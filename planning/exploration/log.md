@@ -30137,3 +30137,67 @@ Campaign was the one capability with no API, route or content. Now:
   isolation and process tests. No application or test bytes changed after their successful proof.
   Commit only the22 owned implementation/test/research/review/tracking files with normal hooks;
   retain the three pre-existing untracked entries untouched and do not push.
+
+## 2026-10-15 — D3847/D3850 material and promotion source-contract component
+
+- Previous goal turn was progress:5542cc2d landed D3848/D3849 with full normal local proof and
+  the independent Inspector return. Recheck current HEAD/working tree; only the same three
+  pre-existing untracked entries remain. Continue the full1.0 objective without pausing it.
+- Trace material-role state to its actual ten P/N/B/R/Q count observations and two before/after
+  signatures. Count payloads lack FEN; same-board opposite-turn positions have equal payload/
+  payload-digest images but different existing F2 authority-input receipts. A disposable recipe
+  in the existing prefix instrument binds exact FEN/factory/role/slot and reconstructs44 full
+  signature payloads. Seven missing/extra/duplicate/reordered/king/foreign-FEN controls refuse.
+  No new public hash, resource, source wrapper, recording or production mint is introduced.
+- Record D3850 before its probe: the catalogue says strictly rising magnitude but the current
+  pure contract/tests/D3688 cases retain broader changes with an increased boolean. Extend the
+  initial18-edge probe with two genuine balanced-queen capture controls, rather than silently
+  assuming it covers rises. Final20 legal both-color/all-promotion-role edges retain two rises,
+  ten falls/eight unchanged magnitudes, three complete C/P arms and20 identical whole-event
+  payloads reconstructed from count signatures and actual complete cause sources. This is
+  preservation against existing code, not an independent general chess oracle or qualification.
+- Six promotion cases confirm a direct FEN computation, zero actual sealed inputs versus three
+  declared predicates, and retained invalid-clone/no-reply/empty-pawn outcomes. Unchanged F1
+  rejects an empty derived tuple but compiles a separately named computed rules source. Literal
+  ten-count/two-signature prospective schemas compile on three local paths retaining distinct
+  signature occurrence addresses. No new factory is sealed, registered or authorized.
+- The first normal prefix target fails a research-only evidenceDigest import from the wrong
+  module; correct it to the existing evidence-contract export. Final normal prefix target/types
+  pass all preceding104-run/452-prefix,452-request window and136 historical controls plus the
+  new reconstruction cases. A documentation patch with a nonexistent anchor refuses atomically;
+  verify the diff and reapply only the actual anchors. No production/compiler guard changes.
+- Land research/coverage before drafting F2 §2.3c: explicit self-sourcing material derivations
+  must consume actual admitted count/cause values, not compute old outputs and attach unused
+  evidence. Promotion gets its actual direct computed source and a literal bounded algorithm
+  convention, claimed first in the existing register. Normal register-check passes76 active
+  RFCs/26 live claims;48 convention members remain landed, new member is claimed only.
+  Inspector's proposed map now17/58,75+6 distinct requirements with nine missing/version controls.
+- Send this bounded component to the same user-authorized independent Inspector reviewer.
+  The component and joint amendment remain unaccepted; all other D3847 classes/D3845 grammar
+  and actual typed factories/adapters/current access/API/native delivery stay open. D3850 is
+  assigned doing/evidence-foundation:3599 rows/1736 live assigned, zero untriaged. No whole
+  capability, source qualification, content or release promotion; prior5542cc2d proof stays prior
+  proof, not a new production run for this research/authoring pass.
+- The independent read-only component review finds no normative blocker, then requests missing
+  en passant, quiet-empty and wrong-edge controls. Add them to the same instrument, not another
+  harness: final22 legal edges/48 signature/22 whole-event comparisons include four rises/ten
+  falls/eight unchanged magnitudes. Both en passant victim identities,21 wrong-edge substitutions
+  and four quiet/castling empty populations pass. Those21 substitutions exercise one shared
+  refusal path, not21 distinct defect classes. The reviewer rechecks the additions and clears
+  these recipe-level coverage gaps without rerunning tests or accepting runtime/upstream/joint
+  work. Update every current component summary to these expanded counts.
+- The normal prefix target/types pass with all earlier controls retained. Register C1–C8 and
+  nine unchanged provider-census controls pass. Refresh the existing ledger-state/roadmap, not
+  a new progress instrument:3599 rows/1736 live assigned, zero untriaged,23 doing,1701 done and
+  162 refused. D3850/D3847/D3841 remain open; no production, content or whole-capability promotion.
+  Run normal governance and commit only the owned research/draft/review/tracking paths with
+  normal hooks. Preserve the same three pre-existing untracked entries and do not push.
+- The first normal governance run correctly rejects two stale F2 checkpoint anchors after its
+  new register claim. Re-read that row: parent awaiting state and old48 landed convention members
+  are unchanged; only the unaccepted claim is added. Update both existing checkpoint anchors and
+  the foundation checkpoint's exact bounded status, then regenerate the normal roadmap receipt
+  and rerun the unchanged governance target. Do not weaken or remove the check.
+- Final unchanged governance target exits zero: lifecycle/resource registers,3599-row state/index,
+  roadmap R1–R10/current receipt, intent parity, tier isolation, docs and process tests pass.
+  Inspect the explicit14-file index and run normal commit hooks. No production/app files or new
+  raw recordings are included; the full1.0 goal remains active.

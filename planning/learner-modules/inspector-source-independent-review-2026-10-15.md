@@ -337,3 +337,30 @@ resolve those schemas. Older recorded-path §4 explicitly compares projection se
 occurrences. Require distinct upstream reconciliation for fixed witnesses, finite alternatives,
 bounded capture populations and computed hypothetical authority before scoped adoption. No tests,
 edits, runtime qualification, collection grammar or joint acceptance follow from this review.
+
+### D3847/D3850 material and promotion component — independent review
+
+The same authorized reviewer finds no normative blocker within F2 §2.3c's bounded three-source
+proposal. Ten genuine non-king counts reconstruct the old vectors, magnitude and source-array
+order; tuple slot order and payload source order remain distinct. Matching private FEN authority
+and exact factory/ref are required because equal count payloads do not establish a position.
+Canonicalization must precede acquisition: the old validFen check alone does not canonicalize.
+
+The event owns complete capture/promotion populations, before/after signatures and every vector
+change, with a separate increased boolean. Closed raw-fact projection preserves en passant. The
+promotion proposal accurately describes the existing FEN computation and its invalid-clone,
+nonvacuous reply and empty-list outcomes; the additional convention axis does not invent sealed
+predicate ancestry or demote primary rule grounding. All three map replacements remain requirements.
+
+The initial review flags absent en passant, quiet-empty and wrong-edge controls. Main adds them
+to the existing disposable probe and runs the normal prefix target successfully: 22 legal edges,
+48 signature/22 complete event comparisons, seven bad-count controls, four rises/ten falls/eight
+unchanged magnitudes, two en passant cases, 21 wrong-edge substitutions and four quiet/castling
+empty cases, plus six promotion cases. The reviewer rechecks those additions read-only and finds
+them genuine. The 21 substitutions exercise one shared refusal path, not 21 distinct defect classes.
+
+No remaining blocker is found within this component/control review. No tests were rerun by the
+reviewer. Actual successor factories must consume admitted sources rather than calculate old
+outputs and append unused witnesses; no successor mint, convention registration, access/native
+delivery, source qualification, other D3847 class, D3845 grammar or upstream/joint acceptance is
+cleared. Parent lifecycle state does not authorize this unaccepted amendment.

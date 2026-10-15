@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ec36a593f9631e08f7cf55a98bcf13f5eb143eb02b318c338f9482a7631b6fd5",
+    "roadmap": "sha256:c7ffd4fefc0fdd6a80125736021d1a2f4908fe93821dbaced0282992336f4932",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:56da17e1d3e1298ef4b74046041efa2f7e670b3fc902cfb717b057d4b00e3f29",
-    "rfcRegister": "sha256:deed655632924fa30ec63c61eedcf6d73b064ecc95a8da4a020ce6484b45832e",
+    "workState": "sha256:99a249bfe4c9acd2056e87d843e5d2db0cc3a056e6855101379468bcc08dbc41",
+    "rfcRegister": "sha256:b4ee59071a40fff09af73bc27d8fa66a1af21eaaa613b07d29a9907cde517477",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 627,
-      "doing": 22,
+      "doing": 23,
       "blocked": 1086,
       "done": 1701,
       "refused": 162
@@ -346,8 +346,8 @@
       ],
       "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
-        "at": "2026-10-13",
-        "summary": "D3781 executes all 343 registered cases for retained-input inventory: 56/81 subjects, 495 targets and 5,443 FEN/UCI leaves. The still-unaccepted orientation amendment now covers seven literal root spellings; 106 disposable matrix checks pass, including actual Check/castling with complete metadata and corruption refusals. Nested/continuation, recorded/bounded scopes and 25 unobserved subjects remain required. Production grammar, cases, profiles and qualification are unchanged. D3768's terminal-policy repair and historical compatibility remain held for independent acceptance. Earlier implementation checkpoints stand. No content, milestone, remote-CI or release promotion.",
+        "at": "2026-10-15",
+        "summary": "D3847/D3850 adds unaccepted F2 section2.3c's literal material/promotion source contracts; one promotion algorithm convention is now claimed, not registered. Independent bounded review finds no normative blocker, not upstream/joint acceptance. No runtime factory, convention registry or qualification changes. D3781's preceding343-case retained-input inventory remains56/81 subjects,495 targets and5443 FEN/UCI leaves;106 disposable orientation controls pass. Nested/continuation, recorded/bounded scopes and25 unobserved subjects remain required. Production grammar, cases, profiles and qualification are unchanged. D3768's terminal-policy repair and historical compatibility remain held for independent acceptance. Earlier implementation checkpoints stand. No content, milestone, remote-CI or release promotion.",
         "impact": "advanced",
         "evidence": [
           "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
@@ -407,7 +407,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+            "digest": "sha256:f398b511b82e159ebb93e9063f52eefd9ff2ae0cdef1894b9d4f7266e955cc32"
           },
           {
             "kind": "work_state",
@@ -466,7 +466,7 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3848 closes the accepted seven-family hint receipt-order correction: seven predecessor failures become74 focused passes/types; payloads, callable inputs, permissions and convention multisets remain. Full frozen local proof passes5895 software/seven performance/257 content/build and397 browser cases, one configured optional Maia skip and112 unretried composition cells. D3849 closes a trace-proven browser-helper race by awaiting actual fork-dialog dismissal; the original58/59 matrix failure remains logged, and the complete four-tier rerun passes with no retry/deadline/gesture weakening. D3847's guarded fixture observer sees120/121 derived routes;48 count/two ref conflicts and three opaque routes remain,31 conflicts in the current Inspector declared union. Independent review classifies fixed tuples, finite horizons, bounded capture populations and internally computed hypothetical exchanges;14-row map/61-topic retention stays conditional on source reconciliation. Semantic case outcomes remain343 passes/81 subjects/zero qualified. D3845 grammar and upstream/joint Inspector acceptance remain open; no content, whole-capability or release promotion.",
+        "summary": "D3847/D3850 adds a bounded material/promotion source-contract proposal in unaccepted F2 section2.3c:48 signature/22 full-event comparisons over22 legal edges and four positions, seven bad-count controls, two en passant cases,21 wrong-edge substitutions and four quiet/castling empties pass; six promotion cases support direct FEN computation rather than fictitious sealed inputs. Independent bounded review finds no normative blocker and confirms the added controls, not runtime adoption, source qualification or upstream/joint acceptance. The proposed Inspector map now replaces17 topics/conditionally retains58;75+6 requirements are not executable adapters. One promotion convention is claimed only;48 existing members remain landed. D3847's other literal-input classes and D3845 grammar remain open. Prior5542cc2d production proof remains5895 software/seven performance/257 content/build and397 browser cases, one configured optional Maia skip and112 unretried composition cells; it is not rerun for this research/authoring-only pass. D3848/D3849 remain closed. Semantic case outcomes remain343 passes/81 subjects/zero qualified; no content, whole-capability or release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
@@ -705,7 +705,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+            "digest": "sha256:f398b511b82e159ebb93e9063f52eefd9ff2ae0cdef1894b9d4f7266e955cc32"
           },
           {
             "kind": "rfc",

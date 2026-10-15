@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Material/promotion source reconciliation, 2026-10-15 ([[D3847]]/[[D3850]]): 48 complete material
+signature payload comparisons over 22 legal edges/four position controls; seven count/role/order/
+foreign-FEN negatives, 21 wrong-edge cause refusals, both-color en passant and four quiet/castling
+empty cases; all three material arms and all three magnitude directions observed.
+Prospective ten-count/two-signature schemas compile without weakening F1. Six promotion cases
+support a direct computed reading, not three fictitious sealed inputs. No factory or qualification
+lands. `[V]` `module-evidence-assembly.md` §Material and promotion source reconstruction and the
+existing `make inspector-recorded-prefix-research` target.
+
 Literal factory inputs, 2026-10-15 ([[D3847]]): guarded observation of successful real mints in
 the permanent fixture suite sees 120 of 121 derived routes. After D3848's seven-family order
 repair, 48 routes contradict declared cardinality and two contradict ordered refs; three retain

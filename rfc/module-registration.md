@@ -1901,10 +1901,10 @@ bindings. No held-binding compiler exception or source retirement is authorized.
 D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
-refs in its predecessor inventory slot, preserving all other61 refs/order and all @1 contracts.
+refs in its predecessor inventory slot, preserving all other58 refs/order and all @1 contracts.
 This is an obligation-preserving proposed map, not complete literal factory-input closure.
 D3847's fixture audit reaches31 conflicting routes in the current declared Inspector union;
-retaining those61 topics is conditional on source-contract reconciliation and independent review.
+retaining those58 topics is conditional on source-contract reconciliation and independent review.
 Do not fabricate unused prerequisites or treat an executable declaration as qualified lineage.
 D3847's independent continuation also finds that scope-only reuse of existing recorded-window
 @2 and fork/overload factories below does not resolve their literal schemas. Fixed witness tuples,
@@ -1914,7 +1914,9 @@ an exemption from that prerequisite; the older set-based membership contract is 
 occurrence conformance. See the existing research dossier's Recorded tactical classes section.
 The initial twelve rows account for nine narrow provider-labelled leaves and three dependent
 topics. D3846 adds two currently compilable but false fixed-tuple topics; they are not new provider
-failures. Proposed recorded/source factories are owned by value-authority §§2.3a–2.3b, not implemented by this
+failures. D3847/D3850 add two material topics and the direct computed promotion reading below;
+their exact reconstruction and same-payload/foreign-FEN controls do not establish new runtime
+factories. Proposed source factories are owned by value-authority §§2.3a–2.3c, not implemented by this
 table. The old `recorded.engine.eval@1` and `recorded.tablebase.result@1` sourcing-ledger topics
 remain separate; a ledger record cannot substitute for a run attachment.
 
@@ -1934,6 +1936,9 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `derived.story.rank@2` | `derived.story.rank@3` | derived | Proposed identity only; Review §4.5 must resolve D3845's variable/empty literal-input contract before declaring this source/factory |
 | `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@2` | derived | D3846 exact ordered before/after phase+position pairs; value-authority §2.3b |
 | `derived.pivotal.option_collapse@1` | `derived.pivotal.option_collapse@2` | derived | D3846 exact prior/first-low/confirming legal-reading+position pairs; value-authority §2.3b |
+| `derived.material.reading.role_signature@1` | `derived.material.reading.role_signature@2` | derived | D3847 complete ten-count same-FEN derivation; value-authority §2.3c |
+| `derived.material.event.role_asymmetry@1` | `derived.material.event.role_asymmetry@2` | derived | D3847/D3850 before/after signatures plus the complete capture/promotion arm; value-authority §2.3c |
+| `derived.tactic.promotion_pressure@1` | `rules.tactic.reading.promotion_pressure@1` | local_rules | D3847 direct FEN arithmetic with declared pass/reply convention; value-authority §2.3c |
 
 This establishes a **requirements image**, not executable bindings:75 retained topic obligations
 plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger

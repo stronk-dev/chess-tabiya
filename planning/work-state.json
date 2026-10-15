@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e45d59dc971f0524a074a0579c3e99efbe738d9207a125b8e55ae1ecdaad92ab",
+      "sourceDigest": "sha256:d55159f546d3a984a8ba055c17bd422210a30de7599267c40df67bdadabc5c40",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32039,7 +32039,7 @@
       "id": "D3847",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:c67779c23e45b5bcf8e34fade84e524f5f2bc55a0035a26912d26b9b7e0f4f25",
+      "sourceDigest": "sha256:1911ac372e9b00c6a5eb5566f8973c1b533efd31b03ae9a7b10468eca0f96326",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32061,6 +32061,15 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3850",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:410560c5074332b161c561d0a596a43496757aa65b053a5e9c6e8649b52279d4",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
     }
   ]
 }

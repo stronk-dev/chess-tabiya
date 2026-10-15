@@ -2,6 +2,14 @@
 // Existing sealed history is the authority; fixture labels never establish a provider exchange.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { normalizeMove } from "chessops/chess";
+import { parseUci } from "chessops/util";
+import { canonicalFen, positionFromFen } from "../../packages/runtime/src/chess.js";
+import { materialRoleSignatureReading, type MaterialRole, type MaterialRoleSignatureReading, type MaterialRoleAsymmetryEvent } from "../../packages/runtime/src/material-state.js";
+import type { TransitionSemanticEventOperands } from "../../packages/runtime/src/semantic-evidence.js";
+import { captureTargetSquare, type TransitionSemanticFact } from "../../packages/runtime/src/transition.js";
+import { promotionPressureReading } from "../../packages/runtime/src/tactics.js";
+import type { StructuralObservation } from "../../packages/runtime/src/structure.js";
 import { createRun, canonicalRunStart, appendOpponentPly, attachEvidence, rewind, fork, branchPath, commitMove,
   type DrillRun, type EvidenceAttachedEvent, type EvidenceKind, type OpponentMoveSelectedEvent,
 } from "../../packages/runtime/src/index.js";
@@ -10,7 +18,7 @@ import { resolveRunSubject, resolveRunEvidenceItem, assertResolvedRunSubject,
 } from "../../packages/runtime/src/run-subject.js";
 import { PRIMARY_EVIDENCE_MANIFEST, EVIDENCE_CONTRACT_DECLARATIONS } from "../../packages/runtime/src/evidence-catalog.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
-import { evidenceValueReceipt, compileEvidenceManifest, type DeclaredEvidence, type ProjectionDeclaration,
+import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, compileEvidenceManifest, type DeclaredEvidence, type ProjectionDeclaration,
   type ProducerDeclaration } from "../../packages/runtime/src/evidence-contract.js";
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
 import { reviewStoryMoments, rankStoryMoments } from "../../packages/runtime/src/story.js";
@@ -369,15 +377,21 @@ const failedRefs = originalRefs.filter(id => {
   try { compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, { id: name!, version: Number(version) }); return false; }
   catch (error) { assert.match(String(error), /EXECUTION_SOURCE_UNREGISTERED/u); return true; }
 });
+const localSourceRebases = [
+  ["derived.material.reading.role_signature@1", "derived.material.reading.role_signature@2"],
+  ["derived.material.event.role_asymmetry@1", "derived.material.event.role_asymmetry@2"],
+  ["derived.tactic.promotion_pressure@1", "rules.tactic.reading.promotion_pressure@1"],
+] as const;
 function checkMap(text: string) {
   const section = text.split("**D3841 exact affected-source map — unaccepted author image:**")[1]!
     .split("**D3841 exact-version closure")[0]!;
   const rows = [...section.matchAll(/^\| `([^`]+@\d+)` \| `([^`]+@\d+)` \|/gmu)].map(match => [match[1]!, match[2]!] as const);
-  assert.equal(rows.length, 14);
-  assert.equal(new Set(rows.map(row => row[0])).size, 14);
-  assert.equal(new Set(rows.map(row => row[1])).size, 14);
+  assert.equal(rows.length, 17);
+  assert.equal(new Set(rows.map(row => row[0])).size, 17);
+  assert.equal(new Set(rows.map(row => row[1])).size, 17);
   const tupleRepairs = pivotalSuccessors.map(row => `${row.id}@1`);
-  assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs, ...tupleRepairs].sort());
+  assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs, ...tupleRepairs, ...localSourceRebases.map(row => row[0])].sort());
+  for (const [old, successor] of localSourceRebases) assert(rows.some(row => row[0] === old && row[1] === successor));
   for (const successor of pivotalSuccessors) assert(rows.some(row => row[0] === `${successor.id}@1` && row[1] === `${successor.id}@2`),
     "a tuple repair cannot retain the false @1 declaration");
   for (const old of rows.map(row => row[0])) assert(originalRefs.includes(old), "no new source obligation may silently replace an unknown old topic");
@@ -393,6 +407,9 @@ assert.throws(() => checkMap(specification.replace("| `recorded.inspector.wdl_pa
 assert.throws(() => checkMap(specification.replace(/^\| `derived.pivotal.phase_change@1` \|.*\n/mu, "")));
 assert.throws(() => checkMap(specification.replace("| `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@2` |",
   "| `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@1` |")));
+for (const [old] of localSourceRebases) assert.throws(() => checkMap(specification.split("\n").filter(line => !line.startsWith(`| \`${old}\` |`)).join("\n")));
+assert.throws(() => checkMap(specification.replace("| `derived.tactic.promotion_pressure@1` | `rules.tactic.reading.promotion_pressure@1` |",
+  "| `derived.tactic.promotion_pressure@1` | `derived.tactic.promotion_pressure@1` |")));
 const presentationDraft = readFileSync("rfc/evidence-presentation.md", "utf8");
 const detailTable = presentationDraft.split("| Projection suffix after `derived.inspector.detail.` | Sole source | Proposed factory | Registered renderer |")[1]!.split("\n\n")[0]!;
 const detailRefs = [...detailTable.matchAll(/^\| `([^`]+)` \|/gmu)].map(match => `derived.inspector.detail.${match[1]}@1`);
@@ -402,4 +419,227 @@ console.log(JSON.stringify({ scope: "D3841 draft inventory requirements only, NO
   currentTopics: originalRefs.length, exactAffectedMappings: mapped.rows.length, originalExecutionFailures: failedRefs.length,
   additionalFixedTupleRepairs: pivotalSuccessors.length, unchangedTopics: originalRefs.length - mapped.rows.length,
   proposedTopics: mapped.topics.length, proposedAcceptedRefs: mapped.topics.length + detailRefs.length,
-  negativeMapControls: 5, rankInputContract: "held_D3845", productionRegistration: false }));
+  localSourceRepairs: localSourceRebases.length, negativeMapControls: 9, rankInputContract: "held_D3845", productionRegistration: false }));
+
+// D3847/D3850 disposable input reconstruction. No new factory, seal or runtime declaration.
+const materialRoles = ["pawn", "knight", "bishop", "rook", "queen"] as const;
+const materialColors = ["white", "black"] as const;
+const countSlots = materialColors.flatMap(color => materialRoles.map(role => ({ color, role })));
+type CountEvidence = DeclaredEvidence<StructuralObservation>;
+function countInputs(fen: string): readonly CountEvidence[] {
+  const population = invokeEvidenceValueRoute("rules.structural.reading.piece_count@1", { fen }) as readonly CountEvidence[];
+  assert.equal(population.length, 12);
+  return countSlots.map(slot => population.find(value => value.payload.color === slot.color && value.payload.role === slot.role)!);
+}
+function signatureFromCounts(fen: string, counts: readonly CountEvidence[]): MaterialRoleSignatureReading {
+  assert.equal(fen, canonicalFen(positionFromFen(fen)), "research input must retain exact canonical FEN bytes");
+  assert.equal(counts.length, 10, "ten non-king role counts are required");
+  counts.forEach((value, index) => {
+    assertDeclaredEvidence(value);
+    assert.deepEqual(value.projection, { id: "rules.structural.reading.piece_count", version: 1 });
+    const receipt = evidenceValueReceipt(value);
+    assert.equal(receipt.factory, "createRulesStructuralReadingPieceCountV1Evidence");
+    assert.equal(receipt.inputDigest, evidenceDigest({ fen }), "equal count bytes do not establish the same FEN authority");
+    const observation = value.payload, slot = countSlots[index]!;
+    assert.equal(observation.kind, "piece_count");
+    assert.equal(observation.color, slot.color);
+    assert.equal(observation.role, slot.role);
+    assert(Number.isSafeInteger(observation.count) && observation.count! >= 0);
+  });
+  const colors = materialColors.map(color => {
+    // Preserve the old payload's canonical observation order, separately from tuple-slot order.
+    const sources = counts.filter(value => value.payload.color === color).map(value => value.payload)
+      .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+    const vector = Object.freeze(Object.fromEntries(materialRoles.map(role =>
+      [role, sources.find(source => source.role === role)!.count!]))) as Readonly<Record<MaterialRole, number>>;
+    return Object.freeze({ color, counts: vector, sources: Object.freeze(sources) });
+  });
+  const asymmetry = Object.freeze(Object.fromEntries(materialRoles.map(role =>
+    [role, Math.abs(colors[0]!.counts[role] - colors[1]!.counts[role])]))) as Readonly<Record<MaterialRole, number>>;
+  return Object.freeze({ fen, conventionId: "material-role-signature@1", colors: Object.freeze(colors),
+    asymmetry, magnitude: materialRoles.reduce((sum, role) => sum + asymmetry[role], 0) });
+}
+const initialMaterialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const otherTurnMaterialFen = initialMaterialFen.replace(" w ", " b ");
+const completeCounts = countInputs(initialMaterialFen), otherTurnCounts = countInputs(otherTurnMaterialFen);
+assert.deepEqual(completeCounts.map(value => value.payload), otherTurnCounts.map(value => value.payload));
+assert.deepEqual(completeCounts.map(value => evidenceValueReceipt(value).payloadDigest), otherTurnCounts.map(value => evidenceValueReceipt(value).payloadDigest));
+assert.notEqual(evidenceValueReceipt(completeCounts[0]!).inputDigest, evidenceValueReceipt(otherTurnCounts[0]!).inputDigest);
+const countNegatives = [completeCounts.slice(1), [...completeCounts, completeCounts[0]!],
+  [completeCounts[0]!, completeCounts[0]!, ...completeCounts.slice(2)], [...completeCounts].reverse(),
+  [...completeCounts.slice(0, 9), otherTurnCounts[9]!], otherTurnCounts];
+for (const values of countNegatives) assert.throws(() => signatureFromCounts(initialMaterialFen, values));
+const king = (invokeEvidenceValueRoute("rules.structural.reading.piece_count@1", { fen: initialMaterialFen }) as readonly CountEvidence[])
+  .find(value => value.payload.role === "king")!;
+assert.throws(() => signatureFromCounts(initialMaterialFen, [king, ...completeCounts.slice(1)]));
+
+const materialEdges = [
+  ["7k/8/8/3pP3/8/8/8/K7 w - d6 0 1", "e5d6"],
+  ["7k/8/8/8/3Pp3/8/8/K7 b - d3 0 1", "e4d3"],
+  ["4k3/8/8/3q4/8/8/3Q4/4K3 w - - 0 1", "d2d5"],
+  ["4k3/3q4/8/8/3Q4/8/8/4K3 b - - 0 1", "d7d4"],
+  ["4k3/8/8/8/8/8/n7/R3K3 w - - 7 1", "a1a2"],
+  ["r3k3/N7/8/8/8/8/8/4K3 b - - 7 1", "a8a7"],
+  ...["q", "r", "b", "n"].flatMap(role => [
+    ["7k/P7/8/8/8/8/8/7K w - - 7 1", `a7a8${role}`],
+    ["7k/8/8/8/8/8/p7/7K b - - 7 1", `a2a1${role}`],
+    ["1r5k/P7/8/8/8/8/8/7K w - - 7 1", `a7b8${role}`],
+    ["7k/8/8/8/8/8/p7/1R5K b - - 7 1", `a2b1${role}`],
+  ]),
+] as const;
+const materialArms = new Set<string>();
+let signatureChecks = 0, increased = 0, decreased = 0, unchangedMagnitude = 0;
+function rawMaterialCause(edge: { beforeFen: string; moveUci: string; afterFen: string }, cause: DeclaredEvidence<unknown>): TransitionSemanticFact {
+  assertDeclaredEvidence(cause);
+  assert.equal(evidenceValueReceipt(cause).inputDigest, evidenceDigest(edge));
+  const fact = cause.payload as TransitionSemanticEventOperands;
+  assert.equal(fact.before_fen, edge.beforeFen); assert.equal(fact.move_uci, edge.moveUci); assert.equal(fact.after_fen, edge.afterFen);
+  assert.equal(`${cause.projection.id}@${cause.projection.version}`, `rules.transition.event.${fact.family}@1`);
+  if (fact.family === "capture") return Object.freeze({ family: fact.family, sign: fact.sign,
+    mover: fact.mover, from: fact.from, to: fact.to, captured: fact.captured, enPassant: fact.enPassant });
+  assert.equal(fact.family, "promotion");
+  if (fact.family !== "promotion") throw new TypeError("not a material source family");
+  return Object.freeze({ family: fact.family, sign: fact.sign, mover: fact.mover, from: fact.from, to: fact.to, detail: fact.detail });
+}
+let firstMaterialCause: DeclaredEvidence<unknown> | undefined;
+let wrongEdgeCauseRefusals = 0, enPassantCases = 0;
+for (const fen of [initialMaterialFen, otherTurnMaterialFen, "7k/8/8/8/8/8/8/K7 w - - 0 1", "7k/8/8/8/8/8/8/K7 b - - 0 1"]) {
+  assert.deepEqual(signatureFromCounts(fen, countInputs(fen)), materialRoleSignatureReading(fen));
+  signatureChecks++;
+}
+for (const [beforeFen, uci] of materialEdges) {
+  const position = positionFromFen(beforeFen), move = normalizeMove(position, parseUci(uci)!);
+  assert(position.isLegal(move)); position.play(move);
+  const edge = { beforeFen, moveUci: uci, afterFen: canonicalFen(position) };
+  const reconstructed = [beforeFen, edge.afterFen].map(fen => {
+    const recipe = signatureFromCounts(fen, countInputs(fen));
+    assert.deepEqual(recipe, materialRoleSignatureReading(fen));
+    const old = invokeEvidenceValueRoute("derived.material.reading.role_signature@1", { fen });
+    assert.deepEqual(recipe, old.payload);
+    assert.equal(evidenceValueReceipt(old).sourceDigests.length, 0);
+    signatureChecks++;
+    return recipe;
+  });
+  const emitted = invokeEvidenceValueRoute("derived.material.event.role_asymmetry@1", edge);
+  assert.equal(emitted.length, 1);
+  const value = emitted[0]!;
+  const refs = value.inputs.map(input => `${input.projection.id}@${input.projection.version}`);
+  assert.deepEqual(refs.slice(0, 2), ["derived.material.reading.role_signature@1", "derived.material.reading.role_signature@1"]);
+  assert.equal((value.inputs[0]!.payload as MaterialRoleSignatureReading).fen, beforeFen);
+  assert.equal((value.inputs[1]!.payload as MaterialRoleSignatureReading).fen, edge.afterFen);
+  materialArms.add(refs.slice(2).join(","));
+  // The proposed self-sourcing factory owns both COMPLETE event-family populations. A caller
+  // cannot select capture-only on a capture-promotion. Existing caches preserve genuine sources.
+  const causes = ["capture", "promotion"].flatMap(family => invokeEvidenceValueRoute(
+    `rules.transition.event.${family}@1` as "rules.transition.event.capture@1" | "rules.transition.event.promotion@1", edge));
+  assert.deepEqual(causes.map(cause => cause.projection), value.inputs.slice(2).map(cause => cause.projection));
+  const sourceEvents = causes.map(cause => rawMaterialCause(edge, cause));
+  if (firstMaterialCause === undefined) firstMaterialCause = causes[0]!;
+  else { assert.throws(() => rawMaterialCause(edge, firstMaterialCause!)); wrongEdgeCauseRefusals++; }
+  for (const fact of sourceEvents) if (fact.family === "capture" && fact.enPassant) {
+    assert.equal(captureTargetSquare(fact), beforeFen.includes(" w ") ? "d5" : "d4");
+    assert.notEqual(captureTargetSquare(fact), fact.to);
+    enPassantCases++;
+  }
+  const [before, after] = reconstructed as [MaterialRoleSignatureReading, MaterialRoleSignatureReading];
+  const reconstructedEvent: MaterialRoleAsymmetryEvent = { ...edge, conventionId: "material-role-signature@1",
+    before: { vector: before.asymmetry, magnitude: before.magnitude },
+    after: { vector: after.asymmetry, magnitude: after.magnitude },
+    changedRoles: materialRoles.filter(role => before.asymmetry[role] !== after.asymmetry[role]),
+    increased: after.magnitude > before.magnitude, sourceEvents };
+  assert.deepEqual(reconstructedEvent, value.evidence.payload);
+  const payload = value.evidence.payload as { before: { magnitude: number }; after: { magnitude: number }; increased: boolean };
+  assert.equal(payload.increased, payload.after.magnitude > payload.before.magnitude);
+  if (payload.increased) increased++;
+  if (payload.after.magnitude < payload.before.magnitude) decreased++;
+  if (payload.after.magnitude === payload.before.magnitude) unchangedMagnitude++;
+}
+assert.deepEqual([...materialArms].sort(), ["rules.transition.event.capture@1", "rules.transition.event.capture@1,rules.transition.event.promotion@1", "rules.transition.event.promotion@1"].sort());
+assert(increased > 0 && decreased > 0 && unchangedMagnitude > 0, "D3850 must observe all three magnitude directions");
+assert.equal(enPassantCases, 2);
+assert.equal(wrongEdgeCauseRefusals, materialEdges.length - 1);
+let emptyCauseCases = 0;
+for (const [beforeFen, moveUci] of [
+  [initialMaterialFen, "e2e4"], [otherTurnMaterialFen, "e7e5"],
+  ["r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 7 1", "e1h1"],
+  ["r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 7 1", "e8h8"],
+] as const) {
+  const position = positionFromFen(beforeFen), move = normalizeMove(position, parseUci(moveUci)!);
+  assert(position.isLegal(move)); position.play(move);
+  const edge = { beforeFen, moveUci, afterFen: canonicalFen(position) };
+  assert.deepEqual(invokeEvidenceValueRoute("rules.transition.event.capture@1", edge), []);
+  assert.deepEqual(invokeEvidenceValueRoute("rules.transition.event.promotion@1", edge), []);
+  assert.deepEqual(invokeEvidenceValueRoute("derived.material.event.role_asymmetry@1", edge), []);
+  emptyCauseCases++;
+}
+
+const signatureDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.material.reading.role_signature")!;
+const materialDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.material.event.role_asymmetry")!;
+const countRef = { id: "rules.structural.reading.piece_count", version: 1 };
+const signatureSuccessor: ProjectionDeclaration = { ...signatureDeclaration, version: 2,
+  derivation: { inputs: countSlots.map(() => countRef) },
+  disposition: { kind: "operator_only", reason: "D3847 prospective declaration only; no factory or consumer" } };
+const signatureRef = { id: signatureSuccessor.id, version: 2 };
+const materialSuccessor: ProjectionDeclaration = { ...materialDeclaration, version: 2,
+  semantics: "All exact role-vector changes with a strictly-increased unweighted-magnitude flag; no material value or advice.",
+  derivation: { anyOf: [...materialArms].sort().map(arm => [signatureRef, signatureRef, ...arm.split(",").map(ref => {
+    const [id, version] = ref.split("@"); return { id: id!, version: Number(version) };
+  })]) },
+  disposition: { kind: "operator_only", reason: "D3847 prospective declaration only; no factory or consumer" } };
+const materialManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.material"
+    ? { ...producer, outputs: [...producer.outputs, signatureSuccessor, materialSuccessor] } : producer) });
+const materialPaths = compileProjectionExecution(materialManifest, materialSuccessor).paths;
+assert.equal(materialPaths.length, 3);
+for (const path of materialPaths) {
+  const signatures = path.derivationChoices.filter(choice => choice.projection.id === signatureSuccessor.id);
+  assert.deepEqual(signatures.map(choice => choice.occurrence), [[0], [1]]);
+  assert(signatures.every(choice => choice.inputs.length === 10));
+  assert.equal(path.sourceRequirements.length, 0);
+}
+console.log(JSON.stringify({ scope: "D3847/D3850 reconstruction and prospective F1 only; no successor mints or runtime adoption",
+  materialEdges: materialEdges.length, completeEventPayloadComparisons: materialEdges.length,
+  signaturePayloadComparisons: signatureChecks, countSlots: countSlots.length,
+  wrongCountOrderRoleOrFenRefusals: countNegatives.length + 1, equalPayloadForeignFenRefused: true,
+  actualMaterialArms: [...materialArms].sort(), increased, decreased, unchangedMagnitude,
+  enPassantCases, wrongEdgeCauseRefusals, emptyCauseCases,
+  prospectiveMaterialPaths: materialPaths.length, exactSignatureOccurrences: [[0], [1]], oldDeclarationsChanged: false }));
+
+// Promotion pressure actually computes from one FEN. A real computed rules source is different
+// from disguising Story's variable collection as a computed leaf; preserve every inner state.
+const promotionDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.tactic.promotion_pressure")!;
+const promotionFens = ["7k/P7/8/8/8/8/8/7K b - - 0 1", "4k3/P6r/8/8/8/8/8/6K1 b - - 0 1",
+  "7k/6P1/8/8/8/8/8/7K b - - 0 1", "7k/P4K2/6Q1/8/8/8/8/8 b - - 0 1",
+  "7k/8/8/8/8/8/p7/7K w - - 0 1", initialMaterialFen];
+for (const fen of promotionFens) {
+  const current = invokeEvidenceValueRoute("derived.tactic.promotion_pressure@1", { fen });
+  assert.deepEqual(current.payload, promotionPressureReading(fen));
+  assert.equal(evidenceValueReceipt(current).sourceDigests.length, 0);
+}
+assert.deepEqual(promotionPressureReading(promotionFens[2]!).pawns[0]!.passAvailability,
+  { kind: "unavailable", reason: "invalid_turn_clone" });
+assert.deepEqual(promotionPressureReading(promotionFens[3]!).pawns[0]!.replyPersistence, { kind: "available", value: false });
+assert.equal(promotionPressureReading(initialMaterialFen).pawns.length, 0);
+const { derivation: previousPromotionDerivation, ...promotionBase } = promotionDeclaration;
+assert.equal(previousPromotionDerivation!.inputs!.length, 3);
+assert.throws(() => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.tactic"
+    ? { ...producer, outputs: [...producer.outputs, { ...promotionBase, version: 2,
+      disposition: { kind: "operator_only", reason: "D3847 intentionally invalid empty derived declaration" } }] } : producer) }),
+  /EVIDENCE_PROJECTION_INCOMPLETE/u);
+const promotionSuccessor: ProjectionDeclaration = { ...promotionBase, id: "rules.tactic.reading.promotion_pressure",
+  producer: { id: "rules.tactic", version: 1 }, plane: "rules",
+  disposition: { kind: "operator_only", reason: "D3847 prospective computed source only; no factory or consumer" } };
+const promotionManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "rules.tactic"
+    ? { ...producer, outputs: [...producer.outputs, promotionSuccessor] } : producer) });
+const promotionExecution = compileProjectionExecution(promotionManifest, promotionSuccessor);
+assert.equal(promotionExecution.paths.length, 1);
+assert.equal(promotionExecution.own.availability, "local");
+assert.equal(promotionExecution.worstCaseLatency, "sync");
+assert.deepEqual(promotionExecution.paths[0]!.derivationChoices, []);
+assert.deepEqual(promotionExecution.paths[0]!.sourceRequirements, []);
+console.log(JSON.stringify({ scope: "D3847 actual promotion source and prospective computed declaration; no successor mints/adoption",
+  actualFenCases: promotionFens.length, declaredOldInputs: previousPromotionDerivation!.inputs!.length,
+  actualSourceDigests: 0, invalidTurnCloneRetained: true, terminalPersistenceFalseRetained: true,
+  emptyDerivedRefused: true, computedRulesDeclarationCompiles: true, providerOperations: 0, oldDeclarationsChanged: false }));

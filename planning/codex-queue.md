@@ -1,5 +1,18 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847/D3850 material/promotion source component is now authored in F2 §2.3c after
+actual reconstruction: 48 signature/22 whole-event comparisons over 22 legal edges/four positions,
+seven count/order/role/foreign-FEN negatives, 21 wrong-edge refusals, both-color en passant,
+four quiet/castling empties, three actual capture/promotion arms and six promotion
+cases. Two material successors use actual ten-count and before/after/cause tuples; promotion is
+a genuine computed FEN reading with one explicitly claimed algorithm convention, not fabricated
+predicate inputs. D3850 preserves all vector changes plus their increased flag, not the catalogue's
+false strictly-rising sentence. The proposed Inspector map now replaces17/retains58 topics, still
+75+6 requirements rather than executable bindings. Independent bounded review finds no normative
+blocker and confirms the added edge controls, not new factories, adoption or joint acceptance.
+Remaining tactical/window, Compare/Story,
+computed hypothetical and opaque-input classes must still be reconciled before full acceptance.
+
 2026-10-15 — D3849 normal matrix failure is a trace-proven test synchronization error: the fork
 response takes115ms while both raw board clicks finish within72ms of submission, under the still-open
 modal. The shared click helper now awaits actual branch-dialog dismissal before measuring/input.
@@ -13,7 +26,8 @@ conflicts. Three routes retain opaque digest operands. The current Inspector dec
 31 conflicts; this is an audit obligation, not 31 independently proven successor blockers.
 Classify complete fixed witnesses, actual collections, directly computed authority and opaque
 recorded operands separately. Preserve old meanings; independently accept changed contracts.
-The fourteen-row map is not complete literal factory closure, and retaining its other61 topics is
+The earlier fourteen-row map was not complete literal factory closure; today's17/58 image above
+also leaves the retained topics conditional on the remaining audit. Retention is
 conditional on that audit. Do not invent witnesses, widen a checker or self-accept Inspector.
 D3848's accepted one-line hint receipt correction closes with full normal local proof:
 5895 software/seven performance/257 content/build and all four browser tiers. This does not close D3847.

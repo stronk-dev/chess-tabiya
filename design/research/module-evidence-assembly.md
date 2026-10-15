@@ -1521,3 +1521,75 @@ A future reconciliation must preserve those distinct obligations and source sema
 mapping both to one new ref would collapse the accepted image rather than fix it. No replacement
 version names or total are inferred here. `[V]` `evidence-catalog.ts:withRecordedPathSuccessorRefs`
 and `MODULE_CONSUMER_ACCEPTS.full_inspector`.
+
+## Material and promotion source reconstruction — 2026-10-15, D3847/D3850
+
+The existing opt-in prefix instrument now tests actual material/count sources before proposing
+their successor contracts. Material-role state uses ten non-king counts: P/N/B/R/Q for White,
+then Black. The current factory returns twelve sealed piece-count observations including kings;
+the ten selected observations reconstruct all existing signature payload fields and source-array
+ordering exactly. Across 22 legal edges (both colors, en passant, capture and all four promotion
+roles with/without capture) plus four starting/zero-material positions, 48 complete payload comparisons pass.
+This is preservation against current code, not an independent oracle for those chess predicates.
+`[V]` `make inspector-recorded-prefix-research`, `recorded-origin.ts:signatureFromCounts`,
+`material-state.ts`, `STRUCTURAL_READING_FACTORIES`.
+
+Count payloads have no FEN. Genuine counts from initial White/Black-to-move positions have equal
+payloads and payload digests, but different existing private authority-input receipts. Seven
+missing/extra/duplicate/reordered/king/foreign-position controls refuse. A proposed internal
+derivation must bind every count to its exact source FEN, not infer position from equal numbers
+or projection refs. The experiment reuses the current private receipt and `evidenceDigest({fen})`
+authority shape; it adds no public hash, source wrapper, persisted field or progress dependency.
+`[V]` same instrument, `evidence-factories.ts:fenPopulation/authorityShape/authorityDigest`.
+
+Every material-event value retains both complete before/after signatures followed by capture,
+promotion, or capture+promotion in that order. All three alternatives occur. Reconstruction from
+the ten-count signatures and complete existing capture/promotion sources preserves all 22 complete
+event payloads, including closed raw-fact views without the three edge-envelope fields. Prospective signature
+@2 with ten repeated count refs and event@2 with those three exact members compile in unchanged
+F1; execution preserves signature occurrence addresses[0]/[1], each with ten inputs, on three
+local/sync paths. No new value is sealed or factory registered. `[V]` same target's actual event
+observations and isolated `compileEvidenceManifest`/`compileProjectionExecution` controls.
+
+D3850 distinguishes source meaning from usefulness: the 22 actual events include four rising,
+ten falling and eight unchanged-magnitude role-vector changes. The `increased` flag always equals
+strict magnitude rise. This agrees with existing material tests, D3688 literal validation cases
+and docs, but contradicts the catalogue's "strictly rising" event sentence. A successor must state
+the broader exact change plus its boolean, not filter historical events or turn unweighted count
+arithmetic into a material-value/strategic verdict. `[V]` same target, `material-state.test.ts`,
+`semantic-validation-literal-sources.ts:roleStateFixtures`, `docs/semantic-evidence.md` D3688,
+`evidence-catalog.ts:derivedMaterialOutputs`, `rfc/breadth-collectors.md` §3.6.
+
+The review-requested edge controls also pass: both colors' en passant events retain the actual
+victim square (d5/d4), not the move's landing square; 21 substitutions of a genuine cause from
+another edge refuse; four quiet/castling edges have empty capture, promotion and material event
+populations. These are disposable reconstruction controls, not enforcement by a new production
+factory. `[V]` same target, `rawMaterialCause` and the explicit empty-cause cases.
+
+Promotion pressure differs: six actual factory cases retain zero sealed sources while the old
+declaration names three predicate inputs. Its pure operation owns FEN-based passed-pawn geometry,
+occupancy, pseudo-control and legal pass/reply checks. Existing invalid-turn-clone, no-replies false
+and successful empty pawn-list outcomes remain exact. Unchanged F1 refuses simply deleting the
+derived member, but admits a separately named computed rules reading with the same payload,
+grounding and answer limits under existing `rules.tactic`; it needs no provider or derivation path.
+That is evidence for a genuine direct computed source, not permission to disguise rank's variable
+historical collection as a local leaf. Source/factory/convention registration, eligibility and
+authenticated/UX delivery remain unimplemented/unaccepted. `[V]` same target, `tactics.ts:promotionPressureReading`,
+`tactics.test.ts`, current F1 compiler and projection execution.
+
+The draft can therefore propose three separately named successors without changing the old data
+or loosening F1's nonempty-derived rule. New promotion source convention identity still requires
+explicit treatment: the old derived triple supplied no actual input closure. Its proposed direct
+algorithm definition states the pass-clone and bounded reply rule, without changing primary
+rule grounding or manufacturing source ancestry. This follows the existing separation between
+grounding and convention identity, not blanket demotion of exact rule computations. The claim is
+declared before its definition in F2 §2.3c and the existing semantic-conventions register. `[V]`
+`evidence-grounding-taxonomy.md` §Why the six convention rows stay position-grounded;
+`rfc/semantic-convention-provenance.md` §§2–3; current claim block/register (unaccepted proposal).
+
+Independent read-only review finds no normative blocker within these three proposals and confirms
+the added en passant, quiet-empty and wrong-edge controls. Twenty-one wrong-edge substitutions
+exercise one refusal path, not 21 distinct classes. The reviewer does not rerun tests or accept
+new factories, convention registration, source qualification, remaining D3847 classes, D3845 or
+the joint Inspector amendment. `[V]` `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`
+§D3847/D3850 material and promotion component.

@@ -10,7 +10,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3841/D3846, §§2.3a–2.3b:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3841/D3846/D3847/D3850, §§2.3a–2.3c:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845 independently holds rank's variable/empty input contract.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -37,14 +37,15 @@
 - **Planning:** `planning/evidence-value-authority/implementation-2026-09-24.md`
 
 ```tabiya-claims
-none
+semantic-conventions | members promotion_pressure_geometry_v1 | exact FEN promotion geometry and bounded legal pass/reply checks; no outcome verdict
 ```
 
-**Why `none`.** This RFC changes package-internal construction operations, catalogue projections
-and consumers. It adds no persisted schema, database migration, pack/shape/principle member,
-evidence-kind member or independent versioned register. New projection refs are owned by the one
-compiled F1 catalogue and can merge with parallel additive catalogue work. The semantic convention
-members it consumes remain claimed by `semantic-convention-provenance.md`, not duplicated here.
+**Claim scope.** The unaccepted D3847 promotion successor adds one literal algorithm definition to
+the existing convention resource; it creates no second register. Historical convention members
+remain landed under semantic-convention-provenance. Other changes are package-internal operations
+and additive F1 refs, with no persisted schema, migration, pack/shape/principle or evidence-kind
+member. The one compiled F1 catalogue still owns projection refs; no parent lifecycle state accepts
+these proposed successors.
 
 ## Summary
 
@@ -366,6 +367,108 @@ payload equivalence, source mutation isolation, current access/cancellation/rece
 The disposable probe measures old factory operands and prospective declaration feasibility only.
 This subsection changes neither current production nor the parent's awaiting status; it requires
 independent upstream and joint Inspector acceptance. D3845's collection contract remains separate.
+
+#### 2.3c Draft D3847 material/promotion source reconciliation — unaccepted
+
+The existing factories are not all variable collections. The material recipe reconstructs 48
+signature payloads and 22 complete events from genuine count/cause inputs; seven bad count/FEN
+and 21 wrong-edge cause controls refuse. Both en passant captures and four quiet/castling empty
+cases pass. Promotion pressure actually computes from FEN. These bounded results establish
+authoring feasibility, not new production factories, qualified detectors or Inspector acceptance.
+Keep the old refs, factories, receipts, public helpers and every old caller unchanged.
+
+| Proposed exact ref | Sole proposed factory | Authority arm | Literal sealed inputs |
+|---|---|---|---|
+| `derived.material.reading.role_signature@2` | `createDerivedMaterialReadingRoleSignatureV2Evidence` | `{fen:string}` | ten `rules.structural.reading.piece_count@1` occurrences, in the slot order below |
+| `derived.material.event.role_asymmetry@2` | `createDerivedMaterialEventRoleAsymmetryV2Evidence` | `{beforeFen:string,moveUci:string,afterFen:string}` | `[signature@2,signature@2,capture@1]`, `[signature@2,signature@2,promotion@1]` or `[signature@2,signature@2,capture@1,promotion@1]`; full namespaces below |
+| `rules.tactic.reading.promotion_pressure@1` | `createRulesTacticReadingPromotionPressureV1Evidence` | `{fen:string}` | none: direct computed FEN reading under existing `rules.tactic` |
+
+**Material signature.** This is an explicitly self-sourcing derived factory, not a caller-payload
+adapter. Capture/validate the one FEN input and canonicalize it before acquisition. Obtain the
+complete existing piece-count population once. Select exactly White P/N/B/R/Q then Black P/N/B/R/Q,
+including zero counts and excluding both kings. The fixed derivation member contains ten repeated
+exact refs, not one ref standing for an arbitrary population. Every slot is the genuine named
+piece-count factory's value for that exact canonical FEN, with its matching color/role. Do not join
+by equal counts or payload digests: current count payloads have no FEN and can be equal across
+distinct positions. Reuse the private F2 factory/input-authority receipt to establish this join;
+add no public digest, schema, caller receipt or second source authority.
+
+The package-internal pure reconstruction consumes those ten admitted payloads and no board-derived
+replacement counts. Preserve all existing `MaterialRoleSignatureReading` fields: canonical FEN,
+`material-role-signature@1`, per-color counts in P/N/B/R/Q key order, complete original observation
+values in their existing canonical source-array order, absolute role differences and their
+unweighted sum. Do not invoke the old FEN signature calculator and merely attach unused sealed
+counts afterward. Retain all ten actual occurrences in receipt order. Missing, extra, duplicated,
+king, wrong-role/order, foreign-FEN or wrong-factory counts are internal contract failures, not
+empty signatures. A legal kings-only position still has ten zero non-king count inputs.
+
+The new projection remains derived/reading, position_rules/exact/not_applicable, fact-only and
+local/sync with the old forms/limitations. Bind the existing direct material-role-signature
+convention and every actual count input closure. F1 fixed-input guards remain unchanged. The
+existing old reading's zero-input receipt is not reinterpreted or reissued as this new lineage.
+
+**Material event.** Validate/canonicalize the exact legal edge before source work. The factory
+owns the complete existing `rules.transition.event.capture@1` and `rules.transition.event.promotion@1`
+populations for that edge, including successful empties; use their shared source/cache rather than
+full local-semantic fan-out. A caller cannot supply an event list or choose a derivation member.
+Neither family may emit more than one value for one legal edge. If both are empty, return the
+successful empty event population, never a fabricated no-change fact. Otherwise construct the
+before and after signature@2 values for their own exact FENs, then use only their admitted payloads
+and those actual cause values to compute the event. The three exact members above use full ids
+`derived.material.reading.role_signature@2`, `rules.transition.event.capture@1` and
+`rules.transition.event.promotion@1`; signatures are before then after, causes capture then promotion.
+An incomplete cause list on capture-promotion is not another admitted arm.
+
+Retain every existing event operand, including the complete before/after vectors, changedRoles and
+the boolean `increased = after.magnitude > before.magnitude`. Emit all role-vector changes, not
+only rising magnitude: D3850's four rises/ten falls/eight unchanged-magnitude changes are preservation
+controls. `sourceEvents` projects only the existing capture or promotion fact fields from those
+sealed sources, excluding their three edge-envelope fields; use closed per-family projection,
+not an arbitrary object/path renderer. Edge envelopes and private source authority must match
+the exact validated edge. Never recompute the old FEN event and attach unrelated unused witnesses.
+The result stays the existing event item population with its actual literal input list; new
+semantic-event, invoker, execution, consumer and rendering registrations must agree before use.
+Keep position_rules/exact/not_applicable, fact-only/state semantics, direct/inherited material
+convention and old forms/limitations. No increase flag is a scalar material advantage or advice.
+
+**Promotion reading.** This source belongs to the existing rules.tactic local/sync producer and
+is a computed rules-plane reading, not an empty derived tuple. It invokes the existing
+`promotionPressureReading` once on its captured canonical FEN and retains its complete existing
+`{fen,pawns}` payload. Preserve passed-pawn identities, geometric distance/path, blockers,
+pseudo-controls and both typed availability fields, with their current ordering and nested
+reasons. Invalid turn clone remains unavailable for that pawn; zero legal replies makes
+replyPersistence false rather than a vacuous universal; an empty pawn list is successful empty
+data, not provider absence or a global safety claim. No source predicate results or caller
+`inputsAvailable` override are accepted. This does not change the old pure helper's separate arm.
+
+The claimed `promotion_pressure_geometry_v1` adds `promotion-pressure-geometry@1` to the one
+existing convention registry. Its literal definition is: select passed pawns belonging to the
+side opposite the current side to move; report the forward path through the promotion square,
+its occupied blockers and both colors' pseudo-attackers of that square. For pass availability,
+set that pawn's color to move and clear en passant; return invalid_turn_clone when chessops refuses
+the clone, otherwise whether that pawn has a legal promotion now. For reply persistence, require
+at least one current legal reply and, after every such reply, the same source-square pawn/color
+still exists and has a legal promotion on its next turn. No replies gives false. Define promotion
+as a legal pawn move to the final rank, not a chosen promotion piece or a tablebase outcome.
+Its limitations forbid outcome, arbitrary-future inevitability, safety, importance, intent,
+recommendation or move-quality claims. Bind this direct convention to the new projection with
+definition-and-limitations disclosure. The existing operation at5542cc2d is the landed-code
+authority witness; do not label the proposed projection itself landed. Preserve primary
+position_rules/exact/not_applicable and fact-only old forms; convention identity is an additional
+axis, not a fabricated ancestry from the old three predicate declarations.
+
+**Adoption and proof.** The proposed Inspector image explicitly replaces these three old topics;
+other modules, hints, bots, semantic cases and pack requirements remain on their existing exact
+versions until separately specified migrations. No implicit prefix alias or source retirement.
+Before adoption require actual sole-factory/invoker/manifest/type-profile/semantic/convention
+registrations; complete payload/empty equivalence; genuine ten-input receipts, all three event
+members, same-payload/foreign-FEN and wrong-edge cause refusals, both-color en passant victim
+identity and quiet/castling successful empties; source/caller mutation isolation;
+zero work before authority validation; unchanged old callers/receipts; exact registered renderer
+and consumer pairs, plus current authorization/disclosure/cancellation and HTTP/native delivery.
+The disposable recipe and metadata compilation establish none of these new runtime boundaries.
+Independent upstream and joint review remain mandatory; D3847's other classes and D3845 grammar
+are not discharged by these three proposals.
 
 #### 2.4 Authored authority
 
@@ -823,6 +926,14 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: draft D3847/D3850 §2.3c specifies two material successors retaining actual ten-count
+  and before/after/capture/promotion inputs, plus a genuinely computed promotion reading under
+  the existing rules producer. The latter claims one direct algorithm convention in the existing
+  register, not a fake predicate ancestry.48 signature/22 full event comparisons, seven bad-count/
+  same-payload foreign-FEN negatives, two en passant cases, 21 wrong-edge substitutions, four
+  quiet/castling empties and six promotion cases support feasibility; unchanged F1
+  compiles the prospective declarations. The proposed Inspector map expands17/58, not complete
+  factory/consumer closure. No production registration, old-meaning rewrite or acceptance follows.
 - 2026-10-15: D3848 corrects all seven hint-horizon source arrays to the existing declared order,
   family source then principal variation. Seven permanent predecessor failures become passes;
   payloads, callable arguments, policy and convention multiset remain. D3847's separate opt-in
