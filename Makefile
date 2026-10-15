@@ -655,7 +655,7 @@ recorded-target-continuity-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/review-map.test.ts -t 'D3718|D3719'
 
 recorded-semantic-path-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-evidence.test.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
 	./node_modules/.bin/esbuild apps/server/src/recorded-semantic-path-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/recorded-semantic-path-check.js
 	$(CI_NODE) apps/server/dist/recorded-semantic-path-check.js
 

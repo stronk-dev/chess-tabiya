@@ -2490,3 +2490,71 @@ disclosure; bounded re-review finds no further blocker, not joint acceptance. `[
 `tools/d3792-inspector-demand/grade-source.ts` closure diagnostic;
 `packages/runtime/src/evidence-convention-closure.ts` deriveProjectionConventionTable;
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md` D1422 section.
+
+## Complete current module image and joint source return — D3863–D3867 (2026-10-15)
+
+The earlier four-consumer migration missed Compare Coach. The actual catalogue has ten
+evidence-consuming modules with23/3/7/52/7/4/35/8/85/75 accepted refs, totaling299. The proposed
+single-current image conditionally preserves every family at23/3/7/52/7/4/35/8/72/71, totaling282
+after duplicate retirement and six Inspector details.38 disposable controls check exact rows,
+versions/callables and malformed image mutations. Compare's baseline complete execution refuses
+live.stockfish.eval@1; an isolated genuine point+position trajectory declaration compiles two
+literal alternatives under unchanged F1. Neither result supplies new source issuers or bindings.
+`[V]` tools/d3792-inspector-demand/module-source.ts runWholeCurrentModuleInventory;
+normal make inspector-recorded-prefix-research; EVIDENCE_MODULE_IDS/MODULE_CONSUMER_ACCEPTS.
+
+The unaccepted module contract now specifies a sole current registry/callable/adapter recipe,
+strict receivers and actual Compare peer selection, not frozen compiler1/2 compatibility helpers.
+Compare's proposed trajectory uses genuine source-owned per-node modern/ledger points and
+includes a root/fork without inventing a move. It shares only private endpoint selection with
+grade. Its piece-route source carries the complete original recorded node/event path, including
+zero-edge paths; it is not an opaque witness digest or a fabricated singleton move. These are
+authored proposals, not current behavior. `[V]` rfc/module-registration.md D3841 closure;
+rfc/evidence-value-authority.md §2.3a; rfc/evidence-presentation.md comparison companion.
+
+Independent joint review returns four concrete blockers: actual piece-route factory has zero
+sealed inputs against a declared move (D3864); trade factories retain four inputs against two
+declared (D3865); Hint/candidate still use wrong promotion/material sources (D3866); and defender
+exposure retains all positive captures against a fixed two-input declaration (D3867). The last
+is executed, not only read: legal FEN r3k3/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1 with c5b6 yields
+two positive captures and three sealed inputs; six falsifier controls pass. The282-pair candidate
+therefore remains returned, not an accepted final version/ref image. `[V]` cited independent
+review; module-source.ts runExposureWitnessDiagnostic; evidence-factories.ts and catalogue.
+
+D3864's bounded raw-path review catches nonexistent RunCreatedEvent/run.created spellings.
+The proposal now names actual RunStartedEvent/run.started.data.rootNode; bounded re-review
+clears that correction, not implementation or joint acceptance. D3865's already accepted repair
+declares C,C,M,M / C,C,E,E and matches repeated refs and receipt digests in order. Real narrative/
+recorded-factory assertions fail on predecessor declarations (two failed/153 passed), then the
+correct declaration exposes the old event compiler's set deduplication (32 failed/123 passed).
+After the occurrence fix,155 focused cases pass; a standalone narrative regression is then
+separated from the unchanged captured assertion. Later full-gate outcomes belong to the log.
+Unique-ref variable population semantics remain separate source debt, not silently qualified by
+this repair. `[V]` make recorded-semantic-path-check; semantic-evidence.ts compileSemanticEvidenceEvent;
+evidence-catalog.ts trade declaration; the two permanent runtime test suites; dated review.
+
+D3866's coordinated author correction now covers all four actual candidate slots (fork,
+promotion, material signature and material event), with complete F2 source operands and
+original retained values. Hint adds the promotion horizon and five current rung@2 refs beside
+fork's five; five other families/25 refs remain@1,35 total. One current matrix owns selection,
+factory, parser, disclosure and wire identities; no frozen compiler1 API. Independent bounded
+review finds no further buildability blocker, runs no tests and does not accept implementation.
+`[V]` shared-candidate-evidence-packet §3.1a; hint-distance §3a; module current-image clause;
+dated independent D3866 re-review.
+
+The normal prefix target passes39 current-image controls plus ten active-path diagnostic
+controls: actual candidateChildReadings still emits the two old sources with zero source
+digests; actual localSemanticEvents still emits material asymmetry@1, and Hint's live matrix
+still names the old promotion source/compiler1. These passing falsifiers establish the bug
+remains in production, not that the amended source pipeline works. D3867 remains the open
+joint authoring return; full current refs/versions must be refreshed after it is resolved.
+`[V]` module-source.ts runCurrentPacketSourceDiagnostic/runWholeCurrentModuleInventory;
+normal make inspector-recorded-prefix-research. Production stays frozen on the verified trade fix.
+
+Seven further D3867 controls replay a Black two-capture counterpart, a White one-capture
+case and a White no-capture case through actual legal recorded moves and localSemanticEvents.
+The positives retain control followed by every exchange in exact receipt order; the negative
+emits no fabricated exposure. This bounds the next source-contract work with both colors and
+0/1/2 witnesses, not a claim about maximum arity, complete tactical qualification or a new
+reduction/source implementation. `[V]` module-source.ts runExposureWitnessDiagnostic;
+normal prefix target, cases black-two/white-one/white-none.

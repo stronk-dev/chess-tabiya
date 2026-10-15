@@ -314,7 +314,9 @@ trail, stable by ply then original event order, before selecting consecutive rep
 same-FEN merge, later observation, guessed peer or caller trail. Require literal safe-integer cp
 values at both ends and the unchanged `STORY_PIVOT_CP` threshold. Mate/uninterpretable entries
 cannot become cp. Emit `{before,after,delta,plyOffset,frame:"recorded_cp_numbers",
-comparability:"provider_not_established"}`; retain both occurrences in that order. No qualifying
+comparability:"provider_not_established"}`; before/after/delta are safe-integer reported cp
+numbers, delta=after-before; overflow abstains rather than truncating. Retain both original
+sealed source occurrences in the input receipt, in that order. No qualifying
 pair is successful no_witness, while missing/crossed source is not. It reports the difference of
 stored numbers under the existing comparison convention, not a validated same-engine/bound
 evaluation change or move grade. Grounding recorded_run, exactness measured/confidence reported,
@@ -327,12 +329,138 @@ weaker recorded views. Conversely an explicitly requested recorded view reports 
 without acquiring a new provider or reconstructing a transcript. The durable Stockfish draft owns
 modern job retention and joins; it does not authorize promoting old packets through this section.
 
+**D3863 Compare Coach's genuine trajectory — unaccepted.** The all-module audit also reaches
+engine_trajectory@1's unregistered live.stockfish.eval leaf and opaque entry digest. Keeping it
+in a new eight-ref consumer would reproduce D3859. Its current replacement is
+derived.compare.engine_trajectory@2, sole createDerivedCompareEngineTrajectoryV2Evidence,
+under the existing derived.compare_narrative producer. It is a point, not a fabricated
+collection input or recorded-report packet relabelled as validated evaluation. Its literal
+alternatives are [derived.review.eval_point@1,run.record.position@1] and
+[recorded.engine.eval@1,run.record.position@1], in that order. Grounding declared_convention,
+exactness measured/confidence reported, answer evaluation, forms list/panel. Both alternatives
+and actual ordered occurrences must compile; no live.stockfish.eval alias or weaker packet arm.
+
+Its exact argument is {comparisonPoint:RecordedComparisonPointSource}, a separate privately
+nominal immutable source issued only by proposed
+RunService.resolveComparisonPointSource(context,{comparison,nodeId,signal}). comparison must
+be the genuine RecordedComparisonSource for this admitted module.compare_coach@2 operation
+after complete preflight and both full-tip grants. Capture one actual node within the peer's
+fork-inclusive path; do not invent an incoming edge for a root/fork or reuse a grade capsule.
+Its private reader is readRecordedComparisonPointSource. Both operations share only grade
+§2a's private resolveRecordedEngineEndpoint node lookup and closed endpoint state: exact
+selected reading/point/instrument or source_pending/missing_eval/input_abstained. No public
+endpoint resolver, caller validator, scores, report choices, fourth grade context or grade
+consumer. Compare's real context/consumer/grants stay in its own canonical source image.
+
+The service enumerates every original peer node from the common fork through its granted tip
+in path order, including the fork and a zero-edge attempt. No provider call, caller score,
+reached-depth guess, report search to rescue a pair or synthetic shortened run. Use genuine
+retained modern deliveries or independently admitted pinned ledger reports, with the same exact
+budget/version/options/generation checks and corrupt-modern refusal. A valid point survives
+unavailable/missing/incomparable adjacent point; pair coverage is not point coverage. Retain each
+node's ordered result state, including pending/absence, rather than an empty whole trajectory.
+
+The factory validates the nominal point source before private reads/mints and its retained
+genuine comparison, original run/head/granted branch/tip/node and full FEN. It uses the selected
+evaluation and actual run.record.position from their sole owners; caller positions or equal-FEN
+foreign occurrences refuse. Mint one point with exactly
+{nodeId,plyOffset,whiteScore,engineId,instrument,bound}; whiteScore is the existing typed cp|mate score,
+already White-POV under both owners, not learner-normalized or mate-as-cp. instrument/bound use
+grade §2a's closed GradeInstrumentV2/GradeRequestedBound, including provider nodes and real
+offline depth/time limits. Complete private source/occurrence evidence stays in input authority,
+not public provider envelopes. An available endpoint returns one point; pending/missing/input-
+abstained endpoint preserves its typed local availability. No grade, WDL, accuracy or strategic
+judgement. Full convention closure follows the genuine operands; no grade-convention@1
+inheritance or forced grade convention on this different producer.
+
+Register the exact module.compare_coach@2 pair with fact_statement, list/panel forms and strict
+compare.engine_point@2 operand/renderer over that closed payload. State actual recorded move
+offset, typed White-relative score, engine version/origin and requested bound; no generic bare
+magnitude that loses those qualifications. Retain signed mate as a typed score in text, not a
+scalar graph point. It is a recorded engine reading at that budget, not best-move advice. The
+separate recorded numerical-difference@2 view above stays explicitly unverified and cannot
+supply this stronger point. No segment between incomparable points, invented zero or confident
+engine attribution from an ordinary packet.
+
+Actual source/factory/receiver tests cover both colors/origins/all supported budgets, valid
+point beside missing/incomparable adjacent point, fixed shared-node selection, per-node
+pending/absence/corrupt modern, wrong source/consumer/column/head/node/ordinal, pair-dependent
+fallback, equal-FEN foreign point and terminal typed mate. Every input mutation affects/refuses
+the original receipt before empty shortcuts. Include zero-edge/root/fork, repeated nodes and
+typed-availability controls, not only after-move fixtures. The sole value-route arm is the
+existing kind:value with package-private isRecordedComparisonPointSource predicate. Add an
+explicit authorityShape branch over the validated immutable source image: exact comparison
+columns/grants/head/node/FEN/ordinal, endpoint state/instrument and actual sealed source receipt
+identities, not a raw DrillRun/capsule digest. Shared node selection is the same as grade, but
+their nominal sources/permissions cannot substitute for each other. Independent source/module review still gates
+implementation; metadata compilation is not private issuance or source/native qualification.
+
 Acceptance requires actual typed factory/receipt cases, malformed and substituted inputs,
 repeated-identical payload occurrences, empty/missing/uninterpretable fields, exact registered
 components and authenticated/native delivery. `recorded-origin.ts`'s pure historical membership
 controls are feasibility evidence only: they establish none of those new F2 mints or access joins.
 Story rank's dependent successor is separately held on D3845's variable/empty input contract;
 do not hide that hole behind a computed local leaf or fabricate absent source witnesses.
+
+#### D3864 companion — genuine recorded path for piece routes — unaccepted
+
+The all-module joint review reaches the real Compare route factory: it declares one move
+but mints from an unsealed variable path. Do not disguise that population as one arbitrary
+move/digest or add an unused witness. Register run.record.comparison_path@1 as a specific
+internal source_record under existing run.record (record plane, recorded/sync,
+recorded_run/exact/not_applicable, answer fact+move, forms machine_condition only). It is
+the genuine complete original raw path, not calculated routes or a generic collection of
+independently computed semantic observations. No new provider, UI topic or reduction opcode.
+
+Sole source factory createRunRecordComparisonPathV1Evidence has exactly
+{comparison:RecordedComparisonSource,branchId:string}. Require the actual nominal comparison
+owner and one of its two granted columns before reading, caches or empty decisions. Its closed
+payload is {runId,headSeq,branchId,forkNodeId,throughNodeId,nodes}, where nodes is a nonempty
+ordered array of {node:Node,creationEventOrdinal:number,creationEvent:RunStartedEvent|MoveCommittedEvent}.
+Node and events use their existing exact recorded schemas; no loose records. headSeq is the
+captured actual event head, event ordinals are original zero-based array offsets, and full
+creation events retain their original seq. Retain every node from actual common fork through
+that granted tip, including original FEN/occupancy, parent/move/actor/branch identity, captures,
+castling/promotion role and origin. Zero-edge has exactly the real fork entry, never [] or an
+invented move. Repeated positions and inherited nodes remain separate original occurrences.
+
+The owner validates both complete original graphs/FEN paths before narrowing, then every
+adjacent canonical legal move/result and each unique actual creation-event join. Root uses
+run.started.data.rootNode; other nodes use their original move.committed.data.node. Original
+creation identity fields id,parentId,fen,transposeKey,moveUci,moveSan,ply,actor,branchId,createdAt
+must match. Do not equate later mutable objective/checkpoint/evidence annotations with their
+birth snapshots; retain both complete original stored images. Actual runtime event/replay
+admission remains required, not a caller assertion. Origin branch of a shared node is not
+rewritten to the requested branch. The private source/receipt binds original run/head, both
+grants/ordered columns, selected column/tip, all nodes and original event ordinals/images.
+Do not serialize a raw DrillRun into its count-only authority shape or replace the path with
+an opaque digest. No caller node/event array, shortened run or generic source-valid callback.
+
+derived.compare.piece_route@2, sole createDerivedComparePieceRouteV2Evidence, has exactly
+[run.record.comparison_path@1] as literal sealed input. Its arguments are
+{comparison:RecordedComparisonSource,branchId:string,path:DeclaredEvidence<RecordedComparisonPath>}.
+The source owner records/validates the exact path projection/issuer/input authority against
+this comparison/head/selected column/tip before payload reads or no-output shortcuts. Copied
+seals and genuine foreign paths fail; an equal FEN or matching piece label is not authority.
+Compute the existing recordedPieceRoutes only from the admitted path's ordered node payloads,
+not the original run or a second path lookup; retain the complete real path as its one actual
+input. Output each existing PieceRoute payload {pieceId,squares} in existing order with unchanged
+recorded_run/exact/not_applicable, fact+move and list/panel forms. Route identity remains the
+physical piece at the fork through captures/EP/promotion and simultaneous castling relocations;
+a stationary castling piece has no invented movement. Zero-edge is successful empty after
+source validation. This is lawful whole recorded source authority, not a fake singleton move.
+
+Register both exact source/factory/route schemas, literal declarations, owner input/receipt
+shaping, invokers/execution source and the module.compare_coach@2 × piece_route@2 pair.
+Reuse the reviewed route operand/renderer because its fields/meaning are unchanged, not an
+old consumer or guessed label. The source itself is machine-only. All real nonmodule strip/
+voice consumers must migrate under their existing obligations before global@1 retirement;
+there is no hypothetical legacy API or frozen packet pipeline to maintain. Acceptance needs
+actual owned source/factory and full route output/ordinal/receipt controls: missing/reordered/
+duplicated/substituted node/event/edge, later malformed FEN before prefix, shared origins,
+empty/no-output, both-color EP/promotion/capture, orthodox/960 castling and repeated piece moves,
+plus actual Compare authenticated/presentation/native journeys. Independent joint review still
+gates implementation; no semantic qualification follows from a metadata/path model.
 
 #### 2.3b Draft D3846 pivotal fixed-tuple successors — unaccepted
 
@@ -1363,8 +1491,14 @@ union; an actual emitted value matches one complete ordered member with multipli
 
 These are23 finite upper-bounded members. They describe possible source shapes, not a claim that
 every count/arm is physically realizable. Existing exact recorded predicates still decide matches.
-Trade-completed@2 already has literal C,C,E,E and is not an Inspector topic; retain it unchanged,
-including its physical recorded moveAnchors envelope. No trade@3 or extra Inspector topic.
+Trade-completed@2's actual factory retains literal C,C,E,E, but the catalogue had incorrectly
+declared C,E (D3865); its narrative predecessor likewise retained C,C,M,M against declared C,M.
+Repair that declaration and semantic-event occurrence matching under the already accepted
+recorded-semantic-path contract before this migration. Repeated refs mean separate ordered
+occurrences and the event must retain their exact ordered receipt digests; a set of two dependency
+families is not four operands. Unique-ref families with variable populations still require their
+own F2 source contracts; this narrow repair does not qualify them. Trade is not an Inspector
+topic. Keep its physical recorded moveAnchors envelope and meaning; no trade@3 or extra topic.
 
 **Owned window and exact source joins.** Retain an independent immutable snapshot of the admitted
 original run/head/grant, exact requested @3 ref, original branch and endpoint, complete horizon

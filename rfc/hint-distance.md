@@ -359,9 +359,9 @@ The disclosure brand is a runtime property backed by a private `WeakSet`, follow
 spread copies, JSON round-trips and double assertions. The only public constructor is
 `compileHintDisclosure(occurrence, rung)`.
 
-### §3a — Draft D3768 exact nonterminal-fork migration — unaccepted
+### §3a — Draft D3768/D3866 exact fork and promotion source migration — unaccepted
 
-This companion consumes value-authority §2.3f, not the old fork source under a new label.
+This companion consumes value-authority §§2.3c/2.3f, not old sources under new labels.
 The seven semantic family names, fixed selection precedence, root-side plies1/3, four-ply scan,
 five rung meanings/forms/answer ceilings, optional voice rules and all assistance/rated gates
 stay unchanged. The current exact source for family fork_survives_reply becomes
@@ -371,8 +371,13 @@ Each genuine source must be the original retained value for the searched edge. A
 child's source is total false, so this family is not admitted there. Checkmate may still select
 mate_in_one; any other family selected at stalemate must justify its own unchanged statement.
 No global terminal-edge filter or claim that geometric double attack itself becomes false.
+Promotion_pressure uses candidate compiler2's original rules.tactic.reading.promotion_pressure@1
+value for that searched child, including its declared promotion-pressure-geometry@1 convention
+and complete typed availability fields. Keep the existing promotion predicate/target operands;
+source correction is not permission to assert inevitable promotion, a safe pawn move or a
+winning position. The old derived promotion source cannot satisfy this current family.
 
-Only this family's exact projections change:
+Exactly these two families' projections change:
 
 | Exact successor | Sole factory symbol | Exact ordered inputs |
 |---|---|---|
@@ -382,54 +387,62 @@ Only this family's exact projections change:
 | `derived.hint.disclosure.fork_survives_reply.piece@2` | `createDerivedHintDisclosureForkSurvivesReplyPieceV2Evidence` | the exact fork horizon@2 |
 | `derived.hint.disclosure.fork_survives_reply.distance@2` | `createDerivedHintDisclosureForkSurvivesReplyDistanceV2Evidence` | the exact fork horizon@2 |
 | `derived.hint.disclosure.fork_survives_reply.move@2` | `createDerivedHintDisclosureForkSurvivesReplyMoveV2Evidence` | the exact fork horizon@2 |
+| `derived.hint.horizon.promotion_pressure@2` | `createDerivedHintHorizonPromotionPressureV2Evidence` | rules.tactic.reading.promotion_pressure@1, then live.stockfish.principal_variation@1 |
+| `derived.hint.disclosure.promotion_pressure.pattern@2` | `createDerivedHintDisclosurePromotionPressurePatternV2Evidence` | the exact promotion horizon@2 |
+| `derived.hint.disclosure.promotion_pressure.square@2` | `createDerivedHintDisclosurePromotionPressureSquareV2Evidence` | the exact promotion horizon@2 |
+| `derived.hint.disclosure.promotion_pressure.piece@2` | `createDerivedHintDisclosurePromotionPressurePieceV2Evidence` | the exact promotion horizon@2 |
+| `derived.hint.disclosure.promotion_pressure.distance@2` | `createDerivedHintDisclosurePromotionPressureDistanceV2Evidence` | the exact promotion horizon@2 |
+| `derived.hint.disclosure.promotion_pressure.move@2` | `createDerivedHintDisclosurePromotionPressureMoveV2Evidence` | the exact promotion horizon@2 |
 
-The other six horizon refs/thirty disclosure refs remain@1. HINT_DECLARATION_MATRIX must carry
+The other five horizon refs/twenty-five disclosure refs remain@1. HINT_DECLARATION_MATRIX must carry
 the literal source and exact horizon/disclosure refs instead of rebuilding every route with@1;
 all factory, source dispatch, renderer, module-acceptance and wire-version lookups derive from
-that one current matrix. Keep an explicit frozen historical@1 image for old factories/receipts,
-not a default-to-latest or payload-shape choice. New fork factories retain old payloads, weakest
+that one current matrix. D3851 removes the frozen historical executable image: migrate actual
+callers and retain one current matrix, never a payload-shape/default-to-latest choice. New fork/promotion
+factories retain the existing payload shapes and weakest
 declared_convention/measured/reported metadata, abstention union and answer/form images. Their
 closure follows the actual new source and searched line, then the actual horizon, never the old
-fork source or its convention. Test exact full closure, not a subset assertion.
+fork source or its convention. The promotion chain retains its exact new geometric convention;
+neither inherited convention or source may be replaced by the other family's. Test exact full
+closure, not a subset assertion. familySources/readingSources must use the current matrix's
+exact source tuple, never a hardcoded version1/base-id match or old promotion factory fallback.
 
 HINT_COMPILER_VERSION becomes guided_hint_compiler@2 for all new requests. New request/cache
 identities already include the compiler; no old retained selection/request can be served as@2.
 The selector owns the actual current packet/source/line tuple, and disclosure construction still
 requires that process-local selected owner. New module.guided_hint@2 accepts exactly the current
-35-ref matrix image, not both versions of the fork's rungs. Its one existing logical policy,
+35-ref matrix image (ten changed@2, twenty-five unchanged@1), not both versions of either family's rungs. Its one existing logical policy,
 disclosure vocabulary, context/role ceilings, current decision and budget rules remain. The
-request/cache epoch guided_hint_compiler@2 is **not** a disclosure callable identity. Keep the
-historical GUIDED_HINT_DISCLOSURE and MODULE_DECLARATIONS bytes, including compileHintDisclosure@1.
-The exact successor consumer image instead names callable compileHintDisclosure@2, implemented
-by proposed compileHintDisclosureV2. Module-registration's image-local disclosureCompiler field
-owns that execution reference; both images inherit the one unchanged logical policy's vocabulary,
-rung ceiling/roles/contexts/budgets. The new callable checks the exact current horizon ref AND
+request/cache epoch guided_hint_compiler@2 is **not** a disclosure callable identity. The sole
+current GUIDED_HINT_DISCLOSURE/MODULE_DECLARATIONS image names compileHintDisclosure@2,
+implemented by proposed compileHintDisclosureV2. Module-registration's current image owns
+that execution reference and the one unchanged logical vocabulary/rung ceiling/roles/contexts/
+budgets. The callable checks the exact current horizon ref AND
 its current compiler@2 selected owner before exact-rung minting. A matching base id, old selected
 owner, compatible payload or old disclosure WeakSet membership cannot admit it. Source/route
-dispatch, disclosure brands and current receiver checks retain exact versions. Old consumer@1,
-compileHintDisclosure@1 and exact factories/renderers stay explicit historical compatibility,
-not new active requests; never overwrite old declaration metadata with the request-cache epoch.
+dispatch, disclosure brands and current receiver checks retain exact versions. Retire obsolete
+consumer@1/callable/wrapper/fork factory/renderer paths after actual callers migrate; no historical
+compatibility pipeline. This includes old promotion horizon/rung paths. Historical meaning
+records stay truthful, not reissued as compiler2.
 
 **Wire identity must not erase the projection version.** The current HintDeliveryReceipt has
 version1 and projectionId without a projection version. It cannot truthfully identify these@2
 values. Add closed HintDeliveryReceiptV2 with version:2 and required projectionVersion, retaining
 every other version1 field unchanged. The exact projectionId/version pair must equal the current
-matrix's family/rung ref, including@1 for the unchanged six families. Its digest covers version
-and projectionVersion. The shared runtime strict parser dispatches on receipt version: the
-historical version1 grammar/bytes stay exact and version2 accepts only its complete closed shape.
-No optional version field or defaulting. The available HintResponse arm carries that explicit
-receipt union; no raw evidence/horizon/PV or compiler-owner seal crosses JSON.
+matrix's family/rung ref, including@1 for the unchanged five families. Its digest covers version
+and projectionVersion. The shared runtime strict parser accepts the complete closed version2
+shape and rejects version1. No compatibility reader, optional field or defaulting. The available
+HintResponse arm carries only that current receipt; no raw horizon/PV or owner seal crosses JSON.
 
 The current request owner/seat accepts version2 only for new compiler@2 requests, checks current
 request/decision/rung/manifest/disclosure identity and refuses version1 delivery as unsupported
-rather than rendering it as corrected output. Historical readers may explicitly parse version1;
-that is not current-request fallback. Preserve source-unavailable/empty/voice-fallback distinctions,
+rather than rendering it as corrected output. Preserve source-unavailable/empty/voice-fallback distinctions,
 cancel/retry/late-response behavior and all existing mark-level refusal rules. Update the server
 receipt compiler and shared web parser/consumer together; no second browser-only validator.
 
 Acceptance requires actual complete source→packet→selection→factory→module→receipt→seat cases,
-old/new compiler separation, wrong/crossed source and line refusals, all five exact new rung refs
-and projection-version corruption tests, old version1 round-trip compatibility, both-color
+old/new compiler separation, wrong/crossed source and line refusals, all ten exact new rung refs
+and projection-version corruption tests, permanent version1 refusal, both-color
 terminal/nonterminal cases, authenticated HTTP and desktop/phone late-response/ceiling controls.
 No unchanged-budget latency or full Hint completion is inferred from research-only fixtures.
 Independent source plus joint module/wire review is required before this amendment is accepted.

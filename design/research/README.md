@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D3863–D3867 current module source audit, 2026-10-15:39 disposable controls enumerate all ten
+modules (299 current/282 conditional proposed pairs) and expose omitted Compare Coach. Joint
+review returns four concrete lineage/cardinality gaps. Six actual defender-exposure controls
+reproduce two positive captures/three inputs against two declared. D3865's scoped accepted trade
+repair has real-factory regressions; remaining current source contracts stay independently gated.
+`[V]` module-evidence-assembly.md, current-image/joint-return section; cited source/normal targets.
+
 D1422 grade/source alignment, 2026-10-15:28 disposable numerical controls retain the ruled
 2.5/10/15 ladder, exact inclusive boundaries and three actual predecessor disagreements.
 These are not grade@2 source issuance or cross-workflow delivery proof. See

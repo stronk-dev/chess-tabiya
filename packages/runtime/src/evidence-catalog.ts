@@ -687,7 +687,8 @@ const derivedExchangeOutputs = [
   projection("derived.exchange", "derived.exchange.trade_completed", "derived", {
     role: "event", payloadType: "TradeCompletedEvent", semantics: "Two immediately consecutive legal captures with a byte-identical shared position, the second capturing on the first capture's landing square.",
     operands: ["startFen", "firstMoveUci", "boundaryFen", "secondMoveUci", "endFen", "landingSquare", "first", "second", "moveAnchors"], signs: ["state"], grounding: "declared_convention", exactness: "exact", answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
-    dependsOn: [ref("rules.transition.event.capture"), ref("run.record.move")], derivation: { inputs: [ref("rules.transition.event.capture"), ref("run.record.move")] },
+    dependsOn: [ref("rules.transition.event.capture"), ref("run.record.move")],
+    derivation: { inputs: [ref("rules.transition.event.capture"), ref("rules.transition.event.capture"), ref("run.record.move"), ref("run.record.move")] },
     limitations: ["Immediate capture-recapture only; later return captures and strategic exchange judgements are outside scope."],
   }),
 ];

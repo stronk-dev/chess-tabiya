@@ -2,17 +2,20 @@
 // proposed Inspector rebase rows are an inventory aid, NOT new module bindings or source proof.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { MODULE_CONSUMER_ACCEPTS, PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
+import { EVIDENCE_CONTRACT_DECLARATIONS, EVIDENCE_MODULE_IDS, MODULE_CONSUMER_ACCEPTS, PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 import { compileProjectionExecution, EvidenceExecutionError } from "../../packages/runtime/src/evidence-execution.js";
 import { compileEvidenceConsumerExecution } from "../../packages/runtime/src/evidence-binding-execution.js";
 import type { VersionedEvidenceId } from "../../packages/runtime/src/evidence-contract.js";
-import { evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { compileEvidenceManifest, evidenceValueReceipt, type DeclaredEvidence, type ProjectionDeclaration } from "../../packages/runtime/src/evidence-contract.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { importedRun, play } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { moveQualityGrade, type MoveQualityGrade } from "../../packages/runtime/src/grade.js";
 import { gradeReadingFromPayload } from "../../packages/runtime/src/grade-reading.js";
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
 import { runGradeSourceResearch } from "./grade-source.js";
+import { localSemanticEvents } from "../../packages/runtime/src/semantic-evidence.js";
+import { candidateChildReadings, CANDIDATE_PACKET_COMPILER_VERSION } from "../../packages/runtime/src/candidate-population.js";
+import { HINT_DECLARATION_MATRIX } from "../../packages/runtime/src/hint-registry.js";
 
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
 const declarations = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map(row => [key(row), row]));
@@ -105,7 +108,151 @@ export function runModuleSourceResearch() {
     controls, rows, counterfactualDroppingLiveGradeCompiles: true, oldDeclarationsChanged: false, providerCalls: 0, productionChanges: 0 }));
   runGradeOperandResearch();
   runPrelaunchRetirementResearch(replacements);
+  runWholeCurrentModuleInventory(replacements);
   runGradeSourceResearch();
+  runExposureWitnessDiagnostic();
+  runCurrentPacketSourceDiagnostic();
+}
+
+// DISPOSABLE D3866 active-path falsifier, not a corrected packet or Hint implementation.
+function runCurrentPacketSourceDiagnostic() {
+  let controls = 0;
+  const check = (test: () => void) => { test(); controls++; };
+  const fen = "4k3/P7/8/8/8/8/8/4K3 b - - 0 1";
+  const readings = candidateChildReadings(fen);
+  for (const ref of ["derived.tactic.promotion_pressure@1", "derived.material.reading.role_signature@1"]) {
+    const value = readings.find(reading => key(reading.projection) === ref)!;
+    check(() => assert(value));
+    check(() => assert.equal((value.payload as { readonly fen: string }).fen, fen));
+    check(() => assert.equal(evidenceValueReceipt(value).sourceDigests.length, 0));
+  }
+  check(() => assert.equal(CANDIDATE_PACKET_COMPILER_VERSION, 1));
+  check(() => assert.equal(key(HINT_DECLARATION_MATRIX.find(row => row.family === "promotion_pressure")!.source), "derived.tactic.promotion_pressure@1"));
+  const material = localSemanticEvents("4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", "e4d5", "4k3/8/4p3/3P4/8/8/8/4K3 b - - 0 1")
+    .filter(event => event.projection.id === "derived.material.event.role_asymmetry");
+  check(() => assert.equal(material.length, 1));
+  check(() => assert.equal(key(material[0]!.projection), "derived.material.event.role_asymmetry@1"));
+  console.log(JSON.stringify({ scope: "DISPOSABLE D3866 actual active packet/Hint source diagnostic, NOT successor/adoption proof",
+    controls, activeCompiler: CANDIDATE_PACKET_COMPILER_VERSION, retainedOldReadings: 2, oldMaterialEvents: material.length,
+    correctedSourceIssuers: 0, providerCalls: 0, productionChanges: 0 }));
+}
+
+// DISPOSABLE joint-review falsifier: actual current factories on a legal recorded edge.
+function runExposureWitnessDiagnostic() {
+  const fen = "r3k3/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1";
+  const run = play(importedRun("joint-review-exposure", "white", fen), ["c5b6"]);
+  const root = run.nodes.find(node => node.parentId === null)!, child = run.nodes.find(node => node.parentId === root.id)!;
+  const exposures = localSemanticEvents(root.fen, child.moveUci!, child.fen)
+    .filter(event => event.projection.id === "derived.tactic.defender_exposure");
+  const multi = exposures.find(event => event.derivationInputs.filter(input => input.projection.id === "rules.exchange.predicate.legal_exchange").length > 1);
+  assert(multi, "independent-review fixture must reach multiple real positive exchange witnesses");
+  const declared = declarations.get("derived.tactic.defender_exposure@1")!.derivation!.inputs!;
+  assert.equal(declared.length, 2);
+  assert.equal(multi.derivationInputs.length, 3);
+  assert.equal(evidenceValueReceipt(multi.evidence).sourceDigests.length, 3);
+  assert.equal(multi.derivationInputs.filter(input => input.projection.id === "rules.exchange.predicate.legal_exchange").length, 2);
+  assert.notDeepEqual(declared, multi.derivationInputs.map(input => input.projection));
+  console.log(JSON.stringify({ scope: "DISPOSABLE actual defender-exposure literal-count falsifier, NOT successor/adoption proof",
+    controls: 6, fen, move: child.moveUci, declaredInputs: declared.length, actualInputs: multi.derivationInputs.length,
+    positiveExchangeWitnesses: 2, productionChanges: 0 }));
+  let breadthControls = 0;
+  const check = (test: () => void) => { test(); breadthControls++; };
+  for (const fixture of [
+    { id: "black-two", side: "black" as const, fen: "3k3r/8/8/8/5b2/6N1/6b1/3K3R b - - 0 1", move: "f4g3", captures: 2 },
+    { id: "white-one", side: "white" as const, fen: "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", move: "c5b6", captures: 1 },
+    { id: "white-none", side: "white" as const, fen: "r3k3/8/1n6/2B5/8/8/8/4K3 w - - 0 1", move: "c5b6", captures: 0 },
+  ]) {
+    const replay = play(importedRun(`exposure:${fixture.id}`, fixture.side, fixture.fen), [fixture.move]);
+    const before = replay.nodes.find(node => node.parentId === null)!, after = replay.nodes.find(node => node.parentId === before.id)!;
+    const events = localSemanticEvents(before.fen, after.moveUci!, after.fen).filter(event => event.projection.id === "derived.tactic.defender_exposure");
+    check(() => assert.equal(events.length, fixture.captures === 0 ? 0 : 1));
+    if (fixture.captures === 0) continue;
+    const event = events[0]!;
+    check(() => assert.deepEqual(event.derivationInputs.map(input => key(input.projection)), ["rules.square.event.control@1", ...Array.from({ length: fixture.captures }, () => "rules.exchange.predicate.legal_exchange@1")]));
+    check(() => assert.deepEqual(evidenceValueReceipt(event.evidence).sourceDigests, event.derivationInputs.map(input => evidenceValueReceipt(input).payloadDigest)));
+  }
+  console.log(JSON.stringify({ scope: "DISPOSABLE D3867 actual witness breadth, NOT source successor or qualification",
+    controls: breadthControls, cases: 3, bothColors: true, positiveCaptureCounts: [2, 1, 0], productionChanges: 0 }));
+}
+
+// DISPOSABLE D3841/D3859: inspect ALL current learner modules, not only the four previously
+// named successor consumers. This is an inventory of exact refs/forms, NOT new bindings.
+function runWholeCurrentModuleInventory(replacements: ReadonlyMap<string, string>) {
+  let controls = 0;
+  const check = (test: () => void) => { test(); controls++; };
+  const author = readFileSync("rfc/module-registration.md", "utf8");
+  const detailRefs = [...author.matchAll(/^\| `(derived\.inspector\.detail\.[a-z_]+)` \|/gmu)].map(match => `${match[1]}@1`);
+  check(() => assert.equal(detailRefs.length, 6));
+  check(() => assert.equal(new Set(detailRefs).size, 6));
+  const sequences = new Map<string, string>(SEQUENCE_SOURCE_REBASES.map(([before, after]) => [before.split("@")[0]!, after]));
+  sequences.set("derived.exchange.trade_completed", "derived.exchange.trade_completed@2");
+  const rows = EVIDENCE_MODULE_IDS.map(module => {
+    const refs = MODULE_CONSUMER_ACCEPTS[module].map(key);
+    const target = [...new Set(refs.filter(ref => module !== "review_map" || !["live.stockfish.eval@1", "live.stockfish.wdl@1"].includes(ref))
+      .map(ref => ref === "derived.grade.move_quality@1" ? "derived.grade.move_quality@2"
+        : module === "compare_coach" && ref === "derived.compare.engine_trajectory@1" ? "derived.compare.engine_trajectory@2"
+          : module === "compare_coach" && ref === "derived.compare.piece_route@1" ? "derived.compare.piece_route@2"
+          : sequences.get(ref.split("@")[0]!) ?? replacements.get(ref) ?? ref))];
+    // Both changed families come from Hint's current matrix proposal, not an Inspector map.
+    // Five other families/twenty-five rung refs keep their truthful source meaning@1.
+    const proposed = module === "guided_hint" ? target.map(ref => /^derived\.hint\.disclosure\.(fork_survives_reply|promotion_pressure)\./u.test(ref)
+      ? ref.replace(/@1$/u, "@2") : ref) : module === "full_inspector" ? [...target, ...detailRefs] : target;
+    const bindings = PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => binding.consumer.id === `module.${module}`);
+    check(() => assert.deepEqual(new Set(bindings.map(binding => key(binding.projection))), new Set(refs)));
+    check(() => assert.equal(new Set(proposed).size, proposed.length));
+    let baselineExecution: string;
+    try { compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 1 }); baselineExecution = "compiled"; }
+    catch (error) { assert(error instanceof EvidenceExecutionError); baselineExecution = `${error.code}: ${error.message}`; }
+    return { module, baseline: refs.length, proposed: proposed.length,
+      changed: refs.length !== proposed.length || refs.some((ref, i) => ref !== proposed[i]),
+      changedPairs: refs.filter(ref => !proposed.includes(ref)),
+      bindingRows: bindings.length, bindingForms: [...new Set(bindings.flatMap(binding => binding.forms))], baselineExecution,
+    };
+  });
+  check(() => assert.equal(rows.reduce((total, row) => total + row.baseline, 0), 299));
+  check(() => assert.equal(rows.reduce((total, row) => total + row.proposed, 0), 282));
+  check(() => assert.equal(rows.find(row => row.module === "guided_hint")!.changedPairs.length, 10));
+  check(() => assert.deepEqual(rows.filter(row => row.changed).map(row => row.module),
+    ["postcommit_nudge", "guided_hint", "compare_coach", "review_map", "full_inspector"]));
+  check(() => assert.match(rows.find(row => row.module === "compare_coach")!.baselineExecution, /EXECUTION_SOURCE_UNREGISTERED/u));
+  const section = author.split("**D3841 exact-version closure — unaccepted current contract:**")[1]!.split("**Ordered exact acceptance.**")[0]!;
+  const expected = rows.map(row => ({ module: row.module, version: row.changed ? 2 : 1, count: row.proposed,
+    callable: row.module === "full_inspector" ? "compileInspectorSourcePage" : "compileModulePacket",
+    disclosure: row.module === "guided_hint" ? "compileHintDisclosure@2" : "none" }));
+  const assertImage = (text: string) => {
+    const image = [...text.matchAll(/^\| ([a-z_]+) \| module\.\1@(\d+) \| ([^|]+) \| ([a-zA-Z]+) \| ([^|]+) \|$/gmu)]
+      .map(match => ({ module: match[1], version: Number(match[2]), count: match[3]!.trim() === "65 topics plus six detail refs" ? 71 : Number(match[3]!.trim()), callable: match[4], disclosure: match[5]!.trim() }));
+    assert.deepEqual(image, expected);
+  };
+  check(() => assertImage(section));
+  const compareLine = section.split("\n").find(line => line.startsWith("| compare_coach |"))!;
+  for (const mutated of [section.replace(compareLine, ""), `${section}\n${compareLine}`,
+    section.replace("module.compare_coach@2", "module.compare_coach@1"),
+    section.replace("| 72 |", "| 74 |"),
+    section.replace(compareLine, compareLine.replace("compileModulePacket", "compileInspectorSourcePage")),
+    section.replace("compileHintDisclosure@2", "compileHintDisclosure@1")]) {
+    check(() => assert.throws(() => assertImage(mutated)));
+  }
+  const oldTrajectory = declarations.get("derived.compare.engine_trajectory@1")!;
+  check(() => assert.throws(() => compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, oldTrajectory), /EXECUTION_SOURCE_UNREGISTERED/u));
+  const candidate: ProjectionDeclaration = { ...oldTrajectory, version: 2, grounding: "declared_convention",
+    payloadType: "DisposableComparisonEnginePoint", operands: ["nodeId", "plyOffset", "whiteScore", "engineId", "instrument", "bound"],
+    dependsOn: [parse("derived.review.eval_point@1"), parse("recorded.engine.eval@1"), parse("run.record.position@1")],
+    derivation: { anyOf: [[parse("derived.review.eval_point@1"), parse("run.record.position@1")],
+      [parse("recorded.engine.eval@1"), parse("run.record.position@1")]] },
+    semantics: "Disposable D3863 fixed point+position alternatives; no point source issuer or current consumer adoption.",
+    disposition: { kind: "inspector_only", reason: "Disposable D3863 metadata only" } };
+  const candidateManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+    producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.outputs.some(row => key(row) === key(oldTrajectory))
+      ? { ...producer, outputs: [...producer.outputs, candidate] } : producer) });
+  const execution = compileProjectionExecution(candidateManifest, candidate);
+  check(() => assert.equal(execution.paths.length, 2));
+  check(() => assert.equal(execution.paths.filter(path => path.sourceRequirements.some(source => source.providerOperation !== null)).length, 1));
+  check(() => assert.deepEqual(candidate.derivation?.anyOf?.map(member => member.length), [2, 2]));
+  check(() => assert.equal(declarations.has("derived.compare.engine_trajectory@2"), false));
+  console.log(JSON.stringify({ scope: "DISPOSABLE D3841/D3859 ALL learner-module exact-ref inventory, NOT bindings/source/factory/adoption proof",
+    modules: rows.length, controls, rows, proposedPairs: 282, literalTrajectoryExecutionPaths: execution.paths.length,
+    newSourceIssuers: 0, currentConsumerBindings: 0, productionChanges: 0 }));
 }
 
 function runPrelaunchRetirementResearch(inspectorReplacements: ReadonlyMap<string, string>) {

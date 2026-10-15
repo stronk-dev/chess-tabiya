@@ -33,6 +33,7 @@ import {
 import { commitMove, createRun, rewind } from "./runtime.js";
 import {
   assertSemanticEvidenceEvent,
+  compileSemanticEvidenceEvent,
   attractionObservedOperands,
   checkZwischenzugObservedOperands,
   defenderConsequenceOperands,
@@ -665,7 +666,23 @@ describe("recorded semantic path compiler", () => {
     const tradeEdges = tradePath.slice(1).map((node, index) => declareRecordedEdgeEvidence(trade, tradePath[index]!, node));
     const capture = (edge: DeclaredEvidence<RecordedEdge>) => transitionSemanticEvents(edge.payload.beforeFen, edge.payload.moveUci, edge.payload.afterFen).find((event) => event.operands.family === "capture") as SemanticEvidenceEvent<TransitionSemanticEventOperands>;
     expect(() => tradeCompletedSemanticEvent(capture(tradeEdges[0]!), capture(tradeEdges[1]!), tradeEdges[0]!, tradeEdges[1]!)).toThrow(/run.record.move/u);
-    expect(recordedTradeCompletedSemanticEvent(capture(tradeEdges[0]!), capture(tradeEdges[1]!), tradeEdges[0]!, tradeEdges[1]!)?.projection).toEqual({ id: "derived.exchange.trade_completed", version: 2 });
+    const tradeEvent = recordedTradeCompletedSemanticEvent(capture(tradeEdges[0]!), capture(tradeEdges[1]!), tradeEdges[0]!, tradeEdges[1]!)!;
+    expect(tradeEvent.projection).toEqual({ id: "derived.exchange.trade_completed", version: 2 });
+    const declared = PRIMARY_EVIDENCE_MANIFEST.projections.find(value => value.id === tradeEvent.projection.id && value.version === tradeEvent.projection.version)!;
+    expect(declared.derivation?.inputs).toEqual(tradeEvent.derivationInputs.map(value => value.projection));
+    expect(tradeEvent.derivationInputs.map(value => `${value.projection.id}@${value.projection.version}`)).toEqual([
+      "rules.transition.event.capture@1", "rules.transition.event.capture@1", "run.record.edge@1", "run.record.edge@1",
+    ]);
+    expect(evidenceValueReceipt(tradeEvent.evidence).sourceDigests).toEqual(tradeEvent.derivationInputs.map(value => evidenceValueReceipt(value).payloadDigest));
+    const [firstCapture, secondCapture, firstRecorded, secondRecorded] = tradeEvent.derivationInputs;
+    for (const inputs of [
+      [secondCapture!, firstCapture!, firstRecorded!, secondRecorded!],
+      [firstCapture!, secondCapture!, secondRecorded!, firstRecorded!],
+      [firstCapture!, firstCapture!, firstRecorded!, secondRecorded!],
+      [firstCapture!, secondCapture!, firstRecorded!],
+    ]) expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
+      evidence: tradeEvent.evidence, derivationInputs: inputs, anchor: tradeEvent.anchor, sign: tradeEvent.sign,
+    })).toThrow(/EVIDENCE_EVENT_DERIVATION_MISMATCH/u);
     expect(() => recordedTradeCompletedSemanticEvent(capture(tradeEdges[0]!), capture(tradeEdges[1]!), tradeEdges[1]!, tradeEdges[0]!)).toThrow(/crossed/u);
     const square = recordedRun("square", POSITIVES[7].fen, POSITIVES[7].moves);
     const squarePath = branchPath(square, square.activeCursor.branchId);

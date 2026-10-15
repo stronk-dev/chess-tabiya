@@ -32178,6 +32178,51 @@
       "uxItems": [],
       "evidence": "apps/server/src/review-map.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3863",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:93c1bcb898720fe991e0ab4d2f921939349f145b49d52327f97d6f5a89b6b037",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
+    },
+    {
+      "id": "D3864",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f3a014c863453b7257fe1b5991d918c903841f684473460aca99df99eda23b43",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
+    },
+    {
+      "id": "D3865",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c9fe35171e6bf203241720254e01ac4a38c58a7694da7fe3d95245e65a72fb83",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/recorded-semantic-path.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3866",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2ddc6f46b9e05afa4e0cb018330dc4c5ace4a89bb03cfc66c1b716e9a4a2032d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
+    },
+    {
+      "id": "D3867",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:35195ab7ef9a2628c81219d2fe6ed47e56039bd0ca2e575afb4e59a98bb78258",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
     }
   ]
 }

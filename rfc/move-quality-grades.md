@@ -223,6 +223,14 @@ imported workflow, otherwise review. That context stays private source/permissio
 Recheck current access/head/selected edge/disclosure/cancellation before publication. A copied,
 crossed, stale or forged source fails; it is not missing_eval or a successful empty result.
 
+D3863/F2 §2.3a shares only the private per-node engine endpoint resolver with Compare trajectory,
+not this edge-shaped grade source or grading permission. The source owner factors fixed node
+selection into resolveRecordedEngineEndpoint, returning the same closed endpoint state for
+grade's two nodes and Compare's independently authorized node (including a root/fork with no
+incoming edge). Full source context/grants still precede either lookup; no caller scores,
+invented edge, extra grade consumer, public resolver or context/threshold change. Compare's
+separate nominal source and sole point factory cannot authorize a grade.
+
 **Provider origin already exists.** Reuse Review's actual private attached
 values.providerDelivery via serialize/parsePersistedProviderDelivery and the registered
 live.stockfish.position_eval@1 → derived.review.eval_point@1 factories. Persisted delivery

@@ -22,6 +22,14 @@ by a SHA-256 digest. `/capabilities` returns that digest, current producer avail
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
 
+Completed-trade declarations retain both captures and both recorded moves/edges in their actual
+factory order, rather than collapsing four operands into two dependency families (D3865).
+Semantic-event compilation treats a repeated declared ref as distinct ordered occurrences and
+checks their exact ordered receipt digests as well as projection refs. Missing, repeated or
+crossed witnesses refuse. Existing unique-ref family declarations still use their existing
+population matching; the pending F2 source migrations, including defender exposure, must settle
+those separate cardinality contracts. This repair does not establish their qualification.
+
 Pivotal grounding retains complete recorded witnesses: a phase-change item carries both
 definite phase readings and their two positions, even across an intervening unclear phase.
 A sustained-option-collapse item carries all three same-side legal-move readings and positions,

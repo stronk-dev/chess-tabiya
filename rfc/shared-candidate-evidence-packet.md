@@ -408,20 +408,37 @@ required roadmap work; implementing this RFC alone cannot close those consumer f
 `CANDIDATE_PACKET_COMPILER_VERSION = 1` is an exported literal and every construction-semantic
 change must move it or the cache-identity fixture fails.
 
-#### §3.1a Draft D3768 nonterminal-fork compiler successor — unaccepted
+#### §3.1a Draft D3768/D3866 current local-source compiler successor — unaccepted
 
-The preceding literal describes compiler1. Under coordinated value-authority §2.3f and
-hint-distance §3a acceptance, the current compiler literal becomes2. It constructs
-reading.fork_survival with only derived.tactic.nonterminal_fork_survival@1, using the actual
+The preceding literal describes compiler1. Under coordinated value-authority §§2.3c/2.3f and
+hint-distance §3a acceptance, the sole current compiler literal becomes2. Its exact source changes
+are the following; they are one unshipped compiler2 image, not successive compatibility epochs:
+
+| Current slot/family | Exact current source |
+|---|---|
+| reading.fork_survival | derived.tactic.nonterminal_fork_survival@1 |
+| candidateChildReadings promotion pressure | rules.tactic.reading.promotion_pressure@1 |
+| candidateChildReadings material role signature | derived.material.reading.role_signature@2 |
+| localSemanticEvents material role asymmetry | derived.material.event.role_asymmetry@2 |
+
+The latter three use the actual sole factories and complete source operands specified by F2
+§2.3c: direct canonical-FEN promotion reading, ten ordered count inputs for each material
+signature, and before/after signatures plus every actual capture/promotion cause. Change actual
+child-reading and local-event dispatch, not just the allowed-ref list or Inspector bindings.
+Readings use each exact child FEN; events use that row's exact original legal edge. Invalid
+sources refuse rather than falling back to old factories or attaching unused witnesses to old
+results. Retain each complete payload/population and original sealed object in the packet.
+
+The fork slot uses the actual
 same-edge double-attack/reply-breadth sealed values; no old source relabelling or second reply
 population. The original double-attack absence still yields no fork value; a present terminal
 double attack yields the new total false value with zero actual refutations. Nonterminal values
 preserve full operands/refutation order. All other readings/events, legal population/order,
 terminal-root behavior, score/provider exclusion and scope-retention rules stay unchanged.
 
-Derive the current literal closure from the single current slot declaration, replacing only
-that ref; the historical compiler1 vocabulary remains a frozen compatibility image rather than
-being reinterpreted by the current generated tuple. Exercise events/readings/wide scopes,
+Derive the current literal closure from the single current slot declaration, applying all four
+exact replacements. Under D3851 retire the obsolete compiler1 vector/API compatibility image
+after real caller migration; do not reinterpret old values as compiler2. Exercise events/readings/wide scopes,
 including private tactical prerequisites when only readings are retained. Narrowing a wide
 compiler2 receipt must retain the same original sealed objects and compiler identity, not mint
 or recalculate predicates. The actual legal input and candidate rows stay complete.
@@ -433,7 +450,16 @@ recomputed through the current compiler, never converted. Preserve the old publi
 input grammar; this is an explicit compiler-version change, not an extra learner setting or a
 new aggregate evidence leaf. Packets are process-local: do not fabricate persisted packet
 migrations, rewrite authored packs or rebuild longitudinal semantic events for this change.
-Retain predecessor fixtures/old source APIs and the exact compiler1 identity/construction evidence.
+Retain truthful predecessor construction evidence, not an executable compatibility pipeline.
+
+Acceptance includes both-color actual compiler→scope→projection/selection/Hint tests for the
+four changed slots. Promotion empty, legal-promotion, terminal-reply and invalid-clone cases
+retain complete typed fields/conventions; material capture/promotion/capture-promotion and
+quiet/castling empties retain exact input occurrences and full original edges. A generated
+allow-list alone cannot witness adoption. Wrong source/version/FEN/edge, old compiler receipt,
+crossed material count/cause and manufactured modern-value substitutions must refuse. Audit
+and migrate actual bot/Hint/pack/selection callers and exact current closure from real compiled
+values before removing old routes. No detector family, opportunity or payload field may vanish.
 
 **D3851 owner scope amendment, 2026-10-15:** “zero legacy required. we are pre launch. make it
 all right.” The earlier frozen-vector compatibility requirement and this draft's predecessor

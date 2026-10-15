@@ -2112,140 +2112,154 @@ public meanings remain untouched until those exact new contracts and the joint I
 amendment survive independent review. No reserved provider alias, unavailable stub, hidden
 required modern-to-legacy fallback, arbitrary copied packet or implicit opening authority.
 
-**D3841 exact-version closure — unaccepted author contract:** preserve the eleven logical
-`MODULE_IDS`, one `MODULE_POLICIES` entry per id, every preset/context reference and the existing
-`MODULE_DECLARATIONS` predecessor image. Consumer version is an execution/presentation identity,
-not a new module, policy, assistance preset or permission. Add a versioned consumer-image index
-alongside `MODULE_CONSUMER_ACCEPTS` in the existing catalogue; its rows have exactly
-`moduleId`, `consumer`, `accepts`, `implementation` and `disclosureCompiler`. `accepts` is an
-ordered exact-ref list. disclosureCompiler is null except for Guided Hint, whose exact callable
-ref is compileHintDisclosure@1 for consumer@1 and compileHintDisclosure@2 for consumer@2.
-Each current row is the existing `module.<id>@1` image without changing its contents/order.
-Those predecessor rows reference the existing `MODULE_CONSUMER_ACCEPTS` entries; do not copy or
-independently maintain their lists. All closure/callable/pair views derive from this one exact
-image index, not a competing consumer registry or an additional policy authority.
-The Inspector's new logical-family row is `module.full_inspector@2`, with the complete separately
-authored source map followed by the six detail refs. D3768's coordinated three additional exact
-consumer images below use the same index and policy rule; they do not add logical modules.
-No aliases or default-to-latest lookup.
+**D3841 exact-version closure — unaccepted current contract:** D3851 replaces the earlier
+dual-image/compatibility design, not the exact-source or disclosure requirements. One current
+image per evidence module, eleven unchanged logical MODULE_IDS/policies/preset references,
+and no version negotiation or old packet pipeline. This is the proposed complete image, including
+D3863's previously omitted Compare Coach. Five unchanged consumers stay@1 because their
+meaning is unchanged, not to support old deployments. rules_floor has no evidence consumer.
 
-The predecessor row names `compileModulePacket`. The successor row names the proposed runtime
-callable `compileInspectorSourcePage`; the stored-access/query service invokes it only after
-the requested source/context has been admitted. Register both exact tuples through the existing
-`evidenceConsumerOperation`/`assertEvidenceConsumerOperations` authority. Keep the existing @1
-entry point explicitly @1; it must not infer @2 from a compatible payload. The new callable
-compiles/render-fits an already admitted source collection, not storage access or arbitrary
-caller facts. The HTTP/service source-owner checks in this section still precede it.
+**Joint review return, 2026-10-15:** the inventory below is not yet a source-complete contract.
+D3864's genuine recorded-path/piece-route correction is bounded-reviewed, not implemented;
+D3865 repairs the accepted trade declaration separately. D3866's coordinated candidate/Hint
+source/disclosure correction is now bounded-reviewed, not implemented; D3867 requires complete
+variable defender-exposure lineage, including the real Threat consumer. Its unchanged@1 row
+below is therefore not endorsed. Resolve these exact sources and refresh the version/ref image
+before joint acceptance;282 is the measured conditional image, not a final binding commitment.
 
-`moduleEvidenceClosure`, `assertClosure` and `assertModuleRegistry` must join the exact consumer
-tuple to its consumer-image row, then join `moduleId` to the existing policy. Every image must
-have exactly one consumer and callable, ordered-equal declared acceptance, declared projections,
-answer content inside that one policy, and complete accepted/bound projection coverage. Every
-`module.*` manifest consumer must have an image; an unknown version, duplicate tuple or unmatched
-image refuses. Compare binding **pair sets**, allowing multiple separately declared adapters
-for one pair while retaining unique adapter tuples and validating every adapter. Do not weaken
-closure by ignoring @2, reducing to base ids, dropping extra bindings or counting @1 as its witness.
-Cover-or-refuse upstream closure includes the explicit versioned images without removing any
-retained predecessor coverage. `rules_floor` remains the sole non-evidence module.
+| Logical module | Sole current consumer | Accepted refs | Sole evidence callable | Disclosure callable |
+|---|---|---:|---|---|
+| sight_on_request | module.sight_on_request@1 | 23 | compileModulePacket | none |
+| blunder_prevention | module.blunder_prevention@1 | 3 | compileModulePacket | none |
+| threat_radar | module.threat_radar@1 | 7 | compileModulePacket | none |
+| postcommit_nudge | module.postcommit_nudge@2 | 52 | compileModulePacket | none |
+| structure_nudge | module.structure_nudge@1 | 7 | compileModulePacket | none |
+| theory_breadcrumb | module.theory_breadcrumb@1 | 4 | compileModulePacket | none |
+| guided_hint | module.guided_hint@2 | 35 | compileModulePacket | compileHintDisclosure@2 |
+| compare_coach | module.compare_coach@2 | 8 | compileModulePacket | none |
+| review_map | module.review_map@2 | 72 | compileModulePacket | none |
+| full_inspector | module.full_inspector@2 | 65 topics plus six detail refs | compileInspectorSourcePage | none |
 
-Both versions read roles, sessions, review/explicit initiative, disclosure/answer ceilings,
-empty-family vocabulary and budgets from `modulePolicy("full_inspector")`; no copied successor
-policy table. The limits stay20 facts/400 words/20 marks/eight arrows. The successor's exact
-acceptance list comes from its image, not from `moduleDeclaration(...).accepts`' @1 list.
-Extend the existing admission helper with explicit exact-consumer selection (default @1 for
-existing callers), validate the sealed view against that image, and preserve operand/answer/
-denominator checks. A different module or version cannot borrow admission. Its source-collection
-path must retain order as specified below; the old packet/reducer path keeps its current behavior.
+**Ordered exact acceptance.** At author baseline ca022571 the ten lists contain299 pairs.
+Materialize the new lists once in the existing catalogue using these complete rules, then
+delete obsolete list-building paths; no runtime copy of a historical list is required:
 
-Presentation classification names both tuples `inspector_presented`. Pair-keyed source/detail
-adapter registrations, callable census, operation rows and pair-execution tracking retain the
-exact consumer version; a predecessor adapter/operation is not successor adoption. Their @1
-records remain, and a missing @2 receiver/renderer remains explicitly unimplemented, not covered
-by a declaration-only census. No source/data/version is added to a saved run or drill pack.
+1. Preserve slot order and apply the31-row affected-source map above to every exact matching
+   ref in every list. Keep other refs unless the following rules replace them. This includes
+   Compare's two delta refs, not only Inspector.
+2. For eleven sequence families (trade plus F2 §2.3j's ten), replace narrative@1 or recorded@2
+   with its sole current recorded ref: trade@2, ten others@3. Deduplicate exact accepted refs by
+   first occurrence. Keep all families: Nudge9, Review11, Inspector10. Never deduplicate source
+   occurrences or literal derivation operands.
+3. Nudge/Review replace grade@1 in place with grade@2 (grade §§2a/4a, F2 §2.3l). Review removes
+   only duplicate scalar live.stockfish.eval@1/wdl@1 acceptance. Keep actual eval_point@1,
+   wdl_point@1 and independent admitted ledger readings; Inspector's report-only sources cannot
+   power grade/accuracy. Hint replaces its five fork and five promotion disclosures with@2;
+   five other families/twenty-five refs stay@1 under its current matrix. Candidate compiler2
+   adopts the actual promotion/material reading and material event sources under shared packet
+   §3.1a/F2 §2.3c; an updated accept list alone is not source adoption. Compare additionally replaces engine_trajectory@1
+   with F2 §2.3a/D3863's genuine engine_trajectory@2 point; its unregistered Stockfish predecessor
+   cannot satisfy complete preflight. Replace Compare's piece_route@1 with F2 §2.3a/D3864's
+   piece_route@2 over the genuine complete recorded-path source, not an unused move witness.
+4. Inspector appends §4.11a's six literal detail refs in their table order, each@1. These are
+   views of a topic, not extra acquisition topics; no other module receives them.
 
-**D3859/D3861 current grade/Review source amendment — unaccepted:** the D3851 retirement
-inventory above is the sequence-only baseline. Current Nudge replaces derived.grade.move_quality@1
-with the exact derived.grade.move_quality@2 owned by move-quality-grades §2a/F2 §2.3l; same
-position in its accepted-ref list. Current Review makes the same grade replacement and retires
-the two duplicate scalar bindings live.stockfish.eval@1 and live.stockfish.wdl@1. It already
-accepts derived.review.eval_point@1 and derived.review.wdl_point@1; retain those real modern
-sources and the independent admitted ledger readings rather than substitute Inspector's weaker
-report-only packet projections into current Review grades/figures. This gives conditional
-Nudge52/Review72/Inspector65+6 refs, not runtime bindings or a new logical module. No engine/WDL
-feature is dropped: typed point sources own evaluation/graph/WDL presentation; grade/accuracy
-share exact validated pairs. Missing WDL or ungradeable pairs remain honest source-local states.
-This supersedes the fork-only acceptance-list instructions below for Nudge/Review: publish one
-complete current list, not a union with the old scalar/narrative bindings or a compatibility image.
+Total282 distinct consumer×projection pairs (299 minus23 duplicate/obsolete representations
+plus six details), not282 acquisitions or qualifications. One F1 adapter/binding per pair;
+a composition serves all its component forms. No predecessor module consumers/bindings/
+callables alongside these current rows. Retain truthful historical capability/convention
+records; retire executable paths after actual caller migration, not by rewriting saved packs,
+user data, immutable archives or historical meaning.
 
-The new grade is evaluation-only and keeps current timing/roles/sessions/budgets. Register its
-exact pair-keyed grade.move_quality@2 renderer/parser and current voice accepts to Nudge/Review
-only. Move-quality-grades §4a also supplies D1422's single2.5/10/15 convention@2: no grading
-context switch, public context field or context suffix in the full deterministic grade sentence.
-Identical admitted operands/mover/instrument yield byte-identical complete grade payload and
-full sentence across workflows, while source/consumer receipts, permissions and selection stay
-distinct. Keep the registered operand/parser/convention lookup/voice image synchronized; no
-grade@1 parser relabel or new Inspector grade consumer. Source-owning service resolution uses
-the actual authorized operation context, not Full
-Inspector permission. Complete whole-consumer preflight remains required before lazy work; both
-grade literal alternatives must compile and their required source absence must remain local.
-F2 §2.3l/move-quality-grades §2a own issuer/private-reader/original occurrence/origin selection/
-instrument/context and accuracy/graph adoption. Their source reads never initiate analysis or
-upgrade a scalar packet. Retire obsolete current grade/scalar adapters/callers after real current
-consumers migrate; no duplicate legacy module image under D3851. All remaining source/scoped
-Review adapter contracts and independent joint acceptance remain required.
+**One authority, not a second registry.** Refactor MODULE_CONSUMER_ACCEPTS into the acceptance
+view of one current catalogue image with closed rows
+{moduleId,consumer,accepts,implementation,disclosureCompiler}. One row per evidence module;
+derive the existing acceptance export, F1 consumers and actual operation registrations from
+it, not independently copied arrays. MODULE_DECLARATIONS gains consumer:VersionedEvidenceId|null
+(null only for rules_floor), obtained from that row, never a hardcoded@1/max-version lookup.
+MODULE_POLICIES remains the sole policy authority. compileModulePacket keeps its name/signature
+and reads that exact current consumer from its compiled module. Remove the proposed
+compatibility-only compileModulePacketForConsumer wrapper. Source resolution, admission,
+reducers, presentation/voice, shared page/disclosure parser, component/callable coverage and
+MODULE_PAIR_EXECUTION join that exact tuple; a request cannot choose another version.
 
-**D3768 coordinated direct and Hint consumer images — unaccepted:** extend the same index, not
-a second registry, with these exact rows. For each direct module the ordered successor accepts
-list is its frozen@1 image with the old fork ref replaced in place by
-derived.tactic.nonterminal_fork_survival@1; all other exact refs/order remain. Guided Hint uses
-hint-distance §3a's current35-ref image (five fork@2, thirty unchanged@1):
+Register actual references through evidenceConsumerOperation and its assertion, not matching
+symbol strings. Full Inspector uses compileInspectorSourcePage because source-order paging
+does not run module selection. Its web door uses inspector/query; remove the obsolete all-source
+module-query Inspector arm and migrate actual UI callers. An explicit obsolete Full Inspector
+modules/query request is typed invalid, not raw fallback or silent success. Other queries keep
+their existing closed timing grammar/receipts. The inner PresentationReceipt already carries
+the exact consumer; the shared receiver checks the current image. No new protocol, stored
+format, preset or generic API-version router is introduced by these consumer versions.
 
-| Logical module / sole policy | Exact new consumer | Registered evidence callable |
-|---|---|---|
-| postcommit_nudge | module.postcommit_nudge@2 | compileModulePacketForConsumer |
-| review_map | module.review_map@2 | compileModulePacketForConsumer |
-| guided_hint | module.guided_hint@2 | compileModulePacketForConsumer |
+**Total bindings and presentation.** compileModuleEvidenceBindings (§2.5.2) derives every
+field from the current image, actual projection and registered pair adapter, not old bindings.
+Adapter identity is adapter.module.<moduleId>.<one-based-current-slot>@<consumer-version>.
+Producer/ref, implementation, timings/roles/sessions, complete forms/answer image, latency and
+budgets follow §2.5.2. Empty form/answer intersections refuse; no first-form/first-answer
+fallback. Every exact pair has its actual component/composition and strict registered operand
+parser. Same payloads may reuse reviewed pure constructs; changed packet/grade/material/
+structural payloads use the authored successor parser/renderer, not casts or source-name
+aliases. Six details use their presentation companion schemas. Grade uses strict full grade@2,
+context-free convention@2 and byte-exact voice spans, never an Inspector grade binding.
 
-Proposed compileModulePacketForConsumer takes the existing ModulePacketRequest plus a required
-exact consumer tuple, with the same optional manifest argument. Validate moduleId/consumer/image
-agreement before admission, use the image's exact accepts and the one logical MODULE_POLICIES
-entry for capabilities/reducers/ceilings. Do not reuse MODULE_DECLARATIONS'@1 acceptance as@2.
-The existing compileModulePacket remains explicitly@1; it may wrap the shared internal
-implementation but cannot choose a version from payload shape or current/latest. The current
-source-owning Nudge/Review operations and compileGuidedHintPacket explicitly invoke@2 for new
-requests, then pair-keyed presentation/voice read that same exact consumer. Historical@1 paths
-stay separately addressed. The Hint wrapper still requires its selected/owned disclosure first.
+Accepted/binding/presentation pair sets and callable tuples must agree before lazy work.
+Validate every ordered occurrence of every derivation alternative, source owner/nominal reader,
+direct convention, reduction and sourceAbsence policy. Never filter failed bindings to compile.
+Each of the ten consumers compiles as a whole; production execution consumes that exact compiled
+object. Cover-or-refuse maps retired refs to explicit current successors without dropping any
+family or upstream obligation. Current role/rated/assistance/timing/disclosure/budget checks
+remain at both admission and publication.
 
-The index's image-local disclosureCompiler is execution metadata, not a second logical policy
-or a request/cache epoch. Retain GUIDED_HINT_DISCLOSURE/MODULE_DECLARATIONS' historical compiler
-compileHintDisclosure@1. Derive the successor declaration's disclosure from the single unchanged
-logical vocabulary/rung ceiling and that image's exact callable ref; do not globally replace the
-predecessor field. Proposed compileHintDisclosureV2 implements compileHintDisclosure@2 with the
-exact current matrix and compiler@2 owner checks in hint-distance §3a. Non-Hint images must have
-null, both Hint images must have their exact ref, and unknown/mismatched callable refs refuse.
-Register both actual callable identities; guided_hint_compiler@2 is only request/cache identity.
+**Acquisition owners.** Nudge windows/novelty use §4.5b at the actual learner commit; grade uses
+its actual workflow-issued source and fixed endpoints. Review uses its full current plan plus
+Review compiler §4.5's exact12-row Story adapter/parser/slot/state image, with graph/accuracy
+reading the same admitted endpoints. Direct fork uses F2 §2.3f's same legal edge, terminal false
+and complete reply population. Hint uses its owned hypothetical candidate/search-line source
+and compiler2, never recorded authority. Inspector inventory does no acquisition; source/detail
+resolves only the named topic through the suppliers below, preserving occurrence order and
+local absence. No operation borrows Inspector permission, caller validation or fresh engine
+work to turn a historical report into a stronger source.
 
-Extend moduleEvidenceClosure, assertClosure/assertModuleRegistry, MODULE_OPERATIONS,
-MODULE_PAIR_EXECUTION, adapters, presentation classification, callable census and full consumer
-preflight to exact tuples for all four proposed@2 consumers, not only Inspector. Reuse the same
-unchanged policy once per logical id and derive every binding image from the one index. No@1
-operation, rendered pair or ID-only check counts as@2 execution. Missing source/presentation
-remains blocked, never hidden by filtering failed bindings. Existing@1 declaration/adapter order
-and receipt bytes stay unchanged. Preserve all other projection/source holds rather than
-claiming complete Review/Nudge/Hint from one repaired pair.
+**D3863 Compare's eight-ref operation.** Preserve moduleComparisonForSubject's selection rule:
+subject's containing active branch else creating branch, then last other recorded branch.
+At the authorized snapshot capture that pair and both actual leaf endpoints in primary/peer
+order. Compare Coach compares whole attempts, not a prefix through the selected node. Grant and
+validate both complete original paths before compareBranches, readers or caches. Create the
+genuine RecordedComparisonSource from those same full-tip columns. The two delta bindings use
+their sole@2 factory/source arms below/F2 §§2.3a/2.3i. Trajectory uses that section's genuine
+source-owned@2 points, not the old unregistered live leaf or opaque digest. Piece route uses
+D3864's complete original recorded-path source and exact@2 factory. Four refs remain exact:
+run.record.fork@1, run.record.consequence@1, run.record.objective_transition@1,
+run.record.checkpoint_hit@1.
+Their actual factories use the same authorized original run/BranchComparison/peer, not a second
+pair lookup or shortened run. Trajectory enumerates peer nodes from the fork through the
+captured tip, including zero-edge/fork points, through its independently issued nominal
+RecordedComparisonPointSource. It shares private per-node lookup with grades, not a fabricated
+edge-shaped grade capsule or grading permission. Retain every node's exact endpoint state.
+Both literal modern/ledger alternatives and the typed instrument/score renderer must compile;
+dropping an origin or input occurrence is not this migration. D3855's false-safe/catalogue
+caption repair remains an explicit renderer obligation, not a generic weak fallback. Missing
+second attempt stays no_second_attempt; missing engine reports remain engine-local and cannot
+erase structural differences. Access/currentness or malformed/crossed source fails, not empty.
+The enter-other-attempt action uses that captured peer, never a branch added while work is
+pending. Inspector instead uses its independently granted bounded columns.
 
-For Nudge/Review's new direct fork pair, their actual granted committed/incoming edge supplies
-the canonical operands for the genuine double-attack and reply-breadth factories. No double
-attack is successful no_witness; a terminal double attack is a real available false predicate,
-not no_witness/unavailable. Render through value-authority §2.3f's exact terminal-aware statement
-pair. Retain the selected/creating branch distinction, actual edge provenance, current read/
-assistance/disclosure authority and cancellation/late-publication checks. No synthetic branch,
-client-provided FEN, engine line masquerading as recorded play or unused sealed prerequisite.
-Inspector obtains the same arithmetic sources through its existing proposed dependent-edge
-supplier below; Guided Hint instead uses the original hypothetical candidate-packet values and
-never imports recorded authority. Current effect/preset/module/role ceilings and budgets do
-not change. Acceptance needs actual all-four complete preflight/binding/callable/presentation
-coverage plus real new request/source/HTTP/native operation, not four anchored declarations.
+**Hint and grade migration.** Only current compileHintDisclosure@2 remains, implemented by
+compileHintDisclosureV2 using the current matrix/compiler2 selected owner. Retire compiler1
+wrappers/receiver grammar after actual caller migration; request/cache epoch is not callable
+identity. Current wire2 carries exact projection versions and rejects wire1, not a historical
+compatibility parser. Grade@2 uses one2.5/10/15 ladder, no public context field/suffix; private
+workflow/permission/input receipts remain distinct. Complete payload/full sentence identity
+does not equate permissions or selection. Budgets/defaults/ceilings are unchanged.
+
+Acceptance requires all ten exact image/282 binding/presenter/callable joins and all five changed
+consumer preflights, plus real sources/factories/HTTP/LLM-off/native journeys for each changed
+operation. Corruption, crossed/extra/missing refs, wrong consumer version, obsolete Hint/grade/
+source values and forged handles fail before preparation. Honest empty/local absence preserves
+useful siblings; grade admission alone does not satisfy D3767 selected delivery. Inventory and
+model tests do not prove those new boundaries. Independent source plus joint module/wire
+review still precedes implementation.
 
 **D3841 demanded-topic absence — unaccepted author contract:** every Inspector@2 binding declares literal
 `sourceAbsence: {necessity:"required",whenNoPath:"operation_unavailable"}`. Required means that

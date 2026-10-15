@@ -1,5 +1,30 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — Whole-current-image checkpoint D3863–D3867: all ten modules now have an explicit
+current-catalogue/callable/binding recipe, including previously omitted Compare Coach. The
+38-control disposable inventory measures299 current pairs and282 conditional proposed pairs;
+that proposal is RETURNED, not accepted/implemented. Independent joint review finds four real
+gaps: Compare piece routes have zero sealed inputs (D3864), trade declarations collapse four
+inputs to two (D3865), Hint/candidate promotion/material sources remain wrong (D3866), and
+defender exposure retains a variable exchange population (D3867). The last is executed with six
+controls: two positive captures/three actual inputs against two declared. No blanket hold,
+failed-binding filter, singleton fake or family deletion may hide these returns.
+
+D3865's accepted immediate repair is implemented with genuine narrative/recorded-factory
+regressions; focused155 tests pass before a separate new regression is isolated from the frozen
+capture assertion. Final full-gate results belong to the log. D3864 now proposes the genuine
+complete raw recorded comparison path plus piece_route@2; independent bounded return corrects
+the exact existing RunStartedEvent/run.started names, then clears that wording, not joint
+acceptance. Compare trajectory@2 uses genuine source-owned per-node eval points including root/
+fork, sharing only the private endpoint resolver with grade; it does not invent grade edges.
+The D3866 correction is now authored and independently bounded-reviewed: all four actual
+packet source slots migrate together; fork+promotion have ten current disclosure@2 refs,
+five other families/25 refs remain@1.39 current-image and ten actual active-path diagnostic
+controls pass, not corrected packet/Hint adoption. Next author D3867's complete exposure
+population, refresh the whole image and obtain independent joint
+acceptance before new source/factory/API implementation. D1422 remains doing. No legacy pipeline
+or user decision is required; D3851 remains answered. No whole milestone or release promotion.
+
 **Current owner ruling, 2026-10-15 — D3851:** “zero legacy required. we are pre launch. make it
 all right.” This supersedes the compatibility/pipeline-preservation instructions below. Build
 one correct current foundation; migrate real consumers and remove obsolete narrative/vector/

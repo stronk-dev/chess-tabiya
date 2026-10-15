@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3862]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3867]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,22 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3863's all-ten-module inventory closes the omission of Compare Coach from the current-source
+migration plan:299 current pairs,282 conditionally proposed pairs,38 disposable controls. The
+independent joint review returns four concrete source/cardinality gaps, not a production-ready
+image. D3865's accepted trade repair now preserves four ordered witnesses and rejects crossed/
+missing/duplicated inputs. D3864's genuine raw recorded-path proposal and Compare's root-inclusive
+per-node trajectory source are authored; bounded review clears the corrected existing event
+names, not their production adoption. D3866's four-slot packet/current Hint source correction is
+now authored and bounded-reviewed, with39 image/ten active-path diagnostic controls, not actual
+source adoption. D3867's variable defender-exposure population remains next. It is reproduced with two positive captures/
+three sealed inputs against two declared. All five rows are owned; current source/joint acceptance,
+actual issuers/adapters/API/native proof and full1.0 breadth remain. Local verification passes
+5931 software/seven performance/257 content,396 browser cases/one configured optional skip,
+112 unretried composition cells and the packaged-production smoke case. These regress existing
+production paths, not the unimplemented source amendments. No remote CI, whole-milestone,
+new qualification or release claim.
 
 D3862 removes the unused raw-string Nudge API/client/runtime packet while preserving the actual
 canonical module query, shared evidence and presentation path. Its useful tests migrate to real

@@ -1301,12 +1301,19 @@ export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManife
   if (!declaration.requiredOperands.every((operand) => keys.includes(operand))) throw new EvidenceManifestError("EVIDENCE_EVENT_OPERAND_MISSING", "runtime event payload lacks a required operand", [refKey(input.evidence.projection)]);
   const derivationInputs = [...(input.derivationInputs ?? [])];
   for (const value of derivationInputs) assertDeclaredEvidence(value);
-  const receiptSources = [...evidenceValueReceipt(input.evidence).sourceDigests].sort();
-  const suppliedSources = derivationInputs.map((value) => evidenceValueReceipt(value).payloadDigest).sort();
-  if (receiptSources.join("|") !== suppliedSources.join("|")) throw new EvidenceManifestError("EVIDENCE_EVENT_DERIVATION_MISMATCH", "runtime derivation inputs are not the exact sealed inputs named by the factory receipt", [refKey(input.evidence.projection)]);
+  const receiptSources = [...evidenceValueReceipt(input.evidence).sourceDigests];
+  const suppliedSources = derivationInputs.map((value) => evidenceValueReceipt(value).payloadDigest);
+  if ([...receiptSources].sort().join("|") !== [...suppliedSources].sort().join("|")) throw new EvidenceManifestError("EVIDENCE_EVENT_DERIVATION_MISMATCH", "runtime derivation inputs are not the exact sealed inputs named by the factory receipt", [refKey(input.evidence.projection)]);
   const expectedMembers = declaration.derivationAnyOf ?? (declaration.derivationInputs === undefined ? [Object.freeze([])] : [declaration.derivationInputs]);
-  const actualKeys = [...new Set(derivationInputs.map((value) => refKey(value.projection)))];
-  const matchingMembers = expectedMembers.filter((member) => member.length === actualKeys.length && member.every((value) => actualKeys.includes(refKey(value))) && actualKeys.every((key) => member.some((value) => refKey(value) === key)));
+  const actualRefs = derivationInputs.map((value) => refKey(value.projection));
+  const actualKeys = [...new Set(actualRefs)];
+  // A repeated declared ref denotes separate ordered occurrences, not one set member.
+  // Unique-ref event declarations still describe dependency families; their exact population
+  // migrations are owned by F2. Do not silently widen this scoped literal-cardinality repair.
+  const literalMember = (member: readonly VersionedEvidenceId[]): boolean => new Set(member.map(refKey)).size !== member.length;
+  const matchingMembers = expectedMembers.filter((member) => literalMember(member)
+    ? member.length === actualRefs.length && member.every((value, i) => refKey(value) === actualRefs[i]) && receiptSources.every((digest, i) => digest === suppliedSources[i])
+    : member.length === actualKeys.length && member.every((value) => actualKeys.includes(refKey(value))) && actualKeys.every((key) => member.some((value) => refKey(value) === key)));
   if (matchingMembers.length !== 1) throw new EvidenceManifestError("EVIDENCE_EVENT_DERIVATION_MISMATCH", "runtime derivation inputs disagree with the event declaration", [refKey(input.evidence.projection)]);
   const anchor = canonicalAnchor(input.anchor);
   const operandRecord = operands as Record<string, unknown>;
@@ -1318,7 +1325,7 @@ export function compileSemanticEvidenceEvent<T>(manifest: CompiledEvidenceManife
     afterFen: anchor.afterFen,
     sign: input.sign,
     operands,
-    ...(declaration.derivationAnyOf === undefined ? {} : { derivationMember: [...actualKeys].sort() }),
+    ...(declaration.derivationAnyOf === undefined ? {} : { derivationMember: literalMember(matchingMembers[0]!) ? actualRefs : [...actualKeys].sort() }),
   });
   const value = immutable({
     [SEMANTIC_EVENT]: true as const, id, projection: { ...input.evidence.projection }, evidence: input.evidence,

@@ -973,3 +973,45 @@ table, context-free payload/full-sentence identity, private workflow permissions
 parser/voice/source migration. No reviewer tests run. New replacement logic, actual source/
 factory/renderer/HTTP positives and full current module/source joint acceptance remain owed;
 this is not source qualification, an acceptance or a production ladder change.
+
+## Whole current-source/module joint review — D3863–D3867
+
+The user-authorized separate reviewer inspects all ten current module rows, candidate/Hint,
+F2 source contracts and the genuine Compare paths read-only. Result: **RETURN on four concrete
+source/declaration gaps**, not on missing production qualifications that implementation owes.
+
+1. D3864: actual piece_route@1 declares one recorded move but its factory mints with zero
+   sealed inputs. The new genuine raw complete comparison-path source and piece_route@2 are
+   coherent on bounded review, after correcting nonexistent RunCreatedEvent/run.created to
+   actual RunStartedEvent/run.started.data.rootNode. Re-review verifies this exact correction.
+   No source issuer or API migration is implemented or accepted by that bounded clearance.
+2. D3865: actual completed-trade factories retain C,C,M,M / C,C,E,E, while the catalogue
+   declares C,M / C,E. The narrow accepted repair retains four ordered occurrences and exact
+   ordered receipt digests; independent diff review finds no concrete concern and no test
+   weakening. The reviewer runs no tests; local full-gate results belong to the log.
+3. D3866: active candidate/Hint promotion/material sources were left on the old values despite
+   proposed source corrections elsewhere. Fix real child readings, material event, Hint horizon/
+   disclosures and exact current consumer matrix, not merely Inspector or vector adapters.
+4. D3867: defender exposure declares control+exchange but actually retains control+every positive
+   capture. The main agent executes the legal c5b6 falsifier with six controls: two positive
+   exchange witnesses/three actual inputs against two declared. The initial reviewer read-only
+   result did not execute it. Preserve every witness and settle the full population contract.
+
+The reviewer finds no additional concrete return in the inspected source-only sequences,
+ledger/opening/Explorer status, explicit reductions, grade convention/permissions, complete
+consumer preflight or access/disclosure/budgets. This bounded observation is not acceptance
+of the complete amendment. D3866/D3867 and full joint acceptance remain open; no production
+qualification, browser/provider run or legacy compatibility requirement follows.
+
+### D3866 bounded author correction — independent re-review
+
+Packet §3.1a now explicitly migrates the actual nonterminal-fork, promotion reading, material
+signature and material event dispatch with F2 §2.3c's complete source operands and original
+retained object identity. Hint §3a adds promotion horizon@2 and all five disclosure@2 refs,
+beside fork's five; one current matrix/selection/owner/wire2 join retains35 refs and unchanged
+ceilings. Other five families/25 refs stay@1. Module image and disposable recipe are coordinated.
+
+The independent reviewer finds no bounded blocker, runs no tests and preserves actual source/
+factory/packet/selector/receiver/native proofs as implementation obligations. Main's normal
+prefix target passes39 image and ten actual old-path diagnostic controls, not new source proof.
+D3867 and whole joint acceptance remain open; no old value is relabelled or legacy image required.

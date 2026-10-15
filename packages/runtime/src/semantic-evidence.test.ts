@@ -306,6 +306,27 @@ describe("semantic evidence runtime", () => {
     }
   });
 
+  it("D3865 retains every ordered trade occurrence and rejects crossed or incomplete witnesses", () => {
+    const start = "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1";
+    const boundary = after(start, "e4d5");
+    const end = after(boundary, "e6d5");
+    const first = transitionSemanticEvents(start, "e4d5", boundary).find(value => value.operands.family === "capture")!;
+    const second = transitionSemanticEvents(boundary, "e6d5", end).find(value => value.operands.family === "capture")!;
+    const [firstMove, secondMove] = pathMoves(start, ["e4d5", "e6d5"]) as [DeclaredEvidence<unknown>, DeclaredEvidence<unknown>];
+    const trade = tradeCompletedSemanticEvent(first, second, firstMove, secondMove)!;
+    const declared = PRIMARY_EVIDENCE_MANIFEST.projections.find(value => value.id === trade.projection.id && value.version === trade.projection.version)!;
+    expect(declared.derivation?.inputs).toEqual(trade.derivationInputs.map(value => value.projection));
+    expect(evidenceValueReceipt(trade.evidence).sourceDigests).toEqual(trade.derivationInputs.map(value => evidenceValueReceipt(value).payloadDigest));
+    for (const inputs of [
+      [second.evidence, first.evidence, firstMove, secondMove],
+      [first.evidence, second.evidence, secondMove, firstMove],
+      [first.evidence, first.evidence, firstMove, secondMove],
+      [first.evidence, second.evidence, firstMove],
+    ]) expect(() => compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
+      evidence: trade.evidence, derivationInputs: inputs, anchor: trade.anchor, sign: trade.sign,
+    })).toThrow(/EVIDENCE_EVENT_DERIVATION_MISMATCH/u);
+  });
+
   it("emits discovered execution only when the exact before-state relation and gained ray agree", () => {
     const before = "7k/8/8/8/4r3/5N2/6B1/7K w - - 0 1";
     const afterFen = after(before, "f3h4");

@@ -1978,8 +1978,9 @@ No further product policy or owner choice is presumed necessary for preserving m
 ## Draft companion — scoped comparison structure fidelity (D3847/D3855)
 
 **Unaccepted; no current consumer is migrated by this text.** F2 §2.3i owns the proposed
-derived.compare.structure_delta@2 source/factory/reduction and exact payload. Register only
-`module.full_inspector@2 × derived.compare.structure_delta@2 × fact_statement`, with forms
+derived.compare.structure_delta@2 source/factory/reduction and exact payload. Register both
+`module.full_inspector@2 × derived.compare.structure_delta@2 × fact_statement` and D3863's
+`module.compare_coach@2 × derived.compare.structure_delta@2 × fact_statement`, with forms
 sentence/list/panel, retained operands observation and namedStructure, and assertions
 copied_byte_equal plus retained_convention. Its sole registered fact renderer is
 `inspector.compare_structure@1`; it accepts exactly that payload's closed kind-discriminated
@@ -2021,10 +2022,37 @@ kinds, including zero values, a real unsafe reach record, a real named match, un
 missing/inconsistent nested fields and copied source/results. Both mounted/native Inspector
 journeys must show exact names and honest reach text without raw strings/undefined/overflow,
 while preserving board geometry, grants and assistance ceilings. The disposable D3855 controls
-prove the old failure, not this new implementation. Existing Compare Coach, Full Inspector@1,
-comparison strip and voice still have the old bad-caption path; D3855 remains open until their
-separately versioned source/renderer adoption is specified, accepted, implemented and verified.
-Do not silently widen those frozen accepts or alter their stored receipt/payload meanings here.
+prove the old failure, not this new implementation. D3863 now includes Compare Coach's actual
+source/renderer migration in module-registration's current image; adoption is not implemented.
+The separate comparison strip/voice paths remain D3855 work until their actual consumers migrate.
+D3851 requires no frozen runtime compatibility image, but no existing source/payload may be
+silently relabelled as the corrected source or historical meaning rewritten.
+
+**D3863 current Compare engine adapters — unaccepted.** Register the exact
+module.compare_coach@2 pair for derived.compare.engine_trajectory@2 with fact_statement,
+list/panel forms, all six payload fields (nodeId,plyOffset,whiteScore,engineId,instrument,bound)
+as sourceOperands, and copied_byte_equal/retained_convention assertions. Its sole renderer and
+closed operand parser are compare.engine_point@2, under the existing presentation registry.
+The strict schema reuses F2 §2.3a's typed cp|mate, GradeInstrumentV2 and GradeRequestedBound
+domains and requires nonnegative integer plyOffset. Preserve engineId in identity, never print
+an opaque identifier as a learner label. State "At the comparison fork" for offset0 or
+"<N> plies after the fork", the signed White-relative cp value in pawns or the typed mate for
+White/Black, actual engine version, modern/offline source origin and requested depth/time/nodes.
+Use registered human labels, not raw enum spellings. No mate-as-cp, inferred missing engine
+settings, bare magnitude or judgement. Existing source/convention receipt accompanies it.
+
+Register module.compare_coach@2 × derived.compare.eval_delta@2 with fact_statement and
+sentence/list/panel forms. Its exact compare.recorded_difference@2 operand has safe-integer
+before,after,delta, nonnegative integer plyOffset, frame:"recorded_cp_numbers" and
+comparability:"provider_not_established"; delta must equal after-before without overflow.
+F2 §2.3a's before/after here are the reported cp numbers, not raw sealed source envelopes.
+The full sentence states "Recorded engine reports changed from <before> to <after> pawns
+(numerical difference <delta>). Matching engine settings are not established." No White-POV,
+quality or calibrated comparability is inferred from those historical packet labels. The
+stronger trajectory point and this numerical-report difference are separately labelled; one
+cannot supply the other's parser or lineage. Invalid/overflow/mate operands abstain upstream,
+not zero-filled components. These adapters add no selection, default, graph interpolation or
+grade consumer. Actual typed factory→adapter→HTTP/component/native proof remains required.
 
 ## Draft companion — bounded source-member Inspector detail (D3802)
 

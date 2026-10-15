@@ -31099,3 +31099,69 @@ Campaign was the one capability with no API, route or content. Now:
   exits zero after the actual old-closure diagnostic. Stage only the14 owned amendment/research/
   review/tracking files and run normal hooks; no production/browser/remote CI claim, push,
   legacy pipeline or goal pause. Next complete the current module binding image for joint review.
+
+### 2026-10-15 — D3863–D3867 complete module inventory, joint return and accepted trade repair
+
+- Apply answered D3851: one correct current image, no frozen helper/consumer compatibility
+  pipeline. Inspect all ten modules, not four.38 disposable controls measure299 current/282
+  conditional proposed pairs and expose Compare Coach's omitted source migration. Author exact
+  current registry/callable/binding/receiver joins, genuine root-inclusive Compare points and
+  complete raw recorded-path source for piece routes. These proposals remain unaccepted.
+- Reuse the user-authorized independent reviewer for full joint review. Four returns become
+  D3864 piece-route zero inputs, D3865 trade four-versus-two, D3866 candidate/Hint promotion/
+  material sources and D3867 variable exposure population. Execute six real exposure falsifier
+  controls: two positive captures/three sealed inputs against two declared. No family deletion,
+  source alias, fake singleton or weakened complete-consumer preflight is permitted.
+- Bounded D3864 review catches invented RunCreatedEvent/run.created names. Correct to actual
+  RunStartedEvent/run.started.data.rootNode; independent re-review clears only that source
+  wording, not issuance or joint acceptance. D3866/D3867 remain next; no owner blocker.
+- Implement D3865 under already accepted trade semantics. First focused command has a local
+  duplicate-variable parse error, corrected before testing the product. Two actual manifest/
+  factory regressions then fail on unchanged predecessor (153 pass); four-occurrence declaration
+  exposes old compiler set-dedup failure (32 fail/123 pass). Preserve ordered repeated refs and
+  exact ordered receipt digests;155 focused cases and108-game/6991-ply recorded-path check pass.
+  Both-color sequence/prefix research also exits zero. Independent narrow diff review finds no
+  concrete concern, runs no tests and does not accept pending source migrations.
+- Keep the old captured capture assertion byte-unchanged: the initial expanded body causes one
+  real validation-authority refusal; move new coverage to a separate named regression and
+  restore its original blank line. Canonical semantic-validation-update then passes343/343
+  cases,81 subjects still0 fully qualified. Do not edit its recorded assertion hash to bless a
+  changed claim. First work-state sync catches five new untriaged rows; assign all five to
+  evidence-foundation, restoring zero. Full normal verification/build results follow below.
+- Normal make verify build exits zero on frozen production/tests:5931 software/392files,
+  seven isolated performance/257 content cases; clean workspace types, source/manifest/
+  validation checks, register C1–C8, lifecycle P1–P7, roadmap R1–R10, packaging and actual build.
+  Clearance/capability corpus checks pass; these are local gates, not remote CI or graduation.
+- While full native/browser verification runs on that same production image, author D3866's
+  actual four-slot packet and current Hint source correction. Promotion adds its exact horizon
+  and five rung@2 refs beside fork; five other families/25 refs stay@1,35 total. No current
+  source operation changes. Independent bounded review finds no blocker, runs no tests; full
+  joint acceptance still waits on D3867. Normal prefix research passes39 current-image and ten
+  actual old-path diagnostic controls, explicitly not corrected packet/Hint delivery proof.
+- Add seven narrow actual D3867 breadth controls while production stays frozen: legal Black
+  two-capture, White one-capture and White no-capture paths preserve complete ordered witnesses
+  or real empty output. Normal prefix target exits zero. This informs the next source contract;
+  it does not supply variable arity support, typed absence coverage or tactical qualification.
+- Close D3865 locally on the actual accepted repair and complete normal software/content/
+  performance/build gates, retaining D3863/D3864/D3866/D3867 as live source-migration work.
+  The first state-transition invocation incorrectly supplies doing-only owner/since fields;
+  its validator refuses it. The normal done transition with path evidence then exits zero,
+  retaining zero untriaged/1747 live. This is a narrow repair, not a whole milestone.
+- Final native/browser regression exits zero on the same frozen production/tests:396 passes,
+  one configured optional skip, zero retries and112/112 composition cells. The initial separate
+  packaged-production command cannot start its server because pnpm's lockfile write is sandbox-
+  refused; request the unchanged normal Make command with actual build/listener permission.
+  That command passes its one packaged-default rehearsal journey. No timeout, environment,
+  assertion, release gate or provider policy is weakened; no remote CI/push/deployment claim.
+- Final post-closeout governance exits zero with D3865 path-backed done, all other new source
+  rows explicitly live, zero untriaged and refreshed current roadmap receipt. Stage only the
+ 25 owned code/test/amendment/review/research/tracking files; normal pre-commit checks still
+  precede the commit. Goal remains active; D3867 source population and refreshed joint image
+  are next, not another owner question or a claim of full1.0 completion.
+- First normal commit hook correctly refuses two missing checkpoint evidence paths for the
+  newly coordinated Hint/packet RFCs. Add those actual amended RFC paths to the changed source
+  checkpoint and refresh its compact receipt, retaining the hook unchanged. Production/test
+  bytes remain the fully verified image; this is a flow-back repair, not a skipped gate.
+- The normal roadmap check then requires the corresponding exact active-register anchors,
+  not bare RFC paths. Derive both from its existing canonical parser and add them alongside
+  the two evidence paths; no invented digest, source gate weakening or RFC acceptance follows.
