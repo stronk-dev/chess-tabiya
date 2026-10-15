@@ -38,7 +38,18 @@ The final full normal make verify build exits zero:6018 software/395 files, seve
 performance cases,257 content cases and all type/contract/governance/corpus/build checks.
 No new browser run, tactical qualification or whole capability is claimed for this internal wave.
 
-Next implement material's ten-count signature and exact capture/promotion event sources, the
+Material's genuine ten-count signature@2 and complete capture/promotion event@2 are now internal
+sources.42 permanent cases/202 focused passes and workspace types retain all22 event payloads
+(four rises, ten falls, eight unchanged-magnitude role changes), both-color EP, all promotions,
+exact private authority, genuine corrupt-source refusals and quiet/castling empties. The actual
+twenty child-reading routes now drive both execution and exact generated closure; internal
+registration cannot silently become current output. Canonical generators add exactly two
+profiles/declarations (991 total), old989 and packet bytes unchanged; no pack edits/restamps.
+Independent read-only implementation review finds no blocker. Final normal make verify build
+passes6061 software/396 files, seven isolated performance cases,257 content cases and all
+type/contract/governance/corpus/build gates; no assertion, deadline or coverage reduction.
+
+Next implement the
 remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,
 D1422's unified ladder and original budgets. Exposure is currently Threat-only, not an invented

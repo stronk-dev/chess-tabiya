@@ -1095,6 +1095,19 @@ exclusion. Missing/two active identities refuse; internal@2 is not selected auto
 new regression exercises both failures, and the current generated file has no diff. No blocker
 found; read-only review, no tests rerun. This is event-identity derivation, not public adoption.
 
+### Internal material source implementation review — 2026-10-16
+
+Authorized independent reviewer `/root/inspector_independent_review` reads the implementation
+against accepted F2 §2.3c and D3851, without edits or rerunning tests/typecheck. No blocking
+correctness issue or additional bounded proof gap is found. The review confirms ten genuine
+ordered count occurrences/private canonical-FEN joins/zeros/canonical source order; legal edge
+validation before work; complete capture/promotion cause arms; closed raw-fact projections;
+all role changes, including decreased/unchanged magnitude; and the actual exact source table
+driving both child execution and generator closure. Tests include genuine malformed source
+injection, crossed authorities, missing/reordered causes, hand-count arithmetic and mutation
+isolation. Public consumer cutover and complete delivery qualification remain pending. This
+is implementation review of internal prerequisites, not new contract or product acceptance.
+
 ### Internal promotion/overload/nonterminal-fork implementation review
 
 The authorized independent reviewer finds no production correctness blocker in the three

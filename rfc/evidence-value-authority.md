@@ -13,6 +13,13 @@ fork conventions are landed members with append-only history; only comparison's 
 remains live below. These unbound internal components do not complete material, packet/Hint,
 current module/renderer/access/native migration, source qualification or the parent discharges.
 
+**Material source checkpoint, 2026-10-16:** §2.3c's signature@2 and event@2 now compute from
+the actual ten-count tuple and complete capture/promotion populations.42 permanent cases retain
+zero counts, all22 measured vector changes, exact private FEN/edge joins, genuine malformed
+source refusals and quiet/castling empty populations. The current child-reading execution list
+also drives the generated exact packet closure; adding an internal version cannot auto-select it.
+These internal/unbound sources do not complete the coordinated consumer cutover or qualification.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft

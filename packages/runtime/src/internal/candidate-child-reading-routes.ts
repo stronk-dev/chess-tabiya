@@ -1,0 +1,23 @@
+/** Exact sources actually executed by candidateChildReadings; also drives its packet closure. */
+export const CANDIDATE_CHILD_READING_ROUTES = Object.freeze([
+  "rules.castling.reading.rights@1",
+  "rules.castling.reading.legality@1",
+  "rules.tactic.reading.loose_piece@1",
+  "rules.tactic.reading.ray_classification@1",
+  "rules.tactic.consequence.threat@1",
+  "rules.structural.reading.pawn_connectivity@1",
+  "rules.phase.development@1",
+  "rules.tactic.reading.rook_on_seventh@1",
+  "rules.structural.reading.space@1",
+  "rules.tactic.reading.discovered_latency@1",
+  "rules.tactic.reading.trapped_piece@1",
+  "rules.tactic.reading.back_rank@1",
+  "rules.tactic.consequence.mate_in_one@1",
+  "derived.tactic.promotion_pressure@1",
+  "rules.square.reading.control@1",
+  "rules.mobility.reading.piece_destinations@1",
+  "rules.pawn.reading.contacts@1",
+  "rules.pawn.reading.candidate_majority@1",
+  "derived.material.reading.role_signature@1",
+  "rules.king.reading.zone_state@1",
+] as const);

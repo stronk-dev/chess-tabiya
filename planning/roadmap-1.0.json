@@ -1088,10 +1088,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "The complete current-source/module contract is independently accepted. Genuine internal landing captures, two-input exposure, direct promotion pressure, computed overload and nonterminal fork sources are implemented/verified. Next implement material's genuine ten-count signature and complete capture/promotion event, then remaining recorded Inspector/pivotal/sequence sources, declared collection reductions and source-owned grades. Complete exact receivers and the source-complete282-pair current packet/Hint/module image together; preserve projection-addressed unavailability, conservative whole-selection refusal, all detector families, granted origins, root-inclusive Compare points, D1422's unified ladder and original budgets. Exposure is Threat-only. Retire obsolete paths after migrating actual callers; never add a legacy compatibility pipeline or filter failed bindings. D3792 waits on D3841 implementation, not another authoring round. No tactical qualification, whole milestone or release promotion.",
+        "nextAction": "The complete current-source/module contract is independently accepted. Genuine internal landing captures, two-input exposure, direct promotion pressure, computed overload and nonterminal fork sources are implemented/verified. The genuine ten-count material signature and complete capture/promotion event are now internal sources too. Next implement remaining recorded Inspector/pivotal/sequence sources, declared collection reductions and source-owned grades. Complete exact receivers and the source-complete282-pair current packet/Hint/module image together; preserve projection-addressed unavailability, conservative whole-selection refusal, all detector families, granted origins, root-inclusive Compare points, D1422's unified ladder and original budgets. Exposure is Threat-only. Retire obsolete paths after migrating actual callers; never add a legacy compatibility pipeline or filter failed bindings. D3792 waits on D3841 implementation, not another authoring round. No tactical qualification, whole milestone or release promotion.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "The accepted local tactical-source wave adds genuine internal promotion-pressure, computed overload-conflict and nonterminal-fork-survival factories.44 new permanent source cases/160 focused passes cover both-colour terminal negatives, promoted fork operands, same-full-edge source authority, per-pawn clone absence, complete overload availability and EP physical-victim/recapture FEN joins. Five genuinely issued source faults independently test reply metadata guards before calculation; independent review confirms the repaired test boundary and finds no production blocker. Two accepted reviewed convention definitions/history rows land without changing the original48. Final normal make verify build passes6018 software/395 files, seven isolated performance cases,257 content and all type/contract/governance/corpus/build checks. Three capability declarations/profiles are added (989 total), prior986 unchanged; no pack changes/restamps, no current packet bytes or consumer cutover. Canonical343 cases/81 subjects/zero qualified and semantic78/78/16/1 remain. Actual material/recorded/reduction/grade sources, complete282-pair packet/Hint/module migration, receivers/API/native proof and obsolete-path retirement remain. No browser rerun, tactical qualification, whole milestone or remote/release claim.",
+          "summary": "The accepted material source pair is implemented internally: signature@2 reconstructs from exactly ten genuine ordered non-king count occurrences, event@2 joins exact before/after signatures to complete capture/promotion populations.42 permanent cases/202 focused passes and workspace types retain all22 event payloads (four rises, ten falls, eight unchanged-magnitude changes), both-color EP, four promotion pieces, genuine metadata faults, foreign FEN/edge refusals and quiet/castling empties. Independent read-only review finds no blocker. The twenty actually executed child-reading routes now drive generated exact closure, with missing/duplicate/wrong-role refusals and unchanged packet bytes. Canonical generators add exactly two profiles/declarations (991 total), prior989 unchanged;343 cases/81 subjects/zero qualified remain. Final normal make verify build passes6061 software tests/396 files, seven isolated performance cases,257 real-content cases and all type/contract/governance/corpus/build checks. Corpus clearance92 documents/zero errors and exact requirements in104 documents pass. No deadline, assertion or coverage reduction. Complete recorded/reduction/grade sources,282-pair current packet/Hint/module image, receivers/API/native proof and obsolete-path retirement remain. No partial consumer cutover, pack changes/restamps, qualification or whole milestone/release claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1215,6 +1215,9 @@
             "packages/runtime/src/landing-captures.test.ts",
             "packages/runtime/src/defender-exposure-source.test.ts",
             "packages/runtime/src/local-tactical-sources.test.ts",
+            "packages/runtime/src/material-sources.test.ts",
+            "packages/runtime/src/internal/material-sources.ts",
+            "packages/runtime/src/internal/candidate-child-reading-routes.ts",
             "packages/runtime/src/tactics.ts",
             "packages/runtime/src/evidence-conventions.ts",
             "packages/runtime/src/evidence-convention-history.jsonl",
@@ -1454,7 +1457,7 @@
             {
               "kind": "work_state",
               "id": "D3847",
-              "digest": "sha256:53e92b087ed81a59a5f4bf55d631ab91a573e0c80e94b56a63d4cf2d1da4d182"
+              "digest": "sha256:d8e2e8795f5cda83316acebf3e725d7da8120abb17725a8c8ee3a99751d65ad5"
             },
             {
               "kind": "work_state",

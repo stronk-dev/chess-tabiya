@@ -634,22 +634,16 @@ for (const [beforeFen, moveUci] of [
   emptyCauseCases++;
 }
 
-const signatureDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.material.reading.role_signature")!;
-const materialDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.material.event.role_asymmetry")!;
-const countRef = { id: "rules.structural.reading.piece_count", version: 1 };
-const signatureSuccessor: ProjectionDeclaration = { ...signatureDeclaration, version: 2,
-  derivation: { inputs: countSlots.map(() => countRef) },
-  disposition: { kind: "operator_only", reason: "D3847 prospective declaration only; no factory or consumer" } };
-const signatureRef = { id: signatureSuccessor.id, version: 2 };
-const materialSuccessor: ProjectionDeclaration = { ...materialDeclaration, version: 2,
-  semantics: "All exact role-vector changes with a strictly-increased unweighted-magnitude flag; no material value or advice.",
-  derivation: { anyOf: [...materialArms].sort().map(arm => [signatureRef, signatureRef, ...arm.split(",").map(ref => {
-    const [id, version] = ref.split("@"); return { id: id!, version: Number(version) };
-  })]) },
-  disposition: { kind: "operator_only", reason: "D3847 prospective declaration only; no factory or consumer" } };
-const materialManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
-  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.material"
-    ? { ...producer, outputs: [...producer.outputs, signatureSuccessor, materialSuccessor] } : producer) });
+const signatureSuccessor = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.material.reading.role_signature" && row.version === 2)!;
+const materialSuccessor = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.material.event.role_asymmetry" && row.version === 2)!;
+const materialManifest = PRIMARY_EVIDENCE_MANIFEST;
+for (const [fen, moveUci] of materialEdges) {
+  const position = positionFromFen(fen), move = normalizeMove(position, parseUci(moveUci)!);
+  position.play(move);
+  const edge = { beforeFen: fen, moveUci, afterFen: canonicalFen(position) };
+  assert.deepEqual(invokeEvidenceValueRoute("derived.material.event.role_asymmetry@2", edge)[0]!.evidence.payload,
+    invokeEvidenceValueRoute("derived.material.event.role_asymmetry@1", edge)[0]!.evidence.payload);
+}
 const materialPaths = compileProjectionExecution(materialManifest, materialSuccessor).paths;
 assert.equal(materialPaths.length, 3);
 for (const path of materialPaths) {
@@ -658,7 +652,7 @@ for (const path of materialPaths) {
   assert(signatures.every(choice => choice.inputs.length === 10));
   assert.equal(path.sourceRequirements.length, 0);
 }
-console.log(JSON.stringify({ scope: "D3847/D3850 reconstruction and prospective F1 only; no successor mints or runtime adoption",
+console.log(JSON.stringify({ scope: "D3847/D3850 reconstruction and installed internal source equivalence; no current-consumer adoption or qualification",
   materialEdges: materialEdges.length, completeEventPayloadComparisons: materialEdges.length,
   signaturePayloadComparisons: signatureChecks, countSlots: countSlots.length,
   wrongCountOrderRoleOrFenRefusals: countNegatives.length + 1, equalPayloadForeignFenRefused: true,

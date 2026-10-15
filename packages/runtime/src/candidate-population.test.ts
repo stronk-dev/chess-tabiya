@@ -283,6 +283,18 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     })).toThrow(/does not resolve to exactly one/u);
   });
 
+  it("criterion 9: child closure follows actual executed exact sources, not the newest same-name registration", () => {
+    const manifest = PRIMARY_EVIDENCE_MANIFEST, id = "derived.material.reading.role_signature";
+    const current = manifest.projections.find(value => value.id === id && value.version === 1)!;
+    expect(manifest.projections.some(value => value.id === id && value.version === 2)).toBe(true);
+    const { groups } = deriveCandidatePacketProjectionGroups(manifest);
+    expect(groups["reading.child"]).toContain(`${id}@1`);
+    expect(groups["reading.child"]).not.toContain(`${id}@2`);
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: manifest.projections.filter(value => value !== current) })).toThrow(/exactly one compiled local reading/u);
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: [...manifest.projections, current] })).toThrow(/exactly one compiled local reading/u);
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: manifest.projections.map(value => value === current ? { ...value, role: "event" as const } : value) })).toThrow(/exactly one compiled local reading/u);
+  });
+
   it("criterion 9: projection-identity multisets are unchanged by the migration on ordinary, capture, double-attack and abstention fixtures", () => {
     for (const [fen, move] of [[INITIAL_FEN, "g1f3"], [CAPTURE, "e4d5"], [FORK, "b5c7"], [CHECK_EVASION, "e1e2"]] as const) {
       const receipt = compiled(fen, CANDIDATE_WIDE_SCOPE);

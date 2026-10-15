@@ -906,6 +906,25 @@ const derivedPawnOutputs = [
 
 const derivedMaterialOutputs = [
   projection("derived.material", "derived.material.reading.role_signature", "derived", {
+    version: 2, payloadType: "MaterialRoleSignatureReading", semantics: BREADTH_CONVENTION_TEXT.materialRole,
+    disposition: { kind: "experimental", reason: "Accepted internal count-derived source; complete current-consumer cutover remains pending." },
+    operands: ["fen", "conventionId", "colors", "asymmetry", "magnitude"], grounding: "position_rules", exactness: "exact", forms: ["list", "panel"],
+    dependsOn: [ref("rules.structural.reading.piece_count")], derivation: { inputs: Array.from({ length: 10 }, () => ref("rules.structural.reading.piece_count")) },
+    limitations: ["No scalar material advantage, imbalance quality, or exchange advice is emitted."],
+  }),
+  projection("derived.material", "derived.material.event.role_asymmetry", "derived", {
+    version: 2, role: "event", payloadType: "MaterialRoleAsymmetryEvent", semantics: "All exact role-vector changes with a strictly-increased unweighted-magnitude flag; no material value or advice.",
+    disposition: { kind: "experimental", reason: "Accepted internal capture/promotion derivation; complete current-consumer cutover remains pending." },
+    operands: ["beforeFen", "moveUci", "afterFen", "conventionId", "before", "after", "changedRoles", "increased", "sourceEvents"], signs: ["state"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
+    dependsOn: [ref2("derived.material.reading.role_signature"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")],
+    derivation: { anyOf: [
+      [ref2("derived.material.reading.role_signature"), ref2("derived.material.reading.role_signature"), ref("rules.transition.event.capture")],
+      [ref2("derived.material.reading.role_signature"), ref2("derived.material.reading.role_signature"), ref("rules.transition.event.promotion")],
+      [ref2("derived.material.reading.role_signature"), ref2("derived.material.reading.role_signature"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")],
+    ] },
+    limitations: [BREADTH_CONVENTION_TEXT.materialRole, "Role-count change is not a trade recommendation or position evaluation."],
+  }),
+  projection("derived.material", "derived.material.reading.role_signature", "derived", {
     payloadType: "MaterialRoleSignatureReading", semantics: BREADTH_CONVENTION_TEXT.materialRole,
     operands: ["fen", "conventionId", "colors", "asymmetry", "magnitude"], grounding: "position_rules", exactness: "exact", forms: ["list", "panel"],
     dependsOn: [ref("rules.structural.reading.piece_count")], derivation: { inputs: [ref("rules.structural.reading.piece_count")] },

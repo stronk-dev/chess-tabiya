@@ -21,6 +21,7 @@ import {
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertDeclaredEvidence, evidenceDigest, type DeclaredEvidence } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { CANDIDATE_CHILD_READING_ROUTES } from "./internal/candidate-child-reading-routes.js";
 import { legalExchange } from "./exchange.js";
 import { kingZoneReading } from "./king-state.js";
 import { MOVE_IDENTITY_CONVENTION, type ExactLegalMove, type ExactLegalMoveMap } from "./legal-moves.js";
@@ -241,29 +242,10 @@ function packetIdentity(beforeFen: string, member: CandidatePacketScopeMember): 
  * authority owns them (§12 row 1, criterion 20). No detector, grade or prose is added.
  */
 export function candidateChildReadings(afterFen: string): readonly DeclaredEvidence<unknown>[] {
-  const fen = afterFen;
-  return Object.freeze([
-    invokeEvidenceValueRoute("rules.castling.reading.rights@1", { fen }),
-    ...invokeEvidenceValueRoute("rules.castling.reading.legality@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.reading.loose_piece@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.reading.ray_classification@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.consequence.threat@1", { fen }),
-    invokeEvidenceValueRoute("rules.structural.reading.pawn_connectivity@1", { fen }),
-    invokeEvidenceValueRoute("rules.phase.development@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.reading.rook_on_seventh@1", { fen }),
-    invokeEvidenceValueRoute("rules.structural.reading.space@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.reading.discovered_latency@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.reading.trapped_piece@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.reading.back_rank@1", { fen }),
-    invokeEvidenceValueRoute("rules.tactic.consequence.mate_in_one@1", { fen }),
-    invokeEvidenceValueRoute("derived.tactic.promotion_pressure@1", { fen }),
-    invokeEvidenceValueRoute("rules.square.reading.control@1", { fen }),
-    invokeEvidenceValueRoute("rules.mobility.reading.piece_destinations@1", { fen }),
-    invokeEvidenceValueRoute("rules.pawn.reading.contacts@1", { fen }),
-    invokeEvidenceValueRoute("rules.pawn.reading.candidate_majority@1", { fen }),
-    invokeEvidenceValueRoute("derived.material.reading.role_signature@1", { fen }),
-    invokeEvidenceValueRoute("rules.king.reading.zone_state@1", { fen }),
-  ]);
+  return Object.freeze(CANDIDATE_CHILD_READING_ROUTES.flatMap((route): readonly DeclaredEvidence<unknown>[] => {
+    const value = invokeEvidenceValueRoute(route, { fen: afterFen });
+    return "projection" in value ? [value] : value;
+  }));
 }
 
 /**

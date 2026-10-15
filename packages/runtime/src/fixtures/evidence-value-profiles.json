@@ -541,7 +541,21 @@
       "8ba381efa7c6203299e8cc7378d0a7c771d9ca9f104ee6d570442df3208959b7"
     ]
   },
+  "derived.material.event.role_asymmetry@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "8ba381efa7c6203299e8cc7378d0a7c771d9ca9f104ee6d570442df3208959b7"
+    ]
+  },
   "derived.material.reading.role_signature@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "6409046ec4cefa7b6788d6fbf5a66e2366a2c4bb74eba93649c46e3a56030603"
+    ]
+  },
+  "derived.material.reading.role_signature@2": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [

@@ -45,6 +45,18 @@ rehearsal smoke passed at the preceding landing-source checkpoint; no browser re
 qualification is claimed for this internal exposure slice. The previous full sweep remains396 browser cases/one configured optional skip and
 112 unretried composition cells. No remote CI, whole-milestone or release claim.
 
+The material source pair is also implemented internally: ten actual count occurrences for
+signature@2 and complete before/after/capture/promotion inputs for event@2.42 permanent source
+cases/202 focused passes retain all22 event payloads (four rises, ten falls, eight unchanged-
+magnitude changes), both-color EP, all promotion pieces and quiet/castling empties. Genuine
+source faults and crossed authorities refuse; independent read-only review finds no blocker.
+The exact twenty actually executed child routes now also drive the generated packet closure,
+so merely registering material@2 cannot activate it. Two canonical profiles/declarations are
+added (991 total), old989 and all current packet bytes unchanged, no pack edits/restamps.
+Final normal make verify build passes6061 software/396 files, seven isolated performance cases,
+257 content cases and all type/contract/governance/corpus/build gates. Remaining recorded/reduction/grade
+sources and the complete current consumer/receiver/API/native cutover still own delivery.
+
 D3869 also closes the measured verification-order debt: existing28 normal Make gates now
 refuse stale generated contracts before both full test pools. Four scheduling regressions
 check the actual Make plan, failure propagation and unchanged393-file/native ownership;

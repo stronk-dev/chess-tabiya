@@ -43,6 +43,7 @@ import { resolveSourceAttribution, type SourceAttributionReceipt } from "./sourc
 import { kingZoneEvents, kingZoneReading } from "./king-state.js";
 import { exactLegalMoveMap, exactMoveIdentity, type ExactLegalMove } from "./legal-moves.js";
 import { materialRoleAsymmetryEvent, materialRoleSignatureReading } from "./material-state.js";
+import { MATERIAL_COUNT_SLOTS, assertMaterialCauses, materialSignatureValue, materialAsymmetryValue } from "./internal/material-sources.js";
 import { forcedMateAfterMove } from "./mate-proof.js";
 import { moveQualityGrade, type GradeContext, type GradeSide, type MoveQualityGrade } from "./grade.js";
 import { gradeReadingFromPayload } from "./grade-reading.js";
@@ -573,6 +574,20 @@ export const STRUCTURAL_READING_FACTORIES = Object.freeze(Object.fromEntries(STR
   return [route, fenPopulation(route, (fen) => cachedStructuralReading(fen).features.filter((feature) => feature.kind === kind))];
 })) as Readonly<Record<`rules.structural.reading.${StructuralReadingKind}@1`, EvidenceValueFactory<{ readonly fen: string }, readonly DeclaredEvidence<StructuralReading["features"][number]>[]>>>);
 
+export const createDerivedMaterialReadingRoleSignatureV2Evidence = (() => {
+  const route = "derived.material.reading.role_signature@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ fen: FEN }], result: "single" }, ({ fen }: { readonly fen: string }) => {
+    const canonical = canonicalFen(positionFromFen(validFen(fen)));
+    const population = STRUCTURAL_READING_FACTORIES["rules.structural.reading.piece_count@1"]({ fen: canonical });
+    const expected = [...MATERIAL_COUNT_SLOTS, { color: "white", role: "king" }, { color: "black", role: "king" }];
+    if (population.length !== 12 || expected.some(slot => population.filter(item => item.payload.color === slot.color && item.payload.role === slot.role).length !== 1)) {
+      throw new TypeError("Material signature requires the complete piece-count population");
+    }
+    const inputs = MATERIAL_COUNT_SLOTS.map(slot => population.find(item => item.payload.color === slot.color && item.payload.role === slot.role)!);
+    return mint(route, symbol, materialSignatureValue(canonical, inputs), { fen: canonical }, inputs);
+  });
+})();
+
 /** One `{ fen, feature }` predicate factory per structural feature kind (eighteen). */
 export const STRUCTURAL_PREDICATE_FACTORIES = Object.freeze(Object.fromEntries(STRUCTURAL_FEATURE_KINDS.map((kind) => {
   const route = `rules.structural.predicate.${kind}@1`;
@@ -940,6 +955,18 @@ export const createDerivedMaterialEventRoleAsymmetryV1Evidence = edgeDerived("de
   const families = [...new Set(material.sourceEvents.map((source) => source.family))];
   const authorities = families.flatMap((family) => (TRANSITION_EVENT_FACTORIES as Readonly<Record<string, EvidenceValueFactory<EvidenceEdge, readonly DeclaredEvidence<unknown>[]>>>)[`rules.transition.event.${family}@1`]!(edge));
   return [{ payload: material, inputs: [...readings, ...authorities] }];
+});
+
+export const createDerivedMaterialEventRoleAsymmetryV2Evidence = edgeDerived("derived.material.event.role_asymmetry@2", edge => {
+  const captures = TRANSITION_EVENT_FACTORIES["rules.transition.event.capture@1"](edge);
+  const promotions = TRANSITION_EVENT_FACTORIES["rules.transition.event.promotion@1"](edge);
+  if (captures.length > 1 || promotions.length > 1) throw new TypeError("A material edge has at most one cause per family");
+  const causes = [...captures, ...promotions];
+  assertMaterialCauses(edge, causes);
+  if (causes.length === 0) return [];
+  const before = createDerivedMaterialReadingRoleSignatureV2Evidence({ fen: edge.beforeFen });
+  const after = createDerivedMaterialReadingRoleSignatureV2Evidence({ fen: edge.afterFen });
+  return [{ payload: materialAsymmetryValue(edge, before, after, causes), inputs: [before, after, ...causes] }];
 });
 
 export const createDerivedKingCapturedZoneDefenderV1Evidence = edgeDerived("derived.king.captured_zone_defender@1", (edge) => {

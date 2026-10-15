@@ -232,7 +232,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(283);
+    expect(ACTIVE).toHaveLength(285);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -307,7 +307,7 @@ describe("value authority: registry equality", () => {
     const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
     expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
     const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
-    const localTactical = ["derived.tactic.nonterminal_fork_survival@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1"];
+    const localTactical = ["derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.tactic.nonterminal_fork_survival@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1"];
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
     const extra = allExtra.filter(route => !localTactical.includes(route));
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no

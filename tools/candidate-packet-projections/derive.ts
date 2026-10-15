@@ -3,7 +3,6 @@
 // and check packages/runtime/src/candidate-population-projections.generated.ts, and the runtime
 // contract test imports it to prove the checked-in bytes are the derivation's output.
 import {
-  BREADTH_COLLECTOR_PROJECTION_IDS,
   BREADTH_EVENT_PROJECTION_IDS,
   CASTLING_EVENT_PROJECTION_IDS,
   DERIVED_EXCHANGE_EVENT_PROJECTION_IDS,
@@ -11,23 +10,17 @@ import {
   PRIMARY_EVIDENCE_MANIFEST,
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
   STRUCTURAL_EVENT_PROJECTION_IDS,
-  TACTICAL_COLLECTOR_PROJECTION_IDS,
   TACTICAL_EVENT_PROJECTION_IDS,
   TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS,
   TRANSITION_EVENT_PROJECTION_IDS,
 } from "../../packages/runtime/src/evidence-catalog.ts";
 import type { CompiledEvidenceManifest } from "../../packages/runtime/src/evidence-contract.ts";
+import { CANDIDATE_CHILD_READING_ROUTES } from "../../packages/runtime/src/internal/candidate-child-reading-routes.ts";
 
 export type ProjectionGroups = Readonly<Record<string, readonly string[]>>;
 
 /** Multi-move sequence projections are not outputs of a one-edge collector. */
 const isSequenceProjection = (id: string): boolean => id.includes(".sequence.") || id.endsWith("_observed");
-/** Provider projections (Maia, live engines) are joins, never local collector results (§8.2). */
-const isProviderProjection = (manifest: CompiledEvidenceManifest, id: string): boolean => {
-  const projection = manifest.projections.find((candidate) => candidate.id === id);
-  return projection === undefined || projection.producer.id.startsWith("human.") || projection.producer.id.startsWith("live.");
-};
-
 /**
  * The one-edge collector composition, in `localSemanticEventClosure` order, plus the reading
  * collectors of the moved `candidateChildReadings` authority. Every id is resolved through the
@@ -46,12 +39,13 @@ export function deriveCandidatePacketProjectionGroups(manifest: CompiledEvidence
     return `${matches[0]!.id}@${matches[0]!.version}`;
   };
   const events = (ids: readonly string[]) => ids.filter((id) => !isSequenceProjection(id)).map(id => resolve(id, true));
-  const childReadingExclusions = new Set(["rules.exchange.predicate.legal_exchange", "derived.tactic.fork_survives_reply"]);
-  const childReadings = [...new Set([...TACTICAL_COLLECTOR_PROJECTION_IDS, ...BREADTH_COLLECTOR_PROJECTION_IDS])]
-    .filter((id) => !childReadingExclusions.has(id) && !isProviderProjection(manifest, id))
-    .filter((id) => manifest.projections.find((candidate) => candidate.id === id)?.role === "reading")
-    .map(id => resolve(id))
-    .sort();
+  const childReadings = CANDIDATE_CHILD_READING_ROUTES.map(key => {
+    const matches = manifest.projections.filter(candidate => `${candidate.id}@${candidate.version}` === key);
+    if (matches.length !== 1 || matches[0]!.role !== "reading" || !matches[0]!.producer.id.startsWith("rules.") && !matches[0]!.producer.id.startsWith("derived.")) {
+      throw new TypeError(`candidate reading ${key} does not resolve to exactly one compiled local reading`);
+    }
+    return key;
+  }).sort();
   const groups: ProjectionGroups = {
     "event.structural": events(STRUCTURAL_EVENT_PROJECTION_IDS),
     "event.pawn_island": events(TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS),
