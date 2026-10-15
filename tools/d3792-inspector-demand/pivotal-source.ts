@@ -7,7 +7,7 @@ import {
   createRun, canonicalRunStart, commitMove, appendOpponentPly, rewind, fork, branchPath, exactLegalMoves,
   type DrillRun,
 } from "../../packages/runtime/src/index.js";
-import { pivotalMarkerPayloads, type PivotalMarker } from "../../packages/runtime/src/pivotal.js";
+import { pivotalMarkerPayloads, pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, type PivotalKind, type PivotalMarker } from "../../packages/runtime/src/pivotal.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { SQLiteRunStorage } from "../../apps/server/src/storage.js";
 import { loadConceptRegistry } from "../../apps/server/src/concept-registry-loader.js";
@@ -25,6 +25,29 @@ function recorded(id: string, fen: string, moves: readonly string[]) {
 function scoped(run: DrillRun, branch: string, through: string): readonly PivotalMarker[] {
   // The extra argument is supported only by the guarded disposable bundle, not production.
   return Reflect.apply(pivotalMarkerPayloads, undefined, [run, branch, through]);
+}
+// Source-data matching only, not current access, a scoped factory mint or a stronger provider receipt.
+function occurrence(run: DrillRun, branchId: string, through: string, marker: PivotalMarker) {
+  const original = branchPath(run, branchId);
+  const end = original.findIndex(node => node.id === through);
+  assert(end >= 0, "occurrence endpoint must be on original branch");
+  const retained = pivotalMarkerRecordedSelection(marker);
+  assert(retained !== undefined, "occurrence needs a producer-owned marker");
+  const ref = retained.occurrence;
+  assert.equal(ref.runId, run.id, "occurrence belongs to this original run");
+  assert.equal(ref.nodeId, marker.nodeId);
+  assert(original.slice(0, end + 1).some(node => node.id === ref.nodeId), "source anchor must be granted");
+  const matching = run.events.filter(event => event.seq === ref.eventSeq);
+  assert.equal(matching.length, 1, "source sequence must identify exactly one event");
+  const event = matching[0]!;
+  assert(event.type === "opponent.move_selected");
+  assert.deepEqual({ runId: run.id, eventSeq: event.seq, branchId: event.data.branchId,
+    nodeId: event.data.nodeId, moveUci: event.data.moveUci }, ref);
+  assert(branchPath(run, ref.branchId).some(node => node.id === ref.nodeId), "origin branch must contain the source anchor");
+  assert.equal(event.data.selection.moveUci, ref.moveUci);
+  assert.deepEqual(event.data.selection.engine, retained.engine);
+  assert.deepEqual(event.data.selection.candidates, retained.candidates);
+  return ref;
 }
 const simple = recorded("d3825-opening", start, ["e2e4", "e7e5", "g1f3", "b8c6", "d2d4", "e5d4"]);
 if (process.argv[2] === "baseline") {
@@ -69,6 +92,7 @@ runs.push(appendOpponentPly(strong, { moveUci: "e7e5", policyModeApplied: "stron
 const directory = mkdtempSync(join(tmpdir(), "tabiya-d3825-pivotal-source-"));
 const storage = new SQLiteRunStorage(join(directory, "fixture.sqlite"), { concepts: { registry: loadConceptRegistry(resolve("content/concepts")) } });
 let controls = 0, prefixes = 0, futureCollapsesRefused = 0, fullMarkers = 0, crossedHumanInputs = 0;
+let familyControls = 0, occurrenceControls = 0;
 const kinds = new Set<string>();
 const checked = (action: () => void) => { action(); controls++; };
 try {
@@ -93,6 +117,11 @@ try {
         return true;
       });
       checked(() => assert.deepEqual(actual, expected, "complete ordered payload population must obey every witness, not marker position alone"));
+      for (const kind of ["irreversibility", "phase_change", "human_divergence", "option_collapse"] as const satisfies readonly PivotalKind[]) {
+        const selected = Reflect.apply(pivotalMarkerPayloadsForKind, undefined, [run, branch, kind, path[end]!.id]);
+        assert.deepEqual(selected, actual.filter(marker => marker.kind === kind));
+        familyControls++;
+      }
       checked(() => assert.equal(JSON.stringify(run), saved));
       prefixes++;
     }
@@ -139,6 +168,38 @@ try {
     crossedHumanInputs += crossed.length;
   }
   checked(() => assert.equal(JSON.stringify(storage.read(changed.id)!.run), sourceBytes));
+  // A third recorded selection has exactly the FIRST distribution image, but another event/branch.
+  const firstSelection = originalDistribution.events.find(event => event.type === "opponent.move_selected")!;
+  assert(firstSelection.type === "opponent.move_selected");
+  let repeated = fork(rewind(branched, shared.id, at).run, shared.id, { at }).run;
+  repeated = appendOpponentPly(repeated, firstSelection.data.selection, { at }).run;
+  storage.save(repeated, "d3825-disposable-source-writer");
+  const storedRepeated = storage.read(repeated.id)!.run, repeatedBytes = JSON.stringify(storedRepeated);
+  const selections = storedRepeated.events.filter(event => event.type === "opponent.move_selected");
+  const verifyOccurrence = (action: () => void) => { action(); occurrenceControls++; };
+  for (const branchId of storedRepeated.branches.map(branch => branch.id)) {
+    const markers = pivotalMarkerPayloadsForKind(storedRepeated, branchId, "human_divergence");
+    verifyOccurrence(() => assert.equal(markers.length, 3));
+    for (const [index, marker] of markers.entries()) {
+      const ref = occurrence(storedRepeated, branchId, shared.id, marker);
+      verifyOccurrence(() => assert.equal(ref.eventSeq, selections[index]!.seq));
+      verifyOccurrence(() => assert.equal(ref.branchId, selections[index]!.data.branchId));
+      verifyOccurrence(() => assert.throws(() => occurrence(storedRepeated, branchId, storedRepeated.nodes[0]!.id, marker), /anchor/u));
+      verifyOccurrence(() => assert.throws(() => occurrence(storedRepeated, branchId, shared.id, { ...marker }), /producer-owned/u));
+      for (const corrupt of [
+        { ...storedRepeated, id: "another-run" },
+        { ...storedRepeated, events: storedRepeated.events.filter(event => event.seq !== ref.eventSeq) },
+        { ...storedRepeated, events: [...storedRepeated.events, selections[index]!] },
+        { ...storedRepeated, nodes: [...storedRepeated.nodes, storedRepeated.nodes.at(-1)!] },
+        { ...storedRepeated, events: storedRepeated.events.map(event => event.seq === ref.eventSeq && event.type === "opponent.move_selected"
+          ? { ...event, data: { ...event.data, branchId: "another-branch" } } : event) },
+        { ...storedRepeated, events: storedRepeated.events.map(event => event.seq === ref.eventSeq && event.type === "opponent.move_selected"
+          ? { ...event, data: { ...event.data, selection: { ...event.data.selection, engine: { ...event.data.selection.engine, id: "substituted-source" } } } } : event) },
+      ]) verifyOccurrence(() => assert.throws(() => occurrence(corrupt, branchId, shared.id, marker)));
+    }
+  }
+  verifyOccurrence(() => assert.equal(JSON.stringify(storage.read(repeated.id)!.run), repeatedBytes));
   console.log(JSON.stringify({ scope: "D3825 payload-owner model, NOT permission, scoped factory, full Review or production", controls, prefixes,
-    fullMarkers, futureCollapsesRefused, corpusPathsExamined, kinds: [...kinds].sort(), crossedHumanInputs }));
+    fullMarkers, futureCollapsesRefused, corpusPathsExamined, kinds: [...kinds].sort(), crossedHumanInputs,
+    familyControls, occurrenceControls, repeatedSourceEvents: selections.length }));
 } finally { storage.close(); rmSync(directory, { recursive: true, force: true }); }

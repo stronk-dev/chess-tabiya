@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:24f945029e7e6e6f19acd782d2bf9f11feff535c407e1c6f4b3c8a912fbb7413",
+    "roadmap": "sha256:0a3f22d721447c0e8561fee65b9c39e4d274f45a772af75efe3ec4be23394d51",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:2d75e7f641eda6f9e7e27b44a3cc858fe3a4c78865f657fd895e070b9e7c1b60",
+    "workState": "sha256:7bd464a7784e2b62e40dc60c7980b9b25e17553d53d5d44582a98c80747b414d",
     "rfcRegister": "sha256:25fe2fb61a4108b91f295f756be869a3b88fda5eae266f7cf6fa0dec280e6804",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 17,
       "blocked": 1086,
-      "done": 1685,
+      "done": 1686,
       "refused": 161
     },
     "workItems": {
@@ -466,7 +466,7 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3829 closes the accepted value-authority section 3.4 internal repair: exact pivotal factories prepare only their own family. Four permanent predecessor failures become105 focused passes/types. Actual production retains45 complete payload/input/value/convention images across28 calls and84 graph/FEN refusals; preparation phase828-to207/irreversibility800-to200/legal828-to207/human28-to7. Existing465 prefix controls and all343 semantic outcomes remain, with only implementation stamps refreshed. Complete frozen normal verification/build/all four browser tiers exit zero:5850 software/391 files, seven performance/four,257 content/26 and393 browser passes, one configured optional Maia skip, no retries,59 matrix and112 unretried composition cells plus packaged production. No authored/capability/migration changes. D3792's scoped comparison contract remains draft, not delivered; current source occurrence/access/receiver and independent acceptance remain. No scoped authority, latency, qualification, whole capability or remote/release promotion.",
+        "summary": "D3830 finishes accepted value-authority section 3.4 private occurrence retention: identical human distributions keep distinct original run/event/branch/node/move references. One permanent predecessor failure becomes106 focused passes/types. The existing stored-prefix probe adds828 requested-family and94 occurrence controls over three repeated selections;465 original controls/207 prefixes and prior45-item/84-refusal parity remain. Public payloads, v1 receipts, saved games and node-level populations are unchanged. Complete frozen normal verification/build/all four browser tiers exit zero:5851 software/391 files, seven performance/four,257 content/26 and393 browser passes, one configured optional Maia skip,59 matrix and112 unretried composition cells. Only62 implementation stamps change;343 case outcomes/81 subjects/zero fully qualified remain. D3792 scoped factories/access/receivers and independent acceptance stay open. No pack, public API, qualification, whole capability or remote/release promotion. Owner requests the full 1.0 inventory next, not another implementation wave.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
@@ -668,6 +668,11 @@
             "kind": "work_state",
             "id": "D3829",
             "digest": "sha256:577ff5f7f2ca3ad981ad3bc25665f8d446be42a194565d681d516aaade84b025"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3830",
+            "digest": "sha256:1bf396a22d50976dd0774f1f4bdae544683fbe34914deaf4259436d9b4a93e33"
           },
           {
             "kind": "rfc",

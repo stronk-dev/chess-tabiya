@@ -21,6 +21,41 @@ const reviewItems = (run: ReturnType<typeof created>) => {
 };
 
 describe("pivotal marker consumer boundary", () => {
+  it("retains distinct recorded occurrences even when shared-node policy images are identical", () => {
+    let run = commitMove(created("human-occurrences", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), "e2e4", { at }).run;
+    const nodeId = run.activeCursor.nodeId;
+    const selection = { moveUci: "e7e5", policyModeApplied: "human_common" as const,
+      candidates: ["e7e5", "c7c5", "e7e6", "c7c6", "d7d5"].map((moveUci, index) => ({ moveUci, rank: index + 1, mass: [.31, .24, .19, .16, .1][index]! })),
+      engine: { id: "same-source", name: "Same synthetic source", version: "test", seedHonored: false } };
+    run = appendOpponentPly(run, selection, { at }).run;
+    const original = run.activeCursor.branchId;
+    run = fork(rewind(run, nodeId, at).run, nodeId, { at }).run;
+    run = appendOpponentPly(run, selection, { at }).run;
+    const events = run.events.filter(event => event.type === "opponent.move_selected");
+    expect(events).toHaveLength(2);
+    expect(events[0]!.data.selection).toEqual(events[1]!.data.selection);
+    expect(events[0]!.data.branchId).not.toBe(events[1]!.data.branchId);
+    const saved = JSON.stringify(run);
+    for (const branchId of [original, run.activeCursor.branchId]) {
+      const markers = pivotalMarkers(run, branchId).filter(marker => marker.kind === "human_divergence");
+      expect(markers).toHaveLength(2); // Preserve existing node-level, not chosen-branch semantics.
+      for (const [index, marker] of markers.entries()) {
+        const event = events[index]!;
+        const retained = pivotalMarkerRecordedSelection(marker)!;
+        expect(retained).toMatchObject({ occurrence: { runId: run.id, eventSeq: event.seq,
+          branchId: event.data.branchId, nodeId: event.data.nodeId, moveUci: event.data.moveUci } });
+        expect(Object.isFrozen(Object.getOwnPropertyDescriptor(retained, "occurrence")!.value)).toBe(true);
+        expect(pivotalMarkerRecordedSelection({ ...marker })).toBeUndefined();
+      }
+      const values = invokeEvidenceValueRoute("derived.pivotal.human_divergence@1", { run, branchId });
+      expect(values).toHaveLength(2);
+      expect(values[0]!.evidence.payload).toEqual(values[1]!.evidence.payload);
+      expect(evidenceValueReceipt(values[0]!.evidence)).toEqual(evidenceValueReceipt(values[1]!.evidence));
+      expect(JSON.stringify(values)).not.toContain('"occurrence"'); // Internal source data does not widen old wire payloads.
+    }
+    expect(JSON.stringify(run)).toBe(saved);
+  });
+
   it.each(["irreversibility", "phase_change", "human_divergence", "option_collapse"] as const)("prepares only the declared %s family without changing its output", (kind) => {
     let run;
     if (kind === "irreversibility") run = commitMove(created("family-queen", "4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1"), "e2e7", { at }).run;

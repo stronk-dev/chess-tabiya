@@ -298,6 +298,14 @@ the existing per-occurrence reveal surface, and never added to the public pack
 projection. For `mode: line`, even the authored spine is withheld before play;
 other modes continue to receive their projected spine.
 
+## Recorded pivotal sources
+
+Pivotal human-divergence markers retain their original selection's run, event sequence,
+branch, node and selected move privately alongside the engine/candidate image. Identical
+distributions from different recorded selections therefore remain distinguishable internally.
+This does not change current node-level observations, public marker payloads or v1 receipts;
+the reference is source data, not permission to inspect a branch.
+
 ## Optional Theory source execution
 
 The authenticated Theory query compiles all four `module.theory_breadcrumb@1` bindings

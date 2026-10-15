@@ -29359,3 +29359,29 @@ Campaign was the one capability with no API, route or content. Now:
   recorded event occurrence, access/receiver and independent acceptance remain D3792 work.
   Code/fixtures stay unchanged after the full pass; run final closeout/staged checks before
   committing only the owned files. Nothing is pushed, published or deployed; goal stays active.
+
+## 2026-10-15 — D3830 recorded-selection occurrence retention
+
+- Register the missing private occurrence reference before implementing it. One permanent
+  regression fails on that reference, with105 other cases passing; retain the predecessor result.
+- Preserve literal run/event/branch/node/move beside the existing engine/candidate image.
+  Current node-level populations, public v1 payloads/receipts and saved games remain unchanged.
+- All106 focused cases and workspace types pass. Existing source experiments retain465 controls/
+  207 prefixes, add828 family checks and94 actual stored-occurrence checks over three selections.
+  Frozen fixture generators preserve45 output images and84 graph/FEN refusals in the A/B probe.
+- This is accepted §3.4 internal retention, not scoped Inspector implementation, source permission,
+  a new registry or release qualification. Full normal verification follows with source frozen.
+- Owner requests finish/commit this in-flight work, then an overall breadth/depth progress report;
+  do not start another implementation wave before that report. D3792 remains open.
+- Complete frozen normal make roadmap-receipt verify-awake build test-browser-ci-awake exits
+  zero:5851 software/391 files, seven performance/four,257 content/26, clean types, governance,
+  packaging/build;328 smoke/five content/59 matrix/one production browser passes. The one optional
+  Maia arm is configured skipped; all112 composition cells pass without retries.
+- Close D3830 with its permanent test path. Only62 implementation/predicate stamps change;
+  all343 semantic case outcomes/81 subjects/zero fully qualified remain. No authored pack,
+  public input, v1 receipt, source eligibility, whole capability or release promotion follows.
+- Tracking after closeout:3579 total ledger rows;1732 live assigned,629 todo/17 doing/1086 blocked,
+  1686 done/161 refused. UX282 completed/263 live/24 retired; four active/five blocked milestones,
+  all14 whole capabilities incomplete; zero graduated official packs. Preserve462 historical
+  prose-only closures as weak historical evidence, not current product proof. Final metadata-only
+  governance/staged checks precede the owned-file commit; nothing is pushed or deployed.

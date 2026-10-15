@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Recorded selection occurrence, 2026-10-15 ([[D3830]]): **accepted-contract private retention,
+not scoped Inspector delivery**. A permanent regression first fails on the missing event
+reference, then all106 focused cases/types pass. The existing stored-prefix experiment adds
+828 requested-family checks and94 occurrence checks over three actual repeated selections;
+original465 controls/207 prefixes remain. Public payloads, receipts and saved bytes are
+unchanged. `[V]` `pivotal-evidence.test.ts`, `tools/d3792-inspector-demand/pivotal-source.ts`,
+`module-evidence-assembly.md` §Recorded selection occurrence. Scope/access/receiver work stays open.
+
 Pivotal per-family preparation, 2026-10-15 ([[D3829]]): **accepted-contract internal repair,
 verified locally**. Four permanent regressions reproduce unrelated detector work.
 The current implementation matches complete payload/input/value/convention images over28 calls/

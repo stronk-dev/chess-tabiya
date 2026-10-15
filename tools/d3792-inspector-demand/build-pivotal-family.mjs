@@ -67,7 +67,7 @@ for (const candidate of [false, true]) {
         return { contents: source, loader: "ts", resolveDir: resolve(args.path, "..") };
       });
       builder.onLoad({ filter: /\/tools\/d3792-inspector-demand\/pivotal-source\.ts$/ }, args => {
-        let source = readFileSync(args.path, "utf8");
+        let source = oldSource("tools/d3792-inspector-demand/pivotal-source.ts"); // Same fixture definitions for both variants.
         source = 'import { createHash } from "node:crypto";\nimport { evidenceValueReceipt } from "../../packages/runtime/src/evidence-contract.js";\n' + source;
         source = replaceOnce(source, 'assert.equal(process.argv[2], "candidate");', 'assert.equal(process.argv[2], "family_probe");');
         source = replaceOnce(source, 'const directory = mkdtempSync(join(tmpdir(), "tabiya-d3825-pivotal-source-"));',

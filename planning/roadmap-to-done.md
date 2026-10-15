@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3828]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3830]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,16 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3830 finishes private recorded-selection occurrence retention under the accepted pivotal
+contract: identical distribution images retain distinct original event/branch references.
+The permanent predecessor failure becomes106 focused passes/types. The existing prefix probe
+adds828 family and94 actual stored-occurrence checks while retaining465 original controls and
+207 prefixes. Public outputs, v1 receipts, saved games and existing node-level populations stay
+unchanged. Full frozen normal verification/build/all browser tiers pass5851 software/seven
+performance/257 content/393 browser checks, one configured optional Maia skip,59 matrix and112
+unretried composition cells. No whole capability or scoped Inspector delivery is promoted.
+The next task is the overall 1.0 inventory, not another implementation wave.
 
 D3829 is complete under accepted value-authority §3.4: exact pivotal factories now prepare
 only their own family rather than compute all four before filtering. Four original regressions

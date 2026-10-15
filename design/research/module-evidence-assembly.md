@@ -962,3 +962,35 @@ source-preserving implementation under accepted value-authority §3.4, not accep
 different scope/occurrence/access contract. The current whole-tip shared-node distribution
 population and its exact retained source images remain unchanged. `[V]` same source/tests;
 `rfc/evidence-value-authority.md` §3.4 and `rfc/module-registration.md` draft §4.11a.
+
+## Recorded selection occurrence — 2026-10-15, D3830
+
+Two selections at a shared node can carry identical distributions but distinct event sequences
+and origin branches. A new permanent regression fails only on the missing occurrence reference
+before the repair (105 other cases pass). The producer now privately retains the literal run,
+event sequence, branch, node and move alongside its original engine/candidate image; all106
+focused cases and workspace types pass. Current node-level marker populations, public payloads,
+v1 receipts and saved run bytes remain unchanged. `[V]` `packages/runtime/src/pivotal.ts`,
+`pivotal-evidence.test.ts`; normal `make test-pivotal-grounding` predecessor and candidate results.
+
+The existing disposable prefix experiment additionally exercises four requested families at
+207 stored prefixes (828 checks) and matches three repeated selections against their actual
+stored events (94 occurrence checks). Wrong run, missing/duplicate sequence, malformed graph,
+substituted origin/source, ungranted anchor and copied marker refuse. Original465 controls,
+four missing-later-collapse exclusions and zero crossed human distributions remain. The family
+A/B experiment freezes both fixture generators at2fd557b9 and retains all45 output images,
+84 graph/FEN refusals and prior preparation savings. `[V]`
+`tools/d3792-inspector-demand/pivotal-source.ts`, `build-pivotal.mjs`,
+`build-pivotal-family.mjs`; normal research Make results.
+
+This identifies source data, not a new factory receipt, current access or proof that a selected
+move lies on the requested branch. Shared/inherited node-level observations keep their current
+meaning. Scoped Inspector source/factory/access/receiver delivery and independent acceptance
+remain D3792 work. `[V]` existing production factory inputs and draft module-registration §4.11a.
+
+Full frozen normal verification/build/all browser tiers exit zero:5851 software, seven
+performance,257 content and393 browser passes, one configured optional Maia skip; all59 matrix
+cases and112 composition cells pass without retries. `[V]` normal Make results;
+`test-results/browser-results.json` expected59/skipped0/unexpected0/flaky0 and
+`test-results/composition/receipt.json`; append-only exploration log. These are local checks,
+not current-revision GitHub, a calibrated chess detector or full release qualification.

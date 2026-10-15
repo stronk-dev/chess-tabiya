@@ -22,7 +22,11 @@ const PROVENANCE = "Tabiya's pivotal-marker convention";
 const DEFINITE = new Set<DetectedPhase>(["opening", "middlegame", "endgame"]);
 // Producer-owned input retention: two histories may select at the same recorded node.
 // Marker fields alone cannot locate which complete distribution produced that marker.
-type RecordedMarkerSelection = Readonly<{ engine: OpponentSelection["engine"]; candidates: NonNullable<OpponentSelection["candidates"]> }>;
+type RecordedMarkerSelection = Readonly<{
+  occurrence: Readonly<{ runId: string; eventSeq: number; branchId: string; nodeId: string; moveUci: string }>;
+  engine: OpponentSelection["engine"];
+  candidates: NonNullable<OpponentSelection["candidates"]>;
+}>;
 const RECORDED_SELECTIONS = new WeakMap<PivotalMarker, RecordedMarkerSelection>();
 /** Internal source operand, not evidence or permission; copied/rendered markers have none. */
 export function pivotalMarkerRecordedSelection(marker: PivotalMarker): RecordedMarkerSelection | undefined {
@@ -40,6 +44,8 @@ function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly Pivot
     const selection = event.data.selection;
     const recordedCandidates = selection.candidates;
     const source = recordedCandidates === undefined ? undefined : Object.freeze({
+      occurrence: Object.freeze({ runId: run.id, eventSeq: event.seq, branchId: event.data.branchId,
+        nodeId: event.data.nodeId, moveUci: event.data.moveUci }),
       engine: Object.freeze({ ...selection.engine }),
       candidates: Object.freeze(recordedCandidates.map(candidate => Object.freeze({ ...candidate }))),
     });

@@ -33,6 +33,10 @@ for (const candidate of [false, true]) {
           'function pivotalPayloads(run: DrillRun, branchId: string, kind: PivotalKind | undefined, researchThroughNodeId?: string): readonly PivotalMarker[] {');
         replace('  return pivotalPayloads(run, branchId, undefined);',
           '  return pivotalPayloads(run, branchId, undefined, researchThroughNodeId);');
+        replace('export function pivotalMarkerPayloadsForKind(run: DrillRun, branchId: string, kind: PivotalKind): readonly PivotalMarker[] {',
+          'export function pivotalMarkerPayloadsForKind(run: DrillRun, branchId: string, kind: PivotalKind, researchThroughNodeId?: string): readonly PivotalMarker[] {');
+        replace('  return pivotalPayloads(run, branchId, kind);',
+          '  return pivotalPayloads(run, branchId, kind, researchThroughNodeId);');
         replace('  const path = branchPath(run, branchId), markers: PivotalMarker[] = [];', `
   const original = branchPath(run, branchId);
   const endpoint = researchThroughNodeId === undefined ? original.length - 1
