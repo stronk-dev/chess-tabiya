@@ -513,6 +513,20 @@
       "ba940137fd6b957cd2002a0140a3af077b1612a718bcd37c40ad80d8c90cfee9"
     ]
   },
+  "derived.inspector.tablebase_category@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "8ddf5cc36128e12d3dd63dbcc33daf5bfd56c54db3b76072cc74e773d53f6d78"
+    ]
+  },
+  "derived.inspector.tablebase_distance@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "fc7df39aae4222c469dbb920d8532d975008c16ba613a9392395d3d3e30d0154"
+    ]
+  },
   "derived.king.captured_zone_defender@1": {
     "availability": "available",
     "cardinality": 1,
@@ -1135,6 +1149,41 @@
     "cardinality": 1,
     "payloadDigests": [
       "cc6576cebd7825eb237f126a5cec8058df423e585db72e15b285dfa736da6505"
+    ]
+  },
+  "recorded.inspector.eval_packet@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "91b8cc48afd94382b94320444b75a019c54b59e9732cbd0df790c2dbfc0935cc"
+    ]
+  },
+  "recorded.inspector.maia_selection@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "94b9dede8ffc44367031cda85e5d83159859c4909230aa645360d42a61f92727"
+    ]
+  },
+  "recorded.inspector.pv_packet@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "570e019375430c511e57954bc1438fee172b3df5c71aeb382456f1a9b641c158"
+    ]
+  },
+  "recorded.inspector.tablebase_packet@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "33309ccc8db3645ac17495fd4b101d4d8edbbd756c544fa78471fd590f17ba88"
+    ]
+  },
+  "recorded.inspector.wdl_packet@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "f123f9fdea575191f70ab534302c1ee2af17b148e5621fb146488fefbfde6adf"
     ]
   },
   "recorded.tablebase.result@1": {

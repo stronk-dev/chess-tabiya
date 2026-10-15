@@ -46,9 +46,9 @@ function canonical(value: unknown): string {
 describe("primary evidence catalogue", () => {
   it("compiles all audited producer paths and current consumer operations", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
-    expect(EVIDENCE_PRODUCER_IDS).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia"]);
+    expect(EVIDENCE_PRODUCER_IDS).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia", "recorded.inspector", "derived.inspector"]);
     // Declarations are unordered compiler input; compare the exact inventory, retaining duplicates.
-    expect(EVIDENCE_PRODUCERS.map((item) => item.id).sort()).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia"].sort());
+    expect(EVIDENCE_PRODUCERS.map((item) => item.id).sort()).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia", "recorded.inspector", "derived.inspector"].sort());
     expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(26);
     // rfc/module-registration.md §2.2: ten module consumers join (rules_floor has no evidence);
     // rfc/hint-distance.md adds module.guided_hint over its 35 disclosure projections.
@@ -61,7 +61,7 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([47, 292, 42, 556]); // Internal source components only; no partial consumer cutover.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 299, 42, 556]); // Internal source components only; no partial consumer cutover.
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");

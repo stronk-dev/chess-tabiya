@@ -169,6 +169,9 @@ import type { ExplorerPopulationSummary, ExplorerPositionFrequency, ExplorerInsp
 import type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 import { maiaExactFenOccurrencePayload, maiaRunOccurrencePayload, type MaiaExactFenMoveOccurrence, type MaiaOccurrencePageEvidence, type MaiaRunMoveOccurrence } from "./maia-occurrence.js";
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
+import type { RunEvidenceItemDigest } from "./run-subject.js";
+import type { EvidenceKind } from "./types.js";
+import { isRecordedInspectorNode, recordedInspectorPacketValue, recordedInspectorSelectionValue, recordedInspectorCategoryValue, recordedInspectorDistanceValue, type RecordedInspectorPacket, type RecordedInspectorSelection } from "./recorded-inspector.js";
 import type { ExplorerPositionPage } from "./provider-types.js";
 import type { FixedBoundPrincipalVariation, ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
 import { hintDisclosurePayload, hintHorizonOccurrence, type HintDisclosurePayload, type HintHorizonOccurrence } from "./hint-horizon.js";
@@ -1609,6 +1612,34 @@ export const createDerivedMaiaExactFenMoveOccurrenceV1Evidence = (() => {
     return mint(route, symbol, payload, { page, observedMoveUci }, [page]);
   });
 })();
+
+function recordedInspectorPacketFactory<K extends EvidenceKind>(route: string, kind: K) {
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ resolved: value("an exact sealed run-node subject", isRecordedInspectorNode), itemDigest: value("an existing run evidence-item digest", candidate => typeof candidate === "string" && /^sha256:[0-9a-f]{64}$/u.test(candidate)) }], result: "single" },
+    ({ resolved, itemDigest }: { readonly resolved: ResolvedRunSubject; readonly itemDigest: RunEvidenceItemDigest }) => {
+      const payload = recordedInspectorPacketValue(resolved, itemDigest, kind);
+      return mint(route, symbol, payload, payload);
+    });
+}
+export const createRecordedInspectorEvalPacketV1Evidence = recordedInspectorPacketFactory("recorded.inspector.eval_packet@1", "eval");
+export const createRecordedInspectorWdlPacketV1Evidence = recordedInspectorPacketFactory("recorded.inspector.wdl_packet@1", "wdl");
+export const createRecordedInspectorPvPacketV1Evidence = recordedInspectorPacketFactory("recorded.inspector.pv_packet@1", "bestline");
+export const createRecordedInspectorTablebasePacketV1Evidence = recordedInspectorPacketFactory("recorded.inspector.tablebase_packet@1", "tablebase");
+export const createRecordedInspectorMaiaSelectionV1Evidence = (() => {
+  const route = "recorded.inspector.maia_selection@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ resolved: value("an exact sealed run-node subject", isRecordedInspectorNode), eventSeq: value("a positive safe event sequence", candidate => Number.isSafeInteger(candidate) && (candidate as number) > 0) }], result: "availability" },
+    ({ resolved, eventSeq }: { readonly resolved: ResolvedRunSubject; readonly eventSeq: number }): EvidenceAvailability<DeclaredEvidence<RecordedInspectorSelection>> => {
+      const payload = recordedInspectorSelectionValue(resolved, eventSeq);
+      return payload === undefined ? unavailable("source_absent") : available(mint(route, symbol, payload, payload));
+    });
+})();
+function recordedInspectorTablebaseView<T>(route: string, compute: (record: DeclaredEvidence<RecordedInspectorPacket<"tablebase">>) => T) {
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ record: sealed("recorded.inspector.tablebase_packet@1") }], result: "single" },
+    ({ record }: { readonly record: DeclaredEvidence<RecordedInspectorPacket<"tablebase">> }) => mint(route, symbol, compute(record), { record }, [record]));
+}
+export const createDerivedInspectorTablebaseCategoryV1Evidence = recordedInspectorTablebaseView("derived.inspector.tablebase_category@1", recordedInspectorCategoryValue);
+export const createDerivedInspectorTablebaseDistanceV1Evidence = recordedInspectorTablebaseView("derived.inspector.tablebase_distance@1", recordedInspectorDistanceValue);
 
 /** §7: the one adapter for the scheduler-sealed whole Syzygy outside-domain envelope. */
 export const createRulesEndgameTablebaseDomainV1Evidence = (() => {

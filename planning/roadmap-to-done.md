@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3869]] · **Machine map:**
+2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3871]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -56,6 +56,22 @@ added (991 total), old989 and all current packet bytes unchanged, no pack edits/
 Final normal make verify build passes6061 software/396 files, seven isolated performance cases,
 257 content cases and all type/contract/governance/corpus/build gates. Remaining recorded/reduction/grade
 sources and the complete current consumer/receiver/API/native cutover still own delivery.
+
+Seven recorded report routes are now internal prerequisites: exact eval/WDL/PV/tablebase
+attachments, origin-bound Maia selection and fixed tablebase category/distance views.31 new
+permanent source cases/268 extended focused passes and workspace types retain source/head/node/event identity,
+duplicate occurrences, stored requested band and missing/uninterpretable/null/signed values.
+Independent read-only review finds no additional blocker. No current learner bindings change.
+The real D3870 conflict remains open: run0.18 refuses the accepted empty selection array before
+subject issuance. A reviewed canonical schema-owner/resource/migration amendment is needed;
+no parser/seal bypass, guessed schema version or complete selection/pivotal delivery claim.
+Seven profiles/declarations are added (998 total), old991 and pack requirements unchanged.
+Final normal make verify build passes6092 software/397 files, seven isolated performance cases,
+257 content cases and all type/contract/governance/corpus/build checks. The first run caught
+one stale producer-list expectation after6091 passes; D3871 closes the exact-list correction
+and enrolls both existing catalogue/manifest files in the normal fast F2 gate, without reducing
+any assertion, deadline or coverage. Remaining nominal sources/reductions/grades and complete current
+consumer/receiver/API/native delivery still gate the capability.
 
 D3869 also closes the measured verification-order debt: existing28 normal Make gates now
 refuse stale generated contracts before both full test pools. Four scheduling regressions

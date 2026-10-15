@@ -31483,3 +31483,78 @@ Campaign was the one capability with no API, route or content. Now:
   milestone or release completion is claimed. Next remains actual recorded/pivotal/sequence
   source issuance, typed reductions and grades, then complete current receivers/API/native
   delivery and obsolete-path retirement. The full1.0 goal remains active.
+
+### 2026-10-16 — implement exact historical report sources; preserve a real schema return
+
+- Accepted F2 §2.3a now has seven internal/unbound routes: four complete stored attachment
+  sources, exact origin-node/branch Maia selection and two fixed tablebase field views. Initial
+  25 cases have19 predecessor failures:18 missing-route controls and one genuine canonical
+  schema failure. The expanded31 permanent cases/233 focused passes and workspace types retain
+  exact run/head/node/item/event authority, complete envelopes, duplicate occurrences, legitimate
+  inherited-node packet reuse, selected origin branch and stored requested target band. Both
+  side-to-move contexts, mutation isolation and raw/copied/crossed/mistyped inputs are covered.
+- Tablebase views preserve reported/not_recorded/uninterpretable categories and signed integer/
+  zero/null/missing distance distinctions. The source reports historical labels only, never new
+  modern provider exchange, strength, engine bound, frame or exact tablebase truth. Derived
+  values retain their complete genuine source in the payload and literal F2 input receipt.
+- D3870 records the actual failed source-boundary criterion: run0.18 requires candidates.minItems=1,
+  so the accepted successful-empty selection cannot receive a genuine resolved subject. The
+  canonical negative is kept, not called a successful-empty proof; absent candidates separately
+  return source_absent. Independent authorized read-only review confirms this upstream gap and
+  finds no additional implementation blocker. Schema-owner/resource/migration amendment and a
+  real canonical positive remain required before complete selection/pivotal/current adoption.
+  No schema version is guessed, schema weakened, subject seal forged or fake candidate added.
+- Canonical generators add seven profiles/declarations (998 total), old991 and all authored
+  requirements unchanged. Semantic receipt retains343/343 cases/81 subjects/zero qualified,
+  53 population/eight external receipts. The optional prefix research initially appends a
+  duplicate hypothetical selection producer; it now uses the actual internal declaration,
+  retains the prospective marker-only experiment and passes its normal target. No raw dump,
+  new research dependency in ordinary CI, source qualification or public delivery is inferred.
+- Existing queue/strategic/machine checkpoint, docs and ledger/work-state are updated. D3870
+  is assigned to evidence-foundation, zero untriaged; the broader source/consumer rows remain
+  open. Full normal verify/build is next and not yet claimed passed for this checkpoint.
+  No pack edit/re-stamp, browser rerun, protected-intent change, migration, data deletion,
+  compatibility pipeline, public cutover, whole milestone, remote CI or release claim.
+  Continue nominal recorded/Compare/pivotal/sequence sources and typed reductions/grades while
+  the schema contradiction is repaired through its actual owners. The full1.0 goal stays active.
+
+### 2026-10-16 — full recorded-source run catches the missed literal producer list
+
+- The first full normal make verify build reaches6091 software passes/397 files and one failure:
+  primary catalogue's separate literal producer list still expects47, omitting the new
+  recorded.inspector and derived.inspector. Its expected aggregate49/299/42/556 was already
+  updated; the strict identity assertion correctly refuses the incomplete list. No performance,
+  content or final full-run success is claimed from this aborted command.
+- Correct the literal expectation with exactly those two identities, retain every prior one,
+  and enroll the existing primary-catalogue and server-manifest software tests in the same
+  normal evidence-value-authority target. D3871 owns this fast-source-gate coverage/closeout.
+  No new wrapper, Make target, hook/service prerequisite, test skip/retry/deadline change or
+  relaxed assertion. The extended focused target and full normal verification are rerun next.
+  D3870's independently confirmed canonical empty-selection contradiction remains open.
+
+### 2026-10-16 — recorded-source full rerun verified; keep the real schema hold
+
+- The second full normal make verify build exits zero:6092 software cases/397 files, seven
+  isolated performance cases/four files,257 real-content cases/26 files and all type/schema,
+  manifest/source/semantic/candidate/capability/release/governance/build/final corpus checks.
+  The extended normal evidence-value-authority target passes268 cases/nine files and includes
+  the actual primary-catalogue/server-manifest assertions that caught the first run's failure.
+  D3871 closes with Makefile path evidence. No assertion, coverage, deadline, skip, retry, sleep,
+  hook or environment-prefix workaround is introduced. The earlier failure remains append-only.
+- Corpus clearance is92 documents/354 blockers/34 resolved/48 accepted/errors[]; exact derived
+  requirements pass for104 documents. Exactly seven canonical capability entries/profiles are
+  added (998 total); prior991, all authored requirements and current packet/module bindings
+  stay unchanged. F1 is49/299/42/556 and semantic78/78/16/1; factory routes292. Canonical343/343
+  cases/81 subjects/zero qualified remain measurements, not new source or tactical qualification.
+- The seven internal report routes remain unbound. Independent read-only review finds no
+  additional implementation blocker but explicitly confirms D3870: genuine empty selection
+  cannot cross canonical run0.18. Keep that accepted arm undischarged, reconcile actual schema
+  owner/resource/migration through independent review, and prove the real positive before
+  complete selection/pivotal/current-consumer adoption. No parser/seal bypass, guessed version,
+  fabricated candidate or missing-to-empty substitution. No schema, migration or saved data changes.
+- Refresh the existing queue, strategic/machine checkpoint, live source rows and state anchors
+  with zero untriaged; no whole capability or milestone is promoted. No browser rerun, raw dump,
+  pack edits/re-stamps, protected-intent change, public cutover, remote CI, push or release claim.
+  Continue the actual nominal recorded/Compare/pivotal/sequence owners, typed reductions/grades
+  and complete current receivers/API/native migration, retiring obsolete paths under D3851.
+  The full1.0 goal remains active.

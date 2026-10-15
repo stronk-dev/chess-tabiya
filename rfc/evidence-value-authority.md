@@ -20,6 +20,14 @@ source refusals and quiet/castling empty populations. The current child-reading 
 also drives the generated exact packet closure; adding an internal version cannot auto-select it.
 These internal/unbound sources do not complete the coordinated consumer cutover or qualification.
 
+**Recorded packet checkpoint, 2026-10-16:** §2.3a now has internal exact-attachment packet
+factories, the origin-bound recorded selection source and fixed tablebase field views. They
+report history only; no modern provider or learner consumer is migrated. D3870 records an
+actual upstream contract contradiction: canonical run0.18 requires candidates.minItems=1, so
+the specified successful empty selection cannot receive a genuine resolved subject. Preserve
+that requirement as undischarged pending a reviewed schema-owner/resource/migration amendment;
+neither this checkpoint nor the existing no-schema claim authorizes changing or bypassing it.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft

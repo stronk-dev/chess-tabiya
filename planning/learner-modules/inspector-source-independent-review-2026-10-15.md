@@ -1124,3 +1124,21 @@ read confirms the limitation is cleared. Both-colour EP checks replay actual rec
 and physical victim/target joins. Promoted-recapturer comparisons remain explicitly wrapper
 parity over unchanged arithmetic, not independent semantic qualification. No files edited or
 tests rerun by the reviewer. Actual packet/Hint/module/access/HTTP/native delivery remains open.
+
+### Internal recorded packet/selection/field implementation review — 2026-10-16
+
+Authorized independent reviewer `/root/inspector_independent_review` reads the seven internal
+routes against accepted F2 §2.3a and D3851. No additional implementation blocker is found: exact
+resolved-node/head/event joins, complete envelopes, distinct duplicate observations, stored
+head requested band and fixed tablebase field states match the contract. No modern provider
+authority is promoted. Read-only inspection; tests/typecheck are not rerun by the reviewer.
+
+D3870 is confirmed independently as a genuine upstream contract gap: canonical run0.18
+candidates.minItems=1 refuses a recorded empty array before ResolvedRunSubject issuance.
+The run-schema register already has owned/current and claimed successor lanes. Reconcile the
+owning canonical event/schema contract and its resource/migration through independent review,
+not a guessed version, local parser/seal bypass or silently dropped requirement. Existing
+nonempty/internal work may continue, but complete selection/pivotal/current-consumer adoption
+is held until a genuine successful-empty positive crosses the actual canonical boundary.
+Missing-array source_absent remains a different state. No complete source/consumer acceptance
+or qualification follows from the bounded internal implementation review.

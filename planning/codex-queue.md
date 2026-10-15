@@ -49,6 +49,33 @@ Independent read-only implementation review finds no blocker. Final normal make 
 passes6061 software/396 files, seven isolated performance cases,257 content cases and all
 type/contract/governance/corpus/build gates; no assertion, deadline or coverage reduction.
 
+The recorded report source wave now has seven internal/unbound routes: four exact packet
+sources, origin-bound Maia selection and two fixed tablebase field views.31 permanent source cases/
+268 extended focused passes and workspace types preserve complete attachments, head/node/item/run
+identity, duplicate occurrences, inherited-node packet reuse, selection origin branch, stored
+requested band and absent/uninterpretable/null/signed fields. Independent read-only review
+finds no additional correctness blocker. Canonical generators add seven profiles/declarations
+(998 total), prior991 and all pack requirements unchanged. Current packet/module bindings do
+not change. Final normal make verify build passes6092 software/397 files, seven performance,
+257 content and all type/contract/governance/corpus/build gates.
+
+D3870 is an actual upstream contract return, not an implementation shortcut: the accepted
+successful-empty candidate window is refused by run0.18's candidates.minItems=1 before genuine
+subject issuance. Keep that exact requirement open. Reconcile the canonical schema owner and
+existing run-schema/migration claims through independent review before exposing/proving it;
+never forge a seal, guess a version, weaken the schema locally or substitute a fake candidate.
+Nonempty internal source work may continue, but not complete selection/pivotal/current-image
+adoption. Existing current ownership/resources and saved data remain untouched.
+
+D3871 records the first full-run failure before claiming this wave verified: the primary
+catalogue's separate literal producer list missed the two additions (6091 pass/one failure).
+Both existing primary-catalogue and server-manifest software files now join the normal fast
+evidence-value-authority target. Preserve every prior identity and strict equality; rerun
+the extended focused gate and full normal verification/build before committing/closing it.
+Those reruns now pass in full; D3871 closes locally with the first failure retained in the log.
+Next reconcile D3870's schema-owner/resource/migration amendment through independent review,
+without blocking lawful internal nominal-source work or exposing the incomplete selection arm.
+
 Next implement the
 remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,

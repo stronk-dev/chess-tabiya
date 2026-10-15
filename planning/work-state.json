@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d01a8be8b580c2fcab721a697c7cde106b56b66cd323af688050ff8a901e0cf9",
+      "sourceDigest": "sha256:69c9ebd0b36c80222c8bd1bce461c1f1e61600899f302c37fae3faf2ae4b71f0",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32240,6 +32240,24 @@
       "sourceDigest": "sha256:98a9d1567b53aac4b1c3e434ce3e4422dcc83448eea600948e27729d0bdf2fb4",
       "uxItems": [],
       "evidence": "tools/software-scheduling.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3870",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ff2c08c9b5da48646f70f11c362a3edd92b2f4d8795d26e047ed887269787ece",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-16"
+    },
+    {
+      "id": "D3871",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9c21d569bff8894a80a75f9e02128d73c7fc8289c5b324e28d6b87a8847901a6",
+      "uxItems": [],
+      "evidence": "Makefile",
       "evidenceKind": "path"
     }
   ]

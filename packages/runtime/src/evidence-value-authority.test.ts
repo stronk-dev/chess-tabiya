@@ -47,6 +47,7 @@ import type { ProviderExecutionCapture, ProviderOperationId, ProviderRequestedId
 import { HINT_DISCLOSURE_PROJECTION_IDS, HINT_FAMILIES, HINT_HORIZON_PROJECTION_IDS, HINT_RUNGS, type HintFamily } from "./hint-registry.js";
 import { HINT_FAMILY_POSITIVES, sealedHintLine } from "./testing/hint-fixture.js";
 import { occurrenceFixture, occurrencePage } from "./testing/maia-occurrence-fixture.js";
+import { recordedInspectorAttachment, recordedInspectorSelection } from "./testing/recorded-inspector-fixture.js";
 
 /** One scheduler-sealed live delivery per provider operation, keyed by its source route. */
 function providerDeliveries(): readonly (readonly [string, ProviderOperationId, unknown])[] {
@@ -232,7 +233,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(285);
+    expect(ACTIVE).toHaveLength(292);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -307,7 +308,7 @@ describe("value authority: registry equality", () => {
     const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
     expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
     const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
-    const localTactical = ["derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.tactic.nonterminal_fork_survival@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1"];
+    const localTactical = ["derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1"];
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
     const extra = allExtra.filter(route => !localTactical.includes(route));
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
@@ -1011,6 +1012,23 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   // rfc/hint-distance.md §1/§3 ([[D1640]]): each family horizon from one sealed searched line and one
   // sealed family source at ply 1; the falsifier asks for an opponent/absent ply. Each disclosure from
   // one sealed horizon; the falsifier is a value-unverified wrapper of the same horizon.
+  for (const [kind, route, values] of [
+    ["eval", "recorded.inspector.eval_packet@1", { centipawns: 31 }],
+    ["wdl", "recorded.inspector.wdl_packet@1", { win: 300, draw: 600, loss: 100 }],
+    ["bestline", "recorded.inspector.pv_packet@1", { pv: ["e2e4"] }],
+    ["tablebase", "recorded.inspector.tablebase_packet@1", { category: "draw", dtz: 0, preciseDtz: null, dtm: null }],
+  ] as const) {
+    const fixture = recordedInspectorAttachment({ kind, source: kind === "tablebase" ? "tablebase_exact" : "engine_validated", values });
+    const valid = { resolved: fixture.resolved, itemDigest: fixture.itemDigest };
+    profiles.set(route, { valid, falsify: refused(route, { ...valid, resolved: { ...fixture.resolved } }) });
+    if (kind === "tablebase") {
+      const record = invokeEvidenceValueRoute("recorded.inspector.tablebase_packet@1", valid);
+      for (const view of ["derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1"] as const) profiles.set(view, { valid: { record }, falsify: refused(view, { record: { ...record } }) });
+    }
+  }
+  const recordedSelection = recordedInspectorSelection();
+  profiles.set("recorded.inspector.maia_selection@1", { valid: { resolved: recordedSelection.resolved, eventSeq: recordedSelection.eventSeq },
+    falsify: refused("recorded.inspector.maia_selection@1", { resolved: { ...recordedSelection.resolved }, eventSeq: recordedSelection.eventSeq }) });
   const maiaOccurrence = occurrenceFixture();
   profiles.set("derived.maia.run_move_occurrence@1", { valid: { page: maiaOccurrence.page, resolved: maiaOccurrence.resolved, edge: maiaOccurrence.edge }, falsify: refused("derived.maia.run_move_occurrence@1", { page: maiaOccurrence.page, resolved: { ...maiaOccurrence.resolved }, edge: maiaOccurrence.edge }) });
   const exactMaiaPage = occurrencePage({ kind: "exact_fen", fen: INITIAL });

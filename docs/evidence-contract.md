@@ -127,7 +127,7 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 47 producers, 292 projections, 42 versioned consumers and 556 bindings,
+The current compiled closure is 49 producers, 299 projections, 42 versioned consumers and 556 bindings,
 plus 78 semantic-event declarations, 78 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
@@ -155,6 +155,22 @@ and promotion populations for its validated legal edge. Capture-promotion requir
 quiet moves and castling return successful empty populations. Decreased and unchanged total
 magnitude remain events when role vectors change. Neither source grades material advantage.
 Both remain unbound internal prerequisites until the complete current-consumer migration.
+
+Recorded Inspector sources now retain complete stored eval/WDL/PV/tablebase attachments through
+the existing exact run-node/head/item resolver. Their `recorded_run/measured/reported` labels
+describe historical reports, not newly established provider provenance. Equal FENs do not merge
+different nodes, and repeated identical reports retain distinct event sequences and envelopes.
+The separate recorded Maia-selection source requires its actual origin node and branch and
+retains the selected head's requested target band; it does not claim applied band or strength.
+
+Fixed tablebase category/distance views retain that entire source and distinguish reported,
+not-recorded and uninterpretable fields. Signed safe integers, zero and recorded null are
+preserved, never replaced with absolute distances or guessed draws. These seven internal routes
+have no learner or live-provider bindings yet. D3870 remains an upstream hold: the accepted empty
+selection window cannot cross the current run0.18 schema's candidates.minItems=1 boundary.
+Missing candidates are source_absent, not a fabricated empty window. A reviewed schema-owner/
+resource/migration amendment and a genuine canonical empty-array positive are still required;
+no local subject/parser bypass or complete selection/pivotal delivery is claimed.
 
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,

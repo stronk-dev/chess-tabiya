@@ -370,16 +370,11 @@ console.log(JSON.stringify({ scope: "D3852 installed internal computed declarati
   grounding: overloadComputed.grounding, exactness: overloadComputed.exactness,
   sealedInputs: 0, directConventions: overloadDirectConventions.refs, providerOperations: 0, oldDeclarationsChanged: false }));
 
-// Hypothetical declaration ONLY, compiled by the real unchanged F1 guard; never source adoption.
+// The recorded selection source is now installed internally. Only the marker successor below
+// remains hypothetical; do not append a duplicate producer or claim current-consumer adoption.
 const positionDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "run.record.position")!;
 const oldMarker = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.pivotal.human_divergence")!;
-const selectionDeclaration: ProjectionDeclaration = { ...positionDeclaration,
-  id: "recorded.inspector.maia_selection", producer: { id: "recorded.inspector", version: 1 },
-  role: "source_record", payloadType: "RecordedInspectorSelection", exactness: "measured", confidence: "reported",
-  operands: ["subject", "event", "requestedTargetElo", "authority"], answerContent: ["candidate_moves"],
-};
-const recordedProducer: ProducerDeclaration = { id: "recorded.inspector", version: 1, plane: "record",
-  implementation: "UNIMPLEMENTED D3841 draft", availability: "recorded", latency: "sync", outputs: [selectionDeclaration] };
+const selectionDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "recorded.inspector.maia_selection" && row.version === 1)!;
 const successor = (grounding: "recorded_run" | "declared_convention"): ProjectionDeclaration => ({ ...oldMarker,
   version: 2, payloadType: "RecordedHumanDivergenceMarker", grounding,
   disposition: { kind: "inspector_only", reason: "D3841 isolated prospective declaration; current consumer migration remains unaccepted" },
@@ -387,8 +382,8 @@ const successor = (grounding: "recorded_run" | "declared_convention"): Projectio
 });
 function candidate(grounding: "recorded_run" | "declared_convention") {
   return compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
-    producers: [...EVIDENCE_CONTRACT_DECLARATIONS.producers.map(row => row.id === "derived.pivotal"
-      ? { ...row, outputs: [...row.outputs, successor(grounding)] } : row), recordedProducer],
+    producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(row => row.id === "derived.pivotal"
+      ? { ...row, outputs: [...row.outputs, successor(grounding)] } : row),
   });
 }
 assert.throws(() => candidate("declared_convention"), /EVIDENCE_DERIVATION_WIDENS/u);

@@ -153,6 +153,7 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
   "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy", "derived.explorer", "derived.maia",
+  "recorded.inspector", "derived.inspector",
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
@@ -1248,6 +1249,33 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts", "local", "sync", withRecordedPathSuccessors(derivedTacticOutputs)),
   producer("derived.pawn", "derived", "packages/runtime/src/pawn-dynamics.ts", "local", "sync", withRecordedPathSuccessors(derivedPawnOutputs)),
   producer("derived.material", "derived", "packages/runtime/src/material-state.ts", "local", "sync", derivedMaterialOutputs),
+  producer("recorded.inspector", "record", "packages/runtime/src/recorded-inspector.ts", "recorded", "sync", [
+    ...([
+      ["eval_packet", "evaluation"], ["wdl_packet", "evaluation"], ["pv_packet", "move"], ["tablebase_packet", "fact"],
+    ] as const).map(([suffix, answer]) => projection("recorded.inspector", `recorded.inspector.${suffix}`, "record", {
+      role: "source_record", payloadType: "RecordedInspectorPacket", semantics: "One complete stored attachment at its exact resolved run node and event head; recorded report only, not independently established provider truth.",
+      operands: ["subject", "itemDigest", "event", "authority"], grounding: "recorded_run", exactness: "measured", confidence: "reported",
+      answerContent: suffix === "pv_packet" ? ["move", "principal_variation"] : suffix === "tablebase_packet" ? ["fact", "evaluation"] : [answer],
+      forms: ["panel", "machine_condition"], disposition: { kind: "experimental", reason: "Accepted internal historical source; complete current-consumer migration remains pending." },
+      limitations: ["The packet source label does not establish a modern exchange, engine bound, model options, calibration or exact tablebase truth. Raw reports remain server-internal."],
+    })),
+    projection("recorded.inspector", "recorded.inspector.maia_selection", "record", {
+      role: "source_record", payloadType: "RecordedInspectorSelection", semantics: "One entire historical human_common selection at its exact origin node/branch/head, retaining the stored requested target band separately from any applied claim.",
+      operands: ["subject", "event", "requestedTargetElo", "authority"], grounding: "recorded_run", exactness: "measured", confidence: "reported", answerContent: ["candidate_moves"],
+      forms: ["machine_condition"], abstention: { possible: true, reasons: ["source_absent"] },
+      disposition: { kind: "experimental", reason: "Internal pivotal source, not a live distribution topic; D3870 holds the schema-refused empty-array arm." },
+      limitations: ["Stored requestedTargetElo is neither applied band nor player rating or calibrated playing strength. No candidate is claimed played merely because it was recorded."],
+    }),
+  ]),
+  producer("derived.inspector", "derived", "packages/runtime/src/recorded-inspector.ts", "local", "sync", [
+    ...(["category", "distance"] as const).map(kind => projection("derived.inspector", `derived.inspector.tablebase_${kind}`, "derived", {
+      payloadType: kind === "category" ? "RecordedInspectorTablebaseCategory" : "RecordedInspectorTablebaseDistance", semantics: "Fixed typed fields of the complete historical tablebase report; absent, uninterpretable, null and signed values remain distinct.",
+      operands: kind === "category" ? ["record", "category"] : ["record", "category", "dtz", "preciseDtz", "dtm"], grounding: "recorded_run", exactness: "measured", confidence: "reported",
+      answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], dependsOn: [ref("recorded.inspector.tablebase_packet")], derivation: { inputs: [ref("recorded.inspector.tablebase_packet")] },
+      disposition: { kind: "experimental", reason: "Internal fixed historical field view; no current learner bindings or raw JSON delivery." },
+      limitations: ["No absolute distance, substituted category, assumed optimality, modern provider identity or tablebase exactness is inferred."],
+    })),
+  ]),
   producer("derived.king", "derived", "packages/runtime/src/semantic-evidence.ts", "local", "sync", derivedKingOutputs),
   producer("derived.activity", "derived", "packages/runtime/src/semantic-evidence.ts", "local", "sync", derivedActivityOutputs),
   producer("derived.opponent", "derived", "apps/server/src/candidate-evidence.ts", "local", "sync", derivedOpponentOutputs),
