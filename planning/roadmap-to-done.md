@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3838]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3843]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,22 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3840 closes a bounded accepted foundation correction: direct events and their derivations
+reuse the complete validated edge population instead of resealing it. Both-color controls,
+exact whole-projector output comparisons and every normal local test tier pass. The final
+eight-pair cold sum is 2.56% lower locally; the roughly three-second cold projector still misses
+D3300's target. D3839's broader position cache is rejected and removed, not a second shipped
+optimization. D3358's compatibility debt is reconciled against the already implemented D3528
+public-version policy; current source-only changes require zero pack edits/restamps.
+
+The authorized independent Inspector review **returns** the unaccepted D3792 amendment:
+D3841 needs the complete successor execution image/legacy-hold contract; D3842 needs original
+comparison-path FEN validation before narrowing; D3843 needs held-dependency wire identity.
+The known remaining supplier authoring is still separate work. Exact findings and corrections
+are in `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+No source retirement, acceptance, source qualification, content, whole capability or release
+promotion follows from these repairs or the review. The full 1.0 goal remains active.
 
 D3838 completes the bounded presentation repair after D3837's preserved second-attempt journey:
 ordinary Support questions appear once and current empty-answer recovery actions reveal inside
@@ -318,24 +334,35 @@ noise, selected-Sight coverage and missing Review sources remain substantive pro
 The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records and one
-superseded record are subsystem history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+superseded record are subsystem history, not 75 completed product journeys. All 1,734 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3838's bounded presentation repair passes the full normal serial local
-verification/build/all four browser tiers: 5,871 software/unchanged-budget performance/
-257 content/332 smoke/five content-browser/59 matrix/one packaged-production cases. The existing
-optional uncached Maia check remains skipped; all 112 composition cells pass without retries.
-Both-color desktop/phone native flows retain exact failure/retry, both attempts and actual Compare.
+Current local checkpoint: D3840's bounded population reuse passes all normal serial local
+software/performance/governance/content/build/browser tiers on frozen production/tests:
+5,875 software/seven unchanged-budget performance/257 content/332 smoke/five content-browser/
+59 matrix/one packaged-production cases (397 browser passes). The existing optional uncached
+Maia check remains skipped; the matrix has zero unexpected/flaky/skipped cases, errors or retries
+and all 112 composition cells pass. The first run's clamshell-interrupted timings and a later
+corrected literal review-row routing refusal remain recorded in the log, not hidden by this pass.
+Exact output comparisons retain all facts/receipts/rows/checkpoints; no pack content or public
+source version changes. The existing generated semantic implementation bindings are refreshed
+without changing any case/profile result or qualification. D3300's whole cold target stays open.
+There are 3,592 ledger rows: 1,696 done, 162 refused and 1,734 live assigned, zero untriaged.
+UX remains 282 complete/263 live/24 retired; four active/five blocked milestones remain.
+
+D3838's completed presentation proof stands: both-color desktop/phone native flows retain exact
+failure/retry, both attempts and actual Compare.
 D3838 closes the repeated ordinary heading and phone action discoverability, retaining tablet
 headings, mounted state and native focus. Seven viewport sizes prove fully visible, hit-testable
 empty-answer controls; the final matrix report has 59 expected cases and zero errors/flakiness/retries.
-No content, source, semantic metadata, preset or whole-capability state is changed. D3835's
+That presentation repair changed no content, source, semantic metadata, preset or whole-capability state. D3835's
 principle snapshot and its earlier full verification stay closed at their own checkpoint.
 D3834's preceding committed full shape-source proof remains closed at its own checkpoint.
 D3830's exact recorded selection and the preceding accepted repairs remain closed. D3831–D3833
 and D3836 are bounded source research/draft authoring; they do not deliver scoped Inspector or close the
-independent acceptance and production API/client/native obligations. All historical failures and
-preceding proof retain their own dates and scopes in the log.
+author correction, independent re-review/acceptance and production API/client/native obligations.
+D3841, D3842 and D3843 name the returned contract defects; supplier completion remains separately
+open. All historical failures and preceding proof retain their own dates and scopes in the log.
 Fresh GitHub read on 2026-10-15 still concerns published revision 78fd302f:
 [verify succeeded](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140789),
 [browser failed](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140733); its

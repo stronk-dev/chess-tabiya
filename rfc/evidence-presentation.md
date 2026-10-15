@@ -1986,6 +1986,11 @@ The old full-source producers, consumers/adapters and pack predicates remain byt
 
 ### Six exact identities and sole constructors
 
+Independent D3792 review on 2026-10-15 returns the joint amendment for D3841, D3842 and D3843; see
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`. In particular,
+naming the consumer successor below does not specify its complete execution/binding image.
+This detail section remains unaccepted; no production or existing source meaning changes.
+
 Every new projection below is version 1. Register it only to `module.full_inspector@2`, together
 with the original source image owned by §4.11a. Factories consume exactly one **admitted complete
 source** plus closed scope/start; they compute the members themselves and retain that literal

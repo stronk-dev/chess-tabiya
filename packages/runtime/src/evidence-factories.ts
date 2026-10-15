@@ -582,9 +582,15 @@ export const STRUCTURAL_PREDICATE_FACTORIES = Object.freeze(Object.fromEntries(S
 
 function edgePopulation<T>(route: string, compute: (edge: EvidenceEdge) => readonly T[], options: { readonly dependency?: string; readonly pending?: string } = {}): EvidenceValueFactory<EvidenceEdge, readonly DeclaredEvidence<T>[]> {
   const symbol = evidenceFactorySymbol(route);
+  // Direct events and their derivations can request the same complete population. Retain only
+  // this factory's latest successful validated edge, never a provider, window or game history.
+  let previous: { readonly edge: EvidenceEdge; readonly values: readonly DeclaredEvidence<T>[] } | undefined;
   return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, moveUci: value("a UCI string", isText), afterFen: FEN }], result: "population", ...(options.dependency === undefined ? {} : { dependency: options.dependency }), ...(options.pending === undefined ? {} : { pending: options.pending }) }, (input: EvidenceEdge) => {
     const edge = validEdge({ beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen });
-    return Object.freeze(compute(edge).map((payload) => mint(route, symbol, payload, edge)));
+    if (previous?.edge === edge) return previous.values;
+    const values = Object.freeze(compute(edge).map((payload) => mint(route, symbol, payload, edge)));
+    previous = { edge, values }; // empty successes are complete; exceptions are never retained
+    return values;
   });
 }
 

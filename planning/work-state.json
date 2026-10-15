@@ -27099,11 +27099,12 @@
     },
     {
       "id": "D3300",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:95f842d765fa439eb8f4d34e58cd978c6bf069bdcd35ab19636d00027d8bf07e",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
     },
     {
       "id": "D3301",
@@ -27620,11 +27621,12 @@
     },
     {
       "id": "D3358",
-      "state": "todo",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:7709f92f430bc529d896b2a5c06c497b696dbc6841ae60500c8bbfc75b6ef739",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fd7b622ec1321333b6024a672072a1a033bd4599bda1045b6e5e0a706e5f02d4",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/capability/pack-capability-contract.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3359",
@@ -31960,6 +31962,48 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3839",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:7137c94212cc88b97ab55b21bb6e52fd0c21a028c02cf1e0f430345d0a1536d6",
+      "uxItems": [],
+      "ruling": "ledger:D3839",
+      "rulingKind": "source-row"
+    },
+    {
+      "id": "D3840",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:81296c5515ec66edb44c06f215939bc31013c12c75d614f8f44104c2e454a57e",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/collector-index-reuse.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3841",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:234fcb11f5213976479935fd72e317284e8c03a2cc8be8bb5d87b8cadfcc627c",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3842",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:60974b8eccf74d46a422328812d8a0bc983a2adedc77034842b9053e595f439a",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3843",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:afb15a02834e1a04c40413606aad27da01e96ff76ec7d4128aeed16da9a96af4",
+      "uxItems": [],
+      "owner": "assistance-and-presentation"
     }
   ]
 }

@@ -29709,3 +29709,93 @@ Campaign was the one capability with no API, route or content. Now:
   to name module-query cards, not Guided Hint's independent protocol; this is documentation-only,
   after the frozen full run. Production and tests remain unchanged. Recheck docs, inspect only
   the thirteen owned staged files, and retain normal commit hooks.
+
+## 2026-10-15 — evidence dependency reconciliation and cold-path cost
+
+- Previous turn progresses at0ebd09ff: bounded Support repair, full normal verification and
+  required closeout committed. The tracked tree is clean; retain the three pre-existing untracked
+  entries. Held source amendments still need independent acceptance, not self-acceptance from
+  their parent's implementing state. Ask the owner whether an independent agent review is allowed.
+- Inspect D3358 against current production rather than its October-1 description: D3528's
+  owner-approved explicit public versions already removed source-closure compatibility.
+  Verify the actual builder/checker, negative controls and unchanged pack migration population
+  before retiring this stale residual; do not commission a new fingerprint/closure mechanism.
+- D3300 remains open. Measure the actual complete cold projector and keep its current ignored
+  baseline before any change. Raw CPU recordings remain in memory; retain only compact aggregates.
+  Any correction must preserve complete facts, receipts, opportunity populations and published
+  rows; no narrower worker-only collector or source/qualification/default changes are authorized.
+- The normal compatibility integration, immutable-history/capability/corpus and migration-plan
+  checks pass. All984 declarations remain and all352 documents need zero migration/restamps:
+  D3358's historical coupling has been superseded by the already-approved D3528 policy/code.
+- Fresh current cold arms are3290.6/3266.0 ms with complete2199 edges/196589 events; warm arms
+  are20.1/19.6 ms. The compact CPU aggregate puts freezeData at18.3/19.3% self and mint at30.2/31.7%
+  inclusive. Register D3839 before its pure per-FEN reuse experiment. Three predecessor work-count
+  controls fail (3 mints rather than2);182 retained collector cases pass. Add two-entry private
+  recent-value reuse only to the existing pure one-position factory helper, preserving exact
+  raw-FEN/route authority, immutable outputs, eviction, admission and failure behavior.
+- D3839's eight counterbalanced full-output pairs retain every event/receipt/row/checkpoint but
+  sum to26217.6 ms before/26054.6 ms after (0.62% lower;four faster/four slower). Reject the
+  position cache and remove that experiment's work-count expectations; no such cache ships.
+  Retain the generic position-authority/immutability/admission control. Record D3840 for actual
+  edge-population duplication: the unchanged full composition seals66 controls for22 unique
+  source values in both colors. Correct the test's initial source-order versus event-id-order
+  comparison before counting those as failures. The three intended predecessor regressions now
+  fail with182 retained passes. Add one latest-success slot after unchanged edge validation,
+  keeping complete frozen populations (including empty), exact input authority and bounded state.
+- D3840 passes185 collector/67 authority checks, including full FEN-clock identity, invalid/extra
+  operands, immutability, eviction and empty results. Eight full-output cold pairs are26374.3 versus
+  25480.6 ms (3.39% lower locally;six faster/two slower). Retain only the latest validated complete
+  population, not the rejected two-entry position cache. D3300's full cold target remains unmet.
+- Current compatibility checks retain984 declarations,104 exact capability documents and352
+  migration documents with zero changes/restamps. Close D3358 as superseded by the implemented
+  D3528 owner ruling, not new dependency machinery. Semantic validation correctly reports stale
+  implementation receipts; normal refresh changes only9 operation/53 population implementation
+  bindings. All343 cases,53 population inputs/results,8 external sources and81 verdicts remain
+  identical. The first D3839 refusal transition correctly rejects done-style evidence fields;
+  correct it to the source-row ruling, with the validator unchanged and zero untriaged rows.
+- Repeat the full-output comparison after final metadata: all8 pairs retain complete events,
+  value/input receipts, rows and checkpoints;26614.8/25933.7 ms (2.56% lower;seven faster/one slower).
+  Preserve both cohorts in the existing compact D3300 report; repetitions do not inflate chess
+  coverage. Freeze production, permanent tests and canonical docs for the full normal local gates.
+- The first full normal run passes5875 software cases/392 files, then fails two performance
+  files: latency-performance (978100.5 ms) and recorded-semantic-path (956834.3 ms), including a
+  949775.9 ms individual sample despite96.0 ms p95. macOS `pmset -g log` records clamshell sleep
+  at08:58:24 CEST,974 seconds to the first dark wake, then another953-second sleep from09:14:40;
+  full wake resumes only at10:07:25. These interrupted timings cannot establish performance.
+  Keep the failed result, unchanged budgets and source bytes; start the same normal
+  `make verify-awake build test-browser-ci-awake` after full wake. Idle prevention cannot override
+  clamshell sleep. This does not diagnose or close the separate historical D3532 timing cause.
+- Marco explicitly authorizes an independent Inspector amendment review. Delegate a read-only
+  adversarial review of the complete source/factory/wire/receiver contract and75-source population;
+  no self-acceptance, production implementation, heavy concurrent checks or permission expansion.
+- Independent review returns three precise draft-contract blockers: D3841 complete successor
+  consumer execution/legacy-hold image, D3842 original-path FEN validation before comparison
+  narrowing, and D3843 held-dependency wire identity. Main checks the cited live boundaries;
+  record the compact review and assign all three in existing ledger/state/queue/RFC notes.
+  Keep known unfinished supplier authoring separate from these contradictions. No acceptance,
+  new production Inspector, source retirement or qualification follows. The state validator
+  rejects missing population, transient untriaged rows and todo's invalid since field; sync and
+  valid batch assignment restore zero untriaged without weakening any guard.
+- The awake run passes5875 software/seven performance cases and all remaining software
+  contracts, then the governance routing guard catches D3842: the newly recorded range
+  D3841–D3843 cites only its endpoints, not the middle row. Name all three literal IDs in the
+  existing RFC/queue notes. Production, tests and semantic metadata remain unchanged; rerun
+  governance, then continue content/build/all browser tiers. No routing guard or test is waived.
+- Remaining normal governance/content/build/all four browser tiers exit zero with frozen
+  production/tests:257 content/26 files,332 smoke/five content-browser/59 matrix/one packaged
+  production; one configured optional Maia skip. Read the final matrix JSON:59 expected,
+  zero unexpected/flaky/skipped, zero retries and errors; all112 composition cells pass.
+  Together with the awake5875 software/seven performance pass, this completes the normal
+  local gate population. The first sleep-interrupted run and the literal-routing failure remain
+  recorded separately. No threshold, retry or source/fixture waiver; no raw captures in Git.
+- Close only D3840 with its permanent test path. D3839 stays refused, D3358 stays reconciled
+  against shipped D3528, and D3300 remains doing. The independent Inspector amendment remains
+  returned/unaccepted on D3841, D3842 and D3843 plus its known outstanding supplier contract.
+  Update existing machine/human checkpoints and the source-derived report, without promoting
+  a milestone, whole capability, semantic qualification, official content, remote CI or release.
+- Final closeout guards pass: `make roadmap-receipt docs-check work-state roadmap-progress
+  status-parity register-check`. Current counts are3592 ledger rows,1696 done,162 refused,
+  1734 live assigned and zero untriaged. UX remains282 complete/263 live/24 retired; four active/
+  five blocked milestones and zero fully qualified semantic subjects/official graduates remain.
+  Keep checkpoints concise with the full scoped evidence in their linked reports. Stage only
+  the sixteen owned files, inspect the exact index and retain normal commit hooks; no push.

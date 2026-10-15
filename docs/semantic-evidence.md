@@ -219,6 +219,14 @@ that evidence's factory receipt, so a caller cannot pair a sealed value with a d
 Registered Compare and Story renderers receive structured operands and derive prose themselves;
 callers cannot smuggle a pre-rendered sentence under a structured projection.
 
+Pure validated-edge population factories retain only their latest successful complete frozen
+population. Route admission and legal-edge validation still run before reuse; a different edge
+evicts it. Empty successes remain complete and failures are never retained. Direct events and
+their derivations therefore share the same sealed source values rather than resealing them.
+This does not cache providers, history or recorded windows, confer run/node authority on a local
+edge value, change source versions, or narrow the event population. Cold-cost evidence and the
+rejected position-cache experiment are recorded in the existing D3300 projector report.
+
 ## Compiled closure and provider behavior
 
 The primary manifest contains 47 producers, 285 projections, 42 consumers and 556 bindings, plus

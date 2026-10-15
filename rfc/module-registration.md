@@ -46,6 +46,10 @@
   parent implementing status. The six-source detail model is not a production factory,
   renderer, protocol or discharge; exact source suppliers and independent buildability review
   still precede implementation.
+  Independent review on 2026-10-15 returns this amendment on D3841, D3842 and D3843: the complete @2
+  execution image/legacy holds, original comparison-path FEN validation and held-dependency
+  wire identity need author correction. Exact findings:
+  `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 - **Implementation checkpoint 2026-10-07, shape-backed learner actions:** D3538 retains
   the exact fired shape entry ID through the registered presenter and the parsed
   module receipt. Named-structure and Theory pointer cards can open the existing Library
@@ -3250,6 +3254,9 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Independent Inspector review returns D3792 on D3841, D3842 and D3843, separately from
+  its explicitly outstanding supplier authoring. Record the exact findings in the review above;
+  the amendment remains unaccepted, with no production, source or parent-status change.
 - 2026-10-15 — D3836 specifies five dependent incoming-edge suppliers from actual recorded
   edges, explicit mate-only horizons and strict overload's source-specific unavailability.
   Disposable legal/storage controls pass; §4.11a remains unaccepted. No production operation,

@@ -121,3 +121,114 @@ the grace, and the supervisor terminates the thread before `close()` proceeds, s
 connection outlives the application that removes its directory. The 30 s teardown budgets added for
 D3300 in `review-map.test.ts` and `learner-profile-application.test.ts` are back to the defaults
 (Review Map keeps its pre-existing 30 s per-test timeout).
+
+## 2026-10-15 — current cost and rejected position-value cache (D3839)
+
+Run `make longitudinal-projector-baseline longitudinal-projector-profile` at `0ebd09ff`:
+the unchanged real revision-4 80-ply arms take3290.6/3266.0 ms cold and20.1/19.6 ms warm.
+Both sides retain40 checkpoints and together2199 legal edges/196589 semantic events.
+The compact CPU aggregate places `freezeData` at18.3/19.3% self time and `mint` at30.2/31.7%
+inclusive. These sampled shares are not disjoint costs or a portable latency guarantee.
+
+A disposable two-entry LRU inside each pure `fenReading` factory retained the exact raw FEN
+and already-sealed value, with no provider/history entries and no failed-result caching.
+Three predecessor work-count controls failed;185 collector and67 authority cases/types then
+passed. The existing `make longitudinal-projector-compare` checked complete event/value/input
+receipts and projected rows/checkpoints, not just a count or source fingerprint.
+
+| Side / counterbalanced pair | Before ms | Candidate ms |
+|---|---:|---:|
+| White1 | 3390.0 | 3395.6 |
+| White2 | 3414.1 | 3307.6 |
+| White3 | 3265.8 | 3356.5 |
+| White4 | 3264.7 | 3344.8 |
+| Black1 | 3245.2 | 3155.8 |
+| Black2 | 3283.1 | 3142.8 |
+| Black3 | 3199.8 | 3235.7 |
+| Black4 | 3155.0 | 3115.7 |
+
+All eight complete-output comparisons pass. Summed time is26217.6 versus26054.6 ms,
+0.62% lower locally, with four faster and four slower pairs. **Reject this cache:** the evidence
+does not justify extra retained state. Remove the candidate and its cache-only expectations;
+retain the general exact-position authority/immutability/refusal regression. No raw profiles or
+comparison dumps are committed or required by progress/CI.
+
+The next D3840 experiment targets the actual breadth composition's repeated **edge** population:
+direct square-control events and defender exposure both request the complete same source
+(`packages/runtime/src/semantic-evidence.ts`, `evidence-factories.ts`). The permanent control
+first counts66 mints for22 source values in each color. This is a separate experiment, not a
+rescoring or relabeling of D3839; D3300's whole cold-cost objective remains open.
+
+## 2026-10-15 — exact-edge population reuse candidate (D3840)
+
+The existing `edgePopulation` helper retains only its latest successful validated edge and the
+complete frozen value array. All route admission and `validEdge` checks still run first; a
+different validated edge evicts the array. Empty successes remain complete; failures do not
+replace the successful entry. This is not a provider, recorded-window, node-authority or history cache.
+
+The both-color full-composition control changes66 mints for22 source values to22, with every
+source receipt retained. Three intended predecessor failures (both colors plus empty-result
+reuse) become185 collector and67 authority passes. The initial harness mistakenly compares source
+order to composed event-id order; compare the complete receipt population instead, while the
+whole-game instrument continues requiring exact event order. Extended negatives retain full FEN
+clocks, move identity, invalid/extra operands, immutability and one-entry eviction.
+
+Run the unchanged counterbalanced `make longitudinal-projector-compare` against the captured
+`0ebd09ff` baseline (the rejected D3839 cache has been removed):
+
+| Side / counterbalanced pair | Before ms | Candidate ms |
+|---|---:|---:|
+| White1 | 3455.6 | 3237.2 |
+| White2 | 3509.1 | 3216.4 |
+| White3 | 3271.1 | 3205.3 |
+| White4 | 3250.6 | 3289.7 |
+| Black1 | 3266.8 | 3091.1 |
+| Black2 | 3209.3 | 3228.7 |
+| Black3 | 3178.5 | 3080.8 |
+| Black4 | 3233.4 | 3131.4 |
+
+All eight pairs retain complete event/value/input receipts, projected rows and checkpoints.
+Summed cold time is26374.3 versus25480.6 ms (3.39% lower locally; six faster/two slower).
+This is a small local improvement, not a portable guarantee, sub-second cold target, source
+qualification or whole-1.0 completion. Retention removes directly demonstrated repeated work
+in the actual composition using one slot, unlike the rejected broader position-cache experiment.
+Full normal verification and current declaration/migration checks still precede delivery.
+
+The required semantic implementation receipt refresh then changes exactly nine operation
+implementation bindings and53 population implementation bindings, with every case, population
+input/result, external source and verdict unchanged. Re-run the same complete-output comparison
+against the final metadata, retaining the first cohort rather than replacing its result:
+
+| Side / final-metadata pair | Before ms | Candidate ms |
+|---|---:|---:|
+| White1 | 3446.2 | 3217.2 |
+| White2 | 3461.6 | 3218.5 |
+| White3 | 3292.6 | 3417.2 |
+| White4 | 3357.1 | 3245.6 |
+| Black1 | 3270.1 | 3170.5 |
+| Black2 | 3270.2 | 3213.6 |
+| Black3 | 3252.3 | 3238.9 |
+| Black4 | 3264.9 | 3212.4 |
+
+All eight final-metadata pairs retain the complete outputs. Summed cold time is26614.8 versus
+25933.7 ms (2.56% lower locally; seven faster/one slower). These are repetitions on the same
+fixed game, not extra positions or a larger chess validation population. The retained change
+removes demonstrated duplicate work; neither cohort proves a portable or substantial speedup.
+
+The first full normal verification passes5875 software cases, then two performance files fail
+after workstation suspension. The runtime test's80-ply arm has96.0 ms p95 but a949775.9 ms maximum;
+Vitest records956834.3 ms for that file and978100.5 ms for the transport latency file. The macOS
+power log records08:58:24 CEST clamshell sleep (974 seconds),09:14:40 sleep (953 seconds),
+subsequent maintenance wakes/sleeps and10:07:25 full wake on2026-10-15. Those samples are not
+valid performance evidence; the complete unchanged normal gates are run again after full wake.
+No threshold, timeout, fixture or execution population is relaxed. The earlier D3532 incident
+retains its separate unresolved cause; diagnosing this suspension does not close that row.
+
+Final frozen production/tests pass5875 software cases/392 files and all seven performance cases
+under unchanged limits. A later governance refusal finds one new review row cited only inside
+an endpoint range; naming all three literal IDs corrects routing, not production behavior.
+The remaining normal governance/content/build/browser stages then pass257 content cases,
+332 smoke/five content-browser/59 matrix/one packaged-production cases (397 browser passes),
+with one configured optional Maia skip. The final matrix report has zero unexpected/flaky/
+skipped cases, errors or retries; all112 composition cells pass. No raw recording is committed.
+D3840 closes only duplicate population work; D3300's full cold target remains unmet.

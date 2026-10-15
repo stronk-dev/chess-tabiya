@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — Marco authorizes independent Inspector review; it returns D3792 on
+[[D3841]], [[D3842]] and [[D3843]]: complete successor execution/held-source representation, original-path
+FEN refusal before comparison narrowing, and held-dependency wire identity. Exact review:
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`. Finish those
+author corrections and the explicitly outstanding supplier matrix, then independent re-review;
+no self-acceptance or speculative API/client implementation. D3358 is reconciled as already
+superseded by D3528; do not build new source-hash compatibility machinery. D3839's position
+cache experiment is rejected. D3840's separate accepted-contract edge reuse is complete locally:
+all normal frozen-code gates pass5875 software/seven performance/257 content/397 browser cases,
+one configured optional Maia skip and112 unretried composition cells. The compact D3300 report
+retains exact-output comparisons and the small local gain; the whole cold-path objective stays open.
+
 2026-10-15 — [[D3838]] is complete locally: ordinary questions appear once, tablet heads remain,
 and current empty answers reveal their action row inside the bounded companion. Actual clipping/
 native-hit checks, both-color desktop/mobile recovery and full normal gates pass; the dated log
@@ -2956,6 +2968,11 @@ voice boundary pass 151 focused tests, including the authenticated composed HTTP
 Real-content contracts pass 223 tests and all 104 requirement declarations match. Final exact-index software passes 2769 tests plus seven performance tests and downstream
 contracts; browser CI passes 111 journeys with one optional latency skip; governance passes.
 D3328/D3329/D3330/D3357 are closed. D3358 retains broad dispatcher coupling for analysis.
+
+2026-10-15 superseding reconciliation: D3528's approved explicit public-version policy already
+removed that D3358 compatibility coupling. Current integration/negative/migration checks close
+the stale row with 984 retained declarations and zero required restamps; retain the dated account
+above as history, not today's work instruction.
 
 After final gate closeout, continue the existing provider RFC obligations: §§1–2 path/availability
 and exact Maia/Explorer played occurrences, then migrate legacy consumer identities and sources.

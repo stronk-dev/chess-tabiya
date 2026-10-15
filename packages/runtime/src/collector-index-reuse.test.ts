@@ -21,6 +21,77 @@ function edge(fen: string, uci: string) {
   return { beforeFen: fen, moveUci: makeUci(move), afterFen: canonicalFen(position) };
 }
 
+it("retains complete position authority, per-route isolation, frozen values and current admission", () => {
+  const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 7912";
+  const route = "rules.square.reading.control@1";
+  const initial = invokeEvidenceValueRoute(route, { fen });
+  const receipt = evidenceValueReceipt(initial);
+  expect(Object.isFrozen(initial.payload)).toBe(true);
+  expect(() => Object.assign(initial.payload, { corrupt: true })).toThrow();
+  expect(evidenceValueReceipt(invokeEvidenceValueRoute(route, { fen }))).toEqual(receipt);
+  for (const distinct of [fen.replace("0 7912", "1 7912"), fen.replace("0 7912", "0 7913"), fen.replace(" w ", " b ")]) {
+    expect(evidenceValueReceipt(invokeEvidenceValueRoute(route, { fen: distinct })).inputDigest).not.toBe(receipt.inputDigest);
+  }
+  const mobility = invokeEvidenceValueRoute("rules.mobility.reading.piece_destinations@1", { fen });
+  expect(mobility.projection.id).not.toBe(initial.projection.id);
+  expect(evidenceValueReceipt(mobility).factory).not.toBe(receipt.factory);
+  for (let repeat = 0; repeat < 2; repeat++) {
+    expect(() => invokeEvidenceValueRoute(route, { fen: "invalid" })).toThrow();
+    expect(() => invokeEvidenceValueRoute(route, { fen, extra: true } as unknown as { fen: string })).toThrow();
+  }
+  expect(evidenceValueReceipt(invokeEvidenceValueRoute(route, { fen }))).toEqual(receipt);
+});
+
+it.each(["white", "black"] as const)("D3840 shares a complete %s control population across the real event composition", color => {
+  const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${color === "white" ? "w" : "b"} KQkq - 0 7921`;
+  const input = edge(fen, color === "white" ? "e2e4" : "e7e5");
+  const spy = vi.spyOn(evidenceContract, "declareEvidence");
+  const mints = () => spy.mock.calls.filter(([, projection]) => projection.id === "rules.square.event.control").length;
+  try {
+    const initial = invokeEvidenceValueRoute("rules.square.event.control@1", input);
+    expect(initial.length).toBeGreaterThan(0);
+    const receipts = initial.map(evidenceValueReceipt);
+    expect(Object.isFrozen(initial)).toBe(true);
+    expect(() => Object.assign(initial[0]!.payload, { corrupt: true })).toThrow();
+    expect(mints()).toBe(initial.length);
+    const actual = localSemanticEventClosure(input.beforeFen, input.moveUci, input.afterFen);
+    // The composed event list has its own id ordering. Compare the complete receipt population,
+    // not that different ordering; the whole-game byte comparison separately pins output order.
+    const byDigest = (a: ReturnType<typeof evidenceValueReceipt>, b: ReturnType<typeof evidenceValueReceipt>) => a.payloadDigest.localeCompare(b.payloadDigest);
+    expect(actual.events.filter(value => value.projection.id === "rules.square.event.control").map(value => evidenceValueReceipt(value.evidence)).sort(byDigest)).toEqual([...receipts].sort(byDigest));
+    expect(mints()).toBe(initial.length);
+    const repeated = invokeEvidenceValueRoute("rules.square.event.control@1", input);
+    expect(repeated.map(evidenceValueReceipt)).toEqual(receipts);
+    expect(mints()).toBe(initial.length);
+    // One slot, not a growing history. A different legal edge evicts this population.
+    invokeEvidenceValueRoute("rules.square.event.control@1", edge(fen, color === "white" ? "d2d4" : "d7d5"));
+    const count = mints();
+    expect(invokeEvidenceValueRoute("rules.square.event.control@1", input).map(evidenceValueReceipt)).toEqual(receipts);
+    expect(mints()).toBe(count + initial.length);
+    for (const distinct of [fen.replace("0 7921", "1 7921"), fen.replace("0 7921", "0 7923")]) {
+      const scoped = invokeEvidenceValueRoute("rules.square.event.control@1", edge(distinct, input.moveUci));
+      expect(scoped.length).toBe(initial.length);
+      expect(evidenceValueReceipt(scoped[0]!).inputDigest).not.toBe(receipts[0]!.inputDigest);
+    }
+  } finally { spy.mockRestore(); }
+});
+
+it("D3840 retains an honest empty edge population without bypassing invalid requests", () => {
+  const input = edge("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 7922", "e2e4");
+  const route = "rules.transition.event.capture@1";
+  const empty = invokeEvidenceValueRoute(route, input);
+  expect(empty).toEqual([]);
+  expect(Object.isFrozen(empty)).toBe(true);
+  expect(invokeEvidenceValueRoute(route, input)).toBe(empty);
+  for (let repeat = 0; repeat < 2; repeat++) {
+    expect(() => invokeEvidenceValueRoute(route, { ...input, moveUci: "e2e5" })).toThrow();
+    expect(() => invokeEvidenceValueRoute(route, { ...input, afterFen: input.beforeFen })).toThrow();
+    expect(() => invokeEvidenceValueRoute(route, { ...input, afterFen: input.afterFen.replace("0 7922", "1 7922") })).toThrow();
+    expect(() => invokeEvidenceValueRoute(route, { ...input, extra: true } as unknown as typeof input)).toThrow();
+  }
+  expect(invokeEvidenceValueRoute(route, input)).toBe(empty);
+});
+
 // The predecessor's hashed per-family join, independent of the production string keys.
 function structuralReference(input: ReturnType<typeof edge>) {
   const key = (value: ReturnType<typeof structuralReading>["features"][number]) => {
