@@ -666,3 +666,27 @@ ancestors, not a dependency on their other consumer. The reviewer recommends cor
 blanket vector-before-Inspector queue gate while retaining full vector reconciliation at the
 opponent consumer and D3853 compatibility before shared packet/helper changes. No tests, edits
 or acceptance; full platform/source obligations remain.
+
+### D3847 finite recorded-sequence successors — independent bounded review
+
+The user explicitly confirms separate review. The authorized reviewer directly traces the old
+factory/helpers and confirms the proposed23 members, fixed horizons, deflection bait-capture
+precedence and indexed D/C/K/X joins. Complete ordered capture authority and exact new refs remain
+requirements for additive@3 factories, not permission to tighten old@2 or merge narrative@1.
+
+Review returns one blocking delivery inconsistency: F2 §2.3j requires corrupt/missing dependency
+invocations to refuse, but the scoped window's closed refusal grammar admits only graph/request
+failures. Main adds explicit private source_contract_invalid/source_lookup_failed variants and
+genuine exact-dependency holds, mapping only to the existing closed failed/unavailable outcomes.
+A valid graph with a failed collector cannot become malformed-graph or successful no_witness.
+The final read-only recheck clears that blocker and finds no further concrete inconsistency in
+this bounded wording. No reviewer tests, source qualification, component/joint acceptance or new
+implementation authority. Narrative scope and complete runtime/source-delivery proofs remain.
+
+Main separately runs the normal prefix research target: ten prospective declarations/23 literal
+members compile with unchanged F1;76 actual nontrade old recorded outputs match; old direct
+conventions stay unchanged; eight deliberately stripped-token controls expose missing binding.
+The first draft control incorrectly expected convention loss from merely copying old text. It
+fails, is corrected and is not filed as a production defect.30/45 map requirements and32 negative
+controls retain75+6 obligations, not compiled successor suppliers. These reported test results
+are not the reviewer's tests and do not exercise the proposed owned-window issuer or factories.

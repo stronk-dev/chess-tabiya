@@ -2020,3 +2020,39 @@ contracts and complete source/adapter closure. Full vector reconciliation stays 
 actual consumer, and D3853 compatibility still precedes shared packet/helper changes; whole
 F2/provider/platform completion is not narrowed. `[V]` independent read-only vector-scope check;
 `evidence-catalog.ts` Inspector accepts/opponent binding and existing observer's inInspectorClosure.
+
+### Recorded sequence finite successor contracts
+
+D3847's recorded sequence proposal now uses ten source-only@3 factories and23 literal existing
+F1 inputs/anyOf members, not a new variable-reduction grammar. The disposable declaration image
+compiles all23 with unchanged F1 and matches all76 actual nontrade positive recorded tuples;
+the eight trade outputs keep existing C,C,E,E@2 and stay outside Inspector. Complete capture
+populations and indexed duty/check/exchange authority are separate from tuple length/ref checks.
+The previously measured25 positive/77 negative capture guards and ten old accepted omissions/
+reorders remain; no old factory is changed or new issuer/factory minted. `[V]`
+`tools/d3792-inspector-demand/recorded-sequence-contract.ts`; `window-source.ts`;
+`make inspector-recorded-prefix-research`; F2 §2.3j.
+
+The first new control assumes simply copying old@2 text loses direct conventions at@3; it fails
+because current literal text already retains them. Immediate-predecessor witnessed inheritance
+is nontransitive, but that does not establish a real loss here. Correct the claim and test actual
+preservation plus eight deliberately stripped-token controls. Existing@1/@2 direct tables remain
+equal; new@3 preserves exactly old@2 direct refs without new convention definitions or old witness
+changes. The prospective image still declares the old exact grounded/physical recorded semantics,
+not narrative substitutions. `[V]` cited normal target and `evidence-convention-closure.ts`.
+
+The successor map now replaces30/conditionally retains45 topics, still75 acquisition obligations
+plus six detail refs.32 negative map controls reject dropped/wrong source repairs; these are
+requirements, not source availability or compiled new consumer bindings. D3851's narrative scope
+choice and full runtime/adapter/current-access/native delivery remain open. `[V]`
+`recorded-origin.ts`; `rfc/module-registration.md` affected-source table and scoped window owner.
+
+The authorized independent review confirms exact finite horizons/arms/indexed joins and returns
+a source-failure grammar omission: failed C/D/K/X execution could not inhabit the closed window
+refusal union. The correction explicitly maps private source-contract/lookup failures to closed
+failed outcomes and actual exact-owner holds to unavailable, never malformed graph, source_absent
+or successful no_witness. Final bounded wording recheck clears that blocker, not source/joint
+acceptance or implementation qualification. Reviewer performs no tests; the new issuer, private
+source proof, invocation adoption, presentation and HTTP/native behavior are not exercised by this
+old-source research. `[V]` dated Inspector independent review, finite recorded-sequence section;
+F2 §2.3j and module-registration recorded-window source-owner/result grammar.

@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Recorded sequence successor authoring, 2026-10-15 ([[D3847]]): ten prospective@3 declarations
+compile23 finite fixed/anyOf members under unchanged F1, matching76 actual nontrade recorded
+outputs. Complete ordered capture/indexed source guards remain explicit; old factories/history
+are unchanged.30/45 requirements-map and32 negative controls retain75+6 obligations, not runtime
+availability. Eight stripped-token controls verify convention retention; a first false assumption
+that copied old text lost refs is corrected. No new factory, issuer, API or acceptance. `[V]`
+`module-evidence-assembly.md` §Recorded sequence finite successor contracts; normal prefix target.
+
 Opaque sources and existing method-path proof, 2026-10-15 ([[D3847]]/[[D3856]]): the three raw
 digest routes have distinct authority; only comparison delta reaches current Inspector.13 new
 permanent actual method-factory tests cover all three methods/both colors, exact stage-prefix/

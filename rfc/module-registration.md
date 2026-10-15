@@ -1901,10 +1901,10 @@ bindings. No held-binding compiler exception or source retirement is authorized.
 D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
-refs in its predecessor inventory slot, preserving all other55 refs/order and all @1 contracts.
+refs in its predecessor inventory slot, preserving all other45 refs/order and all old contracts.
 This is an obligation-preserving proposed map, not complete literal factory-input closure.
 D3847's fixture audit reaches31 conflicting routes in the current declared Inspector union;
-retaining those55 topics is conditional on source-contract reconciliation and independent review.
+retaining those45 topics is conditional on source-contract reconciliation and independent review.
 Do not fabricate unused prerequisites or treat an executable declaration as qualified lineage.
 D3847's independent continuation also finds that scope-only reuse of existing recorded-window
 @2 and fork/overload factories below does not resolve their literal schemas. Fixed witness tuples,
@@ -1920,7 +1920,10 @@ factories. D3847/D3852's strict-overload component adds one direct computed conv
 predicate, superseding the rejected two-sealed-input proposal without a grounding relabel or F1
 change. All arithmetic is reconstructed from the admitted legal edge. The D3768 fork component
 and D3847 structural reduction add their separately proposed bindings, not acceptance or factories.
-Proposed source factories are owned by value-authority §§2.3a–2.3i, not implemented by this
+D3847 §2.3j additionally replaces the ten recorded@2 sequence topics with exact source-owned@3
+fixed/anyOf successors. These ten repairs do not resolve the independent narrative@1 pipeline
+choice or its source obligations. Proposed source factories are owned by value-authority
+§§2.3a–2.3j, not implemented by this
 table. The old `recorded.engine.eval@1` and `recorded.tablebase.result@1` sourcing-ledger topics
 remain separate; a ledger record cannot substitute for a run attachment.
 
@@ -1946,8 +1949,19 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `derived.tactic.overloaded_defender_response_conflict@1` | `rules.tactic.predicate.overload_conflict@1` | local_rules | D3847/D3852 direct legal-edge computation under the existing overload/defence/exchange conventions; value-authority §2.3e, unaccepted |
 | `derived.tactic.fork_survives_reply@1` | `derived.tactic.nonterminal_fork_survival@1` | derived | D3768 exact two-source same-edge derivation and nonempty reply rule; value-authority §2.3f, unaccepted |
 | `derived.compare.structure_delta@1` | `derived.compare.structure_delta@2` | derived | D3847/F2 §2.3i compare.structure_delta@1 reduction over both granted structural populations and selected branch; exact relative locations, private variable/empty result proof and retained catalogue identity. Unaccepted, not an @1 alias |
+| `derived.pawn.sequence.contact_timing@2` | `derived.pawn.sequence.contact_timing@3` | derived | F2 §2.3j owned recorded windows; exact two/three-edge alternatives |
+| `derived.pawn.sequence.harassment_pressure@2` | `derived.pawn.sequence.harassment_pressure@3` | derived | F2 §2.3j owned two-edge recorded window |
+| `derived.tactic.sequence.defender_consequence@2` | `derived.tactic.sequence.defender_consequence@3` | derived | F2 §2.3j owned three-edge recorded window; physical piece identity retained |
+| `derived.tactic.square_clearance_observed@2` | `derived.tactic.square_clearance_observed@3` | derived | F2 §2.3j owned three-edge recorded window; no narrative substitution |
+| `derived.tactic.line_blocker_clearance_observed@2` | `derived.tactic.line_blocker_clearance_observed@3` | derived | F2 §2.3j three edges plus exact final exchange |
+| `derived.tactic.interference_observed@2` | `derived.tactic.interference_observed@3` | derived | F2 §2.3j three edges, initial duty and final exchange |
+| `derived.tactic.check_zwischenzug_observed@2` | `derived.tactic.check_zwischenzug_observed@3` | derived | F2 §2.3j four edges, edge0 capture, edge1 check and final exchange |
+| `derived.tactic.overload_exploitation_observed@2` | `derived.tactic.overload_exploitation_observed@3` | derived | F2 §2.3j three edges, initial duty, complete three captures and final exchange |
+| `derived.tactic.deflection_observed@2` | `derived.tactic.deflection_observed@3` | derived | F2 §2.3j three edges, initial duty, complete ordered captures, final exchange and actual edge0 check-induced arm |
+| `derived.tactic.attraction_observed@2` | `derived.tactic.attraction_observed@3` | derived | F2 §2.3j exact three/five-edge arm and complete ordered captures; edge2 check only for actual check consequence |
 
-This establishes a **requirements image**, not executable bindings:75 retained topic obligations
+This establishes a **requirements image**, not executable bindings:30 replacements and45
+conditionally unchanged topics preserve75 topic obligations;
 plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger
 when a pair has several declared forms. Complete compilation/closure and independent upstream
 acceptance remain required; the candidate count is not runtime source availability or delivery.
@@ -2830,11 +2844,14 @@ The scoped recorded-window supplier is proposed as
 `recordedSemanticWindowSource({run, branchId, throughNodeId, projection})`, a new runtime
 helper owned by this amendment's source execution. `run` is the unchanged full stored image
 retained by the admitted server context; branch/endpoint/projection are independently captured
-primitive fields from the exact parsed request and grant. It accepts only an exact registered
-v2 row from the existing recorded-path evaluator table. It is **not** a new optional scope
+primitive fields from the exact parsed request and grant. It accepts only the exact new scoped
+evaluator image: trade-completed@2 and F2 §2.3j's ten recorded@3 rows, retaining the existing
+family/horizon table (contact2/3, attraction3/5, other fixed horizons). Do not dispatch by latest
+version, base id alone or unchanged `version===2`. It is **not** a new optional scope
 argument silently added to `recordedSemanticPath`/its v1 result identity. All existing whole-tip
-callers and historical result identities remain unchanged. No new semantic projection,
-convention, stored record, schema or provider protocol is introduced.
+callers and historical result identities remain unchanged. F2 §2.3j owns the ten additive
+projection/factory contracts and explicit direct-convention retention; they are not aliases for
+old@2 values. No new convention definition, stored record, schema or provider protocol.
 
 Runtime execution validates the original graph and endpoint, then legal-replays every edge in
 the granted prefix through the existing `run.record.edge@1` factory with the original node
@@ -2847,25 +2864,46 @@ bounded to five or exempted. Captures are prepared only for trade/deflection/att
 zwischenzug/overload-exploitation; check inputs only for deflection/attraction/checking zwischenzug.
 Defender-duty/exchange inputs remain those rows' exact lazy source-owner dependencies. A family
 with no complete row performs no detector preparation and has missing context, not no-witness.
+For each complete @3 row, the source owner privately issues RecordedSequenceWindow with the
+independently retained original source/grant, exact requested ref/horizon and genuine ordered
+edge/dependency invocations. F2 §2.3j's sole factory arm authenticates it through the private
+reader before computation/mint. Retain all0/1 capture results before ordered flattening for the
+three complete-capture families and enforce the indexed check/duty/exchange joins. A caller
+array or successful old@2 factory call does not establish this new owned source. Valid unmatched
+windows are empty; absent/corrupt required sources refuse, not empty success.
 
 The proposed private result is a closed union with distinct `window_available`, `window_missing`
 and `window_refused` kinds, deliberately not assignable to the whole-path result. Available
-contains exact `{runId,branchId,throughNodeId,projection}` scope, existing sealed v2 events,
+contains exact `{runId,branchId,throughNodeId,projection}` scope, genuine events from the requested
+exact successor (or unchanged trade@2),
 complete `RecordedPathWindowReceipt`s, omitted-horizon numbers, existing convention closure and
 one identity computed with the existing canonical digest function under the new operation
 `recorded-semantic-window@1`. Its identity binds scope, exact completed/omitted row image and
 event/source/convention closure. It is not a public token or new cache. Missing contains that
 scope, `no_recorded_window`, required horizons and available-prefix edge count. Refused contains
 only the existing original-graph/legal-edge reason or `endpoint_not_on_branch`/
-`projection_unsupported`; private diagnostics never cross the Inspector refusal wire.
+`projection_unsupported` for graph/request failures. It additionally has an explicit private
+source-failure variant: reason `source_contract_invalid | source_lookup_failed`, or reason
+`source_version_held` with the required exact actual factory dependency. Missing/corrupt capture
+execution, false membership/index joins, copied invocations/handles or a required factory
+contract exception are source_contract_invalid, never malformed-graph or empty success. Actual
+source-owner lookup failure is source_lookup_failed. A genuine typed version hold must satisfy
+the existing exact dependency rule below; unresolved nested/mismatched dependencies are
+source_contract_invalid, not a guessed hold. Private diagnostics never cross the Inspector wire.
 
 The Inspector adapter maps missing to `missing_context/no_recorded_window`; available with
 at least one complete window but no events to `no_witness`; and emitted events only through
 their exact admitted module refs/presentation path. The generic compiler retains all eleven
-families, but Inspector admits its existing ten v2 successors, not the excluded trade family.
-The ten v1 sequence obligations remain independently held; do not relabel their payloads as v2
+families, but new Inspector admits its ten proposed@3 recorded successors, not the excluded trade
+family. Existing whole-tip/Review emitters remain@2 unless separately migrated.
+The ten v1 sequence obligations remain independently held; do not relabel their payloads as @3
 or remove them. Other consumers, especially longitudinal opportunities, keep their own contracts.
 The scope result never grades, ranks, selects useful moments or supplies hypothetical lines.
+The adapter maps the two private source-failure reasons only to the same closed `failed` outcome,
+and a genuine source_version_held only to `unavailable/source_version_held` with its exact owner.
+It must not translate either into no_witness/source_absent. Existing graph/request refusals keep
+their request-level refusal mapping; no dependency error string or private source details leave
+the server. Exercise these boundaries even on a valid complete legal graph.
 
 `make inspector-recorded-prefix-research` executes guarded in-memory source variants. The
 unchanged baseline fails the exact zero-edge prefix control. The prefix variant passes 452
@@ -2878,6 +2916,10 @@ These measurements establish the algorithm's bounded source behavior, not compil
 types, the proposed operation identity/result parser, authenticated Inspector source acquisition,
 worker cancellation, source performance discharge or HTTP/component/native receiver proof.
 The prototype uses unmistakable research-only identities, never production scope receipts.
+The D3847 extension separately compiles prospective@3 fixed/anyOf declarations with unchanged
+F1, matches actual recorded positive tuples and checks direct convention retention. It does not
+run the proposed owned-window issuer or new factories: the source prototype above still emits
+old@2 events. Keep that distinction in qualification and never relabel its diagnostic output.
 
 Refuse wrong/off-branch/foreign endpoints and withheld spans before collector/provider reads.
 After async acquisition or computation, recheck the **current full stored authority**, access,
@@ -3603,6 +3645,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3847/F2 §2.3j adds ten source-owned recorded sequence@3 topics
+  with finite literal members, complete ordered capture populations and indexed auxiliary
+  sources. The requirements image is30 replacements/45 conditionally unchanged topics, still
+  75+6 refs, not executable bindings. Scoped dispatch explicitly adopts@3; old full-tip/Review
+  @2 and narrative@1 stay unchanged. D3851 is not ruled and joint acceptance remains held.
 - 2026-10-15 — F2 §2.3h now separately authors the proposed last-level@2 prerequisite used
   by rank@3; both source/reduction contracts remain unaccepted and unimplemented. No extra
   Inspector topic, old Story/title migration or source-availability completion follows.

@@ -1,5 +1,19 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847's recorded sequence contracts are now proposed in F2 §2.3j, not implemented:
+ten source-owned@3 factories,23 fixed/anyOf members, complete ordered capture populations and
+indexed auxiliary joins. The scoped supplier explicitly dispatches these new refs; old full-tip/
+Review@2, generic trade@2 and independent narrative@1 stay unchanged. Normal prefix research
+compiles all23 members, matches76 actual nontrade outputs, preserves direct conventions and
+checks30/45 map requirements with32 negatives. Eight deliberately stripped-token controls prove
+explicit convention binding; an initial false copy-loss assumption was corrected, not reported
+as a production defect. Independent bounded review returns and clears the private source-failure
+grammar gap; no further bounded wording blocker is found, not joint acceptance or runtime proof.
+Next complete exact source/adapter closure and independent joint review; D3851 still controls
+narrative coexistence and is not bypassed by this proposal. Implement only accepted sources/
+sidecars/factories/planners/admission/consumer/API/native paths; the bot vector and other
+out-of-graph migrations remain at their actual consumers. No whole capability promotion.
+
 2026-10-15 — D3856 directly proves F2's existing D5 method-path obligation with13 permanent
 actual-factory cases (all three techniques/both colors, full stage-prefix/convention authority,
 mixed/order/gap/duplicate/forgery and pre-shortcut/late-domain refusals). The normal108-case target,

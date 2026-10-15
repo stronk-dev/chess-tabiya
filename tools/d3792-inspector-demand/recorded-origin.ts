@@ -26,6 +26,7 @@ import { reviewStoryMoments, rankStoryMoments } from "../../packages/runtime/src
 import { reviewPacketForRun, reviewSubjectPath, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
 import { importedRun, importRecord, evaluationDelivery, attachDelivery } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { ReviewEnginePoint } from "../../packages/runtime/src/review-points.js";
+import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
 
 const at = "2026-10-15T00:00:00.000Z";
 let checks = 0;
@@ -439,12 +440,12 @@ function checkMap(text: string) {
   const section = text.split("**D3841 exact affected-source map — unaccepted author image:**")[1]!
     .split("**D3841 exact-version closure")[0]!;
   const rows = [...section.matchAll(/^\| `([^`]+@\d+)` \| `([^`]+@\d+)` \|/gmu)].map(match => [match[1]!, match[2]!] as const);
-  assert.equal(rows.length, 20);
-  assert.equal(new Set(rows.map(row => row[0])).size, 20);
-  assert.equal(new Set(rows.map(row => row[1])).size, 20);
+  assert.equal(rows.length, 30);
+  assert.equal(new Set(rows.map(row => row[0])).size, 30);
+  assert.equal(new Set(rows.map(row => row[1])).size, 30);
   const tupleRepairs = pivotalSuccessors.map(row => `${row.id}@1`);
-  assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs, ...tupleRepairs, ...localSourceRebases.map(row => row[0])].sort());
-  for (const [old, successor] of localSourceRebases) assert(rows.some(row => row[0] === old && row[1] === successor));
+  assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs, ...tupleRepairs, ...localSourceRebases.map(row => row[0]), ...SEQUENCE_SOURCE_REBASES.map(row => row[0])].sort());
+  for (const [old, successor] of [...localSourceRebases, ...SEQUENCE_SOURCE_REBASES]) assert(rows.some(row => row[0] === old && row[1] === successor));
   for (const successor of pivotalSuccessors) assert(rows.some(row => row[0] === `${successor.id}@1` && row[1] === `${successor.id}@2`),
     "a tuple repair cannot retain the false @1 declaration");
   for (const old of rows.map(row => row[0])) assert(originalRefs.includes(old), "no new source obligation may silently replace an unknown old topic");
@@ -461,6 +462,10 @@ assert.throws(() => checkMap(specification.replace(/^\| `derived.pivotal.phase_c
 assert.throws(() => checkMap(specification.replace("| `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@2` |",
   "| `derived.pivotal.phase_change@1` | `derived.pivotal.phase_change@1` |")));
 for (const [old] of localSourceRebases) assert.throws(() => checkMap(specification.split("\n").filter(line => !line.startsWith(`| \`${old}\` |`)).join("\n")));
+for (const [old, successor] of SEQUENCE_SOURCE_REBASES) {
+  assert.throws(() => checkMap(specification.split("\n").filter(line => !line.startsWith(`| \`${old}\` |`)).join("\n")));
+  assert.throws(() => checkMap(specification.replace(`| \`${old}\` | \`${successor}\` |`, `| \`${old}\` | \`${old}\` |`)));
+}
 assert.throws(() => checkMap(specification.replace("| `derived.tactic.promotion_pressure@1` | `rules.tactic.reading.promotion_pressure@1` |",
   "| `derived.tactic.promotion_pressure@1` | `derived.tactic.promotion_pressure@1` |")));
 const presentationDraft = readFileSync("rfc/evidence-presentation.md", "utf8");
@@ -472,7 +477,8 @@ console.log(JSON.stringify({ scope: "D3841 draft inventory requirements only, NO
   currentTopics: originalRefs.length, exactAffectedMappings: mapped.rows.length, originalExecutionFailures: failedRefs.length,
   additionalFixedTupleRepairs: pivotalSuccessors.length, unchangedTopics: originalRefs.length - mapped.rows.length,
   proposedTopics: mapped.topics.length, proposedAcceptedRefs: mapped.topics.length + detailRefs.length,
-  localSourceRepairs: localSourceRebases.length, negativeMapControls: 12, rankInputContract: "held_D3845", productionRegistration: false }));
+  localSourceRepairs: localSourceRebases.length, recordedSequenceRepairs: SEQUENCE_SOURCE_REBASES.length,
+  negativeMapControls: 32, rankInputContract: "held_D3845", productionRegistration: false }));
 
 // D3847/D3850 disposable input reconstruction. No new factory, seal or runtime declaration.
 const materialRoles = ["pawn", "knight", "bishop", "rook", "queen"] as const;

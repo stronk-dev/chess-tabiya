@@ -10,7 +10,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850/D3855, §§2.3a–2.3i:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850/D3855, §§2.3a–2.3j:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845's reduction grammar and its three exact operation bindings are proposed, not accepted;
   its upstream source contracts and complete execution/admission implementation remain held.
@@ -1321,6 +1321,111 @@ Provider-off/no-new-provider-work, current access/disclosure/cancellation and ac
 HTTP/native journeys plus independent source/joint review remain required. Existing disposable
 scope/family reconstruction proves none of these new runtime boundaries by itself.
 
+#### 2.3j Draft D3847 complete recorded-sequence fixed tuples — unaccepted
+
+Add exactly ten recorded @3 projections, preserving every existing @1/@2 declaration, callable
+arm, receipt and consumer. These are source-only successors, not tighter guards grafted onto
+old factories. Their ids and factory symbols are the following; the sole arm for each is
+`{window:RecordedSequenceWindow}`, metadata shape derived, result population. This private window
+is issued only by module-registration's scoped recorded source owner after original graph and
+granted-prefix validation. `readRecordedSequenceWindow` authenticates issuer membership and
+exact requested projection/horizon/scope before computation. It accepts no caller edge/capture
+array, output payload, check-presence boolean, run clone, digest-only stand-in or optional old arm.
+
+E=run.record.edge@1; C=rules.transition.event.capture@1;
+D=rules.tactic.reading.defender_duty_set@1; K=rules.tactic.event.check@1;
+X=rules.exchange.predicate.legal_exchange@1. E^h and C^c below mean literal repeated refs in
+that exact order, **not** set membership or a new schema grammar. Expand each finite row into
+existing F1 `inputs` for one tuple or `anyOf` for several. `dependsOn` is its exact distinct ref
+union; an actual emitted value matches one complete ordered member with multiplicity.
+
+| Exact successor | Factory | Complete ordered members |
+|---|---|---|
+| derived.pawn.sequence.contact_timing@3 | createDerivedPawnSequenceContactTimingV3Evidence | E²; E³ |
+| derived.pawn.sequence.harassment_pressure@3 | createDerivedPawnSequenceHarassmentPressureV3Evidence | E² |
+| derived.tactic.sequence.defender_consequence@3 | createDerivedTacticSequenceDefenderConsequenceV3Evidence | E³ |
+| derived.tactic.square_clearance_observed@3 | createDerivedTacticSquareClearanceObservedV3Evidence | E³ |
+| derived.tactic.line_blocker_clearance_observed@3 | createDerivedTacticLineBlockerClearanceObservedV3Evidence | E³,X |
+| derived.tactic.interference_observed@3 | createDerivedTacticInterferenceObservedV3Evidence | E³,D,X |
+| derived.tactic.check_zwischenzug_observed@3 | createDerivedTacticCheckZwischenzugObservedV3Evidence | E⁴,C,K,X |
+| derived.tactic.overload_exploitation_observed@3 | createDerivedTacticOverloadExploitationObservedV3Evidence | E³,D,C,C,C,X |
+| derived.tactic.deflection_observed@3 | createDerivedTacticDeflectionObservedV3Evidence | E³,D,C^c,X and E³,D,C^c,X,K, each c=1,2,3 |
+| derived.tactic.attraction_observed@3 | createDerivedTacticAttractionObservedV3Evidence | E³,C^c,K with c=1,2,3; E⁵,C^c with c=1,2,3,4,5 |
+
+These are23 finite upper-bounded members. They describe possible source shapes, not a claim that
+every count/arm is physically realizable. Existing exact recorded predicates still decide matches.
+Trade-completed@2 already has literal C,C,E,E and is not an Inspector topic; retain it unchanged,
+including its physical recorded moveAnchors envelope. No trade@3 or extra Inspector topic.
+
+**Owned window and exact source joins.** Retain an independent immutable snapshot of the admitted
+original run/head/grant, exact requested @3 ref, original branch and endpoint, complete horizon
+and original ordered genuine E inputs. Authenticate every E from its existing sole factory;
+replay original parent/child legality, same run, node/FEN contiguity and consecutive actual plies.
+Shared inherited edges are legitimate; creating branch is not necessarily requested branch.
+No FEN-equality substitution, changed source image or node-free narrative M input is admissible.
+The source owner may prepare only this family's complete trailing windows ending at the granted
+endpoint, never a later edge/full-tip result followed by cropping.
+
+For deflection/attraction/overload, invoke the existing C factory on **every** window edge and
+retain each complete original0/1 result before flattening. The supplied capture population is
+exactly all positive captures in edge order. Successful empty edge results are source-owned
+execution outcomes, not minted absence facts; missing/failed invocations refuse. Authenticate
+factory/ref and canonical beforeFen/moveUci/afterFen input identity as well as payload. Truncated,
+reversed, duplicated, extra or unrelated genuine C values cannot stand in for that population.
+Private source construction/retention establishes this proof; raw array/payload equality alone
+does not authenticate an invocation. This requirement is not imposed on other families that do
+not consume every capture: zwischenzug consumes exactly the C at edge0, not all captures.
+
+D is the genuine complete duty reading at edge0.beforeFen, with exact private `{fen}` input
+identity. X is the genuine legal-exchange result for the **final** indexed window edge with
+exact private `{fen:final.beforeFen,captureUci:final.moveUci}` input identity; its payload must
+equal targetCapture, retainedRecapture (zwischenzug), or secondTargetCapture (overload) from the
+actual recorded operands. A value on some other member edge is insufficient. K is exactly the
+genuine transition check for edge0 in deflection, edge2 in attraction, edge1 in zwischenzug,
+joined by full canonical edge input identity, not only triggeringMove text. Zwischenzug's C is
+likewise joined to edge0, including its after position. The owned source invokes these existing
+factories, retaining their exact output/authority; it never fabricates replacement operands.
+
+Use the existing recorded pure computations, not their @1 narrative substitutes. Deflection's
+existing induction decides K: check_induced requires edge0 K; bait-capture uses no K even if the
+same move also checked. Attraction's actual consequence decides K: three-edge check uses edge2 K;
+five-edge retained capture has no K. Never let a caller choose an arm. D/X may remain lazy
+dependencies of actually matched operands. A valid complete window with no semantic match
+returns an empty population, not an old missing-induction exception or fabricated negative fact.
+Authenticate the owned window and required source execution before any positive mint; failed
+required acquisition cannot be converted to no_witness. Each emitted value binds the complete
+owned source input plus its literal actual tuple. Multiple complete horizons retain separate
+window receipts and original locations; a later available horizon cannot erase an omitted one.
+
+**Preservation and adoption.** Copy each old recorded@2 payload, operands, primary grounding,
+exactness, answer content, limitations and deterministic output order for the same valid source.
+In particular keep recorded physical-castling handling and recorded_run/exact families; do not
+relabel all sequences as conventional. No new convention definition. For every new @3 explicitly
+write its predecessor @2's actual direct convention refs literally in catalogue semantics under
+the existing catalogue-text closure path. Immediate-predecessor witnessed inheritance is not
+transitive; do not rely on it to carry @1-origin refs at @3. Existing literal tokens may already
+retain them; the negative control removes those tokens rather than claiming an observed loss
+from an unchanged semantics copy. Do not alter old authority witnesses,
+global inheritance or union unused conventions. Actual child closures still inherit normally.
+
+Register all ten exact refs, sole factories, central invoker routes, semantic event constructors,
+scoped evaluator rows, authority profiles and exact module/presentation pairs explicitly. Existing
+old full-path/Review calls remain @2 until separately migrated. The proposed new Inspector image
+replaces ten recorded@2 slots with these @3 slots, retaining ten independent narrative@1 topics
+pending D3851; this proposal neither chooses that scope ruling nor discharges their source repair.
+Module-registration owns missing/available/empty window delivery and current source/access checks.
+No D3845 variable-reduction arm, provider request, persisted schema or automatic qualification.
+
+**Adoption proof still owed.** Actual source issuer/private reader/invoker tests must reject
+forged/copied handles, different ref/horizon/head/branch/endpoint/grant and wrong actual sources;
+test all indexed D/C/K/X joins with genuine crossed values, not only synthetic payload mutations.
+Cover complete/no-match and short/missing windows, both colors, special moves and mixed/inherited
+branches. Prove exact tuple order/count and old/new valid-source payload equivalence, unchanged
+old@1/@2 authority and explicitly retained @3 direct/child convention closure. Existing disposable
+84-output replay and prospective F1 compilation establish feasibility only: they do not implement
+new factories, source issuance, qualification, current HTTP access, native delivery or acceptance.
+Independent source/joint review and the other Inspector source prerequisites remain required.
+
 #### 2.4 Authored authority
 
 Authored/theory factories accept the registered pack, shape, principle, citation or claim record
@@ -1777,6 +1882,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3847 §2.3j authors ten source-only recorded sequence@3 successors,
+  23 literal fixed/anyOf members, complete capture populations and indexed auxiliary joins.
+  Retain old APIs/receipts, physical recorded payloads and direct conventions explicitly; no
+  narrative scope ruling, new convention, joint acceptance or runtime implementation.
 - 2026-10-15: D3856 discharges only D5's existing ordered method-path authority after direct
   permanent method-factory controls. The three opaque audit routes now have explicit separate
   dispositions; only eval_delta is in the old Inspector graph, with its §2.3a proposal unchanged.

@@ -16,6 +16,11 @@ import { RECORDED_SOURCE_CASES, recordedSourceRun } from "./recorded-source-case
 import { SQLiteRunStorage } from "../../apps/server/src/storage.js";
 import { RunService } from "../../apps/server/src/service.js";
 import { loadConceptRegistry } from "../../apps/server/src/concept-registry-loader.js";
+import { SEQUENCE_SUCCESSOR_MEMBERS, SEQUENCE_SUCCESSOR_DECLARATIONS, SEQUENCE_SUCCESSOR_MANIFEST } from "./recorded-sequence-contract.js";
+import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
+import { PRIMARY_EVIDENCE_MANIFEST, EVIDENCE_CONTRACT_DECLARATIONS } from "../../packages/runtime/src/evidence-catalog.js";
+import { compileEvidenceManifest } from "../../packages/runtime/src/evidence-contract.js";
+import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
 
 type WindowExecution = Omit<RecordedSemanticPathExecution, "result"> & { result:
   | (Extract<RecordedSemanticPathExecution["result"], { kind: "available" }> & { researchScope: {
@@ -40,6 +45,31 @@ let incompleteCaptureAccepted = 0, reorderedCaptureAccepted = 0, capturePopulati
 let completeCaptureGuardPositives = 0, completeCaptureGuardNegatives = 0;
 let indexedCaptureJoins = 0, indexedExchangeJoins = 0;
 let sampleCapture: DeclaredEvidence<unknown> | undefined;
+let successorTupleMatches = 0;
+const oldConventionTable = deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST);
+const successorConventionTable = deriveProjectionConventionTable(SEQUENCE_SUCCESSOR_MANIFEST);
+let literalMembers = 0, strippedConventionControls = 0;
+for (const row of SEQUENCE_SUCCESSOR_DECLARATIONS) {
+  const members = SEQUENCE_SUCCESSOR_MEMBERS[row.id]!;
+  const path = compileProjectionExecution(SEQUENCE_SUCCESSOR_MANIFEST, row);
+  assert.equal(path.paths.length, members.length);
+  for (const member of members) assert(path.paths.some(value => value.derivationChoices.some(choice =>
+    choice.projection.id === row.id && JSON.stringify(choice.inputs.map(ref => `${ref.id}@${ref.version}`)) === JSON.stringify(member))));
+  literalMembers += members.length;
+  assert.deepEqual(successorConventionTable.get(`${row.id}@3`)!.refs, oldConventionTable.get(`${row.id}@2`)!.refs);
+  assert.deepEqual(successorConventionTable.get(`${row.id}@1`), oldConventionTable.get(`${row.id}@1`));
+  assert.deepEqual(successorConventionTable.get(`${row.id}@2`), oldConventionTable.get(`${row.id}@2`));
+  const directKeys = oldConventionTable.get(`${row.id}@2`)!.refs.map(value => `${value.id}@${value.version}`);
+  const stripRefs = (text: string) => directKeys.reduce((text, key) => text.replaceAll(key, "[removed convention token]"), text);
+  const unbound = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+    producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => ({ ...producer,
+      outputs: [...producer.outputs, ...(producer.id === row.producer.id ? [{ ...row,
+        semantics: stripRefs(row.semantics), limitations: row.limitations.map(stripRefs) }] : [])],
+    })),
+  });
+  if (JSON.stringify(deriveProjectionConventionTable(unbound).get(`${row.id}@3`)!.refs) !== JSON.stringify(oldConventionTable.get(`${row.id}@2`)!.refs)) strippedConventionControls++;
+}
+assert(strippedConventionControls > 0, "removing literal bindings must demonstrate that convention preservation is not automatic");
 // Disposable prospective guard, not a changed old factory or an invented absence receipt.
 // The source owner derives every eligible edge occurrence, including successful empty results.
 function completeCaptureGuard(anchors: readonly RecordedMoveAnchor[], supplied: readonly DeclaredEvidence<unknown>[]) {
@@ -130,6 +160,11 @@ function inspectSequence(event: SemanticEvidenceEvent) {
     }
   } else throw new TypeError(`Unclassified actual sequence ${id}`);
   assert.deepEqual(inputs.map(refKey), expected);
+  if (id !== "derived.exchange.trade_completed") {
+    assert(SEQUENCE_SUCCESSOR_MEMBERS[id]!.some(member => JSON.stringify(member) === JSON.stringify(expected)),
+      `actual complete recorded tuple has no prospective literal member: ${id}`);
+    successorTupleMatches++;
+  }
   assert.deepEqual(evidenceValueReceipt(event.evidence).sourceDigests, inputs.map(value => evidenceValueReceipt(value).payloadDigest));
   for (const duty of duties) {
     assert.equal((duty.payload as { fen: string }).fen, anchors[0]!.beforeFen);
@@ -273,6 +308,8 @@ console.log(JSON.stringify({ scope: "D3847 genuine sequence tuple/replay diagnos
   indexedCaptureJoins, indexedExchangeJoins,
   completeCaptureGuardPositives, completeCaptureGuardNegatives,
   incompleteCaptureAccepted, reorderedCaptureAccepted,
+  prospectiveSuccessors: SEQUENCE_SUCCESSOR_DECLARATIONS.length, literalMembers, successorTupleMatches,
+  strippedConventionControls, prospectiveDirectConventionsPreserved: true,
   rows: [...tupleRows].map(([projection, row]) => ({ projection, ...row, signatures: [...row.signatures].sort() })),
   narrativeNotRelabelledRecorded: true, historicalVersionsUnchanged: true }));
 // Actual server imports and parsed stored sources, not a position-run imitation of a PGN.

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:80f5a37cb3e271c873635350252e10e58ef255fc7454cc4bea4ec77c92e11d9a",
+    "roadmap": "sha256:689ad2b946c17153a20673ae50940928c1200c69e7443e54e1a94823f6558c63",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:be870229889d9f2867de908438074ba81e271ea1df50f68d6b4ba4cf021ae585",
+    "workState": "sha256:079d382e74c3bd6e184dc92c7dc938cc48eeec9d00e0eb01382ecb6102d55456",
     "rfcRegister": "sha256:b514ed548ebdb05a57da890c3247fd37378225944ee809c1b603326e4ab7ae52",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -471,10 +471,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish D3847's source-reachable sequence contracts and complete scoped source/adapter image before joint acceptance of D3845 grammar/V2 execution and D3792 Inspector. Independent tracing puts candidate vector outside Inspector; full vector reconciliation remains mandatory at opponent.selection and D3853 compatibility still precedes shared packet/helper changes. Keep other out-of-graph trajectory/method migrations at their actual consumers, not as extra Inspector topics. D3856 discharges only existing method-path authority; structural/last-level remain proposed and old11-adapter baseline omits new position requirements. D3855 still needs versioned repair of four old bad-caption consumers. D3851 controls coexistence; preserve both pipelines until ruled, all families and APIs/history. After acceptance implement source/witness/planner/admission/consumer/API/native paths. Whole platform/F2/provider completion still requires all owned migrations and full Support/Review/bot/learner joins.",
+      "nextAction": "Complete the scoped source/adapter image before independent joint acceptance of D3845 grammar/V2 execution and D3792 Inspector. D3847 section2.3j now proposes ten exact recorded-sequence@3 source contracts; bounded review clears the source-failure grammar return, not implementation/qualification or joint acceptance. Candidate vector remains at opponent.selection, and D3853 compatibility still precedes shared packet/helper changes. Other out-of-graph trajectory/method migrations remain platform work, not extra Inspector topics. D3856 discharges only existing method-path authority; structural/last-level/rank remain proposed and old11-adapter baseline omits new position requirements. D3855 still needs versioned repair of four old bad-caption consumers. D3851 controls narrative coexistence; preserve both pipelines until ruled, all families and APIs/history. After acceptance implement source/witness/planner/admission/consumer/API/native paths. Whole platform/F2/provider completion still requires all owned migrations and full Support/Review/bot/learner joins.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3847 proposes structural comparison section2.3i with position+17-family roles, both grants/selected branch, authenticated empty invocations/results, relative offsets and explicit catalogue identity. Provider section1a has exactly three captured-source bindings. Independent review catches/clears an old-projection convention-witness preservation defect, not source/joint acceptance. D3855 reproduces false-safe and undefined captions across four old consumer/render pairs; their production repair stays open. Normal comparison/prefix/types and20-replacement/55-retained map controls pass, not new sidecars/planners/admission/API/native qualification. Exact sequence/opaque/vector, complete source/adapter closure, D3851 and actual implementation remain. Production is unchanged from5542cc2d; no semantic/content/whole milestone/remote/release promotion.",
+        "summary": "D3847 section2.3j proposes ten source-owned recorded sequence@3 factories with23 fixed/anyOf members, complete captures and indexed auxiliary joins; all old APIs/records/payloads remain. Normal prefix research compiles23 members, matches76 actual nontrade tuples, preserves direct conventions and checks30-replacement/45-conditional map requirements with32 negatives. Eight stripped-token controls verify binding; the first presumed copied-text convention loss was false and corrected. Independent bounded review returns/clears the source-failure grammar gap, not source/joint acceptance or runtime qualification. Structural/last-level/rank contracts remain proposed, D3851 unanswered, D3855 old captions unfixed, complete source/adapter/native closure still owed. No production behavior/content/browser or remote/release promotion; last full local software proof remains1bc7e67d.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -523,6 +523,7 @@
           "tools/d3792-inspector-demand/recorded-origin.ts",
           "tools/d3792-inspector-demand/prefix-source.ts",
           "tools/d3792-inspector-demand/window-source.ts",
+          "tools/d3792-inspector-demand/recorded-sequence-contract.ts",
           "tools/d3792-inspector-demand/scope-selection.ts",
           "tools/d3792-inspector-demand/source-matrix.ts",
           "tools/d3792-inspector-demand/draft-wire.ts",
@@ -791,7 +792,7 @@
           {
             "kind": "work_state",
             "id": "D3847",
-            "digest": "sha256:d0ede47635446862001833c0df663e7b4161f234fb1a632dcf745c2b42a1fe31"
+            "digest": "sha256:2650621949b5c5dba04dad9fce6ac52c7ca3166127626298a0deefabcebdc86d"
           },
           {
             "kind": "work_state",

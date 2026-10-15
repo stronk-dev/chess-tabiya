@@ -19,6 +19,13 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3847 now proposes the ten exact recorded sequence@3 contracts in F2 §2.3j, preserving old
+APIs/history and D3851's unanswered narrative scope choice.23 fixed/anyOf members compile under
+unchanged F1 and match76 actual nontrade outputs; source-only windows require complete captures
+and indexed auxiliary joins.30/45 map controls retain75+6 obligations, not executable bindings.
+Independent bounded review, complete source/adapter closure and joint acceptance still precede
+implementation. This is contract/research progress, not new detector delivery or learner UX.
+
 D3856 proves and discharges F2's existing D5 method-path obligation through the actual factory:
 all three methods/both colors, exact stage-prefix/convention receipts and corrupt/forged-path
 refusals, including before shortcuts.13 new permanent cases run in normal software CI; the

@@ -30632,3 +30632,43 @@ Campaign was the one capability with no API, route or content. Now:
   322 open discharges after the narrow D5 closeout. Stage only the14 explicit owned test/Make/
   documentation/tracking files, inspect the index and commit through normal hooks. The same
   three pre-existing untracked entries remain untouched; no push, acceptance or goal pause.
+
+### 2026-10-15 — D3847 finite recorded-sequence source successors, bounded independent review
+
+- Continue the active full1.0 goal. The user explicitly approves independent Inspector review;
+  reuse the authorized separate reader, never self-accept the amendment. Existing factory/path
+  research owns this question, so no duplicate ledger row or new research program is created.
+- Author F2 §2.3j: ten additive recorded@3 source-only factories,23 finite literal inputs/anyOf
+  members under unchanged F1, complete ordered capture populations and exact indexed duty/
+  check/exchange joins. Existing@1/@2 APIs, recorded physical payloads, conventions and callers
+  remain. Trade@2 retains its correct C,C,E,E and stays outside Inspector. D3851's narrative
+  coexistence ruling is still unanswered; no detector family/history is dropped or relabelled.
+- Extend the existing disposable prefix target, not normal CI or a new progress dependency.
+  Prospective declarations compile all23 members and match76 actual nontrade old outputs;
+  complete84-output replay and prior capture-population controls remain. The first assertion
+  incorrectly expects simply copied old text to lose direct conventions at@3. It fails because
+  existing literal tokens already preserve them. Correct the claim/control; eight deliberately
+  stripped-token cases demonstrate missing binding while all old@1/@2 tables remain unchanged.
+  Do not record that false hypothesis as a production defect.
+- Exact Inspector requirements map now30 replacements/45 conditional unchanged, still75+6
+  obligations.32 map negatives preserve the image; no new callable supplier is thereby built.
+  The source-owner proposal explicitly dispatches the ten@3 refs, never generic latest-version
+  or unchanged@2 aliases. The research prototype still emits old@2 and is labelled accordingly.
+- Independent read-only review verifies finite members/horizons/actual semantic arms and returns
+  one blocker: the closed window union cannot represent a required C/D/K/X invocation failure
+  on a valid graph. Add private source-contract/lookup/actual-owner-hold variants and safe closed
+  failed/unavailable mapping. The final bounded recheck clears the blocker and finds no further
+  wording inconsistency; reviewer performs no tests, edits or source/joint acceptance.
+- Normal make inspector-recorded-prefix-research and make typecheck pass on final changes.
+  Same-commit ledger/work-state/dossier/coverage/review/queue/strategic and machine roadmap
+  updates retain3605 rows/1740 live/zero untriaged. No row/capability is falsely closed, source
+  issuer/factory/API/native implementation is not claimed. No production behavior changes;
+  no fresh full software/content/browser/remote-CI proof is claimed for this author/research pass.
+  Governance/receipt and normal commit hooks follow before the checkpoint is committed.
+- The first governance run catches the expected stale D3847 roadmap anchor after its ledger
+  paragraph changed. Update that exact anchor to the synced live source row, retaining the
+  substantive checkpoint and open state; regenerate the compact receipt and rerun the normal
+  governance target. No guard is bypassed or changed to make the authoring pass green.
+- Final make roadmap-receipt verify-governance exits zero, including R1–R10, status/resource
+  parity, all source assignments, compact receipt, unchanged semantic history and test tiers.
+  Stage only the15 explicit owned files and inspect cached names/diff before normal commit hooks.
