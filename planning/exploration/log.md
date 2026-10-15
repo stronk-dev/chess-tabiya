@@ -30062,3 +30062,78 @@ Campaign was the one capability with no API, route or content. Now:
   controls pass without rewriting the complete saved report. `git diff --check` is clean. Stage
   only the15 owned research/author/tracking files, inspect the exact index and use normal commit
   hooks. No push, production/API change, acceptance, content/source qualification or goal pause.
+
+## 2026-10-15 — D3847 literal-input audit and D3848 accepted hint-order repair
+
+- Continue from08ad4f74 with the full1.0 goal active. Before D3845 grammar, record D3847 and
+  inspect the already deferred union/subset class across existing permanent factory positives.
+  The first digest-candidate heuristic cannot distinguish equal payload identities and is
+  abandoned. Replace it with a guarded, opt-in in-memory transform observing exact source refs
+  only after successful unchanged mints; no application instrumentation or payload retention.
+- Initial exact report:121 declared/120 observed derived routes,48 count conflicts/nine ordered-ref
+  conflicts/62 matching-ref routes. Three routes retain opaque digest operands; opening deepest
+  reached is held/unobserved. Successful mints are not whole-operation success, full arm coverage
+  or correct operand/subject identity. The116-ref current declared Inspector union reaches31
+  conflicts, not31 proved blockers in its as-yet unimplemented successor graph.
+- Authorized independent reviewer confirms the observer's bounded soundness and limits, and
+  returns the fourteen-row map as incomplete literal closure. Its61 retained topics are conditional
+  on the broader audit. Separate complete fixed witnesses, real collections, direct computation
+  and opaque recorded authority; do not fabricate unused evidence or weaken the checker.
+  Record findings in the existing dossier/review/queue and unaccepted module amendment, not a
+  second work register or a claim that the proposed Inspector is accepted.
+- Record D3848 before repairing: all seven hint horizons mint line then family source against
+  the accepted source-then-line tuple. Seven permanent negatives fail, then the one-line array
+  correction makes all74 value-authority cases pass. Payloads, callable inputs, policy/rungs and
+  the order-free convention multiset remain. A normal workspace typecheck hits sandbox pnpm
+  cache-write restrictions; the identical approved command succeeds with zero Svelte diagnostics.
+- Normal semantic-validation refresh retains343 passes,81 subjects/zero qualified,53 population
+  receipts/eight external; generated changes bind implementation only. Normal source-contract
+  research passes44 cases/clean types and nine unchanged-census controls. Exact post-fix report:
+  48 count/two ordered-ref conflicts,69 matching-ref routes, three opaque and31 Inspector-union
+  conflicts unchanged. D3847/D3845/D3846 remain open; no source qualification follows.
+- Normal tracker sync first exposes the two new rows against the zero-untriaged ceiling. Assign
+  both explicitly to evidence-foundation:3597 rows/1736 live, zero untriaged. Update canonical
+  docs, research coverage and current roadmap checkpoint; start the unchanged normal
+  `make roadmap-receipt verify-awake build test-browser-ci-awake` before D3848 closeout.
+- While those gates run, the same authorized reviewer traces the remaining recorded tactical
+  classes read-only. Main rechecks the actual factories, pure horizon guards, complete-window
+  capture source and older set-based contract. Record one exact per-output tuple table in the
+  existing dossier: most are fixed or finite2/3/5-edge alternatives; deflection/attraction's
+  variable captures are bounded complete-window populations, while fork/strict-overload compute
+  hypothetical exchange work internally. Neither a generic collection exemption nor a guessed
+  played-edge exchange is valid. The scoped unchanged-version reuse is explicitly conditional
+  on upstream schema reconciliation, not independently accepted or implemented by this review.
+- The full normal run passes5895 software/392 files, seven unchanged-budget performance/four
+  files, governance,257 content/26 files and build. Smoke/content browser tiers pass, but the
+  unretried matrix fails one of59 cases: phone comparison never receives its d1d2 move POST.
+  Record D3849 before investigation; do not call D3848 done or start the unrun production tier.
+  The retained trace proves Create branch returns before its115ms fork request finishes; raw
+  origin/destination clicks both finish within72ms of submission beneath the still-open modal.
+  Final screenshot has the correct unplayed branch position. This is not an engine timeout or
+  evidence-order failure. The shared click helper now waits for the actual fork dialog to close
+  before geometry/input, covering its smoke callers too; no fixed sleep, timeout increase,
+  retry, hidden move or application change. Preserve ignored trace/screenshot, then rerun all
+  four normal browser tiers on the same frozen production/software/content image.
+- The normal browser-only restart first hits sandbox loopback `listen EPERM` in arrival-diagnostic
+  tests, before Playwright starts. Prompt for local-loopback access and rerun the identical
+  `make test-browser-ci-awake`, not a new environment/command or weaker check. Its diagnostic
+  tests now pass and the browser run proceeds. D3849 is assigned to client-platform;3598 rows/
+  1737 live are assigned with zero untriaged while both closeouts still await final browser proof.
+- The complete normal browser rerun exits zero:332 smoke/one configured optional Maia skip,
+  five real-content browser,59 matrix and one packaged-production pass. All112 composition cells
+  pass unretried; no matrix errors, unexpected/flaky/skipped cases or retries. The original phone
+  comparison and every shared-helper smoke caller pass. Earlier full5895 software/392 files,
+  seven unchanged-budget performance/four files,257 content/26 files, types/build/semantic proof
+  remain valid: only the browser test helper and bookkeeping changed afterward.
+- Close only D3848/D3849 with permanent test-path evidence via the normal transition command.
+  Current3598 ledger rows include1701 done/162 refused/1735 live assigned, zero untriaged;462
+  historical prose-only closures do not increase. UX stays282 complete/263 live/24 retired;
+  four active/five blocked milestones, zero official graduates and zero qualified semantic
+  subjects remain. D3847/D3845/D3846 and upstream/joint Inspector acceptance stay open.
+  Refresh the current roadmap receipt and run final governance/index checks. No protected intent,
+  source retirement, release claim, push or goal pause; the full1.0 objective remains active.
+- Final normal governance exits zero after both closeouts:3598-row index/state, zero untriaged,
+  current roadmap receipt/R1–R10, lifecycle/resource registers, intent parity, docs index, tier
+  isolation and process tests. No application or test bytes changed after their successful proof.
+  Commit only the22 owned implementation/test/research/review/tracking files with normal hooks;
+  retain the three pre-existing untracked entries untouched and do not push.

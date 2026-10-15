@@ -88,6 +88,9 @@ independent contract repair, not a real-engine recommendation or completed coach
    `live.stockfish.principal_variation@1` (declared_convention / measured / reported). It also has
    35 learner projections `derived.hint.disclosure.<family>.<rung>@1`, each derived from its
    horizon alone. The real manifest compiler rejects any widening.
+   The horizon value receipt retains its ordered inputs as family source, then principal
+   variation, matching that declaration. Permanent controls cover all seven families (D3848);
+   this corrects receipt order without changing hint selection, payloads, rungs or permissions.
 3. **Horizon** (`selectHintHorizon`, `hint-distance.ts`). One bounded Stockfish principal variation
    is scanned to four plies. Only the root side's own ply 1 (`root_direct`) and ply 3
    (`root_followup_in_line`) are read, joined to the original sealed events and readings of the

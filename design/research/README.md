@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Literal factory inputs, 2026-10-15 ([[D3847]]): guarded observation of successful real mints in
+the permanent fixture suite sees 120 of 121 derived routes. After D3848's seven-family order
+repair, 48 routes contradict declared cardinality and two contradict ordered refs; three retain
+opaque digest inputs. The current Inspector static derivation union reaches 31 conflicting routes.
+This is review scope, not 31 proven successor blockers or runtime qualification. `[V]`
+`module-evidence-assembly.md` §Literal factory-input audit; existing opt-in source-contract target.
+
 Pivotal fixed-input prerequisites, 2026-10-15 ([[D3846]]): four genuine legal fixture cases retain
 4/6 phase/collapse witness inputs against2 declared, with all actual receipt order/multiplicity
 intact. These two direct Inspector topics compile but need explicit tuple/source migration;

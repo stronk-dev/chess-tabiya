@@ -1099,6 +1099,25 @@ const PROFILE_FILE = new URL("fixtures/evidence-value-profiles.json", import.met
 const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
+  let orderedHintProfiles: ReadonlyMap<string, Profile> | undefined;
+  it.each(HINT_FAMILIES)("D3848 %s horizon retains the declared source-then-search input order", (family) => {
+    const route = `derived.hint.horizon.${family}@1`;
+    const profile = (orderedHintProfiles ??= buildProfiles()).get(route)!;
+    const input = profile.valid as { readonly source: DeclaredEvidence<unknown>; readonly line: DeclaredEvidence<unknown> };
+    const expected = [input.source, input.line];
+    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => `${row.id}@${row.version}` === route)!;
+    expect(declaration.derivation!.inputs).toEqual(expected.map(item => item.projection));
+    const result = invoke(route, profile.valid) as { readonly kind: string; readonly value: DeclaredEvidence<unknown> };
+    expect(result.kind).toBe("available");
+    const receipt = evidenceValueReceipt(result.value);
+    expect(receipt.sourceDigests).toEqual(expected.map(item => evidenceValueReceipt(item).payloadDigest));
+    expect(receipt.convention!.derivation.kind).toBe("derived");
+    if (receipt.convention!.derivation.kind === "derived") {
+      expect(receipt.convention!.derivation.inputs.map(item => item.projection).sort())
+        .toEqual(expected.map(item => `${item.projection.id}@${item.projection.version}`).sort());
+    }
+  });
+
   it("D3778 one reference invocation cannot seal a different authority from its resolved value", () => {
     let reads = 0;
     const input = Object.freeze({ get reference() { reads += 1; return reads <= 3 ? "rules:material" : "rules:checkmate"; } });

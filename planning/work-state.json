@@ -32034,6 +32034,33 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
+    },
+    {
+      "id": "D3847",
+      "state": "doing",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:c67779c23e45b5bcf8e34fade84e524f5f2bc55a0035a26912d26b9b7e0f4f25",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
+    },
+    {
+      "id": "D3848",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f83b2ddcfb61863391f81a0ff84b3e7dcae227e54bae9471f808c4251dc196ac",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3849",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bcf46dd21cd60e0c11c6cb6bed3a70c5eec803f141fd9b1eddd56e29ccf52448",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

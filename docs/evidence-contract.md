@@ -164,6 +164,12 @@ therefore no generic mint API and no caller-payload adapter:
   semantic selection, module reducers, deterministic renderers and voice requests) refuses a value
   with no receipt or whose payload digest disagrees with it. It does not claim to reconstruct the
   inputs the factory discarded.
+- Literal-input declaration reconciliation remains incomplete (D3847). The opt-in factory-fixture
+  observer currently finds 48 routes with input-count conflicts and two with ordered projection-ref
+  conflicts; three routes retain opaque digest-only inputs. This is bounded fixture evidence, not
+  a full runtime audit. Matching refs alone do not establish operand identity or same-subject joins.
+  The seven hint-horizon input-order conflicts are corrected separately in D3848. Do not interpret
+  sealing or a successful execution compile as proof that every derived tuple already conforms.
 - Sealing recursively freezes nested own data, even when a factory has already frozen the outer
   object or array. Payload digests are cached only for complete plain-data trees verified by the
   sealing function. Accessors, custom prototypes and array holes cannot borrow that cache: their

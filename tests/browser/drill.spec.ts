@@ -3096,6 +3096,9 @@ async function move(page: Page, from: string, to: string, orientation: "white" |
 }
 
 async function clickMove(page: Page, from: string, to: string): Promise<void> {
+  // Creating a branch is asynchronous. The board remains geometrically visible beneath its
+  // modal, so visibility/animation frames alone cannot make coordinate input actionable.
+  await expect(page.getByRole("dialog", { name: "Name the experiment.", exact: true })).toHaveCount(0);
   const board = page.getByLabel("Chessboard");
   await expect(board).toBeVisible();
   await board.evaluate(

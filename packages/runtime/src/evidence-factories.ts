@@ -2068,7 +2068,7 @@ function hintHorizonFactory(family: HintFamily): EvidenceValueFactory<{ readonly
   return factory({ route, symbol, shape: "derived", arms: [{ line: sealed(`${HINT_SEARCH_SOURCE.id}@${HINT_SEARCH_SOURCE.version}`), source: sealed(`${row.source.id}@${row.source.version}`), ply: value("the searched root-side ply 1 or 3", (candidate) => candidate === 1 || candidate === 3) }], result: "availability" }, ({ line, source, ply }: { readonly line: HintLineEvidence; readonly source: DeclaredEvidence<unknown>; readonly ply: 1 | 3 }): EvidenceAvailability<DeclaredEvidence<HintHorizonOccurrence>> => {
     const occurrence = hintHorizonOccurrence(family, line.payload, source.payload, ply);
     if (occurrence === undefined) return unavailable("no_admitted_occurrence");
-    return available(mint(route, symbol, occurrence, { line, source, ply }, [line, source]));
+    return available(mint(route, symbol, occurrence, { line, source, ply }, [source, line]));
   });
 }
 

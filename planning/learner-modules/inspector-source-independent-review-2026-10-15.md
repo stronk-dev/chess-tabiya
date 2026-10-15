@@ -289,3 +289,51 @@ routes. Main corrects the draft to reuse only its family keys/kind validation, p
 values/callers, and dispatch exact scoped successors from the existing table before preparation.
 Final read-only recheck clears that wording and sole-arm heading. This does not accept D3845's
 grammar, actual nominal implementation, upstream contracts or the joint Inspector amendment.
+
+## D3847 observer and remaining source closure — independent review, 2026-10-15
+
+The authorized reviewer inspects the guarded opt-in mint transform, exact-ref observer, declaration
+comparison and current compact report read-only, without editing or running tests. Observation
+occurs after genuine successful mints with the original arguments unchanged. Raw digest operands
+stay opaque; matching payload bytes never infer refs. Ordered refs, multiplicity and cardinality
+are compared separately, with known-match and known-mismatch non-vacuity controls.
+
+Current fixture results after main's separate D3848 repair:121 declared/120 observed derived
+routes,48 count-conflict routes and two ordered-ref-conflict routes; three retain opaque inputs.
+The current declared Inspector derivation union reaches116 refs and31 conflicts. Those31 are
+review obligations, not31 proven blockers in the eventual rebased graph. A successful mint need
+not mean its enclosing operation later succeeds; fixture positives do not cover every alternative;
+matching refs establish neither correct values, exact member identity nor same-subject joins.
+
+The fourteen-row source map is not a complete literal factory closure. Retention of its other61
+topics is conditional on the audit and upstream corrections. The reviewer identifies actual
+examples beyond that map: role-asymmetry retains two signatures rather than its declared one;
+role signature and promotion pressure compute from FEN despite declared sealed prerequisites;
+Compare structure delta has no sealed operands; Story last-level retains a selected point and
+raw result token rather than the declared imported-result evidence. Classify fixed witnesses,
+real collections, directly computed authority and opaque recorded inputs separately. Do not mint
+evidence the computation never used; preserve frozen versions and independently accept successors
+where contracts change. No D3845 grammar, supplier qualification or joint acceptance is granted.
+The reviewer does not review or qualify main's accepted-contract hint repair.
+
+### D3847 continuation — recorded tactical classes
+
+The same reviewer continues the authorized scope read-only while main runs normal D3848 gates.
+Most remaining tactical conflicts are fixed tuples or finite alternatives, not arbitrary collections.
+The exact per-output @2 tuple table and main's source rechecks are recorded once in
+`design/research/module-evidence-assembly.md` §Recorded tactical classes. Multiple emitted targets
+do not make each result's witnesses variable. Contact timing has exactly2/3 edges and attraction
+exactly3/5, already fixed by the accepted recorded-path horizon table and pure operations.
+
+Deflection/attraction capture populations are genuinely variable but bounded by the complete
+window. The source owner gathers its captures in edge order; the current projection-presence/
+occurrence guard is not an exact complete ordered-population check. Fork survival and strict
+overload instead compute hypothetical exchanges internally while declaring an additional sealed
+exchange not present in their actual two-input factory paths. A guessed played-edge exchange
+would manufacture the wrong authority, not repair it.
+
+The scoped window draft's unchanged @2 reuse and D3836's unchanged dependent factories do not
+resolve those schemas. Older recorded-path §4 explicitly compares projection sets, not ordered
+occurrences. Require distinct upstream reconciliation for fixed witnesses, finite alternatives,
+bounded capture populations and computed hypothetical authority before scoped adoption. No tests,
+edits, runtime qualification, collection grammar or joint acceptance follow from this review.

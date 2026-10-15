@@ -1421,3 +1421,103 @@ PIVOTAL_MARKER_ROUTES values all point at @1. The corrected draft reuses only fa
 validation, leaves old map/callers intact and checks exact new scoped route/kind before work.
 Final read-only recheck clears that wording, not factories, new bindings, collection grammar
 or upstream/joint acceptance. `[V]` existing dated independent review; §2.3b and scoped table.
+
+## Literal factory-input audit — 2026-10-15, D3847/D3848
+
+Before choosing D3845's collection grammar, extend the existing opt-in source-contract target over
+the permanent value-authority fixture suite. A guarded in-memory Vitest transform observes the
+actual source arguments only after the unchanged sole mint succeeds. It records projection refs
+in order, including repeated occurrences; raw digest operands stay null. It retains no payloads
+or digests and writes only a capped, ignored compact report. Equal payload bytes cannot recover
+projection or occurrence identity. An initial digest-candidate approach was abandoned for exactly
+that ambiguity; its candidate ref conflicts are not findings. `[V]` `make inspector-source-contract-research`,
+`tools/d3792-inspector-demand/{vitest.sources.config.ts,mint-input-observer.ts,source-observer.ts}`.
+
+The exact pre-repair observation sees120 of121 non-retired derived routes:48 have count conflicts,
+nine have ordered-ref conflicts and62 have matching ref shapes. Three have opaque digest inputs
+(overlapping two count conflicts); `derived.opening.deepest_reached@1` is held/unobserved. Seven
+ref conflicts are the same hint-horizon array reversal. After D3848's correction,48 count/two ref
+conflicts remain and69 routes have matching shapes. The remaining ref conflicts are
+`derived.material.event.role_asymmetry@1` and `derived.bounded_target.engine_target_policy@1`;
+both require fuller operand-contract analysis, not the hint's simple reorder. `[V]` same target's
+bounded `literal-input-fixtures.json` output and actual factory/declaration comparisons.
+
+The48 count-conflict routes span semantic avoidance, observed tactical sequences, pawn sequences,
+Story, Compare, material, trade, grade, opponent candidate features, bounded targets, pivotal
+phase/collapse and endgame method stage. Do not turn that into48 identical fixes: some retain
+complete fixed witnesses, some consume real populations, some compute directly from FEN despite
+declaring sealed prerequisites, and some include opaque recorded inputs. For example material
+role signature and promotion pressure compute directly; Compare structure delta mints without
+the declared sealed readings; material role asymmetry retains two signatures rather than one.
+The observer reproduces the exact route list instead of maintaining a second live register.
+`[V]` same report, `evidence-factories.ts` and `evidence-catalog.ts`.
+
+The current Inspector's static declared derivation-union closure has116 refs and reaches31
+conflicting routes. It includes all declaration alternatives, not just executed arms. The proposed
+fourteen-row rebase is therefore not complete literal-input closure; its61 retained topics remain
+conditional on audit/upstream corrections. This is not31 proven blockers in the future successor
+graph, which does not yet exist. The authorized independent reviewer confirms the observer's
+bounded soundness and these limits: a successful mint may precede a later operation refusal;
+fixture positives do not cover every arm; matching refs do not prove value identity or subject
+joins; opaque inputs remain unresolved. No runtime qualification or joint acceptance follows.
+`[V]` dated independent Inspector review and the same observer's declared-union traversal.
+
+D3848 is a separate accepted-contract correction, not a proposed collection exemption: hint
+horizons declare source then principal variation but minted the opposite ordered receipt.
+Seven new permanent family cases fail against the predecessor, then all74 value-authority cases
+pass after changing only that source array. Callable arguments, payloads, hint policy and the
+order-free convention multiset stay unchanged. Workspace types pass. Semantic validation refresh
+retains343 passing cases,81 subjects/zero qualified and53 population receipts; only implementation
+bindings change. This does not resolve the remaining50 conflicting routes. `[V]`
+`evidence-value-authority.test.ts`, `hintHorizonFactory`, normal focused/typecheck/semantic targets.
+
+### Recorded tactical classes — independent source tracing under D3847
+
+The same authorized reviewer traces four shared classes rather than treating every conflict as
+a collection. Main rechecks the named implementations. In the following snapshot, E is exact
+`run.record.edge@1`, D defender-duty reading, C capture event, K check event and X legal exchange
+(all other refs @1). These are actual @2 factory input sequences, not accepted successor schemas.
+`[V]` `evidence-factories.ts:recordedSequenceFactory` and its named @2 registrations.
+
+| Family | Actual ordered inputs per output |
+|---|---|
+| harassment pressure | E,E |
+| defender consequence; square clearance | E,E,E |
+| line clearance | E,E,E,X |
+| interference | E,E,E,D,X |
+| checking zwischenzug | E,E,E,E,C,K,X |
+| overload exploitation | E,E,E,D,C,C,C,X |
+
+Multiple emitted targets do not make those per-output tuples variable. Contact timing separately
+accepts exactly two or three edges; attraction accepts exactly three or five. Their pure operations
+reject other lengths even though the outer input validators are broader. The accepted recorded-path
+horizon table already states these finite alternatives. `[V]` `pawn-dynamics.ts:pawnContactTimingSequence`,
+`semantic-evidence.ts:attractionOperands`, `rfc/recorded-semantic-path.md` §3.
+
+Deflection and attraction additionally retain capture populations assembled from all captures in
+their complete fixed window, ordered by edge. Their variable captures are bounded by that window;
+induction/consequence determines optional check evidence. The current occurrence/presence guard
+does not establish the exact complete ordered capture population. Future contract reconciliation
+must specify eligible occurrences, order, multiplicity, completeness and arm correlation, not an
+unrestricted repeated-edge permission. `[V]` `recorded-semantic-path.ts:evaluate`,
+`semantic-evidence.ts:exactRecordedSequenceInputs`, actual deflection/attraction factories.
+
+Fork survival retains only double-attack/breadth; strict overload retains duties/capture. Both
+declarations additionally name one sealed legal exchange, while their pure operations compute
+exchanges across hypothetical replies/recaptures internally. A guessed exchange from the played
+edge would not discharge that discrepancy. `[V]` named factories, `tactics.ts:forkSurvivesReply`
+and `overloadedDefenderResponseConflict`, `evidence-catalog.ts` corresponding declarations.
+
+The scoped window draft reuses @2 without a schema change; D3836 retains fork/overload's two-input
+paths unchanged. Neither resolves these literal declarations. The older recorded-path §4 explicitly
+uses set-based membership; that establishes preparation/horizons, not later ordered occurrence
+conformance. Reconcile those classes upstream and independently review the exact successor image
+before scoped adoption. No new factory/version/grammar is accepted by this tracing. `[V]`
+`rfc/module-registration.md` §4.11a, `rfc/recorded-semantic-path.md` §4 and dated independent review.
+
+Main's consumer-image recheck also confirms that review-timed modules deliberately retain both
+predecessor @1 and recorded-path @2 refs, placing each successor immediately after its predecessor.
+A future reconciliation must preserve those distinct obligations and source semantics; blindly
+mapping both to one new ref would collapse the accepted image rather than fix it. No replacement
+version names or total are inferred here. `[V]` `evidence-catalog.ts:withRecordedPathSuccessorRefs`
+and `MODULE_CONSUMER_ACCEPTS.full_inspector`.

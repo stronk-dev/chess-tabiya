@@ -1,10 +1,34 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3849 normal matrix failure is a trace-proven test synchronization error: the fork
+response takes115ms while both raw board clicks finish within72ms of submission, under the still-open
+modal. The shared click helper now awaits actual branch-dialog dismissal before measuring/input.
+The full four-tier rerun passes397 browser cases/one configured skip and112 unretried cells,
+including smoke callers. D3849 closes; first failure/trace remain, with no retry/deadline changes.
+Software/content production bytes remained frozen from their preceding full pass.
+
+2026-10-15 — D3847 widens the prerequisite audit before D3845 grammar: the existing permanent
+factory positives expose 48 cardinality and, after D3848's seven-family order repair, two ordered-ref
+conflicts. Three routes retain opaque digest operands. The current Inspector declared union reaches
+31 conflicts; this is an audit obligation, not 31 independently proven successor blockers.
+Classify complete fixed witnesses, actual collections, directly computed authority and opaque
+recorded operands separately. Preserve old meanings; independently accept changed contracts.
+The fourteen-row map is not complete literal factory closure, and retaining its other61 topics is
+conditional on that audit. Do not invent witnesses, widen a checker or self-accept Inspector.
+D3848's accepted one-line hint receipt correction closes with full normal local proof:
+5895 software/seven performance/257 content/build and all four browser tiers. This does not close D3847.
+The independent tactical continuation now classifies fixed per-result tuples, finite contact/
+attraction horizons, bounded window capture populations and computed hypothetical exchange work.
+Use the existing dossier's exact table for upstream authoring; unchanged scoped @2 reuse does not
+repair those declarations. Remaining computed/opaque/material/Story prerequisites still need
+their own reconciliation before a complete successor image can be reviewed.
+
 2026-10-15 — D3845's real empty/variable rank research is measured, not solved by tuple
 alternatives:18 actual Stories,10 empty/2 singleton/6 repeated-ref; six labelled state controls
 retain coverage separately. Independent assessment records six unfilled collection-contract
-requirements in Review §4.5; next author the distinct convention-bound reduction and actual
-instance authority/execution image before rank@3 adoption. Reuse the existing ranking convention,
+requirements in Review §4.5. The next authoring now waits for D3847's upstream input reconciliation;
+then specify the distinct convention-bound reduction and actual instance authority/execution image
+before rank@3 adoption. Reuse the existing ranking convention,
 not a redundant policy-evidence leaf or a generic local aggregate.
 
 D3846 separately measures phase/collapse4/6 actual inputs versus2 declared on four legal cases.

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3846]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3849]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,23 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3847 expands the literal-input audit before D3845's collection grammar:120/121 derived routes
+are observed in existing permanent fixtures. After D3848's seven-family hint receipt-order fix,
+48 count-conflict routes and two ordered-ref conflicts remain; three retain opaque inputs.
+The current Inspector declared union reaches31 conflicts, a review obligation rather than31
+proved successor blockers. Independent review confirms the observation's bounds and makes the
+fourteen-row map's61-topic retention conditional on source reconciliation. Do not fabricate
+unused prerequisites, weaken fixed tuples or claim runtime qualification. D3848 is a bounded
+accepted repair with seven predecessor failures,74 focused passes/types and unchanged semantic
+case outcomes. Full local proof passes5895 software/seven performance/257 content/build and397
+browser cases, one configured optional Maia skip and112 unretried composition cells. No whole-product
+gate or Inspector acceptance moves.
+
+D3849 records the first run's phone matrix failure rather than calling it flaky: both raw board
+clicks land before a115ms fork response closes the modal. The shared browser helper now waits for
+actual branch-dialog dismissal; the full four-tier rerun passes on frozen production. The original
+failure remains logged. No deadline, retry count, input gesture or assertion is weakened.
 
 D3844 repairs a real completeness hole found while tracing D3841: removing failed bindings could
 make the existing compiler approve an incomplete consumer. It now checks exact accepted/bound
@@ -366,7 +383,7 @@ noise, selected-Sight coverage and missing Review sources remain substantive pro
 The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records and one
-superseded record are subsystem history, not 75 completed product journeys. All 1,734 live ledger rows are assigned, while 462
+superseded record are subsystem history, not 75 completed product journeys. All 1,735 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
 Previous local checkpoint: D3840's bounded population reuse passes all normal serial local
@@ -379,14 +396,14 @@ corrected literal review-row routing refusal remain recorded in the log, not hid
 Exact output comparisons retain all facts/receipts/rows/checkpoints; no pack content or public
 source version changes. The existing generated semantic implementation bindings are refreshed
 without changing any case/profile result or qualification. D3300's whole cold target stays open.
-D3844's current production checkpoint passes5888 software/392 files, seven unchanged-budget
+D3844's preceding production checkpoint passes5888 software/392 files, seven unchanged-budget
 performance/four files, governance,257 content/26 files, build and all four browser tiers:
 332 smoke/five content-browser/59 matrix/one packaged-production passes, with the existing optional
 Maia skip and112 unretried composition cells. Generated semantic implementation references change
 only because their compiler dependency changed; all343 cases,81 verdicts and zero qualified subjects
 remain identical. The first stale-receipt refusal and later duplicate-roadmap-reference refusal
 remain logged; only bookkeeping changed between the final software proof and remaining gates.
-Current ledger:3,595 rows,1,699 done,162 refused and1,734 live assigned, zero untriaged.
+Current ledger:3,598 rows,1,701 done,162 refused and1,735 live assigned, zero untriaged.
 D3841 remains doing: the three cross-cutting clauses are authored, with independent review's
 atomic-bundle correction closed. Exact recorded/live source and dependent-version mapping is
 authored with136 historical feasibility controls; D3846 expands it to14 affected topics with
@@ -394,7 +411,8 @@ four legal fixed-tuple cases/two prospective declarations. Its81 refs are not co
 Independent review's grounding, band, scope and preservation corrections are closed only within
 that bounded authoring. D3845's18 measured empty/variable rank cases hold rank@3. Its collection
 contract, source/callable operand suppliers and upstream acceptance precede joint acceptance
-or Inspector API implementation. This author pass changes no production and adds no application-run claim.
+or Inspector API implementation. That authoring is separate from D3848's bounded accepted production
+repair above; D3847's broader literal-input reconciliation is now an explicit prerequisite.
 UX remains282 complete/263 live/24 retired; four active/five blocked milestones remain.
 
 D3838's completed presentation proof stands: both-color desktop/phone native flows retain exact

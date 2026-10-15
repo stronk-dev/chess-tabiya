@@ -823,6 +823,14 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: D3848 corrects all seven hint-horizon source arrays to the existing declared order,
+  family source then principal variation. Seven permanent predecessor failures become passes;
+  payloads, callable arguments, policy and convention multiset remain. D3847's separate opt-in
+  audit exposes broader literal-input reconciliation debt; neither this repair nor a successful
+  factory fixture settles that debt, D3845 grammar or joint Inspector acceptance.
+  Full local proof passes5895 software/seven performance/257 content/build and397 browser cases,
+  one configured optional Maia skip and112 unretried composition cells. The first matrix failure
+  is retained with D3849's test-race diagnosis/condition-wait repair and full four-tier rerun.
 - 2026-10-15: D3846 authors explicit phase-change@2 and option-collapse@2 scoped successors
   retaining their actual ordered four/six witness operands. Old versions remain untouched;
   existing fixed-tuple compiler guards suffice, but source/factory/caller migration and

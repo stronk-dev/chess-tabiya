@@ -1902,6 +1902,16 @@ D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
 refs in its predecessor inventory slot, preserving all other61 refs/order and all @1 contracts.
+This is an obligation-preserving proposed map, not complete literal factory-input closure.
+D3847's fixture audit reaches31 conflicting routes in the current declared Inspector union;
+retaining those61 topics is conditional on source-contract reconciliation and independent review.
+Do not fabricate unused prerequisites or treat an executable declaration as qualified lineage.
+D3847's independent continuation also finds that scope-only reuse of existing recorded-window
+@2 and fork/overload factories below does not resolve their literal schemas. Fixed witness tuples,
+finite horizons, bounded window capture populations and internally computed hypothetical exchange
+authority require distinct upstream reconciliation before adoption. The scoped text below is not
+an exemption from that prerequisite; the older set-based membership contract is not ordered
+occurrence conformance. See the existing research dossier's Recorded tactical classes section.
 The initial twelve rows account for nine narrow provider-labelled leaves and three dependent
 topics. D3846 adds two currently compilable but false fixed-tuple topics; they are not new provider
 failures. Proposed recorded/source factories are owned by value-authority §§2.3a–2.3b, not implemented by this
