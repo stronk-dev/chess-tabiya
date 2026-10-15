@@ -127,7 +127,7 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 47 producers, 287 projections, 42 versioned consumers and 556 bindings,
+The current compiled closure is 47 producers, 290 projections, 42 versioned consumers and 556 bindings,
 plus 78 semantic-event declarations, 78 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
@@ -136,6 +136,15 @@ The internal `derived.tactic.defender_exposure@2` factory joins an exact lost-co
 sealed inputs and returns `invalid_turn_clone` as typed unavailability, never an empty event
 population. The full-FEN/target joins reject crossed or copied inputs before no-witness handling.
 It is not yet bound to a learner module; the coordinated Threat/packet migration remains open.
+
+Three further internal replacements are unbound until the coordinated current image migrates:
+`rules.tactic.reading.promotion_pressure@1` computes its complete canonical-FEN geometry and
+nested availability directly; `rules.tactic.predicate.overload_conflict@1` computes the existing
+strict response conflict from a validated legal edge; and
+`derived.tactic.nonterminal_fork_survival@1` consumes exactly same-edge double-attack/reply-breadth
+sources, requiring at least one reply. Mate/stalemate are total negative survival results, not
+vacuous positives. New reviewed convention definitions disclose these bounded computations;
+they do not infer move quality, forced outcome or significance.
 
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,

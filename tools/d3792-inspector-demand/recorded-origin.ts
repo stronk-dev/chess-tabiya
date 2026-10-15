@@ -354,16 +354,11 @@ assert.deepEqual(overloadPath.paths[0]!.sourceRequirements, [], "local computati
 console.log(JSON.stringify({ scope: "D3852 rejected strict-overload proposal and counterfactual metadata, NOT authority correction/adoption",
   literalInputRefs: overloadInputs.map(ref => `${ref.id}@${ref.version}`), proposedGroundingRefused: true,
   counterfactualPositionGroundingCompiles: true, nonLocalSourceRequirements: 0, providerOperations: 0, oldDeclarationsChanged: false }));
-const { derivation: discardedOverloadDerivation, ...overloadComputedBase } = overloadOld;
-assert(discardedOverloadDerivation !== undefined);
-const overloadComputed: ProjectionDeclaration = { ...overloadComputedBase, ...overloadComputedRef,
-  producer: { id: "rules.tactic", version: 1 }, plane: "rules", dependsOn: [],
-  semantics: `${overloadOld.semantics} Computed from one legal edge under overload-conflict@1, defence-duty@1 and legal-exchange@1.`,
-  abstention: { possible: true, reasons: ["no_legal_recapture"] },
-  disposition: { kind: "inspector_only", reason: "D3852 isolated direct computed proposal, not registered source adoption" } };
-const overloadComputedManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
-  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "rules.tactic"
-    ? { ...producer, outputs: [...producer.outputs, overloadComputed] } : producer) });
+const overloadComputed = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === overloadComputedRef.id && row.version === 1)!;
+assert(overloadComputed, "accepted internal computed overload source is now installed");
+assert.equal(overloadComputed.derivation, undefined);
+assert.deepEqual(overloadComputed.dependsOn, []);
+const overloadComputedManifest = PRIMARY_EVIDENCE_MANIFEST;
 const overloadComputedPath = compileProjectionExecution(overloadComputedManifest, overloadComputedRef);
 assert.equal(overloadComputedPath.paths.length, 1);
 assert.deepEqual(overloadComputedPath.paths[0]!.derivationChoices, []);
@@ -371,7 +366,7 @@ assert.deepEqual(overloadComputedPath.paths[0]!.sourceRequirements, []);
 const overloadDirectConventions = deriveProjectionConventionTable(overloadComputedManifest).get(`${overloadComputedRef.id}@1`)!;
 assert.deepEqual(overloadDirectConventions.refs.map(ref => `${ref.id}@${ref.version}`),
   ["defence-duty@1", "legal-exchange@1", "overload-conflict@1"]);
-console.log(JSON.stringify({ scope: "D3852 direct computed conventional metadata only; no factory/receipt/consumer qualification",
+console.log(JSON.stringify({ scope: "D3852 installed internal computed declaration; not consumer adoption or qualification",
   grounding: overloadComputed.grounding, exactness: overloadComputed.exactness,
   sealedInputs: 0, directConventions: overloadDirectConventions.refs, providerOperations: 0, oldDeclarationsChanged: false }));
 
@@ -693,19 +688,18 @@ assert.throws(() => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
     ? { ...producer, outputs: [...producer.outputs, { ...promotionBase, version: 2,
       disposition: { kind: "operator_only", reason: "D3847 intentionally invalid empty derived declaration" } }] } : producer) }),
   /EVIDENCE_PROJECTION_INCOMPLETE/u);
-const promotionSuccessor: ProjectionDeclaration = { ...promotionBase, id: "rules.tactic.reading.promotion_pressure",
-  producer: { id: "rules.tactic", version: 1 }, plane: "rules",
-  disposition: { kind: "operator_only", reason: "D3847 prospective computed source only; no factory or consumer" } };
-const promotionManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
-  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "rules.tactic"
-    ? { ...producer, outputs: [...producer.outputs, promotionSuccessor] } : producer) });
+const promotionSuccessor = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "rules.tactic.reading.promotion_pressure" && row.version === 1)!;
+assert(promotionSuccessor, "accepted internal computed promotion source is now installed");
+for (const fen of promotionFens) assert.deepEqual(invokeEvidenceValueRoute("rules.tactic.reading.promotion_pressure@1", { fen }).payload,
+  promotionPressureReading(canonicalFen(positionFromFen(fen))));
+const promotionManifest = PRIMARY_EVIDENCE_MANIFEST;
 const promotionExecution = compileProjectionExecution(promotionManifest, promotionSuccessor);
 assert.equal(promotionExecution.paths.length, 1);
 assert.equal(promotionExecution.own.availability, "local");
 assert.equal(promotionExecution.worstCaseLatency, "sync");
 assert.deepEqual(promotionExecution.paths[0]!.derivationChoices, []);
 assert.deepEqual(promotionExecution.paths[0]!.sourceRequirements, []);
-console.log(JSON.stringify({ scope: "D3847 actual promotion source and prospective computed declaration; no successor mints/adoption",
+console.log(JSON.stringify({ scope: "D3847 actual internal promotion source/declaration; no learner adoption or qualification",
   actualFenCases: promotionFens.length, declaredOldInputs: previousPromotionDerivation!.inputs!.length,
   actualSourceDigests: 0, invalidTurnCloneRetained: true, terminalPersistenceFalseRetained: true,
   emptyDerivedRefused: true, computedRulesDeclarationCompiles: true, providerOperations: 0, oldDeclarationsChanged: false }));

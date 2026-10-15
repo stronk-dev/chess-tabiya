@@ -463,6 +463,20 @@ const castlingOutputs = [
 ];
 
 const tacticalOutputs = [
+  projection("rules.tactic", "rules.tactic.reading.promotion_pressure", "rules", {
+    role: "reading", payloadType: "PromotionPressureReading", semantics: "Computed passed-pawn geometry and legal pass/immediate-reply availability under promotion-pressure-geometry@1.",
+    operands: ["fen", "pawns"], signs: ["state"], answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "machine_condition"],
+    disposition: { kind: "experimental", reason: "Internal current-source prerequisite; coordinated packet/Hint/module cutover remains." },
+    limitations: ["Pressure description only; winner, drawing status and outcome words stay with Syzygy."],
+  }),
+  projection("rules.tactic", "rules.tactic.predicate.overload_conflict", "rules", {
+    role: "predicate", payloadType: "OverloadedDefenderConflict", semantics: "Computed strict overload-conflict@1 response conflict under defence-duty@1 and legal-exchange@1, preserving all hypothetical recapture/target joins.",
+    operands: ["candidate", "soleDefender", "capturedTarget", "retainedTargets", "legalRecaptures", "positiveCaptures"], signs: ["state"],
+    grounding: "declared_convention", exactness: "convention", answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
+    abstention: { possible: true, reasons: ["no_legal_recapture"] },
+    disposition: { kind: "experimental", reason: "Internal current-source prerequisite; complete Inspector cutover remains." },
+    limitations: ["Candidate-time arithmetic only; it does not grade or recommend the candidate."],
+  }),
   projection("rules.tactic", "rules.tactic.reading.loose_piece", "rules", {
     payloadType: "LoosePieceReading", semantics: "For each non-king piece belonging to the non-moving side, retains legal capturers, geometric defenders, legal-exchange@1 results and the en-prise, loose and under-defended convention flags.",
     operands: ["fen", "sideToMove", "pieces"], grounding: "declared_convention", exactness: "convention",
@@ -572,6 +586,15 @@ const tacticalOutputs = [
 ];
 
 const derivedTacticOutputs = [
+  projection("derived.tactic", "derived.tactic.nonterminal_fork_survival", "derived", {
+    role: "predicate", payloadType: "ForkSurvivalResult", semantics: "Local fork-survival@2 requires a nonempty complete legal reply population; every reply must retain a positive capture of an original non-king target on its original square. False results retain all actual refutations.",
+    operands: ["matched", "doubleAttack", "replyBreadth", "refutingReplies"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["threat"], forms: ["machine_condition", "list", "panel"],
+    dependsOn: [ref("rules.tactic.event.double_attack"), ref("rules.tactic.consequence.reply_breadth")],
+    derivation: { inputs: [ref("rules.tactic.event.double_attack"), ref("rules.tactic.consequence.reply_breadth")] },
+    disposition: { kind: "experimental", reason: "Internal current-source prerequisite; complete packet/Hint/module cutover remains." },
+    limitations: ["One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment."],
+  }),
   projection("derived.tactic", "derived.tactic.fork_survives_reply", "derived", {
     role: "predicate", payloadType: "ForkSurvivalResult", semantics: "For every exact legal reply, the moved piece survives and retains a positive legal-exchange@1 capture of at least one original non-king target on its original square. False results retain refuting replies.",
     operands: ["matched", "doubleAttack", "replyBreadth", "refutingReplies"], grounding: "declared_convention", exactness: "convention",

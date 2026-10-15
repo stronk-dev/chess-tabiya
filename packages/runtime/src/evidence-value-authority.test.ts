@@ -232,7 +232,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(280);
+    expect(ACTIVE).toHaveLength(283);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -306,7 +306,10 @@ describe("value authority: registry equality", () => {
     // rfc/hint-distance.md's 42 Guided Hint routes post-date the receipt and are counted separately.
     const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
     expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
-    const extra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
+    const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
+    const localTactical = ["derived.tactic.nonterminal_fork_survival@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1"];
+    expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
+    const extra = allExtra.filter(route => !localTactical.includes(route));
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
@@ -788,6 +791,7 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const doubleAttack = sealedOne("rules.tactic.event.double_attack@1", edge("4k3/8/8/8/1n6/8/8/R3K3 b - - 0 1", "b4c2"));
   const forkBreadth = sealedOne("rules.tactic.consequence.reply_breadth@1", edge("4k3/8/8/8/1n6/8/8/R3K3 b - - 0 1", "b4c2"));
   profiles.set("derived.tactic.fork_survives_reply@1", { valid: { doubleAttack, breadth: forkBreadth }, falsify: refused("derived.tactic.fork_survives_reply@1", { doubleAttack: forkBreadth, breadth: forkBreadth }) });
+  profiles.set("derived.tactic.nonterminal_fork_survival@1", { valid: { doubleAttack, breadth: forkBreadth }, falsify: refused("derived.tactic.nonterminal_fork_survival@1", { doubleAttack: forkBreadth, breadth: forkBreadth }) });
   const discoveredEdge = edge("7k/8/8/8/4r3/5N2/6B1/7K w - - 0 1", "f3h4");
   const latency = sealedOne("rules.tactic.reading.discovered_latency@1", { fen: discoveredEdge.beforeFen });
   const rays = invoke("rules.transition.event.slider_ray@1", discoveredEdge) as readonly DeclaredEvidence<unknown>[];

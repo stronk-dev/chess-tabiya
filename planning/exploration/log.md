@@ -31361,3 +31361,71 @@ Campaign was the one capability with no API, route or content. Now:
   reduction/collector/packet/current-module migration and eventual obsolete-path retirement;
   D3867/D3868 remain doing, full1.0 goal remains active. No protected intent sentence is changed
   or newly falsified by this internal, unbound source component.
+
+### 2026-10-15 — accepted local promotion, overload and nonterminal-fork source wave
+
+- Continue the independently accepted F2 §§2.3c/e/f/current-image contract from clean tracked
+  commit66eff173. Keep the full1.0 objective and owner D3851 no-legacy ruling; this wave supplies
+  genuine source prerequisites, not a partial282-pair learner-image cutover.
+- Add26 permanent source tests before implementation:23 fail on absent source routes/declarations.
+  Implement direct canonical-FEN promotion pressure once, retaining all geometry and nested
+  outcomes with no invented derived inputs. Implement strict overload from a validated complete
+  legal edge before the pure capture/quiet path; use the existing pure duty/recapture arithmetic
+  once, no discarded sealed dependencies, and preserve complete availability/payload/order.
+- Implement the fresh nonterminal fork helper/factory over exactly two actual admitted
+  double-attack/reply-breadth sources. Require exact factories and full-edge input authority,
+  legal reconstructed endpoints and consistent distinct legal reply population metadata before
+  any terminal handling. Reuse the old complete refutation algorithm; zero replies returns false
+  with zero actual refutations. Nonterminal promoted-piece payload/order remains unchanged.
+- Declare the three new sources experimental/unbound, with matching sole routes and three
+  permanent value profiles. Canonical capability declarations add exactly3 (989 total), prior986
+  unchanged; applicability472 and all document requirements remain unchanged. F1 becomes47/
+  290/42/556 with semantic78/78/16/1 unchanged. Canonical semantic validation retains81 subjects/
+  zero qualified,343/343 cases,53 population receipts/eight external receipts.
+- Copy the exact accepted fork-survival@2 and promotion-pressure-geometry@1 reviewed definitions/
+  disclosures into the existing registry, bind their real implementation symbols, append exactly
+  two history rows and move exactly two resource claims to Landed. The39 initial declarations
+  remain byte-identical; all48 old declarations/history rows retain their prior bytes. Registry/
+  history50/50 and shared register27 remaining live claims pass. Parent RFC discharges stay open.
+- Extend permanent coverage to both-colour EP and actual recapture-FEN/physical-victim joins,
+  clear/refuted versus unavailable outcomes, promotion-recapture wrapper parity, per-pawn clone
+  absence, closed source arms and invalid quiet edges before helper work. The unchanged pure
+  overload helper is the wrapper-parity oracle, not independent algorithm qualification.
+- Independent authorized read-only review finds no production blocker, but correctly finds that
+  copied corrupt breadth values only prove seal rejection. Add five real-source fault-injection
+  cases: corrupt count/terminal/check/duplicates/illegal replies before the registered source
+  factory mints; require the same genuine factory/full-edge receipt and refusal before the
+  survival helper. Follow-up review confirms that the guard tests now exercise their stated
+  boundary. Final focused gate passes160 cases, including44 new source tests; workspace types
+  pass across all packages with zero Svelte errors/warnings. Reviewer runs no tests.
+- Update disposable research to consume the actual installed sources/declarations, not append
+  duplicate hypothetical promotion/overload/fork rows. The first two prefix runs correctly refuse
+  those duplicates before correction; the final prefix/type/register/source/history run passes.
+  The26-case terminal research now uses the real source and models the complete ten-disclosure
+  fork+promotion Hint amendment, not the obsolete fork-only image. This remains metadata research,
+  not current API/UI/Hint adoption or qualification. Full normal make verify build is in flight.
+- D3768's obsolete blocked-on-authoring state becomes doing under the existing owner; D3852
+  records implemented source authority, not complete Inspector adoption. Other source rows and
+  all product milestones stay open. Continue with material sources and the remaining recorded/
+  reduction/grade/current-consumer contract, not a compatibility layer or a new research silo.
+
+### 2026-10-16 — local tactical-source wave fully verified
+
+- The already-live full normal make verify build finishes with6018 software/395 files, including
+  the final44 new source cases and all five genuine source-fault controls; seven isolated
+  performance cases/four files;257 content cases/26 files; and all type/schema/F1/F2/semantic/
+  candidate/capability/release/governance/corpus/build checks. No skipped software cases, limit
+  changes, gate removals or environment-prefix workaround. All current generated packet bytes,
+  existing986 capability declarations and all authored requirements remain unchanged; exactly
+  three new declarations/profiles and two convention/history rows are added.
+- Final corpus checks report92 documents/354 blockers/34 resolved/48 accepted/zero errors and
+  exact derived capability requirements for104 documents, with no pack edit or ledger re-stamp.
+  This is no graduation or semantic qualification: canonical343 cases/81 subjects/zero qualified
+  and semantic78/78/16/1 remain. No browser rerun, remote CI, push, whole milestone or release claim.
+- Record the incremental source delivery in the existing strategic/machine checkpoint and queue,
+  refresh exact changed RFC/work-state anchors with canonical parsers, and retain zero untriaged.
+  D3768 is now doing rather than blocked on an already-accepted contract; D3852 and all public
+  source/current-image obligations remain open. No protected intent sentence changes or is newly
+  falsified by the internal unbound components. Next is the genuine ten-count material signature/
+  capture-promotion event, then recorded/reduction/grade sources and the complete current image.
+  The full1.0 goal remains active; no legacy compatibility pipeline is introduced.

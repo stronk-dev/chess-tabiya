@@ -112,6 +112,7 @@ import {
   discoveredLatencyReading,
   doubleAttackEvent,
   forkSurvivesReply,
+  nonterminalForkSurvival,
   loosePieceEvents,
   loosePieceReading,
   mateInOne,
@@ -125,6 +126,7 @@ import {
   trappedPieceReading,
   type DoubleAttackEvent,
   type GainedSliderRay,
+  type OverloadedDefenderConflict,
   type ReplyBreadth,
 } from "./tactics.js";
 import { bindThreatEvidencePassAnchor } from "./threat-pass-authority.js";
@@ -535,6 +537,14 @@ export const createDerivedMaterialReadingRoleSignatureV1Evidence = fenReading("d
 /** Derived reading whose declared predicate inputs are recomputed in the same pass from the FEN. */
 export const createDerivedTacticPromotionPressureV1Evidence = fenReading("derived.tactic.promotion_pressure@1", (fen) => promotionPressureReading(fen), { shape: "derived" });
 
+export const createRulesTacticReadingPromotionPressureV1Evidence = (() => {
+  const route = "rules.tactic.reading.promotion_pressure@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN }], result: "single" }, ({ fen }: { readonly fen: string }) => {
+    const canonical = canonicalFen(positionFromFen(validFen(fen)));
+    return mint(route, symbol, promotionPressureReading(canonical), { fen: canonical });
+  });
+})();
+
 // ---------------------------------------------------------------------------------------------
 // Computed: FEN populations
 // ---------------------------------------------------------------------------------------------
@@ -815,6 +825,38 @@ export const createDerivedTacticForkSurvivesReplyV1Evidence = (() => {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ doubleAttack: sealed("rules.tactic.event.double_attack@1"), breadth: sealed("rules.tactic.consequence.reply_breadth@1") }], result: "single" }, ({ doubleAttack, breadth }: { readonly doubleAttack: DeclaredEvidence<DoubleAttackEvent>; readonly breadth: DeclaredEvidence<ReplyBreadth> }) =>
     mint(route, symbol, forkSurvivesReply(doubleAttack.payload, breadth.payload), { doubleAttack, breadth }, [doubleAttack, breadth]));
+})();
+
+export const createDerivedTacticNonterminalForkSurvivalV1Evidence = (() => {
+  const route = "derived.tactic.nonterminal_fork_survival@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ doubleAttack: sealed("rules.tactic.event.double_attack@1"), breadth: sealed("rules.tactic.consequence.reply_breadth@1") }], result: "single" },
+    ({ doubleAttack, breadth }: { readonly doubleAttack: DeclaredEvidence<DoubleAttackEvent>; readonly breadth: DeclaredEvidence<ReplyBreadth> }) => {
+      for (const [source, expected] of [[doubleAttack, "rules.tactic.event.double_attack@1"], [breadth, "rules.tactic.consequence.reply_breadth@1"]] as const) {
+        assertDeclaredEvidence(source);
+        if (sealedRoute(source) !== expected || evidenceValueReceipt(source).factory !== evidenceFactorySymbol(expected)) throw new TypeError("Fork survival requires the exact registered source factory");
+      }
+      const event = doubleAttack.payload, replies = breadth.payload;
+      const edge = validEdge({ beforeFen: event.beforeFen, moveUci: event.moveUci, afterFen: event.afterFen });
+      const digest = authorityDigest(edge);
+      if (event.beforeFen !== edge.beforeFen || event.moveUci !== edge.moveUci || event.afterFen !== edge.afterFen ||
+        [doubleAttack, breadth].some(source => evidenceValueReceipt(source).inputDigest !== digest)) throw new TypeError("Fork survival source authorities cross full legal edges");
+      const after = positionFromFen(edge.afterFen);
+      if (replies.afterFen !== edge.afterFen || replies.triggeringMove !== edge.moveUci || replies.count !== replies.replies.length ||
+        new Set(replies.replies).size !== replies.count || replies.terminal !== (replies.count === 0) || replies.check !== after.isCheck() ||
+        replies.replies.some(uci => exactMoveIdentity(edge.afterFen, uci) !== uci)) throw new TypeError("Fork survival reply population is inconsistent with its edge");
+      return mint(route, symbol, nonterminalForkSurvival(event, replies), { doubleAttack, breadth }, [doubleAttack, breadth]);
+    });
+})();
+
+export const createRulesTacticPredicateOverloadConflictV1Evidence = (() => {
+  const route = "rules.tactic.predicate.overload_conflict@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, moveUci: value("a UCI string", isText), afterFen: FEN }], result: "availability" },
+    (input: EvidenceEdge): EvidenceAvailability<readonly DeclaredEvidence<OverloadedDefenderConflict>[]> => {
+      const edge = validEdge(input);
+      const result = overloadedDefenderResponseConflict(edge.beforeFen, edge.moveUci, edge.afterFen, captureFactFor(edge));
+      if (result.kind === "unavailable") return unavailable(result.reason);
+      return available(Object.freeze(result.conflicts.map(payload => mint(route, symbol, payload, edge))));
+    });
 })();
 
 export const createDerivedTacticOverloadedDefenderResponseConflictV1Evidence = (() => {

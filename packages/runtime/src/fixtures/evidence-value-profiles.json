@@ -878,6 +878,13 @@
       "9c798567863b5bf3b88cf07fb19b269242df819844a884dd804a95f65fc8d9a8"
     ]
   },
+  "derived.tactic.nonterminal_fork_survival@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "0633de392ca553c0341426290467a5a7cbeaa3a2be0fcf90ce67dcac565dd3d6"
+    ]
+  },
   "derived.tactic.overload_exploitation_observed@1": {
     "availability": "available",
     "cardinality": 1,
@@ -1846,6 +1853,13 @@
       "c2e34e0eeb6eec6d653245d941878917bd6c859a53baa81dbf2ccab32e22b7fa"
     ]
   },
+  "rules.tactic.predicate.overload_conflict@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "3afed70339cf21627177943b7971c7c76954a14c29e97acd36c074db1c1cf34a"
+    ]
+  },
   "rules.tactic.reading.back_rank@1": {
     "availability": "available",
     "cardinality": 1,
@@ -1872,6 +1886,13 @@
     "cardinality": 1,
     "payloadDigests": [
       "f716dc7cc7ec795ba8074e83bac4ecaa7c341d334e37305395d1c7e420bde1e8"
+    ]
+  },
+  "rules.tactic.reading.promotion_pressure@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "b80e9a0a0f3e3103abcf05b99165af75b5dcaf054d869d01cd68596ebce6c374"
     ]
   },
   "rules.tactic.reading.ray_classification@1": {

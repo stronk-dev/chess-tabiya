@@ -1039,6 +1039,12 @@ export function forkSurvivesReply(event: DoubleAttackEvent, breadth: ReplyBreadt
   return Object.freeze({ matched: refutingReplies.length === 0, doubleAttack: event, replyBreadth: breadth, refutingReplies: Object.freeze(refutingReplies) });
 }
 
+/** fork-survival@2: an empty reply population cannot establish local survival. */
+export function nonterminalForkSurvival(event: DoubleAttackEvent, breadth: ReplyBreadth): ForkSurvivalResult {
+  const result = forkSurvivesReply(event, breadth);
+  return Object.freeze({ ...result, matched: breadth.count > 0 && result.refutingReplies.length === 0 });
+}
+
 export type ThreatResult =
   | { readonly kind: "abstained"; readonly reason: "pass_while_in_check"; readonly conventionId: typeof THREAT_CONVENTION; readonly threats: readonly [] }
   | { readonly kind: "threats"; readonly conventionId: typeof THREAT_CONVENTION; readonly threats: readonly Threat[] };

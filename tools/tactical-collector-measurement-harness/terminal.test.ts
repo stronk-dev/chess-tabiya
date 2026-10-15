@@ -5,9 +5,9 @@ import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "../../packages/runtime/src/chess.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
-import { assertDeclaredEvidence, compileEvidenceManifest, evidenceConventionReceipt, evidenceDigest, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type ProjectionDeclaration } from "../../packages/runtime/src/evidence-contract.js";
+import { assertDeclaredEvidence, compileEvidenceManifest, evidenceConventionReceipt, evidenceDigest, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
 import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
-import { compileConventionRegistry, CONVENTION_REGISTRY } from "../../packages/runtime/src/evidence-conventions.js";
+import { CONVENTION_REGISTRY } from "../../packages/runtime/src/evidence-conventions.js";
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
 import { compileHintDisclosure, hintSentence } from "../../packages/runtime/src/hint-distance.js";
 import { evidenceValueRouteRegistry, invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
@@ -31,9 +31,8 @@ function edge(fen: string, moveUci: string) {
   return { beforeFen: fen, moveUci, afterFen: canonicalFen(position) };
 }
 
-// Disposable candidate semantics, not a registered helper/factory or an accepted convention.
-// Actual sealed input authority is checked before the terminal short circuit.
-function prospectiveNonterminalFork(attack: DeclaredEvidence<DoubleAttackEvent>, breadth: DeclaredEvidence<ReplyBreadth>) {
+// The internal source is now installed; keep this research on the real factory, not a duplicate.
+function installedNonterminalFork(attack: DeclaredEvidence<DoubleAttackEvent>, breadth: DeclaredEvidence<ReplyBreadth>) {
   for (const [value, route] of [[attack, "rules.tactic.event.double_attack@1"], [breadth, "rules.tactic.consequence.reply_breadth@1"]] as const) {
     assertDeclaredEvidence(value);
     expect(`${value.projection.id}@${value.projection.version}`).toBe(route);
@@ -47,8 +46,7 @@ function prospectiveNonterminalFork(attack: DeclaredEvidence<DoubleAttackEvent>,
   expect(breadth.payload.triggeringMove).toBe(canonicalEdge.moveUci);
   expect(breadth.payload.count).toBe(breadth.payload.replies.length);
   expect(breadth.payload.terminal).toBe(breadth.payload.count === 0);
-  const old = forkSurvivesReply(attack.payload, breadth.payload);
-  return { ...old, matched: breadth.payload.count > 0 && old.matched };
+  return invokeEvidenceValueRoute("derived.tactic.nonterminal_fork_survival@1", { doubleAttack: attack, breadth }).payload;
 }
 
 describe("D3768 terminal all-reply predicate research", () => {
@@ -140,7 +138,7 @@ describe("D3768 terminal all-reply predicate research", () => {
       const breadth = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", input);
       const old = invokeEvidenceValueRoute("derived.tactic.fork_survives_reply@1", { doubleAttack: attack, breadth });
       expect(evidenceValueReceipt(old).sourceDigests).toEqual([attack, breadth].map(value => evidenceValueReceipt(value).payloadDigest));
-      const proposed = prospectiveNonterminalFork(attack, breadth);
+      const proposed = installedNonterminalFork(attack, breadth);
       if (breadth.payload.terminal) {
         expect(proposed).toEqual({ ...old.payload, matched: false });
         expect(proposed.refutingReplies).toEqual([]);
@@ -160,8 +158,8 @@ describe("D3768 terminal all-reply predicate research", () => {
     expect(own.payload).toEqual(crossed.payload);
     expect(evidenceValueReceipt(own).inputDigest).not.toBe(evidenceValueReceipt(crossed).inputDigest);
     expect(() => invokeEvidenceValueRoute("derived.tactic.fork_survives_reply@1", { doubleAttack: attack, breadth: crossed })).not.toThrow();
-    expect(() => prospectiveNonterminalFork(attack, own)).not.toThrow();
-    expect(() => prospectiveNonterminalFork(attack, crossed)).toThrow();
+    expect(() => installedNonterminalFork(attack, own)).not.toThrow();
+    expect(() => installedNonterminalFork(attack, crossed)).toThrow();
   });
 
   it("inventories declared fork dependents without claiming that every accepted path actually emits", () => {
@@ -187,23 +185,22 @@ describe("D3768 terminal all-reply predicate research", () => {
     console.log(JSON.stringify({ scope: "D3768/D3847 declared dependency census; NOT emitting/runtime/persistence proof", consumers }));
   });
 
-  it("checks prospective exact fork and Hint metadata/closure without registering or minting successors", () => {
+  it("checks actual internal fork and prospective complete fork/promotion Hint metadata without learner adoption", () => {
     const oldFork = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.tactic.fork_survives_reply" && row.version === 1)!;
     const inputs = [{ id: "rules.tactic.event.double_attack", version: 1 }, { id: "rules.tactic.consequence.reply_breadth", version: 1 }];
-    const proposed: ProjectionDeclaration = { ...oldFork, id: "derived.tactic.nonterminal_fork_survival", version: 1,
-      semantics: "Nonempty complete legal-reply survival under fork-survival@2.",
-      dependsOn: inputs, derivation: { inputs },
-      disposition: { kind: "inspector_only", reason: "D3768 prospective declaration, not production registration or qualification" } };
-    const oldHints = PRIMARY_EVIDENCE_MANIFEST.projections.filter(row => row.id === "derived.hint.horizon.fork_survives_reply"
-      || row.id.startsWith("derived.hint.disclosure.fork_survives_reply."));
-    expect(oldHints).toHaveLength(6);
+    const proposed = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.tactic.nonterminal_fork_survival" && row.version === 1)!;
+    expect(proposed.derivation!.inputs).toEqual(inputs);
+    const changedFamily = (id: string) => /\.(fork_survives_reply|promotion_pressure)(?:\.|$)/u.test(id);
+    const oldHints = PRIMARY_EVIDENCE_MANIFEST.projections.filter(row => row.id.startsWith("derived.hint.") && changedFamily(row.id));
+    expect(oldHints).toHaveLength(12);
     const hints = oldHints.map(row => {
+      const family = row.id.includes("fork_survives_reply") ? "fork_survives_reply" : "promotion_pressure";
       const sourceInputs = row.id.includes(".horizon.")
-        ? [{ id: proposed.id, version: 1 }, { id: "live.stockfish.principal_variation", version: 1 }]
-        : [{ id: "derived.hint.horizon.fork_survives_reply", version: 2 }];
+        ? [{ id: family === "fork_survives_reply" ? proposed.id : "rules.tactic.reading.promotion_pressure", version: 1 }, { id: "live.stockfish.principal_variation", version: 1 }]
+        : [{ id: `derived.hint.horizon.${family}`, version: 2 }];
       return { ...row, version: 2, dependsOn: sourceInputs, derivation: { inputs: sourceInputs } };
     });
-    const isForkDisclosure = (id: string) => id.startsWith("derived.hint.disclosure.fork_survives_reply.");
+    const isForkDisclosure = (id: string) => id.startsWith("derived.hint.disclosure.") && changedFamily(id);
     const oldConsumer = EVIDENCE_CONTRACT_DECLARATIONS.consumers.find(row => row.id === "module.guided_hint" && row.version === 1)!;
     const consumer = { ...oldConsumer, version: 2, implementation: "compileModulePacketForConsumer",
       accepts: oldConsumer.accepts.map(ref => isForkDisclosure(ref.id) ? { ...ref, version: 2 } : ref) };
@@ -213,9 +210,8 @@ describe("D3768 terminal all-reply predicate research", () => {
     const manifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
       consumers: [...EVIDENCE_CONTRACT_DECLARATIONS.consumers, consumer],
       adapters: [...EVIDENCE_CONTRACT_DECLARATIONS.adapters, ...adapters],
-      producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.tactic"
-        ? { ...producer, outputs: [...producer.outputs, proposed] }
-        : producer.id === "derived.hint" ? { ...producer, outputs: [...producer.outputs, ...hints] } : producer) });
+      producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.hint"
+        ? { ...producer, outputs: [...producer.outputs, ...hints] } : producer) });
     const path = compileProjectionExecution(manifest, { id: proposed.id, version: 1 });
     expect(path.paths).toHaveLength(1);
     expect(path.paths[0]!.derivationChoices[0]!.inputs).toEqual(inputs);
@@ -224,16 +220,9 @@ describe("D3768 terminal all-reply predicate research", () => {
     expect(horizonPath.paths).toHaveLength(1);
     expect(horizonPath.paths[0]!.sourceRequirements.map(source => source.occurrence)).toEqual([[1]]);
     expect(consumer.accepts).toHaveLength(35);
-    expect(consumer.accepts.filter(ref => ref.version === 2)).toHaveLength(5);
+    expect(consumer.accepts.filter(ref => ref.version === 2)).toHaveLength(10);
     expect(manifest.bindings.filter(row => row.consumer.id === consumer.id && row.consumer.version === 2)).toHaveLength(35);
-    // Hypothetical declaration only: the new implementation/authority does NOT exist yet.
-    const definition = "Local fork survival requires a nonempty complete legal reply population and a surviving positive capture after every reply. Empty replies return false with zero refutations.";
-    const registry = compileConventionRegistry([...CONVENTION_REGISTRY.declarations, {
-      ref: { id: "fork-survival", version: 2 }, definition,
-      limitations: ["One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment."],
-      authority: [{ kind: "position_rules", implementation: "packages/runtime/src/tactics.ts#nonterminalForkSurvival" }],
-      disclosure: { kind: "reviewed_text", summary: "Local fork survival requires at least one legal reply and a surviving positive capture after each.", detail: `${definition} One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment.` },
-    }]);
+    const registry = CONVENTION_REGISTRY;
     const direct = deriveProjectionConventionTable(manifest, registry);
     const key = (ref: { id: string; version: number }) => `${ref.id}@${ref.version}`;
     expect(direct.get(`${proposed.id}@1`)!.refs.map(key)).toEqual(["fork-survival@2"]);
@@ -251,7 +240,7 @@ describe("D3768 terminal all-reply predicate research", () => {
         ? { ...producer, outputs: [...producer.outputs, wrong] } : producer) });
     expect(deriveProjectionConventionTable(wrongManifest, registry).get(`${wrong.id}@2`)!.refs.map(key))
       .toEqual(["fork-survival@1", "fork-survival@2"]);
-    expect(PRIMARY_EVIDENCE_MANIFEST.projections.some(row => row.id === proposed.id)).toBe(false);
-    expect(CONVENTION_REGISTRY.declarations.some(row => row.ref.id === "fork-survival" && row.ref.version === 2)).toBe(false);
+    expect(PRIMARY_EVIDENCE_MANIFEST.projections.some(row => row.id === proposed.id)).toBe(true);
+    expect(CONVENTION_REGISTRY.declarations.some(row => row.ref.id === "fork-survival" && row.ref.version === 2)).toBe(true);
   });
 });

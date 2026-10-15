@@ -1012,7 +1012,7 @@
             {
               "kind": "work_state",
               "id": "D3768",
-              "digest": "sha256:c4ca4bc052b810e2af0cad86e706e6d7b21be4739dbb3c41e59981bec815d537"
+              "digest": "sha256:90d946dd22858bba5504f73d020bb9979c366a3997b80a6f7ff8ba6776f41b98"
             },
             {
               "kind": "work_state",
@@ -1032,7 +1032,7 @@
             {
               "kind": "rfc",
               "id": "evidence-value-authority.md",
-              "digest": "sha256:ee54d76df862bd88a01582c0427f3877965e16e980fe84a04341fe7511345eda"
+              "digest": "sha256:1c23fc7e3fea3b48790e9ed234bcbbc63fb864b6cc955830f22c00e053a5da34"
             },
             {
               "kind": "work_state",
@@ -1088,10 +1088,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "The coordinated current-source/module contract is independently accepted; genuine internal complete landing captures and truthful two-input exposure@2 are implemented with permanent source/absence/join tests. D3869's normal Make sequencing is fixed. Next implement accepted source/reduction/collector/packet/current-binding migrations with actual strict receivers, API and native journeys. Propagate exposure@2 unavailability once per edge and preserve the existing whole-selection refusal. The ten-consumer282-pair image must cut over source-complete, never by filtering failed bindings. Exposure is Threat-only; no phantom Inspector/Nudge/Review slots or legacy compatibility pipeline. Retire@1 after migrating real callers, not by hiding their failures. D3792 waits on D3841 implementation, not contract acceptance. Preserve all families, Review deliveries, root-inclusive Compare points, exact grants/local absence, D1422's unified ladder and original budgets. No source qualification, whole-milestone or release promotion.",
+        "nextAction": "The complete current-source/module contract is independently accepted. Genuine internal landing captures, two-input exposure, direct promotion pressure, computed overload and nonterminal fork sources are implemented/verified. Next implement material's genuine ten-count signature and complete capture/promotion event, then remaining recorded Inspector/pivotal/sequence sources, declared collection reductions and source-owned grades. Complete exact receivers and the source-complete282-pair current packet/Hint/module image together; preserve projection-addressed unavailability, conservative whole-selection refusal, all detector families, granted origins, root-inclusive Compare points, D1422's unified ladder and original budgets. Exposure is Threat-only. Retire obsolete paths after migrating actual callers; never add a legacy compatibility pipeline or filter failed bindings. D3792 waits on D3841 implementation, not another authoring round. No tactical qualification, whole milestone or release promotion.",
         "latestCheckpoint": {
-          "at": "2026-10-15",
-          "summary": "The independently accepted current-source/module contract now has genuine internal complete landing captures and two-input exposure@2. Seventeen new permanent cases preserve both-colour0/1/2/5 capture payloads, trees/promotions/order, exact sources/receipts, full FEN/target joins and invalid_turn_clone before source acquisition; twelve original predecessor failures become116 focused passes. The packet generator resolves exact registered semantic-event identities, refusing missing/ambiguous identities without changing current packet bytes. Independent read-only reviews find no blocker in either bounded implementation. Final normal make verify build passes5974 software/394 files, seven isolated performance cases,257 content and every type/contract/governance/corpus/packaging/build check. Capability declarations add one (986 total), old985 unchanged; applicability472, canonical343 cases/81 subjects/zero qualified and semantic78/78/16/1 remain. Actual collector/packet/Threat/current-image cutover and obsolete-path retirement remain open, not legacy compatibility. D3792 waits on D3841 implementation. No browser rerun, tactical qualification, whole milestone or remote/release claim.",
+          "at": "2026-10-16",
+          "summary": "The accepted local tactical-source wave adds genuine internal promotion-pressure, computed overload-conflict and nonterminal-fork-survival factories.44 new permanent source cases/160 focused passes cover both-colour terminal negatives, promoted fork operands, same-full-edge source authority, per-pawn clone absence, complete overload availability and EP physical-victim/recapture FEN joins. Five genuinely issued source faults independently test reply metadata guards before calculation; independent review confirms the repaired test boundary and finds no production blocker. Two accepted reviewed convention definitions/history rows land without changing the original48. Final normal make verify build passes6018 software/395 files, seven isolated performance cases,257 content and all type/contract/governance/corpus/build checks. Three capability declarations/profiles are added (989 total), prior986 unchanged; no pack changes/restamps, no current packet bytes or consumer cutover. Canonical343 cases/81 subjects/zero qualified and semantic78/78/16/1 remain. Actual material/recorded/reduction/grade sources, complete282-pair packet/Hint/module migration, receivers/API/native proof and obsolete-path retirement remain. No browser rerun, tactical qualification, whole milestone or remote/release claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1214,6 +1214,11 @@
             "rfc/installed-opening-evidence.md",
             "packages/runtime/src/landing-captures.test.ts",
             "packages/runtime/src/defender-exposure-source.test.ts",
+            "packages/runtime/src/local-tactical-sources.test.ts",
+            "packages/runtime/src/tactics.ts",
+            "packages/runtime/src/evidence-conventions.ts",
+            "packages/runtime/src/evidence-convention-history.jsonl",
+            "rfc/semantic-convention-provenance.md",
             "packages/runtime/src/internal/defender-exposure.ts",
             "packages/runtime/src/candidate-population.test.ts",
             "tools/candidate-packet-projections/derive.ts",
@@ -1235,6 +1240,11 @@
               "kind": "work_state",
               "id": "D3791",
               "digest": "sha256:b1cd877f7f1bbcc5427ffc696dd57db5d5b2deba0ea06c12951acbe845484176"
+            },
+            {
+              "kind": "rfc",
+              "id": "semantic-convention-provenance.md",
+              "digest": "sha256:cd69d2b53499b99274e7bb6e43f306d478d65a816902536401c7df8cfea2bc8d"
             },
             {
               "kind": "work_state",
@@ -1354,7 +1364,7 @@
             {
               "kind": "rfc",
               "id": "evidence-value-authority.md",
-              "digest": "sha256:ee54d76df862bd88a01582c0427f3877965e16e980fe84a04341fe7511345eda"
+              "digest": "sha256:1c23fc7e3fea3b48790e9ed234bcbbc63fb864b6cc955830f22c00e053a5da34"
             },
             {
               "kind": "rfc",

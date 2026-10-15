@@ -7,6 +7,12 @@ unaccepted/returned labels are retained review history, not current blockers. Ac
 issuance, complete execution/consumer cutover and qualification remain implementation work;
 this accepts no unrelated parent discharge or product-completion claim.
 
+**Internal source checkpoint, 2026-10-15:** §§2.3c/e/f now have genuine promotion-pressure,
+computed overload-conflict and nonterminal fork-survival factories. The two claimed promotion/
+fork conventions are landed members with append-only history; only comparison's member claim
+remains live below. These unbound internal components do not complete material, packet/Hint,
+current module/renderer/access/native migration, source qualification or the parent discharges.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft
@@ -45,13 +51,12 @@ this accepts no unrelated parent discharge or product-completion claim.
 - **Planning:** `planning/evidence-value-authority/implementation-2026-09-24.md`
 
 ```tabiya-claims
-semantic-conventions | members promotion_pressure_geometry_v1 | exact FEN promotion geometry and bounded legal pass/reply checks; no outcome verdict
-semantic-conventions | members fork_survival_v2 | nonempty complete legal reply population required for local fork survival; terminal false retains zero real refutations
 semantic-conventions | members comparison_structure_appearance_v1 | existing post-fork immediate-predecessor appearance minus complete compared-column intersection; no significance or recommendation
 ```
 
-**Claim scope.** The unaccepted D3847 promotion/comparison and D3768 fork successors add three literal algorithm
-definitions to the existing convention resource; they create no second register. Historical convention members
+**Claim scope.** The independently accepted current-source amendment adds three literal algorithm
+definitions to the existing convention resource; it creates no second register. Promotion geometry
+and nonterminal fork survival are now landed; comparison remains claimed. Historical convention members
 remain landed under semantic-convention-provenance. Other changes are package-internal operations
 and additive F1 refs, with no persisted schema, migration, pack/shape/principle or evidence-kind
 member. The one compiled F1 catalogue still owns projection refs; no parent lifecycle state accepts

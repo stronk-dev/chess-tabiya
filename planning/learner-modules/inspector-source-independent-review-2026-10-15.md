@@ -1094,3 +1094,20 @@ event resolution intersects exact registered semantic-event identities and retai
 exclusion. Missing/two active identities refuse; internal@2 is not selected automatically. The
 new regression exercises both failures, and the current generated file has no diff. No blocker
 found; read-only review, no tests rerun. This is event-identity derivation, not public adoption.
+
+### Internal promotion/overload/nonterminal-fork implementation review
+
+The authorized independent reviewer finds no production correctness blocker in the three
+accepted internal sources. Full-edge authority checks precede fork terminal handling and quiet
+overload computation; factories preserve intended inputs, complete payloads, availability and
+exact convention closure. Declarations remain experimental/unbound. The two reviewed-text
+definitions and two appended history rows match the accepted contract.
+
+Review finds a test limitation: copied corrupt breadth values prove source-seal rejection, not
+the individual metadata guards. Five new controls inject count/terminal/check/duplicate/illegal
+faults before the actual registered breadth source factory mints; verify its original full-edge
+input receipt/factory; then require refusal before the survival helper is reached. Follow-up
+read confirms the limitation is cleared. Both-colour EP checks replay actual recapture edges
+and physical victim/target joins. Promoted-recapturer comparisons remain explicitly wrapper
+parity over unchanged arithmetic, not independent semantic qualification. No files edited or
+tests rerun by the reviewer. Actual packet/Hint/module/access/HTTP/native delivery remains open.

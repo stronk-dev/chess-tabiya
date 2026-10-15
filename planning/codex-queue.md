@@ -27,7 +27,19 @@ refuses the generator ambiguity before either full pool; the corrected command p
 One declaration/profile is added, old985 declarations and all pack requirements remain unchanged.
 No browser rerun or source qualification is inferred from this internal component.
 
-Next implement the accepted source/reduction/packet/current-binding migrations, strict receivers,
+The accepted local tactical-source wave also has actual internal factories: direct canonical-FEN
+promotion pressure, strict computed-edge overload and two-input nonterminal fork survival.
+44 permanent cases/160 focused passes include genuine corrupt-source metadata controls,
+both-colour EP recapture/physical-target joins and terminal negatives. Independent review finds
+no production blocker and confirms the repaired test boundary. Two reviewed conventions are
+landed; no current module/Hint/packet consumer switches yet.
+
+The final full normal make verify build exits zero:6018 software/395 files, seven isolated
+performance cases,257 content cases and all type/contract/governance/corpus/build checks.
+No new browser run, tactical qualification or whole capability is claimed for this internal wave.
+
+Next implement material's ten-count signature and exact capture/promotion event sources, the
+remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,
 D1422's unified ladder and original budgets. Exposure is currently Threat-only, not an invented
 Inspector/Nudge/Review slot. D3792 now waits on D3841's implementation, not another contract

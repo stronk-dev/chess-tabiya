@@ -31314,12 +31314,12 @@
     },
     {
       "id": "D3768",
-      "state": "blocked",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c4ca4bc052b810e2af0cad86e706e6d7b21be4739dbb3c41e59981bec815d537",
+      "sourceDigest": "sha256:90d946dd22858bba5504f73d020bb9979c366a3997b80a6f7ff8ba6776f41b98",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:tactical-collectors.md"
+      "since": "2026-10-15"
     },
     {
       "id": "D3769",
@@ -32084,7 +32084,7 @@
       "id": "D3852",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:f40882d5ae6d2f329d736d77b1c2aa5dbbf507ddeaef9067fe337f00a83836b5",
+      "sourceDigest": "sha256:f372030f755eecbc85c4e9c287c93bf2a9ee9aabfaf622d8c8bd35d4ed3941b7",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"

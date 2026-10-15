@@ -51,7 +51,7 @@ function projectionWitnessExists(witness: string): boolean {
 interface InitialRow { readonly ref: string; readonly definition: string; readonly limitations: readonly string[]; readonly witnesses: readonly string[] }
 const initial = JSON.parse(read("planning/semantic-convention-provenance/initial-declarations.json")) as { readonly snapshotRef: string; readonly declarations: readonly InitialRow[] };
 const seed = JSON.parse(read("planning/semantic-convention-register/initial-members.json")) as { readonly members: readonly { readonly ref: string }[] };
-const AUTHORED = ["endgame-material-census@1", "named-structure-catalogue@1", "phase-bands@1", "lucena-setup@1", "philidor-third-rank-setup@1", "vancura-setup@1", "lucena-bridge-method@1", "philidor-third-rank-method@1", "vancura-method@1"];
+const AUTHORED = ["endgame-material-census@1", "named-structure-catalogue@1", "phase-bands@1", "lucena-setup@1", "philidor-third-rank-setup@1", "vancura-setup@1", "lucena-bridge-method@1", "philidor-third-rank-method@1", "vancura-method@1", "fork-survival@2", "promotion-pressure-geometry@1"];
 
 const declaration = (overrides: Partial<ConventionDeclaration> = {}): ConventionDeclaration => ({
   ref: { id: "fixture", version: 1 },
@@ -63,9 +63,9 @@ const declaration = (overrides: Partial<ConventionDeclaration> = {}): Convention
 });
 
 describe("semantic-convention registry (rfc/semantic-convention-provenance.md §1)", () => {
-  it("registers exactly the 39 reviewed initial members plus the nine authored declarations", () => {
+  it("registers exactly the 39 reviewed initial members plus the eleven authored declarations", () => {
     const declared = CONVENTION_REGISTRY.declarations.map((value) => conventionRefKey(value.ref));
-    expect(declared).toHaveLength(48);
+    expect(declared).toHaveLength(50);
     const initialRefs = initial.declarations.map((row) => row.ref).sort();
     expect(initialRefs).toEqual(seed.members.map((member) => member.ref).sort());
     expect(initialRefs).toHaveLength(39);
