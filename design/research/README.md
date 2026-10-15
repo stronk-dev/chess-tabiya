@@ -75,6 +75,17 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Sequence literal-source replay, 2026-10-15 ([[D3847]]/[[D3851]]): 84 per-recorded-output old-factory
+replays across eleven families; 84 edge/84 narrative-order refusals; 24 complete capture populations
+and18 capture/18 exchange indexed source joins. Independent read-only recheck closes diagnostic
+join gaps, not successor/source qualification; next author exact contracts, not larger counters.
+Current private factories admit ten omitted and ten reordered capture-list mutations with unchanged
+detector results; a disposable guard passes 25 complete/empty and rejects 77 corrupt populations.
+Check-induced deflection is added separately to the existing cohort. Cross-source payloads differ
+in 42 replay calls, including eight trade source-envelope differences—not 42 independent chess
+errors. New source identities/coexistence and production remain unaccepted. `[V]`
+`module-evidence-assembly.md` §Sequence literal-source replay and coexistence; existing prefix target.
+
 Compare/Story selection closure, 2026-10-15 ([[D3847]]/[[D3845]]): 17 genuine structural-family
 populations reconstruct 44 FEN readings/126 column results, retaining 392 empty family rows.
 The fixed pairs yield 72 broad peer-extension removals; one deliberate later-peer extension adds

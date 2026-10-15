@@ -30247,3 +30247,52 @@ Campaign was the one capability with no API, route or content. Now:
   not necessarily distinct identities, and refresh the normal receipt. Research tool bytes remain
   exactly those that passed their normal targets/types. Commit the explicit15 owned files with
   current-index hooks; no production change, push or goal pause.
+
+## 2026-10-15 — D3847 sequence witness replay and D3851 coexistence question
+
+- Previous goal turn was progress:15f84ac1 committed measured Compare/Story source obligations
+  and independent wording review. Recheck actual main/status; the same three pre-existing
+  untracked entries remain. Continue the full1.0 objective without pausing or claiming completion.
+- Independent read-only continuation confirms accepted coexistence: narrative@1 and exact-edge@2
+  obligations differ in authority and sometimes special-move computation. No accepted replacement
+  identities/adoption map exists. New recorded refs cannot be inferred from latest/version===2;
+  old compiler/source/semantic/presentation meanings stay frozen unless explicitly amended.
+- Extend only the existing window instrument:84 per-recorded-output replays span all11 families,
+  including two extra mirrored check-deflection controls absent from the shared52-case population.
+  Literal tuple/ref order, contiguous exact edges, initial duty FEN, check occurrence and actual
+  target/retained-exchange authority pass;84 reversed-edge and84 reversed-narrative controls refuse.
+  Narrative uses genuine path/offset moves, never the Compare sentence arm or relabelled edges.
+- Twenty-four complete capture populations match all window captures. Ten current private
+  deflection/attraction calls admit omitted and ten admit reversed genuine capture lists with
+  unchanged detector output. Record the missing source-completeness guard, not a public exploit
+  or false chess verdict. The disposable prospective guard accepts25 complete/quiet-empty cases
+  and rejects77 omitted/extra/reversed/duplicate controls; no existing version is changed.
+- Full narrative/recorded payload populations differ42/84 replay calls: eight trade differences
+  include source envelopes, not tactical errors. Remaining defender/attraction/square differences
+  include recorded-specific physical castling handling. Do not claim cross-version equivalence.
+- Ledger D3851 before asking the owner about exact-edge-only new delivery versus implementing
+  both input pipelines, retaining old APIs/history and every detector family either way. The
+  source/call-site check finds no in-repo production narrative emitter, not proof about external
+  exported API consumers. Normal sync intentionally reports one new untriaged row; assign it
+  todo/OWNER with the normal transition:3600 rows/1737 live, zero untriaged. No inventory removal,
+  successor naming or other consequence is inferred without the ruling; current coexistence holds.
+- The unchanged normal prefix target and strict tool types pass all earlier controls and the new
+  source replays. Deliveries/provider research are unchanged, no raw report is committed and no
+  ordinary CI/progress gate depends on these opt-in instruments. Independent control review is
+  requested from the same user-authorized reviewer; no production/upstream/joint acceptance.
+
+- Independent review returns two proof-strengthening gaps, not demonstrated production failures:
+  trade/zwischenzug capture authority was not checked at its exact edge index, and exchange
+  authority joined only its own payload. Add indexed genuine-factory capture checks and explicit
+  final-window-edge FEN/UCI/private-authority joins. The unchanged normal prefix target/types
+  exits zero with18 capture and18 exchange join incidences; all preceding controls remain.
+  Read-only reviewer recheck closes both diagnostic gaps without rerunning tests or qualifying
+  successors. Next author exact source/callable/consumer contracts, not larger sample counters.
+  D3851 remains unanswered; existing coexistence, structural/last-level schemas and D3845 holds
+  stay explicit. Update the existing queue/roadmap/review rather than create another work document.
+- Normal work-state sync and roadmap receipt/governance exit zero:3600 ledger rows/1737 live,
+  zero untriaged;569 UX items/263 live/282 complete/24 retired; lifecycle/resource, roadmap,
+  intent, tiers, docs and process checks pass. No new ordinary CI/progress dependency, raw
+  artifact or production change. Full software/browser proof remains the earlier5542cc2d run,
+  not a fresh claim from this research pass. Stage only the explicit checkpoint files and retain
+  the three pre-existing untracked entries; no push or goal pause.

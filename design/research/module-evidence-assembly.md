@@ -1656,3 +1656,84 @@ scoped table's extra eval_delta@1 arm must instead dispatch F2's exact eval_delt
 structural and last-level literal schemas remain authoring holds, not compiler exceptions. `[V]`
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md` continuation;
 `compare-strip-values.ts:recordedPieceRoutes`, F2 §2.3a, current Inspector accepts.
+
+## Sequence literal-source replay and coexistence — 2026-10-15, D3847/D3851
+
+The existing window instrument now reinspects genuine emitted derivation inputs and reinvokes
+both old factory paths from their genuine sources. It observes 84 **per-recorded-output replays**
+across all eleven families, not 84 independent positions/windows or a corpus prevalence sample.
+Exact edges retain same-run, contiguous node/FEN/ply joins. Narrative inputs are minted through
+the existing path/offset arm, never the Compare sentence arm or relabelled exact edges. All 84
+reversed-edge and 84 reversed-narrative-move controls refuse. Factory source-digest lists retain
+the actual repeated witnesses in their respective order; this is not proof that an equal digest
+establishes a different projection identity. `[V]` `make inspector-recorded-prefix-research`,
+`window-source.ts:inspectSequence`, existing unmodified factories and semantic event sources.
+
+The exact observed recorded tuples are below. E=run.record.edge@1, C=capture@1, D=defender-duty
+reading@1, K=check@1, X=legal-exchange@1. Powers denote literal repeated occurrences, not a new
+metadata grammar. Corresponding narrative replays use path/offset move@1 values in E's slots.
+
+| Family | Actual recorded witnesses | Replay count |
+|---|---|---:|
+| trade completed | C,C,E,E | 8 |
+| contact timing | E,E or E,E,E | 4 |
+| harassment pressure | E,E | 2 |
+| defender consequence | E,E,E | 18 |
+| square clearance | E,E,E | 20 |
+| line clearance | E,E,E,X | 4 |
+| interference | E,E,E,D,X | 2 |
+| checking zwischenzug | E,E,E,E,C,K,X | 2 |
+| overload exploitation | E,E,E,D,C,C,C,X | 4 |
+| deflection | E³,D,C,X,K or E³,D,C,C,C,X in these fixtures | 6 |
+| attraction | E³,C,K or E⁵,C,C in these fixtures | 14 |
+
+`[V]` same target. The two bounded-capture rows describe measured arms, not every legal arm;
+at most one capture per legal edge bounds complete populations by the declared 3/5 horizons.
+Do not infer a universal capture count from this fixture sample. The shared 52-case population
+omitted check-induced deflection, so two additional legal/mirrored cases explicitly cover its
+first-edge check. Zwischenzug uses the first-edge capture/second-edge check; attraction's check
+uses its third edge. Actual private input authority confirms those joins, the initial-FEN duty
+reading, and each exchange's exact target/retained-recapture operand. Trade's captures are checked
+against actual edge0/edge1 capture factories and zwischenzug's against edge0: 18 indexed capture
+joins. All 18 exchange joins also check FEN/UCI and private authority directly against their
+required final window edge, not just the exchange's own fields. These are fixture incidences,
+not independent failure classes. This retains the original
+104-run/452-window and eight imported-game source experiments; it does not expand their counts.
+
+Twenty-four positive complete capture populations are compared with every capture in their own
+window, in edge order. In ten deflection/attraction replays, the current private @2 factory also
+accepts an omitted capture and the reversed genuine list with unchanged output payloads. These
+are ten replay incidences per mutation, not ten distinct flaws or a public injection exploit.
+The source list is incomplete or misordered even though the detector recomputes the same result
+from legal anchors. A disposable source-completeness guard accepts 25 complete/quiet-empty cases
+and rejects 77 missing/extra/reordered/duplicate cases using existing factory/ref/input authority
+and exact payloads. Successful empties remain local result states, not invented chess evidence.
+No old factory is changed or new receipt/factory registered. `[V]` same instrument's
+`completeCaptureGuard`; rules.transition.event.capture sole factory.
+
+Narrative and recorded full payload populations differ in 42 of 84 replay calls. Eight trade
+differences include deliberately different moveAnchors source envelopes; they are not eight
+tactical errors. The remaining differences occur in defender consequence, attraction and square
+clearance, including their recorded-specific physical castling handling. Preserve independent
+source/computation contracts rather than asserting blanket cross-version byte equality. `[V]`
+same target's per-family summary; `semantic-evidence.ts` recorded versus narrative operations.
+
+Existing accepted inventory deliberately retains both live source versions. Source/call-site
+inspection finds production Review's exact-edge emitter and no in-repo production narrative
+sequence emitter; this is a repository observation, not proof about external exported-API users.
+D3851 asks whether new delivery should use exact edges only while retaining old APIs/history, or
+implement both input pipelines. No retirement, merged topic count or new successor identity is
+authorized while that question is open. D3847's finite witness repair and complete-window source
+construction remain required either way. `[V]` `recorded-semantic-path.ts`, `module-query-sources.ts`,
+call sites of the narrative semantic constructors; `rfc/module-registration.md` §1.3.1 and scoped
+window source; `evidence-catalog.ts:withRecordedPathSuccessorRefs`; [[D3851]].
+
+The authorized independent reviewer first identified the missing indexed capture and exchange
+checks above, then rechecked their additions read-only after the normal target passed. Both
+diagnostic gaps are closed. The review does not rerun tests, authenticate narrative provenance,
+make old factories enforce completeness or qualify successors. The next step is exact contract
+authoring, not larger fixture counters: literal tuples/finite arms, complete capture populations,
+indexed joins and exact callable/consumer/presentation bindings. D3851 decides which distinct
+delivery pipelines that image must preserve; structural/last-level schemas and D3845 remain
+separate authoring holds. No upstream or joint Inspector acceptance follows. `[V]`
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md` sequence continuation.

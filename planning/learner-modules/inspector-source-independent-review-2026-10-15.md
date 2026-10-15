@@ -411,3 +411,36 @@ remaining contradictory acceptance sentence requiring both new complete-tip payl
 their predecessors. Main separates structural payload/selection preservation from eval@2's new
 payload/lineage/disclosure and keeps all historical callers/receipts unchanged. Final read-only
 recheck closes that paragraph's contradiction, not any broader acceptance or implementation.
+
+### D3847 sequence replay — independent control review and recheck
+
+The authorized reviewer inspects the existing window instrument read-only. Genuine emitted
+inputs, exact ordered refs/source digests and separate old recorded/narrative factory replays
+support84 per-recorded-output checks across11 families, not84 independent windows or84 positive
+narrative outputs. Both84 reversal populations are meaningful. Omitted/reordered capture probes
+require a nonempty original and compare full returned populations, so the old acceptance gap is
+not an empty-output artifact. The prospective guard reconstructs every legal edge's actual capture
+population, including successful empties, with exact factory/private authority/payload checks.
+It is not a new factory or a sealed absence fact. Added mirrored check-deflection fixtures close
+the original shared population's omitted induction arm.
+
+The initial review returns two diagnostic gaps: trade/zwischenzug lacked indexed capture private
+authority checks; exchange checks used their own FEN/UCI rather than independently joining to a
+required window edge. Main adds captureAt for trade edges0/1 and zwischenzug edge0, and joins
+each exchange's FEN/UCI/private authority directly to its required final edge. Normal prefix
+research/types pass:18 indexed capture and18 indexed exchange incidences,24 complete capture
+populations,25 prospective positives/77 negatives and ten omitted/ten reordered old-factory
+acceptances. Read-only recheck confirms both diagnostic obligations are closed. Those counts
+are fixture incidences, not independent failure classes. No reviewer tests were rerun.
+
+Forty-two differing narrative/recorded full populations include eight trade source-envelope
+differences, not42 tactical errors. The rest require field/population classification before any
+chess-error interpretation. The controls do not authenticate narrative provenance, enforce
+completeness in old factories or qualify successors.
+
+The next prerequisite is contract authoring, not increasing counters: exact successor/source-input
+images for ordered tuples, finite alternatives, complete captures, indexed auxiliary joins,
+payload preservation and callable/consumer/presentation bindings. D3851 determines which distinct
+new-delivery obligations remain; until ruled, neither pipeline may be silently merged or dropped.
+Structural/last-level population schemas and D3845 are separate holds. The17-row map is not a
+completed source contract. No policy ruling, source qualification, upstream or joint acceptance.

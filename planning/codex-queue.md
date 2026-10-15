@@ -1,5 +1,20 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847's sequence diagnostic now replays84 actual recorded outputs across all11
+families through genuine recorded and narrative sources. Preserve per-output versus independent
+window denominators.84 edge reversals/84 narrative reversals refuse;18 indexed capture and18
+indexed final-edge exchange joins pass. The complete capture guard accepts25 complete/quiet-empty
+cases and rejects77 bad populations; ten old deflection/attraction calls each accept omitted or
+reordered captures without changing detector payloads. This is incomplete lineage, not a proven
+false chess verdict or public exploit.42 differing narrative/recorded populations include eight
+trade source-envelope differences, not42 tactical errors. Normal prefix target/types pass.
+Independent read-only recheck closes the two indexed-join diagnostic gaps, not source qualification.
+Next author exact source-input/callable/consumer/presentation contracts; do not keep increasing
+these counters. D3851 is an unanswered owner choice about exact-edge-only new delivery versus
+separate repaired narrative and recorded pipelines, retaining old APIs/history and every family
+either way. Existing coexistence holds until ruled; no topics are silently merged/retired.
+Structural/last-level schemas and D3845 remain separate authoring work. No joint acceptance or UI.
+
 2026-10-15 — D3847 Compare/Story continuation now tests selection's complete input populations,
 not just displayed positive evidence. Actual17 structural-family sources reconstruct44 FENs/
 126 column reads/392 empty family rows. Keep72 broad peer-extension removals separate from ten

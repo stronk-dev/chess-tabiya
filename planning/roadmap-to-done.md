@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3850]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3851]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,16 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3847's eleven sequence families now have measured literal witness tuples and indexed source
+joins:84 per-recorded-output factory replays,84+84 reversed-source refusals,18 indexed captures
+and18 final-edge exchanges. A prospective complete-window guard passes25 positive/77 negative
+cases; unchanged old factories admit ten omitted and ten reordered capture lists without changing
+detector payloads. That proves a lineage-completeness gap, not a false tactical verdict. Independent
+review closes the diagnostic join gaps but requires exact successor/callable/consumer contracts
+before adoption. D3851 asks which new-delivery pipelines to retain; no choice, retirement or
+Inspector acceptance is inferred. Existing narrative/recorded coexistence holds pending a ruling.
+Next is contract authoring, not another increase to these counters. Full1.0 remains incomplete.
 
 D3847's next measured class is negative selection: complete structural source populations
 reconstruct 126 column reads, and a deliberate later peer move suppresses ten facts at an
