@@ -1,5 +1,11 @@
 # RFC: Move-quality grades — the grade-family projection and its convention document
 
+**2026-10-15 joint amendment acceptance:** independent review accepts §§2a/4a's current-source
+grade and the already owner-ruled unified ladder with the coordinated module image. Earlier
+unaccepted labels for these clauses are history; actual issuance, source/consumer tests and
+parent obligations remain. Decision:
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 - **Status:** implementing — D3860's 2026-10-15 repair enforces §2 at the sealed factory before payload normalization and declares the two actual ordered occurrences in each same-source alternative. The earlier 2026-09-01 claim of paired declaration/source enforcement was too strong: the declaration still had one occurrence per member and the wrapper admitted mixed origins. Pure grading constants/arithmetic are unchanged. D1 discharged at `63902370` (2026-09-24): both current module consumers admit the grade. This scoped repair does not supply D3859's modern source/edge/context and complete-consumer migration. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
 - **Author:** claude, on the [[D879]] BUILD-IT verdict and the [[D899]] routing (learner-modules `## Discharges` D3)
 - **Created:** 2026-08-22

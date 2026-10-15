@@ -2558,3 +2558,53 @@ emits no fabricated exposure. This bounds the next source-contract work with bot
 0/1/2 witnesses, not a claim about maximum arity, complete tactical qualification or a new
 reduction/source implementation. `[V]` module-source.ts runExposureWitnessDiagnostic;
 normal prefix target, cases black-two/white-one/white-none.
+
+### Defender-exposure complete source and lost availability — D3867/D3868
+
+Two legal checking edges expose a separate current defect. White c5b6 from
+`r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1` and Black f4g3 from
+`3k3r/8/8/8/5b2/6N1/6b1/4K2R b - - 0 1` both reach the helper's
+invalid_turn_clone. The actual factory returns empty, local closure publishes no exposure
+abstention and the actual wide candidate row loses it too.18 controls distinguish those two
+unavailable cases from a genuine available empty. Accepted breadth-collectors §3.5 explicitly
+requires this abstention and denominator exclusion; the experiment does not implement them.
+`[V]` semantic-evidence.ts defenderExposureOperands/localSemanticEventClosure;
+evidence-factories.ts createDerivedTacticDefenderExposureV1Evidence;
+module-source.ts runExposureAbsenceDiagnostic; normal prefix target.
+
+The bounded simpler source recipe computes all legal captures on a specified landing square
+from raw FEN. Actual legalCaptureMovesTo sorts UCI and includes four promotion choices;
+legalExchangeForMove supplies each complete branch/line/stop result. Four both-color cases
+with2/2/5/5 captures preserve the exact existing positive exposure payloads. Separate negative
+and empty cases retain nonpositive results/context; en passant retains d6 as landing and d5 as
+physical captured square.26 calculation controls plus five isolated unchanged-F1 metadata
+controls pass; no new source issuer/factory/adoption follows. The proposed reading is
+declared_convention/convention/not_applicable, with existing legal-exchange@1 semantics;
+the derived exposure has actual fixed [control,completeReading] authority. This is internal
+direct arithmetic, not a fifth generic reduction or a manufactured singleton witness.
+`[V]` exchange.ts legalCaptureMovesTo/legalExchangeForMove;
+module-source.ts runLandingCaptureSourceRecipe; F2 §2.3m authored proposal.
+
+Independent review catches a wrong scope assumption in the first author revision: exposure
+is currently accepted **only by Threat**, not Nudge/Review/Inspector. Adding it to Inspector's
+31 replacements makes the existing recorded-origin map test fail on an unknown old topic.
+The corrected proposal retains that31/44 map, rebases only Threat's actual exposure slot and
+updates the shared candidate source/abstention. All-module proposed count stays282; Threat
+joins the other five changed consumers@2, four unaffected consumers remain@1. An explicit
+actual-catalogue control now forbids phantom exposure consumers. Independent complete joint
+acceptance remains owed. `[V]` evidence-catalog.ts MODULE_POSTCOMMIT_EVENTS/current accepted
+lists; independent dated review; module-source.ts runWholeCurrentModuleInventory;
+recorded-origin.ts checkMap; module-registration current-image clause.
+
+Final independent review clears the Threat-only/selector corrections and the two stale
+presentation/opening companions, then accepts the complete coordinated source/module
+implementation contract. The first production component is the internal landing-capture
+reading: genuine catalogue/closed computed factory/central route, no direct learner binding.
+Its25 permanent cases first yield20 predecessor failures, then all pass with99 focused cases.
+They check complete enumeration against independent all-destination traversal while reusing
+legal-exchange arithmetic; they are not independent arithmetic/tactical qualification.
+Source/full-tree/empty-context/convention/input-receipt tests and the factory profile retain
+actual values. Exposure@2, actual availability propagation and public current consumer cutover
+remain unfinished. `[V]` landing-captures.test.ts; evidence-factories.ts;
+evidence-catalog.ts; normal make evidence-value-profile-update/evidence-value-authority;
+dated independent final review; owner RFC acceptance notes.

@@ -1,5 +1,10 @@
 # RFC: Provider exchange and projection execution
 
+**2026-10-15 joint amendment acceptance:** independent review accepts §1a's finite reduction
+execution contract with the coordinated current-source/module image. Earlier unaccepted labels
+for that reviewed clause are history; parent obligations and actual implementation remain.
+Scope and decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 - **2026-10-09 recorded guidance checkpoint:** D3630 adds complete exact-consumer admission before packet source preparation and at the registered reading renderer, including empty and previously assembled/cached paths. Thirty-eight predecessor controls reproduce missing admission/ordering; all 144 focused software and 39 existing content controls plus workspace types pass. Actual authenticated REST and composed HTTP refuse invalid bindings before collection/provider I/O; permissions precede execution, cached speech cannot bypass it, and current recorded suffix/provider exclusion bytes remain. No source/declaration/permission migration, whole manifest or availability completion. Complete normal verification and closeout belong to the append-only log.
 
 - **2026-10-09 Maia author checkpoint:** draft `maia-task-source.md` owns D3370's sampled-task source and D3363's exact-node distribution migration. Four permanent selector controls pin sample-versus-argmax, final-task-only retry windows, the selection width floor and equal-FEN distinct histories. It preserves the page/occurrence predecessors and claims one new provider member; independent review/acceptance precedes production migration. This is contract authoring, not shipped source adoption, bot calibration or completed availability.

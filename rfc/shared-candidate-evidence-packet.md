@@ -1,6 +1,11 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Draft amendment 2026-10-15 — D3768/D3847, §3.1a:** compiler2's exact nonterminal-fork
+**2026-10-15 joint amendment acceptance:** independent review accepts §3.1a's five-source
+current compiler2/availability migration with the coordinated module image. Earlier unaccepted
+labels for that clause are history; actual collector/packet/selection/bot/Hint migration remains.
+Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
+- **Draft amendment 2026-10-15 — D3768/D3847/D3866/D3867/D3868, §3.1a:** compiler2's exact nonterminal-fork
   slot and compiler1 receipt separation. Unaccepted; no permission follows from parent status.
 
 - **Status:** **implementing — the foundation contract landed 2026-09-24 at the owner's direction to implement ready RFCs, without a further review round.**
@@ -408,7 +413,7 @@ required roadmap work; implementing this RFC alone cannot close those consumer f
 `CANDIDATE_PACKET_COMPILER_VERSION = 1` is an exported literal and every construction-semantic
 change must move it or the cache-identity fixture fails.
 
-#### §3.1a Draft D3768/D3866 current local-source compiler successor — unaccepted
+#### §3.1a Draft D3768/D3866/D3867/D3868 current local-source compiler successor — unaccepted
 
 The preceding literal describes compiler1. Under coordinated value-authority §§2.3c/2.3f and
 hint-distance §3a acceptance, the sole current compiler literal becomes2. Its exact source changes
@@ -420,14 +425,25 @@ are the following; they are one unshipped compiler2 image, not successive compat
 | candidateChildReadings promotion pressure | rules.tactic.reading.promotion_pressure@1 |
 | candidateChildReadings material role signature | derived.material.reading.role_signature@2 |
 | localSemanticEvents material role asymmetry | derived.material.event.role_asymmetry@2 |
+| localSemanticEventClosure defender exposure and its abstention | derived.tactic.defender_exposure@2 |
 
-The latter three use the actual sole factories and complete source operands specified by F2
+The promotion and two material slots use the actual sole factories and complete source operands specified by F2
 §2.3c: direct canonical-FEN promotion reading, ten ordered count inputs for each material
 signature, and before/after signatures plus every actual capture/promotion cause. Change actual
 child-reading and local-event dispatch, not just the allowed-ref list or Inspector bindings.
 Readings use each exact child FEN; events use that row's exact original legal edge. Invalid
 sources refuse rather than falling back to old factories or attaching unused witnesses to old
 results. Retain each complete payload/population and original sealed object in the packet.
+
+Exposure uses F2 §2.3m's fixed control plus complete landing-capture reading. Preserve every
+positive witness and the existing fact/overlay meaning. Its factory's invalid_turn_clone is a
+typed unavailable outcome, not an empty event array. Local closure acquires that family once,
+publishes its@2 projection-addressed abstention and propagates the original private outcome into
+event/wide candidate rows and narrowing; readings-only scope omits that event abstention under
+the existing rule. Real available empty stays no witness. Preserve loose-piece and every other
+family's outcomes independently. Update the actual generator's abstention map as well as event
+projection closure; the old loose-piece-only map cannot witness this correction. No new packet
+field, schema or runtime compatibility image is needed.
 
 The fork slot uses the actual
 same-edge double-attack/reply-breadth sealed values; no old source relabelling or second reply
@@ -437,7 +453,7 @@ preserve full operands/refutation order. All other readings/events, legal popula
 terminal-root behavior, score/provider exclusion and scope-retention rules stay unchanged.
 
 Derive the current literal closure from the single current slot declaration, applying all four
-exact replacements. Under D3851 retire the obsolete compiler1 vector/API compatibility image
+earlier exact replacements plus exposure@2 and its abstention. Under D3851 retire the obsolete compiler1 vector/API compatibility image
 after real caller migration; do not reinterpret old values as compiler2. Exercise events/readings/wide scopes,
 including private tactical prerequisites when only readings are retained. Narrowing a wide
 compiler2 receipt must retain the same original sealed objects and compiler identity, not mint
@@ -453,7 +469,12 @@ migrations, rewrite authored packs or rebuild longitudinal semantic events for t
 Retain truthful predecessor construction evidence, not an executable compatibility pipeline.
 
 Acceptance includes both-color actual compiler→scope→projection/selection/Hint tests for the
-four changed slots. Promotion empty, legal-promotion, terminal-reply and invalid-clone cases
+five changed slots. Exposure requires both-color multi-capture/promotion populations and legal
+checking moves that reproduce invalid-turn-clone unavailability, plus real available empty.
+Assert exact two-input receipt lineage and both scope/outcome paths. Preserve the current
+selector's whole-selection counterfactual_population_incomplete refusal and measured evaluated
+alternative count on any played/alternative row abstention; no per-family selector policy is
+added and no collector failure can turn into a negative observation. Promotion empty, legal-promotion, terminal-reply and invalid-clone cases
 retain complete typed fields/conventions; material capture/promotion/capture-promotion and
 quiet/castling empties retain exact input occurrences and full original edges. A generated
 allow-list alone cannot witness adoption. Wrong source/version/FEN/edge, old compiler receipt,
@@ -1702,6 +1723,11 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-10-15 — Unaccepted D3867/D3868 correction adds exposure@2 and its genuine typed
+  invalid-clone abstention to the same proposed compiler2 image, alongside the four existing
+  source changes. Existing candidate row/private outcomes suffice; no new packet schema or
+  compatibility epoch. Actual factory/generator/selection/module delivery remains gated.
 
 - 2026-10-15 — D3851 owner rules no pre-launch legacy compatibility. Replace D3853's frozen
   vector vocabulary/child-helper plan with actual caller migration and obsolete-chain retirement;

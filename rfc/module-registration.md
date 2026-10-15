@@ -1,5 +1,12 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
+**Current-source amendment accepted for implementation, 2026-10-15.** Authorized independent
+review accepts §4.11a's corrected source/detail contract and the sole ten-consumer/282-pair
+image with linked exact owner contracts. Earlier unaccepted/returned labels for those clauses
+are retained review history, not current blockers. Actual source/consumer/UI delivery and
+unrelated parent obligations remain. Scope and decision:
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 - **Status:** **implementing — the production registry landed 2026-09-24 at the owner's direction
   (implement directly, no review round); receipts `planning/learner-modules/implementation-2026-09-24.md`
   and `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`.** `MODULE_REGISTRY` compiles all eleven declarations at import; A5 is closed by exact
@@ -1995,10 +2002,10 @@ bindings. No held-binding compiler exception or source retirement is authorized.
 D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
-refs in its predecessor inventory slot, preserving all other44 refs/order and all old contracts.
+refs in its predecessor inventory slot, preserving all other44 refs/order and their meanings.
 This is an obligation-preserving proposed map, not complete literal factory-input closure.
 D3847's fixture audit reaches31 conflicting routes in the current declared Inspector union;
-retaining those44 topics is conditional on source-contract reconciliation and independent review.
+retaining the initially unchanged44 topics was conditional on source-contract reconciliation and independent review.
 Do not fabricate unused prerequisites or treat an executable declaration as qualified lineage.
 D3847's independent continuation also finds that scope-only reuse of existing recorded-window
 @2 and fork/overload factories below does not resolve their literal schemas. Fixed witness tuples,
@@ -2116,22 +2123,23 @@ required modern-to-legacy fallback, arbitrary copied packet or implicit opening 
 dual-image/compatibility design, not the exact-source or disclosure requirements. One current
 image per evidence module, eleven unchanged logical MODULE_IDS/policies/preset references,
 and no version negotiation or old packet pipeline. This is the proposed complete image, including
-D3863's previously omitted Compare Coach. Five unchanged consumers stay@1 because their
+D3863's previously omitted Compare Coach. Four unchanged consumers stay@1 because their
 meaning is unchanged, not to support old deployments. rules_floor has no evidence consumer.
 
 **Joint review return, 2026-10-15:** the inventory below is not yet a source-complete contract.
 D3864's genuine recorded-path/piece-route correction is bounded-reviewed, not implemented;
 D3865 repairs the accepted trade declaration separately. D3866's coordinated candidate/Hint
-source/disclosure correction is now bounded-reviewed, not implemented; D3867 requires complete
-variable defender-exposure lineage, including the real Threat consumer. Its unchanged@1 row
-below is therefore not endorsed. Resolve these exact sources and refresh the version/ref image
-before joint acceptance;282 is the measured conditional image, not a final binding commitment.
+source/disclosure correction is now bounded-reviewed, not implemented. D3867/D3868 now propose
+F2 §2.3m's complete computed landing-capture reading, fixed two-input exposure@2 and actual
+typed abstention propagation. The real Threat consumer changes to@2 as well. Obtain independent
+source and full joint acceptance before implementation;282 is the measured conditional image,
+not a final binding commitment.
 
 | Logical module | Sole current consumer | Accepted refs | Sole evidence callable | Disclosure callable |
 |---|---|---:|---|---|
 | sight_on_request | module.sight_on_request@1 | 23 | compileModulePacket | none |
 | blunder_prevention | module.blunder_prevention@1 | 3 | compileModulePacket | none |
-| threat_radar | module.threat_radar@1 | 7 | compileModulePacket | none |
+| threat_radar | module.threat_radar@2 | 7 | compileModulePacket | none |
 | postcommit_nudge | module.postcommit_nudge@2 | 52 | compileModulePacket | none |
 | structure_nudge | module.structure_nudge@1 | 7 | compileModulePacket | none |
 | theory_breadcrumb | module.theory_breadcrumb@1 | 4 | compileModulePacket | none |
@@ -2161,6 +2169,12 @@ delete obsolete list-building paths; no runtime copy of a historical list is req
    with F2 §2.3a/D3863's genuine engine_trajectory@2 point; its unregistered Stockfish predecessor
    cannot satisfy complete preflight. Replace Compare's piece_route@1 with F2 §2.3a/D3864's
    piece_route@2 over the genuine complete recorded-path source, not an unused move witness.
+   Separately replace Threat's exposure@1 with F2 §2.3m's actual exposure@2 factory/availability
+   path. This ref is absent from the original Inspector31-row rebase map and from actual
+   Nudge/Review/Inspector accepted lists; do not add it to those modules. Its internal complete-
+   capture reading is a prerequisite, not a new learner accepted ref. Candidate compiler2 retains
+   its exact projection-addressed abstention under shared packet §3.1a. Preserve every existing
+   Threat source, assistance clamp and overlay.
 4. Inspector appends §4.11a's six literal detail refs in their table order, each@1. These are
    views of a topic, not extra acquisition topics; no other module receives them.
 
@@ -2253,7 +2267,7 @@ compatibility parser. Grade@2 uses one2.5/10/15 ladder, no public context field/
 workflow/permission/input receipts remain distinct. Complete payload/full sentence identity
 does not equate permissions or selection. Budgets/defaults/ceilings are unchanged.
 
-Acceptance requires all ten exact image/282 binding/presenter/callable joins and all five changed
+Acceptance requires all ten exact image/282 binding/presenter/callable joins and all six changed
 consumer preflights, plus real sources/factories/HTTP/LLM-off/native journeys for each changed
 operation. Corruption, crossed/extra/missing refs, wrong consumer version, obsolete Hint/grade/
 source values and forged handles fail before preparation. Honest empty/local absence preserves

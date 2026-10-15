@@ -229,7 +229,7 @@ rejected position-cache experiment are recorded in the existing D3300 projector 
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 47 producers, 285 projections, 42 consumers and 556 bindings, plus
+The primary manifest contains 47 producers, 286 projections, 42 consumers and 556 bindings, plus
 78 semantic events, 78 eligibility rows, 16 reasons and one selection policy. These are registered
 declarations, not proof of complete production consumption or a useful learner workflow. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
@@ -558,6 +558,16 @@ valid pairs still reach the total operand comparison. See
 `design/research/semantic-validation-closure.md` for the bounded experiment and handoff.
 
 ## Adding a product module
+
+The internal `rules.exchange.reading.landing_captures@1` prerequisite computes every legal
+capture onto one requested landing square in a canonical full FEN. It retains nonpositive
+exchanges, all promotion choices and complete recapture trees under `legal-exchange@1`.
+En passant's victim square remains distinct from the landing square. The sole closed factory
+accepts only FEN and landing square; callers cannot supply capture results. It has no direct
+learner/provider binding or packet child-reading slot. Its permanent tests independently check
+complete destination enumeration while reusing the already-tested exchange arithmetic.
+The accepted exposure@2/availability/current-module migration is separate unfinished work;
+adding this prerequisite alone does not fix today's exposure factory or learner surfaces.
 
 F5 must add a named consumer, literal eligibility rows, exact bindings, a versioned production
 policy and workflow defaults together. Raw producer toggles are not a product configuration

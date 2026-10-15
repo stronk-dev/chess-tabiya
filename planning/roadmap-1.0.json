@@ -1083,10 +1083,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "All-ten module inventory/current binding recipe is authored; joint review returns four real gaps. D3865 accepted trade repair is implemented; D3864 raw comparison-path and D3866 four-slot candidate/Hint source corrections are authored and independently bounded-reviewed, not implemented. Next author D3867's complete variable defender-exposure population, refresh all exact current refs/consumer versions and obtain independent joint acceptance before D3792/D3845 source/API migration.39 image/ten actual active-path diagnostic controls are not corrected packet/Hint adoption;282 remains conditional. Preserve all families, real Review deliveries, root-inclusive Compare points, exact grants/local absence and D1422's ruled unified ladder. D3851 requires no legacy pipeline, not data deletion. No failed-binding filter, fake singleton, whole-milestone or qualification promotion.",
+        "nextAction": "The complete coordinated current-source/module amendment is independently accepted, and the internal complete landing-capture source is implemented/verified. Apply D3869's small existing-Make fast-check ordering repair before the next source wave; then implement exposure@2's truthful two-input factory/availability and permanent edge/absence tests, followed by accepted source/reduction/packet/current-binding migrations with actual strict receivers, API and native journeys. The ten-consumer282-pair image must cut over source-complete, never by filtering failed bindings. Exposure is Threat-only; no phantom Inspector/Nudge/Review slots or legacy compatibility pipeline. D3792 waits on D3841 implementation, not contract acceptance. Preserve all families, Review deliveries, root-inclusive Compare points, exact grants/local absence, D1422's unified ladder and original budgets. No source qualification, whole-milestone or release promotion.",
         "latestCheckpoint": {
           "at": "2026-10-15",
-          "summary": "D3863 all-ten inventory measures299 current/282 conditional proposed module pairs, now39 disposable controls, and exposes omitted Compare Coach. Joint review returns four real gaps. D3865 accepted trade repair retains four ordered witnesses; normal verify/build passes5931 software/seven performance/257 content plus types/governance/packaging. D3864 raw recorded-path and D3866 four-slot candidate/Hint source corrections are authored/bounded-reviewed, not production adoption. Ten actual active-path controls retain the old source defect; six exposure controls reproduce three inputs against two declared. Next D3867 and refreshed joint source/module image. Full browser result is logged separately; no whole milestone, new qualification or remote-CI claim.",
+          "summary": "Independent review accepts the complete coordinated current-source/module contract after four substantive returns and final companion synchronization. Internal landing_captures@1 has a genuine computed declaration/factory/route and25 permanent cases, initially20red then99 focused passes. Full FEN/empty context, all promotions/nonpositive results/recapture trees and convention/input receipts survive; no direct learner binding or exposure cutover yet. Normal make verify build passes5956 software/393 files, seven isolated performance cases,257 content and all types/contracts/governance/packaging/build checks. Packaged rehearsal smoke passes separately. D3792 now waits on D3841 implementation; D3869 owns measured fail-fast verification ordering. No whole milestone, tactical qualification, full new-browser sweep or remote-CI claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1206,6 +1206,14 @@
             "rfc/evidence-presentation.md",
             "rfc/hint-distance.md",
             "rfc/shared-candidate-evidence-packet.md",
+            "rfc/installed-opening-evidence.md",
+            "packages/runtime/src/landing-captures.test.ts",
+            "packages/runtime/src/exchange.ts",
+            "packages/runtime/src/evidence-catalog.ts",
+            "packages/runtime/src/evidence-catalog.test.ts",
+            "packages/runtime/src/fixtures/evidence-value-profiles.json",
+            "packages/runtime/src/capability/declarations.generated.ts",
+            "apps/server/src/evidence-manifest.test.ts",
             "planning/learner-modules/inspector-source-independent-review-2026-10-15.md",
             "packages/runtime/src/grade.test.ts",
             "packages/runtime/src/presentation-inspector-adapters.ts",
@@ -1222,7 +1230,7 @@
             {
               "kind": "work_state",
               "id": "D3792",
-              "digest": "sha256:0008319e90c2f582d10944469c2dd88c794986dd95727bb682eff70f249209a2"
+              "digest": "sha256:9ea74edf1b0ae7b0b73cdc94aa8d375c9905f246ca7e1447d175502d13ef16c7"
             },
             {
               "kind": "work_state",
@@ -1398,6 +1406,11 @@
               "kind": "rfc",
               "id": "module-registration.md",
               "digest": "sha256:f829923970114538d86b62039d2acc8a357a716920b32a5d2fb109c4267f4fe0"
+            },
+            {
+              "kind": "rfc",
+              "id": "installed-opening-evidence.md",
+              "digest": "sha256:115fbe7168281915da80311161d3f63a76d51dd420ae965df811a1d9a33c297f"
             },
             {
               "kind": "rfc",

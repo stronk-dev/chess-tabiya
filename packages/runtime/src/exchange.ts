@@ -150,6 +150,13 @@ function continuation(position: Chess, target: Square, perspective: Color, ply: 
   });
 }
 
+/** Internal complete population; landing square differs from an en-passant victim square. */
+export interface LandingCaptureReading {
+  readonly fen: string;
+  readonly landingSquare: SquareName;
+  readonly captures: readonly LegalExchangeResult[];
+}
+
 export function legalExchangeForMove(position: Chess, move: Move): LegalExchangeResult | undefined {
   if (!("from" in move) || !position.isLegal(move)) return undefined;
   const mover = position.board.get(move.from);

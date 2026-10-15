@@ -1,5 +1,12 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
+**Joint current-source amendment accepted for implementation, 2026-10-15.** Independent review
+accepts §§2.3a–m with the coordinated current-module and linked owner contracts recorded in
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`. Their earlier
+unaccepted/returned labels are retained review history, not current blockers. Actual source
+issuance, complete execution/consumer cutover and qualification remain implementation work;
+this accepts no unrelated parent discharge or product-completion claim.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft
@@ -10,7 +17,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850/D3855/D3857, §§2.3a–2.3k:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850/D3855/D3857/D3859/D3867/D3868, §§2.3a–2.3m:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845's reduction grammar and its four exact operation bindings are proposed, not accepted;
   its upstream source contracts and complete execution/admission implementation remain held.
@@ -1724,6 +1731,130 @@ two edges. Arithmetic-unavailable pairs do not count toward accuracy even if sou
 available below-threshold pairs do, using existing typed-mate/cp conversion. Real private
 source/HTTP/client/LLM-off proof and independent source/joint review remain implementation gates;
 the disposable71 controls/two execution paths are feasibility, not source qualification.
+
+#### 2.3m D3867/D3868 complete landing captures and defender exposure — source component accepted
+
+**Bounded independent acceptance, 2026-10-15:** the authorized reviewer accepts this source
+component for genuine internal reading/factory/permanent-test implementation after the
+Threat-only and conservative-selector corrections. Actual public Threat/packet/current-module
+cutover remains held on complete coordinated exact-image review. No partial current consumer
+image or runtime qualification is accepted by this bounded decision; see the dated independent
+review record. Other §2.3 amendment sections keep their stated gates.
+
+This is one computed source and one fixed two-input derivation, not a fifth reduction operation.
+`exchange.ts` already enumerates every legal capture onto a landing square (UCI-sorted, all four
+promotion choices) and computes each complete `LegalExchangeResult` directly from the board.
+The disposable recipe preserves the old positive payloads with two/two/five/five captures for
+both movers, a negative exchange and an en-passant victim off the landing square. Its26 calculation
+and five isolated F1-metadata controls prove feasibility, not source issuance, collector qualification or implementation.
+D3868's18 actual-path controls separately show two legal checking moves becoming unavailable
+in the helper, then empty in the factory and missing in candidate abstentions.
+
+**Computed authority.** Add exactly `rules.exchange.reading.landing_captures@1` under existing
+producer `rules.exchange`, sole factory `createRulesExchangeReadingLandingCapturesV1Evidence`,
+construction mode computed, local/synchronous availability, reading role. Its sole closed route
+arm is `{fen: string, landingSquare: SquareName}`; parse a legal position and a real board square,
+canonicalize the full FEN, and compute directly. No caller capture array, result predicate,
+supplied evidence or aggregate reduction callback is accepted. Payload `LandingCaptureReading`
+has exactly `{fen,landingSquare,captures:readonly LegalExchangeResult[]}`. Retain canonical FEN
+and requested landing square for an empty reading too. Captures are **all** results of
+`legalCaptureMovesTo(position, landingSquare)` in its deterministic order, each from
+`legalExchangeForMove(position, move)`. Preserve nonpositive results, promotion variants,
+capturer/captured identities (including the physical en-passant victim square), every branch,
+chosenLine and stopDecisions, conventionId and resultUnits. An enumerated legal capture without
+an exchange result is a construction error, never filtered into successful empty output.
+The requested square is the move's landing square, not the victim's physical square.
+
+The new reading is `rules` plane, `declared_convention` grounding, `convention` exactness,
+`not_applicable` confidence; direct semantics retain `legal-exchange@1` and its existing closure.
+It has no sealed derivation inputs, because board computation is its actual authority. F1
+answerContent is exactly `[fact]`, forms exactly `[machine_condition]`, disposition
+`inspector_only` with the explicit reason “internal complete-capture prerequisite; no direct
+learner binding.” Do not add it to Inspector topics or child-reading packet output merely because
+it is a reading. No raw capture-line display, provider operation, best-move suggestion, engine
+score or new convention member is implied. The strict closed input validator and sole typed
+computation own its complete payload; sealed-input admission rejects a caller-authored lookalike.
+No separate external parser registry is added for this internal-only computed prerequisite.
+
+**Exposure authority and availability.** Replace the current exposure declaration/factory with
+`derived.tactic.defender_exposure@2` / `createDerivedTacticDefenderExposureV2Evidence`.
+Preserve its event role, declared_convention/convention/not_applicable tuple, existing fact-only
+answer image, forms, signs and pass convention `mover-turn-ep-cleared@1`. The sole input arm
+remains `{beforeFen,moveUci,afterFen}` with the existing exact legal-edge validation. Its result
+metadata is `availability`; return existing
+`EvidenceAvailability<readonly DerivedEvidence<AvailableDefenderExposureOperands>[]>`.
+`AvailableDefenderExposureOperands` retains every old available payload field, with kind exactly
+`available` and required defender/target/captures/controllerEvent, no unavailable union arm.
+The wrapper's unavailable reason is exactly `invalid_turn_clone`; it is not a sealed fake event.
+
+Validate the full legal edge before pass cloning, reads, empty shortcuts or minting. If the
+after-position with turn returned to the mover and en passant cleared is not legal, return
+typed unavailable even when no lost control would otherwise be found. A legal clone with no
+eligible lost controller/target or no positive capture is available with an empty array.
+Use the actual admitted `rules.square.event.control@1` values for the validated edge. Select
+only lost pseudo-control by the non-moving color and an opponent-occupied target retained at
+the same square with the same color, role and promoted flag across the edge. Obtain the new
+complete reading for that exact target square in the exact canonical pass-clone FEN. Join each
+input's full edge/FEN, controller and target identity; reject foreign/crossed values, including
+same-board/different-turn/en-passant/counter FENs, before output or empty decisions.
+
+Literal `dependsOn` and `derivation.inputs` are exactly ordered
+`[rules.square.event.control@1,rules.exchange.reading.landing_captures@1]`.
+Build each exposure's captures by filtering **the admitted complete reading payload** for
+`resultUnits > 0`, in its original order, and its controllerEvent/defender/target from that exact
+control and retained edge. Mint with exactly these two real sealed inputs. Every output
+retains the complete positive captures, recapture trees and identities, not a representative
+capture. Do not run the old helper to construct the output and merely attach unused witnesses;
+the complete reading must be the value authority actually consumed. Zero positives emits no
+exposure, not a fake singleton. Normal F2 fixed-input receipts suffice: no generic variable
+witness exception, opaque population digest or additional reduction receipt is introduced.
+
+**Actual collection and delivery.** Acquire exposure once per edge while composing
+`breadthSemanticEvents`/`localSemanticEventClosure`; share that availability result rather than
+computing a second family population to recover absence. Publish available items as exact@2
+events with their two original inputs; append a projection-addressed@2 `invalid_turn_clone`
+abstention for unavailable. Preserve other families and loose-piece abstentions independently.
+Update `LocalSemanticEventAbstention`, actual generated packet abstention derivation and exact
+current projection groups together. Existing candidate row `abstentions` and private
+collectorOutcomes already carry this shape: retain original outcome identity through event/wide
+construction and narrowing, omit it only under the existing readings-only scope rule. No new
+packet schema or persisted protocol is needed. An unavailable collector is not a negative
+detector observation. Keep the candidate row and other families' collected results intact,
+but preserve the existing conservative selector: selectSemanticEvidence refuses the whole
+selection as counterfactual_population_incomplete when the played row or any alternative has
+an abstention, and evaluatedAlternatives counts only abstention-free alternatives. This
+amendment introduces no per-family denominators or relaxation. Accepted breadth §3.5's
+exclusion is satisfied conservatively, not by interpreting uncomputed exposure as absent.
+
+Shared packet §3.1a integrates this in its one unshipped compiler2 image beside the four earlier
+source replacements. Actual module-query flattening already handles availability wrappers;
+retain available empty as no_witness and projection-addressed unavailable in the current query
+result without erasing surviving modules/facts. Migrate actual exposure routes/source refs,
+event descriptors, semantic eligibility/qualification identities, strict payload receivers,
+presentation adapters, consumers and generated factory population to@2 together. Preserve
+Threat's existing lost-defender-to-target overlay, wording and assistance clamp, not a new
+safety or forced-tactic claim. Module-registration's single current image bumps Threat to@2;
+the other five changed modules retain their own exact accepted lists. Exposure is currently
+accepted only by Threat, not Nudge/Review/Inspector: do not add new slots to those lists or to
+Inspector's31-source map. No direct binding for the internal new reading. Retire old exposure@1 callable/factory/adapters after real caller
+migration; D3851 requires no executable compatibility pipeline, not deletion of saved data or
+rewriting historical claims/qualification.
+
+**Able-to-fail acceptance.** Permanent real-factory controls must include both-color 0/1/2 and
+promotion-expanded five-root cases, full payload/positive-order parity, negative/zero exchange,
+empty target, pinned/king-illegal recapture, X-ray, all promotion choices and en passant's
+distinct victim square. Assert the exact two source refs and ordered full source receipts.
+Reject fabricated/copied source values, crossed landing/FEN/control/edge and changed/truncated/
+reordered capture populations before empty shortcuts. Both legal checking fixtures must reach
+factory unavailable, actual local closure, candidate event/wide outcomes, narrowing, semantic
+counterfactual_population_incomplete with its measured evaluatedAlternatives and module-query
+unavailable; a real available no-witness fixture must
+remain distinct throughout. Readings-only scope must not retain an event abstention. Missing
+other families or a quiet all-family failure is not success. Check the actual generated closure,
+all affected current pair bindings, strict receivers and Threat native assistance behavior.
+The bounded source acceptance above authorizes genuine internal implementation and permanent
+tests. Complete current-module review still gates public cutover; parent awaiting/implementing
+states and passing disposable recipes confer no additional authority.
 
 #### 2.4 Authored authority
 

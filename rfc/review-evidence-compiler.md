@@ -1,5 +1,10 @@
 # RFC: Review evidence compiler
 
+**2026-10-15 joint amendment acceptance:** independent review accepts §4.5's exact earlier-
+Review source/12-adapter contract with the coordinated current-module image. Earlier unaccepted
+labels for that clause are history; actual source/execution/receiver delivery and unrelated
+parent amendments remain. Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 - **Draft amendment 2026-10-15 — [[D3832]]:** §4.5 owns the storage-bound earlier-Review
   moment source required by Inspector. It is **unaccepted**, adds no production authority,
   and preserves the old whole-tip subject/packet/Story contracts. The companion Inspector

@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3867]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3868]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,21 +19,30 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-D3863's all-ten-module inventory closes the omission of Compare Coach from the current-source
-migration plan:299 current pairs,282 conditionally proposed pairs,38 disposable controls. The
-independent joint review returns four concrete source/cardinality gaps, not a production-ready
-image. D3865's accepted trade repair now preserves four ordered witnesses and rejects crossed/
-missing/duplicated inputs. D3864's genuine raw recorded-path proposal and Compare's root-inclusive
-per-node trajectory source are authored; bounded review clears the corrected existing event
-names, not their production adoption. D3866's four-slot packet/current Hint source correction is
-now authored and bounded-reviewed, with39 image/ten active-path diagnostic controls, not actual
-source adoption. D3867's variable defender-exposure population remains next. It is reproduced with two positive captures/
-three sealed inputs against two declared. All five rows are owned; current source/joint acceptance,
-actual issuers/adapters/API/native proof and full1.0 breadth remain. Local verification passes
-5931 software/seven performance/257 content,396 browser cases/one configured optional skip,
-112 unretried composition cells and the packaged-production smoke case. These regress existing
-production paths, not the unimplemented source amendments. No remote CI, whole-milestone,
-new qualification or release claim.
+The complete coordinated current-source/module contract is now independently accepted for
+implementation. All four substantive returns and the final presentation/opening companion
+contradictions are resolved at contract level. The actual ten-module image retains282 pairs/
+six changed consumers, with no phantom exposure slots or legacy compatibility pipeline.
+Acceptance is not runtime qualification or completed learner delivery.
+
+Implementation starts with the genuine internal complete landing-capture source: sole computed
+factory/route, full capture trees/promotions/nonpositive outcomes and25 permanent cases,
+initially20red then99 focused passes. It has no direct learner binding and does not yet repair
+exposure's unavailable-to-empty loss. Next are its truthful two-input exposure/availability
+factory, complete source/reduction/packet/current-consumer migrations and real receiver/API/
+native proof. D3792 waits on implementation, not another author review; all affected rows stay
+live. Fresh normal make verify build passes5956 software/393 files, seven isolated performance
+cases,257 content cases and all type/contract/governance/packaging/build checks. Packaged
+rehearsal smoke passes separately; no new full-browser sweep or tactical qualification is
+claimed. The previous full sweep remains396 browser cases/one configured optional skip and
+112 unretried composition cells. No remote CI, whole-milestone or release claim.
+
+### Earlier checkpoints — history, not the current queue
+
+The following dated work descriptions retain the sequence of findings and repairs. Their
+then-pending source-review/compatibility instructions are superseded by the current verdict,
+the scoped acceptance record and the machine map's current nextAction; do not commission
+another author round from an old “next” sentence below.
 
 D3862 removes the unused raw-string Nudge API/client/runtime packet while preserving the actual
 canonical module query, shared evidence and presentation path. Its useful tests migrate to real

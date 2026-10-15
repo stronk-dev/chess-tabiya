@@ -1015,3 +1015,65 @@ The independent reviewer finds no bounded blocker, runs no tests and preserves a
 factory/packet/selector/receiver/native proofs as implementation obligations. Main's normal
 prefix target passes39 image and ten actual old-path diagnostic controls, not new source proof.
 D3867 and whole joint acceptance remain open; no old value is relabelled or legacy image required.
+
+### D3867/D3868 architecture and first exact-source return
+
+The authorized independent reviewer finds the complete raw-FEN+landing-square capture
+reading a legitimate computed authority: existing exchange.ts deterministically enumerates
+legal captures/all promotions and computes complete results. No independently sealed per-root
+inputs are required when none are consumed. Requirements: exact canonical FEN/landing even
+when empty, all results/branches/nonpositive scores, undefined enumerated capture refusal,
+physical en-passant victim identity, truthful conventional grounding, actual admitted-payload
+consumption and distinct invalid-turn-clone availability. This is architectural advice, not
+implementation acceptance. Reviewer runs no tests at this stage.
+
+The exact amendment's first review then returns a scope error: the author put exposure in
+Inspector's rebase map and claimed Nudge/Review/Inspector had slots to replace. Actual
+MODULE_POSTCOMMIT_EVENTS and Full Inspector lists exclude it; only Threat accepts it.
+The existing recorded-origin checker also refuses the unknown old topic. Correct by keeping
+the31-row Inspector map and making exposure a separate Threat-only rebase plus shared local
+packet source/abstention correction. Do not add new learner slots to save the proposed counts.
+The current282-pair image can retain six changed consumers, now including Threat. Bounded
+and complete joint re-review are requested against those actual corrected clauses; neither
+the architectural advice nor this author repair is acceptance.
+
+### D3867/D3868 bounded source acceptance — not joint delivery
+
+The next independent read returns a selection-boundary ambiguity: actual selectSemanticEvidence
+refuses the complete selection on any played/alternative row abstention, as accepted packet
+2026-09-24 item4 records. Retaining other families' collected rows does not authorize a new
+per-family denominator policy. F2 §2.3m and packet §3.1a now preserve the exact conservative
+counterfactual_population_incomplete result and measured abstention-free evaluatedAlternatives.
+The reviewer clears that correction and the Threat-only scope; six changed preflights are explicit.
+
+Reviewer decision: **ACCEPT FOR IMPLEMENTATION of the isolated D3867/D3868 source component**,
+including the genuine internal landing-capture reading, fixed two-input exposure@2 and stated
+availability/collector propagation. Source/factory/permanent-test implementation is authorized;
+no demonstrated runtime qualification or partial public Threat/packet/current consumer image
+is accepted. Complete coordinated source/module review continues independently. No tests run
+by the reviewer at this checkpoint. Main begins with the internal complete-capture reading;
+all actual consumer cutover and broader source obligations remain live.
+
+### Final coordinated implementation acceptance
+
+Independent review returns two last companion-only contradictions: evidence-presentation's
+old30/45 and75+6/dual-Inspector requirements versus the sole current65+6 image, and its
+Inspector-only opening-history pair while the authored Review@2 image also consumes it.
+Installed-opening's “fork-only” sentence likewise falsely says that Review contract is absent.
+Synchronize the actual current pair/source clauses, retain prior counts only as history and
+require real caller migration before retiring obsolete executable paths.
+
+The reviewer re-reads those actual fixes and explicitly **ACCEPTS FOR IMPLEMENTATION the
+complete jointly reviewed Inspector/current learner-module amendment**: module-registration's
+sole ten-consumer/282-pair image, F2 §§2.3a–m, provider §1a, grades §§2a/4a, Hint §3a, packet
+§3.1a, Review compiler §4.5, installed-opening §3a/current adoption and exact presentation
+companions. Prior four substantive returns are resolved at contract level. Actual source
+issuance, execution, HTTP/native delivery and qualification remain implementation obligations;
+unrelated parent RFC obligations are not accepted by this decision. No tests run/files changed
+by the reviewer. Each owner RFC/register acknowledges this bounded decision without pretending
+its parent lifecycle or all old discharges completed.
+
+A separate narrow production diff read finds no correctness blocker in the new internal
+landing-capture declaration/type/factory/route/permanent tests. The tests independently check
+capture enumeration but reuse existing exchange arithmetic; they are not independent arithmetic
+or tactical qualification. Reviewer runs no tests. Main's local gate results belong to the log.

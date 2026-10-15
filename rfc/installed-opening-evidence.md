@@ -1,5 +1,11 @@
 # RFC: Installed opening evidence
 
+**2026-10-15 joint amendment acceptance:** independent review accepts §3a's complete opening-
+history source and coordinated current Inspector@2/ReviewMap@2 adoption contract. Earlier
+unaccepted labels for those clauses are history; this does not accept unrelated parent/resource
+obligations or claim actual source delivery. Decision:
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 - **Status:** draft — [[D3376]]; independent buildability review required before implementation
 - **Author:** codex
 - **Created:** 2026-10-08
@@ -229,12 +235,15 @@ descendant name, arbitrary pack recommendation, move prior or persistent theory-
 Existing `/opening-identity` response bytes/absence meanings and the source catalogue pin remain.
 No saved run, pack, database table, historical event or opponent request is rewritten. Point
 factory valid/falsifier fixtures migrate to real authorities. Old deepest@1 declaration, factory,
-callers and receipts remain unchanged; it does not gain a fabricated available compatibility arm.
-New @2 has its own real available/empty/refused controls. Current endpoint and membership
+callers/receipts are not reinterpreted as new authority; under D3851 migrate actual callers and
+retire the obsolete executable@1 path rather than build a compatibility arm. New @2 has its
+own real available/empty/refused controls. Current endpoint and membership
 payloads stay @1. No consumer silently accepts @2 under an old pair: Inspector's proposed
-75-topic map replaces the history slot explicitly, and Review Map's complete successor image
-must do likewise under D3859 before joint acceptance. The current fork-only proposal alone
-does not provide that full image or permission to count this source as delivered.
+original75-topic rebase map replaces the history slot before sequence deduplication into its
+sole current65-topic/six-detail image. Review Map's complete72-ref successor contract now exists
+under D3859. Bind deepest_reached@2 to both exact module.full_inspector@2 and module.review_map@2;
+actual complete-source/current-binding/receiver adoption remains required before either is
+counted as delivered. No parallel old consumer image or fabricated historical authority.
 
 Keep the existing 250 ms load budget and 50 µs paired-lookup CPU p95 budget. Track load count and
 one-pair normalization with structural controls in addition to timing. History walks one authorized

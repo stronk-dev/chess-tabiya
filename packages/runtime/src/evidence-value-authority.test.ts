@@ -231,7 +231,8 @@ describe("value authority: registry equality", () => {
     // (rfc/bounded-target-policy-composition.md §4).
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
-    expect(ACTIVE).toHaveLength(278);
+    // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
+    expect(ACTIVE).toHaveLength(279);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -312,7 +313,7 @@ describe("value authority: registry equality", () => {
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
     // Plus rfc/bounded-policy-targets.md §4 and rfc/bounded-target-policy-composition.md §4 routes.
     // Plus rfc/evidence-presentation.md Checkpoint P's source-bound citation derivation.
-    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.inspector_population@1", "derived.explorer.population_summary@1", "derived.explorer.position_frequency@1", "derived.explorer.repertoire_frontier@1", "derived.grade.move_quality@1", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.run_move_occurrence@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@2", "derived.review.eval_point@1", "derived.review.mate_transition@2", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "live.syzygy.position_result@2", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.inspector_population@1", "derived.explorer.population_summary@1", "derived.explorer.position_frequency@1", "derived.explorer.repertoire_frontier@1", "derived.grade.move_quality@1", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.run_move_occurrence@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@2", "derived.review.eval_point@1", "derived.review.mate_transition@2", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "live.syzygy.position_result@2", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.exchange.reading.landing_captures@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -777,6 +778,8 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const capture = sealedOne("rules.transition.event.capture@1", edge("4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", "e4d5"));
   const exchange = sealedOne("rules.exchange.predicate.legal_exchange@1", { fen: "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", captureUci: "e4d5" });
   profiles.set("rules.exchange.predicate.legal_exchange@1", { valid: { fen: "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", captureUci: "e4d5" }, falsify: refused("rules.exchange.predicate.legal_exchange@1", { fen: "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", captureUci: "e4d5", resultUnits: 9 }) });
+  profiles.set("rules.exchange.reading.landing_captures@1", { valid: { fen: "r3k3/1P6/1B6/8/8/8/8/R3K3 w - - 0 1", landingSquare: "a8" },
+    falsify: refused("rules.exchange.reading.landing_captures@1", { fen: "r3k3/1P6/1B6/8/8/8/8/R3K3 w - - 0 1", landingSquare: "a8", captures: [] }) });
   profiles.set("derived.exchange.capture_class@1", { valid: { capture, exchange }, falsify: refused("derived.exchange.capture_class@1", { capture, exchange: identity(exchange) }) });
   const mateFen = "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1";
   const breadth = sealedOne("rules.tactic.consequence.reply_breadth@1", edge(mateFen, "f7g7"));

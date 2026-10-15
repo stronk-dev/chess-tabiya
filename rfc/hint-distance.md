@@ -1,5 +1,10 @@
 # RFC: Guided-hint disclosure distance
 
+**2026-10-15 joint amendment acceptance:** independent review accepts §3a's exact current
+source/disclosure/compiler/wire contract with the coordinated module image. Earlier unaccepted
+labels for that clause are history; actual source/API/native migration and unrelated parent
+obligations remain. Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 - **Draft amendment 2026-10-15 — D3768/D3847, §3a:** coordinated nonterminal-fork source,
   exact current versions and version-two delivery receipt. Unaccepted; the existing parent
   lifecycle grants no implementation permission for this amendment.

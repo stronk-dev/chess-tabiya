@@ -12,7 +12,8 @@
  */
 import { canonicalizeJson, STRUCTURAL_FEATURE_KINDS, type DrillPackDefinition, type StructuralFeature } from "@chess-tabiya/schema/drill-pack";
 import { normalizeMove } from "chessops/chess";
-import { parseUci } from "chessops/util";
+import { parseSquare, parseUci } from "chessops/util";
+import type { SquareName } from "chessops/types";
 
 import { sha256Hex } from "./assistance-exchange.js";
 import { castlingLegality, castlingRights, castlingRightsLost } from "./castling.js";
@@ -23,7 +24,7 @@ import { recordedBranchFacts, type BranchComparison, type ComparisonEvidenceEntr
 import { endgameClassification } from "./endgame.js";
 import { endgameMethodConvention, replayEndgameMethod, type MethodStage } from "./endgame-method.js";
 import { endgameSetupConvention, endgameSetupMatch, type EndgameSetupMatch, type EndgameTechnique } from "./endgame-setup.js";
-import { captureClassEvent, legalExchange, type LegalExchangeResult } from "./exchange.js";
+import { captureClassEvent, legalCaptureMovesTo, legalExchange, legalExchangeForMove, type LandingCaptureReading, type LegalExchangeResult } from "./exchange.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES, TRANSITION_GEOMETRY_EVENT_FAMILIES, TRANSITION_RULE_EVENT_FAMILIES } from "./evidence-catalog.js";
 import {
   assertDeclaredEvidence,
@@ -638,6 +639,25 @@ export const createRulesTacticEventLoosePieceV1Evidence = (() => {
     if (result.kind === "unavailable") return unavailable(result.reason);
     if (result.afterFen !== edge.afterFen) throw new TypeError(`Loose-piece after FEN does not match ${edge.moveUci}`);
     return available(Object.freeze(result.events.map((payload) => mint(route, symbol, payload, edge))));
+  });
+})();
+
+export const createRulesExchangeReadingLandingCapturesV1Evidence = (() => {
+  const route = "rules.exchange.reading.landing_captures@1";
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN,
+    landingSquare: value("a board square", candidate => typeof candidate === "string" && /^[a-h][1-8]$/u.test(candidate)) }],
+    result: "single" }, ({ fen, landingSquare }: { readonly fen: string; readonly landingSquare: SquareName }): DeclaredEvidence<LandingCaptureReading> => {
+    const position = positionFromFen(validFen(fen)), target = parseSquare(landingSquare);
+    if (target === undefined) throw new TypeError("Landing capture requires a board square");
+    const canonical = canonicalFen(position);
+    const captures = legalCaptureMovesTo(position, target).map(move => {
+      const result = legalExchangeForMove(position, move);
+      if (result === undefined) throw new TypeError("Enumerated legal capture has no exchange result");
+      return result;
+    });
+    return mint(route, symbol, { fen: canonical, landingSquare, captures: Object.freeze(captures) },
+      { fen: canonical, landingSquare });
   });
 })();
 

@@ -1162,6 +1162,13 @@
       "41306d1ceab343c57c0ab653a0baec17770c87838d8a4e3ec3f7c1b90326a4ee"
     ]
   },
+  "rules.exchange.reading.landing_captures@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "3ffd128ccfb3173a2f5b99019fc6e9022dc7752fb68c643335839aa2d3f34158"
+    ]
+  },
   "rules.king.event.zone_state@1": {
     "availability": "available",
     "cardinality": 2,

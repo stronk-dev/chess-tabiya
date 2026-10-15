@@ -423,6 +423,14 @@ const LEGAL_EXCHANGE_SEMANTICS = "legal-exchange@1 evaluates one specified legal
 const THREAT_SEMANTICS = "threat@1 gives the move to the opponent and clears en-passant, then enumerates positive legal-exchange@1 captures and mate in one. It abstains while the side to move is in check. Quiet promotion, deeper mating nets, trapping threats and forking threats are outside this one-ply convention.";
 
 const exchangeOutputs = [
+  projection("rules.exchange", "rules.exchange.reading.landing_captures", "rules", {
+    role: "reading", payloadType: "LandingCaptureReading",
+    semantics: "Complete UCI-ordered legal-exchange@1 population on one landing square in the exact canonical FEN. Retains every legal capture, all promotion choices, nonpositive results and complete recapture trees; empty retains its FEN and target.",
+    operands: ["fen", "landingSquare", "captures"], grounding: "declared_convention", exactness: "convention",
+    answerContent: ["fact"], forms: ["machine_condition"],
+    limitations: ["Local exchange arithmetic only, not move quality, strategy or a best move. The landing square is not the en-passant victim square."],
+    disposition: { kind: "inspector_only", reason: "Internal complete-capture prerequisite; no direct learner binding." },
+  }),
   projection("rules.exchange", "rules.exchange.predicate.legal_exchange", "rules", {
     role: "predicate",
     payloadType: "LegalExchangeResult",

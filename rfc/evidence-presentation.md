@@ -1,5 +1,11 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
+**2026-10-15 joint amendment acceptance:** independent review accepts the corrected Inspector
+source/detail, current-pair and opening-history presentation companions with the coordinated
+ten-consumer image. Earlier unaccepted labels for these clauses are history; actual adapters,
+strict receivers, native usability and unrelated parent obligations remain. Decision:
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 - **Status:** **implementing — Checkpoints P, A and B landed 2026-09-24 at the owner's direction
   (implement directly, no review round); receipts
   `planning/platform-alignment/evidence-presentation/checkpoint-a-implementation-2026-09-24.md` and
@@ -2061,7 +2067,8 @@ response and disclosure. This section owns only the six derived payloads and reg
 presentation. D3795/D3797 establish intrinsic overflow and bounded member feasibility; D3802's
 typed reconstruction checks retain the source operand image. Neither instrument establishes
 semantic qualification, real acquisition, production seals, response admission or native usability.
-The old full-source producers, consumers/adapters and pack predicates remain byte-compatible.
+The earlier compatibility-only requirement is superseded by D3851's no-prelaunch-legacy ruling;
+actual callers migrate before obsolete executable source/consumer/adapter paths are retired.
 
 ### Six exact identities and sole constructors
 
@@ -2070,16 +2077,16 @@ Independent D3792 review on 2026-10-15 returns the joint amendment for D3841, D3
 naming the consumer successor below does not specify its complete execution/binding image.
 This detail section remains unaccepted; no production or existing source meaning changes.
 The D3841 follow-up also refutes simply retaining75 unchanged legacy refs plus these six views:
-§4.11a still owes an obligation-preserving modern-source rebase and exact-version registry/
-admission/presentation closure. One existing module policy is shared, not duplicated or weakened;
-old @1 payloads and adapters stay intact. The current exact30-replacement/45-conditionally-retained
-source map (including recorded sequence@3 repairs) preserves
-75 topic refs plus six detail refs (81 distinct accepted refs), not a compiled successor binding
-count: its rank@3 remains held on D3845 and adapters can have multiple forms.
-The subsequent D3841 author clauses specify the exact-version consumer-image join, required
-per-demand source policies and source-order whole-component fitting, still pending independent
-review and actual source/callable/supplier closure. Presentation must classify both Inspector versions and bind
-adapters to the exact tuple. Source/detail components consume the admitted @2 collection without
+§4.11a now supplies an obligation-preserving modern-source rebase and exact-version registry/
+admission/presentation contract, still requiring independent acceptance and actual implementation.
+One existing module policy is shared, not duplicated or weakened. The original Inspector map has
+31 replacements/44 retained topics before module-registration's ordered sequence deduplication;
+the sole current Inspector image is65 topics plus six detail refs,71 exact pairs. The entire
+ten-module image has282 pairs/six changed consumers. Prior30/45 and75+6 counts are superseded,
+not a second compatibility image. Source-owned rank/reductions retain their explicit F2/provider
+contracts; neither counts nor adapters establish runtime delivery.
+Presentation classifies only the sole current Inspector@2 tuple and binds every adapter to it;
+retire old@1 adapters after real caller migration under D3851. Source/detail components consume the admitted @2 collection without
 the old packet ordering/reduction backstop; all current role/answer limits and whole-component
 budgets remain. Fit all components/equivalent sentences/captions/marks/arrows owned by one
 occurrence or detail member atomically; count it once and publish none of its components if
@@ -2104,13 +2111,16 @@ Budget deferral remains distinct from a refused source record. No unbounded diag
 extra source-detail door is introduced here; the complete private source keeps its ordinals.
 
 **D3857 installed-opening status and successor pair — unaccepted companion.** Register the
-new derived.opening.deepest_reached@2 pair only to the exact proposed Inspector successor,
+new derived.opening.deepest_reached@2 pairs to exact module.full_inspector@2 and module.review_map@2
+in module-registration's sole current image,
 using the existing inspector.opening_reached@1 closed eco/name operand schema and renderer.
 Copy those fields from the genuine selected deepest endpoint, retaining its catalogue/convention
 attribution and the source-bounded retrospective label; never claim current-position identity,
 book quality, strategy or a suggested move. Authenticate the complete @2 result before adapting,
-including empty output. Old @1 pairs/receipts remain unchanged. Review Map's new exact pair
-must wait for D3859's complete successor image, not accept a new ref under an old consumer.
+including empty output. Migrate actual Inspector and Review adapters/receivers with that same
+coordinated image; retire obsolete executable@1 pairs after caller migration, retaining truthful
+history. Review's72-ref successor contract exists; runtime adoption still requires its actual
+complete-source/current-binding gates, not a new ref accepted under an old consumer.
 
 The fixed source-status UI labels are: artifact_missing, "Opening catalogue is not installed";
 artifact_invalid, "Installed opening catalogue is invalid"; digest_mismatch, "Installed opening

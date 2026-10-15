@@ -4,6 +4,15 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Current source/module amendment acceptance, 2026-10-15:** authorized independent joint
+review accepts module-registration's sole ten-consumer/282-pair image, F2 §§2.3a–m, provider
+§1a, grade §§2a/4a, Hint §3a, packet §3.1a, Review §4.5, installed-opening §3a/current adoption
+and their exact presentation companions. Earlier returned/unaccepted notes below describe
+review history, not a current blocker for these accepted clauses. Parent lifecycle states,
+resource claims and unrelated discharges do not change. Actual source issuance, complete
+execution/bindings, HTTP/native delivery and qualification remain implementation obligations.
+Decision/scope: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 **Recorded Review/Story source contract, 2026-10-15:** D3832 authors Review compiler §4.5
 and the companion Inspector rank arm together. The source authority is storage-bound;
 the existing manifest derives eleven required adapters. Actual imported source fixtures

@@ -13,9 +13,14 @@ import { moveQualityGrade, type MoveQualityGrade } from "../../packages/runtime/
 import { gradeReadingFromPayload } from "../../packages/runtime/src/grade-reading.js";
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
 import { runGradeSourceResearch } from "./grade-source.js";
-import { localSemanticEvents } from "../../packages/runtime/src/semantic-evidence.js";
-import { candidateChildReadings, CANDIDATE_PACKET_COMPILER_VERSION } from "../../packages/runtime/src/candidate-population.js";
+import { defenderExposureOperands, localSemanticEventClosure, localSemanticEvents } from "../../packages/runtime/src/semantic-evidence.js";
+import { candidateChildReadings, CANDIDATE_PACKET_COMPILER_VERSION, CANDIDATE_WIDE_SCOPE, compileCandidatePopulation } from "../../packages/runtime/src/candidate-population.js";
 import { HINT_DECLARATION_MATRIX } from "../../packages/runtime/src/hint-registry.js";
+import { canonicalFen, positionFromFen } from "../../packages/runtime/src/chess.js";
+import { parseSquare } from "chessops/util";
+import type { SquareName } from "chessops/types";
+import { legalCaptureMovesTo, legalExchangeForMove } from "../../packages/runtime/src/exchange.js";
+import { passFen } from "../../packages/runtime/src/module-query.js";
 
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
 const declarations = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map(row => [key(row), row]));
@@ -112,6 +117,100 @@ export function runModuleSourceResearch() {
   runGradeSourceResearch();
   runExposureWitnessDiagnostic();
   runCurrentPacketSourceDiagnostic();
+  runExposureAbsenceDiagnostic();
+  runLandingCaptureSourceRecipe();
+}
+
+// DISPOSABLE D3867 computed-source recipe. Plain data only: NOT a registered/sealed source.
+function runLandingCaptureSourceRecipe() {
+  let controls = 0;
+  const check = (test: () => void) => { test(); controls++; };
+  const reading = (fen: string, landingSquare: SquareName) => {
+    const position = positionFromFen(fen), square = parseSquare(landingSquare);
+    if (square === undefined) throw new TypeError("invalid landing square");
+    const captures = legalCaptureMovesTo(position, square).map(move => {
+      const result = legalExchangeForMove(position, move);
+      if (result === undefined) throw new Error("legal capture has no exchange result");
+      return result;
+    });
+    return Object.freeze({ fen: canonicalFen(position), landingSquare, captures: Object.freeze(captures) });
+  };
+  for (const fixture of [
+    { side: "white" as const, fen: "r3k3/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", move: "c5b6", count: 2 },
+    { side: "black" as const, fen: "3k3r/8/8/8/5b2/6N1/6b1/3K3R b - - 0 1", move: "f4g3", count: 2 },
+    { side: "white" as const, fen: "r3k3/1P6/1n6/2B5/8/8/8/R3K3 w - - 0 1", move: "c5b6", count: 5 },
+    { side: "black" as const, fen: "3k3r/8/8/8/5b2/6N1/6p1/3K3R b - - 0 1", move: "f4g3", count: 5 },
+  ]) {
+    const run = play(importedRun(`landing:${fixture.side}:${fixture.count}`, fixture.side, fixture.fen), [fixture.move]);
+    const root = run.nodes.find(node => node.parentId === null)!, child = run.nodes.find(node => node.parentId === root.id)!;
+    const payloads = defenderExposureOperands(root.fen, child.moveUci!, child.fen);
+    check(() => assert.equal(payloads.length, 1));
+    const payload = payloads[0]!;
+    check(() => assert.equal(payload.kind, "available"));
+    const source = reading(passFen(child.fen)!, payload.target!.square);
+    check(() => assert.equal(source.captures.length, fixture.count));
+    check(() => assert.deepEqual(source.captures.filter(value => value.resultUnits > 0), payload.captures));
+    check(() => assert(source.captures.every(value => value.beforeFen === source.fen && value.captureUci.slice(2, 4) === source.landingSquare)));
+  }
+  const negative = reading("r3k3/p7/8/8/8/8/8/R3K3 w - - 0 1", "a7");
+  check(() => assert.equal(negative.captures.length, 1));
+  check(() => assert(negative.captures[0]!.resultUnits < 0));
+  const ep = reading("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 2", "d6");
+  check(() => assert.equal(ep.captures.length, 1));
+  check(() => assert.equal(ep.captures[0]!.captureUci, "e5d6"));
+  check(() => assert.equal(ep.captures[0]!.captured.square, "d5"));
+  check(() => assert.deepEqual(reading("4k3/8/8/8/8/8/8/4K3 w - - 0 1", "a4").captures, []));
+  const computed = declarations.get("rules.exchange.reading.landing_captures@1")!;
+  assert(computed, "bounded-accepted internal complete reading is now installed");
+  const exposure = declarations.get("derived.tactic.defender_exposure@1")!;
+  const inputs = [parse("rules.square.event.control@1"), { id: computed.id, version: 1 }];
+  const successor: ProjectionDeclaration = { ...exposure, version: 2, dependsOn: inputs, derivation: { inputs },
+    disposition: { kind: "inspector_only", reason: "Disposable fixed-input metadata, not an exposure factory" } };
+  const manifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+    producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.tactic"
+        ? { ...producer, outputs: [...producer.outputs, successor] } : producer) });
+  const execution = compileProjectionExecution(manifest, successor);
+  check(() => assert.equal(execution.paths.length, 1));
+  check(() => assert.deepEqual(execution.paths[0]!.derivationChoices.find(choice => choice.projection.id === successor.id)!.inputs, inputs));
+  check(() => assert.deepEqual(execution.paths[0]!.sourceRequirements, []));
+  check(() => assert.deepEqual([computed.grounding, computed.exactness, computed.confidence], ["declared_convention", "convention", "not_applicable"]));
+  check(() => assert(!declarations.has("derived.tactic.defender_exposure@2")));
+  console.log(JSON.stringify({ scope: "DISPOSABLE D3867 landing-capture recipe and isolated F1 metadata, NOT source/derivation/adoption proof",
+    controls, sourcePairs: 4, positiveCaptureCounts: [2, 2, 5, 5], retainsNegative: true, enPassantPhysicalCapture: true,
+    completeOldPositivePayloadParity: true, literalInputRefs: inputs.map(key), installedInternalReading: true,
+    newExposureIssuers: 0, instrumentProductionChanges: 0 }));
+}
+
+// DISPOSABLE D3868 actual absence path; no corrected source, packet or learner operation.
+function runExposureAbsenceDiagnostic() {
+  let controls = 0;
+  const check = (test: () => void) => { test(); controls++; };
+  for (const fixture of [
+    { side: "white" as const, fen: "r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", move: "c5b6" },
+    { side: "black" as const, fen: "3k3r/8/8/8/5b2/6N1/6b1/4K2R b - - 0 1", move: "f4g3" },
+  ]) {
+    const run = play(importedRun(`exposure-absence:${fixture.side}`, fixture.side, fixture.fen), [fixture.move]);
+    const root = run.nodes.find(node => node.parentId === null)!, child = run.nodes.find(node => node.parentId === root.id)!;
+    const raw = defenderExposureOperands(root.fen, child.moveUci!, child.fen);
+    check(() => assert.equal(raw.length, 1));
+    check(() => assert.equal(raw[0]!.kind, "unavailable"));
+    check(() => assert.equal(raw[0]!.reason, "invalid_turn_clone"));
+    check(() => assert.deepEqual(invokeEvidenceValueRoute("derived.tactic.defender_exposure@1", { beforeFen: root.fen, moveUci: child.moveUci!, afterFen: child.fen }), []));
+    const closure = localSemanticEventClosure(root.fen, child.moveUci!, child.fen);
+    check(() => assert(!closure.abstentions.map(value => String(value.projection)).includes("derived.tactic.defender_exposure@1")));
+    const packet = compileCandidatePopulation({ beforeFen: root.fen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+    check(() => assert.equal(packet.kind, "ready"));
+    if (packet.kind !== "ready") throw new Error("actual exposure absence packet did not compile");
+    const row = packet.receipt.packet.candidates.find(value => value.moveUci === child.moveUci)!;
+    check(() => assert(row));
+    check(() => assert(!row.abstentions.map(value => String(value.projection)).includes("derived.tactic.defender_exposure@1")));
+  }
+  const empty = play(importedRun("exposure-absence:real-empty", "white", "r3k3/8/1n6/2B5/8/8/8/4K3 w - - 0 1"), ["c5b6"]);
+  const root = empty.nodes.find(node => node.parentId === null)!, child = empty.nodes.find(node => node.parentId === root.id)!;
+  check(() => assert.deepEqual(defenderExposureOperands(root.fen, child.moveUci!, child.fen), []));
+  check(() => assert.deepEqual(invokeEvidenceValueRoute("derived.tactic.defender_exposure@1", { beforeFen: root.fen, moveUci: child.moveUci!, afterFen: child.fen }), []));
+  console.log(JSON.stringify({ scope: "DISPOSABLE D3868 actual unavailable-to-empty loss, NOT corrected source/consumer proof",
+    controls, legalCheckingEdges: 2, helperUnavailable: 2, factoryEmpty: 2, packetAbstentionMissing: 2, realEmptyControls: 1, productionChanges: 0 }));
 }
 
 // DISPOSABLE D3866 active-path falsifier, not a corrected packet or Hint implementation.
@@ -190,6 +289,7 @@ function runWholeCurrentModuleInventory(replacements: ReadonlyMap<string, string
     const refs = MODULE_CONSUMER_ACCEPTS[module].map(key);
     const target = [...new Set(refs.filter(ref => module !== "review_map" || !["live.stockfish.eval@1", "live.stockfish.wdl@1"].includes(ref))
       .map(ref => ref === "derived.grade.move_quality@1" ? "derived.grade.move_quality@2"
+        : ref === "derived.tactic.defender_exposure@1" ? "derived.tactic.defender_exposure@2"
         : module === "compare_coach" && ref === "derived.compare.engine_trajectory@1" ? "derived.compare.engine_trajectory@2"
           : module === "compare_coach" && ref === "derived.compare.piece_route@1" ? "derived.compare.piece_route@2"
           : sequences.get(ref.split("@")[0]!) ?? replacements.get(ref) ?? ref))];
@@ -211,9 +311,11 @@ function runWholeCurrentModuleInventory(replacements: ReadonlyMap<string, string
   });
   check(() => assert.equal(rows.reduce((total, row) => total + row.baseline, 0), 299));
   check(() => assert.equal(rows.reduce((total, row) => total + row.proposed, 0), 282));
+  check(() => assert.deepEqual(EVIDENCE_MODULE_IDS.filter(module => MODULE_CONSUMER_ACCEPTS[module]
+    .some(ref => key(ref) === "derived.tactic.defender_exposure@1")), ["threat_radar"]));
   check(() => assert.equal(rows.find(row => row.module === "guided_hint")!.changedPairs.length, 10));
   check(() => assert.deepEqual(rows.filter(row => row.changed).map(row => row.module),
-    ["postcommit_nudge", "guided_hint", "compare_coach", "review_map", "full_inspector"]));
+    ["threat_radar", "postcommit_nudge", "guided_hint", "compare_coach", "review_map", "full_inspector"]));
   check(() => assert.match(rows.find(row => row.module === "compare_coach")!.baselineExecution, /EXECUTION_SOURCE_UNREGISTERED/u));
   const section = author.split("**D3841 exact-version closure — unaccepted current contract:**")[1]!.split("**Ordered exact acceptance.**")[0]!;
   const expected = rows.map(row => ({ module: row.module, version: row.changed ? 2 : 1, count: row.proposed,
@@ -228,6 +330,7 @@ function runWholeCurrentModuleInventory(replacements: ReadonlyMap<string, string
   const compareLine = section.split("\n").find(line => line.startsWith("| compare_coach |"))!;
   for (const mutated of [section.replace(compareLine, ""), `${section}\n${compareLine}`,
     section.replace("module.compare_coach@2", "module.compare_coach@1"),
+    section.replace("module.threat_radar@2", "module.threat_radar@1"),
     section.replace("| 72 |", "| 74 |"),
     section.replace(compareLine, compareLine.replace("compileModulePacket", "compileInspectorSourcePage")),
     section.replace("compileHintDisclosure@2", "compileHintDisclosure@1")]) {

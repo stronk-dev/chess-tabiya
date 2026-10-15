@@ -1,29 +1,33 @@
-# Codex queue — rewritten in full 2026-08-16
+# Codex queue
 
-2026-10-15 — Whole-current-image checkpoint D3863–D3867: all ten modules now have an explicit
-current-catalogue/callable/binding recipe, including previously omitted Compare Coach. The
-38-control disposable inventory measures299 current pairs and282 conditional proposed pairs;
-that proposal is RETURNED, not accepted/implemented. Independent joint review finds four real
-gaps: Compare piece routes have zero sealed inputs (D3864), trade declarations collapse four
-inputs to two (D3865), Hint/candidate promotion/material sources remain wrong (D3866), and
-defender exposure retains a variable exchange population (D3867). The last is executed with six
-controls: two positive captures/three actual inputs against two declared. No blanket hold,
-failed-binding filter, singleton fake or family deletion may hide these returns.
+2026-10-15 — **Complete current-source/module amendment independently accepted for
+implementation.** All four substantive returns and the final companion inconsistencies have
+reviewed contracts: genuine recorded Compare path/points, four-occurrence trade (already fixed),
+five actual packet source changes, complete landing captures and truthful exposure availability.
+The ten-module current image has282 exact pairs/six changed consumers. Source-only internal
+work may land incrementally; actual current consumer cutover must be source-complete, not a
+partial image made green by filtering failures. Acceptance scope/decision is in
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
-D3865's accepted immediate repair is implemented with genuine narrative/recorded-factory
-regressions; focused155 tests pass before a separate new regression is isolated from the frozen
-capture assertion. Final full-gate results belong to the log. D3864 now proposes the genuine
-complete raw recorded comparison path plus piece_route@2; independent bounded return corrects
-the exact existing RunStartedEvent/run.started names, then clears that wording, not joint
-acceptance. Compare trajectory@2 uses genuine source-owned per-node eval points including root/
-fork, sharing only the private endpoint resolver with grade; it does not invent grade edges.
-The D3866 correction is now authored and independently bounded-reviewed: all four actual
-packet source slots migrate together; fork+promotion have ten current disclosure@2 refs,
-five other families/25 refs remain@1.39 current-image and ten actual active-path diagnostic
-controls pass, not corrected packet/Hint adoption. Next author D3867's complete exposure
-population, refresh the whole image and obtain independent joint
-acceptance before new source/factory/API implementation. D1422 remains doing. No legacy pipeline
-or user decision is required; D3851 remains answered. No whole milestone or release promotion.
+Internal landing_captures@1 is the first production component: sole computed catalogue/factory/
+route, complete source payload and25 permanent cases, initially20red then99 focused passes.
+It has no direct learner binding, new packet output or exposure migration yet. Enumeration
+is independently checked; existing legal-exchange arithmetic is reused, not independently
+qualified. No finished Support/Review capability follows from this prerequisite.
+
+Next implement exposure@2's real two-input factory/availability and permanent edge/absence
+tests; then the accepted source/reduction/packet/current-binding migrations, strict receivers,
+API and native journeys. Preserve every actual detector family, exact source/access/assistance,
+D1422's unified ladder and original budgets. Exposure is currently Threat-only, not an invented
+Inspector/Nudge/Review slot. D3792 now waits on D3841's implementation, not another contract
+review. D3867/D3868 and the remaining source rows stay live until actual cutover/proof. No legacy
+pipeline or owner question is required; no whole milestone, qualification or release promotion.
+
+Small verification-maintenance slice [[D3869]] before the next source implementation: fail fast
+on the existing generated-contract checks before expensive software/performance pools. The
+current pipeline correctly catches stale data, but does so after minutes of unrelated passing
+tests. Reorder existing normal Make prerequisites and strengthen existing scheduling tests;
+retain all gates/populations/native/performance isolation. No new command wrapper or hook policy.
 
 **Current owner ruling, 2026-10-15 — D3851:** “zero legacy required. we are pre launch. make it
 all right.” This supersedes the compatibility/pipeline-preservation instructions below. Build

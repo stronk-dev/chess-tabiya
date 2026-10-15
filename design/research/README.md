@@ -75,6 +75,23 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D3867/D3868 complete capture and absence audit, 2026-10-15:18 actual-path controls reproduce
+legal both-color invalid-clone outcomes lost as factory empty/missing packet abstention.
+26 plain-data capture and five isolated F1 metadata controls preserve complete2/2/5/5 capture
+populations, negative exchanges and en-passant victim identity, not new source issuance.
+Independent review corrects an author scope error: exposure is Threat-only, not an Inspector
+topic. Proposed current image retains282 pairs/six changed consumers and31 Inspector rebases;
+actual factory/collector/packet/module delivery and full joint acceptance remain. `[V]`
+`module-evidence-assembly.md` §Defender-exposure complete source and lost availability;
+normal prefix target; dated independent review.
+
+Current-source joint gate cleared, 2026-10-15: independent reviewer explicitly accepts the
+complete coordinated contract after source and companion repairs. Internal landing-capture
+source now has genuine factory/route and25 permanent cases (20 initially red;99 focused pass).
+This is actual prerequisite implementation, not exposure/public consumer cutover or independent
+exchange arithmetic qualification. `[V]` same dossier's final acceptance/source paragraph;
+landing-captures.test.ts; owner RFC notes and dated independent decision.
+
 D3863–D3867 current module source audit, 2026-10-15:39 disposable controls enumerate all ten
 modules (299 current/282 conditional proposed pairs) and expose omitted Compare Coach. Joint
 review returns four concrete lineage/cardinality gaps. Six actual defender-exposure controls

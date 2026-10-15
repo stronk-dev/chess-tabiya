@@ -31165,3 +31165,110 @@ Campaign was the one capability with no API, route or content. Now:
 - The normal roadmap check then requires the corresponding exact active-register anchors,
   not bare RFC paths. Derive both from its existing canonical parser and add them alongside
   the two evidence paths; no invented digest, source gate weakening or RFC acceptance follows.
+
+### 2026-10-15 — D3867/D3868 complete capture source and actual absence audit
+
+- Continue the active full1.0 goal from21139a3f without pausing or promoting a milestone.
+  Add/assign D3868 before implementing anything:18 actual recorded-edge/helper/factory/local-
+  closure/candidate controls reproduce legal checking moves for both colors losing declared
+  invalid_turn_clone as empty. A real no-witness fixture stays separately empty. This is an
+  actual accepted breadth §3.5 violation, not a new chess judgement or a qualified detector.
+- Prototype a smaller correct authority: compute the complete legal capture population on one
+  canonical FEN/landing square, retaining all results/branches and four promotion variants.
+  Both-color2/2/5/5 witness cases reproduce complete old positive payloads; negative/empty and
+  en-passant physical victim cases survive.26 calculation/five isolated unchanged-F1 metadata
+  controls pass. No production source/factory/consumer or fifth reduction is implemented.
+- Initial research typecheck correctly rejects a mistaken LegalExchangeResult.line access;
+  use its actual captured identity. While expanding the coordinated image, the existing source
+  map checker then rejects32 versus31, and a follow-up fails on an unknown original topic.
+  Independent reviewer identifies the real author error: exposure is accepted only by Threat,
+  not Nudge/Review/Inspector. Restore the actual31/44 Inspector map and separately rebase
+  Threat. Keep the checker intact; add explicit actual-consumer and stale-Threat-version
+  controls. Final normal make inspector-recorded-prefix-research exits zero with41 all-module
+  image controls,18 absence and31 capture/metadata controls, retaining282 proposed pairs.
+- F2 §2.3m now authors that computed reading plus fixed [control,completeReading] exposure@2,
+  existing availability wrappers and actual local closure/generator/outcome/Threat migration.
+  Shared packet's same unshipped compiler2 includes exposure beside four earlier source changes.
+  Exact complete source/module bounded/joint review is requested from the authorized independent
+  reviewer; architectural approval is not implementation acceptance. No old source relabelling,
+  positive-capture truncation, new learner slot, persisted protocol or compatibility scaffolding.
+- Sync the new row, then explicitly assign evidence-foundation/doing. The expected intermediate
+  sync refuses one untriaged row; the assignment restores0/1748 live with36 doing. Refresh the
+  existing queue/coverage/roadmap checkpoint and compact receipt, not a new tracking hierarchy.
+  Normal roadmap receipt/check is green. Production/test bytes remain the last fully verified
+  image; fresh research/governance and subsequent normal hooks are this change set's gates.
+- Exact-source review next catches an unintended selector-policy change: preserving each
+  family's collected results is not permission to select over an incomplete counterfactual
+  population. Keep actual selectSemanticEvidence's whole-selection
+  counterfactual_population_incomplete refusal and measured evaluatedAlternatives; no new
+  per-family denominator policy. Correct the stale five-versus-six consumer preflight count.
+  Reviewer accepts the isolated source/availability component after re-reading these fixes.
+- The complete joint pass then returns only stale companion requirements: presentation still
+  says30/45,75+6 and both Inspector versions; opening history says Inspector-only and Review's
+  complete image absent. Synchronize to the sole65-topic/six-detail current Inspector and the
+  actual72-ref Review@2 image, with both exact opening-history pairs and caller migration before
+  obsolete-path retirement. Reviewer re-reads the fixes and explicitly ACCEPTS FOR IMPLEMENTATION
+  the complete coordinated source/module contract, not unrelated parent obligations, runtime
+  qualification or product completion. Record the bounded scope in each owner RFC and register.
+- Implement the first accepted internal component: LandingCaptureReading, its actual computed
+  F1 declaration, sole closed FEN/square factory and central route. Retain complete sorted capture
+  populations/nonpositive scores/promotion variants/recapture trees and full empty FEN context;
+  no direct learner binding or new packet output.25 permanent cases initially yield20 failures
+  for absent route/declaration; the new component makes those pass. Existing closure then catches
+  four missing count/profile updates. Add the exact new route/profile, not exemptions; ordinary
+  make evidence-value-profile-update changes only its seven-line fixture entry. Subsequent
+  normal make evidence-value-authority passes99 tests/three files.
+- The first full make verify build stops at workspace typecheck on an optional convention
+  receipt in the new test. Assert its presence before reading refs; keep the runtime contract
+  and normal gates intact. Restart the unchanged full command. Narrow independent diff read
+  finds no correctness blocker, runs no tests, and correctly limits the new tests' independence
+  to enumeration, not the reused legal-exchange arithmetic. Full outcome follows below.
+- Normal prefix research passes again after switching its isolated metadata experiment to the
+  now genuinely installed internal reading; exposure issuance remains absent and its actual
+  old-path falsifiers stay red-by-design/diagnostically passing. Move D3792's durable blocker
+  from RFC review to actual item:D3841 implementation; keep all unfinished source rows live.
+  Refreshed normal roadmap receipt/check passes. No new worktree, push, archive/data deletion,
+  whole-milestone promotion or compatibility-only pipeline.
+- The completed full software run finds exactly three integration failures/5953 passes:
+  the public manifest still pins285 rather than286 projections, and two capability contract
+  controls see the missing new declaration. No runtime arithmetic, authority or unrelated test
+  failure. Update that exact manifest count and run normal make capability-declarations: it
+  adds exactly one line for the new source (985 total); all984 predecessors and472 applicability
+  rows remain unchanged. No weakened assertion, rewritten old declaration or source-hash churn.
+  Restart the unchanged normal make verify build against this corrected frozen source image.
+- Packaged browser startup first fails only on actual sandbox listen EPERM at127.0.0.1:4174.
+  Request the unchanged make test-browser-production with local-listener permission; it exits
+  zero, one complete packaged-default rehearsal case in9.0s. No environment, test deadline or
+  assertion changes. No new UI/engine-source/exposure completion is inferred from this smoke.
+- Reconcile the remaining immediate source rows to the actual acceptance: D3841/D3863/D3864
+  are implementation work, not pending another author review. All remain doing; D3792 retains
+  item:D3841 as its actual implementation blocker. State sync preserves0 untriaged/1748 live.
+- Corrected full software passes5956 cases/393 files, isolated performance passes7/4 files,
+  and scaffold/packaging/release/presentation/value-authority checks pass. The next normal gate
+  correctly refuses the stale generated semantic receipt after the factory/catalogue edit,
+  although all343 cases pass and all81 subjects remain unqualified. Normal
+  make semantic-validation-update semantic-validation-check candidate-packet-projections-check
+  capability-check exits zero. Changes are generated digests/receipt metadata, no new semantic
+  verdicts or source-hash-based capability rewrite:984 committed/985 candidate declarations.
+  Keep the gates intact and rerun normal make verify build on this final generated image.
+- Record measured verification-order debt D3869 rather than forget it: semantic receipt drift
+  is detected only after356.67s software and62.09s performance plus later checks. Queue a small
+  existing-Make prerequisite reorder/guard maintenance after this verified checkpoint, retaining
+  every gate, actual full population and isolated timing/native scheduling. No new wrapper,
+  permission-heavy commands, skip or clean-tree pre-push requirement. This is avoidable latency,
+  not evidence that CI silently accepts the stale source. Assign release-engineering/todo.
+- Final unchanged normal make verify build exits zero:5956 software/393 files, seven isolated
+  performance cases/four files,257 real-content cases/26 files, clean workspace types and all
+  schema/release/presentation/F1/F2/semantic/candidate/opening/account/rating/style/capability/
+  migration/composition/latency/governance/corpus checks. Semantic cases stay343/343 with zero
+  newly qualified subjects; every984 old capability declaration survives beside the new one.
+  Build is also invoked as an aggregate prerequisite; the final explicit build goal is already
+  satisfied. No gate, assertion, deadline or source population is weakened.
+- Update the two canonical docs' actual manifest count285→286, and the existing roadmap/queue
+  to distinguish current accepted implementation work from retained historical “next” sentences.
+  Keep D3867/D3868/consumer cutover live; this delivers one genuine internal prerequisite, not
+  user-visible Support/Review/bot completion. Goal remains active, no pause or release promotion.
+- Final packaged-production rerun on the refreshed built image passes its one complete rehearsal
+  case in8.8s under the same granted local-server permission. Final source/research/staged/roadmap
+  checks and explicit36-file owned index are retained; ordinary pre-commit hooks run before the
+  checkpoint commit. No push, remote CI claim or unrelated untracked-file absorption.

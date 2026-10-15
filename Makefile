@@ -2222,7 +2222,7 @@ provider-traversal-check:
 # Permanent value-authority gate (rfc/evidence-value-authority.md §8): single mint, central invoker,
 # registry = non-retired catalogue, receipts, positives and falsifiers for every factory.
 evidence-value-authority:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/evidence-contract.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/landing-captures.test.ts
 
 .PHONY: endgame-method-authority-check
 endgame-method-authority-check:
