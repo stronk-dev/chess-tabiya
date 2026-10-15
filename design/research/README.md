@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Fork-terminal coordinated author image, 2026-10-15 ([[D3768]]/[[D3847]]/[[D3853]]): the existing
+terminal target passes26 tests, including isolated unchanged-F1 fork/Hint exact tuples and
+convention closure, not new factory/consumer adoption. D3853 finds the legacy vector borrowing
+current packet vocabulary/child readings; Hint wire1 lacks projection version. The companion
+drafts specify legacy separation, exact current source/consumer/wire images and reviewed_text
+convention disclosure. Independent acceptance and production/API/native proof remain required.
+`[V]` `wave-a-contract-closure.md` §Coordinated source-contract authoring; existing opt-in targets.
+
 Fork-terminal adoption inventory, 2026-10-15 ([[D3768]]/[[D3847]]): 25 research tests retain the
 old22, compare four terminal/four nonterminal prospective outcomes, and refuse a genuine crossed
 full-edge source despite equal after-FEN/breadth payload. Five manifest consumers reach the old

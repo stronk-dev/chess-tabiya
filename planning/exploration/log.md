@@ -30376,3 +30376,48 @@ Campaign was the one capability with no API, route or content. Now:
   remain assigned,1738 live and zero untriaged;569 UX items retain282 complete/263 live/24 retired.
   No milestone or dimension is promoted. Commit only the explicit13 owned files through normal
   hooks, retain the three pre-existing untracked entries, do not push or pause the active goal.
+
+## 2026-10-15 — D3768 coordinated nonterminal-fork contract and D3853 legacy coupling
+
+- Previous goal turn made progress:3a15beaf committed the reviewed source/adoption inventory.
+  Revalidate main/status, retaining the three pre-existing untracked entries. Continue the
+  full1.0 goal with exact contract authoring rather than another chess-population counter wave.
+- Claim fork_survival_v2 in F2/README before authoring its meaning. No runtime convention,
+  tuple/history row or source registration changes. F2 §2.3f specifies a fresh nonterminal
+  fork source with actual ordered DA/breadth inputs and both private full-edge joins. Empty
+  replies are total false with no fabricated refutation; old source/helper/history and all
+  nonterminal payloads remain. Tactical §3.7a references this one contract rather than duplicates.
+- Author the coordinated packet3.1a/Hint3a/module-registration image: current compiler2, six
+  fork-only Hint@2 refs, full current35-ref image, wire2 with projectionVersion, current-only
+  owner/dispatch/receiver checks, exact terminal-aware renderer and four module-consumer@2
+  images under unchanged logical policies. Preserve version1 history and every old pair.
+  No new preset/default/ceiling, significance rank or reply/mate/promotion policy is inferred.
+- Authorized independent reviewer finds the hidden legacy vector dependency on current packet
+  closure/shared child readings. Ledger D3853 first, then specify frozen old exact refs/old
+  child-reading dispatch before replacing current vocabulary. No actual shipped regression or
+  completed replacement vector is claimed; variable vector lineage remains D3847 work.
+- First source review returns initial-migration-only convention disclosure; replace it with
+  exact source-reviewed reviewed_text and preserve the source-authority/primary-grounding
+  distinction. Later bounded review returns a cache-epoch/callable confusion; image-local
+  disclosureCompiler now resolves compileHintDisclosure@1/@2 without rewriting historical
+  declarations or duplicating policy. Final read-only recheck closes that contradiction,
+  not component/joint acceptance. Reviewer runs no tests and makes no edits.
+- Added isolated metadata test first fails EVIDENCE_PROJECTION_ORPHANED because the new Hint
+  disclosures have no bindings. Add the complete hypothetical35-ref consumer/35 bindings,
+  not an orphan-disposition waiver. The normal terminal target then passes26 tests; strict
+  prefix types/replay/source checks pass with19/56 conditional topic map/eleven negatives.
+  Exact source/horizon tuples, actual-input convention closure and same-base old-inheritance
+  negative are metadata feasibility, not new factories, mints, runtime owners, wire or UI proof.
+- Work-state sync discovers D3853 and intentionally refuses its unassigned state; assign it
+  doing/evidence-foundation/since2026-10-15 through the normal target.3602 rows/1739 live now
+  have zero untriaged; no row is closed by authoring. Update existing review/dossier/coverage,
+  tactical handoff, queue and roadmap. D3851 remains unanswered; other source/population and
+  collection schemas plus upstream/joint acceptance stay open. Protected intent unchanged.
+- No production or ordinary CI gate changes. Full software/build/browser proof remains prior
+  5542cc2d, not a rerun for this research/authoring checkpoint. No source qualification,
+  content/milestone/remote/release promotion, push or goal pause.
+- Final make roadmap-receipt verify-governance and diff checks pass, including all lifecycle/
+  resource/intent/tier/doc/staged-process checks.3602 ledger rows/1739 live remain assigned with
+  zero untriaged, and569 UX items retain their prior states. Stage only the19 explicit owned
+  authoring/research/tracking files and commit through normal hooks; keep the three pre-existing
+  untracked entries. No production application, factory, schema or ordinary test gate changed.

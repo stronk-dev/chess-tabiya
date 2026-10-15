@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3768/D3847 coordinated authoring now spans F2 §2.3f, tactical §3.7a, packet
+§3.1a, Hint §3a and module-registration's exact successor image. New nonterminal source,
+compiler2, fork-only six Hint@2 refs, exact wire2 and terminal-aware rendering are specified,
+not implemented/accepted. D3853 preserves old vector refs/child-reading behavior independently
+of the mutable current packet closure. Existing26-test terminal metadata/closure and prefix
+strict-types controls pass, with19/56 topic mapping/11 negatives; the initial orphan refusal
+is retained. Independent review is in progress. After source/joint acceptance, implement the
+actual full coordinated path and permanent predecessors/HTTP/native controls, not an Inspector-
+only source alias. No authored pack edits, automatic longitudinal rebuild, source retirement
+or whole capability/remote-CI promotion. D3851 and other D3847/D3845 holds remain.
+
 2026-10-15 — D3768/D3847 terminal fork research now has25 disposable tests, retaining the
 original22. The proposed nonempty rule changes only matched on four terminal examples and
 preserves four complete nonterminal payloads. A genuine equal-after-position en-passant pair

@@ -1944,6 +1944,7 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `derived.material.event.role_asymmetry@1` | `derived.material.event.role_asymmetry@2` | derived | D3847/D3850 before/after signatures plus the complete capture/promotion arm; value-authority §2.3c |
 | `derived.tactic.promotion_pressure@1` | `rules.tactic.reading.promotion_pressure@1` | local_rules | D3847 direct FEN arithmetic with declared pass/reply convention; value-authority §2.3c |
 | `derived.tactic.overloaded_defender_response_conflict@1` | `rules.tactic.predicate.overload_conflict@1` | local_rules | D3847/D3852 direct legal-edge computation under the existing overload/defence/exchange conventions; value-authority §2.3e, unaccepted |
+| `derived.tactic.fork_survives_reply@1` | `derived.tactic.nonterminal_fork_survival@1` | derived | D3768 exact two-source same-edge derivation and nonempty reply rule; value-authority §2.3f, unaccepted |
 
 This establishes a **requirements image**, not executable bindings:75 retained topic obligations
 plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger
@@ -1982,13 +1983,17 @@ required modern-to-legacy fallback, arbitrary copied packet or implicit opening 
 `MODULE_DECLARATIONS` predecessor image. Consumer version is an execution/presentation identity,
 not a new module, policy, assistance preset or permission. Add a versioned consumer-image index
 alongside `MODULE_CONSUMER_ACCEPTS` in the existing catalogue; its rows have exactly
-`moduleId`, `consumer`, `accepts` and `implementation`. `accepts` is an ordered exact-ref list.
+`moduleId`, `consumer`, `accepts`, `implementation` and `disclosureCompiler`. `accepts` is an
+ordered exact-ref list. disclosureCompiler is null except for Guided Hint, whose exact callable
+ref is compileHintDisclosure@1 for consumer@1 and compileHintDisclosure@2 for consumer@2.
 Each current row is the existing `module.<id>@1` image without changing its contents/order.
 Those predecessor rows reference the existing `MODULE_CONSUMER_ACCEPTS` entries; do not copy or
 independently maintain their lists. All closure/callable/pair views derive from this one exact
 image index, not a competing consumer registry or an additional policy authority.
-The sole new logical-family row here is `module.full_inspector@2`, with the complete separately
-authored source map followed by the six detail refs. No aliases or default-to-latest lookup.
+The Inspector's new logical-family row is `module.full_inspector@2`, with the complete separately
+authored source map followed by the six detail refs. D3768's coordinated three additional exact
+consumer images below use the same index and policy rule; they do not add logical modules.
+No aliases or default-to-latest lookup.
 
 The predecessor row names `compileModulePacket`. The successor row names the proposed runtime
 callable `compileInspectorSourcePage`; the stored-access/query service invokes it only after
@@ -2024,7 +2029,60 @@ exact consumer version; a predecessor adapter/operation is not successor adoptio
 records remain, and a missing @2 receiver/renderer remains explicitly unimplemented, not covered
 by a declaration-only census. No source/data/version is added to a saved run or drill pack.
 
-**D3841 demanded-topic absence — unaccepted author contract:** every @2 binding declares literal
+**D3768 coordinated direct and Hint consumer images — unaccepted:** extend the same index, not
+a second registry, with these exact rows. For each direct module the ordered successor accepts
+list is its frozen@1 image with the old fork ref replaced in place by
+derived.tactic.nonterminal_fork_survival@1; all other exact refs/order remain. Guided Hint uses
+hint-distance §3a's current35-ref image (five fork@2, thirty unchanged@1):
+
+| Logical module / sole policy | Exact new consumer | Registered evidence callable |
+|---|---|---|
+| postcommit_nudge | module.postcommit_nudge@2 | compileModulePacketForConsumer |
+| review_map | module.review_map@2 | compileModulePacketForConsumer |
+| guided_hint | module.guided_hint@2 | compileModulePacketForConsumer |
+
+Proposed compileModulePacketForConsumer takes the existing ModulePacketRequest plus a required
+exact consumer tuple, with the same optional manifest argument. Validate moduleId/consumer/image
+agreement before admission, use the image's exact accepts and the one logical MODULE_POLICIES
+entry for capabilities/reducers/ceilings. Do not reuse MODULE_DECLARATIONS'@1 acceptance as@2.
+The existing compileModulePacket remains explicitly@1; it may wrap the shared internal
+implementation but cannot choose a version from payload shape or current/latest. The current
+source-owning Nudge/Review operations and compileGuidedHintPacket explicitly invoke@2 for new
+requests, then pair-keyed presentation/voice read that same exact consumer. Historical@1 paths
+stay separately addressed. The Hint wrapper still requires its selected/owned disclosure first.
+
+The index's image-local disclosureCompiler is execution metadata, not a second logical policy
+or a request/cache epoch. Retain GUIDED_HINT_DISCLOSURE/MODULE_DECLARATIONS' historical compiler
+compileHintDisclosure@1. Derive the successor declaration's disclosure from the single unchanged
+logical vocabulary/rung ceiling and that image's exact callable ref; do not globally replace the
+predecessor field. Proposed compileHintDisclosureV2 implements compileHintDisclosure@2 with the
+exact current matrix and compiler@2 owner checks in hint-distance §3a. Non-Hint images must have
+null, both Hint images must have their exact ref, and unknown/mismatched callable refs refuse.
+Register both actual callable identities; guided_hint_compiler@2 is only request/cache identity.
+
+Extend moduleEvidenceClosure, assertClosure/assertModuleRegistry, MODULE_OPERATIONS,
+MODULE_PAIR_EXECUTION, adapters, presentation classification, callable census and full consumer
+preflight to exact tuples for all four proposed@2 consumers, not only Inspector. Reuse the same
+unchanged policy once per logical id and derive every binding image from the one index. No@1
+operation, rendered pair or ID-only check counts as@2 execution. Missing source/presentation
+remains blocked, never hidden by filtering failed bindings. Existing@1 declaration/adapter order
+and receipt bytes stay unchanged. Preserve all other projection/source holds rather than
+claiming complete Review/Nudge/Hint from one repaired pair.
+
+For Nudge/Review's new direct fork pair, their actual granted committed/incoming edge supplies
+the canonical operands for the genuine double-attack and reply-breadth factories. No double
+attack is successful no_witness; a terminal double attack is a real available false predicate,
+not no_witness/unavailable. Render through value-authority §2.3f's exact terminal-aware statement
+pair. Retain the selected/creating branch distinction, actual edge provenance, current read/
+assistance/disclosure authority and cancellation/late-publication checks. No synthetic branch,
+client-provided FEN, engine line masquerading as recorded play or unused sealed prerequisite.
+Inspector obtains the same arithmetic sources through its existing proposed dependent-edge
+supplier below; Guided Hint instead uses the original hypothetical candidate-packet values and
+never imports recorded authority. Current effect/preset/module/role ceilings and budgets do
+not change. Acceptance needs actual all-four complete preflight/binding/callable/presentation
+coverage plus real new request/source/HTTP/native operation, not four anchored declarations.
+
+**D3841 demanded-topic absence — unaccepted author contract:** every Inspector@2 binding declares literal
 `sourceAbsence: {necessity:"required",whenNoPath:"operation_unavailable"}`. Required means that
 this binding's requested topic cannot be produced without an admitted complete path; it does
 not require acquiring every topic when the Inspector opens. The @2 source operation performs
@@ -2317,13 +2375,14 @@ branch: an inherited shared-prefix node remains valid on a child branch.
 | Exact proposed dependent source | Required dependency/factory path |
 |---|---|
 | `derived.tactic.discovered_executed@1` | Before-position `rules.tactic.reading.discovered_latency@1` plus same-edge `rules.transition.event.slider_ray@1`, then the unchanged target factory and its gained-ray semantics |
-| `derived.tactic.fork_survives_reply@1` | Same-edge `rules.tactic.event.double_attack@1`; a successful empty event population is `no_witness`. Otherwise use its one actual event and matching same-edge `rules.tactic.consequence.reply_breadth@1`, then the unchanged target factory |
+| `derived.tactic.nonterminal_fork_survival@1` | Same-edge `rules.tactic.event.double_attack@1`; a successful empty event population is `no_witness`. Otherwise use its one actual event and matching same-edge `rules.tactic.consequence.reply_breadth@1`, then proposed createDerivedTacticNonterminalForkSurvivalV1Evidence under value-authority §2.3f. Terminal false is available, not no_witness/unavailable; full private edge join precedes that result. The D3836 diagnostic still exercises old derived@1 |
 | `rules.tactic.predicate.overload_conflict@1` | Pass the actual selected edge's canonical beforeFen/moveUci/afterFen to proposed `createRulesTacticPredicateOverloadConflictV1Evidence`; it validates the complete legal edge before capture/quiet work and computes capture/duties/hypothetical replies internally under value-authority §2.3e. No sealed prerequisites, caller capture or result override; this is not an existing export. The D3836 diagnostic still exercises old derived@1 |
 | `rules.tactic.consequence.forced_mate_after_move@1` | Same-edge `rules.tactic.consequence.reply_breadth@1`, beforeFen and explicit `maxAttackerMoves`, then the exact v1 factory |
 | `rules.tactic.consequence.forced_mate_after_move@2` | The same dependency scope and explicit horizon, then the exact v2 factory; never relabel a v1 payload |
 
 The supplier retains the actual edge, exact dependency items and genuine factory outcomes.
-The computed strict-overload row supersedes D3836's earlier unchanged-derived@1 proposal and
+The nonterminal-fork row supersedes only D3836's new-Inspector unchanged-fork proposal; old source
+APIs/receipts/helpers remain. The computed strict-overload row supersedes D3836's earlier unchanged-derived@1 proposal and
 D3852's rejected derived@2 alternative only for the new Inspector. Its factory reconstructs all
 authority from the legal edge; do not implement it by relabelling old sealed outputs or silently
 consuming/discarding sealed prerequisites. All existing F2 arms, receipts, versions
@@ -3536,6 +3595,10 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3768/D3847 replaces the fork topic/supplier with the exact nonterminal
+  source and coordinates Nudge/Review/Hint successor consumers through the same single-policy
+  exact-version image as Inspector. The requirements map replaces19/retains56 topics, still75+6
+  obligations; it is not runtime registration, acceptance or delivered UI.
 - 2026-10-15 — D3847/D3852 adds the proposed direct computed strict-overload source/factory/
   supplier component from value-authority §2.3e, replacing the rejected two-input derived@2
   proposal without changing F1 or primary convention grounding. The requirements map now

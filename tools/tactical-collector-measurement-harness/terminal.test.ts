@@ -4,8 +4,11 @@ import { parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "../../packages/runtime/src/chess.js";
-import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
-import { assertDeclaredEvidence, evidenceDigest, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
+import { assertDeclaredEvidence, compileEvidenceManifest, evidenceConventionReceipt, evidenceDigest, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type ProjectionDeclaration } from "../../packages/runtime/src/evidence-contract.js";
+import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
+import { compileConventionRegistry, CONVENTION_REGISTRY } from "../../packages/runtime/src/evidence-conventions.js";
+import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
 import { compileHintDisclosure, hintSentence } from "../../packages/runtime/src/hint-distance.js";
 import { evidenceValueRouteRegistry, invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { forcedMateAfterMove } from "../../packages/runtime/src/mate-proof.js";
@@ -182,5 +185,73 @@ describe("D3768 terminal all-reply predicate research", () => {
     const declared = projections.get(target)!.derivation!.inputs!;
     expect(declared).toHaveLength(3); // literal old declaration, not actual two-input lineage
     console.log(JSON.stringify({ scope: "D3768/D3847 declared dependency census; NOT emitting/runtime/persistence proof", consumers }));
+  });
+
+  it("checks prospective exact fork and Hint metadata/closure without registering or minting successors", () => {
+    const oldFork = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.tactic.fork_survives_reply" && row.version === 1)!;
+    const inputs = [{ id: "rules.tactic.event.double_attack", version: 1 }, { id: "rules.tactic.consequence.reply_breadth", version: 1 }];
+    const proposed: ProjectionDeclaration = { ...oldFork, id: "derived.tactic.nonterminal_fork_survival", version: 1,
+      semantics: "Nonempty complete legal-reply survival under fork-survival@2.",
+      dependsOn: inputs, derivation: { inputs },
+      disposition: { kind: "inspector_only", reason: "D3768 prospective declaration, not production registration or qualification" } };
+    const oldHints = PRIMARY_EVIDENCE_MANIFEST.projections.filter(row => row.id === "derived.hint.horizon.fork_survives_reply"
+      || row.id.startsWith("derived.hint.disclosure.fork_survives_reply."));
+    expect(oldHints).toHaveLength(6);
+    const hints = oldHints.map(row => {
+      const sourceInputs = row.id.includes(".horizon.")
+        ? [{ id: proposed.id, version: 1 }, { id: "live.stockfish.principal_variation", version: 1 }]
+        : [{ id: "derived.hint.horizon.fork_survives_reply", version: 2 }];
+      return { ...row, version: 2, dependsOn: sourceInputs, derivation: { inputs: sourceInputs } };
+    });
+    const isForkDisclosure = (id: string) => id.startsWith("derived.hint.disclosure.fork_survives_reply.");
+    const oldConsumer = EVIDENCE_CONTRACT_DECLARATIONS.consumers.find(row => row.id === "module.guided_hint" && row.version === 1)!;
+    const consumer = { ...oldConsumer, version: 2, implementation: "compileModulePacketForConsumer",
+      accepts: oldConsumer.accepts.map(ref => isForkDisclosure(ref.id) ? { ...ref, version: 2 } : ref) };
+    const adapters = EVIDENCE_CONTRACT_DECLARATIONS.adapters.filter(row => row.consumer.id === oldConsumer.id && row.consumer.version === 1)
+      .map(row => ({ ...row, version: 2, consumer: { id: consumer.id, version: 2 },
+        projection: isForkDisclosure(row.projection.id) ? { ...row.projection, version: 2 } : row.projection }));
+    const manifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+      consumers: [...EVIDENCE_CONTRACT_DECLARATIONS.consumers, consumer],
+      adapters: [...EVIDENCE_CONTRACT_DECLARATIONS.adapters, ...adapters],
+      producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.tactic"
+        ? { ...producer, outputs: [...producer.outputs, proposed] }
+        : producer.id === "derived.hint" ? { ...producer, outputs: [...producer.outputs, ...hints] } : producer) });
+    const path = compileProjectionExecution(manifest, { id: proposed.id, version: 1 });
+    expect(path.paths).toHaveLength(1);
+    expect(path.paths[0]!.derivationChoices[0]!.inputs).toEqual(inputs);
+    expect(path.paths[0]!.sourceRequirements).toEqual([]);
+    const horizonPath = compileProjectionExecution(manifest, { id: "derived.hint.horizon.fork_survives_reply", version: 2 });
+    expect(horizonPath.paths).toHaveLength(1);
+    expect(horizonPath.paths[0]!.sourceRequirements.map(source => source.occurrence)).toEqual([[1]]);
+    expect(consumer.accepts).toHaveLength(35);
+    expect(consumer.accepts.filter(ref => ref.version === 2)).toHaveLength(5);
+    expect(manifest.bindings.filter(row => row.consumer.id === consumer.id && row.consumer.version === 2)).toHaveLength(35);
+    // Hypothetical declaration only: the new implementation/authority does NOT exist yet.
+    const definition = "Local fork survival requires a nonempty complete legal reply population and a surviving positive capture after every reply. Empty replies return false with zero refutations.";
+    const registry = compileConventionRegistry([...CONVENTION_REGISTRY.declarations, {
+      ref: { id: "fork-survival", version: 2 }, definition,
+      limitations: ["One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment."],
+      authority: [{ kind: "position_rules", implementation: "packages/runtime/src/tactics.ts#nonterminalForkSurvival" }],
+      disclosure: { kind: "reviewed_text", summary: "Local fork survival requires at least one legal reply and a surviving positive capture after each.", detail: `${definition} One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment.` },
+    }]);
+    const direct = deriveProjectionConventionTable(manifest, registry);
+    const key = (ref: { id: string; version: number }) => `${ref.id}@${ref.version}`;
+    expect(direct.get(`${proposed.id}@1`)!.refs.map(key)).toEqual(["fork-survival@2"]);
+    expect(hints.flatMap(row => direct.get(`${row.id}@2`)!.refs).map(key)).not.toContain("fork-survival@1");
+    const input = edge(terminal[0].fen, terminal[0].move);
+    const attack = invokeEvidenceValueRoute("rules.tactic.event.double_attack@1", input)[0]!;
+    const breadth = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", input);
+    const closure = [...new Set([...direct.get(`${proposed.id}@1`)!.refs,
+      ...evidenceConventionReceipt(attack)!.refs, ...evidenceConventionReceipt(breadth)!.refs].map(key))].sort();
+    expect(closure).toEqual(["double-attack@1", "fork-survival@2", "legal-exchange@1"]);
+    // Same-base @2 is NOT interchangeable: it inherits the witnessed old convention.
+    const wrong = { ...proposed, id: oldFork.id, version: 2 };
+    const wrongManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+      producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.tactic"
+        ? { ...producer, outputs: [...producer.outputs, wrong] } : producer) });
+    expect(deriveProjectionConventionTable(wrongManifest, registry).get(`${wrong.id}@2`)!.refs.map(key))
+      .toEqual(["fork-survival@1", "fork-survival@2"]);
+    expect(PRIMARY_EVIDENCE_MANIFEST.projections.some(row => row.id === proposed.id)).toBe(false);
+    expect(CONVENTION_REGISTRY.declarations.some(row => row.ref.id === "fork-survival" && row.ref.version === 2)).toBe(false);
   });
 });

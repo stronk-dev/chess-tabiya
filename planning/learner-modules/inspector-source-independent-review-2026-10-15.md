@@ -503,3 +503,38 @@ support subsequent exact contract authoring, not a new version/convention author
 qualification, implementation permission, upstream/joint acceptance or D3768 closure. The old
 renderer ignores matched; candidate-packet, Hint, direct presentation and vector/history paths
 need explicit dispositions rather than an Inspector-only claim of repair.
+
+### D3768 coordinated source, consumer and Hint-wire author image
+
+The authorized reviewer returns the first F2 §2.3f disclosure: definition_and_limitations is
+initial migration only under accepted convention-provenance. Main supplies exact reviewed_text
+definition/limitations/summary/detail, without manufacturing a prior landing or owner ruling.
+The reviewer distinguishes legal-board implementation authority from primary convention grounding;
+the proposed actual helper must exist and be reviewed before registration, not merely be named.
+
+The review also finds D3853's legacy coupling: candidateCollectorIds reads the current generated
+packet vocabulary while the vector still emits the old fork and shares child readings. Main
+records the row before specifying frozen exact legacy refs/old child-reading behavior; current
+packet replacement cannot silently break the retained old API. No shipped regression is claimed.
+
+Hint's original wire has no projection version. The companion authors strict version2 with
+required projectionVersion, unchanged version1 historical parser, current-version refusal of
+old deliveries and exact current matrix/owner/brand dispatch. Nudge/Review/Hint@2 join existing
+Inspector@2 through the one policy/exact-consumer-image authority, not duplicate logical modules.
+The review confirms Hint successor inheritance does not itself pull the old fork convention;
+catalogue-text contamination still requires exact negative controls.
+
+One remaining return catches request/cache epoch guided_hint_compiler@2 incorrectly put in
+the policy's callable field. Main separates it from image-local compileHintDisclosure@2,
+implemented by proposed compileHintDisclosureV2, and retains old GUIDED_HINT_DISCLOSURE and
+MODULE_DECLARATIONS compileHintDisclosure@1. The same image index gains required nullable
+disclosureCompiler, with exact two Hint refs and mismatch refusal, not a second policy. Final
+read-only recheck finds that contradiction closed and no further inconsistency in those corrected
+paragraphs. No reviewer tests, component/joint acceptance or implementation qualification.
+
+Main reports26 terminal tests and normal prefix strict types passing. Added isolated F1 metadata
+first refuses orphan disclosures; main adds the full hypothetical35-ref consumer/35 bindings,
+not a disposition waiver. Exact source/horizon tuples, actual-input convention closure and the
+same-base inherited-old-convention negative pass; current declarations remain unchanged. The
+19/56 map/eleven negatives remains requirements only. Actual factories/owner enforcement/receipt
+parsers/source/presentation/API/native boundaries and source/joint acceptance remain required.

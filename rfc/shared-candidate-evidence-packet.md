@@ -1,5 +1,8 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
+- **Draft amendment 2026-10-15 — D3768/D3847, §3.1a:** compiler2's exact nonterminal-fork
+  slot and compiler1 receipt separation. Unaccepted; no permission follows from parent status.
+
 - **Status:** **implementing — the foundation contract landed 2026-09-24 at the owner's direction to implement ready RFCs, without a further review round.**
   `packages/runtime/src/candidate-population.ts` compiles the receipt, the generated literal closure
   exists, selection consumes the receipt, and the server child readings moved into the runtime.
@@ -404,6 +407,47 @@ required roadmap work; implementing this RFC alone cannot close those consumer f
 
 `CANDIDATE_PACKET_COMPILER_VERSION = 1` is an exported literal and every construction-semantic
 change must move it or the cache-identity fixture fails.
+
+#### §3.1a Draft D3768 nonterminal-fork compiler successor — unaccepted
+
+The preceding literal describes compiler1. Under coordinated value-authority §2.3f and
+hint-distance §3a acceptance, the current compiler literal becomes2. It constructs
+reading.fork_survival with only derived.tactic.nonterminal_fork_survival@1, using the actual
+same-edge double-attack/reply-breadth sealed values; no old source relabelling or second reply
+population. The original double-attack absence still yields no fork value; a present terminal
+double attack yields the new total false value with zero actual refutations. Nonterminal values
+preserve full operands/refutation order. All other readings/events, legal population/order,
+terminal-root behavior, score/provider exclusion and scope-retention rules stay unchanged.
+
+Derive the current literal closure from the single current slot declaration, replacing only
+that ref; the historical compiler1 vocabulary remains a frozen compatibility image rather than
+being reinterpreted by the current generated tuple. Exercise events/readings/wide scopes,
+including private tactical prerequisites when only readings are retained. Narrowing a wide
+compiler2 receipt must retain the same original sealed objects and compiler identity, not mint
+or recalculate predicates. The actual legal input and candidate rows stay complete.
+
+Packet id/receipt/cache identity includes compiler2 and the actual manifest as before. Current
+assertion, projection, Hint and semantic-selection paths must refuse a compiler1 receipt instead
+of upgrading its fields or treating its old fork as new. A stale cache entry is discarded and
+recomputed through the current compiler, never converted. Preserve the old public callable's
+input grammar; this is an explicit compiler-version change, not an extra learner setting or a
+new aggregate evidence leaf. Packets are process-local: do not fabricate persisted packet
+migrations, rewrite authored packs or rebuild longitudinal semantic events for this change.
+Retain predecessor fixtures/old source APIs and the exact compiler1 identity/construction evidence.
+
+D3853's legacy vector must not derive its allowed IDs or child-reading version dispatch from this
+new current closure. Freeze its exact compiler1 collector vocabulary and old child-reading arm,
+with genuine full output/receipt preservation; a declaration-only legacy label is insufficient.
+Keep common unchanged pure calculations shared. Test the old fork-producing vector with current
+compiler2 installed, and reject injecting the new fork into the old vector. This is preservation
+of an existing API, not a new vector version or current bot capability.
+
+Acceptance requires actual three-scope construction, complete equal nonfork populations, terminal
+false/nonterminal equality, correct retained object identity under narrowing, exact new generated
+closure, old/new id/cache/admission separation and both production Hint and semantic-selection
+integration. This does not repair the legacy candidate_feature_vector source or its different
+literal-input problem; D3847 retains that obligation. No compiler2 implementation or full packet
+discharge is authorized by the draft or parent lifecycle alone.
 
 ```ts
 export type CandidateEventsScope = { readonly events: true; readonly readings: false };
@@ -1624,6 +1668,9 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3768/D3847 §3.1a specifies current compiler2 nonterminal-fork
+  construction, exact slot/narrowing closure and old compiler1 identity/admission separation.
+  No persisted migration, source relabelling, vector completion or implementation acceptance.
 - 2026-09-24 — **Implemented the foundation contract on the owner's in-session acceptance.**
   `candidate-population.ts` provides the request/scope/packet/receipt types, the private `WeakMap`
   receipt constructor and assertion, the wide→narrow projector, readers that never normalise,

@@ -10,7 +10,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3841/D3846/D3847/D3850, §§2.3a–2.3e:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3768/D3841/D3846/D3847/D3850, §§2.3a–2.3f:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845 independently holds rank's variable/empty input contract.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -38,10 +38,11 @@
 
 ```tabiya-claims
 semantic-conventions | members promotion_pressure_geometry_v1 | exact FEN promotion geometry and bounded legal pass/reply checks; no outcome verdict
+semantic-conventions | members fork_survival_v2 | nonempty complete legal reply population required for local fork survival; terminal false retains zero real refutations
 ```
 
-**Claim scope.** The unaccepted D3847 promotion successor adds one literal algorithm definition to
-the existing convention resource; it creates no second register. Historical convention members
+**Claim scope.** The unaccepted D3847 promotion and D3768 fork successors add two literal algorithm
+definitions to the existing convention resource; they create no second register. Historical convention members
 remain landed under semantic-convention-provenance. Other changes are package-internal operations
 and additive F1 refs, with no persisted schema, migration, pack/shape/principle or evidence-kind
 member. The one compiled F1 catalogue still owns projection refs; no parent lifecycle state accepts
@@ -582,6 +583,136 @@ current authorization/disclosure/cancellation, receiver and native delivery proo
 recipe and metadata compilation prove none of those new production boundaries. Independent
 upstream and joint review remain required; fork/D3768, D3851 and D3845 are not discharged here.
 
+#### 2.3f Draft D3768/D3847 nonterminal fork source and coordinated adoption — unaccepted
+
+**Meaning changes under a new identity, never by repairing historical bytes.** The old
+derived.tactic.fork_survives_reply@1 and its pure helper/factory remain callable with their old
+all-reply meaning, including vacuous terminal true. Their convention declaration/history and
+receipts stay unchanged. The declaration's fictitious third exchange is not copied into the
+successor. The new source is:
+
+| Exact proposed ref | Sole factory | Exact sole input arm, in receipt order |
+|---|---|---|
+| `derived.tactic.nonterminal_fork_survival@1` | `createDerivedTacticNonterminalForkSurvivalV1Evidence` | `{doubleAttack,breadth}`: `rules.tactic.event.double_attack@1`, then `rules.tactic.consequence.reply_breadth@1` |
+
+Existing derived.tactic@1 owns this local synchronous predicate. Preserve the complete four-field
+ForkSurvivalResult payload, declared_convention/convention/not_applicable, state sign, threat
+answer ceiling and machine_condition/list/panel forms. Both dependsOn and derivation.inputs are
+exactly the ordered two refs above. There is no separate sealed exchange argument or unused
+witness. Reply-specific exchange calculations remain inside the existing algorithm.
+
+The sole factory snapshots its two actual admitted values. Require genuine source seals and
+their registered sole factories/exact refs, not caller-branded structures. Reconstruct and
+canonicalize the complete legal edge from doubleAttack.beforeFen/moveUci and require the exact
+resulting afterFen. Both private input authorities must equal that same complete canonical edge;
+equal afterFen or triggeringMove alone is insufficient. No caller FEN/result/receipt override.
+Breadth is the registered source's complete ordered legal reply population, not an input slice:
+count equals replies.length, replies are distinct exact legal move identities, terminal agrees
+with the empty population, and check agrees with the actual after-position. Its sole factory
+establishes complete enumeration; do not substitute a caller list or calculate sealed witnesses
+only to discard them. Validate source identity and these invariants before any terminal return.
+
+The new pure helper nonterminalForkSurvival uses the unchanged forkSurvivesReply computation for
+its actual refutation population/order. Return that full result with
+matched = breadth.count > 0 && refutingReplies.length === 0. Checkmate and stalemate are successful
+total negatives with the genuine empty refutingReplies, not unavailable, no_witness or a made-up
+refuting move. Nonterminal positive/refutable payloads remain byte-equal to their old counterparts.
+This means no legal replies, not every other possible draw adjudication. Mate-proof distinctions,
+promotion persistence and the double-attack event are unchanged; no global zero-reply policy.
+
+**Convention identity and closure.** The claim above reserves fork-survival@2 (fork_survival_v2).
+The definition refers only to the exact algorithm above, including original non-king target/square
+identity and its positive legal exchange test; it does not generalize "positive capture" to a
+new material or search convention. Literal declaration/disclosure fields are:
+
+```json
+{
+  "definition": "Local fork survival requires a nonempty complete legal reply population and a surviving positive capture after every reply. Empty replies return false with zero refutations.",
+  "limitations": ["One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment."],
+  "disclosure": {
+    "kind": "reviewed_text",
+    "summary": "Local fork survival requires at least one legal reply and a surviving positive capture after each.",
+    "detail": "Local fork survival requires a nonempty complete legal reply population and a surviving positive capture after every reply. Empty replies return false with zero refutations. One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment."
+  }
+}
+```
+
+Authority is the implementation of this bounded rule at packages/runtime/src/tactics.ts#nonterminalForkSurvival,
+using the existing position_rules/implementation authority arm; this identifies executable
+authority, not primary position_rules grounding or a newly discovered chess theorem. Register it
+only with that actual implementation and append its declaration/history in the implementing commit.
+Do not claim the old landing snapshot established this different meaning or invent an owner ruling.
+
+The new projection's catalogue semantics names fork-survival@2 literally. Its direct closure is
+exactly that ref; its input receipts contribute double-attack@1 and legal-exchange@1, so the full
+closure is exactly those three refs. The new convention uses the accepted later-source
+reviewed_text disclosure above, not the initial-migration-only definition_and_limitations arm.
+The two retained input conventions keep their existing disclosures. The fresh base
+avoids automatic witnessed predecessor inheritance. No old fork convention token belongs in the
+new catalogue semantics/limitations, and no F1/closure relaxation is authorized. Earlier source
+APIs and declarations remain present for compatibility; old evidence cannot be relabelled new.
+
+**Complete current-delivery image.** These coordinated companion amendments are required for
+acceptance and implementation, not optional follow-up polish:
+
+| Existing current path | Proposed current disposition | Historical disposition |
+|---|---|---|
+| Candidate population reading.fork_survival | Shared packet §3.1a: compiler2 constructs only the new source for that slot and its genuine same-edge inputs | compiler1 receipts remain original, never admitted as compiler2 or rewritten |
+| Guided Hint fork family | Hint-distance §3a: fork-only horizon@2/five disclosures@2, compiler@2 and exact module.guided_hint@2; other six families retain current refs | old horizon/disclosures/compiler receipts/renderer remain readable, no fallback new request to old fork |
+| Nudge and Review Map direct fork bindings | module.postcommit_nudge@2 and module.review_map@2 replace only their old fork acceptance with the new ref, under unchanged logical module policy/seat/budgets | all @1 receipts/adapters remain; no duplicate logical modules or controls |
+| Full Inspector | existing proposed module.full_inspector@2 replaces this topic with the new ref and same-edge supplier | all75 topic obligations and all old source receipts remain; no retirement |
+| Exported candidate_feature_vector@1/opponent.selection@1 path | Explicit legacy-only callable, not a current repaired bot/vector path; no new production caller may select it for this predicate | old API/output remains exact; no unmeasured stored-record rewrite or predicate-history rebuild |
+
+The last row is not a replacement vector contract or permission to retire its accepted obligations.
+D3847 still owns its variable literal-input reconciliation before a new vector source or production
+adoption. Inventory exact callers and stored occurrences before any later migration. The repository
+search found no production caller of the exported server vector wrapper; this does not prove no
+external caller, computed alias or stored occurrence exists. A release cannot claim complete repaired
+bot evidence from this compatibility row. New paths fail closed on an unexpected old source rather
+than silently repackaging it. D3768 is not closed merely by the Inspector replacement.
+
+D3853 is an actual compatibility prerequisite: candidateCollectorIds currently intersects old
+vector IDs with the current packet's generated closure, and candidateCollectorResults also calls
+the shared candidateChildReadings. Before changing that closure, give the legacy vector its
+frozen **exact-ref** compiler1 local collector vocabulary and old child-reading entry point;
+retain genuine old result/source order, old pure/factory outputs and full receipts. Do not strip
+versions then admit whichever current source shares a base id. Current packet/generator and
+Hint use the current vocabulary only; the legacy source never calls that mutable lookup. Preserve
+shared pure calculations where their behavior is identical, not a fork of chess algorithms.
+Test an old vector fixture that actually has double attack/fork and a child reading, its old
+closure with the new current vocabulary present, and refusal of either substituted current ref.
+No duplicate source seal, copied old receipt or broadened old manifest declaration is permitted.
+
+**Truthful direct presentation.** Register inspector.nonterminal_fork_survival@1 as a new exact
+fact-statement renderer and pair it with the new source for the three direct module successors.
+Its closed operands are attacker, targets, matched, terminal, check, replies and answering;
+attacker/targets preserve existing placed-piece shapes, the three flags are booleans and the
+two counts are nonnegative safe integers. Adapter fields are mechanical copies/counts from the
+same admitted payload: answering=refutingReplies.length. No caller text or reply move list.
+Require answering<=replies, terminal iff replies===0, matched iff replies>0 && answering===0.
+Reject inconsistent envelopes instead of rendering them. Nonterminal output retains both counts
+and says either all replies preserve the local attack or how many refute it, qualified by the
+declared convention. Terminal output identifies checkmate/stalemate from complete zero replies
+and check, and states that reply-survival does not apply; it never says the fork survives all
+replies. Old inspector.fork_survives@1 and its exact source pairs remain unchanged. No changes
+to automatic significance selection, family precedence, assistance ceilings or generic board marks.
+
+**Falsifiers and closeout.** Require new actual factory/route/receipt/closure controls, both-color
+terminal checkmate/stalemate and nonterminal positive/refutable promotion forks; exact old/new
+complete nonterminal payload/order preservation; own versus genuine equal-after-FEN crossed
+before-position input authorities; bad edge/source/ref/factory/count/terminal/check refusals
+before the short circuit; immutable inputs and original old receipts. Test the exact proposed
+renderer with consistent terminal/positive/refutable and corrupt envelopes. Test all three packet
+scopes, projection narrowing, old/new compiler separation and cache identities. Actual Hint
+selection must stop choosing the fork family for terminal children without changing checkmate's
+mate selection, the other families, ranks or budgets; every rung must retain its answer ceiling
+and exact source/line order. Require complete successor binding/consumer preflight, old read
+compatibility, actual authenticated module/Hint HTTP and desktop/phone disclosure/late-response
+controls. The exported-vector compatibility restriction must be checked at actual production call
+sites; full new vector/longitudinal capability remains separate. Disposable25-test research is
+not those new production boundaries. Independent source and joint consumer acceptance still gate
+implementation; the parent's awaiting state, a registry claim or a green research probe does not.
+
 #### 2.4 Authored authority
 
 Authored/theory factories accept the registered pack, shape, principle, citation or claim record
@@ -1038,6 +1169,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3768/D3847 §2.3f specifies a fresh nonterminal fork source, exact two
+  input authorities and claimed convention successor, coordinated packet/Hint/direct-consumer
+  migration and terminal-aware rendering. Old meaning/history and the explicitly legacy vector
+  remain; no acceptance or production qualification follows.
 - 2026-10-15: D3847/D3852 §2.3e proposes a direct computed conventional strict-overload predicate
   from one validated legal edge. It supersedes the rejected two-input derived@2 proposal;
   that F1 failure stays in the research instrument. No primary relabel, dummy witness or F1

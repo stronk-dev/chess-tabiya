@@ -71,3 +71,15 @@ paths are different evidence. `wave-a-contract-closure.md` records the exact inv
 current renderer ignores matched, packet compiler identity must change for new construction,
 and no predicate-only change justifies a longitudinal-event rebuild. Author the full source/
 terminal/convention/consumer compatibility contract next; no implementation or acceptance follows.
+
+2026-10-15 coordinated author image now exists, still unaccepted: value-authority §2.3f owns the
+fresh nonterminal source/two-input join, claimed fork convention, terminal-aware exact renderer
+and complete compatibility/falsifier matrix. Tactical §3.7a points there; packet §3.1a owns
+compiler2, Hint §3a owns six fork@2 refs/compiler2/wire2, and module-registration owns all four
+successor consumer images under one logical policy per module. D3853 requires a frozen old vector
+vocabulary/child-reading arm before current packet adoption; it is not a completed new vector.
+The26-test terminal metadata probe passes after retaining its original orphan-refusal failure
+and adding the complete hypothetical Guided Hint consumer/bindings; prefix strict types and the
+19/56 requirements map/11 negatives pass. No production factories, convention, renderers,
+wire/source registration or UI have landed. Independent source/joint review gates implementation;
+D3851 and the other source/population/collection holds remain separate.

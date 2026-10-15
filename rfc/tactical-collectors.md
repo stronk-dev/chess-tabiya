@@ -583,6 +583,22 @@ predeclared D545 answer the measurement must confirm or refute.
   double attack parryable by one defending move (state fires; consequence abstains). The
   fixture corpus must include geometric-only forks (non-vacuity).
 
+#### 3.7a Draft D3768 terminal fork successor — unaccepted
+
+Section3.7 remains the historical all-reply source contract, not a definition silently corrected
+under the same ref. Value-authority §2.3f now proposes the fresh exact
+derived.tactic.nonterminal_fork_survival@1, genuine two-input same-edge authority and claimed
+fork-survival@2. The resource claim is owned there, not duplicated in this document. New survival
+requires at least one legal reply; checkmate/stalemate yield total false with zero real refutations.
+Nonterminal full payloads/refutation order, mate proof and promotion semantics stay unchanged.
+
+Implementation is coordinated with shared-candidate-evidence-packet §3.1a, hint-distance §3a and
+module-registration's exact consumer/source/presentation image; it includes the terminal-aware
+renderer and explicit old vector compatibility, not only an Inspector replacement. D3853 separates
+that old vector's frozen vocabulary from the current packet before changing the latter. Preserve
+old pure/factory/API/history meanings. Research25-test fixtures and independent bounded review are
+not new-source qualification, version/convention acceptance, product implementation or D3768 closure.
+
 #### 3.8 Pawn islands / connected pawns / chains (audit §3.6; row D735)
 
 - **Home:** `packages/runtime/src/structure.ts` (extension — a new exported reading
@@ -1080,6 +1096,9 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3768 §3.7a delegates the complete fresh-source/terminal/convention
+  contract to value-authority §2.3f and its coordinated packet/Hint/module companions; old@1
+  stays historical/callable, with no acceptance or production change.
 - 2026-10-11: D3711 restores §3.12's executed discovered-check join when the retained
   target is a slider ray's board-edge endpoint. Interior blocker arrays deliberately omit
   that endpoint; its existing exact operand now supplies the retained-target condition.

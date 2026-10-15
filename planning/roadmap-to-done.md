@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3852]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3853]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,17 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3768/D3847's coordinated repair is now authored, not implemented: F2 §2.3f/tactical §3.7a
+specify a fresh nonterminal fork source, exact two-input edge authority and claimed convention;
+packet §3.1a, Hint §3a and module-registration cover compiler2, fork-only six Hint@2 refs,
+version2 wire identity, terminal-aware rendering and all four exact successor consumers under
+the existing logical policies. D3853 prevents the legacy vector from breaking when the current
+packet vocabulary changes. Independent bounded review closes disclosure and callable/epoch
+contradictions, not source/joint acceptance. Normal26-test terminal/prefix types pass, including
+isolated metadata/closure and19/56 requirements map/eleven negatives, not new runtime factories.
+Production remains unchanged from5542cc2d. Actual source/consumer/presentation/API/native
+implementation, full joint acceptance and the other source/schema holds remain. No whole gate moves.
 
 D3768/D3847 now have a reviewed terminal-fork source and compatibility inventory:25 disposable
 tests retain the original22, compare four terminal/four nonterminal outcomes and reject a genuine

@@ -83,7 +83,7 @@ asserting the consequence. Those failed fixture attempts are not product finding
 
 ## Terminal repair source/adoption inventory — 2026-10-15, D3768/D3847
 
-The normal research target now passes 25 tests, retaining all original 22 characterizations.
+The3a15beaf research checkpoint passes25 tests, retaining all original22 characterizations.
 The added non-production recipe validates genuine named double-attack/reply-breadth factories
 and both private full-edge authorities before applying nonempty-replies AND the old survival
 result. Four terminal payloads change only matched to false and retain zero real refutations;
@@ -130,3 +130,38 @@ repository snapshot, not authority to rewrite stored receipts or authored conten
 serialized occurrences and every later adopter still require their owner's inventory and
 compatibility rule. `[V]` `longitudinal-registry.ts` exact registry constructor;
 content/rfc/contracts source search; existing module plan artifacts.
+
+### Coordinated source-contract authoring — D3768/D3847/D3853
+
+The existing opt-in terminal target now passes26 tests; the added case checks isolated proposed
+source/Hint metadata, not another measured chess population. The exact two-input fresh fork
+declaration compiles unchanged F1. Actual admitted double-attack/breadth input convention receipts
+plus the proposed direct convention yield exactly double-attack@1/fork-survival@2/legal-exchange@1.
+A same-base@2 negative instead inherits the old fork convention, confirming why the fresh base
+matters. Fork horizon@2/five disclosures@2 and a hypothetical35-ref Guided Hint consumer/35
+bindings compile without replacing production declarations. The first attempt lacks successor
+bindings and correctly fails EVIDENCE_PROJECTION_ORPHANED; add the complete hypothetical consumer
+image rather than an orphan-disposition waiver. No new factory/value/convention is registered or
+minted. `[V]` `terminal.test.ts` prospective metadata case; normal terminal/prefix targets.
+
+Independent read-only source tracing finds D3853: candidateCollectorIds strips versions and
+intersects the legacy vector's allowed IDs with the **current** packet vocabulary, while its
+factory still emits the old fork and candidateCollectorResults shares current child readings.
+Changing only the current slot to a fresh base can therefore break the supposedly retained API.
+Freeze legacy exact refs/child-reading behavior before adopting the current slot; no production
+regression is claimed before that change exists. `[V]` `candidate-feature-vector.ts` lines43–45/
+89/96; `evidence-factories.ts` COLLECTOR_FACTORIES; independent review receipt.
+
+The same review checks that Hint projection@2 does not automatically inherit the old fork
+convention: closure inheritance reads only predecessor **landed witnesses**, not old transitive
+value receipts. It also finds that Hint wire version1 omits projection version, so ID-only
+receipt identity cannot disclose this migration. The companion draft authors exact wire version2,
+current-only dispatch/owners and explicit version1 historical parsing. `[V]`
+`evidence-convention-closure.ts` deriveProjectionConventionTable; `evidence-conventions.ts` exact
+witnesses; `hint-exchange.ts` HintDeliveryReceipt/parseHintDeliveryReceipt; `hint-distance.ts`.
+
+Unaccepted F2 §2.3f, tactical §3.7a, packet §3.1a, Hint §3a and module-registration now specify
+the coordinated repair. New convention uses source-reviewed reviewed_text, not the migration-only
+definition_and_limitations arm. All new consumer images inherit one existing logical policy.
+These authored contracts remain subject to independent source/joint acceptance and actual
+factory/admission/presentation/API/native verification; metadata green is not that implementation.
