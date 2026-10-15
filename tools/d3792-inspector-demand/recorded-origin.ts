@@ -27,6 +27,8 @@ import { reviewPacketForRun, reviewSubjectPath, type ReviewProviderNodeState } f
 import { importedRun, importRecord, evaluationDelivery, attachDelivery } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { ReviewEnginePoint } from "../../packages/runtime/src/review-points.js";
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
+import { runLedgerSourceResearch } from "./ledger-source.js";
+
 
 const at = "2026-10-15T00:00:00.000Z";
 let checks = 0;
@@ -863,3 +865,5 @@ console.log(JSON.stringify({ scope: "D3847 actual Story selection and recorded c
   lastLevelThresholdCases, primitiveRootStoryExclusions, lastLevelNonlossCases,
   successfulEmptyCases: lastLevelEmptyCases, terminalGateCases, oldInputAuthorityBindsPopulation: true,
   sourceCoverageNotInSelectedLineage: true, liveProviderCalls: 0, productionChanges: 0 }));
+
+runLedgerSourceResearch();

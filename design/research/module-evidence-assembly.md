@@ -2056,3 +2056,51 @@ acceptance or implementation qualification. Reviewer performs no tests; the new 
 source proof, invocation adoption, presentation and HTTP/native behavior are not exercised by this
 old-source research. `[V]` dated Inspector independent review, finite recorded-sequence section;
 F2 §2.3j and module-registration recorded-window source-owner/result grammar.
+
+### Recorded ledger source populations and coverage
+
+D3841's two retained ledger topics need different acquisition from selected-node attachments.
+Six synthetic reports at one legal board with different half/fullmove clocks yield three engine
+and two tablebase readings through legacy recordedReadingsAt, but exactly one of each through
+the prospective full-FEN selector. Two saved live attachments suppress all legacy recorded
+readings; phase's full-FEN tablebase resolver retains its report. These are measurements of actual
+source/filter code using explicitly synthetic report values, not Stockfish/Syzygy computations
+or detector correctness evidence. `[V]` `tools/d3792-inspector-demand/ledger-source.ts`;
+`apps/server/src/position-evidence.ts`; `apps/server/src/phase-source-composition.ts`;
+`make inspector-recorded-prefix-research`.
+
+The same41-control experiment preserves admitted/refused/admitted record ordinals plus matching
+abstentions, distinguishes refused-only/abstention-only from genuine verified absence, refuses
+malformed/crossed artifacts/FENs/source links and checks both sides. Identical records produce
+equal sealed payload digests but retain distinct original ordinals; a digest alone cannot replace
+the proposed source occurrence proof. The existing phase snapshot rejects same-full-FEN duplicate
+tablebase reports, so it cannot be aliased as Inspector's complete ordered population. That is
+an API-domain difference, not an asserted bug in phase's singleton contract. `[V]` cited experiment;
+`recorded-reading.ts`; `evidence-factories.ts:recordedFactory`; phase snapshot implementation.
+
+Existing assessmentGrounding immediately rejects non-engine/syzygy grading claims; it is not a
+general measurement-source admission function. PackRecord retains a lossy index/assessment state,
+not the original manifest/ledger record/disposition image. optionalJson also collapses every
+missing, read or parse failure to undefined. The proposal therefore adds separate registry-owned
+measurement admission and original sidecar load states while deriving old loader/grading/index/
+phase behavior unchanged. The raw synthetic helper demonstrates selection/validation feasibility,
+not a validated complete document, installed-source issuer, actual loader error-state combinations
+or runtime pack authority. No consumer may use it as a production source constructor. `[V]`
+`apps/server/src/pack-registry.ts:optionalJson/fromDocuments`; `sourcing/ledger-validation.ts`;
+module-registration §4.11a's new recorded-ledger supplier contract.
+
+The old closed available outcome cannot carry source refusals beside valid facts. The new draft
+adds a constant-sized recordedCoverage field to source body/disclosure and one two-topic-only
+unavailable reason for refused/abstained zero-fact results.17 parser/count/receipt controls reject
+null, extra/wrong-topic/incoherent/negative/fractional coverage and changed source/count digests;
+the normal incoming target also executes three exact-topic unavailable-reason controls. This is
+grammar/coherence evidence, not source issuance or full response admission. Fixed operational
+status is distinct from chess facts, LLM input and budget deferral. `[V]` `ledger-source.ts`;
+`draft-wire.ts`; `make inspector-incoming-dependent-research`; module/presentation draft clauses.
+
+The authorized independent reviewer first identifies that mixed facts/status cannot fit the old
+wire, then checks the authored source, coverage, receipt and presentation companion. It finds no
+remaining normative blocker in this bounded component; no tests, edits, component/source/joint
+acceptance or implementation qualification. Actual registry/loader/witness/callable/adapter/current
+access/native proof and the complete75+6 source image remain owed, independently of D3851's
+narrative scope choice. `[V]` dated Inspector independent review, ledger population correction.

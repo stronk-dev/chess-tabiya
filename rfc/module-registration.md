@@ -2382,6 +2382,97 @@ later witness span; no later witness beyond the grant is borrowed.
 | Recorded Review / Story | Storage-authorised source-owner subject at the exact admitted recorded boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
 | Provider / sourcing records | Exact retained operation/node/path/ledger occurrences from their owners. Existing operation-keyed receipt and legacy migration holds remain; this resolver does not perform an unaccepted provider exchange or invent absent evidence |
 
+**D3841 recorded ledger suppliers — unaccepted exact source contract:** the two retained topics
+are recorded.engine.eval@1 and recorded.tablebase.result@1, not aliases for the selected-node
+attachment successors. The proposed server-private callable is
+`RunService.acquireInspectorLedgerSource(context,{projection,signal})`. It consumes the admitted
+original-run/position context from this section and exactly one of these refs, never a caller
+pack id, FEN, ledger/index, source-state Boolean or reading payload. Validate requested ref/current
+context before source work. Non-pack runs or missing pinned pack/sidecars yield source_absent;
+they do not borrow an installed pack with the same title/id or acquire a fresh provider report.
+
+**Registry-owned measurement admission, not grading.** Add the private registry operation
+`PackRegistry.resolveRecordedMeasurementSource(packDigest)`. At actual document/sidecar
+registration retain independently immutable original validated document, parsed manifest/ledger,
+their existing canonical identities, original record/abstention ordinals and source links.
+This source is issued/read only by the registry that owns those bytes; a caller cannot compile
+one from arbitrary JSON, a matching digest, plain PackRecord/map or a spread/JSON copy. Validate
+the whole document/digest, ledger/manifest shapes, exact ledger packId/packVersion/packDigest and
+sourceId+retrievedAt linkage under the existing licence/source rules. Retain the full records,
+including reading refusals and abstentions; the lossy positionEvidence map is not its authority.
+Missing sidecars are source_absent, invalid/mismatched artifacts are source_contract_invalid,
+and an actual read/lookup failure is source_lookup_failed. Existing optionalJson drops every
+read/parse error to undefined; that legacy result cannot attest these distinctions. The new
+registration path retains, from its original sidecar read, a closed missing/loaded/parse-failed/
+read-failed state for each sidecar. Derive the old optionalJson/PackRecord behavior from it
+unchanged (both failures still supply undefined to old consumers); Inspector reads the retained
+typed state. Do not add a second request-time file read, fail otherwise loadable packs at boot
+or call malformed/unreadable sidecars absent. Programmatic fromDocuments registration validates
+its supplied parsed artifacts through the same source constructor; it does not attest an actual
+file read or provider transaction. No public source issuer accepts caller failure/verified flags.
+
+Measurement admission does **not** require objective.grading.assessedBy to be engine/syzygy.
+That field supports a grading claim, not the existence of separately validated measurements.
+Keep assessmentGrounding, recordedEvidence, buildPositionEvidenceIndex, recordedReadingsAt and
+phase composition behavior unchanged. The new admission neither verifies an authored objective
+nor reclassifies an old pack. Missing/unverified old grading metadata is not, by itself, a source
+version hold. The new source checks actual artifacts; it does not promote their historical
+reports to modern provider exchanges or manufacture a durable receipt that old values lacked.
+
+**Exact selected population.** Canonicalize the actual selected run.record.position@1 FEN with
+the existing legal six-field FEN routine. Both engine and tablebase matching use all six fields,
+including side, castling/en-passant and both clocks—not transposeKey or halfmove-only matching.
+Inspect every requested-kind record/abstention in original order. An invalid requested-kind FEN
+is a source-contract failure, not permission to omit it and assert absence. Where record.values
+also owns a FEN it must canonical-match its anchor. An engine manifest's owned FEN and a recognized
+Syzygy /standard request FEN must likewise match that exact record; conflicting claims fail.
+Retain other permitted origin forms as historical source links, without inventing a provider
+transaction. Full source links and raw prose remain private; none are LLM-created chess facts.
+
+For each matching record invoke exactly sourcing.ledger.engine_eval@1 → recorded.engine.eval@1,
+or sourcing.ledger.tablebase_result@1 → recorded.tablebase.result@1. Retain the original ordinal,
+exact sealed ledger/value pair, actual factory outcome and source association in the owned
+result. Assert exact same-record lineage, not just matching FEN/payload. An actual
+ledger_record_not_admitted outcome is a retained per-record refusal, not source corruption,
+empty success or a budget-deferred fact. An exception, crossed value or failed required invocation
+fails the source. Keep all admitted readings in original order and multiplicity: do not choose
+newest/best, deduplicate same-FEN reports or hide them beside live attachments. Matching ledger
+abstentions remain separate source statuses, never negative chess evidence.
+
+Use the existing canonical-FEN and declared-reading checks from phase composition where
+applicable, but do not alias its singleton tablebase snapshot/resolver: that API rejects duplicate
+full-FEN readings and supplies no engine population. Preserve it unchanged. The complete new
+private result retains the pinned pack/manifest/ledger identities, selected run/head/grant/node/
+position/projection, every matching record/disposition and matching abstention, including empty
+lists. Its sourceKey uses the existing canonical source-identity construction over this complete
+image. New compiler occurrence witnesses bind those actual factory invocations/ordinals; old
+values/receipts are never retroactively stamped. No new evidence projection, schema or provider
+operation is needed for this source result. Source permission and actual execution are distinct.
+
+**Mixed and zero populations.** Add the closed recordedCoverage object below to the draft wire.
+It describes artifact enumeration and measurement admission, not confidence or presentation
+budget. If any readings are admitted, outcome is available with collected equal admittedRecords;
+all valid readings remain pageable even beside refusals/abstentions. If no reading is admitted
+but any record was refused or any matching abstention exists, outcome is
+`unavailable/recorded_measurement_unavailable`, with that same complete coverage. Only a validated
+source with zero matching records **and** zero matching abstentions yields no_witness. Missing,
+invalid, unreadable or genuinely held source states carry null coverage, not fabricated zeros.
+Source_contract_invalid/source_lookup_failed use the existing failed outcomes; genuine version
+holds use the exact actual dependency rule, never pending metadata alone. Revalidate current
+access/decision and the current registry-owned artifact image after any async boundary and before
+publishing; a surviving node/unchanged pack document does not waive changed ledger/manifest state.
+Forward cancellation and perform no provider, disk re-scrape or whole-run attachment mutation.
+
+Before acceptance require real registry issuance/load/hydration/removal tests, forged/copied/
+cross-pack/ledger/source/position/ref refusals and actual complete ordered mixed populations.
+Exercise engine/tablebase clock/side mismatches, same-FEN duplicates, live coexistence, grading
+independence, malformed/unverified/absent/read-failed and factory-refused sources. Prove strict
+coverage/receipt correlation and native rendering of valid facts beside partial/refused/abstained
+coverage without fake facts or raw JSON. Re-run old phase/lookup/pack callers unchanged. The
+disposable synthetic-ledger experiment proves selection/factory feasibility only, not installed
+source issuance, a real engine/tablebase computation, qualification or authenticated API/native
+delivery. The complete75+6 consumer/source obligations and independent joint review remain held.
+
 **D3836 dependent incoming-edge binding (2026-10-15), still unaccepted:** the proposed
 `prepareInspectorDependentEdgeSource` supplier takes an actual admitted
 `DeclaredEvidence<RecordedEdge>` from `run.record.edge@1`, one of the five exact refs below,
@@ -2953,7 +3044,7 @@ The requested selection and current decision cursor are distinct and both retain
 | Body kind | Exact additional fields | Meaning |
 |---|---|---|
 | `inventory` | `range`, `topics[{projection,family,state}]` | Exact eligible registered topics; family is one of the existing eight IDs, state only `not_requested`; no source work/count claim |
-| `source` | `projection`, `context`, `outcome`, mate-only `parameters` | One requested source, complete execution outcome; parameters required only for the two mate refs |
+| `source` | `projection`, `context`, `outcome`, `recordedCoverage`, mate-only `parameters` | One requested source, complete execution outcome; parameters required only for the two mate refs; coverage is exactly the ledger-specific closed object below or null |
 | `detail` | `projection`, `context`, `sourceKey`, `scope`, `range`, `fullSourceTotal`, `sourceOrdinals`, `presentation` | One bounded batch of complete typed members |
 | `detail_limited` | `projection`, `context`, `sourceKey`, `scope`, `ordinal`, `sourceOrdinal`, `selectedTotal`, `fullSourceTotal`, `exceeded` | A complete member cannot fit; no zero-progress page or silently cropped substitute |
 
@@ -2980,9 +3071,11 @@ Source outcome is closed:
   source-owner migration, not this wire declaration, changes the underlying availability.
   All other unavailable alternatives have exactly `kind` and `reason`, with no dependency
   field: `source_absent | provider_unavailable | authored_source_absent | invalid_turn_clone |
-  no_legal_recapture`.
+  no_legal_recapture | recorded_measurement_unavailable`.
   `no_legal_recapture` is admitted only for the strict overload projection above; neither
   invalid request horizons nor `budget_exhausted` are source-unavailability alternatives.
+  `recorded_measurement_unavailable` is admitted only for the two ledger topics with the
+  completed refused/abstention-only coverage below, never a missing or invalid artifact.
   Each requires actual
   source-owner absence/refusal evidence; no universal stub satisfies acquisition obligations.
 - `failed` has only `reason`, exactly `source_contract_invalid | provider_failed |
@@ -2994,6 +3087,48 @@ Source outcome is closed:
   dimensions are unique members of `facts | words | marks | arrows`. Detail is null or the
   exact one of six new view refs belonging to this source. No source payload/raw JSON travels
   in this summary. Presentation is the existing strictly parsed `PresentationReceipt`.
+
+**D3841 recorded-source coverage — same unimplemented wire, not a new evidence leaf.** Every
+source body has the required recordedCoverage field, null except for the two exact ledger topics
+after successful complete artifact enumeration. In their available/no_witness or
+unavailable/recorded_measurement_unavailable outcomes it is exactly:
+
+```ts
+interface InspectorRecordedCoverage {
+  readonly sourceKey: string; // exact owned complete ledger-source identity, not a caller key
+  readonly matchedRecords: number;
+  readonly admittedRecords: number;
+  readonly notAdmittedRecords: number;
+  readonly abstentions: {
+    readonly out_of_range: number;
+    readonly source_unavailable: number;
+    readonly no_data_at_band: number;
+    readonly licence_withheld: number;
+  };
+}
+```
+
+All seven counts are nonnegative safe integers, including safe sums;
+matchedRecords=admittedRecords+notAdmittedRecords. Every matching abstention increments exactly
+its existing closed reason. Count matching records independently of abstentions; a report plus
+abstention is not deduplicated. This is constant-sized metadata, not an unbounded diagnostic list.
+Original ordinals, individual dispositions, timestamps/source links and raw abstention detail stay
+in the private source proof, not arbitrary wire prose. No records may be silently dropped before
+counting. Available requires admittedRecords>0 and collected=admittedRecords. No_witness requires
+all counts0. Recorded_measurement_unavailable requires admittedRecords0 and at least one refused
+record or abstention. Other outcomes and every other projection require null; missing, extra,
+negative, fractional, overflow, inconsistent or wrong-topic fields refuse. These parsers check
+shape/coherence, not source issuance: the server must derive counts/sourceKey from the actual
+retained private source and the client must bind the entire returned value to its receipt.
+
+The source collection key binds recordedCoverage.sourceKey and all complete admitted reading
+occurrences in original order. Every page of that collection repeats the same coverage; changed
+source or counts yields stale, not continuation into a different report. The operational source
+status renderer shows admitted/not-admitted and each positive abstention count beside valid
+fact pages, including refused-only/abstention-only states. It is a fixed typed status component,
+not a chess fact, advice, raw ledger JSON, arbitrary caption or input to external voice/LLM.
+Do not encode source refusal as deferred; that word remains exclusively presentation budgeting.
+The native bounded-layout proof must include the compact coverage block and mixed fact pages.
 
 `collected` is the full collection's fact total and equals range.total; `displayed+deferred`
 equals this page's count, not the full collection. The facts length equals range.count with
@@ -3015,7 +3150,11 @@ their cancellation remain source-owner implementation obligations, not establish
 **Disclosure binding:** `inspector.disclosure_receipt@1` is exactly `protocol`, `runId`, `branchId`,
 `nodeId`, `decisionDigest`, `requestedConfigDigest`, `effectiveConfigDigest`, `view`, `range`,
 `collectionKey`, ordered `sourceKeys`, ordered `sourceOrdinals`, `detailProjection`, ordered
-`componentDigests`, `sourceOutcome`, and `digest`. `sourceOutcome` is null for inventory/detail/
+`componentDigests`, `sourceOutcome`, `recordedCoverage`, and `digest`. recordedCoverage equals the
+source body's entire field, including sourceKey and all counts, or is null for every non-source
+body. Include it in the canonical receipt body for available, no_witness and refused/abstained
+ledger measurements alike; changing/removing the coverage changes the receipt. `sourceOutcome`
+is null for inventory/detail/
 limited-detail bodies. For source bodies it is the exact closed nonavailable outcome, including
 the held dependency; an available outcome instead contributes exactly `{kind:"available"}`
 because its page/collection/source/component identities are already bound by the fields above.
@@ -3645,6 +3784,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3841 authors both retained ledger suppliers: registry-owned
+  grading-independent artifact admission, original sidecar load states, exact full-FEN complete
+  populations and ordered same-record lineage with no live suppression. Closed recordedCoverage
+  and receipt/presentation companions retain mixed/refused/abstained populations without fake
+  facts or budget deferral. Synthetic research is not source issuance/API/native proof; no
+  joint acceptance, source retirement, new projection or production implementation.
 - 2026-10-15 — Unaccepted D3847/F2 §2.3j adds ten source-owned recorded sequence@3 topics
   with finite literal members, complete ordered capture populations and indexed auxiliary
   sources. The requirements image is30 replacements/45 conditionally unchanged topics, still

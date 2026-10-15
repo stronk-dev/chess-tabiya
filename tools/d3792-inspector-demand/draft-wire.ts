@@ -49,7 +49,7 @@ export interface DraftRequest {
 export interface DraftRange { start: number; count: number; total: number; next: number | null }
 export type DraftContextFailure = "no_incoming_edge" | "no_recorded_window" | "no_second_attempt" | "no_recorded_review";
 export type DraftUnavailableOutcome =
-  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "invalid_turn_clone" | "no_legal_recapture" }
+  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "invalid_turn_clone" | "no_legal_recapture" | "recorded_measurement_unavailable" }
   | { kind: "unavailable"; reason: "source_version_held"; dependency: string };
 export type DraftSourceOutcome =
   | { kind: "missing_context"; reason: DraftContextFailure }
@@ -72,6 +72,7 @@ export interface DraftDisclosure {
   sourceKeys: readonly string[]; sourceOrdinals: readonly number[];
   detailProjection: DraftDetailRef | null; componentDigests: readonly string[]; digest: string;
   sourceOutcome: DraftDisclosureOutcome | null;
+  recordedCoverage: import("./ledger-source.js").DraftRecordedCoverage | null;
 }
 export type DraftResponse =
   | { protocol: "inspector.query_page@1"; kind: "refused";
@@ -80,7 +81,8 @@ export type DraftResponse =
       decision: ModuleDecisionStamp; requestedConfigDigest: string; effectiveConfigDigest: string;
       disclosure: DraftDisclosure; body:
         | { kind: "inventory"; range: DraftRange; topics: readonly { projection: string; family: InspectorFamilyId; state: "not_requested" }[] }
-        | { kind: "source"; projection: string; context: DraftSourceContext; parameters?: DraftMateParameters; outcome: DraftSourceOutcome }
+        | { kind: "source"; projection: string; context: DraftSourceContext; parameters?: DraftMateParameters; outcome: DraftSourceOutcome;
+            recordedCoverage: import("./ledger-source.js").DraftRecordedCoverage | null }
         | { kind: "detail"; projection: string; context: DraftSourceContext; sourceKey: string; scope: DraftDetailScope;
             range: DraftRange; fullSourceTotal: number; sourceOrdinals: readonly number[]; presentation: PresentationReceipt }
         | { kind: "detail_limited"; projection: string; context: DraftSourceContext; sourceKey: string; scope: DraftDetailScope;
@@ -109,8 +111,9 @@ export function parseDraftUnavailableOutcome(projection: string, value: unknown)
     assert(meta.pending !== undefined && meta.pending.trim() !== "", "registration alone is not an unresolved source hold");
   } else {
     exact(row, ["kind", "reason"]);
-    assert(["source_absent", "provider_unavailable", "authored_source_absent", "invalid_turn_clone", "no_legal_recapture"].includes(row.reason as string));
+    assert(["source_absent", "provider_unavailable", "authored_source_absent", "invalid_turn_clone", "no_legal_recapture", "recorded_measurement_unavailable"].includes(row.reason as string));
     if (row.reason === "no_legal_recapture") assert.equal(projection, "derived.tactic.overloaded_defender_response_conflict@1");
+    if (row.reason === "recorded_measurement_unavailable") assert(projection === "recorded.engine.eval@1" || projection === "recorded.tablebase.result@1");
   }
   return Object.freeze(structuredClone(row)) as DraftUnavailableOutcome;
 }
@@ -303,7 +306,7 @@ const disclosureBody: Omit<DraftDisclosure, "digest"> = {
   effectiveConfigDigest: `sha256:${"c".repeat(64)}`,
   view: { kind: "source", projection: opening, context: { kind: "position" }, start: 0, collectionKey: null },
   range: null, collectionKey: null, sourceKeys: [], sourceOrdinals: [], detailProjection: null,
-  componentDigests: [], sourceOutcome: admittedHeld,
+  componentDigests: [], sourceOutcome: admittedHeld, recordedCoverage: null,
 };
 const bound = presentationDigest("inspector.disclosure_receipt@1", disclosureBody);
 assert.equal(presentationDigest("inspector.disclosure_receipt@1", JSON.parse(JSON.stringify(disclosureBody))), bound); absenceChecks++;
@@ -313,3 +316,9 @@ for (const sourceOutcome of [null, { kind: "unavailable", reason: "provider_unav
 }
 console.log(JSON.stringify({ scope: "D3843 disposable unavailable-branch/receipt metadata controls only; NOT full response, source authority or API",
   absenceChecks, actualOpeningDependencyRetained: true, nonHeldHasNoDependencyField: true }));
+
+for (const projection of ["recorded.engine.eval@1", "recorded.tablebase.result@1"]) {
+  assert.deepEqual(parseDraftUnavailableOutcome(projection, { kind: "unavailable", reason: "recorded_measurement_unavailable" }),
+    { kind: "unavailable", reason: "recorded_measurement_unavailable" });
+}
+assert.throws(() => parseDraftUnavailableOutcome("rules.phase.reading@2", { kind: "unavailable", reason: "recorded_measurement_unavailable" }));

@@ -30695,3 +30695,52 @@ Campaign was the one capability with no API, route or content. Now:
 - make work-state-sync roadmap-receipt verify-governance exits zero; live assignment counts
   remain unchanged with zero untriaged. Inspect/stage only the eight owned tracking files and
   commit this independent return through the normal hooks. No push or goal pause.
+
+### 2026-10-15 — D3841 exact recorded-ledger sources and bounded mixed coverage
+
+- Previous goal turn made concrete progress in5f7af1dd/6ce7d5ac. Continue from the actual clean
+  tracked tree and independently returned ledger supplier gap, not a new research/RFC program.
+  Existing D3841 owns this source-contract work; no duplicate defect row is invented.
+- Read actual ledger validation/linkage, grading-specific admission, pack registration/optional
+  sidecar loading, position lookup, declared reading factories and phase snapshot/resolver.
+  The old index suppresses refused rows and lookup suppresses kinds beside live attachments;
+  engine matching ignores clocks and tablebase matching checks halfmove only. Phase's full-FEN
+  singleton source has no engine arm and rejects duplicate tablebase reports, not necessarily
+  a bug in that accepted API. Do not alias either as the new complete Inspector supplier.
+- Extend the existing normal prefix research target with an explicitly synthetic fixture tool,
+  not production source issuance or actual Stockfish/Syzygy outputs.41 controls retain original
+  admitted/refused/admitted ordinals and abstentions, distinguish refusal/abstention-only from
+  verified absence, preserve identical-record multiplicity and reject malformed/crossed source
+  shapes/links/FENs. Existing factories supply real sealed fixture values; their equal digests
+  do not replace the source ordinal/proof a production issuer still owes. Both sides are covered.
+- Independent read-only review confirms mixed facts/source status cannot fit the old closed
+  wire and measurement admission can be separate from objective grading. Author the two exact
+  registry/service source operations and full retained source image, including actual original
+  missing/loaded/parse-failed/read-failed sidecar state. The initial presumed loader behavior
+  was wrong: optionalJson swallows all read/parse errors to undefined. Correct the draft before
+  landing, preserving that old behavior while retaining typed state for new Inspector reads.
+- Add constant-sized recordedCoverage to the still-unimplemented source/disclosure grammar,
+  a two-topic-only unavailable reason for refused/abstained zero-fact populations and fixed
+  operational presentation beside valid pages. No fake chess/absence facts, arbitrary prose,
+  LLM input, budget-deferred source failures, newest-report selection or live suppression.
+ 17 coverage/parser/digest controls and three topic-restricted unavailable controls execute in
+  the normal prefix/incoming targets. The30/45 topic repair map still preserves75+6 obligations.
+- The authorized reviewer finds no remaining normative blocker in this bounded correction,
+  not component/source/joint acceptance. It explicitly identifies actual complete document/
+  registry/loader issuer, original read-state combinations and current-source revalidation as
+  unimplemented acceptance obligations, not things the raw fixture helper proves. No reviewer
+  tests or edits. Existing grading/index/lookup/phase/callers, payloads and receipts are unchanged.
+- Normal make inspector-recorded-prefix-research and make inspector-incoming-dependent-research
+  exit zero. The normal make typecheck first cannot start because the package manager's
+  dependency-resolution cache write is sandbox-blocked; retry the **same** Make target through
+  the permission mechanism, then all workspace types/Svelte diagnostics pass. No alternate
+  test command, dependency, lockfile or Make/environment change. No fresh full software/content/
+  browser or remote-CI claim: this turn changes contracts/disposable research, not production.
+- Update the existing dossier/coverage/review/ledger/queue/roadmap in the same checkpoint;
+  replace the superseded current ledger-return instructions instead of leaving them queued.
+  Work-state/compact receipt/governance and normal commit hooks follow. The full1.0 goal stays
+  active; D3851 and complete upstream/source/adapter/callable/HTTP/native qualification remain.
+- Final make work-state-sync roadmap-receipt verify-governance exits zero:3605 rows/1740 live,
+  zero untriaged, resource/status/roadmap parity and compact receipt green. Stage the15 explicit
+  owned contract/research/tracking files, inspect cached names/diff and use normal commit hooks.
+  No push, persisted schema/registry-head change, source qualification or goal pause.

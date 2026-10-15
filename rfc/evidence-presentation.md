@@ -2044,8 +2044,8 @@ This detail section remains unaccepted; no production or existing source meaning
 The D3841 follow-up also refutes simply retaining75 unchanged legacy refs plus these six views:
 §4.11a still owes an obligation-preserving modern-source rebase and exact-version registry/
 admission/presentation closure. One existing module policy is shared, not duplicated or weakened;
-old @1 payloads and adapters stay intact. The subsequent exact fourteen-row source map
-(twelve execution failures plus D3846's two fixed-tuple repairs) proposes
+old @1 payloads and adapters stay intact. The current exact30-replacement/45-conditionally-retained
+source map (including recorded sequence@3 repairs) preserves
 75 topic refs plus six detail refs (81 distinct accepted refs), not a compiled successor binding
 count: its rank@3 remains held on D3845 and adapters can have multiple forms.
 The subsequent D3841 author clauses specify the exact-version consumer-image join, required
@@ -2058,6 +2058,22 @@ occurrence or detail member atomically; count it once and publish none of its co
 the combined cost exceeds any dimension. Historical packets may have separately declared recorded successors, never
 fabricated modern receipts or refreshed historical values. This companion does not authorize
 those unfilled source factories or treat a new adapter as adoption.
+
+**D3841 recorded-source operational coverage — unaccepted companion.** Module-registration's
+two exact sourcing-ledger topics retain valid recorded readings beside a complete, constant-sized
+recordedCoverage summary, bound into source collection and disclosure identities. Render it as
+fixed typed source status: matching record count, admitted count, not-admitted count and each
+positive count under the four existing abstention labels. Never render raw abstention detail,
+ledger JSON or arbitrary source prose. This is operational chrome, not a new evidence projection,
+chess annotation, importance/grade, strategic claim or input to voice/LLM. Admitted facts still
+use the registered exact recorded-reading pair; coverage does not grant them new permissions.
+Mixed coverage must remain visible with every bounded fact page. Refused-only/abstention-only
+coverage has the explicit unavailable outcome, not an empty panel asserting no_witness. Counts
+and source identity must be identical to the strict disclosure field; reject absent, substituted,
+inconsistent or foreign-topic coverage before paint. Native acceptance includes compact status
+and facts together at every supported viewport, without overlap, board shrinkage or cropping.
+Budget deferral remains distinct from a refused source record. No unbounded diagnostic list or
+extra source-detail door is introduced here; the complete private source keeps its ordinals.
 
 Every new projection below is version 1. Register it only to `module.full_inspector@2`, together
 with the original source image owned by §4.11a. Factories consume exactly one **admitted complete
@@ -2273,6 +2289,10 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-10-15 — Unaccepted D3841 companion defines compact fixed operational recordedCoverage
+  status beside admitted recorded facts, including refused/abstained zero-fact outcomes. No raw
+  ledger prose, fake evidence leaf, LLM input or deferred-source alias. Exact source/receipt
+  correlation and bounded native presentation remain implementation/acceptance obligations.
 - 2026-10-15 — D3841 companion distinguishes the authored 81-ref requirements image from
   unimplemented successor bindings. Historical recorded packets/selection lineage and separate
   modern Maia WDL require exact admitted renderers, closed field states and unchanged ceilings;

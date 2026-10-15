@@ -713,3 +713,27 @@ wording is clear in this pass; source issuers, sidecars, exact adapters, HTTP/cl
 and qualification remain future implementation obligations, not newly alleged production bugs.
 Read-only source inspection only, no tests/edits/acceptance. Inspector remains returned, not
 accepted by main. Preserve the complete75+6 obligations while the two-topic source gap is authored.
+
+### D3841 ledger population correction — bounded independent review
+
+The authorized reviewer traces the closed wire and confirms that the old available outcome
+cannot retain valid measurements with visible source refusals. It recommends an explicitly
+authored source-specific coverage summary, not fake facts, budget-deferred rows or whole-source
+failure that discards valid measurements. It also confirms measurement admission can be separate
+from grading-specific assessmentGrounding while old APIs/phase behavior remain unchanged.
+
+Main authors module-registration's two exact source owners, registry-retained artifact/load
+authority, six-field-FEN complete populations and same-record factory lineage; fixed-size
+recordedCoverage/source status and its exact collection/disclosure correlation accompany mixed,
+refused-only, abstention-only and genuinely empty outcomes. Original optionalJson read/parse
+failures receive explicit retained state for the new issuer while old consumers still receive
+their existing undefined behavior. Phase's singleton snapshot is reused only where applicable,
+not misrepresented as an engine or multi-report source. No runtime implementation is supplied.
+
+Independent read-only recheck finds no remaining normative blocker in this bounded correction.
+It explicitly notes the synthetic helper is not complete document/source registration, installed
+issuer, real loader missing/parse/read-state execution or current-source revalidation. Those are
+retained adoption tests, not extra author blockers or demonstrated production capability.
+Reviewer performs no tests, edits, component acceptance or joint acceptance. Main reports normal
+prefix/incoming research and workspace types, including41 synthetic source/17 coverage controls
+and three restricted unavailable-reason checks; those are not the reviewer's verification.

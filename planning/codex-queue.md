@@ -1,13 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-15 — The independently authorized complete Inspector review returns D3841's two retained
-sourcing-ledger topics after the recorded-sequence contract checkpoint5f7af1dd. Next author their
-exact owner/callable, pack/ledger/position joins, complete ordered source population, FEN matching
-and explicit absence/invalid/unavailable/refused-record mappings. Do not reuse recordedReadingsAt's
-live-attachment suppression or empty unverified index as Inspector semantics. Existing authenticated
-phase composition supplies full-FEN tablebase state, not an engine arm; reuse rather than fork it
-where appropriate. D3851 narrative scope is a separate owner hold. No source/joint acceptance or
-API/UI implementation authority; detailed evidence is in the existing independent review record.
+2026-10-15 — D3841's two ledger suppliers are now authored in module-registration §4.11a,
+not implemented: registry-owned artifact admission independent of grading, retained original
+sidecar load state, complete six-field-FEN populations and ordered same-record factory lineage.
+Closed recordedCoverage and receipt/presentation status retain useful facts beside refused/
+abstained records without live suppression, fake facts or budget deferral.41 synthetic source/
+17 coverage controls, three restricted reason checks and normal prefix/incoming/types pass.
+The independent bounded review finds no normative blocker, not component/joint acceptance.
+Next finish the complete source/adapter/callable image and joint review; D3851 remains a separate
+scope choice. Actual registry issuance, original loader-state combinations, source revalidation,
+compiler witnesses, response/native delivery and qualification are future implementation work.
+Keep old grading/index/lookup/phase consumers unchanged and all75+6 obligations; do not promote
+the raw fixture helper into a production source or claim a real engine/tablebase measurement.
 
 2026-10-15 — D3847's recorded sequence contracts are now proposed in F2 §2.3j, not implemented:
 ten source-owned@3 factories,23 fixed/anyOf members, complete ordered capture populations and

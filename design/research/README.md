@@ -75,6 +75,16 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Recorded ledger acquisition and mixed coverage, 2026-10-15 ([[D3841]]):41 synthetic source
+controls distinguish legacy transposition/clock/live suppression from exact full-FEN populations,
+ordered duplicates and grading-independent artifact admission.17 closed coverage/receipt controls
+and three restricted unavailable-reason checks preserve valid readings beside refused/abstained
+status. optionalJson's original read/parse failures must be retained by the proposed issuer,
+without changing old behavior. Independent bounded review finds no normative blocker, not source/
+joint acceptance. No real provider result, installed issuer, source revalidation or API/native
+proof. `[V]` `module-evidence-assembly.md` §Recorded ledger source populations and coverage;
+normal prefix/incoming research targets; dated independent review.
+
 Recorded sequence successor authoring, 2026-10-15 ([[D3847]]): ten prospective@3 declarations
 compile23 finite fixed/anyOf members under unchanged F1, matching76 actual nontrade recorded
 outputs. Complete ordered capture/indexed source guards remain explicit; old factories/history

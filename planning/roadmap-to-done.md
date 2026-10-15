@@ -19,12 +19,13 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The complete independent Inspector source review returns a concrete remaining D3841 gap: its two
-retained sourcing-ledger topics have no exact per-topic acquisition/absence contract. Existing
-position lookup suppresses recorded readings beside live attachments and cannot establish absence
-from an empty invalid/unverified index; authenticated phase composition covers full-FEN tablebase,
-not engine readings. Author their explicit source joins/coexistence/outcomes next. This is separate
-from the unanswered D3851 narrative scope choice. Inspector API/UI implementation is not accepted.
+D3841's two ledger source contracts are now authored, not implemented. Separate registry-owned
+measurement admission, original sidecar read states, full-FEN ordered populations and closed
+mixed/refused/abstained coverage preserve valid facts without hiding source status.41 synthetic
+source/17 coverage controls plus three exact-topic reason checks and normal prefix/incoming/types
+pass; independent bounded review finds no normative blocker, not source/joint acceptance. Actual
+issuer/loader/source revalidation/adapter/API/native proof and the full75+6 image remain owed.
+This is contract/research progress; no learner capability or whole milestone is completed.
 
 D3847 now proposes the ten exact recorded sequence@3 contracts in F2 §2.3j, preserving old
 APIs/history and D3851's unanswered narrative scope choice.23 fixed/anyOf members compile under
