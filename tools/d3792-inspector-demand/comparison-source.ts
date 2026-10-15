@@ -7,8 +7,11 @@ import { createRun, canonicalRunStart, commitMove, rewind, fork, revealFeedback,
 } from "../../packages/runtime/src/index.js";
 import { invokeEvidenceValueRoute, type EvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import type { RunEvidenceItem } from "../../packages/runtime/src/evidence-factories.js";
-import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, evidenceForConsumer, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { presentEvidenceItems, presentedSentence } from "../../packages/runtime/src/presentation-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
+import { CONVENTION_REGISTRY, compileConventionRegistry, type ConventionDeclaration } from "../../packages/runtime/src/evidence-conventions.js";
+import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
 import { STORY_PIVOT_CP } from "../../packages/runtime/src/story.js";
 const at = "2026-10-14T00:00:00.000Z";
 type ResearchCompare = (run: DrillRun, branches: readonly string[], options: { researchThroughNodeIds: readonly string[] }) => BranchComparison;
@@ -313,6 +316,60 @@ if (structuralExperiment) {
   assert(laterPeerSuppressions > 0, "suppression must also occur past an already nonempty peer prefix and after the selected observation's ply");
   assert.deepEqual([...structuralInputCounts], [0]);
   assert([...sourcePopulations.values()].some(row => row.sizes.some(size => size === 0)));
+  // D3855: actual old factory -> admitted consumer -> registered renderer, not caller payloads.
+  const presentComparison = (consumer: string, evidence: DeclaredEvidence<unknown>) => presentEvidenceItems(
+    evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, [evidence]));
+  // Disposable closure experiment: exact projection witnesses are executable, not mere citations.
+  const comparisonConvention = (witness: string): ConventionDeclaration => ({
+    ref: { id: "comparison-structure-appearance", version: 1 },
+    definition: "Existing post-fork immediate-predecessor appearance excluding complete compared-column intersection.",
+    limitations: ["Not importance, safety or recommendation."],
+    authority: [{ kind: "landed_contract", witnesses: [witness], snapshotRef: "673683057b6d744623fe45b9deb54bedf3771a06" }],
+    disclosure: { kind: "reviewed_text", summary: "Compared recorded appearances.", detail: "Disposable source-selection closure experiment, not a registered convention." },
+  });
+  const oldRef = "derived.compare.structure_delta@1";
+  const baselineClosure = deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST).get(oldRef);
+  const withWitness = (witness: string) => deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST,
+    compileConventionRegistry([...CONVENTION_REGISTRY.declarations, comparisonConvention(witness)])).get(oldRef);
+  assert.deepEqual(withWitness("packages/runtime/src/compare-strip-values.ts#structureDeltaEntries"), baselineClosure,
+    "helper-only authority must not change frozen predecessor direct closure");
+  assert.notDeepEqual(withWitness(oldRef), baselineClosure,
+    "an old projection authority witness must demonstrate the reviewer's preservation failure");
+  const unsafe = items.find(item => item.evidence.payload.observation.kind === "pawn_safe_square"
+    && item.evidence.payload.observation.detail?.safe === false);
+  assert(unsafe, "the regression must use a genuinely emitted unsafe reach reading");
+  const reachConsumers = ["module.compare_coach", "module.full_inspector", "compare.structure_strip", "guidance.voice_compare"];
+  for (const consumer of reachConsumers) {
+    const rendered: readonly string[] = presentComparison(consumer, unsafe.evidence).map(presentedSentence);
+    assert.equal(rendered.length, 1);
+    assert.match(rendered[0]!, /no opposing pawn can reach/u, "pin the false safe claim after detail stripping");
+  }
+  let namedRun = createRun({ id: "d3855-named-comparison", session: { kind: "position",
+    start: canonicalRunStart({ fen: "4k3/8/8/8/8/3P4/8/4K3 w - - 0 1", side: "white" }),
+    feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+    sessionDigest: `sha256:${"f".repeat(64)}`, seed: 1, createdAt: at,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+  const namedRoot = namedRun.activeCursor.nodeId, namedMain = namedRun.activeCursor.branchId;
+  namedRun = commitMove(namedRun, "d3d4", { at }).run;
+  namedRun = rewind(namedRun, namedRoot, at).run; namedRun = fork(namedRun, namedRoot, { at }).run;
+  namedRun = commitMove(namedRun, "e1f1", { at }).run; namedRun = revealFeedback(namedRun, at).run;
+  const namedComparison = compareBranches(namedRun, [namedMain, namedRun.activeCursor.branchId]);
+  const namedItems = invokeEvidenceValueRoute("derived.compare.structure_delta@1",
+    { run: namedRun, comparison: namedComparison, branchId: namedMain }) as readonly RunEvidenceItem<{ observation: StructuralObservation }>[];
+  const namedItem = namedItems.find(item => item.evidence.payload.observation.kind === "named_structure");
+  assert(namedItem, "a real new isolated d-pawn catalogue match must survive comparison selection");
+  const namedOutcomes = reachConsumers.map(consumer => {
+    const rendered: readonly string[] = presentComparison(consumer, namedItem.evidence).map(presentedSentence);
+    assert.deepEqual(rendered, ["On this attempt after the fork: undefined"],
+      "pin the actual unhandled named-kind output, not an assumed parser exception");
+    return { consumer, items: rendered };
+  });
+  console.log(JSON.stringify({ scope: "D3855 named presentation actual outcome", namedOutcomes }));
+  console.log(JSON.stringify({ scope: "D3855 old comparison presentation regression, not a successor renderer or UI proof",
+    genuineUnsafeReading: unsafe.evidence.payload.observation, falseSafeConsumerCount: reachConsumers.length,
+    genuineNamedReading: namedItem.evidence.payload.observation, undefinedNamedCaptionCount: namedOutcomes.length,
+    helperOnlyWitnessPreservesOldDirectClosure: true, oldProjectionWitnessChangesClosure: true,
+    productionChanges: 0 }));
   console.log(JSON.stringify({ scope: "D3847 complete structural source reconstruction/negative selection; not successor receipts or qualification",
     draftExactFamilyTableChecked: true, missingOrOldNamedVersionTableRefused: true,
     familyRefs: structuralRefs.length, distinctFenPopulations: sourcePopulations.size, sourceReconstructionCases,

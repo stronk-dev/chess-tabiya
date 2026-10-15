@@ -258,9 +258,9 @@ The existing producer availability and latency fields now mean only the producer
 own a synchronous local output and a provider-bearing derived sibling without either declaration
 lying.
 
-### 1a. Draft D3845/D3847 collection templates — explicit rank/last-level bindings, unaccepted
+### 1a. Draft D3845/D3847 collection templates — three explicit bindings, unaccepted
 
-Value-authority §§2.3g–h own the third derivation arm, exact story.rank@1/story.last_level@1
+Value-authority §§2.3g–i own the third derivation arm, exact story.rank@1/story.last_level@1/compare.structure_delta@1
 bindings, their separate answer rules and reduction receipts. This section owns execution integration; it creates no
 second source vocabulary or acquisition callback registry. The eligible refs come from that
 one compiled reduction declaration. Missing exact upstream refs/operations or cycles refuse
@@ -282,7 +282,7 @@ type CompiledEvidenceExecutionPlan =
   | { readonly kind: "reduction"; readonly projection: VersionedEvidenceId;
       readonly own: CompiledProjectionExecution["own"];
       readonly operation: VersionedEvidenceId;
-      readonly sourceOwner: "RecordedReviewMomentSource" | "RecordedLastLevelPopulation";
+      readonly sourceOwner: "RecordedReviewMomentSource" | "RecordedLastLevelPopulation" | "RecordedComparisonStructuralPopulation";
       readonly sourceUse: "captured_only";
       readonly elements: readonly { readonly projection: VersionedEvidenceId;
         readonly execution: CompiledEvidenceExecutionPlan }[];
@@ -295,11 +295,12 @@ member number and ordered/multiple input children. For a reduction, retain its e
 operation/source owner and one ordered template per eligible ref, recursively compiled. It is a
 finite template graph, not one tuple containing every family or a list of every possible subset.
 Own producer and all leaf availability/latency/providerOperation identities still use the shared
-protocol validator; sourceUse is allowed only on those two exact registered operations, never a
+protocol validator; sourceUse is allowed only on those three exact registered operations, never a
 caller-selected provider bypass. WorstCaseLatency exposes the full potential ancestry using the
 existing ordering; it is not proof that a particular provider ran or an actual request budget.
 The operation/source-owner pairing is exact: story.rank@1 uses RecordedReviewMomentSource and
-story.last_level@1 uses RecordedLastLevelPopulation. Crossed pairs are invalid plans, not aliases.
+story.last_level@1 uses RecordedLastLevelPopulation, and compare.structure_delta@1 uses
+RecordedComparisonStructuralPopulation. Crossed pairs are invalid plans, not aliases.
 
 Add compileEvidenceConsumerExecutionV2 for exact new consumer images that accept reduction
 graphs. It retains complete accepted/bound set equality, every adapter identity, binding latency
@@ -368,8 +369,9 @@ genuine original local-input, recorded-occurrence, build-time/document or provid
 AuthorityDigest binds that source owner's explicit complete input image; it does not mint or
 replace the original proof. A nested reduction joins its genuine complete reduction receipt and
 plan recursively; cycles and self-reference refuse.
-A last-level child value also joins the genuine authenticated result array containing that
-exact value at its recorded node/ply location; a detached or copied result receipt cannot fill it.
+A last-level or structural-comparison child value also joins the genuine authenticated result
+array containing that exact value at its recorded ordinal/node/ply location; a detached or copied
+result receipt cannot fill it.
 
 Admission traverses the witness and corresponding template together. A fixed wrapper's concrete
 member choices and leaf addresses must match one actual old compiled path; composition preserves
@@ -397,6 +399,21 @@ pair before iteration; [] has a real calculation receipt and no fabricated fact/
 moment source retains that receipt pair even when no item survives its separate root exclusion.
 Rank's complete source image and applied-convention closure bind that actually executed context
 calculation; no generic unexecuted-family closure or new public availability field is added.
+
+**Structural comparison's distinct realization.** compare.structure_delta@1 uses exactly
+RecordedComparisonStructuralPopulation and F2 §2.3i's eighteen-role group mapping, not Story
+moment/result ordinals. All18 templates compile, including the direct recorded position and
+all17 exact family refs. Its source-bound input image includes the separately selected granted
+branch, both complete bounded columns, every successful empty family group and authentic local
+factory-invocation/convention proof. Local FEN computation is allowed inside this captured-only
+operation; no provider request, sibling source or whole-tip read is allowed. Empty family groups
+have zero element witnesses, not fabricated leaves; their actually executed invocation authority
+and applied closures remain in the private source/result proof. The reduction validator checks
+that membership, not only available positive values or a union of eligible convention names.
+Fresh variable/empty result arrays are authenticated before flattening and every emitted child
+joins its original output ordinal/node/relative offset. Old @1 full-tip/N-way callers and
+receipts are unchanged. The new exact Inspector pair adopts @2 only after joint acceptance;
+no old strip, Compare or voice adapter is implicitly upgraded.
 
 The implementation must audit every old two-arm reader, including derivationMembers, manifest
 dependency/cycle/event checks, convention-member helpers, effectiveEvidenceExecution, source-label

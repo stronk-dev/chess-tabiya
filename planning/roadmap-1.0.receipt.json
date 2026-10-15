@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c6d6e46119c262fe424949cb011d53597ecc45f76b7b88103cb7ae307e8f16bc",
+    "roadmap": "sha256:9d9198b145fcac6412162feda88886cfa8a8516cc0ed2c75350cb7b24872a779",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:2e3fb1c0cbaa31c0f162f77216156aafbd7a208ab39038bc23774e614a221bc6",
-    "rfcRegister": "sha256:b1d106c6b7462f4c54cdf079d05f807bc78ac2f2b96492e0cdf3537b09df3a49",
+    "workState": "sha256:be2d5a3387219f64930ecc1ea0f3ee53fb6867479ec17446ccb54b93fdb81413",
+    "rfcRegister": "sha256:b514ed548ebdb05a57da890c3247fd37378225944ee809c1b603326e4ab7ae52",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 628,
-      "doing": 25,
+      "doing": 26,
       "blocked": 1086,
       "done": 1702,
       "refused": 162
@@ -407,7 +407,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:47ec03f1f4a06d894b5146eb8a7b8c313d65e1caf8b01518853ab73f404606aa"
+            "digest": "sha256:ee54d76df862bd88a01582c0427f3877965e16e980fe84a04341fe7511345eda"
           },
           {
             "kind": "work_state",
@@ -463,10 +463,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Author D3847/F2 section2.3d's structural-selection exact reduction/factory/result contract next; last-level@2 is now proposed separately in section2.3h, not implemented. Finish exact sequence/opaque/vector inputs and the complete source/adapter image (the old11 adapter census omits the new direct position input) before joint acceptance of D3845's grammar/V2 execution and D3792's complete Inspector amendment. D3851 still controls narrative/recorded coexistence; preserve both until ruled, every detector family and old APIs/history. Do not repeat completed counters or implement unaccepted suppliers. After acceptance, deliver actual source/factory/input-witness/planner/admission paths, exact complete consumers and authenticated/native UX. Parallel support obligations D3758,D3309/D3654,D3578 and wider D3363/D3370/D3373/D3376/D3391/D3392, persistence/D1867 and full Support/Review/bot/learner joins remain tracked.",
+      "nextAction": "Finish D3847's exact sequence/opaque/vector input contracts and the complete source/adapter image before joint acceptance of D3845's grammar/V2 execution and D3792's Inspector amendment. Structural section2.3i and last-level section2.3h are now proposed, not implemented; the old11-adapter baseline omits new direct-position requirements. D3855 separately owns false-safe/undefined captions on four old comparison consumers and needs explicit versioned repair/adoption, not silent closure through new Inspector. D3851 still controls narrative/recorded coexistence; preserve both until ruled, all detector families and old APIs/history. After acceptance implement actual source/factory/input-witness/planner/admission paths, exact consumers and authenticated/native UX. Parallel D3758,D3309/D3654,D3578, wider provider sources, persistence/D1867 and full Support/Review/bot/learner joins remain tracked.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3847 now authors last-level@2's exact source/reduction/result contract in F2 section2.3h, with real endpoint result/position/point roles and private authenticated0/1 result/convention receipts. Empty and root-excluded computation proof survives through rank; provider section1a has two exact captured-source bindings, no new provider work. Bounded independent review finds no blocker and rechecks the distinct constructor/reader naming correction, not source/joint acceptance. Existing prefix/types pass eight threshold/six root/four nonloss controls over old factories, not new-sidecar/planner/admission/API/native qualification. The direct position input makes old11-adapter baseline insufficient as the successor image. Structural/sequence/opaque/vector contracts, complete source closure, D3851 and actual implementation remain open. Prior19/56 requirements map stands. Production is unchanged from5542cc2d; no semantic/content/whole milestone/remote/release promotion.",
+        "summary": "D3847 proposes structural comparison section2.3i with position+17-family roles, both grants/selected branch, authenticated empty invocations/results, relative offsets and explicit catalogue identity. Provider section1a has exactly three captured-source bindings. Independent review catches/clears an old-projection convention-witness preservation defect, not source/joint acceptance. D3855 reproduces false-safe and undefined captions across four old consumer/render pairs; their production repair stays open. Normal comparison/prefix/types and20-replacement/55-retained map controls pass, not new sidecars/planners/admission/API/native qualification. Exact sequence/opaque/vector, complete source/adapter closure, D3851 and actual implementation remain. Production is unchanged from5542cc2d; no semantic/content/whole milestone/remote/release promotion.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -708,7 +708,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:47ec03f1f4a06d894b5146eb8a7b8c313d65e1caf8b01518853ab73f404606aa"
+            "digest": "sha256:ee54d76df862bd88a01582c0427f3877965e16e980fe84a04341fe7511345eda"
           },
           {
             "kind": "rfc",
@@ -779,6 +779,16 @@
             "kind": "rfc",
             "id": "review-map.md",
             "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3847",
+            "digest": "sha256:d0ede47635446862001833c0df663e7b4161f234fb1a632dcf745c2b42a1fe31"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3855",
+            "digest": "sha256:9372c34b293dd8de3ea561187a1d53eeec5956e97c8daf9e776193a7e71cfd35"
           },
           {
             "kind": "rfc",

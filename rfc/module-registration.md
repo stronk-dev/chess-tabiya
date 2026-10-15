@@ -1901,10 +1901,10 @@ bindings. No held-binding compiler exception or source retirement is authorized.
 D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
-refs in its predecessor inventory slot, preserving all other57 refs/order and all @1 contracts.
+refs in its predecessor inventory slot, preserving all other55 refs/order and all @1 contracts.
 This is an obligation-preserving proposed map, not complete literal factory-input closure.
 D3847's fixture audit reaches31 conflicting routes in the current declared Inspector union;
-retaining those57 topics is conditional on source-contract reconciliation and independent review.
+retaining those55 topics is conditional on source-contract reconciliation and independent review.
 Do not fabricate unused prerequisites or treat an executable declaration as qualified lineage.
 D3847's independent continuation also finds that scope-only reuse of existing recorded-window
 @2 and fork/overload factories below does not resolve their literal schemas. Fixed witness tuples,
@@ -1918,9 +1918,9 @@ failures. D3847/D3850 add two material topics and the direct computed promotion 
 their exact reconstruction and same-payload/foreign-FEN controls do not establish new runtime
 factories. D3847/D3852's strict-overload component adds one direct computed conventional
 predicate, superseding the rejected two-sealed-input proposal without a grounding relabel or F1
-change. All arithmetic is reconstructed from the admitted legal edge. Fork survival and its separate D3768
-terminal rule remain unresolved. Proposed source factories are owned by value-authority
-§§2.3a–2.3e, not implemented by this
+change. All arithmetic is reconstructed from the admitted legal edge. The D3768 fork component
+and D3847 structural reduction add their separately proposed bindings, not acceptance or factories.
+Proposed source factories are owned by value-authority §§2.3a–2.3i, not implemented by this
 table. The old `recorded.engine.eval@1` and `recorded.tablebase.result@1` sourcing-ledger topics
 remain separate; a ledger record cannot substitute for a run attachment.
 
@@ -1945,6 +1945,7 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `derived.tactic.promotion_pressure@1` | `rules.tactic.reading.promotion_pressure@1` | local_rules | D3847 direct FEN arithmetic with declared pass/reply convention; value-authority §2.3c |
 | `derived.tactic.overloaded_defender_response_conflict@1` | `rules.tactic.predicate.overload_conflict@1` | local_rules | D3847/D3852 direct legal-edge computation under the existing overload/defence/exchange conventions; value-authority §2.3e, unaccepted |
 | `derived.tactic.fork_survives_reply@1` | `derived.tactic.nonterminal_fork_survival@1` | derived | D3768 exact two-source same-edge derivation and nonempty reply rule; value-authority §2.3f, unaccepted |
+| `derived.compare.structure_delta@1` | `derived.compare.structure_delta@2` | derived | D3847/F2 §2.3i compare.structure_delta@1 reduction over both granted structural populations and selected branch; exact relative locations, private variable/empty result proof and retained catalogue identity. Unaccepted, not an @1 alias |
 
 This establishes a **requirements image**, not executable bindings:75 retained topic obligations
 plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger
@@ -2487,7 +2488,7 @@ a full-tip receipt or silently replace any of Inspector's 75 source obligations.
 **Comparison source constructor and execution obligations (2026-10-15), still unaccepted:** The
 current Full Inspector inventory accepts `derived.compare.structure_delta@1` and
 `derived.compare.eval_delta@1`; D3841's proposed successor image replaces the latter with @2.
-Structural lineage is separately held by D3847/F2 §2.3d; this subsection does not authorize
+Structural lineage is separately proposed by D3847/F2 §§2.3d/2.3i; this subsection does not authorize
 adding a scoped arm to its frozen @1. Inspector does not accept the route or trajectory projection merely
 because Compare does. The new operation must invoke the requested factory directly. Calling
 `comparisonStrips`, `comparisonNarrative` or `compareSources` and filtering afterward acquires
@@ -2538,12 +2539,12 @@ attached to their source records. This is a distinct source-operation identity, 
 persisted protocol, permission token or reinterpretation of a whole-tip value receipt.
 
 The scoped source obligations below do not introduce additional @1 arms. Eval dispatch must use
-F2 §2.3a's exact successor and sole arm; structural factory/declaration/receipt authoring remains
-held before acceptance:
+F2 §2.3a's exact successor and sole arm; structural dispatch uses the separately proposed
+§2.3i source/factory/reduction contract, still held before acceptance:
 
 | Source requirement | Arm status | Source-side execution and literal inputs |
 |---|---|---|
-| Structural difference, predecessor `derived.compare.structure_delta@1`; successor/reduction held D3847/D3845 | F2 §2.3d's proposed collectComparisonStructuralPopulation({comparison}) source-owned data schema, not a new @1 factory arm or mint | Require branchId equal one granted column. Every fork-inclusive path occurrence on both prefixes owns its actual position and17 ordered exact-family result rows, including successful empties, genuine source values and closed named-structure@2 conversion. Preserve complete peer unions, predecessor absence/reappearance and order; no positive-only or whole-tip substitute. The nominal complete data image is not itself an F1 derivation or permission. The exact successor/factory/reduction remains held until grammar and source/joint acceptance; current topic retention is conditional. |
+| `derived.compare.structure_delta@2` | F2 §§2.3d/2.3i: collectComparisonStructuralPopulation({comparison}) then sole `{population,branchId}` factory arm, not a new @1 arm | Require branchId equal one granted column; both fork-inclusive paths retain actual positions and17 ordered exact-family results, including authenticated successful empties. Preserve complete peer unions, predecessor absence/reappearance and relative offsets; no positive-only or whole-tip substitute. Authenticate the complete result array before paging/flattening and join each item to its original ordinal/location. Named catalogue identity is explicit new @2 payload; registered full-detail renderer preserves pawn reach. Grammar/source/renderer/joint acceptance and actual runtime remain held. |
 | `derived.compare.eval_delta@2` | `{before,after,comparison: RecordedComparisonSource,branchId:string}` exactly, per F2 §2.3a | Source owner reconstructs the complete recorded trail on the granted column and selects consecutive report pairs in stable ply/event order. Both exact sealed recorded.inspector.eval_packet@1 inputs, event/head/node membership and the comparison source must validate; arbitrary supplied pairs are not a trail. Preserve safe-integer cp parsing and STORY_PIVOT_CP, with no mate conversion. Emit the new recorded_cp_numbers/provider_not_established frame and disclose unverified comparability; do not label this a modern validated engine delta. |
 
 The old `{run, comparison, branchId}` arms remain unchanged for their existing callers.
@@ -2555,10 +2556,11 @@ serialization or only the run/branch/fork. Different endpoint tuples must have d
 identities even when their displayed deltas happen to be equal. Reversing the tuple retains
 requested column order and changes scope identity without manufacturing another chess meaning.
 
-The structural successor must preserve the current appearance/noncommon selection and payload
-population at complete tips, while supplying truthful complete source lineage and its exact
-grounding/convention contract. Its unresolved schema is not implicitly accepted by the source
-constructor. Eval@2 deliberately reports recorded numerical difference under F2 §2.3a's weaker
+The structural successor must preserve the current appearance/noncommon selection and legacy
+observation/location population at complete tips, while supplying truthful complete source lineage
+and its exact grounding/convention contract. Its new namedStructure field is the explicit additive
+payload change in F2 §2.3i, not whole-payload byte equivalence. This proposed schema is not implicitly
+accepted by the source constructor. Eval@2 deliberately reports recorded numerical difference under F2 §2.3a's weaker
 recorded_run authority and explicit comparability disclosure; it is not byte-equivalent to the
 old provider-labelled @1 projection. Existing @1 factories, full-tip callers and historical
 receipts remain untouched. Independently review each successor, its actual factory/consumer
@@ -2585,7 +2587,8 @@ old request owners, scope/configuration/account changes and paint. A correct sou
 not permission to publish an obsolete response.
 
 Acceptance adds actual typed constructor/successor/invoker controls to the D3820 prefix
-population. The eventual accepted structural successor preserves full-tip selection and payloads;
+population. The eventual accepted structural successor preserves full-tip selection and legacy
+observation/location bytes, with its explicitly new catalogue-identity field;
 eval@2 preserves the specified historical pair selection/arithmetic with its explicitly new
 payload, lineage and comparability disclosure. All old@1 callers, payloads and receipts remain
 unchanged. Fork-only/unequal-length/reversed and inherited prefixes retain exact complete

@@ -30547,3 +30547,42 @@ Campaign was the one capability with no API, route or content. Now:
   lifecycle, assignment/roadmap, intent, tier/docs and staged-process guards. Stage only the15
   explicit owned draft/research/tracking files and commit through normal hooks. Preserve the
   three pre-existing untracked entries; no push, acceptance or goal pause.
+
+### 2026-10-15 — D3847 structural reduction authored; D3855 genuine comparison caption failures
+
+- Continue from31c55d5a without production changes. The authorized independent reviewer confirms
+  the existing comparison selection has no direct registered selection convention and zero
+  sealed input witnesses. Main directly re-reads the committed helper at673683057b6d744623fe45b9deb54bedf3771a06,
+  claims the comparison convention in the existing register before writing the new binding,
+  and authors F2 §2.3i/provider §1a plus module/presentation companions. Exact position+17-family
+  roles, both columns/selected branch, authentic executed empty families, relative offsets and
+  complete variable/empty result receipts are explicit; old N-way callers/history remain.
+- Catalogue naming requires the explicit additive namedStructure field from the selected raw
+  named@2 input. Full PawnSafety detail survives the new scoped renderer; no guessed name or
+  strategic claim. The independent review returns a preservation blocker: exact old@1 authority
+  witnesses would mutate predecessor convention closure. Correct to the single committed helper
+  path/symbol and explicit new@2 catalogue token; independent wording recheck clears it, not
+  source/renderer/joint acceptance. A disposable actual closure control confirms old-projection
+  witnessing changes closure while helper-only authority preserves it. No registry is changed.
+- D3855 is recorded before investigation and reproduced through four actual old consumer/render
+  pairs using genuine factory output: unsafe f3 pawn geometry becomes a false safe caption;
+  an actual isolated d-pawn match prints undefined. The initial expected named-parser exception
+  is false; pin the actual string instead. A strict-tool inference error is corrected with an
+  explicit readonly string-array type. These are instrument corrections, not production fixes.
+  New Inspector authoring does not close old Compare/Inspector@1/strip/voice repair.
+- Normal make inspector-recorded-prefix-research inspector-comparison-source-research and strict
+  tool types pass. Retain316/597 source controls,126 full reading reconstructions/392 empty rows,
+  ten later-peer suppressions/eight reappearances. The exact requirements map is20 replacements/
+  55 conditional unchanged topics, still75+6 refs, with twelve negative controls; not actual
+  consumer bindings, source qualification, new sidecar/planner/admission or API/native proof.
+- Existing ledger, work-state, dossier, coverage, independent-review record, queue and roadmap
+  are updated.3604 ledger rows/1740 live, zero untriaged;569 UX states unchanged. The initial
+  sync correctly refuses its new ownerless row; assign D3855 through the normal transition and
+  re-sync successfully. Roadmap checking then correctly refuses its stale generated receipt;
+  refresh through make roadmap-receipt before final governance. No product gate or milestone
+  moves, no official pack graduates. The last full production proof remains5542cc2d, not a new
+  remote-CI claim. Next exact sequence/opaque/vector and complete source/adapter closure before
+  independent joint acceptance. D3851 stays unanswered, all coexistence/history retained.
+- Final make roadmap-receipt verify-governance and git diff --check pass. Source/resource/lifecycle,
+  work assignment/roadmap/intent, tiers/docs and staged-process controls are green. Commit only
+  the17 explicit owned author/research/tracking files through normal hooks; no push or goal pause.

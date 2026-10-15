@@ -10,9 +10,9 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850, §§2.3a–2.3h:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850/D3855, §§2.3a–2.3i:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
-  from the parent's awaiting state. D3845's rank-only reduction contract is proposed, not accepted;
+  from the parent's awaiting state. D3845's reduction grammar and its three exact operation bindings are proposed, not accepted;
   its upstream source contracts and complete execution/admission implementation remain held.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
   `design/04-content-architecture.md` grounded predicates; `design/05-in-run-experience.md` §3
@@ -40,9 +40,10 @@
 ```tabiya-claims
 semantic-conventions | members promotion_pressure_geometry_v1 | exact FEN promotion geometry and bounded legal pass/reply checks; no outcome verdict
 semantic-conventions | members fork_survival_v2 | nonempty complete legal reply population required for local fork survival; terminal false retains zero real refutations
+semantic-conventions | members comparison_structure_appearance_v1 | existing post-fork immediate-predecessor appearance minus complete compared-column intersection; no significance or recommendation
 ```
 
-**Claim scope.** The unaccepted D3847 promotion and D3768 fork successors add two literal algorithm
+**Claim scope.** The unaccepted D3847 promotion/comparison and D3768 fork successors add three literal algorithm
 definitions to the existing convention resource; they create no second register. Historical convention members
 remain landed under semantic-convention-provenance. Other changes are package-internal operations
 and additive F1 refs, with no persisted schema, migration, pack/shape/principle or evidence-kind
@@ -483,7 +484,7 @@ The disposable recipe and metadata compilation establish none of these new runti
 Independent upstream and joint review remain mandatory; D3847's other classes and D3845 grammar
 are not discharged by these three proposals.
 
-#### 2.3d Draft D3847 selection populations — domain schemas authored, reduction held
+#### 2.3d Draft D3847 selection populations — domain schemas, reductions below
 
 The measured structural/Story selections need complete population authority, not merely positive
 witnesses. The existing comparison instrument reconstructs 17 actual family populations at 44
@@ -500,8 +501,9 @@ RecordedComparisonSource under module-registration §4.11a, with its already spe
 original-path/FEN validation, independent snapshot and exact primary/peer grants. Proposed
 collectComparisonStructuralPopulation takes exactly `{comparison:RecordedComparisonSource}`;
 it is runtime-internal, not a client/source-data API or a new evidence projection. Its result is
-nominal and runtime-owned, with an independent immutable data reader accessible only to the
-comparison/reduction owners. A symbol property alone does not authenticate it. Copies, arbitrary
+RecordedComparisonStructuralPopulation, nominal and runtime-owned, with private
+readComparisonStructuralPopulation accessible only to the comparison/reduction owners.
+A symbol property alone does not authenticate it. Copies, arbitrary
 caller row arrays and a genuine population from another comparison cannot substitute. The
 subsequent source factory must bind the **complete data image** below, not merely this brand.
 
@@ -567,16 +569,18 @@ node's complete view with its immediate predecessor and excluding the common ide
 The fork supplies predecessor context but emits no entry. Retain every newly appearing
 observation in existing node/observation order, including reappearance after a genuine gap.
 An observation on the peer after the displayed node but inside its grant can suppress an entry;
-there is no earliest-positive-only or matched-node crop. Output payload remains the old complete
-StructuralObservationChange for each selected occurrence. No new before-value, importance,
+there is no earliest-positive-only or matched-node crop. Output observation remains the old complete
+StructuralObservation for each selected occurrence; §2.3i adds exact catalogue identity alongside
+named observations without changing this legacy selection view. No new before-value, importance,
 significance, named plan or grade is invented. Successful zero differences yields zero items,
 not a fabricated negative observation or an unavailable source.
 
 The future reduction receipt must retain the comparison scope, every ordered column/node/family
 result row (including successful empties), original sealed items and the closed conversion/selection
-identity. Replacing that with only selected positives or a set of source refs is refused. How F1
-represents these repeated/empty groups is still the D3845 grammar obligation below; this schema
-does not authorize empty fixed members, a generic aggregate leaf or a source-receipt fallback.
+identity. Replacing that with only selected positives or a set of source refs is refused. The
+proposed exact repeated/empty-group mapping is §2.3i, using D3845's still-unaccepted reduction
+grammar. This schema does not authorize empty fixed members, a generic aggregate leaf or a
+source-receipt fallback.
 
 Last-level differs from rank and structural difference. Its successor must consume the complete
 source-owned **recorded available** point population and actual coverage states, learner side,
@@ -939,7 +943,8 @@ checks traverse every eligible ref; semantic events cannot use this arm without 
 Last-level@2's source schema is in §2.3d and its proposed factory/reduction/result contract is
 §2.3h. Both remain unaccepted prerequisites before this element graph can be accepted or
 implemented. Neither old last-level@1 nor a fabricated empty value fills the hole. Structural
-comparison/last-level and the variable candidate vector receive no authority from this rank rule.
+comparison/last-level require their own explicit §§2.3h–i bindings; the variable candidate vector
+receives no authority from this rank rule.
 
 **One closed computation binding.** The runtime's reduction binding is exact and package-owned:
 operation story.rank@1; projection derived.story.rank@3; factory createDerivedStoryRankV3Evidence;
@@ -1163,6 +1168,139 @@ point with different earlier/later/rejected input images, and authentic empty/ro
 retention through rank. Mutate each group/element/address/plan/source/output location and reject
 missing/copied/crossed receipts. Actual source-owner/preflight/provider-off/no-new-work and
 authenticated/native Inspector journeys plus independent source/joint review remain required.
+
+#### 2.3i Draft D3847 structural comparison reduction — unaccepted
+
+This adds exactly one binding to the proposed reduction arm, not an optional input or new arm
+on frozen @1. Operation compare.structure_delta@1; projection derived.compare.structure_delta@2;
+factory createDerivedCompareStructureDeltaV2Evidence; source RecordedComparisonStructuralPopulation;
+constructor collectComparisonStructuralPopulation; private reader readComparisonStructuralPopulation;
+private computation comparisonStructuralAppearances; direct convention
+comparison-structure-appearance@1. The sole factory arm is exactly
+`{population:RecordedComparisonStructuralPopulation,branchId:string}`, metadata shape derived,
+result items. Authenticate the complete population from §2.3d and requested branch membership
+before any selection, even when both grants end at the fork. The computation consumes only its
+owned bounded rows; it must not call the old full-branch helper or crop a whole-tip result.
+
+**Eligible elements and exact occurrences.** Element0 is run.record.position@1. Elements1–17
+are exactly §2.3d's ordered17 family refs, including named_structure@2. These eighteen refs are
+the complete eligible vocabulary; position is a real direct input, not hidden metadata. Traverse
+column0 then column1, assigning consecutive node ordinal q to every fork-inclusive node occurrence.
+For each q, group18q contains item0=that row's genuine position (element0). For family index k
+from0 through16, group18q+1+k contains that complete family result's original item ordinals,
+each with element k+1 and the genuine child's concrete execution witness. Successful empty
+families retain an empty group at that exact address; later groups are never renumbered.
+Shared forks/equal FENs/repeated refs stay distinct occurrences. The complete source image binds
+the comparison's original operand/grant image, ordered columns/endpoints, pathIndex/node/ply/FEN,
+every position/family/result and requested branchId. Equal outputs with a different requested
+column or peer endpoint must have different input authority.
+
+**Executed empty families are not unused templates.** The collector retains an internal authentic
+invocation record for each original factory return array before flattening: exact ref, actual
+sole factory, canonical `{fen}` input identity, complete ordered sealed output identities and its
+actually applied convention closure. Add construction-time private result membership for these
+seventeen factory routes, including successful empty returns; existing array equality and value
+seals do not supply it. This is new implementation, not a claim that old results carry this proof.
+Local equal-FEN reuse may share one authenticated invocation while retaining all its source
+occurrences. Failed/unexecuted returns, copied/filtered arrays and wrong-FEN/ref invocations
+refuse, not empty success. These invocation records live in the private population sidecar and
+explicit source encoder, not new public row keys, absence facts or a generic execution bypass.
+
+The result's convention closure combines the direct comparison convention with all actually
+executed family invocations' applied closures, including successful empties. In particular retain
+maximal_pawn_reach@1, backward-pawn-legacy@1, king-opposition-blocker-blind@1 and
+named-structure-catalogue@1 where actually applied. Do not infer applied closure from the eligible
+ref list or union unexecuted templates. The convention reduction arm must bind these authenticated
+context invocations as well as actual positive child occurrences, by their complete identities in
+sourceImageDigest; the operation-specific validator checks their issuance, not only a digest match.
+
+**Selection, payload and location.** Apply §2.3d's closed legacy conversion/sort/observationIdentity,
+post-fork column unions/intersection and immediate-predecessor test. Keep real reappearance after
+absence; fork rows are predecessor context only and neither enter unions nor emit. Every selected
+occurrence retains its original corresponding family-item ordinal through sorting; equal keys
+are not permission to substitute another raw catalogue item or source occurrence. Use stable
+family/item order for equal sort keys. At complete tips the ordered legacy observation/node/offset
+view equals the old helper's result. A scoped two-column grant is not a replacement for old
+N-column callers; keep their old semantics and interfaces.
+
+The new closed payload is ScopedStructuralObservationChange, exactly
+`{observation,namedStructure}`. Observation is byte-equal to the selected legacy observation.
+For named_structure only, namedStructure is exactly `{id,name}` copied from that selected genuine
+named_structure@2 input; for every other kind it is null. Require the exact catalogue id/name
+pair and matching source squares/provenance. No caller name, name inferred from prose/squares,
+new before observation, importance, strategy, grade or recommendation is accepted. This is an
+explicit additive @2 payload change, not a claim that the whole new payload equals @1.
+Each RunEvidenceItem retains the original selected nodeId and
+`plyOffset = selected position.ply - common fork position.ply`, not absolute ply or pathIndex.
+The new derived reading is declared_convention/convention/not_applicable, answerContent:[fact],
+operands:[observation,namedStructure], forms:[sentence,list,panel], with possible input_abstained.
+The direct convention licenses only the stated appearance/contrast fact, not child move/evaluation
+permissions. Original child grounding/exactness/conventions remain unchanged in its source proof.
+
+**Complete variable/empty result.** Use §2.3h's fresh frozen items-array/private
+`{reduction,convention}` result membership protocol with this exact operation/projection/plan/source
+and requested branch. Authenticate the original array before iteration or adapter flattening.
+Its reduction receipt has §2.3g's exact fields; sourceImageDigest includes the complete image and
+authentic invocation identities above. Occurrences use the eighteen-group mapping. OutputDigest
+binds every ordered `{nodeId,plyOffset,producer,projection,payloadDigest}` result entry, including
+all reappearances, or [] when no differences qualify. Build child/invocation authority first,
+then computed payload/location digests, then result receipt, then emitted values/convention
+receipts, finally publish the authenticated array. No output receipt is its own input.
+The containing result proof must authenticate every emitted value and its ordinal/location;
+copied, shortened, foreign-branch or replaced arrays refuse even if all retained values are real.
+Zero output retains substantial actual position/family inputs and computation proof, but mints
+no negative chess fact. Source failure cannot become no_witness or operation_unavailable success.
+
+**One source-recovered convention.** The claimed comparison_structure_appearance_v1 defines
+comparison-structure-appearance@1 in the existing register. Definition: form an observation-identity
+union from nodes strictly after the common fork on each complete granted column; intersect those
+unions. On the requested column, emit each observation at a post-fork node only when its identity
+is absent from the immediate predecessor and that intersection; preserve order and reappearance.
+Use the closed legacy family conversion, STRUCTURAL_FEATURE_KINDS/JSON ordering and
+observationIdentity (pawn_safe_square compares kind/color/squares only). Fork observations provide
+predecessor context but do not enter unions or emit. This is a product selection convention, not
+position rules, an owner ruling or strategic significance. Its landed_contract authority has
+exactly one witness: packages/runtime/src/compare-strip-values.ts#structureDeltaEntries, at
+snapshotRef673683057b6d744623fe45b9deb54bedf3771a06, directly re-read in this pass. The old
+derived.compare.structure_delta@1 is historical explanation only, **not** an authority witness:
+registering its exact ref would change its direct convention closure and old receipts. Bind
+comparison-structure-appearance@1 literally only in @2's catalogue semantics through the existing
+catalogue-text closure path. Require unchanged old@1 direct refs/receipts plus the new @2 direct
+closure in permanent tests. The new factory/projection is proposed, not landed.
+Use exactly this reviewed_text disclosure, not the migration-only definition_and_limitations arm:
+
+```json
+{
+  "kind": "reviewed_text",
+  "summary": "New observations on this attempt, excluding observations shared across the compared lines.",
+  "detail": "Compare each position with its immediate predecessor after the shared fork. Exclude an observation if it occurs anywhere after the fork in every complete compared span. Observations can reappear after an absence; extending the other span can change this contrast. Pawn-reach identity compares side and square, not a change in its reach details. This states recorded differences under the declared detectors, not importance, a good move, safety or a recommendation."
+}
+```
+
+**Renderer/adoption boundary (D3855).** Only the new exact scoped Inspector source adopts @2
+in this amendment. Define its pair-keyed registered fact renderer; do not route new named/detail
+operands through play.compare_structure@1. For the sixteen nonnamed kinds, retain every actual
+kind-specific operand and the complete PawnSafety.detail, with required-field/side/square checks
+and maximal-reach/blocker/legality caveats as in the detailed-structural amendment to presentation.
+In particular an unsafe detail cannot become a no-opposing-pawn sentence when an adapter drops it.
+The named branch states the actual retained catalogue name and its squares with the catalogue
+qualification, not generic "a pattern matched" or a plan. Register the complete closed operand
+schema, adapter retention and exact component pair in evidence-presentation before acceptance.
+This section does not independently accept that still-unaccepted presentation amendment or
+silently migrate old Compare/voice/strip callers. D3855 retains their separately owned repair.
+
+**Verification before adoption.** Require real constructors/invoker/manifest/profile/binding and
+V2 planner/admission tests, authentic empty family/result sidecars and exact convention closure.
+Prove both ordered columns/all18 element roles, later-peer suppression, recurrence after absence,
+fork-only empties, original absolute ply versus relative output offset, equal-FEN foreign source
+refusals, and complete old/new legacy-view equivalence at full tips. Mutate each empty group,
+invocation/FEN/branch/grant/member/order/output ordinal/node/offset; copied/filtered/foreign
+results must refuse, not pass through authentic positives. Test genuine named and unsafe pawn
+outputs through the registered new renderer and closed wire, retaining exact names/geometry and
+no strategic claims. Source-original validation remains before any read, including warmed reuse.
+Provider-off/no-new-provider-work, current access/disclosure/cancellation and actual authenticated
+HTTP/native journeys plus independent source/joint review remain required. Existing disposable
+scope/family reconstruction proves none of these new runtime boundaries by itself.
 
 #### 2.4 Authored authority
 

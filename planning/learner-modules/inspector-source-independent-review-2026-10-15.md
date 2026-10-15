@@ -623,3 +623,28 @@ Main reports normal prefix research/types passing with eight both-color -101/-10
 threshold controls, six primitive-root/Story-exclusion cases and four win/draw nonloss cases.
 They check old complete payload/location and behavior with synthetic source deliveries, not the
 new constructor, result sidecar, witness, V2 planner, authenticated endpoint or native delivery.
+
+### D3847 structural comparison reduction — bounded author review and correction
+
+The authorized independent reader first confirms there is no direct convention ref or literal
+input lineage for old structure_delta@1. It recommends source-recovering the already shipped
+selection rule, with eighteen eligible refs (position plus17 families), complete both-column
+occurrences and authenticated actually executed empty-family closure. Main verifies the named
+committed helper and authors F2 §2.3i, provider §1a's third exact binding, module-registration's
+twentieth replacement and the scoped comparison presentation companion. The additive
+namedStructure field retains exact catalogue identity; complete pawn detail remains readable.
+
+Review returns one concrete preservation blocker: listing the exact old@1 projection in a
+landed_contract witness is executable direct-closure input. It would change old receipts, not
+merely cite history. Main corrects authority to the single committed path/symbol witness and
+binds the new convention literal only in @2 catalogue semantics. The independent wording recheck
+clears this blocker. Otherwise the reviewed text consistently preserves all18 roles, stable group
+arithmetic, selected branch, empty invocation proof, relative offsets and acyclic complete-result
+authentication. No reviewer tests, convention/source/renderer/joint acceptance or runtime proof.
+
+Main's normal comparison research additionally exposes D3855 using genuine old factory outputs
+through four actual consumer/render pairs: unsafe f3 geometry becomes a false no-opposing-pawn
+sentence; a genuine isolated-pawn catalogue match renders undefined. The initial presumed parser
+exception was wrong and the control is corrected to actual output. The new scoped renderer is
+proposed, not implemented; all old consumer repairs stay open. The independent reviewer does not
+claim those separately reported test runs as its own verification.

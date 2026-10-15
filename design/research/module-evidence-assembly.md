@@ -1924,3 +1924,49 @@ also means the old eleven-adapter baseline is not a complete new source image. A
 factory/sidecar/witness/planner/admission/API/native work, structural/sequence/opaque/vector
 contracts and independent joint acceptance remain open. `[V]` dated Inspector independent review,
 last-level continuation; provider §1a; Review successor-closure obligation.
+
+## Structural comparison reduction and caption failures — 2026-10-15, D3847/D3855
+
+The authorized independent reader confirms that current structure_delta@1 has no direct registered
+selection-convention ref and supplies zero sealed inputs. Its actual rule is already shipped in
+structureDeltaEntries, directly re-read at snapshot673683057b6d744623fe45b9deb54bedf3771a06.
+Recover that product rule as landed_contract authority, not position rules or an owner ruling.
+Actual recorded positions plus17 families make eighteen eligible roles. Executed empty families
+need applied convention authority retained, not an unexecuted-template union. `[V]`
+`packages/runtime/src/compare-strip-values.ts:structureDeltaEntries`;
+`evidence-factories.ts:createDerivedCompareStructureDeltaV1Evidence`; dated independent review.
+
+The disposable comparison target feeds genuine old factory values through four actual consumer/
+render pairs: module.compare_coach, module.full_inspector, compare.structure_strip and
+guidance.voice_compare. A White knight reading on f3 has safe:false, actual e7/g7 push attackers
+and capture-reach geometry, yet all four captions say no opposing pawn can reach it. A genuine
+d3–d4 isolated-pawn match prints "On this attempt after the fork: undefined" in all four. The
+first named control wrongly expected a parser exception; actual formatting does not throw, and
+the corrected regression pins its emitted undefined string. A first strict-tool type error
+required an explicit readonly string-array annotation. These instrument failures are retained;
+neither is a production repair. D3855 owns the live bad-caption class. `[V]`
+`tools/d3792-inspector-demand/comparison-source.ts`; `make inspector-comparison-source-research`;
+`presentation-play-adapters.ts:observationSentence` and all three comparison adapter modules.
+
+F2 §2.3i proposes compare.structure_delta@1/structure_delta@2, complete eighteen-role occurrence
+mapping, authenticated invocation/variable-empty-result proofs, selected-branch identity and
+relative ply. It preserves legacy conversion/intersection/predecessor/reappearance and old N-way
+callers. Its explicit additive namedStructure field retains the selected raw catalogue id/name;
+the scoped renderer keeps complete pawn detail. Provider §1a gains only the third exact binding.
+The requirement map has20 replacements/55 conditional unchanged topics, still75+6 requirements,
+not actual bindings. `[V]` cited RFC sections and presentation/module-registration companions.
+
+Independent review catches a preservation blocker: an exact old@1 projection in the new
+convention's authority witnesses would automatically change that predecessor's direct closure.
+The corrected proposal has only the verified path/symbol authority witness, with the convention
+literal bound only to @2 catalogue semantics. Explicit old-ref/receipt preservation tests remain
+required. `[V]` `evidence-convention-closure.ts:deriveProjectionConventionTable`; dated review;
+F2 §2.3i. No new convention registration or runtime closure change has occurred.
+
+Both normal prefix/comparison research targets and strict tool types pass:316/597 source controls,
+126 reconstructed readings,392 empty family rows, ten strict later-peer suppressions and eight
+reappearances; twelve map negatives. They prove existing selection and caption failures, not new
+nominal sources, sidecars, convention registration, execution, API/native or joint qualification.
+No provider work, raw dump, production change, semantic qualification, content graduation or
+release promotion follows. Existing old Compare/voice/strip repair stays open separately. `[V]`
+named normal targets and committed assertions; independent re-review status is recorded separately.

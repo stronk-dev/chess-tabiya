@@ -1975,6 +1975,57 @@ both call sites without creating a second admission path? Independent review mus
 compiler, parser, renderer and consumers, including the zero-count and pawn-geometry negatives.
 No further product policy or owner choice is presumed necessary for preserving measured facts.
 
+## Draft companion — scoped comparison structure fidelity (D3847/D3855)
+
+**Unaccepted; no current consumer is migrated by this text.** F2 §2.3i owns the proposed
+derived.compare.structure_delta@2 source/factory/reduction and exact payload. Register only
+`module.full_inspector@2 × derived.compare.structure_delta@2 × fact_statement`, with forms
+sentence/list/panel, retained operands observation and namedStructure, and assertions
+copied_byte_equal plus retained_convention. Its sole registered fact renderer is
+`inspector.compare_structure@1`; it accepts exactly that payload's closed kind-discriminated
+operand image, not an arbitrary observation bag, caption or FEN. Use the existing fact_statement
+component and source convention disclosure, not a new UI component or raw-JSON view. The adapter
+copies the complete kind-specific observation plus namedStructure without stripping detail.
+The renderer never runs a detector or consults another position/source to fill missing operands.
+
+The sixteen nonnamed variants require exactly the kind-specific fields and nested PawnSafety
+domain in the detailed structural Inspector section above, while retaining the legacy source's
+actual additional provenanceNote only for its declared convention cases. namedStructure is null
+for all sixteen. Required zero counts and empty witness arrays remain valid; missing fields,
+unexpected kind fields, conflicting side/square/detail, malformed nested reach arrays or caller
+prose refuse. State the existing literal fact with the prefix "On this attempt after the fork: ".
+Pawn-reach text uses the complete safe/pushAttackers/captureAttackers operands and explicitly
+states maximal reach ignores blockers and legality. Do not convert any unsafe record to a safe
+claim when one list is empty, or turn geometric reach into a legal threat forecast. Retain actual
+attacker squares and step/capture distances in its registered readable detail, not only a count.
+
+The seventeenth variant has observation exactly `{kind:"named_structure",squares,provenanceNote}`
+and required namedStructure exactly `{id,name}` from its genuine named_structure@2 source. Use
+the existing four-entry registered catalogue id/name domain; refuse mismatched id/name and
+unregistered labels. Render "On this attempt after the fork: the declared catalogue matches
+<name> on <squares>." with the actual registered name and original ordered squares. Render no
+provenanceNote as caller prose, derive no name from it, and introduce no lesson, relevance, grade,
+plan or recommendation. Preserve its actual source provenance and applied catalogue/comparison
+conventions in the retained presentation receipt and source disclosure. This is not permission
+to weaken a named match to generic "a pattern matched".
+
+Before presentation, authenticate the complete source result and each original output ordinal/
+node/relative ply as specified by F2. Then retain source-order/whole-component page fitting,
+current role/disclosure/timing/access and response retirement from module-registration §4.11a.
+No detached selected fact or genuine foreign result/column is sufficient. These are registered
+readable statements of recorded differences, not an importance selector or ordinary proactive
+Support. The comparison convention's explicit reviewed_text disclosure comes from F2 §2.3i.
+
+Acceptance requires genuine source→factory→exact consumer→renderer→closed wire tests for all17
+kinds, including zero values, a real unsafe reach record, a real named match, unknown/forged names,
+missing/inconsistent nested fields and copied source/results. Both mounted/native Inspector
+journeys must show exact names and honest reach text without raw strings/undefined/overflow,
+while preserving board geometry, grants and assistance ceilings. The disposable D3855 controls
+prove the old failure, not this new implementation. Existing Compare Coach, Full Inspector@1,
+comparison strip and voice still have the old bad-caption path; D3855 remains open until their
+separately versioned source/renderer adoption is specified, accepted, implemented and verified.
+Do not silently widen those frozen accepts or alter their stored receipt/payload meanings here.
+
 ## Draft companion — bounded source-member Inspector detail (D3802)
 
 **Unaccepted.** `rfc/module-registration.md` §4.11a owns demand, source context, access, paging,

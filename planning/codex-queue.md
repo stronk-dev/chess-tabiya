@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847 structural reduction is now proposed in F2 §2.3i/provider §1a: complete
+position+17-family roles, both grants/selected branch, genuine empty invocation/result authority,
+relative offsets and explicit catalogue identity. The independent reviewer catches/clears an old
+projection authority-witness closure regression in the draft, not source/joint acceptance.
+Presentation's scoped successor preserves full pawn detail; D3855 reproduces false-safe and
+undefined captions through four old consumer pairs and keeps their separate repair open.
+Normal comparison/prefix/types and20-replacement/55-retained map controls pass, not runtime
+qualification. Next exact sequence/opaque/vector inputs and complete source/adapter closure;
+D3851 remains unanswered and existing coexistence/history stays. Then independent joint review
+before implementing the nominal sources, sidecars, actual bindings and authenticated/native UX.
+
 2026-10-15 — D3847's last-level@2 prerequisite is now authored in F2 §2.3h, still unaccepted.
 Complete eligible result/position/point roles, measured/reported positive output and authenticated
 fresh0/1 result/convention pair survive empty/root exclusion through rank. Provider §1a maps only

@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Structural comparison authoring and caption regression, 2026-10-15 ([[D3847]]/[[D3855]]): F2
+§2.3i proposes the exact eighteen-role reduction/selected-branch and authentic variable/empty
+result contract, with explicit catalogue identity and full pawn reach in the new scoped renderer.
+Independent review catches and clears an old-projection authority-witness preservation defect,
+not source/joint acceptance. Genuine old values render false-safe/undefined captions across four
+actual consumer pairs; their repair stays open. Existing comparison/prefix/types and20/55 map
+controls pass, not new factories/sidecars/API/native proof. `[V]` `module-evidence-assembly.md`
+§Structural comparison reduction and caption failures; dated independent review.
+
 Last-level source/result authoring, 2026-10-15 ([[D3847]]): F2 §2.3h adds the separate proposed
 reduction, exact eligible-result/position/point source roles and private authenticated0/1 result
 array/convention pair. Rank retains empty/root-excluded computation proof without fake facts.
