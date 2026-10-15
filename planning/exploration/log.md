@@ -30502,3 +30502,48 @@ Campaign was the one capability with no API, route or content. Now:
   work/roadmap, intent, tier, docs and staged-process guards green. Stage only the14 explicit
   owned draft/research/tracking files and commit through normal hooks. Preserve the three
   pre-existing untracked entries; no push, production-code change or automatic acceptance.
+
+## 2026-10-15 — D3847 last-level source and authenticated empty-result contract
+
+- Previous goal turn made progress:effc7107 committed the proposed rank reduction/concrete-input
+  witness contract. Continue from clean tracked main, retaining the same three untracked entries.
+  The active1.0 objective is unchanged; no parent RFC state grants acceptance to its new sections.
+- Independently trace old last-level arrays, source/result gate and wrapper/invoker identity.
+  The authorized reviewer confirms a fresh-array private result receipt is feasible and requires
+  explicit eligible import-result authority, pre-iteration empty/root-result retention, output
+  location identity and construction below moment assembly, not a fictitious last-level adapter.
+- F2 §2.3d's closed source image now includes the actual endpoint result slot/state and genuine
+  result items; raw outcome tokens/old arbitrary caller arms cannot substitute. §2.3h separately
+  authors exact last-level@2/story.last_level@1 binding, sole source-only factory, explicit result/
+  position/point roles, measured/reported fact+evaluation positive values and source-state retention.
+  The original lower threshold/imported-loss gate/mate exclusion and old APIs/history remain.
+- A fresh frozen0/1 array has private reduction/convention receipt issuance, including successful
+  empty output. The output preimage binds payload and actual selected wrapper node/ply without
+  its own final receipt/convention, so construction is acyclic. New moment sources retain
+  lastLevelReduction even for [] or a root-only item later excluded from Story. Rank binds the
+  actually executed context proof/convention, never a fabricated empty evidence value. Provider
+  §1a gains only the second explicit captured-source owner/role mapping; no new provider request.
+- Bounded independent read-only review finds no blocking inconsistency, not component/joint
+  acceptance or implementation proof. Main then catches a naming contradiction: the constructor
+  had been called a reader in one binding line. Explicitly distinguish constructor
+  collectRecordedLastLevelPopulation and private readRecordedLastLevelPopulation; final read-only
+  recheck confirms the correction. No reviewer tests or source/qualification authority.
+- Normal make inspector-recorded-prefix-research exits zero with strict tool types. Added eight
+  both-color learner -101/-100/-99/+250 controls preserve complete old payload/node/actual ply;
+  six qualifying root cases stay absent from actual Story and four wins/draws stay empty. These
+  exercise old genuine synthetic provider fixtures, not new constructors/sidecars/witnesses or
+  live engine output. All earlier scopes/tuples/coverage controls remain. No ordinary CI tier change.
+- The direct position input makes the old eleven-adapter baseline insufficient for the new
+  successor source image; keep the complete adapter/element closure an explicit prerequisite,
+  not another inherited count. Next author structural selection's exact reduction/factory/result
+  contract, then sequence/opaque/vector and the full joint source image. D3851 remains unanswered,
+  with existing coexistence and every detector family/history retained meanwhile.
+- Update existing ledger/work-state/dossier/coverage/review/queue and roadmap.3603 ledger rows
+  retain zero untriaged/1739 live, and569 UX states are unchanged. No row, source qualification,
+  official content, capability/milestone or release is promoted. Production remains unchanged
+  from prior5542cc2d's full local software/performance/content/build/browser proof; it is not
+  rerun or relabelled current remote proof for this research/author-only checkpoint.
+- Final make roadmap-receipt verify-governance and diff checks pass, including source/resource,
+  lifecycle, assignment/roadmap, intent, tier/docs and staged-process guards. Stage only the15
+  explicit owned draft/research/tracking files and commit through normal hooks. Preserve the
+  three pre-existing untracked entries; no push, acceptance or goal pause.

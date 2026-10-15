@@ -1886,3 +1886,41 @@ planners, sidecars or authenticated/native delivery. No extra truth inferred fro
 Last-level@2 is a named prerequisite whose exact factory/reduction remains to be authored, not a
 new existing source; structural/last-level/vector reductions receive no rank exemption. `[V]`
 `make inspector-recorded-prefix-research`; F2 §2.3g acceptance hold and provider §1a.
+
+## Last-level result authority — 2026-10-15, D3847
+
+The current last-level factory emits an ordinary frozen0/1 array; the actual factory wrapper and
+route invoker return the body's array unchanged. That makes a private result-array receipt pair
+feasible without adding public wrappers or fabricated empty evidence. Its genuine-empty proof
+does not currently exist. Current Story iterates the result and later excludes root moments;
+the new source must retain the calculation receipt before either operation loses result identity.
+`[V]` evidence-factories.ts:factory/createDerivedStoryLastLevelV1Evidence;
+internal/evidence-value-routes.ts:invokeEvidenceValueRoute; story.ts:reviewStoryMoments;
+independent read-only last-level review.
+
+Existing synthetic source probes now pin the actual learner lower threshold at -101/-100/-99
+and +250 for both colors: eight cases. Six qualifying root cases preserve exact complete old
+payload and selected node/actual ply, while actual Story emits no root last-level moment. Four
+learner-win/draw controls remain empty despite a qualifying score. These add evidence about old
+behavior, not tests of the proposed source constructor or sidecar. No absolute ±100 interval,
+objective level claim, new engine call or complete-analysis proof follows. `[V]`
+`make inspector-recorded-prefix-research`; recorded-origin.ts final Story controls.
+
+F2 §2.3h now authors the exact new story.last_level@1 operation/last-level@2 source-only factory,
+complete eligible result/position/point roles and private fresh0/1 result/convention receipt pair.
+The source schema explicitly gains the original endpoint result invocation/state and genuine
+fact; raw outcome tokens or an arbitrary historical caller arm do not substitute. Result output
+identity includes payload plus original wrapper node/ply, with acyclic mint/receipt publication.
+Moment assembly retains private lastLevelReduction even for empty/root-excluded output; rank
+binds that actually executed context convention, not an invented absent fact. Provider §1a has
+two exact source-owner bindings, no automatic reduction permission or new provider work. `[V]`
+cited draft sections; Review §4.5 and module-registration's scoped rank binding.
+
+Authorized independent review finds no normative blocker in this bounded image, not component/
+joint acceptance. Main catches one naming contradiction (constructor called a reader); the final
+read-only recheck confirms distinct collectRecordedLastLevelPopulation and private
+readRecordedLastLevelPopulation. No reviewer tests or implementation proof. Direct position input
+also means the old eleven-adapter baseline is not a complete new source image. Actual source/
+factory/sidecar/witness/planner/admission/API/native work, structural/sequence/opaque/vector
+contracts and independent joint acceptance remain open. `[V]` dated Inspector independent review,
+last-level continuation; provider §1a; Review successor-closure obligation.

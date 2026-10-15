@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3847's last-level@2 source/factory/reduction contract is now authored in F2 §2.3h, not accepted
+or implemented. Complete endpoint result/position/point authority and private authenticated0/1
+array/convention receipts survive empty/root-excluded results through rank. Independent bounded
+review finds no inconsistency, not source/joint acceptance; a constructor/reader naming correction
+is rechecked separately. Existing prefix/types pass eight threshold/six root/four nonloss controls
+on old production, not new-sidecar or API/native proof. The direct position dependency makes the
+old11 adapter baseline insufficient as the successor image. Structural/sequence/opaque/vector
+contracts and complete source/adapter closure remain before implementation. No whole gate moves.
+
 D3845's rank-only collection contract is now authored in F2 §2.3g/provider §1a, not accepted or
 implemented. Actual rank use supports fact-only ordering; child evaluation/pattern permission
 does not transfer. Independent review returns and clears generic grounding wording and an

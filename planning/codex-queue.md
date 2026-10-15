@@ -1,5 +1,16 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847's last-level@2 prerequisite is now authored in F2 §2.3h, still unaccepted.
+Complete eligible result/position/point roles, measured/reported positive output and authenticated
+fresh0/1 result/convention pair survive empty/root exclusion through rank. Provider §1a maps only
+the two exact operations/source owners; Review keeps this calculation below moments, not a new
+adapter. Independent bounded review finds no blocker and clears a reader/constructor naming
+correction, not implementation or joint acceptance. Existing prefix/types pass eight threshold,
+six root and four nonloss controls on old sources. Next structural selection's exact reduction/
+factory/result contract, then remaining sequence/opaque/vector and complete source/adapter images.
+D3851 remains unanswered; do not implement the unaccepted amendment or promote the old11-adapter
+baseline/new19-row requirements map into a complete runtime source/consumer proof.
+
 2026-10-15 — D3845 now has an unaccepted rank-only collection contract in F2 §2.3g and provider
 §1a, joined to Review/module registration. Fact-only ordering preserves child authority; explicit
 reduction/convention receipts, finite V2 plans and concrete witnesses replace no-input fallback.

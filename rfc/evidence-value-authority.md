@@ -10,7 +10,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850, §§2.3a–2.3g:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3768/D3841/D3845/D3846/D3847/D3850, §§2.3a–2.3h:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845's rank-only reduction contract is proposed, not accepted;
   its upstream source contracts and complete execution/admission implementation remain held.
@@ -591,7 +591,8 @@ source owner's point population rather than inventing a new ordering.
 
 **Last-level population schema — unaccepted.** Review §4.5's genuine RecordedReviewBoundary
 and independently captured server-owned ReviewSourceContext supply proposed runtime-internal
-collectRecordedLastLevelPopulation's sole arm `{boundary,context}`. The boundary's owning
+collectRecordedLastLevelPopulation's sole arm `{boundary,context}`. Its result type is the private
+RecordedLastLevelPopulation. The boundary's owning
 authority validates its current issuer/storage/head/path/import context first; the collection
 cannot take an HTTP packet, caller run/result, arbitrary point list or cropped full-tip Story.
 Share the existing internal point/adapter preparation without casting a boundary into the old
@@ -599,12 +600,25 @@ prefix receipt. It runs no new engine request, promotion search or provider refr
 only this boundary's actual admitted source context and registered adapter execution.
 
 The immutable nominal population's closed data image is exactly
-`{boundary,learnerSide,outcome,rows}`. Retain the complete boundary operand image, not only a
+`{boundary,learnerSide,outcome,result,rows}`. Retain the complete boundary operand image, not only a
 brand, so scope/state changes cannot alias the same selected point. learnerSide and outcome
 are derived from that boundary without caller overrides. Outcome retains the existing distinct
 unfinished/board_terminal/recorded_result union and its complete recorded fields. In particular,
 an imported result is eligible only at its original full endpoint, never by cropping a completed
 whole-game source. Current access/disclosure and post-work revalidation stay separate obligations.
+
+Result is exactly `{slot,state,items}` from the actual endpoint invocation of
+review.source.imported_result@1 under Review §4.5's boundary-authorized source arm. Slot is the
+complete original ReviewSourcePlanSlot, with family recorded, grain node, endpoint nodeId and
+fromNodeId:null. For eligible recorded_result, state is available/itemCount1 and items is exactly
+the one genuine run.record.imported_result@1; its original wrapper's nodeId/plyOffset must equal
+the endpoint node/ply, and payload is the unchanged `{context:"story",result:outcome.result}`.
+For unfinished/board_terminal, the actually executed endpoint adapter returns honest_empty/
+no_observation and items:[]. No old caller-supplied `{run,recordedResult}` arm, raw result token,
+unexecuted adapter or genuine fact from another import/endpoint substitutes. If required result
+source authority is held/failed, construction does not issue a population; return the exact
+source failure rather than manufacture honest_empty. Point measurement absences below remain
+valid coverage states. No last-level adapter is added by this result-source invocation.
 
 Rows has exactly one ordered row for **every** granted root-to-endpoint path node, including
 nodes with no point. Each is exactly `{pathIndex,position,slot,provider,state,points}`.
@@ -668,9 +682,10 @@ the selected point. It adds no longitudinal rebuild, profile judgement or new en
 
 **Reduction and successor hold.** The two domain schemas above are proposed source-owner data
 contracts, not a generic CollectionEvidence primitive, new mint, permission or completed derivation.
-Before acceptance, author each exact successor's sole factory and callable, empty-result identity,
-execution templates versus actual occurrences, source joins,
-convention/grounding/answer limits and compatibility with frozen predecessors. D3845's proposed
+§2.3h now proposes last-level@2's exact factory/reduction/result authority, still unaccepted.
+Structural selection still needs its exact successor/factory/reduction, empty-result identity,
+execution templates/occurrences, source joins, convention/grounding/answer limits and compatibility.
+D3845's proposed
 rank reduction is not automatic authority for these different computations. No new factory name
 or generic computed/derived leaf is inferred by this hold; no empty tuple, invented absence value,
 unused evidence or runtime held-binding exception is permitted. Structural@1 remains conditional
@@ -921,9 +936,9 @@ checks traverse every eligible ref; semantic events cannot use this arm without 
 | rules.endgame.classification | 1 |
 | theory.shapes.firing | 1 |
 
-Last-level@2 is an explicit **prerequisite identity**, not a supplied implementation contract:
-§2.3d must finish its own exact factory/reduction/receipt contract before this element graph can
-be accepted. Neither old last-level@1 nor a fabricated empty value fills the hole. Structural
+Last-level@2's source schema is in §2.3d and its proposed factory/reduction/result contract is
+§2.3h. Both remain unaccepted prerequisites before this element graph can be accepted or
+implemented. Neither old last-level@1 nor a fabricated empty value fills the hole. Structural
 comparison/last-level and the variable candidate vector receive no authority from this rank rule.
 
 **One closed computation binding.** The runtime's reduction binding is exact and package-owned:
@@ -1000,8 +1015,11 @@ no unused evaluation/pattern authority is read from elements or the whole module
 
 **Convention receipts distinguish the reduction.** Extend ConventionDerivationReceipt with a
 closed reduction arm containing operation, reduction authority digest and the actual input
-multiset. Its convention refs are exactly story-rank@1 plus the closures of the actual input
-occurrences, never absent eligible families. Both empty and nonempty new values take this arm;
+multiset. Its convention refs are exactly story-rank@1 plus the closures of actual input
+occurrences and the authenticated actually executed lastLevelReduction result from §2.3h,
+including its empty/gated result. That context computation is not an absent eligible fact or
+an invented witness; its genuine result/convention receipt is bound in sourceImageDigest.
+No unexecuted eligible-family convention contributes. Both empty and nonempty new values take this arm;
 the cached source branch in mintConventionReceipt must never serve rank@3. The new arm's digest
 binds the ordered reduction receipt above; the input multiset remains canonical/order-free for
 convention disclosure, not a replacement for ordered group identity. Old source/derived arms,
@@ -1025,7 +1043,7 @@ claim about chess significance. Do not automatically route old Story/title throu
 claim their literal inputs fixed by this proposal. Review's future migration needs its own exact
 consumer/title contract. The75-topic Inspector obligation count is unchanged.
 
-**Acceptance is still held.** Author and independently review the prerequisite last-level@2 and
+**Acceptance is still held.** Complete and independently review the prerequisite last-level@2 and
 all other exact source successors, source reader, complete adapter templates and production
 execution/receipt/admission changes together. Permanent controls must show real source-owned
 empty, singleton, repeated and mixed families; the six coverage distinctions; unknown/old refs;
@@ -1034,6 +1052,117 @@ missing/copied/crossed receipts and empty source-branch refusal; fact-only child
 provider-off without new provider work; complete consumer preflight with no deleted binding;
 old rank/title/share byte preservation; and actual authenticated Inspector/native delivery.
 The existing18 old-rank fixtures are research, not tests of this proposed new authority.
+
+#### 2.3h Draft D3847 last-recorded-level reduction — unaccepted
+
+This explicitly adds one operation to §2.3g's proposed reduction grammar; it is not automatic
+permission from the rank rule. The exact binding is operation story.last_level@1; projection
+derived.story.last_level@2; factory createDerivedStoryLastLevelV2Evidence; source type
+RecordedLastLevelPopulation, constructor collectRecordedLastLevelPopulation from §2.3d and
+private reader readRecordedLastLevelPopulation; private
+computation lastRecordedAvailableLevel; direct convention story-last-level@1. The collector's
+actual constructor and the private population reader are distinct: the factory authenticates and
+reads an already constructed population, never re-collects it or calls compileMoments.
+
+The sole factory arm is `{population:RecordedLastLevelPopulation}`, metadata shape derived/result
+items. The exact ordered eligible-element vocabulary is run.record.position@1,
+derived.review.eval_point@1, run.record.imported_result@1. The complete source image includes every
+boundary/result/row/slot/provider/state field in §2.3d, including successful empties and rejected
+deliveries. Validate the whole genuine source and actual source results before eligibility;
+do not accept caller arrays/path/result/side/FEN, a moment source, a packet cropped from whole
+Story or a rank. Collection is below moment assembly and has no dependency back to rank/Story.
+
+**Exact roles and occurrence addresses.** Reduction group0 is the result-source row: item0 is
+its genuine imported-result fact when eligible (element2), otherwise the group has zero items.
+For each consecutive pathIndex i, group i+1 is its original node row: item0 is position
+(element0), and item1 is the same row's genuine point (element1) iff available. The point's
+sealed position must be that original row position, not an equal copied value. Rows without a
+point retain the position, actual complete provider/state image and no fake point item. Result
+and row groups are not Story moment groups and are never renumbered after filtering. All literal
+occurrences, not just the selected point, have §1a's authenticated concrete child witnesses.
+The complete image separately retains provider inputs whose conversion failed; they do not
+become invented evaluation points or gain evaluation-answer permission.
+
+**Preserved selection and payload.** Run exactly §2.3d's imported-result learner-loss gate,
+typed-cp-only learner conversion, learnerCp >= -100 lower threshold and greatest pathIndex
+selection. Do not turn this into absolute distance from zero or a claim of equal engine bounds.
+A singleton is exactly the old valid-source RunEvidenceItem shape: original selected nodeId,
+plyOffset = selected position.ply (not path index), and a new @2 sealed StoryLastLevel payload
+`{recordedResult,evaluation:{nodeId,whiteCentipawns,learnerCentipawns,side}}`. recordedResult
+equals the genuine eligible result fact; side equals the boundary's learnerSide; both cp numbers
+come only from the selected genuine point's typed score. Wrapper nodeId, payload evaluation.nodeId,
+position.nodeId and the chosen population row must all match. No later/root cropping is performed
+inside this primitive. Root may qualify here; Story's no-decision-edge rule excludes its moment
+only after retaining the authentic computation result.
+
+Unfinished, board-terminal, learner nonloss, no points, all mate or no qualifying cp returns zero
+items as a successful calculation. A population/source/child-witness failure cannot take that
+path. The new projection is a reading with grounding declared_convention, exactness measured,
+confidence reported, answerContent:[fact,evaluation], operands:[recordedResult,evaluation],
+forms:[sentence,panel], and possible abstention/input_abstained. The direct convention adds the
+presentation threshold; it does not strengthen its reported measured score. Unlike rank's
+fact-only empty value, an empty last-level result mints **no value and no answer capabilities**.
+Every emitted value therefore has both a genuine selected cp point and imported-result fact;
+no eligible-family union licenses evaluation without the actual score. Provider frame/bound and
+all other available/failed states remain in the source, not silently made comparable or complete.
+
+**Authenticate the complete 0/1 result.** The factory returns one fresh frozen readonly items
+array for every valid invocation, including empty. The sole mint owns a private WeakMap tying
+that exact array to an immutable `{reduction,convention}` pair: the complete reduction-result
+receipt and its distinguished reduction ConventionReceipt. Keep the existing items return type;
+no public wrapper, fake empty DeclaredEvidence or new result enum is needed. A package-private
+reader authenticates array issuance and the exact operation/projection/plan/source before any
+adapter, map, for-of or spread can discard the array identity. JSON/spread/slice copies, a shared
+empty-array constant, an array from another source and arbitrary attached receipt fields refuse.
+
+The receipt uses §2.3g's exact fields with this operation and its complete role/group occurrences.
+Its outputDigest covers the ordered result image `{nodeId,plyOffset,producer,projection,payloadDigest}`
+for each emitted item, or [] for no items. It excludes the emitted value's own input/convention/
+reduction receipt so it is acyclic. First validate/read the source and child witnesses, compute
+the output payload/location digests and full result receipt, then atomically mint any @2 item
+with that receipt and its distinguished reduction convention receipt, and finally publish/register
+the frozen array. No partially constructed result escapes. The value's inputDigest binds only
+operation/plan/source/actual child occurrences, as in §2.3g. Child receipts already exist; no
+current output can appear as its own source.
+
+Both empty and singleton result receipts retain the complete population, input order, context,
+coverage and applied-convention closure. For a singleton, the value's closure includes
+story-last-level@1 plus all actual child conventions, not only the selected point; a future point
+or state can affect selection even when the current payload does not change. Empty results retain
+that same explicit reduction/convention authority privately on the array without manufacturing
+a chess fact. The per-value old cached source-receipt branch is never used for a new reduction.
+
+**Moment-source retention.** RecordedReviewMomentSource gains one private field
+lastLevelReduction containing exactly `{items,receipt,convention}`: this genuine result array,
+its authenticated reduction-result receipt and convention receipt. It is not a ReviewAdapterState,
+public packet field or new registered adapter. The source
+constructs the complete last-level population and calls this operation once before assembling its
+last-level moment, even for an ineligible result; reuse actual shared point/result preparation,
+do not start duplicate providers. It authenticates the result before reading items. It retains the
+complete computation proof for empty output and for a root-only item omitted from moments.
+The rank source image/receipt binds this field even when rank's actual moment-input list is empty.
+Rank's applied convention closure retains this actually executed context reduction as well as
+actual moment facts; it never substitutes an empty last-level value in its occurrence list.
+Do not flatten the array first or infer proof of the calculation from its selected child values.
+
+**Execution and compatibility.** Provider §1a's operation/source-owner switch gains exactly this
+binding with sourceUse captured_only. Its three finite element templates retain original leaf
+identities; concrete addresses use the result/row roles above, not rank's moment ordinals.
+No provider refresh, new query, history rewrite, title generation or extra Inspector topic.
+Old last-level@1, rank@2, title@2, their callers/receipts/duplicate permissiveness and old Store/
+share behavior remain unchanged. Only the proposed scoped moment source adopts this @2 result;
+other Review/Story delivery migrations need their own reviewed exact consumer contracts.
+
+**Acceptance/verification.** This is authoring, not new factories/sidecars or source qualification.
+Require real constructor/route/receipt tests for every coverage state and missing-map distinction,
+both colors at learner -101/-100/-99 and positive scores, typed mate/no-point/empty and every
+result arm, later qualifying points, duplicate/reordered rows, equal-FEN foreign occurrences,
+unmatched/foreign result facts and before-shortcut refusal. Prove valid old/new complete payload
+equality, root selection versus Story exclusion, exact wrapper node/actual ply, same selected
+point with different earlier/later/rejected input images, and authentic empty/root result
+retention through rank. Mutate each group/element/address/plan/source/output location and reject
+missing/copied/crossed receipts. Actual source-owner/preflight/provider-off/no-new-work and
+authenticated/native Inspector journeys plus independent source/joint review remain required.
 
 #### 2.4 Authored authority
 
@@ -1491,6 +1620,11 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3847 §2.3h authors last-level@2's exact source-only0/1 reduction,
+  explicit eligible result/position/point roles, measured/reported singleton, authenticated empty
+  array receipt pair and acyclic location-bound output authority. §2.3d gains the actual endpoint
+  result source; rank retains the executed context proof even for empty/root-excluded results.
+  Constructors/factories/sidecars/planners/admission/delivery and joint acceptance remain owed.
 - 2026-10-15: unaccepted D3845 §2.3g authors a rank-only fact-valued collection arm, exact
   computation/source binding, explicit ordered reduction authority and distinguished convention
   receipt; provider §1a owns finite templates/captured realization. Last-level@2 and other

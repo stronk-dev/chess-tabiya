@@ -2277,7 +2277,8 @@ keep the existing rank@2 `{moments}` contract and callers unchanged. The propose
 arm is `{recordedReview: RecordedReviewMomentSource}`, **held on D3845** before its declaration,
 factory or adapter may be implemented. F2 §2.3g now proposes a closed fact-only collection
 reduction, with provider §1a's finite templates/captured-occurrence execution contract. Neither
-is accepted or executable. Its last-level@2 prerequisite, other exact suppliers, source reader,
+is accepted or executable. F2 §2.3h separately authors the last-level@2 prerequisite, still unaccepted.
+Other exact suppliers, source reader,
 actual receipts/admission/availability and joint review remain required; a version alone supplies none.
 An opaque source handle cannot conceal undeclared lineage, and an empty local leaf/member or
 fabricated eleven witnesses cannot make this requirement pass. The eventual factory asserts that source's runtime
@@ -3599,6 +3600,9 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — F2 §2.3h now separately authors the proposed last-level@2 prerequisite used
+  by rank@3; both source/reduction contracts remain unaccepted and unimplemented. No extra
+  Inspector topic, old Story/title migration or source-availability completion follows.
 - 2026-10-15 — Unaccepted rank@3 binding now points to F2 §2.3g's fact-only reduction and
   provider §1a's finite execution templates. Source prerequisites, actual suppliers/receipts,
   consumer availability/native delivery and joint acceptance remain held; old Story/title stay.

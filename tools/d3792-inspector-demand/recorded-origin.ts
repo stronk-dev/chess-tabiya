@@ -700,6 +700,7 @@ console.log(JSON.stringify({ scope: "D3847 actual promotion source and prospecti
 // deliveries below are explicitly synthetic parser/seal fixtures, not a live provider experiment.
 let lastLevelCases = 0, sameSelectedDifferentPopulation = 0, laterPointChangesSelection = 0;
 let lastLevelEmptyCases = 0, terminalGateCases = 0, sameSelectionDistinctCoverage = 0, rejectedDeliveryContrasts = 0;
+let lastLevelThresholdCases = 0, primitiveRootStoryExclusions = 0, lastLevelNonlossCases = 0;
 const lastLevelDeclared = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.story.last_level")!.derivation!.inputs!;
 function packetPoints(packet: ReturnType<typeof reviewPacketForRun>): readonly DeclaredEvidence<ReviewEnginePoint>[] {
   // Reinspect actual old packet slots; this is not the proposed boundary/population constructor.
@@ -794,6 +795,39 @@ for (const side of ["white", "black"] as const) {
   assert.deepEqual(rejected[0]!.state, rejected[1]!.state);
   assert.notEqual(rejected[0]!.input, rejected[1]!.input);
   rejectedDeliveryContrasts++;
+  // Preserve the actual lower threshold, including positive scores outside an absolute one-pawn
+  // interval. This is old-factory/Story behavior, not the proposed population/result sidecar.
+  for (const learnerCp of [-101, -100, -99, 250]) {
+    const engine = new Map<string, ReviewProviderNodeState>(path.map((node, index) => {
+      const cp = index === 0 ? learnerCp : -400;
+      const whiteCp = side === "white" ? cp : -cp;
+      return [node.id, { kind: "delivered", delivery: invokeEvidenceValueRoute("live.stockfish.position_eval@1", {
+        delivery: evaluationDelivery(node.fen, `cp ${node.fen.split(" ")[1] === "w" ? whiteCp : -whiteCp}`),
+      }) }];
+    }));
+    const packet = reviewPacketForRun(base, base.activeCursor.branchId, { importRecord: importRecord(base, result), engine });
+    const level = lastLevel(packet);
+    if (learnerCp < -100) assert.deepEqual(level, []);
+    else {
+      const root = path[0]!;
+      assert.equal(level.length, 1);
+      assert.equal(level[0]!.nodeId, root.id);
+      assert.equal(level[0]!.plyOffset, root.ply);
+      assert.deepEqual(level[0]!.evidence.payload, { recordedResult: result, evaluation: {
+        nodeId: root.id, whiteCentipawns: side === "white" ? learnerCp : -learnerCp, learnerCentipawns: learnerCp, side,
+      } });
+      assert(!reviewStoryMoments(packet).moments.some(moment => moment.kinds.includes("last_level")),
+        "primitive root selection must not manufacture a Story decision edge");
+      primitiveRootStoryExclusions++;
+    }
+    for (const nonloss of [side === "white" ? "1-0" : "0-1", "1/2-1/2"] as const) {
+      if (learnerCp !== 250) continue;
+      const nonlossPacket = reviewPacketForRun(base, base.activeCursor.branchId, { importRecord: importRecord(base, nonloss), engine });
+      assert.deepEqual(lastLevel(nonlossPacket), []);
+      lastLevelNonlossCases++;
+    }
+    lastLevelThresholdCases++;
+  }
   const noPoints = reviewPacketForRun(base, base.activeCursor.branchId, { importRecord: importRecord(base, result) });
   assert.deepEqual(lastLevel(noPoints), []); lastLevelEmptyCases++;
   let mateOnly = base;
@@ -819,5 +853,6 @@ console.log(JSON.stringify({ scope: "D3847 actual Story selection and recorded c
   sides: lastLevelCases, declaredFixedInputs: lastLevelDeclared.length, actualSelectedInputCount: 1,
   sameSelectedDifferentPopulation, laterPointChangesSelection, sameSelectionDistinctCoverage,
   rejectedDeliveryContrasts,
+  lastLevelThresholdCases, primitiveRootStoryExclusions, lastLevelNonlossCases,
   successfulEmptyCases: lastLevelEmptyCases, terminalGateCases, oldInputAuthorityBindsPopulation: true,
   sourceCoverageNotInSelectedLineage: true, liveProviderCalls: 0, productionChanges: 0 }));

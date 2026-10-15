@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Last-level source/result authoring, 2026-10-15 ([[D3847]]): F2 §2.3h adds the separate proposed
+reduction, exact eligible-result/position/point source roles and private authenticated0/1 result
+array/convention pair. Rank retains empty/root-excluded computation proof without fake facts.
+Eight both-color threshold/six root/four nonloss old-source controls and prefix/types pass;
+independent bounded review finds no blocker, not source/sidecar/joint qualification. The old11
+adapter baseline is not the new direct-position closure. `[V]` `module-evidence-assembly.md`
+§Last-level result authority; dated Inspector independent review; F2/provider/Review companion.
+
 Rank-only reduction authoring, 2026-10-15 ([[D3845]]): actual rank payload/use supports fact-only
 ordering, not child evaluation/pattern authority. F2 §2.3g/provider §1a propose the explicit
 reduction and finite plan/concrete witness contract. Independent review returns and clears

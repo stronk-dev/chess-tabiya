@@ -959,7 +959,9 @@ ReviewAdapterState, with one genuine point iff available. A missing context entr
 null, distinct from explicit not_requested input. Delivered inputs survive a failed point join
 even when output folds to unavailable/input_abstained. Available/missing/pending/degraded rows
 stay distinct, with original reasons/counters and source authority. Source-owned one-slot-per-node semantics rejects duplicates rather
-than importing old arbitrary-array tie behavior. No caller result, FEN or point override.
+than importing old arbitrary-array tie behavior. The source also retains the actual endpoint
+import-result slot/state and its0/1 genuine boundary-authorized result items under F2 §2.3d.
+No raw outcome token, old arbitrary-result arm or caller result/FEN/point override substitutes.
 
 compileMoments consumes that population for last-level selection while retaining the complete
 boundary/state authority in the moment source; it does not make a point list complete by saying
@@ -998,6 +1000,16 @@ factory is authored by this data schema. Empty groups are valid and eventually r
 receipt must preserve group membership/ordinal and complete source/state authority even then;
 it cannot fall back to the old no-input source-receipt branch or borrow absent family ceilings.
 
+**D3847 last-level result integration — still unaccepted:** F2 §2.3h supplies the separate
+story.last_level@1 reduction/last-level@2 factory contract over RecordedLastLevelPopulation.
+The source builder retains private lastLevelReduction:{items,receipt,convention}, authenticating
+the fresh0/1 result array before iteration. Empty output and a root-only item excluded from
+moments keep their complete executed reduction/result/convention proof. The rank source image
+and applied-convention closure bind it even when the moment list is empty. It is neither a new
+adapter nor a public packet/state field. Construct positions/points/result/population below
+moment assembly; last-level never calls compileMoments, Story or rank. Missing required source/
+result authority prevents source issuance; missing measurements remain actual coverage.
+
 **D3845 proposed reduction integration — still unaccepted:** value-authority §2.3g now authors
 the rank-only third derivation arm and sole rank@3 factory over this complete moment source;
 provider exchange §1a authors its finite template/captured-occurrence execution shape. Rank@3
@@ -1005,8 +1017,8 @@ has only fact answer content: it orders node IDs and permits the existing moment
 not child evaluation/pattern prose. The source's child evidence remains separately admitted.
 Empty success takes an explicit reduction receipt; source/state/group/occurrence identity and
 actual convention closure survive it. No generic policy-evidence leaf, fixed-input relaxation or
-automatic structural/last-level authority. Last-level@2's exact factory/reduction is an explicit
-prerequisite, not an old-source fallback. Upstream completeness and implementation/admission/
+automatic structural/last-level authority. Last-level@2's exact factory/reduction is proposed
+separately in F2 §2.3h, not an old-source fallback or accepted implementation. Upstream completeness and implementation/admission/
 availability/native proof plus independent joint acceptance remain held.
 
 **D3841/D3845 identity/cardinality hold — still unaccepted:** this proposed scoped Inspector
@@ -1067,6 +1079,10 @@ the successor's exact adapter and literal-source/state image, including the hist
 human-divergence@2 path, and replace this baseline-only census with that reviewed authority.
 Neither eleven unchanged adapters nor matching names establish successor completeness. The caller cannot choose
 a subset, provide moment arrays or request unrelated families through this operation.
+F2 §2.3h adds a direct run.record.position@1 input population to last-level@2; the old
+eleven-adapter baseline cannot silently stand in for that expanded source closure. Its complete
+source-owner/adapter/element image must include the exact position operation alongside the
+point/result preparations before acceptance, not infer it from the old count or omit the binding.
 
 | Source group | Scoped execution |
 |---|---|
@@ -1095,11 +1111,12 @@ expansions and v2 semantic events do not become new Story kinds through this ame
 **Assemble before ranking, without prose.** Share one private unrendered-moment builder with
 `reviewStoryMoments`: same current kinds, thresholds, merging at exact nodes, recorded decision/
 evidence/entry/stop identities, phase/endgame data and typed evaluation endpoints. Root creates
-no moment. Compute last-level only if this boundary's outcome is exactly `recorded_result` and
-its result says the learner lost. This is the eligible original imported endpoint rule, not any
-board-terminal loss or a caller result token. D3847/F2 §2.3d separately holds its successor's
-complete available point/state lineage and literal selection schema; rank's collection grammar
-does not automatically settle that source. Preserve all available points and actual coverage
+no moment. Invoke F2 §2.3h's new reduction after full source validation even for ineligible
+outcomes, retaining its genuine result proof. It can emit a last-level item only if this
+boundary's outcome is exactly recorded_result and its result says the learner lost. This is
+the eligible original imported endpoint rule, not board-terminal loss or a caller result token.
+F2 §§2.3d/h separately own the complete point/result/coverage source and its0/1 reduction;
+rank's collection rule is not automatic authority for that source. Preserve all available points and actual coverage
 states, not only the selected positive witness. Missing/pending is not proof of no later witness;
 never remove leaked last-level moments after whole-game derivation. The legacy Story path adds
 its components/title as before. The scoped source constructs neither title nor voice text,
@@ -1514,6 +1531,10 @@ unauthorized until another genuinely fresh review and all declared dependencies 
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3847 integrates F2 §2.3h's authenticated0/1 last-level result proof
+  below moment assembly, retaining empty/root-excluded results and actual executed conventions
+  through rank. The source's eligible endpoint result and direct position dependency are explicit;
+  the old eleven-adapter baseline is not its complete successor image. No implementation/acceptance.
 - 2026-10-15: D3845's unaccepted rank-source integration now references the proposed fact-only
   reduction and finite captured-source template contracts; no eligible-family answer union,
   empty source-receipt fallback or automatic old Story/title migration. Exact upstream

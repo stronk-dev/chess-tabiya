@@ -594,3 +594,32 @@ revised wording. It does not rerun tests or grant grammar/source/joint acceptanc
 qualification. Last-level@2's exact factory/reduction contract and other source successors remain
 prerequisites. Main reports the normal prefix target/types passing; that target exercises existing
 research, not the new V2 planners, receipts, sidecars, admission or native delivery.
+
+### D3847 last-level source and authenticated0/1 result
+
+The authorized reviewer confirms the existing factory wrapper/invoker return the exact result
+array unchanged, making private fresh-array issuance feasible. It requires an explicit eligible
+import-result operand/endpoint join in the closed source image, authentic empty result proof,
+retention before iteration/root exclusion, acyclic payload/location receipt construction and
+a separate source owner/role mapping below moment assembly. No last-level adapter is invented.
+
+Main authors F2 §2.3h, extends §2.3d with the actual endpoint result slot/state/items and joins
+provider §1a's two exact operation/source-owner switch. Result arrays carry a private authenticated
+reduction/convention receipt pair; copying/flattening cannot preserve issuance. Result output
+identity includes selected original node/actual ply as well as payload, not final own receipt
+digests. Moment sources retain lastLevelReduction for empty and root-only results, and rank binds
+that actually executed context convention without a fake empty fact. Singleton fact/evaluation
+permission needs a genuine cp point and imported-result fact; empty has no value/answer.
+
+Independent read-only review finds no blocking inconsistency in the bounded contract. Source
+versus measurement absence, old API/history, exact threshold, root and75-topic boundaries remain.
+Main subsequently catches a constructor/reader naming contradiction and supplies distinct
+collectRecordedLastLevelPopulation/readRecordedLastLevelPopulation; the final read-only recheck
+confirms the factory reads, not recollects, its authenticated population. No reviewer tests,
+component/joint acceptance or implementation qualification. The direct position input makes
+the old eleven-adapter baseline insufficient as the successor image, explicitly still held.
+
+Main reports normal prefix research/types passing with eight both-color -101/-100/-99/+250
+threshold controls, six primitive-root/Story-exclusion cases and four win/draw nonloss cases.
+They check old complete payload/location and behavior with synthetic source deliveries, not the
+new constructor, result sidecar, witness, V2 planner, authenticated endpoint or native delivery.

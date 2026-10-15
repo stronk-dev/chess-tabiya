@@ -176,7 +176,8 @@ make `/capabilities` report wrapper availability instead of executable evidence 
 
 ### 1. F1 compiles execution paths
 
-**Unaccepted D3845 companion:** §1a below and value-authority §2.3g propose an explicit rank-only
+**Unaccepted D3845/D3847 companion:** §1a below and value-authority §§2.3g/h propose explicit
+rank and last-level
 collection template. The landed fixed-path interfaces/identities in this section remain unchanged.
 No parent lifecycle state accepts that amendment or licenses a collection fallback.
 
@@ -257,10 +258,10 @@ The existing producer availability and latency fields now mean only the producer
 own a synchronous local output and a provider-bearing derived sibling without either declaration
 lying.
 
-### 1a. Draft D3845 collection templates — rank-only, unaccepted
+### 1a. Draft D3845/D3847 collection templates — explicit rank/last-level bindings, unaccepted
 
-Value-authority §2.3g owns the third derivation arm, its exact story.rank@1 binding, fact-only
-authority and reduction receipts. This section owns its execution integration; it creates no
+Value-authority §§2.3g–h own the third derivation arm, exact story.rank@1/story.last_level@1
+bindings, their separate answer rules and reduction receipts. This section owns execution integration; it creates no
 second source vocabulary or acquisition callback registry. The eligible refs come from that
 one compiled reduction declaration. Missing exact upstream refs/operations or cycles refuse
 before collection; no missing binding, held provider leaf or unsupported arm is filtered away.
@@ -281,7 +282,7 @@ type CompiledEvidenceExecutionPlan =
   | { readonly kind: "reduction"; readonly projection: VersionedEvidenceId;
       readonly own: CompiledProjectionExecution["own"];
       readonly operation: VersionedEvidenceId;
-      readonly sourceOwner: "RecordedReviewMomentSource";
+      readonly sourceOwner: "RecordedReviewMomentSource" | "RecordedLastLevelPopulation";
       readonly sourceUse: "captured_only";
       readonly elements: readonly { readonly projection: VersionedEvidenceId;
         readonly execution: CompiledEvidenceExecutionPlan }[];
@@ -294,9 +295,11 @@ member number and ordered/multiple input children. For a reduction, retain its e
 operation/source owner and one ordered template per eligible ref, recursively compiled. It is a
 finite template graph, not one tuple containing every family or a list of every possible subset.
 Own producer and all leaf availability/latency/providerOperation identities still use the shared
-protocol validator; sourceUse is allowed only on the exact registered rank operation, never a
+protocol validator; sourceUse is allowed only on those two exact registered operations, never a
 caller-selected provider bypass. WorstCaseLatency exposes the full potential ancestry using the
 existing ordering; it is not proof that a particular provider ran or an actual request budget.
+The operation/source-owner pairing is exact: story.rank@1 uses RecordedReviewMomentSource and
+story.last_level@1 uses RecordedLastLevelPopulation. Crossed pairs are invalid plans, not aliases.
 
 Add compileEvidenceConsumerExecutionV2 for exact new consumer images that accept reduction
 graphs. It retains complete accepted/bound set equality, every adapter identity, binding latency
@@ -307,7 +310,7 @@ to make a reduction compile. Unsupported consumers/adapters refuse the new plan.
 operations and their byte-identical fixed images remain; a manifest-wide current execution
 report uses the V2 compiler for every projection rather than silently excluding reductions.
 
-**Captured source versus new acquisition.** The rank operation's owning recorded source prepares
+**Captured source versus new acquisition.** Each operation's owning recorded source prepares
 the complete plan and actual slot/state data under its current boundary. Captured_only directs
 the realization to that immutable context; it never calls a provider or refreshes history. A
 provider-origin leaf keeps provider identity and its genuine original delivery/parser proof when
@@ -365,6 +368,8 @@ genuine original local-input, recorded-occurrence, build-time/document or provid
 AuthorityDigest binds that source owner's explicit complete input image; it does not mint or
 replace the original proof. A nested reduction joins its genuine complete reduction receipt and
 plan recursively; cycles and self-reference refuse.
+A last-level child value also joins the genuine authenticated result array containing that
+exact value at its recorded node/ply location; a detached or copied result receipt cannot fill it.
 
 Admission traverses the witness and corresponding template together. A fixed wrapper's concrete
 member choices and leaf addresses must match one actual old compiled path; composition preserves
@@ -380,6 +385,18 @@ values through reviewed original source operations/recorded parsers without a pr
 otherwise report the exact held source. Old APIs/receipts remain unchanged and lack no newly
 claimed historical proof. These occurrence addresses are not old provider.path.v1 paths, and
 matching plan/template metadata alone never establishes acquisition or concrete input choices.
+
+**Last-level's distinct realization.** story.last_level@1 uses exactly
+RecordedLastLevelPopulation and §2.3h's result-row/node-row group/element mapping. It never uses
+Story moment ordinals or calls the moment builder. The source owner below moment assembly
+prepares complete recorded positions/point slots and the exact endpoint imported-result source;
+unavailable measurements are valid retained states, but unavailable required boundary/result
+authority prevents source issuance. All three eligible element templates must compile even for
+an ineligible outcome. The result array is privately authenticated with its reduction/convention
+pair before iteration; [] has a real calculation receipt and no fabricated fact/witness. The
+moment source retains that receipt pair even when no item survives its separate root exclusion.
+Rank's complete source image and applied-convention closure bind that actually executed context
+calculation; no generic unexecuted-family closure or new public availability field is added.
 
 The implementation must audit every old two-arm reader, including derivationMembers, manifest
 dependency/cycle/event checks, convention-member helpers, effectiveEvidenceExecution, source-label
@@ -2298,6 +2315,10 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-10-15: unaccepted D3847 adds only story.last_level@1/RecordedLastLevelPopulation to
+  §1a's exact captured-source binding switch, with distinct role addresses and authenticated0/1
+  result/convention retention. Its result proof contributes actual executed context, not a fake
+  empty fact. No new provider work or current execution/availability implementation.
 - 2026-10-15: unaccepted D3845 §1a specifies additive V2 finite collection/composition plans
   and exact consumer integration, separately retaining captured source states/actual occurrences
   without new provider acquisition. Old fixed path/compiler bytes remain; this is not acceptance
