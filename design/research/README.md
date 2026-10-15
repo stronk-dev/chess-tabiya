@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Pivotal scoped-source contract, 2026-10-15 ([[D3831]]): **draft authoring and disposable-source
+validation only**. An earlier endpoint first hides an invalid later original FEN; the corrected
+bundle retains full-path refusal before narrowing. Existing source checks now pass500 controls/
+207 prefixes plus828 family and94 occurrence checks. Four proposed factory arms retain full
+witnesses and literal human event identity without changing old v1 meanings. `[V]`
+`module-evidence-assembly.md` §Pivotal scoped-source contract, `rfc/module-registration.md`
+§4.11a and `make inspector-pivotal-source-research`. Independent acceptance and production
+source/access/receiver/native delivery remain; no new runtime registry or raw-data dependency.
+
 Recorded selection occurrence, 2026-10-15 ([[D3830]]): **accepted-contract private retention,
 not scoped Inspector delivery**. A permanent regression first fails on the missing event
 reference, then all106 focused cases/types pass. The existing stored-prefix experiment adds

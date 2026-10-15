@@ -39,6 +39,7 @@ for (const candidate of [false, true]) {
           '  return pivotalPayloads(run, branchId, kind, researchThroughNodeId);');
         replace('  const path = branchPath(run, branchId), markers: PivotalMarker[] = [];', `
   const original = branchPath(run, branchId);
+  for (const node of original) positionFromFen(node.fen);
   const endpoint = researchThroughNodeId === undefined ? original.length - 1
     : original.findIndex(node => node.id === researchThroughNodeId);
   if (endpoint < 0) throw new TypeError("D3825 endpoint is not on the original branch");

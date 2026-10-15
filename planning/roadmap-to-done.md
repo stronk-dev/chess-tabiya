@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3830]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3831]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,14 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3831 finishes the four-family pivotal source/factory authoring slice in D3792's existing
+unaccepted Inspector amendment. A real stored-prefix negative first exposes skipped later-FEN
+validation in the disposable candidate;500 source/828 family/94 occurrence checks now pass.
+The proposed contract retains all witnesses, shared-node human occurrence semantics, old v1
+arms and pending provider dependencies. Typed production admission/identity, current access/
+receivers, remaining suppliers and independent acceptance remain open. Production is unchanged
+from1834494b's full5851/seven/257/393 local pass; no 1.0 capability or milestone is promoted.
 
 D3830 finishes private recorded-selection occurrence retention under the accepted pivotal
 contract: identical distribution images retain distinct original event/branch references.

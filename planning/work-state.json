@@ -31888,6 +31888,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/pivotal-evidence.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3831",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c4fc4a0a2d3d72886ebefbc86a101d8f7527bb09853148338fa108ef7e8f788e",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/pivotal-source.ts",
+      "evidenceKind": "path"
     }
   ]
 }

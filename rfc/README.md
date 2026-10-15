@@ -4,6 +4,13 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Pivotal Inspector source contract, 2026-10-15:** D3831 names the exact original-run scoped
+constructor and four additional factory arms in module-registration §4.11a. The existing
+stored-prefix experiment first fails an original-path FEN refusal, then passes500 source/
+828 family/94 occurrence checks after a disposable-only repair. Old whole-tip arms, node-level
+human observations and legacy provider holds remain. This amendment is **unaccepted**;
+typed production factories, current access/receivers and HTTP/native delivery still remain.
+
 **Campaign restriction checkpoint, 2026-10-14:** D3809 completes CMP-a13 under the existing
 `campaign-core.md` §§3.3/7.1 contract, not an amendment or full RFC completion. Restrictions
 remain independent of pending/failed source confirmation and end visibly on saved map cards.

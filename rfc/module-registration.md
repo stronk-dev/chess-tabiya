@@ -2136,8 +2136,8 @@ phone tests must exercise both requested refs and stale/cancelled/revoked result
 new route. The existing guarded algorithms do not already prove these typing, identity,
 permission or receiver criteria; all remain unaccepted implementation work.
 
-Each supplier row still owes its exact callable/input/absence/receiver/cancellation and boundary
-fixtures; the operation names in this paragraph are requirements, not claims of landed code.
+Supplier rows not specified below still owe their exact callable/input/absence/receiver/
+cancellation and boundary fixtures. Named operations are requirements, not claims of landed code.
 
 **D3825 pivotal source-owner boundary (2026-10-15), still draft:** the proposed private
 `pivotalPayloadsForRecordedContext(context, {projection})` consumes only the resolver's owned
@@ -2174,6 +2174,113 @@ payload list alone neither resolves this binding nor becomes a current v1 receip
 New source-owner signatures/receipts or projection meanings require explicit accepted contracts
 and version declarations; this amendment does not silently reinterpret v1 whole-branch suppliers
 or retire any of the 75 source obligations. Existing full-tip calls remain supported.
+
+**Closed pivotal source and factory contract ([[D3831]], 2026-10-15), still unaccepted:**
+The following replaces the proposed `pivotalPayloadsForRecordedContext` signature above; that
+name is not a second supplier to implement. Introduce exactly one runtime-owned scoped source:
+
+```ts
+// Proposed exports, not existing production symbols. The brand/admission reader is private.
+declare const recordedPivotalSourceBrand: unique symbol;
+export interface RecordedPivotalSource {
+  readonly [recordedPivotalSourceBrand]: true;
+}
+export function createRecordedPivotalSource(input: Readonly<{
+  run: DrillRun;
+  branchId: string;
+  throughNodeId: string;
+  kind: PivotalKind;
+}>): RecordedPivotalSource;
+```
+
+The owner is `packages/runtime/src/pivotal.ts`; export only the constructor/nominal type through
+the existing runtime entry point for the server operation. Retain one private path-reading
+implementation shared with whole-tip callers, not four duplicate detectors or a new registry.
+`evidence-factories.ts` and the typed invoker/operand census gain the exact arms below together;
+an existing symbol anchor is not proof that those callers consume the scoped source.
+
+Reuse the existing `PivotalKind` and `PIVOTAL_MARKER_ROUTES` correspondence, not another
+registry of the four families. The constructor captures its closed fields, validates the
+unchanged parser-admitted full run's original branch graph and **every original path FEN before
+narrowing**, then resolves the requested endpoint and owns its exact prefix. Inherited endpoints
+are valid, including one before that branch's own fork; comparison's distinct two-attempt rule
+does not apply here. Unknown/off-path endpoints, malformed originals and extra fields refuse.
+No detector, evidence factory or provider runs in construction. Admission is nominal and checked
+at runtime; caller payloads, casts, spreads and JSON copies cannot act as sources.
+
+The source retains an independent immutable parsed run image (or an already parser-owned immutable
+image), `moduleDecisionStamp(run)`, captured branch/endpoint/kind and ordered original prefix nodes.
+It must not retain writable caller backing records or freeze the caller's objects in place.
+It is **recorded source scope only**, never storage
+authenticity, current Inspector access or provider authority. Its runtime-internal reader is
+owned by the four factories; server callers cannot provide replacement paths, markers, policy
+pages or witness arrays. The server resolver grants this exact branch/prefix/family before
+construction and the receiver compares those fields and current decision again before delivery.
+
+Add only these four new closed F2 arms; each rejects a genuine source of another kind:
+
+| Exact factory | Additional arm | Preparation and complete retained inputs |
+|---|---|---|
+| `derived.pivotal.irreversibility@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `irreversibility`. Prepare only this family on granted incoming edges. Retain actual parent/child identities and FENs, committed move, the exact existing transition reading and recorded anchor position. A root cannot invent an edge. |
+| `derived.pivotal.phase_change@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `phase_change`. Walk only the granted prefix, including intervening unclear bands. Retain both actual definite readings and their recorded positions; the previous definite witness need not be the immediate parent. Never borrow a later phase or infer a transition from the displayed labels alone. |
+| `derived.pivotal.human_divergence@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `human_divergence`. Prepare only actual `human_common` selection observations anchored on the granted prefix. Resolve each marker's retained occurrence to exactly one original `opponent.move_selected` event; retain the full original selection, run/event/branch/node/move tuple, its original engine/candidates and the existing policy-page/position inputs. No latest-at-node lookup or reconstruction from normalized marker masses. |
+| `derived.pivotal.option_collapse@1` | `{recordedPivotal: RecordedPivotalSource}` | Require kind `option_collapse`. Prepare only this family's same-side legal-count sequence within the grant. Retain prior, first-low and next same-side positions plus all three complete legal-mobility readings. The anchor stays the first-low node. A prefix missing the later witness produces no marker, even if that later node exists in the stored run. |
+
+The existing `{run, branchId}` arms and their whole-tip output, inputs and receipt identities
+remain unchanged. Scoped factories do not call those arms, compute the combined population and
+filter it, or manufacture a shorter DrillRun. They use their source's granted path before their
+own preparation, then existing exact reading/position factories against the unchanged original
+run. Keep current marker order, payloads, thresholds, conventions, grounding and dependencies.
+A complete-tip source must retain byte-equal payload populations to its legacy arm; source input
+identities are intentionally new, not retrospective edits to old receipts.
+If independent review finds a v1 meaning requires complete tips, return for explicit successor
+projections/bindings before acceptance rather than silently widening that meaning.
+
+**Human occurrence is not selected-branch attribution.** Current v1 observes distributions at
+recorded nodes: two branches can share an anchor while their selection events have distinct
+origin branches, sequences and chosen moves. Preserve that population. Validate the origin
+branch contains the anchor and the retained tuple/image equals its unique actual event; do not
+require the event's chosen move to be a committed edge on the requested prefix. The endpoint
+bounds position witnesses, not a historical event-time cut: observations come from the admitted
+current full event head. A different chronological-cut feature requires its own contract.
+Current read/disclosure permission remains separate and is never inferred from that anchor.
+
+The legacy human page's target band still comes from `run.opponentPolicy.targetElo` (or null),
+not an invented historical sample field. Retain that exact operand and limitation. Recorded
+engine/candidate bytes and an event reference do not establish a modern Maia task receipt,
+calibrated rating or best-move judgement. Its current provider dependency stays pending until
+the source-owning successor is actually admitted; no scoped factory discharges it by relabelling.
+
+Canonical factory inputs include `recorded-pivotal-source@1`, the exact requested route/kind,
+original run/current decision, branch/endpoint, ordered granted node/edge operands and actual
+used witness/selection records. Never digest only an opaque handle, displayed marker, run/node
+pair or normalized masses. Distinct endpoints and repeated equal-image selection events remain
+distinct inputs. Retain all declared reading/source inputs and weakest-input grounding; do not
+change a convention or promote a legacy receipt to exact/provider-validated.
+
+Successful `no_witness` means only **no complete qualifying witness inside this permitted
+prefix**. It makes no assertion about the rest of the branch. An access refusal is withheld;
+invalid stored source data is `failed/source_contract_invalid`, not successful absence. A held
+source version keeps its exact registered dependency reason. Do not scan hidden later positions
+to decide whether to advertise that a withheld witness exists.
+
+These are synchronous, requested-family operations. Check the same AbortSignal before source
+construction, before family/factory work and before publication. Outer asynchronous preparation
+uses the resolver's existing post-await storage/access/assistance checks; the client separately
+retires obsolete request owners and paint. No source handle authorizes an old response.
+
+Acceptance requires actual typed constructor/new-arm/invoker controls, not the disposable helper:
+all four full-tip payload populations retain legacy bytes; all207 stored prefixes retain complete
+family witnesses; later graph **and FEN** corruption refuse before detector counters advance;
+copied/wrong-kind/wrong-scope sources and duplicate/missing/substituted human occurrences refuse;
+mutating caller argument/node/event records after construction cannot alter the admitted image.
+Repeated equal-image observations must have distinct new input identities while old-arm receipts
+remain unchanged. Keep the four missing-later-collapse negatives and all94 stored occurrence
+controls. Actual authenticated HTTP/client/desktop/phone requests must cover every family,
+inherited endpoints, revocation, cancellation and late-response retirement. Current research
+passes500 source controls plus828 family checks; its original-path FEN negative first fails,
+then passes after repairing only the disposable bundle. Production source/factory/receiver and
+native delivery remain unimplemented, and independent acceptance still gates all of them.
 
 **D3813 bounded resolver/receiver author model — still unaccepted:**
 `make inspector-recorded-context-research` exercises real IdentityService sessions, requireRead,
@@ -2986,6 +3093,14 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-15 — D3831 specifies the four pivotal source/factory arms in the existing unaccepted
+  Inspector amendment, using D3830's retained actual event occurrences and complete phase/
+  collapse witnesses. The existing prefix model first fails an original-path FEN refusal, then
+  passes500 source/828 family/94 occurrence controls after a disposable-only repair. Original
+  full-tip arms, v1 identities, node-level human observations, provider holds and meanings stay.
+  New typed factory identity, current access/receiver/native proof and independent acceptance
+  remain required; this is authoring, not production or full Inspector completion.
 
 - 2026-10-15 — D3792's comparison source now has an exact two-prefix constructor, runtime-owned
   result, two explicitly scoped F2 input arms and scope/occurrence identity plus receiver and

@@ -994,3 +994,30 @@ cases and112 composition cells pass without retries. `[V]` normal Make results;
 `test-results/browser-results.json` expected59/skipped0/unexpected0/flaky0 and
 `test-results/composition/receipt.json`; append-only exploration log. These are local checks,
 not current-revision GitHub, a calibrated chess detector or full release qualification.
+
+## Pivotal scoped-source contract — 2026-10-15, D3831
+
+The current disposable prefix candidate validates the original graph but originally parses FENs
+only after cropping. A new actual stored-run negative requests the root while corrupting the
+later original tip's FEN; it fails with "Missing expected exception", not a load/setup failure.
+The candidate now parses every original path FEN before extracting a prefix, without computing
+unrequested detector families or changing production. All35 new full-path FEN controls pass:
+500 source controls/207 prefixes,828 requested-family checks and94 occurrence checks over three
+repeated selections. Four missing-later-collapse exclusions and zero crossed policy inputs
+remain. `[V]` `tools/d3792-inspector-demand/pivotal-source.ts`, `build-pivotal.mjs`;
+normal `make inspector-pivotal-source-research` predecessor and corrected results.
+
+The same frozen-fixture A/B command still preserves45 complete output/input/value/convention
+images,84 original graph/FEN refusals and saved bytes over28 factory calls; preparation counts
+remain207/200/207/7 rather than828/800/828/28. This is unchanged production, not a newly claimed
+speed gain. `[V]` `make pivotal-family-research`, `build-pivotal-family.mjs` at this checkpoint.
+
+The existing unaccepted Inspector amendment now names one proposed scoped constructor and four
+exact F2 arms, each with its own complete witnesses. It separates positional prefix scope from
+historical event-time cuts and chosen-branch attribution; actual shared-node human observations
+retain their origin events, original distributions and current legacy target-band operand.
+No source handle or event reference supplies current permission or modern provider authority.
+Canonical input scopes, typed production admission/receipts, current receiver/cancellation,
+HTTP/native delivery and independent acceptance remain required rather than declared green.
+`[V]` `rfc/module-registration.md` §4.11a; current `pivotal.ts`, `evidence-factories.ts`,
+`module-query.ts` and `pivotal-evidence.test.ts` at1834494b. No pack or public production changes.

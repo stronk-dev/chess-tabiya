@@ -29385,3 +29385,33 @@ Campaign was the one capability with no API, route or content. Now:
   all14 whole capabilities incomplete; zero graduated official packs. Preserve462 historical
   prose-only closures as weak historical evidence, not current product proof. Final metadata-only
   governance/staged checks precede the owned-file commit; nothing is pushed or deployed.
+
+## 2026-10-15 — D3831 four-family pivotal Inspector source contract
+
+- Previous goal turn is progress:1834494b commits exact private selection occurrence retention,
+  full normal local verification/build/browser proof and the requested overall 1.0 inventory.
+- Reinspect current source/queue before choosing the next step. Critical source-heavy amendments
+  remain explicitly unaccepted; their parent's implementing state does not authorize production.
+  Continue the existing D3792 source contract rather than ship a filtered Run or a stub.
+- Add an actual later-original-FEN negative to the existing stored-prefix probe. It first fails
+  on Missing expected exception. Correct only the disposable bundle to parse the original path's
+  FENs before narrowing;500 source controls/207 prefixes,828 family and94 occurrence checks pass.
+  All35 new FEN refusals, four later-collapse exclusions and zero crossed human images remain.
+- Frozen-fixture A/B preserves45 complete payload/input/receipt images/84 graph/FEN refusals,
+  saved bytes and prior preparation counts. No production or software fixture is modified.
+- Author one explicit scoped constructor/four F2 arms in the existing Inspector amendment;
+  retain exact witnesses, original full-tip compatibility, node-level human observations and
+  actual event identity. Position endpoints are not historical event-time cuts or selected-move
+  attribution. Old model data remains legacy/pending; no provider receipt is manufactured.
+- D3831's bounded research/authoring completes; D3792 stays blocked pending remaining exact
+  suppliers, genuine independent acceptance and actual typed source/access/receiver/HTTP/native
+  implementation. No new tracker, registry, raw recording or ordinary-CI data dependency is added.
+  Refresh the existing state/roadmap/register navigation and run final governance before commit.
+  No whole semantic, content, capability, remote-CI or release gate changes; no push or deployment.
+- Strict research types and all37 existing source-contract cases pass; normal docs/governance,
+  register C1–C8, status P1–P7 and roadmap R1–R10 checks pass. No production/schema/browser
+  fixture bytes differ from1834494b, so its full local5851/seven/257/393 proof remains the last
+  production verification; this research/document change does not claim another full runtime run.
+  Final clarification names the existing source/factory owners and one shared implementation;
+  whitespace/staged checks and current-body governance precede commit.3580 ledger rows remain,
+  with1732 live assigned,1687 done/161 refused. All whole-product gates remain unchanged.

@@ -133,6 +133,15 @@ try {
       { ...run, nodes: run.nodes.map(node => node.id === path.at(-1)!.id ? { ...node, parentId: "missing" } : node) },
       { ...run, branches: [...run.branches, run.branches[0]!] },
     ]) checked(() => assert.throws(() => scoped(malformed, branch, path[0]!.id)));
+    if (path.length > 1) {
+      const malformed = { ...run, nodes: run.nodes.map(node => node.id === path.at(-1)!.id ? { ...node, fen: "not-a-fen" } : node) };
+      checked(() => assert.throws(() => scoped(malformed, branch, path[0]!.id),
+        "an earlier endpoint must not hide an invalid FEN on the original path"));
+      for (const kind of ["irreversibility", "phase_change", "human_divergence", "option_collapse"] as const) {
+        checked(() => assert.throws(() => Reflect.apply(pivotalMarkerPayloadsForKind, undefined, [malformed, branch, kind, path[0]!.id]),
+          "requested-family acquisition must preserve original full-path FEN refusal"));
+      }
+    }
     if (run.id === "d3825-opening") {
       let retry = rewind(run, path[2]!.id, at, undefined, branch).run;
       retry = fork(retry, path[2]!.id, { at }).run;
