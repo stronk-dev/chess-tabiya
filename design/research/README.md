@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector comparison source/input contract, 2026-10-15 ([[D3792]]): **draft authoring,
+not accepted or delivered**. The current guarded prefix experiment retains 1,020 structural
+and fourteen eval-delta items over 62 pairs (370 controls). Ten old-arm receipt comparisons
+share identity across different endpoint scopes; this is a reason not to reuse whole-tip arms,
+not a shipped-product defect. The existing draft now names the two-source constructor/arms,
+scope/occurrence identity and receiver criteria. See `module-evidence-assembly.md` §Exact
+comparison source/input contract. Typed production/source/access/native and other suppliers
+remain open; no raw recordings or ordinary CI/progress dependency.
+
 Pivotal recorded-prefix witnesses, 2026-10-15 ([[D3825]]/[[D3826]]): **bounded scope question
 answered; accepted grounding repairs verified locally**. The guarded payload owner passes 465 controls/
 207 actual stored legal prefixes across all four families, including four anchor-before-later-

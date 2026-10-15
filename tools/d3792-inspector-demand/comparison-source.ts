@@ -6,11 +6,14 @@ import { createRun, canonicalRunStart, commitMove, rewind, fork, revealFeedback,
 } from "../../packages/runtime/src/index.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import type { RunEvidenceItem } from "../../packages/runtime/src/evidence-factories.js";
+import { evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { STORY_PIVOT_CP } from "../../packages/runtime/src/story.js";
 const at = "2026-10-14T00:00:00.000Z";
 type ResearchCompare = (run: DrillRun, branches: readonly string[], options: { researchThroughNodeIds: readonly string[] }) => BranchComparison;
 // The extra argument exists only in the guarded transpiled candidate; this is not production typing.
 const scoped = compareBranches as ResearchCompare;
 let checks = 0, requests = 0, legacyLaterItems = 0, boundedStructuralItems = 0;
+let boundedEvalDeltaItems = 0, oldArmScopeCollisions = 0;
 const structuralExperiment = process.argv[2] === "structural";
 function check(callback: () => void) { callback(); checks++; }
 // Scope oracle only, not a validation oracle for the underlying chess predicates:
@@ -29,6 +32,23 @@ function expectedStructure(paths: readonly (readonly DrillRun["nodes"][number][]
     previous = new Set(value.values.map(observationIdentity));
   }
   return result;
+}
+// Scope oracle from actual original events, not the candidate BranchComparison's claimed trail.
+// Reuses the current scalar convention deliberately; this is not engine/chess qualification.
+function expectedEvalDeltas(run: DrillRun, path: readonly DrillRun["nodes"][number][], forkId: string) {
+  const forkPly = path.find(node => node.id === forkId)!.ply;
+  const trail = run.events.flatMap(event => {
+    if (event.type !== "evidence.attached" || event.data.payload.kind !== "eval" || event.data.payload.source !== "engine_validated") return [];
+    const node = path.find(value => value.id === event.data.nodeId);
+    if (!node || node.ply < forkPly) return [];
+    const values = event.data.payload.values;
+    return [{ plyOffset: node.ply - forkPly, cp: Number.isSafeInteger(values.centipawns) ? values.centipawns as number : null }];
+  }).sort((left, right) => left.plyOffset - right.plyOffset);
+  return trail.flatMap((after, index) => {
+    const before = trail[index - 1];
+    return before?.cp !== null && before?.cp !== undefined && after.cp !== null && Math.abs(after.cp - before.cp) >= STORY_PIVOT_CP
+      ? [{ delta: after.cp - before.cp, plyOffset: after.plyOffset }] : [];
+  });
 }
 function fixture(black: boolean, terminal: boolean) {
   const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${black ? "b" : "w"} KQkq - 0 1`;
@@ -62,6 +82,7 @@ for (const black of [false, true]) for (const terminal of [false, true]) {
   if (process.argv[2] === "baseline") assert.equal(first.columns[0]!.leafNodeId, selected,
     "whole-tip comparison is not requested-prefix acquisition");
   const whole = compareBranches(run, [main, peer]);
+  const oldInputScopes = new Map<string, string>();
   check(() => assert.deepEqual(scoped(run, [main, peer], { researchThroughNodeIds: [mainPath.at(-1)!.id, peerPath.at(-1)!.id] }), whole));
   if (structuralExperiment) for (const [index, branchId] of [main, peer].entries()) {
     const items = invokeEvidenceValueRoute("derived.compare.structure_delta@1", { run, comparison: whole, branchId }) as readonly RunEvidenceItem<{ observation: StructuralObservation }>[];
@@ -86,6 +107,19 @@ for (const black of [false, true]) for (const terminal of [false, true]) {
           assert.deepEqual(result.consequences[id]!.outcome, outcome?.type === "outcome.reached" ? outcome.data.outcome : null);
         }
       });
+      for (const [index, branchId] of [main, peer].entries()) {
+        const path = index === 0 ? mainPath.slice(0, left + 1) : peerPath.slice(0, right + 1);
+        const values = invokeEvidenceValueRoute("derived.compare.eval_delta@1", { run, comparison: result, branchId }) as readonly DeclaredEvidence<{ delta: number; plyOffset: number }>[];
+        check(() => assert.deepEqual(values.map(value => value.payload), expectedEvalDeltas(run, path, result.forkNodeId)));
+        boundedEvalDeltaItems += values.length;
+        for (const value of values) {
+          const input = evidenceValueReceipt(value).inputDigest;
+          const scope = JSON.stringify({ columns: [main, peer], endpoints, branchId });
+          const previous = oldInputScopes.get(input);
+          if (previous !== undefined && previous !== scope) oldArmScopeCollisions++;
+          else oldInputScopes.set(input, scope);
+        }
+      }
       if (structuralExperiment) for (const [index, branchId] of [main, peer].entries()) {
         const allowed = new Set((index === 0 ? mainPath.slice(0, left + 1) : peerPath.slice(0, right + 1)).map(node => node.id));
         const items = invokeEvidenceValueRoute("derived.compare.structure_delta@1", { run, comparison: result, branchId }) as readonly RunEvidenceItem<{ observation: StructuralObservation }>[];
@@ -130,8 +164,11 @@ for (const black of [false, true]) for (const terminal of [false, true]) {
 }
 if (structuralExperiment) assert(boundedStructuralItems > 0, "source-side narrowing cannot pass by returning an empty population");
 else assert(legacyLaterItems > 0);
+assert(boundedEvalDeltaItems > 0, "eval scope cannot pass using only empty populations");
+assert(oldArmScopeCollisions > 0, "old full-tip input arms must not be mistaken for endpoint-bound source identity");
 console.log(JSON.stringify({ scope: "D3820 disposable source-owner prefix algorithm; NOT scoped factories, authorization, production types or HTTP/native proof",
   legalFixtures: 4, prefixPairs: requests, checks, actualMateOutcomesBounded: true, retainedOriginalGraph: true,
   recordedProviderFixtures: "synthetic eval/checkpoint controls, not live providers or qualification", legacyLaterItems,
   legacyFactoriesInProductionStillUnscoped: true, sourceOwnerStructuralExperiment: structuralExperiment,
-  boundedStructuralItems, savedBytesUnchanged: true }));
+  boundedStructuralItems, boundedEvalDeltaItems, oldArmScopeCollisions,
+  oldArmIdentityIsNotScopedAuthority: true, savedBytesUnchanged: true }));

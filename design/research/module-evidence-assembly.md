@@ -898,3 +898,37 @@ governance/content/build/all four browser tiers exit zero: 257 content, 312 smok
 with all 112 composition cells. No product source is changed between those results. D3826/D3827
 close their accepted grounding defects, not the unaccepted scoped operation, qualifications,
 official content or release. `[V]` normal Make outputs and `planning/exploration/log.md`.
+
+## Exact comparison source/input contract — 2026-10-15, D3792
+
+Full Inspector accepts two comparison projections, structural difference and eval difference;
+route and trajectory belong to other consumers. Current generic comparison acquisition calls
+strips before filtering. The source proposal therefore uses a dedicated two-prefix source and
+direct exact factory dispatch, not a second full Compare screen. `[V]`
+(`packages/runtime/src/evidence-catalog.ts` MODULE_CONSUMER_ACCEPTS.full_inspector;
+`packages/runtime/src/module-query.ts` compareSources; `compare-strips.ts` comparisonStrips).
+
+The unchanged D3820 boundary experiment still reproduces all 32 later structural items when
+the legacy factory reopens full branches. With guarded source-side narrowing it retains the
+same complete 1,020 structural items over 62 prefix pairs. Added original-event-based eval
+checks retain fourteen delta items and pass all 124 column requests. The extended constructor
+variant passes 240 controls and the structural variant 370, including original graph, mate-
+outcome and saved-byte controls. Eval/checkpoint inputs remain explicitly synthetic. These are
+scope checks, not an independent oracle for structural predicates or engine quality. `[V]`
+(`tools/d3792-inspector-demand/comparison-source.ts`, `build-comparison.mjs`;
+`make inspector-comparison-source-research` normal output, 2026-10-15).
+
+Ten emitted old-arm delta inputs reuse an existing input identity across different requested
+endpoint tuples. The arithmetic output remains correct and scope-bounded in the guarded view,
+but its legacy mint operands contain the full run, branch and before/after entries—not the
+requested two-endpoint scope. This is not a defect in the existing whole-tip contract. It is a
+direct falsifier for using that old arm as a scoped source authority. `[V]`
+(same instrument's evidenceValueReceipt.inputDigest comparisons;
+`packages/runtime/src/evidence-factories.ts` createDerivedCompareEvalDeltaV1Evidence).
+
+Draft synthesis `[M]`: module-registration §4.11a now names a privately admitted runtime source
+over the original stored image/two granted prefixes and two new explicit F2 arms. Literal
+source scope and actual used occurrences must enter their receipts; equal visible output cannot
+erase scope. Old full-tip arms, payloads, conventions and upstream provider holds remain.
+Runtime admission, complete input grammar/identity, all other scoped sources, current permission,
+actual HTTP/client/native receiver proof and independent acceptance remain unimplemented.

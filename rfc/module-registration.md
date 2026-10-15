@@ -2038,6 +2038,104 @@ must be explicit and independently accepted; neither prototype supplies producti
 current v1 scoped receipts, response admission or HTTP/native receiver proof. Do not reinterpret
 a full-tip receipt or silently replace any of Inspector's 75 source obligations.
 
+**Closed comparison source and factory contract (2026-10-15), still unaccepted:** Full
+Inspector accepts exactly `derived.compare.structure_delta@1` and
+`derived.compare.eval_delta@1`; it does not accept the route or trajectory projection merely
+because Compare does. The new operation must invoke the requested factory directly. Calling
+`comparisonStrips`, `comparisonNarrative` or `compareSources` and filtering afterward acquires
+unrequested siblings and is not this operation. Existing full-tip Compare, its routes and all
+its other factory arms remain supported and unchanged.
+
+The proposed runtime source constructor is
+`createRecordedComparisonSource({run, columns})`, called only after the server resolver has
+granted both recorded spans. `run` is its unchanged, parser-admitted complete stored image;
+`columns` is exactly a readonly two-tuple of closed `{branchId, throughNodeId}` records, in
+primary/peer order. Strings are captured once, nonempty and independently retained. This
+constructor establishes recorded source scope, **not storage authenticity, current access,
+Inspector permission or permission to request a provider**. Those remain the resolver's
+separate responsibility, including the post-acquisition check.
+
+The source has a nominal TypeScript identity and runtime-owned admission (a module-private
+WeakMap or equivalent). Its internal data is not accepted as a constructor argument, a factory
+payload, JSON or wire token. The constructor and type may cross the runtime/server boundary
+for the new operation; the data reader stays runtime-internal to the source/factory owner.
+The complete operand domain, invoker and declaration census must include this exact new
+arm before it can execute. A cast, spread, JSON copy or genuine source from another run/scope
+cannot substitute for the requested source at the query receiver.
+
+Constructor order is: admit the closed argument and original run, reject equal/unknown branch
+ids, validate **both complete original branch paths**, then locate each endpoint and extract
+the two exact prefixes. Each prefix must contain that branch's actual recorded fork. Compute
+the common fork from the two ordered prefixes, not from caller metadata, current cursor,
+node.branchId, newest sibling or full-tip comparison. Inherited nodes are valid; an endpoint
+before its attempt's fork is not. A valid pair ending exactly at the common fork remains valid
+and may emit zero differences. Do not manufacture a shortened DrillRun or a partially populated
+BranchComparison. No structural reader, engine lookup or evidence factory runs in construction.
+
+The internal source owns only the unchanged run image, captured two-tuple, original validated
+paths, granted prefixes and actual common-fork node. Its canonical operand image has the new
+operation identity `recorded-comparison-source@1`, the original run id/current
+`ModuleDecisionStamp`, ordered endpoint records and ordered original node/edge identities for
+both granted paths. Original FEN, normalized committed move and event occurrence operands stay
+attached to their source records. This is a distinct source-operation identity, not a new
+persisted protocol, permission token or reinterpretation of a whole-tip value receipt.
+
+Only these additional closed F2 arms are introduced by this subsection:
+
+| Exact factory route | New arm | Source-side execution and literal inputs |
+|---|---|---|
+| `derived.compare.structure_delta@1` | `{recordedComparison: RecordedComparisonSource, branchId: string}` | Require branchId equal one granted column. Read structural observations only on the two granted prefixes, using their common fork and existing reader/conventions. Form both post-fork observation sets before their intersection; derive the requested column's newly present, noncommon observations in original node/feature order. Retain that node's exact occurrence and both actual path/read operands. No whole-branch helper is called after the source has granted its paths. |
+| `derived.compare.eval_delta@1` | `{recordedComparison: RecordedComparisonSource, branchId: string}` | Require the same membership. Join actual eval attachments to the requested granted path at/after its common fork, retaining their original event sequences and bytes. Preserve current score parsing, stable ply ordering, cp-to-cp-only arithmetic and `STORY_PIVOT_CP`; no mate-to-cp conversion, new ranking or invented line. Every delta retains both exact source attachments plus the recorded comparison scope. |
+
+The old `{run, comparison, branchId}` arms remain unchanged for their existing callers.
+Do not infer scoped admission from `comparison.columns[].leafNodeId`, add an optional endpoint
+to that old arm, overload the old receipt or accept caller arrays of observations/trails.
+The new factories admit the runtime-owned source before reading its data and mint from its
+canonical operand image **and actual used records**, never from the opaque handle's empty
+serialization or only the run/branch/fork. Different endpoint tuples must have different input
+identities even when their displayed deltas happen to be equal. Reversing the tuple retains
+requested column order and changes scope identity without manufacturing another chess meaning.
+
+This changes acquisition scope and its declared operands, not the two projections' chess
+semantics: both remain differences after an actual recorded common fork, with their existing
+payload, convention, grounding, exactness, dependency status and consumer eligibility. A
+complete-tip new source must produce byte-equal payload populations to its old arm; its input
+receipt is intentionally distinct. Whole-tip callers and historical receipts keep their old
+identities. Independent review must verify this compatibility against the actual catalogue and
+factory contracts; a finding that a v1 meaning requires complete tips instead must return this
+proposal for explicit successors/bindings, not silently reinterpret or retire v1.
+
+In particular, an `engine_validated` attachment label does not establish a modern provider
+receipt. The eval factory keeps its existing provider-exchange dependency and pending status;
+these scoped arms cannot manufacture engine/model/bound identity or discharge the upstream
+source migration. Where the requested consumer requires a held source version, return the
+existing `unavailable/source_version_held` with that actual dependency—not a universal stub,
+successful absence or a new stronger claim. A permitted complete execution with no qualifying
+delta is `no_witness`; invalid attachment/source operands are `failed/source_contract_invalid`.
+Invalid scopes are the existing request refusal. Missing the second attempt is resolved before
+construction as `missing_context/no_second_attempt`, not an empty fabricated comparison.
+
+Acquisition consumes this source synchronously and requests neither provider nor unrelated
+projection. Observe cancellation before source construction, before source/factory work and
+before publication; asynchronous outer preparation still uses the resolver's same signal and
+post-await storage/access/configuration revalidation. The query receiver compares the admitted
+source's captured run, both branch/endpoints and current decision with the resolver's exact
+grant before its values can become source summaries/detail. The browser independently retires
+old request owners, scope/configuration/account changes and paint. A correct source object is
+not permission to publish an obsolete response.
+
+Acceptance adds the actual typed constructor/new-arm/invoker controls to the D3820 prefix
+population: both complete-tip arms retain old payloads; fork-only/unequal-length/reversed and
+inherited prefixes retain exact complete output; original late-graph corruption refuses before
+read counters advance; no source from another endpoint/order/run, copied handle or substituted
+branch is accepted. Equal displayed payloads at different endpoint tuples must still retain
+distinct declared input scopes. Later structural observations, eval attachments and terminal
+results cannot enter an earlier grant. Preserve complete source operands, original saved bytes,
+mate boundaries and current legacy dependency status. Actual authenticated HTTP/client/desktop/
+phone tests must exercise both requested refs and stale/cancelled/revoked results through the
+new route. The existing guarded algorithms do not already prove these typing, identity,
+permission or receiver criteria; all remain unaccepted implementation work.
+
 Each supplier row still owes its exact callable/input/absence/receiver/cancellation and boundary
 fixtures; the operation names in this paragraph are requirements, not claims of landed code.
 
@@ -2888,6 +2986,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-15 — D3792's comparison source now has an exact two-prefix constructor, runtime-owned
+  result, two explicitly scoped F2 input arms and scope/occurrence identity plus receiver and
+  compatibility criteria. Inspector requests only its two accepted Compare refs, not a whole
+  Compare screen. D3820's current guarded algorithms are rechecked separately; they do not
+  establish these proposed production types/identities or independent acceptance. Other scoped
+  sources, live provider holds and the full HTTP/native delivery remain open.
 
 - 2026-10-15 — D3824's actual-storage exact recorded-Review model establishes earlier-prefix
   outcome and source boundaries. §4.11a names the proposed private callable while preserving

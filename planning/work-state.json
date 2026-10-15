@@ -31531,7 +31531,7 @@
       "id": "D3792",
       "state": "blocked",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:2dcb0bea09180fcdfc2996fe14a373b9028110c61ba1bfaa91058cf22be9ae51",
+      "sourceDigest": "sha256:0008319e90c2f582d10944469c2dd88c794986dd95727bb682eff70f249209a2",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"

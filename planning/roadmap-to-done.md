@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3792's comparison contract now names the exact two-prefix source and two scoped factory arms
+needed by Inspector, with scope/occurrence identity, old-arm compatibility and current receiver
+checks. The extended existing experiment passes 370 controls over 62 pairs, retaining 1,020
+structural and fourteen eval-delta items. Ten old-arm inputs share identity across different
+requested endpoint tuples: correct arithmetic is not scoped source authority. Production remains
+unchanged from D3828's full local proof below. This is draft authoring, not acceptance or delivery;
+the other scoped suppliers, current access and complete HTTP/native operation remain open.
+
 The completed D3828 correction restores physical rook identity in comparison routes for
 stationary, crossing and non-corner Chess960 castling. Ninety of 112 supplied-FEN geometry
 controls fail before the repair; all 112 now pass through the existing source/factory/Compare

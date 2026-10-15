@@ -29266,3 +29266,37 @@ Campaign was the one capability with no API, route or content. Now:
   38560140733 failed. Its Theory race correction is local, not current-revision remote
   qualification. Nothing is pushed/published/deployed, no owner-use discharge is invented,
   and the full 1.0 goal is neither paused nor completed by this finish-and-overview checkpoint.
+
+### 2026-10-15 — D3792 exact comparison source/arm authoring
+
+- Previous goal turn is progress: D3828's production repair and complete local gates are
+  committed at 67368305. Continue the source-to-UX frontier, not another roadmap or register.
+- The existing draft now names createRecordedComparisonSource over the unchanged stored run
+  and exactly two captured granted endpoints, with original-graph-first admission and separate
+  current server access. Its runtime-owned result supplies only the two comparison projections
+  Inspector actually accepts. Direct factory dispatch avoids acquiring a full Compare screen
+  and filtering afterward. Old Compare and its other source/factory arms remain supported.
+- Author both explicit scoped F2 arms, literal source/path/event operands, endpoint-sensitive
+  receipt identity, complete-tip payload parity, dependency-preserving eval behavior and exact
+  cancellation/receiver/native criteria. The operation and types are proposed, not landed or
+  independently accepted. No private handle, bounded display or correct arithmetic is permission.
+- Extend the existing disposable experiment only: actual original-event-derived eval scope
+  expectations cover all124 column requests and retain14 emitted deltas. Ten old-arm input
+  digests are reused across distinct endpoint scopes, directly refuting their use as scoped
+  authority without mis-filing the existing full-tip contract as defective. The normal Make
+  target passes240 constructor/370 structural controls, unchanged1020 structural items over62
+  pairs, all original graph/mate-outcome/saved-byte controls and clean research TypeScript.
+  Synthetic eval/checkpoint inputs are not live providers or semantic qualification. Bundles
+  stay ignored; no raw recordings, new tool directory or ordinary CI/progress dependency.
+- Update the same dossier/coverage, D3792 blocked ledger row/state and roadmap/checkpoint.
+  All1732 live rows remain assigned, UX282/263/24 and every macro/source/content/release gate
+  are unchanged. The remainder is exact pivotal/Review/authored/provider scoped binding and
+  current permission/response/native implementation after independent contract acceptance.
+  Product bytes/tests remain those of67368305's full proof; do not rerun or relabel it as a
+  newly delivered feature. Normal governance/staged checks must pass before the author commit.
+
+- Normal make roadmap-receipt verify-governance exits zero on the final author/research inputs:
+  all work remains assigned, exact D3792 anchor matches its still-blocked state, and register/
+  lifecycle/roadmap/intent/tier/size checks pass. No product, pack, source receipt or ordinary
+  software/browser fixture is edited in this authoring checkpoint. Commit only its explicit files;
+  keep the three pre-existing untracked paths and all publication authority untouched.
