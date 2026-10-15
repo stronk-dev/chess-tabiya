@@ -1990,6 +1990,10 @@ Independent D3792 review on 2026-10-15 returns the joint amendment for D3841, D3
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`. In particular,
 naming the consumer successor below does not specify its complete execution/binding image.
 This detail section remains unaccepted; no production or existing source meaning changes.
+The D3841 follow-up also refutes simply retaining75 unchanged legacy refs plus these six views:
+§4.11a still owes an obligation-preserving modern-source rebase and exact-version registry/
+admission/presentation closure. One existing module policy is shared, not duplicated or weakened;
+old @1 payloads and adapters stay intact. No total successor binding count is established yet.
 
 Every new projection below is version 1. Register it only to `module.full_inspector@2`, together
 with the original source image owned by §4.11a. Factories consume exactly one **admitted complete

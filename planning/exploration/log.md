@@ -29848,3 +29848,69 @@ Campaign was the one capability with no API, route or content. Now:
   in the same human roadmap: distinguish the D3809 historical snapshot and reconcile the current
   ledger totals/independent-review outcome with the checked registers. Fold only those prose
   corrections into this unpublished owned checkpoint, retaining normal hooks and all histories.
+
+## 2026-10-15 — Complete Inspector execution: acceptance-image boundary
+
+- Previous turn made concrete progress at10fbcf11: two bounded author defects independently
+  cleared, committed and accurately tracked. Tracked tree is clean; three pre-existing untracked
+  entries remain. D3841's full successor/legacy execution image is the next source prerequisite.
+- Current source trace finds63 individually compilable Inspector bindings and twelve refused
+  bindings through nine unregistered provider leaves. This is execution metadata, not delivery.
+  Before choosing a successor contract, record D3844 and add a normal existing-census control
+  against deleting the twelve failed bindings while retaining all75 declared accepted refs.
+  An incomplete graph must not masquerade as the required complete-consumer preflight.
+- The unchanged production execution compiler actually approves the filtered63-binding image;
+  the new ordinary research negative fails compiled-versus-refused. Mark D3844 verified and add
+  permanent production controls, including a legitimately compiled semantic Theory manifest
+  whose missing shape binding is still declared accepted. This is a completeness defect under
+  accepted provider §§1–2, not permission to implement D3792 or a claimed external exploit.
+  Initial work-state sync correctly refuses one newly unassigned row; normal assignment restores
+  zero untriaged without changing the ceiling. D3841 remains active, not complete.
+- Four permanent predecessor tests fail on missing/extra/duplicate coverage, including an actual
+  semantic Theory manifest that compiles while its execution image is incomplete. Require exact
+  accepted/bound set equality before path compilation, preserving multiple adapters per projection.
+  Existing single-binding fixtures/diagnostics now declare their actual projection rather than
+  borrowing a full consumer declaration.75 focused compiler cases and nine census controls pass;
+  the full saved census remains byte-equal, not regenerated to hide the change.
+- The wider focused module target catches three old synthetic fault fixtures before their intended
+  policy/latency/source seam: they add bindings without declaring acceptance. Repair their inputs,
+  not the expected failure codes. Actual authenticated controls additionally check those exact
+  internal codes and missing-binding refusal with zero preparation/collection for all five local
+  modules. Keep generic HTTP503 and every existing deadline unchanged.
+- The corrected normal focused target passes183 runtime/application cases, clean workspace types
+  and nine census controls. Roadmap preflight catches a duplicate doc evidence path and missing
+  existing RFC-row anchor; remove only the duplicate and bind the current registered RFC row.
+  Do not weaken those checks. Freeze production/tests before the full normal serial gates.
+- During the frozen-code run, the same authorized independent reviewer checks D3841's proposed
+  successor direction read-only, without competing tests or edits. It refutes the literal75+6
+  image: strict provider leaves require whole deliveries while the old narrow payload meanings
+  remain immutable. Main rechecks the named symbols and records four author constraints in the
+  existing review/queue: explicit obligation-preserving modern rebase, versioned closure under
+  one policy, literal absence separate from lazy demand, and source-order delivery not old
+  reducer ordering. Correct the draft's impossible exact-ref premise, retaining all obligations.
+  Exact mapping/closure/supplier authoring still remains; D3841 and D3792 are not discharged.
+- The first full serial run passes all5,888 software cases/392 files and seven unchanged-budget
+  performance cases/four files, then correctly refuses stale generated semantic-validation
+  receipts after the compiler-source change. Later content/build/browser stages do not run.
+  Use the existing `make semantic-validation-update`; it reruns343 cases/81 subjects and retains
+  zero qualified subjects,53 population receipts/eight external receipts. Inspect the exact
+  generated diff before freezing again; do not weaken checking or alter any qualification rule.
+- The generated comparison changes exactly nine operation implementation references and53
+  population predicate references; all other JSON fields (including343 case outcomes,eight external
+  receipts and81 verdicts) are identical. The final-code full rerun again passes5,888 software/
+  392 files and seven performance/four files, current semantic receipts and remaining software
+  contracts. Governance then catches two generated-file evidence paths duplicated by main in
+  the roadmap list. Remove only those duplicates; production/tests/generated files remain frozen.
+  Re-run governance and the remaining normal content/build/all-browser tiers without repeating
+  the successful unchanged software run or erasing either failed full-command checkpoint.
+- Remaining normal gates complete on the unchanged final production/tests/generated image:
+  governance,257 content cases/26 files, all content checks, build,332 smoke passes with the
+  existing configured optional uncached-Maia skip, five content-browser,59 matrix and one packaged
+  production pass. The retained composition report has59 expected, zero unexpected/flaky/skipped
+  cases/errors and112/112 successful unretried cells. No source, pack, deadline, retry or test-tier
+  relaxation was needed. These are local results, not current-revision GitHub or native-release
+  qualification. Close only D3844; keep D3841 doing and D3792 unaccepted with independent review's
+  four author constraints and outstanding suppliers. Ledger has3593 rows:1699 done,162 refused,
+  1732 live assigned and zero untriaged; UX/milestones and all qualification counts are unchanged.
+  Refresh the existing roadmap receipt, run final governance and normal explicit-index commit
+  hooks, preserving the three pre-existing untracked entries and making no push.

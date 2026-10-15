@@ -1210,3 +1210,41 @@ failed and successful-empty results; arbitrary pending metadata is not a univers
 stub. Missing supplier-specific mappings and the complete successor consumer remain D3792/D3841
 work. Independent review and actual API/client/native admission still precede delivery. `[V]`
 the same targets, `inspector-source-contract-research` and unaccepted RFC clauses.
+
+## Complete-consumer acceptance coverage — 2026-10-15, D3844
+
+D3841's independent return exposes a second boundary in the existing execution compiler.
+Inspector declares75 projections; its unchanged isolated census compiles63 bindings and refuses
+twelve through nine unregistered provider leaves. Deleting just those twelve from a copied
+compiled manifest makes the old compiler approve the remaining63 as the complete consumer.
+The new existing-census negative fails `compiled` versus `refused`. This is an internal contract
+defect, not a demonstrated HTTP exploit or source outage. `[V]`
+`tools/d3403-execution-frontier/audit.test.mjs`, retained current `execution-frontier.json`,
+`packages/runtime/src/evidence-binding-execution.ts` and `make provider-execution-census-check`.
+
+A permanent control constructs a valid semantic manifest from the actual declarations with one
+Theory shape binding removed: the consumer still accepts four projections, but the old execution
+compiler approves three bindings. Three further predecessor failures cover filtered Inspector,
+extra projections and duplicate declarations. The production repair requires exactly one
+consumer id/version and accepted/bound projection set equality before path work. Multiple
+legitimate adapters for the same projection remain supported and all compile; version1 cannot
+stand in for version2. The corrected unit fixtures and isolated research explicitly declare
+their own projection set rather than borrowing a complete consumer. `[V]`
+`evidence-binding-execution.test.ts`, `evidence-binding-execution.ts`, audit and the accepted
+`rfc/provider-exchange-and-execution.md` §§1–2;75 focused compiler cases pass.
+
+Actual authenticated local-module controls add missing-binding refusal for all five local
+Support modules before preparation/collector work. They separately retain the exact old
+policy/latency/unregistered-source failure codes; the first broader run catches three old
+synthetic input images at the new coverage guard, so those fixtures gain matching declared
+acceptance without relaxing assertions.183 focused runtime/application cases, clean workspace
+types and nine census controls pass. The saved complete census remains byte-equal:262/285
+projections,495/556 isolated bindings and21/42 complete consumers compile. `[V]`
+`apps/server/src/local-module-execution.test.ts`, `packages/runtime/src/module-query.test.ts`,
+normal `make local-module-execution-check provider-execution-census-check`.
+
+This fixes the accepted completeness guard only. It neither makes Inspector's missing providers
+executable nor authors/accepts D3841's successor image. No bindings are removed in production,
+no execution error becomes a normal unavailable result, and source/semantic qualification,
+usefulness, content and release gates remain. Full verification follows separately in the log;
+the focused evidence above is not a whole-platform proof. `[V]` code diff and unchanged D3792.

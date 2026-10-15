@@ -197,8 +197,10 @@ the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.
 ## Not yet shipped
 
 The binding execution primitives now implement §2's closed optional/required source-absence
-policy and its aggregation precedence. `compileEvidenceConsumerExecution` strictly compiles
-each bound path, requires literal policy for transitive provider leaves, and refuses bindings
+policy and its aggregation precedence. `compileEvidenceConsumerExecution` first checks the exact
+consumer's accepted-projection/binding set equality, then strictly compiles every bound path.
+Missing/extra coverage and duplicate declarations refuse before execution; distinct legitimate
+adapters for one projection remain. It requires literal policy for transitive provider leaves and refuses bindings
 whose latency admits no execution path. `aggregateEvidenceConsumerSourceAvailability` validates
 the complete set of already-resolved binding/path results and generates compatibility
 `providerOff` output. Required unavailable wins over honest-empty; optional failures omit only

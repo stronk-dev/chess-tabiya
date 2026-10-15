@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PRIMARY_EVIDENCE_MANIFEST as MANIFEST } from "./evidence-catalog.js";
+import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST as MANIFEST } from "./evidence-catalog.js";
 import { compileEvidenceManifest, type BindingSourceAbsence, type CompiledEvidenceManifest, type EvidenceBinding, type LatencyMode, type ProjectionDeclaration, type VersionedEvidenceId } from "./evidence-contract.js";
 import { aggregateEvidenceConsumerSourceAvailability as aggregate, compileEvidenceConsumerExecution as compile } from "./evidence-binding-execution.js";
 
@@ -18,7 +18,8 @@ function binding(id: string, projection = source, policy?: BindingSourceAbsence,
 }
 function fixture(bindings: readonly EvidenceBinding[], outputs: readonly ProjectionDeclaration[] = []): CompiledEvidenceManifest {
   return { ...MANIFEST,
-    consumers: [{ ...MANIFEST.consumers[0]!, ...consumer }], bindings,
+    consumers: [{ ...MANIFEST.consumers[0]!, ...consumer,
+      accepts: [...new Map(bindings.map(row => [`${row.projection.id}@${row.projection.version}`, row.projection])).values()] }], bindings,
     projections: [...MANIFEST.projections, ...outputs],
     producers: [...MANIFEST.producers, { id: "fixture.local", version: 1, plane: "derived", implementation: "fixture", availability: "local", latency: "sync", outputs }],
   };
@@ -28,6 +29,67 @@ function satisfied(compiled: ReturnType<typeof compile>, ids: readonly string[])
 }
 
 describe("binding execution and source absence", () => {
+  it("refuses a missing accepted binding even when the semantic manifest still compiles", () => {
+    const theory = ref("module.theory_breadcrumb");
+    const declarations = { ...EVIDENCE_CONTRACT_DECLARATIONS,
+      adapters: EVIDENCE_CONTRACT_DECLARATIONS.adapters.filter(row =>
+        !(row.consumer.id === theory.id && row.consumer.version === theory.version && row.projection.id === "theory.shapes.firing")),
+    };
+    const incomplete = compileEvidenceManifest(declarations);
+    expect(incomplete.consumers.find(row => row.id === theory.id)!.accepts).toHaveLength(4);
+    expect(incomplete.bindings.filter(row => row.consumer.id === theory.id)).toHaveLength(3);
+    expect(() => compile(incomplete, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+  });
+
+  it("cannot make all75 Inspector declarations executable by removing twelve refused bindings", () => {
+    const inspector = ref("module.full_inspector");
+    const failed = new Set(["live.stockfish.eval@1", "live.stockfish.wdl@1", "live.stockfish.pv@1",
+      "human.maia.policy@1", "human.maia.candidate_wdl@1", "human.explorer.population@1",
+      "live.syzygy.result@1", "live.syzygy.category@1", "live.syzygy.distance@1",
+      "derived.pivotal.human_divergence@1", "derived.compare.eval_delta@1", "derived.story.rank@2"]);
+    const bindings = MANIFEST.bindings.filter(row => row.consumer.id !== inspector.id || !failed.has(`${row.projection.id}@${row.projection.version}`));
+    expect(bindings.filter(row => row.consumer.id === inspector.id)).toHaveLength(63);
+    expect(() => compile({ ...MANIFEST, bindings }, inspector)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+    expect(() => compile(MANIFEST, inspector)).toThrow(/EXECUTION_SOURCE_UNREGISTERED/u);
+  });
+
+  it("refuses an extra projection outside the exact accepted image", () => {
+    const theory = ref("module.theory_breadcrumb");
+    const original = MANIFEST.bindings.find(row => row.consumer.id === theory.id)!;
+    const projection = ref("rules.mobility.reading.legal_moves");
+    const extra = { ...original, adapter: ref("fixture.extra"), projection };
+    expect(() => compile({ ...MANIFEST, bindings: [...MANIFEST.bindings, extra] }, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+  });
+
+  it("refuses duplicate exact consumer declarations", () => {
+    const theory = ref("module.theory_breadcrumb");
+    const declaration = MANIFEST.consumers.find(row => row.id === theory.id)!;
+    expect(() => compile({ ...MANIFEST, consumers: [...MANIFEST.consumers, declaration] }, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+  });
+
+  it("refuses duplicate accepted refs instead of silently collapsing the declaration", () => {
+    const theory = ref("module.theory_breadcrumb");
+    const declaration = MANIFEST.consumers.find(row => row.id === theory.id)!;
+    const consumers = MANIFEST.consumers.map(row => row === declaration ? { ...row, accepts: [...row.accepts, row.accepts[0]!] } : row);
+    expect(() => compile({ ...MANIFEST, consumers }, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+  });
+
+  it("preserves every declared adapter when two valid adapters serve the same accepted projection", () => {
+    const theory = ref("module.theory_breadcrumb");
+    const original = MANIFEST.bindings.find(row => row.consumer.id === theory.id && row.projection.id === "theory.shapes.firing")!;
+    const extra = { ...original, adapter: ref("fixture.second_form") };
+    const compiled = compile({ ...MANIFEST, bindings: [...MANIFEST.bindings, extra] }, theory);
+    expect(compiled.bindings).toHaveLength(5);
+    expect(compiled.bindings.filter(row => row.binding.projection.id === "theory.shapes.firing")).toHaveLength(2);
+  });
+
+  it("does not substitute an old-version binding for a missing successor binding", () => {
+    const successor = { id: "opponent.selection", version: 2 };
+    const bindings = MANIFEST.bindings.filter(row => !(row.consumer.id === successor.id && row.consumer.version === successor.version));
+    expect(bindings.some(row => row.consumer.id === successor.id && row.consumer.version === 1)).toBe(true);
+    expect(() => compile({ ...MANIFEST, bindings }, successor)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+  });
+
   it("compiles the complete production Theory consumer with optional source policies", () => {
     const theory = compile(MANIFEST, ref("module.theory_breadcrumb"));
     expect(theory.bindings.map(row => `${row.binding.projection.id}@${row.binding.projection.version}`).sort()).toEqual([

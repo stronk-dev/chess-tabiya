@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3843]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3844]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,6 +19,14 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3844 repairs a real completeness hole found while tracing D3841: removing failed bindings could
+make the existing compiler approve an incomplete consumer. It now checks exact accepted/bound
+projection set equality before path work, preserving legitimate multiple adapters and old source
+refusals.75 compiler and183 runtime/authenticated cases, nine unchanged-census controls and types
+pass. All normal local tiers pass5888 software/seven performance/257 content/build/397 browser
+cases, one configured optional Maia skip and112 unretried composition cells. D3841's successor
+contract and remaining suppliers are not completed by this guard; no whole 1.0 gate is promoted.
+
 D3840 closes a bounded accepted foundation correction: direct events and their derivations
 reuse the complete validated edge population instead of resealing it. Both-color controls,
 exact whole-projector output comparisons and every normal local test tier pass. The final
@@ -30,7 +38,7 @@ public-version policy; current source-only changes require zero pack edits/resta
 The authorized independent Inspector review still **returns** the unaccepted D3792 amendment.
 D3842's complete original comparison graph/FEN validation and D3843's exact held-dependency
 wire/disclosure contract are now independently cleared author corrections, not production delivery.
-The normal scoped controls pass; current production remains13781fb7's fully verified image above.
+The normal scoped controls pass;13781fb7 is the previous full production verification checkpoint.
 D3841 still needs the complete successor execution image/legacy-hold contract; the known remaining
 supplier authoring is still separate work. Current census retains all75 Inspector bindings and
 refuses complete compilation rather than disguising missing execution as source absence. Exact findings and corrections
@@ -340,7 +348,7 @@ ten awaiting discharge and 24 draft documents; its 75 archived implementation re
 superseded record are subsystem history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3840's bounded population reuse passes all normal serial local
+Previous local checkpoint: D3840's bounded population reuse passes all normal serial local
 software/performance/governance/content/build/browser tiers on frozen production/tests:
 5,875 software/seven unchanged-budget performance/257 content/332 smoke/five content-browser/
 59 matrix/one packaged-production cases (397 browser passes). The existing optional uncached
@@ -350,9 +358,16 @@ corrected literal review-row routing refusal remain recorded in the log, not hid
 Exact output comparisons retain all facts/receipts/rows/checkpoints; no pack content or public
 source version changes. The existing generated semantic implementation bindings are refreshed
 without changing any case/profile result or qualification. D3300's whole cold target stays open.
-D3842 and D3843's subsequent independently cleared author corrections bring the current ledger
-to3,592 rows:1,698 done,162 refused and1,732 live assigned, zero untriaged. This draft-only
-checkpoint passes its scoped research and governance controls, not a new full application run.
+D3844's current production checkpoint passes5888 software/392 files, seven unchanged-budget
+performance/four files, governance,257 content/26 files, build and all four browser tiers:
+332 smoke/five content-browser/59 matrix/one packaged-production passes, with the existing optional
+Maia skip and112 unretried composition cells. Generated semantic implementation references change
+only because their compiler dependency changed; all343 cases,81 verdicts and zero qualified subjects
+remain identical. The first stale-receipt refusal and later duplicate-roadmap-reference refusal
+remain logged; only bookkeeping changed between the final software proof and remaining gates.
+Current ledger:3,593 rows,1,699 done,162 refused and1,732 live assigned, zero untriaged.
+D3841 remains doing: independent review requires the modern-source mapping, exact-version closure,
+absence/demand and source-order delivery contracts before acceptance or Inspector API implementation.
 UX remains282 complete/263 live/24 retired; four active/five blocked milestones remain.
 
 D3838's completed presentation proof stands: both-color desktop/phone native flows retain exact

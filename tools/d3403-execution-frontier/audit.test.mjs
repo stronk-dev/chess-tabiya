@@ -42,11 +42,26 @@ test("all failed provider declarations retain their literal ancestor and consume
 test("one compilable binding cannot approve a complete consumer with an extra raw binding", () => {
   const extra = { ...binding, adapter: { id: "fixture.raw", version: 1 },
     producer: { id: "human.maia", version: 1 }, projection: { id: "human.maia.uci_response", version: 1 } };
-  const changed = auditExecutionFrontier({ ...CATALOGUE, bindings: [...CATALOGUE.bindings, extra] });
+  const consumers = CATALOGUE.consumers.map(row => key(row) === key(modern)
+    ? { ...row, accepts: [...row.accepts, extra.projection] } : row);
+  const changed = auditExecutionFrontier({ ...CATALOGUE, consumers, bindings: [...CATALOGUE.bindings, extra] });
   assert.equal(changed.bindings.find(row => row.adapter === key(binding.adapter)).isolatedDiagnostic.kind, "compiled");
   assert.equal(changed.bindings.find(row => row.adapter === "fixture.raw@1").isolatedDiagnostic.kind, "refused");
   assert.equal(target(changed).completeContract.kind, "refused");
   assert.equal(target(changed).bindingCount, 2);
+});
+
+test("D3844: removing refused Inspector bindings cannot approve a still-complete declared consumer", () => {
+  const consumer = "module.full_inspector@1";
+  const declared = CATALOGUE.consumers.find(row => key(row) === consumer);
+  const failed = new Set(report.bindings.filter(row => row.consumer === consumer && row.isolatedDiagnostic.kind === "refused").map(row => row.adapter));
+  assert.equal(declared.accepts.length, 75);
+  assert.equal(failed.size, 12);
+  const changed = auditExecutionFrontier({ ...CATALOGUE, bindings: CATALOGUE.bindings.filter(row => !failed.has(key(row.adapter))) });
+  const result = changed.consumers.find(row => row.consumer === consumer);
+  assert.equal(result.bindingCount, 63);
+  assert.equal(result.completeContract.kind, "refused", "a63-binding subset cannot satisfy the unchanged75-ref consumer");
+  assert.equal(result.completeContract.code, "BINDING_EXECUTION_UNDECLARED");
 });
 
 test("missing source policy and impossible latency remain separate diagnosed refusals", () => {

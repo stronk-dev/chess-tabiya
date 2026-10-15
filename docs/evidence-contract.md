@@ -58,9 +58,17 @@ missing expected families, unexpected operations and implementation-name drift r
 This permits coexisting versions without changing or retiring an existing consumer contract.
 It does not compile that consumer's source bindings or establish provider availability.
 
+Complete consumer execution first requires one exact id/version declaration and set equality
+between its accepted projections and the projections of its bindings. Missing bindings, extra
+projections and duplicate accepted refs refuse before path work; a predecessor cannot satisfy a
+successor. Multiple declared adapters may still serve one accepted projection, and all are
+compiled. Deleting failed bindings cannot turn an incomplete consumer into a complete one.
+
 The opt-in `make provider-execution-census` research instrument diagnoses every current
 projection, isolated binding and complete exact-version consumer without constructing a
-partial executable manifest. `make provider-execution-census-update` refreshes the living inventory
+partial executable manifest. Isolated diagnostics explicitly declare only the one projection
+they inspect; that narrowed declaration is never used for the complete-consumer result.
+`make provider-execution-census-update` refreshes the living inventory
 in `planning/provider-exchange-and-execution/execution-frontier.json`; the ordinary report
 is read-only. Refused rows and literal source ancestry remain visible. Compilation is not
 runtime adoption or exact-subject availability, and this instrument is not a release gate.

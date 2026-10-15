@@ -1875,8 +1875,24 @@ into position readings. Root/no-witness, broken boundary, provider absence and f
 stay distinct.
 Compile the complete registered consumer before any lazy catalogue/provider read. Disabled,
 withheld, foreign, invalid-scope and stale requests perform zero source work.
+Complete means set equality between the exact consumer declaration's accepted projections and
+its binding projections before execution-path compilation (accepted provider contract; D3844).
+Deleting refused bindings or passing an isolated diagnostic declaration cannot satisfy this
+operation's full image. That guard repairs the existing compiler, not D3841's still-missing
+successor declaration, adapter/presentation image or retained-source contract.
 
-**Source execution:** retain all 75 refs and their exact requirements. Local and edge factories
+**Source execution:** retain all 75 existing source obligations and their exact requirements;
+the predecessor's exact refs/meanings remain supported unchanged. The independent D3841 return
+finds that registering those same75 refs to a new consumer cannot make its execution complete:
+nine legacy provider leaves carry narrow packet/page payloads, not the strict executor's whole
+provider-delivery type, and three derived bindings inherit them. The successor must name an
+explicit obligation-preserving rebase onto independently accepted modern source/derived refs,
+with all old contracts intact; neither in-place payload rewriting nor operation aliases suffice.
+That exact map, versioned registry/admission/callable/presentation closure, binding absence policies
+versus lazy demand, and source-order rather than old reducer delivery **remain unfilled authoring
+requirements**. Six detail refs do not establish a total of81 executable bindings. No held-binding
+compiler exception or source retirement is authorized. See the dated D3841 independent follow-up.
+Local and edge factories
 receive the authoritative FEN/edge; recorded successors use `recordedSemanticPath`, not v1
 payload relabelling. Saved engine/tablebase values resolve exact retained occurrences. Other
 providers, authored inputs, comparisons and derived dependencies must name their actual typed

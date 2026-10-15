@@ -30,7 +30,11 @@ export function auditExecutionFrontier(manifest: CompiledEvidenceManifest) {
     adapter: key(binding.adapter), consumer: key(binding.consumer), projection: key(binding.projection),
     latency: binding.latency, sourceAbsence: binding.sourceAbsence ?? null,
     isolatedDiagnostic: attempt(() => {
-      const result = compileEvidenceConsumerExecution({ ...manifest, bindings: [binding] }, binding.consumer);
+      // A single-binding diagnostic declares exactly its one projection, not the original
+      // complete consumer with most bindings deleted. Only completeContract below uses that.
+      const consumers = manifest.consumers.map(row => key(row) === key(binding.consumer)
+        ? { ...row, accepts: [binding.projection] } : row);
+      const result = compileEvidenceConsumerExecution({ ...manifest, consumers, bindings: [binding] }, binding.consumer);
       return { adapter: key(binding.adapter), admittedPathIds: result.bindings[0]!.paths.map(path => path.pathId) };
     }),
   }));

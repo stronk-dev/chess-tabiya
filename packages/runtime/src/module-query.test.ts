@@ -365,19 +365,22 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     }
   });
 
-  it.each(["missing_policy", "impossible_latency", "extra_raw_binding"] as const)("Theory rejects %s before even local source access", fault => {
+  it.each(["missing_policy", "impossible_latency", "extra_raw_binding", "missing_binding"] as const)("Theory rejects %s before even local source access", fault => {
     const run = packRun(ITALIAN, ["e1g1"]);
     const compile = execution.compileEvidenceConsumerExecution;
     vi.spyOn(execution, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
       if (consumer.id !== "module.theory_breadcrumb") return compile(manifest, consumer);
       const first = manifest.bindings.find(row => row.consumer.id === consumer.id && row.consumer.version === consumer.version)!;
+      if (fault === "missing_binding") return compile({ ...manifest, bindings: manifest.bindings.filter(row => row !== first) }, consumer);
       const { sourceAbsence: _originalPolicy, ...base } = first;
       const extra = { ...base, adapter: { id: "adapter.fixture.theory_execution", version: 1 }, producer: { id: "live.stockfish", version: 1 },
         projection: { id: fault === "extra_raw_binding" ? "live.stockfish.uci_response" : "live.stockfish.position_eval", version: 1 },
         latency: { mode: fault === "impossible_latency" ? "sync" as const : "interactive" as const, maxMs: 1000 },
         ...(fault === "missing_policy" ? {} : { sourceAbsence: { necessity: "required" as const, whenNoPath: "operation_unavailable" as const } }),
       };
-      return compile({ ...manifest, bindings: [...manifest.bindings, extra] }, consumer);
+      const consumers = manifest.consumers.map(row => row.id === consumer.id && row.version === consumer.version
+        ? { ...row, accepts: [...row.accepts, extra.projection] } : row);
+      return compile({ ...manifest, consumers, bindings: [...manifest.bindings, extra] }, consumer);
     });
     const sources = {
       get shapes(): never { throw new Error("shape acquisition before preflight"); },
@@ -386,7 +389,8 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     };
     expect(() => queryModules({ run, assistance: finalized("onramp", "guided", "theory_breadcrumb"), role: "learner", session: "onramp",
       request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb"] }, sources,
-    })).toThrow(fault === "extra_raw_binding" ? "EXECUTION_SOURCE_UNREGISTERED" : fault === "impossible_latency" ? "BINDING_EXECUTION_LATENCY" : "BINDING_SOURCE_ABSENCE");
+    })).toThrow({ missing_binding: "BINDING_EXECUTION_UNDECLARED", extra_raw_binding: "EXECUTION_SOURCE_UNREGISTERED",
+      impossible_latency: "BINDING_EXECUTION_LATENCY", missing_policy: "BINDING_SOURCE_ABSENCE" }[fault]);
   });
 
   it.each(["postcommit_nudge", "compare_coach", "full_inspector"] as const)("%s reads recorded/local facts without catalogue or Explorer dependencies", module => {

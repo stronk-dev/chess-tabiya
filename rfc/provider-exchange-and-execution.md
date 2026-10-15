@@ -2162,6 +2162,13 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-10-15: D3844 repairs the accepted complete-consumer execution boundary: the exact
+  declaration's accepted projections must be set-equal to bound projections before path work.
+  Missing/extra projections and duplicate declarations refuse; multiple legitimate adapters
+  for a projection remain. Isolated research explicitly narrows its own diagnostic declaration,
+  never the production consumer. Current source contracts, policies and legacy refusals remain;
+  this does not implement D3792 or complete provider migration/availability.
+
 - 2026-10-05: D3405 repairs the global compatibility summary's exact consumer-version join.
   The source-absence algebra and all current policies remain unchanged; the compatibility
   result is not authenticated exact-subject availability. No new resource claim or RFC completion.

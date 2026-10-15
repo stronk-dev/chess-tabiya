@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Complete-consumer acceptance coverage, 2026-10-15 ([[D3844]]): an actual valid semantic manifest
+and a filtered Inspector image expose missing accepted/bound set equality. Four predecessor
+failures become75 focused compiler passes;183 runtime/authenticated application cases and nine
+census controls retain exact failures, zero acquisition and unchanged complete census counts.
+This repairs the accepted compiler, not D3841's successor or scoped Inspector delivery. `[V]`
+`module-evidence-assembly.md` §Complete-consumer acceptance coverage and existing normal Make targets.
+
 Held-source outcome identity, 2026-10-15 ([[D3843]]): a predecessor type negative proves
 dependency loss; the corrected inline draft retains the actual opening source owner through
 JSON and the existing disclosure.18 bounded absence/binding controls and unchanged96/491

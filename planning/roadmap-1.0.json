@@ -1078,10 +1078,18 @@
         "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
         "latestCheckpoint": {
           "at": "2026-10-15",
-          "summary": "Independent re-review clears only D3842 original comparison graph/FEN refusal and D3843 exact held-dependency wire/disclosure author corrections. Existing scoped targets pass316/470 comparison controls,18 absence/receipt controls,96/491 request grammar,318 dependent-source controls/218 requests and37 source-contract cases; eight existing execution-census controls also pass. D3841 complete successor execution/legacy holds and known supplier authoring still return D3792: all75 source obligations remain, and current complete Inspector compilation refuses rather than becoming ordinary absence. Independent acceptance, typed constructors, current access and real API/client/native delivery remain. Production is unchanged from13781fb7's full normal local proof (5875 software,seven performance,257 content,397 browser passes/one configured optional Maia skip,112 unretried composition cells), not freshly rerun by this draft-only correction. No source retirement, default, qualification, content or whole-capability/release promotion.",
-          "impact": "held",
+          "summary": "D3844 closes accepted complete-consumer preflight coverage: exact accepted/bound projection sets agree before path work while legal multiple adapters and all original source refusals remain. Four predecessor failures become75 compiler cases,183 runtime/application cases, clean types and nine unchanged-census controls. Normal local software5888/392 files, seven performance/four files, governance,257 content/26 files, build and397 browser passes complete with one configured optional Maia skip and112 unretried composition cells. Stale generated receipts and duplicate roadmap-reference failures remain logged; refreshing implementation references changes no cases/verdicts/qualification. D3842/D3843 bounded author corrections stay independently cleared; D3841 modern-source successor mapping/versioned closure/absence-demand/source-order delivery and known suppliers still return D3792. No Inspector API, source retirement, default, qualification, content or whole-capability/release promotion.",
+          "impact": "advanced",
           "evidence": [
             "packages/runtime/src/evidence-contract.ts",
+            "packages/runtime/src/evidence-binding-execution.ts",
+            "packages/runtime/src/evidence-binding-execution.test.ts",
+            "packages/runtime/src/module-query.test.ts",
+            "apps/server/src/local-module-execution.test.ts",
+            "tools/d3403-execution-frontier/audit.ts",
+            "tools/d3403-execution-frontier/audit.test.mjs",
+            "docs/provider-exchange.md",
+            "rfc/provider-exchange-and-execution.md",
             "design/research/recorded-semantic-path-cost.md",
             "design/research/module-evidence-assembly.md",
             "tools/d3792-inspector-demand/build.mjs",
@@ -1308,6 +1316,11 @@
               "kind": "rfc",
               "id": "evidence-value-authority.md",
               "digest": "sha256:f51628c5253ae64046e6035ac84a6dea771bae131cb933298c016c094a9f1301"
+            },
+            {
+              "kind": "rfc",
+              "id": "provider-exchange-and-execution.md",
+              "digest": "sha256:ce70fd1e1862180bf025f5e58cbb4d5ced94d71a3a14dfcfa3e3097280f1b50d"
             },
             {
               "kind": "work_state",

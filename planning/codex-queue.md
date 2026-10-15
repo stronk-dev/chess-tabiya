@@ -1,5 +1,22 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — [[D3844]] is complete locally; do not recommission it. Accepted complete-consumer
+preflight now requires exact accepted/bound projection coverage before path work. Permanent
+missing/extra/duplicate/version controls retain legitimate multiple adapters, real semantic-manifest
+construction and original source refusals. All normal local tiers pass5888 software/seven performance/
+257 content/build/397 browser cases, one configured optional Maia skip and112 unretried composition
+cells. Isolated research declares its single diagnostic projection explicitly; saved complete census
+counts remain unchanged. This does not accept D3792, fix its upstream sources or qualify a release.
+
+D3841's independent follow-up refutes the literal unchanged75+6 image: strict execution needs
+whole provider deliveries, while nine legacy leaves are narrow and three derived bindings depend
+on them. Next author the explicit obligation-preserving modern-source rebase with upstream
+acceptance, exact-version registry/admission/callable/presentation closure sharing one policy,
+literal absence policies distinct from lazy demand, and source-order paging instead of old
+reducers. Preserve every obligation and @1 meaning; do not introduce held compiler exemptions,
+fabricated absent rows for undemanded topics, a twelfth module or source retirement. The existing
+dated review owns the exact findings; D3841 remains open and D3792 unaccepted.
+
 2026-10-15 — Marco authorizes independent Inspector review; it returns D3792 on
 [[D3841]], [[D3842]] and [[D3843]]. D3842 original-path FEN refusal and D3843 held-dependency
 wire identity now have bounded author corrections independently cleared, not production delivery.

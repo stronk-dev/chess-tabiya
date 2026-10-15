@@ -31983,11 +31983,12 @@
     },
     {
       "id": "D3841",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:234fcb11f5213976479935fd72e317284e8c03a2cc8be8bb5d87b8cadfcc627c",
+      "sourceDigest": "sha256:88a3b61ae99fa65cdbb803b992f6ae10f411202698633c193fcd589fc81e2d48",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
     },
     {
       "id": "D3842",
@@ -32005,6 +32006,15 @@
       "sourceDigest": "sha256:bc5ee02f43ae67af1a99c83c1f0a1ccbe6c2d6981678004d6e077dcd49220c1c",
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/draft-wire.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3844",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a71272c851dfb3ffb1bdeb2689bf9bdf9ebb5389b73e216d1f6df3cf7e98d5de",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-binding-execution.test.ts",
       "evidenceKind": "path"
     }
   ]

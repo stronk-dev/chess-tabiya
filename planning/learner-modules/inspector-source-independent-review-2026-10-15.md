@@ -134,3 +134,36 @@ unregistered provider declarations. `module.full_inspector@1` retains all75 bind
 refuses at `live.stockfish.eval@1`; `module.full_inspector@2` is not declared. These are compile
 diagnostics, not source availability or runtime adoption. D3841 remains open: neither source
 removal nor converting this refusal to `source_version_held` is authorized by the wire repair.
+
+## D3841 follow-up review — successor constraints, 2026-10-15
+
+The authorized reviewer inspects the same amendment read-only while main verifies the accepted
+D3844 completeness correction. No tests, report regeneration, edits or acceptance occur. Main
+rechecks the cited compiler, catalogue, registry, admission, reducer and aggregation symbols.
+The proposal “unchanged75 exact refs plus six detail refs” is **not a buildable full image**.
+
+1. Strict provider execution requires an exact registered operation and whole delivery payload
+   (`evidence-execution.ts`, `providerOperation`). Nine old Inspector provider leaves carry
+   narrow packet/page payloads (`evidence-catalog.ts`, live Stockfish/Syzygy and human Maia/
+   Explorer producers); three derived bindings inherit that incompatibility. Registering an
+   operation alias cannot fix the payload. Migration-first needs an explicit obligation-preserving
+   successor rebase, including affected derived projections, with independent upstream acceptance.
+   Keep @1 meanings/consumers intact. No in-place payload rewrite or held-binding exception.
+   The source-ref union/retention wording must reflect that mapping;81 is not an established count.
+2. Registry closure, module binding/operation invariants, `compileModulePacket`,
+   `admitModuleFacts` and presentation classification currently assume @1. The amendment must
+   define exact-version successor closure/admission/callable/presentation/pair tracking sharing
+   one current module policy, not add a twelfth module, weaken checks or route @2 through @1.
+3. Complete static compilation acquires nothing. The existing total source-availability
+   aggregator requires a result for every binding and cannot accept fabricated absence for
+   undemanded topics. Declare exact binding policies separately from lazy requested-source
+   resolution. Other topics remain not_requested; an optional source does not make its own
+   literal derivation operands optional or allow unrelated required sources to suppress it.
+4. Reuse current roles, sessions, answer ceilings and limits, not the whole old reducer pipeline.
+   `orderAdmittedFacts` applies criticality/exactness/lift ordering; D3792 requires complete
+   source order, explicit deferred members and whole-component budget fitting. Admission must
+   name the exact version without losing the collection to the old packet backstop first.
+
+These constraints guide the remaining author pass; they do not supply the missing successor map,
+supplier contract or actual API/native implementation. D3841 remains open and D3792 unaccepted.
+D3844's guard closes neither. No source retirement, policy/default change or new module follows.

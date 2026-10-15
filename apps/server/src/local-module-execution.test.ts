@@ -17,7 +17,7 @@ import { installEmptyApplicationCatalogues } from "./empty-application-catalogue
 const FEN = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
 const modules = ["sight_on_request", "threat_radar", "blunder_prevention", "structure_nudge", "theory_breadcrumb"] as const;
 type LocalModule = typeof modules[number];
-const faults = ["missing_policy", "impossible_latency", "extra_raw_binding"] as const;
+const faults = ["missing_policy", "impossible_latency", "extra_raw_binding", "missing_binding"] as const;
 type Fault = typeof faults[number];
 const originalCompile = execution.compileEvidenceConsumerExecution;
 const originalRoute = routes.invokeEvidenceValueRoute;
@@ -106,6 +106,7 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
     boundary("graph body read");
     const nodeId = graph.graph.activeCursor.nodeId;
     const trace: string[] = [];
+    const contractFailures: string[] = [];
     const originalShapes = ShapeRegistry.prototype.list;
     const prepare = vi.spyOn(ShapeRegistry.prototype, "list").mockImplementation(function (this: ShapeRegistry) {
       trace.push("prepare");
@@ -116,6 +117,14 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
       if (consumer.id !== `module.${module}` || fault === undefined) return originalCompile(manifest, consumer);
       const first = manifest.bindings.find(row => row.consumer.id === consumer.id && row.consumer.version === consumer.version)!;
       expect(first).toBeDefined();
+      const check = (image: typeof manifest) => {
+        try { return originalCompile(image, consumer); }
+        catch (error) {
+          contractFailures.push(error instanceof Error && "code" in error ? String(error.code) : "unexpected_failure");
+          throw error;
+        }
+      };
+      if (fault === "missing_binding") return check({ ...manifest, bindings: manifest.bindings.filter(row => row !== first) });
       const { sourceAbsence: _originalPolicy, ...base } = first;
       // Add a genuine provider requirement to the complete consumer. The real compiler,
       // not a stubbed rejection, must detect its missing policy/latency/source contract.
@@ -124,7 +133,11 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
         latency: { mode: fault === "impossible_latency" ? "sync" as const : "interactive" as const, maxMs: 1000 },
         ...(fault === "missing_policy" ? {} : { sourceAbsence: { necessity: "required" as const, whenNoPath: "operation_unavailable" as const } }),
       };
-      return originalCompile({ ...manifest, bindings: [...manifest.bindings, extra] }, consumer);
+      // The provider-fault controls declare the extra accepted projection, so they still reach
+      // their original policy/latency/source boundary rather than D3844's coverage rejection.
+      const consumers = manifest.consumers.map(row => row.id === consumer.id && row.version === consumer.version
+        ? { ...row, accepts: [...row.accepts, extra.projection] } : row);
+      return check({ ...manifest, consumers, bindings: [...manifest.bindings, extra] });
     });
     const collect = vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation((...args) => {
       trace.push(`collect:${args[0]}`);
@@ -138,7 +151,7 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
       assistance: runtime.compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset, overrides: {}, moduleOverrides: { include: [], exclude: isolate ? runtime.MODULE_IDS.filter((id): id is Exclude<runtime.ModuleId, "rules_floor"> => id !== module && id !== "rules_floor") : [] } } }),
       query: overrideQuery,
     });
-    return { application, close, ask, query, trace, compile, collect, prepare, fault(value?: Fault) { fault = value; } };
+    return { application, close, ask, query, trace, contractFailures, compile, collect, prepare, fault(value?: Fault) { fault = value; } };
   } catch (error) { vi.restoreAllMocks(); await close(); throw error; }
 }
 
@@ -165,6 +178,10 @@ describe("authenticated complete local Support execution", () => {
         expect(response.status).toBe(503);
         expect(body).toEqual({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Module execution contract is unavailable" } });
         expect(app.trace).toEqual([`compile:module.${module}@1`]);
+        expect(app.contractFailures).toEqual([{
+          missing_policy: "BINDING_SOURCE_ABSENCE", impossible_latency: "BINDING_EXECUTION_LATENCY",
+          extra_raw_binding: "EXECUTION_SOURCE_UNREGISTERED", missing_binding: "BINDING_EXECUTION_UNDECLARED",
+        }[fault]]);
         expect(app.collect).not.toHaveBeenCalled();
         expect(app.prepare).not.toHaveBeenCalled();
       } finally { vi.restoreAllMocks(); await app.close(); }

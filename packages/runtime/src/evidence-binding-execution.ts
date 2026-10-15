@@ -28,11 +28,20 @@ export interface CompiledEvidenceConsumerExecution {
   readonly bindings: readonly CompiledEvidenceBindingExecution[];
 }
 
-/** Every binding compiles; a raw/unregistered provider leaf cannot be skipped. */
+/** Every accepted projection is bound and every binding compiles; no filtered consumer image. */
 export function compileEvidenceConsumerExecution(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId): CompiledEvidenceConsumerExecution {
-  if (!manifest.consumers.some(row => key(row) === key(consumer))) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", key(consumer));
+  const declarations = manifest.consumers.filter(row => key(row) === key(consumer));
+  if (declarations.length !== 1) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", key(consumer));
   const bindings = manifest.bindings.filter(row => key(row.consumer) === key(consumer));
   if (bindings.length === 0) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", `${key(consumer)} has no admitted bindings`);
+  const accepts = declarations[0]!.accepts.map(key);
+  const accepted = new Set(accepts);
+  const bound = new Set(bindings.map(row => key(row.projection)));
+  // Multiple declared adapters may serve one projection (for example distinct forms), but
+  // a missing accepted projection or an undeclared extra is never a complete consumer.
+  if (accepted.size !== accepts.length || accepted.size !== bound.size || [...bound].some(ref => !accepted.has(ref))) {
+    throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", `${key(consumer)} bindings are not set-equal to its accepted projections`);
+  }
   const ids = bindings.map(row => key(row.adapter));
   if (new Set(ids).size !== ids.length) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", "duplicate adapter identity");
   const compiled = bindings.map(binding => {
