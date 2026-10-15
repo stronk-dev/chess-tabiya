@@ -29620,3 +29620,51 @@ Campaign was the one capability with no API, route or content. Now:
   qualified. Inspect/stage only the explicit checkpoint files, retain normal hooks, and report
   the fourteen still-incomplete journeys and remaining integration/content/calibration/release work.
   The full 1.0 goal is neither achieved nor paused by this checkpoint.
+
+## 2026-10-15 — D3837 comparison's missing-attempt recovery
+
+- Previous turn makes progress at34895777: bounded source contracts and the requested full
+  inventory are committed. Revalidate the clean tracked tree; retain three pre-existing untracked
+  entries. No live process or independently accepted amendment appeared meanwhile.
+- Inspect the existing accepted Support/Compare chrome before implementation. Most honest-empty
+  packets already have both loop actions under D3789/D3790; do not reimplement those. The actual
+  no_second_attempt suppression is different: no packet exists and its door only describes the
+  next step. Register D3837 before repairing this real entry-to-comparison workflow.
+- Three new regressions fail on the predecessor's missing actions, with283 retained passes.
+  Existing exact rewind/focus navigation now serves only the admitted missing-attempt door;
+  no empty evidence receipt or fact badge is manufactured. Root, both colors, current write
+  access, stale decision, pending navigation, failure and exact retry retain their boundaries.
+- The complete client gate passes289 cases. Its first extended type check correctly refuses
+  my use of Promise.withResolvers under the existing web target; reuse the established deferred
+  helper instead of changing the target. Four initial native controls reach successful alternate
+  play, then my whole-array preservation assertion wrongly rejects the two new nodes. Require
+  exactly two additions and compare the complete original prefix with the unchanged helper.
+  The repaired normal focused browser gate passes all nine cases, including both colors under
+  desktop and actual mobile projects, refusal/retry, branch preservation, reload and real Compare.
+- Inspect actual desktop/phone screenshots. Record D3838 before any presentation change: the
+  duplicate full heading and initially below-fold phone recovery need their own bounded reveal
+  repair. Do not relabel DOM visibility as physical discoverability or call D3837 all-UX closure.
+  Freeze production/tests/canonical docs and run the full normal gates before committing.
+- Full normal serial `make roadmap-receipt verify-awake build test-browser-ci-awake` exits zero:
+  workspace types have0 errors/warnings,5870 software/392 files,seven unchanged-budget
+  performance/four files,257 content/26 files,all downstream governance/contracts/build,
+  332 smoke cases plus the one configured optional Maia latency skip,five content-browser,
+  59 matrix and one packaged-production case. All112 composition cells pass without retries.
+  Actual warm p95 is196.1 ms under the unchanged250 ms limit. The long software wait is verified
+  against its live session and rotating worker processes; do not restart from a quiet log.
+- Production/tests/canonical docs stay unchanged throughout that successful sequence. Final
+  inspection then strengthens the unit no-presentation assertion from an unused DOM attribute
+  to the actual data-presented marker; the native controls already assert absence in the real
+  module response. Run the focused client/type gates again with production/docs/browser cases
+  unchanged; this is a test correction, not another full-software/browser execution claim.
+- Close D3837 with its actual native path and refresh the existing roadmap/state:3587 total,
+  1693 done,161 refused,1733 live assigned,zero untriaged;282 completed/263 live/24 retired UX
+  items remain. D3838 is separately queued under assistance-and-presentation. No invented
+  comparison source, new assistance/preset/schema/wire, source qualification, official content,
+  whole capability, current-HEAD remote CI or release promotion. Goal remains active.
+- Final normal `make roadmap-receipt module-question-check typecheck docs-check` exits zero:
+  all289 focused client cases, clean workspace types and61 indexed canonical documents. The
+  strengthened marker assertion passes. Read the actual final matrix report:59 expected,
+  zero skipped/unexpected/flaky,zero retried results and no report errors; the earlier smoke
+  optional skip remains separately scoped. Inspect the explicit owned staged list and retain
+  normal hooks. No new product wave, push, publication or deployment is included in this closeout.

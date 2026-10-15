@@ -41,7 +41,7 @@
   import type { GuidedHintClient } from "./api.js";
   import type { HintDeliveryMarks } from "@chess-tabiya/runtime/client";
   import { HINT_DISTANCES, moduleComparisonForSubject, moduleDecisionStamp } from "@chess-tabiya/runtime/client";
-  import type { ModuleSeatAction, ModuleSeatActions } from "./module-seats.js";
+  import type { MissingAttemptRecovery, ModuleSeatAction, ModuleSeatActions } from "./module-seats.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
   import type { CheckpointNotice } from "./screen-model.js";
   import {
@@ -1179,6 +1179,22 @@
     };
   });
   const emptyRewindUnavailable = $derived(emptyRewindAction === undefined ? "There is no earlier played decision to rewind to." : undefined);
+  const missingAttemptRecovery: MissingAttemptRecovery | undefined = $derived.by(() => {
+    // compare_coach's only blocked door is set by the admitted no_second_attempt suppression.
+    // Never mint an empty packet to turn a missing prerequisite into evidence absence.
+    const reason = seatDoorReasons.compare_coach;
+    if (reason === undefined || seatPackets.has("compare_coach") || seatPending.has("compare_coach") || seatFailed.has("compare_coach")) return undefined;
+    const authority = seatAuthority, rewind = emptyRewindAction;
+    const current = () => seatAlive && seatAuthority === authority && seatDoorReasons.compare_coach === reason
+      && !seatPackets.has("compare_coach") && !seatPending.has("compare_coach") && !seatFailed.has("compare_coach")
+      && seats.some(seat => seat.module === "compare_coach");
+    return {
+      rewind: rewind === undefined ? undefined : { ...rewind, onInvoke: () => { if (current()) rewind.onInvoke(); } },
+      rewindUnavailable: emptyRewindUnavailable,
+      keepPlayingBlocked,
+      onKeepPlaying: () => { if (current() && keepPlayingBlocked === undefined) void focusBoardFromSupport(); },
+    };
+  });
   const emptyRewindActions = $derived.by(() => {
     const action = emptyRewindAction;
     if (action === undefined) return {};
@@ -2713,6 +2729,7 @@
                 actions={seatActions}
                 {emptyRewindActions}
                 {emptyRewindUnavailable}
+                {missingAttemptRecovery}
                 onKeepPlaying={keepPlayingFromSeat}
                 {keepPlayingBlocked}
                 onToggle={toggleSeat}

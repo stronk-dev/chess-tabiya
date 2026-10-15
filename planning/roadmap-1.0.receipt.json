@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1e5586761e5647638dd57e1c29422af691365423abb9db750c62f3fa3ce1d7e9",
+    "roadmap": "sha256:3abdaa80fd1e7e6b26dda523321b255afb798604e7be11a71047168ce0d9c994",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:05193db8f8601c604413852e8c68ef9c35f281d56c43cb7cb5b42380868d62af",
+    "workState": "sha256:ee271b11280c64471396add77b1e55d8655ba667da92b07be5c8e5a2da310433",
     "rfcRegister": "sha256:deed655632924fa30ec63c61eedcf6d73b064ecc95a8da4a020ce6484b45832e",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
+      "todo": 630,
       "doing": 17,
       "blocked": 1086,
-      "done": 1692,
+      "done": 1693,
       "refused": 161
     },
     "workItems": {
@@ -824,8 +824,8 @@
       ],
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
-        "at": "2026-10-14",
-        "summary": "D3812 defers existing Settings and Studio tools through the accepted delivery boundary, retaining all evidence/value/semantic validation, original section styling, parent-held unsaved JSON and callbacks. Actual initial static JavaScript falls 2,059,959 to 1,966,179 bytes; total JavaScript slightly increases and the 1,375,335-byte runtime chunk remains. All 145 focused shell/theme cases and types pass. Eight native desktop/phone controls prove private assets absent from the catalogue, Settings failure/reload with unchanged preferences and only the existing deletion-preview read, and held editor arrival preserving current text/focus. The strengthened editor test waits for actual read-only lint and compares the entire unchanged saved draft. Full frozen normal verification/build/all four browser tiers pass 5,632 software, seven performance, 257 content, 59 matrix, packaged production and all 150 input/112 unretried composition cells, with one existing optional Maia skip and zero retries. Warm p95 108.4 ms retains 250 ms. No production change occurs before the strengthened eight-case rerun. Earlier Campaign finish/restriction/tool/help recovery and board/preset checkpoints stand. D3722 actual device/deployment cost, source execution/qualification, useful Sight/Nudge/Inspector/Review, all-context/owner-use, official content and remote release obligations remain. No whole capability/milestone or release promotion; no push.",
+        "at": "2026-10-15",
+        "summary": "D3837 closes the actual missing-attempt navigation slice: the admitted no_second_attempt door offers Keep playing and guarded exact-decision rewind, never an invented empty packet or fact count. Three predecessor failures become 289 focused client passes; four real both-color desktop/mobile flows cover pre-mutation refusal, exact retry, preserved alternate play, reload and actual other-attempt entry. Root/read-only/stale/pending boundaries and existing Campaign cost remain. Full normal serial verification/build/all browser tiers pass 5870 software/seven unchanged-budget performance/257 content/332 smoke/five content-browser/59 matrix/one packaged production, with one configured optional Maia skip and all 112 unretried composition cells. Screenshot-observed repeated heading and phone action discoverability stay open as D3838; wider INR-a7, source execution/qualification, useful Sight/Nudge/Inspector/Review, all-context/owner use, official content and remote/release proof remain. No source/preset/schema/wire/whole capability or milestone promotion; no push.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/RehearsalAction.svelte",

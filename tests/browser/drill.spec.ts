@@ -4993,6 +4993,81 @@ test(`D3789 empty Support rewinds with explicit failure recovery and preserves b
   }
 });
 
+for (const side of ["white", "black"] as const) {
+test(`D3837 missing comparison becomes a preserved second attempt (${side}, ${viewport.width}px)${viewport.width === 390 ? " @mobile" : ""}`, async ({ page }, testInfo) => {
+  await page.setViewportSize(viewport);
+  const fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${side === "white" ? "w" : "b"} KQkq - 0 1`;
+  await startSupportFromFen(page, fen, side);
+  await choosePreset(page, /^Guide me/u);
+  const first = side === "white" ? ["e2", "e4"] as const : ["e7", "e5"] as const;
+  const alternate = side === "white" ? ["d2", "d4"] as const : ["d7", "d5"] as const;
+  await move(page, ...first, side);
+  const runId = page.url().split("/").at(-1)!;
+  const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+  await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(1);
+  const openCompare = async () => {
+    await showSupportTools(page);
+    const reveal = page.getByRole("button", { name: "Show support for this position", exact: true });
+    if (await reveal.isVisible()) await reveal.click();
+    const seat = page.locator('[data-module="compare_coach"]');
+    await seat.locator(".seat-row").click();
+    const pending = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().postDataJSON()?.query?.requested?.includes("compare_coach"));
+    await seat.getByRole("button", { name: "Show", exact: true }).click();
+    const pageResult = ((await (await pending).json()) as { page: ModuleQueryPage }).page;
+    return { seat, pageResult };
+  };
+  const { seat, pageResult } = await openCompare();
+  expect(pageResult.suppressions).toContainEqual({ module: "compare_coach", reason: "no_second_attempt" });
+  expect(pageResult.packets.some(packet => packet.module === "compare_coach")).toBe(false);
+  await expect(seat).toContainText("Needs a second attempt");
+  await expect(seat.locator(".seat-badge")).toHaveCount(0);
+  await expect(seat.getByRole("button", { name: "Keep playing", exact: true })).toBeVisible();
+  const recovery = seat.getByRole("button", { name: "Rewind to a decision", exact: true });
+  await expect(recovery).toBeVisible();
+  await testInfo.attach("missing-attempt-recovery", { body: await page.screenshot({ path: testInfo.outputPath("missing-attempt-recovery.png") }), contentType: "image/png" });
+  const before = await graph(), root = before.nodes.find(node => node.parentId === null)!;
+  const board = await page.getByLabel("Chessboard", { exact: true }).boundingBox();
+  let refusedBody: unknown;
+  await page.route(`**/runs/${runId}/rewind`, async route => {
+    refusedBody = route.request().postDataJSON();
+    await route.fulfill({ status: 503, json: { error: { code: "UNAVAILABLE", message: "Injected before mutation" } } });
+  });
+  try {
+    await recovery.click();
+    await expect(seat.getByRole("alert")).toContainText("try again");
+    expect(refusedBody).toEqual({ nodeId: root.id, branchId: before.activeCursor.branchId });
+    expect(await graph()).toEqual(before);
+  } finally { await page.unroute(`**/runs/${runId}/rewind`); }
+  const accepted = page.waitForResponse(res => res.url().endsWith(`/runs/${runId}/rewind`) && res.request().method() === "POST");
+  await recovery.click();
+  const response = await accepted;
+  expect(response.ok()).toBe(true); expect(response.request().postDataJSON()).toEqual(refusedBody);
+  await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+  expect((await graph()).activeCursor).toEqual({ nodeId: root.id, branchId: before.activeCursor.branchId });
+  expect(await page.getByLabel("Chessboard", { exact: true }).boundingBox()).toEqual(board);
+  await move(page, ...alternate, side);
+  await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(2);
+  const branched = await graph();
+  expect(branched.branches).toHaveLength(2);
+  expect(branched.activeCursor.branchId).not.toBe(before.activeCursor.branchId);
+  expect(branched.nodes).toHaveLength(before.nodes.length + 2);
+  assertRecordedNodesPreserved(before.nodes, branched.nodes.slice(0, before.nodes.length));
+  await page.reload();
+  await expect(page.getByLabel("Chessboard", { exact: true })).toBeVisible();
+  const complete = await openCompare();
+  expect(complete.pageResult.suppressions.some(row => row.module === "compare_coach")).toBe(false);
+  expect(complete.pageResult.packets.find(packet => packet.module === "compare_coach")!.receipt.items.length).toBeGreaterThan(0);
+  await expect(complete.seat.locator("[data-presented]").first()).toBeVisible();
+  await expect(complete.seat.locator("[data-missing-attempt-recovery]")).toHaveCount(0);
+  await complete.seat.getByRole("button", { name: "Enter other attempt", exact: true }).click();
+  await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+  expect((await graph()).activeCursor).toEqual({ nodeId: root.id, branchId: before.activeCursor.branchId });
+  assertRecordedNodesPreserved(branched.nodes, (await graph()).nodes);
+  expect((await graph()).branches).toEqual(branched.branches);
+  await assertRunViewport(page, viewport);
+});
+}
+
 test(`Empty Support returns to playable board without changing the recorded game (${viewport.width}px)`, async ({ page }) => {
   await page.setViewportSize(viewport);
   await startSupportFromFen(page, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "white");

@@ -96,6 +96,11 @@ autoplay. Both preserve all recorded continuations and return focus to board inp
 phone, returning to play first closes the companion and releases its modal inertness;
 Keep playing uses the same handoff. Busy/read-only actions explain their disabled state,
 failed navigation offers an exact retry, and old run/decision deliveries cannot navigate.
+When Compare reports that no second attempt exists, its door offers Keep playing and the same
+guarded Rewind to a decision action. It creates no empty evidence packet or comparison badge.
+At the root it explains the missing rewind destination instead of borrowing a future move;
+read-only/busy/stale navigation remains refused. Playing a different continuation after the
+rewind preserves the first attempt and enables the ordinary recorded-comparison door.
 The fixed-height header reserves intrinsic width for its controls and bounds the visual
 status text within its own wrapping column, retaining the full live announcement. On phones the secondary
 bot rematch action is in Support tools rather than wrapping into the board.

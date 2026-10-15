@@ -1952,7 +1952,94 @@ describe("Layer 3 screens", () => {
       await unmount(screen.component);
     });
 
-    it("does not create an action before a second attempt and removes a displayed action when write access is lost", async () => {
+    it.each(["white", "black"] as const)("D3837 offers an actual missing-attempt recovery for %s without inventing a comparison packet", async side => {
+      const original = actionRun(side), screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = document.querySelector('[data-module="compare_coach"]')!;
+      seat.querySelector<HTMLButtonElement>(".seat-row")!.click();
+      await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
+      await vi.waitFor(() => expect(seat.textContent).toContain("Needs a second attempt"));
+      const recovery = action("compare_coach");
+      expect(recovery).not.toBeNull();
+      expect(recovery!.textContent).toBe("Rewind to a decision");
+      expect(seat.querySelectorAll("[data-presented]")).toHaveLength(0);
+      recovery!.click();
+      await vi.waitFor(() => expect(screen.onRewind).toHaveBeenCalledTimes(1));
+      expect(screen.onRewind).toHaveBeenCalledWith({ nodeId: original.nodes[0]!.id, branchId: original.activeCursor.branchId });
+      expect(screen.snapshots.get("current")!.run.nodes).toEqual(original.nodes);
+      await unmount(screen.component);
+    });
+
+    it("D3837 keeps playing from a missing-attempt door without writing or querying again", async () => {
+      const original = actionRun(), screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = document.querySelector('[data-module="compare_coach"]')!;
+      seat.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
+      await vi.waitFor(() => expect(seat.textContent).toContain("Needs a second attempt"));
+      const queries = screen.onModuleQuery.mock.calls.length;
+      const keep = seat.querySelector<HTMLButtonElement>("[data-keep-playing]");
+      expect(keep).not.toBeNull(); keep!.click(); await tick();
+      expect(document.activeElement).toBe(document.querySelector("[data-board-input-grid]"));
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      expect(screen.onModuleQuery).toHaveBeenCalledTimes(queries);
+      expect(screen.snapshots.get("current")!.run).toBe(original);
+      await unmount(screen.component);
+    });
+
+    it("D3837 explains a root's missing rewind without borrowing a future played decision", async () => {
+      const played = actionRun(), original = rewind(played, played.nodes[0]!.id, at).run;
+      const screen = actionScreen(original);
+      await assistanceSettled();
+      const seat = document.querySelector('[data-module="compare_coach"]')!;
+      seat.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
+      await vi.waitFor(() => expect(seat.textContent).toContain("Needs a second attempt"));
+      expect(action("compare_coach")).toBeNull();
+      expect(seat.textContent).toContain("There is no earlier played decision to rewind to.");
+      seat.querySelector<HTMLButtonElement>("[data-keep-playing]")!.click(); await tick();
+      expect(document.activeElement).toBe(document.querySelector("[data-board-input-grid]"));
+      expect(screen.snapshots.get("current")!.run).toBe(original);
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      await unmount(screen.component);
+    });
+
+    it("D3837 holds the exact missing-attempt rewind through failure and explicit retry", async () => {
+      const original = actionRun(), pending = deferred<boolean>();
+      const onRewind = vi.fn().mockReturnValueOnce(pending.promise).mockResolvedValueOnce(false);
+      const screen = actionScreen(original, "writer", { onRewind });
+      await assistanceSettled();
+      const recovery = await openComparison();
+      recovery.click();
+      await vi.waitFor(() => expect(recovery.disabled).toBe(true));
+      recovery.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      expect(onRewind).toHaveBeenCalledTimes(1);
+      pending.resolve(false);
+      await vi.waitFor(() => expect(recovery.disabled).toBe(false));
+      expect(document.querySelector('[data-module="compare_coach"] [role="alert"]')?.textContent).toContain("try again");
+      recovery.click();
+      await vi.waitFor(() => expect(onRewind).toHaveBeenCalledTimes(2));
+      expect(onRewind.mock.calls[1]).toEqual(onRewind.mock.calls[0]);
+      expect(screen.snapshots.get("current")!.run).toBe(original);
+      await unmount(screen.component);
+    });
+
+    it("D3837 retires missing-attempt navigation when the decision changes", async () => {
+      const original = actionRun(), screen = actionScreen(original);
+      await assistanceSettled();
+      const recovery = await openComparison();
+      const keep = document.querySelector<HTMLButtonElement>('[data-module="compare_coach"] [data-keep-playing]')!;
+      const next = revealFeedback(commitMove(original, "g1f3", { at }).run, at).run;
+      screen.replace(next); await tick();
+      recovery.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      keep.dispatchEvent(new MouseEvent("click", { bubbles: true })); await tick();
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      expect(screen.snapshots.get("current")!.run).toBe(next);
+      await unmount(screen.component);
+    });
+
+    it("does not create a comparison entry before a second attempt and removes actions when write access is lost", async () => {
       const original = actionRun();
       const screen = actionScreen(original);
       await assistanceSettled();
@@ -1961,11 +2048,14 @@ describe("Layer 3 screens", () => {
       await tick();
       [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
       await vi.waitFor(() => expect(seat.textContent).toContain("Needs a second attempt"));
-      expect(action("compare_coach")).toBeNull();
+      const recovery = action("compare_coach")!;
+      expect(recovery.textContent).toBe("Rewind to a decision");
+      expect(seat.textContent).not.toContain("Enter other attempt");
       const nudge = action("postcommit_nudge")!;
       expect(nudge).not.toBeNull();
       screen.replace(original, "read_only");
       await tick();
+      recovery.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       nudge.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await tick();
       expect(screen.onRewind).not.toHaveBeenCalled();

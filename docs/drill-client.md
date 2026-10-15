@@ -210,6 +210,13 @@ focus to the semantic board. It offers **Rewind to a decision** only when the ac
 contains a destination already admitted by the timeline's runtime-derived rewind set. Read-only,
 terminal, and busy states retain their disabled action with a visible reason.
 
+Compare's `no_second_attempt` response is a missing prerequisite, not evidence absence. Its
+Support door offers Keep playing and, when an earlier played learner decision exists, Rewind
+to a decision. These use the same exact-target controller, failure/retry, Campaign cost and
+modal-to-board focus handoff as empty help. They do not request another source, choose a chess
+move or invent a comparison packet. After a different continuation and reload, the real Compare
+card can enter the preserved other attempt. Roots and current write/readiness limits stay explicit.
+
 The same region owns the ordinary on-request calculation workflow. **Calculate this position**
 requests one bounded recorded line for the current node without requiring a branch group or an
 assistance setting. Its copy distinguishes calculation evidence from a lesson, move grade, or

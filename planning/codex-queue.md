@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — [[D3838]] is the next accepted presentation repair after D3837's actual navigation:
+remove the repeated whole question outside the tablet band and make expanded recovery actions
+physically discoverable inside the bounded companion. Keep tablet head titles, accessible names,
+mounted state, keyboard focus, counts, source limits and the board rectangle; screenshot/native
+center/clipping controls must not equate DOM visibility with an on-screen control.
+
+2026-10-15 — [[D3837]] is complete locally: the actual no-second-attempt door offers guarded
+rewind/focus navigation without a synthetic receipt or fact badge. Both-color desktop/phone
+failure → exact retry → preserved alternate → reload → real Compare and full normal gates pass;
+results are in the dated exploration log. Do not recommission navigation; D3838 owns the visual residual.
+Silent modules, source/selection holds, wider INR-a7 and all whole-capability/release gates remain.
+
 2026-10-15 — [[D3836]] completes the bounded research/authoring prerequisite for D3792's five
 dependent incoming-edge suppliers.318 controls/218 requests pass, including all four mate horizons,
 both colors and two stored imports. The unaccepted draft names actual edge/dependency factories,

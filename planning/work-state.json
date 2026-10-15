@@ -31942,6 +31942,23 @@
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/incoming-dependent.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3837",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:69a47d3d175a7056c4a6d2ae2b5352a7e3564b923e42e7290b66c9aaef84952f",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3838",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f8d39fe56fdf5e02987147cf8f564b422b1e02ac0734a0dc96b071d4e841bb22",
+      "uxItems": [],
+      "owner": "assistance-and-presentation"
     }
   ]
 }

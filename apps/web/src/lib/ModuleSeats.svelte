@@ -9,7 +9,7 @@
   import RehearsalAction from "./RehearsalAction.svelte";
   import CompanionSeat from "./CompanionSeat.svelte";
   import type { ParsedModulePacket } from "./module-query-response.js";
-  import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type ModuleSeatActions, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
+  import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type MissingAttemptRecovery, type ModuleSeatActions, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
 
   interface Props {
     seats: readonly SeatDeclaration[];
@@ -25,6 +25,7 @@
     actions?: ModuleSeatActions;
     emptyRewindActions?: Readonly<Partial<Record<PlaySeatModule, import("./module-seats.js").ModuleSeatAction>>>;
     emptyRewindUnavailable?: string | undefined;
+    missingAttemptRecovery?: MissingAttemptRecovery | undefined;
     onKeepPlaying?: ((module: PlaySeatModule, packet: ParsedModulePacket) => void) | undefined;
     keepPlayingBlocked?: string | undefined;
     onToggle: (module: PlaySeatModule) => void;
@@ -33,7 +34,7 @@
     onReviseStaged: () => void;
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { seats, packets, pending, failed, expanded, band = false, campaignEncounter = false, doorBlocked, staged, actions = {}, emptyRewindActions = {}, emptyRewindUnavailable, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
+  let { seats, packets, pending, failed, expanded, band = false, campaignEncounter = false, doorBlocked, staged, actions = {}, emptyRewindActions = {}, emptyRewindUnavailable, missingAttemptRecovery, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
 
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
@@ -100,6 +101,23 @@
           {:else if packet === undefined}
             {#if doorBlocked[seat.module] !== undefined}
               <p class="door-reason">{doorBlocked[seat.module]}</p>
+              {#if seat.module === "compare_coach" && missingAttemptRecovery !== undefined}
+                {@const recovery = missingAttemptRecovery}
+                <div data-missing-attempt-recovery>
+                  {#snippet continuePlaying()}
+                    <button type="button" data-keep-playing disabled={recovery.keepPlayingBlocked !== undefined}
+                      aria-describedby={recovery.keepPlayingBlocked === undefined ? undefined : "compare-missing-continue-status"}
+                      onclick={recovery.onKeepPlaying}>Keep playing</button>
+                  {/snippet}
+                  {#if recovery.rewind !== undefined}
+                    <RehearsalAction action={recovery.rewind} id="compare-missing-attempt" {campaignEncounter} empty before={continuePlaying} />
+                  {:else}
+                    <div class="seat-actions">{@render continuePlaying()}</div>
+                    {#if recovery.rewindUnavailable !== undefined}<p class="door-reason">{recovery.rewindUnavailable}</p>{/if}
+                  {/if}
+                  {#if recovery.keepPlayingBlocked !== undefined}<p id="compare-missing-continue-status" class="door-reason">{recovery.keepPlayingBlocked}</p>{/if}
+                </div>
+              {/if}
             {:else}
               <button type="button" class="seat-request" onclick={() => onRequest(seat.module)}>Show</button>
             {/if}

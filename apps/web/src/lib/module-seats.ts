@@ -54,6 +54,14 @@ export interface ModuleSeatAction {
 }
 export type ModuleSeatActions = Readonly<Partial<Record<"postcommit_nudge" | "compare_coach", ModuleSeatAction>>>;
 
+/** A missing attempt is a navigation door, not an empty or fabricated evidence packet. */
+export interface MissingAttemptRecovery {
+  readonly rewind?: ModuleSeatAction | undefined;
+  readonly rewindUnavailable?: string | undefined;
+  readonly keepPlayingBlocked?: string | undefined;
+  readonly onKeepPlaying: () => void;
+}
+
 /** The seats the compiled assistance composes, in seat order. */
 export function composedSeats(compiled: { readonly modules: readonly ModuleId[]; readonly effects: readonly CompiledAssistanceEffect[] } | undefined): readonly SeatDeclaration[] {
   if (compiled === undefined) return Object.freeze([]);

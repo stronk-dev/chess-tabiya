@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3836]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3838]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,11 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3837 now guides a missing comparison into a preserved second attempt: keep playing or rewind
+the actual earlier decision, play an alternate, reload and enter the other recorded attempt.
+Both-color desktop/phone journeys and the full normal local gates pass. D3838 separately owns
+the repeated heading and phone action discoverability; no whole Support/Compare or 1.0
+completion is claimed. Detailed verification appears in the current checkpoint below and log.
+
 D3836 finishes five dependent incoming-edge source **research/draft contracts**, not production
 delivery:318 controls/218 requests,96 positive/491 grammar refusals and37 source-contract cases
 pass. The explicit mate horizon and source-specific unavailable state are now specified in the
 existing unaccepted Inspector amendment. Independent acceptance and real source/API/client/native
-implementation remain. The last full production verification is844adab2 (D3835), not this probe.
+implementation remain. Its preceding full production proof was844adab2 (D3835), not that probe.
 
 D3835 closes the analogous principle boundary: five predecessor failures cover document identity,
 citation loss/replacement, nested aliases and actual Library rendering. Thirty software and 24
@@ -36,7 +42,7 @@ D3834 repairs an accepted shape-library source-integrity defect: registered trig
 cannot change under fixed digests, and hashing/indexing use one owned input snapshot. Four
 predecessor regressions become 45 focused passes/types, including actual authenticated source
 read/export. Full normal verification/build/all browser tiers pass: 5855 software, seven
-performance, 257 content, 393 browser checks and 112 unretried composition cells. D3835 is the
+performance, 257 content, 393 browser checks and 112 unretried composition cells. D3835's
 separate principle-registry check has since closed above; no whole capability or release gate is promoted.
 
 D3833 adds the remaining authored-shape interval binding to the unaccepted Inspector draft.
@@ -312,16 +318,17 @@ noise, selected-Sight coverage and missing Review sources remain substantive pro
 The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records and one
-superseded record are subsystem history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
+superseded record are subsystem history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3835's accepted principle snapshot repair is finished with 5,864 software
-cases/seven unchanged-budget performance checks passing. The first aggregate stops at my duplicate
-roadmap evidence path; after removing only that duplicate, remaining governance/257 content/build/
-all four browser tiers exit zero on unchanged production/tests/canonical docs. The 59-case matrix
-has no skipped/unexpected/flaky cases or retries, with all 112 composition cells proven; packaged
-production also passes. The optional uncached Maia check remains skipped. Thirty software/24
-real-content focused controls and workspace types pass; no content or semantic metadata moves.
+Current local checkpoint: D3837's missing-attempt navigation passes the full normal serial local
+verification/build/all four browser tiers: 5,870 software/seven unchanged-budget performance/
+257 content/332 smoke/five content-browser/59 matrix/one packaged-production cases. The existing
+optional uncached Maia check remains skipped; all 112 composition cells pass without retries.
+Both-color desktop/phone native flows retain exact failure/retry, both attempts and actual Compare.
+D3838's repeated heading and phone action discoverability remain explicit open presentation work.
+No content, source, semantic metadata, preset or whole-capability state is changed. D3835's
+principle snapshot and its earlier full verification stay closed at their own checkpoint.
 D3834's preceding committed full shape-source proof remains closed at its own checkpoint.
 D3830's exact recorded selection and the preceding accepted repairs remain closed. D3831–D3833
 and D3836 are bounded source research/draft authoring; they do not deliver scoped Inspector or close the
