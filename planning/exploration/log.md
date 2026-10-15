@@ -29415,3 +29415,36 @@ Campaign was the one capability with no API, route or content. Now:
   Final clarification names the existing source/factory owners and one shared implementation;
   whitespace/staged checks and current-body governance precede commit.3580 ledger rows remain,
   with1732 live assigned,1687 done/161 refused. All whole-product gates remain unchanged.
+
+## 2026-10-15 — D3832 recorded Review/Story source closure
+
+- Previous goal turn is progress:84b29087 commits the four pivotal source/factory contracts
+  and a verified disposable refusal repair, with all existing whole-product holds unchanged.
+- Continue the same D3792 supplier closure, not an unaccepted production implementation.
+  Register D3832 before changing the existing recorded-Review source instrument.
+- The new later-original-FEN negative first fails Missing expected exception. Repair only the
+  model to validate original FENs before narrowing;300 boundary checks retain48 prefixes,
+  172 position and124 edge items. All eight new FEN refusals are non-vacuous.
+- Actual stored PGN imports for both learner colours plus labelled synthetic engine captures
+  go through the production payload/factory/Review/Story code. Whole-moment node cropping
+  retains four invalid-for-the-prefix last-level facts and two equal old-input/different-endpoint
+  cases. Full-game behavior is correct; a scoped source must rederive, not crop it.
+- The existing manifest derives exactly eleven required adapters without a second source
+  register. Empty source/rank and unchanged saved imports are positive controls. All25 rank,
+  37 source-contract and33 authenticated source/effect checks pass; provider fixtures/mocks
+  establish plumbing and boundaries only, not real engine/model quality or source qualification.
+- Author one coherent source-owner section in Review compiler §4.5 and its exact Inspector rank
+  binding. The proposed per-storage authority must reject foreign ownership; current permission stays separate.
+  Preserve old whole-tip subjects/packets/Story/title/wire and ranking; source selection and
+  evidence boundary are distinct. New scoped recorded-fact arms are explicit, never legacy casts.
+- D3832 completes research/authoring only. D3792 remains blocked on remaining source contracts,
+  independent acceptance and actual typed source/factory/receiver/API/native delivery. No whole
+  milestone/capability, semantic validation, official graduate, remote CI or release gate moves.
+  Run final existing governance, update the same tracker/roadmap and commit only owned files.
+  Production/schema/software/browser fixtures remain unchanged; no raw captures, push or deploy.
+- Final normal docs/governance pass: register C1–C8, status P1–P7, work-state zero untriaged and
+  roadmap R1–R10 are green.3581 ledger rows:1732 live assigned,1688 done/161 refused; all14 whole
+  capabilities and nine milestone states remain unchanged. The last full production proof stays
+  1834494b's5851 software/seven performance/257 content/393 browser checks, one optional skip.
+  No runtime re-run or new UI delivery is claimed for these research/draft-only bytes. Final
+  explicit staging/current-body hooks precede the owned-file commit; no push or deployment.

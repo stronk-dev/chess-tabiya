@@ -31897,6 +31897,15 @@
       "uxItems": [],
       "evidence": "tools/d3792-inspector-demand/pivotal-source.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3832",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5226565f61e951cb892de92df7021b1692d0af1c5232fce84b59fbbc90e9725c",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/review-boundary.ts",
+      "evidenceKind": "path"
     }
   ]
 }

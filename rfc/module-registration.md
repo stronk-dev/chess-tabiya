@@ -1951,7 +1951,7 @@ The immutability condition comes from current `#refuseImportedMainlineExtension`
 general rule that any branch tip establishes an import result boundary.
 
 The proposed **server-private** source callable is
-`createRecordedReviewBoundaryAuthority(storage)({runId, branchId, throughNodeId})`, with storage
+`createRecordedReviewBoundaryAuthority(storage).resolve({runId, branchId, throughNodeId})`, with storage
 owned by RunService and parser-admitted full run/import records. Its privately issued result
 retains the unchanged full source image, exact bounded path, learner side and scoped outcome;
 it is not Inspector access authority. The service must first obtain the separate current read/
@@ -1971,6 +1971,55 @@ sources. Those owners still owe their exact supported bindings and complete mome
 at this boundary, not trimming whole-tip arrays. Their input/result types, private identity,
 composition with current access, cancellation and HTTP/native receivers must be authored and
 independently accepted before production. No new permission or complete-source claim follows.
+
+**Closed recorded-Review rank binding ([[D3832]], 2026-10-15), still unaccepted:**
+`review-evidence-compiler.md` draft §4.5 is the sole owner of
+`createRecordedReviewBoundaryAuthority`, `RecordedReviewBoundaryAuthority`, `RecordedReviewBoundary`
+and `RecordedReviewMomentSource` (issued by `authority.compileMoments`), including its scoped
+recorded-fact arms. The D3824 paragraph above describes its precursor model, not a second
+constructor or permission mechanism. Keep source assembly and current Inspector access separate.
+
+Add exactly one new `derived.story.rank@2` F2 arm:
+`{recordedReview: RecordedReviewMomentSource}`. The factory asserts that source's runtime
+admission and current boundary before reading its owned unrendered moments; it does not accept
+the source's visible fields, copied values, a bare boundary or caller-provided moment arrays.
+The existing `{moments}` arm remains unchanged for existing whole-game callers and is forbidden
+as the new Inspector supplier. Reuse `rankStoryMoments` and its exact source checks; constructing
+the full Story/title then filtering is not this operation and must advance no such call counter.
+
+The new canonical input image is `recorded-review-moment-source@1` plus the source's actual
+original run/current head, branch/endpoint, learner side, boundary outcome/import record identity,
+ordered granted node/edge operands, exact adapter plan/states and complete used moment/evidence/
+typed-evaluation operands. It is not the opaque handle's serialization or only the displayed
+rank. Equal ranks or moment images at different endpoints remain distinct scoped inputs; actual
+full-tip payloads must remain byte-equal to the legacy arm. Keep the current v2 convention,
+grounding, dependency limits and existing title/private/share callers. This is no new prominence,
+educational-value or positive-move selection policy. If v2's declared meaning cannot support the
+new arm, return for an explicit successor rather than silently reinterpret or retire it.
+
+A successfully empty moment source still mints the existing singleton `{rank:[]}` ordering;
+do not confuse zero ranked moments with a missing source or `no_recorded_review`. Present the
+new Inspector topic explicitly as the recorded order of **currently admitted moments**, not
+finished analysis or a complete diagnosis. Typed adapter absence/progress is retained in the
+source, not invented as facts or added as undeclared payload fields. Contract/source-version
+holds remain the existing unavailable result with their actual dependency, not a permanently
+empty rank. No raw scores, provider images, title text or new public packet rides this arm.
+
+Construction, factory execution and publication use the same current recorded-context grant and
+signal. The receiver compares exact source scope/head/outcome and captured current assistance;
+it revalidates after asynchronous preparation, while the client retires selection/configuration/
+account changes independently. The source's unfinished outcome does not classify a current
+recorded line as live or grant access: reuse existing original-branch read/disclosure policy,
+then this operation's Inspector effect. Source existence, outcome, access and delivery remain
+four different checks.
+
+Acceptance requires the real typed arm/invoker/canonical-input/receipt and complete registered
+consumer path, the source owner's §4.5 fixtures, old-arm compatibility and actual authenticated
+HTTP/desktop/phone tests. All required adapter statuses and input identities survive source
+assembly; scope changes, revoked access, cancellation and late callbacks publish nothing. The
+current research observes300 boundary checks,25 rank controls, four invalid node-crop last-level
+items and two old-input endpoint collisions; it proves why the new source is needed, not that
+this source/arm or current delivery already exists. D3792 and independent acceptance stay open.
 
 **Supplier boundary established by D3805:** the actual SQLite-backed three-branch probe shows
 that `moduleComparisonForSubject` chooses the newest sibling, `compareBranches` uses both full
@@ -3093,6 +3142,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-15 — D3832 binds the proposed recorded-Review moment source to one new rank arm;
+  Review compiler §4.5 owns its exact source/adapter/recorded-fact contract. Whole-game filtering
+  retains four result-dependent early moments and two equal old-input/different-endpoint cases
+  in actual imported source fixtures. Existing whole-tip semantics/receipts, provider holds and
+  current permission boundaries remain. This joint amendment is unaccepted; no production,
+  whole Inspector, Review Map ranking or release promotion follows.
 
 - 2026-10-15 — D3831 specifies the four pivotal source/factory arms in the existing unaccepted
   Inspector amendment, using D3830's retained actual event occurrences and complete phase/

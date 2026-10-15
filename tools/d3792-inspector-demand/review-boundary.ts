@@ -6,12 +6,17 @@ import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import {
   createRun, canonicalRunStart, commitMove, rewind, fork, revealFeedback, branchPath,
-  resolveBranchPath, createReviewPrefixAuthority, assertReviewRecordedPrefixReceipt,
+  resolveBranchPath, createReviewPrefixAuthority, assertReviewRecordedPrefixReceipt, attachEvidence,
+  PRIMARY_EVIDENCE_MANIFEST, REVIEW_PACKET_SOURCE_ADAPTERS,
   type DrillRun, type Node, type ReviewOutcomeReceipt,
 } from "../../packages/runtime/src/index.js";
 import { presentationDigest } from "../../packages/runtime/src/presentation-contract.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
-import { assertDeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { assertDeclaredEvidence, evidenceValueReceipt } from "../../packages/runtime/src/evidence-contract.js";
+import { positionFromFen } from "../../packages/runtime/src/chess.js";
+import { compileReviewPacketForSubject, reviewDurableEngineStates, reviewDeliveryEvidencePayload } from "../../packages/runtime/src/review-evidence.js";
+import { reviewStoryMoments } from "../../packages/runtime/src/story.js";
+import { evaluationDelivery } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { SQLiteRunStorage, type ImportedGameRecord } from "../../apps/server/src/storage.js";
 import { loadConceptRegistry } from "../../apps/server/src/concept-registry-loader.js";
 import { IdentityService } from "../../apps/server/src/identity.js";
@@ -47,6 +52,8 @@ function boundaryModel(storage: Storage) {
     for (let i = 1; i < run.events.length; i++) if (run.events[i]!.seq !== run.events[i - 1]!.seq + 1) refuse("invalid_event_sequence");
     const original = resolveBranchPath(run, request.branchId);
     if (original.kind !== "resolved") refuse(`invalid_graph:${original.reason}`);
+    try { for (const node of original.nodes) positionFromFen(node.fen); }
+    catch { refuse("invalid_original_fen"); }
     const endpoint = original.nodes.findIndex(node => node.id === request.throughNodeId);
     if (endpoint < 0) refuse("endpoint_not_on_branch");
     // Original graph validation precedes narrowing. The unchanged run is retained, never cropped.
@@ -117,6 +124,7 @@ const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const directory = mkdtempSync(join(tmpdir(), "tabiya-d3824-review-boundary-"));
 const storage = new SQLiteRunStorage(join(directory, "fixture.sqlite"), { concepts: { registry: loadConceptRegistry(resolve("content/concepts")) } });
 let checks = 0, prefixes = 0, actualItems = 0, actualEdges = 0;
+let rankChecks = 0, croppedLastLevelItems = 0, oldRankScopeCollisions = 0;
 const checked = (callback: () => void) => { callback(); checks++; };
 const writer = "d3824-storage-fixture";
 try {
@@ -208,6 +216,8 @@ try {
     for (const malformed of mutations) {
       overrideRun = malformed; rejected(() => model.issue(first), /invalid_graph/u); overrideRun = undefined;
     }
+    overrideRun = { ...original, nodes: original.nodes.map(node => node.id === path.at(-1)!.id ? { ...node, fen: "not-a-fen" } : node) };
+    rejected(() => model.issue(first), /invalid_original_fen/u); overrideRun = undefined;
     overrideRun = { ...original, events: original.events.filter((_event, index) => index !== 1) };
     rejected(() => model.issue(first), /invalid_event_sequence/u); overrideRun = undefined;
     if (imported) {
@@ -241,7 +251,82 @@ try {
     checked(() => assertReviewRecordedPrefixReceipt(current({ runId: id, branchId: main })));
     assert.equal(JSON.stringify(original), saved);
   }
-  console.log(JSON.stringify({ scope: "D3824 storage/source model; NOT permission, scoped Review packet, complete source delivery or production", checks, prefixes, actualPositionItems: actualItems, actualEdgeItems: actualEdges }));
+  // D3832: derive the rank operation's adapter demand from existing declarations, not a new
+  // source registry. Stop at an existing adapter; its own operation retains its dependencies.
+  const declarations = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map(value => [`${value.id}@${value.version}`, value]));
+  const adapters = new Map(REVIEW_PACKET_SOURCE_ADAPTERS.map(value => [`${value.projection.id}@${value.projection.version}`, value.id]));
+  const requiredAdapters = new Set<string>();
+  const visiting = new Set<string>();
+  function demand(key: string): void {
+    assert(!visiting.has(key), "Story source dependency cycle");
+    const adapter = adapters.get(key);
+    if (adapter !== undefined) { requiredAdapters.add(adapter); return; }
+    const definition = declarations.get(key);
+    assert(definition?.derivation?.inputs !== undefined && definition.derivation.inputs.length > 0,
+      `Story source has no exact adapter or conjunctive derivation: ${key}`);
+    visiting.add(key);
+    for (const input of definition.derivation.inputs) demand(`${input.id}@${input.version}`);
+    visiting.delete(key);
+  }
+  demand("derived.story.rank@2");
+  const rankChecked = (callback: () => void) => { callback(); rankChecks++; };
+  rankChecked(() => assert.deepEqual([...requiredAdapters].sort(), [
+    "review.source.consequence@1", "review.source.endgame@1", "review.source.eval_delta@2",
+    "review.source.eval_point@1", "review.source.imported_result@1", "review.source.mate_transition@2",
+    "review.source.pivotal.human_divergence@1", "review.source.pivotal.irreversibility@1",
+    "review.source.pivotal.option_collapse@1", "review.source.pivotal.phase_change@1", "review.source.shapes@1",
+  ].sort()));
+
+  for (const side of ["white", "black"] as const) {
+    const id = `d3832-rank-${side}`;
+    const result = side === "white" ? "0-1" : "1-0";
+    let run = (await service.importGame({ id, side, opponentPolicy: { mode: "human_common" },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1, createdAt: at, source: { kind: "pgn", pgn: `[Result "${result}"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 ${result}` } }, lease)).run;
+    const branchId = run.branches[0]!.id;
+    const point = branchPath(run, branchId)[3]!;
+    // Labelled synthetic engine capture, admitted and stored by the real production builder.
+    // This tests source/occurrence plumbing, NOT Stockfish evaluation or chess usefulness.
+    run = attachEvidence(run, point.id, ["fixture:d3832-eval"], reviewDeliveryEvidencePayload(evaluationDelivery(point.fen, "cp 0")), at).run;
+    storage.save(run, lease);
+    const saved = JSON.stringify(storage.read(id)!.run), path = branchPath(run, branchId);
+    const subject = current({ runId: id, branchId });
+    const packet = compileReviewPacketForSubject(subject, { engine: reviewDurableEngineStates(run, path), shapes: [] });
+    const full = reviewStoryMoments(packet);
+    rankChecked(() => assert.equal(subject.outcome.kind, "recorded_result"));
+    rankChecked(() => assert(full.moments.some(moment => moment.nodeId === point.id && moment.kinds.includes("last_level")),
+      "actual full-game Story must positively observe its outcome-dependent last-level fact"));
+    const images: string[] = [];
+    const scopes: string[] = [];
+    for (const index of [3, 4]) {
+      const boundary = model.issue({ runId: id, branchId, throughNodeId: path[index]!.id });
+      rankChecked(() => assert.equal(boundary.outcome.kind, "unfinished"));
+      const ids = new Set(boundary.pathNodeIds);
+      const cropped = full.moments.filter(moment => ids.has(moment.nodeId));
+      const leaked = cropped.filter(moment => moment.kinds.includes("last_level"));
+      rankChecked(() => assert.equal(leaked.length, 1, "node-only cropping retains a fact depending on the ungranted final result"));
+      croppedLastLevelItems += leaked.length;
+      const rank = invokeEvidenceValueRoute("derived.story.rank@2", { moments: cropped });
+      rankChecked(() => assert(rank.payload.rank.includes(point.id)));
+      images.push(evidenceValueReceipt(rank).inputDigest);
+      scopes.push(boundary.digest);
+    }
+    rankChecked(() => assert.notEqual(scopes[0], scopes[1]));
+    rankChecked(() => assert.equal(images[0], images[1], "legacy moment-list input does not name the requested endpoint"));
+    oldRankScopeCollisions++;
+    rankChecked(() => assert.equal(JSON.stringify(storage.read(id)!.run), saved));
+  }
+  const empty = createRun({ id: "d3832-empty", session: { kind: "position", start: canonicalRunStart({ fen: initial, side: "white" }),
+    feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+  storage.create(empty, lease);
+  const emptyPacket = compileReviewPacketForSubject(current({ runId: empty.id, branchId: empty.activeCursor.branchId }), { engine: new Map(), shapes: [] });
+  const emptyStory = reviewStoryMoments(emptyPacket);
+  rankChecked(() => assert.deepEqual(emptyStory.moments, []));
+  rankChecked(() => assert.deepEqual(invokeEvidenceValueRoute("derived.story.rank@2", { moments: emptyStory.moments }).payload.rank, []));
+  console.log(JSON.stringify({ scope: "D3824/D3832 storage/source and rank-boundary model; NOT permission, scoped Review packet, complete source delivery or production",
+    checks, prefixes, actualPositionItems: actualItems, actualEdgeItems: actualEdges, rankChecks, croppedLastLevelItems,
+    oldRankScopeCollisions, requiredStoryAdapters: [...requiredAdapters].sort() }));
 } finally {
   storage.close(); rmSync(directory, { recursive: true, force: true }); // only this owned fixture
 }

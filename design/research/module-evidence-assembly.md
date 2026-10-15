@@ -1021,3 +1021,38 @@ Canonical input scopes, typed production admission/receipts, current receiver/ca
 HTTP/native delivery and independent acceptance remain required rather than declared green.
 `[V]` `rfc/module-registration.md` §4.11a; current `pivotal.ts`, `evidence-factories.ts`,
 `module-query.ts` and `pivotal-evidence.test.ts` at1834494b. No pack or public production changes.
+
+## Recorded Review moment source — 2026-10-15, D3832
+
+The existing storage-boundary model originally validates graph structure, but crops before
+parsing a later original FEN. An actual stored-run negative first fails with Missing expected
+exception. Parsing the original path before narrowing adds eight refusals;300 boundary checks
+retain all48 earlier prefixes,172 actual position items and124 actual edge items. This repairs
+only the disposable model. `[V]` `tools/d3792-inspector-demand/review-boundary.ts` and normal
+`make inspector-review-boundary-research` predecessor/corrected results.
+
+Two new actual `RunService.importGame`/SQLite cases follow White and Black in resigned losses.
+A labelled synthetic cp-zero delivery is admitted by the production provider/payload factories,
+stored as actual run evidence and re-read by `reviewDurableEngineStates`. The full real Review
+packet/Story correctly derives a last-level moment at an earlier recorded move. Cropping that
+Story to each of two earlier node prefixes retains four last-level facts even though the
+boundary model correctly says unfinished. The two legacy rank inputs are also identical at
+different endpoint scopes. These are counterexamples to scoped reuse, not defects in the
+current whole-game operation and not measurements of engine quality. `[V]` same probe;
+`testing/review-evidence-fixture.ts`, `review-evidence.ts`, `story.ts`, `evidence-factories.ts`.
+
+The existing rank declaration, recursively resolved only until a real Review adapter, gives
+exactly eleven adapters: four pivotal, endgame, shapes, consequence, import result, eval point,
+eval delta and mate transition. No new source register is needed. A genuine empty native source
+successfully supplies an empty ordering. All25 rank controls pass; both saved imports remain
+byte-identical after inspection. `[V]` same probe, `evidence-catalog.ts` and the current adapter
+registry. Current source-contract cases37 and authenticated source/effect controls33 also pass;
+the latter use labelled application mocks, not live providers. `[V]` normal Make results.
+
+The joint unaccepted contract puts source ownership in Review compiler §4.5 and its exact rank
+arm in module-registration §4.11a. It retains current full-tip APIs, records, packets, titles,
+ranking convention and public wire, while requiring immutable per-storage admission, complete
+scoped source inputs and current access/receiver checks. An early selected move can still use
+an explicitly granted whole-game boundary. New typed construction, scope-bound receipts,
+permission/cancellation and real HTTP/native delivery remain unimplemented, not established by
+these models. `[V]` those draft sections; `apps/server/src/service.ts` current read boundaries.

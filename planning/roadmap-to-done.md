@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3831]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3832]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,15 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3832 finishes the bounded recorded-Review/Story source authoring slice: the joint unaccepted
+Review compiler §4.5 and Inspector binding require a storage-owned source, eleven actual
+manifest-derived adapters and exact rank/recorded-fact inputs. Actual imported source fixtures
+show four result-dependent facts surviving whole-moment cropping and two old-input endpoint
+collisions.300 boundary/25 rank,37 source-contract and33 authenticated source/effect checks pass.
+Current access, actual typed factories/receipts, remaining suppliers and API/native delivery
+still require independent acceptance and implementation. Production remains unchanged from
+1834494b's full local proof; no whole capability, milestone, content or release promotion.
 
 D3831 finishes the four-family pivotal source/factory authoring slice in D3792's existing
 unaccepted Inspector amendment. A real stored-prefix negative first exposes skipped later-FEN

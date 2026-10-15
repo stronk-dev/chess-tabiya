@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Recorded Review/Story source, 2026-10-15 ([[D3832]]): **bounded research and joint draft
+authoring, not production**. Actual imported records with labelled stored engine fixtures show
+four early last-level facts surviving unsafe whole-moment cropping and two distinct endpoints
+sharing old rank inputs. Existing manifest demand resolves eleven adapters.300 boundary/25
+rank controls retain172 positions/124 edges;37 source-contract and33 authenticated source/effect
+controls pass. `[V]` `module-evidence-assembly.md` §Recorded Review moment source,
+`tools/d3792-inspector-demand/review-boundary.ts` and the joint unaccepted Review compiler §4.5/
+module-registration §4.11a. Actual source/arm/permission/receiver/native proof remains.
+
 Pivotal scoped-source contract, 2026-10-15 ([[D3831]]): **draft authoring and disposable-source
 validation only**. An earlier endpoint first hides an invalid later original FEN; the corrected
 bundle retains full-path refusal before narrowing. Existing source checks now pass500 controls/

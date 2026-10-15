@@ -1,5 +1,10 @@
 # RFC: Review evidence compiler
 
+- **Draft amendment 2026-10-15 — [[D3832]]:** §4.5 owns the storage-bound earlier-Review
+  moment source required by Inspector. It is **unaccepted**, adds no production authority,
+  and preserves the old whole-tip subject/packet/Story contracts. The companion Inspector
+  amendment owns its exact rank-factory binding and current delivery checks.
+
 - **Draft amendment 2026-10-13 — [[D3758]]:** §4.4 specifies exact local incoming-edge
   acquisition for Review. This amendment is **not accepted** by the parent's implementing
   status. The companion Review Map §2a owns learner selection; source acquisition alone does
@@ -880,6 +885,136 @@ Independent acceptance precedes production acquisition. D3758 closes only after 
 source-to-client path and the separately owned useful-selection contract pass; a draft, renderer
 probe or acquisition-only packet does not discharge it.
 
+### 4.5 Draft amendment: recorded-boundary Story source ([[D3832]])
+
+This is the source-owner contract for module-registration §4.11a's recorded-Review context,
+not an extension of the old `review-recorded-prefix@1` input grammar. D3824's source-boundary
+model alone supplies no Review packet or moment assembly. D3832's actual imported records with
+labelled stored engine fixtures demonstrate why cropping a full Story by moment node fails:
+four retained last-level facts depend on a final result outside the requested prefixes.
+Two different endpoints also yield identical legacy rank inputs. Neither is a defect in the
+existing whole-game contract; both forbid treating it as a scoped supplier.
+
+**One source owner, explicit exports.** In `review-evidence.ts`, add the following proposed
+server-side operations/types through the existing runtime entry point, never the client barrel:
+
+```ts
+declare const recordedReviewBoundaryBrand: unique symbol;
+export interface RecordedReviewBoundary {
+  readonly [recordedReviewBoundaryBrand]: true;
+}
+declare const recordedReviewMomentSourceBrand: unique symbol;
+export interface RecordedReviewMomentSource {
+  readonly [recordedReviewMomentSourceBrand]: true;
+}
+export interface RecordedReviewBoundaryAuthority {
+  resolve(input: Readonly<{ runId: string; branchId: string; throughNodeId: string }>): RecordedReviewBoundary;
+  assertCurrent(boundary: RecordedReviewBoundary): void;
+  compileMoments(boundary: RecordedReviewBoundary, context: ReviewSourceContext): RecordedReviewMomentSource;
+  assertMomentSourceCurrent(source: RecordedReviewMomentSource): void;
+}
+export function createRecordedReviewBoundaryAuthority(storage: ReviewStorageAuthority): RecordedReviewBoundaryAuthority;
+```
+
+These are nominal, runtime-owned values, not JSON, caller evidence or access tokens. Admission
+rejects copies, cross-issuer values and writable caller backing records. Existing whole-tip
+constructors, assertions, packet types, compile entry points and wire protocols keep their
+current grammar; a boundary is never cast into an old prefix receipt or aggregate packet.
+Share private path/source/family-fold/moment code, not public structural constructors or a
+second registry. The moment source's data reader stays module-internal to the source/factory
+owners. No new persistence, cache, provider protocol, public packet or migration is introduced.
+RunService owns one authority bound to its actual storage. Its methods reject another authority's
+boundary/source even when run ids and values coincide; self-checking the foreign issuer is not
+enough. The factory's internal reader validates its genuine source, while the query receiver
+also invokes its own authority's assertion. Issuer identity is process-local admission only,
+not a new persisted identifier or canonical paging operand.
+
+**Boundary construction does no collection.** Storage callbacks supply the parsed full run and
+the existing three-field `ReviewImportRecordImage`, not a caller run/result. Capture closed
+request fields, validate the original branch graph and all original path FENs before narrowing,
+require contiguous actual event sequences, then retain an immutable original image and exact
+prefix. Inherited endpoints are valid. Retain learner side, original current event head and the
+relevant import record; unknown/off-path endpoints, invalid originals and inconsistent/missing
+import context refuse. Issuance and currentness checks run no semantic/provider collectors.
+The currentness assertion rereads the same storage-owned fields and graph/path/FEN operands;
+changed head, path, side, relevant import data or issuer refuses before source preparation.
+RunService constructs `ReviewSourceContext` from its coordinator/durable reads and registered
+shape owner, never HTTP source data. Capture its admitted values independently; a mutable map,
+entry array or caller reference cannot change the resulting moment source after compilation.
+
+Derive outcome only from that boundary. A board terminal needs its actual on-prefix outcome
+event and learner-relative result. A PGN result is eligible only at the immutable original
+imported mainline's full endpoint; earlier prefixes and retries are unfinished unless their own
+path proves a terminal. At that eligible original endpoint, a contradictory terminal/result
+refuses. Preserve the three distinct outcome arms, including successful unfinished context.
+Position scope is not chronological replay: current reveal/grants and saved alternatives are
+not deleted to create a prefix. Source existence/outcome is not current permission.
+
+**Collect precisely the rank dependency closure.** Derive required adapter demand from the
+existing manifest's `derived.story.rank@2` dependency graph: stop at a matching existing Review
+adapter; otherwise follow that projection's conjunctive declared inputs. Missing/ambiguous/
+cyclic definitions refuse, not fallback or omission. At this contract the resulting set is
+exactly eleven existing adapters: four `review.source.pivotal.<kind>@1`, `endgame@1`,
+`shapes@1`, `consequence@1`, `imported_result@1`, `eval_point@1`, `eval_delta@2` and
+`mate_transition@2` (all with the `review.source.` prefix). The last-level derivation reaches
+eval-point/import-result through the same graph. Assert set equality; future graph changes
+require explicit contract review, not silent acquisition widening. The caller cannot choose
+a subset, provide moment arrays or request unrelated families through this operation.
+
+| Source group | Scoped execution |
+|---|---|
+| Four pivotal adapters | Use module-registration's proposed `RecordedPivotalSource` arms with this exact original run, branch, endpoint and family. Retain full witnesses/actual selection events; no whole-tip collection then anchor filtering. |
+| Endgame | Run the existing exact classification at granted nodes; preserve the first-observed-entry convention and root's lack of a decision edge. |
+| Shapes | Use the existing sole firing factory over actual registered entries and this ordered prefix. Derive spans/open-endedness there, not from cropped whole-game firings. Retain exact entry/trigger inputs and existing authored-authority limitations. |
+| Eval point/delta/mate | Read coordinator/durable provider states only for granted nodes and actual incoming-edge endpoints. Reuse exact evaluation/position factories, comparability and typed score domains. Retain both endpoints; no mate sentinel, legacy-image promotion or out-of-prefix value. This operation enqueues no engine job and calls no provider. |
+| Consequence/import result | Add the exact boundary arms below; do not call whole-branch factories and trim their output. |
+
+Add `{recordedReview: RecordedReviewBoundary}` arms to `run.record.consequence@1` and
+`run.record.imported_result@1` together with their typed invoker/operand declarations. The former
+emits only the boundary's actual on-path terminal event; the latter emits only its eligible
+stored import result at the original immutable endpoint. Otherwise each emits zero items.
+Retain actual used event/record and occurrence operands plus boundary identity in new receipts.
+Old arms, payload meanings and receipts remain unchanged; full-tip new payloads must match old
+ones. If that compatibility fails on the declared meaning, return for explicit successors.
+
+For every demanded adapter × applicable node/edge, retain exactly one sealed internal result
+with the current typed state and exact evidence inputs. Reuse existing state propagation,
+source validation and memoized node/edge/provider readings. Invalid input/seal/occurrence is
+failure, never an empty source. Normal not-requested/pending/unavailable source states remain
+distinct and cannot be converted into imaginary facts. Legacy source/version dependency holds
+still prevent execution where required. The other Review families, unaccepted tablebase/local
+expansions and v2 semantic events do not become new Story kinds through this amendment.
+
+**Assemble before ranking, without prose.** Share one private unrendered-moment builder with
+`reviewStoryMoments`: same current kinds, thresholds, merging at exact nodes, recorded decision/
+evidence/entry/stop identities, phase/endgame data and typed evaluation endpoints. Root creates
+no moment. Compute last-level only if this boundary's own outcome supplies its recorded loss;
+never remove leaked last-level moments after whole-game derivation. The legacy Story path adds
+its components/title as before. The scoped source constructs neither title nor voice text,
+receives no callback strings and performs no Review Map educational selection.
+Selection and evidence boundary remain distinct: inspecting an early move with the original
+full-tip recorded-Review grant retains the full game's valid context and moment order.
+
+The admitted moment source owns its boundary, exact required plan/results/states and complete
+unrendered moment population. Empty moments are a valid successful source, not missing context.
+The companion rank factory returns the exact current order over admitted moments, not a claim
+that every source is available, that analysis is complete or that these are the best lessons.
+Current permissions are obtained before construction and revalidated before publication under
+module-registration's resolver; do not invoke `#storyContext` as a free permission predicate.
+Check cancellation around construction/compilation/factory publication. Revalidate storage
+after any asynchronous preparation; the browser independently retires old request owners.
+
+**Acceptance, still owed before implementation.** Actual typed boundary/source/factory tests
+must retain both-colour original/import/retry/root/terminal and old full-tip behavior, original
+late graph/FEN refusals, every literal demanded adapter and its exact source operands/states.
+Hard-negative the demonstrated whole-moment crop and equal-input endpoint reuse; no final
+result, later collapse/phase witness, shape span or engine point crosses the grant. Reject
+copied/cross-issuer/stale/mutated source values before preparation. Empty rank stays a successful
+empty ordering. Assert zero unrelated adapters, title/voice rendering and provider/enqueue calls.
+Prove current access, disclosure/revocation, cancellation and actual HTTP/desktop/phone delivery
+under the new Inspector operation. The research's300 boundary/25 rank checks and 11-adapter
+closure are author evidence, not those production proofs or independent acceptance.
+
 ## 5. Story compatibility repair
 
 The server-local compatibility compiler consumes typed `ReviewEnginePoint` items and emits only the
@@ -1266,6 +1401,14 @@ six source-bound repair groups under the repository TypeScript runtime. Producti
 unauthorized until another genuinely fresh review and all declared dependencies land.
 
 ## Changelog
+
+- 2026-10-15 — D3832 authors draft §4.5 with one storage-owned boundary and unrendered moment
+  source, existing-manifest demand (eleven adapters) and exact scoped recorded-fact arms.
+  Actual imported records plus labelled stored engine fixtures retain four outcome-dependent
+  crop counterexamples and two old-input endpoint collisions. The research boundary's original
+  FEN negative first fails, then300 boundary/25 rank controls pass after a disposable-only fix.
+  Existing whole-tip subjects/packets/Story/wire and all source holds remain. Independent
+  acceptance and actual typed source/factory/access/receiver/native delivery are still required.
 
 - 2026-10-13: D3758 draft §4.4 specifies the full 32-ref local incoming-edge acquisition class,
   exact occurrence/native absence, one-call-per-edge work and real consumer tests. D3760 corrects

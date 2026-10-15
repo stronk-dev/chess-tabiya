@@ -4,6 +4,15 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Recorded Review/Story source contract, 2026-10-15:** D3832 authors Review compiler §4.5
+and the companion Inspector rank arm together. The source authority is storage-bound;
+the existing manifest derives eleven required adapters. Actual imported source fixtures
+retain four invalid whole-moment-crop facts and two old-input endpoint collisions.300 boundary/
+25 rank controls,37 source-contract cases and33 authenticated source/effect controls pass.
+Both amendments are **unaccepted**; no production source, packet, wire, rank policy or permission
+changes. D3792's remaining suppliers, independent acceptance and real typed/API/native delivery
+remain open.
+
 **Pivotal Inspector source contract, 2026-10-15:** D3831 names the exact original-run scoped
 constructor and four additional factory arms in module-registration §4.11a. The existing
 stored-prefix experiment first fails an original-path FEN refusal, then passes500 source/
