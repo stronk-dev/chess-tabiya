@@ -31272,3 +31272,38 @@ Campaign was the one capability with no API, route or content. Now:
   case in8.8s under the same granted local-server permission. Final source/research/staged/roadmap
   checks and explicit36-file owned index are retained; ordinary pre-commit hooks run before the
   checkpoint commit. No push, remote CI claim or unrelated untracked-file absorption.
+
+### 2026-10-15 — D3869 fail-fast normal Make verification, no new wrapper
+
+- Source checkpoint c38ed0ad commits only36 owned files after ordinary hooks, full normal
+  verify/build and exact packaged rehearsal proof. Tracked tree is clean; the same three
+  pre-existing untracked paths remain untouched. Continue the active1.0 goal into the measured
+  verification-order debt before further source implementation, without asking another ruling.
+- Add a permanent existing-tool regression before changing Make: it fails on the predecessor's
+  toolchain-last/full-pools-first order, while actual393-file/one-native-project discovery still
+  passes. Reorder exactly the same28 prerequisites, removing only the redundant second target
+  declaration; toolchain/type/schema/generated contracts precede both full pools, which remain
+  software then isolated performance. No recipe, test, assertion, deadline, hook policy or
+  environment/service requirement is weakened or added.
+- Four scheduling cases pass. The guard checks Make's real expanded recipe/dependency plan,
+  refuses missing/duplicate/reordered gates and retains actual Vitest discovery. A second real
+  Make process uses the original dependency graph with cheap recipe markers and a deterministic
+  semantic-validation refusal: failure exits nonzero before either full-pool marker. The
+  predecessor-order mutation really executes the costly marker before refusing. This proves
+  sequencing/failure propagation, not successful software execution; the full run separately
+  supplies that. Fixture Makefiles live only in an owned temporary directory and are removed.
+- Normal make software-scheduling-check schema-check passes; then unchanged make verify build
+  starts with actual selected-toolchain/discovery/type/schema/F1/F2/semantic/candidate/capability
+  and remaining fast checks, all green, before pnpm test:software starts. The full pools and
+  governance/content/build result remain in flight; do not close the row from the marker test.
+- Full reordered normal make verify build exits zero:5956 software/393 files, seven isolated
+  performance cases/four files,257 content cases/26 files and every existing type/schema/F1/F2/
+  semantic/candidate/capability/source/presentation/release/governance/corpus/build guard.
+  Actual application, worker, content, browser and schema source bytes are unchanged from
+  c38ed0ad; no new browser sweep is claimed for a Make-only sequencing change.
+- Close D3869 with actual Make/test path evidence. Sync correctly refuses the intermediate
+  closed-glyph/doing mismatch; the explicit path-backed done transition then passes, restoring
+  zero untriaged/1748 live with36 doing/1708 done. No prose-only completion, role reassignment,
+  new wrapper, hook policy, service requirement or whole-milestone/remote-green inference.
+  Update the existing queue/roadmap checkpoint and remove the now-closed CI step from the source
+  nextAction. Return to exposure/source integration under the accepted contract; goal stays active.

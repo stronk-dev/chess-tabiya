@@ -131,7 +131,11 @@ software gate includes `make make-toolchain-check`, which runs actual Make launc
 deliberately different ambient Node fixture. It does not install or upgrade a runtime.
 
 `make verify` is the aggregate local gate. GitHub presents its three owners separately:
-`make verify-software` runs types, synthetic/runtime contracts and compiled manifests;
+`make verify-software` refuses toolchain/type/generated-contract errors first, then runs the
+complete software pool followed by the isolated performance pool. Its unchanged28 gates use
+the normal serial Make command in host development and CI; no extra wrapper or environment
+prefix is needed. The actual expanded Make plan and complete test population have scheduling
+regressions in `tools/software-scheduling.test.mjs`.
 `make verify-governance` runs the registers, roadmap and process invariants; and
 `make verify-content` runs tests that deliberately read committed corpus bytes. It also runs
 the installed-pack Support controls (`make local-module-content-check`). The unauthored

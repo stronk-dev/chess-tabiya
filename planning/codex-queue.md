@@ -23,11 +23,10 @@ Inspector/Nudge/Review slot. D3792 now waits on D3841's implementation, not anot
 review. D3867/D3868 and the remaining source rows stay live until actual cutover/proof. No legacy
 pipeline or owner question is required; no whole milestone, qualification or release promotion.
 
-Small verification-maintenance slice [[D3869]] before the next source implementation: fail fast
-on the existing generated-contract checks before expensive software/performance pools. The
-current pipeline correctly catches stale data, but does so after minutes of unrelated passing
-tests. Reorder existing normal Make prerequisites and strengthen existing scheduling tests;
-retain all gates/populations/native/performance isolation. No new command wrapper or hook policy.
+Verification sequencing [[D3869]] is closed: the same28 normal Make gates now fail fast before
+both complete pools, with actual-plan/failure-order regressions and full verification green.
+No new wrapper, hook policy, skipped case or deadline change. The next live item remains
+exposure/source integration, not another CI-command redesign or authoring round.
 
 **Current owner ruling, 2026-10-15 — D3851:** “zero legacy required. we are pre launch. make it
 all right.” This supersedes the compatibility/pipeline-preservation instructions below. Build

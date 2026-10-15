@@ -37,6 +37,13 @@ rehearsal smoke passes separately; no new full-browser sweep or tactical qualifi
 claimed. The previous full sweep remains396 browser cases/one configured optional skip and
 112 unretried composition cells. No remote CI, whole-milestone or release claim.
 
+D3869 also closes the measured verification-order debt: existing28 normal Make gates now
+refuse stale generated contracts before both full test pools. Four scheduling regressions
+check the actual Make plan, failure propagation and unchanged393-file/native ownership;
+the reordered full verify/build command passes. No new wrapper, hook/service requirement,
+deadline inflation or skipped test. Source integration remains next; release truth still
+requires its separately recorded remote and operator proofs.
+
 ### Earlier checkpoints — history, not the current queue
 
 The following dated work descriptions retain the sequence of findings and repairs. Their

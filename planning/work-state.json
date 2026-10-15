@@ -32235,11 +32235,12 @@
     },
     {
       "id": "D3869",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8bed6ef56dfad2a1cbdee3a96ee31cf153926961b7811981f4a94da13dab5a79",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:98a9d1567b53aac4b1c3e434ce3e4422dcc83448eea600948e27729d0bdf2fb4",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "tools/software-scheduling.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }
