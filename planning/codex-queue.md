@@ -1,10 +1,12 @@
 # Codex queue — rewritten in full 2026-08-16
 
-2026-10-15 — [[D3835]] is the next same-class source-integrity check after [[D3834]]'s
-in-flight shape repair. Reproduce `PrincipleRegistry.add` caller mutation across its digest
-await, including original document/id and citation-array consistency. This is a source-inspected
-risk, not a reproduced failure; keep it separate from the frozen shape verification. Use the
-existing principle/source contract, preserve citation validation and prove behavior before repair.
+2026-10-15 — [[D3835]] is complete after [[D3834]]'s committed shape repair. Five permanent
+predecessor failures become a single owned principle-document/citation snapshot, stable digest/id
+and Library rendering, without freezing caller inputs. Thirty software/24 content focused cases,
+types and full frozen software/performance plus remaining governance/content/build/all browser
+tiers pass. The original duplicate-roadmap-link refusal remains logged; only bookkeeping changed
+between those stages. Existing source validation/qualification and D3792 independent acceptance
+holds remain; do not reopen this completed repair or count it as full theory/Support delivery.
 
 2026-10-14 — D3805 takes D3792's actual permitted-prefix supplier prerequisite. Exercise genuine
 runtime branches, explicit two-attempt endpoints, current disclosure and historical event replay;

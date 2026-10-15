@@ -3505,6 +3505,13 @@ rating-pool-research:
 build:
 	pnpm build
 
+.PHONY: principle-registry-check
+# Snapshot ownership and citation coherence are software contracts; real Library/pack joins
+# remain in the explicit content tier. Both suites also run in their ordinary CI tiers.
+principle-registry-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/principle-registry-snapshot.test.ts apps/server/src/authoring-execution.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/principle-registry.test.ts apps/server/src/principle-citation.test.ts apps/server/src/theory-library.test.ts
+
 .PHONY: shape-registry-check
 # Frozen registered documents, authoring/hydration and exact trigger/signature validation.
 # Permanent tests also run in the ordinary software tier; no corpus coverage gate is added.

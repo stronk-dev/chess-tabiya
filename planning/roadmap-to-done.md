@@ -19,6 +19,13 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3835 closes the analogous principle boundary: five predecessor failures cover document identity,
+citation loss/replacement, nested aliases and actual Library rendering. Thirty software and 24
+real-content/Library focused cases plus types pass. Full software 5864/seven performance and the
+remaining governance/257 content/build/all four browser tiers pass on unchanged production after
+a duplicate roadmap path is removed. All 59 matrix cases/112 unretried cells and packaged production
+pass; no new source trust, content, whole capability or release completion follows.
+
 D3834 repairs an accepted shape-library source-integrity defect: registered triggers/signatures
 cannot change under fixed digests, and hashing/indexing use one owned input snapshot. Four
 predecessor regressions become 45 focused passes/types, including actual authenticated source
@@ -299,15 +306,17 @@ noise, selected-Sight coverage and missing Review sources remain substantive pro
 The checked inventory is 282 completed / 263 live / 24 retired UX items, four active / five
 blocked milestones, and zero official pack graduates. The product RFC register has 42 implementing,
 ten awaiting discharge and 24 draft documents; its 75 archived implementation records and one
-superseded record are subsystem history, not 75 completed product journeys. All 1,733 live ledger rows are assigned, while 462
+superseded record are subsystem history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3834's accepted immutable-shape repair is finished with complete
-normal verification/build/all four browser tiers exiting zero: 5,855 software, seven performance,
-257 content and 393 browser passes, one configured optional Maia skip, zero retries and 112
-composition cells. Strengthened authenticated source-export assertions subsequently pass all 45
-focused cases and workspace types, with production unchanged from that full run. D3835 is a
-separate source-inspected principle-registry risk awaiting reproduction, not a verified defect.
+Current local checkpoint: D3835's accepted principle snapshot repair is finished with 5,864 software
+cases/seven unchanged-budget performance checks passing. The first aggregate stops at my duplicate
+roadmap evidence path; after removing only that duplicate, remaining governance/257 content/build/
+all four browser tiers exit zero on unchanged production/tests/canonical docs. The 59-case matrix
+has no skipped/unexpected/flaky cases or retries, with all 112 composition cells proven; packaged
+production also passes. The optional uncached Maia check remains skipped. Thirty software/24
+real-content focused controls and workspace types pass; no content or semantic metadata moves.
+D3834's preceding committed full shape-source proof remains closed at its own checkpoint.
 D3830's exact recorded selection and the preceding accepted repairs remain closed. D3831–D3833
 are bounded source research/draft authoring; they do not deliver scoped Inspector or close the
 independent acceptance and production API/client/native obligations. All historical failures and

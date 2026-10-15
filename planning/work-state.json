@@ -31927,11 +31927,12 @@
     },
     {
       "id": "D3835",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4f3df19d51f0e189c25f197a874ed1e1dd0c41fa5603e880b740372475330426",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cb91fd1bff81e6dd0b08cc648337ce981753bc0de8870c16997d8feda88c5e66",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/principle-registry.ts",
+      "evidenceKind": "path"
     }
   ]
 }

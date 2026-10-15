@@ -29534,3 +29534,52 @@ Campaign was the one capability with no API, route or content. Now:
   test-tier separation and all 1,733 live ledger/263 live UX assignments pass. Inspect the
   explicit twelve-file staged list before the normal commit hooks; leave existing untracked
   material untouched. The full goal remains active, not complete or paused.
+
+## 2026-10-15 — D3835 principle document and citation snapshot
+
+- Previous goal turn is progress: c967dcf9 closes the accepted shape repair, current roadmap
+  inventory and full local proof. Revalidate its clean tracked tree; existing untracked material
+  remains untouched. The full 1.0 goal is active and the independent draft acceptances remain held.
+- Take the separately queued D3835 under accepted claim-backing §3.10's stable principle identity
+  and implemented theory-knowledge-pipeline §10 citation joins. The doing transition first refuses
+  the missing required start date; the unchanged normal target with SINCE then succeeds.
+- Add mechanical, corpus-independent permanent controls. The first run has four product failures
+  plus a test fixture incorrectly calling PackRegistry's private constructor. Correct the fixture
+  to its real fromDocuments factory, not a cast or production seam. The unchanged predecessor then
+  has five actual failures and 25 passes: document/id change during Web Crypto, removed/replaced
+  citation array entries, retained nested caller aliases and mismatched actual Library rendering.
+  The new authenticated application read/list compatibility case passes; no remote exploit or
+  installed cited principle is claimed.
+- Capture document and joined citations together before hashing, validate the count on that
+  snapshot, hash/project/index its document and recursively freeze its owned retained values.
+  No caller input is frozen; no new admission/source authority, schema, migration, content,
+  version, trust policy or strategic judgement is introduced. Preserve the existing citation
+  validator, duplicate refusal and truthful source_unavailable proof.
+- Normal principle-registry-check separates software snapshot/HTTP controls from real corpus
+  principle/citation/Library joins. Run it and workspace types, then freeze production/test/docs
+  for full normal verification, build and browser proof before closing the row or committing.
+- The repaired focused run exits zero: 30 software controls, 24 actual-content/Library cases and
+  workspace types with zero Svelte errors/warnings. Both missing/extra citation refusals and actual
+  concurrent duplicate-id refusal remain. No tests, deadlines, policies or tier boundaries weaken.
+- The full run passes all 5,864 software cases/392 files and seven unchanged-budget performance
+  cases/four files, types, packaging and the foundation checks. All 343 semantic cases remain
+  current without regeneration; full qualification remains zero. Current-body governance then
+  refuses my duplicate docs/claim-backing.md checkpoint link. Remove only the repeated path and
+  refresh the existing receipt; production/test/canonical docs are unchanged. Run remaining
+  governance/content/build/browser gates normally rather than misreporting the stopped aggregate
+  as a pass or repeating the already-passed frozen software tier without a source change.
+- The remaining normal `make roadmap-receipt verify-governance verify-content build
+  test-browser-ci-awake` exits zero: current-body governance, all 257 content cases/26 files,
+  corpus checks with no errors, build and all four browser tiers. Five browser content cases
+  pass; the 59-case matrix independently reports zero skipped/unexpected/flaky cases and 59
+  passed results at retry zero, with all 112 required/proven composition cells present.
+  Packaged production passes its real start/play journey. The configured uncached Maia skip
+  remains; no retry, threshold, source or canonical-doc change enters the remaining run.
+- Close D3835 with the production path evidence, update the existing queue/roadmap/receipt and
+  verify final docs/state/checkpoint plus normal staged hooks before the explicit twelve-file
+  commit. The immutable-source repair fulfills existing intent; it falsifies no protected intent
+  sentence. No new RFC acceptance, citation verification, source authority, semantic qualification,
+  official graduate, full capability/milestone or remote/release proof is claimed. Goal stays active.
+- Final docs/roadmap/state/UX checks exit zero: R1–R10 green, all 1,732 live ledger items and
+  263 live UX items assigned, zero untriaged. Inspect the explicit owned staged list and retain
+  the ordinary commit hooks; no push, publication, deployment or new feature wave is included.

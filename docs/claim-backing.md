@@ -44,6 +44,12 @@ phases, one closed basis (`chess_tradition`, `authors_practice`, `instrument_pat
 `cited_source`), provenance, and a required counter-case. The registry is a provenance floor for
 authored judgement; it does not grade whether a particular claim correctly instantiates the principle.
 
+Registration captures the document and its joined citations together before awaiting its digest.
+The stored record, index and nested citation values use that frozen, independently owned snapshot;
+later caller edits cannot change the statement, quotation or attribution under its retained identity.
+Caller inputs and decoded HTTP responses remain client-owned. This does not establish citation
+truth: the existing validator and separate local-source-byte proof still determine admission.
+
 Lane 0.2 (`rfc/theory-knowledge-pipeline.md` §10) lets `provenance.sources` carry a structured
 citation `{sourceId, revisionUrl, sha256, sectionRef, quotedText}` beside free-text notes.
 `standsOn: "cited_source"` holds exactly when at least one structured citation is present. Every

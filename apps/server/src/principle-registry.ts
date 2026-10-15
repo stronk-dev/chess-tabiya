@@ -26,7 +26,12 @@ export interface PrincipleRecord {
   readonly citations: readonly JoinedCitation[];
 }
 
-function freeze<T>(value: T): T { return Object.freeze(value); }
+function freeze<T>(value: T): T {
+  if (value !== null && typeof value === "object") {
+    for (const child of Object.values(value)) freeze(child);
+  }
+  return Object.freeze(value);
+}
 
 function project(document: PrincipleEntryDefinition): PrincipleEntryDefinition {
   return freeze({
@@ -70,15 +75,18 @@ export class PrincipleRegistry {
   byDigest(digest: string): PrincipleRecord | undefined { return this.#digests.get(digest); }
 
   async add(document: PrincipleEntryDefinition, citations: readonly JoinedCitation[] = []): Promise<PrincipleRecord> {
-    const structured = document.provenance.sources.filter((source) => typeof source !== "string").length;
-    if (structured !== citations.length) throw new ServerError("PACK_INVALID", `Principle ${document.id} carries ${structured} structured citations but ${citations.length} joined records; join them through validatePrincipleEntry`);
-    const digest = await digestPrincipleEntry(document);
-    const frozen = project(structuredClone(document));
+    // Own both inputs before the digest await: a later caller edit must not change either
+    // the source identity or the joined citation that Library renders beside that source.
+    const snapshot = structuredClone({ document, citations });
+    const structured = snapshot.document.provenance.sources.filter((source) => typeof source !== "string").length;
+    if (structured !== snapshot.citations.length) throw new ServerError("PACK_INVALID", `Principle ${snapshot.document.id} carries ${structured} structured citations but ${snapshot.citations.length} joined records; join them through validatePrincipleEntry`);
+    const digest = await digestPrincipleEntry(snapshot.document);
+    const frozen = project(snapshot.document);
     const record = freeze({
       document: frozen,
       digest,
       summary: freeze({ id: frozen.id, version: frozen.version, digest, name: frozen.name, statement: frozen.statement, phases: frozen.phases, licence: frozen.provenance.licence }),
-      citations: freeze([...citations]),
+      citations: freeze(snapshot.citations),
     });
     if (this.#records.has(frozen.id)) throw new ServerError("PACK_INVALID", `Duplicate principle id ${frozen.id}`);
     this.#records.set(frozen.id, record);

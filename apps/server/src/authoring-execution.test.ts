@@ -11,6 +11,7 @@ import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { validateClaimBindings } from "./sourcing/claim-binding.js";
 import type { EvidenceLedger, SourcingIssue } from "./sourcing/types.js";
 import { ShapeRegistry, type ShapeRecord } from "./shape-registry.js";
+import { PrincipleRegistry, type PrincipleRecord } from "./principle-registry.js";
 
 const FEN = "4k3/8/8/8/8/8/8/4K3 w - - 0 1";
 const SHAPE: ShapeEntryDefinition = {
@@ -131,6 +132,36 @@ describe("authenticated authoring refusal and retry", () => {
     headers = { "content-type": "application/json", cookie: registration.headers.get("set-cookie")!.split(";", 1)[0]! };
   });
   afterAll(async () => { await owned?.close(); });
+
+  it("keeps actual registered principle identity and Library reads stable under client-owned edits", async () => {
+    const listed = await request("/principles");
+    expect(listed.status).toBe(200);
+    const { principles } = await listed.json() as { principles: { id: string; digest: string; statement: string }[] };
+    expect(principles.length).toBeGreaterThan(0);
+    const summary = principles[0]!;
+    const get = PrincipleRegistry.prototype.get;
+    let record: PrincipleRecord | undefined;
+    vi.spyOn(PrincipleRegistry.prototype, "get").mockImplementation(function (this: PrincipleRegistry, id) {
+      const actual = get.call(this, id);
+      if (id === summary.id) record = actual;
+      return actual;
+    });
+    const path = `/theory/principles/${encodeURIComponent(summary.id)}`;
+    const first = await request(path);
+    expect(first.status).toBe(200);
+    const body = await first.json(), saved = structuredClone(body);
+    expect(body).toMatchObject({ id: summary.id, digest: summary.digest, statement: summary.statement });
+    expect(record).toBeDefined();
+    expect(Reflect.set(record!.document, "statement", "Changed registered statement")).toBe(false);
+    body.statement = "Changed decoded response";
+    body.citations.push({ quotedText: "Client-only citation" });
+    const second = await request(path);
+    expect(second.status).toBe(200);
+    expect(await second.json()).toEqual(saved);
+    const relisted = await request("/principles");
+    expect(relisted.status).toBe(200);
+    expect(await relisted.json()).toEqual({ principles });
+  });
 
   it.each(["missing_policy", "impossible_latency", "raw_source"] as const)("refuses %s without saving a phantom shape draft", async fault => {
     const before = await (await request("/shapes/drafts")).json();
