@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Strict-overload construction, 2026-10-15 ([[D3847]]/[[D3852]]): actual initial duty/capture
+receipts and four hypothetical recapture→exchange joins distinguish internal calculation from a
+fictitious third sealed witness. The rejected two-input derived proposal hits F1 grounding;
+counterfactual relabelling is not adopted. F2 §2.3e instead proposes a directly computed conventional
+edge predicate with three direct conventions and no sealed prerequisites. Exact contract and
+production qualification remain separate; map18/57 is conditional. `[V]`
+`module-evidence-assembly.md` §Strict overload's hypothetical authority; existing incoming/prefix targets.
+
 Sequence literal-source replay, 2026-10-15 ([[D3847]]/[[D3851]]): 84 per-recorded-output old-factory
 replays across eleven families; 84 edge/84 narrative-order refusals; 24 complete capture populations
 and18 capture/18 exchange indexed source joins. Independent read-only recheck closes diagnostic

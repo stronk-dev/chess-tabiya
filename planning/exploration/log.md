@@ -30296,3 +30296,46 @@ Campaign was the one capability with no API, route or content. Now:
   artifact or production change. Full software/browser proof remains the earlier5542cc2d run,
   not a fresh claim from this research pass. Stage only the explicit checkpoint files and retain
   the three pre-existing untracked entries; no push or goal pause.
+
+## 2026-10-15 — D3847/D3852 strict overload: computed source instead of fictitious lineage
+
+- Previous goal turn was progress:2a2018b1 committed genuine sequence tuples, source joins and
+  capture-completeness evidence. Recheck main/status; only the same three pre-existing untracked
+  entries remain. Continue the full1.0 goal without promoting a capability or pausing it.
+- Extend only existing incoming/prefix instruments. Four actual overload outputs have duty/capture
+  source lists; their four hypothetical positive exchanges reproduce at actual recapture FENs,
+  not the played candidate's before-position. Preserve318 controls/218 requests and imported
+  source cases. The first added check incorrectly assumes the exchange factory returns an
+  availability union; strict types reject it. Use its real population return type, no type waiver.
+- Author a two-input derived proposal, then run the real unchanged F1: normal prefix research
+  fails EVIDENCE_DERIVATION_WIDENS. Ledger D3852 before considering a repair. Counterfactual
+  position grounding compiles but is not adopted. Independent review confirms the primary
+  convention authority and corrects an additional local/non-local execution assertion.
+- Work-state sync intentionally refuses one new untriaged row. An initial doing transition
+  omits required since and refuses; rerun the normal transition with since2026-10-15. All3601
+  rows/1738 live are assigned, zero untriaged; D3852 is doing under evidence-foundation.
+- Use the existing computed legal-edge construction category instead of changing F1. F2 §2.3e
+  explicitly supersedes the rejected @2 with a direct conventional rules.tactic predicate;
+  all three conventions bind directly, no independent sealed input is consumed/discarded,
+  and validation precedes quiet early return. Preserve old helper/factory/receipts/callers,
+  full operands/order/availability, en-passant and promoted-recapturer semantics. Inspector's
+  exact proposed slot/supplier changes; other callers and all permission/source holds remain.
+- The final normal combined prefix/incoming target exits zero with strict types:24 complete
+  old outcome comparisons, three invalid quiet-edge refusals, four hypothetical FEN/target joins,
+  direct-convention metadata and18/57 map with ten negative controls. Preserve the first failed
+  derived proposal and intermediate exactOptionalPropertyTypes refusal; omit the old derivation
+  property properly, without changing types or flags. No raw recording or production edit.
+- Independent read-only review finds no remaining normative blocker in this bounded revised
+  component, not source qualification or joint acceptance. Actual factories/receipts, old/new
+  production equivalence, promoted/mixed-candidate controls, complete bindings and HTTP/native
+  delivery remain. D3851, fork/D3768, structural/last-level schemas, opaque inputs and D3845
+  remain open. Update the existing roadmap/queue/ledger/review; no new tracking document.
+- Label the incoming report's timing boundary honestly: added reconstruction is inside the
+  measured interval, so maxMs is diagnostic wall time, not a comparable production-cost claim.
+  No new performance budget, source-cache or latency advantage follows from this research.
+- Final incoming rerun exits zero on the timing-labelled bytes; normal roadmap receipt and
+  governance exit zero with3601 assigned rows/1738 live, zero untriaged, unchanged569 UX items
+  and all lifecycle/resource/intent/tier/doc/process checks. No production or ordinary CI gate
+  changed; full software/browser proof remains prior5542cc2d, not a new claim. Stage only the
+  explicit fourteen owned files, retain the three pre-existing untracked entries and use normal
+  hooks. No push, accepted-contract bypass, source qualification or goal pause.

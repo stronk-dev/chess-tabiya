@@ -10,7 +10,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3841/D3846/D3847/D3850, §§2.3a–2.3d:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3841/D3846/D3847/D3850, §§2.3a–2.3e:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845 independently holds rank's variable/empty input contract.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -508,6 +508,80 @@ authority; existing comparison/prefix targets and independent read-only review. 
 reconstruction/selection controls, not new source completeness receipts, independent chess
 correctness, runtime qualification or upstream/joint acceptance.
 
+#### 2.3e Draft D3847/D3852 computed strict-overload source — unaccepted
+
+**Replaces the rejected two-sealed-input proposal.** Existing old receipts retain duties/capture,
+not the third exchange their declaration names. A proposed derived @2 with those two literal
+inputs fails unchanged F1: both are position-grounded while the conventional classifier is not.
+The counterfactual position_rules label compiles but is not a truthful-authority ruling. Retain
+that failed experiment; do not mint @2, change its primary label for green checks, weaken F1 or
+attach an unused exchange/convention witness. This section instead uses F2 §2.1's existing direct
+computed-edge category: all authority is reconstructible from one legal board edge. Construction
+mode and primary grounding remain separate. This does not authorize computed Story/Compare leaves
+over recorded populations, availability or history that cannot be reconstructed from one edge.
+
+| Proposed exact ref | Sole proposed factory | Sole authority arm | Literal sealed inputs |
+|---|---|---|---|
+| `rules.tactic.predicate.overload_conflict@1` | `createRulesTacticPredicateOverloadConflictV1Evidence` | `{beforeFen,moveUci,afterFen}` | none — computed |
+
+This belongs to existing `rules.tactic@1`, rules plane, local/sync. It is a computed conventional
+predicate, not position_rules truth merely because the producer is named rules. Retain
+declared_convention/convention/not_applicable, fact-only answer content, old payload fields and
+list/panel/machine_condition forms. Its derivation is absent and dependsOn is empty: it accepts
+no independent sealed prerequisite. All three `overload-conflict@1`, `defence-duty@1` and
+`legal-exchange@1` contributions are **direct**, not inherited from nonexistent input receipts.
+Name each literal registered ref in the projection semantics so the existing direct-closure
+derivation registers/checks exactly those contributions with definition-and-limitations disclosure.
+No convention definition/version, registry or F1 guard changes.
+
+Capture/canonicalize the complete legal edge with the shared validated-edge authority **before
+any computation**, including quiet/no-capture paths. Validate actual legal UCI and byte-identical
+canonical resulting FEN; malformed/crossed edges are errors, not clear/no_witness/unavailable.
+The old pure helper returns clear immediately for absent capture, so calling it before validation
+would be incorrect. Obtain capture identity internally from the existing pure transition/capture
+operation, including en-passant victim square distinct from landing. Do not accept caller capture,
+initial duty reading, exchange, output, status, optional override or arbitrary field. Use pure
+internal calculations, not sealed factories whose admitted evidence is consumed then discarded.
+
+Invoke the existing `overloadedDefenderResponseConflict` once from that validated edge and actual
+capture fact, with its own initial duty computation. Do not implement a second motif algorithm.
+Retain its four clauses: exact sole-defender duties for removed/retained targets; a legal recapture
+by that defender; no recapture preserving every retained duty; and, after every recapture, a
+positive legal-exchange@1 capture of at least one retained target. Replay each legal recapture
+from the actual after-position and use its actual landing occupant, including promoted roles.
+Preserve complete legal recaptures, retained targets, positive captures and nested exchange
+operands/order. Each exchange starts at the named recapture's actual resulting FEN and captures
+that retained target, not the candidate's before-position or an unrelated positive target.
+These hypothetical calculations are not recorded opponent play, force, significance or a grade.
+
+Return availability of the existing ordered `OverloadedDefenderConflict` population: available
+conflicts if any exist; otherwise unavailable/no_legal_recapture if the current missing-recapture
+condition occurred; otherwise available empty. Preserve that precedence across different duty
+candidates. No capture is successful empty, not a fake capture/absence receipt. The projection's
+abstention reason is no_legal_recapture; it has no sealed-input-abstained arm. The source receipt
+binds its exact canonical legal edge and direct conventions, with zero sealed source digests.
+Its compiler/execution image has no derivation choices or non-local source requirements.
+
+The proposed successor Inspector replaces only the original strict-overload topic slot with this
+exact new ref in local_rules. `prepareInspectorDependentEdgeSource` receives its admitted actual
+run.record.edge@1 from the validated original/granted graph and passes only that edge's three
+canonical operands to the new factory. Arithmetic authority proves neither recorded occurrence
+nor permission; requested/creating branch, selected endpoint, access/disclosure/cancellation
+remain the source owner's separate obligations. Register the exact sole route/invoker, type
+profile, predicate validation subject, complete consumer/adapter/execution and renderer pairs.
+Renderer output preserves the old learner wording/operands under the new ref, not raw packet
+prose. Preserve old derived@1/factory/helper/receipts and all old callers; no implicit Hint, Nudge,
+bot, pack or validation-subject migration and no retrospective reissue as the new source.
+
+Acceptance requires actual direct factory/receipt/closure and pre-work invalid-edge refusals,
+including quiet early-return cases; orthodox/both-color en passant, clear, no-capture,
+pinned/no-legal-recapture and promoted-recapturer preservation; each positive exchange's replayed
+FEN/target join; complete old/new payload/order/availability equivalence and mixed-candidate
+precedence; old caller/receipt preservation and mutation isolation. Require full consumer preflight,
+current authorization/disclosure/cancellation, receiver and native delivery proof. The disposable
+recipe and metadata compilation prove none of those new production boundaries. Independent
+upstream and joint review remain required; fork/D3768, D3851 and D3845 are not discharged here.
+
 #### 2.4 Authored authority
 
 Authored/theory factories accept the registered pack, shape, principle, citation or claim record
@@ -963,6 +1037,12 @@ None for the owner. Author review must settle exact successor symbol spelling an
 192-route migration table before acceptance; those are buildability obligations, not product choices.
 
 ## Changelog
+
+- 2026-10-15: D3847/D3852 §2.3e proposes a direct computed conventional strict-overload predicate
+  from one validated legal edge. It supersedes the rejected two-input derived@2 proposal;
+  that F1 failure stays in the research instrument. No primary relabel, dummy witness or F1
+  amendment; all three conventions bind directly. Historical callers and all other source/
+  collection holds remain. This is unaccepted authoring, not a new factory or Inspector acceptance.
 
 - 2026-10-15: D3847 §2.3d records measured negative-selection source obligations for Compare
   structure and Story last-level before choosing their exact schemas. Complete populations,

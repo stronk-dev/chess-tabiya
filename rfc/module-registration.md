@@ -1901,10 +1901,10 @@ bindings. No held-binding compiler exception or source retirement is authorized.
 D3841 independent follow-up and its recorded-versus-live refinement.
 
 **D3841 exact affected-source map — unaccepted author image:** replace each of the following
-refs in its predecessor inventory slot, preserving all other58 refs/order and all @1 contracts.
+refs in its predecessor inventory slot, preserving all other57 refs/order and all @1 contracts.
 This is an obligation-preserving proposed map, not complete literal factory-input closure.
 D3847's fixture audit reaches31 conflicting routes in the current declared Inspector union;
-retaining those58 topics is conditional on source-contract reconciliation and independent review.
+retaining those57 topics is conditional on source-contract reconciliation and independent review.
 Do not fabricate unused prerequisites or treat an executable declaration as qualified lineage.
 D3847's independent continuation also finds that scope-only reuse of existing recorded-window
 @2 and fork/overload factories below does not resolve their literal schemas. Fixed witness tuples,
@@ -1916,7 +1916,11 @@ The initial twelve rows account for nine narrow provider-labelled leaves and thr
 topics. D3846 adds two currently compilable but false fixed-tuple topics; they are not new provider
 failures. D3847/D3850 add two material topics and the direct computed promotion reading below;
 their exact reconstruction and same-payload/foreign-FEN controls do not establish new runtime
-factories. Proposed source factories are owned by value-authority §§2.3a–2.3c, not implemented by this
+factories. D3847/D3852's strict-overload component adds one direct computed conventional
+predicate, superseding the rejected two-sealed-input proposal without a grounding relabel or F1
+change. All arithmetic is reconstructed from the admitted legal edge. Fork survival and its separate D3768
+terminal rule remain unresolved. Proposed source factories are owned by value-authority
+§§2.3a–2.3e, not implemented by this
 table. The old `recorded.engine.eval@1` and `recorded.tablebase.result@1` sourcing-ledger topics
 remain separate; a ledger record cannot substitute for a run attachment.
 
@@ -1939,6 +1943,7 @@ remain separate; a ledger record cannot substitute for a run attachment.
 | `derived.material.reading.role_signature@1` | `derived.material.reading.role_signature@2` | derived | D3847 complete ten-count same-FEN derivation; value-authority §2.3c |
 | `derived.material.event.role_asymmetry@1` | `derived.material.event.role_asymmetry@2` | derived | D3847/D3850 before/after signatures plus the complete capture/promotion arm; value-authority §2.3c |
 | `derived.tactic.promotion_pressure@1` | `rules.tactic.reading.promotion_pressure@1` | local_rules | D3847 direct FEN arithmetic with declared pass/reply convention; value-authority §2.3c |
+| `derived.tactic.overloaded_defender_response_conflict@1` | `rules.tactic.predicate.overload_conflict@1` | local_rules | D3847/D3852 direct legal-edge computation under the existing overload/defence/exchange conventions; value-authority §2.3e, unaccepted |
 
 This establishes a **requirements image**, not executable bindings:75 retained topic obligations
 plus six detail refs produce81 distinct proposed accepted refs. Actual adapter count may be larger
@@ -2309,16 +2314,20 @@ selection. No client FEN, guessed parent, shallow replacement Run or later playe
 supplies its operands. Retain requested branch/endpoint separately from the edge's creating
 branch: an inherited shared-prefix node remains valid on a child branch.
 
-| Exact dependent source | Sole existing dependency/factory path |
+| Exact proposed dependent source | Required dependency/factory path |
 |---|---|
 | `derived.tactic.discovered_executed@1` | Before-position `rules.tactic.reading.discovered_latency@1` plus same-edge `rules.transition.event.slider_ray@1`, then the unchanged target factory and its gained-ray semantics |
 | `derived.tactic.fork_survives_reply@1` | Same-edge `rules.tactic.event.double_attack@1`; a successful empty event population is `no_witness`. Otherwise use its one actual event and matching same-edge `rules.tactic.consequence.reply_breadth@1`, then the unchanged target factory |
-| `derived.tactic.overloaded_defender_response_conflict@1` | Same-edge `rules.transition.event.capture@1`; successful empty capture population is `no_witness`. Otherwise use the actual capture and before-position `rules.tactic.reading.defender_duty_set@1`, then the unchanged strict-conflict factory |
+| `rules.tactic.predicate.overload_conflict@1` | Pass the actual selected edge's canonical beforeFen/moveUci/afterFen to proposed `createRulesTacticPredicateOverloadConflictV1Evidence`; it validates the complete legal edge before capture/quiet work and computes capture/duties/hypothetical replies internally under value-authority §2.3e. No sealed prerequisites, caller capture or result override; this is not an existing export. The D3836 diagnostic still exercises old derived@1 |
 | `rules.tactic.consequence.forced_mate_after_move@1` | Same-edge `rules.tactic.consequence.reply_breadth@1`, beforeFen and explicit `maxAttackerMoves`, then the exact v1 factory |
 | `rules.tactic.consequence.forced_mate_after_move@2` | The same dependency scope and explicit horizon, then the exact v2 factory; never relabel a v1 payload |
 
 The supplier retains the actual edge, exact dependency items and genuine factory outcomes.
-Existing F2 arms, receipts, versions and source meanings remain unchanged; those receipts
+The computed strict-overload row supersedes D3836's earlier unchanged-derived@1 proposal and
+D3852's rejected derived@2 alternative only for the new Inspector. Its factory reconstructs all
+authority from the legal edge; do not implement it by relabelling old sealed outputs or silently
+consuming/discarding sealed prerequisites. All existing F2 arms, receipts, versions
+and source meanings remain unchanged; those receipts
 alone are not current-context authority. Special moves retain the source's actual identities:
 an en-passant captured target is not its landing square. No co-defender or motif verdict is
 guessed from a partial population. Strict overload's `no_legal_recapture` is **unavailable
@@ -3526,6 +3535,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-10-15 — D3847/D3852 adds the proposed direct computed strict-overload source/factory/
+  supplier component from value-authority §2.3e, replacing the rejected two-input derived@2
+  proposal without changing F1 or primary convention grounding. The requirements map now
+  replaces18/retains57 topics, still75+6 refs, not executable bindings.
+  D3836's old @1 diagnostic and every historical caller remain;
+  fork terminal policy, sequence pipeline choice D3851 and joint acceptance are not resolved.
 
 - 2026-10-15 — D3847's complete-population/negative-selection measurements return structural
   Compare lineage to an explicit authoring hold (F2 §2.3d), not a new scoped @1 arm. The stale

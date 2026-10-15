@@ -21,6 +21,7 @@ import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/ev
 import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, compileEvidenceManifest, type DeclaredEvidence, type ProjectionDeclaration,
   type ProducerDeclaration } from "../../packages/runtime/src/evidence-contract.js";
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
+import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
 import { reviewStoryMoments, rankStoryMoments } from "../../packages/runtime/src/story.js";
 import { reviewPacketForRun, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
 import { importedRun, importRecord, evaluationDelivery, attachDelivery } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
@@ -322,6 +323,53 @@ console.log(JSON.stringify({ scope: "D3846 prospective fixed tuples compile in u
   successorDeclarations: 2, phaseRecordedOccurrences: [[1], [3]], collapseRecordedOccurrences: [[1], [3], [5]],
   providerOperations: 0, oldDeclarationsChanged: false }));
 
+// D3847's strict overload computes hypothetical exchanges internally. Its literal sealed
+// inputs are duties/capture, not an invented single exchange for every legal recapture.
+const overloadOld = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.tactic.overloaded_defender_response_conflict" && row.version === 1)!;
+const overloadInputs = [{ id: "rules.tactic.reading.defender_duty_set", version: 1 }, { id: "rules.transition.event.capture", version: 1 }];
+const overloadDraft = readFileSync("rfc/evidence-value-authority.md", "utf8").split("#### 2.3e Draft D3847")[1]!.split("#### 2.4")[0]!;
+const overloadComputedRef = { id: "rules.tactic.predicate.overload_conflict", version: 1 };
+const overloadRow = overloadDraft.split("\n").find(line => line.startsWith(`| \`${overloadComputedRef.id}@1\` |`));
+assert(overloadRow);
+assert.equal(overloadRow.split(" | ")[3]!.replace(/ \|$/u, ""), "none — computed");
+const overloadProposed: ProjectionDeclaration = { ...overloadOld, version: 2,
+  dependsOn: overloadInputs, derivation: { inputs: overloadInputs },
+  disposition: { kind: "inspector_only", reason: "D3847 isolated two-input proposal, not source adoption" } };
+const overloadCandidate = (grounding: ProjectionDeclaration["grounding"]) => compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "derived.tactic"
+    ? { ...producer, outputs: [...producer.outputs, { ...overloadProposed, grounding }] } : producer) });
+// D3852: retain the real authoring failure. The contrasting metadata is NOT a proposed
+// authority correction; a green manifest cannot decide whether its primary label is truthful.
+assert.throws(() => overloadCandidate("declared_convention"), /EVIDENCE_DERIVATION_WIDENS/u);
+const overloadCompiled = overloadCandidate("position_rules");
+const overloadPath = compileProjectionExecution(overloadCompiled, { id: overloadOld.id, version: 2 });
+assert.equal(overloadPath.paths.length, 1);
+assert.deepEqual(overloadPath.paths[0]!.derivationChoices.find(choice => choice.projection.id === overloadOld.id)!.inputs, overloadInputs);
+assert.deepEqual(overloadPath.paths[0]!.sourceRequirements, [], "local computations are not non-local execution leaves");
+console.log(JSON.stringify({ scope: "D3852 rejected strict-overload proposal and counterfactual metadata, NOT authority correction/adoption",
+  literalInputRefs: overloadInputs.map(ref => `${ref.id}@${ref.version}`), proposedGroundingRefused: true,
+  counterfactualPositionGroundingCompiles: true, nonLocalSourceRequirements: 0, providerOperations: 0, oldDeclarationsChanged: false }));
+const { derivation: discardedOverloadDerivation, ...overloadComputedBase } = overloadOld;
+assert(discardedOverloadDerivation !== undefined);
+const overloadComputed: ProjectionDeclaration = { ...overloadComputedBase, ...overloadComputedRef,
+  producer: { id: "rules.tactic", version: 1 }, plane: "rules", dependsOn: [],
+  semantics: `${overloadOld.semantics} Computed from one legal edge under overload-conflict@1, defence-duty@1 and legal-exchange@1.`,
+  abstention: { possible: true, reasons: ["no_legal_recapture"] },
+  disposition: { kind: "inspector_only", reason: "D3852 isolated direct computed proposal, not registered source adoption" } };
+const overloadComputedManifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS,
+  producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map(producer => producer.id === "rules.tactic"
+    ? { ...producer, outputs: [...producer.outputs, overloadComputed] } : producer) });
+const overloadComputedPath = compileProjectionExecution(overloadComputedManifest, overloadComputedRef);
+assert.equal(overloadComputedPath.paths.length, 1);
+assert.deepEqual(overloadComputedPath.paths[0]!.derivationChoices, []);
+assert.deepEqual(overloadComputedPath.paths[0]!.sourceRequirements, []);
+const overloadDirectConventions = deriveProjectionConventionTable(overloadComputedManifest).get(`${overloadComputedRef.id}@1`)!;
+assert.deepEqual(overloadDirectConventions.refs.map(ref => `${ref.id}@${ref.version}`),
+  ["defence-duty@1", "legal-exchange@1", "overload-conflict@1"]);
+console.log(JSON.stringify({ scope: "D3852 direct computed conventional metadata only; no factory/receipt/consumer qualification",
+  grounding: overloadComputed.grounding, exactness: overloadComputed.exactness,
+  sealedInputs: 0, directConventions: overloadDirectConventions.refs, providerOperations: 0, oldDeclarationsChanged: false }));
+
 // Hypothetical declaration ONLY, compiled by the real unchanged F1 guard; never source adoption.
 const positionDeclaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "run.record.position")!;
 const oldMarker = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.pivotal.human_divergence")!;
@@ -383,14 +431,15 @@ const localSourceRebases = [
   ["derived.material.reading.role_signature@1", "derived.material.reading.role_signature@2"],
   ["derived.material.event.role_asymmetry@1", "derived.material.event.role_asymmetry@2"],
   ["derived.tactic.promotion_pressure@1", "rules.tactic.reading.promotion_pressure@1"],
+  ["derived.tactic.overloaded_defender_response_conflict@1", "rules.tactic.predicate.overload_conflict@1"],
 ] as const;
 function checkMap(text: string) {
   const section = text.split("**D3841 exact affected-source map — unaccepted author image:**")[1]!
     .split("**D3841 exact-version closure")[0]!;
   const rows = [...section.matchAll(/^\| `([^`]+@\d+)` \| `([^`]+@\d+)` \|/gmu)].map(match => [match[1]!, match[2]!] as const);
-  assert.equal(rows.length, 17);
-  assert.equal(new Set(rows.map(row => row[0])).size, 17);
-  assert.equal(new Set(rows.map(row => row[1])).size, 17);
+  assert.equal(rows.length, 18);
+  assert.equal(new Set(rows.map(row => row[0])).size, 18);
+  assert.equal(new Set(rows.map(row => row[1])).size, 18);
   const tupleRepairs = pivotalSuccessors.map(row => `${row.id}@1`);
   assert.deepEqual(rows.map(row => row[0]).sort(), [...failedRefs, ...tupleRepairs, ...localSourceRebases.map(row => row[0])].sort());
   for (const [old, successor] of localSourceRebases) assert(rows.some(row => row[0] === old && row[1] === successor));
@@ -421,7 +470,7 @@ console.log(JSON.stringify({ scope: "D3841 draft inventory requirements only, NO
   currentTopics: originalRefs.length, exactAffectedMappings: mapped.rows.length, originalExecutionFailures: failedRefs.length,
   additionalFixedTupleRepairs: pivotalSuccessors.length, unchangedTopics: originalRefs.length - mapped.rows.length,
   proposedTopics: mapped.topics.length, proposedAcceptedRefs: mapped.topics.length + detailRefs.length,
-  localSourceRepairs: localSourceRebases.length, negativeMapControls: 9, rankInputContract: "held_D3845", productionRegistration: false }));
+  localSourceRepairs: localSourceRebases.length, negativeMapControls: 10, rankInputContract: "held_D3845", productionRegistration: false }));
 
 // D3847/D3850 disposable input reconstruction. No new factory, seal or runtime declaration.
 const materialRoles = ["pawn", "knight", "bishop", "rook", "queen"] as const;

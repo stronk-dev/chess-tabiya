@@ -444,3 +444,37 @@ payload preservation and callable/consumer/presentation bindings. D3851 determin
 new-delivery obligations remain; until ruled, neither pipeline may be silently merged or dropped.
 Structural/last-level population schemas and D3845 are separate holds. The17-row map is not a
 completed source contract. No policy ruling, source qualification, upstream or joint acceptance.
+
+### D3847/D3852 strict overload — direct construction correction
+
+The initial two-sealed-input draft is returned on a concrete F1 contradiction: duty/capture
+share position_rules grounding while strict overload retains declared_convention. Normal prefix
+research actually fails EVIDENCE_DERIVATION_WIDENS. Removing a fictitious third exchange does not
+remove the product-valued overload/exchange convention authority. Counterfactual position_rules
+metadata compiles but is not an authority ruling; no such relabelling is endorsed. The execution
+probe also initially confuses local inputs with non-local leaves: literal order belongs in
+derivationChoices.inputs and sourceRequirements is empty. Direct versus inherited closure must
+be exact, not credited to nonexistent input receipts.
+
+The reviewer assesses a simpler alternative under F2's existing computed legal-edge category.
+All overload authority can be reconstructed internally from that edge; construction mode and
+primary grounding are separate. That does not apply to Story/Compare whose authority includes
+recorded populations/history. Conditions: full legal-edge validation even for quiet early exits;
+internal actual capture identity; the existing helper once; no discarded sealed prerequisites;
+all three conventions directly bound; exact new source/factory/consumer migration and old-version
+preservation; recorded occurrence/access remain outside this arithmetic factory.
+
+Main reauthors §2.3e and module-registration accordingly, explicitly superseding rejected derived@2
+with proposed rules.tactic.predicate.overload_conflict@1 under existing rules.tactic@1. Final
+read-only review finds no remaining normative blocker in that bounded component: exact edge arm,
+convention grounding/closure, empty derivation/dependencies, quiet admission ordering, preserved
+payload/availability precedence, exact Inspector local_rules slot/supplier and old callers agree.
+The failed proposal remains in the instrument; counterfactual green metadata is not adopted.
+
+Main reports both normal targets/typechecks exit zero. Existing incoming controls remain318/218,
+two imported games/six selected edges; new recipe compares24 complete old outcomes, three invalid
+quiet-edge refusals and four hypothetical FEN/target joins. Computed metadata/convention closure
+and map18/57/ten negatives pass. The reviewer does not independently run those commands.
+Actual factory/receipt/mutation/pre-work boundaries, promoted recapturers, mixed-candidate
+precedence, complete consumer/presentation closure and authenticated/native delivery remain.
+No D3852 closure, implementation qualification, policy ruling or upstream/joint acceptance.

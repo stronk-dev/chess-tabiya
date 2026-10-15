@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847/D3852 strict overload now has a bounded, independently reviewed direct
+computed source proposal in F2 §2.3e. It replaces the rejected two-input derived@2 shape with
+rules.tactic.predicate.overload_conflict@1: validate one legal edge before quiet work, compute
+all capture/duty/hypothetical authority internally, retain conventional grounding and bind all
+three conventions directly. No F1 change, fake input or primary relabel. Normal incoming/prefix
+targets/types pass24 complete old outcome comparisons, three invalid quiet-edge refusals, four
+hypothetical FEN/target joins and the18/57 requirements map/ten negatives. Preserve the original
+grounding/typecheck failures and all old callers. Independent review finds no normative blocker
+in this component, not acceptance or runtime proof. New factories/receipts, consumer/presentation
+and HTTP/native journeys remain. D3851, fork/D3768, structural/last-level source schemas and D3845
+remain the next authoring obligations; no repeat of the completed fixed-sequence counters.
+
 2026-10-15 — D3847's sequence diagnostic now replays84 actual recorded outputs across all11
 families through genuine recorded and narrative sources. Preserve per-output versus independent
 window denominators.84 edge reversals/84 narrative reversals refuse;18 indexed capture and18

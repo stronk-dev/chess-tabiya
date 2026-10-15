@@ -1737,3 +1737,87 @@ indexed joins and exact callable/consumer/presentation bindings. D3851 decides w
 delivery pipelines that image must preserve; structural/last-level schemas and D3845 remain
 separate authoring holds. No upstream or joint Inspector acceptance follows. `[V]`
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md` sequence continuation.
+
+## Strict overload's hypothetical authority — 2026-10-15, D3847
+
+The existing incoming-edge instrument now checks the actual strict-overload output receipts:
+all four positive emitted conflicts retain exactly initial defender-duty reading then capture,
+not a third sealed exchange. Both initial inputs' private authority matches the actual canonical
+before-position/edge. The four retained legal recapture positions each have a positive follow-up
+capture. Replaying those recaptures from the actual after-position establishes the corresponding
+reply FEN; invoking the existing exchange factory there reproduces the nested exchange payload.
+All four reply FENs differ from the candidate's before-position. These are fixture incidences
+across orthodox/en-passant cases and their mirrors, not an independent chess oracle or frequency
+estimate. `[V]` `make inspector-incoming-dependent-research`, `incoming-dependent.ts` overload arm;
+`evidence-factories.ts:createDerivedTacticOverloadedDefenderResponseConflictV1Evidence`.
+
+The original target still passes318 controls/218 requests, including two actual imported games/
+six selected edges, successful clear results, no-capture source empties, exact en-passant victim
+identity and `no_legal_recapture` unavailability. The first added check did not typecheck because
+it treated the exchange factory's population as an availability union; correcting the diagnostic
+to require its actual one-element population restores the unchanged normal target. No production
+or old factory changed. `[V]` same target and actual factory route type.
+
+`overloadedDefenderResponseConflict` recomputes the initial duties from beforeFen today. A new
+two-input contract must actually consume the admitted initial duty payload, rather than run that
+old helper and append an unused reading. Subsequent duties/exchanges are internally computed
+on legally replayed hypothetical recaptures under `overload-conflict@1`, `defence-duty@1` and
+`legal-exchange@1`; one guessed played-edge exchange cannot witness that complete computation.
+The literal new derivation needs two inputs, not a fabricated exchange collection. This does
+not change the algorithm's four clauses, nested operands, recapture-promotion identity, ordering
+or abstention precedence. `[V]` `tactics.ts:overloadedDefenderResponseConflict`, existing convention
+declarations, D3716's permanent recapture-promotion controls. Fork survival is separate: D3768's
+terminal-rule repair still requires coordinated acceptance, not a source-only relabelling.
+
+The first isolated proposed two-input declaration **fails** normal prefix research with
+EVIDENCE_DERIVATION_WIDENS: F1 requires a shared input grounding to be inherited, so two
+position_rules inputs cannot produce the proposed declared_convention result. The instrument
+now preserves that refusal as a negative. Counterfactual position_rules metadata compiles;
+that does not establish truthful primary authority. The independent reviewer confirms that
+strict overload includes positive-exchange classification, not just geometric duties, and
+finds no accepted basis for that relabelling. D3852 owns resolution before adoption. `[V]`
+`make inspector-recorded-prefix-research`, `recorded-origin.ts` overload candidate;
+`evidence-contract.ts` grounding guard; dated independent review.
+
+The reviewer also corrects the prospective execution assertion: local duty/capture computations
+appear in the exact derivationChoices.inputs order, not the non-local sourceRequirements list.
+That list is empty. Normal prefix research passes with the unresolved grounding refusal explicit,
+18 conditional map replacements/57 retained topics and ten map-corruption controls. No successor
+was minted and the counterfactual metadata is not an accepted declaration. Direct calculation
+versus sealed-input derivation is the construction-authority question addressed below, not a
+reason to weaken the compiler or mint unused witnesses. `[V]` same target;
+`evidence-execution.ts` local leaf handling.
+
+The revised proposal uses F2 §2.1's existing **direct computed conventional predicate** category.
+The entire capture/duty/recapture calculation is reconstructible from one legal board edge; it
+does not accept independent sealed inputs. This is not a computed escape hatch for recorded
+Story/Compare populations. The author replaces, rather than retains alongside it, the rejected
+derived@2 proposal with `rules.tactic.predicate.overload_conflict@1`. Its primary grounding stays
+declared_convention and all three convention contributions are direct. The unchanged F1 compiles
+the isolated metadata; its direct-closure computation finds exactly defence-duty@1,
+legal-exchange@1 and overload-conflict@1, with no derivation or non-local source requirements.
+No new convention or F1 amendment is required by this construction category. `[V]` same normal
+prefix target; F2 §2.3e; independent bounded source review.
+
+A disposable pure-edge recipe in the original incoming instrument compares 24 complete old
+payload/availability outcomes, including quiet successes, against the existing pure helper.
+Three malformed/illegal/mismatched quiet-edge controls refuse before capture lookup while the
+old helper's undefined-capture shortcut returns clear; the new factory must validate first.
+Four hypothetical capture checks also join exact retained target color/role/square, not just FEN.
+The final unchanged incoming/prefix commands and strict tool types pass. An intermediate metadata
+typecheck rejected explicit derivation:undefined under exactOptionalPropertyTypes; the prototype
+now genuinely omits the property without weakening flags or types. `[V]`
+`make inspector-recorded-prefix-research inspector-incoming-dependent-research`;
+`incoming-dependent.ts:computedOverload`, `recorded-origin.ts` computed candidate.
+
+The incoming report's timed interval now includes added reconstruction checks. Its maxMs values
+are diagnostic wall time, not a fresh measurement of production latency or comparable to the
+earlier source-only D3836 cost experiment. The report explicitly labels that limit. `[V]`
+`incoming-dependent.ts` report scope and execute timing boundary.
+
+Independent read-only review finds no remaining normative blocker in this bounded revised
+component. It does not rerun tests or accept the source, D3852 closure or joint Inspector.
+Actual factory/receipt/closure, mutation and pre-work refusals, promoted-recapturer/mixed-candidate
+precedence, full consumer/rendering and authenticated/native proof remain. The new map18/57
+retains75 topics plus six detail refs as requirements only; no topic is added or retired. `[V]`
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md` computed overload.

@@ -1,14 +1,18 @@
-// DISPOSABLE D3836 source/cost experiment, NOT Inspector, permission or semantic qualification.
+// DISPOSABLE D3836/D3847 source reconstruction, NOT Inspector, permission or qualification.
 // Execute the existing five exact factories from actual recorded incoming edges. No production
 // file is rewritten, no whole candidate closure is used, and no raw recording is saved.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parsePgn, makePgn } from "chessops/pgn";
+import { parseUci } from "chessops/util";
 import { branchPath, resolveBranchPath, rewind, fork, commitMove,
   assertDeclaredEvidence, type DeclaredEvidence, type DrillRun, type Node } from "../../packages/runtime/src/index.js";
 import { canonicalFen, positionFromFen } from "../../packages/runtime/src/chess.js";
-import { evidenceValueReceipt } from "../../packages/runtime/src/evidence-contract.js";
+import { evidenceDigest, evidenceValueReceipt } from "../../packages/runtime/src/evidence-contract.js";
+import type { OverloadedDefenderConflict } from "../../packages/runtime/src/tactics.js";
+import { overloadedDefenderResponseConflict } from "../../packages/runtime/src/tactics.js";
+import { transitionSemanticFacts } from "../../packages/runtime/src/transition.js";
 import { recordedEdgePayload, assertRecordedEdgeEvidence } from "../../packages/runtime/src/recorded-edge.js";
 import { invokeEvidenceValueRoute as invoke, type EvidenceValueRoute, type EvidenceValueRouteInputs,
   type EvidenceValueRouteResults } from "../../packages/runtime/src/internal/evidence-value-routes.js";
@@ -29,6 +33,18 @@ type Result = Readonly<{ kind: "available"; items: readonly DeclaredEvidence<unk
   { kind: "unavailable"; reason: string } | { kind: "missing_context"; reason: "no_incoming_edge" }>;
 const counts = new Map<string, { requests: number; items: number; maxMs: number; maxNodes: number; states: Set<string> }>();
 let trace: string[] = [], controls = 0, requests = 0;
+let overloadLiteralInputs = 0, overloadHypotheticalCaptures = 0, overloadReplyPositions = 0;
+let computedOverloadComparisons = 0;
+// Disposable construction recipe, not a new evidence factory. Validate even quiet edges;
+// the old pure helper intentionally returns clear before validation when capture is absent.
+function computedOverload(edge: Edge) {
+  const position = positionFromFen(edge.beforeFen), move = parseUci(edge.moveUci);
+  assert.equal(canonicalFen(position), edge.beforeFen);
+  assert(move !== undefined && position.isLegal(move)); position.play(move);
+  assert.equal(canonicalFen(position), edge.afterFen);
+  const capture = transitionSemanticFacts(edge.beforeFen, edge.moveUci, edge.afterFen).find(fact => fact.family === "capture");
+  return overloadedDefenderResponseConflict(edge.beforeFen, edge.moveUci, edge.afterFen, capture);
+}
 function call<Route extends EvidenceValueRoute>(ref: Route, input: EvidenceValueRouteInputs[Route]): EvidenceValueRouteResults[Route] {
   trace.push(ref); return invoke(ref, input);
 }
@@ -96,11 +112,56 @@ function execute(run: DrillRun, branchId: string, nodeId: string, ref: Ref, hori
       result = items(call(ref, { doubleAttack: attacks[0]!, breadth })); break;
     }
     case "derived.tactic.overloaded_defender_response_conflict@1": {
+      const computed = computedOverload(edge); computedOverloadComparisons++;
       const captures = call("rules.transition.event.capture@1", edge);
-      if (captures.length === 0) { result = { kind: "available", items: [] }; break; }
+      if (captures.length === 0) {
+        assert.deepEqual(computed, { kind: "clear", conflicts: [] });
+        result = { kind: "available", items: [] }; break;
+      }
       assert.equal(captures.length, 1);
       const duties = call("rules.tactic.reading.defender_duty_set@1", { fen: edge.beforeFen });
-      result = items(call(ref, { capture: captures[0]!, duties })); break;
+      const capture = captures[0]!;
+      assert.equal(evidenceValueReceipt(duties).inputDigest, evidenceDigest({ fen: edge.beforeFen }));
+      assert.equal(evidenceValueReceipt(capture).inputDigest, evidenceDigest(edge));
+      const outcome = call(ref, { capture, duties });
+      result = items(outcome);
+      if (outcome.kind === "unavailable") assert.deepEqual(computed, { kind: "unavailable", reason: outcome.reason, conflicts: [] });
+      else {
+        assert.notEqual(computed.kind, "unavailable");
+        assert.deepEqual(computed.conflicts, outcome.value.map(value => value.payload));
+      }
+      if (outcome.kind === "available") for (const value of outcome.value) {
+        assert.deepEqual(evidenceValueReceipt(value).sourceDigests,
+          [duties, capture].map(input => evidenceValueReceipt(input).payloadDigest));
+        overloadLiteralInputs++;
+        const payload = value.payload as OverloadedDefenderConflict;
+        assert(payload.legalRecaptures.length > 0 && payload.positiveCaptures.length > 0);
+        assert.deepEqual([payload.beforeFen, payload.candidate, payload.afterFen],
+          [edge.beforeFen, edge.moveUci, edge.afterFen]);
+        for (const recapture of payload.legalRecaptures) {
+          const position = positionFromFen(edge.afterFen), move = parseUci(recapture);
+          assert(move !== undefined && position.isLegal(move)); position.play(move);
+          const replyFen = canonicalFen(position);
+          const witnesses = payload.positiveCaptures.filter(row => row.recapture === recapture);
+          assert(witnesses.length > 0, "every recapture must expose a retained target");
+          for (const witness of witnesses) {
+            assert(payload.retainedTargets.some(target => evidenceDigest(target) === evidenceDigest(witness.target)));
+            assert(witness.captures.length > 0);
+            for (const exchange of witness.captures) {
+              assert.equal(exchange.beforeFen, replyFen, "hypothetical capture belongs AFTER its named legal recapture");
+              assert.deepEqual(exchange.captured, { square: witness.target.square,
+                color: witness.target.piece.color, role: witness.target.piece.role });
+              assert.notEqual(exchange.beforeFen, edge.beforeFen, "a played-edge exchange is not this authority");
+              assert(exchange.resultUnits > 0);
+              const actual = invoke("rules.exchange.predicate.legal_exchange@1", { fen: replyFen, captureUci: exchange.captureUci });
+              assert.equal(actual.length, 1, "retained hypothetical exchange must have one actual capture result");
+              assert.deepEqual(actual[0]!.payload, exchange); overloadHypotheticalCaptures++;
+            }
+          }
+          overloadReplyPositions++;
+        }
+      }
+      break;
     }
     default: {
       const breadth = call("rules.tactic.consequence.reply_breadth@1", edge);
@@ -215,8 +276,21 @@ for (const ref of refs) {
     { ...branched, nodes: branched.nodes.map(node => node.id === tip.id ? { ...node, fen: fixtures[5].fen } : node) },
   ]) checked(() => { assert.throws(() => execute(invalid, child, shared.id, ref)); assert.deepEqual(trace, []); });
 }
-const report = { scope: "D3836 actual-edge dependency/cost research, NOT production/admission/qualification",
+const report = { scope: "D3836/D3847 source diagnostic; timings include added reconstruction checks, NOT production latency/admission/qualification",
   controls, requests, importedGames, importedEdges,
+  overloadLiteralInputs, overloadHypotheticalCaptures, overloadReplyPositions, computedOverloadComparisons,
   rows: [...counts].map(([source, value]) => ({ source, ...value, maxMs: Math.round(value.maxMs * 1000) / 1000, states: [...value.states].sort() })) };
 assert(Buffer.byteLength(JSON.stringify(report)) < 16 * 1024);
+const quietEdge = selectedEdge(branched, main, mainPath[1]!.id)!;
+const invalidQuietEdges = [
+  { ...quietEdge, beforeFen: "not-a-fen" },
+  { ...quietEdge, moveUci: "e2e5" },
+  { ...quietEdge, afterFen: quietEdge.beforeFen },
+];
+for (const edge of invalidQuietEdges) {
+  assert.deepEqual(overloadedDefenderResponseConflict(edge.beforeFen, edge.moveUci, edge.afterFen, undefined), { kind: "clear", conflicts: [] });
+  assert.throws(() => computedOverload(edge), "the new computed recipe must validate before its no-capture path");
+}
+console.log(JSON.stringify({ scope: "D3852 direct computed-edge recipe only; no new source mint/adoption",
+  computedOverloadComparisons, invalidQuietEdgeRefusals: invalidQuietEdges.length, sealedPrerequisitesUsedByRecipe: 0 }));
 console.log(JSON.stringify(report, null, 2));
