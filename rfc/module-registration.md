@@ -1798,7 +1798,7 @@ type InspectorRequest = {
     view:
       | { kind: "inventory"; start: number }
       | { kind: "source"; projection: InspectorSourceRef; context: InspectorSourceContext;
-          start: number; collectionKey: string | null }
+          start: number; collectionKey: string | null; parameters?: InspectorMateParameters }
       | { kind: "detail"; projection: InspectorSourceRef; context: InspectorSourceContext;
           sourceKey: string;
           scope: { kind: "whole" } | {
@@ -1817,7 +1817,26 @@ type InspectorSourceContext =
   | { kind: "branch"; throughNodeId: string }
   | { kind: "comparison"; otherBranchId: string; otherNodeId: string }
   | { kind: "recorded_review"; throughNodeId: string };
+
+type InspectorMateParameters = {
+  kind: "forced_mate";
+  maxAttackerMoves: 1 | 2 | 3 | 4;
+};
 ```
+
+**Closed source parameters (D3836):** the two exact refs
+`rules.tactic.consequence.forced_mate_after_move@1` and `@2` require `parameters` on a
+source request, with exactly the fields above. All other sources, inventory and detail
+requests forbid it. This conditional association is a runtime parser requirement; the
+optional field in the abbreviated type above is not a substitute. The Advanced Inspector
+must expose the named bounded horizon; the unit is attacker moves **including the committed
+candidate**, not plies. There is no caller node cap, arbitrary options bag or silent horizon
+inferred from whichever caller ran last. Ordinary Hint and Review policies are unchanged.
+Detail follows its exact sourceKey rather than accepting a second horizon. Source bodies echo
+these parameters iff the projection is one of those two refs. Collection/source identity,
+disclosure, continuation and receiver equality bind the exact parameters; changing horizon
+retires the old collection, pending requests and paint. The disposable request parser proves
+the grammar, not production response admission or an Inspector UI default.
 
 `RequestedAssistanceV1` is the actual exported stage-1 type, parsed by
 `parseRequestedAssistanceV1`; it is not an authoritative/effective receipt. The server derives
@@ -2059,6 +2078,58 @@ later witness span; no later witness beyond the grant is borrowed.
 | Comparison | Source-owner computation over the two exact permitted attempts/endpoints, common recorded fork and original orientation. Every timeline, outcome, evaluation and line overlay obeys its own permitted path, not just the displayed columns |
 | Recorded Review / Story | Storage-authorised source-owner subject at the exact admitted recorded boundary and its complete moment image. Do not trim a whole-game rank/moment array, reuse a whole-tip receipt for an earlier endpoint or project a later import result onto an unfinished prefix |
 | Provider / sourcing records | Exact retained operation/node/path/ledger occurrences from their owners. Existing operation-keyed receipt and legacy migration holds remain; this resolver does not perform an unaccepted provider exchange or invent absent evidence |
+
+**D3836 dependent incoming-edge binding (2026-10-15), still unaccepted:** the proposed
+`prepareInspectorDependentEdgeSource` supplier takes an actual admitted
+`DeclaredEvidence<RecordedEdge>` from `run.record.edge@1`, one of the five exact refs below,
+and the closed mate parameters only for the two mate refs. This is a proposed supplier,
+not an existing export or permission granted by this draft. Its server owner obtains the
+edge from `resolveInspectorRecordedContext`'s validated **original** graph and granted
+selection. No client FEN, guessed parent, shallow replacement Run or later played successor
+supplies its operands. Retain requested branch/endpoint separately from the edge's creating
+branch: an inherited shared-prefix node remains valid on a child branch.
+
+| Exact dependent source | Sole existing dependency/factory path |
+|---|---|
+| `derived.tactic.discovered_executed@1` | Before-position `rules.tactic.reading.discovered_latency@1` plus same-edge `rules.transition.event.slider_ray@1`, then the unchanged target factory and its gained-ray semantics |
+| `derived.tactic.fork_survives_reply@1` | Same-edge `rules.tactic.event.double_attack@1`; a successful empty event population is `no_witness`. Otherwise use its one actual event and matching same-edge `rules.tactic.consequence.reply_breadth@1`, then the unchanged target factory |
+| `derived.tactic.overloaded_defender_response_conflict@1` | Same-edge `rules.transition.event.capture@1`; successful empty capture population is `no_witness`. Otherwise use the actual capture and before-position `rules.tactic.reading.defender_duty_set@1`, then the unchanged strict-conflict factory |
+| `rules.tactic.consequence.forced_mate_after_move@1` | Same-edge `rules.tactic.consequence.reply_breadth@1`, beforeFen and explicit `maxAttackerMoves`, then the exact v1 factory |
+| `rules.tactic.consequence.forced_mate_after_move@2` | The same dependency scope and explicit horizon, then the exact v2 factory; never relabel a v1 payload |
+
+The supplier retains the actual edge, exact dependency items and genuine factory outcomes.
+Existing F2 arms, receipts, versions and source meanings remain unchanged; those receipts
+alone are not current-context authority. Special moves retain the source's actual identities:
+an en-passant captured target is not its landing square. No co-defender or motif verdict is
+guessed from a partial population. Strict overload's `no_legal_recapture` is **unavailable
+only for that exact projection**, never clear/no_witness, a conflict, or an engine grade.
+
+Reply breadth and mate trees are bounded **hypothetical consequences**, not later recorded
+play borrowed beyond the grant, player intent, significance or an explanation of why an engine
+chose the move. Preserve `proved`, `refuted` and `budget_exhausted`; exhaustion is not refutation
+or absence. Preserve v1's complete operands and v2's exact nine fields: `beforeFen`, `candidate`,
+`afterFen`, `attacker`, `maxAttackerMoves`, `proofStatus`, `proofDigest`, `rootReplies`, `nodes`.
+The existing `mate-proof@1` convention and 250,000-node cap remain; no client override is added.
+Hint's fixed two-attacker-move policy and Review's engine-reported distance-plus-one (at most
+four) remain distinct existing policies, not an undocumented shared Inspector default.
+
+Complete consumer/source/version admission and current access checks precede dependency work.
+Execute only the requested dependency path, not the whole candidate population or a broad
+semantic closure subsequently filtered. These current factories are synchronous and do not
+promise mid-computation cancellation. Existing operation deadline/current-receiver checks
+apply before and after computation; late/cancelled results cannot publish. Any execution
+isolation or yielding needed to honor that deadline needs implementation proof, not a raised
+budget or dropped operands. Source/version/convention/definition and qualification holds all
+remain. No new F2 arm, schema claim or production authorization is implied here.
+
+The disposable probe exercises eight legal fixtures in both colors, all four existing mate
+horizons and two actual stored imports (six edges), with 318 controls/218 source requests.
+It checks original-graph refusal before narrowing, inherited prefixes, pinned recaptures,
+en-passant target identity, empty/unavailable separation and unchanged saved play. Its roughly
+276 ms observed maximum is dependent-stage cost on this small local population, not a general
+latency guarantee, API/native proof or semantic qualification. Production acceptance still
+owes typed source/context/response binding, horizon-crossing/stale/cancel controls and actual
+authenticated/native delivery. See `module-evidence-assembly.md` §Dependent incoming-edge sources.
 
 **D3833 authored-shape interval binding (2026-10-15), still unaccepted:** resolve entries
 through RunService's actual `ShapeRegistry`, not caller triggers, names, rendered plans or
@@ -2506,7 +2577,7 @@ The requested selection and current decision cursor are distinct and both retain
 | Body kind | Exact additional fields | Meaning |
 |---|---|---|
 | `inventory` | `range`, `topics[{projection,family,state}]` | Exact eligible registered topics; family is one of the existing eight IDs, state only `not_requested`; no source work/count claim |
-| `source` | `projection`, `context`, `outcome` | One requested source, complete execution outcome |
+| `source` | `projection`, `context`, `outcome`, mate-only `parameters` | One requested source, complete execution outcome; parameters required only for the two mate refs |
 | `detail` | `projection`, `context`, `sourceKey`, `scope`, `range`, `fullSourceTotal`, `sourceOrdinals`, `presentation` | One bounded batch of complete typed members |
 | `detail_limited` | `projection`, `context`, `sourceKey`, `scope`, `ordinal`, `sourceOrdinal`, `selectedTotal`, `fullSourceTotal`, `exceeded` | A complete member cannot fit; no zero-progress page or silently cropped substitute |
 
@@ -2521,7 +2592,10 @@ Source outcome is closed:
 - `missing_context` has only `reason`, exactly `no_incoming_edge | no_recorded_window |
   no_second_attempt | no_recorded_review`.
 - `unavailable` has only `reason`, exactly `source_absent | provider_unavailable |
-  authored_source_absent | source_version_held | invalid_turn_clone`. Each requires actual
+  authored_source_absent | source_version_held | invalid_turn_clone | no_legal_recapture`.
+  `no_legal_recapture` is admitted only for the strict overload projection above; neither
+  invalid request horizons nor `budget_exhausted` are source-unavailability alternatives.
+  Each requires actual
   source-owner absence/refusal evidence; no universal stub satisfies acquisition obligations.
 - `failed` has only `reason`, exactly `source_contract_invalid | provider_failed |
   source_lookup_failed`. Broken bindings are failures, not chess absence.
@@ -3176,6 +3250,10 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — D3836 specifies five dependent incoming-edge suppliers from actual recorded
+  edges, explicit mate-only horizons and strict overload's source-specific unavailability.
+  Disposable legal/storage controls pass; §4.11a remains unaccepted. No production operation,
+  factory version, source qualification or whole capability is delivered by this authoring.
 - 2026-10-15 — D3833 measures actual registered shape intervals over stored legal prefixes and
   specifies endpoint recomputation/position distinction in the unaccepted §4.11a supplier draft.
   Existing factory/value semantics and registered-provenance holds remain; no production landing.

@@ -531,6 +531,15 @@ terminal-inspector-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep 'D3796 terminal Inspector'
 
 .PHONY: inspector-source-contract-research
+.PHONY: inspector-incoming-dependent-research
+# Disposable D3836 source/cost probe; does not enter ordinary CI or authorize production.
+inspector-incoming-dependent-research:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+	./node_modules/.bin/esbuild tools/d3792-inspector-demand/incoming-dependent.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/d3792-inspector-demand/incoming-dependent.mjs --log-level=warning
+	./node_modules/.bin/esbuild tools/d3792-inspector-demand/draft-wire.ts --bundle --platform=node --format=esm --outfile=.cache/d3792-inspector-demand/draft-wire.mjs --log-level=warning
+	$(CI_NODE) .cache/d3792-inspector-demand/draft-wire.mjs
+	$(CI_NODE) .cache/d3792-inspector-demand/incoming-dependent.mjs
+
 .PHONY: inspector-supplier-scope-research
 inspector-supplier-scope-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit

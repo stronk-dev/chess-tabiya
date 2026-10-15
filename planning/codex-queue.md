@@ -1,5 +1,14 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — [[D3836]] completes the bounded research/authoring prerequisite for D3792's five
+dependent incoming-edge suppliers.318 controls/218 requests pass, including all four mate horizons,
+both colors and two stored imports. The unaccepted draft names actual edge/dependency factories,
+mate-only request parameters and strict overload unavailability; grammar96/491 and37 unchanged
+source-contract cases pass. This is not production Inspector delivery or independent acceptance.
+Next obtain independent review of the complete D3792 contract before its typed API/client/native
+implementation. Keep source/qualification holds; do not add whole candidate closure or a hidden
+horizon default. Marco requested the full progress inventory after this checkpoint, not a new wave.
+
 2026-10-15 — [[D3835]] is complete after [[D3834]]'s committed shape repair. Five permanent
 predecessor failures become a single owned principle-document/citation snapshot, stable digest/id
 and Library rendering, without freezing caller inputs. Thirty software/24 content focused cases,

@@ -434,7 +434,7 @@ All table rows are source-inspected `[V]` against `evidence-factories.ts` and op
 Supplier anchors: `semantic-evidence.ts` (named sequence/discovered wrappers);
 `candidate-population.ts`, `forkSurvival`; `evidence-operations.ts`, `recordedReadingEvidence`
 and `positionGuidanceEvidence`; `module-query.ts`, `inspectorSources`, `compareSources`;
-`apps/server/src/review/source-adapters.ts`; `compare-strips.ts`; `story.ts`; `hint-distance.ts`;
+`packages/runtime/src/review-evidence.ts`; `compare-strips.ts`; `story.ts`; `hint-distance.ts`;
 `pivotal.ts`; and the sole factories in `evidence-factories.ts`. The observer exercises Maia's
 page arm, not its alternative run arm, and does not exercise both optional-check arms. `[V]`
 
@@ -1090,3 +1090,56 @@ obligations. Matching a trigger does not establish the entry's strategic prose, 
 usefulness. No new scope permission, factory arm/version or production operation follows.
 Independent acceptance, registered provenance and actual API/client/native delivery remain
 D3792 work. `[V]` that draft and the legacy factory's `registered-authored-provenance` hold.
+
+## Dependent incoming-edge sources — 2026-10-15, D3836
+
+**Bounded prerequisite answered; production unchanged.** Five exact existing Inspector refs
+can be acquired without a full candidate population: discovered execution, fork survival,
+strict overload response conflict and forced-mate-after-move versions 1 and 2. The disposable
+`tools/d3792-inspector-demand/incoming-dependent.ts` uses the actual `run.record.edge@1`
+authority after original branch/edge validation, then invokes their unchanged sole factories
+with exact same-edge dependencies. It is not an authenticated Inspector operation or a new
+source authority. `[V]` that probe, `recorded-edge.ts` and `internal/evidence-value-routes.ts`.
+
+The final run passes **318 controls / 218 source requests**: eight legal fixtures mirrored
+for both colors, horizons 1–4 for both mate versions, and two actual SQLite imports with six
+selected edges. The import path is the test-writer overload, not a permission proof. Cases
+include discovered rays, forks, strict conflict/clear, a pinned recapture, en-passant's captured
+target versus landing square, mate and ordinary opening play. Fixtures reuse existing permanent
+factory/semantic/mate cases; they are not independently validated strategic lessons. Root absence,
+inherited child-branch prefixes, off-branch requests and duplicate/missing-parent/invalid-or-wrong-
+FEN original graph material are checked before source acquisition. Original saved play stays
+unchanged. `[V]` probe and `make inspector-incoming-dependent-research`.
+
+Successful empty prerequisites remain empty; strict overload's `no_legal_recapture` remains
+unavailable, not absence or a conflict. Mate output retains exact v1/v2 shapes and the existing
+`proved | refuted | budget_exhausted` domain. The measured population contains proved/refuted
+but does **not** exercise default-cap exhaustion. Separate horizon-5 negative controls retain
+the unchanged factory refusal; the proposed wire instead refuses that invalid horizon before
+work. `[V]` probe, `tactics.ts`, `mate-proof.ts` and `evidence-value-authority.test.ts`.
+
+The measured dependent-stage maximum is approximately **276 ms** at horizon four (31,695
+observed nodes), after graph/source-edge admission. This is one process mixing cold/warm calls
+over a small fixed population, not full-operation latency, a worst-case bound or a speedup
+claim. The current proof engine is synchronous, capped at 250,000 nodes and has no mid-search
+AbortSignal. Current receiver/deadline checks and any necessary executor isolation still need
+production proof; do not raise budgets on this evidence. Only bounded aggregates print, under
+16 KiB; no raw recording or ordinary CI/progress dependency is added. `[V]` probe/Make target
+and `mate-proof.ts`.
+
+The experiment exposes a literal draft gap: mate factories require a horizon but the proposed
+Inspector request had no parameter for one. §4.11a now requires the closed 1–4 attacker-move
+parameter only for those two source refs, binds it to source/collection/disclosure/receiver
+identity, and preserves exact-source unavailability. Hint's fixed two-move policy and Review's
+engine-distance-plus-one policy remain distinct; Inspector cannot silently borrow either.
+The disposable request grammar passes **96 positive / 491 refusal controls**, while the
+unchanged source-contract suite passes 37 tests. Request grammar is not response, source/access
+or native UI admission. `[V]` `draft-wire.ts`, `hint-distance.ts`, `review-evidence.ts`,
+`make inspector-source-contract-research` and the still-unaccepted RFC.
+
+The typed trace wrapper and invariant-backed indexed accesses first fail strict research
+compilation, then pass after correction; no production types or private authority were weakened.
+Remaining obligations are independent acceptance, exact runtime supplier/context admission,
+response/current-request/horizon/cancellation binding, source/version/qualification holds and
+actual authenticated/native delivery. This advances five prerequisite contracts, **not**
+Inspector, Review, Support or 1.0 completion. `[V]` research compilation and §4.11a.

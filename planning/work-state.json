@@ -31933,6 +31933,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/principle-registry.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3836",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1ec758dc37add294bed9922eb6bbff2b3700d6959be3b22e94b1584e1180d987",
+      "uxItems": [],
+      "evidence": "tools/d3792-inspector-demand/incoming-dependent.ts",
+      "evidenceKind": "path"
     }
   ]
 }

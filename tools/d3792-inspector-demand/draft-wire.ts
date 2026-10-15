@@ -15,6 +15,8 @@ const arms = new Map(evidenceValueRouteRegistry().map(row => [row.route, row.arm
 const edgeDependencies = new Set(["derived.tactic.discovered_executed@1", "derived.tactic.fork_survives_reply@1",
   "derived.tactic.overloaded_defender_response_conflict@1", "rules.tactic.consequence.forced_mate_after_move@1",
   "rules.tactic.consequence.forced_mate_after_move@2"]);
+const mateSources = new Set(["rules.tactic.consequence.forced_mate_after_move@1", "rules.tactic.consequence.forced_mate_after_move@2"]);
+export type DraftMateParameters = { kind: "forced_mate"; maxAttackerMoves: 1 | 2 | 3 | 4 };
 export const DETAIL_VIEWS = new Map([
   ["rules.tactic.reading.ray_classification@1", "derived.inspector.detail.rays@1"],
   ["rules.square.reading.control@1", "derived.inspector.detail.square_control@1"],
@@ -34,7 +36,8 @@ export type DraftDetailScope = { kind: "whole" } | {
   kind: "control_target"; color: "white" | "black"; mode: "geometric" | "legal"; target: string };
 export type DraftView =
   | { kind: "inventory"; start: number }
-  | { kind: "source"; projection: string; context: DraftSourceContext; start: number; collectionKey: string | null }
+  | { kind: "source"; projection: string; context: DraftSourceContext; start: number; collectionKey: string | null;
+      parameters?: DraftMateParameters }
   | { kind: "detail"; projection: string; context: DraftSourceContext; sourceKey: string; scope: DraftDetailScope; start: number };
 export interface DraftRequest {
   protocol: "inspector.query_page@1";
@@ -45,7 +48,7 @@ export interface DraftRange { start: number; count: number; total: number; next:
 export type DraftContextFailure = "no_incoming_edge" | "no_recorded_window" | "no_second_attempt" | "no_recorded_review";
 export type DraftSourceOutcome =
   | { kind: "missing_context"; reason: DraftContextFailure }
-  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "source_version_held" | "invalid_turn_clone" }
+  | { kind: "unavailable"; reason: "source_absent" | "provider_unavailable" | "authored_source_absent" | "source_version_held" | "invalid_turn_clone" | "no_legal_recapture" }
   | { kind: "failed"; reason: "source_contract_invalid" | "provider_failed" | "source_lookup_failed" }
   | { kind: "no_witness" }
   | { kind: "available"; collectionKey: string; range: DraftRange; collected: number; displayed: number; deferred: number;
@@ -67,7 +70,7 @@ export type DraftResponse =
       decision: ModuleDecisionStamp; requestedConfigDigest: string; effectiveConfigDigest: string;
       disclosure: DraftDisclosure; body:
         | { kind: "inventory"; range: DraftRange; topics: readonly { projection: string; family: InspectorFamilyId; state: "not_requested" }[] }
-        | { kind: "source"; projection: string; context: DraftSourceContext; outcome: DraftSourceOutcome }
+        | { kind: "source"; projection: string; context: DraftSourceContext; parameters?: DraftMateParameters; outcome: DraftSourceOutcome }
         | { kind: "detail"; projection: string; context: DraftSourceContext; sourceKey: string; scope: DraftDetailScope;
             range: DraftRange; fullSourceTotal: number; sourceOrdinals: readonly number[]; presentation: PresentationReceipt }
         | { kind: "detail_limited"; projection: string; context: DraftSourceContext; sourceKey: string; scope: DraftDetailScope;
@@ -119,7 +122,12 @@ export function parseDraftRequest(value: unknown): DraftRequest {
     const scope = context(view.context); assert(allowedContexts(view.projection).includes(scope.kind));
     if (scope.kind === "comparison") assert.notEqual(scope.otherBranchId, query.branchId, "a branch cannot be its own second attempt");
     if (view.kind === "source") {
-      exact(view, ["kind", "projection", "context", "start", "collectionKey"]);
+      exact(view, ["kind", "projection", "context", "start", "collectionKey", ...(mateSources.has(view.projection) ? ["parameters"] : [])]);
+      if (mateSources.has(view.projection)) {
+        const parameters = exact(view.parameters, ["kind", "maxAttackerMoves"]);
+        assert.equal(parameters.kind, "forced_mate");
+        assert(Number.isInteger(parameters.maxAttackerMoves) && [1, 2, 3, 4].includes(parameters.maxAttackerMoves as number));
+      }
       if (view.start === 0) assert.equal(view.collectionKey, null); else text(view.collectionKey);
     } else {
       exact(view, ["kind", "projection", "context", "sourceKey", "scope", "start"]); text(view.sourceKey);
@@ -195,8 +203,23 @@ const contexts: readonly DraftSourceContext[] = [{ kind: "position" }, { kind: "
   { kind: "recorded_review", throughNodeId: "n9" }];
 pass(request({ kind: "inventory", start: 0 }));
 for (const projection of sources) for (const candidate of contexts) {
-  const value = request({ kind: "source", projection, context: candidate, start: 0, collectionKey: null });
+  const value = request({ kind: "source", projection, context: candidate, start: 0, collectionKey: null,
+    ...(mateSources.has(projection) ? { parameters: { kind: "forced_mate", maxAttackerMoves: 4 } } : {}) });
   if (scopeFixture.get(projection)!.includes(candidate.kind)) pass(value); else reject(value);
+}
+for (const projection of mateSources) {
+  const base = { kind: "source", projection, context: { kind: "incoming_edge" }, start: 0, collectionKey: null };
+  for (const maxAttackerMoves of [1, 2, 3, 4]) pass(request({ ...base, parameters: { kind: "forced_mate", maxAttackerMoves } }));
+  reject(request(base));
+  for (const maxAttackerMoves of [0, -1, 5, 1.5, "4", null])
+    reject(request({ ...base, parameters: { kind: "forced_mate", maxAttackerMoves } }));
+  reject(request({ ...base, parameters: { kind: "forced_mate", maxAttackerMoves: 4, nodeCap: 1 } }));
+  reject(request({ ...base, parameters: { kind: "other", maxAttackerMoves: 4 } }));
+}
+for (const projection of sources) if (!mateSources.has(projection)) {
+  const context = contexts.find(candidate => scopeFixture.get(projection)!.includes(candidate.kind))!;
+  reject(request({ kind: "source", projection, context, start: 0, collectionKey: null,
+    parameters: { kind: "forced_mate", maxAttackerMoves: 4 } }));
 }
 const source = { kind: "source", projection: "rules.square.reading.control@1", context: { kind: "position" }, start: 8, collectionKey: "retained-collection" };
 pass(request(source));
@@ -207,6 +230,7 @@ reject(request({ ...detail, projection: "rules.mobility.reading.legal_moves@1", 
 for (const start of [-1, 0.5, Number.MAX_SAFE_INTEGER + 1, "0"]) reject(request({ ...detail, start }));
 for (const mutation of [{ target: "i4" }, { color: "red" }, { mode: "all_moves" }, { field: "rays" }]) reject(request({ ...detail, scope: { ...detail.scope, ...mutation } }));
 reject(request({ ...detail, projection: "rules.tactic.reading.ray_classification@1" }));
+reject(request({ ...detail, parameters: { kind: "forced_mate", maxAttackerMoves: 4 } }));
 reject(request({ ...source, collectionKey: null })); reject(request({ ...source, start: 0 }));
 reject(request({ ...source, context: { kind: "position", fen: "caller supplied" } }));
 reject(request({ kind: "source", projection: "derived.story.rank@2", context: { kind: "position" }, start: 0, collectionKey: null }));

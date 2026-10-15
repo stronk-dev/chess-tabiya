@@ -29583,3 +29583,40 @@ Campaign was the one capability with no API, route or content. Now:
 - Final docs/roadmap/state/UX checks exit zero: R1–R10 green, all 1,732 live ledger items and
   263 live UX items assigned, zero untriaged. Inspect the explicit owned staged list and retain
   the ordinary commit hooks; no push, publication, deployment or new feature wave is included.
+
+## 2026-10-15 — D3836 dependent incoming-edge source contracts
+
+- Previous goal turn is progress: 844adab2 closes the principle snapshot repair with frozen
+  software/performance and remaining governance/content/build/browser proof. Revalidate clean
+  tracked state; the full 1.0 objective stays active and the same untracked material is untouched.
+- Inspect the existing complete-consumer frontier and actual migrated wrappers before choosing
+  work; the compilable production acquisition paths inspected already have their checks. Do not
+  recommission D3404/D3418/D3618 or bypass the expressly unaccepted source/selection amendments.
+- Register D3836 before its disposable source experiment. It takes the five dependent local
+  incoming-edge refs in D3799's existing 35-ref inventory; use actual factory dependencies and
+  legal stored sources, not caller payloads or whole candidate closure. Source correctness,
+  scope, horizon and execution cost are distinct from useful selection or semantic qualification.
+- Two initial research compilations refuse the trace wrapper/indexed accesses; correct them
+  against the actual route/input/result types and checked singular populations, without weakening
+  production types or private authority. Replace the candidate's manual edge legality check with
+  the existing recordedEdgePayload/run.record.edge authority before the passing experiment.
+- Final normal research commands pass strict compilation,318 controls/218 requests,96 positive/
+  491 request refusals and37 unchanged source-contract cases. Eight fixtures/both colors/four
+  existing mate horizons and two SQLite imports/six edges retain actual edge identities, graph
+  refusals, pinned/en-passant distinctions and unchanged saved play. Observed h4 maxima vary
+  about250–276 ms across runs; dependency-stage cost is not a whole-operation/worst-case guarantee.
+- Author exact same-edge suppliers, mate-only explicit parameters and strict overload's
+  unavailable reason into the existing unaccepted Inspector section. Correct the dossier's
+  nonexistent review-adapter path to runtime review-evidence.ts. No production/source version,
+  schema, pack, semantic qualification, acceptance or full capability changes. No raw dump,
+  recording-dependent progress gate, new tracker or ordinary-CI research job is added.
+- Close D3836 as a research/authoring prerequisite only; D3792 remains independently held.
+  Refresh existing roadmap receipt. An early roadmap-progress read correctly refuses the
+  not-yet-refreshed report; after regeneration, docs/governance exits zero (R1–R10, P1–P7,
+  C1–C8;0 untriaged/1,732 assigned live ledger items;282 completed/263 live/24 retired UX items).
+  Production proof remains844adab2's full local pass; do not call this a new whole software/browser run.
+- Marco requests finish then whole-product inventory, not another feature wave. Fresh GitHub
+  read still shows published78fd302f verify success/browser failure; nothing is pushed or remotely
+  qualified. Inspect/stage only the explicit checkpoint files, retain normal hooks, and report
+  the fourteen still-incomplete journeys and remaining integration/content/calibration/release work.
+  The full 1.0 goal is neither achieved nor paused by this checkpoint.

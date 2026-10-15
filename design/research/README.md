@@ -75,6 +75,12 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Dependent incoming-edge sources, 2026-10-15 ([[D3836]]): five exact existing factories execute
+from actual recorded edges with 318 controls/218 requests, both colors, four mate horizons and
+two SQLite imports. This supplies bounded source/parameter contract input, not Inspector
+delivery or qualification. See `module-evidence-assembly.md` §Dependent incoming-edge sources
+and opt-in `make inspector-incoming-dependent-research`. D3792 remains unaccepted. `[V]`
+
 Authored shape interval scope, 2026-10-15 ([[D3833]]): actual 25 registered entries over 22
 stored legal prefixes retain 20 declared items; 124 controls pass alongside 300 boundary/25 rank
 checks. Whole-path cropping retains four future endpoints and eight future closure claims.

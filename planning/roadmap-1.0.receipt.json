@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:cb023edc68fa8920e6fed59bef363e77d8327917fd2f74bbeec530f0d8bef2ec",
+    "roadmap": "sha256:1e5586761e5647638dd57e1c29422af691365423abb9db750c62f3fa3ce1d7e9",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:8411cb76dcc82924c3792fa061d222eb482db7011e23198a58fe5fcef40e15d2",
+    "workState": "sha256:05193db8f8601c604413852e8c68ef9c35f281d56c43cb7cb5b42380868d62af",
     "rfcRegister": "sha256:deed655632924fa30ec63c61eedcf6d73b064ecc95a8da4a020ce6484b45832e",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 629,
       "doing": 17,
       "blocked": 1086,
-      "done": 1691,
+      "done": 1692,
       "refused": 161
     },
     "workItems": {
@@ -466,7 +466,7 @@
       "nextAction": "D3791 recorded Inspector delivery is blocked on D3792: specify and independently accept explicit existing-family demand, pre-acquisition narrowing, truthful collected-but-budget-limited outcomes and closed wire compatibility in module-registration before actual HTTP/client/native implementation. The fixed ten-family probe proves acquisition alone renders none and focused delivery renders all ten under unchanged budgets, not production completion. Independently review D3758's authored compiler section 4.4 exact 32-ref incoming-edge adoption; complete and review the separate Review Map section 2a/D1/D928 per-family witness/selection matrix before production source-to-client delivery; its declared pair is not delivery, and Full Inspector deliberately excludes it. D3757's physical-rook occupancy supplier and Nudge collection are repaired, not useful selection. Independently review D3309/D3654's authored detailed structural Inspector amendment in evidence-presentation before its sixteen successor factories, consumer and both UI migrations; all predecessor versions and board Sight remain. Independently review D3578's authored module-registration section 4.2a and evidence-presentation companion before implementing selected factories, queries, receipts and views. Check complete legality versus other Sight budgets, default view proposal, source/frame retention and exact native gesture acceptance. D3579 captions and D3607 semantic landing are closed. Continue accepted source migrations and complete consumer contracts without filtering raw bindings, then exact source-occurrence resolution and authenticated availability. The retained execution-frontier diagnostic compiles 262/285 projections, 495/556 isolated bindings and 21/42 complete consumers; 14 provider declarations refuse. These are compilation counts, not runtime adoption. D3613's actual bounded-target operation preflight is closed; do not repeat D3403's census or D3404's Guided Hint preflight. D3363/D3370/D3373/D3376 and D3391/D3392 remain explicit contract holds. Whole-source persistence, D1867 retirement and complete Support/Review/bot/learner joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3835 closes the accepted principle snapshot repair: five permanent predecessor failures become stable document/id/digest and joined Library citations, with caller inputs remaining mutable. Thirty focused software/24 real-content cases and workspace types pass. Full frozen software 5864/seven performance pass; after correcting only my duplicate roadmap evidence path, remaining governance/257 content/build/all four browser tiers exit zero on unchanged production/tests/docs. All 59 matrix cases pass at retry zero, all 112 composition cells are proven and packaged production passes; the optional uncached Maia check remains skipped. No semantic metadata or authored content changes. D3792's independent acceptance and actual scoped/provenance/API/native holds remain; no new source trust, schema, migration, source/projection version, whole capability, remote or release promotion.",
+        "summary": "D3836 completes bounded research/draft contracts for five dependent incoming-edge sources: 318 controls/218 requests across both colors, four mate horizons and two stored imports; 96 positive/491 request refusals and 37 unchanged source-contract cases pass. Actual recorded-edge dependencies, explicit mate-only parameters and strict overload unavailability are specified in the unaccepted Inspector amendment. No production code changes; full production proof remains D3835 at 844adab2 (5864 software/seven performance/257 content/build/all browser tiers, 59 retry-zero matrix cases and 112 composition cells). Independent acceptance and actual source/access/API/client/native implementation, semantic qualification and official content remain. No whole capability, milestone, remote or release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/evidence-contract.ts",
@@ -506,6 +506,7 @@
           "tools/d3792-inspector-demand/scope-selection.ts",
           "tools/d3792-inspector-demand/source-matrix.ts",
           "tools/d3792-inspector-demand/draft-wire.ts",
+          "tools/d3792-inspector-demand/incoming-dependent.ts",
           "tools/d3792-inspector-demand/source-observer.ts",
           "tools/d3792-inspector-demand/vitest.sources.config.ts",
           "tools/d3792-inspector-demand/tsconfig.json",

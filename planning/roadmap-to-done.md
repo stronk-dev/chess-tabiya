@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3835]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3836]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,6 +19,12 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3836 finishes five dependent incoming-edge source **research/draft contracts**, not production
+delivery:318 controls/218 requests,96 positive/491 grammar refusals and37 source-contract cases
+pass. The explicit mate horizon and source-specific unavailable state are now specified in the
+existing unaccepted Inspector amendment. Independent acceptance and real source/API/client/native
+implementation remain. The last full production verification is844adab2 (D3835), not this probe.
+
 D3835 closes the analogous principle boundary: five predecessor failures cover document identity,
 citation loss/replacement, nested aliases and actual Library rendering. Thirty software and 24
 real-content/Library focused cases plus types pass. Full software 5864/seven performance and the
@@ -31,7 +37,7 @@ cannot change under fixed digests, and hashing/indexing use one owned input snap
 predecessor regressions become 45 focused passes/types, including actual authenticated source
 read/export. Full normal verification/build/all browser tiers pass: 5855 software, seven
 performance, 257 content, 393 browser checks and 112 unretried composition cells. D3835 is the
-separately queued principle-registry check; no whole capability or release gate is promoted.
+separate principle-registry check has since closed above; no whole capability or release gate is promoted.
 
 D3833 adds the remaining authored-shape interval binding to the unaccepted Inspector draft.
 Actual registry/stored-prefix checks demonstrate why both interval ends and closure must be
@@ -318,14 +324,14 @@ production also passes. The optional uncached Maia check remains skipped. Thirty
 real-content focused controls and workspace types pass; no content or semantic metadata moves.
 D3834's preceding committed full shape-source proof remains closed at its own checkpoint.
 D3830's exact recorded selection and the preceding accepted repairs remain closed. D3831–D3833
-are bounded source research/draft authoring; they do not deliver scoped Inspector or close the
+and D3836 are bounded source research/draft authoring; they do not deliver scoped Inspector or close the
 independent acceptance and production API/client/native obligations. All historical failures and
 preceding proof retain their own dates and scopes in the log.
-The last recorded GitHub read concerns published revision 78fd302f:
+Fresh GitHub read on 2026-10-15 still concerns published revision 78fd302f:
 [verify succeeded](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140789),
 [browser failed](https://github.com/stronk-dev/chess-tabiya/actions/runs/38560140733); its
-D3810 matrix repair is verified locally but not remotely. Local commits are unpushed and no
-new GitHub query, current-revision remote or release qualification is claimed here. No 1.0 promotion.
+D3810 matrix repair is verified locally but not remotely. Local commits are unpushed; that fresh
+read does not establish current-revision remote or release qualification. No 1.0 promotion.
 
 The execution frontier is concrete: independent acceptance and implementation of held source,
 selected-Sight, Nudge and Review contracts; complete learner journeys and bot calibration;
