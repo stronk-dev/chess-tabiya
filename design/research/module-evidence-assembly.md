@@ -1593,3 +1593,66 @@ exercise one refusal path, not 21 distinct classes. The reviewer does not rerun 
 new factories, convention registration, source qualification, remaining D3847 classes, D3845 or
 the joint Inspector amendment. `[V]` `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`
 §D3847/D3850 material and promotion component.
+
+## Compare and Story negative-selection authority — 2026-10-15, D3847/D3845
+
+Compare's structural difference is not a positive observation alone. It compares the requested
+node's complete observation set with its immediate predecessor, then removes identities in the
+intersection of both complete post-fork path unions. Every source occurrence and successful
+empty family result matters; two endpoint readings or only the emitted observations cannot
+establish those negative tests. `[V]` `compare-strip-values.ts:structureDeltaEntries` and the
+authorized read-only continuation in the dated Inspector independent review.
+
+The existing comparison research target now reconstructs all observation arrays from the actual
+17 exact structural-family factories, retaining seal/ref/FEN authority. Named-structure@2 has a
+different payload shape: the closed legacy observation uses only kind, squares and provenanceNote,
+while the genuine input retains its id/name. Canonical kind/JSON ordering matches current complete
+readings at all 44 distinct FENs examined, including two positive named-structure controls. There
+are 392 successful empty family rows across these unique positions; these are recorded local
+result rows, not fabricated sealed absence facts. Full selected arrays agree in 126 column reads
+(124 from the existing 62 prefix pairs plus two deliberate strict-timing reads). The old selected
+values still retain zero sealed input receipts versus 17 declared eligible-family refs. `[V]`
+`make inspector-comparison-source-research`, `comparison-source.ts:sourceFeatures`, actual F1
+factory receipt observation. This tests reconstruction/scope, not independent chess correctness.
+
+On the fixed 62 pairs, extending the peer removes 72 requested-column node/observation entries.
+These are removal incidences, not independent defect classes. A stricter assertion initially
+fails: none occurs after an already nonempty peer prefix and beyond the selected observation's
+ply. The instrument therefore adds a deliberate legal pair: main Nf3 at ply1 stays fixed; peer
+a3/a6 ends at ply2, then reaches Nf3 at ply3. Its two endpoint-pair reads remove ten observations
+from that unchanged requested node. Keep those ten separate from the earlier 72. A legal knight
+return sequence additionally emits eight repeated-appearance items; a distinct-node pair
+with a genuinely absent intervening observation is explicitly pinned. Selection is immediate-
+predecessor appearance, including reappearance, not first-ever post-fork occurrence. `[V]` same
+target, complete source-owned structural variant: 597 controls plus 316 constructor controls;
+the original 1,020-item/four-fixture population and refusal controls remain.
+
+Story's last-level factory instead scans all supplied typed evaluation points and retains only
+the selected point. Both-color actual Review packet fixtures establish:
+
+- Four available points versus the selected point alone give equal output/positive source lineage
+  but unequal existing raw-input authority. That authority already binds all supplied points;
+  the finding is missing declared population/selection lineage, not unbound caller input.
+- A later qualifying measured point changes the selection in both cases.
+- Three labelled final-node source states per color (not_requested, pending, provider_off) preserve
+  different real packet states with equal last-level inputs/selection. Pending/degradation remain
+  visible in the packet. These are source-state fixtures, not actual queued jobs/provider outages.
+- Empty and all-mate populations produce four successful no-output cases. Two actual legal
+  board-terminal losses contain qualifying measurements but produce no last-level Story moment:
+  only an eligible `recorded_result` outcome invokes that computation.
+
+`[V]` `make inspector-recorded-prefix-research`, `recorded-origin.ts` final Story controls;
+`story.ts:reviewStoryMoments`, `evidence-factories.ts:createDerivedStoryLastLevelV1Evidence`.
+Deliveries use existing synthetic parser/seal fixtures; no live engine call, complete-analysis
+claim, new factory or provider qualification follows. Actual available points, missing states and
+recorded outcome authority must stay separate in any successor's complete selection contract.
+
+The independent reviewer confirms the mechanisms and corrects the scope: piece_route is a
+separate complete initial-occupancy/ordered-replay computation, not a current Inspector topic.
+Do not add it to the 75-topic migration. Its source closure remains open under D3847 for actual
+Compare consumers. The reviewer finds no blocker in the bounded controls, does not rerun tests
+and does not accept successor lineage, runtime implementation or the joint amendment. The stale
+scoped table's extra eval_delta@1 arm must instead dispatch F2's exact eval_delta@2 contract;
+structural and last-level literal schemas remain authoring holds, not compiler exceptions. `[V]`
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md` continuation;
+`compare-strip-values.ts:recordedPieceRoutes`, F2 §2.3a, current Inspector accepts.

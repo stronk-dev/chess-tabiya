@@ -2,11 +2,12 @@
 import assert from "node:assert/strict";
 import { createRun, canonicalRunStart, commitMove, rewind, fork, revealFeedback, branchPath,
   compareBranches, attachEvidence, reachCheckpoint, transitionObjective, structuralReading, readBackReplay,
-  observationIdentity, type BranchComparison, type DrillRun, type StructuralObservation,
+  observationIdentity, STRUCTURAL_FEATURE_KINDS, type BranchComparison, type DrillRun, type StructuralObservation,
 } from "../../packages/runtime/src/index.js";
-import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import { invokeEvidenceValueRoute, type EvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import type { RunEvidenceItem } from "../../packages/runtime/src/evidence-factories.js";
-import { evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 import { STORY_PIVOT_CP } from "../../packages/runtime/src/story.js";
 const at = "2026-10-14T00:00:00.000Z";
 type ResearchCompare = (run: DrillRun, branches: readonly string[], options: { researchThroughNodeIds: readonly string[] }) => BranchComparison;
@@ -18,9 +19,10 @@ const structuralExperiment = process.argv[2] === "structural";
 function check(callback: () => void) { callback(); checks++; }
 // Scope oracle only, not a validation oracle for the underlying chess predicates:
 // derive the complete population from BOTH explicit prefixes before their intersection.
-function expectedStructure(paths: readonly (readonly DrillRun["nodes"][number][])[], index: number, forkId: string) {
+function expectedStructure(paths: readonly (readonly DrillRun["nodes"][number][])[], index: number, forkId: string,
+  readFeatures: (fen: string) => readonly StructuralObservation[] = fen => structuralReading(fen).features) {
   const fork = paths[0]!.find(node => node.id === forkId)!;
-  const features = paths.map(path => path.map(node => ({ node, values: structuralReading(node.fen).features })));
+  const features = paths.map(path => path.map(node => ({ node, values: readFeatures(node.fen) })));
   const populations = features.map(path => new Set(path.filter(value => value.node.ply > fork.ply).flatMap(value => value.values.map(observationIdentity))));
   const common = new Set([...populations[0]!].filter(key => populations.slice(1).every(population => population.has(key))));
   const result: { nodeId: string; plyOffset: number; observation: StructuralObservation }[] = [];
@@ -33,6 +35,36 @@ function expectedStructure(paths: readonly (readonly DrillRun["nodes"][number][]
   }
   return result;
 }
+// D3847: reconstruct the entire observation population from actual named factories. Empty
+// family results remain explicit rows in this experiment, NOT fabricated sealed absence facts.
+const structuralRefs = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.compare.structure_delta")!.derivation!.inputs!;
+const sourcePopulations = new Map<string, { features: readonly StructuralObservation[]; sizes: readonly number[] }>();
+function sourceFeatures(fen: string): readonly StructuralObservation[] {
+  const known = sourcePopulations.get(fen);
+  if (known) return known.features;
+  const populations = structuralRefs.map(ref => {
+    const values = invokeEvidenceValueRoute(`${ref.id}@${ref.version}` as EvidenceValueRoute, { fen }) as readonly DeclaredEvidence<unknown>[];
+    return values.map(value => {
+      assertDeclaredEvidence(value); assert.deepEqual(value.projection, ref);
+      assert.equal(evidenceValueReceipt(value).inputDigest, evidenceDigest({ fen }));
+      if (ref.id === "rules.structural.reading.named_structure") {
+        const payload = value.payload as { id: string; name: string; squares: StructuralObservation["squares"]; provenanceNote: string };
+        assert.equal(typeof payload.id, "string"); assert.equal(typeof payload.name, "string");
+        // Closed legacy observation projection: no id/name fields are silently appended.
+        return { kind: "named_structure", squares: payload.squares, provenanceNote: payload.provenanceNote } as StructuralObservation;
+      }
+      return value.payload as StructuralObservation;
+    });
+  });
+  const features = populations.flat().sort((a, b) => STRUCTURAL_FEATURE_KINDS.indexOf(a.kind) - STRUCTURAL_FEATURE_KINDS.indexOf(b.kind)
+    || JSON.stringify(a).localeCompare(JSON.stringify(b)));
+  assert.deepEqual(features, structuralReading(fen).features, "complete sealed-family reconstruction must preserve legacy observation bytes/order");
+  sourcePopulations.set(fen, { features, sizes: populations.map(values => values.length) });
+  return features;
+}
+let sourceReconstructionCases = 0, peerExtensionSuppressions = 0, laterPeerSuppressions = 0, repeatedAppearanceItems = 0;
+const structuralInputCounts = new Set<number>();
+const entryKey = (entry: { nodeId: string; observation: StructuralObservation }) => `${entry.nodeId}|${observationIdentity(entry.observation)}`;
 // Scope oracle from actual original events, not the candidate BranchComparison's claimed trail.
 // Reuses the current scalar convention deliberately; this is not engine/chess qualification.
 function expectedEvalDeltas(run: DrillRun, path: readonly DrillRun["nodes"][number][], forkId: string) {
@@ -83,6 +115,7 @@ for (const black of [false, true]) for (const terminal of [false, true]) {
     "whole-tip comparison is not requested-prefix acquisition");
   const whole = compareBranches(run, [main, peer]);
   const oldInputScopes = new Map<string, string>();
+  const peerPrefixes = new Map<number, Set<string>>();
   check(() => assert.deepEqual(scoped(run, [main, peer], { researchThroughNodeIds: [mainPath.at(-1)!.id, peerPath.at(-1)!.id] }), whole));
   if (structuralExperiment) for (const [index, branchId] of [main, peer].entries()) {
     const items = invokeEvidenceValueRoute("derived.compare.structure_delta@1", { run, comparison: whole, branchId }) as readonly RunEvidenceItem<{ observation: StructuralObservation }>[];
@@ -128,6 +161,24 @@ for (const black of [false, true]) for (const terminal of [false, true]) {
           assert.deepEqual(items.map(item => ({ nodeId: item.nodeId, plyOffset: item.plyOffset, observation: item.evidence.payload.observation })),
             expectedStructure([mainPath.slice(0, left + 1), peerPath.slice(0, right + 1)], index, result.forkNodeId));
         });
+        check(() => assert.deepEqual(items.map(item => ({ nodeId: item.nodeId, plyOffset: item.plyOffset, observation: item.evidence.payload.observation })),
+          expectedStructure([mainPath.slice(0, left + 1), peerPath.slice(0, right + 1)], index, result.forkNodeId, sourceFeatures)));
+        for (const item of items) structuralInputCounts.add(evidenceValueReceipt(item.evidence).sourceDigests.length);
+        sourceReconstructionCases++;
+        if (index === 0) {
+          const keys = new Set(items.map(item => entryKey({ nodeId: item.nodeId, observation: item.evidence.payload.observation })));
+          const previous = peerPrefixes.get(left);
+          if (previous) {
+            const removed = [...previous].filter(key => !keys.has(key));
+            peerExtensionSuppressions += removed.length;
+            if (right > peerPath.findIndex(node => node.id === shared.id) + 1)
+              laterPeerSuppressions += removed.filter(key => {
+                const node = mainPath.find(node => key.startsWith(`${node.id}|`))!;
+                return peerPath[right]!.ply > node.ply;
+              }).length;
+          }
+          peerPrefixes.set(left, keys);
+        }
         boundedStructuralItems += items.length;
       }
     }
@@ -193,6 +244,69 @@ for (const black of [false, true]) for (const terminal of [false, true]) {
     legacyLaterItems += later.length;
   }
   check(() => assert.equal(JSON.stringify(run), original));
+}
+if (structuralExperiment) {
+  // A genuine appearance/disappearance/reappearance is not a first-ever occurrence selector.
+  let run = createRun({ id: "d3847-reappearance", session: { kind: "position",
+    start: canonicalRunStart({ fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }),
+    feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+    sessionDigest: `sha256:${"e".repeat(64)}`, seed: 1, createdAt: at,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+  const main = run.activeCursor.branchId, root = run.activeCursor.nodeId;
+  for (const move of ["g1f3", "g8f6", "f3g1", "f6g8", "g1f3"]) run = commitMove(run, move, { at }).run;
+  run = rewind(run, root, at).run; run = fork(run, root, { at }).run;
+  const peer = run.activeCursor.branchId;
+  for (const move of ["b1c3", "b8c6"]) run = commitMove(run, move, { at }).run;
+  run = revealFeedback(run, at).run;
+  const comparison = compareBranches(run, [main, peer]);
+  const items = invokeEvidenceValueRoute("derived.compare.structure_delta@1", { run, comparison, branchId: main }) as readonly RunEvidenceItem<{ observation: StructuralObservation }>[];
+  check(() => assert.deepEqual(items.map(item => ({ nodeId: item.nodeId, plyOffset: item.plyOffset, observation: item.evidence.payload.observation })),
+    expectedStructure([branchPath(run, main), branchPath(run, peer)], 0, comparison.forkNodeId, sourceFeatures)));
+  const seen = new Set<string>();
+  for (const item of items) { const key = observationIdentity(item.evidence.payload.observation); if (seen.has(key)) repeatedAppearanceItems++; seen.add(key); }
+  assert(repeatedAppearanceItems > 0, "actual legacy selection must retain genuine repeated appearances");
+  const mainPath = branchPath(run, main);
+  assert(items.some(first => items.some(last => first.nodeId !== last.nodeId
+    && observationIdentity(first.evidence.payload.observation) === observationIdentity(last.evidence.payload.observation)
+    && mainPath.some(node => node.ply > run.nodes.find(node => node.id === first.nodeId)!.ply
+      && node.ply < run.nodes.find(node => node.id === last.nodeId)!.ply
+      && !sourceFeatures(node.fen).some(value => observationIdentity(value) === observationIdentity(first.evidence.payload.observation))))),
+  "pin a real distinct-node recurrence with an absent-between witness");
+  // The fixed62 pairs do not cover this strict timing case. Pin a deliberate legal peer:
+  // the main's Nf3 at ply1 is suppressed only when the nonempty peer reaches Nf3 at ply3.
+  run = rewind(run, root, at).run; run = fork(run, root, { at }).run;
+  const latePeer = run.activeCursor.branchId;
+  for (const move of ["a2a3", "a7a6"]) run = commitMove(run, move, { at }).run;
+  const earlierPeer = run.activeCursor.nodeId;
+  run = commitMove(run, "g1f3", { at }).run; run = revealFeedback(run, at).run;
+  const laterPeer = run.activeCursor.nodeId;
+  const images = [earlierPeer, laterPeer].map(endpoint => {
+    const comparison = scoped(run, [main, latePeer], { researchThroughNodeIds: [mainPath[1]!.id, endpoint] });
+    const entries = invokeEvidenceValueRoute("derived.compare.structure_delta@1", { run, comparison, branchId: main }) as readonly RunEvidenceItem<{ observation: StructuralObservation }>[];
+    const peerPath = branchPath(run, latePeer), end = peerPath.findIndex(node => node.id === endpoint);
+    check(() => assert.deepEqual(entries.map(item => ({ nodeId: item.nodeId, plyOffset: item.plyOffset, observation: item.evidence.payload.observation })),
+      expectedStructure([mainPath.slice(0, 2), peerPath.slice(0, end + 1)], 0, comparison.forkNodeId, sourceFeatures)));
+    sourceReconstructionCases++;
+    return new Set(entries.map(item => entryKey({ nodeId: item.nodeId, observation: item.evidence.payload.observation })));
+  });
+  const strictRemoved = [...images[0]!].filter(key => !images[1]!.has(key));
+  assert(strictRemoved.length > 0, "the deliberate later-peer case must actually suppress selected-node facts");
+  laterPeerSuppressions += strictRemoved.length;
+  for (const fen of ["4k3/8/8/8/3P4/8/8/4K3 w - - 0 1", "4k3/8/8/3p4/8/8/8/4K3 b - - 0 1"]) {
+    const features = sourceFeatures(fen);
+    assert(features.some(value => value.kind === "named_structure"), "named-structure conversion needs a real positive");
+    assert.notDeepEqual(features.filter(value => value.kind !== "named_structure"), structuralReading(fen).features);
+  }
+  assert(peerExtensionSuppressions > 0, "a later peer observation must actually change earlier selected-column membership");
+  assert(laterPeerSuppressions > 0, "suppression must also occur past an already nonempty peer prefix and after the selected observation's ply");
+  assert.deepEqual([...structuralInputCounts], [0]);
+  assert([...sourcePopulations.values()].some(row => row.sizes.some(size => size === 0)));
+  console.log(JSON.stringify({ scope: "D3847 complete structural source reconstruction/negative selection; not successor receipts or qualification",
+    familyRefs: structuralRefs.length, distinctFenPopulations: sourcePopulations.size, sourceReconstructionCases,
+    additionalStrictPeerPairs: 2, distinctNodeAbsentBetweenWitness: true,
+    peerExtensionSuppressions, laterPeerSuppressions, repeatedAppearanceItems, namedStructurePositiveCases: 2,
+    successfulEmptyFamilyRows: [...sourcePopulations.values()].reduce((sum, row) => sum + row.sizes.filter(size => size === 0).length, 0),
+    legacySealedInputCounts: [...structuralInputCounts], productionChanges: 0 }));
 }
 if (structuralExperiment) assert(boundedStructuralItems > 0, "source-side narrowing cannot pass by returning an empty population");
 else assert(legacyLaterItems > 0);

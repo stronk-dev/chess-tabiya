@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3847 Compare/Story continuation now tests selection's complete input populations,
+not just displayed positive evidence. Actual17 structural-family sources reconstruct44 FENs/
+126 column reads/392 empty family rows. Keep72 broad peer-extension removals separate from ten
+strict removals in one deliberately added later-peer case; the initial strict control failed
+on the original62 pairs. A distinct-node absent-between witness pins reappearance. Both-color
+actual Story packets preserve full point authority, six differing coverage states, four empty/
+mate-only cases and two recorded-result-versus-board-terminal gates. Normal comparison316/597
+and prefix targets/types pass. F2 §2.3d explicitly holds structural/last-level literal schemas;
+the scoped Compare draft now dispatches F2's exact eval_delta@2 instead of adding an @1 arm.
+Piece routes remain separate Compare work, not an extra Inspector topic. Map17/58 stays conditional,
+with no source factory, production/API/client change, qualification or joint acceptance.
+
 2026-10-15 — D3847/D3850 material/promotion source component is now authored in F2 §2.3c after
 actual reconstruction: 48 signature/22 whole-event comparisons over 22 legal edges/four positions,
 seven count/order/role/foreign-FEN negatives, 21 wrong-edge refusals, both-color en passant,

@@ -364,3 +364,50 @@ reviewer. Actual successor factories must consume admitted sources rather than c
 outputs and append unused witnesses; no successor mint, convention registration, access/native
 delivery, source qualification, other D3847 class, D3845 grammar or upstream/joint acceptance is
 cleared. Parent lifecycle state does not authorize this unaccepted amendment.
+
+### D3847 Compare/Story continuation — complete selection populations
+
+The reviewer traces structure delta to every compared post-fork observation union, the requested
+fork/predecessor readings and immediate appearances after absence. A positive observation or
+two endpoints cannot establish peer/predecessor absence. Named-structure@2 payloads also require
+a closed conversion to old observation shape. Current zero sealed inputs and17 eligible refs
+are not that literal population contract. Source/state/order schema and exact successors remain
+authoring work; constructor scope alone does not supply them.
+
+Piece routes instead track full initial occupancy and ordered replay, including captures,
+en passant, simultaneous/stationary castling, promotion identity and captured historical paths.
+The reviewer notes it is a Compare source, not an accepted Full Inspector topic; do not silently
+expand the75-topic requirements map. Its complete source schema remains separate D3847 work.
+
+Story last-level retains only a selected point despite scanning the available point population
+and raw result. Future sources need full recorded-available point/state authority and the actual
+eligible imported-result gate. Preserve last-level only for recorded_result learner losses,
+not all board-terminal losses. Rank grammar does not automatically settle this selection schema.
+
+Main's existing instruments reconstruct17 genuine family populations with exact FEN/seal/ref
+checks, named conversion and original ordering; complete and selected arrays agree. Actual
+Story packets demonstrate unequal raw full input authority with equal selected output/lineage;
+the reviewer explicitly acknowledges current authority already binds supplied points. Coverage
+states, later qualifying points, empties/mate-only and terminal gates are genuine bounded controls.
+
+The initial72 broad peer-prefix removals do not prove later-than-selected suppression: main's
+stricter assertion fails on the62 original pairs. An initial read-only review sees that assertion
+but does not establish a passing run; main reports the failure explicitly. A deliberate main Nf3
+at ply1 versus peer a3/a6→Nf3 at ply3 produces ten strict removals on two endpoint reads. The
+reviewer rechecks that actual mechanism and the distinct-node absent-between recurrence witness;
+no blocker remains in those bounded controls. Final normal comparison output is316 constructor/
+597 structural controls,44 FENs/126 column reads/392 empty family rows and eight repeated-
+appearance items. Keep the72 broad and ten strict removal incidences separate.
+
+No reviewer tests rerun. The shared detector/selection oracle establishes reconstruction and
+scope, not independent chess correctness, future completeness receipts or qualification. The
+reviewer recommends replacing the stale extra eval_delta@1 arm with F2 §2.3a's exact @2 arm
+{before,after,comparison,branchId} and explicitly holding structural lineage; all historical
+routes stay. Source-schema, runtime, upstream and joint acceptance are not granted.
+
+The bounded draft recheck confirms F2's explicit schema holds, exact eval@2 sole-arm dispatch
+and weaker recorded authority, and Review's recorded_result-only loss gate. It returns one
+remaining contradictory acceptance sentence requiring both new complete-tip payloads to equal
+their predecessors. Main separates structural payload/selection preservation from eval@2's new
+payload/lineage/disclosure and keeps all historical callers/receipts unchanged. Final read-only
+recheck closes that paragraph's contradiction, not any broader acceptance or implementation.

@@ -1036,7 +1036,12 @@ expansions and v2 semantic events do not become new Story kinds through this ame
 **Assemble before ranking, without prose.** Share one private unrendered-moment builder with
 `reviewStoryMoments`: same current kinds, thresholds, merging at exact nodes, recorded decision/
 evidence/entry/stop identities, phase/endgame data and typed evaluation endpoints. Root creates
-no moment. Compute last-level only if this boundary's own outcome supplies its recorded loss;
+no moment. Compute last-level only if this boundary's outcome is exactly `recorded_result` and
+its result says the learner lost. This is the eligible original imported endpoint rule, not any
+board-terminal loss or a caller result token. D3847/F2 §2.3d separately holds its successor's
+complete available point/state lineage and literal selection schema; rank's collection grammar
+does not automatically settle that source. Preserve all available points and actual coverage
+states, not only the selected positive witness. Missing/pending is not proof of no later witness;
 never remove leaked last-level moments after whole-game derivation. The legacy Story path adds
 its components/title as before. The scoped source constructs neither title nor voice text,
 receives no callback strings and performs no Review Map educational selection.
@@ -1450,6 +1455,10 @@ unauthorized until another genuinely fresh review and all declared dependencies 
 
 ## Changelog
 
+- 2026-10-15: D3847's actual packet controls make the last-level gate explicitly recorded_result
+  plus learner loss, preserving the absence of board-terminal last-level moments. Complete
+  recorded-available point/state lineage remains an authoring hold distinct from D3845 rank
+  grammar; no selected-witness shortcut, new factory or runtime implementation is authorized.
 - 2026-10-15 — D3845 research/independent assessment records the six still-required collection
   contract decisions without adopting a grammar or redundant policy-evidence leaf. D3846 adds
   phase/collapse@2's exact ordered witness tuples to the proposed scoped adapter image; no old

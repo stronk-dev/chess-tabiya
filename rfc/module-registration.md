@@ -2411,9 +2411,11 @@ must be explicit and independently accepted; neither prototype supplies producti
 current v1 scoped receipts, response admission or HTTP/native receiver proof. Do not reinterpret
 a full-tip receipt or silently replace any of Inspector's 75 source obligations.
 
-**Closed comparison source and factory contract (2026-10-15), still unaccepted:** Full
-Inspector accepts exactly `derived.compare.structure_delta@1` and
-`derived.compare.eval_delta@1`; it does not accept the route or trajectory projection merely
+**Comparison source constructor and execution obligations (2026-10-15), still unaccepted:** The
+current Full Inspector inventory accepts `derived.compare.structure_delta@1` and
+`derived.compare.eval_delta@1`; D3841's proposed successor image replaces the latter with @2.
+Structural lineage is separately held by D3847/F2 §2.3d; this subsection does not authorize
+adding a scoped arm to its frozen @1. Inspector does not accept the route or trajectory projection merely
 because Compare does. The new operation must invoke the requested factory directly. Calling
 `comparisonStrips`, `comparisonNarrative` or `compareSources` and filtering afterward acquires
 unrequested siblings and is not this operation. Existing full-tip Compare, its routes and all
@@ -2462,12 +2464,14 @@ both granted paths. Original FEN, normalized committed move and event occurrence
 attached to their source records. This is a distinct source-operation identity, not a new
 persisted protocol, permission token or reinterpretation of a whole-tip value receipt.
 
-Only these additional closed F2 arms are introduced by this subsection:
+The scoped source obligations below do not introduce additional @1 arms. Eval dispatch must use
+F2 §2.3a's exact successor and sole arm; structural factory/declaration/receipt authoring remains
+held before acceptance:
 
-| Exact factory route | New arm | Source-side execution and literal inputs |
+| Source requirement | Arm status | Source-side execution and literal inputs |
 |---|---|---|
-| `derived.compare.structure_delta@1` | `{recordedComparison: RecordedComparisonSource, branchId: string}` | Require branchId equal one granted column. Read structural observations only on the two granted prefixes, using their common fork and existing reader/conventions. Form both post-fork observation sets before their intersection; derive the requested column's newly present, noncommon observations in original node/feature order. Retain that node's exact occurrence and both actual path/read operands. No whole-branch helper is called after the source has granted its paths. |
-| `derived.compare.eval_delta@1` | `{recordedComparison: RecordedComparisonSource, branchId: string}` | Require the same membership. Join actual eval attachments to the requested granted path at/after its common fork, retaining their original event sequences and bytes. Preserve current score parsing, stable ply ordering, cp-to-cp-only arithmetic and `STORY_PIVOT_CP`; no mate-to-cp conversion, new ranking or invented line. Every delta retains both exact source attachments plus the recorded comparison scope. |
+| Structural difference, predecessor `derived.compare.structure_delta@1`; successor held D3847 | Not yet specified; source-owned comparison grant required, not a new @1 arm | Require branchId equal one granted column. Reconstruct complete observations on both granted prefixes before intersection, retaining per-node occurrence/FEN, family results including successful empties, and immediate requested-path predecessor tests. A peer observation later than the displayed node may suppress it. Preserve reappearance and node/feature order; specify closed named-structure@2 conversion. Positive observations alone do not establish negative selection. No whole-branch helper runs after the grant; F2 §2.3d owns the unresolved literal schema. |
+| `derived.compare.eval_delta@2` | `{before,after,comparison: RecordedComparisonSource,branchId:string}` exactly, per F2 §2.3a | Source owner reconstructs the complete recorded trail on the granted column and selects consecutive report pairs in stable ply/event order. Both exact sealed recorded.inspector.eval_packet@1 inputs, event/head/node membership and the comparison source must validate; arbitrary supplied pairs are not a trail. Preserve safe-integer cp parsing and STORY_PIVOT_CP, with no mate conversion. Emit the new recorded_cp_numbers/provider_not_established frame and disclose unverified comparability; do not label this a modern validated engine delta. |
 
 The old `{run, comparison, branchId}` arms remain unchanged for their existing callers.
 Do not infer scoped admission from `comparison.columns[].leafNodeId`, add an optional endpoint
@@ -2478,18 +2482,19 @@ serialization or only the run/branch/fork. Different endpoint tuples must have d
 identities even when their displayed deltas happen to be equal. Reversing the tuple retains
 requested column order and changes scope identity without manufacturing another chess meaning.
 
-This changes acquisition scope and its declared operands, not the two projections' chess
-semantics: both remain differences after an actual recorded common fork, with their existing
-payload, convention, grounding, exactness, dependency status and consumer eligibility. A
-complete-tip new source must produce byte-equal payload populations to its old arm; its input
-receipt is intentionally distinct. Whole-tip callers and historical receipts keep their old
-identities. Independent review must verify this compatibility against the actual catalogue and
-factory contracts; a finding that a v1 meaning requires complete tips instead must return this
-proposal for explicit successors/bindings, not silently reinterpret or retire v1.
+The structural successor must preserve the current appearance/noncommon selection and payload
+population at complete tips, while supplying truthful complete source lineage and its exact
+grounding/convention contract. Its unresolved schema is not implicitly accepted by the source
+constructor. Eval@2 deliberately reports recorded numerical difference under F2 §2.3a's weaker
+recorded_run authority and explicit comparability disclosure; it is not byte-equivalent to the
+old provider-labelled @1 projection. Existing @1 factories, full-tip callers and historical
+receipts remain untouched. Independently review each successor, its actual factory/consumer
+bindings and compatibility; no silent predecessor reinterpretation or retirement.
 
 In particular, an `engine_validated` attachment label does not establish a modern provider
-receipt. The eval factory keeps its existing provider-exchange dependency and pending status;
-these scoped arms cannot manufacture engine/model/bound identity or discharge the upstream
+receipt. The old eval@1 factory keeps its provider-exchange dependency and pending status;
+the proposed recorded @2 is a separately requested weaker view, not a fallback from a modern
+source refusal. It cannot manufacture engine/model/bound identity or discharge that upstream
 source migration. Where the requested consumer requires a held source version, return the
 existing `unavailable/source_version_held` with that actual dependency—not a universal stub,
 successful absence or a new stronger claim. A permitted complete execution with no qualifying
@@ -2506,9 +2511,12 @@ grant before its values can become source summaries/detail. The browser independ
 old request owners, scope/configuration/account changes and paint. A correct source object is
 not permission to publish an obsolete response.
 
-Acceptance adds the actual typed constructor/new-arm/invoker controls to the D3820 prefix
-population: both complete-tip arms retain old payloads; fork-only/unequal-length/reversed and
-inherited prefixes retain exact complete output; original late-graph corruption and malformed
+Acceptance adds actual typed constructor/successor/invoker controls to the D3820 prefix
+population. The eventual accepted structural successor preserves full-tip selection and payloads;
+eval@2 preserves the specified historical pair selection/arithmetic with its explicitly new
+payload, lineage and comparability disclosure. All old@1 callers, payloads and receipts remain
+unchanged. Fork-only/unequal-length/reversed and inherited prefixes retain exact complete
+source-scoped output; original late-graph corruption and malformed
 or syntactically valid-but-illegal later FENs on either original column refuse before any read
 counters advance, including warmed memo accesses. Controls replay actual committed events and
 distinguish parser-rejected terminal images from replay-admitted ordinary images; neither a
@@ -3519,6 +3527,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — D3847's complete-population/negative-selection measurements return structural
+  Compare lineage to an explicit authoring hold (F2 §2.3d), not a new scoped @1 arm. The stale
+  eval row now dispatches F2 §2.3a's exact eval_delta@2 sole arm and recorded-number disclosure.
+  Preserve every old factory/caller and the17/58 conditional requirements map. No acceptance,
+  source-completeness receipt, new Inspector topic or runtime exception follows.
 - 2026-10-15 — D3846 extends the proposed rebase from twelve execution-failing topics to fourteen
   affected topics: phase_change@2/option_collapse@2 use their actual fixed4/6-input tuples.
   Only irreversibility retains a new @1 scoped arm; all old @1 meanings/receipts remain unchanged.

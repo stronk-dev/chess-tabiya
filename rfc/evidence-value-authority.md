@@ -10,7 +10,7 @@
   D2146 callable-operation closure
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
-- **Draft amendment 2026-10-15 — D3841/D3846/D3847/D3850, §§2.3a–2.3c:** explicit recorded Inspector source and
+- **Draft amendment 2026-10-15 — D3841/D3846/D3847/D3850, §§2.3a–2.3d:** explicit recorded Inspector source and
   dependent projection successors. This is unaccepted authoring, not implementation authority
   from the parent's awaiting state. D3845 independently holds rank's variable/empty input contract.
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -470,6 +470,44 @@ The disposable recipe and metadata compilation establish none of these new runti
 Independent upstream and joint review remain mandatory; D3847's other classes and D3845 grammar
 are not discharged by these three proposals.
 
+#### 2.3d D3847 selection-source obligations — unresolved, not an implementation contract
+
+The measured structural/Story selections need complete population authority, not merely positive
+witnesses. The existing comparison instrument reconstructs 17 actual family populations at 44
+FENs and 126 column reads, including closed named-structure@2 conversion and 392 empty family
+results. A controlled later peer extension removes ten facts from an unchanged earlier requested
+node; genuine reappearance also occurs. The source must preserve both granted path populations,
+each requested predecessor and original occurrence/order, including successful empty families.
+A displayed observation, one reading at each endpoint, a list of only changed nodes or an opaque
+source handle does not establish those negative tests. Record raw named-structure inputs as well
+as the exact legacy observation projection; do not silently interchange their payload shapes.
+
+Last-level differs from rank and structural difference. Its successor must consume the complete
+source-owned **recorded available** point population and actual coverage states, learner side,
+path ordering and the eligible recorded-result authority. Both-color actual packets show equal
+selected positive lineage with unequal full input authority, and equal last-level selection with
+different source-state packets. Current input authority already binds all supplied points; do not
+misreport that as no input binding. Later qualifying points change selection. Missing/pending
+measurements are not proof of no later qualifying point or complete analysis. Preserve the
+recorded_result-only loss gate; board-terminal loss does not invoke this Story family. Retain
+successful empty/mate-only results and specify equal-index/duplicate handling against the actual
+source owner's point population rather than inventing a new ordering.
+
+Before acceptance, author each exact successor's literal population/state schema, sole factory
+and callable, empty-result identity, execution templates versus actual occurrences, source joins,
+convention/grounding/answer limits and compatibility with frozen predecessors. D3845's proposed
+rank reduction is not automatic authority for these different computations. No new factory name
+or generic computed/derived leaf is inferred by this hold; no empty tuple, invented absence value,
+unused evidence or runtime held-binding exception is permitted. Structural@1 remains conditional
+in D3841's requirements map until this contract is resolved; last-level is a transitive Story
+dependency, not an extra Inspector topic. Piece routes separately require complete initial
+occupancy plus ordered replay under D3847, but are not added to Inspector's 75 topics.
+
+Evidence: `design/research/module-evidence-assembly.md` §Compare and Story negative-selection
+authority; existing comparison/prefix targets and independent read-only review. These are bounded
+reconstruction/selection controls, not new source completeness receipts, independent chess
+correctness, runtime qualification or upstream/joint acceptance.
+
 #### 2.4 Authored authority
 
 Authored/theory factories accept the registered pack, shape, principle, citation or claim record
@@ -926,6 +964,11 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15: D3847 §2.3d records measured negative-selection source obligations for Compare
+  structure and Story last-level before choosing their exact schemas. Complete populations,
+  successful empty family/state results and recorded-result-only gating cannot be replaced by
+  positive witnesses. The source map remains17/58 and conditional; piece routes are not added
+  to Inspector. This is an explicit authoring hold, not accepted grammar or an implementation.
 - 2026-10-15: draft D3847/D3850 §2.3c specifies two material successors retaining actual ten-count
   and before/after/capture/promotion inputs, plus a genuinely computed promotion reading under
   the existing rules producer. The latter claims one direct algorithm convention in the existing

@@ -75,6 +75,16 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Compare/Story selection closure, 2026-10-15 ([[D3847]]/[[D3845]]): 17 genuine structural-family
+populations reconstruct 44 FEN readings/126 column results, retaining 392 empty family rows.
+The fixed pairs yield 72 broad peer-extension removals; one deliberate later-peer extension adds
+ten strict removals after the initial strict control fails. Eight repeated-appearance items include
+a pinned absent-between witness. Both-color actual Story packets distinguish selected-point
+lineage from full population/coverage and preserve the recorded-result-only gate. Independent
+read-only review confirms these bounded controls, not successor source schemas, runtime or joint
+acceptance. `[V]` `module-evidence-assembly.md` §Compare and Story negative-selection authority;
+existing comparison and prefix research targets, synthetic provider fixtures only.
+
 Material/promotion source reconciliation, 2026-10-15 ([[D3847]]/[[D3850]]): 48 complete material
 signature payload comparisons over 22 legal edges/four position controls; seven count/role/order/
 foreign-FEN negatives, 21 wrong-edge cause refusals, both-color en passant and four quiet/castling

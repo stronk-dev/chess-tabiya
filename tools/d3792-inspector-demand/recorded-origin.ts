@@ -23,6 +23,8 @@ import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, compileEv
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
 import { reviewStoryMoments, rankStoryMoments } from "../../packages/runtime/src/story.js";
 import { reviewPacketForRun, type ReviewProviderNodeState } from "../../packages/runtime/src/review-evidence.js";
+import { importedRun, importRecord, evaluationDelivery, attachDelivery } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
+import type { ReviewEnginePoint } from "../../packages/runtime/src/review-points.js";
 
 const at = "2026-10-15T00:00:00.000Z";
 let checks = 0;
@@ -643,3 +645,86 @@ console.log(JSON.stringify({ scope: "D3847 actual promotion source and prospecti
   actualFenCases: promotionFens.length, declaredOldInputs: previousPromotionDerivation!.inputs!.length,
   actualSourceDigests: 0, invalidTurnCloneRetained: true, terminalPersistenceFalseRetained: true,
   emptyDerivedRefused: true, computedRulesDeclarationCompiles: true, providerOperations: 0, oldDeclarationsChanged: false }));
+
+// D3847: "last" is selection over the entire recorded available point population. All engine
+// deliveries below are explicitly synthetic parser/seal fixtures, not a live provider experiment.
+let lastLevelCases = 0, sameSelectedDifferentPopulation = 0, laterPointChangesSelection = 0;
+let lastLevelEmptyCases = 0, terminalGateCases = 0, sameSelectionDistinctCoverage = 0;
+const lastLevelDeclared = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.story.last_level")!.derivation!.inputs!;
+function packetPoints(packet: ReturnType<typeof reviewPacketForRun>): readonly DeclaredEvidence<ReviewEnginePoint>[] {
+  return packet.nodes.flatMap(node => node.items.filter(value => value.projection.id === "derived.review.eval_point") as readonly DeclaredEvidence<ReviewEnginePoint>[]);
+}
+function lastLevel(packet: ReturnType<typeof reviewPacketForRun>, points = packetPoints(packet)) {
+  assert.equal(packet.subject.outcome.kind, "recorded_result");
+  if (packet.subject.outcome.kind !== "recorded_result") throw new TypeError("no imported-result gate");
+  return invokeEvidenceValueRoute("derived.story.last_level@1", { path: packet.subject.pathNodeIds,
+    side: packet.subject.learnerSide, recordedResult: packet.subject.outcome.result, points });
+}
+for (const side of ["white", "black"] as const) {
+  let base = importedRun(`d3847-last-level-${side}`, side);
+  for (const move of ["e2e4", "e7e5", "g1f3"]) base = commitMove(base, move, { at }).run;
+  const path = branchPath(base, base.activeCursor.branchId), result = side === "white" ? "0-1" : "1-0";
+  const deliveries = path.map((node, index) => {
+    const learnerCp = [0, -250, 50, -350][index]!;
+    const whiteCp = side === "white" ? learnerCp : -learnerCp;
+    return evaluationDelivery(node.fen, `cp ${node.fen.split(" ")[1] === "w" ? whiteCp : -whiteCp}`);
+  });
+  let run = base;
+  for (const [index, node] of path.entries()) run = attachDelivery(run, node.id, deliveries[index]!);
+  const packet = reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, result) });
+  const points = packetPoints(packet), full = lastLevel(packet);
+  assert.equal(points.length, 4); assert.equal(full.length, 1); assert.equal(full[0]!.nodeId, path[2]!.id);
+  assert(reviewStoryMoments(packet).moments.some(moment => moment.kinds.includes("last_level") && moment.nodeId === path[2]!.id));
+  const selected = points.find(point => point.payload.position.payload.nodeId === path[2]!.id)!;
+  assert.deepEqual(evidenceValueReceipt(full[0]!.evidence).sourceDigests, [evidenceValueReceipt(selected).payloadDigest]);
+  assert.equal(lastLevelDeclared.length, 2);
+  const singleton = lastLevel(packet, [selected]);
+  assert.deepEqual(singleton[0]!.evidence.payload, full[0]!.evidence.payload);
+  assert.deepEqual(evidenceValueReceipt(singleton[0]!.evidence).sourceDigests, evidenceValueReceipt(full[0]!.evidence).sourceDigests);
+  assert.notEqual(evidenceValueReceipt(singleton[0]!.evidence).inputDigest, evidenceValueReceipt(full[0]!.evidence).inputDigest,
+    "the old raw authority does bind all supplied points; identical positive lineage does not establish population completeness");
+  sameSelectedDifferentPopulation++;
+  const final = path.at(-1)!, learnerCp = 75, whiteCp = side === "white" ? learnerCp : -learnerCp;
+  const changedRun = attachDelivery(run, final.id, evaluationDelivery(final.fen, `cp ${final.fen.split(" ")[1] === "w" ? whiteCp : -whiteCp}`));
+  const changedPacket = reviewPacketForRun(changedRun, changedRun.activeCursor.branchId, { importRecord: importRecord(changedRun, result) });
+  assert.equal(lastLevel(changedPacket)[0]!.nodeId, final.id); laterPointChangesSelection++;
+  const states: readonly ReviewProviderNodeState[] = [{ kind: "not_requested" },
+    { kind: "pending", jobCount: 1, retrying: 0 }, { kind: "unavailable", reason: "provider_off" }];
+  const coverage = states.map(state => {
+    const engine = new Map<string, ReviewProviderNodeState>(path.map((node, index) => [node.id,
+      index === path.length - 1 ? state : { kind: "delivered", delivery: invokeEvidenceValueRoute("live.stockfish.position_eval@1", { delivery: deliveries[index]! }) }]));
+    const packet = reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, result), engine });
+    const level = lastLevel(packet);
+    assert.equal(level[0]!.nodeId, path[2]!.id);
+    return { packet, input: evidenceValueReceipt(level[0]!.evidence).inputDigest };
+  });
+  assert.equal(new Set(coverage.map(value => value.packet.packetDigest)).size, 3);
+  assert.equal(new Set(coverage.map(value => value.input)).size, 1);
+  assert.equal(coverage[1]!.packet.completion.progress.kind, "progressive");
+  assert.equal(coverage[2]!.packet.completion.degradation.kind, "degraded");
+  sameSelectionDistinctCoverage += coverage.length;
+  const noPoints = reviewPacketForRun(base, base.activeCursor.branchId, { importRecord: importRecord(base, result) });
+  assert.deepEqual(lastLevel(noPoints), []); lastLevelEmptyCases++;
+  let mateOnly = base;
+  for (const node of path) mateOnly = attachDelivery(mateOnly, node.id, evaluationDelivery(node.fen, "mate 2"));
+  const matePacket = reviewPacketForRun(mateOnly, mateOnly.activeCursor.branchId, { importRecord: importRecord(mateOnly, result) });
+  assert.equal(packetPoints(matePacket).length, 4); assert.deepEqual(lastLevel(matePacket), []); lastLevelEmptyCases++;
+  let terminal = importedRun(`d3847-terminal-gate-${side}`, side,
+    `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${side === "white" ? "w" : "b"} KQkq - 0 1`);
+  const moves = side === "white" ? ["f2f3", "e7e5", "g2g4", "d8h4"] : ["f7f6", "e2e4", "g7g5", "d1h5"];
+  for (const move of moves.slice(0, -1)) terminal = commitMove(terminal, move, { at }).run;
+  const measuredNode = terminal.nodes.find(node => node.id === terminal.activeCursor.nodeId)!;
+  terminal = attachDelivery(terminal, measuredNode.id, evaluationDelivery(measuredNode.fen, "cp 0"));
+  terminal = commitMove(terminal, moves.at(-1)!, { at }).run;
+  const terminalPacket = reviewPacketForRun(terminal, terminal.activeCursor.branchId, { importRecord: importRecord(terminal, result) });
+  assert.equal(terminalPacket.subject.outcome.kind, "board_terminal");
+  assert(packetPoints(terminalPacket).length > 0);
+  assert(!reviewStoryMoments(terminalPacket).moments.some(moment => moment.kinds.includes("last_level")),
+    "a board-terminal loss must not be broadened into the recorded-result last-level gate");
+  terminalGateCases++; lastLevelCases++;
+}
+console.log(JSON.stringify({ scope: "D3847 actual Story selection and recorded coverage; synthetic deliveries, no successor or provider proof",
+  sides: lastLevelCases, declaredFixedInputs: lastLevelDeclared.length, actualSelectedInputCount: 1,
+  sameSelectedDifferentPopulation, laterPointChangesSelection, sameSelectionDistinctCoverage,
+  successfulEmptyCases: lastLevelEmptyCases, terminalGateCases, oldInputAuthorityBindsPopulation: true,
+  sourceCoverageNotInSelectedLineage: true, liveProviderCalls: 0, productionChanges: 0 }));

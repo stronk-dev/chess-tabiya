@@ -30201,3 +30201,49 @@ Campaign was the one capability with no API, route or content. Now:
   roadmap R1–R10/current receipt, intent parity, tier isolation, docs and process tests pass.
   Inspect the explicit14-file index and run normal commit hooks. No production/app files or new
   raw recordings are included; the full1.0 goal remains active.
+
+## 2026-10-15 — D3847 Compare/Story population and negative-selection closure
+
+- Previous goal turn was progress:dd51fd0f committed the independently inspected material/
+  promotion source proposal. Verify current main and the same three pre-existing untracked
+  entries. Continue D3847's remaining source classes before choosing D3845's reduction grammar.
+- The same authorized independent reviewer traces Compare structure to complete post-fork
+  unions and predecessor absence, piece routes to full occupancy/replay, and last-level to all
+  available points plus recorded loss. These are distinct source obligations, not rank's
+  collection schema automatically solving every class. Piece routes are not Inspector topics.
+- Extend only the existing two disposable instruments. Actual17 structural-family sources
+  reconstruct44 complete FEN readings/126 column reads;392 successful empty family rows remain
+  explicit, not sealed absence facts. Named-structure conversion has two positives. Keep the
+  original1020-item/62-pair population and all original graph/FEN/source refusals.
+- An initial stricter later-peer assertion fails:72 broad peer-extension removals on those62
+  pairs do not prove later-than-displayed suppression. Preserve that failure and add one legal
+  controlled extension: fixed main Nf3 at ply1 versus nonempty peer a3/a6, then Nf3 at ply3.
+  Two endpoint reads remove ten facts. Separately pin a distinct-node reappearance with an
+  absent-between position; eight repeated-appearance items are observed. The unchanged normal
+  comparison target passes316 constructor/597 structural controls. No production edits.
+- Both-color actual Review packets prove equal selected lineage can accompany unequal full
+  input populations; old input authority already binds the complete supplied list. Two later
+  qualifying-point changes, six source-state packet variants, four empty/mate-only cases and
+  two actual board-terminal gates pass in the normal prefix target with all earlier controls.
+  Deliveries and pending/unavailable states are explicitly synthetic fixtures, zero live calls.
+- Independent read-only review confirms the bounded mechanisms; a recheck distinguishes the
+  failed initial strict assertion from the subsequently passed deliberate pair. No test rerun
+  by the reviewer, source qualification, successor factory or upstream/joint acceptance.
+- Record research before amending existing drafts: F2 §2.3d makes structural/last-level literal
+  schemas explicit unresolved obligations; Review preserves recorded_result plus learner loss
+  only. The scoped Compare table no longer adds false new@1 arms: eval dispatch agrees with
+  F2 §2.3a's exact@2 sole arm and recorded comparability disclosure. The independent wording
+  review returns a leftover both-payloads-equal acceptance sentence. Separate structural
+  preservation from eval@2's intentionally new payload/lineage/disclosure; final bounded recheck
+  clears the contradiction, not runtime/upstream/joint acceptance. No Inspector topic is added.
+- Update the existing D3847/D3845 rows, queue and roadmap checkpoint/next action rather than
+  creating another work document. Map17/58 remains conditional; full schemas, tactical/hypothetical
+  classes and D3845 reduction remain open. No protected intent, production, persisted resource,
+  source retirement, content or release claim. Run normal types/research/governance and explicit
+  index hooks before committing; preserve the same three pre-existing untracked entries.
+- Normal governance exits zero with3599 assigned ledger rows/1736 live, zero untriaged,
+  unchanged lifecycle/resource claims, roadmap R1–R10/current receipt, intent parity, tiers,
+  docs and process tests. Clarify that the recurrence counter counts repeated-appearance items,
+  not necessarily distinct identities, and refresh the normal receipt. Research tool bytes remain
+  exactly those that passed their normal targets/types. Commit the explicit15 owned files with
+  current-index hooks; no production change, push or goal pause.

@@ -19,6 +19,16 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3847's next measured class is negative selection: complete structural source populations
+reconstruct 126 column reads, and a deliberate later peer move suppresses ten facts at an
+unchanged earlier requested node. The original 62 pairs' 72 broader removals did not cover that
+timing case; the failed stricter control and added legal pair are recorded. Story's selected
+moment similarly cannot stand in for all recorded available points and source states. Both-color
+packet, empty/mate-only and recorded-result-only gate controls pass. F2 §2.3d now explicitly
+holds those exact source schemas; the stale scoped eval table dispatch is corrected to the
+already proposed @2 contract. These are research/author corrections, not production sources or
+Inspector acceptance. Other source classes and collection grammar remain the next dependency.
+
 D3847/D3850 now have a checked material/promotion source-contract proposal: 48 signature and
 22 whole-event comparisons preserve current payloads from actual count/cause inputs. Seven
 bad-count controls, both-color en passant, 21 wrong-edge substitutions and four quiet/castling
