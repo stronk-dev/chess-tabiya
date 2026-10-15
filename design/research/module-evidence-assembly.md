@@ -2104,3 +2104,73 @@ remaining normative blocker in this bounded component; no tests, edits, componen
 acceptance or implementation qualification. Actual registry/loader/witness/callable/adapter/current
 access/native proof and the complete75+6 source image remain owed, independently of D3851's
 narrative scope choice. `[V]` dated Inspector independent review, ledger population correction.
+
+### Opening history and sparse Explorer delivery returns — 2026-10-15
+
+The independent whole-source review finds two remaining contract gaps, not production false
+available results. Installed-opening §3 requires complete actual-prefix positions and endpoint
+visits, including successful negative lookups, but deepest_reached@1 declares exactly one
+endpoint/position input pair. Provider §1a's three proposed reductions do not include history.
+The existing runtime factory honestly returns input_abstained; changing a future available
+implementation cannot silently change old literal input/receipt meanings. `[V]`
+`rfc/installed-opening-evidence.md` §3; `packages/runtime/src/evidence-catalog.ts` deepest_reached;
+`packages/runtime/src/evidence-factories.ts:createDerivedOpeningDeepestReachedV1Evidence`;
+dated independent Inspector review; [[D3857]].
+
+The new disposable opening-source experiment loads the real installed catalogue, uses actual
+legal recorded moves and existing sealed position factories, and passes28 controls. Its nine-node
+prefix has seven matched visits, including repeated endpoint keys at later observed plies; this
+requires more than the declaration's two literal inputs. Earlier endpoints exclude later nodes,
+and a fork excludes sibling nodes. A one-position and a two-position nonopening prefix return
+the same successful absent payload while their complete position/lookup images differ. Thus a
+future history authority must retain negative rows as well as selected/matched visits; one
+selected endpoint or an empty result alone does not establish what was searched. `[V]`
+`tools/d3792-inspector-demand/opening-source.ts`; `make inspector-recorded-prefix-research`.
+
+These controls exercise existing catalogue/history functions, not the unbuilt installed-source
+issuer, new history factory, execution realization, storage authorization or response admission.
+The first probe incorrectly expected the position after e4 to repeat after Black had played e5;
+it fails and is corrected to the genuinely repeated e4/e5 position. Initial TypeScript input/
+function-signature mistakes are also corrected, not recorded as production bugs. Existing history
+folds all three source-unavailable reasons to input_abstained, while the installed-source draft
+requires exact missing/invalid/digest status at consumers; the new Inspector mapping must retain
+that source-local distinction after migration instead of keeping a permanent version hold. `[V]`
+cited experiment; `apps/server/src/opening-catalogue.ts:deepestOpeningReached`;
+`rfc/installed-opening-evidence.md` §4; `rfc/module-registration.md` closed source outcomes.
+
+Explorer's actual narrow factory admits complete sparse and zero pages. The current corpus
+service handles total<100 before presentation and returns typed below_floor/total; its existing
+fact renderer intentionally rejects those totals. The proposed complete Inspector source clause
+requires preserving this status, but its closed source outcomes contain neither that status nor
+its total. Reusing a >=100 fact renderer fails valid sparse data; provider_failed, source_absent
+or generic no_witness loses the promised distinction. The ledger-only coverage field cannot be
+borrowed for Explorer. `[V]` `packages/runtime/src/evidence-factories.ts` inspector population;
+`apps/server/src/inspector-corpus.ts`; `packages/runtime/src/presentation-consumer-adapters.ts`
+consumer.explorer_population; `rfc/module-registration.md` §4.11a; [[D3858]].
+
+Next author exact history construction/retained inputs/admissible execution and post-install
+source outcomes in the owning contracts, and an Explorer-only status/receipt/client mapping.
+Preserve old source APIs/receipts, all sample floors and D3851's separate unanswered coexistence
+choice. These findings do not accept Inspector or establish new source/adaptor/API/native delivery.
+The reviewer performs no tests or edits; main's28 controls and normal prefix target are separate
+research verification. `[V]` dated independent Inspector review and cited runnable experiment.
+
+The rest of the independent pass finds a coordinated consumer contradiction: Nudge/Review@2
+replace only fork while preserving every other exact ref, yet require complete strict execution
+preflight. Retained live.stockfish.eval@1, live.stockfish.wdl@1, human_divergence@1 and grade@1
+all reach unregistered provider leaves. Four direct actual compiler refusals in the normal
+prefix probe confirm this; the draft V2 wrapper cannot make a fixed subtree executable. The
+proposal needs an exact complete source/image disposition, not an implicit held-binding plan,
+dropped alternative or silently failed whole module. `[V]` [[D3859]]; module-registration's
+coordinated direct consumer images; evidence-execution.ts providerOperation; recorded-origin.ts.
+
+Review §4.5 also explicitly says its successor adapter/literal source/state image is unpublished.
+Current pivotal adapters hard-bind marker@1, with a four-field parser and exact projection check;
+the proposed source needs version2 markers and direct positions. D3841 therefore still owns the
+exact scoped adapter IDs/versions/callables/parsers/slots/source/state table. This is acknowledged
+remaining mechanical authoring, not a newly failed reduction grammar or completed adapter work.
+The rest of the review finds no additional concrete contract gap in its inspected packet,
+material, dependent-edge, detail and shape paths; this bounded negative finding is not joint
+acceptance or a claim that their future implementations/tests exist. `[V]`
+`rfc/review-evidence-compiler.md` §4.5; `packages/runtime/src/review-evidence.ts` pivotal adapters
+and sealSourceResult; dated independent review, remaining source pass.

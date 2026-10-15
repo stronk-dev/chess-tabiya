@@ -28,6 +28,7 @@ import { importedRun, importRecord, evaluationDelivery, attachDelivery } from ".
 import type { ReviewEnginePoint } from "../../packages/runtime/src/review-points.js";
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
 import { runLedgerSourceResearch } from "./ledger-source.js";
+import { runOpeningSourceResearch } from "./opening-source.js";
 
 
 const at = "2026-10-15T00:00:00.000Z";
@@ -867,3 +868,14 @@ console.log(JSON.stringify({ scope: "D3847 actual Story selection and recorded c
   sourceCoverageNotInSelectedLineage: true, liveProviderCalls: 0, productionChanges: 0 }));
 
 runLedgerSourceResearch();
+runOpeningSourceResearch();
+
+// D3859: the proposed fork-only successor images retain these exact refs. A new fork
+// cannot repair their existing source execution. This does not construct a new consumer.
+const retainedModuleRefs = ["live.stockfish.eval@1", "live.stockfish.wdl@1", "derived.pivotal.human_divergence@1", "derived.grade.move_quality@1"];
+for (const projection of retainedModuleRefs) {
+  const [id, version] = projection.split("@");
+  assert.throws(() => compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, { id: id!, version: Number(version) }), /EXECUTION_SOURCE_UNREGISTERED/u);
+}
+console.log(JSON.stringify({ scope: "D3859 retained direct-module refs only, NOT successor consumer construction/adoption",
+  retainedUnregisteredExecutionRefs: retainedModuleRefs, controls: retainedModuleRefs.length, productionChanges: 0 }));

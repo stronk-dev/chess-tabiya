@@ -1,5 +1,24 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — Complete Inspector review returns three remaining source-delivery gaps: D3857's
+deepest-opening all-visit history cannot fit the current single endpoint/position tuple, and
+D3858's successful Explorer below-floor/total has no carrier in the closed wire; D3859's
+fork-only Nudge/Review successors cannot satisfy complete strict preflight with retained
+unregistered source refs. Four actual retained-ref compiler refusals confirm the last gap.
+Review §4.5 also still owes its exact scoped adapter/callable/parser/slot/source/state image
+under D3841, not the old eleven-adapter baseline.28 disposable
+real-catalogue/recorded-position controls pass in the normal prefix target: seven visits across
+nine nodes, repeated keys, branch/prefix exclusion and distinct negative populations despite
+equal absence output. The current unavailable history factory and sparse corpus API are honest;
+these are upstream authoring gaps, not new production fixes or source acceptance.
+Next reconcile installed-opening/F2/provider history construction, complete operands/execution
+and exact installed-source reasons; separately author narrow Explorer status/receipt/client
+mapping without relaxing floors or manufacturing facts; reconcile coordinated complete module
+preflight and publish the exact scoped Review adapter image. The remaining read-only source
+pass finds no additional concrete packet/material/dependent-edge/detail/shape contract gap,
+not implementation proof or acceptance. Obtain joint acceptance before new API/UI work. D3851 remains separate;
+preserve current narrative coexistence,75+6 source obligations and all old APIs/receipts.
+
 2026-10-15 — D3841's two ledger suppliers are now authored in module-registration §4.11a,
 not implemented: registry-owned artifact admission independent of grading, retained original
 sidecar load state, complete six-field-FEN populations and ordered same-record factory lineage.

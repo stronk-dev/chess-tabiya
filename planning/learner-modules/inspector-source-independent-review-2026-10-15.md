@@ -737,3 +737,54 @@ retained adoption tests, not extra author blockers or demonstrated production ca
 Reviewer performs no tests, edits, component acceptance or joint acceptance. Main reports normal
 prefix/incoming research and workspace types, including41 synthetic source/17 coverage controls
 and three restricted unavailable-reason checks; those are not the reviewer's verification.
+
+### Complete source review continuation — opening history and sparse Explorer returned
+
+The user explicitly reconfirms independent review. Reviewer traces deepest-opening history's
+complete-prefix/all-visit requirement in installed-opening §3 against the current one-pair
+declaration and provider §1a's three bounded operations. No operation currently specifies that
+history population or successful negative lookup authority. Return D3857 for exact upstream
+construction/retained operands/admissible execution, plus post-install source reason mapping.
+The existing unavailable factory is honest, not evidence of a falsely available production path.
+Do not truncate history, silently reuse another reducer or count future issuers as implemented.
+
+The next independent pass finds D3858: Explorer's actual narrow factory admits sparse/zero pages,
+the current corpus service returns typed below_floor/total before rendering, and the registered
+fact renderer refuses total<100. The draft promises that status but its closed source wire has
+no status/total carrier. Author an exact Explorer-only status or registered status-rendering path
+with source/node/window and receipt/client correlation. No new evidence leaf or fallback is
+required. Preserve population/per-move floors and the old corpus API. This is a draft delivery
+gap, not a newly demonstrated defect in today's corpus service.
+
+Main independently checks both source paths and runs28 disposable real-catalogue/history
+controls through the normal prefix target. Seven matched visits across nine actual nodes,
+repeated positions, negative lookup populations and branch/prefix refusals expose the history
+input mismatch. The first assumed repeated e4 position was false after e5; the probe is corrected
+to actual e4/e5 re-entry. These are main's tests, not the reviewer's. No installed issuer, new
+factory, source qualification, HTTP/native delivery, component or joint acceptance follows.
+D3851 remains unanswered; all75+6 obligations and historical APIs/receipts remain. The reviewer
+is asked to finish remaining source-contract checks in one pass, not declare acceptance on
+these findings or treat ordinary future implementation work as another normative blocker.
+
+### Remaining source pass — coordinated preflight and exact Review adapter image
+
+The authorized reviewer completes the remaining read-only pass and returns D3859: Nudge/Review
+successors freeze all nonfork exact refs but require full strict execution preflight. Review's
+retained Stockfish and human-divergence refs, and Nudge's grade Stockfish alternative, still
+reach unregistered provider leaves. V2 wraps fixed-only subtrees with the strict old compiler;
+the fork-only change cannot satisfy that requirement. Main independently confirms four actual
+projection compiler refusals through the normal prefix probe. Author the complete source/image
+disposition; do not invent a held-binding plan, silently drop alternatives or promote one fork
+pair into complete module delivery. These are main's compiler checks, not reviewer tests.
+
+Review §4.5's exact successor adapter/literal-source/state image is explicitly unpublished.
+Current pivotal adapters are hard-bound to @1 and a four-field parser; sealSourceResult requires
+the exact projection. New version2 markers/direct-position population need exact scoped
+adapter IDs/versions/callables/parsers/slots/state mapping, not the old eleven-adapter census.
+This remains D3841's acknowledged mechanical authoring debt, not a new production defect or
+another reduction-grammar gap. Main independently rechecks the named paths before recording it.
+
+No further concrete normative gap is found in the inspected packet, material, dependent-edge,
+detail and shape contracts beyond these returns, D3857/D3858 and the separate D3851 scope
+choice. Missing future issuers, bindings and qualification remain implementation obligations.
+Reviewer runs no tests, edits nothing and grants no component or joint acceptance.

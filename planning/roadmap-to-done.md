@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3856]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3859]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,19 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+The independent complete-source review returns Inspector on D3857–D3859: opening history needs
+complete retained positions/visits/negative lookups rather than its declared one-pair tuple,
+and valid sparse Explorer data needs its promised below-floor status in the closed wire.
+Fork-only Nudge/Review successors also retain refs that fail required complete preflight;
+four actual strict compiler refusals confirm that contradiction. D3841's exact scoped Review
+adapter/source/state image is still unpublished. No further concrete contract gap is found
+in the rest of the inspected packet/material/dependent-edge/detail/shape paths, not acceptance.
+28 new real-catalogue/recorded-position controls pass through the normal prefix research target;
+seven visits across nine nodes and two negative histories expose the exact history mismatch.
+The owning source/execution/status contracts still need authoring and independent joint review.
+No new source/API/UI implementation or milestone completion follows; current unavailable history
+and existing sparse corpus behavior are not falsely described as broken. D3851 is separate.
 
 D3841's two ledger source contracts are now authored, not implemented. Separate registry-owned
 measurement admission, original sidecar read states, full-FEN ordered populations and closed

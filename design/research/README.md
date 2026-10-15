@@ -75,6 +75,16 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Complete Inspector review returns, 2026-10-15 ([[D3841]]/[[D3857]]–[[D3859]]): deepest-opening history
+requires a full prefix, not its declared singleton pair;28 new real-catalogue/recorded-position
+controls preserve seven visits across nine nodes, repeated keys, branch/prefix isolation and
+different negative populations with equal absence output. Explorer's actual below-floor status
+also lacks a closed wire carrier. Four retained module refs fail strict execution despite the
+fork-only successor's full-preflight requirement; exact scoped Review adapter image is still
+explicitly unpublished. Source/receipt/execution, adapter and sparse-status authoring remain,
+not newly implemented factories or independent acceptance. `[V]` `module-evidence-assembly.md`
+§Opening history and sparse Explorer delivery returns; normal prefix research; dated review.
+
 Recorded ledger acquisition and mixed coverage, 2026-10-15 ([[D3841]]):41 synthetic source
 controls distinguish legacy transposition/clock/live suppression from exact full-FEN populations,
 ordered duplicates and grading-independent artifact admission.17 closed coverage/receipt controls

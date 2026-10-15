@@ -30744,3 +30744,48 @@ Campaign was the one capability with no API, route or content. Now:
   zero untriaged, resource/status/roadmap parity and compact receipt green. Stage the15 explicit
   owned contract/research/tracking files, inspect cached names/diff and use normal commit hooks.
   No push, persisted schema/registry-head change, source qualification or goal pause.
+
+### 2026-10-15 — D3857/D3858 complete Inspector source review returns and opening population research
+
+- User explicitly reconfirms independent source-delivery review. Reuse the separate reviewer;
+  do not self-accept the amendment. The review identifies opening history's complete-prefix
+  source requirement versus its fixed one-pair declaration, with no opening operation in the
+  three proposed reduction bindings. Ledger D3857 before research; the current unavailable
+  runtime factory is honest, not a falsely available production result.
+- Add one disposable helper to the existing prefix research target, not another CI/progress
+  program. Load the real installed catalogue and use actual recorded legal moves/sealed
+  positions.28 controls retain seven visits across nine nodes, repeated endpoint keys at later
+  plies, earlier-prefix/sibling exclusion and negative histories with equal output but different
+  complete inputs. Actual loader/history unavailable behavior is distinct from the draft's
+  required consumer reason mapping. No new source issuer/factory/authorization/API is supplied.
+- The initial probe's TypeScript shapes/signatures are corrected. Its claim that the e4 board
+  repeats after e5 is false; the control fails, then uses the actually repeated e4/e5 position.
+  Do not file a fixture mistake as a production defect. Final normal prefix research exits zero,
+  retaining all existing sequence/map/ledger controls without changing production or old receipts.
+- Independent continuation returns D3858: narrow Explorer evidence admits sparse/zero pages;
+  current corpus service exposes below_floor/total before its >=100 fact renderer. The new
+  Inspector wire promises that status but has no carrier. Verify the source and ledger it;
+  preserve current API/sample floors, no fake leaf/fallback or provider-failure reclassification.
+- Record both returns in the existing review/dossier/coverage/queue/roadmap. Next author exact
+  opening history inputs/construction/execution and post-install outcomes, plus narrow Explorer
+  status/disclosure/client mapping, then independent whole-source/joint review. D3851 remains
+  separately unanswered; all75+6 requirements remain. No new source acceptance or full1.0 claim.
+- The remaining independent pass returns D3859's coordinated consumer contradiction: fork-only
+  Nudge/Review successors retain refs that strict complete preflight rejects. Main confirms
+  four actual retained-ref execution refusals in the normal prefix research. Review §4.5 also
+  explicitly still owes its exact scoped adapter/source/state table; old pivotal@1 bindings
+  and the eleven-adapter baseline do not supply it. Keep that acknowledged authoring under
+  D3841. No additional concrete gap is found in the rest of the inspected packet/material/
+  dependent-edge/detail/shape contracts; this is not joint acceptance or implementation proof.
+- Existing make opening-source-check passes46 tests. The normal inspector-corpus-check reaches
+ 65 application failures caused by sandbox listen EPERM on127.0.0.1, with508 other cases and39
+  guidance cases passing. Request permission and rerun the exact same Make target, without
+  changing commands/deadlines/assertions or misreporting the refused listener as a source bug.
+- Permissioned rerun of the unchanged make inspector-corpus-check exits zero:573 software
+  cases across12 files and39 guidance cases pass. Opening-source's46 cases and the final normal
+  prefix target (28 opening/four retained-ref controls plus all existing controls) also pass.
+  This is relevant focused verification, not a new full software/content/browser/remote-CI proof.
+- Final compact roadmap receipt/governance checks exit zero:3608 ledger rows,1743 live and
+  zero untriaged; all three new rows have durable evidence-foundation assignments. Stage only
+  the12 explicit research/review/tracking files and inspect cached names/diff. Normal hooks
+  follow; no push, production change, raw recording, new worktree or goal pause.

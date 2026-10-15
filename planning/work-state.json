@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:facbe48fda76edab91594547a0ecb4b5afa238044d0ad7946be017f7226abb2e",
+      "sourceDigest": "sha256:08d1ebcecd21e8f8e9632a9b60eb8410b0ab0e92b3a515718e298f3f0ce2296e",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32123,6 +32123,31 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/endgame-method-authority.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3857",
+      "state": "doing",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:f96523039309d1dfe42bb6a58f31296994ee07a9af724edeab343cda7c20ed39",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
+    },
+    {
+      "id": "D3858",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d0a7e73001c2636284843ffb3278934a4149ba5d14cc404c5b5b75eab1911bb9",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3859",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0803d627338ec0140bdb908314f8ec358f41a5e2b957d13f2ae2b0667ae8f49a",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }
