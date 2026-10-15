@@ -10787,11 +10787,12 @@
     },
     {
       "id": "D1422",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "⚖️",
       "sourceDigest": "sha256:fa90261f40755a55c735f58c85f5b857eb6378052801d4914ef35723d0f19c93",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "since": "2026-10-15"
     },
     {
       "id": "D1423",

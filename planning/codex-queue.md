@@ -12,6 +12,20 @@ owns retirement/caller migration rather than compatibility freeze. Update comple
 module-image counts from the deduplicated target, not the old75+6 baseline; obtain independent
 review before implementing unaccepted source contracts. D3851 is answered, not an owner blocker.
 
+2026-10-15 — D1422's answered ruling is now authored in move-quality-grades §4a and reconciled
+with §2a/F2 §2.3l/module registration: one2.5/10/15 convention@2, nine cited records, no context
+switch or public context field/suffix. Actual context remains private permission/source/receipt
+authority. Criterion4 now requires complete payload/full deterministic grade-sentence byte
+identity across real authorized workflows, not a comparator stripping fields. Historical@1
+meaning remains, not an executable compatibility pipeline. The normal prefix target passes28
+new numerical controls/three actual predecessor disagreements alongside the unchanged71 source
+controls; no new source/factory/HTTP/renderer adoption follows. Independent bounded review
+returns/clears automatic predecessor-convention inheritance and missing reviewed disclosure.
+Three actual old-closure controls reproduce the dual-ref failure; exact validated replacement
+is specified, not implemented. No further narrow blocker, not joint acceptance. Source/joint
+acceptance still waits on the complete exact current module binding image. D1422 is
+doing/review-and-return, not closed by authoring or model tests.
+
 2026-10-15 — D3859's missing scoped source contracts are now authored, not implemented:
 module §4.5b pins actual committed-learner/past-only windows for nine Nudge families and
 ancestor-specific novelty inputs.36 real actor-labelled fixture runs/64 learner endpoints retain

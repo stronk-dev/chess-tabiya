@@ -30,8 +30,11 @@ authored with36 actor-labelled runs/64 endpoints/18 family×learner witnesses/46
 and45 plan-model controls. Independent return/re-review closes historical human-source absence
 mapping, not source/joint acceptance. Complete current bindings and actual issuer/factory/source/
 API/native migration remain. No whole milestone/capability or release qualification is promoted.
-Already-ruled D1422's single-ladder convention amendment is now explicit todo before final grade
-adoption, not an unanswered owner question or permission to preserve the old split into1.0.
+Already-ruled D1422's single-ladder convention amendment is now authored/doing before final grade
+adoption: convention@2/one2.5/10/15 ladder, context-free payload/prose with private workflow
+authority retained.28 numerical/three actual old-closure controls and independent bounded review
+expose/clear conflicting predecessor inheritance and missing reviewed disclosure. These are not
+new source/renderer/HTTP adoption or joint acceptance, and do not preserve the old split into1.0.
 
 D3859/D3861 now have a source-owned current grade proposal, not source delivery.71 disposable
 controls replay actual modern delivery/reload factories with synthetic scores and preserve real

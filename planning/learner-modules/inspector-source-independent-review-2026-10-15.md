@@ -956,3 +956,20 @@ executable removed-symbol references. Useful HTTP tests now use typed modules/qu
 budgets, read-only/rating controls, invalid subjects, auth/foreign readers and removed-route404.
 No test pass is claimed by the reviewer. This accepted-contract/no-legacy cleanup is independent
 of the still-unaccepted source amendments and does not claim Nudge sequence or grade@2 delivery.
+
+### D1422 unified grade dependency — independent return and bounded re-review
+
+The reviewer returns two concrete authoring gaps: same-base successor closure automatically
+imports convention@1 despite grade@2 naming convention@2; and new concise convention disclosure
+requires actual reviewed_text, not migration-only definition_and_limitations. §4a now specifies
+the exact route-owned predecessor-witness replacement, validates both refs/lineage/catalogue
+meaning before closure, preserves all unrelated/current/actual-input and historical authority,
+and supplies exact reviewed summary/detail. Three controls through the actual existing pure
+closure reproduce both direct conventions on the isolated candidate; they do not implement
+the replacement rule. The earlier28 numerical controls and71 source controls remain separate.
+
+Bounded re-review closes both returns and finds no further concrete blocker in the nine-record
+table, context-free payload/full-sentence identity, private workflow permissions or coordinated
+parser/voice/source migration. No reviewer tests run. New replacement logic, actual source/
+factory/renderer/HTTP positives and full current module/source joint acceptance remain owed;
+this is not source qualification, an acceptance or a production ladder change.

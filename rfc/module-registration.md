@@ -2179,7 +2179,13 @@ complete current list, not a union with the old scalar/narrative bindings or a c
 
 The new grade is evaluation-only and keeps current timing/roles/sessions/budgets. Register its
 exact pair-keyed grade.move_quality@2 renderer/parser and current voice accepts to Nudge/Review
-only. Source-owning service resolution uses the actual authorized operation context, not Full
+only. Move-quality-grades §4a also supplies D1422's single2.5/10/15 convention@2: no grading
+context switch, public context field or context suffix in the full deterministic grade sentence.
+Identical admitted operands/mover/instrument yield byte-identical complete grade payload and
+full sentence across workflows, while source/consumer receipts, permissions and selection stay
+distinct. Keep the registered operand/parser/convention lookup/voice image synchronized; no
+grade@1 parser relabel or new Inspector grade consumer. Source-owning service resolution uses
+the actual authorized operation context, not Full
 Inspector permission. Complete whole-consumer preflight remains required before lazy work; both
 grade literal alternatives must compile and their required source absence must remain local.
 F2 §2.3l/move-quality-grades §2a own issuer/private-reader/original occurrence/origin selection/

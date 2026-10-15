@@ -1566,14 +1566,20 @@ ordinary object or unknown capsule refuses before private reads; source identity
 revalidation must not depend on whether a grade happens to emit.
 
 Grounding is declared_convention, exactness convention, confidence reported; evaluation-only
-sentence/panel forms. Semantics literally retains grade-convention@1 and real child convention
+sentence/panel forms. Semantics literally retains grade-convention@2 (move-quality-grades §4a,
+D1422's already-ruled single2.5/10/15 ladder) and real child convention
 closure. The new declaration cannot claim bounded_search merely because the grade has engine
 scores: its actual inputs include recorded positions/edge and conventional eval-point joins.
 The provider branch uses actual already-registered whole deliveries/reload, not Inspector's
 report-only packet projections. The ledger branch uses exact original engine SourceEntry profile/
 budget as well as same-record readings; no modern transcript/generation is invented.
 
-Both branches use the unchanged grade arithmetic. All modern depth/time/nodes and actual offline
+Both branches use the unchanged logistic/clamp/typed-mate arithmetic with §4a's unified ladder.
+Workflow context remains in private source/input authority, not a grading switch or public
+grade@2 field. The complete grade payload and full deterministic sentence are byte-identical
+for identical admitted operands/instrument/mover across contexts; access, source/consumer
+receipts and selection remain workflow-specific. No context-stripping test comparator.
+All modern depth/time/nodes and actual offline
 depth/time bounds have closed instrument representations; requested limit is never reached depth.
 No source-path deletion to make preflight green. Current Nudge/Review bindings/renderer/parser and
 accuracy/graph routes migrate together; old scalar grade APIs are not retained for compatibility

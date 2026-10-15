@@ -13,8 +13,10 @@ import type { StockfishPositionEvaluationRequest } from "../../packages/runtime/
 import type { EvidencePayload } from "../../packages/runtime/src/types.js";
 import { validateManifest, validateLedger, linkage } from "../../apps/server/src/sourcing/ledger-validation.js";
 import type { EvidenceLedger, SourceManifest, SourcingIssue } from "../../apps/server/src/sourcing/types.js";
-import { moveQualityGrade, type GradeEvaluation } from "../../packages/runtime/src/grade.js";
+import { moveQualityGrade, winPercentFromCp, type GradeEvaluation } from "../../packages/runtime/src/grade.js";
 import { moverWinPercent } from "../../packages/runtime/src/grade-reading.js";
+import { CONVENTION_REGISTRY, compileConventionRegistry, conventionRefKey } from "../../packages/runtime/src/evidence-conventions.js";
+import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
 
 export function runGradeSourceResearch() {
   let controls = 0;
@@ -144,4 +146,67 @@ export function runGradeSourceResearch() {
     controls, modernPairs, currentNodeBoundAbstentions, mismatchRefusals, literalExecutionPaths: compiled.paths.length,
     reviewReturnControls: 11,
     realEngineMeasurements: 0, newSourceIssuers: 0, productionChanges: 0 }));
+  runUnifiedLadderModel();
+  // D1422 independent return: current automatic same-base successor inheritance retains @1
+  // even if the candidate's literal semantics only names @2. Real existing closure diagnostic,
+  // NOT a replacement implementation or a declaration admitted to production.
+  const registry = compileConventionRegistry([...CONVENTION_REGISTRY.declarations, {
+    ref: { id: "grade-convention", version: 2 }, definition: "DISPOSABLE D1422 closure diagnostic only.",
+    limitations: ["Not a production convention or reviewed disclosure."],
+    authority: [{ kind: "product_rule", rulingRef: "[[D1422]]" }],
+    disclosure: { kind: "reviewed_text", summary: "Disposable diagnostic.", detail: "Not source or delivery proof." },
+  }]);
+  const closure = deriveProjectionConventionTable({ ...manifest, projections: manifest.projections.map(row =>
+    row.id === "derived.grade.move_quality" && row.version === 2
+      ? { ...row, semantics: "grade-convention@2: disposable same-base direct-closure diagnostic." } : row) }, registry);
+  const refs = closure.get("derived.grade.move_quality@2")!.refs.map(conventionRefKey);
+  assert.deepEqual(refs, ["grade-convention@1", "grade-convention@2"]);
+  assert.deepEqual(closure.get("derived.grade.move_quality@1")!.refs.map(conventionRefKey), ["grade-convention@1"]);
+  assert.equal(closure.get("derived.grade.move_quality@2")!.origins["grade-convention@1"]!.includes("successor"), true);
+  console.log(JSON.stringify({ scope: "DISPOSABLE D1422 actual old convention closure diagnostic; NOT a replacement rule or adoption",
+    controls: 3, candidateDirectRefs: refs, unwantedPredecessorConventionReproduced: true, productionChanges: 0 }));
+}
+
+// DISPOSABLE D1422 numerical model, not a production convention/source/factory/renderer.
+// The existing source experiment above deliberately continues to describe the shipped @1.
+function runUnifiedLadderModel() {
+  let controls = 0;
+  const check = (test: () => void) => { test(); controls++; };
+  const classify = (drop: number) => {
+    if (drop >= 15) return { klass: "blunder", threshold: 15 };
+    if (drop >= 10) return { klass: "mistake", threshold: 10 };
+    if (drop >= 2.5) return { klass: "inaccuracy", threshold: 2.5 };
+    return undefined;
+  };
+  for (const [boundary, below, at] of [
+    [2.5, undefined, "inaccuracy"], [10, "inaccuracy", "mistake"], [15, "mistake", "blunder"],
+  ] as const) {
+    check(() => assert.equal(classify(boundary - 1e-9)?.klass, below));
+    check(() => assert.equal(classify(boundary)?.klass, at));
+    check(() => assert.equal(classify(boundary + 1e-9)?.klass, at));
+    check(() => assert.equal(classify(boundary)?.threshold, boundary));
+  }
+  const drop = (before: number, after: number) => winPercentFromCp(before) - winPercentFromCp(after);
+  for (const [after, expected] of [
+    [-27, undefined], [-28, "inaccuracy"], [-110, "inaccuracy"], [-111, "mistake"],
+    [-168, "mistake"], [-169, "blunder"],
+  ] as const) check(() => assert.equal(classify(drop(0, after))?.klass, expected));
+  check(() => assert.equal(classify(drop(3000, 530))?.klass, "inaccuracy"));
+  const reading = (cp: number): GradeEvaluation => ({ lane: "recorded", perspective: "white",
+    engineId: "synthetic", depth: 12, sideToMove: "white", score: { kind: "cp", value: cp } });
+  for (const [after, context, oldClass, currentClass] of [
+    [-28, "review", undefined, "inaccuracy"],
+    [-66, "drill", "mistake", "inaccuracy"],
+    [-157, "drill", "blunder", "mistake"],
+  ] as const) {
+    const old = moveQualityGrade(reading(0), reading(after), context, "white");
+    check(() => assert.equal(old && "klass" in old ? old.klass : undefined, oldClass));
+    check(() => assert.equal(classify(drop(0, after))?.klass, currentClass));
+    check(() => assert.notEqual(oldClass, currentClass));
+  }
+  // The model has no context input; this is NOT a cross-workflow delivery identity test.
+  // Actual authorized source issuance/full-payload/registered-renderer positives are still owed.
+  console.log(JSON.stringify({ scope: "DISPOSABLE D1422 ruled ladder arithmetic only",
+    controls, thresholds: [2.5, 10, 15], predecessorDisagreements: 3,
+    realEngineMeasurements: 0, sourceIssuanceTests: 0, crossWorkflowDeliveryTests: 0, productionChanges: 0 }));
 }

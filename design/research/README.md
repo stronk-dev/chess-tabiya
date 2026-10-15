@@ -75,6 +75,11 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D1422 grade/source alignment, 2026-10-15:28 disposable numerical controls retain the ruled
+2.5/10/15 ladder, exact inclusive boundaries and three actual predecessor disagreements.
+These are not grade@2 source issuance or cross-workflow delivery proof. See
+`module-evidence-assembly.md`, D1422 section; normal `make inspector-recorded-prefix-research`.
+
 D3859 exact Nudge/Review scope, 2026-10-15:36 actor-labelled runs/64 learner endpoints cover
 all nine sequence families for both colours and exclude46 future witnesses; current one-edge
 Nudge emits zero sequence items there.45 scoped Review adapter/slot metadata controls retain

@@ -31060,3 +31060,42 @@ Campaign was the one capability with no API, route or content. Now:
  1743live/zero untriaged; D1422 is todo/review-and-return. Update the compact roadmap receipt,
   stage only the25 explicit owned code/test/RFC/research/review/tracking files, inspect cached
   names/diff and run normal hooks. No push, new worktree, saved-data deletion or goal pause.
+
+### 2026-10-15 — D1422 author the already-ruled unified grade convention, not another context split
+
+- Continue D3851's no-legacy current foundation: take existing D1422 into doing/review-and-return,
+  not a new owner question. The owner already ruled2.5/10/15 on2026-08-23. Current source-grade
+  proposal had retained shipped@1/context semantics; reconcile before adoption, not afterward.
+- Add unaccepted move-quality-grades §4a and semantic-conventions claim grade_convention_v2.
+  Nine current cited records, one ladder and unchanged logistic/clamp/typed-mate rules. Context
+  remains private permission/source/input-receipt authority, not public grade payload/prose.
+  Invert criterion4 into complete payload/full deterministic sentence byte identity across actual
+  authorized contexts. No stripping fields in the comparator, equating workflow receipts or
+  relaxing module selection. Coordinate §2a, F2 §2.3l and the current Nudge/Review grade clause.
+- Retain historical convention@1 meaning without a second executable compatibility path.
+  Current renderer/parser/operand/convention/voice migration is explicit, no grade in Inspector,
+  no generated-prefix rewriting or new chess judgement. D1409 byte-exact grade spans remain;
+  the original free-paraphrase rationale is not current authority.
+- Normal make inspector-recorded-prefix-research passes including28 new disposable numerical
+  controls/three actual predecessor disagreements. Existing71 source controls stay separate.
+  Zero new source issuers, production registrations or actual cross-workflow delivery positives.
+  Independent bounded review requested under existing user authorization; full source/module
+  joint acceptance remains gated on complete current bindings. No full capability/goal closure.
+- Independent review returns two real gaps: automatic successor-witness inheritance retains the
+  conflicting old ladder, and the new convention lacks reviewed_text disclosure. Specify an
+  exact validated grade-route replacement of only that automatic predecessor origin, keeping
+  historical/current/actual-input authority; add exact reviewed summary/detail. Three actual
+  existing closure controls reproduce the dual-ref predecessor failure. Bounded re-review closes
+  both gaps, no tests run by reviewer, no source/module joint acceptance. Production unchanged.
+- First governance run catches mismatched declaration/register change-text strings; align the
+  two exact claim cells and rerun the normal target. Do not present that initial red run as green.
+- The next run reaches/passes register, lifecycle, work-state and roadmap contracts, then the
+  receipt check catches the concurrent roadmap edit from this same authoring pass. Finish all
+  tracking edits, regenerate the compact receipt and rerun the unchanged normal governance gate.
+  This is a truthful intermediate failure, not a reason to weaken the receipt or claim it passed.
+- Final unchanged make roadmap-receipt verify-governance exits zero: register C1–C8, lifecycle
+  P1–P7, work-state/UX assignments, roadmap R1–R10/compact receipt, append-only histories,
+  intent parity, tier isolation and staged-process contracts pass. Normal prefix research also
+  exits zero after the actual old-closure diagnostic. Stage only the14 owned amendment/research/
+  review/tracking files and run normal hooks; no production/browser/remote CI claim, push,
+  legacy pipeline or goal pause. Next complete the current module binding image for joint review.

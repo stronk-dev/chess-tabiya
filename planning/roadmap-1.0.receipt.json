@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9cd04826eaa7f2ce8b9ff0c7a795da5e446e50728f56c70f8374c8a571dc57cd",
+    "roadmap": "sha256:d7a0bb99d2c0e3f55c58c0a125348522cf9e0914e1b8fe4b5b726e5eacbbae4c",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:a70f99c67d800af38373b345bab84b3e116ddc27a9baf5ab30d2c5a1108b92b4",
-    "rfcRegister": "sha256:9bb8e0274c94f4399cb6a6c6bd4c5d93d2b98a75726a56dd54774b9f2870ef96",
+    "workState": "sha256:71961fa4a97703aa8043c2a3db8aac4d74a50ba12298d44a6226836dc74fdee8",
+    "rfcRegister": "sha256:c0d3ba5b93d049e3ba1258b46f16f46d8c43f0410bbca80abfd6cf27108d2b3b",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -30,8 +30,8 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
-      "doing": 30,
+      "todo": 627,
+      "doing": 31,
       "blocked": 1085,
       "done": 1706,
       "refused": 162
@@ -471,10 +471,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D3862 unused raw-string Nudge retirement is closed on actual typed HTTP and normal local gates; do not implement another compatibility packet. D3859 now authors nine-family learner past windows and exact12-row scoped Story adapter/parser/slot/state image alongside source-owned grades. Publish the complete exact current module binding image, reconcile already-ruled D1422 grade-convention@2 before final grade adoption, then independent full source/joint buildability review before D3845/D3792 production migration. Keep actual Review deliveries independent of queued settlement, fixed per-node selection, typed supported budgets, local absence and real context/occurrence authority. Under D3851 retire obsolete paths after real caller migration, not detector families/shared readings/data. Conditional52/72/65 plus six details are not compiled bindings. Real issuers/sidecars/factories/API/native proof, D3855 captions and full platform joins remain; no source/joint acceptance from bounded metadata reviews.",
+      "nextAction": "D3862 unused raw-string Nudge retirement is closed. D1422 single2.5/10/15 convention@2 is authored/doing and coordinated with source-grade@2, not adopted. Independent bounded review clears predecessor-convention inheritance and reviewed disclosure gaps;28 numerical/three actual old-closure controls are not source or delivery proof. Next publish the complete exact current module binding image, then independent full source/joint buildability review before D3845/D3792 production migration. Keep actual Review deliveries independent of queued settlement, fixed per-node selection, typed supported budgets, local absence and real context/occurrence authority. Under D3851 retire obsolete paths after real caller migration, not detector families/shared readings/data. Conditional52/72/65 plus six details are not compiled bindings. Actual issuers/sidecars/factories/API/native proof, D3855 captions and full platform joins remain; no joint acceptance from bounded metadata reviews.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3862 obsolete raw-string Nudge route/service/runtime packet/client decoder is removed; shared sources and canonical query/presentation stay. Actual migrated HTTP tests cover budgets, subject/auth/foreign/read-only/rating and removed-route404. Local gates pass fresh types/5930 software cases392files/seven isolated performance cases, then corrected governance/257 content cases/corpus checks/build; the initial full command retained a duplicate-tracker-path failure before the remaining targets passed. Independent read-only cleanup review finds no concern. D3859 nine-family Nudge windows and twelve-row scoped Story image are authored with36 actor runs/64 endpoints/18 family-by-learner witnesses/46 future exclusions and45 slot-model controls. Bounded review clears missing-array state mapping, not source/joint acceptance. D1422 is queued authoring, not an unanswered owner question. No new source issuer/factory/sequence delivery, whole milestone or browser/remote/release proof.",
+        "summary": "D1422's already-ruled single2.5/10/15 convention@2 is authored and coordinated with source-grade@2.28 numerical controls retain three actual predecessor disagreements; three actual old-closure controls expose conflicting automatic convention@1 inheritance. Independent return/re-review clears the exact replacement/disclosure gaps, not source/module joint acceptance. Current public grade payload/full sentence have no context switch; actual workflow permission/source receipts stay distinct. D1422 remains doing; actual issuers/factories/renderer/HTTP/native adoption still await complete bindings and joint review. D3862 raw-string Nudge retirement remains closed on the preceding full local component gates. No new production grading, whole milestone or browser/remote/release proof.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -828,7 +828,7 @@
           {
             "kind": "rfc",
             "id": "move-quality-grades.md",
-            "digest": "sha256:e23816b996661c45e5d7f30a9ea773607bf2de15efe1b4777e2e283d5a7b1e45"
+            "digest": "sha256:c1add86f9dbdd0cd764c9dd5232d79ae781b9294dd95be7b261d30965959a295"
           },
           {
             "kind": "rfc",

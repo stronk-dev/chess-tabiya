@@ -11,8 +11,16 @@
 - **Planning:** `planning/evidence-foundation-ux/` (once implementing)
 
 ```tabiya-claims
-none
+semantic-conventions | members grade_convention_v2 | D1422 owner-ruled single 2.5/10/15 Win%-point ladder, with unchanged typed-mate and logistic rules
 ```
+
+**Current amendment boundary, 2026-10-15:** §2a and §4a are unaccepted amendments to the
+implemented predecessor described by the original Summary/§§1–9 below. §4a supersedes its
+two-ladder/context-dependent payload and criteria2–4/9 for the proposed current grade@2;
+it does not authorize a silent change to the landed projection@1 or convention@1. D1422 is
+an answered owner ruling, not an outstanding product choice. Independent source/joint review
+still precedes adoption. The semantic-conventions claim above is new; the original claim-free
+scope statement below describes the predecessor, not this amendment.
 
 *Verified against all six registers at drafting: no pack/run/shape-entry/principle-entry schema
 change, no `EVIDENCE_KINDS` member (that enum is the sourcing-artifact vocabulary in
@@ -209,8 +217,9 @@ graph and granted source path before narrowing; obtain the genuine run.record.ed
 positions, including canonical full FENs, through their existing owners. The source validates
 both point/readings against those exact positions and original occurrence identities, not just
 equal FENs. Derive mover from the parent FEN. Nudge retains its actual learner-committed-edge
-eligibility and practice/drill context; Review supplies imported_analysis for the original
-imported workflow, otherwise review. Client preferences cannot choose a stricter ladder.
+eligibility and actual drill workflow; Review supplies imported_analysis for the original
+imported workflow, otherwise review. That context stays private source/permission metadata;
+§4a uses one ladder and no public context field. Client preferences cannot choose a ladder.
 Recheck current access/head/selected edge/disclosure/cancellation before publication. A copied,
 crossed, stale or forged source fails; it is not missing_eval or a successful empty result.
 
@@ -298,18 +307,19 @@ reviewPointComparability: actual engine id/version, generation, position-free co
 typed requested bound. Do not compare reached depth under timed/node searches. Extend the pure
 grade input/output search-limit representation to an explicit requestedNodes arm; never encode
 nodes as depth or milliseconds. A normalized operand carries exactly one requested bound.
-Depth, movetime and node-count pairs all run the same existing score/threshold/mate arithmetic.
+Depth, movetime and node-count pairs all run the same score/mate arithmetic and §4a's one ladder.
 Offline origin has only the two actual SourceManifest budget arms; do not invent offline nodes.
 
 **Payload and authority.** `MoveQualityGradeV2` retains the existing class/arm, both learner-POV
-typed scores, unrounded drop, threshold and grade-convention@1/context, engine id and recorded
+typed scores, unrounded drop, threshold and grade-convention@2, engine id and recorded
 lane, plus the exact normalized requested bound and an instrument arm identifying provider
 delivery versus offline engine report. Provider metadata retains actual version/generation;
 offline metadata retains actual version/profile. Keep source occurrence/complete delivery/
 original ledger entries in the owned source/input receipts, not raw public/LLM data. Provider
 scores are already White POV; offline readings require explicit White POV. Normalize to the
 derived mover exactly once. Typed mate never becomes centipawns, a prediction or an outcome claim.
-Keep existing unavailable/below-threshold/no-praise distinctions and all constants unchanged.
+Keep existing unavailable/below-threshold/no-praise distinctions. Only §4a changes the ladder;
+source ownership does not change the logistic, clamp, mate rules or accuracy formula.
 
 The closed payload addition is:
 
@@ -322,7 +332,8 @@ type GradeInstrumentV2 =
   | { readonly origin: "provider_delivery"; readonly engineVersion: string; readonly generation: number }
   | { readonly origin: "offline_engine"; readonly engineVersion: string;
       readonly profile: { readonly threads: number; readonly hashMb: number; readonly multiPv: 1 } };
-type MoveQualityGradeV2 = Omit<MoveQualityGrade, "depth" | "requestedMovetimeMs" | "requestedNodes"> & {
+type MoveQualityGradeV2 = Omit<MoveQualityGrade, "convention" | "depth" | "requestedMovetimeMs" | "requestedNodes"> & {
+  readonly convention: { readonly id: "grade-convention"; readonly version: 2 };
   readonly bound: GradeRequestedBound;
   readonly instrument: GradeInstrumentV2;
 };
@@ -338,9 +349,9 @@ does not require a fabricated engine grade.
 
 The new projection is declared_convention/convention/reported: its real position/edge and
 eval-point inputs do not inherit the predecessor's bounded_search primary grounding. Its
-answerContent is evaluation only; forms sentence/panel. Semantics names grade-convention@1
+answerContent is evaluation only; forms sentence/panel. Semantics names grade-convention@2
 literally and retains its actual direct/child closure without relying on a retired@1 declaration.
-No new convention definition or provider operation. The registered renderer
+§4a owns the new convention definition; no new provider operation. The registered renderer
 `grade.move_quality@2` is pair-keyed to current Nudge/Review consumers only and co-renders the
 class, operands/drop/threshold, actual instrument/budget/origin and cited convention. It cannot
 say a historical reading is live analysis or expose a best move, PV, WDL or private source.
@@ -376,7 +387,7 @@ mixed origins, later legacy and corrupt modern, pending/missing sources and node
 Include the shared-middle-node X/Y fixture, valid endpoint beside incomparable/missing endpoint,
 and comparable mate_score_inconsistent versus available below-threshold accuracy controls.
 Run actual authenticated Nudge/Review/accuracy/graph/LLM-off renderer journeys, not only factory
-fixtures. Prove unchanged valid arithmetic and source-local absence beside useful other facts,
+fixtures. Prove unchanged logistic/mate arithmetic, the ruled ladder and source-local absence beside useful other facts,
 with no new provider request, stored write, copied seal, dropped family or authority upgrade.
 
 ### §3 — The mate arm: mate is not a centipawn
@@ -471,6 +482,124 @@ the union (the `tactical-collectors` §2.5 reconciliation, followed exactly).
 the version bump *is* the ceremony, and the rendered convention version is what makes an
 old rendered sentence forever attributable to the rule that produced it. Re-pinning a
 derivation input version is a projection `@2` (F1 §4.3).
+
+### §4a — Draft D1422 unified convention@2 — unaccepted
+
+**Authority and exact change.** D1408 ruled one ladder everywhere; D1422 settled it on
+2026-08-23: **2.5 / 10 / 15 Win%-points**, inclusive at each boundary. The constituent
+values have the original 2026-08-22 source pins in §1/§4; their combination is Tabiya's
+product rule, not a claim that Lichess uses this combined ladder or still uses these values
+today. No new empirical chess claim or owner answer is needed. This amendment corrects the
+unlanded ruling, not the earlier history. The provider-source proposal §2a adopts it together
+with its new projection; source comparability alone does not select the numerical convention.
+
+**One current table, no context switch.** Replace the live GRADE_CONVENTION table with
+id grade-convention/version2 and exactly nine cited constant records:
+
+| Key | Value | Existing source pin |
+|---|---:|---|
+| inaccuracy | 2.5 | practiceCtrl.ts, 2026-08-22 (§1) |
+| mistake | 10 | Advice.scala, 2026-08-22 (§1) |
+| blunder | 15 | Advice.scala, 2026-08-22 (§1) |
+| mateLostInaccuracy | 999 | Advice.scala, 2026-08-22 (§3) |
+| mateLostMistake | 700 | Advice.scala, 2026-08-22 (§3) |
+| mateAllowedInaccuracy | -999 | Advice.scala, 2026-08-22 (§3) |
+| mateAllowedMistake | -700 | Advice.scala, 2026-08-22 (§3) |
+| centipawnClamp | 1000 | winningChances.ts, 2026-08-22 (§1) |
+| logisticCoefficient | 0.00368208 | winningChances.ts, 2026-08-22 (§1) |
+
+Each retains {value,source,pinnedAt} with the same full source URLs used by the current table.
+There is no contexts map, report/practice prefix, rating operand or second active table.
+The pure current grade function takes admitted before/after inputs and mover, not workflow
+context. Remove the obsolete context-choosing overload/wrapper and migrate actual callers.
+Source ownership still retains actual context for authorization, timings, receipts and access;
+dropping context from the arithmetic must not make Drill and Review permission-equivalent.
+All nine constants remain validated; a missing, extra, invalid or uncited record fails.
+
+**Byte identity must be real, not a comparator that discards inconvenient fields.** The
+current grade@2 payload uses §2a's closed convention {id:"grade-convention",version:2}, with
+no public context discriminator. Its registered full deterministic sentence uses the same
+context-independent convention label/definition and operands on both Nudge and Review. For
+identical admitted operands, mover and instrument, serialize the *whole grade payload* and
+compare the full deterministic grade sentence byte-for-byte across drill, review and
+imported_analysis. Do not strip context just in the assertion or compare only the class.
+Actual source/consumer receipts, selection, presentation seats and availability may differ
+because permissions and workflows differ; they are not the bytes this criterion equates.
+The source-owned context remains in the existing input receipt's canonical source image,
+not in public grade prose. Never infer permission from equal numeric outputs.
+
+**Registered meaning and delivery.** Add grade_convention_v2 exactly once to the semantic
+member tuple and append its authored declaration/history without rewriting convention@1's
+generated prefix or historical meaning. Its definition names the one 2.5/10/15 ladder,
+clamp/logistic and unchanged typed-mate rules, as well as the engine-relative/non-lesson
+limitations. Authority includes product_rule/rulingRef [[D1422]]; source citations explain
+the borrowed values rather than laundering the combined rule as a published Lichess ladder.
+Bind grade@2's direct convention closure to grade-convention@2. Keep existing historical@1
+records attributable; no frozen executable grade@1 compatibility pipeline is required by D3851.
+The new declaration's disclosure is exactly reviewed_text with:
+
+- summary: "Move labels use Tabiya's single 2.5 / 10 / 15 win-percentage-point loss convention."
+- detail: "All workflows use the same thresholds: inaccuracy at 2.5, mistake at 10 and blunder at 15 win-percentage points lost, with inclusive boundaries. Centipawns are clamped to -1000 through +1000 and converted with coefficient 0.00368208. Losing a positive mate grades by the remaining score: above +999 is inaccuracy, above +700 is mistake, otherwise blunder; allowing a negative mate grades by the earlier score: below -999 is inaccuracy, below -700 is mistake, otherwise blunder. A positive mate changing to a negative mate is a lost-mate blunder; delaying a mate is not graded. These are labels on paired readings from one engine and search budget, not an explanation of why the move works or a judgement of the player. The combined ladder is Tabiya's rule, using the cited historical Lichess values."
+
+**Exact direct-convention replacement.** The current closure automatically carries a
+predecessor's witnessed refs to the same-base successor. Merely mentioning convention@2 would
+therefore retain both ladders. Amend that one owner, evidence-convention-closure, with a
+package-private literal DECLARED_CONVENTION_REPLACEMENTS row:
+`"derived.grade.move_quality@2": [{from:"grade-convention@1",to:"grade-convention@2"}]`.
+Pass it as a defaulted fourth argument to deriveProjectionConventionTable, keeping the existing
+three arguments unchanged. Validate it before deriving closure: exact active successor route
+exists, from/to are registered versions of the same convention id advancing exactly one, the
+immediate predecessor has that exact witnessed from ref, and the successor's catalogue semantics
+literally names to but does not name from. Duplicate/conflicting pairs or unknown routes/refs
+fail. When constructing this route's *automatic successor* origins, replace only that witnessed
+from ref with to, retaining origin successor. Do not remove exact current witnessed refs,
+catalogue refs or declared inheritance, edit the old convention's witness, suppress unrelated
+conventions, or strip refs propagated from actual inputs. No caller-provided per-request override.
+This row declares the changed grading meaning; it is not a generic exemption from grounding.
+All unrelated routes preserve their old inheritance. Before grade@2 minting, its direct closure
+must contain grade-convention@2 and not grade-convention@1; full actual-input closure remains
+checked normally. Permanent negatives remove/swap/duplicate the row, remove the old witness,
+name unknown/skipped/non-successor refs, retain old catalogue text or inject actual child@1
+authority. The no-row predecessor control must expose the erroneous dual direct convention;
+an actual child@1 authority cannot be erased to make the grade pass. Historical@1 declarations,
+generated prefix and append-only history stay byte-identical. No production replacement row
+is introduced until this amendment and its source/module joint migration are accepted.
+
+Move the current payload parser, full registered renderer, module operand schema/renderer,
+convention label lookup, voice bindings and actual Nudge/Review callers together. The shared
+presentation-inspector-adapters filename does not authorize an Inspector grade consumer.
+Reject wrong-version/context-bearing grade@2 payloads rather than silently coercing them.
+
+**Acceptance replacements (current grade@2, not retroactive @1 assertions).**
+
+- Criterion2 becomes nine records, with missing/invalid/extra-field and individual value mutation
+  negatives. Criterion3 becomes six cp boundary fixtures in every context: 0→-27 no emission,
+  0→-28 inaccuracy, 0→-110 inaccuracy, 0→-111 mistake, 0→-168 mistake, 0→-169 blunder;
+  retain +3000→+530 as inaccuracy under input clamp. Also test the exact unrounded-drop classifier
+  immediately below/at/above each of 2.5,10,15 so integer-cp examples cannot hide > versus >=.
+- **Criterion4 is inverted:** actual authenticated drill/Nudge, Review and imported Review
+  source issuance must reach the current factory/registered renderer for the same synthetic
+  admitted score/instrument pair. Assert complete grade payload and full deterministic sentence
+  byte identity, including threshold/convention and all operands. The predecessor must fail on
+  0→-28 (silence in Review), 0→-66 (old drill mistake, current inaccuracy) and 0→-157
+  (old drill blunder, current mistake). Missing/withheld/incomparable grades do not count as a
+  positive fixture; selection/budgets remain separately tested, not relaxed to force delivery.
+- Criterion9 retains mandatory full grounding and byte-exact allowed judgement spans under
+  D1409, but uses convention@2 with no context suffix. A word-only, context-switched or
+  wrong-version sentence fails. The LLM may quote an admitted deterministic grade span under
+  the current voice contract; it may not freely re-voice or compute the label (§6's original
+  free-paraphrase rationale was superseded by D1409/D1417).
+- Re-run all typed mate, clamp, same-instrument/perspective, abstention, below-floor, no-praise,
+  access/answer-ceiling and no-persistence regressions. Available below-floor still counts for
+  source-admitted accuracy; changed class thresholds never change the accuracy formula.
+  Existing grade-source node/time/depth coverage and exact occurrences remain requirements.
+
+**Measurement boundary.** The disposable D1422 model attached to the existing grade-source
+research may demonstrate the threshold arithmetic and predecessor disagreements, not genuine
+current source issuance, grade@2 registration or cross-workflow delivery. Keep permanent actual
+factory/HTTP/renderer positives pending until implementation; counts in a research model do not
+discharge criterion4 or make this amendment accepted. Adopt only after independent source/joint
+review with §2a/F2 §2.3l and the one complete current module image. No production change here.
 
 ### §5 — The projection, declared under F1 §4.3
 
@@ -704,10 +833,13 @@ scored as evidence.
    mistake. Failure mode: a wrong coefficient, clamp, normalization (×50 vs ×100 — the
    exact error this cross-review found in the draft), or comparison direction flips at
    least one pair.
-4. **Two-conventions fixture** (F-CTX): the identical 0→−28 pair grades **inaccuracy**
-   under `drill` and **nothing** under `review`; byte-identical inputs, different
-   convention context, different (word vs silence) result — the Lichess two-ladder
-   precedent, executable.
+4. **Single-convention fixture** (F-CTX; D1422/§4a amendment, unaccepted): identical admitted
+   operands/mover/instrument yield byte-identical complete grade@2 payload and full registered
+   deterministic grade sentence across drill, review and imported_analysis. Actual authenticated
+   source/factory/renderer positives must include 0→−28, 0→−66 and 0→−157; predecessor behavior
+   fails. Do not erase a context field only in the comparator, count missing/withheld grades as
+   equal positives or equate workflow-specific permission/receipt/selection bytes. §4a specifies
+   the current context-free payload and required tests; original convention@1 history is retained.
 5. **Mate arm** (unit: fixture; total 9, one per §3 tier plus the negatives):
    `mate_lost` tiers — #2 → +1100 (clamps to +1000 > +999): **inaccuracy**; F-MATE-LOST
    (#2 → +800: **mistake**, sentence carries "#2", 95.01% and the +7.00..+9.99 tier);
@@ -856,3 +988,9 @@ to the ledger by this review:**
   Correct both manifest alternatives to two ordered actual occurrences and §5's stale conjunction.
   The26 new permanent controls fail on the predecessor. No new thresholds, grade words, provider
   attestation, source-owned occurrence authority or complete-module migration is implied.
+- 2026-10-15 ([[D1422]], unaccepted amendment): claim grade_convention_v2 and specify the
+  already-ruled single2.5/10/15 ladder in §4a, invert criterion4 and reconcile §2a/F2/module
+  source proposals. Nine current cited records replace six context-split ladder records plus
+  six unchanged other constants; context stays private source authority, not public grade@2
+  payload/prose. Historical convention@1 is not rewritten; no compatibility runtime required.
+  Disposable arithmetic controls and independent review are not production adoption.

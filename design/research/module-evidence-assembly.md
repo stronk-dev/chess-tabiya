@@ -2453,3 +2453,40 @@ also blocked by package-manager lockfile write permission. These are retained en
 failures, not product/CI passes. Full normal make verify build is then requested with actual
 listener/cache/engine permission; terminal result is recorded in the exploration log. `[V]`
 current task command results; dated independent review. New source amendments remain unaccepted.
+
+## D1422 — one ruled ladder, not a source-dependent grading policy (2026-10-15)
+
+D1422 already fixes the current product ladder at2.5/10/15 Win%-points; the current runtime
+still uses report5/10/15 and practice2.5/6/14. The source-grade proposal had copied that old
+convention@1/context payload into its future@2. Authoring now separates the source change from
+the owner-ruled convention change: `rfc/move-quality-grades.md` §4a, its coordinated §2a/F2
+§2.3l/module clause and the semantic member claim specify one current convention@2. Private
+workflow/source/permission metadata remains context-specific; the proposed public grade payload
+and full deterministic sentence do not carry context. Historical meaning@1 is retained, not
+another executable pipeline. `[V]` `design/BACKLOG.md` D1422/D3851;
+`packages/runtime/src/grade.ts` GRADE_CONVENTION/classFromThresholds;
+the cited draft sections (unaccepted, not current behavior).
+
+The unchanged normal `make inspector-recorded-prefix-research` passes28 additional disposable
+numerical controls:12 inclusive below/at/above/threshold checks, six integer-cp examples, one
+input-clamp example and nine checks over three actual predecessor/model disagreements. The
+predecessor is silent for review0→-28, calls drill0→-66 a mistake and drill0→-157 a blunder;
+the ruled numerical model gives inaccuracy/inaccuracy/mistake. The existing71 source-feasibility
+controls remain separate and retain shipped@1 arithmetic. `[V]`
+`tools/d3792-inspector-demand/grade-source.ts` runUnifiedLadderModel/runGradeSourceResearch;
+normal target output in this pass. Synthetic scores, zero measured engine quality.
+
+This does not establish grade@2 source issuance, registration, complete payload/renderer byte
+identity or authenticated cross-workflow delivery. Criterion4 explicitly requires those actual
+positives, retaining permissions/selection rather than relaxing them to make a test pass.
+Independent bounded review and full current source/module joint review still precede adoption;
+D1422 remains doing. `[V]` cited amendment acceptance boundary and `planning/work-state.json`.
+
+The independent return catches a concrete closure seam: adding a literal convention@2 to the
+same-base grade@2 also carries convention@1 from the predecessor's witnessed meaning. Three
+actual existing closure controls reproduce the dual-ref result and retain unchanged historical
+closure. The amendment now specifies the exact direct-witness replacement and reviewed_text
+disclosure; bounded re-review finds no further blocker, not joint acceptance. `[V]`
+`tools/d3792-inspector-demand/grade-source.ts` closure diagnostic;
+`packages/runtime/src/evidence-convention-closure.ts` deriveProjectionConventionTable;
+`planning/learner-modules/inspector-source-independent-review-2026-10-15.md` D1422 section.
