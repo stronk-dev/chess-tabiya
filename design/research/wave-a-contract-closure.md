@@ -80,3 +80,53 @@ position permitted capture of the pinner; another let one target block the other
 controls assert legal move, terminal/check state and both positive-exchange targets before
 asserting the consequence. Those failed fixture attempts are not product findings. `[V]`
 (`terminal.test.ts` final boundary assertions).
+
+## Terminal repair source/adoption inventory — 2026-10-15, D3768/D3847
+
+The normal research target now passes 25 tests, retaining all original 22 characterizations.
+The added non-production recipe validates genuine named double-attack/reply-breadth factories
+and both private full-edge authorities before applying nonempty-replies AND the old survival
+result. Four terminal payloads change only matched to false and retain zero real refutations;
+four nonterminal promotion-fork payloads remain exactly equal. This is proposed semantics,
+not a new registered helper, convention, factory or accepted repair. `[V]`
+`make tactical-terminal-research`, `terminal.test.ts:prospectiveNonterminalFork`.
+
+A legal pair demonstrates why the full edge join matters: a Black knight forks from b4 to c2
+in otherwise identical positions with/without a genuine e3 en-passant right. Both produce the
+same after-FEN, UCI and reply-breadth payload, but different private input authorities. The old
+factory accepts the crossed breadth; the prospective guard refuses it and accepts its own.
+Because the post-move positions are equal, this is a source-identity gap, not evidence of a
+different fork verdict. `[V]` same target's equal-after-position control.
+
+The compiled manifest has exactly five consumer declarations reaching the old predicate:
+
+| Consumer | Declared relationship | Current-path evidence / limit |
+|---|---|---|
+| module.full_inspector@1 | direct | existing exact presentation pair; its dependent incoming-edge acquisition is still proposed under D3836/D3792 |
+| module.postcommit_nudge@1 | direct | admitted registered presentation reproduced by the original terminal tests, not an authenticated live emission proof |
+| module.review_map@1 | direct | acceptance/binding declarations, not proof the Review node compiler emits the predicate |
+| module.guided_hint@1 | transitive | actual candidate packet → family source → horizon/disclosure selection reproduced by controlled provider fixtures |
+| opponent.selection@1 | transitive via candidate_feature_vector | vector factory/collector and exported server adapter exist; source search finds no in-repo production caller of that server wrapper |
+
+`[V]` same target's manifest dependency walk; `candidate-population.ts:forkSurvival`,
+`hint-distance.ts:familySources`, `hint-horizon.ts:familyOperands`, `candidate-feature-vector.ts`,
+`apps/server/src/candidate-evidence.ts`; exact candidateFeatureVector call sites. A declaration
+is not an emitting path, nor does a repository search prove no external API callers.
+
+The current renderer does not read matched: it renders the old statement from doubleAttack,
+replyBreadth and refutingReplies. Reusing that exact pair for terminal false therefore does not
+explain terminality. Candidate packet construction separately retains compilerVersion=1 and
+requires a change for new construction semantics. The candidate-feature-vector route and
+opponent.selection@1 are another exact source/consumer pair, not automatically changed by an
+Inspector alias. These are explicit adoption obligations, not new learner surfaces. `[V]`
+`presentation-inspector-adapters.ts:forkSurvives`; `candidate-population.ts` compiler identity;
+`rfc/shared-candidate-evidence-packet.md` §5/criteria; server vector admission.
+
+Longitudinal revision5 admits version1 semantic **events**, whereas fork survival is a predicate
+and is absent from that registry. Do not commission a history rebuild solely because a new
+predicate exists. Current content source search finds no literal fork-survival/fork_survives_reply
+requirement; old module execution/binding plan artifacts do retain the old ref. This is a checked
+repository snapshot, not authority to rewrite stored receipts or authored content. Actual
+serialized occurrences and every later adopter still require their owner's inventory and
+compatibility rule. `[V]` `longitudinal-registry.ts` exact registry constructor;
+content/rfc/contracts source search; existing module plan artifacts.

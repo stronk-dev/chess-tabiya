@@ -5,12 +5,12 @@ import { describe, expect, it } from "vitest";
 
 import { canonicalFen, positionFromFen } from "../../packages/runtime/src/chess.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
-import { evidenceForConsumer, evidenceValueReceipt } from "../../packages/runtime/src/evidence-contract.js";
+import { assertDeclaredEvidence, evidenceDigest, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
 import { compileHintDisclosure, hintSentence } from "../../packages/runtime/src/hint-distance.js";
-import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import { evidenceValueRouteRegistry, invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { forcedMateAfterMove } from "../../packages/runtime/src/mate-proof.js";
 import { presentEvidenceItems, presentedSentence } from "../../packages/runtime/src/presentation-contract.js";
-import { doubleAttackEvent, forkSurvivesReply, promotionPressureReading, replyBreadth } from "../../packages/runtime/src/tactics.js";
+import { doubleAttackEvent, forkSurvivesReply, promotionPressureReading, replyBreadth, type DoubleAttackEvent, type ReplyBreadth } from "../../packages/runtime/src/tactics.js";
 import { selectFixture } from "../../packages/runtime/src/testing/hint-fixture.js";
 
 const terminal = [
@@ -26,6 +26,26 @@ function edge(fen: string, moveUci: string) {
   expect(position.isLegal(move)).toBe(true);
   position.play(move);
   return { beforeFen: fen, moveUci, afterFen: canonicalFen(position) };
+}
+
+// Disposable candidate semantics, not a registered helper/factory or an accepted convention.
+// Actual sealed input authority is checked before the terminal short circuit.
+function prospectiveNonterminalFork(attack: DeclaredEvidence<DoubleAttackEvent>, breadth: DeclaredEvidence<ReplyBreadth>) {
+  for (const [value, route] of [[attack, "rules.tactic.event.double_attack@1"], [breadth, "rules.tactic.consequence.reply_breadth@1"]] as const) {
+    assertDeclaredEvidence(value);
+    expect(`${value.projection.id}@${value.projection.version}`).toBe(route);
+    expect(evidenceValueReceipt(value).factory).toBe(evidenceValueRouteRegistry().find(row => row.route === route)!.symbol);
+  }
+  const canonicalEdge = edge(attack.payload.beforeFen, attack.payload.moveUci);
+  expect(attack.payload.afterFen).toBe(canonicalEdge.afterFen);
+  expect(evidenceValueReceipt(attack).inputDigest).toBe(evidenceDigest(canonicalEdge));
+  expect(evidenceValueReceipt(breadth).inputDigest).toBe(evidenceDigest(canonicalEdge));
+  expect(breadth.payload.afterFen).toBe(canonicalEdge.afterFen);
+  expect(breadth.payload.triggeringMove).toBe(canonicalEdge.moveUci);
+  expect(breadth.payload.count).toBe(breadth.payload.replies.length);
+  expect(breadth.payload.terminal).toBe(breadth.payload.count === 0);
+  const old = forkSurvivesReply(attack.payload, breadth.payload);
+  return { ...old, matched: breadth.payload.count > 0 && old.matched };
 }
 
 describe("D3768 terminal all-reply predicate research", () => {
@@ -102,5 +122,65 @@ describe("D3768 terminal all-reply predicate research", () => {
     expect(result.matched).toBe(fixture.matched);
     expect(result.refutingReplies.length === 0).toBe(fixture.matched);
     expect(result.refutingReplies.every(reply => breadth.replies.includes(reply))).toBe(true);
+  });
+
+  it("reconstructs proposed terminal false without changing nonterminal payloads or fabricating refutations", () => {
+    const nonterminal = [
+      { fen: "k7/6Pr/8/8/8/8/8/4K3 w - - 0 1", move: "g7g8q" },
+      { fen: "4k3/8/8/8/8/8/6pR/K7 b - - 0 1", move: "g2g1q" },
+      { fen: "k6r/6P1/8/8/8/8/8/4K3 w - - 0 1", move: "g7g8q" },
+      { fen: "4k3/8/8/8/8/8/6p1/K6R b - - 0 1", move: "g2g1q" },
+    ];
+    for (const fixture of [...terminal, ...nonterminal]) {
+      const input = edge(fixture.fen, fixture.move);
+      const attack = invokeEvidenceValueRoute("rules.tactic.event.double_attack@1", input)[0]!;
+      const breadth = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", input);
+      const old = invokeEvidenceValueRoute("derived.tactic.fork_survives_reply@1", { doubleAttack: attack, breadth });
+      expect(evidenceValueReceipt(old).sourceDigests).toEqual([attack, breadth].map(value => evidenceValueReceipt(value).payloadDigest));
+      const proposed = prospectiveNonterminalFork(attack, breadth);
+      if (breadth.payload.terminal) {
+        expect(proposed).toEqual({ ...old.payload, matched: false });
+        expect(proposed.refutingReplies).toEqual([]);
+      } else expect(proposed).toEqual(old.payload);
+    }
+  });
+
+  it("refuses equal-after-position breadth from a different genuine before-position", () => {
+    // The knight move clears either EP state to the SAME after-FEN. Payload-only joins
+    // cannot distinguish these genuine sources; the private full-edge authority can.
+    const withEp = edge("4k3/8/8/8/1n1pP3/8/8/R3K3 b - e3 0 1", "b4c2");
+    const withoutEp = edge("4k3/8/8/8/1n1pP3/8/8/R3K3 b - - 0 1", "b4c2");
+    expect(withEp.afterFen).toBe(withoutEp.afterFen);
+    const attack = invokeEvidenceValueRoute("rules.tactic.event.double_attack@1", withEp)[0]!;
+    const own = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", withEp);
+    const crossed = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", withoutEp);
+    expect(own.payload).toEqual(crossed.payload);
+    expect(evidenceValueReceipt(own).inputDigest).not.toBe(evidenceValueReceipt(crossed).inputDigest);
+    expect(() => invokeEvidenceValueRoute("derived.tactic.fork_survives_reply@1", { doubleAttack: attack, breadth: crossed })).not.toThrow();
+    expect(() => prospectiveNonterminalFork(attack, own)).not.toThrow();
+    expect(() => prospectiveNonterminalFork(attack, crossed)).toThrow();
+  });
+
+  it("inventories declared fork dependents without claiming that every accepted path actually emits", () => {
+    const target = "derived.tactic.fork_survives_reply@1";
+    const key = (ref: { id: string; version: number }) => `${ref.id}@${ref.version}`;
+    const projections = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map(row => [key(row), row]));
+    const reaches = (id: string, visited = new Set<string>()): boolean => {
+      if (id === target) return true;
+      if (visited.has(id)) return false;
+      visited.add(id);
+      const row = projections.get(id)!;
+      const inputs = row.derivation?.inputs ?? row.derivation?.anyOf?.flat() ?? [];
+      return [...row.dependsOn, ...inputs].some(ref => reaches(key(ref), visited));
+    };
+    const consumers = PRIMARY_EVIDENCE_MANIFEST.consumers.filter(row => row.accepts.some(ref => reaches(key(ref))))
+      .map(row => ({ consumer: key(row), direct: row.accepts.some(ref => key(ref) === target) }));
+    expect(consumers.filter(row => row.direct).map(row => row.consumer)).toEqual(expect.arrayContaining([
+      "module.postcommit_nudge@1", "module.review_map@1", "module.full_inspector@1",
+    ]));
+    expect(consumers.some(row => row.consumer === "module.guided_hint@1" && !row.direct)).toBe(true);
+    const declared = projections.get(target)!.derivation!.inputs!;
+    expect(declared).toHaveLength(3); // literal old declaration, not actual two-input lineage
+    console.log(JSON.stringify({ scope: "D3768/D3847 declared dependency census; NOT emitting/runtime/persistence proof", consumers }));
   });
 });

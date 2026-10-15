@@ -478,3 +478,28 @@ and map18/57/ten negatives pass. The reviewer does not independently run those c
 Actual factory/receipt/mutation/pre-work boundaries, promoted recapturers, mixed-candidate
 precedence, complete consumer/presentation closure and authenticated/native delivery remain.
 No D3852 closure, implementation qualification, policy ruling or upstream/joint acceptance.
+
+### D3768/D3847 terminal fork — source and compatibility control review
+
+The authorized reviewer inspects the added controls read-only; no tests are rerun. Four terminal
+comparisons change only matched while preserving zero real refutations, and four nonterminal
+comparisons preserve the complete old payload. The prospective guard checks genuine seals,
+exact factory/ref and both private full-edge authorities before applying its nonempty rule.
+The en-passant contrast is legal: Black can use the e3 right before b4–c2 clears it. Equal after-
+positions and breadth payloads therefore do not establish identical before-position authority.
+Own sources pass and the crossed source refuses. This is position-source evidence, not recorded-
+game provenance or a demonstrated difference in tactical verdict.
+
+The five-consumer census walks declared dependencies and every derivation alternative; it does
+not establish five executing/emitting paths. Assertions permit added consumers, so the output
+is a snapshot diagnostic rather than a permanent closure gate. The reviewer independently finds
+no in-repository production caller for the exported server vector wrapper, and confirms retained
+historical module-plan refs. These searches cannot exclude external callers, computed aliases or
+stored occurrences. Longitudinal's semantic-event registry does not justify an automatic predicate
+history rebuild.
+
+No remaining blocker is found in these bounded controls or their stated interpretation. They
+support subsequent exact contract authoring, not a new version/convention authority, source
+qualification, implementation permission, upstream/joint acceptance or D3768 closure. The old
+renderer ignores matched; candidate-packet, Hint, direct presentation and vector/history paths
+need explicit dispositions rather than an Inspector-only claim of repair.

@@ -30339,3 +30339,40 @@ Campaign was the one capability with no API, route or content. Now:
   changed; full software/browser proof remains prior5542cc2d, not a new claim. Stage only the
   explicit fourteen owned files, retain the three pre-existing untracked entries and use normal
   hooks. No push, accepted-contract bypass, source qualification or goal pause.
+
+## 2026-10-15 — D3768/D3847 terminal-fork source and compatibility inventory
+
+- Continue from3e33f8e4 with the full1.0 goal active. Retain the three pre-existing untracked
+  entries. The owner's explicit approval authorizes the separate Inspector dependency reviewer;
+  it is not self-acceptance or authority to implement the unaccepted amendment.
+- Extend only the existing disposable terminal probe:25 tests retain all original22. Four
+  terminal comparisons change only matched and invent no refutation; four complete nonterminal
+  outcomes stay equal. The proposed recipe validates genuine seals/ref/factory and both private
+  full-edge authorities before applying the nonempty rule. It is not a registered factory.
+- A legal en-passant-right contrast yields equal after-FEN/breadth payload after a knight move,
+  while genuine before-position authorities differ. Old construction accepts crossed sources;
+  the prospective guard accepts its own and rejects the crossed source. This is a position-source
+  identity gap, not recorded provenance or a demonstrated different tactical verdict.
+- Walk declared dependencies and every derivation alternative: five current reachable consumer
+  declarations, not five emitting paths. The renderer ignores matched; Guided Hint consumes the
+  old candidate-packet source. The exported server vector wrapper has no production caller found
+  in the searched repository, not proof about external callers or stored occurrences. Preserve
+  historical module plans. Longitudinal's semantic-event registry does not imply predicate rebuild.
+- Authorized independent read-only review finds no remaining blocker in these bounded controls
+  or their interpretation. No tests are rerun by the reviewer; no convention/version authority,
+  implementation qualification, upstream/joint acceptance or D3768 closure is granted.
+- Normal make tactical-terminal-research exits zero:25 tests. Include that existing probe in the
+  existing opt-in Inspector strict-types config; make inspector-recorded-prefix-research exits
+  zero with its prior prefix/window/source controls unchanged. No production or ordinary CI gate
+  changes. Full software/build/browser proof remains prior5542cc2d, not a rerun in this checkpoint.
+- Update the existing dossier/coverage, tactical handoff, reviewer receipt, ledger/queue and
+  roadmap; author the coordinated source/renderer/packet/Hint/vector compatibility contract next,
+  not another count increase. D3851 remains unanswered; all current coexistence obligations and
+  other source/schema/collection holds remain. No protected intent or whole-product gate changes.
+- The first governance run refuses a stale foundation-checkpoint reference to the previous D3768
+  source row. Refresh that exact reference after reviewing the updated entry; preserve the failed
+  check here rather than treating it as a runtime/test defect or weakening the tracking guard.
+- Final normal governance, roadmap receipt/progress and diff checks pass. All3601 ledger rows
+  remain assigned,1738 live and zero untriaged;569 UX items retain282 complete/263 live/24 retired.
+  No milestone or dimension is promoted. Commit only the explicit13 owned files through normal
+  hooks, retain the three pre-existing untracked entries, do not push or pause the active goal.

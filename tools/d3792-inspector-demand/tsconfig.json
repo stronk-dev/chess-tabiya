@@ -7,5 +7,5 @@
       "chessops/*": ["../../packages/runtime/node_modules/chessops/dist/types/*.d.ts"]
     }
   },
-  "include": ["census.ts", "detail-model.ts", "source-matrix.ts", "source-observer.ts", "vitest.sources.config.ts", "draft-wire.ts", "detail-schema.ts", "supplier-scope.ts", "recorded-context.ts", "scope-selection.ts", "prefix-source.ts", "recorded-source-cases.ts", "window-source.ts", "review-observer.ts", "review-scope.ts", "comparison-source.ts", "review-boundary.ts", "pivotal-source.ts", "incoming-dependent.ts", "recorded-origin.ts"]
+  "include": ["census.ts", "detail-model.ts", "source-matrix.ts", "source-observer.ts", "vitest.sources.config.ts", "draft-wire.ts", "detail-schema.ts", "supplier-scope.ts", "recorded-context.ts", "scope-selection.ts", "prefix-source.ts", "recorded-source-cases.ts", "window-source.ts", "review-observer.ts", "review-scope.ts", "comparison-source.ts", "review-boundary.ts", "pivotal-source.ts", "incoming-dependent.ts", "recorded-origin.ts", "../tactical-collector-measurement-harness/terminal.test.ts"]
 }

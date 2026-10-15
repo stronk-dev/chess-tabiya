@@ -31316,7 +31316,7 @@
       "id": "D3768",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0d2f80e4679ab9fb8d1467bb2bcd1f24350b2808307604ecc0fd5f7ee1ad895e",
+      "sourceDigest": "sha256:474f0ee28cad015e3efe7ba731e7254e26ecfc22cde618bba58ba666ce446477",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:tactical-collectors.md"

@@ -1,5 +1,17 @@
 # Codex queue — rewritten in full 2026-08-16
 
+2026-10-15 — D3768/D3847 terminal fork research now has25 disposable tests, retaining the
+original22. The proposed nonempty rule changes only matched on four terminal examples and
+preserves four complete nonterminal payloads. A genuine equal-after-position en-passant pair
+demonstrates the missing full-edge source join. Independent bounded review finds no blocker
+in those controls, not a convention/version acceptance or implementation permission. The five
+reachable consumer declarations are not five emitting paths. Author the coordinated exact
+source, terminal-aware renderer, candidate-packet/Hint and direct-consumer/vector compatibility
+contract next; the current renderer ignores matched. Preserve old helper/factory/receipts,
+mate and promotion semantics, and historical plans. No automatic longitudinal rebuild or
+Inspector-only claim of D3768 closure. Existing opt-in prefix types now include this probe;
+no ordinary CI gate or production bytes change.
+
 2026-10-15 — D3847/D3852 strict overload now has a bounded, independently reviewed direct
 computed source proposal in F2 §2.3e. It replaces the rejected two-input derived@2 shape with
 rules.tactic.predicate.overload_conflict@1: validate one legal edge before quiet work, compute

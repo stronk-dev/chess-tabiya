@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3768/D3847 now have a reviewed terminal-fork source and compatibility inventory:25 disposable
+tests retain the original22, compare four terminal/four nonterminal outcomes and reject a genuine
+crossed full-edge authority despite equal after-FEN/payload. The five reachable consumer declarations
+are not five emitting paths. The renderer ignores matched and Guided Hint reads the old packet
+source, so exact source, renderer, packet/Hint and vector/history dispositions must be authored
+together. Existing opt-in prefix strict types include the probe. No version/convention acceptance,
+production change, predicate-history rebuild or D3768 closure follows. Prior full production proof
+remains5542cc2d; no whole-product gate moves.
+
 D3847/D3852 now have a source-contract proposal for strict overload without fictitious lineage
 or a broader F1 change. The rejected two-input derivation still fails the unchanged grounding
 guard. The revised direct computed conventional predicate reconstructs all authority from one

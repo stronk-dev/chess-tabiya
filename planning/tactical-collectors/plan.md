@@ -61,3 +61,13 @@ with `rfc/hint-distance.md`. The source-first author repair must specify:
    tests deliberately assert today's result; they are not acceptance tests for the proposed fix.
 
 No production change is authorized until that repaired contract is independently accepted.
+
+2026-10-15 source/adoption inventory: the unchanged normal research command passes25 tests,
+retaining the old22. The proposed nonempty recipe changes only four terminal matched bits and
+preserves four nonterminal payloads; a legal EP-right pair proves equal after-position/breadth
+payload cannot establish the full input edge. Five exact manifest consumer declarations reach
+the old predicate, but live Hint selection, admitted module rendering and export-only vector
+paths are different evidence. `wave-a-contract-closure.md` records the exact inventory. The
+current renderer ignores matched, packet compiler identity must change for new construction,
+and no predicate-only change justifies a longitudinal-event rebuild. Author the full source/
+terminal/convention/consumer compatibility contract next; no implementation or acceptance follows.

@@ -75,6 +75,14 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Fork-terminal adoption inventory, 2026-10-15 ([[D3768]]/[[D3847]]): 25 research tests retain the
+old22, compare four terminal/four nonterminal prospective outcomes, and refuse a genuine crossed
+full-edge source despite equal after-FEN/breadth payload. Five manifest consumers reach the old
+predicate, but declared/actual/exported paths are distinguished. Renderer ignores matched;
+candidate compiler, exact Hint identities, bot-vector compatibility and historical authorities
+need explicit dispositions. No source/terminal change is accepted. `[V]`
+`wave-a-contract-closure.md` §Terminal repair source/adoption inventory; existing terminal target.
+
 Strict-overload construction, 2026-10-15 ([[D3847]]/[[D3852]]): actual initial duty/capture
 receipts and four hypothetical recapture→exchange joins distinguish internal calculation from a
 fictitious third sealed witness. The rejected two-input derived proposal hits F1 grounding;
