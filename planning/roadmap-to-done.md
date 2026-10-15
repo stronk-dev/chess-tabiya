@@ -27,6 +27,15 @@ pass. All normal local tiers pass5888 software/seven performance/257 content/bui
 cases, one configured optional Maia skip and112 unretried composition cells. D3841's successor
 contract and remaining suppliers are not completed by this guard; no whole 1.0 gate is promoted.
 
+D3841's next author checkpoint specifies exact-version consumer closure under one existing
+module policy, required per-demand absence without abusing total aggregation, and source-order
+paging. Independent review catches and clears an atomic multi-component bundle-fitting correction:
+one occurrence/member is either fully shown or fully deferred. Source tracing also distinguishes
+recorded packets/selections from new provider queries; refreshing historical observations or
+fabricating old exchange receipts would be a regression. The exact source/derived/factory/grounding
+map, source/callable operand contracts, upstream acceptance and remaining suppliers stay open.
+No production changes or joint Inspector acceptance follow; ae0c9d55 retains the full local proof.
+
 D3840 closes a bounded accepted foundation correction: direct events and their derivations
 reuse the complete validated edge population instead of resealing it. Both-color controls,
 exact whole-projector output comparisons and every normal local test tier pass. The final
@@ -366,8 +375,10 @@ only because their compiler dependency changed; all343 cases,81 verdicts and zer
 remain identical. The first stale-receipt refusal and later duplicate-roadmap-reference refusal
 remain logged; only bookkeeping changed between the final software proof and remaining gates.
 Current ledger:3,593 rows,1,699 done,162 refused and1,732 live assigned, zero untriaged.
-D3841 remains doing: independent review requires the modern-source mapping, exact-version closure,
-absence/demand and source-order delivery contracts before acceptance or Inspector API implementation.
+D3841 remains doing: the three cross-cutting clauses are authored, with independent review's
+atomic-bundle correction closed. Exact recorded/live source and dependent-version mapping,
+source/callable operand contracts, upstream acceptance and suppliers precede joint acceptance
+or Inspector API implementation. This author pass changes no production and adds no application-run claim.
 UX remains282 complete/263 live/24 retired; four active/five blocked milestones remain.
 
 D3838's completed presentation proof stands: both-color desktop/phone native flows retain exact

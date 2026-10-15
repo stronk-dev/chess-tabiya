@@ -1888,10 +1888,128 @@ nine legacy provider leaves carry narrow packet/page payloads, not the strict ex
 provider-delivery type, and three derived bindings inherit them. The successor must name an
 explicit obligation-preserving rebase onto independently accepted modern source/derived refs,
 with all old contracts intact; neither in-place payload rewriting nor operation aliases suffice.
-That exact map, versioned registry/admission/callable/presentation closure, binding absence policies
-versus lazy demand, and source-order rather than old reducer delivery **remain unfilled authoring
-requirements**. Six detail refs do not establish a total of81 executable bindings. No held-binding
-compiler exception or source retirement is authorized. See the dated D3841 independent follow-up.
+An authentic recorded-source successor may instead retain a historical attachment or selection;
+it must establish the exact stored occurrence and disclose that it does not prove a missing
+provider exchange. Six current packet topics, the historical divergence marker and recorded
+Compare deltas have that origin. Fresh Maia/Explorer requests remain actual provider operations.
+The exact source/derived successor map, payloads, grounding/receipt contracts and upstream
+acceptance **remain unfilled authoring requirements**. The three cross-cutting clauses below
+specify versioned closure, demanded-topic absence and source-order delivery, pending independent
+review; they do not supply that map. Six detail refs do not establish a total of81 executable
+bindings. No held-binding compiler exception or source retirement is authorized. See the dated
+D3841 independent follow-up and its recorded-versus-live refinement.
+
+**D3841 exact-version closure — unaccepted author contract:** preserve the eleven logical
+`MODULE_IDS`, one `MODULE_POLICIES` entry per id, every preset/context reference and the existing
+`MODULE_DECLARATIONS` predecessor image. Consumer version is an execution/presentation identity,
+not a new module, policy, assistance preset or permission. Add a versioned consumer-image index
+alongside `MODULE_CONSUMER_ACCEPTS` in the existing catalogue; its rows have exactly
+`moduleId`, `consumer`, `accepts` and `implementation`. `accepts` is an ordered exact-ref list.
+Each current row is the existing `module.<id>@1` image without changing its contents/order.
+Those predecessor rows reference the existing `MODULE_CONSUMER_ACCEPTS` entries; do not copy or
+independently maintain their lists. All closure/callable/pair views derive from this one exact
+image index, not a competing consumer registry or an additional policy authority.
+The sole new logical-family row here is `module.full_inspector@2`, with the complete separately
+authored source map followed by the six detail refs. No aliases or default-to-latest lookup.
+
+The predecessor row names `compileModulePacket`. The successor row names the proposed runtime
+callable `compileInspectorSourcePage`; the stored-access/query service invokes it only after
+the requested source/context has been admitted. Register both exact tuples through the existing
+`evidenceConsumerOperation`/`assertEvidenceConsumerOperations` authority. Keep the existing @1
+entry point explicitly @1; it must not infer @2 from a compatible payload. The new callable
+compiles/render-fits an already admitted source collection, not storage access or arbitrary
+caller facts. The HTTP/service source-owner checks in this section still precede it.
+
+`moduleEvidenceClosure`, `assertClosure` and `assertModuleRegistry` must join the exact consumer
+tuple to its consumer-image row, then join `moduleId` to the existing policy. Every image must
+have exactly one consumer and callable, ordered-equal declared acceptance, declared projections,
+answer content inside that one policy, and complete accepted/bound projection coverage. Every
+`module.*` manifest consumer must have an image; an unknown version, duplicate tuple or unmatched
+image refuses. Compare binding **pair sets**, allowing multiple separately declared adapters
+for one pair while retaining unique adapter tuples and validating every adapter. Do not weaken
+closure by ignoring @2, reducing to base ids, dropping extra bindings or counting @1 as its witness.
+Cover-or-refuse upstream closure includes the explicit versioned images without removing any
+retained predecessor coverage. `rules_floor` remains the sole non-evidence module.
+
+Both versions read roles, sessions, review/explicit initiative, disclosure/answer ceilings,
+empty-family vocabulary and budgets from `modulePolicy("full_inspector")`; no copied successor
+policy table. The limits stay20 facts/400 words/20 marks/eight arrows. The successor's exact
+acceptance list comes from its image, not from `moduleDeclaration(...).accepts`' @1 list.
+Extend the existing admission helper with explicit exact-consumer selection (default @1 for
+existing callers), validate the sealed view against that image, and preserve operand/answer/
+denominator checks. A different module or version cannot borrow admission. Its source-collection
+path must retain order as specified below; the old packet/reducer path keeps its current behavior.
+
+Presentation classification names both tuples `inspector_presented`. Pair-keyed source/detail
+adapter registrations, callable census, operation rows and pair-execution tracking retain the
+exact consumer version; a predecessor adapter/operation is not successor adoption. Their @1
+records remain, and a missing @2 receiver/renderer remains explicitly unimplemented, not covered
+by a declaration-only census. No source/data/version is added to a saved run or drill pack.
+
+**D3841 demanded-topic absence — unaccepted author contract:** every @2 binding declares literal
+`sourceAbsence: {necessity:"required",whenNoPath:"operation_unavailable"}`. Required means that
+this binding's requested topic cannot be produced without an admitted complete path; it does
+not require acquiring every topic when the Inspector opens. The @2 source operation performs
+complete static consumer compilation first, then selects the exact requested source's bindings
+from that sealed complete result. Inventory performs no resolution/acquisition. Detail demands
+only its sole original source and that detail view. An unrelated provider's reach/failure never
+suppresses a local topic or causes background acquisition.
+
+For the demanded bindings only, resolve the literal source occurrences on their compiled paths
+using provider exchange §2 and the exact context/source-owner map. All operands of a selected
+derivation member remain required; an optional sibling path does not erase missing operands.
+A satisfied complete alternative may serve the binding; absent alternatives remain distinguishable
+from invalid/crossed source receipts, which fail. A required absence makes that requested topic
+unavailable with the authored source-specific reason. Successful zero witnesses is `no_witness`,
+not provider absence. A broken contract fails before work; no compilation failure becomes absence.
+
+Do not call `aggregateEvidenceConsumerSourceAvailability` with a partial result list: its existing
+total-consumer contract still requires every binding. This operation instead emits the one demanded
+topic's source outcome from its resolved exact bindings and the source-specific outcome map.
+Undemanded topics remain `not_requested` without invented satisfaction/absence rows. Neither a
+temporary narrowed manifest nor a filtered consumer is permitted. An actual source-dependent
+operation failure is local to this request; it is not a global unavailable family or a permission
+to substitute another occurrence, old raw packet or fresh query. Required modern-source corruption
+cannot fall back to a weaker historical observation. Keep missing context, source absence, failed
+source, successful empty and display-limited outcomes separate through the existing closed wire.
+
+**D3841 source-order delivery — unaccepted author contract:** after exact source/context admission,
+retain the complete immutable occurrence collection, its producer order and every original ordinal.
+Do not feed it through `compileModulePacket`, including its `mode:"admit"`, because that mode
+still invokes `orderAdmittedFacts`; do not run novelty, criticality, exactness, lift, usefulness,
+top-N or whole-packet backstops before paging. A malformed or foreign item fails the source contract,
+not an invisible selection drop. Current permission/timing/answer checks remain mandatory; none
+may be bypassed to preserve an inadmissible item.
+
+The requested source page considers at most eight consecutive original occurrences from `start`,
+in source order. Each occurrence is rendered through its exact registered adapter, retaining
+its entire owned component bundle, equivalent sentences, captions, marks and arrows. Fit that
+complete bundle atomically against every dimension of the shared policy's remaining page budget;
+count its occurrence once, not once per component. The same atomic rule applies to every complete
+detail member, including a statement plus a square set. If any dimension exceeds the remaining
+budget, publish none of that occurrence/member's components or equivalent sentences. Preserve
+the over-budget occurrence as `deferred` with its exceeded dimensions, ordinal and supported
+detail door (or the member as `detail_limited`), never a partial fact marked presented or a
+no-witness result. A later occurrence can fit only in that same original order;
+no ranking or reordering is introduced. The page range counts all considered occurrences,
+including deferred ones, so it progresses even if every original fact is too large. A request
+with changed source/decision refuses stale before continuation. Detail's complete-member fitting
+and `detail_limited` behavior remain as specified below; narrowing is never source re-collection.
+
+**Required negative/native controls for these three clauses:** jointly compile genuine @1/@2
+consumer images under exactly eleven policies; remove/duplicate/cross a successor image, binding,
+callable, view or renderer and require refusal. Keep a permanent legal multi-adapter positive.
+Prove @1 output/ordering unchanged and @2 source order unchanged even when the same facts would
+sort differently by old criticality/exactness/lift. Hold/fail Maia or Explorer while requesting a
+local source and require zero unrelated calls and a successful local response; inventory must do
+zero source work. Independently remove a selected derivation operand and reject the crossed path;
+never fill undemanded topics with absent rows. Use a multi-component occurrence/member whose
+separate components each fit but whose combined words or arrows exceed the budget, and require
+zero partial output and one deferred occurrence. Real authenticated HTTP and desktop/touch-phone
+receivers must traverse version mismatch, unavailable/failure/retry, all-deferred pages, continued
+detail, stale decision/source and permission revocation without changing board/history/budgets.
+These controls are acceptance obligations, not claims of current implementation or clearance.
+
 Local and edge factories
 receive the authoritative FEN/edge; recorded successors use `recordedSemanticPath`, not v1
 payload relabelling. Saved engine/tablebase values resolve exact retained occurrences. Other
@@ -3303,6 +3421,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — D3841 author clauses specify exact-version consumer closure under one existing
+  module policy, literal required per-demand absence without abusing total-consumer aggregation,
+  and source-order admission/whole-component paging without the old ranking backstop. Independent
+  review and the complete source/derived map remain required. Historical packet/selection sources
+  may have explicit recorded successors; no fresh query or missing provider receipt may be invented.
 - 2026-10-15 — The authorized independent reviewer clears only the bounded D3842 and D3843
   author corrections after inspecting their contract/controls and independently rerunning the
   comparison and wire bundles. D3841's complete successor execution/legacy-source treatment

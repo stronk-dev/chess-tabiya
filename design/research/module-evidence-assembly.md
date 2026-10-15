@@ -1248,3 +1248,40 @@ executable nor authors/accepts D3841's successor image. No bindings are removed 
 no execution error becomes a normal unavailable result, and source/semantic qualification,
 usefulness, content and release gates remain. Full verification follows separately in the log;
 the focused evidence above is not a whole-platform proof. `[V]` code diff and unchanged D3792.
+
+## Inspector successor: recorded is not live — 2026-10-15, D3841
+
+The independent follow-up's phrase “modern-source rebase” does not require manufacturing live
+exchange evidence for historical packets. Six refused topics (Stockfish eval/WDL/PV and Syzygy
+result/category/distance) are currently acquired from the selected node's actual `evidence.attached`
+events. `inspectorSources` retains every matching packet occurrence, not a new provider response.
+`pivotal.divergence` retains the exact `opponent.move_selected` occurrence and candidates; Compare's
+`evidenceOverlay` reads engine-labelled eval events on the recorded path. Separately declared
+recorded-source successors could preserve those observations without asserting a provider delivery.
+Neither changing the old provider declarations nor fetching a fresh reading would preserve their
+historical meaning. `[V]` `packages/runtime/src/module-query.ts:inspectorSources`,
+`pivotal.ts:divergence`, `compare.ts:evidenceOverlay`,
+`evidence-factories.ts:createDerivedCompareEvalDeltaV1Evidence` and the authorized independent
+review's recorded-source refinement.
+
+Requested-node Maia and Explorer pages are a different source path. The current `MaiaPolicyPage`
+contains only move/probability rows; it has neither candidate WDL nor the actual final sampled-task
+window. The unaccepted `maia-task-source.md` §§1/4 specifies the needed task and node distribution,
+but does not durably retain old selection tasks. Explorer already has the sealed
+`derived.explorer.inspector_population@1` successor and exact-node authenticated boundary; its
+population/sample/recency/committed-membership policy must survive integration. The final twelve-row
+successor map must distinguish these origins and explicitly name all dependent versions, not force
+every historical topic through a live provider or claim existing narrow records are whole-source
+receipts. `[V]` `provider-types.ts:MaiaPolicyPage`, `maia-task-source.md` §§1/3/4,
+`evidence-catalog.ts` provider/Explorer declarations and `apps/server/src/inspector-corpus.ts`.
+
+Three other D3841 requirements can be specified independently of that still-open source map:
+exact-version consumer closure under the existing eleven module policies, requested-topic absence
+without fabricated results for undemanded topics, and source-order admission before bounded whole
+component fitting. Current registry/packet/admission/classification explicitly assume version1;
+`compileModulePacket`'s admit mode also calls `orderAdmittedFacts`. Reusing that path unchanged would
+reorder or truncate the very collection the detail contract must retain. `[V]`
+`module-contract.ts:assertClosure`, `module-registry.ts:assertModuleRegistry`,
+`module-packets.ts:compileModulePacket`, `module-reducers.ts:admitModuleFacts/orderAdmittedFacts`,
+`presentation-consumer-adapters.ts:PRESENTATION_CONSUMER_CLASSES`. These are authoring prerequisites,
+not completed production migration, independently cleared clauses or a whole Inspector delivery.

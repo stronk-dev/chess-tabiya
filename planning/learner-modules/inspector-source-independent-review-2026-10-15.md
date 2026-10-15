@@ -167,3 +167,53 @@ The proposal “unchanged75 exact refs plus six detail refs” is **not a builda
 These constraints guide the remaining author pass; they do not supply the missing successor map,
 supplier contract or actual API/native implementation. D3841 remains open and D3792 unaccepted.
 D3844's guard closes neither. No source retirement, policy/default change or new module follows.
+
+## D3841 source-origin refinement — independent follow-up, 2026-10-15
+
+The same authorized reviewer refines its “modern source” shorthand after checking actual operand
+origins. Six Inspector packet topics read exact-node `evidence.attached` events, not new provider
+output. Pivotal human divergence reads its exact retained `opponent.move_selected` candidates;
+Compare delta reads two engine-labelled attachment occurrences. Separately declared recorded-source
+successors may preserve those historical observations without provider I/O. Their source authority
+must establish the complete exact event/head/node/path membership, not accept caller packets or
+change the old provider refs' availability/payload in place. Current `resolveRunEvidenceItem`
+supplies attachment membership, not already-minted new source types or provider provenance.
+
+Recorded means recorded bytes/occurrence: it cannot manufacture transcript, bound, model options
+or exchange receipt. A new provider query cannot reconstruct that old observation. Required modern
+delivery corruption must refuse rather than falling back to a weaker historical report.
+Requested-node Maia/Explorer still require their genuine modern sources. Maia's task draft keeps
+candidate WDL but has not specified its separate evaluation-valued node-WDL successor; the frozen
+policy page contains no WDL. Its task source is not durably recoverable from old selection events.
+Explorer uses its accepted whole-page/narrow Inspector source, not an offline sourcing census.
+
+Ownership remains the existing provider exchange for exact source resolution, durable Stockfish/
+job durability for modern persistence, Maia task for actual task/distribution, and value authority
+for new factories, literal inputs and receipts. The twelve-row source/derived successor map,
+grounding/limitations and upstream acceptance remain required. No production or acceptance follows.
+
+## D3841 cross-cutting author response — 2026-10-15, pending independent review
+
+The existing §4.11a now specifies three bounded clauses: exact consumer-image/callable/adapter/
+admission closure under eleven unchanged logical module policies; required source absence scoped
+to actual demanded bindings without partial calls to the total aggregator; and source-order
+whole-component paging without routing the full collection through old packet ordering/reducers.
+The presentation companion retains both exact version classifications and all existing budgets.
+Permanent negative/native criteria are specified, not executed or discharged. The independent
+reviewer is asked to check these clauses read-only. Exact source/derived mapping and remaining
+suppliers are still open; D3841 stays doing and D3792 remains unaccepted.
+
+## D3841 bounded clause review and correction — 2026-10-15
+
+The independent reviewer finds no additional contradiction in exact-version closure under the
+eleven policies, required absence scoped to demanded bindings, and source-order paging without
+the old reducer pipeline. It returns one real wording hole: fitting a “whole component” can still
+publish a partial occurrence when it owns multiple components. `fitModulePresentation` already
+groups by evidence identity before combined cost; a detail member can own both statement and
+square set. Main verifies that symbol and corrects both clauses: the complete occurrence/member
+bundle, equivalent sentences, captions, marks and arrows fits atomically, counts once and publishes
+nothing if any combined dimension fails. A combined-cost negative is explicitly required.
+
+Independent read-only recheck confirms that identified correction closed. No tests, edits or joint
+acceptance occur. The exact source map, source/callable operand contracts, upstream acceptance and
+remaining suppliers stay open. These bounded clauses are not implemented and do not close D3841.

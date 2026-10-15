@@ -1994,6 +1994,16 @@ The D3841 follow-up also refutes simply retaining75 unchanged legacy refs plus t
 §4.11a still owes an obligation-preserving modern-source rebase and exact-version registry/
 admission/presentation closure. One existing module policy is shared, not duplicated or weakened;
 old @1 payloads and adapters stay intact. No total successor binding count is established yet.
+The subsequent D3841 author clauses specify the exact-version consumer-image join, required
+per-demand source policies and source-order whole-component fitting, still pending independent
+review and the complete source map. Presentation must classify both Inspector versions and bind
+adapters to the exact tuple. Source/detail components consume the admitted @2 collection without
+the old packet ordering/reduction backstop; all current role/answer limits and whole-component
+budgets remain. Fit all components/equivalent sentences/captions/marks/arrows owned by one
+occurrence or detail member atomically; count it once and publish none of its components if
+the combined cost exceeds any dimension. Historical packets may have separately declared recorded successors, never
+fabricated modern receipts or refreshed historical values. This companion does not authorize
+those unfilled source factories or treat a new adapter as adoption.
 
 Every new projection below is version 1. Register it only to `module.full_inspector@2`, together
 with the original source image owned by §4.11a. Factories consume exactly one **admitted complete
@@ -2209,6 +2219,10 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-10-15 — D3841 companion names exact @1/@2 classification/pair closure, shared existing
+  ceilings and source-order whole-component fitting. Historical observations remain distinct
+  from actual provider deliveries. This is unaccepted authoring; the full source map and
+  independent review still precede source factories, adapters, callable/API/client adoption.
 - 2026-10-14 — D3802 supplies six closed source-retaining detail payload/factory/parser/renderer
   schemas and eighteen member alternatives, companion to module-registration §4.11a. Strict
   disposable member reconstruction is not production authority or semantic qualification.

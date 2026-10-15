@@ -29914,3 +29914,37 @@ Campaign was the one capability with no API, route or content. Now:
   1732 live assigned and zero untriaged; UX/milestones and all qualification counts are unchanged.
   Refresh the existing roadmap receipt, run final governance and normal explicit-index commit
   hooks, preserving the three pre-existing untracked entries and making no push.
+
+## 2026-10-15 — Inspector successor policy, demand and historical-source boundaries
+
+- Previous goal turn made concrete progress at ae0c9d55: the accepted complete-consumer guard
+  is fixed and fully verified locally. Current tracked tree is clean, with the same three
+  pre-existing untracked entries. Continue D3841 authoring; no API/UI implementation or acceptance.
+- The same authorized independent reviewer refines its earlier modern-source shorthand. Six
+  current provider-labelled topics actually read exact-node recorded packets; pivotal human
+  divergence and Compare also read historical occurrences. Main rechecks those symbols and lands
+  the bounded research finding before drafting: separately declared recorded successors may
+  report that history, never fabricate exchange receipts or replace it with fresh provider work.
+  Requested-node Maia/Explorer remain their distinct actual modern source paths. No source is
+  retired; the full twelve-row map and upstream acceptance remain required.
+- Author three cross-cutting D3841 clauses under the one existing module policy: exact-version
+  image/callable/admission/presentation closure; required per-demand source absence without
+  fabricating total-aggregator rows; and source-order paging before old ranking/reducer backstops.
+  The same independent reviewer finds a real hole: fitting a whole component is insufficient
+  when one occurrence owns several components. Main verifies actual `fitModulePresentation`
+  groups by evidence identity and repairs the draft to fit the entire occurrence/member bundle,
+  all equivalent text/marks/arrows, atomically, counted once. A combined-cost negative is required.
+  No acceptance or production follows. Current nine execution-census controls pass with the
+  saved full report unchanged; scoped author controls are obligations, not executed proof.
+- Independent recheck confirms the atomic-bundle wording hole closed and no other contradiction
+  in these three bounded clauses; it does not clear the exact source map/callable operand contracts
+  or accept D3841/D3792. Existing `make inspector-source-contract-research` passes its clean
+  research types and37 source-contract cases. Refresh work-state and the existing roadmap receipt;
+  all counts stay unchanged, D3841 stays doing, and prior ae0c9d55 application proof remains prior
+  proof rather than a new run. No production edits, new harness/gate, schema/source version,
+  authored content change or raw recording is introduced. Verify current governance and normal
+  explicit-file commit hooks; keep all remaining source/consumer/native obligations visible.
+- Final `make verify-governance` passes: current register/lifecycle,3593-row work index/state,
+ 569-item UX ownership, roadmap R1–R10/receipt, intent parity, test tiers and process contracts.
+  All1732 live rows remain assigned. Stage only the twelve owned author/research/tracking files,
+  inspect the exact index and commit through normal hooks; no push or whole-capability promotion.

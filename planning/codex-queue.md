@@ -8,14 +8,17 @@ construction and original source refusals. All normal local tiers pass5888 softw
 cells. Isolated research declares its single diagnostic projection explicitly; saved complete census
 counts remain unchanged. This does not accept D3792, fix its upstream sources or qualify a release.
 
-D3841's independent follow-up refutes the literal unchanged75+6 image: strict execution needs
-whole provider deliveries, while nine legacy leaves are narrow and three derived bindings depend
-on them. Next author the explicit obligation-preserving modern-source rebase with upstream
-acceptance, exact-version registry/admission/callable/presentation closure sharing one policy,
-literal absence policies distinct from lazy demand, and source-order paging instead of old
-reducers. Preserve every obligation and @1 meaning; do not introduce held compiler exemptions,
-fabricated absent rows for undemanded topics, a twelfth module or source retirement. The existing
-dated review owns the exact findings; D3841 remains open and D3792 unaccepted.
+D3841's independent follow-up refutes unchanged75+6. Its refined source trace distinguishes
+six recorded packet topics and historical marker/Compare observations from actual live Maia/
+Explorer requests: recorded successors must establish occurrences without fabricating exchanges
+or refreshing history. The three cross-cutting contracts are now authored in §4.11a. Independent
+bounded review's atomic bundle-fitting correction is closed, not joint acceptance: exact-version
+closure under one policy, required per-demand absence
+without partial total aggregation, and source-order whole-component paging without old reducers.
+Next finish the exact twelve-row source/derived/factory/grounding map, including separate Maia
+WDL and upstream ownership/acceptance, then remaining supplier contracts. Preserve all obligations
+and @1 meanings; no held compiler exemptions, fake undemanded absence, twelfth module or source
+retirement. The existing dated review owns the findings; D3841 stays doing and D3792 unaccepted.
 
 2026-10-15 — Marco authorizes independent Inspector review; it returns D3792 on
 [[D3841]], [[D3842]] and [[D3843]]. D3842 original-path FEN refusal and D3843 held-dependency

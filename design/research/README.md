@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Inspector successor origins, 2026-10-15 ([[D3841]]): actual source tracing distinguishes six
+recorded packet topics and historical marker/Compare inputs from requested-node live Maia/Explorer
+pages. Historical observations must not be refreshed or misrepresented as whole provider deliveries.
+The still-open exact map must retain both classes. Versioned policy closure, lazy topic absence and
+source-order delivery are separate authoring requirements. `[V]` `module-evidence-assembly.md`
+§Inspector successor: recorded is not live; authorized independent follow-up and named symbols.
+
 Complete-consumer acceptance coverage, 2026-10-15 ([[D3844]]): an actual valid semantic manifest
 and a filtered Inspector image expose missing accepted/bound set equality. Four predecessor
 failures become75 focused compiler passes;183 runtime/authenticated application cases and nine
