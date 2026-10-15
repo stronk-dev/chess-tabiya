@@ -932,3 +932,33 @@ source scope and actual used occurrences must enter their receipts; equal visibl
 erase scope. Old full-tip arms, payloads, conventions and upstream provider holds remain.
 Runtime admission, complete input grammar/identity, all other scoped sources, current permission,
 actual HTTP/client/native receiver proof and independent acceptance remain unimplemented.
+
+## Pivotal family preparation — 2026-10-15, D3829
+
+The existing four exact factories each called the combined pivotal producer before filtering
+one kind. Across the same seven legal fixture runs/28 exact route calls, that prepares phase828,
+irreversibility800, legal-count828 and human28. Four permanent actual-factory cases fail on
+unrequested phase/irreversibility/legality calls, not loading or empty positive fixtures. `[V]`
+(`packages/runtime/src/pivotal-evidence.test.ts`; `pivotal.ts` and `evidence-factories.ts` at
+2fd557b9; normal make test-pivotal-grounding predecessor result).
+
+The guarded family-specific model retains all45 emitted items' complete payloads, input values,
+value/convention receipts and saved-run images; graph/FEN corruption outcomes also match.
+The actual internal implementation then matches those same original images with preparation
+phase207, irreversibility200, legal-count207 and human7. Combined whole-tip rendering remains;
+the new helper is absent from the package barrel. All105 focused cases/types and the existing
+465-control/207-prefix source experiment pass. Only the research bundle forwards its endpoint
+through the refactored internal helper; production public inputs gain no endpoint or kind field.
+`[V]` (`tools/d3792-inspector-demand/build-pivotal-family.mjs`, `build-pivotal.mjs`;
+`packages/runtime/src/pivotal.ts`, `evidence-factories.ts`; normal Make outputs).
+
+These are detector-work and complete-output controls, not whole-app latency, independent chess
+qualification or a scoped Inspector source. The final frozen normal gates exit zero:5850 software,
+seven performance,257 content,328 browser smoke/five content/59 matrix/one packaged-production
+case, one configured optional Maia skip, no retries and112 composition cells. All84 graph/FEN
+corruption controls actually refuse. `[V]` normal Make outputs; matrix JSON expected59/skipped0/
+unexpected0/flaky0; `planning/exploration/log.md`. D3829 is a
+source-preserving implementation under accepted value-authority §3.4, not acceptance of D3792's
+different scope/occurrence/access contract. The current whole-tip shared-node distribution
+population and its exact retained source images remain unchanged. `[V]` same source/tests;
+`rfc/evidence-value-authority.md` §3.4 and `rfc/module-registration.md` draft §4.11a.

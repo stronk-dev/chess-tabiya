@@ -19,6 +19,15 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+D3829 is complete under accepted value-authority §3.4: exact pivotal factories now prepare
+only their own family rather than compute all four before filtering. Four original regressions
+become105 focused passes/types; the committed-baseline experiment retains complete45-item
+images across28 fixture-route calls while each family's preparation falls to one pass from
+four. All84 graph/FEN refusals and existing465 prefix/source controls remain. Full frozen normal
+verification/build/all four browser tiers exit zero:5850 software, seven performance,257 content,
+393 browser passes/one configured optional Maia skip,59 matrix and112 unretried composition cells.
+No public input, marker meaning, scoped Inspector or latency claim changes.
+
 D3792's comparison contract now names the exact two-prefix source and two scoped factory arms
 needed by Inspector, with scope/occurrence identity, old-arm compatibility and current receiver
 checks. The extended existing experiment passes 370 controls over 62 pairs, retaining 1,020
@@ -253,10 +262,10 @@ ten awaiting discharge and 24 draft documents; its 75 archived implementation re
 history, not 75 completed product journeys. All 1,732 live ledger rows are assigned, while 462
 historical closures still cite prose alone. No overall completion percentage is inferred.
 
-Current local checkpoint: D3828's accepted comparison-route correction is finished with complete
-normal verification/build/all four browser tiers exiting zero: 5,846 software, seven performance,
+Current local checkpoint: D3829's accepted pivotal preparation repair is finished with complete
+normal verification/build/all four browser tiers exiting zero: 5,850 software, seven performance,
 257 content and 393 browser passes, one optional Maia skip, zero retries and 112 composition cells.
-D3826/D3827's accepted pivotal grounding repairs and D3825's bounded scope research remain closed
+D3828's comparison repair, D3826/D3827's pivotal grounding and D3825's bounded scope research remain closed
 at their preceding checkpoint. Their original duplicate-checkpoint refusal and corrected
 remaining-gates run remain recorded.
 D3822/D3823's accepted calibration evidence-to-card repair is verified

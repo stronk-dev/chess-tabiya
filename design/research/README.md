@@ -75,6 +75,15 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+Pivotal per-family preparation, 2026-10-15 ([[D3829]]): **accepted-contract internal repair,
+verified locally**. Four permanent regressions reproduce unrelated detector work.
+The current implementation matches complete payload/input/value/convention images over28 calls/
+45 items, with per-family preparation one pass instead of four. Source/graph/FEN retention and
+the existing465 prefix controls remain. Full normal gates pass5850 software/seven performance/
+257 content and all browser tiers/112 unretried composition cells. See `module-evidence-assembly.md` §Pivotal family
+preparation and opt-in `make pivotal-family-research`. No whole-app latency, scoped permission,
+semantic qualification or whole capability promotion.
+
 Inspector comparison source/input contract, 2026-10-15 ([[D3792]]): **draft authoring,
 not accepted or delivered**. The current guarded prefix experiment retains 1,020 structural
 and fourteen eval-delta items over 62 pairs (370 controls). Ten old-arm receipt comparisons

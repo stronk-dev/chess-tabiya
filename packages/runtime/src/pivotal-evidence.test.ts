@@ -1,4 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import * as phaseSource from "./phase.js";
+import * as transitionSource from "./transition.js";
+import * as legalSource from "./legal-moves.js";
 
 import { evidenceForConsumer, evidenceValueReceipt, identitySealedEvidenceWithoutValueReceipt } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
@@ -18,6 +21,43 @@ const reviewItems = (run: ReturnType<typeof created>) => {
 };
 
 describe("pivotal marker consumer boundary", () => {
+  it.each(["irreversibility", "phase_change", "human_divergence", "option_collapse"] as const)("prepares only the declared %s family without changing its output", (kind) => {
+    let run;
+    if (kind === "irreversibility") run = commitMove(created("family-queen", "4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1"), "e2e7", { at }).run;
+    else if (kind === "phase_change") {
+      run = created("family-phase", "r2qk2r/8/8/8/8/8/8/R2QK2R w - - 0 1");
+      for (const move of ["d1d8", "e8d8"]) run = commitMove(run, move, { at }).run;
+    } else if (kind === "option_collapse") {
+      run = created("family-collapse", "8/3r3k/p3qr1p/1p5Q/8/P6R/1PP1p3/1K5R w - - 0 37");
+      for (const move of ["h1e1", "d7d1", "e1d1", "e2d1q"]) run = commitMove(run, move, { at }).run;
+    } else {
+      run = commitMove(created("family-human", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), "e2e4", { at }).run;
+      run = appendOpponentPly(run, { moveUci: "e7e5", policyModeApplied: "human_common",
+        candidates: ["e7e5", "c7c5", "e7e6", "c7c6", "d7d5"].map((moveUci, index) => ({ moveUci, rank: index + 1, mass: [.31, .24, .19, .16, .1][index]! })),
+        engine: { id: "family-source", name: "Synthetic family control", version: "test", seedHonored: false } }, { at }).run;
+    }
+    const branchId = run.activeCursor.branchId, saved = JSON.stringify(run);
+    const expected = pivotalMarkers(run, branchId).filter(marker => marker.kind === kind);
+    expect(expected.length).toBeGreaterThan(0);
+    const phase = vi.spyOn(phaseSource, "classifyPhase");
+    const irreversible = vi.spyOn(transitionSource, "irreversibility");
+    const legal = vi.spyOn(legalSource, "exactLegalMoves");
+    try {
+      const values = invokeEvidenceValueRoute(`derived.pivotal.${kind}@1`, { run, branchId });
+      expect(values.map(item => item.evidence.payload)).toEqual(expected);
+      for (const [wanted, source] of [["phase_change", phase], ["irreversibility", irreversible], ["option_collapse", legal]] as const) {
+        if (kind === wanted) expect(source.mock.calls.length).toBeGreaterThan(0);
+        else expect(source).not.toHaveBeenCalled();
+      }
+      expect(JSON.stringify(run)).toBe(saved);
+      for (const malformed of [
+        { ...run, nodes: [...run.nodes, run.nodes.at(-1)!] },
+        { ...run, nodes: run.nodes.map(node => node.id === run.nodes.at(-1)!.id ? { ...node, parentId: node.id } : node) },
+        { ...run, nodes: run.nodes.map(node => node.id === run.nodes.at(-1)!.id ? { ...node, fen: "invalid FEN" } : node) },
+      ]) expect(() => invokeEvidenceValueRoute(`derived.pivotal.${kind}@1`, { run: malformed, branchId })).toThrow();
+    } finally { vi.restoreAllMocks(); }
+  });
+
   it("grounds each shared-node human marker in its own exact recorded selection", () => {
     let run = commitMove(created("human-inputs", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), "e2e4", { at }).run;
     const shared = run.activeCursor.nodeId;

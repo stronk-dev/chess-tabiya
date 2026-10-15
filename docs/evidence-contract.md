@@ -32,6 +32,12 @@ arm (D3826), never the newest sibling's selection at the shared node. Copied ren
 have no producer-owned source operand. Existing whole-tip populations remain unchanged;
 this does not introduce the still-draft scoped Inspector source operation.
 
+Each of the four pivotal factories prepares only its own marker family. The shared internal
+producer retains complete original-path/FEN validation even for an empty family; phase,
+irreversibility, human-distribution and legal-count preparation no longer run for unrelated
+routes. The existing combined whole-tip rendering population and exact retained inputs remain.
+This changes neither the public factory arms nor the still-draft endpoint-scoped operation.
+
 Recorded comparison routes use the legal move's simultaneous physical relocations, including
 Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities
 are captured before either origin is cleared; a stationary actor adds no route segment. Later

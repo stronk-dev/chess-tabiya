@@ -29,6 +29,10 @@ for (const candidate of [false, true]) {
         };
         replace('export function pivotalMarkerPayloads(run: DrillRun, branchId: string): readonly PivotalMarker[] {',
           'export function pivotalMarkerPayloads(run: DrillRun, branchId: string, researchThroughNodeId?: string): readonly PivotalMarker[] {');
+        replace('function pivotalPayloads(run: DrillRun, branchId: string, kind: PivotalKind | undefined): readonly PivotalMarker[] {',
+          'function pivotalPayloads(run: DrillRun, branchId: string, kind: PivotalKind | undefined, researchThroughNodeId?: string): readonly PivotalMarker[] {');
+        replace('  return pivotalPayloads(run, branchId, undefined);',
+          '  return pivotalPayloads(run, branchId, undefined, researchThroughNodeId);');
         replace('  const path = branchPath(run, branchId), markers: PivotalMarker[] = [];', `
   const original = branchPath(run, branchId);
   const endpoint = researchThroughNodeId === undefined ? original.length - 1

@@ -561,6 +561,10 @@ test-pivotal-grounding:
 	$(MAKE) typecheck
 
 # Disposable source-owner model; no production scope operation or permission.
+.PHONY: pivotal-family-research
+pivotal-family-research:
+	$(CI_NODE) tools/d3792-inspector-demand/build-pivotal-family.mjs
+
 .PHONY: inspector-pivotal-source-research
 inspector-pivotal-source-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit

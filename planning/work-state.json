@@ -31870,6 +31870,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/compare.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3829",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:577ff5f7f2ca3ad981ad3bc25665f8d446be42a194565d681d516aaade84b025",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/pivotal-evidence.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

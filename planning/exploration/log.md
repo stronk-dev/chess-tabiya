@@ -29300,3 +29300,62 @@ Campaign was the one capability with no API, route or content. Now:
   lifecycle/roadmap/intent/tier/size checks pass. No product, pack, source receipt or ordinary
   software/browser fixture is edited in this authoring checkpoint. Commit only its explicit files;
   keep the three pre-existing untracked paths and all publication authority untouched.
+
+### 2026-10-15 — D3829 pivotal factory preparation, full verification pending
+
+- Prior goal turn is progress: 2fd557b9 lands the exact comparison-source draft and bounded
+  scope/identity evidence. Keep that amendment unaccepted and continue accepted foundation work.
+- Register D3829 before its experiment: all four exact pivotal factories prepare all four
+  detector families and only then filter one result. The usual new-row sync temporarily
+  reports W9; the explicit doing/evidence-foundation assignment restores zero untriaged.
+- The new opt-in source program reuses the existing seven legal fixture definitions, not a new
+  corpus or raw dump. A fixed 2fd557b9 baseline and guarded in-memory candidate have identical
+  complete values/input/value/convention receipts over28 calls/45 items and84 actual graph/FEN
+  corruptions. Preparation is phase828→207, irreversibility800→200, legal828→207, human28→7.
+  Counts concern payload preparation, not all provider/worker activity or whole-app latency.
+- Four permanent positive actual-factory regressions fail on unrelated detector calls;
+  101 other cases pass. Under accepted value-authority §3.4, refactor the internal producer
+  to one requested family per exact factory. Keep complete original graph/FEN validation,
+  old combined whole-tip rendering, output ordering, per-marker source retention and public
+  inputs. New internal helper is absent from the package barrel. No scoped operation/version.
+- Final focused normal make test-pivotal-grounding pivotal-family-research
+  inspector-pivotal-source-research semantic-validation-update exits zero:105 cases/types,
+  the same complete actual-production parity/preparation figures,84 non-vacuous refusals and
+  all465 existing prefix/source controls with zero crossed human inputs. Only its disposable
+  scope bundle forwards the endpoint through the refactored helper; production does not.
+  All343 semantic cases still pass over81 subjects, zero fully qualified; generated changes
+  are implementation/predicate stamps only. No authored pack or frozen migration is edited.
+- Update canonical docs, the accepted RFC checkpoint and existing dossier/coverage/roadmap.
+  D3829 remains doing until the full frozen normal gates finish. All1733 live items assigned,
+  UX282/263/24; the scoped source/occurrence/current-access/receiver amendments, D3300 cost
+  question, D3600 remote timing cause, content/calibration and whole1.0 gates remain open.
+  Freeze code, fixtures and consumed documents, then run normal full verification/build/all
+  browser tiers. No push, independent-review approval, owner-use discharge or goal pause.
+
+### 2026-10-15 — D3829 complete local proof and closeout
+
+- The complete frozen normal make roadmap-receipt verify-awake build test-browser-ci-awake
+  chain exits zero: 5,850 software cases/391 files, seven performance/four, 257 content/26,
+  clean types, packaging, governance and build; all four browser tiers pass. There are 329
+  smoke cases with the configured optional Maia arm disabled, five content, 59 matrix and one
+  packaged-production case: 393 passes, one optional skip, no retries. Matrix JSON confirms
+  expected59/skipped0/unexpected0/flaky0; all 112 required composition cells pass.
+- Do not overwrite the successful report with a list command. An auxiliary external printenv
+  read fails to fork; a shell-builtin read confirms the optional Maia flag is disabled. That
+  diagnostic is outside the successful Make chain, changes no input and is not filed as an
+  application/CI defect or used as evidence of a timing cause.
+- Close D3829 through its permanent actual-factory regression path. All four original unwanted-
+  work failures are retained; 105 focused cases/types, 28-route complete-image parity, 84
+  non-vacuous graph/FEN refusals and 465 stored-prefix/source controls pass. Detector work falls
+  by three quarters across those four requests, not a measured whole-app speedup. No pack,
+  projection/convention/public input, whole-tip population or source-retention meaning changes.
+- All 984 capability declarations remain compatible; the 352-document migration plan requires
+  zero edits or ledger re-stamps. Semantic changes are only 62 implementation/predicate stamps;
+  all 343 outcomes, 81 subjects and zero fully qualified remain. No frozen fixture is rewritten.
+- Refresh the same ledger/state/docs/RFC checkpoint and roadmap receipt. Live rows are 1,732,
+  all assigned (629 todo/17 doing/1,086 blocked), with 1,685 done/161 refused of 3,578 total.
+  UX remains 282 completed/263 live/24 retired. No whole capability/milestone, official graduate,
+  owner-use discharge or current-revision remote/release proof is promoted. Current scope,
+  recorded event occurrence, access/receiver and independent acceptance remain D3792 work.
+  Code/fixtures stay unchanged after the full pass; run final closeout/staged checks before
+  committing only the owned files. Nothing is pushed, published or deployed; goal stays active.

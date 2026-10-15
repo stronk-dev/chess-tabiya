@@ -633,6 +633,17 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15 — D3829 applies §3.4's separate families to source preparation, not only output
+  filtering. Each exact factory calls a module-internal requested-family producer; original
+  graph/FEN validation, combined whole-tip rendering, retained witnesses, public arms and all
+  meanings remain. Four permanent predecessor failures become105 focused passes/types; a
+  committed-baseline experiment preserves complete payload/input/value/convention images over
+  28 fixture-route calls while cutting each detector family's preparation to one pass instead
+  of four, with84 non-vacuous graph/FEN refusals. Full frozen normal verification/build/all
+  browser tiers pass:5850 software, seven performance,257 content,59 matrix and112 unretried
+  composition cells. No scoped authority, latency or qualification claim, new register/version
+  or whole-RFC discharge follows.
+
 - 2026-10-15 — D3826/D3827 repair the accepted §3.4 implementation: retain each human marker's
   own recorded engine/candidate image through the already-declared page arm, two definite phase
   readings/occurrences and three same-side mobility readings/occurrences. Marker meanings,

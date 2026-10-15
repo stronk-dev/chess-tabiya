@@ -54,32 +54,49 @@ function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly Pivot
   });
 }
 
-/** Pure pivotal-marker population: the producer operation behind the four derived.pivotal routes. */
-export function pivotalMarkerPayloads(run: DrillRun, branchId: string): readonly PivotalMarker[] {
+/** Shared source implementation; each exact factory prepares only its own declared family. */
+function pivotalPayloads(run: DrillRun, branchId: string, kind: PivotalKind | undefined): readonly PivotalMarker[] {
   const path = branchPath(run, branchId), markers: PivotalMarker[] = [];
   let lastDefinite: Exclude<DetectedPhase, "unclear"> | undefined;
   for (let index = 0; index < path.length; index += 1) {
     const node = path[index]!;
-    const phase = classifyPhase(node.fen).phase;
-    if (DEFINITE.has(phase)) {
-      const definite = phase as Exclude<DetectedPhase, "unclear">;
-      if (lastDefinite !== undefined && definite !== lastDefinite) markers.push(Object.freeze({ nodeId: node.id, kind: "phase_change", detail: Object.freeze({ from: lastDefinite, to: definite }), provenanceNote: PROVENANCE }));
-      lastDefinite = definite;
+    // Every route retains original path/FEN validation even when its own family has no witness.
+    positionFromFen(node.fen);
+    if (kind === undefined || kind === "phase_change") {
+      const phase = classifyPhase(node.fen).phase;
+      if (DEFINITE.has(phase)) {
+        const definite = phase as Exclude<DetectedPhase, "unclear">;
+        if (lastDefinite !== undefined && definite !== lastDefinite) markers.push(Object.freeze({ nodeId: node.id, kind: "phase_change", detail: Object.freeze({ from: lastDefinite, to: definite }), provenanceNote: PROVENANCE }));
+        lastDefinite = definite;
+      }
     }
     const parent = index === 0 ? undefined : path[index - 1];
-    if (parent !== undefined && node.moveUci !== null) { const detail = irreversibility(parent.fen, node.moveUci, node.fen); if (detail !== undefined) markers.push(Object.freeze({ nodeId: node.id, kind: "irreversibility", detail: Object.freeze(detail), provenanceNote: PROVENANCE })); }
+    if ((kind === undefined || kind === "irreversibility") && parent !== undefined && node.moveUci !== null) { const detail = irreversibility(parent.fen, node.moveUci, node.fen); if (detail !== undefined) markers.push(Object.freeze({ nodeId: node.id, kind: "irreversibility", detail: Object.freeze(detail), provenanceNote: PROVENANCE })); }
   }
-  const decisions = path.map((node) => ({ node, color: positionFromFen(node.fen).turn, count: legalCount(node.fen) }));
-  for (const color of ["white", "black"] as const) {
-    const same = decisions.filter((item) => item.color === color);
-    for (let index = 1; index + 1 < same.length; index += 1) {
-      const prior = same[index - 1]!, first = same[index]!, second = same[index + 1]!;
-      if (prior.count >= 8 && first.count <= 3 && second.count <= 3) markers.push(Object.freeze({ nodeId: first.node.id, kind: "option_collapse", detail: Object.freeze({ color, priorCount: prior.count, count: first.count, nextCount: second.count }), provenanceNote: "Tabiya's sustained legal-continuation convention." }));
+  if (kind === undefined || kind === "option_collapse") {
+    const decisions = path.map((node) => ({ node, color: positionFromFen(node.fen).turn, count: legalCount(node.fen) }));
+    for (const color of ["white", "black"] as const) {
+      const same = decisions.filter((item) => item.color === color);
+      for (let index = 1; index + 1 < same.length; index += 1) {
+        const prior = same[index - 1]!, first = same[index]!, second = same[index + 1]!;
+        if (prior.count >= 8 && first.count <= 3 && second.count <= 3) markers.push(Object.freeze({ nodeId: first.node.id, kind: "option_collapse", detail: Object.freeze({ color, priorCount: prior.count, count: first.count, nextCount: second.count }), provenanceNote: "Tabiya's sustained legal-continuation convention." }));
+      }
     }
   }
-  markers.push(...divergence(run, new Set(path.map((node) => node.id))));
+  if (kind === undefined || kind === "human_divergence") markers.push(...divergence(run, new Set(path.map((node) => node.id))));
   const order = new Map(path.map((node, index) => [node.id, index]));
   return Object.freeze(markers.sort((a, b) => (order.get(a.nodeId)! - order.get(b.nodeId)!) || a.kind.localeCompare(b.kind)));
+}
+
+/** Unchanged whole-tip population for rendering and existing complete-source callers. */
+export function pivotalMarkerPayloads(run: DrillRun, branchId: string): readonly PivotalMarker[] {
+  return pivotalPayloads(run, branchId, undefined);
+}
+
+/** Factory-internal selection, not a scoped path, public package export or permission. */
+export function pivotalMarkerPayloadsForKind(run: DrillRun, branchId: string, kind: PivotalKind): readonly PivotalMarker[] {
+  if (!Object.hasOwn(PIVOTAL_MARKER_ROUTES, kind)) throw new TypeError("Unknown pivotal source family");
+  return pivotalPayloads(run, branchId, kind);
 }
 
 /** Rendering-model population (not evidence). Evidence consumers use `pivotalMarkerEvidenceItems`. */

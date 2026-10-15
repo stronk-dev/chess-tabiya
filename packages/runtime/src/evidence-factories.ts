@@ -48,7 +48,7 @@ import { gradeReadingFromPayload } from "./grade-reading.js";
 import { pieceDestinationEvents, pieceDestinationsReading } from "./mobility.js";
 import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReading, pawnContactTimingSequence, pawnDynamicsEvents, pawnTransitionEvents, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { developmentReading, phaseBandReading } from "./phase.js";
-import { pivotalMarkerPayloads, pivotalMarkerRecordedSelection, type PivotalKind, type PivotalMarker } from "./pivotal.js";
+import { pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, type PivotalKind, type PivotalMarker } from "./pivotal.js";
 import { RECORDED_EDGE_FACTORY, recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
 import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 import {
@@ -1320,7 +1320,7 @@ function pivotalFactory(kind: PivotalKind): EvidenceValueFactory<{ readonly run:
   return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, branchId: value("a branch id", isText) }], result: "items", dependency: kind === "human_divergence" ? "provider-exchange-and-execution" : "recorded-semantic-path", pending: kind === "human_divergence" ? "The Maia distribution is the run's recorded opponent selection; the model exchange receipt lands with provider-exchange-and-execution." : RUN_PENDING }, ({ run, branchId }: { readonly run: DrillRun; readonly branchId: string }) => {
     const path = branchPath(run, branchId);
     const byId = new Map(path.map((node, index) => [node.id, { node, index }]));
-    return Object.freeze(pivotalMarkerPayloads(run, branchId).filter((marker) => marker.kind === kind).map((marker) => {
+    return Object.freeze(pivotalMarkerPayloadsForKind(run, branchId, kind).map((marker) => {
       const located = byId.get(marker.nodeId)!;
       const position = createRunRecordPositionV1Evidence({ run, nodeId: marker.nodeId });
       let inputs: DeclaredEvidence<unknown>[];
