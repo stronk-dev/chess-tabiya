@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3859]] · **Machine map:**
+2026-10-15 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3860]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,24 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+D3851 is now ruled: no pre-launch legacy compatibility. Retire obsolete narrative/vector/API
+paths instead of maintaining dual pipelines or frozen helper vocabularies; retain every detector
+family and migrate real consumers to correct sources.14 inventory controls preserve sequence
+families while conditionally mapping Nudge52→52, Review85→74 and Inspector75→65 plus six detail
+refs. Independent read-only tracing confirms these ten Inspector duplicates and the vector
+retirement boundary. Actual source/grade/adapter/window delivery and acceptance remain owed;
+this is a simpler migration scope, not completed cleanup or permission to erase user data.
+
+D3859's full current-module census now measures Nudge51/52, Review81/85 and Hint35/35 individually
+executable; only Hint's complete strict consumer compiles. Conditional proposed Inspector rebases
+still leave grade unresolved. D3860 exposes one declared versus two retained grade operands and
+12 mixed-projection outputs among24 synthetic-report cases, despite the accepted never-mix rule.
+Current actual module callers use packet/packet; this is not proof of bad live learner grades.
+Next author the paired source/edge/context contract and consistent Review accuracy routing, then
+the complete coordinated image/scoped Review adapters and independent joint review. Report-only
+Inspector packets cannot automatically ground grade words. Old APIs/history remain; source-local
+absence cannot suppress otherwise useful modules. No whole milestone or capability promotion.
 
 D3857 complete opening history and D3858 sparse Explorer status now have authored corrections
 with independent bounded wording checks. History@2 retains complete positions/matched and

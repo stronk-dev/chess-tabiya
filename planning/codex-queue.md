@@ -1,5 +1,32 @@
 # Codex queue — rewritten in full 2026-08-16
 
+**Current owner ruling, 2026-10-15 — D3851:** “zero legacy required. we are pre launch. make it
+all right.” This supersedes the compatibility/pipeline-preservation instructions below. Build
+one correct current foundation; migrate real consumers and remove obsolete narrative/vector/
+API/adapter paths. Do not build frozen compiler1 helper vocabularies or dual consumer images
+solely to support hypothetical old users. Keep every detector family/useful feature, correct
+source authority/access and real current bot/Hint/pack consumers. Existing versions identify
+meaning, not an obligation to run every predecessor forever. Audit concrete stored formats
+separately; no data/archive/log deletion follows from a code compatibility ruling. D3853 now
+owns retirement/caller migration rather than compatibility freeze. Update complete source and
+module-image counts from the deduplicated target, not the old75+6 baseline; obtain independent
+review before implementing unaccepted source contracts. D3851 is answered, not an owner blocker.
+
+2026-10-15 — D3859 now has a complete current-source census, not a successor implementation:
+28 controls measure Nudge51/52, Review81/85 and Hint35/35 individually executable; only Hint's
+whole consumer compiles. Applying Inspector's proposed source map conditionally still leaves
+grade blocked. D3860's24 actual old-factory outputs over synthetic reports retain two operands
+against one declared per alternative;12 cross-projection pairs pass despite the accepted
+never-mix rule. Actual current module callers use packet/packet, not those mixed pairs.
+Next author the paired grade/source contract: two ordered same-origin operands, genuine
+modern attached-job delivery or admitted ledger authority, actual edge/mover/context, unchanged
+grading arithmetic and source-local absence. Report-only Inspector packet projections expressly
+do not authorize grade words. Route Review accuracy/evaluation consistently; keep legacy APIs/
+receipts distinct. Then publish the complete coordinated module and scoped Review adapter image,
+obtain independent joint review and only implement accepted contracts. No source-name alias,
+deleted alternative, generic hold or new provider call can stand in for this. D3851 remains an
+owner choice in the earlier review; the subsequent owner ruling above now answers it.
+
 2026-10-15 — D3857/D3858 corrections are authored and independently bounded-reviewed, not
 implemented/accepted. Installed-opening §3a/F2 §2.3k add history@2 over complete recorded positions
 and actual matched/negative lookups, one fourth exact reduction binding and authentic empty

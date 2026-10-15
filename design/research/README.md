@@ -75,6 +75,25 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D3851 owner ruling, 2026-10-15: no pre-launch legacy compatibility required.14 additional
+disposable controls preserve every current sequence family while conditionally mapping
+Nudge52→52, Review85→74 and Inspector75→65 source refs. Trade retains recorded@2; ten other
+families have real recorded@2 paths and proposed@3 repairs. The independent reviewer confirms
+the ten Inspector duplicates and small obsolete vector chain; current shared child readings
+remain. Actual source/caller/adapter migration and complete acceptance are not proved by this
+inventory. `[V]` `module-evidence-assembly.md` §Pre-launch compatibility ruling and exact retirement
+inventory; `module-source.ts`; dated independent review. Earlier pending-D3851 entries are historical.
+
+Complete module-source census and grade origins, 2026-10-15 ([[D3859]]/[[D3860]]):28 controls
+measure current Nudge51/52, Review81/85 and Hint35/35 individually executable, with complete
+Hint compilation. Conditional proposed Inspector replacements leave grade unresolved.24 actual
+old-factory outputs over explicitly synthetic reports have two ordered inputs versus one
+declared;12 mixed-projection pairs pass despite the accepted never-mix contract. Current module
+callers use packet/packet; this is not evidence of bad live grades. Independent read-only tracing
+requires paired exact source/edge/context and Review accuracy routing, not a provider alias or
+whole-module hold. `[V]` `module-evidence-assembly.md` §Complete module source census and paired
+grade authority; `tools/d3792-inspector-demand/module-source.ts`; dated independent review.
+
 Opening history and sparse Explorer authoring, 2026-10-15 ([[D3857]]/[[D3858]]): installed-opening
 §3a/F2 §2.3k propose history@2 with complete positions/matched and negative lookup authority,
 authentic empty results and the fourth exact reduction binding; old@1 stays. Inspector source

@@ -2,7 +2,7 @@
 // positions, not the proposed source issuer, successor factory, access grant or Inspector API.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { compileLoadedOpeningCatalogue, deepestOpeningReached, type OpeningCatalogueAvailability } from "../../apps/server/src/opening-catalogue.js";
+import { compileLoadedOpeningCatalogue, deepestOpeningReached, recordedOpeningPosition, type OpeningCatalogueAvailability } from "../../apps/server/src/opening-catalogue.js";
 import { branchPath, commitMove, rewind, fork, type DrillRun } from "../../packages/runtime/src/index.js";
 import { importedRun, play, REVIEW_AT } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
@@ -22,10 +22,13 @@ export function runOpeningSourceResearch() {
     const end = path.findIndex(node => node.id === throughNodeId);
     assert(end >= 0, "through-node is not on branch");
     const rows = path.slice(0, end + 1).map(node => {
-      const position = invokeEvidenceValueRoute("run.record.position@1", { run: input, nodeId: node.id }) as DeclaredEvidence<{ projectionId: "run.record.position@1"; nodeId: string; ply: number; fen: string }>;
+      const position = invokeEvidenceValueRoute("run.record.position@1", { run: input, nodeId: node.id }) as DeclaredEvidence<{ nodeId: string; ply: number; fen: string }>;
       return { node, position, lookup: catalogue.currentEndpoint(node.fen, node.ply) };
     });
-    const history = deepestOpeningReached(available, rows.map(row => row.position.payload));
+    // The legacy pure helper takes a different raw position envelope. Construct that real
+    // envelope explicitly; do not pretend its projectionId exists inside a sealed position.
+    const history = deepestOpeningReached(available, rows.map(({ position }) =>
+      recordedOpeningPosition(position.payload.nodeId, position.payload.ply, position.payload.fen)));
     return { rows, history, image: { runId: input.id, branchId, throughNodeId, catalogue: catalogue.ref,
       rows: rows.map(({ node, position, lookup }) => ({ nodeId: node.id, position: evidenceValueReceipt(position), lookup })) } };
   }

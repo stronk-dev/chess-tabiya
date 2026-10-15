@@ -186,6 +186,19 @@ request, model digest or response, fails before minting.
 
 #### 2.3a Draft D3841 recorded Inspector source successors — unaccepted
 
+**D3851 owner scope amendment, 2026-10-15:** Marco rules “zero legacy required. we are pre
+launch. make it all right.” For the current migration this supersedes predecessor API/receipt
+compatibility and separate narrative-pipeline preservation requirements in §§2.3a–2.3k, including
+§2.3f's frozen-vector helper prerequisite and §2.3j's pending scope question. Retire obsolete
+source/callable/adapter paths after migrating actual consumers; do not build parallel legacy
+registries or retain an API for hypothetical external users. Every semantic detector family and
+real current bot/Hint/pack consumer still needs correct source authority and behavior. Versioned
+meanings remain truthful while registered; never relabel old bytes as stronger evidence. The
+complete deduplicated source/consumer image must be authored and independently reviewed, not
+inferred by dropping failed bindings. No source/joint acceptance, blanket data migration, database
+wipe, archive edit or removal of meaningful source/access tests follows. D3853 now owns concrete
+retirement/caller migration; D3859/D3860 still own paired grade/source repair.
+
 This subsection is proposed source authoring for module-registration §4.11a, not authority from
 this parent's awaiting status. Current provider projections/factories and recorded ledger
 readings remain unchanged. These new sources report actual historical records; they do not
@@ -871,39 +884,35 @@ closure is exactly those three refs. The new convention uses the accepted later-
 reviewed_text disclosure above, not the initial-migration-only definition_and_limitations arm.
 The two retained input conventions keep their existing disclosures. The fresh base
 avoids automatic witnessed predecessor inheritance. No old fork convention token belongs in the
-new catalogue semantics/limitations, and no F1/closure relaxation is authorized. Earlier source
-APIs and declarations remain present for compatibility; old evidence cannot be relabelled new.
+new catalogue semantics/limitations, and no F1/closure relaxation is authorized. Under D3851,
+obsolete source APIs/declarations may retire after actual callers migrate; old evidence cannot
+be relabelled new.
 
 **Complete current-delivery image.** These coordinated companion amendments are required for
 acceptance and implementation, not optional follow-up polish:
 
-| Existing current path | Proposed current disposition | Historical disposition |
+| Existing current path | Proposed current disposition | Pre-launch retirement duty |
 |---|---|---|
-| Candidate population reading.fork_survival | Shared packet §3.1a: compiler2 constructs only the new source for that slot and its genuine same-edge inputs | compiler1 receipts remain original, never admitted as compiler2 or rewritten |
-| Guided Hint fork family | Hint-distance §3a: fork-only horizon@2/five disclosures@2, compiler@2 and exact module.guided_hint@2; other six families retain current refs | old horizon/disclosures/compiler receipts/renderer remain readable, no fallback new request to old fork |
-| Nudge and Review Map direct fork bindings | module.postcommit_nudge@2 and module.review_map@2 replace only their old fork acceptance with the new ref, under unchanged logical module policy/seat/budgets | all @1 receipts/adapters remain; no duplicate logical modules or controls |
-| Full Inspector | existing proposed module.full_inspector@2 replaces this topic with the new ref and same-edge supplier | all75 topic obligations and all old source receipts remain; no retirement |
-| Exported candidate_feature_vector@1/opponent.selection@1 path | Explicit legacy-only callable, not a current repaired bot/vector path; no new production caller may select it for this predicate | old API/output remains exact; no unmeasured stored-record rewrite or predicate-history rebuild |
+| Candidate population reading.fork_survival | Shared packet §3.1a: compiler2 constructs only the new source for that slot and its genuine same-edge inputs | Migrate actual current callers and retire compiler1-only API/cache/admission paths, not retain parallel construction |
+| Guided Hint fork family | Hint-distance §3a: fork-only horizon@2/five disclosures@2, compiler@2 and current module.guided_hint@2; other six families retain current refs | Retire predecessor-only horizon/disclosure/compiler/renderer paths; no fallback to the vacuous old fork |
+| Nudge and Review Map direct fork bindings | Current module.postcommit_nudge@2 and module.review_map@2 use this ref within D3859's complete source image under unchanged logical policy/seat/budgets | Migrate actual consumers and retire obsolete module/API/adapters; not a fork-only replacement retaining blocked sources |
+| Full Inspector | Current proposed module.full_inspector@2 uses this ref and same-edge supplier within the deduplicated65-topic/six-detail image | Remove duplicate narrative representations while retaining every detector family and complete source requirements |
+| Exported candidate_feature_vector@1/opponent.selection@1 path | Retire the unused vector chain; migrate any actual caller to the correct current source | Keep opponent.selection's other actual consumers/shared child readings; no compatibility-only frozen vocabulary |
 
-The last row is not a replacement vector contract or permission to retire its accepted obligations.
-D3847 still owns its variable literal-input reconciliation before a new vector source or production
-adoption. Inventory exact callers and stored occurrences before any later migration. The repository
-search found no production caller of the exported server vector wrapper; this does not prove no
-external caller, computed alias or stored occurrence exists. A release cannot claim complete repaired
-bot evidence from this compatibility row. New paths fail closed on an unexpected old source rather
-than silently repackaging it. D3768 is not closed merely by the Inspector replacement.
+The last row retires an obsolete representation, not real bot feature obligations. D3847 still
+owns literal-input reconciliation in any actual current vector/source consumer. The wrapper
+search found no production caller; under the owner's pre-launch ruling hypothetical external
+consumers do not create a preservation requirement. Actual stored-data changes require a concrete
+separate plan, not automatic rewriting or erasure. Current paths fail closed on unexpected old
+source values instead of repackaging them. D3768 is not closed merely by the Inspector replacement.
 
-D3853 is an actual compatibility prerequisite: candidateCollectorIds currently intersects old
-vector IDs with the current packet's generated closure, and candidateCollectorResults also calls
-the shared candidateChildReadings. Before changing that closure, give the legacy vector its
-frozen **exact-ref** compiler1 local collector vocabulary and old child-reading entry point;
-retain genuine old result/source order, old pure/factory outputs and full receipts. Do not strip
-versions then admit whichever current source shares a base id. Current packet/generator and
-Hint use the current vocabulary only; the legacy source never calls that mutable lookup. Preserve
-shared pure calculations where their behavior is identical, not a fork of chess algorithms.
-Test an old vector fixture that actually has double attack/fork and a child reading, its old
-closure with the new current vocabulary present, and refusal of either substituted current ref.
-No duplicate source seal, copied old receipt or broadened old manifest declaration is permitted.
+D3853 is now a retirement/caller-migration prerequisite under the owner scope ruling, not a
+compatibility freeze. Inventory the exported wrapper, central invoker/factory, collector and
+child-reading callers. Remove unused vector/source/adaptor compatibility paths; migrate real
+bot/Hint/pack consumers to the correct current source. Keep shared correct chess arithmetic and
+meaningful complete-population/source-authority tests. Do not build a frozen compiler1 vocabulary,
+parallel child-reading entry point, duplicate source seal or broadened old declaration merely
+to preserve the retired API. D3847 still owns any literal-input defect in actual current consumers.
 
 **Truthful direct presentation.** Register inspector.nonterminal_fork_survival@1 as a new exact
 fact-statement renderer and pair it with the new source for the three direct module successors.
@@ -1410,9 +1419,12 @@ global inheritance or union unused conventions. Actual child closures still inhe
 
 Register all ten exact refs, sole factories, central invoker routes, semantic event constructors,
 scoped evaluator rows, authority profiles and exact module/presentation pairs explicitly. Existing
-old full-path/Review calls remain @2 until separately migrated. The proposed new Inspector image
-replaces ten recorded@2 slots with these @3 slots, retaining ten independent narrative@1 topics
-pending D3851; this proposal neither chooses that scope ruling nor discharges their source repair.
+old full-path/Review calls must migrate to the correct current source as part of the complete
+consumer image. Under D3851's owner ruling, replace the ten recorded@2 slots with these @3 slots
+and remove their duplicate narrative@1 topics. Nudge's narrative-only family slots must instead
+receive the corresponding recorded source, not disappear. Trade retains its separately correct
+recorded source; it is not one of these ten new factories. No parallel narrative input pipeline
+or compatibility-only old factory/API is required. Preserve every family and genuine source joins.
 Module-registration owns missing/available/empty window delivery and current source/access checks.
 No D3845 variable-reduction arm, provider request, persisted schema or automatic qualification.
 
@@ -1978,6 +1990,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-10-15 — D3851 owner rules no pre-launch legacy compatibility. Supersede dual narrative/
+  recorded delivery and frozen-vector preservation obligations; D3853 owns concrete retirement/
+  caller migration. Keep every detector family, truthful source meanings and actual current
+  bot/Hint/pack consumers. Independent source/joint acceptance remains required; no data wipe.
 - 2026-10-15: unaccepted D3857 §2.3k specifies additive deepest-opening@2, one exact fourth
   reduction binding, complete recorded positions/matched and negative lookup authority,
   authentic empty result and old@1 compatibility. Installed-opening owns the source issuer

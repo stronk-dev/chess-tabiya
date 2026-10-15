@@ -435,12 +435,21 @@ new aggregate evidence leaf. Packets are process-local: do not fabricate persist
 migrations, rewrite authored packs or rebuild longitudinal semantic events for this change.
 Retain predecessor fixtures/old source APIs and the exact compiler1 identity/construction evidence.
 
-D3853's legacy vector must not derive its allowed IDs or child-reading version dispatch from this
-new current closure. Freeze its exact compiler1 collector vocabulary and old child-reading arm,
-with genuine full output/receipt preservation; a declaration-only legacy label is insufficient.
-Keep common unchanged pure calculations shared. Test the old fork-producing vector with current
-compiler2 installed, and reject injecting the new fork into the old vector. This is preservation
-of an existing API, not a new vector version or current bot capability.
+**D3851 owner scope amendment, 2026-10-15:** “zero legacy required. we are pre launch. make it
+all right.” The earlier frozen-vector compatibility requirement and this draft's predecessor
+API/receipt coexistence requirements are superseded for current delivery. D3853 instead inventories
+and retires obsolete vector/wrapper/adapter paths, migrating actual bot/Hint/pack callers to the
+correct source-owned foundation. Share correct calculations; do not create compiler1-only helper
+registries for compatibility. Keep full current source/semantic populations, actual input authority,
+terminal-fork correction, truthful versioned meanings and meaningful current behavior tests. Exact
+current source/consumer contracts still need independent acceptance before implementation; no data
+wipe, manufactured modern source or dropped detector family follows from removing compatibility.
+
+Inventory the actual vector wrapper, central invoker, factory, collector and child-reading callers
+before removal. Migrate real callers to the current source-owned packet; remove unused compatibility
+exports/registrations/adapters and tests whose sole purpose was preserving retired behavior. Keep
+tests that prove actual current full populations, authority, fork semantics and Hint/bot integration.
+No frozen compiler1 vector vocabulary or parallel old child-reading arm is required.
 
 Acceptance requires actual three-scope construction, complete equal nonfork populations, terminal
 false/nonterminal equality, correct retained object identity under narrowing, exact new generated
@@ -1668,6 +1677,9 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-10-15 — D3851 owner rules no pre-launch legacy compatibility. Replace D3853's frozen
+  vector vocabulary/child-helper plan with actual caller migration and obsolete-chain retirement;
+  retain shared current calculations, full source populations and meaningful bot/Hint tests.
 - 2026-10-15: unaccepted D3768/D3847 §3.1a specifies current compiler2 nonterminal-fork
   construction, exact slot/narrowing closure and old compiler1 identity/admission separation.
   No persisted migration, source relabelling, vector completion or implementation acceptance.

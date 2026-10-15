@@ -821,3 +821,49 @@ source/request joins, null paging/receipt correlation, no fact-renderer call bel
 preservation of old corpus APIs/floors. No tests/edits/source acceptance. Main separately passes
 30 disposable shape/population/digest controls, not actual source issuance/response/client/native
 proof. D3859, exact scoped Review adapters, D3851 and joint acceptance remain open.
+
+## D3859/D3860 independent source and grade tracing — 2026-10-15
+
+The authorized reviewer inspects the upstream coordinated module/grade contract read-only.
+No tests, edits, version selection or acceptance occur. Main separately exercises28 complete
+current-module controls and24 old-factory outputs over synthetic reports. The latter are not
+actual engine measurements;12 mixed-projection outputs demonstrate behavior, not accepted
+successor obligations. Actual Nudge/Review callers use packet/packet at parent/child, not ledger
+or mixed pairs. The catalogue's one occurrence per alternative contradicts the accepted grade
+contract's two ordered occurrences and same-lane rule.
+
+Required repair: a paired successor with exact before/after same-origin members, source-owned
+actual legal edge/full FEN/occurrence/head/grant/mover/context, and genuine admitted ledger or
+modern attached-job whole-delivery joins. Durable Stockfish §4 already owns the modern resolver;
+no new analysis, arbitrary job lookup or v1-to-modern promotion. F2 §2.3a's report-only Inspector
+packet projections expressly exclude grading, so they cannot automatically become grade inputs.
+New historical-report grading would require separately authored meaning/authority/disclosure.
+
+Keep arithmetic, typed mates, thresholds, below-threshold empty output and abstention distinct;
+preserve old factories/helpers/renderers/receipts. New grade absence must remain source-local,
+not a whole-module hold. Review accuracy/evaluation routing must not retain incompatible source
+semantics silently. This supplies concrete author constraints, not a completed successor image,
+new source authority, independent acceptance or an answer to D3851's owner scope question.
+
+## Subsequent D3851 owner ruling and independent retirement tracing
+
+The owner subsequently answers “zero legacy required. we are pre launch. make it all right.”
+This supersedes this review's earlier compatibility requirements and pending-scope statements.
+It does not change the review's source-truth findings or grant joint acceptance.
+
+Read-only follow-up confirms ten narrative@1 Inspector refs, each with a real recorded@2 path
+and authored@3 tuple repair: contact timing, harassment pressure, defender consequence, square
+clearance, line-blocker clearance, interference, check zwischenzug, overload exploitation,
+deflection and attraction. Trade is separately recorded@2 with capture/capture/edge/edge inputs;
+it is not currently an Inspector topic. Removing only duplicate representations gives65+6
+conditional Inspector refs. Main's separate14-control inventory also measures Nudge52→52 and
+Review85→74, preserving nine/eleven families respectively. The reviewer performs no tests.
+
+Retirement must remove obsolete narrative declarations/factories/invokers/event exports and
+presentation bindings together, migrate actual emitters/adapters and never relabel narrative
+payloads as recorded facts. Nudge's current one-edge supplier needs an explicit source-owned
+window contract before multi-move delivery; changing its accepted refs is not supplier adoption.
+The unused vector wrapper→operation→factory→collector chain can be retired instead of frozen.
+Keep the rest of opponent.selection and the shared candidateChildReadings used by current
+candidate packets. Actual bot/Hint/pack consumers, source quality/access and recorded data remain.
+No edits, tests or acceptance by the reviewer; no data/archive deletion or completed cleanup claim.

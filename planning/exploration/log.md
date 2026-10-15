@@ -30830,3 +30830,66 @@ Campaign was the one capability with no API, route or content. Now:
  1743 live and zero untriaged; D3857/D3858 remain doing, not completed by their proposals.
   Stage the17 explicit owned contract/research/tracking files and inspect the cached names/
   diff before normal commit hooks. No push, source qualification or whole milestone promotion.
+
+### 2026-10-15 — D3859 complete module census and D3860 paired grade source discrepancy
+
+- Continue the active full1.0 goal, using the separately authorized Inspector reviewer only for
+  read-only upstream contract tracing.28 disposable current-source controls traverse every input
+  alternative: Nudge51/52, Review81/85 and Hint35/35 individually executable. Only complete Hint
+  compiles. Conditional Inspector map substitutions still leave grade blocked; a recorded-only
+  counterfactual compiles but is explicitly not a lawful deletion of an accepted alternative.
+-24 actual old grade factory outputs over synthetic reports cover both movers/three contexts/
+  four ref pairs. Each retains two source digests versus one declared per alternative;12 mixed
+  pairs pass because the reader normalizes both wrappers to recorded. The accepted grade
+  contract requires same-lane pairs/two ordered occurrences. Record D3860 immediately and assign
+  it with D3859 to evidence-foundation/doing; work-state's new-row refusal clears after assignment.
+  Actual current Nudge/Review callers use packet/packet, so do not claim measured engine truth
+  or prove bad live learner grades from this synthetic cross-origin experiment.
+- Independent tracing requires a paired source/edge/mover/context successor with admitted ledger
+  or modern actual attached-job whole-delivery joins, unchanged arithmetic and source-local
+  absence. Report-only Inspector packet sources cannot automatically ground grade words. Review
+  accuracy/evaluation needs consistent routing. No tests, edits, version choice or acceptance by
+  the reviewer; no source authority or D3851 answer follows from review authorization.
+- The first cp fixture wrongly included mateIn:null and was corrected to the actual reader's
+  valid shape. The opening probe now explicitly adapts the legacy helper envelope instead of
+  asserting projectionId on a real sealed position. These are fixture corrections, not production
+  bugs. Normal prefix research passes the new controls and all existing source controls.
+- The normal focused move-grade-consumer-check initially cannot listen on127.0.0.1 in sandbox;
+  this is a permission refusal, not a code test failure. Rerun the unchanged Make target with
+  explicit local-listener permission, retaining deadlines/assertions. Record its actual result
+  below before commit. No fresh full software/content/browser/remote-CI proof or release promotion.
+- Permissioned unchanged make move-grade-consumer-check exits zero:127 cases/five files,
+  workspace types and zero Svelte errors/warnings. No assertions/deadlines/contexts changed.
+
+### 2026-10-15 — D3851 owner removes pre-launch compatibility requirement
+
+- Marco answers the exact pipeline/coexistence question: “zero legacy required. we are pre
+  launch. make it all right.” Record D3851 as a completed scope decision with this path evidence,
+  not completed implementation. New learner delivery uses the correctly sourced recorded-move
+  foundation for all existing detector families. No hypothetical old API/external caller is a
+  reason to maintain dual pipelines, frozen compiler1 vocabularies or compatibility-only code.
+- D3853 changes from freeze/preserve to actual caller migration and obsolete vector-chain
+  retirement. The authorized independent reviewer confirms the small unused wrapper→operation→
+  factory→collector chain and ten duplicated Inspector narrative topics. Keep opponent.selection
+  and candidateChildReadings used by current packets; remove obsolete exports/registrations/
+  adapters together. No payload relabel, dropped family, forged modern source, database wipe,
+  archive edit or log erasure is authorized. Current source/access and review gates still hold.
+-14 disposable inventory controls preserve exact current sequence-family coverage/nonsequence
+  topics while conditionally mapping Nudge52→52/nine families, Review85→74/eleven and
+  Inspector75→65/ten. Six Inspector detail refs remain separate. Trade retains its real
+  capture/capture/edge/edge@2 source, not an invented eleventh@3. Nudge replaces narrative-only
+  slots and still needs an explicit granted-prefix/window source contract; its one-edge supplier
+  does not acquire multi-move evidence through a registry edit.
+- Active F2/module/packet drafts record the owner's superseding scope and remove the proposed
+  frozen-vector work. Complete current image, paired grade/source/accuracy routing, scoped
+  Review adapters and source-native proof remain open; no independent joint acceptance or
+  production cleanup is claimed. The reviewer performs no edits/tests/acceptance.
+- The first retirement probe inferred only@3 map values and failed TypeScript when adding
+  trade@2; explicitly typing the inventory map corrects the research fixture. Final normal
+  prefix research exits zero with all14 retirement/28 module/24 grade controls and prior checks.
+  Record the ruling in the ledger/state/roadmap/queue, refresh the compact receipt/governance
+  and stage only explicit owned files before commit. The1.0 goal remains active; no push.
+- Final make roadmap-receipt verify-governance exits zero:3609 rows,1743 live/zero untriaged,
+  all routed; D3851's decision closes with path evidence while D3841/D3853/D3859/D3860 remain
+  assigned doing. No whole milestone or capability is promoted. Inspect/stage the16 explicit
+  research/contract/review/tracking files; leave the three pre-existing untracked paths alone.

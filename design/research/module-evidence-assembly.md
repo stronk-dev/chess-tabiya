@@ -2213,3 +2213,94 @@ adapters and authenticated/native client proof remain future implementation. D38
 coordinated module image and D3841's exact scoped Review adapter/source/state table remain next;
 neither the old eleven baseline nor these proposals supplies them. D3851 is separately unanswered.
 `[V]` dated Inspector independent review, D3857/D3858 correction sections.
+
+### Complete module source census and paired grade authority
+
+The current strict execution census traverses every declared input alternative, not only the
+fork path.28 disposable controls measure Nudge52 accepted/51 individually executable, Review85/
+81 and Hint35/35. Whole Hint compilation succeeds; Nudge fails at grade and Review at grade,
+human divergence and its two live Stockfish leaves. The proposed Inspector replacement map is
+used solely as a conditional inventory, not module authority: it overlaps one Nudge and18 Review
+refs but still leaves grade unresolved. Removing the grade's live alternative yields a passing
+counterfactual while changing the accepted contract, so it is explicitly not a repair. Compilation
+does not establish literal factory conformance, acquired source authority or UI adoption. `[V]`
+`tools/d3792-inspector-demand/module-source.ts`; `evidence-catalog.ts` MODULE_CONSUMER_ACCEPTS;
+`evidence-execution.ts:compileProjectionExecution`; `evidence-binding-execution.ts`;
+`rfc/module-registration.md` coordinated module successor image; [[D3859]].
+
+The grade declaration has one input in each alternative; the actual factory retains two ordered
+before/after input digests.24 actual old-factory positive outputs over explicitly synthetic
+engine reports cover both movers, three contexts and all four recorded/live-labelled ref pairs.
+All output lanes are recorded;12 pairs cross projection origins. Pure arithmetic matches the
+existing grader exactly. These are not Stockfish runs, engine-quality measurements or new source
+issuance. The accepted grade §2 instead requires same-lane pairs, and its D2473 changelog already
+promises two ordered occurrences. Four observed combinations therefore establish current behavior,
+not four obligations for a successor. `[V]` cited module-source experiment;
+`evidence-factories.ts:createDerivedGradeMoveQualityV1Evidence`; `grade-reading.ts`;
+`rfc/move-quality-grades.md` §2/D2473; [[D3860]].
+
+Actual Nudge and Review acquisition is narrower: latest engine_validated attachment packets at
+the actual parent and child; Nudge supplies drill context, Review supplies review/imported_analysis.
+Neither currently acquires ledger readings for these module grades. Thus the mixed-source control
+does not prove current learner grades use mixed origins. Both wrappers normalize to recorded in
+the shared reader, losing the source distinction required by the contract. `[V]`
+`postcommit-nudge.ts:postcommitEdgeEvidence`; `review-map.ts:evaluationPacket` and grade decision;
+`apps/server/src/service.ts` Review context; independent review's D3859/D3860 source tracing.
+
+The authorized independent reviewer requires a paired successor over two exact same-origin
+operands, source-owned actual legal edge/full FENs/occurrence/head/grant/mover/context, and exact
+admitted ledger or modern attached-job whole-delivery joins. No new analysis in the read and no
+promotion of v1 packets to modern deliveries. F2 §2.3a's report-only Inspector packet projections
+expressly exclude grading; using them for new grade words would need a separately authored
+meaning and authority, not an automatic map substitution. Existing arithmetic/typed mates/
+thresholds/below-threshold-empty/abstention stay; old APIs/receipts stay distinct. Missing new
+grade sources must remain source-local, not suppress an entire otherwise useful module. Review
+accuracy/evaluation routing also needs an exact disposition. These are required author corrections,
+not accepted new sources or completed consumers. `[V]` dated independent review;
+`rfc/durable-stockfish-source.md` §4; `rfc/evidence-value-authority.md` §2.3a.
+
+The initial synthetic cp fixture included mateIn:null, which the actual recorded reader rejects;
+removing that invalid field produces the24 outputs. The opening fixture also stops pretending the
+real position payload contains projectionId: it explicitly constructs the legacy raw helper's
+separate envelope after obtaining a genuine sealed position. Existing28 opening controls remain.
+Neither correction changes production. `[V]` module-source.ts; opening-source.ts;
+`recorded-reading.ts`; normal inspector-recorded-prefix-research target.
+
+### Pre-launch compatibility ruling and exact retirement inventory
+
+Marco answers D3851: “zero legacy required. we are pre launch. make it all right.” This removes
+compatibility-only API/helper/dual-pipeline obligations, not detector breadth, truthful source
+authority or real current consumers. The owner decision is recorded separately from code delivery;
+it does not authorize deleting stored user data, immutable archives or append-only logs. `[V]`
+owner reply in this task,2026-10-15; [[D3851]]; exploration log's dated ruling entry.
+
+14 disposable inventory controls map every currently accepted sequence family to one recorded
+source, deduplicate first-slot order and assert no nonsequence source disappears. Nudge52→52
+retains nine families by replacing its narrative-only slots. Review85→74 retains eleven;
+Inspector75→65 retains ten, with six separate detail refs still proposed. Trade is the eleventh
+recorded family elsewhere and already has the distinct capture/capture/edge/edge@2 factory; it
+is not a Full Inspector topic or an invented eleventh@3 source. The ten other families have real
+recorded@2 paths and separately authored@3 tuple repairs. These are conditional inventories,
+not compiled complete target consumers or implemented source issuers. `[V]` module-source.ts;
+recorded-sequence-contract.ts; evidence-catalog.ts SEMANTIC_EVENT_PROJECTION_REFS;
+evidence-factories.ts recorded trade; normal prefix research.
+
+Independent read-only tracing confirms the ten exact Inspector duplicates. Remove obsolete
+narrative declarations/factories/invokers/wrappers/exports/adapters together after actual callers
+migrate; never rename narrative payloads into recorded authority. Nudge's existing one-edge
+supplier does not acquire multi-move windows merely because its accepts list changes: exact
+granted-prefix/window semantics must be authored and reviewed. The obsolete vector chain is
+server wrapper→runtime operation→sole factory→candidateCollectorResults, with no in-repo
+production wrapper caller found. Retire that chain and its obsolete registrations/profile/tests,
+not the entire opponent.selection consumer or candidateChildReadings used by current packets.
+No frozen old vocabulary is now required. Actual current bot/Hint/pack consumers and source
+authority remain. `[V]` dated independent review; candidate-evidence.ts; candidate-feature-vector.ts;
+postcommit-nudge.ts; [[D3853]]/[[D3859]].
+
+The initial retirement probe's map inferred only@3 values and rejected adding trade@2 at
+TypeScript compilation. Its value type is corrected to string; no production bug or output
+meaning changes. Final normal prefix research passes all14 inventory controls and prior
+28 module/24 synthetic grade controls. Normal permissioned move-grade-consumer-check passes
+127 cases across five files and all workspace types, including zero Svelte errors/warnings.
+This is focused verification, not full software/content/browser/remote-CI release proof. `[V]`
+cited Make targets and current task outputs.

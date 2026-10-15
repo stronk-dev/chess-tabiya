@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:fea3aa04ae8c09484a993b976f4a96cb04a772dc658a98298f22cc4637191d16",
+    "roadmap": "sha256:a1a31dbdf9b533d7ab3cd449aba9e02f059e5dacd1d21584cfeb034a40a9f61f",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:78720defcb2d3796eb3756abf53896c52412a549c192054e34ee785405524e93",
+    "workState": "sha256:8124abc56444c0925917c784382e88d5f7dfc20574d7ad8004573c37dd969777",
     "rfcRegister": "sha256:b514ed548ebdb05a57da890c3247fd37378225944ee809c1b603326e4ab7ae52",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 629,
-      "doing": 28,
+      "todo": 627,
+      "doing": 30,
       "blocked": 1086,
-      "done": 1703,
+      "done": 1704,
       "refused": 162
     },
     "workItems": {
@@ -471,10 +471,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D3857 complete opening-history@2 and D3858 sparse Explorer status are authored with independent bounded wording checks, not implemented/accepted. Next reconcile D3859 complete Nudge/Review successor preflight with retained unregistered source refs, without filtering alternatives or held-binding exemptions. Publish D3841/Review4.5 exact scoped adapter IDs/versions/callables/parsers/slots/source/state image; old eleven baseline is not authority. Obtain independent joint acceptance before D3845/D3792 implementation. Real installed/ledger/source issuers, lookup/result sidecars, V2 witnesses, current-source/access revalidation and response/native qualification remain. Keep sample floors/old APIs/receipts and all75+6 requirements; D3847 proposals stay held, D3851 remains separately unanswered and both sequence pipelines/families/history remain. Other-consumer migrations/D3853 compatibility, D3855 captions and full platform joins remain open.",
+      "nextAction": "Apply D3851 owner ruling: no pre-launch compatibility. Author one complete current family-preserving source/module image, replacing Nudge narrative-only slots and deduplicating Review/Inspector sequence topics; conditional inventory is52/74/65 plus six Inspector detail refs, not compiled bindings. D3853 retires obsolete vector/wrapper/adapter paths after actual caller migration, without frozen legacy vocabularies or removing current shared child readings. Author D3859/D3860 paired grade/source contract: two ordered same-origin operands, actual edge/mover/context, genuine admitted ledger or modern attached-job deliveries, unchanged arithmetic, consistent Review accuracy/evaluation and source-local absence. Report-only Inspector packets cannot ground grade words. Publish exact scoped Review adapter/parser/slot/state and granted Nudge-window contracts; independently review before D3845/D3792 implementation. Opening-history/Explorer/ledger/sequence proposals still need real issuers/sidecars/consumers/API/native proof. Keep detector breadth, meaningful tests, sample floors and truthful versions; no inferred database/archive deletion. D3855 captions and full platform joins remain open.",
       "latestCheckpoint": {
         "at": "2026-10-15",
-        "summary": "D3857/D3858 now have unaccepted source/delivery corrections: complete opening-history@2 with all recorded positions/matched and negative lookup authority, fourth exact reduction/empty-result proof, opening-only installed-source outcomes and genuine Explorer below_floor/total/population status. Old history/floors/APIs stay. Independent bounded reviews find no normative wording blocker, not source/joint acceptance. Normal prefix/incoming research passes40 opening outcome/30 sparse status controls and31/44 map/34 negatives, retaining existing28 real-catalogue and all prior controls. D3859 coordinated full preflight and exact scoped Review adapter/source/state image are next. Real issuers/sidecars/consumers/API/native proof remain; D3851 separately unanswered. Production unchanged, no fresh broad software/content/browser/remote/release claim; last full local software proof1bc7e67d.",
+        "summary": "D3851 owner rules no pre-launch legacy compatibility; obsolete narrative/vector/API paths should retire after actual caller migration, not gain frozen compatibility vocabularies.14 inventory controls retain all current sequence families with conditional Nudge52/Review74/Inspector65+6 refs; source/grade/adapter/window implementation and joint acceptance remain. D3859 current-source census passes28 controls: Nudge51/52, Review81/85, Hint35/35 individually executable; complete Hint compiles. D3860's24 synthetic old-factory outputs expose two actual versus one declared grade input and12 forbidden cross-projection pairs; actual current module callers use packet/packet. Independent tracing requires paired genuine source/edge/context, consistent accuracy and source-local absence. Permissioned focused grade checks pass127 cases/five files and clean workspace types; final prefix research passes all controls. Production unchanged; no fresh full software/content/browser/remote/release claim; last full local software proof1bc7e67d.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -521,6 +521,7 @@
           "rfc/evidence-value-authority.md",
           "tools/d3792-inspector-demand/build-prefix.mjs",
           "tools/d3792-inspector-demand/recorded-origin.ts",
+          "tools/d3792-inspector-demand/module-source.ts",
           "tools/d3792-inspector-demand/ledger-source.ts",
           "tools/d3792-inspector-demand/opening-source.ts",
           "tools/d3792-inspector-demand/prefix-source.ts",

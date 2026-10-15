@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:367187660c9d0f4c68ce540c12531a543dff6a89b31c3813057dbf4795250eb8",
+      "sourceDigest": "sha256:bd840233e87b094da8ab889c29b346e11b68b826966390da3cc622b75475351a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32073,11 +32073,12 @@
     },
     {
       "id": "D3851",
-      "state": "todo",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:02d321003758505316cf3b55dd69f767d4fd9ad5a343699083b4688169510414",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c728be89feb927b9c115d62c8747f208b1596f945a516e7465f2055999432ce7",
       "uxItems": [],
-      "owner": "OWNER"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3852",
@@ -32092,7 +32093,7 @@
       "id": "D3853",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:9e157fbdda2806e07a68715717defb25cd86a44f573dab9f8aabb1dac54798ce",
+      "sourceDigest": "sha256:d41bf44bf430fc0f3fdada0538523c94a284cb70faac4f77dce4be87a9917d8a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32144,11 +32145,21 @@
     },
     {
       "id": "D3859",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0803d627338ec0140bdb908314f8ec358f41a5e2b957d13f2ae2b0667ae8f49a",
+      "sourceDigest": "sha256:75612c334b64dd613047fd58b496073fc2ce2b28cee7ff56d6d9e51760ab617e",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
+    },
+    {
+      "id": "D3860",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ec5ff56aa2bc520e1a071d4c7d92c62a4e3d7bf086b0e0f1ef7ddcdc788c10fd",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-10-15"
     }
   ]
 }

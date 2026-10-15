@@ -29,6 +29,7 @@ import type { ReviewEnginePoint } from "../../packages/runtime/src/review-points
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
 import { runLedgerSourceResearch } from "./ledger-source.js";
 import { runOpeningSourceResearch } from "./opening-source.js";
+import { runModuleSourceResearch } from "./module-source.js";
 
 
 const at = "2026-10-15T00:00:00.000Z";
@@ -882,3 +883,5 @@ for (const projection of retainedModuleRefs) {
 }
 console.log(JSON.stringify({ scope: "D3859 retained direct-module refs only, NOT successor consumer construction/adoption",
   retainedUnregisteredExecutionRefs: retainedModuleRefs, controls: retainedModuleRefs.length, productionChanges: 0 }));
+
+runModuleSourceResearch();

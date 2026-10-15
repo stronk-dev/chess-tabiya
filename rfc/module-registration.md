@@ -1881,7 +1881,19 @@ Deleting refused bindings or passing an isolated diagnostic declaration cannot s
 operation's full image. That guard repairs the existing compiler, not D3841's still-missing
 successor declaration, adapter/presentation image or retained-source contract.
 
-**Source execution:** retain all 75 existing source obligations and their exact requirements;
+**D3851 owner scope amendment, 2026-10-15:** “zero legacy required. we are pre launch. make it
+all right.” The source map/counts below describe the pre-ruling current baseline, not a mandate
+to preserve duplicate narrative representations or predecessor module APIs. Current delivery
+must use the correct recorded-move foundation for every sequence family and retire obsolete
+compatibility paths after real callers are migrated. This supersedes this draft's old-contract/
+dual-image preservation and pending-D3851 instructions, not source/access/complete-preflight
+requirements. Recompute the exact deduplicated target and adapter/callable image before joint
+acceptance; do not turn removal into dropped detector breadth, a concealed compiler refusal or
+a generic module hold. D3853 now requires retirement/caller migration, not a frozen old helper
+vocabulary. Versioned meanings stay truthful while present. No user-data/archive/log deletion
+or new source acceptance is implied. F2's matching scope amendment owns the source-side change.
+
+**Source execution — pre-ruling diagnostic baseline:** retain all 75 existing source obligations and their exact requirements;
 the predecessor's exact refs/meanings remain supported unchanged. The independent D3841 return
 finds that registering those same75 refs to a new consumer cannot make its execution complete:
 nine legacy provider leaves carry narrow packet/page payloads, not the strict executor's whole
@@ -1921,8 +1933,8 @@ predicate, superseding the rejected two-sealed-input proposal without a groundin
 change. All arithmetic is reconstructed from the admitted legal edge. The D3768 fork component
 and D3847 structural reduction add their separately proposed bindings, not acceptance or factories.
 D3847 §2.3j additionally replaces the ten recorded@2 sequence topics with exact source-owned@3
-fixed/anyOf successors. These ten repairs do not resolve the independent narrative@1 pipeline
-choice or its source obligations. D3857 additionally replaces deepest-opening@1 with @2's complete
+fixed/anyOf successors. D3851 now removes their duplicate narrative@1 delivery slots; actual
+recorded source acquisition and consumer migration remain required. D3857 additionally replaces deepest-opening@1 with @2's complete
 recorded-history source/reduction, including negative lookup authority; no singleton tuple or
 permanent version hold may stand in for that source. Proposed source factories are owned by value-authority
 §§2.3a–2.3k, not implemented by this
@@ -1972,6 +1984,28 @@ The Story row is explicitly held, not implemented by aliasing @2. `InspectorSour
 exact75-topic successor image only; six detail refs are not acquisition topics. Register the
 explicit family assignments above rather than letting new prefixes silently fall into `derived`.
 Family names group the UI; they do not attest Stockfish/Syzygy execution for a historical packet.
+
+**D3851 current retirement inventory:** the preceding31/44/75+6 count is the reproducible
+pre-ruling baseline. For current delivery, map narrative@1 and recorded@2 representations of
+each of the ten §2.3j families to its one exact recorded@3 source, then deduplicate in first-slot
+order. Trade uses its existing recorded@2, not a fictitious eleventh@3 factory. This gives the
+following conditional source inventories before the still-required grade/complete-image repair:
+
+| Current logical module | Baseline refs | Conditional current refs | Sequence families retained |
+|---|---:|---:|---:|
+| Post-commit Nudge | 52 | 52 | 9 |
+| Review Map | 85 | 74 | 11 |
+| Full Inspector | 75 | 65 | 10 |
+
+Nudge's nine narrative-only slots are replaced, not deleted. Review's eleven and Inspector's ten
+duplicate sequence representations collapse without losing a family. All nonsequence topics
+remain under the explicit affected-source map, pending their source reconciliation. Inspector's
+six detail views yield71 conditional accepted refs, not71 established executable bindings. The
+full grade/source/adapter image and independent acceptance remain required; do not treat this
+scope inventory or the original baseline as a registered consumer declaration.
+Nudge's current operation is one-edge-only: recorded multi-move support requires an explicit
+source-owned granted-prefix/window contract and current role/disclosure checks. Replacing its
+accepts list alone neither acquires those windows nor authorizes arbitrary historical scanning.
 
 All @2 bindings use the literal per-demand policy below and unchanged review timing/roles/
 sessions/answer ceilings/4000ms interactive binding limit. Local recorded paths use no provider
@@ -3841,6 +3875,10 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-10-15 — D3851 owner removes pre-launch compatibility requirements. Annotate the old75+6
+  baseline and specify the family-preserving conditional Nudge52/Review74/Inspector65+6 inventory,
+  including trade@2 and source-owned Nudge windows still owed. Do not maintain duplicate narrative
+  topics or dual images solely for compatibility. Complete source/grade/adapter review remains.
 - 2026-10-15 — Unaccepted D3858 authors an exact Explorer-only below_floor outcome from
   genuine admitted whole-page/narrow evidence, retaining total/population/source occurrence
   and full disclosure/client correlation. Zero/sparse is success, not provider failure or
