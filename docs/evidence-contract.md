@@ -37,14 +37,17 @@ including the later witness beyond its display anchor. These repair accepted §3
 inputs (D3827); marker labels, meanings and consumer eligibility do not change. Human-divergence
 markers retain their own complete recorded distribution image through the existing source-page
 arm (D3826), never the newest sibling's selection at the shared node. Copied rendering models
-have no producer-owned source operand. Existing whole-tip populations remain unchanged;
-this does not introduce the still-draft scoped Inspector source operation.
+have no producer-owned source operand. Existing whole-tip populations remain unchanged until
+their actual callers migrate; the scoped successors below are separate internal operations,
+not completed Inspector consumer delivery.
 
 Each of the four pivotal factories prepares only its own marker family. The shared internal
 producer retains complete original-path/FEN validation even for an empty family; phase,
 irreversibility, human-distribution and legal-count preparation no longer run for unrelated
 routes. The existing combined whole-tip rendering population and exact retained inputs remain.
-This changes neither the public factory arms nor the still-draft endpoint-scoped operation.
+The nominal endpoint-scoped owner and scoped rule/human successors now exist internally.
+Current access/receiver/API/native adoption still remains; this is not a second compatibility
+pipeline to preserve after real callers migrate.
 
 Recorded comparison routes use the legal move's simultaneous physical relocations, including
 Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities
@@ -127,9 +130,21 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 49 producers, 315 projections, 42 versioned consumers and 566 bindings,
+The current compiled closure is 49 producers, 316 projections, 42 versioned consumers and 566 bindings,
 plus 88 semantic-event declarations, 88 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
+
+The internal `derived.pivotal.human_divergence@2` factory consumes only a genuine scoped recorded
+pivotal source. It retains every human-common selection anchored on the requested prefix,
+including missing candidate arrays and sibling-origin events. Complete original origin paths
+validate before subject resolution; exact full-head event/origin/position and stored requested
+target context join before the shared reported-window split arithmetic. Each marker retains
+literal recorded-selection and position inputs. Original frozen result arrays have a private
+complete observation reader, including nonmatches and source absence; copied or foreign results
+refuse even when empty. This is internal source work, not a new learner binding. The later Review
+node adapter must fold mixed missing/present observations to unavailable with no published items.
+Explicit empty candidate telemetry still fails the canonical schema (D3870); its separate
+`recorded-selection-telemetry.md` draft is not authority to bypass that boundary or migrate data.
 
 The source-only structural comparison successor uses the third closed derivation arm,
 `reduction:{operation,elements}`. The two installed operations are compare.structure_delta@1

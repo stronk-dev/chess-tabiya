@@ -8,9 +8,12 @@ import { projectRun } from "./events.js";
 import { moduleDecisionStamp } from "./module-decision.js";
 import { recordedEdgePayload } from "./recorded-edge.js";
 import { digestRunEventHead } from "./run-subject-digest.js";
+import { resolveRunSubject, type ResolvedRunSubject } from "./run-subject.js";
 import { exactLegalMoves } from "./legal-moves.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
-import type { DrillRun, Node, OpponentSelection } from "./types.js";
+import type { DrillRun, Node, OpponentMoveSelectedEvent, OpponentSelection } from "./types.js";
+import type { RecordedInspectorSelection } from "./recorded-inspector.js";
+import type { RecordedPosition } from "./review-points.js";
 import { irreversibility, type IrreversibilityDetail } from "./transition.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
@@ -22,6 +25,10 @@ export interface PhaseChangeDetail { readonly from: Exclude<DetectedPhase, "uncl
 export interface DivergenceDetail { readonly engine: OpponentSelection["engine"]; readonly targetElo?: number; readonly masses: readonly number[]; }
 export interface CollapseDetail { readonly color: Color; readonly priorCount: number; readonly count: number; readonly nextCount: number; }
 export interface PivotalMarker { readonly nodeId: string; readonly kind: PivotalKind; readonly detail: IrreversibilityDetail | PhaseChangeDetail | DivergenceDetail | CollapseDetail; readonly provenanceNote: string; }
+export interface RecordedHumanDivergenceMarker extends PivotalMarker {
+  readonly selection: DeclaredEvidence<RecordedInspectorSelection>;
+  readonly position: DeclaredEvidence<RecordedPosition>;
+}
 
 const PROVENANCE = "Tabiya's pivotal-marker convention";
 const DEFINITE = new Set<DetectedPhase>(["opening", "middlegame", "endgame"]);
@@ -43,6 +50,17 @@ function legalCount(fen: string): number {
 }
 
 
+/** Shared reported-window arithmetic. This is a choice-spread convention, not chess quality. */
+export function reportedHumanSplit(nodeId: string, selection: OpponentSelection, targetElo?: number): PivotalMarker | undefined {
+  const candidates = selection.candidates?.filter(item => item.offWindow !== true);
+  if (candidates === undefined || candidates.length === 0 || candidates.some(item => item.mass === undefined)) return undefined;
+  const total = candidates.reduce((sum, item) => sum + item.mass!, 0); if (!(total > 0)) return undefined;
+  const masses = candidates.map(item => item.mass! / total).sort((a, b) => b - a);
+  if (Math.max(...masses) > 0.5 || masses.filter(mass => mass >= 0.15).length < 3) return undefined;
+  return Object.freeze({ nodeId, kind: "human_divergence" as const, detail: Object.freeze({ engine: selection.engine,
+    ...(targetElo === undefined ? {} : { targetElo }), masses: Object.freeze(masses) }), provenanceNote: "Recorded human-model distribution under Tabiya's split convention." });
+}
+
 function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly PivotalMarker[] {
   return run.events.flatMap((event) => {
     if (event.type !== "opponent.move_selected" || !pathIds.has(event.data.nodeId) || event.data.selection.policyModeApplied !== "human_common") return [];
@@ -54,12 +72,9 @@ function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly Pivot
       engine: Object.freeze({ ...selection.engine }),
       candidates: Object.freeze(recordedCandidates.map(candidate => Object.freeze({ ...candidate }))),
     });
-    const candidates = source?.candidates.filter((item) => item.offWindow !== true);
-    if (candidates === undefined || candidates.length === 0 || candidates.some((item) => item.mass === undefined)) return [];
-    const total = candidates.reduce((sum, item) => sum + item.mass!, 0); if (!(total > 0)) return [];
-    const masses = candidates.map((item) => item.mass! / total).sort((a, b) => b - a);
-    if (Math.max(...masses) > 0.5 || masses.filter((mass) => mass >= 0.15).length < 3) return [];
-    const marker = Object.freeze({ nodeId: event.data.nodeId, kind: "human_divergence" as const, detail: Object.freeze({ engine: source!.engine, ...(run.opponentPolicy.targetElo === undefined ? {} : { targetElo: run.opponentPolicy.targetElo }), masses: Object.freeze(masses) }), provenanceNote: "Recorded human-model distribution under Tabiya's split convention." });
+    if (source === undefined) return [];
+    const marker = reportedHumanSplit(event.data.nodeId, { ...selection, engine: source.engine, candidates: source.candidates }, run.opponentPolicy.targetElo);
+    if (marker === undefined) return [];
     RECORDED_SELECTIONS.set(marker, source!);
     return [marker];
   });
@@ -130,6 +145,7 @@ declare const recordedPivotalBrand: unique symbol;
 export interface RecordedPivotalSource { readonly [recordedPivotalBrand]: true }
 const RECORDED_PIVOTAL = new WeakMap<object, Readonly<{
   run: DrillRun;
+  humanObservations?: readonly Readonly<{ event: OpponentMoveSelectedEvent; resolved: ResolvedRunSubject }>[];
   authority: Readonly<{
     operation: "recorded-pivotal-source@1";
     runId: string;
@@ -161,8 +177,25 @@ export function createRecordedPivotalSource(input: Readonly<{ run: DrillRun; bra
   if (endpoint < 0) throw new TypeError("Recorded pivotal endpoint is not on the original branch");
   // Inherited endpoints before this attempt's own fork are valid for a one-path query.
   const path = Object.freeze(original.slice(0, endpoint + 1));
+  let humanObservations: readonly Readonly<{ event: OpponentMoveSelectedEvent; resolved: ResolvedRunSubject }>[] | undefined;
+  if (kind === "human_divergence") {
+    const anchors = new Set(path.map(node => node.id));
+    const events = run.events.filter((event): event is OpponentMoveSelectedEvent => event.type === "opponent.move_selected"
+      && event.data.selection.policyModeApplied === "human_common" && anchors.has(event.data.nodeId));
+    // Validate ALL relevant originals before resolving any observation. A shared anchor cannot
+    // hide a malformed sibling suffix, even for a missing-candidates/nonmatching observation.
+    const origins = new Map([...new Set(events.map(event => event.data.branchId))].map(origin => [origin, branchPath(run, origin)]));
+    for (const nodes of origins.values()) for (const [index, node] of nodes.entries()) {
+      if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new TypeError("Recorded human origin FEN is not canonical");
+      if (index > 0) recordedEdgePayload(run, nodes[index - 1]!, node);
+    }
+    for (const event of events) if (!origins.get(event.data.branchId)!.some(node => node.id === event.data.nodeId)) throw new TypeError("Recorded human observation is not on its actual origin branch");
+    humanObservations = Object.freeze(events.map(event => Object.freeze({ event, resolved: resolveRunSubject(run, {
+      kind: "run_node", runId: run.id, eventHeadDigest, branchId: event.data.branchId, nodeId: event.data.nodeId,
+    }) })));
+  }
   const source = Object.freeze({}) as RecordedPivotalSource;
-  RECORDED_PIVOTAL.set(source, Object.freeze({ run, authority: Object.freeze({ operation: "recorded-pivotal-source@1", runId: run.id,
+  RECORDED_PIVOTAL.set(source, Object.freeze({ run, ...(humanObservations === undefined ? {} : { humanObservations }), authority: Object.freeze({ operation: "recorded-pivotal-source@1", runId: run.id,
     eventHeadDigest, decision: moduleDecisionStamp(run), branchId, throughNodeId, kind, path }) }));
   return source;
 }

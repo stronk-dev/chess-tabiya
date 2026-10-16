@@ -29,6 +29,7 @@ import {
   assertRecordedReviewResultInvocation,
   readReviewPointInvocation,
   readReviewPointResultInvocation,
+  readRecordedHumanDivergenceInvocation,
   createAuthoredStructuralConditionInputV1Evidence,
   createDerivedExplorerRepertoireFrontierV1Evidence,
   createDerivedExplorerPositionFrequencyV1Evidence,
@@ -63,6 +64,7 @@ import {
   createDerivedPawnSequenceContactTimingV1Evidence,
   createDerivedPawnSequenceHarassmentPressureV1Evidence,
   createDerivedPivotalHumanDivergenceV1Evidence,
+  createDerivedPivotalHumanDivergenceV2Evidence,
   createDerivedPivotalIrreversibilityV1Evidence,
   createDerivedPivotalOptionCollapseV1Evidence,
   createDerivedPivotalPhaseChangeV1Evidence,
@@ -216,7 +218,7 @@ import {
 } from "../evidence-factories.js";
 
 // Read-only source membership, never a public registration or second factory dispatcher.
-export { readStructuralPopulationInvocation, assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, readReviewPointInvocation, readReviewPointResultInvocation };
+export { readStructuralPopulationInvocation, assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation };
 
 /** The literal route table: exact projection ref → its one production factory. */
 const EVIDENCE_VALUE_ROUTES = Object.freeze({
@@ -263,6 +265,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "derived.pawn.sequence.contact_timing@1": createDerivedPawnSequenceContactTimingV1Evidence,
   "derived.pawn.sequence.harassment_pressure@1": createDerivedPawnSequenceHarassmentPressureV1Evidence,
   "derived.pivotal.human_divergence@1": createDerivedPivotalHumanDivergenceV1Evidence,
+  "derived.pivotal.human_divergence@2": createDerivedPivotalHumanDivergenceV2Evidence,
   "derived.pivotal.irreversibility@1": createDerivedPivotalIrreversibilityV1Evidence,
   "derived.pivotal.option_collapse@1": createDerivedPivotalOptionCollapseV1Evidence,
   "derived.pivotal.option_collapse@2": createDerivedPivotalOptionCollapseV2Evidence,

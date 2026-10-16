@@ -56,7 +56,7 @@ import { gradeReadingFromPayload } from "./grade-reading.js";
 import { pieceDestinationEvents, pieceDestinationsReading } from "./mobility.js";
 import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReading, pawnContactTimingSequence, pawnDynamicsEvents, pawnTransitionEvents, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { developmentReading, phaseBandReading } from "./phase.js";
-import { pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, isRecordedPivotalSource, recordedPivotalData, pivotalRecordedPayloads, type RecordedPivotalSource, type PivotalKind, type PivotalMarker } from "./pivotal.js";
+import { pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, isRecordedPivotalSource, recordedPivotalData, pivotalRecordedPayloads, reportedHumanSplit, type RecordedHumanDivergenceMarker, type RecordedPivotalSource, type PivotalKind, type PivotalMarker } from "./pivotal.js";
 import { RECORDED_EDGE_FACTORY, recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
 import { isRecordedSequenceWindow, readRecordedSequenceWindow, recordedSequenceWindowOperands, recordedSequenceWindowInputs, recordedSequenceWindowValueAuthority, type RecordedSequenceWindow, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
@@ -1675,6 +1675,79 @@ function pivotalFactory<K extends PivotalKind, V extends 1 | 2>(kind: K, version
     }));
   });
 }
+
+type RecordedHumanObservation = Readonly<{
+  event: Extract<DrillRun["events"][number], { type: "opponent.move_selected" }>;
+  resolved: ResolvedRunSubject;
+  position: DeclaredEvidence<RecordedPosition>;
+  selection: EvidenceAvailability<DeclaredEvidence<RecordedInspectorSelection>>;
+  disposition: "source_absent" | "nonmatch" | "matched";
+  item: DerivedEvidence<RecordedHumanDivergenceMarker> | null;
+}>;
+const RECORDED_HUMAN_INVOCATIONS = new WeakMap<object, Readonly<{ source: RecordedPivotalSource; observations: readonly RecordedHumanObservation[] }>>();
+
+function assertRecordedHumanObservation(data: ReturnType<typeof recordedPivotalData>, observation: Pick<RecordedHumanObservation, "event" | "resolved" | "position" | "selection">): void {
+  const { event, resolved, position, selection } = observation;
+  assertResolvedRunSubject(resolved);
+  assertRecordedPositionInvocation(position, data.run, event.data.nodeId);
+  if (data.run.events[event.seq - 1] !== event || resolved.subject.kind !== "run_node" || resolved.subject.runId !== data.run.id
+    || resolved.subject.eventHeadDigest !== data.authority.eventHeadDigest || resolved.headSeq !== data.run.events.length
+    || resolved.subject.nodeId !== event.data.nodeId || resolved.subject.branchId !== event.data.branchId
+    || resolved.subject.fen !== position.payload.fen) throw new TypeError("Recorded human observation crosses its actual full-head origin/position");
+  if (selection.kind === "available") {
+    assertDeclaredEvidence(selection.value);
+    if (sealedRoute(selection.value) !== "recorded.inspector.maia_selection@1" || evidenceValueReceipt(selection.value).factory !== "createRecordedInspectorMaiaSelectionV1Evidence"
+      || !sameDigest(selection.value.payload.event, event) || !sameDigest(selection.value.payload.subject, resolved.subject)
+      || selection.value.payload.requestedTargetElo !== (data.run.opponentPolicy.targetElo ?? null)) throw new TypeError("Recorded human selection crossed its actual origin/head/event/context");
+  } else if (selection.reason !== "source_absent" || event.data.selection.candidates !== undefined) throw new TypeError("Recorded human missing-source disposition changed");
+}
+
+/** Actual original result + complete observation dispositions, including absent candidates. */
+export function readRecordedHumanDivergenceInvocation(result: readonly DerivedEvidence<RecordedHumanDivergenceMarker>[], source: RecordedPivotalSource) {
+  const proof = RECORDED_HUMAN_INVOCATIONS.get(result), data = recordedPivotalData(source, "human_divergence");
+  const originals = data.humanObservations;
+  if (proof === undefined || proof.source !== source || originals === undefined || proof.observations.length !== originals.length) throw new TypeError("Recorded human result is not its original complete source invocation");
+  for (const [index, observation] of proof.observations.entries()) {
+    const original = originals[index]!;
+    if (observation.event !== original.event || observation.resolved !== original.resolved) throw new TypeError("Recorded human result crossed its original observation");
+    assertRecordedHumanObservation(data, observation);
+    if (observation.item !== null) {
+      const item = observation.item; assertDeclaredEvidence(item.evidence);
+      if (observation.selection.kind !== "available" || observation.disposition !== "matched" || item.inputs[0] !== observation.selection.value || item.inputs[1] !== observation.position
+        || item.evidence.payload.selection !== observation.selection.value || item.evidence.payload.position !== observation.position) throw new TypeError("Recorded human marker lost its exact literal inputs");
+    }
+  }
+  const order = new Map(data.authority.path.map((node, index) => [node.id, index]));
+  const expected = proof.observations.flatMap(observation => observation.item === null ? [] : [observation.item]).sort((a, b) => order.get(a.evidence.payload.nodeId)! - order.get(b.evidence.payload.nodeId)!);
+  if (result.length !== expected.length || result.some((item, index) => item !== expected[index])) throw new TypeError("Recorded human result is not the complete original ordered output");
+  return proof;
+}
+
+export const createDerivedPivotalHumanDivergenceV2Evidence = (() => {
+  const route = "derived.pivotal.human_divergence@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ recordedPivotal: value("an owned recorded pivotal source", isRecordedPivotalSource) }], result: "items" },
+    ({ recordedPivotal }: ScopedPivotalInput): readonly DerivedEvidence<RecordedHumanDivergenceMarker>[] => {
+      const data = recordedPivotalData(recordedPivotal, "human_divergence");
+      if (data.humanObservations === undefined) throw new TypeError("Recorded human source has no complete observation population");
+      const observations = Object.freeze(data.humanObservations.map(({ event, resolved }): RecordedHumanObservation => {
+        const selection = createRecordedInspectorMaiaSelectionV1Evidence({ resolved, eventSeq: event.seq });
+        const position = createRunRecordPositionV1Evidence({ run: data.run, nodeId: event.data.nodeId });
+        assertRecordedHumanObservation(data, { event, resolved, position, selection });
+        const marker = selection.kind === "available" ? reportedHumanSplit(event.data.nodeId, selection.value.payload.event.data.selection,
+          selection.value.payload.requestedTargetElo ?? undefined) : undefined;
+        if (marker === undefined || selection.kind !== "available") return Object.freeze({ event, resolved, position, selection,
+          disposition: selection.kind === "available" ? "nonmatch" : "source_absent", item: null });
+        const inputs = Object.freeze([selection.value, position]);
+        const payload = Object.freeze({ ...marker, selection: selection.value, position });
+        const item = Object.freeze({ evidence: mint(route, symbol, payload, { recordedPivotal, event, origin: resolved.subject, inputs }, inputs), inputs });
+        return Object.freeze({ event, resolved, position, selection, disposition: "matched", item });
+      }));
+      const order = new Map(data.authority.path.map((node, index) => [node.id, index]));
+      const result = Object.freeze(observations.flatMap(observation => observation.item === null ? [] : [observation.item]).sort((a, b) => order.get(a.evidence.payload.nodeId)! - order.get(b.evidence.payload.nodeId)!));
+      RECORDED_HUMAN_INVOCATIONS.set(result, Object.freeze({ source: recordedPivotal, observations }));
+      readRecordedHumanDivergenceInvocation(result, recordedPivotal); return result;
+    });
+})();
 
 // ---------------------------------------------------------------------------------------------
 // Source receipts: provider, model, corpus and ledger responses

@@ -7,6 +7,18 @@ unaccepted/returned labels are retained review history, not current blockers. Ac
 issuance, complete execution/consumer cutover and qualification remain implementation work;
 this accepts no unrelated parent discharge or product-completion claim.
 
+**Recorded human-divergence checkpoint, 2026-10-16:** §2.3a now has its internal scoped@2
+factory and original complete observation reader. Every anchored human-common observation survives,
+including missing arrays and sibling origins. All complete original origin paths validate before
+source resolution; exact event/head/position/requested-context joins precede shared unchanged split
+arithmetic.27 permanent cases/990 focused passes/27 files and workspace types pass; independent
+bounded read-only review finds no blocker. Full normal make verify build passes6543 software/
+408 files, seven isolated performance/257 content and all remaining gates. This introduces
+no current binding, new convention or source qualification. D3870's separate
+`recorded-selection-telemetry.md` draft leaves schema/REST/migration/resource ordering unaccepted;
+the actual source still refuses explicit empty telemetry at canonical validation. Later per-node
+missing-source folding and complete consumer/API/native migration remain open.
+
 **Internal source checkpoint, 2026-10-15:** §§2.3c/e/f now have genuine promotion-pressure,
 computed overload-conflict and nonterminal fork-survival factories. The two claimed promotion/
 fork conventions are landed members with append-only history; only comparison's member claim

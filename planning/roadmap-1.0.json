@@ -88,6 +88,7 @@
         "bounded-target-policy-composition.md",
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
+        "recorded-selection-telemetry.md",
         "phase-source-composition.md"
       ],
       "completion": {
@@ -1030,9 +1031,14 @@
               "digest": "sha256:f8d3b56da7a6c83740a7fdaf505915553247e42e40020d5c37f280e45ce9203a"
             },
             {
-"kind": "rfc",
+              "kind": "rfc",
               "id": "evidence-value-authority.md",
               "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
+            },
+            {
+              "kind": "rfc",
+              "id": "recorded-selection-telemetry.md",
+              "digest": "sha256:542ec0a062017b2488accff6c207b5f5cc35a96dbaa03192a4f3515d31e22816"
             },
             {
               "kind": "work_state",
@@ -1088,10 +1094,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement the full recorded moment/rank/opening/grade sources and independently reviewed D3870 empty-telemetry/schema/REST/resource/stamp-only migration follow-up. Internal last-level reduction, Review boundary/population/result and comparison/V2/value/result/consumer-plan sources exist. Preserve complete captured data and authentic empty/root calculation authority in moment/rank assembly; bind the final complete authority once to RunService storage through observation/durable reads, never enqueue. Then adopt the entire current282-pair source/access/receiver/API/native image. Preserve detector families, grants/heads/availability and D1422 ladder/budgets. Migrate actual callers and retire obsolete paths; no legacy compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
+        "nextAction": "Implement the full recorded moment/rank/opening/grade sources. Resolve D3870 recorded-selection-telemetry.md's resource-order question and independent acceptance before schema/REST/stamp-only migration work; do not guess or bypass the existing claims. Internal human-divergence, last-level reduction, Review boundary/population/result and comparison/V2/value/result/consumer-plan sources exist. Preserve complete captured data and authentic empty/root calculation authority; bind one final complete authority to RunService storage through observation/durable reads, never enqueue. Then adopt the entire current282-pair source/access/receiver/API/native image, fold missing human observations per node and retire obsolete paths after real callers migrate. No legacy compatibility pipeline, filtered bindings, dropped detector family, widened grant/assistance/budget or premature qualification/milestone/release claim.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "Accepted F2 §2.3h now has the actual internal last-level reduction over the complete recorded point/state/result population. Every original source/value/member/provider witness authenticates before imported-loss/typed-cp selection; fresh complete zero/one arrays retain acyclic result/convention authority without fake empty facts. The dependency-free shared seal retains two exact operation issuers, and V2 checks every reached actual callable binding.21 new permanent cases/963 focused passes/26 files and workspace types pass; independent bounded read-only review finds no blocker. D3880 closes the independently returned equal-image population-result join through retained nominal proof identity; all four new empty/nonempty regressions first fail specifically for missing refusal. Full corrected normal make verify build exits zero:6516 software/407 files, seven performance/four files,257 content/26 files and all governance/corpus/packaging/build gates.315 projections/308 profiles/1014 capabilities; no new convention, pack edit, learner binding, qualification or release claim. Full moment/rank/opening/grade sources, D3870 and complete282-pair access/receiver/API/native migration remain; no compatibility pipeline.",
+          "summary": "Accepted F2 §2.3a now has the internal human_divergence@2 source/factory and complete original observation result reader. Requested grant and actual sibling origin remain separate; all anchored observations, including missing candidates, survive. Exact event/head/position/target context authenticates before shared unchanged split arithmetic. D3881's two origin-suffix controls fail before repair, then pass with complete original origin validation before any resolver.27 new permanent cases/990 focused passes/27 files and workspace types pass; independent bounded read-only review finds no blocker.316 projections/309 profiles/1015 capabilities; all prior profiles/declarations and current bindings remain. Full normal make verify build exits zero:6543 software/408 files, seven performance/four files,257 content/26 files and all governance/corpus/packaging/build gates. D3870 has a bounded unaccepted schema/REST/stamp-only follow-up with resource ordering explicitly unresolved. Moment/rank/opening/grade sources, missing-source node folding and complete282-pair access/receiver/API/native migration remain; no compatibility pipeline, new convention, pack edit, qualification or release claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1153,6 +1159,9 @@
             "packages/runtime/src/internal/evidence-reduction-seal.ts",
             "packages/runtime/src/internal/last-level-reduction-authority.ts",
             "packages/runtime/src/last-level-reduction.test.ts",
+            "packages/runtime/src/recorded-human-divergence.test.ts",
+            "packages/runtime/src/testing/recorded-human-divergence-fixture.ts",
+            "rfc/recorded-selection-telemetry.md",
             "packages/runtime/src/internal/comparison-structural-families.ts",
             "packages/runtime/src/semantic-validation-profiles.json",
             "packages/runtime/src/semantic-validation-law.ts",
@@ -1292,7 +1301,7 @@
             {
 "kind": "work_state",
               "id": "D3841",
-              "digest": "sha256:84f09e6da920c9e25a267c74174082e9d4248766e1cb65a4fa4afd331ca04bf7"
+              "digest": "sha256:9aae0b45cf67060f4f367c50f52a82c07f1ce680af28c736f21a81e1e8c51846"
             },
             {
               "kind": "work_state",
@@ -1307,7 +1316,7 @@
             {
               "kind": "work_state",
               "id": "D3870",
-              "digest": "sha256:d8a130d97d9c1a3bd95843c3c796a33045d427963a2edb35b08ea36af500fc09"
+              "digest": "sha256:8e9b3562a9c342ad0cf8e1fe7d5ba198a7317e589c44f256d09125d9bf1af9de"
             },
             {
               "kind": "work_state",
@@ -1435,7 +1444,12 @@
               "digest": "sha256:5226565f61e951cb892de92df7021b1692d0af1c5232fce84b59fbbc90e9725c"
             },
             {
-"kind": "rfc",
+              "kind": "rfc",
+              "id": "recorded-selection-telemetry.md",
+              "digest": "sha256:542ec0a062017b2488accff6c207b5f5cc35a96dbaa03192a4f3515d31e22816"
+            },
+            {
+              "kind": "rfc",
               "id": "evidence-value-authority.md",
               "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
             },
@@ -1527,7 +1541,7 @@
             {
 "kind": "work_state",
               "id": "D3847",
-              "digest": "sha256:1d0f06eb9729cada2439cc9bfd4e7f4eceb6396ca3f003667a1ee64911225e83"
+              "digest": "sha256:9a9069ccafb63b5ca4d28016fee6c481210345a8fd7eaa4961851f60e977e2ca"
             },
             {
               "kind": "work_state",

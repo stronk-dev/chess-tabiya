@@ -32100,3 +32100,60 @@ Campaign was the one capability with no API, route or content. Now:
   Full1.0 remains active: complete moment/rank/opening/grade owners, reviewed D3870 and all282
   current source/access/receiver/API/native pairs remain, without a legacy compatibility pipeline.
   No partial final facade, learner-module completion, qualification or parent release claim.
+
+### 2026-10-16 — Scoped recorded human-choice source and empty-telemetry follow-up
+
+- Implement accepted F2 §2.3a's internal human_divergence@2 factory and complete original
+  observation reader. Retain every actual anchored human-common observation, including missing
+  candidate arrays and sibling origins; keep the requested grant separate from the actual origin.
+  Exact current head/event/position/stored target context authenticates before shared unchanged
+  split arithmetic. Fresh frozen result arrays retain all observations even when no marker emits.
+- D3881 is recorded before repair: two actual malformed sibling-origin suffix controls fail for
+  missing refusal. The scoped constructor now validates every relevant complete origin before
+  any observation resolver; missing candidates do not bypass validation. The independent reader
+  finds no blocker and asks for the precise intended invalid-FEN assertion, which is added.
+  Review is read-only/test inspection, not independent execution or detector qualification.
+- Initial focused run has three test expectation errors: two assume a nonexistent convention
+  receipt grammar, and one mistakes appendEvents for canonical schema validation. Correct the
+  tests to actual derived-member input receipts and the real source/subject validation boundary.
+  A run loaded before the receipt correction still has two assertion failures. Final normal fast
+  gate passes990 cases/27 files (762+101+127), including27 new cases; workspace types pass clean.
+  No production refusal, assertion coverage, deadline or threshold is removed to obtain green.
+- Canonical generators add only human_divergence@2:309 profiles and1015 capability declarations;
+  explicit old-to-new comparison confirms all prior308 profiles/1014 declarations unchanged.
+  Semantic91 subjects/zero qualified/343 existing cases/53 population/eight external receipts
+  remain. Current49/316/42/566 closure,88/88/16/1 semantic declarations,51 conventions unchanged
+  except the one internal projection. No pack edit, new binding or learner-facing dump.
+- Draft `rfc/recorded-selection-telemetry.md` under existing D3870: genuine human empty telemetry,
+  absent-source distinctions, existing REST parser, shared-reference replay restrictions and
+  stamp-only migration with explicit JSON/stamp/ID/event/replay corruption negatives. Bounded
+  read-only review corrections are authored; no acceptance or tests ran in review. Resource order
+  remains unresolved and claims remain none; no version is guessed, another lane rebased, schema
+  widened or historic data rewritten. Current source still genuinely refuses candidates:[] at
+  canonical validation. Modern nonempty live-response validation stays separate/unchanged.
+- Full normal verification/build follows before commit. D3847/D3841 remain doing; actual moment/
+  rank/opening/grade sources, D3870, per-node missing-source folding and all282 current access/
+  receiver/API/native pairs remain. D3851 requires actual caller migration and retirement, not
+  a compatibility-only pipeline. No parent closure, browser/remote CI/push or release claim.
+
+### 2026-10-16 — Recorded human-choice source verified checkpoint
+
+- Full normal make verify build exits zero:6543 software tests/408 files (377.84s), seven isolated
+  performance cases/four files (60.48s),257 content cases/26 files (58.23s), all type/contract/
+  governance/corpus/packaging/build gates. Corpus92 documents/354 blocking/34 resolved/48 accepted/
+  errors[];104 capability documents declare exactly their derived requirements. No test/timeout/
+  retry/skip relaxation, new wrapper or environment override.
+- D3881 closes on permanent test-path evidence after predecessor-red controls, full original-origin
+  validation and bounded independent read-only review. D3870 transitions to blocked on the exact
+  new recorded-selection-telemetry RFC; its resource-order question is put to the owner without
+  treating silence as approval. Schema/parser/storage and all existing reserved claims remain
+  unchanged. Accepted moment/rank/opening/grade work can continue independently.
+- Two intermediate roadmap checks refuse the new RFC evidence without a matching checkpoint
+  anchor; add its exact live-row anchor to the affected checkpoint, then the normal check passes.
+  Work-state sync refuses a done glyph before its explicit transition; use the normal transition
+  command, not inferred completion. Final state3630 rows/1749 live/zero untriaged;627 todo/37 doing/
+  1085 blocked/1719 done/162 refused. Historic462 prose-only closeouts remain unchanged.
+- Update existing queue, roadmap, state, canonical docs and final receipt in this commit. D3847,
+  D3841 and D3845 remain live. No actual learner binding, new convention, pack edit/restamp,
+  semantic qualification, completed mode/milestone, browser/remote CI run, push or deployment.
+  D3851 stands: move real callers and retire obsolete execution, not a legacy compatibility path.

@@ -1111,6 +1111,15 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       derivation: { inputs: [ref("rules.mobility.reading.legal_moves"), ref("run.record.position")] },
       limitations: ["A legal-move count is not forcing, quality or difficulty."],
     }),
+    projection("derived.pivotal", "derived.pivotal.human_divergence", "derived", {
+      version: 2, payloadType: "RecordedHumanDivergenceMarker", grounding: "recorded_run", exactness: "measured", confidence: "reported",
+      semantics: "The unchanged split convention over each genuine current-head human_common selection anchored on the granted prefix: omit offWindow rows, normalize positive total reported masses, require maximum <=0.5 and at least three masses >=0.15. Actual event origin is separate from requested grant.",
+      operands: ["nodeId", "kind", "detail", "provenanceNote", "selection", "position"], forms: ["timeline_marker", "sentence", "panel"],
+      abstention: { possible: true, reasons: ["input_abstained"] },
+      derivation: { inputs: [ref("recorded.inspector.maia_selection"), ref("run.record.position")] },
+      limitations: ["Recorded model-choice spread only; not quality, intent, strength, calibration or strategic significance. Missing candidate arrays retain private source_absent dispositions; they are not completed nonmatches."],
+      disposition: { kind: "experimental", reason: "Accepted F2 §2.3a internal recorded successor; D3870 empty telemetry and complete consumer/API/native adoption remain open." },
+    }),
     ...(["phase_change", "option_collapse"] as const).map(kind => projection("derived.pivotal", `derived.pivotal.${kind}`, "derived", {
       version: 2, payloadType: `PivotalMarker.${kind}`, grounding: "declared_convention", exactness: "convention", confidence: "not_applicable",
       semantics: kind === "phase_change" ? "The unchanged phase-bands@1 transition between two actual definite readings/recorded positions within the granted original prefix, including intervening unclear nodes." : "The unchanged sustained legal-continuation convention over all three complete same-side legal-mobility readings and their actual recorded positions within the granted prefix.",

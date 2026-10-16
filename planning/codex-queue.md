@@ -1,15 +1,22 @@
 # Codex queue
 
-**Current executable checkpoint, 2026-10-16:** actual internal last-level reduction now consumes
-the complete recorded Review population. It authenticates all original source/value/member/
-provider witnesses before imported-loss/typed-cp selection and publishes genuine fresh empty or
-singleton arrays. A shared dependency-free seal retains exact per-operation issuance; V2 binds
-every reached actual operation separately.21 new permanent cases/963 focused passes/26 files and
-workspace types pass; independent bounded read-only review/re-review is clear. Full corrected
-normal make verify build exits zero:6516 software/407 files, seven performance/four files,
-257 content/26 files and all governance/corpus/packaging/build gates.
-315 projections/308 profiles/1014 capabilities; no new convention, pack
-edit, current learner binding, qualification, browser/remote or release claim.
+**Current executable checkpoint, 2026-10-16:** the internal scoped human-divergence@2 factory
+retains every actual current-head observation, including missing arrays and sibling origins.
+Exact source/event/position/context joins precede unchanged reported-window arithmetic; original
+frozen results retain complete dispositions even when empty.27 new permanent cases/990 focused
+passes/27 files and workspace types pass; independent bounded read-only review finds no blocker.
+Full normal make verify build exits zero:6543 software/408 files, seven performance/four files,
+257 content/26 files and all governance/corpus/packaging/build gates.316 projections/309 profiles/1015
+capabilities; prior profiles/declarations and all current bindings remain. No new convention,
+pack edit, learner delivery, qualification, browser/remote or release claim.
+
+[[D3881]]'s two actual origin-suffix controls first fail for missing refusal, then pass: all
+relevant complete original origin branches validate before any source resolver, even when that
+observation lacks candidates. Requested grant and actual origin remain separate. D3870 now has
+the bounded `rfc/recorded-selection-telemetry.md` draft; shared-reference replay constraints,
+existing REST writes, concrete stamp-only migration negatives and independent read-only review
+are recorded, not implemented. Resource ordering is unresolved; do not guess a lane, renumber
+other claims or self-accept it. This blocks only the explicit-empty source arm, not lawful source work.
 
 [[D3880]]'s independent follow-up correction is implemented/re-reviewed: both result readers now
 require their already-retained actual population, not only equal contents. All four genuine
@@ -19,7 +26,7 @@ full run is explicitly superseded (exit130); the corrected full run passes in fu
 The structural comparison reduction/V2/consumer-plan wave remains implemented and verified;
 D3874–D3877 remain closed. This new source has no partial four-method public facade, placeholder
 moment/Story operation or new learner binding. Next: complete
-moment/rank/opening/grade owners, D3870's reviewed schema
+moment/rank/opening/grade owners, D3870's independently accepted schema
 follow-up, then the entire current282-pair source/access/receiver/API/native cutover. Bind one
 final authority to RunService's actual storage and use observation/durable reads, never enqueue
 from captured-only preparation. Retire obsolete executable paths after actual callers move;

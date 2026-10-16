@@ -1333,3 +1333,29 @@ both readers authenticate operation issuance/exact population before returning r
 complete-image/operation/plan/currentness guard remains, and both populations may compute their
 own results. The four tests are inspected, not run by the reviewer; no remaining bounded blocker.
 This return supersedes the initial no-blocker conclusion and grants no new acceptance or release.
+
+### Recorded human-divergence — bounded implementation review, 2026-10-16
+
+The authorized independent reviewer finds no blocking issue in the actual internal source/factory.
+Every current-head anchored human-common observation survives, including missing candidate arrays
+and sibling origins. Complete relevant original origin paths validate before resolution; exact
+head/origin/event/position/requested-context admission precedes shared unchanged split arithmetic.
+The original result reader retains complete dispositions, literal ordered selection/position
+inputs, anchor/event ordering and exact nominal source/result membership, including empty arrays.
+The declaration remains recorded_run/measured/reported. Tests were inspected, not run by reviewer.
+
+D3881's predecessor-red invalid-origin-suffix controls cover present and missing candidate arrays.
+The review's strengthening is implemented: assert the exact invalid-FEN refusal as well as zero
+resolver calls, so an unrelated constructor failure cannot satisfy them. Mixed internal facts are
+not a completed available node slot; future Review adapters must apply the accepted unavailable
+fold. D3870, complete current consumer delivery and qualification remain open.
+
+### D3870 narrow follow-up draft — bounded review, 2026-10-16
+
+`rfc/recorded-selection-telemetry.md` now states the actual canonical/REST/storage repair without
+claiming a numeric future lane, rebasing another claimant or changing production schema/parsers.
+Read-only review adds two concrete obligations: shared schema widening must retain seeded-group
+coverage refusals/prediction empty semantics, and targeted migration corruption includes embedded
+stamp/ID/event/replay mismatches, not only invalid JSON. Both are authored into the draft with
+permanent-test requirements. Modern live-response nonempty validation remains separate/unchanged.
+Resource ordering is explicitly unresolved; no acceptance is granted and no tests ran in review.

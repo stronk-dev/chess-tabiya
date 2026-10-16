@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3880]] · **Machine map:**
+2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3881]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,24 +19,25 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest internal implementation is the actual last-level reduction over the complete recorded
-Review population. Source authentication precedes selection, including every original point/member/
-provider witness and failed input. A fresh original zero/one array retains complete calculation
-authority; no empty fact is manufactured. The shared seal has two exact operation issuers, and
-V2 binds every reached actual callable separately.21 new permanent cases/963 focused passes/26 files
-and clean workspace types pass; independent bounded read-only review/re-review finds no blocker.
-D3880's four genuine equal-image controls first fail for missing refusal, then pass with exact
-retained-population checks. Full corrected normal make verify build exits zero:6516 software/
-407 files, seven performance/four files,257 content/26 files and all other gates.
-315 projections/308 profiles/1014 capabilities, with no
-new convention, pack edit, current learner binding or qualification. Zero untriaged remains.
-Prior Review boundary/population and structural comparison/V2/value/result/consumer-plan work
-remains implemented and verified.
+The latest internal implementation is scoped human-divergence@2 over the exact recorded
+selection history. Every anchored observation survives, including missing arrays and sibling
+origins. Full original origin paths validate before resolving any source; exact current-head
+event/position/context joins precede the unchanged reported-window arithmetic. Original frozen
+results retain complete per-observation dispositions, including successful no-match calculations.
+D3881's two malformed-origin controls first fail for missing refusal, then pass.27 permanent
+cases/990 focused passes/27 files and clean workspace types pass; independent bounded read-only
+review finds no blocker. Full normal make verify build exits zero:6543 software/408 files,
+seven performance/four files,257 content/26 files and all governance/corpus/packaging/build gates.
+316 projections/309 profiles/1015 capabilities preserve all prior profiles/declarations and actual
+current bindings. No new convention, pack edit, learner delivery or qualification. Prior last-level,
+Review boundary/population and structural comparison/V2/value/result/consumer-plan work remains.
 
 This source is below moment assembly; it does not complete a learner module or milestone.
 Full moment/rank/opening/grade owners and
 the entire current282-pair access/receiver/API/native delivery still gate the requested UX.
-D3870 remains a separately reviewed schema/REST/migration follow-up, not a local bypass;
+D3870's `rfc/recorded-selection-telemetry.md` is a bounded unaccepted schema/REST/stamp-only
+migration follow-up. Resource ordering remains unresolved; no existing lane was taken or rebased.
+The explicit-empty source arm still refuses at canonical validation, not a local bypass;
 no legacy compatibility pipeline is owed.
 
 The complete coordinated current-source/module contract is now independently accepted for

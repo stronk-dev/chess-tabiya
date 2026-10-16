@@ -61,7 +61,7 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 315, 42, 566]); // Complete comparison/last-level reductions are source-only; no partial learner cutover.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 316, 42, 566]); // Internal recorded successors are source-only; no partial learner cutover.
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");
