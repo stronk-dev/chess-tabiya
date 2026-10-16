@@ -240,6 +240,23 @@ migration, access enforcement and receiver/API/native proof remain open. Whole-t
 have not yet migrated; this does not establish a second supported pipeline or preserve obsolete
 APIs under D3851.
 
+Structural comparison now has the runtime-private `collectComparisonStructuralPopulation` over
+the genuine two-column comparison source. It retains every fork-inclusive node occurrence,
+original path index, position and the complete ordered seventeen-family result rows. Successful
+empty arrays carry construction-time membership and applied convention receipts from the sole
+factories; a copied/partial array or a genuine wrong-FEN invocation cannot stand in for them.
+Original position membership also binds the full event head without changing its old receipt.
+
+The bounded selection retains existing observation identity/order, whole-grant intersection,
+immediate-predecessor tests and real reappearance. Named observations keep their original
+catalogue id/name alongside the unchanged legacy observation view. Its explicit private source
+encoder retains every row/invocation/receipt and requested branch, including empty results.
+34 new permanent cases/761 focused passes and types pass; independent read-only review finds
+no blocker. Full normal make verify build passes6415 software/402 files, seven isolated
+performance/257 content and all remaining gates. The reduction mint/result membership, V2
+execution plans, actual current consumers and API/native delivery remain open; this helper does
+not mint an absence fact or qualify the detectors.
+
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,
 and can carry evaluation only. Its derivation is an explicit same-lane alternative: two recorded

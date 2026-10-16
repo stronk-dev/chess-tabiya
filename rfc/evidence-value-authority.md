@@ -76,6 +76,22 @@ existing cases,53 population/eight external outcomes unchanged.1012 capability d
 seven isolated performance/257 content and all remaining gates. Source-owned reductions/grades,
 human@2/D3870, complete current consumers/access/API/native delivery and parent discharges remain open.
 
+**Structural population checkpoint, 2026-10-16:** §§2.3d/i now have the runtime-private nominal
+collector/reader and complete explicit comparison source encoder. Both complete granted columns
+retain fork-inclusive original path indices/positions and all17 ordered family result arrays,
+including empty invocations and their actually applied convention receipts. Membership is issued
+only at the existing sole factories; original position issuance binds full event heads while old
+value receipts remain unchanged. Closed named conversion, stable legacy ordering/identity,
+whole-peer suppression and recurrence retain original family/item ordinals and catalogue names.
+34 new cases/761 focused passes and workspace types pass. An explicit temporary guard-removal
+mutation causes18 wrong-FEN/cross-head failures; restored guards return761 green. Independent
+read-only implementation review finds no blocker; it does not independently qualify detectors.
+1012 declarations/306 factory profiles and semantic91 subjects/zero qualified/343 prior passing
+cases/53 population/eight external outcomes remain unchanged. Full normal make verify build
+passes6415 software/402 files, seven isolated performance/257 content and all remaining gates.
+Reduction grammar/receipts/authenticated results, V2 plans/admission, last-level/rank/
+opening/grade owners and complete current consumer delivery remain open; no parent discharge.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft

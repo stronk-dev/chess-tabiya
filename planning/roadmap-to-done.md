@@ -122,6 +122,17 @@ seven isolated performance/257 content and all remaining gates. Reductions/grade
 and complete current consumers/access/receiver/API/native delivery still gate the learner
 capability. D3847/D3841 remain doing; no milestone or qualification promotion.
 
+Structural comparison now owns the complete negative-selection population: both granted columns,
+fork-inclusive original occurrences and17 exact ordered family invocations, including authentic
+empty arrays and applied conventions.34 new cases/761 focused passes retain unchanged old
+receipts, full-head position membership, legacy ordering/identity, peer suppression, recurrence,
+named identity and explicit complete source encoding. A temporary guard-removal mutation yields
+18 failures; restoring guards yields761 passes and clean types. Independent bounded review finds
+no blocker, not detector qualification. Full normal make verify build passes6415 software/402
+files, seven isolated performance/257 content and all remaining gates. Reduction mint/result/
+plan/admission, Review boundary/last-level/rank/opening/grade ownership and complete
+current consumer/access/API/native delivery remain; no milestone is promoted.
+
 D3869 also closes the measured verification-order debt: existing28 normal Make gates now
 refuse stale generated contracts before both full test pools. Four scheduling regressions
 check the actual Make plan, failure propagation and unchanged393-file/native ownership;

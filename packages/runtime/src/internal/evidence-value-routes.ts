@@ -19,6 +19,8 @@ import {
   TRANSITION_EVENT_FACTORIES,
   TRANSITION_READING_FACTORIES,
   admitInputValue,
+  readStructuralPopulationInvocation,
+  assertRecordedPositionInvocation,
   createAuthoredStructuralConditionInputV1Evidence,
   createDerivedExplorerRepertoireFrontierV1Evidence,
   createDerivedExplorerPositionFrequencyV1Evidence,
@@ -202,6 +204,9 @@ import {
   type EvidenceValueFactory,
   type EvidenceValueFactoryMeta,
 } from "../evidence-factories.js";
+
+// Read-only source membership, never a public registration or second factory dispatcher.
+export { readStructuralPopulationInvocation, assertRecordedPositionInvocation };
 
 /** The literal route table: exact projection ref → its one production factory. */
 const EVIDENCE_VALUE_ROUTES = Object.freeze({

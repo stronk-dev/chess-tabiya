@@ -135,7 +135,20 @@ remain unqualified, with the prior343/343 cases/53 population/eight external out
 passes6381 software/401 files, seven isolated performance/257 content and all remaining gates;
 no current learner/access/API/native cutover is claimed.
 
-Next complete source-owned reductions/grades, reconcile
+Structural negative-selection source authority now exists: the private comparison population
+retains both full grants, fork-inclusive occurrences and all17 ordered family invocations, even
+when empty. Sole-factory array/position membership rejects copied/partial/foreign-FEN results
+and genuine equal-payload positions from a changed full head; identical logical scopes remain
+valid. Legacy conversion/selection, later-peer suppression, recurrence and named catalogue
+identity/ordinals are retained in the complete private encoder.34 new cases/761 focused passes
+and workspace types pass. Temporary guard removal yields18 expected failures; restored761 pass.
+Independent read-only review finds no blocker, not independent detector qualification. Full
+normal make verify build passes6415 software/402 files, seven isolated performance/257 content
+and all remaining gates. No reduction value/plan/result or current consumer is made executable
+merely by this source component; declarations/profiles/qualification unchanged.
+
+Next complete actual reduction grammar/mint/result authority and V2 execution/admission, the
+accepted Review boundary/last-level/rank/opening source owners and source-owned grades; reconcile
 human-divergence's D3870 schema follow-up, then the
 remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,

@@ -1218,3 +1218,22 @@ profiles; predecessor qualification is not copied. Trade@2 keeps its existing co
 receipt, while the scoped result identity binds the current full head. Tests are inspected,
 not rerun by the reviewer. Consumer/access/API/native delivery and semantic qualification are
 not cleared by this bounded implementation review.
+
+### Complete structural comparison population — bounded implementation review, 2026-10-16
+
+The authorized reviewer first clears the source approach against accepted F2 §§2.3d/i. Empty
+arrays require membership issued at their sole actual factories, with original complete outputs,
+FEN/ref/factory and actually applied convention receipt. Existing position receipts alone cannot
+distinguish genuine equal-payload/same-count changed-head returns; a narrow original-position
+invocation sidecar can establish that join without altering receipts or requiring per-handle
+allocation identity. Independently issued identical logical scopes remain valid.
+
+The subsequent read-only implementation review finds no blocking defect. Collection/validation
+retains both complete grants, fork-inclusive occurrences, original indices and17 ordered family
+rows. Array membership rejects copies, partial arrays and genuine wrong-FEN returns; position
+membership distinguishes changed full heads while preserving equal logical scopes. Selection/
+encoding retain the legacy ordering/identity, whole-peer suppression, reappearance, catalogue
+identity and original family/item addresses. Tests are inspected, not rerun. They share existing
+structural computations and prove reconstruction/selection fidelity, not independent detector
+correctness. Repeated full-event hashing remains for normal performance verification. No reduction,
+qualification or consumer-delivery completion is implied.

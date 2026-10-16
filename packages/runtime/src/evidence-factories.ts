@@ -37,6 +37,7 @@ import {
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
 import { directProjectionConventions } from "./evidence-convention-closure.js";
+import { COMPARISON_STRUCTURAL_ROUTES, type ComparisonStructuralRoute } from "./internal/comparison-structural-families.js";
 import { conventionReceipt, type ConventionReceipt } from "./evidence-conventions.js";
 import { resolveEvidenceReference, type EvidenceReferenceResolution } from "./evidence-ref-resolution.js";
 import { resolveSourceAttribution, type SourceAttributionReceipt } from "./source-attribution.js";
@@ -558,11 +559,48 @@ export const createRulesTacticReadingPromotionPressureV1Evidence = (() => {
 // Computed: FEN populations
 // ---------------------------------------------------------------------------------------------
 
+interface StructuralPopulationInvocation {
+  readonly projection: VersionedEvidenceId;
+  readonly factory: string;
+  readonly fen: string;
+  readonly inputDigest: string;
+  readonly items: readonly DeclaredEvidence<unknown>[];
+  readonly convention: ConventionReceipt;
+}
+const STRUCTURAL_POPULATION_INVOCATIONS = new WeakMap<object, StructuralPopulationInvocation>();
+const COMPARISON_STRUCTURAL_ROUTE_SET: ReadonlySet<string> = new Set(COMPARISON_STRUCTURAL_ROUTES);
+
+/** Private read only: successful empty arrays need the same actual invocation proof as positives. */
+export function readStructuralPopulationInvocation(items: readonly DeclaredEvidence<unknown>[], route: ComparisonStructuralRoute, fen: string): StructuralPopulationInvocation {
+  const invocation = items !== null && typeof items === "object" ? STRUCTURAL_POPULATION_INVOCATIONS.get(items) : undefined;
+  if (invocation === undefined || !COMPARISON_STRUCTURAL_ROUTE_SET.has(route)
+    || `${invocation.projection.id}@${invocation.projection.version}` !== route
+    || invocation.factory !== evidenceFactorySymbol(route) || invocation.fen !== fen
+    || invocation.inputDigest !== evidenceDigest({ fen }) || invocation.items !== items) {
+    throw new TypeError("Structural population is not the complete exact factory invocation");
+  }
+  for (const item of items) {
+    assertDeclaredEvidence(item);
+    const receipt = evidenceValueReceipt(item);
+    if (sealedRoute(item) !== route || receipt.factory !== invocation.factory
+      || receipt.inputDigest !== invocation.inputDigest || receipt.convention !== invocation.convention) {
+      throw new TypeError("Structural population item crosses its original invocation");
+    }
+  }
+  return invocation;
+}
+
 function fenPopulation<T>(route: string, compute: (fen: string) => readonly T[], options: { readonly dependency?: string; readonly pending?: string } = {}): EvidenceValueFactory<{ readonly fen: string }, readonly DeclaredEvidence<T>[]> {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN }], result: "population", ...(options.dependency === undefined ? {} : { dependency: options.dependency }), ...(options.pending === undefined ? {} : { pending: options.pending }) }, ({ fen }: { readonly fen: string }) => {
     const valid = validFen(fen);
-    return Object.freeze(compute(valid).map((payload) => mint(route, symbol, payload, { fen })));
+    const items = Object.freeze(compute(valid).map((payload) => mint(route, symbol, payload, { fen })));
+    if (COMPARISON_STRUCTURAL_ROUTE_SET.has(route)) {
+      const projection = projectionFor(route);
+      STRUCTURAL_POPULATION_INVOCATIONS.set(items, Object.freeze({ projection: Object.freeze({ id: projection.id, version: projection.version }),
+        factory: symbol, fen, inputDigest: evidenceDigest({ fen }), items, convention: mintConventionReceipt(route, [], []) }));
+    }
+    return items;
   });
 }
 
@@ -1104,12 +1142,28 @@ function runNode(run: DrillRun, nodeId: string): Node {
   return node;
 }
 
+const RECORDED_POSITION_INVOCATIONS = new WeakMap<object, Readonly<{ runId: string; headDigest: string; nodeId: string }>>();
+/** Private original-head membership; never changes the historical position value receipt. */
+export function assertRecordedPositionInvocation(position: DeclaredEvidence<RecordedPosition>, run: DrillRun, nodeId: string): void {
+  assertDeclaredEvidence(position);
+  const invocation = RECORDED_POSITION_INVOCATIONS.get(position), node = runNode(run, nodeId), receipt = evidenceValueReceipt(position);
+  if (invocation === undefined || invocation.runId !== run.id || invocation.nodeId !== nodeId
+    || invocation.headDigest !== evidenceDigest(run.events) || sealedRoute(position) !== "run.record.position@1"
+    || receipt.factory !== "createRunRecordPositionV1Evidence"
+    || receipt.inputDigest !== evidenceDigest({ run: { run: run.id, nodes: run.nodes.length, events: run.events.length }, nodeId })
+    || position.payload.nodeId !== nodeId || position.payload.ply !== node.ply || position.payload.fen !== node.fen) {
+    throw new TypeError("Recorded position is not the original source head/node invocation");
+  }
+}
+
 export const createRunRecordPositionV1Evidence = (() => {
   const route = "run.record.position@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, nodeId: value("a node id", isText) }], result: "single", dependency: "recorded-semantic-path", pending: RUN_PENDING }, ({ run, nodeId }: { readonly run: DrillRun; readonly nodeId: string }) => {
     const node = runNode(run, nodeId);
-    return mint(route, symbol, Object.freeze({ nodeId: node.id, ply: node.ply, fen: node.fen }), { run, nodeId });
+    const position = mint(route, symbol, Object.freeze({ nodeId: node.id, ply: node.ply, fen: node.fen }), { run, nodeId });
+    RECORDED_POSITION_INVOCATIONS.set(position, Object.freeze({ runId: run.id, headDigest: evidenceDigest(run.events), nodeId }));
+    return position;
   });
 })();
 

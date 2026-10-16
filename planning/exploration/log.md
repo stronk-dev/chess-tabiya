@@ -31783,3 +31783,59 @@ Campaign was the one capability with no API, route or content. Now:
   receiver/API/native journeys remain. D3851 requires real caller migration then obsolete-path
   retirement, not a second compatibility pipeline. No parent/milestone/semantic qualification or
   whole1.0 completion claim. The full1.0 goal stays active.
+
+### 2026-10-16 — D3847 complete structural comparison population
+
+- Implement accepted F2 §§2.3d/i's private nominal collector/reader over the existing genuine
+  comparison source. Retain both complete grants, every fork-inclusive original occurrence,
+  root-relative path index, position and17 exact ordered family rows. No caller arrays or
+  whole-tip crop. Shared equal-FEN invocation reuse never merges distinct node occurrences.
+- Add construction-time original-array membership only at those17 existing sole factories:
+  exact input/ref/factory, complete frozen original outputs and actual applied conventions,
+  including successful empties. Private read-only functions cross the existing central invoker;
+  no new setter, mint, public projection or registry. Position sidecars bind actual full event
+  heads/node issuance without changing historical value receipts or accepting per-handle identity
+  as source authority. Equal logical scopes remain valid; actual changed heads refuse.
+- Closed named conversion preserves raw catalogue id/name and unchanged legacy observation
+  bytes. Preserve stable kind/JSON-locale ordering, pawn-safe identity, complete post-fork column
+  unions/intersection, immediate-predecessor selection and true recurrence. The private explicit
+  encoder retains every row/empty invocation/child receipt and requested branch. No absence fact,
+  grade, significance, provider work or full-analysis claim is manufactured.
+-34 new cases/761 focused passes include both colors,60 ordered branch/prefix combinations,
+  fork-only empty output, real later-peer suppression/absent-between recurrence, named metadata,
+  equal-FEN distinct occurrences and17 genuine wrong-full-FEN source populations. Initial types/
+  focused checks pass. A later encoder assertion had an undefined test variable (759 pass/two
+  fail); correct the assertion. Controlled removal of actual FEN/input/head guards then gives
+  exactly18 expected failures/743 passes. Restore the guards before final types/761 focused
+  passes; no historical predecessor-red claim or production-rule relaxation is inferred.
+- Canonical generators retain1012 declarations with zero changes and306 factory profiles;
+  semantic implementation metadata refresh retains91 subjects/zero qualified,343/343 prior
+  cases,53 population/eight external outcomes. Independent source approach and implementation
+  reviews find no blocker, but share the existing detector arithmetic and claim no independent
+  detector qualification. Full normal verification/build is pending, including existing budgets.
+- D3847/D3841 remain doing; correct D3845's stale author-only acceptance text against the existing
+  joint decision, not a new acceptance. Real reduction grammar/mint/result authority, V2 plans/
+  admission, Review boundary/last-level/rank/opening/grade source owners, D3870 and complete current
+  consumer/access/API/native migration remain. No compatibility pipeline, new schema/migration,
+  pack restamp, bulk research artifact, milestone/qualification/push/release claim. Keep the
+  full1.0 objective active and refresh the existing trackers, not another queue.
+
+### 2026-10-16 — D3847 structural population final verification
+
+- Final normal `make verify build` exits zero:6415 software tests/402 files (377.39s), seven
+  isolated performance tests/four files (63.11s),257 content tests/26 files (55.85s), all workspace
+  types, generated source/semantic/capability contracts, governance, packaging/build and corpus
+  checks. Normal focused gate761/17 files includes34 new source cases. Existing performance
+  budgets pass; no new whole-population/native/HTTP latency qualification is inferred.
+- Corpus clearance remains92 documents/354 blockers/34 resolved/48 accepted/errors[];104
+  capability documents retain exact requirements.1012 declarations and306 factory profiles,
+  prior343 semantic cases/91 subjects/zero qualified/53 population/eight external outcomes,
+  current module bindings and pack bytes/requirements remain unchanged. No schema/migration,
+  bulk research recording or fake absence fact. No browser, remote CI, push or release claim.
+- Independent bounded source implementation review remains clear. Refresh the existing
+  ledger/state/roadmap/queue at zero untriaged. D3847/D3845/D3841 stay doing: the genuine source
+  population is implemented, not the reduction grammar/mint/authenticated result/V2 planner or
+  current learner delivery. Review boundary/last-level/rank/opening/grade source owners, D3870
+  and complete consumer/access/receiver/API/native migration remain. Retire obsolete executable
+  paths after real callers move; no compatibility pipeline or parent/milestone/qualification/
+  full1.0 completion claim. The full1.0 goal remains active.
