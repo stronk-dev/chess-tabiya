@@ -4,6 +4,17 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
+**Registry-owned measurement prerequisite, 2026-10-16:** module-registration §4.11a now has
+its private original document/ledger/manifest owner, exact pin/licence/linkage, all original
+ordinals/source links and distinct missing/invalid/read-failure states. D3886's independent
+pre-commit returns are corrected with47 software/14 file controls, including genuine verified
+predecessor digest/readings and SQLite hydration. Bounded independent code review clears only
+this prerequisite; normal `make verify build` exits zero:6,784 software/417 files, seven
+performance/four files,271 content/27 files and every remaining gate. Failed/interrupted attempts
+remain logged. D3841's selected-position invocation/coverage,
+grade/Compare selection, complete current consumer/access/renderer/API/native delivery remain.
+No lifecycle, resource, qualification, content or full-capability completion is inferred.
+
 **Current source/module amendment acceptance, 2026-10-15:** authorized independent joint
 review accepts module-registration's sole ten-consumer/282-pair image, F2 §§2.3a–m, provider
 §1a, grade §§2a/4a, Hint §3a, packet §3.1a, Review §4.5, installed-opening §3a/current adoption

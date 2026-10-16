@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+The new registry-owned measurement prerequisite retains the complete original pinned document,
+manifest and ledger independently of objective grading, with every row/abstention ordinal and
+exact source link. Missing, malformed and actual read failures stay distinct; copied/foreign/
+retired handles fail. D3886's pre-commit admission returns are repaired;47 focused software and14
+real-file cases plus bounded independent review pass. Genuine verified predecessor readings and
+JSON-order ledger digests remain unchanged. Full normal `make verify build` exits zero:6,784
+software/417 files, seven performance/four files,271 content/27 files and every remaining gate.
+Failed/interrupted attempts remain in the existing log. D3841's selected-position
+supplier, grade/Compare source choice and complete consumer/access/renderer/API/native migration
+remain; no learner-feature or milestone promotion follows from this prerequisite.
+
 The latest verified opening prerequisite retains genuine installed source/recorded-position
 identity, original frozen table rows and actually executed negative lookups. Endpoint/membership
 share one normalization and the existing maps/calculation, also used by actual HTTP/phase lookup.

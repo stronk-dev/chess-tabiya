@@ -128,6 +128,18 @@ match, and no cross-node delta or verdict is computed. Structured readings never
 external voice provider's packet; frozen attributed prose is appended after provider
 rendering. See `recorded-evidence.md`.
 
+The registry separately retains original measurement artifacts for the new source adapters.
+`resolveRecordedMeasurementSource(packDigest)` is server-private and independent of objective
+grading: it pins the complete detached document, ledger and manifest, every original record/
+abstention ordinal and its exact source link. Only the issuing registry can read its source
+handle; copied handles, another registry and same-digest replacements cannot lend authority.
+Missing sidecars, malformed/mismatched artifacts and actual read failures remain distinct.
+File reads occur only at registration; reload, not a request-time reread, observes changed files.
+Programmatic registration admits plain JSON data without executing accessors or normalizing away
+invalid members. Existing assessment grounding, position readings and saved JSON-order ledger
+digests are unchanged. This owner does not yet execute the new per-position ledger supplier,
+issue GradeSource/access receipts or deliver the replacement Inspector page.
+
 ## Authored checkpoint reveal
 
 `GET /packs/:id` never contains authored annotations, deviations, plan classes,

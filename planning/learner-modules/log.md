@@ -114,3 +114,35 @@ production constructors, checked the 26 literal consumer pairs, and verified tha
 candidate/operand projections remain Inspector-only. It also confirmed that the implementation
 draft still calls every pair dependency-blocked, so eligibility does not masquerade as a running
 recorded-path assembler. No technical return remains; owner acceptance is the final amendment gate.
+
+## 2026-10-16 — Original registry measurement prerequisite, D3841/D3886
+
+Accepted module-registration §4.11a now has a registry-instance-owned original document/ledger/
+manifest source. It checks exact pack pin, shapes, permitted source/licence and source/timestamp
+linkage, retaining every original record/abstention ordinal and source reference. Registration
+captures each actual file read once; missing, parse failure and read failure remain distinct.
+Programmatic artifacts must be acyclic plain JSON and confer no file/provider transaction.
+Copied/foreign/retired handles fail; same-digest replacement and fresh reload do not borrow old
+artifact authority. Existing grading/readings and insertion-order ledger digests remain unchanged.
+
+Independent pre-commit review returned non-JSON normalization/failure isolation and malformed-
+counterpart masking. D3886's repairs include getter/array-method zero-execution, Map/Set/cycle,
+file-backed invalid Unicode plus missing counterpart, and genuinely verified predecessor digest/
+nonempty-reading controls. Bounded independent re-review finds no remaining implementation
+blocker. Focused gate passes47 software/three files and14 real-file cases; actual SQLite Studio
+hydration asserts absence rather than inventing sidecars. Full normal verification is in flight.
+
+Earlier full runs were deliberately interrupted130 for review repairs; another fails fast at a
+TypeScript-only adversarial-array fixture constructor. Correct the fixture, not production or
+assertions. The first unsandboxed focused types pass; a separate sandboxed attempt is blocked by
+pnpm lockfile write permission. No failed/interrupted command is a successful full run. Selected-
+position supplier/factory coverage, GradeSource/Compare choice and complete current consumer/
+access/renderer/API/native delivery remain open. No compatibility-only execution arm, authored
+pack change, source qualification, browser/remote CI or full-capability completion.
+
+Final corrected normal `make verify build` exits zero:6,784 software/417 files (429.24s), seven
+unchanged-budget performance/four files (63.21s),271 content/27 files (59.20s), all types/contracts/
+governance/corpus and build prerequisites. Corpus92 documents/354 blocking/34 resolved/48 accepted/
+errors[];104 exact-capability documents. No source/test changes after this successful run. D3886
+closes on permanent path evidence; D3841 stays doing. Final prose/state/checkpoint regeneration
+and configured commit hooks follow; no remote or learner-migration claim.

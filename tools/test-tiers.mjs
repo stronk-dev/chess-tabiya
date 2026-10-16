@@ -13,6 +13,7 @@ export const CONTENT_CONTRACT_TESTS = Object.freeze([
   "apps/server/src/campaign-account-lifecycle.test.ts",
   "apps/server/src/opponent-contracts.test.ts",
   "apps/server/src/pack-authoring.test.ts",
+  "apps/server/src/pack-measurement-loading.test.ts",
   "apps/server/src/principle-citation.test.ts",
   "apps/server/src/principle-registry.test.ts",
   "apps/server/src/reasoning.test.ts",

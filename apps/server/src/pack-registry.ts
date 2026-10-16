@@ -4,6 +4,7 @@ import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  canonicalizeJson,
   digestDrillPack,
   type DrillPackDefinition,
   type FeedbackPolicy,
@@ -24,14 +25,50 @@ import { installedConceptRegistry } from "./concept-registry-loader.js";
 import { ServerError } from "./errors.js";
 import { packVariantIssues, validatePackDocument, type PackPrincipleLookup, type PackShapeLookup } from "./pack-validation.js";
 import { buildPositionEvidenceIndex } from "./position-evidence.js";
-import { assessmentGrounding } from "./sourcing/ledger-validation.js";
-import { validateLedger } from "./sourcing/ledger-validation.js";
+import { assessmentGrounding, linkage, validateLedger, validateManifest } from "./sourcing/ledger-validation.js";
 import { MACHINE_LABEL_EVIDENCE_KINDS, validateClaimBindings } from "./sourcing/claim-binding.js";
-import type { SourcingIssue } from "./sourcing/types.js";
+import type { EvidenceAbstention, EvidenceLedger, EvidenceRecord, SourceEntry, SourceManifest, SourcingIssue } from "./sourcing/types.js";
 
 export const SIDECAR_BASENAMES = PACK_SIDECAR_BASENAMES;
 
 export type AssessmentGrounding = "ledger_verified" | "unverified";
+
+type SidecarRead =
+  | { readonly kind: "missing" }
+  | { readonly kind: "loaded"; readonly value: unknown }
+  | { readonly kind: "parse_failed" }
+  | { readonly kind: "read_failed" };
+interface SidecarImage {
+  readonly origin: { readonly kind: "provided" } | { readonly kind: "file"; readonly path: string };
+  readonly read: SidecarRead;
+}
+interface MeasurementArtifacts { readonly ledger: SidecarImage; readonly manifest: SidecarImage }
+declare const measurementSourceBrand: unique symbol;
+/** Server-private original registry artifact authority, never a provider or access receipt. */
+export interface RecordedMeasurementSource { readonly [measurementSourceBrand]: true }
+export type RecordedMeasurementAdmission =
+  | { readonly kind: "available"; readonly source: RecordedMeasurementSource }
+  | { readonly kind: "unavailable"; readonly reason: "source_absent" }
+  | { readonly kind: "failed"; readonly reason: "source_contract_invalid" | "source_lookup_failed" };
+interface MeasurementSourceImage {
+  readonly document: DrillPackDefinition;
+  readonly packDigest: string;
+  readonly sidecars: MeasurementArtifacts;
+  readonly ledger: EvidenceLedger;
+  readonly manifest: SourceManifest;
+  readonly ledgerDigest: string;
+  readonly manifestDigest: string;
+  readonly records: readonly { readonly ordinal: number; readonly record: EvidenceRecord; readonly sourceOrdinal: number; readonly source: SourceEntry }[];
+  readonly abstentions: readonly { readonly ordinal: number; readonly abstention: EvidenceAbstention; readonly sourceOrdinal: number; readonly source: SourceEntry }[];
+}
+interface RegistrationInput {
+  readonly source: string; readonly value: unknown; readonly sidecars: MeasurementArtifacts;
+  readonly channel: "official" | "community";
+}
+interface RegistrationOptions {
+  readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup;
+  readonly concepts?: CompiledConceptRegistry; readonly capabilities?: RuntimeCapabilitySupport;
+}
 
 export type { FeedbackPolicy } from "@chess-tabiya/schema/drill-pack";
 
@@ -231,16 +268,51 @@ export function isPackDocumentName(name: string): boolean {
   return isPackDocumentFileName(name);
 }
 
-async function optionalJson(path: string): Promise<unknown | undefined> {
+async function readSidecar(path: string): Promise<SidecarImage> {
+  const origin = Object.freeze({ kind: "file" as const, path });
+  let text: string;
   try {
-    return JSON.parse(await readFile(path, "utf8")) as unknown;
+    text = await readFile(path, "utf8");
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return undefined;
-    // A malformed optional sidecar cannot earn grounding, but must not turn a
-    // loadable draft pack into a server-startup failure.
-    return undefined;
+    return freeze({ origin, read: { kind: (error as NodeJS.ErrnoException).code === "ENOENT" ? "missing" as const : "read_failed" as const } });
+  }
+  try { return freeze({ origin, read: { kind: "loaded" as const, value: JSON.parse(text) as unknown } }); }
+  catch { return freeze({ origin, read: { kind: "parse_failed" as const } }); }
+}
+
+function providedSidecar(value: unknown): SidecarImage {
+  const origin = Object.freeze({ kind: "provided" as const });
+  if (value === undefined) return freeze({ origin, read: { kind: "missing" as const } });
+  try {
+    assertJsonArtifact(value, new Set());
+    // Check canonical JSON validity, but preserve insertion order for existing byte-sensitive
+    // JSON.stringify consumers. Canonical identities are computed separately at admission.
+    canonicalizeJson(value);
+    return freeze({ origin, read: { kind: "loaded" as const, value: structuredClone(value) } });
+  } catch {
+    return freeze({ origin, read: { kind: "parse_failed" as const } });
   }
 }
+
+/** Supplied artifacts are JSON data, not executable accessors or clone-normalized objects. */
+function assertJsonArtifact(value: unknown, parents: Set<object>): void {
+  if (value === null || typeof value === "string" || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value))) return;
+  if (typeof value !== "object" || parents.has(value)) throw new TypeError("Sidecar is not JSON data");
+  const array = Array.isArray(value);
+  const prototype = Object.getPrototypeOf(value);
+  if (array ? prototype !== Array.prototype : prototype !== Object.prototype && prototype !== null) throw new TypeError("Sidecar is not a plain JSON object/array");
+  const descriptors = Object.getOwnPropertyDescriptors(value);
+  if (Reflect.ownKeys(value).some(key => typeof key !== "string") || (array && Object.keys(descriptors).length !== value.length + 1)) throw new TypeError("Sidecar has non-JSON properties");
+  parents.add(value);
+  for (const [key, descriptor] of Object.entries(descriptors)) {
+    if (array && key === "length") continue;
+    if (!descriptor.enumerable || !("value" in descriptor) || (array && (!/^(0|[1-9][0-9]*)$/u.test(key) || Number(key) >= value.length))) throw new TypeError("Sidecar has non-JSON properties");
+    assertJsonArtifact(descriptor.value, parents);
+  }
+  parents.delete(value);
+}
+/** Preserve the old optional-sidecar view, not its former loss of original failure states. */
+function optionalValue(sidecar: SidecarImage): unknown | undefined { return sidecar.read.kind === "loaded" ? sidecar.read.value : undefined; }
 
 function sidecarPaths(source: string): {
   readonly ledger: string;
@@ -285,8 +357,11 @@ export class PackRegistry {
   readonly #capabilityRefusals: readonly CapabilityRefusal[];
   readonly #shapes: PackShapeLookup | undefined;
   readonly #principles: PackPrincipleLookup | undefined;
+  readonly #measurementArtifacts: Map<string, MeasurementArtifacts>;
+  readonly #measurementAdmissions = new Map<string, RecordedMeasurementAdmission>();
+  readonly #measurementSources = new WeakMap<RecordedMeasurementSource, MeasurementSourceImage>();
 
-  private constructor(records: ReadonlyMap<string, PackRecord>, concepts: CompiledConceptRegistry, capabilities: RuntimeCapabilitySupport, refusals: readonly CapabilityRefusal[], shapes?: PackShapeLookup, principles?: PackPrincipleLookup) {
+  private constructor(records: ReadonlyMap<string, PackRecord>, concepts: CompiledConceptRegistry, capabilities: RuntimeCapabilitySupport, refusals: readonly CapabilityRefusal[], shapes: PackShapeLookup | undefined, principles: PackPrincipleLookup | undefined, artifacts: ReadonlyMap<string, MeasurementArtifacts>) {
     this.#records = new Map(records);
     this.#digests = new Map([...records.values()].map((record) => [record.digest, record]));
     this.#concepts = concepts;
@@ -294,6 +369,66 @@ export class PackRegistry {
     this.#capabilityRefusals = Object.freeze([...refusals]);
     this.#shapes = shapes;
     this.#principles = principles;
+    this.#measurementArtifacts = new Map(artifacts);
+    for (const record of this.#digests.values()) this.#admitMeasurements(record);
+  }
+
+  #admitMeasurements(record: PackRecord): void {
+    const sidecars = this.#measurementArtifacts.get(record.digest);
+    const failed = (reason: "source_contract_invalid" | "source_lookup_failed") => Object.freeze({ kind: "failed" as const, reason });
+    let admission: RecordedMeasurementAdmission;
+    const reads = sidecars === undefined ? [] : [sidecars.ledger.read, sidecars.manifest.read];
+    if (reads.some(read => read.kind === "read_failed")) admission = failed("source_lookup_failed");
+    else if (reads.some(read => read.kind === "parse_failed")) admission = failed("source_contract_invalid");
+    else if (sidecars === undefined) admission = Object.freeze({ kind: "unavailable", reason: "source_absent" });
+    else {
+      let ledgerDigest: string | undefined, manifestDigest: string | undefined;
+      try {
+        const digest = (value: unknown) => `sha256:${createHash("sha256").update(canonicalizeJson(value)).digest("hex")}`;
+        if (sidecars.ledger.read.kind === "loaded") ledgerDigest = digest(sidecars.ledger.read.value);
+        if (sidecars.manifest.read.kind === "loaded") manifestDigest = digest(sidecars.manifest.read.value);
+      } catch {
+        // Each loaded artifact must be canonical JSON even when its counterpart is missing.
+        this.#measurementAdmissions.set(record.digest, failed("source_contract_invalid"));
+        return;
+      }
+      const issues: SourcingIssue[] = [];
+      const ledger = sidecars.ledger.read.kind === "loaded" ? validateLedger(sidecars.ledger.read.value, issues) : undefined;
+      const manifest = sidecars.manifest.read.kind === "loaded" ? validateManifest(sidecars.manifest.read.value, issues) : undefined;
+      if (ledger !== undefined && manifest !== undefined) linkage(manifest, ledger, issues);
+      if (issues.length > 0 || (ledger !== undefined
+        && (ledger.packId !== record.document.id || ledger.packVersion !== record.document.version || ledger.packDigest !== record.digest))) admission = failed("source_contract_invalid");
+      else if (ledger === undefined || manifest === undefined || ledgerDigest === undefined || manifestDigest === undefined) admission = Object.freeze({ kind: "unavailable", reason: "source_absent" });
+      else {
+        const link = (row: EvidenceRecord | EvidenceAbstention) => {
+          const sourceOrdinal = manifest.entries.findIndex(entry => entry.sourceId === row.sourceId && entry.retrievedAt === row.retrievedAt);
+          if (sourceOrdinal < 0) throw new TypeError("Validated measurement lost its original source linkage");
+          return { sourceOrdinal, source: manifest.entries[sourceOrdinal]! };
+        };
+        const image: MeasurementSourceImage = freeze({ document: record.document, packDigest: record.digest, sidecars, ledger, manifest,
+          ledgerDigest, manifestDigest,
+          records: ledger.records.map((row, ordinal) => ({ ordinal, record: row, ...link(row) })),
+          abstentions: ledger.abstentions.map((row, ordinal) => ({ ordinal, abstention: row, ...link(row) })),
+        });
+        const source = Object.freeze({}) as RecordedMeasurementSource;
+        this.#measurementSources.set(source, image); admission = Object.freeze({ kind: "available", source });
+      }
+    }
+    this.#measurementAdmissions.set(record.digest, admission);
+  }
+
+  /** Actual retained registration state only. Never reads disk, borrows a same-id pack or grades. */
+  resolveRecordedMeasurementSource(packDigest: string): RecordedMeasurementAdmission {
+    if (typeof packDigest !== "string" || !/^sha256:[a-f0-9]{64}$/u.test(packDigest)) throw new TypeError("Measurement source requires an exact pack digest");
+    return this.#measurementAdmissions.get(packDigest) ?? Object.freeze({ kind: "unavailable", reason: "source_absent" });
+  }
+
+  /** Issuing-registry/current-artifact membership, not digest equality or current permission. */
+  readRecordedMeasurementSource(source: RecordedMeasurementSource): MeasurementSourceImage {
+    const image = this.#measurementSources.get(source), current = image === undefined ? undefined : this.#measurementAdmissions.get(image.packDigest);
+    if (image === undefined || current?.kind !== "available" || current.source !== source
+      || this.#digests.get(image.packDigest)?.document !== image.document) throw new TypeError("Measurement source is foreign or no longer the registry's original artifact image");
+    return image;
   }
 
   /** The configured capability identities this catalogue registered packs against (§4.2/§4.3). */
@@ -343,19 +478,24 @@ export class PackRegistry {
       readonly manifest?: unknown;
       readonly channel?: "official" | "community";
     }[],
-    options: { readonly replaceDuplicates?: boolean; readonly shapes?: PackShapeLookup; readonly principles?: PackPrincipleLookup; readonly concepts?: CompiledConceptRegistry; readonly capabilities?: RuntimeCapabilitySupport } = {},
+    options: RegistrationOptions = {},
   ): Promise<PackRegistry> {
+    return PackRegistry.#fromRegistrations(documents.map(({ source, value, ledger, manifest, channel = "official" }) => ({
+      source, value, channel, sidecars: { ledger: providedSidecar(ledger), manifest: providedSidecar(manifest) },
+    })), options);
+  }
+
+  static async #fromRegistrations(documents: readonly RegistrationInput[], options: RegistrationOptions): Promise<PackRegistry> {
     const concepts = options.concepts ?? installedConceptRegistry();
     assertCompiledConceptRegistry(concepts);
     const capabilities = options.capabilities ?? runtimeSupportedCapabilities();
     const refusals: CapabilityRefusal[] = [];
     const records = new Map<string, PackRecord>();
-    const validated = documents.map(({ source, value, ledger, manifest, channel = "official" }) => ({
-      source,
-      ledger,
-      manifest,
-      channel,
-      document: validatedDocument(value, source, options.shapes, options.principles, concepts),
+    const artifacts = new Map<string, MeasurementArtifacts>();
+    const validated = documents.map(({ source, value, sidecars, channel }) => ({
+      source, sidecars, channel,
+      ledger: optionalValue(sidecars.ledger), manifest: optionalValue(sidecars.manifest),
+      document: validatedDocument(structuredClone(value), source, options.shapes, options.principles, concepts),
     }));
     const siblings = new Map(validated.map(({ document }) => [document.id, {
       start: document.start,
@@ -389,6 +529,7 @@ export class PackRegistry {
       const provenance = raw.provenance as Record<string, unknown>;
       const feedbackPolicy = raw.feedbackPolicy as FeedbackPolicy;
       const digest = await digestDrillPack(document);
+      artifacts.set(digest, entry.sidecars);
       const grounding = assessmentGrounding({ document, documentDigest: digest, ledger, manifest });
       const positionEvidence = buildPositionEvidenceIndex({ ledger, grounding, packDigest: digest });
       const bindingIssues: SourcingIssue[] = [];
@@ -439,7 +580,7 @@ export class PackRegistry {
         }),
       );
     }
-    return new PackRegistry(records, concepts, capabilities, refusals, options.shapes, options.principles);
+    return new PackRegistry(records, concepts, capabilities, refusals, options.shapes, options.principles, artifacts);
   }
 
   static async loadDefault(
@@ -481,13 +622,12 @@ export class PackRegistry {
         return {
           source: path,
           value: JSON.parse(await readFile(path, "utf8")) as unknown,
-          ledger: await optionalJson(sidecars.ledger),
-          manifest: await optionalJson(sidecars.manifest),
+          sidecars: { ledger: await readSidecar(sidecars.ledger), manifest: await readSidecar(sidecars.manifest) },
           channel: productionPaths.includes(path) ? "official" as const : "community" as const,
         };
       }),
     );
-    return PackRegistry.fromDocuments(documents, {
+    return PackRegistry.#fromRegistrations(documents, {
       replaceDuplicates: options.development === true,
       ...(options.shapes === undefined ? {} : { shapes: options.shapes }),
       ...(options.principles === undefined ? {} : { principles: options.principles }),
@@ -570,6 +710,8 @@ export class PackRegistry {
     });
     if (this.#records.get(document.id)?.channel !== "official") this.#records.set(document.id, record);
     this.#digests.set(digest, record);
+    this.#measurementArtifacts.delete(digest);
+    this.#admitMeasurements(record);
     return record;
   }
 
@@ -600,6 +742,8 @@ export class PackRegistry {
       channel: "community",
     });
     this.#digests.set(digest, record);
+    this.#measurementArtifacts.delete(digest);
+    this.#admitMeasurements(record);
     return record;
   }
 }

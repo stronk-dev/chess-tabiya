@@ -32475,3 +32475,40 @@ Campaign was the one capability with no API, route or content. Now:
   profiles/1016 capabilities/51 conventions and91 subjects/zero qualified. Final metadata/hook
   checks precede commit. Full1.0 goal remains active. No protected intent sentence is falsified;
   no content graduation, browser/remote-CI/push/deploy or whole capability/milestone/release claim.
+
+## 2026-10-16 — Registry-owned measurement source prerequisite (codex)
+
+- Implement accepted module-registration §4.11a's original measurement owner in the actual
+  PackRegistry registration paths. Keep detached immutable document/manifest/ledger, exact pack
+  identity and source/timestamp/licence linkage, every record/abstention ordinal and source ref.
+  Source recognition is instance-owned; copies/foreign handles and replaced same-digest images
+  cannot lend authority. Capture actual file read state once; missing, malformed and unreadable
+  remain different without breaking otherwise loadable packs or rereading during requests.
+- Measurement existence is independent of objective grading. Preserve actual verified grading,
+  position readings and existing JSON-order ledger digests. No saved-data rewrite or compatible-
+  only alternate pipeline. Public fromDocuments accepts parsed artifacts, not failure flags or
+  a fake file/provider transaction; real Studio SQLite hydration does not invent sidecars.
+- Authorized independent pre-commit review returns D3886: non-JSON clone/freeze can execute or
+  normalize input/fail boot, and missing counterparts can mask invalid present artifacts. Repair
+  strict plain-JSON admission, insertion-order preservation and per-artifact canonical/shape/pin
+  validation before absence. Add getter/array-method zero-execution, mutable collections/cycle,
+  actual invalid-Unicode file/missing counterpart, and real verified predecessor controls. Bounded
+  independent read-only re-review finds no remaining prerequisite blocker.61 focused cases pass.
+- Earlier full commands are deliberately interrupted130 for review repairs; a subsequent full
+  run refuses a TypeScript-only Array subclass fixture constructor. Correct the test constructor,
+  not production guards or assertion/budget/coverage. A separate sandboxed type attempt fails at
+  pnpm lockfile write permission; normal approved Make invocation works. Initial state sync and
+  done-with-owner requests correctly fail the existing protocol; explicit valid transitions fix
+  them. Failed/interrupted attempts are not relabelled successful.
+- Final normal make verify build exits zero:6,784 software/417 files (429.24s), seven performance/
+  four files (63.21s),271 content/27 files (59.20s), all remaining contracts/governance/corpus/build.
+  Actual normal GitHub workflow calls the same software/content tiers; no remote CI run is claimed.
+  Corpus92/354 blocking/34 resolved/48 accepted/errors[];104 exact-capability documents. No product
+  or test change after the successful full run. Final metadata/hooks remain the commit boundary.
+- D3886 closes path-backed; D3841 remains doing. Existing queue/docs/RFC register/roadmap/state
+  carry the source checkpoint and next selected-position invocation, GradeSource/Compare choice,
+  opening history and complete per-consumer access/renderer/receiver/API/native migration. No new
+  planning authority. State3635/1750 live/zero untriaged, historical462 prose closures unchanged;
+  317 projections/310 profiles/1016 capabilities/51 conventions and91 subjects/zero qualified stand.
+  Full1.0 goal remains active. No protected intent sentence falsified, content graduation, native/
+  browser proof, push/deploy, source qualification or whole capability/milestone/release claim.

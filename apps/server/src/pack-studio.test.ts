@@ -66,6 +66,7 @@ describe("Pack Studio", () => {
     expect(unavailable.byDigest(legacyDigest)).toBeUndefined();
     expect(unavailable.byDigest(providerDigest)).toBeUndefined();
     expect(unavailable.byDigest(healthyDigest)?.document.id).toBe("healthy-stored-playtest");
+    expect(unavailable.resolveRecordedMeasurementSource(healthyDigest)).toEqual({ kind: "unavailable", reason: "source_absent" });
     expect(storage.playtestDocuments()).toEqual(before);
     expect(unavailable.byDigest(communityDigest)).toBeUndefined();
     expect(unavailable.get("old-community")).toBeUndefined();
@@ -172,6 +173,7 @@ describe("Pack Studio", () => {
     const freshStudio = new PackStudio(storage, freshRegistry, undefined, principles);
     freshStudio.hydrate();
     expect(freshRegistry.byDigest(registered.digest)?.summary).toMatchObject({ id: "restart-pack", channel: "community" });
+    expect(freshRegistry.resolveRecordedMeasurementSource(registered.digest)).toEqual({ kind: "unavailable", reason: "source_absent" });
   });
 
   it("deletes mutable drafts and playtests while retaining exact registered bytes with tombstoned attribution", async () => {
@@ -223,6 +225,7 @@ describe("Pack Studio", () => {
     new PackStudio(storage, fresh, undefined, principles).hydrate();
     expect(fresh.get("playtest-only")).toBeUndefined();
     expect(fresh.byDigest(record.digest)?.document.id).toBe("playtest-only");
+    expect(fresh.resolveRecordedMeasurementSource(record.digest)).toEqual({ kind: "unavailable", reason: "source_absent" });
   });
 
   it("derives playtest run assembly at the HTTP boundary", async () => {

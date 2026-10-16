@@ -1,5 +1,18 @@
 # Codex queue
 
+**Registry-owned measurement prerequisite, 2026-10-16 — [[D3841]], [[D3886]]:**
+accepted module-registration §4.11a's original immutable document/manifest/ledger owner now
+checks exact pin/licence/linkage, retaining every row/abstention ordinal and exact source link.
+Real missing/parse/read failure states remain separate from objective grading. Independent
+pre-commit returns repair non-JSON normalization/failure isolation and invalid-counterpart masking;
+47 focused software/14 real-file cases and bounded independent re-review pass, including genuine
+verified predecessor digest/readings and actual SQLite hydration. Full normal `make verify build`
+exits zero:6,784 software/417 files, seven performance/four files,271 content/27 files and all
+remaining gates. Earlier interrupted/failed attempts remain in the existing log.
+Next build actual selected-position ledger invocation/coverage and grade/Compare source selection,
+then complete each current consumer/access/renderer/API/native path. This is not a complete ledger
+supplier, GradeSource, Inspector source-page operation or learner migration; no compatibility arm.
+
 **Current verified opening source checkpoint, 2026-10-16 — [[D3376]], [[D3857]]:**
 the accepted installed-source foundation now has its real shared schema, pure runtime loader/
 paired maps,263-byte generated package pin and genuine privately recognized source handle.

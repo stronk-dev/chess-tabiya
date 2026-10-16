@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:53124b9a717e0d69682f131d3a5f5815b37671e30c1fced6bd0becbee74f11d2",
+    "roadmap": "sha256:90f643f4e88b5b1e76c2865de824892041f0cfca45c8468e72d749e8946a72eb",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:471b235d7ab5e0611bf3c666f5362aada4ac065870878ccea2afc8775c880d66",
-    "rfcRegister": "sha256:53f5ebe84c2e3628fa678cdee2b62e8f8c7b8b91c822204ba6175a4baf536c2a",
+    "workState": "sha256:a4aa31274cec97208f8165bfc7bc5eae92214ee6a627646a8234ee1c1004de4f",
+    "rfcRegister": "sha256:2a7967b71746e1047c0f2612441d2f0b31a1116697bbdc8501eb4ed36a734dbb",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 38,
       "blocked": 1084,
-      "done": 1722,
+      "done": 1723,
       "refused": 162
     },
     "workItems": {
@@ -492,12 +492,18 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete installed-opening sole point-factory result-array authority and complete history/reduction over the implemented original paired invocations, then remaining grade/Compare endpoint sources. Current adoption is complete per consumer, not a globally atomic282-pair switch: Theory needs all four bindings and genuine catalogue-applicability; Inspector needs its complete preflighted source-page operation, not the old generic fen arm. Migrate all actual current source/access/count-renderer/receiver/API/native pairs and retire obsolete execution after callers move. Preserve original occurrences/corrupt-modern refusal; durable attachment primitive is not complete pending/job/ledger selection. D3870 remains separate. No compatibility-only input arm, fake availability, dropped family, widened grant or premature qualification/milestone/release claim.",
+      "nextAction": "Complete selected-position ledger invocation/coverage over the registry-owned original measurement source, then remaining grade/Compare endpoint selection. Complete installed-opening sole point-factory result-array authority and history/reduction over its original paired invocations. Current adoption is complete per consumer, not a globally atomic282-pair switch: Theory needs all four bindings/applicability; Inspector needs its complete preflighted source-page operation, not the old generic fen arm. Migrate actual current source/access/count-renderer/receiver/API/native pairs and retire obsolete execution after callers move. Preserve original occurrences/corrupt-modern refusal; source prerequisites are not complete pending/job/ledger selection. D3870 remains separate. No compatibility-only input, fake availability, dropped family, widened grant or premature qualification/milestone/release claim.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Installed opening paired invocations retain genuine source/sole-factory recorded position and original frozen endpoint/member rows, including executed negatives and distinct repeated-key occurrences. The same existing maps/calculation also serve actual HTTP/phase lookup, with one normalization.28 new runtime cases and real both-color SQLite reopen/prefix extensions pass in137 source cases/eight files; types and independent bounded review pass. Normal software6751/416, unchanged performance7/4 and corrected remaining governance/content257/26/corpus/build tiers pass; failed/interrupted combined commands remain logged. D3884's independent-worker snapshot race is repaired; D3885 full-row proof remains owned. Actual3810 endpoints/7854 members/vendor bytes are unchanged. Point-factory array authentication, complete history/reduction and per-consumer complete current delivery remain; no partial module image or legacy-only input pipeline. Prior source checkpoints and317 projections/310 profiles/1016 capabilities/51 conventions/semantic91 subjects/zero qualified stand. No current learner cutover, provider request, saved-data rewrite, source qualification or release claim.",
+        "summary": "Registry-owned original measurement admission now retains immutable document/ledger/manifest, exact pins/licences/source links and every original row/abstention ordinal independently of objective grading. Missing, invalid and actual read failures stay distinct; copied/foreign/retired handles fail. D3886 pre-commit returns repair non-JSON normalization and malformed-counterpart masking;61 focused cases, genuine ledger_verified predecessor digest/nonempty readings, actual SQLite hydration and bounded independent review pass. Final normal make verify build exits zero:6784 software/417 files (429.24s), unchanged performance7/4 (63.21s),271 content/27 files (59.20s), governance/corpus/build. Interrupted/failed attempts remain logged; no assertion/budget/retry/coverage waiver. Prior paired-opening/durable-attachment/rank checkpoints stand. Selected-position supplier/factory coverage, grade/Compare choice, opening history and complete per-consumer source/access/renderer/API/native delivery remain. D3841 stays doing; no compatibility-only path, current learner cutover, saved-data rewrite, semantic qualification, official content or whole-capability/milestone/release claim.",
         "impact": "advanced",
         "evidence": [
+          "apps/server/src/pack-registry.ts",
+          "apps/server/src/recorded-measurement-source.test.ts",
+          "apps/server/src/pack-measurement-loading.test.ts",
+          "apps/server/src/pack-studio.test.ts",
+          "docs/explanation-grounds.md",
+          "planning/learner-modules/log.md",
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
           "design/research/wave-a-contract-closure.md",
           "planning/tactical-collectors/plan.md",
@@ -714,7 +720,12 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:ed3ded65d7de83c0da9610c434c1acb7114604de8ad4183390114e53f6f0b210"
+            "digest": "sha256:12d22b12a3169c6fdf39711f85757c2a5f33b90c58375399e091b1cae5a91b0c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3886",
+            "digest": "sha256:827354342e0e5dd2c09385f6cff08ef959c39d976a0e5482c6377c5fa15496d0"
           },
           {
             "kind": "work_state",

@@ -31985,10 +31985,10 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ed3ded65d7de83c0da9610c434c1acb7114604de8ad4183390114e53f6f0b210",
+      "sourceDigest": "sha256:12d22b12a3169c6fdf39711f85757c2a5f33b90c58375399e091b1cae5a91b0c",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "since": "2026-10-15"
+      "since": "2026-10-16"
     },
     {
       "id": "D3842",
@@ -32384,6 +32384,15 @@
       "sourceDigest": "sha256:57564c7d9bafe828f0c98b9cbd9408fe9512fee2d95890f49272464ce51a17eb",
       "uxItems": [],
       "owner": "release-engineering"
+    },
+    {
+      "id": "D3886",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:827354342e0e5dd2c09385f6cff08ef959c39d976a0e5482c6377c5fa15496d0",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-measurement-source.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }
