@@ -5,12 +5,12 @@ import { branchPath } from "../branch-path.js";
 import { createRecordedReviewBoundarySourceOwner } from "../recorded-review-boundary.js";
 import { collectRecordedLastLevelPopulation, type ReviewImportRecordImage, type ReviewProviderNodeState } from "../review-evidence.js";
 import { invokeEvidenceValueRoute } from "../internal/evidence-value-routes.js";
-import { evaluationDelivery, importedRun, play } from "./review-evidence-fixture.js";
+import { evaluationDelivery, importedRun, play, START_FEN } from "./review-evidence-fixture.js";
 import type { DrillRun } from "../types.js";
 
 export function recordedLastLevelFixture(side: "white" | "black" = "white", result: ReviewImportRecordImage["result"] = "0-1",
-  id = "last-level-reduction", moves = ["e2e4", "e7e5", "g1f3", "b8c6"]) {
-  let run = play(importedRun(id, side), moves);
+  id = "last-level-reduction", moves = ["e2e4", "e7e5", "g1f3", "b8c6"], fen = START_FEN) {
+  let run = play(importedRun(id, side, fen), moves);
   const path = branchPath(run, run.activeCursor.branchId);
   const record = { runId: run.id, result, movetextDigest: `sha256:${createHash("sha256").update(canonicalizeJson({ rootFen: path[0]!.fen, uci: path.slice(1).map(node => node.moveUci) })).digest("hex")}` };
   const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => record });

@@ -19,7 +19,18 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest internal implementation is the complete twelve-adapter recorded Review source
+The latest internal implementation is the recorded moment source over the complete twelve-source
+population. One actual unrendered assembler/order now serves current Story and the scoped source.
+Original source states and the genuine last-level reduction remain attached even when moments
+are empty or a qualifying root is excluded. Exact groups preserve occurrence multiplicity,
+typed evaluation and parent/evidence/stop identities. The 26 new runtime cases and extended
+real SQLite prefix/reopen controls pass in 1,052 focused cases across 30 files; bounded independent
+read-only review finds no blocker. Full normal `make verify build` passes: 6,598 software tests
+across 410 files, seven performance tests, 257 content tests and all remaining gates. No rank@3, final
+public facade, current consumer cutover, qualification or milestone completion follows.
+Rank/opening/grade owners and the full 282-pair access/receiver/API/native migration still remain.
+
+The prior verified source implementation is the complete twelve-adapter recorded Review source
 population. One actual registry executes the full prefix image, retaining original empty and
 unavailable invocations, independently captured shapes and scoped human-observation node folds.
 Last-level reuses actual executed source slots/results. The 29 new runtime cases and extended

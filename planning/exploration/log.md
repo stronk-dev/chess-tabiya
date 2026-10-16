@@ -32202,3 +32202,52 @@ Campaign was the one capability with no API, route or content. Now:
   callers migrate. D3870's schema/resource decision remains unapproved and does not block this
   lawful source work. No partial public facade, legacy compatibility obligation, pack edit,
   source qualification, learner binding, browser/remote CI run, push or release claim.
+
+### 2026-10-16 — Recorded Review moment source, accepted internal implementation
+
+- Accepted Review §4.5 now has a genuine internal source over the actual complete twelve-adapter
+  population. One unrendered assembler and canonical evidence order serve current Story and the
+  new scoped source; no fake packet, second moment algorithm, raw string channel, title/voice/
+  rank or provider request is introduced. Exact pivotal versions replace broad prefix matching.
+- Every outcome invokes last-level@2 once after full source admission and authenticates its
+  original result before iteration. Full source handle/captured states and actual items/receipt/
+  convention survive empty/root-only results. Original-order exact groups retain occurrence
+  multiplicity, typed endpoints and parent/evidence/stop identities. Root endgame detection stays
+  before root exclusion;150-cp selection remains inclusive. Reader authenticates current storage/
+  source/group/result authority without reassembly or dispatch. Node grouping/indexing use Maps,
+  not repeated whole-source scans; closed keys use the existing validator, not new hash machinery.
+-26 new runtime cases and extended real SQLite import/save/close/reopen/every-prefix controls
+  pass in1052 focused cases/30 files (762+101+189); clean workspace types. First focused run has
+  four failures: three incorrect fixtures (mate grammar, opposite-check FEN, malformed attachment)
+  and an all-edge helper assertion. Fix fixtures to actual validated data and validate every
+  parent edge before assembly, not only edges with moments. The corrected run passes. Additional
+  repeated/missing human, genuine incomparable point pair and coverage controls pass.
+- Authorized bounded independent read-only review finds no blocker. Its minor closed-input note
+  becomes three genuine predecessor-red symbol/hidden-extra/accessor controls. Reuse the existing
+  validator before field reads; final fast run passes and read-only confirmation clears the note.
+  Reviewers inspect but do not run tests or grant acceptance/qualification.
+- Canonical generators retain309 profiles/1015 declarations (zero changed),91 semantic subjects/
+  zero qualified/343 cases/53 population/eight external receipts. Existing queue/roadmap/docs/
+  ledger state are updated; full normal verification/build follows before commit. D3847/D3841/
+  D3845 remain doing. Rank/opening/grade owners, D3870 and all282 current access/receiver/API/native
+  pairs remain. No compatibility-only path, current consumer cutover, new convention, pack edit,
+  browser/remote CI/push, completed milestone or release claim.
+
+### 2026-10-16 — Recorded Review moment source verified checkpoint
+
+- Full normal make verify build exits zero:6598 software tests/410 files (383.94s), seven
+  isolated performance cases/four files (62.25s),257 content cases/26 files (56.61s), clean
+  types and all manifest/contract/governance/corpus/packaging/build gates. Corpus92 documents/
+  354 blocking/34 resolved/48 accepted/errors[];104 capability documents declare exactly their
+  derived requirements. No assertion, deadline, budget, retry, skip or coverage reduction.
+- Existing queue, roadmap, canonical docs, RFC implementation checkpoint and state are updated
+  together.3630 rows/1749 live/zero untriaged;627 todo/37 doing/1085 blocked/1719 done/162 refused;
+  historical462 prose-only closeouts unchanged. D3847/D3841/D3845 remain live. The first tracker
+  patch refuses backward-ordered hunks; regenerate them in file order before applying, with no
+  partial write. No finding or closure is invented to make the rollup move.
+- Shared current Story assembly is covered by existing Story/Review/server suites, exact both-
+  colour full-tip factual parity and real SQLite prefix/reopen controls. No new browser or
+  remote CI run is claimed. New scoped rank/opening/grade operations, full receiver/API/native
+  adoption and obsolete execution retirement remain. D3870 still awaits its schema/resource
+  decision and independent acceptance; no lane is guessed. No public facade, compatibility-only
+  pipeline, pack edit, qualification, whole milestone or release promotion, push or deployment.

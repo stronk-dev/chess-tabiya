@@ -5,6 +5,17 @@ Review source/12-adapter contract with the coordinated current-module image. Ear
 labels for that clause are history; actual source/execution/receiver delivery and unrelated
 parent amendments remain. Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+- **Internal moment checkpoint 2026-10-16 — [[D3847]], [[D3845]]:** accepted §4.5 now has a
+  genuine internal recorded moment source over the complete twelve-adapter population. Current
+  Story shares the same unrendered assembler/order; last-level@2 executes once for every outcome
+  and retains its actual empty/root-only reduction proof. Exact ordered groups retain complete
+  original source authority. The 26 new runtime cases and extended real SQLite prefix/reopen
+  controls pass in 1,052 focused cases across 30 files. Bounded independent read-only review
+  finds no blocker; its three closed-input controls first fail, then pass with the existing
+  validator. Full normal `make verify build` passes: 6,598 software tests across 410 files,
+  seven performance tests, 257 content tests and all remaining gates. No rank@3, final public authority,
+  lifetime RunService receiver, current consumer/API cutover or qualification is claimed.
+
 - **Internal complete-source checkpoint 2026-10-16 — [[D3847]]:** accepted §4.5 now executes
   its exact twelve-adapter recorded prefix image through the one actual registry, retaining
   original empty/unavailable invocation authority, captured shapes and scoped human node folds.

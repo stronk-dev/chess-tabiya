@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { createRecordedReviewBoundarySourceOwner, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { collectRecordedLastLevelPopulation, readRecordedLastLevelPopulation, collectRecordedReviewSourcePopulation, readRecordedReviewSourcePopulation } from "../../../packages/runtime/src/review-evidence.js";
+import { collectRecordedReviewMoments, readRecordedReviewMoments } from "../../../packages/runtime/src/recorded-review-moments.js";
 import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -49,7 +50,7 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
         } else { expect(row.state.kind).toBe("not_requested"); expect(row.points).toEqual([]); }
       }
       expect(data.result.items).toHaveLength(last === nodes.length - 1 ? 1 : 0);
-      const complete = readRecordedReviewSourcePopulation(collectRecordedReviewSourcePopulation({ boundary, context }));
+      const completeSource = collectRecordedReviewSourcePopulation({ boundary, context }), complete = readRecordedReviewSourcePopulation(completeSource);
       expect(complete.plan).toHaveLength(12 * (last + 1) - 2);
       const retained = readRecordedLastLevelPopulation(complete.lastLevelPopulation);
       expect(retained.rows.map(row => row.state)).toEqual(data.rows.map(row => row.state));
@@ -59,14 +60,21 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
       }
       const firings = complete.results.filter(result => result.slot.adapterId === "review.source.shapes@1").flatMap(result => result.items);
       expect(firings.map(item => item.payload)).toEqual(last < 3 ? [] : [{ entryId: "import-f3", firstNodeId: nodes[3]!.id, lastNodeId: endpoint.id, openEnded: true }]);
+      const moments = readRecordedReviewMoments(collectRecordedReviewMoments({ population: completeSource }));
+      expect(moments.population).toBe(complete);
+      expect(moments.groups.every(group => nodes.slice(1, last + 1).some(node => node.id === group.evidenceNodeId && node.parentId === group.decisionNodeId))).toBe(true);
+      expect(moments.lastLevelReduction.receipt.operation).toEqual({ id: "story.last_level", version: 1 });
+      if (last < nodes.length - 1 || side === "black") expect(moments.lastLevelReduction.items).toEqual([]);
     }
     expect(JSON.stringify(reloaded.read(run.id)!.run.events)).toBe(before); expect(imported.evidencePass.jobs).toBe(0);
     const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: nodes.at(-1)!.id });
     const population = collectRecordedLastLevelPopulation({ boundary, context });
     const complete = collectRecordedReviewSourcePopulation({ boundary, context });
+    const moments = collectRecordedReviewMoments({ population: complete });
     new RunService(reloaded).reveal(run.id, "writer");
     expect(() => readRecordedLastLevelPopulation(population)).toThrow(/no longer/u);
     expect(() => readRecordedReviewSourcePopulation(complete)).toThrow(/no longer/u);
+    expect(() => readRecordedReviewMoments(moments)).toThrow(/no longer/u);
   });
 
   it.each(["white", "black"] as const)("retains every earlier endpoint across save/reload without acquiring providers: %s", async side => {

@@ -11,8 +11,8 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
 import type { EndgameClassification } from "./endgame.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
-import { classifyPhase, type DetectedPhase } from "./phase.js";
-import type { PivotalKind, PivotalMarker } from "./pivotal.js";
+import type { DetectedPhase } from "./phase.js";
+import { assembleReviewMoments, STORY_MOMENT_KINDS, type StoryMomentKind } from "./internal/review-moment-assembly.js";
 import {
   GROUNDING_LABELS,
   PresentationError,
@@ -39,12 +39,12 @@ import {
   type ReviewRunFamilyState,
   type ReviewSourceFamily,
 } from "./review-evidence.js";
-import { reviewScoreReceipt, type ReviewEnginePoint, type ReviewEvalDelta, type ReviewMateTransition, type ReviewScoreReceipt } from "./review-points.js";
+import type { ReviewEnginePoint, ReviewScoreReceipt } from "./review-points.js";
 import type { ShapeTriggerSource } from "./shape-firing.js";
 import type { DrillRun, RunOutcome } from "./types.js";
 
-export type StoryMomentKind = PivotalKind | "eval_pivot" | "mate_transition" | "last_level" | "endgame_entry" | "shape_span" | "outcome";
-export const STORY_MOMENT_KINDS: readonly StoryMomentKind[] = Object.freeze(["human_divergence", "option_collapse", "irreversibility", "phase_change", "eval_pivot", "mate_transition", "last_level", "endgame_entry", "shape_span", "outcome"]);
+export { STORY_MOMENT_KINDS, STORY_PIVOT_CP } from "./internal/review-moment-assembly.js";
+export type { StoryMomentKind } from "./internal/review-moment-assembly.js";
 
 /** Server-only Story moment (`ReviewStoryMoment`): exact sealed evidence and components. */
 export interface StoryMoment {
@@ -84,9 +84,6 @@ export interface StoryTitleInput {
   readonly moments: readonly Pick<StoryMoment, "nodeId" | "ply" | "endgame">[];
   readonly rank: readonly string[];
 }
-
-/** The existing absolute 150-cp product convention for a cp pivot (until the Review Map policy). */
-export const STORY_PIVOT_CP = 150;
 
 /**
  * Nine presentation bands (HEAD's order with the new mate-transition band at position 1; every band
@@ -196,63 +193,14 @@ function titleOutcome(outcome: ReviewOutcomeReceipt): StoryTitleInput["outcome"]
 export function reviewStoryMoments(packet: ReviewEvidencePacket): StoryProjection {
   assertReviewEvidencePacket(packet);
   const { path } = reviewSubjectPath(packet.subject);
-  const index = new Map(path.map((node, at) => [node.id, at]));
-  const byId = new Map(path.map((node) => [node.id, node]));
-  const accum = new Map<string, { kinds: Set<StoryMomentKind>; evidence: DeclaredEvidence<unknown>[]; evaluation: StoryMoment["evaluation"]; endgame?: EndgameClassification }>();
-  const at = (nodeId: string) => {
-    let value = accum.get(nodeId);
-    if (value === undefined) { value = { kinds: new Set(), evidence: [], evaluation: null }; accum.set(nodeId, value); }
-    return value;
-  };
-  let endgameSeen = false;
-  const points: DeclaredEvidence<ReviewEnginePoint>[] = [];
-  for (const node of packet.nodes) {
-    for (const item of node.items) {
-      const id = item.projection.id;
-      if (id.startsWith("derived.pivotal.")) { const value = at(node.nodeId); value.kinds.add((item.payload as PivotalMarker).kind); value.evidence.push(item); }
-      else if (projectionIs(item, "derived.review.eval_point")) points.push(item as DeclaredEvidence<ReviewEnginePoint>);
-      else if (projectionIs(item, "derived.review.eval_delta", 2)) {
-        const delta = item.payload as ReviewEvalDelta;
-        if (Math.abs(delta.deltaCp) < STORY_PIVOT_CP) continue;
-        const value = at(node.nodeId); value.kinds.add("eval_pivot"); value.evidence.push(item);
-        value.evaluation = { before: reviewScoreReceipt(delta.before.payload.evaluation.payload.payload.score), after: reviewScoreReceipt(delta.after.payload.evaluation.payload.payload.score) };
-      } else if (projectionIs(item, "derived.review.mate_transition", 2)) {
-        const transition = item.payload as ReviewMateTransition;
-        const value = at(node.nodeId); value.kinds.add("mate_transition"); value.evidence.push(item);
-        value.evaluation = { before: reviewScoreReceipt(transition.before.payload.evaluation.payload.payload.score), after: reviewScoreReceipt(transition.after.payload.evaluation.payload.payload.score) };
-      } else if (projectionIs(item, "rules.endgame.classification") && !endgameSeen) {
-        endgameSeen = true;
-        const value = at(node.nodeId); value.kinds.add("endgame_entry"); value.endgame = item.payload as EndgameClassification; value.evidence.push(item);
-      } else if (projectionIs(item, "theory.shapes.firing")) { const value = at(node.nodeId); value.kinds.add("shape_span"); value.evidence.push(item); }
-      else if (projectionIs(item, "run.record.consequence") || projectionIs(item, "run.record.imported_result")) { const value = at(node.nodeId); value.kinds.add("outcome"); value.evidence.push(item); }
-    }
-  }
   const outcome = packet.subject.outcome;
-  if (outcome.kind === "recorded_result") {
-    for (const level of invokeEvidenceValueRoute("derived.story.last_level@1", { path: packet.subject.pathNodeIds, side: packet.subject.learnerSide, recordedResult: outcome.result, points })) {
-      const value = at(level.nodeId); value.kinds.add("last_level"); value.evidence.push(level.evidence);
-    }
-  }
-  const moments = [...accum.entries()].flatMap(([nodeId, value]): StoryMoment[] => {
-    const node = byId.get(nodeId);
-    const position = index.get(nodeId);
-    // A moment needs a recorded decision edge: the root occurrence constructs none.
-    if (node === undefined || position === undefined || position === 0 || node.parentId === null) return [];
-    const decision = path[position - 1]!;
-    if (decision.id !== node.parentId) throw new TypeError(`Story moment ${nodeId} has no exact recorded edge on its path`);
-    const components = renderReviewStoryComponents(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_STORY, value.evidence));
-    return [Object.freeze({
-      nodeId, decisionNodeId: decision.id, evidenceNodeId: nodeId, stopNodeId: nodeId, entryNodeId: decision.id,
-      ply: node.ply, san: node.moveSan, fen: node.fen,
-      kinds: Object.freeze([...value.kinds].sort()),
-      evidence: Object.freeze([...value.evidence]),
-      components,
-      sentences: Object.freeze(components.map(presentedSentence)),
-      evaluation: value.evaluation === null ? null : Object.freeze({ ...value.evaluation }),
-      phase: classifyPhase(node.fen).phase,
-      ...(value.endgame === undefined ? {} : { endgame: value.endgame }),
-    })];
-  }).sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId));
+  const points = packet.nodes.flatMap(node => node.items.filter(item => projectionIs(item, "derived.review.eval_point"))) as readonly DeclaredEvidence<ReviewEnginePoint>[];
+  const lastLevel = outcome.kind === "recorded_result"
+    ? invokeEvidenceValueRoute("derived.story.last_level@1", { path: packet.subject.pathNodeIds, side: packet.subject.learnerSide, recordedResult: outcome.result, points }) : [];
+  const moments = assembleReviewMoments(path, packet.nodes, lastLevel).map((moment): StoryMoment => {
+    const components = renderReviewStoryComponents(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_STORY, moment.evidence));
+    return Object.freeze({ ...moment, components, sentences: Object.freeze(components.map(presentedSentence)) });
+  });
   const rank = rankStoryMoments(moments);
   const rankEvidence = invokeEvidenceValueRoute("derived.story.rank@2", { moments });
   if ((rankEvidence.payload as { readonly rank: readonly string[] }).rank.join("|") !== rank.join("|")) throw new TypeError("Story rank factory disagrees with the moment ranking");

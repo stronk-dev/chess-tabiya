@@ -56,7 +56,10 @@ human observations remain attached; a missing human observation folds only its n
 Last-level calculation reuses the original executed subset rather than collecting again. The
 current packet's thirty-adapter image remains explicit, not automatically expanded to the
 registry's thirty-three operations. Manifest counts remain 49 producers/316 projections/42
-consumers/566 bindings. Moment assembly, rank and actual current-consumer delivery still remain.
+consumers/566 bindings. Internal moment assembly now retains that actual full source population
+and original last-level reduction, including empty/root-only results, behind nominal source
+authority. One shared unrendered builder serves it and current Story. Rank and actual current-
+consumer delivery still remain; there is no partial public facade or new learner binding.
 
 Recorded comparison routes use the legal move's simultaneous physical relocations, including
 Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities

@@ -30,8 +30,8 @@ unfinished unless their own on-prefix terminal is recorded.
 The existing consequence/import-result factories have an internal `{recordedReview}` arm with
 that actual boundary as authority, unchanged factual payloads and absolute recorded locations.
 The source-only owner is not exported through a public barrel. It is not the final four-method
-Review authority: moment assembly, application-lifetime
-RunService ownership and current consumer/API adoption remain. Existing raw-run arms remain
+Review authority: application-lifetime RunService ownership and current consumer/API adoption
+remain. Its internal moment-source prerequisite is described below. Existing raw-run arms remain
 only while actual current callers need migration, not as a legacy compatibility requirement.
 
 The internal `collectRecordedLastLevelPopulation({boundary,context})` now prepares the complete
@@ -61,8 +61,8 @@ Readback authenticates the private original invocation/result authority for ever
 including empty endgame, shape and pivotal arrays. Equal-looking copies and foreign executions
 cannot substitute. Owning entry/publication/readback boundaries recheck actual storage; individual
 slots use the already validated captured image rather than replaying storage for every slot.
-No moment construction, ranking, provider request, public authority facade or learner binding is
-introduced by this source-only prerequisite.
+That collector does not itself assemble/rank moments, request providers, expose a public
+authority facade or adopt a learner binding.
 
 The internal `derived.story.last_level@2` operation now consumes that original complete population.
 It authenticates every row/state/result before checking whether an eligible imported result says
@@ -77,9 +77,24 @@ result must belong to the identical retained population, not another equal-image
 reduction retains genuine result/position leaves and point member0's ordered provider/position
 witnesses, including complete provider parser/delivery authority. Changed unselected or rejected
 inputs change the source receipt even when the selected payload stays equal. Root may qualify
-in this primitive; subsequent Story moment assembly must retain the calculation before excluding
-a root without a decision edge. Full moment/rank/opening/grade owners and learner-facing final
-receiver/API migration remain unimplemented; no current consumer is partially switched here.
+in this primitive; moment assembly retains the calculation before excluding a root without a
+decision edge. Rank/opening/grade owners and learner-facing final receiver/API migration remain
+unimplemented; no current consumer is partially switched here.
+
+The internal `collectRecordedReviewMoments({population})` now accepts only the genuine complete
+twelve-source population. It executes last-level@2 once for every outcome, authenticates the
+original result before reading it, and retains its exact items/receipt/convention even for an
+empty result or a qualifying root excluded from visible moments. The original population handle
+and every captured source state remain private authority, not inferred from positive moments.
+
+Current Story and this new source share one unrendered assembler and canonical evidence order.
+Exact pivotal versions replace prefix matching; evidence multiplicity, sorted kinds, the inclusive
+150-cp threshold, typed mate endpoints and original parent/evidence/stop identities survive.
+Root endgame detection still occurs before root-moment exclusion. The scoped source emits exact
+ordered rank groups, not ranked groups, and no components, sentences, title or voice text.
+Its reader checks current storage and original source/result/group identity without reassembly
+or factory dispatch. Current Story alone still adds its presentation, rank and title. This is
+not the final public authority or completed learner/API cutover; no legacy-only fork is required.
 
 The only engine source is the shared node-free `live.stockfish.position_eval@1` delivery from the
 provider exchange: a White-perspective `centipawns | mate` score plus the same line's raw

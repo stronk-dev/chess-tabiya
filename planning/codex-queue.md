@@ -1,6 +1,21 @@
 # Codex queue
 
-**Current executable checkpoint, 2026-10-16:** the internal complete recorded Review population
+**Current executable checkpoint, 2026-10-16:** the genuine internal recorded moment source now
+consumes the complete twelve-source population and retains the actual last-level reduction for
+every outcome, including empty/root-only results. One unrendered assembler/order also serves
+current Story; no second moment algorithm or raw-prose channel. Exact groups retain original
+occurrence multiplicity, typed endpoints and full private source/state authority. The 26 new
+runtime cases and extended real SQLite prefix/reopen controls pass in 1,052 focused cases across
+30 files; bounded independent read-only review finds no blocker. Full normal `make verify build`
+passes: 6,598 software tests across 410 files, seven performance tests, 257 content tests and
+all remaining gates. Profiles, capabilities, current bindings and qualification remain unchanged.
+
+Next: rank/opening/grade owners, then the complete 282-pair current access/receiver/API/native
+cutover and obsolete-path retirement. No partial facade or legacy compatibility pipeline.
+D3847/D3841/D3845 remain doing; D3870 remains separately blocked on its unaccepted schema/resource
+follow-up. This is not completed Review UI, a milestone, qualification or a release.
+
+**Prior verified source checkpoint, 2026-10-16:** the internal complete recorded Review population
 executes all twelve accepted adapters through one actual registry. Exact prefix slots preserve
 original empty/unavailable invocations, captured shapes and per-node missing-human folds.
 Last-level reuses the actual executed subset. The 29 new runtime cases plus extended real SQLite

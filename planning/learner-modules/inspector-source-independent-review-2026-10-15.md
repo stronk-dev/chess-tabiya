@@ -1376,3 +1376,23 @@ real SQLite import/save/close/reopen/every-prefix coverage is inspected. Tests w
 not executed by the reviewer. This grants no new acceptance or source qualification. Future
 moment/rank sources must retain complete private invocation/disposition authority, including
 empty/unavailable states, not flatten the source into only positive items.
+
+### Recorded Review moment source — bounded implementation review, 2026-10-16
+
+The authorized independent reviewer finds no blocker in the actual shared unrendered assembler
+or genuine internal moment source. Canonical node/item order, exact pivotal versions, repeated
+observations, sorted kinds, inclusive150-cp selection and typed endpoints remain. Root-first
+endgame detection and root-moment exclusion are separate. Current Story alone adds components,
+sentences, rank and title; the new source constructs no fake packet or prose.
+
+Construction consumes the original complete source population, invokes last-level@2 once for
+every outcome, authenticates its original array before iteration and retains the exact receipt/
+convention for empty/root-only results. Reader checks original population/current storage,
+groups/edges and last-level proof without rebuilding or dispatching. Actual both-color SQLite
+prefix/reopen and adversarial runtime tests are inspected, not run by reviewer. No acceptance,
+qualification, public facade or current consumer cutover follows.
+
+The minor hardening note is implemented and independently confirmed: reuse the existing closed-
+own-data validator before reading population. Three symbol/nonenumerable-extra/accessor cases
+first fail for missing refusal, then require refusal before dispatch and zero accessor reads.
+This closes the bounded note, not an allegation of an escaped source-authority bypass.

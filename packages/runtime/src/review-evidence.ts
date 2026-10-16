@@ -11,6 +11,7 @@ import { importedMainlineBranchId } from "./branch-scale.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { DerivedEvidence } from "./evidence-factories.js";
+import { orderedReviewEvidence } from "./internal/review-moment-assembly.js";
 import { assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import { createRecordedPivotalSource, recordedPivotalData, type RecordedPivotalSource, type PivotalKind, type PivotalMarker, type RecordedHumanDivergenceMarker } from "./pivotal.js";
@@ -718,6 +719,7 @@ function closedSource(value: unknown, keys: readonly string[]): value is Record<
   return value !== null && typeof value === "object" && !Array.isArray(value) && Reflect.ownKeys(value).length === keys.length
     && keys.every(key => Object.hasOwn(value, key) && Object.hasOwn(Object.getOwnPropertyDescriptor(value, key)!, "value"));
 }
+export { closedSource as isClosedReviewSourceRecord };
 function capturePointContext(context: ReviewSourceContext, path: readonly Node[]): ReviewSourceContext {
   if (!closedSource(context, ["engine", "shapes"]) || !(context.engine instanceof Map) || !Array.isArray(context.shapes)) throw new TypeError("Recorded Review requires the closed server-owned source context");
   const captured = new Map<string, ReviewProviderNodeState>();
@@ -1162,7 +1164,7 @@ export function compileReviewEvidence(input: ReviewEvidenceInput): ReviewEvidenc
   for (const result of input.sources) byNode.set(result.nodeId, [...(byNode.get(result.nodeId) ?? []), result]);
   const nodes = [...snapshot.path].sort((left, right) => left.ply - right.ply || left.id.localeCompare(right.id)).map((node): ReviewNodePacket => {
     const results = byNode.get(node.id) ?? [];
-    const items = results.flatMap((result) => result.items).sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection)) || evidenceDigestOf(left).localeCompare(evidenceDigestOf(right)));
+    const items = orderedReviewEvidence(results.flatMap((result) => result.items));
     const families = Object.fromEntries(REVIEW_SOURCE_FAMILIES.map((family) => {
       const rows = results.filter((result) => ADAPTER_BY_ID.get(result.adapterId)!.family === family)
         .sort((left, right) => left.adapterId.localeCompare(right.adapterId) || left.invocationId.localeCompare(right.invocationId))
