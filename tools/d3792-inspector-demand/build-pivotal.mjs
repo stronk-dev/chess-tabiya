@@ -37,13 +37,13 @@ for (const candidate of [false, true]) {
           'export function pivotalMarkerPayloadsForKind(run: DrillRun, branchId: string, kind: PivotalKind, researchThroughNodeId?: string): readonly PivotalMarker[] {');
         replace('  return pivotalPayloads(run, branchId, kind);',
           '  return pivotalPayloads(run, branchId, kind, researchThroughNodeId);');
-        replace('  const path = branchPath(run, branchId), markers: PivotalMarker[] = [];', `
+        replace('  return pivotalPathPayloads(run, branchPath(run, branchId), kind);', `
   const original = branchPath(run, branchId);
   for (const node of original) positionFromFen(node.fen);
   const endpoint = researchThroughNodeId === undefined ? original.length - 1
     : original.findIndex(node => node.id === researchThroughNodeId);
   if (endpoint < 0) throw new TypeError("D3825 endpoint is not on the original branch");
-  const path = original.slice(0, endpoint + 1), markers: PivotalMarker[] = [];`);
+  return pivotalPathPayloads(run, original.slice(0, endpoint + 1), kind);`);
         sites++;
         return { contents: source, loader: "ts", resolveDir: resolve(args.path, "..") };
       });

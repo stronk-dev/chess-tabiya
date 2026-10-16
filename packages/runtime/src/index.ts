@@ -27,6 +27,7 @@ export {
   type LineVerdict,
 } from "./line.js";
 export { BranchQueryError, branchPath, branchPaths, resolveBranchPath, type BranchPathRefusalReason, type BranchPathResolution } from "./branch-path.js";
+export { createRecordedPivotalSource, type RecordedPivotalSource } from "./pivotal.js";
 export { createRecordedComparisonSource, type RecordedComparisonSource } from "./recorded-comparison.js";
 export {
   MAX_COMPARISON_BRANCHES,

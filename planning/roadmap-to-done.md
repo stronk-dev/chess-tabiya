@@ -88,6 +88,18 @@ D3870 also still requires a narrow schema follow-up with explicit REST write pol
 stamp-only storage transition, not merely a parser edit or guessed version. No public cutover,
 qualified semantic source, completed capability or release claim follows from this checkpoint.
 
+The nominal pivotal source and three rule-backed scoped factories now exist internally.
+24 permanent cases/332 focused passes retain full event-head/decision/branch/endpoint/family
+authority, complete original validation, caller isolation and literal four/six witness inputs.
+Both-color phase/collapse controls preserve unclear-node history and refuse future confirmation
+beyond the requested endpoint. Independent read-only review finds no blocker; its ordered-ref
+assertion suggestion is implemented. Two profiles/declarations are added (1002 total), prior1000
+and current consumers/pack requirements unchanged. Full normal make verify build passes6146
+software/399 files, seven isolated performance/257 content and all remaining gates.
+The optional source-scope research remains green over500 controls/207 prefixes; that is not
+actual API/native delivery. D3846/D3841 remain doing. Human_divergence@2/D3870, remaining sequence/
+reduction/grade owners and the complete current image still gate consumer adoption.
+
 D3869 also closes the measured verification-order debt: existing28 normal Make gates now
 refuse stale generated contracts before both full test pools. Four scheduling regressions
 check the actual Make plan, failure propagation and unchanged393-file/native ownership;

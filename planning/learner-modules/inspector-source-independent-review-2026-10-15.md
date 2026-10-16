@@ -1174,3 +1174,17 @@ no further blocker in birth/annotation separation, immutable snapshots, literal 
 physical capture/EP/promotion/960 routes or unchanged pure decision/digest extraction.
 The reviewer does not rerun tests. Current public consumers/receivers/API/native migration,
 semantic qualification and D3870 remain open; this is bounded component review only.
+
+### Internal scoped pivotal implementation review — 2026-10-16
+
+The authorized independent reviewer reads the nominal source and three rule-backed scoped
+factories against accepted F2 §2.3b. No blocking issue is found. Construction independently
+snapshots full run/head, validates the complete original path before narrowing and freezes
+only owned data. Wrong-kind admission precedes preparation. Phase's four and collapse's six
+actual inputs are correct; no future collapse witness is borrowed and prior definite phases
+survive unclear nodes. The shared helper refactor preserves the existing detector computation.
+
+The nonblocking suggestion is to assert the complete ordered exact projection-ref tuple,
+alongside counts, witness position order and receipt order. Main implements it; the normal
+focused gate passes332 tests/twelve files. The reviewer does not rerun tests or typecheck.
+Human-divergence@2, D3870, current consumer/API/native adoption and qualification remain open.

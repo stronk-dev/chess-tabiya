@@ -31614,3 +31614,50 @@ Campaign was the one capability with no API, route or content. Now:
   untriaged. No whole milestone, capability, tactical qualification, browser/native-provider,
   push or release claim. No new worktree or compatibility pipeline. The full1.0 goal stays active;
   continue scoped pivotal/sequence/reduction/grade owners and source-complete current adoption.
+
+### 2026-10-16 — accepted D3846 internal scoped pivotal source and rule factories
+
+- Implement the nominal source with an independent actual replay snapshot, complete original
+  graph/canonical-FEN/legal-edge validation before narrowing, actual event-head digest/current
+  decision/branch/endpoint/family identity, inherited endpoints and no caller marker/path override.
+  The shared detector helper prepares only the granted prefix; original full-tip callers retain
+  the same implementation until their actual source-complete migration, not a compatibility fork.
+- Add irreversibility@1's scoped arm and sole-source phase_change@2/option_collapse@2. Their
+  literal four/six input occurrences retain the previous definite phase across unclear nodes
+  and all three same-side mobility witnesses. Collapse's confirming node must lie inside the
+  granted prefix; the marker still anchors at the first low node. Human_divergence@2 is unbuilt.
+- 25 permanent cases/332 normal focused passes retain both colors, zero-edge/inherited/sibling
+  endpoints, genuine replay-admitted corrupt original suffixes/canonical roots, same-sequence
+  changed reports, caller isolation, copied/wrong-family refusals before preparation and genuine
+  phase/mobility witness disagreement. Exact ordered refs, position occurrences and source-digest
+  order are asserted separately. No copied seal substitutes for the source metadata guards.
+- Authorized independent read-only review finds no blocker; its exact-ref-tuple suggestion is
+  implemented. No tests rerun by the reviewer. Canonical generators add two profiles/declarations
+  (1002 total), prior1000/current bindings/pack requirements unchanged; semantic343/343 cases,
+  81 subjects/zero qualified,53 population/eight external outcomes remain unchanged.
+- Maintain the optional existing source-scope instrument's helper anchor after the shared
+  refactor. Normal research target passes500 controls/207 prefixes/828 family checks/94 occurrence
+  controls/45 full markers/four missing-later-collapse refusals/zero crossed human inputs/three
+  repeated source events. It remains disposable research, not actual nominal/API/native proof.
+- Full normal verification/build is pending. D3846/D3841 and actual current consumers remain
+  doing; D3870 remains open for the narrow independently reviewed schema/REST/resource/migration
+  follow-up. No guessed version, compatibility pipeline, pack restamp, protected-intent change,
+  qualification, milestone, remote-CI, push or release claim. The full1.0 goal stays active.
+
+### 2026-10-16 — D3846 scoped pivotal checkpoint full verification
+
+- Full normal `make verify build` exits zero:6146 software tests/399 files, seven isolated
+  performance tests/four files,257 content tests/26 files and every type/schema/F1/F2/source/
+  semantic/packet/capability/release/governance/corpus/build gate. Software takes373.47s,
+  performance63.02s/content55.99s. No retry, skipped population, deadline change or replacement
+  of complete tests by focused tests. No remote-CI/browser/native-provider run is claimed.
+- Correct the interim handwritten count above: the new permanent file contains24 cases,
+  not25. Its parameterized populations,332 focused passes and actual6146 full passes are
+  unchanged. Refresh current checkpoint prose/counts from the measured run; retain history.
+- Corpus clearance retains92 documents/354 blockers/34 resolved/48 accepted/errors[];104
+  capability documents retain exact requirements. All prior1000 declarations and294 profiles
+  remain unchanged, with two additions each. No pack edits/restamps or official graduation.
+- D3846/D3841 remain doing until actual consumer/receiver/API/native adoption; human@2/D3870
+  and source-owned sequence/reduction/grade work remain open. Refresh existing ledger/state,
+  roadmap/checkpoint/anchors and queue at zero untriaged. No full capability, milestone,
+  qualification, compatibility pipeline, push or release claim. The full1.0 goal stays active.

@@ -190,6 +190,25 @@ Chess960 castling; stationary castling pieces have no invented movement. These t
 internal/unbound prerequisites, not a partial Compare/Inspector consumer cutover. Current
 consumers must migrate source-completely before obsolete APIs retire under D3851.
 
+`createRecordedPivotalSource({run,branchId,throughNodeId,kind})` owns a separate immutable
+replayed snapshot. It validates the complete original branch, including canonical root FEN
+and every legal edge, before narrowing; inherited endpoints before an attempt's own fork are
+valid. Full event-head digest, current decision, branch, endpoint and exact family remain in
+private authority. Copied handles, wrong families and caller path/marker overrides refuse before
+detector preparation. This source is recorded context, not current server permission.
+
+Three rule-backed pivotal factories now accept that source: irreversibility@1's scoped arm,
+phase_change@2 and option_collapse@2. The latter two accept only the nominal source. Their
+unchanged detector implementation prepares only the granted prefix, not a whole-tip result
+cropped afterward. Phase change retains four ordered inputs (previous definite reading/position,
+current definite reading/position), even across intervening unclear nodes. Sustained collapse
+retains six inputs for prior/first-low/confirming same-side positions; without the confirming
+position inside the grant, no collapse marker emits. Both use literal occurrence tuples, not
+deduplicated identities. They remain internal/unbound; human_divergence@2, D3870 and complete
+current consumer/receiver/API/native adoption remain open. Actual whole-tip callers still use
+the existing shared implementation until their source-complete migration; no compatibility
+pipeline is introduced.
+
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,
 and can carry evaluation only. Its derivation is an explicit same-lane alternative: two recorded

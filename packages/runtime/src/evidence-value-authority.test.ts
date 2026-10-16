@@ -49,6 +49,8 @@ import { HINT_FAMILY_POSITIVES, sealedHintLine } from "./testing/hint-fixture.js
 import { occurrenceFixture, occurrencePage } from "./testing/maia-occurrence-fixture.js";
 import { recordedInspectorAttachment, recordedInspectorSelection } from "./testing/recorded-inspector-fixture.js";
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
+import { recordedPivotalFixture } from "./testing/recorded-pivotal-fixture.js";
+import { createRecordedPivotalSource } from "./pivotal.js";
 
 /** One scheduler-sealed live delivery per provider operation, keyed by its source route. */
 function providerDeliveries(): readonly (readonly [string, ProviderOperationId, unknown])[] {
@@ -234,7 +236,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(294);
+    expect(ACTIVE).toHaveLength(296);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -309,7 +311,7 @@ describe("value authority: registry equality", () => {
     const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
     expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
     const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
-    const localTactical = ["derived.compare.piece_route@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
+    const localTactical = ["derived.compare.piece_route@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
     const extra = allExtra.filter(route => !localTactical.includes(route));
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
@@ -1026,6 +1028,11 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
       const record = invokeEvidenceValueRoute("recorded.inspector.tablebase_packet@1", valid);
       for (const view of ["derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1"] as const) profiles.set(view, { valid: { record }, falsify: refused(view, { record: { ...record } }) });
     }
+  }
+  for (const kind of ["phase_change", "option_collapse"] as const) {
+    const run = recordedPivotalFixture(kind), recordedPivotal = createRecordedPivotalSource({ run, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId, kind });
+    const route = `derived.pivotal.${kind}@2`;
+    profiles.set(route, { valid: { recordedPivotal }, falsify: refused(route, { recordedPivotal: { ...recordedPivotal } }) });
   }
   const recordedComparison = recordedComparisonFixture();
   const comparisonInput = { comparison: recordedComparison.comparison, branchId: recordedComparison.main };

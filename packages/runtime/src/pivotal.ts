@@ -1,8 +1,13 @@
 import type { Color } from "chessops/types";
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 
 import { permittedAssistance, type AssistanceContext } from "./assistance.js";
 import { branchPath } from "./branch-path.js";
-import { positionFromFen } from "./chess.js";
+import { canonicalFen, positionFromFen } from "./chess.js";
+import { projectRun } from "./events.js";
+import { moduleDecisionStamp } from "./module-decision.js";
+import { recordedEdgePayload } from "./recorded-edge.js";
+import { digestRunEventHead } from "./run-subject-digest.js";
 import { exactLegalMoves } from "./legal-moves.js";
 import { classifyPhase, type DetectedPhase } from "./phase.js";
 import type { DrillRun, Node, OpponentSelection } from "./types.js";
@@ -62,7 +67,11 @@ function divergence(run: DrillRun, pathIds: ReadonlySet<string>): readonly Pivot
 
 /** Shared source implementation; each exact factory prepares only its own declared family. */
 function pivotalPayloads(run: DrillRun, branchId: string, kind: PivotalKind | undefined): readonly PivotalMarker[] {
-  const path = branchPath(run, branchId), markers: PivotalMarker[] = [];
+  return pivotalPathPayloads(run, branchPath(run, branchId), kind);
+}
+
+function pivotalPathPayloads(run: DrillRun, path: readonly Node[], kind: PivotalKind | undefined): readonly PivotalMarker[] {
+  const markers: PivotalMarker[] = [];
   let lastDefinite: Exclude<DetectedPhase, "unclear"> | undefined;
   for (let index = 0; index < path.length; index += 1) {
     const node = path[index]!;
@@ -116,6 +125,62 @@ export const PIVOTAL_MARKER_ROUTES = Object.freeze({
   human_divergence: "derived.pivotal.human_divergence@1",
   option_collapse: "derived.pivotal.option_collapse@1",
 } as const satisfies Readonly<Record<PivotalKind, string>>);
+
+declare const recordedPivotalBrand: unique symbol;
+export interface RecordedPivotalSource { readonly [recordedPivotalBrand]: true }
+const RECORDED_PIVOTAL = new WeakMap<object, Readonly<{
+  run: DrillRun;
+  authority: Readonly<{
+    operation: "recorded-pivotal-source@1";
+    runId: string;
+    eventHeadDigest: string;
+    decision: ReturnType<typeof moduleDecisionStamp>;
+    branchId: string;
+    throughNodeId: string;
+    kind: PivotalKind;
+    path: readonly Node[];
+  }>;
+}>>();
+
+/** Recorded scope only. Current read/disclosure/publication authority remains server-owned. */
+export function createRecordedPivotalSource(input: Readonly<{ run: DrillRun; branchId: string; throughNodeId: string; kind: PivotalKind }>): RecordedPivotalSource {
+  if (input === null || typeof input !== "object" || Reflect.ownKeys(input).length !== 4
+    || !["run", "branchId", "throughNodeId", "kind"].every(key => Object.hasOwn(input, key))) throw new TypeError("Recorded pivotal requires exactly {run,branchId,throughNodeId,kind}");
+  const { branchId, throughNodeId, kind } = input;
+  if (typeof branchId !== "string" || branchId.length === 0 || typeof throughNodeId !== "string" || throughNodeId.length === 0 || typeof kind !== "string" || !Object.hasOwn(PIVOTAL_MARKER_ROUTES, kind)) throw new TypeError("Recorded pivotal requires a known kind and nonempty branch/endpoint");
+  const snapshot = structuredClone(input.run);
+  const eventHeadDigest = digestRunEventHead({ runId: snapshot.id, headSeq: snapshot.events.length, events: snapshot.events });
+  const run = projectRun(snapshot.events);
+  if (canonicalizeJson(run) !== canonicalizeJson(snapshot)) throw new TypeError("Recorded pivotal snapshot disagrees with its event replay");
+  const original = branchPath(run, branchId);
+  for (const [index, node] of original.entries()) {
+    if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new TypeError("Recorded pivotal original FEN is not canonical");
+    if (index > 0) recordedEdgePayload(run, original[index - 1]!, node);
+  }
+  const endpoint = original.findIndex(node => node.id === throughNodeId);
+  if (endpoint < 0) throw new TypeError("Recorded pivotal endpoint is not on the original branch");
+  // Inherited endpoints before this attempt's own fork are valid for a one-path query.
+  const path = Object.freeze(original.slice(0, endpoint + 1));
+  const source = Object.freeze({}) as RecordedPivotalSource;
+  RECORDED_PIVOTAL.set(source, Object.freeze({ run, authority: Object.freeze({ operation: "recorded-pivotal-source@1", runId: run.id,
+    eventHeadDigest, decision: moduleDecisionStamp(run), branchId, throughNodeId, kind, path }) }));
+  return source;
+}
+
+export function isRecordedPivotalSource(value: unknown): value is RecordedPivotalSource {
+  return value !== null && typeof value === "object" && RECORDED_PIVOTAL.has(value);
+}
+/** Runtime-internal; no public data reader or caller path/marker override. */
+export function recordedPivotalData(source: RecordedPivotalSource, kind?: PivotalKind) {
+  if (!isRecordedPivotalSource(source)) throw new TypeError("Recorded pivotal source was not issued by its owner");
+  const data = RECORDED_PIVOTAL.get(source)!;
+  if (kind !== undefined && data.authority.kind !== kind) throw new TypeError("Recorded pivotal source kind does not match the exact requested factory");
+  return data;
+}
+export function pivotalRecordedPayloads(source: RecordedPivotalSource, kind: PivotalKind): readonly PivotalMarker[] {
+  const { run, authority } = recordedPivotalData(source, kind);
+  return pivotalPathPayloads(run, authority.path, kind);
+}
 
 /**
  * The four exact derived pivotal projections for one recorded branch, in path order. Each item is

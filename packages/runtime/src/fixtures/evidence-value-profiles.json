@@ -657,11 +657,25 @@
       "fe418cafc89317a56fbc793cfcf077d1eea25f2449de1bb1e5ef7d1f9aa65d4f"
     ]
   },
+  "derived.pivotal.option_collapse@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "a5092e99466f9b7cf01720c7bb02ece876799d70f07436fbb6a884ef595cb24a"
+    ]
+  },
   "derived.pivotal.phase_change@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
       "9247cde839b8cf922b5c27ba55dc4357d9fb0b9516a59806a4eea1f6322f4f5d"
+    ]
+  },
+  "derived.pivotal.phase_change@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "8700b20dc8d3a8a57fc9773ae1f612843adaba7d33a7e15e56bc98f03463fab6"
     ]
   },
   "derived.review.eval_delta@2": {

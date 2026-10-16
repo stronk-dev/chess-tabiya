@@ -95,7 +95,24 @@ must explicitly settle REST's separate empty-candidates write refusal and a stam
 as well as canonical human_common empty telemetry and resource ordering. No unilateral version/
 lane rebase or empty-to-missing substitution is authorized by this implementation checkpoint.
 
-Next implement the
+The accepted D3846 scoped pivotal slice now has its genuine nominal owner and three rule-backed
+factories: irreversibility@1's scoped arm, phase_change@2 and option_collapse@2.24 permanent
+cases/332 focused passes retain full original validation before narrowing, actual full-head
+authority, caller isolation, inherited endpoints, four/six literal ordered witnesses and both
+colors. Phase change retains the last definite phase across unclear positions; collapse cannot
+borrow confirmation from beyond the endpoint. Genuine contradictory source witnesses refuse.
+Independent read-only review finds no blocker; exact ordered ref assertions implement its
+nonblocking suggestion. Canonical generators add exactly two profiles/declarations (1002 total),
+prior1000/current consumers/pack requirements unchanged. Full normal make verify build passes
+6146 software/399 files, seven isolated performance/257 content and every remaining gate.
+These remain unbound internal prerequisites, not completed learner delivery.
+
+The maintained optional pivotal source-scope research still passes500 controls/207 prefixes,
+828 family checks/94 occurrence controls/45 full markers, four missing-later-collapse refusals,
+zero crossed human inputs and three repeated source events. Its helper anchor is updated for
+the shared production refactor; this disposable instrument is not native/API qualification.
+
+Next implement human-divergence's scoped source once D3870 is reconciled, then the
 remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,
 D1422's unified ladder and original budgets. Exposure is currently Threat-only, not an invented

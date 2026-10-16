@@ -50,7 +50,7 @@ import { gradeReadingFromPayload } from "./grade-reading.js";
 import { pieceDestinationEvents, pieceDestinationsReading } from "./mobility.js";
 import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReading, pawnContactTimingSequence, pawnDynamicsEvents, pawnTransitionEvents, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { developmentReading, phaseBandReading } from "./phase.js";
-import { pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, type PivotalKind, type PivotalMarker } from "./pivotal.js";
+import { pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, isRecordedPivotalSource, recordedPivotalData, pivotalRecordedPayloads, type RecordedPivotalSource, type PivotalKind, type PivotalMarker } from "./pivotal.js";
 import { RECORDED_EDGE_FACTORY, recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
 import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 import {
@@ -362,6 +362,7 @@ function projectionFor(route: string): ProjectionDeclaration {
 function authorityShape(candidate: unknown): unknown {
   if (candidate === null || typeof candidate !== "object") return candidate;
   if (Array.isArray(candidate)) return candidate.map(authorityShape);
+  if (isRecordedPivotalSource(candidate)) return recordedPivotalData(candidate).authority;
   if (isRecordedComparisonSource(candidate)) return recordedComparisonData(candidate).authority;
   if (isRun(candidate)) return { run: candidate.id, nodes: candidate.nodes.length, events: candidate.events.length };
   if (candidate instanceof Map) return { map: [...candidate].map(([key, entry]) => [key, authorityShape(entry)]) };
@@ -1457,13 +1458,23 @@ export const createDerivedStoryTitleV2Evidence = (() => {
 // Pivotal markers: four exact derived projections
 // ---------------------------------------------------------------------------------------------
 
-function pivotalFactory(kind: PivotalKind): EvidenceValueFactory<{ readonly run: DrillRun; readonly branchId: string }, readonly DerivedEvidence<PivotalMarker>[]> {
-  const route = `derived.pivotal.${kind}@1`;
+type WholePivotalInput = { readonly run: DrillRun; readonly branchId: string };
+type ScopedPivotalInput = { readonly recordedPivotal: RecordedPivotalSource };
+type PivotalInput<K extends PivotalKind, V extends 1 | 2> = V extends 2 ? ScopedPivotalInput : K extends "irreversibility" ? WholePivotalInput | ScopedPivotalInput : WholePivotalInput;
+
+function pivotalFactory<K extends PivotalKind, V extends 1 | 2>(kind: K, version: V): EvidenceValueFactory<PivotalInput<K, V>, readonly DerivedEvidence<PivotalMarker>[]> {
+  const route = `derived.pivotal.${kind}@${version}`;
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, branchId: value("a branch id", isText) }], result: "items", dependency: kind === "human_divergence" ? "provider-exchange-and-execution" : "recorded-semantic-path", pending: kind === "human_divergence" ? "The Maia distribution is the run's recorded opponent selection; the model exchange receipt lands with provider-exchange-and-execution." : RUN_PENDING }, ({ run, branchId }: { readonly run: DrillRun; readonly branchId: string }) => {
-    const path = branchPath(run, branchId);
+  const scopedArm = { recordedPivotal: value("an owned recorded pivotal source", isRecordedPivotalSource) };
+  const arms = version === 2 ? [scopedArm] : [{ run: RUN, branchId: value("a branch id", isText) }, ...(kind === "irreversibility" ? [scopedArm] : [])];
+  return factory({ route, symbol, shape: "derived", arms, result: "items", dependency: kind === "human_divergence" ? "provider-exchange-and-execution" : "recorded-semantic-path", pending: kind === "human_divergence" ? "The Maia distribution is the run's recorded opponent selection; the model exchange receipt lands with provider-exchange-and-execution." : RUN_PENDING }, (input: PivotalInput<K, V>) => {
+    const source = "recordedPivotal" in input ? input.recordedPivotal : undefined;
+    const scoped = source === undefined ? undefined : recordedPivotalData(source, kind);
+    const { run, branchId } = scoped === undefined ? input as WholePivotalInput : { run: scoped.run, branchId: scoped.authority.branchId };
+    const path = scoped?.authority.path ?? branchPath(run, branchId);
     const byId = new Map(path.map((node, index) => [node.id, { node, index }]));
-    return Object.freeze(pivotalMarkerPayloadsForKind(run, branchId, kind).map((marker) => {
+    const markers = source === undefined ? pivotalMarkerPayloadsForKind(run, branchId, kind) : pivotalRecordedPayloads(source, kind);
+    return Object.freeze(markers.map((marker) => {
       const located = byId.get(marker.nodeId)!;
       const position = createRunRecordPositionV1Evidence({ run, nodeId: marker.nodeId });
       let inputs: DeclaredEvidence<unknown>[];
@@ -1503,7 +1514,8 @@ function pivotalFactory(kind: PivotalKind): EvidenceValueFactory<{ readonly run:
         if (counts[0] !== detail.priorCount || counts[1] !== detail.count || counts[2] !== detail.nextCount) throw new TypeError("Sustained-collapse marker disagrees with its exact mobility witnesses");
         inputs = nodes.flatMap((node, index) => [readings[index]!, createRunRecordPositionV1Evidence({ run, nodeId: node.id })]);
       }
-      return Object.freeze({ evidence: mint(route, symbol, marker, { run, branchId, nodeId: marker.nodeId }, inputs), inputs: Object.freeze(inputs) });
+      const authority = source === undefined ? { run, branchId, nodeId: marker.nodeId } : { route, recordedPivotal: source, marker, inputs };
+      return Object.freeze({ evidence: mint(route, symbol, marker, authority, inputs), inputs: Object.freeze(inputs) });
     }));
   });
 }
@@ -2216,10 +2228,12 @@ export const createDerivedBoundedTargetPolicyBoundsV1Evidence = (() => {
 })();
 
 // Pivotal factories are defined last: they reuse the reading and source factories above.
-export const createDerivedPivotalIrreversibilityV1Evidence = pivotalFactory("irreversibility");
-export const createDerivedPivotalPhaseChangeV1Evidence = pivotalFactory("phase_change");
-export const createDerivedPivotalHumanDivergenceV1Evidence = pivotalFactory("human_divergence");
-export const createDerivedPivotalOptionCollapseV1Evidence = pivotalFactory("option_collapse");
+export const createDerivedPivotalIrreversibilityV1Evidence = pivotalFactory("irreversibility", 1);
+export const createDerivedPivotalPhaseChangeV1Evidence = pivotalFactory("phase_change", 1);
+export const createDerivedPivotalHumanDivergenceV1Evidence = pivotalFactory("human_divergence", 1);
+export const createDerivedPivotalOptionCollapseV1Evidence = pivotalFactory("option_collapse", 1);
+export const createDerivedPivotalPhaseChangeV2Evidence = pivotalFactory("phase_change", 2);
+export const createDerivedPivotalOptionCollapseV2Evidence = pivotalFactory("option_collapse", 2);
 
 // ---------------------------------------------------------------------------------------------
 // Guided Hint (rfc/hint-distance.md §1–§3, [[D1640]]/[[D1641]]): seven family horizons and 35

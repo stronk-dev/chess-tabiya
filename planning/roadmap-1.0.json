@@ -1088,10 +1088,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Continue accepted nominal pivotal/sequence sources, source-owned reductions/grades and complete current Compare/Inspector/Hint/packet receivers. Recorded comparison/path/piece_route@2 now exists internally with reviewed corrections and focused proof; full normal verification/build is green with6122 software/seven performance/257 content and all remaining gates. D3870 needs a narrow schema follow-up settling human_common empty telemetry, REST write policy, claimed run-schema/migration order and stamp-only transition before canonical empty-array/persistence/export/reload success. Do not guess a version or rebase claims unilaterally. Preserve every detector family, full source/grant/head identity, availability, conservative whole-selection refusal, root-inclusive Compare, D1422 unified ladder and original budgets. Source-complete282-pair current cutover precedes actual obsolete-path retirement. No compatibility pipeline, filtered bindings or qualification/milestone/release promotion.",
+        "nextAction": "Continue accepted source-owned sequences/reductions/grades and complete current Compare/Inspector/Hint/packet receivers. Nominal pivotal source and three rule-backed scoped factories now exist internally with24 permanent cases/332 focused passes; full normal make verify build passes6146 software/399 files, seven isolated performance/257 content and all remaining gates. Human_divergence@2 remains uncut over while D3870 needs a narrow schema follow-up settling human_common empty telemetry, REST write policy, claimed run-schema/migration order and stamp-only transition before genuine canonical empty-array/persistence/export/reload success. Do not guess a version or rebase claims unilaterally. Preserve every detector family, full source/grant/head identity, availability, conservative whole-selection refusal, root-inclusive Compare, D1422 unified ladder and original budgets. Source-complete282-pair current cutover precedes actual obsolete-path retirement. No compatibility pipeline, filtered bindings or qualification/milestone/release promotion.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "Accepted D3864 nominal recorded comparison owner and complete original path/piece_route@2 are implemented internally.30 permanent cases/298 focused passes retain60 both-color ordered-column/endpoint combinations, full birth-event ordinals, annotations, zero-edge roots, caller isolation, exact logical authority and physical capture/EP/promotion/960 routes. Independent review finds D3872 same-seq head aliasing and D3873 root-only canonicality; explicit predecessor mutation fails exactly two controls, fixes restore green and independent re-review clears both. Existing full event-head digest now participates in source authority; no per-allocation registry. Two canonical profiles/declarations added (1000 total), prior998/current packet/module/pack requirements unchanged. Semantic343/343 cases/81 subjects/zero qualified remain. Final normal make verify build passes6122 software/398 files, seven isolated performance,257 content and every remaining type/contract/governance/corpus/build gate. D3872/D3873 close with actual source/test evidence; zero untriaged. D3870 needs a narrow schema follow-up, explicit REST write policy, claimed version/migration negotiation and stamp-only transition before genuine canonical empty-array/persistence/export/reload proof. Actual current282-pair consumers, pivotal/sequence/reduction/grade owners and receivers/API/native proof remain; obsolete paths retire after real callers migrate. No complete capability, qualification, browser/remote CI or release claim.",
+          "summary": "Accepted D3846 nominal pivotal source and three rule-backed scoped factories are implemented internally: irreversibility@1 scoped arm, phase_change@2 and option_collapse@2.24 permanent cases/332 focused passes retain complete original validation, actual full head/decision/branch/endpoint/family authority, caller isolation, inherited endpoints, exact ordered four/six input tuples, unclear-node prior phases and later confirmation inside the grant. Independent read-only review finds no blocker; exact-ref-tuple suggestion implemented. Two canonical profiles/declarations added (1002 total), prior1000/current bindings/pack requirements unchanged. Semantic343/343 cases/81 subjects/zero qualified remain. Optional existing source-scope research passes500 controls/207 prefixes/828 family checks/94 occurrence controls/45 full markers/four missing-later-collapse refusals/zero crossed human inputs/three repeated source events. Full normal make verify build passes6146 software/399 files, seven isolated performance/257 content and all remaining gates. D3846/D3841 remain doing, no public image adopted. Human_divergence@2/D3870, sequence/reduction/grade owners, complete current282-pair consumers and receivers/API/native proof remain. No compatibility pipeline, qualification/milestone/browser/remote CI/release claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1132,6 +1132,8 @@
             "tools/d3792-inspector-demand/build-pivotal-family.mjs",
             "packages/runtime/src/pivotal.ts",
             "packages/runtime/src/pivotal-evidence.test.ts",
+            "packages/runtime/src/recorded-pivotal.test.ts",
+            "packages/runtime/src/testing/recorded-pivotal-fixture.ts",
             "packages/runtime/src/compare-strip-values.ts",
             "packages/runtime/src/compare.test.ts",
             "tests/browser/comparison-castling-routes.spec.ts",
@@ -1250,6 +1252,11 @@
           "anchors": [
             {
               "kind": "work_state",
+              "id": "D3846",
+              "digest": "sha256:0c5f57b3a598e25181a561094fa6ee2b4d96268e2af82ed8774717ca7472eec2"
+            },
+            {
+              "kind": "work_state",
               "id": "D3872",
               "digest": "sha256:4d6ae45b4f673d99738cd745777e45d4d933ccb84aa44a4ee39badd04bf15a58"
             },
@@ -1257,6 +1264,11 @@
               "kind": "work_state",
               "id": "D3873",
               "digest": "sha256:e31e9ae646c6a41acd256e4dda73c2a9ac2f25dbdb8507a2aa2c10cc9114c89e"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3841",
+              "digest": "sha256:a2b3c6fc4f1745d63d0d09f692ffa9868295d5ba4b5f694aa8ac58679fa9922d"
             },
             {
               "kind": "work_state",

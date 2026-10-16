@@ -55,6 +55,8 @@ import {
   createDerivedPivotalIrreversibilityV1Evidence,
   createDerivedPivotalOptionCollapseV1Evidence,
   createDerivedPivotalPhaseChangeV1Evidence,
+  createDerivedPivotalOptionCollapseV2Evidence,
+  createDerivedPivotalPhaseChangeV2Evidence,
   createDerivedReviewEvalDeltaV2Evidence,
   createDerivedReviewEvalPointV1Evidence,
   createDerivedReviewMateTransitionV2Evidence,
@@ -227,7 +229,9 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "derived.pivotal.human_divergence@1": createDerivedPivotalHumanDivergenceV1Evidence,
   "derived.pivotal.irreversibility@1": createDerivedPivotalIrreversibilityV1Evidence,
   "derived.pivotal.option_collapse@1": createDerivedPivotalOptionCollapseV1Evidence,
+  "derived.pivotal.option_collapse@2": createDerivedPivotalOptionCollapseV2Evidence,
   "derived.pivotal.phase_change@1": createDerivedPivotalPhaseChangeV1Evidence,
+  "derived.pivotal.phase_change@2": createDerivedPivotalPhaseChangeV2Evidence,
   ...AVOIDANCE_FACTORIES,
   // rfc/review-evidence-compiler.md: derived.story.eval_shift@1 is retired; the typed Review
   // projections replace it and are never minted from a legacy scalar.

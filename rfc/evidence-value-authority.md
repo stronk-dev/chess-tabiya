@@ -38,6 +38,17 @@ re-review and actual predecessor-red controls. Normal focused gate298 cases/ten 
 make verify build6122 software/398 files, seven performance/257 content plus all remaining gates pass.
 These two internal/unbound routes do not complete actual Compare/Inspector/API/native migration.
 
+**Scoped pivotal checkpoint, 2026-10-16:** §2.3b's nominal full-head/branch/endpoint/family source
+and three rule-backed scoped factories are implemented internally: irreversibility@1's new arm,
+phase_change@2 and option_collapse@2.24 permanent cases/332 focused passes retain complete original
+path validation, canonical roots, owned snapshot isolation, exact ordered four/six input tuples,
+prior definite phases across unclear nodes and later collapse confirmation inside the grant.
+Independent read-only review finds no blocker; its exact-ref-tuple suggestion is implemented.
+Two profiles are added; declarations increase1000→1002 with all prior profiles/declarations
+unchanged. Full normal make verify build passes6146 software/399 files, seven isolated
+performance/257 content and all remaining gates. Human-divergence@2, D3870 and complete current consumer/receiver/
+API/native adoption remain open; no parent discharge or semantic qualification is claimed.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft

@@ -5,7 +5,7 @@ import type { SemanticValidationVerdictTable } from "./semantic-validation.js";
 
 export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
   "schemaVersion": 1,
-  "receiptSha256": "870232c6198b7e78cfac0bee9dcb7e593f8856026196909e2085a382ed4a6d6e",
+  "receiptSha256": "a5c23a2921c63538e843221a478c2c4c1139c004bc2bd87a1654043dd830aa96",
   "verdicts": [
     {
       "subject": {

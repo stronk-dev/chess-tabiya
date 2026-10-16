@@ -1070,6 +1070,14 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       derivation: { inputs: [ref("rules.mobility.reading.legal_moves"), ref("run.record.position")] },
       limitations: ["A legal-move count is not forcing, quality or difficulty."],
     }),
+    ...(["phase_change", "option_collapse"] as const).map(kind => projection("derived.pivotal", `derived.pivotal.${kind}`, "derived", {
+      version: 2, payloadType: `PivotalMarker.${kind}`, grounding: "declared_convention", exactness: "convention", confidence: "not_applicable",
+      semantics: kind === "phase_change" ? "The unchanged phase-bands@1 transition between two actual definite readings/recorded positions within the granted original prefix, including intervening unclear nodes." : "The unchanged sustained legal-continuation convention over all three complete same-side legal-mobility readings and their actual recorded positions within the granted prefix.",
+      operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"],
+      derivation: { inputs: Array.from({ length: kind === "phase_change" ? 2 : 3 }, () => [kind === "phase_change" ? ref2("rules.phase.reading") : ref("rules.mobility.reading.legal_moves"), ref("run.record.position")]).flat() },
+      limitations: ["A product convention over a complete permitted witness span, not full-branch absence, quality, significance, intent or difficulty."],
+      disposition: { kind: "experimental", reason: "Accepted F2 §2.3b internal fixed-tuple successor; complete current consumers and receiver/API/native adoption remain open." },
+    })),
   ]),
   producer("rules.endgame", "rules", "packages/runtime/src/endgame.ts", "local", "sync", [
     projection("rules.endgame", "rules.endgame.reading", "rules", { payloadType: "EndgameReading", operands: ["type", "techniques", "provenanceNote"], forms: ["sentence", "panel"], disposition: retired("rfc/evidence-value-authority.md §3.4: material classification and technique applicability are split; replaced by rules.endgame.classification@1 and theory.endgame.setup_match@1.") }),
