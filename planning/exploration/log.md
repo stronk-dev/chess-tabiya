@@ -31923,3 +31923,66 @@ Campaign was the one capability with no API, route or content. Now:
   passing prior cases/53 population/eight external outcomes remain. No browser rerun, new
   scientific qualification, schema/migration, raw research artifact, push or release claim.
   Keep the full1.0 objective active after the natural local commit checkpoint.
+
+### 2026-10-16 — Recorded Review storage-bound source and original import endpoint
+
+- Continue the active full1.0 goal under D3851: no hypothetical legacy pipeline. Accepted Review
+  §4.5 now has an internal nominal resolve/currentness owner, not a partial final facade. It
+  clones parsed storage images; canonical full event replay, complete original graph/path/FEN/
+  edge/creation validation precedes prefix narrowing. Live storage checks reject changed heads,
+  side/path/import context, foreign issuers and copied handles without semantic/provider
+  collection. The full game remains intact; scope does not simulate chronological permissions.
+- Both existing consequence/import-result factories have actual boundary-only input arms with
+  full boundary source authority, unchanged payloads and absolute original locations. Earlier
+  prefixes/retries do not inherit the original result; on-prefix terminal outcomes retain their
+  learner-relative result and eligible contradictory import results refuse. Raw-run arms remain
+  only for actual callers awaiting the complete migration, not promised compatibility.
+- Independent review returns D3878: canonical/replay-valid mainline extension saved below the
+  service guard can relocate a presumed original endpoint. Record the row before repair. Bind
+  the existing stored movetextDigest to the importer's canonical root/ordered-UCIs recipe before
+  narrowing. Genuine runtime and SQLite save/close/reopen negatives retain the original digest.
+  Re-review clears the bounded repair; it does not approve final facade/application ownership/
+  complete population/moment assembly/current consumer/API delivery or source qualification.
+- First focused run records two bad fixture assumptions: the existing run factory already
+  freezes its run, so two assertions incorrectly require it to be mutable. Preserve its initial
+  frozen state and retain a separate independently mutable-clone test. First typecheck also
+  catches a redundant TS-narrowed result-token comparison; remove that comparison without
+  changing the eligible predicate. Rerun normal make evidence-value-authority typecheck:
+  903 passes/24 files and all workspace types.20 new runtime/four server cases include both
+  colors, every earlier endpoint, actual terminal/draw/unfinished cases, retries, complete
+  originals, storage rereads and mutation isolation. No test/budget/permission relaxation.
+- Sync D3878 into the existing state register; its initial untriaged guard intentionally fails
+  until the existing canonical transition assigns evidence-foundation/doing. Zero untriaged
+  restored. Update the existing queue/roadmap/docs, not a new work plan. Full normal verification
+  is next; no schema/migration, new projection/convention/capability, pack rewrite, raw research
+  artifact, browser rerun, push, deployment or whole-capability completion is claimed.
+
+- The first full make verify build correctly stops at semantic-validation-check before either
+  expensive pool: the changed sole-factory/source import closure needs the existing generated
+  receipt refreshed. Run canonical make semantic-validation-update/capability-declarations and
+  inspect their exact deltas; this is metadata maintenance, not new qualification or a changed
+  profile/threshold. Rerun the normal full gate after generation, without skips or guard changes.
+
+### 2026-10-16 — Recorded Review source verified checkpoint and closeout
+
+- Full normal make verify build exits zero over the frozen source/test image:6458 software
+  tests/405 files (378.49s), seven isolated performance cases/four files (62.66s),257 real-content
+  tests/26 files (58.38s), every type/contract/governance/packaging/build gate. Corpus audit:
+  92 documents/354 blocking/34 resolved/48 accepted/errors[];104 capability documents retain
+  exact requirements. Earlier failed commands above are not relabelled successful.
+- Independent read-only re-review clears D3878, which closes with actual SQLite test-path
+  evidence. D3847/D3845/D3841 remain doing; update their current checkpoint and existing queue/
+  machine roadmap, then synchronize exact row anchors/receipt. Zero untriaged remains across
+  3627 rows/1749 live; done1716/doing38/todo627/blocked1084/refused162. The462 prose-only
+  historical closeouts are unchanged; this closeout has source/test evidence.
+- Semantic regeneration changes only actual source-closure metadata:91 subjects/zero qualified,
+  343 prior cases passing/53 population/eight external receipts unchanged. Capability generator
+  reports1013 declarations/zero changed; no new projection/profile/convention, data migration,
+  content/restamp, raw research dump, browser rerun, push or deployment. Only tracker/docs
+  closeout follows the passing frozen code/test image; the real pre-commit staged checks remain.
+- Next is the accepted complete boundary-owned point/state/result population, then moment and
+  last-level/rank/opening/grade sources plus D3870's independently reviewed schema follow-up and
+  complete current282-pair access/receiver/API/native migration. Reuse the one actual registry;
+  capture observation/durable context without enqueue and retain complete input/state/occurrence
+  membership, even for empty results. No placeholder final facade, legacy compatibility pipeline,
+  detector qualification, parent discharge or full1.0 completion. Keep the full goal active.

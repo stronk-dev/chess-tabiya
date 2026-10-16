@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5436d0e89a570f59b70cc8caa8c4d08cea891f27f300967cb88be42c4f28db4f",
+    "roadmap": "sha256:6c21d782798c45029a42314326ffe4866926b1c2a246c4e3b26154a69a4ee981",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:6ac253a2a21eeebb7713606c7da680ddee68bb763d3e0244493cb3867dc11adc",
+    "workState": "sha256:51f7747947c47c92d8e2d1953de33818442d95e83b61498b9babc838ca44255a",
     "rfcRegister": "sha256:bef4a474494c72354a37ed6441daefd318a1ec8a307c6e53879f226b74c74353",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 38,
       "blocked": 1084,
-      "done": 1715,
+      "done": 1716,
       "refused": 162
     },
     "workItems": {
@@ -476,10 +476,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement the remaining accepted Review boundary/last-level/rank/opening/grade source owners and independently reviewed D3870 canonical empty-telemetry/REST/resource/stamp-only migration follow-up. The real internal structural comparison reduction/V2/value/result/consumer-plan authority is implemented, independently re-reviewed and verified. Then adopt the entire current282-pair Compare/Inspector/Hint/packet image through actual access/receiver/API/native journeys. Preserve all detector families, full grants/heads/availability and D1422 ladder/budgets; migrate actual callers then retire obsolete paths, no compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
+      "nextAction": "Implement the complete boundary-owned Review point/state/endpoint-result population, actual moment/last-level/rank/opening/grade owners and independently reviewed D3870 canonical empty-telemetry/REST/resource/stamp-only migration follow-up. The internal Review storage boundary/result arms and structural comparison reduction/V2/value/result/consumer-plan authority exist. Bind the final complete authority once to RunService storage; captured-only source preparation uses observation/durable reads, never enqueue. Then adopt the entire current282-pair Compare/Inspector/Hint/packet image through actual access/receiver/API/native journeys. Preserve all detector families, grants/heads/availability and D1422 ladder/budgets; migrate actual callers then retire obsolete paths, no compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Accepted source-only compare.structure_delta@1/derived.compare.structure_delta@2 now has its real sole factory, genuine18-template V2 plan, complete concrete source occurrences, acyclic value/convention authority and authenticated original empty/nonempty results. Consumer admission joins its actual supplied manifest's genuine V2 plan; old fixed images remain strict.17 new reduction cases plus AST/consumer controls and both-color named outputs give842 focused passes/21 files/types. Independent re-review clears D3874-D3876; D3877 closes the exact convention inventory/fast-gate/queue-route repair. Frozen software6434/403 files and seven performance pass; remaining normal governance/content257/build gates pass after the tracker-only correction. Failed whole commands remain logged, not relabelled successful.314 projections/307 factory profiles/1013 capabilities preserve prior1012 declarations, pack bytes and semantic91 subjects/zero qualified/343 passing prior cases/53 population/eight external outcomes. No learner binding or whole milestone/qualification/release claim. Review/last-level/rank/opening/grade owners, D3870 and entire282-pair access/receiver/API/native delivery remain.",
+        "summary": "Accepted Review §4.5 now has its internal immutable storage-bound prefix source and genuine consequence/import-result factory arms. Original replay/path/FEN validation precedes narrowing; storage/head/side/import changes and copied/foreign handles refuse without semantic/provider collection. D3878 binds the original imported endpoint to its existing stored canonical move-sequence digest, including real runtime/SQLite save/close/reopen extension negatives.20 runtime/four server cases retain both colors, every prefix, unfinished/terminal/result distinctions, retries and independent snapshots. Independent re-review clears the repair;903 focused cases/24 files/types and full normal make verify build pass:6458 software/405 files, seven isolated performance,257 content and all governance/corpus/packaging/build gates. D3878 closes with path evidence; zero untriaged remains. Prior comparison reduction/V2/value/result/consumer-plan implementation stays verified. No partial final facade, placeholder operation or learner adoption.314 projections/307 profiles/1013 capabilities, pack bytes and semantic qualification unchanged. Complete point/state/result population, moment/last-level/rank/opening/grade owners, D3870 and entire282-pair access/receiver/API/native delivery remain; no whole milestone/qualification/release promotion.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -528,6 +528,10 @@
           "packages/runtime/src/comparison-structural-population.ts",
           "packages/runtime/src/comparison-structural-population.test.ts",
           "packages/runtime/src/comparison-reduction.test.ts",
+          "packages/runtime/src/recorded-review-boundary.ts",
+          "packages/runtime/src/recorded-review-boundary.test.ts",
+          "apps/server/src/recorded-review-boundary.test.ts",
+          "docs/review-evidence.md",
           "packages/runtime/src/evidence-execution-v2.ts",
           "packages/runtime/src/evidence-reduction-contract.ts",
           "packages/runtime/src/evidence-reduction-types.ts",
@@ -672,7 +676,7 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:03541b1517ded1f22862079ecc32a83954d087c1715c4b4bede178b8452ae77a"
+            "digest": "sha256:f76aeab6a2d6713a5264f4d26121bc4e0d461d70e4d34a0fd6ae27d5e7e975d3"
           },
           {
             "kind": "work_state",
@@ -907,7 +911,7 @@
           {
             "kind": "work_state",
             "id": "D3847",
-            "digest": "sha256:0e56a53d7fcc522e230339a2ff0ae10bbb166a85d12753e016d92f8871c867fc"
+            "digest": "sha256:09491b4618186791e86eb82d410521a5ea539f3b455ccc642a7bff9628b9c305"
           },
           {
             "kind": "work_state",

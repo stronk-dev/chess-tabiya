@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3873]] · **Machine map:**
+2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3878]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,17 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest implementation is the source-only structural comparison reduction, not another
-declaration-only row: its exact factory consumes the genuine complete population and issues
-V2 execution/concrete-input/value/convention/result authority. Empty result arrays are
-authenticated computation results, not negative chess facts. Consumer admission joins the
-actual supplied manifest's plan. No learner-facing module or whole milestone is completed by
-this checkpoint. Independent re-review and all normal gate components pass:6434 software,
-seven isolated performance,257 content, types/governance/packaging/build. The first inventory
-failure and later missing queue link remain logged; the tracker-only repair reruns the remaining
-governance/content/build gates, not an invented uninterrupted full-command success. The remaining
-Review/last-level/rank/opening/grade owners and complete current282-pair delivery still gate
-the requested UX. D3870 remains a reviewed schema/REST/migration follow-up, not a local bypass.
+The latest internal implementation is the storage-bound earlier-Review source and its actual
+consequence/import-result factory arms. It retains the full saved game and checks original
+replay/path/FEN/current storage before source use; earlier prefixes and retries cannot inherit
+the final result. D3878 repairs original-import endpoint authority using the existing stored
+move-sequence digest, with a real SQLite extension regression. Independent review clears this
+bounded wave;903 focused cases/24 files and workspace types pass. Full normal make verify build
+exits zero:6458 software/405 files, seven performance cases,257 content and all governance/
+corpus/packaging/build gates. D3878 is closed with source/test evidence; zero untriaged remains.
+The earlier structural comparison reduction/V2/value/result/consumer-plan wave remains
+verified. No learner-facing module or whole milestone is completed by these internal sources.
+Complete Review point/state/result population, moment/last-level/rank/opening/grade owners and
+the entire current282-pair delivery still gate the requested UX. D3870 remains a separately
+reviewed schema/REST/migration follow-up, not a local bypass; no compatibility pipeline is owed.
 
 The complete coordinated current-source/module contract is now independently accepted for
 implementation. All four substantive returns and the final presentation/opening companion

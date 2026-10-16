@@ -1,21 +1,31 @@
 # Codex queue
 
-**Current executable checkpoint, 2026-10-16:** structural comparison now has its real
-compare.structure_delta@1 reduction/derived.compare.structure_delta@2 sole factory. Complete
-owned populations feed authenticated V2 templates, concrete ordered leaf occurrences, atomic
-value/convention receipts and original frozen result-array authority, including empty results.
-V2 complete-consumer compilation retains every binding and policy; generic value admission
-also joins the consumer manifest's genuine V2 plan. Fixed-only images use the original compiler.
-No learner binding switches. D3874/D3875/D3876 record the independently re-reviewed guard
-repairs. D3877 adds the exact new convention to the existing inventory and enrolls that software
-file in the normal fast gate. All four repairs are closed with source/test evidence. Frozen
-software6434/403 files and seven isolated performance tests pass; normal governance/content257/
-build gates pass after the tracker-only queue correction.842 focused cases/21 files and types
-pass, with no runtime/test/budget relaxation. The failed commands remain in the append-only log;
-this is verified internal progress, not a completed learner image or one uninterrupted full run.
-Next: accepted Review boundary/last-level/rank/opening/grade owners, D3870's reviewed schema
-follow-up, then the entire current282-pair source/access/receiver/API/native cutover. Retire
-obsolete executable paths after real callers move; no legacy compatibility pipeline.
+**Current executable checkpoint, 2026-10-16:** recorded Review now has an internal storage-bound
+prefix source and genuine consequence/import-result factory arms, not a cropped whole-tip packet.
+Complete original replay/path/FEN validation precedes narrowing; source use rereads storage and
+rejects stale/copied/foreign handles without collecting semantic/provider evidence. D3878 binds
+the immutable imported endpoint to its existing stored move-sequence digest, including a real
+below-service SQLite extension negative.20 runtime/four server cases retain both colors,
+unfinished/terminal/result distinctions, retries, mutation isolation and actual save/reload.
+Independent review clears the bounded repair;903 focused cases/24 files and workspace types
+pass. Full normal make verify build exits zero:6458 software/405 files, seven isolated
+performance cases,257 content cases and all governance/corpus/packaging/build gates. D3878
+is closed with real source/test evidence; zero untriaged remains. No browser/remote/release claim.
+
+The structural comparison reduction/V2/consumer-plan wave remains implemented and verified;
+D3874–D3877 remain closed. This new source has no partial four-method public facade, placeholder
+moment/Story operation or new learner binding. Next: the complete boundary-owned point/state/
+endpoint-result population, actual last-level/rank/opening/grade owners, D3870's reviewed schema
+follow-up, then the entire current282-pair source/access/receiver/API/native cutover. Bind one
+final authority to RunService's actual storage and use observation/durable reads, never enqueue
+from captured-only preparation. Retire obsolete executable paths after actual callers move;
+the D3851 ruling requires no legacy compatibility pipeline.
+
+Population implementation must share the actual source registry with a private discriminated
+boundary execution context, not cast a boundary into an old prefix or add a second operation map.
+Keep complete private invocation membership even for empty/unavailable slots. Preserve captured
+provider inputs (including null-versus-explicit-not_requested and rejected deliveries), exact
+position/point factory inputs/full-head joins and ordered receipts before any loss/CP shortcut.
 
 2026-10-15 — **Complete current-source/module amendment independently accepted for
 implementation.** All four substantive returns and the final companion inconsistencies have

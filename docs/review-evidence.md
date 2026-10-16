@@ -19,6 +19,21 @@ or be refused because its ending differs. Both the visible Review header and Sto
 recorded-prefix outcome. The original import result remains intact as source metadata. A real
 disagreement between that result and the original mainline's terminal outcome still refuses.
 
+The accepted earlier-prefix migration now has its internal storage source in
+`recorded-review-boundary.ts`. It retains an independent immutable full game and exact prefix,
+validates the complete event replay/original paths before narrowing, and checks current storage
+before source use. Resolution/checking invokes no semantic or provider collectors. Import
+eligibility also verifies the existing stored root/ordered-move digest: a lower-level mainline
+extension cannot relocate the original final result. Earlier prefixes and retries remain
+unfinished unless their own on-prefix terminal is recorded.
+
+The existing consequence/import-result factories have an internal `{recordedReview}` arm with
+that actual boundary as authority, unchanged factual payloads and absolute recorded locations.
+The source-only owner is not exported through a public barrel. It is not the final four-method
+Review authority: complete point/state/result population, moment assembly, application-lifetime
+RunService ownership and current consumer/API adoption remain. Existing raw-run arms remain
+only while actual current callers need migration, not as a legacy compatibility requirement.
+
 The only engine source is the shared node-free `live.stockfish.position_eval@1` delivery from the
 provider exchange: a White-perspective `centipawns | mate` score plus the same line's raw
 side-to-move WDL, exact canonical request FEN, engine identity and one bound. It carries no node,

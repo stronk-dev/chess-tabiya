@@ -1264,3 +1264,25 @@ No remaining blocker is found in these bounded repairs. Tests are inspected, not
 reviewer. This clears neither full normal verification nor learner adoption, the other three
 operations, source qualification or parent RFC/milestone completion. Full gates remain the
 implementer's obligation and are recorded separately in the append-only log.
+
+### Recorded Review storage boundary — bounded implementation return/re-review, 2026-10-16
+
+The authorized independent reviewer confirms lawful internal staging: resolve/currentness and
+complete source population are below moment assembly. Do not expose an incomplete four-method
+authority or reuse whole-tip issuance (which runs semantic collectors). Final RunService
+integration must own one issuer, check its own receiver and capture coordinator/durable context
+through observation, not ensureBranch/enqueue. Context currentness is separate from storage.
+
+The implementation review returns D3878: a canonical/replay-valid current mainline tip is not
+independent proof of the immutable original import endpoint. Runtime commitMove plus actual
+SQLite save bypasses the service's extension guard. Re-review clears the repair: bind the
+existing storage-owned movetextDigest to the importer's existing canonical root/ordered-UCIs
+recipe before narrowing. Source review otherwise finds original validation-before-crop,
+independent snapshot/issuer/currentness, terminal outcomes and both source arms coherent.
+
+Permanent tests use actual imported records and SQLite file close/reopen to resolve/mint every
+prefix without a new public/service API. The original extension control was a cached save;
+the implementer subsequently extends it through close/reopen as well. Tests were inspected,
+not rerun by the reviewer. No remaining blocker is found in this bounded source repair; final
+facade/application ownership/population/moment assembly/current consumer/API delivery and full
+verification remain outside that clearance. No new acceptance or source qualification follows.

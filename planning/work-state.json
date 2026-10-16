@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:03541b1517ded1f22862079ecc32a83954d087c1715c4b4bede178b8452ae77a",
+      "sourceDigest": "sha256:f76aeab6a2d6713a5264f4d26121bc4e0d461d70e4d34a0fd6ae27d5e7e975d3",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32021,7 +32021,7 @@
       "id": "D3845",
       "state": "doing",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:f6fa4583cceb2bb0b204d67e14f4a98c0e571d3a7cbf9a9cc3e2ca50ebae165f",
+      "sourceDigest": "sha256:6e93a1042e3d148d1beb41e9b582f37e831b885c94d7df9f2b92252004802ae9",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32039,7 +32039,7 @@
       "id": "D3847",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:0e56a53d7fcc522e230339a2ff0ae10bbb166a85d12753e016d92f8871c867fc",
+      "sourceDigest": "sha256:09491b4618186791e86eb82d410521a5ea539f3b455ccc642a7bff9628b9c305",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32312,6 +32312,15 @@
       "sourceDigest": "sha256:d40d55daced5ae2e7666b969fd77d8726b9b66dab901bba344ce6c63d20b49db",
       "uxItems": [],
       "evidence": "packages/runtime/src/comparison-reduction.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3878",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6a1670675f471dba5e9958ead6501c60ec94e4a21ce6461fe0d5d25e68460909",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-review-boundary.test.ts",
       "evidenceKind": "path"
     }
   ]

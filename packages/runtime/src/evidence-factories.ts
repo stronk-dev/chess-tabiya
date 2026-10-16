@@ -166,6 +166,7 @@ import { transitionReading, transitionSemanticFacts } from "./transition.js";
 import { branchPath } from "./branch-path.js";
 import { recordedPieceRoutes, structureDeltaEntries } from "./compare-strip-values.js";
 import { isRecordedComparisonSource, recordedComparisonData, recordedComparisonPathValue, assertRecordedComparisonPath, type RecordedComparisonSource, type RecordedComparisonPath } from "./recorded-comparison.js";
+import { isRecordedReviewBoundary, readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdentity } from "./types.js";
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
@@ -370,6 +371,7 @@ function authorityShape(candidate: unknown): unknown {
   if (isRecordedSequenceWindow(candidate)) return readRecordedSequenceWindow(candidate).authority;
   if (isRecordedPivotalSource(candidate)) return recordedPivotalData(candidate).authority;
   if (isRecordedComparisonSource(candidate)) return recordedComparisonData(candidate).authority;
+  if (isRecordedReviewBoundary(candidate)) return readRecordedReviewBoundary(candidate);
   if (isRun(candidate)) return { run: candidate.id, nodes: candidate.nodes.length, events: candidate.events.length };
   if (candidate instanceof Map) return { map: [...candidate].map(([key, entry]) => [key, authorityShape(entry)]) };
   // A sealed value hashes as its receipt digest; anything else is an ordinary authority record.
@@ -1237,7 +1239,13 @@ export const createRunRecordObjectiveTransitionV1Evidence = (() => {
 export const createRunRecordConsequenceV1Evidence = (() => {
   const route = "run.record.consequence@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }, { run: RUN, branchId: value("a branch id", isText) }], result: "items", dependency: "recorded-semantic-path", pending: RUN_PENDING }, (input: { readonly run: DrillRun; readonly comparison?: BranchComparison; readonly branchId: string }): readonly RunEvidenceItem<unknown>[] => {
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }, { run: RUN, branchId: value("a branch id", isText) }, { recordedReview: value("a storage-owned recorded Review boundary", isRecordedReviewBoundary) }], result: "items", dependency: "recorded-semantic-path", pending: RUN_PENDING }, (input: { readonly run: DrillRun; readonly comparison?: BranchComparison; readonly branchId: string } | { readonly recordedReview: RecordedReviewBoundary }): readonly RunEvidenceItem<unknown>[] => {
+    if ("recordedReview" in input) {
+      const source = readRecordedReviewBoundary(input.recordedReview), outcome = source.outcome;
+      if (outcome.kind !== "board_terminal") return Object.freeze([]);
+      const node = source.path.find(entry => entry.node.id === outcome.nodeId)!.node;
+      return Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "story", terminal: true, outcome: outcome.result }), input), nodeId: node.id, plyOffset: node.ply })]);
+    }
     if (input.comparison !== undefined) {
       const consequence = comparisonFacts(input.run, input.comparison, input.branchId);
       const leaf = consequence.leafNodeId;
@@ -1259,7 +1267,14 @@ const PGN_RESULT_TOKENS = new Set(["1-0", "0-1", "1/2-1/2"]);
 export const createRunRecordImportedResultV1Evidence = (() => {
   const route = "run.record.imported_result@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, branchId: value("a branch id", isText), recordedResult: value("a decisive or drawn PGN result token", (candidate) => typeof candidate === "string" && PGN_RESULT_TOKENS.has(candidate)) }], result: "items", dependency: "recorded-semantic-path", pending: "The imported PGN result token is validated as a closed token; its import-source receipt lands with recorded-semantic-path/import provenance." }, ({ run, branchId, recordedResult }: { readonly run: DrillRun; readonly branchId: string; readonly recordedResult: "1-0" | "0-1" | "1/2-1/2" }): readonly RunEvidenceItem<unknown>[] => {
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, branchId: value("a branch id", isText), recordedResult: value("a decisive or drawn PGN result token", (candidate) => typeof candidate === "string" && PGN_RESULT_TOKENS.has(candidate)) }, { recordedReview: value("a storage-owned recorded Review boundary", isRecordedReviewBoundary) }], result: "items", dependency: "recorded-semantic-path", pending: "The imported PGN result token is validated as a closed token; its import-source receipt lands with recorded-semantic-path/import provenance." }, (input: { readonly run: DrillRun; readonly branchId: string; readonly recordedResult: "1-0" | "0-1" | "1/2-1/2" } | { readonly recordedReview: RecordedReviewBoundary }): readonly RunEvidenceItem<unknown>[] => {
+    if ("recordedReview" in input) {
+      const source = readRecordedReviewBoundary(input.recordedReview);
+      if (source.outcome.kind !== "recorded_result") return Object.freeze([]);
+      const leaf = source.path.at(-1)!.node;
+      return Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "story", result: source.outcome.result }), input), nodeId: leaf.id, plyOffset: leaf.ply })]);
+    }
+    const { run, branchId, recordedResult } = input;
     const leaf = branchPath(run, branchId).at(-1)!;
     return Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "story", result: recordedResult }), { run, branchId, recordedResult }), nodeId: leaf.id, plyOffset: leaf.ply })]);
   });

@@ -5,6 +5,14 @@ Review source/12-adapter contract with the coordinated current-module image. Ear
 labels for that clause are history; actual source/execution/receiver delivery and unrelated
 parent amendments remain. Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+- **Internal source checkpoint 2026-10-16 — [[D3847]], [[D3878]]:** accepted §4.5 now has
+  a storage-bound prefix owner and real boundary-only consequence/import-result factory arms.
+  Full original validation, currentness and immutable imported endpoint authority precede
+  preparation;20 runtime/four real SQLite cases and independent bounded re-review cover this
+  source. The final four-method facade, RunService lifetime ownership, complete point/state/
+  result population and moment/current-consumer adoption remain unimplemented. No placeholder
+  methods, new wire protocol, source qualification or parent completion is claimed.
+
 - **Draft amendment 2026-10-15 — [[D3832]]:** §4.5 owns the storage-bound earlier-Review
   moment source required by Inspector. It is **unaccepted**, adds no production authority,
   and preserves the old whole-tip subject/packet/Story contracts. The companion Inspector
