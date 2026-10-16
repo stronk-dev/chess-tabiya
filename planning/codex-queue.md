@@ -125,7 +125,17 @@ unchanged. Independent read-only review finds no blocker. Full normal make verif
 supplier/result/semantic-event registration and actual consumers remain unfinished, not renamed
 as complete by this internal checkpoint.
 
-Next complete that scoped supplier/event result and source-owned reductions/grades, reconcile
+The higher scoped supplier/event result is now implemented: eleven families, complete/omitted
+window receipts, actual head/grant-bound source admission, distinct missing/graph/contract/lookup
+failures and immutable scoped results. Trade@2 keeps its original receipt/computation.110 new
+cases/727 focused passes and workspace types pass; independent read-only review finds no blocker.
+The ten@3 event versions have research-only bindings and required/unvalidated profiles;91 subjects
+remain unqualified, with the prior343/343 cases/53 population/eight external outcomes unchanged.
+1012 capability declarations and306 factory profiles are unchanged. Full normal make verify build
+passes6381 software/401 files, seven isolated performance/257 content and all remaining gates;
+no current learner/access/API/native cutover is claimed.
+
+Next complete source-owned reductions/grades, reconcile
 human-divergence's D3870 schema follow-up, then the
 remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,

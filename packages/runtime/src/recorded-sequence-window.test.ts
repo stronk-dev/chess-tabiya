@@ -144,7 +144,9 @@ describe("source-owned recorded sequence windows", () => {
     for (const values of Object.values(RECORDED_SEQUENCE_HORIZONS)) expect(Object.isFrozen(values)).toBe(true);
     const projections = ALL.map(route => PRIMARY_EVIDENCE_MANIFEST.projections.find(value => `${value.id}@${value.version}` === route)!);
     expect(projections.reduce((sum, value) => sum + (value.derivation!.inputs === undefined ? value.derivation!.anyOf!.length : 1), 0)).toBe(23);
-    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => ALL.includes(`${binding.projection.id}@${binding.projection.version}` as RecordedSequenceRoute))).toEqual([]);
+    const bindings = PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => ALL.includes(`${binding.projection.id}@${binding.projection.version}` as RecordedSequenceRoute));
+    expect(bindings).toHaveLength(10);
+    expect(bindings.every(binding => binding.consumer.id === "research.semantic_selection")).toBe(true);
   });
 
   it("removing a retained direct convention token really drops the new route's closure", () => {
@@ -209,7 +211,7 @@ describe("source-owned recorded sequence windows", () => {
       if (ref === "rules.transition.event.capture@1" && input.beforeFen === data.edges[0]!.payload.beforeFen) throw new Error("source acquisition failed");
       return original(ref as never, input as never);
     }) as typeof routes.invokeEvidenceValueRoute);
-    try { expect(() => prepare(run, route)).toThrow("source acquisition failed"); } finally { calls.mockRestore(); }
+    try { expect(() => prepare(run, route)).toThrow("Recorded sequence source acquisition refused"); } finally { calls.mockRestore(); }
   });
 
   it("refuses unsupported/nonclosed scope before edge or detector acquisition", () => {

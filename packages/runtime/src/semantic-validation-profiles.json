@@ -1149,6 +1149,43 @@
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.pawn.sequence.contact_timing",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.pawn.sequence.harassment_pressure",
           "version": 1
         }
@@ -1487,6 +1524,43 @@
             "resultVersion": 1
           }
         ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.pawn.sequence.harassment_pressure",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
       },
       "externalLabel": {
         "disposition": "not_applicable",
@@ -2121,6 +2195,44 @@
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.attraction_observed",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
+      },
+      "externalLabel": {
+        "disposition": "required",
+        "owner": "semantic-validation D4 (slice C)",
+        "discharge": "re-run the D872 disagreement study over this successor version's production operation; a new version starts with no receipt"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.check_zwischenzug_observed",
           "version": 1
         }
@@ -2240,6 +2352,44 @@
             "resultVersion": 1
           }
         ]
+      },
+      "externalLabel": {
+        "disposition": "required",
+        "owner": "semantic-validation D4 (slice C)",
+        "discharge": "re-run the D872 disagreement study over this successor version's production operation; a new version starts with no receipt"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.check_zwischenzug_observed",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
       },
       "externalLabel": {
         "disposition": "required",
@@ -2447,6 +2597,44 @@
             "resultVersion": 1
           }
         ]
+      },
+      "externalLabel": {
+        "disposition": "required",
+        "owner": "semantic-validation D4 (slice C)",
+        "discharge": "re-run the D872 disagreement study over this successor version's production operation; a new version starts with no receipt"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.deflection_observed",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
       },
       "externalLabel": {
         "disposition": "required",
@@ -2860,6 +3048,44 @@
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.interference_observed",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
+      },
+      "externalLabel": {
+        "disposition": "required",
+        "owner": "semantic-validation D4 (slice C)",
+        "discharge": "re-run the D872 disagreement study over this successor version's production operation; a new version starts with no receipt"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.line_blocker_clearance_observed",
           "version": 1
         }
@@ -2979,6 +3205,44 @@
             "resultVersion": 1
           }
         ]
+      },
+      "externalLabel": {
+        "disposition": "required",
+        "owner": "semantic-validation D4 (slice C)",
+        "discharge": "re-run the D872 disagreement study over this successor version's production operation; a new version starts with no receipt"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.line_blocker_clearance_observed",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
       },
       "externalLabel": {
         "disposition": "required",
@@ -3120,6 +3384,44 @@
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.overload_exploitation_observed",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
+      },
+      "externalLabel": {
+        "disposition": "required",
+        "owner": "semantic-validation D4 (slice C)",
+        "discharge": "re-run the D872 disagreement study over this successor version's production operation; a new version starts with no receipt"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.sequence.defender_consequence",
           "version": 1
         }
@@ -3224,6 +3526,43 @@
             "resultVersion": 1
           }
         ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.sequence.defender_consequence",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
       },
       "externalLabel": {
         "disposition": "not_applicable",
@@ -3353,6 +3692,44 @@
             "resultVersion": 1
           }
         ]
+      },
+      "externalLabel": {
+        "disposition": "required",
+        "owner": "semantic-validation D4 (slice C)",
+        "discharge": "re-run the D872 disagreement study over this successor version's production operation; a new version starts with no receipt"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.square_clearance_observed",
+          "version": 3
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a legal input through the production operation with an independent authority (rules oracle + proposition, cited source or owner receipt)"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it"
       },
       "externalLabel": {
         "disposition": "required",

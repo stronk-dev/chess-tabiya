@@ -61,6 +61,21 @@ normal make verify build passes6271 software/400 files, seven isolated performan
 and all remaining gates. Higher scoped supplier/result/event construction/registration, complete current
 consumer/presentation/API/native adoption and qualification remain open; no parent discharge.
 
+**Scoped sequence event checkpoint, 2026-10-16:** accepted module-registration §4.11a now has
+the eleven-family `recordedSemanticWindowSource`, closed available/missing/refused results and
+exact event construction. Complete original validation precedes preparation. Actual source seals,
+literal input receipts and full window/head/grant authority must agree; genuine equal-payload
+values from a different head refuse. Original graph failures are separated from acquisition/
+contract/lookup failures. Trade@2's computation and receipt remain unchanged. No current source
+has a genuine version-hold arm; forged/nested hold-shaped values refuse rather than supply one.
+110 new cases/727 focused passes and workspace types pass; independent read-only review finds
+no blocker. The ten@3 versions gain research-only event bindings and ten required/unvalidated
+profiles, not predecessor qualification. Semantic receipt:91 subjects/zero qualified,343/343
+existing cases,53 population/eight external outcomes unchanged.1012 capability declarations and
+306 factory profiles remain unchanged. Full normal make verify build passes6381 software/401 files,
+seven isolated performance/257 content and all remaining gates. Source-owned reductions/grades,
+human@2/D3870, complete current consumers/access/API/native delivery and parent discharges remain open.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft

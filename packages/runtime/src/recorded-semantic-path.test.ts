@@ -532,7 +532,8 @@ describe("recorded semantic path compiler", () => {
     expect(new Set(crossed.map((value) => value.id))).toEqual(new Set(SEMANTIC_EVENT_FAMILY_IDS));
     expect(() => assertRecordedPathTableClosure(rows, crossed, PRIMARY_EVIDENCE_MANIFEST)).toThrow(/set-equal/u);
     expect(PRIMARY_EVIDENCE_MANIFEST.semanticEvents.map((event) => exact(event.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());
-    expect(SEMANTIC_EVENT_FAMILY_IDS.length).toBe(SEMANTIC_EVENT_PROJECTION_REFS.length - 11);
+    // Additional exact versions do not create families; compare the complete unique-id image.
+    expect([...SEMANTIC_EVENT_FAMILY_IDS].sort()).toEqual([...new Set(SEMANTIC_EVENT_PROJECTION_REFS.map(value => value.id))].sort());
     // Omission fixture: a v2 successor silently compiled as v1 collides instead of passing.
     const omitted = { ...EVIDENCE_CONTRACT_DECLARATIONS, producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map((producer) => ({ ...producer, outputs: producer.outputs.map((output) => output.version === 2 ? { ...output, version: 1 } : output) })) };
     expect(() => compileEvidenceManifest(omitted)).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_PROJECTION_DUPLICATE" }));

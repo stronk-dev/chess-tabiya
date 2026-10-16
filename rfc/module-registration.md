@@ -7,6 +7,15 @@ are retained review history, not current blockers. Actual source/consumer/UI del
 unrelated parent obligations remain. Scope and decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+**Scoped semantic supplier checkpoint, 2026-10-16:** §4.11a's eleven-family runtime supplier,
+closed source result and exact semantic-event construction are implemented.110 permanent cases
+join the normal727-case focused gate; workspace types and independent implementation review
+find no blocker. Ten sequence@3 versions are bound only to operator research and carry separate
+required/unvalidated qualification profiles. Full normal make verify build passes6381 software/
+401 files, seven isolated performance/257 content and all remaining gates. This does not adopt
+the282-pair current consumer image, enforce its access/disclosure at an API, complete a native
+learner journey, qualify the events or discharge the parent RFC. D3847/D3841 remain doing.
+
 - **Status:** **implementing — the production registry landed 2026-09-24 at the owner's direction
   (implement directly, no review round); receipts `planning/learner-modules/implementation-2026-09-24.md`
   and `planning/platform-alignment/evidence-presentation/checkpoint-b-implementation-2026-09-24.md`.** `MODULE_REGISTRY` compiles all eleven declarations at import; A5 is closed by exact

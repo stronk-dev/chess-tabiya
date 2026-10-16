@@ -224,11 +224,21 @@ tuple members preserve repeated occurrence order. Existing recorded pure computa
 castling behavior, grounding, payloads and convention closure remain unchanged; complete legal
 windows without a pattern return empty. Source acquisition/identity failures throw, never empty.
 
-These ten routes remain experimental/unbound internal prerequisites. The higher scoped supplier's
-closed available/missing/refused result, semantic-event constructors/registration, exact current
-consumer/presentation migration and receiver/API/native proof are still open. The existing whole-
-tip/narrative callers have not yet migrated; this checkpoint does not establish a second supported
-pipeline or authorize preserving obsolete APIs under D3851.
+`recordedSemanticWindowSource` now supplies the exact eleven-family scoped result: available
+events and complete/omitted horizon receipts, genuinely missing short context, or a typed refusal.
+It validates the complete original graph before acquisition and binds emitted values to the actual
+window/head/grant authority. Equal visible payloads from another head do not pass. Original graph
+errors remain separate from producer/lookup failures; forged held-shaped values cannot manufacture
+a source-version hold. Trade@2 keeps its original C,C,E,E receipt and computation.
+
+The ten sequence@3 event versions are registered for operator research only. Their ten separate
+qualification profiles are required/unvalidated; predecessor qualification is not inherited.
+110 new supplier cases pass within the normal727-case focused gate; independent implementation
+review finds no blocker. Full normal make verify build passes6381 software/401 files, seven
+isolated performance/257 content and all remaining gates. Exact current consumer/presentation
+migration, access enforcement and receiver/API/native proof remain open. Whole-tip/narrative callers
+have not yet migrated; this does not establish a second supported pipeline or preserve obsolete
+APIs under D3851.
 
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,

@@ -4,11 +4,12 @@ import { resolveBranchPath } from "./branch-path.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
 import { projectRun } from "./events.js";
-import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { invokeEvidenceValueRoute, EvidenceValueRouteLookupError, type EvidenceValueRoute, type EvidenceValueRouteInputs, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { materialCauseFamilies } from "./internal/material-sources.js";
 import { moduleDecisionStamp } from "./module-decision.js";
 import { harassmentPressureSequence, pawnContactTimingSequence, type RecordedMoveAnchor } from "./pawn-dynamics.js";
-import { recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
+import { RecordedEdgeError, recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
+import type { RecordedPathRefusalReason } from "./recorded-semantic-path.js";
 import { digestRunEventHead } from "./run-subject-digest.js";
 import {
   recordedDefenderConsequenceOperands, recordedSquareClearanceObservedOperands,
@@ -34,6 +35,10 @@ const horizons = {
 for (const values of Object.values(horizons)) Object.freeze(values);
 export const RECORDED_SEQUENCE_HORIZONS = Object.freeze(horizons);
 export type RecordedSequenceRoute = keyof typeof RECORDED_SEQUENCE_HORIZONS;
+export type RecordedWindowRoute = RecordedSequenceRoute | "derived.exchange.trade_completed@2";
+export class RecordedSequenceScopeError extends TypeError {
+  constructor(readonly reason: RecordedPathRefusalReason | "endpoint_not_on_branch" | "projection_unsupported", message: string) { super(message); this.name = "RecordedSequenceScopeError"; }
+}
 declare const recordedSequenceWindowBrand: unique symbol;
 export interface RecordedSequenceWindow { readonly [recordedSequenceWindowBrand]: true }
 type Value = DeclaredEvidence<unknown>;
@@ -41,7 +46,7 @@ interface WindowData {
   readonly run: DrillRun;
   readonly authority: Readonly<{ operation: "recorded-sequence-window@1"; runId: string; eventHeadDigest: string;
     decision: ReturnType<typeof moduleDecisionStamp>; branchId: string; throughNodeId: string;
-    route: RecordedSequenceRoute; horizon: number }>;
+    route: RecordedWindowRoute; horizon: number }>;
   readonly edges: readonly DeclaredEvidence<RecordedEdge>[];
   readonly anchors: readonly RecordedMoveAnchor[];
   readonly captures: readonly (readonly Value[])[];
@@ -52,13 +57,22 @@ const lazySources = new WeakMap<object, Map<string, Value>>();
 const key = (value: Value) => `${value.projection.id}@${value.projection.version}`;
 const edgeInput = (edge: RecordedEdge) => Object.freeze({ beforeFen: edge.beforeFen, moveUci: edge.moveUci, afterFen: edge.afterFen });
 
+/** A factory exception after original legality validation is not a graph refusal. */
+function acquireSource<Route extends EvidenceValueRoute>(route: Route, input: EvidenceValueRouteInputs[Route]): EvidenceValueRouteResults[Route] {
+  try { return invokeEvidenceValueRoute(route, input); }
+  catch (error) {
+    if (error instanceof EvidenceValueRouteLookupError) throw error;
+    throw new TypeError("Recorded sequence source acquisition refused", { cause: error });
+  }
+}
+
 function assertSource(value: Value, route: string, factory: string, authority: unknown): void {
   assertDeclaredEvidence(value);
   const receipt = evidenceValueReceipt(value);
   if (key(value) !== route || receipt.factory !== factory || receipt.inputDigest !== evidenceDigest(authority)) throw new TypeError(`Recorded sequence source crosses exact ${route} authority`);
 }
 function population(route: "rules.transition.event.capture@1" | "rules.tactic.event.check@1", edge: RecordedEdge): readonly Value[] {
-  const input = edgeInput(edge), values = invokeEvidenceValueRoute(route, input);
+  const input = edgeInput(edge), values = acquireSource(route, input);
   const expected = route === "rules.transition.event.capture@1" ? materialCauseFamilies(input).includes("capture") : positionFromFen(edge.afterFen).isCheck();
   if (!Array.isArray(values) || values.length !== Number(expected)) throw new TypeError(`Recorded sequence lost complete ${route} execution`);
   for (const value of values) {
@@ -72,37 +86,41 @@ function population(route: "rules.transition.event.capture@1" | "rules.tactic.ev
 }
 
 /** Internal issuer for the scoped supplier. Detector preparation touches only complete trailing rows. */
-export function createRecordedSequenceWindows(input: Readonly<{ run: DrillRun; branchId: string; throughNodeId: string; route: RecordedSequenceRoute }>): Readonly<{
-  windows: readonly RecordedSequenceWindow[]; omittedHorizons: readonly number[]; availableEdges: number;
+export function prepareRecordedSemanticWindows(input: Readonly<{ run: DrillRun; branchId: string; throughNodeId: string; route: RecordedWindowRoute }>): Readonly<{
+  run: DrillRun; eventHeadDigest: string; windows: readonly RecordedSequenceWindow[]; omittedHorizons: readonly number[]; availableEdges: number;
 }> {
   if (input === null || typeof input !== "object" || Reflect.ownKeys(input).length !== 4 || !["run", "branchId", "throughNodeId", "route"].every(field => Object.hasOwn(input, field))) throw new TypeError("Recorded sequence requires exactly {run,branchId,throughNodeId,route}");
   const { branchId, throughNodeId, route } = input;
-  if (typeof route !== "string" || !Object.hasOwn(RECORDED_SEQUENCE_HORIZONS, route)) throw new TypeError("Recorded sequence projection unsupported");
+  if (typeof route !== "string" || route !== "derived.exchange.trade_completed@2" && !Object.hasOwn(RECORDED_SEQUENCE_HORIZONS, route)) throw new RecordedSequenceScopeError("projection_unsupported", "Recorded sequence projection unsupported");
   if (typeof branchId !== "string" || !branchId || typeof throughNodeId !== "string" || !throughNodeId) throw new TypeError("Recorded sequence needs exact branch and endpoint");
   const snapshot = structuredClone(input.run);
+  const originalResolution = resolveBranchPath(snapshot, branchId);
+  if (originalResolution.kind !== "resolved") throw new RecordedSequenceScopeError(originalResolution.reason, `Recorded sequence original graph refused: ${originalResolution.reason}`);
   const eventHeadDigest = digestRunEventHead({ runId: snapshot.id, headSeq: snapshot.events.length, events: snapshot.events });
   const run = projectRun(snapshot.events);
   if (canonicalizeJson(run) !== canonicalizeJson(snapshot)) throw new TypeError("Recorded sequence snapshot disagrees with replay");
   const resolution = resolveBranchPath(run, branchId);
-  if (resolution.kind !== "resolved") throw new TypeError(`Recorded sequence original graph refused: ${resolution.reason}`);
+  if (resolution.kind !== "resolved") throw new RecordedSequenceScopeError(resolution.reason, `Recorded sequence original graph refused: ${resolution.reason}`);
   const original = resolution.nodes;
   for (const [index, node] of original.entries()) {
-    if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new TypeError("Recorded sequence original FEN is not canonical");
+    try {
+      if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new Error("noncanonical");
+    } catch { throw new RecordedEdgeError("broken_fen_boundary", node.id, "Recorded sequence original FEN is invalid or not canonical"); }
     if (index > 0) recordedEdgePayload(run, original[index - 1]!, node);
   }
   const endpoint = original.findIndex(node => node.id === throughNodeId);
-  if (endpoint < 0) throw new TypeError("Recorded sequence endpoint is not on branch");
+  if (endpoint < 0) throw new RecordedSequenceScopeError("endpoint_not_on_branch", "Recorded sequence endpoint is not on branch");
   // Validate and obtain genuine prefix edges on original references, not reconstructed stand-ins.
   const edges = original.slice(1, endpoint + 1).map((child, index) => {
-    const parent = original[index]!, value = invokeEvidenceValueRoute("run.record.edge@1", { run, parent, child });
+    const parent = original[index]!, value = acquireSource("run.record.edge@1", { run, parent, child });
     assertSource(value, "run.record.edge@1", "createRunRecordEdgeV1Evidence", { run: { run: run.id, nodes: run.nodes.length, events: run.events.length }, parentId: parent.id, childId: child.id });
     if (evidenceDigest(value.payload) !== evidenceDigest(recordedEdgePayload(run, parent, child))) throw new TypeError("Recorded sequence edge payload crosses its original occurrence");
     return value;
   });
   const captures = new Map<number, readonly Value[]>(), checks = new Map<number, readonly Value[]>();
-  const needsCapture = route === "derived.tactic.deflection_observed@3" || route === "derived.tactic.attraction_observed@3" || route === "derived.tactic.overload_exploitation_observed@3";
+  const needsCapture = route === "derived.exchange.trade_completed@2" || route === "derived.tactic.deflection_observed@3" || route === "derived.tactic.attraction_observed@3" || route === "derived.tactic.overload_exploitation_observed@3";
   const own: RecordedSequenceWindow[] = [], omitted: number[] = [];
-  for (const horizon of RECORDED_SEQUENCE_HORIZONS[route]) {
+  for (const horizon of route === "derived.exchange.trade_completed@2" ? [2] : RECORDED_SEQUENCE_HORIZONS[route]) {
     if (edges.length < horizon) { omitted.push(horizon); continue; }
     const start = edges.length - horizon, selected = Object.freeze(edges.slice(start));
     const captureRows = selected.map((value, index): readonly Value[] => {
@@ -125,12 +143,22 @@ export function createRecordedSequenceWindows(input: Readonly<{ run: DrillRun; b
       captures: Object.freeze(captureRows), checks: Object.freeze(checkRows) }));
     lazySources.set(window, new Map()); own.push(window);
   }
-  return Object.freeze({ windows: Object.freeze(own), omittedHorizons: Object.freeze(omitted), availableEdges: endpoint });
+  return Object.freeze({ run, eventHeadDigest, windows: Object.freeze(own), omittedHorizons: Object.freeze(omitted), availableEdges: endpoint });
+}
+
+/** The ten @3 factory issuer remains closed; trade is reachable only through its exact supplier. */
+export function createRecordedSequenceWindows(input: Readonly<{ run: DrillRun; branchId: string; throughNodeId: string; route: RecordedSequenceRoute }>) {
+  if (input === null || typeof input !== "object" || typeof input.route !== "string" || !Object.hasOwn(RECORDED_SEQUENCE_HORIZONS, input.route)) throw new RecordedSequenceScopeError("projection_unsupported", "Recorded sequence projection unsupported");
+  return prepareRecordedSemanticWindows(input);
 }
 
 export function isRecordedSequenceWindow(value: unknown): value is RecordedSequenceWindow { return value !== null && typeof value === "object" && windows.has(value); }
+/** The one canonical value-authority image, shared by mint and subsequent source/event admission. */
+export function recordedSequenceWindowValueAuthority(window: RecordedSequenceWindow, payload: unknown, inputs: readonly Value[]) {
+  return { window: readRecordedSequenceWindow(window).authority, payload, inputs: inputs.map(value => ({ sealed: evidenceValueReceipt(value).payloadDigest })) };
+}
 /** No public reader or raw operand arm; authenticate before even computing no-match. */
-export function readRecordedSequenceWindow(window: RecordedSequenceWindow, route?: RecordedSequenceRoute): WindowData {
+export function readRecordedSequenceWindow(window: RecordedSequenceWindow, route?: RecordedWindowRoute): WindowData {
   if (!isRecordedSequenceWindow(window)) throw new TypeError("Recorded sequence window was not issued by its owner");
   const data = windows.get(window)!;
   if (route !== undefined && data.authority.route !== route) throw new TypeError("Recorded sequence window belongs to another exact projection");
@@ -161,7 +189,7 @@ export function recordedSequenceWindowInputs(window: RecordedSequenceWindow, pay
   const cached = lazySources.get(window)!;
   const duty = () => {
     if (!cached.has("duty")) {
-      const fen = data.edges[0]!.payload.beforeFen, result = invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen });
+      const fen = data.edges[0]!.payload.beforeFen, result = acquireSource("rules.tactic.reading.defender_duty_set@1", { fen });
       assertSource(result, "rules.tactic.reading.defender_duty_set@1", "createRulesTacticReadingDefenderDutySetV1Evidence", { fen });
       if ((result.payload as { fen?: string }).fen !== fen) throw new TypeError("Recorded sequence duty payload crosses its indexed before position");
       cached.set("duty", result);
@@ -170,7 +198,7 @@ export function recordedSequenceWindowInputs(window: RecordedSequenceWindow, pay
   };
   const exchange = (wanted: unknown) => {
     if (!cached.has("exchange")) {
-      const input = { fen: last.beforeFen, captureUci: last.moveUci }, results = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", input);
+      const input = { fen: last.beforeFen, captureUci: last.moveUci }, results = acquireSource("rules.exchange.predicate.legal_exchange@1", input);
       if (results.length !== 1) throw new TypeError("Recorded sequence final exchange source missing");
       const result = results[0]!; assertSource(result, "rules.exchange.predicate.legal_exchange@1", "createRulesExchangePredicateLegalExchangeV1Evidence", input); cached.set("exchange", result);
     }

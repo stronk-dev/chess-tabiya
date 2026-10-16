@@ -52,7 +52,7 @@ import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReadi
 import { developmentReading, phaseBandReading } from "./phase.js";
 import { pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, isRecordedPivotalSource, recordedPivotalData, pivotalRecordedPayloads, type RecordedPivotalSource, type PivotalKind, type PivotalMarker } from "./pivotal.js";
 import { RECORDED_EDGE_FACTORY, recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
-import { isRecordedSequenceWindow, readRecordedSequenceWindow, recordedSequenceWindowOperands, recordedSequenceWindowInputs, type RecordedSequenceWindow, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
+import { isRecordedSequenceWindow, readRecordedSequenceWindow, recordedSequenceWindowOperands, recordedSequenceWindowInputs, recordedSequenceWindowValueAuthority, type RecordedSequenceWindow, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 import {
   assertSemanticEvidenceEvent,
@@ -2064,7 +2064,7 @@ function ownedRecordedSequenceFactory(route: RecordedSequenceRoute): EvidenceVal
     readRecordedSequenceWindow(window, route);
     return Object.freeze(recordedSequenceWindowOperands(window, route).map(payload => {
       const inputs = recordedSequenceWindowInputs(window, payload);
-      return mint(route, symbol, payload, { window, payload, inputs }, inputs);
+      return mint(route, symbol, payload, recordedSequenceWindowValueAuthority(window, payload, inputs), inputs);
     }));
   });
 }

@@ -173,7 +173,6 @@ function recordedWindowSuccessor(previous: ProjectionDeclaration): ProjectionDec
   return Object.freeze({ ...previous, version: 3,
     semantics: `${previous.semantics}${direct} Source-owned complete granted recorded window under F2 §2.3j.`,
     dependsOn: Object.freeze(dependsOn), derivation: alternatives.length === 1 ? { inputs: Object.freeze(alternatives[0]!) } : { anyOf: Object.freeze(alternatives.map(member => Object.freeze(member))) },
-    disposition: { kind: "experimental" as const, reason: "Internal owned-window source/factory component; scoped supplier, event and complete current-consumer adoption remain open." },
   });
 }
 
@@ -279,6 +278,14 @@ export const SEMANTIC_EVENT_PROJECTION_REFS: readonly VersionedEvidenceId[] = Ob
   ref2("derived.tactic.interference_observed"),
   ref2("derived.tactic.check_zwischenzug_observed"),
   ref2("derived.tactic.overload_exploitation_observed"),
+  // Accepted F2 §2.3j: exact new event identities, research-only until current consumer cutover.
+  ...[
+    "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure",
+    "derived.tactic.sequence.defender_consequence", "derived.tactic.square_clearance_observed",
+    "derived.tactic.line_blocker_clearance_observed", "derived.tactic.interference_observed",
+    "derived.tactic.check_zwischenzug_observed", "derived.tactic.overload_exploitation_observed",
+    "derived.tactic.deflection_observed", "derived.tactic.attraction_observed",
+  ].map(id => Object.freeze({ id, version: 3 })),
 ]);
 
 /**

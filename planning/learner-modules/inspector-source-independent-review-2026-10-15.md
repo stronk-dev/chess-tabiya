@@ -1203,3 +1203,18 @@ equal-payload/different-FEN checks, lost/duplicate captures, failed quiet acquis
 canonical-root refusal. Tests are inspected, not rerun by the reviewer. Higher scoped supplier/
 result/event registrations, current consumers, access enforcement and HTTP/native delivery remain
 unqualified and open. This is bounded implementation review, not parent or product acceptance.
+
+### Scoped semantic supplier/event implementation review — 2026-10-16
+
+The authorized independent reviewer finds no blocking defect in the scoped event/result slice.
+Output admission checks genuine seals, exact factory/ref and the shared full-window authority
+digest; a genuine equal-payload cross-head factory injection exercises this boundary. Results
+retain completed/omitted horizons, ordered occurrences and requested scope separately from each
+event's creating-branch anchor. Original graph/legal failures remain distinct from acquisition/
+contract failures; unsupported held-shaped returns refuse rather than invent a version hold.
+
+The ten@3 versions are research-only registrations with required/unvalidated qualification
+profiles; predecessor qualification is not copied. Trade@2 keeps its existing computation and
+receipt, while the scoped result identity binds the current full head. Tests are inspected,
+not rerun by the reviewer. Consumer/access/API/native delivery and semantic qualification are
+not cleared by this bounded implementation review.

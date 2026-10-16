@@ -5,7 +5,7 @@ import type { SemanticValidationVerdictTable } from "./semantic-validation.js";
 
 export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
   "schemaVersion": 1,
-  "receiptSha256": "3674aa4b777b1062c5140113072ff2a74508b255e69e241705362bea58b8846d",
+  "receiptSha256": "5eb334a2e442e22a9af5330fe6ae1624413ab39a8b9649c92fda0dd2bea966cb",
   "verdicts": [
     {
       "subject": {
@@ -150,6 +150,22 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.pawn.sequence.contact_timing",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.pawn.sequence.harassment_pressure",
           "version": 1
         }
@@ -173,6 +189,22 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "orientation"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.pawn.sequence.harassment_pressure",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
       ]
     },
     {
@@ -430,6 +462,23 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.attraction_observed",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population",
+        "external_label"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.check_zwischenzug_observed",
           "version": 1
         }
@@ -453,6 +502,23 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "orientation",
+        "external_label"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.check_zwischenzug_observed",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population",
         "external_label"
       ]
     },
@@ -503,6 +569,23 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.deflection_observed",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population",
+        "external_label"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.discovered_executed",
           "version": 1
         }
@@ -546,6 +629,23 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.interference_observed",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population",
+        "external_label"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.line_blocker_clearance_observed",
           "version": 1
         }
@@ -576,6 +676,23 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.line_blocker_clearance_observed",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population",
+        "external_label"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.overload_exploitation_observed",
           "version": 1
         }
@@ -599,6 +716,23 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "orientation",
+        "external_label"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.overload_exploitation_observed",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population",
         "external_label"
       ]
     },
@@ -635,6 +769,22 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "subject": {
         "kind": "event",
         "projection": {
+          "id": "derived.tactic.sequence.defender_consequence",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
           "id": "derived.tactic.square_clearance_observed",
           "version": 1
         }
@@ -658,6 +808,23 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "verdict": "unvalidated",
       "open": [
         "orientation",
+        "external_label"
+      ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.square_clearance_observed",
+          "version": 3
+        }
+      },
+      "verdict": "unvalidated",
+      "open": [
+        "positive",
+        "semantic_negative",
+        "orientation",
+        "imported_population",
         "external_label"
       ]
     },

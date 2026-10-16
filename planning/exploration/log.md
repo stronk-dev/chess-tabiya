@@ -31716,3 +31716,70 @@ Campaign was the one capability with no API, route or content. Now:
   proof remain. Refresh existing ledger/state/roadmap/queue at zero untriaged. No compatibility
   pipeline, obsolete-API deletion before real migration, capability/milestone, push or release
   completion claim. The full1.0 goal stays active.
+
+### 2026-10-16 — D3847 scoped semantic supplier/event checkpoint
+
+- Implement accepted module-registration §4.11a's eleven-family recordedSemanticWindowSource
+  over the real owned windows: closed available/missing/refused results, complete/omitted horizon
+  receipts, exact ordered semantic-event inputs and creating-branch anchors separate from the
+  requested scope. Preserve trade@2's existing computation and C,C,E,E receipt.
+- Require genuine exact factory/ref receipts and full window/head/grant authority before an
+  event is admitted. A genuine equal-payload value issued from another full head refuses.
+  Original graph/legal-edge errors are distinct from producer acquisition/contract/lookup
+  failures, including producer-thrown domain errors. No source currently emits a real version
+  hold; forged or nested held-shaped values refuse rather than manufacture one.
+- First normal fast gate refuses the new@3 events because experimental dispositions are not
+  active semantic projections. Register the accepted ten exact events as research-only and
+  remove their obsolete experimental dispositions; do not weaken F1's guard or add learner
+  bindings. Core49 producers/313 projections/42 consumers/566 bindings; semantic88 events/
+  eligibilities/16 reasons/one policy. Existing learner bindings and pack requirements unchanged.
+- Add ten separate required/unvalidated qualification profiles in canonical subject order;
+  do not copy predecessor cases or qualification. Existing qualification law explicitly marks
+  unregistered@3 populations required. Canonical receipt:91 subjects/zero qualified,343/343 prior
+  cases/53 population/eight external outcomes unchanged.1012 capability declarations and306
+  factory profiles remain unchanged; no new bulk artifact, schema, migration or pack restamp.
+- Workspace types and632 focused cases/15 files pass, including110 new supplier controls,
+  all retained special-move fixtures and six additional both-color EP/capture-promotion/
+  underpromotion trade cases. The cross-head, producer-domain and malformed-source controls
+  exercise real factory/dispatcher boundaries; no predecessor-red run is claimed this slice.
+- Authorized independent read-only review finds no blocker; its bounded report is appended to
+  the existing Inspector review. Full normal verification/build is pending. D3847/D3841 remain
+  doing: reductions/grades, human@2/D3870 and the complete current consumer/access/API/native
+  migration still remain. Refresh the existing trackers; D3851 forbids a compatibility pipeline,
+  not real caller migration. No qualification, parent discharge, milestone, push or release
+  claim. The full1.0 goal remains active.
+
+### 2026-10-16 — D3847 full-gate registry assertion correction
+
+- First normal full verify/build stops in software after371.80s:6380 pass/one fails across401
+  files. The old recorded-path criterion4 expects family-count = exact-event-count minus eleven;
+  the ten newly registered@3 identities make that arithmetic false (67 actual versus77 expected).
+  Actual thirteen-row/eleven-exact-v2 production closure and every other software case pass.
+- Replace only the stale duplicate-count arithmetic with exact sorted family-array versus unique
+  event-id set equality. This also detects duplicate family-list entries. Retain every exact
+  v2/table/manifest/crossed-version/duplicate-projection assertion and all95 existing cases.
+  Include this existing suite in the normal early value-authority gate, so registry drift fails
+  there rather than after the complete software pool. No production predicate, case removal,
+  deadline, retry or qualification change. Rerun the focused and full normal gates; the first
+  failure remains recorded rather than replaced by an implied success.
+
+### 2026-10-16 — D3847 scoped supplier/event final verification
+
+- After the recorded family-count assertion correction, the normal early value-authority gate
+  passes727 cases/16 files, including all95 unchanged recorded-path cases and110 new supplier
+  controls. Every old exact-v2/table/crossed-version/duplicate-ref guard remains; no production
+  predicate, case count, deadline or qualification arm is relaxed.
+- Final normal `make verify build` exits zero:6381 software tests/401 files (370.35s), seven
+  isolated performance tests/four files (61.64s),257 content tests/26 files (56.83s), all workspace
+  types, generated source/semantic/capability contracts, governance, packaging/build and corpus
+  checks. No browser/native, remote CI, push or release success is inferred from local tests.
+- Clearance remains92 documents/354 blockers/34 resolved/48 accepted/errors[];104 capability
+  documents retain exact requirements. No source data/schema/migration/pack restamp or new bulk
+  research recording. Independent bounded implementation review remains clear; ten new event
+  versions remain research-only with required/unvalidated qualification profiles.
+- Refresh the existing ledger/work-state/roadmap/queue in this commit, preserving zero
+  untriaged. D3847/D3841 remain doing: source-owned reductions/grades, D3870's reviewed canonical
+  empty-telemetry/schema/REST/resource/migration follow-up and complete current consumers/access/
+  receiver/API/native journeys remain. D3851 requires real caller migration then obsolete-path
+  retirement, not a second compatibility pipeline. No parent/milestone/semantic qualification or
+  whole1.0 completion claim. The full1.0 goal stays active.

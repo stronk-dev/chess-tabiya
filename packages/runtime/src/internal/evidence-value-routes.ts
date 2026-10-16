@@ -429,8 +429,11 @@ function admitArm(arm: EvidenceInputArm, input: Readonly<Record<string, unknown>
  * The single dispatcher. Unknown routes, missing/extra keys, crossed inputs and authority-validator
  * failures are rejected before the factory runs.
  */
+export class EvidenceValueRouteLookupError extends TypeError {
+  constructor(readonly route: unknown) { super(`Unknown evidence value route ${String(route)}`); this.name = "EvidenceValueRouteLookupError"; }
+}
 export function invokeEvidenceValueRoute<Route extends EvidenceValueRoute>(route: Route, inputs: EvidenceValueRouteInputs[Route]): EvidenceValueRouteResults[Route] {
-  if (typeof route !== "string" || !Object.hasOwn(EVIDENCE_VALUE_ROUTES, route)) throw new TypeError(`Unknown evidence value route ${String(route)}`);
+  if (typeof route !== "string" || !Object.hasOwn(EVIDENCE_VALUE_ROUTES, route)) throw new EvidenceValueRouteLookupError(route);
   const operation = EVIDENCE_VALUE_ROUTES[route] as unknown as EvidenceValueFactory<unknown, unknown>;
   if (typeof inputs !== "object" || inputs === null || Array.isArray(inputs) || Object.getPrototypeOf(inputs) !== Object.prototype) throw new TypeError(`Evidence route ${route} requires a plain authority-input record`);
   const record = inputs as Readonly<Record<string, unknown>>;
