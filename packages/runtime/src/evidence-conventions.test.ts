@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { capabilityKey } from "@chess-tabiya/schema";
 
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { CAPABILITY_REGISTRY } from "./capability/registry.js";
+import { CAPABILITY_REGISTRY } from "./capability/current.js";
 import {
   DECLARED_CONVENTION_INHERITANCE,
   INSTANCE_CONVENTION_PROJECTIONS,
@@ -134,7 +134,8 @@ describe("semantic-convention registry (rfc/semantic-convention-provenance.md §
     for (const id of ["derived.story.rank", "derived.story.title"]) {
       expect(projectionWitnessExists(`${id}@1`)).toBe(true);
       expect(projectionWitnessExists(`${id}@2`)).toBe(true);
-      expect(projectionWitnessExists(`${id}@3`)).toBe(false);
+      expect(projectionWitnessExists(`${id}@3`)).toBe(id === "derived.story.rank");
+      expect(projectionWitnessExists(`${id}@4`)).toBe(false);
     }
     expect(projectionWitnessExists("missing.projection@1")).toBe(false);
     expect(projectionWitnessExists("opponent.selection@8")).toBe(false);

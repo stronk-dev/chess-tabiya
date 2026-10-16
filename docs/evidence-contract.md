@@ -55,11 +55,20 @@ availability/array authority, including genuine empty results. Captured shapes a
 human observations remain attached; a missing human observation folds only its node unavailable.
 Last-level calculation reuses the original executed subset rather than collecting again. The
 current packet's thirty-adapter image remains explicit, not automatically expanded to the
-registry's thirty-three operations. Manifest counts remain 49 producers/316 projections/42
+registry's thirty-three operations. Manifest counts are 49 producers/317 projections/42
 consumers/566 bindings. Internal moment assembly now retains that actual full source population
 and original last-level reduction, including empty/root-only results, behind nominal source
-authority. One shared unrendered builder serves it and current Story. Rank and actual current-
-consumer delivery still remain; there is no partial public facade or new learner binding.
+authority. One shared unrendered builder serves it and current Story. Internal rank@3 now
+computes the same presentation ordering from that source alone, never caller moments. Its
+fact-only single value authenticates actual original operands, complete coverage states and
+the genuine nested last-level calculation even when groups are empty. It provides no child
+evaluation/pattern permission. Actual current-consumer/count-only renderer delivery remains;
+there is no partial public facade or new learner binding. Old live Story/title are unchanged
+pending their actual migration, not retained for hypothetical compatibility.
+
+Capability generation uses the pure registry builder; application initialization separately
+validates the stored generated declarations against the lifecycle. A newly authored version can
+therefore be generated without requiring that same output already exist at module import.
 
 Recorded comparison routes use the legal move's simultaneous physical relocations, including
 Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities
@@ -142,7 +151,7 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 49 producers, 316 projections, 42 versioned consumers and 566 bindings,
+The current compiled closure is 49 producers, 317 projections, 42 versioned consumers and 566 bindings,
 plus 88 semantic-event declarations, 88 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
@@ -159,8 +168,8 @@ Explicit empty candidate telemetry still fails the canonical schema (D3870); its
 `recorded-selection-telemetry.md` draft is not authority to bypass that boundary or migrate data.
 
 The source-only structural comparison successor uses the third closed derivation arm,
-`reduction:{operation,elements}`. The two installed operations are compare.structure_delta@1
-and story.last_level@1; unimplemented rank/opening operations refuse, without placeholders.
+`reduction:{operation,elements}`. The three installed operations are compare.structure_delta@1,
+story.last_level@1 and story.rank@1; unimplemented opening operations refuse, without placeholders.
 The genuine complete population drives18 finite V2 execution templates and concrete original
 position/family occurrences, including every authentic empty invocation in its source image.
 Result arrays are fresh, frozen and privately authenticated before flattening; copied/partial/
@@ -180,8 +189,9 @@ all value receipts, original slots and captured states, including rejected provi
 The inclusive learner-cp >= -100 rule selects the greatest recorded path index; mate scores never
 become cp, and output locations use actual recorded ply. Empty results are successful calculations
 with authenticated original arrays and no fabricated fact. The shared dependency-free seal has
-two exact operation issuers, no caller registration API. V2 plans retain every reachable actual
-factory/reader/computation binding, including compositions containing both operations.
+three exact operation issuers, no caller registration API. Rank's separately discriminated single
+publisher cannot replace item-array publication; neither mode can publish the other. V2 plans
+retain every reachable actual factory/reader/computation binding, including nested reductions.
 
 The internal `derived.tactic.defender_exposure@2` factory joins an exact lost-control event to
 `rules.exchange.reading.landing_captures@1`. It retains every positive capture with exactly two

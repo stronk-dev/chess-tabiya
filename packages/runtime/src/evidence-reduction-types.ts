@@ -17,8 +17,16 @@ export interface EvidenceReductionReceipt {
   readonly occurrences: readonly Readonly<{ group: number; item: number; element: number; witness: ConcreteEvidenceExecutionWitness }>[];
   readonly outputDigest: string;
 }
-export interface EvidenceReductionMintImage {
+interface EvidenceReductionMintBase {
   readonly receipt: EvidenceReductionReceipt; readonly convention: ConventionReceipt; readonly inputDigest: string;
+}
+export interface EvidenceReductionItemsMintImage extends EvidenceReductionMintBase {
+  readonly resultKind: "items";
   readonly outputs: readonly Readonly<{ nodeId: string; plyOffset: number; producer: VersionedEvidenceId; projection: VersionedEvidenceId; payloadDigest: string }>[];
 }
+export interface EvidenceReductionSingleMintImage extends EvidenceReductionMintBase {
+  readonly resultKind: "single";
+  readonly output: Readonly<{ producer: VersionedEvidenceId; projection: VersionedEvidenceId; payloadDigest: string }>;
+}
+export type EvidenceReductionMintImage = EvidenceReductionItemsMintImage | EvidenceReductionSingleMintImage;
 export interface ReductionResultItem { readonly evidence: DeclaredEvidence<unknown>; readonly nodeId: string; readonly plyOffset: number }

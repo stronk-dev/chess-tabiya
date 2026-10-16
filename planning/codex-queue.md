@@ -1,6 +1,25 @@
 # Codex queue
 
-**Current executable checkpoint, 2026-10-16:** the genuine internal recorded moment source now
+**Current verified checkpoint, 2026-10-16 — [[D3847]], [[D3845]], [[D3882]]:** source-owned
+rank@3 now computes the existing nine-band presentation order over original recorded groups.
+Concrete witnesses retain actual ordered inputs, provider/recorded/local authority and genuine
+nested last-level reduction identity. Complete source states and the executed empty/root-only
+last-level result remain bound even with zero eligible moments. The single publication path
+cannot be used by item-array reductions; no fabricated node/ply metadata or child-content
+authority. Independent bounded code/test review finds no blocker.18 rank/16 operand cases and
+extended actual SQLite/human controls join1,095 focused passes/32 files and clean types.
+Full normal `make verify build` passes:6,641 software/412 files, seven performance/four files,
+257 content/26 files and every remaining gate. No deadline/retry/skip/coverage relaxation.
+The generator bootstrap defect D3882 is repaired by separating the pure registry builder from
+application initialization; normal generation adds only rank@3, preserving all prior meanings.
+
+Next: opening/grade owners, then complete282-pair current access/receiver/API/native cutover,
+proper count-only rank presentation and obsolete-path retirement. D3851 means no compatibility-only
+pipeline; live Story/title remain unchanged until their actual replacement contract/callers migrate.
+D3847/D3841/D3845 remain doing; D3870 remains independently blocked. This is an internal
+checkpoint, not a completed learner capability or release.
+
+**Prior verified moment checkpoint, 2026-10-16:** the genuine internal recorded moment source now
 consumes the complete twelve-source population and retains the actual last-level reduction for
 every outcome, including empty/root-only results. One unrendered assembler/order also serves
 current Story; no second moment algorithm or raw-prose channel. Exact groups retain original

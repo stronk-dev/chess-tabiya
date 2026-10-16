@@ -19,7 +19,18 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest internal implementation is the recorded moment source over the complete twelve-source
+The latest verified slice is source-owned rank@3: the existing nine-band presentation order now
+has an authentic complete-source/single-value computation over actual recorded groups, including
+empty/root-only context, exact child occurrence authority and nested last-level receipts. It
+does not inherit evaluation or pattern permissions. Independent bounded code/test review finds
+no blocker;1,095 focused cases/32 files/types and full normal `make verify build` pass:6,641
+software/412 files, seven performance/four files,257 content/26 files and every remaining gate.
+D3882 repairs the
+normal generator's stale-singleton bootstrap without skipping validation. No current consumer,
+renderer, API/native delivery, qualification or milestone is claimed. Opening/grade source owners
+and the complete282-pair migration remain before learner cutover; no legacy-only pipeline.
+
+The prior verified implementation is the recorded moment source over the complete twelve-source
 population. One actual unrendered assembler/order now serves current Story and the scoped source.
 Original source states and the genuine last-level reduction remain attached even when moments
 are empty or a qualifying root is excluded. Exact groups preserve occurrence multiplicity,

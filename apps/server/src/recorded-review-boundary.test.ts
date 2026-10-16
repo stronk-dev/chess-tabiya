@@ -7,7 +7,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { createRecordedReviewBoundarySourceOwner, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { collectRecordedLastLevelPopulation, readRecordedLastLevelPopulation, collectRecordedReviewSourcePopulation, readRecordedReviewSourcePopulation } from "../../../packages/runtime/src/review-evidence.js";
-import { collectRecordedReviewMoments, readRecordedReviewMoments } from "../../../packages/runtime/src/recorded-review-moments.js";
+import { collectRecordedReviewMoments, readRecordedReviewMoments, readRecordedReviewMomentOperands, recordedReviewMomentSourceImage } from "../../../packages/runtime/src/recorded-review-moments.js";
+import { readStoryRankReductionValue } from "../../../packages/runtime/src/internal/story-rank-reduction-authority.js";
+import { evidenceDigest } from "../../../packages/runtime/src/evidence-contract.js";
+import { rankStoryMoments } from "../../../packages/runtime/src/story.js";
 import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -24,19 +27,20 @@ function ownerFor(storage: SQLiteRunStorage) {
 function open(path: string) { const storage = new SQLiteRunStorage(path, { onMigration: () => {} }); stores.push(storage); return storage; }
 
 describe("recorded Review source over actual parsed SQLite imports", () => {
-  it.each(["white", "black"] as const)("collects genuine durable point/state/result inputs after file reload: %s", async side => {
+  it.each((["white", "black"] as const).flatMap(side => [0, 1, 2, 3, 4].map(last => ({ side, last }))))("collects genuine durable point/state/result inputs after file reload: $side prefix $last", async ({ side, last: prefix }) => {
     const directory = mkdtempSync(join(tmpdir(), "tabiya-review-population-")); directories.push(directory);
     const path = join(directory, "runs.sqlite"), storage = open(path), service = new RunService(storage);
     const imported = await service.importGame({ id: `recorded-population-${side}`, side, opponentPolicy: { mode: "human_common" }, policyConfig, seed: 1,
       source: { kind: "pgn", pgn: '[Result "0-1"]\n\n1. e4 e5 2. Nf3 Nc6 0-1' } }, "writer");
     let run = imported.run;
     const branchId = run.branches[0]!.id, nodes = branchPath(run, branchId);
+    expect(nodes[prefix], "the parameterized saved-import prefix must exist").toBeDefined();
     for (const index of [0, 1, 3]) run = attachDelivery(run, nodes[index]!.id, evaluationDelivery(nodes[index]!.fen, index === 1 ? "mate -2" : "cp 75"));
     storage.save(run, { writerId: "writer", learnerId: "__legacy" });
     storage.close(); stores.splice(stores.indexOf(storage), 1);
     const reloaded = open(path), parsed = reloaded.read(run.id)!.run, before = JSON.stringify(parsed.events), owner = ownerFor(reloaded);
     const context = { engine: reviewDurableEngineStates(parsed, nodes), shapes: [{ id: "import-f3", trigger: { kind: "pieceOnSquare" as const, square: "f3" as const, piece: { color: "white" as const, role: "knight" as const } } }] };
-    for (const [last, endpoint] of nodes.entries()) {
+    for (const [last, endpoint] of [...nodes.entries()].filter(([index]) => index === prefix)) {
       const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: endpoint.id });
       const population = collectRecordedLastLevelPopulation({ boundary, context }), data = readRecordedLastLevelPopulation(population);
       expect(data.rows).toHaveLength(last + 1); expect(data.boundary.run).toEqual(parsed);
@@ -60,10 +64,15 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
       }
       const firings = complete.results.filter(result => result.slot.adapterId === "review.source.shapes@1").flatMap(result => result.items);
       expect(firings.map(item => item.payload)).toEqual(last < 3 ? [] : [{ entryId: "import-f3", firstNodeId: nodes[3]!.id, lastNodeId: endpoint.id, openEnded: true }]);
-      const moments = readRecordedReviewMoments(collectRecordedReviewMoments({ population: completeSource }));
+      const momentSource = collectRecordedReviewMoments({ population: completeSource }), moments = readRecordedReviewMoments(momentSource);
       expect(moments.population).toBe(complete);
       expect(moments.groups.every(group => nodes.slice(1, last + 1).some(node => node.id === group.evidenceNodeId && node.parentId === group.decisionNodeId))).toBe(true);
       expect(moments.lastLevelReduction.receipt.operation).toEqual({ id: "story.last_level", version: 1 });
+      const rank = invokeEvidenceValueRoute("derived.story.rank@3", { recordedReview: momentSource });
+      expect(rank.payload.rank).toEqual(rankStoryMoments(moments.groups));
+      const rankProof = readStoryRankReductionValue(rank, momentSource);
+      expect(rankProof.reduction.sourceImageDigest).toBe(evidenceDigest(recordedReviewMomentSourceImage(momentSource)));
+      expect(readRecordedReviewMomentOperands(momentSource).flat().map(item => item.value)).toEqual(moments.groups.flatMap(group => group.evidence));
       if (last < nodes.length - 1 || side === "black") expect(moments.lastLevelReduction.items).toEqual([]);
     }
     expect(JSON.stringify(reloaded.read(run.id)!.run.events)).toBe(before); expect(imported.evidencePass.jobs).toBe(0);

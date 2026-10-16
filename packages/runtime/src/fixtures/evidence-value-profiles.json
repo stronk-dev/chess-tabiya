@@ -876,6 +876,13 @@
       "918aafe7884d69f44932c93f1f1defd9908704fb86436397e76ae22eff80c628"
     ]
   },
+  "derived.story.rank@3": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "909cfec4934d1ce35888af39e44f6410bcdb9368c2580bba14850c949fb4babb"
+    ]
+  },
   "derived.story.title@2": {
     "availability": "available",
     "cardinality": 1,

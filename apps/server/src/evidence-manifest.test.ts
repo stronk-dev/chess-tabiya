@@ -107,7 +107,7 @@ describe("server evidence manifest aggregate", () => {
   it("exposes only consumer-safe binding summaries, never payloads or provider secrets", async () => {
     const value = evidenceManifestCapabilities(await testProviderHealth({ "stockfish-analysis": "available", "maia-inference": "available", "external-voice": "unverified", "explorer-primary": "unverified", "tablebase-primary": "unverified" }));
     expect(value.digest).toMatch(/^[a-f0-9]{64}$/);
-    expect(value.counts).toEqual({ producers: 49, projections: 316, consumers: 42, bindings: 566, semanticEvents: 88, eligibility: 88, reasons: 16, selectionPolicies: 1 });
+    expect(value.counts).toEqual({ producers: 49, projections: 317, consumers: 42, bindings: 566, semanticEvents: 88, eligibility: 88, reasons: 16, selectionPolicies: 1 });
     expect(JSON.stringify(value)).not.toMatch(/bestMoveUci|principalVariation|apiKey|authoredText/);
     expect(value.bindings.every((binding) => binding.consumerId.length > 0 && binding.projectionId.length > 0)).toBe(true);
   });

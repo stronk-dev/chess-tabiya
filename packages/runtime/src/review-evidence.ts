@@ -12,7 +12,7 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { DerivedEvidence } from "./evidence-factories.js";
 import { orderedReviewEvidence } from "./internal/review-moment-assembly.js";
-import { assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
+import { assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, readReviewMemberInputs, readLocalReadingInvocation, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import { createRecordedPivotalSource, recordedPivotalData, type RecordedPivotalSource, type PivotalKind, type PivotalMarker, type RecordedHumanDivergenceMarker } from "./pivotal.js";
 import {
@@ -1002,6 +1002,88 @@ export function readRecordedReviewSourcePopulation(population: RecordedReviewSou
   if (lastLevel.result !== data.results.find(result => result.slot.adapterId === IMPORTED_RESULT_SOURCE_ADAPTER.id && result.slot.nodeId === image.request.throughNodeId)) throw new TypeError("Recorded Review last-level result is not its actual endpoint invocation");
   readRecordedReviewBoundary(boundary);
   return data;
+}
+
+/** Original source operands, not a public witness constructor or payload-based ancestry guess. */
+export type RecordedReviewSourceOperand =
+  | Readonly<{ kind: "member"; value: DeclaredEvidence<unknown>; inputs: readonly RecordedReviewSourceOperand[] }>
+  | Readonly<{ kind: "leaf"; value: DeclaredEvidence<unknown>; availability: "local" | "recorded" | "provider";
+      providerOperation: "stockfish.position_evaluation@1" | null; image: unknown }>;
+const REVIEW_SOURCE_OPERANDS = new WeakMap<object, readonly (readonly RecordedReviewSourceOperand[])[]>();
+/** Exact result-index/item-index image. Empty slots remain present in the surrounding population. */
+export function readRecordedReviewSourceOperands(population: RecordedReviewSourcePopulation): readonly (readonly RecordedReviewSourceOperand[])[] {
+  const data = readRecordedReviewSourcePopulation(population), owned = RECORDED_REVIEW_POPULATIONS.get(population)!;
+  const retained = REVIEW_SOURCE_OPERANDS.get(population); if (retained !== undefined) return retained;
+  const { execution } = owned, boundary = data.boundary;
+  const scope = Object.freeze({ request: boundary.request, eventHead: boundary.eventHead });
+  const leaf = (value: DeclaredEvidence<unknown>, availability: "local" | "recorded" | "provider", image: unknown, providerOperation: "stockfish.position_evaluation@1" | null = null): RecordedReviewSourceOperand =>
+    Object.freeze({ kind: "leaf", value, availability, providerOperation, image: deepFreeze(image) });
+  const position = (value: DeclaredEvidence<unknown>): RecordedReviewSourceOperand => {
+    const nodeId = (value.payload as RecordedPosition).nodeId;
+    assertRecordedPositionInvocation(value as DeclaredEvidence<RecordedPosition>, execution.snapshot.run, nodeId);
+    const entry = boundary.path.find(entry => entry.node.id === nodeId);
+    if (entry === undefined) throw new TypeError("Review operand position is outside its actual recorded grant");
+    return leaf(value, "recorded", { kind: "position", scope, entry });
+  };
+  const point = (value: DeclaredEvidence<unknown>): RecordedReviewSourceOperand => {
+    const original = readReviewMemberInputs(value), inputs = readReviewPointInvocation(value as DeclaredEvidence<ReviewEnginePoint>);
+    if (original.length !== 2 || original[0] !== inputs.evaluation || original[1] !== inputs.position) throw new TypeError("Review point lost its original minted inputs");
+    const provider = leaf(inputs.evaluation, "provider", { kind: "provider", delivery: serializeProviderDelivery("stockfish.position_evaluation@1", inputs.evaluation.payload) }, "stockfish.position_evaluation@1");
+    return Object.freeze({ kind: "member", value, inputs: Object.freeze([provider, position(inputs.position)]) });
+  };
+  const local = (value: DeclaredEvidence<unknown>, expectedFen?: string): RecordedReviewSourceOperand => {
+    const input = readLocalReadingInvocation(value);
+    if (input.kind === "fen") {
+      if (input.fen !== expectedFen || !boundary.path.some(entry => entry.node.fen === input.fen)) throw new TypeError("Review local reading crosses its actual recorded FEN operand");
+    } else {
+      const child = boundary.path.find((entry, index) => index > 0 && entry.node.fen === input.edge.afterFen && entry.node.moveUci === input.edge.moveUci
+        && boundary.path[index - 1]!.node.fen === input.edge.beforeFen);
+      if (child === undefined || expectedFen !== undefined && child.node.fen !== expectedFen) throw new TypeError("Review local reading crosses its actual recorded edge operand");
+    }
+    return leaf(value, "local", input);
+  };
+  const result = Object.freeze(data.results.map((row) => Object.freeze(row.items.map((value): RecordedReviewSourceOperand => {
+    const route = refKey(value.projection), node = execution.byId.get(row.slot.nodeId)!;
+    if (route === "run.record.position@1") return position(value);
+    if (route === "derived.review.eval_point@1") return point(value);
+    if (route === "derived.review.eval_delta@2" || route === "derived.review.mate_transition@2") {
+      const original = execution.memo.transitions!.get(row.slot.invocationId), inputs = readReviewTransitionResultInvocation(original, route), minted = readReviewMemberInputs(value);
+      if (original?.kind !== "available" || original.value !== value || minted.length !== 2 || minted[0] !== inputs.before || minted[1] !== inputs.after) throw new TypeError("Review transition lost its original result/minted endpoints");
+      return Object.freeze({ kind: "member", value, inputs: Object.freeze([point(inputs.before), point(inputs.after)]) });
+    }
+    const kind = (Object.keys(RECORDED_PIVOTAL_ROUTES) as PivotalKind[]).find(kind => RECORDED_PIVOTAL_ROUTES[kind] === route);
+    if (kind !== undefined) {
+      const invocation = execution.memo.scopedPivotal!.get(kind)!;
+      const wrapper = invocation.items.find(item => item.evidence === value), minted = readReviewMemberInputs(value);
+      if (wrapper === undefined || minted.length !== wrapper.inputs.length || minted.some((input, index) => input !== wrapper.inputs[index])) throw new TypeError("Review pivotal operand lost its actual wrapper/minted inputs");
+      const inputs = minted.map((input, index): RecordedReviewSourceOperand => {
+        if (refKey(input.projection) === "run.record.position@1") return position(input);
+        if (kind === "human_divergence") {
+          const observation = readRecordedHumanDivergenceInvocation(invocation.items as readonly DerivedEvidence<RecordedHumanDivergenceMarker>[], invocation.source).observations.find(row => row.item === wrapper);
+          if (observation?.selection.kind !== "available" || observation.selection.value !== input || index !== 0) throw new TypeError("Review human operand lost its original observation/selection input");
+          return leaf(input, "recorded", { kind: "selection", scope, subject: observation.resolved.subject, event: observation.event, record: input.payload });
+        }
+        const following = minted[index + 1];
+        if (following === undefined || refKey(following.projection) !== "run.record.position@1") throw new TypeError("Review local pivotal operand has no original position partner");
+        return local(input, (following.payload as RecordedPosition).fen);
+      });
+      return Object.freeze({ kind: "member", value, inputs: Object.freeze(inputs) });
+    }
+    if (route === "rules.endgame.classification@1") {
+      const invocation = readEndgamePopulationInvocation(execution.memo.endgame!.get(node.id)!, node.fen);
+      if (!invocation.items.includes(value)) throw new TypeError("Review endgame operand is not its original invocation member");
+      return leaf(value, "local", { kind: "fen", fen: invocation.fen });
+    }
+    if (route === "theory.shapes.firing@1") {
+      const invocation = readShapeFiringInvocation(execution.memo.shapeInvocation!, execution.context.shapes, execution.shapePath!);
+      if (!invocation.items.includes(value)) throw new TypeError("Review shape operand is not its original invocation member");
+      return leaf(value, "local", { kind: "shape", entries: invocation.entries, path: invocation.path });
+    }
+    if (route === "run.record.consequence@1" || route === "run.record.imported_result@1") return leaf(value, "recorded", { kind: "recorded_outcome", scope, outcome: boundary.outcome, importRecord: boundary.importRecord, slot: row.slot });
+    throw new TypeError(`Review source operand has no exact original family: ${route}`);
+  }))));
+  readRecordedReviewSourcePopulation(population);
+  REVIEW_SOURCE_OPERANDS.set(population, result); return result;
 }
 
 // ---------------------------------------------------------------------------------------------

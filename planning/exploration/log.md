@@ -32251,3 +32251,61 @@ Campaign was the one capability with no API, route or content. Now:
   adoption and obsolete execution retirement remain. D3870 still awaits its schema/resource
   decision and independent acceptance; no lane is guessed. No public facade, compatibility-only
   pipeline, pack edit, qualification, whole milestone or release promotion, push or deployment.
+
+### 2026-10-16 — Source-owned recorded rank implementation and test repairs
+
+- Accepted F2 §2.3g/provider §1a now has the actual internal story.rank@1 operation and
+  derived.story.rank@3 sole factory. Original group/item/slot authority and actual ordered minted
+  member inputs/local FEN/edge/provider invocations supply concrete compiler-path witnesses.
+  Nested last-level retains original array/population/ordinal/location/proof. Complete source
+  state/shape/provider images and the executed last-level context survive empty/root-only groups.
+  Rank has a single authenticated payload, including rank[], not a synthetic result location;
+  fixed fact-only/convention/reported authority does not expose child scores or patterns.
+- New controls first expose treating a nested finite template as an independently issued V2 root.
+  Repair by compiling the genuine child root and comparing its full template/actual receipt;
+  no compiler-seal relaxation. Actual SQLite prefix journeys exceed the unchanged five-second
+  case deadline when grouped five-per-case; parameterize each genuine prefix independently with
+  explicit endpoint existence, retain every assertion, no timeout/skip/retry change.
+- D3882 normal capability generation fails on the actual stale predecessor because importing the
+  builder initializes stored old declarations against the new lifecycle. Separate the pure builder
+  from application current.ts; public barrel exports and strict application validation remain.
+  Permanent AST guard pins pure/generator imports. Normal generator then adds only rank@3 (1016
+  declarations), repeat changes zero;310 profiles preserve every prior profile/declaration and all
+  pack requirements. Semantic validation remains91 subjects/zero qualified/343 cases/53 population/
+  eight external receipts. No convention changes.
+- Independent authorized reviewer inspects actual implementation and tests read-only twice, no
+  blocking issue. Nested-template falsification and parameterized prefix-existence notes are
+  implemented. Main's normal focused gate passes1094 cases/32 files and workspace types, then
+  adds the explicit genuine singleton control before full verification. Initial failed test and
+  generator commands are retained as failed, not counted successful. Full normal verification/
+  build follows before commit; no browser/remote CI/push/deploy or product-completion claim.
+- Existing queue/roadmap/RFC checkpoints/docs/ledger state are updated, zero untriaged.
+  D3847/D3841/D3845 remain doing: opening/grade, complete282-pair current source/count-renderer/
+  access/receiver/API/native adoption and obsolete-path retirement remain. D3851 requires no
+  hypothetical compatibility pipeline; it does not authorize saved-data deletion or bypassing
+  current-source review. D3870's separate schema/resource ruling remains unresolved.
+
+### 2026-10-16 — Recorded Review rank verified checkpoint
+
+- Full normal make verify build exits zero:6641 software tests/412 files (399.87s), seven
+  isolated performance cases/four files (60.06s),257 content cases/26 files (59.05s), clean
+  workspace types and all manifest/contract/governance/corpus/packaging/build gates. The final
+  focused gate is1095 passes/32 files, including18 rank and16 original-operand cases. No
+  assertion/deadline/retry/skip/coverage reduction. Corpus92 documents/354 blocking/34 resolved/
+  48 accepted/errors[];104 capability documents declare exactly their derived requirements.
+- D3882 closes on the actual normal-generator repair and permanent pure-builder/import guard.
+  The final internal population is317 projections/310 profiles/1016 capabilities; all prior
+  profiles/1015 meanings and current566 bindings remain,51 conventions unchanged. Semantic
+  validation remains91 subjects/zero qualified/343 cases/53 population/eight external receipts.
+  Inspection finds no falsified sentence in protected design00–06 requiring an intent amendment.
+- Update existing queue/roadmap/checkpoint/docs/RFC/state together; the first final-prose patch
+  refuses one mismatched context atomically and is reapplied against actual lines. The new closed
+  row is explicitly assigned path evidence after sync refuses an untriaged completion. Final
+  work-state3631 rows/1749 live/zero untriaged;627 todo/37 doing/1085 blocked/1720 done/162 refused;
+  historical462 prose-only closeouts unchanged. The actual roadmap checkpoint advances without
+  falsely completing a capability/milestone. Final metadata checks and configured commit hook
+  follow; no product source changes after the full pass.
+- D3847/D3841/D3845 remain doing. Next lawful implementation is opening/grade source ownership,
+  then complete282-pair current access/count-renderer/receiver/API/native delivery and obsolete-
+  path retirement. D3870 remains separately blocked. No compatibility-only pipeline, saved-data
+  deletion, pack edit, source qualification, browser/remote CI/push/deploy or 1.0 completion claim.

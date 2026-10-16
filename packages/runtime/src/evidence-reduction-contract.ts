@@ -22,6 +22,13 @@ export const LAST_LEVEL_REDUCTION_CONTRACT = Object.freeze({
   sourceOwner: "RecordedLastLevelPopulation" as const, sourceUse: "captured_only" as const,
   elements: Object.freeze([ref("run.record.position"), ref("derived.review.eval_point"), ref("run.record.imported_result")]),
 });
+export const STORY_RANK_REDUCTION_CONTRACT = Object.freeze({
+  operation: ref("story.rank"), projection: ref("derived.story.rank", 3), factory: "createDerivedStoryRankV3Evidence",
+  sourceOwner: "RecordedReviewMomentSource" as const, sourceUse: "captured_only" as const,
+  elements: Object.freeze([ref("derived.review.eval_delta", 2), ref("derived.review.mate_transition", 2), ref("derived.story.last_level", 2),
+    ref("run.record.consequence"), ref("run.record.imported_result"), ref("derived.pivotal.irreversibility"), ref("derived.pivotal.phase_change", 2),
+    ref("derived.pivotal.human_divergence", 2), ref("derived.pivotal.option_collapse", 2), ref("rules.endgame.classification"), ref("theory.shapes.firing")]),
+});
 
 /** Closed installed operations, not a registration API or placeholders for rank/opening. */
 export function evidenceReductionContract(operation: VersionedEvidenceId) {
@@ -31,6 +38,7 @@ export function evidenceReductionContract(operation: VersionedEvidenceId) {
   }
   if (operation.id === COMPARISON_REDUCTION_CONTRACT.operation.id) return COMPARISON_REDUCTION_CONTRACT;
   if (operation.id === LAST_LEVEL_REDUCTION_CONTRACT.operation.id) return LAST_LEVEL_REDUCTION_CONTRACT;
+  if (operation.id === STORY_RANK_REDUCTION_CONTRACT.operation.id) return STORY_RANK_REDUCTION_CONTRACT;
   throw new TypeError("Evidence reduction operation has no installed exact binding");
 }
 
@@ -45,10 +53,11 @@ export function assertEvidenceReductionDeclaration(projection: ProjectionDeclara
   }
   const same = (left: readonly string[], right: readonly string[]) => left.length === right.length && left.every((value, index) => value === right[index]);
   const lastLevel = binding === LAST_LEVEL_REDUCTION_CONTRACT;
+  const rank = binding === STORY_RANK_REDUCTION_CONTRACT;
   if (projection.plane !== "derived" || projection.role !== "reading" || projection.grounding !== "declared_convention"
-    || projection.exactness !== (lastLevel ? "measured" : "convention") || projection.confidence !== (lastLevel ? "reported" : "not_applicable")
-    || !same(projection.answerContent, lastLevel ? ["fact", "evaluation"] : ["fact"]) || !same(projection.operands, lastLevel ? ["recordedResult", "evaluation"] : ["observation", "namedStructure"])
-    || !same(projection.forms, lastLevel ? ["sentence", "panel"] : ["sentence", "list", "panel"]) || !same(projection.signs, ["state"])
+    || projection.exactness !== (lastLevel ? "measured" : "convention") || projection.confidence !== (lastLevel || rank ? "reported" : "not_applicable")
+    || !same(projection.answerContent, lastLevel ? ["fact", "evaluation"] : ["fact"]) || !same(projection.operands, lastLevel ? ["recordedResult", "evaluation"] : rank ? ["rank"] : ["observation", "namedStructure"])
+    || !same(projection.forms, lastLevel ? ["sentence", "panel"] : rank ? ["list", "panel", "machine_condition"] : ["sentence", "list", "panel"]) || !same(projection.signs, ["state"])
     || !projection.abstention.possible || !projection.abstention.reasons.includes("input_abstained")) {
     throw new TypeError("Evidence reduction exceeds its exact installed answer/grounding contract");
   }

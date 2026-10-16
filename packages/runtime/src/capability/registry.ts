@@ -5,7 +5,8 @@
 // legacy declaration marker (never recomputed from today's source); the authored half
 // (`lifecycle.ts`) carries every disposition that is not "active at version 1". `CAPABILITY_HISTORIES`
 // groups declarations by subject, retains obsolete versions and names exactly one current version.
-// The §4.3 invariants run at module load.
+// This module is the pure builder; current.ts runs §4.3 invariants at application module load.
+// Generators can validate their newly built image without first importing stale generated output.
 
 import {
   capabilityEquals,
@@ -16,8 +17,6 @@ import {
   type CapabilityKey,
 } from "@chess-tabiya/schema";
 
-import { GENERATED_CAPABILITY_DECLARATIONS } from "./declarations.generated.js";
-import { CAPABILITY_LIFECYCLE } from "./lifecycle.js";
 
 export type CapabilitySubjectKind =
   | "vocabulary_arm"
@@ -35,7 +34,6 @@ export interface SchemaMemberIdentityRef {
   readonly schemaPointer: string;
   readonly member: string | number | boolean;
 }
-
 export type CapabilitySiteRef =
   | { readonly kind: "symbol"; readonly module: string; readonly symbol: string }
   | { readonly kind: "discriminant_arm"; readonly module: string; readonly owner: string; readonly property: string; readonly value: string };
@@ -270,7 +268,3 @@ export function buildCapabilityRegistry(
     },
   });
 }
-
-export const CAPABILITY_REGISTRY: CapabilityRegistry = buildCapabilityRegistry(GENERATED_CAPABILITY_DECLARATIONS, CAPABILITY_LIFECYCLE);
-export const CAPABILITY_DECLARATIONS: readonly CapabilityDeclaration[] = CAPABILITY_REGISTRY.declarations;
-export const CAPABILITY_HISTORIES: readonly CapabilityHistory[] = CAPABILITY_REGISTRY.histories;

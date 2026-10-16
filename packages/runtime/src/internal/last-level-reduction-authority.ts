@@ -3,7 +3,7 @@ import { evidenceDigest, evidenceValueReceipt, type CompiledEvidenceManifest, ty
 import { PRIMARY_EVIDENCE_MANIFEST } from "../evidence-catalog.js";
 import { compileProjectionExecutionV2, executionPlanDigest, type CompiledEvidenceExecutionPlan } from "../evidence-execution-v2.js";
 import { LAST_LEVEL_REDUCTION_CONTRACT as contract } from "../evidence-reduction-contract.js";
-import type { ConcreteEvidenceExecutionWitness, EvidenceReductionMintImage, EvidenceReductionReceipt, ReductionResultItem, ReductionValueIdentity } from "../evidence-reduction-types.js";
+import type { ConcreteEvidenceExecutionWitness, EvidenceReductionItemsMintImage, EvidenceReductionReceipt, ReductionResultItem, ReductionValueIdentity } from "../evidence-reduction-types.js";
 import { directProjectionConventions } from "../evidence-convention-closure.js";
 import { conventionReceipt } from "../evidence-conventions.js";
 import { assertProviderDelivery, serializeProviderDelivery } from "../provider-exchange.js";
@@ -66,7 +66,7 @@ export function lastRecordedAvailableLevel(population: RecordedLastLevelPopulati
   return Object.freeze(selected === undefined ? [] : [selected]);
 }
 
-interface LastLevelProof extends EvidenceReductionMintImage { readonly population: RecordedLastLevelPopulation; readonly plan: CompiledEvidenceExecutionPlan }
+interface LastLevelProof extends EvidenceReductionItemsMintImage { readonly population: RecordedLastLevelPopulation; readonly plan: CompiledEvidenceExecutionPlan }
 const proofs = new WeakSet<object>();
 function inputs(population: RecordedLastLevelPopulation, plan: CompiledEvidenceExecutionPlan) {
   if (plan.kind !== "reduction" || key(plan.projection) !== route || key(plan.operation) !== key(contract.operation)) throw new TypeError("Last-level requires its exact genuine reduction plan");
@@ -115,7 +115,7 @@ export function computeLastLevelReduction(population: RecordedLastLevelPopulatio
   const convention = conventionReceipt(source.refs, { kind: "reduction", operation: contract.operation, reductionDigest: `sha256:${evidenceDigest(receipt)}`,
     inputs: source.values.map(value => ({ projection: key(value.projection), valueDigest: `sha256:${evidenceDigest(identity(value))}` })) });
   const inputDigest = evidenceDigest({ operation: receipt.operation, planDigest: receipt.planDigest, sourceImageDigest: receipt.sourceImageDigest, occurrences: receipt.occurrences });
-  const proof: LastLevelProof = Object.freeze({ population, plan, receipt, convention, inputDigest, outputs }); proofs.add(proof);
+  const proof: LastLevelProof = Object.freeze({ resultKind: "items", population, plan, receipt, convention, inputDigest, outputs }); proofs.add(proof);
   return Object.freeze({ proof, authority: sealOwnedLastLevelReductionProof(proof, manifest => assertLastLevelReductionProof(proof, manifest)), selected });
 }
 export function assertLastLevelReductionProof(data: LastLevelProof, manifest?: CompiledEvidenceManifest): void {

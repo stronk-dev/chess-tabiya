@@ -7,6 +7,18 @@ unaccepted/returned labels are retained review history, not current blockers. Ac
 issuance, complete execution/consumer cutover and qualification remain implementation work;
 this accepts no unrelated parent discharge or product-completion claim.
 
+**Internal rank checkpoint, 2026-10-16 — [[D3847]], [[D3845]]:** accepted §2.3g now has the
+actual story.rank@1/derived.story.rank@3 operation and original complete-source operand reader.
+Original group/item/slot membership, actual minted child inputs and retained FEN/edge/provider
+invocations supply concrete compiler-path witnesses. Nested last-level uses its genuine original
+array/ordinal/population/proof; the complete source image retains that executed calculation even
+when moments are empty/root-only. Rank-only single publication has no artificial node location;
+older item-array receipt bytes remain unchanged. Fact-only/convention/reported authority does
+not expose child content. Independent bounded code/test review finds no blocker;1,095 focused
+cases/32 files/types and full normal `make verify build` pass:6,641 software/412 files, seven
+performance/four files,257 content/26 files and all remaining gates. Current learner/renderer/API/native adoption and
+opening/grade remain open; this is neither qualification nor a parent completion.
+
 **Recorded human-divergence checkpoint, 2026-10-16:** §2.3a now has its internal scoped@2
 factory and original complete observation reader. Every anchored human-common observation survives,
 including missing arrays and sibling origins. All complete original origin paths validate before

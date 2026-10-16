@@ -22,6 +22,9 @@ export const CAPABILITY_LIFECYCLE: readonly CapabilityLifecycleRow[] = Object.fr
     versions: [
       { version: v(1), disposition: { kind: "deprecated", successor: capabilityId(subjectId, 2), reasonCode: "superseded", reason: "Review transitions declare both ordered endpoints and Story consumes those exact successors; version 1 retains its original declaration" } },
       { version: v(2), disposition: { kind: "active" } },
+      // Source-only accepted rank reduction; old Story consumers remain exactly bound to @2
+      // until the complete current-source migration, not a compatibility-only execution fork.
+      ...(subjectId === "derived.story.rank" ? [{ version: v(3), disposition: { kind: "active" as const } }] : []),
     ],
   })),
   // Provider-exchange §§7/9: a bound opponent source is a successor, not a rewrite of operator-only v1.

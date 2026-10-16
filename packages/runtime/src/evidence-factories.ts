@@ -39,8 +39,10 @@ import {
 import { directProjectionConventions } from "./evidence-convention-closure.js";
 import { computeComparisonReduction } from "./internal/comparison-reduction-authority.js";
 import { computeLastLevelReduction, type RecordedLastLevelValue } from "./internal/last-level-reduction-authority.js";
+import { computeStoryRankReduction } from "./internal/story-rank-reduction-authority.js";
+import { readRecordedReviewMoments, type RecordedReviewMomentSource } from "./recorded-review-moments.js";
 import { readRecordedLastLevelPopulation, type RecordedLastLevelPopulation } from "./review-evidence.js";
-import { initiateEvidenceReduction, publishEvidenceReduction } from "./internal/evidence-reduction-seal.js";
+import { initiateEvidenceReduction, publishEvidenceReduction, publishSingleEvidenceReduction } from "./internal/evidence-reduction-seal.js";
 import { readComparisonStructuralPopulation, type RecordedComparisonStructuralPopulation, type ScopedStructuralObservationChange } from "./comparison-structural-population.js";
 import { COMPARISON_STRUCTURAL_ROUTES, type ComparisonStructuralRoute } from "./internal/comparison-structural-families.js";
 import { conventionReceipt, type ConventionReceipt } from "./evidence-conventions.js";
@@ -477,14 +479,40 @@ function mintConventionReceipt(route: string, sources: readonly (DeclaredEvidenc
  * The local mint helper. Deliberately not exported. `instance` names the registered conventions a
  * payload instance selected (a setup or method convention ref); unregistered refs fail the receipt.
  */
+const REVIEW_MEMBER_INPUTS = new WeakMap<object, readonly DeclaredEvidence<unknown>[]>();
+const REVIEW_MEMBER_ROUTES = new Set(["derived.review.eval_point@1", "derived.review.eval_delta@2", "derived.review.mate_transition@2",
+  "derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@2", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2"]);
+type LocalReadingInvocation = Readonly<{ kind: "fen"; fen: string }> | Readonly<{ kind: "edge"; edge: EvidenceEdge }>;
+const LOCAL_READING_INVOCATIONS = new WeakMap<object, LocalReadingInvocation>();
+/** Original input membership at the sole mint, never inferred from payload or source digests. */
+export function readReviewMemberInputs(value: DeclaredEvidence<unknown>): readonly DeclaredEvidence<unknown>[] {
+  assertDeclaredEvidence(value);
+  const inputs = REVIEW_MEMBER_INPUTS.get(value);
+  if (inputs === undefined) throw new TypeError("Review member lacks original mint input membership");
+  if (inputs.length !== evidenceValueReceipt(value).sourceDigests.length || inputs.some((input, index) => evidenceValueReceipt(input).payloadDigest !== evidenceValueReceipt(value).sourceDigests[index])) throw new TypeError("Review member lost its literal ordered inputs");
+  return inputs;
+}
+export function readLocalReadingInvocation(value: DeclaredEvidence<unknown>): LocalReadingInvocation {
+  assertDeclaredEvidence(value);
+  const input = LOCAL_READING_INVOCATIONS.get(value);
+  if (input === undefined) throw new TypeError("Local reading lacks its original FEN/edge factory invocation");
+  const authority = input.kind === "fen" ? { fen: input.fen } : input.edge;
+  if (evidenceValueReceipt(value).inputDigest !== authorityDigest(authority)) throw new TypeError("Local reading differs from its original literal factory input");
+  return input;
+}
 function mint<T>(route: string, symbol: string, payload: T, authority: unknown, sources: readonly (DeclaredEvidence<unknown> | string)[] = [], instance: readonly VersionedEvidenceId[] = []): DeclaredEvidence<T> {
   const projection = projectionFor(route);
-  return declareEvidence(projection.producer, { id: projection.id, version: projection.version }, present(payload, route), {
+  const result = declareEvidence(projection.producer, { id: projection.id, version: projection.version }, present(payload, route), {
     factory: symbol,
     inputDigest: authorityDigest(authority),
     sourceDigests: sources.map(sourceDigest),
     convention: mintConventionReceipt(route, sources, instance),
   });
+  if (REVIEW_MEMBER_ROUTES.has(route)) {
+    if (sources.some(source => typeof source === "string")) throw new TypeError("Review member requires original sealed inputs, not digest operands");
+    REVIEW_MEMBER_INPUTS.set(result, Object.freeze([...sources] as DeclaredEvidence<unknown>[]));
+  }
+  return result;
 }
 
 function factory<I, R>(meta: Omit<EvidenceValueFactoryMeta, "dependency"> & { readonly dependency?: string }, body: (input: I, meta: EvidenceValueFactoryMeta) => R): EvidenceValueFactory<I, R> {
@@ -511,7 +539,10 @@ const unavailable = <T>(reason: string, dependency?: string): EvidenceAvailabili
 
 function fenReading<T>(route: string, compute: (fen: string) => T, options: { readonly shape?: EvidenceValueFactoryShape; readonly dependency?: string; readonly pending?: string } = {}): EvidenceValueFactory<{ readonly fen: string }, DeclaredEvidence<T>> {
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: options.shape ?? "computed", arms: [{ fen: FEN }], result: "single", ...(options.dependency === undefined ? {} : { dependency: options.dependency }), ...(options.pending === undefined ? {} : { pending: options.pending }) }, ({ fen }: { readonly fen: string }) => mint(route, symbol, compute(validFen(fen)), { fen }));
+  return factory({ route, symbol, shape: options.shape ?? "computed", arms: [{ fen: FEN }], result: "single", ...(options.dependency === undefined ? {} : { dependency: options.dependency }), ...(options.pending === undefined ? {} : { pending: options.pending }) }, ({ fen }: { readonly fen: string }) => {
+    const result = mint(route, symbol, compute(validFen(fen)), { fen });
+    LOCAL_READING_INVOCATIONS.set(result, Object.freeze({ kind: "fen", fen })); return result;
+  });
 }
 
 export const createRulesCastlingReadingRightsV1Evidence = fenReading("rules.castling.reading.rights@1", castlingRights);
@@ -827,9 +858,12 @@ export const TRANSITION_READING_FACTORIES = Object.freeze(Object.fromEntries(TRA
   const route = `rules.transition.reading.${leaf}@1`;
   const symbol = evidenceFactorySymbol(route);
   return [route, factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, moveUci: value("a UCI string", isText), afterFen: FEN }], result: "population" }, (input: EvidenceEdge) => {
-    validEdge({ beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen });
+    const edge = validEdge({ beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen });
     const reading = memo(`transitionReading|${edgeKey(input)}`, () => transitionReading(input.beforeFen, input.moveUci, input.afterFen));
-    return Object.freeze((reading?.observations ?? []).filter((observation) => transitionLeaf(observation) === leaf).map((observation) => mint(route, symbol, observation, { beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen })));
+    return Object.freeze((reading?.observations ?? []).filter((observation) => transitionLeaf(observation) === leaf).map((observation) => {
+      const result = mint(route, symbol, observation, { beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen });
+      LOCAL_READING_INVOCATIONS.set(result, Object.freeze({ kind: "edge", edge })); return result;
+    }));
   })];
 })) as Readonly<Record<`rules.transition.reading.${(typeof TRANSITION_READING_LEAVES)[number]}@1`, EvidenceValueFactory<EvidenceEdge, readonly DeclaredEvidence<TransitionObservationValue>[]>>>);
 
@@ -1496,6 +1530,20 @@ const MOMENT_KIND_SOURCES: Readonly<Record<string, string>> = Object.freeze({
   eval_pivot: "derived.review.eval_delta@2", mate_transition: "derived.review.mate_transition@2", last_level: "derived.story.last_level@1",
   endgame_entry: "rules.endgame.classification@1", shape_span: "theory.shapes.firing@1",
 });
+
+export const createDerivedStoryRankV3Evidence = (() => {
+  const route = "derived.story.rank@3", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ recordedReview: value("an original complete recorded Review moment source", candidate => {
+    try { readRecordedReviewMoments(candidate as RecordedReviewMomentSource); return true; } catch { return false; }
+  }) }], result: "single" }, ({ recordedReview }: { readonly recordedReview: RecordedReviewMomentSource }): DeclaredEvidence<{ readonly rank: readonly string[] }> => {
+    const computed = computeStoryRankReduction(recordedReview), projection = projectionFor(route), proof = computed.proof;
+    const authority = initiateEvidenceReduction(computed.authority);
+    const value = declareEvidence(projection.producer, { id: projection.id, version: projection.version }, computed.payload, {
+      factory: symbol, inputDigest: proof.inputDigest, sourceDigests: [], convention: proof.convention, reduction: { authority, ordinal: 0 },
+    });
+    publishSingleEvidenceReduction(authority, value); return value;
+  });
+})();
 
 export const createDerivedStoryRankV2Evidence = (() => {
   const route = "derived.story.rank@2";

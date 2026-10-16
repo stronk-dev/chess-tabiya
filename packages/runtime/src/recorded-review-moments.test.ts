@@ -4,7 +4,8 @@ import { evidenceValueReceipt } from "./evidence-contract.js";
 import * as routes from "./internal/evidence-value-routes.js";
 import { readLastLevelReductionResult } from "./internal/last-level-reduction-authority.js";
 import { assembleReviewMoments, orderedReviewEvidence } from "./internal/review-moment-assembly.js";
-import { collectRecordedReviewMoments, readRecordedReviewMoments } from "./recorded-review-moments.js";
+import { collectRecordedReviewMoments, readRecordedReviewMoments, readRecordedReviewMomentOperands, recordedReviewMomentSourceImage } from "./recorded-review-moments.js";
+import { readStoryRankReductionValue } from "./internal/story-rank-reduction-authority.js";
 import { collectRecordedReviewSourcePopulation, readRecordedReviewSourcePopulation, reviewPacketForRun } from "./review-evidence.js";
 import { reviewStoryMoments, rankStoryMoments } from "./story.js";
 import { recordedLastLevelFixture } from "./testing/recorded-last-level-fixture.js";
@@ -130,11 +131,16 @@ describe("actual recorded Review unrendered moment source", () => {
     run = fork(rewind(run, anchor, REVIEW_AT, undefined, main).run, anchor, { at: REVIEW_AT, label: "shared later observation" }).run; reply("g2g3", missing);
     const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined });
     const population = collectRecordedReviewSourcePopulation({ boundary: owner.resolve({ runId: run.id, branchId: main, throughNodeId: endpoint }), context: { engine: new Map(), shapes: [] } });
-    const data = readRecordedReviewMoments(collectRecordedReviewMoments({ population }));
+    const momentSource = collectRecordedReviewMoments({ population }), data = readRecordedReviewMoments(momentSource);
     const source = data.population.results.find(result => result.slot.adapterId === "review.source.pivotal.human_divergence@2" && result.slot.nodeId === anchor)!;
     const items = data.groups.find(group => group.nodeId === anchor)?.evidence.filter(item => item.projection.id === "derived.pivotal.human_divergence") ?? [];
     expect(items).toEqual(source.items); expect(items).toHaveLength(missing ? 0 : 2);
     expect(source.state.kind).toBe(missing ? "unavailable" : "available");
+    const rank = routes.invokeEvidenceValueRoute("derived.story.rank@3", { recordedReview: momentSource });
+    const occurrences = readStoryRankReductionValue(rank, momentSource).reduction.occurrences.filter(item => item.element === 7);
+    expect(occurrences).toHaveLength(missing ? 0 : 2);
+    expect(readRecordedReviewMomentOperands(momentSource).flat().filter(item => item.value.projection.id === "derived.pivotal.human_divergence").map(item => item.value)).toEqual(items);
+    expect(recordedReviewMomentSourceImage(momentSource).results.find(result => result.slot.adapterId === "review.source.pivotal.human_divergence@2" && result.slot.nodeId === anchor)!.state).toEqual(source.state);
     if (!missing) { expect(items[0]).not.toBe(items[1]); expect(data.groups.filter(group => group.nodeId === anchor)).toHaveLength(1); }
   });
 

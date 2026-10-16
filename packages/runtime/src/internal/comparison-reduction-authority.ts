@@ -10,8 +10,8 @@ import { conventionReceipt } from "../evidence-conventions.js";
 import type { RunEvidenceItem } from "../evidence-factories.js";
 import { sealOwnedComparisonReductionProof, evidenceReductionResultProof } from "./evidence-reduction-seal.js";
 
-import type { EvidenceReductionMintImage, EvidenceReductionReceipt, ReductionValueIdentity } from "../evidence-reduction-types.js";
-export interface ComparisonReductionProof extends EvidenceReductionMintImage {
+import type { EvidenceReductionItemsMintImage, EvidenceReductionReceipt, ReductionValueIdentity } from "../evidence-reduction-types.js";
+export interface ComparisonReductionProof extends EvidenceReductionItemsMintImage {
   readonly population: RecordedComparisonStructuralPopulation; readonly branchId: string; readonly plan: CompiledEvidenceExecutionPlan;
 }
 const proofs = new WeakSet<object>();
@@ -64,7 +64,7 @@ export function computeComparisonReduction(population: RecordedComparisonStructu
   const convention = conventionReceipt(source.refs, { kind: "reduction", operation: contract.operation, reductionDigest: `sha256:${evidenceDigest(receipt)}`,
     inputs: source.values.map(value => ({ projection: key(value.projection), valueDigest: `sha256:${evidenceDigest(identity(value))}` })) });
   const inputDigest = evidenceDigest({ operation: receipt.operation, planDigest: receipt.planDigest, sourceImageDigest: receipt.sourceImageDigest, occurrences: receipt.occurrences });
-  const proof: ComparisonReductionProof = Object.freeze({ population, branchId, plan, receipt, convention, inputDigest, outputs });
+  const proof: ComparisonReductionProof = Object.freeze({ resultKind: "items", population, branchId, plan, receipt, convention, inputDigest, outputs });
   proofs.add(proof);
   return Object.freeze({ proof, authority: sealOwnedComparisonReductionProof(proof, manifest => assertComparisonReductionProof(proof, manifest)), appearances });
 }

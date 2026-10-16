@@ -64,6 +64,16 @@ slots use the already validated captured image rather than replaying storage for
 That collector does not itself assemble/rank moments, request providers, expose a public
 authority facade or adopt a learner binding.
 
+Internal `derived.story.rank@3` now consumes only the original complete recorded moment source.
+Its single `{rank}` payload retains the current nine presentation bands, not chess significance.
+Every group/item is joined to its original source slot/item and actual ordered minted inputs;
+local FEN/edge invocations and genuine provider/recorded inputs supply concrete execution
+witnesses. Nested last-level retains the original result array, population, ordinal and proof.
+The complete source image includes all states and the executed last-level context even with
+empty/root-only groups. Rank always publishes one value, including `{rank:[]}`; it cannot expose
+child evaluations or patterns. No providers or child collectors run during ranking/readback.
+The current learner consumers and count-only renderer are not yet migrated.
+
 The internal `derived.story.last_level@2` operation now consumes that original complete population.
 It authenticates every row/state/result before checking whether an eligible imported result says
 the learner lost. Typed cp alone is converted from White to learner perspective; the latest

@@ -50,6 +50,8 @@ import { occurrenceFixture, occurrencePage } from "./testing/maia-occurrence-fix
 import { recordedInspectorAttachment, recordedInspectorSelection } from "./testing/recorded-inspector-fixture.js";
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
 import { recordedLastLevelFixture } from "./testing/recorded-last-level-fixture.js";
+import { collectRecordedReviewSourcePopulation } from "./review-evidence.js";
+import { collectRecordedReviewMoments } from "./recorded-review-moments.js";
 import { humanObservationRun, recordHumanObservation, splitCandidates } from "./testing/recorded-human-divergence-fixture.js";
 import { collectComparisonStructuralPopulation } from "./comparison-structural-population.js";
 import { recordedPivotalFixture } from "./testing/recorded-pivotal-fixture.js";
@@ -156,15 +158,25 @@ const RECEIPT = JSON.parse(read("planning/evidence-foundation-ux/evidence-value-
 };
 
 describe("value authority: static closure", () => {
+  it("keeps capability generation independent of the stale application singleton", () => {
+    const builder = FACTS.get("packages/runtime/src/capability/registry.ts")!;
+    expect(builder.valueImports.map(entry => entry.module)).toEqual(["@chess-tabiya/schema"]);
+    expect(builder.calls.has("buildCapabilityRegistry")).toBe(false);
+    expect(FACTS.get("packages/runtime/src/capability/current.ts")!.calls.has("buildCapabilityRegistry")).toBe(true);
+    expect(FACTS.get("apps/server/src/capability/contract.ts")!.valueImports.filter(entry => entry.names.includes("buildCapabilityRegistry"))).toEqual([
+      { module: "../../../../packages/runtime/src/capability/registry.js", names: ["buildCapabilityRegistry"] },
+    ]);
+  });
   it("restricts comparison proof/seal issuance to the exact operation and sole mint", () => {
     const callers = (name: string) => PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has(name)).sort();
-    for (const name of ["computeComparisonReduction", "computeLastLevelReduction", "initiateEvidenceReduction", "publishEvidenceReduction"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-factories.ts"]);
+    for (const name of ["computeComparisonReduction", "computeLastLevelReduction", "computeStoryRankReduction", "initiateEvidenceReduction", "publishEvidenceReduction", "publishSingleEvidenceReduction"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-factories.ts"]);
     expect(callers("sealOwnedComparisonReductionProof")).toEqual(["packages/runtime/src/internal/comparison-reduction-authority.ts"]);
     expect(callers("sealOwnedLastLevelReductionProof")).toEqual(["packages/runtime/src/internal/last-level-reduction-authority.ts"]);
+    expect(callers("sealOwnedStoryRankReductionProof")).toEqual(["packages/runtime/src/internal/story-rank-reduction-authority.ts"]);
     for (const name of ["joinEvidenceReductionValue", "evidenceReductionMintReceipt"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-contract.ts"]);
     const store = FACTS.get("packages/runtime/src/internal/evidence-reduction-seal.ts")!;
     expect(store.valueImports).toEqual([]); // Type-only imports cannot reintroduce catalogue bootstrap.
-    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/(?:comparison|last-level)-reduction-authority|evidence-reduction-seal|sealOwned(?:Comparison|LastLevel)ReductionProof|initiateEvidenceReduction/u);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/(?:comparison|last-level|story-rank)-reduction-authority|evidence-reduction-seal|sealOwned(?:Comparison|LastLevel|StoryRank)ReductionProof|initiateEvidenceReduction|publishSingleEvidenceReduction/u);
   });
   it("only evidence-factories.ts calls declareEvidence outside tests (criterion 5, §8.1)", () => {
     const callers = PRODUCTION_FILES.filter((path) => FACTS.get(path)!.calls.has("declareEvidence")).sort();
@@ -234,8 +246,9 @@ describe("value authority: registry equality", () => {
       expect(CAPABILITY_LIFECYCLE.find((candidate) => candidate.subjectId === row.subjectId)?.versions).toMatchObject([
         { version: { kind: "integer", value: 1 }, disposition: { kind: "deprecated", successor: { id: row.subjectId, version: { kind: "integer", value: 2 } } } },
         { version: { kind: "integer", value: 2 }, disposition: { kind: "active" } },
+        ...(row.subjectId === "derived.story.rank" ? [{ version: { kind: "integer", value: 3 }, disposition: { kind: "active" } }] : []),
       ]);
-      expect(PRIMARY_EVIDENCE_MANIFEST.projections.filter((candidate) => candidate.id === row.subjectId).map((candidate) => candidate.version)).toEqual([2]);
+      expect(PRIMARY_EVIDENCE_MANIFEST.projections.filter((candidate) => candidate.id === row.subjectId).map((candidate) => candidate.version)).toEqual(row.subjectId === "derived.story.rank" ? [2, 3] : [2]);
       expect(() => invoke(`${row.id.id}@1`, {})).toThrow(/Unknown evidence value route/u);
     }
     expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter((binding) => REVIEW_V1_ROUTES.includes(exact(binding.projection) as typeof REVIEW_V1_ROUTES[number]))).toEqual([]);
@@ -251,7 +264,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(309);
+    expect(ACTIVE).toHaveLength(310);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -330,7 +343,8 @@ describe("value authority: registry equality", () => {
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
     const sequences = Object.keys(RECORDED_SEQUENCE_HORIZONS).sort();
     expect(allExtra.filter(route => sequences.includes(route))).toEqual(sequences);
-    const extra = allExtra.filter(route => !localTactical.includes(route) && !sequences.includes(route));
+    expect(allExtra.filter(route => route === "derived.story.rank@3")).toEqual(["derived.story.rank@3"]);
+    const extra = allExtra.filter(route => !localTactical.includes(route) && !sequences.includes(route) && route !== "derived.story.rank@3");
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
@@ -956,6 +970,9 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const shift = (invoke("derived.review.eval_delta@2", { before: reviewBefore, after: reviewAfter }) as { readonly value: DeclaredEvidence<{ readonly before: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }>; readonly after: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }> }> }).value;
   const moment = { nodeId: mainPath[2]!.id, decisionNodeId: mainPath[1]!.id, evidenceNodeId: mainPath[2]!.id, stopNodeId: mainPath[2]!.id, entryNodeId: mainPath[1]!.id, ply: 2, san: null, fen: mainPath[2]!.fen, kinds: ["eval_pivot"], sentences: [], components: [], evidence: [shift], phase: "middlegame", evaluation: { before: shift.payload.before.payload.evaluation.payload.payload.score, after: shift.payload.after.payload.evaluation.payload.payload.score } };
   profiles.set("derived.story.rank@2", { valid: { moments: [moment] }, falsify: refused("derived.story.rank@2", { moments: [{ ...moment, kinds: ["phase_change"] }] }) });
+  const rankFixture = recordedLastLevelFixture("white", "*", "rank-authority-profile");
+  const recordedReview = collectRecordedReviewMoments({ population: collectRecordedReviewSourcePopulation({ boundary: rankFixture.boundary(), context: { engine: rankFixture.engine, shapes: [] } }) });
+  profiles.set("derived.story.rank@3", { valid: { recordedReview }, falsify: refused("derived.story.rank@3", { recordedReview: { ...recordedReview } }) });
   const rank = invoke("derived.story.rank@2", { moments: [moment] }) as DeclaredEvidence<{ rank: readonly string[] }>;
   const story = { side: "white", outcome: { kind: "unfinished" }, moments: [moment], rank: rank.payload.rank };
   profiles.set("derived.story.title@2", { valid: { story, rank }, falsify: refused("derived.story.title@2", { story: { ...story, rank: ["forged"] }, rank }) });

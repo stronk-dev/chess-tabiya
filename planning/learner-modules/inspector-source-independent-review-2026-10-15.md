@@ -1396,3 +1396,27 @@ The minor hardening note is implemented and independently confirmed: reuse the e
 own-data validator before reading population. Three symbol/nonenumerable-extra/accessor cases
 first fail for missing refusal, then require refusal before dispatch and zero accessor reads.
 This closes the bounded note, not an allegation of an escaped source-authority bypass.
+
+## 2026-10-16 — Internal rank/operand implementation, bounded independent review
+
+The same authorized independent reviewer inspected the actual source operand readers, group/item
+origins, complete source encoder, rank computation, single-publication seal and permanent tests.
+No blocking issue found. Original minted child inputs and retained FEN/edge/provider authority
+are used, not ancestry reconstructed from equal payloads. Complete original slots/states, rejected
+provider joins, shapes and the executed last-level proof survive empty/root-only moments. Concrete
+fixed witnesses match genuine compiler paths; nested last-level retains its original complete
+array/population/ordinal/location/proof. Fact-only rank does not launder child content.
+
+Runtime tests catch an implementation error before commit: a nested finite template is not an
+independently issued V2 root. The corrected owner compiles the genuine child root, compares the
+whole template image and authenticates the actual child plan digest. Review clears that repair.
+The two nonblocking review notes are implemented: explicitly altered nested-template control,
+and an existence assertion for every parameterized actual SQLite prefix. Prefixes are independent
+test cases under the unchanged normal deadline, rather than five complete journeys inside one case.
+
+D3882's pure-builder/application-singleton split is also inspected and cleared. The generator
+validates newly built declarations while normal application imports retain strict stored-output
+validation and the public barrel exports. Normal generation from the actual stale predecessor
+adds only rank@3, then changes zero on repeat. The reviewer ran no tests or acceptance actions;
+main runs the normal verification. This is not source qualification, new acceptance, current
+consumer/count-renderer/API/native adoption, a complete Review capability or release.

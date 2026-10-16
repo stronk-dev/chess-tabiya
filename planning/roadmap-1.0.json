@@ -1094,10 +1094,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement rank/opening/grade sources over the genuine complete recorded moment source. Resolve D3870 recorded-selection-telemetry.md's resource-order question and independent acceptance before schema/REST/stamp-only migration work; do not guess or bypass the existing claims. Internal complete twelve-adapter Review source, human-divergence, last-level reduction, boundary/result and comparison/V2/value/result/consumer-plan sources exist. Preserve complete captured data and authentic empty/root calculation authority; bind one final complete authority to RunService storage through observation/durable reads, never enqueue. Then adopt the entire current282-pair source/access/receiver/API/native image, preserve missing-human node folds and retire obsolete paths after real callers migrate. No legacy compatibility pipeline, filtered bindings, dropped detector family, widened grant/assistance/budget or premature qualification/milestone/release claim.",
+        "nextAction": "Implement opening/grade owners after the verified source-owned recorded rank operation. Resolve D3870 recorded-selection-telemetry.md resource ordering and independent acceptance before schema/REST/stamp-only migration work; do not guess or bypass claims. The complete twelve-adapter Review source, moment/operand/rank owners, human-divergence, last-level and comparison/V2 sources exist internally. Bind one final complete authority to RunService storage through observation/durable reads, never enqueue from captured-only preparation. Then adopt the entire current282-pair source/access/count-renderer/receiver/API/native image and retire obsolete paths after real callers migrate. No legacy-only pipeline, filtered bindings, dropped detector family, widened grant/assistance/budget or premature qualification/milestone/release claim.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "Accepted Review §4.5 now has a genuine internal recorded moment source over the complete twelve-source population. Current Story shares actual unrendered assembly and canonical evidence order. Exact groups preserve original occurrences, kinds, typed evaluation and parent/evidence/stop identities; complete source states and authentic last-level items/receipt/convention survive empty/root-only results.26 new runtime cases/1052 focused passes/30 files/types and bounded independent read-only review pass. Three closed-input controls first fail, then pass with the existing validator. Full normal make verify build passes:6598 software/410 files, seven performance/four files,257 content/26 files and all remaining gates.309 profiles/1015 capabilities/current bindings and semantic91 subjects/zero qualified unchanged. Rank/opening/grade owners, D3870 and complete282-pair current access/receiver/API/native migration remain. No final public facade, learner cutover, compatibility pipeline or release claim.",
+          "summary": "Accepted story.rank@1/derived.story.rank@3 now computes the current nine-band presentation order over the genuine complete recorded moment source. Original group/slot/item/minted-input authority supplies concrete local/provider/recorded witnesses; nested last-level retains its genuine result/population/ordinal/proof, including empty/root-only context. Rank-only single publication is fact-only/convention/reported and exposes no child content.18 rank/16 operand cases and actual SQLite/human controls join1095 focused passes/32 files/types and bounded independent read-only review. Full normal make verify build passes:6641 software/412 files, seven performance/four files,257 content/26 files and all remaining gates. D3882 separates pure capability generation from strict application initialization;310 profiles/1016 capabilities retain all prior meanings/current bindings, semantic91 subjects/zero qualified unchanged. Opening/grade and complete282-pair access/count-renderer/receiver/API/native migration remain. No public facade, learner cutover, compatibility-only pipeline or release claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1152,6 +1152,9 @@
             "packages/runtime/src/recorded-review-source-population.test.ts",
             "packages/runtime/src/recorded-review-moments.ts",
             "packages/runtime/src/recorded-review-moments.test.ts",
+            "packages/runtime/src/recorded-review-operands.test.ts",
+            "packages/runtime/src/story-rank-reduction.test.ts",
+            "packages/runtime/src/internal/story-rank-reduction-authority.ts",
             "packages/runtime/src/internal/review-moment-assembly.ts",
             "packages/runtime/src/review-evidence.ts",
             "apps/server/src/recorded-review-boundary.test.ts",
@@ -1305,7 +1308,7 @@
             {
 "kind": "work_state",
               "id": "D3841",
-              "digest": "sha256:910b84aa09c5695aeff33d897a7e342cd2142d3e9d736affa7cc1c5ee416e381"
+              "digest": "sha256:ed3ded65d7de83c0da9610c434c1acb7114604de8ad4183390114e53f6f0b210"
             },
             {
               "kind": "work_state",
@@ -1545,7 +1548,7 @@
             {
 "kind": "work_state",
               "id": "D3847",
-              "digest": "sha256:ceb4440f861f2d2142a224cf670e12871a86fb6f2666af1fb5673cf1af10b656"
+              "digest": "sha256:d481d0ec3f161e2907500aec9d6a0afe8fe7a053efc91aefefedfe9915bf8009"
             },
             {
               "kind": "work_state",

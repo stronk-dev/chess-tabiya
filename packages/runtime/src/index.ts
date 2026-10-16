@@ -1202,9 +1202,6 @@ export * from "./style-atoms.js";
 export * from "./skills-contract.js";
 export * from "./concept-registry.js";
 export {
-  CAPABILITY_DECLARATIONS,
-  CAPABILITY_HISTORIES,
-  CAPABILITY_REGISTRY,
   CLAIM_BINDING_CAPABILITY_ID,
   PACK_MEANING_CONSUMERS,
   CapabilityRegistryError,
@@ -1224,6 +1221,7 @@ export {
   type SemanticDisposition,
   type WithdrawalRefusal,
 } from "./capability/registry.js";
+export { CAPABILITY_DECLARATIONS, CAPABILITY_HISTORIES, CAPABILITY_REGISTRY } from "./capability/current.js";
 export { CAPABILITY_LIFECYCLE } from "./capability/lifecycle.js";
 export {
   cycleOrder,

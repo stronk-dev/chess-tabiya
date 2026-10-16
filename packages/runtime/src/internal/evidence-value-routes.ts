@@ -10,7 +10,9 @@
  * from every barrel and package export.
  */
 import { comparisonStructuralAppearances, readComparisonStructuralPopulation } from "../comparison-structural-population.js";
-import { COMPARISON_REDUCTION_CONTRACT, LAST_LEVEL_REDUCTION_CONTRACT, evidenceReductionContract } from "../evidence-reduction-contract.js";
+import { COMPARISON_REDUCTION_CONTRACT, LAST_LEVEL_REDUCTION_CONTRACT, STORY_RANK_REDUCTION_CONTRACT, evidenceReductionContract } from "../evidence-reduction-contract.js";
+import { readRecordedReviewMoments } from "../recorded-review-moments.js";
+import { rankStoryMoments } from "../story.js";
 import { readRecordedLastLevelPopulation } from "../review-evidence.js";
 import { lastRecordedAvailableLevel } from "./last-level-reduction-authority.js";
 import type { VersionedEvidenceId } from "../evidence-contract.js";
@@ -24,6 +26,7 @@ import {
   TRANSITION_EVENT_FACTORIES,
   TRANSITION_READING_FACTORIES,
   admitInputValue,
+  evidenceFactorySymbol,
   readStructuralPopulationInvocation,
   assertRecordedPositionInvocation,
   assertRecordedReviewResultInvocation,
@@ -34,6 +37,8 @@ import {
   readEndgamePopulationInvocation,
   readShapeFiringInvocation,
   readReviewTransitionResultInvocation,
+  readReviewMemberInputs,
+  readLocalReadingInvocation,
   createAuthoredStructuralConditionInputV1Evidence,
   createDerivedExplorerRepertoireFrontierV1Evidence,
   createDerivedExplorerPositionFrequencyV1Evidence,
@@ -82,6 +87,7 @@ import {
   createDerivedStoryLastLevelV1Evidence,
   createDerivedStoryLastLevelV2Evidence,
   createDerivedStoryRankV2Evidence,
+  createDerivedStoryRankV3Evidence,
   createDerivedStoryTitleV2Evidence,
   createDerivedStructuralPredicateResultV1Evidence,
   createDerivedTacticAttractionObservedV1Evidence,
@@ -222,7 +228,7 @@ import {
 } from "../evidence-factories.js";
 
 // Read-only source membership, never a public registration or second factory dispatcher.
-export { readStructuralPopulationInvocation, assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation };
+export { readStructuralPopulationInvocation, assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, readReviewMemberInputs, readLocalReadingInvocation, evidenceFactorySymbol };
 
 /** The literal route table: exact projection ref → its one production factory. */
 const EVIDENCE_VALUE_ROUTES = Object.freeze({
@@ -286,6 +292,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "derived.story.last_level@1": createDerivedStoryLastLevelV1Evidence,
   "derived.story.last_level@2": createDerivedStoryLastLevelV2Evidence,
   "derived.story.rank@2": createDerivedStoryRankV2Evidence,
+  "derived.story.rank@3": createDerivedStoryRankV3Evidence,
   "derived.story.title@2": createDerivedStoryTitleV2Evidence,
   "derived.structural.predicate_result@1": createDerivedStructuralPredicateResultV1Evidence,
   "derived.tactic.attraction_observed@1": createDerivedTacticAttractionObservedV1Evidence,
@@ -494,9 +501,18 @@ export function inspectComparisonReductionBinding() {
 
 const lastLevelReductionBinding = Object.freeze({ identity: LAST_LEVEL_REDUCTION_CONTRACT, factory: createDerivedStoryLastLevelV2Evidence,
   reader: readRecordedLastLevelPopulation, computation: lastRecordedAvailableLevel });
+const storyRankReductionBinding = Object.freeze({ identity: STORY_RANK_REDUCTION_CONTRACT, factory: createDerivedStoryRankV3Evidence,
+  reader: readRecordedReviewMoments, computation: rankStoryMoments });
 export function inspectEvidenceReductionBinding(operation: VersionedEvidenceId) {
   const contract = evidenceReductionContract(operation);
   if (contract === COMPARISON_REDUCTION_CONTRACT) return inspectComparisonReductionBinding();
+  if (contract === STORY_RANK_REDUCTION_CONTRACT) {
+    const factory = EVIDENCE_VALUE_ROUTES["derived.story.rank@3"];
+    if (factory !== createDerivedStoryRankV3Evidence || factory.name !== contract.factory || factory.meta.route !== "derived.story.rank@3"
+      || factory.meta.shape !== "derived" || factory.meta.result !== "single" || storyRankReductionBinding.reader !== readRecordedReviewMoments
+      || storyRankReductionBinding.computation !== rankStoryMoments) throw new TypeError("Story rank lacks its exact single factory/source/computation binding");
+    return storyRankReductionBinding;
+  }
   const factory = EVIDENCE_VALUE_ROUTES["derived.story.last_level@2"];
   if (factory !== createDerivedStoryLastLevelV2Evidence || factory.name !== contract.factory || factory.meta.route !== "derived.story.last_level@2"
     || factory.meta.shape !== "derived" || factory.meta.result !== "items" || lastLevelReductionBinding.reader !== readRecordedLastLevelPopulation

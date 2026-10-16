@@ -5,6 +5,16 @@ execution contract with the coordinated current-source/module image. Earlier una
 for that reviewed clause are history; parent obligations and actual implementation remain.
 Scope and decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+**2026-10-16 internal rank execution checkpoint — [[D3845]], [[D3847]]:** §1a now installs the
+exact rank binding and finite eleven-element template. Concrete occurrences authenticate original
+fixed input tuples/addresses/source leaves or the actual nested last-level operation. A nested
+template is compared with its genuine separately compiled child root, not treated as an issued
+root handle itself. Empty realization keeps the complete captured source image and actual
+last-level context. No provider work, empty fixed-path fiction, caller moment array or current
+consumer/whole-manifest readiness is introduced.1,095 focused cases/32 files/types and full
+normal `make verify build` pass:6,641 software/412 files, seven performance/four files,257
+content/26 files and all remaining gates. Independent bounded code/test review finds no blocker.
+
 **2026-10-16 comparison execution checkpoint:** V2 now has genuine compiler-issued finite
 templates/compositions and complete consumer-plan compilation for the installed exact comparison
 operation. Fixed-only subtrees wrap the original fixed compiler. Concrete position/family

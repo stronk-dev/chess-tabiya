@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:910b84aa09c5695aeff33d897a7e342cd2142d3e9d736affa7cc1c5ee416e381",
+      "sourceDigest": "sha256:ed3ded65d7de83c0da9610c434c1acb7114604de8ad4183390114e53f6f0b210",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32021,7 +32021,7 @@
       "id": "D3845",
       "state": "doing",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:402d2771abb702bfa215dc30346fd81a11366ff35ecde64f5027cfa677a7b7e4",
+      "sourceDigest": "sha256:b17d08d0570727e830c2a8120b706755d1fa3f69e33ef4e590a12a514f4d9f31",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32039,7 +32039,7 @@
       "id": "D3847",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:ceb4440f861f2d2142a224cf670e12871a86fb6f2666af1fb5673cf1af10b656",
+      "sourceDigest": "sha256:d481d0ec3f161e2907500aec9d6a0afe8fe7a053efc91aefefedfe9915bf8009",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32348,6 +32348,15 @@
       "sourceDigest": "sha256:fe8ebb31beb58c3d0107c6b27bf3b8743e80bae7881de43768df67bf1d9f8a7b",
       "uxItems": [],
       "evidence": "packages/runtime/src/recorded-human-divergence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3882",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:98cf073ff50e95fbccbbd2969afbd23b1550f0d477318aaf56489f7dc019bca0",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
       "evidenceKind": "path"
     }
   ]

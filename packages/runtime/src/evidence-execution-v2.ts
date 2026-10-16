@@ -7,7 +7,7 @@ import { inspectEvidenceReductionBinding } from "./internal/evidence-value-route
 export type CompiledEvidenceExecutionPlan =
   | Readonly<{ kind: "fixed"; execution: CompiledProjectionExecution }>
   | Readonly<{ kind: "composition"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; members: readonly Readonly<{ member: number; inputs: readonly CompiledEvidenceExecutionPlan[] }>[]; worstCaseLatency: LatencyMode }>
-  | Readonly<{ kind: "reduction"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; operation: VersionedEvidenceId; sourceOwner: "RecordedComparisonStructuralPopulation" | "RecordedLastLevelPopulation"; sourceUse: "captured_only"; elements: readonly Readonly<{ projection: VersionedEvidenceId; execution: CompiledEvidenceExecutionPlan }>[]; worstCaseLatency: LatencyMode }>;
+  | Readonly<{ kind: "reduction"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; operation: VersionedEvidenceId; sourceOwner: "RecordedComparisonStructuralPopulation" | "RecordedLastLevelPopulation" | "RecordedReviewMomentSource"; sourceUse: "captured_only"; elements: readonly Readonly<{ projection: VersionedEvidenceId; execution: CompiledEvidenceExecutionPlan }>[]; worstCaseLatency: LatencyMode }>;
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
 const ref = (value: VersionedEvidenceId) => Object.freeze({ id: value.id, version: value.version });
 const order: readonly LatencyMode[] = ["sync", "interactive", "background", "offline"];

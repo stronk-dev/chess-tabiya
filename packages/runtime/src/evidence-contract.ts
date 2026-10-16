@@ -670,7 +670,8 @@ export function identitySealedEvidenceWithoutValueReceipt<T>(producer: Versioned
  * per record ([[D3300]]).
  */
 function isReductionProjection(projection: VersionedEvidenceId): boolean {
-  return projection.version === 2 && (projection.id === "derived.compare.structure_delta" || projection.id === "derived.story.last_level");
+  return projection.version === 2 && (projection.id === "derived.compare.structure_delta" || projection.id === "derived.story.last_level")
+    || projection.id === "derived.story.rank" && projection.version === 3;
 }
 
 export function isDeclaredEvidence(value: unknown): value is DeclaredEvidence<unknown> {
