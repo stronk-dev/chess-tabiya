@@ -3,6 +3,7 @@ import { STRUCTURAL_FEATURE_KINDS, TRANSITION_FEATURE_KINDS } from "@chess-tabiy
 
 import { CORPUS_RESULT_ABSTENTION_REASONS } from "./corpus-result.js";
 import { compileEvidenceManifest } from "./evidence-contract.js";
+import { COMPARISON_REDUCTION_CONTRACT } from "./evidence-reduction-contract.js";
 import type {
   AdapterDeclaration,
   BindingSourceAbsence,
@@ -110,6 +111,8 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
     ...(options.derivation === undefined ? {} : {
       derivation: options.derivation.inputs !== undefined
         ? Object.freeze({ inputs: Object.freeze(options.derivation.inputs) })
+        : options.derivation.reduction !== undefined
+        ? Object.freeze({ reduction: Object.freeze({ operation: options.derivation.reduction.operation, elements: Object.freeze(options.derivation.reduction.elements) }) })
         : Object.freeze({ anyOf: Object.freeze(options.derivation.anyOf.map((member) => Object.freeze(member))) }),
     }),
     limitations: Object.freeze(options.limitations ?? []),
@@ -123,6 +126,7 @@ function projection(producerId: string, id: string, plane: EvidencePlane, option
  * replaces the narrative run.record.move@1 source with the exact run.record.edge@1 source.
  */
 function recordedPathSuccessor(v1: ProjectionDeclaration): ProjectionDeclaration {
+  if (v1.derivation?.reduction !== undefined) throw new TypeError("Recorded fixed-path successors cannot rewrite a reduction");
   if (v1.version !== 1) throw new TypeError(`${refKey(v1)} is not a v1 recorded-path predecessor`);
   const move = refKey(ref("run.record.move"));
   const swap = (values: readonly VersionedEvidenceId[]): readonly VersionedEvidenceId[] => Object.freeze(values.map((value) => refKey(value) === move ? ref("run.record.edge") : value));
@@ -1263,6 +1267,11 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("derived.compare_narrative", "derived", "packages/runtime/src/compare-strips.ts:comparisonNarrative", "local", "sync", [
     projection("derived.compare_narrative", "derived.compare.engine_trajectory", "derived", { payloadType: "ComparisonEvidenceEntry", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["nodeId", "plyOffset", "evidenceRefs", "kind", "source", "score"], answerContent: ["evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("live.stockfish.eval")] }, limitations: ["Recorded run-relative point; provider-only fields omitted and no best-move claim retained."] }),
     projection("derived.compare_narrative", "derived.compare.structure_delta", "derived", { payloadType: "StructuralObservationChange", grounding: "declared_convention", exactness: "convention", semantics: "A structural observation newly present on one branch after the fork. Its inputs include the named-structure catalogue convention, so the delta is convention-grounded as a whole.", operands: ["observation"], forms: ["sentence", "list", "panel"], derivation: { inputs: STRUCTURAL_READER_WITNESSES.map((kind) => (kind === "named_structure" ? ref2 : ref)(`rules.structural.reading.${kind}`)) } }),
+    projection("derived.compare_narrative", "derived.compare.structure_delta", "derived", { version: 2, payloadType: "ScopedStructuralObservationChange", grounding: "declared_convention", exactness: "convention", confidence: "not_applicable",
+      semantics: "comparison-structure-appearance@1: new observations on the requested complete granted column, excluding post-fork identities shared across both complete spans. Immediate-predecessor comparison preserves reappearance. Convention-selected differences, not importance, safety, a grade or a recommendation.",
+      operands: ["observation", "namedStructure"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] },
+      derivation: { reduction: { operation: COMPARISON_REDUCTION_CONTRACT.operation, elements: COMPARISON_REDUCTION_CONTRACT.elements } },
+      disposition: { kind: "experimental", reason: "Accepted F2 §2.3i source-only successor. Complete current source/renderer/module adoption remains separately gated; not a partial learner cutover." } }),
     projection("derived.compare_narrative", "derived.compare.piece_route", "derived", { payloadType: "PieceRoute", grounding: "recorded_run", operands: ["pieceId", "squares"], answerContent: ["fact", "move"], forms: ["list", "panel"], derivation: { inputs: [ref("run.record.move")] }, limitations: ["Route restates recorded moves after the fork; it is not a plan, threat or recommendation."] }),
     projection("derived.compare_narrative", "derived.compare.piece_route", "derived", { version: 2, payloadType: "PieceRoute", grounding: "recorded_run", exactness: "exact", confidence: "not_applicable", operands: ["pieceId", "squares"], answerContent: ["fact", "move"], forms: ["list", "panel"], derivation: { inputs: [ref("run.record.comparison_path")] },
       limitations: ["Only physical recorded-piece routes from the admitted complete path; no plan, threat or recommendation."],
@@ -1638,6 +1647,7 @@ export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = 
   const source = producerByProjection.get(refKey(projectionRef));
   const output = source?.outputs.find((candidate) => refKey(candidate) === refKey(projectionRef));
   if (output === undefined) throw new TypeError(`Semantic event catalogue names missing projection ${refKey(projectionRef)}`);
+  if (output.derivation?.reduction !== undefined) throw new TypeError("Semantic events cannot use collection reductions");
   return Object.freeze({
     projection: projectionRef,
     ...(output.derivation === undefined ? {}

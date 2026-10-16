@@ -1,9 +1,13 @@
 /** Disposable contract instrument for D3391/D3392; not production confidence authority. */
 import type { CompiledEvidenceManifest, ProjectionDeclaration, VersionedEvidenceId } from "../../packages/runtime/src/evidence-contract.js";
+import { assertEvidenceReductionDeclaration } from "../../packages/runtime/src/evidence-reduction-contract.js";
 
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
-const members = (projection: ProjectionDeclaration): readonly (readonly VersionedEvidenceId[])[] => projection.derivation === undefined
-  ? [] : projection.derivation.inputs === undefined ? projection.derivation.anyOf! : [projection.derivation.inputs];
+const members = (projection: ProjectionDeclaration): readonly (readonly VersionedEvidenceId[])[] => {
+  // Installed reduction has its own exact confidence rule, not member inheritance.
+  if (projection.derivation?.reduction !== undefined) { assertEvidenceReductionDeclaration(projection); return []; }
+  return projection.derivation === undefined ? [] : projection.derivation.inputs === undefined ? projection.derivation.anyOf : [projection.derivation.inputs];
+};
 
 /** Models only the two literal inheritance clauses; mixed/exact-only clauses are unresolved. */
 export function confidenceCensus(manifest: Pick<CompiledEvidenceManifest, "projections">) {

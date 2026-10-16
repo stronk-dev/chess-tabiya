@@ -131,6 +131,7 @@ export function directProjectionConventions(route: string): readonly ConventionR
 export function declaredDerivationMembers(projection: ProjectionDeclaration): readonly string[] {
   const derivation = projection.derivation;
   if (derivation === undefined) return [];
+  if (derivation.reduction !== undefined) throw new TypeError("A reduction has no literal convention member; use its authenticated reduction receipt");
   const members = derivation.inputs !== undefined ? [derivation.inputs] : derivation.anyOf ?? [];
   return members.map((member) => [...new Set(member.map(projectionKey))].sort().join("+"));
 }

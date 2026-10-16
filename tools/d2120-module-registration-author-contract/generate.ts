@@ -98,6 +98,7 @@ const occurrenceViewFor = (sourceId: string, subjectKind: string): string => {
   return view;
 };
 const derivationFor = (projection: (typeof PRIMARY_EVIDENCE_MANIFEST.projections)[number], subjectKind: string) => {
+  if (projection.derivation?.reduction !== undefined) throw new TypeError("This historical fixed-member author instrument does not support collection reductions");
   const join = { subjectKind, rule: subjectKind === "branch_pair" ? "declared_branch_pair" : subjectKind === "run_prefix" ? "same_frozen_prefix" : subjectKind === "position" ? "same_position" : "same_edge_context" };
   if (projection.derivation?.inputs !== undefined) return { kind: "all", inputs: projection.derivation.inputs, join };
   if (projection.derivation?.anyOf !== undefined) return { kind: "any", alternatives: projection.derivation.anyOf, join };

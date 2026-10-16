@@ -1237,3 +1237,30 @@ identity and original family/item addresses. Tests are inspected, not rerun. The
 structural computations and prove reconstruction/selection fidelity, not independent detector
 correctness. Repeated full-event hashing remains for normal performance verification. No reduction,
 qualification or consumer-delivery completion is implied.
+
+### Actual comparison reduction/V2 boundary — implementation return and re-review, 2026-10-16
+
+The authorized independent reviewer examines the actual new source-only factory/route, finite
+V2 planner/consumer compiler, complete concrete occurrence image, atomic value/convention/result
+seals and core admission, not only the declaration. Bootstrap must split semantic manifest
+validation from live callable readiness: the pure closed table proves the former; V2 lazily
+inspects the actual centrally captured factory/reader/computation identities before plan issuance.
+The low-level seal store has no runtime imports and its types are genuinely neutral. Operation
+proofs and value/result handles are privately issued; copied objects and arbitrary structural
+validators cannot initiate a reduction. Root validation uses retained raw receipts, never its
+own recursive getter; children retain ordinary source admission.
+
+First review returns two concrete gaps: V2 parents with reduction descendants accepted empty,
+crossed or duplicate literal members (D3874), and evidenceForConsumer admitted a genuine value
+under a changed same-ref consumer manifest without joining its actual plan (D3876). Re-review
+clears both: the compilers share strict member validation before traversal, with direct negatives;
+consumer admission calls the operation's retained validator, compiles a genuine V2 plan for the
+actual supplied manifest and compares the receipt's exact planDigest. A genuine-value/changed-
+source-implementation control exercises that seam. D3875's first-gate static oracle-closure
+failure is fixed with neutral types, preserving the original complete scanner, not skipping
+type imports. Source/factory/computation identities are captured at central initialization.
+
+No remaining blocker is found in these bounded repairs. Tests are inspected, not rerun by the
+reviewer. This clears neither full normal verification nor learner adoption, the other three
+operations, source qualification or parent RFC/milestone completion. Full gates remain the
+implementer's obligation and are recorded separately in the append-only log.

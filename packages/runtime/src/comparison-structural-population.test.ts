@@ -19,6 +19,7 @@ import { mirrorSemanticFen, mirrorSemanticUci } from "./semantic-validation.js";
 import { structuralReading, observationIdentity, type StructuralObservation } from "./structure.js";
 import { recordedComparisonFixture, RECORDED_COMPARISON_AT as at } from "./testing/recorded-comparison-fixture.js";
 import type { DrillRun } from "./types.js";
+import { readComparisonReductionResult } from "./internal/comparison-reduction-authority.js";
 
 const collect = (comparison: RecordedComparisonSource) => collectComparisonStructuralPopulation({ comparison });
 const oldView = (items: ReturnType<typeof comparisonStructuralAppearances>) => items.map(item => ({ nodeId: item.nodeId, plyOffset: item.plyOffset, observation: item.payload.observation }));
@@ -139,6 +140,9 @@ describe("complete owned structural comparison populations", () => {
   it.each([false, true])("retains actual catalogue id/name alongside the closed legacy named view, black=%s", black => {
     const value = fixture(["d2d4"], [], black, "4k3/8/8/8/8/8/3P4/4K3 w - - 0 1"), population = collect(value.comparison), actual = comparisonStructuralAppearances(population, value.main);
     const named = actual.filter(item => item.payload.observation.kind === "named_structure"); expect(named.length).toBeGreaterThan(0);
+    const minted = invokeEvidenceValueRoute("derived.compare.structure_delta@2", { population, branchId: value.main });
+    readComparisonReductionResult(minted, population, value.main); // Authenticate the complete array before flattening.
+    expect(minted.map(item => item.evidence.payload)).toEqual(actual.map(item => item.payload));
     for (const item of named) {
       const row = readComparisonStructuralPopulation(population).columns[0].nodes.find(row => row.pathIndex === item.occurrence.pathIndex)!, source = row.families[item.occurrence.family]!.items[item.occurrence.item]!.payload as { id: string; name: string; squares: readonly string[]; provenanceNote: string };
       expect(item.payload.namedStructure).toEqual({ id: source.id, name: source.name });

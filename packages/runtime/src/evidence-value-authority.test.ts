@@ -49,6 +49,7 @@ import { HINT_FAMILY_POSITIVES, sealedHintLine } from "./testing/hint-fixture.js
 import { occurrenceFixture, occurrencePage } from "./testing/maia-occurrence-fixture.js";
 import { recordedInspectorAttachment, recordedInspectorSelection } from "./testing/recorded-inspector-fixture.js";
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
+import { collectComparisonStructuralPopulation } from "./comparison-structural-population.js";
 import { recordedPivotalFixture } from "./testing/recorded-pivotal-fixture.js";
 import { createRecordedPivotalSource } from "./pivotal.js";
 import { createRecordedSequenceWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
@@ -153,6 +154,15 @@ const RECEIPT = JSON.parse(read("planning/evidence-foundation-ux/evidence-value-
 };
 
 describe("value authority: static closure", () => {
+  it("restricts comparison proof/seal issuance to the exact operation and sole mint", () => {
+    const callers = (name: string) => PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has(name)).sort();
+    for (const name of ["computeComparisonReduction", "initiateComparisonReduction", "publishComparisonReduction"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-factories.ts"]);
+    expect(callers("sealOwnedComparisonReductionProof")).toEqual(["packages/runtime/src/internal/comparison-reduction-authority.ts"]);
+    for (const name of ["joinComparisonReductionValue", "comparisonReductionMintReceipt"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-contract.ts"]);
+    const store = FACTS.get("packages/runtime/src/internal/comparison-reduction-seal.ts")!;
+    expect(store.valueImports).toEqual([]); // Type-only imports cannot reintroduce catalogue bootstrap.
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/comparison-reduction-(?:authority|seal)|sealOwnedComparisonReductionProof|initiateComparisonReduction/u);
+  });
   it("only evidence-factories.ts calls declareEvidence outside tests (criterion 5, §8.1)", () => {
     const callers = PRODUCTION_FILES.filter((path) => FACTS.get(path)!.calls.has("declareEvidence")).sort();
     expect(callers).toEqual(["packages/runtime/src/evidence-factories.ts"]);
@@ -238,7 +248,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(306);
+    expect(ACTIVE).toHaveLength(307);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -313,7 +323,7 @@ describe("value authority: registry equality", () => {
     const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
     expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
     const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
-    const localTactical = ["derived.compare.piece_route@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
+    const localTactical = ["derived.compare.piece_route@2", "derived.compare.structure_delta@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
     const sequences = Object.keys(RECORDED_SEQUENCE_HORIZONS).sort();
     expect(allExtra.filter(route => sequences.includes(route))).toEqual(sequences);
@@ -1045,6 +1055,8 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     profiles.set(route, { valid: { window }, falsify: refused(route, { window: { ...window } }) });
   }
   const recordedComparison = recordedComparisonFixture();
+  const structuralPopulation = collectComparisonStructuralPopulation({ comparison: recordedComparison.comparison });
+  profiles.set("derived.compare.structure_delta@2", { valid: { population: structuralPopulation, branchId: recordedComparison.main }, falsify: refused("derived.compare.structure_delta@2", { population: { ...structuralPopulation }, branchId: recordedComparison.main }) });
   const comparisonInput = { comparison: recordedComparison.comparison, branchId: recordedComparison.main };
   const comparisonPath = invokeEvidenceValueRoute("run.record.comparison_path@1", comparisonInput);
   profiles.set("run.record.comparison_path@1", { valid: comparisonInput, falsify: refused("run.record.comparison_path@1", { ...comparisonInput, comparison: { ...recordedComparison.comparison } }) });

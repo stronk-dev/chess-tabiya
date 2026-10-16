@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:38a74144498e434b372a768fa8ce852db7b5715cefee86ad801a97cd90201696",
+    "roadmap": "sha256:5436d0e89a570f59b70cc8caa8c4d08cea891f27f300967cb88be42c4f28db4f",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:78db194735f0ece6daa3a4c02817165505912866c4966829f0631d9b11d006c0",
-    "rfcRegister": "sha256:5b8f04a615e9fc3fbe27cb34d6470de4aaf21f25bda207402410549840b35775",
+    "workState": "sha256:6ac253a2a21eeebb7713606c7da680ddee68bb763d3e0244493cb3867dc11adc",
+    "rfcRegister": "sha256:bef4a474494c72354a37ed6441daefd318a1ec8a307c6e53879f226b74c74353",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 38,
       "blocked": 1084,
-      "done": 1711,
+      "done": 1715,
       "refused": 162
     },
     "workItems": {
@@ -420,7 +420,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:1c23fc7e3fea3b48790e9ed234bcbbc63fb864b6cc955830f22c00e053a5da34"
+            "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
           },
           {
             "kind": "work_state",
@@ -476,10 +476,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete the accepted reduction grammar/mint/authenticated result authority and V2 templates/concrete-witness/admission path; implement remaining Review boundary/last-level/rank/opening/grade source owners and D3870 canonical empty-telemetry/REST/resource/stamp-only migration follow-up through independent review. The complete structural comparison population/encoder now has34 new cases/761 focused passes, types,18 guard-removal failures and independent implementation review without blocker; full normal make verify build passes6415 software/402 files, seven isolated performance/257 content and all remaining gates. Then adopt the entire current282-pair Compare/Inspector/Hint/packet image through actual access/receiver/API/native journeys. Preserve all detector families, exact grants/full heads/availability and D1422 ladder/budgets. Migrate actual callers then retire obsolete paths; no compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
+      "nextAction": "Implement the remaining accepted Review boundary/last-level/rank/opening/grade source owners and independently reviewed D3870 canonical empty-telemetry/REST/resource/stamp-only migration follow-up. The real internal structural comparison reduction/V2/value/result/consumer-plan authority is implemented, independently re-reviewed and verified. Then adopt the entire current282-pair Compare/Inspector/Hint/packet image through actual access/receiver/API/native journeys. Preserve all detector families, full grants/heads/availability and D1422 ladder/budgets; migrate actual callers then retire obsolete paths, no compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Accepted F2 §§2.3d/i complete structural comparison population/reader/encoder now retains both full grants, fork-inclusive original path indices/positions and all17 ordered exact factory populations, including authentic empty arrays/applied conventions.34 new cases/761 focused passes and workspace types retain unchanged historical value receipts, genuine changed-head position refusal, equal logical scopes, original family/item ordinals, named catalogue identity, stable legacy ordering/identity, whole-peer suppression and recurrence. Explicit temporary FEN/input/head guard removal produces18 expected failures; restored761 pass. Independent read-only approach/implementation reviews find no blocker; detector arithmetic is shared, not independently qualified.1012 declarations/306 factory profiles and semantic91 subjects/zero qualified/343 prior passing cases/53 population/eight external outcomes unchanged; core/event/current learner bindings unchanged. Full normal make verify build passes6415 software/402 files, seven isolated performance/257 content and all remaining gates. Reduction grammar/mint/result arrays/V2 execution/admission, remaining Review/last-level/rank/opening/grade source owners, D3870 and complete current282-pair consumer/access/API/native cutover remain. No compatibility, parent discharge, qualification/capability/milestone/browser/remote CI/push/release claim.",
+        "summary": "Accepted source-only compare.structure_delta@1/derived.compare.structure_delta@2 now has its real sole factory, genuine18-template V2 plan, complete concrete source occurrences, acyclic value/convention authority and authenticated original empty/nonempty results. Consumer admission joins its actual supplied manifest's genuine V2 plan; old fixed images remain strict.17 new reduction cases plus AST/consumer controls and both-color named outputs give842 focused passes/21 files/types. Independent re-review clears D3874-D3876; D3877 closes the exact convention inventory/fast-gate/queue-route repair. Frozen software6434/403 files and seven performance pass; remaining normal governance/content257/build gates pass after the tracker-only correction. Failed whole commands remain logged, not relabelled successful.314 projections/307 factory profiles/1013 capabilities preserve prior1012 declarations, pack bytes and semantic91 subjects/zero qualified/343 passing prior cases/53 population/eight external outcomes. No learner binding or whole milestone/qualification/release claim. Review/last-level/rank/opening/grade owners, D3870 and entire282-pair access/receiver/API/native delivery remain.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -527,6 +527,12 @@
           "packages/runtime/src/recorded-semantic-window.test.ts",
           "packages/runtime/src/comparison-structural-population.ts",
           "packages/runtime/src/comparison-structural-population.test.ts",
+          "packages/runtime/src/comparison-reduction.test.ts",
+          "packages/runtime/src/evidence-execution-v2.ts",
+          "packages/runtime/src/evidence-reduction-contract.ts",
+          "packages/runtime/src/evidence-reduction-types.ts",
+          "packages/runtime/src/internal/comparison-reduction-authority.ts",
+          "packages/runtime/src/internal/comparison-reduction-seal.ts",
           "packages/runtime/src/internal/comparison-structural-families.ts",
           "packages/runtime/src/semantic-validation-profiles.json",
           "packages/runtime/src/semantic-validation-law.ts",
@@ -666,7 +672,7 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:a5b01e5b8cde54725cf6ea364d8708209caf407b29a0d1d6e465d6021a99a09b"
+            "digest": "sha256:03541b1517ded1f22862079ecc32a83954d087c1715c4b4bede178b8452ae77a"
           },
           {
             "kind": "work_state",
@@ -811,7 +817,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:1c23fc7e3fea3b48790e9ed234bcbbc63fb864b6cc955830f22c00e053a5da34"
+            "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
           },
           {
             "kind": "rfc",
@@ -901,7 +907,7 @@
           {
             "kind": "work_state",
             "id": "D3847",
-            "digest": "sha256:5feea40f3d6ab432e866417e9c4c19190c731f638a5ddadb05bfed1536d22f80"
+            "digest": "sha256:0e56a53d7fcc522e230339a2ff0ae10bbb166a85d12753e016d92f8871c867fc"
           },
           {
             "kind": "work_state",

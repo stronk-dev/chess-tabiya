@@ -64,7 +64,7 @@ afterAll(() => {
     const row = projections.get(ref);
     assert(row, "existing Inspector dependency must have a literal declaration");
     const members = row.derivation?.inputs === undefined ? row.derivation?.anyOf ?? [] : [row.derivation.inputs];
-    for (const input of members.flat()) visit(key(input));
+    for (const input of [...members.flat(), ...(row.derivation?.reduction?.elements ?? [])]) visit(key(input));
   }
   for (const ref of MODULE_CONSUMER_ACCEPTS.full_inspector) visit(key(ref));
   const observed = new Map<string, { calls: number; inputCounts: Set<number>; countMismatches: number;
@@ -72,6 +72,7 @@ afterAll(() => {
   for (const { route, inputs } of observedMintInputs()) {
     const declaration = projections.get(route);
     if (declaration?.derivation === undefined || declaration.disposition?.kind === "retired") continue;
+    if (declaration.derivation.reduction !== undefined) throw new TypeError("Historical literal-mint observer cannot diagnose concrete reduction witnesses");
     const members = declaration.derivation.inputs === undefined ? declaration.derivation.anyOf : [declaration.derivation.inputs];
     const row = observed.get(route) ?? { calls: 0, inputCounts: new Set<number>(), countMismatches: 0,
       refMismatches: 0, opaqueInputs: 0, matchingRefTuples: 0, signatures: new Set<string>() };

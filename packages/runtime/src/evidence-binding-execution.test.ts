@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST as MANIFEST } from "./evidence-catalog.js";
 import { compileEvidenceManifest, type BindingSourceAbsence, type CompiledEvidenceManifest, type EvidenceBinding, type LatencyMode, type ProjectionDeclaration, type VersionedEvidenceId } from "./evidence-contract.js";
 import { aggregateEvidenceConsumerSourceAvailability as aggregate, compileEvidenceConsumerExecution as compile } from "./evidence-binding-execution.js";
+import { compileEvidenceConsumerExecutionV2, assertEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
 
 const ref = (id: string): VersionedEvidenceId => ({ id, version: 1 });
 const consumer = ref("fixture.consumer");
@@ -29,6 +30,24 @@ function satisfied(compiled: ReturnType<typeof compile>, ids: readonly string[])
 }
 
 describe("binding execution and source absence", () => {
+  it("keeps a complete reduction plan and exact binding policies without inventing realized paths", () => {
+    const comparison = MANIFEST.projections.find(row => row.id === "derived.compare.structure_delta" && row.version === 2)!;
+    const row = binding("fixture.comparison", comparison, UNAVAILABLE, "sync"), manifest = fixture([row]);
+    const compiled = compileEvidenceConsumerExecutionV2(manifest, consumer);
+    expect(compiled.bindings).toHaveLength(1);
+    expect(compiled.bindings[0]).toMatchObject({ binding: row, sourceAbsence: UNAVAILABLE, plan: { kind: "reduction", sourceUse: "captured_only" } });
+    expect(compiled.bindings[0]).not.toHaveProperty("paths");
+    expect(() => assertEvidenceConsumerExecutionV2(compiled)).not.toThrow();
+    expect(() => assertEvidenceConsumerExecutionV2({ ...compiled })).toThrow();
+    expect(() => compile(manifest, consumer)).toThrow(/V2/);
+    expect(() => compileEvidenceConsumerExecutionV2(fixture([binding("fixture.missing_policy", comparison)]), consumer)).toThrow(/BINDING_SOURCE_ABSENCE/);
+    expect(() => compileEvidenceConsumerExecutionV2({ ...manifest, bindings: [] }, consumer)).toThrow(/BINDING_EXECUTION_UNDECLARED/);
+    expect(() => compileEvidenceConsumerExecutionV2({ ...manifest, bindings: [row, { ...row }] }, consumer)).toThrow(/duplicate adapter/);
+    const missingElement = { ...manifest, projections: manifest.projections.filter(projection => projection.id !== "run.record.position") };
+    expect(() => compileEvidenceConsumerExecutionV2(missingElement, consumer)).toThrow(/missing/);
+    const crossed = { ...manifest, bindings: [{ ...row, producer: ref("foreign") }] };
+    expect(() => compileEvidenceConsumerExecutionV2(crossed, consumer)).toThrow(/exact admitted adapter/);
+  });
   it("refuses a missing accepted binding even when the semantic manifest still compiles", () => {
     const theory = ref("module.theory_breadcrumb");
     const declarations = { ...EVIDENCE_CONTRACT_DECLARATIONS,

@@ -74,11 +74,32 @@ function providerOperation(projection: ProjectionDeclaration, availability: Avai
   return protocol.operation;
 }
 
+/** One shared own-source validator for fixed paths and V2 templates. */
+export function projectionOwnExecution(manifest: Pick<CompiledEvidenceManifest, "producers">, projection: ProjectionDeclaration): CompiledProjectionExecution["own"] {
+  const producers = manifest.producers.filter(producer => key(producer) === key(projection.producer));
+  const producer = producers[0];
+  if (producers.length !== 1 || producer === undefined || !LATENCIES.includes(producer.latency) || !["local", "recorded", "provider", "build_time"].includes(producer.availability)) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `${key(projection)} has no valid own producer`);
+  return Object.freeze({ availability: producer.availability, latency: producer.latency, providerOperation: providerOperation(projection, producer.availability) });
+}
+
 function compareOccurrences(left: readonly number[], right: readonly number[]): number {
   for (let index = 0; index < Math.min(left.length, right.length); index += 1) {
     if (left[index] !== right[index]) return left[index]! - right[index]!;
   }
   return left.length - right.length;
+}
+
+/** Strict literal members shared by both execution compilers; order and multiplicity are identity. */
+export function literalExecutionMembers(projection: ProjectionDeclaration): readonly (readonly VersionedEvidenceId[])[] {
+  const derivation = projection.derivation;
+  if (derivation === undefined) return [];
+  if (derivation.reduction !== undefined) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `${key(projection)} requires the V2 reduction compiler`);
+  const members = derivation.inputs === undefined ? derivation.anyOf : [derivation.inputs];
+  if (members === undefined || members.length === 0 || members.some(member => member.length === 0)
+    || (derivation.inputs !== undefined && derivation.anyOf !== undefined) || Object.keys(derivation).length !== 1) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `empty or crossed derivation at ${key(projection)}`);
+  const identities = members.map(member => member.map(key).join("\0"));
+  if (new Set(identities).size !== identities.length) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `duplicate derivation member at ${key(projection)}`);
+  return members;
 }
 
 /**
@@ -95,9 +116,7 @@ export function compileProjectionExecution(manifest: Pick<CompiledEvidenceManife
   if (producers.size !== manifest.producers.length) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", "duplicate producer");
   const active = new Set<string>();
   const ownFor = (projection: ProjectionDeclaration): CompiledProjectionExecution["own"] => {
-    const producer = producers.get(key(projection.producer));
-    if (producer === undefined || !LATENCIES.includes(producer.latency) || !["local", "recorded", "provider", "build_time"].includes(producer.availability)) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `${key(projection)} has no valid own producer`);
-    return Object.freeze({ availability: producer.availability, latency: producer.latency, providerOperation: providerOperation(projection, producer.availability) });
+    return projectionOwnExecution(manifest, projection);
   };
   const expand = (ref: VersionedEvidenceId, address: readonly number[]): readonly ExpandedPath[] => {
     const projection = projections.get(key(ref));
@@ -107,14 +126,12 @@ export function compileProjectionExecution(manifest: Pick<CompiledEvidenceManife
     try {
       const own = ownFor(projection);
       const derivation = projection.derivation;
+      if (derivation?.reduction !== undefined) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `${key(ref)} requires the V2 reduction compiler`);
       if (derivation === undefined) {
         const sources: readonly Source[] = own.availability === "local" ? [] : [Object.freeze({ occurrence: Object.freeze([...address]), projection: reference(projection), availability: own.availability, providerOperation: own.providerOperation })];
         return [{ choices: [], sources, latency: own.latency }];
       }
-      const members = derivation.inputs === undefined ? derivation.anyOf : [derivation.inputs];
-      if (members === undefined || members.length === 0 || members.some(member => member.length === 0) || (derivation.inputs !== undefined && derivation.anyOf !== undefined)) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `empty or crossed derivation at ${key(ref)}`);
-      const identities = members.map(member => member.map(key).join("\0"));
-      if (new Set(identities).size !== identities.length) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", `duplicate derivation member at ${key(ref)}`);
+      const members = literalExecutionMembers(projection);
       return members.flatMap((inputs, member) => {
         const choice: Choice = Object.freeze({ projection: reference(projection), occurrence: Object.freeze([...address]), member, inputs: Object.freeze(inputs.map(reference)) });
         let products: readonly ExpandedPath[] = [{ choices: [choice], sources: [], latency: own.latency }];

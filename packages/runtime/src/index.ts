@@ -806,6 +806,8 @@ export {
 export type { BoundedTargetPolicyBoundsFactoryResult, EngineTargetPolicyFactoryResult } from "./evidence-factories.js";
 export { assertPathEffectiveExecution, effectiveEvidenceExecution, type EffectiveEvidenceExecution } from "./evidence-contract.js";
 export { compileProjectionExecution, compileManifestExecution, EvidenceExecutionError, type CompiledProjectionExecution } from "./evidence-execution.js";
+export { compileProjectionExecutionV2, compileManifestExecutionV2, type CompiledEvidenceExecutionPlan } from "./evidence-execution-v2.js";
+export { compileEvidenceConsumerExecutionV2, type CompiledEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
 export { compileEvidenceConsumerExecution, aggregateEvidenceConsumerSourceAvailability, EvidenceBindingExecutionError, type CompiledEvidenceConsumerExecution, type CompiledEvidenceBindingExecution, type EvidenceBindingPathSatisfaction, type EvidenceConsumerSourceAvailability } from "./evidence-binding-execution.js";
 export type { BindingSourceAbsence } from "./evidence-contract.js";
 export { assertEvidenceProducerOperations, evidenceProducerOperation, type EvidenceProducerOperation } from "./evidence-producer-operations.js";

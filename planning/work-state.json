@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a5b01e5b8cde54725cf6ea364d8708209caf407b29a0d1d6e465d6021a99a09b",
+      "sourceDigest": "sha256:03541b1517ded1f22862079ecc32a83954d087c1715c4b4bede178b8452ae77a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32021,7 +32021,7 @@
       "id": "D3845",
       "state": "doing",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:7df92a18f937cf1e0900c2e9d341eafa25d305027320bd6190fed576a0bd2383",
+      "sourceDigest": "sha256:f6fa4583cceb2bb0b204d67e14f4a98c0e571d3a7cbf9a9cc3e2ca50ebae165f",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32039,7 +32039,7 @@
       "id": "D3847",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:5feea40f3d6ab432e866417e9c4c19190c731f638a5ddadb05bfed1536d22f80",
+      "sourceDigest": "sha256:0e56a53d7fcc522e230339a2ff0ae10bbb166a85d12753e016d92f8871c867fc",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32276,6 +32276,42 @@
       "sourceDigest": "sha256:e31e9ae646c6a41acd256e4dda73c2a9ac2f25dbdb8507a2aa2c10cc9114c89e",
       "uxItems": [],
       "evidence": "packages/runtime/src/recorded-comparison.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3874",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b90a0f7a97e5a81c44d904434cfb3210baf15dfe7360f004af5c7e29a612fedb",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/comparison-reduction.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3875",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:15cd772673f7bcdfd47f35fd2c29c63a0caf14b038dd60d85fd3259d603cabda",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/comparison-reduction.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3876",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2a05dee424071448498b9a933379975fc846337c68cc446167885bbd443da776",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/comparison-reduction.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3877",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d40d55daced5ae2e7666b969fd77d8726b9b66dab901bba344ce6c63d20b49db",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/comparison-reduction.test.ts",
       "evidenceKind": "path"
     }
   ]

@@ -2,6 +2,8 @@
 import {
   PRIMARY_EVIDENCE_MANIFEST,
   compileManifestExecution,
+  compileManifestExecutionV2,
+  compileProjectionExecutionV2,
   compileProjectionExecution,
   compileEvidenceConsumerExecution,
   type CompiledEvidenceManifest,
@@ -57,7 +59,7 @@ export function auditExecutionFrontier(manifest: CompiledEvidenceManifest) {
     seen.add(root);
     const declaration = projectionById.get(root)!;
     const members = declaration.derivation?.inputs === undefined ? declaration.derivation?.anyOf ?? [] : [declaration.derivation.inputs];
-    for (const member of members) for (const input of member) literalReach(key(input), seen);
+    for (const input of [...members.flat(), ...(declaration.derivation?.reduction?.elements ?? [])]) literalReach(key(input), seen);
     return seen;
   }
   const reach = new Map(projections.map(row => [row.projection, literalReach(row.projection)]));
@@ -77,7 +79,11 @@ export function auditExecutionFrontier(manifest: CompiledEvidenceManifest) {
     refused: rows.filter(row => status(row).kind === "refused").length,
   });
   const wholeManifest = attempt(() => compileManifestExecution(manifest));
+  // Current report includes every reduction template. Keep the old path report explicitly historical.
+  const currentPlans = projections.map(row => ({ projection: row.projection, result: attempt(() => compileProjectionExecutionV2(manifest, projectionById.get(row.projection)!)) }));
+  const currentManifest = attempt(() => compileManifestExecutionV2(manifest));
   return {
+    currentExecutionTemplates: { projections: currentPlans, summary: count(currentPlans, row => row.result), wholeManifest: currentManifest.kind === "compiled" ? { kind: currentManifest.kind, projectionCount: currentManifest.value.length } : currentManifest },
     purpose: "Disposable migration research. Compilation diagnostics do not prove runtime adoption or exact-subject availability. No filtered executable manifest is constructed.",
     manifestDigest: manifest.digest,
     summary: {

@@ -61,7 +61,7 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 313, 42, 566]); // Ten exact scoped events gain operator research bindings, not learner cutover.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 314, 42, 566]); // Scoped comparison reduction is source-only; no partial learner cutover.
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");
@@ -99,9 +99,9 @@ describe("primary evidence catalogue", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const projections = new Map(manifest.projections.map((projection) => [`${projection.id}@${projection.version}`, projection]));
     for (const output of manifest.projections) {
-      const members = output.derivation === undefined
+      const members = output.derivation === undefined || output.derivation.reduction !== undefined
         ? []
-        : "inputs" in output.derivation
+        : output.derivation.inputs !== undefined
           ? [output.derivation.inputs]
           : output.derivation.anyOf;
       for (const member of members) {

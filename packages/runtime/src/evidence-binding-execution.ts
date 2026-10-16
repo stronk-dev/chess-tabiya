@@ -6,10 +6,12 @@
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { isBindingSourceAbsence, type BindingSourceAbsence, type CompiledEvidenceManifest, type EvidenceBinding, type LatencyMode, type ProviderOffBehavior, type VersionedEvidenceId } from "./evidence-contract.js";
 import { compileProjectionExecution, type CompiledProjectionExecution } from "./evidence-execution.js";
+import { compileProjectionExecutionV2, executionPlanDigest, type CompiledEvidenceExecutionPlan } from "./evidence-execution-v2.js";
 
 const key = (ref: VersionedEvidenceId): string => `${ref.id}@${ref.version}`;
 const LATENCY_ORDER: readonly LatencyMode[] = ["sync", "interactive", "background", "offline"];
 const COMPILED = new WeakSet<object>();
+const COMPILED_V2 = new WeakSet<object>();
 
 export class EvidenceBindingExecutionError extends TypeError {
   constructor(readonly code: "BINDING_EXECUTION_UNDECLARED" | "BINDING_EXECUTION_LATENCY" | "BINDING_SOURCE_ABSENCE" | "BINDING_AVAILABILITY_CROSSED", message: string) {
@@ -28,8 +30,13 @@ export interface CompiledEvidenceConsumerExecution {
   readonly bindings: readonly CompiledEvidenceBindingExecution[];
 }
 
+export interface CompiledEvidenceConsumerExecutionV2 {
+  readonly consumer: VersionedEvidenceId;
+  readonly bindings: readonly Readonly<{ binding: EvidenceBinding; plan: CompiledEvidenceExecutionPlan; sourceAbsence: BindingSourceAbsence | null }>[];
+}
+
 /** Every accepted projection is bound and every binding compiles; no filtered consumer image. */
-export function compileEvidenceConsumerExecution(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId): CompiledEvidenceConsumerExecution {
+function completeBindings(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId): readonly EvidenceBinding[] {
   const declarations = manifest.consumers.filter(row => key(row) === key(consumer));
   if (declarations.length !== 1) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", key(consumer));
   const bindings = manifest.bindings.filter(row => key(row.consumer) === key(consumer));
@@ -44,6 +51,11 @@ export function compileEvidenceConsumerExecution(manifest: CompiledEvidenceManif
   }
   const ids = bindings.map(row => key(row.adapter));
   if (new Set(ids).size !== ids.length) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", "duplicate adapter identity");
+  return bindings;
+}
+
+export function compileEvidenceConsumerExecution(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId): CompiledEvidenceConsumerExecution {
+  const bindings = completeBindings(manifest, consumer);
   const compiled = bindings.map(binding => {
     const execution = compileProjectionExecution(manifest, binding.projection);
     const limit = LATENCY_ORDER.indexOf(binding.latency.mode);
@@ -59,6 +71,40 @@ export function compileEvidenceConsumerExecution(manifest: CompiledEvidenceManif
   const result = Object.freeze({ consumer: Object.freeze({ ...consumer }), bindings: Object.freeze(compiled) });
   COMPILED.add(result);
   return result;
+}
+
+function withinBudget(plan: CompiledEvidenceExecutionPlan, limit: number): boolean {
+  if (plan.kind === "fixed") return plan.execution.paths.some(path => LATENCY_ORDER.indexOf(path.effectiveLatency) <= limit);
+  if (LATENCY_ORDER.indexOf(plan.own.latency) > limit) return false;
+  return plan.kind === "reduction" ? plan.elements.every(element => withinBudget(element.execution, limit))
+    : plan.members.some(member => member.inputs.every(input => withinBudget(input, limit)));
+}
+function needsSourcePolicy(plan: CompiledEvidenceExecutionPlan): boolean {
+  if (plan.kind === "fixed") return plan.execution.paths.some(path => path.sourceRequirements.some(source => source.availability === "provider"));
+  // An owned captured source can fail even when every detector is local.
+  return plan.kind === "reduction" || plan.members.some(member => member.inputs.some(needsSourcePolicy));
+}
+
+/** Complete compile-time binding image. Templates are not realized paths or source satisfaction. */
+export function compileEvidenceConsumerExecutionV2(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId): CompiledEvidenceConsumerExecutionV2 {
+  const bindings = completeBindings(manifest, consumer).map(binding => {
+    // Compiled manifest bindings are the admitted adapter declarations, not a second adapter list.
+    const projections = manifest.projections.filter(projection => key(projection) === key(binding.projection));
+    if (projections.length !== 1 || key(projections[0]!.producer) !== key(binding.producer)
+      || !/^[a-z][a-z0-9_]*(?:\.[a-z0-9_]+)*$/u.test(binding.adapter.id) || !Number.isSafeInteger(binding.adapter.version) || binding.adapter.version < 1) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", "binding has no exact admitted adapter/projection");
+    const plan = compileProjectionExecutionV2(manifest, binding.projection), limit = LATENCY_ORDER.indexOf(binding.latency.mode);
+    if (limit < 0 || !withinBudget(plan, limit)) throw new EvidenceBindingExecutionError("BINDING_EXECUTION_LATENCY", `${key(binding.adapter)} has no complete admissible execution template`);
+    const policy = binding.sourceAbsence;
+    if ((needsSourcePolicy(plan) && policy === undefined) || (policy !== undefined && !isBindingSourceAbsence(policy))) throw new EvidenceBindingExecutionError("BINDING_SOURCE_ABSENCE", `${key(binding.adapter)} requires a literal source-absence policy`);
+    return Object.freeze({ binding: freezeJson(binding), plan, sourceAbsence: policy === undefined ? null : Object.freeze({ ...policy }) });
+  }).sort((a, b) => key(a.binding.adapter).localeCompare(key(b.binding.adapter)));
+  const compiled = Object.freeze({ consumer: Object.freeze({ ...consumer }), bindings: Object.freeze(bindings) });
+  COMPILED_V2.add(compiled); return compiled;
+}
+
+export function assertEvidenceConsumerExecutionV2(compiled: CompiledEvidenceConsumerExecutionV2): void {
+  if (!COMPILED_V2.has(compiled)) throw new EvidenceBindingExecutionError("BINDING_AVAILABILITY_CROSSED", "consumer V2 execution is not original compiler authority");
+  for (const binding of compiled.bindings) executionPlanDigest(binding.plan);
 }
 
 function freezeJson<T>(value: T): T {

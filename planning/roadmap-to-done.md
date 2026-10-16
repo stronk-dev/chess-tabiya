@@ -19,6 +19,18 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+The latest implementation is the source-only structural comparison reduction, not another
+declaration-only row: its exact factory consumes the genuine complete population and issues
+V2 execution/concrete-input/value/convention/result authority. Empty result arrays are
+authenticated computation results, not negative chess facts. Consumer admission joins the
+actual supplied manifest's plan. No learner-facing module or whole milestone is completed by
+this checkpoint. Independent re-review and all normal gate components pass:6434 software,
+seven isolated performance,257 content, types/governance/packaging/build. The first inventory
+failure and later missing queue link remain logged; the tracker-only repair reruns the remaining
+governance/content/build gates, not an invented uninterrupted full-command success. The remaining
+Review/last-level/rank/opening/grade owners and complete current282-pair delivery still gate
+the requested UX. D3870 remains a reviewed schema/REST/migration follow-up, not a local bypass.
+
 The complete coordinated current-source/module contract is now independently accepted for
 implementation. All four substantive returns and the final presentation/opening companion
 contradictions are resolved at contract level. The actual ten-module image retains282 pairs/

@@ -1,5 +1,22 @@
 # Codex queue
 
+**Current executable checkpoint, 2026-10-16:** structural comparison now has its real
+compare.structure_delta@1 reduction/derived.compare.structure_delta@2 sole factory. Complete
+owned populations feed authenticated V2 templates, concrete ordered leaf occurrences, atomic
+value/convention receipts and original frozen result-array authority, including empty results.
+V2 complete-consumer compilation retains every binding and policy; generic value admission
+also joins the consumer manifest's genuine V2 plan. Fixed-only images use the original compiler.
+No learner binding switches. D3874/D3875/D3876 record the independently re-reviewed guard
+repairs. D3877 adds the exact new convention to the existing inventory and enrolls that software
+file in the normal fast gate. All four repairs are closed with source/test evidence. Frozen
+software6434/403 files and seven isolated performance tests pass; normal governance/content257/
+build gates pass after the tracker-only queue correction.842 focused cases/21 files and types
+pass, with no runtime/test/budget relaxation. The failed commands remain in the append-only log;
+this is verified internal progress, not a completed learner image or one uninterrupted full run.
+Next: accepted Review boundary/last-level/rank/opening/grade owners, D3870's reviewed schema
+follow-up, then the entire current282-pair source/access/receiver/API/native cutover. Retire
+obsolete executable paths after real callers move; no legacy compatibility pipeline.
+
 2026-10-15 — **Complete current-source/module amendment independently accepted for
 implementation.** All four substantive returns and the final companion inconsistencies have
 reviewed contracts: genuine recorded Compare path/points, four-occurrence trade (already fixed),

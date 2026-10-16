@@ -92,6 +92,16 @@ passes6415 software/402 files, seven isolated performance/257 content and all re
 Reduction grammar/receipts/authenticated results, V2 plans/admission, last-level/rank/
 opening/grade owners and complete current consumer delivery remain open; no parent discharge.
 
+**Comparison reduction checkpoint, 2026-10-16:** §2.3i now has its real internal sole factory,
+third-arm declaration, authenticated V2 plan and concrete occurrence receipts, acyclic value/
+convention authority and original complete result-array seals, including empty results. Consumer
+admission joins the supplied manifest's genuine plan. No learner bindings switch. D3874/D3876
+record independent guard/plan-join returns and D3875 the existing oracle static-closure failure;
+repairs/permanent controls and independent re-review are clear. Frozen software6434/seven
+performance and remaining normal governance/content257/build gates pass; first failures remain
+in the append-only log rather than a fictitious single successful full command. Source-only
+progress is not the remaining Story/last-level/opening operations or completed current delivery.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft
@@ -130,12 +140,15 @@ opening/grade owners and complete current consumer delivery remain open; no pare
 - **Planning:** `planning/evidence-value-authority/implementation-2026-09-24.md`
 
 ```tabiya-claims
-semantic-conventions | members comparison_structure_appearance_v1 | existing post-fork immediate-predecessor appearance minus complete compared-column intersection; no significance or recommendation
+none
 ```
+
+All three independently accepted algorithm-convention members are now landed in the existing
+semantic-conventions register.
 
 **Claim scope.** The independently accepted current-source amendment adds three literal algorithm
 definitions to the existing convention resource; it creates no second register. Promotion geometry
-and nonterminal fork survival are now landed; comparison remains claimed. Historical convention members
+and nonterminal fork survival landed first; comparison lands with its actual reduction factory. Historical convention members
 remain landed under semantic-convention-provenance. Other changes are package-internal operations
 and additive F1 refs, with no persisted schema, migration, pack/shape/principle or evidence-kind
 member. The one compiled F1 catalogue still owns projection refs; no parent lifecycle state accepts

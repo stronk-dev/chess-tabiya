@@ -9,6 +9,8 @@
  * projection payload, output, receipt, factory name or caller-selected ancestry, and it is absent
  * from every barrel and package export.
  */
+import { comparisonStructuralAppearances, readComparisonStructuralPopulation } from "../comparison-structural-population.js";
+import { COMPARISON_REDUCTION_CONTRACT } from "../evidence-reduction-contract.js";
 import {
   AVOIDANCE_FACTORIES,
   HINT_DISCLOSURE_FACTORIES,
@@ -32,6 +34,7 @@ import {
   createDerivedComparePieceRouteV2Evidence,
   createRunRecordComparisonPathV1Evidence,
   createDerivedCompareStructureDeltaV1Evidence,
+  createDerivedCompareStructureDeltaV2Evidence,
   createDerivedCitationAttributionV1Evidence,
   createDerivedExchangeCaptureClassV1Evidence,
   createDerivedExchangeTradeCompletedV1Evidence,
@@ -231,6 +234,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "derived.compare.piece_route@2": createDerivedComparePieceRouteV2Evidence,
   "run.record.comparison_path@1": createRunRecordComparisonPathV1Evidence,
   "derived.compare.structure_delta@1": createDerivedCompareStructureDeltaV1Evidence,
+  "derived.compare.structure_delta@2": createDerivedCompareStructureDeltaV2Evidence,
   "derived.exchange.capture_class@1": createDerivedExchangeCaptureClassV1Evidence,
   "derived.exchange.trade_completed@1": createDerivedExchangeTradeCompletedV1Evidence,
   "derived.grade.move_quality@1": createDerivedGradeMoveQualityV1Evidence,
@@ -460,4 +464,15 @@ export function evidenceValueRouteRegistry(): readonly EvidenceValueFactoryMeta[
     if ((operation as { readonly name: string }).name !== meta.symbol) throw new TypeError(`Evidence route ${route} factory name ${(operation as { readonly name: string }).name} is not ${meta.symbol}`);
     return meta;
   }));
+}
+
+// Identity inspection only, never an alternate dispatcher or mutable binding registry.
+const comparisonReductionBinding = Object.freeze({ identity: COMPARISON_REDUCTION_CONTRACT, factory: createDerivedCompareStructureDeltaV2Evidence,
+  reader: readComparisonStructuralPopulation, computation: comparisonStructuralAppearances });
+export function inspectComparisonReductionBinding() {
+  const factory = EVIDENCE_VALUE_ROUTES["derived.compare.structure_delta@2"];
+  if (factory !== createDerivedCompareStructureDeltaV2Evidence || factory.name !== COMPARISON_REDUCTION_CONTRACT.factory
+    || factory.meta.route !== "derived.compare.structure_delta@2" || factory.meta.shape !== "derived" || factory.meta.result !== "items") throw new TypeError("Comparison reduction lacks its actual central factory binding");
+  if (comparisonReductionBinding.factory !== factory || comparisonReductionBinding.reader !== readComparisonStructuralPopulation || comparisonReductionBinding.computation !== comparisonStructuralAppearances) throw new TypeError("Comparison source/computation function identities changed");
+  return comparisonReductionBinding;
 }

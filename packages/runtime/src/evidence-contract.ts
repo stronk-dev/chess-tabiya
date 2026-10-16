@@ -1,4 +1,6 @@
 import type { ConventionReceipt } from "./evidence-conventions.js";
+import { assertEvidenceReductionDeclaration } from "./evidence-reduction-contract.js";
+import { assertComparisonReductionValue, assertComparisonReductionConsumerManifest, comparisonReductionMintReceipt, joinComparisonReductionValue, type ComparisonReductionAuthority, type EvidenceReductionReceipt } from "./internal/comparison-reduction-seal.js";
 
 export type EvidencePlane = "rules" | "transition" | "search" | "human" | "theory" | "authored" | "record" | "derived";
 export type ProjectionRole = "predicate" | "reading" | "event" | "source_record";
@@ -31,8 +33,9 @@ export interface EvidenceLatency { readonly mode: LatencyMode; readonly maxMs: n
 export interface EvidenceBudget { readonly maxFacts: number | null; readonly maxForms: number | null }
 
 export type EvidenceDerivation =
-  | { readonly inputs: readonly VersionedEvidenceId[]; readonly anyOf?: never }
-  | { readonly inputs?: never; readonly anyOf: readonly (readonly VersionedEvidenceId[])[] };
+  | { readonly inputs: readonly VersionedEvidenceId[]; readonly anyOf?: never; readonly reduction?: never }
+  | { readonly inputs?: never; readonly anyOf: readonly (readonly VersionedEvidenceId[])[]; readonly reduction?: never }
+  | { readonly inputs?: never; readonly anyOf?: never; readonly reduction: Readonly<{ operation: VersionedEvidenceId; elements: readonly VersionedEvidenceId[] }> };
 
 export interface ProjectionDeclaration {
   readonly id: string;
@@ -361,8 +364,13 @@ function setEqual<T>(left: readonly T[], right: readonly T[]): boolean {
 function derivationMembers(projection: ProjectionDeclaration): readonly (readonly VersionedEvidenceId[])[] {
   const derivation = projection.derivation;
   if (derivation === undefined) return Object.freeze([]);
+  if (derivation.reduction !== undefined) return Object.freeze([]);
   if (derivation.inputs !== undefined) return Object.freeze([derivation.inputs]);
   return derivation.anyOf;
+}
+
+function derivationDependencies(projection: ProjectionDeclaration): readonly VersionedEvidenceId[] {
+  return projection.derivation?.reduction?.elements ?? derivationMembers(projection).flat();
 }
 
 function derivationMemberKey(member: readonly VersionedEvidenceId[]): string {
@@ -570,6 +578,7 @@ function immutable<T>(value: T): T {
  * private WeakMap beside the identity seal, never serialized, and never claims durable provenance.
  */
 export interface EvidenceValueReceipt {
+  readonly reduction?: EvidenceReductionReceipt;
   readonly projection: VersionedEvidenceId;
   /** Exact factory symbol; diagnostic only. */
   readonly factory: string;
@@ -588,6 +597,7 @@ export interface EvidenceValueReceipt {
 
 /** What the sole mint boundary supplies when it seals a factory-computed payload. */
 export interface EvidenceMintAuthority {
+  readonly reduction?: Readonly<{ authority: ComparisonReductionAuthority; ordinal: number }>;
   readonly factory: string;
   readonly inputDigest: string;
   readonly sourceDigests: readonly string[];
@@ -631,7 +641,14 @@ export function declareEvidence<T>(producer: VersionedEvidenceId, projection: Ve
     payloadDigest: sealedPayloadDigest(value.payload),
     sourceDigests: [...authority.sourceDigests],
     ...(authority.convention === undefined ? {} : { convention: authority.convention }),
+    ...(authority.reduction === undefined ? {} : { reduction: comparisonReductionMintReceipt(authority.reduction.authority).receipt }),
   });
+  if (projection.id === "derived.compare.structure_delta" && projection.version === 2) {
+    if (authority.reduction === undefined) fail("EVIDENCE_GENERIC_BYPASS", "comparison reduction is missing its construction authority", ["declared-evidence:reduction"]);
+    joinComparisonReductionValue(authority.reduction.authority, authority.reduction.ordinal, value, receipt);
+  } else if (authority.reduction !== undefined) {
+    fail("EVIDENCE_GENERIC_BYPASS", "reduction authority crossed its exact projection", ["declared-evidence:reduction"]);
+  }
   DECLARED_VALUES.add(value);
   VALUE_RECEIPTS.set(value, receipt);
   return value;
@@ -657,7 +674,11 @@ export function isDeclaredEvidence(value: unknown): value is DeclaredEvidence<un
   const receipt = VALUE_RECEIPTS.get(value);
   if (receipt === undefined) return false;
   const declared = value as DeclaredEvidence<unknown>;
-  return refKey(receipt.projection) === refKey(declared.projection) && receipt.payloadDigest === sealedPayloadDigest(declared.payload);
+  if (refKey(receipt.projection) !== refKey(declared.projection) || receipt.payloadDigest !== sealedPayloadDigest(declared.payload)) return false;
+  if (receipt.reduction !== undefined || (declared.projection.id === "derived.compare.structure_delta" && declared.projection.version === 2)) {
+    try { assertComparisonReductionValue(declared, receipt); } catch { return false; }
+  }
+  return true;
 }
 
 export function assertDeclaredEvidence(value: unknown): asserts value is DeclaredEvidence<unknown> {
@@ -672,6 +693,7 @@ export function assertDeclaredEvidence(value: unknown): asserts value is Declare
   if (refKey(receipt.projection) !== refKey(declared.projection) || receipt.payloadDigest !== sealedPayloadDigest(declared.payload)) {
     fail("EVIDENCE_GENERIC_BYPASS", "evidence value receipt disagrees with its sealed projection or payload", ["declared-evidence:receipt-mismatch"]);
   }
+  if (receipt.reduction !== undefined || (declared.projection.id === "derived.compare.structure_delta" && declared.projection.version === 2)) assertComparisonReductionValue(declared, receipt);
 }
 
 /** Package-internal read of the value's sealed convention closure; `undefined` for a fixture value. */
@@ -698,6 +720,7 @@ export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consu
   const admitted: DeclaredEvidence<T>[] = [];
   for (const value of values) {
     assertDeclaredEvidence(value);
+    if (VALUE_RECEIPTS.get(value)?.reduction !== undefined) assertComparisonReductionConsumerManifest(value, manifest);
     assertLiteral(value.producer, "declared-evidence producer");
     assertLiteral(value.projection, "declared-evidence projection");
     const projection = projectionByKey.get(refKey(value.projection));
@@ -770,14 +793,18 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
       const derivation = projection.derivation;
       const hasInputs = derivation !== undefined && "inputs" in derivation && derivation.inputs !== undefined;
       const hasAnyOf = derivation !== undefined && "anyOf" in derivation && derivation.anyOf !== undefined;
+      const hasReduction = derivation?.reduction !== undefined;
       const memberKeys = members.map(derivationMemberKey);
       const invalidDerivation = derivation !== undefined && (
-        hasInputs === hasAnyOf || members.length === 0 ||
-        members.some((member) => member.length === 0) ||
-        new Set(memberKeys).size !== memberKeys.length
+        Number(hasInputs) + Number(hasAnyOf) + Number(hasReduction) !== 1 || Object.keys(derivation).length !== 1 ||
+        (!hasReduction && (members.length === 0 || members.some((member) => member.length === 0) || new Set(memberKeys).size !== memberKeys.length))
       );
       if (projection.payloadType.trim() === "" || projection.semantics.trim() === "" || projection.forms.length === 0 || projection.answerContent.length === 0 || !nonEmptyStrings(projection.operands) || !nonEmptyStrings(projection.limitations) || !abstentionValid || !confidenceValid || !dispositionValid || invalidDerivation) fail("EVIDENCE_PROJECTION_INCOMPLETE", "projection semantics are incomplete", [site("projection", projection, producer.implementation)]);
       projectionMap.set(refKey(projection), projection);
+      if (hasReduction) {
+        try { assertEvidenceReductionDeclaration(projection); }
+        catch (error) { fail("EVIDENCE_PROJECTION_INCOMPLETE", error instanceof Error ? error.message : "invalid reduction declaration", [site("projection", projection)]); }
+      }
     }
   }
 
@@ -789,7 +816,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     consumerMap.set(refKey(consumer), consumer);
   }
 
-  for (const projection of projectionMap.values()) for (const dependency of [...projection.dependsOn, ...derivationMembers(projection).flat()]) {
+  for (const projection of projectionMap.values()) for (const dependency of [...projection.dependsOn, ...derivationDependencies(projection)]) {
     assertLiteral(dependency, site("dependency", projection));
     if (!projectionMap.has(refKey(dependency))) fail("EVIDENCE_DEPENDENCY_MISSING", "projection dependency is absent", [site("projection", projection), site("dependency", dependency)]);
   }
@@ -800,13 +827,15 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     if (visited.has(key)) return;
     visiting.add(key);
     const projection = projectionMap.get(key)!;
-    for (const dependency of [...projection.dependsOn, ...derivationMembers(projection).flat()]) walk(refKey(dependency), [...path, key]);
+    for (const dependency of [...projection.dependsOn, ...derivationDependencies(projection)]) walk(refKey(dependency), [...path, key]);
     visiting.delete(key);
     visited.add(key);
   };
   for (const key of projectionMap.keys()) walk(key, []);
 
   for (const projection of projectionMap.values()) {
+    // The installed reduction has its own narrow answer rule; never treat its elements as a tuple/union.
+    if (projection.derivation?.reduction !== undefined) continue;
     if (projection.plane !== "derived" && projection.derivation === undefined) continue;
     const members = derivationMembers(projection);
     if (projection.plane !== "derived" || members.length === 0) {
@@ -847,6 +876,7 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     const projection = projectionMap.get(key);
     if (projection === undefined) fail("EVIDENCE_EVENT_PROJECTION_MISSING", "semantic event projection is absent", [site("semantic-event", event.projection)]);
     if (projection.role !== "event" || projection.disposition !== undefined) fail("EVIDENCE_EVENT_PROJECTION_REFUSED", "semantic event projection is not an active event projection", [site("semantic-event", event.projection)]);
+    if (projection.derivation?.reduction !== undefined) fail("EVIDENCE_EVENT_PROJECTION_REFUSED", "semantic events cannot use reduction derivations", [site("semantic-event", event.projection)]);
     const declaredMembers = derivationMembers(projection);
     const eventMembers = event.derivationAnyOf ?? (event.derivationInputs === undefined ? [] : [event.derivationInputs]);
     const declaredMemberKeys = declaredMembers.map(derivationMemberKey);
@@ -989,8 +1019,7 @@ export function effectiveEvidenceExecution(manifest: CompiledEvidenceManifest, p
     if (declaration === undefined) throw new TypeError(`No projection ${refKeyValue}`);
     const producer = producers.get(key(declaration.producer))!;
     if (producer.availability === "provider") providers.add(refKeyValue);
-    const members = declaration.derivation?.inputs !== undefined ? [declaration.derivation.inputs] : declaration.derivation?.anyOf ?? [];
-    for (const member of members) for (const input of member) visit(input);
+    for (const input of derivationDependencies(declaration)) visit(input);
   };
   visit(projection);
   const own = producers.get(key(projections.get(key(projection))!.producer))!;

@@ -127,9 +127,21 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 49 producers, 299 projections, 42 versioned consumers and 556 bindings,
-plus 78 semantic-event declarations, 78 eligibility rows, 16 refusal reasons and one selection
+The current compiled closure is 49 producers, 314 projections, 42 versioned consumers and 566 bindings,
+plus 88 semantic-event declarations, 88 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
+
+The source-only structural comparison successor uses the third closed derivation arm,
+`reduction:{operation,elements}`. Its one installed operation is compare.structure_delta@1;
+unimplemented Story/last-level/opening operations refuse rather than register placeholders.
+The genuine complete population drives18 finite V2 execution templates and concrete original
+position/family occurrences, including every authentic empty invocation in its source image.
+Result arrays are fresh, frozen and privately authenticated before flattening; copied/partial/
+foreign-scope arrays refuse. Values and the reduction convention receipt are constructed
+acyclically before publication; ordinary admission refuses unpublished or forged authority.
+Consumer admission also checks its actual manifest's V2 plan. Fixed-only V2 wrappers use the
+unchanged fixed compiler output. This does not expose a learner API or complete current module
+source assembly; remaining owners and the full coordinated consumer migration stay open.
 
 The internal `derived.tactic.defender_exposure@2` factory joins an exact lost-control event to
 `rules.exchange.reading.landing_captures@1`. It retains every positive capture with exactly two

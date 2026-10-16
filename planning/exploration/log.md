@@ -31839,3 +31839,87 @@ Campaign was the one capability with no API, route or content. Now:
   and complete consumer/access/receiver/API/native migration remain. Retire obsolete executable
   paths after real callers move; no compatibility pipeline or parent/milestone/qualification/
   full1.0 completion claim. The full1.0 goal remains active.
+
+### 2026-10-16 — Actual structural comparison reduction and V2 execution checkpoint
+
+- Accepted F2 §2.3i/provider §1a now have the source-only comparison reduction's actual
+  declaration/sole factory/route, exact eighteen-element finite execution templates and ordered
+  concrete position/family witnesses. Original fork-inclusive node occurrence groups retain
+  empty family addresses, original item ordinals and both complete grants. Full source image,
+  selected payload/location digests and atomic value/convention/result authority are acyclic;
+  fresh empty results retain genuine computation proof without minting negative chess facts.
+- V2 fixed-only subtrees wrap the unchanged fixed compiler. Literal composition preserves
+  member numbers, order/multiplicity and all eligible templates. Complete consumer compilation
+  retains exact binding/accepted equality, adapter identities, latency and literal source
+  policy; ordinary consumer admission joins its supplied manifest's genuine V2 plan.
+- Independent first review returns two real guard gaps: V2 composition omitted literal-member
+  guards (D3874), and consumer admission joined refs but not its manifest's plan (D3876).
+  Both repairs have permanent negatives. The first fast gate records758 pass/four fail:
+  three exact new inventory expectations plus D3875's oracle static-import closure leak through
+  type imports. Neutral types restore genuine isolation without weakening the complete scanner.
+  Preliminary bootstrap/duplicate-local failures were corrected before these testable boundaries.
+- Current normal focused target passes762 cases/17 files plus62 cases/three files (824 total);
+  all workspace types pass. One source-only projection/profile/capability declaration adds to
+  314/307/1013; prior1012 declarations and historical profile payloads remain unchanged. The new
+  reviewed comparison convention/history member lands in the existing register (51 members),
+  not a new resource. Historical@1 direct refs/source arm stay unchanged; new registry builds
+  naturally have a new registry digest, not retroactively restamped old receipts.
+- Semantic implementation metadata retains91 subjects/zero qualified,343 passing prior cases,
+  53 population/eight external outcomes. No learner binding, schema/migration, pack requirement,
+  persisted receipt, provider request or raw research dump is added. Normal full verify/build
+  and independent re-review are pending. D3847/D3845/D3841 and all three repair rows remain doing;
+  remaining Review/last-level/rank/opening/grade owners, D3870 and complete current282-pair
+  access/receivers/API/native delivery remain. No legacy pipeline, milestone/qualification/
+  remote-CI/push/release claim; the full1.0 objective remains active.
+
+### 2026-10-16 — Comparison reduction first full-run return, retained and repaired
+
+- First full normal verify/build reaches6432 software passes/one failure across403 files
+  (376.41s). Existing evidence-conventions.test.ts expects50 rather than the actual reviewed51
+  members. D3877 records that exact gap; add comparison-structure-appearance@1 to the explicit
+  authored set, preserve the original39 seed and every predecessor assertion, and enroll the
+  existing convention file in the normal fast evidence target. Performance/content/build did
+  not run after the software refusal; no full-pass claim is made from that command.
+- Strengthen the accepted atomic-publication controls before rerun: genuine computed proofs
+  reject copied operation authority, caller payloads, bad/duplicate ordinals, unpublished
+  values/results, shortened/reordered arrays and wrong node/offset publication; correct complete
+  publication succeeds once and further publication/minting refuses. Both-color actual named
+  catalogue outputs now also pass through the real new factory and original-array reader.
+- Normal fast gate passes762/17 files plus80/four files (842 total). Independent re-review
+  has cleared D3874/D3875/D3876's bounded repairs, inspecting rather than rerunning tests.
+  Full normal verification/build is rerun next with unchanged production logic, budgets and
+  source policies; no exception, retry or filtered corpus is introduced.
+
+### 2026-10-16 — Comparison reduction complete software/performance, governance route return
+
+- The frozen rerun passes all6434 software cases/403 files (376.14s) and seven isolated
+  performance cases/four files (61.94s), plus workspace types, build, source/semantic/capability,
+  packaging and all preceding software contracts. No production or test bytes change afterward.
+- Governance passes register/source/history/status checks, then work-index correctly refuses
+  the new D3877 row because its log/ledger references were not a durable queue route. Add D3877
+  explicitly to the existing current queue; do not weaken routing or create another tracker.
+  Complete normal verify-governance/verify-content/build on this tracker-only correction, retaining
+  the successful software/performance results for the unchanged production/test image. The
+  failed whole command is not relabelled a successful exit or erased from history.
+
+### 2026-10-16 — Comparison reduction verified checkpoint and closeout
+
+- Frozen production/test image passes6434 software tests/403 files (376.14s) and seven isolated
+  performance cases/four files (61.94s). After the tracker-only queue-link correction, normal
+  make verify-governance verify-content build exits zero:257 content cases/26 files (56.83s),
+  all register/history/status/work-index/work-state/roadmap/governance, capability/corpus,
+  packaging and build gates. Workspace types and842 focused cases/21 files pass. Earlier full
+  command failures remain above; this is the complete verified component set, not a claim that
+  a failed command exited zero. No production/test/budget changes follow these passing gates.
+- Independent bounded re-review is clear. D3874–D3877 close with actual source/test evidence;
+  D3847/D3845/D3841 remain doing. Update the existing roadmap/checkpoint/queue, preserving zero
+  untriaged. Complete structural source and reduction authority now exist internally; next are
+  Review boundary/last-level/rank/opening/grade owners, D3870's reviewed schema follow-up and
+  the entire current282-pair source/access/receiver/API/native cutover. No legacy compatibility
+  pipeline, unfinished source-family deletion, parent discharge or whole milestone promotion.
+- Corpus clearance remains92 documents/34 resolved/48 accepted/errors[];104 capability documents
+  retain exact requirements. New projection/profile/capability totals314/307/1013 preserve prior
+  1012 declarations and all pack bytes/requirements. Semantic91 subjects/zero qualified/343
+  passing prior cases/53 population/eight external outcomes remain. No browser rerun, new
+  scientific qualification, schema/migration, raw research artifact, push or release claim.
+  Keep the full1.0 objective active after the natural local commit checkpoint.

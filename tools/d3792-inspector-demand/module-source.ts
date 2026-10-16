@@ -52,7 +52,7 @@ export function runModuleSourceResearch() {
       reached.add(key(ref));
       const row = declarations.get(key(ref)); assert(row, "current module has an unknown exact ref");
       const members = row.derivation?.inputs === undefined ? row.derivation?.anyOf ?? [] : [row.derivation.inputs];
-      for (const input of members.flat()) visit(input);
+      for (const input of [...members.flat(), ...(row.derivation?.reduction?.elements ?? [])]) visit(input);
     };
     refs.forEach(visit); return reached;
   };

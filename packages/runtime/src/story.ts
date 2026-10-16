@@ -160,6 +160,7 @@ export function storyEvidenceSourceLabels(moment: Pick<StoryMoment, "evidence">)
     if (visiting.has(key)) return;
     const projection = byProjection.get(key);
     if (projection === undefined) throw new TypeError(`Story evidence names undeclared projection ${key}`);
+    if (projection.derivation?.reduction !== undefined) throw new TypeError(`Story source labels require an admitted concrete reduction receipt, not eligible templates: ${key}`);
     visiting.add(key);
     if (projection.plane === "derived" && projection.derivation?.inputs !== undefined) {
       for (const input of projection.derivation.inputs) visit(input.id, input.version);

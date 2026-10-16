@@ -225,6 +225,7 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
       ...projection.dependsOn,
       ...(projection.derivation?.inputs ?? []),
       ...(projection.derivation?.anyOf ?? []).flat(),
+      ...(projection.derivation?.reduction?.elements ?? []),
     ];
     const dependsOn = dependencyRefs.flatMap((ref) => (projections.has(`${ref.id}@${ref.version}`) ? [capabilityId(ref.id, ref.version)] : []));
     put({

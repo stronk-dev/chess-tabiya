@@ -5,6 +5,17 @@ execution contract with the coordinated current-source/module image. Earlier una
 for that reviewed clause are history; parent obligations and actual implementation remain.
 Scope and decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+**2026-10-16 comparison execution checkpoint:** V2 now has genuine compiler-issued finite
+templates/compositions and complete consumer-plan compilation for the installed exact comparison
+operation. Fixed-only subtrees wrap the original fixed compiler. Concrete position/family
+occurrences retain original source authority; result/value admission authenticates the complete
+source and the supplied consumer manifest's actual V2 plan. Other three operations remain absent/
+refused, not placeholder callables. First review/fast-gate returns D3874–D3876 are repaired with
+permanent controls and independent re-review. Frozen software6434/seven performance and the
+remaining normal governance/content257/build gates pass after the tracker-only queue correction;
+failed full commands remain logged, not relabelled successful. No provider
+acquisition, learner cutover, whole-manifest readiness or parent completion is claimed.
+
 - **2026-10-09 recorded guidance checkpoint:** D3630 adds complete exact-consumer admission before packet source preparation and at the registered reading renderer, including empty and previously assembled/cached paths. Thirty-eight predecessor controls reproduce missing admission/ordering; all 144 focused software and 39 existing content controls plus workspace types pass. Actual authenticated REST and composed HTTP refuse invalid bindings before collection/provider I/O; permissions precede execution, cached speech cannot bypass it, and current recorded suffix/provider exclusion bytes remain. No source/declaration/permission migration, whole manifest or availability completion. Complete normal verification and closeout belong to the append-only log.
 
 - **2026-10-09 Maia author checkpoint:** draft `maia-task-source.md` owns D3370's sampled-task source and D3363's exact-node distribution migration. Four permanent selector controls pin sample-versus-argmax, final-task-only retry windows, the selection width floor and equal-FEN distinct histories. It preserves the page/occurrence predecessors and claims one new provider member; independent review/acceptance precedes production migration. This is contract authoring, not shipped source adoption, bot calibration or completed availability.

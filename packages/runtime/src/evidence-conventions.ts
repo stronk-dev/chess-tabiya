@@ -57,6 +57,7 @@ export const SEMANTIC_CONVENTION_MEMBERS = [
   "candidate_feature_vector_v1",
   "candidate_majority_v1",
   "chessops_king_takes_rook_v1",
+  "comparison_structure_appearance_v1",
   "defence_duty_v1",
   "development_v1",
   "discovered_latency_v1",
@@ -517,6 +518,15 @@ export const CONVENTION_DECLARATIONS: readonly ConventionDeclaration[] = deepFre
       summary: "Passed-pawn geometry and legal promotion availability, including the declared pass-clone and immediate-reply tests.",
       detail: "Select passed pawns belonging to the side opposite the current side to move; report the forward path through the promotion square, its occupied blockers and both colors' pseudo-attackers of that square. For pass availability, set that pawn's color to move and clear en passant; return invalid_turn_clone when chessops refuses the clone, otherwise whether that pawn has a legal promotion now. For reply persistence, require at least one current legal reply and, after every such reply, the same source-square pawn/color still exists and has a legal promotion on its next turn. No replies gives false. Promotion means a legal pawn move to the final rank, not a chosen promotion piece or a tablebase outcome. No outcome, arbitrary-future inevitability, safety, importance, intent, recommendation or move-quality claim follows." },
   },
+  {
+    ref: { id: "comparison-structure-appearance", version: 1 },
+    definition: "Form an observation-identity union from nodes strictly after the common fork on each complete granted column; intersect those unions. On the requested column, emit each observation at a post-fork node only when its identity is absent from the immediate predecessor and that intersection; preserve order and reappearance. Use the closed legacy family conversion, STRUCTURAL_FEATURE_KINDS/JSON ordering and observationIdentity (pawn_safe_square compares kind/color/squares only). Fork observations provide predecessor context but do not enter unions or emit.",
+    limitations: ["Product selection convention, not position rules, strategic significance, move quality, safety or a recommendation. Extending the peer span can change the contrast."],
+    authority: [{ kind: "landed_contract", witnesses: ["packages/runtime/src/compare-strip-values.ts#structureDeltaEntries"], snapshotRef: "673683057b6d744623fe45b9deb54bedf3771a06" }],
+    disclosure: { kind: "reviewed_text",
+      summary: "New observations on this attempt, excluding observations shared across the compared lines.",
+      detail: "Compare each position with its immediate predecessor after the shared fork. Exclude an observation if it occurs anywhere after the fork in every complete compared span. Observations can reappear after an absence; extending the other span can change this contrast. Pawn-reach identity compares side and square, not a change in its reach details. This states recorded differences under the declared detectors, not importance, a good move, safety or a recommendation." },
+  },
 ]);
 
 // ---------------------------------------------------------------------------------------------
@@ -648,6 +658,8 @@ export function isRegisteredConvention(ref: ConventionRef): boolean {
 
 export type ConventionDerivationReceipt =
   | Readonly<{ kind: "source" }>
+  | Readonly<{ kind: "reduction"; operation: ConventionRef; reductionDigest: string;
+      inputs: readonly Readonly<{ projection: string; valueDigest: string }>[] }>
   | Readonly<{
       kind: "derived";
       /** Canonical sorted exact-projection identity of the declared member actually used. */
@@ -680,8 +692,8 @@ export function conventionReceipt(refs: readonly ConventionRef[], derivation: Co
   const canonicalDerivation: ConventionDerivationReceipt = derivation.kind === "source"
     ? { kind: "source" }
     : {
-        kind: "derived",
-        member: derivation.member,
+        ...(derivation.kind === "derived" ? { kind: "derived" as const, member: derivation.member }
+          : { kind: "reduction" as const, operation: { ...derivation.operation }, reductionDigest: derivation.reductionDigest }),
         inputs: [...derivation.inputs].map((input) => ({ projection: input.projection, valueDigest: input.valueDigest }))
           .sort((left, right) => left.projection < right.projection ? -1 : left.projection > right.projection ? 1 : left.valueDigest < right.valueDigest ? -1 : left.valueDigest > right.valueDigest ? 1 : 0),
       };

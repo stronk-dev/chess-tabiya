@@ -37,6 +37,9 @@ import {
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
 import { directProjectionConventions } from "./evidence-convention-closure.js";
+import { computeComparisonReduction } from "./internal/comparison-reduction-authority.js";
+import { initiateComparisonReduction, publishComparisonReduction } from "./internal/comparison-reduction-seal.js";
+import { readComparisonStructuralPopulation, type RecordedComparisonStructuralPopulation, type ScopedStructuralObservationChange } from "./comparison-structural-population.js";
 import { COMPARISON_STRUCTURAL_ROUTES, type ComparisonStructuralRoute } from "./internal/comparison-structural-families.js";
 import { conventionReceipt, type ConventionReceipt } from "./evidence-conventions.js";
 import { resolveEvidenceReference, type EvidenceReferenceResolution } from "./evidence-ref-resolution.js";
@@ -1353,6 +1356,24 @@ export const createDerivedCompareStructureDeltaV1Evidence = (() => {
     comparisonFacts(run, comparison, branchId);
     return Object.freeze(structureDeltaEntries(run, comparison, branchId, cachedStructuralReading).map((entry) => Object.freeze({ evidence: mint(route, symbol, Object.freeze({ observation: entry.observation }), { run, branchId, nodeId: entry.nodeId }), nodeId: entry.nodeId, plyOffset: entry.plyOffset })));
   });
+})();
+
+export const createDerivedCompareStructureDeltaV2Evidence = (() => {
+  const route = "derived.compare.structure_delta@2", symbol = evidenceFactorySymbol(route);
+  const populationInput = value("an original complete recorded structural population", candidate => {
+    try { readComparisonStructuralPopulation(candidate as RecordedComparisonStructuralPopulation); return true; } catch { return false; }
+  });
+  return factory({ route, symbol, shape: "derived", arms: [{ population: populationInput, branchId: value("a granted branch id", isText) }], result: "items" },
+    ({ population, branchId }: { readonly population: RecordedComparisonStructuralPopulation; readonly branchId: string }): readonly RunEvidenceItem<ScopedStructuralObservationChange>[] => {
+      const computed = computeComparisonReduction(population, branchId), projection = projectionFor(route), proof = computed.proof;
+      const authority = initiateComparisonReduction(computed.authority);
+      const result = Object.freeze(computed.appearances.map((appearance, ordinal) => Object.freeze({ nodeId: appearance.nodeId, plyOffset: appearance.plyOffset,
+        evidence: declareEvidence(projection.producer, { id: projection.id, version: projection.version }, appearance.payload, {
+          factory: symbol, inputDigest: proof.inputDigest, sourceDigests: [], convention: proof.convention, reduction: { authority, ordinal },
+        }) })));
+      publishComparisonReduction(authority, result);
+      return result;
+    });
 })();
 
 export const createDerivedComparePieceRouteV1Evidence = (() => {
