@@ -27785,7 +27785,7 @@
       "id": "D3376",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec95af81188a1628240fe5e2ac81ad3e3c3516f782c388544c56ecdf1578df59",
+      "sourceDigest": "sha256:05147c1405282030ef21740c78bd7b9f2e9919750215fac2530579fa6e208545",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-16"
@@ -32129,7 +32129,7 @@
       "id": "D3857",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:a4042d20dba012c62eae525e8c3cba193a1cf4ff2e2ef2a73e39da01b93b3354",
+      "sourceDigest": "sha256:aeca74ab359df9c4d8113ddf82f6bf83c6a88c8cc33e122431b0f2c34931980c",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32367,6 +32367,23 @@
       "uxItems": [],
       "evidence": "rfc/installed-opening-evidence.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3884",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e7a84593dd7a3f7610f566d7123c5a110ddbdc2e326ebb76e775939533fd80ea",
+      "uxItems": [],
+      "evidence": "apps/server/src/review-map.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3885",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:57564c7d9bafe828f0c98b9cbd9408fe9512fee2d95890f49272464ce51a17eb",
+      "uxItems": [],
+      "owner": "release-engineering"
     }
   ]
 }

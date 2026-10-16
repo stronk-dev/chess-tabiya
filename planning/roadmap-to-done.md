@@ -19,16 +19,23 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest verified opening foundation implements the shared existing-document schema, pure
-runtime loader/paired maps,263-byte installed pin and genuine source handles at actual application
-loading. Independent review's key-validation, failure-precedence and build-order returns are
-repaired, with original compiler coverage retained; bounded re-review finds no blocker.95 focused
-source cases/six files,39 register cases/types and seven unchanged-budget performance cases pass;
-full normal `make verify build` exits zero:6,723 software/415 files, seven performance/four files,
-257 content/26 files and every remaining gate. The original3,810 endpoint/7,854 membership tables
-are unchanged. No assertion, timeout, retry, skip or coverage is weakened.
-This supplies a source prerequisite, not the still-unavailable point/history factories, complete
-recorded history or282-pair current learner migration. Those remain the next required work.
+The latest verified opening prerequisite retains genuine installed source/recorded-position
+identity, original frozen table rows and actually executed negative lookups. Endpoint/membership
+share one normalization and the existing maps/calculation, also used by actual HTTP/phase lookup.
+28 new runtime cases and real both-color SQLite reopen/prefix controls pass in137 source cases/
+eight files; types and independent bounded review pass. The shared schema/source/pin foundation
+from7e245d48 stands; all3,810 endpoints/7,854 members and vendored bytes remain unchanged.
+
+Normal software6,751/416 files and unchanged performance7/4 pass. D3884 repairs the real independent
+learner-worker snapshot race without excluding tables, disabling workers or raising deadlines;
+157 focused Review cases pass. Governance catches two missing queue routes; after correction,
+normal remaining governance/content257/26/corpus/build tiers exit zero. Failed/interrupted combined
+runs remain logged, not relabelled successful. D3885 full-row no-write proof remains assigned.
+Point-factory array authentication and complete recorded history remain.
+Current adoption is complete per consumer, not a globally atomic282-pair switch: Theory needs its
+four complete bindings and genuine applicability proof; Inspector needs its actual complete
+preflighted source-page operation. No partial image, compatibility-only input arm or learner
+delivery claim. All current consumer/access/receiver/native obligations remain before1.0.
 
 The prior verified grade/Compare source dependency is the private durable modern attachment
 primitive: complete original seq/ordinal/head/FEN inputs, genuine parser/source/point joins,

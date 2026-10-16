@@ -1191,11 +1191,19 @@ function runNode(run: DrillRun, nodeId: string): Node {
 }
 
 const RECORDED_POSITION_INVOCATIONS = new WeakMap<object, Readonly<{ runId: string; headDigest: string; nodeId: string }>>();
+/** Internal recognition of the sole factory's original position, not a run/access validator. */
+export function readRecordedPositionInvocation(position: DeclaredEvidence<RecordedPosition>) {
+  assertDeclaredEvidence(position);
+  const invocation = RECORDED_POSITION_INVOCATIONS.get(position);
+  if (invocation === undefined || sealedRoute(position) !== "run.record.position@1"
+    || evidenceValueReceipt(position).factory !== "createRunRecordPositionV1Evidence"
+    || position.payload.nodeId !== invocation.nodeId) throw new TypeError("Recorded position was not issued by its original factory invocation");
+  return invocation;
+}
 /** Private original-head membership; never changes the historical position value receipt. */
 export function assertRecordedPositionInvocation(position: DeclaredEvidence<RecordedPosition>, run: DrillRun, nodeId: string): void {
-  assertDeclaredEvidence(position);
-  const invocation = RECORDED_POSITION_INVOCATIONS.get(position), node = runNode(run, nodeId), receipt = evidenceValueReceipt(position);
-  if (invocation === undefined || invocation.runId !== run.id || invocation.nodeId !== nodeId
+  const invocation = readRecordedPositionInvocation(position), node = runNode(run, nodeId), receipt = evidenceValueReceipt(position);
+  if (invocation.runId !== run.id || invocation.nodeId !== nodeId
     || invocation.headDigest !== evidenceDigest(run.events) || sealedRoute(position) !== "run.record.position@1"
     || receipt.factory !== "createRunRecordPositionV1Evidence"
     || receipt.inputDigest !== evidenceDigest({ run: { run: run.id, nodes: run.nodes.length, events: run.events.length }, nodeId })

@@ -16,11 +16,31 @@ clean workspace types and seven unchanged-budget performance cases pass. Full no
 build` exits zero:6,723 software/415 files, seven performance/four files,257 content/26 files and
 every remaining gate. The3,810 endpoint/7,854 membership tables and vendored source bytes are unchanged.
 
+The private paired-invocation prerequisite now retains actual source/position/table-row identities,
+including executed negatives and repeated-key occurrences.28 runtime controls plus real SQLite
+reopen/prefix extensions pass in137 source cases/eight files; workspace types pass. Independent
+read-only review finds no bounded blocker. All normal local tiers pass:6,751 software/416 files,
+seven performance/four files,257 content/26 files, governance/corpus contracts and production build. This is not
+point-factory array authentication or complete history.
+
 Next implement actual point lookup-result authority and complete recorded opening history, then
-the remaining grade/Compare sources and complete282-pair current consumer/access/renderer/API/
-native migration. The sole factories remain unavailable until that complete migration; do not
-change their accepted inputs while leaving live callers on the old shape. No compatibility-only
-pipeline, saved-data rewrite, source qualification, learner delivery or 1.0 milestone claim.
+the remaining grade/Compare sources and current consumer/access/renderer/API/native migration.
+Completeness is per consumer, not a globally atomic282-pair switch: Theory may migrate with its
+complete four bindings and real catalogue-applicability receipt. Inspector must use its actual
+complete preflighted source-page operation. Do not change shared factory inputs while its old
+generic `{fen}` fallthrough would turn a real topic into `not_requested`. Stage source primitives
+internally; do not add compatibility-only inputs/pipelines, rewrite saved data or claim source
+qualification, learner delivery or a 1.0 milestone from this checkpoint.
+
+Verification found [[D3884]]: whole-database read-only tests must wait for import's actual
+learner-history worker as well as engine settlement. The test-only repair retains every measured
+request/table/event assertion, worker and deadline; independent review and157 focused Review
+cases pass. Corrected full software6751/416, seven isolated performance cases and all remaining
+normal governance/content/build tiers pass. D3884 is closed; prior failures remain logged.
+[[D3885]] is separate executable testing debt for release-engineering:
+strengthen count-only no-write snapshots with stable full-row/event comparisons and a same-count
+mutation falsifier under the existing Review criterion. No actual in-place product mutation is
+claimed. Do not close that debt on D3884's settlement repair or hide it in a new planning document.
 
 **Prior verified durable checkpoint, 2026-10-16 — [[D3859]], [[D3863]], [[D3376]], [[D3883]]:**
 the accepted grade/Compare dependency now has its genuine private durable modern attachment

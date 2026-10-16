@@ -102,6 +102,14 @@ function tableSnapshot(path: string): Readonly<Record<string, number>> {
   }
 }
 
+/** Import's engine pass and learner-history worker settle independently. A no-write test must
+ * observe both before its initial snapshot, not count unrelated import work as a Review write.
+ * Keep the real worker, every table/event assertion and the existing observation deadline. */
+async function settledTableSnapshot(path: string, runId: string): Promise<Readonly<Record<string, number>>> {
+  await expect.poll(() => observationJobSettled(path, runId), { timeout: 10_000 }).toBe(true);
+  return tableSnapshot(path);
+}
+
 function eventKinds(path: string, runId: string): readonly string[] {
   const database = new DatabaseSync(path, { readOnly: true });
   try {
@@ -251,7 +259,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(path.kind).toBe("available");
     if (path.kind !== "available") throw new Error("actual imported sequence refused");
     expect(path.events.some(event => event.projection.id === value.projection && event.projection.version === 2)).toBe(value.emits);
-    const before = tableSnapshot(databasePath);
+    const before = await settledTableSnapshot(databasePath, runId);
     const compile = vi.spyOn(phaseSources, "compilePhaseArc");
     const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
     expect(response.status, await response.clone().text()).toBe(200);
@@ -396,7 +404,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const cookie = await register(origin, "review_relation_owner");
     const pgn = `[Event "Recorded pressure"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${value.fen}"]\n\n${value.line}`;
     const runId = await importReviewedGame(origin, cookie, "writer-relation", pgn);
-    const before = tableSnapshot(databasePath);
+    const before = await settledTableSnapshot(databasePath, runId);
     const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
     expect(response.status, await response.clone().text()).toBe(200);
     const review = await response.json() as ReviewMap;
@@ -557,7 +565,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     };
 
     // [criterion 14] nothing persisted: every table and the run's event log are unchanged by review reads.
-    const before = tableSnapshot(databasePath);
+    const before = await settledTableSnapshot(databasePath, runId);
     const eventsBefore = eventKinds(databasePath, runId);
     const review = await read();
     await read();
@@ -653,7 +661,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const runId = await importReviewedGame(origin, cookie, "writer-nudge");
     const review = await (await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } })).json() as ReviewPayload;
     const nudge = (nodeId: string) => queryNudge(origin, cookie, runId, nodeId);
-    const before = tableSnapshot(databasePath);
+    const before = await settledTableSnapshot(databasePath, runId);
     const white = review.rows[4]!;
     const response = await nudge(white.nodeId);
     expect(response.status, await response.clone().text()).toBe(200);
@@ -790,7 +798,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(JSON.stringify(review)).not.toMatch(/bestMove|movesUci|principal|providerLineDelivery/u);
 
     // §7 / O7.3: the explicit reveal, attributed to engine and search bound, and it writes nothing.
-    const tables = tableSnapshot(databasePath);
+    const tables = await settledTableSnapshot(databasePath, runId);
     const events = eventKinds(databasePath, runId);
     const target = review.rows[10]!;
     phase("explicit Analyze request");

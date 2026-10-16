@@ -32439,3 +32439,39 @@ Campaign was the one capability with no API, route or content. Now:
   D3851 means no compatibility-only pipeline, not deletion of saved data. D3870 remains separately
   blocked. No provider request, new lesson/content, source qualification, current learner delivery,
   browser/remote CI/push/deploy or whole capability/milestone/1.0 completion is claimed.
+
+### 2026-10-16 — Original installed-opening lookup invocations, D3884 test settlement repair
+
+- Implement the accepted installed-opening §3/3a paired-invocation prerequisite: genuine installed
+  handle plus original sole-factory recorded position; original frozen endpoint/member rows and
+  actual negative results; one existing map pair/calculation/normalization, shared by current
+  HTTP/phase lookup. Equal keys and equal-valued separately issued positions retain distinct
+  occurrences. No fake history source, declared point fact, empty factory-array receipt or access
+  grant. Independent read-only source review finds no bounded implementation blocker.
+- Add28 permanent runtime controls and extend actual parsed both-color SQLite prefix/reopen tests.
+  Normal source gate137/eight files and workspace types pass. Terminal test-start fixture refusal
+  and regeneration-overlap old-pin refusal are repaired/re-run without changing domain assertions.
+  Normal regeneration preserves every3810 endpoint/7854 member and vendored byte; only the existing
+  accurate compiler digest/pin changes. No new source/schema/version or chess meaning is invented.
+- Full software first fails6750/one case when engine settlement precedes import's independent
+  learner-worker publication:46 observations, one denominator and one structure row commit between
+  count snapshots. D3884 records the observed class; every initial no-write snapshot now waits on
+  the actual atomic completed job before the measured request. Real HTTP/workers/table/event
+  assertions and existing deadlines remain. Independent review and157 focused Review cases pass.
+  D3885 records separate count-only/full-row coverage debt, not an observed in-place product write.
+- Final normal software6751/416 (418.50s) and unchanged performance7/4 (59.62s) pass. Governance
+  catches both new rows' missing queue routes; add them to the existing queue, then normal remaining
+  verify-governance/verify-content/build exits zero with257 content/26 (58.16s), corpus92 documents/
+  354 blocking/34 resolved/48 accepted/errors[] and104 exact-capability documents. No source/test
+  changes after successful product gates. Interrupted/failed combined commands stay failed in the
+  job log; no assertion/deadline/retry/skip/coverage waiver or worker/table exclusion.
+- D3884 closes path-backed; D3885 is release-engineering todo. D3376/D3857 remain doing. Current
+  adoption is complete per consumer, not a global atomic282-pair prerequisite; Theory still needs
+  four complete bindings/applicability and Inspector its actual complete preflighted source-page
+  operation. Keep point-factory/history and real consumer delivery open; no old-input compatibility
+  arm. Existing queue/RFC/plan/log/docs/roadmap/state carry the same next work, no new work register.
+- State3634 rows/1750 live/zero untriaged:628 todo/38 doing/1084 blocked/1722 done/162 refused;
+  historical462 prose-only closures unchanged. Meanings/qualification remain317 projections/310
+  profiles/1016 capabilities/51 conventions and91 subjects/zero qualified. Final metadata/hook
+  checks precede commit. Full1.0 goal remains active. No protected intent sentence is falsified;
+  no content graduation, browser/remote-CI/push/deploy or whole capability/milestone/release claim.

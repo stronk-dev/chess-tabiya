@@ -12,9 +12,15 @@ import { readStoryRankReductionValue } from "../../../packages/runtime/src/inter
 import { evidenceDigest } from "../../../packages/runtime/src/evidence-contract.js";
 import { rankStoryMoments } from "../../../packages/runtime/src/story.js";
 import { collectRecordedEngineAttachments, readRecordedEngineAttachments } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+import { recordedOpeningLookup, readRecordedOpeningLookup } from "../../../packages/runtime/src/internal/recorded-opening-lookup.js";
+import { assertRecordedPositionInvocation } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { loadOpeningCatalogue } from "./opening-catalogue.js";
+
+const opening = await loadOpeningCatalogue(new URL("../artifacts/runtime-opening-catalogue.json", import.meta.url).pathname);
+if (opening.kind !== "available") throw new TypeError(`Actual installed opening fixture refused: ${opening.reason}`);
 
 const stores: SQLiteRunStorage[] = [], directories: string[] = [];
 afterEach(() => { for (const store of stores.splice(0)) store.close(); for (const directory of directories.splice(0)) rmSync(directory, { recursive: true, force: true }); });
@@ -46,6 +52,16 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
       const attachments = readRecordedEngineAttachments(collectRecordedEngineAttachments({ boundary }));
       expect(attachments.rows).toHaveLength(last + 1);
       for (const [index, row] of attachments.rows.entries()) {
+        // Reuse the original position issued over the actual parsed/reloaded prefix. This is
+        // the lookup prerequisite, not a complete recorded-opening history or learner delivery.
+        const lookup = recordedOpeningLookup({ source: opening.source, position: row.position });
+        const recorded = readRecordedOpeningLookup(lookup, opening.source, row.position);
+        assertRecordedPositionInvocation(recorded.position, attachments.boundary.run, nodes[index]!.id);
+        expect(recorded.position).toBe(row.position);
+        expect(recorded.lookup.catalogue).toBe(opening.catalogue);
+        expect(recorded.lookup.result.currentEndpoint).toEqual(opening.catalogue.currentEndpoint(nodes[index]!.fen, nodes[index]!.ply));
+        expect(recorded.lookup.result.catalogueMembership).toEqual(opening.catalogue.catalogueMembership(nodes[index]!.fen, nodes[index]!.ply));
+        if (index === 1) expect(recorded.lookup.result.currentEndpoint).toMatchObject({ kind: "matched", eco: "B00", name: "King's Pawn Game" });
         expect(row.selected !== null).toBe([0, 1, 3].includes(index));
         if (row.selected !== null) {
           expect(row.selected.occurrence.event).toBe(attachments.boundary.run.events[row.selected.occurrence.eventOrdinal]);

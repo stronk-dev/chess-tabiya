@@ -73,3 +73,81 @@
   recorded opening history/reduction and actual current consumer delivery with remaining
   grade/Compare dependencies. No compatibility-only pipeline, saved-data erasure, provider call,
   source qualification/content graduation, current learner cutover or full capability/release.
+
+## 2026-10-16 — Original paired-lookup prerequisite and migration sequencing
+
+- User confirms D3851: zero compatibility-only legacy required before launch. Independent
+  read-only sequencing review clarifies complete adoption is per consumer, not globally atomic
+  across282 pairs. Theory still needs all four bindings plus real applicability; Inspector's
+  generic old `{fen}` arm cannot silently lose a topic when shared factory inputs change. Keep
+  current arms unchanged until actual complete callers migrate; do not add a legacy input arm.
+- Implement private paired invocations over the genuine installed handle and original sole-factory
+  recorded position. Retain actual frozen endpoint/member rows in the same existing maps, not a
+  duplicated index or callback. Exact-source/position memoization normalizes only once; repeated
+  keys/equal-valued fresh positions keep distinct identities. Authentic negatives retain their
+  executed result, without claiming a declared fact or factory-array/history receipt. The actual
+  HTTP/phase helper also uses that admitted-source operation, with unchanged response meanings.
+- Add28 permanent runtime controls and extend actual parsed SQLite reopen/prefix cases for both
+  colors. Initial six tests correctly reject the kings-only terminal test start; replace only
+  that fixture with a legal non-terminal pawn endgame. No product guard or assertion changes.
+  An overlapping focused run sees the expected temporary old-pin/new-artifact refusal during
+  deliberate regeneration; restart after generation/build completes, no retry or assertion waiver.
+- Authorized independent read-only code/test review finds no bounded implementation blocker:
+  genuine source/position, original rows/negatives, occurrence identity, one existing lookup,
+  private readers and unchanged predecessor tests. No reviewer tests/edits or new-scope acceptance.
+  Normal generation/build finishes; full normal verification is next. D3376/D3857 remain doing;
+  point-factory array authentication, complete history/reduction and actual consumer delivery remain.
+
+## 2026-10-16 — Full software gate catches actual independent-worker snapshot race
+
+- First normal full software run is6,750 passes/one failure across416 files (430.42s): D3632/D3633
+  whole-database read-only assertion observes import's independent learner-history job commit
+  46 observations, one denominator and one structure row. All other tables and the expected Review
+  presentation assertions pass. Engine settlement is not observation-worker settlement; this is
+  not an opening lookup failure or permission to erase rows from the no-write assertion.
+- Record D3884 and assign release-engineering. Reuse the existing exact state=complete and
+  completed_seq=requested_seq predicate before every initial whole-database snapshot. All actual
+  workers/HTTP paths, full table/event comparisons, existing10s observation bound and30s suite
+  deadline remain. No worker disable, fixed sleep, table exclusion, retry or product behavior change.
+  Existing normal review-evidence-runtime-check and a corrected full normal rerun follow.
+- The tracked tree gains only this owned test repair and its required ledger/state/log record.
+  D3376/D3857 and the complete1.0 goal remain active; no completion is inferred from the failed run.
+- First focused Review rerun is interrupted after its sandboxed HTTP cases stop at listen;
+  repeat the same normal Make target with loopback permission, not altered command/env/deadlines.
+- Independent read-only D3884 review finds no blocker: publication commits the completion marker
+  atomically with the derived tables; every measured request follows settlement and all later
+  assertions remain. It flags an existing separate coverage limitation: count-only snapshots do
+  not detect arbitrary in-place updates. Record D3885 as testing debt, not an observed product
+  mutation or silently discharged full-row proof. No reviewer tests or edits.
+- Corrected normal review-evidence-runtime-check passes157 cases/four files (140.32s) through
+  actual HTTP/worker execution. The first state assignment mistakenly supplies since for a todo
+  row; the normal validator refuses it, and the correct owner-only todo assignment passes. Both
+  D3884/D3885 are owned; zero untriaged. Restart full normal make verify build against the repaired
+  frozen product/test tree. Prior failed/permission-interrupted runs are not counted as success.
+- Corrected full software passes6,751/416 files (418.50s) and unchanged performance passes
+  seven/four files (59.62s). Governance then correctly refuses D3884/D3885's missing queue routes:
+  they were assigned in the state file but only cited in the append-only job log. Add both to the
+  existing codex queue, with the full-row debt explicitly separate, no new planning document.
+  Product/test bytes stay unchanged; run normal remaining verify-governance, verify-content and
+  build tiers. Do not claim the interrupted combined command itself exited zero.
+
+## 2026-10-16 — Verified paired-invocation checkpoint and D3884 closeout
+
+- All required normal local tiers now pass against unchanged repaired product/test bytes:
+  6,751 software/416 files (418.50s), seven unchanged-budget performance/four files (59.62s),
+  corrected remaining verify-governance/verify-content/build exits zero with257 content/26 files
+  (58.16s), all corpus/capability contracts and production build. The failed/interrupted combined
+  commands above remain failed records. No source/test edits after those passed executions.
+- Focused source137/eight files and Review157/four files, workspace types and independent bounded
+  reviews pass. The two original tables and vendored bytes remain exact3810/7854. Semantic/capability
+  meaning/qualification stays317 projections/310 profiles/1016 declarations/51 conventions and
+  91 subjects/zero qualified/343 cases/53 population/eight external receipts. No new dataset or
+  recording, provider call, source qualification, authored content or protected intent change.
+- D3884 closes with actual test-path evidence, not prose-only closure. D3885 remains owned todo;
+  D3376/D3857 remain doing, with point-factory array authentication, complete history/reduction and
+  actual complete per-consumer/current access/renderer/receiver/API/native delivery still required.
+  The same263-byte pin remains package-owned; no old-input arm or compatibility-only pipeline.
+- Existing ledger/state/queue/RFC/roadmap/job-plan/docs are reconciled, not replaced by a new work
+  register. State3634 rows/1750 live/zero untriaged:628 todo/38 doing/1084 blocked/1722 done/162
+  refused; historical462 prose-only closures unchanged. Final metadata/commit-hook checks follow.
+  Full1.0 goal stays active; no browser/remote-CI/push/deploy or milestone/release completion claim.

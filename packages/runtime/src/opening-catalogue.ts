@@ -108,6 +108,11 @@ export interface InstalledOpeningCatalogue {
   readonly ref: OpeningCatalogueRef;
 }
 const installedSources = new WeakMap<object, CompiledOpeningCatalogue>();
+// The original frozen rows behind the compiled lookup, not a second table/index.
+const compiledRows = new WeakMap<CompiledOpeningCatalogue, Readonly<{
+  endpoints: ReadonlyMap<string, RuntimeOpeningCatalogue["namedEndpoints"][number]>;
+  members: ReadonlyMap<string, RuntimeOpeningCatalogue["pathMembership"][number]>;
+}>>();
 class OpeningCatalogueDigestMismatch extends RangeError {}
 
 export interface OpeningCatalogueSourceInput { readonly name: OpeningCatalogueFileName; readonly bytes: Uint8Array }
@@ -147,11 +152,11 @@ export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCa
     if (endpoints.has(item.key)) throw new TypeError("Opening catalogue endpoint key is duplicated");
     endpoints.set(item.key, item);
   }
-  const members = new Map<string, number>();
+  const members = new Map<string, RuntimeOpeningCatalogue["pathMembership"][number]>();
   for (const item of value.pathMembership) {
     if (item.key.split(" ").length !== 4 || transposeKey(`${item.key} 0 1`) !== item.key) throw new TypeError("Opening catalogue membership key is not a canonical position key");
     if (members.has(item.key)) throw new TypeError("Opening catalogue membership key is duplicated");
-    members.set(item.key, item.descendantEndpointCount);
+    members.set(item.key, item);
   }
   if ([...endpoints.keys()].join("\0") !== [...endpoints.keys()].sort((left, right) => left.localeCompare(right)).join("\0") || [...members.keys()].join("\0") !== [...members.keys()].sort((left, right) => left.localeCompare(right)).join("\0")) throw new TypeError("Opening catalogue tables are not canonically sorted");
   if ([...endpoints.keys()].some(key => !members.has(key))) throw new TypeError("Opening catalogue endpoint is not a path member");
@@ -180,12 +185,12 @@ export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCa
       : Object.freeze({ kind: "matched", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, positionKey, observedPly, eco: found.eco, name: found.name, sourcePly: found.sourcePly, catalogue: catalogueRef });
   };
   const catalogueMembershipFor = (positionKey: string, observedPly: number): OpeningCatalogueMembership => {
-    const count = members.get(positionKey);
-    return count === undefined
+    const found = members.get(positionKey);
+    return found === undefined
       ? Object.freeze({ kind: "absent", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, positionKey, observedPly, reason: "no_catalogue_path", catalogue: catalogueRef })
-      : Object.freeze({ kind: "member", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, positionKey, observedPly, descendantEndpointCount: count, catalogue: catalogueRef });
+      : Object.freeze({ kind: "member", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, positionKey, observedPly, descendantEndpointCount: found.descendantEndpointCount, catalogue: catalogueRef });
   };
-  return Object.freeze({
+  const compiled: CompiledOpeningCatalogue = Object.freeze({
     artifact,
     ref: catalogueRef,
     openingIdentity(fen: string, observedPly: number) {
@@ -207,6 +212,8 @@ export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCa
       return catalogueMembershipFor(positionKey, observedPly);
     },
   });
+  compiledRows.set(compiled, Object.freeze({ endpoints, members }));
+  return compiled;
 }
 
 /** Installed admission, never a caller-selected expected digest or registration. */
@@ -237,14 +244,25 @@ export function isInstalledOpeningCatalogue(source: unknown): source is Installe
   return source !== null && typeof source === "object" && installedSources.has(source);
 }
 
+/** Internal original-row lookup. One paired calculation/normalization, no caller rows/callback. */
+export function readInstalledOpeningLookup(source: InstalledOpeningCatalogue, fen: string, observedPly: number) {
+  const catalogue = readInstalledOpeningCatalogue(source), rows = compiledRows.get(catalogue)!;
+  const result = catalogue.openingIdentity(fen, observedPly);
+  if (result.currentEndpoint.kind === "abstained" || result.catalogueMembership.kind === "abstained") throw new TypeError("Installed opening lookup unexpectedly abstained");
+  const key = result.currentEndpoint.positionKey;
+  return Object.freeze({ catalogue, result, endpointRow: rows.endpoints.get(key) ?? null, membershipRow: rows.members.get(key) ?? null });
+}
+
 export function openingIdentityAt(availability: OpeningCatalogueAvailability, fen: string, observedPly: number): { readonly currentEndpoint: CurrentOpeningEndpoint; readonly catalogueMembership: OpeningCatalogueMembership } {
   if (!Number.isSafeInteger(observedPly) || observedPly < 0) throw new TypeError("ply must be a non-negative safe integer");
-  transposeKey(fen);
-  if (availability.kind === "unavailable") return Object.freeze({
-    currentEndpoint: Object.freeze({ kind: "abstained", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, reason: availability.reason }),
-    catalogueMembership: Object.freeze({ kind: "abstained", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, reason: availability.reason }),
-  });
-  return availability.catalogue.openingIdentity(fen, observedPly);
+  if (availability.kind === "unavailable") {
+    transposeKey(fen);
+    return Object.freeze({
+      currentEndpoint: Object.freeze({ kind: "abstained", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, reason: availability.reason }),
+      catalogueMembership: Object.freeze({ kind: "abstained", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, reason: availability.reason }),
+    });
+  }
+  return readInstalledOpeningLookup(availability.source, fen, observedPly).result;
 }
 
 export function recordedOpeningPosition(nodeId: string, ply: number, fen: string): RecordedPosition {

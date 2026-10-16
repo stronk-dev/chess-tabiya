@@ -7,6 +7,11 @@ Implement the independently accepted `rfc/installed-opening-evidence.md`, under 
 full normal verification/build passes. Steps3–6 and D3376/D3857 remain open. The actual runtime
 point/history factories have not changed, and no learner-facing migration is claimed.
 
+The step3 paired-invocation prerequisite is now implemented and independently code-reviewed;
+all normal local tiers pass:6,751 software/416 files, seven performance/four files,257 content/26
+files, governance/corpus contracts and production build. It retains genuine source/position and original table
+rows, including negative lookups, without claiming point-factory result-array or history authority.
+
 1. Register the exact existing catalogue schema. Move its pure structural loader, owned tables
    and paired lookup into runtime; keep file I/O and TSV/PGN compilation on the server.
 2. Generate the small installed-content registration alongside the artifact. Admit only that
@@ -25,3 +30,10 @@ point/history factories have not changed, and no learner-facing migration is cla
 Source-only checkpoints are prerequisites, not D3376 completion. Acceptance criteria1–11 of the
 RFC remain the complete obligation; no content graduation, source qualification or release is
 inferred. Independent review uses the existing authorized reviewer, not author self-acceptance.
+
+Completeness is per consumer (`module-registration.md` current-adoption contract), not a global
+atomic282-pair cutover. Theory may migrate as its complete four-binding consumer, with original
+position and genuine catalogue-applicability receipt. Inspector must migrate through its actual
+complete preflighted source-page operation; changing the shared factory inputs while its generic
+old `{fen}` fallthrough is live would silently turn a real topic into `not_requested`. Stage owned
+source primitives internally first; never retain an obsolete input arm to conceal that gap.

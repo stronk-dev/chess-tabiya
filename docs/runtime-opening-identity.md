@@ -76,6 +76,19 @@ before they can be erased or executed. The runtime bundle includes the small reg
 catalogue tables or raw source files. This source foundation does not yet replace the unavailable
 sole point/history factories or complete the coordinated learner-facing migration.
 
+The private recorded lookup now binds one genuine `run.record.position@1` factory invocation to
+one admitted installation. Endpoint and membership share one calculation/normalization and the
+original frozen table rows (including endpoint file/row location); there is no second index or
+lookup algorithm. Memoization uses exact source/position objects, so repeated keys and equal-valued
+but separately recorded positions do not borrow another occurrence's identity. Successful negative
+lookups remain actual retained results, not unavailable sources or invented name facts. The existing
+HTTP/phase operation uses the same admitted-source lookup and preserves its response meanings.
+
+This private invocation is not a point-factory result-array receipt, complete recorded history,
+current-storage/access grant or learner-module integration. Those remain open under D3376/D3857.
+Normal source tests include real parsed imports after file-backed SQLite reopen for both learner
+colors and every prefix, with no provider acquisition or rewritten recorded events.
+
 The required performance test keeps catalogue load below 250 ms wall time and production lookup
 work below 50 µs CPU time per position at the p95 of bounded batches over all 6,991 recorded sample
 positions. CPU time deliberately excludes periods when a shared CI runner has descheduled the Node

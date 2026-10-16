@@ -2247,7 +2247,7 @@ evidence-value-authority-route-map-update:
 	$(CI_NODE) tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs --write
 
 opening-source-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/opening-catalogue.test.ts packages/runtime/src/opening-catalogue.test.ts apps/server/src/opening-catalogue.test.ts apps/server/src/opening-catalogue-build.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/opening-catalogue.test.ts packages/runtime/src/opening-catalogue.test.ts packages/runtime/src/recorded-opening-lookup.test.ts apps/server/src/opening-catalogue.test.ts apps/server/src/opening-catalogue-build.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/recorded-review-boundary.test.ts
 
 opening-catalogue:
 	./node_modules/.bin/esbuild apps/server/src/opening-catalogue-build.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/opening-catalogue-build.js --log-level=warning

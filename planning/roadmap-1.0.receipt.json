@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5a4a4a1e7720e9004582d6974767949400acd99b915d29b16f9acf60ff89abe3",
+    "roadmap": "sha256:53124b9a717e0d69682f131d3a5f5815b37671e30c1fced6bd0becbee74f11d2",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:e71b8ed26185ab6ce8d8dc21c3b27623d9e9c9a7f7990ccd044ca53f4db2db7f",
-    "rfcRegister": "sha256:3e23337e3118bafc6bef6c091ed1841964441f316e71d5a9cf0496ac2fa9a5af",
+    "workState": "sha256:471b235d7ab5e0611bf3c666f5362aada4ac065870878ccea2afc8775c880d66",
+    "rfcRegister": "sha256:53f5ebe84c2e3628fa678cdee2b62e8f8c7b8b91c822204ba6175a4baf536c2a",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 627,
+      "todo": 628,
       "doing": 38,
       "blocked": 1084,
-      "done": 1721,
+      "done": 1722,
       "refused": 162
     },
     "workItems": {
@@ -76,7 +76,7 @@
       "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Diagnose D3600's published 62c81eb1 warm native-arrival failure (1092.9 ms p95; three of five samples meet 250 ms), retaining its earlier failures. D3771's locally measured assertion interference and ordering correction do not establish the remote cause; preserve tracing, every sample and the 250 ms budget. Locate D3591's longitudinal-worker stall without changing its budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "D3869 closes local fail-fast sequencing: the same28 Make gates put selected-toolchain/type/generated-contract checks before both complete software and isolated performance pools. Four permanent scheduling tests inspect the actual expanded Make plan, retain393-file/one-native-project discovery and prove real Make failure propagation skips both pool markers while the predecessor-order mutation executes the costly marker. One predecessor-red case becomes green. Reordered normal make verify build passes5956 software/seven performance/257 content plus every existing contract/governance/corpus/build check. No new wrapper, hook/service requirement, deadline inflation, skipped case or product behavior. Prior source-history/remote diagnostic evidence remains recorded; local ordering does not establish a current remote-green revision, fix the old intermittent causes or restore release-truth as a whole.",
+        "summary": "D3884 repairs an observed Review whole-database snapshot race: engine settlement preceded import's independent atomic learner-history publication. Initial snapshots now observe the exact completed job before the measured request; every real HTTP/worker/table/event assertion and existing deadline remains. Independent review and157 focused Review cases pass. Normal software6751/416 (418.50s), unchanged performance7/4 (59.62s), and corrected remaining governance/content257/26 (58.16s)/corpus/build tiers pass. Governance's two initially unrouted new rows are routed in the existing queue; failed/interrupted combined commands stay logged. D3885 count-only/full-row coverage debt remains owned, not a claimed observed product mutation. Prior D3869 scheduling/source-history/remote evidence stands. No worker disable, table exclusion, sleep, retry, product behavior change, remote-green revision or whole release-truth promotion.",
         "impact": "advanced",
         "evidence": [
           "tools/d3367-provider-source-history/proof.ts",
@@ -182,6 +182,11 @@
           "apps/server/src/capabilities.test.ts"
         ],
         "anchors": [
+          {
+            "kind": "work_state",
+            "id": "D3884",
+            "digest": "sha256:e7a84593dd7a3f7610f566d7123c5a110ddbdc2e326ebb76e775939533fd80ea"
+          },
           {
             "kind": "work_state",
             "id": "D3869",
@@ -487,10 +492,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete genuine installed-opening point lookup-result authority and complete recorded history over the implemented source/schema/pin, then remaining grade/Compare endpoint sources. Preserve source-complete preflight and per-node original occurrence identity/corrupt-modern refusal; durable modern primitive is not complete pending/job/ledger selection. D3870 resource ordering/acceptance remain separate. Then bind the final full authority to actual RunService storage and migrate all282 current source/access/count-renderer/receiver/API/native pairs, retiring obsolete execution after real callers move. No compatibility-only pipeline, fake availability, dropped family, widened grants or premature qualification/milestone/release claim.",
+      "nextAction": "Complete installed-opening sole point-factory result-array authority and complete history/reduction over the implemented original paired invocations, then remaining grade/Compare endpoint sources. Current adoption is complete per consumer, not a globally atomic282-pair switch: Theory needs all four bindings and genuine catalogue-applicability; Inspector needs its complete preflighted source-page operation, not the old generic fen arm. Migrate all actual current source/access/count-renderer/receiver/API/native pairs and retire obsolete execution after callers move. Preserve original occurrences/corrupt-modern refusal; durable attachment primitive is not complete pending/job/ledger selection. D3870 remains separate. No compatibility-only input arm, fake availability, dropped family, widened grant or premature qualification/milestone/release claim.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Installed opening source admission now uses the actual shared schema/pure loader/paired maps and263-byte package pin at application loading. Exact source references and privately recognized handles retain detached frozen data; forged handles or self-redigested rewrites refuse. Canonical-key/relationship precedence and generator-before-final-build repairs are independently cleared; predecessor compiler tests retained.95 focused source cases/six files,39 register cases/types and seven unchanged-budget performance cases pass. Full normal make verify build passes6723 software/415 files, seven performance/four files,257 content/26 files and every remaining gate; no assertion/deadline/retry/skip/coverage relaxation. Actual point/history factories and full282-pair current source/access/renderer/API/native migration remain; prior durable engine/moment/rank source checkpoints stand.317 projections/310 profiles/1016 capabilities/51 conventions and semantic91 subjects/zero qualified unchanged. No current learner cutover, provider request, saved-data rewrite, source qualification or release claim.",
+        "summary": "Installed opening paired invocations retain genuine source/sole-factory recorded position and original frozen endpoint/member rows, including executed negatives and distinct repeated-key occurrences. The same existing maps/calculation also serve actual HTTP/phase lookup, with one normalization.28 new runtime cases and real both-color SQLite reopen/prefix extensions pass in137 source cases/eight files; types and independent bounded review pass. Normal software6751/416, unchanged performance7/4 and corrected remaining governance/content257/26/corpus/build tiers pass; failed/interrupted combined commands remain logged. D3884's independent-worker snapshot race is repaired; D3885 full-row proof remains owned. Actual3810 endpoints/7854 members/vendor bytes are unchanged. Point-factory array authentication, complete history/reduction and per-consumer complete current delivery remain; no partial module image or legacy-only input pipeline. Prior source checkpoints and317 projections/310 profiles/1016 capabilities/51 conventions/semantic91 subjects/zero qualified stand. No current learner cutover, provider request, saved-data rewrite, source qualification or release claim.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -684,6 +689,8 @@
           "schemas/opening_catalogue.schema.json",
           "packages/runtime/src/opening-catalogue.ts",
           "packages/runtime/src/opening-catalogue.test.ts",
+          "packages/runtime/src/internal/recorded-opening-lookup.ts",
+          "packages/runtime/src/recorded-opening-lookup.test.ts",
           "packages/runtime/src/opening-catalogue-registration.json",
           "apps/server/src/opening-catalogue-build.test.ts",
           "docs/runtime-opening-identity.md"
@@ -922,7 +929,7 @@
           {
             "kind": "rfc",
             "id": "installed-opening-evidence.md",
-            "digest": "sha256:2bc16ddf5f75560e6a0be3502c93e65e621ecacce93f32b908aea3026cdc75e4"
+            "digest": "sha256:c3f0394f53b923f07dce4175b6f0aefad2a34c6c59cb9cd11d2a82b3c18eec52"
           },
           {
             "kind": "rfc",
