@@ -19,7 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest verified slice is source-owned rank@3: the existing nine-band presentation order now
+The latest verified grade/Compare source dependency is the private durable modern attachment
+primitive: complete original seq/ordinal/head/FEN inputs, genuine parser/source/point joins,
+latest-modern node selection and fatal corrupt-modern refusal.36 runtime cases, actual SQLite
+prefix/reopen extensions, types and independent bounded review pass. Full normal `make verify build`
+exits zero:6,677 software/413 files, seven performance/four files,257 content/26 files and every
+remaining gate. The focused gate passes1,131 cases/33 files. No test budget or coverage is relaxed.
+This is not pending/job/ledger selection, a complete endpoint/GradeSource, grade or learner delivery.
+The separately required opening §§1–3 base contract is now independently accepted after D3883's
+schema grammar repair. D3376 moves from review-blocked to executable queued implementation;
+actual schema/runtime pin/lookup/factory/history/consumer work remains. Nothing here completes
+a capability or milestone; the next source and full282-pair migration obligations stand.
+
+The prior verified slice is source-owned rank@3: the existing nine-band presentation order now
 has an authentic complete-source/single-value computation over actual recorded groups, including
 empty/root-only context, exact child occurrence authority and nested last-level receipts. It
 does not inherit evaluation or pattern permissions. Independent bounded code/test review finds

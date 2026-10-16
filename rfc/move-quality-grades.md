@@ -6,6 +6,17 @@ unaccepted labels for these clauses are history; actual issuance, source/consume
 parent obligations remain. Decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+**Internal durable attachment checkpoint, 2026-10-16 — [[D3859]], [[D3863]]:** §2a now has
+its private durable modern arm over a genuine validated storage boundary. All original seq/
+ordinal/position/delivery inputs remain; latest modern selection ignores later scalar reports,
+corrupt modern input refuses and current storage is rechecked at publication/readback.36
+runtime cases and real SQLite prefix/reopen extensions pass, with clean workspace types and
+bounded independent code review. Normal `make verify build` passes6,677 software/413 files,
+seven performance/four files,257 content/26 files and all remaining gates; the focused gate is
+1,131 cases/33 files. This does not complete
+resolveRecordedEngineEndpoint: pending/job ownership, pinned-ledger selection/precedence,
+grade/Compare service contexts, accuracy, renderers and complete current adoption remain.
+
 - **Status:** implementing — D3860's 2026-10-15 repair enforces §2 at the sealed factory before payload normalization and declares the two actual ordered occurrences in each same-source alternative. The earlier 2026-09-01 claim of paired declaration/source enforcement was too strong: the declaration still had one occurrence per member and the wrapper admitted mixed origins. Pure grading constants/arithmetic are unchanged. D1 discharged at `63902370` (2026-09-24): both current module consumers admit the grade. This scoped repair does not supply D3859's modern source/edge/context and complete-consumer migration. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
 - **Author:** claude, on the [[D879]] BUILD-IT verdict and the [[D899]] routing (learner-modules `## Discharges` D3)
 - **Created:** 2026-08-22

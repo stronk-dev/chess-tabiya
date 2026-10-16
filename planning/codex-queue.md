@@ -1,6 +1,24 @@
 # Codex queue
 
-**Current verified checkpoint, 2026-10-16 — [[D3847]], [[D3845]], [[D3882]]:** source-owned
+**Current verified checkpoint, 2026-10-16 — [[D3859]], [[D3863]], [[D3376]], [[D3883]]:**
+the accepted grade/Compare dependency now has its genuine private durable modern attachment
+primitive. It retains original full-head/prefix/position/seq/ordinal authority, re-derives whole
+persisted deliveries through the real parser/source/point factories and fixes latest-modern
+selection independently per node. All corrupt modern inputs refuse; later scalars cannot replace
+modern evidence.36 runtime cases, actual SQLite prefix/reopen controls, clean types and bounded
+independent review pass. Normal `make verify build` exits zero:6,677 software/413 files, seven
+performance/four files,257 content/26 files and every remaining gate. The focused gate passes
+1,131 cases/33 files. No complete pending/
+ledger endpoint resolver, GradeSource, access grant, grade, current consumer or release claim.
+
+Opening's required §§1–3 base/schema/pin/paired-source contract is now independently accepted
+after D3883's schema-URN correction. This is one explicitly authorized source-first/atomic
+ordinary introduction, not generic absent-resource admission or D3082 discharge. D3376 is queued,
+not blocked on its former review. Next implement the actual installed opening foundation, then
+complete history/grade/Compare sources and the entire282-pair current access/renderer/API/native
+migration. No compatibility-only pipeline or saved-data erasure; D3870 stays independently blocked.
+
+**Prior verified rank checkpoint, 2026-10-16 — [[D3847]], [[D3845]], [[D3882]]:** source-owned
 rank@3 now computes the existing nine-band presentation order over original recorded groups.
 Concrete witnesses retain actual ordered inputs, provider/recorded/local authority and genuine
 nested last-level reduction identity. Complete source states and the executed empty/root-only

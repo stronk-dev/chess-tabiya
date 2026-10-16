@@ -27783,12 +27783,11 @@
     },
     {
       "id": "D3376",
-      "state": "blocked",
+      "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:153adc57b16cfc8b532e675e12b792fa2745ad97d05c5e36a79b1f7ce42ef912",
+      "sourceDigest": "sha256:9174b8e47fc127ac6f502e4cf9c335377b146c31a3ca8f80b5c02987b52f8a73",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:installed-opening-evidence.md"
+      "owner": "evidence-foundation"
     },
     {
       "id": "D3377",
@@ -32129,7 +32128,7 @@
       "id": "D3857",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:f8ed30ca362e421ebbe3338461e967289c573e80cbfb6e3a673ad8d27da9cf50",
+      "sourceDigest": "sha256:2081b89d447317e1779b61f9236fd1d1de89aa66e9ab59a213f0803d4c6ebb55",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32147,7 +32146,7 @@
       "id": "D3859",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3ea71e37d5a085ee171fdca6bbbfe0f3fc4e9be08c2f950b9e75edfa7968a1c9",
+      "sourceDigest": "sha256:5c6fb2308a7f3d38baa849824d03f8cc0e3c89670f6b6b40f4208d860d415370",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32183,7 +32182,7 @@
       "id": "D3863",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a1343d696ff9fbd6273bc96ede4d18f50324d47cc9f4e93f5e459ad709d6b576",
+      "sourceDigest": "sha256:3154171316448fed8bcb922cea788d78c8b5eae80e137cfd40b25f0e51e5d808",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32357,6 +32356,15 @@
       "sourceDigest": "sha256:98cf073ff50e95fbccbbd2969afbd23b1550f0d477318aaf56489f7dc019bca0",
       "uxItems": [],
       "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3883",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:453283d10fddcfbb6a8b12841cf93685fb0168149225d688d1e51b7e3f47774a",
+      "uxItems": [],
+      "evidence": "rfc/installed-opening-evidence.md",
       "evidenceKind": "path"
     }
   ]

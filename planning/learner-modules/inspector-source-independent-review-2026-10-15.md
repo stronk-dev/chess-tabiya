@@ -1420,3 +1420,28 @@ validation and the public barrel exports. Normal generation from the actual stal
 adds only rank@3, then changes zero on repeat. The reviewer ran no tests or acceptance actions;
 main runs the normal verification. This is not source qualification, new acceptance, current
 consumer/count-renderer/API/native adoption, a complete Review capability or release.
+
+## 2026-10-16 — Installed-opening base dependency, independent bounded acceptance
+
+The authorized reviewer confirms that the prior joint decision accepted installed-opening §3a/
+current adoption, not its required §§1–3 base-source/schema/pin boundary. Necessity is not approval.
+Read-only full relevant specification/criteria and actual compiler/loader, runtime-opening
+authority, Make/build, resource checker and release pipeline review returns exactly D3883: the
+draft's schema URN lacks the actual checker grammar's schema segment. Main corrects that literal
+and explicitly bounds source-first creation/atomic row-export-register admission to this one schema.
+The reviewer re-reads the actual fixes and explicitly ACCEPTS FOR IMPLEMENTATION §§1–3 and their
+directly supporting criteria. No checker relaxation or generic absent-resource permission;
+D3082/unrelated parent obligations, implementation, current consumer delivery and qualification
+remain open. This is a reviewer decision, not author self-acceptance or a schema already shipped.
+
+## 2026-10-16 — Durable modern attachment primitive, independent implementation review
+
+The same reviewer independently clears the internal accepted-grade primitive, not the complete
+resolveRecordedEngineEndpoint or service issuer. Genuine existing storage-bound immutable run/
+head/path precedes collection; all relevant original attachment seq/ordinals and exact full FENs
+are retained. Persisted deliveries pass the real reload parser and sole source/point factories.
+All modern inputs validate; latest modern wins over later scalar reports, and corrupt modern
+data cannot fall back. Original point inputs and final publication/readback currentness hold.
+No pending request, ledger origin/selection, GradeSource, grading/access authority or provider
+request is invented. The inspected runtime/SQLite tests exercise these boundaries; reviewer
+runs no tests. Main's actual execution results are recorded separately in the append-only log.

@@ -32309,3 +32309,64 @@ Campaign was the one capability with no API, route or content. Now:
   then complete282-pair current access/count-renderer/receiver/API/native delivery and obsolete-
   path retirement. D3870 remains separately blocked. No compatibility-only pipeline, saved-data
   deletion, pack edit, source qualification, browser/remote CI/push/deploy or 1.0 completion claim.
+
+### 2026-10-16 — Durable engine attachment source and opening-base independent acceptance
+
+- Previous goal turn is verified progress:6b4efa0e lands actual source-owned Review rank and
+  D3882's normal-generator repair with full normal verification/build and configured hooks.
+  Current tracked tree is clean before this wave; the same three pre-existing untracked paths
+  remain excluded. The full 1.0 objective stays active; no worktree/push/deploy or new task.
+- Independent scope check finds opening §3a/current adoption accepted, but required §§1–3
+  base/schema/pin not authorized by implication. The reviewer then examines the full relevant
+  specification/criteria and real compiler/loader/build/resource/release boundary, returning
+  D3883's wrong schema URN. Correct to the existing schema grammar, explicitly authorize only
+  this one source-first/atomic ordinary row/export/register introduction, do not weaken checker.
+  Independent re-review explicitly ACCEPTS FOR IMPLEMENTATION the bounded base and supporting
+  criteria; D3082/unrelated obligations/current delivery remain open. Body/register/queue align;
+  D3376 becomes queued executable work, not source already shipped or author self-acceptance.
+- Accepted grade§2a/F2§2.3a's durable modern source primitive is implemented internally over
+  the genuine existing validated storage boundary. Every original prefix position, relevant
+  attachment event/ordinal and genuine parsed delivery remains. Latest modern wins independently
+  per node; later scalars do not replace it, corrupt modern data does not fall back. Exact full
+  FEN and original point input identities validate before publication/readback with current
+  storage. No provider call or fabricated pending/ledger/grade/access authority. The complete
+  endpoint resolver and real service/consumer scopes still remain, as independently confirmed.
+-36 runtime tests and actual both-colour SQLite prefix/save/reopen controls pass with clean
+  types; independent code/test inspection finds no blocker. Initial controls are corrected at
+  their actual premises: a legitimate generation100 is retained, not unverifiable tampering;
+  malformed generation0 refuses, and terminal coverage plays a legal mating line because a
+  terminal root is forbidden. An optional test argument is omitted rather than passed as
+  undefined under exact optional typing; no domain/assertion/deadline/coverage relaxation.
+- Normal generators produce no declaration/profile/convention/qualification change:1016
+  capabilities/310 profiles/51 conventions; semantic91 subjects/zero qualified/343 cases/53
+  population/eight external receipts. Focused and full normal verification follow before commit.
+  The first ledger sync correctly refuses an unassigned closed row; explicit path assignment
+  fixes it. A todo transition rejects an inapplicable since field; rerun with its valid ordinary
+  arguments, no validator change. No false milestone, content, browser/remote or release claim.
+
+### 2026-10-16 — Durable modern attachment verified checkpoint
+
+- Full unchanged normal `make verify build` exits zero:6,677 software tests/413 files
+  (395.44s), seven isolated performance tests/four files (60.03s),257 content tests/26 files
+  (56.04s), clean workspace types and every manifest/contract/governance/corpus/packaging/build
+  gate. Focused evidence-value authority is1,131 passes/33 files, including36 new runtime cases
+  and actual both-colour SQLite prefix/save/reopen extensions. No assertion/deadline/retry/skip/
+  coverage change. Corpus92 documents/354 blocking/34 resolved/48 accepted/errors[];104
+  capability documents declare exactly their derived requirements.
+- Independent bounded implementation review finds no blocker. D3883's actual contract repair
+  and bounded opening §§1–3 acceptance stand, not schema/source/consumer implementation or
+  D3082 discharge. D3376 is todo; D3857/D3859/D3863 remain doing. This source primitive is not
+  complete pending/job/ledger endpoint selection, GradeSource, Compare context, access grant or
+  current learner delivery. No provider call, new projection/convention/schema, pack edit,
+  qualification, browser/remote CI/push/deploy or capability/milestone/release completion.
+- Final metadata now records verified rather than in-flight status. Source population remains
+  317 projections/310 profiles/1,016 capabilities/51 conventions; semantic validation91 subjects/
+  zero qualified/343 cases/53 population/eight external receipts. Work-state3,632 rows/1,749
+  live/zero untriaged:628 todo/37 doing/1,084 blocked/1,721 done/162 refused; historical462
+  prose-only closeouts unchanged. No product source changes after the full pass. Final receipt,
+  metadata checks and configured commit hook follow before commit.
+- The full 1.0 goal stays active. Next implement the independently accepted installed opening
+  foundation/history, complete grade/Compare sources, then the complete282-pair current source/
+  access/renderer/receiver/API/native migration. D3851 requires no compatibility-only pipeline;
+  preserve saved data and retire obsolete execution after actual callers move. D3870 remains
+  independently blocked, not a reason to stop the other accepted foundation work.

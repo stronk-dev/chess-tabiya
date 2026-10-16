@@ -177,6 +177,7 @@ describe("value authority: static closure", () => {
     const store = FACTS.get("packages/runtime/src/internal/evidence-reduction-seal.ts")!;
     expect(store.valueImports).toEqual([]); // Type-only imports cannot reintroduce catalogue bootstrap.
     for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/(?:comparison|last-level|story-rank)-reduction-authority|evidence-reduction-seal|sealOwned(?:Comparison|LastLevel|StoryRank)ReductionProof|initiateEvidenceReduction|publishSingleEvidenceReduction/u);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/recorded-engine-attachments|collectRecordedEngineAttachments|readRecordedEngineAttachments/u);
   });
   it("only evidence-factories.ts calls declareEvidence outside tests (criterion 5, §8.1)", () => {
     const callers = PRODUCTION_FILES.filter((path) => FACTS.get(path)!.calls.has("declareEvidence")).sort();

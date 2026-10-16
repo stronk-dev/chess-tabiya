@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:156cd814abc10e2ffe0c068db2a248ee6682ef4e3dded6249a0b5307b742e251",
+    "roadmap": "sha256:06a73c62757ac79f7f7b96fe13000cecd3002db46f5a5ff2b1a417aed66abdf9",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:e2510302f6da0ec6ca583b8e86e1eef4ad56836410dc4668e2a559842f2670df",
-    "rfcRegister": "sha256:46a9bc9219ec37622acea5d3cac7a26f06ba6b29ba3715833c6f606078192485",
+    "workState": "sha256:a708ff86ce0879f2a43c96da408ce42a269dbc0dfd09fcc2de03f9cf67663e8c",
+    "rfcRegister": "sha256:a01e3d43276dfd33afa321b821a65d94d23ceeb12c570eab7526b1a73e5a17ba",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -20,8 +20,8 @@
     },
     "assignedRfcs": 77,
     "activeRfcLifecycle": {
-      "draft": 25,
-      "accepted": 0,
+      "draft": 24,
+      "accepted": 1,
       "implementing": 42,
       "awaiting": 10,
       "implemented": 0,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 627,
+      "todo": 628,
       "doing": 37,
-      "blocked": 1085,
-      "done": 1720,
+      "blocked": 1084,
+      "done": 1721,
       "refused": 162
     },
     "workItems": {
@@ -75,7 +75,7 @@
       "dependsOn": [],
       "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Diagnose D3600's published 62c81eb1 warm native-arrival failure (1092.9 ms p95; three of five samples meet 250 ms), retaining its earlier failures. D3771's locally measured assertion interference and ordering correction do not establish the remote cause; preserve tracing, every sample and the 250 ms budget. Locate D3591's longitudinal-worker stall without changing its budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
       "latestCheckpoint": {
-        "at": "2026-10-15",
+        "at": "2026-10-16",
         "summary": "D3869 closes local fail-fast sequencing: the same28 Make gates put selected-toolchain/type/generated-contract checks before both complete software and isolated performance pools. Four permanent scheduling tests inspect the actual expanded Make plan, retain393-file/one-native-project discovery and prove real Make failure propagation skips both pool markers while the predecessor-order mutation executes the costly marker. One predecessor-red case becomes green. Reordered normal make verify build passes5956 software/seven performance/257 content plus every existing contract/governance/corpus/build check. No new wrapper, hook/service requirement, deadline inflation, skipped case or product behavior. Prior source-history/remote diagnostic evidence remains recorded; local ordering does not establish a current remote-green revision, fix the old intermittent causes or restore release-truth as a whole.",
         "impact": "advanced",
         "evidence": [
@@ -349,10 +349,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Independently review D3564's draft orientation grammar, D3376's installed-opening draft and D3373's durable Stockfish draft before implementation. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+      "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Implement D3376's independently accepted installed-opening base/schema/pin foundation; independently review remaining D3564 orientation and D3373 durable-Stockfish drafts before implementing those. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
       "latestCheckpoint": {
-        "at": "2026-10-15",
-        "summary": "D3856 proves F2 D5's existing method-path obligation with13 permanent actual-factory cases across all three techniques/both colors, exact stage-prefix/convention receipts and corrupt-path/forgery/pre-shortcut refusals. Full local verify-software passes5908 tests/393 files, seven isolated performance tests, types/build and normal software guards. D5 discharges only path authority; variable method declarations, eligibility and D2-D4 remain open. Independent Inspector scope review confirms trajectory/method/vector are outside its graph, not D5 or whole-parent acceptance. The later D3851 owner ruling supersedes the former D3853 compatibility requirement: migrate actual consumers and retire obsolete paths, never preserve a hypothetical legacy pipeline. The coordinated current-source/module amendment is independently accepted; its implementation checkpoint is reported under evidence-to-consumer-spine. Unrelated base-RFC/orientation obligations remain held. No whole milestone, tactical qualification, content/browser rerun or remote/release promotion.",
+        "at": "2026-10-16",
+        "summary": "Independent bounded review explicitly accepts installed-opening §§1–3 and supporting criteria after D3883's schema-URN correction and one-source creation-first/atomic ordinary registration clarification. Prior §3a/current adoption acceptance stands. D3376 moves from review-blocked to executable queued work; no schema/source/consumer implementation, generic absent-resource admission or D3082 discharge. Accepted grade/Compare durable modern source primitive has36 runtime cases/real SQLite controls/types and independent implementation review; full normal make verify build passes6677 software/413 files, seven performance/four files,257 content/26 files and all remaining gates under evidence-to-consumer-spine. Prior D3856 method-path discharge remains, as do unrelated orientation/base-source/source-qualification and whole-milestone obligations.",
         "impact": "advanced",
         "evidence": [
           "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
@@ -481,10 +481,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement opening/grade owners after the verified source-owned recorded rank operation. Resolve D3870 recorded-selection-telemetry.md resource ordering and independent acceptance before schema/REST/stamp-only migration work; do not guess or bypass claims. The complete twelve-adapter Review source, moment/operand/rank owners, human-divergence, last-level and comparison/V2 sources exist internally. Bind one final complete authority to RunService storage through observation/durable reads, never enqueue from captured-only preparation. Then adopt the entire current282-pair source/access/count-renderer/receiver/API/native image and retire obsolete paths after real callers migrate. No legacy-only pipeline, filtered bindings, dropped detector family, widened grant/assistance/budget or premature qualification/milestone/release claim.",
+      "nextAction": "Implement the now-independently-accepted installed opening base/schema/pin/paired lookup, complete history reduction and grade/Compare endpoint sources. The private durable modern attachment primitive is implemented, not the complete pending/job/ledger selector or service/GradeSource. Preserve per-node original occurrence identity and corrupt-modern refusal. D3870 resource ordering/independent acceptance remain separate. Then bind the final full authority to actual RunService storage and migrate all282 current source/access/count-renderer/receiver/API/native pairs, retiring obsolete paths after real callers move. No compatibility-only pipeline, fake availability, dropped family, widened grants or premature qualification/milestone/release claim.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Accepted story.rank@1/derived.story.rank@3 now computes the current nine-band presentation order over the genuine complete recorded moment source. Original group/slot/item/minted-input authority supplies concrete local/provider/recorded witnesses; nested last-level retains its genuine result/population/ordinal/proof, including empty/root-only context. Rank-only single publication is fact-only/convention/reported and exposes no child content.18 rank/16 operand cases and actual SQLite/human controls join1095 focused passes/32 files/types and bounded independent read-only review. Full normal make verify build passes:6641 software/412 files, seven performance/four files,257 content/26 files and all remaining gates. D3882 separates pure capability generation from strict application initialization;310 profiles/1016 capabilities retain all prior meanings/current bindings, semantic91 subjects/zero qualified unchanged. Opening/grade and complete282-pair access/count-renderer/receiver/API/native migration remain. No public facade, learner cutover, compatibility-only pipeline or release claim.",
+        "summary": "The accepted grade/Compare durable modern attachment primitive now retains genuine full-head/prefix/position/event seq/ordinal authority and actual parsed-delivery/source/point inputs. All modern occurrences validate; latest modern selection is independent per node, later scalars cannot replace it, corrupt modern data refuses and current storage is rechecked at publication/readback.36 runtime cases/actual SQLite prefix-reopen controls/types,1131 focused passes/33 files and independent bounded implementation review pass; full normal make verify build passes6677 software/413 files (395.44s), seven performance/four files (60.03s),257 content/26 files (56.04s) and every remaining gate. No assertion/deadline/retry/skip/coverage relaxation.317 projections/310 profiles/1016 capabilities/51 conventions and semantic91 subjects/zero qualified unchanged. D3883's opening-base contract correction is independently accepted, not production source implementation. Pending/job/ledger endpoint resolution, grade/Compare issuers and entire282-pair current access/renderer/API/native migration remain. No GradeSource, access grant, provider request, current learner cutover or release claim.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -910,7 +910,7 @@
           {
             "kind": "rfc",
             "id": "installed-opening-evidence.md",
-            "digest": "sha256:115fbe7168281915da80311161d3f63a76d51dd420ae965df811a1d9a33c297f"
+            "digest": "sha256:769eea885e10f6325a1e542d202fdb4a4273f83628813cb8d7bf1b27e89f4cc0"
           },
           {
             "kind": "rfc",
@@ -1005,7 +1005,7 @@
       ],
       "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
       "latestCheckpoint": {
-        "at": "2026-10-15",
+        "at": "2026-10-16",
         "summary": "D3838 closes duplicated ordinary Support questions and clipped empty-answer recovery. Full questions remain once in desktop/phone rows and in tablet heads; mounted state, accessible names, counts, focus and the board rectangle remain. Current selected-seat delivery reveals actual recovery controls within its own scroller, with a rounding-safe inset and no page scroll or evidence request. Two predecessor component and four native failures become 290 focused passes plus both-color desktop/mobile recovery and seven-viewport clipping/native-hit checks. Full frozen normal verification/build/all browser tiers exit zero: 5871 software, unchanged-budget performance,257 content,332 smoke/five content-browser/59 matrix/one packaged production; one configured optional Maia skip, zero matrix retries/errors and112 composition cells. D3837's preserved attempts and exact retry remain. Wider INR-a7, source execution/qualification, useful Sight/Nudge/Inspector/Review, owner use, official content and remote/release proof remain. No source/preset/schema/wire, whole capability or milestone promotion; no push.",
         "impact": "advanced",
         "evidence": [
@@ -1622,7 +1622,7 @@
       ],
       "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
       "latestCheckpoint": {
-        "at": "2026-10-15",
+        "at": "2026-10-16",
         "summary": "D3840 closes repeated complete-edge population sealing: both-color composition seals 22 source values once instead of 66 times. Exact authority, immutable complete/empty outputs, admission and one-entry eviction remain. Final eight-pair whole-projector comparisons retain every event/receipt/row/checkpoint with a 2.56% lower local time sum; D3300's roughly three-second cold path remains open. Reject D3839's position cache; none ships. D3358 is reconciled against shipped D3528: 984 declarations and all capability/migration documents need zero pack edits/restamps. Frozen production/tests pass 5,875 software, seven performance, 257 content and 397 browser cases, with one configured optional Maia skip and 112 unretried composition cells. Interrupted timing and corrected routing failures remain logged. Semantic implementation metadata refresh changes no case result or qualification. Source/consumer/lifecycle and release obligations remain; no whole-capability/milestone promotion, push or remote qualification.",
         "impact": "advanced",
         "evidence": [
@@ -1842,7 +1842,7 @@
       ],
       "nextAction": "Independently review D3670's drafted player-style section 8.1 recorded numbering: actual desktop/touch contributor lists each mislabel three of four legal source refs; one completed-cut builder, all nested parsers and exact-node native links must land together. Continue module-critical source/operand validation, Review/theory/rehearsal connections, valid skill credit, profile lifecycle and per-bot history/Review; complete Campaign curriculum/theory/reward/catalogue, social/professional setup/roles, guest/claim and broader account/operator journeys. Bot tournaments/leagues stay post-1.0 under D1416; preserve tournament-ready architecture under D1520. Preserve D3598 bounded intake and D3599 read-before-mutation recovery, current-view/focus and exact-source controls. D3595/D3596 private Profile and prior Campaign/classroom repairs stand. D3543's initial startup failures remain unlocated. Close UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-10-15",
+        "at": "2026-10-16",
         "summary": "D3822/D3823 close the accepted calibration evidence-to-card repair. Thirteen original failures and two additional sparse-interval failures reproduce malformed measured cards, a bool-only decoder and false Calibrated labels. Compiler/complete web decoding retain three separate verdicts, finite actual interval slots, scopes/citations, null failed figures and exact human-like permission. Human labels/copy do not collapse conclusions. Forty focused cases cover 36 supported verdict combinations, corruptions and mounted labels; prior complete card/compiler/catalogue and disclosure checks stand. Two built desktop/touch synthetic-variant controls prove bounded labels, bad-read refusal, explicit recovery, real play/reload with retained nodes/cursor and genuine uncalibrated return. Test syntax/source-import faults are fixed only in the harness. The first full run's 5,729 software/seven performance passes remain an interrupted checkpoint; sparse negatives are fixed before the final frozen normal verification/build/all four browser tiers exit zero: 5,731 software/391 files, seven performance/four files, 257 content/26 files, 59 matrix cases, 112/112 unretried composition cells and packaged-production proof. Earlier Review/Campaign/Profile work stands. Real calibration remains absent; no behavior/default/rating/source/schema/convention, scientific threshold, semantic qualification/content/whole capability/milestone, remote or release promotion.",
         "impact": "advanced",
         "evidence": [

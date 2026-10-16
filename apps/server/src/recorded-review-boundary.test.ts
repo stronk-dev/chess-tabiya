@@ -11,6 +11,7 @@ import { collectRecordedReviewMoments, readRecordedReviewMoments, readRecordedRe
 import { readStoryRankReductionValue } from "../../../packages/runtime/src/internal/story-rank-reduction-authority.js";
 import { evidenceDigest } from "../../../packages/runtime/src/evidence-contract.js";
 import { rankStoryMoments } from "../../../packages/runtime/src/story.js";
+import { collectRecordedEngineAttachments, readRecordedEngineAttachments } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -42,6 +43,16 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
     const context = { engine: reviewDurableEngineStates(parsed, nodes), shapes: [{ id: "import-f3", trigger: { kind: "pieceOnSquare" as const, square: "f3" as const, piece: { color: "white" as const, role: "knight" as const } } }] };
     for (const [last, endpoint] of [...nodes.entries()].filter(([index]) => index === prefix)) {
       const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: endpoint.id });
+      const attachments = readRecordedEngineAttachments(collectRecordedEngineAttachments({ boundary }));
+      expect(attachments.rows).toHaveLength(last + 1);
+      for (const [index, row] of attachments.rows.entries()) {
+        expect(row.selected !== null).toBe([0, 1, 3].includes(index));
+        if (row.selected !== null) {
+          expect(row.selected.occurrence.event).toBe(attachments.boundary.run.events[row.selected.occurrence.eventOrdinal]);
+          expect(row.selected.point.payload.position).toBe(row.position);
+          expect(row.selected.occurrence.evaluation.payload.payload.fen).toBe(nodes[index]!.fen);
+        }
+      }
       const population = collectRecordedLastLevelPopulation({ boundary, context }), data = readRecordedLastLevelPopulation(population);
       expect(data.rows).toHaveLength(last + 1); expect(data.boundary.run).toEqual(parsed);
       for (const [index, row] of data.rows.entries()) {

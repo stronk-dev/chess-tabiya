@@ -70,6 +70,15 @@ Capability generation uses the pure registry builder; application initialization
 validates the stored generated declarations against the lifecycle. A newly authored version can
 therefore be generated without requiring that same output already exist at module import.
 
+The internal durable engine-attachment primitive now retains each granted recorded position and
+every original modern/legacy attachment seq/ordinal. Modern deliveries re-derive through the
+actual reload parser, bind the exact full FEN and supply the genuine existing eval-point factory.
+The latest modern occurrence is fixed per node; a later scalar report cannot replace it, and
+corrupt modern data is a source-contract failure rather than fallback. Publication/readback
+validate current storage. This is only the durable modern arm: actual pending-job ownership,
+pinned-ledger origin selection, complete endpoint/grade/comparison issuers and learner delivery
+remain. The helper is private, creates no new projection/schema/convention and grants no access.
+
 Recorded comparison routes use the legal move's simultaneous physical relocations, including
 Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities
 are captured before either origin is cleared; a stationary actor adds no route segment. Later

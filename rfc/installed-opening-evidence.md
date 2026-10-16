@@ -1,12 +1,19 @@
 # RFC: Installed opening evidence
 
+**2026-10-16 bounded base-source acceptance:** the authorized independent reviewer accepts
+§§1–3 and their directly supporting criteria after D3883's schema-id/source-first-admission
+correction. This explicitly authorizes only this one new schema's creation and atomic ordinary
+registration; it does not discharge D3082 or claim source/consumer implementation. Together
+with the prior §3a/current-adoption acceptance, the required installed-source implementation is
+now executable. Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
 **2026-10-15 joint amendment acceptance:** independent review accepts §3a's complete opening-
 history source and coordinated current Inspector@2/ReviewMap@2 adoption contract. Earlier
 unaccepted labels for those clauses are history; this does not accept unrelated parent/resource
 obligations or claim actual source delivery. Decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
-- **Status:** draft — [[D3376]]; independent buildability review required before implementation
+- **Status:** accepted — [[D3376]]; independently accepted §§1–3 base-source boundary on 2026-10-16, with §3a/current adoption previously jointly accepted. Implementation and all actual production/qualification/release obligations remain.
 - **Author:** codex
 - **Created:** 2026-10-08
 - **Design refs:** `design/03-product-breadth.md` (shared evidence and theory/Review journeys); `design/05-in-run-experience.md` (grounded, permission-bounded assistance); ADR-0005
@@ -59,10 +66,15 @@ malformed-leaf refusal repair the loader independently; neither supplies the mis
 ### 1. One installed document, one shared schema
 
 Register `schemas/opening_catalogue.schema.json`, with
-`$id: "urn:chess-tabiya:opening-catalogue:1"`, and export
+`$id: "urn:chess-tabiya:schema:opening-catalogue:1"`, and export
 `OPENING_CATALOGUE_SCHEMA_VERSION = "1"` from `packages/schema/src/index.ts`.
 The resource row uses `claimKind: "schema_lane"`, `source.kind: "json_schema"`,
 `schemaSlug: "opening-catalogue"` and that version export, following the existing catalogue.
+
+Acceptance of this bounded introduction authorizes creating this one schema first, then landing
+its ordinary catalogue row, export and README register atomically in the same change. The
+existing bootstrap/checker validates that now-present source; this is not generic permission
+to register absent resources, and D3082 is not discharged by it.
 
 The schema describes the existing `RuntimeOpeningCatalogue` document exactly. Do not add a
 `schemaVersion` field to the existing artifact or reinterpret historical bytes. Its closed source,
@@ -305,13 +317,18 @@ none
 
 ## Open questions
 
-Independent review must verify the resource bootstrap and source registration/build boundary against
-the actual package/image pipeline before acceptance. This is a buildability obligation, not an owner
-product choice. The proposal fixes one package-owned registration, not a caller-extensible catalogue
-registry. New catalogue sources, book policies and authored theory remain outside this document.
+Answered 2026-10-16 by bounded independent buildability review: the one-source creation-first/
+atomic ordinary bootstrap and registration/build boundary are accepted after D3883's grammar
+correction. No remaining owner product choice; the proposal fixes one package-owned registration,
+not a caller-extensible catalogue registry. New catalogue sources, book policies and authored
+theory remain outside this document. This answer is not implementation or D3082 discharge.
 
 ## Changelog
 
+- 2026-10-16: independent bounded §§1–3 review returns D3883's schema-id mismatch; correct it
+  to the existing urn:chess-tabiya:schema:opening-catalogue:1 grammar and explicitly scope
+  creation-before-registration to this one introduction. No checker relaxation, production
+  schema/source change, generic absent-resource admission or inferred parent acceptance.
 - 2026-10-15: unaccepted D3857 amendment replaces the one-pair history proposal with an additive
   @2 complete-prefix source/reduction/result contract; exact original validation, successful
   negative lookup authority, both consumer migrations and installed-source outcome mapping.
