@@ -1,5 +1,24 @@
 # Codex queue
 
+**Verified selected-position measurement population, 2026-10-16 — [[D3841]], [[D3887]]:**
+the registry executes original engine/tablebase ledger-to-reading pairs for every matching
+full-FEN occurrence after validating the entire requested-kind population. It retains duplicate
+ordinals, literal factory results/refusals, every abstention reason and real coverage counts.
+The original position mint supplies run/head/node/pack identity, not a caller FEN or digest.
+D3887's two independent returns are fixed: actual lookup/contract failures stay distinct and
+recognized Syzygy requests require exactly one matching FEN before invocation. Bounded independent
+re-review,100 focused cases, types and full normal `make verify build` pass:6,823 software/419
+files, seven performance/four files,271 content/27 files and all remaining gates. This prerequisite
+has no current grant or final service sourceKey; the real resolver, scoped source operation and
+complete API/native migration remain open. D3841 stays doing; no learner/milestone promotion.
+
+**Immediate engineering preparation — [[D3870]]:** owner delegates routine pre-launch schema
+ordering to engineering. Put the empty-telemetry correctness fix first, shift the eight unlanded
+run-schema reservations one slot and preserve their relative order/scope. Coordinate claimant
+and register/predecessor text, then obtain independent acceptance before schema/parser/storage
+implementation. Do not ask the owner another version-slot question. Continue actual current
+measurement supplier and grade/Compare/opening history work under its accepted authority.
+
 **Registry-owned measurement prerequisite, 2026-10-16 — [[D3841]], [[D3886]]:**
 accepted module-registration §4.11a's original immutable document/manifest/ledger owner now
 checks exact pin/licence/linkage, retaining every row/abstention ordinal and exact source link.
@@ -249,10 +268,14 @@ read-only re-review clears both repairs; D3872/D3873 close with actual source/te
 Two canonical profiles/capability declarations are added (1000 total), prior998 and current
 module/packet bindings remain unchanged. No current Compare/Inspector adoption is claimed.
 
-D3870 follow-up review finds no existing accepted schema-widening authority. The narrow follow-up
-must explicitly settle REST's separate empty-candidates write refusal and a stamp-only migration,
-as well as canonical human_common empty telemetry and resource ordering. No unilateral version/
-lane rebase or empty-to-missing substitution is authorized by this implementation checkpoint.
+D3870 follow-up review finds no inherited schema-widening authority; the narrow follow-up owns
+REST's empty-candidates parser, conditional canonical telemetry and stamp-only migration. On
+2026-10-16 the owner delegates routine pre-launch slot ordering to engineering. Put this repair
+first and mechanically shift the eight unlanded run-schema claims one slot, preserving scope/
+relative order and updating actual claimant/register/predecessor metadata together. No further
+owner ordering question. Independent acceptance still gates implementation; the existing `none`
+claim must be replaced through that ordinary engineering pass, not a parser bypass or a second
+legacy pipeline. This resource bookkeeping is executable preparation, not a product blocker.
 
 The accepted D3846 scoped pivotal slice now has its genuine nominal owner and three rule-backed
 factories: irreversibility@1's scoped arm, phase_change@2 and option_collapse@2.24 permanent

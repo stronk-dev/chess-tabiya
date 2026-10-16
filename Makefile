@@ -4179,7 +4179,7 @@ provider-parser-update:
 
 .PHONY: pack-loading-check
 pack-loading-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/pack-registry-validation.test.ts apps/server/src/pack-studio.test.ts apps/server/src/recorded-measurement-source.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/pack-registry-validation.test.ts apps/server/src/pack-studio.test.ts apps/server/src/recorded-measurement-source.test.ts apps/server/src/recorded-measurement-population.test.ts packages/runtime/src/recorded-measurement.test.ts
 	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/pack-measurement-loading.test.ts
 
 .PHONY: studio-publication-check studio-publication-browser-check

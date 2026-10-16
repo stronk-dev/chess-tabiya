@@ -4,15 +4,15 @@ Process: `rfc/0000-rfc-process.md`. Template: `rfc/template.md`.
 
 ## Active
 
-**Registry-owned measurement prerequisite, 2026-10-16:** module-registration §4.11a now has
-its private original document/ledger/manifest owner, exact pin/licence/linkage, all original
-ordinals/source links and distinct missing/invalid/read-failure states. D3886's independent
-pre-commit returns are corrected with47 software/14 file controls, including genuine verified
-predecessor digest/readings and SQLite hydration. Bounded independent code review clears only
-this prerequisite; normal `make verify build` exits zero:6,784 software/417 files, seven
-performance/four files,271 content/27 files and every remaining gate. Failed/interrupted attempts
-remain logged. D3841's selected-position invocation/coverage,
-grade/Compare selection, complete current consumer/access/renderer/API/native delivery remain.
+**Selected-position measurement prerequisite, 2026-10-16:** module-registration §4.11a now
+has registry-owned complete requested-kind FEN validation and original ledger/reading execution.
+It retains the position mint's original pin, duplicate ordinals, actual refused results, all
+abstentions and real counts beside admitted reports. D3887's two independent returns are fixed;
+100 focused cases and bounded independent re-review pass. Normal `make verify build` exits zero:
+6,823 software/419 files, seven performance/four files,271 content/27 files and every remaining
+gate. Actual current resolver/grant/sourceKey/supplier, grade/Compare/opening history and complete
+current consumer/access/renderer/API/native delivery remain. D3870's routine reservation rebase
+is engineering-owned, not an owner question; its independent acceptance remains required.
 No lifecycle, resource, qualification, content or full-capability completion is inferred.
 
 **Current source/module amendment acceptance, 2026-10-15:** authorized independent joint

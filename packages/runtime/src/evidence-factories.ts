@@ -1190,7 +1190,10 @@ function runNode(run: DrillRun, nodeId: string): Node {
   return node;
 }
 
-const RECORDED_POSITION_INVOCATIONS = new WeakMap<object, Readonly<{ runId: string; headDigest: string; nodeId: string }>>();
+const RECORDED_POSITION_INVOCATIONS = new WeakMap<object, Readonly<{
+  runId: string; headDigest: string; nodeId: string;
+  pack: Readonly<{ id: string; digest: string }> | null;
+}>>();
 /** Internal recognition of the sole factory's original position, not a run/access validator. */
 export function readRecordedPositionInvocation(position: DeclaredEvidence<RecordedPosition>) {
   assertDeclaredEvidence(position);
@@ -1218,7 +1221,10 @@ export const createRunRecordPositionV1Evidence = (() => {
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, nodeId: value("a node id", isText) }], result: "single", dependency: "recorded-semantic-path", pending: RUN_PENDING }, ({ run, nodeId }: { readonly run: DrillRun; readonly nodeId: string }) => {
     const node = runNode(run, nodeId);
     const position = mint(route, symbol, Object.freeze({ nodeId: node.id, ply: node.ply, fen: node.fen }), { run, nodeId });
-    RECORDED_POSITION_INVOCATIONS.set(position, Object.freeze({ runId: run.id, headDigest: evidenceDigest(run.events), nodeId }));
+    RECORDED_POSITION_INVOCATIONS.set(position, Object.freeze({ runId: run.id, headDigest: evidenceDigest(run.events), nodeId,
+      pack: run.sessionKind === "pack" && run.packId !== null && run.packDigest !== null
+        ? Object.freeze({ id: run.packId, digest: run.packDigest }) : null,
+    }));
     return position;
   });
 })();
@@ -2108,11 +2114,20 @@ export const createSourcingLedgerCitableTextV1Evidence = ledgerFactory("sourcing
 export const createTheoryOpeningIdentityRecordV1Evidence = ledgerFactory("theory.opening_identity.record@1", "opening_identity", ["kind", "sourceId", "retrievedAt", "values"]);
 
 /** [[D2327]]: the runtime reading is derived from the exact same-record ledger evidence only. */
+const RECORDED_READING_INVOCATIONS = new WeakMap<object, Readonly<{ ledger: DeclaredEvidence<SourcingLedgerRecord>; route: string }>>();
+/** Internal original two-step invocation, including actual refusal outcomes. */
+export function readRecordedReadingInvocation(result: object) {
+  const invocation = RECORDED_READING_INVOCATIONS.get(result);
+  if (invocation === undefined) throw new TypeError("Recorded reading result is not its original factory invocation");
+  return invocation;
+}
 function recordedFactory(route: string, source: string): EvidenceValueFactory<{ readonly ledger: DeclaredEvidence<SourcingLedgerRecord> }, EvidenceAvailability<DeclaredEvidence<unknown>>> {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ ledger: sealed(source) }], result: "availability", dependency: "provider-exchange-and-execution", pending: LEDGER_PENDING }, ({ ledger }: { readonly ledger: DeclaredEvidence<SourcingLedgerRecord> }) => {
     const reading = recordedReadingFromLedgerRecord(ledger.payload);
-    return reading === undefined ? unavailable("ledger_record_not_admitted") : available(mint(route, symbol, reading, { ledger }, [ledger]));
+    const result: EvidenceAvailability<DeclaredEvidence<unknown>> = reading === undefined ? unavailable("ledger_record_not_admitted") : available(mint(route, symbol, reading, { ledger }, [ledger]));
+    RECORDED_READING_INVOCATIONS.set(result, Object.freeze({ ledger, route }));
+    return result;
   });
 }
 export const createRecordedEngineEvalV1Evidence = recordedFactory("recorded.engine.eval@1", "sourcing.ledger.engine_eval@1");

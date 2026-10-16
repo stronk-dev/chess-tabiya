@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:12d22b12a3169c6fdf39711f85757c2a5f33b90c58375399e091b1cae5a91b0c",
+      "sourceDigest": "sha256:7bcb77968a77b63b4284b90e10f1d0a9331f984bac53f1a89d03e71405750cee",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-16"
@@ -32246,7 +32246,7 @@
       "id": "D3870",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8e9b3562a9c342ad0cf8e1fe7d5ba198a7317e589c44f256d09125d9bf1af9de",
+      "sourceDigest": "sha256:263453d3b3247fe755e07fa29f4222683e24ad5282f02a6bf1bd728e38905534",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:recorded-selection-telemetry.md"
@@ -32392,6 +32392,15 @@
       "sourceDigest": "sha256:827354342e0e5dd2c09385f6cff08ef959c39d976a0e5482c6377c5fa15496d0",
       "uxItems": [],
       "evidence": "apps/server/src/recorded-measurement-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3887",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ccab6a6cb0e77f9eb500ea4d9ca5d867802f401b7ff69bd217c25a451817ded1",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-measurement-population.test.ts",
       "evidenceKind": "path"
     }
   ]

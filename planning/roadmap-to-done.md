@@ -19,16 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The new registry-owned measurement prerequisite retains the complete original pinned document,
-manifest and ledger independently of objective grading, with every row/abstention ordinal and
-exact source link. Missing, malformed and actual read failures stay distinct; copied/foreign/
-retired handles fail. D3886's pre-commit admission returns are repaired;47 focused software and14
-real-file cases plus bounded independent review pass. Genuine verified predecessor readings and
-JSON-order ledger digests remain unchanged. Full normal `make verify build` exits zero:6,784
-software/417 files, seven performance/four files,271 content/27 files and every remaining gate.
-Failed/interrupted attempts remain in the existing log. D3841's selected-position
-supplier, grade/Compare source choice and complete consumer/access/renderer/API/native migration
-remain; no learner-feature or milestone promotion follows from this prerequisite.
+The registry-owned selected measurement population now validates every requested-kind full-FEN
+claim before executing the exact original ledger/reading pairs. Original position/pin, duplicate
+ordinals, literal refusals and every abstention survive beside admitted reports and real counts.
+D3887's independent returns are repaired;100 focused cases and bounded independent re-review
+pass. Full normal `make verify build` exits zero:6,823 software/419 files, seven performance/four
+files,271 content/27 files and every remaining gate. Existing original artifact admission,
+verified predecessor readings and JSON-order ledger digests remain unchanged. Actual current
+resolver/grant/sourceKey/supplier, grade/Compare source choice, opening history and complete
+consumer/access/renderer/API/native migration remain; no learner-feature or milestone promotion.
+D3870's version ordering is engineering-owned, not an owner blocker: rebase the eight unlanded
+reservations behind the small correctness repair, then obtain independent RFC acceptance.
 
 The latest verified opening prerequisite retains genuine installed source/recorded-position
 identity, original frozen table rows and actually executed negative lookups. Endpoint/membership

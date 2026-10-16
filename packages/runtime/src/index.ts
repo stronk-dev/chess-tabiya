@@ -419,6 +419,7 @@ export {
   type PackConceptReferencePayload,
   type PositionGuidanceEvidenceInput,
 } from "./evidence-operations.js";
+export { recordedMeasurementPosition, invokeRecordedMeasurementReading, RecordedMeasurementInvocationError } from "./recorded-measurement.js";
 // rfc/provider-exchange-and-execution.md: shared provider exchange types, request identity,
 // receipts and the durable boundary. The scheduler-only constructors are NOT exported here; they
 // live behind a dedicated scheduler-only subpath (census in provider-protocol.test.ts).

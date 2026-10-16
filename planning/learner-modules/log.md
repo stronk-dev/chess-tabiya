@@ -146,3 +146,35 @@ governance/corpus and build prerequisites. Corpus92 documents/354 blocking/34 re
 errors[];104 exact-capability documents. No source/test changes after this successful run. D3886
 closes on permanent path evidence; D3841 stays doing. Final prose/state/checkpoint regeneration
 and configured commit hooks follow; no remote or learner-migration claim.
+
+## 2026-10-16 — Selected original measurement populations, D3841/D3887
+
+Accepted module-registration §4.11a now has registry-owned selected populations over the original
+measurement artifacts. Every requested-kind record and abstention validates its legal six-field
+FEN and source position claims before either factory executes. Original position/pin identity,
+duplicate row/source ordinals, literal ledger/result pairs, actual refusals and all four abstention
+counts survive beside admitted readings. A private factory-result sidecar rejects even genuinely
+equal-digest crossed occurrences. No current grant or final Inspector sourceKey is invented.
+
+Independent review returns lookup/contract conflation and an ambiguous Syzygy query claim. D3887
+repairs both with genuine route failure/crossed/copy controls and missing/duplicate request-FEN
+zero-invocation controls; bounded re-review finds no remaining prerequisite blocker. Seven runtime
+and32 server cases include actual both-colour file-backed SQLite reopening. Extended ordinary
+pack-loading gate passes86 software/five files plus14 real-file cases. Initial wrong test-only
+receipt import, generic result inference and shared fixture-anchor mutation are corrected at their
+actual causes; no assertion, deadline or scope is relaxed. Semantic receipt regeneration is normal
+existing metadata:91 subjects/zero qualified,343 cases,53 population/eight external receipts.
+
+Final normal make verify build exits zero:6,823 software/419 files (460.83s), seven performance/
+four files (60.32s),271 content/27 files (60.61s), types/contracts/governance/corpus/build. Corpus
+92/354 blocking/34 resolved/48 accepted/errors[];104 exact-capability documents. Product/tests
+remain unchanged after this run. Final tracker/prose and configured commit hooks follow. D3887
+closes path-backed; D3841 stays doing. Current resolver/grant/sourceKey/supplier, grade/Compare
+choice, opening history and complete consumer/API/native delivery remain open. No qualification,
+compatibility-only pipeline, saved-data rewrite, content graduation, browser/remote or release claim.
+
+Owner's routine-order reply: "idk who cares for the order? it's not that deep. we are pre launch,
+it's a chess site..." Record in D3870 and its draft: engineering chooses the small correctness
+repair first and shifts eight unlanded reservations one slot, retaining relative order/scope.
+Coordinated rebase and independent acceptance remain engineering work, not an owner question;
+no resource reservation, schema/parser/storage implementation or acceptance is claimed here.

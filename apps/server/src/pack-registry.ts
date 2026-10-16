@@ -16,7 +16,10 @@ import {
   isPackSidecarName,
   PACK_SIDECAR_BASENAMES,
 } from "@chess-tabiya/schema/pack-path";
-import { assertCompiledConceptRegistry, type CompiledConceptRegistry, type PositionEvidenceIndex } from "@chess-tabiya/runtime";
+import { assertCompiledConceptRegistry, invokeRecordedMeasurementReading, recordedMeasurementPosition, RecordedMeasurementInvocationError,
+  type CompiledConceptRegistry, type DeclaredEvidence, type PositionEvidenceIndex } from "@chess-tabiya/runtime";
+import { Chess } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
 
 import { capabilityKey, type CapabilityId } from "@chess-tabiya/schema";
 
@@ -46,6 +49,32 @@ interface MeasurementArtifacts { readonly ledger: SidecarImage; readonly manifes
 declare const measurementSourceBrand: unique symbol;
 /** Server-private original registry artifact authority, never a provider or access receipt. */
 export interface RecordedMeasurementSource { readonly [measurementSourceBrand]: true }
+declare const measurementPopulationBrand: unique symbol;
+export interface RecordedMeasurementPopulation { readonly [measurementPopulationBrand]: true }
+export type RecordedMeasurementProjection = "recorded.engine.eval@1" | "recorded.tablebase.result@1";
+type MeasurementInvocation = ReturnType<typeof invokeRecordedMeasurementReading>;
+interface MeasurementPopulationImage {
+  readonly source: RecordedMeasurementSource;
+  readonly artifact: MeasurementSourceImage;
+  readonly position: Parameters<typeof recordedMeasurementPosition>[0];
+  readonly origin: ReturnType<typeof recordedMeasurementPosition>;
+  readonly projection: RecordedMeasurementProjection;
+  readonly fen: string;
+  readonly records: readonly (MeasurementSourceImage["records"][number] & { readonly invocation: MeasurementInvocation })[];
+  readonly abstentions: MeasurementSourceImage["abstentions"];
+  readonly readings: readonly DeclaredEvidence<import("@chess-tabiya/runtime").RecordedReading>[];
+  readonly counts: {
+    readonly matchedRecords: number; readonly admittedRecords: number; readonly notAdmittedRecords: number;
+    readonly abstentions: { readonly out_of_range: number; readonly source_unavailable: number; readonly no_data_at_band: number; readonly licence_withheld: number };
+  };
+  readonly outcome: { readonly kind: "available"; readonly collected: number } | { readonly kind: "no_witness" }
+    | { readonly kind: "unavailable"; readonly reason: "recorded_measurement_unavailable" };
+}
+export class RecordedMeasurementSourceError extends TypeError {
+  constructor(readonly reason: "source_contract_invalid" | "source_lookup_failed", message: string, options?: ErrorOptions) {
+    super(message, options); this.name = "RecordedMeasurementSourceError";
+  }
+}
 export type RecordedMeasurementAdmission =
   | { readonly kind: "available"; readonly source: RecordedMeasurementSource }
   | { readonly kind: "unavailable"; readonly reason: "source_absent" }
@@ -314,6 +343,30 @@ function assertJsonArtifact(value: unknown, parents: Set<object>): void {
 /** Preserve the old optional-sidecar view, not its former loss of original failure states. */
 function optionalValue(sidecar: SidecarImage): unknown | undefined { return sidecar.read.kind === "loaded" ? sidecar.read.value : undefined; }
 
+/** Exact legal six-field position; never a transpose key or a repaired ledger record. */
+function measurementFen(value: unknown): string {
+  try {
+    if (typeof value !== "string" || value.trim().split(/\s+/u).length !== 6) throw new TypeError("Missing six-field FEN");
+    return makeFen(Chess.fromSetup(parseFen(value).unwrap()).unwrap().toSetup());
+  } catch (cause) { throw new RecordedMeasurementSourceError("source_contract_invalid", "Recorded measurement has an invalid full FEN", { cause }); }
+}
+
+function measurementRowFen(row: EvidenceRecord | EvidenceAbstention, source: SourceEntry): string {
+  const fen = measurementFen(row.anchor.fen);
+  if (("values" in row && Object.hasOwn(row.values, "fen") && measurementFen(row.values.fen) !== fen)
+    || (source.origin.kind === "engine" && measurementFen(source.origin.fen) !== fen)) {
+    throw new RecordedMeasurementSourceError("source_contract_invalid", "Recorded measurement has conflicting position claims");
+  }
+  if (source.origin.kind === "http") {
+    const url = new URL(source.origin.url);
+    if (url.hostname === "tablebase.lichess.org" && url.pathname === "/standard") {
+      const claims = url.searchParams.getAll("fen");
+      if (claims.length !== 1 || measurementFen(claims[0]) !== fen) throw new RecordedMeasurementSourceError("source_contract_invalid", "Recorded measurement conflicts with its Syzygy request position");
+    }
+  }
+  return fen;
+}
+
 function sidecarPaths(source: string): {
   readonly ledger: string;
   readonly manifest: string;
@@ -360,6 +413,7 @@ export class PackRegistry {
   readonly #measurementArtifacts: Map<string, MeasurementArtifacts>;
   readonly #measurementAdmissions = new Map<string, RecordedMeasurementAdmission>();
   readonly #measurementSources = new WeakMap<RecordedMeasurementSource, MeasurementSourceImage>();
+  readonly #measurementPopulations = new WeakMap<RecordedMeasurementPopulation, MeasurementPopulationImage>();
 
   private constructor(records: ReadonlyMap<string, PackRecord>, concepts: CompiledConceptRegistry, capabilities: RuntimeCapabilitySupport, refusals: readonly CapabilityRefusal[], shapes: PackShapeLookup | undefined, principles: PackPrincipleLookup | undefined, artifacts: ReadonlyMap<string, MeasurementArtifacts>) {
     this.#records = new Map(records);
@@ -428,6 +482,51 @@ export class PackRegistry {
     const image = this.#measurementSources.get(source), current = image === undefined ? undefined : this.#measurementAdmissions.get(image.packDigest);
     if (image === undefined || current?.kind !== "available" || current.source !== source
       || this.#digests.get(image.packDigest)?.document !== image.document) throw new TypeError("Measurement source is foreign or no longer the registry's original artifact image");
+    return image;
+  }
+
+  /** Selected-position enumeration only: no current grant, final Inspector sourceKey or API. */
+  collectRecordedMeasurements(input: Readonly<{
+    source: RecordedMeasurementSource; position: Parameters<typeof recordedMeasurementPosition>[0]; projection: RecordedMeasurementProjection;
+  }>): RecordedMeasurementPopulation {
+    if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
+      || Reflect.ownKeys(input).length !== 3 || !["source", "position", "projection"].every(key => {
+        const descriptor = Object.getOwnPropertyDescriptor(input, key);
+        return descriptor !== undefined && descriptor.enumerable && "value" in descriptor;
+      })) throw new TypeError("Recorded measurement collection requires exactly {source,position,projection}");
+    const { source, position, projection } = input;
+    if (projection !== "recorded.engine.eval@1" && projection !== "recorded.tablebase.result@1") throw new TypeError("Recorded measurement projection is unsupported");
+    const origin = recordedMeasurementPosition(position), artifact = this.readRecordedMeasurementSource(source);
+    if (origin.pack?.digest !== artifact.packDigest || origin.pack.id !== artifact.document.id) throw new TypeError("Recorded measurement position does not belong to the original pinned pack");
+    const fen = measurementFen(position.payload.fen), kind = projection === "recorded.engine.eval@1" ? "engine_eval" : "tablebase_result";
+    // Validate the ENTIRE requested-kind population before selecting or invoking either factory.
+    const matchingRecords = artifact.records.flatMap(row => row.record.kind !== kind ? []
+      : measurementRowFen(row.record, row.source) === fen ? [row] : []);
+    const abstentions = artifact.abstentions.flatMap(row => row.abstention.kind !== kind ? []
+      : measurementRowFen(row.abstention, row.source) === fen ? [row] : []);
+    const records = matchingRecords.map(row => {
+      try {
+        const invocation = invokeRecordedMeasurementReading(row.record);
+        return Object.freeze({ ...row, invocation });
+      } catch (cause) { throw new RecordedMeasurementSourceError(cause instanceof RecordedMeasurementInvocationError ? cause.reason : "source_contract_invalid", "Recorded measurement factory invocation failed", { cause }); }
+    });
+    const readings = records.flatMap(row => row.invocation.result.kind === "available" ? [row.invocation.result.value] : []);
+    const counts = { matchedRecords: records.length, admittedRecords: readings.length, notAdmittedRecords: records.length - readings.length,
+      abstentions: { out_of_range: 0, source_unavailable: 0, no_data_at_band: 0, licence_withheld: 0 } };
+    for (const row of abstentions) counts.abstentions[row.abstention.reason]++;
+    const outcome = readings.length > 0 ? { kind: "available" as const, collected: readings.length }
+      : records.length > 0 || abstentions.length > 0 ? { kind: "unavailable" as const, reason: "recorded_measurement_unavailable" as const }
+        : { kind: "no_witness" as const };
+    const image: MeasurementPopulationImage = freeze({ source, artifact, position, origin, projection, fen, records, abstentions, readings, counts, outcome });
+    const population = Object.freeze({}) as RecordedMeasurementPopulation;
+    this.#measurementPopulations.set(population, image);
+    return population;
+  }
+
+  readRecordedMeasurements(population: RecordedMeasurementPopulation): MeasurementPopulationImage {
+    const image = this.#measurementPopulations.get(population);
+    if (image === undefined || this.readRecordedMeasurementSource(image.source) !== image.artifact
+      || recordedMeasurementPosition(image.position) !== image.origin) throw new TypeError("Recorded measurement population is foreign or no longer original");
     return image;
   }
 

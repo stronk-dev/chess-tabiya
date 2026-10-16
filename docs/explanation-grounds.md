@@ -137,8 +137,20 @@ Missing sidecars, malformed/mismatched artifacts and actual read failures remain
 File reads occur only at registration; reload, not a request-time reread, observes changed files.
 Programmatic registration admits plain JSON data without executing accessors or normalizing away
 invalid members. Existing assessment grounding, position readings and saved JSON-order ledger
-digests are unchanged. This owner does not yet execute the new per-position ledger supplier,
-issue GradeSource/access receipts or deliver the replacement Inspector page.
+digests are unchanged.
+
+`collectRecordedMeasurements({source,position,projection})` now enumerates a genuine recorded
+position against that owned artifact. The sole position mint privately retains its original
+run/head/node/pack pin; equal FEN or caller-supplied pack identity cannot replace it. The owner
+validates every requested-kind record/abstention and all position claims before selecting or
+invoking factories, including both clocks and unambiguous recognized Syzygy request FENs. It keeps
+original ordinals, duplicate reports, exact ledger-to-reading invocations and actual refusals.
+Valid readings remain beside refusals and all four abstention counts; truly empty and unavailable
+measurements differ. Live attachments do not suppress this population. A malformed/crossed contract
+is not a lookup failure. Only the issuing registry may read the immutable population, and readback
+rechecks the original artifact. This prerequisite has no current access grant or final service
+sourceKey. The current-context supplier, GradeSource/Compare selection and replacement Inspector
+page remain unimplemented; no stored report becomes a modern provider delivery or qualified claim.
 
 ## Authored checkpoint reveal
 

@@ -32512,3 +32512,34 @@ Campaign was the one capability with no API, route or content. Now:
   317 projections/310 profiles/1016 capabilities/51 conventions and91 subjects/zero qualified stand.
   Full1.0 goal remains active. No protected intent sentence falsified, content graduation, native/
   browser proof, push/deploy, source qualification or whole capability/milestone/release claim.
+
+## 2026-10-16 — Selected original measurement population verified, D3841/D3887
+
+- Under accepted module-registration §4.11a, PackRegistry collects original engine/tablebase
+  occurrences after complete requested-kind FEN/source validation. Original run/head/node/pack
+  identity, duplicate ordinals, literal two-factory results/refusals and all abstentions remain
+  alongside admitted readings and real counts. Actual equal-digest crossed result authority
+  fails. No current access grant, final sourceKey or actual Inspector API supplier is claimed.
+- Independent bounded review returns lookup/contract conflation and ambiguous Syzygy query FENs;
+  D3887 repairs both and independently clears re-review. Permanent controls include original/
+  copied/crossed results, real route lookup failure, missing/duplicate query FENs before invocation,
+  all abstention reasons and both-colour reopened SQLite runs. Normal focused pack-loading gate
+  passes100 cases. Initial wrong test receipt import, generic result inference and shared fixture
+  anchor mutation are corrected without dropping assertions or widening product API/deadlines.
+- Normal semantic-validation update refreshes existing generated metadata after factory sidecar
+  code changes:91 subjects/zero qualified,343/343 cases,53 population/eight external receipts.
+  Projection/profile/capability/convention counts remain317/310/1016/51.
+- Full normal make verify build exits zero:6,823 software/419 files (460.83s), seven performance/
+  four files (60.32s),271 content/27 files (60.61s), all types/contracts/governance/corpus/build.
+  Corpus92/354 blocking/34 resolved/48 accepted/errors[];104 exact-capability documents. No product
+  or test changes after the run. Final metadata and configured commit checks follow. No remote CI,
+  browser/native proof, source qualification, official-content or full-feature completion claim.
+- D3887 closes path-backed; D3841 stays doing. Existing queue/RFC checkpoint/docs/roadmap/state
+  now retain this prerequisite and actual remaining resolver/grant/sourceKey/supplier, grade/
+  Compare choice, opening history and complete per-consumer access/renderer/receiver/API/native
+  work. State3636/1750 live/zero untriaged; historical462 prose closures unchanged. Milestone
+  states unchanged; full1.0 goal remains active. No protected intent sentence is falsified.
+- Owner delegates pre-launch version-slot ordering to engineering, not another owner question.
+  D3870 and its existing draft record correctness-first with eight unlanded reservations shifted
+  one slot, relative order and feature scope preserved. Actual coordinated rebase and independent
+  acceptance remain engineering's next work; no resource claim/schema implementation/self-acceptance.

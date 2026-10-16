@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:90f643f4e88b5b1e76c2865de824892041f0cfca45c8468e72d749e8946a72eb",
+    "roadmap": "sha256:eda67574bbfea736206820e8eb50e6a10d5f7cf51ca64f81ebb55323aa6363df",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:a4aa31274cec97208f8165bfc7bc5eae92214ee6a627646a8234ee1c1004de4f",
-    "rfcRegister": "sha256:2a7967b71746e1047c0f2612441d2f0b31a1116697bbdc8501eb4ed36a734dbb",
+    "workState": "sha256:9dc42bd8e596a5248e3d0977ba2a751b1126067daef1df5cf1a3a785c6b4a4f7",
+    "rfcRegister": "sha256:699ded581cf50e35f4b1654e21fd956c76236079862d4bc88abffbb9a3e9dd4f",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 38,
       "blocked": 1084,
-      "done": 1723,
+      "done": 1724,
       "refused": 162
     },
     "workItems": {
@@ -492,13 +492,16 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete selected-position ledger invocation/coverage over the registry-owned original measurement source, then remaining grade/Compare endpoint selection. Complete installed-opening sole point-factory result-array authority and history/reduction over its original paired invocations. Current adoption is complete per consumer, not a globally atomic282-pair switch: Theory needs all four bindings/applicability; Inspector needs its complete preflighted source-page operation, not the old generic fen arm. Migrate actual current source/access/count-renderer/receiver/API/native pairs and retire obsolete execution after callers move. Preserve original occurrences/corrupt-modern refusal; source prerequisites are not complete pending/job/ledger selection. D3870 remains separate. No compatibility-only input, fake availability, dropped family, widened grant or premature qualification/milestone/release claim.",
+      "nextAction": "Rebase D3870's routine schema reservations as engineering-owned preparation, then obtain independent acceptance; no owner ordering question remains. Complete the actual current measurement resolver/grant/sourceKey/supplier over the selected original population, then remaining grade/Compare endpoint selection. Complete installed-opening sole point-factory result-array authority and history/reduction over its original paired invocations. Current adoption is complete per consumer, not a globally atomic282-pair switch: Theory needs all four bindings/applicability; Inspector needs its complete preflighted source-page operation, not the old generic fen arm. Migrate actual current source/access/count-renderer/receiver/API/native pairs and retire obsolete execution after callers move. Preserve original occurrences/corrupt-modern refusal. No compatibility-only input, fake availability, dropped family, widened grant or premature qualification/milestone/release claim.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Registry-owned original measurement admission now retains immutable document/ledger/manifest, exact pins/licences/source links and every original row/abstention ordinal independently of objective grading. Missing, invalid and actual read failures stay distinct; copied/foreign/retired handles fail. D3886 pre-commit returns repair non-JSON normalization and malformed-counterpart masking;61 focused cases, genuine ledger_verified predecessor digest/nonempty readings, actual SQLite hydration and bounded independent review pass. Final normal make verify build exits zero:6784 software/417 files (429.24s), unchanged performance7/4 (63.21s),271 content/27 files (59.20s), governance/corpus/build. Interrupted/failed attempts remain logged; no assertion/budget/retry/coverage waiver. Prior paired-opening/durable-attachment/rank checkpoints stand. Selected-position supplier/factory coverage, grade/Compare choice, opening history and complete per-consumer source/access/renderer/API/native delivery remain. D3841 stays doing; no compatibility-only path, current learner cutover, saved-data rewrite, semantic qualification, official content or whole-capability/milestone/release claim.",
+        "summary": "Registry-owned selected measurement populations validate complete requested-kind six-field FEN claims before original ledger/reading invocation, retaining position/pin identity, duplicate ordinals, actual refusals, all abstentions and real counts beside admitted reports. D3887's lookup-versus-contract and ambiguous Syzygy request returns are repaired;100 focused cases, both-colour reopened SQLite controls and bounded independent re-review pass. Final normal make verify build exits zero:6823 software/419 files (460.83s), unchanged performance7/4 (60.32s),271 content/27 files (60.61s), governance/corpus/build. Semantic validation remains91 subjects/zero qualified,343 cases/53 population receipts/eight external receipts; profiles/capabilities/conventions unchanged. Prior original artifact/paired-opening/durable-attachment/rank checkpoints stand. Actual current resolver/grant/sourceKey/supplier, grade/Compare choice, opening history and complete per-consumer source/access/renderer/API/native delivery remain. D3841 stays doing. D3870 routine ordering is engineering-owned; coordinated rebase and independent acceptance remain. No compatibility-only path, learner cutover, saved-data rewrite, official content or whole-capability/milestone/release claim.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/pack-registry.ts",
+          "apps/server/src/recorded-measurement-population.test.ts",
+          "packages/runtime/src/recorded-measurement.ts",
+          "packages/runtime/src/recorded-measurement.test.ts",
           "apps/server/src/recorded-measurement-source.test.ts",
           "apps/server/src/pack-measurement-loading.test.ts",
           "apps/server/src/pack-studio.test.ts",
@@ -720,7 +723,12 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:12d22b12a3169c6fdf39711f85757c2a5f33b90c58375399e091b1cae5a91b0c"
+            "digest": "sha256:7bcb77968a77b63b4284b90e10f1d0a9331f984bac53f1a89d03e71405750cee"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3887",
+            "digest": "sha256:ccab6a6cb0e77f9eb500ea4d9ca5d867802f401b7ff69bd217c25a451817ded1"
           },
           {
             "kind": "work_state",
@@ -740,7 +748,7 @@
           {
             "kind": "work_state",
             "id": "D3870",
-            "digest": "sha256:8e9b3562a9c342ad0cf8e1fe7d5ba198a7317e589c44f256d09125d9bf1af9de"
+            "digest": "sha256:263453d3b3247fe755e07fa29f4222683e24ad5282f02a6bf1bd728e38905534"
           },
           {
             "kind": "work_state",

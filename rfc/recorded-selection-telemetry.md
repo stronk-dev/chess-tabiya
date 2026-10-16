@@ -1,6 +1,6 @@
 # RFC: Preserve explicitly empty recorded human-selection telemetry
 
-- **Status:** draft — D3870; resource ordering and independent acceptance remain open
+- **Status:** draft — D3870; routine resource rebase and independent acceptance remain open; no owner ordering decision needed
 - **Author:** Codex
 - **Created:** 2026-10-16
 - **Design refs:** `design/03-product-breadth.md` evidence/Review surfaces; `design/05-in-run-experience.md` assistance and honest absence
@@ -170,11 +170,14 @@ none
 
 ## Open questions
 
-1. **Run-schema/migration order, unresolved:** should this small correctness repair take the
-   immediate next lane by an explicitly approved rebase of existing unlanded claims, or follow
-   the existing claimed train? The latter preserves claims but delays the accepted source arm;
-   the former needs coordinated claimant/register edits. Neither is selected by this draft.
-   Do not defer this to an implementer or mark the RFC accepted while it is unresolved.
+1. **Run-schema/migration order, answered 2026-10-16:** owner: "idk who cares for the order?
+   it's not that deep. we are pre launch, it's a chess site..." Routine scheduling/version-slot
+   bookkeeping is delegated to engineering, not a further product ruling. Take this small
+   correctness repair first, then shift the eight unlanded run-schema reservations one slot,
+   preserving feature scope and relative order. The implementer owns the coordinated claimant/
+   register/predecessor update before independent acceptance. The current `none` claim does not
+   reserve those resources or authorize implementation until that mechanical rebase is applied.
+   Do not re-escalate the order to the owner or treat this answer as independent RFC acceptance.
 
 ## Changelog
 
@@ -184,3 +187,6 @@ none
 - 2026-10-16: bounded read-only review adds shared-reference replay constraints, concrete targeted
   migration-corruption negatives and the separate modern live-response boundary. Resource ordering
   remains unresolved; the review grants no acceptance and ran no tests.
+- 2026-10-16: owner delegates routine pre-launch ordering to engineering. Choose the immediate
+  correctness-first rebase above; coordinated resource edits and independent acceptance remain,
+  but there is no outstanding owner question about slot order or a new product-scope decision.
