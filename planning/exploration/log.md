@@ -31661,3 +31661,58 @@ Campaign was the one capability with no API, route or content. Now:
   and source-owned sequence/reduction/grade work remain open. Refresh existing ledger/state,
   roadmap/checkpoint/anchors and queue at zero untriaged. No full capability, milestone,
   qualification, compatibility pipeline, push or release claim. The full1.0 goal stays active.
+
+### 2026-10-16 — accepted D3847 internal owned-window sequence factories
+
+- Implement ten genuine nominal-window-only@3 factories, exact central routes and23 finite
+  literal occurrence tuples. Retain every prior@1/@2 factory/declaration/receipt for actual
+  unmigrated callers, not hypothetical compatibility. All new routes are experimental/unbound.
+- The internal issuer retains the complete actual replay snapshot, full event head/current
+  decision/branch/endpoint/ref/horizon and genuine original edges. Original graph/FEN/legal-edge
+  validation precedes narrowing; only complete requested trailing rows prepare detectors. Short
+  horizons are omitted, complete unmatched rows are empty. Inherited source edges are valid.
+- Complete0/1 capture executions are retained for every edge of the three complete-capture
+  families. Check/duty/exchange joins require exact full-edge/private input authority, not payload
+  equality or a matching UCI. Duty/final exchange remain lazy; failed sources never become empty.
+  Reuse all existing recorded computations and physical castling semantics; retain exact direct
+  convention tokens without changing old witnesses or global inheritance.
+- First normal typecheck catches a widened disposition literal; the next catches a Vitest
+  union-tuple overload in the special-move tests. Correct the literal and map fixtures to their
+  actual common fields; normal workspace types then pass with zero Svelte errors/warnings.
+- 125 new permanent cases/457 focused passes cover all ten families/both colors, every existing
+  castling population, complete/omitted horizons, actual old payload/tuple/convention equality,
+  immutable snapshots/full heads/inherited grants, original suffix/root corruption and21 genuine
+  dropped/duplicated/crossed capture controls. Equal-payload/same-UCI checks from different full
+  FEN counters and genuine foreign E/D/X refuse; failed quiet-capture acquisition throws.
+- Canonical generators add ten profiles/declarations (1012 declarations), prior1002/296 profiles
+  unchanged; semantic343/343 cases/81 subjects/zero qualified/53 population/eight external outcomes
+  remain unchanged. No pack edits/restamps. Independent implementation review and final full
+  verification/build are pending. The higher scoped supplier/closed result/semantic-event
+  registration, source-owned reductions/grades and complete current receiver/API/native adoption
+  remain open; no capability/milestone, qualification, compatibility pipeline, push or release
+  claim. Refresh existing trackers rather than create another queue; the full1.0 goal stays active.
+
+### 2026-10-16 — D3847 owned-window source checkpoint verification
+
+- Authorized independent read-only implementation review finds no blocker in snapshot/head/
+  grant ownership, complete original validation, literal23-member declarations, exact indexed
+  source joins or genuine-source tests. Its complete bounded report is appended to the existing
+  Inspector review record; the reviewer inspects tests without rerunning them.
+- Final normal `make verify build` exits zero:6271 software tests/400 files, seven isolated
+  performance tests/four files,257 content tests/26 files and every type/schema/F1/F2/source/
+  semantic/packet/capability/release/governance/build/corpus gate. Software374.51s,
+  performance62.81s/content56.95s. No retries, relaxed deadlines, dropped cases or browser/remote
+  CI/native-provider inference. Focused gate457/13 files includes125 new source cases.
+- Existing roadmap checking catches a duplicate D3847 anchor while updating the checkpoint;
+  remove the extra occurrence, retain the existing current-row anchor and rerun both normal
+  receipt/check targets green before the full gate. No new tracker, hash system or gate waiver.
+- Corpus clearance remains92 documents/354 blockers/34 resolved/48 accepted/errors[]; all104
+  capability documents retain exact requirements. Ten new canonical profiles/declarations
+  preserve prior296 profiles/1002 declarations; no pack edits/restamps, new schema/migration or
+  qualified source. The core remains49 producers/42 consumers/556 bindings, now313 projections;
+  78 semantic events/eligibilities remain unchanged pending actual scoped event registration.
+- D3847/D3841 remain doing: higher scoped supplier/result/event construction/registration,
+  reductions/grades, human@2/D3870 follow-up and complete current consumers/receivers/API/native
+  proof remain. Refresh existing ledger/state/roadmap/queue at zero untriaged. No compatibility
+  pipeline, obsolete-API deletion before real migration, capability/milestone, push or release
+  completion claim. The full1.0 goal stays active.

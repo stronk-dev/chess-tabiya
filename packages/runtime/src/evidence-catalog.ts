@@ -144,7 +144,37 @@ function recordedPathSuccessor(v1: ProjectionDeclaration): ProjectionDeclaration
 
 function withRecordedPathSuccessors(outputs: readonly ProjectionDeclaration[]): readonly ProjectionDeclaration[] {
   const v2 = new Set(SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2).map((value) => value.id));
-  return Object.freeze([...outputs, ...outputs.filter((output) => v2.has(output.id)).map(recordedPathSuccessor)]);
+  const previous = outputs.filter((output) => v2.has(output.id)).map(recordedPathSuccessor);
+  return Object.freeze([...outputs, ...previous, ...previous.filter(value => value.id !== "derived.exchange.trade_completed").map(recordedWindowSuccessor)]);
+}
+
+/** Accepted F2 §2.3j: finite literal input occurrences, not unique dependency families. */
+function recordedWindowSuccessor(previous: ProjectionDeclaration): ProjectionDeclaration {
+  const e = ref("run.record.edge"), c = ref("rules.transition.event.capture"), d = ref("rules.tactic.reading.defender_duty_set"), k = ref("rules.tactic.event.check"), x = ref("rules.exchange.predicate.legal_exchange");
+  const edges = (n: number) => Array.from({ length: n }, () => e);
+  const captures = (n: number) => Array.from({ length: n }, () => c);
+  const members: Readonly<Record<string, readonly (readonly VersionedEvidenceId[])[]>> = {
+    "derived.pawn.sequence.contact_timing": [edges(2), edges(3)],
+    "derived.pawn.sequence.harassment_pressure": [edges(2)],
+    "derived.tactic.sequence.defender_consequence": [edges(3)],
+    "derived.tactic.square_clearance_observed": [edges(3)],
+    "derived.tactic.line_blocker_clearance_observed": [[...edges(3), x]],
+    "derived.tactic.interference_observed": [[...edges(3), d, x]],
+    "derived.tactic.check_zwischenzug_observed": [[...edges(4), c, k, x]],
+    "derived.tactic.overload_exploitation_observed": [[...edges(3), d, c, c, c, x]],
+    "derived.tactic.deflection_observed": [1, 2, 3].flatMap(n => [[...edges(3), d, ...captures(n), x], [...edges(3), d, ...captures(n), x, k]]),
+    "derived.tactic.attraction_observed": [...[1, 2, 3].map(n => [...edges(3), ...captures(n), k]), ...[1, 2, 3, 4, 5].map(n => [...edges(5), ...captures(n)])],
+  };
+  const alternatives = members[previous.id];
+  if (previous.version !== 2 || alternatives === undefined) throw new TypeError("Unknown recorded window predecessor");
+  const direct = previous.id === "derived.tactic.square_clearance_observed" ? " observed-window@1."
+    : previous.id === "derived.pawn.sequence.harassment_pressure" ? " pressure-line@1." : "";
+  const dependsOn = [...new Map(alternatives.flat().map(value => [refKey(value), value])).values()];
+  return Object.freeze({ ...previous, version: 3,
+    semantics: `${previous.semantics}${direct} Source-owned complete granted recorded window under F2 §2.3j.`,
+    dependsOn: Object.freeze(dependsOn), derivation: alternatives.length === 1 ? { inputs: Object.freeze(alternatives[0]!) } : { anyOf: Object.freeze(alternatives.map(member => Object.freeze(member))) },
+    disposition: { kind: "experimental" as const, reason: "Internal owned-window source/factory component; scoped supplier, event and complete current-consumer adoption remain open." },
+  });
 }
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([

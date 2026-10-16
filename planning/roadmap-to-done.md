@@ -100,6 +100,17 @@ The optional source-scope research remains green over500 controls/207 prefixes; 
 actual API/native delivery. D3846/D3841 remain doing. Human_divergence@2/D3870, remaining sequence/
 reduction/grade owners and the complete current image still gate consumer adoption.
 
+Ten source-owned recorded-sequence@3 factories and their private issuer now exist internally.
+125 permanent cases/457 focused passes retain23 finite tuple members, complete original replay/
+head/grant, exact trailing horizons, full capture execution and indexed D/C/K/X authority.
+Both colors, all retained special moves, genuine crossed-source refusals and old payload/
+convention equivalence are covered. Ten profiles/declarations add to1012; prior1002 declarations/
+296 profiles/current bindings/pack requirements remain unchanged. Independent read-only review
+finds no blocker. Full normal make verify build passes6271 software/400 files, seven isolated
+performance/257 content and all remaining gates. Higher scoped supplier/result/semantic-event construction,
+complete current consumers and receiver/API/native journeys remain open under D3847/D3841.
+This is internal foundation progress, not Support/Review or whole-milestone completion.
+
 D3869 also closes the measured verification-order debt: existing28 normal Make gates now
 refuse stale generated contracts before both full test pools. Four scheduling regressions
 check the actual Make plan, failure propagation and unchanged393-file/native ownership;

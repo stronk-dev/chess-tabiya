@@ -52,6 +52,7 @@ import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReadi
 import { developmentReading, phaseBandReading } from "./phase.js";
 import { pivotalMarkerPayloadsForKind, pivotalMarkerRecordedSelection, isRecordedPivotalSource, recordedPivotalData, pivotalRecordedPayloads, type RecordedPivotalSource, type PivotalKind, type PivotalMarker } from "./pivotal.js";
 import { RECORDED_EDGE_FACTORY, recordedEdgePayload, type RecordedEdge } from "./recorded-edge.js";
+import { isRecordedSequenceWindow, readRecordedSequenceWindow, recordedSequenceWindowOperands, recordedSequenceWindowInputs, type RecordedSequenceWindow, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 import {
   assertSemanticEvidenceEvent,
@@ -362,6 +363,7 @@ function projectionFor(route: string): ProjectionDeclaration {
 function authorityShape(candidate: unknown): unknown {
   if (candidate === null || typeof candidate !== "object") return candidate;
   if (Array.isArray(candidate)) return candidate.map(authorityShape);
+  if (isRecordedSequenceWindow(candidate)) return readRecordedSequenceWindow(candidate).authority;
   if (isRecordedPivotalSource(candidate)) return recordedPivotalData(candidate).authority;
   if (isRecordedComparisonSource(candidate)) return recordedComparisonData(candidate).authority;
   if (isRun(candidate)) return { run: candidate.id, nodes: candidate.nodes.length, events: candidate.events.length };
@@ -2054,6 +2056,28 @@ export const createDerivedTacticOverloadExploitationObservedV2Evidence = recorde
   exactRecordedSequenceInputs(anchors, edgesOf(input), 3, others(input, "duty", "captures", "exchange"), ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange"]);
   return overloadExploitationObservedOperands(anchors).filter((payload) => sameDigest(payload.secondTargetCapture, (input.exchange as DeclaredEvidence<unknown>).payload));
 }, (input) => [...edgesOf(input), ...others(input, "duty", "captures", "exchange")]);
+
+/** Accepted F2 §2.3j: no caller arrays, payloads, selected arms or truncated witness tuples. */
+function ownedRecordedSequenceFactory(route: RecordedSequenceRoute): EvidenceValueFactory<{ readonly window: RecordedSequenceWindow }, readonly DeclaredEvidence<unknown>[]> {
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ window: value("an owned recorded sequence window", isRecordedSequenceWindow) }], result: "population", dependency: "semantic-convention-provenance" }, ({ window }: { readonly window: RecordedSequenceWindow }) => {
+    readRecordedSequenceWindow(window, route);
+    return Object.freeze(recordedSequenceWindowOperands(window, route).map(payload => {
+      const inputs = recordedSequenceWindowInputs(window, payload);
+      return mint(route, symbol, payload, { window, payload, inputs }, inputs);
+    }));
+  });
+}
+export const createDerivedPawnSequenceContactTimingV3Evidence = ownedRecordedSequenceFactory("derived.pawn.sequence.contact_timing@3");
+export const createDerivedPawnSequenceHarassmentPressureV3Evidence = ownedRecordedSequenceFactory("derived.pawn.sequence.harassment_pressure@3");
+export const createDerivedTacticSequenceDefenderConsequenceV3Evidence = ownedRecordedSequenceFactory("derived.tactic.sequence.defender_consequence@3");
+export const createDerivedTacticSquareClearanceObservedV3Evidence = ownedRecordedSequenceFactory("derived.tactic.square_clearance_observed@3");
+export const createDerivedTacticLineBlockerClearanceObservedV3Evidence = ownedRecordedSequenceFactory("derived.tactic.line_blocker_clearance_observed@3");
+export const createDerivedTacticInterferenceObservedV3Evidence = ownedRecordedSequenceFactory("derived.tactic.interference_observed@3");
+export const createDerivedTacticCheckZwischenzugObservedV3Evidence = ownedRecordedSequenceFactory("derived.tactic.check_zwischenzug_observed@3");
+export const createDerivedTacticOverloadExploitationObservedV3Evidence = ownedRecordedSequenceFactory("derived.tactic.overload_exploitation_observed@3");
+export const createDerivedTacticDeflectionObservedV3Evidence = ownedRecordedSequenceFactory("derived.tactic.deflection_observed@3");
+export const createDerivedTacticAttractionObservedV3Evidence = ownedRecordedSequenceFactory("derived.tactic.attraction_observed@3");
 
 /** `theory.endgame.method_stage@1` payload (MethodStageV1). */
 export interface MethodStageV1 {

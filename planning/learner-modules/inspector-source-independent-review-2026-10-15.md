@@ -1188,3 +1188,18 @@ The nonblocking suggestion is to assert the complete ordered exact projection-re
 alongside counts, witness position order and receipt order. Main implements it; the normal
 focused gate passes332 tests/twelve files. The reviewer does not rerun tests or typecheck.
 Human-divergence@2, D3870, current consumer/API/native adoption and qualification remain open.
+
+### Internal owned-window sequence implementation review — 2026-10-16
+
+The authorized reviewer independently inspects the accepted F2 §2.3j internal component and
+finds no blocking defect. The nominal windows retain an immutable replay run/full head, validate
+the complete original path before narrowing and authenticate the exact route/endpoint/horizon.
+Complete capture/check executions and indexed private input identity are enforced; lazy duty/
+exchange joins validate genuine receipts and matching payloads. The ten factories expose only
+the nominal window arm. The catalogue's23 finite members preserve old declarations.
+
+The review confirms that permanent controls genuinely exercise crossed issued sources,
+equal-payload/different-FEN checks, lost/duplicate captures, failed quiet acquisition and
+canonical-root refusal. Tests are inspected, not rerun by the reviewer. Higher scoped supplier/
+result/event registrations, current consumers, access enforcement and HTTP/native delivery remain
+unqualified and open. This is bounded implementation review, not parent or product acceptance.

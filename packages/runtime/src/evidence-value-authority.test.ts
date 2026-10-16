@@ -51,6 +51,8 @@ import { recordedInspectorAttachment, recordedInspectorSelection } from "./testi
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
 import { recordedPivotalFixture } from "./testing/recorded-pivotal-fixture.js";
 import { createRecordedPivotalSource } from "./pivotal.js";
+import { createRecordedSequenceWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
+import { recordedSequenceRouteFixture } from "./testing/recorded-sequence-window-fixture.js";
 
 /** One scheduler-sealed live delivery per provider operation, keyed by its source route. */
 function providerDeliveries(): readonly (readonly [string, ProviderOperationId, unknown])[] {
@@ -236,7 +238,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(296);
+    expect(ACTIVE).toHaveLength(306);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -313,7 +315,9 @@ describe("value authority: registry equality", () => {
     const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
     const localTactical = ["derived.compare.piece_route@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
-    const extra = allExtra.filter(route => !localTactical.includes(route));
+    const sequences = Object.keys(RECORDED_SEQUENCE_HORIZONS).sort();
+    expect(allExtra.filter(route => sequences.includes(route))).toEqual(sequences);
+    const extra = allExtra.filter(route => !localTactical.includes(route) && !sequences.includes(route));
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
@@ -1033,6 +1037,12 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     const run = recordedPivotalFixture(kind), recordedPivotal = createRecordedPivotalSource({ run, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId, kind });
     const route = `derived.pivotal.${kind}@2`;
     profiles.set(route, { valid: { recordedPivotal }, falsify: refused(route, { recordedPivotal: { ...recordedPivotal } }) });
+  }
+  for (const route of Object.keys(RECORDED_SEQUENCE_HORIZONS) as RecordedSequenceRoute[]) {
+    const run = recordedSequenceRouteFixture(route), prepared = createRecordedSequenceWindows({ run, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId, route });
+    const window = prepared.windows.find(window => invokeEvidenceValueRoute(route, { window }).length > 0);
+    if (window === undefined) throw new TypeError(`Missing positive profile ${route}`);
+    profiles.set(route, { valid: { window }, falsify: refused(route, { window: { ...window } }) });
   }
   const recordedComparison = recordedComparisonFixture();
   const comparisonInput = { comparison: recordedComparison.comparison, branchId: recordedComparison.main };

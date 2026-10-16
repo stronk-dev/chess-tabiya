@@ -49,6 +49,18 @@ unchanged. Full normal make verify build passes6146 software/399 files, seven is
 performance/257 content and all remaining gates. Human-divergence@2, D3870 and complete current consumer/receiver/
 API/native adoption remain open; no parent discharge or semantic qualification is claimed.
 
+**Owned sequence checkpoint, 2026-10-16:** §2.3j's ten nominal-window-only@3 factories and
+their23 finite literal tuple members are implemented internally. The internal issuer retains
+the actual original replay snapshot/head/grant, complete original validation, genuine prefix
+edges, requested trailing horizons, complete0/1 capture invocations and exact indexed D/C/K/X
+authority.125 permanent cases/457 focused passes retain both colors, all existing special-move
+controls, old payload/convention equivalence, short/empty distinctions, genuine crossed sources
+and failed acquisition. Ten profiles/declarations add to1012; all prior1002 declarations and296
+profiles remain unchanged. Independent read-only implementation review finds no blocker. Full
+normal make verify build passes6271 software/400 files, seven isolated performance/257 content
+and all remaining gates. Higher scoped supplier/result/event construction/registration, complete current
+consumer/presentation/API/native adoption and qualification remain open; no parent discharge.
+
 - **Status:** awaiting D2 — implemented 2026-09-24 (dependency-qualified; D2–D4 stay open, so not `implemented`; D1 discharged the same day by semantic-convention-provenance; D5 discharged 2026-10-15 by direct method-factory path controls) — the value
   receipt, single mint, central invoker, all 210 factories and the permanent
   `make evidence-value-authority` gate ship; the parts that need the still-draft

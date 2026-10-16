@@ -209,6 +209,27 @@ current consumer/receiver/API/native adoption remain open. Actual whole-tip call
 the existing shared implementation until their source-complete migration; no compatibility
 pipeline is introduced.
 
+Ten internal recorded-sequence@3 factories now accept only a nominal `RecordedSequenceWindow`.
+The internal issuer owns an immutable complete replay snapshot/head/decision/branch/endpoint,
+validates the original graph/FEN/legal edges before narrowing, and retains genuine ordered edge
+values for complete trailing horizons. Short horizons remain explicitly omitted; they are not
+complete no-match windows. Detector preparation is limited to the requested family's trailing
+windows (at most five edges). No caller capture array, output, check arm or shortened run is input.
+
+Deflection, attraction and overload retain each edge's complete0/1 capture execution before
+flattening. Zwischenzug uses its indexed first capture only. Check/duty/final-exchange sources
+retain exact private full-edge/FEN authority; equal-looking payloads or matching UCI at another
+position do not join. Duty and exchange remain lazy for actual matches. All23 finite literal
+tuple members preserve repeated occurrence order. Existing recorded pure computations, physical
+castling behavior, grounding, payloads and convention closure remain unchanged; complete legal
+windows without a pattern return empty. Source acquisition/identity failures throw, never empty.
+
+These ten routes remain experimental/unbound internal prerequisites. The higher scoped supplier's
+closed available/missing/refused result, semantic-event constructors/registration, exact current
+consumer/presentation migration and receiver/API/native proof are still open. The existing whole-
+tip/narrative callers have not yet migrated; this checkpoint does not establish a second supported
+pipeline or authorize preserving obsolete APIs under D3851.
+
 The grade projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,
 and can carry evaluation only. Its derivation is an explicit same-lane alternative: two recorded

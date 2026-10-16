@@ -1088,10 +1088,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Continue accepted source-owned sequences/reductions/grades and complete current Compare/Inspector/Hint/packet receivers. Nominal pivotal source and three rule-backed scoped factories now exist internally with24 permanent cases/332 focused passes; full normal make verify build passes6146 software/399 files, seven isolated performance/257 content and all remaining gates. Human_divergence@2 remains uncut over while D3870 needs a narrow schema follow-up settling human_common empty telemetry, REST write policy, claimed run-schema/migration order and stamp-only transition before genuine canonical empty-array/persistence/export/reload success. Do not guess a version or rebase claims unilaterally. Preserve every detector family, full source/grant/head identity, availability, conservative whole-selection refusal, root-inclusive Compare, D1422 unified ladder and original budgets. Source-complete282-pair current cutover precedes actual obsolete-path retirement. No compatibility pipeline, filtered bindings or qualification/milestone/release promotion.",
+        "nextAction": "Complete accepted higher scoped sequence supplier/closed result/semantic-event constructors and registration using the ten genuine owned-window factories, then source-owned reductions/grades and complete current Compare/Inspector/Hint/packet receivers. Internal ten-family source component now has125 permanent cases/457 focused passes and independent implementation review with no blocker; full normal make verify build passes6271 software/400 files, seven isolated performance/257 content and all remaining gates. Human@2/D3870 still needs a narrow independently reviewed schema follow-up for empty telemetry, REST write policy, negotiated resource/migration order and stamp-only transition, with genuine canonical persistence/export/reload proof. Preserve every family, exact source/grant/head identity, availability and D1422 ladder/budgets. Source-complete282-pair current cutover precedes actual obsolete-path retirement. No compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "Accepted D3846 nominal pivotal source and three rule-backed scoped factories are implemented internally: irreversibility@1 scoped arm, phase_change@2 and option_collapse@2.24 permanent cases/332 focused passes retain complete original validation, actual full head/decision/branch/endpoint/family authority, caller isolation, inherited endpoints, exact ordered four/six input tuples, unclear-node prior phases and later confirmation inside the grant. Independent read-only review finds no blocker; exact-ref-tuple suggestion implemented. Two canonical profiles/declarations added (1002 total), prior1000/current bindings/pack requirements unchanged. Semantic343/343 cases/81 subjects/zero qualified remain. Optional existing source-scope research passes500 controls/207 prefixes/828 family checks/94 occurrence controls/45 full markers/four missing-later-collapse refusals/zero crossed human inputs/three repeated source events. Full normal make verify build passes6146 software/399 files, seven isolated performance/257 content and all remaining gates. D3846/D3841 remain doing, no public image adopted. Human_divergence@2/D3870, sequence/reduction/grade owners, complete current282-pair consumers and receivers/API/native proof remain. No compatibility pipeline, qualification/milestone/browser/remote CI/release claim.",
+          "summary": "Accepted D3847 internal owned-window sequence component implements all ten nominal-window-only@3 factories/central routes and23 finite literal tuples.125 permanent cases/457 focused passes and workspace types retain complete original replay snapshot/full head/decision/grant, exact trailing horizons, genuine edges, complete0/1 capture executions and indexed D/C/K/X authority. Both colors/all prior special moves preserve old payload/direct/child convention receipts. Genuine foreign sources, equal-payload/same-UCI checks at different full FENs, dropped/duplicated capture execution, source acquisition failure and root/suffix corruption refuse. Independent read-only implementation review finds no blocker. Ten profiles/declarations add to1012; prior1002 declarations/296 profiles/current bindings/pack requirements unchanged. Semantic343/343 cases/81 subjects/zero qualified remain. Full normal make verify build passes6271 software/400 files, seven isolated performance/257 content and all remaining gates. Higher scoped supplier/closed result/semantic-event registration, human@2/D3870 schema follow-up, reductions/grades, complete current282-pair consumer/receiver/API/native cutover and obsolete-path retirement remain. No compatibility pipeline, qualification/capability/milestone/browser/remote CI/push/release claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1133,6 +1133,9 @@
             "packages/runtime/src/pivotal.ts",
             "packages/runtime/src/pivotal-evidence.test.ts",
             "packages/runtime/src/recorded-pivotal.test.ts",
+            "packages/runtime/src/recorded-sequence-window.ts",
+            "packages/runtime/src/recorded-sequence-window.test.ts",
+            "packages/runtime/src/testing/recorded-sequence-window-fixture.ts",
             "packages/runtime/src/testing/recorded-pivotal-fixture.ts",
             "packages/runtime/src/compare-strip-values.ts",
             "packages/runtime/src/compare.test.ts",
@@ -1268,7 +1271,7 @@
             {
               "kind": "work_state",
               "id": "D3841",
-              "digest": "sha256:a2b3c6fc4f1745d63d0d09f692ffa9868295d5ba4b5f694aa8ac58679fa9922d"
+              "digest": "sha256:f43a1d798146a8221b28d0ad76ea43bbf55d1763fa46a79321f267cec96fd66f"
             },
             {
               "kind": "work_state",
@@ -1503,7 +1506,7 @@
             {
               "kind": "work_state",
               "id": "D3847",
-              "digest": "sha256:d8e2e8795f5cda83316acebf3e725d7da8120abb17725a8c8ee3a99751d65ad5"
+              "digest": "sha256:ec6532cada3b33b4cecc1b2593d82b15dce7dec6f21be47728209d51b4ee585a"
             },
             {
               "kind": "work_state",

@@ -112,7 +112,21 @@ The maintained optional pivotal source-scope research still passes500 controls/2
 zero crossed human inputs and three repeated source events. Its helper anchor is updated for
 the shared production refactor; this disposable instrument is not native/API qualification.
 
-Next implement human-divergence's scoped source once D3870 is reconciled, then the
+The accepted D3847 sequence component now has ten actual source-only@3 factories with23 finite
+literal tuple members and a private nominal window issuer.125 permanent cases/457 focused passes
+retain full replay snapshot/head/grant identity, original validation, exact trailing horizons,
+genuine ordered edges, complete0/1 captures and indexed checks/duty/final exchanges. Both-color
+positives, hard negatives, all prior castling cases and direct/child conventions agree with the
+existing recorded computations. Genuine foreign/equal-payload sources and failed acquisition
+refuse; short context remains omitted, complete no-match remains empty. Ten canonical profiles/
+declarations add to1012, prior1002 declarations/296 profiles/current bindings/pack requirements
+unchanged. Independent read-only review finds no blocker. Full normal make verify build passes
+6271 software/400 files, seven isolated performance/257 content and all remaining gates. The higher scoped
+supplier/result/semantic-event registration and actual consumers remain unfinished, not renamed
+as complete by this internal checkpoint.
+
+Next complete that scoped supplier/event result and source-owned reductions/grades, reconcile
+human-divergence's D3870 schema follow-up, then the
 remaining recorded source/sequence/reduction/grade contracts, and complete packet/current-binding migrations, strict receivers,
 API and native journeys. Preserve every actual detector family, exact source/access/assistance,
 D1422's unified ladder and original budgets. Exposure is currently Threat-only, not an invented
