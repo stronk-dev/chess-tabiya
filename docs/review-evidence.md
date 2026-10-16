@@ -46,8 +46,24 @@ Private source witnesses retain original availability results/arrays and exact o
 inputs. Copied, partial, foreign-head or equal-looking values cannot substitute for the complete
 population. Context is captured independently before execution; source readback validates all
 membership and current storage without re-minting or requesting providers. This is complete
-collection of captured data, not complete analysis. Last-level selection/reduction, full moment
-assembly and learner-facing receiver/API migration remain unimplemented by this internal slice.
+collection of captured data, not complete analysis.
+
+The internal `derived.story.last_level@2` operation now consumes that original complete population.
+It authenticates every row/state/result before checking whether an eligible imported result says
+the learner lost. Typed cp alone is converted from White to learner perspective; the latest
+path index with learner cp >= -100 wins, using the node's absolute recorded ply. Positive scores
+are not excluded by an absolute-distance rule. Mate, missing/unavailable points, nonloss,
+unfinished and board-terminal cases do not manufacture an answer.
+
+Every invocation publishes a fresh frozen authenticated zero/one result array. Its private
+reader validates the original array and complete source before adapters may flatten it. The
+result must belong to the identical retained population, not another equal-image invocation. The
+reduction retains genuine result/position leaves and point member0's ordered provider/position
+witnesses, including complete provider parser/delivery authority. Changed unselected or rejected
+inputs change the source receipt even when the selected payload stays equal. Root may qualify
+in this primitive; subsequent Story moment assembly must retain the calculation before excluding
+a root without a decision edge. Full moment/rank/opening/grade owners and learner-facing final
+receiver/API migration remain unimplemented; no current consumer is partially switched here.
 
 The only engine source is the shared node-free `live.stockfish.position_eval@1` delivery from the
 provider exchange: a White-perspective `centipawns | mate` score plus the same line's raw

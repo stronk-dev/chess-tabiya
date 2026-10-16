@@ -13,6 +13,19 @@ fork conventions are landed members with append-only history; only comparison's 
 remains live below. These unbound internal components do not complete material, packet/Hint,
 current module/renderer/access/native migration, source qualification or the parent discharges.
 
+**Last-level reduction checkpoint, 2026-10-16:** accepted §2.3h now has its actual internal
+story.last_level@1 operation, derived.story.last_level@2 factory and original complete result
+reader. Complete source/value receipts and genuine point/member/provider witnesses precede
+all loss/typed-cp selection; authenticated fresh empty arrays mint no fact. The neutral seal
+retains two exact operation issuers, and V2 binds every reached actual callable separately.
+21 new permanent cases,963 focused passes/26 files and workspace types pass; independent bounded
+read-only review/re-review finds no blocker. D3880's four genuine equal-image controls first
+fail for missing refusal, then pass with the retained-population checks. Full corrected normal
+make verify build exits zero:6516 software/407 files, seven performance,257 content and all
+remaining gates. Moment/rank/
+opening/grade sources, D3870 and complete current consumer/API/native adoption remain open.
+This is an implementation checkpoint, not additional acceptance, qualification or parent closure.
+
 **Material source checkpoint, 2026-10-16:** §2.3c's signature@2 and event@2 now compute from
 the actual ten-count tuple and complete capture/promotion populations.42 permanent cases retain
 zero counts, all22 measured vector changes, exact private FEN/edge joins, genuine malformed

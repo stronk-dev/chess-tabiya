@@ -855,6 +855,13 @@
       "8a95117f5b332e54364605163eae57f950d47145f788967dba1050da96ecccb0"
     ]
   },
+  "derived.story.last_level@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "854f5d0a3d046d3ce98fdaa6b2bea441ab59060f016b835fb75d4c3e4c2c442f"
+    ]
+  },
   "derived.story.rank@2": {
     "availability": "available",
     "cardinality": 1,

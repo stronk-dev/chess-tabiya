@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a08e9e6fad11538932fd406a17c79e9f20c29ffb5d5a9d3b17a494db198cf78b",
+    "roadmap": "sha256:ac28e52056ac9031b869c47f2343b8ec198c6bf76cfcfd2213b649d3af7737ab",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:d762cf05902f4fbd8a5174b6246e4bbcfa32269000213be84f926299713efcfe",
+    "workState": "sha256:218ee802c61fec7a023aa48f6979d14dc395db78a30bd01e92fd607428687767",
     "rfcRegister": "sha256:bef4a474494c72354a37ed6441daefd318a1ec8a307c6e53879f226b74c74353",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 38,
       "blocked": 1084,
-      "done": 1717,
+      "done": 1718,
       "refused": 162
     },
     "workItems": {
@@ -476,10 +476,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement the actual last-level reduction over the complete boundary-owned Review point/state/result population, then full moment/rank/opening/grade sources and independently reviewed D3870 canonical empty-telemetry/REST/resource/stamp-only migration follow-up. Internal population, Review boundary/result and comparison/V2/value/result/consumer-plan sources exist. Use the actual retained complete receipts/private witnesses for future concrete reductions, not only a data digest. Bind the final complete authority once to RunService storage; captured-only preparation uses observation/durable reads, never enqueue. Then adopt the entire current282-pair Compare/Inspector/Hint/packet image through actual access/receiver/API/native journeys. Preserve all detector families, grants/heads/availability and D1422 ladder/budgets; migrate actual callers then retire obsolete paths, no compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
+      "nextAction": "Implement the full recorded moment/rank/opening/grade sources and independently reviewed D3870 empty-telemetry/schema/REST/resource/stamp-only migration follow-up. Internal last-level reduction, Review boundary/population/result and comparison/V2/value/result/consumer-plan sources exist. Preserve complete captured data and authentic empty/root calculation authority in moment/rank assembly; bind the final complete authority once to RunService storage through observation/durable reads, never enqueue. Then adopt the entire current282-pair source/access/receiver/API/native image. Preserve detector families, grants/heads/availability and D1422 ladder/budgets. Migrate actual callers and retire obsolete paths; no legacy compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Accepted F2 §2.3d/Review §4.5 now has the complete internal point/state/result population. Every2N+1 original source slot executes through the actual shared registry; private factory/slot/result witnesses retain full-head positions, literal ordered point inputs and genuine empty results. Captured absent/explicit/pending/failed/rejected-delivery states, immutable scope and before/after storage checks survive.35 runtime/two added real SQLite cases cover every prefix/both sides, serialized/reloaded deliveries, context mutation and genuine source substitutions. Independent bounded review,942 focused cases/25 files/types and full normal make verify build pass:6495 software/406 files, seven performance,257 content and all governance/corpus/packaging/build gates. D3879 corrects the earlier focused prose total to905, not903; individual/full-run counts were correct. Zero untriaged remains. Prior boundary/comparison/V2/value/result/consumer-plan work stays verified;314 projections/307 profiles/1013 capabilities, pack bytes and qualification unchanged. Actual last-level reduction, full moment/rank/opening/grade sources, D3870 and complete282-pair access/receiver/API/native migration remain. No partial final facade, placeholder operation, learner adoption or whole milestone/qualification/release promotion.",
+        "summary": "Accepted F2 §2.3h now has the actual internal last-level reduction over the complete recorded point/state/result population. Every original source/value/member/provider witness authenticates before imported-loss/typed-cp selection; fresh complete zero/one arrays retain acyclic result/convention authority without fake empty facts. The dependency-free shared seal retains two exact operation issuers, and V2 checks every reached actual callable binding.21 new permanent cases/963 focused passes/26 files and workspace types pass; independent bounded read-only review finds no blocker. D3880 closes the independently returned equal-image population-result join through retained nominal proof identity; all four new empty/nonempty regressions first fail specifically for missing refusal. Full corrected normal make verify build exits zero:6516 software/407 files, seven performance/four files,257 content/26 files and all governance/corpus/packaging/build gates.315 projections/308 profiles/1014 capabilities; no new convention, pack edit, learner binding, qualification or release claim. Full moment/rank/opening/grade sources, D3870 and complete282-pair access/receiver/API/native migration remain; no compatibility pipeline.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -538,7 +538,9 @@
           "packages/runtime/src/evidence-reduction-contract.ts",
           "packages/runtime/src/evidence-reduction-types.ts",
           "packages/runtime/src/internal/comparison-reduction-authority.ts",
-          "packages/runtime/src/internal/comparison-reduction-seal.ts",
+          "packages/runtime/src/internal/evidence-reduction-seal.ts",
+          "packages/runtime/src/internal/last-level-reduction-authority.ts",
+          "packages/runtime/src/last-level-reduction.test.ts",
           "packages/runtime/src/internal/comparison-structural-families.ts",
           "packages/runtime/src/semantic-validation-profiles.json",
           "packages/runtime/src/semantic-validation-law.ts",
@@ -678,7 +680,7 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:4e81b6fa4c33043a604567bce0b435407bb90db59b4ae69072c8196872e386e9"
+            "digest": "sha256:84f09e6da920c9e25a267c74174082e9d4248766e1cb65a4fa4afd331ca04bf7"
           },
           {
             "kind": "work_state",
@@ -913,7 +915,7 @@
           {
             "kind": "work_state",
             "id": "D3847",
-            "digest": "sha256:72739581faee1bfea011a9655fa100462189c668ead6b1e7a946814fa57daf3c"
+            "digest": "sha256:1d0f06eb9729cada2439cc9bfd4e7f4eceb6396ca3f003667a1ee64911225e83"
           },
           {
             "kind": "work_state",

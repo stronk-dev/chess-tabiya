@@ -38,7 +38,9 @@ import {
 } from "./evidence-contract.js";
 import { directProjectionConventions } from "./evidence-convention-closure.js";
 import { computeComparisonReduction } from "./internal/comparison-reduction-authority.js";
-import { initiateComparisonReduction, publishComparisonReduction } from "./internal/comparison-reduction-seal.js";
+import { computeLastLevelReduction, type RecordedLastLevelValue } from "./internal/last-level-reduction-authority.js";
+import { readRecordedLastLevelPopulation, type RecordedLastLevelPopulation } from "./review-evidence.js";
+import { initiateEvidenceReduction, publishEvidenceReduction } from "./internal/evidence-reduction-seal.js";
 import { readComparisonStructuralPopulation, type RecordedComparisonStructuralPopulation, type ScopedStructuralObservationChange } from "./comparison-structural-population.js";
 import { COMPARISON_STRUCTURAL_ROUTES, type ComparisonStructuralRoute } from "./internal/comparison-structural-families.js";
 import { conventionReceipt, type ConventionReceipt } from "./evidence-conventions.js";
@@ -1399,12 +1401,12 @@ export const createDerivedCompareStructureDeltaV2Evidence = (() => {
   return factory({ route, symbol, shape: "derived", arms: [{ population: populationInput, branchId: value("a granted branch id", isText) }], result: "items" },
     ({ population, branchId }: { readonly population: RecordedComparisonStructuralPopulation; readonly branchId: string }): readonly RunEvidenceItem<ScopedStructuralObservationChange>[] => {
       const computed = computeComparisonReduction(population, branchId), projection = projectionFor(route), proof = computed.proof;
-      const authority = initiateComparisonReduction(computed.authority);
+      const authority = initiateEvidenceReduction(computed.authority);
       const result = Object.freeze(computed.appearances.map((appearance, ordinal) => Object.freeze({ nodeId: appearance.nodeId, plyOffset: appearance.plyOffset,
         evidence: declareEvidence(projection.producer, { id: projection.id, version: projection.version }, appearance.payload, {
           factory: symbol, inputDigest: proof.inputDigest, sourceDigests: [], convention: proof.convention, reduction: { authority, ordinal },
         }) })));
-      publishComparisonReduction(authority, result);
+      publishEvidenceReduction(authority, result);
       return result;
     });
 })();
@@ -1436,6 +1438,23 @@ export const createDerivedComparePieceRouteV2Evidence = (() => {
 })();
 
 const isLearnerSide = (candidate: unknown): boolean => candidate === "white" || candidate === "black";
+
+export const createDerivedStoryLastLevelV2Evidence = (() => {
+  const route = "derived.story.last_level@2", symbol = evidenceFactorySymbol(route);
+  const populationInput = value("an original complete recorded last-level population", candidate => {
+    try { readRecordedLastLevelPopulation(candidate as RecordedLastLevelPopulation); return true; } catch { return false; }
+  });
+  return factory({ route, symbol, shape: "derived", arms: [{ population: populationInput }], result: "items" },
+    ({ population }: { readonly population: RecordedLastLevelPopulation }): readonly RunEvidenceItem<RecordedLastLevelValue>[] => {
+      const computed = computeLastLevelReduction(population), projection = projectionFor(route), proof = computed.proof;
+      const authority = initiateEvidenceReduction(computed.authority);
+      const result = Object.freeze(computed.selected.map((selected, ordinal) => Object.freeze({ nodeId: selected.nodeId, plyOffset: selected.plyOffset,
+        evidence: declareEvidence(projection.producer, { id: projection.id, version: projection.version }, selected.payload, {
+          factory: symbol, inputDigest: proof.inputDigest, sourceDigests: [], convention: proof.convention, reduction: { authority, ordinal },
+        }) })));
+      publishEvidenceReduction(authority, result); return result;
+    });
+})();
 
 /**
  * rfc/review-evidence-compiler.md §5: last-level evaluates typed cp review points only and converts

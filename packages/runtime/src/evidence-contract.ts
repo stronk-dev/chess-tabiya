@@ -1,6 +1,6 @@
 import type { ConventionReceipt } from "./evidence-conventions.js";
 import { assertEvidenceReductionDeclaration } from "./evidence-reduction-contract.js";
-import { assertComparisonReductionValue, assertComparisonReductionConsumerManifest, comparisonReductionMintReceipt, joinComparisonReductionValue, type ComparisonReductionAuthority, type EvidenceReductionReceipt } from "./internal/comparison-reduction-seal.js";
+import { assertEvidenceReductionValue, assertEvidenceReductionConsumerManifest, evidenceReductionMintReceipt, joinEvidenceReductionValue, type EvidenceReductionAuthority, type EvidenceReductionReceipt } from "./internal/evidence-reduction-seal.js";
 
 export type EvidencePlane = "rules" | "transition" | "search" | "human" | "theory" | "authored" | "record" | "derived";
 export type ProjectionRole = "predicate" | "reading" | "event" | "source_record";
@@ -597,7 +597,7 @@ export interface EvidenceValueReceipt {
 
 /** What the sole mint boundary supplies when it seals a factory-computed payload. */
 export interface EvidenceMintAuthority {
-  readonly reduction?: Readonly<{ authority: ComparisonReductionAuthority; ordinal: number }>;
+  readonly reduction?: Readonly<{ authority: EvidenceReductionAuthority; ordinal: number }>;
   readonly factory: string;
   readonly inputDigest: string;
   readonly sourceDigests: readonly string[];
@@ -641,11 +641,11 @@ export function declareEvidence<T>(producer: VersionedEvidenceId, projection: Ve
     payloadDigest: sealedPayloadDigest(value.payload),
     sourceDigests: [...authority.sourceDigests],
     ...(authority.convention === undefined ? {} : { convention: authority.convention }),
-    ...(authority.reduction === undefined ? {} : { reduction: comparisonReductionMintReceipt(authority.reduction.authority).receipt }),
+    ...(authority.reduction === undefined ? {} : { reduction: evidenceReductionMintReceipt(authority.reduction.authority).receipt }),
   });
-  if (projection.id === "derived.compare.structure_delta" && projection.version === 2) {
-    if (authority.reduction === undefined) fail("EVIDENCE_GENERIC_BYPASS", "comparison reduction is missing its construction authority", ["declared-evidence:reduction"]);
-    joinComparisonReductionValue(authority.reduction.authority, authority.reduction.ordinal, value, receipt);
+  if (isReductionProjection(projection)) {
+    if (authority.reduction === undefined) fail("EVIDENCE_GENERIC_BYPASS", "reduction is missing its construction authority", ["declared-evidence:reduction"]);
+    joinEvidenceReductionValue(authority.reduction.authority, authority.reduction.ordinal, value, receipt);
   } else if (authority.reduction !== undefined) {
     fail("EVIDENCE_GENERIC_BYPASS", "reduction authority crossed its exact projection", ["declared-evidence:reduction"]);
   }
@@ -669,14 +669,18 @@ export function identitySealedEvidenceWithoutValueReceipt<T>(producer: Versioned
  * callers that probe arbitrary authority records use it instead of catching a constructed error
  * per record ([[D3300]]).
  */
+function isReductionProjection(projection: VersionedEvidenceId): boolean {
+  return projection.version === 2 && (projection.id === "derived.compare.structure_delta" || projection.id === "derived.story.last_level");
+}
+
 export function isDeclaredEvidence(value: unknown): value is DeclaredEvidence<unknown> {
   if (typeof value !== "object" || value === null || (value as { readonly [DECLARED]?: unknown })[DECLARED] !== true || !DECLARED_VALUES.has(value)) return false;
   const receipt = VALUE_RECEIPTS.get(value);
   if (receipt === undefined) return false;
   const declared = value as DeclaredEvidence<unknown>;
   if (refKey(receipt.projection) !== refKey(declared.projection) || receipt.payloadDigest !== sealedPayloadDigest(declared.payload)) return false;
-  if (receipt.reduction !== undefined || (declared.projection.id === "derived.compare.structure_delta" && declared.projection.version === 2)) {
-    try { assertComparisonReductionValue(declared, receipt); } catch { return false; }
+  if (receipt.reduction !== undefined || isReductionProjection(declared.projection)) {
+    try { assertEvidenceReductionValue(declared, receipt); } catch { return false; }
   }
   return true;
 }
@@ -693,7 +697,7 @@ export function assertDeclaredEvidence(value: unknown): asserts value is Declare
   if (refKey(receipt.projection) !== refKey(declared.projection) || receipt.payloadDigest !== sealedPayloadDigest(declared.payload)) {
     fail("EVIDENCE_GENERIC_BYPASS", "evidence value receipt disagrees with its sealed projection or payload", ["declared-evidence:receipt-mismatch"]);
   }
-  if (receipt.reduction !== undefined || (declared.projection.id === "derived.compare.structure_delta" && declared.projection.version === 2)) assertComparisonReductionValue(declared, receipt);
+  if (receipt.reduction !== undefined || isReductionProjection(declared.projection)) assertEvidenceReductionValue(declared, receipt);
 }
 
 /** Package-internal read of the value's sealed convention closure; `undefined` for a fixture value. */
@@ -720,7 +724,7 @@ export function evidenceForConsumer<T>(manifest: CompiledEvidenceManifest, consu
   const admitted: DeclaredEvidence<T>[] = [];
   for (const value of values) {
     assertDeclaredEvidence(value);
-    if (VALUE_RECEIPTS.get(value)?.reduction !== undefined) assertComparisonReductionConsumerManifest(value, manifest);
+    if (VALUE_RECEIPTS.get(value)?.reduction !== undefined) assertEvidenceReductionConsumerManifest(value, manifest);
     assertLiteral(value.producer, "declared-evidence producer");
     assertLiteral(value.projection, "declared-evidence projection");
     const projection = projectionByKey.get(refKey(value.projection));

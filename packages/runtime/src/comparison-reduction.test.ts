@@ -5,7 +5,7 @@ import { assertDeclaredEvidence, compileEvidenceManifest, declareEvidence, evide
 import { collectComparisonStructuralPopulation, comparisonStructuralAppearances, comparisonStructuralPopulationImage, readComparisonStructuralPopulation } from "./comparison-structural-population.js";
 import * as populationOwner from "./comparison-structural-population.js";
 import { computeComparisonReduction, assertComparisonReductionProof, readComparisonReductionResult } from "./internal/comparison-reduction-authority.js";
-import { comparisonReductionResultProof, initiateComparisonReduction, publishComparisonReduction } from "./internal/comparison-reduction-seal.js";
+import { evidenceReductionResultProof, initiateEvidenceReduction, publishEvidenceReduction } from "./internal/evidence-reduction-seal.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { compileProjectionExecution } from "./evidence-execution.js";
 import { compileProjectionExecutionV2, executionPlanDigest } from "./evidence-execution-v2.js";
@@ -20,7 +20,7 @@ function fixture(black = false, empty = false) {
   const value = recordedComparisonFixture(black);
   const comparison = empty ? createRecordedComparisonSource({ run: value.run, columns: value.columns.map(column => ({ ...column, throughNodeId: value.shared.id })) as never }) : value.comparison;
   const population = collectComparisonStructuralPopulation({ comparison });
-  return { ...value, population, result: invokeEvidenceValueRoute(route, { population, branchId: value.main }) };
+  return { ...value, comparison, population, result: invokeEvidenceValueRoute(route, { population, branchId: value.main }) };
 }
 
 describe("owned structural comparison reduction", () => {
@@ -77,11 +77,11 @@ describe("owned structural comparison reduction", () => {
   });
 
   it("requires original operation and compiler issuance, never structural receipts or copied plans", () => {
-    expect(() => initiateComparisonReduction({ validate() {} } as never)).toThrow(/privately issued/);
+    expect(() => initiateEvidenceReduction({ validate() {} } as never)).toThrow(/privately issued/);
     const value = fixture(), item = value.result[0]!, receipt = evidenceValueReceipt(item.evidence);
     expect(() => declareEvidence(item.evidence.producer, ref, item.evidence.payload, { factory: receipt.factory, inputDigest: receipt.inputDigest, sourceDigests: [], convention: receipt.convention! })).toThrow(/construction authority/);
     expect(() => assertDeclaredEvidence({ ...item.evidence })).toThrow();
-    expect(() => comparisonReductionResultProof(Object.freeze([...value.result]))).toThrow();
+    expect(() => evidenceReductionResultProof(Object.freeze([...value.result]))).toThrow();
     const plan = compileProjectionExecutionV2(PRIMARY_EVIDENCE_MANIFEST, ref);
     expect(plan.kind).toBe("reduction");
     expect(() => executionPlanDigest({ ...plan })).toThrow(/issued/);
@@ -95,11 +95,18 @@ describe("owned structural comparison reduction", () => {
     expect(compileProjectionExecutionV2(PRIMARY_EVIDENCE_MANIFEST, fixedRef)).toEqual({ kind: "fixed", execution: compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, fixedRef) });
   });
 
+  it.each([false, true])("rejects another genuinely collected equal-image population, empty=%s", empty => {
+    const value = fixture(false, empty), other = collectComparisonStructuralPopulation({ comparison: value.comparison });
+    expect(evidenceDigest(comparisonStructuralPopulationImage(other, value.main))).toBe(evidenceDigest(comparisonStructuralPopulationImage(value.population, value.main)));
+    expect(() => readComparisonReductionResult(value.result, other, value.main)).toThrow(/original population/);
+    expect(() => readComparisonReductionResult(invokeEvidenceValueRoute(route, { population: other, branchId: value.main }), other, value.main)).not.toThrow();
+  });
+
   it("refuses unpublished values, copied proofs and wrong ordinal/location publication, then seals once", () => {
     const value = recordedComparisonFixture(), population = collectComparisonStructuralPopulation({ comparison: value.comparison });
-    const computed = computeComparisonReduction(population, value.main), proof = computed.proof, authority = initiateComparisonReduction(computed.authority);
+    const computed = computeComparisonReduction(population, value.main), proof = computed.proof, authority = initiateEvidenceReduction(computed.authority);
     expect(() => assertComparisonReductionProof({ ...proof })).toThrow(/not issued/);
-    expect(() => initiateComparisonReduction({ ...computed.authority })).toThrow(/privately issued/);
+    expect(() => initiateEvidenceReduction({ ...computed.authority })).toThrow(/privately issued/);
     const producer = proof.outputs[0]!.producer;
     const mint = (ordinal: number, payload: unknown) => declareEvidence(producer, ref, payload, {
       factory: contract.factory, inputDigest: proof.inputDigest, sourceDigests: [], convention: proof.convention, reduction: { authority, ordinal },
@@ -111,16 +118,16 @@ describe("owned structural comparison reduction", () => {
     expect(() => mint(0, computed.appearances[0]!.payload)).toThrow(/ordinal/);
     expect(() => assertDeclaredEvidence(result[0]!.evidence)).toThrow(/unpublished/);
     expect(isDeclaredEvidence(result[0]!.evidence)).toBe(false);
-    expect(() => comparisonReductionResultProof(result)).toThrow(/original authenticated/);
+    expect(() => evidenceReductionResultProof(result)).toThrow(/original authenticated/);
     for (const bad of [Object.freeze(result.slice(1)), Object.freeze([...result].reverse()),
       Object.freeze(result.map((item, index) => index === 0 ? Object.freeze({ ...item, plyOffset: item.plyOffset + 1 }) : item)),
       Object.freeze(result.map((item, index) => index === 0 ? Object.freeze({ ...item, nodeId: value.shared.id }) : item))]) {
-      expect(() => publishComparisonReduction(authority, bad as never)).toThrow(/incomplete|ordinal\/location/);
+      expect(() => publishEvidenceReduction(authority, bad as never)).toThrow(/incomplete|ordinal\/location/);
       expect(isDeclaredEvidence(result[0]!.evidence)).toBe(false);
     }
-    publishComparisonReduction(authority, result as never);
+    publishEvidenceReduction(authority, result as never);
     expect(isDeclaredEvidence(result[0]!.evidence)).toBe(true);
-    expect(() => publishComparisonReduction(authority, result as never)).toThrow(/already published/);
+    expect(() => publishEvidenceReduction(authority, result as never)).toThrow(/already published/);
     expect(() => mint(0, computed.appearances[0]!.payload)).toThrow(/cannot mint/);
     expect(() => readComparisonReductionResult(result as never, population, value.main)).not.toThrow();
   });

@@ -10,7 +10,10 @@
  * from every barrel and package export.
  */
 import { comparisonStructuralAppearances, readComparisonStructuralPopulation } from "../comparison-structural-population.js";
-import { COMPARISON_REDUCTION_CONTRACT } from "../evidence-reduction-contract.js";
+import { COMPARISON_REDUCTION_CONTRACT, LAST_LEVEL_REDUCTION_CONTRACT, evidenceReductionContract } from "../evidence-reduction-contract.js";
+import { readRecordedLastLevelPopulation } from "../review-evidence.js";
+import { lastRecordedAvailableLevel } from "./last-level-reduction-authority.js";
+import type { VersionedEvidenceId } from "../evidence-contract.js";
 import {
   AVOIDANCE_FACTORIES,
   HINT_DISCLOSURE_FACTORIES,
@@ -71,6 +74,7 @@ import {
   createDerivedReviewWdlPointV1Evidence,
   createDerivedReviewWdlWhiteV1Evidence,
   createDerivedStoryLastLevelV1Evidence,
+  createDerivedStoryLastLevelV2Evidence,
   createDerivedStoryRankV2Evidence,
   createDerivedStoryTitleV2Evidence,
   createDerivedStructuralPredicateResultV1Evidence,
@@ -273,6 +277,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "derived.review.wdl_white@1": createDerivedReviewWdlWhiteV1Evidence,
   "derived.review.wdl_point@1": createDerivedReviewWdlPointV1Evidence,
   "derived.story.last_level@1": createDerivedStoryLastLevelV1Evidence,
+  "derived.story.last_level@2": createDerivedStoryLastLevelV2Evidence,
   "derived.story.rank@2": createDerivedStoryRankV2Evidence,
   "derived.story.title@2": createDerivedStoryTitleV2Evidence,
   "derived.structural.predicate_result@1": createDerivedStructuralPredicateResultV1Evidence,
@@ -478,4 +483,16 @@ export function inspectComparisonReductionBinding() {
     || factory.meta.route !== "derived.compare.structure_delta@2" || factory.meta.shape !== "derived" || factory.meta.result !== "items") throw new TypeError("Comparison reduction lacks its actual central factory binding");
   if (comparisonReductionBinding.factory !== factory || comparisonReductionBinding.reader !== readComparisonStructuralPopulation || comparisonReductionBinding.computation !== comparisonStructuralAppearances) throw new TypeError("Comparison source/computation function identities changed");
   return comparisonReductionBinding;
+}
+
+const lastLevelReductionBinding = Object.freeze({ identity: LAST_LEVEL_REDUCTION_CONTRACT, factory: createDerivedStoryLastLevelV2Evidence,
+  reader: readRecordedLastLevelPopulation, computation: lastRecordedAvailableLevel });
+export function inspectEvidenceReductionBinding(operation: VersionedEvidenceId) {
+  const contract = evidenceReductionContract(operation);
+  if (contract === COMPARISON_REDUCTION_CONTRACT) return inspectComparisonReductionBinding();
+  const factory = EVIDENCE_VALUE_ROUTES["derived.story.last_level@2"];
+  if (factory !== createDerivedStoryLastLevelV2Evidence || factory.name !== contract.factory || factory.meta.route !== "derived.story.last_level@2"
+    || factory.meta.shape !== "derived" || factory.meta.result !== "items" || lastLevelReductionBinding.reader !== readRecordedLastLevelPopulation
+    || lastLevelReductionBinding.computation !== lastRecordedAvailableLevel) throw new TypeError("Last-level reduction lacks its exact central factory/source/computation binding");
+  return lastLevelReductionBinding;
 }

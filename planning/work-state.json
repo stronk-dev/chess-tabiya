@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4e81b6fa4c33043a604567bce0b435407bb90db59b4ae69072c8196872e386e9",
+      "sourceDigest": "sha256:84f09e6da920c9e25a267c74174082e9d4248766e1cb65a4fa4afd331ca04bf7",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32021,7 +32021,7 @@
       "id": "D3845",
       "state": "doing",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:22576b64a2aba83a36aaae2baa3a01dfcd1cc61b26f26507825b6f8ae36f90f0",
+      "sourceDigest": "sha256:729ae0cfd64a5f5d791560c1bcccd11769d79f8f6edbc1f4800b5939004b4298",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32039,7 +32039,7 @@
       "id": "D3847",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:72739581faee1bfea011a9655fa100462189c668ead6b1e7a946814fa57daf3c",
+      "sourceDigest": "sha256:1d0f06eb9729cada2439cc9bfd4e7f4eceb6396ca3f003667a1ee64911225e83",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32330,6 +32330,15 @@
       "sourceDigest": "sha256:52ce7397ce0c1c83aa4493e48c9a0faa833838e1db505a5a7d7c31755770208f",
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3880",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e2cd507ddb27e087fc8454e49eeb257dab8f50846e36554840624e52fda7d911",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/last-level-reduction.test.ts",
       "evidenceKind": "path"
     }
   ]

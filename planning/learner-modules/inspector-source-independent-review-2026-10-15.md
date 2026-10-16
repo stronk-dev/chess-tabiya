@@ -1306,3 +1306,30 @@ Future reduction encoding must consume these retained complete receipts/private 
 hash the plain data alone and call that proof. Last-level selection/reduction, full moment source,
 final receiver ownership and consumer/API adoption remain outside this bounded clearance. No new
 acceptance, source qualification, parent discharge or whole-product completion is inferred.
+
+### Last-level reduction — bounded implementation review/return, 2026-10-16
+
+The authorized reviewer confirms lawful staging as the second genuine internal reduction, not
+rank/opening placeholders or a partial current consumer image. Comparison retains its exact
+fact-only rule; last-level separately requires measured/reported fact+evaluation and its three
+ordered templates. A neutral dependency-free seal keeps exact operation issuers/core joins and
+sole-factory publication. V2 must bind every reached real operation, including mixed compositions.
+
+Read-only implementation review initially finds no blocker: the complete explicit source/value
+encoder precedes eligibility, member0 retains genuine ordered provider-evaluation/position
+children, selection is learner-loss/typed-cp/latest-index with absolute ply, and empty output
+retains original array authority without minting a fact. The dispatcher spy establishes no new
+dispatcher work on read, not independent observation of every possible acquisition path; the
+inspected implementation itself has no acquisition path. Tests were inspected, not run.
+
+A focused follow-up returns D3880: full-image equality is insufficient to relabel an original
+result as another independently executed population's calculation. Both comparison and last-level
+already retain their exact population in nominal operation proofs. Use that identity, plus all
+existing plan/image/currentness checks, without adding a registry. Four genuine equal-image
+empty/nonempty controls first fail for missing refusal. The comparison empty fixture is corrected
+to retain its actual shortened source before measuring those four predecessor failures.
+Two retained-population checks implement the correction. Read-only re-review clears D3880:
+both readers authenticate operation issuance/exact population before returning receipts; every
+complete-image/operation/plan/currentness guard remains, and both populations may compute their
+own results. The four tests are inspected, not run by the reviewer; no remaining bounded blocker.
+This return supersedes the initial no-blocker conclusion and grants no new acceptance or release.

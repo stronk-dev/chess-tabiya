@@ -8,10 +8,10 @@ import { COMPARISON_REDUCTION_CONTRACT as contract } from "../evidence-reduction
 import { directProjectionConventions } from "../evidence-convention-closure.js";
 import { conventionReceipt } from "../evidence-conventions.js";
 import type { RunEvidenceItem } from "../evidence-factories.js";
-import { sealOwnedComparisonReductionProof, comparisonReductionResultProof } from "./comparison-reduction-seal.js";
+import { sealOwnedComparisonReductionProof, evidenceReductionResultProof } from "./evidence-reduction-seal.js";
 
-import type { ComparisonReductionMintImage, EvidenceReductionReceipt, ReductionValueIdentity } from "../evidence-reduction-types.js";
-export interface ComparisonReductionProof extends ComparisonReductionMintImage {
+import type { EvidenceReductionMintImage, EvidenceReductionReceipt, ReductionValueIdentity } from "../evidence-reduction-types.js";
+export interface ComparisonReductionProof extends EvidenceReductionMintImage {
   readonly population: RecordedComparisonStructuralPopulation; readonly branchId: string; readonly plan: CompiledEvidenceExecutionPlan;
 }
 const proofs = new WeakSet<object>();
@@ -78,7 +78,9 @@ export function assertComparisonReductionProof(data: ComparisonReductionProof, m
 }
 
 export function readComparisonReductionResult(result: readonly RunEvidenceItem<ScopedStructuralObservationChange>[], population: RecordedComparisonStructuralPopulation, branchId: string) {
-  const proof = comparisonReductionResultProof(result);
-  if (evidenceDigest(comparisonStructuralPopulationImage(population, branchId)) !== proof.receipt.sourceImageDigest) throw new TypeError("Comparison result crosses its requested branch or complete source");
+  const proof = evidenceReductionResultProof(result);
+  if (!proofs.has(proof) || (proof as ComparisonReductionProof).population !== population) throw new TypeError("Comparison result crosses its original population/operation");
+  if (key(proof.receipt.operation) !== key(contract.operation) || key(proof.receipt.projection) !== route
+    || evidenceDigest(comparisonStructuralPopulationImage(population, branchId)) !== proof.receipt.sourceImageDigest) throw new TypeError("Comparison result crosses its operation, requested branch or complete source");
   return Object.freeze({ reduction: proof.receipt, convention: proof.convention });
 }

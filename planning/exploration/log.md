@@ -32049,3 +32049,54 @@ Campaign was the one capability with no API, route or content. Now:
   plain data digest; then full moment/rank/opening/grade sources, D3870's independently reviewed
   schema follow-up, final application-owned receiver and complete282-pair consumer/API/native
   cutover. No legacy compatibility pipeline, partial final facade or parent discharge.
+
+### 2026-10-16 — Last-level reduction and exact population-result correction
+
+- Continue accepted F2 §2.3h/provider §1a over the genuine complete recorded Review population.
+  Install actual story.last_level@1/derived.story.last_level@2 with three ordered templates,
+  complete value/receipt/provider/state encoding and genuine member0 evaluation/position child
+  witnesses. Validate source before all loss/typed-cp shortcuts; preserve >=-100, greatest path
+  index, absolute recorded ply, root applicability and unchanged valid-source factual payloads.
+  Every invocation publishes a fresh original frozen0/1 array; empty mints no fact/capability.
+- Replace the comparison-only internal seal module/types with one dependency-free closed shared
+  store and two exact operation issuers, migrating actual imports without an obsolete alias.
+  Keep sole-factory/core AST guards and distinct fact-only versus measured fact+evaluation
+  declarations. V2 retains every actual reached callable binding, including mixed compositions;
+  no operation registry setter, rank/opening placeholder or current learner cutover.
+- The first type/profile/test runs catch a missing new fixture import, literal test-helper type,
+  malformed consumer test accepts shape, old exact census counts and signed-zero expectation.
+  Repair those inputs/assertions without changing any grading/threshold/gate/deadline. Initial
+  normal focused gate passes959 cases/26 files and workspace types; canonical regeneration adds
+  one profile/declaration (308/1014), preserving prior declarations and all pack requirements.
+- Authorized independent review initially clears the bounded source implementation. A focused
+  follow-up returns D3880: original result plus complete-image equality still permits borrowing
+  another independently executed population's calculation. Record/assign the row and stop the
+  superseded full run explicitly (software exit130), rather than claim current-code verification.
+  First new comparison-empty control used the original unshortened fixture; repair that fixture
+  before measuring. All four genuine equal-image empty/nonempty controls then fail specifically
+  for missing refusal. Both readers now check their existing nominal proof's exact population,
+  retaining full operation/plan/source/currentness validation; no new registry or digest scheme.
+  Focused re-verification and corrected full normal make verify build follow before commit.
+  No source qualification, browser/remote CI, push, partial final facade or whole1.0 completion.
+
+### 2026-10-16 — Last-level reduction verified checkpoint
+
+- Corrected normal make verify build exits zero:6516 software tests/407 files (377.33s), seven
+  isolated performance cases/four files (61.33s),257 real-content cases/26 files (57.52s), all
+  type/contract/governance/corpus/packaging/build gates. Corpus92 documents/354 blocking/34
+  resolved/48 accepted/errors[];104 capability documents retain exactly their requirements.
+  The963 focused cases/26 files include19 new last-level cases and two new comparison controls.
+- D3880 closes with four genuine predecessor-red equal-image source crossings, both corrected
+  result readers and independent read-only re-review. The first repaired run has one remaining
+  assertion expecting the later source-image refusal; update it to expect the new earlier exact-
+  population refusal. All actual refusals remain; no threshold, deadline, retry or skip is relaxed.
+  The explicitly interrupted superseded full run (exit130) is not the passing proof above.
+- Current closure49/315/42/566, semantic88/88/16/1 and51 conventions. Permanent profiles308,
+  capabilities1014 with all prior1013 retained; semantic91 subjects/zero qualified/343 existing
+  cases passing/53 population/eight external receipts unchanged. No pack edits/restamps,
+  migrations, raw recording, browser run, external CI, push, publication or deployment.
+- Update the existing queue/roadmap/sidecar/docs and final checkpoint receipt; keep D3847,
+  D3845 and D3841 doing. D3880 has test-path landing evidence, not a prose-only closeout.
+  Full1.0 remains active: complete moment/rank/opening/grade owners, reviewed D3870 and all282
+  current source/access/receiver/API/native pairs remain, without a legacy compatibility pipeline.
+  No partial final facade, learner-module completion, qualification or parent release claim.

@@ -1,20 +1,24 @@
 # Codex queue
 
-**Current executable checkpoint, 2026-10-16:** recorded Review now has its complete internal
-point/state/result population below selection and moment assembly. It executes2N+1 actual
-position/eval-point/import-result registry slots with private original source membership, full-
-head positions, literal point inputs and genuine empty results. Every captured provider input
-survives, including null/explicit-not-requested, pending counters, all reasons and rejected
-deliveries.35 runtime/two added SQLite cases retain full scope, every prefix/both sides,
-serialization/reload, context mutation, crossed heads and post-work storage changes. Independent
-bounded review is clear;942 focused cases/25 files and types pass. Full normal make verify build
-exits zero:6495 software/406 files, seven isolated performance,257 content and all governance/
-corpus/packaging/build gates. D3879 corrects the previous fast total to905, not903; prior results were
-correct. No new projection, browser/remote, detector qualification or release claim.
+**Current executable checkpoint, 2026-10-16:** actual internal last-level reduction now consumes
+the complete recorded Review population. It authenticates all original source/value/member/
+provider witnesses before imported-loss/typed-cp selection and publishes genuine fresh empty or
+singleton arrays. A shared dependency-free seal retains exact per-operation issuance; V2 binds
+every reached actual operation separately.21 new permanent cases/963 focused passes/26 files and
+workspace types pass; independent bounded read-only review/re-review is clear. Full corrected
+normal make verify build exits zero:6516 software/407 files, seven performance/four files,
+257 content/26 files and all governance/corpus/packaging/build gates.
+315 projections/308 profiles/1014 capabilities; no new convention, pack
+edit, current learner binding, qualification, browser/remote or release claim.
+
+[[D3880]]'s independent follow-up correction is implemented/re-reviewed: both result readers now
+require their already-retained actual population, not only equal contents. All four genuine
+empty/nonempty controls fail for missing refusal before repair and pass afterward. The initial
+full run is explicitly superseded (exit130); the corrected full run passes in full.
 
 The structural comparison reduction/V2/consumer-plan wave remains implemented and verified;
 D3874–D3877 remain closed. This new source has no partial four-method public facade, placeholder
-moment/Story operation or new learner binding. Next: actual last-level reduction, complete
+moment/Story operation or new learner binding. Next: complete
 moment/rank/opening/grade owners, D3870's reviewed schema
 follow-up, then the entire current282-pair source/access/receiver/API/native cutover. Bind one
 final authority to RunService's actual storage and use observation/durable reads, never enqueue

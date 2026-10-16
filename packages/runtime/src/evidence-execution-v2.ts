@@ -2,12 +2,12 @@
 import { evidenceDigest, type CompiledEvidenceManifest, type LatencyMode, type VersionedEvidenceId } from "./evidence-contract.js";
 import { compileProjectionExecution, projectionOwnExecution, literalExecutionMembers, EvidenceExecutionError, type CompiledProjectionExecution } from "./evidence-execution.js";
 import { assertEvidenceReductionDeclaration, evidenceReductionContract } from "./evidence-reduction-contract.js";
-import { inspectComparisonReductionBinding } from "./internal/evidence-value-routes.js";
+import { inspectEvidenceReductionBinding } from "./internal/evidence-value-routes.js";
 
 export type CompiledEvidenceExecutionPlan =
   | Readonly<{ kind: "fixed"; execution: CompiledProjectionExecution }>
   | Readonly<{ kind: "composition"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; members: readonly Readonly<{ member: number; inputs: readonly CompiledEvidenceExecutionPlan[] }>[]; worstCaseLatency: LatencyMode }>
-  | Readonly<{ kind: "reduction"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; operation: VersionedEvidenceId; sourceOwner: "RecordedComparisonStructuralPopulation"; sourceUse: "captured_only"; elements: readonly Readonly<{ projection: VersionedEvidenceId; execution: CompiledEvidenceExecutionPlan }>[]; worstCaseLatency: LatencyMode }>;
+  | Readonly<{ kind: "reduction"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; operation: VersionedEvidenceId; sourceOwner: "RecordedComparisonStructuralPopulation" | "RecordedLastLevelPopulation"; sourceUse: "captured_only"; elements: readonly Readonly<{ projection: VersionedEvidenceId; execution: CompiledEvidenceExecutionPlan }>[]; worstCaseLatency: LatencyMode }>;
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
 const ref = (value: VersionedEvidenceId) => Object.freeze({ id: value.id, version: value.version });
 const order: readonly LatencyMode[] = ["sync", "interactive", "background", "offline"];
@@ -34,13 +34,15 @@ export function compileProjectionExecutionV2(manifest: Pick<CompiledEvidenceMani
     } finally { active.delete(id); }
   };
   const bindingChecks: (() => void)[] = [];
+  const bindings = new Map<string, ReturnType<typeof evidenceReductionContract>>();
   const build = (value: VersionedEvidenceId): CompiledEvidenceExecutionPlan => {
     if (!hasReduction(value)) return Object.freeze({ kind: "fixed", execution: compileProjectionExecution(manifest, value) });
     const declaration = declarations.get(key(value))!, own = projectionOwnExecution(manifest, declaration), derivation = declaration.derivation!;
     if (derivation.reduction !== undefined) {
       assertEvidenceReductionDeclaration(declaration);
-      const contract = evidenceReductionContract(derivation.reduction.operation), binding = inspectComparisonReductionBinding();
-      bindingChecks.push(() => { if (inspectComparisonReductionBinding() !== binding) throw new TypeError("Reduction callable binding changed after plan issuance"); });
+      const contract = evidenceReductionContract(derivation.reduction.operation), binding = inspectEvidenceReductionBinding(contract.operation);
+      bindings.set(key(contract.operation), binding.identity);
+      bindingChecks.push(() => { if (inspectEvidenceReductionBinding(contract.operation) !== binding) throw new TypeError("Reduction callable binding changed after plan issuance"); });
       const elements = Object.freeze(derivation.reduction.elements.map(element => Object.freeze({ projection: ref(element), execution: build(element) })));
       return Object.freeze({ kind: "reduction", projection: ref(value), own, operation: contract.operation, sourceOwner: contract.sourceOwner, sourceUse: contract.sourceUse, elements,
         worstCaseLatency: slowest([own.latency, ...elements.map(element => latency(element.execution))]) });
@@ -51,7 +53,7 @@ export function compileProjectionExecutionV2(manifest: Pick<CompiledEvidenceMani
   const plan = build(root);
   const reachable = [...visited].sort().map(id => declarations.get(id)!);
   const producers = manifest.producers.filter(producer => reachable.some(projection => key(projection.producer) === key(producer)));
-  const digest = evidenceDigest({ plan, declarations: reachable, producers, binding: plan.kind === "fixed" ? null : inspectComparisonReductionBinding().identity });
+  const digest = evidenceDigest({ plan, declarations: reachable, producers, bindings: [...bindings].sort(([a], [b]) => a.localeCompare(b)).map(([, binding]) => binding) });
   plans.set(plan, Object.freeze({ digest, validate: () => { for (const check of bindingChecks) check(); } }));
   return plan;
 }

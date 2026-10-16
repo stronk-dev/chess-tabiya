@@ -127,21 +127,34 @@ top-k remains unobserved, not impossible or poor quality. These are operator-onl
 Inspector's existing next-move distribution still has no observed-move operand and is not
 silently relabelled as an occurrence (D3363).
 
-The current compiled closure is 49 producers, 314 projections, 42 versioned consumers and 566 bindings,
+The current compiled closure is 49 producers, 315 projections, 42 versioned consumers and 566 bindings,
 plus 88 semantic-event declarations, 88 eligibility rows, 16 refusal reasons and one selection
 policy. The executable manifest and semantic-evidence checks own this tuple.
 
 The source-only structural comparison successor uses the third closed derivation arm,
-`reduction:{operation,elements}`. Its one installed operation is compare.structure_delta@1;
-unimplemented Story/last-level/opening operations refuse rather than register placeholders.
+`reduction:{operation,elements}`. The two installed operations are compare.structure_delta@1
+and story.last_level@1; unimplemented rank/opening operations refuse, without placeholders.
 The genuine complete population drives18 finite V2 execution templates and concrete original
 position/family occurrences, including every authentic empty invocation in its source image.
 Result arrays are fresh, frozen and privately authenticated before flattening; copied/partial/
-foreign-scope arrays refuse. Values and the reduction convention receipt are constructed
+foreign-scope arrays refuse. The result must belong to the identical retained population;
+independently executed equal-image populations compute their own results, never borrow one.
+Values and the reduction convention receipt are constructed
 acyclically before publication; ordinary admission refuses unpublished or forged authority.
 Consumer admission also checks its actual manifest's V2 plan. Fixed-only V2 wrappers use the
 unchanged fixed compiler output. This does not expose a learner API or complete current module
 source assembly; remaining owners and the full coordinated consumer migration stay open.
+
+The last-level successor uses its own three ordered templates and measured/reported
+fact+evaluation contract, without widening comparison's fact-only rule. It validates the complete
+recorded point/state/result source before imported-loss eligibility and retains real point member0
+witnesses with ordered provider-evaluation/recorded-position children. Its source image includes
+all value receipts, original slots and captured states, including rejected provider deliveries.
+The inclusive learner-cp >= -100 rule selects the greatest recorded path index; mate scores never
+become cp, and output locations use actual recorded ply. Empty results are successful calculations
+with authenticated original arrays and no fabricated fact. The shared dependency-free seal has
+two exact operation issuers, no caller registration API. V2 plans retain every reachable actual
+factory/reader/computation binding, including compositions containing both operations.
 
 The internal `derived.tactic.defender_exposure@2` factory joins an exact lost-control event to
 `rules.exchange.reading.landing_captures@1`. It retains every positive capture with exactly two
