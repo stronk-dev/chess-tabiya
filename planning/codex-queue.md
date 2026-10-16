@@ -1,21 +1,21 @@
 # Codex queue
 
-**Current executable checkpoint, 2026-10-16:** recorded Review now has an internal storage-bound
-prefix source and genuine consequence/import-result factory arms, not a cropped whole-tip packet.
-Complete original replay/path/FEN validation precedes narrowing; source use rereads storage and
-rejects stale/copied/foreign handles without collecting semantic/provider evidence. D3878 binds
-the immutable imported endpoint to its existing stored move-sequence digest, including a real
-below-service SQLite extension negative.20 runtime/four server cases retain both colors,
-unfinished/terminal/result distinctions, retries, mutation isolation and actual save/reload.
-Independent review clears the bounded repair;903 focused cases/24 files and workspace types
-pass. Full normal make verify build exits zero:6458 software/405 files, seven isolated
-performance cases,257 content cases and all governance/corpus/packaging/build gates. D3878
-is closed with real source/test evidence; zero untriaged remains. No browser/remote/release claim.
+**Current executable checkpoint, 2026-10-16:** recorded Review now has its complete internal
+point/state/result population below selection and moment assembly. It executes2N+1 actual
+position/eval-point/import-result registry slots with private original source membership, full-
+head positions, literal point inputs and genuine empty results. Every captured provider input
+survives, including null/explicit-not-requested, pending counters, all reasons and rejected
+deliveries.35 runtime/two added SQLite cases retain full scope, every prefix/both sides,
+serialization/reload, context mutation, crossed heads and post-work storage changes. Independent
+bounded review is clear;942 focused cases/25 files and types pass. Full normal make verify build
+exits zero:6495 software/406 files, seven isolated performance,257 content and all governance/
+corpus/packaging/build gates. D3879 corrects the previous fast total to905, not903; prior results were
+correct. No new projection, browser/remote, detector qualification or release claim.
 
 The structural comparison reduction/V2/consumer-plan wave remains implemented and verified;
 D3874–D3877 remain closed. This new source has no partial four-method public facade, placeholder
-moment/Story operation or new learner binding. Next: the complete boundary-owned point/state/
-endpoint-result population, actual last-level/rank/opening/grade owners, D3870's reviewed schema
+moment/Story operation or new learner binding. Next: actual last-level reduction, complete
+moment/rank/opening/grade owners, D3870's reviewed schema
 follow-up, then the entire current282-pair source/access/receiver/API/native cutover. Bind one
 final authority to RunService's actual storage and use observation/durable reads, never enqueue
 from captured-only preparation. Retire obsolete executable paths after actual callers move;

@@ -30,9 +30,24 @@ unfinished unless their own on-prefix terminal is recorded.
 The existing consequence/import-result factories have an internal `{recordedReview}` arm with
 that actual boundary as authority, unchanged factual payloads and absolute recorded locations.
 The source-only owner is not exported through a public barrel. It is not the final four-method
-Review authority: complete point/state/result population, moment assembly, application-lifetime
+Review authority: moment assembly, application-lifetime
 RunService ownership and current consumer/API adoption remain. Existing raw-run arms remain
 only while actual current callers need migration, not as a legacy compatibility requirement.
+
+The internal `collectRecordedLastLevelPopulation({boundary,context})` now prepares the complete
+root-to-endpoint point/state/result image. It executes the three actual position/eval-point/
+import-result registry entries with the shared slot formula, not another registry or a fabricated
+whole-tip subject. Every node retains its original position and slot, captured provider input,
+closed output state and zero/one genuine point. Absent map entries remain null, distinct from
+explicit not-requested input; pending/failure reasons and rejected delivered values survive.
+The endpoint result is an actual boundary-authorized invocation, including genuine empty output.
+
+Private source witnesses retain original availability results/arrays and exact ordered point
+inputs. Copied, partial, foreign-head or equal-looking values cannot substitute for the complete
+population. Context is captured independently before execution; source readback validates all
+membership and current storage without re-minting or requesting providers. This is complete
+collection of captured data, not complete analysis. Last-level selection/reduction, full moment
+assembly and learner-facing receiver/API migration remain unimplemented by this internal slice.
 
 The only engine source is the shared node-free `live.stockfish.position_eval@1` delivery from the
 provider exchange: a White-perspective `centipawns | mate` score plus the same line's raw

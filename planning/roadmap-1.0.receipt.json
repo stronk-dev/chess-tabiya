@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:6c21d782798c45029a42314326ffe4866926b1c2a246c4e3b26154a69a4ee981",
+    "roadmap": "sha256:a08e9e6fad11538932fd406a17c79e9f20c29ffb5d5a9d3b17a494db198cf78b",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:51f7747947c47c92d8e2d1953de33818442d95e83b61498b9babc838ca44255a",
+    "workState": "sha256:d762cf05902f4fbd8a5174b6246e4bbcfa32269000213be84f926299713efcfe",
     "rfcRegister": "sha256:bef4a474494c72354a37ed6441daefd318a1ec8a307c6e53879f226b74c74353",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 627,
       "doing": 38,
       "blocked": 1084,
-      "done": 1716,
+      "done": 1717,
       "refused": 162
     },
     "workItems": {
@@ -476,10 +476,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement the complete boundary-owned Review point/state/endpoint-result population, actual moment/last-level/rank/opening/grade owners and independently reviewed D3870 canonical empty-telemetry/REST/resource/stamp-only migration follow-up. The internal Review storage boundary/result arms and structural comparison reduction/V2/value/result/consumer-plan authority exist. Bind the final complete authority once to RunService storage; captured-only source preparation uses observation/durable reads, never enqueue. Then adopt the entire current282-pair Compare/Inspector/Hint/packet image through actual access/receiver/API/native journeys. Preserve all detector families, grants/heads/availability and D1422 ladder/budgets; migrate actual callers then retire obsolete paths, no compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
+      "nextAction": "Implement the actual last-level reduction over the complete boundary-owned Review point/state/result population, then full moment/rank/opening/grade sources and independently reviewed D3870 canonical empty-telemetry/REST/resource/stamp-only migration follow-up. Internal population, Review boundary/result and comparison/V2/value/result/consumer-plan sources exist. Use the actual retained complete receipts/private witnesses for future concrete reductions, not only a data digest. Bind the final complete authority once to RunService storage; captured-only preparation uses observation/durable reads, never enqueue. Then adopt the entire current282-pair Compare/Inspector/Hint/packet image through actual access/receiver/API/native journeys. Preserve all detector families, grants/heads/availability and D1422 ladder/budgets; migrate actual callers then retire obsolete paths, no compatibility pipeline, filtered bindings or premature qualification/capability/milestone/release promotion.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Accepted Review §4.5 now has its internal immutable storage-bound prefix source and genuine consequence/import-result factory arms. Original replay/path/FEN validation precedes narrowing; storage/head/side/import changes and copied/foreign handles refuse without semantic/provider collection. D3878 binds the original imported endpoint to its existing stored canonical move-sequence digest, including real runtime/SQLite save/close/reopen extension negatives.20 runtime/four server cases retain both colors, every prefix, unfinished/terminal/result distinctions, retries and independent snapshots. Independent re-review clears the repair;903 focused cases/24 files/types and full normal make verify build pass:6458 software/405 files, seven isolated performance,257 content and all governance/corpus/packaging/build gates. D3878 closes with path evidence; zero untriaged remains. Prior comparison reduction/V2/value/result/consumer-plan implementation stays verified. No partial final facade, placeholder operation or learner adoption.314 projections/307 profiles/1013 capabilities, pack bytes and semantic qualification unchanged. Complete point/state/result population, moment/last-level/rank/opening/grade owners, D3870 and entire282-pair access/receiver/API/native delivery remain; no whole milestone/qualification/release promotion.",
+        "summary": "Accepted F2 §2.3d/Review §4.5 now has the complete internal point/state/result population. Every2N+1 original source slot executes through the actual shared registry; private factory/slot/result witnesses retain full-head positions, literal ordered point inputs and genuine empty results. Captured absent/explicit/pending/failed/rejected-delivery states, immutable scope and before/after storage checks survive.35 runtime/two added real SQLite cases cover every prefix/both sides, serialized/reloaded deliveries, context mutation and genuine source substitutions. Independent bounded review,942 focused cases/25 files/types and full normal make verify build pass:6495 software/406 files, seven performance,257 content and all governance/corpus/packaging/build gates. D3879 corrects the earlier focused prose total to905, not903; individual/full-run counts were correct. Zero untriaged remains. Prior boundary/comparison/V2/value/result/consumer-plan work stays verified;314 projections/307 profiles/1013 capabilities, pack bytes and qualification unchanged. Actual last-level reduction, full moment/rank/opening/grade sources, D3870 and complete282-pair access/receiver/API/native migration remain. No partial final facade, placeholder operation, learner adoption or whole milestone/qualification/release promotion.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -530,6 +530,8 @@
           "packages/runtime/src/comparison-reduction.test.ts",
           "packages/runtime/src/recorded-review-boundary.ts",
           "packages/runtime/src/recorded-review-boundary.test.ts",
+          "packages/runtime/src/recorded-last-level-population.test.ts",
+          "packages/runtime/src/review-evidence.ts",
           "apps/server/src/recorded-review-boundary.test.ts",
           "docs/review-evidence.md",
           "packages/runtime/src/evidence-execution-v2.ts",
@@ -676,7 +678,7 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:f76aeab6a2d6713a5264f4d26121bc4e0d461d70e4d34a0fd6ae27d5e7e975d3"
+            "digest": "sha256:4e81b6fa4c33043a604567bce0b435407bb90db59b4ae69072c8196872e386e9"
           },
           {
             "kind": "work_state",
@@ -911,7 +913,7 @@
           {
             "kind": "work_state",
             "id": "D3847",
-            "digest": "sha256:09491b4618186791e86eb82d410521a5ea539f3b455ccc642a7bff9628b9c305"
+            "digest": "sha256:72739581faee1bfea011a9655fa100462189c668ead6b1e7a946814fa57daf3c"
           },
           {
             "kind": "work_state",

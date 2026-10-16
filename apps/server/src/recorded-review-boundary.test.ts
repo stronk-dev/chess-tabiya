@@ -2,10 +2,12 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { branchPath, commitMove, fork, rewind } from "@chess-tabiya/runtime";
+import { branchPath, commitMove, fork, rewind, reviewDurableEngineStates } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { createRecordedReviewBoundarySourceOwner, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
+import { collectRecordedLastLevelPopulation, readRecordedLastLevelPopulation } from "../../../packages/runtime/src/review-evidence.js";
+import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
@@ -21,6 +23,40 @@ function ownerFor(storage: SQLiteRunStorage) {
 function open(path: string) { const storage = new SQLiteRunStorage(path, { onMigration: () => {} }); stores.push(storage); return storage; }
 
 describe("recorded Review source over actual parsed SQLite imports", () => {
+  it.each(["white", "black"] as const)("collects genuine durable point/state/result inputs after file reload: %s", async side => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-review-population-")); directories.push(directory);
+    const path = join(directory, "runs.sqlite"), storage = open(path), service = new RunService(storage);
+    const imported = await service.importGame({ id: `recorded-population-${side}`, side, opponentPolicy: { mode: "human_common" }, policyConfig, seed: 1,
+      source: { kind: "pgn", pgn: '[Result "0-1"]\n\n1. e4 e5 2. Nf3 Nc6 0-1' } }, "writer");
+    let run = imported.run;
+    const branchId = run.branches[0]!.id, nodes = branchPath(run, branchId);
+    for (const index of [0, 1, 3]) run = attachDelivery(run, nodes[index]!.id, evaluationDelivery(nodes[index]!.fen, index === 1 ? "mate -2" : "cp 75"));
+    storage.save(run, { writerId: "writer", learnerId: "__legacy" });
+    storage.close(); stores.splice(stores.indexOf(storage), 1);
+    const reloaded = open(path), parsed = reloaded.read(run.id)!.run, before = JSON.stringify(parsed.events), owner = ownerFor(reloaded);
+    const context = { engine: reviewDurableEngineStates(parsed, nodes), shapes: [] };
+    for (const [last, endpoint] of nodes.entries()) {
+      const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: endpoint.id });
+      const population = collectRecordedLastLevelPopulation({ boundary, context }), data = readRecordedLastLevelPopulation(population);
+      expect(data.rows).toHaveLength(last + 1); expect(data.boundary.run).toEqual(parsed);
+      for (const [index, row] of data.rows.entries()) {
+        expect(row.position.payload.nodeId).toBe(nodes[index]!.id);
+        if ([0, 1, 3].includes(index)) {
+          expect(row.state).toEqual({ kind: "available", itemCount: 1 });
+          expect(row.points[0]!.payload.position).toBe(row.position);
+          expect(row.points[0]!.payload.evaluation.payload.payload.fen).toBe(nodes[index]!.fen);
+          expect(row.points[0]!.payload.evaluation.payload.payload.score.kind).toBe(index === 1 ? "mate" : "centipawns");
+        } else { expect(row.state.kind).toBe("not_requested"); expect(row.points).toEqual([]); }
+      }
+      expect(data.result.items).toHaveLength(last === nodes.length - 1 ? 1 : 0);
+    }
+    expect(JSON.stringify(reloaded.read(run.id)!.run.events)).toBe(before); expect(imported.evidencePass.jobs).toBe(0);
+    const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: nodes.at(-1)!.id });
+    const population = collectRecordedLastLevelPopulation({ boundary, context });
+    new RunService(reloaded).reveal(run.id, "writer");
+    expect(() => readRecordedLastLevelPopulation(population)).toThrow(/no longer/u);
+  });
+
   it.each(["white", "black"] as const)("retains every earlier endpoint across save/reload without acquiring providers: %s", async side => {
     const directory = mkdtempSync(join(tmpdir(), "tabiya-review-boundary-")); directories.push(directory);
     const path = join(directory, "runs.sqlite"), storage = open(path), service = new RunService(storage);

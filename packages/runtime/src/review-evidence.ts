@@ -9,8 +9,9 @@
 import { branchPath } from "./branch-path.js";
 import { importedMainlineBranchId } from "./branch-scale.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { assertDeclaredEvidence, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
-import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
+import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import {
   PRESENTATION_SOURCE_REASONS,
   REVIEW_PACKET_FAMILY_SEAT,
@@ -263,31 +264,35 @@ interface SourceOutcome { readonly state: ReviewAdapterState; readonly items: re
 
 interface Memo {
   readonly points: Map<string, DeclaredEvidence<ReviewEnginePoint> | ReviewAdapterState>;
+  readonly pointInvocations: Map<string, EvidenceValueRouteResults["derived.review.eval_point@1"]>;
   readonly positions: Map<string, DeclaredEvidence<RecordedPosition>>;
   readonly edges: Map<string, DeclaredEvidence<RecordedEdge>>;
   pivotal?: ReadonlyMap<string, readonly DeclaredEvidence<unknown>[]>;
   shapes?: ReadonlyMap<string, readonly DeclaredEvidence<unknown>[]>;
   consequence?: readonly { readonly nodeId: string; readonly evidence: DeclaredEvidence<unknown> }[];
+  importedResult?: EvidenceValueRouteResults["run.record.imported_result@1"];
 }
 
-interface ExecutionContext {
-  readonly subject: ReviewRecordedPrefixReceipt;
-  readonly snapshot: PrefixSnapshot;
+interface NodeSourceExecution {
+  readonly snapshot: { readonly run: DrillRun; readonly path: readonly Node[] };
   readonly byId: ReadonlyMap<string, Node>;
   readonly context: ReviewSourceContext;
   readonly memo: Memo;
 }
+interface ExecutionContext extends NodeSourceExecution {
+  readonly subject: ReviewRecordedPrefixReceipt;
+  readonly snapshot: PrefixSnapshot;
+}
+interface RecordedPointExecution extends NodeSourceExecution { readonly recordedReview: RecordedReviewBoundary }
 
-type AdapterOperation = (slot: Slot, execution: ExecutionContext) => SourceOutcome;
-
-export interface ReviewPacketSourceAdapter {
+export interface ReviewPacketSourceAdapter<Context = ExecutionContext> {
   readonly id: string;
   readonly projection: VersionedEvidenceId;
   readonly family: ReviewSourceFamily;
   readonly grain: "node" | "incoming_edge";
   /** Executable exact payload parser; evidence authority is admitted only after it succeeds. */
   readonly parser: (payload: unknown) => unknown;
-  readonly operation: AdapterOperation;
+  readonly operation: (slot: Slot, execution: Context) => SourceOutcome;
 }
 
 const isRecord = (value: unknown): value is Readonly<Record<string, unknown>> => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -305,7 +310,7 @@ const available = (items: readonly DeclaredEvidence<unknown>[]): SourceOutcome =
 const stateOnly = (state: ReviewAdapterState): SourceOutcome => ({ state, items: [] });
 const NO_OBSERVATION: ReviewAdapterState = Object.freeze({ kind: "honest_empty", reason: "no_observation" });
 
-function positionOf(execution: ExecutionContext, nodeId: string): DeclaredEvidence<RecordedPosition> {
+function positionOf(execution: NodeSourceExecution, nodeId: string): DeclaredEvidence<RecordedPosition> {
   let position = execution.memo.positions.get(nodeId);
   if (position === undefined) {
     position = invokeEvidenceValueRoute("run.record.position@1", { run: execution.snapshot.run, nodeId }) as DeclaredEvidence<RecordedPosition>;
@@ -326,13 +331,14 @@ function edgeOf(execution: ExecutionContext, slot: Slot): DeclaredEvidence<Recor
 }
 
 /** The node's review point, or the adapter state that stands in its place. */
-function pointOf(execution: ExecutionContext, nodeId: string): DeclaredEvidence<ReviewEnginePoint> | ReviewAdapterState {
+function pointOf(execution: NodeSourceExecution, nodeId: string): DeclaredEvidence<ReviewEnginePoint> | ReviewAdapterState {
   const cached = execution.memo.points.get(nodeId);
   if (cached !== undefined) return cached;
   const provider = execution.context.engine.get(nodeId) ?? { kind: "not_requested" as const };
   let result: DeclaredEvidence<ReviewEnginePoint> | ReviewAdapterState;
   if (provider.kind === "delivered") {
     const point = invokeEvidenceValueRoute("derived.review.eval_point@1", { evaluation: provider.delivery, position: positionOf(execution, nodeId) });
+    execution.memo.pointInvocations.set(nodeId, point);
     result = point.kind === "available" ? point.value : Object.freeze({ kind: "unavailable" as const, reason: "input_abstained" as const });
   } else {
     result = provider;
@@ -422,25 +428,34 @@ const pivotalAdapter = (kind: string): ReviewPacketSourceAdapter => Object.freez
   operation: (slot: Slot, execution: ExecutionContext) => available(pivotalAt(execution, slot.nodeId, `derived.pivotal.${kind}`)),
 });
 
+const POSITION_SOURCE_ADAPTER = Object.freeze<ReviewPacketSourceAdapter<NodeSourceExecution>>({ id: "review.source.position@1", projection: V1("run.record.position"), family: "recorded", grain: "node", parser: exactPayload(["nodeId", "ply", "fen"], "run.record.position@1"), operation: (slot, execution) => available([positionOf(execution, slot.nodeId)]) });
+const IMPORTED_RESULT_SOURCE_ADAPTER = Object.freeze<ReviewPacketSourceAdapter<ExecutionContext | RecordedPointExecution>>({ id: "review.source.imported_result@1", projection: V1("run.record.imported_result"), family: "recorded", grain: "node", parser: exactPayload(["context", "result"], "run.record.imported_result@1"), operation: (slot, execution) => {
+  if ("recordedReview" in execution) {
+    execution.memo.importedResult ??= invokeEvidenceValueRoute("run.record.imported_result@1", { recordedReview: execution.recordedReview });
+    assertRecordedReviewResultInvocation(execution.memo.importedResult, "run.record.imported_result@1", execution.recordedReview);
+    return available(execution.memo.importedResult.filter(item => item.nodeId === slot.nodeId).map(item => item.evidence));
+  }
+  const outcome = execution.subject.outcome;
+  if (outcome.kind !== "recorded_result" || slot.nodeId !== execution.subject.tipNodeId) return stateOnly(NO_OBSERVATION);
+  return available(invokeEvidenceValueRoute("run.record.imported_result@1", { run: execution.snapshot.run, branchId: execution.subject.branchId, recordedResult: outcome.result }).map(item => item.evidence));
+} });
+const POINT_SOURCE_ADAPTER = Object.freeze<ReviewPacketSourceAdapter<NodeSourceExecution>>({ id: "review.source.eval_point@1", projection: V1("derived.review.eval_point"), family: "engine_eval", grain: "node", parser: exactPayload(["projectionId", "position", "evaluation"], "derived.review.eval_point@1"), operation: (slot, execution) => {
+  const point = pointOf(execution, slot.nodeId);
+  return isPoint(point) ? available([point]) : stateOnly(point);
+} });
+
 /** The exact adapter population, keyed by projection; set-equal to REVIEW_PACKET_SOURCE_PROJECTION_IDS. */
 export const REVIEW_PACKET_SOURCE_ADAPTERS = Object.freeze([
   // recorded
-  Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.position@1", projection: V1("run.record.position"), family: "recorded", grain: "node", parser: exactPayload(["nodeId", "ply", "fen"], "run.record.position@1"), operation: (slot, execution) => available([positionOf(execution, slot.nodeId)]) }),
+  POSITION_SOURCE_ADAPTER,
   Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.edge@1", projection: V1("run.record.edge"), family: "recorded", grain: "incoming_edge", parser: exactPayload(["runId", "edgeBranchId", "beforeNodeId", "afterNodeId", "beforeFen", "afterFen", "moveUci", "moveSan", "ply"], "run.record.edge@1"), operation: (slot, execution) => available([edgeOf(execution, slot)]) }),
   Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.consequence@1", projection: V1("run.record.consequence"), family: "recorded", grain: "node", parser: exactPayload(["context", "terminal"], "run.record.consequence@1", ["outcome", "plies", "objectiveState"]), operation: (slot, execution) => {
     execution.memo.consequence ??= invokeEvidenceValueRoute("run.record.consequence@1", { run: execution.snapshot.run, branchId: execution.subject.branchId }).map((item) => ({ nodeId: item.nodeId, evidence: item.evidence as DeclaredEvidence<unknown> }));
     return available(execution.memo.consequence.filter((item) => item.nodeId === slot.nodeId).map((item) => item.evidence));
   } }),
-  Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.imported_result@1", projection: V1("run.record.imported_result"), family: "recorded", grain: "node", parser: exactPayload(["context", "result"], "run.record.imported_result@1"), operation: (slot, execution) => {
-    const outcome = execution.subject.outcome;
-    if (outcome.kind !== "recorded_result" || slot.nodeId !== execution.subject.tipNodeId) return stateOnly(NO_OBSERVATION);
-    return available(invokeEvidenceValueRoute("run.record.imported_result@1", { run: execution.snapshot.run, branchId: execution.subject.branchId, recordedResult: outcome.result }).map((item) => item.evidence as DeclaredEvidence<unknown>));
-  } }),
+  IMPORTED_RESULT_SOURCE_ADAPTER,
   // engine_eval: one shared delivery per node supplies score and raw WDL
-  Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.eval_point@1", projection: V1("derived.review.eval_point"), family: "engine_eval", grain: "node", parser: exactPayload(["projectionId", "position", "evaluation"], "derived.review.eval_point@1"), operation: (slot, execution) => {
-    const point = pointOf(execution, slot.nodeId);
-    return isPoint(point) ? available([point]) : stateOnly(point);
-  } }),
+  POINT_SOURCE_ADAPTER,
   Object.freeze<ReviewPacketSourceAdapter>({ id: "review.source.eval_delta@2", projection: V2("derived.review.eval_delta"), family: "engine_eval", grain: "incoming_edge", parser: exactPayload(["projectionId", "before", "after", "deltaCp"], "derived.review.eval_delta@2"), operation: (slot, execution) => {
     const points = edgePoints(slot, execution);
     if (!("before" in points)) return stateOnly(points);
@@ -522,13 +537,18 @@ export interface ReviewSourcePlanSlot {
  */
 export function reviewPacketSourcePlan(subject: ReviewRecordedPrefixReceipt, options: { readonly windowNodes: number }): readonly ReviewSourcePlanSlot[] {
   snapshotOf(subject);
-  if (!Number.isSafeInteger(options.windowNodes) || options.windowNodes < 1) throw new ReviewEvidenceError("REVIEW_SOURCE_INVALID", "windowNodes must be a positive safe integer");
+  return sourcePlanSlots(subject.pathNodeIds, REVIEW_PACKET_SOURCE_ADAPTERS, options.windowNodes);
+}
+
+/** The one slot formula for both current packets and boundary-owned source preparation. */
+function sourcePlanSlots(pathNodeIds: readonly string[], adapters: readonly ReviewPacketSourceAdapter[], windowNodes: number): readonly ReviewSourcePlanSlot[] {
+  if (!Number.isSafeInteger(windowNodes) || windowNodes < 1) throw new ReviewEvidenceError("REVIEW_SOURCE_INVALID", "windowNodes must be a positive safe integer");
   const slots: ReviewSourcePlanSlot[] = [];
-  for (const entry of REVIEW_PACKET_SOURCE_ADAPTERS) {
-    subject.pathNodeIds.forEach((nodeId, index) => {
+  for (const entry of adapters) {
+    pathNodeIds.forEach((nodeId, index) => {
       if (entry.grain === "incoming_edge" && index === 0) return;
-      const fromNodeId = entry.grain === "incoming_edge" ? subject.pathNodeIds[index - 1]! : null;
-      slots.push(Object.freeze({ invocationId: `${entry.id}#${entry.grain === "node" ? nodeId : `${fromNodeId}>${nodeId}`}`, adapterId: entry.id, family: entry.family, grain: entry.grain, nodeId, fromNodeId, window: Math.floor(index / options.windowNodes) }));
+      const fromNodeId = entry.grain === "incoming_edge" ? pathNodeIds[index - 1]! : null;
+      slots.push(Object.freeze({ invocationId: `${entry.id}#${entry.grain === "node" ? nodeId : `${fromNodeId}>${nodeId}`}`, adapterId: entry.id, family: entry.family, grain: entry.grain, nodeId, fromNodeId, window: Math.floor(index / windowNodes) }));
     });
   }
   return Object.freeze(slots);
@@ -566,8 +586,187 @@ function sealSourceResult(subject: ReviewRecordedPrefixReceipt, slot: ReviewSour
  */
 export function runReviewPacketSources(subject: ReviewRecordedPrefixReceipt, context: ReviewSourceContext, options: { readonly windowNodes: number } = { windowNodes: 1 }): readonly ReviewPacketSourceResult[] {
   const snapshot = snapshotOf(subject);
-  const execution: ExecutionContext = { subject, snapshot, byId: new Map(snapshot.path.map((node) => [node.id, node])), context, memo: { points: new Map(), positions: new Map(), edges: new Map() } };
+  const execution: ExecutionContext = { subject, snapshot, byId: new Map(snapshot.path.map((node) => [node.id, node])), context, memo: { points: new Map(), pointInvocations: new Map(), positions: new Map(), edges: new Map() } };
   return Object.freeze(reviewPacketSourcePlan(subject, options).map((slot) => sealSourceResult(subject, slot, ADAPTER_BY_ID.get(slot.adapterId)!.operation({ invocationId: slot.invocationId, adapterId: slot.adapterId, nodeId: slot.nodeId, grain: slot.grain, fromNodeId: slot.fromNodeId, window: slot.window }, execution))));
+}
+
+// ---------------------------------------------------------------------------------------------
+// Accepted F2 §2.3d: complete owned point/state/result population, below moment assembly.
+// These exports are package-internal, deliberately absent from the server/client barrels.
+// ---------------------------------------------------------------------------------------------
+
+declare const recordedLastLevelPopulationBrand: unique symbol;
+export interface RecordedLastLevelPopulation { readonly [recordedLastLevelPopulationBrand]: true }
+interface RecordedPointRow {
+  readonly pathIndex: number;
+  readonly position: DeclaredEvidence<RecordedPosition>;
+  readonly slot: ReviewSourcePlanSlot;
+  readonly provider: ReviewProviderNodeState | null;
+  readonly state: ReviewAdapterState;
+  readonly points: readonly DeclaredEvidence<ReviewEnginePoint>[];
+}
+interface RecordedSourceResult { readonly slot: ReviewSourcePlanSlot; readonly state: ReviewAdapterState; readonly items: readonly DeclaredEvidence<unknown>[] }
+interface RecordedLastLevelData {
+  readonly boundary: ReturnType<typeof readRecordedReviewBoundary>;
+  readonly learnerSide: "white" | "black";
+  readonly outcome: ReviewOutcomeReceipt;
+  readonly result: RecordedSourceResult;
+  readonly rows: readonly RecordedPointRow[];
+}
+const RECORDED_SLOTS = new WeakMap<object, Readonly<{ boundary: RecordedReviewBoundary; adapter: ReviewPacketSourceAdapter }>>();
+const RECORDED_RESULTS = new WeakMap<object, Readonly<{ boundary: RecordedReviewBoundary; execution: RecordedPointExecution; adapter: ReviewPacketSourceAdapter }>>();
+const LAST_LEVEL_POPULATIONS = new WeakMap<object, Readonly<{
+  boundary: RecordedReviewBoundary;
+  data: RecordedLastLevelData;
+  plan: readonly ReviewSourcePlanSlot[];
+  results: ReadonlyMap<ReviewSourcePlanSlot, RecordedSourceResult>;
+}>>();
+
+function closedSource(value: unknown, keys: readonly string[]): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value) && Reflect.ownKeys(value).length === keys.length
+    && keys.every(key => Object.hasOwn(value, key) && Object.hasOwn(Object.getOwnPropertyDescriptor(value, key)!, "value"));
+}
+function capturePointContext(context: ReviewSourceContext, path: readonly Node[]): ReviewSourceContext {
+  if (!closedSource(context, ["engine", "shapes"]) || !(context.engine instanceof Map) || !Array.isArray(context.shapes)) throw new TypeError("Recorded Review requires the closed server-owned source context");
+  const captured = new Map<string, ReviewProviderNodeState>();
+  for (const node of path) {
+    if (!Map.prototype.has.call(context.engine, node.id)) continue;
+    const state: unknown = Map.prototype.get.call(context.engine, node.id);
+    const kind = isRecord(state) ? Object.getOwnPropertyDescriptor(state, "kind") : undefined;
+    if (!isRecord(state) || kind === undefined || !Object.hasOwn(kind, "value") || typeof kind.value !== "string") throw new TypeError("Recorded Review provider state is not a closed state");
+    const keys = state.kind === "delivered" ? ["kind", "delivery"] : state.kind === "pending" ? ["kind", "jobCount", "retrying"]
+      : state.kind === "honest_empty" || state.kind === "unavailable" ? ["kind", "reason"] : ["kind"];
+    if (!closedSource(state, keys)) throw new TypeError("Recorded Review provider state has missing/extra/accessor fields");
+    if (state.kind === "delivered") {
+      assertDeclaredEvidence(state.delivery);
+      if (refKey(state.delivery.projection) !== "live.stockfish.position_eval@1" || evidenceValueReceipt(state.delivery).factory !== "createLiveStockfishPositionEvalV1Evidence") throw new TypeError("Recorded Review provider delivery is not the genuine position-evaluation source");
+      captured.set(node.id, Object.freeze({ kind: "delivered", delivery: state.delivery as DeclaredEvidence<StockfishPositionEvaluation> }));
+    } else {
+      // The same state rules, but not source outputs ('available' or 'input_abstained').
+      if (state.kind === "available" || state.kind === "honest_empty" && state.reason !== "outside_domain"
+        || state.kind === "unavailable" && state.reason === "input_abstained") throw new TypeError("Recorded Review provider input is not a coordinator state");
+      assertState(state as unknown as ReviewAdapterState);
+      captured.set(node.id, Object.freeze({ ...state }) as ReviewProviderNodeState);
+    }
+  }
+  // No shape operation participates in this point/result source. Unrelated inputs enter neither
+  // its population image nor execution, and no mutable caller map/state is retained.
+  return Object.freeze({ engine: captured, shapes: Object.freeze([]) });
+}
+
+/** Select existing registered objects; never a second adapter or operation registry. */
+function recordedPointAdapter(id: string) {
+  const entry = ADAPTER_BY_ID.get(id);
+  return entry === POSITION_SOURCE_ADAPTER ? POSITION_SOURCE_ADAPTER : entry === POINT_SOURCE_ADAPTER ? POINT_SOURCE_ADAPTER
+    : entry === IMPORTED_RESULT_SOURCE_ADAPTER ? IMPORTED_RESULT_SOURCE_ADAPTER
+    : refuse("REVIEW_SOURCE_INVALID", `adapter ${id} is not owned by the recorded point/result source`);
+}
+function recordedPointPlan(boundary: RecordedReviewBoundary, execution: RecordedPointExecution): readonly ReviewSourcePlanSlot[] {
+  const adapters = [POSITION_SOURCE_ADAPTER, POINT_SOURCE_ADAPTER, IMPORTED_RESULT_SOURCE_ADAPTER].sort((a, b) => a.id.localeCompare(b.id));
+  for (const entry of adapters) if (recordedPointAdapter(entry.id) !== entry) throw new TypeError("Recorded Review adapter identity changed");
+  const path = execution.snapshot.path, endpoint = path.at(-1)!.id;
+  const slots = sourcePlanSlots(path.map(node => node.id), adapters, 1).filter(slot => slot.adapterId !== IMPORTED_RESULT_SOURCE_ADAPTER.id || slot.nodeId === endpoint);
+  for (const slot of slots) RECORDED_SLOTS.set(slot, Object.freeze({ boundary, adapter: recordedPointAdapter(slot.adapterId) }));
+  return Object.freeze(slots);
+}
+
+function assertRecordedSourceResult(result: RecordedSourceResult, boundary: RecordedReviewBoundary): void {
+  const proof = RECORDED_RESULTS.get(result), slotProof = RECORDED_SLOTS.get(result.slot);
+  if (proof === undefined || slotProof === undefined || proof.boundary !== boundary || slotProof.boundary !== boundary
+    || proof.adapter !== slotProof.adapter || recordedPointAdapter(result.slot.adapterId) !== proof.adapter) throw new TypeError("Recorded Review slot/result was not executed by its actual registered source");
+  const { execution, adapter } = proof, slot = result.slot, node = execution.byId.get(slot.nodeId)!;
+  assertState(result.state);
+  if (result.state.kind === "available" ? result.state.itemCount !== result.items.length : result.items.length !== 0) throw new TypeError("Recorded Review state/count differs from its complete source result");
+  for (const item of result.items) {
+    assertDeclaredEvidence(item);
+    if (refKey(item.projection) !== refKey(adapter.projection)) throw new TypeError("Recorded Review source returned a different projection");
+    adapter.parser(item.payload);
+  }
+  if (adapter === POSITION_SOURCE_ADAPTER) {
+    const position = execution.memo.positions.get(node.id)!;
+    assertRecordedPositionInvocation(position, execution.snapshot.run, node.id);
+    if (result.items.length !== 1 || result.items[0] !== position || result.state.kind !== "available") throw new TypeError("Recorded Review position source lost its exact invocation");
+  } else if (adapter === POINT_SOURCE_ADAPTER) {
+    const position = positionOf(execution, node.id), provider = execution.context.engine.get(node.id);
+    assertRecordedPositionInvocation(position, execution.snapshot.run, node.id);
+    if (provider?.kind === "delivered") {
+      const sourceResult = execution.memo.pointInvocations.get(node.id), inputs = readReviewPointResultInvocation(sourceResult);
+      if (inputs.position !== position || inputs.evaluation !== provider.delivery) throw new TypeError("Recorded Review point availability belongs to different inputs");
+      if (sourceResult?.kind === "available") {
+        const point = sourceResult.value, pointInputs = readReviewPointInvocation(point);
+        if (result.state.kind !== "available" || result.items.length !== 1 || result.items[0] !== point
+          || pointInputs.position !== position || pointInputs.evaluation !== provider.delivery
+          || point.payload.position.payload.fen !== node.fen) throw new TypeError("Recorded Review point crosses its original position/delivery occurrence");
+      } else if (sourceResult?.kind !== "unavailable" || sourceResult.reason !== "position_mismatch"
+        || result.state.kind !== "unavailable" || result.state.reason !== "input_abstained" || result.items.length !== 0) throw new TypeError("Recorded Review rejected delivery lost its actual failure");
+    } else if (result.items.length !== 0 || evidenceDigest(result.state) !== evidenceDigest(provider ?? { kind: "not_requested" })) throw new TypeError("Recorded Review absent/pending state differs from its captured input");
+  } else {
+    const items = execution.memo.importedResult;
+    if (items === undefined) throw new TypeError("Recorded Review result source was not actually invoked");
+    assertRecordedReviewResultInvocation(items, "run.record.imported_result@1", boundary);
+    if (result.items.length !== items.length || items.some((item, index) => item.evidence !== result.items[index] || item.nodeId !== node.id || item.plyOffset !== node.ply)) throw new TypeError("Recorded Review imported result crosses its original endpoint/invocation");
+  }
+}
+function executeRecordedPointSlot(slot: ReviewSourcePlanSlot, execution: RecordedPointExecution): RecordedSourceResult {
+  const owner = RECORDED_SLOTS.get(slot);
+  if (owner === undefined || owner.boundary !== execution.recordedReview) throw new TypeError("Recorded Review slot is not owned by this boundary");
+  const adapter = recordedPointAdapter(slot.adapterId);
+  const output = adapter.operation(slot, execution);
+  const result = Object.freeze({ slot, state: Object.freeze({ ...output.state }), items: Object.freeze([...output.items]) });
+  RECORDED_RESULTS.set(result, Object.freeze({ boundary: execution.recordedReview, execution, adapter }));
+  assertRecordedSourceResult(result, execution.recordedReview);
+  return result;
+}
+
+/** Captured-only collection. No arbitrary rows/points/result, provider request or moment assembly. */
+export function collectRecordedLastLevelPopulation(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedLastLevelPopulation {
+  if (!closedSource(input, ["boundary", "context"])) throw new TypeError("Recorded last-level collection requires exactly {boundary,context}");
+  const boundary = input.boundary, image = readRecordedReviewBoundary(boundary), path = image.path.map(entry => entry.node);
+  const context = capturePointContext(input.context, path);
+  const execution: RecordedPointExecution = { recordedReview: boundary, snapshot: { run: image.run, path }, byId: new Map(path.map(node => [node.id, node])), context,
+    memo: { points: new Map(), pointInvocations: new Map(), positions: new Map(), edges: new Map() } };
+  const plan = recordedPointPlan(boundary, execution), results = new Map<ReviewSourcePlanSlot, RecordedSourceResult>();
+  for (const slot of plan) results.set(slot, executeRecordedPointSlot(slot, execution));
+  const resultFor = (adapter: ReviewPacketSourceAdapter, nodeId: string): RecordedSourceResult => {
+    const slot = plan.find(entry => entry.adapterId === adapter.id && entry.nodeId === nodeId);
+    if (slot === undefined || !results.has(slot)) throw new TypeError("Recorded Review population omitted a planned source slot");
+    return results.get(slot)!;
+  };
+  const rows = Object.freeze(path.map((node, pathIndex): RecordedPointRow => {
+    const point = resultFor(POINT_SOURCE_ADAPTER, node.id), position = resultFor(POSITION_SOURCE_ADAPTER, node.id).items[0]!;
+    return Object.freeze({ pathIndex, position: position as DeclaredEvidence<RecordedPosition>, slot: point.slot, provider: context.engine.get(node.id) ?? null,
+      state: point.state, points: point.items as readonly DeclaredEvidence<ReviewEnginePoint>[] });
+  }));
+  const data = Object.freeze({ boundary: image, learnerSide: image.learnerSide, outcome: image.outcome, result: resultFor(IMPORTED_RESULT_SOURCE_ADAPTER, path.at(-1)!.id), rows });
+  const population = Object.freeze({}) as RecordedLastLevelPopulation;
+  LAST_LEVEL_POPULATIONS.set(population, Object.freeze({ boundary, data, plan, results }));
+  readRecordedLastLevelPopulation(population); // All source/member checks before publication, even empty/nonloss inputs.
+  return population;
+}
+
+/** Private reader authenticates complete source/state/occurrence membership, not selected points. */
+export function readRecordedLastLevelPopulation(population: RecordedLastLevelPopulation): RecordedLastLevelData {
+  const owned = population !== null && typeof population === "object" ? LAST_LEVEL_POPULATIONS.get(population) : undefined;
+  if (owned === undefined) throw new TypeError("Recorded last-level population was not issued by its source owner");
+  const { boundary, data, plan, results } = owned, image = readRecordedReviewBoundary(boundary);
+  if (data.boundary !== image || data.learnerSide !== image.learnerSide || data.outcome !== image.outcome || data.rows.length !== image.path.length
+    || plan.length !== image.path.length * 2 + 1 || results.size !== plan.length) throw new TypeError("Recorded Review population is not the complete original scope");
+  for (const slot of plan) {
+    const result = results.get(slot);
+    if (result === undefined || result.slot !== slot) throw new TypeError("Recorded Review lost a planned invocation");
+    assertRecordedSourceResult(result, boundary);
+  }
+  for (const [index, row] of data.rows.entries()) {
+    const node = image.path[index]!.node, position = [...results.values()].find(result => result.slot.adapterId === POSITION_SOURCE_ADAPTER.id && result.slot.nodeId === node.id)!;
+    const point = [...results.values()].find(result => result.slot.adapterId === POINT_SOURCE_ADAPTER.id && result.slot.nodeId === node.id)!;
+    const proof = RECORDED_RESULTS.get(point)!;
+    if (row.pathIndex !== index || row.position !== position.items[0] || row.slot !== point.slot || row.slot.window !== index
+      || row.provider !== (proof.execution.context.engine.get(node.id) ?? null) || row.state !== point.state || row.points !== point.items) throw new TypeError("Recorded Review row dropped/reordered/substituted its original slot/input/result");
+  }
+  if (data.result.slot.adapterId !== IMPORTED_RESULT_SOURCE_ADAPTER.id || data.result.slot.nodeId !== image.request.throughNodeId
+    || results.get(data.result.slot) !== data.result) throw new TypeError("Recorded Review result is not the actual endpoint invocation");
+  readRecordedReviewBoundary(boundary); // Source preparation never bypasses a concurrent storage change.
+  return data;
 }
 
 // ---------------------------------------------------------------------------------------------

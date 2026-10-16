@@ -1236,15 +1236,33 @@ export const createRunRecordObjectiveTransitionV1Evidence = (() => {
   });
 })();
 
+const RECORDED_REVIEW_RESULT_INVOCATIONS = new WeakMap<object, Readonly<{ route: string; boundary: RecordedReviewBoundary }>>();
+function publishRecordedReviewItems(route: string, boundary: RecordedReviewBoundary, items: readonly RunEvidenceItem<unknown>[]): readonly RunEvidenceItem<unknown>[] {
+  RECORDED_REVIEW_RESULT_INVOCATIONS.set(items, Object.freeze({ route, boundary }));
+  return items;
+}
+/** Read-only original invocation membership, including successful empty result arrays. */
+export function assertRecordedReviewResultInvocation(items: readonly RunEvidenceItem<unknown>[], route: string, boundary: RecordedReviewBoundary): void {
+  const invocation = RECORDED_REVIEW_RESULT_INVOCATIONS.get(items);
+  if (invocation === undefined || invocation.route !== route || invocation.boundary !== boundary || !Object.isFrozen(items)) throw new TypeError("Recorded Review result is not its original boundary/factory invocation");
+  const image = readRecordedReviewBoundary(boundary);
+  for (const item of items) {
+    assertDeclaredEvidence(item.evidence);
+    const receipt = evidenceValueReceipt(item.evidence);
+    if (sealedRoute(item.evidence) !== route || receipt.factory !== evidenceFactorySymbol(route)
+      || receipt.inputDigest !== evidenceDigest({ recordedReview: image })) throw new TypeError("Recorded Review result differs from its original full boundary authority");
+  }
+}
+
 export const createRunRecordConsequenceV1Evidence = (() => {
   const route = "run.record.consequence@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }, { run: RUN, branchId: value("a branch id", isText) }, { recordedReview: value("a storage-owned recorded Review boundary", isRecordedReviewBoundary) }], result: "items", dependency: "recorded-semantic-path", pending: RUN_PENDING }, (input: { readonly run: DrillRun; readonly comparison?: BranchComparison; readonly branchId: string } | { readonly recordedReview: RecordedReviewBoundary }): readonly RunEvidenceItem<unknown>[] => {
     if ("recordedReview" in input) {
       const source = readRecordedReviewBoundary(input.recordedReview), outcome = source.outcome;
-      if (outcome.kind !== "board_terminal") return Object.freeze([]);
+      if (outcome.kind !== "board_terminal") return publishRecordedReviewItems(route, input.recordedReview, Object.freeze([]));
       const node = source.path.find(entry => entry.node.id === outcome.nodeId)!.node;
-      return Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "story", terminal: true, outcome: outcome.result }), input), nodeId: node.id, plyOffset: node.ply })]);
+      return publishRecordedReviewItems(route, input.recordedReview, Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "story", terminal: true, outcome: outcome.result }), input), nodeId: node.id, plyOffset: node.ply })]));
     }
     if (input.comparison !== undefined) {
       const consequence = comparisonFacts(input.run, input.comparison, input.branchId);
@@ -1270,9 +1288,9 @@ export const createRunRecordImportedResultV1Evidence = (() => {
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, branchId: value("a branch id", isText), recordedResult: value("a decisive or drawn PGN result token", (candidate) => typeof candidate === "string" && PGN_RESULT_TOKENS.has(candidate)) }, { recordedReview: value("a storage-owned recorded Review boundary", isRecordedReviewBoundary) }], result: "items", dependency: "recorded-semantic-path", pending: "The imported PGN result token is validated as a closed token; its import-source receipt lands with recorded-semantic-path/import provenance." }, (input: { readonly run: DrillRun; readonly branchId: string; readonly recordedResult: "1-0" | "0-1" | "1/2-1/2" } | { readonly recordedReview: RecordedReviewBoundary }): readonly RunEvidenceItem<unknown>[] => {
     if ("recordedReview" in input) {
       const source = readRecordedReviewBoundary(input.recordedReview);
-      if (source.outcome.kind !== "recorded_result") return Object.freeze([]);
+      if (source.outcome.kind !== "recorded_result") return publishRecordedReviewItems(route, input.recordedReview, Object.freeze([]));
       const leaf = source.path.at(-1)!.node;
-      return Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "story", result: source.outcome.result }), input), nodeId: leaf.id, plyOffset: leaf.ply })]);
+      return publishRecordedReviewItems(route, input.recordedReview, Object.freeze([Object.freeze({ evidence: mint(route, symbol, Object.freeze({ context: "story", result: source.outcome.result }), input), nodeId: leaf.id, plyOffset: leaf.ply })]));
     }
     const { run, branchId, recordedResult } = input;
     const leaf = branchPath(run, branchId).at(-1)!;
@@ -1483,13 +1501,40 @@ export const createDerivedStoryRankV2Evidence = (() => {
 // ---------------------------------------------------------------------------------------------
 
 const sameCanonicalFen = (left: string, right: string): boolean => left === right;
+const REVIEW_POINT_INVOCATIONS = new WeakMap<object, Readonly<{ evaluation: DeclaredEvidence<StockfishPositionEvaluation>; position: DeclaredEvidence<RecordedPosition> }>>();
+const REVIEW_POINT_RESULT_INVOCATIONS = new WeakMap<object, Readonly<{ evaluation: DeclaredEvidence<StockfishPositionEvaluation>; position: DeclaredEvidence<RecordedPosition> }>>();
+/** Original availability result, including a genuine rejected delivery. No registration setter. */
+export function readReviewPointResultInvocation(result: unknown) {
+  const inputs = result !== null && typeof result === "object" ? REVIEW_POINT_RESULT_INVOCATIONS.get(result) : undefined;
+  if (inputs === undefined) throw new TypeError("Review point result is not an original factory invocation");
+  return inputs;
+}
+/** Exact literal inputs used at the sole point factory, not inferred from equal payloads later. */
+export function readReviewPointInvocation(point: DeclaredEvidence<ReviewEnginePoint>) {
+  assertDeclaredEvidence(point);
+  const inputs = REVIEW_POINT_INVOCATIONS.get(point), receipt = evidenceValueReceipt(point);
+  if (inputs === undefined || sealedRoute(point) !== "derived.review.eval_point@1" || receipt.factory !== "createDerivedReviewEvalPointV1Evidence"
+    || point.payload.position !== inputs.position || point.payload.evaluation !== inputs.evaluation
+    || receipt.sourceDigests.length !== 2 || receipt.sourceDigests[0] !== evidenceValueReceipt(inputs.evaluation).payloadDigest
+    || receipt.sourceDigests[1] !== evidenceValueReceipt(inputs.position).payloadDigest) throw new TypeError("Review point is not the original ordered evaluation/position invocation");
+  return inputs;
+}
 
 export const createDerivedReviewEvalPointV1Evidence = (() => {
   const route = "derived.review.eval_point@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ evaluation: sealed("live.stockfish.position_eval@1"), position: sealed("run.record.position@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ evaluation, position }: { readonly evaluation: DeclaredEvidence<StockfishPositionEvaluation>; readonly position: DeclaredEvidence<RecordedPosition> }): EvidenceAvailability<DeclaredEvidence<ReviewEnginePoint>> => {
-    if (!sameCanonicalFen(evaluation.payload.payload.fen, position.payload.fen)) return unavailable("position_mismatch");
-    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_point@1" as const, position, evaluation }), { evaluation, position }, [evaluation, position]));
+    const inputs = Object.freeze({ evaluation, position });
+    if (!sameCanonicalFen(evaluation.payload.payload.fen, position.payload.fen)) {
+      const result = unavailable<DeclaredEvidence<ReviewEnginePoint>>("position_mismatch");
+      REVIEW_POINT_RESULT_INVOCATIONS.set(result, inputs);
+      return result;
+    }
+    const point = mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_point@1" as const, position, evaluation }), { evaluation, position }, [evaluation, position]);
+    REVIEW_POINT_INVOCATIONS.set(point, inputs);
+    const result = available(point);
+    REVIEW_POINT_RESULT_INVOCATIONS.set(result, inputs);
+    return result;
   });
 })();
 

@@ -5,7 +5,16 @@ Review source/12-adapter contract with the coordinated current-module image. Ear
 labels for that clause are history; actual source/execution/receiver delivery and unrelated
 parent amendments remain. Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
-- **Internal source checkpoint 2026-10-16 — [[D3847]], [[D3878]]:** accepted §4.5 now has
+- **Internal population checkpoint 2026-10-16 — [[D3847]]:** the accepted §4.5/F2 §2.3d
+  point/state/result population now executes its actual2N+1 registered slots and retains every
+  captured provider/state/position/point/result occurrence, including genuine empty/rejected
+  invocations.35 runtime/two added real SQLite cases and independent bounded review cover this
+  source.942 focused cases/25 files/types and full normal make verify build pass:6495 software,
+  seven isolated performance,257 content and all governance/corpus/packaging/build gates.
+  This is below selection/moment assembly: no new reduction, final four-method facade,
+  application-lifetime receiver, learner API adoption or source qualification is claimed.
+
+- **Prior internal source checkpoint 2026-10-16 — [[D3847]], [[D3878]]:** accepted §4.5 now has
   a storage-bound prefix owner and real boundary-only consequence/import-result factory arms.
   Full original validation, currentness and immutable imported endpoint authority precede
   preparation;20 runtime/four real SQLite cases and independent bounded re-review cover this

@@ -1286,3 +1286,23 @@ the implementer subsequently extends it through close/reopen as well. Tests were
 not rerun by the reviewer. No remaining blocker is found in this bounded source repair; final
 facade/application ownership/population/moment assembly/current consumer/API delivery and full
 verification remain outside that clearance. No new acceptance or source qualification follows.
+
+### Complete recorded point/state/result population — bounded implementation review, 2026-10-16
+
+The authorized reviewer first clears the common-context factoring: share actual node-source
+execution and the three real registered adapter objects, never fabricate an old prefix or add
+a second operation registry. Preserve captured null/explicit state/rejected deliveries, private
+availability/array membership even when empty, and literal point inputs/full-head positions.
+
+Read-only implementation review finds no blocking defect. The exact five-field population
+retains every2N+1 source slot, original boundary and before/after storage checks. Source validation
+joins the complete original position, actual point availability/value inputs and genuine
+boundary-result arrays. Capture retains reasons/counters/mutation isolation. The reviewer notes
+missing SQLite population proof during inspection; the added actual file import/serialized
+delivery/close-reopen/durable-read/every-prefix/both-side controls and service-write invalidation
+close that gap. Tests are inspected, not rerun by the reviewer.
+
+Future reduction encoding must consume these retained complete receipts/private witnesses, not
+hash the plain data alone and call that proof. Last-level selection/reduction, full moment source,
+final receiver ownership and consumer/API adoption remain outside this bounded clearance. No new
+acceptance, source qualification, parent discharge or whole-product completion is inferred.

@@ -31986,3 +31986,66 @@ Campaign was the one capability with no API, route or content. Now:
   capture observation/durable context without enqueue and retain complete input/state/occurrence
   membership, even for empty results. No placeholder final facade, legacy compatibility pipeline,
   detector qualification, parent discharge or full1.0 completion. Keep the full goal active.
+
+### 2026-10-16 — Complete recorded Review point/state/result population
+
+- Accepted F2 §2.3d/Review §4.5 now execute the real shared position/eval-point/import-result
+  registry entries over the genuine boundary. Common execution fields and the original slot
+  formula are shared; no fake prefix, second registry, arbitrary callback or final-facade stub.
+  The exact closed five-field source retains every2N+1 invocation and every path node, original
+  position, captured provider input, closed state and zero/one point, plus the actual endpoint
+  result invocation. Null differs from explicit not_requested; pending/reasons and rejected
+  genuine deliveries remain, including when folded output is otherwise identical.
+- Sole factories retain private original point availability/value inputs and boundary-result
+  array membership, including empty results. Read-only witnesses flow only through the central
+  invoker; source/reader validates all full-head/node/FEN/literal-input/ordered-receipt/result-
+  location joins before eligibility shortcuts and rechecks current storage after construction.
+  Independent context capture survives mutable maps/states; malformed present inputs/accessors
+  refuse before preparation. No provider or semantic collection, selection or moment assembly.
+-35 new runtime and two added server cases cover complete slots/every prefix/both learner sides,
+  all captured states, typed mate/unclamped cp, empty/nonloss/terminal sources, context changes,
+  real factory substitutions, copied/foreign result arrays, same-count changed heads and actual
+  file-backed import/serialized delivery/close-reopen/durable-read/service-write invalidation.
+  Normal make evidence-value-authority typecheck passes762+80+100=942 cases/25 files and all
+  workspace types. Independent read-only implementation review finds no bounded blocker;
+  future reductions must use complete retained witnesses, not a digest of plain data alone.
+- First ordinary typecheck is blocked by pnpm's external cache write; run the same make target
+  after the permission escalation, without changing env/Node/arguments or budgets. It then
+  catches an unspecified unavailable generic; supply the exact existing result type. First
+  focused last batch has91 passes/one failure: its new assertion names White cp's field 'white'
+  while the actual existing typed score uses 'value'. Correct that field assertion, retaining
+  the exact12345 score. No production scoring/threshold or test-gate relaxation.
+- D3879 records a prior prose arithmetic error:762+80+63=905, not903. Individual prior suite and
+  full-run counts were correct. Correct the live row/current checkpoint and append this
+  correction; never rewrite the old log or build another counting framework.
+- Canonical semantic regeneration preserves91 subjects/zero qualified/343 prior cases passing/
+  53 population/eight external receipts; capability generation reports1013 declarations/zero
+  changed. No projection/profile/convention/schema/migration/content/restamp, raw artifact,
+  browser/remote or release change. Full normal gates are next. Actual last-level reduction,
+  complete moment/rank/opening/grade sources, final receiver and entire282-pair consumer/API/
+  native cutover remain. Full1.0 stays active; no partial source slice is product completion.
+
+### 2026-10-16 — Recorded point/state/result population verified checkpoint
+
+- Full normal make verify build exits zero over the frozen production/test image:6495 software
+  tests/406 files (383.83s), seven isolated performance cases/four files (63.56s),257 real-content
+  tests/26 files (74.68s), every type/contract/governance/packaging/build gate. Corpus92 documents/
+  354 blocking/34 resolved/48 accepted/errors[];104 capability documents retain exact derived
+  requirements.942 focused cases/25 files and workspace types pass. Earlier first-run fixture/
+  type errors are retained above; no assertion, deadline, retries or skip change.
+- Authorized independent bounded review is clear; tests inspected, not rerun by reviewer.
+  The37 new permanent cases and actual source paths establish complete captured collection,
+  not selection, complete game analysis, detector qualification or current learner delivery.
+  D3847/D3845/D3841 remain doing. D3879 closes only the two-count prior prose correction, with
+  appended evidence; zero untriaged remains across3628 rows/1749 live. Done1717/doing38/todo627/
+  blocked1084/refused162;462 prose-only historical closeouts remain unchanged.
+- Update existing current checkpoint/queue/docs/row anchors/roadmap receipt. Only tracker/docs
+  closeout follows this passing source/test image; staged pre-commit guards remain. No public
+  barrel exports for collector/private readers, new projection/profile/convention/schema/data
+  migration, content/restamp, raw research artifact, browser run, push, deployment or release.
+  Semantic91 subjects/zero qualified/343 prior passing cases/53 population/eight external and
+  capability1013 declarations/zero changed remain. Full1.0 goal stays active after local commit.
+- Next actual last-level reduction consumes complete receipts/private witnesses, never only a
+  plain data digest; then full moment/rank/opening/grade sources, D3870's independently reviewed
+  schema follow-up, final application-owned receiver and complete282-pair consumer/API/native
+  cutover. No legacy compatibility pipeline, partial final facade or parent discharge.

@@ -28,6 +28,15 @@ the specified successful empty selection cannot receive a genuine resolved subje
 that requirement as undischarged pending a reviewed schema-owner/resource/migration amendment;
 neither this checkpoint nor the existing no-schema claim authorizes changing or bypassing it.
 
+**Recorded Review population checkpoint, 2026-10-16:** accepted §2.3d now has its actual
+collectRecordedLastLevelPopulation/readRecordedLastLevelPopulation source owner, complete
+2N+1 registered invocations and original factory membership for points/availability/results.
+Every captured state/input and exact full-head occurrence survives before eligibility shortcuts.
+Independent bounded review,942 focused cases/types and full normal make verify build pass:
+6495 software/seven isolated performance/257 content and all other gates. Selection/reduction@2,
+moment source and current consumer/
+receiver/API adoption remain. No new projection, declaration, convention or parent discharge.
+
 **Recorded comparison checkpoint, 2026-10-16:** D3864 now has its nominal source owner,
 complete original graph/FEN/legal-edge/event validation before narrowing, exact sealed
 fork-to-granted-tip path and piece_route@2 consuming that one genuine path.30 permanent tests
