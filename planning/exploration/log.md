@@ -32157,3 +32157,48 @@ Campaign was the one capability with no API, route or content. Now:
   D3841 and D3845 remain live. No actual learner binding, new convention, pack edit/restamp,
   semantic qualification, completed mode/milestone, browser/remote CI run, push or deployment.
   D3851 stands: move real callers and retire obsolete execution, not a legacy compatibility path.
+
+### 2026-10-16 — Complete recorded Review source population, accepted internal implementation
+
+- Accepted Review §4.5 now executes all twelve actual source adapters over the genuine prefix.
+  One registry retains explicit current30/recorded12 images (33 actual operations), not a second
+  dispatcher or fabricated whole-tip subject. Original slots/results preserve honest empties,
+  unavailable transitions, scoped pivotal invocations and independently captured full shapes.
+  Missing human observations fold only their node unavailable. Actual last-level slots/results
+  are reused without recollection; no moment/rank/title/voice/provider request runs here.
+- Private readback checks complete invocation/disposition authority, genuine source arrays and
+  exact ordered transition inputs, including equal-image foreign/empty refusals. Storage checks
+  remain at original execution/publication/readback boundaries; per-slot joins use the already
+  admitted captured boundary, avoiding repeated full storage replay. No public facade is added.
+-29 new permanent runtime cases plus extended both-color real SQLite import/save/close/reopen/
+  every-prefix tests pass in1019 focused cases/28 files (762+101+156), workspace types clean.
+  Initial type errors are repaired with explicit types and a real private assertion, not unsafe
+  double assertions. The old plan test now names its exact current image, preserving every source.
+  The first synthetic human fixture omitted real opponent commits; repair the fixture to genuine
+  appendOpponentPly/learner-move/fork history, not weaken replay. Additional adversarial cases pass.
+- Authorized independent bounded read-only implementation review and final re-review find no
+  blocker; reviewers inspect but do not execute tests. Future moment/rank owners must retain full
+  original private source/state authority, not only positive items. No new acceptance follows.
+- Canonical generators retain309 profiles/1015 capabilities (zero changed declarations),91
+  semantic subjects/zero qualified/343 cases/53 population/eight external receipts. Full normal
+  verification/build follows before commit. D3847/D3841/D3845 remain doing; D3870 stays blocked
+  on its unaccepted schema/resource follow-up. Moment/rank/opening/grade owners and complete282-
+  pair current access/receiver/API/native adoption remain; no compatibility-only pipeline,
+  qualification, learner delivery, browser/remote CI/push or release claim.
+
+### 2026-10-16 — Complete recorded Review source verified checkpoint
+
+- Full normal make verify build exits zero:6572 software tests/409 files (398.77s), seven
+  isolated performance cases/four files (60.46s),257 content cases/26 files (55.38s), clean
+  workspace types and all manifest/contract/governance/corpus/packaging/build gates. Corpus92
+  documents/354 blocking/34 resolved/48 accepted/errors[];104 capability documents declare
+  exactly their derived requirements. No timeout, budget, retry, skip or coverage reduction.
+- Existing queue, roadmap, canonical docs, implementation checkpoint and work-state are updated
+  in this commit.3630 rows/1749 live/zero untriaged;627 todo/37 doing/1085 blocked/1719 done/
+  162 refused. Historical462 prose-only closeouts remain unchanged. No parent row/RFC closes.
+- Next accepted work is shared unrendered moment assembly, rank/opening/grade sources and the
+  entire282-pair current access/receiver/API/native migration. Preserve original source and
+  empty/unavailable calculation authority throughout; retire obsolete execution after actual
+  callers migrate. D3870's schema/resource decision remains unapproved and does not block this
+  lawful source work. No partial public facade, legacy compatibility obligation, pack edit,
+  source qualification, learner binding, browser/remote CI run, push or release claim.

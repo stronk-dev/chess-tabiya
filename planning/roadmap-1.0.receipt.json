@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5d9ebb1b8ea18c537e9342f2cc54247ee57e249535e1521074417f3ee7ac4cbc",
+    "roadmap": "sha256:febf88b214ced01227aba5194d7b9ee90d53392dfcbeb23e065dc1dd056613a5",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:180dd6cc1e2f9d52aabc70e9a8d3077f66895fa4d5e03b0d9a8b8add8e6e6710",
+    "workState": "sha256:629e4245cbc16770c1c5748167e35cf3849f82d9e2d0e6ee38d39336a7121039",
     "rfcRegister": "sha256:46a9bc9219ec37622acea5d3cac7a26f06ba6b29ba3715833c6f606078192485",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -481,10 +481,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement the full recorded moment/rank/opening/grade sources. Resolve D3870 recorded-selection-telemetry.md's resource-order question and independent acceptance before schema/REST/stamp-only migration work; do not guess or bypass the existing claims. Internal human-divergence, last-level reduction, Review boundary/population/result and comparison/V2/value/result/consumer-plan sources exist. Preserve complete captured data and authentic empty/root calculation authority; bind one final complete authority to RunService storage through observation/durable reads, never enqueue. Then adopt the entire current282-pair source/access/receiver/API/native image, fold missing human observations per node and retire obsolete paths after real callers migrate. No legacy compatibility pipeline, filtered bindings, dropped detector family, widened grant/assistance/budget or premature qualification/milestone/release claim.",
+      "nextAction": "Implement the full recorded moment/rank/opening/grade sources. Resolve D3870 recorded-selection-telemetry.md's resource-order question and independent acceptance before schema/REST/stamp-only migration work; do not guess or bypass the existing claims. Internal complete twelve-adapter Review source, human-divergence, last-level reduction, boundary/result and comparison/V2/value/result/consumer-plan sources exist. Preserve complete captured data and authentic empty/root calculation authority; bind one final complete authority to RunService storage through observation/durable reads, never enqueue. Then adopt the entire current282-pair source/access/receiver/API/native image, preserve missing-human node folds and retire obsolete paths after real callers migrate. No legacy compatibility pipeline, filtered bindings, dropped detector family, widened grant/assistance/budget or premature qualification/milestone/release claim.",
       "latestCheckpoint": {
         "at": "2026-10-16",
-        "summary": "Accepted F2 §2.3a now has the internal human_divergence@2 source/factory and complete original observation result reader. Requested grant and actual sibling origin remain separate; all anchored observations, including missing candidates, survive. Exact event/head/position/target context authenticates before shared unchanged split arithmetic. D3881's two origin-suffix controls fail before repair, then pass with complete original origin validation before any resolver.27 new permanent cases/990 focused passes/27 files and workspace types pass; independent bounded read-only review finds no blocker.316 projections/309 profiles/1015 capabilities; all prior profiles/declarations and current bindings remain. Full normal make verify build exits zero:6543 software/408 files, seven performance/four files,257 content/26 files and all governance/corpus/packaging/build gates. D3870 has a bounded unaccepted schema/REST/stamp-only follow-up with resource ordering explicitly unresolved. Moment/rank/opening/grade sources, missing-source node folding and complete282-pair access/receiver/API/native migration remain; no compatibility pipeline, new convention, pack edit, qualification or release claim.",
+        "summary": "Accepted Review §4.5 now executes the complete internal twelve-adapter recorded prefix population through one actual registry. Exact12N-2 slots retain original empty/unavailable source authority, captured shapes and per-node missing-human folds. Last-level shares original executed slots/results.29 new runtime cases and extended real SQLite prefix/reopen tests pass in1019 focused cases/28 files; workspace types and bounded independent read-only review pass. Full normal make verify build passes:6572 software/409 files, seven performance/four files,257 content/26 files and all remaining gates.309 profiles/1015 capabilities and current bindings remain unchanged; semantic91 subjects/zero qualified. Full moment/rank/opening/grade owners, D3870 schema/resource follow-up and complete282-pair current access/receiver/API/native migration remain. No public facade, learner delivery, compatibility pipeline or release claim.",
         "impact": "advanced",
         "evidence": [
           "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -536,6 +536,7 @@
           "packages/runtime/src/recorded-review-boundary.ts",
           "packages/runtime/src/recorded-review-boundary.test.ts",
           "packages/runtime/src/recorded-last-level-population.test.ts",
+          "packages/runtime/src/recorded-review-source-population.test.ts",
           "packages/runtime/src/review-evidence.ts",
           "apps/server/src/recorded-review-boundary.test.ts",
           "docs/review-evidence.md",
@@ -688,7 +689,7 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:9aae0b45cf67060f4f367c50f52a82c07f1ce680af28c736f21a81e1e8c51846"
+            "digest": "sha256:1e210a6d72f6d33c8dd418cb5d311c572e31ee8007d21fd0abb4319023df9876"
           },
           {
             "kind": "work_state",
@@ -928,7 +929,7 @@
           {
             "kind": "work_state",
             "id": "D3847",
-            "digest": "sha256:9a9069ccafb63b5ca4d28016fee6c481210345a8fd7eaa4961851f60e977e2ca"
+            "digest": "sha256:dba9efb738c8654f0346a6fa44cada531db06670c829896e7392325ba08f2fc2"
           },
           {
             "kind": "work_state",

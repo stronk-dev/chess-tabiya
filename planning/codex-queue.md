@@ -1,6 +1,20 @@
 # Codex queue
 
-**Current executable checkpoint, 2026-10-16:** the internal scoped human-divergence@2 factory
+**Current executable checkpoint, 2026-10-16:** the internal complete recorded Review population
+executes all twelve accepted adapters through one actual registry. Exact prefix slots preserve
+original empty/unavailable invocations, captured shapes and per-node missing-human folds.
+Last-level reuses the actual executed subset. The 29 new runtime cases plus extended real SQLite
+prefix/reopen coverage pass in 1,019 focused cases across 28 files; workspace types and bounded
+independent read-only review pass. Full normal `make verify build` passes: 6,572 software tests
+across 409 files, seven performance tests, 257 content tests and all remaining gates. The 309
+profiles, 1,015 capabilities, prior current bindings and qualification counts remain unchanged.
+
+Next: shared unrendered moment assembly and actual rank/opening/grade owners, then the complete
+282-pair current access/receiver/API/native cutover. No partial public facade, learner delivery,
+compatibility pipeline, milestone or release claim. D3847/D3841/D3845 remain doing; D3870 remains
+blocked on its independently accepted schema/resource follow-up, not a blocker to other source work.
+
+**Prior verified checkpoint, 2026-10-16:** the internal scoped human-divergence@2 factory
 retains every actual current-head observation, including missing arrays and sibling origins.
 Exact source/event/position/context joins precede unchanged reported-window arithmetic; original
 frozen results retain complete dispositions even when empty.27 new permanent cases/990 focused

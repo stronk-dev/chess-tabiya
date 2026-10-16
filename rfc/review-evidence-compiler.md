@@ -5,6 +5,16 @@ Review source/12-adapter contract with the coordinated current-module image. Ear
 labels for that clause are history; actual source/execution/receiver delivery and unrelated
 parent amendments remain. Decision: `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+- **Internal complete-source checkpoint 2026-10-16 — [[D3847]]:** accepted §4.5 now executes
+  its exact twelve-adapter recorded prefix image through the one actual registry, retaining
+  original empty/unavailable invocation authority, captured shapes and scoped human node folds.
+  The last-level population shares actual executed slots/results rather than recollecting.
+  The 29 new runtime cases and extended real SQLite prefix/reopen tests pass in 1,019 focused
+  cases across 28 files; workspace types and bounded independent read-only review pass. Full
+  normal `make verify build` passes 6,572 software tests across 409 files, seven performance
+  tests, 257 content tests and all remaining gates. No moment/rank implementation, final
+  four-method facade, RunService lifetime receiver, learner adoption or qualification is claimed.
+
 - **Internal population checkpoint 2026-10-16 — [[D3847]]:** the accepted §4.5/F2 §2.3d
   point/state/result population now executes its actual2N+1 registered slots and retains every
   captured provider/state/position/point/result occurrence, including genuine empty/rejected

@@ -12,6 +12,7 @@ import { attachEvidence } from "./evidence.js";
 import { presentedSentence } from "./presentation-contract.js";
 import {
   REVIEW_PACKET_SOURCE_ADAPTERS,
+  REVIEW_PACKET_SOURCE_PROJECTION_IDS,
   REVIEW_SOURCE_FAMILIES,
   assertReviewEvidencePacket,
   assertReviewRecordedPrefixReceipt,
@@ -293,8 +294,12 @@ describe("review evidence compiler: subject, plan, packet and folds", () => {
     const packet = reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, "*") });
     const plan = reviewPacketSourcePlan(packet.subject, { windowNodes: 3 });
     const nodes = packet.subject.pathNodeIds.length;
-    const nodeAdapters = REVIEW_PACKET_SOURCE_ADAPTERS.filter((entry) => entry.grain === "node").length;
-    const edgeAdapters = REVIEW_PACKET_SOURCE_ADAPTERS.filter((entry) => entry.grain === "incoming_edge").length;
+    const current = new Set(REVIEW_PACKET_SOURCE_PROJECTION_IDS.map(ref => `${ref.id}@${ref.version}`));
+    const adapters = REVIEW_PACKET_SOURCE_ADAPTERS.filter(entry => current.has(`${entry.projection.id}@${entry.projection.version}`));
+    const nodeAdapters = adapters.filter((entry) => entry.grain === "node").length;
+    const edgeAdapters = adapters.filter((entry) => entry.grain === "incoming_edge").length;
+    expect(new Set(plan.map(slot => slot.adapterId))).toEqual(new Set(adapters.map(entry => entry.id)));
+    expect(plan.some(slot => /pivotal\.(phase_change|human_divergence|option_collapse)@2/u.test(slot.adapterId))).toBe(false);
     expect(plan).toHaveLength(nodeAdapters * nodes + edgeAdapters * (nodes - 1));
     expect(plan.filter((slot) => slot.grain === "incoming_edge").every((slot) => slot.nodeId !== packet.subject.pathNodeIds[0] && slot.fromNodeId !== null)).toBe(true);
     expect(new Set(plan.map((slot) => slot.window))).toEqual(new Set([0, 1, 2]));

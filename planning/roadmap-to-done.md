@@ -19,7 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest internal implementation is scoped human-divergence@2 over the exact recorded
+The latest internal implementation is the complete twelve-adapter recorded Review source
+population. One actual registry executes the full prefix image, retaining original empty and
+unavailable invocations, independently captured shapes and scoped human-observation node folds.
+Last-level reuses actual executed source slots/results. The 29 new runtime cases and extended
+real SQLite prefix/reopen coverage pass in 1,019 focused cases across 28 files; workspace types
+and bounded independent read-only review pass. Full normal `make verify build` passes: 6,572
+software tests across 409 files, seven performance tests, 257 content tests and all remaining
+gates. The 309 profiles, 1,015 capabilities and all current bindings remain unchanged.
+This does not assemble/rank moments or
+switch any learner/API consumer. Full moment/rank/opening/grade ownership and the complete
+282-pair access/receiver/native cutover still gate delivery; D3847/D3841/D3845 remain doing.
+
+The prior verified implementation is scoped human-divergence@2 over the exact recorded
 selection history. Every anchored observation survives, including missing arrays and sibling
 origins. Full original origin paths validate before resolving any source; exact current-head
 event/position/context joins precede the unchanged reported-window arithmetic. Original frozen

@@ -48,6 +48,22 @@ population. Context is captured independently before execution; source readback 
 membership and current storage without re-minting or requesting providers. This is complete
 collection of captured data, not complete analysis.
 
+The internal `collectRecordedReviewSourcePopulation({boundary,context})` now executes the
+complete accepted twelve-adapter prefix population: position, consequence, imported result,
+eval point/delta, mate transition, four scoped pivotal families, endgame and shapes. Its exact
+`12N-2` slots retain every original result, including empty arrays and unavailable transitions.
+The last-level population reuses the actual executed position/point/endpoint-result slots and
+objects; it does not collect them again. Shape definitions and paths are captured independently
+before execution. Missing human observations make their node unavailable without erasing the
+other observations or changing another node's state.
+
+Readback authenticates the private original invocation/result authority for every family,
+including empty endgame, shape and pivotal arrays. Equal-looking copies and foreign executions
+cannot substitute. Owning entry/publication/readback boundaries recheck actual storage; individual
+slots use the already validated captured image rather than replaying storage for every slot.
+No moment construction, ranking, provider request, public authority facade or learner binding is
+introduced by this source-only prerequisite.
+
 The internal `derived.story.last_level@2` operation now consumes that original complete population.
 It authenticates every row/state/result before checking whether an eligible imported result says
 the learner lost. Typed cp alone is converted from White to learner perspective; the latest
@@ -95,9 +111,12 @@ The two-capture trade's v1 projection is not a one-edge source; recorded Review 
 `createReviewPrefixAuthority(storage)` is the sole constructor of the recorded-prefix subject: it
 reads the parsed stored run and import record, requires contiguous events, hashes the event prefix
 and complete path, and derives learner side and outcome. `reviewPacketSourcePlan` derives the exact
-adapter × node (and adapter × incoming edge, never at the root) invocations from the literal
-`REVIEW_PACKET_SOURCE_ADAPTERS` registry; each adapter has one family, grain and executable payload
-parser. `compileReviewEvidence({ subject, sources })` requires the private-sealed results to be
+adapter × node (and adapter × incoming edge, never at the root) invocations from the exact current
+thirty-adapter image of `REVIEW_PACKET_SOURCE_ADAPTERS`; each adapter has one family, grain and
+executable payload parser. The single registry now has thirty-three actual operations: its
+recorded twelve-adapter image shares existing operations and adds three scoped successors.
+Registering those successors does not automatically activate them in the current packet.
+`compileReviewEvidence({ subject, sources })` requires the private-sealed results to be
 set-equal to that plan, sorts, links, folds every adapter row per family (`foldReviewFamilyState`)
 and derives orthogonal `progress` and `degradation` (`foldReviewCompletion`) before sealing the
 packet. `assertReviewEvidencePacket` is the trust boundary.

@@ -49,6 +49,15 @@ The nominal endpoint-scoped owner and scoped rule/human successors now exist int
 Current access/receiver/API/native adoption still remains; this is not a second compatibility
 pipeline to preserve after real callers migrate.
 
+The internal recorded Review source population executes all twelve accepted source adapters
+from the same registry as the current packet. Every exact prefix slot retains its actual
+availability/array authority, including genuine empty results. Captured shapes and complete
+human observations remain attached; a missing human observation folds only its node unavailable.
+Last-level calculation reuses the original executed subset rather than collecting again. The
+current packet's thirty-adapter image remains explicit, not automatically expanded to the
+registry's thirty-three operations. Manifest counts remain 49 producers/316 projections/42
+consumers/566 bindings. Moment assembly, rank and actual current-consumer delivery still remain.
+
 Recorded comparison routes use the legal move's simultaneous physical relocations, including
 Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities
 are captured before either origin is cleared; a stationary actor adds no route segment. Later

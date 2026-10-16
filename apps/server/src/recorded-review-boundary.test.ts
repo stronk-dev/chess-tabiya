@@ -6,7 +6,7 @@ import { branchPath, commitMove, fork, rewind, reviewDurableEngineStates } from 
 import { afterEach, describe, expect, it } from "vitest";
 import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { createRecordedReviewBoundarySourceOwner, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
-import { collectRecordedLastLevelPopulation, readRecordedLastLevelPopulation } from "../../../packages/runtime/src/review-evidence.js";
+import { collectRecordedLastLevelPopulation, readRecordedLastLevelPopulation, collectRecordedReviewSourcePopulation, readRecordedReviewSourcePopulation } from "../../../packages/runtime/src/review-evidence.js";
 import { attachDelivery, evaluationDelivery } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -34,7 +34,7 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
     storage.save(run, { writerId: "writer", learnerId: "__legacy" });
     storage.close(); stores.splice(stores.indexOf(storage), 1);
     const reloaded = open(path), parsed = reloaded.read(run.id)!.run, before = JSON.stringify(parsed.events), owner = ownerFor(reloaded);
-    const context = { engine: reviewDurableEngineStates(parsed, nodes), shapes: [] };
+    const context = { engine: reviewDurableEngineStates(parsed, nodes), shapes: [{ id: "import-f3", trigger: { kind: "pieceOnSquare" as const, square: "f3" as const, piece: { color: "white" as const, role: "knight" as const } } }] };
     for (const [last, endpoint] of nodes.entries()) {
       const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: endpoint.id });
       const population = collectRecordedLastLevelPopulation({ boundary, context }), data = readRecordedLastLevelPopulation(population);
@@ -49,12 +49,24 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
         } else { expect(row.state.kind).toBe("not_requested"); expect(row.points).toEqual([]); }
       }
       expect(data.result.items).toHaveLength(last === nodes.length - 1 ? 1 : 0);
+      const complete = readRecordedReviewSourcePopulation(collectRecordedReviewSourcePopulation({ boundary, context }));
+      expect(complete.plan).toHaveLength(12 * (last + 1) - 2);
+      const retained = readRecordedLastLevelPopulation(complete.lastLevelPopulation);
+      expect(retained.rows.map(row => row.state)).toEqual(data.rows.map(row => row.state));
+      for (const row of retained.rows) {
+        const original = complete.results.find(result => result.slot.adapterId === "review.source.eval_point@1" && result.slot.nodeId === row.position.payload.nodeId)!;
+        expect(row.slot).toBe(original.slot); expect(row.points).toBe(original.items);
+      }
+      const firings = complete.results.filter(result => result.slot.adapterId === "review.source.shapes@1").flatMap(result => result.items);
+      expect(firings.map(item => item.payload)).toEqual(last < 3 ? [] : [{ entryId: "import-f3", firstNodeId: nodes[3]!.id, lastNodeId: endpoint.id, openEnded: true }]);
     }
     expect(JSON.stringify(reloaded.read(run.id)!.run.events)).toBe(before); expect(imported.evidencePass.jobs).toBe(0);
     const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: nodes.at(-1)!.id });
     const population = collectRecordedLastLevelPopulation({ boundary, context });
+    const complete = collectRecordedReviewSourcePopulation({ boundary, context });
     new RunService(reloaded).reveal(run.id, "writer");
     expect(() => readRecordedLastLevelPopulation(population)).toThrow(/no longer/u);
+    expect(() => readRecordedReviewSourcePopulation(complete)).toThrow(/no longer/u);
   });
 
   it.each(["white", "black"] as const)("retains every earlier endpoint across save/reload without acquiring providers: %s", async side => {

@@ -566,7 +566,7 @@ export const createRulesTacticReadingPromotionPressureV1Evidence = (() => {
 // Computed: FEN populations
 // ---------------------------------------------------------------------------------------------
 
-interface StructuralPopulationInvocation {
+interface FenPopulationInvocation {
   readonly projection: VersionedEvidenceId;
   readonly factory: string;
   readonly fen: string;
@@ -574,13 +574,20 @@ interface StructuralPopulationInvocation {
   readonly items: readonly DeclaredEvidence<unknown>[];
   readonly convention: ConventionReceipt;
 }
-const STRUCTURAL_POPULATION_INVOCATIONS = new WeakMap<object, StructuralPopulationInvocation>();
+const FEN_POPULATION_INVOCATIONS = new WeakMap<object, FenPopulationInvocation>();
 const COMPARISON_STRUCTURAL_ROUTE_SET: ReadonlySet<string> = new Set(COMPARISON_STRUCTURAL_ROUTES);
 
 /** Private read only: successful empty arrays need the same actual invocation proof as positives. */
-export function readStructuralPopulationInvocation(items: readonly DeclaredEvidence<unknown>[], route: ComparisonStructuralRoute, fen: string): StructuralPopulationInvocation {
-  const invocation = items !== null && typeof items === "object" ? STRUCTURAL_POPULATION_INVOCATIONS.get(items) : undefined;
-  if (invocation === undefined || !COMPARISON_STRUCTURAL_ROUTE_SET.has(route)
+export function readStructuralPopulationInvocation(items: readonly DeclaredEvidence<unknown>[], route: ComparisonStructuralRoute, fen: string): FenPopulationInvocation {
+  if (!COMPARISON_STRUCTURAL_ROUTE_SET.has(route)) throw new TypeError("Unknown structural population route");
+  return readFenPopulationInvocation(items, route, fen);
+}
+export function readEndgamePopulationInvocation(items: readonly DeclaredEvidence<unknown>[], fen: string): FenPopulationInvocation {
+  return readFenPopulationInvocation(items, "rules.endgame.classification@1", fen);
+}
+function readFenPopulationInvocation(items: readonly DeclaredEvidence<unknown>[], route: string, fen: string): FenPopulationInvocation {
+  const invocation = items !== null && typeof items === "object" ? FEN_POPULATION_INVOCATIONS.get(items) : undefined;
+  if (invocation === undefined
     || `${invocation.projection.id}@${invocation.projection.version}` !== route
     || invocation.factory !== evidenceFactorySymbol(route) || invocation.fen !== fen
     || invocation.inputDigest !== evidenceDigest({ fen }) || invocation.items !== items) {
@@ -602,9 +609,9 @@ function fenPopulation<T>(route: string, compute: (fen: string) => readonly T[],
   return factory({ route, symbol, shape: "computed", arms: [{ fen: FEN }], result: "population", ...(options.dependency === undefined ? {} : { dependency: options.dependency }), ...(options.pending === undefined ? {} : { pending: options.pending }) }, ({ fen }: { readonly fen: string }) => {
     const valid = validFen(fen);
     const items = Object.freeze(compute(valid).map((payload) => mint(route, symbol, payload, { fen })));
-    if (COMPARISON_STRUCTURAL_ROUTE_SET.has(route)) {
+    if (COMPARISON_STRUCTURAL_ROUTE_SET.has(route) || route === "rules.endgame.classification@1") {
       const projection = projectionFor(route);
-      STRUCTURAL_POPULATION_INVOCATIONS.set(items, Object.freeze({ projection: Object.freeze({ id: projection.id, version: projection.version }),
+      FEN_POPULATION_INVOCATIONS.set(items, Object.freeze({ projection: Object.freeze({ id: projection.id, version: projection.version }),
         factory: symbol, fen, inputDigest: evidenceDigest({ fen }), items, convention: mintConventionReceipt(route, [], []) }));
     }
     return items;
@@ -1557,15 +1564,31 @@ export const createDerivedReviewEvalPointV1Evidence = (() => {
   });
 })();
 
+type ReviewTransitionRoute = "derived.review.eval_delta@2" | "derived.review.mate_transition@2";
+const REVIEW_TRANSITION_INVOCATIONS = new WeakMap<object, Readonly<{
+  route: ReviewTransitionRoute; before: DeclaredEvidence<ReviewEnginePoint>; after: DeclaredEvidence<ReviewEnginePoint>;
+}>>();
+function recordReviewTransitionResult<T>(route: ReviewTransitionRoute, before: DeclaredEvidence<ReviewEnginePoint>, after: DeclaredEvidence<ReviewEnginePoint>, result: EvidenceAvailability<T>): EvidenceAvailability<T> {
+  REVIEW_TRANSITION_INVOCATIONS.set(result, Object.freeze({ route, before, after }));
+  return result;
+}
+/** Read-only original availability membership, including incomparable/nonmatching endpoints. */
+export function readReviewTransitionResultInvocation(result: unknown, route: ReviewTransitionRoute) {
+  const inputs = result !== null && typeof result === "object" ? REVIEW_TRANSITION_INVOCATIONS.get(result) : undefined;
+  if (inputs === undefined || inputs.route !== route) throw new TypeError("Review transition result is not its original factory invocation");
+  readReviewPointInvocation(inputs.before); readReviewPointInvocation(inputs.after);
+  return inputs;
+}
+
 export const createDerivedReviewEvalDeltaV2Evidence = (() => {
   const route = "derived.review.eval_delta@2";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("derived.review.eval_point@1"), after: sealed("derived.review.eval_point@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ before, after }: { readonly before: DeclaredEvidence<ReviewEnginePoint>; readonly after: DeclaredEvidence<ReviewEnginePoint> }): EvidenceAvailability<DeclaredEvidence<ReviewEvalDelta>> => {
     const comparability = reviewPointComparability(before.payload, after.payload);
-    if (comparability !== "comparable") return unavailable(comparability);
+    if (comparability !== "comparable") return recordReviewTransitionResult(route, before, after, unavailable(comparability));
     const beforeCp = reviewPointCentipawns(before.payload), afterCp = reviewPointCentipawns(after.payload);
-    if (beforeCp === null || afterCp === null) return unavailable("mate_operand");
-    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_delta@2" as const, before, after, deltaCp: afterCp - beforeCp }), { before, after }, [before, after]));
+    if (beforeCp === null || afterCp === null) return recordReviewTransitionResult(route, before, after, unavailable("mate_operand"));
+    return recordReviewTransitionResult(route, before, after, available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.eval_delta@2" as const, before, after, deltaCp: afterCp - beforeCp }), { before, after }, [before, after])));
   });
 })();
 
@@ -1574,10 +1597,10 @@ export const createDerivedReviewMateTransitionV2Evidence = (() => {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("derived.review.eval_point@1"), after: sealed("derived.review.eval_point@1") }], result: "availability", dependency: "provider-exchange-and-execution" }, ({ before, after }: { readonly before: DeclaredEvidence<ReviewEnginePoint>; readonly after: DeclaredEvidence<ReviewEnginePoint> }): EvidenceAvailability<DeclaredEvidence<ReviewMateTransition>> => {
     const comparability = reviewPointComparability(before.payload, after.payload);
-    if (comparability !== "comparable") return unavailable(comparability);
+    if (comparability !== "comparable") return recordReviewTransitionResult(route, before, after, unavailable(comparability));
     const changes = mateTransitionChanges(before.payload.evaluation.payload.payload.score, after.payload.evaluation.payload.payload.score);
-    if (typeof changes === "string") return unavailable(changes);
-    return available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.mate_transition@2" as const, before, after, changes }), { before, after }, [before, after]));
+    if (typeof changes === "string") return recordReviewTransitionResult(route, before, after, unavailable(changes));
+    return recordReviewTransitionResult(route, before, after, available(mint(route, symbol, Object.freeze({ projectionId: "derived.review.mate_transition@2" as const, before, after, changes }), { before, after }, [before, after])));
   });
 })();
 
@@ -1618,6 +1641,25 @@ type WholePivotalInput = { readonly run: DrillRun; readonly branchId: string };
 type ScopedPivotalInput = { readonly recordedPivotal: RecordedPivotalSource };
 type PivotalInput<K extends PivotalKind, V extends 1 | 2> = V extends 2 ? ScopedPivotalInput : K extends "irreversibility" ? WholePivotalInput | ScopedPivotalInput : WholePivotalInput;
 
+const RECORDED_RULE_PIVOTAL_INVOCATIONS = new WeakMap<object, Readonly<{
+  source: RecordedPivotalSource; route: string; items: readonly DerivedEvidence<PivotalMarker>[];
+}>>();
+/** Original scoped rule calculation, even when the unchanged convention emits no marker. */
+export function readRecordedRulePivotalInvocation(items: readonly DerivedEvidence<PivotalMarker>[], source: RecordedPivotalSource) {
+  const proof = RECORDED_RULE_PIVOTAL_INVOCATIONS.get(items), data = recordedPivotalData(source);
+  const kind = data.authority.kind, route = `derived.pivotal.${kind}@${kind === "irreversibility" ? 1 : 2}`;
+  if (kind === "human_divergence" || proof === undefined || proof.source !== source || proof.route !== route || proof.items !== items) throw new TypeError("Recorded rule pivotal result is not its original scoped factory invocation");
+  for (const item of items) {
+    assertDeclaredEvidence(item.evidence);
+    const receipt = evidenceValueReceipt(item.evidence);
+    if (sealedRoute(item.evidence) !== route || receipt.factory !== evidenceFactorySymbol(route)
+      || receipt.sourceDigests.length !== item.inputs.length
+      || item.inputs.some((input, index) => receipt.sourceDigests[index] !== evidenceValueReceipt(input).payloadDigest)) throw new TypeError("Recorded rule pivotal item lost its original literal inputs");
+    for (const input of item.inputs) if (sealedRoute(input) === "run.record.position@1") assertRecordedPositionInvocation(input as DeclaredEvidence<RecordedPosition>, data.run, (input.payload as RecordedPosition).nodeId);
+  }
+  return proof;
+}
+
 function pivotalFactory<K extends PivotalKind, V extends 1 | 2>(kind: K, version: V): EvidenceValueFactory<PivotalInput<K, V>, readonly DerivedEvidence<PivotalMarker>[]> {
   const route = `derived.pivotal.${kind}@${version}`;
   const symbol = evidenceFactorySymbol(route);
@@ -1630,7 +1672,7 @@ function pivotalFactory<K extends PivotalKind, V extends 1 | 2>(kind: K, version
     const path = scoped?.authority.path ?? branchPath(run, branchId);
     const byId = new Map(path.map((node, index) => [node.id, { node, index }]));
     const markers = source === undefined ? pivotalMarkerPayloadsForKind(run, branchId, kind) : pivotalRecordedPayloads(source, kind);
-    return Object.freeze(markers.map((marker) => {
+    const items = Object.freeze(markers.map((marker) => {
       const located = byId.get(marker.nodeId)!;
       const position = createRunRecordPositionV1Evidence({ run, nodeId: marker.nodeId });
       let inputs: DeclaredEvidence<unknown>[];
@@ -1673,6 +1715,8 @@ function pivotalFactory<K extends PivotalKind, V extends 1 | 2>(kind: K, version
       const authority = source === undefined ? { run, branchId, nodeId: marker.nodeId } : { route, recordedPivotal: source, marker, inputs };
       return Object.freeze({ evidence: mint(route, symbol, marker, authority, inputs), inputs: Object.freeze(inputs) });
     }));
+    if (source !== undefined) RECORDED_RULE_PIVOTAL_INVOCATIONS.set(items, Object.freeze({ source, route, items }));
+    return items;
   });
 }
 
@@ -2115,12 +2159,30 @@ export const createAuthoredStructuralConditionInputV1Evidence = (() => {
     mint(route, symbol, Object.freeze({ source: input.source, documentId: input.documentId, pointer: input.pointer, expression: input.expression }), input, [evidenceDigest({ documentId: input.documentId, pointer: input.pointer })]));
 })();
 
+const SHAPE_FIRING_INVOCATIONS = new WeakMap<object, Readonly<{
+  entries: readonly ShapeTriggerSource[]; path: readonly { readonly id: string; readonly fen: string }[];
+  inputDigest: string; items: readonly DeclaredEvidence<unknown>[];
+}>>();
+/** Complete original shape calculation; trigger inputs and empty spans are not caller claims. */
+export function readShapeFiringInvocation(items: readonly DeclaredEvidence<unknown>[], entries: readonly ShapeTriggerSource[], path: readonly { readonly id: string; readonly fen: string }[]) {
+  const proof = SHAPE_FIRING_INVOCATIONS.get(items);
+  if (proof === undefined || proof.items !== items || proof.entries !== entries || proof.path !== path
+    || proof.inputDigest !== evidenceDigest({ entries, path })) throw new TypeError("Shape firing population is not its original input invocation");
+  for (const item of items) {
+    assertDeclaredEvidence(item);
+    if (sealedRoute(item) !== "theory.shapes.firing@1" || evidenceValueReceipt(item).factory !== "createTheoryShapesFiringV1Evidence") throw new TypeError("Shape firing item crosses its original factory");
+  }
+  return proof;
+}
+
 export const createTheoryShapesFiringV1Evidence = (() => {
   const route = "theory.shapes.firing@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "authored_authority", arms: [{ entries: value("registered shape trigger records", (candidate) => Array.isArray(candidate) && candidate.every((entry) => isRecord(entry) && isText(entry.id) && isRecord(entry.trigger))), path: value("a recorded { id, fen } path", (candidate) => Array.isArray(candidate) && candidate.every((node) => isRecord(node) && isText(node.id) && typeof node.fen === "string")) }], result: "population", dependency: "registered-authored-provenance", pending: AUTHORED_PENDING }, ({ entries, path }: { readonly entries: readonly ShapeTriggerSource[]; readonly path: readonly { readonly id: string; readonly fen: string }[] }) => {
     const nodes = path.map((node) => Object.freeze({ id: node.id, fen: validFen(node.fen) }));
-    return Object.freeze(shapeFirings(entries, nodes).map((firing) => mint(route, symbol, firing, { entries: entries.map((entry) => entry.id), path: nodes }, [evidenceDigest(entries.find((entry) => entry.id === firing.entryId))])));
+    const items = Object.freeze(shapeFirings(entries, nodes).map((firing) => mint(route, symbol, firing, { entries: entries.map((entry) => entry.id), path: nodes }, [evidenceDigest(entries.find((entry) => entry.id === firing.entryId))])));
+    SHAPE_FIRING_INVOCATIONS.set(items, Object.freeze({ entries, path, inputDigest: evidenceDigest({ entries, path }), items }));
+    return items;
   });
 })();
 
