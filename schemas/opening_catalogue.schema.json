@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chess-tabiya:schema:opening-catalogue:1",
+  "title": "Installed opening catalogue",
+  "description": "The existing complete runtime opening document. Table ordering, unique keys, endpoint membership and the complete-document digest are additionally checked by the runtime loader. No artifact schemaVersion field is introduced.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "namedEndpoints", "pathMembership", "digest"],
+  "properties": {
+    "source": { "$ref": "#/$defs/source" },
+    "namedEndpoints": { "type": "array", "items": { "$ref": "#/$defs/endpoint" } },
+    "pathMembership": { "type": "array", "items": { "$ref": "#/$defs/member" } },
+    "digest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "text": { "type": "string", "pattern": "\\S" },
+    "positiveInteger": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "sourceFileName": { "enum": ["a.tsv", "b.tsv", "c.tsv", "d.tsv", "e.tsv"] },
+    "sourceFile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "bytes", "sha256"],
+      "properties": {
+        "name": { "$ref": "#/$defs/sourceFileName" },
+        "bytes": { "$ref": "#/$defs/positiveInteger" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "compilerFile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": { "path": { "$ref": "#/$defs/text" }, "sha256": { "$ref": "#/$defs/digest" } }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "commit", "retrievedAt", "licence", "files", "compilerFiles", "compilerDigest"],
+      "properties": {
+        "id": { "const": "lichess-chess-openings" },
+        "commit": { "const": "4b8622759e7ae6f93f011cc6c83a3823401ab45e" },
+        "retrievedAt": { "const": "2026-08-04T00:00:00.000Z" },
+        "licence": { "const": "CC0-1.0" },
+        "files": {
+          "type": "array", "minItems": 5, "maxItems": 5,
+          "items": { "$ref": "#/$defs/sourceFile" }
+        },
+        "compilerFiles": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/compilerFile" } },
+        "compilerDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "endpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["key", "eco", "name", "sourcePly", "sourceFile", "sourceRow"],
+      "properties": {
+        "key": { "$ref": "#/$defs/text" },
+        "eco": { "$ref": "#/$defs/text" },
+        "name": { "$ref": "#/$defs/text" },
+        "sourcePly": { "$ref": "#/$defs/positiveInteger" },
+        "sourceFile": { "$ref": "#/$defs/sourceFileName" },
+        "sourceRow": { "type": "integer", "minimum": 2, "maximum": 9007199254740991 }
+      }
+    },
+    "member": {
+      "type": "object", "additionalProperties": false,
+      "required": ["key", "descendantEndpointCount"],
+      "properties": { "key": { "$ref": "#/$defs/text" }, "descendantEndpointCount": { "$ref": "#/$defs/positiveInteger" } }
+    }
+  }
+}

@@ -14,9 +14,10 @@ uses the same TSV and legal-PGN parsers as pack sourcing and writes
 - 7,854 position keys occurring on catalogue paths;
 - source-file, compiler-file, licence, commit, byte-count, and digest provenance.
 
-Run `make opening-catalogue` to deliberately regenerate it. `make opening-catalogue-check` rebuilds
-from the vendored inputs and fails when the committed artifact is stale. `make verify` includes the
-check.
+Run `make opening-catalogue` to deliberately regenerate it and the small package-owned
+`packages/runtime/src/opening-catalogue-registration.json`. Generation precedes the final application
+build, so the runnable server embeds the new pin, not the previous one. `make opening-catalogue-check`
+rebuilds from the vendored inputs and fails when either output is stale. `make verify` includes the check.
 
 The production image contains the compiled artifact. It does not contain the raw TSV inputs.
 
@@ -50,13 +51,30 @@ Loading takes a detached snapshot of the artifact, validates that snapshot, and 
 tables, their rows and all source metadata. Mutating a retained parser input cannot change a
 subsequent lookup; returned artifact objects cannot be edited in place. `make opening-source-check`
 exercises those boundaries and the existing phase-source and manifest consumers. This does not
-supply the separate cross-package evidence authority still required by D3376.
+supply the point/history factory or complete learner-module bindings still required by D3376.
 
 The loader also rejects blank endpoint names/ECO and malformed source/compiler SHA-256 values,
 even when the outer document digest has been recomputed. These are invalid artifacts, not missing
 files or successful unnamed lookups. Six permanent controls exercise direct compilation and actual
 file loading; valid installed data and the original latency budgets remain unchanged. This checks
-the declared field formats, not authenticity of arbitrary caller-rewritten source documents.
+the declared field formats. Installed-source admission additionally checks the package-owned pin:
+changing a name, count or source metadata and recomputing the document checksum cannot make a new
+document authoritative.
+
+The existing document grammar is registered as `opening-catalogue-schema@1`; the artifact gains no
+version field. The pure loader and immutable paired lookup now live in runtime, with no Node imports.
+The shared schema validates every field; the loader also checks canonical position keys, sorted
+unique tables and endpoint-to-membership joins before either digest decision. Malformed structure
+is `artifact_invalid`, even with a stale checksum. Only a structurally valid document whose complete
+checksum or installed pin disagrees is `digest_mismatch`.
+
+Application construction admits the document once and shares its frozen catalogue and genuine
+`InstalledOpeningCatalogue` handle. That handle exposes only the source reference; its maps remain
+in private runtime storage. A spread/JSON/method lookalike or structural compilation does not issue
+such a handle. Parser inputs are detached before publication, and non-data fields/accessors refuse
+before they can be erased or executed. The runtime bundle includes the small registration, not the
+catalogue tables or raw source files. This source foundation does not yet replace the unavailable
+sole point/history factories or complete the coordinated learner-facing migration.
 
 The required performance test keeps catalogue load below 250 ms wall time and production lookup
 work below 50 µs CPU time per position at the p95 of bounded batches over all 6,991 recorded sample
@@ -72,6 +90,8 @@ and perceived-operation tests separately enforce user-visible wall latency.
 - Renderers may restate admitted identity and provenance only; they do not add theory prose.
 
 The executable contract lives in [the accepted RFC](../rfc/runtime-opening-identity.md). Source,
-loader, lookup, history derivation, and renderers live in
-`apps/server/src/opening-catalogue.ts`; the production-boundary regression lives in
+loader, lookup, historical helper and renderers live in `packages/runtime/src/opening-catalogue.ts`;
+`apps/server/src/opening-catalogue.ts` retains file I/O and source compilation and re-exports the
+same implementation for existing real callers. No second parser or lookup map is maintained.
+The production-boundary regression lives in
 `apps/server/src/application.test.ts`.

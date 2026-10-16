@@ -32370,3 +32370,72 @@ Campaign was the one capability with no API, route or content. Now:
   access/renderer/receiver/API/native migration. D3851 requires no compatibility-only pipeline;
   preserve saved data and retire obsolete execution after actual callers move. D3870 remains
   independently blocked, not a reason to stop the other accepted foundation work.
+
+### 2026-10-16 — Installed opening schema/source implementation before full verification
+
+- Previous goal turn is verified progress:32d12076 implements durable original engine attachment
+  ownership, with full normal verification/build and configured hooks. Start from a clean tracked
+  tree; the same three pre-existing untracked paths remain excluded. The full1.0 goal stays active.
+- Implement independently accepted installed-opening §§1–2: actual existing-document schema,
+  version/export/catalogue/register atomically; one pure runtime parser/paired lookup owns detached
+  frozen maps, while server code retains file I/O and TSV/PGN compilation and re-exports that one
+  implementation for real callers. Actual application loading now returns the genuine runtime
+  source and shared maps, with exact missing/invalid/digest-mismatch meanings. No artifact version
+  field, source content change, compatibility-only pipeline, saved-data rewrite or provider call.
+- One263-byte generated package registration pins only source/schema/commit/retrieval/artifact.
+  Compilation is structural and never asks its previous registration to authorize replacement;
+  registration is outside the accurate nine-file compiler inventory. Compare with actual HEAD:
+  all3,810 endpoint/7,854 member table bytes and vendored source-file metadata remain unchanged.
+  No research recordings or new transitive hash/freshness framework are dependencies.
+- Independent read-only implementation review returns missing canonical-key validation, digest
+  precedence/broad RangeError mapping, generation-after-bundling, then accidental predecessor
+  compiler-test replacement. Repair all before full verification: each unique member key is
+  canonical, endpoint membership exact and all relations precede checksum decisions; only the
+  dedicated digest mismatch signal selects that reason. Ordinary Make generation now precedes
+  final application bundling. Restore all three original compiler tests and assertions alongside
+  the two new stale-pin pipeline controls. Final independent re-review clears every return and
+  finds no bounded §§1–2 implementation blocker; no reviewer tests, current delivery or release.
+- Normal focused source gate passes95 cases/six files; register39/C1–C8, workspace types and
+  unchanged-budget performance pass (seven/four files,62.05s). The six initial register fixture
+  failures are repaired by adding this actual resource to the synthetic full inventory and exact
+  extension assertion, not changing checker behavior or the immutable original seven-row seed.
+  First pipeline control exposes esbuild's unsupported JS u regex flag; remove only that test
+  flag. Permission-refused pnpm runs repeat the same normal Make command with approval, no env
+  change. An out-of-order ledger patch and an oversized metadata patch refuse; bounded in-order
+  patches succeed. No assertion, timeout, retry, skip, coverage or product-budget relaxation.
+- Existing semantic/capability generators change no declaration/profile/qualification:317
+  projections/310 profiles/1,016 capabilities/51 conventions;91 subjects/zero qualified/343 cases/
+  53 population/eight external receipts. D3376 moves todo→doing, not done; D3857 remains doing.
+  State3,632 rows/1,749 live/zero untriaged:627 todo/38 doing/1,084 blocked/1,721 done/162 refused;
+  historical462 prose-only closeouts unchanged. RFC status is implementing and its actual job plan/
+  append-only log exist. Roadmap R1–R10 and lifecycle P1–P7 pass with exact current anchors.
+- Full normal verification/build follows before commit; no product source changes are intended
+  during that gate. Point/history lookup-result authority, complete recorded history, grade/Compare
+  endpoint/service scopes and all282 current consumer/access/renderer/API/native pairs remain
+  required work. Sole current factories stay unchanged, not falsely delivered from source admission.
+  No source qualification, official content, capability/milestone, remote CI/push/deploy or release.
+
+### 2026-10-16 — Installed opening source verified checkpoint
+
+- The first full preflight refuses two test-only readonly-array casts before either expensive
+  pool; repair with ordinary copied/sorted arrays, no typechecking waiver. Final unchanged normal
+  `make verify build` exits zero:6,723 software tests/415 files (442.53s), seven isolated performance
+  tests/four files (61.37s),257 content tests/26 files (56.24s), clean types and every remaining
+  manifest/contract/governance/corpus/packaging/build gate. All95 focused source cases/six files
+  and39 register cases remain. No assertion/deadline/retry/skip/coverage or product-budget change.
+- Corpus92 documents/354 blocking/34 resolved/48 accepted/errors[];104 capability documents
+  declare exactly their derived requirements. Counts and checked-in semantic/capability meanings
+  remain317 projections/310 profiles/1,016 capabilities/51 conventions and91 subjects/zero
+  qualified/343 cases/53 population/eight external receipts. No intent sentence in protected
+  design00–06 is falsified by this source prerequisite; no intent edit/proposal is needed.
+- Update existing job plan/log, queue, RFC/register, canonical docs, ledger, roadmap/state/receipt
+  with verified status. State3,632 rows/1,749 live/zero untriaged:627 todo/38 doing/1,084 blocked/
+  1,721 done/162 refused; historical462 prose-only closeouts unchanged. D3376/D3857 stay doing.
+  Final metadata checks and configured commit hook follow; no product source changes after the
+  successful full gate. Same three pre-existing untracked paths stay excluded.
+- The full1.0 goal stays active. Next supply actual opening point lookup-result authority and
+  complete recorded history, remaining grade/Compare source issuers, then the complete282-pair
+  current source/access/renderer/receiver/API/native migration and obsolete-path retirement.
+  D3851 means no compatibility-only pipeline, not deletion of saved data. D3870 remains separately
+  blocked. No provider request, new lesson/content, source qualification, current learner delivery,
+  browser/remote CI/push/deploy or whole capability/milestone/1.0 completion is claimed.

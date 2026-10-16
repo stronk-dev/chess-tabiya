@@ -1248,6 +1248,18 @@ export {
 } from "./hint-exchange.js";
 export { HintHorizonMismatch, type HintDisclosurePayload, type HintHorizonOccurrence, type HintPieceIdentity } from "./hint-horizon.js";
 export {
+  CHESS_OPENINGS_COMMIT, CHESS_OPENINGS_RETRIEVED_AT, OPENING_SOURCE_ID,
+  OPENING_CATALOGUE_PROJECTION_IDS, OPENING_CATALOGUE_FILES, OPENING_CATALOGUE_COMPILER_FILES,
+  admitInstalledOpeningCatalogue, compileLoadedOpeningCatalogue, openingIdentityAt,
+  recordedOpeningPosition, deepestOpeningReached, deriveDeepestOpeningVisits,
+  renderCurrentOpeningEndpoint, renderOpeningMembership, renderDeepestOpeningReached,
+  type OpeningCatalogueFileName, type OpeningCatalogueUnavailableReason, type RuntimeOpeningCatalogue,
+  type OpeningCatalogueRef, type OpeningCatalogueUnavailable, type CurrentOpeningEndpoint,
+  type OpeningCatalogueMembership, type RecordedPosition as RecordedOpeningPosition,
+  type DeepestOpeningReached, type CompiledOpeningCatalogue, type OpeningCatalogueAvailability,
+  type InstalledOpeningCatalogue, type OpeningCatalogueSourceInput, type OpeningCatalogueCompilerInput,
+} from "./opening-catalogue.js";
+export {
   HINT_COMPILER_VERSION, HINT_DISCLOSURE_RENDERERS, HINT_FORCED_MATE_ATTACKER_MOVES, assertHintDisclosurePacket, compileGuidedHintPacket,
   compileHintDeliveryReceipt, compileHintDisclosure, hintHorizonOwner, hintPacketRoots, hintSearchLineEvidence, hintSentence, hintVoiceCheck, selectHintHorizon,
   type GuidedHintPacket, type HintHorizonAuthority, type HintHorizonSelection, type HintRootIdentity, type SealedHintHorizon,

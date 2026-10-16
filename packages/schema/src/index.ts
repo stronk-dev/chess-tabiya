@@ -27,6 +27,7 @@ export type PrincipleEntrySchemaVersion = typeof PRINCIPLE_ENTRY_SCHEMA_VERSION;
  * (`CONCEPT_REGISTRY_SCHEMA_VERSION` in `@chess-tabiya/runtime`).
  */
 export const CONCEPT_REGISTRY_SCHEMA_LANE = "1" as const;
+export const OPENING_CATALOGUE_SCHEMA_VERSION = "1" as const;
 
 export const schemaBuildInfo = Object.freeze({
   drillPackVersion: DRILL_PACK_SCHEMA_VERSION,

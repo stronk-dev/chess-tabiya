@@ -13,6 +13,7 @@
     "./pack-path": "./src/pack-path/index.ts",
     "./release-manifest": "./src/release-manifest/index.ts",
     "./run-event": "./src/run-event.ts",
+    "./opening-catalogue": "./src/opening-catalogue.ts",
     "./capability": "./src/capability/index.ts"
   },
   "scripts": {

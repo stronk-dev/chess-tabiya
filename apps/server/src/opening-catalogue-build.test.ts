@@ -1,15 +1,75 @@
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
-
+import { execFile } from "node:child_process";
+import { cp, mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
+import { promisify } from "node:util";
+import { build, type Plugin } from "esbuild";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
+import { CHESS_OPENINGS_COMMIT, OPENING_CATALOGUE_COMPILER_FILES, OPENING_CATALOGUE_FILES, compileRuntimeOpeningCatalogue, type OpeningCatalogueSourceInput } from "./opening-catalogue.js";
 
-import {
-  OPENING_CATALOGUE_COMPILER_FILES,
-  OPENING_CATALOGUE_FILES,
-  compileRuntimeOpeningCatalogue,
-  type OpeningCatalogueSourceInput,
-} from "./opening-catalogue.js";
+const execute = promisify(execFile), root = process.cwd();
+const registrationRelative = "packages/runtime/src/opening-catalogue-registration.json";
+const artifactRelative = "apps/server/artifacts/runtime-opening-catalogue.json";
+const pinnedJson = (contents: () => Promise<string>): Plugin => ({
+  name: "actual-installed-json", setup(builder) {
+    builder.onLoad({ filter: /[/\\]opening-catalogue-registration\.json$/ }, async () => ({ contents: await contents(), loader: "json" }));
+  },
+});
+
+async function admissionProbe(pin: () => Promise<string>): Promise<string> {
+  const result = await build({ stdin: { contents: `import {readFileSync} from "node:fs";
+    import {admitInstalledOpeningCatalogue} from ${JSON.stringify(resolve(root, "packages/runtime/src/opening-catalogue.ts"))};
+    const value=admitInstalledOpeningCatalogue(JSON.parse(readFileSync(process.argv[1],"utf8")));
+    console.log(JSON.stringify(value.kind==="available"?{kind:value.kind,ref:value.source.ref}:value));`, resolveDir: root },
+    bundle: true, platform: "node", format: "esm", write: false, logLevel: "silent", plugins: [pinnedJson(pin)] });
+  return result.outputFiles[0]!.text;
+}
+async function runProbe(code: string, artifact: string) {
+  const result = await execute(process.execPath, ["--input-type=module", "-e", code, artifact]);
+  return JSON.parse(result.stdout.trim()) as { kind: string; reason?: string; ref?: { artifactDigest: string } };
+}
+
+describe("the ordinary opening catalogue rebuild", () => {
+  it("the actual Make plan generates both outputs before bundling the runnable applications", async () => {
+    const result = await execute("make", ["-n", "opening-catalogue"], { cwd: root });
+    const lines = result.stdout.split("\n"), generator = lines.findIndex(line => /node .*apps\/server\/dist\/opening-catalogue-build\.js$/u.test(line));
+    const generatorBundle = lines.findIndex(line => line.includes("esbuild apps/server/src/opening-catalogue-build.ts --bundle"));
+    const applicationBundle = lines.findIndex(line => line.trim() === "pnpm build");
+    expect(generatorBundle).toBeGreaterThanOrEqual(0); expect(generator).toBeGreaterThan(generatorBundle);
+    expect(applicationBundle).toBeGreaterThan(generator);
+  });
+
+  it("rebuilds from a stale installed pin, then fresh bundled production admission accepts exactly the generated artifact", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "tabiya-installed-opening-rebuild-"));
+    try {
+      const copy = async (relative: string) => { const destination = join(directory, relative); await mkdir(dirname(destination), { recursive: true }); await cp(resolve(root, relative), destination); };
+      await Promise.all([...OPENING_CATALOGUE_COMPILER_FILES, ...OPENING_CATALOGUE_FILES.map(name => `vendor/chess-openings/${CHESS_OPENINGS_COMMIT}/${name}`),
+        "tools/d894-opening-runtime-harness/README.md", "tools/knowledge-retrieval-harness/prepare.mjs",
+        "planning/platform-alignment/knowledge-retrieval/source-register.csv", artifactRelative].map(copy));
+      expect(OPENING_CATALOGUE_COMPILER_FILES.some(file => file === registrationRelative as string)).toBe(false);
+      const stale = JSON.stringify({ ...JSON.parse(await readFile(resolve(root, registrationRelative), "utf8")), artifactDigest: `sha256:${"0".repeat(64)}` });
+      const staleProbe = await admissionProbe(async () => stale), artifact = join(directory, artifactRelative);
+      expect(await runProbe(staleProbe, artifact)).toEqual({ kind: "unavailable", reason: "digest_mismatch" });
+
+      // This is the real generator with an intentionally stale embedded package pin. It must
+      // compile structurally, never ask that old pin to approve its own replacement.
+      const generated = await build({ entryPoints: [resolve(root, "apps/server/src/opening-catalogue-build.ts")], bundle: true,
+        platform: "node", format: "esm", write: false, logLevel: "silent", plugins: [pinnedJson(async () => stale)] });
+      const generator = join(directory, "generator.mjs"); await writeFile(generator, generated.outputFiles[0]!.text, "utf8");
+      await execute(process.execPath, [generator], { cwd: directory });
+      const registrationPath = join(directory, registrationRelative), registration = JSON.parse(await readFile(registrationPath, "utf8"));
+      const compiled = JSON.parse(await readFile(artifact, "utf8")); expect(registration.artifactDigest).toBe(compiled.digest);
+      expect(registration.schemaVersion).toBe("1"); expect(registration.sourceId).toBe(compiled.source.id);
+      const freshProbe = await admissionProbe(() => readFile(registrationPath, "utf8"));
+      expect(await runProbe(freshProbe, artifact)).toEqual({ kind: "available", ref: { sourceId: compiled.source.id, commit: compiled.source.commit, artifactDigest: compiled.digest } });
+      expect(await runProbe(staleProbe, artifact)).toEqual({ kind: "unavailable", reason: "digest_mismatch" });
+      await execute(process.execPath, [generator, "--check"], { cwd: directory });
+      await writeFile(registrationPath, stale, "utf8");
+      await expect(execute(process.execPath, [generator, "--check"], { cwd: directory })).rejects.toThrow(/Installed opening registration is stale/u);
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+});
 
 const ROOT = new URL("../../../", import.meta.url).pathname;
 

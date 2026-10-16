@@ -962,10 +962,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Implement D3376's independently accepted installed-opening base/schema/pin foundation; independently review remaining D3564 orientation and D3373 durable-Stockfish drafts before implementing those. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+        "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Complete D3376's installed opening point lookup-result authority and complete recorded history on the implemented schema/pure loader/package pin/source handles; independently review remaining D3564 orientation and D3373 durable-Stockfish drafts before implementing those. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "Independent bounded review explicitly accepts installed-opening §§1–3 and supporting criteria after D3883's schema-URN correction and one-source creation-first/atomic ordinary registration clarification. Prior §3a/current adoption acceptance stands. D3376 moves from review-blocked to executable queued work; no schema/source/consumer implementation, generic absent-resource admission or D3082 discharge. Accepted grade/Compare durable modern source primitive has36 runtime cases/real SQLite controls/types and independent implementation review; full normal make verify build passes6677 software/413 files, seven performance/four files,257 content/26 files and all remaining gates under evidence-to-consumer-spine. Prior D3856 method-path discharge remains, as do unrelated orientation/base-source/source-qualification and whole-milestone obligations.",
+          "summary": "Installed-opening §§1–2 source foundation now implements the shared existing-document schema, pure runtime loader/paired maps,263-byte generated package pin and genuine source handles used by actual application loading. Canonical keys and complete relationships precede digest decisions; dedicated mismatch classification and generator-before-final-bundle ordering close all independent returns. Original three compiler tests remain intact beside real stale-pin regeneration/bundled-admission controls. Independent bounded re-review,95 source cases/six files,39 register cases/types and seven unchanged-budget performance cases pass. Full normal make verify build passes6723 software/415 files (442.53s), seven performance/four files (61.37s),257 content/26 files (56.24s) and all remaining gates, with no assertion/deadline/retry/skip/coverage or budget relaxation. Original3810 endpoint/7854 membership tables remain unchanged. D3376 is doing, not complete: actual point/history factory/result authority, complete history and coordinated current delivery remain. No D3082 discharge, qualification, content or whole milestone claim.",
           "impact": "advanced",
           "evidence": [
             "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
@@ -1002,7 +1002,13 @@
             "packages/runtime/src/semantic-validation-receipt.generated.json",
             "docs/semantic-evidence.md",
             "planning/recorded-semantic-path/implementation-2026-09-24.md",
-            "Makefile"
+            "Makefile",
+            "schemas/opening_catalogue.schema.json",
+            "packages/runtime/src/opening-catalogue.ts",
+            "packages/runtime/src/opening-catalogue.test.ts",
+            "packages/runtime/src/opening-catalogue-registration.json",
+            "apps/server/src/opening-catalogue-build.test.ts",
+            "docs/runtime-opening-identity.md"
           ],
           "anchors": [
             {
@@ -1094,10 +1100,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement the now-independently-accepted installed opening base/schema/pin/paired lookup, complete history reduction and grade/Compare endpoint sources. The private durable modern attachment primitive is implemented, not the complete pending/job/ledger selector or service/GradeSource. Preserve per-node original occurrence identity and corrupt-modern refusal. D3870 resource ordering/independent acceptance remain separate. Then bind the final full authority to actual RunService storage and migrate all282 current source/access/count-renderer/receiver/API/native pairs, retiring obsolete paths after real callers move. No compatibility-only pipeline, fake availability, dropped family, widened grants or premature qualification/milestone/release claim.",
+        "nextAction": "Complete genuine installed-opening point lookup-result authority and complete recorded history over the implemented source/schema/pin, then remaining grade/Compare endpoint sources. Preserve source-complete preflight and per-node original occurrence identity/corrupt-modern refusal; durable modern primitive is not complete pending/job/ledger selection. D3870 resource ordering/acceptance remain separate. Then bind the final full authority to actual RunService storage and migrate all282 current source/access/count-renderer/receiver/API/native pairs, retiring obsolete execution after real callers move. No compatibility-only pipeline, fake availability, dropped family, widened grants or premature qualification/milestone/release claim.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "The accepted grade/Compare durable modern attachment primitive now retains genuine full-head/prefix/position/event seq/ordinal authority and actual parsed-delivery/source/point inputs. All modern occurrences validate; latest modern selection is independent per node, later scalars cannot replace it, corrupt modern data refuses and current storage is rechecked at publication/readback.36 runtime cases/actual SQLite prefix-reopen controls/types,1131 focused passes/33 files and independent bounded implementation review pass; full normal make verify build passes6677 software/413 files (395.44s), seven performance/four files (60.03s),257 content/26 files (56.04s) and every remaining gate. No assertion/deadline/retry/skip/coverage relaxation.317 projections/310 profiles/1016 capabilities/51 conventions and semantic91 subjects/zero qualified unchanged. D3883's opening-base contract correction is independently accepted, not production source implementation. Pending/job/ledger endpoint resolution, grade/Compare issuers and entire282-pair current access/renderer/API/native migration remain. No GradeSource, access grant, provider request, current learner cutover or release claim.",
+          "summary": "Installed opening source admission now uses the actual shared schema/pure loader/paired maps and263-byte package pin at application loading. Exact source references and privately recognized handles retain detached frozen data; forged handles or self-redigested rewrites refuse. Canonical-key/relationship precedence and generator-before-final-build repairs are independently cleared; predecessor compiler tests retained.95 focused source cases/six files,39 register cases/types and seven unchanged-budget performance cases pass. Full normal make verify build passes6723 software/415 files, seven performance/four files,257 content/26 files and every remaining gate; no assertion/deadline/retry/skip/coverage relaxation. Actual point/history factories and full282-pair current source/access/renderer/API/native migration remain; prior durable engine/moment/rank source checkpoints stand.317 projections/310 profiles/1016 capabilities/51 conventions and semantic91 subjects/zero qualified unchanged. No current learner cutover, provider request, saved-data rewrite, source qualification or release claim.",
           "impact": "advanced",
           "evidence": [
             "tools/tactical-collector-measurement-harness/terminal.test.ts",
@@ -1287,7 +1293,13 @@
             "packages/runtime/src/presentation-inspector-adapters.ts",
             "packages/runtime/src/presentation-inspector-adapters.test.ts",
             "apps/web/src/lib/evidence/components.test.ts",
-            "planning/exploration/log.md"
+            "planning/exploration/log.md",
+            "schemas/opening_catalogue.schema.json",
+            "packages/runtime/src/opening-catalogue.ts",
+            "packages/runtime/src/opening-catalogue.test.ts",
+            "packages/runtime/src/opening-catalogue-registration.json",
+            "apps/server/src/opening-catalogue-build.test.ts",
+            "docs/runtime-opening-identity.md"
           ],
           "anchors": [
             {
@@ -1523,7 +1535,7 @@
             {
               "kind": "rfc",
               "id": "installed-opening-evidence.md",
-              "digest": "sha256:769eea885e10f6325a1e542d202fdb4a4273f83628813cb8d7bf1b27e89f4cc0"
+              "digest": "sha256:2bc16ddf5f75560e6a0be3502c93e65e621ecacce93f32b908aea3026cdc75e4"
             },
             {
               "kind": "rfc",

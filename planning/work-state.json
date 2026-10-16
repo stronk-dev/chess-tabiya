@@ -27783,11 +27783,12 @@
     },
     {
       "id": "D3376",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9174b8e47fc127ac6f502e4cf9c335377b146c31a3ca8f80b5c02987b52f8a73",
+      "sourceDigest": "sha256:ec95af81188a1628240fe5e2ac81ad3e3c3516f782c388544c56ecdf1578df59",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-10-16"
     },
     {
       "id": "D3377",
@@ -32128,7 +32129,7 @@
       "id": "D3857",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:2081b89d447317e1779b61f9236fd1d1de89aa66e9ab59a213f0803d4c6ebb55",
+      "sourceDigest": "sha256:a4042d20dba012c62eae525e8c3cba193a1cf4ff2e2ef2a73e39da01b93b3354",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"

@@ -1445,3 +1445,21 @@ data cannot fall back. Original point inputs and final publication/readback curr
 No pending request, ledger origin/selection, GradeSource, grading/access authority or provider
 request is invented. The inspected runtime/SQLite tests exercise these boundaries; reviewer
 runs no tests. Main's actual execution results are recorded separately in the append-only log.
+
+## 2026-10-16 — Installed opening §§1–2, independent implementation review
+
+The authorized independent reviewer returns the first source implementation for missing canonical
+key validation, digest decisions before complete relational validation/broad RangeError mapping,
+and generation after final bundling. The revised source validates each unique member key and exact
+endpoint membership before either digest decision, uses a dedicated mismatch signal and executes
+generation before the final application build. The real stale-pin generation/bundled-admission
+controls and malformed/stale-digest controls cover those boundaries.
+
+The reviewer additionally catches accidental replacement of the three predecessor compiler tests.
+They are restored intact beside the two new pipeline tests, then independently re-inspected. Final
+decision: **no remaining bounded implementation blocker for §§1–2; all returns cleared**. Structural
+compilation cannot issue installed handles; source admission owns detached frozen maps, checks the
+package pin and rejects copies. The generated registration is outside compiler inputs; browser
+bundling checks the actual pure source. Read-only inspection, no reviewer tests or edits. Main's
+execution results remain separate; no point/history/current-consumer, full verification, source
+qualification, release or whole-product clearance is inferred.

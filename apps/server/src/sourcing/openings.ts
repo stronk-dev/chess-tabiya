@@ -15,8 +15,8 @@ import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canon
 import { checkSourcingDirectory } from "./check.js";
 import { type EvidenceLedger, type SourceEntry, type SourceManifest, SourcingError } from "./types.js";
 
-export const CHESS_OPENINGS_COMMIT = "4b8622759e7ae6f93f011cc6c83a3823401ab45e";
-export const CHESS_OPENINGS_RETRIEVED_AT = "2026-08-04T00:00:00.000Z";
+import { CHESS_OPENINGS_COMMIT, CHESS_OPENINGS_RETRIEVED_AT } from "@chess-tabiya/runtime";
+export { CHESS_OPENINGS_COMMIT, CHESS_OPENINGS_RETRIEVED_AT };
 
 export interface OpeningEmitOptions {
   readonly eco: string;

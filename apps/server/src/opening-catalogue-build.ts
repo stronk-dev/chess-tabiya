@@ -11,12 +11,14 @@ import {
 import {
   OPENING_CATALOGUE_COMPILER_FILES,
   OPENING_CATALOGUE_FILES,
+  compileLoadedOpeningCatalogue,
   compileRuntimeOpeningCatalogue,
 } from "./opening-catalogue.js";
 
 const root = process.cwd();
 const sourceRoot = resolve(root, "vendor", "chess-openings", CHESS_OPENINGS_COMMIT);
 const output = resolve(root, "apps", "server", "artifacts", "runtime-opening-catalogue.json");
+const registrationOutput = resolve(root, "packages", "runtime", "src", "opening-catalogue-registration.json");
 const sourceFiles = await Promise.all(OPENING_CATALOGUE_FILES.map(async (name) => Object.freeze({ name, bytes: await readFile(join(sourceRoot, name)) })));
 const expectedBytes = Object.freeze({ "a.tsv": 66_338, "b.tsv": 77_372, "c.tsv": 132_306, "d.tsv": 69_199, "e.tsv": 42_837 } as const);
 const [harnessReadme, retrievalPrepare, sourceRegister] = await Promise.all([
@@ -38,15 +40,22 @@ for (const file of sourceFiles) {
 }
 const compilerFiles = await Promise.all(OPENING_CATALOGUE_COMPILER_FILES.map(async (path) => Object.freeze({ path, bytes: await readFile(resolve(root, path)) })));
 const artifact = compileRuntimeOpeningCatalogue(sourceFiles, compilerFiles);
+// Structural compilation is independent of the previous installed registration.
+compileLoadedOpeningCatalogue(artifact);
 if (artifact.namedEndpoints.length !== 3_810 || artifact.pathMembership.length !== 7_854 || Math.max(...artifact.pathMembership.map((item) => item.descendantEndpointCount)) !== 2_023) throw new TypeError("Runtime opening catalogue population differs from the accepted source closure");
 const bytes = `${canonicalizeJson(artifact)}\n`;
+const registrationBytes = `${JSON.stringify({ schemaVersion: "1", sourceId: artifact.source.id,
+  commit: artifact.source.commit, retrievedAt: artifact.source.retrievedAt, artifactDigest: artifact.digest }, null, 2)}\n`;
 
 if (process.argv.includes("--check")) {
   const current = await readFile(output, "utf8").catch(() => "");
   if (current !== bytes) throw new TypeError("Runtime opening catalogue is stale; run make opening-catalogue");
+  const currentRegistration = await readFile(registrationOutput, "utf8").catch(() => "");
+  if (currentRegistration !== registrationBytes) throw new TypeError("Installed opening registration is stale; run make opening-catalogue");
   console.log(`runtime opening catalogue: ${artifact.namedEndpoints.length} endpoints, ${artifact.pathMembership.length} path keys, ${artifact.digest}`);
 } else {
   await mkdir(dirname(output), { recursive: true });
   await writeFile(output, bytes, "utf8");
+  await writeFile(registrationOutput, registrationBytes, "utf8");
   console.log(`wrote ${output}`);
 }

@@ -1,6 +1,28 @@
 # Codex queue
 
-**Current verified checkpoint, 2026-10-16 — [[D3859]], [[D3863]], [[D3376]], [[D3883]]:**
+**Current verified opening source checkpoint, 2026-10-16 — [[D3376]], [[D3857]]:**
+the accepted installed-source foundation now has its real shared schema, pure runtime loader/
+paired maps,263-byte generated package pin and genuine privately recognized source handle.
+Actual application loading uses the admitted document once; all retained tables/source metadata
+are detached and frozen. Every key and complete relationship validates before either digest
+decision, so malformed documents remain invalid rather than masquerading as checksum failures.
+Ordinary generation runs before the final application bundle; actual stale-pin regeneration/
+bundled admission and both-output --check controls execute the real code.
+
+All three independent implementation returns and the accidental compiler-test replacement are
+repaired; the three predecessor tests remain intact beside the new pipeline controls. Independent
+read-only re-review finds no bounded blocker.95 source cases/six files,39 register cases/C1–C8,
+clean workspace types and seven unchanged-budget performance cases pass. Full normal `make verify
+build` exits zero:6,723 software/415 files, seven performance/four files,257 content/26 files and
+every remaining gate. The3,810 endpoint/7,854 membership tables and vendored source bytes are unchanged.
+
+Next implement actual point lookup-result authority and complete recorded opening history, then
+the remaining grade/Compare sources and complete282-pair current consumer/access/renderer/API/
+native migration. The sole factories remain unavailable until that complete migration; do not
+change their accepted inputs while leaving live callers on the old shape. No compatibility-only
+pipeline, saved-data rewrite, source qualification, learner delivery or 1.0 milestone claim.
+
+**Prior verified durable checkpoint, 2026-10-16 — [[D3859]], [[D3863]], [[D3376]], [[D3883]]:**
 the accepted grade/Compare dependency now has its genuine private durable modern attachment
 primitive. It retains original full-head/prefix/position/seq/ordinal authority, re-derives whole
 persisted deliveries through the real parser/source/point factories and fixes latest-modern

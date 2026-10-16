@@ -56,6 +56,15 @@
       }
     },
     {
+      "id": "opening-catalogue-schema",
+      "claimKind": "schema_lane",
+      "source": {
+        "kind": "json_schema",
+        "schemaSlug": "opening-catalogue",
+        "versionExport": "OPENING_CATALOGUE_SCHEMA_VERSION"
+      }
+    },
+    {
       "id": "pack-schema",
       "claimKind": "schema_lane",
       "source": {

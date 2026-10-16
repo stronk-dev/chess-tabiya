@@ -1,5 +1,14 @@
 # RFC: Installed opening evidence
 
+**2026-10-16 source foundation checkpoint:** §§1–2 now implement the actual shared schema,
+pure runtime loader and installed-source admission used by application loading. The package pin
+is263 bytes, generated before final application bundling. Original tables/source bytes are
+unchanged. Independent bounded implementation review clears all three returns; the original
+compiler tests are retained.95 source cases/six files,39 register cases, types and unchanged-budget
+performance pass. Full normal `make verify build` passes6,723 software/415 files, seven performance/
+four files,257 content/26 files and all remaining gates. Point/history factories and complete consumer/native
+adoption remain unimplemented, not discharged by the source introduction.
+
 **2026-10-16 bounded base-source acceptance:** the authorized independent reviewer accepts
 §§1–3 and their directly supporting criteria after D3883's schema-id/source-first-admission
 correction. This explicitly authorizes only this one new schema's creation and atomic ordinary
@@ -13,7 +22,7 @@ unaccepted labels for those clauses are history; this does not accept unrelated 
 obligations or claim actual source delivery. Decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
-- **Status:** accepted — [[D3376]]; independently accepted §§1–3 base-source boundary on 2026-10-16, with §3a/current adoption previously jointly accepted. Implementation and all actual production/qualification/release obligations remain.
+- **Status:** implementing — [[D3376]]; independently accepted §§1–3 base-source boundary on 2026-10-16, with §3a/current adoption previously jointly accepted. Shared schema/pure loader/installed-source work is underway; point/history factories and complete actual consumer/qualification/release obligations remain.
 - **Author:** codex
 - **Created:** 2026-10-08
 - **Design refs:** `design/03-product-breadth.md` (shared evidence and theory/Review journeys); `design/05-in-run-experience.md` (grounded, permission-bounded assistance); ADR-0005
@@ -21,7 +30,7 @@ obligations or claim actual source delivery. Decision:
 - **Depends on:** `runtime-opening-identity.md`; `evidence-value-authority.md`; `module-registration.md`; `review-evidence-compiler.md`
 - **Parent / amends:** runtime-opening-identity's private-artifact boundary and D1; the three opening factories and their existing module/Review source calls
 - **Supersedes / superseded by:** —
-- **Planning:** existing `planning/runtime-opening-identity/` once accepted; delivery remains in `planning/codex-queue.md`
+- **Planning:** `planning/installed-opening-evidence/`; delivery remains in `planning/codex-queue.md`
 
 ```tabiya-claims
 none
