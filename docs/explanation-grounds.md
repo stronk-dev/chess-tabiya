@@ -16,6 +16,16 @@ This page is the cross-system contract. Runtime payload details remain in
 `docs/branch-runtime.md`; client episode behavior remains in
 `docs/drill-client.md`.
 
+The internal `derived.compare.eval_delta@2` source now computes only the numerical difference
+of two consecutive historical `engine_validated`-labelled centipawn reports on an exact granted
+comparison path. Both packets retain their complete original event/head/node identity; ordering
+is by recorded ply, then original event order. The unchanged 150cp convention applies to safe
+integer differences only. Typed mate blocks a cp pair, overflow produces no witness, and no
+provider comparability, move grade or strategic significance is inferred. The payload explicitly
+says `frame: recorded_cp_numbers` and `comparability: provider_not_established`. This internal
+route is not yet a current learner consumer or renderer; the complete Compare migration remains
+open, including its separate stronger engine-point source and access/publication checks.
+
 Rung-0 structural grading now has eighteen `rules:structure-*` facts. They render generic detector
 grounds because evidence refs carry the feature kind but not its square/file parameters. Exact
 position-specific sentences are recomputed from the run FEN in the structural-reading surface.

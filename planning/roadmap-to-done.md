@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3893]] · **Machine map:**
+2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3894]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,7 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The current internal endpoint checkpoint now fixes one engine-source selection per original
+Compare's internal recorded numerical-difference successor now validates both original packet
+occurrences against the exact full comparison head and granted path before reconstructing the
+predecessor's ply/event-ordered trail. Safe cp subtraction and the unchanged threshold retain
+explicitly unverified provider comparability; no move grade is inferred.87 focused source cases,
+the permanent authority gate and workspace types pass, with independent bounded review clear.
+Full normal make verify build passes7,267 software/424 files, seven isolated performance/four
+files,271 content/27 files and every remaining gate. The actual Compare consumer is not partially switched.
+D3894 tracks implementation/review of the stronger engine-point server/runtime issuer under the
+already accepted sole-service contract. Independent re-read retracts the unnecessary amendment
+blocker: use the established restricted domain-specific constructor, not a generic validator.
+D3863 stays doing; milestone/content states are unchanged.
+
+The prior internal endpoint checkpoint fixes one engine-source selection per original
 stored node, shared groundwork for grade/accuracy/graph and Compare. Genuine modern deliveries
 or actual owned Review reservations precede independent pinned pack reports; all candidate
 dispositions and original ordinals survive. Requested depth/time/node budgets retain their real

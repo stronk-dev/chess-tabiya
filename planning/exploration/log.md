@@ -32733,3 +32733,74 @@ Campaign was the one capability with no API, route or content. Now:
 - Update the existing queue, canonical Review docs, grade RFC checkpoint, work-state and roadmap
   together. No new tracking silo or raw research artifact. Full1.0 objective remains active;
   no milestone/content graduation, browser/native or remote CI completion is claimed.
+
+## 2026-11-01 — Exact recorded Compare numerical differences; point issuer gap
+
+- Continue the active full1.0 goal on accepted F2 §2.3a. The internal eval_delta@2 factory now
+  consumes two genuine original eval packets and one nominal complete comparison scope. Both
+  head/event/column/node/FEN memberships validate before no-witness. The actual original granted
+  trail orders by ply then event sequence; mate remains typed, malformed rows follow predecessor
+  exclusion, safe-integer subtraction retains the unchanged150cp threshold and overflow abstains.
+  Output explicitly reports recorded numbers with provider comparability not established.
+- Independent read-only implementation review finds no blocker. Add all three useful controls:
+  actual root-only attempts, equal-valued same-node occurrences with distinct original receipts,
+  and caller-input mutation after invocation.87 focused cases/three files and workspace types
+  pass. The permanent authority gate passes its complete registered route/falsifier population.
+  Only the new source profile/capability declaration is generated; existing profile bytes stay.
+- First own typecheck catches an excess-key negative's test typing and a branded head-digest
+  mismatch; both are repaired without casts weakening production authority. The first permanent
+  gate catches four intentionally pinned catalogue/profile count additions; update only the new
+  declaration/profile and exact resulting count, preserving every existing assertion.
+- First normal make verify build stops in software-scheduling before either expensive pool:
+  my new evidence-value-authority prerequisite runs inside the mocked recipe-isolation check.
+  Move the new test into the existing recipe, retain its standalone focused Make target and all
+  scheduling assertions. Corrected normal full gates are running; no readiness claim yet.
+- Separate independent source-boundary review confirms D3894: accepted D3863 requires a
+  runtime-recognizable server-issued trajectory source, but the real endpoint/registry/pending
+  owners are server-private and no issuer seam is specified. Record/assign the gap to the existing
+  F2 RFC before any bridge implementation. A narrow domain-specific issuer clarification needs
+  independent acceptance; no generic validator or payload-plus-Boolean authority is invented.
+- Existing tracker sync briefly exposes the new untriaged row and rejects a prose blocker;
+  assign the actual RFC-format blocker. Now3643 rows/1750 live,0 untriaged; D3863 stays doing,
+  D3894 blocked. No complete consumer, access/renderer/API/native or milestone/content promotion.
+
+## 2026-11-01 — Compare source report refresh and bounded re-review
+
+- Corrected normal verification passes scheduling and all evidence authority checks, then stops
+  before the software pools on the existing generated semantic implementation report. Explicit
+  make semantic-validation-update refreshes the actual changed source closure;91 subjects remain
+  unqualified, all343 instrument cases pass,53 population/eight external receipts remain. No
+  qualification, threshold, convention, source population or verification assertion is changed.
+- Independent bounded re-review clears the three added root/occurrence/caller-mutation controls
+  and the Make recipe repair. Corrected full make verify build is running; no full-pass claim yet.
+
+## 2026-11-01 — Retract unnecessary Compare issuer authoring blocker
+
+Challenge D3894's initial conclusion against the accepted text before commissioning more docs.
+Independent re-read finds no clause requiring an amendment for a restricted domain-specific
+constructor implementing the already-required sole RunService issuer. That is ordinary internal
+implementation, not a new caller authority. Correct the ledger/current queue/RFC checkpoint and
+roadmap; move D3894 from blocked-author to doing under F2. Preserve this correction and the
+earlier diagnosis as append-only history rather than silently rewriting the review.
+
+The implementation must still exclude public/client barrels, census its designated server
+importer, independently validate genuine comparison/position/selected operands and exact source/
+receipt joins, and retain concrete registry/pending/access revalidation before invocation and
+publication. Generic payloads, callbacks or validity flags remain refused. No new owner question,
+self-acceptance, feature permission or partial current consumer image follows from the correction.
+
+## 2026-11-01 — Recorded Compare delta checkpoint fully verified
+
+- Full normal make verify build exits zero:7,267 software/424 files in489.30s, seven isolated
+  performance/four files in65.03s,271 content/27 files in63.68s and all remaining contracts.
+  Graduation checks92 documents with zero errors; capability checks104 documents. Source cases,
+  original predecessor profiles, test deadlines and assertions remain. No remote CI/native result.
+- Independent bounded review/re-review clears the actual delta implementation and added controls.
+  Only the new version's fixture/declaration is added; existing source meaning stays unchanged.
+  The explicit semantic report refresh retains91 unqualified subjects/343 passing cases/53
+  populations/eight external receipts; no content or detector qualification is manufactured.
+- D3863/D3894 remain doing. Finish the actual restricted point issuer and exact eight-pair
+  Compare consumer/current preflight/grants/renderer/API/native journey next, not another
+  compatibility pipeline or a finished-feature claim from an isolated helper. No extra authoring
+  approval is required for the established private constructor pattern. Record current progress
+  in the existing queue/RFC/docs/work-state/roadmap; full1.0 goal remains active.

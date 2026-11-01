@@ -1,5 +1,25 @@
 # Codex queue
 
+**Current Compare source work, 2026-11-01 — [[D3863]], [[D3894]]:** accepted F2 §2.3a's
+recorded numerical-difference@2 is implemented internally, with exact original packet/head/
+column/event membership before no-witness and predecessor-equivalent ply/event ordering.
+87 focused source cases and workspace types pass; independent review finds no blocker and its
+three suggested occurrence/root/caller-mutation controls are added. Permanent authority contracts
+and full normal make verify build pass:7,267 software/424 files, seven isolated performance/four
+files,271 content/27 files and all remaining gates. Keep the complete Compare migration open.
+
+Independent contract re-read corrects D3894's initial authoring-blocker diagnosis: accepted F2
+already requires the sole-service-issued nominal point. Implement its domain-specific restricted
+constructor through the existing scheduler-authority pattern; keep it out of public/client barrels
+and census the sole server importer. Independently validate genuine comparison/position/selected
+operands and exact receipt/scope joins; actual registry/pending/access owners still revalidate
+before invocation/publication. No extra owner decision or amendment for constructor spelling;
+no generic reader/validator/payload-plus-Boolean escape hatch. D3894 is doing, not blocked-author.
+The delta route stays internal until the complete consumer image and API/native journey migrate.
+Next implementation wave: finish the point issuer/projection and the exact eight-pair Compare
+consumer as one current image, with actual RunService grants, registered renderers and API/native
+journey verification. Do not treat another isolated source helper as learner-feature completion.
+
 **Verified fixed endpoint checkpoint, 2026-11-01 — [[D3859]], [[D3863]]; [[D3893]] closed:** the internal
 source owner now captures original boundary/modern/registry/request state once per node.
 Actual modern deliveries/reservations precede independently pinned reports; first individually

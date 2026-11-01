@@ -277,3 +277,39 @@ four files,271 content/27 files and every remaining contract. Independent bounde
 prior missing-refusal and fixture/type failures remain in the append-only logs. D3859/D3863 stay
 doing: workflow/GradeSource/Compare point/paired arithmetic/accuracy/graph/current consumer/API/
 native adoption remain. No current learner path is partially switched or marked complete.
+
+## 2026-11-01 — Recorded Compare numerical-difference source
+
+Accepted F2 §2.3a's internal eval_delta@2 now consumes the exact two original packet occurrences
+under a genuine complete comparison/head/path, with stable ply/event order, safe cp arithmetic,
+typed mate exclusion, unchanged threshold and explicit unverified provider comparability.
+87 focused cases/three files, permanent authority contracts and workspace types pass; independent
+read-only review finds no blocker and its three suggested root/occurrence/mutation controls are
+added. Initial type/pinned-count failures and the repaired Make prerequisite/scheduling failure
+remain in the root exploration log. Corrected full normal verification/build remains pending.
+
+Separately record D3894: the stronger trajectory source's server/runtime issuance boundary is
+not specified. The existing endpoint owner remains valid internal groundwork, not runtime point
+authority. Route a bounded sole-issuer/source-image/revalidation/importer clarification to the
+existing F2 RFC for independent acceptance. D3863 stays doing; no partial current consumer image
+or completed access/renderer/API/native journey is claimed.
+
+## 2026-11-01 — Issuer diagnosis corrected before further authoring
+
+Independent re-read withdraws D3894's extra-amendment requirement: accepted F2 already requires
+the sole-service-issued nominal point, and the established restricted domain-specific constructor
+is an internal implementation choice. Keep genuine operand/scope/receipt validation, the sole
+server importer census and concrete current owner checks; generic payload/callback/Boolean mints
+remain prohibited. Correct current tracking to doing under the accepted RFC. No additional owner
+decision or author round is needed merely to choose a constructor spelling; trajectory/current
+consumer implementation and verification still remain.
+
+## 2026-11-01 — Recorded Compare delta checkpoint verified
+
+Full normal make verify build passes7,267 software/424 files, seven isolated performance/four
+files,271 content/27 files and all remaining gates, including92-document graduation checks with
+zero errors and104-document capability checks. Independent bounded review/re-review and87
+focused source cases/types pass. Earlier failures and the withdrawn extra-authoring diagnosis
+remain logged. D3863/D3894 stay doing: implement the restricted point issuer and complete the
+actual eight-pair Compare consumer, grants, renderer/API/native journey next. No partial current
+consumer, qualification, graduated pack, milestone or whole1.0 completion is asserted.

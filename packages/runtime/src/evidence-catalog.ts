@@ -1286,6 +1286,12 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       limitations: ["Only physical recorded-piece routes from the admitted complete path; no plan, threat or recommendation."],
       disposition: { kind: "experimental", reason: "Accepted F2 D3864 internal successor; not a partial module image or current consumer cutover." } }),
     projection("derived.compare_narrative", "derived.compare.eval_delta", "derived", { payloadType: "RecordedEvalDelta", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["delta", "plyOffset"], answerContent: ["evaluation"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("live.stockfish.eval")] } }),
+    projection("derived.compare_narrative", "derived.compare.eval_delta", "derived", { version: 2, payloadType: "RecordedCompareEvalDelta", grounding: "recorded_run", exactness: "measured", confidence: "reported",
+      operands: ["before", "after", "delta", "plyOffset", "frame", "comparability"], answerContent: ["evaluation"], forms: ["sentence", "list", "panel"],
+      semantics: "The safe-integer numerical difference of two consecutive engine_validated-labelled historical cp reports on one exact granted comparison path, under the unchanged STORY_PIVOT_CP convention. Provider comparability is not established.",
+      abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("recorded.inspector.eval_packet"), ref("recorded.inspector.eval_packet")] },
+      limitations: ["Recorded numbers only; not a validated same-engine/bound evaluation change, move grade, significance or recommendation. Mate never becomes cp; overflow abstains."],
+      disposition: { kind: "experimental", reason: "Accepted F2 §2.3a internal source successor. Complete Compare consumer, access, renderer and native adoption remain open; no partial learner cutover." } }),
   ]),
   producer("derived.story", "derived", "packages/runtime/src/story.ts:storyMoments; suggestTitle", "local", "sync", [
     projection("derived.story", "derived.story.last_level", "derived", { version: 2, payloadType: "StoryLastLevel", grounding: "declared_convention", exactness: "measured", confidence: "reported",

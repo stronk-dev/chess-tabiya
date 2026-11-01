@@ -32183,7 +32183,7 @@
       "id": "D3863",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f7ad6c7a2a1f876c3e8eccbb7c60a73b01edee06faae58539af178c03a885964",
+      "sourceDigest": "sha256:f97e1596e60f809e677b920129e9efd97eea74106e1146519c5c5eed2ff007fe",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32456,6 +32456,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/recorded-engine-endpoints.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3894",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1be7900b9c304383a9af65cf58de20d9ee7bc922bbea7c4566bbf19291477e4c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-01"
     }
   ]
 }

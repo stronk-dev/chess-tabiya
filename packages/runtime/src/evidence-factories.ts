@@ -170,6 +170,7 @@ import { transitionReading, transitionSemanticFacts } from "./transition.js";
 import { branchPath } from "./branch-path.js";
 import { recordedPieceRoutes, structureDeltaEntries } from "./compare-strip-values.js";
 import { isRecordedComparisonSource, recordedComparisonData, recordedComparisonPathValue, assertRecordedComparisonPath, type RecordedComparisonSource, type RecordedComparisonPath } from "./recorded-comparison.js";
+import { recordedComparisonEvalDeltaValue, type RecordedCompareEvalDeltaInput } from "./recorded-comparison-eval.js";
 import { isRecordedReviewBoundary, readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdentity } from "./types.js";
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
@@ -1437,6 +1438,16 @@ export const createDerivedCompareEvalDeltaV1Evidence = (() => {
     }
     return Object.freeze(result);
   });
+})();
+
+export const createDerivedCompareEvalDeltaV2Evidence = (() => {
+  const route = "derived.compare.eval_delta@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("recorded.inspector.eval_packet@1"), after: sealed("recorded.inspector.eval_packet@1"),
+    comparison: value("an owned recorded comparison", isRecordedComparisonSource), branchId: value("a granted branch id", isText) }], result: "population" },
+    (input: RecordedCompareEvalDeltaInput) => {
+      const payload = recordedComparisonEvalDeltaValue(input);
+      return Object.freeze(payload === undefined ? [] : [mint(route, symbol, payload, input, [input.before, input.after])]);
+    });
 })();
 
 export const createDerivedCompareStructureDeltaV1Evidence = (() => {

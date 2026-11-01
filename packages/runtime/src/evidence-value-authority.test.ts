@@ -49,6 +49,7 @@ import { HINT_FAMILY_POSITIVES, sealedHintLine } from "./testing/hint-fixture.js
 import { occurrenceFixture, occurrencePage } from "./testing/maia-occurrence-fixture.js";
 import { recordedInspectorAttachment, recordedInspectorSelection } from "./testing/recorded-inspector-fixture.js";
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
+import { recordedComparisonEvalFixture } from "./testing/recorded-comparison-eval-fixture.js";
 import { recordedLastLevelFixture } from "./testing/recorded-last-level-fixture.js";
 import { collectRecordedReviewSourcePopulation } from "./review-evidence.js";
 import { collectRecordedReviewMoments } from "./recorded-review-moments.js";
@@ -264,8 +265,8 @@ describe("value authority: registry equality", () => {
     // (rfc/bounded-target-policy-composition.md §4).
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
-    // F2 §2.3m adds the internal complete landing-capture computed prerequisite.
-    expect(ACTIVE).toHaveLength(310);
+    // F2 §2.3m adds landing captures; §2.3a adds the recorded numerical-difference successor.
+    expect(ACTIVE).toHaveLength(311);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -340,7 +341,7 @@ describe("value authority: registry equality", () => {
     const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
     expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
     const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
-    const localTactical = ["derived.compare.piece_route@2", "derived.compare.structure_delta@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.story.last_level@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
+    const localTactical = ["derived.compare.eval_delta@2", "derived.compare.piece_route@2", "derived.compare.structure_delta@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.story.last_level@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
     const sequences = Object.keys(RECORDED_SEQUENCE_HORIZONS).sort();
     expect(allExtra.filter(route => sequences.includes(route))).toEqual(sequences);
@@ -1095,6 +1096,9 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     profiles.set(route, { valid: { window }, falsify: refused(route, { window: { ...window } }) });
   }
   const recordedComparison = recordedComparisonFixture();
+  const recordedDelta = recordedComparisonEvalFixture();
+  const deltaInput = { comparison: recordedDelta.comparison, branchId: recordedDelta.main, before: recordedDelta.packets[0]!, after: recordedDelta.packets[1]! };
+  profiles.set("derived.compare.eval_delta@2", { valid: deltaInput, falsify: refused("derived.compare.eval_delta@2", { ...deltaInput, comparison: { ...recordedDelta.comparison } }) });
   const humanRun = recordHumanObservation(humanObservationRun(), splitCandidates());
   const humanPivotal = createRecordedPivotalSource({ run: humanRun, branchId: humanRun.activeCursor.branchId, throughNodeId: humanRun.activeCursor.nodeId, kind: "human_divergence" });
   profiles.set("derived.pivotal.human_divergence@2", { valid: { recordedPivotal: humanPivotal }, falsify: refused("derived.pivotal.human_divergence@2", { recordedPivotal: { ...humanPivotal } }) });

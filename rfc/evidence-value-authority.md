@@ -1,5 +1,17 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
+**Recorded numerical-difference implementation, 2026-11-01:** accepted §2.3a's internal
+eval_delta@2 now consumes the exact two original packet occurrences and nominal comparison
+scope, reconstructs the complete granted engine-labelled trail and preserves stable ply/event
+order, safe-integer arithmetic and the existing threshold. It reports recorded numbers only,
+never engine comparability or move quality.87 focused cases, permanent authority contracts/types
+and full normal make verify build pass:7,267 software/424 files, seven isolated performance/four
+files,271 content/27 files and all remaining gates. D3863 stays open. D3894 tracks implementation of the stronger point's sole server/runtime
+issuer, not a missing author approval: independent contract re-read withdraws that extra blocker.
+The existing domain-specific restricted issuer pattern implements the already-required sole
+service authority; genuine operands/joins and concrete current owner checks still apply. No
+generic caller validator or payload-plus-Boolean bridge, new authority or partial consumer image.
+
 **Recorded-empty source repair completed, 2026-11-01:** D3870's independently accepted
 `archive/recorded-selection-telemetry.md` lands run0.19/storage31. Genuine explicit human empty
 telemetry now reaches recorded selection, human-divergence and Review's honest-empty fold;

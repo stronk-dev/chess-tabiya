@@ -70,6 +70,13 @@
       "3a0858d8ad5a5ac76037ca137f0dc11163087b17fb819a06ba3552da29f8eee6"
     ]
   },
+  "derived.compare.eval_delta@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "ee9ddf15be7425365382ea6f0a07e7cbe50a2576e4ad70754aa8f6f8f7992c2d"
+    ]
+  },
   "derived.compare.piece_route@1": {
     "availability": "available",
     "cardinality": 9,
