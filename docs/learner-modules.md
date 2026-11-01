@@ -9,9 +9,9 @@ answer capabilities and budgets. It selects no chess fact by itself and authors 
 
 | file | role |
 |---|---|
-| `packages/runtime/src/module-contract.ts` | the fourteen-field contract, the branched answer-capability image, `compileModuleRegistry` |
+| `packages/runtime/src/module-contract.ts` | the module contract with an explicit current consumer, the branched answer-capability image, `compileModuleRegistry` |
 | `packages/runtime/src/module-policy.ts` | `MODULE_POLICIES` — the one policy authority (intent, action, timings, capabilities, roles, budgets, forms, empty behaviour, seat, novelty) |
-| `packages/runtime/src/evidence-catalog.ts` | `MODULE_CONSUMER_ACCEPTS` — the one exact `id@version` acceptance image, and the nine `module.*` F1 consumers derived from it |
+| `packages/runtime/src/evidence-catalog.ts` | `MODULE_CURRENT_IMAGE` — the current versions, acceptance and operation image, with ten `module.*` F1 consumers derived from it |
 | `packages/runtime/src/module-registry.ts` | `MODULE_DECLARATIONS`, `MODULE_REGISTRY` (compiled at import), `assertModuleRegistry`, the per-pair execution table |
 | `packages/runtime/src/module-packets.ts` | `compileModulePacket` — the single operation every `module.*` consumer names |
 | `packages/runtime/src/module-reducers.ts` | admission, ordering, identity, subsumption, bounded novelty and the fact backstop |
@@ -126,7 +126,12 @@ remain separate work.
   execution bindings after finalized demand/timing/square/disclosure checks, before any selected
   module collects. Theory's local preview is covered too, before shapes/authored claims
   are read; its online path still rechecks before acquisition and after I/O. All these
-  effective consumers pass before the first source read. Server pack
+  effective consumers pass before the first source read. Compare additionally preflights its
+  complete current V2 consumer before its service-owned original comparison sources. Its eight
+  bindings use exact engine points, scoped structure, recorded numerical differences and genuine
+  recorded piece routes; its missing engine points retain per-node absence rather than invented
+  scores. Current consumer identity is derived from `MODULE_CURRENT_IMAGE` across declarations,
+  packet admission, reducers, adapters and browser receiving. Server pack
   and shape inputs are prepared independently on demand, once per runtime query:
   only Structure and Theory read the shape catalogue, and only Theory projects
   released authored claims or validates Explorer summaries. Sight, Threat Radar,

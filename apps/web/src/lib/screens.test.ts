@@ -78,6 +78,7 @@ import { latestCheckpoint } from "./screen-model.js";
 import { workflowPreferenceKey } from "./assistance-preference.js";
 import type { RunStateSnapshot } from "./run-state.js";
 import * as moduleResponses from "./module-query-response.js";
+import { comparisonSourcesForRun } from "../../../../packages/runtime/src/testing/recorded-comparison-point-fixture.js";
 
 const assistanceKey = (context: string): string => `tabiya.assistance.v1.${context}`;
 const workflowKey = (context: string): string => `tabiya.workflow.v1.${context}`;
@@ -101,7 +102,13 @@ async function testAssistanceAuthority(request: RequestedAssistanceV1): Promise<
 function testModuleQuery(run: DrillRun) {
   return vi.fn(async (body: { readonly assistance: RequestedAssistanceV1; readonly query: unknown }) => {
     const assistance = await testAssistanceAuthority(body.assistance);
-    const { page } = queryModules({ run, assistance, role: "host", session: assistance.context, request: parseModuleQueryRequest(body.query) });
+    const request = parseModuleQueryRequest(body.query);
+    const { page } = queryModules({ run, assistance, role: "host", session: assistance.context, request, sources: {
+      get comparison() {
+        return (request.timing === "checkpoint" || request.timing === "review") && run.branches.length > 1
+          ? comparisonSourcesForRun(run, assistance, request.nodeId, request.timing, "host") : undefined;
+      },
+    } });
     return JSON.parse(JSON.stringify({ page })) as unknown;
   });
 }
@@ -1890,6 +1897,34 @@ describe("Layer 3 screens", () => {
       expect(screen.onSwitchBranch).not.toHaveBeenCalled(); // It resumes the opponent; entering a recorded comparison must not.
       expect(screen.snapshots.get("current")!.run.activeCursor).toEqual({ nodeId: subject.parentId, branchId: original.activeCursor.branchId });
       expect(screen.snapshots.get("current")!.run.nodes).toEqual(alternate.nodes);
+      await unmount(screen.component);
+    });
+
+    it.each(["white", "black"] as const)("D3903 retires a completed Compare action after an actual %s evidence attachment", async side => {
+      const original = actionRun(side), root = original.nodes[0]!.id;
+      const alternate = revealFeedback(commitMove(rewind(original, root, at).run, side === "white" ? "g1f3" : "g8f6", { at }).run, at).run;
+      const screen = actionScreen(alternate);
+      await assistanceSettled();
+      const enter = await openComparison(), requests = screen.onModuleQuery.mock.calls.length;
+      const attached = attachEvidence(alternate, alternate.activeCursor.nodeId, ["engine:later-attachment"], {
+        kind: "eval", source: "engine_validated", values: { centipawns: 17 },
+      }, at).run;
+      screen.replace(attached);
+      await assistanceSettled(); await tick();
+      expect(action("compare_coach")).toBeNull();
+      enter.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(screen.onRewind).not.toHaveBeenCalled();
+      // Retirement is intentional: no stale answer and no unsolicited on-request retry.
+      expect(screen.onModuleQuery.mock.calls.slice(requests).some(([body]) => {
+        const request = parseModuleQueryRequest(body.query);
+        return "requested" in request && request.requested?.includes("compare_coach");
+      })).toBe(false);
+      const seat = document.querySelector('[data-module="compare_coach"]')!;
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")!.click();
+      await vi.waitFor(() => expect(action("compare_coach")).not.toBeNull());
+      action("compare_coach")!.click();
+      await vi.waitFor(() => expect(screen.onRewind).toHaveBeenCalledWith({ nodeId: root, branchId: original.activeCursor.branchId }));
       await unmount(screen.component);
     });
 

@@ -5,10 +5,13 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { presentationAdapter } from "./presentation-contract.js";
+import * as consumerOperations from "./evidence-consumer-operations.js";
+import { compileModulePacket } from "./module-packets.js";
 
 import {
   EVIDENCE_CONTRACT_DECLARATIONS,
   MODULE_CONSUMER_ACCEPTS,
+  MODULE_CURRENT_IMAGE,
   MODULE_SUCCESSOR_REBASE,
   PRIMARY_EVIDENCE_MANIFEST,
   RECORDED_PATH_SUCCESSOR_REFS,
@@ -16,7 +19,7 @@ import {
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
   WAVE_C_MODULE_PROJECTION_REFS,
 } from "./evidence-catalog.js";
-import { compileEvidenceManifest, EvidenceManifestError, type VersionedEvidenceId } from "./evidence-contract.js";
+import { assertEvidenceConsumerOperations, compileEvidenceManifest, EvidenceManifestError, type EvidenceConsumerOperation, type VersionedEvidenceId } from "./evidence-contract.js";
 import { MODULE_ANSWER_CAPABILITY_IMAGE, MODULE_IDS, ModuleContractError, compileModuleRegistry, type ModuleDeclaration } from "./module-contract.js";
 import { MODULE_POLICIES, moduleEvidenceRole, moduleSessions } from "./module-policy.js";
 import { HINT_DISCLOSURE_PROJECTION_IDS, HINT_HORIZON_PROJECTION_IDS, hintDeclarationRow, hintDisclosureIdentity } from "./hint-registry.js";
@@ -43,10 +46,23 @@ const pairs = MODULE_REGISTRY.modules.flatMap((module) => accepted(module).map((
 const replace = (id: string, change: (module: ModuleDeclaration) => ModuleDeclaration) => MODULE_DECLARATIONS.map((module) => module.id === id ? change(module) : module);
 
 describe("module registration — the compiled production registry", () => {
+  it("D3902 registers every exact current tuple with the actual shared compiler function", () => {
+    const registered = Reflect.get(consumerOperations, "MODULE_EVIDENCE_CONSUMER_OPERATIONS") as readonly EvidenceConsumerOperation[] | undefined;
+    expect(registered).toBeDefined();
+    expect(registered!.map(row => row.consumer)).toEqual(MODULE_CURRENT_IMAGE.map(row => row.consumer));
+    expect(registered!.every(row => row.operation === compileModulePacket)).toBe(true);
+    const ids = MODULE_CURRENT_IMAGE.map(row => row.consumer.id);
+    expect(() => assertEvidenceConsumerOperations(ids, PRIMARY_EVIDENCE_MANIFEST.consumers, registered!)).not.toThrow();
+    expect(() => assertEvidenceConsumerOperations(ids, PRIMARY_EVIDENCE_MANIFEST.consumers, registered!.slice(1))).toThrow(/not set-equal/u);
+    const obsolete = registered!.map(row => row.consumer.id === "module.compare_coach" ? { ...row, consumer: { ...row.consumer, version: 1 } } : row);
+    expect(() => assertEvidenceConsumerOperations(ids, PRIMARY_EVIDENCE_MANIFEST.consumers, obsolete)).toThrow(/unsupported version/u);
+    const wrongFunction = registered!.map((row, index) => index === 0 ? { ...row, operation: function notTheCompiler() {} } : row);
+    expect(() => assertEvidenceConsumerOperations(ids, PRIMARY_EVIDENCE_MANIFEST.consumers, wrongFunction)).toThrow(/declares/u);
+  });
   it("[A1] compiles all eleven fourteen-field declarations at import, in MODULE_IDS order", () => {
     expect(MODULE_REGISTRY.modules.map((module) => module.id)).toEqual(MODULE_IDS);
-    // Fourteen fields; Guided Hint alone carries the fifteenth `disclosure` declaration (rfc/hint-distance.md §9).
-    for (const module of MODULE_REGISTRY.modules) expect(Object.keys(module).sort()).toHaveLength(module.id === "guided_hint" ? 15 : 14);
+    // The current consumer is explicit; Guided Hint alone also carries disclosure.
+    for (const module of MODULE_REGISTRY.modules) expect(Object.keys(module).sort()).toHaveLength(module.id === "guided_hint" ? 16 : 15);
     // The registry is compiled by the production module, not by a test.
     const registry = readFileSync(new URL("packages/runtime/src/module-registry.ts", ROOT), "utf8");
     expect(registry).toMatch(/^export const MODULE_REGISTRY: CompiledModuleRegistry = compileModuleRegistry\(MODULE_DECLARATIONS, moduleEvidenceClosure\(PRIMARY_EVIDENCE_MANIFEST\)\);$/mu);
@@ -146,7 +162,7 @@ describe("module registration — the compiled production registry", () => {
     // + the Explorer summary; 1 awaiting.
     expect(pairs).toHaveLength(299);
     expect(pairs.length + awaiting.length).toBe(300);
-    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(188);
+    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(190);
     expect(Object.fromEntries(MODULE_REGISTRY.modules.map((module) => [module.id, accepted(module).length]))).toEqual({
       rules_floor: 0, sight_on_request: 23, blunder_prevention: 3, threat_radar: 7, postcommit_nudge: 52, structure_nudge: 7,
       theory_breadcrumb: 4, guided_hint: 35, compare_coach: 8, review_map: 85, full_inspector: 75,
@@ -253,7 +269,7 @@ describe("module registration — the compiled production registry", () => {
     for (const pair of MODULE_PAIR_EXECUTION) {
       if (pair.status === "blocked_dependencies") expect(pair.blockers.length).toBeGreaterThan(0);
       // Flip rule: executable exactly when the operation acquires the pair and its adapter exists.
-      const adapter = presentationAdapter({ id: `module.${pair.module}`, version: 1 }, pair.projection) !== undefined;
+      const adapter = presentationAdapter(MODULE_REGISTRY.byId.get(pair.module)!.consumer!, pair.projection) !== undefined;
       const acquired = MODULE_OPERATIONS.some((operation) => operation.module === pair.module && operation.projections.some((projection) => key(projection) === key(pair.projection)));
       expect(pair.status === "executable", `${pair.module} ${key(pair.projection)}`).toBe(adapter && acquired);
       if (pair.status === "blocked_dependencies" && !adapter) expect(pair.blockers.some((blocker) => blocker.owner === "evidence-presentation")).toBe(true);

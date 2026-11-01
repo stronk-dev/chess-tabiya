@@ -104,6 +104,7 @@ export type ModuleEmptyBehavior =
 /** The fourteen-field learner-module contract. It selects no chess facts by itself. */
 export interface ModuleDeclaration {
   readonly id: ModuleId;
+  readonly consumer: VersionedEvidenceId | null;
   readonly intent: string;
   readonly learnerAction: string;
   readonly accepts: ModuleEvidenceDeclaration;
@@ -278,19 +279,20 @@ function assertClosure(modules: readonly ModuleDeclaration[], closure: ModuleEvi
   const consumers = new Map(closure.consumers.map((value) => [refKey(value.consumer), value.accepts.map(refKey)]));
   const answers = closure.answerContent === undefined ? undefined : new Map(closure.answerContent.map((value) => [refKey(value.projection), value.answerContent]));
   for (const module of modules) {
+    if (module.id === "rules_floor" ? module.consumer !== null : module.consumer?.id !== `module.${module.id}` || !Number.isSafeInteger(module.consumer.version) || module.consumer.version < 1) fail("MODULE_CONSUMER_MISMATCH", `${module.id} has no exact current consumer`);
     if (module.accepts.kind === "none") {
-      if (consumers.has(`module.${module.id}@1`)) fail("MODULE_CONSUMER_MISMATCH", "rules_floor must not register an evidence consumer");
+      if (closure.consumers.some(value => value.consumer.id === `module.${module.id}`)) fail("MODULE_CONSUMER_MISMATCH", "rules_floor must not register an evidence consumer");
       continue;
     }
     const awaiting = module.accepts.awaiting.map(refKey);
     if (module.accepts.kind === "blocked_dependencies") {
-      if (consumers.has(`module.${module.id}@1`)) fail("MODULE_CONSUMER_MISMATCH", `${module.id} is blocked and must not register an evidence consumer`);
+      if (consumers.has(refKey(module.consumer!))) fail("MODULE_CONSUMER_MISMATCH", `${module.id} is blocked and must not register an evidence consumer`);
       if (awaiting.some((value) => projections.has(value))) fail("MODULE_EVIDENCE_UNRESOLVED", `${module.id} awaits a projection that already compiles`);
       continue;
     }
     const accepted = module.accepts.projections.map((value) => refKey(value.projection));
     if (accepted.some((value) => !projections.has(value)) || awaiting.some((value) => projections.has(value))) fail("MODULE_EVIDENCE_UNRESOLVED", `${module.id} compiled/awaiting projection partition is false`);
-    const consumer = consumers.get(`module.${module.id}@1`);
+    const consumer = consumers.get(refKey(module.consumer!));
     if (consumer === undefined || consumer.join("|") !== accepted.join("|")) fail("MODULE_CONSUMER_MISMATCH", `${module.id} consumer is absent or not order-equal to accepts`);
     if (answers !== undefined) {
       const image = moduleAnswerImage(module.answerCeiling);

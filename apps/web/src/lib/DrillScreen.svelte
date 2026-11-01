@@ -1001,6 +1001,7 @@
   let requestedAssistance: RequestedAssistanceV1 | undefined = $state();
   let seats = $derived(onModuleQuery === undefined ? [] : composedSeats(compiledAssistance));
   let seatPackets: ReadonlyMap<PlaySeatModule, ParsedModulePacket> = $state.raw(new Map());
+  const seatComparisonTargets = new WeakMap<ParsedModulePacket, Readonly<{ nodeId: string; branchId: string }>>();
   let seatSubjects: ReadonlyMap<PlaySeatModule, string> = $state.raw(new Map());
   let seatPending: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
   let seatFailed: ReadonlySet<PlaySeatModule> = $state.raw(new Set());
@@ -1090,6 +1091,10 @@
         seatPending = withSeat(seatPending, module, false);
         seatFailed = withSeat(seatFailed, module, false);
         const packet = page.packets.find((candidate) => candidate.module === module);
+        if (packet?.module === "compare_coach") {
+          const comparison = moduleComparisonForSubject(run, subjectNodeId), peer = comparison?.columns[1];
+          if (comparison !== undefined && peer !== undefined) seatComparisonTargets.set(packet, Object.freeze({ nodeId: comparison.forkNodeId, branchId: peer.branchId }));
+        }
         const suppression = page.suppressions.find((candidate) => candidate.module === module);
         if (packet !== undefined) { nextPackets.set(module, packet); nextSubjects.set(module, subjectNodeId); packets.push(packet); delete nextDoors[module]; }
         else {
@@ -1128,9 +1133,7 @@
       const branchId = branchPath(run, run.activeCursor.branchId).some(node => node.id === subject.id) ? run.activeCursor.branchId : subject.branchId;
       return { nodeId: subject.parentId, branchId };
     }
-    const recorded = moduleComparisonForSubject(run, subject.id);
-    const other = recorded?.columns[1]?.branchId;
-    return recorded === undefined || other === undefined ? undefined : { nodeId: recorded.forkNodeId, branchId: other };
+    return seatComparisonTargets.get(packet);
   }
 
   function seatActionBlock(): string | undefined {

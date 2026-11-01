@@ -13,7 +13,7 @@
 
 import type { Color, Role, SquareName } from "chessops/types";
 
-import { MODULE_CONSUMER_IDS } from "./evidence-catalog.js";
+import { MODULE_CURRENT_IMAGE } from "./evidence-catalog.js";
 import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
 import { RULES_EVIDENCE_FACTS, type RulesEvidenceFact } from "./evidence-ref.js";
 import type { AdapterSpec, ComponentValue, ConventionReceipt, DistributionOperand, PresentationKit } from "./presentation-contract.js";
@@ -77,7 +77,7 @@ export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRo
   classRow("runtime.queued_tablebase@1", "non_presentational_operation", "apps/server/src/queued-tablebase.ts", "consumeQueuedTablebaseEvidence"),
   classRow("runtime.repertoire_scan@1", "non_presentational_operation", "apps/server/src/repertoire.ts", "consumeRepertoireCorpus"),
   classRow("theory.shape_firing@1", "ordinary_presented", "packages/runtime/src/shape-firing.ts", "consumeShapeFiring"),
-  ...MODULE_CONSUMER_IDS.map((id) => classRow(`${id}@1`, id === "module.full_inspector" ? "inspector_presented" : "module_presented", "packages/runtime/src/evidence-catalog.ts", id)),
+  ...MODULE_CURRENT_IMAGE.map(({ consumer, implementation }) => classRow(`${consumer.id}@${consumer.version}`, consumer.id === "module.full_inspector" ? "inspector_presented" : "module_presented", "packages/runtime/src/module-packets.ts", implementation)),
 ]);
 
 /** The class of one `id@version` consumer, or `undefined` when it is unclassified. */

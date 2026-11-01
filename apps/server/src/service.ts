@@ -42,6 +42,7 @@ import {
   reviewAnalysis,
   reviewMapProjection,
   moduleEvidenceRole,
+  moduleDecisionStamp,
   queryModules,
   assertProviderDelivery,
   compileEvidenceConsumerExecution,
@@ -147,6 +148,7 @@ import { expandPackAuthoredBoundary, orchestratePackMove, orchestratePackStart, 
 import { applyRecordedEngineGuard, applyRulesGuard } from "./guard.js";
 import {
   PackRegistry,
+  RecordedMeasurementSourceError,
   type PackRecord,
   type PackSummary,
 } from "./pack-registry.js";
@@ -184,6 +186,8 @@ import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
 import { InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
+import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
+import type { RecordedComparisonSource } from "../../../packages/runtime/src/recorded-comparison.js";
 import { InspectorLedgerSourceOwner, type InspectorLedgerSource } from "./inspector-ledger-source.js";
 import { compileAuthoritativeAssistance, finalizeAssistanceEffects, MODULE_SOURCE_AUTHORITY, parseRequestedAssistanceV1, type RequestedAssistanceV1, type ServerEvidenceAvailabilityReceipt } from "../../../packages/runtime/src/assistance-exchange.js";
 import type { ReviewEvidenceCoordinator } from "./review-evidence.js";
@@ -554,6 +558,7 @@ export class RunService {
   readonly #packRegistry: PackRegistry | undefined;
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
   readonly #inspectorContexts = new InspectorRecordedContextOwner();
+  readonly #comparisonPoints: RecordedComparisonPointOwner;
   readonly #inspectorLedgerSources: InspectorLedgerSourceOwner;
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
@@ -608,6 +613,7 @@ export class RunService {
       options.evidenceQueue.attach({ evidenceJobs: storage.evidenceJobs, setEvidenceJobListener: (listener) => storage.setEvidenceJobListener!(listener) });
     }
     this.#packRegistry = options.packRegistry;
+    this.#comparisonPoints = new RecordedComparisonPointOwner(storage, this.#packRegistry, this.#reviewEvidence);
     this.#inspectorLedgerSources = new InspectorLedgerSourceOwner(this.#inspectorContexts, this.#packRegistry);
     this.#openingCatalogue = options.openingCatalogue;
     this.#progress = options.progressStorage;
@@ -2953,6 +2959,23 @@ export class RunService {
 
   readInspectorRecordedContext(context: InspectorRecordedContext) { return this.#inspectorContexts.read(context); }
 
+  resolveComparisonRecordedContext(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, query: ComparisonSelection, signal: AbortSignal) {
+    const owner = Object.freeze({ ...principal }), finalized = structuredClone(assistance), selection = Object.freeze({ ...query });
+    return this.#comparisonPoints.resolve(selection, columns => {
+      signal.throwIfAborted(); this.#refuseRatedAssistance(runId);
+      const { stored, role } = requireRead(this.#storage, runId, owner);
+      for (const column of columns ?? []) this.#requireRecordedBranchDisclosure(runId, owner, stored.run, column.branchId);
+      return { run: stored.run, principal: owner, role: moduleEvidenceRole(role), assistance: finalized,
+        timing: selection.timing, access: this.assistanceAuthority(runId, owner) };
+    }, signal);
+  }
+
+  resolveComparisonPointSource(context: RecordedComparisonContext, input: Readonly<{ comparison: RecordedComparisonSource; nodeId: string; signal: AbortSignal }>) {
+    return this.#comparisonPoints.resolvePoint(context, input);
+  }
+
+  readComparisonRecordedContext(context: RecordedComparisonContext) { return this.#comparisonPoints.read(context); }
+
   acquireInspectorLedgerSource(context: InspectorRecordedContext,
     input: Readonly<{ projection: "recorded.engine.eval@1" | "recorded.tablebase.result@1"; signal: AbortSignal }>) {
     if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
@@ -2977,7 +3000,7 @@ export class RunService {
    * persisted): post-commit/checkpoint/review receipts join their existing durable boundary events;
    * pre-/at-commit receipts are the ephemeral request receipts ([[D1866]]).
    */
-  queryModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = {}) {
+  queryModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = {}, signal: AbortSignal = new AbortController().signal) {
     this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
@@ -2986,9 +3009,22 @@ export class RunService {
     // The runtime still preflights every effective local consumer before acquiring either.
     let shapes: ModuleSourceContext["shapes"];
     let authoredAt: ModuleSourceContext["authoredAt"];
+    let comparisonContext: RecordedComparisonContext | undefined;
     const service = this;
     const sources: ModuleSourceContext = {
       ...explorer,
+      get comparison() {
+        if (request.timing !== "checkpoint" && request.timing !== "review") return undefined;
+        try {
+          comparisonContext = service.resolveComparisonRecordedContext(runId, principal, assistance,
+            { nodeId: request.nodeId, decisionDigest: moduleDecisionStamp(run).digest, timing: request.timing }, signal);
+          return comparisonContext === undefined ? undefined : service.#comparisonPoints.sources(comparisonContext);
+        } catch (error) {
+          if (error instanceof RecordedComparisonContextError) throw error;
+          if (error instanceof TypeError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Recorded comparison source is invalid or changed");
+          throw error;
+        }
+      },
       get shapes() {
         return shapes ??= service.#shapes?.list().map((summary) => {
           const document = service.#shapes!.required(summary.id).document;
@@ -3009,11 +3045,14 @@ export class RunService {
       },
     };
     try {
-      return queryModules({
+      const result = queryModules({
         run, assistance, request, ...this.#moduleViewer(runId, principal, run, role),
         sources,
       }).page;
+      if (comparisonContext !== undefined) this.readComparisonRecordedContext(comparisonContext);
+      signal.throwIfAborted(); return result;
     } catch (error) {
+      if (error instanceof RecordedComparisonContextError) throw new ServerError(error.reason === "permission_withheld" ? "ASSISTANCE_WITHHELD" : "EVIDENCE_UNAVAILABLE", error.message);
       if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) {
         throw new ServerError("EVIDENCE_UNAVAILABLE", "Module execution contract is unavailable");
       }
@@ -3021,15 +3060,17 @@ export class RunService {
         if (error.code === "MODULE_QUERY_WITHHELD") throw new ServerError("ASSISTANCE_WITHHELD", error.message);
         throw new ServerError("INVALID_REQUEST", error.message);
       }
+      if (error instanceof RecordedMeasurementSourceError || (comparisonContext !== undefined && error instanceof TypeError)) throw new ServerError("EVIDENCE_UNAVAILABLE", "Recorded comparison source is invalid or changed");
       throw error;
     }
   }
 
   /** Provider work follows authenticated finalized demand, never a raw browser module choice. */
   async queryModulesWithProviders(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, corpus?: Pick<CorpusSource, "page">, signal?: AbortSignal) {
+    const requestSignal = signal ?? new AbortController().signal;
     // The pure preview validates authority/subject/disclosure and determines admitted demand.
     // It does not persist novelty, history or credit and is never returned to the browser.
-    const preview = this.queryModules(runId, principal, assistance, request);
+    const preview = this.queryModules(runId, principal, assistance, request, {}, requestSignal);
     if (!preview.packets.some((packet) => packet.module === "theory_breadcrumb")) return preview;
     // Compile the complete consumer, including transitive source-absence and latency policies.
     // A separately valid provider projection cannot bypass another invalid Theory binding.
@@ -3072,7 +3113,7 @@ export class RunService {
     }
     if (signal?.aborted) throw Object.assign(new Error("Module request cancelled"), { name: "AbortError" });
     // Re-read authorization/run after I/O. A changed decision must not disclose an old request.
-    const page = this.queryModules(runId, principal, assistance, request, explorer);
+    const page = this.queryModules(runId, principal, assistance, request, explorer, requestSignal);
     if (page.decision.digest !== preview.decision.digest) throw new ServerError("INVALID_REQUEST", "Module decision changed while acquiring Explorer evidence");
     return page;
   }

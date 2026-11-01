@@ -8,6 +8,7 @@
 import {
   INSPECTOR_FAMILY_IDS,
   MODULE_IDS,
+  MODULE_CURRENT_IMAGE,
   MODULE_QUERY_PROTOCOL,
   moduleDisclosureDigest,
   parsePresentationReceipt,
@@ -30,7 +31,7 @@ export interface ParsedModulePacket {
   readonly budget: ModuleBudgetReceipt;
   readonly noveltyAbstained: boolean;
   readonly empty: ModuleEmptyState | null;
-  readonly unavailable: readonly { readonly projection: string; readonly reason: string }[];
+  readonly unavailable: readonly { readonly projection: string; readonly reason: string; readonly nodeId?: string }[];
   readonly disclosure: ModuleDisclosureReceipt;
 }
 
@@ -96,6 +97,8 @@ function parsePacket(value: unknown, page: { readonly runId: string; readonly ti
   if (packet.timing !== page.timing) fail("packet timing differs from the page");
   if (packet.initiative !== "proactive" && packet.initiative !== "on_request" && packet.initiative !== "explicit_mode") fail("initiative");
   const items = parsePresentationReceipt(packet.receipt);
+  const consumer = MODULE_CURRENT_IMAGE.find(row => row.moduleId === module)?.consumer;
+  if (items.some(item => item.adapter.consumer.id !== consumer?.id || item.adapter.consumer.version !== consumer.version)) fail("receipt is not from this module's current consumer");
   const disclosure = record(packet.disclosure, "disclosure") as unknown as ModuleDisclosureReceipt;
   const { digest, ...body } = disclosure;
   if (moduleDisclosureDigest(body) !== digest) fail("disclosure digest mismatch");
@@ -103,7 +106,13 @@ function parsePacket(value: unknown, page: { readonly runId: string; readonly ti
   if (disclosure.decisionDigest !== page.decisionDigest || disclosure.effectiveConfigDigest !== page.effectiveConfigDigest) fail("disclosure is bound to a different decision or configuration");
   if (disclosure.componentDigests.length !== items.length || disclosure.componentDigests.some((entry, index) => entry !== items[index]!.componentDigest)) fail("disclosure does not bind the delivered components");
   if (!Array.isArray(packet.unavailable)) fail("unavailable");
-  const unavailable = (packet.unavailable as unknown[]).map((entry) => { const row = record(entry, "unavailable"); keys(row, ["projection", "reason"], "unavailable"); return Object.freeze({ projection: String(row.projection), reason: String(row.reason) }); });
+  const unavailable = (packet.unavailable as unknown[]).map((entry) => {
+    const row = record(entry, "unavailable"), point = Object.hasOwn(row, "nodeId");
+    keys(row, point ? ["projection", "reason", "nodeId"] : ["projection", "reason"], "unavailable");
+    if (typeof row.projection !== "string" || typeof row.reason !== "string") fail("unavailable projection/reason");
+    if (point && (module !== "compare_coach" || row.projection !== "derived.compare.engine_trajectory@2" || typeof row.nodeId !== "string" || row.nodeId.length === 0)) fail("invalid comparison point absence");
+    return Object.freeze({ projection: row.projection as string, reason: row.reason as string, ...(point ? { nodeId: row.nodeId as string } : {}) });
+  });
   if (typeof packet.noveltyAbstained !== "boolean") fail("noveltyAbstained");
   const empty = parseEmpty(packet.empty);
   if ((empty === null) !== (items.length > 0) && module !== "full_inspector") fail("empty state must exist exactly when nothing was delivered");

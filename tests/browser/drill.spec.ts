@@ -5027,6 +5027,9 @@ test(`D3837 missing comparison becomes a preserved second attempt (${side}, ${vi
     await showSupportTools(page);
     const reveal = page.getByRole("button", { name: "Show support for this position", exact: true });
     if (await reveal.isVisible()) await reveal.click();
+    // The action below requires an unchanged recorded decision. Keep real automatic jobs,
+    // but observe their actual attachment/client consumption before taking this snapshot.
+    await waitForPlayedMoveEvidence(page, runId);
     const seat = page.locator('[data-module="compare_coach"]');
     await seat.locator(".seat-row").click();
     await expect(seat.locator(".seat-row")).toBeFocused();
@@ -5085,7 +5088,9 @@ test(`D3837 missing comparison becomes a preserved second attempt (${side}, ${vi
   await expect(page.getByLabel("Chessboard", { exact: true })).toBeVisible();
   const complete = await openCompare();
   expect(complete.pageResult.suppressions.some(row => row.module === "compare_coach")).toBe(false);
-  expect(complete.pageResult.packets.find(packet => packet.module === "compare_coach")!.receipt.items.length).toBeGreaterThan(0);
+  const comparisonPacket = complete.pageResult.packets.find(packet => packet.module === "compare_coach")!;
+  expect(comparisonPacket.receipt.items.length).toBeGreaterThan(0);
+  expect(comparisonPacket.receipt.items.every(item => item.adapter.consumer.id === "module.compare_coach" && item.adapter.consumer.version === 2)).toBe(true);
   await expect(complete.seat.locator("[data-presented]").first()).toBeVisible();
   await expect(complete.seat.locator("[data-missing-attempt-recovery]")).toHaveCount(0);
   await complete.seat.getByRole("button", { name: "Enter other attempt", exact: true }).click();

@@ -3,6 +3,7 @@ import { CURRENT_CONSUMER_OPERATION_IDS, MODULE_CONSUMER_IDS, MODULE_CONSUMER_IM
 import { WEB_EVIDENCE_CONSUMER_OPERATIONS } from "../../web/src/lib/evidence-consumer-operations.js";
 import { SERVER_EVIDENCE_CONSUMER_OPERATIONS } from "./evidence-consumer-operations.js";
 import { EVIDENCE_MANIFEST, assertEvidenceManifest } from "./evidence-manifest.js";
+import { MODULE_EVIDENCE_CONSUMER_OPERATIONS } from "@chess-tabiya/runtime";
 
 assertEvidenceManifest();
 const declaredConsumers = EVIDENCE_MANIFEST.consumers.map((consumer) => consumer.id);
@@ -10,8 +11,9 @@ const consumerOperations = Object.freeze([
   ...RUNTIME_EVIDENCE_CONSUMER_OPERATIONS,
   ...SERVER_EVIDENCE_CONSUMER_OPERATIONS,
   ...WEB_EVIDENCE_CONSUMER_OPERATIONS,
+  ...MODULE_EVIDENCE_CONSUMER_OPERATIONS,
 ]);
-assertEvidenceConsumerOperations(CURRENT_CONSUMER_OPERATION_IDS, EVIDENCE_MANIFEST.consumers, consumerOperations);
+assertEvidenceConsumerOperations([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS], EVIDENCE_MANIFEST.consumers, consumerOperations);
 // rfc/bounded-policy-targets.md §4.2: every background producer has exactly its one operation.
 assertEvidenceProducerOperations(EVIDENCE_MANIFEST.producers, RUNTIME_EVIDENCE_PRODUCER_OPERATIONS);
 // rfc/module-registration.md §2.2: every module consumer names the one shared module operation.

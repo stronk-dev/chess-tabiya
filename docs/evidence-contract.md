@@ -55,7 +55,7 @@ availability/array authority, including genuine empty results. Captured shapes a
 human observations remain attached; a missing human observation folds only its node unavailable.
 Last-level calculation reuses the original executed subset rather than collecting again. The
 current packet's thirty-adapter image remains explicit, not automatically expanded to the
-registry's thirty-three operations. Manifest counts are 49 producers/317 projections/42
+registry's thirty-three operations. Manifest counts are 49 producers/319 projections/42
 consumers/566 bindings. Internal moment assembly now retains that actual full source population
 and original last-level reduction, including empty/root-only results, behind nominal source
 authority. One shared unrendered builder serves it and current Story. Internal rank@3 now
@@ -75,9 +75,11 @@ every original modern/legacy attachment seq/ordinal. Modern deliveries re-derive
 actual reload parser, bind the exact full FEN and supply the genuine existing eval-point factory.
 The latest modern occurrence is fixed per node; a later scalar report cannot replace it, and
 corrupt modern data is a source-contract failure rather than fallback. Publication/readback
-validate current storage. This is only the durable modern arm: actual pending-job ownership,
-pinned-ledger origin selection, complete endpoint/grade/comparison issuers and learner delivery
-remain. The helper is private, creates no new projection/schema/convention and grants no access.
+validate current storage. The shared fixed endpoint owner additionally retains actual pending-job
+ownership and original pinned-ledger selection. Compare@2 consumes those exact states through
+its separate current service-issued point; GradeSource and complete Nudge/Review source adoption
+remain. The attachment helper is private, creates no new projection/schema/convention and grants
+no access.
 
 Recorded comparison routes use the legal move's simultaneous physical relocations, including
 Chess960 king/rook swaps, non-corner rooks and stationary castling actors (D3828). Both identities
@@ -257,9 +259,11 @@ fork singleton. The full actual event-head digest and both ordered grants/curren
 column's displayed path is unchanged. `derived.compare.piece_route@2` consumes exactly that
 genuine sealed path, not a whole branch reopened later or an arbitrary single move. Physical
 piece identity survives captures, en passant, promotion, repeated moves and simultaneous
-Chess960 castling; stationary castling pieces have no invented movement. These two routes are
-internal/unbound prerequisites, not a partial Compare/Inspector consumer cutover. Current
-consumers must migrate source-completely before obsolete APIs retire under D3851.
+Chess960 castling; stationary castling pieces have no invented movement. The path stays internal
+and machine-only; the route is bound to the complete current `module.compare_coach@2` image.
+That module also consumes scoped structure@2, exact engine points@2 and recorded-number
+differences@2, alongside its four recorded graph facts. Other consumers must migrate
+source-completely before their obsolete APIs retire under D3851.
 
 `createRecordedPivotalSource({run,branchId,throughNodeId,kind})` owns a separate immutable
 replayed snapshot. It validates the complete original branch, including canonical root FEN

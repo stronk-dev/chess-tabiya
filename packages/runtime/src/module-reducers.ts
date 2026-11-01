@@ -159,7 +159,7 @@ export function admitModuleFacts<T>(
   timing: ModuleTiming,
 ): readonly ModuleFact<T>[] {
   assertConsumerEvidenceView(view);
-  if (view.consumer.id !== `module.${module.id}` || view.consumer.version !== 1) throw new TypeError("MODULE_CONSUMER_MISMATCH: packet view does not belong to the module");
+  if (view.consumer.id !== module.consumer?.id || view.consumer.version !== module.consumer.version) throw new TypeError("MODULE_CONSUMER_MISMATCH: packet view does not belong to the module");
   if (!module.timings.some((candidate) => candidate.timing === timing)) return Object.freeze([]);
   if (module.accepts.kind !== "manifest") return Object.freeze([]);
   const allowed = new Map(module.accepts.projections.map((candidate) => [projectionKey(candidate.projection), candidate]));

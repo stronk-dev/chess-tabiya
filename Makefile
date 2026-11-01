@@ -2231,6 +2231,14 @@ provider-traversal-check:
 recorded-comparison-eval-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-comparison-eval.test.ts packages/runtime/src/recorded-comparison.test.ts packages/runtime/src/recorded-inspector-source.test.ts
 
+.PHONY: recorded-comparison-point-check
+recorded-comparison-point-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-comparison-point.test.ts apps/server/src/recorded-comparison-points.test.ts packages/runtime/src/presentation-comparison.test.ts packages/runtime/src/client.test.ts packages/runtime/src/module-contract.test.ts packages/runtime/src/module-registry.test.ts packages/runtime/src/module-query.test.ts apps/server/src/module-query.test.ts
+
+.PHONY: recorded-comparison-browser-check
+recorded-comparison-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3837 missing comparison"
+
 evidence-value-authority:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-catalog.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/landing-captures.test.ts packages/runtime/src/defender-exposure-source.test.ts packages/runtime/src/local-tactical-sources.test.ts packages/runtime/src/material-sources.test.ts packages/runtime/src/recorded-inspector-source.test.ts packages/runtime/src/recorded-comparison.test.ts packages/runtime/src/recorded-comparison-eval.test.ts packages/runtime/src/pivotal-evidence.test.ts packages/runtime/src/recorded-pivotal.test.ts packages/runtime/src/recorded-sequence-window.test.ts packages/runtime/src/recorded-semantic-window.test.ts packages/runtime/src/semantic-validation.test.ts packages/runtime/src/recorded-semantic-path.test.ts packages/runtime/src/comparison-structural-population.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/comparison-reduction.test.ts packages/runtime/src/last-level-reduction.test.ts packages/runtime/src/story-rank-reduction.test.ts packages/runtime/src/evidence-execution.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-conventions.test.ts

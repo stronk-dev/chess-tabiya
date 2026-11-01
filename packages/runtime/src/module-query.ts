@@ -26,7 +26,12 @@ import { branchPath } from "./branch-path.js";
 import { compareBranches, type BranchComparison } from "./compare.js";
 import { ENDGAME_SETUP_CONVENTIONS } from "./endgame-setup.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
+import { compileEvidenceConsumerExecution, compileEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
+import { collectComparisonStructuralPopulation } from "./comparison-structural-population.js";
+import { recordedComparisonData, recordedComparisonColumnsForSubject, type RecordedComparisonSource } from "./recorded-comparison.js";
+import { readRecordedComparisonPointSource, type RecordedComparisonPointSource } from "./recorded-comparison-point.js";
+import { digestRunEvidenceItem, resolveRunSubject } from "./run-subject.js";
+import { evidenceDigest } from "./evidence-contract.js";
 import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
@@ -134,6 +139,7 @@ export function parseModuleQueryRequest(value: unknown): ModuleQueryRequest {
 
 /** Server-owned inputs the catalogue pool needs (released authored items, registered shapes). */
 export interface ModuleSourceContext {
+  readonly comparison?: Readonly<{ comparison: RecordedComparisonSource; points: readonly RecordedComparisonPointSource[] }> | undefined;
   readonly shapes?: readonly ShapeTriggerSource[];
   readonly authoredAt?: (nodeId: string) => readonly AuthoredFeedbackItemRecord[];
   /** Server-acquired source over the exact timing subject, never a browser payload. */
@@ -145,7 +151,7 @@ export interface ModuleSourceContext {
 export type ModuleSourceResult =
   | { readonly kind: "available"; readonly projection: string; readonly items: readonly DeclaredEvidence<unknown>[] }
   | { readonly kind: "no_witness"; readonly projection: string }
-  | { readonly kind: "unavailable"; readonly projection: string; readonly reason: string };
+  | { readonly kind: "unavailable"; readonly projection: string; readonly reason: string; readonly nodeId?: string };
 
 /** Flip the side to move with en passant cleared (the shipped `mover-turn` pass convention). */
 export function passFen(fen: string): string | undefined {
@@ -288,7 +294,7 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
             : [route("derived.explorer.population_summary@1", { page: explorer.payload.page })]),
       ];
     }
-    case "compare_coach": return compareSources(run, subject);
+    case "compare_coach": return compareSources(run, subject, context.comparison);
     case "postcommit_nudge": {
       const parent = subject.node.parentId === null ? undefined : run.nodes.find((candidate) => candidate.id === subject.node.parentId);
       if (parent === undefined) return [];
@@ -334,31 +340,50 @@ function inspectorSources(run: DrillRun, subject: ModuleSubject): readonly Modul
 
 /** The recorded pair used by both Compare's facts and its enter-other-attempt action. */
 export function moduleComparisonForSubject(run: DrillRun, nodeId: string): BranchComparison | undefined {
-  const subject = run.nodes.find(node => node.id === nodeId);
-  if (subject === undefined) return undefined;
-  // A shared-prefix node retains its creating branch. The current decision's branch is the
-  // subject's attempt when its recorded path contains that node; off-path subjects keep theirs.
-  const branchId = branchPath(run, run.activeCursor.branchId).some(node => node.id === nodeId)
-    ? run.activeCursor.branchId : subject.branchId;
-  const other = [...run.branches].reverse().find(branch => branch.id !== branchId)?.id;
-  return other === undefined ? undefined : compareBranches(run, [branchId, other]);
+  if (!run.nodes.some(node => node.id === nodeId)) return undefined;
+  const columns = recordedComparisonColumnsForSubject(run, nodeId);
+  return columns === undefined ? undefined : compareBranches(run, columns.map(column => column.branchId));
 }
 
-function compareSources(run: DrillRun, subject: ModuleSubject): readonly ModuleSourceResult[] {
-  const comparison = moduleComparisonForSubject(run, subject.node.id);
-  if (comparison === undefined) return [Object.freeze({ kind: "unavailable", projection: "run.record.fork@1", reason: "no_second_attempt" })];
-  const other = comparison.columns[1]!.branchId;
-  const branchInput = { run, comparison, branchId: other };
-  return [
-    route("run.record.fork@1", { run, comparison }),
-    route("run.record.consequence@1", branchInput),
-    route("run.record.objective_transition@1", branchInput),
-    route("run.record.checkpoint_hit@1", branchInput),
-    route("derived.compare.structure_delta@1", branchInput),
-    route("derived.compare.eval_delta@1", branchInput),
-    route("derived.compare.engine_trajectory@1", branchInput),
-    route("derived.compare.piece_route@1", branchInput),
-  ];
+function compareSources(run: DrillRun, subject: ModuleSubject, captured: ModuleSourceContext["comparison"], viewer?: Pick<ModuleQueryInput, "assistance" | "role"> & { readonly timing: ModuleTiming }): readonly ModuleSourceResult[] {
+  const expected = recordedComparisonColumnsForSubject(run, subject.node.id);
+  if (expected === undefined) return [Object.freeze({ kind: "unavailable", projection: "run.record.fork@1", reason: "no_second_attempt" })];
+  if (captured === undefined) return MODULE_CONSUMER_ACCEPTS.compare_coach.map(ref => Object.freeze({ kind: "unavailable", projection: ref.id + "@" + ref.version, reason: "source_unavailable" }));
+  const data = recordedComparisonData(captured.comparison);
+  if (evidenceDigest(data.run.events) !== evidenceDigest(run.events) || data.run.id !== run.id
+    || evidenceDigest(expected) !== evidenceDigest(data.authority.columns)) throw new TypeError("Compare capture crosses the current subject/head/full tips");
+  const peer = data.authority.paths[1], span = peer.slice(peer.findIndex(entry => entry.node.id === data.authority.forkNodeId));
+  if (span.length !== captured.points.length) throw new TypeError("Compare capture omits original peer points");
+  for (const [index, source] of captured.points.entries()) {
+    const point = readRecordedComparisonPointSource(source);
+    if (point.authority.comparison !== data.authority || point.authority.node.node.id !== span[index]!.node.id
+      || viewer === undefined || point.authority.permission.role !== viewer.role
+      || point.authority.permission.assistance.finalDigest !== viewer.assistance.finalDigest || point.authority.permission.timing !== viewer.timing) throw new TypeError("Compare point crosses its exact scope or current consumer");
+  }
+  const branchId = expected[1].branchId;
+  const comparison = compareBranches(data.run, expected.map(column => column.branchId));
+  const branchInput = { run: data.run, comparison, branchId };
+  const population = collectComparisonStructuralPopulation({ comparison: captured.comparison });
+  const path = invokeEvidenceValueRoute("run.record.comparison_path@1", { comparison: captured.comparison, branchId });
+  const nodeIds = new Set(span.map(entry => entry.node.id));
+  const packets = data.run.events.flatMap(event => {
+    if (event.type !== "evidence.attached" || event.data.payload.kind !== "eval" || event.data.payload.source !== "engine_validated" || !nodeIds.has(event.data.nodeId)) return [];
+    const values = event.data.payload.values;
+    if (!Number.isSafeInteger(values.centipawns) && !Number.isSafeInteger(values.mateIn)) return [];
+    const resolved = resolveRunSubject(data.run, { kind: "run_node", runId: data.run.id, eventHeadDigest: data.authority.eventHeadDigest, branchId, nodeId: event.data.nodeId });
+    const itemDigest = digestRunEvidenceItem({ runId: data.run.id, eventHeadDigest: resolved.subject.eventHeadDigest, eventSeq: event.seq, event });
+    return [{ event, packet: invokeEvidenceValueRoute("recorded.inspector.eval_packet@1", { resolved, itemDigest }), ply: span.find(entry => entry.node.id === event.data.nodeId)!.node.ply }];
+  }).sort((left, right) => left.ply - right.ply || left.event.seq - right.event.seq);
+  const deltas = packets.slice(1).map((after, index) => route("derived.compare.eval_delta@2", { comparison: captured.comparison, branchId, before: packets[index]!.packet, after: after.packet }));
+  return [route("run.record.fork@1", { run: data.run, comparison }), route("run.record.consequence@1", branchInput),
+    route("run.record.objective_transition@1", branchInput), route("run.record.checkpoint_hit@1", branchInput),
+    route("derived.compare.structure_delta@2", { population, branchId }),
+    ...(deltas.length === 0 ? [Object.freeze({ kind: "no_witness" as const, projection: "derived.compare.eval_delta@2" })] : deltas),
+    ...captured.points.map(comparisonPoint => {
+      const result = route("derived.compare.engine_trajectory@2", { comparisonPoint });
+      return result.kind === "unavailable" ? Object.freeze({ ...result, nodeId: readRecordedComparisonPointSource(comparisonPoint).authority.node.node.id }) : result;
+    }),
+    route("derived.compare.piece_route@2", { comparison: captured.comparison, branchId, path })];
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -484,7 +509,7 @@ export interface ModuleQueryPacket {
   /** Present exactly when no component survived: the module's declared empty behaviour. */
   readonly empty: ModuleEmptyState | null;
   /** Source results the operation could not acquire (never flattened into an empty fact). */
-  readonly unavailable: readonly { readonly projection: string; readonly reason: string }[];
+  readonly unavailable: readonly { readonly projection: string; readonly reason: string; readonly nodeId?: string }[];
   readonly disclosure: ModuleDisclosureReceipt;
 }
 
@@ -664,12 +689,14 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
   // Other consumers retain their explicit source-migration obligations; a successful local
   // preflight is not a filtered whole-manifest execution image or a provider satisfaction claim.
   for (const { module } of selected) {
+    if (module === "compare_coach") compileEvidenceConsumerExecutionV2(PRIMARY_EVIDENCE_MANIFEST, moduleDeclaration(module).consumer!);
     if (module === "sight_on_request" || module === "threat_radar" || module === "blunder_prevention" || module === "structure_nudge" || module === "theory_breadcrumb") {
       compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 1 });
     }
   }
   for (const { module, declared } of selected) {
-    const results = sources(module, subject, run, input.sources ?? {});
+    const results = module === "compare_coach" ? compareSources(run, subject, input.sources?.comparison, { assistance, role: input.role, timing })
+      : sources(module, subject, run, input.sources ?? {});
     if (module === "compare_coach" && results.some((result) => result.kind === "unavailable" && result.reason === "no_second_attempt")) { suppressions.push({ module, reason: "no_second_attempt" }); continue; }
     const available = results.flatMap((result) => result.kind === "available" ? result.items : []);
     const scoped = module === "sight_on_request" ? available.filter((item) => sightScope(item).includes(subject.square!)) : available;
@@ -677,12 +704,12 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
     const packet = compileModulePacket({ module, timing, role: input.role, session: input.session, evidence, ancestorFacts: ancestorFacts(run, module, subject, input), recorder: input.recorder ?? NULL_REDUCTION_QUALITY_RECORDER });
     if (packet.kind === "refused") { suppressions.push({ module, reason: "not_effective" }); continue; }
     const survivors = packet.facts.map((fact) => fact.evidence);
-    const presented = survivors.length === 0 ? [] : presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 1 }, survivors));
+    const presented = survivors.length === 0 ? [] : presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, moduleDeclaration(module).consumer!, survivors));
     assertAnswerCeiling(module, presented);
     const fitted = fitModulePresentation(module, presented);
     itemsByModule.set(module, fitted.items);
     const receipt = serializePresentedEvidence(fitted.items);
-    const unavailable = results.flatMap((result) => result.kind === "unavailable" ? [Object.freeze({ projection: result.projection, reason: result.reason })] : []);
+    const unavailable = results.flatMap((result) => result.kind === "unavailable" ? [Object.freeze({ projection: result.projection, reason: result.reason, ...(result.nodeId === undefined ? {} : { nodeId: result.nodeId }) })] : []);
     const empty: ModuleEmptyState | null = module === "full_inspector"
       ? Object.freeze({ kind: "family_partitioned", families: inspectorFamilies(results, fitted.items) })
       : fitted.items.length === 0 ? EMPTY_STATE(module) : null;

@@ -205,12 +205,6 @@ export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
  * binds hint-distance's literal disclosure registry. Checked set-equal to MODULE_CONSUMER_ACCEPTS
  * below and to the compiled registry.
  */
-export const MODULE_CONSUMER_IDS = Object.freeze([
-  "module.sight_on_request", "module.blunder_prevention", "module.threat_radar", "module.postcommit_nudge",
-  "module.structure_nudge", "module.theory_breadcrumb", "module.guided_hint", "module.compare_coach", "module.review_map", "module.full_inspector",
-] as const);
-
-export const EVIDENCE_CONSUMER_IDS = Object.freeze([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"] as const);
 
 const STRUCTURAL_READER_WITNESSES = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count"));
 const TRANSITION_READING_LEAVES = Object.freeze([
@@ -1274,24 +1268,30 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     }),
   ]),
   producer("derived.compare_narrative", "derived", "packages/runtime/src/compare-strips.ts:comparisonNarrative", "local", "sync", [
+    projection("derived.compare_narrative", "derived.compare.engine_trajectory", "derived", { version: 2, payloadType: "RecordedComparisonEnginePoint", grounding: "declared_convention", exactness: "measured", confidence: "reported",
+      operands: ["nodeId", "plyOffset", "whiteScore", "engineId", "instrument", "bound"], answerContent: ["evaluation"], forms: ["list", "panel"],
+      semantics: "One original peer-path engine point from the sole service-issued Compare source, with typed White score, original instrument and requested bound. Root/fork points require no invented edge; no comparison or move-quality claim.",
+      derivation: { anyOf: [[ref("derived.review.eval_point"), ref("run.record.position")], [ref("recorded.engine.eval"), ref("run.record.position")]] },
+      abstention: { possible: true, reasons: ["source_pending", "missing_eval", "input_abstained"] },
+      limitations: ["A fixed per-node selection, never a neighbour-dependent fallback; mate remains typed. Current permission and registry/pending revalidation belong to the issuing service."] }),
     projection("derived.compare_narrative", "derived.compare.engine_trajectory", "derived", { payloadType: "ComparisonEvidenceEntry", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["nodeId", "plyOffset", "evidenceRefs", "kind", "source", "score"], answerContent: ["evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("live.stockfish.eval")] }, limitations: ["Recorded run-relative point; provider-only fields omitted and no best-move claim retained."] }),
     projection("derived.compare_narrative", "derived.compare.structure_delta", "derived", { payloadType: "StructuralObservationChange", grounding: "declared_convention", exactness: "convention", semantics: "A structural observation newly present on one branch after the fork. Its inputs include the named-structure catalogue convention, so the delta is convention-grounded as a whole.", operands: ["observation"], forms: ["sentence", "list", "panel"], derivation: { inputs: STRUCTURAL_READER_WITNESSES.map((kind) => (kind === "named_structure" ? ref2 : ref)(`rules.structural.reading.${kind}`)) } }),
     projection("derived.compare_narrative", "derived.compare.structure_delta", "derived", { version: 2, payloadType: "ScopedStructuralObservationChange", grounding: "declared_convention", exactness: "convention", confidence: "not_applicable",
       semantics: "comparison-structure-appearance@1: new observations on the requested complete granted column, excluding post-fork identities shared across both complete spans. Immediate-predecessor comparison preserves reappearance. Convention-selected differences, not importance, safety, a grade or a recommendation.",
       operands: ["observation", "namedStructure"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] },
       derivation: { reduction: { operation: COMPARISON_REDUCTION_CONTRACT.operation, elements: COMPARISON_REDUCTION_CONTRACT.elements } },
-      disposition: { kind: "experimental", reason: "Accepted F2 §2.3i source-only successor. Complete current source/renderer/module adoption remains separately gated; not a partial learner cutover." } }),
+    }),
     projection("derived.compare_narrative", "derived.compare.piece_route", "derived", { payloadType: "PieceRoute", grounding: "recorded_run", operands: ["pieceId", "squares"], answerContent: ["fact", "move"], forms: ["list", "panel"], derivation: { inputs: [ref("run.record.move")] }, limitations: ["Route restates recorded moves after the fork; it is not a plan, threat or recommendation."] }),
     projection("derived.compare_narrative", "derived.compare.piece_route", "derived", { version: 2, payloadType: "PieceRoute", grounding: "recorded_run", exactness: "exact", confidence: "not_applicable", operands: ["pieceId", "squares"], answerContent: ["fact", "move"], forms: ["list", "panel"], derivation: { inputs: [ref("run.record.comparison_path")] },
       limitations: ["Only physical recorded-piece routes from the admitted complete path; no plan, threat or recommendation."],
-      disposition: { kind: "experimental", reason: "Accepted F2 D3864 internal successor; not a partial module image or current consumer cutover." } }),
+    }),
     projection("derived.compare_narrative", "derived.compare.eval_delta", "derived", { payloadType: "RecordedEvalDelta", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["delta", "plyOffset"], answerContent: ["evaluation"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("live.stockfish.eval")] } }),
     projection("derived.compare_narrative", "derived.compare.eval_delta", "derived", { version: 2, payloadType: "RecordedCompareEvalDelta", grounding: "recorded_run", exactness: "measured", confidence: "reported",
       operands: ["before", "after", "delta", "plyOffset", "frame", "comparability"], answerContent: ["evaluation"], forms: ["sentence", "list", "panel"],
       semantics: "The safe-integer numerical difference of two consecutive engine_validated-labelled historical cp reports on one exact granted comparison path, under the unchanged STORY_PIVOT_CP convention. Provider comparability is not established.",
       abstention: { possible: true, reasons: ["input_abstained", "no_recorded_trail"] }, derivation: { inputs: [ref("recorded.inspector.eval_packet"), ref("recorded.inspector.eval_packet")] },
       limitations: ["Recorded numbers only; not a validated same-engine/bound evaluation change, move grade, significance or recommendation. Mate never becomes cp; overflow abstains."],
-      disposition: { kind: "experimental", reason: "Accepted F2 §2.3a internal source successor. Complete Compare consumer, access, renderer and native adoption remain open; no partial learner cutover." } }),
+    }),
   ]),
   producer("derived.story", "derived", "packages/runtime/src/story.ts:storyMoments; suggestTitle", "local", "sync", [
     projection("derived.story", "derived.story.last_level", "derived", { version: 2, payloadType: "StoryLastLevel", grounding: "declared_convention", exactness: "measured", confidence: "reported",
@@ -1462,7 +1462,7 @@ export const WAVE_C_MODULE_PROJECTION_REFS: readonly VersionedEvidenceId[] = Obj
  * literal family x rung disclosure registry. Declared-awaiting refs that do not compile yet live
  * beside the declarations in `module-registry.ts`, never here.
  */
-export const MODULE_CONSUMER_ACCEPTS = Object.freeze({
+const MODULE_ACCEPTANCE_IMAGE = Object.freeze({
   sight_on_request: rebased([
     ...STRUCTURAL_READER_WITNESSES.map((kind) => `rules.structural.reading.${kind}`),
     "rules.castling.reading.rights", "rules.castling.reading.legality", "rules.tactic.reading.rook_on_seventh",
@@ -1483,10 +1483,8 @@ export const MODULE_CONSUMER_ACCEPTS = Object.freeze({
   // rfc/hint-distance.md §3/§9: the literal family x rung disclosure registry, never a horizon,
   // raw PV, Syzygy, authored claim or endgame reading ([[D1569]]).
   guided_hint: HINT_DISCLOSURE_PROJECTION_IDS,
-  compare_coach: rebased([
-    "derived.compare.structure_delta", "derived.compare.eval_delta", "derived.compare.engine_trajectory", "derived.compare.piece_route",
-    "run.record.fork", "run.record.consequence", "run.record.objective_transition", "run.record.checkpoint_hit",
-  ]),
+  compare_coach: [ref2("derived.compare.structure_delta"), ref2("derived.compare.eval_delta"), ref2("derived.compare.engine_trajectory"), ref2("derived.compare.piece_route"),
+    ref("run.record.fork"), ref("run.record.consequence"), ref("run.record.objective_transition"), ref("run.record.checkpoint_hit")],
   review_map: withRecordedPathSuccessorRefs(rebased([
     ...MODULE_POSTCOMMIT_EVENTS, "rules.pivotal.marker", "rules.phase.reading", "rules.endgame.reading",
     "recorded.engine.eval", "recorded.tablebase.result", "live.stockfish.eval", "live.stockfish.wdl",
@@ -1518,17 +1516,26 @@ export const MODULE_CONSUMER_ACCEPTS = Object.freeze({
   ])),
 } as const satisfies Readonly<Partial<Record<ModuleId, readonly VersionedEvidenceId[]>>>);
 
-export type EvidenceModuleId = keyof typeof MODULE_CONSUMER_ACCEPTS;
+export type EvidenceModuleId = keyof typeof MODULE_ACCEPTANCE_IMAGE;
+/** One current catalogue image; every consumer/acceptance/operation view derives from these rows. */
+export const MODULE_CURRENT_IMAGE = Object.freeze((Object.entries(MODULE_ACCEPTANCE_IMAGE) as [EvidenceModuleId, readonly VersionedEvidenceId[]][]).map(([moduleId, accepts]) => Object.freeze({
+  moduleId, consumer: Object.freeze({ id: `module.${moduleId}` as const, version: moduleId === "compare_coach" ? 2 : 1 }), accepts,
+  implementation: "compileModulePacket" as const, disclosureCompiler: moduleId === "guided_hint" ? Object.freeze({ id: "compileHintDisclosure", version: 1 }) : null,
+})));
+export const MODULE_CONSUMER_ACCEPTS = Object.freeze(Object.fromEntries(MODULE_CURRENT_IMAGE.map(row => [row.moduleId, row.accepts]))) as typeof MODULE_ACCEPTANCE_IMAGE;
+export const MODULE_CONSUMER_IDS = Object.freeze(MODULE_CURRENT_IMAGE.map(row => row.consumer.id));
+export const EVIDENCE_CONSUMER_IDS = Object.freeze([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"] as const);
 export const EVIDENCE_MODULE_IDS: readonly EvidenceModuleId[] = Object.freeze(MODULE_IDS.filter((id): id is EvidenceModuleId => id in MODULE_CONSUMER_ACCEPTS));
 if (EVIDENCE_MODULE_IDS.map((id) => `module.${id}`).join("|") !== MODULE_CONSUMER_IDS.join("|")) throw new TypeError("MODULE_CONSUMER_IDS is not order-equal to the module acceptance image");
 /** The one shared module operation every `module.*` consumer names (`module-packets.ts`). */
 export const MODULE_CONSUMER_IMPLEMENTATION = "compileModulePacket" as const;
 
 function moduleConsumerSpec(id: EvidenceModuleId): ConsumerSpec {
+  const current = MODULE_CURRENT_IMAGE.find(row => row.moduleId === id)!;
   const ceilings = moduleConsumerCeilings(id);
   const live = ceilings.timing.some((timing) => timing === "precommit" || timing === "at_commit");
   return {
-    id: `module.${id}`, implementation: MODULE_CONSUMER_IMPLEMENTATION, projections: MODULE_CONSUMER_ACCEPTS[id],
+    id: current.consumer.id, version: current.consumer.version, implementation: current.implementation, projections: current.accepts,
     timing: ceilings.timing, roles: ceilings.roles, sessions: ceilings.sessions, forms: ceilings.forms,
     answerContent: ceilings.answerContent,
     latency: live ? { mode: "sync", maxMs: 50 } : DEFAULT_LATENCY,
@@ -1542,6 +1549,8 @@ function moduleConsumerSpec(id: EvidenceModuleId): ConsumerSpec {
     // operation-unavailable; a successful search with no admitted occurrence is
     // separately honest-empty (hint-distance §7/§10), never a local fallback.
     ...(id === "guided_hint" ? { sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } as const } : {}),
+    // Missing points omit only their own item; invalid original authority still throws.
+    ...(id === "compare_coach" ? { sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } as const } : {}),
   };
 }
 
@@ -1649,6 +1658,7 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
     ? ["machine_condition" as const]
     : (spec.forms ?? DEFAULT_FORMS).filter((form) => projectionValue.forms.includes(form) && !(form === "machine_condition" && SELECTION_ONLY_CONSUMERS.has(spec.id)));
   const answers = (spec.answerContent ?? DEFAULT_ANSWERS).filter((answer) => projectionValue.answerContent.includes(answer));
+  if (spec.id.startsWith("module.") && (forms.length === 0 || answers.length === 0)) throw new TypeError(`Current module binding has an empty form/answer intersection: ${spec.id}/${refKey(projectionRef)}`);
   return Object.freeze({
     id: `adapter.${spec.id}.${index + 1}`,
     version: spec.version ?? 1,

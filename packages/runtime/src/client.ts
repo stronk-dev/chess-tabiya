@@ -117,6 +117,7 @@ export {
   type ModuleQueryRequest,
   type ModuleSuppressionReason,
 } from "./module-query.js";
+export { MODULE_CURRENT_IMAGE } from "./evidence-catalog.js";
 export {
   pivotalMarkerEvidence,
   renderPivotalMarker,

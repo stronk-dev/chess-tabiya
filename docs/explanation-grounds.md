@@ -16,15 +16,31 @@ This page is the cross-system contract. Runtime payload details remain in
 `docs/branch-runtime.md`; client episode behavior remains in
 `docs/drill-client.md`.
 
-The internal `derived.compare.eval_delta@2` source now computes only the numerical difference
+The current `module.compare_coach@2` consumes eight complete bindings: scoped structural
+differences, recorded numerical differences, exact engine points, recorded piece routes, and the
+four existing fork/consequence/objective/checkpoint facts. Its complete V2 execution plan compiles
+before source work. RunService grants both full recorded attempts, captures their original tips,
+and rechecks current access, storage, registry membership, pending work and cancellation before
+publication. The browser accepts only this current consumer and captures the other-attempt action
+with its admitted packet; it does not choose a new peer when the button is clicked.
+
+`derived.compare.eval_delta@2` computes only the numerical difference
 of two consecutive historical `engine_validated`-labelled centipawn reports on an exact granted
 comparison path. Both packets retain their complete original event/head/node identity; ordering
 is by recorded ply, then original event order. The unchanged 150cp convention applies to safe
 integer differences only. Typed mate blocks a cp pair, overflow produces no witness, and no
 provider comparability, move grade or strategic significance is inferred. The payload explicitly
-says `frame: recorded_cp_numbers` and `comparability: provider_not_established`. This internal
-route is not yet a current learner consumer or renderer; the complete Compare migration remains
-open, including its separate stronger engine-point source and access/publication checks.
+says `frame: recorded_cp_numbers` and `comparability: provider_not_established`.
+
+The separate `derived.compare.engine_trajectory@2` point retains its exact node and fork-relative
+offset, typed White-relative cp or mate, engine identity/version/origin and requested depth/time/node
+budget. Modern durable deliveries take precedence; an actual owned pending request blocks offline
+fallback. Otherwise the first individually eligible pinned report is fixed per node, not chosen to
+make neighboring scores comparable. Missing/pending/abstained points remain local absences with
+their node identities; no zero, segment or move grade is fabricated. Registered strict renderers
+preserve these operands, including offline depth/time restrictions and positive provider generation.
+The existing nonmodule Compare overlays below retain their own versioned contract; this module
+migration does not claim to replace those or complete Review, grading or source qualification.
 
 Rung-0 structural grading now has eighteen `rules:structure-*` facts. They render generic detector
 grounds because evidence refs carry the feature kind but not its square/file parameters. Exact
@@ -179,7 +195,7 @@ There is no provider call, request-time file reread or run mutation.
 
 These are internal callable source operations, not a completed execution grant, replacement
 Inspector endpoint, paging/disclosure receiver or learner seat. Final HTTP/client freshness and
-complete current consumer migration remain; GradeSource/Compare selection and opening history
+complete Inspector consumer migration remain; GradeSource and opening history
 still need their owners. No stored report becomes a modern provider delivery or qualified claim.
 
 ## Authored checkpoint reveal

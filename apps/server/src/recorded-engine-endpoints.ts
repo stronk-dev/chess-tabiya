@@ -2,27 +2,14 @@
 // current consumer access. No provider calls, synthetic grades or pair-dependent report search.
 import { collectRecordedEngineAttachments, readRecordedEngineAttachments, type RecordedEngineAttachments } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
-import type { ReviewEngineScore, ReviewSearchBound } from "../../../packages/runtime/src/review-points.js";
+import { recordedOfflineEngineEndpoint, recordedEngineRequestedBound as requestedBound, type RecordedEngineAvailable } from "../../../packages/runtime/src/internal/recorded-engine-endpoint-values.js";
 import { PackRegistry, RecordedMeasurementSourceError, type RecordedMeasurementAdmission, type RecordedMeasurementPopulation } from "./pack-registry.js";
 import { ReviewEvidenceCoordinator } from "./review-evidence.js";
+import type { RecordedComparisonPointCapture } from "../../../packages/runtime/src/recorded-comparison-point.js";
 
 type ModernRows = ReturnType<typeof readRecordedEngineAttachments>;
 type Population = ReturnType<PackRegistry["readRecordedMeasurements"]>;
-type Instrument = Readonly<{ origin: "provider_delivery"; engineVersion: string; generation: number }>
-  | Readonly<{ origin: "offline_engine"; engineVersion: string; profile: { readonly threads: number; readonly hashMb: number; readonly multiPv: 1 } }>;
-interface Available {
-  readonly kind: "available";
-  readonly engineId: string;
-  readonly score: ReviewEngineScore;
-  readonly instrument: Instrument;
-  readonly bound: RequestedBound;
-}
-type RequestedBound = Readonly<{ kind: "depth"; requestedDepth: number }>
-  | Readonly<{ kind: "movetime"; requestedMs: number }> | Readonly<{ kind: "nodes"; requestedNodes: number }>;
-function requestedBound(bound: ReviewSearchBound): RequestedBound {
-  return Object.freeze(bound.kind === "depth" ? { kind: "depth", requestedDepth: bound.requestedDepth }
-    : bound.kind === "movetime" ? { kind: "movetime", requestedMs: bound.requestedMs } : { kind: "nodes", requestedNodes: bound.requestedNodes });
-}
+type Available = RecordedEngineAvailable;
 type Candidate = Readonly<{ row: Population["records"][number]; disposition: "selected" | "eligible" | "input_abstained" | "ledger_record_not_admitted" }>;
 interface Endpoint {
   readonly position: ModernRows["rows"][number]["position"];
@@ -48,38 +35,7 @@ interface Owned {
   readonly populations: readonly RecordedMeasurementPopulation[];
   readonly image: SourceImage;
 }
-const positive = (value: number) => Number.isSafeInteger(value) && value > 0;
 const invalid = (message: string): never => { throw new RecordedMeasurementSourceError("source_contract_invalid", message); };
-
-/** Normalize only an individually admitted original engine report, never an arbitrary reading. */
-function offline(row: Population["records"][number]): Available | null {
-  const origin = row.source.origin;
-  if (origin.kind === "engine" && origin.evidenceKind !== "engine_eval") return invalid("Engine endpoint has a conflicting original source evidence kind");
-  if (row.invocation.result.kind !== "available") return null;
-  const reading = row.invocation.result.value.payload;
-  if (reading.kind !== "engine_eval") return invalid("Engine endpoint has a crossed reading kind");
-  if (origin.kind !== "engine") return null;
-  const values = reading.values;
-  if (origin.engineId !== values.engineId || origin.engineVersion !== values.engineVersion
-    || (origin.engineName !== null && origin.engineName !== values.engineName)) return invalid("Engine endpoint report conflicts with its original instrument identity");
-  if (!positive(origin.profile.threads) || !positive(origin.profile.hashMb) || origin.profile.multiPv !== 1) return null;
-  const budget = origin.budget;
-  if (Object.keys(budget).length !== 1) return invalid("Engine endpoint requested budget is ambiguous");
-  const bound: RequestedBound = "depth" in budget ? { kind: "depth", requestedDepth: budget.depth } : { kind: "movetime", requestedMs: budget.movetimeMs };
-  if (!positive("depth" in budget ? budget.depth : budget.movetimeMs)) return null;
-  let score: ReviewEngineScore;
-  if (values.centipawns !== undefined) score = { kind: "centipawns", value: values.centipawns };
-  else {
-    const mate = values.mateIn;
-    // A fractional/unsigned-zero mate report supplies no unambiguous side/distance. Never
-    // repair it into cp or invent a terminal engine value from the board's rules result.
-    if (mate === undefined || !Number.isSafeInteger(mate) || mate === 0) return null;
-    score = { kind: "mate", side: mate > 0 ? "white" : "black", distance: Math.abs(mate), unit: "moves" };
-  }
-  return Object.freeze({ kind: "available", engineId: values.engineId, score: Object.freeze(score), bound: Object.freeze(bound),
-    instrument: Object.freeze({ origin: "offline_engine", engineVersion: origin.engineVersion,
-      profile: Object.freeze({ threads: origin.profile.threads, hashMb: origin.profile.hashMb, multiPv: 1 as const }) }) });
-}
 
 /** Server-private source owner. A storage boundary is source scope, not Nudge/Review/Compare
  * permission; those complete current consumer operations must admit access before calling it. */
@@ -125,7 +81,10 @@ export class RecordedEngineEndpointOwner {
       const ledger = this.registry.readRecordedMeasurements(population);
       // Normalize the complete candidate image before selecting. A later conflicting artifact
       // must fail, not disappear because an earlier candidate would have been usable.
-      const normalized = ledger.records.map(offline), selected = normalized.findIndex(value => value !== null);
+      let normalized: readonly (Available | null)[];
+      try { normalized = ledger.records.map(recordedOfflineEngineEndpoint); }
+      catch (cause) { throw new RecordedMeasurementSourceError("source_contract_invalid", "Invalid original engine endpoint", { cause }); }
+      const selected = normalized.findIndex(value => value !== null);
       const candidates = Object.freeze(ledger.records.map((candidate, index): Candidate => Object.freeze({ row: candidate,
         disposition: candidate.invocation.result.kind === "unavailable" ? "ledger_record_not_admitted"
           : normalized[index] === null ? "input_abstained" : index === selected ? "selected" : "eligible" })));
@@ -163,6 +122,17 @@ export class RecordedEngineEndpointOwner {
     const row = this.read(source).rows.find(candidate => candidate.position.payload.nodeId === nodeId);
     if (row === undefined) return invalid("Engine endpoint is outside the original granted path");
     return row;
+  }
+
+  /** Original operands for the restricted Compare issuer, not a public numeric endpoint API. */
+  comparisonPointCapture(source: RecordedEngineEndpoints, nodeId: string): Pick<RecordedComparisonPointCapture, "attachments" | "offline" | "pending"> {
+    const row = this.resolveRecordedEngineEndpoint(source, nodeId), owned = this.#sources.get(source)!;
+    const ledger = row.ledger;
+    return Object.freeze({ attachments: owned.attachments, pending: row.pending,
+      offline: ledger === null ? null : Object.freeze({ packDigest: ledger.artifact.packDigest,
+        ledgerDigest: ledger.artifact.ledgerDigest, manifestDigest: ledger.artifact.manifestDigest,
+        ledger: ledger.artifact.ledger, manifest: ledger.artifact.manifest, candidates: ledger.records, abstentions: ledger.abstentions }),
+    });
   }
 
   #pending(image: SourceImage["boundary"], nodeId: string, fen: string) {

@@ -1,5 +1,7 @@
 import { consumeComparisonEngineTrajectory, consumeComparisonStripEvidence } from "./compare-strips.js";
 import { evidenceConsumerOperation } from "./evidence-contract.js";
+import { MODULE_CURRENT_IMAGE } from "./evidence-catalog.js";
+import { compileModulePacket } from "./module-packets.js";
 import { consumePivotalMarkers } from "./pivotal.js";
 import { consumeMoveTransition, consumePositionStructure, consumeSelectedSquareSight } from "./reading-evidence.js";
 import { consumeShapeFiring } from "./shape-firing.js";
@@ -18,3 +20,8 @@ export const RUNTIME_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
   evidenceConsumerOperation("board.pivotal_marker", consumePivotalMarkers),
   evidenceConsumerOperation("review.story", renderReviewStoryReceipt),
 ]);
+
+const MODULE_COMPILERS = Object.freeze({ compileModulePacket });
+/** Exact current tuples backed by the same callable the production query invokes. */
+export const MODULE_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze(MODULE_CURRENT_IMAGE.map(row =>
+  evidenceConsumerOperation(row.consumer.id, MODULE_COMPILERS[row.implementation], row.consumer.version)));

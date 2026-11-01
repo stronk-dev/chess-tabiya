@@ -73,7 +73,7 @@ export function compileModulePacket<T>(request: ModulePacketRequest<T>, manifest
   if (!module.timings.some((value) => value.timing === request.timing)) return refusal(module.id, "timing_outside_module");
   if (!module.ceilings.roles.includes(request.role)) return refusal(module.id, "role_outside_ceiling");
   if (!module.ceilings.sessions.includes(request.session)) return refusal(module.id, "session_outside_ceiling");
-  const view = evidenceForConsumer(manifest, { id: `module.${module.id}`, version: 1 }, request.evidence);
+  const view = evidenceForConsumer(manifest, module.consumer!, request.evidence);
   if ((request.mode ?? "reduce") === "admit") {
     const facts = orderAdmittedFacts(module, admitModuleFacts(module, manifest, view, request.timing));
     return Object.freeze({

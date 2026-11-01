@@ -73,6 +73,7 @@ function declaration(overrides: Partial<ModuleDeclaration> = {}): ModuleDeclarat
   const projections = acceptedIds.map((id) => ({ projection: { id, version: 1 } }));
   const base: ModuleDeclaration = {
     id: "postcommit_nudge",
+    consumer,
     intent: "Name grounded consequences.",
     learnerAction: "Branch from this move.",
     accepts: { kind: "manifest" as const, projections, awaiting: [] },

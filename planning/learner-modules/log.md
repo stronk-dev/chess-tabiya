@@ -313,3 +313,27 @@ focused source cases/types pass. Earlier failures and the withdrawn extra-author
 remain logged. D3863/D3894 stay doing: implement the restricted point issuer and complete the
 actual eight-pair Compare consumer, grants, renderer/API/native journey next. No partial current
 consumer, qualification, graduated pack, milestone or whole1.0 completion is asserted.
+
+## 2026-11-01 — Complete current Compare implementation under final verification
+
+Compare@2 now binds all eight original-source facts through its complete current image. Actual
+service grants/full tips, fixed per-node modern/pending/offline selection, strict typed rendering,
+current-consumer receiving and packet-captured peer action are wired.140 focused cases/types and
+four authenticated desktop/mobile both-color native journeys pass. Independent bounded review
+clears the D3895–D3899 repairs, including real RunService grant changes and strict wire domains.
+Initial failing fixtures/contracts and the generation refresh are recorded in the exploration log.
+Full normal gates remain in progress; no parent, milestone or content qualification closes yet.
+
+## 2026-11-01 — Complete current Compare@2 source-to-seat journey verified
+
+D3863/D3894–D3903 close with all eight current bindings and actual permission/source/preflight/
+renderer/receiver/API/native navigation. Exact original engine selection retains local absent
+points, requested budgets and typed White scores; no synthetic zero or move grade. Actual stale
+heads retire cards/actions, and the native fixture observes real queued attachments before an
+unchanged-decision query. Independent bounded review,144 focused source/contract and292 component
+cases pass. Four authenticated both-color desktop/mobile journeys pass in40.3s with zero retries.
+Final normal make verify build exits zero:7312 software/427 files, seven unchanged-budget
+performance/four files,271 content/27 files and all remaining contracts/build/corpus gates.
+Earlier failures stay in the exploration log. D3864 nonmodule retirement, GradeSource/accuracy/
+graph, installed opening history and complete Inspector/other current images remain assigned;
+no whole RFC, qualification, official content or milestone closes.

@@ -11,6 +11,7 @@ import {
   MODULE_CONSUMER_ACCEPTS,
   MODULE_CONSUMER_IDS,
   MODULE_CONSUMER_IMPLEMENTATION,
+  MODULE_CURRENT_IMAGE,
   PRIMARY_EVIDENCE_MANIFEST,
   RECORDED_PATH_SUCCESSOR_REFS,
   SEMANTIC_EVENT_PROJECTION_REFS,
@@ -79,6 +80,7 @@ function declarationFor(policy: ModulePolicy): ModuleDeclaration {
       : Object.freeze({ kind: "manifest" as const, projections: Object.freeze(accepted.map(acceptance)), awaiting });
   return Object.freeze({
     id,
+    consumer: MODULE_CURRENT_IMAGE.find(row => row.moduleId === id)?.consumer ?? null,
     intent: policy.intent,
     learnerAction: policy.learnerAction,
     accepts,
@@ -177,7 +179,7 @@ export function assertModuleRegistry(input: ModuleRegistryInvariantInput): void 
     if (!declared.has(id)) throw new ModuleRegistryInvariantError("MODULE_PRESET_UNRESOLVED", `preset ${preset.id} names ${id}, which has no declaration`);
   }
   // 4. The compiled F1 module bindings are exactly the declared acceptance pairs (§2.2, A2).
-  const declaredPairs = input.declarations.flatMap((module) => module.accepts.kind === "manifest" ? module.accepts.projections.map((value) => `module.${module.id}@1\u0000${refKey(value.projection)}`) : []).sort();
+  const declaredPairs = input.declarations.flatMap((module) => module.accepts.kind === "manifest" ? module.accepts.projections.map((value) => `${refKey(module.consumer!)}\u0000${refKey(value.projection)}`) : []).sort();
   const boundPairs = manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module.")).map((binding) => `${refKey(binding.consumer)}\u0000${refKey(binding.projection)}`).sort();
   if (declaredPairs.join("|") !== boundPairs.join("|")) throw new ModuleRegistryInvariantError("MODULE_BINDING_DRIFT", `declared ${declaredPairs.length} module pairs, bound ${boundPairs.length}`);
   // 5. [[D3065]] cover-or-refuse closure over every upstream discharge population.
@@ -276,7 +278,7 @@ export type ModulePairExecution =
   | { readonly module: ModuleId; readonly projection: VersionedEvidenceId; readonly status: "blocked_dependencies"; readonly blockers: readonly ModuleDependencyBlocker[] };
 
 function pairBlockers(module: ModuleDeclaration, projection: VersionedEvidenceId): readonly ModuleDependencyBlocker[] {
-  const presentable = presentationAdapter({ id: `module.${module.id}`, version: 1 }, projection) !== undefined;
+  const presentable = presentationAdapter(module.consumer!, projection) !== undefined;
   const presentationBlockers = presentable ? [] : [PRESENTATION_BLOCKER];
   if (module.id === "postcommit_nudge") {
     if (projection.id.startsWith("derived.semantic_avoidance.")) return [CANDIDATE_BLOCKER, ...presentationBlockers];
@@ -295,7 +297,7 @@ export const MODULE_PAIR_EXECUTION: readonly ModulePairExecution[] = Object.free
   return module.accepts.projections.map(({ projection }): ModulePairExecution => {
     // Executable = a production operation acquires the pair's sealed source AND an exact pair-keyed
     // adapter presents it (module-registration A5). A missing adapter is a named blocker, never a gap.
-    const executable = operation?.projections.some((value) => refKey(value) === refKey(projection)) === true && presentationAdapter({ id: `module.${module.id}`, version: 1 }, projection) !== undefined;
+    const executable = operation?.projections.some((value) => refKey(value) === refKey(projection)) === true && presentationAdapter(module.consumer!, projection) !== undefined;
     return Object.freeze(executable
       ? { module: module.id, projection, status: "executable" as const, operation: operation!.operation, timing: operation!.timing }
       : { module: module.id, projection, status: "blocked_dependencies" as const, blockers: Object.freeze(pairBlockers(module, projection)) });

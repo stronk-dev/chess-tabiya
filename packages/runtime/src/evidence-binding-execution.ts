@@ -11,7 +11,7 @@ import { compileProjectionExecutionV2, executionPlanDigest, type CompiledEvidenc
 const key = (ref: VersionedEvidenceId): string => `${ref.id}@${ref.version}`;
 const LATENCY_ORDER: readonly LatencyMode[] = ["sync", "interactive", "background", "offline"];
 const COMPILED = new WeakSet<object>();
-const COMPILED_V2 = new WeakSet<object>();
+const COMPILED_V2 = new WeakMap<object, CompiledEvidenceManifest>();
 
 export class EvidenceBindingExecutionError extends TypeError {
   constructor(readonly code: "BINDING_EXECUTION_UNDECLARED" | "BINDING_EXECUTION_LATENCY" | "BINDING_SOURCE_ABSENCE" | "BINDING_AVAILABILITY_CROSSED", message: string) {
@@ -99,12 +99,18 @@ export function compileEvidenceConsumerExecutionV2(manifest: CompiledEvidenceMan
     return Object.freeze({ binding: freezeJson(binding), plan, sourceAbsence: policy === undefined ? null : Object.freeze({ ...policy }) });
   }).sort((a, b) => key(a.binding.adapter).localeCompare(key(b.binding.adapter)));
   const compiled = Object.freeze({ consumer: Object.freeze({ ...consumer }), bindings: Object.freeze(bindings) });
-  COMPILED_V2.add(compiled); return compiled;
+  COMPILED_V2.set(compiled, manifest); return compiled;
 }
 
 export function assertEvidenceConsumerExecutionV2(compiled: CompiledEvidenceConsumerExecutionV2): void {
   if (!COMPILED_V2.has(compiled)) throw new EvidenceBindingExecutionError("BINDING_AVAILABILITY_CROSSED", "consumer V2 execution is not original compiler authority");
   for (const binding of compiled.bindings) executionPlanDigest(binding.plan);
+}
+
+/** Exact originating manifest, not a same-name/same-count plan compiled from another image. */
+export function assertEvidenceConsumerExecutionManifestV2(compiled: CompiledEvidenceConsumerExecutionV2, manifest: CompiledEvidenceManifest): void {
+  assertEvidenceConsumerExecutionV2(compiled);
+  if (COMPILED_V2.get(compiled) !== manifest) throw new EvidenceBindingExecutionError("BINDING_AVAILABILITY_CROSSED", "consumer execution belongs to a different manifest");
 }
 
 function freezeJson<T>(value: T): T {

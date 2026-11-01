@@ -13,8 +13,11 @@
 import type { Color, Role, SquareName } from "chessops/types";
 
 import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
+import { MODULE_CURRENT_IMAGE } from "./evidence-catalog.js";
+import type { RecordedComparisonEnginePoint } from "./recorded-comparison-point.js";
+import type { RecordedCompareEvalDelta } from "./recorded-comparison-eval.js";
 import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
-import { controlledSquareCount, factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
+import { controlledSquareCount, factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, PresentationSchemaError, type Parser, type SchemaPiece } from "./presentation-schema.js";
 import type { SquareControlReading } from "./square-control.js";
 import { hintSentence, type HintDisclosurePayload } from "./hint-horizon.js";
 import { HINT_FAMILIES, HINT_RELATIONS, HINT_RUNGS, hintDisclosureProjectionId, type HintFamily, type HintRelation, type HintRung } from "./hint-registry.js";
@@ -128,7 +131,35 @@ const RAY_VERBS: Readonly<Record<ReturnType<typeof rayKinds>, string>> = Object.
   absolute_pin: "pins", relative_pin: "pins", skewer: "skewers", xray_attack: "x-rays through", xray_defense: "defends through",
 });
 
+const positive: Parser<number> = (value, label) => { const number = s.nat(value, label); if (number === 0) throw new PresentationSchemaError(`${label} must be positive`); return number; };
+const finite: Parser<number> = (value, label) => { if (typeof value !== "number" || !Number.isFinite(value)) throw new PresentationSchemaError(`${label} must be finite`); return value; };
+const enginePointShape = s.obj({ nodeId: s.str, plyOffset: s.nat,
+  whiteScore: s.union("kind", { centipawns: s.obj({ kind: s.lit("centipawns"), value: finite }), mate: s.obj({ kind: s.lit("mate"), side: s.color, distance: positive, unit: s.lit("moves") }) }),
+  engineId: s.str, instrument: s.union("origin", {
+    provider_delivery: s.obj({ origin: s.lit("provider_delivery"), engineVersion: s.str, generation: positive }),
+    offline_engine: s.obj({ origin: s.lit("offline_engine"), engineVersion: s.str, profile: s.obj({ threads: positive, hashMb: positive, multiPv: s.lit(1) }) }),
+  }), bound: s.union("kind", { depth: s.obj({ kind: s.lit("depth"), requestedDepth: positive }), movetime: s.obj({ kind: s.lit("movetime"), requestedMs: positive }), nodes: s.obj({ kind: s.lit("nodes"), requestedNodes: positive }) }),
+});
+const enginePointSchema: Parser<ReturnType<typeof enginePointShape>> = (value, label) => {
+  const parsed = enginePointShape(value, label);
+  if (parsed.instrument.origin === "offline_engine" && parsed.bound.kind === "nodes") throw new PresentationSchemaError(`${label} offline analysis requires a depth or time budget`);
+  return parsed;
+};
+
 export const PLAY_FACT_RENDERERS = Object.freeze({
+  "compare.engine_point@2": factRenderer(enginePointSchema, value => {
+    const score = value.whiteScore.kind === "centipawns" ? `${value.whiteScore.value >= 0 ? "+" : ""}${value.whiteScore.value} centipawns for White`
+      : `${side(value.whiteScore.side)} mating in ${plural(value.whiteScore.distance, "move")}`;
+    const bound = value.bound.kind === "depth" ? `requested depth ${value.bound.requestedDepth}` : value.bound.kind === "movetime" ? `requested ${value.bound.requestedMs} ms` : `requested ${value.bound.requestedNodes} search nodes`;
+    const origin = value.instrument.origin === "provider_delivery" ? `recorded engine job, generation ${value.instrument.generation}`
+      : `recorded offline analysis, ${value.instrument.profile.threads} threads and ${value.instrument.profile.hashMb} MB hash`;
+    return `After ${plural(value.plyOffset, "move")} by either side from the fork: ${score} (${value.engineId} ${value.instrument.engineVersion}; ${origin}; ${bound}). An engine reading at this budget, not move advice.`;
+  }),
+  "compare.recorded_delta@2": factRenderer(s.obj({ before: s.int, after: s.int, delta: s.int, plyOffset: s.nat,
+    frame: s.lit("recorded_cp_numbers"), comparability: s.lit("provider_not_established") }), value => {
+    if (!Number.isSafeInteger(value.after - value.before) || value.delta !== value.after - value.before) throw new PresentationSchemaError("recorded difference does not match its operands");
+    return `After ${plural(value.plyOffset, "move")} by either side from the fork, the recorded numbers differ by ${value.delta >= 0 ? "+" : ""}${value.delta} centipawns (${value.before} to ${value.after}). Whether the engine runs are comparable is not established; this is not a move grade.`;
+  }),
   "play.explorer_summary@1": factRenderer(s.obj({ total: s.nat, white: s.nat, draws: s.nat, black: s.nat, ratings: s.arr(s.nat), speeds: s.arr(s.str), since: s.nullable(s.str), until: s.nullable(s.str), opening: s.nullable(s.str), disclosure: s.lit(CORPUS_GUARD) }), (value) =>
     `Lichess Explorer: ${plural(value.total, "game")} in rating bands ${value.ratings.join(", ")} (${value.speeds.join(", ")}; ${value.since ?? "all dates"} to ${value.until ?? "now"}). White won ${value.white}, ${value.draws} drawn, Black won ${value.black}.${value.opening === null ? "" : ` Reported opening: ${value.opening}.`} ${value.disclosure}`),
   "play.structural_observation@1": factRenderer(observationSchema, observationSentence),
@@ -226,7 +257,7 @@ const fromSquare = (uci: string): SquareName => uci.slice(0, 2) as SquareName;
 // ---------------------------------------------------------------------------------------------
 
 const V1 = (id: string, version = 1): VersionedEvidenceId => Object.freeze({ id, version });
-const MODULE = (id: string): VersionedEvidenceId => V1(`module.${id}`);
+const MODULE = (id: string): VersionedEvidenceId => MODULE_CURRENT_IMAGE.find(row => row.moduleId === id)!.consumer;
 
 type Construct = (evidence: DeclaredEvidence<unknown>) => ComponentValue | readonly ComponentValue[];
 
@@ -404,22 +435,18 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
     statement("play.authored_claim@1", "authored-claim@1", { text: (evidence.payload as { readonly text: string }).text }));
 
   // --- compare_coach: the smallest recorded difference between two attempts (§4.9)
-  const compareScore = (evidence: DeclaredEvidence<unknown>, value: number, unit: "centipawn" | "mate_in"): ComponentValue => ({
-    id: "magnitude",
-    operand: { value, unit: { kind: unit }, convention: kit.convention(evidence, { kind: "recorded_search", engine: null, depth: null }, "white"), saturated: false },
-  });
-  add("compare_coach", V1("derived.compare.engine_trajectory"), "magnitude", ["list", "panel"], ["score", "plyOffset"], ["copied_byte_equal", "retained_convention"], (evidence) => {
-    const entry = evidence.payload as { readonly score: { readonly kind: "cp"; readonly value: number } | { readonly kind: "mate"; readonly movesTo: number } };
-    return entry.score.kind === "cp" ? compareScore(evidence, entry.score.value, "centipawn") : compareScore(evidence, entry.score.movesTo, "mate_in");
-  });
-  add("compare_coach", V1("derived.compare.eval_delta"), "magnitude", ["list", "panel", "sentence"], ["delta", "plyOffset"], ["copied_byte_equal", "retained_convention"], (evidence) =>
-    compareScore(evidence, (evidence.payload as { readonly delta: number }).delta, "centipawn"));
-  add("compare_coach", V1("derived.compare.structure_delta"), "fact_statement", ["list", "panel", "sentence"], ["observation"], ["copied_byte_equal"], (evidence) => {
+  add("compare_coach", V1("derived.compare.engine_trajectory", 2), "fact_statement", ["list", "panel"], ["nodeId", "plyOffset", "whiteScore", "engineId", "instrument", "bound"], ["copied_byte_equal", "retained_convention"], evidence =>
+    statement("compare.engine_point@2", "recorded-comparison@1", evidence.payload as RecordedComparisonEnginePoint));
+  add("compare_coach", V1("derived.compare.eval_delta", 2), "fact_statement", ["list", "panel", "sentence"], ["before", "after", "delta", "plyOffset", "frame", "comparability"], ["copied_byte_equal"], evidence =>
+    statement("compare.recorded_delta@2", "recorded-comparison@1", evidence.payload as RecordedCompareEvalDelta, "recorded_run"));
+  add("compare_coach", V1("derived.compare.structure_delta", 2), "fact_statement", ["list", "panel", "sentence"], ["observation", "namedStructure"], ["copied_byte_equal"], (evidence) => {
+    const named = (evidence.payload as { readonly namedStructure: { readonly id: StructureName; readonly name: string } | null }).namedStructure;
     const observation = (evidence.payload as { readonly observation: { readonly kind: StructuralKind } & Readonly<Record<string, unknown>> }).observation;
+    if (named !== null) return statement("play.named_structure@1", "structure-catalogue@1", { ...named, squares: observation.squares });
     const { detail: _detail, provenanceNote: _note, ...rest } = observation as Readonly<Record<string, unknown>>;
     return statement("play.compare_structure@1", "pawn-structure@1", { observation: rest });
   });
-  add("compare_coach", V1("derived.compare.piece_route"), "fact_statement", ["list", "panel"], ["pieceId", "squares"], ["copied_byte_equal"], (evidence) => {
+  add("compare_coach", V1("derived.compare.piece_route", 2), "fact_statement", ["list", "panel"], ["pieceId", "squares"], ["copied_byte_equal"], (evidence) => {
     const route = evidence.payload as { readonly pieceId: string; readonly squares: readonly SquareName[] };
     return statement("play.compare_route@1", "recorded-comparison@1", { piece: route.pieceId.replace(/^(White|Black) /u, (match) => match.toLowerCase()), squares: [...route.squares] }, "recorded_run");
   });

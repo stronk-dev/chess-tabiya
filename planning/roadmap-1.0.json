@@ -1099,12 +1099,21 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement and independently review D3894's sole domain-specific server/runtime Compare-point issuer under accepted F2; preserve original scope/receipt joins and concrete current registry/pending/access checks. No additional authoring approval is required for that established internal constructor pattern. Finish workflow-issued GradeSource, paired arithmetic, installed-opening result/history and compiler execution grants, then complete each current consumer/preflight/access/source-order paging/renderer/receiver/API/native journey. Recorded numerical-difference@2 remains internal; no partial consumer image, generic validator bridge or compatibility-only pipeline.",
+        "nextAction": "Preserve D3863/D3894-D3903's verified complete current Compare migration; D3864 still owns actual nonmodule piece-route callers and obsolete-path retirement. Finish D3859's workflow-issued GradeSource, fixed paired arithmetic/accuracy/graph and coordinated complete Nudge/Review images. Finish D3376's installed-opening result/history authority and D3841's complete Inspector execution grants, source-order paging, strict renderer/receiver and authenticated API/native delivery. No partial current consumer image, generic validator bridge, compatibility-only pipeline or source-qualification promotion.",
         "latestCheckpoint": {
           "at": "2026-11-01",
-          "summary": "Accepted F2 recorded numerical-difference@2 now joins two original sealed packet occurrences to the exact complete comparison head/column/path, reconstructs predecessor ply/event order and retains safe cp subtraction, typed mate exclusion, unchanged threshold and explicit unverified provider comparability.87 focused source cases/three files, permanent authority contracts and workspace types pass; independent bounded review finds no blocker and its root/occurrence/caller-mutation controls are added. Full normal make verify build passes7267 software/424 files, seven isolated performance/four files,271 content/27 files and every remaining contract. Earlier type, pinned-profile, Make scheduling and generated-report failures remain logged; no deadline, assertion or source qualification is weakened. Prior fixed endpoint and current Inspector checkpoints stand verified. D3894 tracks implementation of the stronger trajectory's restricted sole-server issuer under the accepted contract; independent re-read retracts the unnecessary authoring blocker. No generic validator bridge or partial current consumer switch. D3863 remains doing. No qualification, official-content, milestone, learner API/native or remote CI claim.",
+          "summary": "The complete eight-binding module.compare_coach@2 now uses actual RunService grants, full original attempts, fixed modern/pending/offline engine points, scoped structural and recorded-number differences, genuine piece paths, strict renderers/current receiving and packet-captured peer navigation.144 focused source/contract cases,292 component cases, independent bounded review and four authenticated both-color desktop/mobile journeys pass. Final normal make verify build passes7312 software/427 files in537.39s, seven unchanged-budget performance/four files in64.57s,271 content/27 files in74.64s and all remaining contracts/build/corpus gates. Earlier failures, including the real automatic-evidence test race, remain logged; no job is suppressed and no deadline or assertion is weakened. D3863/D3894-D3903 close; D3864 retains nonmodule caller retirement. Qualification, GradeSource/other current consumers, official content and parent milestones remain open; no remote CI/release claim.",
           "impact": "advanced",
           "evidence": [
+            "apps/server/src/recorded-comparison-points.ts",
+            "apps/server/src/recorded-comparison-points.test.ts",
+            "packages/runtime/src/recorded-comparison-point.ts",
+            "packages/runtime/src/recorded-comparison-point.test.ts",
+            "packages/runtime/src/presentation-comparison.test.ts",
+            "packages/runtime/src/module-query.ts",
+            "apps/web/src/lib/module-query-response.ts",
+            "apps/web/src/lib/DrillScreen.svelte",
+            "apps/web/src/lib/screens.test.ts",
             "packages/runtime/src/recorded-comparison-eval.ts",
             "packages/runtime/src/recorded-comparison-eval.test.ts",
             "packages/runtime/src/testing/recorded-comparison-eval-fixture.ts",
@@ -1371,7 +1380,7 @@
             {
               "kind": "work_state",
               "id": "D3864",
-              "digest": "sha256:beaf0db574cf23ab3921e8bade22f0e6adf94c14569e36b874ff63dd53afc529"
+              "digest": "sha256:0d237899683f117f9d0274453f725f95a0e71b0b860aadfd47c57f58fe23fd99"
             },
             {
               "kind": "work_state",
@@ -1751,7 +1760,7 @@
             {
               "kind": "work_state",
               "id": "D3894",
-              "digest": "sha256:1be7900b9c304383a9af65cf58de20d9ee7bc922bbea7c4566bbf19291477e4c"
+              "digest": "sha256:d8588f7f47ff845b09473addd632865f9bfb90a400705c6f7a8834407879c7d4"
             }
           ]
         },

@@ -111,6 +111,8 @@ const SOURCE_REASON_SENTENCES: Readonly<Record<string, string>> = Object.freeze(
   pass_while_in_check: "the one-move threat convention is not computed while in check",
   trapped_while_in_check: "the trapped-piece convention is not computed while in check",
   input_abstained: "an input it depends on is missing",
+  missing_eval: "an engine reading was not recorded for a compared position",
+  source_pending: "an engine reading for a compared position is still being prepared",
 });
 
 /** Learner sentences for the sources a packet could not consult (never the raw reason id). */

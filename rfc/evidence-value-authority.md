@@ -1,6 +1,17 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-**Recorded numerical-difference implementation, 2026-11-01:** accepted §2.3a's internal
+**Compare current-image implementation verified, 2026-11-01:** the exact eight bindings now
+use Compare@2 with its sole RunService-issued nominal engine point, scoped structural differences,
+recorded-number differences and genuine piece paths. Current access/full tips/original source and
+requested budgets are retained; no scalar fallback or invented missing point. Registered strict
+renderers, exact current-consumer receiving and packet-captured peer action are wired. Four
+authenticated native desktop/mobile both-color journeys pass in40.3s. D3863/D3894–D3903 close
+with144 focused source/contract and292 component cases, independent bounded review and final normal
+make verify build:7312 software/427 files, seven performance/four files,271 content/27 files,
+all remaining contracts/build/corpus gates. Earlier failures remain logged. This verifies one
+complete current consumer, not qualification, nonmodule retirement, archive or parent completion.
+
+**Prior recorded numerical-difference checkpoint, 2026-11-01:** accepted §2.3a's internal
 eval_delta@2 now consumes the exact two original packet occurrences and nominal comparison
 scope, reconstructs the complete granted engine-labelled trail and preserves stable ply/event
 order, safe-integer arithmetic and the existing threshold. It reports recorded numbers only,

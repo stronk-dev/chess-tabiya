@@ -171,6 +171,7 @@ import { branchPath } from "./branch-path.js";
 import { recordedPieceRoutes, structureDeltaEntries } from "./compare-strip-values.js";
 import { isRecordedComparisonSource, recordedComparisonData, recordedComparisonPathValue, assertRecordedComparisonPath, type RecordedComparisonSource, type RecordedComparisonPath } from "./recorded-comparison.js";
 import { recordedComparisonEvalDeltaValue, type RecordedCompareEvalDeltaInput } from "./recorded-comparison-eval.js";
+import { isRecordedComparisonPointSource, readRecordedComparisonPointSource, type RecordedComparisonPointSource, type RecordedComparisonEnginePoint } from "./recorded-comparison-point.js";
 import { isRecordedReviewBoundary, readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdentity } from "./types.js";
 import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
@@ -376,6 +377,7 @@ function authorityShape(candidate: unknown): unknown {
   if (isRecordedSequenceWindow(candidate)) return readRecordedSequenceWindow(candidate).authority;
   if (isRecordedPivotalSource(candidate)) return recordedPivotalData(candidate).authority;
   if (isRecordedComparisonSource(candidate)) return recordedComparisonData(candidate).authority;
+  if (isRecordedComparisonPointSource(candidate)) return readRecordedComparisonPointSource(candidate).authority;
   if (isRecordedReviewBoundary(candidate)) return readRecordedReviewBoundary(candidate);
   if (isRun(candidate)) return { run: candidate.id, nodes: candidate.nodes.length, events: candidate.events.length };
   if (candidate instanceof Map) return { map: [...candidate].map(([key, entry]) => [key, authorityShape(entry)]) };
@@ -1422,6 +1424,15 @@ export const createDerivedCompareEngineTrajectoryV1Evidence = (() => {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, comparison: COMPARISON, branchId: value("a branch id", isText) }], result: "population", dependency: "provider-exchange-and-execution", pending: "Recorded engine entries are verified against the run's evidence.attached events; the live exchange receipt lands with provider-exchange-and-execution." }, ({ run, comparison, branchId }: { readonly run: DrillRun; readonly comparison: BranchComparison; readonly branchId: string }) =>
     Object.freeze(verifiedTrail(run, comparison, branchId).map((entry) => mint(route, symbol, entry, { run, comparison: comparison.forkNodeId, branchId, entry }, [evidenceDigest(entry)]))));
+})();
+
+export const createDerivedCompareEngineTrajectoryV2Evidence = (() => {
+  const route = "derived.compare.engine_trajectory@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ comparisonPoint: value("an original Compare point source", isRecordedComparisonPointSource) }], result: "availability" },
+    (input: { readonly comparisonPoint: RecordedComparisonPointSource }) => {
+      const data = readRecordedComparisonPointSource(input.comparisonPoint);
+      return data.payload === null ? unavailable<DeclaredEvidence<RecordedComparisonEnginePoint>>(data.unavailable) : available(mint(route, symbol, data.payload, input, data.inputs));
+    });
 })();
 
 export const createDerivedCompareEvalDeltaV1Evidence = (() => {

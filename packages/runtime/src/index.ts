@@ -591,13 +591,14 @@ export {
   type SemanticEventSign,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-export { RUNTIME_EVIDENCE_CONSUMER_OPERATIONS } from "./evidence-consumer-operations.js";
+export { RUNTIME_EVIDENCE_CONSUMER_OPERATIONS, MODULE_EVIDENCE_CONSUMER_OPERATIONS } from "./evidence-consumer-operations.js";
 export {
   CURRENT_CONSUMER_OPERATION_IDS,
   EVIDENCE_ADAPTERS,
   EVIDENCE_CONSUMER_IDS,
   EVIDENCE_MODULE_IDS,
   MODULE_CONSUMER_ACCEPTS,
+  MODULE_CURRENT_IMAGE,
   MODULE_CONSUMER_IDS,
   MODULE_CONSUMER_IMPLEMENTATION,
   MODULE_SUCCESSOR_REBASE,

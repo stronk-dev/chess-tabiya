@@ -6,7 +6,7 @@ import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type Decl
 import { moduleDecisionStamp, type ModuleDecisionStamp } from "./module-decision.js";
 import { recordedEdgePayload } from "./recorded-edge.js";
 import { readBackReplay } from "./replay.js";
-import { digestRunEventHead } from "./run-subject-digest.js";
+import { digestRunEventHead, type RunEventHeadDigest } from "./run-subject-digest.js";
 import type { DrillRun, MoveCommittedEvent, Node, RunStartedEvent } from "./types.js";
 
 declare const recordedComparisonBrand: unique symbol;
@@ -28,7 +28,7 @@ export interface RecordedComparisonPath {
 interface ComparisonAuthority {
   readonly operation: "recorded-comparison-source@1";
   readonly runId: string;
-  readonly eventHeadDigest: string;
+  readonly eventHeadDigest: RunEventHeadDigest;
   readonly decision: ModuleDecisionStamp;
   readonly columns: readonly [RecordedComparisonColumn, RecordedComparisonColumn];
   readonly paths: readonly [readonly RecordedComparisonPathEntry[], readonly RecordedComparisonPathEntry[]];
@@ -40,6 +40,16 @@ interface ComparisonData {
 }
 const sources = new WeakMap<object, ComparisonData>();
 const identityFields = ["id", "parentId", "fen", "transposeKey", "moveUci", "moveSan", "ply", "actor", "branchId", "createdAt"] as const;
+
+/** One attempt-selection rule for the service grants, comparison facts and client action. */
+export function recordedComparisonColumnsForSubject(run: DrillRun, nodeId: string): readonly [RecordedComparisonColumn, RecordedComparisonColumn] | undefined {
+  const node = run.nodes.find(value => value.id === nodeId);
+  if (node === undefined) throw new TypeError("Unknown comparison subject");
+  const primary = branchPath(run, run.activeCursor.branchId).some(value => value.id === nodeId) ? run.activeCursor.branchId : node.branchId;
+  const peer = [...run.branches].reverse().find(value => value.id !== primary)?.id;
+  return peer === undefined ? undefined : Object.freeze([Object.freeze({ branchId: primary, throughNodeId: branchPath(run, primary).at(-1)!.id }),
+    Object.freeze({ branchId: peer, throughNodeId: branchPath(run, peer).at(-1)!.id })]);
+}
 
 function freeze<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {

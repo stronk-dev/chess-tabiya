@@ -63,6 +63,13 @@
       "aea25e9534e3a7bda67af93f6b39423fc3d7370d32be4591c94016adb9a1dea2"
     ]
   },
+  "derived.compare.engine_trajectory@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "d529b2c3eab8520ac42c46b53a0c331992936a49704bd72b27461305bd3c65d6"
+    ]
+  },
   "derived.compare.eval_delta@1": {
     "availability": "available",
     "cardinality": 1,

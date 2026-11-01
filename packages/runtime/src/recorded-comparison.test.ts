@@ -244,12 +244,13 @@ describe("owned recorded comparison scope and complete piece-route lineage", () 
     }
   });
 
-  it("keeps the new path/routes internal, correctly grounded and unbound until complete consumer migration", () => {
+  it("keeps the path internal and binds the exact route only to the complete current Compare consumer", () => {
     const path = PRIMARY_EVIDENCE_MANIFEST.projections.find(value => value.id === "run.record.comparison_path")!;
     const route = PRIMARY_EVIDENCE_MANIFEST.projections.find(value => value.id === "derived.compare.piece_route" && value.version === 2)!;
     expect(path).toMatchObject({ role: "source_record", forms: ["machine_condition"], grounding: "recorded_run", exactness: "exact", confidence: "not_applicable" });
     expect(route.derivation).toEqual({ inputs: [{ id: path.id, version: 1 }] });
-    for (const projection of [path, route]) expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(value => value.projection.id === projection.id && value.projection.version === projection.version)).toEqual([]);
+    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(value => value.projection.id === path.id && value.projection.version === path.version)).toEqual([]);
+    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(value => value.projection.id === route.id && value.projection.version === route.version).map(value => value.consumer)).toEqual([{ id: "module.compare_coach", version: 2 }]);
     expect(recordedComparisonData(recordedComparisonFixture().comparison).authority.operation).toBe("recorded-comparison-source@1");
   });
 });

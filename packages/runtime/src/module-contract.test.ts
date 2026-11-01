@@ -35,6 +35,7 @@ function declaration(id: ModuleId): ModuleDeclaration {
       : { kind: "manifest" as const, projections: Object.freeze([{ projection: evidenceRef }]), awaiting: Object.freeze([]) };
   return Object.freeze({
     id,
+    consumer: id === "rules_floor" ? null : { id: `module.${id}`, version: 1 },
     intent: `Intent for ${id}`,
     learnerAction: `Action for ${id}`,
     accepts,

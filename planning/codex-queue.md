@@ -1,6 +1,23 @@
 # Codex queue
 
-**Current Compare source work, 2026-11-01 — [[D3863]], [[D3894]]:** accepted F2 §2.3a's
+**Verified complete current Compare migration, 2026-11-01 — [[D3863]], [[D3894]], [[D3895]],
+[[D3896]], [[D3897]], [[D3898]], [[D3899]], [[D3900]], [[D3901]], [[D3902]], [[D3903]]:**
+the current eight-binding Compare@2 image, sole-service point issuer, original endpoint selection,
+strict renderers/receiver and captured enter-other action are implemented. Four authenticated
+desktop/mobile both-color browser journeys pass in40.3s with real automatic evidence enabled.
+Independent review clears population/preflight/caller-isolation, correlated renderer-domain,
+actual grants and real callable registrations. Final normal make verify build passes7312 software/
+427 files, seven unchanged-budget performance/four files,271 content/27 files and all remaining
+contracts/build/corpus gates. Earlier failed attempts and the automatic-evidence test race remain
+logged. These bounded rows close, not qualification, official content or a whole milestone/RFC.
+
+**Next accepted implementation:** finish [[D3859]]'s actual workflow-issued GradeSource, fixed
+paired arithmetic/accuracy/graph and coordinated complete Nudge/Review images; finish [[D3376]]'s
+installed-opening result/history authority and [[D3841]]'s full Inspector execution/source/page/
+renderer/receiver/API/native delivery. Keep [[D3864]] doing for actual nonmodule piece-route callers
+and obsolete-path retirement. No current-module legacy-only arm or new owner ordering question.
+
+**Prior internal Compare source checkpoint, 2026-11-01 — [[D3863]], [[D3894]]:** accepted F2 §2.3a's
 recorded numerical-difference@2 is implemented internally, with exact original packet/head/
 column/event membership before no-witness and predecessor-equivalent ply/event ordering.
 87 focused source cases and workspace types pass; independent review finds no blocker and its

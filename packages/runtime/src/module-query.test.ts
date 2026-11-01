@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import * as execution from "./evidence-binding-execution.js";
 import * as routes from "./internal/evidence-value-routes.js";
 import { exactLegalMoves } from "./legal-moves.js";
+import { comparisonSourcesForRun } from "./testing/recorded-comparison-point-fixture.js";
 
 import {
   MODULE_SOURCE_AUTHORITY,
@@ -404,6 +405,7 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
       ? { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] }
       : { timing: module === "full_inspector" ? "review" : "checkpoint", nodeId: run.activeCursor.nodeId, requested: [module] };
     const { page } = queryModules({ run, assistance, role: "learner", session: context, request, sources: {
+      ...(module === "compare_coach" ? { comparison: comparisonSourcesForRun(run, assistance, run.activeCursor.nodeId) } : {}),
       get explorerSummary(): never { throw new Error("unrelated Explorer source read"); },
       get shapes(): never { throw new Error("unrelated shape source read"); },
       get authoredAt(): never { throw new Error("unrelated authored source read"); },
@@ -502,7 +504,7 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     run = rewind(run, root, at).run;
     run = fork(run, root, { at }).run;
     run = commitMove(run, "a2a3", { at }).run;
-    const { page } = queryModules({ run, assistance, role: "learner", session: "onramp", request: { timing: "checkpoint", nodeId: run.activeCursor.nodeId, requested: ["compare_coach"] } });
+    const { page } = queryModules({ run, assistance, role: "learner", session: "onramp", request: { timing: "checkpoint", nodeId: run.activeCursor.nodeId, requested: ["compare_coach"] }, sources: { comparison: comparisonSourcesForRun(run, assistance, run.activeCursor.nodeId) } });
     const coach = packetOf(page, "compare_coach")!;
     const sentences = assertDelivered(coach, assistance);
     expect(sentences.length).toBeGreaterThan(0);

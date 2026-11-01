@@ -32804,3 +32804,93 @@ self-acceptance, feature permission or partial current consumer image follows fr
   compatibility pipeline or a finished-feature claim from an isolated helper. No extra authoring
   approval is required for the established private constructor pattern. Record current progress
   in the existing queue/RFC/docs/work-state/roadmap; full1.0 goal remains active.
+
+## 2026-11-01 — Complete Compare current image implemented, final gates in progress
+
+- Implement the sole service-owned comparison point, exact eight-binding Compare@2 image,
+  complete preflight, current full-tip grants/source revalidation, strict typed point/difference
+  rendering, exact current-consumer receiving and packet-captured peer action. Modern/pending/
+  pinned offline selection shares the fixed original endpoint implementation; no neighbor rescue,
+  scalar fallback, invented score or move grade.
+- Independent review finds D3895 incomplete/crossed original population, D3896 foreign-manifest
+  count-only preflight and D3897 caller-object freezing. Record and repair them, including cloning
+  unrelated mutable records. Its next pass finds D3898 correlated renderer domains (offline node
+  budgets, zero mate, zero provider generation) and D3899 synthetic-only grant testing. Record
+  and repair with actual strict wire and SQLite/RunService host downgrade/revocation controls.
+  Final bounded review finds no remaining blocker; it does not run or certify the full gates.
+- Normal focused checks pass140 cases/seven files with workspace types. They include actual REST,
+  real pending appearance/retirement and a real zero-edge root point. Four authenticated Chromium
+  journeys pass, desktop/mobile and both colors: recover a missing attempt, play another branch,
+  reload, render the current consumer, enter its captured peer and preserve board/graph state.
+- Failed first attempts remain evidence: missing source-absence metadata, stale v1/field/count/
+  unbound fixtures, fixture feedback/preset errors, wrong receipt reference, an idempotence bug in
+  the test's grant-revocation hook and stale generated semantic receipts. Correct facts/fixtures,
+  do not raise deadlines, weaken assertions or promote qualification. Normal regeneration retains
+  91 unqualified semantic subjects/343 passing cases/53 populations/eight external receipts.
+- Full normal make verify build is running again after repairs. All affected ledger rows remain
+  doing until complete verification/closeout. No whole RFC/milestone/content/1.0 or remote CI claim.
+
+## 2026-11-01 — Complete gates return two real Compare integration repairs
+
+- D3900: component coverage refuses the old metadata-id anchors after the current image derives
+  module ids. Anchor each current consumer at its actual compileModulePacket implementation,
+  not at a generated id. Unchanged coverage now passes all ordinary91/Inspector117/author5/
+  learner-module224 pairs with zero misses; all eight anchor controls remain.
+- The next full software run passes7,308 cases and fails one client-entry parity assertion across
+  427 files in468.55s. D3901 records the missing main-barrel export of MODULE_CURRENT_IMAGE.
+  Add the original re-export rather than weakening the exact identity assertion. The normal
+  Compare target now includes that permanent boundary test and passes143 cases/eight files.
+- All normal gates/build are running again. No final green, closed parent or remote result is
+  inferred from the previous almost-green run; all reported defects remain assigned meanwhile.
+
+## 2026-11-01 — Green normal gates, then accepted-contract callable closure
+
+- Full normal make verify build exits zero:7,309 software/427 files in485.00s, seven isolated
+  performance/four files in63.73s,271 content/27 files in62.89s, all governance/corpus/build gates.
+  Graduation92 documents has no errors; capability104 documents remains unchanged.
+- Final §4.11a re-read catches D3902: real module function references were not registered through
+  evidenceConsumerOperation despite the successful name-based check. Add the exact current-tuple/
+  callable falsifier first:143 passes/one expected missing-registration failure. Derive the actual
+  registrations from MODULE_CURRENT_IMAGE and include them in the normal manifest assertion;
+  reject omitted rows, old Compare versions and wrong callables without weakening earlier checks.
+- Independent bounded review finds no blocker in this repair. Browser initialization gains no
+  function-name assertion that minification could break. Rerun focused/types/manifest/native and
+  the entire normal gate after the repair; the earlier green is not final readiness for new bytes.
+
+## 2026-11-01 — Real automatic evidence versus unchanged-decision browser setup
+
+- D3903: four native Compare journeys fail when actual queued engine attachments advance the
+  event head after a valid Compare response. Trace inspection and independent read-only review
+  establish intentional exact-head retirement, not a point/source or callable-registration bug.
+  Reuse waitForPlayedMoveEvidence before the explicit unchanged-decision query; keep all real
+  jobs, action assertions, deadlines and source/permission controls. No sleep or suppressed work.
+- Two genuine completed-card attachment controls prove both learner colors retire the old action,
+  refuse its detached button and require a new explicit request.292 component cases/four files
+  pass; all four actual browser journeys pass in40.3s with zero retries. A test-only unknown/query
+  union narrowing error is corrected with the existing parser, not a cast or typecheck exclusion.
+- The final full normal make verify build is running on the repaired source/test image. No
+  completed parent, qualification, content, milestone, remote CI or release result is inferred.
+
+## 2026-11-01 — Complete current Compare migration verified and closed out
+
+- D3863 and D3894–D3903 close the eight-binding current module.compare_coach@2 delivery: actual
+  RunService grants/full attempts and original source owners, complete V2 preflight, scoped
+  structure/numerical differences, typed attributed engine points, recorded piece routes, strict
+  registered rendering/current receiving and packet-captured other-attempt navigation.
+- Final normal make verify build exits zero:7,312 software/427 files in537.39s; seven isolated
+  unchanged-budget performance/four files in64.57s;271 content/27 files in74.64s; all remaining
+  contracts/governance/build/corpus gates. Installed graduation92 documents has errors[];
+  capability104 documents declares its actual requirements.144 focused source/contract cases,
+  292 component cases and four actual desktop/mobile both-color browser journeys in40.3s pass.
+  Independent bounded review clears the source, access, renderer, real-registration and native
+  setup repairs. Earlier failed/interrupted attempts remain in this append-only history.
+- Update the shared ledger, durable work states, queue, current RFC implementation checkpoint,
+  docs and roadmap together. D3864 stays doing for actual nonmodule caller/obsolete-path
+  retirement. GradeSource/paired accuracy/graph, installed opening history and complete Inspector/
+  other current consumer journeys remain next. No source qualification, official pack graduation,
+  whole capability/milestone/RFC, remote CI, release or full1.0 completion is claimed.
+- Post-closeout governance and the exact staged process contract pass. The staged whitespace
+  check catches one extra EOF blank line in the new shared endpoint normalizer; removing it
+  changes no behavior. Normal semantic regeneration refreshes its affected metadata, retaining
+  all343 passing cases,53 populations/eight external receipts and zero qualification promotions.
+  The final commit hook validates the refreshed staged image rather than the earlier index.
