@@ -249,3 +249,31 @@ Close D3890/D3891/D3892 with actual file evidence; earlier failed attempts remai
 larger test count is partitioning, not feature breadth. D3841 remains doing; compiler execution
 grants, remaining source owners and complete current consumer/Inspector/API/native delivery are
 still required. No milestone, qualification, content graduation, browser or remote result is claimed.
+
+## 2026-11-01 — Fixed recorded engine endpoint source prerequisite
+
+The internal server owner now captures actual original modern deliveries, current owned Review
+reservations and independently pinned ledger candidates under one storage-current boundary.
+Each node selects once, before pair comparison. Requested depth/time/node bounds and typed White
+scores retain their actual origin/instrument; no scalar promotion or pair-rescuing fallback.
+The permanent A/X, B/Y-then-X, C/Y case selects B/Y consistently.159 focused cases/five files and
+workspace types pass; initial fixture/type failures remain logged in the root exploration log.
+Independent bounded review/full normal gates are pending. D3859/D3863 stay doing; this is not
+workflow access, GradeSource, Compare-point, grade/accuracy/graph or API/native completion.
+
+## 2026-11-01 — Endpoint review return repaired
+
+D3893's actual later conflicting evidence-kind candidate first fails for missing refusal, then
+passes after the exact source-kind check moves before reading-refusal/selection shortcuts.
+Additional original clock, refused-kind and actual pending-reservation replacement controls pass.
+Normal focused gate164/five files and workspace types pass; independent bounded re-review clears.
+Full normal gates/build remain pending; D3893/D3859/D3863 are not closed by these focused results.
+
+## 2026-11-01 — Fixed endpoint source checkpoint verified
+
+Full normal make verify build exits zero:7,240 software/423 files, seven isolated performance/
+four files,271 content/27 files and every remaining contract. Independent bounded re-review,
+164 focused/five-file cases and workspace types pass. Close only D3893 with actual test evidence;
+prior missing-refusal and fixture/type failures remain in the append-only logs. D3859/D3863 stay
+doing: workflow/GradeSource/Compare point/paired arithmetic/accuracy/graph/current consumer/API/
+native adoption remain. No current learner path is partially switched or marked complete.

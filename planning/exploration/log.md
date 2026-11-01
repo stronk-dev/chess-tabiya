@@ -32670,3 +32670,66 @@ Campaign was the one capability with no API, route or content. Now:
   complete remaining sources and actual Inspector/preflight/paging/disclosure/receiver/API/native
   delivery remain. No legacy compatibility arm, new schema/producer/provider request, raw
   research dump, qualification, milestone or whole1.0 completion follows. Full1.0 goal stays active.
+
+## 2026-11-01 — Fixed recorded engine endpoint selection, verification pending
+
+- Previous goal turn is verified progress at6e87daa0: current Inspector context/ledger operations,
+  complete normal gates and synchronized closeout. Start tracked-clean; retain the same three
+  pre-existing untracked paths. Continue accepted grades §2a/F2 D3863's shared node selection.
+- Implement server-private RecordedEngineEndpointOwner over the genuine storage-current boundary,
+  original durable modern attachments and original registry populations. Preserve each selected
+  node's complete occurrences/candidates/dispositions and typed White score/instrument/requested
+  bound. Actual modern attachment or owned Review reservation takes precedence; scalar reports
+  never become provider evidence. Select offline first individually eligible ordinal once per
+  node, before any neighbor/pair comparison. Later conflicting artifacts fail rather than hide
+  behind an earlier usable candidate. No score/reading/FEN choice or validator comes from callers.
+- Add the coordinator's read-only opaque reservation identity check, retaining original active
+  job ownership/full FEN and no mutable job/controller exposure. No source capture/read schedules
+  providers, discovers engine identity, mutates the run or reopens files. Retained reads recheck
+  storage, pending appearance/retirement, original registry populations and cancellation.
+- First type check identifies two provisional type assumptions: requested bounds exclude reached
+  depth, and engine generation needs an explicit non-null check. Correct the source normalization,
+  preserving full original private evidence. First focused run reaches no source checks because
+  fixture account creation was omitted (24 foreign-key failures); add the real learner before
+  SQLite run creation. Do not relax storage/validators. The corrected159-case/five-file focused
+  gate and all workspace types pass, zero Svelte errors/warnings.
+- Request independent bounded implementation review. Full normal verification/build remains
+  pending. D3859/D3863 stay doing: actual workflow access/GradeSource/Compare point/paired grade,
+  accuracy/graph/current preflight/renderer/API/native delivery and queued Stockfish references
+  remain. No source registration, schema, grade convention, content or milestone is promoted.
+
+## 2026-11-01 — Endpoint independent return repaired before full verification
+
+- Independent review finds D3893: SourceEntry.origin.evidenceKind is only nonempty in the
+  manifest validator and is not joined to engine_eval by the new endpoint candidate. Verify
+  the actual validator/population symbols, record/assign the row and reproduce the real missing
+  refusal:159 focused passes/one failure on a later conflicting candidate after a valid one.
+- Require exact engine_eval engine-origin kind before reading-refusal shortcuts or selection.
+  Permanent added controls retain refused-kind conflicts, later record-clock/abstention-clock
+  failures, wrong run/branch/node pending lookup and a genuine same-node reservation replacement
+  through actual coordinator LRU eviction/cancellation/re-admission. No fabricated pending token.
+- Corrected normal focused run164 cases/five files and all workspace types pass, zero Svelte
+  errors/warnings. Independent bounded re-review finds no remaining source-selection objection;
+  reviewer edits no files/runs no tests. The initial tracker sync correctly refuses one newly
+  untriaged row; immediate explicit doing assignment restores zero without changing its ceiling.
+- D3893 remains doing until full normal gates/build. D3859/D3863 remain doing beyond this
+  prerequisite. No full GradeSource/Compare/context/access/preflight/API/native or qualification
+  claim; current learner callers have not been partially switched to new source semantics.
+
+## 2026-11-01 — Fixed engine endpoint source checkpoint verified
+
+- Complete normal make verify build exits zero:7,240 software/423 files in486.76s, seven
+  isolated performance/four files,271 real-content/27 files and every remaining governance/
+  corpus/build contract. Graduation audit92 documents/zero errors and exact capability derivation
+  for104 documents pass. Catalogue/source/convention/content/qualification meanings stay unchanged.
+- Close D3893 with apps/server/src/recorded-engine-endpoints.test.ts as actual path evidence.
+  Its preceding missing-refusal failure, fixture/type failures, independent return/repair and
+  bounded re-review remain logged.164 focused/five-file cases and clean workspace types also pass.
+  No test deadline, retry, assertion, source population or covered factory is relaxed.
+- D3859/D3863 remain doing: actual workflow-issued GradeSource/Compare-point source and factory,
+  paired grading/accuracy/graph/current preflight/renderer/API/native delivery and queued Stockfish
+  references still need implementation. Current-source selection is internal source groundwork,
+  not a grade/access grant, a completed learner feature or a second compatibility pipeline.
+- Update the existing queue, canonical Review docs, grade RFC checkpoint, work-state and roadmap
+  together. No new tracking silo or raw research artifact. Full1.0 objective remains active;
+  no milestone/content graduation, browser/native or remote CI completion is claimed.

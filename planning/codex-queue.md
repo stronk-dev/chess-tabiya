@@ -1,5 +1,21 @@
 # Codex queue
 
+**Verified fixed endpoint checkpoint, 2026-11-01 — [[D3859]], [[D3863]]; [[D3893]] closed:** the internal
+source owner now captures original boundary/modern/registry/request state once per node.
+Actual modern deliveries/reservations precede independently pinned reports; first individually
+eligible report selection retains all candidates and never searches a later row to rescue a pair.
+Typed White scores, original occurrences and requested budgets survive; current source reads
+recheck storage, registry, pending ownership and cancellation.164 focused cases/five files and
+workspace types pass. Independent review returns D3893's unchecked engine-origin evidenceKind;
+the actual later-conflicting-candidate negative first fails, then passes after the source check
+precedes refusal shortcuts/selection. Independent bounded re-review clears. Full normal
+make verify build exits zero:7,240 software/423 files, seven isolated performance/four files,
+271 content/27 files and every remaining contract. Existing budgets/coverage remain unchanged;
+no remote CI or browser/native result is claimed. Earlier focused failures remain logged.
+Next complete actual workflow-issued GradeSource/Compare context/point/paired arithmetic and
+full current consumer/API/native delivery. No partial learner cutover or compatibility arm;
+the queued Stockfish-reference owner remains separate. D3859/D3863 stay doing.
+
 **Verified current-context/ledger checkpoint, 2026-11-01 — [[D3841]]; [[D3890]], [[D3891]], [[D3892]] closed:**
 RunService now owns genuine current Inspector contexts and original registry-backed ledger
 suppliers. Full canonical events/replay precede granted-path narrowing; current role, assistance,

@@ -248,6 +248,7 @@ export class ReviewEvidenceCoordinator {
   readonly #options: ReviewEvidenceCoordinatorOptions;
   readonly #trackers = new Map<string, BranchTracker>();
   readonly #inflight = new Set<Promise<void>>();
+  readonly #recordedRequests = new WeakMap<object, object>();
   #closed = false;
   #closing: Promise<void> | undefined;
   #clock = 0;
@@ -264,6 +265,17 @@ export class ReviewEvidenceCoordinator {
   }
 
   get trackedBranches(): number { return this.#trackers.size; }
+
+  /** Private source lookup: an actual still-owned reservation, never inferred from a missing score.
+   * The opaque identity stays stable for that reservation and exposes no mutable controller/job.
+   * Reading does not enqueue, update LRU order or discover an engine identity. */
+  recordedPendingRequest(runId: string, branchId: string, nodeId: string, fen: string): object | undefined {
+    const tracker = this.#trackers.get(`${runId}\u0000${branchId}`), job = tracker?.active.get(nodeId);
+    if (tracker === undefined || job === undefined || job.fen !== fen || !this.#owns(tracker, nodeId, job)) return undefined;
+    let token = this.#recordedRequests.get(job);
+    if (token === undefined) { token = Object.freeze({}); this.#recordedRequests.set(job, token); }
+    return token;
+  }
 
   /** Resolves when no provider work is in flight (tests and graceful shutdown). */
   async whenIdle(): Promise<void> {

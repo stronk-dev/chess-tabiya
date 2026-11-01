@@ -74,6 +74,38 @@ empty/root-only groups. Rank always publishes one value, including `{rank:[]}`; 
 child evaluations or patterns. No providers or child collectors run during ranking/readback.
 The current learner consumers and count-only renderer are not yet migrated.
 
+## Fixed recorded engine endpoints (internal)
+
+`apps/server/src/recorded-engine-endpoints.ts` now captures one immutable endpoint selection
+per original node of a genuine stored `RecordedReviewBoundary`. Its private owner reuses the
+actual durable attachment collector and registry-owned measurement populations. A valid modern
+attachment wins at that node; a later scalar cannot replace it. Corrupt modern data fails rather
+than falling back. An actual still-owned Review reservation selects `source_pending`; a missing
+score alone does not. `ReviewEvidenceCoordinator.recordedPendingRequest` returns only an opaque
+reservation identity after checking its original run/branch/node/full FEN, without scheduling work.
+
+Otherwise a pack node independently selects its first individually eligible original engine
+report. Full candidate dispositions and original ledger/manifest ordinals survive. An engine
+source must match the reported identity/version/name, profile and requested budget; a generic
+file/HTTP source cannot attest an engine instrument. Later conflicting artifacts fail even beside
+an earlier usable reading. Non-pack runs cannot borrow a pack at the same FEN. Missing, refused
+or abstained sources never produce an invented score or default grade.
+
+The shared lookup retains typed White-relative cp/mate scores and requested depth/time/node
+bounds for modern deliveries, or depth/time bounds for offline reports. Reached depth is retained
+in the original source but never substitutes for a timed/node budget. It does not normalize a
+score a second time or turn mate into cp. A node's selection is independent of both neighbors:
+A/X, B/Y-then-X, C/Y selects B/Y once; a later pair calculation cannot rescue A→B with B/X.
+
+Every retained read checks the original storage boundary, registry membership, actual pending
+reservation appearance/retirement and cancellation. This source prerequisite does not issue
+current Nudge/Review/Compare access, a `RecordedGradeSource`, a comparison-point factory or an
+execution grant. The future queued Stockfish-reference arm, complete current preflight and
+grade/accuracy/graph/Compare/API/native migration remain. No provider call or run write occurs
+in source capture/readback. The existing learner paths are not partially switched to it.
+
+## Recorded reductions and moment assembly
+
 The internal `derived.story.last_level@2` operation now consumes that original complete population.
 It authenticates every row/state/result before checking whether an eligible imported result says
 the learner lost. Typed cp alone is converted from White to learner perspective; the latest

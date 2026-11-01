@@ -6,6 +6,19 @@ unaccepted labels for these clauses are history; actual issuance, source/consume
 parent obligations remain. Decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+**Internal per-node selection checkpoint, 2026-11-01 — [[D3859]], [[D3863]]:** the server-private
+RecordedEngineEndpointOwner now joins the genuine stored boundary, exact durable modern
+attachments, actual owned Review reservations and original pinned registry populations. Selection
+is fixed per node, retaining every candidate disposition, typed White score and exact requested
+budget/instrument. Modern corruption cannot fall back; a later offline candidate cannot rescue
+an adjacent pair. Storage/artifact/pending/cancellation revalidate on read.164 focused cases/five
+files and workspace types pass; independent bounded re-review clears D3893's predecessor-red
+source-kind repair and stronger original-state controls. Full normal make verify build passes
+7,240 software/423 files, seven isolated performance/four files,271 content/27 files and all
+remaining contracts. D3893 is closed; existing budgets and coverage are unchanged. This is
+not a GradeSource/access grant, queued Stockfish-reference arm, current consumer, accuracy/graph,
+Compare factory or API/native migration. D3859/D3863 remain doing.
+
 **Internal durable attachment checkpoint, 2026-10-16 — [[D3859]], [[D3863]]:** §2a now has
 its private durable modern arm over a genuine validated storage boundary. All original seq/
 ordinal/position/delivery inputs remain; latest modern selection ignores later scalar reports,

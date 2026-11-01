@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3892]] · **Machine map:**
+2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3893]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,7 +19,19 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The latest source checkpoint implements current RunService-owned Inspector contexts and exact
+The current internal endpoint checkpoint now fixes one engine-source selection per original
+stored node, shared groundwork for grade/accuracy/graph and Compare. Genuine modern deliveries
+or actual owned Review reservations precede independent pinned pack reports; all candidate
+dispositions and original ordinals survive. Requested depth/time/node budgets retain their real
+instrument, and typed White-relative mates never become cp. The A/X, B/Y-then-X, C/Y control
+keeps B/Y for both adjacent edges. D3893's conflicting source kind is reproduced and repaired;
+164 focused cases/five files and workspace types pass, with independent bounded re-review clear.
+Full normal make verify build passes7,240 software/423 files, seven isolated performance/four
+files,271 content/27 files and all remaining contracts. D3893 is closed. Actual workflow-issued GradeSource/Compare,
+paired grade/accuracy/graph, queued Stockfish references and complete consumer/preflight/access/
+renderer/API/native delivery remain. D3859/D3863 stay doing; no learner or milestone promotion.
+
+The verified Inspector checkpoint implements current RunService-owned contexts and exact
 registry-backed ledger suppliers. Original full events are canonically validated before replay
 comparison and path narrowing; actual current role/assistance/recorded-branch disclosure,
 cancellation and registry membership revalidate before returning retained results. Mixed, zero,

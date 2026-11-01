@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:bcfe84b342a088e7f34d4effc9a5deb3dfff4c2853deb24435cb5d48fbf3dcbb",
+    "roadmap": "sha256:944b9f8e33f2cf4949c26499f9b45a901f37e94a716187c2686cd84945fe4f3f",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:998524f9e631b587503062275541c7499b62792aebae18bce117f415dd5ab921",
+    "workState": "sha256:3951f99b079e9d6acf3d52bf397b6ed2299539f2103ce83b9ecbd71d0f92453e",
     "rfcRegister": "sha256:99b163d6ea20f7bcbe45e302ab796375b5f4df7a854ce30b9971f05827ff6c78",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 38,
       "blocked": 1083,
-      "done": 1730,
+      "done": 1731,
       "refused": 162
     },
     "workItems": {
@@ -487,12 +487,15 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Integrate the actual current source operations with compiler execution grants and source-order Inspector paging/disclosure; finish installed-opening result/history authority and remaining grade/Compare endpoint selection. Complete all source/preflight/access/renderer/receiver/API/native obligations per consumer, not a partial Inspector image or compatibility-only pipeline. Preserve every exact family, original occurrence and assistance ceiling; qualification/content/release milestones require their own evidence.",
+      "nextAction": "Complete workflow-issued GradeSource and Compare-point sources/factories using the fixed original node selections, paired arithmetic and real current preflight/access. Finish installed-opening result/history authority and compiler execution grants, then complete source-order Inspector paging/disclosure and every source/renderer/receiver/API/native obligation per consumer. Preserve all exact detector families/occurrences and assistance ceilings; no partial consumer image or compatibility-only pipeline. Qualification/content/release milestones need their own evidence.",
       "latestCheckpoint": {
         "at": "2026-11-01",
-        "summary": "Accepted D3841 now has server-private current RunService contexts and exact registry-backed ledger suppliers. Canonical original events/replay precede bounded path extraction; current actual role/config/recorded-branch disclosure, separate cancellation and registry membership revalidate before publication. Complete report duplicates/refusals/abstentions and original invocation/coverage/source identities survive, including zero and mixed populations. D3890 role/effect and independently found D3891 replay/schema defects first fail permanent negatives, then pass.131 focused cases/six files and workspace types pass; independent bounded re-review clears code/coverage. D3890/D3891/D3892 close after full normal make verify build7205 software/422 files, seven isolated performance/four files,271 content/27 files and all remaining gates. Independent review clears per-factory partitioning of the monolithic timeout, retaining complete recursive coverage and unchanged deadlines. Larger test count is not feature breadth; earlier failures stay logged. Prior source/rank/opening/telemetry checkpoints stand. Compiler execution grants, remaining sources and complete current consumer/preflight/paging/disclosure/receiver/API/native delivery remain; no qualification, content, milestone or whole-capability claim.",
+        "summary": "Accepted grades/F2 source groundwork now fixes one engine endpoint selection per original stored node. Genuine modern deliveries/owned pending Review reservations precede independent pinned reports; complete candidate dispositions and original occurrence/profile/requested-budget/typed White score identities survive. No neighbor-dependent fallback or scalar promotion. D3893 conflicting source kind first fails its permanent negative, then passes before refusal shortcuts/selection; clock and actual reservation replacement controls pass.164 focused cases/five files and workspace types pass; independent bounded re-review clears. Full normal make verify build passes7240 software/423 files, seven isolated performance/four files,271 content/27 files and every remaining contract. D3893 is closed; prior focused failures and independent return/repair remain logged. No test budget or coverage is relaxed. Prior current Inspector/context/ledger checkpoints stand verified. D3859/D3863 remain doing: workflow-issued GradeSource/Compare point, paired grading/accuracy/graph, queued Stockfish references and complete current preflight/access/renderer/receiver/API/native delivery remain. No qualification, content, milestone or whole-capability claim.",
         "impact": "advanced",
         "evidence": [
+          "apps/server/src/recorded-engine-endpoints.ts",
+          "apps/server/src/recorded-engine-endpoints.test.ts",
+          "apps/server/src/review-evidence.ts",
           "apps/server/src/inspector-recorded-context.ts",
           "apps/server/src/inspector-recorded-context.test.ts",
           "apps/server/src/inspector-ledger-source.ts",
@@ -1124,6 +1127,11 @@
             "kind": "work_state",
             "id": "D3892",
             "digest": "sha256:97574f932c4471b4ceb5cb60dafb4ef136f0da43074169a3630d34d82806a574"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3893",
+            "digest": "sha256:9d6b810e2d7228c9cf7d40e4ad991a8d6d1f23013f01a5867424e3974419318a"
           }
         ]
       },

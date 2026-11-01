@@ -32147,7 +32147,7 @@
       "id": "D3859",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5c6fb2308a7f3d38baa849824d03f8cc0e3c89670f6b6b40f4208d860d415370",
+      "sourceDigest": "sha256:7d0e69371b08a66889f837d28b47a03d2d2a5c6755a76e956051ba48676cb102",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32183,7 +32183,7 @@
       "id": "D3863",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3154171316448fed8bcb922cea788d78c8b5eae80e137cfd40b25f0e51e5d808",
+      "sourceDigest": "sha256:f7ad6c7a2a1f876c3e8eccbb7c60a73b01edee06faae58539af178c03a885964",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32446,6 +32446,15 @@
       "sourceDigest": "sha256:97574f932c4471b4ceb5cb60dafb4ef136f0da43074169a3630d34d82806a574",
       "uxItems": [],
       "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3893",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9d6b810e2d7228c9cf7d40e4ad991a8d6d1f23013f01a5867424e3974419318a",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-engine-endpoints.test.ts",
       "evidenceKind": "path"
     }
   ]
