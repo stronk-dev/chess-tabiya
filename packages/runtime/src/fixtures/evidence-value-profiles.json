@@ -2458,16 +2458,18 @@
     ]
   },
   "theory.opening.catalogue_membership@1": {
-    "availability": "unavailable",
-    "cardinality": 0,
-    "payloadDigests": [],
-    "reason": "artifact_missing"
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "c44b8896abe69ed3d5fe35cd6e77a052af5574b82a5c7de0478282ae093f4715"
+    ]
   },
   "theory.opening.current_endpoint@1": {
-    "availability": "unavailable",
-    "cardinality": 0,
-    "payloadDigests": [],
-    "reason": "artifact_missing"
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "0a4d5b1416ec93686a8c0dd26c8376a1abbfc6e2a761cb2398afe2537a2295b3"
+    ]
   },
   "theory.shapes.firing@1": {
     "availability": "available",

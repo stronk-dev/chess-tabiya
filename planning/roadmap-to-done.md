@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3903]] · **Machine map:**
+2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3908]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,18 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+The installed-opening point prerequisite now reaches the actual Theory module: genuine source/
+position/result-array joins render the current catalogue name, with authentic unnamed results
+and typed source failure.46 source/API cases,129 Theory/Explorer cases, workspace types,
+independent bounded review and nine desktop/phone journeys pass, including named-to-unnamed
+advancement in the same saved game, reload and unchanged recorded play. Normal local tiers pass
+7,954 software/430 files, seven unchanged-budget performance/four files,271 content/27 files and
+governance/corpus/build checks. Earlier failed combined commands remain failed records; source/
+test bytes stay unchanged while remaining metadata/content tiers pass. D3904–D3908 close only
+their bounded source/test/docs defects; the larger case count is not product breadth.
+D3376/D3857 remain open for complete history/reduction, catalogue pool and Inspector/Review
+delivery. No official pack, qualification, whole capability, milestone or release is promoted.
 
 The complete current Compare@2 module now reaches all eight bindings through actual RunService
 grants, original full attempts and fixed per-node engine selection. Scoped structure/numerical

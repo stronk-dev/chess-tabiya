@@ -47,6 +47,15 @@ no rank, budget, arithmetic or permission is changed by this presentation repair
 
 ## What executes today
 
+Theory Breadcrumb's opening input now comes from the actual startup-installed catalogue and
+the sole factory's recorded-position value. The caller verifies the original run/head/node,
+then authenticates both endpoint and catalogue-membership result arrays from one paired lookup.
+Only the matched endpoint goes to `play.opening@1`; a genuine unnamed position emits no name,
+and moving on or reloading cannot make the previous endpoint sticky. Missing, invalid and
+digest-mismatched installations retain separate absence states. Corrupt sources or crossed
+occurrences fail the actual API with typed unavailability. This supplies the opening leg, not
+the remaining complete catalogue-pool, recorded-history, Inspector or Review migration.
+
 Every compiled pair is either `executable` or `blocked_dependencies` with its blockers
 (`MODULE_PAIR_EXECUTION`). A pair is executable exactly when a production operation acquires its
 sealed source **and** an exact pair-keyed presentation adapter presents it.

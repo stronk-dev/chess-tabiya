@@ -32,6 +32,8 @@ import { recordedComparisonData, recordedComparisonColumnsForSubject, type Recor
 import { readRecordedComparisonPointSource, type RecordedComparisonPointSource } from "./recorded-comparison-point.js";
 import { digestRunEvidenceItem, resolveRunSubject } from "./run-subject.js";
 import { evidenceDigest } from "./evidence-contract.js";
+import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
+import { assertRecordedPositionInvocation, readRecordedOpeningPointResult } from "./internal/evidence-value-routes.js";
 import { assertDeclaredEvidence, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type EvidenceRole, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
@@ -139,6 +141,7 @@ export function parseModuleQueryRequest(value: unknown): ModuleQueryRequest {
 
 /** Server-owned inputs the catalogue pool needs (released authored items, registered shapes). */
 export interface ModuleSourceContext {
+  readonly opening?: OpeningCatalogueAvailability | undefined;
   readonly comparison?: Readonly<{ comparison: RecordedComparisonSource; points: readonly RecordedComparisonPointSource[] }> | undefined;
   readonly shapes?: readonly ShapeTriggerSource[];
   readonly authoredAt?: (nodeId: string) => readonly AuthoredFeedbackItemRecord[];
@@ -286,7 +289,7 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
       return [
         ...(context.authoredAt?.(subject.node.id) ?? []).map((item) => route("pack.authored.claim@1", { item })),
         ...(context.shapes === undefined || context.shapes.length === 0 ? [] : [route("theory.shapes.firing@1", { entries: context.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: subject.node.id, fen }] })]),
-        route("theory.opening.current_endpoint@1", { fen }),
+        openingEndpointSource(run, subject, context.opening),
         ...(explorer === undefined
           ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: context.explorerUnavailable ?? "not_requested" })]
           : explorer.payload.position.positionFen4 !== transposeKey(fen)
@@ -304,6 +307,23 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
     case "full_inspector": return inspectorSources(run, subject);
     default: return [];
   }
+}
+
+/** The exact installed pair is applicability proof; membership is not an extra learner fact. */
+function openingEndpointSource(run: DrillRun, subject: ModuleSubject, installation: OpeningCatalogueAvailability | undefined): ModuleSourceResult {
+  const projection = "theory.opening.current_endpoint@1";
+  if (installation === undefined || installation.kind === "unavailable") return Object.freeze({ kind: "unavailable", projection, reason: installation?.reason ?? "artifact_missing" });
+  const position = invokeEvidenceValueRoute("run.record.position@1", { run, nodeId: subject.node.id });
+  assertRecordedPositionInvocation(position, run, subject.node.id);
+  if (position.payload.fen !== subject.fen) throw new TypeError("Opening source crosses its exact recorded position");
+  const input = { source: installation.source, position };
+  const named = invokeEvidenceValueRoute(projection, input);
+  const member = invokeEvidenceValueRoute("theory.opening.catalogue_membership@1", input);
+  if (named.kind !== "available" || member.kind !== "available") throw new TypeError("Admitted installed opening source unexpectedly unavailable");
+  const endpoint = readRecordedOpeningPointResult(named.value, input, projection);
+  const membership = readRecordedOpeningPointResult(member.value, input, "theory.opening.catalogue_membership@1");
+  if (endpoint.invocation !== membership.invocation || (named.value.length > 0 && member.value.length !== 1)) throw new TypeError("Opening endpoint lost its actual paired catalogue applicability proof");
+  return named.value.length === 0 ? Object.freeze({ kind: "no_witness", projection }) : Object.freeze({ kind: "available", projection, items: named.value });
 }
 
 

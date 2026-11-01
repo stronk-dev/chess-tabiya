@@ -385,6 +385,13 @@ local shape or opening theory unavailable. If no usable fact exists, the module 
 honest absence. An invalid source-absence declaration or non-executable binding is a contract
 failure, not an ordinary provider absence, and prevents acquisition.
 
+The opening leg uses the same admitted installation loaded once for the application. Genuine
+recorded-position and original paired membership/endpoint results bind its exact run/head/node;
+only a named endpoint reaches the registered renderer. Successful unnamed lookup, missing or
+invalid installation, and invalid source joins remain distinct. No LLM invents a name or adds
+theory prose, and no request reloads the catalogue. Complete history and Inspector/Review source
+delivery remain separate open work.
+
 Explorer results still require their sealed whole source and exact requested position,
 population and window. Quiet, unrequested and withheld queries perform no source work.
 Authorization, disclosure and decision identity are checked again after acquisition; raw

@@ -1,5 +1,16 @@
 # RFC: Installed opening evidence
 
+**2026-11-01 point/Theory opening-leg checkpoint:** the two point factories now issue genuine
+positive/empty arrays over the actual installation and recorded position, with retained paired
+lookup/row authority. Actual Theory/RunService acquisition validates the original run/head/node,
+authenticates membership and endpoint, and renders only a matched name.46 focused source/API
+cases,129 Theory/Explorer cases, workspace types, independent bounded review and nine real
+desktop/phone browser journeys pass. Normal local tiers pass7,954 software/430 files, seven
+unchanged-budget performance/four files,271 content/27 files and governance/corpus/build checks.
+Earlier provider-fixture, functional-stage and tracker failures remain logged, not relabelled
+successful combined commands. Complete history/reduction, general catalogue pool and Inspector/Review migrations
+remain open; neither D3376/D3857 nor this RFC is complete.
+
 **2026-10-16 source foundation checkpoint:** §§1–2 now implement the actual shared schema,
 pure runtime loader and installed-source admission used by application loading. The package pin
 is263 bytes, generated before final application bundling. Original tables/source bytes are
@@ -22,7 +33,7 @@ unaccepted labels for those clauses are history; this does not accept unrelated 
 obligations or claim actual source delivery. Decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
-- **Status:** implementing — [[D3376]]; independently accepted §§1–3 base-source boundary on 2026-10-16, with §3a/current adoption previously jointly accepted. Shared schema/pure loader/installed-source work is underway; point/history factories and complete actual consumer/qualification/release obligations remain.
+- **Status:** implementing — [[D3376]]; independently accepted §§1–3 base-source boundary on 2026-10-16, with §3a/current adoption previously jointly accepted. Schema/pure loader/admitted source, genuine point arrays and the actual Theory opening leg are implemented; complete history/reduction, catalogue pool, current Inspector/Review and qualification/release obligations remain.
 - **Author:** codex
 - **Created:** 2026-10-08
 - **Design refs:** `design/03-product-breadth.md` (shared evidence and theory/Review journeys); `design/05-in-run-experience.md` (grounded, permission-bounded assistance); ADR-0005
@@ -344,3 +355,7 @@ theory remain outside this document. This answer is not implementation or D3082 
   Point refs/source pin and old history@1 remain. Independent source/joint review still required.
 - 2026-10-08: drafted from D3376 and the actual sole-factory/module-query/Review composition gaps;
   D3576/D3590 loader repairs remain independent. Not accepted or implemented.
+- 2026-11-01: implement authentic point-result arrays and the real Theory opening source leg;
+  original scope/membership joins, exact absence, typed API refusal and native no-sticky-name
+  delivery pass. D3904–D3908 close bounded source/test/docs repairs with normal local tiers;
+  full history/current consumer/qualification and parent RFC completion remain open.

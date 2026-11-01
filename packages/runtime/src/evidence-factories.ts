@@ -55,6 +55,8 @@ import { MATERIAL_COUNT_SLOTS, assertMaterialCauses, materialSignatureValue, mat
 import { forcedMateAfterMove } from "./mate-proof.js";
 import { moveQualityGrade, type GradeContext, type GradeSide, type MoveQualityGrade } from "./grade.js";
 import { gradeReadingFromPayload } from "./grade-reading.js";
+import { isInstalledOpeningCatalogue, type InstalledOpeningCatalogue, type CurrentOpeningEndpoint, type OpeningCatalogueMembership } from "./opening-catalogue.js";
+import { recordedOpeningLookup, readRecordedOpeningLookup, type RecordedOpeningLookup } from "./internal/recorded-opening-lookup.js";
 import { pieceDestinationEvents, pieceDestinationsReading } from "./mobility.js";
 import { candidateMajorityReading, harassmentPressureSequence, pawnContactsReading, pawnContactTimingSequence, pawnDynamicsEvents, pawnTransitionEvents, type RecordedMoveAnchor } from "./pawn-dynamics.js";
 import { developmentReading, phaseBandReading } from "./phase.js";
@@ -2324,17 +2326,51 @@ export const createDerivedGradeMoveQualityV1Evidence = (() => {
   });
 })();
 
-export const createTheoryOpeningCurrentEndpointV1Evidence = (() => {
-  const route = "theory.opening.current_endpoint@1";
-  const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "authored_authority", arms: [{ fen: FEN }], result: "availability", dependency: "runtime-opening-identity", pending: "The pinned opening catalogue artifact is server-resident; its runtime authority lands with runtime-opening-identity." }, ({ fen }: { readonly fen: string }): EvidenceAvailability<DeclaredEvidence<unknown>> => { validFen(fen); return unavailable("artifact_missing", "runtime-opening-identity"); });
-})();
+type OpeningPointRoute = "theory.opening.current_endpoint@1" | "theory.opening.catalogue_membership@1";
+interface OpeningPointInput { readonly source: InstalledOpeningCatalogue; readonly position: DeclaredEvidence<RecordedPosition> }
+type OpeningPointPayload = Extract<CurrentOpeningEndpoint, { kind: "matched" }> | Extract<OpeningCatalogueMembership, { kind: "member" }>;
+interface OpeningPointInvocation extends OpeningPointInput {
+  readonly route: OpeningPointRoute;
+  readonly invocation: RecordedOpeningLookup;
+  readonly lookup: ReturnType<typeof readRecordedOpeningLookup>["lookup"];
+  readonly authority: unknown;
+}
+const OPENING_POINT_RESULTS = new WeakMap<object, OpeningPointInvocation>();
+/** Only a fresh sole-factory result proves an executed lookup, including available([]). */
+export function readRecordedOpeningPointResult(result: readonly DeclaredEvidence<OpeningPointPayload>[], input: OpeningPointInput, route: OpeningPointRoute): OpeningPointInvocation {
+  const proof = result !== null && typeof result === "object" ? OPENING_POINT_RESULTS.get(result) : undefined;
+  if (proof === undefined || proof.route !== route || proof.source !== input.source || proof.position !== input.position) throw new TypeError("Opening point result is not its original source/position/projection invocation");
+  const original = readRecordedOpeningLookup(proof.invocation, input.source, input.position);
+  if (original.lookup !== proof.lookup) throw new TypeError("Opening point result lost its original paired lookup");
+  const expected = route === "theory.opening.current_endpoint@1" ? proof.lookup.result.currentEndpoint : proof.lookup.result.catalogueMembership;
+  const matched = expected.kind === "matched" || expected.kind === "member";
+  if (!Object.isFrozen(result) || result.length !== Number(matched)) throw new TypeError("Opening point result has an incomplete original population");
+  for (const item of result) {
+    assertDeclaredEvidence(item);
+    const receipt = evidenceValueReceipt(item);
+    if (sealedRoute(item) !== route || receipt.factory !== evidenceFactorySymbol(route) || receipt.inputDigest !== authorityDigest(proof.authority)
+      || receipt.payloadDigest !== evidenceDigest(expected)) throw new TypeError("Opening point result crosses its original lookup operands");
+  }
+  return proof;
+}
 
-export const createTheoryOpeningCatalogueMembershipV1Evidence = (() => {
-  const route = "theory.opening.catalogue_membership@1";
+function openingPointFactory<Route extends OpeningPointRoute>(route: Route) {
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "authored_authority", arms: [{ fen: FEN }], result: "availability", dependency: "runtime-opening-identity", pending: "The pinned opening catalogue artifact is server-resident; its runtime authority lands with runtime-opening-identity." }, ({ fen }: { readonly fen: string }): EvidenceAvailability<DeclaredEvidence<unknown>> => { validFen(fen); return unavailable("artifact_missing", "runtime-opening-identity"); });
-})();
+  return factory({ route, symbol, shape: "authored_authority", arms: [{ source: value("the admitted installed opening catalogue", isInstalledOpeningCatalogue), position: sealed("run.record.position@1") }], result: "availability", dependency: "none" },
+    (input: OpeningPointInput): EvidenceAvailability<readonly DeclaredEvidence<OpeningPointPayload>[]> => {
+      const invocation = recordedOpeningLookup(input), original = readRecordedOpeningLookup(invocation, input.source, input.position), lookup = original.lookup;
+      const payload = route === "theory.opening.current_endpoint@1" ? lookup.result.currentEndpoint : lookup.result.catalogueMembership;
+      const authority = Object.freeze({ catalogue: lookup.catalogue.ref, position: Object.freeze({ invocation: original.positionInvocation,
+        producer: input.position.producer, projection: input.position.projection, receipt: evidenceValueReceipt(input.position) }),
+        endpointRow: lookup.endpointRow, membershipRow: lookup.membershipRow, result: lookup.result });
+      const result = Object.freeze(payload.kind === "matched" || payload.kind === "member" ? [mint(route, symbol, payload, authority)] : []);
+      OPENING_POINT_RESULTS.set(result, Object.freeze({ ...input, route, invocation, lookup, authority }));
+      readRecordedOpeningPointResult(result, input, route);
+      return available(result);
+    });
+}
+export const createTheoryOpeningCurrentEndpointV1Evidence = openingPointFactory("theory.opening.current_endpoint@1");
+export const createTheoryOpeningCatalogueMembershipV1Evidence = openingPointFactory("theory.opening.catalogue_membership@1");
 
 export const createDerivedOpeningDeepestReachedV1Evidence = (() => {
   const route = "derived.opening.deepest_reached@1";

@@ -4874,6 +4874,74 @@ async function startSupportFromFen(page: Page, fen: string, side: "white" | "bla
   await choosePreset(page, /Support/u);
 }
 
+for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }]) {
+  test(`Installed opening Theory follows the recorded move, reload and unnamed next run (${viewport.width}px)`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    for (const setup of [
+      { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white", from: "e2", to: "e4", name: "King's Pawn Game" },
+      { fen: "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2", side: "black", from: "e7", to: "e6", name: null },
+    ] as const) {
+      await startSupportFromFen(page, setup.fen, setup.side);
+      await move(page, setup.from, setup.to, setup.side);
+      const runId = page.url().split("/").at(-1)!;
+      const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
+      await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(1);
+      for (const reload of [false, true]) {
+        if (reload) { await page.reload(); await expect(page.getByLabel("Chessboard")).toBeVisible(); }
+        await showSupportTools(page);
+        const reveal = page.getByRole("button", { name: "Show support for this position", exact: true });
+        if (await reveal.isVisible() && await reveal.isEnabled()) await reveal.click();
+        await waitForPlayedMoveEvidence(page, runId);
+        const before = await graph();
+        const events = await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json();
+        const theory = page.locator('[data-module="theory_breadcrumb"]');
+        await theory.locator(".seat-row").click();
+        const response = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().postDataJSON()?.query?.requested?.includes("theory_breadcrumb"));
+        await theory.getByRole("button", { name: "Show", exact: true }).click();
+        const result = await response;
+        expect(result.status()).toBe(200);
+        const packet = ((await result.json()) as { page: ModuleQueryPage }).page.packets.find(packet => packet.module === "theory_breadcrumb")!;
+        expect(packet.unavailable.some(item => item.projection === "theory.opening.current_endpoint@1")).toBe(false);
+        if (setup.name !== null) {
+          expect(packet.receipt.items.some(item => item.evidenceRef?.projection.id === "theory.opening.current_endpoint")).toBe(true);
+          await expect(theory.locator(".seat-card")).toContainText(setup.name);
+        } else {
+          expect(packet.receipt.items).toHaveLength(0);
+          await expect(theory.locator("[data-empty]")).toHaveText("Nothing is written about this position.");
+          await expect(theory).not.toContainText("King's Pawn Game");
+        }
+        await expect(theory).not.toContainText("the cited catalogue is not installed");
+        expect(await graph()).toEqual(before);
+        expect(await (await page.request.get(`/runs/${runId}/events?sinceSeq=0`)).json()).toEqual(events);
+        if (setup.name === null) await theory.getByRole("button", { name: "Keep playing", exact: true }).click();
+        else {
+          await theory.locator(".seat-row").click();
+          const collapse = page.getByRole("button", { name: "Collapse companion", exact: true });
+          if (await collapse.isVisible()) await collapse.click();
+        }
+        await assertRunViewport(page, viewport);
+      }
+      if (setup.name !== null) {
+        // Advancing the SAME saved run to an unnamed endpoint must not retain the old name.
+        await move(page, "a2", "a3");
+        await expect.poll(async () => (await graph()).nodes.filter(node => node.actor === "opponent").length).toBe(2);
+        await showSupportTools(page);
+        await page.getByRole("button", { name: "Show support for this position", exact: true }).click();
+        await waitForPlayedMoveEvidence(page, runId);
+        const theory = page.locator('[data-module="theory_breadcrumb"]');
+        await theory.locator(".seat-row").click();
+        const response = page.waitForResponse(res => res.url().endsWith("/modules/query") && res.request().postDataJSON()?.query?.requested?.includes("theory_breadcrumb"));
+        await theory.getByRole("button", { name: "Show", exact: true }).click();
+        const packet = ((await (await response).json()) as { page: ModuleQueryPage }).page.packets.find(packet => packet.module === "theory_breadcrumb")!;
+        expect(packet.receipt.items).toHaveLength(0);
+        await expect(theory).not.toContainText(setup.name);
+        await theory.getByRole("button", { name: "Keep playing", exact: true }).click();
+        await assertRunViewport(page, viewport);
+      }
+    }
+  });
+}
+
 for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }] as const) {
   for (const setup of [
     { fen: "r6k/8/8/8/8/8/b1n5/R1K5 w A - 0 1", side: "white", rook: "a1" },
@@ -4924,7 +4992,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
 for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 }] as const) {
 test(`D3789 empty Support rewinds with explicit failure recovery and preserves both attempts (${viewport.width}px)`, async ({ page }) => {
   await page.setViewportSize(viewport);
-  await startSupportFromFen(page, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "white");
+  await startSupportFromFen(page, "4k3/8/8/8/8/8/3PP3/4K1N1 w - - 0 1", "white");
   await move(page, "e2", "e4");
   const runId = page.url().split("/").at(-1)!;
   const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
@@ -5104,7 +5172,7 @@ test(`D3837 missing comparison becomes a preserved second attempt (${side}, ${vi
 
 test(`Empty Support returns to playable board without changing the recorded game (${viewport.width}px)`, async ({ page }) => {
   await page.setViewportSize(viewport);
-  await startSupportFromFen(page, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "white");
+  await startSupportFromFen(page, "4k3/8/8/8/8/8/3PP3/4K1N1 w - - 0 1", "white");
   await move(page, "e2", "e4");
   const runId = page.url().split("/").at(-1)!;
   const graph = async () => (await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: RunGraph }).graph;
@@ -5459,7 +5527,7 @@ test("@matrix module seats render sealed evidence without moving the board (stat
     await seat("theory_breadcrumb").getByRole("button", { name: "Show" }).click();
     const theory = seat("theory_breadcrumb").locator(".seat-card");
     await expect(theory.locator(".stated-empty")).toHaveText("Nothing is written about this position.");
-    await expect(theory).toContainText("Not consulted: the cited catalogue is not installed in this deployment.");
+    await expect(theory).not.toContainText("Not consulted: the cited catalogue is not installed in this deployment.");
     await expect(theory.locator("[data-presented]")).toHaveCount(0);
     // D3790: the two actual loop doors must be obvious before the longer source notes,
     // not merely reachable by a browser's automatic scroll into view.

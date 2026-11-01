@@ -151,3 +151,116 @@
   register. State3634 rows/1750 live/zero untriaged:628 todo/38 doing/1084 blocked/1722 done/162
   refused; historical462 prose-only closures unchanged. Final metadata/commit-hook checks follow.
   Full1.0 goal stays active; no browser/remote-CI/push/deploy or milestone/release completion claim.
+
+## 2026-11-01 — Genuine point results and the actual Theory opening leg
+
+- Implement the accepted two sole point factories over exactly the admitted installation and
+  original recorded-position value. Retain original paired lookup, installed identity and table
+  rows in the source receipt. Fresh frozen positive/empty arrays have private original-result
+  authentication; copied/filtered/foreign arrays, fake source handles and extra caller output
+  refuse. The existing point refs/payload meanings and old unavailable history@1 remain unchanged.
+- RunService supplies its actual startup-loaded source lazily, after complete module preflight.
+  Theory authenticates the endpoint and membership from the same invocation, renders only the
+  genuine matched endpoint and retains exact installation absence reasons. Membership is
+  applicability, not extra learner prose. No provider request, per-query file read or name guess.
+- D3905's actual module negative first publishes a name from a genuine same-FEN position in
+  another run. Validate original run/head/node before either opening lookup; that negative then
+  passes. Real authenticated application/SQLite/HTTP controls also prove copied-source and genuine
+  foreign-empty-membership failures become503 EVIDENCE_UNAVAILABLE, not successful empty cards.
+  Repeated actual named/unnamed queries preserve graph/events and load the catalogue only once.
+- D3904: the existing all-factory profile aggregate times out at5754ms against its unchanged5s
+  deadline. Partition actual valid/falsifier/pinned-outcome assertions per registered factory;
+  retain exact complete route/empty/unavailable sets and refresh only after all cases succeed.
+  Explicit refresh changes only the two genuine opening outcomes. No timeout, route, falsifier,
+  population or ordinary CI coverage is weakened; the larger test count is not product breadth.
+- Focused source/API46 cases/four files and workspace types pass. Initial test-only origin/timing/
+  actor and spy-input typing mistakes are corrected rather than excluded. The API fixture does
+  not request an engine job; remove its mistaken wait for an unrequested attachment, not actual
+  production work. Independent bounded read-only review clears source/caller/result joins,
+  typed failure mapping and the coverage-equivalent profile partition.
+- The first browser attempt has four failures: populated cards do not have the empty-only
+  Keep playing action, and old empty-card controls use1.e4, now correctly named. Use each real
+  card's existing close action and genuinely unnamed legal positions for empty-card recovery.
+  The complete corrected focused browser gate passes9 journeys in90.6s, zero skipped/flaky/
+  unexpected: both colors, desktop/phone, reload, named-to-unnamed advancement in the SAME run,
+  retained attempts/rewind failure recovery, Library links and maximum-load module layout.
+- D3906 removes the development guide's obsolete duplicated v0.9 claim; the actual canonical
+  schema/version and recorded-selection migration stay unchanged. No protected intent sentence
+  is falsified. Normal semantic regeneration retains343 passing cases,53 populations/eight
+  external receipts and zero qualification promotions. Full normal make verify build is running;
+  complete history/reduction, catalogue pool and current Inspector/Review delivery remain open.
+
+## 2026-11-01 — D3907 complete-source fixture repair
+
+- The full ordinary software pool reports four provider-corpus failures: the normal g1f3 fixture
+  now has a real installed name, which legitimately occupies Theory's unchanged one-fact slot.
+  These population-only controls implicitly relied on the opening source being unimplemented.
+  D3907 records the fixture coupling rather than weakening a population assertion or raising
+  the module budget. Use a genuine unnamed legal position retaining g1f3/e2e4/a7a6 for those
+  scenarios, and preserve every population, exact retained-source, authentication, cancellation,
+  cache and leak/refusal control.
+- Add the actual composed with_opening arm over the original normal start. It proves exactly
+  one named item is selected while the exact acquired Explorer page is processed without an
+  unavailable result. Independent read-only review finds no hidden selection defect or weakened
+  test obligation. Normal make theory-source-check passes129 cases/five files in111.08s.
+  The earlier full software run is still finishing its other files; it is not a passing run.
+
+- The first ordinary full software run finishes with exactly those four failed provider fixtures:
+  7,637 pass/4 fail across430 files in534.19s. The observed selected fact is the actual A04
+  Zukertort Opening, confirming the one-fact fixture coupling; no additional failure appears.
+  Start normal make roadmap-receipt verify build on the corrected complete test image. No failed
+  command is relabelled green, and no full-tier success is inferred from the focused repair.
+
+## 2026-11-01 — D3908 separate result construction from functional assertions
+
+- The second normal verification stops at its fast authority gate:1,413 pass/one failure over18
+  files. D3721's per-factory comparison immutability case takes6444ms against the unchanged5s
+  deadline. D3892 split factories, but that one case still executes the actual factory, validates
+  every emitted value via outcomeOf, and checks every descendant under the same unit deadline.
+- D3908 separates those distinct functional stages: normal fixture setup constructs each actual
+  result, one test retains the complete genuine-output/cardinality assertion, another retains
+  every recursive descendant assertion. Exact whole-registry equality and both mutable-child
+  falsifiers stay. Normal hook/test budgets, ordinary CI inclusion and production code are
+  unchanged. This is not a performance-threshold relaxation or a successful retry claim.
+
+- Independent read-only review clears preservation of every route/result/cardinality/descendant
+  assertion and both mutable-child controls. The repaired normal authority gate passes1,726
+  cases/18 files in14.07s; its remaining reduction and Review/source groups continue unchanged.
+  The additional312 case names are a functional-stage split, not new product capability.
+
+## 2026-11-01 — Complete software/performance pass; repair tracker metadata
+
+- The next complete normal software pool passes7,954 cases/430 files in543.24s. All seven
+  unchanged-budget performance cases/four files pass in68.54s. Source/test bytes are fixed;
+  the broader count includes functional-stage partitioning, not invented feature breadth.
+- Governance then catches two authoring mistakes in the checkpoint update: a duplicated
+  docs/runtime-opening-identity.md evidence path and the old anchor for the changed live RFC
+  register row. Remove the duplicate and bind the actual current row; do not weaken the guard.
+  The combined command is stopped, not green. Complete normal remaining governance/content/build
+  tiers against unchanged verified source/test bytes before closing this checkpoint.
+
+## 2026-11-01 — Verified point/Theory opening-leg closeout
+
+- All normal local tiers pass against unchanged repaired source/test bytes:7,954 software/430
+  files in543.24s; seven unchanged-budget performance/four files in68.54s; remaining normal
+  make roadmap-receipt verify-governance verify-content build exits zero with271 content/27
+  files in67.73s, all governance/corpus/capability checks and the production build. Graduation
+  audit92 documents has errors[];104 capability documents retain exact derived declarations.
+  The earlier failed combined commands remain failed records, not a claim of one green rerun.
+- 46 source/API cases,129 Theory/Explorer cases, types, independent bounded source/test reviews
+  and9 real desktop/phone journeys in90.6s pass. No retries, skipped assertions, raised deadline,
+  budget expansion, invented name or suppressed production job supplies that result.
+- Close D3904–D3908 with actual path evidence; D3376/D3857 remain doing. Update their own ledger
+  descriptions so they no longer claim all point factories/arrays and learner delivery are
+  absent. Reconcile the existing queue, job plan, RFC register/checkpoint, canonical docs and
+  roadmap/receipt in this same change.3657 rows retain zero untriaged:628 todo/37 doing/1083
+  blocked/1747 done/162 refused;462 old prose-only closures are unchanged.
+- Complete original recorded opening history/reduction is next, followed by full current
+  Inspector/Review with their other accepted sources and the general catalogue pool. No whole
+  RFC/module/capability/milestone, source qualification, official pack, remote CI or release
+  promotion. Full1.0 goal stays active. Final metadata/staged contract checks follow; no push.
+
+- Post-closeout normal verify-governance and the exact-index make staged-process-contracts both
+  pass, including register C1–C8, status P1–P7, zero-untriaged state, roadmap R1–R10 and intent
+  parity. Source/test bytes are unchanged; only this append records those completed checks.
+  The normal commit hook rechecks the final staged image. No remote action or goal pause.

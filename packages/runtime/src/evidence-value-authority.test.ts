@@ -5,7 +5,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { normalizeMove } from "chessops/chess";
 import { parseUci } from "chessops/util";
 import ts from "typescript";
-import { describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 
@@ -60,6 +60,9 @@ import { recordedPivotalFixture } from "./testing/recorded-pivotal-fixture.js";
 import { createRecordedPivotalSource } from "./pivotal.js";
 import { createRecordedSequenceWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import { recordedSequenceRouteFixture } from "./testing/recorded-sequence-window-fixture.js";
+import { admitInstalledOpeningCatalogue } from "./opening-catalogue.js";
+
+const OPENING_INSTALLATION = admitInstalledOpeningCatalogue(JSON.parse(readFileSync(new URL("../../../apps/server/artifacts/runtime-opening-catalogue.json", import.meta.url), "utf8")));
 
 /** One scheduler-sealed live delivery per provider operation, keyed by its source route. */
 function providerDeliveries(): readonly (readonly [string, ProviderOperationId, unknown])[] {
@@ -989,6 +992,12 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     profiles.set(route, { valid: fixture, falsify: refused(route, { ...fixture, detail: {} }) });
   }
   profiles.set("derived.opening.deepest_reached@1", { valid: { run, branchId: main }, falsify: refused("derived.opening.deepest_reached@1", { run, branchId: main, deepest: {} }) });
+  if (OPENING_INSTALLATION.kind !== "available") throw new Error("Permanent opening profile requires the genuine installed catalogue");
+  const openingFixture = recordedLastLevelFixture("white", "*", "opening-authority-profile");
+  const openingInput = { source: OPENING_INSTALLATION.source, position: sealedOne("run.record.position@1", { run: openingFixture.run, nodeId: openingFixture.path[1]!.id }) };
+  for (const route of ["theory.opening.current_endpoint@1", "theory.opening.catalogue_membership@1"]) {
+    profiles.set(route, { valid: openingInput, falsify: refused(route, { ...openingInput, source: { ...OPENING_INSTALLATION.source } }) });
+  }
   const shift = (invoke("derived.review.eval_delta@2", { before: reviewBefore, after: reviewAfter }) as { readonly value: DeclaredEvidence<{ readonly before: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }>; readonly after: DeclaredEvidence<{ readonly evaluation: DeclaredEvidence<{ readonly payload: { readonly score: unknown } }> }> }> }).value;
   const moment = { nodeId: mainPath[2]!.id, decisionNodeId: mainPath[1]!.id, evidenceNodeId: mainPath[2]!.id, stopNodeId: mainPath[2]!.id, entryNodeId: mainPath[1]!.id, ply: 2, san: null, fen: mainPath[2]!.fen, kinds: ["eval_pivot"], sentences: [], components: [], evidence: [shift], phase: "middlegame", evaluation: { before: shift.payload.before.payload.evaluation.payload.payload.score, after: shift.payload.after.payload.evaluation.payload.payload.score } };
   profiles.set("derived.story.rank@2", { valid: { moments: [moment] }, falsify: refused("derived.story.rank@2", { moments: [{ ...moment, kinds: ["phase_change"] }] }) });
@@ -1213,7 +1222,6 @@ const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
   let orderedHintProfiles: ReadonlyMap<string, Profile> | undefined;
-  let immutableProfiles: ReadonlyMap<string, Profile> | undefined;
   it.each(HINT_FAMILIES)("D3848 %s horizon retains the declared source-then-search input order", (family) => {
     const route = `derived.hint.horizon.${family}@1`;
     const profile = (orderedHintProfiles ??= buildProfiles()).get(route)!;
@@ -1445,22 +1453,32 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect(evidenceValueReceipt(next).inputDigest).not.toBe(evidenceValueReceipt(value).inputDigest);
   });
 
-  it("D3721 immutability profiles cover every registered factory", () => {
-    const profiles = immutableProfiles ??= buildProfiles();
-    expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
-  });
-
-  // D3892: one functional unit per registered factory, not an ever-growing all-factory
-  // computation under one unit's timeout. Every original invocation/cardinality/descendant
-  // assertion remains; the complete route set above prevents an omitted difficult factory.
-  it.each([...ROUTES.keys()])("D3721 %s emits recursively immutable payloads", route => {
-    const profile = (immutableProfiles ??= buildProfiles()).get(route)!;
-    expect(profile, route).toBeDefined();
-    if (profile.valid === undefined) return;
-    const result = profile.resolved ?? invoke(route, profile.valid);
-    const emitted = factoryPayloads(result);
-    expect(emitted.length, route).toBe(outcomeOf(result).cardinality);
-    expect(emitted.flatMap((payload, index) => mutablePayloadPaths(payload, `${route}[${index}]`))).toEqual([]);
+  describe("D3721 complete factory result immutability", () => {
+    let profiles: ReadonlyMap<string, Profile>;
+    beforeAll(() => { profiles = buildProfiles(); });
+    it("D3721 immutability profiles cover every registered factory", () => {
+      expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
+    });
+    // D3892/D3908: actual construction is fixture setup. Complete value validation and
+    // recursive immutability are separate functional assertions, not one aggregate latency
+    // claim. Normal hook/test budgets and every original invocation/assertion remain.
+    describe.each([...ROUTES.keys()])("D3721 %s emits recursively immutable payloads", route => {
+      let result: unknown;
+      let emitted: readonly unknown[];
+      beforeAll(() => {
+        const profile = profiles.get(route)!;
+        expect(profile, route).toBeDefined();
+        result = profile.valid === undefined ? undefined : profile.resolved ?? invoke(route, profile.valid);
+        emitted = factoryPayloads(result);
+      });
+      it("validates every genuine output and the complete cardinality", () => {
+        if (profiles.get(route)!.valid === undefined) return;
+        expect(emitted.length, route).toBe(outcomeOf(result).cardinality);
+      });
+      it("checks every recursively immutable descendant", () => {
+        expect(emitted.flatMap((payload, index) => mutablePayloadPaths(payload, `${route}[${index}]`))).toEqual([]);
+      });
+    });
   });
 
   it.each(["nested", "shared"])("D3892 the recursive guard rejects a %s mutable child below frozen shells", kind => {
@@ -1503,23 +1521,34 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     }
   });
 
-  it("runs a valid authority case and a falsifier for every registry route, pinned by payload digest", () => {
-    const profiles = buildProfiles();
-    expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
+  describe("runs a valid authority case and a falsifier for every registry route, pinned by payload digest", () => {
+    let profiles: ReadonlyMap<string, Profile>;
+    let pinned: Readonly<Record<string, Outcome>>;
     const observed: Record<string, Outcome> = {};
-    for (const [route, profile] of [...profiles].sort(([left], [right]) => left.localeCompare(right))) {
-      observed[route] = profile.valid === undefined ? { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: "authority_not_constructible" } : outcomeOf(profile.resolved ?? invoke(route, profile.valid));
+    const update = process.env.UPDATE_EVIDENCE_VALUE_PROFILES === "1";
+    beforeAll(() => {
+      profiles = buildProfiles();
+      expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
+      pinned = JSON.parse(readFileSync(PROFILE_FILE, "utf8")) as Record<string, Outcome>;
+      expect(Object.keys(pinned).sort()).toEqual([...ROUTES.keys()].sort());
+    });
+    it.each([...ROUTES.keys()].sort())("%s retains its real valid invocation, falsifier and pinned outcome", route => {
+      const profile = profiles.get(route)!;
+      const outcome: Outcome = profile.valid === undefined ? { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: "authority_not_constructible" } : outcomeOf(profile.resolved ?? invoke(route, profile.valid));
       profile.falsify();
-    }
-    if (process.env.UPDATE_EVIDENCE_VALUE_PROFILES === "1") writeFileSync(PROFILE_FILE, `${JSON.stringify(observed, null, 2)}\n`);
-    const pinned = JSON.parse(readFileSync(PROFILE_FILE, "utf8")) as Record<string, Outcome>;
-    expect(observed).toEqual(pinned);
-    // Honest-unavailable routes are exactly the declared dependency gaps.
-    const unavailable = Object.entries(observed).filter(([, outcome]) => outcome.availability === "unavailable").map(([route]) => route).sort();
-    expect(unavailable).toEqual(["derived.opening.deepest_reached@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
-    // Empty valid populations are pinned too; the positives above prove each family can emit.
-    const empty = Object.entries(observed).filter(([, outcome]) => outcome.availability === "empty").map(([route]) => route).sort();
-    expect(empty).toEqual(EXPECTED_EMPTY);
-    for (const route of unavailable) expect(ROUTES.get(route)!.pending, route).toBeDefined();
+      if (!update) expect(outcome).toEqual(pinned[route]);
+      // Failed assertions/falsifiers cannot enter the complete refresh population.
+      observed[route] = outcome;
+    });
+    afterAll(() => {
+      expect(Object.keys(observed).sort()).toEqual([...ROUTES.keys()].sort());
+      const unavailable = Object.entries(observed).filter(([, outcome]) => outcome.availability === "unavailable").map(([route]) => route).sort();
+      expect(unavailable).toEqual(["derived.opening.deepest_reached@1"]);
+      const empty = Object.entries(observed).filter(([, outcome]) => outcome.availability === "empty").map(([route]) => route).sort();
+      expect(empty).toEqual(EXPECTED_EMPTY);
+      for (const route of unavailable) expect(ROUTES.get(route)!.pending, route).toBeDefined();
+      if (update) writeFileSync(PROFILE_FILE, `${JSON.stringify(Object.fromEntries(Object.entries(observed).sort(([left], [right]) => left.localeCompare(right))), null, 2)}\n`);
+      else expect(observed).toEqual(pinned);
+    });
   });
 });

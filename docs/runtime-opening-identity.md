@@ -32,9 +32,12 @@ The runtime keeps four meanings separate:
 | `run.record.position@1` | An exact recorded node id, ply, and FEN. |
 | `derived.opening.deepest_reached@1` | The greatest-ply exact endpoint reached in recorded history, retaining every matched visit. It does not label the current position. |
 
-All four land as inspector-only evidence. Learner modules, Review selection, theory links, bot
-features, and longitudinal aggregates must bind the exact projection they need in their own RFC;
-there is no generic “opening object.”
+Theory Breadcrumb now acquires the two genuine point projections from the shared installation
+and its exact recorded move. It renders only a matched current endpoint; membership proves
+applicability internally and is not an additional learner fact. Complete recorded-history,
+Inspector, Review, bot and longitudinal adoption remain open under their accepted contracts;
+there is no generic “opening object.” The historical deepest-reached@1 factory still returns
+its explicit unavailable result; its pure history helper is not current source authority.
 
 ## HTTP boundary
 
@@ -50,8 +53,7 @@ projection.
 Loading takes a detached snapshot of the artifact, validates that snapshot, and freezes both
 tables, their rows and all source metadata. Mutating a retained parser input cannot change a
 subsequent lookup; returned artifact objects cannot be edited in place. `make opening-source-check`
-exercises those boundaries and the existing phase-source and manifest consumers. This does not
-supply the point/history factory or complete learner-module bindings still required by D3376.
+exercises those boundaries and the existing phase-source and manifest consumers.
 
 The loader also rejects blank endpoint names/ECO and malformed source/compiler SHA-256 values,
 even when the outer document digest has been recomputed. These are invalid artifacts, not missing
@@ -84,8 +86,21 @@ but separately recorded positions do not borrow another occurrence's identity. S
 lookups remain actual retained results, not unavailable sources or invented name facts. The existing
 HTTP/phase operation uses the same admitted-source lookup and preserves its response meanings.
 
-This private invocation is not a point-factory result-array receipt, complete recorded history,
-current-storage/access grant or learner-module integration. Those remain open under D3376/D3857.
+The sole point factories now accept exactly `{source, position}` and issue fresh frozen arrays
+of zero or one genuine item. Their private result reader recognizes only the original array and
+its exact source, position, projection and retained paired lookup, including successful negatives.
+The evidence receipt includes the original position invocation, installed catalogue and actual
+table-row locations. Caller names, FEN/ply replacements, copied handles, copied result arrays,
+foreign occurrences and cross-projection substitutions cannot become authority.
+
+Theory verifies the position's original run, event head and node before either lookup. The actual
+service reuses its startup-loaded source and returns typed `EVIDENCE_UNAVAILABLE` for corrupt
+source joins, not a successful empty card. An unavailable installation retains its exact
+`artifact_missing`, `artifact_invalid` or `digest_mismatch` state. `make opening-point-check`
+exercises real factory/module and authenticated application delivery; `make opening-point-browser-check`
+exercises desktop/phone names, reload, unnamed advancement, empty-card recovery and layout.
+Complete recorded history, current Inspector/Review access and their full consumer migrations
+remain open under D3376/D3857; this point delivery does not discharge them.
 Normal source tests include real parsed imports after file-backed SQLite reopen for both learner
 colors and every prefix, with no provider acquisition or rewritten recorded events.
 

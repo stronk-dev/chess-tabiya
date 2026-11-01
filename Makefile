@@ -2267,6 +2267,14 @@ evidence-value-authority-route-map-update:
 opening-source-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/opening-catalogue.test.ts packages/runtime/src/opening-catalogue.test.ts packages/runtime/src/recorded-opening-lookup.test.ts apps/server/src/opening-catalogue.test.ts apps/server/src/opening-catalogue-build.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/recorded-review-boundary.test.ts
 
+.PHONY: opening-point-check
+opening-point-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-opening-point.test.ts packages/runtime/src/recorded-opening-lookup.test.ts packages/runtime/src/opening-module-source.test.ts apps/server/src/opening-module-source.test.ts
+
+.PHONY: opening-point-browser-check
+opening-point-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep 'Installed opening Theory|Empty Support returns|D3789 empty Support|maximum-load modules|Support opens the exact recognized Library pattern'
+
 opening-catalogue:
 	./node_modules/.bin/esbuild apps/server/src/opening-catalogue-build.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/opening-catalogue-build.js --log-level=warning
 	$(CI_NODE) apps/server/dist/opening-catalogue-build.js

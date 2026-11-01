@@ -30,6 +30,7 @@ import {
   readStructuralPopulationInvocation,
   assertRecordedPositionInvocation,
   readRecordedPositionInvocation,
+  readRecordedOpeningPointResult,
   readRecordedReadingInvocation,
   assertRecordedReviewResultInvocation,
   readReviewPointInvocation,
@@ -232,7 +233,7 @@ import {
 } from "../evidence-factories.js";
 
 // Read-only source membership, never a public registration or second factory dispatcher.
-export { readStructuralPopulationInvocation, assertRecordedPositionInvocation, readRecordedPositionInvocation, readRecordedReadingInvocation, assertRecordedReviewResultInvocation, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, readReviewMemberInputs, readLocalReadingInvocation, evidenceFactorySymbol };
+export { readStructuralPopulationInvocation, assertRecordedPositionInvocation, readRecordedPositionInvocation, readRecordedOpeningPointResult, readRecordedReadingInvocation, assertRecordedReviewResultInvocation, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, readReviewMemberInputs, readLocalReadingInvocation, evidenceFactorySymbol };
 
 /** The literal route table: exact projection ref → its one production factory. */
 const EVIDENCE_VALUE_ROUTES = Object.freeze({

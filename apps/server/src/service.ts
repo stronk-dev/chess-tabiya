@@ -3010,9 +3010,11 @@ export class RunService {
     let shapes: ModuleSourceContext["shapes"];
     let authoredAt: ModuleSourceContext["authoredAt"];
     let comparisonContext: RecordedComparisonContext | undefined;
+    let openingConsulted = false;
     const service = this;
     const sources: ModuleSourceContext = {
       ...explorer,
+      get opening() { openingConsulted = true; return service.#openingCatalogue; },
       get comparison() {
         if (request.timing !== "checkpoint" && request.timing !== "review") return undefined;
         try {
@@ -3060,7 +3062,7 @@ export class RunService {
         if (error.code === "MODULE_QUERY_WITHHELD") throw new ServerError("ASSISTANCE_WITHHELD", error.message);
         throw new ServerError("INVALID_REQUEST", error.message);
       }
-      if (error instanceof RecordedMeasurementSourceError || (comparisonContext !== undefined && error instanceof TypeError)) throw new ServerError("EVIDENCE_UNAVAILABLE", "Recorded comparison source is invalid or changed");
+      if (error instanceof RecordedMeasurementSourceError || ((comparisonContext !== undefined || openingConsulted) && error instanceof TypeError)) throw new ServerError("EVIDENCE_UNAVAILABLE", "Requested recorded evidence source is invalid or changed");
       throw error;
     }
   }

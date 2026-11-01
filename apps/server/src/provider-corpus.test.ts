@@ -24,6 +24,9 @@ import { renderCorpusPage } from "../../web/src/lib/corpus-sentences.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const NEXT = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
+// Genuine unnamed position: e2e4, g1f3 and the provider's a7a6 remain legal. Population
+// delivery controls must not depend on the installed opening source being unimplemented.
+const UNNAMED_THEORY_START = "4k3/p7/8/8/8/8/3PP3/4K1N1 w - - 0 1";
 const query = (fen = START) => ({ ...corpusPopulation(1600, new Date("2026-09-30T12:00:00Z")), fen });
 const body = (total = 120) => ({
   white: total, draws: 0, black: 0,
@@ -481,7 +484,7 @@ describe("learner Explorer shared exchange", () => {
     expect(stats).not.toHaveBeenCalled();
   });
 
-  it.each(["success", "sparse", "zero", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy", "changed", "revoked", "disconnect", "missing_binding_policy", "non_executable_binding"])("admits supplied Theory pages at authenticated application composition (%s)", { timeout: 30_000 }, async arm => {
+  it.each(["success", "sparse", "zero", "with_opening", "position", "ratings", "speeds", "dates", "clone", "failure", "typed_failure", "legacy", "changed", "revoked", "disconnect", "missing_binding_policy", "non_executable_binding"])("admits supplied Theory pages at authenticated application composition (%s)", { timeout: 30_000 }, async arm => {
     // Preserve the functional timeout. If setup, transport or teardown stalls,
     // report the actual last boundary instead of guessing that the provider failed.
     let boundary = "source fixture";
@@ -490,6 +493,7 @@ describe("learner Explorer shared exchange", () => {
     const total = arm === "sparse" ? 37 : arm === "zero" ? 0 : 120;
     const delayed = ["changed", "revoked", "disconnect"].includes(arm);
     let sourceAcquisitionStarted = false;
+    let actualPage: unknown;
     let release!: () => void;
     let started!: () => void;
     let aborted!: () => void;
@@ -525,6 +529,7 @@ describe("learner Explorer shared exchange", () => {
         if (arm !== "disconnect") remote.respond(remote.calls.length - 1, arm === "typed_failure" ? { ...body(), white: "invalid" }
           : { ...body(total), moves: total === 0 ? [] : [{ uci: arm === "position" ? "e2e4" : "a7a6", san: "MOVE_ROW_SENTINEL_DO_NOT_DISCLOSE", white: Math.min(total, 20), draws: 0, black: 0 }] });
         const acquired = await acquiring;
+        if (acquired.kind === "page") actualPage = acquired.evidence;
         return arm === "clone" && acquired.kind === "page" ? { ...acquired, evidence: { ...acquired.evidence } } : acquired;
       }
     }
@@ -555,7 +560,7 @@ describe("learner Explorer shared exchange", () => {
       const headers = { "content-type": "application/json", cookie, "x-writer-id": "theory-writer" };
       boundary = "run creation";
       const created = await fetch(`${origin}/runs`, { method: "POST", headers,
-        body: JSON.stringify({ id: "supplied-theory", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
+        body: JSON.stringify({ id: "supplied-theory", session: { kind: "position", start: { fen: arm === "with_opening" ? START : UNNAMED_THEORY_START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }) });
       expect(created.status, await created.text()).toBe(201);
       const route = `${origin}/runs/supplied-theory`;
       let queryHeaders = headers;
@@ -652,6 +657,14 @@ describe("learner Explorer shared exchange", () => {
       if (["success", "sparse", "zero"].includes(arm)) {
         expect(sentences).toContain(`${total} games`);
         expect(sentences).toContain("not what is good");
+      } else if (arm === "with_opening") {
+        expect(theory.receipt.items).toHaveLength(1); // Preserve the actual accepted one-fact budget.
+        expect(theory.receipt.items[0]!.evidenceRef?.projection.id).toBe("theory.opening.current_endpoint");
+        expect(sentences).toContain("Opening in the cited catalogue");
+        expect(actualPage).toBeDefined();
+        expect(localAcquisition.mock.calls.some(([ref, input]) => ref === "derived.explorer.population_summary@1"
+          && typeof input === "object" && input !== null && "page" in input && input.page === actualPage)).toBe(true);
+        expect(theory.unavailable.some(row => row.projection === "derived.explorer.population_summary@1")).toBe(false);
       } else {
         expect(sentences).not.toMatch(/\d+ games/u);
         expect(JSON.stringify(page)).toContain(arm === "legacy" ? "not_configured" : arm === "failure" ? "provider_unavailable"
@@ -917,7 +930,7 @@ describe("learner Explorer shared exchange", () => {
       const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
       const created = await realFetch(`${origin}/runs`, {
         method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "explorer-writer" },
-        body: JSON.stringify({ id: "explorer-run", session: { kind: "position", start: { fen: START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }),
+        body: JSON.stringify({ id: "explorer-run", session: { kind: "position", start: { fen: UNNAMED_THEORY_START, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 73 }),
       });
       expect(created.status, await created.clone().text()).toBe(201);
       const { run } = await created.json() as { run: { id: string; nodes: { id: string }[] } };
@@ -928,7 +941,7 @@ describe("learner Explorer shared exchange", () => {
       expect(selected.status, JSON.stringify(result)).toBe(200);
       expect(result).toMatchObject({ status: { kind: "below_floor", total: 37 }, presentation: { protocol: "presentation.receipt@1", items: [] } });
       expect(requests).toHaveLength(1);
-      const delivered = await application.providers.scheduler.get({ operation: "lichess_explorer.position_page@1", request: corpusPageRequest({ ...corpusPopulation(undefined), fen: START }) }, { id: "production-proof", budgetMs: 4_000 }, new AbortController().signal);
+      const delivered = await application.providers.scheduler.get({ operation: "lichess_explorer.position_page@1", request: corpusPageRequest({ ...corpusPopulation(undefined), fen: UNNAMED_THEORY_START }) }, { id: "production-proof", budgetMs: 4_000 }, new AbortController().signal);
       expect(delivered).toMatchObject({ kind: "success", delivery: { kind: "retained_exact", payload: { result: { totals: { total: 37 } } } } });
       expect(requests).toHaveLength(1);
       expect(application.providerHealth.snapshot().providers.find((row) => row.instanceId === "explorer-primary")).toMatchObject({ state: "available" });

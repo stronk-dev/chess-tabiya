@@ -3,6 +3,16 @@
 Implement the independently accepted `rfc/installed-opening-evidence.md`, under the current
 1.0 queue. Owner: `evidence-foundation`. This is a job plan, not a second roadmap.
 
+**Point and Theory opening-leg checkpoint, 2026-11-01:** step3 now supplies the genuine point
+factories, original positive/negative array authority, original table-row receipts and actual
+Theory acquisition through RunService.46 focused cases/four files and workspace types pass;
+independent bounded review clears D3905's reproduced same-FEN foreign-run caller gap and the
+D3904/D3908 coverage-equivalent functional partitions. Nine real native journeys pass in90.6s;
+all normal local tiers pass7954 software/430 files, seven performance/four files,271 content/27
+files and governance/corpus/build checks. Earlier failed combined commands remain failed records.
+Steps4–6
+and the complete Theory catalogue-pool/Inspector/Review obligations remain; do not close D3376/D3857.
+
 **Verified source checkpoint, 2026-10-16:** steps1–2 are implemented and independently reviewed;
 full normal verification/build passes. Steps3–6 and D3376/D3857 remain open. The actual runtime
 point/history factories have not changed, and no learner-facing migration is claimed.

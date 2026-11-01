@@ -1,5 +1,20 @@
 # Codex queue
 
+**Verified point/Theory opening-leg checkpoint — [[D3376]], [[D3857]] remain doing;
+[[D3904]], [[D3905]], [[D3906]], [[D3907]], [[D3908]] closed locally:**
+genuine point-factory result arrays, original source/position/row receipts and actual Theory
+membership/endpoint acquisition now reach service/renderer/API/native play.46 focused source/API
+cases,129 Theory/Explorer cases, workspace types, independent bounded review and9 actual
+desktop/phone browser journeys pass. Normal local tiers pass7954 software/430 files, seven
+unchanged-budget performance/four files,271 content/27 files and governance/build/corpus checks.
+Earlier failures and metadata repairs remain logged; no failed command is relabelled green.
+Next implement complete recorded history/reduction, then full
+current Inspector/Review adoption with their other accepted source dependencies. The general
+catalogue-pool obligation also stays open. No caller endpoint/callback, invented name, per-query
+file read, legacy input arm or whole Theory/parent completion is claimed.
+[[D3906]] repairs the development guide's obsolete duplicated run-version claim; the actual
+schema remains the authority and is unchanged.
+
 **Verified complete current Compare migration, 2026-11-01 — [[D3863]], [[D3894]], [[D3895]],
 [[D3896]], [[D3897]], [[D3898]], [[D3899]], [[D3900]], [[D3901]], [[D3902]], [[D3903]]:**
 the current eight-binding Compare@2 image, sole-service point issuer, original endpoint selection,

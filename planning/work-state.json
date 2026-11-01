@@ -27785,7 +27785,7 @@
       "id": "D3376",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:05147c1405282030ef21740c78bd7b9f2e9919750215fac2530579fa6e208545",
+      "sourceDigest": "sha256:e85d1169e4cea10247fb776dcc1ce6dd9c4b51122e550aa68d3ec03f70d0c5d5",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-16"
@@ -32129,7 +32129,7 @@
       "id": "D3857",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:aeca74ab359df9c4d8113ddf82f6bf83c6a88c8cc33e122431b0f2c34931980c",
+      "sourceDigest": "sha256:e657ecf067850f4c3f0d382cf8c5d2ea2746e36d853d17767e7ae455f1cbd743",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32545,6 +32545,51 @@
       "sourceDigest": "sha256:220379b13f1156b2444b6a23e7787630b9da6cff908988099124048bd1769dd1",
       "uxItems": [],
       "evidence": "planning/learner-modules/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3904",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b2c77a725e32c76891b53616a03c8fcb7f397224a99b48682c8a5d733352320b",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3905",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:490bcb6c87b6f6db9461326571c1de4ad5c53d91bb9497a364f09e85b6030672",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3906",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:af6693933e74959b611808c1c2d1ebf30cf2568c958ffc03269b59c3c1beb1d9",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3907",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7f4c4434d5371cdccd85609f3514299e6e1344c49d9f9c3b7a522a146b68f85d",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3908",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2f161de41c8ec7abef37df1c1b16f3924a70bb31424f476fa0dd7e6599edb207",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
       "evidenceKind": "path"
     }
   ]

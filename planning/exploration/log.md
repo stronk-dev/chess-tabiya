@@ -32894,3 +32894,73 @@ self-acceptance, feature permission or partial current consumer image follows fr
   changes no behavior. Normal semantic regeneration refreshes its affected metadata, retaining
   all343 passing cases,53 populations/eight external receipts and zero qualification promotions.
   The final commit hook validates the refreshed staged image rather than the earlier index.
+
+## 2026-11-01 — Installed opening point/source and real Theory delivery
+
+- D3376/D3857's accepted point prerequisite now issues genuine positive/empty arrays from the
+  admitted installed catalogue and exact recorded positions, with original paired lookup/row
+  membership. Actual Theory acquisition joins original run/head/node, authenticates membership
+  and endpoint, and renders only the named endpoint through the existing registered renderer.
+  The service reuses its one startup source, preserves exact installation absence and returns
+  typed503 for corrupt joins. No LLM chess claim, per-request file/network lookup or new schema.
+- D3905 is reproduced before repair by a genuine same-FEN foreign-run position; original run/
+  head/node validation closes it before lookup.46 focused source/module/authenticated HTTP cases
+  and workspace types pass. Independent bounded review clears source/result/caller joins and
+  failure mapping. D3904 splits the timed-out all-factory aggregate into coverage-equivalent
+  per-route assertions under the unchanged deadline; only two opening profile outcomes change.
+- The initial browser test mistakes and stale1.e4 empty fixtures are corrected, not hidden.
+  The final focused native gate passes9 journeys in90.6s, zero skipped/flaky/unexpected: real names,
+  unnamed same-run advancement/reload, both colors at desktop/phone, retained attempts/rewind
+  recovery, Library links and maximum-load layouts. The development guide's stale duplicated
+  schema version is D3906; canonical schema and stored data stay unchanged.
+- Detailed execution/failures are appended in planning/installed-opening-evidence/log.md.
+  Full normal make verify build is still running. Complete recorded opening history/reduction,
+  general catalogue pool, Inspector/Review and GradeSource remain parent-owned open work;
+  no whole RFC/milestone, source qualification, official content, remote CI or release claim.
+
+## 2026-11-01 — Opening/Explorer complete-source controls repaired
+
+- D3907: the ordinary software pool reports four old provider-corpus fixtures coupling Explorer
+  visibility to missing opening delivery. A named g1f3 now legitimately fills Theory's existing
+  one-fact slot. Keep every population/refusal/cache/auth/cancellation/leak assertion on a genuine
+  unnamed legal fixture; add a composed normal-start control proving real page processing while
+  exactly one named fact is selected. No production budget, selection rule or timeout changes.
+- Independent bounded read-only review clears the repair. make theory-source-check passes129
+  cases/five files in111.08s. The first ordinary full run remains failed, not a readiness claim;
+  normal verification on the corrected test image remains required before closeout/commit.
+
+- The first complete software pool finishes7,637 pass/4 fail over430 files in534.19s, with only
+  the four recorded Explorer fixture failures. Start the unchanged normal Make verification/
+  build tiers on the corrected complete test image; retain that failed run as failed evidence.
+
+## 2026-11-01 — D3908 authority functional-stage fixture repair
+
+- The next normal run stops at the fast18-file authority gate:1,413 pass/one failure. The
+  per-factory Compare immutability case combines actual factory invocation, all genuine-output
+  validation and recursive traversal; it takes6444ms against5s. Keep the failed run failed.
+- Move actual result construction to the existing normal fixture budget, then independently
+  assert complete genuine-output/cardinality and every immutable descendant. Exact registry
+  coverage, mutable-child falsifiers and default hook/test deadlines remain; no production,
+  retry, skip, timeout or execution-scope change. D3908 owns the bounded verification repair.
+
+## 2026-11-01 — Opening point/Theory leg verified and tracked
+
+- All normal local tiers pass against unchanged repaired source/test bytes:7954 software/430
+  files (543.24s), seven unchanged-budget performance/four files (68.54s), then corrected normal
+  remaining governance/content/build exits zero with271 content/27 files (67.73s), graduation
+  audit92 documents/errors[] and104 exact capability declarations. Governance's duplicated
+  checkpoint path/stale RFC-row anchor are repaired, not weakened. Earlier failed combined
+  commands remain failed records; no claim that the stopped combined command was green.
+- 46 source/API cases,129 Theory/Explorer cases, workspace types, independent source/test reviews
+  and9 genuine desktop/phone journeys (90.6s) pass. D3904–D3908 close bounded source/test/docs
+  defects; D3376/D3857 remain doing for complete history/reduction, catalogue pool and current
+  Inspector/Review. Correct the parent ledger descriptions as well as the RFC checkpoint/register,
+  existing queue/job plan/docs and roadmap, so point delivery cannot disappear between rollups.
+- 3657 ledger rows/zero untriaged:628 todo,37 doing,1083 blocked,1747 done,162 refused. The larger
+  software case count includes functional assertion partitioning, not claimed product breadth.
+  No protected intent, qualification, official content, whole capability/milestone/RFC, remote CI
+  or release promotion. The full1.0 goal remains active; final staged metadata checks precede commit.
+
+- Post-closeout normal governance and exact-index staged-process contracts pass: register,
+  lifecycle, work-state, roadmap and intent parity remain green. Source/test bytes stay fixed;
+  this append records the completed checks, and the normal commit hook rechecks the final index.
