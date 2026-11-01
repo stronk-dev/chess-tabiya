@@ -32601,3 +32601,72 @@ Campaign was the one capability with no API, route or content. Now:
   selection, opening result/history authority and complete per-consumer access/renderer/receiver/
   API/native delivery remain. No legacy-only pipeline, native/browser/remote CI result,
   qualification, full Inspector or1.0 completion is claimed. Full1.0 goal remains active.
+
+## 2026-11-01 — Current Inspector context and ledger supplier, full verification pending
+
+- Previous turn is verified progress: a25b48a5 completes the independently reviewed empty-human-
+  telemetry fix with full normal gates and explicit closeout. Working tree begins tracked-clean;
+  three pre-existing untracked paths remain outside this work. Full1.0 objective remains active.
+- Inspect the accepted opening/current-source contract and real callers. The shared opening
+  point-factory cutover cannot safely precede unfinished Inspector callers; keep its old input
+  interface intact rather than silently losing topics. Continue accepted D3841's current source
+  owner prerequisite instead. No new planning silo, source-version or compatibility-only arm.
+- Implement actual RunService-owned contexts and ledger suppliers. Full stored events/snapshot
+  survive independently of granted paths; exact role/config/disclosure/context and original
+  registry/population/reading identities are rechecked at retained reads/publication. Six path
+  shapes and imported completed-review disclosure use the actual existing branch policy. Complete
+  mixed/zero/refused populations retain genuine coverage/source identity, never confidence,
+  synthetic chess facts, modern provider authority or grading endorsement.
+- In-flight D3890: enabled assistance effects do not imply allowed module roles. Two actual
+  participant/spectator tests first fail; check modulePolicy/moduleEvidenceRole before granting
+  context. Real additional-host grants, demotion/revocation and during-collection refusal remain.
+- Independent review returns D3891: replay equality is not canonical event admission. Three
+  coordinated extra-event/data/enum failures reach the resolver; a fourth initially stops on a
+  misspelled fixture event. Correct that fixture, reproduce all four missing refusals, then add
+  existing assertRunEventSequence before replay/narrowing. Null-candidates refuse while genuine
+  explicit-empty candidates remain a positive. Re-review clears bounded code/coverage; reviewer
+  edits no files/runs no tests. Nested scope/equal-stamp event changes, separate source signal
+  and actual access/artifact retirement during collection have permanent controls.
+- Initial fixture mistakes (invalid preset, pack-vs-onramp hint, non-pack feedback policy,
+  atPly0 instead of atStart, unused manifest links and an inferred document TypeScript type)
+  are corrected only in fixtures. No product schema/preset/validator is relaxed. Sandboxed pnpm
+  cannot write its package-manager cache; repeat the same normal Make command with that access,
+  not env prefixes. Final focused131 cases/six files and all workspace types pass; no Svelte
+  errors/warnings. Full normal verification/build is pending, not presumed from this gate.
+- D3890/D3891 remain doing until full closeout. D3841 remains doing beyond them: actual execution
+  grants, complete remaining sources and Inspector consumer/preflight/API/paging/receipt/receiver/
+  native delivery remain. No current learner cutover, qualification, content or milestone claim.
+
+## 2026-11-01 — Full-suite immutability timeout reproduced and partitioned
+
+- First full normal make verify build exits2:6,892 software passes/one failure across422 files.
+  The D3721 monolithic all-factory test reports6146ms against its existing5000ms deadline;
+  later performance/governance/content tiers are not reached. This is not a mutable payload
+  finding and does not establish a remote CI failure. Record D3892 before repair.
+- Temporary local diagnostics distinguish profile setup (~302ms), aggregate real factory
+  execution (~3719ms) and recursive freeze traversal (~2ms). These are diagnostic samples,
+  not release performance claims. Remove all temporary timing/logging afterward.
+- Partition the unchanged functional assertions into one case per registered factory. Exact
+  profile/route equality, original invocations, emitted cardinality and every recursive payload
+  descendant remain checked; add genuine nested/shared mutable-child negatives. Keep the same
+  default5s deadline, no retry/skip/global cache/coverage or production change.
+- Normal evidence-value-authority gates pass1,075/119/252 cases; inspector-source-check131/six
+  files and workspace types pass with zero Svelte errors/warnings. Full ordinary rerun remains
+  required before closing D3890/D3891/D3892. D3841 and complete learner delivery stay open.
+
+## 2026-11-01 — Current Inspector context/ledger checkpoint verified
+
+- Complete normal make verify build rerun exits zero:7,205 software/422 files in498.90s, seven
+  isolated performance/four files,271 content/27 files and every remaining governance/corpus/
+  build contract. Graduation audit92 documents/zero errors and exact capability derivation104
+  documents pass; no content graduation is implied. Build output and opening catalogue remain
+  unchanged. No browser/native/remote CI result is claimed.
+- Independent bounded review clears D3892: exact registered factory population, original valid
+  profile handling, output cardinality and recursive descendants remain; nested/shared-child
+  negatives genuinely challenge shallow freezing. No deadline/skip/assertion relaxation.
+  Increased test count is functional partitioning, not new product breadth. Earlier full-suite
+  failure and local diagnostic observations remain in the preceding entry.
+- Close D3890/D3891/D3892 with production/test file evidence. D3841 stays doing: compiler grants,
+  complete remaining sources and actual Inspector/preflight/paging/disclosure/receiver/API/native
+  delivery remain. No legacy compatibility arm, new schema/producer/provider request, raw
+  research dump, qualification, milestone or whole1.0 completion follows. Full1.0 goal stays active.

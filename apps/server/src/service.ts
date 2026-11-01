@@ -183,6 +183,9 @@ import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
 import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
+import { InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
+import { InspectorLedgerSourceOwner, type InspectorLedgerSource } from "./inspector-ledger-source.js";
+import { compileAuthoritativeAssistance, finalizeAssistanceEffects, MODULE_SOURCE_AUTHORITY, parseRequestedAssistanceV1, type RequestedAssistanceV1, type ServerEvidenceAvailabilityReceipt } from "../../../packages/runtime/src/assistance-exchange.js";
 import type { ReviewEvidenceCoordinator } from "./review-evidence.js";
 import { IMPORT_PGN_MAX_BYTES, resolveImportSource, type ImportSource } from "./import-source.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
@@ -550,6 +553,8 @@ export class RunService {
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
   readonly #packRegistry: PackRegistry | undefined;
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
+  readonly #inspectorContexts = new InspectorRecordedContextOwner();
+  readonly #inspectorLedgerSources: InspectorLedgerSourceOwner;
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
   readonly #rating: RatingStorage | undefined;
@@ -603,6 +608,7 @@ export class RunService {
       options.evidenceQueue.attach({ evidenceJobs: storage.evidenceJobs, setEvidenceJobListener: (listener) => storage.setEvidenceJobListener!(listener) });
     }
     this.#packRegistry = options.packRegistry;
+    this.#inspectorLedgerSources = new InspectorLedgerSourceOwner(this.#inspectorContexts, this.#packRegistry);
     this.#openingCatalogue = options.openingCatalogue;
     this.#progress = options.progressStorage;
     this.#rating = options.ratingStorage ?? (
@@ -1182,16 +1188,9 @@ export class RunService {
     return Object.freeze({ runId, branchId: context.branchId, ...analysis });
   }
 
-  #storyContext(runId: string, principal: Principal, requestedBranchId: string | undefined, enqueue: boolean) {
-    const { stored, role } = requireRead(this.#storage, runId, principal);
-    const run = stored.run;
-    const outcomeEvents = run.events.filter((event): event is Extract<DrillRunEvent,{type:"outcome.reached"}> => event.type === "outcome.reached");
+  #requireRecordedBranchDisclosure(runId: string, principal: Principal, run: DrillRun, branchId: string): void {
     const recordedMainline = importedMainlineBranchId(run);
-    // The accepted recorded-prefix authority includes unfinished native lines. A terminal
-    // result chooses the normal result view, but is not permission to inspect a saved line.
-    const defaultBranch = recordedMainline ?? [...outcomeEvents].reverse().map((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId).find((id)=>id!==undefined) ?? run.activeCursor.branchId;
-    const branchId = requestedBranchId ?? defaultBranch;
-    const branchOutcome = outcomeEvents.find((event)=>run.nodes.find((node)=>node.id===event.data.nodeId)?.branchId===branchId);
+    const branchOutcome = run.events.find(event => event.type === "outcome.reached" && run.nodes.find(node => node.id === event.data.nodeId)?.branchId === branchId);
     if (!run.branches.some(branch => branch.id === branchId)) throw new ServerError("STORY_UNAVAILABLE", "This recorded branch is unavailable");
     const completedLine = branchOutcome !== undefined || branchId === recordedMainline;
     if (!completedLine) {
@@ -1203,6 +1202,17 @@ export class RunService {
     const campaignBoundary = this.#campaignGate?.reviewBoundary(runId, principal.learnerId, branchId);
     const declaredConsequence = campaignBoundary !== undefined && branchPath(run, branchId).at(-1)?.id === campaignBoundary;
     if (!(completedLine ? feedbackDisclosed(run) : feedbackDeliveryOpen(run)) && !declaredConsequence) throw new ServerError("ASSISTANCE_WITHHELD", "Reveal this recorded line before opening its review");
+  }
+
+  #storyContext(runId: string, principal: Principal, requestedBranchId: string | undefined, enqueue: boolean) {
+    const { stored, role } = requireRead(this.#storage, runId, principal);
+    const run = stored.run;
+    const outcomeEvents = run.events.filter((event): event is Extract<DrillRunEvent,{type:"outcome.reached"}> => event.type === "outcome.reached");
+    const recordedMainline = importedMainlineBranchId(run);
+    // Keep the existing default and disclosure rule shared with Inspector's current resolver.
+    const defaultBranch = recordedMainline ?? [...outcomeEvents].reverse().map(event => run.nodes.find(node => node.id === event.data.nodeId)?.branchId).find(id => id !== undefined) ?? run.activeCursor.branchId;
+    const branchId = requestedBranchId ?? defaultBranch;
+    this.#requireRecordedBranchDisclosure(runId, principal, run, branchId);
     const record = run.sessionKind === "imported" ? this.importRecord(runId, principal) : undefined;
     // rfc/review-evidence-compiler.md §4: the subject is derived from parsed storage only.
     const authorize = createReviewPrefixAuthority({
@@ -2921,6 +2931,39 @@ export class RunService {
     if(state===undefined)throw new ServerError("STORAGE_FAILURE","Native match state is missing");
     return Object.freeze({session,state});
   }
+
+  /** Server-internal current source boundary; no context or supplied availability is a wire grant. */
+  resolveInspectorRecordedContext(runId: string, principal: Principal, requested: RequestedAssistanceV1,
+    availability: ServerEvidenceAvailabilityReceipt, query: InspectorRecordedSelection, signal: AbortSignal): InspectorRecordedContext {
+    const owner = Object.freeze({ ...principal });
+    const intent = parseRequestedAssistanceV1(structuredClone(requested));
+    const sourceState = structuredClone(availability);
+    return this.#inspectorContexts.resolve(query, selection => {
+      signal.throwIfAborted();
+      this.#refuseRatedAssistance(runId);
+      const { stored, role } = requireRead(this.#storage, runId, owner);
+      const branches = selection.context.kind === "comparison" ? [selection.branchId, selection.context.otherBranchId] : [selection.branchId];
+      for (const branchId of branches) this.#requireRecordedBranchDisclosure(runId, owner, stored.run, branchId);
+      const authority = this.assistanceAuthority(runId, owner);
+      const assistance = finalizeAssistanceEffects(compileAuthoritativeAssistance(intent,
+        { ...authority, access: { ...authority.access, deliveryOpen: true }, availability: sourceState }), { authority: MODULE_SOURCE_AUTHORITY, availability: sourceState });
+      return { run: stored.run, principal: owner, role, assistance };
+    }, signal);
+  }
+
+  readInspectorRecordedContext(context: InspectorRecordedContext) { return this.#inspectorContexts.read(context); }
+
+  acquireInspectorLedgerSource(context: InspectorRecordedContext,
+    input: Readonly<{ projection: "recorded.engine.eval@1" | "recorded.tablebase.result@1"; signal: AbortSignal }>) {
+    if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
+      || Reflect.ownKeys(input).length !== 2 || !["projection", "signal"].every(key => {
+        const field = Object.getOwnPropertyDescriptor(input, key);
+        return field !== undefined && field.enumerable && "value" in field;
+      })) throw new TypeError("Inspector ledger source requires exactly {projection,signal}");
+    return this.#inspectorLedgerSources.acquire(context, input.projection, input.signal);
+  }
+
+  readInspectorLedgerSource(source: InspectorLedgerSource) { return this.#inspectorLedgerSources.read(source); }
 
   /** rfc/module-registration.md §1.2: the viewer a learner module admits against (role, workflow context). */
   #moduleViewer(runId: string, principal: Principal, run: DrillRun, role: RunRole) {

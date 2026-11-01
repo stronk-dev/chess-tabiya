@@ -4188,6 +4188,10 @@ pack-loading-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/pack-registry-validation.test.ts apps/server/src/pack-studio.test.ts apps/server/src/recorded-measurement-source.test.ts apps/server/src/recorded-measurement-population.test.ts packages/runtime/src/recorded-measurement.test.ts
 	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/pack-measurement-loading.test.ts
 
+.PHONY: inspector-source-check
+inspector-source-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/inspector-recorded-context.test.ts apps/server/src/inspector-ledger-source.test.ts apps/server/src/recorded-measurement-population.test.ts apps/server/src/recorded-measurement-source.test.ts packages/runtime/src/recorded-measurement.test.ts apps/server/src/run-subject-access.test.ts
+
 .PHONY: studio-publication-check studio-publication-browser-check
 studio-publication-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/app-shell.test.ts apps/web/src/lib/router.test.ts apps/web/src/lib/api.test.ts apps/web/src/lib/pack-draft-response.test.ts apps/web/src/lib/pack-validation-presentation.test.ts apps/server/src/pack-studio.test.ts

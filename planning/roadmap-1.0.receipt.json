@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4ec395dbc7d797df505ae7195720bce0cc80a195030f6ed90dbd1ca6d3a761ee",
+    "roadmap": "sha256:bcfe84b342a088e7f34d4effc9a5deb3dfff4c2853deb24435cb5d48fbf3dcbb",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:9c2049462783d9e0914830b27a592b1b7506f8824cc50a153d040ea3200ef94e",
+    "workState": "sha256:998524f9e631b587503062275541c7499b62792aebae18bce117f415dd5ab921",
     "rfcRegister": "sha256:99b163d6ea20f7bcbe45e302ab796375b5f4df7a854ce30b9971f05827ff6c78",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 38,
       "blocked": 1083,
-      "done": 1727,
+      "done": 1730,
       "refused": 162
     },
     "workItems": {
@@ -487,12 +487,16 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement the actual current measurement resolver/grant/sourceKey/supplier, remaining grade/Compare endpoint selection and installed-opening result/history authority. Migrate complete per-consumer source/access/renderer/receiver/API/native journeys, not a partial Inspector image or compatibility-only pipeline. Preserve every exact family, original occurrence and current assistance ceiling; no qualification, content or milestone promotion without its own proof.",
+      "nextAction": "Integrate the actual current source operations with compiler execution grants and source-order Inspector paging/disclosure; finish installed-opening result/history authority and remaining grade/Compare endpoint selection. Complete all source/preflight/access/renderer/receiver/API/native obligations per consumer, not a partial Inspector image or compatibility-only pipeline. Preserve every exact family, original occurrence and assistance ceiling; qualification/content/release milestones require their own evidence.",
       "latestCheckpoint": {
         "at": "2026-11-01",
-        "summary": "D3870 independently accepted, implemented and archived: canonical run0.19 human-only empty telemetry, existing REST writes and stamp-only storage31. Frozen0.19 validation/non-stamp replay comparison repair D3888 and preserve actual original events, relations and metadata; targeted corruption rolls back.269 focused cases/14 files cover original source/Review empty-versus-missing folds, prediction/group controls, genuine bot decisions/shared deliveries, import/grants/evidence, list/count/write, reopen/future traversal and authenticated cross-installation export/restore. Bounded independent review clears final code/coverage. Full normal make verify build exits zero:6840 software/420 files (478.72s), seven performance/four files (61.53s),271 content/27 files (60.01s) and all remaining gates. First failed run stays logged. D3889 pins compatible24.22.1/Unicode17 through normal Make, workflows and staged hook without weakening compiler meaning. Three findings closed with path evidence; D3841 remains doing. Current resolver/grant/sourceKey/supplier, grade/Compare/opening history and complete consumer/API/native delivery remain; no browser/remote CI, qualification or whole-capability/milestone claim.",
+        "summary": "Accepted D3841 now has server-private current RunService contexts and exact registry-backed ledger suppliers. Canonical original events/replay precede bounded path extraction; current actual role/config/recorded-branch disclosure, separate cancellation and registry membership revalidate before publication. Complete report duplicates/refusals/abstentions and original invocation/coverage/source identities survive, including zero and mixed populations. D3890 role/effect and independently found D3891 replay/schema defects first fail permanent negatives, then pass.131 focused cases/six files and workspace types pass; independent bounded re-review clears code/coverage. D3890/D3891/D3892 close after full normal make verify build7205 software/422 files, seven isolated performance/four files,271 content/27 files and all remaining gates. Independent review clears per-factory partitioning of the monolithic timeout, retaining complete recursive coverage and unchanged deadlines. Larger test count is not feature breadth; earlier failures stay logged. Prior source/rank/opening/telemetry checkpoints stand. Compiler execution grants, remaining sources and complete current consumer/preflight/paging/disclosure/receiver/API/native delivery remain; no qualification, content, milestone or whole-capability claim.",
         "impact": "advanced",
         "evidence": [
+          "apps/server/src/inspector-recorded-context.ts",
+          "apps/server/src/inspector-recorded-context.test.ts",
+          "apps/server/src/inspector-ledger-source.ts",
+          "apps/server/src/inspector-ledger-source.test.ts",
           "apps/server/src/pack-registry.ts",
           "apps/server/src/recorded-measurement-population.test.ts",
           "packages/runtime/src/recorded-measurement.ts",
@@ -734,7 +738,7 @@
           {
             "kind": "work_state",
             "id": "D3841",
-            "digest": "sha256:f81be9c4a61b2d054a94d506c991353e88da938532c35d2906509209f5608a2e"
+            "digest": "sha256:fe99f9ef056431fa5938081d1a2763b3f7368f1a308c73e334eae75a56e62692"
           },
           {
             "kind": "work_state",
@@ -1105,6 +1109,21 @@
             "kind": "work_state",
             "id": "D3889",
             "digest": "sha256:2d4ca5c7f041fc056f1bf6ad6aef5118d3cc451513c06f533edfaaa61210cd11"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3890",
+            "digest": "sha256:f895358abfd6ef9be8cee1ab852f19e2554055451d299d1477e550a40d2f8b88"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3891",
+            "digest": "sha256:b57f33cfc1608b038b25618281221c4bbba99cbe6102b5f71a8ad862113d094a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3892",
+            "digest": "sha256:97574f932c4471b4ceb5cb60dafb4ef136f0da43074169a3630d34d82806a574"
           }
         ]
       },

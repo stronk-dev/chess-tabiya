@@ -1,5 +1,25 @@
 # Codex queue
 
+**Verified current-context/ledger checkpoint, 2026-11-01 — [[D3841]]; [[D3890]], [[D3891]], [[D3892]] closed:**
+RunService now owns genuine current Inspector contexts and original registry-backed ledger
+suppliers. Full canonical events/replay precede granted-path narrowing; current role, assistance,
+recorded-branch disclosure, cancellation and registry membership revalidate before publication.
+Original duplicate reports/refusals/abstentions and exact coverage/source identities survive.
+131 focused cases/six files and workspace types pass; independent bounded re-review finds no
+remaining objection. D3890's two role refusals and D3891's four coordinated invalid-event refusals
+first fail, then pass. The first full ordinary run reports6,892 passes/one failure: D3721's
+all-factory immutability case exceeds its5s deadline. D3892 partitions that functional test per
+registered factory, retaining exact route coverage, output cardinality and recursive descendant
+assertions under the same deadline; nested/shared mutable-child falsifiers pass. The focused
+authority gates,131 source cases and workspace types pass. Independent bounded review clears
+the source implementation and test partition. Full ordinary make verify build exits zero:
+7,205 software/422 files, seven isolated performance/four files,271 content/27 files and every
+remaining contract. Earlier failed attempts remain logged; no timeout, retry, skip or coverage
+relaxation. The higher test count includes per-factory partitioning, not new product breadth.
+No new schema, producer, provider request, legacy input arm or partial current module image.
+Actual execution grants, remaining opening/grade/Compare sources and complete Inspector
+preflight/API/paging/disclosure/client/native delivery remain; D3841 stays doing.
+
 **Verified D3870 completion, 2026-11-01 — [[D3888]], [[D3889]] closed:** canonical run0.19,
 existing REST write and storage31 preserve genuine human empty telemetry; other policies and
 modern Maia responses stay nonempty. Frozen migration-only validation, complete non-stamp

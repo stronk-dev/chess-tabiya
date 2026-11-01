@@ -681,6 +681,25 @@ function outcomeOf(result: unknown): Outcome {
   return { availability: "available", cardinality: 1, payloadDigests: digests([result]) };
 }
 
+function factoryPayloads(value: unknown): readonly unknown[] {
+  if (value === null || typeof value !== "object") return [];
+  if (Array.isArray(value)) return value.flatMap(factoryPayloads);
+  if ("producer" in value && "projection" in value && "payload" in value) return [(value as DeclaredEvidence<unknown>).payload];
+  if ("evidence" in value) return factoryPayloads(value.evidence);
+  if ("value" in value) return factoryPayloads(value.value);
+  if ("item" in value) return factoryPayloads(value.item);
+  return [];
+}
+
+/** Every descendant of one emitted payload, retaining the original cycle/alias protection. */
+function mutablePayloadPaths(value: unknown, path: string, mutable: string[] = [], seen = new WeakSet<object>()): readonly string[] {
+  if (value === null || typeof value !== "object" || seen.has(value)) return mutable;
+  seen.add(value);
+  if (!Object.isFrozen(value)) mutable.push(path);
+  for (const [key, child] of Object.entries(value)) mutablePayloadPaths(child, `${path}.${key}`, mutable, seen);
+  return mutable;
+}
+
 const at = "2026-09-24T00:00:00.000Z";
 const policyConfig = { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } as const;
 const FENS = Object.freeze([
@@ -1187,6 +1206,7 @@ const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
   let orderedHintProfiles: ReadonlyMap<string, Profile> | undefined;
+  let immutableProfiles: ReadonlyMap<string, Profile> | undefined;
   it.each(HINT_FAMILIES)("D3848 %s horizon retains the declared source-then-search input order", (family) => {
     const route = `derived.hint.horizon.${family}@1`;
     const profile = (orderedHintProfiles ??= buildProfiles()).get(route)!;
@@ -1418,33 +1438,32 @@ describe("value authority: one permanent profile per final factory (§7, criteri
     expect(evidenceValueReceipt(next).inputDigest).not.toBe(evidenceValueReceipt(value).inputDigest);
   });
 
-  it("D3721 every emitted factory payload is recursively immutable, not just its outer shell", () => {
-    const mutable: string[] = [];
-    const payloads = (value: unknown): readonly unknown[] => {
-      if (value === null || typeof value !== "object") return [];
-      if (Array.isArray(value)) return value.flatMap(payloads);
-      if ("producer" in value && "projection" in value && "payload" in value) return [(value as DeclaredEvidence<unknown>).payload];
-      if ("evidence" in value) return payloads(value.evidence);
-      if ("value" in value) return payloads(value.value);
-      if ("item" in value) return payloads(value.item);
-      return [];
-    };
-    const inspect = (value: unknown, path: string, seen = new WeakSet<object>()): void => {
-      if (value === null || typeof value !== "object" || seen.has(value)) return;
-      seen.add(value);
-      if (!Object.isFrozen(value)) mutable.push(path);
-      for (const [key, child] of Object.entries(value)) inspect(child, `${path}.${key}`, seen);
-    };
-    const profiles = buildProfiles();
+  it("D3721 immutability profiles cover every registered factory", () => {
+    const profiles = immutableProfiles ??= buildProfiles();
     expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
-    for (const [route, profile] of profiles) {
-      if (profile.valid === undefined) continue;
-      const result = profile.resolved ?? invoke(route, profile.valid);
-      const emitted = payloads(result);
-      expect(emitted.length, route).toBe(outcomeOf(result).cardinality);
-      emitted.forEach((payload, index) => inspect(payload, `${route}[${index}]`));
-    }
-    expect(mutable).toEqual([]);
+  });
+
+  // D3892: one functional unit per registered factory, not an ever-growing all-factory
+  // computation under one unit's timeout. Every original invocation/cardinality/descendant
+  // assertion remains; the complete route set above prevents an omitted difficult factory.
+  it.each([...ROUTES.keys()])("D3721 %s emits recursively immutable payloads", route => {
+    const profile = (immutableProfiles ??= buildProfiles()).get(route)!;
+    expect(profile, route).toBeDefined();
+    if (profile.valid === undefined) return;
+    const result = profile.resolved ?? invoke(route, profile.valid);
+    const emitted = factoryPayloads(result);
+    expect(emitted.length, route).toBe(outcomeOf(result).cardinality);
+    expect(emitted.flatMap((payload, index) => mutablePayloadPaths(payload, `${route}[${index}]`))).toEqual([]);
+  });
+
+  it.each(["nested", "shared"])("D3892 the recursive guard rejects a %s mutable child below frozen shells", kind => {
+    const child: unknown[] = [];
+    const payload = kind === "nested" ? Object.freeze({ outer: Object.freeze({ child }) })
+      : Object.freeze({ left: Object.freeze({ child }), right: Object.freeze({ child }) });
+    expect(Object.isFrozen(payload)).toBe(true);
+    expect(mutablePayloadPaths(payload, "payload").length).toBeGreaterThan(0);
+    Object.freeze(child);
+    expect(mutablePayloadPaths(payload, "payload")).toEqual([]);
   });
 
   it("changes only transition identity and preserves the predecessor's calculation and Story output", () => {

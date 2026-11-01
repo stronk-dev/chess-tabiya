@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3889]] · **Machine map:**
+2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3892]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,20 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+The latest source checkpoint implements current RunService-owned Inspector contexts and exact
+registry-backed ledger suppliers. Original full events are canonically validated before replay
+comparison and path narrowing; actual current role/assistance/recorded-branch disclosure,
+cancellation and registry membership revalidate before returning retained results. Mixed, zero,
+refused and abstained report populations retain exact coverage and source identities.131 focused
+cases/six files, workspace types and independent bounded re-review pass. D3890/D3891 are closed.
+Full normal make verify build exits zero:7,205 software/422 files, seven isolated performance/
+four files,271 content/27 files and every remaining contract. D3892 partitions the timed-out
+all-factory test per registered factory with unchanged deadlines and complete recursive coverage;
+independent review clears it. The larger test count is not product breadth. These server-private
+operations are not compiler execution grants or completed Inspector paging/receipt/API/native delivery. Those
+and remaining opening/grade/Compare sources still block learner cutover. Milestone states and
+zero graduated official packs are unchanged; no compatibility-only pipeline is added.
 
 D3870 is implemented and independently reviewed: genuine empty human-selection telemetry now
 passes canonical run0.19, the existing REST write and stamp-only storage31. Missing remains

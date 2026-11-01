@@ -31985,7 +31985,7 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f81be9c4a61b2d054a94d506c991353e88da938532c35d2906509209f5608a2e",
+      "sourceDigest": "sha256:fe99f9ef056431fa5938081d1a2763b3f7368f1a308c73e334eae75a56e62692",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-01"
@@ -32419,6 +32419,33 @@
       "sourceDigest": "sha256:2d4ca5c7f041fc056f1bf6ad6aef5118d3cc451513c06f533edfaaa61210cd11",
       "uxItems": [],
       "evidence": "tools/make-toolchain.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3890",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f895358abfd6ef9be8cee1ab852f19e2554055451d299d1477e550a40d2f8b88",
+      "uxItems": [],
+      "evidence": "apps/server/src/inspector-ledger-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3891",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b57f33cfc1608b038b25618281221c4bbba99cbe6102b5f71a8ad862113d094a",
+      "uxItems": [],
+      "evidence": "apps/server/src/inspector-recorded-context.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3892",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:97574f932c4471b4ceb5cb60dafb4ef136f0da43074169a3630d34d82806a574",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-authority.test.ts",
       "evidenceKind": "path"
     }
   ]

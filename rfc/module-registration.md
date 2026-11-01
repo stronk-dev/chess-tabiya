@@ -7,6 +7,18 @@ are retained review history, not current blockers. Actual source/consumer/UI del
 unrelated parent obligations remain. Scope and decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
+**Current-context/ledger implementation checkpoint, 2026-11-01:** the accepted §4.11a now has
+server-private RunService context and recorded ledger operations, with original canonical full
+events/replay, exact granted paths, current role/assistance/disclosure, real registry populations
+and retained-read revalidation. D3890's enabled-effect/role confusion and D3891's replay/schema
+confusion are repaired with predecessor-red negatives.131 focused cases/six files and workspace
+types pass; independent bounded implementation review finds no remaining objection. Full normal
+make verify build passes7,205 software/422 files, seven isolated performance/four files,271
+content/27 files and all remaining gates. D3892's test partition retains exact factory/recursive
+coverage and the same5s deadline; independent review clears it. D3890/D3891/D3892 are closed.
+This is not execution-grant/consumer/API/native completion,
+an Inspector replacement, a qualification or a parent discharge; D3841 remains doing.
+
 **Scoped semantic supplier checkpoint, 2026-10-16:** §4.11a's eleven-family runtime supplier,
 closed source result and exact semantic-event construction are implemented.110 permanent cases
 join the normal727-case focused gate; workspace types and independent implementation review

@@ -213,3 +213,39 @@ Current roadmap, queue and work-state agree:1,749 live rows, zero untriaged; D38
 Actual current resolver/grant/sourceKey/supplier, grade/Compare selection, opening result/history
 authority and full per-consumer/API/native migration remain. No module, milestone, qualification,
 content graduation, browser or remote result follows from this correctness repair.
+
+## 2026-11-01 — Current-context and recorded ledger source implementation
+
+RunService now owns current Inspector contexts and exact registry-backed ledger suppliers under
+accepted §4.11a. Canonical complete events, full replay and original requested paths precede
+narrowing; current actual role/config/disclosure/selection, independent cancellation and original
+registry membership revalidate before returning retained data. The full run is never cropped.
+Exact report duplicates/refusals/abstentions and mixed/zero coverage survive in original order;
+no objective grading claim, provider request or fake absence is introduced.
+
+D3890's role/effect and independent D3891's replay/schema findings have predecessor-red negatives
+and actual repairs.131 focused cases/six files and workspace types pass; bounded independent
+re-review clears code/coverage. Fixture/counter/cache-permission failures are retained in the
+root exploration log. Full normal gates/build remain pending. Neither row nor D3841 is closed by
+this entry. Execution-grant/source/preflight/API/native and complete learner module work remains;
+this checkpoint adds no compatibility-only input, schema, content or qualification claim.
+
+## 2026-11-01 — Full-source checkpoint verification catches test aggregation debt
+
+The first full normal run reports6,892 software passes/one failure: the existing all-factory
+immutability case exceeds its5s deadline, not a demonstrated mutable payload. D3892 partitions
+that functional case per registered factory with identical route/cardinality/recursive coverage
+and unchanged deadlines, plus nested/shared mutable-child falsifiers. Temporary diagnostic logs
+are removed. Authority gates1,075/119/252 cases, source gate131/six files and workspace types pass.
+Full normal rerun and independent bounded repair review remain required; no row, API/native
+journey, qualification or parent completion is claimed by these focused results.
+
+## 2026-11-01 — Current-context/ledger source checkpoint verified
+
+Full ordinary make verify build exits zero:7,205 software/422 files, seven isolated performance/
+four files,271 content/27 files and all remaining gates. Independent bounded review clears both
+the current source implementation and D3892's unchanged-coverage/deadline per-factory test repair.
+Close D3890/D3891/D3892 with actual file evidence; earlier failed attempts remain logged. The
+larger test count is partitioning, not feature breadth. D3841 remains doing; compiler execution
+grants, remaining source owners and complete current consumer/Inspector/API/native delivery are
+still required. No milestone, qualification, content graduation, browser or remote result is claimed.

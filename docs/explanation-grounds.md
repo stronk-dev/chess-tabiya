@@ -148,9 +148,29 @@ original ordinals, duplicate reports, exact ledger-to-reading invocations and ac
 Valid readings remain beside refusals and all four abstention counts; truly empty and unavailable
 measurements differ. Live attachments do not suppress this population. A malformed/crossed contract
 is not a lookup failure. Only the issuing registry may read the immutable population, and readback
-rechecks the original artifact. This prerequisite has no current access grant or final service
-sourceKey. The current-context supplier, GradeSource/Compare selection and replacement Inspector
-page remain unimplemented; no stored report becomes a modern provider delivery or qualified claim.
+rechecks the original artifact. This registry prerequisite alone has no current access grant.
+
+The server-private `RunService.resolveInspectorRecordedContext` now joins actual storage/read
+grants, module role policy, requested assistance compiled under current server ceilings, and the
+existing recorded-branch disclosure rule. Canonical full-event validation and whole-snapshot
+replay equality precede original-path validation and bounded path extraction. It retains the
+unchanged full run beside position/incoming/window/branch/comparison/review spans. Comparisons
+use the explicitly requested peer/order, not the newest branch. Copied/foreign context objects
+are not authority. The availability input is a server-owned receipt, never an Inspector wire field.
+
+`acquireInspectorLedgerSource` accepts only that issuing service's genuine position context and
+one exact recorded engine/tablebase ref. It derives the pinned pack/position itself, invokes the
+registry's complete population and retains original reports, refusals, abstentions and actual
+factory identities. Its source key binds current viewer/decision/assistance/context and complete
+artifact/occurrence identities. Available, truly empty, refused/abstained, absent and failed states
+stay distinct; only successful enumeration has coverage. Retained source reads recheck current
+permission, both cancellation signals and the original registry image before publication.
+There is no provider call, request-time file reread or run mutation.
+
+These are internal callable source operations, not a completed execution grant, replacement
+Inspector endpoint, paging/disclosure receiver or learner seat. Final HTTP/client freshness and
+complete current consumer migration remain; GradeSource/Compare selection and opening history
+still need their owners. No stored report becomes a modern provider delivery or qualified claim.
 
 ## Authored checkpoint reveal
 
