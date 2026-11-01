@@ -31,9 +31,9 @@
 - **Depends on:** `rfc/learner-rating.md` (implementing — the Glicko-2 arithmetic, the calibration,
   the periods, the refusals and the publication rules are **consumed, never re-decided**; this RFC
   changes its preconditions and §6 states the amendment it owes); `rfc/social-play.md` (draft — the
-  native match, the terms object, the invitation state machine, and run-schema lane **0.23**'s
+  native match, the terms object, the invitation state machine, and run-schema lane **0.24**'s
   `GameResignedEvent`/`DrawAgreedEvent`, which this RFC **consumes and does not claim**);
-  `rfc/enforced-clocks.md` (draft — lane **0.21**'s `ClockFlaggedEvent` and its
+  `rfc/enforced-clocks.md` (draft — lane **0.22**'s `ClockFlaggedEvent` and its
   `rated_games.terminal_reason` widening, likewise consumed); `rfc/archive/social-match.md`
   (`match_states`, the seating and `MATCH_LIVE`); `rfc/archive/return-and-progression.md`
   (`attempts`, `projectAttempts`, `/learn`); `rfc/archive/teacher-surface.md` (`classrooms` and the
@@ -50,6 +50,11 @@
 ```tabiya-claims
 migration | position behind theory-drill-current-joins | rated_games rebuilt as games plus game_sides with a colour-oriented declared result and a polymorphic opponent; attempts primary key widens to (run_id, branch_id, learner_id) and attempt_concepts re-points its foreign key at drill_runs; five new tables contests, contest_rounds, contest_encounters, encounter_seats, encounter_games
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -196,7 +201,7 @@ runs **no migration over these tables** — which is this RFC's acceptance test 
 - The bot event of `social-play.md` §6 — deferred by [[D1416]], and `BOT_POLICY_PROFILES =
   compileBotPolicyCatalog([])` is a literal empty array (`bot-policy-catalog.ts:299`), so it has no
   entrants to field.
-- Clocks. `enforced-clocks.md` owns them on lane 0.21; this RFC consumes `clock.flagged` as a
+- Clocks. `enforced-clocks.md` owns them on lane 0.22; this RFC consumes `clock.flagged` as a
   result cause and specifies no timing.
 - The rating **arithmetic**, the calibration, the periods, the publication bracket and the sixteen
   refusals. All are `learner-rating.md`'s and are consumed verbatim.
@@ -319,8 +324,8 @@ agreed draw and a flag all end a game **with no move**. Appending an `outcome.re
 them does not fail at review — it **corrupts every later read of that run, permanently**, because
 the reducer runs on every projection.
 
-`social-play.md` §3.4 claims **run-schema lane 0.23** for `GameResignedEvent` and `DrawAgreedEvent`
-on exactly that mechanism, and `enforced-clocks.md` claims **lane 0.21** for `ClockFlaggedEvent`.
+`social-play.md` §3.4 claims **run-schema lane 0.24** for `GameResignedEvent` and `DrawAgreedEvent`
+on exactly that mechanism, and `enforced-clocks.md` claims **lane 0.22** for `ClockFlaggedEvent`.
 **This RFC consumes both and claims neither** (§7.2). What it adds is the object those events feed:
 a declared result that is not an event at all.
 
@@ -333,9 +338,9 @@ a declared result that is not an event at all.
 | cause | produced by | owner |
 |---|---|---|
 | `checkmate`, `stalemate`, `insufficient_material`, `fifty_move`, `threefold` | `outcome.reached`, via `terminalOutcome`'s four cases plus the fifty-move/threefold arms (`packages/runtime/src/outcome.ts:10-15`) | shipped |
-| `resignation` | `game.resigned` | `social-play.md` lane 0.23 |
-| `agreement` | `draw.agreed` | `social-play.md` lane 0.23 |
-| `flag`, `flag_insufficient_material` | `clock.flagged`, with FIDE 6.9's draw arm computed from the board | `enforced-clocks.md` lane 0.21 |
+| `resignation` | `game.resigned` | `social-play.md` lane 0.24 |
+| `agreement` | `draw.agreed` | `social-play.md` lane 0.24 |
+| `flag`, `flag_insufficient_material` | `clock.flagged`, with FIDE 6.9's draw arm computed from the board | `enforced-clocks.md` lane 0.22 |
 
 **Reserved and unproducible — six:** `forfeit`, `default`, `bye`, `adjudication`,
 `double_forfeit`, `withdrawal`. These are the causes a Swiss cannot run without, and none of them
@@ -643,7 +648,7 @@ it; §8.1 states it again as a limit rather than a feature.
 
 `learner-rating` §11.3 names the abandonment bias and says outright that *"the real fix is a
 resignation event — one run-schema field, which this RFC declines only because it claims no run
-lane."* `social-play.md` lane 0.23 supplies it, and this RFC makes it a rating-terminating cause.
+lane."* `social-play.md` lane 0.24 supplies it, and this RFC makes it a rating-terminating cause.
 **That closes the resolution gap and does not close the bias**: a learner can still close the tab,
 and §7.2's abandonment refusal stands unamended. What changes is that a two-human game now has an
 honest ending available to the losing side, which is the precondition for ever narrowing the
@@ -700,11 +705,12 @@ the build rather than silently dropping out of export. `games`/`game_sides` take
 
 #### §7.2 Run schema — **none**, and this is argued, not assumed
 
-Head is **0.17**; lanes 0.18–0.23 are claimed by `bot-policy`, `recorded-clocks`, `variants`,
-`enforced-clocks`, `bot-roster` and `social-play`, so the next free lane is 0.24 and **this RFC does
-not want it.** Three candidate claims were examined and each is refused on evidence:
+Head is **0.19** after `recorded-selection-telemetry`'s correctness repair.
+The consumed future lane chain includes `recorded-clocks`, `variants`,
+`enforced-clocks`, `bot-roster` and `social-play`. **This RFC claims no run lane**; the register
+owns any next-free calculation. Three candidate claims were examined and each is refused on evidence:
 
-1. **The three non-move endings.** Owned by `social-play` (0.23) and `enforced-clocks` (0.21).
+1. **The three non-move endings.** Owned by `social-play` (0.24) and `enforced-clocks` (0.22).
    Consuming an unlanded lane is a **cross-draft pin**, recorded in `rfc/README.md`; the precedent is
    `bot-route-source.md`'s pin on `bot-policy`'s 0.18. Criterion 10 fails if a
    `game.resigned`/`draw.agreed`/`clock.flagged` member is added **here** instead of there.
@@ -846,7 +852,7 @@ Each is failable at HEAD unless marked otherwise. Counts are drift tripwires, ne
 |---|---|---|---|---|
 | D1 | The `learner-rating` amendment §6 specifies in full: the rateability predicate replacing §3 condition 3, the declared-result condition replacing condition 8, the two-outcome seal reading `rating_before`, and §7.4's anchored-fraction obligation. **No implementation here may precede it** | `learner-rating.md` | that RFC's next amendment | |
 | D2 | `social-play.md` §3.6 gains one sentence: removing the `countable:false` forcing is necessary and not sufficient, and the guest's attempt row comes from this RFC's §5 | `social-play.md` | that RFC's next amendment | |
-| D3 | The declared result's three non-move causes ride lanes 0.23 (`game.resigned`, `draw.agreed`) and 0.21 (`clock.flagged`); until both land, only the five rules causes have producers and `PRODUCIBLE_RESULT_CAUSES` is correspondingly smaller | `social-play.md` | that RFC's implementing commit, and `enforced-clocks.md`'s | |
+| D3 | The declared result's three non-move causes ride lanes 0.24 (`game.resigned`, `draw.agreed`) and 0.22 (`clock.flagged`); until both land, only the five rules causes have producers and `PRODUCIBLE_RESULT_CAUSES` is correspondingly smaller | `social-play.md` | that RFC's implementing commit, and `enforced-clocks.md`'s | |
 | D4 | Whether the shipped two-leg Arena adopts the `arena` contest shape or keeps `arena_legs` as its own record. Not decided here because `social-play.md` Open question 3 owns the rematch chain and the answers interact | `social-play.md` | that RFC's Open question 3 ruling | |
 | D5 | The `design/06-campaign.md` narrowing (Deviations 1) — law 5 work, proposed not written | OWNER | `planning/platform-alignment/native-ratings-intent-amendment-2026-08-26.md` | proposed 2026-08-26 |
 | D6 | `docs/return-and-progression.md` and `docs/account-data-lifecycle.md` updates for the attempt-per-seat change, the seven-table inventory and the twelve rewritten disclosure labels | codex | this RFC's implementing commit | |
@@ -942,3 +948,6 @@ into.
   as written: the attempt upsert never rewrites `learner_id`, and a match guest's plies are stamped
   `actor: "system"`. Claims one migration position and **no** run-schema lane, consuming
   `social-play`'s 0.23 and `enforced-clocks`' 0.21 as a cross-draft pin.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

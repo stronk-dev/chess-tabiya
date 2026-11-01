@@ -1,9 +1,10 @@
-import { accessSync, constants } from "node:fs";
+import { accessSync, constants, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { delimiter, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const REQUIRED_NODE_MAJOR = 24;
+export const REQUIRED_NODE_VERSION = readFileSync(new URL("../.node-version", import.meta.url), "utf8").trim();
 export const REQUIRED_PNPM_VERSION = "11.18.0";
 
 export function preflightFailures({
@@ -13,10 +14,9 @@ export function preflightFailures({
   dockerComposeAvailable,
 }) {
   const failures = [];
-  const nodeMajor = Number(nodeVersion.replace(/^v/, "").split(".")[0]);
-  if (nodeMajor !== REQUIRED_NODE_MAJOR) {
+  if (nodeVersion.replace(/^v/, "") !== REQUIRED_NODE_VERSION) {
     failures.push(
-      `Node ${REQUIRED_NODE_MAJOR} is required; found ${nodeVersion}. Use .node-version before running CI parity.`,
+      `Node ${REQUIRED_NODE_VERSION} is required; found ${nodeVersion}. Use .node-version before running CI parity.`,
     );
   }
   if (pnpmVersion !== REQUIRED_PNPM_VERSION) {

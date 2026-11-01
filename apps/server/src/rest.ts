@@ -406,9 +406,6 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
   if (selection.candidates !== undefined && !Array.isArray(selection.candidates)) {
     throw invalid("selection.candidates must be an array");
   }
-  if (Array.isArray(selection.candidates) && selection.candidates.length === 0) {
-    throw invalid("selection.candidates cannot be empty");
-  }
   const policyModeApplied = (() => {
     const mode = requiredString(
       selection.policyModeApplied,
@@ -419,6 +416,9 @@ function parseOpponentSelection(value: unknown): OpponentSelection {
     }
     return mode as OpponentSelection["policyModeApplied"];
   })();
+  if (policyModeApplied !== "human_common" && Array.isArray(selection.candidates) && selection.candidates.length === 0) {
+    throw invalid("selection.candidates cannot be empty for this policy");
+  }
   const orderingBasis = selection.orderingBasis === undefined
     ? undefined
     : (() => {

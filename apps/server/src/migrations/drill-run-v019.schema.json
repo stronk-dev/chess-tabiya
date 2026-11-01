@@ -1,0 +1,793 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chess-tabiya:schema:drill-run:0.19",
+  "title": "Tabiya Drill Run",
+  "description": "Living v0.19 wire format for an immutable, event-sourced rehearsal run. Event seq values start at 1 and increase monotonically without gaps.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "sessionKind",
+    "packId",
+    "packDigest",
+    "sessionDigest",
+    "start",
+    "feedbackPolicy",
+    "opponentPolicy",
+    "policyConfig",
+    "nodes",
+    "branches",
+    "events",
+    "activeCursor"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.19" },
+    "id": { "$ref": "#/$defs/id" },
+    "sessionKind": { "enum": ["pack", "position", "imported"] },
+    "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+    "packDigest": {
+      "oneOf": [
+        { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        { "type": "null" }
+      ]
+    },
+    "sessionDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "start": { "$ref": "#/$defs/runStart" },
+    "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end", "attempt_end", "immediate_guard"] },
+    "opponentPolicy": { "$ref": "#/$defs/runOpponentPolicy" },
+    "policyConfig": { "$ref": "#/$defs/policyConfig" },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "branches": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/branch" }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "$comment": "The runtime additionally enforces seq = array index + 1.",
+      "items": { "$ref": "#/$defs/event" }
+    },
+    "activeCursor": { "$ref": "#/$defs/cursor" }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "sessionKind": { "const": "position" } } },
+      "then": { "properties": {
+        "packId": { "type": "null" },
+        "packDigest": { "type": "null" },
+        "feedbackPolicy": { "const": "attempt_end" },
+        "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+      } }
+    },
+    {
+      "if": { "properties": { "sessionKind": { "const": "imported" } } },
+      "then": { "properties": {
+        "packId": { "type": "null" },
+        "packDigest": { "type": "null" },
+        "feedbackPolicy": { "const": "attempt_end" },
+        "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+      } }
+    },
+    {
+      "if": { "properties": { "sessionKind": { "const": "pack" } } },
+      "then": { "properties": {
+        "packId": { "$ref": "#/$defs/id" },
+        "packDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end", "immediate_guard"] }
+      } }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "objectiveState": {
+      "enum": [
+        "active",
+        "preserved",
+        "degraded",
+        "failed",
+        "achieved",
+        "transitioned"
+      ]
+    },
+    "versionedPolicy": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "selectionCandidate": {
+      "type": "object",
+      "required": ["moveUci", "rank"],
+      "properties": {
+        "moveUci": { "$ref": "#/$defs/id" },
+        "mass": { "type": "number", "minimum": 0, "maximum": 1 },
+        "concessionRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "offWindow": { "type": "boolean" },
+        "scoreCp": { "type": "integer" },
+        "wdl": { "type": "object", "required": ["win", "draw", "loss"], "properties": { "win": { "type": "integer", "minimum": 0 }, "draw": { "type": "integer", "minimum": 0 }, "loss": { "type": "integer", "minimum": 0 } }, "additionalProperties": false },
+        "rank": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "selectionEngine": {
+      "type": "object",
+      "required": ["id", "name", "version", "seedHonored"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "$ref": "#/$defs/id" },
+        "version": { "$ref": "#/$defs/id" },
+        "modelId": { "$ref": "#/$defs/id" },
+        "containerDigest": { "$ref": "#/$defs/id" },
+        "seedHonored": { "type": "boolean" },
+        "eloHonored": { "type": "boolean" },
+        "eloApplied": { "type": "integer" },
+        "searchBound": { "type": "object", "required": ["kind", "value"], "properties": { "kind": { "enum": ["nodes", "movetime"] }, "value": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "opponentSelection": {
+      "type": "object",
+      "required": ["moveUci", "engine", "policyModeApplied"],
+      "properties": {
+        "moveUci": { "$ref": "#/$defs/id" },
+        "policyModeApplied": {
+          "enum": ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "practical_resistance", "enumerated", "unknown"]
+        },
+        "orderingBasis": {
+          "enum": ["dtz_ascending", "dtz_descending", "none"]
+        },
+        "candidates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/selectionCandidate" }
+        },
+        "engine": { "$ref": "#/$defs/selectionEngine" },
+        "policy": { "$ref": "#/$defs/botPolicyEnvelope" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "policyModeApplied": { "const": "human_common" } },
+            "required": ["policyModeApplied"]
+          },
+          "else": { "properties": { "candidates": { "type": "array", "minItems": 1 } } }
+        },
+        {
+          "if": {
+            "properties": { "policyModeApplied": { "const": "perfect_tablebase" } },
+            "required": ["policyModeApplied"]
+          },
+          "else": { "properties": { "orderingBasis": false } }
+        },
+        {
+          "if": { "properties": { "policy": true }, "required": ["policy"] },
+          "then": { "properties": { "policyModeApplied": { "const": "human_common" } } }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "executionLocus": {
+      "type": "object",
+      "required": ["executedAt", "engineIds", "modelIds"],
+      "properties": {
+        "executedAt": { "enum": ["browser", "server"] },
+        "engineIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/versionedPolicy" }
+        },
+        "modelIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/versionedPolicy" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "policyConfig": {
+      "type": "object",
+      "required": ["seedMode", "locus"],
+      "properties": {
+        "seedMode": { "enum": ["fixed", "per_run", "per_branch"] },
+        "locus": { "$ref": "#/$defs/executionLocus" }
+      },
+      "additionalProperties": false
+    },
+    "runStart": {
+      "type": "object",
+      "required": ["fen", "side"],
+      "properties": {
+        "fen": { "$ref": "#/$defs/id" },
+        "side": { "enum": ["white", "black"] }
+      },
+      "additionalProperties": false
+    },
+    "runOpponentPolicy": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["human_common", "strong_engine", "theory_strict", "perfect_tablebase", "practical_resistance"] },
+        "targetElo": { "type": "integer" },
+        "temperature": { "type": "number", "minimum": 0 },
+        "topP": { "type": "number", "minimum": 0, "maximum": 1 },
+        "profile": { "$ref": "#/$defs/botProfileReference" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "profile": true }, "required": ["profile"] },
+          "then": {
+            "properties": { "mode": { "const": "human_common" }, "targetElo": false, "temperature": false, "topP": false }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "botProfileReference": {
+      "$comment": "Run schema 0.18 (rfc/bot-policy.md §4.1): the exact bot-profile-catalog@1 member. The runtime additionally requires equality with one whole catalogue member.",
+      "type": "object",
+      "required": ["id", "family", "band", "version", "digest", "model", "sampler", "orderedLayers"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(human-baseline|guarded-human|pawn-forward)\\.(1000|1400|1800|2200)@1$" },
+        "family": { "enum": ["human-baseline", "guarded-human", "pawn-forward"] },
+        "band": { "enum": [1000, 1400, 1800, 2200] },
+        "version": { "const": 1 },
+        "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "model": {
+          "type": "object",
+          "required": ["id", "version"],
+          "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "string", "minLength": 1 } },
+          "additionalProperties": false
+        },
+        "sampler": {
+          "type": "object",
+          "required": ["temperature", "topP", "requestedWidth", "returnedMassFloor"],
+          "properties": {
+            "temperature": { "type": "number", "exclusiveMinimum": 0 },
+            "topP": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+            "requestedWidth": { "type": "integer", "minimum": 1 },
+            "returnedMassFloor": { "type": "number", "minimum": 0, "maximum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "orderedLayers": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["sampler.maia_reconstruction@1", "guard.severe_error@1", "trait.pawn_preference@1"] }
+        }
+      },
+      "additionalProperties": false
+    },
+    "botPolicyEnvelope": {
+      "$comment": "Run schema 0.18: the sealed bot-policy decision, non-circular operation record and persisted shared provider deliveries. Their inner shapes are owned by the server's durable parser, which recompiles the decision from independently loaded authorities.",
+      "type": "object",
+      "required": ["decision", "operation", "deliveries"],
+      "properties": {
+        "decision": { "type": "object" },
+        "operation": { "type": "object" },
+        "deliveries": {
+          "type": "object",
+          "required": ["maia"],
+          "properties": { "maia": { "type": "object" }, "stockfish": { "type": "object" } },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "clockState": {
+      "description": "Reserved until clock semantics are specified by a later RFC.",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "parentId",
+        "fen",
+        "transposeKey",
+        "moveUci",
+        "moveSan",
+        "ply",
+        "actor",
+        "branchId",
+        "checkpointRefs",
+        "objectiveState",
+        "evidenceRefs",
+        "createdAt"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "parentId": {
+          "oneOf": [
+            { "$ref": "#/$defs/id" },
+            { "type": "null" }
+          ]
+        },
+        "fen": { "$ref": "#/$defs/id" },
+        "transposeKey": {
+          "type": "string",
+          "pattern": "^[^ ]+ [wb] [^ ]+ [^ ]+$"
+        },
+        "moveUci": {
+          "type": ["string", "null"]
+        },
+        "moveSan": {
+          "type": ["string", "null"]
+        },
+        "ply": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actor": { "enum": ["user", "opponent", "system"] },
+        "branchId": { "$ref": "#/$defs/id" },
+        "checkpointRefs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true
+        },
+        "objectiveState": { "$ref": "#/$defs/objectiveState" },
+        "evidenceRefs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true
+        },
+        "createdAt": { "$ref": "#/$defs/timestamp" },
+        "clockState": { "$ref": "#/$defs/clockState" }
+      },
+      "additionalProperties": false
+    },
+    "branch": {
+      "type": "object",
+      "required": ["id", "forkNodeId", "label", "seed", "origin"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "forkNodeId": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/id" },
+        "intent": { "$ref": "#/$defs/id" },
+        "seed": { "type": "integer" },
+        "origin": { "enum": ["played", "simulated"] }
+      },
+      "additionalProperties": false
+    },
+    "cursor": {
+      "type": "object",
+      "required": ["nodeId", "branchId"],
+      "properties": {
+        "nodeId": { "$ref": "#/$defs/id" },
+        "branchId": { "$ref": "#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "runStartedData": {
+      "type": "object",
+      "required": [
+        "id",
+        "sessionKind",
+        "packId",
+        "packDigest",
+        "sessionDigest",
+        "start",
+        "feedbackPolicy",
+        "opponentPolicy",
+        "policyConfig",
+        "rootNode",
+        "branch",
+        "activeCursor"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "sessionKind": { "enum": ["pack", "position", "imported"] },
+        "packId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "packDigest": {
+          "oneOf": [
+            { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+            { "type": "null" }
+          ]
+        },
+        "sessionDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "start": { "$ref": "#/$defs/runStart" },
+        "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end", "attempt_end", "immediate_guard"] },
+        "opponentPolicy": { "$ref": "#/$defs/runOpponentPolicy" },
+        "policyConfig": { "$ref": "#/$defs/policyConfig" },
+        "rootNode": { "$ref": "#/$defs/node" },
+        "branch": { "$ref": "#/$defs/branch" },
+        "activeCursor": { "$ref": "#/$defs/cursor" }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "sessionKind": { "const": "position" } } },
+          "then": { "properties": {
+            "packId": { "type": "null" },
+            "packDigest": { "type": "null" },
+            "feedbackPolicy": { "const": "attempt_end" },
+            "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+          } }
+        },
+        {
+          "if": { "properties": { "sessionKind": { "const": "imported" } } },
+          "then": { "properties": {
+            "packId": { "type": "null" },
+            "packDigest": { "type": "null" },
+            "feedbackPolicy": { "const": "attempt_end" },
+            "opponentPolicy": { "type": "object", "properties": { "mode": { "enum": ["human_common", "strong_engine"] } } }
+          } }
+        },
+        {
+          "if": { "properties": { "sessionKind": { "const": "pack" } } },
+          "then": { "properties": {
+            "packId": { "$ref": "#/$defs/id" },
+            "packDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+            "feedbackPolicy": { "enum": ["delayed_checkpoint", "segment_end", "immediate_guard"] }
+          } }
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "required": ["seq", "type", "at", "data"],
+      "properties": {
+        "seq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "enum": [
+            "run.started",
+            "move.committed",
+            "opponent.move_selected",
+            "checkpoint.reached",
+            "objective.state_changed",
+            "evidence.attached",
+            "branch.forked",
+            "run.rewound",
+            "segment.completed",
+            "feedback.generated",
+            "outcome.reached",
+            "transfer.scheduled",
+            "prediction.recorded",
+            "group.created",
+            "reasoning.recorded"
+            ,"feedback.revealed"
+          ]
+        },
+        "at": { "$ref": "#/$defs/timestamp" },
+        "data": { "type": "object" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "feedback.revealed" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId"],
+              "properties": { "nodeId": { "$ref": "#/$defs/id" } },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "run.started" },
+            "data": { "$ref": "#/$defs/runStartedData" }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "move.committed" },
+            "data": {
+              "type": "object",
+              "required": ["node"],
+              "properties": {
+                "node": { "$ref": "#/$defs/node" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "opponent.move_selected" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "branchId", "moveUci", "selection"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "branchId": { "$ref": "#/$defs/id" },
+                "moveUci": { "$ref": "#/$defs/id" },
+                "selection": { "$ref": "#/$defs/opponentSelection" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "checkpoint.reached" },
+            "data": {
+              "type": "object",
+              "required": ["checkpointId", "nodeId", "branchId"],
+              "properties": {
+                "checkpointId": { "$ref": "#/$defs/id" },
+                "nodeId": { "$ref": "#/$defs/id" },
+                "branchId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "objective.state_changed" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "from", "to", "evidenceRefs"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "from": { "$ref": "#/$defs/objectiveState" },
+                "to": { "$ref": "#/$defs/objectiveState" },
+                "evidenceRefs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "#/$defs/id" },
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "evidence.attached" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "evidenceRefs", "payload"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "evidenceRefs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "#/$defs/id" },
+                  "uniqueItems": true
+                },
+                "payload": {
+                  "type": "object",
+                  "required": ["kind", "source", "values"],
+                  "properties": {
+                    "kind": { "enum": ["eval", "wdl", "bestline", "tablebase"] },
+                    "source": {
+                      "enum": ["engine_validated", "human_model_predicted", "tablebase_exact"]
+                    },
+                    "values": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "branch.forked" },
+            "data": {
+              "type": "object",
+              "required": ["branch"],
+              "properties": {
+                "branch": { "$ref": "#/$defs/branch" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "run.rewound" },
+            "data": {
+              "type": "object",
+              "required": ["fromNodeId", "toNodeId", "branchId"],
+              "properties": {
+                "fromNodeId": { "$ref": "#/$defs/id" },
+                "toNodeId": { "$ref": "#/$defs/id" },
+                "branchId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "segment.completed" },
+            "data": {
+              "type": "object",
+              "required": [
+                "branchId",
+                "startCheckpointEventSeq",
+                "endCheckpointEventSeq",
+                "startNodeId",
+                "endNodeId"
+              ],
+              "properties": {
+                "branchId": { "$ref": "#/$defs/id" },
+                "startCheckpointEventSeq": { "type": "integer", "minimum": 1 },
+                "endCheckpointEventSeq": { "type": "integer", "minimum": 1 },
+                "startNodeId": { "$ref": "#/$defs/id" },
+                "endNodeId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "feedback.generated" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "evidenceRefs"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "evidenceRefs": {
+                  "type": "array",
+                  "items": { "$ref": "#/$defs/id" },
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "outcome.reached" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "outcome"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "outcome": { "enum": ["win", "loss", "draw"] }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "transfer.scheduled" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "scheduleId"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "scheduleId": { "$ref": "#/$defs/id" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "prediction.recorded" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "checkpointId", "predictedUci", "predictedMass", "predictedRank", "candidateCount", "distribution"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "checkpointId": { "$ref": "#/$defs/id" },
+                "predictedUci": { "$ref": "#/$defs/id" },
+                "predictedMass": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+                "predictedRank": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+                "candidateCount": { "type": "integer", "minimum": 0 },
+                "distribution": { "$ref": "#/$defs/opponentSelection" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "group.created" },
+            "data": {
+              "type": "object",
+              "required": ["groupId", "sourceNodeId", "source", "resistance", "members"],
+              "properties": {
+                "groupId": { "$ref": "#/$defs/id" },
+                "sourceNodeId": { "$ref": "#/$defs/id" },
+                "source": { "enum": ["hand_picked", "authored", "human_replies", "engine_top_n"] },
+                "resistance": { "enum": ["fixed", "per_branch"] },
+                "members": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 8,
+                  "items": {
+                    "type": "object",
+                    "required": ["branchId", "seedMoveUci"],
+                    "properties": {
+                      "branchId": { "$ref": "#/$defs/id" },
+                      "seedMoveUci": { "$ref": "#/$defs/id" }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "distribution": { "$ref": "#/$defs/opponentSelection" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": { "const": "reasoning.recorded" },
+            "data": {
+              "type": "object",
+              "required": ["nodeId", "checkpointId", "checkpointEventSeq", "skipped", "transcript", "matcherVersion", "detections"],
+              "properties": {
+                "nodeId": { "$ref": "#/$defs/id" },
+                "checkpointId": { "$ref": "#/$defs/id" },
+                "checkpointEventSeq": { "type": "integer", "minimum": 1 },
+                "skipped": { "type": "boolean" },
+                "transcript": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": ["candidates", "plan", "fears"],
+                      "properties": {
+                        "candidates": { "type": "array", "maxItems": 8, "items": { "type": "string", "minLength": 1, "maxLength": 120 } },
+                        "plan": { "type": "string", "minLength": 1, "maxLength": 1000 },
+                        "fears": { "type": "string", "maxLength": 500 }
+                      },
+                      "additionalProperties": false
+                    },
+                    { "type": "null" }
+                  ]
+                },
+                "matcherVersion": { "const": 1 },
+                "detections": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["keyPointId", "status"],
+                    "properties": {
+                      "keyPointId": { "$ref": "#/$defs/id" },
+                      "status": { "enum": ["detected", "not_detected"] },
+                      "match": {
+                        "type": "object",
+                        "required": ["field", "index", "start", "end"],
+                        "properties": {
+                          "field": { "enum": ["candidates", "plan", "fears"] },
+                          "index": { "oneOf": [{ "type": "integer", "minimum": 0, "maximum": 7 }, { "type": "null" }] },
+                          "start": { "type": "integer", "minimum": 0 },
+                          "end": { "type": "integer", "minimum": 1 }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -88,7 +88,6 @@
         "bounded-target-policy-composition.md",
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
-        "recorded-selection-telemetry.md",
         "phase-source-composition.md"
       ],
       "completion": {
@@ -1047,11 +1046,6 @@
               "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
             },
             {
-              "kind": "rfc",
-              "id": "recorded-selection-telemetry.md",
-              "digest": "sha256:542ec0a062017b2488accff6c207b5f5cc35a96dbaa03192a4f3515d31e22816"
-            },
-            {
               "kind": "work_state",
               "id": "D3750",
               "digest": "sha256:5ebabb2086554f9f3e41cec2d99af8a7ceea5caa1b7dee4eca8000473cdbc01e"
@@ -1105,10 +1099,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Rebase D3870's routine schema reservations as engineering-owned preparation, then obtain independent acceptance; no owner ordering question remains. Complete the actual current measurement resolver/grant/sourceKey/supplier over the selected original population, then remaining grade/Compare endpoint selection. Complete installed-opening sole point-factory result-array authority and history/reduction over its original paired invocations. Current adoption is complete per consumer, not a globally atomic282-pair switch: Theory needs all four bindings/applicability; Inspector needs its complete preflighted source-page operation, not the old generic fen arm. Migrate actual current source/access/count-renderer/receiver/API/native pairs and retire obsolete execution after callers move. Preserve original occurrences/corrupt-modern refusal. No compatibility-only input, fake availability, dropped family, widened grant or premature qualification/milestone/release claim.",
+        "nextAction": "Implement the actual current measurement resolver/grant/sourceKey/supplier, remaining grade/Compare endpoint selection and installed-opening result/history authority. Migrate complete per-consumer source/access/renderer/receiver/API/native journeys, not a partial Inspector image or compatibility-only pipeline. Preserve every exact family, original occurrence and current assistance ceiling; no qualification, content or milestone promotion without its own proof.",
         "latestCheckpoint": {
-          "at": "2026-10-16",
-          "summary": "Registry-owned selected measurement populations validate complete requested-kind six-field FEN claims before original ledger/reading invocation, retaining position/pin identity, duplicate ordinals, actual refusals, all abstentions and real counts beside admitted reports. D3887's lookup-versus-contract and ambiguous Syzygy request returns are repaired;100 focused cases, both-colour reopened SQLite controls and bounded independent re-review pass. Final normal make verify build exits zero:6823 software/419 files (460.83s), unchanged performance7/4 (60.32s),271 content/27 files (60.61s), governance/corpus/build. Semantic validation remains91 subjects/zero qualified,343 cases/53 population receipts/eight external receipts; profiles/capabilities/conventions unchanged. Prior original artifact/paired-opening/durable-attachment/rank checkpoints stand. Actual current resolver/grant/sourceKey/supplier, grade/Compare choice, opening history and complete per-consumer source/access/renderer/API/native delivery remain. D3841 stays doing. D3870 routine ordering is engineering-owned; coordinated rebase and independent acceptance remain. No compatibility-only path, learner cutover, saved-data rewrite, official content or whole-capability/milestone/release claim.",
+          "at": "2026-11-01",
+          "summary": "D3870 independently accepted, implemented and archived: canonical run0.19 human-only empty telemetry, existing REST writes and stamp-only storage31. Frozen0.19 validation/non-stamp replay comparison repair D3888 and preserve actual original events, relations and metadata; targeted corruption rolls back.269 focused cases/14 files cover original source/Review empty-versus-missing folds, prediction/group controls, genuine bot decisions/shared deliveries, import/grants/evidence, list/count/write, reopen/future traversal and authenticated cross-installation export/restore. Bounded independent review clears final code/coverage. Full normal make verify build exits zero:6840 software/420 files (478.72s), seven performance/four files (61.53s),271 content/27 files (60.01s) and all remaining gates. First failed run stays logged. D3889 pins compatible24.22.1/Unicode17 through normal Make, workflows and staged hook without weakening compiler meaning. Three findings closed with path evidence; D3841 remains doing. Current resolver/grant/sourceKey/supplier, grade/Compare/opening history and complete consumer/API/native delivery remain; no browser/remote CI, qualification or whole-capability/milestone claim.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/pack-registry.ts",
@@ -1188,7 +1182,7 @@
             "packages/runtime/src/last-level-reduction.test.ts",
             "packages/runtime/src/recorded-human-divergence.test.ts",
             "packages/runtime/src/testing/recorded-human-divergence-fixture.ts",
-            "rfc/recorded-selection-telemetry.md",
+            "rfc/archive/recorded-selection-telemetry.md",
             "packages/runtime/src/internal/comparison-structural-families.ts",
             "packages/runtime/src/semantic-validation-profiles.json",
             "packages/runtime/src/semantic-validation-law.ts",
@@ -1311,11 +1305,27 @@
             "schemas/opening_catalogue.schema.json",
             "packages/runtime/src/opening-catalogue.ts",
             "packages/runtime/src/opening-catalogue.test.ts",
-      "packages/runtime/src/internal/recorded-opening-lookup.ts",
-      "packages/runtime/src/recorded-opening-lookup.test.ts",
+            "packages/runtime/src/internal/recorded-opening-lookup.ts",
+            "packages/runtime/src/recorded-opening-lookup.test.ts",
             "packages/runtime/src/opening-catalogue-registration.json",
             "apps/server/src/opening-catalogue-build.test.ts",
-            "docs/runtime-opening-identity.md"
+            "docs/runtime-opening-identity.md",
+            "apps/server/src/migrations/recorded-selection-telemetry.ts",
+            "apps/server/src/migrations/drill-run-v019.schema.json",
+            "apps/server/src/recorded-selection-telemetry.test.ts",
+            "rfc/bot-policy.md",
+            "rfc/bot-roster.md",
+            "rfc/campaign-core.md",
+            "rfc/enforced-clocks.md",
+            "rfc/intent-presets.md",
+            "rfc/native-ratings.md",
+            "rfc/opponent-recovery-journey.md",
+            "rfc/pack-training-forms.md",
+            "rfc/provider-health-degradation.md",
+            "rfc/recorded-clocks.md",
+            "rfc/social-play.md",
+            "rfc/training-mode-variants.md",
+            "rfc/variants.md"
           ],
           "anchors": [
             {
@@ -1336,7 +1346,7 @@
             {
               "kind": "work_state",
               "id": "D3841",
-              "digest": "sha256:7bcb77968a77b63b4284b90e10f1d0a9331f984bac53f1a89d03e71405750cee"
+              "digest": "sha256:f81be9c4a61b2d054a94d506c991353e88da938532c35d2906509209f5608a2e"
             },
             {
               "kind": "work_state",
@@ -1361,7 +1371,7 @@
             {
               "kind": "work_state",
               "id": "D3870",
-              "digest": "sha256:263453d3b3247fe755e07fa29f4222683e24ad5282f02a6bf1bd728e38905534"
+              "digest": "sha256:48311e04a94f03484b2ee2023818e11f3d1234fc62b249e33e73d25e76c015ea"
             },
             {
               "kind": "work_state",
@@ -1371,7 +1381,7 @@
             {
               "kind": "rfc",
               "id": "semantic-convention-provenance.md",
-              "digest": "sha256:cd69d2b53499b99274e7bb6e43f306d478d65a816902536401c7df8cfea2bc8d"
+              "digest": "sha256:81795fa758fc72ae2833f6c1a7793bcfd84f7b1200ef8a9785f0a79233408af0"
             },
             {
               "kind": "work_state",
@@ -1490,11 +1500,6 @@
             },
             {
               "kind": "rfc",
-              "id": "recorded-selection-telemetry.md",
-              "digest": "sha256:542ec0a062017b2488accff6c207b5f5cc35a96dbaa03192a4f3515d31e22816"
-            },
-            {
-              "kind": "rfc",
               "id": "evidence-value-authority.md",
               "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
             },
@@ -1584,7 +1589,7 @@
               "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
             },
             {
-"kind": "work_state",
+              "kind": "work_state",
               "id": "D3847",
               "digest": "sha256:d481d0ec3f161e2907500aec9d6a0afe8fe7a053efc91aefefedfe9915bf8009"
             },
@@ -1637,6 +1642,81 @@
               "kind": "work_state",
               "id": "D3767",
               "digest": "sha256:32ba5eba578ffe83a6a1bccee24ffe4a71c5acb363cf394e16f97bf8fa662eb9"
+            },
+            {
+              "kind": "rfc",
+              "id": "bot-policy.md",
+              "digest": "sha256:8df99e5b923947b7ee4317bf013d07cede1ca0c3fefa0f84f3386d2fabe73ada"
+            },
+            {
+              "kind": "rfc",
+              "id": "bot-roster.md",
+              "digest": "sha256:c62eefe0d85ad5821d288a919f4b89c608536328c65d4f06580dea366792bddc"
+            },
+            {
+              "kind": "rfc",
+              "id": "campaign-core.md",
+              "digest": "sha256:0374ff34452ef0f452d1e53ed8b418edb5641d5f612ebfc16a79e7b0f4873c1e"
+            },
+            {
+              "kind": "rfc",
+              "id": "enforced-clocks.md",
+              "digest": "sha256:29bd07a6f297687169c2af20771416871e1141c08e5af812a5a4bfc5ec37abb8"
+            },
+            {
+              "kind": "rfc",
+              "id": "intent-presets.md",
+              "digest": "sha256:8923ce4681961d201687452efebad20c41be4557ecfbd2e11078737c07086155"
+            },
+            {
+              "kind": "rfc",
+              "id": "native-ratings.md",
+              "digest": "sha256:8aba0390c85f704d1cf9aee8709ba86d43a17e666bc09dc14bc3d4a9dfbc4d2d"
+            },
+            {
+              "kind": "rfc",
+              "id": "opponent-recovery-journey.md",
+              "digest": "sha256:69b5d13aeb2787e6b3528fd50004a8eaa84e07cf0ed78fb4199c3acda5199718"
+            },
+            {
+              "kind": "rfc",
+              "id": "pack-training-forms.md",
+              "digest": "sha256:c4e79a933ce09aa2d1ba3ff9360a219ba0120cc50f0b87e3b2af0f6be575649f"
+            },
+            {
+              "kind": "rfc",
+              "id": "provider-health-degradation.md",
+              "digest": "sha256:b58d53094a34faa901f21a568c5409d78f56929b518a6387fe2eaece26878eed"
+            },
+            {
+              "kind": "rfc",
+              "id": "recorded-clocks.md",
+              "digest": "sha256:10539e27ae2e31b95b36b9a7bcd6c52aa92da062fff0a56d4f1d32b7ff948658"
+            },
+            {
+              "kind": "rfc",
+              "id": "social-play.md",
+              "digest": "sha256:dce7b8571c7da848008133870a50b41384e638c6a29aa8c3f9a3a23d81d88378"
+            },
+            {
+              "kind": "rfc",
+              "id": "training-mode-variants.md",
+              "digest": "sha256:64fc5fab9cbab9d6ba1a40b5a9de833c0e9da52d9d688b914f4e88f6f21d7665"
+            },
+            {
+              "kind": "rfc",
+              "id": "variants.md",
+              "digest": "sha256:73f602a902e2deb17ba61c1f583a3e8d11129f45d0678426e558aa257e8b75c4"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3888",
+              "digest": "sha256:0aa59dbbafec8b4c2b67fdd9740fc085331bf605c896c504e201e9afecb6745f"
+            },
+            {
+              "kind": "work_state",
+              "id": "D3889",
+              "digest": "sha256:2d4ca5c7f041fc056f1bf6ad6aef5118d3cc451513c06f533edfaaa61210cd11"
             }
           ]
         },
@@ -2315,7 +2395,7 @@
             {
               "kind": "rfc",
               "id": "campaign-core.md",
-              "digest": "sha256:73a7cc2c56e30bb0e8bcb964e11d17caa102ac047e79ffc1b74e2fee0a14a8b0"
+              "digest": "sha256:0374ff34452ef0f452d1e53ed8b418edb5641d5f612ebfc16a79e7b0f4873c1e"
             },
             {
               "kind": "rfc",
@@ -2460,7 +2540,7 @@
             {
               "kind": "rfc",
               "id": "pack-training-forms.md",
-              "digest": "sha256:cf8ba2b4f3aa1f9370e004bf1c0067a9a565121c054482567917d1df064ca793"
+              "digest": "sha256:c4e79a933ce09aa2d1ba3ff9360a219ba0120cc50f0b87e3b2af0f6be575649f"
             }
           ]
         },
@@ -2584,7 +2664,7 @@
             {
               "kind": "rfc",
               "id": "bot-roster.md",
-              "digest": "sha256:f23d25f96d1664a2caa2b8bef7cfe7da2b471ce7f554bd1222be3ab485cd465a"
+              "digest": "sha256:c62eefe0d85ad5821d288a919f4b89c608536328c65d4f06580dea366792bddc"
             },
             {
               "kind": "work_state",
@@ -2724,7 +2804,7 @@
             {
               "kind": "rfc",
               "id": "campaign-core.md",
-              "digest": "sha256:73a7cc2c56e30bb0e8bcb964e11d17caa102ac047e79ffc1b74e2fee0a14a8b0"
+              "digest": "sha256:0374ff34452ef0f452d1e53ed8b418edb5641d5f612ebfc16a79e7b0f4873c1e"
             },
             {
               "kind": "work_state",

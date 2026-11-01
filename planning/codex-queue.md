@@ -1,5 +1,15 @@
 # Codex queue
 
+**Verified D3870 completion, 2026-11-01 — [[D3888]], [[D3889]] closed:** canonical run0.19,
+existing REST write and storage31 preserve genuine human empty telemetry; other policies and
+modern Maia responses stay nonempty. Frozen migration-only validation, complete non-stamp
+equality and atomic rollback preserve history.269 focused cases/14 files and final independent
+review pass. Full normal `make verify build` exits zero:6,840 software/420 files, seven performance/
+four files,271 content/27 files and every remaining gate. The initial five-version-assertion
+failure remains logged. The RFC is archived at `rfc/archive/recorded-selection-telemetry.md`.
+D3889 pins compatible Node24.22.1/Unicode17 for normal Make, every workflow and the staged hook;
+no per-test prefixes, relaxed compiler meaning or remote-CI claim. No complete Inspector delivery.
+
 **Verified selected-position measurement population, 2026-10-16 — [[D3841]], [[D3887]]:**
 the registry executes original engine/tablebase ledger-to-reading pairs for every matching
 full-FEN occurrence after validating the entire requested-kind population. It retains duplicate
@@ -12,12 +22,10 @@ files, seven performance/four files,271 content/27 files and all remaining gates
 has no current grant or final service sourceKey; the real resolver, scoped source operation and
 complete API/native migration remain open. D3841 stays doing; no learner/milestone promotion.
 
-**Immediate engineering preparation — [[D3870]]:** owner delegates routine pre-launch schema
-ordering to engineering. Put the empty-telemetry correctness fix first, shift the eight unlanded
-run-schema reservations one slot and preserve their relative order/scope. Coordinate claimant
-and register/predecessor text, then obtain independent acceptance before schema/parser/storage
-implementation. Do not ask the owner another version-slot question. Continue actual current
-measurement supplier and grade/Compare/opening history work under its accepted authority.
+**Next accepted source/consumer wave:** correctness-first rebase is applied; all eight future run-schema
+claims retain relative order/scope and the0.19/31 claims are consumed. No owner ordering question
+remains. Continue the actual current measurement supplier and grade/Compare/opening history,
+then complete per-consumer API/native journeys under their accepted authority.
 
 **Registry-owned measurement prerequisite, 2026-10-16 — [[D3841]], [[D3886]]:**
 accepted module-registration §4.11a's original immutable document/manifest/ledger owner now

@@ -107,6 +107,7 @@ describe("branch group projection", () => {
     expect(() => appendEvents(input.run, [groupDraft(input, "human_replies")])).toThrow(/human_common distribution/);
     expect(() => appendEvents(input.run, [groupDraft(input, "human_replies", distribution("strong_engine", seeds.slice(0, 2)))])).toThrow(/human_common distribution/);
     expect(() => appendEvents(input.run, [groupDraft(input, "human_replies", distribution("human_common", [seeds[0]!]))])).toThrow(/cover every seed/);
+    expect(() => appendEvents(input.run, [groupDraft(input, "human_replies", distribution("human_common", []))])).toThrow(/cover every seed/);
     expect(() => appendEvents(input.run, [groupDraft(input, "authored", distribution("human_common", seeds.slice(0, 2)))])).toThrow(/cannot carry/);
     expect(groupsFromEvents(appendEvents(input.run, [groupDraft(input, "human_replies", distribution("human_common", seeds.slice(0, 2)))]))[0]!.distribution?.engine.id).toBe("maia");
   });

@@ -12,7 +12,7 @@
   pinned `behaviorDigest`/profile digests; every profile has a grounded, source-bearing card from
   the committed depth-8 and D333 artifacts, registers `uncalibrated` and shows no strength number;
   `/capabilities` advertises the roster with every row `not_startable`. `make bot-roster-census`
-  passes criteria 1, 2, 4, 6, 7, 8, 9 and the refusal half of 15. Still open: criterion 5's lane-0.22
+  passes criteria 1, 2, 4, 6, 7, 8, 9 and the refusal half of 15. Still open: criterion 5's lane-0.23
   `depth` widening (run schema), criterion 10's persisted route (bot-policy run lane 0.18, migration
   behind `concept-registry`), calibration (D6/criteria 11–12), and owner identities/default
   (D8/D9). Receipt: `planning/bot-roster/implementation-receipt-2026-09-24.md`. *(Prior checkpoint,
@@ -33,8 +33,13 @@
 - **Planning:** `planning/bot-roster/`
 
 ```tabiya-claims
-run-schema | lane 0.22 | ErrorGuardLayer.searchBound.kind admits "depth" (schemas/drill_run.schema.json:140 enum ["nodes","movetime"] gains "depth"; packages/runtime/src/types.ts and apps/server/src/bot-policy-catalog.ts unions widen in step)
+run-schema | lane 0.23 | ErrorGuardLayer.searchBound.kind admits "depth" (schemas/drill_run.schema.json:140 enum ["nodes","movetime"] gains "depth"; packages/runtime/src/types.ts and apps/server/src/bot-policy-catalog.ts unions widen in step)
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -193,7 +198,7 @@ rather than counted:
 
 | site | what it is |
 |---|---|
-| `schemas/drill_run.schema.json:140` | the persisted enum — **the reason this is lane 0.22** |
+| `schemas/drill_run.schema.json:140` | the persisted enum — **the reason this is lane 0.23** |
 | `packages/runtime/src/types.ts` | the shared union |
 | `apps/server/src/bot-policy-catalog.ts:76` | the layer declaration union |
 | `apps/server/src/rest.ts:260-265` | a **hard throw** on any other kind |
@@ -784,3 +789,6 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   No original manifest/reference/pricing stamp, production policy, threshold, label or acceptance
   changes. Numerical author repair, opening-source repair and the native ladder remain separate
   obligations; no calibration, RFC, capability or milestone completion is claimed.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

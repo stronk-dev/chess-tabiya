@@ -16,8 +16,13 @@
 - **Planning:** `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md` records the split
 
 ```tabiya-claims
-run-schema | lane 0.26 | $defs/opponentSelection.acquisition carries the sealed provider-exchange delivery (new, optional for pre-0.26 reads and required on every new opponent.move_selected write); DrillRunEvent gains opponent.selection_failed and opponent.recovery_requested
+run-schema | lane 0.27 | $defs/opponentSelection.acquisition carries the sealed provider-exchange delivery (new, optional for pre-0.27 reads and required on every new opponent.move_selected write); DrillRunEvent gains opponent.selection_failed and opponent.recovery_requested
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -51,7 +56,7 @@ sequence, the sealed normalized request digest and a closed safe failure reason;
 `POST /runs/:id/opponent-recovery` with its `retry` and `change` arms, resolved against the current
 branch/cursor tail under one write transaction, with idempotency bound to the exact stored recovery
 command subject; (3) `opponentSelection.acquisition` persisting the sealed provider-exchange
-delivery, required on every new `opponent.move_selected` write and read-optional for pre-0.26 events,
+delivery, required on every new `opponent.move_selected` write and read-optional for pre-0.27 events,
 which project as an explicit `legacy_unrecorded` trust state and are never relabelled live, retained
 or local; and (4) the effective-opponent-policy projection, which changes the run's opponent policy
 from the recovery event's sequence onward without rewriting `run.started`, the root `opponentPolicy`
@@ -100,3 +105,6 @@ Deferred with the specification. None require an owner ruling to open drafting.
   run events, `POST /runs/:id/opponent-recovery`, `opponentSelection.acquisition`, the
   effective-policy projection and run-schema lane 0.26 are still unwritten and unclaimed, and every
   inherited row stays open.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

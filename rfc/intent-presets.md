@@ -978,9 +978,9 @@ write contract while retaining it as a read-only migration source):
   ephemeral and exact because persisting a staged move would turn run history into a live-help
   feed. The reopen condition
   is named and tested: **if any module rendering path delivers content without the receipt its
-  timing class requires, this decision is void** and the successor claims run lane 0.19 with a
+  timing class requires, this decision is void** and the successor must register a run lane with a
   `preset.changed` event (criterion 9 is the guard — changing preset mid-run with no learner
-  request must produce zero new rendered items). Run lane 0.19 is explicitly **not claimed**.
+  request must produce zero new rendered items). No run lane is claimed by this RFC.
 
 ### §7. Surfaces, and the owner-use validation gate
 

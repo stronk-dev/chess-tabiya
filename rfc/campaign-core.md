@@ -19,7 +19,7 @@
   content checks and types, actual desktop/phone journeys, and the complete normal local gates
   pass (4,820 software, seven performance, 248 content and 296 browser cases; one optional skip,
   zero retries). D3708 also reconciles the register resource cell with the existing owner-directed
-  landings; run-schema 0.25 and all successor acceptance gates remain unchanged.
+  landings; run-schema 0.26 and all successor acceptance gates remain unchanged.
 
 - **2026-10-09 in-game recovery checkpoint:** D3634 completes the §7.1 encounter strip's
   failed/pending read → explicit read-only retry → same saved encounter/recorded seal journey.
@@ -41,7 +41,7 @@
   `/campaign` API family, the encounter receipt (intent-presets D6), the web Campaign route and a
   draft mechanical pilot.** The seventh return's findings are fixed in the implementation (see the
   2026-09-24 changelog entry). Remaining before archive: the owner/human-authored official campaign
-  (D8, law 8), run-schema lane 0.25 at its register turn, theory/cosmetic rewards behind their
+  (D8, law 8), run-schema lane 0.26 at its register turn, theory/cosmetic rewards behind their
   authorities, consumer closure through `pack-capability-contract`, and the catalogue, rated-boss and
   durable-variety milestones. Receipt: `planning/campaign/implementation-receipt-2026-09-24.md`.
   *(Prior line: seventh fresh independent review returned the sixth repair on [[D2986]]–[[D2992]].)*
@@ -77,13 +77,18 @@
 - **Planning:** `planning/campaign/`
 
 ```tabiya-claims
-run-schema | lane 0.25 | RunSession.origin gains optional exact campaign encounter identity (campaignRunId, nodeId, campaignDocumentDigest); run.started persists it for Review/export/restore
+run-schema | lane 0.26 | RunSession.origin gains optional exact campaign encounter identity (campaignRunId, nodeId, campaignDocumentDigest); run.started persists it for Review/export/restore
 ```
 
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
+
 **Two claims discharged 2026-09-24 (implementation at the owner's direction).** Storage migration 30
-(the five campaign tables) and campaign-schema lane 2 landed. The run-schema lane 0.25 claim stays
-live and unlanded: lanes 0.19–0.24 are claimed ahead of it and landing 0.25 first would put six live
-claims below the head (register C2). Until its turn, the encounter origin is served from the durable
+(the five campaign tables) and campaign-schema lane 2 landed. The run-schema lane 0.26 claim stays
+live and unlanded: earlier reserved run lanes still precede it after the0.19 correctness landing;
+consuming it ahead of those claims would violate register C2. Until its turn, origin comes from the durable
 `node_entered` join (`GET /runs/:id/graph → campaignOrigin`), which Review, export and the Campaign
 assistance context read today.
 
@@ -691,7 +696,7 @@ Per `rfc/intent-presets.md` Discharge D3 (quoted whole in derivation §3.1), reg
    drawn from the registry-invariant token set `"legal" | "sight" | "evidence"` — the campaign
    can never darken the rules floor, by the same compile-time test that guards the other seven.
 3. **The run origin — claimed because this RFC already has Review/export consumers** (repair of
-   [[D2083]]). `RunSession` gains one optional persisted origin in run-schema lane **0.25**:
+   [[D2083]]). `RunSession` gains one optional persisted origin in run-schema lane **0.26**:
 
    ```ts
    type RunOrigin = { readonly kind: "campaign_encounter";
@@ -1660,7 +1665,7 @@ set).
   campaign-shaped (`CampaignDocument`), with the Track generalization left open.
 - **D961 (landed; repaired by [[D2083]])** — the reopen condition fired: Review, export and
   longitudinal readers all need campaign identity outside the campaign tables. This RFC now claims
-  run-schema lane 0.25 for exact `RunOrigin`; the campaign-side join remains mutation authority but
+  run-schema lane 0.26 for exact `RunOrigin`; the campaign-side join remains mutation authority but
   is no longer the only identity source.
 - **D962 (landed)** — the persona'd-rated-boss disjointness (derivation gap 11) is recorded
   and routed to Discharge D1: `RunOpponentPolicy.profile` forbids `targetElo`; the rated
@@ -1831,3 +1836,6 @@ set).
   and strip to the complete home→map→prep→play→result→Review journey with stable-board/access
   criteria. `make campaign-two-horizon-author-contract` passes 19/19. Fresh independent review and
   named dependencies still gate all schema/migration/API/content/UI implementation.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

@@ -361,6 +361,14 @@ frozen literals. It adds no invented fields: historical runs contain neither a
 group event nor an enumerated selection. The stamp is still required because
 reads and listings admit only the current run-schema version.
 
+Migration31 upgrades run0.18 to0.19 without rewriting events or any non-stamp snapshot data.
+It validates each targeted snapshot against the complete frozen0.19 schema, checks identity and
+original-event replay, and aborts the whole transaction on corruption. The frozen validator is
+migration-only; application reads remain current-version-only. Explicit empty `human_common`
+candidate telemetry survives the existing selection write, reload and account export/restore.
+Absent candidates remain absent. Supplied empty arrays for other policies, incomplete seeded
+group distributions and empty modern Maia response windows still refuse.
+
 Migration 19 stamps v0.13 snapshots and indexed rows to run schema v0.14 using
 the frozen literals `0.13` and `0.14`. It rewrites no event or selection data:
 the new practical-resistance mode, per-candidate concession ratio, and

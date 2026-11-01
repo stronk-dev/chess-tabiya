@@ -2,7 +2,11 @@
 
 ## Toolchain
 
-- Node.js 24, matching `.node-version` and CI exactly.
+- Node.js 24.22.1, matching `.node-version` and CI. The concept label compiler requires
+  Unicode17; updating Node is a deliberate toolchain update, not a floating major upgrade.
+  Normal Make commands select that exact version from PATH, `.cache/toolchains/node/bin/node`
+  or Homebrew, or stop with installation guidance. A version manager may install the declared
+  version; do not override each test command.
 - pnpm 11.18.0, pinned by the root package manifest.
 - TypeScript core packages shared by browser and Node consumers.
 - Svelte 5 + Vite for the web client.

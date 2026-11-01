@@ -198,6 +198,7 @@ describe("§6 Maia policy page parser", () => {
   it("refuses missing mass, duplicate or illegal candidates and indices beyond the requested width", () => {
     const identity = normalizeProviderRequest("maia.policy_page@1", maiaRequest(EXACT));
     const run = (received: readonly string[]) => () => PROVIDER_RESPONSE_PARSERS["maia.policy_page@1"].parse(maiaCapture(identity, received), identity);
+    expect(run(["bestmove g1f3"])).toThrow(/Maia returned no candidates/u);
     expect(run(["info depth 1 multipv 1 score cp 0 pv g1f3", "bestmove g1f3"])).toThrow(/policy mass/u);
     expect(run(["info depth 1 multipv 1 policy 0.4 pv g1f3", "info depth 1 multipv 2 policy 0.3 pv g1f3", "bestmove g1f3"])).toThrow(/duplicate Maia candidate/u);
     expect(run(["info depth 1 multipv 1 policy 0.4 pv e1e3", "bestmove e1e3"])).toThrow(/illegal Maia candidate/u);

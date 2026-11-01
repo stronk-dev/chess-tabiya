@@ -16,9 +16,14 @@
 - **Planning:** `planning/time-controls/`
 
 ```tabiya-claims
-run-schema | lane 0.19 | Node.clockState narrows from an untyped open object (schemas/drill_run.schema.json:218-222, additionalProperties true) to a closed ClockReading; a breaking narrowing of an already-persisted field
+run-schema | lane 0.20 | Node.clockState narrows from an untyped open object (schemas/drill_run.schema.json:218-222, additionalProperties true) to a closed ClockReading; a breaking narrowing of an already-persisted field
 migration | position behind live-sources | imported_games.clocks (new typed column holding the per-ply readings sanitizeBroadcastPgn already extracts and does not store)
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -186,8 +191,8 @@ else.
 
 The field is persisted and open, so historical rows may hold anything. Narrowing is a breaking
 change to `schemas/drill_run.schema.json`, whose `schemaVersion` is pinned `"0.17"` at `:24`.
-This RFC claims **run-schema lane 0.19** (0.18 is `bot-policy`'s; `register-check` reports
-`run-schema: head 0.17; next free 0.19`).
+This RFC claims **run-schema lane 0.20**, after the recorded-selection-telemetry0.19
+correctness repair. Its immediate registered predecessor is0.19; this future narrowing stays0.20.
 
 **Existing values are quarantined, not migrated or dropped.** No shipped writer ever populated the
 field (zero readers implies zero product writers; the REST route accepts it from clients). A value
@@ -420,3 +425,6 @@ Each names what a wrong implementation would do to pass it.
   and [[D1041]]'s lane ruling. Scoped to the derivation's Stage 1 on its own recommendation: the
   real-clock arm touches five accepted documents and two unruled owner forks, and does not fit
   here. Stage 0's prevalence measurement (gap 17) was run before drafting and is §2.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

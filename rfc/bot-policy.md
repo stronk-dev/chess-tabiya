@@ -92,7 +92,7 @@
   exact `ProviderRegistrySnapshot`, closed operation result and generation-bound release receipt;
   it defines no parallel health enum. [[D2364]] makes the lane order explicit: health may remain
   implementing after that checkpoint, bot policy then lands run-schema 0.18, and health's durable
-  acquisition field remains its registered 0.26 stage. **The cross-package bot-profile catalog is
+  acquisition field remains its registered 0.27 stage after the 2026-11-01 rebase. **The cross-package bot-profile catalog is
   also blocked on accepted and implemented `shared-resource-register-bootstrap.md`**, which must
   register an absent `bot-profile-catalog` root before this RFC atomically claims its unique first
   lane 1. Until both dependencies are executable, this repaired RFC cannot be accepted.

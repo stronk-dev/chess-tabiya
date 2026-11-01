@@ -43,8 +43,13 @@
 - **Planning:** `planning/variants/`
 
 ```tabiya-claims
-run-schema | lane 0.20 | DrillRun.rules (new, optional, closed union over chessops' RULES minus 'chess'; absent means standard chess — a Tier-2 run is not self-describing because its ruleset is not in the FEN)
+run-schema | lane 0.21 | DrillRun.rules (new, optional, closed union over chessops' RULES minus 'chess'; absent means standard chess — a Tier-2 run is not self-describing because its ruleset is not in the FEN)
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -82,7 +87,7 @@ RFC therefore ships the interim the dossier recommends and does not re-open the 
 Tier-2 start offers a **composed Stockfish opponent, disclosed and labelled uncalibrated, and its
 results are unrated** (§3.7). What was Open question 1 is closed by ruling, not carried.
 
-**Claims one run-schema lane, 0.20**, and it is the honest cost of shipping the family rather than
+**Claims one run-schema lane, 0.21**, and it is the honest cost of shipping the family rather than
 one member: a Chess960 FEN is self-describing (§3.4) but **a Tier-2 game is not** — Crazyhouse's
 start *is* the standard FEN, so a run must record its ruleset or every downstream reader mis-reads
 it as standard chess. **No pack-schema lane** — §6's admission of 960 packs needs none, because
@@ -311,7 +316,7 @@ king move). Neither is a defect in this RFC; both are owed a ledger row. Two con
 | 4 | Accept a pasted 960 FEN as a Just Play start | existing start path | none — v1 generates nothing |
 | 5 | **Refuse a non-standard start at the Maia WRITE** (§3.7b), and filter the offered set as a second, weaker layer | `positionCommand` `apps/server/src/opponent-selector.ts:310` (the single write site); offered set at `:515-524` | **not "small"** — no per-position gate exists, and the guard must cover the evidence paths, not the picker |
 | 6 | Widen the explorer `variant` param — **optional, and v1 declines it** (Open question 2) | `apps/server/src/sourcing/explorer.ts:67` | 1 line in the URL builder (`ExplorerQuery` carries no `variant` field, so a caller-controlled value also touches the type and `normalizeExplorerQuery` `:54-62`) |
-| 7 | **Tier 2** (§7): `DrillRun.rules` on lane 0.20, producer-level instrument suppression (§7.2), and the import arm recording the ruleset (§4.4) | run schema + the story evidence pass + `pgn-import.ts` | **the largest item here — it is the widening, not a rider** |
+| 7 | **Tier 2** (§7): `DrillRun.rules` on lane 0.21, producer-level instrument suppression (§7.2), and the import arm recording the ruleset (§4.4) | run schema + the story evidence pass + `pgn-import.ts` | **the largest item here — it is the widening, not a rider** |
 
 Items 1–3, 5 and 7 are v1. Item 4 is deliberately *nothing*: a Scharnagl start generator is real new
 code and v1 does not need it, because a pasted FEN reaches every downstream symbol already —
@@ -622,7 +627,7 @@ is re-pointed accordingly rather than carrying the whole opponent question.
 **§7.5 The run must record its ruleset.** A Tier-2 game is **not self-describing**: Crazyhouse's
 starting position *is* the standard FEN. Without a recorded ruleset every downstream reader treats
 it as standard chess — which is §4.3's import trap, one layer deeper. Hence this RFC's single claim:
-`DrillRun.rules`, run-schema **lane 0.20**, an optional closed union over the seven, absent meaning
+`DrillRun.rules`, run-schema **lane 0.21**, an optional closed union over the seven, absent meaning
 standard chess. Absence-means-standard keeps every existing run valid with no migration.
 
 **§7.6 Drill packs stay refused for Tier 2**, on [[D1042]]'s own rationale (§6): evidence-dark is
@@ -805,7 +810,7 @@ rejects.
     > nowhere outside `capabilities.ts:133` — so it goes green only when item 1 and item 2 land
     > together.*
 11. **The run-schema lane is claimed and no pack-schema lane is.** The `tabiya-claims` block declares
-    `run-schema | lane 0.20` and nothing else; `make register-check` is green with this RFC active,
+    `run-schema | lane 0.21` and nothing else; `make register-check` is green with this RFC active,
     and the declaration joins its Live-claims row byte-exactly (C3). *Rejected:* claiming a pack lane
     for 960 packs, which §6(b) shows is unnecessary and which would move Gate F clause 1 — a Boolean
     over pack-schema lanes — for no gain.
@@ -1072,3 +1077,6 @@ Unnumbered per [[D1130]]'s convention as it stood; renumber from the head in the
 
   **Criteria are now 15**, adding Tier-2 suppression at the producer (13), Tier-2 branch-runtime
   survival (14) and reduced-army admission without variant machinery (15).
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

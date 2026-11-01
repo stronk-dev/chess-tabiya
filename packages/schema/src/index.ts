@@ -1,4 +1,4 @@
-export const DRILL_RUN_SCHEMA_VERSION = "0.18" as const;
+export const DRILL_RUN_SCHEMA_VERSION = "0.19" as const;
 export const DRILL_PACK_SCHEMA_VERSION = "0.32" as const;
 export const DRILL_PACK_REQUIRED_FIELDS = Object.freeze([
   "id",

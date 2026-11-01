@@ -178,3 +178,38 @@ it's a chess site..." Record in D3870 and its draft: engineering chooses the sma
 repair first and shifts eight unlanded reservations one slot, retaining relative order/scope.
 Coordinated rebase and independent acceptance remain engineering work, not an owner question;
 no resource reservation, schema/parser/storage implementation or acceptance is claimed here.
+
+## 2026-11-01 — Explicit-empty telemetry source repair, verification in flight
+
+Independently accepted D3870 now implements canonical run0.19 human-only empty telemetry, the
+existing REST write and stamp-only storage31. Missing remains source_absent; live Maia responses
+and nonhuman supplied arrays remain nonempty. Review receives actual honest-empty/nonmatch from
+an explicit empty observation and input_abstained from a mixed missing/present node. No move or
+model probability is invented. Original API/grant/receiver/Inspector migration remains separate.
+
+Independent D3888 return is fixed with frozen0.19 migration validation and non-stamp replay
+comparison; all targeted corruptions roll back, and actual SQLite traversal past31 works under
+a later reported replay version. Real import links, grants, evidence, stored bot decisions/shared
+deliveries, list/count/write, reopen and cross-installation HTTP export/restore have permanent
+controls. Final bounded independent review clears code/coverage after the live-empty Maia negative.
+No reviewer edits, test execution or broader consumer/qualification claim.
+
+Normal focused gate269/14 and types pass after correcting fixture/counter issues. First full run
+fails five stale version expectations after6,835 passes; corrections retain the old behavioral
+assertions and join the focused gate. D3889 additionally pins a compatible normal Node runtime
+without weakening Unicode17 or requiring per-test shell prefixes. Full verification rerun remains
+pending; no finished RFC or milestone is claimed from this entry.
+
+## 2026-11-01 — Empty-telemetry repair completed, current consumer work remains
+
+Full ordinary `make verify build` rerun exits zero:6,840 software/420 files, seven performance/
+four files,271 content/27 files and every remaining gate.269 focused/14 files, actual frozen
+migration traversal/rollback and source-to-Review/API/export controls pass. Final independent
+bounded review clears the implementation and test coverage. Archive the finished telemetry RFC;
+land run0.19/storage31 and close D3870/D3888/D3889 with file-backed evidence. Earlier failed
+attempts remain in the preceding entries. No test budget, Unicode rule or scope is weakened.
+
+Current roadmap, queue and work-state agree:1,749 live rows, zero untriaged; D3841 stays doing.
+Actual current resolver/grant/sourceKey/supplier, grade/Compare selection, opening result/history
+authority and full per-consumer/API/native migration remain. No module, milestone, qualification,
+content graduation, browser or remote result follows from this correctness repair.

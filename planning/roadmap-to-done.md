@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-10-16 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3881]] · **Machine map:**
+2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3889]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -19,17 +19,20 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
-The registry-owned selected measurement population now validates every requested-kind full-FEN
-claim before executing the exact original ledger/reading pairs. Original position/pin, duplicate
-ordinals, literal refusals and every abstention survive beside admitted reports and real counts.
-D3887's independent returns are repaired;100 focused cases and bounded independent re-review
-pass. Full normal `make verify build` exits zero:6,823 software/419 files, seven performance/four
-files,271 content/27 files and every remaining gate. Existing original artifact admission,
-verified predecessor readings and JSON-order ledger digests remain unchanged. Actual current
-resolver/grant/sourceKey/supplier, grade/Compare source choice, opening history and complete
-consumer/access/renderer/API/native migration remain; no learner-feature or milestone promotion.
-D3870's version ordering is engineering-owned, not an owner blocker: rebase the eight unlanded
-reservations behind the small correctness repair, then obtain independent RFC acceptance.
+D3870 is implemented and independently reviewed: genuine empty human-selection telemetry now
+passes canonical run0.19, the existing REST write and stamp-only storage31. Missing remains
+absent; modern live Maia and other supplied policy arrays remain nonempty. Real SQLite rollback,
+future-version traversal, import/grant/bot/evidence preservation and cross-installation HTTP
+export/restore pass. The correctness-first resource rebase preserves all eight future features'
+scope and relative order. Its RFC is archived; D3888's moving-validator defect is closed.
+D3889 pins the compatible Node24.22.1/Unicode17 runtime through normal Make, CI and the staged
+hook without changing compiler meaning.269 focused cases/14 files and full normal `make verify
+build` pass:6,840 software/420 files, seven performance/four files,271 content/27 files and every
+remaining gate. First failed attempts remain logged. No remote CI or browser result is claimed.
+Prior selected-population validation and original artifact/source proofs stand. Actual current
+resolver/grant/sourceKey/supplier, grade/Compare source choice, opening result/history authority
+and complete consumer/access/renderer/API/native migration remain; no learner-feature,
+qualification, official-content or milestone promotion.
 
 The latest verified opening prerequisite retains genuine installed source/recorded-position
 identity, original frozen table rows and actually executed negative lookups. Endpoint/membership
@@ -111,10 +114,10 @@ Review boundary/population and structural comparison/V2/value/result/consumer-pl
 This source is below moment assembly; it does not complete a learner module or milestone.
 Full moment/rank/opening/grade owners and
 the entire current282-pair access/receiver/API/native delivery still gate the requested UX.
-D3870's `rfc/recorded-selection-telemetry.md` is a bounded unaccepted schema/REST/stamp-only
-migration follow-up. Resource ordering remains unresolved; no existing lane was taken or rebased.
-The explicit-empty source arm still refuses at canonical validation, not a local bypass;
-no legacy compatibility pipeline is owed.
+D3870's bounded schema/REST/stamp-only migration follow-up is now independently accepted,
+implemented and frozen in `rfc/archive/recorded-selection-telemetry.md`. The explicit-empty
+source arm passes canonical validation; absent input remains distinct. Routine future reservations
+were rebased without feature scope changes. No legacy compatibility pipeline is owed.
 
 The complete coordinated current-source/module contract is now independently accepted for
 implementation. All four substantive returns and the final presentation/opening companion

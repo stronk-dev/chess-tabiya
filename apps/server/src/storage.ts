@@ -19,6 +19,7 @@ import {
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
+import { upgradeV018RecordedSelection } from "./migrations/recorded-selection-telemetry.js";
 import { CAMPAIGN_MIGRATION_SQL, CAMPAIGN_TABLES, CampaignStore } from "./campaign-store.js";
 import { CampaignEventCorrupt } from "./campaign-events.js";
 import { installedConceptRegistry } from "./concept-registry-loader.js";
@@ -802,7 +803,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 30;
+export const STORAGE_VERSION = 31;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -4708,6 +4709,11 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         version: 30,
         name: "campaign runs, creations, events, charged commands and durable awards",
         apply: () => this.#addCampaignTables(),
+      },
+      {
+        version: 31,
+        name: "preserve explicitly empty recorded human-selection telemetry",
+        apply: () => upgradeV018RecordedSelection(this.#database),
       },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));

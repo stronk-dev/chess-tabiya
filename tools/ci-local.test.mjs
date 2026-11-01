@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  REQUIRED_NODE_MAJOR,
+  REQUIRED_NODE_VERSION,
   REQUIRED_PNPM_VERSION,
   ciEnvironment,
   preflightFailures,
 } from "./ci-local.mjs";
 
 const valid = {
-  nodeVersion: `v${REQUIRED_NODE_MAJOR}.0.0`,
+  nodeVersion: `v${REQUIRED_NODE_VERSION}`,
   pnpmVersion: REQUIRED_PNPM_VERSION,
   stockfishCommand: "/tmp/stockfish",
   dockerComposeAvailable: true,
@@ -17,6 +17,10 @@ const valid = {
 
 test("the pinned CI toolchain passes parity preflight", () => {
   assert.deepEqual(preflightFailures(valid), []);
+});
+
+test("a different patch in the supported Node major is still toolchain drift", () => {
+  assert.equal(preflightFailures({ ...valid, nodeVersion: "v24.22.2" }).length, 1);
 });
 
 test("toolchain and required service drift are all refused", () => {
@@ -29,7 +33,7 @@ test("toolchain and required service drift are all refused", () => {
       dockerComposeAvailable: false,
     }),
     [
-      "Node 24 is required; found v26.7.0. Use .node-version before running CI parity.",
+      `Node ${REQUIRED_NODE_VERSION} is required; found v26.7.0. Use .node-version before running CI parity.`,
       "pnpm 11.18.0 is required; found 11.17.0.",
       "SF_CMD must name an executable Stockfish binary, as it does in CI",
       "Docker Compose must be available because schema verification renders every deployment profile",

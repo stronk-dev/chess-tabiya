@@ -12,6 +12,7 @@ import {
   BOT_OPPONENT_PLY_RESULTS,
   catalogEntryFor,
   createRun,
+  attachEvidence,
   digestSessionSource,
   projectRun,
   runEventHeadDigest,
@@ -100,7 +101,7 @@ function setup(options: { readonly engine?: MockProviderEngineClient; readonly e
   });
   const handler = createRestHandler(service);
   cleanups.push(async () => { await queue.close(); storage.close(); });
-  return { storage, engine, availability, providers, service, handler };
+  return { storage, engine, availability, providers, service, handler, queue };
 }
 
 async function call(handler: ReturnType<typeof createRestHandler>, method: string, path: string, value?: unknown, writer = WRITER): Promise<Response> {
@@ -283,11 +284,34 @@ function storedSelections(storage: SQLiteRunStorage, runId: string): readonly Op
 }
 
 describe("run lane 0.18: create, resume and rematch carry the exact profile (A1)", () => {
+  it("migration31 preserves a real stored bot decision, shared deliveries and evidence attachment", async () => {
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-bot-telemetry-migration-"));
+    cleanups.push(() => rmSync(directory, { recursive: true, force: true }));
+    const filename = join(directory, "bot.sqlite"), fixture = setup({ filename });
+    const initial = await createBotRun(fixture.handler, "bot-migration31");
+    const response = await call(fixture.handler, "POST", `/runs/${initial.id}/opponent-ply`, plyBody(initial, requestId("migration31")));
+    expect(response.status, await response.clone().text()).toBe(200); await response.text();
+    await fixture.queue.close();
+    const played = fixture.storage.read(initial.id)!.run;
+    const recorded = attachEvidence(played, played.activeCursor.nodeId, ["migration-synthetic-eval"], { kind: "eval", source: "engine_validated", values: { centipawns: 0 } }).run;
+    fixture.storage.save(recorded, WRITER);
+    const raw = new DatabaseSync(filename);
+    raw.prepare("UPDATE drill_runs SET schema_version='0.18',snapshot_json=? WHERE id=?").run(JSON.stringify({ ...recorded, schemaVersion: "0.18" }), initial.id);
+    raw.exec("PRAGMA user_version=30"); raw.close();
+    const migrated = new SQLiteRunStorage(filename, { onMigration: () => {} });
+    const after = migrated.read(initial.id)!.run;
+    expect(after.schemaVersion).toBe("0.19");
+    expect(after.events).toEqual(recorded.events);
+    expect(after.opponentPolicy).toEqual(recorded.opponentPolicy);
+    const selected = after.events.find((event): event is OpponentMoveSelectedEvent => event.type === "opponent.move_selected")!;
+    expect(parseStoredBotEnvelope(after, selected)).toEqual(parseStoredBotEnvelope(recorded, selected));
+    migrated.close();
+  });
   it("stores the whole catalogue reference in run.started and resumes it byte-for-byte", async () => {
     const { handler, storage } = setup();
     const reference = profile("guarded-human.1800@1");
     const run = await createBotRun(handler, "bot-create", reference);
-    expect(run.schemaVersion).toBe("0.18");
+    expect(run.schemaVersion).toBe("0.19");
     expect(run.opponentPolicy).toEqual({ mode: "human_common", profile: reference });
     const started = (await events(handler, "bot-create"))[0]!;
     expect(started.type === "run.started" && started.data.opponentPolicy.profile).toEqual(reference);
@@ -599,9 +623,9 @@ describe("migration 29: the stamp-only 0.17 → 0.18 upgrade", () => {
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }]);
+    expect(log).toEqual([{ version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
     const after = upgraded.read("prior-run")!.run;
-    expect(after.schemaVersion).toBe("0.18");
+    expect(after.schemaVersion).toBe("0.19");
     expect(after.events).toEqual(run.events);
     expect(after.opponentPolicy.profile).toBeUndefined();
     upgraded.close();
@@ -609,7 +633,7 @@ describe("migration 29: the stamp-only 0.17 → 0.18 upgrade", () => {
     const repeated: StorageMigrationLog[] = [];
     const reopened = new SQLiteRunStorage(filename, { onMigration: (entry) => repeated.push(entry) });
     expect(repeated).toEqual([]);
-    expect(reopened.read("prior-run")!.run.schemaVersion).toBe("0.18");
+    expect(reopened.read("prior-run")!.run.schemaVersion).toBe("0.19");
     reopened.close();
   });
 });

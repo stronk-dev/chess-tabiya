@@ -10,7 +10,7 @@
   with every value ([[D1921]]); the recorded semantic path now carries that receipt ([[D1929]]).
   **Remaining:** §2 typed instance extractors, adapter key equality and the total `not_applicable`
   audit; §4 rendered disclosure and provider limitation assembly; §5 presentation; §6.1 run-schema
-  0.24 attested persistence. Receipt: `planning/semantic-convention-provenance/implementation-2026-09-24.md`.
+  0.25 attested persistence. Receipt: `planning/semantic-convention-provenance/implementation-2026-09-24.md`.
   Previously: draft — amended 2026-08-28 to reconcile the [[D2013]]–[[D2019]] process return
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-27
@@ -27,8 +27,13 @@
 - **Planning:** `planning/semantic-convention-provenance/`
 
 ```tabiya-claims
-run-schema | lane 0.24 | EvidenceAttachedEvent gains optional semanticReceipts carrying exact projection/value/convention receipts; schema 0.17 -> 0.24 through the registered lane chain
+run-schema | lane 0.25 | EvidenceAttachedEvent gains optional semanticReceipts carrying exact projection/value/convention receipts; schema 0.17 -> 0.25 through the registered lane chain
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 The run-schema claim is required now by the durable Review/history guarantee in §6.1 and stays
 live until §6.1 lands. The `semantic-conventions` membership claim was declared in the process
@@ -440,7 +445,7 @@ and cannot satisfy v2 validation, avoidance, pack capability or learner-module b
 
 ### 6.1 Durable run/history receipt
 
-The Review/history promise is durable, not transient recomputation. Run-schema lane 0.24 widens
+The Review/history promise is durable, not transient recomputation. Run-schema lane 0.25 widens
 `EvidenceAttachedEvent.data` with an optional `semanticReceipts` array:
 
 ```ts
@@ -487,9 +492,9 @@ trusts its displayed fingerprint or convention history stays unavailable. Deleti
 does not delete a shared installation public key, but no receipt or learner datum remains attached
 to it. This is provenance integrity, not a claim that a signer is universally trusted.
 
-Runs below schema 0.24 and imported games whose original events contain no receipt remain readable
+Runs below schema 0.25 and imported games whose original events contain no receipt remain readable
 and honestly empty on convention history; no migration manufactures past provenance. New
-convention-bearing attachments after 0.24 must carry receipts. Account export includes them through
+convention-bearing attachments after 0.25 must carry receipts. Account export includes them through
 the existing run event export, and both run/account deletion paths delete them with the containing
 run—there is no second retention table. Fixtures cover create→save→reload→Review, export
 byte-equality, deletion, a legacy absent receipt, a v1 receipt after v2 lands, tampered refs/input
@@ -506,7 +511,7 @@ digests, and a missing historical registry snapshot.
 4. Migrate every current projection/source adapter and produce a zero-unresolved closure report.
 5. Land compiler-owned source/derived value seals, canonical receipts, deterministic limitations
    and admitted/reduced/rendered/provider propagation.
-6. Land run-schema 0.24 attested persistence/re-sealing, installation-key lifecycle and its
+6. Land run-schema 0.25 attested persistence/re-sealing, installation-key lifecycle and its
    save/reload/export/deletion fixtures.
 7. Land opposition/backward-pawn and avoidance successor RFCs on the stable contract.
 8. Bind executable semantic validation and only then activate modules, Review, bots and packs.
@@ -557,7 +562,7 @@ does not add a learner-facing evidence settings surface or strategic judgement.
     the exact refs, definition, limitations and authorities.
 14. The convention disclosure does not widen answer distance, assistance timing, seat permission
     or board-visible forms.
-15. A 0.24 run survives create→save→reload→Review and export with byte-equal exact receipts; v1
+15. A 0.25 run survives create→save→reload→Review and export with byte-equal exact receipts; v1
     remains readable after v2 lands. Legacy absence stays honest-empty, tampering/missing history
     fails typed, and run/account deletion leaves no retained receipt.
 16. `make semantic-convention-source-check`, `make semantic-convention-history-check`,
@@ -594,7 +599,7 @@ with model knowledge.
 | [[D1923]] | repaired by the literal, source-resolved, set-equal 39-row migration population in `planning/semantic-convention-provenance/initial-declarations.json`; repeat review required | executable amendment: `tools/d1923-semantic-declarations-harness/` |
 | [[D1924]] | repaired in §4: provider authors only the summary; deterministic assembler owns mandatory limitations | author amendment; repeat provider-boundary review |
 | [[D1925]] | **closed 2026-09-24**: `evidence-convention-history.jsonl` plus `make semantic-convention-history-check` (working tree, index and first parent); the process register landed as a catalogue row | `tools/semantic-convention-history-check.mjs` |
-| [[D1926]] | repaired in §6.1 with run lane 0.24, origin attestation and durable re-sealing contract; core executable candidate passes | executable amendment + live register claim |
+| [[D1926]] | repaired in §6.1 with run lane 0.25, origin attestation and durable re-sealing contract; core executable candidate passes | executable amendment + live register claim |
 | [[D1934]] | `exactObject` accepts extra fields | exact key-set repair included before instance extraction |
 | [[D1937]] | an unkeyed persisted digest can be rewritten self-consistently because the run stores neither the semantic payload graph nor an event hash chain | repaired by Ed25519 origin attestation over the canonical persisted envelope; executable tamper/unknown-origin negatives |
 | [[D2019]] | history row required its own impossible landing-commit hash | repaired by exact JSONL row without self hash; staged/first-parent Git transition supplies introducing commit |
@@ -666,3 +671,6 @@ with model knowledge.
   event hash chain, so unkeyed digests can be forged self-consistently. Added Ed25519 origin
   attestation, explicit unknown-origin behavior and key rotation/export trust boundaries; the
   candidate rejects ref/input mutation even after digest recomputation.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

@@ -34,7 +34,7 @@ pre-commit:
         - "tools/{register-check,status-parity,work-index,roadmap-check,intent-parity-harness}/**/*"
         - "tools/roadmap-check*.mjs"
         - "tools/staged-process-contracts*.mjs"
-      run: node tools/staged-process-contracts.mjs
+      run: make staged-process-contracts
 
     - name: semantic-authority-history
       glob:

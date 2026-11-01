@@ -60,7 +60,7 @@ solitaire, hand-and-brain, tempo cycles, avoid-the-blunder) are campaign-encount
 mostly law-8-clean over existing primitives; **rule variants** (Chess960 etc.) are a different axis
 already parked under [[D327]]/[[D328]] and stay parked."* `rfc/variants.md` owns the rule axis; its
 §9 deferral row for solitaire already points here (*"its own lane, in parallel (claude)"*). The two
-documents share no schema surface: `variants.md` claims run-schema lane 0.20 (`DrillRun.rules`),
+documents share no schema surface: `variants.md` claims run-schema lane 0.21 (`DrillRun.rules`),
 this one claims only campaign-schema lane 4 (§2.4). The consequence worth stating plainly, because it makes the
 family cheap: **a training-mode variant is not a variant.** Every format specified here is standard
 chess on a standard board, so every rung of the evidence stack survives it unchanged — the

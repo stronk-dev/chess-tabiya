@@ -149,11 +149,11 @@ describe("criteria 7, 13, 14 — the migration partitions every legacy row, atom
     const before = table(path, "SELECT type, name, sql FROM sqlite_schema WHERE name NOT LIKE 'sqlite_%' ORDER BY name");
     const log: StorageMigrationLog[] = [];
     const storage = new SQLiteRunStorage(path, { onMigration: (entry) => log.push(entry), concepts: authority() });
-    expect(STORAGE_VERSION).toBe(30);
-    expect(log).toEqual([{ version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }]);
+    expect(STORAGE_VERSION).toBe(31);
+    expect(log).toEqual([{ version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
     const receipt = storage.conceptMigrationReceipt;
     storage.close();
-    expect(version(path)).toBe(30);
+    expect(version(path)).toBe(31);
 
     // Prior-release schema diff: exactly the rebuilt attempt_concepts plus two new tables.
     const after = table(path, "SELECT type, name, sql FROM sqlite_schema WHERE name NOT LIKE 'sqlite_%' ORDER BY name");

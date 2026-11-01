@@ -11,8 +11,13 @@
 - **Planning:** `planning/training-methods/`
 
 ```tabiya-claims
-migration | position next | training_passes and training_pass_members; no historical adoption or run-schema rewrite
+migration | position behind recorded-selection-telemetry | training_passes and training_pass_members; no historical adoption or run-schema rewrite
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -648,3 +653,6 @@ Proposed — id assigned at landing; head was **D1310** at drafting.
   surface are both absent), so criterion 9 is asserted on the pure sequencer. D5 is partly
   discharged: the ramp's rungs are capability members; set membership is not a pack capability
   because no pack names a set.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

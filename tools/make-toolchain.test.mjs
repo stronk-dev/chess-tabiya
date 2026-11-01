@@ -7,6 +7,30 @@ import test from "node:test";
 
 const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
 
+test("the actual Make runtime matches .node-version and the compiler Unicode contract", () => {
+  const prelude = makefile.slice(0, makefile.indexOf("SF_CMD ?="));
+  const result = spawnSync("make", ["--no-print-directory", "-f", "-", "probe"], {
+    input: `${prelude}\nprobe:\n\t@$(CI_NODE) -p 'process.version + \":\" + process.versions.unicode'\n`,
+    encoding: "utf8",
+  });
+  assert.equal(result.status, 0, result.stderr);
+  const required = readFileSync(new URL("../.node-version", import.meta.url), "utf8").trim();
+  assert.equal(result.stdout.trim(), `v${required}:17.0`);
+});
+
+test("all CI Node installations consume the same version file, not a floating major", () => {
+  for (const name of ["verify", "browser", "release"]) {
+    const workflow = readFileSync(new URL(`../.github/workflows/${name}.yml`, import.meta.url), "utf8");
+    const count = [...workflow.matchAll(/uses: actions\/setup-node@/gu)].length;
+    assert.ok(count > 0);
+    assert.equal([...workflow.matchAll(/node-version-file: \.node-version/gu)].length, count);
+    assert.doesNotMatch(workflow, /node-version:\s*24\s*$/mu);
+  }
+  const hook = readFileSync(new URL("../lefthook.yml", import.meta.url), "utf8");
+  assert.match(hook, /run: make staged-process-contracts/u);
+  assert.match(makefile, /staged-process-contracts:\n\t\$\(CI_NODE\) tools\/staged-process-contracts\.mjs/u);
+});
+
 test("standalone JavaScript recipes use the existing selected runtime", () => {
   assert.deepEqual(makefile.split("\n").filter(line => /^\t@?node /u.test(line)), []);
 });

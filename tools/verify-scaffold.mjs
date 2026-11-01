@@ -258,7 +258,7 @@ if (
 }
 
 const lefthook = await readText("lefthook.yml");
-if (!lefthook.includes("run: node tools/staged-process-contracts.mjs")) {
+if (!lefthook.includes("run: make staged-process-contracts")) {
   failures.push("lefthook: process contracts must run from the staged Git-index snapshot");
 }
 

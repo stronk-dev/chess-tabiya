@@ -31985,10 +31985,10 @@
       "id": "D3841",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7bcb77968a77b63b4284b90e10f1d0a9331f984bac53f1a89d03e71405750cee",
+      "sourceDigest": "sha256:f81be9c4a61b2d054a94d506c991353e88da938532c35d2906509209f5608a2e",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "since": "2026-10-16"
+      "since": "2026-11-01"
     },
     {
       "id": "D3842",
@@ -32244,12 +32244,12 @@
     },
     {
       "id": "D3870",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:263453d3b3247fe755e07fa29f4222683e24ad5282f02a6bf1bd728e38905534",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:48311e04a94f03484b2ee2023818e11f3d1234fc62b249e33e73d25e76c015ea",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:recorded-selection-telemetry.md"
+      "evidence": "apps/server/src/recorded-selection-telemetry.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3871",
@@ -32401,6 +32401,24 @@
       "sourceDigest": "sha256:ccab6a6cb0e77f9eb500ea4d9ca5d867802f401b7ff69bd217c25a451817ded1",
       "uxItems": [],
       "evidence": "apps/server/src/recorded-measurement-population.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3888",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0aa59dbbafec8b4c2b67fdd9740fc085331bf605c896c504e201e9afecb6745f",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-selection-telemetry.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3889",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2d4ca5c7f041fc056f1bf6ad6aef5118d3cc451513c06f533edfaaa61210cd11",
+      "uxItems": [],
+      "evidence": "tools/make-toolchain.test.mjs",
       "evidenceKind": "path"
     }
   ]

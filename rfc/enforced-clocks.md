@@ -11,9 +11,14 @@
 - **Planning:** `planning/time-controls/`
 
 ```tabiya-claims
-run-schema | lane 0.21 | ClockReading.source gains "played"; DrillRunEvent gains ClockFlaggedEvent; RunSession gains an optional TimedControl
+run-schema | lane 0.22 | ClockReading.source gains "played"; DrillRunEvent gains ClockFlaggedEvent; RunSession gains an optional TimedControl
 migration | position behind live-following | rated_games.terminal_reason CHECK gains 'flagged' and 'flagged_insufficient_material' (literal CHECK on a STRICT table, rebuild)
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -568,3 +573,6 @@ Each names what a wrong implementation would do to pass it.
   vocabulary and all five accepted-contract seams are specified; four items defer with named owners
   and cited blockers. The central design finding — that flag-fall cannot ride `outcome.reached` —
   was derived here rather than inherited, and inverts the derivation's §4.3.
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.

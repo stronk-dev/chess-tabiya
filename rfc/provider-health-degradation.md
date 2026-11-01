@@ -7,7 +7,7 @@
 - **Status:** **implementing — landed 2026-09-24 at the owner's direction (see changelog).** Prior: draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model
   chain is retired as this RFC's acceptance authority and moved to
   `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; durable opponent
-  recovery and run-schema lane 0.26 moved to `rfc/opponent-recovery-journey.md`. What remains is the
+  recovery moved to `rfc/opponent-recovery-journey.md` (current run lane0.27 after the 2026-11-01 rebase). What remains is the
   live provider-health authority, and it claims nothing versioned. It is bound to a **named
   obligation** — the 67 ledger rows in the map below — not to a landable minimum. Owner acceptance
   and the provider-protocol/exchange prerequisites remain required.
@@ -798,6 +798,9 @@ Durable acquisition and the two recovery events were run-schema lane 0.26 in thi
 2026-09-06. The lane and its `changes` text moved intact to `rfc/opponent-recovery-journey.md`; this
 RFC now claims `none`. Nothing about the persisted run shape is decided here or left to
 implementation — it is decided in a named successor.
+
+The delegated 2026-11-01 rebase moves that successor's unlanded lane to0.27. The original
+0.26 split above remains historical; the scope and claim-free provider-health boundary do not change.
 
 Rollback may remove the new API fields only before a release claims F12-H. It may never restore the
 60-second Maia wait, the unbounded cache, or static green capability behavior as a compatibility fix.

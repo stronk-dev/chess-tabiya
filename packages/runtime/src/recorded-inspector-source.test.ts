@@ -127,10 +127,12 @@ describe("recorded Inspector reports retain exact stored occurrence authority", 
     expect(evidenceValueReceipt(result.value).sourceDigests).toEqual([]);
   });
 
-  it("selection preserves source absence and absent requested band; D3870 holds the unreachable empty-array arm", () => {
-    // The actual canonical source boundary refuses this before any factory. Do not forge a seal
-    // or turn this negative into proof that the accepted successful-empty arm is implemented.
-    expect(() => recordedInspectorSelection([])).toThrow(/fewer than 1 items/u);
+  it("selection preserves explicit empty telemetry, source absence and absent requested band", () => {
+    const empty = recordedInspectorSelection([]);
+    const emptyResult = invokeEvidenceValueRoute(MAIA, { resolved: empty.resolved, eventSeq: empty.eventSeq });
+    expect(emptyResult.kind).toBe("available");
+    if (emptyResult.kind !== "available") throw new Error("expected recorded empty data");
+    expect(emptyResult.value.payload.event.data.selection.candidates).toEqual([]);
     const existing = recordedInspectorSelection([{ moveUci: "e2e4", rank: 1 }], recordedInspectorRun()), result = invokeEvidenceValueRoute(MAIA, { resolved: existing.resolved, eventSeq: existing.eventSeq });
     expect(result.kind).toBe("available"); if (result.kind !== "available") throw new Error("expected recorded data");
     expect(result.value.payload.requestedTargetElo).toBeNull();

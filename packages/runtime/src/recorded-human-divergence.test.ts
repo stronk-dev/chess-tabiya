@@ -78,11 +78,13 @@ describe("scoped recorded human-choice evidence", () => {
     expect(mixed.proof.observations[0]!.item).toBe(mixed.items[0]);
   });
 
-  it("keeps the actual schema empty-telemetry blocker visible instead of manufacturing source authority", () => {
-    const run = recordHumanObservation(humanObservationRun(), []);
-    // Event projection alone does not validate the canonical schema. The actual source
-    // resolver must refuse the empty telemetry before issuing any recorded authority.
-    expect(() => sourceFor(run)).toThrow(/fewer than 1 items/);
+  it.each([false, true])("retains genuine empty telemetry as a completed nonmatch, black=%s", black => {
+    const run = recordHumanObservation(humanObservationRun(black), []);
+    const result = prepare(run);
+    expect(result.items).toEqual([]);
+    expect(result.proof.observations).toHaveLength(1);
+    expect(result.proof.observations[0]).toMatchObject({ disposition: "nonmatch", item: null,
+      selection: { kind: "available", value: { payload: { event: { data: { selection: { candidates: [] } } } } } } });
   });
 
   it.each([false, true])("uses current full-head observations at every granted prefix without an invented event cutoff, black=%s", black => {

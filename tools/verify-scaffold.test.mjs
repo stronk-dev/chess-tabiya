@@ -69,9 +69,9 @@ test("workflow command guard reports every missing tier", () => {
 test("hook command guard distinguishes the staged process-contract runner", () => {
   assert.deepEqual(
     missingRequiredText("run: make register-check\n", [
-      "run: node tools/staged-process-contracts.mjs",
+      "run: make staged-process-contracts",
     ]),
-    ["run: node tools/staged-process-contracts.mjs"],
+    ["run: make staged-process-contracts"],
   );
 });
 

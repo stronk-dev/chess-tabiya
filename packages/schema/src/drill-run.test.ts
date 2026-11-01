@@ -108,11 +108,25 @@ const validRun = {
   activeCursor,
 };
 
-describe("drill_run.schema.json v0.18", () => {
+describe("drill_run.schema.json v0.19", () => {
+  it.each(["opponent.move_selected", "prediction.recorded", "group.created"])("preserves empty human telemetry at shared %s site without widening other policies", type => {
+    for (const policyModeApplied of ["human_common", "strong_engine", "theory_strict", "practical_resistance", "enumerated", "unknown", "perfect_tablebase"]) {
+      for (const candidates of [undefined, [], [{ moveUci: "e2e4", rank: 1 }], null, [{}]]) {
+        const selection = { moveUci: "e2e4", policyModeApplied, engine: { id: "fixture", name: "Fixture", version: "1", seedHonored: false },
+          ...(candidates === undefined ? {} : { candidates }), ...(policyModeApplied === "perfect_tablebase" ? { orderingBasis: "none" } : {}) };
+        const data = type === "opponent.move_selected" ? { nodeId: rootNode.id, branchId: branch.id, moveUci: "e2e4", selection }
+          : type === "prediction.recorded" ? { nodeId: rootNode.id, checkpointId: "prediction", predictedUci: "e2e4", predictedMass: null, predictedRank: null, candidateCount: 0, distribution: selection }
+            : { groupId: "group", sourceNodeId: rootNode.id, source: "human_replies", resistance: "fixed", members: [{ branchId: "a", seedMoveUci: "e2e4" }, { branchId: "b", seedMoveUci: "d2d4" }], distribution: selection };
+        const allowed = candidates === undefined || (Array.isArray(candidates) && (candidates.length === 0 ? policyModeApplied === "human_common" : "moveUci" in candidates[0]!));
+        expect(validate({ ...validRun, events: [event, { seq: 2, type, at, data }] }), `${type}/${policyModeApplied}/${JSON.stringify(candidates)}: ${JSON.stringify(validate.errors)}`).toBe(allowed);
+      }
+    }
+  });
+
   it("validates a path-keyed run with a sequenced start event", () => {
     expect(validate(validRun), JSON.stringify(validate.errors)).toBe(true);
     expect(schema).toMatchObject({
-      $id: "urn:chess-tabiya:schema:drill-run:0.18",
+      $id: "urn:chess-tabiya:schema:drill-run:0.19",
       properties: { schemaVersion: { const: DRILL_RUN_SCHEMA_VERSION } },
     });
   });

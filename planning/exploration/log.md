@@ -32543,3 +32543,61 @@ Campaign was the one capability with no API, route or content. Now:
   D3870 and its existing draft record correctness-first with eight unlanded reservations shifted
   one slot, relative order and feature scope preserved. Actual coordinated rebase and independent
   acceptance remain engineering's next work; no resource claim/schema implementation/self-acceptance.
+
+## 2026-11-01 — D3870 implementation and independent review, full rerun pending
+
+- Resume from4701cba6 with no tracked modifications. Apply the delegated correctness-first
+  rebase: run0.19/storage31, eight future run slots shifted one with feature scope/relative order
+  unchanged, training-pass storage after the repair. Landed historical versions and changelog
+  entries are not renumbered. No new owner ordering question or protected intent edit.
+- Independent read-only review returns D3888: a moving current validator rejects the historical
+  0.19 intermediate after0.20 lands. Amend the contract to frozen0.19 migration-only validation
+  and top-stamp-only replay normalization, with real SQLite traversal beyond31. Independent
+  re-review accepts the bounded followup before production work; no author self-acceptance.
+- Implement shared human-only empty telemetry, existing REST parser and real coordinator-owned
+  migration31. Preserve absent fields, nonhuman/live-response nonempty restrictions, every
+  original event/non-stamp snapshot field and all relationships. Targeted JSON/stamp/ID/event/
+  replay corruption rolls back the entire transaction. One current application reader remains.
+- Permanent positives replace the two predecessor source refusals. Add every shared schema site,
+  actual prediction replay and seeded-group refusal, both-colour Review empty/missing folds,
+  imported links/grants/evidence, owner list/count/write, reopened/future-version SQLite, genuine
+  bot decision/shared deliveries, and authenticated cross-installation account export/restore.
+  Final independent code/test review finds no remaining bounded objection after adding the live
+  Maia bestmove-only refusal. Reviewer runs no tests and edits no files.
+- D3889: normal Make first refuses22 cases before storage assertions because updated Homebrew
+  Node24.22.2 reports Unicode18 against the accepted Unicode17 compiler rule. Retain that rule;
+  pin compatible24.22.1 in .node-version, all CI setup-node sites, actual Make selection and the
+  staged hook's Make entrypoint. Install the already available compatible binary only in ignored
+  .cache/toolchains/node; no binary is committed. Runtime/Unicode, wrong-patch and workflow/hook
+  guards pass. Existing schema/package checks pass. No remote GitHub result is claimed.
+- Initial fixture errors (missing synthetic session digest, identity call shape, owner list
+  arguments, same-install restore conflicts and uncommitted synthetic selections at a replay
+  boundary) are corrected in the fixtures, not by relaxing production guards. Sandbox loopback
+  refusal is rerun through the same ordinary Make target with its needed permission.
+- First full normal make verify build fails:6,835 software passes/five failures in420 files
+  (469.04s). Four files still expect storage30 and the scaffold expects run0.18; correct those
+  expected current versions and retain every prior migration/workflow assertion. Extend the
+  normal focused target to include all five files:269 cases/14 files pass. Earlier focused199/9,
+  workspace types, scaffold/package checks and eight Make-toolchain cases also pass. No deadline,
+  retry, skip, source population or coverage waiver. Full rerun and final closeout remain.
+
+## 2026-11-01 — D3870/D3888/D3889 verified completion
+
+- The complete normal `make verify build` rerun exits zero:6,840 software tests/420 files
+  (478.72s), seven performance tests/four files (61.53s),271 content tests/27 files (60.01s),
+  types, contracts, governance, real corpus and build. No product/test code changes follow this
+  run. The first failed full run remains recorded above, not reclassified successful.
+- Archive the independently accepted/implemented recorded-selection-telemetry RFC; register
+  run0.19/storage31 as landed. All six criteria are verified. Eight future reservations retain
+  scope/order. D3870 and D3888 close with the actual SQLite/API test path; D3889 closes with the
+  normal toolchain/workflow/hook test path. No binaries or measurement dumps are committed.
+- Final source/ledger synchronization reports3,638 rows:1,749 live,628 todo,38 doing,1,083
+  blocked,1,727 done,162 refused and zero untriaged. Initial separate state transitions correctly
+  refused inconsistent sibling glyphs without writing; apply the three closures as one batch,
+  then refine the toolchain evidence path. Roadmap has76 active product RFCs after archival;
+  fourteen capabilities/nine milestone states and zero graduated official packs do not change.
+- Current queue, roadmap checkpoint/receipt, canonical docs and F2 completion note now agree.
+  D3841 stays doing: actual current measurement resolver/grant/sourceKey/supplier, grade/Compare
+  selection, opening result/history authority and complete per-consumer access/renderer/receiver/
+  API/native delivery remain. No legacy-only pipeline, native/browser/remote CI result,
+  qualification, full Inspector or1.0 completion is claimed. Full1.0 goal remains active.

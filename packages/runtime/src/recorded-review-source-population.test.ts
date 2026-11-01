@@ -15,6 +15,7 @@ import { fork, rewind, commitMove, createRun, appendOpponentPly } from "./runtim
 import type { ShapeTriggerSource } from "./shape-firing.js";
 import { importedRun, play, evaluationDelivery, START_FEN, REVIEW_AT as at } from "./testing/review-evidence-fixture.js";
 import type { DrillRun } from "./types.js";
+import { humanObservationRun } from "./testing/recorded-human-divergence-fixture.js";
 
 const IDS = ["review.source.position@1", "review.source.consequence@1", "review.source.imported_result@1", "review.source.eval_point@1",
   "review.source.eval_delta@2", "review.source.mate_transition@2", "review.source.pivotal.irreversibility@1", "review.source.pivotal.phase_change@2",
@@ -39,6 +40,23 @@ const dataFor = (f: ReturnType<typeof fixture>, nodeId = f.path.at(-1)!.id) => r
 const slotAt = (data: ReturnType<typeof readRecordedReviewSourcePopulation>, adapter: string, nodeId: string) => data.results.find(row => row.slot.adapterId === `review.source.${adapter}` && row.slot.nodeId === nodeId)!;
 
 describe("complete recorded Review source population", () => {
+  it.each([false, true])("folds explicit empty human telemetry as honest-empty but mixed absence as unavailable, black=%s", black => {
+    const initial = humanObservationRun(black);
+    const nodeId = initial.activeCursor.nodeId, main = initial.activeCursor.branchId;
+    const selection = { moveUci: black ? "e7e5" : "e2e4", policyModeApplied: "human_common" as const, candidates: [],
+      engine: { id: "synthetic-maia", name: "Synthetic recorded model", version: "fixture", seedHonored: false } };
+    let run = appendOpponentPly(initial, selection, { at }).run;
+    const endpoint = run.activeCursor.nodeId;
+    const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined });
+    const collect = () => readRecordedReviewSourcePopulation(collectRecordedReviewSourcePopulation({
+      boundary: owner.resolve({ runId: run.id, branchId: main, throughNodeId: endpoint }), context: { engine: new Map(), shapes: [] },
+    }));
+    expect(slotAt(collect(), "pivotal.human_divergence@2", nodeId)).toMatchObject({ state: { kind: "honest_empty", reason: "no_observation" }, items: [] });
+    run = fork(rewind(run, nodeId, at).run, nodeId, { at, label: "missing sibling observation" }).run;
+    const { candidates: _candidates, ...missing } = selection;
+    run = appendOpponentPly(run, { ...missing, moveUci: black ? "d7d5" : "d2d4" }, { at }).run;
+    expect(slotAt(collect(), "pivotal.human_divergence@2", nodeId)).toMatchObject({ state: { kind: "unavailable", reason: "input_abstained" }, items: [] });
+  });
   it.each(["white", "black"] as const)("executes all twelve exact adapters and only applicable original slots at every prefix: %s", side => {
     const f = fixture(side); expect(RECORDED_REVIEW_SOURCE_ADAPTER_IDS).toEqual(IDS);
     for (const [index, node] of f.path.entries()) {

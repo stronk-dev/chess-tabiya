@@ -1,6 +1,6 @@
 # RFC: Preserve explicitly empty recorded human-selection telemetry
 
-- **Status:** draft — D3870; routine resource rebase and independent acceptance remain open; no owner ordering decision needed
+- **Status:** implemented 2026-11-01 — independently accepted after D3888; all six criteria verified; frozen implementation record
 - **Author:** Codex
 - **Created:** 2026-10-16
 - **Design refs:** `design/03-product-breadth.md` evidence/Review surfaces; `design/05-in-run-experience.md` assistance and honest absence
@@ -8,15 +8,20 @@
 - **Depends on:** `evidence-value-authority.md` §2.3a; `review-evidence-compiler.md` §4.5; negotiated run-schema and migration registers in `README.md`
 - **Parent / amends:** `archive/branch-runtime.md`; `archive/opponent-contracts.md`; existing canonical run selection/storage contract
 - **Supersedes / superseded by:** —
-- **Planning:** existing `planning/codex-queue.md` until accepted/implementing
+- **Planning:** `planning/codex-queue.md`; append-only `planning/exploration/log.md` and `planning/learner-modules/log.md`
+- **Canonical docs:** `docs/branch-runtime.md`; normal development toolchain in `docs/development.md`
 
 ```tabiya-claims
 none
 ```
 
-No future schema version or migration number is assigned by this draft. Those resources must
-be negotiated and claimed before acceptance; `none` does not authorize a migration-free change.
-The existing run-schema claims remain untouched. This draft is not permission to widen a parser.
+Engineering rebase under the owner's 2026-10-16 delegation: this correctness fix takes run-schema
+0.19 and the next storage migration (31, from30). The eight unlanded schema reservations move
+from0.19–0.26 to0.20–0.27 in their existing relative order; pack-training-forms follows this
+migration rather than claiming the same next position. No feature scope or landed version changes.
+These claims do not independently authorize implementation; acceptance still gates parser/storage work.
+The0.19/31 implementation below now consumes those claims; both are Landed entries in the
+register. Completed verification and criterion coverage are recorded in the final changelog entry.
 
 ## Summary
 
@@ -105,12 +110,11 @@ request is initiated to fill a hole in history.
 
 ### 4. Persistence/version transition
 
-Before acceptance, assign the run-schema lane and a contiguous storage migration position in the
-existing registers. Update the exported schema version, schema identity and schema-build metadata
-consistently. Do not jump over, consume or renumber another RFC's claim without an explicit
-resource-order decision recorded in those RFCs/registers.
+The coordinated resource rebase assigns run-schema0.19 and storage migration31 (30→31).
+Update the exported schema version, schema identity and schema-build metadata consistently.
+The eight successors retain their relative order at0.20–0.27; no implemented version is renumbered.
 
-The migration from its negotiated immediate predecessor is stamp-only: atomically update
+The migration from frozen run-schema predecessor `"0.18"` to successor `"0.19"` is stamp-only: atomically update
 `drill_runs.schema_version` and the top-level `snapshot_json.schemaVersion`. Preserve all other
 snapshot fields and every stored event value, including absent arrays, optional masses, selected
 moves, provider/bot envelopes, packet attachments and original event ordering. Do not rewrite
@@ -124,8 +128,15 @@ transaction, advances storage version once, and is safe on reopen. A malformed t
 snapshot must fail visibly and roll back rather than be skipped into an unreadable old stamp.
 Malformed includes invalid JSON/non-object data, a mismatched embedded predecessor version,
 row/document ID disagreement, invalid events and snapshot disagreement with canonical replay.
-Validate a candidate with only its in-memory top-level stamp advanced against current canonical
-validation/replay, comparing every non-stamp field before any write. Do not copy older migrations'
+Validate the intermediate candidate with only its in-memory top-level stamp advanced against
+the complete **frozen0.19 successor schema**, retained as migration-only data when this lands.
+Do not use the moving current schema's version constant or shape for this intermediate. Check
+every event against that frozen schema and replay the original events; normalize only the
+replay result's top-level version to the frozen successor before comparing every other JSON
+field. Any future replay change that alters this comparison must preserve this migration's
+historical semantics explicitly, never skip mismatches or reconstruct a different snapshot.
+This is a migration validator, not a second application reader or source pipeline. The normal
+reader remains current-version-only after the migration chain completes. Do not copy older migrations'
 silent `continue` behavior, reconstruct a different snapshot or discard an invalid field.
 Unrelated run versions remain the responsibility of their registered migrations. No new tables,
 pack schema, semantic convention or event digest are needed.
@@ -160,6 +171,9 @@ it does not authorize deleting real stored data, archive records or logs.
    Reopen does not migrate twice; each targeted corruption listed in §4, including valid-JSON
    stamp/ID/event/replay mismatches, rolls back without partial stamps on any row.
    New explicit-empty data survives persistence and the existing export/restore journey.
+   A real SQLite older-database fixture traverses31 and a later-version stamp step while the
+   replay result reports that later current version, proving the intermediate uses frozen0.19
+   validation and compares all non-stamp fields. Corrupt intermediate events/snapshots still fail.
 6. Normal focused software gates, schema/storage/application contracts and `make verify build`
    pass without skips, broadened deadlines or disabled assertions. Actual consumer/API/native
    adoption remains separately tracked; source success alone closes neither D3841 nor a milestone.
@@ -175,8 +189,8 @@ none
    bookkeeping is delegated to engineering, not a further product ruling. Take this small
    correctness repair first, then shift the eight unlanded run-schema reservations one slot,
    preserving feature scope and relative order. The implementer owns the coordinated claimant/
-   register/predecessor update before independent acceptance. The current `none` claim does not
-   reserve those resources or authorize implementation until that mechanical rebase is applied.
+   register/predecessor update before independent acceptance. The coordinated rebase is recorded
+   on2026-11-01 above; resource claims do not replace independent implementation acceptance.
    Do not re-escalate the order to the owner or treat this answer as independent RFC acceptance.
 
 ## Changelog
@@ -190,3 +204,20 @@ none
 - 2026-10-16: owner delegates routine pre-launch ordering to engineering. Choose the immediate
   correctness-first rebase above; coordinated resource edits and independent acceptance remain,
   but there is no outstanding owner question about slot order or a new product-scope decision.
+- 2026-11-01: apply the coordinated correctness-first resource rebase: run0.19/storage31,
+  eight future run slots shifted one, training-pass migration behind this repair. Preserve
+  historical changelog numbers and all feature scopes. Independent acceptance still required.
+- 2026-11-01: independent review returns [[D3888]]: pin intermediate structural validation to
+  frozen0.19 and version-normalize only replay output for non-stamp equality. Add actual SQLite
+  traversal past31 under a later current-version replay; no second application reader.
+- 2026-11-01: independent recorded_telemetry_review re-reads the amendment and finds no remaining
+  bounded buildability blocker; independently acceptable for implementation. No edits or tests
+  performed by the reviewer. Acceptance covers this followup, not completed source/API consumers.
+- 2026-11-01: implementation independently reviewed and all six criteria verified. Normal focused
+  gate269 cases/14 files; full normal make verify build exits zero:6,840 software/420 files,
+  seven performance/four files,271 content/27 files and all remaining gates. Original source,
+  Review folds, every shared schema site, modern-live refusal, authenticated write/export/restore,
+  imports/grants/evidence, genuine bot decision/shared deliveries, count/write/reopen, all targeted
+  corruption rollback and later-version traversal have permanent controls. First failed full
+  run/fixed version expectations remain in the logs. D3870/D3888 close; source/API/native consumer
+  adoption and1.0 milestones remain separate. No compatibility-only application reader or chess truth.

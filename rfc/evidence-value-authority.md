@@ -1,5 +1,14 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
+**Recorded-empty source repair completed, 2026-11-01:** D3870's independently accepted
+`archive/recorded-selection-telemetry.md` lands run0.19/storage31. Genuine explicit human empty
+telemetry now reaches recorded selection, human-divergence and Review's honest-empty fold;
+missing/mixed absence stays unavailable. Frozen migration validation preserves history and
+rolls back corrupt snapshots; modern live Maia responses remain nonempty.269 focused cases and
+the complete normal local gate pass (6,840 software/seven performance/271 content). Earlier
+D3870-held paragraphs below are historical checkpoints, not a current source blocker. Complete
+current consumer/access/renderer/API/native adoption and qualification still remain.
+
 **Joint current-source amendment accepted for implementation, 2026-10-15.** Independent review
 accepts §§2.3a–m with the coordinated current-module and linked owner contracts recorded in
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`. Their earlier

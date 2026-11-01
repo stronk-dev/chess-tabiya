@@ -1,10 +1,12 @@
-# Prefer the repository's pinned local toolchain when Homebrew supplies it. CI and
-# other platforms continue to use PATH/SF_CMD, so callers never need shell prefixes.
-ifneq ($(wildcard /opt/homebrew/opt/node@24/bin/node),)
-export PATH := /opt/homebrew/opt/node@24/bin:$(PATH)
+# Use the exact declared runtime. Never let an unrelated Homebrew update change Unicode rules.
+NODE_VERSION := $(strip $(shell cat .node-version))
+NODE_CANDIDATES := $(shell command -v node 2>/dev/null) $(wildcard .cache/toolchains/node/bin/node /opt/homebrew/opt/node@24/bin/node)
+LOCAL_NODE := $(firstword $(foreach candidate,$(NODE_CANDIDATES),$(if $(filter v$(NODE_VERSION),$(shell $(candidate) --version 2>/dev/null)),$(candidate))))
+ifeq ($(LOCAL_NODE),)
+$(error Install Node $(NODE_VERSION) from .node-version before running Make)
 endif
-
-CI_NODE := $(if $(wildcard /opt/homebrew/opt/node@24/bin/node),/opt/homebrew/opt/node@24/bin/node,node)
+export PATH := $(abspath $(dir $(LOCAL_NODE))):$(PATH)
+CI_NODE := $(abspath $(LOCAL_NODE))
 
 SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
 export SF_CMD
@@ -523,6 +525,10 @@ recorded-consumer-adoption-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/review-map.test.ts
 
 .PHONY: recorded-inspector-check inspector-demand-research
+.PHONY: recorded-selection-check
+recorded-selection-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/drill-run.test.ts packages/runtime/src/scaffold.test.ts packages/runtime/src/groups.test.ts packages/runtime/src/provider-parsers.test.ts packages/runtime/src/recorded-inspector-source.test.ts packages/runtime/src/recorded-human-divergence.test.ts packages/runtime/src/recorded-review-source-population.test.ts apps/server/src/recorded-selection-telemetry.test.ts apps/server/src/storage.test.ts apps/server/src/bot-opponent-ply.test.ts apps/server/src/campaign-storage.test.ts apps/server/src/concept-migration.test.ts apps/server/src/live-session.test.ts apps/server/src/longitudinal-store.test.ts
+
 recorded-inspector-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/module-query.test.ts packages/runtime/src/module-registry.test.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/server/src/module-query.test.ts apps/server/src/recorded-semantic-path.test.ts apps/server/src/terminal-inspector.test.ts
 

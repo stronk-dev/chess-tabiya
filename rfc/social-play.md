@@ -56,8 +56,13 @@
 
 ```tabiya-claims
 migration | position behind enforced-clocks | session_invitations and arena_legs gain provider identity, requested/accepted terms and retrieval state as additive ADD COLUMN with no CHECK, so no rebuild
-run-schema | lane 0.23 | DrillRunEvent gains GameResignedEvent and DrawAgreedEvent (packages/runtime/src/types.ts:294-310 union of 16 members; a resignation and an agreed draw end a game with no move, so neither can be an outcome.reached)
+run-schema | lane 0.24 | DrillRunEvent gains GameResignedEvent and DrawAgreedEvent (packages/runtime/src/types.ts:294-310 union of 16 members; a resignation and an agreed draw end a game with no move, so neither can be an outcome.reached)
 ```
+
+**Resource rebase, 2026-11-01:** routine pre-launch ordering is engineering-owned.
+`archive/recorded-selection-telemetry.md` takes run0.19/storage31; the eight unlanded run claims
+shift one slot, preserving relative order and feature scope. Training-pass storage follows that
+repair. Landed versions and historical changelog entries are not renumbered.
 
 ## Summary
 
@@ -175,11 +180,11 @@ soft:
 
 | absent | blocker at HEAD | owner |
 |---|---|---|
-| **clock** | nothing in the shipped 16-state composition changes without a gesture; a server-authoritative clock must run while the tab is closed | `enforced-clocks.md` §2 (draft), run-schema lane 0.21 |
+| **clock** | nothing in the shipped 16-state composition changes without a gesture; a server-authoritative clock must run while the tab is closed | `enforced-clocks.md` §2 (draft), run-schema lane 0.22 |
 | **rating** | **`rated_games.run_id` is `PRIMARY KEY`** (`storage.ts:4567`) — one rated game per run — while a native two-human match is **one run with two learners**. `opponent_band INTEGER NOT NULL` (`:4570`) and `engine_identity_digest TEXT NOT NULL` (`:4575`) both presuppose a bot. On a `STRICT` table this is a **rebuild**, the `live-sources` class | `learner-rating.md` — Discharge D2, priced in §7.1 |
 | **resignation / agreed draw** | `outcome.reached` must immediately follow its `move.committed` (`events.ts:330-333`) and the reducer re-derives `terminalOutcome`, throwing on a non-terminal node (`:344-345`, `outcome.ts:5-16`). A resignation and an agreed draw both end a game **with no move**, so neither can be an `outcome.reached` — appending one corrupts every subsequent read of that run, permanently | **nobody, until this RFC.** §3.4 |
 
-The third row is why this RFC claims run-schema lane 0.23. `enforced-clocks` §3.1 established the
+The third row is why this RFC claims run-schema lane 0.24. `enforced-clocks` §3.1 established the
 mechanism for flag-fall and explicitly declined resignation (`enforced-clocks.md:51-58`, quoting
 `learner-rating` §11.3). `design/research/ux-live-and-social.md` §13 Q5 routed the pair to the owner
 and found **no owner**. Under [[D1230]], an arm with no named home may not be sequenced away, so it is
@@ -338,8 +343,8 @@ Ledger: a new row — the two verbs a real game needs and no document owns.
 re-derives `terminalOutcome`, throwing *"references a non-terminal node"* on a board chess does not
 consider terminal (`:344-345`; `outcome.ts:5-16` produces exactly four terminal cases). **A resignation
 and an agreed draw have precisely that property**, so the identical mechanism applies and the identical
-corruption follows from the obvious design. Two new run events, on lane 0.23, behind
-`enforced-clocks`' 0.21:
+corruption follows from the obvious design. Two new run events, on lane 0.24, behind
+`enforced-clocks`' 0.22:
 
 ```ts
 export type GameResignedEvent = Event<"game.resigned", {
@@ -356,7 +361,7 @@ export type DrawAgreedEvent = Event<"draw.agreed", {
 ```
 
 `DrillRunEvent` is a union of **16** members at HEAD (`packages/runtime/src/types.ts:294-310`);
-`enforced-clocks` adds `ClockFlaggedEvent` on 0.21, and these are the two after it.
+`enforced-clocks` adds `ClockFlaggedEvent` on 0.22, and these are the two after it.
 
 Three rules bind them:
 
@@ -629,7 +634,7 @@ the hope.
 
 **Clocks — kept.** `[%clk]` readings are **not** annotations in [[D410]]'s sense; they record what the
 player had, which is the same class as the move itself. `recorded-clocks` owns their typed storage
-(`imported_games.clocks`, run-schema lane 0.19). One precision the adapter must not inherit: the
+(`imported_games.clocks`, run-schema lane 0.20). One precision the adapter must not inherit: the
 shipped own-game export requests `clocks=false` alongside `evals=false&literate=false`
 (`import-source.ts:73`), so a returned clocked game would arrive today with its readings discarded at
 the *request* rather than at the parser. The adapter's `exportGame` requests `clocks=true`, and
@@ -837,8 +842,8 @@ has since converted.
 | F2 | **The local bot event** (§6) — tables, entrants, standings and its four criteria | `planning/platform-alignment/social-play/` | `bot-roster.md` | a non-empty profile catalogue, plus [[D1416]]'s post-1.0 window |
 | F3 | **Opponent discovery through the adapter** — public seeks and bulk pairings exist ([[D710]]); v1 uses named/open challenges only | `planning/platform-alignment/social-play/` | a successor drafted from this lane | Open question 1, whose answer decides whether discovery is ours or a provider's |
 | F4 | **A hosted league**, and — per [[D1481]] — **a round/pairing aggregate plus a declared result** (§7.2) | `planning/platform-alignment/social-play/` | a successor drafted from this lane | the numeric trigger below, or an owner ruling |
-| F5 | **Per-ply clock readings from a returned external game** (§4.6) | `recorded-clocks.md` lane 0.19 | that RFC | its implementing commit |
-| F6 | **Provider-stated termination reasons for returned games** (§4.6) | `enforced-clocks.md` lane 0.21 | that RFC | its implementing commit |
+| F5 | **Per-ply clock readings from a returned external game** (§4.6) | `recorded-clocks.md` lane 0.20 | that RFC | its implementing commit |
+| F6 | **Provider-stated termination reasons for returned games** (§4.6) | `enforced-clocks.md` lane 0.22 | that RFC | its implementing commit |
 | F7 | **Federation** — cross-instance discovery, portable identity, federated moderation | R19/O14 | `planning/platform-alignment/decision-queue.md:51` (O14, DEFERRED) | a separate promotion ruling the dossier already requires |
 
 **F4's reopen trigger is a number, not a feeling.** `league-as-return-loop` §C6 measures a real
@@ -1064,7 +1069,7 @@ makes it **RED**. Unfailable criteria are a named defect class here ([[D444]], [
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Native clocks: server-authoritative decrement, refusal of client timestamps, `RunSession.timedControl`, `ClockReading.source: "played"`, `clock.flagged`, and a `rated_games.terminal_reason` widening | `enforced-clocks.md` (lane 0.21) | that RFC's implementing commit | |
+| D1 | Native clocks: server-authoritative decrement, refusal of client timestamps, `RunSession.timedControl`, `ClockReading.source: "played"`, `clock.flagged`, and a `rated_games.terminal_reason` widening | `enforced-clocks.md` (lane 0.22) | that RFC's implementing commit | |
 | D2 | **Native ratings for two-human play.** `rated_games.run_id` is `PRIMARY KEY` (`storage.ts:4567`) against one run with two learners; `opponent_band` (`:4570`) and `engine_identity_digest` (`:4575`) are `NOT NULL` and presuppose a bot; §3 precondition 3 admits only `human_common` (`learner-rating.md:341`). A `STRICT`-table rebuild plus a new admission predicate | `learner-rating.md` | that RFC's next amendment | |
 | D3 | The human-anchor experiment — external rated games against known provider ratings, the cheapest instrument for `learner-rating`'s highest-value unrun experiment (§5.2) | `learner-rating.md` | that RFC's next amendment | |
 | D4 | The `design/03` amendments (§Deviations 1–3): the *"later"* ordering falsified by [[D1414]], the two conditional matchmaking sentences, and [[D412]]'s team-relays disambiguation — law 5 work, proposed not written | OWNER | `planning/platform-alignment/social-play/intent-amendment-2026-08-24.md` | proposed 2026-08-24 |
@@ -1129,7 +1134,7 @@ coordinator lands these. `design/BACKLOG.md` is **not** edited by this pass.
   `docs/live-sessions.md:46-47` records both absent; `enforced-clocks.md:51-58` solves flag-fall and
   explicitly declines them; `ux-live-and-social.md` §13 Q5 routed the pair and found no owner. Under
   [[D1414]] a rated native game whose only exit from a lost position is to walk away is
-  `learner-rating` §11.3's selection bias with a clock bolted on. Claimed here on run-schema lane 0.23
+  `learner-rating` §11.3's selection bias with a clock bolted on. Claimed here on run-schema lane 0.24
   (§3.4).
 - 📊 **Native human ratings cannot be built on the shipped `rated_games` table.** `run_id` is
   `PRIMARY KEY` (`storage.ts:4567`) — one rated game per run — against one run with two learners, and
@@ -1184,3 +1189,6 @@ coordinator lands these. `design/BACKLOG.md` is **not** edited by this pass.
   matchmaking pool is Open question 1, with both branches priced and neither chosen.
 - 2026-08-23 — drafted as [[D1330]]'s rank-2 live debt against the hybrid; **returned, not amended**,
   by [[D1414]].
+
+- 2026-11-01: synchronize current resource/dependency references with the delegated
+  recorded-selection-telemetry rebase; no feature scope, landed version or acceptance change.
