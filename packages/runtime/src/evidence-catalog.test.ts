@@ -61,7 +61,7 @@ describe("primary evidence catalogue", () => {
     expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 319, 42, 566]); // Complete Compare@2 replaces its eight bindings; other consumer migrations remain separate.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 320, 42, 566]); // Internal complete opening-history@2 adds one projection, not a current consumer migration.
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");
@@ -122,7 +122,7 @@ describe("primary evidence catalogue", () => {
   it("binds the three runtime opening facts to their module homes and keeps the recorded position internal", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const ids = ["theory.opening.current_endpoint", "theory.opening.catalogue_membership", "run.record.position", "derived.opening.deepest_reached"];
-    const projections = ids.map((id) => manifest.projections.find((projection) => projection.id === id));
+    const projections = ids.map((id) => manifest.projections.find((projection) => projection.id === id && projection.version === 1));
     expect(projections.every((projection) => projection?.exactness === "exact")).toBe(true);
     const consumersOf = (id: string) => manifest.bindings.filter((binding) => binding.projection.id === id).map((binding) => binding.consumer.id).sort();
     // runtime-opening-identity D1: endpoint → Theory Breadcrumb; membership → Inspector; deepest → Review + Inspector.

@@ -54,7 +54,12 @@ Only the matched endpoint goes to `play.opening@1`; a genuine unnamed position e
 and moving on or reloading cannot make the previous endpoint sticky. Missing, invalid and
 digest-mismatched installations retain separate absence states. Corrupt sources or crossed
 occurrences fail the actual API with typed unavailability. This supplies the opening leg, not
-the remaining complete catalogue-pool, recorded-history, Inspector or Review migration.
+the remaining complete catalogue-pool, Inspector or Review migration.
+
+The internal recorded-opening history source and `derived.opening.deepest_reached@2` reduction
+now preserve all original prefix occurrences and genuine negative lookups. They do not yet reach
+the complete current Inspector/Review consumer images. A backend source is not a module delivery;
+their source/access/renderer/receiver/API/native obligations remain open.
 
 Every compiled pair is either `executable` or `blocked_dependencies` with its blockers
 (`MODULE_PAIR_EXECUTION`). A pair is executable exactly when a production operation acquires its
@@ -180,7 +185,8 @@ remain separate work.
   Their registered `play.shape_entry@1` statement retains the exact fired entry ID;
   the link opens that existing Library entry without deriving identity from its title
   or changing the run. Older title-only statements remain readable but have no guessed link.
-  This connects recognized shapes, not the separately unavailable opening-catalogue source.
+  This connects recognized shapes; the opening-catalogue source has its own exact identity
+  acquisition and registered presentation described above.
   Filled Nudge cards offer **Try another move**, returning to the exact parent of their
   recorded learner move, even after an opponent reply. A different committed move creates
   another attempt without deleting the old one. Filled Compare cards offer **Enter other

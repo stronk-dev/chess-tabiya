@@ -1,6 +1,6 @@
 import type { AddressInfo } from "node:net";
 import { INITIAL_FEN } from "chessops/fen";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { IdentityService } from "./identity.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { createRestHandler } from "./rest.js";
@@ -150,13 +150,17 @@ describe("narration asynchronous authority", () => {
     } finally { release.resolve(); await pending; }
   });
 
-  it.each(["voice", "speech"])("rechecks revoked grants through the composed %s HTTP door", async action => {
+  describe.each(["voice", "speech"])("rechecks revoked grants through the composed %s HTTP door", action => {
     const started = deferred<void>(), release = deferred<void>();
     const voice: VoiceProvider = { async render(_view, _persona, text) { started.resolve(); await release.promise; return text; } };
     const tts: TtsProvider = { async synthesize(text) { started.resolve(); await release.promise; return { bytes: new TextEncoder().encode(text), contentType: "audio/test" }; } };
-    const app = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, voiceProvider: voice, ttsProvider: tts });
+    let app: Awaited<ReturnType<typeof createInMemoryTestApplication>>;
+    let setup: Promise<void> | undefined, guest: string, nodeId: string;
+    let post: (path: string, body: unknown, cookie?: string) => Promise<Response>;
     let pending: Promise<Response> | undefined;
-    try {
+    beforeAll(() => {
+      setup = (async () => {
+      app = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, voiceProvider: voice, ttsProvider: tts });
       await new Promise<void>((resolve, reject) => { app.server.once("error", reject); app.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(app.server.address() as AddressInfo).port}`;
       const register = async (handle: string) => {
@@ -164,20 +168,30 @@ describe("narration asynchronous authority", () => {
         expect(response.status).toBe(201);
         return response.headers.get("set-cookie")!.split(";", 1)[0]!;
       };
-      const owner = await register("http_voice_owner"), guest = await register("http_voice_guest");
-      const post = (path: string, body: unknown, cookie = owner) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "voice-writer" }, body: JSON.stringify(body) });
+      const owner = await register("http_voice_owner"); guest = await register("http_voice_guest");
+      post = (path, body, cookie = owner) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "voice-writer" }, body: JSON.stringify(body) });
       const created = await post("/runs", { id: "http-voice", session: { kind: "position", start: { fen: INITIAL_FEN, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1 });
       expect(created.status).toBe(201);
       const { run } = await created.json() as { run: { activeCursor: { nodeId: string } } };
+      nodeId = run.activeCursor.nodeId;
       expect((await post("/runs/http-voice/grants", { op: "grant", handle: "http_voice_guest", role: "host" })).status).toBe(200);
       expect((await post("/runs/http-voice/reveal", {})).status).toBe(200);
-      pending = post(`/runs/http-voice/${action}`, { nodeId: run.activeCursor.nodeId, scope: "reading" }, guest);
+      })();
+      return setup;
+    });
+    afterAll(async () => {
+      release.resolve();
+      try { await setup?.catch(() => undefined); await pending; }
+      finally { if (app !== undefined) await app.close(); }
+    });
+    it("refuses the real pending response after its grant is revoked", async () => {
+      pending = post(`/runs/http-voice/${action}`, { nodeId, scope: "reading" }, guest);
       await Promise.race([started.promise, pending.then(async response => { throw new Error(`Provider not reached: ${response.status} ${await response.clone().text()}`); })]);
       expect((await post("/runs/http-voice/grants", { op: "revoke", handle: "http_voice_guest" })).status).toBe(200);
       release.resolve();
       const response = await pending;
       expect(response.status).toBe(404);
       expect(await response.json()).toMatchObject({ error: { code: "RUN_NOT_FOUND" } });
-    } finally { release.resolve(); await pending; await app.close(); }
+    });
   });
 });

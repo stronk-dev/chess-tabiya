@@ -670,7 +670,7 @@ export function identitySealedEvidenceWithoutValueReceipt<T>(producer: Versioned
  * per record ([[D3300]]).
  */
 function isReductionProjection(projection: VersionedEvidenceId): boolean {
-  return projection.version === 2 && (projection.id === "derived.compare.structure_delta" || projection.id === "derived.story.last_level")
+  return projection.version === 2 && (projection.id === "derived.compare.structure_delta" || projection.id === "derived.story.last_level" || projection.id === "derived.opening.deepest_reached")
     || projection.id === "derived.story.rank" && projection.version === 3;
 }
 

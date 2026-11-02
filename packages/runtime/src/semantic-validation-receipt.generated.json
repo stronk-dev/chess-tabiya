@@ -9,7 +9,7 @@
     {
       "id": "runtime.semantic.bounded_target_batch",
       "version": 1,
-      "implementationDigest": "62a1b022cbccf3d7946e59f9dce40061b8d68638d0343ed5fe94fa95cc5c4f48",
+      "implementationDigest": "d82c21e321169c78e9c81cb99bd161f6f92fc60261174084a3777a0b12d999ce",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -69,6 +69,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -114,6 +115,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -147,7 +149,7 @@
     {
       "id": "runtime.semantic.breadth_edge",
       "version": 1,
-      "implementationDigest": "8a68dcc5688a017ad2536dc4487b04e0827884fe2b9f550ce73c52d4261a5f09",
+      "implementationDigest": "63d730937fbad75b5dbd844e2c85bec5b96eae760a04cc0b3b3fbf299ff1c20d",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -204,6 +206,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -249,6 +252,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -282,7 +286,7 @@
     {
       "id": "runtime.semantic.complete_alternatives",
       "version": 1,
-      "implementationDigest": "bb769b2ff76875d8338221388c82a5b1d1b58f5ef85c7caed35e5e526c022b05",
+      "implementationDigest": "566b3b1e76548707151dfc06c1f16b295c6422dae4bd8f304e4250e8b041bd68",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -339,6 +343,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -384,6 +389,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -417,7 +423,7 @@
     {
       "id": "runtime.semantic.duty_edge",
       "version": 1,
-      "implementationDigest": "a8c39fffaaa03370d0ad9c4d6352a3ded0495e9cdc20c615fad8ab1cd6100670",
+      "implementationDigest": "0cfb2c6d5e84d6e24ef731f86113a41b84677581484aa3800ba00caf464bfde7",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -474,6 +480,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -519,6 +526,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -552,7 +560,7 @@
     {
       "id": "runtime.semantic.local_edge",
       "version": 1,
-      "implementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "implementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -609,6 +617,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -654,6 +663,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -687,7 +697,7 @@
     {
       "id": "runtime.semantic.recorded_path",
       "version": 1,
-      "implementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "implementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -744,6 +754,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -789,6 +800,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -822,7 +834,7 @@
     {
       "id": "runtime.semantic.recorded_sequence",
       "version": 1,
-      "implementationDigest": "2a2527842c9effaee6c5bb009cfe535c092236a984b376ca61ffd1060b856a6c",
+      "implementationDigest": "a89b5a17a3641b09722aa53f2f150ba11f4f81fd1d3c6ea0fdd37f205c7a609d",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -879,6 +891,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -924,6 +937,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -957,7 +971,7 @@
     {
       "id": "runtime.semantic.structural_edge",
       "version": 1,
-      "implementationDigest": "632636834d4cc456207faf25a33b291b057844b1548fd69eee904f88566d754a",
+      "implementationDigest": "a879f8caf8186af234dd4b4a7bc6ec42fbb7752f5e930fcb0c90885795288628",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -1014,6 +1028,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -1059,6 +1074,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -1092,7 +1108,7 @@
     {
       "id": "runtime.semantic.transition_edge",
       "version": 1,
-      "implementationDigest": "aa3a540234f4bfddfe8ece67c13a7ca30d5c06717ee1db3b1a800aac8121857e",
+      "implementationDigest": "7f9cee1b824c254f16e2e49f394c1b33d494698ac34f0c2168e7d50a31457e0b",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -1149,6 +1165,7 @@
         "packages/runtime/src/internal/evidence-value-routes.ts",
         "packages/runtime/src/internal/last-level-reduction-authority.ts",
         "packages/runtime/src/internal/material-sources.ts",
+        "packages/runtime/src/internal/opening-history-reduction-authority.ts",
         "packages/runtime/src/internal/recorded-engine-attachments.ts",
         "packages/runtime/src/internal/recorded-engine-endpoint-values.ts",
         "packages/runtime/src/internal/recorded-opening-lookup.ts",
@@ -1194,6 +1211,7 @@
         "packages/runtime/src/recorded-edge.ts",
         "packages/runtime/src/recorded-inspector.ts",
         "packages/runtime/src/recorded-measurement.ts",
+        "packages/runtime/src/recorded-opening-history.ts",
         "packages/runtime/src/recorded-reading.ts",
         "packages/runtime/src/recorded-review-boundary.ts",
         "packages/runtime/src/recorded-review-moments.ts",
@@ -2409,7 +2427,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "45259bb6f858fdd1a9f606b7f85b588dbb20b0ed2f50212299ea4693b20184cf",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "2d2d34cd1b2fd92e25f07c8bc36cf3f1cffc433f1334fb4cabdfb592312123c1",
+          "inputDigest": "9b877e64f5d9dbc2f03b85c9c087fc398e4c1efa945090abcb95be3e407d94b8",
           "payloadDigest": "45259bb6f858fdd1a9f606b7f85b588dbb20b0ed2f50212299ea4693b20184cf",
           "sourceDigests": [
             "8956b238eeff0dace16135d522cfdd9d5703f44d6a992cf18dc435b729f77e33"
@@ -2419,7 +2437,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "f69a4880ad084d29f3404f70f184d48368d0d03978e84b98683cea42dd7fd88f",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "f2beefe5bd5fa39f9984b3e15e42ec61d08c2c0690d752de93a81fee84287561",
+          "inputDigest": "75d7e73763d03397c284d6ffd7824911af0be1633a6c6e3b5a1de74240dbe1fc",
           "payloadDigest": "f69a4880ad084d29f3404f70f184d48368d0d03978e84b98683cea42dd7fd88f",
           "sourceDigests": [
             "f92b093ab3c847bda1589082dc2f0c11608f0387e31f46b1a313c4e88af8893e"
@@ -2429,7 +2447,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "c31548a4cc7dcd7dd85999837b0e6822c28bd9669dd93582136cd83aafedecc2",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "5478c711fc3103f4114f5b85839c4f50973fc62c0775fcad70974ac4853b4078",
+          "inputDigest": "0d4eae24998c74daee2f3eeadf6791821e3db28fd9dc12900d91df066c1d0e6a",
           "payloadDigest": "c31548a4cc7dcd7dd85999837b0e6822c28bd9669dd93582136cd83aafedecc2",
           "sourceDigests": [
             "ce7dd3955ac7d7253ee18c96b6096c8b17ed83ec9d9948207dc10c30814e5fc5"
@@ -2439,7 +2457,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "73615a615e3b9d04cab994c0188dd34cbe933b45f08b00b290dc27bfea4b679c",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "6f91303b29be63021a2dd549d45de2cabe1f5f3cc44ebbcd1f9dd3695f738eaa",
+          "inputDigest": "a2bf4c41bcde71be209b573533cdd5c31c9449e516d44db6e6526f4c3f54640d",
           "payloadDigest": "73615a615e3b9d04cab994c0188dd34cbe933b45f08b00b290dc27bfea4b679c",
           "sourceDigests": [
             "eda9daf5ac8f4e87fcd24e7b83019434152818db2e5ce68388a1cc3583e6b9be"
@@ -2449,7 +2467,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "5e8d4f6733ac565f245d23b05e52f52cfc09ddc84204259cf2ec410ff3d9d594",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "683d617a53826682f59b3aca8d5f59de54b9526cb5023df3d2346a6152960a30",
+          "inputDigest": "c0d9015484cf84d437d2c6b81a76368f03de82eb337f1bb5ff0ce97f20f2107c",
           "payloadDigest": "5e8d4f6733ac565f245d23b05e52f52cfc09ddc84204259cf2ec410ff3d9d594",
           "sourceDigests": [
             "426860750500c6377638ef0aa71ef42b9e0dfd81dc48c4ca3094c1ee74283d79"
@@ -2459,7 +2477,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "3033d817094509039d5b9e9c9d97b9ac102b5682da4dba30c847af5e44beb573",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "c11925080a5e82ff2a83b4f87025f6163fde5c98ca46eb86cafa197ea0b969c6",
+          "inputDigest": "53b1f8ca37850a190001a098b69c995e600da83d6281c6ae25d07eeaa11b8bff",
           "payloadDigest": "3033d817094509039d5b9e9c9d97b9ac102b5682da4dba30c847af5e44beb573",
           "sourceDigests": [
             "8b478c2f9d89f8f0cf03e6a7a68304d7d66a1593acfe8990a93742f3c766fb2e"
@@ -2492,7 +2510,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "04207cf73a4db9a10c39fd42ec60e4abcc4c779b1210ab29ddc4f8a0c5bb053b",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "30f56205397a0e022f660787d9189b19adfcda47adc607796dc5a2dadc156e21",
+          "inputDigest": "59eab2a79980814ffb74d500dc53d4464cc70837703703e399448e8a16f1abbd",
           "payloadDigest": "04207cf73a4db9a10c39fd42ec60e4abcc4c779b1210ab29ddc4f8a0c5bb053b",
           "sourceDigests": [
             "0d132710776206029f9a864bcec1c8a93dc3eb99909041174d87b85ecd3274ee"
@@ -2502,7 +2520,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "f7a33fd8c6f3896b613b4cc9b0098ae1a806b539f94e8a4a93c5828ad172b516",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "8ed7e8ed7a53a6b4e3f63b3c51c7bd0ed2706fc2a45208a02d3724f5bbe9e79e",
+          "inputDigest": "5a796a7037e1c6c5c029f8c2509f47ef1d37e92932ef20259872b8653c3d9907",
           "payloadDigest": "f7a33fd8c6f3896b613b4cc9b0098ae1a806b539f94e8a4a93c5828ad172b516",
           "sourceDigests": [
             "a60dbf40c00d81efd032f8bccaf9e98ddf0908f31527decadc560ea5d171c873"
@@ -2512,7 +2530,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "5693da969c753725f20b08b82f556f1b1413ee555a83bde5040741cf34eed255",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "733c802b4e510302bb0731444bbd677ca7cc791399ed0b610c4e63d729158936",
+          "inputDigest": "31b28cd97df54af954b70df0df8ce6cdedab0032857f7343803583be0a328476",
           "payloadDigest": "5693da969c753725f20b08b82f556f1b1413ee555a83bde5040741cf34eed255",
           "sourceDigests": [
             "5712baaa46c90ac63465094b16078d2f425a54a1bfe2f853ccd3742d5efcba5f"
@@ -2522,7 +2540,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "7fa7f628b37c4c40abab50a88cc398c5603a40fde21bef4e1e53f92559d2a50a",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "3a3255f925f79efa2fe0c8d381d85285fa8aeb4f2c04f75d895bb0f3a2be3119",
+          "inputDigest": "c8884cea11e62aa7a5f277fc0aa9aa8ed7608e2a52690a0b9a4d6fd0b5310a49",
           "payloadDigest": "7fa7f628b37c4c40abab50a88cc398c5603a40fde21bef4e1e53f92559d2a50a",
           "sourceDigests": [
             "d398e16383fc412268f87ea34808caa3d37883295afe56b1c9f94539d2832a99"
@@ -2532,7 +2550,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "311aaa51cf5414e2c7cb20dff5c18e38b983a2f3770523ddca3e9da9a373e88b",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "0efc4beb08a1d906c82ab6b8fec87788f0260ea1f3c69303ede4aafd9a2aad62",
+          "inputDigest": "45b70a89e74e339dffb86d4589e98162d2dfb1a672666eff5228e4c9edcdd67e",
           "payloadDigest": "311aaa51cf5414e2c7cb20dff5c18e38b983a2f3770523ddca3e9da9a373e88b",
           "sourceDigests": [
             "46ace9edd6c830d0e8f2a31f362285503341c9bee8999a04c93eca582581dfcf"
@@ -2542,7 +2560,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "3ff81a3cd4000dc66521b865e6d9ca00b80bb805ab7f8ba43b13f315eb44e051",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "8e3a8164a615eaf60f385989b7076038a631d5b6ef06446e3c6d9900be0f6156",
+          "inputDigest": "9a83e1ca4b255f138dc49768a5a402ae5914728ea62743cfe7d2abea95ab603b",
           "payloadDigest": "3ff81a3cd4000dc66521b865e6d9ca00b80bb805ab7f8ba43b13f315eb44e051",
           "sourceDigests": [
             "e59bc85be88c680be6950f339e302ef8ba0f8ce7950ea6cc94ede79c3159a396"
@@ -2619,7 +2637,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "356b55771b9f62ae82cb23f46fba6d035e3bdcbbaac31d35bcbb648fe61e27ff",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "c43291fab02648b8e85f449425df7a3cff5b7b4a868d9640bd247f35f4cd1435",
+          "inputDigest": "4ac4e2a37691faa23404232e5710a566481df05f91ec0f5b8a0bf8e0a06f0815",
           "payloadDigest": "356b55771b9f62ae82cb23f46fba6d035e3bdcbbaac31d35bcbb648fe61e27ff",
           "sourceDigests": [
             "353fe88f795661fe1e94c89726b50a8376aa03b6b1326840f5da9a22027b71df"
@@ -2629,7 +2647,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "6bc4096b4c81535fba63a90df19bb95cf3925a2118201bc857691a27aaac344b",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "d2a64d0ec806c3583688371af8cc28f4c5b0a3800a0dbda820918a33f9f48c0e",
+          "inputDigest": "59db9b15a1f6846861890782d4641e467610a2850b65fd2d8f77056ff0bed44a",
           "payloadDigest": "6bc4096b4c81535fba63a90df19bb95cf3925a2118201bc857691a27aaac344b",
           "sourceDigests": [
             "aa45c9d3dbe73fef0e5fdd948259be4f374276a46945ea2b2421c12385e961ce"
@@ -2639,7 +2657,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "21016967d87a2d191e014a6c35c81a8309f63c43b9b1d63d469df65af2be81b9",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "e8cb95906232fc5e5e4d740c0e1df4bac180b9aeedd79d96ff238a6ceeeda871",
+          "inputDigest": "fe1c66b609b7266e94ef0c090c067338f3fdc1d347ac46335bbc67e5cb7af23a",
           "payloadDigest": "21016967d87a2d191e014a6c35c81a8309f63c43b9b1d63d469df65af2be81b9",
           "sourceDigests": [
             "64b990821c9f98d2763c18d38b5772f4fed4981ee27fa9f8d1afd974de0e20fc"
@@ -2649,7 +2667,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "9db9b76bd2e78df8da27bedce76f88a8743ec27dafc3dcf3969c8b6b03c95649",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "be0c090f985a8bf333acfa502adcccc9c5ea1de1cc955de492b611bae1dab7db",
+          "inputDigest": "261caf0ec82472a66f08d695457dbb4f8efc683d09db85eef2cff694baca5d42",
           "payloadDigest": "9db9b76bd2e78df8da27bedce76f88a8743ec27dafc3dcf3969c8b6b03c95649",
           "sourceDigests": [
             "09596f6a4fe70fe430994f4022de465b4dd20a29defa997386850687cc7021ae"
@@ -2659,7 +2677,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "3772bde59ee194ecc9d4ec9ed60f44f8f23bf663ddae4d7ca231df6018b30ed2",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "6b66587adef47a44f7fe4372e7c930f0a11d137c07cd629776c5afcb359baaef",
+          "inputDigest": "263326218fa1b0fafa27115cf20faa50cd717ab5c177842f84832f023918c8f9",
           "payloadDigest": "3772bde59ee194ecc9d4ec9ed60f44f8f23bf663ddae4d7ca231df6018b30ed2",
           "sourceDigests": [
             "9abc054df02ce7415398fd2168eaf4ebdb5580c33640562f9ec68d9d35037f4c"
@@ -2669,7 +2687,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "4376f32479d17f27c82884e54b0fbbad56d77da96edda4f9c5b9578b7c678a94",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "fffbb2adc1584161135f1cd429d066b26877b64b6e7a7d79a5634b8383420d5b",
+          "inputDigest": "3db1fce24e085437439cd0bf6377db6ddb49c5b40fb09ee8f552919aaeda2d5d",
           "payloadDigest": "4376f32479d17f27c82884e54b0fbbad56d77da96edda4f9c5b9578b7c678a94",
           "sourceDigests": [
             "d1ed6cee1e71095a3db3ef5aa8342266a0d21000cad8ed0b87a862c61eeb1ea8"
@@ -2679,7 +2697,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "f0eedd7044ef2d56366c703dd888ddde4fa377741866a65162b257c55e331d95",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "4a6a454f2caaaef9dc738c775eb3a59db7bc9a1f2aab10884346b2f565e09193",
+          "inputDigest": "857f65fdc6af04dae4a0f9077c720c1cca9d3bef3a5a6d3bc5dd7f13ccf3b964",
           "payloadDigest": "f0eedd7044ef2d56366c703dd888ddde4fa377741866a65162b257c55e331d95",
           "sourceDigests": [
             "c0a947d7709bb06b1c294dc643b66cf69c8c43cd16815a8732bd3306b17edbe1"
@@ -2689,7 +2707,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "40ee542ef1a5080d866d8970a015706c52f51599d13f705d922edd98e37051c8",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "c304c2c6eddc7306aa4598861f2d07ff9d606a81c7a7c323e5ca917654cab744",
+          "inputDigest": "3762a854c93bebeafb4e8cef4d820d830b2ee8da8b57cb980a85dc217785505a",
           "payloadDigest": "40ee542ef1a5080d866d8970a015706c52f51599d13f705d922edd98e37051c8",
           "sourceDigests": [
             "933025c993baa4a71bd4439d4511614fbb213914288738a989521a6a4068dfe4"
@@ -2699,7 +2717,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "f4f2fce54d17db1ec354f4a9592c1ed6fa9b93b75ad8264aaca40bc5be5f8daa",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "43b93e7efa20972e7ba11e69f704c18fe7f21edb0e0760b231e707dd4d3a7b98",
+          "inputDigest": "64e9cd87357874ab1980ae326e3f6947063c9ada908e9d6df683673a338ce013",
           "payloadDigest": "f4f2fce54d17db1ec354f4a9592c1ed6fa9b93b75ad8264aaca40bc5be5f8daa",
           "sourceDigests": [
             "edab5b43e047fd40943e4db1df7a2f223c1e0812ec5821d5f70112341cbb8972"
@@ -2709,7 +2727,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "9cc82b0c6f6db561bf15cc8a1165e7cae1d75c458eab4312eafeb84cb952072b",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "eb0b84fb85b7e713cac2fb50a29be8c6f2f95ae2ffe1db31a5ff673ed3bd917e",
+          "inputDigest": "b8cb55eb8d40cd110619e2ce553a249973a5e957f98898fe8059ccdd0d6a38ce",
           "payloadDigest": "9cc82b0c6f6db561bf15cc8a1165e7cae1d75c458eab4312eafeb84cb952072b",
           "sourceDigests": [
             "fab51945aa1d9a2ecbc317e09ef7878fbcb5654491cbe82880a64735c0a08681"
@@ -2719,7 +2737,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "28e84c7857a4a9c500e0b3b20cddbb86dd3b9d954549e63936019629f3bd545b",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "ebd554d79821292e06b314c7775b822841ed2e8e9203ef33cbf7b13dd240ac30",
+          "inputDigest": "f9178c31dc5265254b73d91538997c2e2b072c6b0c38750167538e08e0eafde7",
           "payloadDigest": "28e84c7857a4a9c500e0b3b20cddbb86dd3b9d954549e63936019629f3bd545b",
           "sourceDigests": [
             "de107dd1455943f34ca81b4a0a05c309a816401f5f140f01f0f1f7b4a9bcadb2"
@@ -2752,7 +2770,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "cecc3e8a61602cefb3fee02651dc6f8d5a3154258d7ac08b0fcfe2fc67b259e8",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "f041130fedeb8b13a21e0dbf22bd62db2901c41ee8e64efa98771f7397523cb2",
+          "inputDigest": "64d83602a94471cfcee286a3cb090f1857fb3c2ea97a1af85e60a99c3c76b103",
           "payloadDigest": "cecc3e8a61602cefb3fee02651dc6f8d5a3154258d7ac08b0fcfe2fc67b259e8",
           "sourceDigests": [
             "b8e29faeda34c1101b595d5bd5182ed09e4886c9f309c77730b988c4ea8a1715"
@@ -2762,7 +2780,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "c1ef72a530f0334e4519679c68ee5ee1c8983e6cbf8b73a4327b37f5446bd046",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "bc6c9846fd5038b65c36148f1465c9f224327901e399e4a3b05b5dd9d5a33956",
+          "inputDigest": "056f670e65970937b768af89afe29f9240c9151d67becab03f3cbe146c9bda8d",
           "payloadDigest": "c1ef72a530f0334e4519679c68ee5ee1c8983e6cbf8b73a4327b37f5446bd046",
           "sourceDigests": [
             "8419001698e8b567877ff25d5e76f4477f155d7c49a41780a1829613d6370284"
@@ -2772,7 +2790,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "9c95b0af47170734cedad4450a3790b6dd79d0883e65bf47f0a2d1c7d9d77e78",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "cf90b02283782207d5ead06ed4096d5bc452cf3d9a0c149db27046e455da281e",
+          "inputDigest": "bf6d530dfbb02d06a103f66e0808e272d87702627a0857d79c8e7a7c8e050a4d",
           "payloadDigest": "9c95b0af47170734cedad4450a3790b6dd79d0883e65bf47f0a2d1c7d9d77e78",
           "sourceDigests": [
             "0b3824be198e99794d84a7c17ec14a16d26492c3ce4eaadaae2bfee7d454dea1"
@@ -2782,7 +2800,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "b0abacdb12041e63402423bdce200950eb24bf2a73f85a559b4a06dd87604415",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "db57f7693103c2bfcc3b391e810a74076a36d7d8d9508818fa10e82818a6f5dc",
+          "inputDigest": "07321750836881c35403749ef353ec4ab50ca22f9daad0beef4221197fc58dfb",
           "payloadDigest": "b0abacdb12041e63402423bdce200950eb24bf2a73f85a559b4a06dd87604415",
           "sourceDigests": [
             "fdae5a5e9a37e68fe63b7b96ad0ada57dd5ca4642a76af1cdd3c5395cd9e3582"
@@ -2792,7 +2810,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "db4df27fa454b5dde6c57278db921c48aea572b4aca4f59d72bc932e696410d8",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "b5d42ea813484193ba7f552e52f1d66ff934bd8e135432a961e4f1183f61c84a",
+          "inputDigest": "d9f15dcec55e106eb56ce153d84ad7de4bd1c4582fffe7e590746bbdd1848cc3",
           "payloadDigest": "db4df27fa454b5dde6c57278db921c48aea572b4aca4f59d72bc932e696410d8",
           "sourceDigests": [
             "511f7a7e976a231e4d8a656729ef5a83079b563260dc68e67b3e159ebdea3fc0"
@@ -2802,7 +2820,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "65271f8ad4d36c8c28a49e0b9d62b573ba4dc8c54f29668bd65a2ca3f814260e",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "f0439fe2e5f57fd73b49677ef27ccf8ee729ecb0371a56c5411c87769bb74334",
+          "inputDigest": "d1f3b2ca222da714a2aa60da4609ffc4cfea2a4ec2c972602e28401b8f5f97ae",
           "payloadDigest": "65271f8ad4d36c8c28a49e0b9d62b573ba4dc8c54f29668bd65a2ca3f814260e",
           "sourceDigests": [
             "7d9ea3e8ba34f86666ef229bd55b5791d3122a4097324ab5563c1d2bf6df13d9"
@@ -2812,7 +2830,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "35ee03987ab0ee05989a10981ede4f394986d8cf2e098da15663f24df2910241",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "335e7971a49be990ecf15bdc01833457345e824024ba0cb754ad982dc9c7c72c",
+          "inputDigest": "e6bdfc8fe4be364753cbedf9f2bfa5a8a568ffb0f78ab7608c7eac503c534f2e",
           "payloadDigest": "35ee03987ab0ee05989a10981ede4f394986d8cf2e098da15663f24df2910241",
           "sourceDigests": [
             "847c4f0163546ea743ca10eb4e49eebaae5070f86aa0de4936d98c28a16b4f48"
@@ -2822,7 +2840,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "fd3ce67a6f25a5c867e6dab07fecb481c0c474479dc211888efb3697ce378e00",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "bbe37ca536063f4aaa4660e700cd9eeba49bf480cfe56ed6d8145c03e4fecfba",
+          "inputDigest": "47e7c6b2b19e425a8b75a83ad570b57c91e6fe65b957d2eaae04559d01b1de8d",
           "payloadDigest": "fd3ce67a6f25a5c867e6dab07fecb481c0c474479dc211888efb3697ce378e00",
           "sourceDigests": [
             "ba66a75ea690ff735602ad9315ee140d9d3b1f152d2802fc2616b49d721d11c3"
@@ -2832,7 +2850,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "11ecf1b79a34c34c40b857ff0a2bf6d0f78a3b8f20ed1d9ae2196341e552df38",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "8f6954c5fc94e54fe1f9bddc9d9da25081c70be024672f3cb90af9569d316079",
+          "inputDigest": "ed9545af3c040dbb93c4ae15333c18e16c46888d6848aefdfdd1b0e726d35468",
           "payloadDigest": "11ecf1b79a34c34c40b857ff0a2bf6d0f78a3b8f20ed1d9ae2196341e552df38",
           "sourceDigests": [
             "6cecc2906b6bd89b79ef3fd841e8685ebc4b4c52ccb56c23e826c515f702e409"
@@ -2842,7 +2860,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "ecd0a756e84d322d86565e3ac73da94b37c42619a785761ab9d523526cfea4cf",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "d984b5af2d015e3e0747c5f3bec1b5135cffcec331e852fd33f3cf9316f80154",
+          "inputDigest": "f69c0fb0b5bf638cfe486f63a1293b86cb30d81820d357f7e80df6e19b7b94f4",
           "payloadDigest": "ecd0a756e84d322d86565e3ac73da94b37c42619a785761ab9d523526cfea4cf",
           "sourceDigests": [
             "54e8bdd257b19db2c1acc9f1ca8e798f0aa39c6820183df4e74707dd5c484d1e"
@@ -2852,7 +2870,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "6ea118327df5e8353290d56c8ba53a75091be9bbfc5d0dfa9fc8268959a1ffac",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "500170bdf55814b313e05a24b9f06ae3019a63ed93635aa470a67096d010510e",
+          "inputDigest": "283bff2cd14a69596b83cba44467248430202e8dbfb73577c720d3c56cc8bdc0",
           "payloadDigest": "6ea118327df5e8353290d56c8ba53a75091be9bbfc5d0dfa9fc8268959a1ffac",
           "sourceDigests": [
             "851fa41345e9f804d660abac9934a04a28e199a4f97e1b250bf48064fdd05025"
@@ -2885,7 +2903,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "acf34244f17b7c9716317df5f80c2c1459d6925891f4e8a02655863c9611b16b",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "b2ffa626169cf0ee5fa5aa905eb65275ba457d5027abe02d7577d0ac143f34c1",
+          "inputDigest": "2e377b4c2c562a00a72e187231e2c7009e6c351ad606b5cf12424c6cfe7992fd",
           "payloadDigest": "acf34244f17b7c9716317df5f80c2c1459d6925891f4e8a02655863c9611b16b",
           "sourceDigests": [
             "0440c68cdaa136f045f8c616577029d07ddb8a9b4c9783f054acf8a4a3c3c1e2"
@@ -2895,7 +2913,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "88f9a35527553a6310aceb6374b1a6b3d6372eb72b7496dbd36c28414f4bfbff",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "842d428344d7ca29080be9afda8605316de3e53121ad3a7e79d30ecfe13c61ac",
+          "inputDigest": "b170cbd8d1c625b01176e468c8f9e75b557d48acba0615247d5e8a1724909e04",
           "payloadDigest": "88f9a35527553a6310aceb6374b1a6b3d6372eb72b7496dbd36c28414f4bfbff",
           "sourceDigests": [
             "0a34d7ccd1057575d96eff823aa18522d275da793aa675a32334c228fb57aa8a"
@@ -2905,7 +2923,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "a7f643e1e01f5f6efbe19dc9bef055a0a1123c830fa71eac8af2d05b89a1ac28",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "e8f3d2f050fc4c50c2a2ad8138ec4ba4046972b894982ccc5445e945db040eaf",
+          "inputDigest": "c0bdc7fe790f661c9cd36c1fa69fb1fd62691122d0c9f1d1085a8f7540f30546",
           "payloadDigest": "a7f643e1e01f5f6efbe19dc9bef055a0a1123c830fa71eac8af2d05b89a1ac28",
           "sourceDigests": [
             "ed103e3b30d37ebf6ec9396f0e13a9dfe3b0c6ec5d6471c439154582c15de787"
@@ -2915,7 +2933,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "fbc8b67abbfa48c3825344648905833d17910f50b7084d06891a6bd1a5d7cf24",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "8c4565dab52fccf519f63b14bc35fb9d700590f78998443a4094ee6171ca0464",
+          "inputDigest": "ed1cfb0d1cb6d103263509daa229ff02e42dcccf5f1b3ef36123555ad28d9895",
           "payloadDigest": "fbc8b67abbfa48c3825344648905833d17910f50b7084d06891a6bd1a5d7cf24",
           "sourceDigests": [
             "22d1c0386594b1d92de85d047239e19a8bdc1ff794b844c81c6a4a1937ecac92"
@@ -2925,7 +2943,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "93bb41d5fb088e1ba4747889431eb5ddf62d80ceac186cd241d1cc57c7d657ed",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "4ca7471bb3375bc968002fc473c8197531c0d6f6c2234c23ee13a9ee93c22390",
+          "inputDigest": "4daaefa11acb33b1539e0ab8b9283b506606c8a85e0f1de186a881b23b001929",
           "payloadDigest": "93bb41d5fb088e1ba4747889431eb5ddf62d80ceac186cd241d1cc57c7d657ed",
           "sourceDigests": [
             "e317f53f2a1ff7cbe0dbdff98789caee7de5ece225fdddde37d92adcacd5b2d2"
@@ -2935,7 +2953,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "57a87bc47e89ec09c5518f2e90579fadb7809ca7bb6005503e33074e246d9440",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "1b26f8a2b91649f78c095a3b7a407d05eb9773c3746a3f63275da46e4ae6647b",
+          "inputDigest": "6a6ee91909fe9cad2df69a57b1128a471f79b881f6e5d3aee8e1ee688404d4b3",
           "payloadDigest": "57a87bc47e89ec09c5518f2e90579fadb7809ca7bb6005503e33074e246d9440",
           "sourceDigests": [
             "56fa9ec64d1df780a78a9c6abf19be862bffd2b7c9501f1e6032b2034f2c5c3b"
@@ -2968,7 +2986,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "4e2fe202c7ba3bf596cd76e3387ebe2de1a96abf1082913b47daadd991b339f5",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "d076063b932aead652f1d996324ef2fb6e4a0d1f02236241b4b2d38343669e46",
+          "inputDigest": "6945e6531b910656ff6eb9377332ef497c913c41c1f49bab4e39691540a971ba",
           "payloadDigest": "4e2fe202c7ba3bf596cd76e3387ebe2de1a96abf1082913b47daadd991b339f5",
           "sourceDigests": [
             "2080e075e63df2dc405b81ff8b285e5e3368afa3366ca8bf88d83409e9aa9afa"
@@ -2978,7 +2996,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "30a15375ef014b0f09b8729aaf069194c6c100479297bc85188d36544e9c3755",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "3f8e657b247eb72126e58e88057ed45cbe86f3b5fd4f86cda8e306ecff0f5bc3",
+          "inputDigest": "96bc7c82df3fdd9d291b9665aa5a47fe1f754ac749ca554bd52b60cb5992ba17",
           "payloadDigest": "30a15375ef014b0f09b8729aaf069194c6c100479297bc85188d36544e9c3755",
           "sourceDigests": [
             "89d91691850a076dcac28966cd0d2dfeb11426c4d98754a6e42009587bc4b1e2"
@@ -2988,7 +3006,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "485a08ed7408a665130bca359c7ea85bd5c72438c1d55dac59ef0a22f6b82b02",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "97fea1ee04b68dd0495a1b8c4cd780c5e8c22f3781e95f3c85dc5a73eeb46156",
+          "inputDigest": "acbc49dacc9bf2d57ffb1862c0086939fb5334cdb7a5684ca64da15fed265c9b",
           "payloadDigest": "485a08ed7408a665130bca359c7ea85bd5c72438c1d55dac59ef0a22f6b82b02",
           "sourceDigests": [
             "55b64f580b38863d18b7cfd9168f3c91744b7e451db3752b5129a7ecc2226695"
@@ -2998,7 +3016,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "37b6b549296cd97999bc64b9ea0d377d1a3b5db2b397241b4a9f8fdc686496a2",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "54b2526731a75d1d2e4b64051c33b1571b3c6e078cf0c83c8a06efc4792453b4",
+          "inputDigest": "834bd1a3376767879113f75aa842cbe7bd7c4218f58edc60e0e17489fc2ec2d4",
           "payloadDigest": "37b6b549296cd97999bc64b9ea0d377d1a3b5db2b397241b4a9f8fdc686496a2",
           "sourceDigests": [
             "46e2d5323e905f28733153662901abe429260d5152c9bbad9c15e6b0e457a8a8"
@@ -3008,7 +3026,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "e624dcc455e24471d1ecdb1ff38396984ae8073312c0c929c50f6666b8e76377",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "0c490d2f9b987a9962ba572aea3bdb5ce608bb8454f9aefacfa2b5c9ec7d4cca",
+          "inputDigest": "359680285611869168084717eebdad91e05fc8a895eb1571424c3ae38d3a0cf3",
           "payloadDigest": "e624dcc455e24471d1ecdb1ff38396984ae8073312c0c929c50f6666b8e76377",
           "sourceDigests": [
             "06783777d7aa834be8370d67132d4accb85c459d157783db80567264c9bfcf8f"
@@ -3018,7 +3036,7 @@
           "projection": "derived.bounded_target.bounded_return@1",
           "operandDigest": "e815d701f2f046491df43e6de3bea5d5f84d5366a73e079a6f042d60acaa0bf1",
           "factory": "createDerivedBoundedTargetBoundedReturnV1Evidence",
-          "inputDigest": "7c26031f43c65d093811fa70967de79cd800963ea0712e594b5ab4a5a17cd7bf",
+          "inputDigest": "f4a9237b661edfcd01ad19da7b94b31eb5e9d9d4b8c7b8c271eeca70284e5ba1",
           "payloadDigest": "e815d701f2f046491df43e6de3bea5d5f84d5366a73e079a6f042d60acaa0bf1",
           "sourceDigests": [
             "ef803a12553285a616df90104fd0860d06161bb67326567d39a57f2ee4a2fdda"
@@ -13426,7 +13444,7 @@
       "id": "r2-2026-07.5784f239aa95f0d5",
       "subject": "event:derived.activity.event.open_file_occupancy@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13445,7 +13463,7 @@
       "id": "r2-2026-07.58a2be554bac66f3",
       "subject": "event:derived.exchange.capture_class@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13464,7 +13482,7 @@
       "id": "r2-2026-07.27727cd17a507246",
       "subject": "event:derived.exchange.trade_completed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13483,7 +13501,7 @@
       "id": "r2-2026-07.a0ef006747b77301",
       "subject": "event:derived.king.captured_zone_defender@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13502,7 +13520,7 @@
       "id": "r2-2026-07.83bc6900aa710e62",
       "subject": "event:derived.material.event.role_asymmetry@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13521,7 +13539,7 @@
       "id": "r2-2026-07.71de92b55c362adb",
       "subject": "event:derived.pawn.event.transitions@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13540,7 +13558,7 @@
       "id": "r2-2026-07.2022a70c8e62c21f",
       "subject": "event:derived.pawn.sequence.contact_timing@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13559,7 +13577,7 @@
       "id": "r2-2026-07.6c35e5dd94ce25ab",
       "subject": "event:derived.pawn.sequence.harassment_pressure@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13578,7 +13596,7 @@
       "id": "r2-2026-07.cdbc2a90a40374b6",
       "subject": "event:derived.tactic.attraction_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13597,7 +13615,7 @@
       "id": "r2-2026-07.a7f7f9ddcfff8923",
       "subject": "event:derived.tactic.check_zwischenzug_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13616,7 +13634,7 @@
       "id": "r2-2026-07.d76bf668ef6dd177",
       "subject": "event:derived.tactic.defender_exposure@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13635,7 +13653,7 @@
       "id": "r2-2026-07.74e6e797d09c71f5",
       "subject": "event:derived.tactic.deflection_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13654,7 +13672,7 @@
       "id": "r2-2026-07.9da87bd56355e6a2",
       "subject": "event:derived.tactic.discovered_executed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13673,7 +13691,7 @@
       "id": "r2-2026-07.aa64d339c15f1332",
       "subject": "event:derived.tactic.interference_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13692,7 +13710,7 @@
       "id": "r2-2026-07.a8bb0a8280423d83",
       "subject": "event:derived.tactic.line_blocker_clearance_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13711,7 +13729,7 @@
       "id": "r2-2026-07.8d2d920dfe4f71d4",
       "subject": "event:derived.tactic.overload_exploitation_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13730,7 +13748,7 @@
       "id": "r2-2026-07.09594c49b39b8b61",
       "subject": "event:derived.tactic.sequence.defender_consequence@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13749,7 +13767,7 @@
       "id": "r2-2026-07.b6b2ed672c753ebb",
       "subject": "event:derived.tactic.square_clearance_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "0460e20811920c9c1d5fd5c53f652c4c0cf6b170a7276d892f41f5d99fb80c90",
+      "predicateImplementationDigest": "f683c103af09878fcccd472f09024046ccbc688de52fc822a7dcd539759afaac",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13768,7 +13786,7 @@
       "id": "r2-2026-07.0543e291a34186ab",
       "subject": "event:rules.castling.event.rights_lost@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13787,7 +13805,7 @@
       "id": "r2-2026-07.e274b77e7afa23b7",
       "subject": "event:rules.king.event.zone_state@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13806,7 +13824,7 @@
       "id": "r2-2026-07.659965fb5f65047a",
       "subject": "event:rules.mobility.event.piece_destinations@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13825,7 +13843,7 @@
       "id": "r2-2026-07.2f9851d75b706f58",
       "subject": "event:rules.pawn.event.dynamics@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13844,7 +13862,7 @@
       "id": "r2-2026-07.b4260187a4dd4291",
       "subject": "event:rules.square.event.control@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13863,7 +13881,7 @@
       "id": "r2-2026-07.1cb6ff2f33c3a9dc",
       "subject": "event:rules.structural.event.backward_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13882,7 +13900,7 @@
       "id": "r2-2026-07.6ab973cae6defe3b",
       "subject": "event:rules.structural.event.direct_attack_count@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13901,7 +13919,7 @@
       "id": "r2-2026-07.2b07823cefbc89d3",
       "subject": "event:rules.structural.event.doubled_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13920,7 +13938,7 @@
       "id": "r2-2026-07.db44c7a5f6108d05",
       "subject": "event:rules.structural.event.half_open_file@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13939,7 +13957,7 @@
       "id": "r2-2026-07.829fa6115d1c1e60",
       "subject": "event:rules.structural.event.isolated_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13958,7 +13976,7 @@
       "id": "r2-2026-07.f3e6969bbb11723f",
       "subject": "event:rules.structural.event.king_zone@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13977,7 +13995,7 @@
       "id": "r2-2026-07.838944582d167420",
       "subject": "event:rules.structural.event.line_blockers@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -13996,7 +14014,7 @@
       "id": "r2-2026-07.3cfd842bf25ca64c",
       "subject": "event:rules.structural.event.open_file@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14015,7 +14033,7 @@
       "id": "r2-2026-07.03a67da8e9180882",
       "subject": "event:rules.structural.event.passed_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14034,7 +14052,7 @@
       "id": "r2-2026-07.50ebf1291fd64b7d",
       "subject": "event:rules.structural.event.pawn_islands@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14053,7 +14071,7 @@
       "id": "r2-2026-07.52d3ff0c83458e23",
       "subject": "event:rules.structural.event.piece_count@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14072,7 +14090,7 @@
       "id": "r2-2026-07.196874b275300e57",
       "subject": "event:rules.tactic.consequence.reply_breadth@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14091,7 +14109,7 @@
       "id": "r2-2026-07.e204e1cee4ebfde1",
       "subject": "event:rules.tactic.event.check@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14110,7 +14128,7 @@
       "id": "r2-2026-07.f0e39cf297e3a8e3",
       "subject": "event:rules.tactic.event.defender_duty_relocated@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14129,7 +14147,7 @@
       "id": "r2-2026-07.ece3eb09023f9f43",
       "subject": "event:rules.tactic.event.defender_removed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14148,7 +14166,7 @@
       "id": "r2-2026-07.fcbc89975a869759",
       "subject": "event:rules.tactic.event.double_attack@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14167,7 +14185,7 @@
       "id": "r2-2026-07.18505960aa940541",
       "subject": "event:rules.tactic.event.loose_piece@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14186,7 +14204,7 @@
       "id": "r2-2026-07.13d0d64d74548b64",
       "subject": "event:rules.transition.event.capture@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14205,7 +14223,7 @@
       "id": "r2-2026-07.5bc27d00667b386e",
       "subject": "event:rules.transition.event.castled@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14224,7 +14242,7 @@
       "id": "r2-2026-07.8e1cfbd072bfd2a0",
       "subject": "event:rules.transition.event.checkmate@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14243,7 +14261,7 @@
       "id": "r2-2026-07.96f1ad7ece12a739",
       "subject": "event:rules.transition.event.clock_reset@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14262,7 +14280,7 @@
       "id": "r2-2026-07.bb30d2307214ef97",
       "subject": "event:rules.transition.event.defended_duty@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14281,7 +14299,7 @@
       "id": "r2-2026-07.be25b2ca0f470d72",
       "subject": "event:rules.transition.event.developed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14300,7 +14318,7 @@
       "id": "r2-2026-07.811a4e0292e9a51d",
       "subject": "event:rules.transition.event.last_of_role@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14319,7 +14337,7 @@
       "id": "r2-2026-07.c1686b9e6c58958e",
       "subject": "event:rules.transition.event.occupied_attack@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14338,7 +14356,7 @@
       "id": "r2-2026-07.d06d6e7543a3c910",
       "subject": "event:rules.transition.event.occupied_defence@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14357,7 +14375,7 @@
       "id": "r2-2026-07.55e8a71ee53306d4",
       "subject": "event:rules.transition.event.pawn_contact@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14376,7 +14394,7 @@
       "id": "r2-2026-07.b1cf552d974b5b30",
       "subject": "event:rules.transition.event.piece_escape@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14395,7 +14413,7 @@
       "id": "r2-2026-07.54fe2dfc7a7b90bc",
       "subject": "event:rules.transition.event.promotion@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -14414,7 +14432,7 @@
       "id": "r2-2026-07.f26a98c0a305b801",
       "subject": "event:rules.transition.event.slider_ray@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "5a624cb88f593aa37ac900f26e064fbad4321467e5fa4ac1ec0eba6668ca9fc0",
+      "predicateImplementationDigest": "936880c8b79b2e1bca982f604fd47b8eb66aa2714afd5b48c9477fb18088408f",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,

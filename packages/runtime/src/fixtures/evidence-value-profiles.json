@@ -636,6 +636,13 @@
     "payloadDigests": [],
     "reason": "input_abstained"
   },
+  "derived.opening.deepest_reached@2": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "b43ed0da55d1459b5c17277f3a1fc3637f0fadf454535c772206fefe459243c9"
+    ]
+  },
   "derived.opponent.candidate_feature_vector@1": {
     "availability": "available",
     "cardinality": 1,
@@ -2461,14 +2468,14 @@
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "c44b8896abe69ed3d5fe35cd6e77a052af5574b82a5c7de0478282ae093f4715"
+      "9d4dffc9a049d1e251a927bac2546c1d6761842c0020b9986ce6c0d72d0bf8b9"
     ]
   },
   "theory.opening.current_endpoint@1": {
     "availability": "available",
     "cardinality": 1,
     "payloadDigests": [
-      "0a4d5b1416ec93686a8c0dd26c8376a1abbfc6e2a761cb2398afe2537a2295b3"
+      "f2dd24e873d3e2a313b52da6ad970ecdb1e5850a44409fe084e2e86aa0c585a3"
     ]
   },
   "theory.shapes.firing@1": {

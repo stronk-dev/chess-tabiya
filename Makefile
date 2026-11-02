@@ -2265,11 +2265,31 @@ evidence-value-authority-route-map-update:
 	$(CI_NODE) tools/d2144-evidence-value-authority-route-map/dist/route-map.mjs --write
 
 opening-source-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/opening-catalogue.test.ts packages/runtime/src/opening-catalogue.test.ts packages/runtime/src/recorded-opening-lookup.test.ts apps/server/src/opening-catalogue.test.ts apps/server/src/opening-catalogue-build.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/recorded-review-boundary.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/schema/src/opening-catalogue.test.ts packages/runtime/src/opening-catalogue.test.ts packages/runtime/src/recorded-opening-lookup.test.ts packages/runtime/src/recorded-review-boundary.test.ts apps/server/src/opening-catalogue.test.ts apps/server/src/opening-catalogue-build.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts apps/server/src/recorded-review-boundary.test.ts
 
 .PHONY: opening-point-check
+.PHONY: recorded-review-boundary-check
+recorded-review-boundary-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-review-boundary.test.ts
+
+.PHONY: guidance-lifetime-check
+guidance-lifetime-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/guidance-lifetime.test.ts
+
+.PHONY: opening-load-performance-check
+opening-load-performance-check:
+	./node_modules/.bin/vitest run --config vitest.performance.config.ts apps/server/src/opening-catalogue-performance.test.ts
+
+.PHONY: longitudinal-lease-check
+longitudinal-lease-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-store.test.ts apps/server/src/longitudinal-worker.test.ts
+
 opening-point-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-opening-point.test.ts packages/runtime/src/recorded-opening-lookup.test.ts packages/runtime/src/opening-module-source.test.ts apps/server/src/opening-module-source.test.ts
+
+.PHONY: opening-history-check
+opening-history-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-opening-history.test.ts packages/runtime/src/recorded-opening-reduction.test.ts packages/runtime/src/comparison-reduction.test.ts packages/runtime/src/last-level-reduction.test.ts packages/runtime/src/story-rank-reduction.test.ts
 
 .PHONY: opening-point-browser-check
 opening-point-browser-check:

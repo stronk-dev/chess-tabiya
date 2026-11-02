@@ -32964,3 +32964,77 @@ self-acceptance, feature permission or partial current consumer image follows fr
 - Post-closeout normal governance and exact-index staged-process contracts pass: register,
   lifecycle, work-state, roadmap and intent parity remain green. Source/test bytes stay fixed;
   this append records the completed checks, and the normal commit hook rechecks the final index.
+
+## 2026-11-01 — internal complete recorded opening-history prerequisite
+
+- Accepted installed-opening §3a/F2 §2.3k/provider §1a now implement complete original graph
+  validation before prefix narrowing/lookup, genuine occurrence-specific positive/negative paired
+  results, and the exact fourth V2 reduction. Historical @1 behavior is unchanged; current
+  Inspector/Review migrations and D3376/D3857 remain open, not discharged by an internal source.
+-84 focused cases across all four reductions pass, with independent bounded read-only review.
+  D3909–D3912 record actual profile-refresh/publication, repeated immutable-source validation and
+  compound functional-test failures. Preserve full exact populations/default deadlines, live
+  callable/manifest checks, and live storage revocation; no retry/skip or latency-budget increase.
+  The existing frozen route-map refuses regeneration and remains unchanged. Semantic refresh
+  retains343 passing cases/53 populations/8 external receipts/91 subjects/zero qualified subjects.
+- Detailed failed commands and repairs live in planning/installed-opening-evidence/log.md.
+  Broader sequential normal source/API/type/full gates remain in flight at this entry; append
+  their real results before closeout. No protected intent, official-content or release promotion.
+
+- D3913 extends that failure record: normal source checks expose actual bundled-build and
+  reloaded-prefix compound functional deadlines. Separate real owned setup/assertion stages and
+  retain every both-color prefix plus actual full-endpoint revocation, production build/check
+  probes and safe async fixture cleanup. The additive current catalogue is320 projections with
+  unchanged49 producers/42 consumers/566 bindings. No new learner consumer or latency claim.
+
+## 2026-11-02 — opening-history verification continues
+
+-202 real source cases,46 point/API cases and clean workspace types pass. First full normal chain
+  passes2042 authority/132 reduction-execution/314 live Review-source cases before refusing the
+  missing additive capability declaration. Normal generation adds that one new successor and
+  retains all1018 predecessors,472 applicability rows and zero source qualification.
+- Final code/test bytes now run full make verify build. Keep every failed/intermediate run in
+  the existing detailed log; no remote CI, partial learner migration or parent completion claim.
+
+- That run was interrupted after actual Review-moment/voice timeouts and a shared-fixture skip;
+  it is not a passing full pool. D3914's permanent counter proves four redundant replays where
+  one validated original is sufficient. Every currentness check still reloads actual live run/
+  import storage and strictly compares complete inputs, including malformed-array refusal.
+  D3915 partitions real HTTP fixture setup/request/cleanup without changing grant revocation,
+  provider work or deadlines. Independent bounded review clears these repairs. Focused boundary
+ 22 and broader source224 cases pass; the detailed installed-opening log retains the failures.
+  Finish the normal complete verification before closing the scoped defect rows.
+
+- Complete software passes8365 cases/432 files in656.58s, no failures/skips. The normal run then
+  stops with two of seven performance cases red: D3916 actual worker renewals12 versus13 and
+  D3917 cold catalogue load321.45ms versus250ms. Both are recorded and assigned; unchanged
+  responsiveness budgets passed in the observed worker arm, not its renewal assertion. No
+  successful full verification or remote/readiness claim; diagnose rather than raise thresholds.
+
+- D3916's controlled real-store tests first reproduce12/15 and1/2 renewals. Fixed heartbeat phase
+  and actual worker-local claim-through-publication timing retain successful CAS counts, source/
+  publication cost, original allowance and every delay/probe/lease-loss negative. D3917 removes a
+  redundant ownership walk/clone by parsing immutable startup text inside the owner and uses built-in
+  crypto, retaining complete validation and installed identity. Native crypto alone still failed307ms;
+  that attempt remains logged.242 source,53 worker/store, clean types, independent bounded review
+  and all seven unchanged-budget performance cases pass. Final full normal gates remain pending;
+  no D3591 historical-cause, current learner migration or release promotion follows from this.
+
+- Final source/test image passes8395 software/432 files (680.92s) and seven unchanged-budget
+  performance/four files (67.59s). Governance then refuses seven row routes omitted by a queue ID
+  range. Nine explicit links repair the metadata, not the checker; keep the combined exit2 record.
+  Source/tests remain fixed for the remaining normal governance/content/build/native checks.
+
+- Remaining normal governance/content/corpus/build/native chain exits0:271 content/27 files,
+  all register/lifecycle/work/roadmap/intent/docs contracts and nine built desktop/phone-viewport
+  journeys (1.5m), zero retries. Same source/tests already pass8395 software/432 and seven
+  unchanged-budget performance/four. D3909–D3917 close only the scoped repairs, with failed and
+  interrupted commands retained. Internal history/reduction is not a completed Inspector/Review,
+  GradeSource, catalogue pool, qualified source, official pack, milestone or release. D3376/D3857
+  and D3591's historical cause remain open; full1.0 goal stays active. Final staged checks precede
+  commit and no remote action is authorized or claimed.
+
+- Post-closeout governance/roadmap-progress pass:3666 rows, zero untriaged/unrouted,1748 live;
+  628 todo/37 doing/1083 blocked/1756 done/162 refused. The462 old prose-only closures and all
+  strict milestone states remain unchanged. Source/tests stay fixed; final exact-index checks and
+  the normal hook precede this checkpoint commit.

@@ -8,6 +8,7 @@ import { canonicalFen, positionFromFen } from "./chess.js";
 import { recordedEdgePayload } from "./recorded-edge.js";
 import { readBackReplay } from "./replay.js";
 import { digestRunEventHead } from "./run-subject-digest.js";
+import { canonicalProviderJson } from "./provider-digest.js";
 import { presentationDigest } from "./presentation-contract.js";
 import type { ReviewImportRecordImage, ReviewOutcomeReceipt, ReviewStorageAuthority } from "./review-evidence.js";
 import type { DrillRun, MoveCommittedEvent, Node, RunStartedEvent } from "./types.js";
@@ -134,9 +135,18 @@ export function createRecordedReviewBoundarySourceOwner(storage: ReviewStorageAu
   return Object.freeze({
     resolve(input: BoundaryAddress): RecordedReviewBoundary {
       const request = address(input), image = read(request);
+      // Full graph/event/legal validation above establishes this exact immutable snapshot.
+      // Equal live inputs derive the same path/outcome; replaying them at every nested read
+      // adds work, not authority. Strict serialization also refuses malformed array holes.
+      const runBytes = canonicalProviderJson(image.run), recordBytes = canonicalProviderJson(image.importRecord);
       const boundary = Object.freeze({}) as RecordedReviewBoundary;
       boundaries.set(boundary, { image, assertCurrent: () => {
-        if (canonicalizeJson(read(request)) !== canonicalizeJson(image)) throw new TypeError("Recorded Review boundary no longer matches its storage authority");
+        const stored = loadRun(request.runId);
+        if (stored === undefined || stored.id !== request.runId) throw new TypeError("Recorded Review run is not stored under the requested identity");
+        const current = structuredClone(stored);
+        if (canonicalProviderJson(current) !== runBytes) throw new TypeError("Recorded Review boundary no longer matches its storage authority");
+        const record = importImage(loadImportRecord(request.runId), current);
+        if (canonicalProviderJson(record) !== recordBytes) throw new TypeError("Recorded Review boundary no longer matches its storage authority");
       } });
       owned.add(boundary);
       return boundary;

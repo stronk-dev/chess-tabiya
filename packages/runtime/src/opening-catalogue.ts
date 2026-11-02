@@ -1,5 +1,5 @@
 /** Installed catalogue: pure document ownership and paired lookup; no file I/O or Node imports. */
-import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { canonicalizeJson, digestCanonicalJson } from "@chess-tabiya/schema/drill-pack";
 import { OPENING_CATALOGUE_SCHEMA_VERSION } from "@chess-tabiya/schema";
 import { assertOpeningCatalogueDocument } from "@chess-tabiya/schema/opening-catalogue";
 import { sha256Hex } from "./assistance-exchange-digest.js";
@@ -139,11 +139,8 @@ function assertDataDocument(value: unknown, active = new Set<object>()): void {
   active.delete(value);
 }
 
-export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCatalogue {
-  // A validated caller-owned row is not durable authority: the caller could mutate it later.
-  // Take ownership before validation, then freeze every artifact layer before exposing the maps.
-  assertDataDocument(input);
-  const value = structuredClone(input) as RuntimeOpeningCatalogue;
+/** Only private ownership paths call this: a detached object or JSON parsed here. */
+function prepareOwnedOpeningCatalogue(value: RuntimeOpeningCatalogue) {
   assertOpeningCatalogueDocument(value);
   if (value.source.files.some((item, index) => item.name !== OPENING_CATALOGUE_FILES[index])) throw new TypeError("Opening catalogue source-file order is invalid");
   if (value.source.compilerFiles.length !== OPENING_CATALOGUE_COMPILER_FILES.length || value.source.compilerFiles.some((item, index) => item.path !== [...OPENING_CATALOGUE_COMPILER_FILES].sort()[index])) throw new TypeError("Opening catalogue compiler inventory is invalid");
@@ -163,8 +160,10 @@ export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCa
   // Only a completely valid document can have a digest mismatch; malformed relationships are
   // artifact_invalid even when their supplied digest is stale. Endpoint keys are validated by
   // their exact membership join, so the same position never needs parsing twice during load.
-  const { digest, ...withoutDigest } = value;
-  if (sha256(canonicalizeJson(withoutDigest)) !== digest) throw new OpeningCatalogueDigestMismatch("Opening catalogue artifact digest does not match its bytes");
+  return { value, endpoints, members };
+}
+
+function finishLoadedOpeningCatalogue({ value, endpoints, members }: ReturnType<typeof prepareOwnedOpeningCatalogue>): CompiledOpeningCatalogue {
   const artifact = value;
   for (const row of artifact.namedEndpoints) Object.freeze(row);
   for (const row of artifact.pathMembership) Object.freeze(row);
@@ -176,7 +175,7 @@ export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCa
   Object.freeze(artifact.source.compilerFiles);
   Object.freeze(artifact.source);
   Object.freeze(artifact);
-  const catalogueRef = Object.freeze({ sourceId: OPENING_SOURCE_ID, commit: CHESS_OPENINGS_COMMIT, artifactDigest: digest });
+  const catalogueRef = Object.freeze({ sourceId: OPENING_SOURCE_ID, commit: CHESS_OPENINGS_COMMIT, artifactDigest: artifact.digest });
   const observed = (ply: number): void => { if (!Number.isSafeInteger(ply) || ply < 0) throw new TypeError("observedPly must be a non-negative safe integer"); };
   const currentEndpointFor = (positionKey: string, observedPly: number): CurrentOpeningEndpoint => {
     const found = endpoints.get(positionKey);
@@ -216,18 +215,48 @@ export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCa
   return compiled;
 }
 
+export function compileLoadedOpeningCatalogue(input: unknown): CompiledOpeningCatalogue {
+  // Caller-owned objects require a complete data check and detached ownership before validation.
+  assertDataDocument(input);
+  const prepared = prepareOwnedOpeningCatalogue(structuredClone(input) as RuntimeOpeningCatalogue);
+  const { digest, ...withoutDigest } = prepared.value;
+  if (sha256(canonicalizeJson(withoutDigest)) !== digest) throw new OpeningCatalogueDigestMismatch("Opening catalogue artifact digest does not match its bytes");
+  return finishLoadedOpeningCatalogue(prepared);
+}
+
+function admitCompiledCatalogue(catalogue: CompiledOpeningCatalogue): OpeningCatalogueAvailability {
+  if (registration.schemaVersion !== OPENING_CATALOGUE_SCHEMA_VERSION || registration.sourceId !== OPENING_SOURCE_ID
+    || registration.commit !== CHESS_OPENINGS_COMMIT || registration.retrievedAt !== CHESS_OPENINGS_RETRIEVED_AT
+    || registration.artifactDigest !== catalogue.artifact.digest) throw new OpeningCatalogueDigestMismatch("Opening catalogue differs from the installed registration");
+  const source = Object.freeze({ ref: catalogue.ref }) as InstalledOpeningCatalogue;
+  installedSources.set(source, catalogue);
+  return Object.freeze({ kind: "available", catalogue, source });
+}
+
 /** Installed admission, never a caller-selected expected digest or registration. */
 export function admitInstalledOpeningCatalogue(artifact?: unknown): OpeningCatalogueAvailability {
   if (arguments.length > 1) throw new TypeError("Opening catalogue admission accepts only the artifact");
   if (artifact === undefined) return Object.freeze({ kind: "unavailable", reason: "artifact_missing" });
   try {
-    const catalogue = compileLoadedOpeningCatalogue(artifact);
-    if (registration.schemaVersion !== OPENING_CATALOGUE_SCHEMA_VERSION || registration.sourceId !== OPENING_SOURCE_ID
-      || registration.commit !== CHESS_OPENINGS_COMMIT || registration.retrievedAt !== CHESS_OPENINGS_RETRIEVED_AT
-      || registration.artifactDigest !== catalogue.artifact.digest) throw new OpeningCatalogueDigestMismatch("Opening catalogue differs from the installed registration");
-    const source = Object.freeze({ ref: catalogue.ref }) as InstalledOpeningCatalogue;
-    installedSources.set(source, catalogue);
-    return Object.freeze({ kind: "available", catalogue, source });
+    return admitCompiledCatalogue(compileLoadedOpeningCatalogue(artifact));
+  } catch (error) {
+    return Object.freeze({ kind: "unavailable", reason: error instanceof OpeningCatalogueDigestMismatch ? "digest_mismatch" : "artifact_invalid" });
+  }
+}
+
+/** Own the immutable JSON text at startup, without cloning/walking a second caller-owned graph. */
+export async function admitInstalledOpeningCatalogueText(text?: string): Promise<OpeningCatalogueAvailability> {
+  if (arguments.length > 1) throw new TypeError("Opening catalogue admission accepts only the artifact");
+  if (text === undefined) return Object.freeze({ kind: "unavailable", reason: "artifact_missing" });
+  if (typeof text !== "string") return Object.freeze({ kind: "unavailable", reason: "artifact_invalid" });
+  try {
+    // JSON.parse creates private plain JSON data: no accessors, sparse arrays, aliases to caller
+    // objects or non-JSON values. All schema/key/relationship checks still precede the first await;
+    // no source is exposed until both complete-content and installed-registration checks pass.
+    const prepared = prepareOwnedOpeningCatalogue(JSON.parse(text) as RuntimeOpeningCatalogue);
+    const { digest, ...withoutDigest } = prepared.value;
+    if (await digestCanonicalJson(withoutDigest) !== digest) throw new OpeningCatalogueDigestMismatch("Opening catalogue artifact digest does not match its bytes");
+    return admitCompiledCatalogue(finishLoadedOpeningCatalogue(prepared));
   } catch (error) {
     return Object.freeze({ kind: "unavailable", reason: error instanceof OpeningCatalogueDigestMismatch ? "digest_mismatch" : "artifact_invalid" });
   }

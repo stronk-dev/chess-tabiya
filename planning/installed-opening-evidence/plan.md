@@ -3,6 +3,19 @@
 Implement the independently accepted `rfc/installed-opening-evidence.md`, under the current
 1.0 queue. Owner: `evidence-foundation`. This is a job plan, not a second roadmap.
 
+**Internal complete-history checkpoint, 2026-11-02:** step4 now captures every original recorded
+prefix occurrence and paired positive/negative point result after validating the whole original
+graph, including suffixes and unrelated branches. The exact fourth V2 reduction issues genuine
+deepest-history@2 items or authenticated empty results; old @1 meanings remain.84 cases across
+all four reductions,243 source cases,46 point/API cases,53 worker/store cases, clean types and
+all seven unchanged-budget performance cases pass; independent bounded review clears.
+All normal local tiers pass8395 software/432 files, seven performance/four,271 content/27 and
+governance/corpus/build; nine built desktop/phone browser journeys pass with zero retries.
+D3909–D3917 close only their bounded repairs. Their failures and the metadata-only missing-route
+correction remain logged; no failed combined command is called successful.
+Steps5–6, general catalogue pool and actual current Inspector/Review migrations remain open;
+D3376/D3857 stay doing, not completed by this internal prerequisite.
+
 **Point and Theory opening-leg checkpoint, 2026-11-01:** step3 now supplies the genuine point
 factories, original positive/negative array authority, original table-row receipts and actual
 Theory acquisition through RunService.46 focused cases/four files and workspace types pass;

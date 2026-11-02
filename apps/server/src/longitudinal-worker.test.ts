@@ -25,6 +25,7 @@ import { LongitudinalStore } from "./longitudinal-store.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { LONGITUDINAL_WORKER_DEFAULTS, fileBackedDatabaseIdentity, validateLongitudinalWorkerConfig } from "./longitudinal-worker-config.js";
 import { LONGITUDINAL_DRAIN_GRACE_MS, LongitudinalProjectionWorker } from "./longitudinal-worker.js";
+import { parseLongitudinalThreadMessage } from "./longitudinal-worker-protocol.js";
 import { AT, importedRun, learner, play, positionRun } from "./longitudinal-test-fixtures.js";
 import { parsePgnMainline } from "./pgn-import.js";
 import { SQLiteRunStorage, STORAGE_VERSION } from "./storage.js";
@@ -33,6 +34,22 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
 const directories: string[] = [];
 let application: ChessTabiyaApplication | undefined;
+
+describe("worker-local claim duration protocol (D3916)", () => {
+  const progress = { type: "progress", claimed: 1, completed: 1, failed: 0, conflicts: 0, renewals: 15, abandoned: 0, claimElapsedMs: 15_000.25 } as const;
+  it("retains finite fractional elapsed time alongside the same batch's actual counters", () => {
+    expect(parseLongitudinalThreadMessage(progress)).toEqual(progress);
+    expect(parseLongitudinalThreadMessage({ ...progress, claimElapsedMs: 0 })).toBeDefined();
+  });
+  it.each([undefined, -1, Number.NaN, Number.POSITIVE_INFINITY, "15000", null])("refuses malformed elapsed value %s", value => {
+    expect(parseLongitudinalThreadMessage({ ...progress, claimElapsedMs: value })).toBeUndefined();
+  });
+  it("refuses a missing duration or an extra caller timing claim", () => {
+    const { claimElapsedMs: _elapsed, ...missing } = progress;
+    expect(parseLongitudinalThreadMessage(missing)).toBeUndefined();
+    expect(parseLongitudinalThreadMessage({ ...progress, observedAfterMs: 40_000 })).toBeUndefined();
+  });
+});
 
 // Detach before awaiting: a late teardown must never close or delete the next test's database (D3300).
 afterEach(async () => {

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3aef942ec6ec1433dd67f6a6c4a18c143f1eaa5653505fd2cdedfb9ed25c37ab",
+    "roadmap": "sha256:a593354130a486bf6ea2c7f443d06184d9eacf6b6f7e0ce4acf3076e3a5ccc8f",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:9fe583076f0b150a4b3dcca91124569b9383099c319cfd9ff7ad02791f70f97b",
-    "rfcRegister": "sha256:630db0a68d465b847ca453e634aba20fbbc0224c6cbacf0ff44b4c2f0514da89",
+    "workState": "sha256:a959b4e54b6f10c0fbb261c00ef6861951dd8b04b5bb5b7380f7398870422c72",
+    "rfcRegister": "sha256:81c80f8dddc935467fa98f9ff9716745f5a83554d17a9117f9dea71b45d458e9",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 37,
       "blocked": 1083,
-      "done": 1747,
+      "done": 1756,
       "refused": 162
     },
     "workItems": {
@@ -487,13 +487,17 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement D3376/D3857's complete recorded opening history/reduction over the verified genuine point/result prerequisite. Finish D3859's workflow-issued GradeSource, fixed paired arithmetic/accuracy/graph and coordinated complete Nudge/Review images, plus D3841's complete Inspector execution/source-page/renderer/receiver/API/native delivery. D3864 retains nonmodule Compare caller/obsolete-path retirement. The general catalogue pool and remaining consumer contracts stay open; no compatibility-only pipeline or source-qualification promotion.",
+      "nextAction": "Finish D3859's workflow-issued GradeSource, fixed paired arithmetic/accuracy/graph and coordinated complete Nudge/Review images, plus D3841's complete Inspector execution/source-page/renderer/receiver/API/native delivery. D3376/D3857's internal complete recorded opening history/reduction is implemented, not its complete current consumers or general catalogue pool. D3864 retains nonmodule Compare caller/obsolete-path retirement. No compatibility-only pipeline, partial learner image or source-qualification promotion.",
       "latestCheckpoint": {
-        "at": "2026-11-01",
-        "summary": "Genuine installed-opening point arrays and actual Theory opening-leg acquisition bind original source/position/run/head/node and paired membership/endpoint results, render current names and remove them at unnamed positions.46 source/API cases,129 Theory/Explorer cases, workspace types, independent review and9 actual desktop/phone journeys pass in90.6s. All normal local tiers pass7954 software/430 files in543.24s, seven unchanged-budget performance/four files in68.54s,271 content/27 files in67.73s plus governance/corpus/build checks. Earlier failed commands stay logged; repaired functional-stage tests retain all assertions/default deadlines, so the larger case count is not product breadth. D3904-D3908 close bounded defects; D3376/D3857 remain doing for complete history/reduction, catalogue pool and Inspector/Review. Prior complete Compare remains delivered. No qualification, official content, whole milestone/RFC, remote CI or release promotion.",
+        "at": "2026-11-02",
+        "summary": "Internal complete recorded opening history/reduction validates the whole original graph before narrowing and retains every genuine positive/negative/repeated occurrence, authentic empty result and exact fourth V2 execution.84 cross-reduction,243 source,46 point/API and53 worker/store cases, clean types and independent bounded review pass. All normal local tiers pass8395 software/432 files, seven unchanged-budget performance/four,271 content/27 and governance/corpus/build; nine built browser journeys pass with zero retries. D3909-D3917 close only their real refresh/publication/replay/functional/cadence/ownership repairs; failed/interrupted commands and corrected explicit queue routes stay logged, not relabelled successful combined runs. D3376/D3857 remain doing for catalogue pool and full current Inspector/Review. Prior point/Theory and complete Compare delivery stand. No qualification, official content, whole milestone/RFC, remote CI or release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/recorded-opening-point.test.ts",
+          "packages/runtime/src/recorded-opening-history.ts",
+          "packages/runtime/src/recorded-opening-history.test.ts",
+          "packages/runtime/src/internal/opening-history-reduction-authority.ts",
+          "packages/runtime/src/recorded-opening-reduction.test.ts",
           "packages/runtime/src/opening-module-source.test.ts",
           "apps/server/src/opening-module-source.test.ts",
           "apps/server/src/provider-corpus.test.ts",
@@ -978,7 +982,7 @@
           {
             "kind": "rfc",
             "id": "installed-opening-evidence.md",
-            "digest": "sha256:83ab01a23be3daaf3a511aaca4ce0b2e93b2b78c3d71c200b6a963c6f2a91801"
+            "digest": "sha256:3344a6ff3595cb9a86660c75b4c260883946845f19bd5a3228d7022841b19e09"
           },
           {
             "kind": "rfc",

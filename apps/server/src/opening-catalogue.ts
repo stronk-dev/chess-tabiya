@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { transposeKey, CHESS_OPENINGS_COMMIT, CHESS_OPENINGS_RETRIEVED_AT, OPENING_SOURCE_ID, OPENING_CATALOGUE_FILES, OPENING_CATALOGUE_COMPILER_FILES, admitInstalledOpeningCatalogue, compileLoadedOpeningCatalogue, type OpeningCatalogueAvailability, type OpeningCatalogueSourceInput, type OpeningCatalogueCompilerInput, type RuntimeOpeningCatalogue } from "@chess-tabiya/runtime";
+import { transposeKey, CHESS_OPENINGS_COMMIT, CHESS_OPENINGS_RETRIEVED_AT, OPENING_SOURCE_ID, OPENING_CATALOGUE_FILES, OPENING_CATALOGUE_COMPILER_FILES, admitInstalledOpeningCatalogueText, compileLoadedOpeningCatalogue, type OpeningCatalogueAvailability, type OpeningCatalogueSourceInput, type OpeningCatalogueCompilerInput, type RuntimeOpeningCatalogue } from "@chess-tabiya/runtime";
 import { normalizeOpeningPgn, parseRows } from "./sourcing/openings.js";
 
 export {
@@ -103,8 +103,5 @@ export async function loadOpeningCatalogue(path: string): Promise<OpeningCatalog
   let text: string;
   try { text = await readFile(path, "utf8"); }
   catch { return Object.freeze({ kind: "unavailable", reason: "artifact_missing" }); }
-  let value: unknown;
-  try { value = JSON.parse(text) as unknown; }
-  catch { return Object.freeze({ kind: "unavailable", reason: "artifact_invalid" }); }
-  return admitInstalledOpeningCatalogue(value);
+  return admitInstalledOpeningCatalogueText(text);
 }

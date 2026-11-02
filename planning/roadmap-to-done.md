@@ -1,7 +1,7 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Summary reconciled:**
-2026-11-01 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3908]] · **Machine map:**
+2026-11-02 under [[D3537]], [[D3541]], [[D3542]], [[D3545]]–[[D3917]] · **Machine map:**
 `planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
 state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
 **Generated status:** `planning/roadmap-1.0.receipt.json`
@@ -18,6 +18,18 @@ There are still zero graduated official packs; several journeys now have product
 doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
+
+The internal complete recorded-opening history/reduction prerequisite is implemented. It validates
+the entire original graph before narrowing, preserves every real positive/negative/repeated
+occurrence and authentic empty result, and binds the exact fourth V2 reduction without changing
+the old @1 meaning.84 cross-reduction,243 broader source,46 point/API and53 worker/store cases,
+workspace types and independent bounded review pass. Normal local tiers pass8395 software/432
+files, seven unchanged-budget performance/four,271 content/27 and governance/corpus/build;
+nine built desktop/phone browser journeys pass with zero retries. D3909–D3917 close their actual
+tooling/functional/performance repairs, with every failed/interrupted attempt and queue-route
+correction retained, not relabelled as a successful combined command. D3376/D3857
+remain doing for the general catalogue pool and complete current Inspector/Review journey;
+internal source delivery is not learner-feature completion or source qualification.
 
 The installed-opening point prerequisite now reaches the actual Theory module: genuine source/
 position/result-array joins render the current catalogue name, with authentic unnamed results

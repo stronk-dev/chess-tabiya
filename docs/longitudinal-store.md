@@ -64,6 +64,12 @@ with its own connection to the same database file. `createApplication` is always
 worker's ready message before returning. The worker claims pending, due-retry and expired-lease jobs
 oldest-first (one execution slot, scan of four), renews its lease from synchronous per-decision
 checkpoints, and publishes rows plus `completed_seq` in one compare-and-swap transaction.
+Heartbeat deadlines retain their original phase, so checkpoint lateness does not accumulate;
+one due checkpoint counts only its actual successful full-tuple CAS, never synthetic catch-up
+renewals. Worker progress includes finite `claimElapsedMs` measured locally from claim processing
+through actual publication, including source preparation. Later message delivery and HTTP
+observation are separate. The real one-claim performance check uses that same claim's duration
+and renewal count with the unchanged heartbeat floor and two-interval allowance.
 `snapshot_invalid` quarantines immediately; `derivation_failed` and `publication_conflict` back off
 5 s × 2ⁿ (capped at 5 min) and quarantine after 3 and 5 attempts. Only a changed source digest,
 event head or derivation revision reopens a quarantine.
@@ -176,4 +182,8 @@ the rest.
   previews list them, and deletion removes them (see `account-data-lifecycle.md`).
 
 The real 80-ply fixed-corpus arm projects in the worker while `/healthz` answers at 20 Hz with
-event-loop delay p95 under 50 ms (`apps/server/src/longitudinal-worker-performance.test.ts`).
+event-loop delay p95 under50ms, maximum under250ms and every probe under500ms
+(`apps/server/src/longitudinal-worker-performance.test.ts`). `make longitudinal-lease-check`
+retains controlled-clock cadence, actual preparation/publication time, late-observation isolation,
+no invented renewals, full-CAS lease loss and timer-only negatives. All unchanged performance
+contracts run with `make test-performance`.

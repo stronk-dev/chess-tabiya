@@ -7,7 +7,7 @@ import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { canonicalFen } from "@chess-tabiya/runtime";
 import { parsePgn, startingPosition } from "chessops/pgn";
 import { parseSan } from "chessops/san";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { normalizeOpeningPgn } from "./sourcing/openings.js";
 import {
@@ -31,6 +31,19 @@ const IMPORTED = new URL("../../../tools/r2-selection-harness/imported-sample.pg
 const E4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
 
 describe("runtime opening catalogue", () => {
+  it("the actual file loader owns parsed JSON without a second graph clone (D3917)", async () => {
+    const clone = vi.spyOn(globalThis, "structuredClone"), native = vi.spyOn(globalThis.crypto.subtle, "digest");
+    try {
+      const loaded = await loadOpeningCatalogue(ARTIFACT);
+      if (loaded.kind !== "available") throw new TypeError(`actual installed source unavailable: ${loaded.reason}`);
+      expect(clone).not.toHaveBeenCalled(); expect(native).toHaveBeenCalledTimes(1);
+      expect(loaded.catalogue.artifact.namedEndpoints).toHaveLength(3810);
+      expect(loaded.catalogue.artifact.pathMembership).toHaveLength(7854);
+      expect(loaded.catalogue.openingIdentity(E4, 1).currentEndpoint).toMatchObject({ kind: "matched", name: "King's Pawn Game" });
+      expect(Object.isFrozen(loaded.catalogue.artifact.namedEndpoints[0])).toBe(true);
+    } finally { clone.mockRestore(); native.mockRestore(); }
+  });
+
   it.each([
     ["empty name", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.namedEndpoints[0]!, { name: "" })],
     ["blank name", (raw: RuntimeOpeningCatalogue) => Object.assign(raw.namedEndpoints[0]!, { name: " \t " })],

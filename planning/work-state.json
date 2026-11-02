@@ -27785,7 +27785,7 @@
       "id": "D3376",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e85d1169e4cea10247fb776dcc1ce6dd9c4b51122e550aa68d3ec03f70d0c5d5",
+      "sourceDigest": "sha256:4137818184a019f5d41f6ac8fbb513ada2d8196f782fe5024e1ca9e695cf6d39",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-16"
@@ -32129,7 +32129,7 @@
       "id": "D3857",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:e657ecf067850f4c3f0d382cf8c5d2ea2746e36d853d17767e7ae455f1cbd743",
+      "sourceDigest": "sha256:ab4d579463ef40eaec146b8be89892e1e7811b2518e8961b384ecc0dbc19f1a5",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32588,6 +32588,87 @@
       "state": "done",
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:2f161de41c8ec7abef37df1c1b16f3924a70bb31424f476fa0dd7e6599edb207",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3909",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c5991259cd27dbe2b1e49033213d98ceb4255cbd0a15b52c328da550ea931e52",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3910",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:eaf14c85abe6f067e979fad8595ac8929ddef561634ece9e99193e40b57e89af",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3911",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:50bcc99e8751644a5ae288f9f0d639f42c2b79aa7b180a2094d043c8496803e6",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3912",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c2d61dd250920875a77f36471eb181b0948f49b621a541fc33b81b5f8756e8f5",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3913",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7f2ebd760e3d6c494fd0be3dd56c0e6846461fc6de40b2009d738b6ff2799393",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3914",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:df3fd306ad7164fd80bdf6d9337df4d0d1c8e3678ecfa1b69d8271e6830d79ee",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3915",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ab4228f14886bf4af3417d5dc3adde47922cdfddd4be41a3f6d9a7ccc834bd78",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3916",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0824e68ffbe37400919b4a9482f4230e733c8a3529ead4315bb66f2937f6435e",
+      "uxItems": [],
+      "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3917",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:81a15691b81c6db27861c498545c327e0e70a781d128d45e5a3847d3a79287c9",
       "uxItems": [],
       "evidence": "planning/installed-opening-evidence/log.md",
       "evidenceKind": "path"

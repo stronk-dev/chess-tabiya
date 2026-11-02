@@ -22,6 +22,7 @@ export type LongitudinalThreadMessage =
   | {
     readonly type: "progress"; readonly claimed: number; readonly completed: number; readonly failed: number;
     readonly conflicts: number; readonly renewals: number; readonly abandoned: number;
+    readonly claimElapsedMs: number;
   }
   | { readonly type: "drained" }
   | { readonly type: "error"; readonly code: "worker_protocol_invalid" | "worker_batch_failed"; readonly message: string };
@@ -36,7 +37,8 @@ export function parseLongitudinalThreadMessage(value: unknown): LongitudinalThre
       return keys === "databasePath,type,workerId" && typeof message.databasePath === "string" && typeof message.workerId === "string"
         ? message as LongitudinalThreadMessage : undefined;
     case "progress":
-      return keys === "abandoned,claimed,completed,conflicts,failed,renewals,type" && ["abandoned", "claimed", "completed", "conflicts", "failed", "renewals"].every(count)
+      return keys === "abandoned,claimElapsedMs,claimed,completed,conflicts,failed,renewals,type" && ["abandoned", "claimed", "completed", "conflicts", "failed", "renewals"].every(count)
+        && typeof message.claimElapsedMs === "number" && Number.isFinite(message.claimElapsedMs) && message.claimElapsedMs >= 0
         ? message as LongitudinalThreadMessage : undefined;
     case "drained":
       return keys === "type" ? message as LongitudinalThreadMessage : undefined;

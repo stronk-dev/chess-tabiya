@@ -1,5 +1,17 @@
 # RFC: Installed opening evidence
 
+**2026-11-02 internal complete-history checkpoint:** §3a/F2 §2.3k now have a genuine complete
+recorded-prefix source and exact fourth V2 reduction. Full original graph validation precedes
+narrowing/lookup; every positive/negative invocation and occurrence survives. Deepest-history@2
+retains the predecessor's successful fields and issues authentic empty results without changing
+old @1 behavior.84 cross-reduction,243 source,46 point/API and53 worker/store cases, clean types,
+independent bounded review and all normal local tiers pass:8395 software/432 files, seven
+unchanged-budget performance/four,271 content/27 and governance/corpus/build. Nine built browser
+journeys pass with zero retries. D3909–D3917 close their bounded repairs; prior failed/interrupted
+commands and the corrected queue routes remain logged. This updates implementation status,
+not accepted semantics. General catalogue pool, complete current Inspector/Review migration and
+qualification/release obligations remain; D3376/D3857 and the parent RFC are not complete.
+
 **2026-11-01 point/Theory opening-leg checkpoint:** the two point factories now issue genuine
 positive/empty arrays over the actual installation and recorded position, with retained paired
 lookup/row authority. Actual Theory/RunService acquisition validates the original run/head/node,
@@ -33,7 +45,7 @@ unaccepted labels for those clauses are history; this does not accept unrelated 
 obligations or claim actual source delivery. Decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
 
-- **Status:** implementing — [[D3376]]; independently accepted §§1–3 base-source boundary on 2026-10-16, with §3a/current adoption previously jointly accepted. Schema/pure loader/admitted source, genuine point arrays and the actual Theory opening leg are implemented; complete history/reduction, catalogue pool, current Inspector/Review and qualification/release obligations remain.
+- **Status:** implementing — [[D3376]]; independently accepted §§1–3 base-source boundary on 2026-10-16, with §3a/current adoption previously jointly accepted. Schema/pure loader/admitted source, genuine point arrays, actual Theory opening leg and internal complete history/reduction are implemented; catalogue pool, current Inspector/Review and qualification/release obligations remain.
 - **Author:** codex
 - **Created:** 2026-10-08
 - **Design refs:** `design/03-product-breadth.md` (shared evidence and theory/Review journeys); `design/05-in-run-experience.md` (grounded, permission-bounded assistance); ADR-0005
@@ -359,3 +371,6 @@ theory remain outside this document. This answer is not implementation or D3082 
   original scope/membership joins, exact absence, typed API refusal and native no-sticky-name
   delivery pass. D3904–D3908 close bounded source/test/docs repairs with normal local tiers;
   full history/current consumer/qualification and parent RFC completion remain open.
+- 2026-11-01: implement the already accepted complete recorded history and exact fourth reduction
+  internally; authentic positive/negative rows and complete original graph precede selection.
+  No semantic amendment or partial learner migration; current Inspector/Review and parent remain.

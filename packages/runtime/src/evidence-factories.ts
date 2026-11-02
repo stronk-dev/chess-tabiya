@@ -39,6 +39,8 @@ import {
 import { directProjectionConventions } from "./evidence-convention-closure.js";
 import { computeComparisonReduction } from "./internal/comparison-reduction-authority.js";
 import { computeLastLevelReduction, type RecordedLastLevelValue } from "./internal/last-level-reduction-authority.js";
+import { computeOpeningHistoryReduction, type RecordedDeepestOpeningReached } from "./internal/opening-history-reduction-authority.js";
+import { isRecordedOpeningHistorySource, type RecordedOpeningHistorySource } from "./recorded-opening-history.js";
 import { computeStoryRankReduction } from "./internal/story-rank-reduction-authority.js";
 import { readRecordedReviewMoments, type RecordedReviewMomentSource } from "./recorded-review-moments.js";
 import { readRecordedLastLevelPopulation, type RecordedLastLevelPopulation } from "./review-evidence.js";
@@ -2376,6 +2378,20 @@ export const createDerivedOpeningDeepestReachedV1Evidence = (() => {
   const route = "derived.opening.deepest_reached@1";
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, branchId: value("a branch id", isText) }], result: "availability", dependency: "runtime-opening-identity", pending: "Requires theory.opening.current_endpoint@1, which is unavailable in runtime." }, (): EvidenceAvailability<DeclaredEvidence<unknown>> => unavailable("input_abstained", "runtime-opening-identity"));
+})();
+
+export const createDerivedOpeningDeepestReachedV2Evidence = (() => {
+  const route = "derived.opening.deepest_reached@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ history: value("an original complete recorded opening history", isRecordedOpeningHistorySource) }], result: "items" },
+    ({ history }: { readonly history: RecordedOpeningHistorySource }): readonly RunEvidenceItem<RecordedDeepestOpeningReached>[] => {
+      const computed = computeOpeningHistoryReduction(history), projection = projectionFor(route), proof = computed.proof;
+      const authority = initiateEvidenceReduction(computed.authority);
+      const result = Object.freeze(computed.selected.map((selected, ordinal) => Object.freeze({ nodeId: selected.nodeId, plyOffset: selected.plyOffset,
+        evidence: declareEvidence(projection.producer, { id: projection.id, version: projection.version }, selected.payload, {
+          factory: symbol, inputDigest: proof.inputDigest, sourceDigests: [], convention: proof.convention, reduction: { authority, ordinal },
+        }) })));
+      publishEvidenceReduction(authority, result); return result;
+    });
 })();
 
 // ---------------------------------------------------------------------------------------------

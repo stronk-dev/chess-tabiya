@@ -6,7 +6,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { DatabaseSync } from "node:sqlite";
 
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { parseLongitudinalReadQuery, type LongitudinalReadQuery } from "./longitudinal-contract.js";
 import { assertLongitudinalMutationCensus, compileLongitudinalMutationCensus } from "./longitudinal-mutation-census.js";
@@ -362,6 +362,74 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     });
     expect(timerOnly).toMatchObject({ claimed: 1, completed: 0, conflicts: 1 });
     expect(jobRow(other.path, "job")?.state).toBe("running");
+  });
+
+  it("keeps a fixed heartbeat phase across late checkpoints and excludes later observation delay (D3916)", () => {
+    const { fixture: { clock }, store } = prepared();
+    const config = { ...LONGITUDINAL_WORKER_DEFAULTS, workerLeaseMs: 60_000, workerHeartbeatMs: 1_000 };
+    let monotonic = 0;
+    const renewedAt: number[] = [];
+    const renew = store.renew.bind(store);
+    const renewal = vi.spyOn(store, "renew").mockImplementation((claim, lease) => {
+      const result = renew(claim, lease);
+      if (result !== undefined) renewedAt.push(monotonic);
+      return result;
+    });
+    try {
+      const receipt = runLongitudinalBatch(store, config, "phase", {
+        monotonicNow: () => monotonic,
+        project: (image, checkpoint) => {
+          for (let step = 0; step < 25; step += 1) { clock.now += 600; monotonic += 600; checkpoint(); }
+          return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+        },
+      });
+      monotonic += 25_000; // Completion delivery/HTTP observation happens after the real claim.
+      expect(receipt).toMatchObject({ claimed: 1, completed: 1, renewals: 15, claimElapsedMs: 15_000 });
+      expect(renewedAt).toEqual([1_200, 2_400, 3_000, 4_200, 5_400, 6_000, 7_200, 8_400, 9_000, 10_200, 11_400, 12_000, 13_200, 14_400, 15_000]);
+      expect(monotonic).toBe(40_000);
+    } finally { renewal.mockRestore(); }
+  });
+
+  it("does not manufacture catch-up renewals for missed heartbeat phases (D3916)", () => {
+    const { fixture: { clock }, store } = prepared();
+    let monotonic = 0;
+    const receipt = runLongitudinalBatch(store, { ...LONGITUDINAL_WORKER_DEFAULTS, workerHeartbeatMs: 1_000 }, "gap", {
+      monotonicNow: () => monotonic,
+      project: (image, checkpoint) => {
+        clock.now += 4_500; monotonic += 4_500; checkpoint();
+        clock.now += 600; monotonic += 600; checkpoint();
+        return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+      },
+    });
+    expect(receipt).toMatchObject({ completed: 1, renewals: 2, claimElapsedMs: 5_100 });
+  });
+
+  it("retains source preparation and slow actual publication in the same claim's elapsed window (D3916)", () => {
+    const { fixture: { clock }, store } = prepared();
+    const config = { ...LONGITUDINAL_WORKER_DEFAULTS, workerHeartbeatMs: 1_000 };
+    let monotonic = 0;
+    const read = store.claimSourceImage.bind(store), publish = store.publish.bind(store);
+    const preparation = vi.spyOn(store, "claimSourceImage").mockImplementation(claim => {
+      clock.now += 2_000; monotonic += 2_000;
+      return read(claim);
+    });
+    const publication = vi.spyOn(store, "publish").mockImplementation((claim, projection) => {
+      clock.now += 5_000; monotonic += 5_000;
+      return publish(claim, projection);
+    });
+    try {
+      const receipt = runLongitudinalBatch(store, config, "publication", {
+        monotonicNow: () => monotonic,
+        project: (image, checkpoint) => {
+          for (let step = 0; step < 6; step += 1) { clock.now += 600; monotonic += 600; checkpoint(); }
+          return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+        },
+      });
+      monotonic += 25_000;
+      expect(receipt).toMatchObject({ completed: 1, renewals: 4, claimElapsedMs: 10_600 });
+      // The original floor still refuses genuinely long uncheckpointed active-claim work.
+      expect(receipt.renewals).toBeLessThan(Math.floor(receipt.claimElapsedMs / config.workerHeartbeatMs) - 2);
+    } finally { preparation.mockRestore(); publication.mockRestore(); }
   });
 
   it("abandons the in-flight claim at the next decision checkpoint on drain and re-leases it at once (D3300)", () => {

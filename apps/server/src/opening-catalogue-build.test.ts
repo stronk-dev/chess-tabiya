@@ -5,7 +5,7 @@ import { dirname, join, resolve } from "node:path";
 import { promisify } from "node:util";
 import { build, type Plugin } from "esbuild";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { CHESS_OPENINGS_COMMIT, OPENING_CATALOGUE_COMPILER_FILES, OPENING_CATALOGUE_FILES, compileRuntimeOpeningCatalogue, type OpeningCatalogueSourceInput } from "./opening-catalogue.js";
 
 const execute = promisify(execFile), root = process.cwd();
@@ -40,34 +40,60 @@ describe("the ordinary opening catalogue rebuild", () => {
     expect(applicationBundle).toBeGreaterThan(generator);
   });
 
-  it("rebuilds from a stale installed pin, then fresh bundled production admission accepts exactly the generated artifact", async () => {
-    const directory = await mkdtemp(join(tmpdir(), "tabiya-installed-opening-rebuild-"));
-    try {
+  describe("rebuilds from a stale installed pin", () => {
+    let directory: string, stale: string, staleProbe: string, artifact: string, generator: string;
+    let registrationPath: string, registrationBytes: string, registration: { artifactDigest: string; schemaVersion: string; sourceId: string }, compiled: { digest: string; source: { id: string; commit: string } }, freshProbe: string;
+    const pending: Promise<unknown>[] = [];
+    const owned = <T>(operation: () => Promise<T>) => { const work = operation(); pending.push(work); return work; };
+    beforeAll(() => owned(async () => {
+      directory = await mkdtemp(join(tmpdir(), "tabiya-installed-opening-rebuild-"));
       const copy = async (relative: string) => { const destination = join(directory, relative); await mkdir(dirname(destination), { recursive: true }); await cp(resolve(root, relative), destination); };
       await Promise.all([...OPENING_CATALOGUE_COMPILER_FILES, ...OPENING_CATALOGUE_FILES.map(name => `vendor/chess-openings/${CHESS_OPENINGS_COMMIT}/${name}`),
         "tools/d894-opening-runtime-harness/README.md", "tools/knowledge-retrieval-harness/prepare.mjs",
-        "planning/platform-alignment/knowledge-retrieval/source-register.csv", artifactRelative].map(copy));
+        "planning/platform-alignment/knowledge-retrieval/source-register.csv", artifactRelative].map(relative => owned(() => copy(relative))));
       expect(OPENING_CATALOGUE_COMPILER_FILES.some(file => file === registrationRelative as string)).toBe(false);
-      const stale = JSON.stringify({ ...JSON.parse(await readFile(resolve(root, registrationRelative), "utf8")), artifactDigest: `sha256:${"0".repeat(64)}` });
-      const staleProbe = await admissionProbe(async () => stale), artifact = join(directory, artifactRelative);
+      stale = JSON.stringify({ ...JSON.parse(await readFile(resolve(root, registrationRelative), "utf8")), artifactDigest: `sha256:${"0".repeat(64)}` });
+      staleProbe = await admissionProbe(async () => stale); artifact = join(directory, artifactRelative);
+    }));
+    beforeAll(() => owned(async () => {
       expect(await runProbe(staleProbe, artifact)).toEqual({ kind: "unavailable", reason: "digest_mismatch" });
 
       // This is the real generator with an intentionally stale embedded package pin. It must
       // compile structurally, never ask that old pin to approve its own replacement.
       const generated = await build({ entryPoints: [resolve(root, "apps/server/src/opening-catalogue-build.ts")], bundle: true,
         platform: "node", format: "esm", write: false, logLevel: "silent", plugins: [pinnedJson(async () => stale)] });
-      const generator = join(directory, "generator.mjs"); await writeFile(generator, generated.outputFiles[0]!.text, "utf8");
+      generator = join(directory, "generator.mjs"); await writeFile(generator, generated.outputFiles[0]!.text, "utf8");
+    }));
+    beforeAll(() => owned(async () => {
       await execute(process.execPath, [generator], { cwd: directory });
-      const registrationPath = join(directory, registrationRelative), registration = JSON.parse(await readFile(registrationPath, "utf8"));
-      const compiled = JSON.parse(await readFile(artifact, "utf8")); expect(registration.artifactDigest).toBe(compiled.digest);
+      registrationPath = join(directory, registrationRelative); registrationBytes = await readFile(registrationPath, "utf8"); registration = JSON.parse(registrationBytes);
+      compiled = JSON.parse(await readFile(artifact, "utf8"));
+      freshProbe = await admissionProbe(() => readFile(registrationPath, "utf8"));
+    }));
+    afterAll(async () => {
+      // Hook/test deadlines do not cancel their async work. Join it before deleting the
+      // exact owned temporary directory, so a late copy/write cannot recreate it.
+      // Drain the growing queue: a timed-out setup can register copies after teardown starts.
+      for (let index = 0; index < pending.length; index++) await pending[index]!.catch(() => undefined);
+      if (directory !== undefined) await rm(directory, { recursive: true, force: true });
+    });
+    it("fresh bundled production admission accepts exactly the generated artifact", () => owned(async () => {
+      expect(registration.artifactDigest).toBe(compiled.digest);
       expect(registration.schemaVersion).toBe("1"); expect(registration.sourceId).toBe(compiled.source.id);
-      const freshProbe = await admissionProbe(() => readFile(registrationPath, "utf8"));
       expect(await runProbe(freshProbe, artifact)).toEqual({ kind: "available", ref: { sourceId: compiled.source.id, commit: compiled.source.commit, artifactDigest: compiled.digest } });
+    }));
+    it("the original stale bundle cannot admit the newly generated artifact", () => owned(async () => {
       expect(await runProbe(staleProbe, artifact)).toEqual({ kind: "unavailable", reason: "digest_mismatch" });
+    }));
+    it("the actual generator check accepts both generated outputs", () => owned(async () => {
       await execute(process.execPath, [generator, "--check"], { cwd: directory });
+    }));
+    it("the actual generator check refuses a stale installed registration", () => owned(async () => {
       await writeFile(registrationPath, stale, "utf8");
-      await expect(execute(process.execPath, [generator, "--check"], { cwd: directory })).rejects.toThrow(/Installed opening registration is stale/u);
-    } finally { await rm(directory, { recursive: true, force: true }); }
+      try { await expect(execute(process.execPath, [generator, "--check"], { cwd: directory })).rejects.toThrow(/Installed opening registration is stale/u); }
+      finally { await writeFile(registrationPath, registrationBytes, "utf8"); }
+      expect(await readFile(registrationPath, "utf8")).toBe(registrationBytes);
+    }));
   });
 });
 

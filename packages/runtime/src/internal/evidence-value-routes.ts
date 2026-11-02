@@ -10,7 +10,9 @@
  * from every barrel and package export.
  */
 import { comparisonStructuralAppearances, readComparisonStructuralPopulation } from "../comparison-structural-population.js";
-import { COMPARISON_REDUCTION_CONTRACT, LAST_LEVEL_REDUCTION_CONTRACT, STORY_RANK_REDUCTION_CONTRACT, evidenceReductionContract } from "../evidence-reduction-contract.js";
+import { COMPARISON_REDUCTION_CONTRACT, LAST_LEVEL_REDUCTION_CONTRACT, STORY_RANK_REDUCTION_CONTRACT, OPENING_HISTORY_REDUCTION_CONTRACT, evidenceReductionContract } from "../evidence-reduction-contract.js";
+import { readRecordedOpeningHistory } from "../recorded-opening-history.js";
+import { deepestRecordedOpeningVisits } from "./opening-history-reduction-authority.js";
 import { readRecordedReviewMoments } from "../recorded-review-moments.js";
 import { rankStoryMoments } from "../story.js";
 import { readRecordedLastLevelPopulation } from "../review-evidence.js";
@@ -73,6 +75,7 @@ import {
   createDerivedInspectorTablebaseCategoryV1Evidence,
   createDerivedInspectorTablebaseDistanceV1Evidence,
   createDerivedOpeningDeepestReachedV1Evidence,
+  createDerivedOpeningDeepestReachedV2Evidence,
   createDerivedOpponentCandidateFeatureVectorV1Evidence,
   createDerivedPawnEventTransitionsV1Evidence,
   createDerivedPawnSequenceContactTimingV1Evidence,
@@ -277,6 +280,7 @@ const EVIDENCE_VALUE_ROUTES = Object.freeze({
   "derived.inspector.tablebase_category@1": createDerivedInspectorTablebaseCategoryV1Evidence,
   "derived.inspector.tablebase_distance@1": createDerivedInspectorTablebaseDistanceV1Evidence,
   "derived.opening.deepest_reached@1": createDerivedOpeningDeepestReachedV1Evidence,
+  "derived.opening.deepest_reached@2": createDerivedOpeningDeepestReachedV2Evidence,
   "derived.opponent.candidate_feature_vector@1": createDerivedOpponentCandidateFeatureVectorV1Evidence,
   "derived.pawn.event.transitions@1": createDerivedPawnEventTransitionsV1Evidence,
   "derived.pawn.sequence.contact_timing@1": createDerivedPawnSequenceContactTimingV1Evidence,
@@ -510,9 +514,18 @@ const lastLevelReductionBinding = Object.freeze({ identity: LAST_LEVEL_REDUCTION
   reader: readRecordedLastLevelPopulation, computation: lastRecordedAvailableLevel });
 const storyRankReductionBinding = Object.freeze({ identity: STORY_RANK_REDUCTION_CONTRACT, factory: createDerivedStoryRankV3Evidence,
   reader: readRecordedReviewMoments, computation: rankStoryMoments });
+const openingHistoryReductionBinding = Object.freeze({ identity: OPENING_HISTORY_REDUCTION_CONTRACT, factory: createDerivedOpeningDeepestReachedV2Evidence,
+  reader: readRecordedOpeningHistory, computation: deepestRecordedOpeningVisits });
 export function inspectEvidenceReductionBinding(operation: VersionedEvidenceId) {
   const contract = evidenceReductionContract(operation);
   if (contract === COMPARISON_REDUCTION_CONTRACT) return inspectComparisonReductionBinding();
+  if (contract === OPENING_HISTORY_REDUCTION_CONTRACT) {
+    const factory = EVIDENCE_VALUE_ROUTES["derived.opening.deepest_reached@2"];
+    if (factory !== createDerivedOpeningDeepestReachedV2Evidence || factory.name !== contract.factory || factory.meta.route !== "derived.opening.deepest_reached@2"
+      || factory.meta.shape !== "derived" || factory.meta.result !== "items" || openingHistoryReductionBinding.reader !== readRecordedOpeningHistory
+      || openingHistoryReductionBinding.computation !== deepestRecordedOpeningVisits) throw new TypeError("Opening history lacks its exact factory/source/computation binding");
+    return openingHistoryReductionBinding;
+  }
   if (contract === STORY_RANK_REDUCTION_CONTRACT) {
     const factory = EVIDENCE_VALUE_ROUTES["derived.story.rank@3"];
     if (factory !== createDerivedStoryRankV3Evidence || factory.name !== contract.factory || factory.meta.route !== "derived.story.rank@3"

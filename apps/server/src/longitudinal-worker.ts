@@ -25,6 +25,7 @@ export interface LongitudinalWorkerProgress {
   readonly failed: number;
   readonly conflicts: number;
   readonly renewals: number;
+  readonly claimElapsedMs: number;
   readonly abandoned: number;
 }
 
@@ -62,7 +63,7 @@ export class LongitudinalProjectionWorker {
   #drained: Promise<void> | undefined;
   #resolveDrained: (() => void) | undefined;
   #exited = false;
-  readonly #totals = { claimed: 0, completed: 0, failed: 0, conflicts: 0, renewals: 0, abandoned: 0 };
+  readonly #totals = { claimed: 0, completed: 0, failed: 0, conflicts: 0, renewals: 0, abandoned: 0, claimElapsedMs: 0 };
   readonly #listeners = new Set<(progress: LongitudinalWorkerProgress) => void>();
 
   private constructor(worker: Worker, databasePath: string, drainSignal: SharedArrayBuffer, drainGraceMs: number) {

@@ -3,8 +3,9 @@ import { build } from "esbuild";
 import { describe, expect, it, vi } from "vitest";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { sha256Hex } from "./assistance-exchange-digest.js";
+import * as synchronousDigest from "./assistance-exchange-digest.js";
 import {
-  admitInstalledOpeningCatalogue, compileLoadedOpeningCatalogue, isInstalledOpeningCatalogue,
+  admitInstalledOpeningCatalogue, admitInstalledOpeningCatalogueText, compileLoadedOpeningCatalogue, isInstalledOpeningCatalogue,
   readInstalledOpeningCatalogue, type RuntimeOpeningCatalogue,
 } from "./opening-catalogue.js";
 
@@ -22,6 +23,49 @@ function installed() {
 }
 
 describe("the actual installed opening source", () => {
+  it("owns startup JSON before awaiting built-in SHA-256, without redundant object cloning or a weaker source", async () => {
+    const expected = installed(), input = structuredClone(raw);
+    const synchronous = vi.spyOn(synchronousDigest, "sha256Hex"), native = vi.spyOn(globalThis.crypto.subtle, "digest"), clone = vi.spyOn(globalThis, "structuredClone");
+    try {
+      const pending = admitInstalledOpeningCatalogueText(JSON.stringify(input));
+      expect(isInstalledOpeningCatalogue(pending)).toBe(false);
+      Object.assign(input.namedEndpoints[0]!, { name: "changed while digest is pending" });
+      const value = await pending;
+      if (value.kind !== "available") throw new TypeError(`async source unavailable: ${value.reason}`);
+      expect(native).toHaveBeenCalledTimes(1); expect(synchronous).not.toHaveBeenCalled(); expect(clone).not.toHaveBeenCalled();
+      expect(value.catalogue.artifact).toEqual(expected.catalogue.artifact);
+      expect(value.source.ref).toEqual(expected.source.ref); expect(value.source).not.toBe(expected.source);
+      expect(isInstalledOpeningCatalogue(value.source)).toBe(true);
+      expect(readInstalledOpeningCatalogue(value.source)).toBe(value.catalogue);
+      expect(Object.isFrozen(value.catalogue.artifact.namedEndpoints[0])).toBe(true);
+      expect(value.catalogue.openingIdentity(E4, 1)).toEqual(expected.catalogue.openingIdentity(E4, 1));
+    } finally { synchronous.mockRestore(); native.mockRestore(); clone.mockRestore(); }
+  });
+
+  it.each(["missing", "shape", "name", "noncanonical-key", "duplicate", "missing-member", "accessor", "digest", "rewritten"] as const)("async admission preserves the actual %s refusal", async fault => {
+    const input = structuredClone(raw);
+    let value: unknown = input, reason = "artifact_invalid";
+    if (fault === "missing") { value = undefined; reason = "artifact_missing"; }
+    else if (fault === "shape") value = { ...input, extra: true };
+    else if (fault === "name") Object.assign(input.namedEndpoints[0]!, { name: " " });
+    else if (fault === "noncanonical-key") Object.assign(input.pathMembership[0]!, { key: "not a canonical key" });
+    else if (fault === "duplicate") (input.namedEndpoints as RuntimeOpeningCatalogue["namedEndpoints"][number][]).push(input.namedEndpoints[0]!);
+    else if (fault === "missing-member") Object.assign(input, { pathMembership: [] });
+    else if (fault === "accessor") Object.defineProperty(input.namedEndpoints[0]!, "name", { get() { throw new Error("must not invoke a caller accessor"); }, enumerable: true });
+    else if (fault === "digest") { Object.assign(input, { digest: `sha256:${"0".repeat(64)}` }); reason = "digest_mismatch"; }
+    else { Object.assign(input.namedEndpoints[0]!, { name: "self-consistent but not installed" }); value = redigest(input); reason = "digest_mismatch"; }
+    const text = value === undefined || fault === "accessor" ? value : JSON.stringify(value);
+    expect(await admitInstalledOpeningCatalogueText(text as never)).toEqual({ kind: "unavailable", reason });
+  });
+
+  it("async admission refuses an extra caller-supplied registration instead of using it", async () => {
+    await expect((admitInstalledOpeningCatalogueText as (...args: unknown[]) => Promise<unknown>)(JSON.stringify(raw), { artifactDigest: raw.digest })).rejects.toThrow(/only the artifact/u);
+  });
+
+  it.each(["", "not JSON", "{", "null", "false", "42", '"catalogue"'])("classifies malformed/wrong-shaped startup JSON as invalid: %s", async text => {
+    expect(await admitInstalledOpeningCatalogueText(text)).toEqual({ kind: "unavailable", reason: "artifact_invalid" });
+  });
+
   it("admits the pinned complete document, owns its maps once, and preserves named/unnamed meanings", () => {
     const value = installed(), owner = readInstalledOpeningCatalogue(value.source);
     expect(owner).toBe(value.catalogue); expect(readInstalledOpeningCatalogue(value.source)).toBe(owner);

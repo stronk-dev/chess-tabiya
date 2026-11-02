@@ -1,5 +1,23 @@
 # Codex queue
 
+**Verified complete recorded-opening history checkpoint, 2026-11-02 — [[D3376]], [[D3857]] remain
+doing; [[D3909]], [[D3910]], [[D3911]], [[D3912]], [[D3913]], [[D3914]], [[D3915]], [[D3916]],
+[[D3917]] closed locally:**
+whole original event/snapshot/branch/FEN/edge validation precedes root-inclusive prefix narrowing
+and every real paired lookup. All occurrences, authentic empty arrays and negative invocations
+remain; exact fourth V2 deepest-history@2 reduction preserves the old successful fields and @1
+behavior.84 cross-reduction,243 source,46 point/API and53 worker/store cases, clean types and
+independent review pass. Real repairs remove repeated immutable Compare validation/unchanged
+Review replay, preserve successful runner-gated profile publication, fix heartbeat-phase drift
+and measure its actual active claim, and parse private startup JSON once with built-in crypto.
+All normal local tiers pass8395 software/432 files, seven unchanged-budget performance/four,
+271 content/27, governance/corpus/build, plus nine built browser journeys with zero retries.
+Failed/interrupted commands and the corrected seven missing explicit queue routes stay logged;
+no failed combined command is relabelled green. D3591's historical cause stays open.
+Next finish the actual workflow-issued GradeSource/paired grade/accuracy/graph and complete
+Nudge/Review images, then full current Inspector delivery with all accepted sources. The general
+catalogue pool remains open. No legacy-only arm, partial current image or whole parent promotion.
+
 **Verified point/Theory opening-leg checkpoint — [[D3376]], [[D3857]] remain doing;
 [[D3904]], [[D3905]], [[D3906]], [[D3907]], [[D3908]] closed locally:**
 genuine point-factory result arrays, original source/position/row receipts and actual Theory

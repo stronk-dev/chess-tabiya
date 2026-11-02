@@ -7,7 +7,7 @@
 // [[D3300]]: the projector now finishes the arm in a few seconds rather than tens, so a fixed "three
 // renewals" floor would measure host speed, not liveness. The instrument requires one renewal per
 // elapsed heartbeat (less two for the first interval and the checkpoint granularity) up to the
-// observed publication; the deterministic >= 3-renewal and timer-only negatives stay in
+// worker-local actual publication (not later HTTP observation); deterministic >= 3-renewal and timer-only negatives stay in
 // longitudinal-store.test.ts, where the projection duration is controlled.
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import type { AddressInfo } from "node:net";
@@ -127,14 +127,16 @@ describe("longitudinal worker responsiveness and lease liveness", () => {
     const job = database.prepare("SELECT state, completed_seq FROM learner_observation_jobs WHERE run_id='eighty'").get() as { state: string; completed_seq: number };
     const denominators = database.prepare("SELECT sum(decisions) AS n FROM learner_observation_denominators WHERE run_id='eighty'").get() as { n: number };
     database.close();
-    const receipt = { event: "longitudinal_worker_performance", probes: probes.length, elapsedMs: Math.round(performance.now() - started), p95DelayMs: p95, maxDelayMs: max, maxProbeMs: Math.max(...probes), renewals: progress.renewals, publishedAfterMs: Math.round(publishedAfterMs), longestGc, longestProbeCycle };
+    const receipt = { event: "longitudinal_worker_performance", probes: probes.length, elapsedMs: Math.round(performance.now() - started), p95DelayMs: p95, maxDelayMs: max, maxProbeMs: Math.max(...probes), renewals: progress.renewals, claimElapsedMs: progress.claimElapsedMs, publishedAfterMs: Math.round(publishedAfterMs), longestGc, longestProbeCycle };
     console.info(JSON.stringify(receipt));
     mkdirSync(new URL("../../../.cache/", import.meta.url), { recursive: true });
     writeFileSync(new URL("../../../.cache/longitudinal-worker-performance.json", import.meta.url), `${JSON.stringify(receipt, null, 2)}\n`);
     expect(job).toEqual({ state: "complete", completed_seq: 81 });
     expect(denominators.n).toBe(40);
-    expect(progress).toMatchObject({ completed: 1, failed: 0 });
-    expect(progress.renewals).toBeGreaterThanOrEqual(Math.max(0, Math.floor(publishedAfterMs / 1_000) - 2));
+    // Exactly one real claim correlates this receipt's elapsed window and successful CAS count.
+    expect(progress).toMatchObject({ claimed: 1, completed: 1, failed: 0, conflicts: 0, abandoned: 0 });
+    expect(progress.claimElapsedMs).toBeGreaterThan(0);
+    expect(progress.renewals).toBeGreaterThanOrEqual(Math.max(0, Math.floor(progress.claimElapsedMs / 1_000) - 2));
     expect(p95).toBeLessThan(BUDGET.p95Ms);
     expect(max).toBeLessThan(BUDGET.maxDelayMs);
     expect(Math.max(...probes)).toBeLessThan(BUDGET.maxProbeMs);

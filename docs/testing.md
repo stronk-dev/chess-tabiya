@@ -1,5 +1,15 @@
 # Testing and CI
 
+`make opening-history-check` covers the complete recorded opening prefix and all four current
+reductions, including actual negative lookups and original occurrence authority. The source is
+internal groundwork, not proof of complete Review/Inspector delivery. `make opening-source-check`
+also exercises actual file/SQLite/build admission. `make recorded-review-boundary-check` asserts
+that every read reloads live storage while an unchanged validated snapshot is not replayed again;
+changed/malformed inputs and revoked sources still refuse. `make guidance-lifetime-check` retains
+real in-flight HTTP grant revocation. Normal `make verify build` includes these software files
+and the separate unchanged-budget performance/content/governance tiers. Focused passes cannot
+substitute for the complete result or remote GitHub qualification.
+
 `make bot-calibration-card-check` exercises all 36 supported strength/distribution/band combinations,
 malformed receipt/card refusals and mounted verdict labels. The native counterpart compiles its
 synthetic controls with the actual server card compiler into ignored `.cache/` output; the normal

@@ -15,8 +15,8 @@ interface Data {
   singleResult?: DeclaredEvidence<unknown>;
 }
 const authorities = new WeakMap<object, Data>(), values = new WeakMap<object, { authority: EvidenceReductionAuthority; ordinal: number }>(), results = new WeakMap<object, EvidenceReductionAuthority>();
-type Binding = Readonly<{ operation: "compare.structure_delta" | "story.last_level" | "story.rank";
-  projection: "derived.compare.structure_delta" | "derived.story.last_level" | "derived.story.rank";
+type Binding = Readonly<{ operation: "compare.structure_delta" | "story.last_level" | "story.rank" | "opening.deepest_reached";
+  projection: "derived.compare.structure_delta" | "derived.story.last_level" | "derived.story.rank" | "derived.opening.deepest_reached";
   version: 2 | 3; resultKind: "items" | "single"; factory: string }>;
 const operationProofs = new WeakMap<object, Readonly<{ proof: EvidenceReductionMintImage; validate: (manifest?: CompiledEvidenceManifest) => void; binding: Binding }>>();
 function seal(proof: EvidenceReductionMintImage, validate: (manifest?: CompiledEvidenceManifest) => void, binding: Binding): OwnedEvidenceReductionProof {
@@ -37,6 +37,10 @@ export function sealOwnedLastLevelReductionProof(proof: EvidenceReductionItemsMi
 }
 export function sealOwnedStoryRankReductionProof(proof: EvidenceReductionSingleMintImage, validate: (manifest?: CompiledEvidenceManifest) => void): OwnedEvidenceReductionProof {
   return seal(proof, validate, Object.freeze({ operation: "story.rank", projection: "derived.story.rank", version: 3, resultKind: "single", factory: "createDerivedStoryRankV3Evidence" }));
+}
+/** Issued only by the exact owned recorded-opening computation module. */
+export function sealOwnedOpeningHistoryReductionProof(proof: EvidenceReductionItemsMintImage, validate: (manifest?: CompiledEvidenceManifest) => void): OwnedEvidenceReductionProof {
+  return seal(proof, validate, Object.freeze({ operation: "opening.deepest_reached", projection: "derived.opening.deepest_reached", version: 2, resultKind: "items", factory: "createDerivedOpeningDeepestReachedV2Evidence" }));
 }
 function read(authority: EvidenceReductionAuthority) {
   const data = authorities.get(authority);

@@ -7,6 +7,7 @@ import { evidenceDigest, evidenceValueReceipt } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { createRecordedReviewBoundarySourceOwner, isRecordedReviewBoundary, readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import { readBackReplay } from "./replay.js";
+import * as replay from "./replay.js";
 import { createReviewPrefixAuthority, type ReviewImportRecordImage } from "./review-evidence.js";
 import { commitMove, fork, rewind } from "./runtime.js";
 import * as semanticPath from "./recorded-semantic-path.js";
@@ -34,6 +35,31 @@ function results(boundary: RecordedReviewBoundary) { return invokeEvidenceValueR
 function consequences(boundary: RecordedReviewBoundary) { return invokeEvidenceValueRoute(CONSEQUENCE, { recordedReview: boundary }); }
 
 describe("recorded Review boundary source (Review §4.5)", () => {
+  it("D3914 rereads live run/import storage without replaying the same validated game", () => {
+    const run = play(importedRun("currentness-replay"), ["e2e4", "e7e5"]), record = importRecord(run, "1-0");
+    const loadRun = vi.fn(() => structuredClone(run)), loadImportRecord = vi.fn(() => ({ ...record }));
+    const owner = createRecordedReviewBoundarySourceOwner({ loadRun, loadImportRecord });
+    const replayed = vi.spyOn(replay, "readBackReplay");
+    try {
+      const boundary = owner.resolve(request(run)), callsAtIssue = replayed.mock.calls.length;
+      expect(callsAtIssue).toBeGreaterThan(0);
+      for (let index = 0; index < 3; index++) readRecordedReviewBoundary(boundary);
+      expect(loadRun).toHaveBeenCalledTimes(4); expect(loadImportRecord).toHaveBeenCalledTimes(4);
+      expect(replayed).toHaveBeenCalledTimes(callsAtIssue);
+    } finally { replayed.mockRestore(); }
+  });
+
+  it("D3914 cannot equate a corrupted sparse source array with its original empty array", () => {
+    const run = play(importedRun("sparse-currentness"), ["e2e4"]), source = stored(run, importRecord(run, "1-0"));
+    const boundary = source.owner.resolve(request(run)), changed = structuredClone(run);
+    expect(changed.events[0]!.type).toBe("run.started");
+    if (changed.events[0]!.type !== "run.started") throw new Error("fixture");
+    expect(changed.events[0]!.data.policyConfig.locus.engineIds).toEqual([]);
+    Object.assign(changed.events[0]!.data.policyConfig.locus, { engineIds: Array(1) });
+    source.setRun(changed);
+    expect(() => readRecordedReviewBoundary(boundary)).toThrow();
+    expect(() => source.owner.resolve(request(changed))).toThrow();
+  });
   it.each(["white", "black"] as const)("keeps every original prefix, absolute occurrence and only the original endpoint result: %s", side => {
     const run = play(importedRun(`prefix-${side}`, side), ["e2e4", "e7e5", "g1f3", "b8c6"]), record = importRecord(run, "0-1");
     const source = stored(run, record), path = branchPath(run, run.activeCursor.branchId), before = JSON.stringify(run), frozen = Object.isFrozen(run);
@@ -172,7 +198,9 @@ describe("recorded Review boundary source (Review §4.5)", () => {
     const original = source.owner.resolve(request(run));
     const extended = commitMove(run, "g1f3", { at: REVIEW_AT }).run;
     source.setRun(extended);
-    expect(() => source.owner.assertCurrent(original)).toThrow(/movetext/u);
+    // Existing handles fail currentness on any changed complete snapshot. Newly resolved
+    // handles below still perform the original mainline/movetext validation in full.
+    expect(() => source.owner.assertCurrent(original)).toThrow(/no longer/u);
     for (const node of branchPath(extended, extended.activeCursor.branchId)) {
       expect(() => source.owner.resolve(request(extended, node.id))).toThrow(/movetext/u);
     }

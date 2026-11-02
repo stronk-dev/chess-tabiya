@@ -14,6 +14,8 @@ export interface LongitudinalBatchReceipt {
   readonly failed: number;
   readonly conflicts: number;
   readonly renewals: number;
+  /** Worker-local active claim time, through actual publication; not message/HTTP latency. */
+  readonly claimElapsedMs: number;
   /** Claims handed back at drain time for immediate re-lease ([[D3300]]). */
   readonly abandoned: number;
 }
@@ -47,52 +49,61 @@ class LongitudinalDrainRequested extends Error {
 
 type ClaimOutcome = "completed" | "failed" | "conflict" | "abandoned";
 
-function processClaim(store: LongitudinalStore, config: LongitudinalWorkerConfig, claim: LongitudinalClaim, options: LongitudinalBatchOptions, counters: { renewals: number }): ClaimOutcome {
+function processClaim(store: LongitudinalStore, config: LongitudinalWorkerConfig, claim: LongitudinalClaim, options: LongitudinalBatchOptions, counters: { renewals: number; claimElapsedMs: number }): ClaimOutcome {
   const monotonic = options.monotonicNow ?? (() => performance.now());
-  let current = claim;
-  let lastRenewal = monotonic();
-  let image: LongitudinalSourceImageV4 | undefined;
+  const started = monotonic();
   try {
-    image = store.claimSourceImage(current);
-  } catch (error) {
-    if (error instanceof LongitudinalSnapshotError) return store.fail(current, "snapshot_invalid") ? "failed" : "conflict";
-    throw error;
-  }
-  if (image === undefined) return "conflict";
-  if (store.sourceDigest(image) !== current.claimedSourceDigest) {
-    // Stored bytes moved without a watermark: re-derive it, which fences this claim.
-    store.refreshWatermark(current.runId);
-    return "conflict";
-  }
-  const checkpoint = (): void => {
-    if (options.drainRequested?.() === true) throw new LongitudinalDrainRequested();
-    const now = monotonic();
-    if (now - lastRenewal < config.workerHeartbeatMs) return;
-    const renewed = store.renew(current, config.workerLeaseMs);
-    if (renewed === undefined) throw new LongitudinalClaimLost();
-    current = renewed;
-    lastRenewal = now;
-    counters.renewals += 1;
-  };
-  let projection: LongitudinalProjection;
-  try {
-    projection = options.project === undefined
-      ? projectObservations(image, { checkpoint })
-      : options.project(image, checkpoint);
-  } catch (error) {
-    if (error instanceof LongitudinalDrainRequested) {
-      store.abandon(current);
-      return "abandoned";
+    let current = claim;
+    let lastRenewal = started;
+    let image: LongitudinalSourceImageV4 | undefined;
+    try {
+      image = store.claimSourceImage(current);
+    } catch (error) {
+      if (error instanceof LongitudinalSnapshotError) return store.fail(current, "snapshot_invalid") ? "failed" : "conflict";
+      throw error;
     }
-    if (error instanceof LongitudinalClaimLost) return "conflict";
-    if (error instanceof LongitudinalSnapshotError) return store.fail(current, "snapshot_invalid") ? "failed" : "conflict";
-    return store.fail(current, "derivation_failed") ? "failed" : "conflict";
-  }
-  try {
-    return store.publish(current, projection) === "published" ? "completed" : "conflict";
-  } catch {
-    // A constraint failure inside a still-current claim is a bounded, retryable publication conflict.
-    return store.fail(current, "publication_conflict") ? "failed" : "conflict";
+    if (image === undefined) return "conflict";
+    if (store.sourceDigest(image) !== current.claimedSourceDigest) {
+      // Stored bytes moved without a watermark: re-derive it, which fences this claim.
+      store.refreshWatermark(current.runId);
+      return "conflict";
+    }
+    const checkpoint = (): void => {
+      if (options.drainRequested?.() === true) throw new LongitudinalDrainRequested();
+      const now = monotonic();
+      if (now - lastRenewal < config.workerHeartbeatMs) return;
+      const renewed = store.renew(current, config.workerLeaseMs);
+      if (renewed === undefined) throw new LongitudinalClaimLost();
+      current = renewed;
+      // Keep the heartbeat phase instead of accumulating every checkpoint's lateness.
+      // A missed phase is not a synthetic renewal: exactly this one successful CAS is counted.
+      lastRenewal += Math.floor((now - lastRenewal) / config.workerHeartbeatMs) * config.workerHeartbeatMs;
+      counters.renewals += 1;
+    };
+    let projection: LongitudinalProjection;
+    try {
+      projection = options.project === undefined
+        ? projectObservations(image, { checkpoint })
+        : options.project(image, checkpoint);
+    } catch (error) {
+      if (error instanceof LongitudinalDrainRequested) {
+        store.abandon(current);
+        return "abandoned";
+      }
+      if (error instanceof LongitudinalClaimLost) return "conflict";
+      if (error instanceof LongitudinalSnapshotError) return store.fail(current, "snapshot_invalid") ? "failed" : "conflict";
+      return store.fail(current, "derivation_failed") ? "failed" : "conflict";
+    }
+    try {
+      return store.publish(current, projection) === "published" ? "completed" : "conflict";
+    } catch {
+      // A constraint failure inside a still-current claim is a bounded, retryable publication conflict.
+      return store.fail(current, "publication_conflict") ? "failed" : "conflict";
+    }
+  } finally {
+    const elapsed = monotonic() - started;
+    if (!Number.isFinite(elapsed) || elapsed < 0) throw new TypeError("Longitudinal claim requires a finite monotonic duration");
+    counters.claimElapsedMs += elapsed;
   }
 }
 
@@ -101,9 +112,9 @@ function processClaim(store: LongitudinalStore, config: LongitudinalWorkerConfig
  * executable `workerConcurrency` slots, and project/publish each claim independently.
  */
 export function runLongitudinalBatch(store: LongitudinalStore, config: LongitudinalWorkerConfig, workerId: string, options: LongitudinalBatchOptions = {}): LongitudinalBatchReceipt {
-  if (options.drainRequested?.() === true) return Object.freeze({ claimed: 0, completed: 0, failed: 0, conflicts: 0, renewals: 0, abandoned: 0 });
+  if (options.drainRequested?.() === true) return Object.freeze({ claimed: 0, completed: 0, failed: 0, conflicts: 0, renewals: 0, abandoned: 0, claimElapsedMs: 0 });
   const claims = store.claimBatch({ workerId, scanLimit: config.workerBatchSize, slots: config.workerConcurrency, leaseMs: config.workerLeaseMs });
-  const counters = { renewals: 0 };
+  const counters = { renewals: 0, claimElapsedMs: 0 };
   let completed = 0;
   let failed = 0;
   let conflicts = 0;
@@ -121,5 +132,5 @@ export function runLongitudinalBatch(store: LongitudinalStore, config: Longitudi
     else if (outcome === "abandoned") abandoned += 1;
     else conflicts += 1;
   }
-  return Object.freeze({ claimed: claims.length, completed, failed, conflicts, renewals: counters.renewals, abandoned });
+  return Object.freeze({ claimed: claims.length, completed, failed, conflicts, renewals: counters.renewals, abandoned, claimElapsedMs: counters.claimElapsedMs });
 }

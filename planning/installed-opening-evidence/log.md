@@ -264,3 +264,172 @@
   pass, including register C1–C8, status P1–P7, zero-untriaged state, roadmap R1–R10 and intent
   parity. Source/test bytes are unchanged; only this append records those completed checks.
   The normal commit hook rechecks the final staged image. No remote action or goal pause.
+
+## 2026-11-01 — complete recorded opening history and exact fourth reduction
+
+- Continue the active full1.0 goal from7f6d6539, under accepted installed-opening §3a/F2 §2.3k/
+  provider §1a. No new schema, reservation ruling, worktree, source policy or learner preset.
+- Implement collectRecordedOpeningHistory over the genuine installation and complete original
+  canonical event/snapshot/branch/FEN/edge graph before narrowing. Detach the selected root-inclusive
+  prefix, preserving original rows, positions, paired invocations and positive/empty point arrays.
+  Full successful-negative lookup results and repeated/re-entered occurrences remain distinct.
+- Implement exactly opening.deepest_reached@1 / derived.opening.deepest_reached@2 through the
+  normal V2 compiler, central dispatcher, sole mint and private complete items-result protocol.
+  Source image includes the complete original run, prefix and all real lookup/receipt images;
+  output digest contains only ordered producer/projection/payload identities, never its own receipt.
+  Keep old helper selection/fields, nested endpoint@1 and historical unavailable factory unchanged.
+- Earlier focused failures remain: first missing-source suite, two incorrect test-fixture APIs/
+  mutation assumptions, readonly test-field assignments, local-leaf path requirements, missing
+  fourth core-mint admission and two wrong real-catalogue expectations. Correct the actual source/
+  mint/tests, not compiler meanings or deadlines. The proper catalogue also names a6 after e4;
+  a negative suffix is tested only after that actual named endpoint.
+- D3909: explicit profile refresh rejects the new route at unconditional old-pinned set equality.
+  Normal checks retain that equality; only deliberate refresh generates the complete checked set.
+- D3910: that refresh then reports Compare7376ms/5000 while still writing after synchronous body
+  completion. Separate construction, complete output assertions and real falsifiers; require the
+  runner's actual626 passed cases before any write. Correct the new Vitest hook's fixture parameter
+  to ({}, suite), retaining exact full, empty and unavailable sets. The intermediate run still fails
+  at output validation8010ms/5000; it is not relabelled green.
+- D3911: repeated complete immutable Compare-source reconstruction causes that validation cost.
+  The permanent call-count falsifier first reads5 images versus its original2. Memoize only each
+  original proof's successful immutable source/occurrence/output validation; retain callable-plan
+  identity and actual consumer-manifest checks on EVERY read. Do not cache service access or live
+  Review sources. Independent review clears this boundary and the original stale-plan/foreign-
+  manifest tests remain. Complete explicit profile refresh then passes626 cases in2.63s.
+- The chained route-map-update command subsequently refuses because that historical migration
+  receipt is frozen after its old adapter was deleted. Preserve that refusal and frozen file;
+  no route-map update is needed for an additive current registry route. Run semantic update alone:
+ 343 passing cases,53 populations,8 external receipts,91 subjects and zero qualified subjects.
+- First cross-reduction run also reports four compound Story functional timeouts: mixed white/
+  black9359/8852ms, phase member9036ms, seven-state loop5833ms against unchanged5000ms. D3912
+  separates actual source/value/receipt fixture stages and ordering/image/member/value assertions;
+  each of seven genuine captured provider states gets a real case plus complete distinct-state
+  equality. Live storage revocation stays unchanged; no production Story cache or timeout increase.
+- Final focused make opening-history-check passes84 cases/five files in27.08s; all four installed
+  operations, authentic empty arrays, named root, exit/re-entry, occurrence addresses, corrupt
+  coordinated event/snapshot suffix/unrelated branch and copied/foreign proofs are exercised.
+  Independent authorized read-only review clears source/reduction and D3909–D3912 repairs without
+  claiming test execution. Broader source/API/type/full normal verification follows sequentially.
+- D3376/D3857 stay doing: current Inspector/Review/API/native consumer adoption, actual GradeSource,
+  general catalogue pool and qualification/release obligations remain. No official pack, module,
+  capability, milestone or RFC completion; no remote CI claim or push. Goal remains active.
+
+- Broader normal opening-source-check first reports133 passed/four failed: the literal manifest
+  count needs the additive320th projection (bindings/consumers unchanged), actual bundled rebuild
+ 5009ms and reloaded white prefix3/4 at5196/6960ms. D3913 records these compound integration cases.
+  An intermediate setup-only split still fails: build5015ms; white3/4 and black3 at10200/7729/5645ms.
+  These are failed runs, not retries counted as success. Finish semantic stage boundaries: actual
+  file-backed parser/save/reopen fixture, attachments, last-level population, full source, moments
+  and rank get ordinary owned setup hooks; all original assertions get separate functional cases
+  for every color/prefix. Full-endpoint live revocation is independently retained for both colors.
+  Generator/fresh bundle/stale bundle/both-output checks remain actual production probes. Join
+  asynchronous setup/test promises before exact temp cleanup, including hook failure; restore
+  deliberately stale registration after its refusal case. No deadline/performance-budget change.
+
+## 2026-11-02 — final normal verification in progress
+
+- Opening sources pass202 cases/eight files; point/API delivery passes46/four; workspace types
+  report zero errors/warnings. Independent review clears owned async fixture cleanup after its
+  growing promise queue is drained and exact generated registration bytes are restored.
+- First full normal chain passes2042 permanent authority cases/18 files,132 execution/reduction
+  cases/six and314 live Review-source cases/ten, plus types/scaffold/manifest/semantic contracts.
+  It then correctly refuses the missing new capability declaration. Ordinary
+  make capability-declarations adds exactly derived.opening.deepest_reached@i:2, retaining all
+ 1018 predecessors and unchanged472 applicability rows. Semantic update retains its same343/
+ 53/8/91/zero-qualified populations. No historical migration receipt or meaning is rewritten.
+- Final code/test bytes now run the full normal make verify build again. No successful full
+  run, source qualification, learner history migration or remote CI is claimed by this entry.
+
+- That second full run was deliberately interrupted after reporting two Review-moment functional
+  timeouts, the real revoked-grant voice HTTP timeout, and seven skipped cases in one shared
+  reloaded-source fixture. Its final hook diagnostic was not collected; do not infer one. Exit130
+  is an interrupted failed checkpoint, not a successful complete pool. D3914/D3915 own the findings.
+- D3914's deterministic replay counter first fails at four replays versus one. Retain full original
+  resolution-time validation, but check each later read against strict complete snapshot/import
+  bytes after loading actual live storage again. No permission/currentness cache, hash, source
+  relaxation or deadline change. Strict serialization rejects sparse-array corruption; changed
+  existing handles fail before a fresh resolution diagnoses an incompatible imported movetext.
+  The permanent22-case boundary check passes, retaining both live loaders and all revocations.
+- D3915 separates actual application/auth/run/grant setup from the real deferred-provider HTTP
+  request/revocation assertion and owned cleanup. The same grant revoked during an in-flight
+  request must still produce404/RUN_NOT_FOUND. No production voice change or timeout increase;
+  neither a green focused replay nor this fixture repair establishes a production cause for the
+  original asynchronous timeout. Independent bounded review clears the lifecycle/assertion change
+  and D3914's strict live equality. The broader source check now passes224 cases/nine files.
+  Final normal verification follows on the repaired image; no full success claimed yet.
+
+- The complete stable-image software pool passes8365 cases/all432 files in656.58s, with no
+  failures/skips. The same normal make verify build then stops in performance: five pass/two
+  fail across four files in125.63s. D3916 is renewals12 versus13 required at15338ms observed
+  publication, not an event-loop budget failure (p95 13.72ms/max82.05ms/probe178.12ms).
+  D3917 is actual cold catalogue load321.454583ms against250ms, before lookup measurement.
+  No governance/content/final-build result belongs to that failed combined command. Keep both
+  defects doing, diagnose before repair, retain all budgets and D3591's separate historical cause.
+
+- D3917 disposable attribution first refuses a duplicate local diagnostic identifier; corrected
+  probe measures177.20ms wall/168.59ms thread CPU, all7854 key checks93.39ms, schema3.94ms,
+  canonical JSON11.76ms and synchronous SHA32.64ms. These are bounded diagnostic observations,
+  not attribution of the original321ms event. Temporary instrumentation is removed; only a tiny
+  ignored aggregate remains, no raw profile enters Git or progress inputs. Built-in async SHA
+  alone still fails cold load306.999875ms after235 source passes; do not call that repair complete.
+- Final startup ownership passes immutable text into the runtime owner, which parses private JSON
+  once. It avoids both the redundant caller-object descriptor walk/clone and synchronous JavaScript
+  hashing, without skipping any schema/key/order/join/digest/installed-registration check. The public
+  object path retains descriptor validation and detached ownership. Actual native-crypto/no-clone,
+  caller-isolation, malformed text/object, stale checksum, structural-invalid-before-checksum and
+  self-consistent foreign installation controls pass in242 source cases. Normal generation updates
+  only compiler metadata/digests, not the3810 endpoints/7854 membership meanings. Types and the
+  unchanged cold-load/full-lookup performance gate pass; independent bounded review clears.
+- D3916 independent review identifies cumulative checkpoint rounding and the unrelated HTTP
+  observation clock. Real-store controlled600ms checkpoints first produce12 rather than15 CAS
+  renewals; the long-gap case first produces1 rather than2. Fixed phase deadlines now count only
+  actual successful CAS calls, never synthetic catch-up. Worker-local claimElapsedMs covers source
+  preparation THROUGH actual publish return; later message/HTTP observation stays separate.
+  Exactly one real claim correlates duration and renewals under the same heartbeat/floor-minus2.
+  Long actual preparation/publication remains visible and deliberately fails that same floor;
+  later observation cannot extend it. Strict finite timing, original controlled>=3 renewals,
+  timer-only/lease-loss/drain controls and all HTTP budgets remain.53 real-store/thread cases,
+  clean types and independent bounded review pass. This clarifies the accepted §C measurement,
+  not a new product policy, schema, deadline or source qualification.
+- All seven unchanged-budget performance cases/four files pass in76.23s after these real repairs.
+  The earlier failed run and native-crypto-only failure remain failed records. Normal final profile
+  refresh, complete verification/build and closeout follow; D3591's historical stall cause remains
+  open and no full success or remote readiness is claimed yet. The tracker initially refuses missing
+  rows and unsupported evidence fields on doing states; canonical sync/batch assignment restores
+  zero untriaged without changing its ratchet or weakening validation.
+
+- Actual file-loader no-clone/native-digest control passes alongside the complete243 source,
+ 84 cross-reduction and46 point/API cases. Explicit profile refresh passes all626 selected genuine/
+  falsifier cases before writing (673 unrelated cases are excluded only by that update target's
+  name filter, not by software CI). Exactly the two predecessor opening payload profiles change
+  for the regenerated compiler/installation identity; the added history@2 carries that same new
+  reference. Other predecessor profiles remain unchanged. Normal authority passes2042/18 files,
+  reduction/execution132/six and live Review-source316/ten with no filtered exclusions. Final
+  source/test bytes now run complete normal verification again; no full success claimed yet.
+
+- Final stable source/test image passes8395 software cases/all432 files in680.92s and all seven
+  unchanged-budget performance cases/four files in67.59s. No software failures/skips. Normal
+  verification then correctly refuses seven unrouted open rows: the queue's range names only its
+  endpoints, not D3910–D3916. Replace it with nine explicit row links; no checker weakening.
+  This combined command exits2 at work-index, so it is not relabelled a successful full command.
+  Source/test bytes stay unchanged while normal governance/content/build and native checks follow.
+
+- Remaining normal make roadmap-receipt verify-governance verify-content build
+  opening-point-browser-check exits0: register C1–C8, lifecycle P1–P7, work/roadmap R1–R10,
+  intent/docs/staged-instrument contracts,271 content cases/27 files (63.12s), real corpus
+  clearance/capability checks, production build and nine built browser journeys (1.5m), zero retries.
+  These desktop/phone-viewport flows retain actual automatic evidence and saved play, named/unnamed
+  opening changes/reload, empty Support recovery, recognized shape links and maximum-load layout.
+  Source/test bytes are unchanged from8395 software/432 files and seven performance/four passes.
+- Close only D3909–D3917 with this log as path evidence. Keep D3376/D3857 doing for complete
+  current Inspector/Review and general catalogue pool; actual GradeSource/paired accuracy/graph and
+  full current Nudge/Review remain next. D3591's historical cause, source qualification, official
+  content, whole capabilities/milestones/RFC and release remain open. No protected-intent change,
+  push, remote-CI claim, new worktree or goal pause. Final metadata/staged checks follow before commit.
+
+- Post-closeout normal governance and roadmap-progress exit0. All3666 rows are assigned; zero
+  untriaged and zero unrouted among1748 live:628 todo/37 doing/1083 blocked,1756 done/162 refused.
+  The462 historical prose-only closures are unchanged. Roadmap remains four active/five blocked
+  milestones, with incremental history delivery recorded separately; no release gate is promoted.
+  Stage only this checkpoint's explicit source/test/docs/metadata paths and verify the exact index
+  before the normal commit hook. No source/test bytes changed after their completed verification.

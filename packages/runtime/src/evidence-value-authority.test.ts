@@ -61,6 +61,7 @@ import { createRecordedPivotalSource } from "./pivotal.js";
 import { createRecordedSequenceWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import { recordedSequenceRouteFixture } from "./testing/recorded-sequence-window-fixture.js";
 import { admitInstalledOpeningCatalogue } from "./opening-catalogue.js";
+import { collectRecordedOpeningHistory } from "./recorded-opening-history.js";
 
 const OPENING_INSTALLATION = admitInstalledOpeningCatalogue(JSON.parse(readFileSync(new URL("../../../apps/server/artifacts/runtime-opening-catalogue.json", import.meta.url), "utf8")));
 
@@ -174,14 +175,15 @@ describe("value authority: static closure", () => {
   });
   it("restricts comparison proof/seal issuance to the exact operation and sole mint", () => {
     const callers = (name: string) => PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has(name)).sort();
-    for (const name of ["computeComparisonReduction", "computeLastLevelReduction", "computeStoryRankReduction", "initiateEvidenceReduction", "publishEvidenceReduction", "publishSingleEvidenceReduction"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-factories.ts"]);
+    for (const name of ["computeComparisonReduction", "computeLastLevelReduction", "computeStoryRankReduction", "computeOpeningHistoryReduction", "initiateEvidenceReduction", "publishEvidenceReduction", "publishSingleEvidenceReduction"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-factories.ts"]);
     expect(callers("sealOwnedComparisonReductionProof")).toEqual(["packages/runtime/src/internal/comparison-reduction-authority.ts"]);
     expect(callers("sealOwnedLastLevelReductionProof")).toEqual(["packages/runtime/src/internal/last-level-reduction-authority.ts"]);
     expect(callers("sealOwnedStoryRankReductionProof")).toEqual(["packages/runtime/src/internal/story-rank-reduction-authority.ts"]);
+    expect(callers("sealOwnedOpeningHistoryReductionProof")).toEqual(["packages/runtime/src/internal/opening-history-reduction-authority.ts"]);
     for (const name of ["joinEvidenceReductionValue", "evidenceReductionMintReceipt"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-contract.ts"]);
     const store = FACTS.get("packages/runtime/src/internal/evidence-reduction-seal.ts")!;
     expect(store.valueImports).toEqual([]); // Type-only imports cannot reintroduce catalogue bootstrap.
-    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/(?:comparison|last-level|story-rank)-reduction-authority|evidence-reduction-seal|sealOwned(?:Comparison|LastLevel|StoryRank)ReductionProof|initiateEvidenceReduction|publishSingleEvidenceReduction/u);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/(?:comparison|last-level|story-rank|opening-history)-reduction-authority|evidence-reduction-seal|sealOwned(?:Comparison|LastLevel|StoryRank|OpeningHistory)ReductionProof|initiateEvidenceReduction|publishSingleEvidenceReduction|readRecordedOpeningHistory/u);
     for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/recorded-engine-attachments|collectRecordedEngineAttachments|readRecordedEngineAttachments/u);
   });
   it("only evidence-factories.ts calls declareEvidence outside tests (criterion 5, §8.1)", () => {
@@ -270,7 +272,7 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds landing captures; §2.3a adds numerical differences and exact engine points.
-    expect(ACTIVE).toHaveLength(312);
+    expect(ACTIVE).toHaveLength(313);
     expect(RETIRED).toEqual([
       "derived.story.eval_shift@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
@@ -350,7 +352,8 @@ describe("value authority: registry equality", () => {
     const sequences = Object.keys(RECORDED_SEQUENCE_HORIZONS).sort();
     expect(allExtra.filter(route => sequences.includes(route))).toEqual(sequences);
     expect(allExtra.filter(route => route === "derived.story.rank@3")).toEqual(["derived.story.rank@3"]);
-    const extra = allExtra.filter(route => !localTactical.includes(route) && !sequences.includes(route) && route !== "derived.story.rank@3");
+    expect(allExtra.filter(route => route === "derived.opening.deepest_reached@2")).toEqual(["derived.opening.deepest_reached@2"]);
+    const extra = allExtra.filter(route => !localTactical.includes(route) && !sequences.includes(route) && route !== "derived.story.rank@3" && route !== "derived.opening.deepest_reached@2");
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
@@ -995,6 +998,8 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   if (OPENING_INSTALLATION.kind !== "available") throw new Error("Permanent opening profile requires the genuine installed catalogue");
   const openingFixture = recordedLastLevelFixture("white", "*", "opening-authority-profile");
   const openingInput = { source: OPENING_INSTALLATION.source, position: sealedOne("run.record.position@1", { run: openingFixture.run, nodeId: openingFixture.path[1]!.id }) };
+  const openingHistory = collectRecordedOpeningHistory({ source: OPENING_INSTALLATION.source, run: openingFixture.run, branchId: openingFixture.run.activeCursor.branchId, throughNodeId: openingFixture.path.at(-1)!.id });
+  profiles.set("derived.opening.deepest_reached@2", { valid: { history: openingHistory }, falsify: refused("derived.opening.deepest_reached@2", { history: { ...openingHistory } }) });
   for (const route of ["theory.opening.current_endpoint@1", "theory.opening.catalogue_membership@1"]) {
     profiles.set(route, { valid: openingInput, falsify: refused(route, { ...openingInput, source: { ...OPENING_INSTALLATION.source } }) });
   }
@@ -1530,17 +1535,27 @@ describe("value authority: one permanent profile per final factory (§7, criteri
       profiles = buildProfiles();
       expect([...profiles.keys()].sort()).toEqual([...ROUTES.keys()].sort());
       pinned = JSON.parse(readFileSync(PROFILE_FILE, "utf8")) as Record<string, Outcome>;
-      expect(Object.keys(pinned).sort()).toEqual([...ROUTES.keys()].sort());
+      if (!update) expect(Object.keys(pinned).sort()).toEqual([...ROUTES.keys()].sort());
     });
-    it.each([...ROUTES.keys()].sort())("%s retains its real valid invocation, falsifier and pinned outcome", route => {
-      const profile = profiles.get(route)!;
-      const outcome: Outcome = profile.valid === undefined ? { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: "authority_not_constructible" } : outcomeOf(profile.resolved ?? invoke(route, profile.valid));
-      profile.falsify();
-      if (!update) expect(outcome).toEqual(pinned[route]);
-      // Failed assertions/falsifiers cannot enter the complete refresh population.
-      observed[route] = outcome;
+    describe.each([...ROUTES.keys()].sort())("%s valid authority and falsifier", route => {
+      let profile: Profile, result: unknown;
+      beforeAll(() => {
+        profile = profiles.get(route)!;
+        result = profile.valid === undefined ? undefined : profile.resolved ?? invoke(route, profile.valid);
+      });
+      it("validates every genuine output, complete cardinality and pinned outcome", () => {
+        const outcome: Outcome = profile.valid === undefined ? { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: "authority_not_constructible" } : outcomeOf(result);
+        if (!update) expect(outcome).toEqual(pinned[route]);
+        observed[route] = outcome;
+      });
+      it("refuses the route's actual falsifier", () => { profile.falsify(); });
     });
-    afterAll(() => {
+    afterAll(({}, suite) => {
+      // A synchronous test may finish its body yet fail its deadline afterwards. Only the
+      // runner's completed case results, not observed writes, may authorize an explicit refresh.
+      const cases = suite.tasks.flatMap(task => task.type === "suite" ? task.tasks : [task]);
+      expect(cases).toHaveLength(ROUTES.size * 2);
+      expect(cases.filter(task => task.result?.state !== "pass").map(task => task.name)).toEqual([]);
       expect(Object.keys(observed).sort()).toEqual([...ROUTES.keys()].sort());
       const unavailable = Object.entries(observed).filter(([, outcome]) => outcome.availability === "unavailable").map(([route]) => route).sort();
       expect(unavailable).toEqual(["derived.opening.deepest_reached@1"]);

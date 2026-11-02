@@ -15,6 +15,9 @@ export interface ComparisonReductionProof extends EvidenceReductionItemsMintImag
   readonly population: RecordedComparisonStructuralPopulation; readonly branchId: string; readonly plan: CompiledEvidenceExecutionPlan;
 }
 const proofs = new WeakSet<object>();
+// Captured source/occurrences/outputs are privately owned immutable data, not live grants.
+// Recheck live callable and consumer plans on every read; seal this invariant only once.
+const validatedSources = new WeakSet<object>();
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
 const route = key(contract.projection);
 function freeze<T>(value: T): T {
@@ -71,9 +74,13 @@ export function computeComparisonReduction(population: RecordedComparisonStructu
 
 export function assertComparisonReductionProof(data: ComparisonReductionProof, manifest?: CompiledEvidenceManifest): void {
   if (!proofs.has(data)) throw new TypeError("Comparison computation proof was not issued by its exact source operation");
-  const proof = inputs(data.population, data.branchId, data.plan);
-  if (executionPlanDigest(data.plan) !== data.receipt.planDigest || evidenceDigest(proof.image) !== data.receipt.sourceImageDigest || evidenceDigest(proof.occurrences) !== evidenceDigest(data.receipt.occurrences)) throw new TypeError("Reduction source or concrete execution authority changed");
-  if (evidenceDigest(data.outputs) !== data.receipt.outputDigest) throw new TypeError("Reduction output image changed");
+  if (executionPlanDigest(data.plan) !== data.receipt.planDigest) throw new TypeError("Reduction concrete execution authority changed");
+  if (!validatedSources.has(data)) {
+    const proof = inputs(data.population, data.branchId, data.plan);
+    if (evidenceDigest(proof.image) !== data.receipt.sourceImageDigest || evidenceDigest(proof.occurrences) !== evidenceDigest(data.receipt.occurrences)) throw new TypeError("Reduction source or concrete execution authority changed");
+    if (evidenceDigest(data.outputs) !== data.receipt.outputDigest) throw new TypeError("Reduction output image changed");
+    validatedSources.add(data);
+  }
   if (manifest !== undefined && executionPlanDigest(compileProjectionExecutionV2(manifest, contract.projection)) !== data.receipt.planDigest) throw new TypeError("Reduction receipt differs from the consumer manifest's genuine V2 plan");
 }
 

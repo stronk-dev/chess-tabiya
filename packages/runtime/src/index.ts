@@ -30,6 +30,7 @@ export { BranchQueryError, branchPath, branchPaths, resolveBranchPath, type Bran
 export { createRecordedPivotalSource, type RecordedPivotalSource } from "./pivotal.js";
 export { recordedSemanticWindowSource, type RecordedSemanticWindowResult, type RecordedSemanticWindowScope } from "./recorded-semantic-window.js";
 export { createRecordedComparisonSource, type RecordedComparisonSource } from "./recorded-comparison.js";
+export { collectRecordedOpeningHistory, type RecordedOpeningHistorySource } from "./recorded-opening-history.js";
 export {
   MAX_COMPARISON_BRANCHES,
   compareBranches,
@@ -1252,7 +1253,7 @@ export { HintHorizonMismatch, type HintDisclosurePayload, type HintHorizonOccurr
 export {
   CHESS_OPENINGS_COMMIT, CHESS_OPENINGS_RETRIEVED_AT, OPENING_SOURCE_ID,
   OPENING_CATALOGUE_PROJECTION_IDS, OPENING_CATALOGUE_FILES, OPENING_CATALOGUE_COMPILER_FILES,
-  admitInstalledOpeningCatalogue, compileLoadedOpeningCatalogue, openingIdentityAt,
+  admitInstalledOpeningCatalogue, admitInstalledOpeningCatalogueText, compileLoadedOpeningCatalogue, openingIdentityAt,
   recordedOpeningPosition, deepestOpeningReached, deriveDeepestOpeningVisits,
   renderCurrentOpeningEndpoint, renderOpeningMembership, renderDeepestOpeningReached,
   type OpeningCatalogueFileName, type OpeningCatalogueUnavailableReason, type RuntimeOpeningCatalogue,

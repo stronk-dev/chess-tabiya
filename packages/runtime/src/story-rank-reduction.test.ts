@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertDeclaredEvidence, declareEvidence, evidenceDigest, evidenceForConsumer, evidenceValueReceipt, isDeclaredEvidence } from "./evidence-contract.js";
 import { compileProjectionExecution } from "./evidence-execution.js";
@@ -26,37 +26,57 @@ function fixture(side: "white" | "black" = "white", result: "0-1" | "1-0" | "*" 
 }
 
 describe("source-owned recorded Story rank reduction", () => {
-  it.each(["white", "black"] as const)("retains current nine-band ordering and complete concrete mixed inputs: %s", side => {
-    const f = fixture(side, side === "white" ? "0-1" : "1-0");
-    f.deliver(0, "cp 100"); f.deliver(1, "cp -300"); f.deliver(2, "mate 3"); f.deliver(3, "cp 0");
-    const source = f.source(), data = readRecordedReviewMoments(source), value = calculate(source), receipt = evidenceValueReceipt(value), proof = readStoryRankReductionValue(value, source);
-    expect(value.payload).toEqual({ rank: rankStoryMoments(data.groups) });
-    expect(value.payload.rank.length).toBeGreaterThan(1); expect(receipt.sourceDigests).toEqual([]);
-    expect(receipt.reduction).toBe(proof.reduction); expect(receipt.convention).toBe(proof.convention);
-    expect(proof.reduction.sourceImageDigest).toBe(evidenceDigest(recordedReviewMomentSourceImage(source)));
-    expect(proof.reduction.outputDigest).toBe(evidenceDigest(value.payload));
-    expect(receipt.inputDigest).toBe(evidenceDigest({ operation: contract.operation, planDigest: proof.reduction.planDigest, sourceImageDigest: proof.reduction.sourceImageDigest, occurrences: proof.reduction.occurrences }));
-    const expected = data.groups.flatMap((group, gi) => group.evidence.map((input, ii) => [gi, ii, contract.elements.findIndex(element => element.id === input.projection.id && element.version === input.projection.version)]));
-    expect(proof.reduction.occurrences.map(({ group, item, element }) => [group, item, element])).toEqual(expected);
-    expect(proof.reduction.occurrences.some(item => item.witness.kind === "reduction")).toBe(true);
-    const delta = proof.reduction.occurrences.find(item => item.element === 0)!.witness;
-    expect(delta.kind).toBe("member"); if (delta.kind !== "member") throw Error("delta member");
-    expect(delta.inputs).toHaveLength(2);
-    expect(delta.inputs[0]).toMatchObject({ kind: "member", inputs: [{ kind: "leaf", source: { availability: "provider", providerOperation: "stockfish.position_evaluation@1" } }, { kind: "leaf", source: { availability: "recorded" } }] });
-    expect(proof.convention.refs.map(item => `${item.id}@${item.version}`)).toEqual(expect.arrayContaining(["story-rank@1", "story-last-level@1"]));
-    expect(Object.keys(evidenceReductionSingleProof(value).output).sort()).toEqual(["payloadDigest", "producer", "projection"]);
-    expect(isDeclaredEvidence(value)).toBe(true);
+  describe.each(["white", "black"] as const)("retains current nine-band ordering and complete concrete mixed inputs: %s", side => {
+    let source: ReturnType<ReturnType<typeof fixture>["source"]>, data: ReturnType<typeof readRecordedReviewMoments>;
+    let value: ReturnType<typeof calculate>, receipt: ReturnType<typeof evidenceValueReceipt>, proof: ReturnType<typeof readStoryRankReductionValue>;
+    beforeAll(() => {
+      const f = fixture(side, side === "white" ? "0-1" : "1-0");
+      f.deliver(0, "cp 100"); f.deliver(1, "cp -300"); f.deliver(2, "mate 3"); f.deliver(3, "cp 0");
+      source = f.source(); data = readRecordedReviewMoments(source);
+    });
+    beforeAll(() => { value = calculate(source); });
+    beforeAll(() => { receipt = evidenceValueReceipt(value); proof = readStoryRankReductionValue(value, source); });
+    it("preserves every ordered moment and original reduction/convention receipt", () => {
+      expect(value.payload).toEqual({ rank: rankStoryMoments(data.groups) });
+      expect(value.payload.rank.length).toBeGreaterThan(1); expect(receipt.sourceDigests).toEqual([]);
+      expect(receipt.reduction).toBe(proof.reduction); expect(receipt.convention).toBe(proof.convention);
+      expect(proof.reduction.outputDigest).toBe(evidenceDigest(value.payload));
+      expect(receipt.inputDigest).toBe(evidenceDigest({ operation: contract.operation, planDigest: proof.reduction.planDigest, sourceImageDigest: proof.reduction.sourceImageDigest, occurrences: proof.reduction.occurrences }));
+      expect(proof.convention.refs.map(item => `${item.id}@${item.version}`)).toEqual(expect.arrayContaining(["story-rank@1", "story-last-level@1"]));
+    });
+    it("binds the complete actual source image, including all captured states", () => {
+      expect(proof.reduction.sourceImageDigest).toBe(evidenceDigest(recordedReviewMomentSourceImage(source)));
+    });
+    it("retains every concrete occurrence address and nested provider/recorded member", () => {
+      const expected = data.groups.flatMap((group, gi) => group.evidence.map((input, ii) => [gi, ii, contract.elements.findIndex(element => element.id === input.projection.id && element.version === input.projection.version)]));
+      expect(proof.reduction.occurrences.map(({ group, item, element }) => [group, item, element])).toEqual(expected);
+      expect(proof.reduction.occurrences.some(item => item.witness.kind === "reduction")).toBe(true);
+      const delta = proof.reduction.occurrences.find(item => item.element === 0)!.witness;
+      expect(delta.kind).toBe("member"); if (delta.kind !== "member") throw Error("delta member");
+      expect(delta.inputs).toHaveLength(2);
+      expect(delta.inputs[0]).toMatchObject({ kind: "member", inputs: [{ kind: "leaf", source: { availability: "provider", providerOperation: "stockfish.position_evaluation@1" } }, { kind: "leaf", source: { availability: "recorded" } }] });
+    });
+    it("validates the real published value and closed output identity", () => {
+      expect(Object.keys(evidenceReductionSingleProof(value).output).sort()).toEqual(["payloadDigest", "producer", "projection"]);
+      expect(isDeclaredEvidence(value)).toBe(true);
+    });
   });
 
-  it.each(PIVOTAL_RULE_KINDS)("authenticates exact local/recorded member tuples: %s", kind => {
-    const run = recordedPivotalFixture(kind), owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined });
-    const source = collectRecordedReviewMoments({ population: collectRecordedReviewSourcePopulation({ boundary: owner.resolve({ runId: run.id, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId }), context: { engine: new Map(), shapes: [] } }) });
-    const value = calculate(source), proof = readStoryRankReductionValue(value, source);
-    const child = proof.reduction.occurrences.find(item => item.witness.value.projection.id === `derived.pivotal.${kind}`)!.witness;
-    expect(child.kind).toBe("member"); if (child.kind !== "member") throw Error("member");
-    expect(child.inputs).toHaveLength(kind === "phase_change" ? 4 : kind === "option_collapse" ? 6 : 2);
-    expect(child.inputs[0]).toMatchObject({ kind: "leaf", source: { availability: "local", providerOperation: null } });
-    expect(child.inputs[1]).toMatchObject({ kind: "leaf", source: { availability: "recorded", providerOperation: null } });
+  describe.each(PIVOTAL_RULE_KINDS)("authenticates exact local/recorded member tuples: %s", kind => {
+    let source: ReturnType<typeof collectRecordedReviewMoments>, value: ReturnType<typeof calculate>;
+    beforeAll(() => {
+      const run = recordedPivotalFixture(kind), owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined });
+      source = collectRecordedReviewMoments({ population: collectRecordedReviewSourcePopulation({ boundary: owner.resolve({ runId: run.id, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId }), context: { engine: new Map(), shapes: [] } }) });
+    });
+    beforeAll(() => { value = calculate(source); });
+    it("preserves the actual member's complete local/recorded tuple", () => {
+      const proof = readStoryRankReductionValue(value, source);
+      const child = proof.reduction.occurrences.find(item => item.witness.value.projection.id === `derived.pivotal.${kind}`)!.witness;
+      expect(child.kind).toBe("member"); if (child.kind !== "member") throw Error("member");
+      expect(child.inputs).toHaveLength(kind === "phase_change" ? 4 : kind === "option_collapse" ? 6 : 2);
+      expect(child.inputs[0]).toMatchObject({ kind: "leaf", source: { availability: "local", providerOperation: null } });
+      expect(child.inputs[1]).toMatchObject({ kind: "leaf", source: { availability: "recorded", providerOperation: null } });
+    });
   });
 
   it("publishes exactly one authenticated empty rank, not an item array or absent value", () => {
@@ -83,13 +103,16 @@ describe("source-owned recorded Story rank reduction", () => {
     expect(evidenceValueReceipt(value).convention!.refs.map(item => `${item.id}@${item.version}`)).toContain("story-last-level@1");
   });
 
-  it("preserves every captured provider absence/failure state without converting it to chess evidence", () => {
-    const f = fixture("white", "*", []), receipts = [];
-    for (const state of [null, { kind: "not_requested" }, { kind: "not_yet_scheduled" }, { kind: "pending", jobCount: 1, retrying: 0 }, { kind: "unavailable", reason: "provider_failed" }, { kind: "unavailable", reason: "provider_off" }, { kind: "honest_empty", reason: "outside_domain" }] as const) {
+  describe("preserves every captured provider absence/failure state without converting it to chess evidence", () => {
+    const states = [null, { kind: "not_requested" }, { kind: "not_yet_scheduled" }, { kind: "pending", jobCount: 1, retrying: 0 }, { kind: "unavailable", reason: "provider_failed" }, { kind: "unavailable", reason: "provider_off" }, { kind: "honest_empty", reason: "outside_domain" }] as const;
+    let f: ReturnType<typeof fixture>;
+    const receipts: string[] = [];
+    beforeAll(() => { f = fixture("white", "*", []); });
+    it.each(states.map(state => ({ state })))("captures $state", ({ state }) => {
       if (state === null) f.engine.clear(); else f.engine.set(f.path[0]!.id, state as never);
       const value = calculate(f.source()); expect(value.payload).toEqual({ rank: [] }); receipts.push(evidenceValueReceipt(value).reduction!.sourceImageDigest);
-    }
-    expect(new Set(receipts).size).toBe(receipts.length);
+    });
+    afterAll(() => { expect(receipts).toHaveLength(states.length); expect(new Set(receipts).size).toBe(states.length); });
   });
 
   it("retains every shape occurrence and does not inherit pattern or evaluation authority", () => {

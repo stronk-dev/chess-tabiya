@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { branchPath, commitMove, fork, rewind, reviewDurableEngineStates } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { createRecordedReviewBoundarySourceOwner, readRecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { collectRecordedLastLevelPopulation, readRecordedLastLevelPopulation, collectRecordedReviewSourcePopulation, readRecordedReviewSourcePopulation } from "../../../packages/runtime/src/review-evidence.js";
@@ -23,7 +23,12 @@ const opening = await loadOpeningCatalogue(new URL("../artifacts/runtime-opening
 if (opening.kind !== "available") throw new TypeError(`Actual installed opening fixture refused: ${opening.reason}`);
 
 const stores: SQLiteRunStorage[] = [], directories: string[] = [];
-afterEach(() => { for (const store of stores.splice(0)) store.close(); for (const directory of directories.splice(0)) rmSync(directory, { recursive: true, force: true }); });
+function dispose(resources: { stores: SQLiteRunStorage[]; directories: string[] }) {
+  for (const store of resources.stores.splice(0)) store.close();
+  for (const directory of resources.directories.splice(0)) rmSync(directory, { recursive: true, force: true });
+}
+afterEach(() => dispose({ stores, directories }));
+afterAll(() => dispose({ stores, directories }));
 const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
 function ownerFor(storage: SQLiteRunStorage) {
   return createRecordedReviewBoundarySourceOwner({ loadRun: id => storage.read(id)?.run, loadImportRecord: id => {
@@ -32,24 +37,45 @@ function ownerFor(storage: SQLiteRunStorage) {
   } });
 }
 function open(path: string) { const storage = new SQLiteRunStorage(path, { onMigration: () => {} }); stores.push(storage); return storage; }
-
-describe("recorded Review source over actual parsed SQLite imports", () => {
-  it.each((["white", "black"] as const).flatMap(side => [0, 1, 2, 3, 4].map(last => ({ side, last }))))("collects genuine durable point/state/result inputs after file reload: $side prefix $last", async ({ side, last: prefix }) => {
-    const directory = mkdtempSync(join(tmpdir(), "tabiya-review-population-")); directories.push(directory);
-    const path = join(directory, "runs.sqlite"), storage = open(path), service = new RunService(storage);
+async function savedImport(side: "white" | "black", resources = { stores, directories }) {
+    const openImport = (path: string) => { const store = new SQLiteRunStorage(path, { onMigration: () => {} }); resources.stores.push(store); return store; };
+    const directory = mkdtempSync(join(tmpdir(), "tabiya-review-population-")); resources.directories.push(directory);
+    const path = join(directory, "runs.sqlite"), storage = openImport(path), service = new RunService(storage);
     const imported = await service.importGame({ id: `recorded-population-${side}`, side, opponentPolicy: { mode: "human_common" }, policyConfig, seed: 1,
       source: { kind: "pgn", pgn: '[Result "0-1"]\n\n1. e4 e5 2. Nf3 Nc6 0-1' } }, "writer");
     let run = imported.run;
     const branchId = run.branches[0]!.id, nodes = branchPath(run, branchId);
-    expect(nodes[prefix], "the parameterized saved-import prefix must exist").toBeDefined();
     for (const index of [0, 1, 3]) run = attachDelivery(run, nodes[index]!.id, evaluationDelivery(nodes[index]!.fen, index === 1 ? "mate -2" : "cp 75"));
     storage.save(run, { writerId: "writer", learnerId: "__legacy" });
-    storage.close(); stores.splice(stores.indexOf(storage), 1);
-    const reloaded = open(path), parsed = reloaded.read(run.id)!.run, before = JSON.stringify(parsed.events), owner = ownerFor(reloaded);
+    storage.close(); resources.stores.splice(resources.stores.indexOf(storage), 1);
+    const reloaded = openImport(path), parsed = reloaded.read(run.id)!.run, before = JSON.stringify(parsed.events), owner = ownerFor(reloaded);
     const context = { engine: reviewDurableEngineStates(parsed, nodes), shapes: [{ id: "import-f3", trigger: { kind: "pieceOnSquare" as const, square: "f3" as const, piece: { color: "white" as const, role: "knight" as const } } }] };
-    for (const [last, endpoint] of [...nodes.entries()].filter(([index]) => index === prefix)) {
-      const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: endpoint.id });
-      const attachments = readRecordedEngineAttachments(collectRecordedEngineAttachments({ boundary }));
+    return { run, branchId, nodes, parsed, before, owner, context, reloaded, imported };
+}
+
+describe("recorded Review source over actual parsed SQLite imports", () => {
+  describe.each((["white", "black"] as const).flatMap(side => [0, 1, 2, 3, 4].map(last => ({ side, last }))))("collects genuine durable point/state/result inputs after file reload: $side prefix $last", ({ side, last }) => {
+    const resources = { stores: [] as SQLiteRunStorage[], directories: [] as string[] };
+    let setup: Promise<Awaited<ReturnType<typeof savedImport>>> | undefined;
+    let f: Awaited<ReturnType<typeof savedImport>>, boundary: ReturnType<ReturnType<typeof ownerFor>["resolve"]>;
+    let attachments: ReturnType<typeof readRecordedEngineAttachments>;
+    let data: ReturnType<typeof readRecordedLastLevelPopulation>;
+    let completeSource: ReturnType<typeof collectRecordedReviewSourcePopulation>, complete: ReturnType<typeof readRecordedReviewSourcePopulation>;
+    let momentSource: ReturnType<typeof collectRecordedReviewMoments>, moments: ReturnType<typeof readRecordedReviewMoments>;
+    let rank: ReturnType<typeof invokeEvidenceValueRoute<"derived.story.rank@3">>;
+    beforeAll(async () => {
+      setup = savedImport(side, resources); f = await setup;
+      expect(f.nodes[last], "the parameterized saved-import prefix must exist").toBeDefined();
+      boundary = f.owner.resolve({ runId: f.run.id, branchId: f.branchId, throughNodeId: f.nodes[last]!.id });
+    });
+    beforeAll(() => { attachments = readRecordedEngineAttachments(collectRecordedEngineAttachments({ boundary })); });
+    beforeAll(() => { data = readRecordedLastLevelPopulation(collectRecordedLastLevelPopulation({ boundary, context: f.context })); });
+    beforeAll(() => { completeSource = collectRecordedReviewSourcePopulation({ boundary, context: f.context }); complete = readRecordedReviewSourcePopulation(completeSource); });
+    beforeAll(() => { momentSource = collectRecordedReviewMoments({ population: completeSource }); moments = readRecordedReviewMoments(momentSource); });
+    beforeAll(() => { rank = invokeEvidenceValueRoute("derived.story.rank@3", { recordedReview: momentSource }); });
+    afterAll(async () => { await setup?.catch(() => undefined); dispose(resources); });
+    it("retains every genuine attachment, exact point and paired installed lookup", () => {
+      const { nodes } = f;
       expect(attachments.rows).toHaveLength(last + 1);
       for (const [index, row] of attachments.rows.entries()) {
         // Reuse the original position issued over the actual parsed/reloaded prefix. This is
@@ -69,7 +95,9 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
           expect(row.selected.occurrence.evaluation.payload.payload.fen).toBe(nodes[index]!.fen);
         }
       }
-      const population = collectRecordedLastLevelPopulation({ boundary, context }), data = readRecordedLastLevelPopulation(population);
+    });
+    it("retains every actual point/state/result operand", () => {
+      const { nodes, parsed } = f;
       expect(data.rows).toHaveLength(last + 1); expect(data.boundary.run).toEqual(parsed);
       for (const [index, row] of data.rows.entries()) {
         expect(row.position.payload.nodeId).toBe(nodes[index]!.id);
@@ -81,7 +109,9 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
         } else { expect(row.state.kind).toBe("not_requested"); expect(row.points).toEqual([]); }
       }
       expect(data.result.items).toHaveLength(last === nodes.length - 1 ? 1 : 0);
-      const completeSource = collectRecordedReviewSourcePopulation({ boundary, context }), complete = readRecordedReviewSourcePopulation(completeSource);
+    });
+    it("retains the entire planned source population, original slots and shape span", () => {
+      const { nodes } = f, endpoint = nodes[last]!;
       expect(complete.plan).toHaveLength(12 * (last + 1) - 2);
       const retained = readRecordedLastLevelPopulation(complete.lastLevelPopulation);
       expect(retained.rows.map(row => row.state)).toEqual(data.rows.map(row => row.state));
@@ -91,18 +121,29 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
       }
       const firings = complete.results.filter(result => result.slot.adapterId === "review.source.shapes@1").flatMap(result => result.items);
       expect(firings.map(item => item.payload)).toEqual(last < 3 ? [] : [{ entryId: "import-f3", firstNodeId: nodes[3]!.id, lastNodeId: endpoint.id, openEnded: true }]);
-      const momentSource = collectRecordedReviewMoments({ population: completeSource }), moments = readRecordedReviewMoments(momentSource);
+    });
+    it("retains original moment/edge identities and the genuine nested reduction", () => {
+      const { nodes } = f;
       expect(moments.population).toBe(complete);
       expect(moments.groups.every(group => nodes.slice(1, last + 1).some(node => node.id === group.evidenceNodeId && node.parentId === group.decisionNodeId))).toBe(true);
       expect(moments.lastLevelReduction.receipt.operation).toEqual({ id: "story.last_level", version: 1 });
-      const rank = invokeEvidenceValueRoute("derived.story.rank@3", { recordedReview: momentSource });
       expect(rank.payload.rank).toEqual(rankStoryMoments(moments.groups));
+      if (last < nodes.length - 1 || side === "black") expect(moments.lastLevelReduction.items).toEqual([]);
+    });
+    it("binds the complete actual moment source image", () => {
       const rankProof = readStoryRankReductionValue(rank, momentSource);
       expect(rankProof.reduction.sourceImageDigest).toBe(evidenceDigest(recordedReviewMomentSourceImage(momentSource)));
+    });
+    it("retains every original operand occurrence", () => {
       expect(readRecordedReviewMomentOperands(momentSource).flat().map(item => item.value)).toEqual(moments.groups.flatMap(group => group.evidence));
-      if (last < nodes.length - 1 || side === "black") expect(moments.lastLevelReduction.items).toEqual([]);
-    }
-    expect(JSON.stringify(reloaded.read(run.id)!.run.events)).toBe(before); expect(imported.evidencePass.jobs).toBe(0);
+    });
+    it("does not rewrite saved events or acquire providers", () => {
+      expect(JSON.stringify(f.reloaded.read(f.run.id)!.run.events)).toBe(f.before); expect(f.imported.evidencePass.jobs).toBe(0);
+    });
+  });
+
+  it.each(["white", "black"] as const)("revokes every complete source after a reloaded run changes: %s", async side => {
+    const { run, branchId, nodes, owner, context, reloaded } = await savedImport(side);
     const boundary = owner.resolve({ runId: run.id, branchId, throughNodeId: nodes.at(-1)!.id });
     const population = collectRecordedLastLevelPopulation({ boundary, context });
     const complete = collectRecordedReviewSourcePopulation({ boundary, context });
@@ -170,7 +211,9 @@ describe("recorded Review source over actual parsed SQLite imports", () => {
     // production storage parsing. Source admission must independently catch it.
     const extended = commitMove(run, "g1f3").run;
     storage.save(extended, { writerId: "writer", learnerId: "__legacy" });
-    expect(() => owner.assertCurrent(original)).toThrow(/movetext/u);
+    // An existing handle rejects the changed complete snapshot before a fresh
+    // resolution diagnoses its incompatible movetext below.
+    expect(() => owner.assertCurrent(original)).toThrow(/no longer/u);
     for (const node of branchPath(extended, request.branchId)) {
       expect(() => owner.resolve({ ...request, throughNodeId: node.id })).toThrow(/movetext/u);
     }

@@ -24,6 +24,17 @@ function fixture(black = false, empty = false) {
 }
 
 describe("owned structural comparison reduction", () => {
+  it("D3911 validates the complete captured image once per original proof, not once per output", () => {
+    const value = recordedComparisonFixture(), population = collectComparisonStructuralPopulation({ comparison: value.comparison });
+    const image = vi.spyOn(populationOwner, "comparisonStructuralPopulationImage");
+    try {
+      const computed = computeComparisonReduction(population, value.main), callsAtIssue = image.mock.calls.length;
+      expect(callsAtIssue).toBeGreaterThan(0);
+      for (let index = 0; index < 3; index++) assertComparisonReductionProof(computed.proof);
+      expect(image).toHaveBeenCalledTimes(callsAtIssue);
+      expect(() => assertComparisonReductionProof({ ...computed.proof })).toThrow(/not issued/);
+    } finally { image.mockRestore(); }
+  });
   it.each([false, true])("mints the exact ordered payloads/locations with genuine full-scope execution, black=%s", black => {
     const value = fixture(black), result = value.result, proof = readComparisonReductionResult(result, value.population, value.main);
     expect(result.length).toBeGreaterThan(0); expect(Object.isFrozen(result)).toBe(true);
