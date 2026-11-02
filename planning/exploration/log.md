@@ -33038,3 +33038,69 @@ self-acceptance, feature permission or partial current consumer image follows fr
   628 todo/37 doing/1083 blocked/1756 done/162 refused. The462 old prose-only closures and all
   strict milestone states remain unchanged. Source/tests stay fixed; final exact-index checks and
   the normal hook precede this checkpoint commit.
+
+## 2026-11-02 — D3859 fixed original engine-pair prerequisite
+
+- Continue accepted move-quality-grades §§2a/4a and F2 §2.3l, not a new research/product
+  decision. RecordedEngineEndpointOwner now resolves an actual incoming edge from the complete
+  original validated boundary and its two fixed node selections. Retain the genuine edge,
+  derived mover, complete endpoint/candidate images and exact ordered original modern-point or
+  offline-reading operands. Root/out-of-prefix/foreign/stale requests refuse before absence.
+- Modern pairs use existing reviewPointComparability (actual engine/version/generation,
+  position-free command image and requested bound); independent reports require equal identity/
+  version/Threads/Hash/MultiPV and requested depth/time. Mixed origins abstain. Never select a
+  later record to rescue an adjacent pair. Valid individual graph points survive an unavailable
+  pair; pending, missing, input-abstained and unequal-instrument retain ordered local states.
+- All cache reads revalidate real storage, registry, pending reservation and cancellation.
+  No provider request, storage write, grade output, grant, caller score or current consumer is
+  added. Actual workflow-owned GradeSource, unified grade@2 arithmetic, accuracy/graph and complete
+  current Nudge/Review preflight/renderer/receiver/API/native delivery remain D3859, not complete.
+- First normal make recorded-engine-endpoint-check exits2:26 new controls fail at the missing
+  pair operation or because the synthetic fixture falsely supplied empty sidecars as an admitted
+  artifact. Correct those fixtures to actual absent sidecars; do not turn
+  invalid sidecars into missing source. Add two more genuine pending/lookup/retirement controls.
+  Final focused check passes192 cases/five files; full workspace typecheck has zero errors/warnings.
+  Real timed/node deliveries reach different depths while matching requested bounds and compare;
+  no reached-depth substitution or weakened budget. Full normal make verify build is running.
+
+- Full normal make verify build exits2 at the permanent central-factory-import census:
+  2041 authority cases pass and one correctly refuses the new direct server factory import.
+  Record D3918 before repair. Move incoming-edge acquisition into the existing genuine runtime
+  attachment source and sole dispatcher, with original prefix validation; do not whitelist the
+  server caller, export the dispatcher or weaken the census. The failed attempt remains failed.
+
+- Runtime-owned incoming-edge acquisition now invokes the sole dispatcher over its genuine
+  original boundary, rechecking actual storage after dispatch. Four additional permanent controls
+  cover both colors, exact actual invocation, root/suffix/foreign/stale refusal before dispatch
+  and mid-dispatch storage mutation before publication. Final source gate passes196 cases/five
+  files; unchanged authority2042/18, reduction132/six and live Review-source320/ten pass. Compare
+  regression144/eight passes. Workspace types remain clean; full normal gates follow. Durable
+  tracking initially refuses an unsynchronized row and incomplete doing metadata; normal ledger
+  synchronization plus the actual owner/start date restore zero untriaged without changing the
+  ceiling. D3918 stays doing until full verification, and D3859's consumer work remains open.
+
+- The next normal full attempt passes all2042 authority,132 reduction and320 live Review-source
+  cases, then correctly refuses stale generated semantic-validation metadata after the runtime
+  source edit. The instrument itself still reports343/343 cases,53 populations/eight external
+  receipts and zero qualified subjects. Regenerate through its existing explicit target before
+  restarting normal verification; no evidence meaning, result, qualification or checker changes.
+
+- Final normal make semantic-validation-update roadmap-receipt verify build exits0. Stable source/
+  test bytes pass8427 software cases/all432 files (853.21s), seven unchanged-budget performance
+  cases/four files (72.35s),271 real-content cases/27 files (82.37s), all remaining governance,
+  capability/corpus contracts and production build. Clearance retains92 documents/354 blockers/
+  34 resolved/48 accepted/errors[]; capability corpus104 documents including86 production packs.
+  The refreshed semantic receipt remains343 passing cases/53 populations/eight external receipts,
+  91 subjects and zero qualified. No new browser or remote CI execution is claimed.
+- Close only D3918 with this log as path evidence. Keep D3859 doing for actual workflow-issued
+  GradeSource, grade@2/convention@2 and coordinated paired arithmetic/accuracy/graph plus complete
+  current Nudge/Review preflight/source/renderer/receiver/API/native delivery. No current module,
+  preset, schema, stored history, official pack, qualified source, milestone or whole capability
+  is promoted. Earlier failed commands remain failed records. Update existing trackers/checkpoint
+  and inspect the exact owned staged list before commit; no push or goal pause.
+
+- Final metadata-only roadmap receipt/governance/progress checks exit0. All3667 ledger rows
+  have durable states; zero untriaged and zero unrouted among1748 live. D3918 is done with path
+  evidence; D3859 stays doing. Four active/five blocked milestones, the historical462 prose-only
+  closures and zero official graduated packs are unchanged. Source/test bytes remain those of
+  the completed full run. Stage the18 explicit owned files; normal hook checks the exact index.

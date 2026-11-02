@@ -1,5 +1,19 @@
 # Evidence-foundation + play-UX program — the D717 brief, operationalized
 
+**2026-11-02 D3859 internal fixed-pair checkpoint (not a learner cutover).** The server-private
+engine owner now resolves actual incoming edges over the same fixed per-node snapshot used by
+Compare. It retains both individual states, the genuine edge, derived mover and exact ordered
+modern-point or offline-reading operands. Comparability checks actual provider command/generation/
+budget or independent report identity/version/profile/budget. Pending/missing/input-abstained/
+unequal-instrument stay distinct; no later report rescues a pair and valid graph points remain.
+Live owners revalidate cached results.196 focused cases/five files and clean workspace types pass.
+Full normal make verify build exits0:8427 software/432 files, seven unchanged-budget performance/
+four,271 content/27 and governance/corpus/build. Initial failed controls, corrected empty-sidecar
+fixtures, D3918's direct-factory import and stale generated receipt remain logged. Still next:
+actual workflow-issued GradeSource and coordinated grade@2/convention@2,
+accuracy/graph, complete Nudge/Review preflight/renderer/receiver/API/native delivery. No current
+binding, schema, permission, preset, historical meaning or parent status changes here.
+
 **Opened 2026-08-22 on the owner's use-rejection (D717) and the verbatim handoff.** The
 governing sentence: **"F1/F2 established authority and mechanics; they did not establish
 completeness or a learner experience."** A successful result is the executable chain

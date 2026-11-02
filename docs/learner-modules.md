@@ -47,6 +47,16 @@ no rank, budget, arithmetic or permission is changed by this presentation repair
 
 ## What executes today
 
+The server-private recorded-engine owner can now resolve an incoming recorded edge against its
+two already-fixed node selections. It retains the genuine edge, derived mover and exact ordered
+original reading/point operands. Modern pairs use actual engine/version/generation, position-free
+commands and requested bounds; independent reports require matching identity/version/profile and
+requested depth or time. A valid graph endpoint survives an incomparable or absent pair. Pending,
+missing, input-abstained and unequal-instrument remain distinct, and cached pairs still recheck
+their actual storage, registry, pending-request and cancellation owners. This performs no provider
+request or storage write. It is not a workflow grant or the accepted `RecordedGradeSource` yet;
+current grade/accuracy/graph and complete Nudge/Review migration remain open under D3859.
+
 Theory Breadcrumb's opening input now comes from the actual startup-installed catalogue and
 the sole factory's recorded-position value. The caller verifies the original run/head/node,
 then authenticates both endpoint and catalogue-membership result arrays from one paired lookup.

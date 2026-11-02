@@ -1,5 +1,18 @@
 # Codex queue
 
+[[D3918]] is closed locally: incoming-edge acquisition uses the genuine runtime attachment
+owner/sole dispatcher; the original factory-import census stays unchanged. Full normal gates pass.
+No current learner cutover follows from this repair; the failed attempts stay logged.
+
+**D3859 internal fixed-pair checkpoint, 2026-11-02 — remains doing:** actual incoming edges now
+retain the original ordered pair, mover and both independent graph endpoint states. Strict modern
+command/generation/requested-budget and offline identity/version/profile/budget checks, ordered
+local absence and live-owner revalidation pass196 focused cases/five files and clean types.
+Full normal make verify build passes8427 software/432 files, seven unchanged-budget performance/
+four,271 content/27 and governance/corpus/build. This is neither GradeSource/access issuance nor grade/accuracy/
+graph or complete current Nudge/Review delivery. Continue those together under accepted §§2a/4a;
+do not publish a partial current learner image or retain a compatibility-only input arm.
+
 **Verified complete recorded-opening history checkpoint, 2026-11-02 — [[D3376]], [[D3857]] remain
 doing; [[D3909]], [[D3910]], [[D3911]], [[D3912]], [[D3913]], [[D3914]], [[D3915]], [[D3916]],
 [[D3917]] closed locally:**

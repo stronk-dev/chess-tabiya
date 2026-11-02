@@ -1,11 +1,14 @@
 // Accepted move-quality-grades §2a: one fixed selection per original node, below grading and
 // current consumer access. No provider calls, synthetic grades or pair-dependent report search.
-import { collectRecordedEngineAttachments, readRecordedEngineAttachments, type RecordedEngineAttachments } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
+import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, type RecordedEngineAttachments } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "../../../packages/runtime/src/recorded-review-boundary.js";
 import { recordedOfflineEngineEndpoint, recordedEngineRequestedBound as requestedBound, type RecordedEngineAvailable } from "../../../packages/runtime/src/internal/recorded-engine-endpoint-values.js";
 import { PackRegistry, RecordedMeasurementSourceError, type RecordedMeasurementAdmission, type RecordedMeasurementPopulation } from "./pack-registry.js";
 import { ReviewEvidenceCoordinator } from "./review-evidence.js";
 import type { RecordedComparisonPointCapture } from "../../../packages/runtime/src/recorded-comparison-point.js";
+import { reviewPointComparability, sideToMove } from "../../../packages/runtime/src/review-points.js";
+import type { DeclaredEvidence } from "../../../packages/runtime/src/evidence-contract.js";
+import type { RecordedEdge } from "../../../packages/runtime/src/recorded-edge.js";
 
 type ModernRows = ReturnType<typeof readRecordedEngineAttachments>;
 type Population = ReturnType<PackRegistry["readRecordedMeasurements"]>;
@@ -21,6 +24,18 @@ interface Endpoint {
   readonly candidates: readonly Candidate[];
   readonly selectedOrdinal: number | null;
 }
+type PairAbsence = "source_pending" | "missing_eval" | "input_abstained" | "unequal_instrument";
+/** Private measurement pair, not a grade or Nudge/Review permission. The whole endpoint image
+ * survives even when comparison is unavailable; graph coverage is not evaluated accuracy. */
+export interface RecordedEnginePair {
+  readonly before: Endpoint;
+  readonly after: Endpoint;
+  readonly edge: DeclaredEvidence<RecordedEdge>;
+  readonly mover: "white" | "black";
+  readonly state: Readonly<{ kind: "unavailable"; reason: PairAbsence }>
+    | Readonly<{ kind: "available"; before: Available; after: Available;
+        inputs: readonly [DeclaredEvidence<unknown>, DeclaredEvidence<unknown>, DeclaredEvidence<RecordedEdge>] }>;
+}
 declare const endpointSourceBrand: unique symbol;
 export interface RecordedEngineEndpoints { readonly [endpointSourceBrand]: true }
 interface SourceImage {
@@ -34,6 +49,7 @@ interface Owned {
   readonly admission: RecordedMeasurementAdmission | null;
   readonly populations: readonly RecordedMeasurementPopulation[];
   readonly image: SourceImage;
+  readonly pairs: Map<string, RecordedEnginePair>;
 }
 const invalid = (message: string): never => { throw new RecordedMeasurementSourceError("source_contract_invalid", message); };
 
@@ -93,7 +109,7 @@ export class RecordedEngineEndpointOwner {
         state: selected < 0 ? Object.freeze({ kind: "unavailable", reason: ledger.records.length > 0 || ledger.abstentions.length > 0 ? "input_abstained" : "missing_eval" }) : normalized[selected]! });
     }));
     const source = Object.freeze({}) as RecordedEngineEndpoints;
-    this.#sources.set(source, { boundary, signal, attachments, admission, populations, image: Object.freeze({ boundary: image, rows }) });
+    this.#sources.set(source, { boundary, signal, attachments, admission, populations, image: Object.freeze({ boundary: image, rows }), pairs: new Map() });
     this.read(source);
     return source;
   }
@@ -124,6 +140,22 @@ export class RecordedEngineEndpointOwner {
     return row;
   }
 
+  /** Derive only from this snapshot's fixed per-node selections. Revalidate live owners before
+   * even a cached unavailable result; absence must not hide revocation or source corruption. */
+  resolveRecordedEnginePair(source: RecordedEngineEndpoints, afterNodeId: string): RecordedEnginePair {
+    const image = this.read(source), owned = this.#sources.get(source)!;
+    const index = image.boundary.path.findIndex(entry => entry.node.id === afterNodeId);
+    if (index <= 0) return invalid("Engine pair requires an actual incoming edge on the original granted path");
+    const existing = owned.pairs.get(afterNodeId);
+    if (existing !== undefined) return existing;
+    const before = image.rows[index - 1]!, after = image.rows[index]!;
+    const edge = collectRecordedEngineEdge(owned.attachments, afterNodeId);
+    const pair = Object.freeze({ before, after, edge, mover: sideToMove(edge.payload.beforeFen), state: pairState(before, after, edge) });
+    this.read(source); // actual storage/registry/pending/cancellation still owns publication
+    owned.pairs.set(afterNodeId, pair);
+    return pair;
+  }
+
   /** Original operands for the restricted Compare issuer, not a public numeric endpoint API. */
   comparisonPointCapture(source: RecordedEngineEndpoints, nodeId: string): Pick<RecordedComparisonPointCapture, "attachments" | "offline" | "pending"> {
     const row = this.resolveRecordedEngineEndpoint(source, nodeId), owned = this.#sources.get(source)!;
@@ -143,4 +175,39 @@ export class RecordedEngineEndpointOwner {
     try { return this.registry!.resolveRecordedMeasurementSource(packDigest); }
     catch (cause) { throw new RecordedMeasurementSourceError(cause instanceof TypeError ? "source_contract_invalid" : "source_lookup_failed", "Recorded endpoint lookup failed", { cause }); }
   }
+}
+
+function pairState(before: Endpoint, after: Endpoint, edge: DeclaredEvidence<RecordedEdge>): RecordedEnginePair["state"] {
+  // Ordered local absence, never catch a source-contract failure into an ungradeable move.
+  for (const reason of ["source_pending", "missing_eval", "input_abstained"] as const) {
+    if ([before.state, after.state].some(state => state.kind === "unavailable" && state.reason === reason)) return Object.freeze({ kind: "unavailable", reason });
+  }
+  const left = before.state, right = after.state;
+  if (left.kind !== "available" || right.kind !== "available") return invalid("Engine pair has an unknown endpoint state");
+  let comparable = false;
+  if (left.instrument.origin === "provider_delivery" && right.instrument.origin === "provider_delivery") {
+    if (before.modern.selected === null || after.modern.selected === null) return invalid("Engine pair lost its original modern points");
+    comparable = reviewPointComparability(before.modern.selected.point.payload, after.modern.selected.point.payload) === "comparable";
+  } else if (left.instrument.origin === "offline_engine" && right.instrument.origin === "offline_engine") {
+    const a = left.instrument, b = right.instrument;
+    comparable = left.engineId === right.engineId && a.engineVersion === b.engineVersion
+      && a.profile.threads === b.profile.threads && a.profile.hashMb === b.profile.hashMb && a.profile.multiPv === b.profile.multiPv
+      && sameBound(left, right);
+  }
+  if (!comparable) return Object.freeze({ kind: "unavailable", reason: "unequal_instrument" });
+  return Object.freeze({ kind: "available", before: left, after: right,
+    inputs: Object.freeze([selectedOperand(before), selectedOperand(after), edge] as const) });
+}
+
+function sameBound(left: Available, right: Available): boolean {
+  const a = left.bound, b = right.bound;
+  return a.kind === "depth" && b.kind === "depth" ? a.requestedDepth === b.requestedDepth
+    : a.kind === "movetime" && b.kind === "movetime" ? a.requestedMs === b.requestedMs
+      : a.kind === "nodes" && b.kind === "nodes" && a.requestedNodes === b.requestedNodes;
+}
+function selectedOperand(endpoint: Endpoint): DeclaredEvidence<unknown> {
+  if (endpoint.origin === "provider_delivery" && endpoint.modern.selected !== null) return endpoint.modern.selected.point;
+  const candidate = endpoint.candidates.find(row => row.disposition === "selected");
+  if (endpoint.origin === "offline_engine" && candidate?.row.invocation.result.kind === "available") return candidate.row.invocation.result.value;
+  return invalid("Comparable engine pair lost its original selected operand");
 }

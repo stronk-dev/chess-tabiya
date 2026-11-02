@@ -32147,7 +32147,7 @@
       "id": "D3859",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7d0e69371b08a66889f837d28b47a03d2d2a5c6755a76e956051ba48676cb102",
+      "sourceDigest": "sha256:cdad208721dac500c5c796b2b14732349d595e8c01bfd43aef9ae61e9c6378c0",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32671,6 +32671,15 @@
       "sourceDigest": "sha256:81a15691b81c6db27861c498545c327e0e70a781d128d45e5a3847d3a79287c9",
       "uxItems": [],
       "evidence": "planning/installed-opening-evidence/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3918",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:539163b36c9f9afac47cc639e910acdb43ebe89036917b136407fce4ac5337ce",
+      "uxItems": [],
+      "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
     }
   ]

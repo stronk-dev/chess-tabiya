@@ -109,6 +109,14 @@ tested separately: D3767's current selection gap is not hidden by forcing a grad
 `make nudge-grade-presentation-check` covers both-side complete grade receipt round-trips and
 mounted components, including fractional thresholds, context and learner-relative mate wording.
 
+`make recorded-engine-endpoint-check` covers original fixed node selection and incoming-edge
+pairs, not completed learner grades. It uses actual stored boundaries, provider deliveries,
+pinned report populations and owned pending requests. Controls cover all three modern/two offline
+budgets, requested versus reached depth, engine/version/generation/profile mismatches, mixed
+origins, the shared B/Y node, exact ordered operands and distinct local absence. The runtime edge
+source uses the central dispatcher; stale/foreign/root/suffix and mid-dispatch storage changes
+refuse. Normal `make verify` also enforces that server callers cannot import factories directly.
+
 `make structural-reading-work-check` covers private same-position reuse and independently checks
 occupied-target geometric counts, alongside the existing predicates, evidence, transitions and
 shape consumers. It also checks the registered interpreter ownership/capability census; moving

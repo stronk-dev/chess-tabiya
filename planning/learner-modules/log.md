@@ -337,3 +337,22 @@ performance/four files,271 content/27 files and all remaining contracts/build/co
 Earlier failures stay in the exploration log. D3864 nonmodule retirement, GradeSource/accuracy/
 graph, installed opening history and complete Inspector/other current images remain assigned;
 no whole RFC, qualification, official content or milestone closes.
+
+## 2026-11-02 — D3859 fixed original engine pairs, internal prerequisite
+
+The shared server-private owner now resolves incoming recorded edges against its fixed node
+selections, retaining both graph endpoint states, derived mover and exact ordered operands.
+Comparability uses the actual modern or independent-report instrument/requested budget; distinct
+local absence and live-owner revalidation remain. No GradeSource grant, arithmetic/convention
+change or current Nudge/Review cutover is claimed.196 source cases/five files, unchanged authority/
+reduction/Review-source controls,144 Compare cases and workspace types pass. D3918 records the
+initial direct factory import caught by normal verification; runtime-owned edge acquisition now
+uses the sole dispatcher and refuses mid-dispatch storage mutation. Full normal verification and
+closeout follow; detailed failed attempts remain in planning/exploration/log.md.
+
+Final normal make semantic-validation-update roadmap-receipt verify build exits0:8427 software/
+432 files, seven unchanged-budget performance/four,271 content/27 and all governance/corpus/build
+checks pass. D3918 closes its dispatcher repair only; the failed attempts remain recorded and
+D3859 stays doing. Actual GradeSource, grade@2/convention@2, shared accuracy/graph and complete
+Nudge/Review source-to-seat migration remain next; no learner capability, qualification, official
+content or milestone promotion, browser/remote CI claim or push.

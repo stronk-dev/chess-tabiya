@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a593354130a486bf6ea2c7f443d06184d9eacf6b6f7e0ce4acf3076e3a5ccc8f",
+    "roadmap": "sha256:3876f31bfec265589dc43291ab0551c3d7e2fc0654e332cae6be12e9587b0fcc",
     "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:a959b4e54b6f10c0fbb261c00ef6861951dd8b04b5bb5b7380f7398870422c72",
+    "workState": "sha256:30186bb94cd02ba48a58e65943acb640cb359088e046ca36b7d5efb3b73aa83d",
     "rfcRegister": "sha256:81c80f8dddc935467fa98f9ff9716745f5a83554d17a9117f9dea71b45d458e9",
     "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -33,7 +33,7 @@
       "todo": 628,
       "doing": 37,
       "blocked": 1083,
-      "done": 1756,
+      "done": 1757,
       "refused": 162
     },
     "workItems": {
@@ -490,7 +490,7 @@
       "nextAction": "Finish D3859's workflow-issued GradeSource, fixed paired arithmetic/accuracy/graph and coordinated complete Nudge/Review images, plus D3841's complete Inspector execution/source-page/renderer/receiver/API/native delivery. D3376/D3857's internal complete recorded opening history/reduction is implemented, not its complete current consumers or general catalogue pool. D3864 retains nonmodule Compare caller/obsolete-path retirement. No compatibility-only pipeline, partial learner image or source-qualification promotion.",
       "latestCheckpoint": {
         "at": "2026-11-02",
-        "summary": "Internal complete recorded opening history/reduction validates the whole original graph before narrowing and retains every genuine positive/negative/repeated occurrence, authentic empty result and exact fourth V2 execution.84 cross-reduction,243 source,46 point/API and53 worker/store cases, clean types and independent bounded review pass. All normal local tiers pass8395 software/432 files, seven unchanged-budget performance/four,271 content/27 and governance/corpus/build; nine built browser journeys pass with zero retries. D3909-D3917 close only their real refresh/publication/replay/functional/cadence/ownership repairs; failed/interrupted commands and corrected explicit queue routes stay logged, not relabelled successful combined runs. D3376/D3857 remain doing for catalogue pool and full current Inspector/Review. Prior point/Theory and complete Compare delivery stand. No qualification, official content, whole milestone/RFC, remote CI or release promotion.",
+        "summary": "Internal fixed engine pairs retain the actual incoming recorded edge, derived mover, exact ordered same-origin operands and both graph endpoint states, including unavailable comparisons. Original provider identity/version/generation/commands/requested bounds or offline identity/version/profile/requested budgets govern comparison; no later report rescues a pair. Live owners revalidate cached reads.196 source cases/five files and clean types pass. Full normal make verify build exits0:8427 software/432 files, seven unchanged-budget performance/four,271 content/27 and governance/corpus/build. D3918 closes only its dispatcher-boundary repair; failed attempts stay logged. D3859 remains doing for workflow-issued GradeSource, grade@2/convention@2, shared accuracy/graph and complete current Nudge/Review source-to-seat delivery. Prior opening/history and Compare work stand; full Inspector and catalogue pool remain open. No current-module, qualification, official-content, whole milestone/RFC, browser/remote CI or release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/recorded-opening-point.test.ts",
@@ -516,6 +516,8 @@
           "packages/runtime/src/testing/recorded-comparison-eval-fixture.ts",
           "apps/server/src/recorded-engine-endpoints.ts",
           "apps/server/src/recorded-engine-endpoints.test.ts",
+          "packages/runtime/src/internal/recorded-engine-attachments.ts",
+          "packages/runtime/src/recorded-engine-attachments.test.ts",
           "apps/server/src/review-evidence.ts",
           "apps/server/src/inspector-recorded-context.ts",
           "apps/server/src/inspector-recorded-context.test.ts",

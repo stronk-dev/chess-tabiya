@@ -15,7 +15,7 @@ import { SQLiteRunStorage } from "./storage.js";
 const at = "2026-11-01T19:00:00.000Z", lease = { writerId: "endpoint-writer", learnerId: "__legacy" };
 const stores: SQLiteRunStorage[] = [], coordinators: ReviewEvidenceCoordinator[] = [];
 afterEach(async () => { vi.restoreAllMocks(); await Promise.all(coordinators.splice(0).map(value => value.close())); for (const store of stores.splice(0)) store.close(); });
-interface Report { node: number; engine?: string; cp?: number; mate?: number; budget?: { depth: number } | { movetimeMs: number }; local?: boolean; multiPv?: number }
+interface Report { node: number; engine?: string; version?: string; threads?: number; hashMb?: number; cp?: number; mate?: number; budget?: { depth: number } | { movetimeMs: number }; local?: boolean; multiPv?: number }
 async function fixture(reports: readonly Report[] = [], side: "white" | "black" = "white", mutate?: (ledger: any, manifest: any) => void, sidecars = true) {
   const document = withDerivedRequires({ id: "engine-endpoints", version: "1.0.0", title: "Synthetic endpoint sources", mode: "outcome", phase: "opening",
     start: { fen: START_FEN, side }, objective: { type: "hold", summary: "Synthetic source selection, not a chess lesson",
@@ -31,10 +31,10 @@ async function fixture(reports: readonly Report[] = [], side: "white" | "black" 
   const ledger: any = { schema: "tabiya.sourcing.evidence.v1", packId: document.id, packVersion: document.version, packDigest: digest, sourcedAt: at,
     records: reports.map((report, ordinal) => ({ kind: "engine_eval", anchor: { fen: path[report.node]!.fen }, sourceId: `report-${ordinal}`, retrievedAt: at,
       grounds: "machine_validation", supports: [], values: { fen: path[report.node]!.fen, ...(report.mate === undefined ? { centipawns: report.cp ?? 20 } : { mateIn: report.mate }),
-        depth: 35, multiPv: 1, perspective: "white", engineId: report.engine ?? "X", engineName: `Engine ${report.engine ?? "X"}`, engineVersion: "1" } })), abstentions: [] };
+        depth: 35, multiPv: 1, perspective: "white", engineId: report.engine ?? "X", engineName: `Engine ${report.engine ?? "X"}`, engineVersion: report.version ?? "1" } })), abstentions: [] };
   const manifest: any = { schema: "tabiya.sourcing.manifest.v1", entries: reports.map((report, ordinal) => ({ sourceId: `report-${ordinal}`, retrievedAt: at, licence,
     origin: report.local ? { kind: "local-file", path: "synthetic.txt", sha256: digest, bytes: 1 }
-      : { kind: "engine", engineId: report.engine ?? "X", engineName: `Engine ${report.engine ?? "X"}`, engineVersion: "1", profile: { threads: 1, hashMb: 16, multiPv: report.multiPv ?? 1 },
+      : { kind: "engine", engineId: report.engine ?? "X", engineName: `Engine ${report.engine ?? "X"}`, engineVersion: report.version ?? "1", profile: { threads: report.threads ?? 1, hashMb: report.hashMb ?? 16, multiPv: report.multiPv ?? 1 },
         budget: report.budget ?? { depth: 12 }, fen: path[report.node]!.fen, evidenceKind: "engine_eval" } })) };
   mutate?.(ledger, manifest);
   const registry = await PackRegistry.fromDocuments([{ source: "synthetic", value: document, ...(sidecars ? { ledger, manifest } : {}) }]);
@@ -64,6 +64,135 @@ function pending(f: Awaited<ReturnType<typeof fixture>>) {
 }
 
 describe("fixed original engine endpoints — registry, canonical stored boundary and request owner", () => {
+  for (const side of ["white", "black"] as const) for (const budget of [{ depth: 12 }, { movetimeMs: 100 }] as const) {
+    it(`pairs actual offline edges with original operands and derived mover, ${side}/${JSON.stringify(budget)}`, async () => {
+      const f = await fixture([{ node: 0, cp: 80, budget }, { node: 1, cp: -120, budget }, { node: 2, mate: -3, budget }], side);
+      const source = f.capture(), image = f.owner.read(source), first = f.owner.resolveRecordedEnginePair(source, f.path[1]!.id);
+      const second = f.owner.resolveRecordedEnginePair(source, f.path[2]!.id);
+      expect(first.before).toBe(image.rows[0]); expect(first.after).toBe(second.before); expect(first.after).toBe(image.rows[1]);
+      expect(first.mover).toBe("white"); expect(second.mover).toBe("black");
+      expect(first.edge.payload).toMatchObject({ runId: f.run.id, beforeNodeId: f.path[0]!.id, afterNodeId: f.path[1]!.id,
+        beforeFen: f.path[0]!.fen, afterFen: f.path[1]!.fen, moveUci: "e2e4" });
+      expect(first.state.kind).toBe("available");
+      if (first.state.kind !== "available") throw new Error("Expected original pair");
+      const before = image.rows[0]!.candidates[0]!.row.invocation.result, after = image.rows[1]!.candidates[0]!.row.invocation.result;
+      if (before.kind !== "available" || after.kind !== "available") throw new Error("Expected original readings");
+      expect(first.state.inputs).toEqual([before.value, after.value, first.edge]);
+      expect(first.state.inputs[0]).toBe(before.value); expect(first.state.inputs[1]).toBe(after.value);
+      expect(first.state.before).toBe(first.before.state); expect(first.state.after).toBe(first.after.state);
+      expect(first.state.inputs.map(value => `${value.projection.id}@${value.projection.version}`)).toEqual(["recorded.engine.eval@1", "recorded.engine.eval@1", "run.record.edge@1"]);
+      expect(second.after.state).toMatchObject({ score: { kind: "mate", side: "black", distance: 3 } });
+      expect(Object.isFrozen(first)).toBe(true); expect(Object.isFrozen(first.state)).toBe(true); expect(Object.isFrozen(first.state.inputs)).toBe(true);
+      expect(f.owner.resolveRecordedEnginePair(source, f.path[1]!.id)).toBe(first);
+    });
+  }
+
+  for (const bound of [{ kind: "depth", requestedDepth: 12 }, { kind: "movetime", requestedMs: 100 }, { kind: "nodes", requestedNodes: 2048 }] as const) {
+    it(`pairs actual modern ${bound.kind} deliveries without comparing their position commands or reached depth`, async () => {
+      const f = await fixture([], "white", undefined, false); f.delivery(0, "cp 80", { bound });
+      f.delivery(1, "cp 120", { bound, reachedDepth: bound.kind === "depth" ? 12 : 18 });
+      const source = f.capture(), pair = f.owner.resolveRecordedEnginePair(source, f.path[1]!.id);
+      expect(pair.state.kind).toBe("available");
+      if (pair.state.kind !== "available") throw new Error("Expected original modern pair");
+      expect(pair.state.inputs[0]).toBe(pair.before.modern.selected!.point); expect(pair.state.inputs[1]).toBe(pair.after.modern.selected!.point);
+      expect(pair.state.inputs.map(value => `${value.projection.id}@${value.projection.version}`)).toEqual(["derived.review.eval_point@1", "derived.review.eval_point@1", "run.record.edge@1"]);
+      expect(pair.state.before.bound).toEqual(bound); expect(pair.state.after.bound).toEqual(bound);
+      expect(pair.after.modern.selected!.occurrence.evaluation.payload.payload.bound.reachedDepth).toBe(bound.kind === "depth" ? 12 : 18);
+      expect(pair.state.before.score).toEqual({ kind: "centipawns", value: 80 });
+      expect(pair.state.after.score).toEqual({ kind: "centipawns", value: -120 }); // normalize raw Black turn only at original delivery
+    });
+  }
+
+  it("retains B/Y across both actual edges; A/X→B/Y refuses while B/Y→C/Y compares", async () => {
+    const f = await fixture([{ node: 0, engine: "X" }, { node: 1, engine: "Y" }, { node: 1, engine: "X" }, { node: 2, engine: "Y" }]);
+    const source = f.capture(), first = f.owner.resolveRecordedEnginePair(source, f.path[1]!.id), second = f.owner.resolveRecordedEnginePair(source, f.path[2]!.id);
+    expect(first.state).toEqual({ kind: "unavailable", reason: "unequal_instrument" }); expect(second.state.kind).toBe("available");
+    expect(first.after).toBe(second.before); expect(first.after.selectedOrdinal).toBe(1);
+    expect(first.after.candidates.map(value => value.disposition)).toEqual(["selected", "eligible"]);
+    expect(first.before.state.kind).toBe("available"); expect(first.after.state.kind).toBe("available");
+  });
+
+  it.each([
+    { engine: "Y" }, { version: "2" }, { threads: 2 }, { hashMb: 32 }, { budget: { depth: 13 } }, { budget: { movetimeMs: 12 } },
+  ] satisfies Partial<Report>[])("refuses offline instrument/budget mismatch %j without losing either graph point", async difference => {
+    const f = await fixture([{ node: 0 }, { node: 1, ...difference }]), source = f.capture();
+    const pair = f.owner.resolveRecordedEnginePair(source, f.path[1]!.id);
+    expect(pair.state).toEqual({ kind: "unavailable", reason: "unequal_instrument" });
+    expect(pair.before.state.kind).toBe("available"); expect(pair.after.state.kind).toBe("available");
+  });
+
+  it.each([{ version: "20" }, { generation: 2 }, { bound: { kind: "depth", requestedDepth: 13 } },
+    { bound: { kind: "movetime", requestedMs: 12 } }, { bound: { kind: "nodes", requestedNodes: 12 } }] as const)("refuses actual modern comparability mismatch %j", async difference => {
+    const f = await fixture([], "white", undefined, false); f.delivery(0); f.delivery(1, "cp 20", difference);
+    const pair = f.owner.resolveRecordedEnginePair(f.capture(), f.path[1]!.id);
+    expect(pair.state).toEqual({ kind: "unavailable", reason: "unequal_instrument" });
+    expect(pair.before.state.kind).toBe("available"); expect(pair.after.state.kind).toBe("available");
+  });
+
+  it.each([0, 1])("never mixes a genuine modern node %s with an independently admitted offline reading", async modernNode => {
+    const f = await fixture([{ node: 0, engine: "stockfish-analysis", version: "19" }, { node: 1, engine: "stockfish-analysis", version: "19" }]);
+    f.delivery(modernNode);
+    const pair = f.owner.resolveRecordedEnginePair(f.capture(), f.path[1]!.id);
+    expect(pair.state).toEqual({ kind: "unavailable", reason: "unequal_instrument" });
+    expect(pair.before.state.kind).toBe("available"); expect(pair.after.state.kind).toBe("available");
+  });
+
+  it.each([0, 1])("retains the available endpoint beside missing endpoint %s without inventing pending or an input tuple", async missing => {
+    const f = await fixture([{ node: missing === 0 ? 1 : 0 }]), pair = f.owner.resolveRecordedEnginePair(f.capture(), f.path[1]!.id);
+    expect(pair.state).toEqual({ kind: "unavailable", reason: "missing_eval" });
+    expect((missing === 0 ? pair.after : pair.before).state.kind).toBe("available"); expect(pair.state).not.toHaveProperty("inputs");
+  });
+
+  it("preserves missing before input-abstained precedence, and genuine input-abstained when neither is missing", async () => {
+    const f = await fixture([{ node: 0, local: true }]), first = f.owner.resolveRecordedEnginePair(f.capture(), f.path[1]!.id);
+    expect(first.before.state).toEqual({ kind: "unavailable", reason: "input_abstained" });
+    expect(first.state).toEqual({ kind: "unavailable", reason: "missing_eval" });
+    const g = await fixture([{ node: 0, local: true }, { node: 1 }]), second = g.owner.resolveRecordedEnginePair(g.capture(), g.path[1]!.id);
+    expect(second.state).toEqual({ kind: "unavailable", reason: "input_abstained" }); expect(second.after.state.kind).toBe("available");
+  });
+
+  it("lets actual owned pending take precedence over missing, performs no request/write, and rechecks a cached pair", async () => {
+    const f = await fixture([], "white", undefined, false), p = pending(f), stored = JSON.stringify(f.storage.read(f.run.id));
+    p.coordinator.ensureBranch(f.run.id, f.path[0]!.branchId);
+    const source = p.owner.capture({ boundary: f.boundary(), signal: f.controller.signal });
+    const pair = p.owner.resolveRecordedEnginePair(source, f.path[1]!.id);
+    expect(pair.state).toEqual({ kind: "unavailable", reason: "source_pending" }); expect(pair.after.state).toEqual({ kind: "unavailable", reason: "missing_eval" });
+    expect(p.get).not.toHaveBeenCalled(); expect(JSON.stringify(f.storage.read(f.run.id))).toBe(stored);
+    await p.coordinator.close(); p.release(null);
+    expect(() => p.owner.resolveRecordedEnginePair(source, f.path[1]!.id)).toThrow();
+  });
+
+  it("lets pending outrank a genuine refused report, not only a missing endpoint", async () => {
+    const f = await fixture([{ node: 1, local: true }]), p = pending(f);
+    p.coordinator.ensureBranch(f.run.id, f.path[0]!.branchId);
+    const source = p.owner.capture({ boundary: f.boundary(), signal: f.controller.signal });
+    const pair = p.owner.resolveRecordedEnginePair(source, f.path[1]!.id);
+    expect(pair.after.state).toEqual({ kind: "unavailable", reason: "input_abstained" });
+    expect(pair.state).toEqual({ kind: "unavailable", reason: "source_pending" });
+    expect(pair.after.ledger!.records).toHaveLength(1); expect(p.get).not.toHaveBeenCalled();
+    await p.coordinator.close(); p.release(null);
+  });
+
+  it("does not turn source lookup failure or registry retirement into a cached missing/incomparable pair", async () => {
+    const f = await fixture([{ node: 0 }, { node: 1, engine: "Y" }]), source = f.capture();
+    expect(f.owner.resolveRecordedEnginePair(source, f.path[1]!.id).state).toEqual({ kind: "unavailable", reason: "unequal_instrument" });
+    const lookup = vi.spyOn(f.registry, "resolveRecordedMeasurementSource").mockImplementation(() => { throw new Error("Synthetic real source read failure"); });
+    expect(() => f.owner.resolveRecordedEnginePair(source, f.path[1]!.id)).toThrow(expect.objectContaining({ reason: "source_lookup_failed" }));
+    lookup.mockRestore(); f.registry.addPlaytest(f.registry.required(f.document.id).document, f.digest);
+    expect(() => f.owner.resolveRecordedEnginePair(source, f.path[1]!.id)).toThrow();
+  });
+
+  it("refuses root, suffix, foreign and stale pair reads before an absence shortcut", async () => {
+    const f = await fixture([], "white", undefined, false), source = f.capture(1);
+    expect(() => f.owner.resolveRecordedEnginePair(source, f.path[0]!.id)).toThrow();
+    expect(() => f.owner.resolveRecordedEnginePair(source, f.path[2]!.id)).toThrow();
+    expect(() => f.owner.resolveRecordedEnginePair({ ...source } as RecordedEngineEndpoints, f.path[1]!.id)).toThrow();
+    f.owner.resolveRecordedEnginePair(source, f.path[1]!.id); f.delivery(0);
+    expect(() => f.owner.resolveRecordedEnginePair(source, f.path[1]!.id)).toThrow();
+    const g = await fixture([], "white", undefined, false), current = g.capture(); g.owner.resolveRecordedEnginePair(current, g.path[1]!.id); g.controller.abort();
+    expect(() => g.owner.resolveRecordedEnginePair(current, g.path[1]!.id)).toThrow();
+  });
+
   for (const side of ["white", "black"] as const) for (const budget of [{ depth: 12 }, { movetimeMs: 100 }] as const) {
     it(`retains White-relative offline scores, original ordinal and requested ${"depth" in budget ? "depth" : "time"} for ${side}`, async () => {
       const f = await fixture([{ node: 0, cp: -25, budget }, { node: 1, mate: -3, budget }], side), source = f.capture();

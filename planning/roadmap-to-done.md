@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+The next grade prerequisite now pairs actual recorded edges using their original fixed per-node
+measurements, with exact operands, a derived mover and both graph endpoint states retained even
+when comparison is unavailable. Modern identity/generation/commands/requested budgets and offline
+identity/version/profile/budgets govern comparability; actual pending/missing/input-abstained/
+unequal-instrument states remain distinct.196 source cases/five files and workspace types pass.
+Full normal make verify build exits0:8427 software/432 files, seven unchanged-budget performance/
+four,271 content/27 and governance/corpus/build. D3918 closes only the original dispatcher-boundary
+repair, with earlier failed attempts retained. D3859 remains doing: workflow-owned GradeSource, grade@2's unified
+convention, accuracy/graph and complete current Nudge/Review/API/native migration are not supplied
+by this internal source prerequisite. No milestone or learner-capability state is promoted.
+
 The internal complete recorded-opening history/reduction prerequisite is implemented. It validates
 the entire original graph before narrowing, preserves every real positive/negative/repeated
 occurrence and authentic empty result, and binds the exact fourth V2 reduction without changing

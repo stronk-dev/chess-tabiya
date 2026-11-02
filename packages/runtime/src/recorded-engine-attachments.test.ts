@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { attachEvidence } from "./evidence.js";
-import { collectRecordedEngineAttachments, readRecordedEngineAttachments } from "./internal/recorded-engine-attachments.js";
+import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, type RecordedEngineAttachments } from "./internal/recorded-engine-attachments.js";
 import * as routes from "./internal/evidence-value-routes.js";
 import { readReviewPointInvocation } from "./internal/evidence-value-routes.js";
 import { recordedLastLevelFixture } from "./testing/recorded-last-level-fixture.js";
@@ -21,6 +21,39 @@ const legacy = (centipawns = 999): EvidencePayload => ({ kind: "eval", source: "
 const modern = (value: unknown): EvidencePayload => ({ kind: "eval", source: "engine_validated", values: { centipawns: 999, [REVIEW_PROVIDER_DELIVERY_KEY]: value } });
 
 describe("original durable modern engine attachment source primitive", () => {
+  for (const side of ["white", "black"] as const) it(`acquires only the actual incoming ${side} edge through the registered dispatcher`, () => {
+    const f = fixture(side), source = f.collect(1), image = readRecordedEngineAttachments(source);
+    const invoke = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      const edge = collectRecordedEngineEdge(source, f.path[1]!.id);
+      expect(invoke).toHaveBeenCalledExactlyOnceWith("run.record.edge@1", { run: image.boundary.run,
+        parent: image.boundary.path[0]!.node, child: image.boundary.path[1]!.node });
+      expect(edge.projection).toEqual({ id: "run.record.edge", version: 1 });
+      expect(edge.payload).toMatchObject({ beforeNodeId: f.path[0]!.id, afterNodeId: f.path[1]!.id,
+        beforeFen: f.path[0]!.fen, afterFen: f.path[1]!.fen, moveUci: f.path[1]!.moveUci });
+    } finally { invoke.mockRestore(); }
+  });
+
+  it("refuses root, suffix, foreign and stale edge sources before dispatch, even with no readings", () => {
+    const f = fixture(), source = f.collect(1), invoke = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      expect(() => collectRecordedEngineEdge(source, f.path[0]!.id)).toThrow();
+      expect(() => collectRecordedEngineEdge(source, f.path[2]!.id)).toThrow();
+      expect(() => collectRecordedEngineEdge({ ...source } as RecordedEngineAttachments, f.path[1]!.id)).toThrow();
+      f.attach(0, legacy()); expect(() => collectRecordedEngineEdge(source, f.path[1]!.id)).toThrow();
+      expect(invoke).not.toHaveBeenCalled();
+    } finally { invoke.mockRestore(); }
+  });
+
+  it("revalidates the original storage after edge dispatch and before publishing its value", () => {
+    const f = fixture(), source = f.collect(1), original = routes.invokeEvidenceValueRoute;
+    const invoke = vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation(((route: string, input: unknown) => {
+      const value = original(route as never, input as never); f.attach(0, legacy()); return value;
+    }) as typeof original);
+    try { expect(() => collectRecordedEngineEdge(source, f.path[1]!.id)).toThrow(/no longer/u); }
+    finally { invoke.mockRestore(); }
+  });
+
   for (const side of ["white", "black"] as const) for (const bound of [{ kind: "depth", requestedDepth: 12 }, { kind: "movetime", requestedMs: 100 }, { kind: "nodes", requestedNodes: 2048 }] as const) {
     it(`retains exact White-POV delivery, requested ${bound.kind} and actual event occurrence for ${side}`, () => {
       const f = fixture(side); f.delivery(0, "cp 20", bound); f.delivery(1, "mate -3", bound);

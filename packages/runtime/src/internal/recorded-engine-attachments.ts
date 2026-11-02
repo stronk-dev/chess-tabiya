@@ -6,6 +6,7 @@ import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "../reco
 import { isClosedReviewSourceRecord, REVIEW_PROVIDER_DELIVERY_KEY } from "../review-evidence.js";
 import type { RecordedPosition, ReviewEnginePoint, StockfishPositionEvaluation } from "../review-points.js";
 import type { EvidenceAttachedEvent } from "../types.js";
+import type { RecordedEdge } from "../recorded-edge.js";
 import { assertRecordedPositionInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation } from "./evidence-value-routes.js";
 
 declare const attachmentsBrand: unique symbol;
@@ -99,4 +100,16 @@ export function readRecordedEngineAttachments(source: RecordedEngineAttachments)
   if (image !== owned.data.boundary || owned.data.rows.length !== image.path.length) throw new TypeError("Recorded engine attachment source crossed its original boundary");
   for (const [index, row] of owned.data.rows.entries()) assertRow(row, image, index);
   return owned.data;
+}
+
+/** One actual incoming edge in this original source prefix, through the sole evidence dispatcher.
+ * Not a raw run/payload factory wrapper or permission to grade its measurements. */
+export function collectRecordedEngineEdge(source: RecordedEngineAttachments, afterNodeId: string): DeclaredEvidence<RecordedEdge> {
+  const { boundary } = readRecordedEngineAttachments(source);
+  const index = boundary.path.findIndex(entry => entry.node.id === afterNodeId);
+  if (index <= 0) throw new TypeError("Recorded engine edge is outside the original incoming-edge prefix");
+  const edge = invokeEvidenceValueRoute("run.record.edge@1", { run: boundary.run,
+    parent: boundary.path[index - 1]!.node, child: boundary.path[index]!.node });
+  readRecordedEngineAttachments(source);
+  return edge;
 }

@@ -22,6 +22,8 @@ export interface DeliveryOptions {
   readonly bound?: StockfishPositionEvaluationRequest["bound"];
   readonly version?: string;
   readonly generation?: number;
+  /** Actual engine-reported depth; timed/node searches may reach different depths. */
+  readonly reachedDepth?: number;
   /** Raw side-to-move WDL per-mille; must sum to 1000. */
   readonly wdl?: readonly [number, number, number];
 }
@@ -35,7 +37,7 @@ export function evaluationDelivery(fen: string, score: string, options: Delivery
   const requested = normalizeProviderRequest("stockfish.position_evaluation@1", request);
   const [win, draw, loss] = options.wdl ?? [400, 400, 200];
   const move = exactLegalMoves(fen)[0]!.uci;
-  const depth = requested.request.bound.kind === "depth" ? requested.request.bound.requestedDepth : 12;
+  const depth = options.reachedDepth ?? (requested.request.bound.kind === "depth" ? requested.request.bound.requestedDepth : 12);
   const capture = evaluationCapture(requested, [`info depth ${depth} seldepth ${depth + 2} score ${score} wdl ${win} ${draw} ${loss} nodes 100 pv ${move}`, `bestmove ${move}`], options.generation ?? 1);
   const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt({ operation: "stockfish.position_evaluation@1", requestedIdentity: requested, capture, requestedAt: FIXTURE_AT, retrievedAt: FIXTURE_AT });
   const { payload, payloadReceipt } = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
