@@ -57,6 +57,14 @@ their actual storage, registry, pending-request and cancellation owners. This pe
 request or storage write. It is not a workflow grant or the accepted `RecordedGradeSource` yet;
 current grade/accuracy/graph and complete Nudge/Review migration remain open under D3859.
 
+Compare and incoming-edge pairs share the package-private original engine-node reader. It checks
+the genuine stored position/attachments, complete original artifact and exact record/source/
+invocation joins before selecting any operand. The server still checks current registry/pending/
+access owners and compares the runtime interpretation against its fixed per-node selection.
+Engine source-kind conflicts in off-position records or abstentions invalidate that requested
+artifact population before reading invocation; they cannot hide behind a usable selected report.
+This is shared source validation, not a new GradeSource issuer or learner permission.
+
 Theory Breadcrumb's opening input now comes from the actual startup-installed catalogue and
 the sole factory's recorded-position value. The caller verifies the original run/head/node,
 then authenticates both endpoint and catalogue-membership result arrays from one paired lookup.

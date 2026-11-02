@@ -5,8 +5,9 @@ import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "../../.
 import { recordedOfflineEngineEndpoint, recordedEngineRequestedBound as requestedBound, type RecordedEngineAvailable } from "../../../packages/runtime/src/internal/recorded-engine-endpoint-values.js";
 import { PackRegistry, RecordedMeasurementSourceError, type RecordedMeasurementAdmission, type RecordedMeasurementPopulation } from "./pack-registry.js";
 import { ReviewEvidenceCoordinator } from "./review-evidence.js";
-import type { RecordedComparisonPointCapture } from "../../../packages/runtime/src/recorded-comparison-point.js";
-import { reviewPointComparability, sideToMove } from "../../../packages/runtime/src/review-points.js";
+import { readRecordedEngineNode, recordedEngineNodesComparable, type RecordedEngineNodeCapture } from "../../../packages/runtime/src/internal/recorded-engine-node.js";
+import { sideToMove } from "../../../packages/runtime/src/review-points.js";
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import type { DeclaredEvidence } from "../../../packages/runtime/src/evidence-contract.js";
 import type { RecordedEdge } from "../../../packages/runtime/src/recorded-edge.js";
 
@@ -149,22 +150,31 @@ export class RecordedEngineEndpointOwner {
     const existing = owned.pairs.get(afterNodeId);
     if (existing !== undefined) return existing;
     const before = image.rows[index - 1]!, after = image.rows[index]!;
+    const first = this.#node(source, before), second = this.#node(source, after);
     const edge = collectRecordedEngineEdge(owned.attachments, afterNodeId);
-    const pair = Object.freeze({ before, after, edge, mover: sideToMove(edge.payload.beforeFen), state: pairState(before, after, edge) });
+    const pair = Object.freeze({ before, after, edge, mover: sideToMove(edge.payload.beforeFen), state: pairState(before, after, edge, first, second) });
     this.read(source); // actual storage/registry/pending/cancellation still owns publication
     owned.pairs.set(afterNodeId, pair);
     return pair;
   }
 
-  /** Original operands for the restricted Compare issuer, not a public numeric endpoint API. */
-  comparisonPointCapture(source: RecordedEngineEndpoints, nodeId: string): Pick<RecordedComparisonPointCapture, "attachments" | "offline" | "pending"> {
+  /** Original operands for separately authorized workflow issuers, not a numeric endpoint API. */
+  nodeCapture(source: RecordedEngineEndpoints, nodeId: string): RecordedEngineNodeCapture {
     const row = this.resolveRecordedEngineEndpoint(source, nodeId), owned = this.#sources.get(source)!;
     const ledger = row.ledger;
-    return Object.freeze({ attachments: owned.attachments, pending: row.pending,
+    return Object.freeze({ attachments: owned.attachments, nodeId, pending: row.pending,
       offline: ledger === null ? null : Object.freeze({ packDigest: ledger.artifact.packDigest,
         ledgerDigest: ledger.artifact.ledgerDigest, manifestDigest: ledger.artifact.manifestDigest,
         ledger: ledger.artifact.ledger, manifest: ledger.artifact.manifest, candidates: ledger.records, abstentions: ledger.abstentions }),
     });
+  }
+
+  #node(source: RecordedEngineEndpoints, endpoint: Endpoint) {
+    const node = readRecordedEngineNode(this.nodeCapture(source, endpoint.position.payload.nodeId));
+    if (node.row !== endpoint.modern || node.selectedOrdinal !== endpoint.selectedOrdinal
+      || (node.selected === null ? endpoint.state.kind !== "unavailable" || node.unavailable !== endpoint.state.reason
+        : canonicalizeJson(node.selected) !== canonicalizeJson(endpoint.state))) return invalid("Engine node differs from its original fixed selection");
+    return node;
   }
 
   #pending(image: SourceImage["boundary"], nodeId: string, fen: string) {
@@ -177,37 +187,15 @@ export class RecordedEngineEndpointOwner {
   }
 }
 
-function pairState(before: Endpoint, after: Endpoint, edge: DeclaredEvidence<RecordedEdge>): RecordedEnginePair["state"] {
+function pairState(before: Endpoint, after: Endpoint, edge: DeclaredEvidence<RecordedEdge>, first: ReturnType<typeof readRecordedEngineNode>, second: ReturnType<typeof readRecordedEngineNode>): RecordedEnginePair["state"] {
   // Ordered local absence, never catch a source-contract failure into an ungradeable move.
   for (const reason of ["source_pending", "missing_eval", "input_abstained"] as const) {
     if ([before.state, after.state].some(state => state.kind === "unavailable" && state.reason === reason)) return Object.freeze({ kind: "unavailable", reason });
   }
   const left = before.state, right = after.state;
   if (left.kind !== "available" || right.kind !== "available") return invalid("Engine pair has an unknown endpoint state");
-  let comparable = false;
-  if (left.instrument.origin === "provider_delivery" && right.instrument.origin === "provider_delivery") {
-    if (before.modern.selected === null || after.modern.selected === null) return invalid("Engine pair lost its original modern points");
-    comparable = reviewPointComparability(before.modern.selected.point.payload, after.modern.selected.point.payload) === "comparable";
-  } else if (left.instrument.origin === "offline_engine" && right.instrument.origin === "offline_engine") {
-    const a = left.instrument, b = right.instrument;
-    comparable = left.engineId === right.engineId && a.engineVersion === b.engineVersion
-      && a.profile.threads === b.profile.threads && a.profile.hashMb === b.profile.hashMb && a.profile.multiPv === b.profile.multiPv
-      && sameBound(left, right);
-  }
-  if (!comparable) return Object.freeze({ kind: "unavailable", reason: "unequal_instrument" });
+  if (!recordedEngineNodesComparable(first, second)) return Object.freeze({ kind: "unavailable", reason: "unequal_instrument" });
+  if (first.selectedOperand === null || second.selectedOperand === null) return invalid("Comparable engine pair lost its original operands");
   return Object.freeze({ kind: "available", before: left, after: right,
-    inputs: Object.freeze([selectedOperand(before), selectedOperand(after), edge] as const) });
-}
-
-function sameBound(left: Available, right: Available): boolean {
-  const a = left.bound, b = right.bound;
-  return a.kind === "depth" && b.kind === "depth" ? a.requestedDepth === b.requestedDepth
-    : a.kind === "movetime" && b.kind === "movetime" ? a.requestedMs === b.requestedMs
-      : a.kind === "nodes" && b.kind === "nodes" && a.requestedNodes === b.requestedNodes;
-}
-function selectedOperand(endpoint: Endpoint): DeclaredEvidence<unknown> {
-  if (endpoint.origin === "provider_delivery" && endpoint.modern.selected !== null) return endpoint.modern.selected.point;
-  const candidate = endpoint.candidates.find(row => row.disposition === "selected");
-  if (endpoint.origin === "offline_engine" && candidate?.row.invocation.result.kind === "available") return candidate.row.invocation.result.value;
-  return invalid("Comparable engine pair lost its original selected operand");
+    inputs: Object.freeze([first.selectedOperand, second.selectedOperand, edge] as const) });
 }

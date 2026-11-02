@@ -32147,7 +32147,7 @@
       "id": "D3859",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cdad208721dac500c5c796b2b14732349d595e8c01bfd43aef9ae61e9c6378c0",
+      "sourceDigest": "sha256:7bc5d19077fca5110dc640342670b40628b410aaa016fb0426e7e43d3c8db5cd",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32678,6 +32678,24 @@
       "state": "done",
       "sourceGlyph": "✅",
       "sourceDigest": "sha256:539163b36c9f9afac47cc639e910acdb43ebe89036917b136407fce4ac5337ce",
+      "uxItems": [],
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3919",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:619d3d3dbb26e74cfba7ee73932c48bfbe6c347e7ffd56e4a8c2af2dd6de6c82",
+      "uxItems": [],
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3920",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e5feadf4746385443ae7b8d98dc65111b47da415b953ed32aa6112cee104073e",
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"

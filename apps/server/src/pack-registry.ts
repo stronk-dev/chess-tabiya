@@ -352,6 +352,9 @@ function measurementFen(value: unknown): string {
 }
 
 function measurementRowFen(row: EvidenceRecord | EvidenceAbstention, source: SourceEntry): string {
+  if (source.origin.kind === "engine" && source.origin.evidenceKind !== row.kind) {
+    throw new RecordedMeasurementSourceError("source_contract_invalid", "Recorded measurement conflicts with its engine source evidence kind");
+  }
   const fen = measurementFen(row.anchor.fen);
   if (("values" in row && Object.hasOwn(row.values, "fen") && measurementFen(row.values.fen) !== fen)
     || (source.origin.kind === "engine" && measurementFen(source.origin.fen) !== fen)) {

@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
@@ -143,6 +147,7 @@ test("the production glyph vocabulary remains an explicit closed set", () => {
 test("the canonical Make target forwards every supported transition field", () => {
   const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
   const recipe = makefile.match(/^work-state-transition:\n([\s\S]*?)(?=^\S[^\n]*:|(?![\s\S]))/mu)?.[1] ?? "";
+  assert.match(recipe, /tools\/work-state\.mjs --sync --set=/u, "new rows must synchronize and receive their assignment in the same CLI validation");
   for (const [variable, option] of [
     ["OWNER", "owner"], ["SINCE", "since"], ["BLOCKER", "blocker"],
     ["QUESTION", "question"], ["EVIDENCE", "evidence"],
@@ -151,6 +156,35 @@ test("the canonical Make target forwards every supported transition field", () =
   ]) {
     assert.match(recipe, new RegExp(`\\$\\(${variable}\\).*--${option}=`, "u"));
   }
+});
+
+for (const valid of [true, false]) test(`real combined CLI ${valid ? "publishes an assigned new row" : "retains prior bytes on a refused assignment"}`, () => {
+  const directory = mkdtempSync(join(tmpdir(), "tabiya-work-state-command-"));
+  try {
+    for (const folder of ["design", "planning", "rfc"]) mkdirSync(join(directory, folder));
+    const initial = buildInitialWorkState({ ledger, roadmap, workItems });
+    const registry = setWorkState({ registry: initial, ledger, roadmap, workItems, ids: ["D4", "D5"], state: "todo", values: { owner: "review-and-return" } });
+    const nextLedger = `${ledger}\n| D6 🐞 | a newly recorded defect | open |\n`;
+    writeFileSync(join(directory, "design/BACKLOG.md"), nextLedger);
+    writeFileSync(join(directory, "planning/roadmap-1.0.json"), JSON.stringify(roadmap));
+    writeFileSync(join(directory, "planning/work-items-1.0.json"), JSON.stringify(workItems));
+    writeFileSync(join(directory, "rfc/README.md"), "# Synthetic CLI fixture\n\n## Active\n\n| RFC | Status |\n|---|---|\n\n## Archive\n");
+    const registryFile = join(directory, "planning/work-state.json"), before = `${JSON.stringify(registry, null, 2)}\n`;
+    writeFileSync(registryFile, before);
+    const result = spawnSync(process.execPath, [fileURLToPath(new URL("./work-state.mjs", import.meta.url)), "--sync", "--set=D6", "--state=doing",
+      "--owner=review-and-return", ...(valid ? ["--since=2026-11-02"] : [])], { cwd: directory, encoding: "utf8" });
+    assert.equal(result.status, valid ? 0 : 1, result.stderr);
+    if (valid) {
+      const saved = JSON.parse(readFileSync(registryFile, "utf8"));
+      assert.equal(saved.untriagedCeiling, 0);
+      const item = saved.items.find(item => item.id === "D6");
+      assert.equal(item?.state, "doing"); assert.equal(item?.owner, "review-and-return"); assert.equal(item?.since, "2026-11-02");
+      assert.equal(saved.items.some(item => item.state === "untriaged"), false);
+    } else {
+      assert.match(result.stderr, /D6: doing requires since/u);
+      assert.equal(readFileSync(registryFile, "utf8"), before, "failed combined transition must not publish the intermediate untriaged image");
+    }
+  } finally { rmSync(directory, { recursive: true, force: true }); }
 });
 
 test("staged discharges join one active-RFC table to exact live work-state rows", () => {

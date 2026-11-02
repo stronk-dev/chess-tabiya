@@ -356,3 +356,18 @@ checks pass. D3918 closes its dispatcher repair only; the failed attempts remain
 D3859 stays doing. Actual GradeSource, grade@2/convention@2, shared accuracy/graph and complete
 Nudge/Review source-to-seat migration remain next; no learner capability, qualification, official
 content or milestone promotion, browser/remote CI claim or push.
+
+## 2026-11-02 — Shared runtime engine-node validation for current Compare and grade pairs
+
+Both existing production source paths now use the same original attachment/position/artifact/
+source/reading interpreter. Server fixed selections and actual workflow/access owners remain;
+the helper issues no GradeSource grant. D3919's off-position source-kind conflict is reproduced
+in two original registry/pair controls, then fixed at registry and independent runtime boundaries.
+220 source and146 Compare cases plus types pass; full normal verification follows. D3859 stays
+doing for actual GradeSource, unified convention and complete grade/accuracy/graph/consumer delivery.
+
+Final normal verification/build exits0:8453 software/432 files, seven unchanged-budget performance/
+four files,271 content/27 and governance/corpus/build. D3919's source-kind conflict and D3920's
+normal tracker assignment/refusal repair close with actual failed/passing controls. D3859 remains
+doing; no current grade@2 or learner-image cutover, qualification, official pack, milestone,
+browser/remote CI execution or whole1.0 promotion is claimed. Failed attempts remain in the log.

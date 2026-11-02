@@ -62,7 +62,7 @@ async function fixture(reports: readonly Report[] = []) {
     const context = resolve(), image = owner.read(context), boundary = createRecordedReviewBoundarySourceOwner({ loadRun: () => storage.read(run.id)!.run, loadImportRecord: () => undefined })
       .resolve({ runId: run.id, branchId: main, throughNodeId: path.at(-1)!.id });
     const endpoints = new RecordedEngineEndpointOwner(registry, undefined), source = endpoints.capture({ boundary, signal: controller.signal });
-    return { ...endpoints.comparisonPointCapture(source, nodeId), comparison: image.comparison, branchId: main, nodeId, permission: image.permission, signal: controller.signal };
+    return { ...endpoints.nodeCapture(source, nodeId), comparison: image.comparison, branchId: main, nodeId, permission: image.permission, signal: controller.signal };
   };
   const query = () => ({ nodeId: run.activeCursor.nodeId, decisionDigest: moduleDecisionStamp(storage.read(run.id)!.run).digest, timing: "review" as const });
   const intent = compileAssistanceRequest({ contextHint: "onramp", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
@@ -73,6 +73,21 @@ async function fixture(reports: readonly Report[] = []) {
 }
 
 describe("real Compare source owner and current service integration", () => {
+  it.each(["record", "abstention"] as const)("D3919 runtime source validation refuses an off-position %s source-kind conflict independently of the registry", async fault => {
+    const f = await fixture([{ node: 0 }, { node: 1 }]), input = f.capture(f.path[0]!.id), original = input.offline!;
+    const manifest = structuredClone(original.manifest);
+    (manifest.entries[1]!.origin as { evidenceKind: string }).evidenceKind = "tablebase_result";
+    const record = original.ledger.records[1]!;
+    const ledger = fault === "record" ? original.ledger : { ...original.ledger, records: original.ledger.records.slice(0, 1),
+      abstentions: [...original.ledger.abstentions, { kind: record.kind, anchor: record.anchor, sourceId: record.sourceId,
+        retrievedAt: record.retrievedAt, reason: "source_unavailable", detail: "Synthetic unselected source conflict" }] };
+    const offline = { ...original, manifest, ledger, manifestDigest: `sha256:${evidenceDigest(manifest)}`, ledgerDigest: `sha256:${evidenceDigest(ledger)}`,
+      candidates: original.candidates.map(row => ({ ...row, source: manifest.entries[row.sourceOrdinal]! })),
+      abstentions: original.abstentions.map(row => ({ ...row, source: manifest.entries[row.sourceOrdinal]! })) };
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...input, offline })).toThrow(/source evidence kind/u);
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(input)).not.toThrow();
+  });
+
   it("keeps fixed A/X,B/Y-then-X,C/Y endpoints and every local unavailable node", async () => {
     const f = await fixture([{ node: 0, engine: "X" }, { node: 1, engine: "Y" }, { node: 1, engine: "X" }, { node: 2, engine: "Y", time: true }]);
     const context = f.resolve(), { points } = f.owner.sources(context), data = points.map(point => f.owner.readPoint(point));

@@ -19,6 +19,17 @@ doors but remain incomplete across the eight release dimensions below.
 
 ## The verdict
 
+Current Compare and recorded incoming-edge pairs now share one runtime original engine-node
+interpreter while retaining their actual independent workflow/access and server selection checks.
+D3919's two predecessor-red cases reveal engine source-kind conflicts hidden in unselected suffix
+records/abstentions; registry and runtime now reject the full requested-kind conflict before
+filtering.220 source cases/five files,146 Compare/eight and types pass. D3920's normal tracker
+command and refused-assignment byte preservation pass12 tool controls. Full normal verification/
+build exits0:8453 software/432 files, seven unchanged-budget performance/four,271 content/27 and
+governance/corpus/build. D3919/D3920 close their scoped repairs; failed attempts remain logged.
+D3859's actual GradeSource and complete new Nudge/Review image remain open. No milestone,
+qualified source, official content or whole learner capability is promoted.
+
 The next grade prerequisite now pairs actual recorded edges using their original fixed per-node
 measurements, with exact operands, a derived mover and both graph endpoint states retained even
 when comparison is unavailable. Modern identity/generation/commands/requested budgets and offline

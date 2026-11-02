@@ -1,5 +1,14 @@
 # Codex queue
 
+[[D3919]] / [[D3920]] are closed locally with predecessor-red controls: full requested-kind
+engine source validation and normal one-command tracker assignment. Current Compare and recorded
+incoming-edge pairs share the original runtime engine-node interpreter;220 source cases/five files,
+146 Compare/eight,12 tracker controls and types pass. Full normal verification/build exits0:
+8453 software/432 files, seven unchanged-budget performance/four,271 content/27 and governance/
+corpus/build. Failed source/CLI/fixture attempts remain logged; no source or learner promotion.
+[[D3859]] still owns actual workflow-issued GradeSource, grade@2/convention@2, shared accuracy/
+graph and complete Nudge/Review source/preflight/presentation/API/native delivery. No partial cutover.
+
 [[D3918]] is closed locally: incoming-edge acquisition uses the genuine runtime attachment
 owner/sole dispatcher; the original factory-import census stays unchanged. Full normal gates pass.
 No current learner cutover follows from this repair; the failed attempts stay logged.

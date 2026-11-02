@@ -347,11 +347,13 @@ export function main(root = process.cwd()) {
   }
   let registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
   const ceilingEligibleIds = new Set(registry.items.map((item) => item.id));
+  const setId = option("set");
   if (process.argv.includes("--sync")) {
     registry = synchronizeWorkState({ registry, ledger, workItems });
-    writeJson(registryPath, registry);
+    // A combined transition publishes only after the final assignment passes validation.
+    // Standalone discovery retains its existing resumable untriaged-image behavior.
+    if (setId === undefined) writeJson(registryPath, registry);
   }
-  const setId = option("set");
   if (setId !== undefined) {
     const state = option("state") ?? "";
     const values = Object.fromEntries([

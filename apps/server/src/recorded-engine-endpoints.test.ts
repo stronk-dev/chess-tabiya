@@ -11,6 +11,7 @@ import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-e
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { SQLiteRunStorage } from "./storage.js";
+import * as nodes from "../../../packages/runtime/src/internal/recorded-engine-node.js";
 
 const at = "2026-11-01T19:00:00.000Z", lease = { writerId: "endpoint-writer", learnerId: "__legacy" };
 const stores: SQLiteRunStorage[] = [], coordinators: ReviewEvidenceCoordinator[] = [];
@@ -64,6 +65,82 @@ function pending(f: Awaited<ReturnType<typeof fixture>>) {
 }
 
 describe("fixed original engine endpoints — registry, canonical stored boundary and request owner", () => {
+  it.each(["record", "abstention"] as const)("rejects a conflicting engine evidence kind on an unselected suffix %s", async fault => {
+    const f = await fixture([{ node: 0 }, { node: 1 }, { node: 2 }], "white", (ledger, manifest) => {
+      manifest.entries[2].origin.evidenceKind = "tablebase_result";
+      if (fault === "abstention") {
+        const record = ledger.records.pop(); ledger.abstentions.push({ kind: record.kind, anchor: record.anchor, sourceId: record.sourceId,
+          retrievedAt: at, reason: "source_unavailable", detail: "Synthetic conflicting unselected source" });
+      }
+    });
+    expect(() => {
+      const source = f.capture(1); f.owner.resolveRecordedEnginePair(source, f.path[1]!.id);
+    }).toThrow(expect.objectContaining({ reason: "source_contract_invalid" }));
+  });
+
+  it("uses one runtime reader for exact original offline operands without copying the selected invocation", async () => {
+    const f = await fixture([{ node: 0, local: true }, { node: 0, engine: "Y" }, { node: 0, engine: "X" }]), source = f.capture();
+    const capture = f.owner.nodeCapture(source, f.path[0]!.id), original = f.owner.read(source).rows[0]!;
+    const result = nodes.readRecordedEngineNode(capture);
+    expect(result.row).toBe(original.modern); expect(result.selected).toEqual(original.state);
+    expect(result.selectedOrdinal).toBe(1); expect(result.selectedOperand).toBe(capture.offline!.candidates[1]!.invocation.result.kind === "available"
+      ? capture.offline!.candidates[1]!.invocation.result.value : undefined);
+    expect(capture.offline!.candidates.map(value => value.ordinal)).toEqual([0, 1, 2]);
+    expect(Object.isFrozen(result)).toBe(true); expect(Object.isFrozen(result.selected)).toBe(true);
+    expect(result.boundary.run.id).toBe(f.run.id);
+  });
+
+  for (const side of ["white", "black"] as const) for (const bound of [{ kind: "depth", requestedDepth: 12 }, { kind: "movetime", requestedMs: 100 }, { kind: "nodes", requestedNodes: 2000 }] as const) {
+    it(`shares actual modern ${side}/${bound.kind} position/point/delivery identity with the pair owner`, async () => {
+      const f = await fixture([], side, undefined, false); f.delivery(0, "mate -3", { bound }); f.delivery(1, "cp 25", { bound });
+      const source = f.capture(), left = nodes.readRecordedEngineNode(f.owner.nodeCapture(source, f.path[0]!.id));
+      const right = nodes.readRecordedEngineNode(f.owner.nodeCapture(source, f.path[1]!.id));
+      expect(left.selectedOperand).toBe(left.row.selected!.point); expect(left.selected!.score).toEqual({ kind: "mate", side: "black", distance: 3, unit: "moves" });
+      expect(left.selected!.bound).toEqual(bound); expect(nodes.recordedEngineNodesComparable(left, right)).toBe(true);
+      const pair = f.owner.resolveRecordedEnginePair(source, f.path[1]!.id);
+      if (pair.state.kind !== "available") throw new Error("Expected actual comparable operands");
+      expect(pair.state.inputs[0]).toBe(left.selectedOperand); expect(pair.state.inputs[1]).toBe(right.selectedOperand);
+      expect(pair.state.before).toEqual(left.selected); expect(pair.state.after).toEqual(right.selected);
+    });
+  }
+
+  it.each(["omitted", "reordered", "copied-record", "copied-source", "wrong-node"] as const)("shared reader refuses %s original offline population", async fault => {
+    const f = await fixture([{ node: 0 }, { node: 0 }]), source = f.capture(), capture = f.owner.nodeCapture(source, f.path[0]!.id), offline = capture.offline!;
+    const candidates = fault === "omitted" ? offline.candidates.slice(1) : fault === "reordered" ? [...offline.candidates].reverse()
+      : offline.candidates.map((candidate, index) => index !== 0 ? candidate : fault === "copied-record" ? { ...candidate, record: structuredClone(candidate.record) }
+        : fault === "copied-source" ? { ...candidate, source: structuredClone(candidate.source) } : candidate);
+    expect(() => nodes.readRecordedEngineNode({ ...capture, nodeId: fault === "wrong-node" ? f.path[1]!.id : capture.nodeId, offline: { ...offline, candidates } })).toThrow();
+    expect(nodes.readRecordedEngineNode(capture).selectedOrdinal).toBe(0);
+  });
+
+  it.each(["getter", "hidden", "symbol"] as const)("shared reader rejects %s overrides without evaluating input getters", async fault => {
+    const f = await fixture([], "white", undefined, false), source = f.capture(), original = f.owner.nodeCapture(source, f.path[0]!.id);
+    const input = { ...original }, get = vi.fn(() => original.attachments);
+    if (fault === "getter") Object.defineProperty(input, "attachments", { enumerable: true, get });
+    else if (fault === "hidden") Object.defineProperty(input, "score", { value: 999 });
+    else Object.defineProperty(input, Symbol("selection"), { value: 999 });
+    expect(() => nodes.readRecordedEngineNode(input)).toThrow(/exactly/u); expect(get).not.toHaveBeenCalled();
+  });
+
+  it.each(["row", "ordinal", "score", "absence"] as const)("pair publication rejects a crossed runtime %s rather than trusting a numeric interpretation", async fault => {
+    const f = await fixture([{ node: 0 }, { node: 1 }]), source = f.capture(), original = nodes.readRecordedEngineNode;
+    const other = original(f.owner.nodeCapture(source, f.path[1]!.id));
+    vi.spyOn(nodes, "readRecordedEngineNode").mockImplementation(input => {
+      const result = original(input);
+      if (fault === "row") return { ...result, row: other.row };
+      if (fault === "ordinal") return { ...result, selectedOrdinal: 99 };
+      if (fault === "score") return { ...result, selected: { ...result.selected!, score: { kind: "centipawns", value: 999 } } };
+      return { ...result, selected: null, selectedOperand: null, unavailable: "missing_eval" };
+    });
+    expect(() => f.owner.resolveRecordedEnginePair(source, f.path[1]!.id)).toThrow(expect.objectContaining({ reason: "source_contract_invalid" }));
+  });
+
+  it("shared node reads never hide real source retirement in an absent endpoint", async () => {
+    const f = await fixture([], "white", undefined, false), source = f.capture(), capture = f.owner.nodeCapture(source, f.path[1]!.id);
+    expect(nodes.readRecordedEngineNode(capture)).toMatchObject({ selected: null, selectedOperand: null, unavailable: "missing_eval" });
+    f.delivery(0); expect(() => nodes.readRecordedEngineNode(capture)).toThrow(/no longer/u);
+  });
+
   for (const side of ["white", "black"] as const) for (const budget of [{ depth: 12 }, { movetimeMs: 100 }] as const) {
     it(`pairs actual offline edges with original operands and derived mover, ${side}/${JSON.stringify(budget)}`, async () => {
       const f = await fixture([{ node: 0, cp: 80, budget }, { node: 1, cp: -120, budget }, { node: 2, mate: -3, budget }], side);

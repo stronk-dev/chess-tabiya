@@ -87,7 +87,7 @@ export class RecordedComparisonPointOwner {
       || !["comparison", "nodeId", "signal"].every(key => { const field = Object.getOwnPropertyDescriptor(input, key); return field?.enumerable && "value" in field; })) return refuse("invalid point request");
     const owned = this.read(context);
     if (input.comparison !== owned.comparison || input.signal !== owned.signal) return refuse("crossed comparison/request");
-    const capture = this.#endpoints.comparisonPointCapture(owned.endpoints, input.nodeId);
+    const capture = this.#endpoints.nodeCapture(owned.endpoints, input.nodeId);
     const source = RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...capture, comparison: owned.comparison,
       branchId: owned.columns[1].branchId, nodeId: input.nodeId, permission: owned.permission, signal: owned.signal });
     this.#points.set(source, context);

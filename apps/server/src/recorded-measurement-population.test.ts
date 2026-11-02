@@ -122,6 +122,19 @@ describe("registry-owned complete selected-position measurement populations", ()
     expect(spy).not.toHaveBeenCalled();
   });
 
+  it.each(["record", "abstention"] as const)("D3919 refuses an off-position engine source-kind conflict in an original %s before invoking readings", async kind => {
+    const f = await fixture("engine_eval", "white", (ledger, manifest) => {
+      const otherFen = ledger.records[0].anchor.fen.replace(" 0 1", " 1 1");
+      const source = structuredClone(manifest.entries[1]); source.sourceId = "off-position";
+      source.origin.fen = otherFen; source.origin.evidenceKind = "tablebase_result"; manifest.entries.push(source);
+      if (kind === "record") ledger.records.push({ ...structuredClone(ledger.records[0]), sourceId: source.sourceId, anchor: { fen: otherFen }, values: { ...ledger.records[0].values, fen: otherFen } });
+      else ledger.abstentions.push({ kind: "engine_eval", sourceId: source.sourceId, retrievedAt: at, anchor: { fen: otherFen }, reason: "source_unavailable", detail: "Synthetic conflicting engine source" });
+    });
+    const invoke = vi.spyOn(runtime, "invokeRecordedMeasurementReading");
+    expect(() => f.collect()).toThrow(expect.objectContaining({ reason: "source_contract_invalid" }));
+    expect(invoke).not.toHaveBeenCalled();
+  });
+
   it("refuses a conflicting recognized Syzygy request before reading-factory invocation", async () => {
     const f = await fixture("tablebase_result", "white", (_ledger, manifest) => {
       const url = new URL(manifest.entries[1].origin.url);

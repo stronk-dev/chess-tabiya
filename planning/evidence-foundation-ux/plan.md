@@ -1,5 +1,17 @@
 # Evidence-foundation + play-UX program — the D717 brief, operationalized
 
+**2026-11-02 shared original engine-node checkpoint — D3859 remains doing.** Current Compare
+and recorded incoming-edge pairs now consume one runtime reader of genuine positions, deliveries,
+full original artifact populations and exact ordered source/reading invocations. Original server
+selection and current access/registry/pending owners remain independent checks. D3919 reproduces
+and repairs a source-kind conflict hidden in an off-position record/abstention; both registry and
+runtime now reject it before filtering.220 source cases/five files,146 Compare/eight and clean
+types pass. D3920 repairs normal new-row assignment plus refused-CLI publication;12 actual tool
+controls pass without raising the ceiling. Full normal verification/build exits0:8453 software/
+432 files, seven unchanged-budget performance/four,271 content/27 and governance/corpus/build.
+D3919/D3920 close only their scoped repairs; earlier failures stay logged. This is not the
+workflow-issued GradeSource, new convention/factory, accuracy/graph or current Nudge/Review cutover.
+
 **2026-11-02 D3859 internal fixed-pair checkpoint (not a learner cutover).** The server-private
 engine owner now resolves actual incoming edges over the same fixed per-node snapshot used by
 Compare. It retains both individual states, the genuine edge, derived mover and exact ordered

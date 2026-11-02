@@ -33104,3 +33104,55 @@ self-acceptance, feature permission or partial current consumer image follows fr
   evidence; D3859 stays doing. Four active/five blocked milestones, the historical462 prose-only
   closures and zero official graduated packs are unchanged. Source/test bytes remain those of
   the completed full run. Stage the18 explicit owned files; normal hook checks the exact index.
+
+## 2026-11-02 — Shared original engine-node source validation, D3859/D3919/D3920
+
+- Extract Compare's exact original position/attachment/artifact/source/reading validation into
+  package-private internal/recorded-engine-node.ts. Current Compare and the incoming-edge pair
+  owner both use it. Retain every candidate/abstention and fixed first selection, actual typed
+  White scores and requested budgets. Original current permissions remain at the workflow owners;
+  no generic validator/callback, numeric endpoint API, provider request, stored write or grade grant.
+- The server compares actual runtime original row/ordinal/state against its fixed per-node
+  selection before pair publication. Direct controls retain all three modern/two offline budgets,
+  exact real operands, copied/reordered/omitted source refusals, non-data fields, stale sources
+  and crossed runtime interpretations. Existing144 Compare cases remain green before the new
+  source-conflict cases; no payload/receipt or public consumer meaning is intentionally changed.
+- D3919's actual registry/pair tests first fail2/218: both unselected suffix engine_eval record
+  and abstention can claim tablebase_result in their engine source and still return a usable pair.
+  Record the defect before repair. Whole requested-kind registry enumeration and the independent
+  runtime artifact reader now reject source evidenceKind versus record kind before position
+  filtering. Four further registry/constructor controls prove refusal before reading invocation
+  and independent runtime enforcement, not only trust in the registry. Unrelated ledger artifacts
+  remain unqueried when genuine modern sources satisfy the request.
+- D3920's actual normal Make assignment fails for the two new rows; its permanent recipe guard
+  fails9/10. Add --sync to the existing transition recipe, using the existing CLI batch support.
+  Real combined CLI fixtures initially lack the required Active register grammar; fix only the
+  fixture. The valid command then passes but the missing-date refusal reproduces publication of
+  the intermediate untriaged image. Defer combined-command publication until final validation;
+  preserve standalone sync behavior. Both real CLI cases and all12 tracker controls pass; the
+  actual normal Make command assigns both new rows with the unchanged zero ceiling.
+- Final focused source220/five files, Compare146/eight and full workspace types pass. D3919/
+  D3920 remain doing pending complete normal verification. D3859 still requires workflow-issued
+  GradeSource, grade@2/convention@2, shared accuracy/graph and complete current Nudge/Review/API/
+  native delivery. No historical meaning, qualified source, content, milestone or release claim.
+
+- Final normal make semantic-validation-update roadmap-receipt verify build exits0. Stable
+  source/test bytes pass8453 software cases/all432 files (431.36s), seven unchanged-budget
+  performance cases/four files (64.46s),271 real-content cases/27 files (60.89s), all governance/
+  source/capability/corpus contracts and build. No causal speed claim follows from elapsed times.
+  All1019 capability declarations and the existing F1 manifest remain unchanged. Semantic evidence
+  retains343 passing cases/53 populations/eight external receipts,91 subjects and zero qualified.
+  Clearance remains92 documents/354 blockers/34 resolved/48 accepted/errors[]; capability corpus
+  retains104 documents including86 production packs. No new browser or remote-CI result is claimed.
+- Close D3919/D3920 with this log as path evidence; keep D3859 doing for actual workflow-issued
+  GradeSource and complete grade/convention/accuracy/graph plus current Nudge/Review delivery.
+  Current Compare operands/receipts/permissions remain validated through the real service cases.
+  The shared runtime helper grants nothing and cannot replace that remaining source/adoption work.
+  Update existing checkpoint/ledger/state and run final metadata/index checks; do not promote
+  qualification, official content, a whole RFC/capability/milestone or1.0. No push or goal pause.
+
+- Post-closeout normal roadmap receipt/governance/progress checks exit0. All3669 ledger rows
+  have durable states; zero untriaged and zero unrouted among1748 live. D3919/D3920 are done with
+  path evidence; D3859 remains doing. Four active/five blocked milestones, the historical462
+  prose-only closures and zero graduated official packs remain unchanged. Stage only this
+  checkpoint's24 explicit owned paths; normal commit hooks validate the exact index.

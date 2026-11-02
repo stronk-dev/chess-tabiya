@@ -1,5 +1,12 @@
 # Testing and CI
 
+For ledger assignments, `make work-state-transition` now synchronizes new rows and applies the
+requested state/owner/date in one command before final validation. No separately failing sync is
+needed to assign a new row after the untriaged ceiling reaches zero. A refused combined assignment
+preserves the prior register bytes. `make work-state` verifies this through real CLI fixtures,
+alongside the unchanged ownership, stale-source and ratchet checks. Standalone discovery/sync
+retains its existing resumable untriaged behavior.
+
 `make opening-history-check` covers the complete recorded opening prefix and all four current
 reductions, including actual negative lookups and original occurrence authority. The source is
 internal groundwork, not proof of complete Review/Inspector delivery. `make opening-source-check`
