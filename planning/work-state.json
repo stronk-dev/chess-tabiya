@@ -13448,7 +13448,7 @@
       "id": "D1716",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b01e803dd8af9ed1403c4a8e1d87db0e76af0ac90034cc4e6684bca74c93e6df",
+      "sourceDigest": "sha256:b558e669340393e5661bd047dc0656e0beb5651f47b6b36b2382a1879e324763",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-04"
@@ -35213,6 +35213,59 @@
       "sourceDigest": "sha256:27e2459e065d7844e42c06eb28dab43507fd2f21f7dea4dbdd4191ffe18aac99",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D4201",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e5e6b9f4b82def5a8568a57f42307c08b8d7341e65f26c4491f2127a88395aa6",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4202",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ce5d1635b7ee557d92725189c3430c3636f06ffb9dd4ac1b50ca100ccf821290",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-10"
+    },
+    {
+      "id": "D4203",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d36e9846652a37780072325a87a20b42a4de9f55e097223141d2f8ec1a9d64bb",
+      "uxItems": [],
+      "owner": "release-engineering"
+    },
+    {
+      "id": "D4204",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:65c7a31f251690258975778706ca0cdf9d5a51e19e315071cf0559bc714f1484",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-10"
+    },
+    {
+      "id": "D4205",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:19c8af771cd9db4d31155130261259c39177a1457cfe5a6e353d8e95f04018a6",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-10"
+    },
+    {
+      "id": "D4206",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0bcf6c2ef13968a3044283e0b8f3e8b1cef8e58351be8fce4c4fa0acb23d6360",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-10"
     }
   ]
 }

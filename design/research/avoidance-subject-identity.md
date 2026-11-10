@@ -328,3 +328,27 @@ the new target typechecks this current probe explicitly rather than claiming the
 has been revalidated. D4200 owns a separately reviewed source-local availability contract.
 Any successor must retain all legal alternatives, distinguish absent/false/unavailable states,
 and declare selection omissions. It may not invent a zero or quietly drop an inconvenient child.
+
+
+## Independent pawn/file outcome qualification — 2026-11-10
+
+`[V]` The actual canonical operation executes all590 independently literal pawn/file propositions
+for doubled/isolated/open/half-open/island subjects. Generation passes1470/1470cases over89roots,
+with17qualified subjects (previous12 plus exactly these five). Exact source/profile joins and
+real value admission go from10failures plus929passing controls before integration to939passes
+in40.33s after generation. Copy refusal and both ordinary2 support consumers' empty views are
+executed; qualification is not a learner delivery binding. Evidence:
+`packages/runtime/src/semantic-validation-pawn-outcome.test.ts`, its cited source definitions,
+`semantic-validation-cases.json`, `semantic-validation-profiles.json` and generated receipt.
+
+`[V]` An executed before/after comparison retains all880 predecessor parsed values/order;
+only the five profiles' four case cells change, while the other84profiles remain identical.
+The source/profiles and historical controls are independently reviewed. The case document is
+ordinary schema1 JSON, one complete case per line,4656038bytes; the receipt is5193569bytes,
+both below the unchanged5242880byte source limit. Formatting changes the raw case-text digest;
+the actual writer regenerates the receipt rather than reusing a previous hash. Frozen875
+historical cases and51retired cases retain their existing helper/meaning. Source: canonical
+writer `tools/semantic-validation-build.ts`; storage guard `tools/git-size-check.mjs`; four
+historical source suites; independent compiler2 review receipt. Full integration gates are
+separate from this measured qualification. Seven other outcome families, D4200 and ordinary26
+remain open.

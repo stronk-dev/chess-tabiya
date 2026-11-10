@@ -40175,3 +40175,65 @@ Checkpoint follow-through: make semantic-validation-check exits0 with880/880case
 12qualified,63population/eightexternal receipts and both generated files unchanged/current.
 Normal make roadmap-receipt verify-governance and roadmap-check pass. No full software or
 remote CI verdict is inferred; exact-index commit hooks run after working-tree checks finish.
+
+
+### 2026-11-10 — five outcome families execute canonical qualification
+
+D1716 adds all590 independently reviewed doubled/isolated/open/half-open/island propositions.
+Actual generator exits0:1470/1470cases,89subjects/17qualified,63population/eightexternal receipts.
+All880 predecessor parsed values/order and84other profiles remain identical; exactly five
+profiles gain four case arms. Frozen875/51retired/reanchored and original epoch cuts remain.
+
+D4201 records the actual expanded JSON storage limit. Same schema/grammar now uses one complete
+case per line:4656038bytes; generated receipt5193569bytes. Both fit the unchanged5MiB guard.
+No dropped cases, new reference format, external data or guard exception. Actual writer updates
+the changed raw-text digest. Independent plan/final static review accepts the bounded integration
+conditionally; actual10RED+929pass becomes939GREEN/one40.33s. Original qualified values admit,
+copies refuse and both ordinary2 views remain[]. Full project types/Svelte0errors0warnings pass.
+
+Full normal make verify-software is live. Seven remaining source families, D4200 availability,
+D4167 reverse consumers, ordinary26 and D3928 content/native/release remain open. No full-gate,
+capability/milestone/1.0 completion or push claim; checkpoint before another implementation wave.
+
+
+### 2026-11-10 — full software exposes two verification defects (D4202)
+
+Initial restricted make verify-software fails8of1663at listen EPERM127.0.0.1; authorized identical
+command passes that entire cohort. It independently checks1470/1470/17current and all preflights,
+then terminates18908pass/2fail/569files644.90s: an old foundation count11versus17, and the real
+Review worker-settlement poll10s before any no-write snapshot. Isolated unchanged Review also
+fails that10s wait (80pass/1fail137.02s), so a scheduling-only remedy is rejected.
+
+D4202's disposable typed exact40ply HTTP/worker probe passes1/1: engine1163ms, complete all83seq
+at10221ms, winning claim9516.55ms, failed0/abandoned0, one completion after22import-burst conflicts.
+Both real Review reads preserve table counts. Independent review accepts explicitly removing the
+inner10s ceiling under the existing30s journey, capturing its remaining budget/test AbortSignal,
+fail-fast job diagnostics and abortable timers. All actual fixture/worker/share/retry/event/count
+assertions remain. Foundation pins exact17total and six qualified avoidance sources. Corrected
+real148/two133.92s and full types/Svelte0errors0warnings pass. Three genuine cancellation/failure
+controls precede another normal full gate, now live; no full pass or unchanged-inner-limit claim.
+
+D4203 records an additional instrument limitation: tableSnapshot compares counts, not row values,
+so it cannot detect same-cardinality UPDATE. Kept separate and todo; measured claims say counts,
+not whole-database immutability. Source qualification and parent/content/native/release obligations
+remain; checkpoint this verified slice after the final gates, without pushing or completing1.0.
+
+
+### 2026-11-10 — restore bounded canonical checkpoint; full CI repair remains open
+
+The five-family qualification is checkpointed separately from the unfinished test repairs.
+D4201 closes only storage/qualification: original880 cases preserved,590 added,1470/1470
+actual executions,17qualified, focused939pass, types/build pass and independent review.
+Both source blobs remain below the unchanged5MiB guard. Ordinary26 and D3928 remain held.
+
+The most recent full software run is terminal18911pass/3fail across569files971.38s.
+Remaining failures are Review's30s Analyze/Compare journey, Profile weighting's5s correctness
+test and the worker's110s post-restart completion observation. Its preceding close/drain
+assertions passed. Performance did not run after software failed. These results supersede
+earlier “live” status; no full CI success, release completion or push is claimed.
+
+D4202's initial budget-aware wait passes85isolated controls but does not resolve the whole
+journey in the full pool. Its trace spends approximately16s waiting for unrelated Profile
+publication solely to obtain a table-count baseline. D4203 still owns the missing UPDATE
+negative control; no whole-database immutability claim is made. App's actual first-response
+deferred and scoped store integration budgets remain a separate test-repair checkpoint.

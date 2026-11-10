@@ -901,7 +901,7 @@ roots/profiles/cases remain set-equal. Verify real consumption, not merely an im
 
 ### 7.3 D4199 — full-population result mirrors and canonical UCI leaves
 
-**Independently accepted2026-11-10 by the source/control reviewer; bounded implementation and first piece_count2 qualification verified. Other12 source-family proofs remain owed.**
+**Independently accepted2026-11-10 by the source/control reviewer; bounded implementation and first piece_count2 qualification verified. Subsequent independently reviewed pawn/file integration executes590 further cases for doubled/isolated/open/half-open/islands, producing1470/1470 cases and17 qualified subjects. Seven source-family proofs remain owed; ordinary26 and D4200 availability policy remain separate.**
 This bounded amendment coordinates semantic-validation-authority §4.1a's closed operand walk
 with the complete source operations already required by §7.1. No new source/chess meaning,
 authority issuer, consumer, qualification waiver or selected-output substitution is introduced.

@@ -1,10 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { readFileSync } from "node:fs";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
-import { evidenceDigest } from "./evidence-contract.js";
+import { evidenceDigest, evidenceForConsumer } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute, readSubjectOutcomeInvocation } from "./internal/evidence-value-routes.js";
 import { PAWN_OUTCOME_FAMILIES, PAWN_OUTCOME_LITERAL_SOURCES, PAWN_OUTCOME_POPULATIONS, pawnOutcomeInput,
   literalPawnOutcomeEvents, literalPawnOutcomePopulation, type PawnOutcomeFamily } from "./semantic-validation-pawn-outcome-sources.js";
-import { canonicalSemanticEdge } from "./semantic-validation-operations.js";
+import { canonicalSemanticEdge, SEMANTIC_VALIDATION_OPERATIONS } from "./semantic-validation-operations.js";
+import { admitValidatedSemanticInstance, SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { SEMANTIC_VALIDATION_RESOLVERS, sha256Text } from "./semantic-validation-authorities.js";
 import { executeSemanticValidationCase } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase, semanticFactConstraintSha256, type SemanticValidationCaseFor } from "./semantic-validation.js";
@@ -88,6 +91,38 @@ function owner(fen: string, fresh = false): CandidatePopulationReceipt<Candidate
 const matrix = PAWN_OUTCOME_FAMILIES.flatMap(family => PAWN_OUTCOME_POPULATIONS.flatMap(row => row.plays.map(move => ({ family, row, move }))));
 
 describe("independent complete pawn/file outcome sources", () => {
+  it.each(PAWN_OUTCOME_FAMILIES)("%s joins every reviewed proposition to the exact four canonical profile arms", family => {
+    const canonical = (JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+    const expected = cases.filter(value => value.input.family === family);
+    const ids = new Set(expected.map(value => value.id));
+    expect(canonical.filter(value => ids.has(value.id))).toEqual(expected);
+    const profile = SEMANTIC_VALIDATION_PROFILES.find(value => value.subject.projection.id === `derived.semantic_avoidance.${family}` && value.subject.projection.version === 2)!;
+    for (const [key, arm] of [["positive", "positive"], ["semanticNegative", "semantic_negative"],
+      ["orientation", "orientation"], ["counterfactual", "counterfactual"]] as const) {
+      const cell = profile[key];
+      expect(cell.disposition).toBe("present");
+      if (cell.disposition !== "present") throw Error("Actual executed canonical arm required");
+      expect(cell.refs.map(ref => ref.id)).toEqual(expected.filter(value => value.arm === arm).map(value => value.id));
+    }
+    expect(semanticValidationVerdict(profile.subject)?.verdict).toBe("passed");
+  });
+
+  it.each(PAWN_OUTCOME_FAMILIES)("%s admits only genuine qualified source instances without enabling held support bindings", async family => {
+    const value = cases.find(value => value.input.family === family && value.arm === "positive")!;
+    const result = await SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.subject_outcomes"].invoke(value.input);
+    if (result.kind !== "completed") throw Error("Actual complete source required");
+    expect(result.observations.length).toBeGreaterThan(0);
+    for (const observation of result.observations) {
+      if (observation.kind !== "event") throw Error("Actual source event required");
+      expect(admitValidatedSemanticInstance("event", observation.item.evidence).kind).toBe("admitted");
+      const copied = structuredClone(observation.item.evidence);
+      expect(admitValidatedSemanticInstance("event", copied)).toMatchObject({ kind: "refused", reason: "event_value_unverified" });
+      for (const consumer of ["module.postcommit_nudge", "module.review_map"]) {
+        expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 2 }, [observation.item.evidence]).items).toEqual([]);
+      }
+    }
+  });
+
   it.each(PAWN_OUTCOME_POPULATIONS)("$id keeps every independently literal legal child", row => {
     for (const edge of pawnOutcomeInput("isolated_pawn", row, row.plays[0]!).population.alternatives) expect(canonicalSemanticEdge(edge)).toEqual(edge);
   });

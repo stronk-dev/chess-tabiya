@@ -2437,6 +2437,12 @@ style-registry-check:
 
 # Disposable D4147/D4149 source/cost research; optional, not CI or product completion proof.
 .PHONY: profile-source-cost profile-source-cost-check
+.PHONY: review-worker-settlement-probe
+# Disposable D4202 measurement; retains the actual Review fixture/HTTP/worker and emits aggregates only.
+review-worker-settlement-probe:
+	$(CI_NODE) ./node_modules/typescript/bin/tsc -p tools/r12-player-style-harness/review-worker-settlement.tsconfig.json
+	./node_modules/.bin/vitest run --config tools/r12-player-style-harness/vitest.config.ts tools/r12-player-style-harness/review-worker-settlement.test.ts
+
 profile-source-cost-check:
 	./node_modules/.bin/tsc -p tools/r12-player-style-harness/profile-source-cost.tsconfig.json
 profile-source-cost: profile-source-cost-check

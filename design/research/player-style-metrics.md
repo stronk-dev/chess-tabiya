@@ -597,3 +597,32 @@ times describe that observed workload; they do not isolate a regression against 
 revision8 run or attribute time to one new family. The launch executable predates the new
 source-definition tests and any prospective D4200 availability amendment. Broader software,
 isolated performance, source qualification, browser and release gates remain separate.
+
+
+### 2026-11-10 — exact Review import settlement (D4202)
+
+[V] Full normal software terminates18908pass/2fail across569files644.90s. Review fails its
+10-second observation-job completion poll before the initial snapshot, not a write assertion;
+the unchanged isolated81-case suite also fails that poll (80pass/1fail,137.02s). The other failure
+is a stale foundation qualification total11versus17, now replaced by exact17and the literal six
+qualified avoidance@2 sources. Evidence: apps/server/src/review-map.test.ts settlement helper;
+packages/runtime/src/foundation-semantic-event.test.ts; existing compiler2 review receipt.
+
+[V] Disposable typed make review-worker-settlement-probe uses the same unchanged glyph-bearing
+40-ply PGN, real HTTP authentication/import/reveal/Story readiness and actual worker. It completes
+all83requested sequences at10221ms total; engine settles at1163ms and the winning claim reports
+9516.55ms. Progress is23claims/22import-burst conflicts/one complete/zero failed or abandoned.
+Both real40-row Review reads preserve every table's row count. Probe1/1 passes17.00s; no raw
+recordings are committed. Source: tools/r12-player-style-harness/review-worker-settlement.test.ts
+and shared apps/server/src/testing/review-import-fixture.ts. This is one observed synthetic
+workload, not an isolated performance regression or a10-second product completion SLA.
+
+[V] Independent review accepts an explicit inner-limit correction: completion uses the remaining
+existing30-second journey budget, captured once with the owning test's AbortSignal. Polling is
+cancelled before SQLite teardown and failed jobs report actual state/progress. The40-ply fixture,
+real worker, share/retry/event/count assertions and separate responsiveness/performance gates
+remain. Corrected real suites pass148/two133.92s and types/Svelte0errors0warnings pass; three
+cancellation/failed-job controls are added before the final full rerun. Source: actual helper,
+existing compiler2 review receipt; full normal gate remains pending. D4203 separately owns
+count-only snapshots' inability to detect same-cardinality updates; no full-row immutability
+is inferred from these counts.

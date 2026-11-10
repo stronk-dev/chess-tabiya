@@ -44,11 +44,16 @@ all five original families populated across both native colors and import. Perma
 startup→worker→reopen→all-six-family omission/repair passes2/2; saved play/account rows remain
 identical. No current9 data is relabelled as old output and ordinary tests need no ignored bundle.
 
-Genuine8 and the first piece_count2 qualification are committed. The next five-family
-literal-source/test checkpoint passes929controls/types with independent review, retaining
-880canonical cases/12qualified;590 new propositions are not promoted yet. D4200 records a
-separate source-availability limitation for review. Remaining source qualification and D4167
-reverse consumers follow. D3928's content/native/release hold remains; no official pack,
+Genuine8 and the first piece_count2 qualification are committed. The following pawn/file
+source/test checkpoint is5bc8cc95. Its independently reviewed canonical integration now executes
+all590 further propositions:1470/1470 cases,89subjects/17qualified. All880 prior values/order
+and84other profiles remain unchanged; only five profiles gain four case arms. Frozen875 history
+is unchanged. Both JSON source/receipt blobs fit the unchanged5MiB guard; the case document uses
+one complete case per line within the same schema. Qualification/types/build checks pass; the
+latest full software run terminates18911pass/3fail (Review, Profile weighting, worker restart).
+Performance did not execute after that failure. CI repair remains open under D4202/D4205/D4206.
+Seven outcome-family qualifications, D4200 source-local availability and D4167 reverse consumers
+remain; ordinary26 is held. D3928's content/native/release hold remains; no official pack,
 whole capability, milestone or1.0 completion is claimed.
 
 D1716/D1719/D4167 retain implementation and all reverse consumers: both Sight paths, Play/Compare

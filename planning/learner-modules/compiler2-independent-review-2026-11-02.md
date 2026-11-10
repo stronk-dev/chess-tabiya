@@ -11439,3 +11439,43 @@ edits/Git and does not claim to have executed tests. No concrete correctness/ind
 Reviewer independently checks current canonical receipt880/12 and zero new pawn canonical IDs.
 This accepts source definitions, cited registration and tests only.590 canonical references,
 five-profile qualification, ordinary26 and D4200 availability policy are not accepted or promoted.
+
+
+### 2026-11-10 — independent pawn/file canonical integration and storage review
+
+foundation_style_review independently accepts one complete case per line INSIDE the existing
+ordinary schema1 document, with unchanged5MiB guard and no reference dialect/externalization.
+It identifies the raw caseText digest consequence; actual receipt regeneration is required.
+Final static review reads1470unique IDs/exact590new/retained56Count,4656038bytes; only five
+profiles' four case arms change. Other seven avoidance families retain all required arms.
+
+Reviewer checks five complete canonical-object/ref-order tests plus five genuine factory-value
+admission/copy-refusal/both-ordinary-empty controls. The four historical suites preserve875/
+51retired/reanchored and419/465/685/759cuts while excluding only exact new IDs from later live
+arithmetic. Generic law pins exact17passed subjects, without a broad verdict waiver. No edits/
+Git/tests by reviewer. Acceptance is conditional on terminal generation/normal gates.
+
+Root subsequently observes actual generator exit0:1470/1470,89subjects/17qualified,63populations/
+8external; focused939/one40.33s GREEN from prior10RED+929pass. Generated receipt5193569bytes also
+fits the unchanged limit. Full make verify-software remains live; final integration verification
+is not claimed from static review. No availability/ordinary26/parent/release promotion.
+
+
+### 2026-11-10 — D4202 independent observation-budget correction review
+
+Full normal main pool ends18908pass/2fail: Review's10s settlement poll and stale count11/17.
+Reviewer accepts exact17plus literal six avoidance refs while retaining89roots and seven native
+source controls. Unchanged isolated Review also fails; reviewer explicitly rejects scheduling
+as an established remedy. Typed exact40ply probe then completes83/83at10221ms, winning claim
+9516.55ms, failed0/abandoned0, with preserved Review table counts. It is not a10s completion SLA.
+
+Reviewer independently accepts removing ONLY the narrower inner10s limit under the EXISTING30s
+journey. Final code captures test timeout/deadline and owning AbortSignal once; each wait owns
+that captured object, checks cancellation before SQLite, uses abortable timers and immediate
+actual failed-job diagnostics, and requires complete/current sequence equality. No scheduling,
+worker/fixture shortening, production/global/journey/performance budget change. Reviewer edits/
+runs no tests/Git; conditional on actual gates. Root's corrected148/two133.92s and types are
+GREEN. Three cancellation/failed-job controls precede final normal full rerun; it is still live.
+
+D4203 distinction is explicit: counts do not prove UPDATE immutability. This acceptance covers
+settlement ownership and retained assertions, not a full-row no-write proof or any cost closure.

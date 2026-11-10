@@ -2497,3 +2497,63 @@ Checkpoint follow-through: make semantic-validation-check exits0 with880/880case
 12qualified,63population/eightexternal receipts and both generated files unchanged/current.
 Normal make roadmap-receipt verify-governance and roadmap-check pass. No full software or
 remote CI verdict is inferred; exact-index commit hooks run after working-tree checks finish.
+
+
+### 2026-11-10 — five-family canonical integration (D1716/D4201)
+
+All590 reviewed doubled/isolated/open/half-open/island propositions now join canonical cases and
+exactly five profiles' four independent case arms. Actual generation exits0 at1470/1470cases,
+89subjects/17qualified,63population/eightexternal receipts. All880 prior parsed case values/order
+and84other profiles are unchanged. Four historical source tests exclude only exact new IDs from
+later-live arithmetic; the frozen875 helper and retired/reanchored/history cuts are unchanged.
+
+D4201 addresses fixture storage without reducing coverage: ordinary schema1 JSON uses one whole
+case per line,4656038bytes under unchanged5MiB. Raw case-text digest changes and the actual writer
+regenerates the receipt (5193569bytes), with no new reference dialect/store/exception. Independent
+review accepts the bounded static integration/storage plan conditionally on actual gates.
+
+Actual admission tests are10RED+929pass before integration,939GREEN/one40.33s after generation:
+exact source/canonical/profile joins, genuine qualified original values, copied-value refusal and
+both ordinary2 consumer views remaining[]. All types/Svelte0errors0warnings pass. Full normal
+make verify-software is running; no full-gate/push/release claim yet. Remaining seven source
+families, D4200 source-local availability, D4167 reverse consumers and D4175ordinary26 stay open.
+Checkpoint this dependency slice before starting further implementation.
+
+
+### 2026-11-10 — current full-gate repair before checkpoint
+
+Authorized full software reaches current1470/1470/17and preflights, then18908pass/2fail/569files.
+D4202 is a real10s background-settlement test assumption, reproduced in isolation. Its exact40ply
+probe completes83seq with healthy worker9516.55ms claim work/10221ms overall, failed0/abandoned0;
+Review row counts remain. Independent review accepts the explicit inner10s removal using only
+remaining existing30s journey budget + owning AbortSignal, with failed-state diagnostics and
+no schedule/mock/fixture/production timing change. Exact17/six-qualified-source foundation
+assertion is repaired. Focused148/two133.92s/types/Svelte0errors0warnings pass; three real
+cancellation/failure controls are added. Full make verify-software is rerunning normally.
+
+D4203 separately retains complete-row no-write proof: counts cannot detect UPDATE. No full-row
+immutability is claimed. All remaining seven source qualifications, D4200, D4167/D4175 and
+D3928 holds stand. Do not take another implementation wave before the current checkpoint.
+
+### 2026-11-10 checkpoint boundary and remaining verification repairs
+
+Canonical qualification is a bounded checkpoint:1470/1470 executed cases,17 qualified subjects,
+939 focused controls, project types and build pass. D4201 closes only its unchanged-format/size
+obligation. Source qualification is not whole-foundation completion or a green release gate.
+
+The latest complete software invocation terminates18911pass/3fail across569files; performance
+has not run after that failure. Keep these owned repairs separate from qualification:
+
+- D4202: Review's real Analyze/Compare journey still exceeds its30s test budget; its trace waits
+  about16s on unrelated worker publication to establish a table-count baseline.
+- D4203: the baseline only compares counts and cannot detect same-cardinality UPDATE. Design a
+  request-write check that allows legitimate separate-worker publication; no immutability claim.
+- D4204: the held-clock App control now awaits actual first HTTP completion rather than an
+  accidental1s polling default. Real revoke/regrant, abort, late response and DOM assertions stay.
+- D4205: independently reviewed full-source store integration groups use explicit30s correctness
+  budgets; separate performance gates and source/unit groups retain their existing limits.
+- D4206: the native worker's existing110s post-restart all-three-jobs completion wait failed;
+  preceding close/drain assertions passed. Preserve full source games/jobs and all budgets while
+  diagnosing and verifying the independently reviewed native-owner scheduling cohort.
+
+No source/content/release promotion is inferred from any partial or isolated test result.
