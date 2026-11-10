@@ -40510,3 +40510,21 @@ Svelte0errors0warnings. The changed operational checker is absent from every gen
 implementation closure; no source-case rewrite or inherited new qualification is required. Fresh
 selector1470/1470 and2948/eighteen proof remains bounded; its whole software gate is still pending.
 Commit this verified repair, then run the complete normal gate again before durable revision10.
+
+### 2026-11-10 — D4210 executed coverage counterexample; commit checkpoints retained
+
+The disposable availability probe records a real one-edge coverage defect: seven legal members
+per color, declared available trade source, but zero trade factory acquisitions. Genuine two-edge
+recorded trade remains positive at the existing @2 route (one event per color); a guessed @3 was
+rejected by strict typing before measurement. Normal counterfactual-availability-probe passes
+four tests/one file in1.61s. Independent read-only call-graph review agrees. The existing avoidance
+dossier/coverage matrix and D4210 tracker carry the result; production correction requires an
+independently reviewed follow-up, with recorded trades and legal denominators preserved.
+
+At the owner's commit-cadence check, tracked changes were three files/49insertions/one deletion,
+not an accumulated implementation diff: e4672b36,309ca7c7,d449e3c8,a7b29564 already separate
+source repair, complete earlier certificate, selector implementation and operational-check repair.
+The normal full run on a7b29564 is still running and has reported a candidate-reader census
+failure. No full-green or ready-to-push claim follows from the focused checks. Commit this small
+research checkpoint separately; keep software failure repair and the source-scope follow-up in
+their own verified changes. Existing untracked .claude/,out.txt and review note are excluded.

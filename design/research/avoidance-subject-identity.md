@@ -404,3 +404,32 @@ domain or healthy children cannot be used to invent a missing required root resu
 `tools/d1718-avoidance-subject-harness/availability.test.ts`; actual normal
 `make counterfactual-availability-probe` typechecks and passes both controls in1.66s. The original
 12-move unrelated-defender witness is unchanged. This is research, not a production-policy change.
+
+### D4210 — one-edge coverage overstates recorded-trade acquisition, 2026-11-10
+
+`[V]` After source-local selection landed in d449e3c8, the selector declares
+`derived.exchange.trade_completed@1` available although its one-edge population never invokes
+that factory. The existing strict disposable probe now spies on actual evidence-route calls:
+from `4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1`, playing e4d5 and its color-mirrored
+equivalent each yields seven legal members, empty unavailable coverage, a declared trade source,
+zero trade acquisitions, and actual capture-class acquisition. A separate genuine recorded
+e4d5/e6d5 window has two authenticated edges and emits one declared trade per color through
+`derived.exchange.trade_completed@2`. The first probe draft guessed @3; strict typechecking
+rejected it, and the executed positive uses the existing @2 route. Source:
+`tools/d1718-avoidance-subject-harness/availability.test.ts`; normal
+`make counterfactual-availability-probe` passes four tests in one file (1.61s).
+
+`[V]` Independent read-only review confirms the scope mismatch: `localSemanticEventClosure`
+uses `derivedExchangeSemanticEvents` (legal-exchange/capture-class), whereas the separate
+`tradeCompletedSemanticEvent` needs two captures and two recorded move anchors. Profile already
+excludes trade from its prevalence sources. Sources:
+`packages/runtime/src/evidence-factories.ts`, `semantic-played-types.ts`,
+`profile-subject-sources.ts`; `rfc/subject-safe-semantic-selection.md` §6.
+
+The bounded correction requires a reviewed follow-up: exclude this unacquired recorded relation
+from one-edge completeness while preserving actual recorded-trade support and every legal
+alternative. This finding changes neither production code nor qualification. Earlier dated
+whole-population observations above describe the predecessor; current selector coverage landed
+in d449e3c8, but durable Profile availability remains open under D4200. The current complete
+software run has separately reported a repository-reader census failure and is not a green
+certificate for that selector change.

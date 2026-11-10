@@ -30,7 +30,10 @@ Selector/consumer3 is now locally implemented and independently reviewed: every 
 exact55-source coverage; partial results preserve valid facts and full legal denominators. Strict
 own-data input capture and actual execution preflight close the review returns. Broad2948/eighteen,
 types/scheduling, current research-boundary10/two and fresh1470/1470canonical cases pass. The full
-selector software rerun remains pending. Next implement durable revision10 coverage through stored
+selector software rerun remains pending and has reported a repository-reader census failure.
+D4210 also measures an overinclusive source image: one-edge coverage declares a recorded trade
+source it never acquires. Resolve that scope correction through independent follow-up review,
+preserving genuine recorded trades, before durable revision10 implementation. Then carry stored
 opportunity denominators, proofs and rebuilds; native/whole54 Profile fences remain until then.
 Then finish the seven outcome-family qualifications and D4167 reverse consumers: Sight,
 Play/Compare, both comparisons, guidance/voice/speech, typed bot/replay/policy and authored migration.

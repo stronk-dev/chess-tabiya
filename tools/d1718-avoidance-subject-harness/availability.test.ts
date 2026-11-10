@@ -1,11 +1,48 @@
 // DISPOSABLE D4200 research: the original policy measurement is retained in the dossier/log;
 // this replay checks the accepted source-local repair, not source qualification or a CI gate.
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, readCandidateFoundationSources } from "../../packages/runtime/src/candidate-population.js";
 import { assertDeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import * as routes from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
+import { selectSemanticEvidence } from "../../packages/runtime/src/semantic-evidence.js";
+import { mirrorSemanticFen, mirrorSemanticUci } from "../../packages/runtime/src/semantic-validation.js";
+import { prepareRecordedSemanticWindowPopulation, collectRecordedSequenceWindow, readRecordedSequenceWindow } from "../../packages/runtime/src/recorded-sequence-window.js";
+import { recordedSequenceWindowFixture } from "../../packages/runtime/src/testing/recorded-sequence-window-fixture.js";
 
 describe("D4200 source-local availability versus global canonical abstentions", () => {
+  it.each([false, true])("D4210 measures unacquired trade coverage separately from a genuine recorded trade (mirrored=%s)", mirrored => {
+    const fen = "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", moves = ["e4d5", "e6d5"] as const;
+    const beforeFen = mirrored ? mirrorSemanticFen(fen, "color_and_vertical") : fen;
+    const moveUci = mirrored ? mirrorSemanticUci(moves[0], "color_and_vertical") : moves[0];
+    const calls = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    let legalMembers = 0;
+    try {
+      const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+      if (compiled.kind !== "ready") throw Error("Actual original candidate fixture required");
+      legalMembers = compiled.receipt.packet.candidates.length;
+      const selected = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 3 }, { receipt: compiled.receipt, moveUci });
+      expect(selected.coverage.sources).toContainEqual({ id: "derived.exchange.trade_completed", version: 1 });
+      expect(selected.coverage.unavailable).toEqual([]);
+      expect(calls.mock.calls.filter(([route]) => route.startsWith("derived.exchange.trade_completed@"))).toHaveLength(0);
+      expect(calls.mock.calls.some(([route]) => route === "derived.exchange.capture_class@1")).toBe(true);
+    } finally { calls.mockRestore(); }
+    const run = recordedSequenceWindowFixture({ fen, moves }, mirrored, `trade-coverage-${mirrored}`);
+    const prepared = prepareRecordedSemanticWindowPopulation({ run, branchId: run.activeCursor.branchId,
+      throughNodeId: run.activeCursor.nodeId, routes: ["derived.exchange.trade_completed@2"] }).get("derived.exchange.trade_completed@2")!;
+    expect(prepared.windows.length).toBeGreaterThan(0);
+    const values = prepared.windows.flatMap(window => {
+      expect(readRecordedSequenceWindow(window).edges).toHaveLength(2);
+      return collectRecordedSequenceWindow(window);
+    });
+    expect(values.length).toBeGreaterThan(0);
+    for (const value of values) assertDeclaredEvidence(value);
+    console.log(JSON.stringify({ question: "D4210", mirrored, legalMembers, declaredTradeCoverage: "available",
+      actualOneEdgeTradeAcquisitions: 0, genuineRecordedTradeEdges: 2, genuineRecordedTrades: values.length,
+      scope: "Executed completeness-image counterexample; not a production correction or current qualification." }));
+  });
+
   it("retains a genuine missing required risk source separately from complete arithmetic and empty own pieces", () => {
     const beforeFen = "7k/8/8/8/8/8/8/r6K w - - 0 1";
     const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });

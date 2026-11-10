@@ -35295,6 +35295,15 @@
       "uxItems": [],
       "evidence": "tools/software-scheduling.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4210",
+      "state": "doing",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:b2fc723e812cede9bce2991266d5571d91338a14c991f2bdfacb5abdd19d149e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-10"
     }
   ]
 }
