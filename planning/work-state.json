@@ -35181,12 +35181,12 @@
     },
     {
       "id": "D4197",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5bd1b62aa7f4ae84e62b4f8d75c275cb79aea9aa81001a37b17b5ba956896e7d",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-11-10"
+      "evidence": "648dbad2",
+      "evidenceKind": "commit"
     },
     {
       "id": "D4198",

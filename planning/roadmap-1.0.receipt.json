@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b1f1b46e668f8ef5d86e4ae994a78ea8d0cbddd53a42bf013608e096eb4e6795",
+    "roadmap": "sha256:011103ca94b4c98a75fd2080ddc19edaa8eee42fb3e6bf1fd040cc63bce3bf7f",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:dcbbccc55fa6a359812b067c9a14e08ded731b5f24697a5814f670d9dafc77ec",
+    "workState": "sha256:7545e75853df3197242ee0513de3b4e9ee3e581ff874127824d6a3c76026c94b",
     "rfcRegister": "sha256:c843c75a7380211f611387b7027ae976d928ba1b1f01381ae4a941150c351f3d",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 632,
-      "doing": 173,
+      "doing": 172,
       "blocked": 1063,
-      "done": 1916,
+      "done": 1917,
       "refused": 163
     },
     "workItems": {
@@ -1161,7 +1161,7 @@
           {
             "kind": "work_state",
             "id": "D4197",
-            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+            "digest": "sha256:5bd1b62aa7f4ae84e62b4f8d75c275cb79aea9aa81001a37b17b5ba956896e7d"
           },
           {
             "kind": "work_state",
@@ -2752,7 +2752,7 @@
           {
             "kind": "work_state",
             "id": "D4197",
-            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+            "digest": "sha256:5bd1b62aa7f4ae84e62b4f8d75c275cb79aea9aa81001a37b17b5ba956896e7d"
           },
           {
             "kind": "work_state",
@@ -4009,7 +4009,7 @@
           {
             "kind": "work_state",
             "id": "D4197",
-            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+            "digest": "sha256:5bd1b62aa7f4ae84e62b4f8d75c275cb79aea9aa81001a37b17b5ba956896e7d"
           },
           {
             "kind": "work_state",
@@ -4269,7 +4269,7 @@
           {
             "kind": "work_state",
             "id": "D4197",
-            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+            "digest": "sha256:5bd1b62aa7f4ae84e62b4f8d75c275cb79aea9aa81001a37b17b5ba956896e7d"
           },
           {
             "kind": "work_state",
@@ -5113,7 +5113,7 @@
           {
             "kind": "work_state",
             "id": "D4197",
-            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+            "digest": "sha256:5bd1b62aa7f4ae84e62b4f8d75c275cb79aea9aa81001a37b17b5ba956896e7d"
           },
           {
             "kind": "work_state",
