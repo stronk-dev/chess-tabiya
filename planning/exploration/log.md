@@ -40418,3 +40418,25 @@ build exits0, with existing bundle-size warnings. No whole source qualification,
 publication, ordinary26 activation, content/native/release or remote-CI claim. The previous
 008115ac full software certificate predates this production change; rerun the complete normal
 software gate after this verified commit, before the next production item. D4200 remains doing.
+
+### 2026-11-10 — complete software certificate for source-local availability
+
+Committed e4672b36 has a fresh terminal0 normal make verify-software:18926software tests/all571
+files867.27s, unchanged7performance/four69.32s, plus every ordinary toolchain/scheduling/type/
+schema/manifest/value/source/capability/migration/application/account/label/latency preflight.
+The first sandboxed run stops on eight packaged-provider listener EPERMs at127.0.0.1; the same
+normal Make target with localhost permission passes in full. No skip, weakened check or ad-hoc
+test command is substituted. Root/source/test bytes remain unchanged throughout the successful
+run. Governance/build/hooks passed at the source checkpoint. No remote-CI result is claimed.
+
+Direct committed predecessor/current census comparison over579 sampled decisions: twelve condition
+families reduce unavailable257→0; loose_piece257→17 retains actual required-risk failures. Exact
+legal denominators remain unchanged. This is recovered source coverage, not a new selection or
+learner-history release. Current source receipt stays1470/1470cases/89subjects/17qualified; seven
+outcome qualifications and the ordinary26 remain open. Earlier revision9 200-game cost is a dated
+pre-availability measurement, not certification of the expanded source work.
+
+Tracker and milestone checkpoint prose now cite the actual committed software result. D4200 stays
+doing for exact55 selector/consumer3 coverage and validation, then revision10/seven-family durable
+coverage, actual9→10 upgrade/read/rebuild/account/cost/gates. D3928's separate content/native/release
+hold and all whole-product completion gates remain. Next production item: accepted selector3.

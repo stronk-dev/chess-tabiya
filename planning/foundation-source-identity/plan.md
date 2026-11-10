@@ -2669,3 +2669,17 @@ D4200 remains doing; no ordinary26, qualification, content/native/release or who
 Final checkpoint verification: complete types/Svelte0errors0warnings, probe2/2, actual regenerated
 1470/1470cases/89subjects/17qualified/63population/eight external and normal governance/build
 pass. Commit this source slice, then rerun the full normal software gate before selector changes.
+
+
+### Complete source-local software checkpoint — 2026-11-10
+
+Committed e4672b36 passes the entire normal make verify-software:18926/all571software867.27s,
+seven unchanged performance/four69.32s and all preflights. The initial sandboxed run fails only on
+actual localhost-listener EPERM; the same Make target with localhost permission exits0, with all
+source/test bytes stable. Existing governance/build/commit hooks pass. No remote-CI inference.
+
+The actual579-decision census changes unknown257→0 for twelve families and257→17 for loose_piece.
+Source availability expands without losing the genuine required-risk failures. Receipt qualification
+stays17 of89, with1470/1470cases. Pre-availability revision9 cost is not a new expanded-work budget.
+Next: implement accepted selector/consumer3 coverage and conservative validation adaptation before
+coordinated revision10 persistence. D4200 and every wider consumer/content/release hold remain open.

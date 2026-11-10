@@ -7,7 +7,7 @@ consumer adoption, learner workflows, content and release proof remain open.
 
 | Checkpoint | Current evidence |
 |---|---|
-| Normal software gate | `make verify-software` exits0 on `008115ac`: 18,919 tests / 570 files in728.43s, seven unchanged performance tests / four files in65.29s, and all preflights |
+| Normal software gate | `make verify-software` exits0 on `e4672b36`: 18,926 tests / 571 files in867.27s, seven unchanged performance tests / four files in69.32s, and all preflights |
 | Source qualification | 1,470 / 1,470 executed cases; 89 subjects / 17 qualified. Six of13 new outcome families qualify; seven remain |
 | Persistent evidence | Migration35/revision9, six-family publication/read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen/repair proof implemented |
 | Learner delivery | 14 compact native Nudge/Review pairs have actual strict REST/DOM and budget controls. The26 ordinary avoidance tuples remain held |
@@ -16,7 +16,8 @@ consumer adoption, learner workflows, content and release proof remain open.
 The verified qualification is committed in `d7c5df9e`; App/store test repairs in `9aedcf83`,
 native-worker ownership/Profile integration classification in `8b254921`, and the Review
 request-write observer in `008115ac`. D4202/D4205/D4206 close boundedly after the complete gate.
-Governance and normal commit hooks pass. Earlier failed/interrupted runs remain in the
+The source-local repair is committed in `e4672b36` and its complete normal software gate passes.
+Governance, build and normal commit hooks pass. Earlier failed/interrupted runs remain in the
 append-only [exploration log](exploration/log.md); local success is not a remote-CI verdict.
 
 D4200's coordinated source/selector/history availability contract is independently accepted.
