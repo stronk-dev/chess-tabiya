@@ -9,6 +9,13 @@ Only compact timings/counts print; no raw dumps are written. It is outside ordin
 no timing threshold and does not implement or authenticate a new worker game context/read model.
 The measured checkpoint is in `design/research/player-style-metrics.md` (2026-11-05).
 
+`make longitudinal-predecessor-fixture` is the separate optional D4181 historical capture.
+It requires the retained genuine revision8 executable in ignored `.cache/longitudinal-rev8/`,
+preserves every production byte and replaces only its cohort/output main. Three synthetic
+sessions populate all five old families. The resulting small SQL fixture is committed separately;
+normal `make longitudinal-predecessor-upgrade-check` uses that fixture, never the old bundle.
+Capture does not run or replace the200-game cost instrument.
+
 This harness measures short-session stability; it is not production ingestion code. Raw public
 usernames, PGNs, profile responses and decision traces stay in `/private/tmp`.
 

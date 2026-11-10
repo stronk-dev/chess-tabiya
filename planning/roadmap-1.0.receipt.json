@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:011103ca94b4c98a75fd2080ddc19edaa8eee42fb3e6bf1fd040cc63bce3bf7f",
+    "roadmap": "sha256:ccbbf6c70e18ba575f9a5bcb4bd20de1e2e4b432a776e0e293938a7477d6a5d5",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:7545e75853df3197242ee0513de3b4e9ee3e581ff874127824d6a3c76026c94b",
+    "workState": "sha256:6dd3d7743e3ff9a0cacd17f62c08bafbb30ed838d454f370caa85529f6c85467",
     "rfcRegister": "sha256:c843c75a7380211f611387b7027ae976d928ba1b1f01381ae4a941150c351f3d",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Finish current full software/performance gates and current200-game Profile cost; prove actual predecessor8 rederivation separately from the shaped fixture; then complete independent13 source qualifications and D4167 reverse consumers. Do not promote whole foundation or held content.",
+      "nextAction": "Measure current200-game Profile cost after the committed genuine predecessor8 proof; then complete independent13 source qualifications and D4167 reverse consumers. Do not promote whole foundation or held content.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -580,7 +580,9 @@
           "rfc/bot-policy.md",
           "rfc/learner-modules.md",
           "rfc/live-following.md",
-          "rfc/measurement-records.md"
+          "rfc/measurement-records.md",
+          "apps/server/src/longitudinal-predecessor-upgrade.test.ts",
+          "tools/d4181-longitudinal-predecessor-fixture.mjs"
         ],
         "anchors": [
           {
@@ -1091,7 +1093,7 @@
           {
             "kind": "work_state",
             "id": "D4181",
-            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+            "digest": "sha256:48cc9675163e592ef62a4e63cac20d94c8d422d84aaa379651122dcaceab0d72"
           },
           {
             "kind": "work_state",
@@ -1210,7 +1212,7 @@
       "nextAction": "Complete current full gate after independently reviewed current-consumer repairs and accepted native same-fact inspection. Then finish D4167 Sight/Play/Compare/guidance/voice reverse bindings and independent13 source qualifications; D4175 ordinary26 remain held.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/presentation-move-path.ts",
@@ -2682,7 +2684,7 @@
           {
             "kind": "work_state",
             "id": "D4181",
-            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+            "digest": "sha256:48cc9675163e592ef62a4e63cac20d94c8d422d84aaa379651122dcaceab0d72"
           },
           {
             "kind": "work_state",
@@ -2778,7 +2780,7 @@
       "nextAction": "Verify complete current software and real-browser geometry/owner-use after the actual14 native pair/default-budget/selected inspection lifetimes. Keep broader presets, all workflows and accessibility release proof open.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/evidence/move-path-callers.test.ts",
@@ -3939,7 +3941,7 @@
           {
             "kind": "work_state",
             "id": "D4181",
-            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+            "digest": "sha256:48cc9675163e592ef62a4e63cac20d94c8d422d84aaa379651122dcaceab0d72"
           },
           {
             "kind": "work_state",
@@ -4040,10 +4042,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete final post-Proxy performance/current200-game Profile cost and genuine predecessor8 execution. Migration35/revision9/all-six-family ownership are local tested implementation, not whole learner-model completion.",
+      "nextAction": "Measure current200-game Profile cost. Actual genuine8 startup/worker/reopen/all-six-family repair is proved; migration35/revision9 and source ownership remain a bounded foundation checkpoint, not whole learner-model completion.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",
@@ -4108,7 +4110,9 @@
           "tools/staged-typecheck.test.mjs",
           "apps/server/src/bot-opponent-operation.ts",
           "apps/server/src/bot-opponent-ply.test.ts",
-          "rfc/bot-policy.md"
+          "rfc/bot-policy.md",
+          "apps/server/src/longitudinal-predecessor-upgrade.test.ts",
+          "tools/d4181-longitudinal-predecessor-fixture.mjs"
         ],
         "anchors": [
           {
@@ -4199,7 +4203,7 @@
           {
             "kind": "work_state",
             "id": "D4181",
-            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+            "digest": "sha256:48cc9675163e592ef62a4e63cac20d94c8d422d84aaa379651122dcaceab0d72"
           },
           {
             "kind": "work_state",
@@ -4716,7 +4720,7 @@
       "nextAction": "Keep release blocked: no current complete software/performance certificate yet. Current consumer/storage/declaration repairs and native inspection are bounded local progress; content/native/release D3928 hold and full release journeys remain.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
           "Makefile",
@@ -5043,7 +5047,7 @@
           {
             "kind": "work_state",
             "id": "D4181",
-            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+            "digest": "sha256:48cc9675163e592ef62a4e63cac20d94c8d422d84aaa379651122dcaceab0d72"
           },
           {
             "kind": "work_state",

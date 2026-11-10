@@ -5,9 +5,9 @@
 Normal serial `make verify-software` passes all17,205 software tests/566files and the unchanged
 seven performance tests/fourfiles; `make verify-governance build` then passes. These are actual
 working-tree results, not a remote CI or release verdict. The earlier concurrent run is explicitly
-interrupted130 and remains unusable. Five scoped commits already preserve the independent
-pnpm/routing/hook fixes and D4148 bot rewind repair/accepted contract. The remaining coordinated
-source/schema/API/consumer image is being checkpointed without claiming parent completion.
+interrupted130 and remains unusable. Five scoped commits preserve the independent pnpm/routing/hook fixes and D4148 bot rewind
+repair/accepted contract. Coordinated source/schema/API/consumer checkpoint648dbad2 and tracker
+closeoutce60e6ae are committed without claiming parent completion.
 
 Canonical42/compiler7, all13 source-owned outcome factories and selector/policy2 share original
 root/child sources, complete quiet/lifecycle states and legal populations. Nine old public event
@@ -28,11 +28,12 @@ D4181/A.2/A.2.5a implements migration35/revision9 and one original WIDE per deci
 native7/condition13/prevalence34. All-six-family publication/read/rebuild/account paths use
 original source ownership and the same denominator/prevalence fold; Profile withholds old
 unqualified habit aggregates. Final post-Proxy performance now passes. Current200-game bulk cost
-and genuine predecessor8 execution remain owed. The actual old schema34/revision8 executable has
-been recovered and preserved in ignored cache; no current9 data is relabelled as old output.
+remains owed. Genuine predecessor8 execution now produces a standalone171KB SQL fixture, with
+all five original families populated across both native colors and import. Permanent actual
+startup→worker→reopen→all-six-family omission/repair passes2/2; saved play/account rows remain
+identical. No current9 data is relabelled as old output and ordinary tests need no ignored bundle.
 
-Next: finish the coordinated commit/checkpoint, then execute genuine8 startup→current worker→
-reopen/rebuild proof and current200-game cost. Independent13source qualification and D4167
+Next: checkpoint the verified genuine8 proof, then measure current200-game cost. Independent13source qualification and D4167
 reverse consumers follow. D3928's content/native/release hold remains; no official pack,
 whole capability, milestone or1.0 completion is claimed.
 

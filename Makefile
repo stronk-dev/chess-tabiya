@@ -2453,6 +2453,14 @@ learner-rating-isolation-check:
 longitudinal-successor-fixture:
 	$(CI_NODE) tools/d4018-longitudinal-successor-fixture.mjs
 
+.PHONY: longitudinal-predecessor-fixture longitudinal-predecessor-upgrade-check
+# Optional D4181 old-executable capture; permanent upgrade tests use the committed small fixture.
+longitudinal-predecessor-fixture:
+	$(CI_NODE) tools/d4181-longitudinal-predecessor-fixture.mjs
+
+longitudinal-predecessor-upgrade-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-predecessor-upgrade.test.ts
+
 .PHONY: longitudinal-incidence
 # D4018 criterion7: opt-in fixed-population diagnostic, never a verification dependency.
 longitudinal-incidence:

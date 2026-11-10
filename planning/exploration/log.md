@@ -40068,3 +40068,28 @@ D4197 closes against648dbad2. No tracked diff remains after the implementation c
 Excluded .claude worktree artifacts, out.txt and the old planning/review/rfc-derivation.md draft
 remain untracked and untouched. No push, release, parent RFC or capability completion. Future
 verified dependency slices commit before another implementation wave, per planning/WORK.md.
+
+### 2026-11-10 — genuine revision8 saved-history migration (D4181/A.2.6)
+
+Optional capture executes the retained actual schema34/revision8 bundle with every production
+byte and native replay helper unchanged, replacing only the main cohort/output loop. Three
+synthetic native White/Black8ply/import jobs complete with92original observations and all five
+old families populated. Permanent fixture171035bytes contains original SQL/data, not current9
+retagging; old ignored bundle/raw recordings are not normal verification dependencies.
+
+Actual startup holds only the real worker start boundary: all six families clear/requeue9, exact
+heads/generation remain and all saved/account tables are unchanged. Real thread publication,
+parsed complete read, close/reopen and independently omitted rows from EVERY family are proved
+through real check/repair/full equality. Independent review accepts the bounded proof. Initial
+restore exposed FK/index ordering and now uses a complete-dump transaction followed by active
+FK/integrity checks. New multi-game journey uses the existing real-worker120s suite convention
+and its own10s diagnostic wait; no existing or production deadline changes. Final normal types
+pass/Svelte0errors0warnings; focused2/2 passes19.19s and tier9passes. Earlier diagnostic2/2
+passes20.77s; the initial5s timeout is retained, not called a production latency result.
+
+D4181 remains doing for current200-game source/cost. D4167 reverse consumers, source13
+qualification and D3928 content/native/release remain open. No parent/capability/1.0 completion,
+raw bulk tracking, protected-intent edit, push or deployment. Checkpoint precedes the next wave.
+
+D4181 predecessor-proof follow-through: normal make roadmap-receipt verify-governance exits0;
+all tracking, type/tier and independent-review evidence is present before explicit-file staging.

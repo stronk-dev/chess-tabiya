@@ -2,9 +2,9 @@
 
 Current prelaunch migration checkpoint (2026-11-10): source/reducer adoption under
 longitudinal-store A.2/A.2.5a installs local migration35/revision9 and the subject table.
-The same-WIDE54 six-family integration passes the normal software/performance gate; bulk cost,
-genuine predecessor8 execution and release proof
-remains in flight. These private observations do not activate learner metrics.
+The same-WIDE54 six-family integration passes the normal software/performance gate. Genuine
+revision8/schema34 saved-history migration now passes actual startup/worker/reopen/all-six-family
+repair. Current200-game cost and release proof remain in flight. These private observations do not activate learner metrics.
 Profile no longer exposes the old pooled event-prevalence observations as habits. Its overview
 returns observationStatus unavailable/subject_metrics_not_adopted and observations:[]; old
 observation detail returns authenticated409 PROFILE_OBSERVATIONS_NOT_ADOPTED. The UI states
@@ -33,9 +33,15 @@ cover corrected promotion duty, castling-rook mobility, both-color retained pawn
 populated false Chess960 occupied-target counts. The saved-history fixture retains actual
 revision-5 outputs from the predecessor implementation and tests unchanged-head invalidation,
 real worker publication, exact current-revision reads, reopening, corruption repair and preserved
-saved/account data. A separate schema34/revision8-shaped fixture checks migration/reset and
-run preservation; it is not a claim of genuinely executed revision8-output parity. These
-bounded proofs do not clear default installed-content/native startup
+saved/account data. The separate schema34/revision8-shaped fixture retains its narrower migration/reset purpose.
+The genuine revision8 fixture in `fixtures/longitudinal-predecessor-rev8.json` is actual output
+from the preserved previous executable: three synthetic sessions (native both colors and one
+import), all five old derived families populated. Permanent `make longitudinal-predecessor-upgrade-check`
+restores its original SQL/data, proves invalidation before real worker startup, rebuilds all six
+current families, reopens them and detects/repairs a missing row in each. Saved play, imported
+source and account records stay identical. Optional `make longitudinal-predecessor-fixture`
+regenerates it only when the ignored old executable is available; ordinary tests never need that
+bundle or raw research. These bounded proofs do not clear default installed-content/native startup
 or the full release gate.
 
 ## Storage (migrations 26, 33 and 34)

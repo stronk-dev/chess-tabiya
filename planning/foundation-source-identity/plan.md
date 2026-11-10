@@ -46,6 +46,24 @@ are authorized without another permission question. D3928 remains a separate pen
   invocation while the position comparison canonicalizes it. Full counters/board identity remain
   exact. A second actual candidate guard refuses a genuine byte-equal snapshot with wrong ancestry.
 
+### 2026-11-10 genuine predecessor migration proof
+
+D4197 checkpoint recovery is committed648dbad2/ce60e6ae. D4181's actual schema34/revision8
+executable generated three complete original jobs (native White/Black8ply and short imported
+session), with all five old families populated. Its unchanged production prefix and original
+replay helper are independently reviewed; no current9 rows are retagged. The permanent171KB
+SQL fixture stands alone in normal software tests; optional capture uses only the ignored old
+bundle. No bulk artifact becomes a progress or CI dependency.
+
+Actual focused2/2 passes20.77s: real startup clears all six current families before worker start,
+advances unchanged heads/generation, preserves saved/account data, then actual thread publishes
+current9. Reopen retains the complete snapshot; removing a real row from every family is detected,
+repaired and compared in full. This is a multi-game worker/rebuild journey with the existing
+real-thread suite's120s convention and separate10s worker diagnostic; no existing deadline changes.
+Independent review accepts the bounded proof. All project types/Svelte0errors0warnings, final focused2/2 (19.19s) and nine tier controls
+pass. Normal make roadmap-receipt verify-governance exits0 before the checkpoint. D4181 remains doing for current200-game cost; source13
+qualification, D4167 reverse consumers and D3928 content/native/release remain open.
+
 ### 2026-11-10 verified coordinated checkpoint
 
 Fresh serial make verify-software exits0:17,205software/all566files555.42s and unchanged
