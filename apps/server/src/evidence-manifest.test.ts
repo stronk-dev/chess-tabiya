@@ -122,7 +122,10 @@ describe("server evidence manifest aggregate", () => {
     const value = evidenceManifestCapabilities(await testProviderHealth({ "stockfish-analysis": "available", "maia-inference": "available", "external-voice": "unverified", "explorer-primary": "unverified", "tablebase-primary": "unverified" }));
     expect(value.digest).toMatch(/^[a-f0-9]{64}$/);
     // Current selector3, separate validation1 and private subject consumer are distinct images.
-    expect(value.counts).toEqual({ producers: 50, projections: 404, consumers: 52, bindings: 698, semanticEvents: 86, eligibility: 141, reasons: 16, selectionPolicies: 1 });
+    expect(value.counts).toEqual({ producers: 50, projections: 404, consumers: 52, bindings: 697, semanticEvents: 86, eligibility: 140, reasons: 16, selectionPolicies: 1 });
+    const selected = value.bindings.filter(binding => binding.consumerId === "research.semantic_selection" && binding.consumerVersion === 3);
+    expect(selected).toHaveLength(54);
+    expect(selected.some(binding => binding.projectionId === "derived.exchange.trade_completed")).toBe(false);
     expect(JSON.stringify(value)).not.toMatch(/bestMoveUci|principalVariation|apiKey|authoredText/);
     expect(value.bindings.every((binding) => binding.consumerId.length > 0 && binding.projectionId.length > 0)).toBe(true);
   });

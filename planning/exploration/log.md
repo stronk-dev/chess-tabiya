@@ -40583,3 +40583,16 @@ implementation digests differ. All89verdicts,63population values,eight externals
 profile/immutable-registry bytes are unchanged. Rebuild after the final generated receipts;
 commit this bounded implementation with full gate pending, then run the normal complete target
 on those committed bytes. The source diff remains exactly deletion of the unreachable trade slot.
+
+### 2026-11-10 — D4210 full-gate aggregate expectation repair
+
+Implementation2648633a passes type/schema/manifest and1663/40 real provider/Inspector controls,
+then the normal full target exits2 at value authority:3859passed/twofailed across21files.
+The two exact aggregate tests still expect698bindings/141eligibility after the reviewed deletion
+produces697/140. Correct those expectations without changing production code or source/validation
+scope, and assert the actual API binding summary has54selector3 refs with no recorded trade.
+Normal focused37/two pass in2.36s; bounded numeric search finds no other obsolete selector totals
+in current software tests. The earlier full-main census failure is separately repaired376fd7ee.
+The first commit hook also refused missing checkpoint evidence for the new RFC; exact path/anchor
+flow-back was added before2648633a committed, without weakening that guard. Commit this focused
+test repair separately, then run the same complete normal target; D4210/D4211 remain doing.

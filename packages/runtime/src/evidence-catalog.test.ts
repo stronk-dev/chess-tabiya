@@ -89,7 +89,7 @@ describe("primary evidence catalogue", () => {
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
     // D4053 replaces the four-binding board1 image with the ruled two-binding board2 image.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([50, 404, 52, 698]); // Exact current source/selector/validation image; no ordinary avoidance2 bindings.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([50, 404, 52, 697]); // Exact current source/selector/validation image; no ordinary avoidance2 bindings.
     for (const id of ["rules.mobility.reading.early_queen_move"]) {
       expect(manifest.projections.filter(row => row.id === id)).toHaveLength(1);
       expect(manifest.projections.find(row => row.id === id)?.disposition).toBeUndefined();
@@ -133,7 +133,7 @@ describe("primary evidence catalogue", () => {
       expect(manifest.projections.find(projection => projection.id === id)?.disposition?.kind).toBe("operator_only");
       expect(manifest.bindings.some(binding => binding.projection.id === id)).toBe(false);
     }
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([86, 141, 16, 1]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([86, 140, 16, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());
     // Source validation preserves all live roots; selector3 owns only the exact current55.
