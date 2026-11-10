@@ -2735,3 +2735,17 @@ and independent bounded read pass. Source/selector runtime semantics and canonic
 unchanged. Commit the repair and rerun the complete normal software gate; no durable code starts
 until that result is known. The last complete certificate remains e4672b36, scoped to its source
 phase. D4200 and durable revision10 remain open.
+
+### D4210 one-edge acquisition correction — 2026-11-10
+
+The executed four-control probe and independent source audit confirm that selector55 includes
+a two-move trade source never acquired by the one-edge collector. Follow-up
+`rfc/one-edge-collector-closure.md` specifies actual local41/selector54, retaining recorded trade,
+all other source operands/order and current Profile54. Independent draft review precedes code.
+Current complete software run on a7b29564 has separately reported a repository-reader census
+failure; wait for its terminal result, repair that bounded guard and retain full normal checks.
+D4200 durable revision10 begins after these corrections; no source qualification/release promotion.
+
+D4211 owns the separate exact-reader census repair: accepted source-availability reads original
+WIDE ownership but was absent from the pinned reader list. Preserve the no-new-population
+assertion explicitly for this helper, then use the normal focused and complete software targets.

@@ -40528,3 +40528,21 @@ The normal full run on a7b29564 is still running and has reported a candidate-re
 failure. No full-green or ready-to-push claim follows from the focused checks. Commit this small
 research checkpoint separately; keep software failure repair and the source-scope follow-up in
 their own verified changes. Existing untracked .claude/,out.txt and review note are excluded.
+
+### 2026-11-10 — D4210 bounded follow-up independently accepted
+
+The executed trade-acquisition finding now has its own follow-up, one-edge-collector-closure.
+Independent review returns two draft inaccuracies: the service key is FEN/process-local rather
+than manifest-keyed, and registry41 is native7 plus edge34 rather than edge41. Packet identity
+does include manifest digest; current authority rejects foreign/reconstructed receipts. Draft
+wording and acceptance controls now make exactly those claims, including process confinement,
+without adding cache machinery. The reviewer accepts the repaired bounded contract, retaining
+compiler7/selector3, real recorded trade and all remaining source behavior. No production change
+yet; the original complete software run remains live. D4211 separately owns its omitted-reader
+census failure. Tracker validation rejected my unsupported bug glyph; corrected to the existing
+work vocabulary before syncing. No intent edit, qualification or release promotion.
+
+The original a7b29564 software handle then exits2:18940passed/onefailed across571files
+(694.30s), with the sole failure exactly the missing semantic-source-availability.ts reader
+in the census. Performance is not reached; do not count it as passing. Its explicit no-new-
+population guard will accompany the allowlist repair. Contract/tracker governance passes.

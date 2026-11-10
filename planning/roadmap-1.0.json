@@ -90,7 +90,8 @@
         "evidence-value-authority.md",
         "phase-source-composition.md",
         "subject-safe-semantic-selection.md",
-        "source-local-evidence-availability.md"
+        "source-local-evidence-availability.md",
+        "one-edge-collector-closure.md"
       ],
       "completion": {
         "evidence": [
