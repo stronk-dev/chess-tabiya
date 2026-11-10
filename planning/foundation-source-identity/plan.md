@@ -2749,3 +2749,15 @@ D4200 durable revision10 begins after these corrections; no source qualification
 D4211 owns the separate exact-reader census repair: accepted source-availability reads original
 WIDE ownership but was absent from the pinned reader list. Preserve the no-new-population
 assertion explicitly for this helper, then use the normal focused and complete software targets.
+
+### Full selector/closure checkpoint35d7cc5c — 2026-11-10
+
+The normal complete software handle exits0:18944/571 in660.52s, unchanged performance7/four
+in57.75s and all preflights. Current1470case values/order,89subjects/17qualified, Profile54 and
+recorded trade remain. D4210 closes and its follow-up archives with canonical docs; D4211 closes
+the exact-reader guard. No broader capability, ordinary26, content or release promotion.
+
+Next implement accepted D4200 through the original native/condition/prevalence reduction and
+private per-decision summary; strict stored evaluations, next migration36/revision10; seven-
+family publish/read/rebuild/export/delete/restore exclusion; actual9 upgrade and current cost.
+All legal alternatives remain, and unknown sources produce no false-zero opportunities.

@@ -40596,3 +40596,21 @@ in current software tests. The earlier full-main census failure is separately re
 The first commit hook also refused missing checkpoint evidence for the new RFC; exact path/anchor
 flow-back was added before2648633a committed, without weakening that guard. Commit this focused
 test repair separately, then run the same complete normal target; D4210/D4211 remain doing.
+
+### 2026-11-10 — Complete selector/closure software checkpoint35d7cc5c
+
+The same normal make verify-software handle exits0 on committed35d7cc5c: all18944tests/571files
+pass in660.52s and unchanged performance7/four pass in57.75s, after all toolchain/type/schema/
+manifest, real provider/value authority, canonical1470/1470 and other required preflights. Fresh
+canonical keeps89subjects/17qualified,1470case values/order,63population values and eight external
+receipts. Focused/type/build/governance/normal commit hooks already pass. Failed earlier runs
+remain above; no remote-CI, content, browser-matrix or release result is inferred.
+
+D4210 and D4211 close with path evidence. The one-edge follow-up is archived with current canonical
+docs, actual local41/selector54 and preserved recorded trade; wider source-local/history parents
+remain implementing. Current roadmap summaries are rewritten to this certificate (including
+removing the incorrect e4672b36/18919 count from release-truth), retaining D3702/D3703, D3885 and
+D3928 residuals. No milestone/capability promotion or content graduation follows. Next work is
+D4200's per-decision54-source coverage through original reductions, seven-family atomic storage,
+revision9→10 upgrade/read/rebuild/account lifecycle and current cost proof. The full1.0 goal stays
+active; no implementation bytes changed during the verified software run.

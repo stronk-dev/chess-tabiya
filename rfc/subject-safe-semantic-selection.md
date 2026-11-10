@@ -22,8 +22,8 @@ none
 source-local completeness, selection3 and durable per-decision unknown coverage. It supersedes
 the global refusal in §5.1 only through its coordinated source/selection/history implementation.
 Source and selector3 are implemented; coordinated durable history remains open. Independently
-accepted `one-edge-collector-closure.md` corrects §§2/5 to actual local41/selector54, preserving
-recorded trade and all other refs. Fresh complete gates remain pending; the parent's wider
+accepted `archive/one-edge-collector-closure.md` corrects §§2/5 to actual local41/selector54, preserving
+recorded trade and all other refs. Complete normal35d7cc5c software18944/571 and performance7/four pass; the parent's wider
 qualification/consumer/discharge obligations are unchanged.
 
 ## Summary

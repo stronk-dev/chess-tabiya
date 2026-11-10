@@ -2,51 +2,32 @@
 
 ## Current continuation — 2026-11-10
 
-The full 1.0 goal remains active. Foundation implementation has advanced, while complete
-consumer adoption, learner workflows, content and release proof remain open.
+The full1.0 goal remains active. Complete normal `make verify-software` passes on committed
+`35d7cc5c`: **18,944 tests /571 files (660.52s)** and **seven unchanged performance tests /
+four files (57.75s)**, with all preflights. Fresh canonical validation passes1470/1470,
+89subjects/17qualified; prior case outcomes/order and population values are preserved.
+Types, build, governance and independent source review pass. Failed earlier runs stay in the
+append-only [exploration log](exploration/log.md); local proof is not remote CI or release proof.
 
-| Checkpoint | Current evidence |
-|---|---|
-| Normal software gate | `make verify-software` exits0 on `e4672b36`: 18,926 tests / 571 files in867.27s, seven unchanged performance tests / four files in69.32s, and all preflights; selector3 has focused/type/canonical proof, with its complete rerun pending |
-| Source qualification | 1,470 / 1,470 executed cases; 89 subjects / 17 qualified. Six of13 new outcome families qualify; seven remain |
-| Persistent evidence | Migration35/revision9, six-family publication/read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen/repair proof implemented |
-| Learner delivery | 14 compact native Nudge/Review pairs have actual strict REST/DOM and budget controls. The26 ordinary avoidance tuples remain held |
-| Content and release | D3928's separate pack migration decision still holds content/native/release. This software certificate graduates no official pack or release candidate |
+D4210's [one-edge correction](../rfc/archive/one-edge-collector-closure.md) is complete: actual
+local41 plus13 condition refs gives selector54. It removes an unacquired trade admission slot,
+retaining real two-capture recorded trade, Profile54, all other sources and legal denominators.
+D4211's exact reader census includes the availability reader and forbids it to create another
+population. Both close with path evidence; the source-local/history parents remain implementing.
 
-The verified qualification is committed in `d7c5df9e`; App/store test repairs in `9aedcf83`,
-native-worker ownership/Profile integration classification in `8b254921`, and the Review
-request-write observer in `008115ac`. D4202/D4205/D4206 close boundedly after the complete gate.
-The source-local repair is committed in `e4672b36` and its complete normal software gate passes.
-Governance, build and normal commit hooks pass. Earlier failed/interrupted runs remain in the
-append-only [exploration log](exploration/log.md); local success is not a remote-CI verdict.
+The next accepted work is **D4200 durable availability**: original per-decision source coverage,
+revision10 and all seven derived families through atomic publication/read/rebuild/account
+lifecycle, actual revision9 upgrade and current workload/latency/lease/drain proof. The genuine
+schema35/revision9 fixture is committed408ffa1d. Current native/whole54 Profile fences stay until
+that coordinated implementation. Missing evidence must never become a statistical zero.
 
-D4200's coordinated source/selector/history availability contract is independently accepted.
-Genuine schema35/revision9 input is captured before code changes: five actual production jobs,
-all six predecessor families, both availability controls and a standalone877KB fixture with
-passing restore/type checks and bounded independent review. This is not the revision10 upgrade.
-The source calculator now preserves all13 complete families on the real unrelated-abstention
-witness and leaves only the genuinely missing risk-dependent family unavailable, in both colors.
-Selector/consumer3 is now locally implemented and independently reviewed: every result carries
-exact54-source coverage under the accepted one-edge correction; partial results preserve valid facts and full legal denominators. Strict
-own-data input capture and actual execution preflight close the review returns. Broad2948/eighteen,
-types/scheduling, current research-boundary10/two and fresh1470/1470canonical cases pass. The full
-selector software rerun remains pending and has reported a repository-reader census failure.
-D4210's one-edge scope correction is independently accepted and locally implemented: local41 plus
-condition13 excludes only the unacquired recorded trade slot. Genuine recorded trades remain;
-fresh canonical1470/1470 preserves prior values; complete gates precede durable revision10 implementation. Then carry stored
-opportunity denominators, proofs and rebuilds; native/whole54 Profile fences remain until then.
-Then finish the seven outcome-family qualifications and D4167 reverse consumers: Sight,
-Play/Compare, both comparisons, guidance/voice/speech, typed bot/replay/policy and authored migration.
-D4175's26 ordinary avoidance tuples also need shared acquisition, strict receiving and cost proof.
-
-The existing [foundation plan](foundation-source-identity/plan.md) carries implementation detail
-and the current handoff. It records1470-case preservation, exact source identities,14-pair
-journeys, the genuine8 fixture and the compact200-game current9 cost receipt. Those observations
-do not establish an isolated predecessor speed comparison or new habit validity.
-
-Routine independent reviews are authorized without another permission question. D1716/D1719/
-D4167/D4181/D4175 and the whole-product gates remain open; this checkpoint promotes no whole
-capability or milestone. D3928's separate owner request remains pending.
+Six of13 new outcome families qualify; seven remain. Existing14 compact native Nudge/Review
+pairs have separate actual REST/DOM/budget proof. D4167 reverse consumers, D4175's26 ordinary
+avoidance tuples, complete module/preset/workflow adoption, learner journeys and release proof
+remain. D3928's separate owner hold still blocks content/native/release; no official pack or
+whole capability/milestone is promoted by this checkpoint. Routine independent reviews are
+authorized; no new permission question is needed. The existing
+[foundation plan](foundation-source-identity/plan.md) carries execution detail.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

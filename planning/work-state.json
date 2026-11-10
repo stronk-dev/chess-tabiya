@@ -35298,21 +35298,21 @@
     },
     {
       "id": "D4210",
-      "state": "doing",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:1a720054ae95cb5276c796dd94ea8be160ee5727e1d130042e1cff7678171043",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-10"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D4211",
-      "state": "doing",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:f70622d3ad2cda5bbc8dd41e9b586520f19db56d4df0b4653567b88df3ca89c1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7d6c8437259de9c5f8a44247a6ff449687b058940f23984be32fc446a1a6f7eb",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-10"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     }
   ]
 }

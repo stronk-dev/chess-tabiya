@@ -445,3 +445,12 @@ input digests across584cases plus population predicate implementation digests. S
 profiles and immutable v3 registry bytes remain unchanged. Sources: actual canonical writer and
 its generated receipt; `one-edge-collector-closure.md`; the cited runtime tests. The fresh whole
 software gate remains required; these checks do not discharge D4200 history or widen qualification.
+
+`[V]` The subsequent complete normal software run on committed35d7cc5c exits0:
+18944/571 in660.52s and unchanged performance7/four in57.75s, after fresh canonical1470/1470
+and all preflights. D4210 and D4211 close; their earlier counterexamples remain above. The actual
+collector composition is `packages/runtime/src/semantic-evidence.ts::localSemanticEventClosure`
+and `derivedExchangeSemanticEvents`; trade factory ownership is in `evidence-factories.ts`.
+The follow-up is frozen in `rfc/archive/one-edge-collector-closure.md`, canonical behavior in
+`docs/explanation-grounds.md`. D4200 durable availability, seven family qualifications and wider
+consumer adoption remain; this local certificate is not content, remote-CI or release proof.

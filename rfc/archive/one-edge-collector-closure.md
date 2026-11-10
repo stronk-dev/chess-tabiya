@@ -1,6 +1,6 @@
 # RFC: one-edge collector closure
 
-- **Status:** implementing — independent contract and bounded source review2026-11-10; focused177/five, strict probe and type/scheduling checks pass. Fresh canonical1470/1470 preserves89 subjects/17qualified; complete software gate remains.
+- **Status:** implemented — independently reviewed correction; committed35d7cc5c complete normal software18944/571 and unchanged performance7/four pass2026-11-10.
 - **Author:** codex
 - **Created:** 2026-11-10
 - **Parent / amends:** subject-safe-semantic-selection.md §§2,5; source-local-evidence-availability.md §§2,3. Both parents remain active implementation records.
@@ -112,3 +112,5 @@ repair of the draft cache-key and registry-kind claims. No code or tests were ru
 - 2026-11-10: draft from executed D4210 counterexample and independent source audit.
 
 - 2026-11-10: independent acceptance after accurate packet/process-cache and native-plus-edge wording.
+
+- 2026-11-10: implemented and verified by normal software18944/571 (660.52s), unchanged performance7/four (57.75s), fresh1470canonical, type/build/governance and independent source review; bounded D4210 closure only.

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:731420991aae5863ab761cff2026b3e645e3310cd1e6db022c94c56e8ce94f9f",
+    "roadmap": "sha256:6238fe3bdf3eb4351559407c9c0644bde165108ebadaf87cb47479e8b7eb0280",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:d2b777043ef5ca6f81d6732c96b48562bae0faa7ebcdebabb9e90b461b81fdab",
-    "rfcRegister": "sha256:c8e642d1e88cee682c99b34a0aaaf9dafd8faeb91f08c4feb9a6ebdc1e28e1f4",
+    "workState": "sha256:a1d091fb6416a26933c94b45908e83ccf808af9a81361f787d7689ff357bf15a",
+    "rfcRegister": "sha256:8b28e7b4ddf7cdf3de2cd845ac60583baf35823f29a4a7636ccb9f26744b2d64",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -18,11 +18,11 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 81,
+    "assignedRfcs": 80,
     "activeRfcLifecycle": {
       "draft": 20,
       "accepted": 0,
-      "implementing": 52,
+      "implementing": 51,
       "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 632,
-      "doing": 175,
+      "doing": 173,
       "blocked": 1063,
-      "done": 1927,
+      "done": 1929,
       "refused": 163
     },
     "workItems": {
@@ -75,8 +75,8 @@
       "dependsOn": [],
       "nextAction": "Resolve the recorded historical D3702/D3703 diagnostic obligations without inventing causes; preserve the current complete local software/performance certificate and finish remaining release-proof obligations.",
       "latestCheckpoint": {
-        "at": "2026-10-16",
-        "summary": "D3884 repairs an observed Review whole-database snapshot race: engine settlement preceded import's independent atomic learner-history publication. Initial snapshots now observe the exact completed job before the measured request; every real HTTP/worker/table/event assertion and existing deadline remains. Independent review and157 focused Review cases pass. Normal software6751/416 (418.50s), unchanged performance7/4 (59.62s), and corrected remaining governance/content257/26 (58.16s)/corpus/build tiers pass. Governance's two initially unrouted new rows are routed in the existing queue; failed/interrupted combined commands stay logged. D3885 count-only/full-row coverage debt remains owned, not a claimed observed product mutation. Prior D3869 scheduling/source-history/remote evidence stands. No worker disable, table exclusion, sleep, retry, product behavior change, remote-green revision or whole release-truth promotion. Current2026-11-10 complete normal software/performance ate4672b36 passes18,919/570 plus7/four and all preflights. This does not diagnose the interrupted historical D3702/D3703 causes or clear D3928 content/native/release; those rows remain open.",
+        "at": "2026-11-10",
+        "summary": "Complete normal software on35d7cc5c passes18944tests/571files in660.52s, unchanged performance7/four in57.75s, all preflights and fresh1470canonical cases. Independent source review, types/build/governance also pass. D4210 exact one-edge source closure and D4211 reader census close with path evidence. Earlier failed runs remain logged. Historical D3702/D3703 diagnosis, D3885 and D3928 content/native/release holds remain; this is local software proof, not remote CI or a release.",
         "impact": "advanced",
         "evidence": [
           "tools/d3367-provider-source-history/proof.ts",
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Finish selector3 complete verification, then implement accepted D4200 durable revision10/seven-family evaluation publication, typed reads, actual9→10 startup/worker/rebuild/account and expanded-work cost. Keep native/history conservative until coverage is durable; remaining qualifications, reverse consumers and content/native/release stay separate.",
+      "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "All13 original total-source/outcome factories exist. Fresh canonical1470/1470 over89subjects yields17qualified: six of13 outcome families qualify and seven remain. Source-local availability and selector/consumer3 now retain exact54-source coverage under one-edge-collector-closure, full legal denominators and genuine unknowns. Independent code review,2948/eighteen focused tests, complete types/scheduling and actual partial/complete validation controls pass. Last completed normal software certificate is e4672b36:18926/571 and7performance/four; the new selector complete rerun is pending. Migration35/revision9 six-family adoption and genuine8 upgrade proof remain; durable revision10/seven-family coverage, actual9 upgrade and expanded cost are next. D4167, ordinary26 and D3928 remain open.",
+        "summary": "Actual one-edge41 and selector3 coverage54 preserve all legal denominators and source-local unknowns; genuine recorded trade remains. Independently reviewed correction,1470/1470 case values/order,89subjects/17qualified, full normal35d7cc5c software18944/571 and performance7/four pass. Six of13 outcome families qualify; seven remain. Migration35/revision9 and genuine9 predecessor input stand. D4200 next delivers original per-decision coverage through revision10/seven-family publication, typed reads, rebuild/account/upgrade and expanded cost. D4167, ordinary26 and D3928 remain open.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -589,7 +589,7 @@
           "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
           "rfc/source-local-evidence-availability.md",
           "apps/server/src/longitudinal-revision9-fixture.test.ts",
-          "rfc/one-edge-collector-closure.md"
+          "rfc/archive/one-edge-collector-closure.md"
         ],
         "anchors": [
           {
@@ -1060,7 +1060,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:32d024101fbafd13401d4d6b5b7b255573c23d16cf9df28e7edc7c2649a951ed"
+            "digest": "sha256:d23aa80f0494365110e822a6aeb17d8ddb0559651355a234fda55b1cfa6444e6"
           },
           {
             "kind": "work_state",
@@ -1215,12 +1215,12 @@
           {
             "kind": "rfc",
             "id": "source-local-evidence-availability.md",
-            "digest": "sha256:7e5d536d11d443fe75cacaa710bb2d3fed34a489a51d509b88e65ff838beb5d6"
+            "digest": "sha256:ce3b7ecd982245959cd49843eee43b48172689f5b0e180ce6a4a3266b2c54285"
           },
           {
-            "kind": "rfc",
-            "id": "one-edge-collector-closure.md",
-            "digest": "sha256:1efe7bd0c637408adc9cba3f210500801dc4f1a9ec347ce70c93684c71ecb4e2"
+            "kind": "work_state",
+            "id": "D4210",
+            "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
           }
         ]
       },
@@ -1241,10 +1241,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish selector3 complete verification, then implement accepted D4200 durable revision10/seven-family evaluation publication, typed reads, actual9→10 startup/worker/rebuild/account and expanded-work cost. Keep native/history conservative until coverage is durable; remaining qualifications, reverse consumers and content/native/release stay separate.",
+      "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Canonical41/compiler7 and all13 source-owned condition factories now feed selector/consumer3 with mandatory54-source coverage under the accepted one-edge correction. Known source gaps no longer erase unrelated complete facts; unknown exact refs cannot supply rarity or critical facts. Strict once-only input capture and actual complete binding execution admission pass their adversarial controls; the validation adapter explicitly abstains on partial coverage. Broad2948/eighteen, types/scheduling and fresh1470canonical cases pass; complete selector rerun is pending. Existing14 compact native Nudge/Review pairs retain verified REST/DOM/budget controls; ordinary26, seven family qualifications and D4167 reverse consumers remain. Durable revision10 coverage is still required before history widens.",
+        "summary": "Compiler7 now declares only41 acquired one-edge events; selector/consumer3 carries exact54-source coverage, preserving valid facts alongside unrelated gaps. Recorded trade remains supported outside that one-edge scope. Fresh1470case values/order and89verdicts are preserved; complete normal35d7cc5c software18944/571 and unchanged performance7/four pass. Existing14 compact native Nudge/Review pairs retain their separate REST/DOM/budget proof. D4200 durable coverage, seven outcome qualifications, D4167 reverse consumers and ordinary26 remain before wider learner adoption.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/presentation-move-path.ts",
@@ -1822,7 +1822,7 @@
           "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
           "rfc/source-local-evidence-availability.md",
           "apps/server/src/longitudinal-revision9-fixture.test.ts",
-          "rfc/one-edge-collector-closure.md"
+          "rfc/archive/one-edge-collector-closure.md"
         ],
         "anchors": [
           {
@@ -2703,7 +2703,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:32d024101fbafd13401d4d6b5b7b255573c23d16cf9df28e7edc7c2649a951ed"
+            "digest": "sha256:d23aa80f0494365110e822a6aeb17d8ddb0559651355a234fda55b1cfa6444e6"
           },
           {
             "kind": "work_state",
@@ -2818,12 +2818,12 @@
           {
             "kind": "rfc",
             "id": "source-local-evidence-availability.md",
-            "digest": "sha256:7e5d536d11d443fe75cacaa710bb2d3fed34a489a51d509b88e65ff838beb5d6"
+            "digest": "sha256:ce3b7ecd982245959cd49843eee43b48172689f5b0e180ce6a4a3266b2c54285"
           },
           {
-            "kind": "rfc",
-            "id": "one-edge-collector-closure.md",
-            "digest": "sha256:1efe7bd0c637408adc9cba3f210500801dc4f1a9ec347ce70c93684c71ecb4e2"
+            "kind": "work_state",
+            "id": "D4210",
+            "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
           }
         ]
       },
@@ -2844,7 +2844,7 @@
       "nextAction": "Complete real-browser geometry and owner-use proof for current board/module defaults, preserve assistance/role ceilings, then finish ordinary26 only after complete source qualification and the accepted availability/adoption contracts.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Previously verified14 compact native Nudge/Review pairs retain strict actual receiving, whole-payload fit and same-selected-fact inspection. The new selector3 foundation carries explicit source gaps without activating ordinary26. Its2948/eighteen focused tests, full types/scheduling and fresh1470canonical cases pass; complete selector rerun remains. Remaining learner module hooks, preset/workflow adoption and owner use still require their own delivery proof. D3928 content/native/release holds remain.",
+        "summary": "Existing14 compact native Nudge/Review pairs retain strict actual receiving, payload fit and same-selected-fact inspection. Corrected selector3 source coverage passes complete normal35d7cc5c software18944/571 and performance7/four without activating ordinary26. Remaining module hooks, presets/workflow adoption, responsive interactions and owner use still require their own complete delivery proof. D3928 content/native/release remains held.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/evidence/move-path-callers.test.ts",
@@ -4785,7 +4785,7 @@
       "nextAction": "Keep release blocked while completing foundation/consumer contracts, D3928 content migration and real native/appliance/release journeys. Preserve the current complete local software/performance certificate; it does not clear content, deployment, backup/restore or whole-product UX.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "The last complete local normal software/performance certificate is committed e4672b36:18926tests/571files867.27s, unchanged7performance/four69.32s and all preflights. Selector3 now has independent code acceptance,2948/eighteen focused checks, full types/scheduling and fresh1470canonical cases; its complete rerun is pending. Seven outcome qualifications, durable D4200 coverage/lifecycle/cost, D4167 and ordinary26 remain. D3928 continues to hold content/native/release; this checkpoint graduates no official pack or release candidate and supplies no remote-CI or deployment result.",
+        "summary": "Last complete local software certificate is35d7cc5c:18944tests/571files660.52s, unchanged performance7/four57.75s and all normal preflights. Fresh canonical1470/1470 preserves89subjects/17qualified and prior values/order. D4210/D4211 close boundedly. D4200 durable coverage/lifecycle/cost, seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content/native/release; zero new official packs graduate. No remote CI, deployment, full browser-matrix or release-candidate result is claimed.",
         "impact": "advanced",
         "evidence": [
           "Makefile",
@@ -5264,7 +5264,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 30,
+      "rfcCount": 29,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

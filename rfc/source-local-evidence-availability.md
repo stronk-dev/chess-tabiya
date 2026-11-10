@@ -1,6 +1,6 @@
 # RFC: source-local evidence availability
 
-- **Status:** implementing — independently accepted2026-11-10 after R1–R3 repair; genuine schema35/revision9 predecessor and source-local calculator verified. Selector/consumer3 implementation has bounded independent code acceptance and focused/type/scheduling controls; canonical1470/1470 over89subjects/17qualified passes; current complete gates and durable revision10 coverage/upgrade/lifecycle/cost remain. No wider foundation completion.
+- **Status:** implementing — independently accepted2026-11-10 after R1–R3 repair; genuine schema35/revision9 predecessor and source-local calculator verified. Selector/consumer3 implementation has bounded independent code acceptance and focused/type/scheduling controls; canonical1470/1470 over89subjects/17qualified passes; complete normal35d7cc5c software18944/571 and performance7/four pass; durable revision10 coverage/upgrade/lifecycle/cost remains. No wider foundation completion.
 - **Author:** codex, under the owner's full-foundation and pre-launch zero-legacy rulings.
 - **Created:** 2026-11-10
 - **Parent / amends:** subject-safe-semantic-selection.md §§5.1–5.3; longitudinal-store.md
@@ -21,7 +21,7 @@ migration | position next | learner_subject_evaluations: one compact complete de
 
 ## Accepted scope correction
 
-`one-edge-collector-closure.md` independently supersedes §§2/3's selection55 with actual
+`archive/one-edge-collector-closure.md` independently supersedes §§2/3's selection55 with actual
 local41 + condition13 = selector54. Trade requires recorded captures and is excluded only from
 one-edge admission; recorded factories, Profile54 and revision10 duties remain unchanged.
 
