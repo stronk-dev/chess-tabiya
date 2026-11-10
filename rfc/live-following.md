@@ -32,7 +32,7 @@
 - **Planning:** `planning/live-sources/`
 
 ```tabiya-claims
-migration | position behind recorded-clocks | followed_sources; followed_source_pushes (new tables holding a growing broadcast game and its per-push audit; runs are immutable cuts taken from them and are not modified)
+migration | position behind profile-game-facts | followed_sources; followed_source_pushes (new tables holding a growing broadcast game and its per-push audit; runs are immutable cuts taken from them and are not modified)
 ```
 
 ## Summary
@@ -602,3 +602,6 @@ Proposed; id assigned at landing (head was **D1213** at drafting).
   production operations, complete UX, clocks/rules/account seams and prefix-revision evidence do
   not. Exact return linked in the status and fresh-return section.
 - 2026-08-23: created, from `planning/live-sources/phase-b-derivation.md`. Growth model specified as the followed-source object on five measured constraints; the D411 lock pinned as a dynamic ceiling bit with two arms and an AND-release; casting specified as a seam and left to the B5 ruling; §5 verified against `0f04a2d` rather than re-specifying two defects codex had already fixed.
+
+- 2026-11-05: engineering-owned prelaunch migration ordering rebased behind the finite
+  profile-game-facts companion; feature scope and returned status unchanged.

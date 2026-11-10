@@ -32,7 +32,7 @@ const migration = (test: string) => a("packages/runtime/src/semantic-validation-
 
 const POSITIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "derived.tactic.check_zwischenzug_observed": [migration("D3628 zwischenzug: a quiet intervening move is not an intervening check")],
-  "rules.structural.event.piece_count": [runtime("emits identity-preserving structural relations while leaving raw readings independent")],
+  "rules.structural.event.piece_count": [runtime("retains twelve original piece-count relations on the initial pawn advance")],
   "rules.structural.event.line_blockers": [d1714("pins five legal positives through the local emitter boundary", "event_emitter")],
   "rules.structural.event.pawn_islands": [runtime("emits pawn-island and mover-relative loose-piece events through the compiled path")],
   "rules.transition.event.castled": [runtime("emits castling, promotion and checkmate exact positives")],
@@ -47,7 +47,7 @@ const POSITIVE: Readonly<Record<string, readonly Authority[]>> = Object.freeze({
   "rules.tactic.event.double_attack": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
   "rules.tactic.consequence.reply_breadth": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
   "rules.tactic.event.check": [runtime("emits exact reply/check and exchange-filtered double-attack events from their real producers")],
-  "rules.tactic.event.loose_piece": [runtime("emits pawn-island and mover-relative loose-piece events through the compiled path")],
+  "rules.tactic.event.loose_piece": [runtime("joins the original moved queen to its gained loose-piece event")],
   "rules.castling.event.rights_lost": [runtime("emits permanent castling-right loss separately from transient legality")],
   "derived.exchange.capture_class": [runtime("seals capture class as a derivation of the exact capture and exchange evidence")],
   "derived.exchange.trade_completed": [runtime("seals an immediate capture-recapture trade over both capture and recorded-move anchors")],

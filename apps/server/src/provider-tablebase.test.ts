@@ -1,5 +1,5 @@
 import type { AddressInfo } from "node:net";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { branchPath, exactLegalMoves, providerSourceEvidence, type SyzygyPositionRequest } from "@chess-tabiya/runtime";
 
 import { ProviderExchangeScheduler, type ProviderOperationDescriptor } from "./provider-exchange.js";
@@ -9,6 +9,7 @@ import { testRegistry } from "./provider-health.test-support.js";
 import { healthReportedTablebase } from "./provider-health-adapters.js";
 import { ExchangeTablebaseSource, healthAdmittedSyzygyOperation } from "./provider-tablebase.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { RunService } from "./service.js";
 import { createRestHandler } from "./rest.js";
@@ -20,6 +21,7 @@ const FEN = "8/8/8/8/8/8/3Q4/k1K5 w - - 0 1";
 const OTHER = "8/8/8/8/8/8/3R4/k1K5 w - - 0 1";
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const request = (fen = FEN): SyzygyPositionRequest => ({ rules: "chess", variant: "standard", fen, timeoutMs: 4_000 });
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 async function harness(wrap: (descriptor: ProviderOperationDescriptor<"syzygy.position@1">, clock: ManualClock) => ProviderOperationDescriptor<"syzygy.position@1"> = descriptor => descriptor) {
   const clock = new ManualClock();
@@ -118,6 +120,7 @@ describe("learner Syzygy shared exchange", () => {
     await flush(); remote.respond(0, syzygyBody(fen));
     const evidence = await pending;
     const bare = vi.fn(async () => evidence.payload.payload.position);
+    installEmptyApplicationCatalogues();
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, tablebaseSource: { kind: "lichess", probe: bare, async probeEvidence() {
       if (arm === "failure") throw new Error("source unavailable");
       return arm === "clone" ? { ...evidence } as TablebaseProbeEvidence : evidence;
@@ -770,6 +773,7 @@ describe("learner Syzygy shared exchange", () => {
     const bare = vi.spyOn(ExchangeTablebaseSource.prototype, "probe").mockRejectedValue(new Error("production selection must keep the sealed delivery"));
     let application: Awaited<ReturnType<typeof createInMemoryTestApplication>> | undefined;
     try {
+      installEmptyApplicationCatalogues();
       application = await createInMemoryTestApplication({ engineMode: "maia", stockfishCommand: "/nonexistent/tabiya-test-stockfish", maiaHost: "127.0.0.1", maiaPort: 1, cookieSecure: false });
       await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;

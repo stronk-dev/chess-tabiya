@@ -1,5 +1,5 @@
 import { INITIAL_FEN } from "chessops/fen";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { checkCandidatePacketProjectionGroups, deriveCandidatePacketProjectionGroups, renderCandidatePacketProjections } from "../../../tools/candidate-packet-projections/derive.js";
 import {
@@ -22,16 +22,18 @@ import {
   projectCandidatePopulationReceipt,
   type CandidatePacketIdentity,
   type CandidatePacketScope,
+  type CandidateWideScope,
   type CandidatePopulationReceipt,
 } from "./candidate-population.js";
 import { CANDIDATE_COLLECTOR_PROJECTION_KEYS } from "./candidate-population-projections.generated.js";
 import { BREADTH_COLLECTOR_PROJECTION_IDS, PRIMARY_EVIDENCE_MANIFEST, TACTICAL_COLLECTOR_PROJECTION_IDS } from "./evidence-catalog.js";
-import { evidenceDigest } from "./evidence-contract.js";
+import { evidenceDigest, evidenceValueReceipt } from "./evidence-contract.js";
+import * as valueRoutes from "./internal/evidence-value-routes.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { MOVE_IDENTITY_CONVENTION, exactLegalMoves } from "./legal-moves.js";
 import { assertSemanticEvidenceEvent, compileSemanticEvidenceEvent, legalAlternativeEdges, localSemanticEvents, selectLocalSemanticEvidence, selectSemanticEvidence } from "./semantic-evidence.js";
 
-const ref = (id: string) => ({ id, version: 1 } as const);
+const ref = (id: string, version = 1) => ({ id, version } as const);
 const MIDDLEGAME = "r2q1rk1/pp2bppp/2n1bn2/2pp4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 10";
 const CASTLING = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
 const EN_PASSANT = "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1";
@@ -46,10 +48,10 @@ const CAPTURE = "4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1";
 const DEGENERATE_CASTLE = "4k3/8/8/8/8/8/8/6KR w K - 0 1";
 
 const cache = new Map<string, CandidatePopulationReceipt>();
-function compiled(fen: string, scope: CandidatePacketScope): CandidatePopulationReceipt {
+function compiled<S extends CandidatePacketScope>(fen: string, scope: S): CandidatePopulationReceipt<S> {
   const key = `${fen}|${JSON.stringify(scope)}`;
   const existing = cache.get(key);
-  if (existing !== undefined) return existing;
+  if (existing !== undefined) return existing as CandidatePopulationReceipt<S>;
   const result = compileCandidatePopulation({ beforeFen: fen, ruleset: "standard", scope });
   if (result.kind !== "ready") throw new Error(`candidate packet did not compile: ${JSON.stringify(result.error)}`);
   cache.set(key, result.receipt);
@@ -63,6 +65,94 @@ function failureOf(result: ReturnType<typeof compileCandidatePopulationForContra
 
 const multiset = (values: readonly string[]) => [...values].sort();
 const keyOf = (value: { readonly projection: { readonly id: string; readonly version: number } }) => `${value.projection.id}@${value.projection.version}`;
+
+describe("foundation child source bindings", () => {
+  it("retains each child's genuine position object used by both complete snapshots", () => {
+    const calls = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      const result = compileCandidatePopulation({ beforeFen: "r7/8/8/8/8/4k3/8/4K3 b - - 0 1", ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
+      if (result.kind !== "ready") throw Error(JSON.stringify(result));
+      expect(result.receipt.packet.candidates.length).toBeGreaterThan(0);
+      for (const child of result.receipt.packet.candidates) {
+        const position = child.readings.find(value => keyOf(value) === "rules.mobility.reading.legal_moves@1");
+        expect(position).toBeDefined();
+        expect(position!.payload).toMatchObject({ fen: child.afterFen });
+        for (const route of ["rules.structural.reading.king_opposition@3", "rules.structural.reading.backward_pawn@3", "derived.square.reading.future_file_challenge@1", "derived.square.reading.capture_migration_reach@1"] as const) {
+          const values = child.readings.filter(value => keyOf(value) === route);
+          expect(values).toHaveLength(1);
+          expect(values[0]!.payload).toMatchObject({ fen: child.afterFen });
+          const sourceCalls = calls.mock.calls.filter(([called, input]) => called === route && "position" in input && input.position === position);
+          expect(sourceCalls).toHaveLength(1);
+          expect(evidenceValueReceipt(values[0]!).sourceDigests).toEqual([evidenceValueReceipt(position!).payloadDigest]);
+        }
+        expect(child.readings.find(value => keyOf(value) === "rules.structural.reading.backward_pawn@3")!.payload).toMatchObject({ pawnDomain: [], pawns: [] });
+        const connectivity = child.readings.find(value => keyOf(value) === "rules.structural.reading.pawn_connectivity@1")!;
+        expect(connectivity.payload).toMatchObject({ fen: child.afterFen });
+        expect(calls.mock.calls.filter(([route, input]) => route === "rules.structural.reading.pawn_connectivity@1" && "fen" in input && input.fen === child.afterFen)).toHaveLength(1);
+        for (const route of ["derived.structural.reading.pawn_file_group@1", "derived.activity.reading.file_state@1"] as const) {
+          const values = child.readings.filter(value => keyOf(value) === route);
+          expect(values).toHaveLength(1);
+          expect(values[0]!.payload).toMatchObject({ fen: child.afterFen });
+          expect(calls.mock.calls.filter(([called, input]) => called === route && "source" in input && input.source === connectivity)).toHaveLength(1);
+          expect(evidenceValueReceipt(values[0]!).sourceDigests).toEqual([evidenceValueReceipt(connectivity).payloadDigest]);
+        }
+        expect(child.readings.find(value => keyOf(value) === "derived.structural.reading.pawn_file_group@1")!.payload).toMatchObject({ groups: [] });
+        expect(child.readings.find(value => keyOf(value) === "derived.activity.reading.file_state@1")!.payload).toMatchObject({ files: ["a", "b", "c", "d", "e", "f", "g", "h"].map(file => ({ file, whitePawns: [], blackPawns: [], state: "open" })) });
+        const control = child.readings.find(value => keyOf(value) === "rules.square.reading.control@1")!;
+        const future = child.readings.find(value => keyOf(value) === "derived.square.reading.future_file_challenge@1")!;
+        const candidate = child.readings.find(value => keyOf(value) === "derived.structural.reading.outpost_candidate@1")!;
+        const occupied = child.readings.find(value => keyOf(value) === "derived.structural.reading.occupied_outpost@1")!;
+        expect(calls.mock.calls.filter(([route, input]) => route === "rules.square.reading.control@1" && "fen" in input && input.fen === child.afterFen)).toHaveLength(1);
+        expect(calls.mock.calls.filter(([route, input]) => route === "derived.structural.reading.outpost_candidate@1" && "control" in input && input.control === control && "future" in input && input.future === future)).toHaveLength(1);
+        expect(calls.mock.calls.filter(([route, input]) => route === "derived.structural.reading.occupied_outpost@1" && "source" in input && input.source === candidate)).toHaveLength(1);
+        expect(evidenceValueReceipt(candidate).sourceDigests).toEqual([evidenceValueReceipt(control).payloadDigest, evidenceValueReceipt(future).payloadDigest]);
+        expect(evidenceValueReceipt(occupied).sourceDigests).toEqual([evidenceValueReceipt(candidate).payloadDigest]);
+        expect(candidate.payload).toMatchObject({ basis: "future_file", candidates: [] });
+        expect(occupied.payload).toMatchObject({ basis: "future_file", occupied: [] });
+        const setup = child.readings.find(value => keyOf(value) === "rules.structural.reading.fianchetto_setup@1")!;
+        const screen = child.readings.find(value => keyOf(value) === "rules.structural.reading.fianchetto_knight_screen@1")!;
+        expect(setup.payload).toMatchObject({ fen: child.afterFen, setups: [] });
+        expect(screen.payload).toMatchObject({ fen: child.afterFen, screens: [] });
+        expect(calls.mock.calls.filter(([route, input]) => route === "rules.structural.reading.fianchetto_knight_screen@1" && "source" in input && input.source === setup)).toHaveLength(1);
+        expect(evidenceValueReceipt(screen).sourceDigests).toEqual([evidenceValueReceipt(setup).payloadDigest]);
+      }
+      const quiet = result.receipt.packet.candidates.find(child => child.moveUci === "a8a7")!;
+      expect(quiet.readings.find(value => keyOf(value) === "rules.structural.reading.king_opposition@3")!.payload).toMatchObject({ opposition: { color: "black" } });
+      expect(result.receipt.packet.compilerVersion).toBe(7);
+    } finally { calls.mockRestore(); }
+  });
+
+  it("collects actual nonempty future-only outpost/occupation snapshots at the real child boundary", () => {
+    const readings = candidateChildReadings("7k/2p5/8/4N3/3P4/8/8/7K w - - 0 1");
+    expect(readings.find(value => keyOf(value) === "derived.structural.reading.outpost_candidate@1")?.payload).toMatchObject({ candidates: expect.arrayContaining([expect.objectContaining({ color: "white", square: "e5" })]) });
+    expect(readings.find(value => keyOf(value) === "derived.structural.reading.occupied_outpost@1")?.payload).toMatchObject({ occupied: expect.arrayContaining([expect.objectContaining({ occupant: { color: "white", role: "knight", square: "e5" } })]) });
+    expect(readings.filter(value => ["derived.square.reading.future_file_challenge@1", "derived.square.reading.capture_migration_reach@1", "derived.structural.reading.outpost_candidate@1", "derived.structural.reading.occupied_outpost@1"].includes(keyOf(value)))).toHaveLength(4);
+  });
+
+  it("collects candidate-role/centre facts from each original root move, not an opponent child", () => {
+    const calls = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      const result = compileCandidatePopulation({ beforeFen: "7k/8/8/8/8/2P5/8/K7 w - - 0 1", ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
+      if (result.kind !== "ready") throw Error(JSON.stringify(result));
+      const root = result.receipt.legalMovesInput;
+      for (const row of result.receipt.packet.candidates) {
+        const role = row.readings.find(value => keyOf(value) === "rules.mobility.reading.candidate_role@1")!;
+        expect(role.payload).toMatchObject({ fen: root.payload.fen, moveUci: row.moveUci, turn: "white" });
+        expect(calls.mock.calls.filter(([route, input]) => route === "rules.mobility.reading.candidate_role@1" && "position" in input && input.position === root && "moveUci" in input && input.moveUci === row.moveUci)).toHaveLength(1);
+        expect(evidenceValueReceipt(role).sourceDigests).toEqual([evidenceValueReceipt(root).payloadDigest]);
+        expect(calls.mock.calls.filter(([route, input]) => route === "rules.mobility.reading.pawn_extended_center_destination@1" && "source" in input && input.source === role)).toHaveLength(1);
+        const centre = row.readings.filter(value => keyOf(value) === "rules.mobility.reading.pawn_extended_center_destination@1");
+        if (row.moveUci === "c3c4") {
+          expect(centre).toHaveLength(1);
+          expect(centre[0]!.payload).toEqual(role.payload);
+          expect(evidenceValueReceipt(centre[0]!).sourceDigests).toEqual([evidenceValueReceipt(role).payloadDigest]);
+        } else expect(centre).toEqual([]);
+      }
+      const setup = candidateChildReadings("7k/8/8/8/8/5NP1/6B1/K7 w - - 0 1");
+      expect(setup.find(value => keyOf(value) === "rules.structural.reading.fianchetto_knight_screen@1")!.payload).toMatchObject({ screens: [expect.objectContaining({ knight: { color: "white", role: "knight", square: "f3" } })] });
+    } finally { calls.mockRestore(); }
+  });
+});
 
 describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet.md)", () => {
   it("criterion 1/27: the caller supplies only beforeFen, a standard ruleset literal and a closed scope", () => {
@@ -234,7 +324,7 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     const { groups, abstentions } = deriveCandidatePacketProjectionGroups();
     expect(checkCandidatePacketProjectionGroups(groups, CANDIDATE_COLLECTOR_PROJECTION_KEYS)).toEqual([]);
     expect(renderCandidatePacketProjections()).toContain('"rules.tactic.event.loose_piece@1"');
-    expect(abstentions).toEqual({ "rules.tactic.event.loose_piece@1": ["invalid_turn_clone"] });
+    expect(abstentions).toEqual({ "rules.tactic.event.loose_piece@1": ["invalid_turn_clone"], "derived.tactic.defender_exposure@2": ["invalid_turn_clone"] });
     const mutate = (change: (value: Record<string, string[]>) => void) => {
       const copy = Object.fromEntries(Object.entries(CANDIDATE_COLLECTOR_PROJECTION_KEYS).map(([group, keys]) => [group, [...keys] as string[]]));
       change(copy);
@@ -247,12 +337,12 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     expect(mutate((value) => { (value["reading.child"] as unknown[]).push(7); })).toEqual(expect.arrayContaining([expect.stringMatching(/^non-literal/u)]));
     expect(mutate((value) => { value["event.extra"] = []; })).toEqual(expect.arrayContaining([expect.stringMatching(/^extra group/u)]));
 
-    // Twenty child readings, observed by executing the moved authority, plus exchange and fork survival.
+    // Thirty-one child routes plus two exact-root candidate readings, exchange and fork survival.
     const observedChild = new Set(candidateChildReadings("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1").map(keyOf));
     expect(observedChild).toEqual(new Set(CANDIDATE_COLLECTOR_PROJECTION_KEYS["reading.child"]));
-    expect(observedChild.size).toBe(20);
-    expect(new Set(LOCAL_CANDIDATE_READING_PROJECTION_KEYS)).toEqual(new Set([...observedChild, "rules.exchange.predicate.legal_exchange@1", "derived.tactic.fork_survives_reply@1"]));
-    expect(LOCAL_CANDIDATE_READING_PROJECTION_KEYS).toHaveLength(22);
+    expect(observedChild.size).toBe(31);
+    expect(new Set(LOCAL_CANDIDATE_READING_PROJECTION_KEYS)).toEqual(new Set([...observedChild, "rules.exchange.predicate.legal_exchange@1", "derived.tactic.nonterminal_fork_survival@1", "rules.mobility.reading.candidate_role@1", "rules.mobility.reading.pawn_extended_center_destination@1"]));
+    expect(LOCAL_CANDIDATE_READING_PROJECTION_KEYS).toHaveLength(35);
 
     // Prevalence is not schema: an observed sweep is a strict subset of the closure and may miss members.
     const observed = new Set<string>();
@@ -270,32 +360,52 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     const id = "derived.tactic.defender_exposure", manifest = PRIMARY_EVIDENCE_MANIFEST;
     expect(manifest.projections.filter(value => value.id === id).map(value => value.version)).toEqual([1, 2]);
     const { groups } = deriveCandidatePacketProjectionGroups(manifest);
-    expect(groups["event.breadth"]).toContain(`${id}@1`);
-    expect(groups["event.breadth"]).not.toContain(`${id}@2`);
-    const current = manifest.semanticEvents.find(value => value.projection.id === id)!;
+    expect(groups["event.breadth"]).toContain(`${id}@2`);
+    expect(groups["event.breadth"]).not.toContain(`${id}@1`);
+    const current = manifest.semanticEvents.find(value => value.projection.id === id && value.projection.version === 2)!;
     // Removing the actual collector identity must refuse, not fall back to the internal source.
     expect(() => deriveCandidatePacketProjectionGroups({ ...manifest,
       semanticEvents: manifest.semanticEvents.filter(value => value !== current),
     })).toThrow(/does not resolve to exactly one/u);
-    // Two active one-edge identities are ambiguous, never "pick latest" or "pick first".
+    // A separately registered successor does not change this operation's explicit @2 output.
+    expect(deriveCandidatePacketProjectionGroups({ ...manifest,
+      semanticEvents: [...manifest.semanticEvents, { ...current, projection: { id, version: 3 } }],
+    }).groups["event.breadth"]).toEqual(groups["event.breadth"]);
+    // Exact duplicates remain invalid; there is no first-match or latest-version fallback.
     expect(() => deriveCandidatePacketProjectionGroups({ ...manifest,
-      semanticEvents: [...manifest.semanticEvents, { ...current, projection: { id, version: 2 } }],
+      semanticEvents: [...manifest.semanticEvents, current],
+    })).toThrow(/does not resolve to exactly one/u);
+    const material = "derived.material.event.role_asymmetry";
+    // Historical declarations remain, but retired v1 roots are not current semantic events.
+    for (const historical of [id, material]) {
+      expect(manifest.projections.filter(value => value.id === historical).map(value => value.version).sort()).toEqual([1, 2]);
+      expect(manifest.projections.find(value => value.id === historical && value.version === 1)?.disposition?.kind).toBe("retired");
+      expect(manifest.semanticEvents.filter(value => value.projection.id === historical).map(value => value.projection.version)).toEqual([2]);
+    }
+    expect(groups["event.breadth"]).toContain(`${material}@2`);
+    expect(groups["event.breadth"]).not.toContain(`${material}@1`);
+    const currentMaterial = manifest.projections.find(value => value.id === material && value.version === 2)!;
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest,
+      projections: manifest.projections.filter(value => value !== currentMaterial),
+    })).toThrow(/does not resolve to exactly one/u);
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest,
+      projections: [...manifest.projections, currentMaterial],
     })).toThrow(/does not resolve to exactly one/u);
   });
 
   it("criterion 9: child closure follows actual executed exact sources, not the newest same-name registration", () => {
     const manifest = PRIMARY_EVIDENCE_MANIFEST, id = "derived.material.reading.role_signature";
-    const current = manifest.projections.find(value => value.id === id && value.version === 1)!;
-    expect(manifest.projections.some(value => value.id === id && value.version === 2)).toBe(true);
+    const current = manifest.projections.find(value => value.id === id && value.version === 2)!;
+    expect(manifest.projections.some(value => value.id === id && value.version === 1)).toBe(true);
     const { groups } = deriveCandidatePacketProjectionGroups(manifest);
-    expect(groups["reading.child"]).toContain(`${id}@1`);
-    expect(groups["reading.child"]).not.toContain(`${id}@2`);
+    expect(groups["reading.child"]).toContain(`${id}@2`);
+    expect(groups["reading.child"]).not.toContain(`${id}@1`);
     expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: manifest.projections.filter(value => value !== current) })).toThrow(/exactly one compiled local reading/u);
     expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: [...manifest.projections, current] })).toThrow(/exactly one compiled local reading/u);
     expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: manifest.projections.map(value => value === current ? { ...value, role: "event" as const } : value) })).toThrow(/exactly one compiled local reading/u);
   });
 
-  it("criterion 9: projection-identity multisets are unchanged by the migration on ordinary, capture, double-attack and abstention fixtures", () => {
+  it("criterion 9: the packet matches the actual current collectors on ordinary, capture, double-attack and abstention fixtures", () => {
     for (const [fen, move] of [[INITIAL_FEN, "g1f3"], [CAPTURE, "e4d5"], [FORK, "b5c7"], [CHECK_EVASION, "e1e2"]] as const) {
       const receipt = compiled(fen, CANDIDATE_WIDE_SCOPE);
       const row = candidatePlayedRow(receipt, move);
@@ -304,7 +414,7 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
       const readingKeys = row.readings.map(keyOf);
       expect(multiset(readingKeys.filter((key) => CANDIDATE_COLLECTOR_PROJECTION_KEYS["reading.child"].includes(key as never)))).toEqual(multiset(childKeys));
     }
-    expect(candidatePlayedRow(compiled(FORK, CANDIDATE_WIDE_SCOPE), "b5c7").readings.map(keyOf)).toContain("derived.tactic.fork_survives_reply@1");
+    expect(candidatePlayedRow(compiled(FORK, CANDIDATE_WIDE_SCOPE), "b5c7").readings.map(keyOf)).toContain("derived.tactic.nonterminal_fork_survival@1");
     expect(candidatePlayedRow(compiled(CAPTURE, CANDIDATE_WIDE_SCOPE), "e4d5").readings.map(keyOf)).toContain("rules.exchange.predicate.legal_exchange@1");
     // The abstention fixture: every row of an in-check root publishes the typed loose-piece abstention.
     const check = compiled(CHECK_EVASION, CANDIDATE_EVENTS_SCOPE);
@@ -315,21 +425,29 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     expect(compiled(CHECK_EVASION, CANDIDATE_READINGS_SCOPE).packet.candidates.every((row) => row.abstentions.length === 0)).toBe(true);
   });
 
+  it.each(["rules.mobility.reading.candidate_role", "rules.mobility.reading.pawn_extended_center_destination"])("criterion 9: exact candidate closure refuses missing/duplicate/wrong-role %s", id => {
+    const manifest = PRIMARY_EVIDENCE_MANIFEST, current = manifest.projections.find(value => value.id === id && value.version === 1)!;
+    expect(current).toBeDefined();
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: manifest.projections.filter(value => value !== current) })).toThrow(/exactly one compiled local reading/u);
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: [...manifest.projections, current] })).toThrow(/exactly one compiled local reading/u);
+    expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: manifest.projections.map(value => value === current ? { ...value, role: "event" as const } : value) })).toThrow(/exactly one compiled local reading/u);
+  });
+
   it("criterion 10: the two enumerators are one, and an unevaluated population reports zero evaluated alternatives", () => {
     const afterFen = "r2q1rk1/pp2bppp/2n1bn2/2Pp4/8/2N1PN2/PP2BPPP/R1BQ1RK1 b - - 0 10";
-    const shipped = selectLocalSemanticEvidence(ref("research.r2_candidate"), { beforeFen: MIDDLEGAME, moveUci: "d4c5", afterFen });
+    const shipped = selectLocalSemanticEvidence(ref("research.r2_candidate", 2), { beforeFen: MIDDLEGAME, moveUci: "d4c5", afterFen });
     const wide = compiled(MIDDLEGAME, CANDIDATE_WIDE_SCOPE);
-    const projected = projectCandidatePopulationReceipt(wide, CANDIDATE_EVENTS_SCOPE);
+    const projected = projectCandidatePopulationReceipt(wide, CANDIDATE_WIDE_SCOPE);
     if (projected.kind !== "ready") throw new Error("projection failed");
-    const full = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt: projected.receipt, moveUci: "d4c5" });
+    const full = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 2), { receipt: projected.receipt, moveUci: "d4c5" });
     const families = (result: typeof shipped) => result.selected.map((item) => `${item.event.projection.id}:${item.event.sign}`);
     expect(families(shipped)).toEqual(families(full));
-    expect(families(shipped)).toEqual(["derived.pawn.event.transitions:state", "rules.structural.event.backward_pawn:gained"]);
+    expect(families(shipped)).not.toContain("rules.structural.event.backward_pawn:gained");
     // The narrow eight-family closure selected these before the repair (RFC §1.5, measured at HEAD).
     expect(families(shipped)).not.toEqual(["rules.structural.event.backward_pawn:gained", "rules.structural.event.half_open_file:lost"]);
     expect(shipped.population).toEqual({ legalAlternatives: 33, evaluatedAlternatives: 33 });
-    const check = compiled(CHECK_EVASION, CANDIDATE_EVENTS_SCOPE);
-    const unevaluated = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt: check, moveUci: "e1e2" });
+    const check = compiled(CHECK_EVASION, CANDIDATE_WIDE_SCOPE);
+    const unevaluated = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 2), { receipt: check, moveUci: "e1e2" });
     expect(unevaluated.population).toEqual({ legalAlternatives: check.packet.candidates.length - 1, evaluatedAlternatives: 0 });
     expect(unevaluated.emptyReason?.id).toBe("counterfactual_population_incomplete");
   });
@@ -351,7 +469,7 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
       { legalConvention: "rules.mobility.reading.legal_moves@2" },
       { moveIdentityConvention: "standard-uci-king-destination@1" },
       { manifestDigest: "0".repeat(64) },
-      { compilerVersion: 2 },
+      { compilerVersion: 1 },
       { ruleset: "chess960" },
       { scope: "events" },
     ];

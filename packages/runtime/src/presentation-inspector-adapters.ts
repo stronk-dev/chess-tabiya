@@ -1,3 +1,5 @@
+import { FOUNDATION_DETAIL_CAPTIONS, isFoundationDetailKind } from "./foundation-snapshot-detail.js";
+import { FOUNDATION_SNAPSHOT_FACT_RENDERERS, FOUNDATION_SNAPSHOT_STATEMENTS, assertFoundationSnapshotPayloadRef } from "./foundation-snapshot-presentation.js";
 // rfc/evidence-presentation.md Checkpoint B / rfc/module-registration.md A5 — the exact pair-keyed
 // presentation adapters of `module.full_inspector@1`, `module.postcommit_nudge@1` and the
 // `module.review_map@1` pairs outside Checkpoint A's list, with their registered fact renderers.
@@ -9,8 +11,9 @@
 // notation, registered labels and the declared convention's label. No template grades, ranks,
 // recommends or infers purpose; a board overlay only draws squares and moves the payload retains.
 //
-// A construct whose payload retains no witness for a board form (an empty population) throws a
-// TypeError: an empty reading is an abstention upstream, never an all-clear fact.
+// Precursor witness-bound constructors keep their current semantics until actual cutover.
+// Accepted D3984 Full2 whole readings instead retain attributed text and optional actual
+// geometry, including exact empty/unavailable states; no all-clear inference follows.
 //
 // This file imports only types from `presentation-contract.ts`; the registry injects its kit.
 
@@ -20,17 +23,146 @@ import { makeSan } from "chessops/san";
 import type { Color, Role, SquareName } from "chessops/types";
 import { parseUci } from "chessops/util";
 
-import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
-import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
-import { controlledSquareCount, factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, type SchemaPiece } from "./presentation-schema.js";
+import { assertDeclaredEvidence, evidenceValueReceipt, type DeclaredEvidence, type EvidenceForm, type VersionedEvidenceId } from "./evidence-contract.js";
+import type { AdapterSpec, ComponentValue, ConventionReceipt, FactOperandsByRenderer, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
+import { assertSquareSetGeometry, bindFactStatement } from "./presentation-fact-contract.js";
+import { factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, PresentationSchemaError, s, side, type SchemaPiece } from "./presentation-schema.js";
 import type { SquareControlReading } from "./square-control.js";
-import { renderMoveQualityGrade } from "./grade.js";
+import { pawnContactCaptionOperands, squareControlCaptionOperands } from "./presentation-play-adapters.js";
+import { renderMoveQualityGrade, renderMoveQualityGradeSummary } from "./grade.js";
+import { currentRecordedModuleRefs, isNudgeRecordedCaptionBinding, PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES } from "./evidence-catalog.js";
+import { parseInspectorStructuralBeforeAfterOperands, renderInspectorStructuralBeforeAfter } from "./inspector-structural-event-presentation.js";
+import { assertRegisteredShapeFiringWire, parseRegisteredShapeFiringOperands, renderRegisteredShapeFiring, registeredShapeFiringOperands } from "./registered-shape-presentation.js";
+import { recordedEvalOperands, recordedWdlOperands, recordedPvOperands, recordedTablebaseOperands,
+  recordedTablebaseCategoryOperands, recordedTablebaseDistanceOperands, recordedFieldText as reportField,
+  RECORDED_TABLEBASE_LABELS, recordedInspectorEvalOperands, recordedInspectorWdlOperands,
+  recordedInspectorPvOperands, recordedInspectorTablebaseOperands, recordedInspectorTablebaseViewOperands } from "./recorded-inspector-presentation.js";
+import { INSPECTOR_DETAIL_SOURCES, inspectorDetailSquares, parseInspectorDetailPayload, renderInspectorDetail, type InspectorDetailKind } from "./inspector-detail.js";
+import type { ExplorerInspectorPopulation } from "./explorer-summary.js";
+import type { MaiaNodeDistribution, MaiaNodeCandidateWdl } from "./maia-node.js";
+import { parseRecordedAnalyzeLineOperands, renderRecordedAnalyzeLine } from "./recorded-analyze-presentation.js";
+import type { RecordedAnalyzeArm } from "./recorded-analyze-line.js";
+import { readRecordedAnalyzeLineInvocation } from "./internal/evidence-value-routes.js";
+import { recordedMovePathPositions } from "./presentation-move-path.js";
+import { INSPECTOR_SOURCE_TOPICS } from "./inspector-source-topics.js";
+import { FOUNDATION_EDGE_FACT_RENDERERS, FOUNDATION_EDGE_STATEMENTS, FOUNDATION_COMPACT_FACT_RENDERERS, FOUNDATION_COMPACT_STATEMENTS, assertFoundationEdgePayloadRef } from "./foundation-edge-presentation.js";
+import { INSPECTOR_WHOLE_FACT_RENDERERS, INSPECTOR_WHOLE_READING_GEOMETRY, inspectorWholeReadingComponents, inspectorWholeReadingGeometryRequired, isInspectorWholeReading } from "./inspector-whole-reading-presentation.js";
+
+type StatementContract = readonly [renderer: string, convention: string, binding?: "recorded_run"];
+/** Exact wire semantics belong to the same registered source adapter as construction, not a UI
+ * whitelist of globally valid renderers. Multiple tuples are only an authored source variant. */
+const INSPECTOR_SOURCE_STATEMENTS: Readonly<Record<string, readonly StatementContract[]>> = Object.freeze({
+  ...Object.fromEntries(STRUCTURAL_EVENT_FAMILIES.filter(family => family !== "backward_pawn" && family !== "king_opposition").map(family => [`rules.structural.event.${family}@1`, [["inspector.structural_before_after@1", "board-rules@1"]]])),
+  ...Object.fromEntries(Object.entries(FOUNDATION_EDGE_STATEMENTS).map(([ref, [renderer, convention]]) => [ref, [[renderer, convention] as const]])),
+  ...Object.fromEntries(Object.entries(FOUNDATION_SNAPSHOT_STATEMENTS).map(([ref, [renderer, convention]]) => [ref, [[renderer, convention] as const]])),
+  "derived.review.analysis_typed_pv@1": [["review.analysis_typed_pv@1", "recorded-run@1"]],
+  "derived.review.analysis_recorded_pv@1": [["review.analysis_recorded_pv@1", "recorded-run@1", "recorded_run"]],
+  "derived.review.analysis_recorded_first@1": [["review.analysis_recorded_first@1", "recorded-run@1", "recorded_run"]],
+  "rules.tactic.consequence.reply_breadth@1": [["inspector.reply_breadth@1", "board-rules@1"]],
+  "rules.castling.reading.rights@1": [["play.castling_rights@1", "board-rules@1"]],
+  "rules.castling.reading.legality@1": [["play.castling_legality@1", "board-rules@1"]],
+  "derived.tactic.discovered_executed@1": [["inspector.discovered_executed@1", "threat-convention@1"]],
+  "derived.tactic.nonterminal_fork_survival@1": [["inspector.fork_survives@1", "threat-convention@1"]],
+  "rules.square.reading.control@1": [["play.square_control@1", "piece-geometry@1"]],
+  "rules.square.event.control@1": [["inspector.square_control_event@1", "piece-geometry@1"]],
+  "rules.mobility.event.piece_destinations@1": [["inspector.piece_destinations_event@1", "piece-geometry@1"]],
+  "derived.pawn.sequence.contact_timing@3": [["inspector.contact_timing@1", "recorded-run@1", "recorded_run"]],
+  "derived.pawn.sequence.harassment_pressure@3": [["inspector.harassment@1", "recorded-run@1", "recorded_run"]],
+  "derived.tactic.sequence.defender_consequence@3": [["inspector.defender_consequence@1", "recorded-run@1", "recorded_run"]],
+  "derived.material.reading.role_signature@2": [["inspector.role_signature@1", "board-rules@1"]],
+  "derived.material.event.role_asymmetry@2": [["inspector.role_asymmetry@1", "board-rules@1"]],
+  "rules.king.reading.zone_state@1": [["inspector.king_zone@1", "piece-geometry@1"]],
+  "recorded.inspector.eval_packet@1": [["inspector.recorded_eval@1", "recorded-run@1", "recorded_run"]],
+  "recorded.inspector.wdl_packet@1": [["inspector.recorded_wdl@1", "recorded-run@1", "recorded_run"]],
+  "recorded.inspector.pv_packet@1": [["inspector.recorded_pv@1", "recorded-run@1", "recorded_run"]],
+  "recorded.inspector.tablebase_packet@1": [["inspector.recorded_tablebase@1", "recorded-run@1", "recorded_run"]],
+  "derived.inspector.tablebase_category@1": [["inspector.recorded_tablebase_category@1", "recorded-run@1", "recorded_run"]],
+  "derived.inspector.tablebase_distance@1": [["inspector.recorded_tablebase_distance@1", "recorded-run@1", "recorded_run"]],
+  "derived.maia.node_distribution@1": [["consumer.maia_node_distribution@1", "maia-reported-window@1"]],
+  "derived.maia.node_candidate_wdl@1": [["consumer.maia_node_candidate_wdl@1", "maia-reported-window@1"]],
+  "derived.explorer.inspector_population@1": [["consumer.explorer_population@1", "explorer-population@1"]],
+  "recorded.engine.eval@1": [],
+  "recorded.tablebase.result@1": [["inspector.tablebase@1", "recorded-engine@1"]],
+  "theory.shapes.firing@3": [["inspector.registered_shape_firing@2", "shape-catalogue@1"]],
+  "rules.phase.reading@2": [["play.phase@1", "phase-bands@1"]],
+  "derived.pivotal.irreversibility@1": [["inspector.pivotal@1", "board-rules@1"]],
+  "derived.pivotal.phase_change@2": [["inspector.pivotal@1", "phase-bands@1"]],
+  "derived.pivotal.human_divergence@2": [["inspector.pivotal@1", "recorded-run@1", "recorded_run"]],
+  "derived.pivotal.option_collapse@2": [["inspector.pivotal@1", "board-rules@1"]],
+  "derived.compare.structure_delta@2": [["play.compare_structure@1", "pawn-structure@1"], ["play.named_structure@1", "structure-catalogue@1"]],
+  "derived.compare.eval_delta@2": [["compare.recorded_delta@2", "recorded-comparison@1", "recorded_run"]],
+  "derived.story.rank@3": [["inspector.story_rank@1", "recorded-run@1", "recorded_run"]],
+  "theory.opening.catalogue_membership@1": [["inspector.catalogue_membership@1", "opening-catalogue@1"]],
+  "derived.opening.deepest_reached@2": [["inspector.opening_reached@1", "opening-catalogue@1"]],
+  "derived.tactic.attraction_observed@3": [["inspector.attraction@1", "recorded-run@1", "recorded_run"]],
+  "derived.tactic.check_zwischenzug_observed@3": [["inspector.zwischenzug@1", "recorded-run@1", "recorded_run"]],
+  "derived.tactic.deflection_observed@3": [["inspector.deflection@1", "recorded-run@1", "recorded_run"]],
+  "derived.tactic.interference_observed@3": [["inspector.interference@1", "recorded-run@1", "recorded_run"]],
+  "derived.tactic.line_blocker_clearance_observed@3": [["inspector.line_clearance@1", "recorded-run@1", "recorded_run"]],
+  "derived.tactic.overload_exploitation_observed@3": [["inspector.overload@1", "recorded-run@1", "recorded_run"]],
+  "derived.tactic.square_clearance_observed@3": [["inspector.square_clearance@1", "recorded-run@1", "recorded_run"]],
+  "rules.tactic.event.defender_removed@1": [["inspector.defender_removed@1", "piece-geometry@1"]],
+  "rules.tactic.event.defender_duty_relocated@1": [["inspector.duty_relocated@1", "piece-geometry@1"]],
+  "rules.tactic.predicate.overload_conflict@1": [["inspector.overload_conflict@1", "threat-convention@1"]],
+  "rules.tactic.consequence.forced_mate_after_move@1": [["inspector.forced_mate@1", "board-rules@1"]],
+  "rules.tactic.consequence.forced_mate_after_move@2": [["inspector.forced_mate@1", "board-rules@1"]],
+});
+
+function assertInspectorWireComponent(ref: string, component: ComponentValue, owner: string, producer: VersionedEvidenceId): void {
+  const fail = (): never => { throw new TypeError("Inspector component crosses its registered source semantics"); };
+  if (ref === "theory.shapes.firing@3") assertRegisteredShapeFiringWire(component, { producer,
+    projection: { id: "theory.shapes.firing", version: 3 }, evidenceDigest: owner });
+  const declared = PRIMARY_EVIDENCE_MANIFEST.projections.find(projection => `${projection.id}@${projection.version}` === ref);
+  if (declared === undefined || producer.id !== declared.producer.id || producer.version !== declared.producer.version) return fail();
+  if (ref === "recorded.engine.eval@1") {
+    if (component.id !== "magnitude" || !["centipawn", "mate_in"].includes(component.operand.unit.kind)
+      || !Number.isSafeInteger(component.operand.value) || component.operand.unit.kind === "mate_in" && component.operand.value === 0
+      || component.operand.saturated !== false || component.operand.convention.basis.kind !== "recorded_search"
+      || !["white", "not_applicable"].includes(component.operand.convention.perspective)) return fail();
+  }
+  if (component.id === "square_set" || component.id === "relation_overlay") {
+    if (component.operand.owner.factRef !== owner) return fail();
+  }
+  const statement = component.id === "fact_statement" ? component.operand : component.id === "square_set" ? component.operand.caption : null;
+  if (statement !== null) {
+    if (isInspectorWholeReading(ref)) {
+      inspectorWholeReadingGeometryRequired(ref, statement);
+      const convention = ["rules.structural.reading.space@1", "rules.pawn.reading.candidate_majority@1"].includes(ref) ? "pawn-structure@1"
+        : ["rules.mobility.reading.piece_destinations@1", "rules.tactic.reading.defender_duty_set@1"].includes(ref) ? "piece-geometry@1"
+        : ["rules.tactic.reading.loose_piece@1", "rules.tactic.reading.ray_classification@1", "rules.tactic.reading.trapped_piece@1", "rules.tactic.reading.back_rank@1", "rules.tactic.reading.discovered_latency@1", "rules.tactic.consequence.threat@1"].includes(ref) ? "threat-convention@1" : "board-rules@1";
+      if (statement.binding !== "declared_convention" || statement.convention !== convention) return fail();
+      if (ref === "rules.mobility.reading.legal_moves@1" && component.id === "square_set"
+        && statement.rendererId === "play.legal_moves@1") assertSquareSetGeometry(component, owner, statement.operands.squares, "blue");
+    } else if (ref.startsWith("derived.inspector.detail.")) {
+      const kind = ref.slice("derived.inspector.detail.".length, -2);
+      if (statement.rendererId !== `inspector.detail.${kind}@1` || statement.binding !== "declared_convention" || statement.convention !== (isFoundationDetailKind(kind) ? FOUNDATION_DETAIL_CAPTIONS[kind] : "piece-geometry@1")) return fail();
+      if (isFoundationDetailKind(kind)) assertFoundationSnapshotPayloadRef(statement.operands, owner);
+    } else {
+      const allowed = INSPECTOR_SOURCE_STATEMENTS[ref];
+      if (allowed === undefined || !allowed.some(([renderer, convention, binding]) => statement.rendererId === renderer && statement.convention === convention && statement.binding === (binding ?? "declared_convention"))) return fail();
+      if (Object.hasOwn(FOUNDATION_EDGE_STATEMENTS, ref)) assertFoundationEdgePayloadRef(statement.operands, owner);
+      if (Object.hasOwn(FOUNDATION_SNAPSHOT_STATEMENTS, ref)) assertFoundationSnapshotPayloadRef(statement.operands, owner);
+      if (ref.startsWith("derived.pivotal.") && (statement.operands as { kind?: string }).kind !== ref.split(".").at(-1)!.split("@")[0]) return fail();
+      if (statement.rendererId === "inspector.structural_before_after@1" && ref !== `rules.structural.event.${statement.operands.family}@1`) return fail();
+    }
+  }
+  const convention = "convention" in component.operand ? component.operand.convention : undefined;
+  if (convention !== undefined && convention !== null && typeof convention === "object" && "sourceProjection" in convention) {
+    if (`${convention.sourceProjection.id}@${convention.sourceProjection.version}` !== ref || convention.sourceEvidenceDigest !== owner
+      || convention.producer.id !== producer.id || convention.producer.version !== producer.version) return fail();
+  }
+}
 
 // ---------------------------------------------------------------------------------------------
 // Shared phrasing
 // ---------------------------------------------------------------------------------------------
 
 const SQUARES = s.arr(s.square);
+const nonemptySquareSet = (value: unknown, label: string): readonly SquareName[] => {
+  const squares = s.arr(s.square, { min: 1 })(value, label);
+  if (new Set(squares).size !== squares.length) throw new PresentationSchemaError(`${label} must contain deduplicated squares`);
+  return squares;
+};
 const placed = s.obj({ piece: pieceSchema, square: s.square });
 type Placed = { readonly piece: SchemaPiece; readonly square: SquareName };
 const placedPhrase = (value: Placed): string => pieceOn(value.piece, value.square);
@@ -94,7 +226,16 @@ const PAWN_TRANSITION_KINDS = Object.freeze(["contact_executed", "moved_pawn_bec
 const TABLEBASE_CATEGORIES = Object.freeze({ win: "a win", loss: "a loss", draw: "a draw", "cursed-win": "a win that the fifty-move rule turns into a draw", "blessed-loss": "a loss that the fifty-move rule turns into a draw" } as const);
 type TablebaseCategory = keyof typeof TABLEBASE_CATEGORIES;
 
-const PIVOTAL_KINDS = s.lit("phase_change", "human_divergence", "option_collapse", "irreversibility");
+const pivotalOperands = s.union("kind", {
+  phase_change: s.obj({ kind: s.lit("phase_change"), from: s.lit("opening", "middlegame", "endgame"), to: s.lit("opening", "middlegame", "endgame") }),
+  human_divergence: s.obj({ kind: s.lit("human_divergence"), model: s.str, band: s.nullable(s.nat), shares: s.arr(s.unit, { min: 1, max: 3 }) }),
+  option_collapse: s.obj({ kind: s.lit("option_collapse"), color: s.color, count: s.nat }),
+  irreversibility: s.union("subkind", {
+    castled: s.obj({ kind: s.lit("irreversibility"), subkind: s.lit("castled"), color: s.color }),
+    last_of_role: s.obj({ kind: s.lit("irreversibility"), subkind: s.lit("last_of_role"), color: s.color, role: s.role, queensOff: s.bool }),
+    pawn_break: s.obj({ kind: s.lit("irreversibility"), subkind: s.lit("pawn_break"), color: s.color }),
+  }),
+});
 const gradeScore = s.union("kind", {
   cp: s.obj({ kind: s.lit("cp"), value: s.int }),
   mate: s.obj({ kind: s.lit("mate"), movesTo: s.int }),
@@ -109,14 +250,21 @@ const gradePercent = (value: unknown, label: string): number => {
   return value as number;
 };
 const completeGradeScore = s.obj({ score: gradeScore, winPercent: gradePercent });
+const positiveGradeInteger = (value: unknown, label: string) => { const result = s.nat(value, label); if (result === 0) throw new TypeError(`${label} must be positive`); return result; };
 const completeGrade = s.obj({
   klass: s.lit("inaccuracy", "mistake", "blunder"), arm: s.lit("eval_delta", "mate_lost", "mate_allowed"),
   before: completeGradeScore, after: completeGradeScore, dropWinPercent: gradePercent,
   thresholdCrossed: (value: unknown, label: string) => typeof value === "number" ? gradePercent(value, label) : s.lit("mate_lost_tier", "mate_allowed_tier")(value, label),
-  convention: s.obj({ id: s.lit("grade-convention"), version: s.lit(1), context: s.lit("drill", "review", "imported_analysis") }),
-  engineId: s.str, lane: s.lit("recorded", "live"),
-}, { depth: s.nat, requestedMovetimeMs: s.nat });
-const gradeContextLabels = Object.freeze({ drill: "practice convention, version 1", review: "review convention, version 1", imported_analysis: "imported-game review convention, version 1" });
+  convention: s.obj({ id: s.lit("grade-convention"), version: s.lit(2) }),
+  engineId: s.str, lane: s.lit("recorded"),
+  bound: s.union("kind", { depth: s.obj({ kind: s.lit("depth"), requestedDepth: positiveGradeInteger }),
+    movetime: s.obj({ kind: s.lit("movetime"), requestedMs: positiveGradeInteger }), nodes: s.obj({ kind: s.lit("nodes"), requestedNodes: positiveGradeInteger }) }),
+  instrument: s.union("origin", {
+    provider_delivery: s.obj({ origin: s.lit("provider_delivery"), engineVersion: s.str, generation: s.nat }),
+    offline_engine: s.obj({ origin: s.lit("offline_engine"), engineVersion: s.str,
+      profile: s.obj({ threads: positiveGradeInteger, hashMb: positiveGradeInteger, multiPv: s.lit(1) }) }),
+  }),
+});
 
 const SEQUENCE_CONTACT_KINDS = s.lit("created_survived_reply", "created_executed_next_own_move");
 
@@ -124,7 +272,55 @@ const SEQUENCE_CONTACT_KINDS = s.lit("created_survived_reply", "created_executed
 // Registered fact renderers
 // ---------------------------------------------------------------------------------------------
 
+const detailRenderer = <K extends InspectorDetailKind>(kind: K) => factRenderer(
+  value => parseInspectorDetailPayload(kind, value),
+  value => renderInspectorDetail(parseInspectorDetailPayload(kind, value)),
+);
+const analyzeRenderer = (arm: RecordedAnalyzeArm) => factRenderer((value, label) => {
+  const parsed = parseRecordedAnalyzeLineOperands(value, label);
+  if (parsed.sourceArm !== arm) throw new TypeError("Analyze renderer crosses its exact recorded source arm");
+  return parsed;
+}, renderRecordedAnalyzeLine);
+
 export const INSPECTOR_FACT_RENDERERS = Object.freeze({
+  ...INSPECTOR_WHOLE_FACT_RENDERERS,
+  ...FOUNDATION_EDGE_FACT_RENDERERS,
+  ...FOUNDATION_COMPACT_FACT_RENDERERS,
+  ...FOUNDATION_SNAPSHOT_FACT_RENDERERS,
+  "inspector.structural_before_after@1": factRenderer(parseInspectorStructuralBeforeAfterOperands, renderInspectorStructuralBeforeAfter),
+  "review.analysis_typed_pv@1": analyzeRenderer("typed_pv"),
+  "review.analysis_recorded_pv@1": analyzeRenderer("recorded_bestline"),
+  "review.analysis_recorded_first@1": analyzeRenderer("recorded_search_first"),
+  "inspector.registered_shape_firing@2": factRenderer(parseRegisteredShapeFiringOperands, renderRegisteredShapeFiring),
+  "inspector.recorded_eval@1": factRenderer(recordedEvalOperands, value =>
+    `Stored report ${value.reportSeq}: centipawn number ${reportField(value.centipawns, String)}; mate-distance number ${reportField(value.mateIn, String)}; reported perspective ${reportField(value.perspective, side => side === "white" ? "White" : "side to move")}. Historical report only, not independently verified engine analysis or a move grade.`),
+  "inspector.recorded_wdl@1": factRenderer(recordedWdlOperands, value =>
+    `Stored report ${value.reportSeq}: win ${reportField(value.win, count => `${count}/1000`)}; draw ${reportField(value.draw, count => `${count}/1000`)}; loss ${reportField(value.loss, count => `${count}/1000`)}. These are the recorded numbers, not a newly verified prediction or a move grade.`),
+  "inspector.recorded_pv@1": factRenderer(recordedPvOperands, value =>
+    `Stored report ${value.reportSeq}: line ${reportField(value.line, moves => moves.length === 0 ? "reported with no moves" : moves.join(" "))}. A historical reported line, not a current recommendation or verified best continuation.`),
+  "inspector.recorded_tablebase_category@1": factRenderer(recordedTablebaseCategoryOperands, value =>
+    `Stored report ${value.reportSeq}: category ${reportField(value.category, category => RECORDED_TABLEBASE_LABELS[category])}. This records the report, not a fresh exact tablebase probe.`),
+  "inspector.recorded_tablebase_distance@1": factRenderer(recordedTablebaseDistanceOperands, value =>
+    `Stored report ${value.reportSeq}: category ${reportField(value.category, category => RECORDED_TABLEBASE_LABELS[category])}; signed distance to zeroing ${reportField(value.dtz, distance => distance === null ? "recorded without a distance value" : String(distance))}; precise signed distance to zeroing ${reportField(value.preciseDtz, distance => distance === null ? "recorded without a distance value" : String(distance))}; signed distance to mate ${reportField(value.dtm, distance => distance === null ? "recorded without a distance value" : String(distance))}. Recorded fields only; optimal play and a fresh exact probe are not established.`),
+  "inspector.recorded_tablebase@1": factRenderer(recordedTablebaseOperands, value =>
+    `Stored report ${value.reportSeq}: category ${reportField(value.category, category => RECORDED_TABLEBASE_LABELS[category])}; signed distance to zeroing ${reportField(value.dtz, distance => distance === null ? "recorded without a distance value" : String(distance))}; precise signed distance to zeroing ${reportField(value.preciseDtz, distance => distance === null ? "recorded without a distance value" : String(distance))}; signed distance to mate ${reportField(value.dtm, distance => distance === null ? "recorded without a distance value" : String(distance))}; piece count ${reportField(value.pieceCount, String)}. Historical fields only, not a fresh exact tablebase probe.`),
+  // Accepted D3802: exact typed operands, recomputed text, no caller-supplied sentences.
+  // Current consumer2 adapters/API adoption remain a separate part of the same cutover.
+  "inspector.detail.rays@1": detailRenderer("rays"),
+  "inspector.detail.square_control@1": detailRenderer("square_control"),
+  "inspector.detail.piece_destinations@1": detailRenderer("piece_destinations"),
+  "inspector.detail.destination_changes@1": detailRenderer("destination_changes"),
+  "inspector.detail.king_zone@1": detailRenderer("king_zone"),
+  "inspector.detail.defender_duties@1": detailRenderer("defender_duties"),
+  "inspector.detail.backward_pawns@1": detailRenderer("backward_pawns"),
+  "inspector.detail.pawn_file_groups@1": detailRenderer("pawn_file_groups"),
+  "inspector.detail.file_states@1": detailRenderer("file_states"),
+  "inspector.detail.future_file_challenges@1": detailRenderer("future_file_challenges"),
+  "inspector.detail.capture_migration_reaches@1": detailRenderer("capture_migration_reaches"),
+  "inspector.detail.outpost_candidates@1": detailRenderer("outpost_candidates"),
+  "inspector.detail.occupied_outposts@1": detailRenderer("occupied_outposts"),
+  "inspector.detail.backward_pawn_advance@1": detailRenderer("backward_pawn_advance"),
+
   // --- one-edge events (Post-commit Nudge, Review Map and Full Inspector)
   "inspector.structural_event@1": factRenderer(s.obj({ san: s.san, change: s.lit("appeared", "disappeared", "held"), observation: structuralObservation }), (value) =>
     `After ${value.san}, ${CHANGE_PHRASES[value.change]}: ${structuralWhat(value.observation)}.`),
@@ -208,7 +404,7 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
     `After ${value.san}, ${placedPhrase(value.subject)} stands on the ${value.file}-file, which ${value.open ? "has no pawns" : `has no ${value.color === null ? "" : `${side(value.color)} `}pawn`}.`),
   "inspector.captured_zone_defender@1": factRenderer(s.obj({ san: s.san, captured: placed, king: s.color, zone: s.arr(s.square, { min: 1 }) }), (value) =>
     `${value.san} removes ${placedPhrase(value.captured)}, which defended ${side(value.king)}'s king zone on ${listPhrase(value.zone)}.`),
-  "inspector.role_asymmetry@1": factRenderer(s.obj({ san: s.san, roles: s.arr(NON_KING_ROLES, { min: 1 }), before: s.nat, after: s.nat }), (value) =>
+  "inspector.role_asymmetry@1": factRenderer(s.obj({ san: s.san, roles: s.arr(NON_KING_ROLES, { min: 1 }), before: s.nat, after: s.nat, squares: nonemptySquareSet }), (value) =>
     `After ${value.san}, the sides' counts of ${listPhrase(value.roles.map((role) => PLURAL_ROLES[role]))} changed; the total difference by role went from ${value.before} to ${value.after}.`),
   "inspector.role_signature@1": factRenderer(s.obj({ colors: s.arr(s.obj({ color: s.color, pawn: s.nat, knight: s.nat, bishop: s.nat, rook: s.nat, queen: s.nat }), { min: 2, max: 2 }), difference: s.nat }), (value) =>
     `${value.colors.map((entry) => `${side(entry.color)}: ${listPhrase((["pawn", "knight", "bishop", "rook", "queen"] as const).map((role) => roleCount(entry[role], role)))}`).join(". ")}. Total difference by role: ${value.difference}.`),
@@ -220,8 +416,8 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
     `${capital(value.klass)} under the declared grade convention: the ${value.lane} engine evaluation went from ${gradeScoreText(value.before)} to ${gradeScoreText(value.after)} across this move, a drop of ${tenths(value.dropTenths)} win-points${value.arm === "eval_delta" ? ` against a threshold of ${value.threshold ?? 0}` : value.arm === "mate_lost" ? " in the lost-mate tier" : " in the allowed-mate tier"}.`),
   // The reduced predecessor stays readable on old wire receipts. Current Nudge construction
   // uses the complete registered operand and the one grade renderer, not a second mate table.
-  "inspector.move_quality_grade_complete@1": factRenderer(completeGrade, (value) =>
-    renderMoveQualityGrade(value).replace(`grade-convention@1/${value.convention.context}`, gradeContextLabels[value.convention.context])),
+  "grade.move_quality@2": factRenderer(completeGrade, renderMoveQualityGrade),
+  "play.move_quality_summary@1": factRenderer(completeGrade, renderMoveQualityGradeSummary),
   "inspector.avoidance@1": factRenderer(s.obj({ family: s.lit(...AVOIDANCE_FAMILIES), sign: s.lit("gained", "lost", "preserved", "state"), alternatives: s.nat, withFamily: s.nat }), (value) =>
     `Of the ${plural(value.alternatives, "other legal move")}, ${value.withFamily} would have ${value.family === "pawn_islands" ? PAWN_ISLAND_SIGNS[value.sign] : `${AVOIDANCE_SIGNS[value.sign]} ${AVOIDANCE_LABELS[value.family]}`}; the move played did not.`),
   "inspector.fork_survives@1": factRenderer(s.obj({ attacker: placed, targets: s.arr(placed, { min: 2 }), replies: s.nat, answering: s.nat }), (value) =>
@@ -243,9 +439,9 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
     `${capital(placedPhrase(value.blocker))} left the line from ${placedPhrase(value.slider)} to ${placedPhrase(value.target)}, which was then captured (${value.capture}).`),
   "inspector.square_clearance@1": factRenderer(s.obj({ vacating: placed, slider: placed, move: s.san }), (value) =>
     `${capital(placedPhrase(value.vacating))} left ${value.vacating.square}; later ${placedPhrase(value.slider)} used that square (${value.move}).`),
-  "inspector.zwischenzug@1": factRenderer(s.obj({ expected: s.arr(s.san, { min: 1 }), check: s.san, reply: s.san, recapture: s.san }), (value) =>
+  "inspector.zwischenzug@1": factRenderer(s.obj({ expected: s.arr(s.san, { min: 1 }), check: s.san, reply: s.san, recapture: s.san, recaptureSquare: s.square }), (value) =>
     `Instead of recapturing at once (${listPhrase(value.expected)}), ${value.check} gave check; after ${value.reply} the recapture ${value.recapture} was still available.`),
-  "inspector.overload@1": factRenderer(s.obj({ first: s.san, recapture: s.san, second: s.san, target: placed }), (value) =>
+  "inspector.overload@1": factRenderer(s.obj({ first: s.san, recapture: s.san, second: s.san, target: placed, defenderRecaptureSquare: s.square }), (value) =>
     `${value.first} was answered by the recapture ${value.recapture}, and ${placedPhrase(value.target)}, which the recapturing piece also defended, was then captured (${value.second}).`),
   // --- readings and derived facts (Full Inspector)
   "inspector.discovered_executed@1": factRenderer(s.obj({ san: s.san, screen: placed, slider: placed, target: placed, check: s.bool }), (value) =>
@@ -283,19 +479,15 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
     `${plural(value.duties, "defensive duty", "defensive duties")} held by ${plural(value.defenders, "piece")} under the declared defence-duty convention.`),
   "inspector.promotion_pressure_none@1": factRenderer(s.obj({ pawns: s.nat }), (value) => `${plural(value.pawns, "pawn")} under promotion pressure.`),
   "inspector.story_rank@1": factRenderer(s.obj({ moments: s.nat }), (value) => `The recorded story orders ${plural(value.moments, "moment")} for review.`),
-  "inspector.pivotal@1": factRenderer(s.obj({ kind: PIVOTAL_KINDS }, {
-    from: s.lit("opening", "middlegame", "endgame"), to: s.lit("opening", "middlegame", "endgame"),
-    model: s.str, band: s.nullable(s.nat), shares: s.arr(s.unit, { min: 1, max: 3 }),
-    color: s.color, count: s.nat, subkind: s.lit("castled", "last_of_role", "pawn_break"), role: s.role, queensOff: s.bool,
-  }), (value) => {
+  "inspector.pivotal@1": factRenderer(pivotalOperands, (value) => {
     switch (value.kind) {
-      case "phase_change": return `The game phase changed from ${value.from ?? "one phase"} to ${value.to ?? "another"} under the declared game-phase convention.`;
-      case "human_divergence": return `${value.model ?? "The human-move model"}${value.band === null || value.band === undefined ? "" : ` at ${value.band} rating`} split its top candidates here: ${(value.shares ?? []).map((share) => `${Math.round(share * 100)}%`).join(" / ")}.`;
-      case "option_collapse": return value.count === 1 ? `${side(value.color ?? "white")} had one legal move here.` : `${side(value.color ?? "white")} had ${plural(value.count ?? 0, "legal move")} here under the declared legal-continuation convention.`;
+      case "phase_change": return `The game phase changed from ${value.from} to ${value.to} under the declared game-phase convention.`;
+      case "human_divergence": return `${value.model}${value.band === null ? "" : ` at ${value.band} rating`} split its top candidates here: ${value.shares.map((share) => `${Math.round(share * 100)}%`).join(" / ")}.`;
+      case "option_collapse": return value.count === 1 ? `${side(value.color)} had one legal move here.` : `${side(value.color)} had ${plural(value.count, "legal move")} here under the declared legal-continuation convention.`;
       case "irreversibility":
-        if (value.subkind === "castled") return `${side(value.color ?? "white")} castled.`;
-        if (value.subkind === "last_of_role") return value.queensOff === true ? "The queens have left the board." : `${side(value.color ?? "white")} has no ${PLURAL_ROLES[value.role ?? "pawn"]} left.`;
-        return `${side(value.color ?? "white")} created or resolved a pawn contact.`;
+        if (value.subkind === "castled") return `${side(value.color)} castled.`;
+        if (value.subkind === "last_of_role") return value.queensOff ? "The queens have left the board." : `${side(value.color)} has no ${PLURAL_ROLES[value.role]} left.`;
+        return `${side(value.color)} created or resolved a pawn contact.`;
     }
   }),
   "inspector.opening_reached@1": factRenderer(s.obj({ eco: s.str, name: s.str }), (value) => `The deepest opening in the cited catalogue reached on this line: ${value.eco} ${value.name}.`),
@@ -346,12 +538,6 @@ function sanOf(fen: string, uci: string): string {
   if (san === "--") throw new TypeError("retained move is not legal in its retained position");
   return san;
 }
-/** The 1-based ply number of the move made from `fen`. */
-function plyOf(fen: string): number {
-  const fields = fen.split(" ");
-  const fullmove = Number(fields[5] ?? "1");
-  return (Number.isSafeInteger(fullmove) && fullmove > 0 ? fullmove - 1 : 0) * 2 + (fields[1] === "b" ? 1 : 0) + 1;
-}
 const moveOf = (uci: string): LongMove => {
   const promotion = ({ q: "queen", r: "rook", b: "bishop", n: "knight" } as const)[uci[4] as "q" | "r" | "b" | "n"] ?? null;
   return { from: uci.slice(0, 2) as SquareName, to: uci.slice(2, 4) as SquareName, promotion };
@@ -366,9 +552,8 @@ const exchangeSan = (exchange: { readonly beforeFen: string; readonly captureUci
 // ---------------------------------------------------------------------------------------------
 
 const V = (id: string, version = 1): VersionedEvidenceId => Object.freeze({ id, version });
-const FULL = V("module.full_inspector");
-const NUDGE = V("module.postcommit_nudge");
-const MAP = V("module.review_map");
+const NUDGE = V("module.postcommit_nudge", 2);
+const MAP = V("module.review_map", 2);
 
 type Construct = (evidence: DeclaredEvidence<unknown>) => ComponentValue | readonly ComponentValue[];
 type RendererId = Parameters<PresentationKit["fact"]>[0];
@@ -380,6 +565,7 @@ interface Family {
   readonly sourceOperands: readonly string[];
   readonly assertions: readonly Assertion[];
   readonly construct: Construct;
+  readonly validateWireComponent?: AdapterSpec["validateWireComponent"];
 }
 
 const LP: readonly EvidenceForm[] = ["list", "panel"];
@@ -393,7 +579,7 @@ const LLP: readonly EvidenceForm[] = ["list", "lit_squares", "panel"];
 const LLPH: readonly EvidenceForm[] = ["list", "lit_squares", "panel", "piece_halo"];
 const LPH: readonly EvidenceForm[] = ["list", "panel", "piece_halo"];
 
-export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
+function buildInspectorAdapterSpecs(kit: PresentationKit): { readonly current: readonly AdapterSpec[]; readonly sources: readonly AdapterSpec[] } {
   const fact = (rendererId: RendererId, convention: ConventionId, operands: unknown, binding: "recorded_run" | "declared_convention" = "declared_convention") =>
     kit.fact(rendererId, binding, convention, operands as never);
   const statement = (rendererId: RendererId, convention: ConventionId, operands: unknown, binding: "recorded_run" | "declared_convention" = "declared_convention"): ComponentValue =>
@@ -404,7 +590,7 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
   };
   const line = (evidence: DeclaredEvidence<unknown>, moves: readonly { readonly fen: string; readonly uci: string }[]): ComponentValue => ({
     id: "move_path",
-    operand: { plies: moves.map((move) => ({ ply: plyOf(move.fen), san: sanOf(move.fen, move.uci), uci: move.uci })), answerDistance: "fact", origin: "recorded", convention: kit.declared(evidence, "recorded-run@1") },
+    operand: { ...recordedMovePathPositions(moves), answerDistance: "fact", origin: "recorded", convention: kit.declared(evidence, "recorded-run@1") },
   });
   const relation = (evidence: DeclaredEvidence<unknown>, nodes: RelationOverlayOperand["nodes"], edges: RelationOverlayOperand["edges"], answerDistance: RelationOverlayOperand["answerDistance"], convention?: ConventionReceipt): ComponentValue => {
     const unique = new Map<string, RelationOverlayOperand["nodes"][number]>();
@@ -423,12 +609,53 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
 
   /** A one-component family whose component serves every binding form. */
   const single = (component: AdapterSpec["component"], sourceOperands: readonly string[], assertions: readonly Assertion[], construct: Construct): Family => ({ component, sourceOperands, assertions, construct });
+  /** A literal declaration owns both construction and received validation. A source reader can
+   * supply operands, never select another renderer or convention after reading the payload. */
+  const singleFact = <R extends RendererId>(renderer: R, convention: ConventionId,
+    sourceOperands: readonly string[], assertions: readonly Assertion[],
+    read: (evidence: DeclaredEvidence<unknown>) => FactOperandsByRenderer[R],
+    binding: "recorded_run" | "declared_convention" = "declared_convention") => {
+    const bound = bindFactStatement(kit.fact, renderer, binding, convention);
+    return { ...single("fact_statement", sourceOperands, assertions, evidence => bound.statement(read(evidence))),
+      validateWireComponent: bound.validateWireComponent };
+  };
   /** A square-set + recorded-move family (the board forms of a one-edge event or recorded window). */
-  const squaresLine = (sourceOperands: readonly string[], build: (evidence: DeclaredEvidence<unknown>) => { readonly squares: readonly SquareName[]; readonly caption: ReturnType<typeof fact>; readonly moves: readonly { readonly fen: string; readonly uci: string }[] }) =>
-    (forms: readonly EvidenceForm[]): Family => ({
-      component: "square_set", composition: boardEvent(forms), sourceOperands, assertions: ["mechanical_transform", "retained_convention"],
-      construct: (evidence) => { const built = build(evidence); return [squareSet(evidence, built.squares, built.caption), line(evidence, built.moves)]; },
+  const squaresLine = <R extends RendererId>(renderer: R, convention: ConventionId, sourceOperands: readonly string[], build: (evidence: DeclaredEvidence<unknown>) => { readonly operands: FactOperandsByRenderer[R]; readonly moves: readonly { readonly fen: string; readonly uci: string }[] }, binding: "recorded_run" | "declared_convention",
+    squaresFromOperands: (operands: FactOperandsByRenderer[R]) => readonly SquareName[]) => {
+    const bound = bindFactStatement(kit.fact, renderer, binding, convention);
+    return (forms: readonly EvidenceForm[], captionOnly = false): Family => ({
+      component: "square_set", ...(captionOnly ? {} : { composition: boardEvent(forms) }), sourceOperands, assertions: ["mechanical_transform", "retained_convention"],
+      construct: evidence => {
+        const built = build(evidence);
+        const caption = squareSet(evidence, squaresFromOperands(built.operands), bound.operand(built.operands));
+        // Only the exact eight current Nudge bindings can request this registered complete form.
+        // Never create a path and crop it after presentation/budget fitting.
+        return captionOnly ? caption : [caption, line(evidence, built.moves)];
+      },
+      validateWireComponent: (component, evidence) => {
+        bound.validateWireComponent(component);
+        if (component.id === "square_set") {
+          if (component.operand.brush !== "blue" || component.operand.owner.factRef !== evidence.evidenceDigest) {
+            throw new TypeError("Board geometry brush or owner crosses its registered source");
+          }
+          // The bound tuple has already established this exact renderer before this generic read.
+          const expected = new Set(squaresFromOperands(component.operand.caption.operands as FactOperandsByRenderer[R]));
+          if (component.operand.squares.length !== expected.size || component.operand.squares.some(square => !expected.has(square))) {
+            throw new TypeError("Board geometry crosses its registered caption witnesses");
+          }
+        } else if (component.id === "move_path") {
+          const value = component.operand, receipt = value.convention;
+          if (value.origin !== "recorded" || value.answerDistance !== "fact" || receipt === undefined
+            || receipt.perspective !== "not_applicable" || receipt.basis.kind !== "declared" || receipt.basis.convention !== "recorded-run@1"
+            || receipt.sourceEvidenceDigest !== evidence.evidenceDigest
+            || receipt.sourceProjection.id !== evidence.projection.id || receipt.sourceProjection.version !== evidence.projection.version
+            || receipt.producer.id !== evidence.producer.id || receipt.producer.version !== evidence.producer.version) {
+            throw new TypeError("Recorded path crosses its registered origin, answer distance or convention");
+          }
+        }
+      },
     });
+  };
   /** A relation + list-statement family. */
   const relationList = (sourceOperands: readonly string[], build: (evidence: DeclaredEvidence<unknown>) => { readonly relation: ComponentValue; readonly statement: ComponentValue }) =>
     (forms: readonly EvidenceForm[]): Family => ({
@@ -437,90 +664,112 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     });
 
   // --- one-edge events rendered as a fact statement (list/panel)
-  const structuralEvent = single("fact_statement", ["before_fen", "move_uci", "family", "before", "after"], ["mechanical_transform"], (evidence) => {
+  const structuralEvent = (family: (typeof STRUCTURAL_FAMILIES)[number]): Family => {
+    // This event partition is deliberately not Sight's reading partition.
+    const convention = family === "backward_pawn" || family === "king_opposition" ? "pawn-structure@1" : "board-rules@1";
+    const declared = singleFact("inspector.structural_event@1", convention,
+      ["before_fen", "move_uci", "family", "before", "after"], ["mechanical_transform"], evidence => {
+        const event = payloadOf(evidence);
+        if (event.family !== family || [event.before, event.after].some(value => value != null && value.kind !== family)) {
+          throw new TypeError("Structural event crosses its registered family");
+        }
+        const observed = event.after ?? event.before;
+        if (observed === null || observed === undefined) throw new TypeError("a structural event retains a before or after observation");
+        const { kind, squares, color, file, form, zone } = observed;
+        const observation = { kind, squares: [...squares], ...(color === undefined ? {} : { color }), ...(file === undefined ? {} : { file }), ...(form === undefined ? {} : { form }), ...(zone === undefined ? {} : { zone }) };
+        const change = event.before === null ? "appeared" : event.after === null ? "disappeared" : "held";
+        return { san: edgeSan(event), change, observation };
+      });
+    return { ...declared, validateWireComponent: component => {
+      declared.validateWireComponent(component);
+      if (component.id === "fact_statement" && component.operand.rendererId === "inspector.structural_event@1"
+        && component.operand.operands.observation.kind !== family) throw new TypeError("Structural statement crosses its registered family");
+    } };
+  };
+  const pawnIslandsEvent = singleFact("inspector.pawn_islands_event@1", "board-rules@1", ["before_fen", "move_uci", "color", "before", "after"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    const observed = event.after ?? event.before;
-    if (observed === null || observed === undefined) throw new TypeError("a structural event retains a before or after observation");
-    const { kind, squares, color, file, form, zone } = observed;
-    const observation = { kind, squares: [...squares], ...(color === undefined ? {} : { color }), ...(file === undefined ? {} : { file }), ...(form === undefined ? {} : { form }), ...(zone === undefined ? {} : { zone }) };
-    const change = event.before === null ? "appeared" : event.after === null ? "disappeared" : "held";
-    return statement("inspector.structural_event@1", kind === "backward_pawn" || kind === "king_opposition" ? "pawn-structure@1" : "board-rules@1", { san: edgeSan(event), change, observation });
+    return { san: edgeSan(event), color: event.color, before: event.before, after: event.after };
   });
-  const pawnIslandsEvent = single("fact_statement", ["before_fen", "move_uci", "color", "before", "after"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
-    const event = payloadOf(evidence);
-    return statement("inspector.pawn_islands_event@1", "board-rules@1", { san: edgeSan(event), color: event.color, before: event.before, after: event.after });
-  });
-  const transition = (build: (event: Payload, san: string) => { readonly id: RendererId; readonly operands: unknown }, sourceOperands: readonly string[]) =>
-    single("fact_statement", ["before_fen", "move_uci", ...sourceOperands], ["mechanical_transform"], (evidence) => {
+  const transition = <R extends RendererId>(renderer: R, build: (event: Payload, san: string) => FactOperandsByRenderer[R], sourceOperands: readonly string[]) =>
+    singleFact(renderer, "board-rules@1", ["before_fen", "move_uci", ...sourceOperands], ["mechanical_transform"], (evidence) => {
       const event = payloadOf(evidence);
-      const built = build(event, edgeSan(event));
-      return statement(built.id, "board-rules@1", built.operands);
+      return build(event, edgeSan(event));
     });
   const TRANSITIONS: Readonly<Record<string, Family>> = {
-    capture: transition((event, san) => ({ id: "inspector.capture@1", operands: { san, mover: piece(event.mover), from: event.from, to: event.to, captured: piece(event.captured), enPassant: event.enPassant } }), ["mover", "from", "to", "captured", "enPassant"]),
-    castled: transition((event, san) => ({ id: "inspector.castled@1", operands: { san, color: event.mover.color, king: event.detail.resultingKingSquare } }), ["mover", "detail"]),
-    checkmate: transition((event, san) => ({ id: "inspector.checkmate@1", operands: { san, mated: event.detail.matedSide } }), ["detail"]),
-    developed: transition((event, san) => ({ id: "inspector.developed@1", operands: { san, piece: piece(event.mover), from: event.from, to: event.to } }), ["mover", "from", "to"]),
-    last_of_role: transition((event, san) => ({ id: "inspector.last_of_role@1", operands: { san, color: event.detail.capturedColor, role: event.detail.capturedRole } }), ["detail"]),
-    pawn_contact: transition((event, san) => ({ id: "inspector.pawn_contact@1", operands: { san, color: event.mover.color, square: event.to, enemy: [...event.detail.enemyPawnSquares] } }), ["mover", "to", "detail"]),
-    promotion: transition((event, san) => ({ id: "inspector.promotion@1", operands: { san, color: event.mover.color, square: event.to, role: event.detail.promotionRole } }), ["mover", "to", "detail"]),
-    defended_duty: transition((event, san) => ({ id: "inspector.defended_duty@1", operands: { san, piece: piece(event.subject), square: event.subject.piece, before: [...event.targets_before], after: [...event.targets_after] } }), ["subject", "targets_before", "targets_after"]),
-    occupied_attack: transition((event, san) => ({ id: "inspector.occupied_attack@1", operands: { san, attacker: event.subject.color, occupant: piece(event.subject.occupant), square: event.subject.target, before: [...event.targets_before], after: [...event.targets_after] } }), ["subject", "targets_before", "targets_after"]),
-    occupied_defence: transition((event, san) => ({ id: "inspector.occupied_defence@1", operands: { san, defender: event.subject.color, occupant: piece(event.subject.occupant), square: event.subject.target, before: [...event.targets_before], after: [...event.targets_after] } }), ["subject", "targets_before", "targets_after"]),
-    piece_escape: transition((event, san) => ({ id: "inspector.piece_escape@1", operands: { san, piece: piece(event.subject), square: event.subject.piece, before: [...event.targets_before], after: [...event.targets_after] } }), ["subject", "targets_before", "targets_after"]),
-    slider_ray: transition((event, san) => ({ id: "inspector.slider_ray@1", operands: { san, piece: piece(event.subject), square: event.subject.slider, endpoint: event.subject.endpoint, before: [...event.targets_before], after: [...event.targets_after] } }), ["subject", "targets_before", "targets_after"]),
+    capture: transition("inspector.capture@1", (event, san) => ({ san, mover: piece(event.mover), from: event.from, to: event.to, captured: piece(event.captured), enPassant: event.enPassant }), ["mover", "from", "to", "captured", "enPassant"]),
+    castled: transition("inspector.castled@1", (event, san) => ({ san, color: event.mover.color, king: event.detail.resultingKingSquare }), ["mover", "detail"]),
+    checkmate: transition("inspector.checkmate@1", (event, san) => ({ san, mated: event.detail.matedSide }), ["detail"]),
+    developed: transition("inspector.developed@1", (event, san) => ({ san, piece: piece(event.mover), from: event.from, to: event.to }), ["mover", "from", "to"]),
+    last_of_role: transition("inspector.last_of_role@1", (event, san) => ({ san, color: event.detail.capturedColor, role: event.detail.capturedRole }), ["detail"]),
+    pawn_contact: transition("inspector.pawn_contact@1", (event, san) => ({ san, color: event.mover.color, square: event.to, enemy: [...event.detail.enemyPawnSquares] }), ["mover", "to", "detail"]),
+    promotion: transition("inspector.promotion@1", (event, san) => ({ san, color: event.mover.color, square: event.to, role: event.detail.promotionRole }), ["mover", "to", "detail"]),
+    defended_duty: transition("inspector.defended_duty@1", (event, san) => ({ san, piece: piece(event.subject), square: event.subject.piece, before: [...event.targets_before], after: [...event.targets_after] }), ["subject", "targets_before", "targets_after"]),
+    occupied_attack: transition("inspector.occupied_attack@1", (event, san) => ({ san, attacker: event.subject.color, occupant: piece(event.subject.occupant), square: event.subject.target, before: [...event.targets_before], after: [...event.targets_after] }), ["subject", "targets_before", "targets_after"]),
+    occupied_defence: transition("inspector.occupied_defence@1", (event, san) => ({ san, defender: event.subject.color, occupant: piece(event.subject.occupant), square: event.subject.target, before: [...event.targets_before], after: [...event.targets_after] }), ["subject", "targets_before", "targets_after"]),
+    piece_escape: transition("inspector.piece_escape@1", (event, san) => ({ san, piece: piece(event.subject), square: event.subject.piece, before: [...event.targets_before], after: [...event.targets_after] }), ["subject", "targets_before", "targets_after"]),
+    slider_ray: transition("inspector.slider_ray@1", (event, san) => ({ san, piece: piece(event.subject), square: event.subject.slider, endpoint: event.subject.endpoint, before: [...event.targets_before], after: [...event.targets_after] }), ["subject", "targets_before", "targets_after"]),
   };
-  const checkEvent = single("fact_statement", ["triggeringMove", "checkingPieces", "checkedKing"], ["mechanical_transform"], (evidence) => {
+  const checkEvent = singleFact("inspector.check@1", "board-rules@1", ["triggeringMove", "checkingPieces", "checkedKing"], ["mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    return statement("inspector.check@1", "board-rules@1", { move: moveOf(event.triggeringMove), checkers: event.checkingPieces.map(at), king: at(event.checkedKing) });
+    return { move: moveOf(event.triggeringMove), checkers: event.checkingPieces.map(at), king: at(event.checkedKing) };
   });
-  const doubleAttack = single("fact_statement", ["beforeFen", "moveUci", "mover", "targets"], ["mechanical_transform"], (evidence) => {
+  const doubleAttack = singleFact("inspector.double_attack@1", "threat-convention@1", ["beforeFen", "moveUci", "mover", "targets"], ["mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    return statement("inspector.double_attack@1", "threat-convention@1", { san: edgeSan(event), attacker: { piece: piece(event.mover.piece), square: event.mover.after }, targets: event.targets.map(atOccupant) });
+    return { san: edgeSan(event), attacker: { piece: piece(event.mover.piece), square: event.mover.after }, targets: event.targets.map(atOccupant) };
   });
   const looseState = (state: Payload): "en_prise" | "loose" | "under_defended" | "covered" => (state.enPrise ? "en_prise" : state.loose ? "loose" : state.underDefended ? "under_defended" : "covered");
-  const looseEvent = single("fact_statement", ["beforeFen", "moveUci", "mover", "before", "after"], ["mechanical_transform"], (evidence) => {
+  const looseEvent = singleFact("inspector.loose_event@1", "threat-convention@1", ["beforeFen", "moveUci", "mover", "before", "after"], ["mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    return statement("inspector.loose_event@1", "threat-convention@1", { san: edgeSan(event), subject: atOccupant(event.after.piece), before: looseState(event.before), after: looseState(event.after), capturers: event.after.legalCapturers.map((capturer: Payload) => capturer.square) });
+    return { san: edgeSan(event), subject: atOccupant(event.after.piece), before: looseState(event.before), after: looseState(event.after), capturers: event.after.legalCapturers.map((capturer: Payload) => capturer.square) };
   });
-  const rightsLost = single("fact_statement", ["beforeFen", "moveUci", "color", "wing", "cause"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
+  const rightsLost = singleFact("inspector.rights_lost@1", "board-rules@1", ["beforeFen", "moveUci", "color", "wing", "cause"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    return statement("inspector.rights_lost@1", "board-rules@1", { san: edgeSan(event), color: event.color, wing: event.wing, cause: event.cause });
+    return { san: edgeSan(event), color: event.color, wing: event.wing, cause: event.cause };
   });
-  const captureClass = single("fact_statement", ["before_fen", "move_uci", "capture", "exchange"], ["mechanical_transform"], (evidence) => {
+  const captureClass = singleFact("inspector.capture_class@1", "threat-convention@1", ["before_fen", "move_uci", "capture", "exchange"], ["mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    return statement("inspector.capture_class@1", "threat-convention@1", { san: edgeSan(event), square: event.capture.to, color: event.exchange.capturer.color, units: event.exchange.resultUnits });
+    return { san: edgeSan(event), square: event.capture.to, color: event.exchange.capturer.color, units: event.exchange.resultUnits };
   });
-  const tradeCompleted = single("fact_statement", ["startFen", "firstMoveUci", "boundaryFen", "secondMoveUci", "landingSquare"], ["mechanical_transform"], (evidence) => {
+  const tradeCompleted = singleFact("inspector.trade_completed@1", "board-rules@1", ["startFen", "firstMoveUci", "boundaryFen", "secondMoveUci", "landingSquare"], ["mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    return statement("inspector.trade_completed@1", "board-rules@1", { first: sanOf(event.startFen, event.firstMoveUci), second: sanOf(event.boundaryFen, event.secondMoveUci), square: event.landingSquare });
+    return { first: sanOf(event.startFen, event.firstMoveUci), second: sanOf(event.boundaryFen, event.secondMoveUci), square: event.landingSquare };
   });
-  const forkSurvives = single("fact_statement", ["doubleAttack", "replyBreadth", "refutingReplies"], ["mechanical_transform"], (evidence) => {
+  const forkSurvives = singleFact("inspector.fork_survives@1", "threat-convention@1", ["doubleAttack", "replyBreadth", "refutingReplies"], ["mechanical_transform"], (evidence) => {
     const event = payloadOf(evidence);
-    return statement("inspector.fork_survives@1", "threat-convention@1", { attacker: { piece: piece(event.doubleAttack.mover.piece), square: event.doubleAttack.mover.after }, targets: event.doubleAttack.targets.map(atOccupant), replies: event.replyBreadth.count, answering: event.refutingReplies.length });
+    return { attacker: { piece: piece(event.doubleAttack.mover.piece), square: event.doubleAttack.mover.after }, targets: event.doubleAttack.targets.map(atOccupant), replies: event.replyBreadth.count, answering: event.refutingReplies.length };
   });
-  const avoidance = single("fact_statement", ["family", "legalAlternatives", "alternativesWithFamily"], ["mechanical_transform"], (evidence) => {
-    const event = payloadOf(evidence);
-    const family = String(event.family.projection.id).split(".").at(-1);
-    return statement("inspector.avoidance@1", family === "loose_piece" ? "threat-convention@1" : "pawn-structure@1", { family, sign: event.family.sign, alternatives: event.legalAlternatives, withFamily: event.alternativesWithFamily });
-  });
-  const grade = single("fact_statement", ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "depthOrMovetime"], ["copied_byte_equal"], (evidence) =>
-    statement("inspector.move_quality_grade_complete@1", "grade-convention@1", payloadOf(evidence)));
+  const avoidance = (family: (typeof AVOIDANCE_FAMILIES)[number]): Family => {
+    const sourceProjection = family === "loose_piece" ? "rules.tactic.event.loose_piece" : `rules.structural.event.${family}`;
+    const declared = singleFact("inspector.avoidance@1", family === "loose_piece" ? "threat-convention@1" : "pawn-structure@1",
+      ["family", "legalAlternatives", "alternativesWithFamily"], ["mechanical_transform"], evidence => {
+        const event = payloadOf(evidence);
+        if (event.family.projection.id !== sourceProjection || event.family.projection.version !== 1) {
+          throw new TypeError("Avoidance source crosses its registered family projection");
+        }
+        return { family, sign: event.family.sign, alternatives: event.legalAlternatives, withFamily: event.alternativesWithFamily };
+      });
+    return { ...declared, validateWireComponent: component => {
+      declared.validateWireComponent(component);
+      if (component.id === "fact_statement" && component.operand.rendererId === "inspector.avoidance@1"
+        && component.operand.operands.family !== family) throw new TypeError("Avoidance statement crosses its registered family");
+    } };
+  };
+  const grade = singleFact("play.move_quality_summary@1", "grade-convention@2", ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "bound", "instrument"], ["copied_byte_equal"], payloadOf);
 
   // --- one-edge events with board forms: square set + the recorded move
-  const openFileOccupancy = squaresLine(["beforeFen", "moveUci", "piece", "fileClass", "sourceReading"], (evidence) => {
+  const openFileOccupancy = squaresLine("inspector.open_file_occupancy@1", "pawn-structure@1", ["beforeFen", "moveUci", "piece", "fileClass", "sourceReading"], (evidence) => {
     const event = payloadOf(evidence);
     const subject = at(event.piece.after);
-    return { squares: [subject.square], moves: [edgeMove(event)], caption: fact("inspector.open_file_occupancy@1", "pawn-structure@1", { san: edgeSan(event), subject, file: event.sourceReading.file, open: event.fileClass === "open_file", color: event.fileClass === "open_file" ? null : event.sourceReading.color ?? null }) };
-  });
-  const capturedZoneDefender = squaresLine(["beforeFen", "moveUci", "capturedSquare", "kingColor", "defender"], (evidence) => {
+    return { moves: [edgeMove(event)], operands: { san: edgeSan(event), subject, file: event.sourceReading.file, open: event.fileClass === "open_file", color: event.fileClass === "open_file" ? null : event.sourceReading.color ?? null } };
+  }, "declared_convention", value => [value.subject.square]);
+  const capturedZoneDefender = squaresLine("inspector.captured_zone_defender@1", "piece-geometry@1", ["beforeFen", "moveUci", "capturedSquare", "kingColor", "defender"], (evidence) => {
     const event = payloadOf(evidence);
-    return { squares: [event.capturedSquare], moves: [edgeMove(event)], caption: fact("inspector.captured_zone_defender@1", "piece-geometry@1", { san: edgeSan(event), captured: { piece: piece(event.defender.piece), square: event.capturedSquare }, king: event.kingColor, zone: [...event.defender.zoneSquares] }) };
-  });
-  const pawnTransition = squaresLine(["beforeFen", "moveUci", "kind", "pawn"], (evidence) => {
+    return { moves: [edgeMove(event)], operands: { san: edgeSan(event), captured: { piece: piece(event.defender.piece), square: event.capturedSquare }, king: event.kingColor, zone: [...event.defender.zoneSquares] } };
+  }, "declared_convention", value => [value.captured.square]);
+  const pawnTransition = squaresLine("inspector.pawn_transition@1", "pawn-structure@1", ["beforeFen", "moveUci", "kind", "pawn"], (evidence) => {
     const event = payloadOf(evidence);
-    return { squares: [event.pawn.after.square], moves: [edgeMove(event)], caption: fact("inspector.pawn_transition@1", "pawn-structure@1", { san: edgeSan(event), kind: event.kind, color: event.pawn.after.piece.color, from: event.pawn.before.square, to: event.pawn.after.square }) };
-  });
+    return { moves: [edgeMove(event)], operands: { san: edgeSan(event), kind: event.kind, color: event.pawn.after.piece.color, from: event.pawn.before.square, to: event.pawn.after.square } };
+  }, "declared_convention", value => [value.to]);
   const dynamicsPieces = (kind: string, subjects: Payload): Placed[] => {
     switch (kind) {
       case "locked_pair_gained": return [at(subjects.white), at(subjects.black)];
@@ -532,30 +781,29 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
       default: throw new TypeError("pawn dynamics kind is outside the registered set");
     }
   };
-  const pawnDynamics = squaresLine(["beforeFen", "moveUci", "kind", "subjects"], (evidence) => {
+  const pawnDynamics = squaresLine("inspector.pawn_dynamics@1", "pawn-structure@1", ["beforeFen", "moveUci", "kind", "subjects"], (evidence) => {
     const event = payloadOf(evidence);
     const pieces = dynamicsPieces(event.kind, event.subjects);
-    const squares = event.kind === "candidate_majority_advanced" ? [pieces[1]!.square] : pieces.slice(0, 2).map((entry) => entry.square);
-    return { squares, moves: [edgeMove(event)], caption: fact("inspector.pawn_dynamics@1", "pawn-structure@1", { san: edgeSan(event), kind: event.kind, pieces }) };
-  });
-  const kingZoneEvent = squaresLine(["beforeFen", "moveUci", "color", "king", "attackers", "defenders", "shelter", "escapes"], (evidence) => {
+    return { moves: [edgeMove(event)], operands: { san: edgeSan(event), kind: event.kind, pieces } };
+  }, "declared_convention", value => value.kind === "candidate_majority_advanced" ? [value.pieces[1]!.square] : value.pieces.slice(0, 2).map(entry => entry.square));
+  const kingZoneEvent = squaresLine("inspector.king_zone_event@1", "piece-geometry@1", ["beforeFen", "moveUci", "color", "king", "attackers", "defenders", "shelter", "escapes"], (evidence) => {
     const event = payloadOf(evidence);
     const list = (values: readonly Payload[]): Placed[] => values.map(at);
     return {
-      squares: [event.king.after], moves: [edgeMove(event)],
-      caption: fact("inspector.king_zone_event@1", "piece-geometry@1", { san: edgeSan(event), color: event.color, king: event.king.after, kingFrom: event.king.relocated ? event.king.before : null, attackersGained: list(event.attackers.gained), attackersLost: list(event.attackers.lost), defendersGained: list(event.defenders.gained), defendersLost: list(event.defenders.lost), shelterGained: list(event.shelter.gained), shelterLost: list(event.shelter.lost), escapesGained: [...event.escapes.gained], escapesLost: [...event.escapes.lost] }),
+      moves: [edgeMove(event)],
+      operands: { san: edgeSan(event), color: event.color, king: event.king.after, kingFrom: event.king.relocated ? event.king.before : null, attackersGained: list(event.attackers.gained), attackersLost: list(event.attackers.lost), defendersGained: list(event.defenders.gained), defendersLost: list(event.defenders.lost), shelterGained: list(event.shelter.gained), shelterLost: list(event.shelter.lost), escapesGained: [...event.escapes.gained], escapesLost: [...event.escapes.lost] },
     };
-  });
-  const roleAsymmetry = squaresLine(["beforeFen", "moveUci", "before", "after", "changedRoles", "sourceEvents"], (evidence) => {
+  }, "declared_convention", value => [value.king]);
+  const roleAsymmetry = squaresLine("inspector.role_asymmetry@1", "board-rules@1", ["beforeFen", "moveUci", "before", "after", "changedRoles", "sourceEvents"], (evidence) => {
     const event = payloadOf(evidence);
-    const squares = event.sourceEvents.map((source: Payload) => source.to as SquareName);
-    return { squares, moves: [edgeMove(event)], caption: fact("inspector.role_asymmetry@1", "board-rules@1", { san: edgeSan(event), roles: [...event.changedRoles], before: event.before.magnitude, after: event.after.magnitude }) };
-  });
-  const destinationsEvent = squaresLine(["beforeFen", "moveUci", "color", "piece", "legalGained", "legalLost", "safeGained", "safeLost"], (evidence) => {
+    const squares = [...new Set<SquareName>(event.sourceEvents.map((source: Payload) => source.to as SquareName))];
+    return { moves: [edgeMove(event)], operands: { san: edgeSan(event), roles: [...event.changedRoles], before: event.before.magnitude, after: event.after.magnitude, squares } };
+  }, "declared_convention", value => value.squares);
+  const destinationsEvent = squaresLine("inspector.piece_destinations_event@1", "piece-geometry@1", ["beforeFen", "moveUci", "color", "piece", "legalGained", "legalLost", "safeGained", "safeLost"], (evidence) => {
     const event = payloadOf(evidence);
     const subject = { piece: { color: event.color, role: event.piece.after.role }, square: event.piece.after.square };
-    return { squares: [subject.square, ...event.legalGained, ...event.legalLost], moves: [edgeMove(event)], caption: fact("inspector.piece_destinations_event@1", "piece-geometry@1", { san: edgeSan(event), subject, legalGained: [...event.legalGained], legalLost: [...event.legalLost], safeGained: [...event.safeGained], safeLost: [...event.safeLost] }) };
-  });
+    return { moves: [edgeMove(event)], operands: { san: edgeSan(event), subject, legalGained: [...event.legalGained], legalLost: [...event.legalLost], safeGained: [...event.safeGained], safeLost: [...event.safeLost] } };
+  }, "declared_convention", value => [value.subject.square, ...value.legalGained, ...value.legalLost]);
 
   // --- one-edge relations
   const squareControlEvent = relationList(["beforeFen", "moveUci", "mode", "sign", "target", "controller"], (evidence) => {
@@ -592,25 +840,27 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
   });
 
   // --- recorded windows: square set + the recorded line
-  const sequence = (sourceOperands: readonly string[], build: (payload: Payload) => { readonly id: RendererId; readonly operands: unknown; readonly squares: readonly SquareName[] }) =>
-    (forms: readonly EvidenceForm[]): Family => ({
-      component: "square_set", composition: boardEvent(forms), sourceOperands: ["anchors", ...sourceOperands], assertions: ["mechanical_transform", "retained_convention"],
-      construct: (evidence) => {
+  const sequence = <R extends RendererId>(renderer: R, sourceOperands: readonly string[], build: (payload: Payload) => { readonly operands: FactOperandsByRenderer[R] },
+    squaresFromOperands: (operands: FactOperandsByRenderer[R]) => readonly SquareName[]) =>
+    squaresLine(renderer, "recorded-run@1", ["anchors", ...sourceOperands], evidence => {
         const payload = payloadOf(evidence);
         const built = build(payload);
-        return [squareSet(evidence, built.squares, fact(built.id, "recorded-run@1", built.operands, "recorded_run")), line(evidence, payload.anchors.map(anchorMove))];
-      },
-    });
-  const contactTiming = sequence(["kind", "pawn", "contactedPawn"], (value) => ({ id: "inspector.contact_timing@1", squares: [value.pawn.contactSquare, value.contactedPawn.square], operands: { kind: value.kind, color: value.pawn.color, from: value.pawn.from, square: value.pawn.contactSquare, contacted: at(value.contactedPawn) } }));
-  const harassment = sequence(["pawn", "minor", "pressure"], (value) => ({ id: "inspector.harassment@1", squares: [value.pawn.square, value.minor.after.square], operands: { pawn: at(value.pawn), minorFrom: value.minor.before.square, minor: at(value.minor.after), screen: at(value.pressure.after.screen), target: at(value.pressure.after.target) } }));
-  const defenderConsequence = sequence(["kind", "defender", "target", "firstMoveCapturedDefender", "finalCapture"], (value) => ({ id: "inspector.defender_consequence@1", squares: [value.defender.before.square, value.target.square], operands: { defender: at(value.defender.before), relocatedTo: value.defender.after?.square ?? null, target: at(value.target), capture: exchangeSan(value.finalCapture), capturedFirst: value.firstMoveCapturedDefender } }));
-  const deflection = sequence(["baitMove", "defenderBefore", "defenderAfter", "lostDuty", "targetCapture"], (value) => ({ id: "inspector.deflection@1", squares: [value.defenderAfter.square, value.lostDuty.target.square], operands: { bait: sanOf(value.baitMove.beforeFen, value.baitMove.moveUci), defender: at(value.defenderBefore), to: value.defenderAfter.square, target: at(value.lostDuty.target), capture: exchangeSan(value.targetCapture) } }));
-  const attraction = sequence(["baitMove", "heavyPiece", "arrivalSquare", "checkOrCaptureConsequence"], (value) => ({ id: "inspector.attraction@1", squares: [value.arrivalSquare], operands: { bait: sanOf(value.baitMove.beforeFen, value.baitMove.moveUci), piece: at(value.heavyPiece.before), to: value.arrivalSquare, consequence: value.checkOrCaptureConsequence.kind, move: sanOf(value.checkOrCaptureConsequence.move.beforeFen, value.checkOrCaptureConsequence.move.moveUci) } }));
-  const interference = sequence(["interposingMove", "slider", "betweenSquare", "target", "targetCapture"], (value) => ({ id: "inspector.interference@1", squares: [value.betweenSquare, value.target.square], operands: { move: sanOf(value.interposingMove.beforeFen, value.interposingMove.moveUci), square: value.betweenSquare, slider: at(value.slider), target: at(value.target), capture: exchangeSan(value.targetCapture) } }));
-  const lineClearance = sequence(["blocker", "slider", "target", "targetCapture"], (value) => ({ id: "inspector.line_clearance@1", squares: [value.slider.square, value.target.square], operands: { blocker: at(value.blocker), slider: at(value.slider), target: at(value.target), capture: exchangeSan(value.targetCapture) } }));
-  const squareClearance = sequence(["vacatedSquare", "vacatingPiece", "laterSlider", "laterMove"], (value) => ({ id: "inspector.square_clearance@1", squares: [value.vacatedSquare], operands: { vacating: at(value.vacatingPiece), slider: at(value.laterSlider), move: sanOf(value.laterMove.beforeFen, value.laterMove.moveUci) } }));
-  const zwischenzug = sequence(["expectedRecapture", "intermediateCheck", "reply", "retainedRecapture"], (value) => ({ id: "inspector.zwischenzug@1", squares: [value.retainedRecapture.landingSquare], operands: { expected: value.expectedRecapture.map((uci: string) => sanOf(value.intermediateCheck.beforeFen, uci)), check: sanOf(value.intermediateCheck.beforeFen, value.intermediateCheck.moveUci), reply: sanOf(value.reply.beforeFen, value.reply.moveUci), recapture: exchangeSan(value.retainedRecapture) } }));
-  const overload = sequence(["firstCapture", "defenderRecapture", "secondTargetCapture"], (value) => ({ id: "inspector.overload@1", squares: [value.defenderRecapture.to, value.secondTargetCapture.landingSquare], operands: { first: sanOf(value.firstCapture.before_fen, value.firstCapture.move_uci), recapture: sanOf(value.defenderRecapture.before_fen, value.defenderRecapture.move_uci), second: exchangeSan(value.secondTargetCapture), target: { piece: piece(value.secondTargetCapture.captured), square: value.secondTargetCapture.landingSquare } } }));
+        return { ...built, moves: payload.anchors.map(anchorMove) };
+    }, "recorded_run", squaresFromOperands);
+  const contactSquares = (value: FactOperandsByRenderer["inspector.contact_timing@1"]): readonly SquareName[] => [value.square, value.contacted.square];
+  const contactTiming = sequence("inspector.contact_timing@1", ["kind", "pawn", "contactedPawn"], value => {
+    const operands: FactOperandsByRenderer["inspector.contact_timing@1"] = { kind: value.kind, color: value.pawn.color, from: value.pawn.from, square: value.pawn.contactSquare, contacted: at(value.contactedPawn) };
+    return { operands };
+  }, contactSquares);
+  const harassment = sequence("inspector.harassment@1", ["pawn", "minor", "pressure"], (value) => ({ operands: { pawn: at(value.pawn), minorFrom: value.minor.before.square, minor: at(value.minor.after), screen: at(value.pressure.after.screen), target: at(value.pressure.after.target) } }), value => [value.pawn.square, value.minor.square]);
+  const defenderConsequence = sequence("inspector.defender_consequence@1", ["kind", "defender", "target", "firstMoveCapturedDefender", "finalCapture"], (value) => ({ operands: { defender: at(value.defender.before), relocatedTo: value.defender.after?.square ?? null, target: at(value.target), capture: exchangeSan(value.finalCapture), capturedFirst: value.firstMoveCapturedDefender } }), value => [value.defender.square, value.target.square]);
+  const deflection = sequence("inspector.deflection@1", ["baitMove", "defenderBefore", "defenderAfter", "lostDuty", "targetCapture"], (value) => ({ operands: { bait: sanOf(value.baitMove.beforeFen, value.baitMove.moveUci), defender: at(value.defenderBefore), to: value.defenderAfter.square, target: at(value.lostDuty.target), capture: exchangeSan(value.targetCapture) } }), value => [value.to, value.target.square]);
+  const attraction = sequence("inspector.attraction@1", ["baitMove", "heavyPiece", "arrivalSquare", "checkOrCaptureConsequence"], (value) => ({ operands: { bait: sanOf(value.baitMove.beforeFen, value.baitMove.moveUci), piece: at(value.heavyPiece.before), to: value.arrivalSquare, consequence: value.checkOrCaptureConsequence.kind, move: sanOf(value.checkOrCaptureConsequence.move.beforeFen, value.checkOrCaptureConsequence.move.moveUci) } }), value => [value.to]);
+  const interference = sequence("inspector.interference@1", ["interposingMove", "slider", "betweenSquare", "target", "targetCapture"], (value) => ({ operands: { move: sanOf(value.interposingMove.beforeFen, value.interposingMove.moveUci), square: value.betweenSquare, slider: at(value.slider), target: at(value.target), capture: exchangeSan(value.targetCapture) } }), value => [value.square, value.target.square]);
+  const lineClearance = sequence("inspector.line_clearance@1", ["blocker", "slider", "target", "targetCapture"], (value) => ({ operands: { blocker: at(value.blocker), slider: at(value.slider), target: at(value.target), capture: exchangeSan(value.targetCapture) } }), value => [value.slider.square, value.target.square]);
+  const squareClearance = sequence("inspector.square_clearance@1", ["vacatedSquare", "vacatingPiece", "laterSlider", "laterMove"], (value) => ({ operands: { vacating: at(value.vacatingPiece), slider: at(value.laterSlider), move: sanOf(value.laterMove.beforeFen, value.laterMove.moveUci) } }), value => [value.vacating.square]);
+  const zwischenzug = sequence("inspector.zwischenzug@1", ["expectedRecapture", "intermediateCheck", "reply", "retainedRecapture"], (value) => ({ operands: { expected: value.expectedRecapture.map((uci: string) => sanOf(value.intermediateCheck.beforeFen, uci)), check: sanOf(value.intermediateCheck.beforeFen, value.intermediateCheck.moveUci), reply: sanOf(value.reply.beforeFen, value.reply.moveUci), recapture: exchangeSan(value.retainedRecapture), recaptureSquare: value.retainedRecapture.landingSquare } }), value => [value.recaptureSquare]);
+  const overload = sequence("inspector.overload@1", ["firstCapture", "defenderRecapture", "secondTargetCapture"], (value) => ({ operands: { first: sanOf(value.firstCapture.before_fen, value.firstCapture.move_uci), recapture: sanOf(value.defenderRecapture.before_fen, value.defenderRecapture.move_uci), second: exchangeSan(value.secondTargetCapture), target: { piece: piece(value.secondTargetCapture.captured), square: value.secondTargetCapture.landingSquare }, defenderRecaptureSquare: value.defenderRecapture.to } }), value => [value.defenderRecaptureSquare, value.target.square]);
 
   // --- position readings (Full Inspector)
   const squareSetReading = (sourceOperands: readonly string[], build: (evidence: DeclaredEvidence<unknown>) => { readonly squares: readonly SquareName[]; readonly caption: ReturnType<typeof fact> }, brush: "blue" | "red" = "blue"): Family =>
@@ -626,7 +876,8 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
   const legalMoves = squareSetReading(["turn", "pieces"], (evidence) => {
     const map = payloadOf(evidence);
     const movable = map.pieces.filter((entry: Payload) => entry.moves.length > 0);
-    return { squares: movable.map((entry: Payload) => entry.piece.square), caption: fact("play.legal_moves@1", "board-rules@1", { turn: map.turn, pieces: movable.length, moves: movable.reduce((sum: number, entry: Payload) => sum + entry.moves.length, 0) }) };
+    const squares = [...new Set<SquareName>(movable.map((entry: Payload) => entry.piece.square))];
+    return { squares, caption: fact("play.legal_moves@1", "board-rules@1", { turn: map.turn, pieces: movable.length, moves: movable.reduce((sum: number, entry: Payload) => sum + entry.moves.length, 0), squares }) };
   });
   const RAY_KINDS = ["absolute_pin", "relative_pin", "skewer", "xray_attack", "xray_defense"];
   const rays = squareSetReading(["rays"], (evidence) => {
@@ -659,7 +910,7 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     const nodes = reading.contacts.flatMap((contact: Payload) => [node(at(contact.attacker), "source"), node(at(contact.target), "target")]);
     return {
       relation: relation(evidence, nodes, reading.contacts.map((contact: Payload) => ({ from: contact.attacker.square, to: contact.target.square, relation: "attacks" as const, sign: "state" as const })), "fact"),
-      statement: statement("play.pawn_contacts@1", "board-rules@1", { contacts: reading.contacts.length, locks: reading.locks.length, passed: reading.passed.filter((entry: Payload) => entry.passed).length, connectedPassedPairs: reading.connectedPassedPairs.length }),
+      statement: statement("play.pawn_contacts@1", "board-rules@1", pawnContactCaptionOperands(reading)),
     };
   });
   const squareControl = relationList(["colors"], (evidence) => {
@@ -673,7 +924,7 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     const ordered = [...nodes.filter((entry) => entry.emphasis === "source"), ...nodes.filter((entry) => entry.emphasis !== "source")];
     return {
       relation: relation(evidence, ordered, edges, "fact"),
-      statement: statement("play.square_control@1", "piece-geometry@1", { colors: reading.colors.map(entry => ({ color: entry.color, pseudo: controlledSquareCount(entry.pseudo), legal: entry.legal.kind === "available" ? controlledSquareCount(entry.legal.squares) : null })) }),
+      statement: statement("play.square_control@1", "piece-geometry@1", squareControlCaptionOperands(reading)),
     };
   });
   const kingZone = relationList(["kings"], (evidence) => {
@@ -782,32 +1033,44 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     const reading = payloadOf(evidence);
     return statement("inspector.role_signature@1", "board-rules@1", { colors: reading.colors.map((entry: Payload) => ({ color: entry.color, pawn: entry.counts.pawn, knight: entry.counts.knight, bishop: entry.counts.bishop, rook: entry.counts.rook, queen: entry.counts.queen })), difference: reading.magnitude });
   });
-  const phase = single("fact_statement", ["phase"], ["copied_byte_equal"], (evidence) =>
-    statement("play.phase@1", "phase-bands@1", { phase: payloadOf(evidence).phase }));
-  const endgame = single("fact_statement", ["type"], ["copied_byte_equal"], (evidence) =>
-    statement("play.endgame_type@1", "endgame-convention@1", { label: payloadOf(evidence).type?.label ?? null }));
-  const setupMatch = single("fact_statement", ["technique"], ["copied_byte_equal"], (evidence) => {
+  const phase = singleFact("play.phase@1", "phase-bands@1", ["phase"], ["copied_byte_equal"], evidence => ({ phase: payloadOf(evidence).phase }));
+  const endgame = singleFact("play.endgame_type@1", "endgame-convention@1", ["type"], ["copied_byte_equal"], evidence => ({ label: payloadOf(evidence).type?.label ?? null }));
+  const setupNames: Readonly<Record<string, string>> = { lucena: "Lucena position", philidor: "Philidor position", vancura: "Vančura position" };
+  const setupStatement = singleFact("play.endgame_setup@1", "endgame-convention@1", ["technique"], ["copied_byte_equal"], (evidence) => {
     const technique = payloadOf(evidence).technique as string;
-    const name = ({ lucena: "Lucena position", philidor: "Philidor position", vancura: "Vančura position" } as Readonly<Record<string, string>>)[technique];
+    const name = setupNames[technique];
     if (name === undefined) throw new TypeError("endgame setup technique has no registered name");
-    return statement("play.endgame_setup@1", "endgame-convention@1", { technique, name });
+    return { technique, name };
   });
+  const setupMatch: Family = { ...setupStatement, validateWireComponent: component => {
+    setupStatement.validateWireComponent(component);
+    if (component.id === "fact_statement" && component.operand.rendererId === "play.endgame_setup@1"
+      && setupNames[component.operand.operands.technique] !== component.operand.operands.name) throw new TypeError("Endgame setup name crosses its registered technique");
+  } };
   const shape = single("fact_statement", ["entryId"], ["mechanical_transform"], (evidence) =>
     statement("play.shape@1", "shape-catalogue@1", { title: String(payloadOf(evidence).entryId).split("-").map((word, index) => (index === 0 ? capital(word) : word)).join(" ") }));
-  const pivotal = single("fact_statement", ["kind", "detail"], ["mechanical_transform"], (evidence) => {
+  const pivotal = (kind: "phase_change" | "human_divergence" | "option_collapse" | "irreversibility"): Family => {
+    const declared = singleFact("inspector.pivotal@1", kind === "phase_change" ? "phase-bands@1" : kind === "human_divergence" ? "recorded-run@1" : "board-rules@1", ["kind", "detail"], ["mechanical_transform"], (evidence) => {
     const marker = payloadOf(evidence);
+    if (marker.kind !== kind) throw new TypeError("Pivotal source crosses its registered kind");
     const detail = marker.detail;
     const operands = marker.kind === "phase_change" ? { kind: marker.kind, from: detail.from, to: detail.to }
       : marker.kind === "human_divergence" ? { kind: marker.kind, model: detail.engine.name.includes(detail.engine.version) ? detail.engine.name : `${detail.engine.name} ${detail.engine.version}`, band: detail.targetElo ?? null, shares: detail.masses.slice(0, 3) }
         : marker.kind === "option_collapse" ? { kind: marker.kind, color: detail.color, count: detail.count }
           : { kind: marker.kind, subkind: detail.subkind, color: detail.color, ...(detail.role === undefined ? {} : { role: detail.role }), ...(detail.queensOff === undefined ? {} : { queensOff: detail.queensOff }) };
-    return statement("inspector.pivotal@1", marker.kind === "phase_change" ? "phase-bands@1" : marker.kind === "human_divergence" ? "recorded-run@1" : "board-rules@1", operands, marker.kind === "human_divergence" ? "recorded_run" : "declared_convention");
-  });
+    return operands;
+    }, kind === "human_divergence" ? "recorded_run" : "declared_convention");
+    return { ...declared, validateWireComponent: component => {
+      declared.validateWireComponent(component);
+      if (component.id === "fact_statement" && component.operand.rendererId === "inspector.pivotal@1"
+        && component.operand.operands.kind !== kind) throw new TypeError("Pivotal statement crosses its registered kind");
+    } };
+  };
   const storyRank = single("fact_statement", ["rank"], ["mechanical_transform"], (evidence) =>
     statement("inspector.story_rank@1", "recorded-run@1", { moments: payloadOf(evidence).rank.length }, "recorded_run"));
-  const openingReached = single("fact_statement", ["deepest"], ["copied_byte_equal"], (evidence) => {
+  const openingReached = singleFact("inspector.opening_reached@1", "opening-catalogue@1", ["deepest"], ["copied_byte_equal"], (evidence) => {
     const deepest = payloadOf(evidence).deepest;
-    return statement("inspector.opening_reached@1", "opening-catalogue@1", { eco: deepest.eco, name: deepest.name });
+    return { eco: deepest.eco, name: deepest.name };
   });
   const catalogueMembership = single("fact_statement", ["observedPly", "descendantEndpointCount"], ["copied_byte_equal"], (evidence) => {
     const membership = payloadOf(evidence);
@@ -821,16 +1084,11 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     const { detail: _detail, provenanceNote: _note, ...rest } = payloadOf(evidence).observation;
     return statement("play.compare_structure@1", "pawn-structure@1", { observation: rest });
   });
-  const consequence = single("fact_statement", ["terminal", "outcome", "plies", "objectiveState"], ["copied_byte_equal"], (evidence) => {
+  const consequence = singleFact("story.consequence@1", "recorded-run@1", ["terminal", "outcome", "plies", "objectiveState"], ["copied_byte_equal"], (evidence) => {
     const value = payloadOf(evidence);
-    return statement("story.consequence@1", "recorded-run@1", value.terminal ? { terminal: true, outcome: value.outcome } : { terminal: false, plies: value.plies, objectiveState: value.objectiveState }, "recorded_run");
-  });
-  const importedResult = single("fact_statement", ["result"], ["copied_byte_equal"], (evidence) =>
-    statement("story.imported_result@1", "recorded-run@1", { result: payloadOf(evidence).result }, "recorded_run"));
-  const objectiveTransition = single("fact_statement", ["from", "to"], ["copied_byte_equal"], (evidence) => {
-    const value = payloadOf(evidence);
-    return statement("play.objective_transition@1", "recorded-run@1", { from: value.from, to: value.to }, "recorded_run");
-  });
+    return value.terminal ? { terminal: true, outcome: value.outcome } : { terminal: false, plies: value.plies, objectiveState: value.objectiveState };
+  }, "recorded_run");
+  const importedResult = singleFact("story.imported_result@1", "recorded-run@1", ["result"], ["copied_byte_equal"], evidence => ({ result: payloadOf(evidence).result }), "recorded_run");
 
   // --- provider, model, corpus and recorded sources
   const engineName = (values: Payload): string | null => (typeof values.engineName === "string" && values.engineName.trim() !== "" ? (typeof values.engineVersion === "string" && values.engineVersion.trim() !== "" && !values.engineName.includes(values.engineVersion) ? `${values.engineName} ${values.engineVersion}` : values.engineName) : null);
@@ -848,7 +1106,8 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     throw new TypeError("an engine reading without a numeric score is an abstention");
   };
   const stockfishEval = single("magnitude", ["values"], ["mechanical_transform", "retained_convention"], (evidence) => engineMagnitude(evidence, payloadOf(evidence).values));
-  const recordedEval = single("magnitude", ["retrievedAt", "values"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => engineMagnitude(evidence, payloadOf(evidence).values));
+  const recordedEval: Family = { ...single("magnitude", ["retrievedAt", "values"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => engineMagnitude(evidence, payloadOf(evidence).values)),
+    validateWireComponent: (component, evidence) => assertInspectorWireComponent("recorded.engine.eval@1", component, evidence.evidenceDigest, evidence.producer) };
   const stockfishWdl = single("fact_statement", ["values"], ["mechanical_transform"], (evidence) => {
     const values = payloadOf(evidence).values;
     return statement("inspector.engine_wdl@1", "recorded-engine@1", { win: values.win, draw: values.draw, loss: values.loss, engine: engineName(values) });
@@ -859,10 +1118,17 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
     return statement("inspector.engine_line@1", "recorded-engine@1", { moves: moves.map((uci: string) => moveOf(uci)), engine: engineName(values), depth: depthOf(values) });
   });
   const nullableInt = (value: unknown): number | null => (Number.isSafeInteger(value) ? value as number : null);
-  const tablebase = (read: (payload: Payload) => Payload, perspective: "side_to_move" | "white", sourceOperands: readonly string[], distances: boolean) => single("fact_statement", sourceOperands, ["mechanical_transform"], (evidence) => {
+  const tablebase = (read: (payload: Payload) => Payload, perspective: "side_to_move" | "white", sourceOperands: readonly string[], distances: boolean): Family => {
+    const declared = singleFact("inspector.tablebase@1", "recorded-engine@1", sourceOperands, ["mechanical_transform"], (evidence) => {
     const values = read(payloadOf(evidence));
-    return statement("inspector.tablebase@1", "recorded-engine@1", { category: values.category, perspective, dtz: distances ? nullableInt(values.preciseDtz ?? values.dtz) : null, dtm: distances ? nullableInt(values.dtm) : null, pieces: distances && Number.isSafeInteger(values.pieceCount) ? values.pieceCount : null });
-  });
+    return { category: values.category, perspective, dtz: distances ? nullableInt(values.preciseDtz ?? values.dtz) : null, dtm: distances ? nullableInt(values.dtm) : null, pieces: distances && Number.isSafeInteger(values.pieceCount) ? values.pieceCount : null };
+    });
+    return { ...declared, validateWireComponent: component => {
+      declared.validateWireComponent(component);
+      if (component.id === "fact_statement" && component.operand.rendererId === "inspector.tablebase@1"
+        && component.operand.operands.perspective !== perspective) throw new TypeError("Tablebase statement crosses its registered perspective");
+    } };
+  };
   const identity = (payload: Payload): Payload => payload;
   const maiaModel = (page: Payload): { readonly name: string; readonly version: string } => ({ name: page.engine.name, version: page.engine.version });
   const maiaPolicy = single("distribution", ["engine", "targetElo", "candidates"], ["mechanical_transform", "retained_convention"], (evidence) => {
@@ -904,16 +1170,45 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
   // ---------------------------------------------------------------------------------------------
 
   const specs: AdapterSpec[] = [];
-  const add = (consumer: VersionedEvidenceId, projection: VersionedEvidenceId, forms: readonly EvidenceForm[], family: Family | ((forms: readonly EvidenceForm[]) => Family)) => {
-    const resolved = typeof family === "function" ? family(forms) : family;
-    specs.push({ consumer, projection, component: resolved.component, forms, sourceOperands: resolved.sourceOperands, assertions: resolved.assertions, construct: resolved.construct, ...(resolved.composition === undefined ? {} : { composition: resolved.composition }) });
+  const add = (consumer: VersionedEvidenceId, projection: VersionedEvidenceId, forms: readonly EvidenceForm[], family: Family | ((forms: readonly EvidenceForm[], captionOnly?: boolean) => Family)) => {
+    if (consumer === NUDGE || consumer === MAP) {
+      projection = currentRecordedModuleRefs([projection])[0]!;
+      // Narrative and former recorded rows now name one exact recorded-window pair.
+      if (specs.some(row => row.consumer === consumer && row.projection.id === projection.id && row.projection.version === projection.version)) return;
+    }
+    const captionOnly = isNudgeRecordedCaptionBinding(consumer, projection);
+    if (captionOnly) forms = forms.filter(form => form !== "arrows");
+    const resolved = typeof family === "function" ? family(forms, captionOnly) : family;
+    if ((consumer === NUDGE || consumer === MAP) && resolved.validateWireComponent === undefined) {
+      throw new TypeError("Current Nudge/Map adapter requires its registered received validation");
+    }
+    specs.push({ consumer, projection, component: resolved.component, forms, sourceOperands: resolved.sourceOperands, assertions: resolved.assertions, construct: resolved.construct,
+      ...(resolved.validateWireComponent === undefined ? {} : { validateWireComponent: resolved.validateWireComponent }),
+      ...(resolved.composition === undefined ? {} : { composition: resolved.composition }) });
   };
   const both = (projection: VersionedEvidenceId, forms: readonly EvidenceForm[], family: Family | ((forms: readonly EvidenceForm[]) => Family)) => { add(NUDGE, projection, forms, family); add(MAP, projection, forms, family); };
 
   // Post-commit Nudge ∩ Review Map: the one-edge semantic closure.
-  for (const family of ["backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "king_opposition", "king_zone", "open_file", "passed_pawn"]) both(V(`rules.structural.event.${family}`), LP, structuralEvent);
-  both(V("rules.structural.event.pawn_islands"), LP, pawnIslandsEvent);
-  for (const [family, construct] of Object.entries(TRANSITIONS)) both(V(`rules.transition.event.${family}`), LP, construct);
+  for (const family of ["king_zone", "passed_pawn"] as const) both(V(`rules.structural.event.${family}`), LP, structuralEvent(family));
+  for (const [ref, [renderer, convention]] of Object.entries(FOUNDATION_COMPACT_STATEMENTS)) {
+    const [id, version] = ref.split("@"), projection = V(id!, Number(version));
+    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(value => value.id === projection.id && value.version === projection.version);
+    if (declaration === undefined) throw new TypeError("Compact current event lacks its exact source declaration");
+    const definition = FOUNDATION_COMPACT_FACT_RENDERERS[renderer];
+    const bound = singleFact(renderer, convention, declaration.operands, ["copied_byte_equal", "mechanical_transform"], evidence => {
+      if (evidence.projection.id !== projection.id || evidence.projection.version !== projection.version) throw new TypeError("Compact event crosses its exact registered source");
+      const value = payloadOf(evidence);
+      const parsed = definition.parse({ san: edgeSan({ before_fen: value.beforeFen, move_uci: value.moveUci }), ...value }, "Complete ordinary current event");
+      assertFoundationEdgePayloadRef(parsed, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
+      return parsed;
+    });
+    both(projection, LP, { ...bound, validateWireComponent: (component, evidence) => {
+      bound.validateWireComponent(component);
+      if (component.id !== "fact_statement" || evidence.projection.id !== projection.id || evidence.projection.version !== projection.version) throw new TypeError("Received compact event crosses its exact registered source");
+      assertFoundationEdgePayloadRef(component.operand.operands, evidence.evidenceDigest);
+    } });
+  }
+  for (const [family, construct] of Object.entries(TRANSITIONS)) if (family !== "slider_ray") both(V(`rules.transition.event.${family}`), LP, construct);
   both(V("rules.tactic.event.check"), LP, checkEvent);
   both(V("rules.tactic.event.double_attack"), LP, doubleAttack);
   both(V("rules.tactic.event.loose_piece"), LP, looseEvent);
@@ -921,7 +1216,6 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
   both(V("derived.exchange.capture_class"), LP, captureClass);
   both(V("derived.exchange.trade_completed"), LP, tradeCompleted);
   both(V("derived.tactic.fork_survives_reply"), LP, forkSurvives);
-  for (const family of AVOIDANCE_FAMILIES) both(V(`derived.semantic_avoidance.${family}`), LP, avoidance);
   both(V("derived.activity.event.open_file_occupancy"), BOARD5, openFileOccupancy);
   both(V("derived.king.captured_zone_defender"), BOARD5, capturedZoneDefender);
   both(V("derived.pawn.event.transitions"), BOARD5, pawnTransition);
@@ -951,82 +1245,237 @@ export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpe
   add(MAP, V("derived.opening.deepest_reached"), LPS, openingReached);
   add(MAP, V("derived.pawn.sequence.contact_timing"), BOARD5, contactTiming);
   add(MAP, V("derived.tactic.sequence.defender_consequence"), BOARD4, defenderConsequence);
-  for (const kind of ["human_divergence", "irreversibility", "option_collapse", "phase_change"]) add(MAP, V(`derived.pivotal.${kind}`), PST, pivotal);
-  add(MAP, V("live.stockfish.eval"), P, stockfishEval);
-  add(MAP, V("live.stockfish.wdl"), P, stockfishWdl);
+  for (const kind of ["human_divergence", "irreversibility", "option_collapse", "phase_change"] as const) add(MAP, V(`derived.pivotal.${kind}`), PST, pivotal(kind));
   add(MAP, V("recorded.engine.eval"), PS, recordedEval);
-  add(MAP, V("recorded.tablebase.result"), PS, tablebase((payload) => payload.values, "white", ["values"], true));
+  add(MAP, V("recorded.tablebase.result"), PS, tablebase((payload) => payload.values, "side_to_move", ["values"], true));
   add(MAP, V("rules.endgame.classification"), PS, endgame);
   add(MAP, V("rules.phase.reading", 2), PS, phase);
   add(MAP, V("run.record.consequence"), PST, consequence);
   add(MAP, V("run.record.imported_result"), PS, importedResult);
-  add(MAP, V("run.record.objective_transition"), PST, objectiveTransition);
+  add(MAP, V("run.record.objective_transition", 2), PST, singleFact("review.objective_transition@1", "recorded-run@1", ["context", "from", "to"], ["copied_byte_equal"], evidence => {
+    const parse = s.obj({ context: s.lit("review"), from: s.lit("active", "preserved", "degraded", "failed", "achieved", "transitioned"), to: s.lit("active", "preserved", "degraded", "failed", "achieved", "transitioned") });
+    const value = parse(evidence.payload, "Review objective payload");
+    return { from: value.from, to: value.to };
+  }, "recorded_run"));
   add(MAP, V("theory.endgame.setup_match"), PS, setupMatch);
 
-  // Full Inspector: the complete census of the node's sealable sources.
-  add(FULL, V("derived.compare.eval_delta"), LPS, compareEvalDelta);
-  add(FULL, V("derived.compare.structure_delta"), LPS, compareStructure);
-  add(FULL, V("derived.material.event.role_asymmetry"), BOARD5, roleAsymmetry);
-  add(FULL, V("derived.material.reading.role_signature"), LP, roleSignature);
-  add(FULL, V("derived.opening.deepest_reached"), LPS, openingReached);
-  for (const version of [1, 2]) {
-    add(FULL, V("derived.pawn.sequence.contact_timing", version), BOARD5, contactTiming);
-    add(FULL, V("derived.pawn.sequence.harassment_pressure", version), BOARD5, harassment);
-    add(FULL, V("derived.tactic.attraction_observed", version), BOARD4, attraction);
-    add(FULL, V("derived.tactic.check_zwischenzug_observed", version), BOARD4, zwischenzug);
-    add(FULL, V("derived.tactic.deflection_observed", version), BOARD4, deflection);
-    add(FULL, V("derived.tactic.interference_observed", version), BOARD4, interference);
-    add(FULL, V("derived.tactic.line_blocker_clearance_observed", version), BOARD4, lineClearance);
-    add(FULL, V("derived.tactic.overload_exploitation_observed", version), BOARD4, overload);
-    add(FULL, V("derived.tactic.sequence.defender_consequence", version), BOARD4, defenderConsequence);
-    add(FULL, V("derived.tactic.square_clearance_observed", version), BOARD4, squareClearance);
+  // Literal accepted Full Inspector2 image. This is deliberately not a ref-rebased copy of
+  // the current Full1 table: saved packets, model/explorer operands and Compare2 have different
+  // meanings and constructors. Until complete source-page/API/client cutover, these specs are
+  // an internal prerequisite, not a second registered consumer or partial compiled view.
+  const sources: AdapterSpec[] = [];
+  const addSource = (projection: VersionedEvidenceId, forms: readonly EvidenceForm[], family: Family | ((forms: readonly EvidenceForm[]) => Family)) => {
+    const resolved = typeof family === "function" ? family(forms) : family;
+    const ref = `${projection.id}@${projection.version}`;
+    if (!isInspectorWholeReading(ref) && !ref.startsWith("derived.inspector.detail.") && !Object.hasOwn(INSPECTOR_SOURCE_STATEMENTS, ref)) throw new TypeError("Inspector source lacks its exact registered wire semantics");
+    if (isInspectorWholeReading(ref)) {
+      const geometry = INSPECTOR_WHOLE_READING_GEOMETRY[ref];
+      const stateOperands = ref === "rules.tactic.reading.trapped_piece@1" || ref === "rules.tactic.consequence.threat@1" ? ["kind", "reason"] : [];
+      sources.push({ consumer: V("module.full_inspector", 2), projection, component: "fact_statement", forms,
+        validateWireComponent: (component, evidence) => assertInspectorWireComponent(ref, component, evidence.evidenceDigest, evidence.producer),
+        sourceOperands: [...new Set([...resolved.sourceOperands, ...stateOperands])], assertions: ["mechanical_transform", "retained_convention"],
+        ...(geometry === "none" ? {} : { composition: { id: "inspector_whole_reading_geometry", members: [
+          { component: "fact_statement" as const, forms: LP },
+          { component: geometry, forms: forms.filter(form => form !== "list" && form !== "panel"), when: "inspector_whole_reading_has_geometry" as const },
+        ] } }),
+        construct: evidence => {
+          assertDeclaredEvidence(evidence);
+          if (`${evidence.projection.id}@${evidence.projection.version}` !== ref) throw new TypeError("Whole reading constructor crosses its exact adapter pair");
+          return inspectorWholeReadingComponents(evidence, kit);
+        },
+      });
+      return;
+    }
+    sources.push({ consumer: V("module.full_inspector", 2), projection, component: resolved.component, forms,
+      validateWireComponent: (component, evidence) => {
+        assertInspectorWireComponent(ref, component, evidence.evidenceDigest, evidence.producer);
+        resolved.validateWireComponent?.(component, evidence);
+      },
+      sourceOperands: resolved.sourceOperands, assertions: resolved.assertions, construct: resolved.construct,
+      ...(resolved.composition === undefined ? {} : { composition: resolved.composition }) });
+  };
+  addSource(V("rules.tactic.reading.loose_piece"), LP, loosePieces);
+  addSource(V("rules.tactic.reading.ray_classification"), LLPH, rays);
+  addSource(V("rules.tactic.reading.rook_on_seventh"), LLPH, rookOnSeventh);
+  addSource(V("rules.tactic.reading.trapped_piece"), BOARD5, trapped);
+  addSource(V("rules.tactic.reading.back_rank"), BOARD5, backRank);
+  addSource(V("rules.tactic.reading.discovered_latency"), BOARD5, discoveredLatency);
+  addSource(V("rules.tactic.consequence.threat"), LP, threats);
+  addSource(V("rules.tactic.consequence.mate_in_one"), LP, mateInOne);
+  addSource(V("rules.tactic.consequence.reply_breadth"), LP, replyBreadth);
+  addSource(V("rules.structural.reading.space"), LLP, space);
+  addSource(V("rules.structural.reading.pawn_connectivity"), LLP, pawnConnectivity);
+  addSource(V("rules.phase.development"), LPH, development);
+  addSource(V("rules.castling.reading.rights"), LP, castlingRights);
+  addSource(V("rules.castling.reading.legality"), LP, castlingLegality);
+  addSource(V("derived.tactic.discovered_executed"), BOARD4, discoveredExecuted);
+  addSource(V("rules.tactic.reading.promotion_pressure"), LLP, promotionPressure);
+  addSource(V("derived.tactic.nonterminal_fork_survival"), LP, forkSurvives);
+  addSource(V("rules.square.reading.control"), BOARD5, squareControl);
+  addSource(V("rules.mobility.reading.piece_destinations"), BOARD5, pieceDestinations);
+  addSource(V("rules.mobility.reading.legal_moves"), LLPH, legalMoves);
+  addSource(V("rules.square.event.control"), BOARD5, squareControlEvent);
+  addSource(V("rules.mobility.event.piece_destinations"), BOARD5, destinationsEvent);
+  addSource(V("rules.pawn.reading.contacts"), BOARD5, contacts);
+  addSource(V("rules.pawn.reading.candidate_majority"), LLPH, candidateMajority);
+  addSource(V("derived.pawn.sequence.contact_timing", 3), BOARD5, contactTiming);
+  addSource(V("derived.pawn.sequence.harassment_pressure", 3), BOARD5, harassment);
+  addSource(V("derived.tactic.sequence.defender_consequence", 3), BOARD4, defenderConsequence);
+  addSource(V("derived.material.event.role_asymmetry", 2), BOARD5, roleAsymmetry);
+  addSource(V("derived.material.reading.role_signature", 2), LP, roleSignature);
+  addSource(V("rules.king.reading.zone_state"), BOARD5, kingZone);
+
+  const historical = (renderer: RendererId, build: (evidence: DeclaredEvidence<unknown>) => unknown,
+    sourceOperands: readonly string[]) => single("fact_statement", sourceOperands,
+    ["copied_byte_equal", "mechanical_transform", "retained_convention"], evidence =>
+      statement(renderer, "recorded-run@1", build(evidence), "recorded_run"));
+  const packetOperands = ["subject", "itemDigest", "event", "authority"];
+  addSource(V("recorded.inspector.eval_packet"), P, historical("inspector.recorded_eval@1", recordedInspectorEvalOperands, packetOperands));
+  addSource(V("recorded.inspector.wdl_packet"), P, historical("inspector.recorded_wdl@1", recordedInspectorWdlOperands, packetOperands));
+  addSource(V("recorded.inspector.pv_packet"), P, historical("inspector.recorded_pv@1", recordedInspectorPvOperands, packetOperands));
+  addSource(V("derived.maia.node_distribution"), LP, single("fact_statement", ["nodeId", "engine", "requestedBand", "appliedBand", "coverage", "candidates"],
+    ["copied_byte_equal", "retained_convention"], evidence => {
+      const { nodeId, engine, requestedBand, appliedBand, coverage, candidates } = evidence.payload as MaiaNodeDistribution;
+      return statement("consumer.maia_node_distribution@1", "maia-reported-window@1", { nodeId, engine, requestedBand, appliedBand, coverage, candidates });
+    }));
+  addSource(V("derived.maia.node_candidate_wdl"), LP, single("fact_statement", ["nodeId", "engine", "requestedBand", "appliedBand", "candidates"],
+    ["copied_byte_equal", "retained_convention"], evidence => {
+      const { nodeId, engine, requestedBand, appliedBand, candidates } = evidence.payload as MaiaNodeCandidateWdl;
+      return statement("consumer.maia_node_candidate_wdl@1", "maia-reported-window@1", { nodeId, engine, requestedBand, appliedBand, candidates });
+    }));
+  addSource(V("derived.explorer.inspector_population"), LP, single("fact_statement", ["request", "totals", "moves", "unlisted", "lastPlayedMonth"],
+    ["copied_byte_equal", "mechanical_transform", "retained_convention"], evidence => {
+      const { request, totals, moves, unlisted, lastPlayedMonth } = evidence.payload as ExplorerInspectorPopulation;
+      return statement("consumer.explorer_population@1", "explorer-population@1", { ...totals, ratings: [...request.ratingBuckets],
+        speeds: [...request.speeds], since: request.since, until: request.until, unlisted, lastPlayedMonth, moves });
+    }));
+  addSource(V("recorded.inspector.tablebase_packet"), P, historical("inspector.recorded_tablebase@1", recordedInspectorTablebaseOperands, packetOperands));
+  addSource(V("derived.inspector.tablebase_category"), P, historical("inspector.recorded_tablebase_category@1", recordedInspectorTablebaseViewOperands, ["record", "category"]));
+  addSource(V("derived.inspector.tablebase_distance"), P, historical("inspector.recorded_tablebase_distance@1", recordedInspectorTablebaseViewOperands, ["record", "category", "dtz", "preciseDtz", "dtm"]));
+  addSource(V("recorded.engine.eval"), PS, recordedEval);
+  addSource(V("recorded.tablebase.result"), PS, tablebase((payload) => payload.values, "side_to_move", ["values"], true));
+  addSource(V("theory.shapes.firing", 3), PS, single("fact_statement", ["entryId", "firstNodeId", "lastNodeId", "openEnded", "authority"],
+    ["copied_byte_equal", "retained_convention"], evidence => statement("inspector.registered_shape_firing@2", "shape-catalogue@1", registeredShapeFiringOperands(evidence))));
+  addSource(V("rules.phase.reading", 2), PS, phase);
+  addSource(V("derived.pivotal.irreversibility"), PS, pivotal("irreversibility"));
+  addSource(V("derived.pivotal.phase_change", 2), PS, pivotal("phase_change"));
+  addSource(V("derived.pivotal.human_divergence", 2), PS, pivotal("human_divergence"));
+  addSource(V("derived.pivotal.option_collapse", 2), PS, pivotal("option_collapse"));
+  addSource(V("derived.compare.structure_delta", 2), LPS, single("fact_statement", ["observation", "namedStructure"], ["copied_byte_equal"], evidence => {
+    const { observation, namedStructure } = payloadOf(evidence);
+    if (namedStructure !== null) return statement("play.named_structure@1", "structure-catalogue@1", { ...namedStructure, squares: observation.squares });
+    const { detail: _detail, provenanceNote: _note, ...rest } = observation;
+    return statement("play.compare_structure@1", "pawn-structure@1", { observation: rest });
+  }));
+  addSource(V("derived.compare.eval_delta", 2), LPS, single("fact_statement", ["before", "after", "delta", "plyOffset", "frame", "comparability"],
+    ["copied_byte_equal", "retained_convention"], evidence => statement("compare.recorded_delta@2", "recorded-comparison@1", evidence.payload, "recorded_run")));
+  addSource(V("derived.story.rank", 3), LP, storyRank);
+  addSource(V("theory.opening.catalogue_membership"), LP, catalogueMembership);
+  addSource(V("derived.opening.deepest_reached", 2), LPS, openingReached);
+  addSource(V("rules.tactic.reading.defender_duty_set"), BOARD4, dutySet);
+  for (const id of ["attraction", "check_zwischenzug", "deflection", "interference", "line_blocker_clearance", "overload_exploitation", "square_clearance"] as const) {
+    addSource(V(`derived.tactic.${id}_observed`, 3), BOARD4, { attraction, check_zwischenzug: zwischenzug, deflection,
+      interference, line_blocker_clearance: lineClearance, overload_exploitation: overload, square_clearance: squareClearance }[id]);
   }
-  for (const kind of ["human_divergence", "irreversibility", "option_collapse", "phase_change"]) add(FULL, V(`derived.pivotal.${kind}`), PS, pivotal);
-  add(FULL, V("derived.story.rank", 2), LP, storyRank);
-  add(FULL, V("derived.tactic.discovered_executed"), BOARD4, discoveredExecuted);
-  add(FULL, V("derived.tactic.fork_survives_reply"), LP, forkSurvives);
-  add(FULL, V("derived.tactic.overloaded_defender_response_conflict"), LP, overloadConflict);
-  add(FULL, V("derived.tactic.promotion_pressure"), LLP, promotionPressure);
-  add(FULL, V("human.explorer.population"), LP, explorerPopulation);
-  add(FULL, V("human.maia.candidate_wdl"), LP, maiaWdl);
-  add(FULL, V("human.maia.policy"), LP, maiaPolicy);
-  add(FULL, V("live.stockfish.eval"), P, stockfishEval);
-  add(FULL, V("live.stockfish.pv"), LP, stockfishPv);
-  add(FULL, V("live.stockfish.wdl"), P, stockfishWdl);
-  add(FULL, V("live.syzygy.category"), P, tablebase(identity, "side_to_move", ["category"], false));
-  add(FULL, V("live.syzygy.distance"), P, tablebase(identity, "side_to_move", ["category", "dtz"], true));
-  add(FULL, V("live.syzygy.result"), P, tablebase((payload) => payload.values, "side_to_move", ["values"], true));
-  add(FULL, V("recorded.engine.eval"), PS, recordedEval);
-  add(FULL, V("recorded.tablebase.result"), PS, tablebase((payload) => payload.values, "white", ["values"], true));
-  add(FULL, V("rules.castling.reading.legality"), LP, castlingLegality);
-  add(FULL, V("rules.castling.reading.rights"), LP, castlingRights);
-  add(FULL, V("rules.king.reading.zone_state"), BOARD5, kingZone);
-  add(FULL, V("rules.mobility.event.piece_destinations"), BOARD5, destinationsEvent);
-  add(FULL, V("rules.mobility.reading.legal_moves"), LLPH, legalMoves);
-  add(FULL, V("rules.mobility.reading.piece_destinations"), BOARD5, pieceDestinations);
-  add(FULL, V("rules.pawn.reading.candidate_majority"), LLPH, candidateMajority);
-  add(FULL, V("rules.pawn.reading.contacts"), BOARD5, contacts);
-  add(FULL, V("rules.phase.development"), LPH, development);
-  add(FULL, V("rules.phase.reading", 2), PS, phase);
-  add(FULL, V("rules.square.event.control"), BOARD5, squareControlEvent);
-  add(FULL, V("rules.square.reading.control"), BOARD5, squareControl);
-  add(FULL, V("rules.structural.reading.pawn_connectivity"), LLP, pawnConnectivity);
-  add(FULL, V("rules.structural.reading.space"), LLP, space);
-  add(FULL, V("rules.tactic.consequence.forced_mate_after_move"), LP, forcedMate(false));
-  add(FULL, V("rules.tactic.consequence.forced_mate_after_move", 2), LP, forcedMate(true));
-  add(FULL, V("rules.tactic.consequence.mate_in_one"), LP, mateInOne);
-  add(FULL, V("rules.tactic.consequence.reply_breadth"), LP, replyBreadth);
-  add(FULL, V("rules.tactic.consequence.threat"), LP, threats);
-  add(FULL, V("rules.tactic.event.defender_duty_relocated"), BOARD4, dutyRelocated);
-  add(FULL, V("rules.tactic.event.defender_removed"), BOARD4, defenderRemoved);
-  add(FULL, V("rules.tactic.reading.back_rank"), BOARD5, backRank);
-  add(FULL, V("rules.tactic.reading.defender_duty_set"), BOARD4, dutySet);
-  add(FULL, V("rules.tactic.reading.discovered_latency"), BOARD5, discoveredLatency);
-  add(FULL, V("rules.tactic.reading.loose_piece"), LP, loosePieces);
-  add(FULL, V("rules.tactic.reading.ray_classification"), LLPH, rays);
-  add(FULL, V("rules.tactic.reading.rook_on_seventh"), LLPH, rookOnSeventh);
-  add(FULL, V("rules.tactic.reading.trapped_piece"), BOARD5, trapped);
-  add(FULL, V("theory.opening.catalogue_membership"), LP, catalogueMembership);
-  add(FULL, V("theory.shapes.firing"), PS, shape);
-  return Object.freeze(specs);
+  addSource(V("rules.tactic.event.defender_removed"), BOARD4, defenderRemoved);
+  addSource(V("rules.tactic.event.defender_duty_relocated"), BOARD4, dutyRelocated);
+  addSource(V("rules.tactic.predicate.overload_conflict"), LP, overloadConflict);
+  addSource(V("rules.tactic.consequence.forced_mate_after_move"), LP, forcedMate(false));
+  addSource(V("rules.tactic.consequence.forced_mate_after_move", 2), LP, forcedMate(true));
+
+  for (const [projection, renderer, arm, binding] of [
+    ["derived.review.analysis_typed_pv", "review.analysis_typed_pv@1", "typed_pv", "declared_convention"],
+    ["derived.review.analysis_recorded_pv", "review.analysis_recorded_pv@1", "recorded_bestline", "recorded_run"],
+    ["derived.review.analysis_recorded_first", "review.analysis_recorded_first@1", "recorded_search_first", "recorded_run"],
+  ] as const) addSource(V(projection), LP, single("fact_statement", ["nodeId", "entryNodeId", "operands"],
+    ["copied_byte_equal", "mechanical_transform", "retained_convention"], evidence => {
+      const invocation = readRecordedAnalyzeLineInvocation(evidence);
+      if (invocation.route !== `${projection}@1` || invocation.data.sourceArm !== arm || invocation.data.operands === null) throw new TypeError("Analyze adapter crosses its original source invocation");
+      return statement(renderer, "recorded-run@1", invocation.data.operands, binding);
+    }));
+
+  for (const family of ["king_zone", "passed_pawn", "piece_count", "direct_attack_count"] as const) {
+    addSource(V(`rules.structural.event.${family}`), LP, singleFact("inspector.structural_before_after@1",
+      "board-rules@1",
+      ["before_fen", "move_uci", "family", "before", "after"], ["mechanical_transform"], evidence => {
+        const event = payloadOf(evidence);
+        if (event.family !== family || evidence.projection.id !== `rules.structural.event.${family}` || evidence.projection.version !== 1) throw new TypeError("Structural source crosses its registered family");
+        return parseInspectorStructuralBeforeAfterOperands({ san: edgeSan(event), family, before: event.before, after: event.after });
+      }));
+  }
+  for (const [ref, [renderer, convention]] of Object.entries(FOUNDATION_EDGE_STATEMENTS)) {
+    const [id, version] = ref.split("@");
+    const projection = V(id!, Number(version));
+    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === projection.id && row.version === projection.version);
+    if (declaration === undefined) throw new TypeError("Missing exact current structural source");
+    const definition = FOUNDATION_EDGE_FACT_RENDERERS[renderer];
+    addSource(projection, LP, single("fact_statement", declaration.operands, ["copied_byte_equal", "mechanical_transform"], evidence => {
+      const value = payloadOf(evidence);
+      const parsed = definition.parse({ san: edgeSan({ before_fen: value.beforeFen, move_uci: value.moveUci }), ...value }, "Current structural readout");
+      assertFoundationEdgePayloadRef(parsed, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
+      return statement(renderer, convention, parsed);
+    }));
+  }
+
+
+  for (const [ref, [renderer, convention]] of Object.entries(FOUNDATION_SNAPSHOT_STATEMENTS)) {
+    const [id, version] = ref.split("@"), projection = V(id!, Number(version));
+    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === projection.id && row.version === projection.version);
+    if (declaration === undefined) throw new TypeError("Missing exact foundation snapshot source");
+    const definition = FOUNDATION_SNAPSHOT_FACT_RENDERERS[renderer];
+    addSource(projection, LP, single("fact_statement", declaration.operands, ["copied_byte_equal", "mechanical_transform"], evidence => {
+      const parsed = definition.parse(payloadOf(evidence), "Complete foundation snapshot");
+      assertFoundationSnapshotPayloadRef(parsed, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
+      return statement(renderer, convention, parsed);
+    }));
+  }
+
+  for (const kind of Object.keys(INSPECTOR_DETAIL_SOURCES) as InspectorDetailKind[]) {
+    if (isFoundationDetailKind(kind)) {
+      addSource(V(`derived.inspector.detail.${kind}`), LP, single("fact_statement",
+        ["sourceProjection", "context", "scope", "range", "fullSourceTotal", "members"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], evidence => {
+          const parsed = parseInspectorDetailPayload(kind, evidence.payload);
+          assertFoundationSnapshotPayloadRef(parsed, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
+          return statement(`inspector.detail.${kind}@1`, FOUNDATION_DETAIL_CAPTIONS[kind], parsed);
+        }));
+      continue;
+    }
+
+    addSource(V(`derived.inspector.detail.${kind}`), LLP, {
+      component: "fact_statement", sourceOperands: ["sourceProjection", "context", "scope", "range", "fullSourceTotal", "members"],
+      assertions: ["copied_byte_equal", "mechanical_transform", "retained_convention"],
+      composition: { id: "inspector_detail_witnesses", members: [
+        { component: "fact_statement", forms: LP },
+        { component: "square_set", forms: ["lit_squares"], when: "inspector_detail_has_squares" },
+      ] },
+      construct: evidence => {
+        const payload = parseInspectorDetailPayload(kind, evidence.payload), squares = inspectorDetailSquares(payload);
+        const caption = fact(`inspector.detail.${kind}@1`, "piece-geometry@1", payload);
+        const text: ComponentValue = { id: "fact_statement", operand: caption };
+        return squares.length === 0 ? [text] : [text, kit.squareSet(evidence, squares, "blue", caption)];
+      },
+    });
+  }
+  // Source choice order has one authority. Constructors are grouped by payload shape, while
+  // the current door retains the topic order (including replacements in their original slots).
+  const byRef = new Map(sources.map(spec => [`${spec.projection.id}@${spec.projection.version}`, spec]));
+  const sourceRefs = [...INSPECTOR_SOURCE_TOPICS.map(row => row.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`)];
+  if (byRef.size !== sources.length || byRef.size !== sourceRefs.length) throw new TypeError("Inspector source adapters must form the exact current image");
+  const ordered = sourceRefs.map(ref => {
+    const spec = byRef.get(ref);
+    if (spec === undefined) throw new TypeError("Inspector source lacks its exact current adapter");
+    return spec;
+  });
+  return { current: Object.freeze(specs), sources: Object.freeze(ordered) };
+}
+
+/** Sole current pairs, including the exact accepted Full2 source/detail image. */
+export function inspectorAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
+  const { current, sources } = buildInspectorAdapterSpecs(kit);
+  return Object.freeze([...current, ...sources]);
+}
+
+/** Accepted source/detail constructors, internal and unbound until the complete Full2 cutover. */
+export function inspectorSourceAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
+  return buildInspectorAdapterSpecs(kit).sources;
 }

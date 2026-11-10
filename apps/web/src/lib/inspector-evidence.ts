@@ -9,11 +9,12 @@ import {
   type PresentedEvidenceItem,
 } from "@chess-tabiya/runtime/client";
 
-import type { CorpusPage, HumanSplitPage } from "./api.js";
+import type { CorpusPage, HumanSplitPage, LegacyHumanSplitPage } from "./api.js";
+import { parseHumanSplitPage } from "./human-split-response.js";
 
 export function consumeHumanSplit(
-  view: ConsumerEvidenceView<HumanSplitPage>,
-): HumanSplitPage {
+  view: ConsumerEvidenceView<LegacyHumanSplitPage>,
+): LegacyHumanSplitPage {
   assertConsumerEvidenceView(view);
   if (view.consumer.id !== "inspector.human_split" || view.consumer.version !== 1 || view.items.length !== 1) {
     throw new TypeError("Expected one inspector.human_split@1 evidence item");
@@ -21,13 +22,21 @@ export function consumeHumanSplit(
   return view.items[0]!.payload;
 }
 
-export function humanSplitEvidence(page: HumanSplitPage): HumanSplitPage {
+export function humanSplitEvidence(page: HumanSplitPage, requestedFen?: string): HumanSplitPage {
+  if ("protocol" in page) return parseHumanSplitPage(page, page.nodeId, requestedFen);
   const declared = humanSplitPageEvidence(page);
   return consumeHumanSplit(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "inspector.human_split", version: 1 },
     [declared],
   ));
+}
+
+/** Modern components come only from the completely validated server receipt, never a browser mint. */
+export function humanSplitPresentation(page: HumanSplitPage): readonly PresentedEvidenceItem[] {
+  if (!("protocol" in page)) throw new TypeError("Legacy model page has no modern receipt");
+  parseHumanSplitPage(page, page.nodeId);
+  return parsePresentationReceipt(page.presentation);
 }
 
 export function corpusEvidence(page: CorpusPage): CorpusPage {
@@ -52,6 +61,7 @@ export function corpusPresentation(page: CorpusPage): readonly PresentedEvidence
   if ((page.status.kind !== "shown" || page.committedMoveSan === null) && page.committedMoveListed !== null) throw new TypeError("Corpus absence has no committed-move membership");
   for (const item of items) {
     if (item.component.id !== "fact_statement" || item.component.operand.rendererId !== "consumer.explorer_population@1") throw new TypeError("Corpus receipt uses another renderer");
+    if (item.component.operand.binding !== "declared_convention" || item.component.operand.convention !== "explorer-population@1") throw new TypeError("Corpus receipt uses another binding or convention");
     const value = item.component.operand.operands;
     if (value.total < 100) throw new TypeError("Corpus presentation is below its population floor");
     if (JSON.stringify([value.ratings, value.speeds, value.since, value.until]) !== JSON.stringify([page.population.ratings, page.population.speeds, page.population.since, page.population.until])) throw new TypeError("Corpus presentation population differs from its requested attribution");

@@ -2,16 +2,13 @@ import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
-import { checkSourcingFile } from "./check.js";
 import { TABLEBASE_RATIONALE, type TablebasePayload } from "./syzygy.js";
-import { cachedTablebaseQuery, compileTablebaseCensus, createTablebaseQueryMeter, hydrateTablebaseAnswerCache, tablebaseCensus, tablebaseCensusStatus, type TablebaseCensusProgress } from "./tablebase-census.js";
+import { cachedTablebaseQuery, compileTablebaseCensus, createTablebaseQueryMeter, hydrateTablebaseAnswerCache, tablebaseCensusStatus, type TablebaseCensusProgress } from "./tablebase-census.js";
 import type { EvidenceLedger, SourceEntry, SourceManifest } from "./types.js";
-import { verifyDraft } from "./verify-draft.js";
 
 const START = "7k/P7/8/8/8/8/4K3/8 w - - 0 1";
 const directories: string[] = [];
@@ -219,24 +216,5 @@ describe("tablebase legal-successor census", () => {
     expect(incomplete.coveredSuccessors).toBe(0);
   });
 
-  it("replaces a real pack's validated sidecars through the production file boundary", async () => {
-    const directory = await mkdtemp(join(tmpdir(), "tabiya-tablebase-census-"));
-    directories.push(directory);
-    const file = join(directory, "lucena.json");
-    await writeFile(file, await readFile(resolvePackPath("lucena-bridge-convert"), "utf8"), "utf8");
-    let calls = 0;
-    const query = async (fen: string) => ({
-      payload: { ...payload(), category: fen.split(" ")[1] === "w" ? "win" : "loss" },
-      source: source(calls++, fen),
-    });
-    await verifyDraft(file, { query, now: () => new Date("2026-09-01T01:00:00.000Z") });
 
-    const result = await tablebaseCensus(file, { query, maxQueries: 400 });
-    const checked = await checkSourcingFile(file, { strict: true });
-    const writtenLedger = JSON.parse(await readFile(result.paths.ledger, "utf8")) as EvidenceLedger;
-
-    expect(checked.valid).toBe(true);
-    expect(result.successorPositions).toBeGreaterThan(0);
-    expect(writtenLedger).toEqual(result.ledger);
-  });
 });

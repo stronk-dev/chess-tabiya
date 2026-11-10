@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createApplication, type ApplicationOptions, type ChessTabiyaApplication } from "./application.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { CampaignRegistry } from "./campaign-registry.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
@@ -37,6 +38,9 @@ const released: string[] = [];
 beforeEach(() => {
   vi.spyOn(console, "info").mockImplementation(() => {});
   directory = mkdtempSync(join(tmpdir(), "tabiya-startup-cleanup-"));
+  const campaignDirectory = join(directory, "campaigns");
+  mkdirSync(campaignDirectory);
+  installEmptyApplicationCatalogues();
   options = {
     databasePath: join(directory, "app.sqlite"),
     engineMode: "maia", stockfishCommand: stockfish!,
@@ -70,8 +74,10 @@ beforeEach(() => {
     closedStorage.add(this);
     released.push("database");
   });
-  vi.spyOn(CampaignRegistry, "loadDefault").mockImplementation(async (...args) => {
-    try { return await originalCampaignLoad(...args); }
+  // Keep the actual file/parser/registry boundary and original extra invalid campaign.
+  // Only the unrelated installed lesson directory is replaced with this owned empty one.
+  vi.spyOn(CampaignRegistry, "loadDefault").mockImplementation(async (packs, _directory, extraFiles) => {
+    try { return await originalCampaignLoad(packs, campaignDirectory, extraFiles); }
     catch (error) { observedCampaignFailure = error; throw error; }
   });
 });

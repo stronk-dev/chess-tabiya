@@ -1,11 +1,12 @@
 // rfc/hint-distance.md §1, §1.1, §3 — the literal Guided Hint family × rung registry.
 //
-// This is a leaf module (type-only imports) so that the evidence catalogue, the module contract and
+// This is a leaf module (only the current source-slot constants plus type imports) so that the evidence catalogue, the module contract and
 // the hint compiler all read ONE table. `HINT_DECLARATION_MATRIX` is the authority for every horizon
 // and disclosure declaration; the catalogue compiles it through the real F1 manifest compiler, so a
 // widened row fails at import rather than in prose ([[D1641]]).
 
 import type { AnswerDistance, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
+import { CANDIDATE_CURRENT_SOURCE_ROUTES } from "./internal/candidate-child-reading-routes.js";
 
 /** §1: the seven hint families, set-equal to D1397's frozen `contract.families`, in precedence order. */
 export const HINT_FAMILIES = Object.freeze([
@@ -48,6 +49,8 @@ export const HINT_ABSTENTION_REASONS = Object.freeze([
 export interface HintDeclarationRow {
   readonly family: HintFamily;
   readonly source: VersionedEvidenceId;
+  readonly horizon: VersionedEvidenceId;
+  readonly disclosures: Readonly<Record<HintRung, VersionedEvidenceId>>;
   readonly role: "reading" | "predicate" | "event";
   /** The admitted source status, literal (§1 table). */
   readonly status: string;
@@ -57,12 +60,15 @@ export interface HintDeclarationRow {
   readonly rungAnswers: Readonly<Record<HintRung, readonly AnswerDistance[]>>;
 }
 
-const ref = (id: string): VersionedEvidenceId => Object.freeze({ id, version: 1 });
-const row = (family: HintFamily, source: string, role: HintDeclarationRow["role"], status: string, sourceAnswers: readonly AnswerDistance[]): HintDeclarationRow => {
+const ref = (id: string, version = 1): VersionedEvidenceId => Object.freeze({ id, version });
+const routeRef = (route: string): VersionedEvidenceId => { const [id, version] = route.split("@"); return ref(id!, Number(version)); };
+const row = (family: HintFamily, source: VersionedEvidenceId, role: HintDeclarationRow["role"], status: string, sourceAnswers: readonly AnswerDistance[], version = 1): HintDeclarationRow => {
   const withMove = Object.freeze([...sourceAnswers, "move"] as AnswerDistance[]);
   const lower = Object.freeze([...sourceAnswers]);
   return Object.freeze({
-    family, source: ref(source), role, status,
+    family, source, role, status,
+    horizon: ref(hintHorizonProjectionId(family), version),
+    disclosures: Object.freeze(Object.fromEntries(HINT_RUNGS.map(rung => [rung, ref(hintDisclosureProjectionId(family, rung), version)]))) as Readonly<Record<HintRung, VersionedEvidenceId>>,
     sourceAnswers: lower,
     horizonAnswers: withMove,
     rungAnswers: Object.freeze({ pattern: lower, square: lower, piece: lower, distance: lower, move: withMove }),
@@ -71,13 +77,13 @@ const row = (family: HintFamily, source: string, role: HintDeclarationRow["role"
 
 /** §1.1 — the executable declaration matrix. Unit: hint family; total seven. */
 export const HINT_DECLARATION_MATRIX: readonly HintDeclarationRow[] = Object.freeze([
-  row("mate_in_one", "rules.tactic.consequence.mate_in_one", "reading", "the searched edge is one of the exact mates in one of its before position", ["threat"]),
-  row("forced_mate", "rules.tactic.consequence.forced_mate_after_move", "predicate", "proofStatus=proved", ["candidate_moves"]),
-  row("double_attack", "rules.tactic.event.double_attack", "event", "gained", ["threat"]),
-  row("fork_survives_reply", "derived.tactic.fork_survives_reply", "predicate", "matched", ["threat"]),
-  row("discovered_executed", "derived.tactic.discovered_executed", "event", "gained", ["fact", "pattern", "threat"]),
-  row("loose_piece", "rules.tactic.event.loose_piece", "event", "lost for a mover-owned previously en-prise piece", ["fact", "threat"]),
-  row("promotion_pressure", "derived.tactic.promotion_pressure", "reading", "a root-side pawn whose promotion is available and persists after every exact immediate reply", ["fact"]),
+  row("mate_in_one", ref("rules.tactic.consequence.mate_in_one"), "reading", "the searched edge is one of the exact mates in one of its before position", ["threat"]),
+  row("forced_mate", ref("rules.tactic.consequence.forced_mate_after_move"), "predicate", "proofStatus=proved", ["candidate_moves"]),
+  row("double_attack", ref("rules.tactic.event.double_attack"), "event", "gained", ["threat"]),
+  row("fork_survives_reply", routeRef(CANDIDATE_CURRENT_SOURCE_ROUTES.forkSurvival), "predicate", "matched", ["threat"], 2),
+  row("discovered_executed", ref("derived.tactic.discovered_executed"), "event", "gained", ["fact", "pattern", "threat"]),
+  row("loose_piece", ref("rules.tactic.event.loose_piece"), "event", "lost for a mover-owned previously en-prise piece", ["fact", "threat"]),
+  row("promotion_pressure", routeRef(CANDIDATE_CURRENT_SOURCE_ROUTES.promotionPressure), "reading", "a root-side pawn whose promotion is available and persists after every exact immediate reply", ["fact"], 2),
 ]);
 if (HINT_DECLARATION_MATRIX.map((value) => value.family).join("|") !== HINT_FAMILIES.join("|")) throw new TypeError("HINT_DECLARATION_MATRIX must follow HINT_FAMILIES exactly");
 
@@ -90,15 +96,15 @@ export const HINT_RUNG_FORMS: Readonly<Record<HintRung, readonly EvidenceForm[]>
   move: Object.freeze(["sentence", "lit_squares", "piece_halo", "arrows"] as const),
 });
 
-export const hintHorizonProjectionId = (family: HintFamily): string => `derived.hint.horizon.${family}`;
-export const hintDisclosureProjectionId = (family: HintFamily, rung: HintRung): string => `derived.hint.disclosure.${family}.${rung}`;
+export function hintHorizonProjectionId(family: HintFamily): string { return `derived.hint.horizon.${family}`; }
+export function hintDisclosureProjectionId(family: HintFamily, rung: HintRung): string { return `derived.hint.disclosure.${family}.${rung}`; }
 
 /** §3: one internal (operator-only) horizon projection per family. */
-export const HINT_HORIZON_PROJECTION_IDS: readonly VersionedEvidenceId[] = Object.freeze(HINT_FAMILIES.map((family) => ref(hintHorizonProjectionId(family))));
+export const HINT_HORIZON_PROJECTION_IDS: readonly VersionedEvidenceId[] = Object.freeze(HINT_DECLARATION_MATRIX.map(row => row.horizon));
 /** §3: one learner disclosure projection per family × rung, family-major then rung order. Total 35. */
-export const HINT_DISCLOSURE_PROJECTION_IDS: readonly VersionedEvidenceId[] = Object.freeze(HINT_FAMILIES.flatMap((family) => HINT_RUNGS.map((rung) => ref(hintDisclosureProjectionId(family, rung)))));
+export const HINT_DISCLOSURE_PROJECTION_IDS: readonly VersionedEvidenceId[] = Object.freeze(HINT_DECLARATION_MATRIX.flatMap(row => HINT_RUNGS.map(rung => row.disclosures[rung])));
 /** §3: the disclosure registry grouped by rung. */
-export const HINT_DISCLOSURE_BY_RUNG: Readonly<Record<HintRung, readonly VersionedEvidenceId[]>> = Object.freeze(Object.fromEntries(HINT_RUNGS.map((rung) => [rung, Object.freeze(HINT_FAMILIES.map((family) => ref(hintDisclosureProjectionId(family, rung))))])) as Record<HintRung, readonly VersionedEvidenceId[]>);
+export const HINT_DISCLOSURE_BY_RUNG: Readonly<Record<HintRung, readonly VersionedEvidenceId[]>> = Object.freeze(Object.fromEntries(HINT_RUNGS.map((rung) => [rung, Object.freeze(HINT_DECLARATION_MATRIX.map(row => row.disclosures[rung]))])) as Record<HintRung, readonly VersionedEvidenceId[]>);
 
 export type HintDisclosureProjectionId = `derived.hint.disclosure.${HintFamily}.${HintRung}`;
 

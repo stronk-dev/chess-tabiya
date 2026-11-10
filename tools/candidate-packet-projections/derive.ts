@@ -11,11 +11,10 @@ import {
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
   STRUCTURAL_EVENT_PROJECTION_IDS,
   TACTICAL_EVENT_PROJECTION_IDS,
-  TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS,
   TRANSITION_EVENT_PROJECTION_IDS,
 } from "../../packages/runtime/src/evidence-catalog.ts";
 import type { CompiledEvidenceManifest } from "../../packages/runtime/src/evidence-contract.ts";
-import { CANDIDATE_CHILD_READING_ROUTES } from "../../packages/runtime/src/internal/candidate-child-reading-routes.ts";
+import { CANDIDATE_CHILD_READING_ROUTES, CANDIDATE_CURRENT_SOURCE_ROUTES } from "../../packages/runtime/src/internal/candidate-child-reading-routes.ts";
 
 export type ProjectionGroups = Readonly<Record<string, readonly string[]>>;
 
@@ -30,26 +29,41 @@ export function deriveCandidatePacketProjectionGroups(manifest: CompiledEvidence
   // `@2` multi-edge successors read the exact recorded edge (`run.record.edge`), which exists only on
   // a recorded path (rfc/recorded-semantic-path.md); a candidate child is never a recorded edge.
   const resolve = (id: string, event = false): string => {
-    const matches = manifest.projections.filter((candidate) => candidate.id === id
+    // Exact current replacement slots are executed by the same collector. Registration alone
+    // never chooses a successor; unrelated @2/@3 recorded-path sources remain excluded.
+    const route = [CANDIDATE_CURRENT_SOURCE_ROUTES.materialEvent, CANDIDATE_CURRENT_SOURCE_ROUTES.defenderExposure]
+      .find(value => value.startsWith(`${id}@`)) ?? `${id}@1`;
+    const matches = manifest.projections.filter((candidate) => `${candidate.id}@${candidate.version}` === route
       && !candidate.dependsOn.some((dependency) => dependency.id === "run.record.edge")
       // An internal successor is not a collector output until its exact semantic-event
       // declaration lands with the actual collector cutover. Never guess from a base id.
-      && (!event || manifest.semanticEvents.some(value => value.projection.id === candidate.id && value.projection.version === candidate.version)));
+      && (!event || manifest.semanticEvents.filter(value => value.projection.id === candidate.id && value.projection.version === candidate.version).length === 1));
     if (matches.length !== 1) throw new TypeError(`candidate projection ${id} does not resolve to exactly one compiled manifest projection`);
     return `${matches[0]!.id}@${matches[0]!.version}`;
   };
   const events = (ids: readonly string[]) => ids.filter((id) => !isSequenceProjection(id)).map(id => resolve(id, true));
-  const childReadings = CANDIDATE_CHILD_READING_ROUTES.map(key => {
+  const exactLocalReading = (key: string): string => {
     const matches = manifest.projections.filter(candidate => `${candidate.id}@${candidate.version}` === key);
     if (matches.length !== 1 || matches[0]!.role !== "reading" || !matches[0]!.producer.id.startsWith("rules.") && !matches[0]!.producer.id.startsWith("derived.")) {
       throw new TypeError(`candidate reading ${key} does not resolve to exactly one compiled local reading`);
     }
     return key;
-  }).sort();
+  };
+  const childReadings = CANDIDATE_CHILD_READING_ROUTES.map(exactLocalReading).sort();
   const groups: ProjectionGroups = {
-    "event.structural": events(STRUCTURAL_EVENT_PROJECTION_IDS),
-    "event.pawn_island": events(TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS),
-    "event.transition": events(TRANSITION_EVENT_PROJECTION_IDS),
+    "event.structural": events(STRUCTURAL_EVENT_PROJECTION_IDS.filter(id => ["king_zone", "passed_pawn", "piece_count", "direct_attack_count"].some(family => id === `rules.structural.event.${family}`))),
+    "event.foundation": [
+      "rules.structural.event.king_opposition@2", "rules.structural.event.backward_pawn@2",
+      "derived.structural.event.pawn_file_group@1", "rules.transition.event.slider_ray@2",
+      "derived.activity.event.file_state@1", "derived.activity.event.file_access_revealed@1",
+      "rules.structural.event.pawn_islands@2",
+    ].map(route => {
+      const projection = manifest.projections.filter(value => `${value.id}@${value.version}` === route);
+      const declarations = manifest.semanticEvents.filter(value => `${value.projection.id}@${value.projection.version}` === route);
+      if (projection.length !== 1 || declarations.length !== 1) throw new TypeError(`candidate foundation ${route} lacks its exact compiled event declaration`);
+      return route;
+    }),
+    "event.transition": events(TRANSITION_EVENT_PROJECTION_IDS.filter(id => id !== "rules.transition.event.slider_ray")),
     "event.tactical": events(TACTICAL_EVENT_PROJECTION_IDS.filter((id) => id !== "rules.tactic.event.loose_piece")),
     "event.loose_piece": events(["rules.tactic.event.loose_piece"]),
     "event.castling": events(CASTLING_EVENT_PROJECTION_IDS),
@@ -58,14 +72,22 @@ export function deriveCandidatePacketProjectionGroups(manifest: CompiledEvidence
     "event.breadth": events(BREADTH_EVENT_PROJECTION_IDS),
     "event.duty": events(SEMANTIC_WAVE_EVENT_PROJECTION_IDS),
     "reading.child": childReadings,
+    "reading.candidate_role": [exactLocalReading(CANDIDATE_CURRENT_SOURCE_ROUTES.candidateRole)],
+    "reading.pawn_extended_center": [exactLocalReading(CANDIDATE_CURRENT_SOURCE_ROUTES.extendedCenterDestination)],
     "reading.legal_exchange": [resolve("rules.exchange.predicate.legal_exchange")],
-    "reading.fork_survival": [resolve("derived.tactic.fork_survives_reply")],
+    "reading.fork_survival": [(() => {
+      const route = CANDIDATE_CURRENT_SOURCE_ROUTES.forkSurvival;
+      if (manifest.projections.filter(value => `${value.id}@${value.version}` === route).length !== 1) throw new TypeError(`candidate reading ${route} does not resolve to exactly one compiled manifest projection`);
+      return route;
+    })()],
   };
-  // The only abstention the packet compiler publishes in this landing: the loose-piece collector's
-  // declared `invalid_turn_clone`. The reason must be one the manifest declares for that projection.
-  const loose = manifest.projections.find((candidate) => candidate.id === "rules.tactic.event.loose_piece")!;
-  if (!loose.abstention.reasons.includes("invalid_turn_clone")) throw new TypeError("rules.tactic.event.loose_piece no longer declares invalid_turn_clone");
-  const abstentions: ProjectionGroups = { [resolve("rules.tactic.event.loose_piece")]: ["invalid_turn_clone"] };
+  // Both actual unavailable outcomes are independently retained by the current collector.
+  const abstentions: Record<string, readonly string[]> = {};
+  for (const id of ["rules.tactic.event.loose_piece", "derived.tactic.defender_exposure"]) {
+    const route = resolve(id, true), declaration = manifest.projections.find(candidate => `${candidate.id}@${candidate.version}` === route)!;
+    if (!declaration.abstention.reasons.includes("invalid_turn_clone")) throw new TypeError(`${route} no longer declares invalid_turn_clone`);
+    abstentions[route] = ["invalid_turn_clone"];
+  }
   return { groups, abstentions };
 }
 

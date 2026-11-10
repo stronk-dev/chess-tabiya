@@ -1,5 +1,6 @@
 // D3705: exact recorded facts, not “trade is good”, contact intent or forced continuation.
 import { readFileSync } from "node:fs";
+import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { makeFen } from "chessops/fen";
 import { makeSquare, opposite, parseUci } from "chessops/util";
@@ -7,13 +8,13 @@ import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { positionFromFen } from "./position-cache.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase, type SemanticRecordedPathInput } from "./semantic-validation.js";
 
-const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
+const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
 const byId = new Map(raw.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
 const pressureSource = RECORDED_CITED_SOURCES.find(source => source.sourceId === "python-chess.recorded.pressure")!;
 const rows = RECORDED_CITED_SOURCES.filter(source => source !== pressureSource).flatMap(source => source.cases);
@@ -148,7 +149,7 @@ describe("D3705 independent recorded exchange and pawn-contact cases", () => {
     expect(added).toHaveLength(20);
     expect(added.filter(row => row.arm === "positive")).toHaveLength(10);
     expect(added.filter(row => row.arm === "semantic_negative")).toHaveLength(10);
-    const later = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...pressureSource.cases.map(row => row.proposition.case.id)]);
+    const later = new Set([...EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...pressureSource.cases.map(row => row.proposition.case.id)]);
     const prior = raw.filter(row => !ids.has(row.id as string) && !later.has(row.id as string));
     expect(prior).toHaveLength(229);
     expect(evidenceDigest(prior)).toBe("35a8afec8943785b40f4ef99998f2a57c51b003f3cc56e2a1e2bcc0a7cd729c0");

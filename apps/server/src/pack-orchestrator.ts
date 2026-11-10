@@ -8,6 +8,12 @@ import type {
   TransitionExpression,
 } from "@chess-tabiya/schema/drill-pack";
 import { normalizeShapeReferences } from "@chess-tabiya/schema/drill-pack";
+import { evidenceDigest } from "../../../packages/runtime/src/evidence-contract.js";
+import { maybeAuthoredStructuralDocument, readAuthoredStructuralConditionSource, selectAuthoredStructuralCondition, type AuthoredStructuralConditionSource } from "../../../packages/runtime/src/internal/authored-structural-source.js";
+import { assertCurrentWindowSources, currentWindowStates } from "../../../packages/runtime/src/tempo.js";
+import { assertCurrentTransitionSources } from "../../../packages/runtime/src/transition.js";
+import { assertCurrentObjectiveSources } from "../../../packages/runtime/src/objective.js";
+import { preflightCurrentAuthoredOperation } from "../../../packages/runtime/src/structural-evidence.js";
 import {
   evaluateObjective,
   evaluateObjectivePredicate,
@@ -21,7 +27,6 @@ import {
   theoryEvidenceRef,
   tempoEvidenceRef,
   tempoMovesFromRun,
-  windowStates,
   legIndexAt,
   reachCheckpoint,
   transitionObjective,
@@ -38,18 +43,20 @@ import {
 } from "@chess-tabiya/runtime";
 
 export type PlanSignatureResolver = (planClassId: string) => StructuralExpression | null | undefined;
+const PLAN_SOURCE_DOCUMENTS = new WeakMap<PlanSignatureResolver, DrillPackDefinition>();
 
 export interface PlanShapeLookup {
   get(id: string): { readonly document: { readonly plans: readonly { readonly id: string; readonly success: { readonly note: string; readonly signature: StructuralExpression | null } }[] } } | undefined;
 }
 
 export function planSignatureResolver(pack: DrillPackDefinition, shapes?: PlanShapeLookup): PlanSignatureResolver {
-  return (planClassId) => {
+  const resolver: PlanSignatureResolver = (planClassId) => {
     const planClass = pack.planClasses?.find((candidate) => candidate.id === planClassId);
     if (planClass?.shapePlan === undefined) return undefined;
     if (normalizeShapeReferences(pack.shapes).find((reference) => reference.shape === planClass.shapePlan!.shape)?.relation === "prospective") return undefined;
     return shapes?.get(planClass.shapePlan.shape)?.document.plans.find((plan) => plan.id === planClass.shapePlan!.plan)?.success.signature;
   };
+  PLAN_SOURCE_DOCUMENTS.set(resolver, pack); return resolver;
 }
 
 export class PackCompileError extends Error {
@@ -67,6 +74,7 @@ export class PackCompileError extends Error {
 export interface ExpandedExpression<T> {
   readonly value: T;
   readonly planEvidenceRefs: readonly string[];
+  readonly authoredSource?: AuthoredStructuralConditionSource;
 }
 
 function containsPlanSignature(expression: StructuralExpression): boolean {
@@ -81,6 +89,13 @@ export function expandStructuralExpression(
   pointer: string,
   resolvePlanSignature?: PlanSignatureResolver,
 ): ExpandedExpression<StructuralExpression> {
+  const original = resolvePlanSignature === undefined ? undefined : PLAN_SOURCE_DOCUMENTS.get(resolvePlanSignature);
+  const document = original === undefined ? undefined : maybeAuthoredStructuralDocument(original);
+  if (document !== undefined) {
+    const source = selectAuthoredStructuralCondition(document, pointer), image = readAuthoredStructuralConditionSource(source);
+    if (evidenceDigest(expression) !== evidenceDigest(image.expression)) throw new PackCompileError("STRUCTURAL_SOURCE_MISMATCH", pointer, "expanded expression differs from the captured authored node");
+    return { value: image.effectiveExpression, authoredSource: source, planEvidenceRefs: image.substitutions.map(row => `planClass#${row.planClassId}`) };
+  }
   if (expression.kind === "plan_signature") {
     const signature = resolvePlanSignature?.(expression.planClassId);
     if (signature == null) {
@@ -134,13 +149,11 @@ function expandFenPredicate(
   resolvePlanSignature?: PlanSignatureResolver,
 ): FenPredicate {
   if (predicate.type !== "structuralFeature") return predicate;
+  const expanded = expandStructuralExpression(predicate.feature, `${pointer}/feature`, resolvePlanSignature);
   return {
     ...predicate,
-    feature: expandStructuralExpression(
-      predicate.feature,
-      `${pointer}/feature`,
-      resolvePlanSignature,
-    ).value,
+    feature: expanded.value,
+    ...(expanded.authoredSource === undefined ? {} : { authoredSource: expanded.authoredSource }),
   };
 }
 
@@ -149,8 +162,15 @@ function expandTimingWindow(
   pointer: string,
   resolvePlanSignature?: PlanSignatureResolver,
 ): TimingWindowDefinition {
+  let opens = window.opens;
+  if ("onTrigger" in opens && "fenPredicate" in opens.onTrigger && opens.onTrigger.fenPredicate.type === "structuralFeature") {
+    const predicate = opens.onTrigger.fenPredicate as Extract<FenPredicate, { type: "structuralFeature" }>;
+    const expanded = expandStructuralExpression(predicate.feature, `${pointer}/opens/onTrigger/fenPredicate/feature`, resolvePlanSignature);
+    opens = { onTrigger: { fenPredicate: { ...predicate, feature: expanded.value, ...(expanded.authoredSource === undefined ? {} : { authoredSource: expanded.authoredSource }) } } };
+  }
   return {
     ...window,
+    opens,
     closes: window.closes.map((close, index) =>
       close.kind === "position"
         ? {
@@ -201,6 +221,7 @@ function simpleTriggerMatches(
   trigger: SimpleTrigger,
   resolvePlanSignature?: PlanSignatureResolver,
   pointer = "/checkpoints",
+  purpose: "authoring" | "objective" = "objective",
 ): boolean {
   const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
   if ("atStart" in trigger) return node.parentId === null;
@@ -213,6 +234,7 @@ function simpleTriggerMatches(
       expandPackAuthoredBoundary(pack, resolvePlanSignature),
       run,
       node,
+      purpose,
     );
   }
   if ("fenPredicate" in trigger) {
@@ -223,12 +245,12 @@ function simpleTriggerMatches(
         `${pointer}/fenPredicate`,
         resolvePlanSignature,
       ),
-    });
+    }, purpose);
   }
   return evaluateObjectivePredicate(run, {
     type: "materialBalance",
     ...(trigger.materialBalance as Omit<MaterialBalancePredicate, "type">),
-  });
+  }, purpose);
 }
 
 function runAtNode(run: DrillRun, nodeId: string): DrillRun {
@@ -243,22 +265,23 @@ function timingState(
   window: TimingWindowDefinition,
   resolvePlanSignature?: PlanSignatureResolver,
   pointer = "/timingWindows",
+  purpose: "authoring" | "objective" = "objective",
 ) {
+  preflightCurrentAuthoredOperation(purpose);
+  const expanded = expandTimingWindow(window, pointer, resolvePlanSignature);
+  assertCurrentWindowSources([expanded]);
+  const opening = compiledOpeningTrigger(pack, window, resolvePlanSignature, pointer);
+  if (opening !== undefined) assertCurrentObjectiveSources(opening);
   const path = tempoMovesFromRun(run);
-  return windowStates(
-    [expandTimingWindow(window, pointer, resolvePlanSignature)],
+  return currentWindowStates(
+    [expanded],
     path,
     pack.start.side,
-    (trigger, index) => {
+    (_trigger, index) => {
       const nodeId = path[index]?.nodeId;
-      return nodeId !== undefined && simpleTriggerMatches(
-        pack,
-        runAtNode(run, nodeId),
-        trigger,
-        resolvePlanSignature,
-        `${pointer}/opens/onTrigger`,
-      );
+      return nodeId !== undefined && opening !== undefined && evaluateObjectivePredicate(runAtNode(run, nodeId), opening, purpose);
     },
+    purpose,
   )[0]!;
 }
 
@@ -268,6 +291,7 @@ export function checkpointMatches(
   checkpoint: CheckpointDefinition,
   resolvePlanSignature?: PlanSignatureResolver,
   pointer = "/checkpoints",
+  purpose: "authoring" | "objective" = "objective",
 ): boolean {
   const trigger = checkpoint.trigger;
   if ("atWindow" in trigger) {
@@ -282,6 +306,7 @@ export function checkpointMatches(
       window,
       resolvePlanSignature,
       windowIndex < 0 ? "/timingWindows" : `/timingWindows/${windowIndex}`,
+      purpose,
     );
     return "verdict" in trigger.atWindow
       ? state.verdict === trigger.atWindow.verdict
@@ -293,6 +318,7 @@ export function checkpointMatches(
     trigger,
     resolvePlanSignature,
     pointer,
+    purpose,
   );
 }
 
@@ -377,12 +403,12 @@ function timingPredicate(
   );
   const openingTrigger = compiledOpeningTrigger(
     pack,
-    expandedWindow,
+    window,
     resolvePlanSignature,
     pointer,
   );
   return {
-    type: "timingWindow",
+    type: "authoredTimingWindow",
     window: expandedWindow,
     learner: pack.start.side,
     verdict,
@@ -423,8 +449,8 @@ function successPredicate(
     };
   }
   if (condition.kind === "structural_feature") {
-    const expanded = expandStructuralExpression(condition.feature, `${pointer}/feature`, resolvePlanSignature);
-    return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: expanded.value } };
+    const expanded = expandStructuralExpression(condition.feature, `${pointer}/feature`, resolvePlanSignature ?? planSignatureResolver(pack));
+    return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: expanded.value, ...(expanded.authoredSource === undefined ? {} : { authoredSource: expanded.authoredSource }) } };
   }
   if (condition.kind === "timing_window") {
     const window = pack.timingWindows?.find((candidate) => candidate.id === condition.windowId);
@@ -443,13 +469,19 @@ function successPredicate(
     );
   }
   if (condition.kind === "plan_consequence") {
+    const document = maybeAuthoredStructuralDocument(pack);
+    if (document !== undefined) {
+      const source = selectAuthoredStructuralCondition(document, pointer);
+      return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: readAuthoredStructuralConditionSource(source).effectiveExpression, authoredSource: source } };
+    }
     const signature = resolvePlanSignature?.(condition.planClassId);
     if (signature == null) throw new PackCompileError("PLAN_CONSEQUENCE_UNRESOLVED", `${pointer}/planClassId`, `plan consequence ${condition.planClassId} has no resolved structural signature`);
     return { type: "fenPredicate", predicate: { type: "structuralFeature", feature: signature } };
   }
   if (condition.kind === "transition_feature") {
     const expanded = expandTransitionExpression(condition.transition, `${pointer}/transition`, resolvePlanSignature);
-    return { type: "transitionFeature", transition: expanded.value };
+    assertCurrentTransitionSources(expanded.value);
+    return { type: "authoredTransitionFeature", transition: expanded.value };
   }
   const exhaustive: never = condition;
   throw new PackCompileError(
@@ -608,7 +640,7 @@ export function objectiveRules(
             id: `tempo-${index}-${verdict}-${from}`,
             from,
             to: "degraded",
-            when: timingPredicate(pack, window, verdict),
+            when: timingPredicate(pack, window, verdict, resolvePlanSignature),
             evidenceRefs: [tempoEvidenceRef(window.id, verdict)],
           });
         }
@@ -619,7 +651,7 @@ export function objectiveRules(
             id: `tempo-${index}-outpaced-${from}`,
             from,
             to: "degraded",
-            when: timingPredicate(pack, window, "outpaced"),
+            when: timingPredicate(pack, window, "outpaced", resolvePlanSignature),
             evidenceRefs: [tempoEvidenceRef(window.id, "outpaced")],
           });
         }
@@ -629,7 +661,7 @@ export function objectiveRules(
           id: `tempo-${index}-in-time-${from}`,
           from,
           to: "preserved",
-          when: timingPredicate(pack, window, "in_time"),
+          when: timingPredicate(pack, window, "in_time", resolvePlanSignature),
           evidenceRefs: [tempoEvidenceRef(window.id, "in_time")],
         });
       }

@@ -1,4 +1,5 @@
 import type { CapabilityId } from "../capability/types.js";
+import type { StructuralConventionRef } from "./structural-conventions.js";
 
 export const OBJECTIVE_TYPES = [
   "reach_structure",
@@ -448,8 +449,8 @@ export type StructuralFeatureKind = (typeof STRUCTURAL_FEATURE_KINDS)[number];
 
 export type StructuralFeature =
   | { readonly kind: "pawn_safe_square"; readonly color: Color; readonly square: SquareName }
-  | { readonly kind: "outpost"; readonly color: Color; readonly square: SquareName }
-  | { readonly kind: "backward_pawn"; readonly color: Color; readonly file: FileName }
+  | { readonly kind: "outpost"; readonly color: Color; readonly square: SquareName; readonly conventionRef?: StructuralConventionRef<"outpost"> }
+  | { readonly kind: "backward_pawn"; readonly color: Color; readonly file: FileName; readonly conventionRef?: StructuralConventionRef<"backward_pawn"> }
   | { readonly kind: "isolated_pawn"; readonly color: Color; readonly file: FileName }
   | { readonly kind: "doubled_pawn"; readonly color: Color; readonly file: FileName }
   | { readonly kind: "passed_pawn"; readonly color: Color; readonly square: SquareName }
@@ -461,7 +462,7 @@ export type StructuralFeature =
   | { readonly kind: "named_structure"; readonly id: "carlsbad" | "iqp-white" | "iqp-black" | "maroczy-bind" }
   | { readonly kind: "bishop_on_shade"; readonly color: Color; readonly shade: "light" | "dark" }
   | { readonly kind: "pawn_count"; readonly color: Color; readonly basis: "count" | "difference"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
-  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" }
+  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant"; readonly conventionRef?: StructuralConventionRef<"king_opposition"> }
   | { readonly kind: "piece_count"; readonly color: Color; readonly role: Role; readonly basis: "count" | "difference"; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
   | { readonly kind: "king_zone"; readonly color: Color; readonly zone: "edge" | "corner" }
   | { readonly kind: "piece_distance"; readonly color: Color; readonly role: "king" | "knight" | "bishop" | "rook" | "queen"; readonly target: { readonly kind: "square"; readonly square: SquareName } | { readonly kind: "piece"; readonly color: Color; readonly role: Role }; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number };
@@ -472,14 +473,14 @@ export interface FileRange { readonly from: FileName; readonly to: FileName }
 export interface RankRange { readonly from: number; readonly to: number }
 export interface SquareRegion { readonly files: FileRange; readonly ranks: RankRange }
 export type FileTemplateFeature =
-  | { readonly kind: "backward_pawn"; readonly color: Color }
+  | { readonly kind: "backward_pawn"; readonly color: Color; readonly conventionRef?: StructuralConventionRef<"backward_pawn"> }
   | { readonly kind: "isolated_pawn"; readonly color: Color }
   | { readonly kind: "doubled_pawn"; readonly color: Color }
   | { readonly kind: "half_open_file"; readonly color: Color }
   | { readonly kind: "open_file" };
 export type SquareTemplateFeature =
   | { readonly kind: "pawn_safe_square"; readonly color: Color }
-  | { readonly kind: "outpost"; readonly color: Color }
+  | { readonly kind: "outpost"; readonly color: Color; readonly conventionRef?: StructuralConventionRef<"outpost"> }
   | { readonly kind: "passed_pawn"; readonly color: Color }
   | { readonly kind: "direct_attack_count"; readonly color: Color; readonly comparison: "atLeast" | "atMost" | "equal"; readonly count: number }
   | { readonly kind: "piece"; readonly piece: { readonly color: Color; readonly role: Role } | null };

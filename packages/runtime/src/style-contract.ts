@@ -49,12 +49,12 @@ export type StyleMetric<U extends StyleMetricUnit = StyleMetricUnit> = U extends
  * whole record: no run stores a time control (rfc/recorded-clocks.md is a returned draft).
  */
 export const STYLE_TIME_CONTROL_SCOPE = "all_recorded_games" as const;
-export const STYLE_TIME_CONTROL_SCOPE_TEXT = "all of your recorded games (time controls are not recorded yet)";
+export const STYLE_TIME_CONTROL_SCOPE_TEXT = "all of your recorded games (these cards are not grouped by time control)";
 
 const CLOCK_BLOCK = Object.freeze({
   kind: "blocked",
   code: "clock_readings_unrecorded",
-  reason: "No run records typed clock readings yet, so thinking time cannot be measured.",
+  reason: "Timing cards are not available for your play yet. Clocks from imported games can be viewed in Review.",
   home: "rfc/recorded-clocks.md Discharge D4",
 } as const);
 
@@ -185,7 +185,7 @@ export const STYLE_METRICS: readonly StyleMetric[] = Object.freeze([
     title: "Pawn moves compared with the legal choices you had",
     valueDefinition: "mean of (1 if you moved a pawn, else 0) minus the share of your legal moves that were pawn moves",
     denominatorDefinition: "your decisions, each with its complete set of legal moves",
-    production: Object.freeze({ kind: "read_time_projection", source: "move role over the complete legal-move set of each decision" }),
+    production: Object.freeze({ kind: "read_time_projection", source: "recorded pawn choices from each completed complete-legal population" }),
   } satisfies StyleMetric<"decision">),
   Object.freeze({
     metricId: "center_pawn_choice_residual",
@@ -199,7 +199,7 @@ export const STYLE_METRICS: readonly StyleMetric[] = Object.freeze([
     title: "Pawn moves to c4–f5 compared with the legal choices you had",
     valueDefinition: "mean of (1 if you moved a pawn to c4, d4, e4, f4, c5, d5, e5 or f5, else 0) minus that move type's share of your legal moves",
     denominatorDefinition: "your decisions, each with its complete set of legal moves",
-    production: Object.freeze({ kind: "read_time_projection", source: "move role and destination over the complete legal-move set of each decision" }),
+    production: Object.freeze({ kind: "read_time_projection", source: "recorded pawn destinations from each completed complete-legal population" }),
   } satisfies StyleMetric<"decision">),
   Object.freeze({
     metricId: "early_queen_choice_residual",
@@ -213,7 +213,7 @@ export const STYLE_METRICS: readonly StyleMetric[] = Object.freeze([
     title: "Queen moves before ply 16 compared with the legal choices you had",
     valueDefinition: "mean of (1 if you moved your queen, else 0) minus the share of your legal moves that were queen moves, before ply 16",
     denominatorDefinition: "your decisions before ply 16, each with its complete set of legal moves",
-    production: Object.freeze({ kind: "read_time_projection", source: "move role and ply over the complete legal-move set of each decision" }),
+    production: Object.freeze({ kind: "read_time_projection", source: "recorded queen choices at the original early-game positions" }),
   } satisfies StyleMetric<"decision">),
 ]);
 

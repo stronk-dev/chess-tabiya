@@ -4,6 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import { componentCoverage, formatCoverage, type CoverageAdapter, type CoverageClass, type CoverageInput } from "./coverage.js";
 import { productionCoverageInput, unresolvedClassAnchors } from "./production.js";
+import { MODULE_CURRENT_IMAGE } from "../../packages/runtime/src/evidence-catalog.js";
+import { PRESENTATION_CONSUMER_CLASSES } from "../../packages/runtime/src/presentation-consumer-adapters.js";
 
 const CLASSES: Readonly<Record<string, CoverageClass>> = {
   "guidance.fixture@1": "ordinary_presented",
@@ -104,5 +106,10 @@ describe("component-coverage: the production registry", () => {
 
   it("resolves every consumer-class anchor to its named operation", () => {
     expect(unresolvedClassAnchors(process.cwd())).toEqual([]);
+    for (const row of MODULE_CURRENT_IMAGE) {
+      expect(PRESENTATION_CONSUMER_CLASSES.find(item => item.consumer === `${row.consumer.id}@${row.consumer.version}`))
+        .toMatchObject({ operation: row.implementation, reachabilityAnchor: row.moduleId === "full_inspector"
+          ? "apps/server/src/inspector-query.ts" : "packages/runtime/src/module-packets.ts" });
+    }
   });
 });

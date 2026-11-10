@@ -14,10 +14,10 @@
 import {
   HINT_COMPILER_VERSION,
   PRIMARY_EVIDENCE_MANIFEST,
-  compileEvidenceConsumerExecution,
+  compileEvidenceConsumerExecutionV2,
   compileGuidedHintPacket,
   compileHintDeliveryReceipt,
-  compileHintDisclosure,
+  compileHintDisclosureV2,
   hintPacketRoots,
   hintRequestId,
   hintSearchLineEvidence,
@@ -158,19 +158,19 @@ export class HintService {
     return this.#options.scheduler === null ? "stockfish:off" : `stockfish.principal_variation@1:depth:${this.#options.depth}:plies:4`;
   }
 
-  requestIdFor(decisionDigest: string, rung: HintRung): string {
-    return hintRequestId({ decisionDigest, rung, manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest, compiler: HINT_COMPILER_VERSION, source: this.#source() });
+  requestIdFor(decisionDigest: string, rung: HintRung, clientRequestId: string): string {
+    return hintRequestId({ clientRequestId, decisionDigest, rung, manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest, compiler: HINT_COMPILER_VERSION, source: this.#source() });
   }
 
   /** §7 step 1–2: join or create the exact operation; returns its current state. */
-  request(access: HintAccess, rung: HintRung): HintResponse {
-    const requestId = this.requestIdFor(access.decision.digest, rung);
+  request(access: HintAccess, rung: HintRung, clientRequestId: string): HintResponse {
+    const requestId = this.requestIdFor(access.decision.digest, rung, clientRequestId);
     if (this.#closed) return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "cancelled" });
     // Compile the complete family/rung contract before identity, search, packet or
     // voice acquisition, including requests that would reuse a retained horizon.
     // A malformed contract is not source absence or an uninformative chess position.
     try {
-      compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 1 });
+      compileEvidenceConsumerExecutionV2(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 2 });
     } catch {
       return Object.freeze({ state: "failed", requestId, rung, reason: "contract_violation" });
     }
@@ -181,7 +181,7 @@ export class HintService {
     }
     let operation = this.#operations.get(requestId);
     if (operation === undefined) {
-      operation = { requestId, runId: access.run.id, rung, decisionDigest: access.decision.digest, horizonKey: `${access.run.id}\u0000${access.decision.digest}\u0000${access.fen}`, controller: new AbortController(), state: Object.freeze({ state: "pending", requestId, rung }), settled: false, lastUsed: ++this.#clock };
+      operation = { requestId, runId: access.run.id, rung, decisionDigest: access.decision.digest, horizonKey: `${HINT_COMPILER_VERSION}\u0000${PRIMARY_EVIDENCE_MANIFEST.digest}\u0000${this.#source()}\u0000${access.run.id}\u0000${access.decision.digest}\u0000${access.fen}`, controller: new AbortController(), state: Object.freeze({ state: "pending", requestId, rung }), settled: false, lastUsed: ++this.#clock };
       this.#operations.set(requestId, operation);
       this.#evict();
       const work = this.#run(operation, access).catch(() => this.#settle(operation!, Object.freeze({ state: "failed", requestId, rung, reason: "internal_error" })));
@@ -345,7 +345,7 @@ export class HintService {
     if (outcome.kind === "source_unavailable") { this.#settle(operation, Object.freeze({ state: "source_unavailable", requestId, rung, reason: outcome.reason })); return; }
     if (outcome.kind === "empty") { this.#settle(operation, Object.freeze({ state: "honest_empty", requestId, rung, reason: outcome.reason })); return; }
     if (outcome.kind === "failed") { this.#settle(operation, Object.freeze({ state: "failed", requestId, rung, reason: "internal_error" })); return; }
-    const packet = compileGuidedHintPacket({ disclosure: compileHintDisclosure(outcome.horizon, rung), role: access.role, session: access.session });
+    const packet = compileGuidedHintPacket({ disclosure: compileHintDisclosureV2(outcome.horizon, rung), role: access.role, session: access.session });
     if (packet.kind !== "rendered") { this.#settle(operation, Object.freeze({ state: "failed", requestId, rung, reason: "contract_violation" })); return; }
     const sentence = packet.view.items[0]!.sentences.join(" ");
     const voice: HintVoiceState = access.voiceRequested ? await this.#voice(packet.view, sentence, operation.controller.signal) : Object.freeze({ state: "not_requested" });

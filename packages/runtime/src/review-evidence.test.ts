@@ -6,10 +6,10 @@ import { describe, expect, it, vi } from "vitest";
 import * as recordedPath from "./recorded-semantic-path.js";
 
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
+import { evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { attachEvidence } from "./evidence.js";
-import { presentedSentence } from "./presentation-contract.js";
+import { factStatementOperand, parsePresentationReceipt, presentEvidenceItems, presentationDigest, presentedSentence, serializePresentedEvidence } from "./presentation-contract.js";
 import {
   REVIEW_PACKET_SOURCE_ADAPTERS,
   REVIEW_PACKET_SOURCE_PROJECTION_IDS,
@@ -444,6 +444,41 @@ describe("review evidence compiler: Story compatibility and wire", () => {
     expect(() => parseReviewStoryReceipt({ ...wire, moments: reversed })).toThrow(/ordered path edge/u);
     const swapped = [{ ...moments[0]!, presentation: { ...(moments[0]!.presentation as object), digest: `sha256:${"0".repeat(64)}` } }, ...moments.slice(1)];
     expect(() => parseReviewStoryReceipt({ ...wire, moments: swapped })).toThrow(/presentation/u);
+  });
+
+  it.each(["foreign title", "own non-title", "foreign moment", "own title as moment"] as const)("D3948 refuses a genuine but wrong Story seat: %s", kind => {
+    const run = evaluatedGame(["cp 20", "cp 35", "cp -300"]);
+    const packet = reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, "0-1") });
+    const wire = renderReviewStoryReceipt(packet);
+    expect(() => parseReviewStoryReceipt(wire, { runId: run.id })).not.toThrow();
+    const foreign = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 }, packet.nodes.flatMap(node => node.items)))
+      .find(item => item.component.id === "fact_statement");
+    const ownNonTitle = reviewStoryMoments(packet).moments.flatMap(moment => moment.components).find(item => item.component.id === "fact_statement");
+    expect(foreign).toBeDefined();
+    expect(ownNonTitle).toBeDefined();
+    expect(wire.moments.length).toBeGreaterThan(0);
+    const replacement = kind === "own title as moment" ? wire.title : serializePresentedEvidence([kind === "own non-title" ? ownNonTitle! : foreign!]);
+    expect(() => parsePresentationReceipt(replacement)).not.toThrow();
+    const changed = kind === "foreign moment" || kind === "own title as moment"
+      ? { ...wire, moments: wire.moments.map((moment, index) => index === 0 ? { ...moment, presentation: replacement } : moment) }
+      : { ...wire, title: replacement };
+    expect(() => parseReviewStoryReceipt(changed, { runId: run.id })).toThrow(/title|consumer/u);
+  });
+
+  it.each(["renderer", "binding", "convention"] as const)("D3948 pins Story title %s after complete public re-digestion", field => {
+    const run = evaluatedGame(["cp 20", "cp 35", "cp -300"]);
+    const wire = renderReviewStoryReceipt(reviewPacketForRun(run, run.activeCursor.branchId, { importRecord: importRecord(run, "0-1") }));
+    const title = wire.title.items[0]!;
+    if (title.component.id !== "fact_statement" || title.component.operand.rendererId !== "story.title@1") throw new Error("Expected actual Story title");
+    const operand = field === "renderer"
+      ? factStatementOperand("story.last_level@1", "declared_convention", "story-last-level@1", { learnerCentipawns: 10 })
+      : factStatementOperand("story.title@1", field === "binding" ? "recorded_run" : "declared_convention",
+        field === "convention" ? "recorded-run@1" : "story-compatibility@1", title.component.operand.operands);
+    const body = { evidenceRef: title.evidenceRef, adapter: title.adapter, component: { id: "fact_statement" as const, operand } };
+    const items = [{ ...body, componentDigest: presentationDigest("presentation.component@1", body) }];
+    const changed = { ...wire, title: { ...wire.title, items, digest: presentationDigest("presentation.receipt@1", items) } };
+    expect(() => parsePresentationReceipt(changed.title)).toThrow(/registered adapter renderer, binding or convention/u);
+    expect(() => parseReviewStoryReceipt(changed, { runId: run.id })).toThrow(/title/u);
   });
 
   it("stays within the local performance bound over a long game (criterion 19, reported)", () => {

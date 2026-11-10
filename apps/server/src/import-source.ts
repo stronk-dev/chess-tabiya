@@ -2,6 +2,8 @@ import type { ImportSourceKind, ImportSourceRequestKind } from "@chess-tabiya/ru
 import { makePgn, parsePgn, type PgnNodeData, type ChildNode } from "chessops/pgn";
 
 import { ServerError } from "./errors.js";
+import { IMPORT_PGN_MAX_BYTES, parseRecordedClockGame, PgnImportError, type ParsedRecordedClockGame } from "./pgn-import.js";
+export { IMPORT_PGN_MAX_BYTES } from "./pgn-import.js";
 
 /** The request union; its discriminants are exactly the `import-source-protocol` request members. */
 export type ImportSource =
@@ -9,10 +11,9 @@ export type ImportSource =
   | { readonly kind: Extract<ImportSourceRequestKind, "lichess">; readonly url: string };
 
 /** The byte bound shared by every game-import source, checked before any parse or strip work. */
-export const IMPORT_PGN_MAX_BYTES = 65_536;
-
 export interface ResolvedImportSource {
   readonly pgn: string;
+  readonly clockGame: ParsedRecordedClockGame;
   readonly sourceKind: ImportSourceKind;
   readonly sourceUrl: string | null;
   readonly licenceNote: string;
@@ -38,6 +39,16 @@ export function stripPgnAnnotations(pgn: string): string {
     for (const child of game.moves.children) stripNodeAnnotations(child);
     return makePgn(game);
   }).join("\n\n");
+}
+
+function extractImport(pgn: string): Pick<ResolvedImportSource, "pgn" | "clockGame"> {
+  try {
+    const clockGame = parseRecordedClockGame(pgn, { requireMoves: true });
+    return Object.freeze({ pgn: stripPgnAnnotations(pgn), clockGame });
+  } catch (error) {
+    if (error instanceof PgnImportError) throw new ServerError("IMPORT_INVALID_PGN", error.message);
+    throw error;
+  }
 }
 
 export function normalizeLichessStudyUrl(value:string):{studyId:string;url:string}{
@@ -89,7 +100,7 @@ export async function resolveImportSource(
       throw new ServerError("IMPORT_INVALID_PGN", "PGN exceeds the 64 KiB import limit");
     }
     return Object.freeze({
-      pgn: stripPgnAnnotations(source.pgn),
+      ...extractImport(source.pgn),
       sourceKind: "pgn_paste",
       sourceUrl: null,
       licenceNote: "no-rights-asserted: learner-supplied bytes; annotations stripped",
@@ -101,7 +112,7 @@ export async function resolveImportSource(
     const timeout = setTimeout(() => controller.abort(), 10_000);
     try {
       const endpoint = new URL(`https://lichess.org/game/export/${normalized.gameId}`);
-      endpoint.search = "moves=true&tags=true&clocks=false&evals=false&opening=false&literate=false&comments=false";
+      endpoint.search = "moves=true&tags=true&clocks=true&evals=false&opening=false&literate=false&comments=false";
       const response = await fetchImpl(endpoint, {
         headers: { Accept: "application/x-chess-pgn", "User-Agent": "chess-tabiya/own-game-import" },
         signal: controller.signal,
@@ -114,7 +125,7 @@ export async function resolveImportSource(
       }
       if (!response.ok) throw new ServerError("IMPORT_SOURCE_UNAVAILABLE", `Lichess export failed with HTTP ${response.status}`);
       return Object.freeze({
-        pgn: stripPgnAnnotations(await response.text()),
+        ...extractImport(await response.text()),
         sourceKind: "lichess_url" as const,
         sourceUrl: normalized.url,
         licenceNote: `no-rights-asserted: public lichess export ${normalized.url}; annotations stripped; retrieved ${new Date().toISOString()}`,

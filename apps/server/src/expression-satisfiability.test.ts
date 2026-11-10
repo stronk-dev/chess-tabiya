@@ -1,13 +1,16 @@
 import fc from "fast-check";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
-import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
+import { STRUCTURAL_CONVENTION_REFS, type StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 import { matchesStructuralExpression } from "@chess-tabiya/runtime";
 import { Chess } from "chessops/chess";
 import { makeFen } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
 import { DEGENERATE_POSITIONS, expressionSatisfiability, playWitness, refuteStructuralExpression } from "./expression-satisfiability.js";
+import { runExpressionCensus } from "./expression-census.js";
 
 const initial = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const expression = (feature: any): StructuralExpression => ({ kind: "feature", feature });
@@ -23,6 +26,22 @@ function generatedFen(choices: readonly number[]): string {
 }
 
 describe("expression satisfiability", () => {
+  it("D4107 keeps legal witness replay separate from unsupported predicate evaluation", async () => {
+    const value = expression({ kind: "outpost", color: "white", square: "e5", conventionRef: STRUCTURAL_CONVENTION_REFS.outpost });
+    const witness = { id: "legal-but-source-required", from: initial, sans: ["e4"], role: "reference" as const, expect: true };
+    const result = playWitness(witness, value);
+    expect(result.code).toBe("WITNESS_EVALUATION_FAILED");
+    expect(result.fen).toBe("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1");
+    expect(result).not.toHaveProperty("actual");
+    expect(expressionSatisfiability(value, [], [witness])).toMatchObject({ verdict: "unknown", witnesses: [{ code: "WITNESS_EVALUATION_FAILED" }] });
+    const empty = mkdtempSync(join(tmpdir(), "witness-diagnostic-"));
+    try {
+      const report = await runExpressionCensus({ roots: [], shapeRoot: empty, expression: value, degenerates: false, witnesses: { "<expression>#/": [witness] } });
+      const wire = JSON.parse(JSON.stringify(report));
+      expect(wire.subjects[0].satisfiability).toMatchObject({ verdict: "unknown", witnesses: [{ code: "WITNESS_EVALUATION_FAILED" }] });
+      expect(wire.subjects[0].satisfiability.witnesses[0]).not.toHaveProperty("actual");
+    } finally { rmSync(empty, { recursive: true, force: true }); }
+  });
   it("separates a sound king refutation from an uncovered expression", () => {
     const impossible = expression({ kind: "piece_count", color: "white", role: "king", basis: "count", comparison: "equal", count: 0 });
     expect(expressionSatisfiability(impossible)).toMatchObject({ verdict: "unsatisfiable", rule: "R2" });

@@ -3,7 +3,7 @@
 // relations only: it never selects, ranks, grades, explains or renders the events it returns.
 
 import { resolveBranchPath } from "./branch-path.js";
-import { PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
+import { PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_PROJECTION_REFS, RECORDED_PATH_SUCCESSOR_REFS } from "./evidence-catalog.js";
 import { evidenceConventionReceipt, evidenceDigest, type CompiledEvidenceManifest, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
 import { CONVENTION_REGISTRY, compareConventionRefs, conventionRefKey, type ConventionReceipt, type ConventionRef } from "./evidence-conventions.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
@@ -160,8 +160,9 @@ const EVALUATOR_ROWS: readonly RecordedPathEvaluatorRow[] = Object.freeze([
  */
 export function assertRecordedPathTableClosure(rows: readonly RecordedPathEvaluatorRow[], refs: readonly VersionedEvidenceId[], manifest: CompiledEvidenceManifest): void {
   const tableKeys = [...new Set(rows.map((row) => refKey(row.projection)))].sort();
-  const refKeys = refs.filter((value) => value.version === 2).map(refKey).sort();
-  const manifestKeys = manifest.semanticEvents.map((event) => event.projection).filter((value) => value.version === 2).map(refKey).sort();
+  const recorded = new Set(RECORDED_PATH_SUCCESSOR_REFS.map(refKey));
+  const refKeys = refs.filter(value => recorded.has(refKey(value))).map(refKey).sort();
+  const manifestKeys = manifest.semanticEvents.map(event => event.projection).filter(value => recorded.has(refKey(value))).map(refKey).sort();
   const rowKeys = rows.map((row) => `${refKey(row.projection)}#${row.horizon}`);
   if (tableKeys.join("|") !== refKeys.join("|") || tableKeys.join("|") !== manifestKeys.join("|")) {
     throw new TypeError(`Recorded-path evaluator table is not set-equal to the exact v2 semantic population (${tableKeys.length} vs ${refKeys.length}/${manifestKeys.length})`);

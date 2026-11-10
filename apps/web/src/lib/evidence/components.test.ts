@@ -8,9 +8,9 @@ import { fileURLToPath } from "node:url";
 
 import {
   COMPONENT_IDS,
+  createRun,
   PRESENTATION_ADAPTERS,
   componentValueSentence,
-  declareShapeFiringEvidence,
   factStatementOperand,
   parseComponentValue,
   presentationDigest,
@@ -25,7 +25,7 @@ import {
   type ConventionReceipt,
 } from "@chess-tabiya/runtime";
 import { flushSync, mount, unmount, type Component } from "svelte";
-import { describe, expect, it, vi } from "vitest";
+import { afterAll, describe, expect, it, vi } from "vitest";
 
 import AbstentionView from "./components/AbstentionView.svelte";
 import CitationView from "./components/CitationView.svelte";
@@ -43,6 +43,38 @@ import StructuredDocumentView from "./components/StructuredDocumentView.svelte";
 import TextStatementView from "./components/TextStatementView.svelte";
 import { trailGeometry } from "./presented-view.js";
 import { invokeEvidenceValueRoute } from "../../../../../packages/runtime/src/internal/evidence-value-routes.js";
+import { registeredShapeFixture } from "../../../../../packages/runtime/src/testing/registered-shape-fixture.js";
+import { recordedGradeFixture } from "../../../../../packages/runtime/src/testing/recorded-grade-fixture.js";
+import { invokeRecordedMeasurementReading } from "../../../../../packages/runtime/src/recorded-measurement.js";
+import { movePathFixture } from "./move-path.test-support.js";
+import type { SourcingLedgerRecord } from "../../../../../packages/runtime/src/recorded-reading.js";
+
+describe("D3945: recorded report occurrence rendering", () => {
+  it.each(["engine_eval", "tablebase_result"] as const)("renders ordered equal %s reports without duplicate DOM keys or deduplication", async kind => {
+    const fen = "4k3/7p/8/8/8/8/P7/4K3 b - - 0 1";
+    const values = kind === "engine_eval" ? { fen, centipawns: 20, depth: 8, multiPv: 1, perspective: "white", engineId: "fixture", engineName: "Synthetic fixture", engineVersion: "fixture" }
+      : { fen, category: "win", dtz: 1, precise_dtz: 1, dtm: null, pieceCount: 4, checkmate: false, stalemate: false, insufficient_material: false };
+    const record: SourcingLedgerRecord = { kind, anchor: { fen }, values, sourceId: "synthetic-records", retrievedAt: "2026-11-02T00:00:00.000Z", grounds: "machine_validation", supports: [] };
+    const reports = [record, { ...record, values: kind === "engine_eval" ? { ...values, centipawns: 21 } : { ...values, category: "loss" } }, structuredClone(record)]
+      .map(row => {
+        const reading = invokeRecordedMeasurementReading(row);
+        if (reading.result.kind !== "available") throw new Error("Expected admitted synthetic recorded report");
+        return reading.result.value;
+      });
+    const items = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(
+      evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 }, reports))))));
+    expect(items[0]!.componentDigest).toBe(items[2]!.componentDigest);
+    expect(items[1]!.componentDigest).not.toBe(items[0]!.componentDigest);
+    const target = globalThis.document.createElement("div");
+    let component: ReturnType<typeof mount> | undefined;
+    try {
+      component = mount(PresentedEvidence, { target, props: { items } }); flushSync();
+      const rendered = [...target.querySelectorAll<HTMLElement>(".presented")];
+      expect(rendered).toHaveLength(3);
+      expect(rendered.map(element => element.textContent!.trim())).toEqual(items.map(item => componentValueSentence(item.component)));
+    } finally { if (component !== undefined) await unmount(component); target.replaceChildren(); }
+  });
+});
 
 const D = (seed: string): string => `sha256:${seed.repeat(64).slice(0, 64)}`;
 
@@ -53,26 +85,25 @@ describe("D3766: mounted Nudge grade grounding", () => {
       [{ kind: "mate", movesTo: 2 }, { kind: "cp", value: 800 }, "inside +7.00..+9.99"],
       [{ kind: "cp", value: -800 }, { kind: "mate", movesTo: -2 }, "opponent mate #2"],
     ] as const) {
-      const reading = (score: typeof before | typeof after) => invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: {
-        kind: "eval", source: "engine_validated", values: {
-          ...(score.kind === "cp" ? { centipawns: score.value * (mover === "white" ? 1 : -1) } : { mateIn: score.movesTo * (mover === "white" ? 1 : -1) }),
-          perspective: "white", engineId: "labelled grade fixture", requestedMovetimeMs: 100,
-        },
-      } });
-      const result = invokeEvidenceValueRoute("derived.grade.move_quality@1", { before: reading(before), after: reading(after), mover, context: "drill" });
+      const raw = (score: typeof before | typeof after, sign: number) => score.kind === "cp" ? `cp ${score.value * sign}` : `mate ${score.movesTo * sign}`;
+      const fixture = recordedGradeFixture({ black: mover === "black", timing: "post_commit", before: raw(before, 1), after: raw(after, -1), budget: { bound: { kind: "movetime", requestedMs: 100 } } });
+      const result = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: fixture.source });
       if (result.kind !== "available") throw new Error("grade fixture unavailable");
       expect(result.value).toHaveLength(1);
       const items = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(
-        presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, result.value)),
+        presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 2 }, result.value)),
       ))));
       const target = globalThis.document.createElement("div");
       globalThis.document.body.append(target);
-      const view = mount(PresentedEvidence, { target, props: { items } });
+      const view = mount(PresentedEvidence, { target, props: { items, detailsScope: {}, detailsActive: true } });
       try {
         flushSync();
         expect(target.querySelectorAll("[data-presented]")).toHaveLength(1);
+        expect(target.textContent).not.toContain(expected);
+        const measured = [...target.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "How measured")!;
+        expect(measured).not.toBeUndefined(); measured.click(); flushSync();
         expect(target.textContent).toContain(expected);
-        expect(target.textContent).toContain("practice convention, version 1");
+        expect(target.textContent).toContain("single move-loss convention, version 2");
         expect(target.textContent).not.toMatch(/White|Black|grade-convention@|inspector\./u);
       } finally { unmount(view); target.remove(); }
     }
@@ -80,14 +111,19 @@ describe("D3766: mounted Nudge grade grounding", () => {
 });
 
 describe("shape-backed Support theory navigation", () => {
-  it.each(["module.structure_nudge", "module.theory_breadcrumb"])("opens the exact fired entry from the parsed %s receipt", consumer => {
+  let browser: typeof import("../inspector-source-browser.test-support.js") | undefined;
+  afterAll(async () => { if (browser !== undefined) { await browser.disposeInspectorBrowserFixtures(); await browser.terminateInspectorBrowserFixture(); } });
+  it.each(["module.structure_nudge", "module.theory_breadcrumb"] as const)("opens the exact fired entry from the parsed %s receipt", async consumer => {
     const entryId = "maroczy-bind";
-    const evidence = declareShapeFiringEvidence([{ id: entryId, trigger: { kind: "feature", feature: { kind: "named_structure", id: "maroczy-bind" } } }],
-      [{ id: "position", fen: "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5" }]);
-    expect(evidence).toHaveLength(1);
-    const items = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(
-      presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, evidence)),
-    ))));
+    browser ??= await import("../inspector-source-browser.test-support.js");
+    const run = createRun({ id: `shape-navigation-${consumer}`, session: { kind: "position", start: {
+      fen: "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5", side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-11-04T00:00:00.000Z" });
+    const source = await browser.historicalInspectorFixture({ run, preserveRun: true, shapes:
+      [{ ...registeredShapeFixture(entryId), trigger: { kind: "feature", feature: { kind: "named_structure", id: "maroczy-bind" } } }] });
+    // Actual current source/adapter receipt only. Structure's selector remains held at D4095.
+    const items = parsePresentationReceipt(await source.shapeComponentReceipt(consumer));
+    expect(items).toHaveLength(1); expect(items[0]!.adapter.projection).toEqual({ id: "theory.shapes.firing", version: 3 });
     const target = globalThis.document.createElement("div");
     globalThis.document.body.append(target);
     const view = mount(PresentedEvidence, { target, props: { items } });
@@ -96,7 +132,7 @@ describe("shape-backed Support theory navigation", () => {
       const link = target.querySelector("a");
       expect(link?.getAttribute("href")).toBe("/library/shape/maroczy-bind");
       expect(link?.textContent).toBe("Open pattern entry");
-      expect(target.textContent).toContain("not advice for this one");
+      expect(target.textContent).toContain("A trigger match does not validate the entry's plans or recommend a move.");
       expect(target.textContent).not.toContain("play.shape_entry");
     } finally { unmount(view); target.remove(); }
   });
@@ -120,6 +156,7 @@ const document = (fields: Record<string, unknown>) => { const canonicalBytes = J
 type State = "zero" | "one" | "many" | "withheld" | "unavailable";
 type Fixture = Readonly<Record<string, unknown>> | "not_applicable";
 /** The explicit state matrix: every component × every state, `not_applicable` stated, never skipped. */
+const PATH_FIXTURES = { one: movePathFixture(true), many: movePathFixture(false) };
 const MATRIX: Readonly<Record<ComponentId, Readonly<Record<State, Fixture>>>> = {
   distribution: {
     zero: { rows: [{ move: { san: "e4", uci: "e2e4" }, share: 0, count: 0 }], residual: { share: 1, label: "other_moves" }, convention: corpus(40), highlight: null },
@@ -158,8 +195,8 @@ const MATRIX: Readonly<Record<ComponentId, Readonly<Record<State, Fixture>>>> = 
   },
   move_path: {
     zero: "not_applicable",
-    one: { plies: [{ ply: 1, san: "e4", uci: "e2e4" }], answerDistance: "fact", origin: "learner_played" },
-    many: { plies: [{ ply: 1, san: "e4", uci: "e2e4" }, { ply: 2, san: "e5", uci: "e7e5" }], answerDistance: "fact", origin: "learner_played" },
+    one: { ...PATH_FIXTURES.one.component.operand },
+    many: { ...PATH_FIXTURES.many.component.operand },
     withheld: "not_applicable",
     unavailable: "not_applicable",
   },
@@ -205,11 +242,13 @@ const VIEWS: Readonly<Record<ComponentId, Component<{ component: never; sentence
 };
 
 function render(id: ComponentId, operand: Fixture, onFocusSquares?: (squares: readonly string[] | undefined) => void): { readonly root: HTMLElement; readonly sentence: string; readonly done: () => void } {
-  const component = parseComponentValue({ id, operand }) as ComponentValue;
+  const path = id === "move_path" && typeof operand === "object" ? (Array.isArray(operand.plies) && operand.plies.length === 1 ? PATH_FIXTURES.one : PATH_FIXTURES.many) : undefined;
+  if (path !== undefined) expect(path.component.operand).toEqual(operand);
+  const component = path?.component ?? parseComponentValue({ id, operand }) as ComponentValue;
   const sentence = componentValueSentence(component);
   const target = globalThis.document.createElement("div");
   globalThis.document.body.append(target);
-  const instance = mount(VIEWS[id], { target, props: { component: component as never, sentence, ...(onFocusSquares === undefined ? {} : { onFocusSquares }) } });
+  const instance = mount(VIEWS[id], { target, props: { component: component as never, sentence, ...(path === undefined ? {} : { owner: path.owner }), ...(onFocusSquares === undefined ? {} : { onFocusSquares }) } });
   return { root: target, sentence, done: () => { void unmount(instance); target.remove(); } };
 }
 

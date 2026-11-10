@@ -93,7 +93,8 @@
   import { assertRunDeletionPreview } from "./lib/run-deletion-preview.js";
   import { assertRunPageResponse, legacyRunPage } from "./lib/run-page-response.js";
   import { assertCreatedStoryShare, assertRevokedStoryShare, assertStoryShares } from "./lib/story-response.js";
-  import { assertReviewAnalysisResponse, assertReviewMapResponse } from "./lib/review-response.js";
+  import { assertReviewMapResponse } from "./lib/review-response.js";
+  import { requestReviewAnalyze, reviewAnalyzeTarget } from "./lib/review-analyze.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -371,6 +372,7 @@
   let storyRefreshBusy = $state(false);
   let storyRefreshFailed = $state(false);
   let storyRefreshExplicit = $state(false);
+  let storyClockAccess = $state({ epoch: 0, refused: false });
   let storyShares: readonly StoryShare[] = $state([]);
   // rfc/review-map.md §4: a Compare handoff from the review, opened by the shipped N-way compare once
   // the run screen has loaded that run. Consumed exactly once.
@@ -381,6 +383,7 @@
   let routeError: string | undefined = $state();
   let shellHelpOpen = $state(false);
   let learner: Learner | undefined = $state();
+  const storyClockIdentity = $derived([JSON.stringify(route), learner?.id ?? "", storyClockAccess.epoch, storyClockAccess.refused, story?.decision.digest ?? ""].join("\u0000"));
   let importSideHint = $derived(pgnSideHint(importPgn, learner?.handle));
   $effect(() => { const side = importSideHint?.side; if (side !== undefined && !untrack(() => importSideTouched)) importSide = side; });
   let authLoading = $state(true);
@@ -432,6 +435,12 @@
   let repertoireAnswerGeneration=0;
   let recommendations:readonly ProgressRecommendation[]=$state([]);
   let recommendationSelection:ProgressRecommendationPage["selection"]=$state({shown:0,total:0});
+  type RecommendationVisit = Readonly<{ generation: number; learnerId: string }>;
+  let recommendationVisit: RecommendationVisit | undefined = $state.raw();
+  let recommendationState: "unsupported" | "loading" | "ready" | "unavailable" = $state("unsupported");
+  let recommendationRetried = $state(false);
+  let recommendationRequest = $state(0);
+  let recommendationAbort: AbortController | undefined;
   let runSelection:RunPage["selection"]=$state({shown:0,total:0});
   let runPageBusy=$state(false);
   let runPageError:string|undefined=$state();
@@ -621,6 +630,13 @@
     };
   });
 
+  function shapeQueryFor(runId: string) {
+    const client = api;
+    return client.shapeFirings === undefined ? undefined
+      : (body: import("../../../packages/runtime/src/guided-shape-query.js").GuidedShapeQuery,
+        expected: import("./lib/guided-shape-response.js").GuidedShapeExpectation, signal: AbortSignal) => client.shapeFirings!(runId, body, expected, signal);
+  }
+
   function navigate(path: string): void {
     if (shellHelpOpen) closeShellHelp();
     router.navigate(path);
@@ -787,6 +803,84 @@
     }
   }
 
+  function retireRecommendations(): void {
+    recommendationRequest += 1;
+    recommendationAbort?.abort();
+    recommendationAbort = undefined;
+    recommendationVisit = undefined;
+    recommendationState = "unsupported";
+    recommendationRetried = false;
+    recommendations = [];
+    recommendationSelection = { shown: 0, total: 0 };
+  }
+
+  function recommendationVisitIsCurrent(visit: RecommendationVisit): boolean {
+    return appMounted && recommendationVisit === visit && route.name === "learn"
+      && visit.generation === loadGeneration && learner?.id === visit.learnerId;
+  }
+
+  function repertoireChangesPending(): boolean {
+    return repertoireMutationBusy !== undefined || repertoireScanBusy !== undefined || repertoireAnswerBusy !== undefined;
+  }
+
+  function suspendRecommendationsForRepertoireChange(): void {
+    if (recommendationVisit === undefined) return;
+    recommendationRequest += 1;
+    recommendationAbort?.abort();
+    recommendationAbort = undefined;
+    recommendations = [];
+    recommendationSelection = { shown: 0, total: 0 };
+    recommendationState = "loading";
+  }
+
+  function refreshRecommendationsAfterRepertoireChange(): void {
+    const visit = recommendationVisit;
+    if (visit === undefined || !recommendationVisitIsCurrent(visit) || repertoireChangesPending()) return;
+    recommendationState = "unsupported";
+    void loadRecommendations(visit);
+  }
+
+  async function loadRecommendations(visit: RecommendationVisit): Promise<void> {
+    if (!recommendationVisitIsCurrent(visit) || repertoireChangesPending() || recommendationState === "loading" || api.recommendations === undefined) return;
+    const request = ++recommendationRequest;
+    const abort = new AbortController();
+    recommendationAbort = abort;
+    recommendationState = "loading";
+    recommendations = [];
+    recommendationSelection = { shown: 0, total: 0 };
+    const isCurrent = () => recommendationVisitIsCurrent(visit) && request === recommendationRequest && !repertoireChangesPending();
+    try {
+      const page = await api.recommendations(abort.signal);
+      if (!isCurrent()) return;
+      recommendations = page.recommendations;
+      recommendationSelection = page.selection;
+      recommendationState = "ready";
+    } catch {
+      if (isCurrent()) recommendationState = "unavailable";
+    } finally {
+      if (isCurrent()) recommendationAbort = undefined;
+    }
+  }
+
+  function recommendationRetryFor(visit: RecommendationVisit, failedRequest: number) {
+    // Capture literal ownership now; a retained control must not read a replacement's epoch.
+    return (event: MouseEvent) => { void retryRecommendations(event.currentTarget as HTMLButtonElement, visit, failedRequest); };
+  }
+
+  async function retryRecommendations(button: HTMLButtonElement, visit: RecommendationVisit, failedRequest: number): Promise<void> {
+    if (!recommendationVisitIsCurrent(visit) || failedRequest !== recommendationRequest || recommendationState !== "unavailable") return;
+    const restoreFocus = document.activeElement === button;
+    recommendationRetried = true;
+    const pending = loadRecommendations(visit);
+    const request = recommendationRequest;
+    await tick();
+    if (restoreFocus && recommendationVisitIsCurrent(visit) && request === recommendationRequest
+      && !repertoireChangesPending() && document.activeElement === document.body) {
+      document.getElementById("recommended-title")?.focus();
+    }
+    await pending;
+  }
+
   function dueRequestIsCurrent(generation: number): boolean {
     return appMounted && route.name === "learn" && generation === loadGeneration;
   }
@@ -940,6 +1034,7 @@
     const startedHere = next.name === "run" && freshlyStartedRun?.runId === next.runId ? freshlyStartedRun : undefined;
     freshlyStartedRun = undefined;
     const generation = ++loadGeneration;
+    retireRecommendations();
     campaignSheetBusy = false;
     campaignSheetError = undefined;
     campaignEncounterState = undefined;
@@ -1000,6 +1095,7 @@
         assertStoryShares(loaded[2],next.runId);
         if(refresh===storyRefreshGeneration){
           story = loaded[0];
+          storyClockAccess = { epoch: storyClockAccess.epoch + 1, refused: false };
           if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
         }
         capabilities = loaded[1];
@@ -1038,12 +1134,16 @@
         repertoireEntryErrors={};
         repertoireAnswerErrors={};
         relatedAttempts = {};
+        if (learner !== undefined && api.recommendations !== undefined) {
+          const visit = { generation, learnerId: learner.id };
+          recommendationVisit = visit;
+          void loadRecommendations(visit);
+        }
         const loaded = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve(EMPTY_DUE_QUEUE),
           api.milestones?.() ?? Promise.resolve([]),
           api.repertoires?.() ?? Promise.resolve([]),
-          api.recommendations?.() ?? Promise.resolve({ recommendations: [], selection: { shown: 0, total: 0 } }),
           api.assignments?.() ?? Promise.resolve([]),
           initialRunPage(),
           api.packs(),
@@ -1052,12 +1152,10 @@
         ]);
         const nextRepertoirePages = await loadRepertoirePages(loaded[3]);
         if (generation !== loadGeneration) return;
-        [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs, capabilities] = [loaded[0], loaded[1].schedules, loaded[2], loaded[3], loaded[5], loaded[7], loaded[8]];
-        [dueWaiting, dueIntakeLimit, difficultRoots] = [loaded[1].waiting, loaded[1].intakeLimit, loaded[9]];
-        runs = loaded[6].runs;
-        runSelection = loaded[6].selection;
-        recommendations = loaded[4].recommendations;
-        recommendationSelection = loaded[4].selection;
+        [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs, capabilities] = [loaded[0], loaded[1].schedules, loaded[2], loaded[3], loaded[4], loaded[6], loaded[7]];
+        [dueWaiting, dueIntakeLimit, difficultRoots] = [loaded[1].waiting, loaded[1].intakeLimit, loaded[8]];
+        runs = loaded[5].runs;
+        runSelection = loaded[5].selection;
         repertoirePages=nextRepertoirePages;
       } else if (isCreateRoute(next)) {
         studioPublicationFailure = undefined;
@@ -1187,6 +1285,7 @@
       }
     } catch (error) {
       if (generation === loadGeneration) {
+        if (next.name === "learn") retireRecommendations();
         routeError = error instanceof LearnerRouteError
           ? error.message
           : "This page could not be loaded. Check your connection and try again.";
@@ -1219,6 +1318,7 @@
   }
 
   async function loadPublicRoute(_next: AppRoute): Promise<void> {
+    retireRecommendations();
     freshlyStartedRun = undefined;
     const generation = ++loadGeneration;
     routeLoading = true;
@@ -1332,13 +1432,15 @@
       const citedNodeId = route.nodeId;
       if (citedNodeId !== undefined && !nextStory.rows.some(row => row.nodeId === citedNodeId)) throw new Error("Cited move missing from refreshed review");
       story=nextStory;
+      storyClockAccess = { epoch: storyClockAccess.epoch + 1, refused: false };
       storyRefreshFailed=false;
       if (story.ready && storyPoll !== undefined) { clearInterval(storyPoll); storyPoll = undefined; }
       else if (!story.ready && storyPoll === undefined) syncStoryPolling(route);
-    }catch{
+    }catch(error){
       // Retain the last confirmed review and selection, but don't disguise an unsuccessful
       // refresh as current data or hammer a failing service with another poll every second.
       if(storyRouteIsCurrent(runId,generation)&&refresh===storyRefreshGeneration){
+        if (error instanceof ApiError && [401, 403, 404].includes(error.status)) storyClockAccess = { epoch: storyClockAccess.epoch + 1, refused: true };
         storyRefreshFailed=true;
         if(storyPoll!==undefined){clearInterval(storyPoll);storyPoll=undefined;}
       }
@@ -1490,12 +1592,22 @@
     navigate(routePath({ name: "run", runId }));
   }
 
-  async function analyzeFromReview(runId: string, branchId: string, nodeId: string) {
+  async function analyzeFromReview(runId: string, branchId: string, nodeId: string, signal: AbortSignal, current: () => boolean) {
     const row = story?.runId === runId && story.branchId === branchId ? story.rows.find(row => row.nodeId === nodeId) : undefined;
     if (row === undefined) throw new Error("This reviewed position is no longer open");
-    const subject = { runId, branchId, nodeId, entryNodeId: row.entryNodeId };
-    const page = await api.reviewAnalysis!(runId, nodeId, branchId);
-    assertReviewAnalysisResponse(page, subject);
+    if (api.reviewAssistance === undefined || api.inspector === undefined || story === undefined) throw new Error("Recorded Analyze is unavailable");
+    const target = reviewAnalyzeTarget(story, nodeId);
+    return requestReviewAnalyze({ reviewAssistance: (id, body, abort) => api.reviewAssistance!(id, body, abort), inspector: (id, body, abort) => api.inspector!(id, body, abort) }, target, signal,
+      () => current() && appMounted && route.name === "story" && route.runId === runId && story?.decision.digest === target.decision.digest && story.branchId === branchId);
+  }
+
+  async function recordedClockFromReview(owner: ReviewMap, nodeId: string, signal: AbortSignal, current: () => boolean) {
+    const generation = loadGeneration, account = learner?.id, loader = api.recordedClock, access = storyClockAccess.epoch;
+    const valid = () => current() && !signal.aborted && appMounted && !storyClockAccess.refused && access === storyClockAccess.epoch && generation === loadGeneration && learner?.id === account
+      && route.name === "story" && route.runId === owner.runId && story === owner && story.branchId === owner.branchId;
+    if (loader === undefined || !valid()) throw new Error("The recorded clock selection is no longer open");
+    const page = await loader.call(api, owner.runId, owner.branchId, nodeId, signal);
+    if (!valid()) throw new Error("The recorded clock selection changed");
     return page;
   }
 
@@ -1531,6 +1643,7 @@
     const input={name:repertoireName,side:repertoireSide,targetElo:repertoireTargetElo,coverageDenominator:repertoireCoverageDenominator,source:repertoireStudyUrl.trim()?{kind:"lichess_study" as const,url:repertoireStudyUrl}:{kind:"pgn" as const,pgn:repertoirePgn}};
     const generation=loadGeneration;const action=++repertoireMutationGeneration;
     repertoireMutationBusy="create";repertoireError=undefined;
+    suspendRecommendationsForRepertoireChange();
     try{
       if(api.createRepertoire===undefined)throw new Error("unavailable");
       const created=await api.createRepertoire(input);
@@ -1541,12 +1654,13 @@
         if(input.source.kind==="lichess_study"&&repertoireStudyUrl===input.source.url)repertoireStudyUrl="";
       }
     }catch{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireError="The repertoire could not be imported. Check its source and try again.";}
-    finally{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireMutationBusy=undefined;}
+    finally{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn"){repertoireMutationBusy=undefined;refreshRecommendationsAfterRepertoireChange();}}
   }
   async function scanRepertoire(id:string):Promise<void>{
     if(repertoireScanBusy!==undefined)return;
     const before=repertoirePages[id]?.scan?.scannedAt;const generation=loadGeneration;const action=++repertoireScanGeneration;
     repertoireScanBusy=id;repertoireScanErrors={...repertoireScanErrors,[id]:""};
+    suspendRecommendationsForRepertoireChange();
     let finished=false;
     try{
       if(api.scanRepertoire===undefined||api.repertoireGaps===undefined)throw new Error("unavailable");
@@ -1564,7 +1678,7 @@
       try{const next=await (api.repertoires?.()??Promise.resolve(repertoires));if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoires=next;}
       catch{if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoireScanErrors={...repertoireScanErrors,[id]:"The scan finished, but its summary could not refresh. Reload to see the current state."};}
     }catch{if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoireScanErrors={...repertoireScanErrors,[id]:"The repertoire scan could not finish. Try again."};}
-    finally{if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration)repertoireScanBusy=undefined;}
+    finally{if(repertoireRouteIsCurrent(generation)&&action===repertoireScanGeneration){repertoireScanBusy=undefined;refreshRecommendationsAfterRepertoireChange();}}
   }
   function repertoireEntry(runId:string|null){return repertoireEntryDecision(capabilities?.policyModes??[],runId);}
   async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{
@@ -1585,6 +1699,7 @@
     if(repertoireAnswerBusy!==undefined)return;
     const actionKey=`${id}:${gapKey}:${moveUci}`;const errorKey=repertoireGapKey(id,gapKey);const generation=loadGeneration;const action=++repertoireAnswerGeneration;
     repertoireAnswerBusy=actionKey;repertoireAnswerErrors={...repertoireAnswerErrors,[errorKey]:""};
+    suspendRecommendationsForRepertoireChange();
     try{
       if(api.chooseRepertoireAnswer===undefined)throw new Error("unavailable");
       const updated=await api.chooseRepertoireAnswer(id,{positionKey:gapKey,moveUci,ifMatch});
@@ -1595,12 +1710,13 @@
       try{const page=await api.repertoireGaps(id);if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration&&page.repertoire.id===id)repertoirePages={...repertoirePages,[id]:page};}
       catch{if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration)repertoireAnswerErrors={...repertoireAnswerErrors,[errorKey]:"The answer was saved, but the gap list could not refresh. Reload to see the current state."};}
     }
-    if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration)repertoireAnswerBusy=undefined;
+    if(repertoireRouteIsCurrent(generation)&&action===repertoireAnswerGeneration){repertoireAnswerBusy=undefined;refreshRecommendationsAfterRepertoireChange();}
   }
   async function deleteRepertoire(id:string):Promise<void>{
     if(api.deleteRepertoire===undefined||repertoireMutationBusy!==undefined)return;
     const generation=loadGeneration;const action=++repertoireMutationGeneration;
     repertoireMutationBusy=`delete:${id}`;repertoireError=undefined;
+    suspendRecommendationsForRepertoireChange();
     try{
       await api.deleteRepertoire(id);
       if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn"){
@@ -1609,7 +1725,7 @@
         recommendations=recommendations.filter((item)=>item.kind!=="repertoire_gap"||item.repertoireId!==id);
       }
     }catch{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireError="The repertoire could not be deleted. Nothing changed; try again.";}
-    finally{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn")repertoireMutationBusy=undefined;}
+    finally{if(generation===loadGeneration&&action===repertoireMutationGeneration&&route.name==="learn"){repertoireMutationBusy=undefined;refreshRecommendationsAfterRepertoireChange();}}
   }
   function recommendationPacks(item:ProgressRecommendation):readonly PackSummary[]{return item.kind==="shape_encounter"?item.packIds.flatMap((packId)=>{const pack=packs.find((candidate)=>candidate.id===packId);return pack===undefined?[]:[pack];}):[];}
   async function distillActiveRun(title: string): Promise<void> {
@@ -2678,6 +2794,7 @@
 
   onDestroy(() => {
     appMounted = false;
+    retireRecommendations();
     authGeneration += 1;
     distillGeneration += 1;
     createSeedGeneration += 1;
@@ -2920,7 +3037,10 @@
         onAssistanceQuery={api.assistance === undefined ? undefined : (request) => api.assistance!(session.runState!.run.id, request)}
         onHumanSplit={(nodeId) => api.humanSplit(session.runState!.run.id, nodeId)}
         onModuleQuery={api.modules === undefined ? undefined : (body) => api.modules!(session.runState!.run.id, body)}
-        hints={api.hint === undefined ? undefined : controller.hints}
+        onShapeFirings={shapeQueryFor(session.runState.run.id)}
+        onInspectorQuery={api.inspector === undefined ? undefined : (body, signal) => api.inspector!(session.runState!.run.id, body, signal)}
+        onInspectorAssistance={api.inspectorAssistance === undefined ? undefined : (body, signal) => api.inspectorAssistance!(session.runState!.run.id, body, signal)}
+        hints={api.hint === undefined ? undefined : controller.hintsFor(session.runState.run.id)}
         onCorpus={(nodeId) => api.corpus(session.runState!.run.id, nodeId)}
         onVoice={(nodeId, scope) => api.voice(session.runState!.run.id, nodeId, scope)}
         onCompareVoice={operationConfigured(capabilities, "render.voice_compare") && session.comparisonBranchIds !== undefined ? () => api.compareVoice(session.runState!.run.id, session.comparisonBranchIds!) : undefined}
@@ -3004,7 +3124,7 @@
       <DeferredScreen label="Game review" load={() => import("./lib/ReviewMapScreen.svelte")} onReady={focusDeliveredRoute}>
         {#snippet children({ default: ReviewMapScreen })}
           {#if story}
-          <ReviewMapScreen review={story} initialNodeId={route.name === 'story' ? route.nodeId : undefined} refreshBusy={storyRefreshBusy && storyRefreshExplicit} refreshFailed={storyRefreshFailed} onRefresh={() => refreshStory(storyRunId,true)} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAnalysis === undefined ? undefined : (nodeId) => analyzeFromReview(storyRunId, story!.branchId, nodeId)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+          <ReviewMapScreen review={story} readActive={!storyClockAccess.refused && !storyRefreshBusy} onRecordedClock={api.recordedClock === undefined || storyClockAccess.refused ? undefined : recordedClockFromReview} clockAccessIdentity={storyClockIdentity} initialNodeId={route.name === 'story' ? route.nodeId : undefined} refreshBusy={storyRefreshBusy && storyRefreshExplicit} refreshFailed={storyRefreshFailed} onRefresh={() => refreshStory(storyRunId,true)} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAssistance === undefined || api.inspector === undefined ? undefined : (nodeId, signal, current) => analyzeFromReview(storyRunId, story!.branchId, nodeId, signal, current)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
           {/if}
         {/snippet}
       </DeferredScreen>
@@ -3019,7 +3139,7 @@
         <ImportSourceFields kind="game" bind:url={importUrl} bind:pgn={importPgn} disabled={importBusy||importPreparation!==undefined} savedSource={importPreparation!==undefined} />
         <label>Your side <select disabled={importBusy||importPreparation!==undefined} aria-describedby={importSideHint ? "import-side-hint" : undefined} bind:value={importSide} onchange={() => { importSideTouched = true; }}><option value="white">White</option><option value="black">Black</option></select></label>
         {#if importSideHint}<p id="import-side-hint" class="honest">{#if importSideHint.side && !importSideTouched}Your handle is {importSideHint.side === "white" ? "White" : "Black"} in this PGN, so Your side is set to {importSideHint.side === "white" ? "White" : "Black"}. Change it if you played the other side.{:else}This PGN names White: {importSideHint.white ?? "not given"} and Black: {importSideHint.black ?? "not given"}. Choose the side you played.{/if}</p>{/if}
-        <p id="import-storage-disclosure" class="honest">Import keeps the game’s PGN tags—including player names—and its moves alongside the parsed main line and the rehearsal branches you add. Comments, engine evaluations and move annotations in the PGN are removed before anything is stored. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
+        <p id="import-storage-disclosure" class="honest">Import keeps the game’s PGN tags—including player names—its moves and any recorded clock times alongside the parsed main line and the rehearsal branches you add. Comments, engine evaluations and other move annotations are removed from the stored PGN. It is included in your account export and removed with this run or your account, subject to the stated backup limits.</p>
         {#if importPreparation}<p role="status">The game is saved. Finish preparing its Story without importing a duplicate.</p>{/if}
         <button class="primary" type="submit" aria-describedby="import-storage-disclosure import-source-guidance" disabled={importBusy||(importPreparation===undefined&&importUrl.trim()===""&&importPgn.trim()==="")}>{importBusy?"Preparing…":importPreparation?"Finish Story setup":"Build game story"}</button>
         {#if importNotice}<p role="status">{importNotice}</p>{/if}
@@ -3065,11 +3185,17 @@
         {#if runSelection.shown<runSelection.total}<p id="assigned-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs when matching assignments.</p><button type="button" disabled={runPageBusy} aria-describedby="assigned-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more saved runs"}</button>{/if}
         {#if runPageError}<p role="alert">{runPageError}</p>{/if}
       </section>
-      {#if recommendations.length>0}
-        <section aria-labelledby="recommended-title" aria-describedby={recommendationSelection.shown<recommendationSelection.total?"recommendation-budget":undefined}><h2 id="recommended-title">Recommended next</h2>{#if recommendationSelection.shown<recommendationSelection.total}<p id="recommendation-budget" class="honest">Showing {recommendationSelection.shown} of {recommendationSelection.total} grounded recommendations.</p>{/if}<div class="item-list">
+      {#if recommendationVisit && recommendationState !== "unsupported" && (recommendationState !== "ready" || recommendations.length > 0 || recommendationRetried)}
+        {@const visit = recommendationVisit}
+        <section aria-labelledby="recommended-title" aria-busy={recommendationState === "loading"} aria-describedby={recommendationState === "ready" && recommendationSelection.shown<recommendationSelection.total?"recommendation-budget":undefined}><h2 id="recommended-title" tabindex="-1">Recommended next</h2>
+        {#if recommendationState === "loading"}<p role="status">{repertoireChangesPending() ? "Recommendations will refresh when your repertoire changes finish." : "Loading recommendations…"}</p>
+        {:else if recommendationState === "unavailable"}<p role="status">Recommendations are temporarily unavailable. Your returns and rehearsals are still available.</p><button type="button" onclick={recommendationRetryFor(visit, recommendationRequest)}>Retry recommendations</button>
+        {:else}
+        {#if recommendations.length === 0}<p role="status">No recommendations right now.</p>{/if}
+        {#if recommendationSelection.shown<recommendationSelection.total}<p id="recommendation-budget" class="honest">Showing {recommendationSelection.shown} of {recommendationSelection.total} grounded recommendations.</p>{/if}<div class="item-list">
           {#each recommendations as item}<article><div><p>{progressRecommendationSentence(item)}</p>{#if item.kind==="shape_encounter"}{@const matchingPacks=recommendationPacks(item)}{#if matchingPacks.length>0}<div class="recommendation-actions">{#each matchingPacks as pack}<button type="button" onclick={()=>void controller.startPack(pack.id)}>{packPhaseCopy(pack.phase)} · Rehearse {pack.title}</button>{/each}</div>{:else}<p class="honest">No matching rehearsal is currently served.</p>{/if}{/if}</div>{#if item.kind==="repertoire_gap"}{@const entry=repertoireEntry(null)}{@const entryKey=repertoireGapKey(item.repertoireId,item.gapKey)}<button type="button" disabled={!entry.available||repertoireEntryBusy!==undefined} aria-describedby={!entry.available?"recommendation-resistance-unavailable":undefined} onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>{repertoireEntryBusy===entryKey?"Opening rehearsal…":entry.label}</button>{#if repertoireEntryErrors[entryKey]}<p role="alert">{repertoireEntryErrors[entryKey]}</p>{/if}{/if}</article>{/each}
           {#if recommendations.some((item)=>item.kind==="repertoire_gap")&&!repertoireEntry(null).available}<p id="recommendation-resistance-unavailable" class="honest">{repertoireEntry(null).reason}</p>{/if}
-        </div></section>
+        </div>{/if}</section>
       {/if}
       <section aria-labelledby="repertoire-title">
         <h2 id="repertoire-title">Repertoire gaps</h2>
@@ -3093,15 +3219,17 @@
               {#if page?.status==="pending"}<p>Scanning…</p>{/if}
               {#if repertoireScanErrors[repertoire.id]}<p role="alert">{repertoireScanErrors[repertoire.id]}</p>{/if}
               {#if page?.scan}
+                {@const startingGap = page.scan.gaps.length === 1 && page.scan.gaps[0]?.replySan === "" && page.scan.gaps[0]?.line.length === 0}
                 <div class="gap-results" aria-label={`Gaps for ${repertoire.name}`}>
                   <p>{corpusPopulationLabel(page.scan.population)}</p><p class="honest">{page.scan.guard}.</p>
                   {#if page.scan.partiality}<p class="honest">{page.scan.partiality}</p>{/if}
                   {#if page.stale}<p class="honest">These results predate your latest repertoire change. Answer states remain visible, but coverage and ranking need a rescan.</p>{/if}
-                  <p>{page.scan.truncated?"At least":"About"} {(page.scan.uncoveredMass*100).toFixed(1)}% of games contain replies above your 1-in-{repertoire.coverageDenominator} bound that still need an answer.</p>
+                  {#if startingGap}<p>This scan found no first answer at the repertoire’s starting position. No opponent reply was queried for this starting-position gap.</p>
+                  {:else}<p>{page.scan.truncated?"At least":"About"} {(page.scan.uncoveredMass*100).toFixed(1)}% of games contain replies above your 1-in-{repertoire.coverageDenominator} bound that still need an answer.</p>{/if}
                   {#if page.scan.unreachedKeys>0}<p class="honest">{page.scan.unreachedKeys} repertoire {page.scan.unreachedKeys===1?"position was":"positions were"} not reached within this scan.</p>{/if}
                   {#each page.scan.gaps as gap,index}
                     <div class="gap-row">
-                      <div><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {repertoireGapStateLabel(gap.state)}</span>
+                      <div><span>{gap.replySan||"First move"}{#if gap.replySan !== "" || gap.line.length !== 0} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"}{/if} · {repertoireGapStateLabel(gap.state)}</span>
                         {#if gap.firstMoves.length>0}<div class="gap-answer"><span>Moves you tried:</span>{#each gap.firstMoves as move}{#if gap.answer?.moveUci===move.moveUci}<strong>Current repertoire answer: {move.moveSan}</strong>{:else}<button type="button" disabled={repertoireAnswerBusy!==undefined} aria-describedby={repertoireAnswerBusy!==undefined?`gap-answer-status-${gap.key}`:undefined} onclick={()=>void chooseRepertoireAnswer(repertoire.id,gap.key,move.moveUci,repertoire.digest)}>{repertoireAnswerBusy===`${repertoire.id}:${gap.key}:${move.moveUci}`?"Saving…":`Use ${move.moveSan} as my repertoire answer`}</button>{/if}{/each}</div>{/if}
                         {#if repertoireAnswerBusy!==undefined}<span id={`gap-answer-status-${gap.key}`} class="honest">Finish saving the current repertoire choice first.</span>{/if}
                         {#if repertoireAnswerErrors[repertoireGapKey(repertoire.id,gap.key)]}<p role="alert">{repertoireAnswerErrors[repertoireGapKey(repertoire.id,gap.key)]}</p>{/if}

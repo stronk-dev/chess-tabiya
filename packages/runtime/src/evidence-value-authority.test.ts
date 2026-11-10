@@ -1,3 +1,6 @@
+import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation } from "./candidate-population.js";
+import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
+import { isFoundationDetailKind } from "./foundation-snapshot-detail.js";
 // Permanent value-authority gate (rfc/evidence-value-authority.md §7-§8). Run by
 // `make evidence-value-authority` (part of `make verify-software`) and by `make test-software`.
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -10,10 +13,12 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 
 import { sha256Hex } from "./assistance-exchange.js";
+import { resolveRunSubject, digestRunEventHead } from "./run-subject.js";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { compileConceptRegistry, conceptRegistryDigest, conceptRegistryHeadBytes, conceptRegistryRevisionBytes } from "./concept-registry.js";
 import { compareBranches } from "./compare.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { STRUCTURAL_DETAIL_KINDS } from "./structural-reading-detail.js";
 import { GENERATED_CAPABILITY_DECLARATIONS } from "./capability/declarations.generated.js";
 import { CAPABILITY_LIFECYCLE } from "./capability/lifecycle.js";
 import {
@@ -34,19 +39,27 @@ import { boundedTargetSourceEvidence } from "./evidence-operations.js";
 import { invokeEvidenceValueRoute, evidenceValueRouteRegistry, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { ENDGAME_MATERIAL_MAX, phaseBandReading } from "./phase.js";
 import { branchPath } from "./branch-path.js";
+import { recordedGradeFixture } from "./testing/recorded-grade-fixture.js";
+import { registeredShapeFixture } from "./testing/registered-shape-fixture.js";
+import { captureDraftShapeStructuralDocument, selectAuthoredStructuralCondition } from "./internal/authored-structural-source.js";
+import { captureAuthoredPredicatePopulation } from "./authored-predicate-population.js";
+import { STRUCTURAL_CONVENTION_REFS } from "@chess-tabiya/schema/drill-pack";
+import { createRegisteredShapeSourceOwner } from "./registered-shape-source.js";
+import { digestShapeEntry } from "@chess-tabiya/schema/shape-entry";
 import { commitMove, createRun, fork, rewind } from "./runtime.js";
 import { compileSemanticEvidenceEvent, legalAlternativeEdges, loosePieceSemanticEvents, pawnIslandSemanticEvents, structuralSemanticEvents, transitionSemanticEvents } from "./semantic-evidence.js";
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
 import type { DrillRun } from "./types.js";
-import { evaluationDelivery as reviewEvaluationDelivery } from "./testing/review-evidence-fixture.js";
+import { evaluationDelivery as reviewEvaluationDelivery, importedRun, play, lineDelivery, attachDelivery, REVIEW_AT } from "./testing/review-evidence-fixture.js";
+import { collectRecordedAnalyzeLine } from "./recorded-analyze-line.js";
 import { PROVIDER_EXCHANGE_AUTHORITY, parserImplementationDigest } from "./provider-exchange.js";
 import { digestProviderPayload } from "./provider-digest.js";
 import { normalizeProviderRequest } from "./provider-requests.js";
-import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, principalVariationCapture, principalVariationRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
+import { FIXTURE_AT, allLegalRows, evaluationCapture, evaluationRequest, explorerBody, explorerRequest, httpCapture, legalRootCapture, legalRootLines, legalRootRequest, maiaCapture, maiaRequest, maiaTaskRequest, maiaTaskCapture, principalVariationCapture, principalVariationRequest, syzygyBody, syzygyRequest } from "./provider-test-fixtures.js";
 import type { ProviderExecutionCapture, ProviderOperationId, ProviderRequestedIdentityMap } from "./provider-types.js";
-import { HINT_DISCLOSURE_PROJECTION_IDS, HINT_FAMILIES, HINT_HORIZON_PROJECTION_IDS, HINT_RUNGS, type HintFamily } from "./hint-registry.js";
+import { HINT_DISCLOSURE_PROJECTION_IDS, HINT_FAMILIES, HINT_HORIZON_PROJECTION_IDS, HINT_RUNGS, hintDeclarationRow, type HintFamily } from "./hint-registry.js";
 import { HINT_FAMILY_POSITIVES, sealedHintLine } from "./testing/hint-fixture.js";
-import { occurrenceFixture, occurrencePage } from "./testing/maia-occurrence-fixture.js";
+import { occurrenceFixture, occurrencePage, occurrenceRun, nodeTask } from "./testing/maia-occurrence-fixture.js";
 import { recordedInspectorAttachment, recordedInspectorSelection } from "./testing/recorded-inspector-fixture.js";
 import { recordedComparisonFixture } from "./testing/recorded-comparison-fixture.js";
 import { recordedComparisonEvalFixture } from "./testing/recorded-comparison-eval-fixture.js";
@@ -62,6 +75,9 @@ import { createRecordedSequenceWindows, RECORDED_SEQUENCE_HORIZONS, type Recorde
 import { recordedSequenceRouteFixture } from "./testing/recorded-sequence-window-fixture.js";
 import { admitInstalledOpeningCatalogue } from "./opening-catalogue.js";
 import { collectRecordedOpeningHistory } from "./recorded-opening-history.js";
+import { createRecordedReviewBoundarySourceOwner } from "./recorded-review-boundary.js";
+import { transitionObjective } from "./objective.js";
+import { INSPECTOR_DETAIL_SOURCES } from "./inspector-detail.js";
 
 const OPENING_INSTALLATION = admitInstalledOpeningCatalogue(JSON.parse(readFileSync(new URL("../../../apps/server/artifacts/runtime-opening-catalogue.json", import.meta.url), "utf8")));
 
@@ -79,6 +95,7 @@ function providerDeliveries(): readonly (readonly [string, ProviderOperationId, 
   const evaluation = normalizeProviderRequest("stockfish.position_evaluation@1", evaluationRequest(initial));
   const line = normalizeProviderRequest("stockfish.principal_variation@1", principalVariationRequest(initial));
   const maia = normalizeProviderRequest("maia.policy_page@1", maiaRequest({ kind: "exact_fen", fen: initial }, { requestedWidth: 2 }));
+  const task = normalizeProviderRequest("maia.inference_task@1", maiaTaskRequest());
   const syzygy = normalizeProviderRequest("syzygy.position@1", syzygyRequest(kqk));
   const explorer = normalizeProviderRequest("lichess_explorer.position_page@1", explorerRequest());
   return [
@@ -86,6 +103,7 @@ function providerDeliveries(): readonly (readonly [string, ProviderOperationId, 
     ["live.stockfish.position_eval@1", "stockfish.position_evaluation@1", seal("stockfish.position_evaluation@1", evaluation, evaluationCapture(evaluation, ["info depth 12 score cp 20 wdl 300 600 100 pv e2e4", "bestmove e2e4"]))],
     ["live.stockfish.principal_variation@1", "stockfish.principal_variation@1", seal("stockfish.principal_variation@1", line, principalVariationCapture(line, ["info depth 12 score cp 20 pv e2e4 e7e5", "bestmove e2e4"]))],
     ["human.maia.policy_page@1", "maia.policy_page@1", seal("maia.policy_page@1", maia, maiaCapture(maia, ["info depth 1 multipv 1 policy 0.4 pv e2e4", "info depth 1 multipv 2 policy 0.3 pv d2d4", "bestmove e2e4"]))],
+    ["human.maia.inference_task@1", "maia.inference_task@1", seal("maia.inference_task@1", task, maiaTaskCapture(task, ["info multipv 1 policy 0.4 score cp 12 wdl 400 300 300 pv e2e4", "info multipv 3 pv d2d4", "bestmove g1f3"]))],
     ["live.syzygy.position_result@1", "syzygy.position@1", seal("syzygy.position@1", syzygy, httpCapture("syzygy.position@1", syzygyBody(kqk)))],
     ["live.syzygy.position_result@2", "syzygy.position@1", seal("syzygy.position@1", syzygy, httpCapture("syzygy.position@1", syzygyBody(kqk)))],
     ["human.explorer.position_page@1", "lichess_explorer.position_page@1", seal("lichess_explorer.position_page@1", explorer, httpCapture("lichess_explorer.position_page@1", explorerBody()))],
@@ -164,6 +182,55 @@ const RECEIPT = JSON.parse(read("planning/evidence-foundation-ux/evidence-value-
 };
 
 describe("value authority: static closure", () => {
+  it("keeps original recorded clock issuance inside its actual storage operation", () => {
+    expect(importers(/(?:^|\/)recorded-clock-source-authority\.js$/u, PRODUCTION_FILES))
+      .toEqual(["apps/server/src/recorded-clock-operation.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.valueImports.some(entry => entry.names.includes("RECORDED_CLOCK_SOURCE_AUTHORITY"))).sort())
+      .toEqual(["apps/server/src/recorded-clock-operation.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has("issueClockSource")).sort())
+      .toEqual(["apps/server/src/recorded-clock-operation.ts"]);
+    expect(PRODUCTION_FILES.filter(path => /RECORDED_CLOCK_SOURCE_AUTHORITY|recorded-clock-source-authority/u.test(read(path))).sort())
+      .toEqual(["apps/server/src/recorded-clock-operation.ts", "packages/runtime/src/recorded-clock-source-authority.ts", "packages/runtime/src/recorded-clock-source.ts"]);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"])
+      expect(read(path)).not.toMatch(/recorded-clock-source|RECORDED_CLOCK_SOURCE_AUTHORITY/u);
+  });
+  it("keeps original recorded foundation issuance inside its storage owner", () => {
+    expect(importers(/(?:^|\/)recorded-foundation-source-authority\.js$/u, PRODUCTION_FILES))
+      .toEqual(["apps/server/src/profile-game-source.ts", "apps/server/src/recorded-foundation-sources.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.valueImports.some(entry =>
+      entry.names.includes("RECORDED_FOUNDATION_SOURCE_AUTHORITY"))).sort())
+      .toEqual(["apps/server/src/profile-game-source.ts", "apps/server/src/recorded-foundation-sources.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has("issuePrefix") || FACTS.get(path)!.calls.has("issueDecision")).sort())
+      .toEqual(["apps/server/src/recorded-foundation-sources.ts"]);
+    expect(PRODUCTION_FILES.filter(path => /RECORDED_FOUNDATION_SOURCE_AUTHORITY|recorded-foundation-source-authority/u.test(read(path))).sort())
+      .toEqual(["apps/server/src/profile-game-source.ts", "apps/server/src/recorded-foundation-sources.ts", "packages/runtime/src/recorded-foundation-source-authority.ts", "packages/runtime/src/recorded-foundation-source.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has("issueClaimedGamePrefix")).sort())
+      .toEqual(["apps/server/src/profile-game-source.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has("issueClaimedChoiceDecision")).sort())
+      .toEqual(["apps/server/src/profile-game-source.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.valueImports.some(entry => entry.names.includes("PROFILE_GAME_SOURCE_AUTHORITY"))).sort())
+      .toEqual(["apps/server/src/longitudinal-store.ts"]);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"])
+      expect(read(path)).not.toMatch(/recorded-foundation-source|RECORDED_FOUNDATION_SOURCE_AUTHORITY/u);
+  });
+  it("keeps GAME result issuance inside its actual machine consumer", () => {
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.valueImports.some(entry => entry.names.includes("ownProfileGameFact"))).sort())
+      .toEqual(["apps/server/src/profile-game-facts.ts"]);
+  });
+  it("keeps choice result issuance inside its actual machine consumer", () => {
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.valueImports.some(entry => entry.names.includes("ownProfileChoiceFact"))).sort())
+      .toEqual(["apps/server/src/profile-choice-facts.ts"]);
+  });
+  it("keeps the subject reduction writer private to its actual machine consumer", () => {
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.valueImports.some(entry => entry.names.includes("ownProfileSubjectReduction"))).sort())
+      .toEqual(["apps/server/src/profile-subject-facts.ts"]);
+    expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has("ownProfileSubjectReduction")).sort())
+      .toEqual(["apps/server/src/profile-subject-facts.ts"]);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"])
+      expect(read(path)).not.toMatch(/profile-subject-facts-authority|ownProfileSubjectReduction/u);
+    for (const path of ["apps/server/src/longitudinal-store.ts", "apps/server/src/profile-subject-facts-authority.ts"])
+      expect(FACTS.get(path)!.valueImports.map(entry => entry.module)).not.toContainEqual(expect.stringMatching(/(?:internal\/profile-subject-facts|evidence-value-routes|candidate-population|profile-subject-facts\.js)/u));
+  });
   it("keeps capability generation independent of the stale application singleton", () => {
     const builder = FACTS.get("packages/runtime/src/capability/registry.ts")!;
     expect(builder.valueImports.map(entry => entry.module)).toEqual(["@chess-tabiya/schema"]);
@@ -175,16 +242,25 @@ describe("value authority: static closure", () => {
   });
   it("restricts comparison proof/seal issuance to the exact operation and sole mint", () => {
     const callers = (name: string) => PRODUCTION_FILES.filter(path => FACTS.get(path)!.calls.has(name)).sort();
-    for (const name of ["computeComparisonReduction", "computeLastLevelReduction", "computeStoryRankReduction", "computeOpeningHistoryReduction", "initiateEvidenceReduction", "publishEvidenceReduction", "publishSingleEvidenceReduction"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-factories.ts"]);
+    for (const name of ["computeComparisonReduction", "computeLastLevelReduction", "computeStoryRankReduction", "computeOpeningHistoryReduction", "computeAuthoredPredicateReduction", "initiateEvidenceReduction", "publishEvidenceReduction", "publishSingleEvidenceReduction"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-factories.ts"]);
     expect(callers("sealOwnedComparisonReductionProof")).toEqual(["packages/runtime/src/internal/comparison-reduction-authority.ts"]);
     expect(callers("sealOwnedLastLevelReductionProof")).toEqual(["packages/runtime/src/internal/last-level-reduction-authority.ts"]);
     expect(callers("sealOwnedStoryRankReductionProof")).toEqual(["packages/runtime/src/internal/story-rank-reduction-authority.ts"]);
     expect(callers("sealOwnedOpeningHistoryReductionProof")).toEqual(["packages/runtime/src/internal/opening-history-reduction-authority.ts"]);
+    expect(callers("sealOwnedAuthoredPredicateReductionProof")).toEqual(["packages/runtime/src/internal/authored-predicate-reduction-authority.ts"]);
+    for (const [name, path] of [
+      ["captureDraftPackStructuralDocument", "apps/server/src/pack-validation.ts"], ["captureDraftShapeStructuralDocument", "apps/server/src/shape-validation.ts"],
+      ["captureRegisteredPackStructuralDocument", "apps/server/src/pack-registry.ts"], ["captureRegisteredShapeStructuralDocument", "apps/server/src/shape-registry.ts"],
+    ]) {
+      expect(callers(name!), name).toEqual([path]);
+      expect(PRODUCTION_FILES.filter(path => FACTS.get(path)!.valueImports.some(entry => entry.names.includes(name!))).sort(), name).toEqual([path]);
+    }
     for (const name of ["joinEvidenceReductionValue", "evidenceReductionMintReceipt"]) expect(callers(name), name).toEqual(["packages/runtime/src/evidence-contract.ts"]);
     const store = FACTS.get("packages/runtime/src/internal/evidence-reduction-seal.ts")!;
     expect(store.valueImports).toEqual([]); // Type-only imports cannot reintroduce catalogue bootstrap.
     for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/(?:comparison|last-level|story-rank|opening-history)-reduction-authority|evidence-reduction-seal|sealOwned(?:Comparison|LastLevel|StoryRank|OpeningHistory)ReductionProof|initiateEvidenceReduction|publishSingleEvidenceReduction|readRecordedOpeningHistory/u);
     for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/recorded-engine-attachments|collectRecordedEngineAttachments|readRecordedEngineAttachments/u);
+    for (const path of ["packages/runtime/src/index.ts", "packages/runtime/src/client.ts"]) expect(read(path)).not.toMatch(/authored-structural-source|authored-predicate-reduction-authority|sealOwnedAuthoredPredicateReductionProof|captureDraft(?:Pack|Shape)StructuralDocument|captureRegistered(?:Pack|Shape)StructuralDocument/u);
   });
   it("only evidence-factories.ts calls declareEvidence outside tests (criterion 5, §8.1)", () => {
     const callers = PRODUCTION_FILES.filter((path) => FACTS.get(path)!.calls.has("declareEvidence")).sort();
@@ -236,8 +312,21 @@ describe("value authority: static closure", () => {
 
 const ACTIVE = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => projection.disposition?.kind !== "retired").map(exact).sort();
 const RETIRED = PRIMARY_EVIDENCE_MANIFEST.projections.filter((projection) => projection.disposition?.kind === "retired").map(exact).sort();
+// D3853 / accepted F2 §2.3f: this unused representation has no current successor. The frozen
+// migration receipt stays historical; absence is asserted at all current execution boundaries.
+const SUBJECT_SAFE_RETIRED_ROUTES = [
+  ...["backward_pawn", "king_opposition", "pawn_islands", "isolated_pawn", "doubled_pawn", "open_file", "half_open_file", "line_blockers"].map(family => `rules.structural.event.${family}@1`),
+  ...SUBJECT_OUTCOME_FAMILIES.map(family => `derived.semantic_avoidance.${family}@1`),
+];
+// A distinct new meaning is not an identity-preserving migration of the old receipt target.
+const RETIRED_WITHOUT_SUCCESSOR = new Set(["derived.opponent.candidate_feature_vector@1", ...SUBJECT_SAFE_RETIRED_ROUTES]);
 /** Receipt targets retired after migration, each with its typed successor route. */
 const RETIRED_AFTER_MIGRATION: ReadonlyMap<string, string> = new Map([
+  ["derived.material.event.role_asymmetry@1", "derived.material.event.role_asymmetry@2"],
+  ["derived.material.reading.role_signature@1", "derived.material.reading.role_signature@2"],
+  ["derived.tactic.defender_exposure@1", "derived.tactic.defender_exposure@2"],
+  ["derived.opening.deepest_reached@1", "derived.opening.deepest_reached@2"],
+  ["derived.grade.move_quality@1", "derived.grade.move_quality@2"],
   ["derived.story.eval_shift@1", "derived.review.eval_delta@2"],
   ["derived.story.rank@1", "derived.story.rank@2"],
   ["derived.story.title@1", "derived.story.title@2"],
@@ -272,12 +361,26 @@ describe("value authority: registry equality", () => {
     // Provider §6 adds the two separately typed Maia move occurrences, with no learner binding.
     // Provider §7 retains source v1 and adds the bound Syzygy v2 successor.
     // F2 §2.3m adds landing captures; §2.3a adds numerical differences and exact engine points.
-    expect(ACTIVE).toHaveLength(313);
+    // Maia task source §4/4.1 adds the two exact requested-node derivations, not learner bindings.
+    // F2 §2.4a adds the registered-document shape successor without redefining raw @1.
+    // Accepted Review §7a/D4009 adds three literal source-arm projections, not a generic union.
+    // D3309/D3654 retains the sixteen original reading sources and adds detailed successors.
+    // Foundation source identity adds two complete position snapshots without learner bindings.
+    // F2 §2.4b adds the current owned shape-scan successor; historical2 stays truthful.
+    // Subject-safe selection adds two private total-state prerequisites, without bindings.
+    expect(ACTIVE).toHaveLength(370);
     expect(RETIRED).toEqual([
+      "derived.grade.move_quality@1",
+      "derived.material.event.role_asymmetry@1",
+      "derived.material.reading.role_signature@1",
+      "derived.opening.deepest_reached@1",
+      "derived.opponent.candidate_feature_vector@1",
       "derived.story.eval_shift@1",
+      "derived.tactic.defender_exposure@1",
       "rules.endgame.reading@1", "rules.phase.reading@1", "rules.pivotal.marker@1",
       "rules.structural.predicate.result@1", "rules.structural.reading.named_structure@1", "rules.structural.reading.pawn_count@1",
-    ]);
+      ...SUBJECT_SAFE_RETIRED_ROUTES,
+    ].sort());
     for (const route of RETIRED) expect(() => invoke(route, { fen: "8/8/8/8/8/8/8/K6k w - - 0 1" })).toThrow(/Unknown evidence value route/u);
     for (const binding of PRIMARY_EVIDENCE_MANIFEST.bindings) expect(ROUTES.has(exact(binding.projection)), exact(binding.projection)).toBe(true);
     // No consumer binds a retired v1 id (criteria 8/9, §8.7).
@@ -298,13 +401,18 @@ describe("value authority: registry equality", () => {
     const reading = invoke("rules.castling.reading.rights@1", { fen }) as DeclaredEvidence<unknown>;
     // A sealed value of another projection is a crossed input.
     expect(() => invoke("derived.tactic.fork_survives_reply@1", { doubleAttack: reading, breadth: reading })).toThrow(/is sealed rules\.castling\.reading\.rights@1/u);
-    // No factory accepts a payload, output, receipt, factory name or ancestry field.
+    // No factory accepts caller output or ancestry. The thirteen exact subject routes accept
+    // only an ORIGINAL complete candidate receipt; their copied-receipt falsifiers run below.
+    const subjectRoutes = new Set(SUBJECT_OUTCOME_FAMILIES.map(family => `derived.semantic_avoidance.${family}@2`));
     for (const meta of REGISTRY) for (const arm of meta.arms) for (const key of Object.keys(arm)) {
-      expect(["payload", "output", "receipt", "factory", "ancestry", "matched", "cause"], `${meta.route}.${key}`).not.toContain(key);
+      if (key === "receipt" && subjectRoutes.has(meta.route)) {
+        expect(Object.keys(arm).sort()).toEqual(["moveUci", "receipt"]);
+        expect(arm.receipt).toMatchObject({ kind: "value", label: "an original wide candidate receipt" });
+      } else expect(["payload", "output", "receipt", "factory", "ancestry", "matched", "cause"], `${meta.route}.${key}`).not.toContain(key);
     }
   });
 
-  it("migrates exactly the literal route receipt: every old route reaches one final factory (§8.4, criteria 1/4)", () => {
+  it("accounts for every literal migration target by a current factory or explicit accepted retirement (§8.4, criteria 1/4)", () => {
     expect(RECEIPT.summary).toMatchObject({ routeCount: 204, distinctCurrentProjections: 200, noRouteCount: 6 });
     expect(RECEIPT.routes).toHaveLength(204);
     expect(RECEIPT.summary.duplicateProjections).toEqual(["human.maia.event@1", "live.stockfish.eval@1", "live.syzygy.result@1", "rules.structural.reading.named_structure@1"]);
@@ -313,6 +421,12 @@ describe("value authority: registry equality", () => {
       expect(row.targetProfiles.length, row.oldOperation).toBeGreaterThan(0);
       for (const target of row.targetProfiles) {
         expect(target.projection, row.oldOperation).not.toMatch(/\*|generic/u);
+        if (RETIRED_WITHOUT_SUCCESSOR.has(target.projection)) {
+          expect(RETIRED).toContain(target.projection);
+          expect(ROUTES.has(target.projection)).toBe(false);
+          expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some(binding => exact(binding.projection) === target.projection)).toBe(false);
+          continue;
+        }
         // rfc/review-evidence-compiler.md §5 retires this receipt target after migration: its route
         // is removed with the projection, and the typed Review successor carries the evidence.
         if (RETIRED_AFTER_MIGRATION.has(target.projection)) {
@@ -340,27 +454,48 @@ describe("value authority: registry equality", () => {
     // No-route declarations: the retired one stays factoryless; the other five gained factories.
     for (const row of RECEIPT.noRoute) {
       if (row.requiredAction === "remain_factoryless") expect(ROUTES.has(row.projection), row.projection).toBe(false);
-      else expect(ROUTES.has(row.projection), row.projection).toBe(true);
+      else expect(ROUTES.has(RETIRED_AFTER_MIGRATION.get(row.projection) ?? row.projection), row.projection).toBe(true);
     }
     // The registry is exactly the receipt's targets plus the five no-route factories and method_stage.
     // rfc/hint-distance.md's 42 Guided Hint routes post-date the receipt and are counted separately.
     const hintRoutes = [...ROUTES.keys()].filter((route) => route.startsWith("derived.hint."));
     expect(hintRoutes.sort()).toEqual([...HINT_HORIZON_PROJECTION_IDS, ...HINT_DISCLOSURE_PROJECTION_IDS].map((value) => `${value.id}@${value.version}`).sort());
-    const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.")).sort();
-    const localTactical = ["derived.compare.engine_trajectory@2", "derived.compare.eval_delta@2", "derived.compare.piece_route@2", "derived.compare.structure_delta@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.material.event.role_asymmetry@2", "derived.material.reading.role_signature@2", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.story.last_level@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1"];
+    const detailRoutes = Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`).sort();
+    expect([...ROUTES.keys()].filter(route => route.startsWith("derived.inspector.detail.")).sort()).toEqual(detailRoutes);
+    const allExtra = [...ROUTES.keys()].filter((route) => !targets.has(route) && !route.startsWith("derived.hint.") && !detailRoutes.includes(route)).sort();
+    const localTactical = ["derived.compare.engine_trajectory@2", "derived.compare.eval_delta@2", "derived.compare.piece_route@2", "derived.compare.structure_delta@2", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2", "derived.pivotal.phase_change@2", "derived.story.last_level@2", "derived.tactic.nonterminal_fork_survival@1", "recorded.inspector.eval_packet@1", "recorded.inspector.maia_selection@1", "recorded.inspector.pv_packet@1", "recorded.inspector.tablebase_packet@1", "recorded.inspector.wdl_packet@1", "rules.tactic.predicate.overload_conflict@1", "rules.tactic.reading.promotion_pressure@1", "run.record.comparison_path@1", "run.record.objective_transition@2"];
     expect(allExtra.filter(route => localTactical.includes(route))).toEqual(localTactical);
     const sequences = Object.keys(RECORDED_SEQUENCE_HORIZONS).sort();
     expect(allExtra.filter(route => sequences.includes(route))).toEqual(sequences);
     expect(allExtra.filter(route => route === "derived.story.rank@3")).toEqual(["derived.story.rank@3"]);
     expect(allExtra.filter(route => route === "derived.opening.deepest_reached@2")).toEqual(["derived.opening.deepest_reached@2"]);
-    const extra = allExtra.filter(route => !localTactical.includes(route) && !sequences.includes(route) && route !== "derived.story.rank@3" && route !== "derived.opening.deepest_reached@2");
+    const detailedStructural = STRUCTURAL_DETAIL_KINDS.map(kind => `rules.structural.reading.${kind}@2`).sort();
+    expect(allExtra.filter(route => detailedStructural.includes(route))).toEqual(detailedStructural);
+    const foundationSources = [
+      "authored.structural_condition.input@2", "derived.structural.predicate_result@2",
+      "rules.structural.predicate.king_opposition@2", "rules.structural.predicate.backward_pawn@2", "rules.structural.predicate.outpost@2",
+      "rules.structural.reading.fianchetto_setup@1", "rules.structural.reading.fianchetto_knight_screen@1",
+      "rules.mobility.reading.candidate_role@1", "rules.mobility.reading.pawn_extended_center_destination@1",
+      "rules.mobility.reading.early_queen_move@1", "run.record.castling_eligibility@1", "run.record.clock_decision@1",
+      "rules.transition.event.slider_ray@2", "derived.pawn.consequence.backward_pawn_legal_advance@1",
+      "rules.transition.reading.physical_slider_rays@1", "rules.tactic.reading.mover_piece_risk@1",
+      "derived.square.reading.future_file_challenge@1", "derived.square.reading.capture_migration_reach@1",
+      "derived.structural.reading.outpost_candidate@1", "derived.structural.reading.occupied_outpost@1",
+      "derived.activity.event.file_access_revealed@1", "derived.activity.event.file_state@1", "derived.activity.reading.file_state@1",
+      "derived.structural.event.pawn_file_group@1", "derived.structural.reading.pawn_file_group@1",
+      "rules.structural.event.backward_pawn@2", "rules.structural.event.king_opposition@2", "rules.structural.event.pawn_islands@2",
+      "rules.structural.reading.backward_pawn@3", "rules.structural.reading.king_opposition@3",
+      ...SUBJECT_OUTCOME_FAMILIES.map(family => `derived.semantic_avoidance.${family}@2`),
+    ].sort();
+    expect(allExtra.filter(route => foundationSources.includes(route))).toEqual(foundationSources);
+    const extra = allExtra.filter(route => !localTactical.includes(route) && !sequences.includes(route) && !detailedStructural.includes(route) && !foundationSources.includes(route) && route !== "derived.story.rank@3" && route !== "derived.opening.deepest_reached@2");
     // Plus the seven provider-exchange routes (rfc/provider-exchange-and-execution.md §§5.2, 9), which have no
     // pre-exchange route in the frozen receipt.
     // Plus the six typed Review routes (rfc/review-evidence-compiler.md), which post-date the receipt.
     // Plus rfc/concept-registry.md §3's authored reference and provider exchange §5.2's principal variation.
     // Plus rfc/bounded-policy-targets.md §4 and rfc/bounded-target-policy-composition.md §4 routes.
     // Plus rfc/evidence-presentation.md Checkpoint P's source-bound citation derivation.
-    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.inspector_population@1", "derived.explorer.population_summary@1", "derived.explorer.position_frequency@1", "derived.explorer.repertoire_frontier@1", "derived.grade.move_quality@1", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.run_move_occurrence@1", "derived.opening.deepest_reached@1", "derived.review.eval_delta@2", "derived.review.eval_point@1", "derived.review.mate_transition@2", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "derived.tactic.defender_exposure@2", "human.explorer.position_page@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "live.syzygy.position_result@2", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.exchange.reading.landing_captures@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1"]);
+    expect(extra).toEqual(["derived.bounded_target.bounded_return@1", "derived.bounded_target.engine_target_policy@1", "derived.bounded_target.immediate@1", "derived.bounded_target.named_material_target@1", "derived.bounded_target.policy_bounds@1", "derived.citation.attribution@1", "derived.explorer.inspector_population@1", "derived.explorer.population_summary@1", "derived.explorer.position_frequency@1", "derived.explorer.repertoire_frontier@1", "derived.grade.move_quality@2", "derived.maia.exact_fen_move_occurrence@1", "derived.maia.node_candidate_wdl@1", "derived.maia.node_distribution@1", "derived.maia.run_move_occurrence@1", "derived.review.analysis_recorded_first@1", "derived.review.analysis_recorded_pv@1", "derived.review.analysis_typed_pv@1", "derived.review.eval_delta@2", "derived.review.eval_point@1", "derived.review.mate_transition@2", "derived.review.wdl_point@1", "derived.review.wdl_white@1", "human.explorer.position_page@1", "human.maia.inference_task@1", "human.maia.policy_page@1", "live.stockfish.legal_root_table@1", "live.stockfish.position_eval@1", "live.stockfish.principal_variation@1", "live.syzygy.position_result@1", "live.syzygy.position_result@2", "pack.authored.concept_reference@1", "rules.endgame.tablebase_domain@1", "rules.exchange.reading.landing_captures@1", "rules.tactic.consequence.forced_mate_after_move@2", "run.record.clock_reading@1", "run.record.position@1", "theory.endgame.method_stage@1", "theory.opening.catalogue_membership@1", "theory.opening.current_endpoint@1", "theory.shapes.firing@2", "theory.shapes.firing@3"]);
   });
 
   it("re-derives the 75 generic caller-payload adapter partition from the literal receipt (criterion 25)", () => {
@@ -369,7 +504,10 @@ describe("value authority: registry equality", () => {
     expect(generic).toHaveLength(75);
     const partition: Record<string, number> = {};
     for (const row of generic) {
-      const shape = ROUTES.get(row.targetProfiles[0]!.projection)!.shape;
+      const target = row.targetProfiles[0]!;
+      // This partition describes the frozen migration, not the surviving executable subset.
+      // Current target identity/shape or explicit no-successor retirement is checked above.
+      const shape = RETIRED_WITHOUT_SUCCESSOR.has(target.projection) ? target.factoryShape : ROUTES.get(RETIRED_AFTER_MIGRATION.get(target.projection) ?? target.projection)!.shape;
       partition[shape] = (partition[shape] ?? 0) + 1;
     }
     // Correction recorded in the RFC changelog (2026-09-24): the literal receipt yields 35/27/9/4.
@@ -386,7 +524,9 @@ describe("value authority: registry equality", () => {
     const convention = ["rules.square.reading.control@1", "rules.square.event.control@1", "rules.tactic.reading.defender_duty_set@1", "rules.tactic.event.defender_removed@1", "rules.tactic.event.defender_duty_relocated@1", "rules.tactic.consequence.forced_mate_after_move@1"];
     for (const route of literal) {
       expect(projection(route)).toMatchObject({ grounding: "position_rules", exactness: "exact" });
-      expect(ROUTES.get(route)).toMatchObject({ shape: "computed", dependency: "none" });
+      if (SUBJECT_SAFE_RETIRED_ROUTES.includes(route)) {
+        expect(projection(route).disposition?.kind).toBe("retired"); expect(ROUTES.has(route)).toBe(false);
+      } else expect(ROUTES.get(route)).toMatchObject({ shape: "computed", dependency: "none" });
     }
     for (const route of convention) {
       expect(projection(route)).toMatchObject({ grounding: "position_rules", exactness: "exact" });
@@ -565,13 +705,13 @@ describe("value authority: negative authority cases", () => {
 
   it("refuses the four same-key reading forgeries and the pawn-contact inversion (criterion 14)", () => {
     const loose = "4k3/8/8/8/8/8/4q3/4R1K1 w - - 0 1";
-    for (const [route, fen] of [["rules.castling.reading.rights@1", INITIAL], ["rules.tactic.reading.loose_piece@1", loose], ["derived.material.reading.role_signature@1", INITIAL], ["rules.square.reading.control@1", INITIAL]] as const) {
+    for (const [route, fen] of [["rules.castling.reading.rights@1", INITIAL], ["rules.tactic.reading.loose_piece@1", loose], ["derived.material.reading.role_signature@2", INITIAL], ["rules.square.reading.control@1", INITIAL]] as const) {
       const genuine = invoke(route, { fen }) as DeclaredEvidence<Record<string, unknown>>;
       const mutated = { ...genuine.payload, fen: "8/8/8/8/8/8/8/K6k w - - 0 1" };
       expect(() => invoke(route, { fen: mutated })).toThrow(/refused its authority inputs/u);
       expect(() => invoke(route, mutated)).toThrow(/refused its authority inputs/u);
       const forged = identitySealedEvidenceWithoutValueReceipt(genuine.producer, genuine.projection, mutated);
-      expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_selection", version: 1 }, [forged])).toThrow(/value-authority receipt/u);
+      expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_selection", version: 2 }, [forged])).toThrow(/value-authority receipt/u);
     }
     const contacts = invoke("rules.pawn.reading.contacts@1", { fen: "8/1p6/8/8/8/8/P7/4K2k w - - 0 1" }) as DeclaredEvidence<Record<string, unknown>>;
     const inverted = { ...contacts.payload, passed: [] };
@@ -678,12 +818,12 @@ function outcomeOf(result: unknown): Outcome {
   };
   const digests = (values: readonly unknown[]) => values.map((value) => evidenceValueReceipt(sealed(value)).payloadDigest);
   if (Array.isArray(result)) return { availability: result.length === 0 ? "empty" : "available", cardinality: result.length, payloadDigests: digests(result) };
-  const record = result as { readonly kind?: string; readonly value?: unknown; readonly reason?: string; readonly item?: unknown };
+  const record = result as { readonly kind?: string; readonly value?: unknown; readonly values?: readonly unknown[]; readonly reason?: string; readonly item?: unknown };
   if (record.kind === "evidence") return { availability: "available", cardinality: 1, payloadDigests: digests([record.item]) };
   if (record.kind === "abstained") return { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: record.reason! };
   if (record.kind === "unavailable") return { availability: "unavailable", cardinality: 0, payloadDigests: [], reason: record.reason! };
   if (record.kind === "available") {
-    const values = Array.isArray(record.value) ? record.value : [record.value];
+    const values = record.values ?? (Array.isArray(record.value) ? record.value : [record.value]);
     return { availability: "available", cardinality: values.length, payloadDigests: digests(values) };
   }
   return { availability: "available", cardinality: 1, payloadDigests: digests([result]) };
@@ -695,6 +835,7 @@ function factoryPayloads(value: unknown): readonly unknown[] {
   if ("producer" in value && "projection" in value && "payload" in value) return [(value as DeclaredEvidence<unknown>).payload];
   if ("evidence" in value) return factoryPayloads(value.evidence);
   if ("value" in value) return factoryPayloads(value.value);
+  if ("values" in value) return factoryPayloads(value.values);
   if ("item" in value) return factoryPayloads(value.item);
   return [];
 }
@@ -763,6 +904,60 @@ function firstNonEmpty(route: string, candidates: readonly unknown[]): unknown {
 
 interface Profile { readonly valid: unknown; readonly falsify: () => void; /** An async route's valid result, awaited at module load. */ readonly resolved?: unknown }
 
+const REGISTERED_SHAPE_PROFILE = await (async () => {
+  const document = registeredShapeFixture(), digest = await digestShapeEntry(document);
+  const records = [{ recordIdentity: {}, document, digest, summary: { id: document.id, version: document.version, digest }, channel: "official" as const, publisherHandle: null }];
+  const owner = createRegisteredShapeSourceOwner({ capture: async () => records, current: () => records });
+  return owner.capture(new AbortController().signal);
+})();
+
+const CURRENT_SHAPE_PROFILE = await (async () => {
+  const { ShapeRegistry } = await import("../../../apps/server/src/shape-registry.js");
+  const registry = new ShapeRegistry(); await registry.add(registeredShapeFixture(), "official");
+  const builder = await registry.beginCurrentShapeScan([{ id: "n1", fen: after(INITIAL, "g1f3") }], new AbortController().signal);
+  for (;;) {
+    const step = registry.advanceCurrentShapeScan(builder);
+    if (step.kind === "complete") return step.scan;
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
+})();
+
+const RECORDED_FOUNDATION_PROFILE = await (async () => {
+  const { SQLiteRunStorage } = await import("../../../apps/server/src/storage.js");
+  const { RunService } = await import("../../../apps/server/src/service.js");
+  const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+  const principal = { learnerId: "value-profile-foundation", handle: "value-profile-foundation" };
+  storage.createLearner({ id: principal.learnerId, handle: principal.handle, passwordHash: "!", createdAt: at });
+  const run = createRun({ id: "value-profile-recorded-foundation", session: { kind: "position", start: { fen: "7k/8/8/8/8/8/2Q5/K7 w - - 0 50", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+    sessionDigest: "sha256:" + "a".repeat(64), policyConfig, seed: 1, createdAt: at });
+  storage.create(run, { learnerId: principal.learnerId, writerId: "value-profile-foundation" });
+  const service = new RunService(storage), prefix = service.resolveFoundationRecordedPrefix(run.id, principal,
+    { branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId }, new AbortController().signal);
+  const decision = service.resolveFoundationRecordedDecision(prefix, run.activeCursor.nodeId);
+  const position = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: run.start.fen });
+  const role = invokeEvidenceValueRoute("rules.mobility.reading.candidate_role@1", { position, moveUci: "c2c3" });
+  if (role.kind !== "available") throw new Error("Actual recorded foundation candidate unavailable");
+  return { prefix, decision, candidate: role.value, close: () => storage.close() };
+})();
+afterAll(() => RECORDED_FOUNDATION_PROFILE.close());
+const RECORDED_CLOCK_PROFILE = await (async () => {
+  const { SQLiteRunStorage } = await import("../../../apps/server/src/storage.js");
+  const { RunService } = await import("../../../apps/server/src/service.js");
+  const { RecordedClockSourceOwner } = await import("../../../apps/server/src/recorded-clock-operation.js");
+  const { readRecordedClockSource } = await import("./recorded-clock-source.js");
+  const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+  const principal = { learnerId: "value-profile-clock", handle: "value-profile-clock" };
+  storage.createLearner({ id: principal.learnerId, handle: principal.handle, passwordHash: "!", createdAt: at });
+  const { run } = await new RunService(storage).importGame({ id: "value-profile-clock", side: "black", source: { kind: "pgn", pgn: '[TimeControl "300+2"]\n\n1. e4 {[%clk 0:04:59]} e5 {[%clk 0:04:57]} *' },
+    opponentPolicy: { mode: "human_common" }, policyConfig, seed: 1, createdAt: at }, { writerId: "value-profile-clock", learnerId: principal.learnerId });
+  const resolved = new RecordedClockSourceOwner(storage).resolve({ runId: run.id, branchId: run.branches[0]!.id, nodeId: run.nodes[1]!.id }, principal, new AbortController().signal);
+  if (resolved.kind !== "available") throw new Error("Actual recorded clock profile unavailable");
+  const source = resolved.source, phase = invokeEvidenceValueRoute("rules.phase.reading@2", { fen: readRecordedClockSource(source).authority.original.beforeFen });
+  return { source, phase, close: () => storage.close() };
+})();
+afterAll(() => RECORDED_CLOCK_PROFILE.close());
+
+
 function runFixtures() {
   let run = createRun({ id: "value-authority", packId: "p", packDigest: `sha256:${"a".repeat(64)}`, startFen: "r3k2r/pppq1ppp/2npbn2/4p3/2B1P3/2NP1N2/PPPQ1PPP/R3K2R w KQkq - 0 1", seed: 1, createdAt: at, policyConfig });
   const root = run.activeCursor.nodeId;
@@ -811,6 +1006,142 @@ function pivotalFixtures(): Readonly<Record<"irreversibility" | "phase_change" |
 function buildProfiles(): ReadonlyMap<string, Profile> {
   const profiles = new Map<string, Profile>();
   const refused = (route: string, inputs: unknown) => () => { expect(() => invoke(route, inputs), `${route} falsifier`).toThrow(); };
+  const totalPosition = invoke("rules.mobility.reading.legal_moves@1", { fen: "1k6/8/6p1/8/6P1/8/8/4K1R1 w - - 0 1" }) as DeclaredEvidence<unknown>;
+  profiles.set("rules.transition.reading.physical_slider_rays@1", { valid: { position: totalPosition },
+    falsify: refused("rules.transition.reading.physical_slider_rays@1", { position: { ...totalPosition } }) });
+  const samePositionBytes = invoke("rules.mobility.reading.legal_moves@1", { fen: "1k6/8/6p1/8/6P1/8/8/4K1R1 w - - 0 1" });
+  profiles.set("rules.tactic.reading.mover_piece_risk@1", { valid: { root: totalPosition, position: totalPosition, moveUci: null },
+    falsify: refused("rules.tactic.reading.mover_piece_risk@1", { root: totalPosition, position: samePositionBytes, moveUci: null }) });
+  const authoredDocument = captureDraftShapeStructuralDocument(registeredShapeFixture());
+  const authoredSource = selectAuthoredStructuralCondition(authoredDocument, "/trigger");
+  profiles.set("authored.structural_condition.input@2", { valid: { source: authoredSource }, falsify: refused("authored.structural_condition.input@2", { source: {} }) });
+  const authoredPosition = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen: "7k/8/8/8/8/5N2/8/7K w - - 0 1" });
+  const authoredPopulation = captureAuthoredPredicatePopulation(authoredSource, authoredPosition);
+  if (authoredPopulation.kind !== "available") throw new Error(authoredPopulation.reason);
+  profiles.set("derived.structural.predicate_result@2", { valid: { population: authoredPopulation.value }, falsify: refused("derived.structural.predicate_result@2", { population: {} }) });
+  for (const [route, fen] of [
+    ["rules.structural.reading.king_opposition@3", "8/8/8/8/8/4k3/8/4K3 b - - 0 1"],
+    ["rules.structural.reading.backward_pawn@3", "4k3/8/2p5/1p6/1P6/8/8/4K3 w - - 0 1"],
+  ] as const) {
+    const position = invoke("rules.mobility.reading.legal_moves@1", { fen }) as DeclaredEvidence<unknown>;
+    profiles.set(route, { valid: { position }, falsify: refused(route, { position: { ...position } }) });
+    const kind = route.includes("king_opposition") ? "king_opposition" : "backward_pawn", predicate = `rules.structural.predicate.${kind}@2`;
+    const source = (invoke(route, { position }) as { kind: "available"; value: DeclaredEvidence<unknown> }).value;
+    const feature = kind === "king_opposition" ? { kind, color: "white", form: "direct", conventionRef: STRUCTURAL_CONVENTION_REFS.king_opposition }
+      : { kind, color: "white", file: "b", conventionRef: STRUCTURAL_CONVENTION_REFS.backward_pawn };
+    profiles.set(predicate, { valid: { source, feature }, falsify: refused(predicate, { source: { ...source }, feature }) });
+  }
+  for (const [family, fen, moveUci] of [
+    ["king_opposition", "r7/8/8/8/8/4k3/8/4K3 b - - 0 1", "a8a7"],
+    ["backward_pawn", "4k3/8/2p5/1p6/8/1P6/8/4K3 w - - 0 1", "b3b4"],
+  ] as const) {
+    const snapshot = (at: string) => {
+      const position = invoke("rules.mobility.reading.legal_moves@1", { fen: at });
+      const reading = invoke(`rules.structural.reading.${family}@3`, { position }) as { kind: "available"; value: DeclaredEvidence<unknown> };
+      return reading.value;
+    };
+    const position = positionFromFen(fen), before = snapshot(canonicalFen(position));
+    position.play(normalizeMove(position, parseUci(moveUci)!));
+    const input = { before, moveUci, after: snapshot(canonicalFen(position)) }, route = `rules.structural.event.${family}@2`;
+    profiles.set(route, { valid: input, falsify: refused(route, { ...input, before: input.after, after: input.before }) });
+  }
+  const styleFen = "7k/8/8/8/8/5NP1/6B1/K7 w - - 0 1";
+  profiles.set("rules.structural.reading.fianchetto_setup@1", { valid: { fen: styleFen }, falsify: refused("rules.structural.reading.fianchetto_setup@1", { fen: styleFen, setups: [] }) });
+  const styleSetup = invoke("rules.structural.reading.fianchetto_setup@1", { fen: styleFen }) as DeclaredEvidence<unknown>;
+  profiles.set("rules.structural.reading.fianchetto_knight_screen@1", { valid: { source: styleSetup }, falsify: refused("rules.structural.reading.fianchetto_knight_screen@1", { source: { ...styleSetup } }) });
+  const stylePosition = invoke("rules.mobility.reading.legal_moves@1", { fen: "7k/8/8/8/8/2P5/8/K7 w - - 0 1" });
+  const roleInput = { position: stylePosition, moveUci: "c3c4" };
+  profiles.set("rules.mobility.reading.candidate_role@1", { valid: roleInput, falsify: refused("rules.mobility.reading.candidate_role@1", { ...roleInput, position: { ...stylePosition as object } }) });
+  const styleCandidate = (invoke("rules.mobility.reading.candidate_role@1", roleInput) as { kind: "available"; value: DeclaredEvidence<unknown> }).value;
+  profiles.set("rules.mobility.reading.pawn_extended_center_destination@1", { valid: { source: styleCandidate }, falsify: refused("rules.mobility.reading.pawn_extended_center_destination@1", { source: { ...styleCandidate } }) });
+  profiles.set("run.record.clock_reading@1", { valid: { source: RECORDED_CLOCK_PROFILE.source },
+    falsify: refused("run.record.clock_reading@1", { source: { ...RECORDED_CLOCK_PROFILE.source } }) });
+  profiles.set("run.record.clock_decision@1", { valid: { source: RECORDED_CLOCK_PROFILE.source, phase: RECORDED_CLOCK_PROFILE.phase },
+    falsify: refused("run.record.clock_decision@1", { source: { ...RECORDED_CLOCK_PROFILE.source }, phase: RECORDED_CLOCK_PROFILE.phase }) });
+  const recordedQueen = { decision: RECORDED_FOUNDATION_PROFILE.decision, candidate: RECORDED_FOUNDATION_PROFILE.candidate };
+  profiles.set("rules.mobility.reading.early_queen_move@1", { valid: recordedQueen,
+    falsify: refused("rules.mobility.reading.early_queen_move@1", { ...recordedQueen, decision: { ...recordedQueen.decision } }) });
+  profiles.set("run.record.castling_eligibility@1", { valid: { prefix: RECORDED_FOUNDATION_PROFILE.prefix },
+    falsify: refused("run.record.castling_eligibility@1", { prefix: { ...RECORDED_FOUNDATION_PROFILE.prefix } }) });
+  const squareFen = "7k/2p5/8/4N3/3P4/8/8/7K w - - 0 1";
+  const squarePosition = invoke("rules.mobility.reading.legal_moves@1", { fen: squareFen }) as DeclaredEvidence<unknown>;
+  for (const route of ["derived.square.reading.future_file_challenge@1", "derived.square.reading.capture_migration_reach@1"]) {
+    profiles.set(route, { valid: { position: squarePosition }, falsify: refused(route, { position: { ...squarePosition } }) });
+  }
+  const future = (invoke("derived.square.reading.future_file_challenge@1", { position: squarePosition }) as { kind: "available"; value: DeclaredEvidence<unknown> }).value;
+  const control = invoke("rules.square.reading.control@1", { fen: squareFen }) as DeclaredEvidence<unknown>;
+  const candidateInput = { control, future };
+  const candidates = (invoke("derived.structural.reading.outpost_candidate@1", candidateInput) as { kind: "available"; value: DeclaredEvidence<unknown> }).value;
+  profiles.set("derived.structural.reading.outpost_candidate@1", { valid: candidateInput, falsify: refused("derived.structural.reading.outpost_candidate@1", { control, future: { ...future } }) });
+  profiles.set("derived.structural.reading.occupied_outpost@1", { valid: { source: candidates }, falsify: refused("derived.structural.reading.occupied_outpost@1", { source: { ...candidates } }) });
+  const outpostFeature = { kind: "outpost", color: "white", square: "e5", conventionRef: STRUCTURAL_CONVENTION_REFS.outpost };
+  profiles.set("rules.structural.predicate.outpost@2", { valid: { source: candidates, feature: outpostFeature }, falsify: refused("rules.structural.predicate.outpost@2", { source: { ...candidates }, feature: outpostFeature }) });
+  const sliderFen = "3r3k/8/8/8/8/3Q4/8/7K w - - 0 1", sliderPosition = positionFromFen(sliderFen);
+  sliderPosition.play(parseUci("d3d4")!);
+  const sliderInput = { beforeFen: sliderFen, moveUci: "d3d4", afterFen: canonicalFen(sliderPosition) };
+  profiles.set("rules.transition.event.slider_ray@2", { valid: sliderInput, falsify: refused("rules.transition.event.slider_ray@2", { ...sliderInput, afterFen: sliderFen }) });
+  const advanceFen = "1r5k/8/8/p1p5/8/1P6/8/7K w - - 0 1", advancePosition = positionFromFen(advanceFen);
+  const advanceLegal = invoke("rules.mobility.reading.legal_moves@1", { fen: advanceFen });
+  const advanceSource = (invoke("rules.structural.reading.backward_pawn@3", { position: advanceLegal }) as { kind: "available"; value: DeclaredEvidence<unknown> }).value;
+  advancePosition.play(parseUci("b3b4")!);
+  const landing = invoke("rules.exchange.reading.landing_captures@1", { fen: canonicalFen(advancePosition), landingSquare: "b4" });
+  const advanceInput = { source: advanceSource, moveUci: "b3b4", landing };
+  profiles.set("derived.pawn.consequence.backward_pawn_legal_advance@1", { valid: advanceInput, falsify: refused("derived.pawn.consequence.backward_pawn_legal_advance@1", { ...advanceInput, landing: { ...landing as object } }) });
+  const connectivity = (fen: string) => invoke("rules.structural.reading.pawn_connectivity@1", { fen }) as DeclaredEvidence<unknown>;
+  const pawnSnapshot = (route: string, fen: string) => (invoke(route, { source: connectivity(fen) }) as { kind: "available"; value: DeclaredEvidence<unknown> }).value;
+  const pawnRoot = "7k/8/8/8/8/2n5/PP1P4/7K w - - 0 1";
+  const pawnChildPosition = positionFromFen(pawnRoot); pawnChildPosition.play(parseUci("b2c3")!);
+  const pawnChild = canonicalFen(pawnChildPosition);
+  for (const route of ["derived.structural.reading.pawn_file_group@1", "derived.activity.reading.file_state@1"]) {
+    const source = connectivity(pawnRoot);
+    profiles.set(route, { valid: { source }, falsify: refused(route, { source: { ...source } }) });
+  }
+  for (const [route, source] of [["derived.structural.event.pawn_file_group@1", "derived.structural.reading.pawn_file_group@1"], ["derived.activity.event.file_state@1", "derived.activity.reading.file_state@1"]]) {
+    const input = { before: pawnSnapshot(source!, pawnRoot), moveUci: "b2c3", after: pawnSnapshot(source!, pawnChild) };
+    profiles.set(route!, { valid: input, falsify: refused(route!, { ...input, after: input.before }) });
+  }
+  const islandInput = { before: connectivity(pawnRoot), moveUci: "b2c3", after: connectivity(pawnChild) };
+  profiles.set("rules.structural.event.pawn_islands@2", { valid: islandInput, falsify: refused("rules.structural.event.pawn_islands@2", { ...islandInput, before: islandInput.after }) });
+  const heavyRoot = "1r4k1/8/8/8/Rp6/8/PQ6/7K w - - 0 1", heavyPosition = positionFromFen(heavyRoot);
+  heavyPosition.play(parseUci("a4b4")!);
+  const fileEvents = invoke("derived.activity.event.file_state@1", { before: pawnSnapshot("derived.activity.reading.file_state@1", heavyRoot), moveUci: "a4b4", after: pawnSnapshot("derived.activity.reading.file_state@1", canonicalFen(heavyPosition)) }) as { kind: "available"; value: readonly DeclaredEvidence<unknown>[] };
+  expect(fileEvents.value).toHaveLength(1);
+  profiles.set("derived.activity.event.file_access_revealed@1", { valid: { change: fileEvents.value[0] }, falsify: refused("derived.activity.event.file_access_revealed@1", { change: { ...fileEvents.value[0] } }) });
+  // Genuine independently collected original arm populations. Never relabel a packet or pass
+  // a caller-selected line/engine into the new factory; only the original source handle enters.
+  const analyzeRun = play(importedRun("analyze-authority-profile"), ["e2e4"]);
+  const analyzePath = branchPath(analyzeRun, analyzeRun.activeCursor.branchId), analyzeParent = analyzePath[0]!, analyzeChild = analyzePath[1]!;
+  const typedAnalyze = attachDelivery(analyzeRun, analyzeParent.id, reviewEvaluationDelivery(analyzeParent.fen, "cp 20"), lineDelivery(analyzeParent.fen, ["d2d4", "d7d5"], { maxPlies: 2 }));
+  const savedAnalyze = attachEvidence(analyzeRun, analyzeParent.id, ["recorded:authority-profile"], { kind: "bestline", source: "engine_validated", values: { movesUci: ["d2d4", "d7d5"], engineId: "saved-analysis-engine", requestedDepth: 12 } }, REVIEW_AT).run;
+  const firstAnalyze = attachEvidence(analyzeRun, analyzeParent.id, ["recorded:authority-profile"], { kind: "eval", source: "engine_validated", values: { bestMoveUci: "d2d4", engineId: "saved-analysis-engine", requestedNodes: 300 } }, REVIEW_AT).run;
+  const analyzeSources = [
+    ["derived.review.analysis_typed_pv@1", typedAnalyze],
+    ["derived.review.analysis_recorded_pv@1", savedAnalyze],
+    ["derived.review.analysis_recorded_first@1", firstAnalyze],
+  ] as const;
+  const collectedAnalyze = analyzeSources.map(([route, run]) => ({ route,
+    source: collectRecordedAnalyzeLine(run, run.activeCursor.branchId, analyzeChild.id, new AbortController().signal) }));
+  for (const [index, { route, source }] of collectedAnalyze.entries()) profiles.set(route, { valid: { source }, falsify: () => {
+    refused(route, { source: { ...source } })();
+    refused(route, { source: collectedAnalyze[(index + 1) % collectedAnalyze.length]!.source })();
+    refused(route, { source, line: ["e2e4"] })();
+  } });
+  // Accepted D3792/D3802 additions, not a rewrite of the frozen migration receipt.
+  // Each exercises its own genuine complete source and a copied-source falsifier.
+  for (const [kind, sourceRoute] of Object.entries(INSPECTOR_DETAIL_SOURCES)) {
+    const source = isFoundationDetailKind(kind) ? (() => {
+      const profile = profiles.get(sourceRoute);
+      if (profile?.valid === undefined) throw new Error(`Missing original foundation source profile: ${sourceRoute}`);
+      const result = invoke(sourceRoute, profile.valid) as { kind: "available"; value: DeclaredEvidence<unknown> | readonly DeclaredEvidence<unknown>[] };
+      if (result.kind !== "available") throw new Error(`Original foundation source profile unavailable: ${sourceRoute}`);
+      return Array.isArray(result.value) ? result.value[0]! : result.value as DeclaredEvidence<unknown>;
+    })() : kind === "destination_changes"
+      ? (invoke(sourceRoute, edgesFor(sourceRoute)[0]!) as readonly DeclaredEvidence<unknown>[])[0]!
+      : invoke(sourceRoute, { fen: "4k3/4r3/8/8/8/8/4R3/4K3 b - - 0 1" }) as DeclaredEvidence<unknown>;
+    expect(source, sourceRoute).toBeDefined();
+    const route = `derived.inspector.detail.${kind}@1`, valid = { source, scope: { kind: "whole" }, start: 0 };
+    profiles.set(route, { valid, falsify: refused(route, { ...valid, source: { ...source } }) });
+  }
   const { run, main, comparison } = runFixtures();
   const mainPath = branchPath(run, main);
   for (const meta of REGISTRY) {
@@ -951,21 +1282,24 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   profiles.set("theory.endgame.method_stage@1", { valid: { setup: vancuraSetup, edges: vancuraEdges, convention: { id: "vancura-method", version: 1 } }, falsify: refused("theory.endgame.method_stage@1", { setup: identity(capture), edges, convention: { id: "lucena-bridge-method", version: 1 } }) });
   profiles.set("theory.endgame.setup_match@1", { valid: { fen: "1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1", convention: { id: "lucena-setup", version: 1 } }, falsify: refused("theory.endgame.setup_match@1", { fen: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1", convention: { id: "lucena-setup", version: 1 }, technique: "lucena" }) });
 
-  // Counterfactual absence: complete sealed alternative populations.
-  const playedEdges = [edge("r3k2r/pppq1ppp/2npbn2/4p3/2B1P3/2NP1N2/PPPQ1PPP/R3K2R w KQkq - 0 1", "e1g1"), edge("4k3/pp4pp/8/2p5/1pP5/1P6/PP4PP/4K3 w - - 0 1", "e1d2"), edge("r1bqkb1r/5ppp/p1np1n2/1p2p3/4P3/N7/PPP2PPP/R2QKB1R b KQkq - 0 1", "h7h6"), edge("4k3/8/8/8/8/8/P1P5/4K3 w - - 0 1", "e1d1")];
-  const alternativesByEdge = playedEdges.map((played) => ({ played, events: legalAlternativeEdges(played.beforeFen, played.moveUci).flatMap((alternative) => [
-    ...structuralSemanticEvents(alternative.beforeFen, alternative.moveUci, alternative.afterFen),
-    ...pawnIslandSemanticEvents(alternative.beforeFen, alternative.moveUci, alternative.afterFen),
-    ...(loosePieceSemanticEvents(alternative.beforeFen, alternative.moveUci, alternative.afterFen) ?? []),
-  ]) }));
-  for (const meta of REGISTRY.filter((value) => value.route.startsWith("derived.semantic_avoidance."))) {
-    const family = meta.route.replace("derived.semantic_avoidance.", "").replace("@1", "");
-    const projection = family === "loose_piece" ? "rules.tactic.event.loose_piece" : family === "pawn_islands" ? "rules.structural.event.pawn_islands" : `rules.structural.event.${family}`;
-    const found = alternativesByEdge.map(({ played, events }) => ({ played, candidates: events.filter((event) => event.projection.id === projection) })).find((entry) => entry.candidates.length > 0);
-    const sign = found?.candidates[0]?.sign;
-    const events = found === undefined || sign === undefined ? [] : [...new Map(found.candidates.filter((event) => event.sign === sign).map((event) => [event.anchor.moveUci, event])).values()];
-    const played = found?.played ?? playedEdges[0]!;
-    profiles.set(meta.route, { valid: events.length === 0 ? undefined : { ...played, sign, events }, falsify: refused(meta.route, { ...played, sign: "gained", events: transitionSemanticEvents(played.beforeFen, played.moveUci, played.afterFen).slice(0, 1) }) });
+  // Source-owned outcomes: exact finite routes, genuine wide receipt and played member only.
+  const captureRoot = "7k/8/8/3p4/2P5/8/3P4/7K w - - 0 1";
+  const subjectFixtures: { readonly [F in SubjectOutcomeFamily]: readonly [string, string] } = {
+    backward_pawn: ["7k/4p3/4p3/8/3P4/8/8/7K w - - 0 1", "d4d5"],
+    doubled_pawn: [captureRoot, "h1g1"], half_open_file: [captureRoot, "h1g1"], isolated_pawn: [captureRoot, "h1g1"],
+    king_opposition: ["4k3/8/4K3/8/8/8/P7/8 w - - 0 1", "a2a3"],
+    king_zone: [captureRoot, "h1g1"], line_blockers: ["7k/8/8/8/8/8/B7/R3K3 w - - 0 1", "e1d1"],
+    open_file: [captureRoot, "h1g1"], passed_pawn: [captureRoot, "h1g1"], piece_count: [captureRoot, "h1g1"],
+    direct_attack_count: [captureRoot, "h1g1"], loose_piece: [captureRoot, "c4d5"], pawn_islands: [captureRoot, "h1g1"],
+  };
+  const subjectRoots = new Map<string, ReturnType<typeof compileCandidatePopulation<typeof CANDIDATE_WIDE_SCOPE>>>();
+  for (const family of SUBJECT_OUTCOME_FAMILIES) {
+    const [beforeFen, moveUci] = subjectFixtures[family], route = `derived.semantic_avoidance.${family}@2`;
+    let compiled = subjectRoots.get(beforeFen);
+    if (compiled === undefined) { compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE }); subjectRoots.set(beforeFen, compiled); }
+    if (compiled.kind !== "ready") throw Error("Required genuine complete subject profile root failed");
+    const receipt = compiled.receipt;
+    profiles.set(route, { valid: { receipt, moveUci }, falsify: refused(route, { receipt: { ...receipt }, moveUci }) });
   }
 
   // Story, comparison, recorded run and pivotal projections.
@@ -974,6 +1308,11 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     profiles.set(route, { valid: runInputs, falsify: refused(route, { ...runInputs, comparison: { ...comparison, forkNodeId: mainPath[3]!.id, evidence: { [main]: [{ nodeId: "forged", plyOffset: 1, evidenceRefs: [], kind: "eval", source: "engine_validated", score: { kind: "cp", value: 999 } }] } } }) });
   }
   profiles.set("run.record.consequence@1", { valid: runInputs, falsify: refused("run.record.consequence@1", { ...runInputs, branchId: "missing" }) });
+  const objectiveRun = transitionObjective(recordedGradeFixture().run, "preserved", ["recorded:profile"], at).run;
+  const objectiveBoundary = createRecordedReviewBoundarySourceOwner({ loadRun: () => objectiveRun, loadImportRecord: () => undefined })
+    .resolve({ runId: objectiveRun.id, branchId: objectiveRun.activeCursor.branchId, throughNodeId: objectiveRun.activeCursor.nodeId });
+  profiles.set("run.record.objective_transition@2", { valid: { recordedReview: objectiveBoundary },
+    falsify: refused("run.record.objective_transition@2", { recordedReview: { ...objectiveBoundary } }) });
   profiles.set("run.record.fork@1", { valid: { run, comparison }, falsify: refused("run.record.fork@1", { run, comparison: { ...comparison, forkNodeId: "missing" } }) });
   profiles.set("run.record.position@1", { valid: { run, nodeId: mainPath[2]!.id }, falsify: refused("run.record.position@1", { run, nodeId: "missing" }) });
   profiles.set("run.record.imported_result@1", { valid: { run, branchId: main, recordedResult: "0-1" }, falsify: refused("run.record.imported_result@1", { run, branchId: main, recordedResult: "*" }) });
@@ -994,7 +1333,6 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
     const fixture = pivotalRuns[kind];
     profiles.set(route, { valid: fixture, falsify: refused(route, { ...fixture, detail: {} }) });
   }
-  profiles.set("derived.opening.deepest_reached@1", { valid: { run, branchId: main }, falsify: refused("derived.opening.deepest_reached@1", { run, branchId: main, deepest: {} }) });
   if (OPENING_INSTALLATION.kind !== "available") throw new Error("Permanent opening profile requires the genuine installed catalogue");
   const openingFixture = recordedLastLevelFixture("white", "*", "opening-authority-profile");
   const openingInput = { source: OPENING_INSTALLATION.source, position: sealedOne("run.record.position@1", { run: openingFixture.run, nodeId: openingFixture.path[1]!.id }) };
@@ -1043,7 +1381,13 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const tablebaseLedger = sealedOne("sourcing.ledger.tablebase_result@1", tablebaseRecord);
   profiles.set("recorded.engine.eval@1", { valid: { ledger: engineLedger }, falsify: refused("recorded.engine.eval@1", { ledger: tablebaseLedger }) });
   profiles.set("recorded.tablebase.result@1", { valid: { ledger: tablebaseLedger }, falsify: refused("recorded.tablebase.result@1", { ledger: engineLedger }) });
-  profiles.set("derived.grade.move_quality@1", { valid: { before: sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns: 20, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 })), after: sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns: -300, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 })), mover: "white", context: "review" }, falsify: refused("derived.grade.move_quality@1", { before: engineLedger, after: engineLedger, mover: "white", context: "review" }) });
+  // The after position is Black to move: provider +300 there is White -300.
+  // Require a real emitted grade so recursive immutability cannot pass on empty output.
+  const grade = recordedGradeFixture({ before: "cp 20", after: "cp 300" });
+  const gradeResult = invoke("derived.grade.move_quality@2", { recordedGrade: grade.source });
+  expect(outcomeOf(gradeResult)).toMatchObject({ availability: "available", cardinality: 1 });
+  profiles.set("derived.grade.move_quality@2", { valid: { recordedGrade: grade.source }, resolved: gradeResult,
+    falsify: refused("derived.grade.move_quality@2", { recordedGrade: { ...grade.source } }) });
   profiles.set("run.record.evidence_ref_resolution@1", { valid: { reference: "rules:checkmate" }, falsify: refused("run.record.evidence_ref_resolution@1", { reference: "rules:checkmate", text: "caller prose" }) });
   // rfc/evidence-presentation.md Checkpoint P: the source-bound citation joins one resolution to exactly one source item.
   const tablebasePacket = { kind: "tablebase", source: "tablebase_exact", values: { category: "win", pieceCount: 4, dtz: 3 } } as const;
@@ -1066,8 +1410,10 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   const condition = sealedOne("authored.structural_condition.input@1", { source: "shape", documentId: "shape-a", pointer: "/trigger", expression });
   profiles.set("derived.structural.predicate_result@1", { valid: { condition, fen: "rnbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1" }, falsify: refused("derived.structural.predicate_result@1", { condition: identity(condition), fen: INITIAL }) });
   profiles.set("theory.shapes.firing@1", { valid: { entries: [{ id: "open-a", trigger: expression }], path: [{ id: "n1", fen: "rnbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1" }] }, falsify: refused("theory.shapes.firing@1", { entries: [{ id: "open-a", trigger: expression }], path: [{ id: "n1", fen: "not a fen" }] }) });
-  const engine = { id: "sf", name: "Stockfish", version: "17", seedHonored: true, searchBound: { kind: "depth", value: 1 } };
-  profiles.set("derived.opponent.candidate_feature_vector@1", { valid: { beforeFen: INITIAL, engine, candidates: [{ moveUci: "g1f3", scoreCp: 31 }] }, falsify: refused("derived.opponent.candidate_feature_vector@1", { beforeFen: INITIAL, engine, candidates: [{ moveUci: "e2e5", scoreCp: 0 }] }) });
+  profiles.set("theory.shapes.firing@2", { valid: { source: REGISTERED_SHAPE_PROFILE, path: [{ id: "n1", fen: after(INITIAL, "g1f3") }] },
+    falsify: refused("theory.shapes.firing@2", { source: { ...REGISTERED_SHAPE_PROFILE }, path: [{ id: "n1", fen: after(INITIAL, "g1f3") }] }) });
+  profiles.set("theory.shapes.firing@3", { valid: { scan: CURRENT_SHAPE_PROFILE },
+    falsify: refused("theory.shapes.firing@3", { scan: { ...CURRENT_SHAPE_PROFILE } }) });
   // rfc/provider-exchange-and-execution.md §9: the five receipt-bearing provider sources and the
   // Syzygy local-domain adapter. Valid input is a scheduler-sealed delivery; the falsifier is the
   // same delivery's bare payload (stripping the receipt is not representable).
@@ -1132,6 +1478,14 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   profiles.set("recorded.inspector.maia_selection@1", { valid: { resolved: recordedSelection.resolved, eventSeq: recordedSelection.eventSeq },
     falsify: refused("recorded.inspector.maia_selection@1", { resolved: { ...recordedSelection.resolved }, eventSeq: recordedSelection.eventSeq }) });
   const maiaOccurrence = occurrenceFixture();
+  const nodeRun = occurrenceRun([]), nodeId = nodeRun.nodes[0]!.id;
+  const nodeResolved = resolveRunSubject(nodeRun, { kind: "run_node", runId: nodeRun.id, nodeId, branchId: nodeRun.nodes[0]!.branchId,
+    eventHeadDigest: digestRunEventHead({ runId: nodeRun.id, headSeq: nodeRun.events.length, events: nodeRun.events }) });
+  const nodeInput = { task: nodeTask({ kind: "history_conditioned", startFen: nodeRun.start.fen, historyUci: [] }),
+    position: invoke("run.record.position@1", { run: nodeResolved.run, nodeId }), resolved: nodeResolved };
+  for (const route of ["derived.maia.node_distribution@1", "derived.maia.node_candidate_wdl@1"]) {
+    profiles.set(route, { valid: nodeInput, falsify: refused(route, { ...nodeInput, resolved: { ...nodeResolved } }) });
+  }
   profiles.set("derived.maia.run_move_occurrence@1", { valid: { page: maiaOccurrence.page, resolved: maiaOccurrence.resolved, edge: maiaOccurrence.edge }, falsify: refused("derived.maia.run_move_occurrence@1", { page: maiaOccurrence.page, resolved: { ...maiaOccurrence.resolved }, edge: maiaOccurrence.edge }) });
   const exactMaiaPage = occurrencePage({ kind: "exact_fen", fen: INITIAL });
   profiles.set("derived.maia.exact_fen_move_occurrence@1", { valid: { page: exactMaiaPage, observedMoveUci: "e2e4" }, falsify: refused("derived.maia.exact_fen_move_occurrence@1", { page: exactMaiaPage, observedMoveUci: "e2e5" }) });
@@ -1145,21 +1499,21 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
         return proof.value;
       }
       case "double_attack": return sealedOne("rules.tactic.event.double_attack@1", current);
-      case "fork_survives_reply": return sealedOne("derived.tactic.fork_survives_reply@1", { doubleAttack: sealedOne("rules.tactic.event.double_attack@1", current), breadth: sealedOne("rules.tactic.consequence.reply_breadth@1", current) });
+      case "fork_survives_reply": return sealedOne(exact(hintDeclarationRow(family).source), { doubleAttack: sealedOne("rules.tactic.event.double_attack@1", current), breadth: sealedOne("rules.tactic.consequence.reply_breadth@1", current) });
       case "discovered_executed": return (invoke("derived.tactic.discovered_executed@1", { latency: sealedOne("rules.tactic.reading.discovered_latency@1", { fen: current.beforeFen }), rays: invoke("rules.transition.event.slider_ray@1", current) }) as readonly { readonly evidence: DeclaredEvidence<unknown> }[])[0]!.evidence;
       case "loose_piece": return ((invoke("rules.tactic.event.loose_piece@1", current) as { readonly value: readonly DeclaredEvidence<{ readonly sign: string }>[] }).value).find((value) => value.payload.sign === "lost")!;
-      case "promotion_pressure": return sealedOne("derived.tactic.promotion_pressure@1", { fen: current.afterFen });
+      case "promotion_pressure": return sealedOne(exact(hintDeclarationRow(family).source), { fen: current.afterFen });
     }
   };
   for (const family of HINT_FAMILIES) {
     const fixture = HINT_FAMILY_POSITIVES[family];
     const line = sealedHintLine(fixture.fen, fixture.moves);
     const source = hintSource(family);
-    const route = `derived.hint.horizon.${family}@1`;
+    const route = exact(hintDeclarationRow(family).horizon);
     profiles.set(route, { valid: { line, source, ply: 1 }, falsify: refused(route, { line, source, ply: 2 }) });
     const horizon = (invoke(route, { line, source, ply: 1 }) as { readonly value: DeclaredEvidence<unknown> }).value;
     for (const rung of HINT_RUNGS) {
-      const disclosure = `derived.hint.disclosure.${family}.${rung}@1`;
+      const disclosure = exact(hintDeclarationRow(family).disclosures[rung]);
       profiles.set(disclosure, { valid: { horizon }, falsify: refused(disclosure, { horizon: identity(horizon) }) });
     }
   }
@@ -1228,7 +1582,7 @@ const EXPECTED_EMPTY: readonly string[] = Object.freeze([]);
 describe("value authority: one permanent profile per final factory (§7, criterion 13)", () => {
   let orderedHintProfiles: ReadonlyMap<string, Profile> | undefined;
   it.each(HINT_FAMILIES)("D3848 %s horizon retains the declared source-then-search input order", (family) => {
-    const route = `derived.hint.horizon.${family}@1`;
+    const route = exact(hintDeclarationRow(family).horizon);
     const profile = (orderedHintProfiles ??= buildProfiles()).get(route)!;
     const input = profile.valid as { readonly source: DeclaredEvidence<unknown>; readonly line: DeclaredEvidence<unknown> };
     const expected = [input.source, input.line];
@@ -1558,7 +1912,7 @@ describe("value authority: one permanent profile per final factory (§7, criteri
       expect(cases.filter(task => task.result?.state !== "pass").map(task => task.name)).toEqual([]);
       expect(Object.keys(observed).sort()).toEqual([...ROUTES.keys()].sort());
       const unavailable = Object.entries(observed).filter(([, outcome]) => outcome.availability === "unavailable").map(([route]) => route).sort();
-      expect(unavailable).toEqual(["derived.opening.deepest_reached@1"]);
+      expect(unavailable).toEqual([]);
       const empty = Object.entries(observed).filter(([, outcome]) => outcome.availability === "empty").map(([route]) => route).sort();
       expect(empty).toEqual(EXPECTED_EMPTY);
       for (const route of unavailable) expect(ROUTES.get(route)!.pending, route).toBeDefined();

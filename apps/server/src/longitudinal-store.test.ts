@@ -7,10 +7,11 @@ import { fileURLToPath } from "node:url";
 import { DatabaseSync } from "node:sqlite";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { legalAlternativeEdges, localSemanticEventClosure, type DrillRun } from "@chess-tabiya/runtime";
 
 import { parseLongitudinalReadQuery, type LongitudinalReadQuery } from "./longitudinal-contract.js";
 import { assertLongitudinalMutationCensus, compileLongitudinalMutationCensus } from "./longitudinal-mutation-census.js";
-import { projectObservations } from "./longitudinal-projector.js";
+import { decisionPopulation, projectObservations } from "./longitudinal-projector.js";
 import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
 import { LONGITUDINAL_INDEXES, LONGITUDINAL_SOURCE_MUTATION_OPERATIONS, LONGITUDINAL_TABLES, LongitudinalStore, type LongitudinalClaim } from "./longitudinal-store.js";
 import { runLongitudinalBatch } from "./longitudinal-worker-core.js";
@@ -35,7 +36,7 @@ function fixture(): FileFixture {
   return value;
 }
 
-const FAST = { project: (image: Parameters<typeof projectObservations>[0], checkpoint: () => void) => projectObservations(image, { checkpoint, dependencies: FIXTURE_DEPENDENCIES }) };
+const FAST = { project: (image: Parameters<typeof projectObservations>[0], checkpoint: () => void, gameSource: import("./profile-game-source.js").ProfileGameSource) => projectObservations(image, { checkpoint, gameSource, dependencies: FIXTURE_DEPENDENCIES }) };
 
 function query(learnerId: string, through: LongitudinalReadQuery["through"] = { kind: "all_complete" }, filter: LongitudinalReadQuery["filter"] = {}) {
   return parseLongitudinalReadQuery({ learnerId, derivationRev: OBSERVATION_DERIVATION_REV, through, filter });
@@ -45,6 +46,25 @@ function raw(path: string): DatabaseSync {
   const database = new DatabaseSync(path);
   database.exec("PRAGMA foreign_keys = ON");
   return database;
+}
+
+/** Source positives remain facts even when a different legal move makes the full population unknown. */
+function assertFullPopulation(run: DrillRun, complete: boolean) {
+  const before = run.nodes[0]!, after = run.nodes.at(-1)!;
+  if (typeof after.moveUci !== "string") throw new Error("Expected actual recorded move");
+  const committed = { beforeFen: before.fen, moveUci: after.moveUci, afterFen: after.fen };
+  const population = [committed, ...legalAlternativeEdges(before.fen, after.moveUci)];
+  const unknown = population.flatMap(edge => localSemanticEventClosure(edge.beforeFen, edge.moveUci, edge.afterFen).abstentions
+    .filter(value => value.projection === "derived.tactic.defender_exposure@2").map(value => ({ uci: edge.moveUci, reason: value.reason })));
+  if (complete) {
+    expect(unknown).toEqual([]);
+    expect(decisionPopulation(before.fen, after.moveUci).kind).toBe("available");
+  } else {
+    expect(unknown.length).toBeGreaterThan(0);
+    expect(unknown.every(value => value.reason === "invalid_turn_clone")).toBe(true);
+    expect(decisionPopulation(before.fen, after.moveUci)).toEqual({ kind: "unavailable", reason: "population_incomplete" });
+  }
+  return localSemanticEventClosure(before.fen, after.moveUci, after.fen).events;
 }
 
 function jobRow(path: string, runId: string): Record<string, unknown> | undefined {
@@ -69,7 +89,7 @@ function drain(store: LongitudinalStore): number {
 }
 
 describe("criterion 1 — additive migration with a prior-release upgrade", () => {
-  it("adds exactly four tables, six indexes and two run columns, reads legacy defaults and backfills nothing", () => {
+  it("adds the exact longitudinal table/index inventory and two run columns, reads legacy defaults and backfills nothing", () => {
     const { path, storage } = fixture();
     const owner = learner(storage, "historic");
     storage.create(play(positionRun("historic-run"), "e2e4"), owner, "Historic");
@@ -90,7 +110,7 @@ describe("criterion 1 — additive migration with a prior-release upgrade", () =
     const columns = (prior.prepare("PRAGMA table_info(drill_runs)").all() as { name: string }[]).map((column) => column.name).filter((name) => !name.startsWith("longitudinal_"));
     prior.exec(`ALTER TABLE drill_runs RENAME TO drill_runs_v26; ${stripped.replace("CREATE TABLE drill_runs", "CREATE TABLE drill_runs")};
       INSERT INTO drill_runs (${columns.join(",")}) SELECT ${columns.join(",")} FROM drill_runs_v26; DROP TABLE drill_runs_v26;`);
-    prior.exec("PRAGMA user_version = 25");
+    prior.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json; PRAGMA user_version = 25");
     const before = prior.prepare("SELECT type, name, tbl_name, sql FROM sqlite_schema WHERE name NOT LIKE 'sqlite_%' ORDER BY name").all() as { type: string; name: string; sql: string | null }[];
     const beforeRuns = prior.prepare("SELECT * FROM drill_runs ORDER BY id").all();
     const beforeColumns = (prior.prepare("PRAGMA table_info(drill_runs)").all() as { name: string }[]).map((column) => column.name);
@@ -98,8 +118,8 @@ describe("criterion 1 — additive migration with a prior-release upgrade", () =
 
     const log: { version: number; name: string }[] = [];
     const upgraded = new SQLiteRunStorage(path, { onMigration: (entry) => log.push(entry) });
-    expect(STORAGE_VERSION).toBe(31);
-    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(STORAGE_VERSION).toBe(35);
+    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     upgraded.close();
 
     const after = raw(path);
@@ -109,6 +129,13 @@ describe("criterion 1 — additive migration with a prior-release upgrade", () =
     for (const prior of before) {
       const current = afterSchema.find((row) => row.name === prior.name);
       if (prior.name === "drill_runs") continue;
+      if (prior.name === "imported_games") {
+        // The full upgrade also runs32; verify its sole additive column explicitly.
+        const clock = after.prepare("PRAGMA table_info(imported_games)").all().filter(column => column.name === "clock_document_json");
+        expect(clock).toMatchObject([{ type: "TEXT", notnull: 0, dflt_value: null }]);
+        expect(current?.sql).toContain("CHECK(clock_document_json IS NULL OR json_valid(clock_document_json))");
+        continue;
+      }
       expect(current?.sql, prior.name).toBe(prior.sql);
     }
     const afterColumns = (after.prepare("PRAGMA table_info(drill_runs)").all() as { name: string }[]).map((column) => column.name);
@@ -196,7 +223,7 @@ describe("criteria 6, 31 — the eleven source mutations commit watermark and so
       learnerSide: "white", startPieceCount: 32, engineIdentityDigest: `sha256:${"e".repeat(64)}`, state: "open", startedAt: AT,
     } as never);
     storage.createImportedRun(importedRun("imported", ["e2e4", "e7e5"]), owner, "Imported", {
-      runId: "imported", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"b".repeat(64)}`, headers: {}, result: "*", pgn: "1. e4 e5 *", licenceNote: "fixture", importedAt: AT,
+      runId: "imported", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"b".repeat(64)}`, headers: {}, result: "*", pgn: "1. e4 e5 *", licenceNote: "fixture", importedAt: AT, clockDocument: null,
     } as never);
     storage.createDerivedRun(positionRun("derived"), owner, "Derived", { derivedRunId: "derived", sourceRunId: "native", sourceBranchId: run.branches[0]!.id, sourceNodeId: run.nodes[0]!.id, kind: "flip_sides", createdAt: AT });
     const repertoire = { id: "rep", ownerLearnerId: owner.learnerId, name: "Rep", side: "white", rootFen: run.nodes[0]!.fen, targetElo: 1500, coverageDenominator: 100, sourceKind: "pgn_paste", sourceUrl: null, originalPgn: "1. e4 *", licenceNote: "fixture", digest: "d", createdAt: AT, updatedAt: AT } as never;
@@ -215,7 +242,7 @@ describe("criteria 6, 31 — the eleven source mutations commit watermark and so
     expect(claim?.claimedRequestedSeq).toBe(3);
     storage.save(run, owner);
     expect(jobRow(path, "native")).toMatchObject({ requested_seq: 2, state: "pending", completed_seq: 0 });
-    expect(store.publish(claim!, { denominators: [], observations: [], structureStats: [] })).toBe("publication_conflict");
+    expect(store.publish(claim!, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [] })).toBe("publication_conflict");
   });
 
   it("taints same-head collaboration monotonically and invalidates a complete job in the same transaction", () => {
@@ -301,7 +328,7 @@ describe("criteria 5, 23 — owner attribution and run-owner provenance", () => 
     const preview = storage.deletionPreview("a", { kind: "run", runId: "run-a" }, AT);
     storage.deleteOwnedRun("a", "run-a", AT, preview.digest);
     expect(store.renew(claim, 60_000)).toBeUndefined();
-    expect(store.publish(claim, { denominators: [], observations: [], structureStats: [] })).toBe("publication_conflict");
+    expect(store.publish(claim, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [] })).toBe("publication_conflict");
     expect(count(path, "learner_observation_jobs", "run_id = 'run-a'")).toBe(0);
   });
 });
@@ -326,7 +353,7 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     expect(second?.generation).toBe(first!.generation + 1);
     expect(store.renew(first!, 60_000)).toBeUndefined();
     expect(store.fail(first!, "derivation_failed")).toBe(false);
-    expect(store.publish(first!, { denominators: [], observations: [], structureStats: [] })).toBe("publication_conflict");
+    expect(store.publish(first!, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [] })).toBe("publication_conflict");
     expect(() => rival.renew(first!, 60_000)).toThrow(/WRONG_STORE/u);
     expect(() => store.claimBatch({ workerId: "", scanLimit: 1, slots: 1, leaseMs: 60_000 })).toThrow(/WORKER_ID_INVALID/u);
   });
@@ -347,21 +374,26 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     let monotonic = 0;
     const slow = runLongitudinalBatch(store, config, "slow", {
       monotonicNow: () => monotonic,
-      project: (image, checkpoint) => {
+      project: (image, checkpoint, gameSource) => {
         for (let step = 0; step < 6; step += 1) { clock.now += 15_000; monotonic += 15_000; checkpoint(); }
-        return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+        return projectObservations(image, { gameSource, dependencies: FIXTURE_DEPENDENCIES });
       },
     });
     expect(slow).toMatchObject({ claimed: 1, completed: 1 });
     expect(slow.renewals).toBeGreaterThanOrEqual(3);
     expect(jobRow(path, "job")?.state).toBe("complete");
+    const renewed = raw(path);
+    try {
+      for (const sourceKind of ["native_incidence", "condition_relation"]) expect(Number(renewed.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id='job' AND source_kind=?").get(sourceKind)!.n), sourceKind).toBeGreaterThan(0);
+    } finally { renewed.close(); }
 
     const { store: second, fixture: other } = prepared();
     const timerOnly = runLongitudinalBatch(second, config, "timer", {
-      project: (image) => { other.clock.now += 90_000; return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES }); },
+      project: (image, _checkpoint, gameSource) => { other.clock.now += 90_000; return projectObservations(image, { gameSource, dependencies: FIXTURE_DEPENDENCIES }); },
     });
     expect(timerOnly).toMatchObject({ claimed: 1, completed: 0, conflicts: 1 });
     expect(jobRow(other.path, "job")?.state).toBe("running");
+    for (const table of LONGITUDINAL_TABLES.filter(t => t !== "learner_observation_jobs")) expect(count(other.path, table), table).toBe(0);
   });
 
   it("keeps a fixed heartbeat phase across late checkpoints and excludes later observation delay (D3916)", () => {
@@ -378,9 +410,9 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     try {
       const receipt = runLongitudinalBatch(store, config, "phase", {
         monotonicNow: () => monotonic,
-        project: (image, checkpoint) => {
+        project: (image, checkpoint, gameSource) => {
           for (let step = 0; step < 25; step += 1) { clock.now += 600; monotonic += 600; checkpoint(); }
-          return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+          return projectObservations(image, { gameSource, dependencies: FIXTURE_DEPENDENCIES });
         },
       });
       monotonic += 25_000; // Completion delivery/HTTP observation happens after the real claim.
@@ -395,10 +427,10 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     let monotonic = 0;
     const receipt = runLongitudinalBatch(store, { ...LONGITUDINAL_WORKER_DEFAULTS, workerHeartbeatMs: 1_000 }, "gap", {
       monotonicNow: () => monotonic,
-      project: (image, checkpoint) => {
+      project: (image, checkpoint, gameSource) => {
         clock.now += 4_500; monotonic += 4_500; checkpoint();
         clock.now += 600; monotonic += 600; checkpoint();
-        return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+        return projectObservations(image, { gameSource, dependencies: FIXTURE_DEPENDENCIES });
       },
     });
     expect(receipt).toMatchObject({ completed: 1, renewals: 2, claimElapsedMs: 5_100 });
@@ -420,9 +452,9 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     try {
       const receipt = runLongitudinalBatch(store, config, "publication", {
         monotonicNow: () => monotonic,
-        project: (image, checkpoint) => {
+        project: (image, checkpoint, gameSource) => {
           for (let step = 0; step < 6; step += 1) { clock.now += 600; monotonic += 600; checkpoint(); }
-          return projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+          return projectObservations(image, { gameSource, dependencies: FIXTURE_DEPENDENCIES });
         },
       });
       monotonic += 25_000;
@@ -438,8 +470,8 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     let drain = false;
     const counting = {
       drainRequested: () => drain,
-      project: (image: Parameters<typeof projectObservations>[0], checkpoint: () => void) => projectObservations(image, {
-        dependencies: FIXTURE_DEPENDENCIES,
+      project: (image: Parameters<typeof projectObservations>[0], checkpoint: () => void, gameSource: import("./profile-game-source.js").ProfileGameSource) => projectObservations(image, {
+        gameSource, dependencies: FIXTURE_DEPENDENCIES,
         checkpoint: () => { checkpoints += 1; if (checkpoints === 1) drain = true; checkpoint(); },
       }),
     };
@@ -558,7 +590,7 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     drain(store);
     expect(count(path, "learner_observation_denominators", "run_id='job'")).toBeGreaterThan(0);
     const database = raw(path);
-    database.exec("UPDATE learner_observation_denominators SET derived_rev=7; UPDATE learner_observations SET derived_rev=7; UPDATE learner_structure_stats SET derived_rev=7; UPDATE learner_observation_jobs SET derived_rev=7");
+    database.exec("UPDATE learner_observation_denominators SET derived_rev=6; UPDATE learner_observations SET derived_rev=6; UPDATE learner_structure_stats SET derived_rev=6; UPDATE learner_game_facts SET derived_rev=6; UPDATE learner_observation_jobs SET derived_rev=6");
     database.close();
     const [stale] = store.claimBatch({ workerId: "w", scanLimit: 1, slots: 1, leaseMs: 60_000 });
     expect(stale).toBeUndefined();
@@ -570,8 +602,10 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
   });
 
   it.each([
-    { name: "white", side: "white" as const, fen: "4k3/8/8/8/8/8/8/4K2R w K - 0 1", move: "e1h1" },
-    { name: "black", side: "black" as const, fen: "4k2r/8/8/8/8/8/8/4K3 b k - 0 1", move: "e8h8" },
+    { name: "original white unavailable population", complete: false, side: "white" as const, fen: "4k3/8/8/8/8/8/8/4K2R w K - 0 1", move: "e1h1" },
+    { name: "original black unavailable population", complete: false, side: "black" as const, fen: "4k2r/8/8/8/8/8/8/4K3 b k - 0 1", move: "e8h8" },
+    { name: "complete white population", complete: true, side: "white" as const, fen: "4k1n1/8/8/8/8/8/P7/4K2R w K - 0 1", move: "e1h1" },
+    { name: "complete black population", complete: true, side: "black" as const, fen: "4k2r/p7/8/8/8/8/8/4K1N1 b k - 0 1", move: "e8h8" },
   ])("rebuilds untouched revision-2 $name history with retained castling-rook mobility", fixtureRow => {
     const value = fixture();
     const owner = learner(value.storage, "mobility-owner");
@@ -579,7 +613,14 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     value.storage.create(run, owner);
     const source = value.storage.longitudinalSourceImageV4(run.id, run.events.length);
     const expected = projectObservations(source);
-    expect(expected.observations.find(row => row.projectionId === "rules.mobility.event.piece_destinations" && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    const events = assertFullPopulation(run, fixtureRow.complete);
+    const rank = fixtureRow.side === "white" ? "1" : "8";
+    expect(events.filter(event => event.projection.id === "rules.mobility.event.piece_destinations").map(event => event.operands)).toContainEqual(expect.objectContaining({
+      color: fixtureRow.side, moved: true, piece: { before: { square: `h${rank}`, role: "rook" }, after: { square: `f${rank}`, role: "rook" } },
+    }));
+    expect(expected.denominators).toContainEqual(expect.objectContaining({ decisions: 1 }));
+    if (fixtureRow.complete) expect(expected.observations.find(row => row.projectionId === "rules.mobility.event.piece_destinations" && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    else expect(expected.observations).toEqual([]);
     const store = value.workerStore();
     expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "before-upgrade").completed).toBe(1);
     const database = raw(value.path);
@@ -597,23 +638,34 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     expect(value.storage.reconcileLongitudinalJobs()).toMatchObject({ revisionReset: 0, advanced: 0, created: 0 });
   });
 
-  it("rebuilds untouched revision-1 history with repaired promotion evidence without rewriting play", () => {
+  it.each([
+    { name: "original unavailable population", complete: false, fen: "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1" },
+    { name: "complete population", complete: true, fen: "2R4r/1P5p/6pk/8/8/8/8/K7 w - - 0 1" },
+  ])("rebuilds untouched revision-1 promotion history without rewriting play: $name", fixtureRow => {
     const value = fixture();
     const owner = learner(value.storage, "promotion-owner");
-    const run = play(positionRun("promotion-history", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8n");
+    const run = play(positionRun("promotion-history", fixtureRow.fen), "b7b8n");
     value.storage.create(run, owner);
     const store = value.workerStore();
     const source = value.storage.longitudinalSourceImageV4(run.id, run.events.length);
     const expected = projectObservations(source);
-    const duty = expected.observations.find(row => row.projectionId === "rules.tactic.event.defender_duty_relocated" && row.occurred > 0);
-    expect(duty).toMatchObject({ occurred: 1, decisionClass: "played" });
+    const dutyId = "rules.tactic.event.defender_duty_relocated";
+    const events = assertFullPopulation(run, fixtureRow.complete);
+    expect(events.filter(event => event.projection.id === dutyId).map(event => event.operands)).toContainEqual(expect.objectContaining({
+      move: { from: "b7", to: "b8" }, defenderBefore: { square: "b7", piece: expect.objectContaining({ role: "pawn", color: "white" }) },
+      defenderAfter: { square: "b8", piece: expect.objectContaining({ role: "knight", color: "white" }) },
+      target: { square: "c8", piece: expect.objectContaining({ role: "rook", color: "white" }) },
+    }));
+    expect(expected.denominators).toContainEqual(expect.objectContaining({ decisions: 1 }));
+    if (fixtureRow.complete) expect(expected.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1, decisionClass: "played" });
+    else expect(expected.observations).toEqual([]);
     expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "before-upgrade").completed).toBe(1);
 
     // Exact prior representation: the same completed cut, but no promoted defender-duty row.
     // Only this test-owned database is edited; source history and source identity stay unchanged.
     const database = raw(value.path);
     database.exec("UPDATE learner_observation_denominators SET derived_rev=1; UPDATE learner_observations SET derived_rev=1; UPDATE learner_structure_stats SET derived_rev=1; UPDATE learner_observation_jobs SET derived_rev=1");
-    database.prepare("DELETE FROM learner_observations WHERE run_id=? AND projection_id=?").run(run.id, duty!.projectionId);
+    database.prepare("DELETE FROM learner_observations WHERE run_id=? AND projection_id=?").run(run.id, dutyId);
     database.close();
     const prior = jobRow(value.path, run.id)!;
     expect(prior).toMatchObject({ state: "complete", completed_seq: run.events.length, derived_rev: 1 });
@@ -747,8 +799,11 @@ describe("criteria 13, 21, 26 — read honesty, eligible history and per-cut gra
     expect(played.kind === "complete" ? played.observations.every((row) => row.decisionClass === "played" && row.runId === "pack-run") : false).toBe(true);
     const packs = value.storage.readLongitudinalSnapshot("o", query("o", { kind: "all_complete" }, { packIds: ["fixture-pack"] }));
     expect(packs.kind === "complete" ? [...new Set([...packs.denominators, ...packs.observations].map((row) => row.runId))] : []).toEqual(["pack-run"]);
-    const family = value.storage.readLongitudinalSnapshot("o", query("o", { kind: "all_complete" }, { projections: [{ id: "derived.semantic_avoidance.open_file", version: 1 }] }));
-    expect(family.kind === "complete" ? family.observations.every((row) => row.projectionId === "derived.semantic_avoidance.open_file") && family.observations.length > 0 : false).toBe(true);
+    if (games.kind !== "complete" || games.observations.length === 0) throw Error("Fixture needs a genuine admitted aggregate source");
+    const target = games.observations[0]!;
+    const family = value.storage.readLongitudinalSnapshot("o", query("o", { kind: "all_complete" }, { projections: [{ id: target.projectionId, version: target.projectionVersion }] }));
+    expect(family.kind === "complete" ? family.observations.every(row => row.projectionId === target.projectionId && row.projectionVersion === target.projectionVersion) && family.observations.length > 0 : false).toBe(true);
+
   });
 });
 
@@ -756,11 +811,14 @@ describe("criterion 11 — authoritative rebuild equality", () => {
   it("names count, ref-element and missing-run tampering and repairs to equality", () => {
     const value = fixture();
     const owner = learner(value.storage, "o");
-    value.storage.create(play(positionRun("tamper"), "e2e4", "e7e5", "d2d4"), owner);
-    value.storage.create(play(positionRun("wiped"), "e2e4"), owner);
+    // Small genuine complete populations retain all count/ref/missing-run falsifiers without
+    // paying unrelated opening trajectories in this storage-equality case.
+    const fen = "7k/8/8/3p4/2P5/8/3P4/7K w - - 0 1";
+    value.storage.create(play(positionRun("tamper", fen), "c4d5"), owner);
+    value.storage.create(play(positionRun("wiped", fen), "h1g1"), owner);
     const store = value.workerStore();
     drain(store);
-    const project = (image: Parameters<typeof projectObservations>[0]) => projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES });
+    const project = (image: Parameters<typeof projectObservations>[0], options: Parameters<typeof projectObservations>[1]) => projectObservations(image, { ...options, dependencies: FIXTURE_DEPENDENCIES });
     expect(store.rebuild({ write: false, project }).mismatches).toEqual([]);
     const database = raw(value.path);
     const target = database.prepare("SELECT projection_id, semantic_sign, source_sign, phase, decision_class, opportunity_refs FROM learner_observations WHERE run_id='tamper' ORDER BY projection_id LIMIT 1").get() as Record<string, string>;
@@ -805,7 +863,7 @@ describe("criteria 14, 22 — privacy, deletion and upgrade population", () => {
     retained.close();
     value.storage.reconcileLongitudinalJobs();
     drain(store);
-    expect(store.rebuild({ write: true, project: (image) => projectObservations(image, { dependencies: FIXTURE_DEPENDENCIES }) }).mismatches).toEqual([]);
+    expect(store.rebuild({ write: true, project: (image, options) => projectObservations(image, { ...options, dependencies: FIXTURE_DEPENDENCIES }) }).mismatches).toEqual([]);
     for (const table of LONGITUDINAL_TABLES) expect(count(value.path, table, "learner_id IN ('leaving','__legacy')"), table).toBe(0);
     expect(value.storage.read("shared")).toBeDefined();
   });
@@ -816,12 +874,15 @@ describe("criteria 14, 22 — privacy, deletion and upgrade population", () => {
     value.storage.create(play(positionRun("gone"), "e2e4"), owner);
     value.storage.create(play(positionRun("kept"), "e2e4"), owner);
     drain(value.workerStore());
+    for (const runId of ["gone", "kept"]) expect(count(value.path, "learner_subject_observations", `run_id='${runId}'`), runId).toBeGreaterThan(0);
     const preview = value.storage.deletionPreview("o", { kind: "run", runId: "gone" }, AT);
     expect(preview.hardDelete.find((effect) => effect.kind === "behavioral_profile")?.objectIds).toContain("longitudinal-job:gone");
     value.storage.deleteOwnedRun("o", "gone", AT, preview.digest);
     expect(count(value.path, "learner_observation_jobs", "run_id='gone'")).toBe(0);
     expect(count(value.path, "learner_observation_denominators", "run_id='gone'")).toBe(0);
     expect(count(value.path, "learner_observation_denominators", "run_id='kept'")).toBeGreaterThan(0);
+    expect(count(value.path, "learner_subject_observations", "run_id='gone'")).toBe(0);
+    expect(count(value.path, "learner_subject_observations", "run_id='kept'")).toBeGreaterThan(0);
   });
 
   it("queues untouched native, imported and active shared runs on first upgraded start, idempotently", () => {
@@ -829,7 +890,7 @@ describe("criteria 14, 22 — privacy, deletion and upgrade population", () => {
     const owner = learner(value.storage, "o");
     const guest = learner(value.storage, "g");
     value.storage.create(play(positionRun("native"), "e2e4"), owner);
-    value.storage.createImportedRun(importedRun("imported", ["e2e4", "e7e5"]), owner, "Imported", { runId: "imported", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"b".repeat(64)}`, headers: {}, result: "*", pgn: "1. e4 e5 *", licenceNote: "fixture", importedAt: AT } as never);
+    value.storage.createImportedRun(importedRun("imported", ["e2e4", "e7e5"]), owner, "Imported", { runId: "imported", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"b".repeat(64)}`, headers: {}, result: "*", pgn: "1. e4 e5 *", licenceNote: "fixture", importedAt: AT, clockDocument: null } as never);
     value.storage.create(play(positionRun("shared"), "e2e4"), owner);
     value.storage.createLiveSession({ id: "live", runId: "shared", kind: "academy", title: "Live", boardControl: "free_claim", createdBy: owner.learnerId, at: AT });
     value.storage.grantRole("shared", guest.learnerId, "participant", owner, AT);

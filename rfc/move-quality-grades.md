@@ -1,5 +1,16 @@
 # RFC: Move-quality grades — the grade-family projection and its convention document
 
+**Current consumer acceptance checkpoint, 2026-11-04, uncommitted:** D3765/D879 close
+their finite producer/current-consumer scope after independent review. The exact9 authenticated
+drill/Nudge, position Review and real imported Review cells at0→−28/−66/−157 produce identical
+complete grade@2 payloads and canonical full reports, with populated expected classes, original
+instrument, actual grants/import record, anonymous401 and unchanged saved bytes. Six actual-grade
+registered voice controls, current9 constants, rating-inert/no-persistence and pre/atcommit hygiene
+remain. New focused3tests/nine cells and final affected200/seven60.77s+clean types pass. This is a
+test-only addition after the prior complete13804 software baseline, not a new full-pool result.
+D3766/D3767/D4064 selected UI/report repairs have separate proof; historical D1 remains discharged.
+No automatic whole-parent archive, semantic qualification, default/native/content or release claim.
+
 **2026-10-15 joint amendment acceptance:** independent review accepts §§2a/4a's current-source
 grade and the already owner-ruled unified ladder with the coordinated module image. Earlier
 unaccepted labels for these clauses are history; actual issuance, source/consumer tests and
@@ -41,8 +52,14 @@ grade/Compare service contexts, accuracy, renderers and complete current adoptio
 - **Planning:** `planning/evidence-foundation-ux/` (once implementing)
 
 ```tabiya-claims
-semantic-conventions | members grade_convention_v2 | D1422 owner-ruled single 2.5/10/15 Win%-point ladder, with unchanged typed-mate and logistic rules
+none
 ```
+
+**Resource checkpoint, 2026-11-02:** claims none. `grade_convention_v2` is now present in the
+tree and the semantic-convention register records that implementation. The coordinated current
+Nudge/Review source, API and native verification remains in flight and uncommitted; releasing the
+reservation is not whole-RFC or learner-capability completion. The joint acceptance above governs
+the earlier historical unaccepted labels below.
 
 **Current amendment boundary, 2026-10-15:** §2a and §4a are unaccepted amendments to the
 implemented predecessor described by the original Summary/§§1–9 below. §4a supersedes its
@@ -638,6 +655,43 @@ current source issuance, grade@2 registration or cross-workflow delivery. Keep p
 factory/HTTP/renderer positives pending until implementation; counts in a research model do not
 discharge criterion4 or make this amendment accepted. Adopt only after independent source/joint
 review with §2a/F2 §2.3l and the one complete current module image. No production change here.
+
+### §4b — D3767/D4064 compact Nudge view with unchanged full-report parity
+
+**Independently accepted companion, 2026-11-04; existing compiler2 receipt records the
+joint decision.** Research in module-evidence-assembly.md identifies
+current selection starvation and pinned-source full sentences that cannot fit Nudge alone.
+Module-registration§4.5e owns the precise selector successor, and evidence-presentation§3.10c
+owns the complete compact renderer and same-item explicit report view. No constants, comparison,
+classification, threshold, grading source, accuracy, eligibility or convention version changes.
+
+§4a's **entire public grade payload parity and canonical full-report byte parity remain**.
+For identical original operands, mover and instrument, full payload and renderMoveQualityGrade
+stay byte-equal across workflows and source-owned grants. A Nudge item's manually requested
+full report equals that same full function and Review's full text, including all attribution.
+Preserve assertMoveQualityGradeSentence and its 'word-only Blunder' rejection. Do not delete
+those tests, strip inconvenient fields or loosen the full-report checker to pass a compact view.
+
+This clause expressly replaces only the implication that Nudge must display that full canonical
+sentence proactively. Current Nudge2 instead uses the exact closed play.move_quality_summary@1
+renderer over the complete same payload, plus the registered full report on explicit demand.
+Review's grade.move_quality@2 renderer remains full. Short and full default UI sentences are
+therefore intentionally different views; they are not different ladders, sources, payloads or
+LLM paraphrases. Tests must assert the short default AND complete on-demand parity rather than
+pretend the two defaults are byte-identical. Module receipts/grants retain their actual contexts.
+
+Grade labels remain emitted only by the sole source-owned factory under convention@2. The
+summary formatter reads the existing klass/arm/loss; it cannot regrade a source or add praise,
+'good', personality, causal explanation, best move or PV. Missing/incomparable/pending/available
+empty remain their original states; valid durable reports do not vanish for lack of a live
+executor. No rating/learner dimension or live-engine-quality claim enters either view.
+
+This is a rendering/selection amendment with claims none, not grade-convention@3 or a pack/run
+migration. All companions have joint independent acceptance. D3767/D4064/D3766 bounded actual
+selected delivery/presentation close locally after independent final review and13804software/497,
+7performance/types/build/source/governance pass. Full checker and entire payload/canonical-report
+parity remain. D3765/D879 current authenticated9-cell consumer parity now closes locally; native startup
+is heldD3928 with zero journeys. Parent/qualification/release obligations remain open.
 
 ### §5 — The projection, declared under F1 §4.3
 

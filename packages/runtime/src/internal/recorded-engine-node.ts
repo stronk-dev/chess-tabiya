@@ -8,6 +8,7 @@ import type { SourceManifest } from "../recorded-source-manifest.js";
 import { reviewPointComparability } from "../review-points.js";
 import { readRecordedEngineAttachments, type RecordedEngineAttachments } from "./recorded-engine-attachments.js";
 import { recordedOfflineEngineEndpoint, recordedEngineRequestedBound, type RecordedEngineCandidate, type RecordedEngineAvailable } from "./recorded-engine-endpoint-values.js";
+import { recordedEventDigest } from "./recorded-event-digest.js";
 
 interface SourceAbstention { readonly kind: string; readonly anchor: Readonly<Record<string, string>>; readonly sourceId: string; readonly retrievedAt: string; readonly reason: string; readonly detail: string }
 export interface RecordedEngineOfflineCapture {
@@ -39,7 +40,7 @@ export function readRecordedEngineNode(input: RecordedEngineNodeCapture) {
   const row = rows.find(value => value.position.payload.nodeId === input.nodeId);
   if (row === undefined) return refuse("node is outside the original granted prefix");
   const positionOrigin = recordedMeasurementPosition(row.position);
-  if (positionOrigin.runId !== run.id || positionOrigin.headDigest !== evidenceDigest(run.events)) return refuse("foreign original position invocation");
+  if (positionOrigin.runId !== run.id || positionOrigin.headDigest !== recordedEventDigest(run.events)) return refuse("foreign original position invocation");
   let selected: RecordedEngineAvailable | null = null, selectedOperand: DeclaredEvidence<unknown> | null = null;
   let unavailable: "source_pending" | "missing_eval" | "input_abstained" = "missing_eval";
   let selectedOrdinal: number | null = null;

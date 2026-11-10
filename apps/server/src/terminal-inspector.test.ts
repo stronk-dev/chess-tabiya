@@ -1,6 +1,8 @@
 // D3796: a legal terminal transition reaches the real authenticated application and SQLite.
 import type { AddressInfo } from "node:net";
-import { compileAssistanceRequest, parsePresentationReceipt, type DrillRun, type ModuleQueryPage } from "@chess-tabiya/runtime";
+import { compileAssistanceRequest, moduleDecisionStamp, type DrillRun } from "@chess-tabiya/runtime";
+import type { InspectorQueryPage, InspectorQueryRequest } from "../../../packages/runtime/src/inspector-query-contract.js";
+import { parseInspectorQueryPage } from "../../web/src/lib/inspector-query-response.js";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import type { ChessTabiyaApplication } from "./application.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
@@ -43,23 +45,31 @@ it("queries played mate and stalemate for both colors without a 500, writes or a
     expect(created.status, await created.clone().text()).toBe(201);
     const moved = await post(`/runs/${id}/moves`, { uci: move });
     expect(moved.status, await moved.clone().text()).toBe(200);
-    const run = (await moved.json() as { run: DrillRun }).run;
+    const reveal = await post(`/runs/${id}/reveal`, {});
+    expect(reveal.status).toBe(200);
+    const run = (await reveal.json() as { run: DrillRun }).run;
     const assistance = compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "analysis", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
-    const request = { assistance, query: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } };
-    expect((await post(`/runs/${id}/reveal`, {})).status).toBe(200);
+    const request: InspectorQueryRequest = { protocol: "inspector.query_page@1", assistance, query: { ...run.activeCursor, decisionDigest: moduleDecisionStamp(run).digest,
+      view: { kind: "source", projection: "rules.mobility.reading.legal_moves@1", context: { kind: "position" }, start: 0, collectionKey: null } } };
     const saved = async () => JSON.stringify(await Promise.all(["graph", "events"].map(async action => {
       const response = await fetch(`${origin}/runs/${id}/${action}`, { headers: { cookie: owner } });
       expect(response.status).toBe(200); return response.json();
     })));
     const before = await saved();
-    const response = await post(`/runs/${id}/modules/query`, request);
+    const response = await post(`/runs/${id}/inspector/query`, request);
     expect(response.status, await response.clone().text()).toBe(200);
-    const page = (await response.json() as { page: ModuleQueryPage }).page;
-    const packet = page.packets.find(item => item.module === "full_inspector")!;
-    expect(packet).toBeDefined();
-    expect(parsePresentationReceipt(packet.receipt).length).toBeGreaterThan(0);
-    expect(packet.receipt.items.some(item => item.evidenceRef?.projection.id === "rules.mobility.reading.legal_moves")).toBe(false);
-    expect((await post(`/runs/${id}/modules/query`, request, foreign)).status).toBe(404);
+    const wire = await response.json() as InspectorQueryPage;
+    expect(wire.kind).toBe("page"); if (wire.kind !== "page") throw new Error("Expected terminal source page");
+    const page = parseInspectorQueryPage(wire, { runId: id, request, fen: run.nodes.find(node => node.id === run.activeCursor.nodeId)!.fen, requestedDigest: wire.requestedConfigDigest, finalDigest: wire.effectiveConfigDigest });
+    expect(page.kind).toBe("page"); if (page.kind !== "page") throw new Error("Terminal source failed receiver");
+    expect(page.body).toMatchObject({ kind: "source", outcome: { kind: "available", collected: 1, displayed: 1, deferred: 0 } });
+    // Full1 omitted the terminal reading. Full2 must positively deliver the complete zero,
+    // rather than passing merely because some unrelated presentation survived selection.
+    expect(page.items).toHaveLength(1);
+    expect(page.items[0]).toMatchObject({ evidenceRef: { projection: { id: "rules.mobility.reading.legal_moves", version: 1 } }, component: { id: "fact_statement", operand: { rendererId: "play.legal_moves@1", operands: { pieces: 0, moves: 0 } } } });
+    expect((await post(`/runs/${id}/inspector/query`, request, foreign)).status).toBe(404);
+    const anonymous = await fetch(`${origin}/runs/${id}/inspector/query`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(request) });
+    expect(anonymous.status).toBe(401);
     expect(await saved()).toBe(before);
   }
 });

@@ -1,5 +1,8 @@
 // DISPOSABLE D3841 source-origin experiment. Not evidence factories, access grants or an API.
 // Existing sealed history is the authority; fixture labels never establish a provider exchange.
+// Historical top-level 75/81-source proposal measurements retain their original assumptions;
+// typechecking this file does not remeasure them against the current Full2 image. Current
+// material source controls below compare @2 to independent count/cause arithmetic, not @1.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { normalizeMove } from "chessops/chess";
@@ -17,7 +20,7 @@ import { resolveRunSubject, resolveRunEvidenceItem, assertResolvedRunSubject,
   digestRunEventHead, digestRunEvidenceItem, type ResolvedRunSubject, type RunEvidenceItemDigest,
 } from "../../packages/runtime/src/run-subject.js";
 import { PRIMARY_EVIDENCE_MANIFEST, EVIDENCE_CONTRACT_DECLARATIONS } from "../../packages/runtime/src/evidence-catalog.js";
-import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import { evidenceValueRouteRegistry, invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, compileEvidenceManifest, type DeclaredEvidence, type ProjectionDeclaration,
   type ProducerDeclaration } from "../../packages/runtime/src/evidence-contract.js";
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
@@ -544,6 +547,10 @@ const materialEdges = [
   ]),
 ] as const;
 const materialArms = new Set<string>();
+for (const retired of ["derived.material.reading.role_signature@1", "derived.material.event.role_asymmetry@1"]) {
+  assert(!evidenceValueRouteRegistry().some(row => row.route === retired));
+}
+const reconstructedMaterial = new Map<string, MaterialRoleAsymmetryEvent>();
 let signatureChecks = 0, increased = 0, decreased = 0, unchangedMagnitude = 0;
 function rawMaterialCause(edge: { beforeFen: string; moveUci: string; afterFen: string }, cause: DeclaredEvidence<unknown>): TransitionSemanticFact {
   assertDeclaredEvidence(cause);
@@ -570,17 +577,19 @@ for (const [beforeFen, uci] of materialEdges) {
   const reconstructed = [beforeFen, edge.afterFen].map(fen => {
     const recipe = signatureFromCounts(fen, countInputs(fen));
     assert.deepEqual(recipe, materialRoleSignatureReading(fen));
-    const old = invokeEvidenceValueRoute("derived.material.reading.role_signature@1", { fen });
-    assert.deepEqual(recipe, old.payload);
-    assert.equal(evidenceValueReceipt(old).sourceDigests.length, 0);
+    const current = invokeEvidenceValueRoute("derived.material.reading.role_signature@2", { fen });
+    assert.deepEqual(recipe, current.payload);
+    assert.deepEqual(evidenceValueReceipt(current).sourceDigests, countInputs(fen).map(value => evidenceValueReceipt(value).payloadDigest));
+    assert.equal(evidenceValueReceipt(current).sourceDigests.length, 10);
     signatureChecks++;
     return recipe;
   });
-  const emitted = invokeEvidenceValueRoute("derived.material.event.role_asymmetry@1", edge);
+  const emitted = invokeEvidenceValueRoute("derived.material.event.role_asymmetry@2", edge);
   assert.equal(emitted.length, 1);
   const value = emitted[0]!;
   const refs = value.inputs.map(input => `${input.projection.id}@${input.projection.version}`);
-  assert.deepEqual(refs.slice(0, 2), ["derived.material.reading.role_signature@1", "derived.material.reading.role_signature@1"]);
+  assert.deepEqual(refs.slice(0, 2), ["derived.material.reading.role_signature@2", "derived.material.reading.role_signature@2"]);
+  assert.deepEqual(evidenceValueReceipt(value.evidence).sourceDigests, value.inputs.map(input => evidenceValueReceipt(input).payloadDigest));
   assert.equal((value.inputs[0]!.payload as MaterialRoleSignatureReading).fen, beforeFen);
   assert.equal((value.inputs[1]!.payload as MaterialRoleSignatureReading).fen, edge.afterFen);
   materialArms.add(refs.slice(2).join(","));
@@ -604,6 +613,7 @@ for (const [beforeFen, uci] of materialEdges) {
     changedRoles: materialRoles.filter(role => before.asymmetry[role] !== after.asymmetry[role]),
     increased: after.magnitude > before.magnitude, sourceEvents };
   assert.deepEqual(reconstructedEvent, value.evidence.payload);
+  reconstructedMaterial.set(JSON.stringify(edge), reconstructedEvent);
   const payload = value.evidence.payload as { before: { magnitude: number }; after: { magnitude: number }; increased: boolean };
   assert.equal(payload.increased, payload.after.magnitude > payload.before.magnitude);
   if (payload.increased) increased++;
@@ -625,7 +635,7 @@ for (const [beforeFen, moveUci] of [
   const edge = { beforeFen, moveUci, afterFen: canonicalFen(position) };
   assert.deepEqual(invokeEvidenceValueRoute("rules.transition.event.capture@1", edge), []);
   assert.deepEqual(invokeEvidenceValueRoute("rules.transition.event.promotion@1", edge), []);
-  assert.deepEqual(invokeEvidenceValueRoute("derived.material.event.role_asymmetry@1", edge), []);
+  assert.deepEqual(invokeEvidenceValueRoute("derived.material.event.role_asymmetry@2", edge), []);
   emptyCauseCases++;
 }
 
@@ -637,7 +647,7 @@ for (const [fen, moveUci] of materialEdges) {
   position.play(move);
   const edge = { beforeFen: fen, moveUci, afterFen: canonicalFen(position) };
   assert.deepEqual(invokeEvidenceValueRoute("derived.material.event.role_asymmetry@2", edge)[0]!.evidence.payload,
-    invokeEvidenceValueRoute("derived.material.event.role_asymmetry@1", edge)[0]!.evidence.payload);
+    reconstructedMaterial.get(JSON.stringify(edge)));
 }
 const materialPaths = compileProjectionExecution(materialManifest, materialSuccessor).paths;
 assert.equal(materialPaths.length, 3);

@@ -32,8 +32,8 @@ test("D2390: dependencies and conventions are separate, closed sets with valid f
   const consequence = row("derived.pawn.consequence.backward_pawn_legal_advance@1");
   assert.deepEqual(consequence.conventions, ["backward-pawn@1", "legal-exchange@1"]);
   assert.deepEqual(consequence.sourceDependencies.map(({ ref }) => ref), [
-    "rules.exchange.predicate.legal_exchange@1",
-    "rules.structural.reading.backward_pawn@2",
+    "rules.exchange.reading.landing_captures@1",
+    "rules.structural.reading.backward_pawn@3",
   ]);
 });
 
@@ -75,11 +75,11 @@ test("D2393: every style atom requires an actor/decision occurrence envelope", (
 });
 
 test("D2394: opposition and backward-pawn successor events have total five-case algebras", () => {
-  const opposition = section("### 3.1 Unobstructed king opposition v2", "### 3.2 Backward pawn v2");
+  const opposition = section("### 3.1 Unobstructed king opposition (reading v3, event v2)", "### 3.2 Backward pawn (reading v3, event v2)");
   for (const transition of ["Absent→absent", "absent→present", "present→absent", "present→present", "membership_changed"]) {
     assert.match(opposition, new RegExp(transition, "iu"));
   }
-  const backward = section("### 3.2 Backward pawn v2", "### 3.3 Exact pawn-file groups");
+  const backward = section("### 3.2 Backward pawn (reading v3, event v2)", "### 3.3 Exact pawn-file groups");
   for (const rule of ["from-square row to its to-square row", "remaining before", "remaining after", "membership_changed", "matched equal row emits nothing"]) {
     assert.match(backward, new RegExp(rule, "u"));
   }

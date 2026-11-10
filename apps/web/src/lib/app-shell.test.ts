@@ -1,13 +1,18 @@
+import { recordedSequenceWindowFixture } from "../../../../packages/runtime/src/testing/recorded-sequence-window-fixture.js";
 // @vitest-environment happy-dom
 
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { REVIEW_MAP_CONVENTION, commitMove, createRun, fork as forkRun, rewind as rewindRun, reviewMapProjection, storyMomentsForRun } from "@chess-tabiya/runtime";
+import { REVIEW_MAP_CONVENTION, revealFeedback, commitMove, createRun, fork as forkRun, rewind as rewindRun, reviewMapProjection, storyMomentsForRun, presentationDigest } from "@chess-tabiya/runtime";
 import { reviewFixtureRun } from "../../../../packages/runtime/src/testing/review-map-fixture.js";
-import { mount, tick, unmount } from "svelte";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { recordedReviewFixtureSources } from "../../../../packages/runtime/src/testing/recorded-grade-fixture.js";
+import { tick } from "svelte";
+import { createComponentTestScope } from "./component-test-lifecycle.js";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
+import { registeredShapeFixture } from "../../../../packages/runtime/src/testing/registered-shape-fixture.js";
+import { historicalInspectorFixture, disposeInspectorBrowserFixtures, terminateInspectorBrowserFixture } from "./inspector-source-browser.test-support.js";
 
 import fixtureJson from "../../../../schemas/drill_pack.example.json?raw";
 
@@ -44,13 +49,19 @@ import { WriterSession, writerStorageKey, type KeyValueStorage } from "./writer-
 import { botRosterFixture } from "./bot-roster.test-support.js";
 import { OBJECTIVE_TYPE_LABELS } from "./labels/index.js";
 
+const componentScope = createComponentTestScope();
+const { mount, unmount } = componentScope;
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const E4_FEN = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
 /** A minimal valid Review Map payload with one moment card (rfc/review-map.md). */
 function reviewPayload(options: { readonly runId: string; readonly branchId: string; readonly source: ReviewMap["source"]; readonly ready?: boolean; readonly nodeId?: string; readonly entryNodeId?: string; readonly ply?: number; readonly fen?: string }): ReviewMap {
   const ready = options.ready ?? true;
+  // UI-only map metadata, not an access/source grant. Use the real decision digest recipe.
+  const decision = { eventHeadSeq: 0, cursor: { branchId: options.branchId, nodeId: options.entryNodeId ?? "entry-1" }, disclosureBoundarySeq: null };
   return {
     runId: options.runId, branchId: options.branchId, side: "white", ready, pendingEvidence: ready ? 0 : 1,
+    decision: { ...decision, digest: presentationDigest("module.decision_stamp@1", decision) },
+    workflowContext: options.source.kind === "native" ? "position" : "imported",
     source: options.source, outcome: { kind: "unfinished" }, storyTitle: "A game story at move 1",
     viewer: { mayWrite: true }, semanticPath: { kind: "available", events: 0 },
     convention: REVIEW_MAP_CONVENTION, context: "review", rows: [],
@@ -238,6 +249,36 @@ function target(): HTMLElement {
   return element;
 }
 
+async function learnSourceFixture() {
+  const root = createRun({ id: "optional-learn-source", session: { kind: "position", start: { fen: INITIAL_FEN, side: "white" },
+    feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: digest,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-11-04T00:00:00.000Z" });
+  return historicalInspectorFixture({ run: commitMove(root, "g1f3", { at: "2026-11-04T00:00:00.000Z" }).run,
+    shapes: [registeredShapeFixture()], recommendations: true, repertoires: true, authenticatedRest: true, preserveRun: true });
+}
+
+function learnSourceApi(f: Awaited<ReturnType<typeof learnSourceFixture>>): DrillClientApi {
+  return { ...api(), session: () => f.api!.session(), recommendations: signal => f.api!.recommendations(signal),
+    repertoires: () => f.api!.repertoires(), repertoireGaps: id => f.api!.repertoireGaps(id),
+    createRepertoire: input => f.api!.createRepertoire(input), deleteRepertoire: id => f.api!.deleteRepertoire(id),
+    scanRepertoire: id => f.api!.scanRepertoire(id), chooseRepertoireAnswer: (id, input) => f.api!.chooseRepertoireAnswer(id, input) };
+}
+
+async function rootRepertoireGap(f: Awaited<ReturnType<typeof learnSourceFixture>>, black = false) {
+  const pgn = black ? `[Event "Empty learner repertoire"]\n[SetUp "1"]\n[FEN "${INITIAL_FEN.replace(' w ', ' b ')}"]\n\n*` : '[Event "Empty learner repertoire"]\n\n*';
+  const repertoire = await f.api!.createRepertoire({ name: "Actual unanswered root", side: black ? "black" : "white", targetElo: 1600,
+    coverageDenominator: 100, source: { kind: "pgn", pgn } });
+  await f.api!.scanRepertoire(repertoire.id);
+  await f.waitForRepertoireScan(repertoire.id);
+  const page = await f.api!.repertoireGaps(repertoire.id);
+  expect(page.status).toBe("ready"); expect(page.scan!.gaps).toHaveLength(1);
+  await expect(f.api!.recommendations()).resolves.toMatchObject({ recommendations: expect.arrayContaining([
+    { kind: "repertoire_gap", repertoireId: repertoire.id, repertoireName: repertoire.name, gapKey: page.scan!.gaps[0]!.key,
+      replySan: "", line: [], gamesUntilSeen: 1 },
+  ]) });
+  return { repertoire, gap: page.scan!.gaps[0]! };
+}
+
 function deferred<T>(): {
   readonly promise: Promise<T>;
   readonly resolve: (value: T) => void;
@@ -260,6 +301,19 @@ function key(value: string, options: KeyboardEventInit = {}): KeyboardEvent {
   return event;
 }
 
+function retainedShellClick(control: HTMLButtonElement) {
+  const handlers = Object.getOwnPropertySymbols(control).flatMap(symbol => {
+    const record: unknown = symbol.description === "events" ? Reflect.get(control, symbol) : undefined;
+    return record !== null && typeof record === "object" && "click" in record && typeof record.click === "function" ? [record.click] : [];
+  });
+  expect(handlers).toHaveLength(1);
+  return () => {
+    document.body.append(control);
+    const event = new MouseEvent("click", { bubbles: true }); Object.defineProperty(event, "currentTarget", { value: control });
+    return handlers[0]!.call(control, event);
+  };
+}
+
 function expectDisabledControlsExplained(): void {
   for (const control of document.querySelectorAll<HTMLElement>(
     ":disabled, [aria-disabled='true']",
@@ -272,13 +326,146 @@ function expectDisabledControlsExplained(): void {
   }
 }
 
-afterEach(() => {
-  vi.restoreAllMocks();
-  document.body.replaceChildren();
-  history.replaceState(null, "", "/");
+afterEach(async () => {
+  try { await componentScope.cleanup(); } finally {
+    vi.restoreAllMocks();
+    document.body.replaceChildren();
+    history.replaceState(null, "", "/");
+  }
 });
 
 describe("application shell", () => {
+  afterAll(async () => { await disposeInspectorBrowserFixtures(); await terminateInspectorBrowserFixture(); });
+  describe("historical Inspector production callback", () => {
+    afterEach(disposeInspectorBrowserFixtures);
+    it.each(["success", "error"] as const)("retires held clock %s on actual Review access refusal and recovers only after authenticated refresh", async late => {
+      const f = await historicalInspectorFixture({ authenticatedRest: true, sharedViewer: true, clockPgn: '[TimeControl "300+2"]\n\n1. e4 {[%clk 0:04:59.123]} e5 {[%clk 0:04:57]} *', side: "black" });
+      if (f.api === undefined) throw new Error("Actual shared-viewer cookie fixture required");
+      const held = deferred<Awaited<ReturnType<DrillApi["recordedClock"]>>>();
+      let captured: Awaited<ReturnType<DrillApi["recordedClock"]>> | undefined;
+      let clockCalls = 0;
+      const recordedClock = vi.fn(async (runId: string, branch: string, node: string, signal: AbortSignal) => {
+        const page = await f.api!.recordedClock(runId, branch, node, signal);
+        if (++clockCalls === 1) { captured = page; return held.promise; }
+        return page;
+      });
+      const first = f.run.nodes[1]!, branchId = f.run.branches[0]!.id;
+      history.replaceState(null, "", `/review/game/${encodeURIComponent(f.run.id)}?branch=${encodeURIComponent(branchId)}&node=${encodeURIComponent(first.id)}`);
+      const root = target(), component = mount(App, { target: root, props: {
+        api: { ...api(), session: f.api.session.bind(f.api), review: f.api.review.bind(f.api), recordedClock },
+        router: new HistoryRouter(window), storage: new MemoryStorage(),
+      } });
+      try {
+        await vi.waitFor(() => expect(captured).toBeDefined());
+        const signal = recordedClock.mock.calls[0]![3]; expect(signal.aborted).toBe(false);
+        await f.viewerAccess(false);
+        root.querySelector<HTMLButtonElement>("[data-review-refresh]")!.click();
+        await vi.waitFor(async () => expect((await f.httpCalls()).some(row => row.path.includes("/review?") && row.status === 404)).toBe(true));
+        await vi.waitFor(() => expect(signal.aborted).toBe(true));
+        if (late === "success") held.resolve(captured!); else held.reject(new Error("old clock error"));
+        await tick(); await tick();
+        expect(root.textContent).not.toContain("0:04:59.123"); expect(recordedClock).toHaveBeenCalledTimes(1);
+        await f.viewerAccess(true);
+        root.querySelector<HTMLButtonElement>("[data-review-refresh]")!.click();
+        await vi.waitFor(() => expect(root.textContent).toContain("White: 0:04:59.123 remaining after this move."));
+        expect(recordedClock).toHaveBeenCalledTimes(2);
+      } finally { await unmount(component); }
+    });
+
+    it.each([401, 403, 404])("native fact inspection follows observed App read refusal%s and authenticated recovery", async status => {
+      const run = revealFeedback(recordedSequenceWindowFixture({ fen: "7k/8/8/8/8/2n5/1P6/1R5K w - - 0 1", moves: ["b2c3"] }, false, `native-read-${status}`), "2026-11-10T02:00:00.000Z").run;
+      const f = await historicalInspectorFixture({ run, preserveRun: true, authenticatedRest: true, sharedViewer: true });
+      if (f.api === undefined) throw new Error("Actual shared cookie API required");
+      const viewer = await f.api.session();
+      await f.api.updateGrants(f.run.id, { op: "grant", handle: viewer.handle, role: "spectator" }, "browser-writer");
+      // The real grant refusal returns404. Exercise App's three equivalent transport statuses
+      // over that same denied authenticated read, never fabricate successful evidence.
+      const review = async (id: string, branch?: string) => {
+        try { return await f.api!.review(id, branch); }
+        catch (error) { if (error instanceof ApiError && error.status === 404) throw new ApiError(status, error.code, error.message); throw error; }
+      };
+      history.replaceState(null, "", `/review/game/${encodeURIComponent(f.run.id)}?branch=${encodeURIComponent(f.run.branches[0]!.id)}&node=${encodeURIComponent(f.run.nodes[1]!.id)}`);
+      const root = target(), component = mount(App, { target: root, props: {
+        api: { ...api(), session: f.api.session.bind(f.api), review }, router: new HistoryRouter(window), storage: new MemoryStorage(),
+      } });
+      const inspect = () => [...root.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Inspect this fact");
+      try {
+        await vi.waitFor(() => expect(inspect(), root.textContent?.slice(-1800)).toBeDefined());
+        expect((await f.api.review(f.run.id)).viewer.mayWrite).toBe(false);
+        const oldButton = inspect()!, oldOpen = retainedShellClick(oldButton);
+        oldButton.click(); await tick(); expect(root.querySelector('[aria-label="Fact details"]')).not.toBeNull();
+        const oldCloseButton = root.querySelector<HTMLButtonElement>('[aria-label="Fact details"] button')!, oldClose = retainedShellClick(oldCloseButton);
+        await f.viewerAccess(false); root.querySelector<HTMLButtonElement>('[data-review-refresh]')!.click();
+        await vi.waitFor(() => expect(root.querySelector(".review-refresh-status [role='alert']")).not.toBeNull());
+        expect(inspect()).toBeUndefined(); expect(root.querySelector('[aria-label="Fact details"]')).toBeNull();
+        expect(root.querySelector(".review-map")).not.toBeNull();
+        oldOpen(); oldButton.remove(); await tick(); expect(root.querySelector('[aria-label="Fact details"]')).toBeNull();
+        await f.viewerAccess(true);
+        await f.api.updateGrants(f.run.id, { op: "grant", handle: viewer.handle, role: "spectator" }, "browser-writer");
+        root.querySelector<HTMLButtonElement>('[data-review-refresh]')!.click();
+        await vi.waitFor(() => expect(inspect(), root.textContent?.slice(-1800)).toBeDefined());
+        expect(root.querySelector('[aria-label="Fact details"]')).toBeNull();
+        expect((await f.api.review(f.run.id)).viewer.mayWrite).toBe(false);
+        inspect()!.click(); await tick(); const replacement = root.querySelector('[aria-label="Fact details"]')!;
+        expect(replacement).not.toBeNull();
+        const focus = document.createElement("button"); root.append(focus); focus.focus();
+        oldClose(); oldCloseButton.remove(); await tick(); await tick();
+        expect(root.querySelector('[aria-label="Fact details"]')).toBe(replacement); expect(document.activeElement).toBe(focus);
+        expect((await f.httpCalls()).some(call => call.path.includes("/review") && call.status === 404)).toBe(true);
+        expect((await f.stats()).providerCalls).toEqual([]);
+      } finally { await unmount(component); }
+    });
+
+    it("delivers both historical clock movers through the actual App callback and cookie API", async () => {
+      const f = await historicalInspectorFixture({ authenticatedRest: true, clockPgn: '[TimeControl "300+2"]\n\n1. e4 {[%clk 0:04:59.123]} e5 {[%clk 0:04:57]} *', side: "black" });
+      if (f.api === undefined) throw new Error("Actual authenticated clock fixture required");
+      await f.api.reveal(f.run.id, "browser-writer");
+      const first = f.run.nodes[1]!, second = f.run.nodes[2]!, branchId = f.run.branches[0]!.id;
+      const recordedClock = vi.fn(f.api.recordedClock.bind(f.api));
+      history.replaceState(null, "", `/review/game/${encodeURIComponent(f.run.id)}?branch=${encodeURIComponent(branchId)}&node=${encodeURIComponent(first.id)}`);
+      const root = target(), component = mount(App, { target: root, props: {
+        api: { ...api(), session: f.api.session.bind(f.api), review: f.api.review.bind(f.api), recordedClock },
+        router: new HistoryRouter(window), storage: new MemoryStorage(),
+      } });
+      try {
+        await vi.waitFor(() => expect(root.textContent).toContain("White: 0:04:59.123 remaining after this move."));
+        expect(recordedClock.mock.calls[0]!.slice(0, 3)).toEqual([f.run.id, branchId, first.id]);
+        const selected = root.querySelector<HTMLButtonElement>(`.move-row[data-node-id="${second.id}"] .move-select`)!;
+        selected.click(); await tick();
+        await vi.waitFor(() => expect(root.textContent).toContain("Black: 0:04:57.000 remaining after this move."));
+        expect(root.textContent).not.toContain("White: 0:04:59.123 remaining");
+        expect(recordedClock.mock.calls.at(-1)!.slice(0, 3)).toEqual([f.run.id, branchId, second.id]);
+        expect((await f.httpCalls()).filter(row => row.path.includes("/recorded-clock?")).every(row => row.status === 200)).toBe(true);
+      } finally { await unmount(component); }
+    });
+
+    it("opens the delivered game's old root through the real App callbacks and source browser", async () => {
+      // This callback test starts after genuine module preparation; cold production loading has
+      // its own browser budgets. Do not turn Vite's first transform into an implicit one-second gate.
+      await import("./DrillScreen.svelte");
+      const f = await historicalInspectorFixture({ historical: true }), root = target();
+      const attached = deferred<void>();
+      const inspectorAssistance = vi.fn(async (_id: string, body: Parameters<typeof f.confirm>[0], signal?: AbortSignal) => f.confirm(body, signal!));
+      const inspector = vi.fn(async (_id: string, body: Parameters<typeof f.send>[0], signal?: AbortSignal) => f.send(body, signal!));
+      const shellApi: DrillClientApi = { ...api(), runDerivations: async () => { attached.resolve(undefined); return { source: null, derived: [] }; }, assistance: async (_id, request) => f.authority(request), inspectorAssistance, inspector,
+        events: async (_id, since = 0) => ({ events: f.run.events.filter(event => event.seq > since), nextSeq: f.run.events.at(-1)!.seq }),
+        graph: async () => ({ id: f.run.id, viewer: { role: "host", mayWrite: true, holdsLease: true, seatedInContest: false, reviewing: false, reviewRail: "not_applicable", leaseHeldBy: { learnerId: "learner-a", handle: "alice" } }, nodes: f.run.nodes, branches: f.run.branches, activeCursor: f.run.activeCursor }) };
+      history.replaceState(null, "", `/play/run/${f.run.id}`);
+      const component = mount(App, { target: root, props: { api: shellApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+      await attached.promise;
+      await vi.waitFor(() => expect(root.querySelector(".inspector-entry"), root.textContent ?? "").not.toBeNull());
+      root.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+      const seat = root.querySelector<HTMLElement>('[aria-label="Inspect a recorded line"]')!;
+      expect(seat).not.toBeNull(); expect(inspectorAssistance).not.toHaveBeenCalled(); expect(inspector).not.toHaveBeenCalled();
+      const line = seat.querySelector<HTMLSelectElement>("select")!; line.value = f.run.branches[0]!.id; line.dispatchEvent(new Event("change", { bubbles: true })); await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(node => node.textContent === "Inspect recorded position")!.click();
+      await vi.waitFor(() => expect(seat.querySelectorAll("nav li")).toHaveLength(8));
+      expect(inspectorAssistance).toHaveBeenCalledExactlyOnceWith(f.run.id, expect.objectContaining({ inspector: { branchId: f.run.branches[0]!.id, nodeId: f.run.nodes[0]!.id, decisionDigest: expect.any(String) } }), expect.any(AbortSignal));
+      expect(inspector).toHaveBeenCalledExactlyOnceWith(f.run.id, expect.objectContaining({ query: expect.objectContaining({ branchId: f.run.branches[0]!.id, nodeId: f.run.nodes[0]!.id, view: { kind: "inventory", start: 0 } }) }), expect.any(AbortSignal));
+      expect(await f.stats()).toEqual({ acquisitions: [], providerCalls: [] });
+      await unmount(component);
+    });
+  });
   it("D3743 keeps the current encounter revision monotone after real screen delivery when an older charge receipt settles", async () => {
     history.replaceState(null, "", `/play/run/${run.id}`);
     const campaignId = "campaign-revision-order", nodeId = "first-node";
@@ -490,11 +677,11 @@ describe("application shell", () => {
 
   it("shows failed/crossed Review refreshes and retries the same selected line without replaying writes", async () => {
     history.replaceState(null, "", "/review/game/recover-review");
-    const recorded = reviewFixtureRun({ id: "recover-review", plies: 4 });
+    const recorded = reviewFixtureRun({ id: "recover-review", kind: "position", plies: 4 });
     const branchId = recorded.branches[0]!.id;
     const confirmed: ReviewMap = { ...reviewPayload({ runId: recorded.id, branchId, source: { kind: "native" } }), ...reviewMapProjection({
       run: recorded, branchId, story: storyMomentsForRun(recorded, branchId), context: "review",
-      viewer: { role: "learner", session: "pack" },
+      viewer: { role: "learner", session: "position" }, ...recordedReviewFixtureSources(recorded, branchId),
     }), ready: true, pendingEvidence: 0 };
     const pending = deferred<ReviewMap>();
     const review = vi.fn(async (): Promise<ReviewMap> => {
@@ -566,13 +753,13 @@ describe("application shell", () => {
 
   it("does not let polling replace a slow cited Review load with the active branch", async () => {
     vi.useFakeTimers();
-    const recorded = reviewFixtureRun({ id: "cited-run", plies: 2 });
+    const recorded = reviewFixtureRun({ id: "cited-run", kind: "position", plies: 2 });
     const node = recorded.nodes[1]!;
     const branchId = node.branchId;
     const graph = deferred<Awaited<ReturnType<DrillClientApi["graph"]>>>();
     const cited = {
       ...reviewPayload({ runId: recorded.id, branchId, source: { kind: "native" }, ready: false }),
-      ...reviewMapProjection({ run: recorded, branchId, story: storyMomentsForRun(recorded, branchId), context: "review", viewer: { role: "learner", session: "pack" } }),
+      ...reviewMapProjection({ run: recorded, branchId, story: storyMomentsForRun(recorded, branchId), context: "review", viewer: { role: "learner", session: "position" }, ...recordedReviewFixtureSources(recorded, branchId) }),
     };
     const review = vi.fn(async (_runId: string, requestedBranch?: string) => requestedBranch === branchId
       ? cited
@@ -631,12 +818,12 @@ describe("application shell", () => {
   });
 
   it("does not silently drop a cited move when a refreshed line omits it", async () => {
-    const recorded = reviewFixtureRun({ id: "cited-refresh", plies: 4 });
+    const recorded = reviewFixtureRun({ id: "cited-refresh", kind: "position", plies: 4 });
     const branchId = recorded.branches[0]!.id;
     const node = recorded.nodes[3]!;
     const empty = reviewPayload({ runId: recorded.id, branchId, source: { kind: "native" } });
     const confirmed: ReviewMap = { ...empty, ...reviewMapProjection({ run: recorded, branchId,
-      story: storyMomentsForRun(recorded, branchId), context: "review", viewer: { role: "learner", session: "pack" } }) };
+      story: storyMomentsForRun(recorded, branchId), context: "review", viewer: { role: "learner", session: "position" }, ...recordedReviewFixtureSources(recorded, branchId) }) };
     const review = vi.fn(async (_id: string, _branchId?: string): Promise<ReviewMap> => review.mock.calls.length === 2 ? empty : confirmed);
     history.replaceState(null, "", `/review/game/${recorded.id}?node=${encodeURIComponent(node.id)}`);
     const component = mount(App, { target: target(), props: { api: { ...api(), review,
@@ -3506,6 +3693,340 @@ describe("application shell", () => {
     expect(section().querySelector('[role="alert"]')).toBeNull();
     expect(document.activeElement).toBe(source);
     expect(dismissSchedule).toHaveBeenCalledTimes(1);
+    await unmount(component);
+  });
+
+  it("D4101 keeps real Learn returns usable when the actual optional recommendation endpoint returns 503", async () => {
+    history.replaceState(null, "", "/learn");
+    const f = await historicalInspectorFixture({ authenticatedRest: true });
+    const recommendations = vi.fn(() => f.api!.recommendations());
+    const dueProgress = vi.fn(async () => dueQueue([{ id: "optional-source-return", sessionKind: "pack", packId: pack.id,
+      kind: "blocked", variant: null, dueAt: "2026-11-04T00:00:00.000Z", sourceRunId: run.id }]));
+    const component = mount(App, { target: target(), props: { api: { ...api(), session: () => f.api!.session(), recommendations, dueProgress }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.querySelector('#due-title')).not.toBeNull());
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"]')?.textContent).toContain("Recommendations are temporarily unavailable."));
+    expect((await f.httpCalls()).some(call => call.path === "/progress/recommendations" && call.status === 503)).toBe(true);
+    expect(document.body.textContent).not.toContain("This page is temporarily unavailable.");
+    expect(document.body.textContent).not.toContain("EVIDENCE_UNAVAILABLE");
+    expect(document.querySelector('section[aria-labelledby="due-title"]')?.textContent).toContain(packSummary.title);
+    expect(document.querySelector('#repertoire-title')).not.toBeNull();
+    expect(dueProgress).toHaveBeenCalledTimes(1);
+    await unmount(component);
+  });
+
+  it("D4101 does not wait for the genuine optional recommendation read before rendering core Learn", async () => {
+    history.replaceState(null, "", "/learn");
+    const f = await historicalInspectorFixture({ recommendations: true, authenticatedRest: true, shapes: [] });
+    const entered = deferred<void>(), release = deferred<void>();
+    const recommendations = vi.fn(async () => { const page = await f.api!.recommendations(); expect(page.recommendations).toEqual([]); entered.resolve(undefined); await release.promise; return page; });
+    const component = mount(App, { target: target(), props: { api: { ...api(), session: () => f.api!.session(), recommendations }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    try {
+      await entered.promise;
+      await vi.waitFor(() => expect(document.querySelector('#learn-title')).not.toBeNull());
+      expect(document.querySelector('section[aria-labelledby="recommended-title"]')?.textContent).toContain("Loading recommendations…");
+    } finally { release.resolve(undefined); }
+    await vi.waitFor(() => expect(document.querySelector('#recommended-title')).toBeNull());
+    expect(document.body.textContent).not.toContain("Recommendations are temporarily unavailable.");
+    expect((await f.httpCalls()).some(call => call.path === "/progress/recommendations" && call.status === 200)).toBe(true);
+    await unmount(component);
+  });
+
+  it("D4101 retries only recommendations, singleflights, and keeps focus in the owned section", async () => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), entered = deferred<void>(), release = deferred<void>();
+    let reads = 0;
+    const recommendations = vi.fn(async (signal?: AbortSignal) => {
+      if (++reads === 1) throw new ApiError(503, "EVIDENCE_UNAVAILABLE", "private raw source diagnostic");
+      const page = await f.api!.recommendations(signal); entered.resolve(undefined); await release.promise; return page;
+    });
+    const dueProgress = vi.fn(async () => dueQueue([])), repertoires = vi.fn(() => f.api!.repertoires());
+    const component = mount(App, { target: target(), props: { api: { ...learnSourceApi(f), recommendations, dueProgress, repertoires }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).not.toBeNull());
+    expect(document.body.textContent).not.toContain("private raw source diagnostic");
+    const button = document.querySelector<HTMLButtonElement>('section[aria-labelledby="recommended-title"] button')!;
+    button.focus(); button.click(); button.click();
+    await entered.promise; await tick();
+    expect(recommendations).toHaveBeenCalledTimes(2);
+    expect(document.activeElement).toBe(document.querySelector('#recommended-title'));
+    const name = document.querySelector<HTMLInputElement>('.repertoire-form input')!; name.focus();
+    release.resolve(undefined);
+    await vi.waitFor(() => expect(document.body.textContent).toContain("You met Mechanical test occupancy"));
+    expect(document.activeElement).toBe(name);
+    expect(dueProgress).toHaveBeenCalledTimes(1); expect(repertoires).toHaveBeenCalledTimes(1);
+    expect((await f.stats()).providerCalls).toEqual([]);
+    await unmount(component);
+  });
+
+  it("D4101 confirms a genuine empty result after explicit retry without pretending the failed read was empty", async () => {
+    history.replaceState(null, "", "/learn");
+    const f = await historicalInspectorFixture({ recommendations: true, authenticatedRest: true, shapes: [] });
+    let reads = 0;
+    const recommendations = vi.fn(async (signal?: AbortSignal) => {
+      if (++reads === 1) throw new TypeError("private transport failure");
+      return f.api!.recommendations(signal);
+    });
+    const component = mount(App, { target: target(), props: { api: { ...api(), session: () => f.api!.session(), recommendations }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).not.toBeNull());
+    const button = document.querySelector<HTMLButtonElement>('section[aria-labelledby="recommended-title"] button')!;
+    button.focus(); button.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("No recommendations right now."));
+    expect(document.activeElement).toBe(document.querySelector('#recommended-title'));
+    expect(document.body.textContent).not.toContain("temporarily unavailable");
+    expect(document.body.textContent).not.toContain("private transport failure");
+    await unmount(component);
+  });
+
+  it.each(["success", "failure"] as const)("D4101 retires a late optional %s and a retained retry handler across Learn reentry", async settlement => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), entered = deferred<void>(), release = deferred<void>();
+    const signals: AbortSignal[] = []; let reads = 0;
+    const recommendations = vi.fn(async (signal?: AbortSignal) => {
+      signals.push(signal!);
+      if (++reads === 1) throw new TypeError("initial local transport failure");
+      if (reads === 3) throw new TypeError("current local transport failure");
+      const page = await f.api!.recommendations(signal);
+      if (reads === 2) { entered.resolve(undefined); await release.promise; if (settlement === "failure") throw new Error("private old failure"); }
+      return page;
+    });
+    const host = target(), router = new HistoryRouter(window);
+    const component = mount(App, { target: host, props: { api: { ...learnSourceApi(f), recommendations }, router, storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).not.toBeNull());
+    const staleButton = document.querySelector<HTMLButtonElement>('section[aria-labelledby="recommended-title"] button')!;
+    const oldRetry = retainedShellClick(staleButton);
+    staleButton.click(); await entered.promise;
+    router.navigate('/play'); await tick(); expect(signals[1]!.aborted).toBe(true);
+    const shape = registeredShapeFixture();
+    await f.replaceRegisteredShape({ ...shape, version: "1.0.1", trigger: { kind: "pieceOnSquare", square: "f4", piece: { color: "white", role: "knight" } } });
+    router.navigate('/learn');
+    await vi.waitFor(() => expect(recommendations).toHaveBeenCalledTimes(3));
+    await vi.waitFor(() => expect(document.querySelector('#learn-title')).not.toBeNull());
+    await recommendations.mock.results[2]!.value.catch(() => undefined); await tick();
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).not.toBeNull());
+    oldRetry(); staleButton.remove(); await tick();
+    expect(recommendations).toHaveBeenCalledTimes(3);
+    release.resolve(undefined); await recommendations.mock.results[1]!.value.catch(() => undefined); await tick();
+    expect(document.querySelector('section[aria-labelledby="recommended-title"]')?.textContent).toContain("temporarily unavailable");
+    expect(document.body.textContent).not.toContain("private old failure");
+    expect(document.body.textContent).not.toContain("You met Mechanical test occupancy");
+    document.querySelector<HTMLButtonElement>('section[aria-labelledby="recommended-title"] button')!.click();
+    await vi.waitFor(() => expect(recommendations).toHaveBeenCalledTimes(4));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("No recommendations right now."));
+    await unmount(component);
+  });
+
+  it("D4101 refuses an exact older Retry handler after a newer failure in the same visit", async () => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(); let reads = 0;
+    const recommendations = vi.fn(async (signal?: AbortSignal) => { if (++reads <= 2) throw new TypeError("local transport failure"); return f.api!.recommendations(signal); });
+    const component = mount(App, { target: target(), props: { api: { ...learnSourceApi(f), recommendations }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).not.toBeNull());
+    const first = document.querySelector<HTMLButtonElement>('section[aria-labelledby="recommended-title"] button')!, oldRetry = retainedShellClick(first);
+    first.click();
+    await vi.waitFor(() => expect(recommendations).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).not.toBeNull());
+    const current = document.querySelector<HTMLButtonElement>('section[aria-labelledby="recommended-title"] button')!;
+    expect(current).not.toBe(first); current.focus();
+    oldRetry(); first.remove(); await tick();
+    expect(recommendations).toHaveBeenCalledTimes(2); expect(document.activeElement).toBe(current);
+    current.click(); await vi.waitFor(() => expect(document.body.textContent).toContain("You met Mechanical test occupancy"));
+    expect(recommendations).toHaveBeenCalledTimes(3);
+    await unmount(component);
+  });
+
+  it.each(["signout", "unmount"] as const)("D4101 aborts and retires an actual positive read on %s", async departure => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), entered = deferred<void>(), release = deferred<void>(); let signal: AbortSignal | undefined;
+    const recommendations = vi.fn(async (current?: AbortSignal) => {
+      signal = current; const page = await f.api!.recommendations(current); expect(page.recommendations).toHaveLength(1);
+      entered.resolve(undefined); await release.promise; return page;
+    });
+    const component = mount(App, { target: target(), props: { api: { ...learnSourceApi(f), recommendations, logout: () => f.api!.logout() }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await entered.promise; await vi.waitFor(() => expect(document.querySelector('#learn-title')).not.toBeNull());
+    if (departure === "unmount") await unmount(component);
+    else {
+      [...document.querySelectorAll<HTMLButtonElement>('button')].find(button => button.textContent === "Sign out")!.click();
+      await vi.waitFor(() => expect(document.querySelector('#auth-title')).not.toBeNull());
+    }
+    expect(signal?.aborted).toBe(true);
+    release.resolve(undefined); await recommendations.mock.results[0]!.value; await tick();
+    expect(document.body.textContent).not.toContain("You met Mechanical test occupancy");
+    if (departure !== "unmount") await unmount(component);
+  });
+
+  it.each(["success", "failure"] as const)("D4101 cannot publish an old learner's late %s after actual logout and another account's registration", async settlement => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), entered = deferred<void>(), release = deferred<void>(); let reads = 0;
+    const firstLearner = await f.api!.session();
+    const recommendations = vi.fn(async (signal?: AbortSignal) => {
+      const page = await f.api!.recommendations(signal);
+      if (++reads === 1) { expect(page.recommendations).toHaveLength(1); entered.resolve(undefined); await release.promise; if (settlement === "failure") throw new Error("old learner private transport error"); }
+      return page;
+    });
+    const component = mount(App, { target: target(), props: { api: { ...learnSourceApi(f), recommendations,
+      logout: () => f.api!.logout(), register: (handle, password) => f.api!.register(handle, password) }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await entered.promise; await vi.waitFor(() => expect(document.querySelector('#learn-title')).not.toBeNull());
+    [...document.querySelectorAll<HTMLButtonElement>('button')].find(button => button.textContent === "Sign out")!.click();
+    await vi.waitFor(() => expect(document.querySelector('#auth-title')).not.toBeNull());
+    [...document.querySelectorAll<HTMLButtonElement>('button')].find(button => button.textContent === "Create an account")!.click(); await tick();
+    const inputs = document.querySelectorAll<HTMLInputElement>('.auth-gate input');
+    inputs[0]!.value = "other_learn_owner"; inputs[0]!.dispatchEvent(new Event('input', { bubbles: true }));
+    inputs[1]!.value = "different-account-password"; inputs[1]!.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector<HTMLFormElement>('.auth-gate form')!.dispatchEvent(new SubmitEvent('submit', { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(recommendations).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(document.querySelector('#learn-title')).not.toBeNull());
+    const current = await f.api!.session(); expect(current.id).not.toBe(firstLearner.id);
+    const page = await recommendations.mock.results[1]!.value; expect(page.recommendations).toEqual([]);
+    release.resolve(undefined); await recommendations.mock.results[0]!.value.catch(() => undefined); await tick();
+    expect(document.querySelector('#recommended-title')).toBeNull();
+    expect(document.body.textContent).not.toContain("You met Mechanical test occupancy");
+    expect(document.body.textContent).not.toContain("old learner private transport error");
+    await unmount(component);
+  });
+
+  it.each([false, true])("D4104 delivers actual first-move repertoire facts without empty slots or invented frequency (black=%s)", async black => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), { repertoire } = await rootRepertoireGap(f, black), before = JSON.stringify(await f.savedRun());
+    const component = mount(App, { target: target(), props: { api: learnSourceApi(f), router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"]')?.textContent).toContain(`Your repertoire ${repertoire.name} has no answer recorded at its starting position.`));
+    const text = document.querySelector('section[aria-labelledby="recommended-title"]')!.textContent!;
+    expect(text).not.toMatch(/answer to  |after ;|population reached|once every/u);
+    expect(text).toContain("These counts say what this population played, not what is good");
+    const gaps = document.querySelector('.gap-results')!.textContent!;
+    expect(gaps).toContain("No opponent reply was queried for this starting-position gap.");
+    expect(gaps).not.toContain("games contain replies above your");
+    expect(gaps).not.toContain("about 1 in 1 games");
+    const scan = (await f.api!.repertoireGaps(repertoire.id)).scan!;
+    expect(scan).toMatchObject({ uncoveredMass: 1, queriesUsed: 0, gaps: [{ gamesUntilSeen: 1, mass: 1 }] });
+    expect((await f.stats()).providerCalls).toEqual([]); expect(JSON.stringify(await f.savedRun())).toBe(before);
+    await unmount(component);
+  });
+
+  it("D4101 never restores a deleted real repertoire from a same-visit held positive page", async () => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), { repertoire } = await rootRepertoireGap(f), entered = deferred<void>(), release = deferred<void>(); let reads = 0;
+    const recommendations = vi.fn(async (signal?: AbortSignal) => {
+      const page = await f.api!.recommendations(signal);
+      if (++reads === 1) { expect(page.recommendations.some(item => item.kind === "repertoire_gap")).toBe(true); entered.resolve(undefined); await release.promise; }
+      return page;
+    });
+    const component = mount(App, { target: target(), props: { api: { ...learnSourceApi(f), recommendations }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await entered.promise; await vi.waitFor(() => expect(document.querySelector('.repertoire-card')).not.toBeNull());
+    [...document.querySelectorAll<HTMLButtonElement>('.repertoire-card button')].find(button => button.textContent === "Delete repertoire")!.click(); await tick();
+    [...document.querySelectorAll<HTMLButtonElement>('.repertoire-card button')].find(button => button.textContent === "Confirm deletion")!.click();
+    await vi.waitFor(() => expect(recommendations).toHaveBeenCalledTimes(2));
+    await recommendations.mock.results[1]!.value; await tick();
+    expect(await f.api!.repertoires()).toEqual([]);
+    release.resolve(undefined); await recommendations.mock.results[0]!.value; await tick();
+    expect(document.body.textContent).not.toContain(repertoire.name);
+    expect(document.querySelector('.repertoire-card')).toBeNull();
+    expect(document.body.textContent).toContain("You met Mechanical test occupancy");
+    await unmount(component);
+  });
+
+  it.each(["scan", "answer"] as const)("D4101 suspends optional publication during an actual repertoire %s and rereads after settlement", async mutation => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), { repertoire, gap } = await rootRepertoireGap(f);
+    if (mutation === "answer") {
+      const entered = await f.api!.enterRepertoireGap(repertoire.id, gap.key);
+      expect(entered.writerId).not.toBeNull();
+      await f.seedRepertoireFirstMove(entered.runId, entered.writerId!, "e2e4");
+      expect((await f.api!.repertoireGaps(repertoire.id)).scan!.gaps[0]!.firstMoves).toEqual([{ moveUci: "e2e4", moveSan: "e4" }]);
+    }
+    const entered = deferred<void>(), release = deferred<void>(), mutated = deferred<void>(), settle = deferred<void>(); let reads = 0;
+    const recommendations = vi.fn(async (signal?: AbortSignal) => {
+      const page = await f.api!.recommendations(signal);
+      if (++reads === 1) { expect(page.recommendations.some(item => item.kind === "shape_encounter")).toBe(true); entered.resolve(undefined); await release.promise; }
+      return page;
+    });
+    const methods = learnSourceApi(f);
+    const scanRepertoire = vi.fn(async (id: string) => { await f.api!.scanRepertoire(id); await f.waitForRepertoireScan(id); mutated.resolve(undefined); await settle.promise; });
+    const chooseRepertoireAnswer = vi.fn(async (id: string, input: Parameters<DrillApi['chooseRepertoireAnswer']>[1]) => { const value = await f.api!.chooseRepertoireAnswer(id, input); mutated.resolve(undefined); await settle.promise; return value; });
+    const component = mount(App, { target: target(), props: { api: { ...methods, recommendations, scanRepertoire, chooseRepertoireAnswer }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await entered.promise; await vi.waitFor(() => expect(document.querySelector('.repertoire-card')).not.toBeNull());
+    const action = [...document.querySelectorAll<HTMLButtonElement>('.repertoire-card button')].find(button => mutation === "scan" ? button.textContent === "Rescan" : button.textContent === "Use e4 as my repertoire answer")!;
+    expect(action).toBeDefined(); action.click(); await mutated.promise;
+    await tick(); expect(document.querySelector('section[aria-labelledby="recommended-title"]')?.textContent).toContain("Recommendations will refresh when your repertoire changes finish.");
+    expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).toBeNull();
+    release.resolve(undefined); await recommendations.mock.results[0]!.value; await tick();
+    expect(recommendations).toHaveBeenCalledTimes(1); expect(document.body.textContent).not.toContain("You met Mechanical test occupancy");
+    // Make the genuine next source distinguishable, without inventing a DTO or fixing D4099 here.
+    const shape = registeredShapeFixture();
+    await f.replaceRegisteredShape({ ...shape, version: "1.0.1", trigger: { kind: "pieceOnSquare", square: "f4", piece: { color: "white", role: "knight" } } });
+    settle.resolve(undefined);
+    await vi.waitFor(() => expect(recommendations).toHaveBeenCalledTimes(2));
+    await recommendations.mock.results[1]!.value; await tick();
+    expect(document.body.textContent).not.toContain("You met Mechanical test occupancy");
+    if (mutation === "answer") {
+      expect((await f.api!.repertoireGaps(repertoire.id)).scan!.gaps[0]!.state).toBe("answered");
+      await vi.waitFor(() => expect(document.querySelector('.gap-results')?.textContent).toContain("Current repertoire answer: e4"));
+      expect(document.querySelector('.gap-results')?.textContent).toContain("This scan found no first answer");
+      expect(document.querySelector('.gap-results')?.textContent).not.toContain("games contain replies above your");
+    }
+    await unmount(component);
+  });
+
+  it("D4101 retires retry's deferred focus before a same-visit repertoire mutation", async () => {
+    history.replaceState(null, "", "/learn");
+    const f = await learnSourceFixture(), { repertoire } = await rootRepertoireGap(f), positive = await f.api!.recommendations();
+    const read = deferred<import('./api.js').ProgressRecommendationPage>(), mutated = deferred<void>(), settle = deferred<void>(); let reads = 0;
+    const recommendations = vi.fn(async (signal?: AbortSignal) => { if (++reads === 1) throw new TypeError("local transport failure"); if (reads === 2) return read.promise; return f.api!.recommendations(signal); });
+    const scanRepertoire = vi.fn(async (id: string) => { await f.api!.scanRepertoire(id); await f.waitForRepertoireScan(id); mutated.resolve(undefined); await settle.promise; });
+    const component = mount(App, { target: target(), props: { api: { ...learnSourceApi(f), recommendations, scanRepertoire }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.querySelector('section[aria-labelledby="recommended-title"] button')).not.toBeNull());
+    const retry = document.querySelector<HTMLButtonElement>('section[aria-labelledby="recommended-title"] button')!;
+    const scan = [...document.querySelectorAll<HTMLButtonElement>('.repertoire-card button')].find(button => button.textContent === 'Rescan')!;
+    retry.focus(); retry.click(); scan.click();
+    await tick(); expect(document.activeElement).not.toBe(document.querySelector('#recommended-title'));
+    await mutated.promise; read.resolve(positive); await recommendations.mock.results[1]!.value; await tick();
+    expect(recommendations).toHaveBeenCalledTimes(2); expect(document.body.textContent).not.toContain("You met Mechanical test occupancy");
+    settle.resolve(undefined);
+    await vi.waitFor(() => expect(recommendations).toHaveBeenCalledTimes(3));
+    expect((await f.api!.repertoireGaps(repertoire.id)).scan!.gaps).toHaveLength(1);
+    await unmount(component);
+  });
+
+  it("renders actual owned source recommendations and honest missing rehearsals in Learn", async () => {
+    history.replaceState(null, "", "/learn");
+    const root = createRun({ id: "actual-learn-recommendations", session: { kind: "position", start: {
+      fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-11-04T00:00:00.000Z" });
+    const own = commitMove(root, "g1f3", { at: "2026-11-04T00:00:00.000Z" }).run;
+    const shapes = Array.from({ length: 13 }, (_, i) => ({ ...registeredShapeFixture(`learn-pattern-${i}`), name: `Mechanical pattern ${i}` }));
+    const f = await historicalInspectorFixture({ run: own, shapes, recommendations: true, authenticatedRest: true, preserveRun: true });
+    const before = JSON.stringify(await f.savedRun()), recommendations = vi.fn(() => f.api!.recommendations());
+    const component = mount(App, { target: target(), props: { api: { ...api(), session: () => f.api!.session(), recommendations }, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Showing 10 of 13 grounded recommendations."));
+    const page: import("./api.js").ProgressRecommendationPage = await recommendations.mock.results[0]!.value;
+    expect(page.recommendations).toHaveLength(10); expect(page.recommendations.every(item => item.kind === "shape_encounter" && item.runCount === 1 && item.runIds.join() === own.id)).toBe(true);
+    expect(document.body.textContent).toContain("Mechanical pattern 0");
+    expect(document.body.textContent).toContain("No matching rehearsal is currently served.");
+    expect(document.body.textContent).not.toContain("learn-pattern-");
+    expect((await f.httpCalls()).some(call => call.path === "/progress/recommendations" && call.status === 200)).toBe(true);
+    expect((await f.stats()).providerCalls).toEqual([]); expect(JSON.stringify(await f.savedRun())).toBe(before);
+    await unmount(component);
+  });
+
+  it("does not revive an older real recommendation page after leaving and re-entering Learn", async () => {
+    history.replaceState(null, "", "/learn");
+    const root = createRun({ id: "held-learn-recommendations", session: { kind: "position", start: {
+      fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-11-04T00:00:00.000Z" });
+    const own = commitMove(root, "g1f3", { at: "2026-11-04T00:00:00.000Z" }).run, shape = registeredShapeFixture();
+    const f = await historicalInspectorFixture({ run: own, shapes: [shape], recommendations: true, authenticatedRest: true, preserveRun: true });
+    const entered = deferred<void>(), release = deferred<void>(); let reads = 0;
+    const recommendations = vi.fn(async () => { const page = await f.api!.recommendations(); if (++reads === 1) { expect(page.recommendations).toHaveLength(1); entered.resolve(undefined); await release.promise; } return page; });
+    const router = new HistoryRouter(window);
+    const component = mount(App, { target: target(), props: { api: { ...api(), session: () => f.api!.session(), recommendations }, router, storage: new MemoryStorage() } });
+    await entered.promise;
+    router.navigate("/play"); await tick();
+    await f.replaceRegisteredShape({ ...shape, version: "1.0.1", trigger: { kind: "pieceOnSquare", square: "f4", piece: { color: "white", role: "knight" } } });
+    expect((await f.api!.recommendations()).recommendations).toEqual([]);
+    router.navigate("/learn");
+    await vi.waitFor(() => expect(reads, document.body.textContent ?? "").toBe(2));
+    const fresh = await recommendations.mock.results[1]!.value; expect(fresh.recommendations).toEqual([]);
+    release.resolve(undefined); await recommendations.mock.results[0]!.value; await tick();
+    expect(document.body.textContent).not.toContain("You met Mechanical test occupancy");
+    expect(document.querySelector("#recommended-title")).toBeNull();
     await unmount(component);
   });
 

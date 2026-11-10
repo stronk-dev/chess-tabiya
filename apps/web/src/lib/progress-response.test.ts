@@ -5,6 +5,19 @@ import { parseDifficultRoots, parseDueQueue, parseProgressAttempts, parseProgres
 const at = "2026-09-14T12:00:00.000Z";
 
 describe("progress response authority", () => {
+  it("D4104 admits only the exact first-move gap sentinel without blank slots or invented population frequency", () => {
+    const item = { kind: "repertoire_gap", repertoireId: "rep", repertoireName: "My choices", gapKey: "root", replySan: "", line: [], gamesUntilSeen: 1 };
+    const page = (row: unknown) => ({ recommendations: [row], selection: { shown: 1, total: 1 } });
+    const parsed = parseProgressRecommendations(page(item));
+    expect(progressRecommendationSentence(parsed.recommendations[0]!)).toContain("My choices has no answer recorded at its starting position.");
+    expect(progressRecommendationSentence(parsed.recommendations[0]!)).not.toMatch(/once every|after ;|answer to  /u);
+    for (const bad of [{ ...item, line: ["e4"] }, { ...item, line: [""] }, { ...item, gamesUntilSeen: 2 }, { ...item, gamesUntilSeen: 0 },
+      { ...item, replySan: null }, { ...item, replySan: " " }, { ...item, repertoireName: "" }, { ...item, sentence: "Injected" }]) {
+      expect(() => parseProgressRecommendations(page(bad))).toThrow();
+    }
+    const ordinary = parseProgressRecommendations(page({ ...item, replySan: "e4", line: ["e4"], gamesUntilSeen: 5 }));
+    expect(progressRecommendationSentence(ordinary.recommendations[0]!)).toContain("no answer to e4 after e4; this population reached it about once every 5 games");
+  });
   it("accepts and freezes the five closed projections", () => {
     expect(parseProgressAttempts({ attempts: [{ runId: "run", branchId: "main", packId: "pack", branchLabel: "Main", attemptNo: 1, countable: true, graded: true, verdict: "stable", result: "win", userPlyCount: 2, origin: "fresh", endedAt: at }] })[0]).toMatchObject({ runId: "run", verdict: "stable" });
     expect(parseProgressAttempts({ attempts: [{ runId: "new-run", branchId: "main", packId: null, branchLabel: "Main", attemptNo: 0, countable: false, graded: false, verdict: "open", result: null, userPlyCount: 0, origin: "fresh", endedAt: at }] })[0]).toMatchObject({ attemptNo: 0, countable: false });

@@ -1,0 +1,257 @@
+{
+  "schema": "tabiya.authored-convention-sites.v1",
+  "sites": [
+    {
+      "file": "content/drafts/carlsbad-minority-attack.json",
+      "documentId": "carlsbad-minority-attack",
+      "kind": "pack",
+      "pointer": "/objective/successConditions/0/transition/of/1/expression/of/0/feature",
+      "family": "backward_pawn"
+    },
+    {
+      "file": "content/drafts/pawn-opposition-convert.json",
+      "documentId": "pawn-opposition-convert",
+      "kind": "pack",
+      "pointer": "/checkpoints/0/trigger/fenPredicate/feature/of/0/feature",
+      "family": "king_opposition"
+    },
+    {
+      "file": "content/drafts/pawn-opposition-convert.json",
+      "documentId": "pawn-opposition-convert",
+      "kind": "pack",
+      "pointer": "/checkpoints/0/trigger/fenPredicate/feature/of/1/feature",
+      "family": "king_opposition"
+    },
+    {
+      "file": "content/drafts/pawn-opposition-convert.json",
+      "documentId": "pawn-opposition-convert",
+      "kind": "pack",
+      "pointer": "/objective/successConditions/0/feature/of/0/feature",
+      "family": "king_opposition"
+    },
+    {
+      "file": "content/drafts/pawn-opposition-convert.json",
+      "documentId": "pawn-opposition-convert",
+      "kind": "pack",
+      "pointer": "/objective/successConditions/0/feature/of/1/feature",
+      "family": "king_opposition"
+    },
+    {
+      "file": "content/drafts/trajectory-qgd-exchange-minority.json",
+      "documentId": "trajectory-qgd-exchange-minority",
+      "kind": "pack",
+      "pointer": "/legs/1/objective/successConditions/0/feature/of/0/feature",
+      "family": "backward_pawn"
+    },
+    {
+      "file": "content/shapes/carlsbad.json",
+      "documentId": "carlsbad",
+      "kind": "shape",
+      "pointer": "/plans/0/success/signature/of/0/feature",
+      "family": "backward_pawn"
+    },
+    {
+      "file": "content/shapes/carlsbad.json",
+      "documentId": "carlsbad",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/3/of/feature",
+      "family": "backward_pawn"
+    },
+    {
+      "file": "content/shapes/carlsbad.json",
+      "documentId": "carlsbad",
+      "kind": "shape",
+      "pointer": "/plans/5/success/signature/of/0/of/feature",
+      "family": "backward_pawn"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/0/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/1/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/10/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/11/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/12/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/13/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/14/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/15/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/16/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/17/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/2/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/3/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/4/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/5/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/6/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/7/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/8/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/knight-vs-bishop.json",
+      "documentId": "knight-vs-bishop",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/9/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/maroczy-bind.json",
+      "documentId": "maroczy-bind",
+      "kind": "shape",
+      "pointer": "/plans/0/success/signature/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/open-centre.json",
+      "documentId": "open-centre",
+      "kind": "shape",
+      "pointer": "/plans/0/success/signature/of/0/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/open-centre.json",
+      "documentId": "open-centre",
+      "kind": "shape",
+      "pointer": "/plans/0/success/signature/of/1/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/open-centre.json",
+      "documentId": "open-centre",
+      "kind": "shape",
+      "pointer": "/plans/2/success/signature/of/0/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/open-centre.json",
+      "documentId": "open-centre",
+      "kind": "shape",
+      "pointer": "/plans/2/success/signature/of/1/of/1/feature",
+      "family": "outpost"
+    },
+    {
+      "file": "content/shapes/pawn-opposition-key-squares.json",
+      "documentId": "pawn-opposition-key-squares",
+      "kind": "shape",
+      "pointer": "/plans/0/success/signature/of/0/feature",
+      "family": "king_opposition"
+    },
+    {
+      "file": "content/shapes/pawn-opposition-key-squares.json",
+      "documentId": "pawn-opposition-key-squares",
+      "kind": "shape",
+      "pointer": "/plans/0/success/signature/of/1/feature",
+      "family": "king_opposition"
+    },
+    {
+      "file": "content/shapes/pawn-opposition-key-squares.json",
+      "documentId": "pawn-opposition-key-squares",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/0/feature",
+      "family": "king_opposition"
+    },
+    {
+      "file": "content/shapes/pawn-opposition-key-squares.json",
+      "documentId": "pawn-opposition-key-squares",
+      "kind": "shape",
+      "pointer": "/plans/3/success/signature/of/1/feature",
+      "family": "king_opposition"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 
-import { commitMove, createRun, SEMANTIC_EVENT_PROJECTION_REFS, type DrillRun } from "@chess-tabiya/runtime";
+import { commitMove, createRun, RECORDED_PATH_SUCCESSOR_REFS, SEMANTIC_EVENT_PROJECTION_REFS, type DrillRun } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { ServerError } from "./errors.js";
@@ -31,7 +31,12 @@ function fixture(fen = "1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", moves: readonly 
 
 describe("D3735 actual owned-source sequence population", () => {
   it("covers the complete declared family image without substituting consumer stand-ins", () => {
-    const refs = SEMANTIC_EVENT_PROJECTION_REFS.filter(ref => ref.version === 2).map(ref => ref.id).sort();
+    const refs = RECORDED_PATH_SUCCESSOR_REFS.map(ref => ref.id).sort();
+    expect(refs).toHaveLength(11);
+    expect(RECORDED_PATH_SUCCESSOR_REFS.every(ref => SEMANTIC_EVENT_PROJECTION_REFS.some(event =>
+      event.id === ref.id && event.version === ref.version))).toBe(true);
+    expect(SEMANTIC_EVENT_PROJECTION_REFS).toContainEqual({ id: "derived.material.event.role_asymmetry", version: 2 });
+    expect(refs).not.toContain("derived.material.event.role_asymmetry");
     expect(RECORDED_SEQUENCE_POSITIVES.map(row => row.projection).sort()).toEqual(refs);
     expect(RECORDED_SEQUENCE_HARD_NEGATIVES.map(row => row.projection).sort()).toEqual(refs);
   });

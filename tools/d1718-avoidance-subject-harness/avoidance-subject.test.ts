@@ -1,17 +1,24 @@
 // DISPOSABLE research harness — D1718. Not production code.
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   AVOIDANCE_EVENT_PROJECTION_IDS,
   loosePieceSemanticEvents,
   pawnIslandSemanticEvents,
   selectLocalSemanticEvidence,
+  selectSemanticEvidence,
+  PRIMARY_EVIDENCE_MANIFEST,
+  assertDeclaredEvidence,
+  compileSemanticEvidenceEvent,
+  type CounterfactualAbsenceOperands,
   structuralSemanticEvents,
   type SemanticEvidenceEvent,
 } from "@chess-tabiya/runtime";
 
 import { authoredRows, importedRows } from "../research-chess/populations.js";
+import { CANDIDATE_EVENTS_SCOPE, compileCandidatePopulation, candidateAlternatives, candidatePlayedRow } from "../../packages/runtime/src/candidate-population.js";
+import * as valueRoutes from "../../packages/runtime/src/internal/evidence-value-routes.js";
 
 const BASELINE = new URL("./baseline.json", import.meta.url).pathname;
 const AVOIDANCE_IDS = Object.freeze([...AVOIDANCE_EVENT_PROJECTION_IDS, "derived.semantic_avoidance.loose_piece", "derived.semantic_avoidance.pawn_islands"]);
@@ -132,17 +139,70 @@ describe("D1718 avoidance subject identity", () => {
     expect(new Set(Object.values(SUBJECT_GRAMMAR))).toEqual(new Set(["file_state", "king_pair_relation", "king_state", "root_slider_ray", "root_pawn_state", "color_role_measure", "fixed_square_measure", "root_piece_state", "color_measure"]));
   });
 
-  it("distinguishes family survival on another subject from survival of the avoided subject", () => {
+  it("records the historical root's current incomplete-population refusal separately from its cross-file state", () => {
     const row = authoredRows().find((candidate) => candidate.id === "trajectory-qgd-exchange-minority/p37-ab5");
     expect(row).toBeDefined();
     const result = selectLocalSemanticEvidence({ id: "research.r2_candidate", version: 1 }, { beforeFen: row!.parentFen, moveUci: row!.uci, afterFen: row!.fen });
+    const packet = compileCandidatePopulation({ beforeFen: row!.parentFen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+    if (packet.kind !== "ready") throw Error("Original population did not compile");
+    const unavailable = [candidatePlayedRow(packet.receipt, row!.uci), ...candidateAlternatives(packet.receipt, row!.uci)]
+      .filter(child => child.abstentions.length !== 0).map(child => ({ move: child.moveUci, abstentions: child.abstentions }));
     const fact = result.selected.find((candidate) => candidate.kind === "counterfactual_absence" && candidate.event.projection.id === "derived.semantic_avoidance.isolated_pawn");
-    expect(fact?.kind).toBe("counterfactual_absence");
-    if (fact?.kind !== "counterfactual_absence") return;
+    expect(result.population).toEqual({ legalAlternatives: 41, evaluatedAlternatives: 40 });
+    expect(unavailable).toEqual([{ move: "d3h7", abstentions: [{ projection: "derived.tactic.defender_exposure@2", reason: "invalid_turn_clone" }] }]);
+    expect(result.emptyReason?.id).toBe("counterfactual_population_incomplete");
+    expect(result.selected).toEqual([]); expect(fact).toBeUndefined();
     const played = structuralSemanticEvents(row!.parentFen, row!.uci, row!.fen).filter((event) => event.projection.id === "rules.structural.event.isolated_pawn");
     const playedChildKeys = playedChildSubjectKeys(played);
     expect(playedChildKeys.size).toBeGreaterThan(0);
-    expect(fact.event.operands.alternativeEvents.some((event) => playedChildKeys.has(conditionKey(event, "outcome")!))).toBe(false);
+    expect([...playedChildKeys]).toContain(JSON.stringify({ family: "isolated_pawn", color: "white", file: "b" }));
+    expect([...playedChildKeys]).not.toContain(JSON.stringify({ family: "isolated_pawn", color: "white", file: "a" }));
+  });
+
+  it("rechecks the cross-file collision with the checking bishop removed and a complete current population", () => {
+    // Disposable mechanical variant, not a chess recommendation: remove d3's bishop, whose Bh7+
+    // makes a different collector unavailable in the historical root. Retain a4xb5 and both files.
+    const beforeFen = "r1b1r1k1/1p4pp/2p1pq2/1p1p4/P2P4/2Q1P3/5PPP/1R3RK1 w - - 0 19";
+    const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+    if (compiled.kind !== "ready") throw Error("Variant did not compile");
+    // Observe real factory publication without replacing its arguments/return or the policy cap.
+    const observed = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    let result: ReturnType<typeof selectSemanticEvidence>;
+    let operands: CounterfactualAbsenceOperands;
+    let candidateId: string;
+    try {
+      result = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 1 }, { receipt: compiled.receipt, moveUci: "a4b5" });
+      const issued = observed.mock.calls.flatMap(([route], i) => route === "derived.semantic_avoidance.isolated_pawn@1" && observed.mock.results[i]!.type === "return" ? [observed.mock.results[i]!.value] : []);
+      expect(issued).toHaveLength(1);
+      const evidence = issued[0]; assertDeclaredEvidence(evidence);
+      expect(evidence.projection).toEqual({ id: "derived.semantic_avoidance.isolated_pawn", version: 1 });
+      operands = evidence.payload as CounterfactualAbsenceOperands;
+      candidateId = compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, {
+        evidence, derivationInputs: operands.alternativeEvents.map(event => event.evidence),
+        anchor: { beforeFen: compiled.receipt.packet.beforeFen, moveUci: "a4b5", afterFen: candidatePlayedRow(compiled.receipt, "a4b5").afterFen, side: "white" }, sign: "avoided",
+      }).id;
+    } finally { observed.mockRestore(); }
+    const rows = candidateAlternatives(compiled.receipt, "a4b5");
+    const unavailable = rows.filter(row => row.abstentions.length !== 0).map(row => ({ move: row.moveUci, abstentions: row.abstentions }));
+    const fact = result.selected.find(item => item.kind === "counterfactual_absence" && item.event.projection.id === "derived.semantic_avoidance.isolated_pawn");
+    expect(result.population).toEqual({ legalAlternatives: 34, evaluatedAlternatives: 34 }); expect(unavailable).toEqual([]);
+    expect(operands).toMatchObject({ relation: "avoided", family: { projection: { id: "rules.structural.event.isolated_pawn", version: 1 }, sign: "preserved" }, legalAlternatives: 34, alternativesWithFamily: 34 });
+    expect(operands.alternativeEvents).toHaveLength(34);
+    expect(new Set(operands.alternativeEvents.map(event => event.anchor.moveUci)).size).toBe(34);
+    const outcomeKeys = new Set(operands.alternativeEvents.map(event => conditionKey(event, "outcome")));
+    expect([...outcomeKeys]).toEqual([JSON.stringify({ family: "isolated_pawn", color: "white", file: "a" })]);
+    const played = candidatePlayedRow(compiled.receipt, "a4b5").events.filter(event => event.projection.id === "rules.structural.event.isolated_pawn");
+    const childKeys = playedChildSubjectKeys(played);
+    expect([...childKeys]).toContain(JSON.stringify({ family: "isolated_pawn", color: "white", file: "b" }));
+    expect(operands.alternativeEvents.some(event => childKeys.has(conditionKey(event, "outcome")!))).toBe(false);
+    // Current top-two selection is a separate fact: this emitted broad candidate is not selected.
+    expect(result.selected.map(item => item.kind)).toEqual(["played_event", "played_event"]);
+    expect(PRIMARY_EVIDENCE_MANIFEST.eligibility).toContainEqual(expect.objectContaining({
+      event: { id: "derived.semantic_avoidance.isolated_pawn", version: 1 }, consumer: result.consumer,
+      disposition: "eligible", allowedSigns: expect.arrayContaining(["avoided"]),
+    }));
+    expect(result.rejected).toContainEqual({ candidate: { kind: "counterfactual_absence", id: candidateId }, reason: { id: "nothing_distinctive", version: 1 } });
+    expect(fact).toBeUndefined();
   });
 
   it("pins a same-edge family/sign group containing twelve distinct subjects", () => {
@@ -173,8 +233,7 @@ describe("D1718 avoidance subject identity", () => {
       + Object.values(value.populations.imported!.families).reduce((sum, counter) => sum + counter.playedChildFamilySurvives - counter.playedChildAlternativeSubjectSurvives, 0)).toBe(36);
   });
 
-  it("recomputes the full census when explicitly requested", () => {
-    if (process.env.D1718_CENSUS !== "1") return;
+  it.runIf(process.env.D1718_CENSUS === "1")("recomputes the full census when explicitly requested", () => {
     const report = census();
     console.log(JSON.stringify({
       schema: report.schema,

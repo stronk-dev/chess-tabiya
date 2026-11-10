@@ -11,6 +11,7 @@ import { appendRecordedReadings, evidencePacket, renderRecordedReadingEvidence, 
 import { IdentityService } from "./identity.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -187,6 +188,7 @@ describe("authenticated recorded narration execution", () => {
   it.each(["voice", "speech"] as const)("composed %s HTTP door refuses the broken contract before the provider", async action => {
     const voice = { render: vi.fn<VoiceProvider["render"]>(async (_view, _persona, text) => text) } satisfies VoiceProvider;
     const tts = { synthesize: vi.fn(async (text: string) => ({ bytes: new TextEncoder().encode(text), contentType: "audio/test" })) } satisfies TtsProvider;
+    installEmptyApplicationCatalogues();
     const owned = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, voiceProvider: voice, ttsProvider: tts }));
     try {
       await owned.ready;
@@ -208,6 +210,6 @@ describe("authenticated recorded narration execution", () => {
       expect(observed.prepare).not.toHaveBeenCalled();
       expect(voice.render).not.toHaveBeenCalled();
       expect(tts.synthesize).not.toHaveBeenCalled();
-    } finally { vi.restoreAllMocks(); await owned.close(); }
+    } finally { try { await owned.close(); } finally { vi.restoreAllMocks(); } }
   });
 });

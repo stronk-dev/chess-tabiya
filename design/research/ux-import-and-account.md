@@ -974,3 +974,15 @@ per the block-registration convention at `design/BACKLOG.md:118-133`.
   refuses to narrate what they mean; the rejected v1 identity (*"mine games → detect weaknesses →
   generate episodes"*) is not reachable from any recommendation in this dossier, and §2.4(d) names
   the one place a future change could drift toward it so that it is ruled rather than slid into.
+
+## 2026-11-05 own-game clock retention closeout
+
+[V] IMP-a6/D2021 now request and extract numeric original clock readings before stripping, retain
+exact sparse original move identities in SQL32, and include the document in account export/restore/
+delete. Registered actual source/actor/API/strict selected Review delivery also exists. Normal
+14464software/526+7performance/types/build and separate bounded reviews pass; actual content
+retains its prior62failure headings. This supersedes the own-game clocks=false/data-loss finding
+in §2.4e, while preserving that dated diagnosis. Evidence: `apps/server/src/recorded-clock-import.test.ts`,
+`apps/server/src/recorded-clock-storage.test.ts`, `apps/server/src/recorded-clock-delivery.test.ts`,
+`apps/web/src/lib/app-shell.test.ts` and `planning/time-controls/implementation-2026-11-05.md`.
+D1048/D2294 broadcast, measured-live/enforcement and whole native clock discharge stay separate.

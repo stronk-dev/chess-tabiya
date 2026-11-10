@@ -1,9 +1,39 @@
 import { describe, expect, it } from "vitest";
 
-import { EVIDENCE_CONTRACT_DECLARATIONS } from "./evidence-catalog.js";
+import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { compileEvidenceManifest, evidenceForConsumer, renderEvidenceItems } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { judgementWordsOutsideGrounding, renderRecordedReading, ungroundedResidue, voiceCheck } from "./voice.js";
+import { recordedGradeFixture } from "./testing/recorded-grade-fixture.js";
+import { presentEvidenceItems, presentedSentence, presentedGradeMeasurementReport, renderPresentedEvidenceView } from "./presentation-contract.js";
+
+describe("current source-backed grade voice boundary (D3765/§4b)", () => {
+  for (const black of [false, true]) for (const pair of [
+    { before: "cp 0", after: "cp 28", arm: "eval_delta" },
+    { before: "mate 2", after: "cp -1100", arm: "mate_lost" },
+    { before: "cp -1200", after: "mate 2", arm: "mate_allowed" },
+  ]) it(`${pair.arm}/mirrored=${black} licenses only its exact registered view, never raw operands/manual prose`, () => {
+    const fixture = recordedGradeFixture({ black, timing: "post_commit", before: pair.before, after: pair.after });
+    const source = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: fixture.source });
+    if (source.kind !== "available" || source.value.length !== 1) throw Error("Expected original current grade");
+    expect(source.value[0]!.payload).toMatchObject({ klass: "inaccuracy", arm: pair.arm });
+    const admitted = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 2 }, source.value);
+    const selected = presentEvidenceItems(admitted)[0]!, summary = presentedSentence(selected);
+    const view = renderPresentedEvidenceView(admitted);
+    expect(view.items.flatMap(item => item.sentences)).toEqual([summary]);
+    expect(voiceCheck(view, summary).valid).toBe(true);
+    expect(voiceCheck(view, "Blunder.").violations).toContain("judgement:blunder");
+    const full = presentedGradeMeasurementReport(selected); if (full?.kind !== "available") throw Error("Expected whole same-item report");
+    expect(voiceCheck(view, full.sentence).violations).toContain("judgement:inaccuracy");
+    expect(voiceCheck(view, `${summary} ${full.sentence}`).violations).toContain("judgement:inaccuracy");
+    expect(view.items.flatMap(item => item.sentences)).toEqual([summary]); // Opening details cannot widen the view.
+    const review = renderPresentedEvidenceView(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 }, source.value));
+    expect(review.items.flatMap(item => item.sentences)).toEqual([full.sentence]);
+    expect(voiceCheck(review, full.sentence).valid).toBe(true);
+    const empty = renderPresentedEvidenceView(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 2 }, []));
+    expect(voiceCheck(empty, summary).violations).toContain("judgement:inaccuracy");
+  });
+});
 
 describe("licence-by-span for judgement words ([[D1409]])", () => {
   const grade = "Mistake — the recorded evaluation moved +1.00 (59.1%) → −1.00 (40.9%) across this move, a drop of 18.2 win-points against a threshold of 10 (grade-convention@1/review).";

@@ -6,7 +6,6 @@
 
   import type { RunOutcome } from "@chess-tabiya/runtime/client";
   import type { AuthoredFeedbackItem, RepertoireGap, ShapeEntryView } from "./api.js";
-  import type { EvidenceSentence } from "./evidence-sentences.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime/client";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
@@ -31,7 +30,7 @@
   interface Props {
     outcome: RunOutcome;
     authoredItems: readonly AuthoredFeedbackItem[];
-    evidence: readonly EvidenceSentence[];
+    evidence: readonly { readonly reference: string }[];
     canRewind: boolean;
     onRewind: () => boolean | void | Promise<boolean | void>;
     rewinding?: boolean;

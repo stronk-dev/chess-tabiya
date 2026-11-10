@@ -216,6 +216,7 @@ describe("portable account-data foundation", () => {
     storage.createImportedRun!(run, lease, "Shared imported run", {
       runId: run.id, sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"5".repeat(64)}`,
       headers: { Event: "Private import metadata" }, result: "*", pgn: "1. e4 *", licenceNote: "Learner supplied", importedAt: at,
+      clockDocument: null,
     });
     storage.grantRole(run.id, "scrub-reader", "participant", lease, at);
     storage.replaceRunMarks({ runId: run.id, learnerId: "scrub-owner", scope: "position", scopeKey: run.nodes[0]!.transposeKey, shapes: [{ brush: "green", orig: "e2", dest: "e4" }], relayed: false, at });

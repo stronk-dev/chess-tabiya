@@ -120,7 +120,27 @@ export class RepertoireService{
   chooseAnswer(id:string,principal:Principal,input:{positionKey:string;moveUci:string;ifMatch:string},at=new Date().toISOString()){const record=this.#owned(id,principal),scan=this.#required("repertoireScan")(id),all=scan===undefined?[]:[...(scan.gaps as GapRow[]),...(scan.alternateGaps as AlternateGapRow[])],gap=all.find((item)=>item.key===input.positionKey);if(gap===undefined)throw new ServerError("REPERTOIRE_NOT_FOUND","Gap position not found");const validated=play(gap.representativeFen,input.moveUci),current=this.#required("repertoireMoves")(id),nextMoves=[...current.map((move)=>move.positionKey===input.positionKey?Object.freeze({...move,rank:move.rank+1}):move),Object.freeze({repertoireId:id,positionKey:input.positionKey,moveUci:input.moveUci,moveSan:validated.san,representativeFen:gap.representativeFen,rank:0,origin:"chosen_from_attempt" as const,createdAt:at})],nextDigest=repertoireDigest(record.side,record.rootFen,nextMoves);this.#required("addRepertoireAnswer")(nextMoves.at(-1)!,input.ifMatch,nextDigest,at);return this.get(id,principal);}
   summary(record:RepertoireRecord){const scan=this.#required("repertoireScan")(record.id);return Object.freeze({id:record.id,name:record.name,side:record.side,targetElo:record.targetElo,coverageDenominator:record.coverageDenominator,digest:record.digest,updatedAt:record.updatedAt,scan:scan===undefined?null:{scannedAt:scan.scannedAt,stale:scan.repertoireDigest!==record.digest,truncated:scan.truncated,gapCount:Array.isArray(scan.gaps)?scan.gaps.length:0}});}
   view(record:RepertoireRecord){return Object.freeze({...this.summary(record),rootFen:record.rootFen,sourceKind:record.sourceKind,sourceUrl:record.sourceUrl,licenceNote:record.licenceNote,moves:this.#required("repertoireMoves")(record.id)});}
-  recommendations(principal:Principal){const rows=[] as Array<Record<string,unknown>>;for(const record of this.#required("repertoires")(principal.learnerId)){const scan=this.#required("repertoireScan")(record.id);if(scan===undefined||!Array.isArray(scan.gaps))continue;for(const gap of scan.gaps as GapRow[]){if(this.#required("repertoireGapRun")(record.id,gap.key)!==undefined)continue;rows.push(Object.freeze({kind:"repertoire_gap",repertoireId:record.id,repertoireName:record.name,gapKey:gap.key,replySan:gap.replySan,line:gap.line,mass:gap.mass,gamesUntilSeen:gap.gamesUntilSeen,sentence:`Your repertoire ${record.name} has no answer to ${gap.replySan} after ${gap.line.join(" ")}; this population reached it about once every ${gap.gamesUntilSeen} games. ${CORPUS_GUARD}`}));}}const eligible=rows.sort((left,right)=>Number(right.mass)-Number(left.mass)||String(left.gapKey).localeCompare(String(right.gapKey)));return Object.freeze({recommendations:Object.freeze(eligible.slice(0,10)),total:eligible.length});}
+  recommendations(principal: Principal) {
+    const rows: Array<Record<string, unknown>> = [];
+    for (const record of this.#required("repertoires")(principal.learnerId)) {
+      const scan = this.#required("repertoireScan")(record.id);
+      // Ranking belongs to one answer map. Preserve stale history in gaps(), but never describe
+      // it as a current recommendation or silently start a provider scan during this read.
+      if (scan === undefined || !Array.isArray(scan.gaps) || scan.repertoireDigest !== record.digest) continue;
+      const answered = new Set(this.#required("repertoireMoves")(record.id)
+        .filter(move => move.rank === 0).map(move => move.positionKey));
+      for (const gap of scan.gaps as GapRow[]) {
+        if (answered.has(gap.key) || this.#required("repertoireGapRun")(record.id, gap.key) !== undefined) continue;
+        rows.push(Object.freeze({ kind: "repertoire_gap", repertoireId: record.id, repertoireName: record.name,
+          gapKey: gap.key, replySan: gap.replySan, line: gap.line, mass: gap.mass, gamesUntilSeen: gap.gamesUntilSeen,
+          sentence: gap.replySan === "" && gap.line.length === 0
+            ? `Your repertoire ${record.name} has no answer recorded at its starting position. ${CORPUS_GUARD}`
+            : `Your repertoire ${record.name} has no answer to ${gap.replySan} after ${gap.line.join(" ")}; this population reached it about once every ${gap.gamesUntilSeen} games. ${CORPUS_GUARD}` }));
+      }
+    }
+    const eligible = rows.sort((left, right) => Number(right.mass) - Number(left.mass) || String(left.gapKey).localeCompare(String(right.gapKey)));
+    return Object.freeze({ recommendations: Object.freeze(eligible.slice(0, 10)), total: eligible.length });
+  }
   #owned(id:string,principal:Principal):RepertoireRecord{const record=this.#required("repertoire")(id);if(record===undefined||record.ownerLearnerId!==principal.learnerId)throw new ServerError("REPERTOIRE_NOT_FOUND","Repertoire not found");return record;}
   #gapRun(id: string, gapKey: string, principal: Principal): RepertoireGapRunRecord | undefined {
     const link = this.#required("repertoireGapRun")(id, gapKey);

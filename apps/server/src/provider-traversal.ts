@@ -3,7 +3,7 @@
  * (rfc/provider-exchange-and-execution.md §9). It is built into the server release and has no HTTP
  * route.
  *
- * Five named callables traverse `scheduler.get` → registered parser → the operation's exact
+ * Seven named callables traverse `scheduler.get` → registered parser → the operation's exact
  * value-authority source factory → its declared projection. Source failures and the Syzygy
  * local-domain arm are returned unchanged and never become evidence. Every callable requires the
  * opaque `ProviderOperatorCapability`, which only `runProviderTraversalCli` mints after parsing
@@ -13,6 +13,7 @@
  * `make provider-traversal OP=<operation>`; the request is read from stdin.
  */
 import { basename } from "node:path";
+import { healthAdmittedMaiaTaskOperation } from "./provider-maia.js";
 
 import {
   PROVIDER_PROTOCOL_RESOURCE,
@@ -24,6 +25,7 @@ import {
   type DeclaredEvidence,
   type ExplorerPositionPageRequest,
   type MaiaPolicyPageRequest,
+  type MaiaInferenceTaskRequest,
   type ProviderCliName,
   type ProviderDelivery,
   type ProviderEvidenceDelivery,
@@ -40,7 +42,9 @@ import {
   type VersionedEvidenceId,
 } from "@chess-tabiya/runtime";
 
-import { EngineSupervisor, binaryArtifactProbe, type EngineArtifactProbe, type EngineSpec } from "./engine-supervisor.js";
+import { EngineSupervisor, type EngineArtifactProbe, type EngineSpec } from "./engine-supervisor.js";
+import { streamingBinaryArtifactProbe } from "./engine-binary-digest.js";
+import { maiaContainerProbe, maiaNetworkSpec } from "./maia.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { providerOperationDescriptors, type ProviderEngineClient, type ProviderFetch } from "./provider-operations.js";
 import type { ProviderRegistry } from "./provider-health.js";
@@ -76,6 +80,7 @@ export const PROVIDER_SOURCE_FACTORIES: ProviderSourceFactories = Object.freeze(
   "stockfish.position_evaluation@1": sourceFactory("stockfish.position_evaluation@1"),
   "stockfish.principal_variation@1": sourceFactory("stockfish.principal_variation@1"),
   "maia.policy_page@1": sourceFactory("maia.policy_page@1"),
+  "maia.inference_task@1": sourceFactory("maia.inference_task@1"),
   "syzygy.position@1": sourceFactory("syzygy.position@1"),
   "lichess_explorer.position_page@1": sourceFactory("lichess_explorer.position_page@1"),
 });
@@ -121,18 +126,20 @@ export interface ProviderTraversalSources {
   /** Application health authority; operator-only composition may omit it. */
   readonly tablebaseHealth?: ProviderRegistry;
   readonly explorerHealth?: ProviderRegistry;
+  readonly maiaTaskHealth?: ProviderRegistry;
   readonly bounds?: ProviderExchangeBounds;
   readonly monotonicNowMs?: () => number;
   readonly wallNow?: () => string;
 }
 
-/** One scheduler over the six operations; the application root and the CLI both use this. */
+/** One scheduler over the seven operations; the application root and the CLI both use this. */
 export function composeProviderTraversalApplication(sources: ProviderTraversalSources): ProviderTraversalApplication {
   const bounds = sources.bounds ?? OPERATOR_PROVIDER_BOUNDS;
   const descriptors = providerOperationDescriptors(sources);
   const scheduler = new ProviderExchangeScheduler({
     descriptors: {
       ...descriptors,
+      ...(sources.maiaTaskHealth === undefined || sources.engines === null ? {} : { "maia.inference_task@1": healthAdmittedMaiaTaskOperation(sources.engines, sources.maiaTaskHealth) }),
       ...(sources.tablebaseHealth === undefined || sources.tablebaseFetch === null ? {} : { "syzygy.position@1": healthAdmittedSyzygyOperation(sources.tablebaseFetch, sources.tablebaseHealth) }),
       ...(sources.explorerHealth === undefined || sources.explorerFetch === null ? {} : { "lichess_explorer.position_page@1": healthAdmittedExplorerOperation(sources.explorerFetch, sources.explorerToken, sources.explorerHealth) }),
     },
@@ -146,11 +153,12 @@ export function composeProviderTraversalApplication(sources: ProviderTraversalSo
   });
   if (sources.tablebaseHealth !== undefined && sources.tablebaseFetch !== null) sources.tablebaseHealth.registerCacheInventory("tablebase-primary", scheduler.retainedInventory("syzygy.position@1"));
   if (sources.explorerHealth !== undefined && sources.explorerFetch !== null) sources.explorerHealth.registerCacheInventory("explorer-primary", scheduler.retainedInventory("lichess_explorer.position_page@1"));
+  if (sources.maiaTaskHealth !== undefined && sources.engines !== null) sources.maiaTaskHealth.registerCacheInventory("maia-inference", scheduler.retainedInventory("maia.inference_task@1"));
   return Object.freeze({ scheduler, sourceFactories: PROVIDER_SOURCE_FACTORIES, operatorBudgetMs: bounds.operatorBudgetMs });
 }
 
 // ---------------------------------------------------------------------------------------------
-// Operator capability and the five traversals
+// Operator capability and the seven traversals
 // ---------------------------------------------------------------------------------------------
 
 declare const OPERATOR: unique symbol;
@@ -202,6 +210,10 @@ export function providerTraversalMaiaPolicyPage(application: ProviderTraversalAp
   return traverse(application, capability, "maia.policy_page@1", request);
 }
 
+export function providerTraversalMaiaInferenceTask(application: ProviderTraversalApplication, capability: ProviderOperatorCapability, request: MaiaInferenceTaskRequest): Promise<ProviderEvidenceTraversalResult<"maia.inference_task@1">> {
+  return traverse(application, capability, "maia.inference_task@1", request);
+}
+
 export function providerTraversalSyzygyPosition(application: ProviderTraversalApplication, capability: ProviderOperatorCapability, request: SyzygyPositionRequest): Promise<ProviderEvidenceTraversalResult<"syzygy.position@1">> {
   return traverse(application, capability, "syzygy.position@1", request);
 }
@@ -218,6 +230,7 @@ export const PROVIDER_TRAVERSALS: { readonly [Name in ProviderCliName]: { readon
   "stockfish-position-evaluation": Object.freeze({ operation: "stockfish.position_evaluation@1", traverse: providerTraversalStockfishPositionEvaluation as unknown as Traversal }),
   "stockfish-principal-variation": Object.freeze({ operation: "stockfish.principal_variation@1", traverse: providerTraversalStockfishPrincipalVariation as unknown as Traversal }),
   "maia-policy-page": Object.freeze({ operation: "maia.policy_page@1", traverse: providerTraversalMaiaPolicyPage as unknown as Traversal }),
+  "maia-inference-task": Object.freeze({ operation: "maia.inference_task@1", traverse: providerTraversalMaiaInferenceTask as unknown as Traversal }),
   "syzygy-position": Object.freeze({ operation: "syzygy.position@1", traverse: providerTraversalSyzygyPosition as unknown as Traversal }),
   "explorer-position-page": Object.freeze({ operation: "lichess_explorer.position_page@1", traverse: providerTraversalExplorerPositionPage as unknown as Traversal }),
 });
@@ -289,12 +302,14 @@ export function providerTraversalEngineSpecs(environment: Readonly<Record<string
   const specs: EngineSpec[] = [];
   const stockfish = environment.STOCKFISH_COMMAND ?? "stockfish";
   specs.push(Object.freeze({ id: "stockfish-analysis", kind: "judge", command: stockfish, name: "Stockfish", options: Object.freeze({ Threads: 1, Hash: 16, MultiPV: 1 }) }));
+  specs.push(maiaNetworkSpec(environment.MAIA_HOST ?? "maia", Number(environment.MAIA_PORT ?? 7000)));
   return Object.freeze(specs);
 }
 
 async function main(): Promise<void> {
   const environment = process.env;
-  const probe: EngineArtifactProbe = binaryArtifactProbe;
+  const maiaProbe = maiaContainerProbe(environment.MAIA_HOST ?? "maia", Number(environment.MAIA_PORT ?? 7000));
+  const probe: EngineArtifactProbe = spec => spec.id === "maia-5m" ? maiaProbe(spec) : streamingBinaryArtifactProbe(spec);
   const supervisor = new EngineSupervisor(providerTraversalEngineSpecs(environment), { artifactProbe: probe });
   const network = environment.PROVIDER_TRAVERSAL_OFFLINE === "1" ? null : ((url: string, init: { readonly signal: AbortSignal; readonly headers: Readonly<Record<string, string>> }) => fetch(url, { signal: init.signal, headers: { ...init.headers } }));
   const application = composeProviderTraversalApplication({

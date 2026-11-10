@@ -2,6 +2,7 @@ import type { AddressInfo } from "node:net";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as runtime from "@chess-tabiya/runtime";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
 import { ExchangeTablebaseSource } from "./provider-tablebase.js";
@@ -30,6 +31,7 @@ async function applicationControl(fault?: typeof faults[number], faultAt = 1) {
   const trace: string[] = [];
   const probe = vi.fn(async () => { throw new Error("modern refusal must not fall back to bare probe"); });
   const probeEvidence = vi.fn(async () => { trace.push("source"); return delivery; });
+  installEmptyApplicationCatalogues();
   const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false,
     tablebaseSource: { kind: "lichess", probe, probeEvidence },
   });

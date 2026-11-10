@@ -107,10 +107,10 @@ async function control(module: LocalModule, fault?: Fault, disclose = true) {
     const nodeId = graph.graph.activeCursor.nodeId;
     const trace: string[] = [];
     const contractFailures: string[] = [];
-    const originalShapes = ShapeRegistry.prototype.list;
-    const prepare = vi.spyOn(ShapeRegistry.prototype, "list").mockImplementation(function (this: ShapeRegistry) {
+    const originalShapes = ShapeRegistry.prototype.beginCurrentShapeScan;
+    const prepare = vi.spyOn(ShapeRegistry.prototype, "beginCurrentShapeScan").mockImplementation(function (this: ShapeRegistry, ...args) {
       trace.push("prepare");
-      return originalShapes.call(this);
+      return originalShapes.apply(this, args);
     });
     const compile = vi.spyOn(execution, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
       trace.push(`compile:${consumer.id}@${consumer.version}`);
@@ -177,7 +177,7 @@ describe("authenticated complete local Support execution", () => {
         const body = await response.json();
         expect(response.status).toBe(503);
         expect(body).toEqual({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Module execution contract is unavailable" } });
-        expect(app.trace).toEqual([`compile:module.${module}@1`]);
+        expect(app.trace).toEqual([`compile:module.${module}@${["threat_radar", "structure_nudge", "theory_breadcrumb"].includes(module) ? 2 : 1}`]);
         expect(app.contractFailures).toEqual([{
           missing_policy: "BINDING_SOURCE_ABSENCE", impossible_latency: "BINDING_EXECUTION_LATENCY",
           extra_raw_binding: "EXECUTION_SOURCE_UNREGISTERED", missing_binding: "BINDING_EXECUTION_UNDECLARED",
@@ -195,9 +195,9 @@ describe("authenticated complete local Support execution", () => {
         expect(response.status, body).toBe(200);
         const page = (JSON.parse(body) as { page: runtime.ModuleQueryPage }).page;
         expect(page.packets.map(packet => packet.module)).toEqual([module]);
-        expect(app.trace[0]).toBe(`compile:module.${module}@1`);
+        expect(app.trace[0]).toBe(`compile:module.${module}@${["threat_radar", "structure_nudge", "theory_breadcrumb"].includes(module) ? 2 : 1}`);
         expect(app.collect).toHaveBeenCalled();
-        expect(app.prepare).toHaveBeenCalledTimes(module === "structure_nudge" ? 1 : module === "theory_breadcrumb" ? 2 : 0);
+        expect(app.prepare).toHaveBeenCalledTimes(module === "structure_nudge" || module === "theory_breadcrumb" ? 1 : 0);
         for (const packet of page.packets) {
           const { digest, ...body } = packet.disclosure;
           expect(runtime.moduleDisclosureDigest(body)).toBe(digest);
@@ -227,7 +227,7 @@ describe("authenticated complete local Support execution", () => {
         const body = await response.text();
         expect(response.status, body).toBe(200);
         expect((JSON.parse(body) as { page: runtime.ModuleQueryPage }).page.packets.map(packet => packet.module)).toEqual([module]);
-        expect(app.trace[0]).toBe(`compile:module.${module}@1`);
+        expect(app.trace[0]).toBe(`compile:module.${module}@${["threat_radar", "structure_nudge", "theory_breadcrumb"].includes(module) ? 2 : 1}`);
         expect(app.collect).toHaveBeenCalled();
         expect(app.prepare).not.toHaveBeenCalled();
       } finally { vi.restoreAllMocks(); await app.close(); }
@@ -239,7 +239,7 @@ describe("authenticated complete local Support execution", () => {
     try {
       const response = await app.ask("support", { ...app.query, timing: "pre_commit", nodeId: "nodeId" in app.query ? app.query.nodeId : "", selectedSquare: "c6", requested: ["sight_on_request", "threat_radar"] }, false);
       expect(await responseStatus(response)).toBe(503);
-      expect(app.trace).toEqual(["compile:module.sight_on_request@1", "compile:module.threat_radar@1"]);
+      expect(app.trace).toEqual(["compile:module.sight_on_request@1", "compile:module.threat_radar@2"]);
       expect(app.collect).not.toHaveBeenCalled();
     } finally { vi.restoreAllMocks(); await app.close(); }
   });
@@ -262,7 +262,7 @@ describe("authenticated complete local Support execution", () => {
       const body = await response.text();
       expect(response.status, body).toBe(503);
       expect(app.trace.filter(entry => entry.startsWith("compile:"))).toEqual([
-        "compile:module.structure_nudge@1", "compile:module.theory_breadcrumb@1",
+        "compile:module.structure_nudge@2", "compile:module.theory_breadcrumb@2",
       ]);
       expect(app.collect).not.toHaveBeenCalled();
       expect(app.prepare).not.toHaveBeenCalled();
@@ -275,7 +275,7 @@ describe("authenticated complete local Support execution", () => {
       expect(await responseStatus(app.ask())).toBe(200);
       app.trace.length = 0; app.collect.mockClear(); app.prepare.mockClear(); app.fault("extra_raw_binding");
       expect(await responseStatus(app.ask())).toBe(503);
-      expect(app.trace).toEqual(["compile:module.theory_breadcrumb@1"]);
+      expect(app.trace).toEqual(["compile:module.theory_breadcrumb@2"]);
       expect(app.collect).not.toHaveBeenCalled();
       expect(app.prepare).not.toHaveBeenCalled();
     } finally { vi.restoreAllMocks(); await app.close(); }

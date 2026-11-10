@@ -30,6 +30,6 @@ it.each(OCCUPIED_TARGET_IDENTITY_CASES)("D3762 retains exact target identity thr
   if (compiled.kind !== "ready") throw new Error(`candidate source unavailable: ${compiled.error.code}`);
   const selected = candidatePlayedRow(compiled.receipt, value.uci);
   expect(selected.events.filter(event => event.projection.id === "rules.transition.event.occupied_defence" && (event.operands as { subject: { target: string } }).subject.target === value.target)).toEqual(events);
-  const rendered = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 1 }, events.map(event => event.evidence)));
+  const rendered = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 }, events.map(event => event.evidence)));
   expect(rendered.length).toBe(value.sign === null ? 0 : 1);
 });

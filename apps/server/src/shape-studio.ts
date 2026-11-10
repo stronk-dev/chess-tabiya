@@ -2,7 +2,8 @@ import { randomUUID } from "node:crypto";
 
 import { digestShapeEntry, type ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { matchesStructuralExpression } from "@chess-tabiya/runtime";
+import { declareCurrentStructuralPredicateEvidence } from "../../../packages/runtime/src/structural-evidence.js";
+import { maybeAuthoredStructuralDocument, selectAuthoredStructuralCondition } from "../../../packages/runtime/src/internal/authored-structural-source.js";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
@@ -63,10 +64,26 @@ export class ShapeStudio {
     const validation=validateShapeEntry(document,{...(probeFen===undefined?{}:{probeFen})});
     if(validation.document===undefined)return validation;
     const positions=this.servedPacks().flatMap((pack)=>authoredPositions(pack.document).map((position)=>({packId:pack.document.id,packTitle:pack.title,startSide:pack.document.start.side,...position})));
-    let matches: typeof positions;
-    try { matches=positions.filter((position)=>matchesStructuralExpression(position.fen,validation.document!.trigger)); }
-    catch { return validation; }
-    return Object.freeze({...validation,corpusPreview:Object.freeze({fires:matches.length,of:positions.length,matches:Object.freeze(matches)})});
+    try {
+      const documentSource = maybeAuthoredStructuralDocument(validation.document);
+      if (documentSource === undefined) {
+        if (!validation.valid) return validation;
+        throw new TypeError("Validated shape has no authored document source");
+      }
+      const source = selectAuthoredStructuralCondition(documentSource, "/trigger");
+      const matches: typeof positions = [];
+      for (const position of positions) {
+        const result = declareCurrentStructuralPredicateEvidence(position.fen, source);
+        if (result.kind !== "available") throw new TypeError(result.reason);
+        if (result.value.payload.observation.matched) matches.push(position);
+      }
+      return Object.freeze({...validation,corpusPreview:Object.freeze({fires:matches.length,of:positions.length,matches:Object.freeze(matches)})});
+    } catch (error) {
+      return Object.freeze({ ...validation, valid: false, issues: Object.freeze([...validation.issues, Object.freeze({
+        severity: "error" as const, source: "runtime" as const, code: "STRUCTURAL_SOURCE_UNAVAILABLE", path: "/trigger",
+        message: error instanceof Error ? error.message : String(error),
+      })]) });
+    }
   }
   async update(id:string,principal:Principal,expectedDigest:string,document:unknown,at=new Date().toISOString()):Promise<ShapeDraftView>{const current=this.required(id,principal);const digest=await digestShapeEntry(document);if(!this.storage.updateShapeDraft(id,principal.learnerId,expectedDigest,document,digest,at))throw new ServerError("DRAFT_STALE","Draft changed in another editor",{details:{digest:current.digest}});return this.required(id,principal);}
   async register(id:string,principal:Principal,at=new Date().toISOString()){const draft=this.required(id,principal);const validation=validateShapeEntry(draft.document);if(!validation.valid||validation.document===undefined)throw new ServerError("PACK_INVALID","Shape draft has validation errors",{details:{issues:validation.issues}});const document=validation.document;if(this.registry.get(document.id)?.channel==="official")throw new ServerError("SHAPE_ID_RESERVED",`Shape id ${document.id} is official`);const rows=this.storage.registeredShapes().filter((row)=>row.shapeId===document.id);if(rows.some((row)=>row.version===document.version))throw new ServerError("SHAPE_VERSION_EXISTS","That shape version already exists");if(rows.some((row)=>row.publisherLearnerId!==principal.learnerId))throw new ServerError("SHAPE_ID_NOT_YOURS","This shape id belongs to another publisher");if(rows.length>0&&!rows.every((row)=>greater(document.version,row.version)))throw new ServerError("SHAPE_VERSION_NOT_INCREASING","A new version must increase");this.storage.registerShapeDraft({shapeId:document.id,version:document.version,digest:draft.digest,document,publisherHandle:principal.handle,publisherLearnerId:principal.learnerId,draftId:id,registeredAt:at});return this.registry.add(document,"community",principal.handle,draft.digest);}

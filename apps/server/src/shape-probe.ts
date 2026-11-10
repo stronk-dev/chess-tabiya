@@ -5,27 +5,52 @@
 // prints trigger firing (D113 fixed) but says nothing about plan signatures,
 // which is what `plan_consequence` success conditions are graded on.
 //
-//   node dist/shape-probe.js <shape-id> <fen> [fen...]
-//   node dist/shape-probe.js --pack <pack.json>     (walks the authored spine)
+//   make shape-probe SHAPE=<shape-id> PROBE='<fen>'
+//   make shape-probe PACK=<pack.json>           (walks the authored spine)
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-import { matchesStructuralExpression } from "@chess-tabiya/runtime";
+import { declareCurrentStructuralPredicateEvidence } from "../../../packages/runtime/src/structural-evidence.js";
+import { authoredStructuralDocument, selectAuthoredStructuralCondition, type AuthoredStructuralConditionSource } from "../../../packages/runtime/src/internal/authored-structural-source.js";
+import { validateShapeEntry } from "./shape-validation.js";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseUci } from "chessops/util";
 
-interface Plan { readonly id: string; readonly side: string; readonly label: string; readonly success: { readonly signature: unknown } }
-interface Entry { readonly id: string; readonly trigger: unknown; readonly plans: readonly Plan[] }
-
-async function entry(id: string): Promise<Entry> {
-  return JSON.parse(await readFile(resolve("content/shapes", `${id}.json`), "utf8")) as Entry;
+export interface ShapeProbePosition { readonly label: string; readonly fen: string }
+export interface ShapeProbeResult extends ShapeProbePosition {
+  readonly trigger: boolean;
+  readonly plans: readonly { readonly id: string; readonly side: "white" | "black" }[];
 }
 
-function report(shape: Entry, label: string, fen: string): void {
-  const trigger = matchesStructuralExpression(fen, shape.trigger as never);
-  const fired = shape.plans.filter((plan) => plan.success.signature !== null && matchesStructuralExpression(fen, plan.success.signature as never));
-  console.log(`${label.padEnd(26)} trigger=${trigger ? "FIRES" : "-    "}  plans: ${fired.length === 0 ? "(none)" : fired.map((plan) => `${plan.side}/${plan.id}`).join(", ")}`);
+async function entry(id: string): Promise<unknown> {
+  return JSON.parse(await readFile(resolve("content/shapes", `${id}.json`), "utf8"));
+}
+
+/** A complete supplied document goes through the actual draft validator, never a raw AST tuple. */
+export function probeShapeDocument(value: unknown, positions: readonly ShapeProbePosition[]): readonly ShapeProbeResult[] {
+  const validation = validateShapeEntry(value);
+  if (!validation.valid || validation.document === undefined) throw new TypeError(`Invalid shape: ${validation.issues.map(issue => `${issue.code} ${issue.path}`).join("; ")}`);
+  const document = validation.document, source = authoredStructuralDocument(document);
+  const trigger = selectAuthoredStructuralCondition(source, "/trigger");
+  const plans = document.plans.flatMap((plan, index) => plan.success.signature === null ? [] : [{
+    id: plan.id, side: plan.side, source: selectAuthoredStructuralCondition(source, `/plans/${index}/success/signature`),
+  }]);
+  const matches = (fen: string, condition: AuthoredStructuralConditionSource): boolean => {
+    const result = declareCurrentStructuralPredicateEvidence(fen, condition);
+    if (result.kind !== "available") throw new TypeError(`Shape probe unavailable: ${result.reason}`);
+    return result.value.payload.observation.matched;
+  };
+  return Object.freeze(positions.map(position => Object.freeze({ ...position,
+    trigger: matches(position.fen, trigger),
+    plans: Object.freeze(plans.filter(plan => matches(position.fen, plan.source)).map(plan => Object.freeze({ id: plan.id, side: plan.side }))),
+  })));
+}
+
+function report(shape: unknown, positions: readonly ShapeProbePosition[]): void {
+  for (const { label, trigger, plans } of probeShapeDocument(shape, positions)) {
+    console.log(`${label.padEnd(26)} trigger=${trigger ? "FIRES" : "-    "}  plans: ${plans.length === 0 ? "(none)" : plans.map(plan => `${plan.side}/${plan.id}`).join(", ")}`);
+  }
 }
 
 async function main(): Promise<void> {
@@ -40,27 +65,28 @@ async function main(): Promise<void> {
       const shape = await entry(id);
       console.log(`\n## ${pack.id} against shape ${id}`);
       const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
-      report(shape, "start", makeFen(root.toSetup()));
+      const positions: ShapeProbePosition[] = [{ label: "start", fen: makeFen(root.toSetup()) }];
       const walk = (nodes: readonly Node[], position: Chess): void => {
         for (const node of nodes) {
           const branch = position.clone();
           const move = parseUci(node.moveUci);
           if (!move || !branch.isLegal(move)) { console.log(`ILLEGAL ${node.id}`); continue; }
           branch.play(move);
-          report(shape, node.id, makeFen(branch.toSetup()));
+          positions.push({ label: node.id, fen: makeFen(branch.toSetup()) });
           walk(node.children, branch);
         }
       };
       walk(pack.spine ?? [], root);
+      report(shape, positions);
     }
     return;
   }
   const shapeId = argv[0];
   if (shapeId === undefined) throw new TypeError("shape probe requires a shape id");
   const shape = await entry(shapeId);
-  for (const [index, fen] of argv.slice(1).entries()) report(shape, `fen[${index}]`, fen);
+  report(shape, argv.slice(1).map((fen, index) => ({ label: `fen[${index}]`, fen })));
 }
 
 interface Node { readonly id: string; readonly moveUci: string; readonly children: readonly Node[] }
 
-await main();
+if (process.argv[1]?.endsWith("shape-probe.js")) await main();

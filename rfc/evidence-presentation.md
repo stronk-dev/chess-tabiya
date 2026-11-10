@@ -1,5 +1,28 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
+**D4167 snapshot/advance amendment §3.10e independently accepted for bounded implementation,
+2026-11-09.** Both authorized read-only source/meaning reviews find no buildability blocker.
+Decision: planning/learner-modules/compiler2-independent-review-2026-11-02.md. Bounded code/delivery is now verified locally:389actual source/API/DOM controls,15173software/539,
+7performance/build/source11 pass; content retains62prior headings. Parent lifecycle and all wider
+D4167/D4170, qualification/native/content/release duties stay unchanged.
+
+**2026-11-09 D4167 amendment independently accepted for bounded implementation:** §3.10d specifies seven selected-edge
+structural source operations/readouts jointly with the other two parent contracts. Both read-only source/meaning reviewers accept the repaired concrete clauses; bounded implementation is now verified locally (14966software/537,7performance/build/source11);
+content/native remain held. Decision: planning/learner-modules/compiler2-independent-review-2026-11-02.md. Complete
+snapshots/advance, ordinary modules, shared-event/avoidance/bot migration remain owed.
+
+**D4060 bounded source delivery implemented locally/uncommitted, 2026-11-04:** independent
+contract/source/control and final closeout review accept all12 original structural/island edge
+sources, the80-topic/86-Full2-pair/297-module image and complete strict before/after rendering.
+Actual factories, root/inherited/repeated/both-colour service controls, exact-pair received
+negatives and24 cookie REST/selected DOM journeys retain original values/order/counts/zeros,
+nulls, role, ray endpoints and same-zone king relocation. Full13762software/all496files367.82s,
+performance7/four58.94s, types/build/4667authority/375semantic/governance pass. Full verify exits2
+at actual content261pass/60fail/18setup-blocked cases43files33.00s; native37004 builds but default
+prepare-start refuses the anti-caro grade@i1/@i2 mismatch, zero native journeys. D3928, D3979
+native/default-App, qualification and whole-parent/release obligations stay open. No ordinary
+module policy change or content migration. Existing compiler2 review receipt records acceptance.
+
 **2026-10-15 joint amendment acceptance:** independent review accepts the corrected Inspector
 source/detail, current-pair and opening-history presentation companions with the coordinated
 ten-consumer image. Earlier unaccepted labels for these clauses are history; actual adapters,
@@ -22,17 +45,25 @@ strict receivers, native usability and unrelated parent obligations remain. Deci
   [[D3102]]–[[D3107]]; [[D1672]] and [[D2401]] were independent blockers.
 - **Author:** claude (evidence-presentation fork), from `design/research/evidence-presentation.md`
   (R3, 2026-08-20) and the HEAD census recorded as [[D1431]]/[[D1434]]
+- **Independently accepted bounded amendment 2026-11-03 — D4049/D4050:** the final section closes all twelve
+  Play relation/statement pairs over their original retained directed operands. It explicitly
+  narrows their flat-receipt grammar to complete adjacent occurrences and gives process-side
+  members one private construction owner. Bounded acceptance is recorded in
+  `planning/learner-modules/compiler2-independent-review-2026-11-02.md`; implementation/full proof
+  and unrelated parent obligations remain. No schema/resource lane is claimed.
 - **Created:** 2026-08-24
 - **Draft companion amendment 2026-10-14 — D3802:** bounded source-member Inspector detail
   below supplies six literal operand/factory/parser/renderer schemas for module-registration
   §4.11a. Disposable typed-member/source-reconstruction controls are research, not registered
   production factories or adapter authority. This amendment remains unaccepted; the parent's
   implementing state does not authorise it or close source/response/native obligations.
-- **Draft amendment 2026-10-10 — D3309/D3654:** the detailed structural Inspector contract
+- **Independently accepted amendment 2026-11-03 — D3309/D3654:** the detailed structural Inspector contract
   below adds sixteen reading successors and `inspector.position_structure@2`. It preserves all
-  existing `@1` declarations, factories, adapters and operations, including board Sight. Authored
-  from the measured fidelity instrument; independent review remains required. The parent's
-  implementing status does **not** authorize this amendment's production migration.
+  existing `@1` reading sources still required by current Sight/packs; obsolete position-structure
+  consumer execution retires after both real callers migrate under D3851. Authored
+  from the measured fidelity instrument and repaired against the actual current ABI/preflight/UI
+  seams; bounded acceptance is recorded in `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+  Implementation/native proof and unrelated parent obligations remain open.
 - **Draft companion amendment 2026-10-09 — D3578:** `rfc/module-registration.md` §4.2a
   owns selected-square context as four explicit derived payloads, not a generic adapter callback
   or a changed parent reading. Once independently accepted, register exact successor adapters
@@ -655,6 +686,19 @@ treated as type evidence.
 
 #### 2.3 Coverage populations are derived from bindings, not the whole catalogue
 
+**D3982 bounded form amendment — independently accepted, 2026-11-03.** The existing compiler2
+independent review receipt records the bounded buildability decision. The exact eight
+current Nudge2/current@3 pairs enumerated in module-registration §4.5c construct one complete
+square_set with their full existing registered typed caption and original highlight footprint.
+Remove only `arrows` from those exact binding forms; the singleton serves their remaining literal
+forms. This supersedes their square_set/move_path composition for Nudge only. Review/Inspector
+retain it unchanged. Keep anchors and all declared operands, original source ownership and
+registered caption/geometry/convention validation on both construction and received components.
+Reject old Nudge move_path/composition/form as outside the current binding, not as compatibility.
+No generic component-dropping, partial-fact output, source mutation, new prose renderer, new
+schema, source/consumer version or budget increase. §4.5c owns the full falsifier/delivery list;
+its18-cell cost result is feasibility, not implementation or actual learner-timing proof.
+
 `PRESENTATION_CONSUMER_CLASSES` assigns every one of the 20 current consumers with a non-machine
 binding exactly one class: `ordinary_presented`, `inspector_presented`,
 `author_operator_presented`, or `non_presentational_operation`. Every row names the real source
@@ -927,6 +971,73 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Forms:** `list`, `card` (→ `panel`), `arrow` (→ `arrows`), `sentence`.
 - **Replaces:** `CompareView.svelte:137`'s `{route.squares.join(" → ")}`.
 
+#### 3.6b D3979 — a recorded line has its own read-only board scope
+
+**Independently accepted bounded amendment, 2026-11-03; implementation in flight 2026-11-04.** Original
+source replay, required start-FEN/strict receipt and the local read-only preview now exist.
+Current full13461-case software, unchanged performance, types/build/source and corrected
+governance checks pass; bounded D4059 implementation/control review accepts. Actual content
+remains red at D3928, and remaining actual context/repeated-path/native/default-startup
+obligations keep D3979 open. The existing
+compiler2 review receipt records actual-constructor buildability, not native/content clearance. The
+current-source audit in `design/research/module-evidence-assembly.md` shows33 live recorded
+board-line pairs after D3982. They retain original FEN at construction but discard it on wire;
+MovePathView renders SAN only. §3.6's board-stepping promise is not implemented by that list.
+
+Extend the existing closed MovePathOperand with required canonical `startFen`, the original
+first move's before-position. Keep plies/SAN/UCI/ply numbers, origin, answerDistance and convention
+unchanged. For each current registered line construction, check its complete original move/FEN
+sequence: the original source supplies the initial FEN, each original UCI is legal there, SAN and
+ply agree, and playing it yields the next retained before-FEN. Refuse the complete construction
+on any mismatch, not a legal prefix. Existing source-owned recipe/operand declarations and
+current consumer ceilings still apply; raw public hashes never supply original source authority.
+This recovers retained position data, not a new collector/search, source payload or run schema.
+
+Normalize castling UCI only for legal replay/SAN validation; keep the original retained UCI bytes.
+Use the existing canonicalFen/toSetup and fullmove/turn conventions for exact FEN and ply, not a
+new encoder or generic move counter. Compare every original next-before FEN, not only a legal
+final position. The same reconstruction supplies the local preview, so parser and UI cannot
+quietly choose different lines.
+
+The strict received parser validates canonical FEN, legal normalized moves, exact SAN/ply and
+whole-line continuity by deterministic chess rules. A pure shared view helper derives root and
+after-ply FENs from that admitted operand; never infer a position from today's run cursor, a
+ply number, SAN alone, branch labels or an unrelated board. Parser validation establishes wire
+consistency, not independent source issuance; source correspondence is enforced over the genuine
+admitted source at registered construction, and D668's separately owned payload-trust boundary
+is not silently claimed solved by a re-computable digest. No additional hash/provenance store.
+Prelaunch cutover retains component/source/consumer IDs but requires the complete new operand;
+there is no legacy no-position parser, optional guessed-FEN fallback or content migration.
+
+Selecting a SAN opens an explicitly labelled **read-only line preview**, rooted at this path's
+own position, with start/previous/next controls and direct ply selection. It does not rewind,
+commit, fork, simulate a new line, request help/providers, change preferences or mutate the
+saved cursor. Do not repurpose SimulationPreview's authored labels or Enter actions. Reuse the
+existing modalBoundary/focus and disabled Chessboard primitives in a bounded responsive dialog;
+the active Play board stays mounted and keeps its dimensions. The preview cannot enable moves,
+promotion, annotations or analysis. Optional arrows paint only the selected original ply in
+that local frame; never all future plies on today's Play board. Equivalent path text and current
+fact/word/mark/arrow costs stay unchanged; startFen is data, never raw learner copy.
+
+Keep the exact sealed presented-item owner, not only a public component digest, as the preview's
+lifetime. Replacing/removing that owner, changing the rendered path or closing/unmounting its
+host closes the preview and retires retained handlers. Existing caller run/branch/subject/access/
+disclosure/health retirement must still clear the owning items. Same-byte replacement from a
+different context cannot preserve an open preview. Escape/Close restore focus only to the still
+owned initiating SAN; otherwise follow the host's existing focus handoff. Opening, stepping and
+closing cannot grant other evidence or bring a retired view back.
+
+Acceptance requires a set-equal census of all current move_path pairs, genuine one-edge/multi-ply
+and both-color construction, full original FEN/source equality, illegal/crossed/noncanonical FEN,
+SAN/UCI/ply and noncontiguous/missing-start negatives, whole refusal/no truncation, unchanged
+Nudge singleton forms and costs. Actual client receipt parsing plus mounted Review/Inspector/
+other real callers must step original positions, including repeated FENs and inherited paths,
+without saved-run writes or active-board changes. Exercise real keyboard/disabled board/focus,
+same-byte owner replacement, permission/context retirement and retained handlers. Native desktop/
+phone checks must show no overflow, clipped modal controls or active-board shrink. Held actual
+content/native startup remains a named separate gate, not waived through an empty catalogue or
+fixture-only release claim. Independent acceptance precedes code; parent completion remains open.
+
 #### 3.6a `relation_overlay` — one admitted directed relation on the board
 
 - **Renders:** the pieces and squares participating in one admitted fact, plus only the directed
@@ -1157,6 +1268,308 @@ budget, and draws it. A component that queries anything is the defect the dossie
   or label recorded operands under a declared convention; it cannot infer a tactic, strategic
   purpose, grade or recommendation. Such a statement requires a validated producer or an authored
   `claim` instead.
+
+#### 3.10b D4060 — complete structural-event before/after statements
+
+**State: independently accepted companion to module-registration§4.11e, 2026-11-04; decision
+recorded in `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.** Research: `design/research/module-evidence-assembly.md`
+§D4060 twelve-source gap. The old eight-family renderer chooses one observation and omits
+count/role; merely widening it would lose data. Ordinary Nudge/Review statements stay unchanged.
+
+For the eleven structural event families, register `inspector.structural_before_after@1`, one
+`fact_statement` per original source occurrence, with closed operands:
+
+```ts
+{ san: SAN; family: StructuralEventFamily; before: ExactObservation | null; after: ExactObservation | null }
+```
+
+`san` is mechanically replayed from the original before-FEN/UCI. Both observations cannot be
+null. A present observation's kind must equal family and retain exactly its original fields:
+
+| Kinds | Exact observation fields besides kind |
+|---|---|
+| backward_pawn, doubled_pawn, half_open_file, isolated_pawn | color, file, squares:[] |
+| open_file | file, squares:[] |
+| passed_pawn | color, squares:[pawnSquare] |
+| king_zone | color, zone:edge/corner, squares:[kingSquare] |
+| king_opposition | color, form:direct/distant, original ordered two-square array |
+| piece_count | color, role, nonnegative integer count, squares:[] |
+| direct_attack_count | color, positive integer count, squares:[targetSquare] |
+| line_blockers | nonnegative integer count, ordered squares:[from,to] |
+
+Reject extra/missing fields, unknown family/domain and malformed square cardinality, rather
+than normalizing or silently dropping fields. If both observations exist, match the existing
+structuralSubject join: kind/color/role/file/form/zone and ordered squares agree except that
+king_zone deliberately ignores the king square in its join. A same-color, same-zone king move
+can therefore retain different original squares before and after; copy both rather than
+rejecting the event or changing the collector. Count is magnitude, not subject identity. Do not
+merge other distinct signed occurrences into a synthetic relocation. Keep nulls and ordered
+ray endpoints intact. Do not use the unrelated
+observationIdentity helper whose identity includes count. The existing event supplier already
+owns the chess computation; this parser validates the declared output, not a new classifier.
+
+Use fixed, registered before/after prose, explicitly saying not observed for a null observation
+of that subject. Keep every retained field represented in the sentence: color/role/count, file,
+opposition form, zone and original squares. Geometric attack counts are not legal-capture/safety
+claims; zero ray blockers are not a tactical verdict. Unchanged/zero quantities are stated as
+such, never replaced with an all-clear, empty sentence or importance judgement. No caller prose.
+Use the existing pawn-structure@1 convention for backward pawn/king opposition, board-rules@1
+for the other families, following their original declarations. Each exact pair binds its family,
+registered renderer/convention/binding; a globally valid renderer from another pair is refused.
+
+For pawn_islands use the existing complete `inspector.pawn_islands_event@1` operands
+`{san,color,before:number,after:number}` and board-rules@1; do not duplicate its already faithful
+formatter or suppress0→0. All twelve are LP-only under Full Inspector2. Construction and received
+validation share the same strict parser; runtime/source retention remains required, and public
+JSON digests do not create private source authority. Whole-occurrence pagination/budgets and
+real supplier/API/client proof are module-registration§4.11e's acceptance, not a prose-only check.
+Include genuine both-color king moves within an edge zone (for example a1→b1 in
+`7k/p7/8/8/8/8/8/K7 w - - 0 1`, mirrored for Black), preserving both different king squares.
+Crossed color/zone observations must still refuse; a valid same-zone relocation must not.
+
+#### 3.10c D3767/D4064 — grade summary and same-item measurement report
+
+**Independently accepted companion for bounded implementation, 2026-11-04; decision is in
+the existing compiler2 review receipt.** Owns representation for
+module-registration§4.5e and move-quality-grades§4b. Current source-backed research establishes
+both selection crowding and standalone pinned mate-grade overflow; compact presentation must
+not discard grounding. This is rendering one already graded payload, not deriving new chess
+judgment, computing a class or explaining the move's strategic cause.
+
+Register `play.move_quality_summary@1` over the **same complete closed operands** as current
+`grade.move_quality@2`/completeGrade: klass, arm, before, after, dropWinPercent, thresholdCrossed,
+convention@2, engineId, recorded lane, requested bound and complete instrument. Reuse the exact
+parser; no reduced public type, caller text, detail string or permissive operand bag. Bind it
+only to `module.postcommit_nudge@2 × derived.grade.move_quality@2`, declared_convention and
+grade-convention@2, with the same source operands/assertions and sentence/panel forms.
+Review keeps its full renderer. Construction and received per-pair semantics reject swapped
+old/new renderers, wrong consumer/convention/binding and incomplete operands.
+
+The default equivalent sentence is exactly the following template for its original arm; Class
+is the existing capitalized emitted label, and loss uses the existing one-decimal rendering:
+
+| Arm | Complete default summary |
+|---|---|
+| eval_delta | `{Class}: the recorded evaluation lost {loss} win-points.` |
+| mate_lost | `{Class}: the recorded mate for the moving side was lost.` |
+| mate_allowed | `{Class}: the recorded reading now reports mate against the moving side.` |
+
+No 'you' assumes the viewer is the mover; no line/PV is claimed by a score-only source. Missing
+grades produce no summary. The default retains no source string that can grow with engine
+metadata; all original metadata remains in the typed operands and full report. This is a
+declared compact view, not cropping renderedText, stripping source fields, hiding an over-budget
+full sentence in HTML or inventing a second grading table. Normal word/fact/mark/arrow fit and
+voice/AT equivalents use this complete default summary. No grade color/valence is introduced.
+
+**Narrow explicit report view.** Only a selected, sealed summary item offers **How measured**.
+Add one narrow runtime helper accepting that actual PresentedEvidenceItem, asserting its local
+seal/exact Nudge pair/renderer, and rendering the original full `renderMoveQualityGrade` over
+those same parsed complete operands. Return no report for another item/renderer; never accept
+a raw grade, text, renderer choice, arbitrary detail callback or collection from the UI. Do not
+forge a Review item/consumer, remint evidence, create a derived producer, select another engine
+reading or issue a query. This is one fact's registered alternate view, with no new identity.
+
+The explicit report has a fixed one-fact/400-word/no-mark/no-arrow limit. Reuse the canonical
+word counter, not whitespace guesses or a second implementation. Its limit is a named manual
+inspection view, not an increase to proactive Nudge budgets or an extra fact slot. If the full
+canonical text exceeds that view's limit, show the fixed operational status **Measurement
+details exceed this view's limit.**; show no partial report and do not reinterpret it as missing
+source or grade absence. The grade summary remains unchanged. All tested90 ordinary source
+reports must open whole; a genuine oversized-source/closed-operand control pins the limit.
+
+Full report text is absent from default DOM, accessibility and provider/voice grounding. On a
+manual open, visible and semantic report text equal the original canonical full sentence,
+including every score/percentage/drop/threshold/engine/version/origin/profile-or-generation/
+bound/convention field. It is never supplied as an untyped second sentences channel or allowed
+LLM output merely because the raw operands contain it. Existing deterministic grade/voice
+allow-list and source seals remain. Do not weaken assertMoveQualityGradeSentence to accept a
+short summary or delete its incomplete-report negatives.
+
+**Client ownership.** The existing TextStatementView/PresentedEvidence/ModuleSeats path owns
+one accessible disclosure for that exact parsed item and current packet/subject/region. Pass
+the existing disclosure/region ownership through the host or key the view accordingly; equal
+component bytes alone cannot preserve open state across repeated moves. No persisted 'show
+all details' switch, separate modal, engine option or automatic reopen. Closed and limited
+states have no chess prose beyond their registered view. Keyboard/AT/control labels, retirement,
+focus recovery and board/region geometry obey module-registration§4.5e. This helper receives
+already admitted evaluation content and grants no higher assistance; observed context changes
+retire it through the existing notification model, not a new realtime permission service.
+
+No component or wire-envelope version changes: the renderer id declares the new representation;
+old full Nudge tuples reject under current exact semantics. Full Review and other components
+remain. Independent joint review accepts this default/explicit-view contract for bounded code. Research
+alone does not authorize a budget waiver or arbitrary disclosure. Independent bounded
+implementation closeout accepts D3767/D4064/D3766 locally/uncommitted with13804software/497,
+7performance/types/build/source/governance and actual selected source/HTTP/UI/voice/lifetime
+controls. Native rebuild then actual startup refusalD3928 is recorded honestly:zero journeys.
+This is no parent/native/qualification/release completion; D3765/D879 authenticated9-cell consumer parity closes separately with independent acceptance;
+whole-parent obligations remain.
+
+#### 3.10d D4167 — exact current structural edge readouts (independently accepted 2026-11-09)
+
+Companion to module-registration§4.11f and shared-candidate-evidence-packet§3.1b. Existing
+§3.10b remains the faithful renderer for separately consumed old structural observations; it
+cannot parse or label the seven current source payloads. Independent review precedes code.
+
+Register the following seven fact_statement renderers, all exclusively Full Inspector2 LP at this
+stage. Operands are `{san, ...exactSourcePayload}`; no optional arbitrary family/data union or
+caller prose. Retain original beforeFen/moveUci/afterFen to verify selected context and mechanical
+SAN; do not dump FEN/field names/JSON into the human sentence. Complete canonical anchor operands
+stay in the typed received fact and attributed source context. Nested snapshot FENs must equal
+the matching original side of the legal edge. Wrong SAN/edge, unknown enum, missing/extra field,
+wrong array member/order/cardinality, invalid null shape or foreign renderer/convention refuses.
+Construction and received validation use the same closed parser; serialization is not source
+mint authority.
+
+| Source → renderer | Exact non-anchor payload retained and represented in fixed human prose | Caption convention |
+|---|---|---|
+| rules.structural.event.king_opposition@2 → inspector.opposition_change@1 | subject.white/black kings; original sign; both complete snapshots, including fen, color-identified kings and opposition:null or holder color, sideToMove, direct/distant_three/distant_five, ordered betweenSquares and betweenSquaresEmpty:true. Describe each king square, turn, holder/form and intervening squares; explicit “no unobstructed opposition” for null | unobstructed-opposition@1 |
+| rules.structural.event.backward_pawn@2 → inspector.backward_pawn_change@1 | subject color/beforePawn/afterPawn and exact sign; nullable full BackwardPawnSubject each side: color,pawn,stop,controllers,supportPawns,aheadAdjacentPawns,stopOccupancy empty/own/enemy with actual piece color/role,immediatePseudoCapture,halfOpenForColor color/value. Describe each list, absence, stop occupancy and opposing-color file condition; geometric pawn control/capture candidacy never means a legal reply or weakness | backward-pawn@1 |
+| derived.structural.event.pawn_file_group@1 → inspector.pawn_file_group_change@1 | subject color/file,sign,both nullable full groups(color,file,pawns ordered front-to-rear,adjacentOccupiedFiles,islandFiles,isolated,doubled),complete cause.mover(color,role,from,to,promotion:null or role) and cause.captured:null or(color,role,square). State each membership/boolean/cause, including unchanged booleans; do not reduce to a pair | pawn-file-membership@1 |
+| rules.transition.event.slider_ray@2 → inspector.slider_blocker_change@1 | original root color/role/square,direction df/dr,sign,both nullable rays(current slider color/role/square,board-edge endpoint,ordered strictInterior,ordered blockers with color/role/square). State original root and current positions/direction, edge square, complete interior and blockers. Null means no ray; empty blockers does not mean an attack or tactical target | physical-slider-membership@1 |
+| derived.activity.event.file_state@1 → inspector.file_state_change@1 | file,sign membership_changed,before/after full FileStateRow(file,whitePawns,blackPawns,state exact four-way enum),complete PawnFileCause as above. State both pawn memberships/classes and original mover/capture/promotion cause; open differs from own-color half-open | pawn-file-membership@1 |
+| derived.activity.event.file_access_revealed@1 → inspector.file_access_revealed@1 | file,piece color/rook-or-queen/square,sign gained,beforeState,afterState,full original nested fileChange including exact anchor,file,sign,both rows and full cause. State stationary piece and file transition plus complete supporting file-change fact; no legal access, control or value claim | pawn-file-membership@1 |
+| rules.structural.event.pawn_islands@2 → inspector.pawn_island_topology_change@1 | color,exact count_gained/count_lost/topology_changed sign,beforeCount,afterCount,both full partitions with ordered files and member pawns. State both counts AND each partition; equal counts do not suppress topology change. Zero partitions stays explicit | pawn-island-topology@1 |
+
+Caption conventions are presentation labels only, not new semantic convention claims or a new
+shared resource: unobstructed-opposition@1 “the unobstructed-opposition definition”; backward-pawn@1
+“the declared backward-pawn definition”; pawn-file-membership@1 “the recorded pawn/file
+memberships”; physical-slider-membership@1 “the recorded physical rays and blockers”;
+pawn-island-topology@1 “the declared pawn-island topology”. Register these five exact labels in
+the existing presentation convention dictionary and exact per-source wire statements. Do not use
+old blocker-blind/maximal-reach definitions or imply an official independent chess verdict.
+
+**Full-payload/source-reference join (independent review correction).** For these seven exact
+Full2 tuples, construction AND the actual received-wire adapter must remove ONLY `san` from the
+closed parsed operands and require `"sha256:" + evidenceDigest(completePayload)` to equal the
+original `evidenceRef.evidenceDigest`. Use the existing F1 payload digest function and original
+reference, not a new hash protocol, signature or provenance store. No field normalization,
+member omission, reordered list or wrapper substitution is permitted. Renderer/convention,
+operand/component/receipt digest checks alone do not establish that join. Include real
+factory-backed controls that change each plausible nested value/list/boolean/sign, recompute all
+public component/receipt digests, and retain the genuine original evidenceRef; they must fail.
+The matching complete original payload passes. This public equality proves correspondence only,
+not source authenticity/access or an independently validated chess claim; private source grants
+and sole-factory authority still govern acquisition.
+
+The parser checks structural identity/sign consistency already specified by the source contract,
+including king-pair subject, pawn-side identity, before/after files/colors, original cause/nested
+anchor equality, distinct null/list/zero shapes and exact signed direction domain. It does not
+re-run a detector, synthesize a population, infer strategic meaning or use count-only equivalence.
+The producer alone owns legal/semantic computation and private mint authority. A genuine source
+with a nested complete payload cannot pair with a foreign renderer, arbitrarily rewritten text,
+new convention or a cropped member list.
+
+Use fixed before/after sentences, translated piece/color/enum labels, algebraic squares and SAN.
+Every member survives in the readout; no JSON.stringify/value interpolation or raw ids. Null,
+empty lists, false flags, unchanged booleans and zero counts are stated with their own meaning.
+No raw source score, LLM, strategy, ranking, intended plan or good/bad language. Render one whole
+original occurrence with no new geometry. Existing full-item budget/continuation/deferred outcome
+applies; report over-budget instead of truncating or claiming an undisplayed item delivered.
+
+Proof includes actual factory-backed construction and received corruption for every nested leaf,
+source/convention/renderer swaps, real matching selected context/SAN, complete whole-source
+paging/over-budget behavior and actual source→API→receiver→selected DOM delivery. Both-color
+source fixtures and all control cuts are defined in module-registration§4.11f. These clauses
+introduce no general raw-object renderer, ordinary module eligibility or semantic qualification.
+
+
+#### 3.10e D4167 — complete snapshots and bounded exchange details (independently accepted 2026-11-09)
+
+Companions: shared-candidate-evidence-packet§3.1c and module-registration§4.11g. These are fixed
+source-specific typed renderers, not LLM judgement, generic JSON inspection or new chess truth.
+Define one closed parser per exact nine-source payload, retaining every original field/list and
+null/empty/optional distinction. Main operands equal the ENTIRE original payload, with no wrapper
+or invented source field. Construction and actual received adapters require its existing payload
+digest equal the original evidenceRef.evidenceDigest, as in §3.10d, without a new hash protocol.
+Opposition directly renders both kings, turn, nullable result, holder/form/interior and empty flag.
+The other eight use explicitly labelled source overviews and complete-source detail doors below.
+Their source-level counts derive from the complete parsed payload, never from one detail page.
+
+Fixed overview/detail wording preserves these meanings:
+
+- Backward: all root pawns and qualifying rows, exact stop/controllers/support/ahead/occupancy,
+  pseudo-capture targets and opponent-color half-open flag. No legal-advance/weakness conclusion.
+- Groups: every color/file, ordered pawn membership, adjacent occupied/island files and literal
+  isolated/doubled booleans. File states: all eight rows with both pawn sets and the literal
+  open/half-open-for-White/half-open-for-Black/closed state; zero pawns means eight open files.
+- Future challenge: original pawn domain and every `(pawn,target,pushes)` row, including zero. State hypothetical same-file geometry ignores occupancy,
+  turn, king safety and legal move paths; count is single-rank geometric pushes, not a forced
+  move count or permission to double-push. Migration additionally retains every distinct captures/
+  pushes combination, assumes no victims or legal path, and never becomes a same-file assertion.
+- Outpost: literal future_file basis, color/square/relative rank, all support pawns and explicit
+  empty challengers. Candidate ignores occupancy and does not exclude capture-migration-only
+  reach; occupied adds exact same-color non-pawn/non-king occupant. Neither establishes arrival,
+  permanence, safety, value, purpose or recommendation.
+- Advance: original actual edge/pawn/advanced pawn, full landing capture and pawn-reply counts;
+  calculated immediate legal options are not observed replies, safe/best or a forced exchange.
+  Zero qualifying occurrence differs from a qualifying occurrence with zero pawn replies.
+
+The source-specific deterministic detail ABI extends the existing closed Inspector detail union.
+No arbitrary callback, recursive JSON walker, user path, detector recomputation or new source
+seal is allowed. Every page uses original source order, stable expanded sourceOrdinal, range
+start/count/total/next and fullSourceTotal; existing whole-scope ordinal rules/8-item fitting stay.
+Every new detail has list/panel statement only, no marks/arrows. Its statement renderer is exactly
+`inspector.detail.<kind>@1`. Use its original source's presentation caption: backward-pawn@1,
+pawn-file-membership@1, piece-geometry@1 for file states, future-file-challenge@1,
+capture-migration-reach@1, outpost-candidate@1 for both outpost details, and legal-exchange@1 for
+advance. These are fixed PRESENTATION labels; reuse existing dictionary entries or add labels
+there, without claiming a new semantic convention/resource/version. Each retains actual source
+conventions and limitations, not an assertion that a label qualifies a source.
+
+| Detail kind | Closed context and exact member enumeration |
+|---|---|
+| backward_pawns | context `{fen}`; every original pawnDomain member in order, then every complete qualifying BackwardPawnSubject in order; separate member kinds for domain and qualifying row |
+| pawn_file_groups | `{fen}`; every complete original PawnFileGroup in order |
+| file_states | `{fen}`; all eight complete original FileStateRow objects in order |
+| future_file_challenges | `{fen}`; every pawnDomain member, then every complete FutureFileChallenge, preserving source order |
+| capture_migration_reaches | `{fen}`; every pawnDomain member, then every complete CaptureMigrationReach, preserving distinct count combinations/order |
+| outpost_candidates | `{fen,basis}` with literal future_file; every complete original OutpostCandidate, including all supporting pawns and explicit challengers:[] |
+| occupied_outposts | `{fen,basis}`; every original complete `{candidate,occupant}` row |
+| backward_pawn_advance | context exact `{beforeFen,moveUci,afterFen,pawn,advancedPawn,landingFen,landingSquare,captureCount,replyCount}`; finite exchange traversal specified below |
+
+Zero members remain a readable whole-scope empty page with exact context and declared zero total.
+A domain pawn with no positive rows still has its original domain member; empty list and absent
+field are never equivalent. Parsed members retain closed original shapes, all booleans, list order
+and source context. No shortened count-only positive member substitutes for an original row.
+
+**Advance exchange traversal.** For each original landing.captures entry, in original order:
+(1) emit capture_header carrying captureIndex and every LegalExchangeResult non-array field:
+beforeFen,captureUci,landingSquare,capturer,captured,conventionId,resultUnits, plus exact immediate
+branch/chosenLine/stopDecisions counts;
+(2) traverse its ordered branches depth-first preorder. Emit one exchange_branch per node with
+captureIndex, literal original zero-based index path from this result's branches, complete step,
+resultUnits,chosen and immediate continuationCount, then descend each continuation in order;
+(3) emit every original chosenLine step with captureIndex and lineIndex;
+(4) emit every original stopDecisions entry with captureIndex,index,ply,color,stopped.
+After all captures, emit each original replies occurrence with replyIndex and its exact original
+landing-capture index. The sole source factory's subset retains that identity; a different or
+missing match refuses, never truncates or reconstructs an exchange. Original headers/counts and
+index paths preserve empty arrays, parentage and every recursive alternative. Preserve repeated
+equal-looking nodes/steps; don't deduplicate, sort by units or replace branches with chosenLine.
+A complete step retains moveUci,mover,captured,from,to,optional promotion,delta; optional absent
+promotion is not an invented null or omitted actual promotion. Fixed prose uses piece/square/move
+labels, chosen yes/no, declared exchange units and literal stop decisions, not engine evaluations
+or strategic grading. Context is repeated in bounded pages; original FENs remain typed operands
+and displayed position context, not raw JSON dumped into learner text. Keep a genuinely oversize
+atomic member as detail_limited; this finite decomposition does not grant larger budgets.
+
+Every derived detail view has its OWN exact full-payload/reference correspondence check at
+construction and receiving, as well as existing sourceKey/current grant/original-source factory
+ancestry and range/member checks. A partial page is NOT hashed as the original snapshot and is
+not an authenticity proof; the original sealed source is checked BEFORE slicing, including zero.
+Use existing retained input membership, never a caller-written source/hash/callback. Public
+checksums cannot authorize mutation while retaining the actual source/view reference.
+
+Acceptance: source-backed both-color absolute cases, zero/domain/null/in-check cases without
+invented abstention; multi-pawn groups, all file states, large hypothetical/migration populations,
+zero pushes and distinct capture counts, supported candidate vs actual occupancy and migration-
+only challenge. Actual legal-advance both-color controls retain non-pawn landing captures and
+zero pawn-reply cases. Lossless traversal tests reconstruct every original array/tree field from
+complete pages, preserving path/index/empty/optional meanings; remove/change/reorder nested leaves,
+parents/counts/refs and require refusal. Real source/API/browser controls traverse every page via
+emitted controls under unchanged budgets and target/access/cancel lifetimes. Full software/build/
+source/governance and content measurements follow, with no content/native/release promotion.
 
 #### 3.11 `abstention` — the honest-empty state as a first-class component
 
@@ -1854,9 +2267,14 @@ and positive/negative visible fidelity fixtures. This is a proposed amendment fo
 accepted implementation authority. Neither a generic `Position reading: ...` substitute nor a
 local prose side channel discharges the current-consumer obligation.
 
-## Draft amendment — detailed structural Inspector (D3309/D3654)
+## Accepted amendment — detailed structural Inspector (D3309/D3654)
 
-**State: authored, awaiting independent review; not accepted implementation authority.** This
+**State: independently accepted for bounded implementation, 2026-11-03.** Current-source review
+return and repaired-draft acceptance are recorded in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`. Local source/UI
+implementation and bounded independent review are recorded in `planning/codex-queue.md` and
+`planning/exploration/log.md` (2026-11-03); native/full release proof remains incomplete.
+No native or semantic qualification is claimed. This
 amendment completes the specification missing from D3309's measured proposal. It does not
 discharge the current-consumer obligation, qualify a chess detector or select useful hints.
 Evidence: `planning/platform-alignment/evidence-presentation/d3309-structural-fidelity-2026-09-30.md`
@@ -1868,20 +2286,32 @@ fidelity against the same collector; it is not an independent oracle for chess s
 For each of the sixteen kinds below, add `rules.structural.reading.<kind>@2`; never change the
 operands or meaning of its `@1` predecessor. Introduce **`inspector.position_structure@2`**, accepting
 exactly these sixteen `@2` readings plus the existing `rules.structural.reading.named_structure@2`.
-The existing consumer `inspector.position_structure@1` continues to accept its original exact
-versions, through its existing operations and adapters. `board.selected_square_sight@1`, predicate
-projections, comparison-delta projections and installed pack references remain unchanged.
+After both actual web callers migrate, retire `inspector.position_structure@1` execution and its
+obsolete raw-returning `positionStructureEvidence` helper/exports/adapters; no parallel compatibility
+pipeline is required under the owner's D3851 prelaunch ruling. Necessary existing `@1` reading
+sources remain because current `board.selected_square_sight@1`, other consumer bindings, predicates,
+comparison deltas and installed pack references still require them. Do not delete or silently
+widen those independent current source contracts just to retire this one consumer.
 `pawn_count` is matcher-only and receives no successor. The existing named-structure successor is
 reused unchanged, not replaced with a generic string slot. This corrects D3654: changing the
 accepted input set of the old consumer is a version change, even if its label remains identical
 (`rfc/archive/evidence-contract-manifest.md` §4.2).
 
-The new runtime entry is `presentPositionStructureEvidence({ fen, context })` in
-`packages/runtime/src/reading-evidence.ts`: acquire sole-factory readings for the displayed FEN,
-compile the exact `@2` consumer, and present its admitted items with registered pair-keyed adapters.
-`context` is the existing compiler/presentation context, not a new permission or prose object.
-Register this actual callable in `CONSUMER_PRESENTATION_CLASSES` and its consumer-operation census;
-pointing at a symbol without production consumption does not pass. No new server endpoint,
+The new public runtime helper is `presentPositionStructureEvidence({ fen })` in
+`packages/runtime/src/reading-evidence.ts`, returning `readonly PresentedEvidenceItem[]`. There is
+no compiler/presentation `context` parameter in the actual APIs. It first calls
+`compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, {id:"inspector.position_structure",version:2})`
+over the complete accepted set, before invoking any of the sixteen sole-factory routes or the
+existing named-structure route for the displayed FEN. Then `evidenceForConsumer` admits those
+values and `consumePositionStructure(view)` presents that exact sealed `ConsumerEvidenceView`.
+The current view-consuming symbol is migrated to require version2 and return presented items;
+it never accepts a raw FEN, caller observations or a synthetic view. Keep wrapper and registered
+consumer operation distinct: register the actual view consumer with
+`evidenceConsumerOperation("inspector.position_structure", consumePositionStructure, 2)` in
+`RUNTIME_EVIDENCE_CONSUMER_OPERATIONS`; update the actual `PRESENTATION_CONSUMER_CLASSES` row to
+`inspector.position_structure@2` and that callable. Export the new pure helper through the actual
+runtime/client facades, not private factory issuance. Both real web callers must consume its
+returned items; pointing at a symbol without production consumption does not pass. No new server endpoint,
 background search, cache or shared-resource version is required. Existing extensible projection,
 consumer and renderer registries receive independently versioned declarations.
 
@@ -1926,7 +2356,9 @@ even when the square is called safe. Keep the strict-outpost caveat as registere
 wording rather than accepting caller-supplied `provenanceNote` prose in these successor payloads.
 The separately admitted named-structure record retains its existing registered provenance.
 
-Add a successor factory table alongside, not over, `STRUCTURAL_READING_FACTORIES`. Factories
+Add a successor factory table alongside, not over, `STRUCTURAL_READING_FACTORIES`, registering
+its exact sixteen route keys in the actual private `internal/evidence-value-routes.ts` dispatcher.
+Factories
 accept the canonical FEN through the existing validated FEN path and compute their own operands;
 they do not accept caller observations, component records, captions or cached caller testimony.
 They copy only the declared kind-specific fields from the existing computation and use the
@@ -1952,16 +2384,30 @@ Do not migrate only one or leave a raw loop as fallback. Preserve collapse/empty
 access/help/disclosure, displayed branch/FEN and decision lifetime. Old responses or items for a
 retired displayed position cannot paint the new board. This amendment adds no settings, presets,
 module relevance ranking, automatic display, selected-square policy or ordinary hint surface.
+At the current DrillScreen seam, replace only `structure.features`' raw prose loop with the
+helper's typed items for `displayedNode.fen`; retain `rawStructure` wherever current Sight or other
+unchanged consumers need it. At Compare's current per-column seam, resolve exactly
+`column.leafNodeId` and pass that node's FEN, never substitute `run.nodes[0]` for a missing leaf.
+A missing displayed leaf is an explicit local unavailable/failed section with valid siblings,
+board and moves preserved; it calls no factory for another position and is not a calculated
+empty chess result. Keep each section under its own existing parent visibility/help/role gates;
+do not borrow Full2 source-browser permission or automatically open it. Both callers recompute
+typed items from their current synchronous displayed-FEN derivation; no stale cache/raw fallback.
 The legacy renderer may remain for its other retained consumers; deleting it globally is not
-part of this migration. Existing saved packs/runs do not change format.
+part of this migration where other current consumers still need it. The obsolete position-structure
+consumer/raw-helper path itself does retire; it is not such a retained consumer. Existing saved
+packs/runs do not change format. Six file/count successor families deliberately retain empty
+witness arrays: this fidelity amendment does not supply backward-pawn/stop identities, fix D1723,
+or turn D4036's12 source-empty pairs into delivered square guidance.
 
 ### Able-to-fail acceptance and closeout
 
 1. Set equality: exactly sixteen successor factories/types/parsers, explicit `@2` consumer,
    operation and complete pair-keyed adapter coverage. Include zero-count/empty-witness records.
-2. Freeze predecessor contract fixtures: all retained `@1` declaration/accept lists, outputs and
-   board Sight still work. An `@1` item cannot satisfy the new sixteen-kind `@2` bindings and a
-   new `@2` item cannot silently widen an old binding. Existing named-structure `@2` still works.
+2. Preserve actual necessary predecessor source/consumer contracts and board Sight, not an
+   obsolete position-structure compatibility door. The retired consumer/raw helper cannot execute.
+   An `@1` reading cannot satisfy the new sixteen-kind `@2` bindings and a new `@2` reading cannot
+   silently widen any still-current `@1` binding. Existing named-structure `@2` still works.
 3. For every kind, a real FEN/factory/compiler/component positive retains all required operands;
    missing/mismatched/extra fields and forged item/component prose refuse. Keep malformed nested
    pawn-safety negatives and count/side/role/shade distinctions, not just rendered snapshots.
@@ -1969,6 +2415,10 @@ part of this migration. Existing saved packs/runs do not change format.
    The measured Carlsbad reading keeps White/Black seven-pawn counts and White's light-square
    bishop on d3; twelve side/role counts must not collapse into one caption. Changing displayed
    branch/FEN and closing/reopening the section cannot retain stale readings or change moves.
+   A missing Compare leaf cannot display root facts; an ineligible/closed parent cannot acquire
+   a new permission from Full2. A missing complete consumer binding refuses before any of the
+   seventeen family/named factory calls. The registered operation refuses the wrong view version
+   and raw FEN/observation inputs; only the public wrapper accepts the displayed FEN.
 5. Native desktop/phone journeys open both sections, verify readable qualified facts without raw
    identifiers, and preserve board hit targets, ceilings, collapse/empty state and saved play.
 6. Normal software/content/governance/build/browser gates pass. Content remains a compatibility
@@ -1976,10 +2426,17 @@ part of this migration. Existing saved packs/runs do not change format.
    new mandatory research gate is added. Close D3309/D3654 only with production bindings and
    visible fidelity proof; the 195 prototype controls alone close neither.
 
-Open review question: does the successor operation inherit the actual display/help context at
-both call sites without creating a second admission path? Independent review must inspect the
-compiler, parser, renderer and consumers, including the zero-count and pawn-geometry negatives.
-No further product policy or owner choice is presumed necessary for preserving measured facts.
+Current-source author repair, 2026-11-03: neither runtime compiler nor presentation API has the
+draft's former `context` argument. Display/help ownership stays at the actual two existing web
+callers and their parent gates. The pure synchronous helper receives only their displayed FEN;
+its reactive value must recompute when that FEN/branch changes, with no retained response from
+another position and no new assistance defaults. Independent review must inspect the complete
+preflight-before-factory sequence, exact view-operation ABI, real both-screen gates/invalidation,
+all operand grammars and terminal/pawn-geometry negatives. No new product policy or owner choice
+is presumed necessary for preserving measured facts. During actual consumer retirement, update or
+retire the opt-in historical195 diagnostic's obsolete consumer calls honestly; do not retain a
+legacy runtime solely to keep an old disposable measurement executable. That diagnostic remains
+same-collector fidelity evidence, not an independent source/meaning qualification.
 
 ## Draft companion — scoped comparison structure fidelity (D3847/D3855)
 
@@ -2302,6 +2759,195 @@ not a required count. Preserve actual source and all original consumer/pack byte
    Close D3792 only after this and module-registration's source/access/response/native obligations
    and independent acceptance—not on a disposable model or a green schema alone.
 
+## Draft companion — whole-reading Inspector states (D3984)
+
+**State: accepted for bounded implementation, 2026-11-02.** Independent decision is recorded
+in the existing compiler2 review after the relation-overlay caption clarification. Full
+source-page/consumer/API/UI/native delivery and parent completion remain open.
+Module-registration §4.11b owns the exact17 Full2
+source pairs, finite predicates, unchanged source/ordinal/status semantics and14 optional
+geometry compositions. This companion owns only strict renderer operands, text and source
+retention. The earlier accepted six D3802 details are unchanged. Research and independent
+return: `design/research/module-evidence-assembly.md` §Whole Inspector readings without
+drawable witnesses; existing compiler2 independent review, 2026-11-02.
+
+**Finite empty/unavailable renderer.** Add only `inspector.whole_population@1`, a closed
+discriminated union keyed by sourceProjection. Its exact source refs are the ten empty-population
+rows: loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank,
+discovered_latency, consequence.threat, consequence.mate_in_one, promotion_pressure and
+pawn.reading.candidate_majority, each with the full exact@1 ref from §4.11b. Every ordinary
+empty arm has exactly `{sourceProjection,state:"empty",count:0}`; loose_piece additionally
+requires `piecesExamined:nat`, copied from the complete reading's pieces.length. The two
+trapped/threat refs additionally admit exactly `{sourceProjection,state:"not_evaluated",reason}`,
+with respective literal reasons trapped_while_in_check/pass_while_in_check and **no count**.
+No other ref, count, state, reason, extra key, or source/arm pairing parses. The registered
+template uses a finite exact-ref label/convention table and says this reading contains zero
+of that named convention's population; the loose-piece arm retains the inspected-piece count.
+The not-evaluated arms explicitly state the in-check calculation limit, not zero tactics or
+safety. Never display source IDs, raw FEN, diagnostics, generic machine JSON or strategic prose.
+The genuine-source retention check recomputes the whole exact operands and caption; parsing a
+syntactically correct empty arm alone grants no source truth or occurrence authority.
+
+**Destinations retain availability.** Add only `inspector.piece_destination_states@1`, with
+`colors` exactly the two unique White/Black entries in their original source order. Each is
+one closed arm: `{color,kind:"available",pieces:nat,legal:nat,localNonLosing:nat}` or
+`{color,kind:"unavailable",reason:"invalid_turn_clone"}`. The available counts copy the complete
+source color's pieces.length and the sums of legal/localNonLosing memberships; the latter
+cannot exceed legal. Unavailable entries have no zero-count fields. This template labels local
+exchange membership as such and states turn-clone unavailability, never move safety. It serves
+all Full2 occurrences of this source, including mixed and positive colors. No change to the
+source predicate, local-exchange convention or ordinary-module destination renderer follows.
+
+**Existing templates and literal scope correction.** Six zero-capable statement families use
+their existing strict registered operands/templates: space, pawn connectivity, development,
+legal moves, pawn contacts and defender duties. Existing nonempty population templates are
+likewise reused, including positive back-rank entries.
+For positive back-rank caption operands, equal heavy square/target renders “already occupies”
+instead of “can reach”; unequal squares keep the existing convention-qualified access wording.
+This is a literal mechanical correction, not a claim that a legal move exists. This template
+correction applies wherever that shared renderer already operates; other consumers' source,
+selection, component layouts and budgets are unchanged. No zero-length relation is introduced.
+
+For each of the14 geometric Full2 rows, derive mandatory statement then optional original
+geometry through the closed `inspector_whole_reading_has_geometry` condition. A square_set's
+caption equals the mandatory statement operand exactly. A relation_overlay has no caption
+field: retain its existing closed schema and accompany it with that same-owner mandatory
+statement. Do not invent a relation caption field. Every actual node/edge,
+brush, convention receipt and evidence owner must equal the source-derived original recipe;
+only the geometry recipe's existing deduplication/nonzero-edge normalization applies. No
+per-source data filter becomes an occurrence filter. Component/static form coverage retains
+the full pair even for text-only instances. Internal source mapping and retention is finite,
+not a registered arbitrary derived sentence, caller predicate, catch/fallback, or permissive
+empty SquareSet. New renderer source reads must join the exact F1 operands named in §4.11b.
+
+Preserve whole equivalent-sentence/caption/mark/arrow cost under unchanged Full Inspector
+budgets and original source-order occurrence identity. A text-only presented occurrence still
+has its exact source evidenceRef; it is not an abstention question (evidenceRef:null), a new
+detail projection or no_witness. Strict wire receiver composition/operand validation must
+admit exactly the same finite cases and reject forged/omitted/extra states or components.
+Neither a parsed component nor a matched source label is an access or completed-page token.
+
+Acceptance tests are the source→renderer→retention/atomic-budget falsifiers in §4.11b, plus
+receipt round-trip/receiver failure for wrong exact source/renderer/consumer, forged calculated
+zero versus unavailable, wrong component layout, caption and owner. Full2 consumer/page/API/UI/
+native delivery remains the accepted parent obligation; no current consumer may be self-promoted
+or registered partially just to make these tests pass. No pack/run/storage change, legacy-data
+rewrite, global empty-component exception, generic JSON/prose renderer or budget increase.
+
+## Accepted amendment — complete recorded board-caption footprints (D4035)
+
+**Independently accepted for bounded implementation, 2026-11-03.** Decision and actual
+persistence-owner audit: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`,
+D4035 bounded buildability acceptance. This does not accept or close unrelated parent work.
+D4034's executed census has41 current Inspector-group board/line pairs:33 captions
+retain all their existing highlighted coordinates, eight in three families do not. This is a
+presentation operand-loss defect, not missing chess evidence. Current sources and exact recipes:
+`presentation-inspector-adapters.ts`'s roleAsymmetry, zwischenzug and overload constructors;
+`material-state.ts`'s sourceEvents; `semantic-evidence.ts`'s recorded sequence operands. The
+source-field factories already retain these data; no new source identity or collector is needed.
+
+### Literal operand delta and identity
+
+Extend only these existing registered operand grammars, without changing their templates:
+
+| Renderer | Additional required closed operand | Original source | Exact highlighted footprint |
+|---|---|---|---|
+| `inspector.role_asymmetry@1` | `squares: nonempty SquareName[]`, deduplicated preserving first occurrence | `sourceEvents.map(event => event.to)` | `squares` |
+| `inspector.zwischenzug@1` | `recaptureSquare: SquareName` | `retainedRecapture.landingSquare` | `[recaptureSquare]` |
+| `inspector.overload@1` | `defenderRecaptureSquare: SquareName` | `defenderRecapture.to` | `[defenderRecaptureSquare, target.square]`, deduplicated |
+
+The proposal uses the existing renderer identities because this implementing, prelaunch
+presentation layer changes no fact or template meaning, and the owner requires a single current
+pipeline with zero legacy execution (D3851). Old rendered operands lacking these required fields
+must refuse, never receive guessed/default coordinates. Original run events, recorded source
+identities and authored packs are unchanged; presentation is recomputed from those original
+sources. No compatibility renderer, parser branch, receipt migration or source relabelling is
+introduced. The reviewer must reject this choice if a current persistence owner actually requires
+stored presentation receipts to execute; a string search alone is not proof of no such owner.
+
+### Construction and received consistency
+
+Each declaration uses one typed coordinate recipe over its retained operands for both source
+construction and received board consistency. Remove its separate source-only geometry path.
+The added coordinates are copied from the same original source fields already declared by that
+adapter; they are not derived from SAN, prose or another position. Preserve every existing
+template byte, original mark order/brush, source operand declaration, recorded move/path order,
+consumer forms, assistance gate and selection. Equivalent sets may arrive in a different order.
+
+All41 shared compositions then have complete caption footprint checks; each also retains D4034's
+fixed brush/owner and recorded path origin/distance/source-convention joins. Full2's existing
+stronger non-whole guard remains first, while its distinct whole-reading/detail construction is
+unchanged. A client can reject internal coordinate contradictions; public digests still do not
+authenticate a coherently forged private source, exact path plies or chess truth.
+
+### Able-to-fail acceptance
+
+1. Derive the exact eight-pair image (role asymmetry: Map+Full2; zwischenzug and overload:
+   Nudge+Map+Full2) from current specs. Every pair must have a nonempty genuine original source
+   and source→consumer→serialization→strict-parser positive; no relabelled predecessor fixture.
+2. Independently recompute expected coordinates from the original source fields and compare
+   their exact construction order plus deduplicated membership. Original caption text and move
+   paths remain byte-equal to the pre-amendment construction.
+3. Recomputed public-digest attacks changing only mark coordinates must fail for all eight pairs,
+   while reordered equivalent sets pass. Old source/caption/line mutations from D4034 stay intact.
+4. Missing, malformed or extra coordinate operands must fail independently at process fact
+   construction and raw-wire receipt input. A constructor refusal cannot stand in for a wire test.
+5. Census complete41 pairs with mandatory current positives and geometry checks; do not retain
+   the former8 as silently untested cases. Stronger Full2, mounted Review/Nudge, normal types/build,
+   current full software/content/performance/governance and existing source qualification/native
+   limitations remain independently reported. This amendment does not close the parent RFC.
+
+## Accepted amendment — retained legal-move board footprint (D4038)
+
+**Independently accepted for bounded implementation, 2026-11-03.** The new decision in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md` supersedes its historical
+first return. Bounded source implementation is independently reviewed locally; actual295/
+three-file and2843/19-file controls, types/build pass. Full gates/coupled landing and all parent
+obligations remain open. D4036's bounded
+source audit finds `rules.mobility.reading.legal_moves` already retains each piece's square and
+legal moves. The Sight constructor filters `pieces` by `moves.length > 0` and lights those piece
+squares; `play.legal_moves@1` drops them, retaining only `turn`, `pieces` and `moves` counts.
+This is presentation operand loss, not a missing chess collector or permission to guess squares.
+
+Independent first review returns the draft: this renderer also serves Full2 whole legal-move
+readings, including a complete terminal zero rendered as a count sentence with no board. A global
+nonempty field or a Sight-only change would break that existing current consumer.
+
+Add one required closed `squares: deduplicated SquareName[]` operand to that existing renderer,
+allowing `[]` at the renderer level. Copy exactly the original movable pieces' squares in source
+order, preserving first occurrence; keep existing turn/count operands and template bytes. Require
+`pieces === squares.length`; a zero piece count retains zero moves. Update both actual
+constructors: Sight and Full2 whole legal-move reading, plus the existing precursor helper if
+retained. One typed recipe over retained squares drives Sight construction/received exact
+unordered-set checks with original blue brush/same evidence owner. Full2's existing stronger
+source-equality/whole guard remains first; its existing received whole guard additionally checks
+the legal caption's retained squares against marks, blue brush and same owner. Construction-side
+source equality alone is not a received consistency check. Sight still requires a nonempty square
+component; Full2 terminal zero retains its exact `play.legal_moves@1` count sentence and no board,
+not an unrelated empty-population renderer. No independent source-only geometry fallback.
+Missing, malformed, duplicate or extra operands refuse; old count-only operands do not execute.
+Do not infer squares from prose, counts, the opponent's pieces or another position.
+
+The prelaunch single-current-pipeline ruling D3851 permits retaining the renderer identity only
+if the reviewer verifies actual persistence owners do not require stored old renderer operands
+to execute. Presentation recomputes from original sources; no source identity, run/pack/storage
+schema, collector, assistance gate, selection, compatibility branch or new semantic judgement.
+The reviewer must check this particular renderer's use/persistence, not rely on identifier grep
+or assume D4035's different renderer audit proves it. Full2's whole constructor must carry the
+new coordinate field but retains the existing source-equality guard, positive/zero layout and
+geometry meaning. Actual Guided Hint's separate target-yellow/actor-green receipt stays untouched.
+
+Acceptance requires genuine legal source→Sight/Full2→serialization→strict-parser positives for
+both turns, including immobile pieces excluded from marks, plus an actual terminal Full2 zero
+sentence/no-board positive. Independently compare source coordinate/order and retain pre-amendment
+caption/marks byte equality. Isolated re-digested square/brush/owner substitutions refuse while
+reordered equivalent sets pass. Missing/malformed/duplicate/extra coordinate and mismatched-count
+controls independently reach process construction and raw-wire input. Inventory the exact two
+current affected pairs; retain original stronger Full2 source/cross-shape checks and zero cases,
+turn/counts/template tests, remaining D4036 families, normal type/build and full gates. Internal
+consistency is not authentication of a coherently forged source or semantic qualification;
+neither parent RFC nor 1.0 closes here.
+
 ## Questions resolved for this draft
 
 1. **`full_inspector` uses components plus a per-fact provenance/raw drawer.** The owner ruled the
@@ -2359,6 +3005,10 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-11-04: drafted D4060§3.10b complete source-specific before/after statements for the exact
+  twelve structural event topics. New eleven-family Inspector renderer retains original fields;
+  complete islands formatter is reused. No ordinary-card or source-policy change; review pending.
 
 - 2026-10-15 — Unaccepted D3858 companion specifies sparse Explorer as fixed typed source
   status with exact body/disclosure correlation, not a below-floor fact-renderer bypass.
@@ -2548,3 +3198,208 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   D5 arrow activation. The 2026-08-25 amendment supersedes D5's producer diagnosis without
   erasing its history. Cross-draft ownership pin with `rfc/module-registration.md` recorded in
   `rfc/README.md` per [[D1381]].
+
+## Accepted bounded amendment — complete Play relation occurrences (D4049/D4050)
+
+**Independently accepted for bounded implementation, 2026-11-03.** Decision:
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`. Independent source audit of all twelve
+current Play relation adapters and every production receipt serializer establishes the finite
+repair below. This extends D4045's original relation-profile checks, not source admission,
+collector meaning, module selection or the live Guided Hint delivery protocol.
+
+### Original sources and missing retained operands
+
+The exact scope is these current adapter pairs:
+
+| Consumer | Projection | Statement renderer / required retained recipe |
+|---|---|---|
+| `module.sight_on_request@1` | `rules.pawn.reading.contacts@1` | `play.pawn_contacts@1`: original directed attacker/target pieces and squares |
+| `module.sight_on_request@1` | `rules.square.reading.control@1` | `play.square_control@1`: original per-color pseudo target/controller sequences |
+| `module.threat_radar@2` | `rules.tactic.reading.back_rank@1` | `play.back_rank@1`: existing kings and heavy-piece square/target entries |
+| `module.threat_radar@2` | `rules.tactic.reading.trapped_piece@1` | `play.trapped_pieces@1`: existing target pieces and attacker-origin squares |
+| `module.threat_radar@2` | `derived.tactic.defender_exposure@2` | `play.defender_exposure@1`: existing defender/target pieces and squares |
+| `module.guided_hint@2` | each of the seven current family `move` disclosure projections | `play.guided_hint@1`: original first-move UCI plus existing actor/targets/SAN/relation/ply |
+
+The seven exact family keys come from `HINT_FAMILIES` and `hintDeclarationRow(family).disclosures.move`;
+no broad `guided_hint.*` wildcard admits another projection. Existing static owner, answer-distance,
+edge relation/sign and optional convention checks stay mandatory.
+
+Three statement schemas already retain sufficient directed operands. The other nine gain only:
+
+1. `play.pawn_contacts@1`: required `directedContacts`, an ordered array of
+   `{attacker:{piece:{color,role},square},target:{piece:{color,role},square}}`, copied from
+   `reading.contacts`. Its length equals the existing `contacts` count. Empty is valid for the
+   shared whole-Inspector zero statement; a Play relation still needs its original actual edge.
+   Locks/passed/connected counts and the original template are unchanged.
+2. `play.square_control@1`: each existing `colors[]` entry gains required `pseudoControls`, copied
+   in original `entry.pseudo` order as `{target,controllers:[{piece:{color,role},square}]}`. Preserve
+   entries with no controllers: the original Play construction retains their target nodes too.
+   The existing `pseudo` count equals the number of retained targets with nonempty controllers;
+   `legal` remains its existing count-or-null, never a guessed controller list. Original text and
+   source-first node ordering are unchanged.
+3. `play.guided_hint@1`: require `uci` only at rung `move`, copied from `firstMove.uci` and checked
+   with the existing UCI parser, including promotions. The existing exact per-rung grammar rejects
+   it at pattern/square/piece/distance. `hintPayloadOf` retains this UCI rather than reconstructing
+   an empty string. Sentence rendering still uses the original SAN/template; UCI is never prose.
+
+All current constructors using the shared pawn/contact or square-control renderer must copy these
+required fields, including `inspectorWholeReadingComponents` and the actual Inspector precursors
+in `presentation-inspector-adapters.ts`. Their stronger source/whole-reading checks, statement-first
+conditional grammar, original geometry and zero/no-board behavior remain unchanged. This is not
+authorization to put the Play relation-pair grammar on Full2 or remove another consumer.
+
+These are private presentation operands, not new chess evidence. Source projections, schema
+versions, pack/run documents, source selection, capabilities and their resource lanes do not
+change. The current prelaunch receiver is strict: no missing-field fallback, parallel legacy
+renderer/parser, default identities, SAN-to-UCI inference or FEN lookup is admitted.
+
+### One typed recipe for construction and received correspondence
+
+Each of the twelve adapters declares one typed caption-operand-to-geometry recipe. The same recipe
+drives its original source construction and its composition-level received check; a second
+handwritten expected geometry is not a production authority. The private bound helper reuses
+D4045's original profile and first-occurrence normalization:
+
+- Contact nodes traverse each attacker then target; edges retain attacker→target.
+- Square control traverses original color/target/controller order, then preserves the original
+  source-first node partition and drops only the original same-square edges.
+- Back-rank nodes traverse king then each heavy-piece/target; edges omit only heavy square equal
+  to file target, exactly as before.
+- Trapped-piece nodes traverse the target piece then attacker origins; attacker role/color remain
+  absent because the original geometry does not retain them. Edges are attacker→target.
+- Defender exposure retains its exact two typed nodes and defender→target lost-defence edge.
+- Move hints retain actor first, a context origin only when different from the actor, context
+  destination, then target squares; edge endpoints are the literal retained UCI split. This
+  preserves follow-up actor/first-mover differences and first-occurrence emphasis collisions.
+
+For every recipe, node deduplication keeps the original first node for each square; edge
+deduplication keeps the original first directed from/to pair. Received node sequence and exact
+optional role/color/emphasis, edge sequence/endpoints and D4045's profile/owner/convention must
+equal that normalized recipe. Do not sort, treat these arrays as unordered, invent missing
+metadata, change existing line semantics or introduce a caption field on `relation_overlay`.
+
+### Closed, positional occurrence grammar for exactly these twelve pairs
+
+Current `presentEvidenceItems` already constructs each occurrence as adjacent
+`[relation_overlay,fact_statement]`. Actual module budgets keep/drop whole bundles; current
+production serializers never intentionally serialize a half pair. However, the process serializer
+and generic parser currently accept arbitrary individually sealed members. The new rule is an
+explicit narrowing, not a claim that it was already enforced:
+
+1. A scoped adapter declares a composition validator, alongside its existing per-component
+   validator. It receives the complete ordered component pair and the common evidence reference.
+   Registration refuses this hook without its fixed unconditional two-member composition.
+2. Process construction checks that pair before sealing and records one private construction
+   occurrence owner for both members. Re-presenting the same evidence object produces a different
+   private occurrence. No public occurrence id, source-hash registry or persisted receipt is added.
+3. Serialization checks process seals/owners first, then scans these pairs positionally. Both
+   members must come from the same private construction occurrence and have identical exact
+   consumer/projection/producer/evidence reference. A pair mixed from separate constructions
+   fails even if their evidence object or serialized bytes are equal.
+4. Received parsing retains existing strict row/component/operand/digest checks, then scans
+   positionally before granting client-local seals. Each protected row must begin one complete
+   adjacent pair in declared order, with identical exact adapter and evidence reference. Its
+   composition validator checks the recipe against that pair's own statement. A first matching
+   digest elsewhere in the flat receipt is never a sibling lookup.
+5. A complete repeated pair, including equal-valued sources or repetition of a whole original
+   process pair, remains valid in its own positional slot. Do not globally coalesce occurrences
+   by evidence digest or infer original source occurrence identity from a budget fact key.
+6. A lone statement/arrow, cropping either member, member reversal, interleaving, an extra member
+   or a crossed pair refuses as a typed presentation error. Whole-pair order across the receipt
+   remains caller order. Empty receipts and unrelated singletons, abstentions, other compositions
+   and Full2's conditional occurrence grammar retain their existing behavior and stronger checks.
+
+The wire continues to be `presentation.receipt@1` with the same exact fields; current producers
+already emit the narrowed pair grammar. This adds no schema resource or lane claim. It does
+not grant source truth: coherent replacement of both retained caption and geometry is not
+authentication of an original private source, and matching public digests is never that proof.
+The actual `HintDeliveryReceiptV2`/`GuidedHintSeat` path remains separately sealed and unchanged.
+
+### Required able-to-fail checks
+
+- Independently census the exact twelve protected adapter keys. Every pair has a genuine source
+  positive and the composition validator, not a lower aggregate coverage threshold. Other
+  consumers may retain their own validators; do not repeat D4024's prohibition on them.
+- Preserve actual source geometry, first-occurrence ordering, template bytes and source evidence
+  across contact/control/back-rank/trapped/exposure and all seven real Hint family positives.
+  Include both colors and promotion/actor-origin/context collisions where actual source fixtures
+  supply them. A source-empty path is not a fabricated arrow positive.
+- For each pair mutate exact endpoint, node metadata/emphasis, or a required directed caption
+  operand independently; rebuild every public operand/component/receipt digest and, for valid
+  altered fact operands, the corresponding registered text. Test the actual received refusal,
+  not an earlier stale digest, impossible fixture or constructor guard.
+- Test missing/cropped/reversed/interleaved/cross-owner and genuinely different sibling pairs,
+  plus process mixing from two separate constructions of the same evidence object. Keep genuine
+  repeated/equal-valued complete pairs, whole-pair reorder and unrelated receipt positives.
+- Prove nonempty contact-count consistency, full square-control target retention and copied count
+  consistency. Test required operand absence/extra fields through process and raw received input.
+  Shared whole-Inspector zero/contact positives retain the actual no-board and original source
+  retention guards, not a blanket empty-component exemption.
+- At each of the four lower Hint rungs, a raw UCI field still refuses; genuine move disclosures
+  retain exact firstMove UCI and original SAN sentence/arrow. Actual Hint seat/API/rung/redaction
+  controls stay unchanged. Never move this work into its live selection or provider pipeline.
+- Before implementation, record genuine red results against existing receipt behavior. Afterward
+  run the focused exact-source/receiver controls, mounted module/API and separate Hint regressions,
+  types/build and normal full gates. Existing held D3928/default/native failure remains visible;
+  unrelated green tests do not qualify a chess detector or complete the parent/milestone.
+
+## Accepted bounded amendment — actual live pivotal source image (D4052/D4053)
+
+The existing `board.pivotal_marker@1` image accepts four pivotal kinds, but its real live policy
+(`liveAdmitted`, D3048) only displays last-of-role irreversibility and phase changes. Complete
+preflight now reproduces `EXECUTION_SOURCE_UNREGISTERED` through the never-live
+`derived.pivotal.human_divergence@1` → `human.maia.policy@1` dependency. Restoring that retired
+provider, skipping preflight or compiling an ad-hoc filtered image is refused. The policy is
+already ruled; this amendment corrects its declared execution image, not what help is offered.
+
+1. Replace this consumer's executable image with `board.pivotal_marker@2`, accepting exactly
+   `derived.pivotal.irreversibility@1` and `derived.pivotal.phase_change@1`. Preserve its existing
+   timing, roles, sessions, forms, answer content, limits and provider-off behavior. Retire its
+   consumer1 execution and receipt adapters, with no legacy fallback. Other consumers and all four
+   original retrospective/source declarations remain unchanged. In particular this does not
+   restore any legacy provider or relabel a source as a newer projection.
+2. The live wrapper compiles this complete current two-ref consumer before any marker factory.
+   It invokes exactly the two existing permitted-family factories, preserving their original
+   inputs, values and source receipts. Shared path/kind ordering is the existing stable ordering,
+   not a new ranking. `liveAdmitted` still filters individual irreversibility subkinds exactly as
+   before; it is not replaced by a family-wide all-clear or a castling notification.
+3. The same operation `consumePivotalMarkers` requires its exact genuine consumer2 view and carries
+   each original marker alongside its own process-sealed registered presentation. Present each
+   admitted item separately; never join first-by-digest, merge equal-valued occurrences or
+   manufacture a receipt. The marker sidecar is navigation/selection metadata only. Its existing
+   registered fact renderer supplies visible evidence; timeline labels keep their existing
+   product vocabulary. A known `PRESENTATION_INVALID` failure is local to that item and visible
+   as rendering failure, not successful empty/no chess event. Unexpected errors still propagate.
+4. The helper lives outside `pivotal.ts`, avoiding a new core-producer↔presentation-registry value
+   cycle. Update the real operation callable, consumer classification anchor, exports, actual
+   DrillScreen caller and existing plan/check readers together. Selected-moment prose uses
+   `PresentedEvidence`; endgame classification, external revoice and the timeline's passive
+   default/off behavior are not changed. No new collector, source semantics, source schema,
+   pack/run/storage version or resource lane is claimed.
+5. Required falsifiers: the existing complete-preflight failure; exact two-binding equality and
+   successful complete current compilation; consumer1 refusal; full preflight before either
+   factory, including empty roots; no human/collapse factory work; same permitted original
+   sources/order/identities in both colors; distinct and repeated equal-valued marker ownership;
+   genuine mounted last-of-role/phase text rendered as registered components; disabled/default/
+   contest filtering and navigation retirement; a known per-item rendering failure that leaves
+   valid siblings and the board usable; unexpected errors not swallowed. Preserve the original
+   source/renderer attacks and all retrospective population cases. Run normal focused, mounted,
+   type/build and complete gates; held installed-content D3928 remains separate and visible.
+
+Independently accepted for buildability on2026-11-03 in the existing compiler2 review receipt,
+after the full candidate-declaration graph witness passes. Actual implementation, ownership/
+failure/mounted controls and full gates remain obligations. The already-authorized formatting
+wiring does not itself authorize weakening its red preflight.
+
+
+## Independently accepted coordinated successor — 2026-11-09
+
+`subject-safe-semantic-selection.md` owns the D1716/D1719 and D4167 canonical/candidate/avoidance
+cutover. BOTH independent source/control and consumer/meaning reviews accept its repaired finite
+source-first contract: original root/child graph, two private total reads, current42/compiler7,
+thirteen source-owned@2 outcomes, fourteen current-event compact ordinary pairs and unchanged
+historical case custody. Acceptance is recorded in the existing compiler2 review receipt; it
+comes from that review, not this parent's implementing state. Production images, source
+correctness/qualification and implementation gates remain owed. D4175 retains all26 ordinary
+avoidance pairs/delivery/cost; D4167 keeps every reverse consumer and actual bot Stage-B/D3662.
+No full adoption, content/native or release completion follows.

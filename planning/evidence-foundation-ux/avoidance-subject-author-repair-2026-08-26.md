@@ -1,5 +1,24 @@
 # D1716/D1718/D1719 author handoff — subject-safe counterfactual evidence
 
+## Current authoring gate — 2026-11-04
+
+Independent review accepts the current thirteen-source ABI/domain study in
+`design/research/avoidance-subject-identity.md` for successor authoring only. The historical790
+census is not current prevalence. Current originalroot41/40 refuses incomplete population;
+completevariant34/34 issues the real subjectless candidate but excludes it under the cap.
+Normal `make avoidance-subject-measurement` strictly typechecks and passes17 tests/twofiles,
+with one explicitly expensive full-census skip. No production or qualification is accepted.
+
+Carry the current source matrix into the successor. Explicitly resolve sparse observations vs
+total state values, mover-only non-king loose-piece domain and unavailable evaluation, exact
+piece/ray relocation, captured/promoted/out-of-domain subjects, complete legal denominators,
+source versions and still-draft `foundation-source-identity.md` dependencies. Do not treat a
+registered future fixture or consumer renderer as a shipped source operation. The new learner
+pipeline needs no legacy compatibility path; frozen identities cannot be reinterpreted in place.
+Every registered family needs a truthful supported/held disposition, not a subset closure.
+The independently accepted research permits drafting; the draft still needs routine independent
+review before implementation. That review is owner-authorized without another permission prompt.
+
 ## Why this is an author action
 
 The implemented selector contract is frozen in `rfc/archive/semantic-evidence-selection.md`.

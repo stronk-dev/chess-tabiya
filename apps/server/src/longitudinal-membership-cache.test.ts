@@ -5,11 +5,11 @@ import { createSemanticMembershipReader } from "./longitudinal-membership-cache.
 const edge = { beforeFen: "before 0 1", moveUci: "e2e4", afterFen: "after 0 1" };
 const gained = { projection: { id: "rules.structural.event.open_file", version: 1 }, sign: "gained" };
 
-it("deduplicates exact v1 projection/signs without removing opposite signs or admitting another version", () => {
+it("deduplicates exact projection/version/signs without aliasing opposite signs or versions", () => {
   const collect = vi.fn(() => [gained, gained, { ...gained, sign: "lost" }, { ...gained, projection: { ...gained.projection, version: 2 } }]);
   const read = createSemanticMembershipReader(collect);
   const memberships = read(edge)!;
-  expect(memberships).toEqual([`${gained.projection.id}\0gained`, `${gained.projection.id}\0lost`]);
+  expect(memberships).toEqual([`${gained.projection.id}@1\0gained`, `${gained.projection.id}@1\0lost`, `${gained.projection.id}@2\0gained`]);
   expect(Object.isFrozen(memberships)).toBe(true);
   expect(() => (memberships as string[]).push("forged")).toThrow();
   expect(read({ ...edge })).toBe(memberships);

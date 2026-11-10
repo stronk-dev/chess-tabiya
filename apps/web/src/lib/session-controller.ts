@@ -17,7 +17,6 @@ import {
   capabilityModeAvailability,
   providerAvailabilityNotice,
   type ProviderOperationAvailability,
-  type HintResponse,
 } from "@chess-tabiya/runtime/client";
 
 import {
@@ -28,7 +27,7 @@ import {
   type Capabilities,
   type AuthoredFeedbackPage,
   type DrillClientApi,
-  type HintRequestBody,
+  type GuidedHintClient,
   type PgnDownload,
   type RunGraph,
   type ShapeEntryView,
@@ -310,6 +309,7 @@ export class DrillSessionController {
   readonly #subscribers = new Set<Subscriber>();
   #state: DrillSessionState = Object.freeze({ busy: false });
   #store: RunStateStore | undefined;
+  readonly #hintClients = new WeakMap<RunStateStore, GuidedHintClient>();
   #unsubscribeStore: (() => void) | undefined;
   #capabilities: Capabilities | undefined;
   #dismissedCheckpointSeq = 0;
@@ -599,12 +599,21 @@ export class DrillSessionController {
     }
   }
 
-  /** rfc/hint-distance.md §7: the Guided Hint seat's three operations over the attached run store. */
-  readonly hints = Object.freeze({
-    request: (body: HintRequestBody): Promise<HintResponse> => this.#requiredStore().requestHint(body),
-    poll: (requestId: string): Promise<HintResponse> => this.#requiredStore().pollHint(requestId),
-    cancel: (requestId: string): Promise<HintResponse> => this.#requiredStore().cancelHint(requestId),
-  });
+  /** §7a: a retained client always addresses its originating attachment, including late cleanup. */
+  hintsFor(runId: string): GuidedHintClient {
+    const store = this.#requiredStore();
+    if (store.snapshot.run.id !== runId) throw new Error("Hint client does not match the attached run");
+    let client = this.#hintClients.get(store);
+    if (client === undefined) {
+      client = Object.freeze({
+        request: (body: Parameters<GuidedHintClient["request"]>[0]) => store.requestHint(body),
+        poll: (requestId: string) => store.pollHint(requestId),
+        cancel: (requestId: string) => store.cancelHint(requestId),
+      });
+      this.#hintClients.set(store, client);
+    }
+    return client;
+  }
 
   async reveal(): Promise<void> {
     if (this.#state.busy) return;
@@ -1292,7 +1301,10 @@ export class DrillSessionController {
 
   async #loadShapes(ids?: readonly ShapeReference[]): Promise<readonly ShapeEntryView[]> {
     const selected = ids?.flatMap((reference) => typeof reference === "string" ? [reference] : reference.relation === "present" ? [reference.shape] : []) ?? (await this.#api.shapes()).map((shape) => shape.id);
-    return Object.freeze(await Promise.all(selected.map(async (id) => (await this.#api.shape(id)).document)));
+    return Object.freeze(await Promise.all(selected.map(async (id) => {
+      const received = await this.#api.shape(id);
+      return Object.freeze({ ...received.document, documentDigest: received.digest });
+    })));
   }
 
   #requiredStore(): RunStateStore {

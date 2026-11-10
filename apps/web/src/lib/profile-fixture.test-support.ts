@@ -54,11 +54,8 @@ export function profileFixture() {
           relatedPacks: [{ id: "italian-pack", title: "Italian structures" }],
         }],
       },
-      observations: {
-        playedDecisions: 700,
-        statement: "These are counts of what the recorded moves show, each against the decisions where it could have happened. No rate, trend or comparison is shown: no stability floor has been measured for any of them.",
-        rows: [{ key: "rules.structural.event.open_file@1:gained:gained", projectionId: "rules.structural.event.open_file", projectionVersion: 1, semanticSign: "gained", sourceSign: "gained", label: "open file — gained", occurred: 4, opportunities: 40, runs: 12, decisions: 300, byPhase: [{ phase: "opening", occurred: 4, opportunities: 40 }], derivedRev: 1 }],
-      },
+      observationStatus: { kind: "unavailable", reason: "subject_metrics_not_adopted" },
+      observations: [],
       skills: {
         categories: [
           { category: "fundamentals", label: "Fundamentals", emptyReason: null, marks: [] },

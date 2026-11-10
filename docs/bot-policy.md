@@ -235,12 +235,17 @@ delay (D820).
 
 ## Stage B candidate evidence
 
-The one-edge candidate-evidence boundary predates the roster and is unchanged.
-`candidateFeatureVector` accepts legal candidate moves with one finite, fixed-bound Stockfish score
-in the root mover's frame, plays each move on a cloned position, and applies the existing tactical
-and breadth collectors to that child and edge. Every retained result carries its literal registered
-projection id. It is admitted only to `opponent.selection@1`, and no registered layer consumes it:
-the compiler's `features` rows are empty until a Stage-B trait passes its own measurement.
+The unused `candidateFeatureVector` score-bearing wrapper and its runtime factory/export/binding
+are retired under accepted F2 §2.3f and D3853. Its historical projection/convention meaning remains
+recorded, but no callable or compatibility registry constructs it. Earlier D1071/D1162/D1329/D1631
+research instruments that imported that wrapper are historical, not current executable proof.
+
+The current candidate packet compiles the complete legal population from a root FEN, with exact
+registered child-reading/event sources and explicit collector abstentions. It accepts neither
+caller candidate lists nor scores. Guided Hint consumes that packet; the bot selector does not
+yet adopt it. Maia/Stockfish response and bound Syzygy inputs remain separate actual opponent
+consumers. The production profile roster and trait feature rows remain empty until their own
+source, integration and measurement requirements are met; source availability is not bot completion.
 
 ## What is not wired yet
 

@@ -363,6 +363,7 @@ export type ReleaseReceiptValidation = "valid" | "stale" | "forged";
  */
 const EXCHANGE_TO_APPLICATION: Readonly<Record<ProviderOperationId, ApplicationProviderOperationId>> = Object.freeze({
   "maia.policy_page@1": "opponent.maia_inference",
+  "maia.inference_task@1": "opponent.maia_inference",
   "stockfish.legal_root_table@1": "evidence.stockfish_analysis",
   "stockfish.position_evaluation@1": "evidence.stockfish_analysis",
   "stockfish.principal_variation@1": "evidence.stockfish_analysis",

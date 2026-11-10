@@ -26,8 +26,8 @@ function row(id: string, learnerId: string) {
 }
 
 describe("migration 30 (campaign tables)", () => {
-  it("retains migration30 in STORAGE_VERSION31 with all five STRICT tables and the one-active partial unique index", () => {
-    expect(STORAGE_VERSION).toBe(31);
+  it("retains migration30 in STORAGE_VERSION35 with all five STRICT tables and the one-active partial unique index", () => {
+    expect(STORAGE_VERSION).toBe(35);
     const storage = new SQLiteRunStorage(":memory:", { onMigration: () => undefined });
     const tables = storage.applicationTableNames();
     for (const table of CAMPAIGN_TABLES) expect(tables).toContain(table);

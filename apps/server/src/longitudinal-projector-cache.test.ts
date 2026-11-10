@@ -8,9 +8,9 @@ vi.mock("@chess-tabiya/runtime", async (importOriginal) => {
   const runtime = await importOriginal<typeof import("@chess-tabiya/runtime")>();
   return {
     ...runtime,
-    localSemanticEvents: (...args: Parameters<typeof runtime.localSemanticEvents>) => {
+    localSemanticEventClosure: (...args: Parameters<typeof runtime.localSemanticEventClosure>) => {
       collection.edges.push(JSON.stringify(args));
-      return runtime.localSemanticEvents(...args);
+      return runtime.localSemanticEventClosure(...args);
     },
   };
 });

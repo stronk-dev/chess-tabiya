@@ -27,6 +27,7 @@ import {
   type PackArtifact,
 } from "./concept-migration.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { SQLiteRunStorage, STORAGE_VERSION, type StorageMigrationLog } from "./storage.js";
 
 const AT = "2026-09-24T10:00:00.000Z";
@@ -121,7 +122,7 @@ function priorRelease(rows: readonly LegacyRow[], runs: readonly (readonly [stri
   database.exec(V27_ATTEMPT_CONCEPTS);
   const insert = database.prepare("INSERT INTO attempt_concepts (run_id, branch_id, pack_id, concept_key, label) VALUES (?, 'main', ?, ?, ?)");
   for (const [runId, packId, key, label] of rows) insert.run(runId, packId, key, label);
-  database.exec("PRAGMA user_version = 27");
+  database.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json; DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 27");
   database.close();
   return path;
 }
@@ -149,17 +150,17 @@ describe("criteria 7, 13, 14 — the migration partitions every legacy row, atom
     const before = table(path, "SELECT type, name, sql FROM sqlite_schema WHERE name NOT LIKE 'sqlite_%' ORDER BY name");
     const log: StorageMigrationLog[] = [];
     const storage = new SQLiteRunStorage(path, { onMigration: (entry) => log.push(entry), concepts: authority() });
-    expect(STORAGE_VERSION).toBe(31);
-    expect(log).toEqual([{ version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(STORAGE_VERSION).toBe(35);
+    expect(log).toEqual([{ version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     const receipt = storage.conceptMigrationReceipt;
     storage.close();
-    expect(version(path)).toBe(31);
+    expect(version(path)).toBe(35);
 
-    // Prior-release schema diff: exactly the rebuilt attempt_concepts plus two new tables.
+    // Prior-release diff includes the concept rebuild/two tables, later clock column, GAME/choice tables and subject table/index.
     const after = table(path, "SELECT type, name, sql FROM sqlite_schema WHERE name NOT LIKE 'sqlite_%' ORDER BY name");
     const changed = after.filter((row) => before.find((prior) => prior.name === row.name)?.sql !== row.sql).map((row) => `${String(row.type)}:${String(row.name)}`).sort();
-    expect(changed).toEqual(["table:attempt_concept_legacy", "table:attempt_concepts", "table:concept_registry_migration"]);
-    expect(after.map((row) => row.name).filter((name) => !before.some((prior) => prior.name === name)).sort()).toEqual(["attempt_concept_legacy", "concept_registry_migration"]);
+    expect(changed).toEqual(["index:learner_subject_observations_source", "table:attempt_concept_legacy", "table:attempt_concepts", "table:concept_registry_migration", "table:imported_games", "table:learner_choice_facts", "table:learner_game_facts", "table:learner_subject_observations"]);
+    expect(after.map((row) => row.name).filter((name) => !before.some((prior) => prior.name === name)).sort()).toEqual(["attempt_concept_legacy", "concept_registry_migration", "learner_choice_facts", "learner_game_facts", "learner_subject_observations", "learner_subject_observations_source"]);
     expect(CONCEPT_MIGRATION_TABLES).toEqual(["attempt_concepts", "attempt_concept_legacy", "concept_registry_migration"]);
 
     const registered = table(path, "SELECT run_id, pack_id, pack_digest, concept_key, concept_id, registry_digest, label FROM attempt_concepts ORDER BY run_id, concept_key");
@@ -342,13 +343,16 @@ describe("[[D2964]], [[D2965]] — no half-composed authority survives a refused
   // Composes the whole application (registries compile at import); under shared-host load this
   // exceeds the 5 s default.
   it("closes storage when composition fails after the coordinator committed", { timeout: 30_000 }, async () => {
+    // This fault belongs to lifecycle composition, not installed-content compatibility. Keep
+    // real storage/coordinator/services, and reach the requested invalid-register parse below.
+    installEmptyApplicationCatalogues();
     const directory = mkdtempSync(join(tmpdir(), "tabiya-concept-compose-"));
     directories.push(directory);
     const invalid = join(directory, "register.json");
     const { writeFileSync } = await import("node:fs");
     writeFileSync(invalid, "{ not json");
     const close = vi.spyOn(SQLiteRunStorage.prototype, "close");
-    await expect(createInMemoryTestApplication({ valenceRegisterPath: invalid })).rejects.toThrow();
+    await expect(createInMemoryTestApplication({ valenceRegisterPath: invalid })).rejects.toBeInstanceOf(SyntaxError);
     expect(close).toHaveBeenCalledTimes(1);
   });
 });

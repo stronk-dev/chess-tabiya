@@ -204,10 +204,12 @@ describe("accepted current local tactical sources (F2 §§2.3c/e/f)", () => {
     expect(() => invokeEvidenceValueRoute(OVERLOAD, { ...anchor, capture: {} } as never)).toThrow();
   });
 
-  it("does not partially bind internal replacements into the current learner image", () => {
+  it("binds only the jointly accepted tactical replacements into current learner consumers", () => {
     for (const route of [FORK, PROMOTION, OVERLOAD]) {
       expect(PRIMARY_EVIDENCE_MANIFEST.projections.find(value => key(value) === route)).toBeDefined();
-      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some(value => key(value.projection) === route)).toBe(false);
+      const consumers = PRIMARY_EVIDENCE_MANIFEST.bindings.filter(value => key(value.projection) === route)
+        .map(value => key(value.consumer)).sort();
+      expect(consumers).toEqual(route === FORK ? ["module.full_inspector@2", "module.postcommit_nudge@2", "module.review_map@2"] : ["module.full_inspector@2"]);
     }
   });
 });

@@ -3,11 +3,12 @@ import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { createHttpServer } from "./rest.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 
 function expectSecurity(response: Response): void {
   expect(response.headers.get("x-content-type-options")).toBe("nosniff");
@@ -22,6 +23,7 @@ describe("application-owned security and static update policy", { timeout: 30_00
   let origin: string;
 
   beforeAll(async () => {
+    installEmptyApplicationCatalogues();
     directory = mkdtempSync(join(tmpdir(), "tabiya-security-"));
     mkdirSync(join(directory, "assets"));
     writeFileSync(join(directory, "index.html"), "<!doctype html><title>Tabiya shell</title>");
@@ -39,8 +41,11 @@ describe("application-owned security and static update policy", { timeout: 30_00
   });
 
   afterAll(async () => {
-    await application?.close();
-    if (directory !== undefined) rmSync(directory, { recursive: true, force: true });
+    try { await application?.close(); }
+    finally {
+      vi.restoreAllMocks();
+      if (directory !== undefined) rmSync(directory, { recursive: true, force: true });
+    }
   });
 
   it.each(["/", "/play", "/settings", "/healthz", "/readyz", "/packs", "/runs/missing/graph"])(

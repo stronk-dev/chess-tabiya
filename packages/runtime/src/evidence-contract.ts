@@ -25,7 +25,8 @@ export function isBindingSourceAbsence(value: unknown): value is BindingSourceAb
   return row.necessity === "optional" ? row.whenNoPath === "omit_optional_item"
     : row.necessity === "required" && (row.whenNoPath === "honest_empty" || row.whenNoPath === "operation_unavailable");
 }
-export type SemanticEventSign = ProjectionDeclaration["signs"][number];
+export const SEMANTIC_EVENT_SIGNS = Object.freeze(["state", "gained", "lost", "preserved", "removed", "avoided", "enabled", "threatened", "membership_changed", "count_gained", "count_lost", "topology_changed"] as const);
+export type SemanticEventSign = (typeof SEMANTIC_EVENT_SIGNS)[number];
 
 export interface VersionedEvidenceId { readonly id: string; readonly version: number }
 export interface EvidenceDispositionDeclaration { readonly kind: EvidenceDisposition; readonly reason: string }
@@ -46,7 +47,7 @@ export interface ProjectionDeclaration {
   readonly payloadType: string;
   readonly semantics: string;
   readonly operands: readonly string[];
-  readonly signs: readonly ("state" | "gained" | "lost" | "preserved" | "removed" | "avoided" | "enabled" | "threatened")[];
+  readonly signs: readonly SemanticEventSign[];
   readonly grounding: EvidenceGrounding;
   readonly exactness: "exact" | "convention" | "measured" | "authored";
   readonly confidence: "not_applicable" | "exact" | "reported";
@@ -174,8 +175,21 @@ export interface EvidenceBinding {
   readonly sourceAbsence?: BindingSourceAbsence;
 }
 
+/** Value-authority §2.2b: the three computed edge factories consume TWO original snapshots.
+ * This finite tuple contract is shared by catalogue assembly and manifest validation; it does
+ * not make rules-plane sources derived or authorize prerequisites on arbitrary computed events. */
+const beforeAfterInputs = (id: string, version: number): readonly VersionedEvidenceId[] => Object.freeze([
+  Object.freeze({ id, version }), Object.freeze({ id, version }),
+]);
+export const FOUNDATION_COMPUTED_EVENT_INPUTS: Readonly<Record<string, readonly VersionedEvidenceId[]>> = Object.freeze({
+  "rules.structural.event.king_opposition@2": beforeAfterInputs("rules.structural.reading.king_opposition", 3),
+  "rules.structural.event.backward_pawn@2": beforeAfterInputs("rules.structural.reading.backward_pawn", 3),
+  "rules.structural.event.pawn_islands@2": beforeAfterInputs("rules.structural.reading.pawn_connectivity", 1),
+});
+
 export interface SemanticEventDeclaration {
   readonly projection: VersionedEvidenceId;
+  /** Wrapper prerequisites: derived members, or the finite computed-source tuple above. */
   readonly derivationInputs?: readonly VersionedEvidenceId[];
   readonly derivationAnyOf?: readonly (readonly VersionedEvidenceId[])[];
   readonly allowedSigns: readonly SemanticEventSign[];
@@ -670,7 +684,7 @@ export function identitySealedEvidenceWithoutValueReceipt<T>(producer: Versioned
  * per record ([[D3300]]).
  */
 function isReductionProjection(projection: VersionedEvidenceId): boolean {
-  return projection.version === 2 && (projection.id === "derived.compare.structure_delta" || projection.id === "derived.story.last_level" || projection.id === "derived.opening.deepest_reached")
+  return projection.version === 2 && (projection.id === "derived.compare.structure_delta" || projection.id === "derived.story.last_level" || projection.id === "derived.opening.deepest_reached" || projection.id === "derived.structural.predicate_result")
     || projection.id === "derived.story.rank" && projection.version === 3;
 }
 
@@ -889,7 +903,16 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
     const eventDeclaresBothForms = event.derivationInputs !== undefined && event.derivationAnyOf !== undefined;
     const invalidEventMembers = eventMembers.some((member) => member.length === 0)
       || new Set(eventMemberKeys).size !== eventMemberKeys.length;
-    if (eventDeclaresBothForms || invalidEventMembers || !setEqual(eventMemberKeys, declaredMemberKeys)) {
+    const computedInputs = Object.hasOwn(FOUNDATION_COMPUTED_EVENT_INPUTS, key) ? FOUNDATION_COMPUTED_EVENT_INPUTS[key] : undefined;
+    if (computedInputs !== undefined) {
+      const dependencyKeys = [...new Set(computedInputs.map(refKey))];
+      if (projection.plane !== "rules" || projection.derivation !== undefined || event.derivationAnyOf !== undefined
+        || event.derivationInputs === undefined || derivationMemberKey(event.derivationInputs) !== derivationMemberKey(computedInputs)
+        || computedInputs.some(input => !projectionMap.has(refKey(input)))
+        || !setEqual(dependencyKeys, projection.dependsOn.map(refKey))) {
+        fail("EVIDENCE_EVENT_DERIVATION_MISMATCH", "computed semantic event lacks its exact original before/after prerequisites", [site("semantic-event", event.projection)]);
+      }
+    } else if (eventDeclaresBothForms || invalidEventMembers || !setEqual(eventMemberKeys, declaredMemberKeys)) {
       fail("EVIDENCE_EVENT_DERIVATION_MISMATCH", "semantic event derivation inputs disagree with its projection", [site("semantic-event", event.projection)]);
     }
     if (event.allowedSigns.length === 0 || !subset(event.allowedSigns, projection.signs)) fail("EVIDENCE_EVENT_SIGN_WIDENS", "semantic event signs exceed its projection", [site("semantic-event", event.projection)]);

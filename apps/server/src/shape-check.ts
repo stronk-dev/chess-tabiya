@@ -5,10 +5,11 @@ import { basename, dirname, resolve } from "node:path";
 import { validateShapeEntry, type ShapeValidationResult } from "./shape-validation.js";
 import { formatPackIssue } from "./pack-check.js";
 import type { PackValidationIssue } from "./pack-validation.js";
-import { runExpressionCensus } from "./expression-census.js";
+import { censusFilePath, runExpressionCensus, type ExpressionCensusReport } from "./expression-census.js";
 
-function censusWarnings(report: any): readonly PackValidationIssue[] {
+function censusWarnings(report: Pick<ExpressionCensusReport, "subjects">): readonly PackValidationIssue[] {
   const warningCode = (subject: any, label: string): string | undefined => {
+    if (label === "EVALUATION_FAULT") return "STRUCTURAL_SOURCE_UNAVAILABLE";
     if (label === "FIRES_ON_DEGENERATE") return "EXPRESSION_FIRES_ON_DEGENERATE";
     if (subject.site.subject.kind === "shape_trigger" && label === "NEVER_FIRES_IN_CORPUS") return "SHAPE_TRIGGER_NEVER_FIRES_IN_CORPUS";
     if (subject.site.subject.kind === "shape_plan_signature" && label === "NEVER_FIRES_IN_SHAPE") return "PLAN_SIGNATURE_NEVER_FIRES_IN_SHAPE";
@@ -16,22 +17,35 @@ function censusWarnings(report: any): readonly PackValidationIssue[] {
     return undefined;
   };
   return Object.freeze(report.subjects.flatMap((subject: any) => subject.observations.flatMap((label: string) => warningCode(subject, label) === undefined ? [] : [{
-    severity: "warning" as const, source: "runtime" as const, code: warningCode(subject, label)!, path: subject.site.pointer,
-    message: `${label} in the selected corpus`,
+    severity: label === "EVALUATION_FAULT" ? "error" as const : "warning" as const, source: "runtime" as const, code: warningCode(subject, label)!, path: subject.site.pointer,
+    message: label === "EVALUATION_FAULT" ? subject.coverage.corpus.faults?.first ?? subject.satisfiabilityError ?? subject.coverage.inShape?.faults?.first ?? subject.satisfiability.witnesses?.find((witness: { code?: string }) => witness.code === "WITNESS_EVALUATION_FAILED")?.error ?? "Structural evaluation unavailable" : `${label} in the selected corpus`,
   }])));
+}
+
+/** Same canonical file join for in-tree and external draft callers, including the CLI. */
+export function censusIssuesForFile(report: Pick<ExpressionCensusReport, "subjects">, file: string): readonly PackValidationIssue[] {
+  const path = censusFilePath(resolve(file));
+  return censusWarnings({ subjects: report.subjects.filter(subject => subject.site.file === path) });
 }
 
 export async function checkShapeFile(file: string, options: { readonly probeFen?: string; readonly corpus?: readonly string[] } = {}): Promise<ShapeValidationResult & { readonly file: string }> {
   const absolute = resolve(file);
-  try {
-    const result = validateShapeEntry(JSON.parse(await readFile(absolute, "utf8")), options.probeFen === undefined ? {} : { probeFen: options.probeFen });
-    if (options.corpus === undefined) return Object.freeze({ file: absolute, ...result });
-    const report = runExpressionCensus({ roots: options.corpus, files: [absolute] });
-    const warnings = censusWarnings(report);
-    return Object.freeze({ file: absolute, ...result, issues: Object.freeze([...result.issues, ...warnings]) });
-  } catch (error) {
+  let raw: unknown;
+  try { raw = JSON.parse(await readFile(absolute, "utf8")); }
+  catch (error) {
     const issue: PackValidationIssue = Object.freeze({ severity: "error", source: "schema", code: "FILE_READ_ERROR", path: "/", message: error instanceof Error ? error.message : String(error) });
     return Object.freeze({ file: absolute, valid: false, issues: Object.freeze([issue]) });
+  }
+  let result: ShapeValidationResult | undefined;
+  try {
+    result = validateShapeEntry(raw, options.probeFen === undefined ? {} : { probeFen: options.probeFen });
+    if (options.corpus === undefined) return Object.freeze({ file: absolute, ...result });
+    const report = await runExpressionCensus({ roots: options.corpus, files: [absolute] });
+    const warnings = censusWarnings(report);
+    return Object.freeze({ file: absolute, ...result, valid: result.valid && !warnings.some(issue => issue.severity === "error"), issues: Object.freeze([...result.issues, ...warnings]) });
+  } catch (error) {
+    const issue: PackValidationIssue = Object.freeze({ severity: "error", source: "runtime", code: "STRUCTURAL_SOURCE_UNAVAILABLE", path: "/", message: error instanceof Error ? error.message : String(error) });
+    return Object.freeze({ file: absolute, ...result, valid: false, issues: Object.freeze([...(result?.issues ?? []), issue]) });
   }
 }
 
@@ -53,16 +67,16 @@ async function main(): Promise<number> {
   const results = await Promise.all(files.map((file) => checkShapeFile(file, probeFen === undefined ? {} : { probeFen })));
   const warningsByFile = new Map<string, readonly PackValidationIssue[]>();
   if (corpus !== undefined) {
-    const report = runExpressionCensus({ roots: corpus, files });
+    const report = await runExpressionCensus({ roots: corpus, files });
     for (const file of files) {
-      const display = file.startsWith("/") ? file.slice(process.cwd().length + 1) : file;
-      warningsByFile.set(resolve(file), censusWarnings({ subjects: report.subjects.filter((subject: any) => subject.site.file === display) }));
+      warningsByFile.set(resolve(file), censusIssuesForFile(report, file));
     }
   }
   for (const result of results) {
-    for (const candidate of [...result.issues, ...(warningsByFile.get(result.file) ?? [])]) (candidate.severity === "warning" ? console.warn : console.error)(formatPackIssue(candidate));
+    const issues = [...result.issues, ...(warningsByFile.get(result.file) ?? [])];
+    for (const candidate of issues) (candidate.severity === "warning" ? console.warn : console.error)(formatPackIssue(candidate));
     if (result.probeMatches !== undefined) console.log(formatProbeResult(result.file, result.probeMatches));
-    if (!result.valid) { console.error(`Shape check failed: ${result.file}`); failed = true; }
+    if (!result.valid || issues.some(issue => issue.severity === "error")) { console.error(`Shape check failed: ${result.file}`); failed = true; }
     else console.log(`Shape check passed: ${result.file}`);
   }
   return failed ? 1 : 0;

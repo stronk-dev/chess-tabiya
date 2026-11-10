@@ -1,11 +1,18 @@
+import { registeredShapeFixture, registeredShapePointFixture } from "./testing/registered-shape-fixture.js";
 // rfc/module-registration.md A5/§2.5.2/§5.1, rfc/evidence-presentation.md Checkpoint B and
 // rfc/intent-presets.md Checkpoint B: the one module query operation delivers exactly the modules
 // the finalized preset compiled, through sealed presentation receipts bound to that digest.
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import * as execution from "./evidence-binding-execution.js";
 import * as routes from "./internal/evidence-value-routes.js";
+import * as candidates from "./candidate-population.js";
 import { exactLegalMoves } from "./legal-moves.js";
 import { comparisonSourcesForRun } from "./testing/recorded-comparison-point-fixture.js";
+import { inspectorFixtureEvidence } from "./testing/inspector-presentation-fixture.js";
+import { inspectorCurrentPresentationFixtures } from "./testing/inspector-current-presentation-fixture.js";
+import { INSPECTOR_SOURCE_TOPICS } from "./inspector-source-topics.js";
+import { compileModulePacket } from "./module-packets.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 
 import {
   MODULE_SOURCE_AUTHORITY,
@@ -30,10 +37,12 @@ import {
   type ModuleQueryPacket,
   type ModuleQueryRequest,
 } from "./module-query.js";
-import { assertPresentationText, parsePresentationReceipt, presentedSentence } from "./presentation-contract.js";
+import { assertPresentationText, parsePresentationReceipt, presentEvidenceItems, presentedSentence } from "./presentation-contract.js";
 import type { OrdinaryWorkflowContextId, OrdinaryWorkflowContextOrigin, PresetId } from "./presets.js";
 import type { DrillRun } from "./types.js";
 import { MODULE_IDS, type ModuleId } from "./module-contract.js";
+import { moduleDeclaration } from "./module-registry.js";
+import { evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence } from "./evidence-contract.js";
 
 const at = "2026-09-24T00:00:00.000Z";
 const policyConfig = { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } as const;
@@ -80,13 +89,74 @@ function assertDelivered(packet: ModuleQueryPacket, assistance: FinalizedAssista
 const ITALIAN = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 4 5";
 const MAROCZY = "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5";
 
-describe("D3796: terminal Inspector is an actual successful query, not a rendering exception", () => {
+describe("D3867/D3868: actual Threat exposure source and availability", () => {
+  it.each([
+    ["white", "r3k3/1P6/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6"],
+    ["black", "3k3r/8/8/8/5b2/6N1/6p1/3K3R b - - 0 1", "f4g3"],
+  ])("%s post-commit acquires the complete current source once through the actual consumer", (_color, fen, move) => {
+    const run = revealFeedback(positionRun(fen, [move]), at).run;
+    const calls = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    const compile = vi.spyOn(execution, "compileEvidenceConsumerExecution");
+    const assistance = finalized("position", "support", "threat_radar");
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position",
+      request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["threat_radar"] } });
+    expect(moduleDeclaration("threat_radar").consumer).toEqual({ id: "module.threat_radar", version: 2 });
+    expect(compile.mock.calls.some(([, consumer]) => consumer.id === "module.threat_radar" && consumer.version === 2)).toBe(true);
+    const current = calls.mock.calls.flatMap((args, index) => args[0] === "derived.tactic.defender_exposure@2" ? [index] : []);
+    expect(current).toHaveLength(1);
+    expect(calls.mock.calls.some(([name]) => String(name) === "derived.tactic.defender_exposure@1")).toBe(false);
+    const acquired = calls.mock.results[current[0]!]!.value as { kind: string; value: readonly { evidence: DeclaredEvidence<{ captures: readonly unknown[] }>; inputs: readonly DeclaredEvidence<unknown>[] }[] };
+    expect(acquired.kind).toBe("available");
+    expect(acquired.value.length).toBeGreaterThan(0);
+    for (const item of acquired.value) {
+      expect(item.inputs.map(source => `${source.projection.id}@${source.projection.version}`)).toEqual([
+        "rules.square.event.control@1", "rules.exchange.reading.landing_captures@1",
+      ]);
+      expect(item.evidence.payload.captures).toHaveLength(5);
+      expect(evidenceValueReceipt(item.evidence).factory).toBe("createDerivedTacticDefenderExposureV2Evidence");
+    }
+    // Dense five-capture positions may lawfully lose this fact to the unchanged three-fact /
+    // sixty-word reducer. The sparse real query→receiver→seat positives live in threat-delivery.
+    assertDelivered(packetOf(page, "threat_radar")!, assistance);
+  });
+
+  it.each([
+    ["white", "4k3/8/8/8/8/8/R7/4K3 w - - 0 1", "a2e2"],
+    ["black", "4k3/r7/8/8/8/8/8/4K3 b - - 0 1", "a7e7"],
+  ])("%s unavailable pass clone does not become a no-threat sentence", (_color, fen, move) => {
+    const run = revealFeedback(positionRun(fen, [move]), at).run;
+    const assistance = finalized("position", "support", "threat_radar");
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position",
+      request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["threat_radar"] } });
+    const radar = packetOf(page, "threat_radar")!;
+    expect(radar.unavailable).toContainEqual({ projection: "derived.tactic.defender_exposure@2", reason: "invalid_turn_clone" });
+    expect(radar.empty).toMatchObject({ kind: "unavailable_source" });
+    expect(JSON.stringify(radar.empty)).not.toContain("No one-ply threat");
+    assertDelivered(radar, assistance);
+  });
+
+  it("pre-commit invents no incoming edge, while a completed empty exposure is not unavailable", () => {
+    const assistance = finalized("position", "support", "threat_radar"), run = positionRun("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    const calls = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    const before = queryModules({ run, assistance, role: "learner", session: "position",
+      request: { timing: "pre_commit", nodeId: run.activeCursor.nodeId, requested: ["threat_radar"] } }).page;
+    expect(calls.mock.calls.some(([name]) => name.startsWith("derived.tactic.defender_exposure@"))).toBe(false);
+    const moved = revealFeedback(commitMove(run, "e2e4", { at }).run, at).run;
+    const after = queryModules({ run: moved, assistance, role: "learner", session: "position",
+      request: { timing: "post_commit", subjectNodeId: moved.activeCursor.nodeId, requested: ["threat_radar"] } }).page;
+    expect(packetOf(before, "threat_radar")!.unavailable).toEqual([]);
+    expect(packetOf(after, "threat_radar")!.unavailable).toEqual([]);
+    expect(packetOf(after, "threat_radar")!.empty).toMatchObject({ kind: "stated_absence" });
+  });
+});
+
+describe("D3796: terminal source collectors survive generic Inspector retirement", () => {
   it.each([
     ["7k/8/5K2/6Q1/8/8/8/8 w - - 0 1", "g5g7"],
     ["7k/8/6K1/5Q2/8/8/8/8 w - - 0 1", "f5f7"],
     ["8/8/8/8/6q1/5k2/8/7K b - - 0 1", "g4g2"],
     ["8/8/8/8/5q2/6k1/8/7K b - - 0 1", "f4f2"],
-  ])("keeps the complete recorded position and returns a valid Inspector packet: %s / %s", (fen, move) => {
+  ])("keeps complete terminal source state and refuses obsolete generic Inspector: %s / %s", (fen, move) => {
     const movable = routes.invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen });
     expect(witnessedEvidence(movable as Parameters<typeof witnessedEvidence>[0])).toBe(true);
     const run = revealFeedback(positionRun(fen, [move]), at).run, before = JSON.stringify(run);
@@ -96,12 +166,10 @@ describe("D3796: terminal Inspector is an actual successful query, not a renderi
     expect((source.payload as { pieces: { moves: unknown[] }[] }).pieces.every(piece => piece.moves.length === 0)).toBe(true);
     expect(witnessedEvidence(source)).toBe(false);
     const assistance = finalized("position", "analysis", "full_inspector");
-    const { page } = queryModules({ run, assistance, role: "learner", session: "position",
-      request: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } });
-    const packet = packetOf(page, "full_inspector");
-    expect(packet).toBeDefined();
-    assertDelivered(packet!, assistance);
-    expect(packet!.receipt.items.some(item => item.evidenceRef?.projection.id === "rules.mobility.reading.legal_moves")).toBe(false);
+    expect(() => queryModules({ run, assistance, role: "learner", session: "position",
+      request: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } })).toThrow(/MODULE_QUERY_SOURCE_PAGE_REQUIRED/u);
+    // Actual terminal source-page/receiver delivery is covered by the server Inspector suites,
+    // not by this retired generic-query refusal or the collector's empty reading alone.
     expect(JSON.stringify(source)).toBe(sourceBefore);
     expect(JSON.stringify(run)).toBe(before);
   });
@@ -208,7 +276,7 @@ describe("Support (position context): sight, threat radar and the at-commit cue"
       : { timing: "pre_commit", nodeId: run.activeCursor.nodeId, selectedSquare: "c6", requested: [module] };
     const sources = {
       get explorerSummary(): never { throw new Error("unrelated Explorer source read"); },
-      get shapes(): never { throw new Error("unrelated shape source read"); },
+      get shapeAt(): never { throw new Error("unrelated shape source read"); },
       get authoredAt(): never { throw new Error("unrelated authored source read"); },
     };
     const { page } = queryModules({ run, assistance, role: "learner", session: "position", request, sources });
@@ -338,23 +406,19 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     ["locked pawns, Black", "7k/3n4/8/8/8/pppppppp/PPPPPPPP/K7 b - - 0 1"],
     ["pawn-free, White", "7k/7n/8/8/3N4/8/8/K7 w - - 0 1"],
     ["pawn-free, Black", "7k/8/8/3n4/8/8/N7/K7 b - - 0 1"],
-  ])("D3715: %s retains per-colour count states on every real legal edge", (_name, fen) => {
+  ])("D3715: %s retains complete per-colour reading counts when current topology events are quiet", (_name, fen) => {
     const legal = exactLegalMoves(fen);
     expect(legal.length).toBeGreaterThan(0);
     for (const move of legal) {
       const run = revealFeedback(positionRun(fen, [move.uci]), at).run;
-      const states = routes.invokeEvidenceValueRoute("rules.structural.event.pawn_islands@1", {
-        beforeFen: run.nodes[0]!.fen, moveUci: move.uci, afterFen: run.nodes[1]!.fen,
-      });
-      // The correct state collector is total even at zero and unchanged counts.
-      // A future Nudge witness repair must not turn this into a sparse collector.
-      expect(states.map(state => (state.payload as { readonly color: string }).color)).toEqual(["white", "black"]);
+      const before = routes.invokeEvidenceValueRoute("rules.structural.reading.pawn_connectivity@1", { fen: run.nodes[0]!.fen });
+      const after = routes.invokeEvidenceValueRoute("rules.structural.reading.pawn_connectivity@1", { fen: run.nodes[1]!.fen });
+      // Readings remain total; current topology events do not manufacture unchanged occurrences.
+      expect(before.payload.colors.map(state => state.color)).toEqual(["white", "black"]);
+      expect(after.payload.colors.map(state => state.color)).toEqual(["white", "black"]);
       const beforeCount = _name.startsWith("pawn-free") ? 0 : 1;
-      for (const state of states) {
-        expect(state.payload).toMatchObject({ before_fen: run.nodes[0]!.fen, move_uci: move.uci,
-          after_fen: run.nodes[1]!.fen, family: "pawn_islands", before: beforeCount });
-        if (move.role === "knight") expect(state.payload).toMatchObject({ after: beforeCount });
-      }
+      expect(before.payload.colors.map(state => state.islandCount)).toEqual([beforeCount, beforeCount]);
+      if (move.role === "knight") expect(after.payload.colors.map(state => state.islandCount)).toEqual([beforeCount, beforeCount]);
       const { page } = queryModules({ run, assistance: finalized("position", "guided", "postcommit_nudge"), role: "learner", session: "position",
         request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] },
       });
@@ -384,7 +448,7 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
       return compile({ ...manifest, consumers, bindings: [...manifest.bindings, extra] }, consumer);
     });
     const sources = {
-      get shapes(): never { throw new Error("shape acquisition before preflight"); },
+      get shapeAt(): never { throw new Error("shape acquisition before preflight"); },
       get authoredAt(): never { throw new Error("authored acquisition before preflight"); },
       get explorerSummary(): never { throw new Error("Explorer consumption before preflight"); },
     };
@@ -394,33 +458,52 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
       impossible_latency: "BINDING_EXECUTION_LATENCY", missing_policy: "BINDING_SOURCE_ABSENCE" }[fault]);
   });
 
-  it.each(["postcommit_nudge", "compare_coach", "full_inspector"] as const)("%s reads recorded/local facts without catalogue or Explorer dependencies", module => {
-    let run = module === "full_inspector" ? positionRun(ITALIAN, ["e1g1", "e8g8"]) : packRun(ITALIAN, ["e1g1", "e8g8"]);
+  it.each(["white", "black"] as const)("D3930 %s Nudge acquires actual edge facts but no avoidance candidate population", side => {
+    const run = revealFeedback(positionRun(`rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${side === "white" ? "w" : "b"} KQkq - 0 1`,
+      [side === "white" ? "e2e4" : "e7e5"]), at).run;
+    const assistance = finalized("position", "guided", "postcommit_nudge");
+    const sourceCalls = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    const populations = vi.spyOn(candidates, "compileCandidatePopulation");
+    const { page } = queryModules({ run, assistance, role: "learner", session: "position",
+      request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] } });
+    const packet = packetOf(page, "postcommit_nudge");
+    expect(packet).toBeDefined();
+    expect(sourceCalls.mock.calls.length).toBeGreaterThan(0);
+    expect(sourceCalls.mock.calls.some(([route]) => route === "rules.transition.event.capture@1")).toBe(true);
+    expect(populations).not.toHaveBeenCalled();
+    expect(sourceCalls.mock.calls.some(([route]) => route.startsWith("derived.semantic_avoidance."))).toBe(false);
+    expect(assertDelivered(packet!, assistance).length).toBeGreaterThan(0);
+    expect(parsePresentationReceipt(packet!.receipt).some(item => item.adapter.projection.id.startsWith("derived.semantic_avoidance."))).toBe(false);
+  });
+
+  it.each(["postcommit_nudge", "compare_coach"] as const)("%s reads recorded/local facts without catalogue or Explorer dependencies", module => {
+    let run = packRun(ITALIAN, ["e1g1", "e8g8"]);
     run = fork(rewind(run, run.nodes[0]!.id, at).run, run.nodes[0]!.id, { at }).run;
     run = commitMove(run, "a2a3", { at }).run;
-    if (module === "full_inspector") run = revealFeedback(run, at).run;
-    const context = module === "full_inspector" ? "position" : "onramp";
-    const assistance = finalized(context, module === "full_inspector" ? "analysis" : "guided", module);
+    const context = "onramp";
+    const assistance = finalized(context, "guided", module);
     const request: ModuleQueryRequest = module === "postcommit_nudge"
       ? { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] }
-      : { timing: module === "full_inspector" ? "review" : "checkpoint", nodeId: run.activeCursor.nodeId, requested: [module] };
+      : { timing: "checkpoint", nodeId: run.activeCursor.nodeId, requested: [module] };
     const { page } = queryModules({ run, assistance, role: "learner", session: context, request, sources: {
       ...(module === "compare_coach" ? { comparison: comparisonSourcesForRun(run, assistance, run.activeCursor.nodeId) } : {}),
       get explorerSummary(): never { throw new Error("unrelated Explorer source read"); },
-      get shapes(): never { throw new Error("unrelated shape source read"); },
+      get shapeAt(): never { throw new Error("unrelated shape source read"); },
       get authoredAt(): never { throw new Error("unrelated authored source read"); },
     } });
     expect(page.packets.map(packet => packet.module)).toEqual([module]);
     expect(assertDelivered(page.packets[0]!, assistance).length).toBeGreaterThan(0);
   });
 
-  it("Structure retains its shape evidence without reading authored claims or Explorer", () => {
+  it("Structure retains its shape evidence without reading authored claims or Explorer", async () => {
     const run = packRun("r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", ["b1c3"]);
+    const point = run.nodes.find(node => node.id === run.activeCursor.nodeId)!;
+    const source = await registeredShapePointFixture([point], [{ ...registeredShapeFixture("maroczy-bind"), name: "Maroczy fixture", trigger: { kind: "feature", feature: { kind: "named_structure", id: "maroczy-bind" } } }]);
     let shapeReads = 0;
     const { page } = queryModules({ run, assistance: finalized("onramp", "guided", "structure_nudge"), role: "learner", session: "onramp",
       request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: [] },
       sources: {
-        get shapes() { shapeReads += 1; return [{ id: "maroczy-bind", trigger: { kind: "feature" as const, feature: { kind: "named_structure" as const, id: "maroczy-bind" as const } } }]; },
+        shapeAt(nodeId) { shapeReads += 1; return source.shapeAt(nodeId); },
         get explorerSummary(): never { throw new Error("unrelated Explorer source read"); },
         get authoredAt(): never { throw new Error("unrelated authored source read"); },
       },
@@ -436,7 +519,7 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
       request: { timing: "post_commit" as const, subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb" as const] },
     };
     let authoredReads = 0;
-    const { page } = queryModules({ ...input, sources: { authoredAt: () => { authoredReads += 1; return []; }, shapes: [] } });
+    const { page } = queryModules({ ...input, sources: { authoredAt: () => { authoredReads += 1; return []; } } });
     expect(authoredReads).toBe(1);
     expect(page.packets.map(packet => packet.module)).toEqual(["theory_breadcrumb"]);
     expect(() => queryModules({ ...input, sources: {
@@ -472,19 +555,21 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     expect(packetOf(page, "theory_breadcrumb")).toBeUndefined();
   });
 
-  it("theory breadcrumb states the opening catalogue's absence as its own source result", () => {
+  it("theory breadcrumb states the opening catalogue's absence as its own source result", async () => {
     const run = packRun(ITALIAN, ["e1g1"]);
-    const { page } = queryModules({ run, assistance, role: "learner", session: "onramp", request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb"] } });
+    const empty = await registeredShapePointFixture([run.nodes.find(node => node.id === run.activeCursor.nodeId)!], []);
+    const { page } = queryModules({ run, assistance, role: "learner", session: "onramp", request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb"] }, sources: { shapeAt: empty.shapeAt } });
     const theory = packetOf(page, "theory_breadcrumb")!;
     expect(theory.unavailable).toContainEqual({ projection: "theory.opening.current_endpoint@1", reason: "artifact_missing" });
     expect(theory.empty).toEqual({ kind: "stated_absence", sentence: "Nothing is written about this position." });
   });
 
-  it.each(["not_configured", "provider_unavailable", "identity_mismatch"] as const)("keeps matched local theory when optional Explorer evidence is %s", explorerUnavailable => {
+  it.each(["not_configured", "provider_unavailable", "identity_mismatch"] as const)("keeps matched local theory when optional Explorer evidence is %s", async explorerUnavailable => {
     const run = packRun("r1bqkbnr/pp1ppppp/2n5/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 5", ["b1c3"]);
+    const source = await registeredShapePointFixture([run.nodes.find(node => node.id === run.activeCursor.nodeId)!], [{ ...registeredShapeFixture("maroczy-bind"), name: "Maroczy fixture", trigger: { kind: "feature", feature: { kind: "named_structure", id: "maroczy-bind" } } }]);
     const { page } = queryModules({ run, assistance, role: "learner", session: "onramp",
       request: { timing: "post_commit", subjectNodeId: run.activeCursor.nodeId, requested: ["theory_breadcrumb"] },
-      sources: { explorerUnavailable, shapes: [{ id: "maroczy-bind", trigger: { kind: "feature", feature: { kind: "named_structure", id: "maroczy-bind" } } }] },
+      sources: { explorerUnavailable, shapeAt: source.shapeAt },
     });
     const theory = packetOf(page, "theory_breadcrumb")!;
     expect(theory.unavailable).toContainEqual({ projection: "derived.explorer.population_summary@1", reason: explorerUnavailable });
@@ -492,7 +577,7 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
     expect(assertDelivered(theory, assistance).join(" ")).toMatch(/maroczy/iu);
     const shape = theory.receipt.items.find((item) => item.component.id === "fact_statement");
     expect(shape?.component.id === "fact_statement" && shape.component.operand).toMatchObject({
-      rendererId: "play.shape_entry@1", operands: { entryId: "maroczy-bind", title: "Maroczy bind" },
+      rendererId: "inspector.registered_shape_firing@2", operands: { entryId: "maroczy-bind", authority: { name: "Maroczy fixture" } },
     });
   });
 
@@ -535,25 +620,51 @@ describe("Guide me (on-ramp pack context): structure nudge, theory breadcrumb an
   });
 });
 
-describe("Analyze: the Full Inspector surface (explicit mode, family-partitioned)", () => {
-  it("presents the node's sealed census and states every family, withheld until feedback opens", () => {
+describe("Analyze: obsolete generic Full Inspector paths require explicit source pages", () => {
+  it("refuses both closed and revealed broad queries before source work", () => {
     const assistance = finalized("position", "analysis");
     const closed = positionRun(ITALIAN, ["e1g1"]);
-    expect(() => queryModules({ run: closed, assistance, role: "learner", session: "position", request: { timing: "review", nodeId: closed.activeCursor.nodeId, requested: ["full_inspector"] } })).toThrow(/MODULE_QUERY_WITHHELD/u);
+    expect(() => queryModules({ run: closed, assistance, role: "learner", session: "position", request: { timing: "review", nodeId: closed.activeCursor.nodeId, requested: ["full_inspector"] } })).toThrow(/MODULE_QUERY_SOURCE_PAGE_REQUIRED/u);
     const run = revealFeedback(closed, at).run;
-    const { page } = queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } });
-    const inspector = packetOf(page, "full_inspector")!;
-    const sentences = assertDelivered(inspector, assistance);
-    expect(sentences.length).toBeGreaterThan(0);
-    expect(inspector.budget.after.facts).toBeLessThanOrEqual(20);
-    expect(inspector.empty?.kind).toBe("family_partitioned");
-    const families = inspector.empty?.kind === "family_partitioned" ? inspector.empty.families : [];
-    expect(families.map((family) => family.family)).toEqual(["local_rules", "authored_theory", "recorded_run", "stockfish", "syzygy", "maia", "explorer", "derived"]);
-    expect(families.find((family) => family.family === "local_rules")?.kind).toBe("available");
+    const collect = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    expect(() => queryModules({ run, assistance, role: "learner", session: "position", request: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } })).toThrow(/MODULE_QUERY_SOURCE_PAGE_REQUIRED/u);
+    expect(collect).not.toHaveBeenCalled();
+    expect(() => parseModuleQueryRequest({ timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] })).toThrow(/MODULE_QUERY_SOURCE_PAGE_REQUIRED/u);
+  });
+  it("refuses direct compileModulePacket use for the separately registered Full2 source operation", () => {
+    expect(compileModulePacket({ module: "full_inspector", timing: "review", role: "learner", session: "position", evidence: [] })).toEqual({ kind: "refused", module: "full_inspector", reason: "source_page_required" });
   });
 });
 
 describe("§5.1 the post-adapter budget fit", () => {
+  let currentFixtures: Awaited<ReturnType<typeof inspectorCurrentPresentationFixtures>>;
+  beforeAll(async () => { currentFixtures = await inspectorCurrentPresentationFixtures(inspectorFixtureEvidence(INSPECTOR_SOURCE_TOPICS.map(row => row.projection))); });
+  const recordedPathBundle = () => {
+    const ref = "derived.pawn.sequence.harassment_pressure@3";
+    const evidence = currentFixtures.get(ref)?.[0];
+    if (evidence === undefined) throw new Error("Actual recorded harassment fixture emitted no occurrence");
+    return presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [evidence]));
+  };
+  it("D3979 counts ordered recorded-path edges without inventing endpoint marks or current-board paint", () => {
+    const bundle = recordedPathBundle(), path = bundle.find(item => item.component.id === "move_path")!.component;
+    if (path.id !== "move_path") throw new Error("Actual board composition omitted its recorded path");
+    expect(bundle.map(item => item.component.id)).toEqual(["square_set", "move_path"]);
+    const arrows = new Set(path.operand.plies.map(ply => ply.uci.slice(0, 4)));
+    expect(arrows.size).toBe(2);
+    const squares = bundle.flatMap(item => item.component.id === "square_set" ? item.component.operand.squares : []);
+    const fitted = fitModulePresentation("full_inspector", bundle);
+    expect(fitted.budget.before.arrows).toBe(arrows.size);
+    expect(fitted.budget.before.marks).toBe(new Set(squares).size);
+    expect(fitted.budget.after).toEqual(fitted.budget.before);
+    expect(fitted.items).toEqual(bundle);
+  });
+  it("D3979 refuses the whole real composition under a zero-arrow budget", () => {
+    const bundle = recordedPathBundle(), fitted = fitModulePresentation("structure_nudge", bundle);
+    expect(fitted.items).toEqual([]);
+    expect(fitted.budget.after).toEqual({ facts: 0, words: 0, marks: 0, arrows: 0 });
+    expect(fitted.budget.dropped).toHaveLength(1);
+    expect(fitted.budget.dropped[0]!.exceeded).toContain("arrows");
+  });
   it("drops whole bundles and never back-fills", () => {
     const empty = fitModulePresentation("sight_on_request", []);
     expect(empty.budget).toEqual({ before: { facts: 0, words: 0, marks: 0, arrows: 0 }, after: { facts: 0, words: 0, marks: 0, arrows: 0 }, kept: [], dropped: [] });

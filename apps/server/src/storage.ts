@@ -1,3 +1,5 @@
+import { PROFILE_SUBJECT_OBSERVATIONS_SQL } from "./profile-subject-facts-storage.js";
+import { PROFILE_GAME_FACTS_SQL, PROFILE_CHOICE_FACTS_SQL } from "./longitudinal-store.js";
 import { randomUUID } from "node:crypto";
 import { DatabaseSync, type SQLInputValue } from "node:sqlite";
 
@@ -11,6 +13,7 @@ import {
   type ImportSourceKind,
   type ObjectiveState,
   type RunMark,
+  type StoredClockDocument,
 } from "@chess-tabiya/runtime";
 import {
   glicko2Update,
@@ -19,6 +22,7 @@ import {
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 import { ServerError } from "./errors.js";
+import { parseStoredClockDocument, legacyStoredClockDocument } from "./recorded-clock-document.js";
 import { upgradeV018RecordedSelection } from "./migrations/recorded-selection-telemetry.js";
 import { CAMPAIGN_MIGRATION_SQL, CAMPAIGN_TABLES, CampaignStore } from "./campaign-store.js";
 import { CampaignEventCorrupt } from "./campaign-events.js";
@@ -214,6 +218,7 @@ export interface ImportedGameRecord {
   readonly pgn: string;
   readonly licenceNote: string;
   readonly importedAt: string;
+  readonly clockDocument: StoredClockDocument | null;
 }
 export type PublicTokenRecord =
   | { readonly id: string; readonly tokenHash: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdBy: string; readonly createdAt: string; readonly revokedAt: string | null }
@@ -394,6 +399,9 @@ export interface RatingStorage {
 
 /** Persistence boundary for run snapshots, identity, grants, and the writer lease. */
 export interface RunStorage {
+  /** Existing store-sealed historical authorship reads; not caller-created actor claims. */
+  longitudinalSourceImageV4?(runId: string, requestedSeq: number): LongitudinalSourceImageV4;
+  longitudinalSourceDigestV4?(image: LongitudinalSourceImageV4): `sha256:${string}`;
   /** Schema-only account-data guard; exposes names, never rows or the database handle. */
   applicationTableNames(): readonly string[];
   applicationIdentityFields(): readonly string[];
@@ -416,6 +424,7 @@ export interface RunStorage {
   applyEvidenceAndConsumeJob?(runId: string, lease: LeaseHolder, input: { readonly resultSeq: number; readonly at: string; readonly guard: RecordedGuardAuthority }): EvidenceApplication;
   createImportedRun?(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void;
   importedGame?(runId: string): ImportedGameRecord | undefined;
+  ensureRecordedClockDocument?(runId: string): ImportedGameRecord;
   createPublicToken?(record: PublicTokenRecord): void;
   publicTokens?(runId: string, creatorId: string): readonly Extract<PublicTokenRecord, { scope: "story_read" }>[];
   publicTokenByHash?(tokenHash: string): PublicTokenRecord | undefined;
@@ -803,7 +812,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 31;
+export const STORAGE_VERSION = 35;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -1505,7 +1514,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           grantedVia: grant.grantedVia === null ? null : String(grant.grantedVia),
         }));
         const imported = this.#database.prepare(
-          "SELECT source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at FROM imported_games WHERE run_id=?",
+          "SELECT source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at,clock_document_json FROM imported_games WHERE run_id=?",
         ).get(id) as Record<string, unknown> | undefined;
         const derivations = rows(
           `SELECT derived_run_id AS derivedRunId,source_run_id AS sourceRunId,source_branch_id AS sourceBranchId,
@@ -1526,6 +1535,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
             sourceKind: String(imported.source_kind), sourceUrl: imported.source_url === null ? null : String(imported.source_url),
             movetextDigest: String(imported.movetext_digest), headers: Object.freeze({ ...(parsedHeaders as Record<string, string>) }),
             result: String(imported.result), pgn: String(imported.pgn), licenceNote: String(imported.licence_note), importedAt: String(imported.imported_at),
+            clockDocument: imported.clock_document_json === null ? null : parseStoredClockDocument(JSON.parse(String(imported.clock_document_json)),
+              { pgn: String(imported.pgn), movetextDigest: String(imported.movetext_digest) }, stored.snapshot.kind === "parsed" ? stored.snapshot.value : undefined),
           });
         }
         return Object.freeze({ id, title, schemaVersion: String(row.schema_version ?? stored.schemaVersion), replayable: stored.replayable, snapshot: stored.snapshot, importedGame, grants: Object.freeze(grants), derivations: Object.freeze(derivations) });
@@ -1709,6 +1720,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         ...tagged("learner_observation_denominators", rows("SELECT * FROM learner_observation_denominators WHERE learner_id=? ORDER BY run_id,phase,decision_class", learnerId)),
         ...tagged("learner_observations", rows("SELECT * FROM learner_observations WHERE learner_id=? ORDER BY run_id,projection_id,projection_version,semantic_sign,source_sign,phase,decision_class", learnerId)),
         ...tagged("learner_structure_stats", rows("SELECT * FROM learner_structure_stats WHERE learner_id=? ORDER BY run_id,root_key", learnerId)),
+        ...tagged("learner_game_facts", rows("SELECT * FROM learner_game_facts WHERE learner_id=? ORDER BY run_id", learnerId)),
+        ...tagged("learner_choice_facts", rows("SELECT * FROM learner_choice_facts WHERE learner_id=? ORDER BY run_id", learnerId)),
+        ...tagged("learner_subject_observations", rows("SELECT * FROM learner_subject_observations WHERE learner_id=? ORDER BY run_id,decision_ref_json,source_kind,projection_id,projection_version,subject_json,parameters_json,tested_key", learnerId)),
         ...tagged("learner_observation_jobs", rows("SELECT run_id,requested_seq,completed_seq,derived_rev,state,retry_count,failure_code,next_attempt_at,updated_at FROM learner_observation_jobs WHERE learner_id=? ORDER BY run_id", learnerId)),
       ];
       const bundle = buildAccountBundle({
@@ -1798,8 +1812,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           VALUES (?,?,'host',?,NULL,NULL)`).run(restored.id, learnerId, at);
         const game = restored.importedGame;
         if (game !== null) {
-          insert("imported_games", ["run_id", "source_kind", "source_url", "movetext_digest", "headers_json", "result", "pgn", "licence_note", "imported_at"], [
+          insert("imported_games", ["run_id", "source_kind", "source_url", "movetext_digest", "headers_json", "result", "pgn", "licence_note", "imported_at", "clock_document_json"], [
             restored.id, game.sourceKind, game.sourceUrl, game.movetextDigest, JSON.stringify(game.headers), game.result, game.pgn, game.licenceNote, game.importedAt,
+            game.clockDocument === null ? null : JSON.stringify(parseStoredClockDocument(game.clockDocument, game, restored.run)),
           ]);
         }
       }
@@ -1880,6 +1895,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ...ids(`SELECT 'longitudinal-observation:'||run_id||':'||projection_id||'@'||projection_version||':'||semantic_sign||':'||source_sign||':'||phase||':'||decision_class AS id
         FROM learner_observations WHERE ${where} ORDER BY run_id,projection_id,projection_version,semantic_sign,source_sign,phase,decision_class`, ...parameters),
       ...ids(`SELECT 'longitudinal-structure:'||run_id||':'||root_key AS id FROM learner_structure_stats WHERE ${where} ORDER BY run_id,root_key`, ...parameters),
+      ...ids(`SELECT 'longitudinal-game:'||run_id AS id FROM learner_game_facts WHERE ${where} ORDER BY run_id`, ...parameters),
+      ...ids(`SELECT 'longitudinal-choice:'||run_id AS id FROM learner_choice_facts WHERE ${where} ORDER BY run_id`, ...parameters),
+      ...ids(`SELECT 'longitudinal-subject:'||run_id||':'||decision_ref_json||':'||source_kind||':'||projection_id||':'||projection_version||':'||subject_json||':'||parameters_json||':'||tested_key AS id FROM learner_subject_observations WHERE ${where} ORDER BY run_id,decision_ref_json,source_kind,projection_id,projection_version,subject_json,parameters_json,tested_key`, ...parameters),
       ...ids(`SELECT 'longitudinal-job:'||run_id AS id FROM learner_observation_jobs WHERE ${where} ORDER BY run_id`, ...parameters),
     ];
     const progressIds = scope.kind === "run" ? [] : [
@@ -2482,6 +2500,8 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
   }
 
   createImportedRun(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void {
+    if (record.runId !== run.id) throw storageFailure("Imported record run identity differs", new TypeError("Imported record run identity differs"));
+    const clockDocument = record.clockDocument === null ? null : parseStoredClockDocument(record.clockDocument, record, run);
     const updatedAt = this.#now();
     try {
       this.#database.exec("BEGIN IMMEDIATE");
@@ -2495,11 +2515,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       this.#database.prepare(`INSERT INTO run_grants (run_id,learner_id,role,granted_at,expires_at,granted_via)
         VALUES (?,?,'host',?,NULL,NULL)`).run(run.id, lease.learnerId, updatedAt);
       this.#database.prepare(`INSERT INTO imported_games
-        (run_id,source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at)
-        VALUES (?,?,?,?,?,?,?,?,?)`).run(
+        (run_id,source_kind,source_url,movetext_digest,headers_json,result,pgn,licence_note,imported_at,clock_document_json)
+        VALUES (?,?,?,?,?,?,?,?,?,?)`).run(
           record.runId, record.sourceKind, record.sourceUrl, record.movetextDigest,
           JSON.stringify(record.headers), record.result, record.pgn, record.licenceNote,
           record.importedAt,
+          clockDocument === null ? null : JSON.stringify(clockDocument),
         );
       this.#upsertLongitudinalWatermark({ symbol: "SQLiteRunStorage#createImportedRun", effect: "always" }, [run.id]);
       this.#database.exec("COMMIT");
@@ -2528,7 +2549,29 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       pgn: String(row.pgn),
       licenceNote: String(row.licence_note),
       importedAt: String(row.imported_at),
+      clockDocument: row.clock_document_json === null ? null : parseStoredClockDocument(JSON.parse(String(row.clock_document_json)),
+        { pgn: String(row.pgn), movetextDigest: String(row.movetext_digest) }, this.read(runId)?.run),
     });
+  }
+
+  /** Authorized source operations call this after requireRead; no clock source is minted here. */
+  ensureRecordedClockDocument(runId: string): ImportedGameRecord {
+    const original = this.importedGame(runId);
+    if (original === undefined) throw storageFailure("Imported clock record is missing", new TypeError("Imported clock record is missing"));
+    if (original.clockDocument !== null) return original;
+    const run = this.read(runId)?.run;
+    if (run === undefined) throw storageFailure("Imported clock run is missing", new TypeError("Imported clock run is missing"));
+    const document = legacyStoredClockDocument(original, run);
+    try {
+      this.#database.exec("BEGIN IMMEDIATE");
+      this.#database.prepare("UPDATE imported_games SET clock_document_json=? WHERE run_id=? AND clock_document_json IS NULL")
+        .run(JSON.stringify(document), runId);
+      // A concurrent winner is validated and retained, never replaced by sanitized PGN.
+      const winner = this.importedGame(runId);
+      if (winner?.clockDocument === null || winner === undefined) throw storageFailure("Clock document compare-and-set failed", new TypeError("Clock document compare-and-set failed"));
+      this.#database.exec("COMMIT");
+      return winner;
+    } catch (error) { this.#rollback(); throw storageFailure("Could not retain recorded clock document", error); }
   }
 
   list(learnerId: string, limit: number, offset: number): readonly RunSummary[];
@@ -4715,6 +4758,14 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         name: "preserve explicitly empty recorded human-selection telemetry",
         apply: () => upgradeV018RecordedSelection(this.#database),
       },
+      {
+        version: 32,
+        name: "typed retained original imported clock document",
+        apply: () => this.#database.exec("ALTER TABLE imported_games ADD COLUMN clock_document_json TEXT CHECK(clock_document_json IS NULL OR json_valid(clock_document_json))"),
+      },
+      { version: 33, name: "profile GAME facts from original foundation sources", apply: () => this.#database.exec(PROFILE_GAME_FACTS_SQL) },
+      { version: 34, name: "profile complete legal choice facts", apply: () => this.#database.exec(PROFILE_CHOICE_FACTS_SQL) },
+      { version: 35, name: "subject-grain longitudinal observations", apply: () => this.#database.exec(PROFILE_SUBJECT_OBSERVATIONS_SQL) },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {

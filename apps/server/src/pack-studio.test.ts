@@ -12,7 +12,7 @@ import { withDerivedRequires } from "./capability/pack-capabilities.js";
 import { ALL_PROVIDERS_CONFIGURED, runtimeSupportedCapabilities } from "./capability/pack-capabilities.js";
 import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 
-const fixture = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as any;
+const fixture = withDerivedRequires(JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as any);
 const principal = { learnerId: "learner-studio", handle: "author" } as const;
 
 describe("Pack Studio", () => {

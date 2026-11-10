@@ -1,4 +1,7 @@
-import { compileAssistanceRequest, moduleDisclosureDigest, parseFinalizedAssistanceV1, parsePresentationReceipt, presentedSentence, type ModuleQueryPage, type WorkflowPreferenceReceipt } from "@chess-tabiya/runtime";
+import { compileAssistanceRequest, moduleDecisionStamp, moduleDisclosureDigest, parseFinalizedAssistanceV1, parsePresentationReceipt, presentedSentence, type ModuleQueryPage, type WorkflowPreferenceReceipt } from "@chess-tabiya/runtime";
+import type { InspectorQueryRequest } from "../../../packages/runtime/src/inspector-query-contract.js";
+import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
+import { parseInspectorQueryPage } from "../../web/src/lib/inspector-query-response.js";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
@@ -27,7 +30,7 @@ describe("POST /runs/:id/modules/query", () => {
     return { service, storage, handler: createRestHandler(service) };
   }
 
-  const finalizedFor = async (handler: ReturnType<typeof createRestHandler>, preset: "quiet" | "support") =>
+  const finalizedFor = async (handler: ReturnType<typeof createRestHandler>, preset: "quiet" | "support" | "analysis") =>
     parseFinalizedAssistanceV1(((await (await handler(post("/runs/modules/assistance", compileAssistanceRequest({ contextHint: "position", preference: named(preset) })))).json()) as { assistance: unknown }).assistance);
 
   it.each([
@@ -84,19 +87,35 @@ describe("POST /runs/:id/modules/query", () => {
     const { service, storage, handler } = await setup(fen);
     service.reveal("modules", "writer", at);
     const run = storage.read("modules")!.run;
-    const response = await handler(post("/runs/modules/modules/query", {
+    const finalized = await finalizedFor(handler, "analysis");
+    const request: InspectorQueryRequest = { protocol: "inspector.query_page@1",
       assistance: compileAssistanceRequest({ contextHint: "position", preference: named("analysis") }),
-      query: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] },
-    }));
+      query: { branchId: run.activeCursor.branchId, nodeId: run.activeCursor.nodeId, decisionDigest: moduleDecisionStamp(run).digest,
+        view: { kind: "source", projection: "rules.square.reading.control@1", context: { kind: "position" }, start: 0, collectionKey: null } } };
+    const obsolete = await handler(post("/runs/modules/modules/query", { assistance: request.assistance,
+      query: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } }));
+    expect(obsolete.status).toBe(400);
+    expect(await obsolete.json()).toMatchObject({ error: { code: "INVALID_REQUEST" } });
+    const response = await handler(post("/runs/modules/inspector/query", request));
     expect(response.status).toBe(200);
-    const { page } = await response.json() as { page: ModuleQueryPage };
-    const packet = page.packets.find(item => item.module === "full_inspector")!;
-    expect(packet).toBeDefined();
-    const caption = parsePresentationReceipt(packet.receipt).find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.square_control@1")!;
+    const page = parseInspectorQueryPage(await response.json(), { runId: run.id, request, requestedDigest: finalized.requestedDigest, finalDigest: finalized.finalDigest, fen });
+    if (page.kind !== "page" || page.body.kind !== "source" || page.body.outcome.kind !== "available") throw new Error("Expected genuine square-control source page");
+    expect(page.body.outcome.collected).toBe(1);
+    expect(page.body.outcome.displayed).toBe(1);
+    const caption = page.items.find(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "play.square_control@1")!;
     expect(caption).toBeDefined();
     if (caption.component.id !== "fact_statement" || caption.component.operand.rendererId !== "play.square_control@1") throw new Error("Expected square-control caption");
     const color = fen.split(" ")[1] === "w" ? "white" : "black";
-    expect(caption.component.operand.operands.colors).toContainEqual({ color, pseudo, legal });
+    const reading = invokeEvidenceValueRoute("rules.square.reading.control@1", { fen }).payload;
+    expect(caption.component.operand.operands.colors.map(({ color, pseudo, legal }) => ({ color, pseudo, legal })))
+      .toContainEqual({ color, pseudo, legal });
+    expect(caption.component.operand.operands.colors).toEqual(reading.colors.map(entry => ({ color: entry.color,
+      pseudo: entry.pseudo.filter(cell => cell.controllers.length > 0).length,
+      legal: entry.legal.kind === "unavailable" ? null : entry.legal.squares.filter(cell => cell.controllers.length > 0).length,
+      pseudoControls: entry.pseudo.map(cell => ({ target: cell.target, controllers: cell.controllers.map(controller => ({
+        piece: { color: controller.piece.color, role: controller.piece.role }, square: controller.square,
+      })) })),
+    })));
     expect(presentedSentence(caption)).toContain(`${color === "white" ? "White" : "Black"} attacks ${pseudo} squares (${legal} with legal moves)`);
     const graph = storage.read("modules")!.run;
     expect(graph.nodes).toEqual(run.nodes);

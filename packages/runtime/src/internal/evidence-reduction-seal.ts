@@ -15,8 +15,8 @@ interface Data {
   singleResult?: DeclaredEvidence<unknown>;
 }
 const authorities = new WeakMap<object, Data>(), values = new WeakMap<object, { authority: EvidenceReductionAuthority; ordinal: number }>(), results = new WeakMap<object, EvidenceReductionAuthority>();
-type Binding = Readonly<{ operation: "compare.structure_delta" | "story.last_level" | "story.rank" | "opening.deepest_reached";
-  projection: "derived.compare.structure_delta" | "derived.story.last_level" | "derived.story.rank" | "derived.opening.deepest_reached";
+type Binding = Readonly<{ operation: "compare.structure_delta" | "story.last_level" | "story.rank" | "opening.deepest_reached" | "authoring.structural_predicate";
+  projection: "derived.compare.structure_delta" | "derived.story.last_level" | "derived.story.rank" | "derived.opening.deepest_reached" | "derived.structural.predicate_result";
   version: 2 | 3; resultKind: "items" | "single"; factory: string }>;
 const operationProofs = new WeakMap<object, Readonly<{ proof: EvidenceReductionMintImage; validate: (manifest?: CompiledEvidenceManifest) => void; binding: Binding }>>();
 function seal(proof: EvidenceReductionMintImage, validate: (manifest?: CompiledEvidenceManifest) => void, binding: Binding): OwnedEvidenceReductionProof {
@@ -41,6 +41,10 @@ export function sealOwnedStoryRankReductionProof(proof: EvidenceReductionSingleM
 /** Issued only by the exact owned recorded-opening computation module. */
 export function sealOwnedOpeningHistoryReductionProof(proof: EvidenceReductionItemsMintImage, validate: (manifest?: CompiledEvidenceManifest) => void): OwnedEvidenceReductionProof {
   return seal(proof, validate, Object.freeze({ operation: "opening.deepest_reached", projection: "derived.opening.deepest_reached", version: 2, resultKind: "items", factory: "createDerivedOpeningDeepestReachedV2Evidence" }));
+}
+/** Issued only by the exact source-owned authored AST computation. */
+export function sealOwnedAuthoredPredicateReductionProof(proof: EvidenceReductionSingleMintImage, validate: (manifest?: CompiledEvidenceManifest) => void): OwnedEvidenceReductionProof {
+  return seal(proof, validate, Object.freeze({ operation: "authoring.structural_predicate", projection: "derived.structural.predicate_result", version: 2, resultKind: "single", factory: "createDerivedStructuralPredicateResultV2Evidence" }));
 }
 function read(authority: EvidenceReductionAuthority) {
   const data = authorities.get(authority);
@@ -82,7 +86,7 @@ export function publishEvidenceReduction(authority: EvidenceReductionAuthority, 
 /** Exact rank single publication: no fabricated item array or node/ply location. */
 export function publishSingleEvidenceReduction(authority: EvidenceReductionAuthority, value: DeclaredEvidence<unknown>): void {
   const data = read(authority);
-  if (data.binding.operation !== "story.rank" || data.binding.resultKind !== "single" || data.proof.resultKind !== "single"
+  if ((data.binding.operation !== "story.rank" && data.binding.operation !== "authoring.structural_predicate") || data.binding.resultKind !== "single" || data.proof.resultKind !== "single"
     || data.result !== undefined || data.singleResult !== undefined || data.values.size !== 1 || data.values.get(0)?.value !== value) throw new TypeError("Single reduction result is incomplete, crossed or already published");
   data.validate(); data.singleResult = value;
 }

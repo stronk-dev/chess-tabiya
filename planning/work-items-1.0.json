@@ -5400,18 +5400,22 @@
     {
       "id": "IMP-a6",
       "sourceState": "queued",
-      "state": "blocked_rfc",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.4e / §11-12",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "**Retain own-game clocks end to end.** Request them, extract `[%clk]` before annotation stripping, persist the typed per-ply readings, and include them in account export/delete inventory. `clocks=true` alone still loses every reading in `stripPgnAnnotations`",
       "legacyRoute": "ledger",
-      "note": "[[D1048]], [[D2021]]; implementation is one `recorded-clocks` unit, not a query-string edit",
+      "note": "[[D2021]] locally verified2026-11-05: extract-before-strip/source/SQL32/account lifecycle plus authenticated API/strict mounted readout. `planning/time-controls/implementation-2026-11-05.md`; [[D1048]] broadcast integration and native whole-clock discharge remain separate",
       "tournamentReady": true,
-      "sourceDigest": "sha256:ed1485574f1234052f9ec9750676022badb4bb998ead7cbcefd90cb5d6851505"
+      "sourceDigest": "sha256:3245031495aec960f080e061230a4ed339c29ecff73635a8f012404483f67350",
+      "completion": {
+        "completedOn": "2026-11-05",
+        "evidence": "apps/server/src/recorded-clock-delivery.test.ts"
+      }
     },
     {
       "id": "IMP-a7",

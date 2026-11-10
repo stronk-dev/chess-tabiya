@@ -79,7 +79,10 @@ export function collectRecordedOpeningHistory(input: HistoryInput): RecordedOpen
     if (!branchIds.has(node.branchId) || !paths.get(node.branchId)?.some(value => value === node)) throw new TypeError("Opening history node is outside its registered branch graph");
     if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new TypeError("Opening history node FEN is not canonical");
     const created = creations.get(node.id);
-    if (created?.length !== 1 || canonicalizeJson(created[0]) !== canonicalizeJson(node)) throw new TypeError("Opening history node has no unique exact creation event");
+    // Evidence/checkpoint/objective fields are projections of later validated events. The full
+    // snapshot/replay equality above still checks them; creation joins only immutable identity.
+    const identity = ["id", "parentId", "fen", "transposeKey", "moveUci", "moveSan", "ply", "actor", "branchId", "createdAt"] as const;
+    if (created?.length !== 1 || identity.some(key => created[0]![key] !== node[key])) throw new TypeError("Opening history node has no unique exact creation event");
     if (node.parentId !== null) {
       const parent = nodes.get(node.parentId);
       if (parent === undefined) throw new TypeError("Opening history edge has no original parent");

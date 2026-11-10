@@ -55,7 +55,7 @@ describe("shared castling evidence follows legal identity, not file displacement
 
   it.each(fixtures)("D3640 explains $name cause through the registered Review adapter", fixture => {
     const events = castlingSemanticEvents(fixture.fen, fixture.move, after(fixture.fen, fixture.move));
-    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 1 }, events.map(item => item.evidence)));
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 }, events.map(item => item.evidence)));
     const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
     expect(wire).toHaveLength(1);
     expect(wire[0]!.evidenceRef?.projection).toEqual({ id: "rules.castling.event.rights_lost", version: 1 });

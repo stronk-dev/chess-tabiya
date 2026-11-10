@@ -4,7 +4,7 @@ import { recordedComparisonColumn, type RecordedComparisonSource } from "./recor
 import type { RecordedInspectorPacket } from "./recorded-inspector.js";
 import { digestRunEvidenceItem } from "./run-subject.js";
 import { STORY_PIVOT_CP } from "./story.js";
-import type { EvidenceAttachedEvent } from "./types.js";
+import type { EvidenceAttachedEvent, Node } from "./types.js";
 
 export interface RecordedCompareEvalDelta {
   readonly before: number;
@@ -21,12 +21,26 @@ export interface RecordedCompareEvalDeltaInput {
   readonly branchId: string;
 }
 
+/** The same original recorded trail for source acquisition and pair admission. No engine claim. */
+export function recordedComparisonEvalTrail(comparison: RecordedComparisonSource, branchId: string): readonly Readonly<{
+  event: EvidenceAttachedEvent; node: Node; plyOffset: number;
+}>[] {
+  const { run, authority, path } = recordedComparisonColumn(comparison, branchId);
+  const forkIndex = path.findIndex(entry => entry.node.id === authority.forkNodeId), forkPly = path[forkIndex]!.node.ply;
+  const nodes = new Map(path.slice(forkIndex).map(entry => [entry.node.id, entry.node]));
+  return Object.freeze(run.events.flatMap(event => {
+    if (event.type !== "evidence.attached" || event.data.payload.kind !== "eval" || event.data.payload.source !== "engine_validated") return [];
+    const node = nodes.get(event.data.nodeId), values = event.data.payload.values;
+    if (node === undefined || (!Number.isSafeInteger(values.centipawns) && !Number.isSafeInteger(values.mateIn))) return [];
+    return [Object.freeze({ event, node, plyOffset: node.ply - forkPly })];
+  }).sort((left, right) => left.plyOffset - right.plyOffset || left.event.seq - right.event.seq));
+}
+
 /** Both original packets must belong to this exact complete head and granted column. */
 export function recordedComparisonEvalDeltaValue(input: RecordedCompareEvalDeltaInput): RecordedCompareEvalDelta | undefined {
   const { run, authority, path } = recordedComparisonColumn(input.comparison, input.branchId);
   const forkIndex = path.findIndex(entry => entry.node.id === authority.forkNodeId);
   const nodes = new Map(path.slice(forkIndex).map(entry => [entry.node.id, entry.node]));
-  const forkPly = path[forkIndex]!.node.ply;
   function original(record: DeclaredEvidence<RecordedInspectorPacket<"eval">>): EvidenceAttachedEvent {
     assertDeclaredEvidence(record);
     const receipt = evidenceValueReceipt(record), packet = record.payload;
@@ -48,13 +62,7 @@ export function recordedComparisonEvalDeltaValue(input: RecordedCompareEvalDelta
   const before = original(input.before), after = original(input.after);
   // Match the existing overlay exactly: cp first, otherwise typed mate; uninterpretable rows do
   // not enter that trail. Mate entries remain between their neighbours and cannot turn into cp.
-  const trail = run.events.flatMap(event => {
-    if (event.type !== "evidence.attached" || event.data.payload.kind !== "eval"
-      || event.data.payload.source !== "engine_validated") return [];
-    const node = nodes.get(event.data.nodeId), values = event.data.payload.values;
-    if (node === undefined || (!Number.isSafeInteger(values.centipawns) && !Number.isSafeInteger(values.mateIn))) return [];
-    return [{ event, plyOffset: node.ply - forkPly }];
-  }).sort((left, right) => left.plyOffset - right.plyOffset || left.event.seq - right.event.seq);
+  const trail = recordedComparisonEvalTrail(input.comparison, input.branchId);
   const index = trail.findIndex(entry => entry.event.seq === before.seq);
   if (index < 0 || trail[index + 1]?.event.seq !== after.seq) return undefined;
   const beforeCp = before.data.payload.values.centipawns, afterCp = after.data.payload.values.centipawns;

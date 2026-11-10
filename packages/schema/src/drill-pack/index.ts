@@ -1,4 +1,5 @@
 export { canonicalizeJson, digestCanonicalJson, digestDrillPack, type JsonValue } from "./digest.js";
+export { STRUCTURAL_CONVENTION_REFS, assertStructuralConventionSelection, assertLegacyStructuralExpression, structuralConventionRefForKind, structuralConventionRefSchema, type StructuralConventionKind, type StructuralConventionRef } from "./structural-conventions.js";
 export {
   lintDrillPack,
   reachableAuthoredSpineIds,

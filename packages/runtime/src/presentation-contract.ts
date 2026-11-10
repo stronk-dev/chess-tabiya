@@ -1,3 +1,6 @@
+import { FOUNDATION_COMPACT_STATEMENTS, FOUNDATION_EDGE_STATEMENTS, assertFoundationEdgePayloadRef } from "./foundation-edge-presentation.js";
+import { FOUNDATION_DETAIL_CAPTIONS, isFoundationDetailKind } from "./foundation-snapshot-detail.js";
+import { assertFoundationSnapshotPayloadRef } from "./foundation-snapshot-presentation.js";
 // rfc/evidence-presentation.md Checkpoint A: the closed component vocabulary between a typed fact
 // and a pixel, the exact projection-keyed adapter registry, the two process-local seals and the
 // closed `presentation.receipt@1` wire.
@@ -16,6 +19,9 @@
 
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { presentationDigest, withoutUndefined } from "./presentation-digest.js";
+import { presentationWordCount } from "./presentation-word-count.js";
+import { movePathFrames } from "./presentation-move-path.js";
+export { movePathFrames } from "./presentation-move-path.js";
 export { presentationDigest } from "./presentation-digest.js";
 import type { Color, Role, SquareName } from "chessops/types";
 
@@ -42,8 +48,11 @@ import { renderShapeFiring, type ShapeFiring } from "./shape-firing.js";
 import { CONSUMER_FACT_RENDERERS, CONSUMER_MAGNITUDE_QUANTITIES, STRUCTURED_DOCUMENT_SCHEMAS, consumerAdapterSpecs } from "./presentation-consumer-adapters.js";
 import { INSPECTOR_FACT_RENDERERS, INSPECTOR_MAGNITUDE_QUANTITIES, inspectorAdapterSpecs } from "./presentation-inspector-adapters.js";
 import { PLAY_FACT_RENDERERS, PLAY_MAGNITUDE_QUANTITIES, playAdapterSpecs } from "./presentation-play-adapters.js";
-import { PresentationSchemaError, ROLE_NAMES, SIDE_NAMES, listPhrase, type FactOperandsOf, type FactRendererDefinition } from "./presentation-schema.js";
+import { PresentationSchemaError, ROLE_NAMES, SIDE_NAMES, listPhrase, s, type Parser, type FactOperandsOf, type FactRendererDefinition } from "./presentation-schema.js";
 import { MARK_BRUSHES, type MarkBrush, type ObjectiveState, type RunOutcome } from "./types.js";
+import { bindFactStatement } from "./presentation-fact-contract.js";
+import { INSPECTOR_DETAIL_SOURCES, inspectorDetailSquares, parseInspectorDetailPayload, type InspectorDetailKind } from "./inspector-detail.js";
+import { INSPECTOR_WHOLE_READING_GEOMETRY, inspectorWholeReadingComponents, isInspectorWholeReading } from "./inspector-whole-reading-presentation.js";
 
 /** A closed JSON value (no `undefined`, functions or non-finite numbers). */
 export type PresentationJsonValue = string | number | boolean | null | readonly PresentationJsonValue[] | { readonly [key: string]: PresentationJsonValue };
@@ -178,8 +187,8 @@ export const LABEL_VOCABULARIES: { readonly [K in keyof LabelVocabularyMembers]:
 
 export class PresentationError extends TypeError {
   readonly code: "PRESENTATION_RAW_ID" | "PRESENTATION_UNSEALED" | "PRESENTATION_INVALID" | "PRESENTATION_UNREGISTERED";
-  constructor(code: PresentationError["code"], message: string) {
-    super(`${code}: ${message}`);
+  constructor(code: PresentationError["code"], message: string, options?: ErrorOptions) {
+    super(`${code}: ${message}`, options);
     this.name = "PresentationError";
     this.code = code;
   }
@@ -211,14 +220,25 @@ export interface StockfishExecutionReceiptRef {
 /** Registered declared conventions; the label is the only rendered name (§5d). */
 export const PRESENTATION_CONVENTIONS = Object.freeze({
   "recorded-run@1": { label: "the recorded game" },
+  "clock-spend-input@1": { label: "recorded clock arithmetic, including the post-move increment" },
   "story-compatibility@1": { label: "Tabiya's story convention" },
   "story-last-level@1": { label: "Tabiya's recorded-evaluation convention" },
   "review-mate-transition@1": { label: "Tabiya's typed mate-transition convention" },
   "review-wdl-white@1": { label: "Tabiya's White-normalized WDL convention" },
   "grade-convention@1": { label: "Tabiya's grade convention" },
+  "grade-convention@2": { label: "Tabiya's single move-loss convention, version 2" },
   "recorded-semantic-path@1": { label: "Tabiya's recorded-path detectors" },
   "authored-claim@1": { label: "the pack author's claim" },
   // Checkpoint B: the declared conventions module facts render under (learner vocabulary, §6a).
+  "unobstructed-opposition@1": { label: "the unobstructed-opposition definition" },
+  "backward-pawn@1": { label: "the declared backward-pawn definition" },
+  "pawn-file-membership@1": { label: "the recorded pawn/file memberships" },
+  "physical-slider-membership@1": { label: "the recorded physical rays and blockers" },
+  "pawn-island-topology@1": { label: "the declared pawn-island topology" },
+  "future-file-challenge@1": { label: "the hypothetical same-file pawn-challenge definition" },
+  "capture-migration-reach@1": { label: "the hypothetical capture-migration definition" },
+  "outpost-candidate@1": { label: "the same-file future-challenge outpost definition" },
+  "legal-exchange@1": { label: "the declared legal recapture-only exchange convention" },
   "board-rules@1": { label: "the rules of chess" },
   "pawn-structure@1": { label: "the declared pawn-structure convention" },
   "piece-geometry@1": { label: "the declared piece-geometry convention" },
@@ -233,6 +253,7 @@ export const PRESENTATION_CONVENTIONS = Object.freeze({
   // rfc/hint-distance.md: one relation-safe occurrence on one bounded searched engine line.
   "guided-hint@1": { label: "a searched engine line" },
   "explorer-population@1": { label: "observed Lichess population counts, not move quality" },
+  "maia-reported-window@1": { label: "a bounded model-reported candidate window, not move quality" },
 } as const);
 export type PresentationConventionId = keyof typeof PRESENTATION_CONVENTIONS;
 
@@ -338,6 +359,7 @@ export interface SquareSetOperand {
   readonly caption: FactStatementOperand;
 }
 export interface MovePathOperand {
+  readonly startFen: string;
   readonly plies: readonly { readonly ply: number; readonly san: string; readonly uci: string }[];
   readonly convention?: ConventionReceipt;
   readonly answerDistance: AnswerDistance;
@@ -421,6 +443,7 @@ export interface ClaimOperand {
 
 // Fact-statement renderers (§3.10a): literal ids, typed operands, one deterministic template each.
 interface BaseFactOperands {
+  readonly "review.objective_transition@1": { readonly from: ObjectiveState; readonly to: ObjectiveState };
   readonly "story.pivotal_marker@1": PivotalMarker;
   readonly "story.shape_firing@1": Pick<ShapeFiring, "entryId">;
   readonly "story.endgame_classification@1": EndgameClassification;
@@ -431,7 +454,6 @@ interface BaseFactOperands {
   readonly "story.title@1": { readonly title: string };
   readonly "review.mate_transition@1": { readonly changes: readonly ReviewMateTransition["changes"][number][]; readonly before: ReviewScoreReceipt; readonly after: ReviewScoreReceipt; readonly engine: { readonly name: string; readonly version: string }; readonly bound: ReviewSearchBound };
   readonly "review.wdl_point@1": { readonly win: number; readonly draw: number; readonly loss: number; readonly engine: { readonly name: string; readonly version: string }; readonly bound: ReviewSearchBound };
-  readonly "module.move_quality_grade@1": MoveQualityGrade;
   readonly "module.recorded_relation@1": { readonly relation: RecordedRelationLabelId; readonly grounding: EvidenceGrounding };
 }
 /** The closed renderer registry: the Checkpoint-A renderers plus every group's registered renderers. */
@@ -567,7 +589,7 @@ const groupParse = (): Readonly<Record<string, (operands: unknown) => unknown>> 
   try {
     return definition.parse(value, id);
   } catch (error) {
-    if (error instanceof PresentationSchemaError) throw new PresentationError("PRESENTATION_INVALID", error.message.replace(/^PRESENTATION_INVALID: /u, ""));
+    if (error instanceof PresentationSchemaError) throw new PresentationError("PRESENTATION_INVALID", error.message.replace(/^PRESENTATION_INVALID: /u, ""), { cause: error });
     throw error;
   }
 }]));
@@ -576,6 +598,7 @@ const groupParse = (): Readonly<Record<string, (operands: unknown) => unknown>> 
   if (new Set(groups).size !== groups.length) throw new PresentationError("PRESENTATION_UNREGISTERED", "two renderer groups register the same fact renderer id");
 }
 const FACT_RENDERERS: { readonly [R in FactStatementRendererId]: FactRenderer<R> } = Object.freeze({
+  "review.objective_transition@1": value => `The rehearsal goal changed from ${OBJECTIVE_STATE_LABELS[value.from].label} to ${OBJECTIVE_STATE_LABELS[value.to].label}.`,
   ...(groupRender() as unknown as { readonly [R in Exclude<FactStatementRendererId, keyof BaseFactOperands>]: FactRenderer<R> }),
   "story.pivotal_marker@1": (marker) => renderPivotalMarker(marker).join(" "),
   "story.shape_firing@1": (firing) => renderShapeFiring(firing).join(" "),
@@ -593,7 +616,6 @@ const FACT_RENDERERS: { readonly [R in FactStatementRendererId]: FactRenderer<R>
   "story.title@1": (value) => value.title,
   "review.mate_transition@1": (value) => `Recorded engine evaluation went from ${presentScore(value.before)} to ${presentScore(value.after)} across this move — ${value.changes.map((change) => MATE_CHANGE_PHRASES[change]).join(" and ")} (${engineLabel(value.engine)}, ${presentSearchBound(value.bound)}; a bounded search reading, not a proof).`,
   "review.wdl_point@1": (value) => `Recorded engine win/draw/loss expectation from White's side: ${per10(value.win)}% / ${per10(value.draw)}% / ${per10(value.loss)}% (${engineLabel(value.engine)}, ${presentSearchBound(value.bound)}).`,
-  "module.move_quality_grade@1": (grade) => { const sentence = renderMoveQualityGrade(grade); assertMoveQualityGradeSentence(grade, sentence); return sentence; },
   "module.recorded_relation@1": (value) => `Recorded-path detector fired from this move: ${RECORDED_RELATION_LABELS[value.relation].label} (${GROUNDING_LABELS[value.grounding].label}).`,
 });
 
@@ -875,13 +897,40 @@ function parseScoreReceipt(value: unknown): ReviewScoreReceipt {
   return { kind: "mate", side: oneOf(item.side, ["white", "black"], "score.side"), distance, unit: "moves" };
 }
 
+// The existing marker types define the four retained detail shapes. This validates their
+// operands, not whether a private source occurrence actually establishes a marker.
+const pivotalFiniteNumber: Parser<number> = (value, label) => {
+  if (typeof value !== "number" || !Number.isFinite(value)) throw new PresentationSchemaError(`${label} must be a finite number`);
+  return value;
+};
+const pivotalEngine = s.obj({ id: s.str, name: s.str, version: s.str, seedHonored: s.bool }, {
+  modelId: s.str, containerDigest: s.str, eloHonored: s.bool, eloApplied: pivotalFiniteNumber,
+  searchBound: s.obj({ kind: s.lit("nodes", "movetime"), value: pivotalFiniteNumber }),
+});
+const pivotalOperand = <K extends PivotalMarker["kind"], T>(kind: K, detail: Parser<T>) =>
+  s.obj({ nodeId: s.str, kind: s.lit(kind), detail, provenanceNote: s.str });
+const pivotalOperandSchema: Parser<PivotalMarker> = s.union("kind", {
+  irreversibility: pivotalOperand("irreversibility", s.union("subkind", {
+    castled: s.obj({ subkind: s.lit("castled"), color: s.color }),
+    last_of_role: s.obj({ subkind: s.lit("last_of_role"), color: s.color, role: s.role, queensOff: s.bool }),
+    pawn_break: s.obj({ subkind: s.lit("pawn_break"), color: s.color }),
+  })),
+  phase_change: pivotalOperand("phase_change", s.obj({ from: s.lit("opening", "middlegame", "endgame"), to: s.lit("opening", "middlegame", "endgame") })),
+  human_divergence: pivotalOperand("human_divergence", s.obj({ engine: pivotalEngine, masses: s.arr(s.unit) }, { targetElo: pivotalFiniteNumber })),
+  option_collapse: pivotalOperand("option_collapse", s.obj({ color: s.color, priorCount: s.nat, count: s.nat, nextCount: s.nat })),
+});
+
 /**
  * Per-renderer exact operand parsers. Checkpoint A retains the literal source operands the
  * renderer needs; the client re-renders and byte-checks `renderedText`.
  */
 const FACT_OPERAND_PARSERS: { readonly [R in FactStatementRendererId]: (value: unknown) => FactOperandsByRenderer[R] } = Object.freeze({
+  "review.objective_transition@1": value => { const item = exact(value, ["from", "to"], [], "Review objective transition"); return {
+    from: oneOf(item.from, Object.keys(OBJECTIVE_STATE_LABELS) as ObjectiveState[], "from"),
+    to: oneOf(item.to, Object.keys(OBJECTIVE_STATE_LABELS) as ObjectiveState[], "to"),
+  }; },
   ...(groupParse() as unknown as { readonly [R in Exclude<FactStatementRendererId, keyof BaseFactOperands>]: (value: unknown) => FactOperandsByRenderer[R] }),
-  "story.pivotal_marker@1": (value) => { const item = exact(value, ["nodeId", "kind", "detail", "provenanceNote"], [], "marker"); oneOf(item.kind, ["irreversibility", "phase_change", "human_divergence", "option_collapse"], "marker.kind"); if (!isRecord(item.detail)) throw new PresentationError("PRESENTATION_INVALID", "marker.detail must be an object"); text(item.nodeId, "marker.nodeId"); text(item.provenanceNote, "marker.provenanceNote"); return item as unknown as PivotalMarker; },
+  "story.pivotal_marker@1": value => pivotalOperandSchema(value, "marker"),
   "story.shape_firing@1": (value) => { const item = exact(value, ["entryId"], [], "shape firing"); return { entryId: text(item.entryId, "entryId") }; },
   "story.endgame_classification@1": (value) => { const item = exact(value, ["fen", "type", "conventionId", "provenanceNote"], [], "endgame"); text(item.fen, "endgame.fen"); if (item.type !== null) { const type = exact(item.type, ["id", "label"], [], "endgame.type"); oneOf(type.id, ["pawn", "rook-and-pawn-vs-rook", "rook", "queen", "minor"], "endgame.type.id"); text(type.label, "endgame.type.label"); } if (item.conventionId !== "endgame-material-census@1") throw new PresentationError("PRESENTATION_INVALID", "endgame convention is not registered"); text(item.provenanceNote, "endgame.provenanceNote"); return item as unknown as EndgameClassification; },
   "story.consequence@1": (value) => { const record = isRecord(value) ? value : {}; if (record.terminal === true) { const item = exact(value, ["terminal", "outcome"], [], "consequence"); return { terminal: true, outcome: oneOf(item.outcome, ["win", "loss", "draw"], "outcome") }; } const item = exact(value, ["terminal", "plies", "objectiveState"], [], "consequence"); if (item.terminal !== false) throw new PresentationError("PRESENTATION_INVALID", "consequence terminal must be boolean"); return { terminal: false, plies: safeInt(item.plies, "plies"), objectiveState: oneOf(item.objectiveState, Object.keys(OBJECTIVE_STATE_LABELS) as ObjectiveState[], "objectiveState") }; },
@@ -891,13 +940,12 @@ const FACT_OPERAND_PARSERS: { readonly [R in FactStatementRendererId]: (value: u
   "story.title@1": (value) => { const item = exact(value, ["title"], [], "title"); return { title: text(item.title, "title") }; },
   "review.mate_transition@1": (value) => { const item = exact(value, ["changes", "before", "after", "engine", "bound"], [], "mate transition"); if (!Array.isArray(item.changes) || item.changes.length === 0) throw new PresentationError("PRESENTATION_INVALID", "changes must be non-empty"); const changes = item.changes.map((change) => oneOf(change, ["appeared", "disappeared", "side_changed", "distance_changed"] as const, "change")); return { changes, before: parseScoreReceipt(item.before), after: parseScoreReceipt(item.after), engine: parseEngine(item.engine), bound: parseBound(item.bound) }; },
   "review.wdl_point@1": (value) => { const item = exact(value, ["win", "draw", "loss", "engine", "bound"], [], "wdl"); const win = safeInt(item.win, "win"), draw = safeInt(item.draw, "draw"), loss = safeInt(item.loss, "loss"); if (win < 0 || draw < 0 || loss < 0 || win + draw + loss !== 1000) throw new PresentationError("PRESENTATION_INVALID", "WDL must be non-negative per-mille summing to 1000"); return { win, draw, loss, engine: parseEngine(item.engine), bound: parseBound(item.bound) }; },
-  "module.move_quality_grade@1": (value) => { if (!isRecord(value)) throw new PresentationError("PRESENTATION_INVALID", "grade must be an object"); oneOf(value.klass, ["inaccuracy", "mistake", "blunder"], "grade.klass"); return value as unknown as MoveQualityGrade; },
   "module.recorded_relation@1": (value) => { const item = exact(value, ["relation", "grounding"], [], "relation"); return { relation: oneOf(item.relation, Object.keys(RECORDED_RELATION_LABELS) as RecordedRelationLabelId[], "relation"), grounding: oneOf(item.grounding, Object.keys(GROUNDING_LABELS) as EvidenceGrounding[], "grounding") }; },
 });
 
 /** Builds the sealed fact operand: the text is recomputed from the retained operands, never supplied. */
 function factStatement<R extends FactStatementRendererId>(rendererId: R, binding: "recorded_run" | "declared_convention", convention: PresentationConventionId, operands: FactOperandsByRenderer[R]): FactStatementOperand {
-  const retained = deepFreeze(jsonClone(operands));
+  const retained = deepFreeze(jsonClone(FACT_OPERAND_PARSERS[rendererId](operands)));
   const renderedText = assertPresentationText((FACT_RENDERERS[rendererId] as FactRenderer<R>)(retained));
   return deepFreeze({ rendererId, binding, convention, operands: retained, sourceDigest: presentationDigest("presentation.fact.operands@1", retained), renderedText } as unknown as FactStatementOperand);
 }
@@ -1061,12 +1109,15 @@ function parseSquareSet(value: unknown): SquareSetOperand {
 }
 
 function parseMovePath(value: unknown): MovePathOperand {
-  const item = exact(value, ["plies", "answerDistance", "origin"], ["convention"], "move_path");
+  const item = exact(value, ["startFen", "plies", "answerDistance", "origin"], ["convention"], "move_path");
   if (!Array.isArray(item.plies) || item.plies.length === 0) throw new PresentationError("PRESENTATION_INVALID", "a move path has at least one ply");
   const plies = item.plies.map((ply, index) => { const entry = exact(ply, ["ply", "san", "uci"], [], `plies[${index}]`); return { ply: nonNegative(entry.ply, "ply"), san: text(entry.san, "san"), uci: uciMove(entry.uci, "uci") }; });
   const origin = oneOf(item.origin, ["recorded", "authored", "learner_played"], "origin");
+  const startFen = text(item.startFen, "startFen");
+  try { movePathFrames({ startFen, plies }); }
+  catch (cause) { throw new PresentationError("PRESENTATION_INVALID", `Recorded path position/SAN/ply is invalid: ${String(cause)}`); }
   if (origin !== "learner_played" && item.convention === undefined) throw new PresentationError("PRESENTATION_INVALID", "a recorded or authored path carries its convention");
-  return { plies, answerDistance: oneOf(item.answerDistance, ANSWER_DISTANCES, "answerDistance"), origin, ...(item.convention === undefined ? {} : { convention: parseConvention(item.convention) }) };
+  return { startFen, plies, answerDistance: oneOf(item.answerDistance, ANSWER_DISTANCES, "answerDistance"), origin, ...(item.convention === undefined ? {} : { convention: parseConvention(item.convention) }) };
 }
 
 function parseRelationOverlay(value: unknown): RelationOverlayOperand {
@@ -1155,6 +1206,9 @@ export interface PresentedEvidenceItem {
 
 const PROCESS_PRESENTED = new WeakSet<object>();
 const PROCESS_OWNERS = new WeakMap<object, object>();
+// Only a complete registered construction issues this private occurrence identity.
+// Equal-valued evidence and repeated presentation of the same object are not one occurrence.
+const PROCESS_COMPOSITIONS = new WeakMap<object, object>();
 const CLIENT_PRESENTED = new WeakSet<object>();
 
 const adapterKey = (consumer: VersionedEvidenceId, projection: VersionedEvidenceId): string => `${consumer.id}@${consumer.version}\u0000${projection.id}@${projection.version}`;
@@ -1190,6 +1244,56 @@ export function assertPresentedEvidenceItem(value: unknown): asserts value is Pr
   }
 }
 
+/** Only this sealed, selected Nudge summary can disclose its own complete measurement. */
+export function isGradeMeasurementSummary(item: PresentedEvidenceItem): boolean {
+  assertPresentedEvidenceItem(item);
+  return item.adapter.consumer.id === "module.postcommit_nudge" && item.adapter.consumer.version === 2
+    && item.adapter.projection.id === "derived.grade.move_quality" && item.adapter.projection.version === 2
+    && item.component.id === "fact_statement" && item.component.operand.rendererId === "play.move_quality_summary@1";
+}
+
+export type GradeMeasurementReport = Readonly<{ kind: "available"; sentence: string; words: number; limit: 400 }>
+  | Readonly<{ kind: "limited"; words: number; limit: 400 }>;
+
+/** Explicit local disclosure only; no second query or provider/voice text channel. */
+export function presentedGradeMeasurementReport(item: PresentedEvidenceItem): GradeMeasurementReport | null {
+  if (!isGradeMeasurementSummary(item)) return null;
+  if (item.component.id !== "fact_statement" || item.component.operand.rendererId !== "play.move_quality_summary@1") return null;
+  const sentence = renderMoveQualityGrade(item.component.operand.operands);
+  const words = presentationWordCount(sentence);
+  return words > 400 ? Object.freeze({ kind: "limited", words, limit: 400 })
+    : Object.freeze({ kind: "available", sentence, words, limit: 400 });
+}
+
+/** §6.3: local expansion of exactly the same already-admitted native fact. No selection authority. */
+export function isNativeFactSummary(item: PresentedEvidenceItem): boolean {
+  assertPresentedEvidenceItem(item);
+  if (item.evidenceRef === null || item.adapter.consumer.version !== 2
+    || !["module.postcommit_nudge", "module.review_map"].includes(item.adapter.consumer.id)
+    || item.component.id !== "fact_statement") return false;
+  const key = `${item.adapter.projection.id}@${item.adapter.projection.version}`;
+  const compact = FOUNDATION_COMPACT_STATEMENTS[key as keyof typeof FOUNDATION_COMPACT_STATEMENTS];
+  return compact !== undefined && item.component.operand.rendererId === compact[0]
+    && item.component.operand.convention === compact[1]
+    && item.evidenceRef.projection.id === item.adapter.projection.id
+    && item.evidenceRef.projection.version === item.adapter.projection.version;
+}
+
+export type NativeFactReport = Readonly<{ kind: "available"; sentence: string; words: number; limit: 400 }>
+  | Readonly<{ kind: "limited"; words: number; limit: 400 }>;
+
+export function presentedNativeFactReport(item: PresentedEvidenceItem): NativeFactReport | null {
+  if (!isNativeFactSummary(item) || item.component.id !== "fact_statement" || item.evidenceRef === null) return null;
+  const key = `${item.adapter.projection.id}@${item.adapter.projection.version}` as keyof typeof FOUNDATION_EDGE_STATEMENTS;
+  const full = FOUNDATION_EDGE_STATEMENTS[key][0];
+  const operands = groupParse()[full]!(item.component.operand.operands);
+  assertFoundationEdgePayloadRef(operands, item.evidenceRef.evidenceDigest);
+  const sentence = assertPresentationText(groupRender()[full]!(operands));
+  const words = presentationWordCount(sentence);
+  return words > 400 ? Object.freeze({ kind: "limited", words, limit: 400 })
+    : Object.freeze({ kind: "available", sentence, words, limit: 400 });
+}
+
 /** The admitted owner of a process-sealed item (a sealed evidence item or operation authority). */
 export function presentedItemOwner(item: PresentedEvidenceItem): object {
   const owner = PROCESS_OWNERS.get(item);
@@ -1219,7 +1323,9 @@ export function isPresentedAbstention(item: PresentedEvidenceItem): boolean {
  */
 export interface PresentationComposition {
   readonly id: string;
-  readonly members: readonly { readonly component: ComponentId; readonly forms: readonly EvidenceForm[] }[];
+  readonly members: readonly { readonly component: ComponentId; readonly forms: readonly EvidenceForm[];
+    /** Accepted D3802 only: actual detail geometry, never a caller-selected predicate. */
+    readonly when?: "inspector_detail_has_squares" | "inspector_whole_reading_has_geometry" }[];
 }
 
 export interface ProjectionPresentationAdapter {
@@ -1234,6 +1340,10 @@ export interface ProjectionPresentationAdapter {
   readonly sourceOperands: readonly string[];
   /** Executable retention assertion names (§2.2); an adapter with none does not compile. */
   readonly assertions: readonly ("copied_byte_equal" | "mechanical_transform" | "authored_text_copied" | "retained_convention")[];
+  /** Source-specific wire semantics, beyond a globally valid component shape. No source grant. */
+  readonly validateWireComponent?: (component: ComponentValue, evidence: PresentedEvidenceRef) => void;
+  /** D4050: an exact fixed relation+statement occurrence, not a public source/occurrence grant. */
+  readonly validateWireComposition?: (components: readonly ComponentValue[], evidence: PresentedEvidenceRef) => void;
   /** One component, or exactly the composition's members in member order. */
   readonly construct: (evidence: DeclaredEvidence<unknown>) => ComponentValue | readonly ComponentValue[];
 }
@@ -1268,19 +1378,25 @@ const evalDeltaComponent = (evidence: DeclaredEvidence<unknown>): ComponentValue
   const delta = evidence.payload as ReviewEvalDelta;
   return { id: "magnitude", operand: { value: delta.deltaCp, unit: { kind: "centipawn" }, convention: searchConvention(evidence, delta.after.payload.evaluation.payload), saturated: false } };
 };
+const mateTransitionFact = bindFactStatement(factStatement, "review.mate_transition@1", "declared_convention", "review-mate-transition@1");
 const mateTransitionComponent = (evidence: DeclaredEvidence<unknown>): ComponentValue => {
   const transition = evidence.payload as ReviewMateTransition;
   const after = transition.after.payload.evaluation.payload.payload;
   const before = transition.before.payload.evaluation.payload.payload;
-  return { id: "fact_statement", operand: factStatement("review.mate_transition@1", "declared_convention", "review-mate-transition@1", { changes: [...transition.changes], before: before.score, after: after.score, engine: { name: after.engine.name, version: after.engine.version }, bound: after.bound }) };
+  return mateTransitionFact.statement({ changes: [...transition.changes], before: before.score, after: after.score, engine: { name: after.engine.name, version: after.engine.version }, bound: after.bound });
 };
+const wdlPointFact = bindFactStatement(factStatement, "review.wdl_point@1", "declared_convention", "review-wdl-white@1");
 const wdlPointComponent = (evidence: DeclaredEvidence<unknown>): ComponentValue => {
   const point = evidence.payload as ReviewWdlPoint;
   const normalized = point.normalized.payload;
   const source = normalized.source.payload.payload;
-  return { id: "fact_statement", operand: factStatement("review.wdl_point@1", "declared_convention", "review-wdl-white@1", { win: normalized.win, draw: normalized.draw, loss: normalized.loss, engine: { name: source.engine.name, version: source.engine.version }, bound: source.bound }) };
+  return wdlPointFact.statement({ win: normalized.win, draw: normalized.draw, loss: normalized.loss, engine: { name: source.engine.name, version: source.engine.version }, bound: source.bound });
 };
-const fact = <R extends FactStatementRendererId>(rendererId: R, binding: "recorded_run" | "declared_convention", convention: PresentationConventionId, read: (payload: unknown) => FactOperandsByRenderer[R]) => (evidence: DeclaredEvidence<unknown>): ComponentValue => ({ id: "fact_statement", operand: factStatement(rendererId, binding, convention, read(evidence.payload)) });
+const fact = <R extends FactStatementRendererId>(rendererId: R, binding: "recorded_run" | "declared_convention", convention: PresentationConventionId, read: (payload: unknown) => FactOperandsByRenderer[R]) => {
+  const bound = bindFactStatement(factStatement, rendererId, binding, convention);
+  return { construct: (evidence: DeclaredEvidence<unknown>): ComponentValue => bound.statement(read(evidence.payload)),
+    validateWireComponent: bound.validateWireComponent };
+};
 
 const PIVOTAL_PROJECTIONS = Object.freeze(["derived.pivotal.irreversibility", "derived.pivotal.phase_change", "derived.pivotal.human_divergence", "derived.pivotal.option_collapse"]);
 
@@ -1339,6 +1455,14 @@ const KIT: PresentationKit = Object.freeze({
   },
 });
 const adapter = (spec: AdapterSpec): ProjectionPresentationAdapter => {
+  if (spec.consumer.id === "module.full_inspector" && spec.consumer.version === 2 && spec.validateWireComponent === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", "Full Inspector2 requires source-specific wire semantics");
+  assertConditionalComposition(spec);
+  if (spec.validateWireComposition !== undefined && (spec.composition?.members.length !== 2
+    || spec.composition.members[0]?.component !== "relation_overlay"
+    || spec.composition.members[1]?.component !== "fact_statement"
+    || spec.composition.members.some(member => member.when !== undefined))) {
+    throw new PresentationError("PRESENTATION_UNREGISTERED", "Relation composition validation requires its fixed ordered two-member declaration");
+  }
   if (spec.composition !== undefined) {
     const members = spec.composition.members;
     if (members.length < 2 || members[0]!.component !== spec.component) throw new PresentationError("PRESENTATION_UNREGISTERED", `${spec.composition.id} must list at least two members, led by its component`);
@@ -1350,40 +1474,106 @@ const adapter = (spec: AdapterSpec): ProjectionPresentationAdapter => {
   }
   return Object.freeze({
     ...spec, key: adapterKey(spec.consumer, spec.projection), forms: Object.freeze([...spec.forms]), sourceOperands: Object.freeze([...spec.sourceOperands]), assertions: Object.freeze([...spec.assertions]),
-    ...(spec.composition === undefined ? {} : { composition: Object.freeze({ id: spec.composition.id, members: Object.freeze(spec.composition.members.map((member) => Object.freeze({ component: member.component, forms: Object.freeze([...member.forms]) }))) }) }),
+    ...(spec.composition === undefined ? {} : { composition: Object.freeze({ id: spec.composition.id, members: Object.freeze(spec.composition.members.map((member) => Object.freeze({ component: member.component, forms: Object.freeze([...member.forms]), ...(member.when === undefined ? {} : { when: member.when }) }))) }) }),
   });
 };
 
 /** The component ids one adapter may construct, in order. */
-export function adapterComponents(entry: ProjectionPresentationAdapter): readonly ComponentId[] {
+export function adapterComponents(entry: Pick<ProjectionPresentationAdapter, "component" | "composition">): readonly ComponentId[] {
   return entry.composition === undefined ? [entry.component] : entry.composition.members.map((member) => member.component);
 }
 
+type CompositionEntry = Pick<ProjectionPresentationAdapter, "consumer" | "projection" | "component" | "composition" | "forms">;
+function inspectorDetailKind(projection: VersionedEvidenceId): InspectorDetailKind | undefined {
+  return (Object.keys(INSPECTOR_DETAIL_SOURCES) as InspectorDetailKind[])
+    .find(kind => projection.version === 1 && projection.id === `derived.inspector.detail.${kind}`);
+}
+/** Finite accepted Inspector cases only; arbitrary predicates never enter the registry. */
+function assertConditionalComposition(entry: CompositionEntry): void {
+  const members = entry.composition?.members;
+  const full2 = entry.consumer.id === "module.full_inspector" && entry.consumer.version === 2;
+  const ref = refKey(entry.projection);
+  if (full2 && isInspectorWholeReading(ref)) {
+    const geometry = INSPECTOR_WHOLE_READING_GEOMETRY[ref];
+    if (geometry === "none") {
+      if (entry.component !== "fact_statement" || entry.composition !== undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", "whole text reading requires its sole statement");
+    } else if (entry.component !== "fact_statement" || entry.composition?.id !== "inspector_whole_reading_geometry"
+      || members?.length !== 2 || members[0]!.component !== "fact_statement" || members[0]!.when !== undefined
+      || members[0]!.forms.join("|") !== "list|panel" || members[1]!.component !== geometry
+      || members[1]!.when !== "inspector_whole_reading_has_geometry"
+      || members[1]!.forms.join("|") !== entry.forms.filter(form => form !== "list" && form !== "panel").join("|")) {
+      throw new PresentationError("PRESENTATION_UNREGISTERED", "whole reading requires its exact source-derived conditional geometry");
+    }
+    return;
+  }
+  const detailKind = full2 ? inspectorDetailKind(entry.projection) : undefined;
+  if (detailKind !== undefined && isFoundationDetailKind(detailKind)) {
+    if (entry.component !== "fact_statement" || entry.composition !== undefined || entry.forms.join("|") !== "list|panel") throw new PresentationError("PRESENTATION_UNREGISTERED", "foundation detail requires its sole text statement");
+    return;
+  }
+  const currentDetail = full2 && inspectorDetailKind(entry.projection) !== undefined;
+  if (!currentDetail && !members?.some(member => member.when !== undefined)) return;
+  if (!currentDetail || entry.component !== "fact_statement" || entry.composition?.id !== "inspector_detail_witnesses"
+    || members?.length !== 2 || members[0]!.component !== "fact_statement" || members[0]!.when !== undefined
+    || members[1]!.component !== "square_set" || members[1]!.when !== "inspector_detail_has_squares"
+    || members[0]!.forms.join("|") !== "list|panel" || members[1]!.forms.join("|") !== "lit_squares") {
+    throw new PresentationError("PRESENTATION_UNREGISTERED", "conditional components require the exact admitted Inspector detail composition");
+  }
+}
+
+/** Potential components still define static coverage; only genuine source geometry omits marks. */
+export function adapterComponentsForEvidence(entry: CompositionEntry, evidence: DeclaredEvidence<unknown>): readonly ComponentId[] {
+  assertDeclaredEvidence(evidence);
+  assertConditionalComposition(entry);
+  if (refKey(entry.projection) !== refKey(evidence.projection)) throw new PresentationError("PRESENTATION_INVALID", "component source crosses its exact projection");
+  if (entry.composition === undefined) return [entry.component];
+  if (entry.consumer.id === "module.full_inspector" && entry.consumer.version === 2 && isInspectorWholeReading(refKey(entry.projection))) {
+    return Object.freeze(inspectorWholeReadingComponents(evidence, KIT).map(component => component.id));
+  }
+  const kind = inspectorDetailKind(entry.projection);
+  const hasSquares = kind === undefined ? false : inspectorDetailSquares(parseInspectorDetailPayload(kind, evidence.payload)).length > 0;
+  return Object.freeze(entry.composition.members.filter(member => member.when === undefined || hasSquares).map(member => member.component));
+}
+
 const REVIEW_STORY = V1("review.story");
-const REVIEW_MAP = V1("module.review_map");
+const REVIEW_MAP = V2("module.review_map");
 const STORY_FORMS: readonly EvidenceForm[] = Object.freeze(["sentence", "panel"]);
 
 /** Checkpoint A's exact adapter population (keyed consumer × projection; sorted, frozen). */
 export const PRESENTATION_ADAPTERS: readonly ProjectionPresentationAdapter[] = Object.freeze([
   // review.story@1 — Story compatibility (rfc/review-evidence-compiler.md §5)
-  ...PIVOTAL_PROJECTIONS.map((id) => adapter({ consumer: REVIEW_STORY, projection: V1(id), component: "fact_statement", forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["nodeId", "kind", "detail", "provenanceNote"], assertions: ["copied_byte_equal", "mechanical_transform"], construct: fact("story.pivotal_marker@1", "declared_convention", "story-compatibility@1", (payload) => payload as PivotalMarker) })),
-  adapter({ consumer: REVIEW_STORY, projection: V1("theory.shapes.firing"), component: "fact_statement", forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["entryId"], assertions: ["copied_byte_equal"], construct: fact("story.shape_firing@1", "declared_convention", "story-compatibility@1", (payload) => ({ entryId: (payload as ShapeFiring).entryId })) }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("run.record.consequence"), component: "fact_statement", forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["terminal", "outcome"], assertions: ["copied_byte_equal"], construct: fact("story.consequence@1", "recorded_run", "recorded-run@1", (payload) => { const value = payload as { readonly terminal: boolean; readonly outcome?: RunOutcome; readonly plies?: number; readonly objectiveState?: ObjectiveState }; return value.terminal ? { terminal: true, outcome: value.outcome! } : { terminal: false, plies: value.plies!, objectiveState: value.objectiveState! }; }) }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("run.record.imported_result"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["result"], assertions: ["copied_byte_equal"], construct: fact("story.imported_result@1", "recorded_run", "recorded-run@1", (payload) => ({ result: (payload as { readonly result: PgnResultToken }).result })) }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("rules.endgame.classification"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["fen", "type", "conventionId", "provenanceNote"], assertions: ["copied_byte_equal"], construct: fact("story.endgame_classification@1", "declared_convention", "story-compatibility@1", (payload) => payload as EndgameClassification) }),
+  ...PIVOTAL_PROJECTIONS.map(id => {
+    const kind = id.slice("derived.pivotal.".length);
+    const assertKind = (actual: PivotalMarker["kind"]): void => {
+      if (actual !== kind) throw new TypeError("Story pivotal kind crosses its declared source");
+    };
+    const bound = fact("story.pivotal_marker@1", "declared_convention", "story-compatibility@1", payload => {
+      const marker = payload as PivotalMarker; assertKind(marker.kind); return marker;
+    });
+    return adapter({ consumer: REVIEW_STORY, projection: V1(id), component: "fact_statement",
+      forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["nodeId", "kind", "detail", "provenanceNote"],
+      assertions: ["copied_byte_equal", "mechanical_transform"], construct: bound.construct,
+      validateWireComponent: component => {
+        bound.validateWireComponent(component);
+        if (component.id === "fact_statement" && component.operand.rendererId === "story.pivotal_marker@1") assertKind(component.operand.operands.kind);
+      } });
+  }),
+  adapter({ consumer: REVIEW_STORY, projection: V1("theory.shapes.firing"), component: "fact_statement", forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["entryId"], assertions: ["copied_byte_equal"], ...fact("story.shape_firing@1", "declared_convention", "story-compatibility@1", (payload) => ({ entryId: (payload as ShapeFiring).entryId })) }),
+  adapter({ consumer: REVIEW_STORY, projection: V1("run.record.consequence"), component: "fact_statement", forms: ["sentence", "timeline_marker", "panel"], sourceOperands: ["terminal", "outcome"], assertions: ["copied_byte_equal"], ...fact("story.consequence@1", "recorded_run", "recorded-run@1", (payload) => { const value = payload as { readonly terminal: boolean; readonly outcome?: RunOutcome; readonly plies?: number; readonly objectiveState?: ObjectiveState }; return value.terminal ? { terminal: true, outcome: value.outcome! } : { terminal: false, plies: value.plies!, objectiveState: value.objectiveState! }; }) }),
+  adapter({ consumer: REVIEW_STORY, projection: V1("run.record.imported_result"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["result"], assertions: ["copied_byte_equal"], ...fact("story.imported_result@1", "recorded_run", "recorded-run@1", (payload) => ({ result: (payload as { readonly result: PgnResultToken }).result })) }),
+  adapter({ consumer: REVIEW_STORY, projection: V1("rules.endgame.classification"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["fen", "type", "conventionId", "provenanceNote"], assertions: ["copied_byte_equal"], ...fact("story.endgame_classification@1", "declared_convention", "story-compatibility@1", (payload) => payload as EndgameClassification) }),
   adapter({ consumer: REVIEW_STORY, projection: V2("derived.review.eval_delta"), component: "magnitude", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
-  adapter({ consumer: REVIEW_STORY, projection: V2("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
-  adapter({ consumer: REVIEW_STORY, projection: V1("derived.story.last_level"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["recordedResult", "evaluation"], assertions: ["mechanical_transform"], construct: fact("story.last_level@1", "declared_convention", "story-last-level@1", (payload) => ({ learnerCentipawns: (payload as { readonly evaluation: { readonly learnerCentipawns: number } }).evaluation.learnerCentipawns })) }),
-  adapter({ consumer: REVIEW_STORY, projection: V2("derived.story.title"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["title"], assertions: ["copied_byte_equal"], construct: fact("story.title@1", "declared_convention", "story-compatibility@1", (payload) => ({ title: (payload as { readonly title: string }).title })) }),
+  adapter({ consumer: REVIEW_STORY, projection: V2("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent, validateWireComponent: mateTransitionFact.validateWireComponent }),
+  adapter({ consumer: REVIEW_STORY, projection: V1("derived.story.last_level"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["recordedResult", "evaluation"], assertions: ["mechanical_transform"], ...fact("story.last_level@1", "declared_convention", "story-last-level@1", (payload) => ({ learnerCentipawns: (payload as { readonly evaluation: { readonly learnerCentipawns: number } }).evaluation.learnerCentipawns })) }),
+  adapter({ consumer: REVIEW_STORY, projection: V2("derived.story.title"), component: "fact_statement", forms: STORY_FORMS, sourceOperands: ["title"], assertions: ["copied_byte_equal"], ...fact("story.title@1", "declared_convention", "story-compatibility@1", (payload) => ({ title: (payload as { readonly title: string }).title })) }),
   // module.review_map@1 — the Review Map evidence panel seat (module-registration A5 slice)
   adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.eval_point"), component: "magnitude", forms: ["list", "panel"], sourceOperands: ["position", "evaluation"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalPointComponent }),
   adapter({ consumer: REVIEW_MAP, projection: V2("derived.review.eval_delta"), component: "magnitude", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "deltaCp"], assertions: ["copied_byte_equal", "retained_convention"], construct: evalDeltaComponent }),
-  adapter({ consumer: REVIEW_MAP, projection: V2("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent }),
-  adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.wdl_point"), component: "fact_statement", forms: ["list", "panel"], sourceOperands: ["position", "normalized"], assertions: ["copied_byte_equal", "mechanical_transform", "retained_convention"], construct: wdlPointComponent }),
-  adapter({ consumer: REVIEW_MAP, projection: V1("derived.grade.move_quality"), component: "fact_statement", forms: ["panel", "sentence"], sourceOperands: ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "depthOrMovetime"], assertions: ["copied_byte_equal"], construct: fact("module.move_quality_grade@1", "declared_convention", "grade-convention@1", (payload) => payload as MoveQualityGrade) }),
+  adapter({ consumer: REVIEW_MAP, projection: V2("derived.review.mate_transition"), component: "fact_statement", forms: ["list", "panel", "sentence"], sourceOperands: ["before", "after", "changes"], assertions: ["copied_byte_equal", "retained_convention"], construct: mateTransitionComponent, validateWireComponent: mateTransitionFact.validateWireComponent }),
+  adapter({ consumer: REVIEW_MAP, projection: V1("derived.review.wdl_point"), component: "fact_statement", forms: ["list", "panel"], sourceOperands: ["position", "normalized"], assertions: ["copied_byte_equal", "mechanical_transform", "retained_convention"], construct: wdlPointComponent, validateWireComponent: wdlPointFact.validateWireComponent }),
+  adapter({ consumer: REVIEW_MAP, projection: V2("derived.grade.move_quality"), component: "fact_statement", forms: ["panel", "sentence"], sourceOperands: ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "bound", "instrument"], assertions: ["copied_byte_equal"], ...fact("grade.move_quality@2", "declared_convention", "grade-convention@2", (payload) => payload as MoveQualityGrade) }),
   // Checkpoint B: only the trade keeps the relation-label statement; the ten board-bound recorded
   // windows (binding forms include arrows/lit squares) take the inspector group's board compositions.
-  ...(["derived.exchange.trade_completed"] as RecordedRelationLabelId[]).map((id) => adapter({ consumer: REVIEW_MAP, projection: Object.freeze({ id, version: 2 }), component: "fact_statement", forms: ["list", "panel"], sourceOperands: [], assertions: ["mechanical_transform"], construct: fact("module.recorded_relation@1", "declared_convention", "recorded-semantic-path@1", () => ({ relation: id, grounding: declaredGrounding({ id, version: 2 }) })) })),
   // guidance.authored_claim@1 — the [[D1673]] vertical slice
   adapter({ consumer: V1("guidance.authored_claim"), projection: V1("pack.authored.claim_delivery"), component: "claim", forms: ["sentence", "panel"], sourceOperands: ["text", "binding", "evidenceTypes", "earnedEvidenceTypes", "principles"], assertions: ["authored_text_copied"], construct: (evidence) => {
     const item = evidence.payload as { readonly text: string; readonly binding: ClaimBinding; readonly evidenceTypes: readonly ClaimEvidenceType[]; readonly earnedEvidenceTypes: readonly ClaimEvidenceType[]; readonly principles: readonly { readonly name: string; readonly statement: string; readonly counterCase: string }[] };
@@ -1408,7 +1598,29 @@ export function presentationAdapter(consumer: VersionedEvidenceId, projection: V
 }
 
 /** A copied authoring timestamp is checked against its admitted source, not just parsed as prose. */
-export function assertPresentationSourceRetention(evidence: DeclaredEvidence<unknown>, components: readonly ComponentValue[]): void {
+export function assertPresentationSourceRetention(evidence: DeclaredEvidence<unknown>, components: readonly ComponentValue[], consumer?: VersionedEvidenceId): void {
+  if (consumer?.id === "module.full_inspector" && consumer.version === 2 && isInspectorWholeReading(refKey(evidence.projection))) {
+    const expected = inspectorWholeReadingComponents(evidence, KIT);
+    if (canonicalizeJson(components) !== canonicalizeJson(expected)) throw new PresentationError("PRESENTATION_INVALID", "whole Inspector components must retain their exact source statement/state/geometry/owner");
+    return;
+  }
+  const kind = inspectorDetailKind(evidence.projection);
+  if (kind !== undefined) {
+    assertDeclaredEvidence(evidence);
+    const payload = parseInspectorDetailPayload(kind, evidence.payload), squares = inspectorDetailSquares(payload);
+    const caption = factStatement(`inspector.detail.${kind}@1`, "declared_convention", isFoundationDetailKind(kind) ? FOUNDATION_DETAIL_CAPTIONS[kind] : "piece-geometry@1", payload);
+    if (isFoundationDetailKind(kind)) assertFoundationSnapshotPayloadRef(payload, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
+    const statement = components[0], board = components[1];
+    if (components.length !== (squares.length === 0 ? 1 : 2) || statement?.id !== "fact_statement"
+      || canonicalizeJson(statement.operand) !== canonicalizeJson(caption)
+      || squares.length !== 0 && (board?.id !== "square_set" || board.operand.brush !== "blue" || board.operand.ordered !== false
+        || board.operand.owner.factRef !== `sha256:${evidenceValueReceipt(evidence).payloadDigest}`
+        || canonicalizeJson(board.operand.squares) !== canonicalizeJson(squares)
+        || canonicalizeJson(board.operand.caption) !== canonicalizeJson(caption))) {
+      throw new PresentationError("PRESENTATION_INVALID", "Inspector detail components must retain the whole exact source and its actual witness squares");
+    }
+    return;
+  }
   if (refKey(evidence.projection) !== "recorded.engine.eval@1") return;
   const sourceTimestamp = (evidence.payload as { readonly retrievedAt?: unknown }).retrievedAt;
   if (components.length !== 1 || components[0]?.id !== "magnitude" || components[0].operand.retrievedAt !== sourceTimestamp) {
@@ -1428,13 +1640,25 @@ export function presentEvidenceItems(view: ConsumerEvidenceView<unknown>): reado
     if (PRESENTATION_SELECTION_ONLY.includes(key)) return [];
     const entry = ADAPTERS_BY_KEY.get(key);
     if (entry === undefined) throw new PresentationError("PRESENTATION_UNREGISTERED", `no presentation adapter for ${view.consumer.id}@${view.consumer.version} × ${refKey(evidence.projection)}`);
-    const constructed = entry.construct(evidence);
+    let constructed: ReturnType<AdapterSpec["construct"]>;
+    try {
+      constructed = entry.construct(evidence);
+    } catch (error) {
+      if (error instanceof PresentationSchemaError) throw new PresentationError("PRESENTATION_INVALID", error.message.replace(/^PRESENTATION_INVALID: /u, ""), { cause: error });
+      throw error;
+    }
     const components: readonly ComponentValue[] = Array.isArray(constructed) ? constructed : [constructed as ComponentValue];
-    const expected = adapterComponents(entry);
+    const expected = adapterComponentsForEvidence(entry, evidence);
     if (components.length !== expected.length || components.some((component, index) => component.id !== expected[index])) throw new PresentationError("PRESENTATION_INVALID", `${entry.key} constructed ${components.map((component) => component.id).join("+")}, not ${expected.join("+")}`);
-    assertPresentationSourceRetention(evidence, components);
+    assertPresentationSourceRetention(evidence, components, view.consumer);
     const evidenceRef: PresentedEvidenceRef = { producer: { ...evidence.producer }, projection: { ...evidence.projection }, evidenceDigest: `sha256:${evidenceValueReceipt(evidence).payloadDigest}` };
-    return components.map((component) => sealPresentedItemForOwner(evidence, evidenceRef, { consumer: { ...view.consumer }, projection: { ...evidence.projection } }, component));
+    validateComposition(entry, components, evidenceRef);
+    const items = components.map((component) => sealPresentedItemForOwner(evidence, evidenceRef, { consumer: { ...view.consumer }, projection: { ...evidence.projection } }, component));
+    if (entry.validateWireComposition !== undefined) {
+      const occurrence = Object.freeze({});
+      for (const item of items) PROCESS_COMPOSITIONS.set(item, occurrence);
+    }
+    return items;
   }));
 }
 
@@ -1504,6 +1728,38 @@ export interface PresentationReceipt {
   readonly digest: string;
 }
 
+function validateComposition(entry: ProjectionPresentationAdapter, components: readonly ComponentValue[], evidence: PresentedEvidenceRef): void {
+  try { entry.validateWireComposition?.(components, evidence); }
+  catch (error) {
+    if (error instanceof PresentationSchemaError) throw new PresentationError("PRESENTATION_INVALID", error.message.replace(/^PRESENTATION_INVALID: /u, ""), { cause: error });
+    throw error;
+  }
+}
+
+/** Fixed protected pairs are positional. Never join arbitrary siblings by payload digest. */
+function assertRelationCompositions(items: readonly PresentedEvidenceItem[], process: boolean): void {
+  for (let index = 0; index < items.length;) {
+    const first = items[index]!;
+    const entry = ADAPTERS_BY_KEY.get(adapterKey(first.adapter.consumer, first.adapter.projection));
+    if (entry?.validateWireComposition === undefined) { index += 1; continue; }
+    const second = items[index + 1];
+    if (first.component.id !== "relation_overlay" || second?.component.id !== "fact_statement"
+      || first.evidenceRef === null || second.evidenceRef === null
+      || canonicalizeJson(first.adapter) !== canonicalizeJson(second.adapter)
+      || canonicalizeJson(first.evidenceRef) !== canonicalizeJson(second.evidenceRef)) {
+      throw new PresentationError("PRESENTATION_INVALID", "Relation composition requires one complete adjacent same-owner occurrence");
+    }
+    if (process) {
+      const occurrence = PROCESS_COMPOSITIONS.get(first);
+      if (occurrence === undefined || PROCESS_COMPOSITIONS.get(second) !== occurrence) {
+        throw new PresentationError("PRESENTATION_INVALID", "Relation composition crosses private construction occurrences");
+      }
+    }
+    validateComposition(entry, [first.component, second.component], first.evidenceRef);
+    index += 2;
+  }
+}
+
 /** Registered abstention seats: adapter keys whose owning operation may state an absence. */
 const ABSTENTION_ADAPTER_PROJECTIONS: ReadonlySet<string> = new Set(["review.packet_family@1"]);
 
@@ -1513,6 +1769,7 @@ export function serializePresentedEvidence(items: readonly PresentedEvidenceItem
     if (!PROCESS_PRESENTED.has(item) || !PROCESS_OWNERS.has(item)) throw new PresentationError("PRESENTATION_UNSEALED", "only process-sealed, owner-bound items serialize");
     return jsonClone({ evidenceRef: item.evidenceRef, adapter: item.adapter, component: item.component, componentDigest: item.componentDigest }) as PresentationReceiptItem;
   });
+  assertRelationCompositions(items, true);
   return deepFreeze({ protocol: "presentation.receipt@1" as const, items: body, digest: presentationDigest("presentation.receipt@1", body) });
 }
 
@@ -1540,6 +1797,9 @@ export function parsePresentationReceipt(value: unknown): readonly PresentedEvid
       const ref = exact(row.evidenceRef, ["producer", "projection", "evidenceDigest"], [], "evidenceRef");
       evidenceRef = { producer: versioned(ref.producer, "evidenceRef.producer"), projection: versioned(ref.projection, "evidenceRef.projection"), evidenceDigest: digestText(ref.evidenceDigest, "evidenceRef.evidenceDigest") };
       if (refKey(evidenceRef.projection) !== refKey(adapterRef.projection)) throw new PresentationError("PRESENTATION_INVALID", "evidence projection and adapter projection disagree");
+      const declared = PRIMARY_EVIDENCE_MANIFEST.projections.find(projection => refKey(projection) === refKey(adapterRef.projection));
+      if (declared === undefined || refKey(declared.producer) !== refKey(evidenceRef.producer)) throw new PresentationError("PRESENTATION_INVALID", "evidence producer does not own the declared projection");
+      entry.validateWireComponent?.(component, evidenceRef);
     }
     const item = buildItem(evidenceRef, adapterRef, component);
     if (item.componentDigest !== row.componentDigest) throw new PresentationError("PRESENTATION_INVALID", "component digest mismatch");
@@ -1547,6 +1807,7 @@ export function parsePresentationReceipt(value: unknown): readonly PresentedEvid
   });
   const expected = presentationDigest("presentation.receipt@1", items.map((item) => jsonClone({ evidenceRef: item.evidenceRef, adapter: item.adapter, component: item.component, componentDigest: item.componentDigest })));
   if (expected !== receipt.digest) throw new PresentationError("PRESENTATION_INVALID", "presentation receipt digest mismatch");
+  assertRelationCompositions(items, false);
   for (const item of items) CLIENT_PRESENTED.add(item);
   return Object.freeze(items);
 }

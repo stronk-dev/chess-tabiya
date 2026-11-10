@@ -9,7 +9,7 @@ import { assertDeclaredEvidence, compileEvidenceManifest, evidenceConventionRece
 import { deriveProjectionConventionTable } from "../../packages/runtime/src/evidence-convention-closure.js";
 import { CONVENTION_REGISTRY } from "../../packages/runtime/src/evidence-conventions.js";
 import { compileProjectionExecution } from "../../packages/runtime/src/evidence-execution.js";
-import { compileHintDisclosure, hintSentence } from "../../packages/runtime/src/hint-distance.js";
+import { compileHintDisclosureV2, hintSentence } from "../../packages/runtime/src/hint-distance.js";
 import { evidenceValueRouteRegistry, invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { forcedMateAfterMove } from "../../packages/runtime/src/mate-proof.js";
 import { presentEvidenceItems, presentedSentence } from "../../packages/runtime/src/presentation-contract.js";
@@ -85,7 +85,7 @@ describe("D3768 terminal all-reply predicate research", () => {
     expect(selection.kind).toBe("selected");
     if (selection.kind !== "selected") throw new Error("terminal candidate was not selected");
     expect(selection.horizon.payload.family).toBe(fixture.check ? "mate_in_one" : "fork_survives_reply");
-    const disclosure = compileHintDisclosure(selection.horizon, "pattern");
+    const disclosure = compileHintDisclosureV2(selection.horizon, "pattern");
     expect(hintSentence(disclosure.payload)).toContain(fixture.check ? "mate" : "after every reply");
   });
 

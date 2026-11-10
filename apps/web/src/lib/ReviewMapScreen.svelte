@@ -5,12 +5,14 @@
   import { onDestroy, tick } from "svelte";
   import type { DrawShape } from "@lichess-org/chessground/draw";
 
-  import type { ReviewAnalysisPage, ReviewMap, StoryShare } from "./api.js";
+  import type { ReviewMap, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
   import ReviewEvalGraph from "./ReviewEvalGraph.svelte";
   import { storyCardDocument } from "./story-card.js";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
-  import { assertReviewAnalysisResponse } from "./review-response.js";
+  import ClockReadout from "./ClockReadout.svelte";
+  import type { RecordedClockView } from "../../../../packages/runtime/src/recorded-clock-view.js";
+  import { assertReviewAnalyzeResult, reviewAnalyzeTarget, type ReviewAnalyzeResult } from "./review-analyze.js";
 
   interface Props {
     review: ReviewMap;
@@ -28,9 +30,13 @@
     /** §4: hands the listed lines to the shipped N-way compare (reviewed line first). */
     onCompare?: ((branchIds: readonly string[]) => void | Promise<void>) | undefined;
     /** §7 / O7.3: the explicit, secondary Analyze reveal for one reviewed move. */
-    onAnalyze?: ((nodeId: string) => Promise<ReviewAnalysisPage>) | undefined;
+    onAnalyze?: ((nodeId: string, signal: AbortSignal, current: () => boolean) => Promise<ReviewAnalyzeResult>) | undefined;
+    onRecordedClock?: ((review: ReviewMap, nodeId: string, signal: AbortSignal, current: () => boolean) => Promise<RecordedClockView>) | undefined;
+    clockAccessIdentity?: string;
+    /** Actual authenticated read access; independent of retry/write permission. */
+    readActive?: boolean;
   }
-  let { review, initialNodeId, refreshBusy = false, refreshFailed = false, onRefresh, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze }: Props = $props();
+  let { review, initialNodeId, refreshBusy = false, refreshFailed = false, onRefresh, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze, onRecordedClock, clockAccessIdentity = "", readActive = true }: Props = $props();
 
   type RetryFailure = "retry.failed.board_held" | "retry.failed.forbidden" | "retry.failed.other";
   let selectedId = $state<string | undefined>();
@@ -52,10 +58,11 @@
   let cardFailed = $state(false);
   let comparing = $state<string | undefined>();
   let compareFailed = $state<string | undefined>();
-  let analysis = $state<ReviewAnalysisPage | undefined>();
+  let analysis = $state<ReviewAnalyzeResult | undefined>();
   let analysisBusy = $state<string | undefined>();
   let analysisFailed = $state<string | undefined>();
   let analysisRequest = 0;
+  let analysisAbort: AbortController | undefined;
   let mounted = true;
   let request = 0;
 
@@ -79,11 +86,14 @@
   const doors = $derived(new Map(review.compareDoors.map((door) => [door.entryNodeId, door])));
   /** rfc/review-evidence-compiler.md: the typed packet components, re-sealed client-side by the exact parser. */
   const packetItems = $derived(selected === undefined ? [] : parsePresentationReceipt(selected.packet));
+  const factDetailsScope = $derived({ review, selected, packet: selected?.packet, access: clockAccessIdentity,
+    refreshing: refreshBusy, retrying, readActive });
   /** The facts that are not packet components (the packet's equivalent sentences are their tail). */
   const plainFacts = $derived(selected === undefined ? [] : selected.facts.slice(0, selected.facts.length - packetItems.length));
   /** O7.3: the reveal belongs to one selected move and is gone the moment selection or a retry moves on. */
   const analysisAllowed = $derived(onAnalyze !== undefined && selected !== undefined && selected.entryNodeId !== review.openRetryEntryNodeId);
-  const shownAnalysis = $derived(analysisAllowed && analysis !== undefined && analysis.runId === review.runId && analysis.branchId === review.branchId && analysis.nodeId === selected?.nodeId && analysis.entryNodeId === selected?.entryNodeId && retrying === undefined ? analysis : undefined);
+  const shownAnalysis = $derived(analysisAllowed && analysis !== undefined && analysis.target.runId === review.runId && analysis.target.branchId === review.branchId && analysis.target.nodeId === selected?.nodeId && analysis.target.entryNodeId === selected?.entryNodeId && analysis.target.decision.digest === review.decision.digest && analysis.target.workflowContext === review.workflowContext && analysis.target.fen === selected?.fen && retrying === undefined ? analysis : undefined);
+  const analysisIdentity = $derived([review.runId, review.branchId, selected?.nodeId, selected?.entryNodeId, selected?.fen, review.decision.digest, review.workflowContext].join("\u0000"));
   const sideLabel = (side: "white" | "black"): string => side === "white" ? reviewText("side.white") : reviewText("side.black");
   const resultSentence = $derived(review.outcome.kind === "board_terminal"
     ? reviewText("header.result.board", { result: review.outcome.result, side: sideLabel(review.side) })
@@ -94,12 +104,25 @@
 
   function hideAnalysis(): void {
     analysisRequest += 1;
+    analysisAbort?.abort();
+    analysisAbort = undefined;
     analysis = undefined;
     analysisBusy = undefined;
     analysisFailed = undefined;
   }
 
+  async function recordedClock(owner: ReviewMap, nodeId: string, signal: AbortSignal, current: () => boolean): Promise<RecordedClockView> {
+    const loader = onRecordedClock, access = clockAccessIdentity;
+    const valid = () => mounted && current() && owner === review && selectedNodeId === nodeId
+      && retrying === undefined && loader === onRecordedClock && access === clockAccessIdentity;
+    if (loader === undefined || !valid()) throw new Error("Recorded clock selection is no longer current");
+    const page = await loader(owner, nodeId, signal, valid);
+    if (!valid()) throw new Error("Recorded clock selection changed");
+    return page;
+  }
+
   $effect(() => { if (!analysisAllowed) hideAnalysis(); });
+  $effect(() => { analysisIdentity; hideAnalysis(); });
 
   function select(nodeId: string): void {
     if (nodeId !== selected?.nodeId) {
@@ -130,16 +153,23 @@
   async function analyze(nodeId: string): Promise<void> {
     const row = selected;
     if (!analysisAllowed || row === undefined || row.nodeId !== nodeId || onAnalyze === undefined || analysisBusy !== undefined || retrying !== undefined) return;
-    const subject = { runId: review.runId, branchId: review.branchId, nodeId, entryNodeId: row.entryNodeId };
+    const subject = reviewAnalyzeTarget(review, nodeId);
     const current = ++analysisRequest;
+    const controller = new AbortController();
+    analysisAbort = controller;
+    const isCurrent = () => mounted && !controller.signal.aborted && current === analysisRequest && analysisAllowed
+      && review.runId === subject.runId && review.branchId === subject.branchId && selected?.nodeId === subject.nodeId
+      && selected.entryNodeId === subject.entryNodeId && selected.fen === subject.fen && review.decision.digest === subject.decision.digest
+      && review.workflowContext === subject.workflowContext && retrying === undefined;
     analysisBusy = nodeId;
     analysisFailed = undefined;
     try {
-      const page = await onAnalyze(nodeId);
-      assertReviewAnalysisResponse(page, subject);
-      if (mounted && current === analysisRequest && analysisAllowed && review.runId === subject.runId && review.branchId === subject.branchId && selected?.nodeId === subject.nodeId && selected.entryNodeId === subject.entryNodeId && retrying === undefined) analysis = page;
+      const page = await onAnalyze(nodeId, controller.signal, isCurrent);
+      if (!isCurrent()) return;
+      assertReviewAnalyzeResult(page, subject);
+      analysis = page;
     } catch {
-      if (mounted && current === analysisRequest) analysisFailed = nodeId;
+      if (isCurrent()) analysisFailed = nodeId;
     } finally {
       if (mounted && current === analysisRequest) analysisBusy = undefined;
     }
@@ -308,7 +338,7 @@
     return Number.isNaN(date.valueOf()) ? value : date.toLocaleString();
   }
 
-  onDestroy(() => { mounted = false; request += 1; });
+  onDestroy(() => { mounted = false; request += 1; hideAnalysis(); });
 </script>
 
 <main class="review-map" aria-labelledby="review-map-title" data-review-surface="review_map">
@@ -382,21 +412,30 @@
         <button type="button" disabled={selectedIndex >= review.rows.length - 1} onclick={() => step(1)}>{reviewText("nav.next")}</button>
       </div>
       {#if retrying !== undefined}<p role="status">{reviewText("retry.status")}</p>{/if}
+      <ClockReadout {review} nodeId={selectedNodeId} accessIdentity={`${clockAccessIdentity}:${forbidden}:${review.viewer.mayWrite}`} enabled={retrying === undefined} load={onRecordedClock === undefined ? undefined : recordedClock} />
       {#if selected}
         <article class="evidence" aria-labelledby="review-evidence-title">
           <h2 id="review-evidence-title">{reviewText("evidence.title")}</h2>
           {#each plainFacts as fact}<p>{fact}</p>{/each}
-          <PresentedEvidence items={packetItems} onFocusSquares={focusFactSquares} />
+          <PresentedEvidence items={packetItems} onFocusSquares={focusFactSquares} detailsScope={factDetailsScope} detailsActive={readActive && !refreshBusy && retrying === undefined} />
         </article>
         {#if onAnalyze && retrying === undefined}
-          <section class="analysis" aria-labelledby="review-analysis-title" aria-busy={analysisBusy === selected.nodeId} data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.kind ?? "closed"}>
+          <section class="analysis" aria-labelledby="review-analysis-title" aria-busy={analysisBusy === selected.nodeId} data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.page.kind ?? "closed"}>
             <h3 id="review-analysis-title">{reviewText("analysis.title")}</h3>
             {#if selected.entryNodeId === review.openRetryEntryNodeId}
               <p class="muted">{reviewText("analysis.withheld", { move: selected.label })}</p>
             {:else if shownAnalysis}
               <div aria-live="polite">
-                <p class="analysis-sentence">{shownAnalysis.sentence}</p>
-                {#if shownAnalysis.kind === "line"}<p class="muted">{shownAnalysis.caveat}</p>{/if}
+                {#if shownAnalysis.page.kind === "page" && shownAnalysis.page.body.kind === "source"}
+                  {@const outcome = shownAnalysis.page.body.outcome}
+                  {#if outcome.kind === "available"}
+                    <div class="analysis-sentence"><PresentedEvidence items={shownAnalysis.page.items} /></div>
+                    {#if outcome.deferred > 0}<p class="honest">{reviewText("analysis.deferred")}</p>{/if}
+                  {:else if outcome.kind === "no_witness"}<p>{reviewText("analysis.empty")}</p>
+                  {:else if outcome.kind === "unavailable" && outcome.reason === "source_absent"}<p>{reviewText("analysis.none", { move: selected.label })}</p>
+                  {:else if outcome.kind === "failed"}<p role="status">{reviewText("analysis.failed")}</p>
+                  {:else}<p>{reviewText("analysis.unavailable")}</p>{/if}
+                {:else}<p role="status">{reviewText("analysis.unavailable")}</p>{/if}
               </div>
             {/if}
             {#if analysisAllowed}

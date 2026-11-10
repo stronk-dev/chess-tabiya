@@ -1,112 +1,19 @@
 import type { AddressInfo } from "node:net";
 
 import { CORPUS_GUARD } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 
 describe("development application mock opponent", { timeout: 15_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
 
+  beforeEach(() => { installEmptyApplicationCatalogues(); });
   afterEach(async () => {
-    await application?.close();
-    application = undefined;
-  });
-
-  it("plays the deterministic Pack A opponent spine from its black-to-move root", async () => {
-    application = await createInMemoryTestApplication({
-      development: true,
-      engineMode: "mock",
-      cookieSecure: false,
-    });
-    await new Promise<void>((resolve, reject) => {
-      application!.server.once("error", reject);
-      application!.server.listen(0, "127.0.0.1", resolve);
-    });
-    const address = application.server.address() as AddressInfo;
-    const origin = `http://127.0.0.1:${address.port}`;
-    const registered = await fetch(`${origin}/auth/register`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ handle: "engine_test", password: "engine-test-password" }),
-    });
-    expect(registered.status).toBe(201);
-    const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
-    const packs = (await (await fetch(`${origin}/packs`)).json()) as {
-      id: string;
-      digest: string;
-    }[];
-    const pack = packs.find((candidate) => candidate.id === "anti-caro-advance-c5-race");
-    expect(pack).toBeDefined();
-
-    const choose = async (historyUci: readonly string[]) => {
-      const response = await fetch(`${origin}/select-move`, {
-        method: "POST",
-        headers: { "content-type": "application/json", cookie },
-        body: JSON.stringify({
-          startFen:
-            "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
-          historyUci,
-          policy: {
-            mode: "human_common",
-            policyConfigDigest: pack!.digest,
-            targetElo: 1800,
-          },
-          seed: 23,
-        }),
-      });
-      const text = await response.text();
-      expect(response.status, text).toBe(200);
-      return JSON.parse(text) as { moveUci: string };
-    };
-
-    await expect(choose([])).resolves.toMatchObject({ moveUci: "c8f5" });
-    await expect(choose(["c8f5", "g1f3"])).resolves.toMatchObject({
-      moveUci: "e7e6",
-    });
-    await expect(
-      choose(["c8f5", "g1f3", "e7e6", "f1e2"]),
-    ).resolves.toMatchObject({ moveUci: "c6c5" });
-  });
-
-  it("serves the official shape catalogue and only the pack's public shape references", async () => {
-    application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });
-    await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
-    const address = application.server.address() as AddressInfo;
-    const origin = `http://127.0.0.1:${address.port}`;
-    const summaries = (await (await fetch(`${origin}/shapes`)).json()) as { shapes: { id: string; channel: string; usedByPacks: number }[] };
-    expect(summaries.shapes).toEqual(expect.arrayContaining([expect.objectContaining({ id: "carlsbad", channel: "official", usedByPacks: expect.any(Number) })]));
-    const detail = await fetch(`${origin}/shapes/carlsbad`);
-    expect(detail.status).toBe(200); expect(detail.headers.get("x-shape-digest")).toMatch(/^sha256:/);
-    expect(await detail.json()).toMatchObject({ id: "carlsbad", channel: "official" });
-    const pack = await fetch(`${origin}/packs/carlsbad-minority-attack`);
-    const projected = await pack.json() as Record<string, unknown>;
-    expect(projected.shapes).toEqual(["carlsbad"]);
-    expect(projected).not.toHaveProperty("planClasses");
-    expect(projected).not.toHaveProperty("successConditions");
-  });
-
-  it("serves the sorted principle catalogue through the production boundary", async () => {
-    application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });
-    await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
-    const address = application.server.address() as AddressInfo;
-    const response = await fetch(`http://127.0.0.1:${address.port}/principles`);
-    expect(response.status).toBe(200);
-    expect(response.headers.get("content-type")).toContain("application/json");
-    const body = await response.json() as { principles: { id: string; name: string; statement: string; phases: string[]; licence: string; usedByPacks: number }[] };
-    expect(body.principles.length).toBeGreaterThan(0);
-    expect(body.principles.map((principle) => principle.id)).toEqual(
-      [...body.principles.map((principle) => principle.id)].sort(),
-    );
-    expect(body.principles[0]).toEqual(expect.objectContaining({
-      id: expect.any(String),
-      name: expect.any(String),
-      statement: expect.any(String),
-      phases: expect.any(Array),
-      licence: expect.any(String),
-      usedByPacks: expect.any(Number),
-    }));
+    try { await application?.close(); }
+    finally { application = undefined; vi.restoreAllMocks(); }
   });
 
   it("does not advertise tablebase modes for the empty mock provider", async () => {

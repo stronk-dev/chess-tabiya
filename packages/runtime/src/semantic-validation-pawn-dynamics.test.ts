@@ -1,6 +1,8 @@
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 // D3691: independent finite pawn operands through the registered production edge.
 // No pawn collector/helper is used to construct this test's expected geometry.
 import { readFileSync } from "node:fs";
+import { retainHistoricalSemanticCaseFixtures, SUBJECT_SAFE_RETIRED_CASES } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import type { Color, Square } from "chessops/types";
 import { makeSquare, parseSquare, parseUci } from "chessops/util";
@@ -8,13 +10,13 @@ import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { positionFromFen } from "./position-cache.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
+const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
 const byId = new Map(raw.map(value => { const parsed = parseSemanticValidationCase(value); return [parsed.id, parsed] as const; }));
 const rows = PAWN_DYNAMICS_CITED_SOURCE.cases;
 const subject = rows[0]!.proposition.subject;
@@ -134,7 +136,7 @@ describe("D3691 finite pawn dynamics qualification", () => {
   it("adds exactly 22 cases and preserves all 191 predecessor records unchanged", () => {
     const ids = new Set(rows.map(row => row.proposition.case.id));
     expect(raw.filter(value => ids.has(value.id as string))).toHaveLength(22);
-    const later = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
+    const later = new Set([...EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
     const prior = raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string));
     expect(prior).toHaveLength(191);
     expect(evidenceDigest(prior)).toBe("822823866a9f9430f9e4438be96e6b17157aab6f05775d4ff199ddc98ba740b9");
@@ -153,13 +155,21 @@ describe("D3690 complete state-event omission contract conflict", () => {
     const pieces = count("rules.structural.event.piece_count");
     expect(pieces).toHaveLength(12);
     expect(pieces).toEqual(expect.arrayContaining([expect.objectContaining({ before: expect.objectContaining({ role: "pawn", count: 0 }), after: expect.objectContaining({ role: "pawn", count: 0 }) })]));
-    expect(count("rules.structural.event.pawn_islands")).toEqual([
-      expect.objectContaining({ color: "white", before: 0, after: 0 }), expect.objectContaining({ color: "black", before: 0, after: 0 }),
-    ]);
+    // Current topology changes are sparse; complete zero state belongs to the reading.
+    expect(count("rules.structural.event.pawn_islands")).toEqual([]);
+    expect(selectSemanticTargets(result, { kind: "event", projection: { id: "rules.structural.event.pawn_islands", version: 2 } })).toEqual([]);
+    for (const fen of [edge.beforeFen, edge.afterFen]) {
+      const reading = invokeEvidenceValueRoute("rules.structural.reading.pawn_connectivity@1", { fen });
+      expect(reading.payload.colors.map(row => ({ color: row.color, islandCount: row.islandCount }))).toEqual([
+        { color: "white", islandCount: 0 }, { color: "black", islandCount: 0 },
+      ]);
+    }
+    expect(SUBJECT_SAFE_RETIRED_CASES.some(row => (row.subject as { projection: { id: string; version: number } }).projection.id === "rules.structural.event.pawn_islands")).toBe(true);
+    expect(SEMANTIC_VALIDATION_PROFILES.some(value => value.subject.projection.id === "rules.structural.event.pawn_islands" && value.subject.projection.version === 1)).toBe(false);
     const replies = count("rules.tactic.consequence.reply_breadth");
     expect(replies).toHaveLength(1);
     expect(replies[0]).toMatchObject(edge.moveUci === "f7g7" ? { terminal: true, count: 0, replies: [], check: true } : { terminal: false, count: expect.any(Number) });
-    for (const id of ["rules.king.event.zone_state", "rules.structural.event.piece_count", "rules.structural.event.pawn_islands", "rules.tactic.consequence.reply_breadth"]) {
+    for (const id of ["rules.king.event.zone_state", "rules.structural.event.piece_count", "rules.tactic.consequence.reply_breadth"]) {
       expect(SEMANTIC_VALIDATION_PROFILES.find(value => value.subject.projection.id === id)!.semanticNegative.disposition).toBe("required");
     }
   });

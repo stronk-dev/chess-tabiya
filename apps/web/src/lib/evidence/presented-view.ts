@@ -17,6 +17,7 @@ import {
 } from "@chess-tabiya/runtime/client";
 
 export interface PresentedView {
+  readonly owner: PresentedEvidenceItem;
   readonly id: ComponentValue["id"];
   readonly digest: string;
   /** The component's equivalent sentence — screen readers and provider-off deployments get these bytes. */
@@ -27,7 +28,7 @@ export interface PresentedView {
 export function presentedViews(items: readonly PresentedEvidenceItem[]): readonly PresentedView[] {
   return Object.freeze(items.map((item) => {
     assertPresentedEvidenceItem(item);
-    return Object.freeze({ id: item.component.id, digest: item.componentDigest, sentence: presentedSentence(item), component: item.component });
+    return Object.freeze({ owner: item, id: item.component.id, digest: item.componentDigest, sentence: presentedSentence(item), component: item.component });
   }));
 }
 

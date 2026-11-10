@@ -7,11 +7,21 @@ import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import { isBindingSourceAbsence, type BindingSourceAbsence, type CompiledEvidenceManifest, type EvidenceBinding, type LatencyMode, type ProviderOffBehavior, type VersionedEvidenceId } from "./evidence-contract.js";
 import { compileProjectionExecution, type CompiledProjectionExecution } from "./evidence-execution.js";
 import { compileProjectionExecutionV2, executionPlanDigest, type CompiledEvidenceExecutionPlan } from "./evidence-execution-v2.js";
+import { isImmutableOwnData } from "./internal/immutable-data.js";
 
 const key = (ref: VersionedEvidenceId): string => `${ref.id}@${ref.version}`;
 const LATENCY_ORDER: readonly LatencyMode[] = ["sync", "interactive", "background", "offline"];
 const COMPILED = new WeakSet<object>();
 const COMPILED_V2 = new WeakMap<object, CompiledEvidenceManifest>();
+const IMMUTABLE_CONSUMERS = new WeakMap<object, Map<string, CompiledEvidenceConsumerExecutionV2>>();
+
+function consumerReference(request: VersionedEvidenceId): VersionedEvidenceId {
+  const consumer = Object.freeze({ id: request.id, version: request.version });
+  if (typeof consumer.id !== "string" || !Number.isSafeInteger(consumer.version) || consumer.version < 1) {
+    throw new EvidenceBindingExecutionError("BINDING_EXECUTION_UNDECLARED", "invalid consumer reference");
+  }
+  return consumer;
+}
 
 export class EvidenceBindingExecutionError extends TypeError {
   constructor(readonly code: "BINDING_EXECUTION_UNDECLARED" | "BINDING_EXECUTION_LATENCY" | "BINDING_SOURCE_ABSENCE" | "BINDING_AVAILABILITY_CROSSED", message: string) {
@@ -54,7 +64,8 @@ function completeBindings(manifest: CompiledEvidenceManifest, consumer: Versione
   return bindings;
 }
 
-export function compileEvidenceConsumerExecution(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId): CompiledEvidenceConsumerExecution {
+export function compileEvidenceConsumerExecution(manifest: CompiledEvidenceManifest, request: VersionedEvidenceId): CompiledEvidenceConsumerExecution {
+  const consumer = consumerReference(request);
   const bindings = completeBindings(manifest, consumer);
   const compiled = bindings.map(binding => {
     const execution = compileProjectionExecution(manifest, binding.projection);
@@ -86,7 +97,13 @@ function needsSourcePolicy(plan: CompiledEvidenceExecutionPlan): boolean {
 }
 
 /** Complete compile-time binding image. Templates are not realized paths or source satisfaction. */
-export function compileEvidenceConsumerExecutionV2(manifest: CompiledEvidenceManifest, consumer: VersionedEvidenceId): CompiledEvidenceConsumerExecutionV2 {
+export function compileEvidenceConsumerExecutionV2(manifest: CompiledEvidenceManifest, request: VersionedEvidenceId): CompiledEvidenceConsumerExecutionV2 {
+  const consumer = consumerReference(request);
+  const cached = IMMUTABLE_CONSUMERS.get(manifest)?.get(key(consumer));
+  if (cached !== undefined) {
+    assertEvidenceConsumerExecutionManifestV2(cached, manifest);
+    return cached;
+  }
   const bindings = completeBindings(manifest, consumer).map(binding => {
     // Compiled manifest bindings are the admitted adapter declarations, not a second adapter list.
     const projections = manifest.projections.filter(projection => key(projection) === key(binding.projection));
@@ -99,7 +116,12 @@ export function compileEvidenceConsumerExecutionV2(manifest: CompiledEvidenceMan
     return Object.freeze({ binding: freezeJson(binding), plan, sourceAbsence: policy === undefined ? null : Object.freeze({ ...policy }) });
   }).sort((a, b) => key(a.binding.adapter).localeCompare(key(b.binding.adapter)));
   const compiled = Object.freeze({ consumer: Object.freeze({ ...consumer }), bindings: Object.freeze(bindings) });
-  COMPILED_V2.set(compiled, manifest); return compiled;
+  COMPILED_V2.set(compiled, manifest);
+  if (isImmutableOwnData(manifest)) {
+    const consumers = IMMUTABLE_CONSUMERS.get(manifest) ?? new Map<string, CompiledEvidenceConsumerExecutionV2>();
+    consumers.set(key(consumer), compiled); IMMUTABLE_CONSUMERS.set(manifest, consumers);
+  }
+  return compiled;
 }
 
 export function assertEvidenceConsumerExecutionV2(compiled: CompiledEvidenceConsumerExecutionV2): void {

@@ -10,10 +10,10 @@ import {
   EVIDENCE_MODULE_IDS,
   MODULE_CONSUMER_ACCEPTS,
   MODULE_CONSUMER_IDS,
-  MODULE_CONSUMER_IMPLEMENTATION,
   MODULE_CURRENT_IMAGE,
   PRIMARY_EVIDENCE_MANIFEST,
   RECORDED_PATH_SUCCESSOR_REFS,
+  currentRecordedModuleRefs,
   SEMANTIC_EVENT_PROJECTION_REFS,
   TACTICAL_COLLECTOR_PROJECTION_IDS,
   BREADTH_COLLECTOR_PROJECTION_IDS,
@@ -21,9 +21,14 @@ import {
   type EvidenceModuleId,
 } from "./evidence-catalog.js";
 import type { CompiledEvidenceManifest, EvidenceRole, VersionedEvidenceId } from "./evidence-contract.js";
+import { SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS } from "./semantic-validation.js";
+import { CANDIDATE_COLLECTOR_PROJECTION_KEYS } from "./candidate-population-projections.generated.js";
 import { HINT_DISCLOSURE_PROJECTION_IDS, hintDeclarationRow, hintDisclosureIdentity } from "./hint-registry.js";
 import {
   MODULE_IDS,
+  POSTCOMMIT_OBSERVED_WINDOW_POLICY,
+  STRUCTURE_RECOGNITION_POLICY,
+  STRUCTURE_SELECTION_GROUPS,
   compileModuleRegistry,
   moduleEvidenceTimings,
   type CompiledModuleRegistry,
@@ -58,7 +63,7 @@ export const MODULE_AWAITING: Readonly<Partial<Record<ModuleId, readonly { reado
  * rung compiler (`compileHintDisclosure`); the module ceiling is the full ladder, narrowed per request
  * by the preset/context/access ceiling, never by source availability.
  */
-export const GUIDED_HINT_DISCLOSURE = Object.freeze({ vocabulary: "guided_hint@1" as const, ceiling: "move" as const, compiler: ref("compileHintDisclosure") });
+export const GUIDED_HINT_DISCLOSURE = Object.freeze({ vocabulary: "guided_hint@1" as const, ceiling: "move" as const, compiler: ref("compileHintDisclosure", 2) });
 
 function acceptance(projection: VersionedEvidenceId): ModuleAcceptanceDeclaration {
   // [[D745]]: an avoidance fact is admissible only with its complete-population denominator.
@@ -93,7 +98,9 @@ function declarationFor(policy: ModulePolicy): ModuleDeclaration {
       visibleBoardParity: true as const,
     }),
     budgets: policy.budgets,
-    selection: Object.freeze({ policy: MODULE_SELECTION_POLICY, familyPrecedence: Object.freeze(accepted === undefined ? [] : [...accepted]) }),
+    selection: Object.freeze({ policy: id === "postcommit_nudge" ? POSTCOMMIT_OBSERVED_WINDOW_POLICY
+      : id === "structure_nudge" ? STRUCTURE_RECOGNITION_POLICY : MODULE_SELECTION_POLICY,
+      familyPrecedence: Object.freeze(accepted === undefined ? [] : [...accepted]) }),
     emptyBehavior: policy.emptyBehavior,
     seatClass: policy.seatClass,
     forms: policy.forms,
@@ -137,6 +144,21 @@ export class ModuleRegistryInvariantError extends TypeError {
  */
 export const MODULE_COVERAGE_REFUSALS: readonly { readonly projection: VersionedEvidenceId; readonly reason: string }[] = Object.freeze([
   Object.freeze({ projection: ref("rules.exchange.predicate.legal_exchange"), reason: "tactical-collectors D1: an internal machine_condition predicate; it stays a producer operand and advanced-inventory fact, never a rendered learner module fact." }),
+  Object.freeze({ projection: ref("derived.exchange.trade_completed"), reason: "D3851 / accepted module-registration: narrative trade@1 delivery is replaced by the actual recorded-edge derived.exchange.trade_completed@2 in the current Nudge and Review consumers; the detector family remains covered, not omitted." }),
+  Object.freeze({ projection: ref("derived.tactic.defender_exposure"), reason: "Accepted module-registration §4.11a / D3867–D3868: Threat consumes the complete-capture exposure@2 and preserves typed unavailability; the old variable-witness declaration is not a current learner source. The detector family remains covered." }),
+  Object.freeze({ projection: ref("rules.structural.event.pawn_islands"), reason: "Accepted subject-safe-semantic-selection: current modules use exact topology source pawn_islands@2; count-only predecessor delivery is retired." }),
+  ...["derived.semantic_avoidance.loose_piece", "derived.semantic_avoidance.pawn_islands"].map(id => Object.freeze({ projection: ref(id), reason: "Accepted subject-safe-semantic-selection: family/sign-only avoidance@1 is retired from ordinary delivery. Complete subject-owned@2 ordinary adoption remains held under D4175, not supplied by another label." })),
+  ...[
+    "derived.tactic.fork_survives_reply", "derived.tactic.promotion_pressure", "human.maia.candidate_wdl",
+    "derived.material.reading.role_signature", "derived.material.event.role_asymmetry", "derived.opening.deepest_reached",
+    "derived.tactic.overloaded_defender_response_conflict",
+  ].map(id => Object.freeze({ projection: ref(id), reason: "Accepted F2 / Full Inspector2 source cutover: this predecessor is not a current module fact. Its independently grounded recorded or source-owned successor is bound explicitly in the current image, not relabelled at delivery." })),
+  ...[
+    "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure", "derived.tactic.sequence.defender_consequence",
+    "derived.tactic.deflection_observed", "derived.tactic.attraction_observed", "derived.tactic.line_blocker_clearance_observed",
+    "derived.tactic.square_clearance_observed", "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
+    "derived.tactic.overload_exploitation_observed",
+  ].flatMap(id => [1, 2].map(version => Object.freeze({ projection: ref(id, version), reason: "Accepted F2 / D3851: current Nudge, Review and Inspector use the exact recorded-window @3 source. Narrative @1 and predecessor @2 authorities are not current learner facts." }))),
 ]);
 
 /** The literal discharge populations the module layer must close, per upstream RFC. */
@@ -172,6 +194,14 @@ export function assertModuleRegistry(input: ModuleRegistryInvariantInput): void 
     }
     // 2. No learner module widens into an authoring or operator surface.
     if (module.ceilings.roles.some((role) => forbidden.includes(role))) throw new ModuleRegistryInvariantError("MODULE_ROLE_FORBIDDEN", `${module.id} declares an author/operator role`);
+    if (module.id === "structure_nudge") {
+      const current = module.accepts.kind === "manifest" ? module.accepts.projections.map(row => refKey(row.projection)).sort() : [];
+      const expected = [...STRUCTURE_SELECTION_GROUPS.recognition, ...STRUCTURE_SELECTION_GROUPS.generic].sort();
+      if (module.consumer?.id !== "module.structure_nudge" || module.consumer.version !== 2
+        || refKey(module.selection.policy) !== refKey(STRUCTURE_RECOGNITION_POLICY) || current.join("|") !== expected.join("|")) {
+        throw new ModuleRegistryInvariantError("MODULE_BINDING_DRIFT", "Structure selection requires its exact current consumer, policy and seven-ref mapping");
+      }
+    }
   }
   // 3. Every preset module resolves to a declaration.
   const declared = new Set(input.declarations.map((module) => module.id));
@@ -198,8 +228,11 @@ assertModuleRegistry({ declarations: MODULE_REGISTRY.modules });
 if (MODULE_REGISTRY.modules.filter((module) => module.accepts.kind === "manifest").map((module) => `module.${module.id}`).join("|") !== MODULE_CONSUMER_IDS.join("|")) {
   throw new ModuleRegistryInvariantError("MODULE_BINDING_DRIFT", "the evidence-bearing modules are not order-equal to MODULE_CONSUMER_IDS");
 }
-if (!PRIMARY_EVIDENCE_MANIFEST.consumers.filter((consumer) => consumer.id.startsWith("module.")).every((consumer) => consumer.implementation === MODULE_CONSUMER_IMPLEMENTATION)) {
-  throw new ModuleRegistryInvariantError("MODULE_BINDING_DRIFT", `every module consumer must name the one ${MODULE_CONSUMER_IMPLEMENTATION} operation`);
+if (!PRIMARY_EVIDENCE_MANIFEST.consumers.filter((consumer) => consumer.id.startsWith("module.")).every((consumer) => {
+  const current = MODULE_CURRENT_IMAGE.find(row => row.consumer.id === consumer.id && row.consumer.version === consumer.version);
+  return current !== undefined && consumer.implementation === current.implementation;
+})) {
+  throw new ModuleRegistryInvariantError("MODULE_BINDING_DRIFT", "every module consumer must name its exact current operation");
 }
 
 export function moduleDeclaration(id: ModuleId): ModuleDeclaration {
@@ -222,8 +255,34 @@ const SEQUENCE_EVENT_IDS = new Set([
   "derived.tactic.square_clearance_observed", "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
   "derived.tactic.overload_exploitation_observed",
 ]);
-export const ONE_EDGE_EVENT_REFS: readonly VersionedEvidenceId[] = Object.freeze(SEMANTIC_EVENT_PROJECTION_REFS.filter((value) =>
-  value.version === 1 && !value.id.startsWith("derived.semantic_avoidance.") && !SEQUENCE_EVENT_IDS.has(value.id)));
+export const ONE_EDGE_EVENT_REFS: readonly VersionedEvidenceId[] = Object.freeze(Object.entries(CANDIDATE_COLLECTOR_PROJECTION_KEYS)
+  .filter(([group]) => group.startsWith("event.")).flatMap(([, values]) => values)
+  .filter(key => !["derived.material.event.role_asymmetry@2", "derived.tactic.defender_exposure@2", "derived.exchange.trade_completed@1"].includes(key))
+  .map(key => { const [id, version] = key.split("@"); return Object.freeze({ id: id!, version: Number(version) }); }));
+
+// The current post-commit operation calls these source families: its one-edge closure,
+// nonterminal fork replacement, genuine grade and owned recorded windows. Acceptance alone
+// does not acquire a source, including future refs added to the module's requirement image.
+const POSTCOMMIT_SOURCE_KEYS = new Set([
+  ...ONE_EDGE_EVENT_REFS.map(refKey), "derived.tactic.nonterminal_fork_survival@1", "derived.grade.move_quality@2",
+  ...currentRecordedModuleRefs(RECORDED_PATH_SUCCESSOR_REFS).map(refKey),
+]);
+
+// reviewMapProjection's actual edge/window, original twelve-adapter recorded population,
+// phase/setup and installed-history collectors. This is not the accepted list: candidate
+// avoidance remains unsupplied. Single-line objectives now use their own recorded @2 source.
+// Historical reports are acquired independently of modern fixed grading endpoints by the
+// current Review source owner.
+const REVIEW_SOURCE_KEYS = new Set([
+  ...POSTCOMMIT_SOURCE_KEYS,
+  "derived.material.event.role_asymmetry@2",
+  "derived.review.eval_point@1", "derived.review.eval_delta@2", "derived.review.mate_transition@2", "derived.review.wdl_point@1",
+  "derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@2", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2",
+  "rules.phase.reading@2", "rules.endgame.classification@1", "theory.endgame.setup_match@1",
+  "run.record.consequence@1", "run.record.imported_result@1", "derived.opening.deepest_reached@2",
+  "run.record.objective_transition@2",
+  "recorded.engine.eval@1", "recorded.tablebase.result@1",
+]);
 
 export interface ModuleOperation {
   readonly module: ModuleId;
@@ -245,8 +304,8 @@ function queryOperation(module: Exclude<EvidenceModuleId, "review_map" | "postco
 export const MODULE_OPERATIONS: readonly ModuleOperation[] = Object.freeze([
   Object.freeze({
     module: "review_map" as const, operation: "reviewMapProjection", timing: "review" as const,
-    // rfc/review-evidence-compiler.md: the typed packet projections the evidence panel admits.
-    projections: Object.freeze([ref("derived.grade.move_quality"), ref("live.stockfish.eval"), ...RECORDED_PATH_SUCCESSOR_REFS, ref("derived.review.eval_point"), { id: "derived.review.eval_delta", version: 2 }, { id: "derived.review.mate_transition", version: 2 }, ref("derived.review.wdl_point")]),
+    projections: Object.freeze(MODULE_CONSUMER_ACCEPTS.review_map.filter(projection =>
+      REVIEW_SOURCE_KEYS.has(refKey(projection)))),
   }),
   // rfc/hint-distance.md §7: one learner-requested disclosure per request, through RunService.hint.
   Object.freeze({
@@ -256,20 +315,25 @@ export const MODULE_OPERATIONS: readonly ModuleOperation[] = Object.freeze([
   Object.freeze({
     // Checkpoint B: the post-commit seat is now delivered by the one query operation.
     module: "postcommit_nudge" as const, operation: MODULE_QUERY_OPERATION, timing: "post_commit" as const,
-    projections: Object.freeze([ref("derived.grade.move_quality"), ...ONE_EDGE_EVENT_REFS.filter((value) => MODULE_CONSUMER_ACCEPTS.postcommit_nudge.some((accepted) => refKey(accepted) === refKey(value)))]),
+    projections: Object.freeze(MODULE_CONSUMER_ACCEPTS.postcommit_nudge.filter(projection =>
+      POSTCOMMIT_SOURCE_KEYS.has(refKey(projection)))),
   }),
   queryOperation("sight_on_request", "pre_commit"),
   queryOperation("blunder_prevention", "at_commit"),
-  queryOperation("threat_radar", "pre_commit"),
+  // The complete seven-source image is acquired post-commit, when a real edge exists.
+  // Pre-commit remains the same six FEN readings and never invents an exposure edge.
+  queryOperation("threat_radar", "post_commit"),
   queryOperation("structure_nudge", "post_commit"),
   queryOperation("theory_breadcrumb", "post_commit"),
   queryOperation("compare_coach", "checkpoint"),
-  queryOperation("full_inspector", "review"),
+  Object.freeze({ module: "full_inspector" as const, operation: "compileInspectorSourcePage", timing: "review" as const,
+    projections: MODULE_CONSUMER_ACCEPTS.full_inspector }),
 ]);
 
 const PRESENTATION_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "evidence-presentation", ledger: "module-registration A5", reason: "No exact pair-keyed presentation adapter is registered for this pair; no seat may render it." });
 const SOURCE_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "module-registration", ledger: "D8", reason: "The query operation does not acquire this pair's sealed source (a provider page or multi-edge window the explicit surface does not demand); it is stated as a not-requested family, never an empty fact." });
-const CANDIDATE_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "shared-candidate-evidence-packet", ledger: "D745", reason: "Avoidance needs the complete legal-alternative population at the committed edge; the post-commit operation reads one edge." });
+const CANDIDATE_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "shared-candidate-evidence-packet", ledger: "D745", reason: "Avoidance needs the complete legal-alternative population at the committed edge; current post-commit acquisition supplies one-edge facts and recorded windows, not that population." });
+const AVOIDANCE_SUBJECT_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "semantic-evidence-selection", ledger: "D1716", reason: "The existing broad-family avoidance source is research-only; exact root-subject/outcome identity and complete subject-first denominators need the independently accepted successor before learner delivery (D1718/D1719)." });
 const WINDOW_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "recorded-semantic-path", ledger: "D1870", reason: "This v1 sequence/observed event derives from a multi-edge window; the recorded-path compiler emits only its v2 successor, and only over a Review branch." });
 const REVIEW_OPERATION_BLOCKER: ModuleDependencyBlocker = Object.freeze({ owner: "review-map", ledger: "review-evidence-compiler D1", reason: "No Review Map production operation acquires this pair's sealed source yet; the final Review Map source-local admission policy (D928) decides which packet families it requests." });
 
@@ -281,7 +345,7 @@ function pairBlockers(module: ModuleDeclaration, projection: VersionedEvidenceId
   const presentable = presentationAdapter(module.consumer!, projection) !== undefined;
   const presentationBlockers = presentable ? [] : [PRESENTATION_BLOCKER];
   if (module.id === "postcommit_nudge") {
-    if (projection.id.startsWith("derived.semantic_avoidance.")) return [CANDIDATE_BLOCKER, ...presentationBlockers];
+    if (projection.id.startsWith("derived.semantic_avoidance.")) return [CANDIDATE_BLOCKER, AVOIDANCE_SUBJECT_BLOCKER, ...presentationBlockers];
     if (SEQUENCE_EVENT_IDS.has(projection.id)) return [WINDOW_BLOCKER, ...presentationBlockers];
   }
   // evidence-presentation Checkpoint B: a pair with a registered pair-keyed adapter is blocked only

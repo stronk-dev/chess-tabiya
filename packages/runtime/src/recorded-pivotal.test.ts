@@ -145,12 +145,13 @@ describe("recorded pivotal sources keep complete in-grant witnesses", () => {
     expect(evidenceValueReceipt(left[0]!.evidence).inputDigest).not.toBe(evidenceValueReceipt(right[0]!.evidence).inputDigest);
   });
 
-  it("keeps fixed tuple declarations exact and current consumers unchanged", () => {
+  it("keeps fixed tuple declarations exact and binds only the accepted Review and Full2 successors", () => {
     for (const kind of ["phase_change", "option_collapse"] as const) {
       const projection = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === `derived.pivotal.${kind}` && row.version === 2)!;
       expect(projection.derivation!.inputs).toHaveLength(kind === "phase_change" ? 4 : 6);
       expect(projection.derivation!.inputs!.filter(ref => ref.id === "run.record.position")).toHaveLength(kind === "phase_change" ? 2 : 3);
-      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => binding.projection.id === projection.id && binding.projection.version === 2)).toEqual([]);
+      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => binding.projection.id === projection.id && binding.projection.version === 2)
+        .map(binding => `${binding.consumer.id}@${binding.consumer.version}`)).toEqual(["module.full_inspector@2", "module.review_map@2"]);
     }
   });
 });

@@ -1,6 +1,7 @@
 // D3688: finite rule facts through the actual sole-factory production operation.
 // Count asymmetry is not advantage, and localNonLosing is not general safety.
 import { readFileSync } from "node:fs";
+import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { Chess, normalizeMove } from "chessops/chess";
 import { bishopAttacks, kingAttacks, knightAttacks, pawnAttacks, rookAttacks } from "chessops/attacks";
@@ -12,13 +13,21 @@ import { positionFromFen } from "./position-cache.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
-import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
+const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
 const cases = raw.map(parseSemanticValidationCase), byId = new Map(cases.map(value => [value.id, value]));
-const rows = RULE_STATE_CITED_SOURCES.flatMap(source => source.cases);
+const historicalRows = RULE_STATE_CITED_SOURCES.flatMap(source => source.cases);
+// Original inputs remain grounded independently; exercise their separately authored
+// current-source authorities rather than relabelling any frozen predecessor record.
+const rows = historicalRows.map(row => {
+  if (row.proposition.subject.projection.id !== "derived.material.event.role_asymmetry") return row;
+  const current = MATERIAL_V2_CITED_SOURCE.cases.find(candidate => evidenceDigest(candidate.input) === evidenceDigest(row.input));
+  if (current === undefined) throw new Error(`Missing independently grounded current case for ${row.proposition.case.id}`);
+  return current;
+});
 const roles = ["pawn", "knight", "bishop", "rook", "queen"] as const;
 
 function roleCounts(fen: string) {
@@ -69,7 +78,7 @@ describe("D3688 material and mobility qualification", () => {
       if (negative) {
         expect(changedRoles).toEqual([]);
         expect(next).toEqual(prior);
-        if (row.proposition.case.id.includes("quiet-negative")) expect(prior.magnitude).toBe(2);
+        if (row.proposition.case.id.includes("asymmetric-negative")) expect(prior.magnitude).toBe(2);
         // A castle really relocates both friendly pieces but changes no count.
         if (row.proposition.case.id.includes("castle-negative")) {
           expect(before.board.rook.intersect(before.board[color]).size()).toBe(2);
@@ -82,7 +91,7 @@ describe("D3688 material and mobility qualification", () => {
           increased: next.magnitude > prior.magnitude });
         expect(payload.sourceEvents).toHaveLength(1);
         expect(payload.sourceEvents[0]).toMatchObject({ family: row.proposition.case.id.includes("promotion-") ? "promotion" : "capture", mover: { color } });
-        if (row.proposition.case.id.includes("capture.")) {
+        if (row.proposition.case.id.includes("capture-knight.")) {
           expect(payload.sourceEvents[0]?.captured).toMatchObject({ color: opposite(color), role: "knight" });
           expect(next.magnitude).toBeLessThan(prior.magnitude);
         } else {
@@ -142,7 +151,7 @@ describe("D3688 material and mobility qualification", () => {
     }
   });
 
-  it.each(RULE_STATE_CITED_SOURCES)("$sourceId closes only its legal omission arm", async source => {
+  it.each(RULE_STATE_CITED_SOURCES.map(source => source.sourceId === "python-chess.rule-state.material" ? MATERIAL_V2_CITED_SOURCE : source))("$sourceId closes only its legal omission arm", async source => {
     const subject = source.cases[0]!.proposition.subject;
     const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
     expect(profile.semanticNegative).toMatchObject({ disposition: "present", refs: source.cases.filter(row => row.arm === "semantic_negative")
@@ -167,8 +176,8 @@ describe("D3688 material and mobility qualification", () => {
   });
 
   it("retains all 175 predecessor records unchanged and adds exactly sixteen grounded cases", () => {
-    const ids = new Set(rows.map(row => row.proposition.case.id));
-    const later = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
+    const ids = new Set(historicalRows.map(row => row.proposition.case.id));
+    const later = new Set([...EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id))]);
     expect(raw.filter(value => ids.has(value.id as string))).toHaveLength(16);
     expect(raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string))).toHaveLength(175);
     expect(evidenceDigest(raw.filter(value => !ids.has(value.id as string) && !later.has(value.id as string))))

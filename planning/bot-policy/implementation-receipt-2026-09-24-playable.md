@@ -84,3 +84,25 @@ identity to the exchange, so bots are honestly shown **unavailable** there until
   because the durable-parse arms now test it directly).
 - `CI=1 PLAYWRIGHT_PORT=4393 make test-browser-smoke` — 47 passed, 1 skipped (the Maia-latency spec
   needs a live Maia), including the choose → play → reload → continue → rematch bot journey.
+
+## 2026-11-05 D4148 branch/root repair contract
+
+Actual REST rewind→automatic fork→durable parse controls fail2/48 for fixed/per_branch,46existing
+pass. Separate read-only source/ABI and meaning/consumer reviewers accept new bot-policy§4.1a:
+one shared pure runtime branch preparation, original request CAS versus planned execution branch/
+seed, no speculative persistence, exact2 original-prefix candidates/unique match/complete committed-
+time preparation equality, same original-request retry and full existing durable admission. No new
+request/envelope/schema or weaker parser; no external execution-authenticity/bot calibration claim.
+This is contract acceptance only. Root owns implementation/tests; all new-byte gates remain owed.
+
+## 2026-11-05 D4148 verified automatic-fork repair
+
+Both independent source/meaning implementation reviews accept the finite§4.1a repair. Original
+fixed/per_branch reds2/48 become final180/five6.61s+types. Shared pure allocation, original CAS
+and planned execution seed, finite historical replay, zero speculative writes, both race outcomes,
+11full fork/root corruption controls, explicit/nonzero/later forks, bothseed actual restart/account
+export with zero exchanges and auto-fork style occurrence pass. Normal58203:14604software/all529
+files425.56s,7performance/four58.67s/types/build/source11. Content15733 remains60fail/261pass/
+18setup43files171.27s/all62old headings. Generation375cases/91subjects/0qualified,1099declarations/
+0changes/477applicability. D4148 closes on actual test path; no schema/profile/calibration or whole
+bot/foundation/native/release/remote-CI promotion. No staged/committed/pushed bytes or goal pause.

@@ -4,7 +4,18 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
 
-import { validateFocusedTestCommands, validateTestTiers } from "./test-tier-check.mjs";
+import { validateFocusedSoftwareFiles, validateFocusedTestCommands, validateTestTiers } from "./test-tier-check.mjs";
+
+test("explicit software selection refuses omissions, flags, missing files and other tiers", () => {
+  const software = "apps/server/src/drill-client-server.test.ts";
+  assert.deepEqual(validateFocusedSoftwareFiles([software, "apps/server/src/pack-registry-validation.test.ts"]), []);
+  for (const files of [[], ["--passWithNoTests"], ["--testTimeout=50000"], ["vitest.config.ts"],
+    ["apps/server/src/guidance.test.ts"], ["apps/server/src/opening-catalogue-performance.test.ts"],
+    ["apps/server/src/nonexistent.test.ts"], [software, software],
+    ["apps/server/../server/src/drill-client-server.test.ts"]]) {
+    assert.ok(validateFocusedSoftwareFiles(files).length > 0, JSON.stringify(files));
+  }
+});
 
 test("focused commands cannot name tests excluded by their selected tier", () => {
   const content = "apps/server/src/guidance.test.ts";
@@ -93,4 +104,23 @@ test("indirect installed-pack loads belong to content even without a literal cor
   }
   writeFileSync(join(root, "apps/example/fixture.test.ts"), "await PackRegistry.fromDocuments([{ value: fixture }])");
   assert.deepEqual(validateTestTiers(root).filter(error => error.includes("fixture.test.ts")), []);
+});
+
+test("canonical pack resolution cannot bypass content ownership through an alias or dynamic import", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "tabiya-test-tier-"));
+  t.after(() => rmSync(root, { recursive: true }));
+  mkdirSync(join(root, "apps/example"), { recursive: true });
+  mkdirSync(join(root, "packages/example"), { recursive: true });
+  for (const [name, source] of [
+    ["call", 'readFileSync(resolvePackPath("pack"))'],
+    ["alias", 'import { resolvePackPath as locate } from "@chess-tabiya/schema/pack-path"; readFileSync(locate("pack"))'],
+    ["dynamic", 'const { resolvePackPath: locate } = await import("@chess-tabiya/schema/pack-path");'],
+  ]) {
+    writeFileSync(join(root, `apps/example/${name}.test.ts`), source);
+    assert.deepEqual(validateTestTiers(root).filter(error => error.includes(`${name}.test.ts`)), [
+      `real-content test is not assigned to the content tier: apps/example/${name}.test.ts`,
+    ]);
+  }
+  writeFileSync(join(root, "apps/example/synthetic.test.ts"), 'readFileSync("schemas/drill_pack.example.json")');
+  assert.deepEqual(validateTestTiers(root).filter(error => error.includes("synthetic.test.ts")), []);
 });

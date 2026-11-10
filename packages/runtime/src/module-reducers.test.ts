@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { orderModuleFactsByBaseKeys } from "./internal/module-fact-comparison.js";
 
 import {
   compileEvidenceManifest,
@@ -8,7 +9,9 @@ import {
   type CompiledEvidenceManifest,
   type ProjectionDeclaration,
 } from "./evidence-contract.js";
-import { MODULE_TIMING_IMAGE, type ModuleDeclaration } from "./module-contract.js";
+import { MODULE_TIMING_IMAGE, POSTCOMMIT_OBSERVED_WINDOW_POLICY, STRUCTURE_RECOGNITION_POLICY, STRUCTURE_SELECTION_GROUPS, type ModuleDeclaration } from "./module-contract.js";
+import { MODULE_REGISTRY } from "./module-registry.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 
 // Test-only compiler fixture for the reducer's synthetic manifest (value authority §1).
 const declareEvidence = <T>(producer: { id: string; version: number }, projection: { id: string; version: number }, payload: T) =>
@@ -22,6 +25,9 @@ import {
   factIdentity,
   moduleFact,
   reduceModulePacket,
+  orderAdmittedFacts,
+  FACT_EQUIVALENCE_CLASSES,
+  POSTCOMMIT_OBSERVED_WINDOW_REFS,
   type ModuleFact,
 } from "./module-reducers.js";
 
@@ -101,6 +107,150 @@ function fact(id: string, operands: Readonly<Record<string, unknown>>, exactness
     eventId: typeof operands.nodeId === "string" ? operands.nodeId : null,
   };
 }
+
+describe("D4095 Structure recognition policy (comparator controls, not chess qualification)", () => {
+  const current = MODULE_REGISTRY.byId.get("structure_nudge")!;
+  const owned = (id: string, version = 1, exactness: ProjectionDeclaration["exactness"] = "exact", operands: Record<string, unknown> = {}) => {
+    const current = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === id && row.version === version);
+    if (current !== undefined) return moduleFact(PRIMARY_EVIDENCE_MANIFEST, declareEvidence(current.producer, { id, version }, operands));
+    const original = { ...projection(id, exactness), version };
+    return moduleFact({ ...manifest([id]), projections: [original] }, declareEvidence(producer, { id, version }, operands));
+  };
+  const generic = owned("rules.structural.reading.pawn_connectivity");
+  const authored = owned("theory.shapes.firing", 3, "authored", { square: "c3" });
+  const oldPolicy = { ...current, selection: { ...current.selection, policy: { id: "production.module_local", version: 1 } } };
+  it("pins exact policy and all three recognition/four generic refs", () => {
+    expect(current.consumer).toEqual({ id: "module.structure_nudge", version: 2 });
+    expect(current.selection.policy).toEqual(STRUCTURE_RECOGNITION_POLICY);
+    expect(STRUCTURE_SELECTION_GROUPS.recognition).toEqual(["rules.structural.reading.named_structure@2", "theory.endgame.setup_match@1", "theory.shapes.firing@3"]);
+    expect(STRUCTURE_SELECTION_GROUPS.generic).toEqual(["rules.structural.reading.space@1", "rules.structural.reading.pawn_connectivity@1", "rules.phase.reading@2", "rules.endgame.classification@1"]);
+  });
+  it("prefers genuine recognition without promoting source risk or changing critical precedence", () => {
+    expect(orderAdmittedFacts(oldPolicy, [authored, generic])).toEqual([generic, authored]);
+    expect(orderAdmittedFacts(current, [generic, authored])).toEqual([authored, generic]);
+    expect(authored.projection.exactness).toBe("authored");
+    for (const kind of ["checkmate", "promotion", "castled", "last_of_role"]) {
+      const critical = owned(`rules.transition.event.${kind}`);
+      expect(orderAdmittedFacts(current, [authored, critical, generic])[0]).toBe(critical);
+    }
+  });
+  it("keeps within-group exactness, measured lift and deterministic ties", () => {
+    const named = owned("rules.structural.reading.named_structure", 2, "convention", { square: "e4" });
+    const setup = owned("theory.endgame.setup_match", 1, "convention", { square: "b7" });
+    const phase = owned("rules.phase.reading", 2, "convention");
+    for (const values of [[authored, setup, named], [phase, generic]]) {
+      expect(orderAdmittedFacts(current, values)).toEqual(orderAdmittedFacts(oldPolicy, values));
+      const lifts = [{ projectionId: values[1]!.projection.id, lift: 9, source: "Comparator fixture only", measuredAt: "2026-11-05", corpus: "synthetic" }];
+      expect(orderAdmittedFacts(current, values, lifts)).toEqual(orderAdmittedFacts(oldPolicy, values, lifts));
+    }
+  });
+  it("refuses copied summaries, relabelled projections and forged source exactness", () => {
+    for (const copied of [
+      { ...generic },
+      { ...generic, projection: authored.projection },
+      { ...authored, projection: { ...authored.projection, exactness: "exact" as const } },
+      { ...generic, retainedOperands: { id: "lucena", type: "recognition" } },
+    ]) expect(() => orderAdmittedFacts(current, [copied, authored])).toThrow(/MODULE_FACT_UNOWNED/u);
+  });
+  it("keeps old ref versions, other modules and crossed consumer/policy guards unboosted", () => {
+    for (const old of [owned("theory.shapes.firing", 2, "authored"), owned("rules.structural.reading.named_structure", 1, "convention"), owned("theory.endgame.setup_match", 2, "convention")]) {
+      const declared = PRIMARY_EVIDENCE_MANIFEST.projections.includes(old.projection);
+      if (declared) expect(orderAdmittedFacts(current, [old, generic])).toEqual([generic, old]);
+      else expect(() => orderAdmittedFacts(current, [old, generic])).toThrow(/MODULE_FACT_DECLARATION/u);
+    }
+    for (const declaration of [oldPolicy,
+      { ...current, consumer: { id: "module.structure_nudge", version: 1 } },
+      { ...current, consumer: { id: "module.theory_breadcrumb", version: 2 } },
+      { ...current, selection: { ...current.selection, policy: { ...STRUCTURE_RECOGNITION_POLICY, version: 2 } } },
+      { ...current, selection: { ...current.selection, policy: { id: "production.structure_recognition_copy", version: 1 } } },
+      ...MODULE_REGISTRY.modules.filter(m => m.id !== "structure_nudge").map(m => ({ ...m, selection: { ...m.selection, policy: STRUCTURE_RECOGNITION_POLICY } })),
+    ]) expect(orderAdmittedFacts(declaration, [authored, generic])).toEqual([generic, authored]);
+  });
+});
+
+describe("D4058 finite Nudge observed-window product ordering (comparator fixtures, not chess qualification)", () => {
+  const current = MODULE_REGISTRY.byId.get("postcommit_nudge")!;
+  const sequence = (ref: string): ModuleFact => {
+    const [id, version] = ref.split("@");
+    const value = fact(id!, { square: "c3" }, "convention");
+    return { ...value, projection: { ...value.projection, version: Number(version) } };
+  };
+  const transition = fact("rules.transition.event.slider_ray", { square: "c3" });
+  const keys = (facts: readonly ModuleFact[]) => facts.map(value => `${value.projection.id}@${value.projection.version}`);
+  it("declares exactly eight current pairs with no registered duplicate-class overlap", () => {
+    expect(current.consumer).toEqual({ id: "module.postcommit_nudge", version: 2 });
+    expect(current.selection.policy).toEqual(POSTCOMMIT_OBSERVED_WINDOW_POLICY);
+    expect(POSTCOMMIT_OBSERVED_WINDOW_REFS).toEqual([
+      "derived.pawn.sequence.harassment_pressure@3", "derived.tactic.deflection_observed@3",
+      "derived.tactic.attraction_observed@3", "derived.tactic.line_blocker_clearance_observed@3",
+      "derived.tactic.square_clearance_observed@3", "derived.tactic.interference_observed@3",
+      "derived.tactic.check_zwischenzug_observed@3", "derived.tactic.overload_exploitation_observed@3",
+    ]);
+    const equivalenceIds = FACT_EQUIVALENCE_CLASSES.flatMap(row => row.projections);
+    expect(POSTCOMMIT_OBSERVED_WINDOW_REFS.some(ref => equivalenceIds.includes(ref.split("@")[0]!))).toBe(false);
+  });
+  for (const ref of POSTCOMMIT_OBSERVED_WINDOW_REFS) {
+    it(`prefers a complete ${ref} to an isolated exact transition without changing its source class`, () => {
+      const observed = sequence(ref), original = JSON.stringify(observed);
+      expect(keys(orderModuleFactsByBaseKeys(current, [transition, observed]))).toEqual([ref, "rules.transition.event.slider_ray@1"]);
+      expect(JSON.stringify(observed)).toBe(original);
+      for (const id of ["checkmate", "promotion", "castled", "last_of_role"]) {
+        const critical = fact(`rules.transition.event.${id}`, {});
+        expect(orderModuleFactsByBaseKeys(current, [observed, critical])[0]).toBe(critical);
+      }
+    });
+    it(`does not promote a predecessor version of ${ref}`, () => {
+      const old = sequence(ref.replace("@3", "@2"));
+      expect(orderModuleFactsByBaseKeys(current, [old, transition])).toEqual([transition, old]);
+    });
+  }
+  it("does not promote other window families, unknown policy/version or wrong consumer/version", () => {
+    for (const ref of ["derived.exchange.trade_completed@2", "derived.pawn.sequence.contact_timing@3", "derived.tactic.sequence.defender_consequence@3"]) {
+      const other = sequence(ref);
+      expect(orderModuleFactsByBaseKeys(current, [other, transition])).toEqual([transition, other]);
+    }
+    const observed = sequence(POSTCOMMIT_OBSERVED_WINDOW_REFS[0]!);
+    for (const module of [
+      { ...current, selection: { ...current.selection, policy: { ...POSTCOMMIT_OBSERVED_WINDOW_POLICY, version: 1 } } },
+      { ...current, selection: { ...current.selection, policy: { id: "production.module_local", version: 1 } } },
+      { ...current, consumer: { id: "module.postcommit_nudge", version: 1 } },
+      { ...current, consumer: { id: "module.review_map", version: 2 } },
+    ]) expect(orderModuleFactsByBaseKeys(module, [observed, transition])).toEqual([transition, observed]);
+  });
+  it("leaves every other actual module's old order unchanged even if given the Nudge policy", () => {
+    const observed = sequence(POSTCOMMIT_OBSERVED_WINDOW_REFS[0]!);
+    for (const module of MODULE_REGISTRY.byId.values()) {
+      if (module.id === "postcommit_nudge") continue;
+      expect(module.selection.policy).toEqual(module.id === "structure_nudge" ? STRUCTURE_RECOGNITION_POLICY : { id: "production.module_local", version: 1 });
+      expect(orderModuleFactsByBaseKeys({ ...module, selection: { ...module.selection, policy: POSTCOMMIT_OBSERVED_WINDOW_POLICY } }, [observed, transition]))
+        .toEqual([transition, observed]);
+    }
+  });
+  it("keeps the exact registered duplicate representative under the new Nudge convention", () => {
+    const measured = fact("rules.structural.predicate.isolated_pawn", { color: "white", file: "c" }, "measured");
+    const exact = fact("rules.structural.reading.isolated_pawn", { color: "white", file: "c" }, "exact");
+    expect(dedupeByFactIdentity(orderModuleFactsByBaseKeys(current, [measured, exact]))).toEqual([exact]);
+  });
+  it("D3767 orders only the current grade after critical/window facts and before routine changes", () => {
+    const grade = sequence("derived.grade.move_quality@2"), oldGrade = sequence("derived.grade.move_quality@1");
+    const critical = fact("rules.transition.event.castled", {}), window = sequence(POSTCOMMIT_OBSERVED_WINDOW_REFS[0]!);
+    const trade = sequence("derived.exchange.trade_completed@2");
+    expect(orderModuleFactsByBaseKeys(current, [transition, trade, grade, window, critical]).slice(0, 3)).toEqual([critical, window, grade]);
+    expect(orderModuleFactsByBaseKeys(current, [oldGrade, transition])).toEqual([transition, oldGrade]);
+    expect(orderModuleFactsByBaseKeys(current, [transition, grade]).slice(0, 1)).toEqual([grade]);
+    expect(applyBackstop(current, [critical, window, grade], 3, false)).toEqual([critical, window]);
+  });
+  it("uses a transitive overload-first key within observed windows without inventing subsumption", () => {
+    const values = POSTCOMMIT_OBSERVED_WINDOW_REFS.map(sequence);
+    const ordered = orderModuleFactsByBaseKeys(current, values);
+    expect(ordered[0]!.projection.id).toBe("derived.tactic.overload_exploitation_observed");
+    expect(applyDeclaredSubsumption(ordered)).toEqual(ordered);
+    for (const left of values) for (const middle of values) for (const right of values) {
+      const first = orderModuleFactsByBaseKeys(current, [left, middle, right]);
+      expect(keys(orderModuleFactsByBaseKeys(current, [...first].reverse()))).toEqual(keys(first));
+    }
+  });
+});
 
 describe("learner module semantic reducers", () => {
   it("deduplicates only registered cross-projection identities and preserves polarity", () => {

@@ -240,8 +240,10 @@ export function parseRelatedProgress(value: unknown, sourceRunId: string): reado
 
 export function progressRecommendationSentence(item: ProgressRecommendation): string {
   return item.kind === "shape_encounter"
-    ? `You met ${item.shapeName} in ${item.runCount} of your preserved runs and have no countable attempt recorded in a rehearsal that names it.`
-    : `Your repertoire ${item.repertoireName} has no answer to ${item.replySan} after ${item.line.join(" ")}; this population reached it about once every ${item.gamesUntilSeen} games. ${CORPUS_GUARD}`;
+    ? `You met ${item.shapeName} in ${item.runCount} of your preserved runs.`
+    : item.replySan === "" && item.line.length === 0
+      ? `Your repertoire ${item.repertoireName} has no answer recorded at its starting position. ${CORPUS_GUARD}`
+      : `Your repertoire ${item.repertoireName} has no answer to ${item.replySan} after ${item.line.join(" ")}; this population reached it about once every ${item.gamesUntilSeen} games. ${CORPUS_GUARD}`;
 }
 
 export function parseProgressRecommendations(value: unknown): ProgressRecommendationPage {
@@ -254,7 +256,13 @@ export function parseProgressRecommendations(value: unknown): ProgressRecommenda
     if (kind === "repertoire_gap") {
       const repertoireId = string(item.repertoireId, `recommendations/${index}/repertoireId`), gapKey = string(item.gapKey, `recommendations/${index}/gapKey`), identity = `${kind}\0${repertoireId}\0${gapKey}`;
       if (identities.has(identity)) throw new TypeError("recommendations contain a duplicate identity"); identities.add(identity);
-      return Object.freeze({ kind, repertoireId, repertoireName: string(item.repertoireName, `recommendations/${index}/repertoireName`), gapKey, replySan: string(item.replySan, `recommendations/${index}/replySan`), line: stringArray(item.line, `recommendations/${index}/line`), gamesUntilSeen: integer(item.gamesUntilSeen, `recommendations/${index}/gamesUntilSeen`, 1) });
+      const line = stringArray(item.line, `recommendations/${index}/line`);
+      const gamesUntilSeen = integer(item.gamesUntilSeen, `recommendations/${index}/gamesUntilSeen`, 1);
+      const root = item.replySan === "" && line.length === 0 && gamesUntilSeen === 1;
+      const replySan = root ? "" : string(item.replySan, `recommendations/${index}/replySan`);
+      if (!root && replySan.trim().length === 0) throw new TypeError(`recommendations/${index}/replySan must name a move`);
+      return Object.freeze({ kind, repertoireId, repertoireName: string(item.repertoireName, `recommendations/${index}/repertoireName`), gapKey,
+        replySan, line, gamesUntilSeen });
     }
     const shapeId = string(item.shapeId, `recommendations/${index}/shapeId`), identity = `${kind}\0${shapeId}`;
     if (identities.has(identity)) throw new TypeError("recommendations contain a duplicate identity"); identities.add(identity);

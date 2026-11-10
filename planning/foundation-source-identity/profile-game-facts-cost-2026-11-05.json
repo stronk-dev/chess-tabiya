@@ -1,0 +1,107 @@
+{
+  "date": "2026-11-05",
+  "command": "make profile-source-cost",
+  "actualPath": [
+    {
+      "instrument": "disposable D4147",
+      "node": "v24.22.1",
+      "input": "tools/r2-selection-harness/imported-sample.pgn",
+      "sourceLicence": "CC0-1.0",
+      "nativeSessions": 200,
+      "learnerSides": {
+        "white": 100,
+        "black": 100
+      },
+      "uniqueLines": 10,
+      "plies": 64,
+      "rejectedInputs": 0,
+      "scope": "Actual claimed GAME scope, complete production projector, atomic four-family publication, parsed snapshot and five Profile paths; independent original helper parity"
+    },
+    {
+      "completed": 200,
+      "workerAndProbeMs": 575656.58,
+      "experimentBeforeMismatchMs": 580057.29,
+      "productionProjectorMs": 570788.45,
+      "independentSourceOperandProbeMs": 1502.99,
+      "originalSourceValues": 25800,
+      "coldProfileMs": 1061.71,
+      "warmProfileMs": 381.78,
+      "coldSourceImageReads": 200,
+      "laterSourceImageReads": 0,
+      "results": [
+        {
+          "metricId": "fianchetto_setup_rate",
+          "games": 200,
+          "numerator": 60,
+          "eligibleGames": 200,
+          "detailMs": 361.18,
+          "shareMs": 357.22
+        },
+        {
+          "metricId": "fianchetto_knight_screen_rate",
+          "games": 200,
+          "numerator": 30,
+          "eligibleGames": 200,
+          "detailMs": 377.11,
+          "shareMs": 365.18
+        },
+        {
+          "metricId": "castle_kingside_rate",
+          "games": 200,
+          "numerator": 140,
+          "eligibleGames": 200,
+          "detailMs": 358.93,
+          "shareMs": 354.61
+        },
+        {
+          "metricId": "castle_queenside_rate",
+          "games": 200,
+          "numerator": 30,
+          "eligibleGames": 200,
+          "detailMs": 344.74,
+          "shareMs": 352.12
+        }
+      ],
+      "limits": "Synthetic repeated native replay with actual GAME issuer/storage/Profile; no human/source-qualification or browser/network latency proof; source probes timed separately from production projection"
+    },
+    {
+      "control": "D4149 first-owner versus first-side",
+      "countedGames": 201,
+      "independentlyProvedEligibleGames": 200,
+      "cardState": "abstained",
+      "abstention": "incomplete_card",
+      "sourceFirstNode": "research-profile-baseline-mismatch:node:0",
+      "metricFirstNode": "research-profile-baseline-mismatch:node:4",
+      "sourceRetainedRights": true,
+      "metricRetainedRights": false,
+      "consequence": "Count201 overall, retain200 independently proved eligible refs, abstain the whole affected card; never retarget the baseline or hide the game"
+    }
+  ],
+  "priorBaseline": {
+    "productionProjectorMs": 545853.71,
+    "workerAndProbeMs": 552931.04,
+    "coldProfileMs": 854.35,
+    "warmProfileMs": 351.57,
+    "source": "design/research/player-style-metrics.md \u2014 2026-11-05 original D4147 workload"
+  },
+  "comparisonLimits": "Two workload executions, not paired statistical attribution. Same repeated CC0 lines/200native64-ply games/100eachside and full production batch/projector. Source probes run before projection and are separately timed; current probe reuses the already acquired GAME scope, so its component cost is not comparable to old live-source acquisition. Worker/profile execute in this instrument process with separate real SQLite connections; not thread/network/browser latency, source qualification or200independent humans.",
+  "parityCoverage": {
+    "independentlyAsserted": [
+      "every normal GAME first-owner BEFORE joins original first-side castling source",
+      "rights eligibility equals original helper",
+      "earliest setup/screen snapshot refs and numerator counts",
+      "four castling/configuration eligibility denominators",
+      "whole warm/cold profile equality and zero later V4 reads",
+      "201st mismatch stays201counted/200known refs/whole-card incomplete"
+    ],
+    "executedAndObserved": [
+      "all four measured cards/details and observed numerators60/30/140/30",
+      "consented sharing for each card with matching game count"
+    ],
+    "notIndependentlyRebuilt": [
+      "all castling contributor refs/numerator calculations",
+      "complete shared-card text and metadata bytes",
+      "all pre-existing bootstrap/tier/card-statistic implementation"
+    ]
+  }
+}

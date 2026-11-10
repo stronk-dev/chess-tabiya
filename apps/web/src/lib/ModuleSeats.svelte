@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tick, untrack } from "svelte";
+  import { onDestroy, tick } from "svelte";
   // rfc/module-registration.md §2.6/§3 + rfc/play-composition.md §4 — the companion region's module
   // seats. A seat renders only what one strict-parsed, digest-bound packet delivered: collapsed as a
   // badged row, expanded as its card, or quiet when honestly empty. At most one seat is expanded;
@@ -9,7 +9,7 @@
   import RehearsalAction from "./RehearsalAction.svelte";
   import CompanionSeat from "./CompanionSeat.svelte";
   import type { ParsedModulePacket } from "./module-query-response.js";
-  import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type MissingAttemptRecovery, type ModuleSeatActions, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
+  import { COMPACT_SEAT_LABELS, occupiedRailSeats, seatBadge, unavailableSentences, type MissingAttemptRecovery, type ModuleSeatActions, type PlayExpandedSeat, type PlaySeatModule, type SeatDeclaration, type StagedCue } from "./module-seats.js";
 
   interface Props {
     seats: readonly SeatDeclaration[];
@@ -17,6 +17,9 @@
     pending: ReadonlySet<PlaySeatModule>;
     failed: ReadonlySet<PlaySeatModule>;
     expanded: PlaySeatModule | undefined;
+    selection?: PlayExpandedSeat | undefined;
+    regionActive?: boolean;
+    regionGeneration?: number;
     band?: boolean;
     campaignEncounter?: boolean;
     /** Why an on-request door cannot open right now (e.g. no subject yet); absent when it can. */
@@ -29,12 +32,12 @@
     onKeepPlaying?: ((module: PlaySeatModule, packet: ParsedModulePacket) => void) | undefined;
     keepPlayingBlocked?: string | undefined;
     onToggle: (module: PlaySeatModule) => void;
-    onRequest: (module: PlaySeatModule) => void;
+    onRequest: (module: PlaySeatModule) => void | Promise<readonly ParsedModulePacket[] | undefined>;
     onConfirmStaged: () => void;
     onReviseStaged: () => void;
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { seats, packets, pending, failed, expanded, band = false, campaignEncounter = false, doorBlocked, staged, actions = {}, emptyRewindActions = {}, emptyRewindUnavailable, missingAttemptRecovery, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
+  let { seats, packets, pending, failed, expanded, selection, regionActive = true, regionGeneration = 0, band = false, campaignEncounter = false, doorBlocked, staged, actions = {}, emptyRewindActions = {}, emptyRewindUnavailable, missingAttemptRecovery, onKeepPlaying, keepPlayingBlocked, onToggle, onRequest, onConfirmStaged, onReviseStaged, onFocusSquares }: Props = $props();
 
   const NUDGE_HEADLINE = "The consequence exposed something concrete.";
   const NUDGE_CLOSING = "Your played line stays preserved.";
@@ -75,26 +78,47 @@
     return () => { current = false; };
   });
 
-  let recoveryFocus: { readonly module: PlaySeatModule; readonly button: HTMLButtonElement } | undefined;
-  $effect.pre(() => {
-    const failures = failed, requests = pending;
-    untrack(() => {
-      const focus = recoveryFocus;
-      if (focus === undefined || failures.has(focus.module) || requests.has(focus.module)) return;
-      recoveryFocus = undefined;
-      if (document.activeElement !== focus.button) return;
-      const selector = focus.button.closest(".module-seat")?.querySelector<HTMLButtonElement>(".seat-row");
-      void tick().then(() => {
-        if (document.activeElement !== document.body && document.activeElement !== focus.button) return;
-        if (selector?.isConnected) selector.focus();
-      });
-    });
-  });
-
-  function retry(module: PlaySeatModule, button: HTMLButtonElement): void {
+  let recoveryEpoch = 0, alive = true;
+  let cleanupRecovery: (() => void) | undefined;
+  onDestroy(() => { alive = false; recoveryEpoch += 1; cleanupRecovery?.(); });
+  async function retry(module: PlaySeatModule, button: HTMLButtonElement): Promise<void> {
     if (pending.has(module) || !failed.has(module)) return;
-    recoveryFocus = { module, button };
-    onRequest(module);
+    cleanupRecovery?.();
+    const epoch = ++recoveryEpoch;
+    const regionEpoch = regionGeneration;
+    const selector = button.closest(".module-seat")?.querySelector<HTMLButtonElement>(".seat-row");
+    const region = frame.closest<HTMLElement>("#run-support-region");
+    let ownsFocus = document.activeElement === button;
+    const movedFocus = (event: FocusEvent): void => {
+      if (event.target !== button && (event.target !== document.body || button.isConnected)) ownsFocus = false;
+    };
+    document.addEventListener("focusin", movedFocus);
+    let listening = true;
+    const cleanup = (): void => {
+      if (!listening) return;
+      listening = false;
+      document.removeEventListener("focusin", movedFocus);
+      if (cleanupRecovery === cleanup) cleanupRecovery = undefined;
+    };
+    cleanupRecovery = cleanup;
+    try {
+      const result = await onRequest(module);
+      if (!result) return;
+      const packet = result.find(packet => packet.module === module);
+      const current = () => alive && epoch === recoveryEpoch && regionActive && regionGeneration === regionEpoch && frame.isConnected && packet !== undefined
+        && packets.get(module) === packet && !pending.has(module) && !failed.has(module) && staged === undefined
+        && ((selection ?? expanded) === undefined || (selection ?? expanded) === module);
+      if (!ownsFocus || !current()) return;
+      await tick();
+      if (!ownsFocus || !current() || (document.activeElement !== button && document.activeElement !== document.body)) return;
+      // A silent result removes its selector. Reuse the default More door, or the named
+      // Support region on desktop; never refetch or move focus to another evidence card.
+      const target = selector?.isConnected ? selector : region?.isConnected
+        ? region.querySelector<HTMLButtonElement>(".companion-tools > .seat-row") ?? region : undefined;
+      target?.focus();
+    } finally {
+      cleanup();
+    }
   }
 </script>
 
@@ -157,7 +181,7 @@
           {:else}
             {#if seat.module === "postcommit_nudge" && packet.items.length > 0}<strong>{NUDGE_HEADLINE}</strong>{/if}
             {#if packet.items.length > 0}
-              <PresentedEvidence items={packet.items} {onFocusSquares} />
+              <PresentedEvidence items={packet.items} {onFocusSquares} detailsScope={packet} detailsActive={regionActive && open} detailsGeneration={regionGeneration} />
             {:else if packet.empty !== null && (packet.empty.kind === "stated_absence" || packet.empty.kind === "unavailable_source")}
               <p class="stated-empty" data-empty={packet.empty.kind}>{packet.empty.sentence}</p>
             {/if}

@@ -80,6 +80,7 @@ import { TheoryLibrary } from "./theory-library.js";
 import { streamingBinaryArtifactProbe } from "./engine-binary-digest.js";
 import { SharedEngineSupervisor } from "./shared-engine-supervisor.js";
 import { OPERATOR_PROVIDER_BOUNDS, composeProviderTraversalApplication, type ProviderExchangeBounds, type ProviderTraversalApplication } from "./provider-traversal.js";
+import { ExchangeMaiaTaskSource } from "./provider-maia.js";
 import { BotOpponentProviders } from "./bot-opponent-operation.js";
 import { BotProviderAvailability } from "./bot-opponent-source.js";
 import { CampaignRegistry } from "./campaign-registry.js";
@@ -744,6 +745,7 @@ async function composeServices(
     bounds: APPLICATION_PROVIDER_BOUNDS,
     ...(builtInTablebase ? { tablebaseHealth: providerHealth } : {}),
     ...(builtInCorpus ? { explorerHealth: providerHealth } : {}),
+    ...(engineMode === "maia" ? { maiaTaskHealth: providerHealth } : {}),
   });
   const corpusSource = builtInCorpus
     ? new ExchangeCorpusSource({ scheduler: providers.scheduler, monotonicNowMs: () => providerHealth.monotonicNow() })
@@ -754,6 +756,8 @@ async function composeServices(
       ? new ExchangeTablebaseSource({ scheduler: providers.scheduler, monotonicNowMs: () => providerHealth.monotonicNow(), health: providerHealth })
       : healthReportedTablebase(fixtureTablebase!, providerHealth);
   selector = new OpponentSelector(opponentEngines, {
+    ...(engineMode === "maia" ? { maiaTaskSource: new ExchangeMaiaTaskSource({ scheduler: providers.scheduler, engines: providerEngines,
+      monotonicNowMs: () => providerHealth.monotonicNow(), health: providerHealth }) } : {}),
     ...(engineMode === "mock" ? { maiaEngineId: "mock-opponent", strongEngineId: "mock-opponent" } : {}),
     health: providerHealth,
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
@@ -809,6 +813,7 @@ async function composeServices(
     progressStorage: storage,
     opponentSelector: selector,
     shapeRegistry: shapes,
+    ...(corpusSource === undefined ? {} : { corpusSource }),
     ...(tablebaseSource === undefined ? {} : { tablebaseSource }),
     botOpponent,
     botAvailability: () => botAvailability.snapshot(),

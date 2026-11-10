@@ -1,15 +1,27 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount, untrack } from "svelte";
 
   import type { ShapeEntryView } from "./api.js";
+  import type { GuidedShapeFiringValue } from "../../../../packages/runtime/src/guided-shape-query.js";
+  import type { PresentedShapeFiring } from "@chess-tabiya/runtime/client";
+  import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
   import { modalBoundary } from "./modal-boundary.js";
   interface Props {
-    entry: ShapeEntryView;
+    entry?: ShapeEntryView | undefined;
+    match: GuidedShapeFiringValue;
+    recognition: PresentedShapeFiring["presentation"];
     onClose: () => void;
     onInspect: () => void;
   }
 
-  let { entry, onClose, onInspect }: Props = $props();
+  let { entry, match, recognition, onClose, onInspect }: Props = $props();
+  // This keyed panel owns these callbacks for its entire lifetime. Reactive prop getters
+  // from a destroyed panel must never resolve to a replacement selection's handlers.
+  const close = untrack(() => onClose), inspect = untrack(() => onInspect);
+  let alive = true;
+  onDestroy(() => { alive = false; });
+  function closeOwned(): void { if (alive) close(); }
+  function inspectOwned(): void { if (alive) inspect(); }
   let heading: HTMLHeadingElement;
 
   onMount(() => heading.focus());
@@ -18,7 +30,7 @@
     if (event.key !== "Escape") return;
     event.preventDefault();
     event.stopPropagation();
-    onClose();
+    closeOwned();
   }
 </script>
 
@@ -27,12 +39,18 @@
 <div class="shape-panel" role="dialog" aria-modal="true" aria-labelledby="shape-panel-title" data-evidence-consumer="theory.shape_firing" use:modalBoundary>
   <header>
     <div>
-      <p class="eyebrow">Named structure · {entry.channel}{entry.publisherHandle ? ` · ${entry.publisherHandle}` : ""}</p>
-      <h2 id="shape-panel-title" tabindex="-1" bind:this={heading}>{entry.name}</h2>
+      <p class="eyebrow">Named structure · {match.authority.channel}{match.authority.publisherHandle ? ` · ${match.authority.publisherHandle}` : ""}</p>
+      <h2 id="shape-panel-title" tabindex="-1" bind:this={heading}>{match.authority.name}</h2>
     </div>
-    <button type="button" onclick={onClose}>Close</button>
+    <button type="button" onclick={closeOwned}>Close</button>
   </header>
 
+  <section aria-label="Pattern recognition">
+    {#if recognition.kind === "ready"}<PresentedEvidence items={recognition.items} />
+    {:else}<p role="status">This pattern recognition could not be displayed. The catalogue below is general authored content.</p>{/if}
+  </section>
+
+  {#if entry !== undefined}
   <section aria-labelledby="shape-plans-title">
     <h3 id="shape-plans-title">Named plans</h3>
     <p class="frame">Named plans for this structure — general to the kind of position, not advice for this one.</p>
@@ -53,7 +71,9 @@
     <div><h3>Typical mistakes</h3>{#each entry.typicalMistakes as item}<p>{item}</p>{/each}</div>
   </section>
 
-  <footer><button type="button" onclick={onInspect}>Inspect trigger and sources</button></footer>
+  {:else}<p role="status">The matching catalogue version is unavailable. General plans cannot be shown for this match.</p>{/if}
+
+  <footer><button type="button" onclick={inspectOwned}>Inspect trigger and sources</button></footer>
 </div>
 
 <style>

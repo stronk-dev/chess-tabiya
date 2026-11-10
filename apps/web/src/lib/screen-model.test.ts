@@ -159,11 +159,11 @@ describe("screen view models", () => {
       state: "preserved",
       eventSeq: 3,
       sentences: [
-        {
+        { kind: "ready", sentence: {
           reference: "pack:plan-commitment",
           text: "Checkpoint reached: Choose the setup.",
           sourceLabel: "Pack",
-        },
+        } },
       ],
     });
     const broken = structuredClone(transitioned.run);

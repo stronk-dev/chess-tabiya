@@ -1,0 +1,5768 @@
+{
+  "sourceCommit": "48a6e0f5175a47e65b48a4fc8823940db0980102",
+  "derivationRevision": 5,
+  "fixtures": [
+    {
+      "name": "material-white",
+      "run": {
+        "schemaVersion": "0.19",
+        "id": "successor-material-white",
+        "sessionKind": "position",
+        "packId": null,
+        "packDigest": null,
+        "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "start": {
+          "fen": "4k3/8/8/8/8/8/n7/R3K3 w - - 0 1",
+          "side": "white"
+        },
+        "feedbackPolicy": "attempt_end",
+        "opponentPolicy": {
+          "mode": "human_common",
+          "targetElo": 1500
+        },
+        "policyConfig": {
+          "seedMode": "fixed",
+          "locus": {
+            "executedAt": "server",
+            "engineIds": [],
+            "modelIds": []
+          }
+        },
+        "nodes": [
+          {
+            "id": "successor-material-white:node:0",
+            "parentId": null,
+            "fen": "4k3/8/8/8/8/8/n7/R3K3 w - - 0 1",
+            "transposeKey": "4k3/8/8/8/8/8/n7/R3K3 w - -",
+            "moveUci": null,
+            "moveSan": null,
+            "ply": 0,
+            "actor": "system",
+            "branchId": "successor-material-white:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          },
+          {
+            "id": "successor-material-white:node:1",
+            "parentId": "successor-material-white:node:0",
+            "fen": "4k3/8/8/8/8/8/R7/4K3 b - - 0 1",
+            "transposeKey": "4k3/8/8/8/8/8/R7/4K3 b - -",
+            "moveUci": "a1a2",
+            "moveSan": "Rxa2",
+            "ply": 1,
+            "actor": "user",
+            "branchId": "successor-material-white:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          }
+        ],
+        "branches": [
+          {
+            "id": "successor-material-white:branch:0",
+            "forkNodeId": "successor-material-white:node:0",
+            "label": "main",
+            "seed": 1,
+            "origin": "played"
+          }
+        ],
+        "events": [
+          {
+            "type": "run.started",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "id": "successor-material-white",
+              "sessionKind": "position",
+              "packId": null,
+              "packDigest": null,
+              "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "start": {
+                "fen": "4k3/8/8/8/8/8/n7/R3K3 w - - 0 1",
+                "side": "white"
+              },
+              "feedbackPolicy": "attempt_end",
+              "opponentPolicy": {
+                "mode": "human_common",
+                "targetElo": 1500
+              },
+              "policyConfig": {
+                "seedMode": "fixed",
+                "locus": {
+                  "executedAt": "server",
+                  "engineIds": [],
+                  "modelIds": []
+                }
+              },
+              "rootNode": {
+                "id": "successor-material-white:node:0",
+                "parentId": null,
+                "fen": "4k3/8/8/8/8/8/n7/R3K3 w - - 0 1",
+                "transposeKey": "4k3/8/8/8/8/8/n7/R3K3 w - -",
+                "moveUci": null,
+                "moveSan": null,
+                "ply": 0,
+                "actor": "system",
+                "branchId": "successor-material-white:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              },
+              "branch": {
+                "id": "successor-material-white:branch:0",
+                "forkNodeId": "successor-material-white:node:0",
+                "label": "main",
+                "seed": 1,
+                "origin": "played"
+              },
+              "activeCursor": {
+                "nodeId": "successor-material-white:node:0",
+                "branchId": "successor-material-white:branch:0"
+              }
+            },
+            "seq": 1
+          },
+          {
+            "type": "move.committed",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "node": {
+                "id": "successor-material-white:node:1",
+                "parentId": "successor-material-white:node:0",
+                "fen": "4k3/8/8/8/8/8/R7/4K3 b - - 0 1",
+                "transposeKey": "4k3/8/8/8/8/8/R7/4K3 b - -",
+                "moveUci": "a1a2",
+                "moveSan": "Rxa2",
+                "ply": 1,
+                "actor": "user",
+                "branchId": "successor-material-white:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              }
+            },
+            "seq": 2
+          }
+        ],
+        "activeCursor": {
+          "nodeId": "successor-material-white:node:1",
+          "branchId": "successor-material-white:branch:0"
+        }
+      },
+      "projection": {
+        "denominators": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ],
+        "observations": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.exchange.capture_class",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.material.event.role_asymmetry",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.5,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 1,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.5,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "preserved",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 1,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "preserved",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.capture",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.clock_reset",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.last_of_role",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          }
+        ],
+        "structureStats": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-white",
+            "rootKey": "position||4k3/8/8/8/8/8/n7/R3K3 w - -",
+            "rootNodeId": "successor-material-white:node:0",
+            "sessionKind": "position",
+            "packId": null,
+            "branchCount": 1,
+            "rewoundCount": 0,
+            "forkedCount": 0,
+            "groupCount": 0,
+            "outcomeCount": 0,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "material-black",
+      "run": {
+        "schemaVersion": "0.19",
+        "id": "successor-material-black",
+        "sessionKind": "position",
+        "packId": null,
+        "packDigest": null,
+        "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "start": {
+          "fen": "r3k3/N7/8/8/8/8/8/4K3 b - - 0 1",
+          "side": "black"
+        },
+        "feedbackPolicy": "attempt_end",
+        "opponentPolicy": {
+          "mode": "human_common",
+          "targetElo": 1500
+        },
+        "policyConfig": {
+          "seedMode": "fixed",
+          "locus": {
+            "executedAt": "server",
+            "engineIds": [],
+            "modelIds": []
+          }
+        },
+        "nodes": [
+          {
+            "id": "successor-material-black:node:0",
+            "parentId": null,
+            "fen": "r3k3/N7/8/8/8/8/8/4K3 b - - 0 1",
+            "transposeKey": "r3k3/N7/8/8/8/8/8/4K3 b - -",
+            "moveUci": null,
+            "moveSan": null,
+            "ply": 0,
+            "actor": "system",
+            "branchId": "successor-material-black:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          },
+          {
+            "id": "successor-material-black:node:1",
+            "parentId": "successor-material-black:node:0",
+            "fen": "4k3/r7/8/8/8/8/8/4K3 w - - 0 2",
+            "transposeKey": "4k3/r7/8/8/8/8/8/4K3 w - -",
+            "moveUci": "a8a7",
+            "moveSan": "Rxa7",
+            "ply": 1,
+            "actor": "user",
+            "branchId": "successor-material-black:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          }
+        ],
+        "branches": [
+          {
+            "id": "successor-material-black:branch:0",
+            "forkNodeId": "successor-material-black:node:0",
+            "label": "main",
+            "seed": 1,
+            "origin": "played"
+          }
+        ],
+        "events": [
+          {
+            "type": "run.started",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "id": "successor-material-black",
+              "sessionKind": "position",
+              "packId": null,
+              "packDigest": null,
+              "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "start": {
+                "fen": "r3k3/N7/8/8/8/8/8/4K3 b - - 0 1",
+                "side": "black"
+              },
+              "feedbackPolicy": "attempt_end",
+              "opponentPolicy": {
+                "mode": "human_common",
+                "targetElo": 1500
+              },
+              "policyConfig": {
+                "seedMode": "fixed",
+                "locus": {
+                  "executedAt": "server",
+                  "engineIds": [],
+                  "modelIds": []
+                }
+              },
+              "rootNode": {
+                "id": "successor-material-black:node:0",
+                "parentId": null,
+                "fen": "r3k3/N7/8/8/8/8/8/4K3 b - - 0 1",
+                "transposeKey": "r3k3/N7/8/8/8/8/8/4K3 b - -",
+                "moveUci": null,
+                "moveSan": null,
+                "ply": 0,
+                "actor": "system",
+                "branchId": "successor-material-black:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              },
+              "branch": {
+                "id": "successor-material-black:branch:0",
+                "forkNodeId": "successor-material-black:node:0",
+                "label": "main",
+                "seed": 1,
+                "origin": "played"
+              },
+              "activeCursor": {
+                "nodeId": "successor-material-black:node:0",
+                "branchId": "successor-material-black:branch:0"
+              }
+            },
+            "seq": 1
+          },
+          {
+            "type": "move.committed",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "node": {
+                "id": "successor-material-black:node:1",
+                "parentId": "successor-material-black:node:0",
+                "fen": "4k3/r7/8/8/8/8/8/4K3 w - - 0 2",
+                "transposeKey": "4k3/r7/8/8/8/8/8/4K3 w - -",
+                "moveUci": "a8a7",
+                "moveSan": "Rxa7",
+                "ply": 1,
+                "actor": "user",
+                "branchId": "successor-material-black:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              }
+            },
+            "seq": 2
+          }
+        ],
+        "activeCursor": {
+          "nodeId": "successor-material-black:node:1",
+          "branchId": "successor-material-black:branch:0"
+        }
+      },
+      "projection": {
+        "denominators": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ],
+        "observations": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.exchange.capture_class",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.material.event.role_asymmetry",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.5,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 1,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.5,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "preserved",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 1,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "preserved",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.capture",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.clock_reset",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.last_of_role",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.375,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-material-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          }
+        ],
+        "structureStats": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-material-black",
+            "rootKey": "position||r3k3/N7/8/8/8/8/8/4K3 b - -",
+            "rootNodeId": "successor-material-black:node:0",
+            "sessionKind": "position",
+            "packId": null,
+            "branchCount": 1,
+            "rewoundCount": 0,
+            "forkedCount": 0,
+            "groupCount": 0,
+            "outcomeCount": 0,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "exposure-white",
+      "run": {
+        "schemaVersion": "0.19",
+        "id": "successor-exposure-white",
+        "sessionKind": "position",
+        "packId": null,
+        "packDigest": null,
+        "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "start": {
+          "fen": "rn2k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+          "side": "white"
+        },
+        "feedbackPolicy": "attempt_end",
+        "opponentPolicy": {
+          "mode": "human_common",
+          "targetElo": 1500
+        },
+        "policyConfig": {
+          "seedMode": "fixed",
+          "locus": {
+            "executedAt": "server",
+            "engineIds": [],
+            "modelIds": []
+          }
+        },
+        "nodes": [
+          {
+            "id": "successor-exposure-white:node:0",
+            "parentId": null,
+            "fen": "rn2k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+            "transposeKey": "rn2k3/8/1n6/2B5/8/8/8/R3K3 w - -",
+            "moveUci": null,
+            "moveSan": null,
+            "ply": 0,
+            "actor": "system",
+            "branchId": "successor-exposure-white:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          },
+          {
+            "id": "successor-exposure-white:node:1",
+            "parentId": "successor-exposure-white:node:0",
+            "fen": "rn2k3/8/1B6/8/8/8/8/R3K3 b - - 0 1",
+            "transposeKey": "rn2k3/8/1B6/8/8/8/8/R3K3 b - -",
+            "moveUci": "c5b6",
+            "moveSan": "Bxb6",
+            "ply": 1,
+            "actor": "user",
+            "branchId": "successor-exposure-white:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          }
+        ],
+        "branches": [
+          {
+            "id": "successor-exposure-white:branch:0",
+            "forkNodeId": "successor-exposure-white:node:0",
+            "label": "main",
+            "seed": 1,
+            "origin": "played"
+          }
+        ],
+        "events": [
+          {
+            "type": "run.started",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "id": "successor-exposure-white",
+              "sessionKind": "position",
+              "packId": null,
+              "packDigest": null,
+              "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "start": {
+                "fen": "rn2k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+                "side": "white"
+              },
+              "feedbackPolicy": "attempt_end",
+              "opponentPolicy": {
+                "mode": "human_common",
+                "targetElo": 1500
+              },
+              "policyConfig": {
+                "seedMode": "fixed",
+                "locus": {
+                  "executedAt": "server",
+                  "engineIds": [],
+                  "modelIds": []
+                }
+              },
+              "rootNode": {
+                "id": "successor-exposure-white:node:0",
+                "parentId": null,
+                "fen": "rn2k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+                "transposeKey": "rn2k3/8/1n6/2B5/8/8/8/R3K3 w - -",
+                "moveUci": null,
+                "moveSan": null,
+                "ply": 0,
+                "actor": "system",
+                "branchId": "successor-exposure-white:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              },
+              "branch": {
+                "id": "successor-exposure-white:branch:0",
+                "forkNodeId": "successor-exposure-white:node:0",
+                "label": "main",
+                "seed": 1,
+                "origin": "played"
+              },
+              "activeCursor": {
+                "nodeId": "successor-exposure-white:node:0",
+                "branchId": "successor-exposure-white:branch:0"
+              }
+            },
+            "seq": 1
+          },
+          {
+            "type": "move.committed",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "node": {
+                "id": "successor-exposure-white:node:1",
+                "parentId": "successor-exposure-white:node:0",
+                "fen": "rn2k3/8/1B6/8/8/8/8/R3K3 b - - 0 1",
+                "transposeKey": "rn2k3/8/1B6/8/8/8/8/R3K3 b - -",
+                "moveUci": "c5b6",
+                "moveSan": "Bxb6",
+                "ply": 1,
+                "actor": "user",
+                "branchId": "successor-exposure-white:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              }
+            },
+            "seq": 2
+          }
+        ],
+        "activeCursor": {
+          "nodeId": "successor-exposure-white:node:1",
+          "branchId": "successor-exposure-white:branch:0"
+        }
+      },
+      "projection": {
+        "denominators": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ],
+        "observations": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.exchange.capture_class",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.king.captured_zone_defender",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.material.event.role_asymmetry",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.9166666666666666,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.08333333333333333,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.25,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.tactic.defender_exposure",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.9166666666666666,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.defender_removed",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.08333333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.25,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "preserved",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.capture",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.clock_reset",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.last_of_role",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.08333333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.3333333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.2916666666666667,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.625,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.4166666666666667,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-white:node:1",
+                "eventSeq": 2
+              }
+            ]
+          }
+        ],
+        "structureStats": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-white",
+            "rootKey": "position||rn2k3/8/1n6/2B5/8/8/8/R3K3 w - -",
+            "rootNodeId": "successor-exposure-white:node:0",
+            "sessionKind": "position",
+            "packId": null,
+            "branchCount": 1,
+            "rewoundCount": 0,
+            "forkedCount": 0,
+            "groupCount": 0,
+            "outcomeCount": 0,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "exposure-black",
+      "run": {
+        "schemaVersion": "0.19",
+        "id": "successor-exposure-black",
+        "sessionKind": "position",
+        "packId": null,
+        "packDigest": null,
+        "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "start": {
+          "fen": "3k3r/8/8/8/5b2/6N1/8/3K2BR b - - 0 1",
+          "side": "black"
+        },
+        "feedbackPolicy": "attempt_end",
+        "opponentPolicy": {
+          "mode": "human_common",
+          "targetElo": 1500
+        },
+        "policyConfig": {
+          "seedMode": "fixed",
+          "locus": {
+            "executedAt": "server",
+            "engineIds": [],
+            "modelIds": []
+          }
+        },
+        "nodes": [
+          {
+            "id": "successor-exposure-black:node:0",
+            "parentId": null,
+            "fen": "3k3r/8/8/8/5b2/6N1/8/3K2BR b - - 0 1",
+            "transposeKey": "3k3r/8/8/8/5b2/6N1/8/3K2BR b - -",
+            "moveUci": null,
+            "moveSan": null,
+            "ply": 0,
+            "actor": "system",
+            "branchId": "successor-exposure-black:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          },
+          {
+            "id": "successor-exposure-black:node:1",
+            "parentId": "successor-exposure-black:node:0",
+            "fen": "3k3r/8/8/8/8/6b1/8/3K2BR w - - 0 2",
+            "transposeKey": "3k3r/8/8/8/8/6b1/8/3K2BR w - -",
+            "moveUci": "f4g3",
+            "moveSan": "Bxg3",
+            "ply": 1,
+            "actor": "user",
+            "branchId": "successor-exposure-black:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          }
+        ],
+        "branches": [
+          {
+            "id": "successor-exposure-black:branch:0",
+            "forkNodeId": "successor-exposure-black:node:0",
+            "label": "main",
+            "seed": 1,
+            "origin": "played"
+          }
+        ],
+        "events": [
+          {
+            "type": "run.started",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "id": "successor-exposure-black",
+              "sessionKind": "position",
+              "packId": null,
+              "packDigest": null,
+              "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "start": {
+                "fen": "3k3r/8/8/8/5b2/6N1/8/3K2BR b - - 0 1",
+                "side": "black"
+              },
+              "feedbackPolicy": "attempt_end",
+              "opponentPolicy": {
+                "mode": "human_common",
+                "targetElo": 1500
+              },
+              "policyConfig": {
+                "seedMode": "fixed",
+                "locus": {
+                  "executedAt": "server",
+                  "engineIds": [],
+                  "modelIds": []
+                }
+              },
+              "rootNode": {
+                "id": "successor-exposure-black:node:0",
+                "parentId": null,
+                "fen": "3k3r/8/8/8/5b2/6N1/8/3K2BR b - - 0 1",
+                "transposeKey": "3k3r/8/8/8/5b2/6N1/8/3K2BR b - -",
+                "moveUci": null,
+                "moveSan": null,
+                "ply": 0,
+                "actor": "system",
+                "branchId": "successor-exposure-black:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              },
+              "branch": {
+                "id": "successor-exposure-black:branch:0",
+                "forkNodeId": "successor-exposure-black:node:0",
+                "label": "main",
+                "seed": 1,
+                "origin": "played"
+              },
+              "activeCursor": {
+                "nodeId": "successor-exposure-black:node:0",
+                "branchId": "successor-exposure-black:branch:0"
+              }
+            },
+            "seq": 1
+          },
+          {
+            "type": "move.committed",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "node": {
+                "id": "successor-exposure-black:node:1",
+                "parentId": "successor-exposure-black:node:0",
+                "fen": "3k3r/8/8/8/8/6b1/8/3K2BR w - - 0 2",
+                "transposeKey": "3k3r/8/8/8/8/6b1/8/3K2BR w - -",
+                "moveUci": "f4g3",
+                "moveSan": "Bxg3",
+                "ply": 1,
+                "actor": "user",
+                "branchId": "successor-exposure-black:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              }
+            },
+            "seq": 2
+          }
+        ],
+        "activeCursor": {
+          "nodeId": "successor-exposure-black:node:1",
+          "branchId": "successor-exposure-black:branch:0"
+        }
+      },
+      "projection": {
+        "denominators": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ],
+        "observations": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.exchange.capture_class",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.king.captured_zone_defender",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.material.event.role_asymmetry",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.9166666666666666,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.25,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.tactic.defender_exposure",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.9166666666666666,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.defender_removed",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.25,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "preserved",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.capture",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.clock_reset",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.last_of_role",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.08333333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.3333333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.2916666666666667,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.875,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.4583333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-exposure-black:node:1",
+                "eventSeq": 2
+              }
+            ]
+          }
+        ],
+        "structureStats": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-exposure-black",
+            "rootKey": "position||3k3r/8/8/8/5b2/6N1/8/3K2BR b - -",
+            "rootNodeId": "successor-exposure-black:node:0",
+            "sessionKind": "position",
+            "packId": null,
+            "branchCount": 1,
+            "rewoundCount": 0,
+            "forkedCount": 0,
+            "groupCount": 0,
+            "outcomeCount": 0,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ]
+      }
+    },
+    {
+      "name": "unavailable-alternative",
+      "run": {
+        "schemaVersion": "0.19",
+        "id": "successor-unavailable-alternative",
+        "sessionKind": "position",
+        "packId": null,
+        "packDigest": null,
+        "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "start": {
+          "fen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+          "side": "white"
+        },
+        "feedbackPolicy": "attempt_end",
+        "opponentPolicy": {
+          "mode": "human_common",
+          "targetElo": 1500
+        },
+        "policyConfig": {
+          "seedMode": "fixed",
+          "locus": {
+            "executedAt": "server",
+            "engineIds": [],
+            "modelIds": []
+          }
+        },
+        "nodes": [
+          {
+            "id": "successor-unavailable-alternative:node:0",
+            "parentId": null,
+            "fen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+            "transposeKey": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - -",
+            "moveUci": null,
+            "moveSan": null,
+            "ply": 0,
+            "actor": "system",
+            "branchId": "successor-unavailable-alternative:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          },
+          {
+            "id": "successor-unavailable-alternative:node:1",
+            "parentId": "successor-unavailable-alternative:node:0",
+            "fen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1",
+            "transposeKey": "r3k3/8/1B6/8/8/8/8/R3K3 b - -",
+            "moveUci": "c5b6",
+            "moveSan": "Bxb6",
+            "ply": 1,
+            "actor": "user",
+            "branchId": "successor-unavailable-alternative:branch:0",
+            "checkpointRefs": [],
+            "objectiveState": "active",
+            "evidenceRefs": [],
+            "createdAt": "2026-09-24T10:00:00.000Z"
+          }
+        ],
+        "branches": [
+          {
+            "id": "successor-unavailable-alternative:branch:0",
+            "forkNodeId": "successor-unavailable-alternative:node:0",
+            "label": "main",
+            "seed": 1,
+            "origin": "played"
+          }
+        ],
+        "events": [
+          {
+            "type": "run.started",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "id": "successor-unavailable-alternative",
+              "sessionKind": "position",
+              "packId": null,
+              "packDigest": null,
+              "sessionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "start": {
+                "fen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+                "side": "white"
+              },
+              "feedbackPolicy": "attempt_end",
+              "opponentPolicy": {
+                "mode": "human_common",
+                "targetElo": 1500
+              },
+              "policyConfig": {
+                "seedMode": "fixed",
+                "locus": {
+                  "executedAt": "server",
+                  "engineIds": [],
+                  "modelIds": []
+                }
+              },
+              "rootNode": {
+                "id": "successor-unavailable-alternative:node:0",
+                "parentId": null,
+                "fen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+                "transposeKey": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - -",
+                "moveUci": null,
+                "moveSan": null,
+                "ply": 0,
+                "actor": "system",
+                "branchId": "successor-unavailable-alternative:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              },
+              "branch": {
+                "id": "successor-unavailable-alternative:branch:0",
+                "forkNodeId": "successor-unavailable-alternative:node:0",
+                "label": "main",
+                "seed": 1,
+                "origin": "played"
+              },
+              "activeCursor": {
+                "nodeId": "successor-unavailable-alternative:node:0",
+                "branchId": "successor-unavailable-alternative:branch:0"
+              }
+            },
+            "seq": 1
+          },
+          {
+            "type": "move.committed",
+            "at": "2026-09-24T10:00:00.000Z",
+            "data": {
+              "node": {
+                "id": "successor-unavailable-alternative:node:1",
+                "parentId": "successor-unavailable-alternative:node:0",
+                "fen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1",
+                "transposeKey": "r3k3/8/1B6/8/8/8/8/R3K3 b - -",
+                "moveUci": "c5b6",
+                "moveSan": "Bxb6",
+                "ply": 1,
+                "actor": "user",
+                "branchId": "successor-unavailable-alternative:branch:0",
+                "checkpointRefs": [],
+                "objectiveState": "active",
+                "evidenceRefs": [],
+                "createdAt": "2026-09-24T10:00:00.000Z"
+              }
+            },
+            "seq": 2
+          }
+        ],
+        "activeCursor": {
+          "nodeId": "successor-unavailable-alternative:node:1",
+          "branchId": "successor-unavailable-alternative:branch:0"
+        }
+      },
+      "projection": {
+        "denominators": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ],
+        "observations": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.exchange.capture_class",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.king.captured_zone_defender",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.material.event.role_asymmetry",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.9166666666666666,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.08333333333333333,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.25,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.semantic_avoidance.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "avoided",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "derived.tactic.defender_exposure",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.direct_attack_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_opposition",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.king_zone",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.7916666666666666,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.line_blockers",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.9166666666666666,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.structural.event.piece_count",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.check",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.defender_removed",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.08333333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.25,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.tactic.event.loose_piece",
+            "projectionVersion": 1,
+            "semanticSign": "preserved",
+            "sourceSign": "preserved",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.75,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.capture",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.clock_reset",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.last_of_role",
+            "projectionVersion": 1,
+            "semanticSign": "state",
+            "sourceSign": "state",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.041666666666666664,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_attack",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.3333333333333333,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.occupied_defence",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.2916666666666667,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.8333333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.piece_escape",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 1,
+            "alternativeShareSum": 0.7083333333333334,
+            "occurredRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "gained",
+            "sourceSign": "gained",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.125,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          },
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "phase": "endgame",
+            "decisionClass": "played",
+            "decisions": 1,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5,
+            "projectionId": "rules.transition.event.slider_ray",
+            "projectionVersion": 1,
+            "semanticSign": "lost",
+            "sourceSign": "lost",
+            "sessionKind": "position",
+            "packId": null,
+            "opportunities": 1,
+            "occurred": 0,
+            "alternativeShareSum": 0.4166666666666667,
+            "occurredRefs": [],
+            "opportunityRefs": [
+              {
+                "kind": "move",
+                "nodeId": "successor-unavailable-alternative:node:1",
+                "eventSeq": 2
+              }
+            ]
+          }
+        ],
+        "structureStats": [
+          {
+            "learnerId": "successor-owner",
+            "runId": "successor-unavailable-alternative",
+            "rootKey": "position||r3k3/8/1n6/2B5/8/8/8/R3K3 w - -",
+            "rootNodeId": "successor-unavailable-alternative:node:0",
+            "sessionKind": "position",
+            "packId": null,
+            "branchCount": 1,
+            "rewoundCount": 0,
+            "forkedCount": 0,
+            "groupCount": 0,
+            "outcomeCount": 0,
+            "observedAt": "2026-09-24T10:00:00.000Z",
+            "derivedRev": 5
+          }
+        ]
+      }
+    }
+  ]
+}

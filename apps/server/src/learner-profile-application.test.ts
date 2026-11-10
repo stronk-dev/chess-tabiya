@@ -8,9 +8,10 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { appendOpponentPly, commitMove, type DrillRun } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createApplication, loadValenceRegister, type ChessTabiyaApplication } from "./application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import type { LearnerProfileView } from "./learner-profile.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { AT, positionRun } from "./longitudinal-test-fixtures.js";
@@ -26,6 +27,7 @@ afterEach(async () => {
   try {
     await closing?.close();
   } finally {
+    vi.restoreAllMocks();
     for (const directory of removing) rmSync(directory, { recursive: true, force: true });
   }
 });
@@ -66,6 +68,7 @@ describe("the learner profile crosses the production application boundary", { ti
   it("serves the profile, drill-downs and consented share to its owner only, after the worker counts the runs", async () => {
     const directory = temp();
     const databasePath = join(directory, "app.sqlite");
+    installEmptyApplicationCatalogues();
     application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
     await new Promise<void>((resolveListen, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolveListen); });
     const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
@@ -95,7 +98,13 @@ describe("the learner profile crosses the production application boundary", { ti
     expect(profile.privacy.visibility).toBe("private");
     expect(profile.style.cards.find((card) => card.metricId === "fianchetto_setup_rate")).toMatchObject({ state: "abstained", sentence: "This card's floor is 25 games; 3 measured." });
     expect(profile.openings.rows.length).toBeGreaterThan(0);
-    expect(profile.observations.rows.length).toBeGreaterThan(0);
+    // This separate production journey keeps the REAL subject census, unlike the isolated
+    // Profile card-math cohort; private source availability never auto-activates learner stats.
+    const sourceDb = new DatabaseSync(databasePath, { readOnly: true });
+    try { expect(Number(sourceDb.prepare("SELECT count(*) AS n FROM learner_subject_observations").get()!.n)).toBeGreaterThan(0); }
+    finally { sourceDb.close(); }
+    expect(profile.observations).toEqual([]);
+    expect(profile.observationStatus).toEqual({ kind: "unavailable", reason: "subject_metrics_not_adopted" });
     expect(profile.skills.categories).toHaveLength(5);
 
     const card = await (await fetch(`${origin}/learner-profile/style/fianchetto_setup_rate?limit=1`, { headers: { cookie } })).json() as { contributors: { total: number; shown: unknown[]; hiddenCount: number } };
@@ -111,17 +120,11 @@ describe("the learner profile crosses the production application boundary", { ti
       openedGames.push(...detail.games.items.map(row => row.runId));
     }
     expect(new Set(openedGames)).toEqual(new Set(["app-g1", "app-g3"]));
-    const observation = profile.observations.rows.find(row => row.occurred >= 2)!;
-    expect(observation).toBeDefined();
-    const occurred: { runId: string; nodeId: string }[] = [];
-    for (let offset = 0; offset < observation.occurred; offset += 1) {
-      const response = await fetch(`${origin}/learner-profile/observations/${encodeURIComponent(observation.key)}?offset=${offset}&limit=1`, { headers: { cookie } });
-      expect(response.status).toBe(200);
-      const detail = await response.json() as { occurred: { total: number; offset: number; items: { runId: string; nodeId: string }[]; hiddenCount: number } };
-      expect(detail.occurred).toMatchObject({ total: observation.occurred, offset, hiddenCount: observation.occurred - offset - 1 });
-      occurred.push(...detail.occurred.items);
+    for (const key of ["rules.structural.event.open_file@1:gained:gained", "unknown"]) {
+      const response = await fetch(`${origin}/learner-profile/observations/${encodeURIComponent(key)}?offset=0&limit=1`, { headers: { cookie } });
+      expect(response.status).toBe(409);
+      expect(await response.json()).toMatchObject({ error: { code: "PROFILE_OBSERVATIONS_NOT_ADOPTED" } });
     }
-    expect(new Set(occurred.map(ref => `${ref.runId}:${ref.nodeId}`)).size).toBe(observation.occurred);
     const history = await (await fetch(`${origin}/learner-profile/history?limit=1&offset=1`, { headers: { cookie } })).json() as { history: { total: number; items: unknown[]; hiddenCount: number } };
     expect(history.history).toMatchObject({ total: 3, hiddenCount: 1 });
     expect(history.history.items).toHaveLength(1);
@@ -174,9 +177,9 @@ describe("the learner profile crosses the production application boundary", { ti
     expect(bystander.profile.store.runs).toBe(0);
     expect(bystander.profile.history.items).toEqual([]);
     for (const family of ["openings", "observations"] as const) {
-      const key = family === "openings" ? opening.key : observation.key;
+      const key = family === "openings" ? opening.key : "rules.structural.event.open_file@1:gained:gained";
       const response = await fetch(`${origin}/learner-profile/${family}/${encodeURIComponent(key)}?offset=1&limit=1`, { headers: { cookie: otherCookie } });
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(family === "observations" ? 409 : 400);
       await response.arrayBuffer();
     }
   });

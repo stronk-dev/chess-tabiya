@@ -1,15 +1,18 @@
-// D3774: synthetic recorded percentages through the real startup registry and authenticated HTTP.
+// D3774: synthetic recorded percentages through validated nonempty registries and authenticated HTTP.
 // No engine/Explorer result or claim-delivery response is mocked; these are attribution controls,
 // not observed chess frequencies, lessons, corpus graduation or longitudinal-worker proof.
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+// D4046 isolates default catalogue enumeration but still reads the owned pack/ledger files.
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import type { ChessTabiyaApplication } from "./application.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { PackRegistry } from "./pack-registry.js";
 import { withDerivedRequires } from "./capability/pack-capabilities.js";
 import { sha256 } from "./sourcing/canonical.js";
 import type { EvidenceLedger } from "./sourcing/types.js";
@@ -61,6 +64,18 @@ describe("D3774 startup-to-learner claim attribution", () => {
       await writeFile(join(directory, `${row.id}.evidence.json`), JSON.stringify(ledger));
       files.push(file);
     }
+    installEmptyApplicationCatalogues();
+    vi.spyOn(PackRegistry, "loadDefault").mockImplementation(async (options = {}) => {
+      expect(options.development).toBe(true);
+      expect(options.draftFiles).toEqual(files);
+      const documents = await Promise.all(files.map(async file => ({
+        source: file,
+        value: JSON.parse(await readFile(file, "utf8")) as unknown,
+        ledger: JSON.parse(await readFile(file.replace(/\.json$/u, ".evidence.json"), "utf8")) as unknown,
+        channel: "community" as const,
+      })));
+      return PackRegistry.fromDocuments(documents, options);
+    });
     owned = applicationFixture(createInMemoryTestApplication({ development: true, draftPackFiles: files, engineMode: "mock", cookieSecure: false }));
     await owned.ready;
     const app = owned.current()!;
@@ -76,7 +91,10 @@ describe("D3774 startup-to-learner claim attribution", () => {
   });
   afterAll(async () => {
     try { await owned?.close(); }
-    finally { if (directory !== undefined) await rm(directory, { recursive: true, force: true }); }
+    finally {
+      vi.restoreAllMocks();
+      if (directory !== undefined) await rm(directory, { recursive: true, force: true });
+    }
   });
 
   it.each(cases)("$kind / $fault retains exact source attribution through authenticated feedback", async ({ id, fault }) => {

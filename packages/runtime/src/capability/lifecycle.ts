@@ -16,6 +16,28 @@ import type { CapabilityLifecycleRow } from "./registry.js";
 const v = (value: number): CapabilityVersion => ({ kind: "integer", value });
 
 export const CAPABILITY_LIFECYCLE: readonly CapabilityLifecycleRow[] = Object.freeze([
+  { subjectId: "run.record.objective_transition", versions: [
+    { version: v(1), disposition: { kind: "deprecated", successor: capabilityId("run.record.objective_transition", 2), reasonCode: "superseded", reason: "D3927 adds genuine single-line Review occurrences at version2; version1 retains its distinct real Compare source and historical declaration" } },
+    { version: v(2), disposition: { kind: "active" } },
+  ] },
+  // Accepted Hint §3a: only these two families change source meaning. Preserve their frozen
+  // predecessor declarations; the sole current horizon/disclosure paths are the exact @2 refs.
+  ...["fork_survives_reply", "promotion_pressure"].flatMap(family => [
+    `derived.hint.horizon.${family}`,
+    ...["distance", "pattern", "piece", "square", "move"].map(rung => `derived.hint.disclosure.${family}.${rung}`),
+  ].map((subjectId): CapabilityLifecycleRow => ({ subjectId, versions: [
+    { version: v(1), disposition: { kind: "deprecated", successor: capabilityId(subjectId, 2), reasonCode: "superseded", reason: "Accepted Hint §3a uses the current nonterminal fork/direct-FEN promotion source; predecessor declaration remains frozen, without a compatibility callable" } },
+    { version: v(2), disposition: { kind: "active" } },
+  ] }))),
+  // D3853 / accepted F2 §2.3f: historical declaration only, never an active bot capability.
+  {
+    subjectId: "derived.opponent.candidate_feature_vector",
+    versions: [{ version: v(1), disposition: {
+      kind: "withdrawn", removedAt: "prelaunch-D3853", successor: null,
+      reason: "Unused caller-score vector retired; current candidate sources remain separate and are not a replacement for its score-bearing contract",
+      noSuccessor: { kind: "replacement_refused", authority: { kind: "accepted_rfc", document: "rfc/evidence-value-authority.md", criterion: "§2.3f / D3851 / D3853" } },
+    } }],
+  },
   // Review §3 / D3371: old one-occurrence declarations stay frozen, not executable.
   ...["derived.review.eval_delta", "derived.review.mate_transition", "derived.story.rank", "derived.story.title"].map((subjectId): CapabilityLifecycleRow => ({
     subjectId,
@@ -27,6 +49,15 @@ export const CAPABILITY_LIFECYCLE: readonly CapabilityLifecycleRow[] = Object.fr
       ...(subjectId === "derived.story.rank" ? [{ version: v(3), disposition: { kind: "active" as const } }] : []),
     ],
   })),
+  // move-quality-grades §§2a/4a: fixed original endpoints and the one context-free convention.
+  { subjectId: "derived.grade.move_quality", versions: [
+    { version: v(1), disposition: { kind: "deprecated", successor: capabilityId("derived.grade.move_quality", 2), reasonCode: "superseded", reason: "Version 2 grades genuine workflow-owned original endpoint pairs with one context-free convention; version 1 retains its historical declaration, not a production input arm" } },
+    { version: v(2), disposition: { kind: "active" } },
+  ] },
+  ...["grade.move_quality", "grade.thresholds"].map((subjectId): CapabilityLifecycleRow => ({ subjectId, versions: [
+    { version: v(1), disposition: { kind: "deprecated", successor: capabilityId(subjectId, 2), reasonCode: "superseded", reason: "The accepted unified grade convention and recorded typed-score arithmetic replace the context-dependent grader; version 1 retains its historical meaning" } },
+    { version: v(2), disposition: { kind: "active" } },
+  ] })),
   // Provider-exchange §§7/9: a bound opponent source is a successor, not a rewrite of operator-only v1.
   { subjectId: "live.syzygy.position_result", versions: [{ version: v(1), disposition: { kind: "deprecated", successor: capabilityId("live.syzygy.position_result", 2), reasonCode: "superseded", reason: "The whole registered delivery now has an opponent-selection consumer; version 1 retains the operator-only source declaration" } }, { version: v(2), disposition: { kind: "active" } }] },
   // Provider-exchange §1: sequence-valued derivation operands; frozen predecessors retained.

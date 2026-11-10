@@ -5,6 +5,8 @@ import {
   type ServerResponse,
 } from "node:http";
 import { randomUUID } from "node:crypto";
+import { digestRunEventHead } from "@chess-tabiya/runtime/run-subject";
+import { inspectorMaiaPage } from "./inspector-maia.js";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import type { ReadableStream as NodeReadableStream } from "node:stream/web";
@@ -97,6 +99,7 @@ import {
   type RewindTarget,
   type CampaignCommandInput,
 } from "./service.js";
+import { assertInspectorSourcePagePreflight } from "./inspector-query.js";
 import type { CampaignService } from "./campaign-service.js";
 import { IdentityService } from "./identity.js";
 import type { Principal } from "./authorization.js";
@@ -777,6 +780,7 @@ export function errorResponse(error: unknown): Response {
               ? 404
               : error.code === "RUN_ALREADY_EXISTS" ||
                 error.code === "IDEMPOTENCY_CONFLICT" ||
+                error.code === "PROFILE_OBSERVATIONS_NOT_ADOPTED" ||
                 error.code === "FEEDBACK_WITHHELD" ||
                 error.code === "ASSISTANCE_WITHHELD" ||
                 error.code === "STORY_UNAVAILABLE" ||
@@ -838,7 +842,7 @@ export function errorResponse(error: unknown): Response {
 function parseRunRoute(
   pathname: string,
 ): { runId: string; action: string } | undefined {
-  const match = /^\/runs\/([^/]+)\/(pack|moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|review-analysis|modules\/query|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
+  const match = /^\/runs\/([^/]+)\/(pack|moves|opponent-ply|rewind|fork|graph|compare|branch-decidedness|events|evidence|authored-feedback|pgn|grants|lease|reveal|duplicate|schedule|simulate|simulate-enter|prediction|reasoning|reasoning-review|assistance|analysis|human-split|corpus|voice|speech|group|group-reply|import|story|review|recorded-clock|modules\/query|inspector\/query|shape-firings\/query|share|flip|derivations|distill|marks|deletion-preview|delete|hints)$/.exec(
     pathname,
   );
   if (!match) return undefined;
@@ -974,6 +978,7 @@ export function createRestHandler(
   };
   return async (request) => {
     try {
+      request.signal.throwIfAborted();
       const url = new URL(request.url);
       const authenticate = (): Principal => {
         if (identity === undefined) {
@@ -1335,8 +1340,11 @@ export function createRestHandler(
       }
       if (request.method === "GET" && url.pathname === "/progress/recommendations") {
         const principal = authenticate();
+        const shapePage = await service.shapeRecommendations(principal, request.signal, authenticate);
+        const currentPrincipal = authenticate();
+        if (currentPrincipal.learnerId !== principal.learnerId) throw new ServerError("UNAUTHENTICATED", "Recommendation account changed");
+        request.signal.throwIfAborted();
         const repertoirePage = repertoires?.recommendations(principal) ?? Object.freeze({ recommendations: Object.freeze([]), total: 0 });
-        const shapePage = service.shapeRecommendations(principal);
         const recommendations = Object.freeze([...repertoirePage.recommendations, ...shapePage.recommendations].map((raw) => {
           const item = raw as Record<string, unknown>;
           return item.kind === "repertoire_gap"
@@ -1718,12 +1726,14 @@ export function createRestHandler(
         return json(200, service.story(route.runId, principal, url.searchParams.get("branch") ?? undefined));
       }
       if (request.method === "GET" && route.action === "review") {
-        return json(200, await service.review(route.runId, principal, url.searchParams.get("branch") ?? undefined));
+        return json(200, await service.review(route.runId, principal, url.searchParams.get("branch") ?? undefined, request.signal));
       }
-      if (request.method === "GET" && route.action === "review-analysis") {
-        const nodeId = url.searchParams.get("node");
-        if (nodeId === null || nodeId.trim() === "") throw invalid("node is required");
-        return json(200, service.reviewAnalysis(route.runId, principal, nodeId, url.searchParams.get("branch") ?? undefined));
+      if (request.method === "GET" && route.action === "recorded-clock") {
+        const keys = [...url.searchParams.keys()];
+        if (keys.length !== 2 || new Set(keys).size !== 2 || !keys.includes("branchId") || !keys.includes("nodeId")) throw invalid("Recorded clock requires exactly branchId and nodeId");
+        const branchId = requiredString(url.searchParams.get("branchId"), "branchId"), nodeId = requiredString(url.searchParams.get("nodeId"), "nodeId");
+        if ([route.runId, branchId, nodeId].some(id => id.length > 256 || /[\s\u0000-\u001f\u007f]/u.test(id))) throw invalid("Recorded clock ids must be bounded, nonblank identifiers");
+        return json(200, service.recordedClock(route.runId, principal, branchId, nodeId, request.signal));
       }
       if (request.method === "GET" && route.action === "share") {
         return json(200, { shares: service.shares(route.runId, principal) });
@@ -1770,13 +1780,20 @@ export function createRestHandler(
         const authored = access.pack === undefined
           ? access.run.opponentPolicy
           : trajectoryPolicyAt(access.pack.document, access.run, access.node.id)?.policy ?? access.run.opponentPolicy;
-        const selection = await selector.select({
+        const selectionRequest = {
           startFen: access.run.start.fen,
           historyUci: access.historyUci,
-          policy: { mode: "human_common", policyConfigDigest: access.run.sessionDigest, ...(authored.targetElo === undefined ? {} : { targetElo: authored.targetElo }), ...(authored.temperature === undefined ? {} : { temperature: authored.temperature }), ...(authored.topP === undefined ? {} : { topP: authored.topP }) },
+          policy: { mode: "human_common" as const, policyConfigDigest: access.run.sessionDigest, ...(authored.targetElo === undefined ? {} : { targetElo: authored.targetElo }), ...(authored.temperature === undefined ? {} : { temperature: authored.temperature }), ...(authored.topP === undefined ? {} : { topP: authored.topP }) },
           seed: access.branchSeed,
           ...(access.pack === undefined ? {} : { packId: access.pack.document.id }),
-        }, { signal: request.signal });
+        };
+        if (selector.hasMaiaTaskSource()) {
+          const resolved = service.evidenceSubjectAccess(principal, { kind: "run_node", runId: access.run.id,
+            branchId: access.node.branchId, nodeId: access.node.id,
+            eventHeadDigest: digestRunEventHead({ runId: access.run.id, headSeq: access.run.events.length, events: access.run.events }) });
+          return json(200, await inspectorMaiaPage(selector, selectionRequest, resolved, { signal: request.signal, recheck }));
+        }
+        const selection = await selector.select(selectionRequest, { signal: request.signal });
         recheck();
         // A sampled move outside MultiPV belongs to the selection record, not
         // this distribution: its insertion rank is not reported and it has no mass.
@@ -1836,6 +1853,16 @@ export function createRestHandler(
         // rfc/intent-presets.md §5.1: stage 1 in, stages 2+3 out. Context, access and provider
         // state are re-derived here; the browser's request is untrusted intent only.
         requireJson(request);
+        if (value !== null && typeof value === "object" && Object.hasOwn(value, "inspector")) {
+          assertInspectorSourcePagePreflight();
+          const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
+          return json(200, service.confirmRecordedInspectorAssistance(route.runId, principal, value, availability, request.signal));
+        }
+        if (value !== null && typeof value === "object" && (Object.hasOwn(value, "review") || Object.hasOwn(value, "assistance"))) {
+          assertInspectorSourcePagePreflight();
+          const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
+          return json(200, service.confirmRecordedAnalyzeAssistance(route.runId, principal, value, availability, request.signal));
+        }
         const { authoritative, availability } = await authoritativeAssistance(route.runId, principal, value);
         return json(200, { assistance: finalizeAssistanceEffects(authoritative, { authority: MODULE_SOURCE_AUTHORITY, availability }) });
       }
@@ -1844,7 +1871,9 @@ export function createRestHandler(
         // learner's stage-1 assistance intent; the ceiling, context, access, boundary and module
         // activation are all re-derived here. Caller-supplied policy bytes do not exist on this wire.
         requireJson(request);
-        const body = closedRecord(value, "/", ["nodeId", "rung", "decisionDigest", "assistance"]);
+        const body = closedRecord(value, "/", ["nodeId", "rung", "decisionDigest", "assistance", "clientRequestId"]);
+        const clientRequestId = requiredString(body.clientRequestId, "clientRequestId");
+        if (!/^[0-9a-f]{32}$/u.test(clientRequestId)) throw invalid("clientRequestId must be 32 lowercase hexadecimal characters");
         const rung = requiredString(body.rung, "rung") as HintRung;
         if (!HINT_RUNGS.includes(rung)) throw invalid("rung must be one of the five hint rungs");
         const nodeId = requiredString(body.nodeId, "nodeId");
@@ -1860,11 +1889,23 @@ export function createRestHandler(
           learnerToMove: access.learnerToMove,
           ratedGameOpen: false,
         });
-        if (policy.kind === "refused") return json(200, { hint: { state: "policy_refused", rung, reason: policy.reason } });
+        if (policy.kind === "refused") return json(200, { clientRequestId, hint: { state: "policy_refused", rung, reason: policy.reason } });
         if (nodeId !== access.decision.cursor.nodeId || decisionDigest !== access.decision.digest) {
-          return json(200, { hint: { state: "stale", requestId: hints.requestIdFor(decisionDigest, rung), rung } });
+          return json(200, { clientRequestId, hint: { state: "stale", requestId: hints.requestIdFor(decisionDigest, rung, clientRequestId), rung } });
         }
-        return json(200, { hint: hints.request({ run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: access.session, voiceRequested: authoritative.config.voice === "persona" }, rung) });
+        return json(200, { clientRequestId, hint: hints.request({ run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: access.session, voiceRequested: authoritative.config.voice === "persona" }, rung, clientRequestId) });
+      }
+      if (route.action === "shape-firings/query") {
+        requireJson(request);
+        const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
+        return json(200, await service.queryShapeFirings(route.runId, principal, value, availability, request.signal));
+      }
+      if (route.action === "inspector/query") {
+        requireJson(request);
+        const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
+        const page = await service.queryInspectorSources(route.runId, principal, value, availability, request.signal);
+        const status = page.kind === "page" ? 200 : ({ invalid_request: 422, not_found: 404, withheld: 403, stale: 409, unsupported_version: 422 } as const)[page.code];
+        return json(status, page);
       }
       if (route.action === "modules/query") {
         // rfc/module-registration.md §2.5.2 + intent-presets Checkpoint B: the requested-assistance
@@ -2323,6 +2364,9 @@ export function createRestHandler(
         error: { code: "NOT_FOUND", message: "Route not found" },
       });
     } catch (error) {
+      // Cancellation belongs to this request's transport, not the generic error mapper.
+      // A provider's AbortError alone is not proof that the HTTP client disconnected.
+      request.signal.throwIfAborted();
       return errorResponse(error);
     }
   };
@@ -2409,10 +2453,14 @@ export function createHttpServer(handler: RestHandler): Server {
     void requestFromNode(request, controller.signal)
       .then(handler)
       .then(async (result) => {
-        if (response.destroyed) await result.body?.cancel();
+        if (controller.signal.aborted || response.destroyed) {
+          try { await result.body?.cancel(); }
+          finally { if (!response.destroyed) response.destroy(); }
+        }
         else await writeNodeResponse(response, result, request);
       })
       .catch(async () => {
+        if (controller.signal.aborted) { response.destroy(); return; }
         if (response.destroyed || response.writableEnded) return;
         // A partial response is not replaceable. End the transport without leaking the source
         // error, appending a second payload, or rejecting an unobserved response-writer promise.

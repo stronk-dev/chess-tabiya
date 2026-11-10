@@ -22,7 +22,7 @@ function productionSources(): readonly string[] {
       const path = join(entry.parentPath, entry.name);
       const rel = relative(ROOT, path);
       if (/(^|\/)(node_modules|dist|build|\.svelte-kit)\//u.test(rel)) continue;
-      if (!/\.(ts|svelte)$/u.test(rel) || /\.(test|typecheck)\.ts$/u.test(rel)) continue;
+      if (!/\.(ts|svelte)$/u.test(rel) || /\.(test|test-support|typecheck)\.ts$/u.test(rel)) continue;
       files.push(rel);
     }
   }
@@ -34,23 +34,34 @@ const read = (rel: string) => readFileSync(join(ROOT, rel), "utf8");
 describe("candidate packet repository census", () => {
   const sources = productionSources();
 
-  it("criteria 18/19/23: the compiler, the research selection contract, the barrel, the verification CLI and exactly one product consumer — Guided Hint through the one injected service — name the packet", () => {
+  it("criteria 18/19/23: exact source owners, research validation, Guided Hint and the scoped Profile worker name the packet", () => {
     const readers = sources.filter((rel) => PACKET_SYMBOLS.test(read(rel)));
-    // rfc/hint-distance.md §10/criterion 15: Guided Hint is the first product consumer. It reaches the
-    // packet only through the application-lifetime CandidatePopulationService (server) and the
-    // horizon selector (runtime); its test fixture is test support, not a product path.
+    // Guided Hint uses the application's injected CandidatePopulationService. Accepted
+    // longitudinal-store A.2 uses one original WIDE per scoped worker decision; its native/
+    // condition reducers only read that same owner. These are distinct declared product paths,
+    // not permission for bots, voices, REST or the browser to acquire arbitrary packets.
     expect(readers).toEqual([
       "apps/server/src/candidate-population-service.ts",
       "apps/server/src/semantic-evidence-check.ts",
       "packages/runtime/src/candidate-population.ts",
+      "packages/runtime/src/evidence-factories.ts",
       "packages/runtime/src/hint-distance.ts",
       "packages/runtime/src/index.ts",
+      "packages/runtime/src/internal/longitudinal-native-incidence.ts",
+      "packages/runtime/src/internal/profile-subject-facts.ts",
       "packages/runtime/src/semantic-evidence.ts",
+      "packages/runtime/src/semantic-subject-outcomes.ts",
       // rfc/semantic-validation-authority.md §4.3: the (required-reach) complete-alternatives
       // validation operation over the research selection; a validation harness, not a product consumer.
       "packages/runtime/src/semantic-validation-operations.ts",
       "packages/runtime/src/testing/hint-fixture.ts",
     ]);
+    for (const rel of ["packages/runtime/src/evidence-factories.ts", "packages/runtime/src/internal/longitudinal-native-incidence.ts", "packages/runtime/src/semantic-subject-outcomes.ts"]) {
+      expect(read(rel)).not.toMatch(/\bcompileCandidatePopulation\s*\(/u);
+    }
+    const worker = read("packages/runtime/src/internal/profile-subject-facts.ts");
+    expect(worker.match(/\bcompileCandidatePopulation\s*\(/gu)).toHaveLength(1);
+    expect(worker).toContain("scope: CANDIDATE_WIDE_SCOPE");
     for (const rel of ["apps/server/src/application.ts", "apps/server/src/rest.ts", "apps/server/src/main.ts", "apps/server/src/opponent-selector.ts", "packages/runtime/src/voice.ts", "packages/runtime/src/evidence-contract.ts"]) {
       expect(PACKET_SYMBOLS.test(read(rel))).toBe(false);
     }
@@ -103,6 +114,8 @@ describe("candidate packet repository census", () => {
     expect(sources.filter((rel) => /ConsumerEvidenceView<\s*CandidateEventPopulation/u.test(read(rel)))).toEqual([]);
     // rfc/hint-distance.md criterion 15: one application-lifetime service, declared once, constructed only
     // by createApplication and injected into its one consumer; never a request-local or runtime cache.
+    // Supporting fixtures may create isolated services; production must never import those fixtures.
+    expect(sources.filter(rel => /\b(?:from|import)\s*(?:\(\s*)?["'][^"']*\.test-support(?:\.js)?["']/u.test(read(rel)))).toEqual([]);
     expect(sources.filter((rel) => /new CandidatePopulationCache\b/u.test(read(rel)))).toEqual([]);
     expect(sources.filter((rel) => /CandidatePopulationService\b/u.test(read(rel)))).toEqual(["apps/server/src/application.ts", "apps/server/src/candidate-population-service.ts", "apps/server/src/hint-service.ts"]);
     expect(sources.filter((rel) => /new CandidatePopulationService\b/u.test(read(rel)))).toEqual(["apps/server/src/application.ts"]);

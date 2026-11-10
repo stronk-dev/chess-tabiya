@@ -4,12 +4,27 @@
 // `SQLiteRunStorage`, sharing its connection so watermark updates commit in the writer's own
 // transaction); the worker thread opens its own connection to the same canonical file. Source images
 // and claim receipts are sealed per store instance ([[D2784]]).
+import { types as nodeTypes } from "node:util";
 import { createHash, randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 import { canonicalizeJson, type JsonValue } from "@chess-tabiya/schema/drill-pack";
 import type { DrillRunEvent } from "@chess-tabiya/runtime";
+import { PROFILE_GAME_SOURCE_AUTHORITY, readProfileGameSource, type ProfileGameSource } from "./profile-game-source.js";
+import { parseLongitudinalGameFactRow, gameFactFromSql, type LongitudinalGameFactRow, type GameFactReadOutcome } from "./profile-game-facts-contract.js";
+import { readProfileGameFactOwner } from "./profile-game-facts-authority.js";
+import { assertProfileGameFactReferences } from "./profile-game-fact-references.js";
+import { parseLongitudinalChoiceFactRow, choiceFactFromSql, type LongitudinalChoiceFactRow, type ChoiceFactReadOutcome } from "./profile-choice-facts-contract.js";
+import { readProfileChoiceFactOwner } from "./profile-choice-facts-authority.js";
+import { assertProfileChoiceFactReferences } from "./profile-choice-fact-references.js";
+
+import { isImmutableOwnData } from "../../../packages/runtime/src/internal/immutable-data.js";
+import { assertProfileSubjectFactOwner, readProfileSubjectReduction } from "./profile-subject-facts-authority.js";
+import { foldProfileSubjectReduction, assertProfileSubjectFold } from "./profile-subject-reduction.js";
+import { parseLongitudinalSubjectObservationRow, subjectObservationKey, subjectObservationMatches, type LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
+import { subjectObservationFromSql, subjectObservationSqlValues, INSERT_SUBJECT_OBSERVATION } from "./profile-subject-facts-storage.js";
+import { profileSubjectReferenceIndex } from "./profile-subject-fact-references.js";
 
 import {
   LONGITUDINAL_FAILURE_CODES,
@@ -37,11 +52,14 @@ import {
   type ParsedLongitudinalReadQuery,
 } from "./longitudinal-contract.js";
 
-/** The three derived row families of one run cut (the projector's output shape). */
+/** The four derived row families of one run cut (the projector's output shape). */
 export interface LongitudinalProjection {
   readonly denominators: readonly LongitudinalDenominatorRow[];
   readonly observations: readonly LongitudinalObservationRow[];
   readonly structureStats: readonly LongitudinalStructureStatRow[];
+  readonly gameFacts: readonly LongitudinalGameFactRow[];
+  readonly choiceFacts: readonly LongitudinalChoiceFactRow[];
+  readonly subjectObservations: readonly LongitudinalSubjectObservationRow[];
 }
 import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
 import {
@@ -53,6 +71,59 @@ import {
   type LongitudinalSourceImageV4,
   type MoveAuthorship,
 } from "./longitudinal-source.js";
+
+const PROJECTION_FIELDS = ["denominators", "observations", "structureStats", "gameFacts", "choiceFacts", "subjectObservations"] as const;
+function dataWithoutProxies(value: unknown, seen = new WeakSet<object>()): boolean {
+  if (value === null || typeof value !== "object") return typeof value !== "function";
+  if (nodeTypes.isProxy(value)) return false;
+  if (seen.has(value)) return true;
+  seen.add(value);
+  const fields = Object.getOwnPropertyDescriptors(value);
+  return Reflect.ownKeys(fields).every(key => {
+    const d = fields[key as keyof typeof fields]!;
+    return "value" in d && dataWithoutProxies(d.value, seen);
+  });
+}
+/** Capture the complete caller image once. Source checks and insertion see identical immutable
+ * arrays; no getter can substitute a different family after its authority/fold was checked. */
+function captureProjection(value: LongitudinalProjection): LongitudinalProjection {
+  const fail = (): never => { throw new LongitudinalContractError("LONGITUDINAL_PROJECTION_IMAGE_INVALID"); };
+  if (value === null || typeof value !== "object" || !dataWithoutProxies(value) || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) return fail();
+  const descriptors = Object.getOwnPropertyDescriptors(value);
+  if (Reflect.ownKeys(descriptors).length !== PROJECTION_FIELDS.length) return fail();
+  const result = {} as { -readonly [K in keyof LongitudinalProjection]: LongitudinalProjection[K] };
+  for (const key of PROJECTION_FIELDS) {
+    const d = descriptors[key];
+    if (d === undefined || !d.enumerable || !("value" in d) || !Array.isArray(d.value) || !isImmutableOwnData(d.value)) return fail();
+    result[key] = d.value;
+  }
+  return Object.freeze(result);
+}
+
+export const PROFILE_CHOICE_FACTS_SQL = `CREATE TABLE learner_choice_facts (
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  run_id TEXT NOT NULL UNIQUE,
+  completed_seq INTEGER NOT NULL CHECK(completed_seq>0),
+  derived_rev INTEGER NOT NULL CHECK(derived_rev>0),
+  observed_at TEXT NOT NULL CHECK(strftime('%Y-%m-%dT%H:%M:%fZ',observed_at) IS observed_at),
+  primary_branch_id TEXT NOT NULL CHECK(length(primary_branch_id)>0),
+  cohort_json TEXT NOT NULL CHECK(json_valid(cohort_json) AND json_type(cohort_json,'$.kind') IS 'text' AND json_extract(cohort_json,'$.kind') IN ('eligible','ineligible')),
+  PRIMARY KEY(learner_id,run_id),
+  FOREIGN KEY(run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON DELETE CASCADE
+) STRICT;`;
+
+export const PROFILE_GAME_FACTS_SQL = `CREATE TABLE learner_game_facts (
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  run_id TEXT NOT NULL UNIQUE,
+  completed_seq INTEGER NOT NULL CHECK(completed_seq>0),
+  derived_rev INTEGER NOT NULL CHECK(derived_rev>0),
+  observed_at TEXT NOT NULL CHECK(strftime('%Y-%m-%dT%H:%M:%fZ',observed_at) IS observed_at),
+  primary_branch_id TEXT NOT NULL CHECK(length(primary_branch_id)>0),
+  learner_side TEXT NOT NULL CHECK(learner_side IN ('white','black')),
+  game_json TEXT NOT NULL CHECK(json_valid(game_json) AND json_type(game_json,'$.kind') IS 'text' AND json_extract(game_json,'$.kind') IN ('eligible','ineligible')),
+  PRIMARY KEY(learner_id,run_id),
+  FOREIGN KEY(run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON DELETE CASCADE
+);`;
 
 const DIGEST_CHECK = (column: string): string =>
   `length(${column})=71 AND substr(${column},1,7)='sha256:' AND substr(${column},8) NOT GLOB '*[^0-9a-f]*'`;
@@ -204,11 +275,11 @@ CREATE INDEX IF NOT EXISTS learner_observation_jobs_work
 `;
 
 export const LONGITUDINAL_TABLES = Object.freeze([
-  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_observation_jobs",
+  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_observation_jobs",
 ] as const);
 export const LONGITUDINAL_INDEXES = Object.freeze([
   "drill_runs_longitudinal_owner", "learner_observation_denominators_by_learner", "learner_observations_by_family",
-  "learner_observations_by_run", "learner_structure_stats_by_learner", "learner_observation_jobs_work",
+  "learner_observations_by_run", "learner_structure_stats_by_learner", "learner_observation_jobs_work", "learner_subject_observations_source",
 ] as const);
 
 /**
@@ -269,7 +340,7 @@ export type WatermarkOutcome = "created" | "advanced" | "revision_reset" | "unch
 
 export interface RebuildMismatch {
   readonly runId: string;
-  readonly table: "learner_observation_denominators" | "learner_observations" | "learner_structure_stats" | "learner_observation_jobs";
+  readonly table: "learner_observation_denominators" | "learner_observations" | "learner_structure_stats" | "learner_game_facts" | "learner_choice_facts" | "learner_subject_observations" | "learner_observation_jobs";
   readonly key: string;
   readonly kind: "missing" | "surplus" | "changed";
 }
@@ -300,6 +371,8 @@ export class LongitudinalStore {
   readonly #now: () => number;
   readonly #authority = Object.freeze({ store: randomUUID() });
   readonly #claims = new WeakSet<object>();
+  readonly #claimImages = new WeakMap<object, LongitudinalClaim>();
+  readonly #gameSources = new WeakSet<object>();
 
   constructor(database: DatabaseSync, options: LongitudinalStoreOptions = {}) {
     this.#db = database;
@@ -419,9 +492,23 @@ export class LongitudinalStore {
   }
 
   #deleteDerivedRows(runId: string): void {
+    const beforeSubjectMigration = Number((this.#db.prepare("PRAGMA user_version").get() as Row).user_version) < 35;
+    if (!beforeSubjectMigration || this.#db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='learner_subject_observations'").get() !== undefined) {
+      this.#db.prepare("DELETE FROM learner_subject_observations WHERE run_id=?").run(runId);
+    }
+    const beforeChoiceMigration = Number((this.#db.prepare("PRAGMA user_version").get() as Row).user_version) < 34;
+    if (!beforeChoiceMigration || this.#db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='learner_choice_facts'").get() !== undefined) {
+      this.#db.prepare("DELETE FROM learner_choice_facts WHERE run_id=?").run(runId);
+    }
     this.#db.prepare("DELETE FROM learner_observations WHERE run_id = ?").run(runId);
     this.#db.prepare("DELETE FROM learner_observation_denominators WHERE run_id = ?").run(runId);
     this.#db.prepare("DELETE FROM learner_structure_stats WHERE run_id = ?").run(runId);
+    // Older migration bodies can invalidate existing jobs before migration33 creates this family.
+    // Once installed, a missing table is an error; it is not a production compatibility fallback.
+    const beforeGameMigration = Number((this.#db.prepare("PRAGMA user_version").get() as Row).user_version) < 33;
+    if (!beforeGameMigration || this.#db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='learner_game_facts'").get() !== undefined) {
+      this.#db.prepare("DELETE FROM learner_game_facts WHERE run_id = ?").run(runId);
+    }
   }
 
   #resetToPending(job: LongitudinalJob, head: number, digest: `sha256:${string}`): void {
@@ -440,6 +527,7 @@ export class LongitudinalStore {
   #quarantineSeed(existing: LongitudinalJob | undefined, runId: string, owner: string, head: number, digest: `sha256:${string}`): void {
     if (existing !== undefined && existing.state === "quarantined" && existing.requestedSeq === head
       && existing.requestedSourceDigest === digest && existing.derivedRev === OBSERVATION_DERIVATION_REV) return;
+    this.#deleteDerivedRows(runId);
     if (existing !== undefined) this.#db.prepare("DELETE FROM learner_observation_jobs WHERE run_id = ?").run(runId);
     this.#db.prepare(`INSERT INTO learner_observation_jobs
       (run_id, learner_id, requested_seq, requested_source_digest, completed_seq, derived_rev, state, claim_generation,
@@ -486,6 +574,7 @@ export class LongitudinalStore {
       return "revision_reset";
     }
     if (existing.requestedSeq === head && existing.requestedSourceDigest === digest) return "unchanged";
+    this.#deleteDerivedRows(runId);
     this.#resetToPending(existing, head, digest);
     return "advanced";
   }
@@ -601,7 +690,7 @@ export class LongitudinalStore {
     });
   }
 
-  #claimIsCurrent(claim: LongitudinalClaim, nowIso: string): boolean {
+  #claimIsCurrent(claim: LongitudinalClaim, nowIso: string, allowRenewedLease = false): boolean {
     const job = this.#job(claim.runId);
     if (job === undefined || job.state !== "running") return false;
     const owner = this.#db.prepare(`SELECT 1 AS ok FROM drill_runs WHERE id = ? AND owner_learner_id = ?
@@ -610,7 +699,7 @@ export class LongitudinalStore {
       && job.claim.claimedRequestedSeq === claim.claimedRequestedSeq && job.requestedSourceDigest === claim.claimedSourceDigest
       && job.claim.claimedSourceDigest === claim.claimedSourceDigest && job.derivedRev === claim.derivedRev
       && job.claimGeneration === claim.generation && job.claim.claimToken === claim.token && job.claim.claimedBy === claim.workerId
-      && job.claim.leaseExpiresAt === claim.leaseExpiresAt && job.claim.leaseExpiresAt > nowIso;
+      && (allowRenewedLease || job.claim.leaseExpiresAt === claim.leaseExpiresAt) && job.claim.leaseExpiresAt > nowIso;
   }
 
   /** Reads the exact claimed prefix under one read transaction; a stale claim reads nothing. */
@@ -618,8 +707,54 @@ export class LongitudinalStore {
     this.#assertClaim(claim);
     return this.#inTransaction("BEGIN", () => {
       if (!this.#claimIsCurrent(claim, this.#nowIso())) return undefined;
-      return this.#sourceImageInTransaction(claim.runId, claim.claimedRequestedSeq);
+      const image = this.#sourceImageInTransaction(claim.runId, claim.claimedRequestedSeq);
+      this.#claimImages.set(image, claim);
+      return image;
     });
+  }
+
+  /** Original claim/image pair only. Normal renewals preserve identity; replaced claims do not. */
+  openClaimedGameSource(claim: LongitudinalClaim, image: LongitudinalSourceImageV4): ProfileGameSource {
+    this.#assertClaim(claim);
+    if (this.#claimImages.get(image) !== claim || this.sourceDigest(image) !== claim.claimedSourceDigest) {
+      throw new LongitudinalContractError("LONGITUDINAL_GAME_SOURCE_IMAGE_MISMATCH");
+    }
+    const check = () => {
+      if (!this.#claimIsCurrent(claim, this.#nowIso(), true)) throw new LongitudinalContractError("LONGITUDINAL_GAME_CLAIM_RETIRED");
+    };
+    const scope = PROFILE_GAME_SOURCE_AUTHORITY.open(image, "claim", check, { derivedRev: claim.derivedRev, sourceDigest: claim.claimedSourceDigest });
+    this.#gameSources.add(scope); return scope;
+  }
+
+  /** Complete-job read scope; acquisition releases its short transaction before projection. */
+  openRebuildGameSource(runId: string): ProfileGameSource | undefined {
+    const acquired = this.#inTransaction("BEGIN", () => {
+      const job = this.#job(runId);
+      if (job?.state !== "complete" || job.derivedRev !== OBSERVATION_DERIVATION_REV) return undefined;
+      const image = this.#sourceImageInTransaction(runId, job.requestedSeq);
+      if (this.sourceDigest(image) !== job.requestedSourceDigest) return undefined;
+      return { job, image };
+    });
+    if (acquired === undefined) return undefined;
+    const { job, image } = acquired;
+    const check = () => {
+      const current = this.#job(runId);
+      const owner = this.#db.prepare(`SELECT 1 AS ok FROM drill_runs WHERE id = ? AND owner_learner_id = ?
+        AND longitudinal_profile_disposition = 'profileable'`).get(runId, job.learnerId);
+      if (owner === undefined || current?.state !== "complete" || current.learnerId !== job.learnerId
+        || current.requestedSeq !== job.requestedSeq || current.completedSeq !== job.completedSeq
+        || current.completedSeq !== current.requestedSeq || current.requestedSourceDigest !== job.requestedSourceDigest
+        || current.derivedRev !== job.derivedRev || current.claimGeneration !== job.claimGeneration) {
+        throw new LongitudinalContractError("LONGITUDINAL_REBUILD_SOURCE_MOVED", runId);
+      }
+    };
+    const scope = PROFILE_GAME_SOURCE_AUTHORITY.open(image, "rebuild", check, { derivedRev: job.derivedRev, sourceDigest: job.requestedSourceDigest });
+    this.#gameSources.add(scope); return scope;
+  }
+
+  closeGameSource(scope: ProfileGameSource): void {
+    if (!this.#gameSources.has(scope)) throw new LongitudinalContractError("LONGITUDINAL_GAME_SOURCE_FOREIGN");
+    PROFILE_GAME_SOURCE_AUTHORITY.close(scope);
   }
 
   /** Full-tuple CAS renewal from `now`; zero changed rows means the projector must stop. */
@@ -705,23 +840,50 @@ export class LongitudinalStore {
       structure.run(row.learnerId, row.runId, row.rootKey, row.rootNodeId, row.sessionKind, row.packId, row.branchCount,
         row.rewoundCount, row.forkedCount, row.groupCount, row.outcomeCount, row.observedAt, row.derivedRev);
     }
+    const game = this.#db.prepare(`INSERT INTO learner_game_facts
+      (learner_id,run_id,completed_seq,derived_rev,observed_at,primary_branch_id,learner_side,game_json) VALUES (?,?,?,?,?,?,?,?)`);
+    for (const raw of projection.gameFacts) {
+      const row = parseLongitudinalGameFactRow(raw);
+      game.run(row.learnerId, row.runId, row.completedSeq, row.derivedRev, row.observedAt, row.primaryBranchId, row.learnerSide, JSON.stringify(row.game));
+    }
+    const choice = this.#db.prepare(`INSERT INTO learner_choice_facts
+      (learner_id,run_id,completed_seq,derived_rev,observed_at,primary_branch_id,cohort_json) VALUES (?,?,?,?,?,?,?)`);
+    for (const raw of projection.choiceFacts) {
+      const row = parseLongitudinalChoiceFactRow(raw);
+      choice.run(row.learnerId, row.runId, row.completedSeq, row.derivedRev, row.observedAt, row.primaryBranchId, JSON.stringify(row.cohort));
+    }
+    const subject = this.#db.prepare(INSERT_SUBJECT_OBSERVATION);
+    for (const raw of projection.subjectObservations) subject.run(...subjectObservationSqlValues(parseLongitudinalSubjectObservationRow(raw)));
   }
 
   static #assertProjectionSubject(projection: LongitudinalProjection, runId: string, learnerId: string, derivedRev: number): void {
-    for (const row of [...projection.denominators, ...projection.observations, ...projection.structureStats]) {
+    if (projection.gameFacts.length !== 1) throw new LongitudinalContractError("LONGITUDINAL_GAME_ROW_CARDINALITY");
+    if (projection.choiceFacts.length !== 1) throw new LongitudinalContractError("LONGITUDINAL_CHOICE_ROW_CARDINALITY");
+    for (const row of [...projection.denominators, ...projection.observations, ...projection.structureStats, ...projection.gameFacts, ...projection.choiceFacts, ...projection.subjectObservations]) {
       if (row.runId !== runId || row.learnerId !== learnerId || row.derivedRev !== derivedRev) {
         throw new LongitudinalContractError("LONGITUDINAL_PROJECTION_SUBJECT_MISMATCH", runId);
       }
     }
   }
 
+  static #assertSubjectReduction(projection: LongitudinalProjection, image: LongitudinalSourceImageV4, scope: ProfileGameSource, derivedRev: number): void {
+    assertProfileSubjectFactOwner(projection.subjectObservations, image, scope, derivedRev);
+    const source = readProfileGameSource(scope), run = source.run;
+    const expected = foldProfileSubjectReduction(readProfileSubjectReduction(projection.subjectObservations, image, scope, derivedRev), {
+      learnerId: image.ownerLearnerId, runId: run.id, observedAt: new Date(Date.parse(run.events[0]!.at)).toISOString(), derivedRev,
+      sessionKind: run.sessionKind, packId: run.sessionKind === "pack" ? run.packId : null,
+    });
+    assertProfileSubjectFold(projection, expected);
+    const check = profileSubjectReferenceIndex(image, derivedRev);
+    for (const row of projection.subjectObservations) check(parseLongitudinalSubjectObservationRow(row));
+  }
+
   /**
-   * Replaces the three derived row sets and advances `completed_seq = N` in one transaction, only
+   * Replaces the four derived row sets and advances `completed_seq = N` in one transaction, only
    * under the immutable claimed cut/source tuple and the exact current `requested_seq = N`.
    */
-  publish(claim: LongitudinalClaim, projection: LongitudinalProjection): "published" | "publication_conflict" {
+  publish(claim: LongitudinalClaim, supplied: LongitudinalProjection): "published" | "publication_conflict" {
     this.#assertClaim(claim);
-    LongitudinalStore.#assertProjectionSubject(projection, claim.runId, claim.learnerId, claim.derivedRev);
     this.#db.exec("BEGIN IMMEDIATE");
     try {
       const nowIso = this.#nowIso();
@@ -729,6 +891,23 @@ export class LongitudinalStore {
         this.#db.exec("ROLLBACK");
         return "publication_conflict";
       }
+      const projection = captureProjection(supplied);
+      LongitudinalStore.#assertProjectionSubject(projection, claim.runId, claim.learnerId, claim.derivedRev);
+      const source = this.#sourceImageInTransaction(claim.runId, claim.claimedRequestedSeq);
+      if (this.sourceDigest(source) !== claim.claimedSourceDigest) {
+        this.#db.exec("ROLLBACK"); return "publication_conflict";
+      }
+      const owner = readProfileGameFactOwner(projection.gameFacts[0]!);
+      const originalClaim = this.#claimImages.get(owner.image);
+      const keys = ["runId", "learnerId", "claimedRequestedSeq", "claimedSourceDigest", "derivedRev", "generation", "token", "workerId"] as const;
+      if (owner.scope === undefined || !this.#gameSources.has(owner.scope) || originalClaim === undefined || keys.some(key => originalClaim[key] !== claim[key]) || this.sourceDigest(owner.image) !== claim.claimedSourceDigest) {
+        throw new LongitudinalContractError("LONGITUDINAL_GAME_ROW_OWNER_INVALID");
+      }
+      assertProfileGameFactReferences(parseLongitudinalGameFactRow(projection.gameFacts[0]), source);
+      const choiceOwner = readProfileChoiceFactOwner(projection.choiceFacts[0]!);
+      if (choiceOwner.image !== owner.image || choiceOwner.scope !== owner.scope) throw new LongitudinalContractError("LONGITUDINAL_CHOICE_ROW_OWNER_INVALID");
+      assertProfileChoiceFactReferences(parseLongitudinalChoiceFactRow(projection.choiceFacts[0]), source);
+      LongitudinalStore.#assertSubjectReduction(projection, owner.image, owner.scope, claim.derivedRev);
       this.#deleteDerivedRows(claim.runId);
       this.#insertProjection(projection);
       const changed = this.#db.prepare(`UPDATE learner_observation_jobs
@@ -772,7 +951,7 @@ export class LongitudinalStore {
         if (job.derivedRev !== query.derivationRev) return { kind: "unavailable", runId, requestedSeq, reason: "revision_mismatch" };
         if (requestedSeq !== job.requestedSeq) return { kind: "unavailable", runId, requestedSeq, reason: "cut_superseded" };
         const cut = { runId, requestedSeq: job.requestedSeq, completedSeq: job.completedSeq, derivedRev: job.derivedRev };
-        if (job.state === "complete") return { kind: "complete", ...cut };
+        if (job.state === "complete") return { kind: "complete", ...cut, sourceDigest: job.requestedSourceDigest };
         if (job.state === "quarantined") return { kind: "failed", ...cut, failureCode: job.failureCode, attempts: job.retryCount };
         if (job.state === "retry_wait") return { kind: "pending", ...cut, retryAt: job.nextAttemptAt };
         return { kind: "pending", ...cut };
@@ -809,6 +988,9 @@ export class LongitudinalStore {
     readonly denominators: readonly LongitudinalDenominatorRow[];
     readonly observations: readonly LongitudinalObservationRow[];
     readonly structureStats: readonly LongitudinalStructureStatRow[];
+    readonly gameFacts: readonly GameFactReadOutcome[];
+    readonly choiceFacts: readonly ChoiceFactReadOutcome[];
+    readonly subjectObservations: readonly LongitudinalSubjectObservationRow[];
   } {
     const filter = query.filter;
     const runSelected = (runId: string): boolean => {
@@ -823,6 +1005,9 @@ export class LongitudinalStore {
     const denominators: LongitudinalDenominatorRow[] = [];
     const observations: LongitudinalObservationRow[] = [];
     const structureStats: LongitudinalStructureStatRow[] = [];
+    const gameFacts: GameFactReadOutcome[] = [];
+    const choiceFacts: ChoiceFactReadOutcome[] = [];
+    const subjectObservations: LongitudinalSubjectObservationRow[] = [];
     const phaseOk = (phase: string): boolean => filter.phases === undefined || (filter.phases as readonly string[]).includes(phase);
     const classOk = (value: string): boolean => filter.decisionClasses === undefined || (filter.decisionClasses as readonly string[]).includes(value);
     const projectionOk = (row: LongitudinalObservationRow): boolean => filter.projections === undefined || filter.projections.some((projection) =>
@@ -830,6 +1015,39 @@ export class LongitudinalStore {
       && (projection.semanticSign === undefined || projection.semanticSign === row.semanticSign)
       && (projection.sourceSign === undefined || projection.sourceSign === row.sourceSign));
     for (const runId of selectedRuns) {
+      if (query.includeSubjectObservations === true) {
+        const cut = this.#job(runId)!, image = this.#sourceImageInTransaction(runId, cut.completedSeq);
+        if (cut.derivedRev !== OBSERVATION_DERIVATION_REV || this.sourceDigest(image) !== cut.requestedSourceDigest) throw new LongitudinalContractError("LONGITUDINAL_SUBJECT_SOURCE_JOIN_INVALID");
+        const check = profileSubjectReferenceIndex(image, query.derivationRev);
+        for (const raw of this.#db.prepare("SELECT * FROM learner_subject_observations WHERE run_id=? AND learner_id=? AND derived_rev=?").all(runId, query.learnerId, query.derivationRev) as readonly Row[]) {
+          const row = subjectObservationFromSql(raw); check(row);
+          if (phaseOk(row.phase) && classOk(row.decisionClass) && (query.subjectFilters === undefined || query.subjectFilters.some(f => subjectObservationMatches(row, f)))) subjectObservations.push(row);
+        }
+      }
+      if (query.includeChoiceFacts === true) {
+        const cut = this.#job(runId)!;
+        const raw = this.#db.prepare("SELECT * FROM learner_choice_facts WHERE run_id=? AND learner_id=? AND derived_rev=?").get(runId, query.learnerId, query.derivationRev) as Row | undefined;
+        if (raw === undefined) choiceFacts.push(Object.freeze({ kind: "unavailable", runId, completedSeq: cut.completedSeq, reason: "choice_facts_missing" }));
+        else {
+          try {
+            const row = choiceFactFromSql(raw);
+            if (row.runId !== runId || row.learnerId !== query.learnerId || row.derivedRev !== query.derivationRev || row.completedSeq !== cut.completedSeq) throw new TypeError("Choice cut mismatch");
+            choiceFacts.push(Object.freeze({ kind: "available", row }));
+          } catch { choiceFacts.push(Object.freeze({ kind: "unavailable", runId, completedSeq: cut.completedSeq, reason: "choice_facts_invalid" })); }
+        }
+      }
+      if (query.includeGameFacts === true) {
+        const cut = this.#job(runId)!;
+        const raw = this.#db.prepare("SELECT * FROM learner_game_facts WHERE run_id=? AND learner_id=? AND derived_rev=?").get(runId, query.learnerId, query.derivationRev) as Row | undefined;
+        if (raw === undefined) gameFacts.push(Object.freeze({ kind: "unavailable", runId, completedSeq: cut.completedSeq, reason: "game_facts_missing" }));
+        else {
+          try {
+            const row = gameFactFromSql(raw);
+            if (row.completedSeq !== cut.completedSeq) throw new TypeError("GAME cut mismatch");
+            gameFacts.push(Object.freeze({ kind: "available", row }));
+          } catch { gameFacts.push(Object.freeze({ kind: "unavailable", runId, completedSeq: cut.completedSeq, reason: "game_facts_invalid" })); }
+        }
+      }
       for (const raw of this.#db.prepare(`SELECT learner_id, run_id, phase, decision_class, decisions, observed_at, derived_rev
           FROM learner_observation_denominators WHERE run_id = ? AND learner_id = ? AND derived_rev = ?`).all(runId, query.learnerId, query.derivationRev) as readonly Row[]) {
         const row = denominatorFromSql(raw);
@@ -848,26 +1066,36 @@ export class LongitudinalStore {
     denominators.sort((left, right) => compareText(`${left.runId}\0${left.phase}\0${left.decisionClass}`, `${right.runId}\0${right.phase}\0${right.decisionClass}`));
     observations.sort((left, right) => compareText(observationSortKey(left), observationSortKey(right)));
     structureStats.sort((left, right) => compareText(`${left.runId}\0${left.rootKey}`, `${right.runId}\0${right.rootKey}`));
-    return { denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats) };
+    subjectObservations.sort((a, b) => compareText(a.runId, b.runId) || a.decisionRef.eventSeq - b.decisionRef.eventSeq || compareText(subjectObservationKey(a), subjectObservationKey(b)));
+    return { denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts: Object.freeze(gameFacts), choiceFacts: Object.freeze(choiceFacts), subjectObservations: Object.freeze(subjectObservations) };
   }
 
   // ------------------------------------------------------------------------------------------
   // Rebuild instrument (§C, AC 11): compare durable rows with a fresh projection; optionally repair.
 
-  storedProjection(runId: string): LongitudinalProjection {
+  storedProjection(runId: string, forRebuild = false): LongitudinalProjection {
     const denominators = (this.#db.prepare("SELECT * FROM learner_observation_denominators WHERE run_id = ?").all(runId) as readonly Row[]).map(denominatorFromSql);
     const observations = (this.#db.prepare(`SELECT o.*, d.decisions FROM learner_observations o
         LEFT JOIN learner_observation_denominators d ON d.learner_id = o.learner_id AND d.run_id = o.run_id
           AND d.phase = o.phase AND d.decision_class = o.decision_class WHERE o.run_id = ?`).all(runId) as readonly Row[]).map(observationFromSqlLoose);
     const structureStats = (this.#db.prepare("SELECT * FROM learner_structure_stats WHERE run_id = ?").all(runId) as readonly Row[]).map(structureFromSql);
-    return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats) });
+    const gameFacts = (this.#db.prepare("SELECT * FROM learner_game_facts WHERE run_id=?").all(runId) as readonly Row[]).flatMap(row => {
+      try { return [gameFactFromSql(row)]; } catch (error) { if (!forRebuild) throw error; return []; }
+    });
+    const choiceFacts = (this.#db.prepare("SELECT * FROM learner_choice_facts WHERE run_id=?").all(runId) as readonly Row[]).flatMap(row => {
+      try { return [choiceFactFromSql(row)]; } catch (error) { if (!forRebuild) throw error; return []; }
+    });
+    const subjectObservations = (this.#db.prepare("SELECT * FROM learner_subject_observations WHERE run_id=?").all(runId) as readonly Row[]).flatMap(row => {
+      try { return [subjectObservationFromSql(row)]; } catch (error) { if (!forRebuild) throw error; return []; }
+    }).sort((a, b) => a.decisionRef.eventSeq - b.decisionRef.eventSeq || compareText(subjectObservationKey(a), subjectObservationKey(b)));
+    return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts: Object.freeze(gameFacts), choiceFacts: Object.freeze(choiceFacts), subjectObservations: Object.freeze(subjectObservations) });
   }
 
   /**
    * The projector is an operand, not an import: the HTTP-side storage module graph never reaches the
    * semantic adapters. The rebuild CLI passes `projectObservations`.
    */
-  rebuild(options: { readonly write: boolean; readonly project: (image: LongitudinalSourceImageV4) => LongitudinalProjection }): RebuildReport {
+  rebuild(options: { readonly write: boolean; readonly project: (image: LongitudinalSourceImageV4, options: { readonly gameSource: ProfileGameSource }) => LongitudinalProjection }): RebuildReport {
     const project = options.project;
     const eligible = this.#inTransaction("BEGIN", () => this.#db.prepare(`SELECT id, owner_learner_id FROM drill_runs
       WHERE longitudinal_profile_disposition = 'profileable' AND schema_version = ? AND ${HEAD_SQL} > 0 ORDER BY id`)
@@ -878,7 +1106,7 @@ export class LongitudinalStore {
     let repaired = 0;
     const eligibleIds = new Set(eligible.map((row) => String(row.id)));
     // Rows or jobs for non-eligible runs (suppressed/deleted) are surplus by definition ([[D2065]]).
-    for (const table of ["learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_observation_jobs"] as const) {
+    for (const table of LONGITUDINAL_TABLES) {
       for (const row of this.#db.prepare(`SELECT DISTINCT run_id FROM ${table} ORDER BY run_id`).all() as readonly Row[]) {
         const runId = String(row.run_id);
         if (eligibleIds.has(runId)) continue;
@@ -899,27 +1127,55 @@ export class LongitudinalStore {
       if (job.derivedRev !== OBSERVATION_DERIVATION_REV) { skipped.revision_mismatch.push(runId); continue; }
       if (job.state !== "complete") { skipped[job.state].push(runId); continue; }
       checked += 1;
-      const image = this.longitudinalSourceImageV4(runId, job.requestedSeq);
-      if (this.sourceDigest(image) !== job.requestedSourceDigest) {
+      const scope = this.openRebuildGameSource(runId);
+      if (scope === undefined) {
         mismatches.push({ runId, table: "learner_observation_jobs", key: `${runId}:source_digest`, kind: "changed" });
         continue;
       }
-      const expected = project(image);
-      const actual = this.storedProjection(runId);
-      const runMismatches = compareProjections(runId, expected, actual);
-      mismatches.push(...runMismatches);
-      if (options.write && runMismatches.length > 0) {
-        this.#inTransaction("BEGIN IMMEDIATE", () => {
-          const current = this.#job(runId);
-          if (current === undefined || current.state !== "complete" || current.requestedSeq !== job.requestedSeq
-            || current.requestedSourceDigest !== job.requestedSourceDigest || current.claimGeneration !== job.claimGeneration) {
-            throw new LongitudinalContractError("LONGITUDINAL_REBUILD_SOURCE_MOVED", runId);
-          }
-          this.#deleteDerivedRows(runId);
-          this.#insertProjection(expected);
-        });
-        repaired += 1;
-      }
+      try {
+        const image = readProfileGameSource(scope).image;
+        const expected = captureProjection(project(image, { gameSource: scope }));
+        readProfileGameSource(scope);
+        LongitudinalStore.#assertProjectionSubject(expected, runId, job.learnerId, job.derivedRev);
+        const owner = readProfileGameFactOwner(expected.gameFacts[0]!);
+        if (owner.image !== image || owner.scope !== scope) throw new LongitudinalContractError("LONGITUDINAL_GAME_ROW_OWNER_INVALID");
+        assertProfileGameFactReferences(parseLongitudinalGameFactRow(expected.gameFacts[0]), image);
+        const choiceOwner = readProfileChoiceFactOwner(expected.choiceFacts[0]!);
+        if (choiceOwner.image !== image || choiceOwner.scope !== scope) throw new LongitudinalContractError("LONGITUDINAL_CHOICE_ROW_OWNER_INVALID");
+        assertProfileChoiceFactReferences(parseLongitudinalChoiceFactRow(expected.choiceFacts[0]), image);
+        LongitudinalStore.#assertSubjectReduction(expected, image, scope, job.derivedRev);
+        const actual = this.storedProjection(runId, true);
+        const rawGameCount = Number((this.#db.prepare("SELECT count(*) AS n FROM learner_game_facts WHERE run_id=?").get(runId) as Row).n);
+        if (rawGameCount !== actual.gameFacts.length) mismatches.push({ runId, table: "learner_game_facts", key: `${runId}:invalid`, kind: "changed" });
+        const rawChoiceCount = Number((this.#db.prepare("SELECT count(*) AS n FROM learner_choice_facts WHERE run_id=?").get(runId) as Row).n);
+        if (rawChoiceCount !== actual.choiceFacts.length) mismatches.push({ runId, table: "learner_choice_facts", key: `${runId}:invalid`, kind: "changed" });
+        const runMismatches = compareProjections(runId, expected, actual);
+        const rawSubjectCount = Number((this.#db.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id=?").get(runId) as Row).n);
+        if (rawSubjectCount !== actual.subjectObservations.length) runMismatches.push({ runId, table: "learner_subject_observations", key: `${runId}:invalid`, kind: "changed" });
+        mismatches.push(...runMismatches);
+        if (options.write && runMismatches.length > 0) {
+          this.#inTransaction("BEGIN IMMEDIATE", () => {
+            const current = this.#job(runId);
+            if (current === undefined || current.state !== "complete" || current.requestedSeq !== job.requestedSeq
+              || current.learnerId !== job.learnerId || current.completedSeq !== job.completedSeq
+              || current.derivedRev !== job.derivedRev || current.requestedSourceDigest !== job.requestedSourceDigest
+              || current.claimGeneration !== job.claimGeneration) {
+              throw new LongitudinalContractError("LONGITUDINAL_REBUILD_SOURCE_MOVED", runId);
+            }
+            readProfileGameSource(scope);
+            if (this.sourceDigest(this.#sourceImageInTransaction(runId, job.requestedSeq)) !== job.requestedSourceDigest) {
+              throw new LongitudinalContractError("LONGITUDINAL_REBUILD_SOURCE_MOVED", runId);
+            }
+            LongitudinalStore.#assertProjectionSubject(expected, runId, job.learnerId, job.derivedRev);
+            assertProfileGameFactReferences(parseLongitudinalGameFactRow(expected.gameFacts[0]), image);
+            assertProfileChoiceFactReferences(parseLongitudinalChoiceFactRow(expected.choiceFacts[0]), image);
+            LongitudinalStore.#assertSubjectReduction(expected, image, scope, job.derivedRev);
+            this.#deleteDerivedRows(runId);
+            this.#insertProjection(expected);
+          });
+          repaired += 1;
+        }
+      } finally { this.closeGameSource(scope); }
     }
     return Object.freeze({ checked, repaired, mismatches: Object.freeze(mismatches), skipped: Object.freeze(skipped) });
   }
@@ -940,6 +1196,9 @@ function compareProjections(runId: string, expected: LongitudinalProjection, act
   compare("learner_observation_denominators", jsonRows(expected.denominators), jsonRows(actual.denominators), (row: LongitudinalDenominatorRow) => `${row.phase}/${row.decisionClass}`);
   compare("learner_observations", jsonRows(expected.observations), jsonRows(actual.observations), (row: LongitudinalObservationRow) => `${row.projectionId}@${row.projectionVersion}/${row.semanticSign}/${row.sourceSign}/${row.phase}/${row.decisionClass}`);
   compare("learner_structure_stats", jsonRows(expected.structureStats), jsonRows(actual.structureStats), (row: LongitudinalStructureStatRow) => row.rootKey);
+  compare("learner_game_facts", jsonRows(expected.gameFacts), jsonRows(actual.gameFacts), (row: LongitudinalGameFactRow) => row.runId);
+  compare("learner_choice_facts", jsonRows(expected.choiceFacts), jsonRows(actual.choiceFacts), (row: LongitudinalChoiceFactRow) => row.runId);
+  compare("learner_subject_observations", jsonRows(expected.subjectObservations), jsonRows(actual.subjectObservations), (row: LongitudinalSubjectObservationRow) => subjectObservationKey(row));
   return mismatches;
 }
 

@@ -9,6 +9,7 @@ import { parsePresentationReceipt, presentedSentence } from "../../../packages/r
 import { recordedComparisonData } from "../../../packages/runtime/src/recorded-comparison.js";
 import { RECORDED_COMPARISON_POINT_AUTHORITY, readRecordedComparisonPointSource, type RecordedComparisonPointCapture } from "../../../packages/runtime/src/recorded-comparison-point.js";
 import { createRecordedReviewBoundarySourceOwner } from "../../../packages/runtime/src/recorded-review-boundary.js";
+import { readRecordedEngineAttachments } from "../../../packages/runtime/src/internal/recorded-engine-attachments.js";
 import { comparisonAssistance } from "../../../packages/runtime/src/testing/recorded-comparison-point-fixture.js";
 import { attachDelivery, evaluationDelivery, START_FEN } from "../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import { withDerivedRequires } from "./capability/pack-capabilities.js";
@@ -25,6 +26,8 @@ import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-e
 const at = "2026-11-01T19:00:00.000Z", lease = { writerId: "compare-writer", learnerId: "__legacy" };
 const stores: SQLiteRunStorage[] = [];
 afterEach(() => { vi.restoreAllMocks(); for (const store of stores.splice(0)) store.close(); });
+// Raw constructor controls test source operands only. Actual grant cases below use RunService.
+const sourceCurrent = (capture: RecordedComparisonPointCapture) => () => { readRecordedEngineAttachments(capture.attachments); };
 interface Report { readonly node: number; readonly engine?: string; readonly cp?: number; readonly mate?: number; readonly time?: boolean }
 async function fixture(reports: readonly Report[] = []) {
   const document = withDerivedRequires({ id: "comparison-points", version: "1.0.0", title: "Synthetic Compare sources", mode: "outcome", phase: "opening",
@@ -84,8 +87,8 @@ describe("real Compare source owner and current service integration", () => {
     const offline = { ...original, manifest, ledger, manifestDigest: `sha256:${evidenceDigest(manifest)}`, ledgerDigest: `sha256:${evidenceDigest(ledger)}`,
       candidates: original.candidates.map(row => ({ ...row, source: manifest.entries[row.sourceOrdinal]! })),
       abstentions: original.abstentions.map(row => ({ ...row, source: manifest.entries[row.sourceOrdinal]! })) };
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...input, offline })).toThrow(/source evidence kind/u);
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(input)).not.toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...input, offline }, sourceCurrent(input))).toThrow(/source evidence kind/u);
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(input, sourceCurrent(input))).not.toThrow();
   });
 
   it("keeps fixed A/X,B/Y-then-X,C/Y endpoints and every local unavailable node", async () => {
@@ -103,7 +106,7 @@ describe("real Compare source owner and current service integration", () => {
     const f = await fixture();
     f.save(attachDelivery(f.storage.read(f.run.id)!.run, f.path[1]!.id, evaluationDelivery(f.path[1]!.fen, "cp 25")));
     const run = f.storage.read(f.run.id)!.run;
-    const page = f.service.queryModules(run.id, f.permission.principal, f.permission.assistance, { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["compare_coach"] });
+    const page = await f.service.queryModules(run.id, f.permission.principal, f.permission.assistance, { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["compare_coach"] });
     const packet = page.packets.find(value => value.module === "compare_coach")!;
     expect(packet).toBeDefined(); expect(packet.receipt.items.length).toBeGreaterThan(0);
     expect(packet.unavailable).toContainEqual(expect.objectContaining({ projection: "derived.compare.engine_trajectory@2", reason: "missing_eval" }));
@@ -142,36 +145,39 @@ describe("real Compare source owner and current service integration", () => {
       corrupted = { ...offline, manifest, manifestDigest: `sha256:${evidenceDigest(manifest)}`,
         candidates: offline.candidates.map(candidate => ({ ...candidate, source: manifest.entries[candidate.sourceOrdinal]! })) };
     }
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...input, offline: corrupted })).toThrow();
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(input)).not.toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...input, offline: corrupted }, sourceCurrent(input))).toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(input, sourceCurrent(input))).not.toThrow();
   });
   it("D3897 clones unrelated mutable backing records and owns candidate envelopes", async () => {
     const f = await fixture([{ node: 0 }]), input = f.capture(f.path[0]!.id), offline = input.offline!;
     const extra = { kind: "citable_text", anchor: { fen: f.path[0]!.fen }, sourceId: "engine-0", retrievedAt: at, grounds: "citable_source", supports: [], values: { text: "Synthetic unrelated record" } };
     const ledger = { ...offline.ledger, records: [...offline.ledger.records, extra] }, candidates = offline.candidates.map(row => ({ ...row }));
     const capture = { ...input, offline: { ...offline, ledger, candidates, ledgerDigest: `sha256:${evidenceDigest(ledger)}` } };
-    const source = RECORDED_COMPARISON_POINT_AUTHORITY.issue(capture), before = readRecordedComparisonPointSource(source);
+    const source = RECORDED_COMPARISON_POINT_AUTHORITY.issue(capture, sourceCurrent(capture)), before = readRecordedComparisonPointSource(source);
     expect(Object.isFrozen(extra)).toBe(false); expect(Object.isFrozen(extra.values)).toBe(false); expect(Object.isFrozen(candidates[0])).toBe(false);
     extra.values.text = "caller changed"; candidates.reverse();
     expect(readRecordedComparisonPointSource(source)).toBe(before);
     expect(before.authority.offline!.ledger.records.at(-1)!.values.text).toBe("Synthetic unrelated record");
   });
-  it("D3899 revalidates real host grants, role downgrade and revocation through RunService", async () => {
-    const f = await fixture([{ node: 0 }]), viewer = { learnerId: "compare-viewer", handle: "compare-viewer" };
+  it.each([true, false])("D3899/D3936 revalidates real grants through the direct factory, including available=%s", async available => {
+    const f = await fixture(available ? [{ node: 0 }] : []), viewer = { learnerId: "compare-viewer", handle: "compare-viewer" };
     f.storage.createLearner({ id: viewer.learnerId, handle: viewer.handle, passwordHash: "!", createdAt: at });
     f.storage.grantRole(f.run.id, viewer.learnerId, "host", lease, at);
     const assistance = f.finalized(viewer), selection = f.query();
     const context = f.service.resolveComparisonRecordedContext(f.run.id, viewer, assistance, selection, f.controller.signal)!;
     const image = f.service.readComparisonRecordedContext(context);
     const source = f.service.resolveComparisonPointSource(context, { comparison: image.comparison, nodeId: f.path[0]!.id, signal: f.controller.signal });
-    expect(readRecordedComparisonPointSource(source).payload).not.toBeNull();
+    expect(readRecordedComparisonPointSource(source).payload === null).toBe(!available);
+    expect(invokeEvidenceValueRoute("derived.compare.engine_trajectory@2", { comparisonPoint: source }).kind).toBe(available ? "available" : "unavailable");
     // The original selection is captured, not retained as caller-owned backing state.
     (selection as { timing: string }).timing = "checkpoint";
     expect(() => f.service.readComparisonRecordedContext(context)).not.toThrow();
     f.storage.grantRole(f.run.id, viewer.learnerId, "participant", lease, at);
     expect(() => f.service.readComparisonRecordedContext(context)).toThrow(expect.objectContaining({ reason: "permission_withheld" }));
+    expect(() => invokeEvidenceValueRoute("derived.compare.engine_trajectory@2", { comparisonPoint: source })).toThrow(expect.objectContaining({ reason: "permission_withheld" }));
     f.storage.revokeGrant(f.run.id, viewer.learnerId, lease);
     expect(() => f.service.readComparisonRecordedContext(context)).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
+    expect(() => invokeEvidenceValueRoute("derived.compare.engine_trajectory@2", { comparisonPoint: source })).toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
   });
   it.each(["participant", "spectator"] as const)("D3899 refuses actual %s grants before registry work", async role => {
     const f = await fixture([{ node: 0 }]), viewer = { learnerId: "compare-viewer", handle: "compare-viewer" };
@@ -193,15 +199,15 @@ describe("real Compare source owner and current service integration", () => {
       if (!revoked) { revoked = true; f.storage.revokeGrant(f.run.id, viewer.learnerId, lease); }
       return result;
     });
-    expect(() => f.service.queryModules(f.run.id, viewer, assistance, { timing: "review", nodeId: f.run.activeCursor.nodeId, requested: ["compare_coach"] }))
-      .toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
+    await expect(f.service.queryModules(f.run.id, viewer, assistance, { timing: "review", nodeId: f.run.activeCursor.nodeId, requested: ["compare_coach"] }))
+      .rejects.toThrow(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
   });
   it("delivers the complete current module through the actual REST route and maps corrupt sources to typed failure", async () => {
     const f = await fixture([{ node: 0 }]), handler = createRestHandler(f.service);
     const ask = () => handler(new Request(`http://tabiya.test/runs/${f.run.id}/modules/query`, { method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ assistance: f.intent, query: { timing: "review", nodeId: f.run.activeCursor.nodeId, requested: ["compare_coach"] } }) }));
     const response = await ask(); expect(response.status).toBe(200);
-    const { page } = await response.json() as { page: ReturnType<RunService["queryModules"]> };
+    const { page } = await response.json() as { page: Awaited<ReturnType<RunService["queryModules"]>> };
     expect(page.packets.find(packet => packet.module === "compare_coach")!.receipt.items.every(item => item.adapter.consumer.version === 2)).toBe(true);
     vi.spyOn(f.registry, "resolveRecordedMeasurementSource").mockImplementation(() => { throw new TypeError("Synthetic corrupt source"); });
     const corrupt = await ask(); expect(corrupt.status).toBe(503); expect(await corrupt.json()).toMatchObject({ error: { code: "EVIDENCE_UNAVAILABLE" } });

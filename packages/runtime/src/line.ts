@@ -6,7 +6,8 @@ import { parseUci } from "chessops/util";
 import type { DrillPackDefinition, SpineNode } from "@chess-tabiya/schema/drill-pack";
 
 import { transposeKey } from "./chess.js";
-import { evaluateObjectivePredicate, type FenPredicate } from "./objective.js";
+import { assertCurrentObjectiveSources, evaluateObjectivePredicate, type FenPredicate } from "./objective.js";
+import { preflightCurrentAuthoredOperation } from "./structural-evidence.js";
 import { historyFrom } from "./runtime.js";
 import { exactMoveIdentity } from "./legal-moves.js";
 import type { DrillRun, Node } from "./types.js";
@@ -103,7 +104,12 @@ export function insideAuthoredBoundary(
   pack: DrillPackDefinition,
   run: DrillRun,
   node: Node,
+  purpose?: "authoring" | "objective",
 ): boolean {
+  if (purpose !== undefined) {
+    preflightCurrentAuthoredOperation(purpose);
+    assertCurrentObjectiveSources({ type: "outsideAuthoredBoundary", spineTransposeKeys: [], fenPredicates: (pack.authoredBoundary?.fenPredicates ?? []) as readonly FenPredicate[] });
+  }
   if (node.parentId === null) return true;
   const boundary = pack.authoredBoundary;
   if (boundary === undefined) return false;
@@ -114,7 +120,7 @@ export function insideAuthoredBoundary(
     evaluateObjectivePredicate(runAt(run, node), {
       type: "fenPredicate",
       predicate: predicate as FenPredicate,
-    }),
+    }, purpose),
   );
 }
 

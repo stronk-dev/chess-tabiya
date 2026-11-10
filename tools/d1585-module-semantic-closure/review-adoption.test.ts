@@ -18,6 +18,7 @@ import { parsePresentationReceipt, presentEvidenceItems, presentationAdapter } f
 import { recordedSemanticPath } from "../../packages/runtime/src/recorded-semantic-path.js";
 import { reviewPacketForRun } from "../../packages/runtime/src/review-evidence.js";
 import { reviewMapProjection } from "../../packages/runtime/src/review-map.js";
+import { recordedReviewFixtureSources } from "../../packages/runtime/src/testing/recorded-grade-fixture.js";
 import { localSemanticEventClosure, type SemanticEvidenceEvent } from "../../packages/runtime/src/semantic-evidence.js";
 import { CASTLING_OPEN_FILE_CASES, CASTLING_OPEN_FILE_NEGATIVES } from "../../packages/runtime/src/testing/castling-open-file-fixtures.js";
 import { importRecord, importedRun, play } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
@@ -74,7 +75,7 @@ function inspect(run: DrillRun) {
   const original = JSON.stringify(run);
   const packet = reviewPacketForRun(run, branchId, { importRecord: importRecord(run, "*"), engine: new Map() });
   const map = reviewMapProjection({ run, branchId, packet, semanticPath: recordedSemanticPath(run, branchId),
-    story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "learner", session: "imported" } });
+    story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, ...recordedReviewFixtureSources(run, branchId) });
   const path = branchPath(run, branchId);
   const rows = path.slice(1).map((node, index) => {
     const parent = path[index]!;
@@ -142,7 +143,7 @@ describe("D3758 disposable Review one-edge adoption probe", () => {
     expect(compileModulePacket({ module: "review_map", timing: "review", role: "author", session: "imported", evidence, mode: "admit" })).toMatchObject({ kind: "refused", reason: "role_outside_ceiling" });
     expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, consumer, JSON.parse(JSON.stringify(evidence)))).toThrow();
     expect(() => reviewMapProjection({ run: play(importedRun("different-run", fixture.side, fixture.fen), [fixture.uci]), branchId: run.activeCursor.branchId,
-      packet, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "learner", session: "imported" } })).toThrow("another run or branch");
+      packet, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, ...recordedReviewFixtureSources(run) })).toThrow("another run or branch");
     const evasion = play(importedRun("d3758-native-absence", "white", "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1"), ["e1e2"]);
     const [before, after] = branchPath(evasion, evasion.activeCursor.branchId);
     const closure = localSemanticEventClosure(before!.fen, after!.moveUci!, after!.fen);

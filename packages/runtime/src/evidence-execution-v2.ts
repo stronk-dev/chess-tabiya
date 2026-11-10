@@ -3,11 +3,12 @@ import { evidenceDigest, type CompiledEvidenceManifest, type LatencyMode, type V
 import { compileProjectionExecution, projectionOwnExecution, literalExecutionMembers, EvidenceExecutionError, type CompiledProjectionExecution } from "./evidence-execution.js";
 import { assertEvidenceReductionDeclaration, evidenceReductionContract } from "./evidence-reduction-contract.js";
 import { inspectEvidenceReductionBinding } from "./internal/evidence-value-routes.js";
+import { isImmutableOwnData } from "./internal/immutable-data.js";
 
 export type CompiledEvidenceExecutionPlan =
   | Readonly<{ kind: "fixed"; execution: CompiledProjectionExecution }>
   | Readonly<{ kind: "composition"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; members: readonly Readonly<{ member: number; inputs: readonly CompiledEvidenceExecutionPlan[] }>[]; worstCaseLatency: LatencyMode }>
-  | Readonly<{ kind: "reduction"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; operation: VersionedEvidenceId; sourceOwner: "RecordedComparisonStructuralPopulation" | "RecordedLastLevelPopulation" | "RecordedReviewMomentSource" | "RecordedOpeningHistorySource"; sourceUse: "captured_only"; elements: readonly Readonly<{ projection: VersionedEvidenceId; execution: CompiledEvidenceExecutionPlan }>[]; worstCaseLatency: LatencyMode }>;
+  | Readonly<{ kind: "reduction"; projection: VersionedEvidenceId; own: CompiledProjectionExecution["own"]; operation: VersionedEvidenceId; sourceOwner: "RecordedComparisonStructuralPopulation" | "RecordedLastLevelPopulation" | "RecordedReviewMomentSource" | "RecordedOpeningHistorySource" | "AuthoredPredicatePopulation"; sourceUse: "captured_only"; elements: readonly Readonly<{ projection: VersionedEvidenceId; execution: CompiledEvidenceExecutionPlan }>[]; worstCaseLatency: LatencyMode }>;
 const key = (ref: VersionedEvidenceId) => `${ref.id}@${ref.version}`;
 const ref = (value: VersionedEvidenceId) => Object.freeze({ id: value.id, version: value.version });
 const order: readonly LatencyMode[] = ["sync", "interactive", "background", "offline"];
@@ -15,8 +16,17 @@ const latency = (plan: CompiledEvidenceExecutionPlan) => plan.kind === "fixed" ?
 const slowest = (values: readonly LatencyMode[]) => values.reduce((a, b) => order.indexOf(a) >= order.indexOf(b) ? a : b, "sync" as LatencyMode);
 interface PlanAuthority { readonly digest: string; readonly validate: () => void }
 const plans = new WeakMap<object, PlanAuthority>();
+const immutablePlans = new WeakMap<object, Map<string, CompiledEvidenceExecutionPlan>>();
 
 export function compileProjectionExecutionV2(manifest: Pick<CompiledEvidenceManifest, "projections" | "producers">, root: VersionedEvidenceId): CompiledEvidenceExecutionPlan {
+  // Snapshot the requested ref once: a getter must not compile one root under another cache key.
+  const requested = ref(root);
+  if (typeof requested.id !== "string" || !Number.isSafeInteger(requested.version) || requested.version < 1) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", "invalid projection reference");
+  const rootKey = key(requested), cached = immutablePlans.get(manifest)?.get(rootKey);
+  if (cached !== undefined) {
+    executionPlanDigest(cached); // Original plan membership and live reduction callables still apply.
+    return cached;
+  }
   const declarations = new Map(manifest.projections.map(value => [key(value), value]));
   if (declarations.size !== manifest.projections.length || new Set(manifest.producers.map(key)).size !== manifest.producers.length) throw new EvidenceExecutionError("EXECUTION_GRAPH_INVALID", "duplicate declaration");
   const visited = new Set<string>(), active = new Set<string>();
@@ -50,11 +60,15 @@ export function compileProjectionExecutionV2(manifest: Pick<CompiledEvidenceMani
     const members = Object.freeze(literalExecutionMembers(declaration).map((inputs, member) => Object.freeze({ member, inputs: Object.freeze(inputs.map(build)) })));
     return Object.freeze({ kind: "composition", projection: ref(value), own, members, worstCaseLatency: slowest([own.latency, ...members.flatMap(member => member.inputs.map(latency))]) });
   };
-  const plan = build(root);
+  const plan = build(requested);
   const reachable = [...visited].sort().map(id => declarations.get(id)!);
   const producers = manifest.producers.filter(producer => reachable.some(projection => key(projection.producer) === key(producer)));
   const digest = evidenceDigest({ plan, declarations: reachable, producers, bindings: [...bindings].sort(([a], [b]) => a.localeCompare(b)).map(([, binding]) => binding) });
   plans.set(plan, Object.freeze({ digest, validate: () => { for (const check of bindingChecks) check(); } }));
+  if (isImmutableOwnData(manifest)) {
+    const roots = immutablePlans.get(manifest) ?? new Map<string, CompiledEvidenceExecutionPlan>();
+    roots.set(rootKey, plan); immutablePlans.set(manifest, roots);
+  }
   return plan;
 }
 

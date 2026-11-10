@@ -154,6 +154,70 @@ export const RULE_STATE_CITED_SOURCES = Object.freeze([
   },
 ]);
 
+// D3949 / accepted Slice B and material@2 §2.3c. These are NEW exact-subject cases, not edits
+// to the old cited propositions or frozen emitter assertions. The independent source establishes
+// role/colour membership; absolute count differences and their unweighted sum are the declared
+// product convention, not material value. Count literal FEN characters, never collector output.
+const materialRoles = ["pawn", "knight", "bishop", "rook", "queen"] as const;
+const materialSymbols = ["p", "n", "b", "r", "q"] as const;
+function literalMaterialVector(fen: string) {
+  const board = fen.split(" ")[0]!;
+  const vector = Object.fromEntries(materialRoles.map((role, index) => {
+    const symbol = materialSymbols[index]!;
+    const white = [...board].filter(piece => piece === symbol.toUpperCase()).length;
+    const black = [...board].filter(piece => piece === symbol).length;
+    return [role, Math.abs(white - black)];
+  }));
+  return { vector, magnitude: Object.values(vector).reduce((sum, count) => sum + count, 0) };
+}
+type MaterialFixture = readonly [id: string, beforeFen: string, moveUci: string, afterFen: string];
+const materialSuccessorFixtures: readonly MaterialFixture[] = [
+  ["en-passant.white", "7k/8/8/3pP3/8/8/8/K7 w - d6 0 1", "e5d6", "7k/8/3P4/8/8/8/8/K7 b - - 0 1"],
+  ["en-passant.black", "7k/8/8/8/3Pp3/8/8/K7 b - d3 0 1", "e4d3", "7k/8/8/8/8/3p4/8/K7 w - - 0 2"],
+  ["capture-queen.white", "4k3/8/8/3q4/8/8/3Q4/4K3 w - - 0 1", "d2d5", "4k3/8/8/3Q4/8/8/8/4K3 b - - 0 1"],
+  ["capture-queen.black", "4k3/3q4/8/8/3Q4/8/8/4K3 b - - 0 1", "d7d4", "4k3/8/8/8/3q4/8/8/4K3 w - - 0 2"],
+  ["capture-knight.white", "4k3/8/8/8/8/8/n7/R3K3 w - - 7 1", "a1a2", "4k3/8/8/8/8/8/R7/4K3 b - - 0 1"],
+  ["capture-knight.black", "r3k3/N7/8/8/8/8/8/4K3 b - - 7 1", "a8a7", "4k3/r7/8/8/8/8/8/4K3 w - - 0 2"],
+  ...(["q", "r", "b", "n"] as const).flatMap(piece => [
+    [`promotion-${piece}.white`, "7k/P7/8/8/8/8/8/7K w - - 7 1", `a7a8${piece}`, `${piece.toUpperCase()}6k/8/8/8/8/8/8/7K b - - 0 1`],
+    [`promotion-${piece}.black`, "7k/8/8/8/8/8/p7/7K b - - 7 1", `a2a1${piece}`, `7k/8/8/8/8/8/8/${piece}6K w - - 0 2`],
+    [`capture-promotion-${piece}.white`, "1r5k/P7/8/8/8/8/8/7K w - - 7 1", `a7b8${piece}`, `1${piece.toUpperCase()}5k/8/8/8/8/8/8/7K b - - 0 1`],
+    [`capture-promotion-${piece}.black`, "7k/8/8/8/8/8/p7/1R5K b - - 7 1", `a2b1${piece}`, `7k/8/8/8/8/8/8/1${piece}5K w - - 0 2`],
+  ] satisfies readonly MaterialFixture[]),
+  ["quiet-negative.white", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "e2e4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"],
+  ["quiet-negative.black", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1", "e7e5", "rnbqkbnr/pppp1ppp/8/4p3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2"],
+  ["asymmetric-negative.white", "6k1/8/8/8/8/2B5/P7/6K1 w - - 7 1", "a2a3", "6k1/8/8/8/8/P1B5/8/6K1 b - - 0 1"],
+  ["asymmetric-negative.black", "6k1/p7/2b5/8/8/8/8/6K1 b - - 7 1", "a7a6", "6k1/8/p1b5/8/8/8/8/6K1 w - - 0 2"],
+  ["castle-negative.white", "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 7 1", "e1h1", "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 8 1"],
+  ["castle-negative.black", "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 7 1", "e8h8", "r4rk1/8/8/8/8/8/8/R3K2R w KQ - 8 2"],
+  // Separately grounded current-subject coverage of the retired breadth a-pawn input.
+  // Kings' coordinates differ from the existing promotion fixtures; neutral board counts
+  // still exchange one pawn for one queen with unchanged unweighted magnitude.
+  ["breadth-promotion.white", "4k3/P7/8/8/8/8/8/4K3 w - - 0 1", "a7a8q", "Q3k3/8/8/8/8/8/8/4K3 b - - 0 1"],
+];
+export const MATERIAL_V2_CITED_SOURCE = Object.freeze({
+  sourceId: "python-chess.rule-state.material-v2",
+  sourceRevision: RULE_STATE_CITED_SOURCES[0]!.sourceRevision,
+  licence: RULE_STATE_CITED_SOURCES[0]!.licence,
+  url: `${RULE_STATE_CITED_SOURCES[0]!.url}#L748-L763`,
+  text: RULE_STATE_CITED_SOURCES[0]!.text,
+  operation: { id: "runtime.semantic.local_edge", version: 1 } as const,
+  cases: materialSuccessorFixtures.map(([suffix, beforeFen, moveUci, afterFen]) => {
+    const before = literalMaterialVector(beforeFen), after = literalMaterialVector(afterFen);
+    const changedRoles = materialRoles.filter(role => before.vector[role] !== after.vector[role]);
+    return {
+      arm: suffix.includes("negative") ? "semantic_negative" as const : "positive" as const,
+      input: { kind: "edge", beforeFen, moveUci, afterFen } satisfies SemanticEdgeInput,
+      proposition: {
+        subject: { kind: "event", projection: { id: "derived.material.event.role_asymmetry", version: 2 } },
+        case: { id: `cited.python-chess.rule-state.material-v2.${suffix}`, version: 1 }, factConstraint: [],
+        expectation: suffix.includes("negative") ? { kind: "omits" } : { kind: "emits", minimum: 1,
+          operandMatch: { before, after, changedRoles, increased: after.magnitude > before.magnitude } },
+      } satisfies Omit<SemanticValidationPropositionRecord, "factConstraintSha256">,
+    };
+  }),
+});
+
 // D3676: literal piece-set arithmetic only. With one pawn of each colour on
 // every file at ranks 2/7, no file lacks pawns, no pawn lacks an adjacent
 // friendly pawn, no file has two same-colour pawns, and every pawn faces an
@@ -404,6 +468,50 @@ export const ATTACK_CITED_SOURCES = Object.freeze([
   },
 ]);
 
+// D3950: new exact@2 propositions. Source rules ground pseudo-control/legal moves only.
+// mover-turn-ep-cleared and legal-exchange values/optional stops remain product conventions;
+// neither source nor case claims a forced gain, safe move or strategic verdict.
+type ExposureFixture = readonly [id: string, beforeFen: string, moveUci: string, afterFen: string,
+  targets: Readonly<Record<string, readonly string[]>>];
+export const EXPOSURE_V2_FIXTURES: readonly ExposureFixture[] = [
+  ["one.white", "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6", "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1", { a8: ["a1a8"] }],
+  ["one.black", "3k3r/8/8/8/5b2/6N1/8/3K3R b - - 0 1", "f4g3", "3k3r/8/8/8/8/6b1/8/3K3R w - - 0 2", { h1: ["h8h1"] }],
+  ["two.white", "r3k3/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6", "r3k3/1B6/1B6/8/8/8/8/R3K3 b - - 0 1", { a8: ["a1a8", "b7a8"] }],
+  ["two.black", "3k3r/8/8/8/5b2/6N1/6b1/3K3R b - - 0 1", "f4g3", "3k3r/8/8/8/8/6b1/6b1/3K3R w - - 0 2", { h1: ["g2h1", "h8h1"] }],
+  ["five.white", "r3k3/1P6/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6", "r3k3/1P6/1B6/8/8/8/8/R3K3 b - - 0 1", { a8: ["a1a8", "b7a8b", "b7a8n", "b7a8q", "b7a8r"] }],
+  ["five.black", "3k3r/8/8/8/5b2/6N1/6p1/3K3R b - - 0 1", "f4g3", "3k3r/8/8/8/8/6b1/6p1/3K3R w - - 0 2", { h1: ["g2h1b", "g2h1n", "g2h1q", "g2h1r", "h8h1"] }],
+  ["two-targets.white", "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1", "c5b6", "r3k3/3q4/1B6/8/8/8/8/R2RK3 b - - 0 1", { a8: ["a1a8"], d7: ["d1d7"] }],
+  ["two-targets.black", "r2rk3/8/8/8/2b5/1N6/3Q4/R3K3 b - - 0 1", "c4b3", "r2rk3/8/8/8/8/1b6/3Q4/R3K3 w - - 0 2", { a1: ["a8a1"], d2: ["d8d2"] }],
+  ["no-capturer.white", "r3k3/8/1n6/2B5/8/8/8/4K3 w - - 0 1", "c5b6", "r3k3/8/1B6/8/8/8/8/4K3 b - - 0 1", {}],
+  ["no-capturer.black", "3k4/8/8/8/5b2/6N1/8/3K3R b - - 0 1", "f4g3", "3k4/8/8/8/8/6b1/8/3K3R w - - 0 2", {}],
+  ["no-retained-target.white", "3rk3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6", "3rk3/8/1B6/8/8/8/8/R3K3 b - - 0 1", {}],
+  ["no-retained-target.black", "3k3r/8/8/8/5b2/6N1/8/3KR3 b - - 0 1", "f4g3", "3k3r/8/8/8/8/6b1/8/3KR3 w - - 0 2", {}],
+  ["zero-exchange.white", "rr2k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6", "rr2k3/8/1B6/8/8/8/8/R3K3 b - - 0 1", {}],
+  ["zero-exchange.black", "r3k3/8/8/8/2b5/1N6/8/RR2K3 b - - 0 1", "c4b3", "r3k3/8/8/8/8/1b6/8/RR2K3 w - - 0 2", {}],
+  ["negative-exchange.white", "rr2k3/8/1n6/2B5/8/8/8/Q3K3 w - - 0 1", "c5b6", "rr2k3/8/1B6/8/8/8/8/Q3K3 b - - 0 1", {}],
+  ["negative-exchange.black", "q3k3/8/8/8/2b5/1N6/8/RR2K3 b - - 0 1", "c4b3", "q3k3/8/8/8/8/1b6/8/RR2K3 w - - 0 2", {}],
+];
+export const EXPOSURE_V2_CITED_SOURCE = Object.freeze({
+  sourceId: "python-chess.exposure-v2", sourceRevision: captureSource.sourceRevision,
+  licence: captureSource.licence, url: `https://github.com/niklasf/python-chess/blob/${captureSource.sourceRevision}/chess/__init__.py`,
+  text: `attackers_mask:\n${attackRuleText}\nis_into_check / is_legal:\n${legalRuleText}`,
+  operation: { id: "runtime.semantic.breadth_edge", version: 1 } as const,
+  cases: EXPOSURE_V2_FIXTURES.map(([suffix, beforeFen, moveUci, afterFen, targets]) => {
+    const positive = Object.keys(targets).length > 0, enemy = beforeFen.split(" ")[1] === "w" ? "black" : "white";
+    return {
+      arm: positive ? "positive" as const : "semantic_negative" as const,
+      input: { kind: "edge", beforeFen, moveUci, afterFen } satisfies SemanticEdgeInput,
+      proposition: {
+        subject: { kind: "event", projection: { id: "derived.tactic.defender_exposure", version: 2 } },
+        case: { id: `cited.python-chess.exposure-v2.${suffix}`, version: 1 }, factConstraint: [],
+        expectation: positive ? { kind: "emits", minimum: 1, operandMatch: {
+          kind: "available", defender: { square: moveUci.slice(2, 4), piece: { color: enemy, role: "knight" } }, passConvention: "mover-turn-ep-cleared@1",
+        } } : { kind: "omits" },
+      } satisfies Omit<SemanticValidationPropositionRecord, "factConstraintSha256">,
+    };
+  }),
+});
+
 // D3710: exact stationary-slider / moved-screen / retained-king geometry. These
 // cases do not claim material gain, a forced reply or a recommendation. The
 // existing positive remains; the new negatives complete real legal edges.
@@ -482,6 +590,8 @@ export const KING_ZONE_CITED_SOURCE = Object.freeze({
 export const BOUNDED_TARGET_CITED_SOURCE = Object.freeze(boundedValidationSource(captureSource, RULE_STATE_CITED_SOURCES[1]!));
 
 export const SEMANTIC_VALIDATION_LITERAL_SOURCES = Object.freeze([
+  EXPOSURE_V2_CITED_SOURCE,
+  MATERIAL_V2_CITED_SOURCE,
   BOUNDED_TARGET_CITED_SOURCE,
   KING_ZONE_CITED_SOURCE,
   DISCOVERED_CITED_SOURCE,

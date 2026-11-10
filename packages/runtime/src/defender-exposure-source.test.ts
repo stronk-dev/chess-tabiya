@@ -9,6 +9,7 @@ import * as exchange from "./exchange.js";
 import { evidenceValueRouteRegistry, invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import * as control from "./square-control.js";
 import { defenderExposureValue } from "./internal/defender-exposure.js";
+import { defenderExposureOperands } from "./semantic-evidence.js";
 
 const ROUTE = "derived.tactic.defender_exposure@2";
 const key = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
@@ -37,9 +38,10 @@ describe("source-owned defender exposure (accepted F2 §2.3m)", () => {
     expect(result.kind).toBe("available");
     if (result.kind !== "available") throw new Error("positive/no-witness fixture unexpectedly unavailable");
     expect(result.value).toHaveLength(count === 0 ? 0 : 1);
-    // Transitional comparison to the genuinely used predecessor, not a compatibility promise.
-    const predecessor = invokeEvidenceValueRoute("derived.tactic.defender_exposure@1", anchor);
-    expect(result.value.map(item => item.evidence.payload)).toEqual(predecessor.map(item => item.evidence.payload));
+    // Retain the original independent geometric detector oracle, not a callable old authority.
+    const expected = defenderExposureOperands(anchor.beforeFen, anchor.moveUci, anchor.afterFen).filter(item => item.kind === "available");
+    expect(result.value.map(item => item.evidence.payload)).toEqual(expected);
+    expect(evidenceValueRouteRegistry().some(meta => String(meta.route) === "derived.tactic.defender_exposure@1")).toBe(false);
     for (const item of result.value) {
       expect(item.inputs.map(value => key(value.projection))).toEqual([
         "rules.square.event.control@1", "rules.exchange.reading.landing_captures@1",
@@ -53,7 +55,8 @@ describe("source-owned defender exposure (accepted F2 §2.3m)", () => {
       expect(population.fen.split(" ")[3]).toBe("-");
       expect(item.evidence.payload.controllerEvent).toEqual(item.inputs[0]!.payload);
       expect(item.evidence.payload.defender).toEqual(item.evidence.payload.controllerEvent.controller);
-      expect(evidenceConventionReceipt(item.evidence)!.refs).toEqual(evidenceConventionReceipt(predecessor[0]!.evidence)!.refs);
+      expect(evidenceConventionReceipt(item.evidence)!.refs).toContainEqual({ id: "mover-turn-ep-cleared", version: 1 });
+      expect(evidenceConventionReceipt(item.evidence)!.refs).toContainEqual({ id: "legal-exchange", version: 1 });
       expect(Object.isFrozen(item.inputs)).toBe(true);
     }
   });
@@ -89,13 +92,14 @@ describe("source-owned defender exposure (accepted F2 §2.3m)", () => {
     expect(evidenceValueRouteRegistry().find(value => value.route === ROUTE)).toMatchObject({ shape: "derived", result: "availability" });
   });
 
-  it("has no partial public consumer/event cutover at this internal-source checkpoint", () => {
+  it("declares the actual current candidate event without inferring semantic qualification", () => {
     const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(value => key(value) === ROUTE)!;
     expect(declaration).toMatchObject({ role: "event", grounding: "declared_convention", exactness: "convention",
-      confidence: "not_applicable", answerContent: ["fact"], disposition: { kind: "experimental" },
+      confidence: "not_applicable", answerContent: ["fact"],
       derivation: { inputs: [{ id: "rules.square.event.control", version: 1 }, { id: "rules.exchange.reading.landing_captures", version: 1 }] } });
-    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some(value => key(value.projection) === ROUTE)).toBe(false);
-    expect(PRIMARY_EVIDENCE_MANIFEST.semanticEvents.some(value => key(value.projection) === ROUTE)).toBe(false);
+    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some(value => key(value.projection) === ROUTE)).toBe(true);
+    expect(declaration.disposition).toBeUndefined();
+    expect(PRIMARY_EVIDENCE_MANIFEST.semanticEvents.some(value => key(value.projection) === ROUTE)).toBe(true);
   });
 
   function sources() {

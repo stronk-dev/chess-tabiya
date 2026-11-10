@@ -2,7 +2,7 @@
   import CampaignGestureCost from "./CampaignGestureCost.svelte";
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
   import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, PRIMARY_EVIDENCE_MANIFEST, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, declareTransitionReadingEvidence, endgameClassification, endgameSetupMatches, evidenceForConsumer, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, presentEvidenceItems, presetDeclaration, renderEndgameClassification, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime/client";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameClassification, endgameSetupMatches, renderEndgameSetupMatch, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, permittedAssistance, pivotalMarkerEvidence, presentMoveTransitionEvidence, presentPositionStructureEvidence, presetDeclaration, renderEndgameClassification, renderPhaseReading, selectedSquareSightEvidence, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type PresetId, type RunMark } from "@chess-tabiya/runtime/client";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick, untrack, type Snippet } from "svelte";
 
@@ -26,20 +26,26 @@
   import ShapePanel from "./ShapePanel.svelte";
   import StatusAnnouncement from "./StatusAnnouncement.svelte";
   import GroupPanel from "./GroupPanel.svelte";
-  import { renderEvidenceRef } from "./evidence-sentences.js";
+  import { evidenceRefPresentation } from "./evidence-sentences.js";
   import { renderStructuralExpressionSpec, renderStructuralObservation } from "./structural-sentences.js";
   import { corpusContextSentences } from "./corpus-sentences.js";
-  import { corpusEvidence, corpusPresentation, humanSplitEvidence } from "./inspector-evidence.js";
+  import { corpusEvidence, corpusPresentation, humanSplitEvidence, humanSplitPresentation } from "./inspector-evidence.js";
+  import { maiaNodeEmptySentence } from "@chess-tabiya/runtime/client";
   import ModuleSeats from "./ModuleSeats.svelte";
   import RehearsalAction from "./RehearsalAction.svelte";
   import CompanionSeat from "./CompanionSeat.svelte";
   import PresentedEvidence from "./evidence/PresentedEvidence.svelte";
+  import InspectorSourceBrowser from "./InspectorSourceBrowser.svelte";
+  import HistoricalInspector from "./HistoricalInspector.svelte";
+  import type { GuidedShapeQuery } from "../../../../packages/runtime/src/guided-shape-query.js";
+  import { parseGuidedShapePage, type GuidedShapeExpectation, type ParsedGuidedShapePage } from "./guided-shape-response.js";
+  import type { InspectorAssistanceRequest } from "./historical-inspector.js";
   import { parseModuleQueryPage, type ParsedModulePacket } from "./module-query-response.js";
   import { PLAY_SEAT_MODULES, composedSeats, effectActive, occupiedRailSeats, toggleExpanded, type PlayExpandedSeat, type PlaySeatModule, type StagedCue } from "./module-seats.js";
   import { boardPaint } from "./evidence/presented-view.js";
   import GuidedHintSeat from "./GuidedHintSeat.svelte";
   import type { GuidedHintClient } from "./api.js";
-  import type { HintDeliveryMarks } from "@chess-tabiya/runtime/client";
+  import type { HintDeliveryMarks, InspectorQueryRequest } from "@chess-tabiya/runtime/client";
   import { HINT_DISTANCES, moduleComparisonForSubject, moduleDecisionStamp } from "@chess-tabiya/runtime/client";
   import type { MissingAttemptRecovery, ModuleSeatAction, ModuleSeatActions } from "./module-seats.js";
   import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
@@ -173,6 +179,9 @@
      * finalized digest this screen renders (intent-presets Checkpoint B).
      */
     onModuleQuery?: ((body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }) => Promise<unknown>) | undefined;
+    onShapeFirings?: ((body: GuidedShapeQuery, expected: GuidedShapeExpectation, signal: AbortSignal) => Promise<unknown>) | undefined;
+    onInspectorQuery?: ((body: InspectorQueryRequest, signal: AbortSignal) => Promise<unknown>) | undefined;
+    onInspectorAssistance?: ((body: InspectorAssistanceRequest, signal: AbortSignal) => Promise<unknown>) | undefined;
     /** rfc/hint-distance.md §7: the Guided Hint seat's request/poll/cancel operations. */
     hints?: GuidedHintClient | undefined;
     onCorpus?: (nodeId: string) => Promise<CorpusPage>;
@@ -253,6 +262,9 @@
     onAssistanceQuery,
     onHumanSplit,
     onModuleQuery,
+    onShapeFirings,
+    onInspectorQuery,
+    onInspectorAssistance,
     hints,
     onCorpus,
     onVoice,
@@ -296,10 +308,14 @@
   let structuralOpen = $state(false);
   let transitionOpen = $state(false);
   let inspectorOpen = $state(false);
+  let inspectorSurface: HTMLDivElement | undefined = $state();
+  let inspectorHelpFocus: AbortController | undefined;
   let objectiveOpen = $state(false);
   let sheetOpen = $state(false);
-  let openShapeId: string | undefined = $state();
+  let companionNavigationGeneration = $state(0);
+  let openShapeSelection: { sourceKey: string; generation: number; entryId: string; firstNodeId: string } | undefined = $state();
   let inspectedShapeId: string | undefined = $state();
+  let inspectedShapeSource: { key: string; generation: number; documentDigest: string } | undefined = $state();
   // rfc/intent-presets.md §5.2 — the one seat. The browser holds only the learner's typed receipt;
   // the effective config arrives from the server's authoritative/finalized stages and is narrowed
   // here only for browser speech. Pending/unavailable renders the silent floor, never a wider promise.
@@ -441,6 +457,7 @@
   }
 
   function openCompanion(tab: typeof compactTab, event?: Event): void {
+    companionNavigationGeneration += 1;
     companionInvoker = event === undefined
       ? document.activeElement instanceof HTMLElement ? document.activeElement : mainElement
       : invoker(event);
@@ -449,6 +466,7 @@
   }
 
   function closeCompanion(): void {
+    companionNavigationGeneration += 1;
     sheetOpen = false;
     restoreFocus(companionInvoker);
     companionInvoker = undefined;
@@ -533,8 +551,7 @@
   let runEvidencePayloads = $derived(evidencePayloads(run));
   let recordedEngineEvidence = $derived(
     currentNode.evidenceRefs
-      .map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads))
-      .filter((sentence) => sentence.sourceLabel === "Engine"),
+      .filter((reference) => runEvidencePayloads.get(reference)?.source === "engine_validated"),
   );
   // rfc/provider-health-degradation.md §10: provider-backed controls read live provider health and
   // stay in the layout with their reason; they never disappear when a provider drops.
@@ -794,7 +811,7 @@
   );
   let guardGrounds = $derived(
     guardEvent?.type === "feedback.generated"
-      ? guardEvent.data.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads))
+      ? guardEvent.data.evidenceRefs.map((reference) => evidenceRefPresentation(reference, pack, runEvidencePayloads))
       : [],
   );
   // A repeated snapshot of the same guard is not another foreground-selection event.
@@ -888,14 +905,73 @@
     return ids;
   });
   let entries = $derived(timelineEntries(run, pack));
-  let path = $derived(historyFrom(run, run.activeCursor.nodeId));
-  let firings = $derived(shapeFiringEvidence(shapes, path));
-  let shapeMarkers = $derived((assistance.guided === "live" ? firings : []).map((firing) => {
-    const entry = shapes.find((candidate) => candidate.id === firing.entryId)!;
-    return { nodeId: firing.firstNodeId, entryId: entry.id, label: entry.name, channel: entry.channel };
-  }));
-  let openShape = $derived(shapes.find((entry) => entry.id === openShapeId));
-  let inspectedShape = $derived(shapes.find((entry) => entry.id === inspectedShapeId));
+  // Ordinary recognition receives the owned server source; raw catalogue entries never mint matches.
+  let shapeReply: { key: string; generation: number; page: ParsedGuidedShapePage } | undefined = $state.raw();
+  let shapeQueryState: "idle" | "pending" | "failed" | "ready" = $state("idle");
+  let shapeGeneration = 0;
+  let shapePath = $derived.by(() => historyFrom(run, displayedNode.id));
+  let shapeQueryKey = $derived.by(() => JSON.stringify([run.id, run.activeCursor.branchId, displayedNode.id,
+    moduleDecisionStamp(run).digest, assistanceAccessKey, queriedAccessKey, assistanceQueryState,
+    compiledAssistance?.finalDigest, viewerRole, seatedInContest, reviewing, snapshot.access,
+    viewportSupport.supported, shapes.map(entry => [entry.id, entry.documentDigest]) ]));
+  let guidedShapeActive = $derived.by(() => viewportSupport.supported && queriedAccessKey === assistanceAccessKey
+    && assistanceQueryState === "ready" && assistance.guided === "live"
+    && effectActive(compiledAssistance, "structure_nudge", "post_commit"));
+  let currentShapeReply = $derived(guidedShapeActive && shapeReply?.key === shapeQueryKey ? shapeReply : undefined);
+  let firings = $derived((currentShapeReply?.page.firings ?? []).map(item => ({ firing: item.value,
+    presentation: { kind: "ready" as const, items: item.presentation } })));
+  let shapeMarkers = $derived(firings.map(({ firing }) => ({ nodeId: firing.firstNodeId, entryId: firing.entryId,
+    label: firing.authority.name, channel: firing.authority.channel,
+    sourceKey: currentShapeReply!.page.sourceKey, generation: currentShapeReply!.generation })));
+  let shapeRecognitionNotice = $derived.by(() => !guidedShapeActive ? undefined
+    : currentShapeReply?.page.outcome.kind === "no_witness" ? "No named structure entry matches this line."
+    : currentShapeReply?.page.outcome.kind === "unavailable" ? "Named-pattern recognition is unavailable for this line."
+    : shapeQueryState === "failed" || onShapeFirings === undefined ? "Named-pattern recognition could not be loaded."
+    : currentShapeReply === undefined ? "Checking this line for named patterns…" : undefined);
+  $effect(() => {
+    const key = shapeQueryKey, active = guidedShapeActive, query = onShapeFirings;
+    const request = requestedAssistance, config = compiledAssistance;
+    const runId = run.id, branchId = run.activeCursor.branchId, endpointId = displayedNode.id;
+    const decisionDigest = moduleDecisionStamp(run).digest, nodeIds = shapePath.map(node => node.id);
+    const generation = ++shapeGeneration, controller = new AbortController();
+    shapeReply = undefined;
+    shapeQueryState = active && query !== undefined && request !== undefined && config !== undefined ? "pending" : "idle";
+    if (active && query !== undefined && request !== undefined && config !== undefined) {
+      const body = { assistance: request, query: { branchId, endpointId, decisionDigest } };
+      const expected = { effectiveConfigDigest: config.finalDigest, nodeIds };
+      const current = () => seatAlive && !controller.signal.aborted && generation === shapeGeneration
+        && key === shapeQueryKey && guidedShapeActive;
+      void Promise.resolve().then(() => { if (current()) return query(body, expected, controller.signal); })
+        .then(value => {
+          if (!current()) return;
+          const page = parseGuidedShapePage(value, runId, body, expected);
+          if (!current()) return;
+          shapeReply = { key, generation, page }; shapeQueryState = "ready";
+        }).catch(() => { if (current()) { shapeReply = undefined; shapeQueryState = "failed"; } });
+    }
+    return () => controller.abort();
+  });
+  let openShapeOccurrence = $derived.by(() => {
+    const selection = openShapeSelection, reply = currentShapeReply;
+    if (selection === undefined || reply === undefined || selection.sourceKey !== reply.page.sourceKey
+      || selection.generation !== reply.generation) return undefined;
+    const matches = firings.filter(({ firing }) => firing.entryId === selection.entryId && firing.firstNodeId === selection.firstNodeId);
+    return matches.length === 1 ? matches[0] : undefined;
+  });
+  let openShape = $derived(openShapeOccurrence === undefined ? undefined : shapes.find(entry =>
+    entry.id === openShapeOccurrence.firing.entryId && entry.documentDigest === openShapeOccurrence.firing.authority.documentDigest));
+  $effect.pre(() => {
+    if (openShapeSelection === undefined || openShapeOccurrence !== undefined) return;
+    const ownedFocus = document.querySelector(".shape-panel")?.contains(document.activeElement) === true;
+    const invoker = shapeInvoker;
+    openShapeSelection = undefined; shapeInvoker = undefined;
+    if (ownedFocus) restoreShapeFocus(invoker);
+  });
+  let inspectedShape = $derived.by(() => {
+    const source = inspectedShapeSource, reply = currentShapeReply;
+    if (source === undefined || reply === undefined || source.key !== reply.page.sourceKey || source.generation !== reply.generation) return undefined;
+    return shapes.find(entry => entry.id === inspectedShapeId && entry.documentDigest === source.documentDigest);
+  });
   let authoredSpineNodeIds = $derived(
     new Set(
       (authoredFeedback?.items ?? []).flatMap((item) =>
@@ -918,7 +994,7 @@
         ),
   );
   let terminalEvidence = $derived(
-    currentNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads)),
+    currentNode.evidenceRefs.map((reference) => ({ reference })),
   );
   let cards = $derived(branchCards(run));
   let timelineCards = $derived(timelineBranchCards(run));
@@ -960,7 +1036,7 @@
   // Preview is not a rewind: Inspector follows the displayed position while
   // TerminalSheet retains the active outcome's evidence above.
   let positionEvidence = $derived(
-    displayedNode.evidenceRefs.map((reference) => renderEvidenceRef(reference, pack, runEvidencePayloads)),
+    displayedNode.evidenceRefs.map((reference) => evidenceRefPresentation(reference, pack, runEvidencePayloads)),
   );
   let corpusDecision = $derived(
     [...historyFrom(run, displayedNode.id)].reverse().find((node) => node.actor === "user"),
@@ -969,18 +1045,14 @@
   let displayedMarkKey = $derived(markScope === "position" ? displayedNode.transposeKey : `${run.activeCursor.branchId}:${displayedNode.id}`);
   let displayedMarks = $derived(ownMarks.filter((mark) => mark.scope === markScope && mark.scopeKey === displayedMarkKey).map((mark) => ({ orig:mark.orig as import("@lichess-org/chessground/types").Key,...(mark.dest===undefined?{}:{dest:mark.dest as import("@lichess-org/chessground/types").Key}),brush:mark.brush })));
   let rawStructure = $derived(structuralReading(displayedNode.fen));
-  let structure = $derived({ ...rawStructure, features: positionStructureEvidence(rawStructure) });
+  let structureItems = $derived(presentPositionStructureEvidence({ fen: displayedNode.fen }));
   let sightFeatures = $derived(selectedSquareSightEvidence(rawStructure));
   let transitionItems = $derived.by(() => {
     if (displayedNode.parentId === null || displayedNode.moveUci === null) return null;
     const parent = run.nodes.find((node) => node.id === displayedNode.parentId);
     if (parent === undefined) return null;
     const reading = transitionReading(parent.fen, displayedNode.moveUci, displayedNode.fen);
-    return reading === null ? null : presentEvidenceItems(evidenceForConsumer(
-      PRIMARY_EVIDENCE_MANIFEST,
-      { id: "inspector.move_transition", version: 1 },
-      declareTransitionReadingEvidence(reading),
-    ));
+    return reading === null ? null : presentMoveTransitionEvidence(reading);
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameClassification(displayedNode.fen));
@@ -1304,86 +1376,36 @@
     });
   });
 
-  function requestSeat(module: PlaySeatModule): void {
+  function requestSeat(module: PlaySeatModule): Promise<ParsedModulePacket[] | undefined> | undefined {
     const learnerToMove = currentNode.actor !== "user";
     if (module === "sight_on_request") { seatDoorReasons = { ...seatDoorReasons, sight_on_request: "Select a square on the board to ask about it." }; return; }
-    if (module === "compare_coach") { void queryModuleSeats({ timing: "checkpoint", nodeId: currentNode.id, requested: ["compare_coach"] }, currentNode.id, ["compare_coach"]); return; }
-    if (module === "threat_radar" && learnerToMove) { void queryModuleSeats({ timing: "pre_commit", nodeId: currentNode.id, requested: ["threat_radar"] }, currentNode.id, ["threat_radar"]); return; }
+    if (module === "compare_coach") return queryModuleSeats({ timing: "checkpoint", nodeId: currentNode.id, requested: ["compare_coach"] }, currentNode.id, ["compare_coach"]);
+    if (module === "threat_radar" && learnerToMove) return queryModuleSeats({ timing: "pre_commit", nodeId: currentNode.id, requested: ["threat_radar"] }, currentNode.id, ["threat_radar"]);
     const subject = latestLearnerMoveId;
     if (subject === undefined) { seatDoorReasons = { ...seatDoorReasons, [module]: "Available after your first move." }; return; }
     if (!feedbackDeliveryOpen(run)) { seatDoorReasons = { ...seatDoorReasons, [module]: "Available once this run opens help for the position." }; return; }
-    void queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [module] }, subject, [module]);
+    return queryModuleSeats({ timing: "post_commit", subjectNodeId: subject, requested: [module] }, subject, [module]);
   }
+
+  $effect(() => {
+    if (seatExpanded !== "postcommit_nudge" || stagedCue !== undefined || guardEvent !== undefined) return;
+    const packet = seatPackets.get("postcommit_nudge");
+    if (packet?.empty?.kind === "silent" && packet.items.length === 0
+      && !seatPending.has("postcommit_nudge") && !seatFailed.has("postcommit_nudge")) {
+      seatExpanded = undefined;
+      seatFocusSquares = undefined;
+    }
+  });
 
   function toggleSeat(module: PlayExpandedSeat): void {
     seatExpanded = toggleExpanded(seatExpanded, module);
     seatFocusSquares = undefined;
   }
 
-  // module-registration §4.11 + §5.2: Full Inspector is an explicit surface. Opening the Inspector
-  // under a style that composed it is the explicit request; its families state their own states.
-  let fullInspectorActive = $derived(onModuleQuery !== undefined && effectActive(compiledAssistance, "full_inspector", "review"));
-  let fullInspector: ParsedModulePacket | undefined = $state.raw();
-  let fullInspectorState: "idle" | "pending" | "failed" = $state("idle");
-  let fullInspectorRequest = 0;
-  let fullInspectorPageSubject: string | undefined = $state();
-  let fullInspectorDecisionDigest = $derived(moduleDecisionStamp(run).digest);
-  let fullInspectorSubject = $derived(JSON.stringify([
-    run.id, displayedNode.id, fullInspectorDecisionDigest, feedbackDeliveryOpen(run),
-    compiledAssistance?.finalDigest, assistanceQueryState, viewerRole, seatedInContest, reviewing,
-  ]));
-  async function loadFullInspector(): Promise<void> {
-    if (fullInspectorState === "pending" || !inspectorOpen || !fullInspectorActive || assistanceQueryState !== "ready"
-      || !feedbackDeliveryOpen(run) || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) return;
-    const request = ++fullInspectorRequest;
-    const subject = fullInspectorSubject;
-    const node = displayedNode.id;
-    const runId = run.id;
-    const decisionDigest = fullInspectorDecisionDigest;
-    const finalDigest = compiledAssistance.finalDigest;
-    const assistance = requestedAssistance;
-    fullInspector = undefined;
-    fullInspectorPageSubject = undefined;
-    fullInspectorState = "pending";
-    try {
-      const value = await onModuleQuery({ assistance, query: { timing: "review", nodeId: node, requested: ["full_inspector"] } });
-      if (request !== fullInspectorRequest || subject !== fullInspectorSubject || !inspectorOpen || !fullInspectorActive) return;
-      const page = parseModuleQueryPage(value, { runId, subjectNodeId: node, finalDigest });
-      if (page.decisionDigest !== decisionDigest) throw new TypeError("Inspector page answers an obsolete recorded decision");
-      const packet = page.packets.find((packet) => packet.module === "full_inspector");
-      if (packet === undefined) throw new TypeError("Inspector page omits its demanded packet");
-      fullInspector = packet;
-      fullInspectorPageSubject = subject;
-      fullInspectorState = "idle";
-    } catch {
-      if (request === fullInspectorRequest && subject === fullInspectorSubject && inspectorOpen && fullInspectorActive) {
-        fullInspector = undefined;
-        fullInspectorPageSubject = undefined;
-        fullInspectorState = "failed";
-      }
-    }
-  }
-  $effect(() => {
-    const open = inspectorOpen;
-    const active = fullInspectorActive;
-    const subject = fullInspectorSubject;
-    ++fullInspectorRequest;
-    untrack(() => {
-      fullInspector = undefined;
-      fullInspectorPageSubject = undefined;
-      fullInspectorState = "idle";
-      if (!open || !active || assistanceQueryState !== "ready" || !feedbackDeliveryOpen(run) || onModuleQuery === undefined || requestedAssistance === undefined || compiledAssistance === undefined) return;
-      void loadFullInspector();
-    });
-  });
-  const INSPECTOR_FAMILY_LABELS: Readonly<Record<string, string>> = Object.freeze({ local_rules: "Local rules", authored_theory: "Authored theory", recorded_run: "Recorded game", stockfish: "Stockfish", syzygy: "Tablebase", maia: "Human-move model", explorer: "Game corpus", derived: "Derived readings" });
-  function familyLine(state: { readonly family: string; readonly kind: string; readonly factCount?: number }): string {
-    const label = INSPECTOR_FAMILY_LABELS[state.family] ?? "Other";
-    if (state.kind === "available") return `${label}: ${state.factCount} ${state.factCount === 1 ? "fact" : "facts"}`;
-    if (state.kind === "no_witness") return `${label}: nothing recorded here`;
-    if (state.kind === "unavailable") return `${label}: unavailable`;
-    return `${label}: not requested here`;
-  }
+  // Full2 is a separate explicit source-page surface, never an ordinary reduced module packet.
+  let fullInspectorActive = $derived(onInspectorQuery !== undefined && effectActive(compiledAssistance, "full_inspector", "review"));
+  let inspectorPeers = $derived(run.branches.map(branch => ({ branchId: branch.id,
+    nodeId: branchPath(run, branch.id).at(-1)!.id, label: branch.label })));
 
   // §4.5: board paint is the expanded seat's own facts (or the held cue's); collapsing removes it.
   let seatPaint = $derived.by(() => {
@@ -1396,6 +1418,15 @@
   // Retain the disabled door through a temporary settings wait, not its old disclosure.
   // Removing the module in the settled settings unmounts it; pending alone preserves progress.
   let hintSeatPresent = $derived(retainedAssistance?.modules.includes("guided_hint") === true && retainedAssistance.hintCeiling.rung !== "off");
+  $effect(() => {
+    const selected = seatExpanded;
+    // Pending confirmation retains the learner's selection and Hint progress. Only the
+    // settled effective composition can retire an absent seat to the existing default.
+    if (assistanceQueryState !== "ready" || selected === undefined || selected === "support_tools"
+      || stagedCue !== undefined || guardEvent !== undefined) return;
+    const present = selected === "guided_hint" ? hints !== undefined && hintSeatPresent : seats.some(seat => seat.module === selected);
+    if (!present) { seatExpanded = undefined; seatFocusSquares = undefined; }
+  });
   let queueSelectorCount = $derived(occupiedRailSeats(seats, seatPackets, seatPending, seatFailed).length + (hints !== undefined && hintSeatPresent ? 1 : 0) + 1);
   let hintMarks: HintDeliveryMarks | undefined = $state();
   function hintAssistanceRequest(): RequestedAssistanceV1 | undefined {
@@ -1411,7 +1442,7 @@
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   // Node equality does not revive an explicit Inspector request after leaving its subject.
   let inspectorRequestAuthority = $derived(JSON.stringify([
-    fullInspectorDecisionDigest, displayedNode.id, compiledAssistance?.finalDigest,
+    run.id, moduleDecisionStamp(run).digest, displayedNode.id, compiledAssistance?.finalDigest,
     assistanceQueryState, viewerRole, seatedInContest, reviewing, inspectorOpen,
   ]));
   let voiceSubject = $derived(JSON.stringify([inspectorRequestAuthority, openPivotalNodeId ?? null]));
@@ -1499,8 +1530,8 @@
   // Without the module query (a harness with no server) the shipped sight caption stays the renderer.
   let overlayCaption = $derived(onModuleQuery === undefined ? selectedObservations.map(renderStructuralObservation) : []);
   let projectedPivotal = $derived(assistance.markers === "live" ? pivotalMarkerEvidence(run, run.activeCursor.branchId, assistanceContext) : []);
-  let pivotalRows = $derived(projectedPivotal.map((marker) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
-  let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter((marker) => marker.nodeId === openPivotalNodeId));
+  let pivotalRows = $derived(projectedPivotal.map(({ marker }) => ({ nodeId: marker.nodeId, label: storyMomentLabel(marker.kind) })));
+  let openPivotal = $derived(openPivotalNodeId === undefined ? [] : projectedPivotal.filter(({ marker }) => marker.nodeId === openPivotalNodeId));
   let openPivotalNode = $derived(openPivotalNodeId === undefined ? undefined : run.nodes.find((node) => node.id === openPivotalNodeId));
   // A timeline moment owns its recorded position even while the board displays another node.
   // Missing historical subjects abstain; the current board is never a substitute evidence source.
@@ -1575,6 +1606,29 @@
     } finally { document.removeEventListener("focusin", movedFocus); }
   }
 
+  async function refreshInspectorHelp(): Promise<void> {
+    if (assistanceQueryState === "pending") return;
+    const surface = inspectorSurface, invoker = document.activeElement, accessKey = assistanceAccessKey;
+    inspectorHelpFocus?.abort();
+    const focus = new AbortController(); inspectorHelpFocus = focus;
+    let ownsFocus = invoker !== null && surface?.contains(invoker) === true;
+    document.addEventListener("focusin", event => {
+      if (event.target !== invoker && event.target !== document.body) ownsFocus = false;
+    }, { signal: focus.signal });
+    const recovery = recompileAssistance(), request = assistanceQuery;
+    try {
+      await recovery; await tick();
+      if (!focus.signal.aborted && ownsFocus && inspectorOpen && surface === inspectorSurface && surface?.isConnected
+        && request === assistanceQuery && accessKey === assistanceAccessKey && invoker?.isConnected === false
+        && document.activeElement === document.body) {
+        (surface.querySelector<HTMLElement>('[data-module="full_inspector"] h3')
+          ?? surface.querySelector<HTMLElement>("[data-inspector-help-retry]"))?.focus();
+      }
+    } finally { focus.abort(); }
+  }
+
+  $effect(() => { if (!inspectorOpen) inspectorHelpFocus?.abort(); });
+
   function choosePreset(preset: PresetId): void {
     commitPreference(selectNamedPreset(activeAssistanceProfile, preference, preset));
     assistanceMenuOpen = false;
@@ -1622,7 +1676,7 @@
         humanSplitError = { nodeId, text: "Those move choices no longer match this position. Load them again." };
         return;
       }
-      humanSplit = humanSplitEvidence(page);
+      humanSplit = humanSplitEvidence(page, displayedNode.fen);
       humanSplitPageSubject = subject;
     } catch {
       if (current()) {
@@ -1662,13 +1716,13 @@
   function humanCandidateSentence(page: HumanSplitPage, candidate: HumanSplitPage["candidates"][number]): string {
     const fen = run.nodes.find((node) => node.id === page.nodeId)?.fen;
     const move = fen === undefined ? undefined : moveSanFromUci(fen, candidate.moveUci);
-    const mass = candidate.mass === undefined ? "frequency unavailable" : `${Math.round(candidate.mass * 100)}%`;
+    const mass = candidate.mass == null ? "frequency unavailable" : `${Math.round(candidate.mass * 100)}%`;
     return `${move ?? "Move notation unavailable"} ${mass}`;
   }
 
   function humanCandidateSentences(page: HumanSplitPage): readonly string[] {
     return page.candidates
-      .filter((candidate) => candidate.offWindow !== true)
+      .filter((candidate) => !("offWindow" in candidate) || candidate.offWindow !== true)
       .map((candidate) => humanCandidateSentence(page, candidate));
   }
 
@@ -1931,16 +1985,36 @@
     void tick().then(() => (target?.isConnected ? target : mainElement)?.focus());
   }
 
-  function showShape(entryId: string): void {
+  function showShape(entryId: string, firstNodeId: string, sourceKey: string, generation: number): void {
+    const reply = currentShapeReply;
+    if (!seatAlive || reply === undefined || reply.page.sourceKey !== sourceKey || reply.generation !== generation
+      || firings.filter(({ firing }) => firing.entryId === entryId && firing.firstNodeId === firstNodeId).length !== 1) return;
     shapeInvoker = document.activeElement instanceof HTMLElement ? document.activeElement : mainElement;
     inspectedShapeId = entryId;
-    openShapeId = entryId;
+    inspectedShapeSource = { key: sourceKey, generation, documentDigest: firings.find(({ firing }) => firing.entryId === entryId && firing.firstNodeId === firstNodeId)!.firing.authority.documentDigest };
+    openShapeSelection = { sourceKey, generation, entryId, firstNodeId };
   }
 
-  function closeShape(): void {
-    openShapeId = undefined;
-    restoreFocus(shapeInvoker);
-    shapeInvoker = undefined;
+  function restoreShapeFocus(target: HTMLElement | undefined): void {
+    const active = document.activeElement, key = shapeQueryKey, generation = shapeGeneration;
+    void tick().then(() => {
+      if (!seatAlive || key !== shapeQueryKey || generation !== shapeGeneration || openShapeSelection !== undefined) return;
+      if (document.activeElement !== active && document.activeElement !== document.body) return;
+      (target?.isConnected ? target : mainElement)?.focus();
+    });
+  }
+  function shapeCloseFor(selection: typeof openShapeSelection): () => void {
+    return () => {
+      if (!seatAlive || selection === undefined || openShapeSelection !== selection || openShapeOccurrence === undefined) return;
+      openShapeSelection = undefined;
+      restoreShapeFocus(shapeInvoker); shapeInvoker = undefined;
+    };
+  }
+  function shapeInspectFor(selection: typeof openShapeSelection): () => void {
+    return () => {
+      if (!seatAlive || selection === undefined || openShapeSelection !== selection || openShapeOccurrence === undefined) return;
+      openShapeSelection = undefined; shapeInvoker = undefined; inspectorOpen = true;
+    };
   }
 
   async function openCompare(requestedIds?: readonly string[]): Promise<void> {
@@ -2381,6 +2455,7 @@
   });
   onDestroy(() => {
     inspectorRequestsAlive = false;
+    inspectorHelpFocus?.abort();
     ++humanSplitRequest; ++voiceRequest; ++speechRequest;
     globalThis.removeEventListener("resize", measureViewport);
     globalThis.removeEventListener("storage", refreshAssistancePreference);
@@ -2398,7 +2473,6 @@
     rematchRequest += 1;
     branchSwitchRequest += 1;
     corpusRequest += 1;
-    fullInspectorRequest += 1;
     seatAlive = false;
     seatActionRequest += 1;
     seatRequests.clear();
@@ -2716,7 +2790,7 @@
         </nav>
 
         <div class="companion-scroll">
-          <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support">
+          <section id="run-support-region" class="companion-section evidence-seat" class:compact-active={compactTab === "evidence"} aria-label="Support" tabindex="-1">
             <div class="companion-queue" class:band={tabletViewport} style={`--queue-columns: ${queueSelectorCount}`}>
             {#if seats.length > 0}
               <ModuleSeats
@@ -2726,6 +2800,9 @@
                 packets={seatPackets}
                 pending={seatPending}
                 failed={seatFailed}
+                selection={seatExpanded}
+                regionActive={compactTab === "evidence" && (!compactViewport || sheetOpen)}
+                regionGeneration={companionNavigationGeneration}
                 expanded={stagedCue !== undefined || seatExpanded === "guided_hint" || seatExpanded === "support_tools" ? undefined : seatExpanded}
                 doorBlocked={seatDoorReasons}
                 staged={stagedCue}
@@ -2824,7 +2901,7 @@
             </section>
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No extra highlights are available here; basic board guidance remains available.</p>{/if}
-            {#if rawStructure.structures.length === 0 && !firings.some((firing) => firing.openEnded && firing.lastNodeId === currentNode.id)}
+            {#if currentShapeReply?.page.outcome.kind === "no_witness" && rawStructure.structures.length === 0 && !firings.some(({ firing }) => firing.openEnded && firing.lastNodeId === currentNode.id)}
               <section class="support-empty" aria-labelledby="support-empty-title">
                 <p>Position pattern</p>
                 <h2 id="support-empty-title">Nothing recognizes this structure yet</h2>
@@ -3092,7 +3169,7 @@
 
 {#if viewportSupport.supported && inspectorOpen}
   <div class="modal-backdrop inspector-backdrop">
-    <div class="inspector-surface" role="dialog" aria-modal="true" aria-labelledby="inspector-title" use:modalBoundary>
+    <div bind:this={inspectorSurface} class="inspector-surface" role="dialog" aria-modal="true" aria-labelledby="inspector-title" use:modalBoundary>
       <header><div><p>Analysis surface</p><h2 id="inspector-title">Evidence inspector</h2></div><button type="button" onclick={() => (inspectorOpen = false)}>Return to play</button></header>
       <div class="inspector-grid">
         <section aria-label="Advanced support controls" data-evidence-consumer="inspector.assistance_controls">
@@ -3125,23 +3202,28 @@
             {/each}
           </fieldset>
         </section>
-        {#if fullInspectorActive}
-          <section class="full-inspector" aria-label="Evidence inspector: full inspector" data-module="full_inspector">
-            <h3>Everything recorded here, attributed</h3>
-            {#if feedbackDeliveryOpen(run)}
-              <button type="button" aria-disabled={fullInspectorState === "pending"} disabled={assistanceQueryState !== "ready"} onclick={() => void loadFullInspector()}>{fullInspectorState === "failed" ? "Retry recorded evidence" : "Refresh recorded evidence"}</button>
-            {/if}
-            {#if fullInspectorState === "pending"}<p role="status">Collecting the recorded evidence…</p>
-            {:else if fullInspectorState === "failed"}<p role="alert">The full inspector could not be loaded.</p>
-            {:else if fullInspector !== undefined && fullInspectorPageSubject === fullInspectorSubject}
-              {#if fullInspector.empty?.kind === "family_partitioned"}<ul class="inspector-families">{#each fullInspector.empty.families as state (state.family)}<li data-family-state={state.kind}>{familyLine(state)}</li>{/each}</ul>{/if}
-              <PresentedEvidence items={fullInspector.items} />
-            {/if}
+        {#if assistanceQueryState !== "ready"}
+          <section aria-label="Confirm evidence access">
+            <p role="status">{assistanceQueryState === "pending" ? "Confirming the current help settings. Source browsing is paused while access is checked." : "The current help settings could not be confirmed. Source browsing is paused."}</p>
+            <button type="button" data-inspector-help-retry disabled={assistanceQueryState === "pending"} onclick={() => void refreshInspectorHelp()}>{assistanceQueryState === "pending" ? "Confirming help…" : "Retry confirming help"}</button>
           </section>
+        {/if}
+        {#if fullInspectorActive}
+          {#if feedbackDeliveryOpen(run) && assistanceQueryState === "ready" && onInspectorQuery !== undefined && requestedAssistance !== undefined && compiledAssistance !== undefined}
+            <InspectorSourceBrowser runId={run.id} branchId={run.activeCursor.branchId} nodeId={displayedNode.id}
+              decisionDigest={moduleDecisionStamp(run).digest} fen={displayedNode.fen}
+              assistance={requestedAssistance} requestedDigest={compiledAssistance.requestedDigest} finalDigest={compiledAssistance.finalDigest}
+              peers={inspectorPeers} onQuery={onInspectorQuery} onRefreshAssistance={refreshInspectorHelp} />
+          {:else}<p>Evidence inspection is available after help opens and the current settings are ready.</p>{/if}
+        {/if}
+        {#if onInspectorAssistance !== undefined && onInspectorQuery !== undefined}
+          <HistoricalInspector {run} workflowContext={activeAssistanceProfile}
+            accessIdentity={`${viewerRole}|${seatedInContest}|${reviewing}|${snapshot.access}`}
+            sourceHealth={capabilities?.providerHealth} onConfirm={onInspectorAssistance} onQuery={onInspectorQuery} />
         {/if}
         <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
           <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Position structure</button>
-          {#if structuralOpen}<div class="structural-facts">{#if assistance.guided === "live" && firings.length === 0}<p>No named structure entry matches this line.</p>{/if}{#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}{#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}</div>{/if}
+          {#if structuralOpen}<div class="structural-facts">{#if shapeRecognitionNotice !== undefined}<p role="status">{shapeRecognitionNotice}</p>{/if}{#if structureItems.length === 0}<p>No structural observations in this position.</p>{:else}<PresentedEvidence items={structureItems} />{/if}</div>{/if}
         </section>
         <section class="transition-reading" aria-label="Evidence inspector: move transition" data-evidence-consumer="inspector.move_transition">
           <button type="button" aria-expanded={transitionOpen} onclick={() => (transitionOpen = !transitionOpen)}>Move transition</button>
@@ -3153,9 +3235,17 @@
           {#if humanSplitBusyNodeId === displayedNode.id}<p role="status">Loading human move choices for this position…</p>{/if}
           {#if humanSplitError?.nodeId === displayedNode.id}<p role="alert">{humanSplitError.text}</p>{/if}
           {#if humanSplit?.nodeId === displayedNode.id && humanSplitPageSubject === inspectorRequestAuthority}
-            <p class="honest">{humanModelBandSentence(humanSplit)}</p>
-            <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
-            <p class="guidance-sentence">{humanCandidateSentences(humanSplit).join(" · ")}</p>
+            {#if "protocol" in humanSplit}
+              {#if humanSplit.status === "empty_population"}
+                <p class="honest">{maiaNodeEmptySentence(humanSplit)}</p>
+              {:else}
+                <PresentedEvidence items={humanSplitPresentation(humanSplit)} />
+              {/if}
+            {:else}
+              <p class="honest">{humanModelBandSentence(humanSplit)}</p>
+              <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
+              <p class="guidance-sentence">{humanCandidateSentences(humanSplit).join(" · ")}</p>
+            {/if}
           {:else if humanSplitBusyNodeId !== displayedNode.id && humanSplitError?.nodeId !== displayedNode.id}<p class="honest">No human-model page loaded for this position.</p>{/if}
         </section>
         <section aria-label="Corpus evidence" data-evidence-consumer="inspector.corpus">
@@ -3174,7 +3264,10 @@
             <p class="honest">Open a timeline moment before inspecting its full evidence.</p>
           {:else}
             <p class="honest">{openPivotalNode?.moveSan ?? "Start position"} · {rehearsalStepLabel(openPivotalNode?.ply ?? 0).toLocaleLowerCase()}</p>
-            {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
+            {#each openPivotal as entry}
+              {#if entry.presentation.kind === "ready"}<PresentedEvidence items={entry.presentation.items} />
+              {:else}<p role="status">This recorded evidence could not be displayed. That is not an empty chess result.</p>{/if}
+            {/each}
             {#each renderEndgameClassification(openPivotalEndgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.voice === "persona" && !voiceNotice.notConfigured && onVoice !== undefined}<button type="button" disabled={voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"} onclick={() => void requestVoice("marker")}>{voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker" ? "Explaining this moment…" : "Revoice this evidence"}</button>{/if}
             {#if voiceBusy?.nodeId === openPivotalNodeId && voiceBusy.scope === "marker"}<p role="status">Preparing an explanation of this moment…</p>{/if}
@@ -3214,7 +3307,7 @@
         <section aria-label="Named structure evidence" data-evidence-consumer="inspector.shape_trigger">
           <h3>Named structure</h3>
           {#if inspectedShape === undefined}
-            <p class="honest">Open a named structure before inspecting its trigger and sources.</p>
+            <p class="honest">{inspectedShapeSource === undefined ? "Open a named structure before inspecting its trigger and sources." : "The matching catalogue version is unavailable for this recorded pattern. Its trigger and sources cannot be shown."}</p>
           {:else}
             <h4>{inspectedShape.name}</h4>
             <p class="guidance-sentence">{renderStructuralExpressionSpec(inspectedShape.trigger)}</p>
@@ -3242,22 +3335,27 @@
         {#if banner !== undefined}
           <section aria-label="Objective change evidence" data-evidence-consumer="inspector.objective_change">
             <h3>Objective change</h3>
-            {#each banner.sentences as sentence}<p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>{/each}
+            {#each banner.sentences as result}
+              {#if result.kind === "ready"}<p><strong>{result.sentence.sourceLabel}</strong> · {result.sentence.text}</p>
+              {:else}<p role="status">This recorded evidence could not be displayed. That is not an empty chess result.</p>{/if}
+            {/each}
           </section>
         {/if}
         {#if guardGrounds.length > 0}
           <section aria-label="Post-commit guard evidence" data-evidence-consumer="inspector.postcommit_guard">
             <h3>Post-commit guard evidence</h3>
-            {#each guardGrounds as sentence}
-              <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>
+            {#each guardGrounds as result}
+              {#if result.kind === "ready"}<p><strong>{result.sentence.sourceLabel}</strong> · {result.sentence.text}</p>
+              {:else}<p role="status">This recorded evidence could not be displayed. That is not an empty chess result.</p>{/if}
             {/each}
           </section>
         {/if}
         {#if positionEvidence.length > 0}
           <section aria-label="Evidence attached to this position" data-evidence-consumer="inspector.position_evidence">
             <h3>Evidence attached to this position</h3>
-            {#each positionEvidence as sentence}
-              <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>
+            {#each positionEvidence as result}
+              {#if result.kind === "ready"}<p><strong>{result.sentence.sourceLabel}</strong> · {result.sentence.text}</p>
+              {:else}<p role="status">This recorded evidence could not be displayed. That is not an empty chess result.</p>{/if}
             {/each}
           </section>
         {/if}
@@ -3302,7 +3400,7 @@
   </div>
 {/if}
 
-{#if viewportSupport.supported && openShape}<ShapePanel entry={openShape} onClose={closeShape} onInspect={() => { openShapeId = undefined; shapeInvoker = undefined; inspectorOpen = true; }} />{/if}
+{#if viewportSupport.supported && openShapeOccurrence}{#key openShapeSelection}<ShapePanel entry={openShape} match={openShapeOccurrence.firing} recognition={openShapeOccurrence.presentation} onClose={shapeCloseFor(openShapeSelection)} onInspect={shapeInspectFor(openShapeSelection)} />{/key}{/if}
 {#if viewportSupport.supported && openPivotalNodeId !== undefined && pivotalDialogOpen}
   <div class="modal-backdrop">
     <div class="modal guidance-panel" role="dialog" aria-modal="true" aria-labelledby="pivotal-title" data-evidence-consumer="board.pivotal_marker" use:modalBoundary>

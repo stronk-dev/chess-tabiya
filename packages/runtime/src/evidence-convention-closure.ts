@@ -41,6 +41,35 @@ export const DECLARED_CONVENTION_INHERITANCE: Readonly<Record<string, readonly s
   "rules.square.event.control@1": Object.freeze(["square-control@1"]),
 });
 
+interface ConventionReplacement { readonly from: string; readonly to: string; readonly source?: string }
+
+/** Replaces only automatic predecessor inheritance, never actual sealed-input conventions. */
+const DECLARED_CONVENTION_REPLACEMENTS: Readonly<Record<string, readonly ConventionReplacement[]>> = Object.freeze({
+  "derived.grade.move_quality@2": Object.freeze([Object.freeze({ from: "grade-convention@1", to: "grade-convention@2" })]),
+  "rules.structural.event.king_opposition@2": Object.freeze([Object.freeze({ from: "king-opposition-blocker-blind@1", to: "king-opposition-unobstructed@1", source: "rules.structural.reading.king_opposition@3" })]),
+  "rules.structural.event.backward_pawn@2": Object.freeze([Object.freeze({ from: "backward-pawn-legacy@1", to: "backward-pawn@1", source: "rules.structural.reading.backward_pawn@3" })]),
+  "rules.structural.predicate.king_opposition@2": Object.freeze([Object.freeze({ from: "king-opposition-blocker-blind@1", to: "king-opposition-unobstructed@1", source: "rules.structural.reading.king_opposition@3" })]),
+  "rules.structural.predicate.backward_pawn@2": Object.freeze([Object.freeze({ from: "backward-pawn-legacy@1", to: "backward-pawn@1", source: "rules.structural.reading.backward_pawn@3" })]),
+  "rules.structural.predicate.outpost@2": Object.freeze([Object.freeze({ from: "maximal_pawn_reach@1", to: "outpost-candidate@1", source: "derived.structural.reading.outpost_candidate@1" })]),
+});
+
+/** Only the five exact foundation §2.1 tuples may replace a different convention base. */
+function foundationReplacement(route: string, pair: ConventionReplacement): { readonly source: string; readonly implementation: string } | undefined {
+  const match = /^rules\.structural\.(event|predicate)\.(king_opposition|backward_pawn|outpost)@2$/u.exec(route);
+  if (match === null || match[2] === "outpost" && match[1] !== "predicate") return undefined;
+  const kind = match[2]!;
+  const from = kind === "king_opposition" ? "king-opposition-blocker-blind@1" : kind === "backward_pawn" ? "backward-pawn-legacy@1" : "maximal_pawn_reach@1";
+  const to = kind === "king_opposition" ? "king-opposition-unobstructed@1" : kind === "backward_pawn" ? "backward-pawn@1" : "outpost-candidate@1";
+  const source = kind === "outpost" ? "derived.structural.reading.outpost_candidate@1" : `rules.structural.reading.${kind}@3`;
+  const implementation = `packages/runtime/src/foundation-position-sources.ts#${kind === "king_opposition" ? "readUnobstructedOpposition" : kind === "backward_pawn" ? "readBackwardPawns" : "readOutpostCandidates"}`;
+  return pair.from === from && pair.to === to && pair.source === source ? { source, implementation } : undefined;
+}
+
+/** Package-internal sole-mint guard: a declaration alone is never a source-value authority. */
+export function conventionReplacementSource(route: string): string | undefined {
+  return DECLARED_CONVENTION_REPLACEMENTS[route]?.find(pair => pair.source !== undefined)?.source;
+}
+
 /**
  * Projections whose payload instance selects one registered convention (a setup or method
  * convention ref passed to the factory). Their catalogue text lists every alternative, so it is not
@@ -74,7 +103,8 @@ function mentions(text: string, key: string): boolean {
  * fixtures can prove a removed witness, a renamed catalogue token or an unregistered inherited ref
  * changes or fails the table.
  */
-export function deriveProjectionConventionTable(manifest: CompiledEvidenceManifest, registry: CompiledConventionRegistry = CONVENTION_REGISTRY, inheritance: Readonly<Record<string, readonly string[]>> = DECLARED_CONVENTION_INHERITANCE): ReadonlyMap<string, ProjectionConventionRow> {
+export function deriveProjectionConventionTable(manifest: CompiledEvidenceManifest, registry: CompiledConventionRegistry = CONVENTION_REGISTRY, inheritance: Readonly<Record<string, readonly string[]>> = DECLARED_CONVENTION_INHERITANCE,
+  replacements: Readonly<Record<string, readonly ConventionReplacement[]>> = DECLARED_CONVENTION_REPLACEMENTS): ReadonlyMap<string, ProjectionConventionRow> {
   const registered = new Map(registry.declarations.map((declaration) => [conventionRefKey(declaration.ref), declaration.ref]));
   const witnessed = new Map<string, Set<string>>();
   for (const declaration of registry.declarations) {
@@ -89,6 +119,37 @@ export function deriveProjectionConventionTable(manifest: CompiledEvidenceManife
     }
   }
   const projections = new Map(manifest.projections.map((projection) => [projectionKey(projection), projection]));
+  for (const [route, pairs] of Object.entries(replacements)) {
+    const successor = projections.get(route);
+    if (successor === undefined || successor.disposition?.kind === "retired" || successor.version < 2) throw new TypeError(`Convention replacement names unknown or inactive successor ${route}`);
+    const prior = projections.get(`${successor.id}@${successor.version - 1}`), seen = new Set<string>();
+    const text = [successor.semantics, ...successor.limitations].join("\n");
+    if (prior === undefined || pairs.length === 0) throw new TypeError(`Convention replacement lacks its immediate predecessor or pair for ${route}`);
+    for (const pair of pairs) {
+      const fields = pair !== null && typeof pair === "object" && Object.hasOwn(pair, "source") ? ["from", "to", "source"] : ["from", "to"];
+      if (pair === null || typeof pair !== "object" || Reflect.ownKeys(pair).length !== fields.length
+        || !fields.every(field => { const entry = Object.getOwnPropertyDescriptor(pair, field); return entry?.enumerable && "value" in entry; })) throw new TypeError(`Invalid convention replacement for ${route}`);
+      const from = registered.get(pair.from), to = registered.get(pair.to);
+      if (from === undefined || to === undefined) throw new TypeError(`Unregistered convention replacement for ${route}`);
+      if (from.id === to.id) {
+        if (from.version + 1 !== to.version || fields.length !== 2) throw new TypeError(`Non-successor convention replacement for ${route}`);
+      } else {
+        const required = foundationReplacement(route, pair), source = required === undefined ? undefined : projections.get(required.source);
+        const declaration = registry.declarations.find(item => conventionRefKey(item.ref) === pair.to);
+        const sourceText = source === undefined ? "" : [source.semantics, ...source.limitations].join("\n");
+        const producer = source === undefined ? undefined : manifest.producers.find(item => projectionKey(item) === projectionKey(source.producer));
+        if (required === undefined || source === undefined || source.role !== "reading" || source.disposition?.kind === "retired"
+          || !successor.dependsOn.some(input => projectionKey(input) === required.source) || !mentions(sourceText, pair.to)
+          || !declaration?.authority.some(authority => authority.kind === "position_rules" && authority.implementation === required.implementation)
+          || !producer?.implementation.split(";").some(path => path.trim() === required.implementation.split("#")[0])) {
+          throw new TypeError(`Convention replacement lacks its exact installed source/helper authority for ${route}`);
+        }
+      }
+      if (seen.has(pair.from) || seen.has(pair.to)) throw new TypeError(`Duplicate or conflicting convention replacement for ${route}`);
+      seen.add(pair.from); seen.add(pair.to);
+      if (!witnessed.get(projectionKey(prior))?.has(pair.from) || !mentions(text, pair.to) || mentions(text, pair.from)) throw new TypeError(`Convention replacement lacks exact predecessor witness or successor catalogue meaning for ${route}`);
+    }
+  }
   for (const [route, refs] of Object.entries(inheritance)) {
     if (!projections.has(route)) throw new TypeError(`Convention inheritance names unknown projection ${route}`);
     for (const ref of refs) if (!registered.has(ref)) throw new TypeError(`Convention inheritance for ${route} names unregistered ${ref}`);
@@ -104,7 +165,7 @@ export function deriveProjectionConventionTable(manifest: CompiledEvidenceManife
       origins.set(ref, list);
     };
     for (const ref of witnessed.get(key) ?? []) add(ref, "witnessed");
-    if (projection.version > 1) for (const ref of witnessed.get(`${projection.id}@${projection.version - 1}`) ?? []) add(ref, "successor");
+    if (projection.version > 1) for (const ref of witnessed.get(`${projection.id}@${projection.version - 1}`) ?? []) add(replacements[key]?.find(pair => pair.from === ref)?.to ?? ref, "successor");
     const text = [projection.semantics, ...projection.limitations].join("\n");
     if (!INSTANCE_CONVENTION_PROJECTIONS.has(key)) for (const ref of registered.keys()) if (mentions(text, ref)) add(ref, "catalogue_text");
     for (const ref of inheritance[key] ?? []) add(ref, "declared_inheritance");

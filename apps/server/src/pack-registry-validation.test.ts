@@ -4,7 +4,7 @@ import { PackRegistry } from "./pack-registry.js";
 import * as validation from "./pack-validation.js";
 import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
-const fixture = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8"));
+const fixture = withDerivedRequires(JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")));
 const documents = () => ["source", "variant"].map(id => ({ source: `${id}.json`, value: { ...structuredClone(fixture), id } }));
 afterEach(() => vi.restoreAllMocks());
 

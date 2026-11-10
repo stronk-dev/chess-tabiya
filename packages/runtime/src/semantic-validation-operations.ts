@@ -13,29 +13,39 @@
 import { makeUci, parseUci } from "chessops/util";
 import { normalizeMove } from "chessops/chess";
 
+import { collectFoundationEdgeEvents, type FoundationEdgeSourceRef } from "./foundation-edge-source.js";
 import { createBoundedTargetBackgroundService } from "./bounded-target.js";
-import { compileCandidatePopulation, CANDIDATE_EVENTS_SCOPE } from "./candidate-population.js";
+import { compileCandidatePopulation, CANDIDATE_WIDE_SCOPE, readCandidateFoundationSources, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { exactLegalMoves } from "./legal-moves.js";
+import { SUBJECT_OUTCOME_FAMILIES } from "./semantic-subject-types.js";
 import { boundedTargetSourceEvidence } from "./evidence-operations.js";
 import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES, TRANSITION_GEOMETRY_EVENT_FAMILIES, TRANSITION_RULE_EVENT_FAMILIES } from "./evidence-catalog.js";
 import type { DeclaredEvidence, VersionedEvidenceId } from "./evidence-contract.js";
 import { canonicalFen, positionFromFen } from "./position-cache.js";
+import { CANDIDATE_CURRENT_SOURCE_ROUTES } from "./internal/candidate-child-reading-routes.js";
 import { recordedSemanticPath } from "./recorded-semantic-path.js";
 import { commitMove, createRun } from "./runtime.js";
 import {
-  breadthSemanticEvents,
+  breadthSemanticEventClosure,
   localSemanticEventClosure,
   selectSemanticEvidence,
+  subjectOutcomeSemanticEvents,
   semanticDutyEvents,
   structuralSemanticEvents,
   pawnIslandSemanticEvents,
   transitionSemanticEvents,
   type SemanticEvidenceEvent,
+  type LocalSemanticEventClosure,
 } from "./semantic-evidence.js";
 import {
+  SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS,
   SemanticValidationError,
   semanticValidationOperationRef,
+  semanticLegalSetDigest,
+  parseSemanticValidationOperationInput,
   type SemanticBoundedTargetInput,
   type SemanticCompleteAlternativesInput,
+  type SemanticSubjectOutcomesInput,
   type SemanticEdgeInput,
   type SemanticRecordedPathInput,
   type SemanticRecordedSequenceInput,
@@ -85,7 +95,7 @@ export type SemanticValidationApplicationReach =
   | { readonly kind: "exact_projection_multiset"; readonly through: SemanticValidationOperationRef; readonly projections: readonly VersionedEvidenceId[] }
   | { readonly kind: "required"; readonly owner: string; readonly discharge: string };
 
-export type SemanticValidationPopulationProjection = "sampled_edges" | "recorded_paths" | "complete_alternatives" | "bounded_target_sources";
+export type SemanticValidationPopulationProjection = "sampled_edges" | "recorded_paths" | "complete_alternatives" | "subject_outcomes" | "bounded_target_sources";
 
 export interface SemanticValidationOperationDeclaration<K extends SemanticValidationOperationId = SemanticValidationOperationId> {
   readonly ref: SemanticValidationOperationRef<K>;
@@ -112,15 +122,14 @@ export const SEMANTIC_VALIDATION_FORBIDDEN_TARGETS: readonly string[] = Object.f
 // ---------------------------------------------------------------------------------------------
 
 export const STRUCTURAL_EDGE_PROJECTIONS: readonly VersionedEvidenceId[] = Object.freeze([
-  ...STRUCTURAL_EVENT_FAMILIES.map((family) => ref(`rules.structural.event.${family}`)),
-  ref("rules.structural.event.pawn_islands"),
+  ...["king_zone", "passed_pawn", "piece_count", "direct_attack_count"].map((family) => ref(`rules.structural.event.${family}`)),
 ]);
-export const TRANSITION_EDGE_PROJECTIONS: readonly VersionedEvidenceId[] = Object.freeze([...TRANSITION_GEOMETRY_EVENT_FAMILIES, ...TRANSITION_RULE_EVENT_FAMILIES].map((family) => ref(`rules.transition.event.${family}`)));
+export const TRANSITION_EDGE_PROJECTIONS: readonly VersionedEvidenceId[] = Object.freeze([...TRANSITION_GEOMETRY_EVENT_FAMILIES, ...TRANSITION_RULE_EVENT_FAMILIES].filter(family => family !== "slider_ray").map((family) => ref(`rules.transition.event.${family}`)));
 export const BREADTH_EDGE_PROJECTIONS: readonly VersionedEvidenceId[] = Object.freeze([
   "rules.square.event.control", "rules.mobility.event.piece_destinations", "rules.pawn.event.dynamics", "derived.pawn.event.transitions",
-  "derived.tactic.defender_exposure", "derived.material.event.role_asymmetry", "rules.king.event.zone_state", "derived.king.captured_zone_defender",
+  CANDIDATE_CURRENT_SOURCE_ROUTES.defenderExposure, CANDIDATE_CURRENT_SOURCE_ROUTES.materialEvent, "rules.king.event.zone_state", "derived.king.captured_zone_defender",
   "derived.activity.event.open_file_occupancy",
-].map((id) => ref(id)));
+].map((route) => { const [id, version] = route.split("@"); return ref(id!, version === undefined ? 1 : Number(version)); }));
 export const DUTY_EDGE_PROJECTIONS: readonly VersionedEvidenceId[] = Object.freeze([ref("rules.tactic.event.defender_removed"), ref("rules.tactic.event.defender_duty_relocated")]);
 
 // ---------------------------------------------------------------------------------------------
@@ -129,7 +138,11 @@ export const DUTY_EDGE_PROJECTIONS: readonly VersionedEvidenceId[] = Object.free
 
 function localEdge(input: SemanticEdgeInput): SemanticValidationOperationResult {
   const closure = localSemanticEventClosure(input.beforeFen, input.moveUci, input.afterFen);
-  // The closure publishes its typed loose-piece abstention; it is never erased to an empty list.
+  return collectedEdge(closure);
+}
+
+function collectedEdge(closure: LocalSemanticEventClosure): SemanticValidationOperationResult {
+  // Each source's typed abstention survives the operation adapter independently.
   return completed(closure.events, closure.abstentions.map((abstention) => {
     const [projectionId, projectionVersion] = abstention.projection.split("@") as [string, string];
     return Object.freeze({ projection: ref(projectionId, Number(projectionVersion)), reason: "source_predicate_unavailable" as const });
@@ -181,14 +194,52 @@ function recordedSequenceOperation(input: SemanticRecordedSequenceInput): Semant
 }
 
 /**
- * Complete-alternative avoidance through the production selection over the compiled candidate
- * population. Its reach stays `required`: the D1716 subject-identity successor is unlanded.
+ * Capped selection is retained for selector controls, not complete family-source qualification.
+ * The dedicated subject_outcomes operation below executes the complete source population.
  */
-function completeAlternativesOperation(input: SemanticCompleteAlternativesInput): SemanticValidationOperationResult {
-  const compiled = compileCandidatePopulation({ beforeFen: input.rootFen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
+export function assertCompleteAlternativesFixture(raw: SemanticCompleteAlternativesInput): SemanticCompleteAlternativesInput {
+  const input = parseSemanticValidationOperationInput("runtime.semantic.complete_alternatives", raw);
+  const invalid = (message: string): never => { throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", message); };
+  if (canonicalFen(positionFromFen(input.rootFen)) !== input.rootFen) invalid("complete alternatives root is not canonical");
+  const legal = exactLegalMoves(input.rootFen).map(move => move.uci).sort();
+  const supplied = input.alternatives.map(edge => edge.moveUci).sort();
+  if (legal.join("|") !== supplied.join("|")) invalid("complete alternatives are not the exact legal set");
+  for (const edge of [input.played, ...input.alternatives]) {
+    if (edge.beforeFen !== input.rootFen) invalid("complete alternatives cross roots");
+    const canonical = canonicalSemanticEdge(edge);
+    if (canonical.beforeFen !== edge.beforeFen || canonical.moveUci !== edge.moveUci || canonical.afterFen !== edge.afterFen) invalid("complete alternatives contain a noncanonical edge or incorrect successor");
+  }
+  return input;
+}
+
+function completeAlternativesOperation(raw: SemanticCompleteAlternativesInput): SemanticValidationOperationResult {
+  const input = assertCompleteAlternativesFixture(raw);
+  const compiled = compileCandidatePopulation({ beforeFen: input.rootFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
   if (compiled.kind !== "ready") return unavailable("complete_alternative_population_unavailable");
-  const selection = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate"), { receipt: compiled.receipt, moveUci: input.played.moveUci });
+  const selection = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 2), { receipt: compiled.receipt, moveUci: input.played.moveUci });
   return completed(selection.selected.filter((fact) => fact.kind === "counterfactual_absence").map((fact) => fact.event));
+}
+
+/** Internal census reuse of an ORIGINAL compiled root; never a serialized input or authority issuer. */
+export function subjectOutcomesFromReceipt(raw: SemanticSubjectOutcomesInput, receipt: CandidatePopulationReceipt<CandidateWideScope>): SemanticValidationOperationResult {
+  const input = parseSemanticValidationOperationInput("runtime.semantic.subject_outcomes", raw);
+  readCandidateFoundationSources(receipt);
+  const population = input.population, packet = receipt.packet;
+  if (population.rootFen !== packet.beforeFen || population.legalSetDigest !== semanticLegalSetDigest(packet.beforeFen, packet.candidates.map(row => row.moveUci))
+    || population.alternatives.length !== packet.candidates.length) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", "subject outcomes population differs from its original complete root");
+  for (const edge of [population.played, ...population.alternatives]) {
+    const row = packet.candidates.find(candidate => candidate.moveUci === edge.moveUci);
+    if (edge.beforeFen !== packet.beforeFen || row === undefined || row.afterFen !== edge.afterFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", "subject outcomes edge differs from its original candidate");
+  }
+  const result = subjectOutcomeSemanticEvents(PRIMARY_EVIDENCE_MANIFEST, input.family, receipt, population.played.moveUci);
+  return result.kind === "available" ? completed(result.events) : unavailable("complete_alternative_population_unavailable");
+}
+
+function subjectOutcomesOperation(raw: SemanticSubjectOutcomesInput): SemanticValidationOperationResult {
+  const input = parseSemanticValidationOperationInput("runtime.semantic.subject_outcomes", raw);
+  assertCompleteAlternativesFixture(input.population);
+  const compiled = compileCandidatePopulation({ beforeFen: input.population.rootFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+  return compiled.kind === "ready" ? subjectOutcomesFromReceipt(input, compiled.receipt) : unavailable("complete_alternative_population_unavailable");
 }
 
 /**
@@ -228,6 +279,15 @@ const SEMANTIC_ENTRY = "packages/runtime/src/semantic-evidence.ts";
 type Registry = { readonly [K in SemanticValidationOperationId]: SemanticValidationOperationDeclaration<K> };
 
 export const SEMANTIC_VALIDATION_OPERATIONS: Registry = Object.freeze({
+  "runtime.semantic.foundation_edge": Object.freeze({
+    ref: semanticValidationOperationRef("runtime.semantic.foundation_edge"), productionSymbol: "collectFoundationEdgeEvents", resultAdapter: "foundationEdge",
+    implementationEntries: Object.freeze(["packages/runtime/src/foundation-edge-source.ts"]),
+    reach: Object.freeze({ kind: "direct" as const, callers: Object.freeze(["packages/runtime/src/inspector-local-source.ts"]) }),
+    population: "sampled_edges" as const,
+    invoke: (input: SemanticEdgeInput) => completed(collectFoundationEdgeEvents(
+      { beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen },
+      SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS.map(ref => `${ref.id}@${ref.version}` as FoundationEdgeSourceRef))),
+  }),
   "runtime.semantic.local_edge": Object.freeze({
     ref: LOCAL, productionSymbol: "localSemanticEventClosure", resultAdapter: "localEdge", implementationEntries: Object.freeze([SEMANTIC_ENTRY]),
     reach: Object.freeze({ kind: "direct" as const, callers: Object.freeze(["packages/runtime/src/candidate-population.ts", "packages/runtime/src/postcommit-nudge.ts"]) }),
@@ -237,7 +297,7 @@ export const SEMANTIC_VALIDATION_OPERATIONS: Registry = Object.freeze({
     ref: semanticValidationOperationRef("runtime.semantic.structural_edge"), productionSymbol: "structuralSemanticEvents", resultAdapter: "structuralEdge", implementationEntries: Object.freeze([SEMANTIC_ENTRY]),
     reach: Object.freeze({ kind: "exact_projection_multiset" as const, through: LOCAL, projections: STRUCTURAL_EDGE_PROJECTIONS }),
     population: "sampled_edges" as const,
-    invoke: (input: SemanticEdgeInput) => completed([...structuralSemanticEvents(input.beforeFen, input.moveUci, input.afterFen), ...pawnIslandSemanticEvents(input.beforeFen, input.moveUci, input.afterFen)]),
+    invoke: (input: SemanticEdgeInput) => completed(structuralSemanticEvents(input.beforeFen, input.moveUci, input.afterFen)),
   }),
   "runtime.semantic.transition_edge": Object.freeze({
     ref: semanticValidationOperationRef("runtime.semantic.transition_edge"), productionSymbol: "transitionSemanticEvents", resultAdapter: "transitionEdge", implementationEntries: Object.freeze([SEMANTIC_ENTRY]),
@@ -246,10 +306,10 @@ export const SEMANTIC_VALIDATION_OPERATIONS: Registry = Object.freeze({
     invoke: (input: SemanticEdgeInput) => completed(transitionSemanticEvents(input.beforeFen, input.moveUci, input.afterFen)),
   }),
   "runtime.semantic.breadth_edge": Object.freeze({
-    ref: semanticValidationOperationRef("runtime.semantic.breadth_edge"), productionSymbol: "breadthSemanticEvents", resultAdapter: "breadthEdge", implementationEntries: Object.freeze([SEMANTIC_ENTRY]),
+    ref: semanticValidationOperationRef("runtime.semantic.breadth_edge"), productionSymbol: "breadthSemanticEventClosure", resultAdapter: "breadthEdge", implementationEntries: Object.freeze([SEMANTIC_ENTRY]),
     reach: Object.freeze({ kind: "exact_projection_multiset" as const, through: LOCAL, projections: BREADTH_EDGE_PROJECTIONS }),
     population: "sampled_edges" as const,
-    invoke: (input: SemanticEdgeInput) => completed(breadthSemanticEvents(input.beforeFen, input.moveUci, input.afterFen)),
+    invoke: (input: SemanticEdgeInput) => collectedEdge(breadthSemanticEventClosure(input.beforeFen, input.moveUci, input.afterFen)),
   }),
   "runtime.semantic.duty_edge": Object.freeze({
     ref: semanticValidationOperationRef("runtime.semantic.duty_edge"), productionSymbol: "semanticDutyEvents", resultAdapter: "dutyEdge", implementationEntries: Object.freeze([SEMANTIC_ENTRY]),
@@ -269,8 +329,13 @@ export const SEMANTIC_VALIDATION_OPERATIONS: Registry = Object.freeze({
   }),
   "runtime.semantic.complete_alternatives": Object.freeze({
     ref: semanticValidationOperationRef("runtime.semantic.complete_alternatives"), productionSymbol: "selectSemanticEvidence", resultAdapter: "completeAlternativesOperation", implementationEntries: Object.freeze([SEMANTIC_ENTRY, "packages/runtime/src/candidate-population.ts"]),
-    reach: Object.freeze({ kind: "required" as const, owner: "D1716", discharge: "The avoidance subject/outcome identity successor is unlanded; the current projection-and-sign relation is known unsound, so no avoidance event can pass through this operation." }),
+    reach: Object.freeze({ kind: "required" as const, owner: "D1716", discharge: "This operation returns capped selected facts, not a complete source family. Independent source qualification uses runtime.semantic.subject_outcomes; selection output cannot discharge that obligation." }),
     population: "complete_alternatives" as const, invoke: completeAlternativesOperation,
+  }),
+  "runtime.semantic.subject_outcomes": Object.freeze({
+    ref: semanticValidationOperationRef("runtime.semantic.subject_outcomes"), productionSymbol: "subjectOutcomeSemanticEvents", resultAdapter: "subjectOutcomesOperation", implementationEntries: Object.freeze([SEMANTIC_ENTRY, "packages/runtime/src/candidate-population.ts"]),
+    reach: Object.freeze({ kind: "direct" as const, callers: Object.freeze(["packages/runtime/src/semantic-evidence.ts"]) }),
+    population: "subject_outcomes" as const, invoke: subjectOutcomesOperation,
   }),
   "runtime.semantic.bounded_target_batch": Object.freeze({
     ref: semanticValidationOperationRef("runtime.semantic.bounded_target_batch"), productionSymbol: "BoundedTargetBackgroundService.submit", resultAdapter: "boundedTargetBatchOperation", implementationEntries: Object.freeze(["packages/runtime/src/bounded-target.ts"]),
@@ -294,8 +359,8 @@ export interface SemanticValidationBlockedFamily {
 
 /** Families whose accepted successors are unlanded: every arm abstains, named by owner. */
 export const SEMANTIC_VALIDATION_BLOCKED_FAMILIES: readonly SemanticValidationBlockedFamily[] = Object.freeze([
-  Object.freeze({ owner: "D1716", discharge: "avoidance subject/outcome identity successor (semantic-validation D1): the projection-and-sign-only relation is known unsound", matches: (projection: VersionedEvidenceId) => projection.id.startsWith("derived.semantic_avoidance.") }),
-  Object.freeze({ owner: "D1717", discharge: "blocker-blind king opposition successor (semantic-validation D2): distant opposition ignores occupied intervening squares", matches: (projection: VersionedEvidenceId) => projection.id === "rules.structural.event.king_opposition" }),
+  Object.freeze({ owner: "D1716", discharge: "Retired projection/sign avoidance cannot qualify", matches: (projection: VersionedEvidenceId) => projection.id.startsWith("derived.semantic_avoidance.") && projection.version === 1 }),
+  Object.freeze({ owner: "D1717", discharge: "blocker-blind king opposition successor (semantic-validation D2): distant opposition ignores occupied intervening squares", matches: (projection: VersionedEvidenceId) => projection.id === "rules.structural.event.king_opposition" && projection.version === 1 }),
 ]);
 
 export function semanticValidationBlockedFamily(projection: VersionedEvidenceId): SemanticValidationBlockedFamily | undefined {
@@ -306,6 +371,8 @@ export function semanticValidationBlockedFamily(projection: VersionedEvidenceId)
 export function semanticValidationPopulationOperation(subject: { readonly kind: "event" | "reading"; readonly projection: VersionedEvidenceId }): SemanticValidationOperationId | undefined {
   const { projection } = subject;
   if (semanticValidationBlockedFamily(projection) !== undefined) return undefined;
+  if (subject.kind === "event" && projection.version === 2 && SUBJECT_OUTCOME_FAMILIES.some(family => projection.id === `derived.semantic_avoidance.${family}`)) return "runtime.semantic.subject_outcomes";
+  if (subject.kind === "event" && SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS.some(ref => ref.id === projection.id && ref.version === projection.version)) return "runtime.semantic.foundation_edge";
   if (projection.id.startsWith("derived.bounded_target.")) return "runtime.semantic.bounded_target_batch";
   if (projection.version === 2 && RECORDED_SEQUENCE_PROJECTIONS.some((value) => value.id === projection.id)) return "runtime.semantic.recorded_path";
   if (subject.kind === "event" && projection.version === 1 && !V1_WINDOW_EVENT_IDS.includes(projection.id)) return "runtime.semantic.local_edge";

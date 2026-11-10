@@ -2,6 +2,8 @@
 // private pack-capability catalogue. Keep the full runtime entry for server/tooling.
 // Semantic validation's four-way module-load equality remains a client startup invariant.
 import "./semantic-validation-registry.js";
+export { parseMaiaNodeDistributionOperands, parseMaiaNodeWdlOperands, maiaNodeBandSentence, maiaNodeEmptySentence,
+  type HumanSplitPageV2, type MaiaNodeDistributionOperands, type MaiaNodeWdlOperands } from "./maia-node-presentation.js";
 
 export {
   exactLegalMoveMap,
@@ -44,7 +46,8 @@ export {
 } from "./feedback.js";
 export {
   shapeFiringEvidence,
-} from "./shape-firing.js";
+  type PresentedShapeFiring,
+} from "./shape-presentation.js";
 export {
   classifyPhase,
   renderPhaseReading,
@@ -90,6 +93,7 @@ export {
   type WorkflowPreferenceV2,
 } from "./presets.js";
 export {
+  MODULE_EFFECT_CATALOG,
   MODULE_LABELS,
   browserChannelReceipt,
   compileAssistanceRequest,
@@ -110,6 +114,7 @@ export {
   moduleDecisionStamp,
   moduleDisclosureDigest,
   moduleComparisonForSubject,
+  modulePresentationBundleCost,
   type InspectorFamilyState,
   type ModuleBudgetReceipt,
   type ModuleDisclosureReceipt,
@@ -119,10 +124,19 @@ export {
 } from "./module-query.js";
 export { MODULE_CURRENT_IMAGE } from "./evidence-catalog.js";
 export {
-  pivotalMarkerEvidence,
+  INSPECTOR_SOURCE_TOPICS, parseInspectorQueryRequest,
+  type InspectorQueryRequest, type InspectorQueryView, type InspectorQueryPage, type InspectorPageBody,
+  type InspectorDisclosureReceipt, type InspectorSourceRef, type InspectorSourceContext,
+  type InspectorSourceOutcome, type InspectorSourceStatus, type InspectorRecordedCoverage,
+  type InspectorPageRange, type InspectorDetailRef, type InspectorBudgetDimension,
+} from "./inspector-query-contract.js";
+export { INSPECTOR_DETAIL_SOURCES, parseInspectorDetailScope, parseInspectorDetailPayload, inspectorDetailSquares, type InspectorDetailKind, type InspectorDetailScope } from "./inspector-detail.js";
+export { isInspectorWholeReading, inspectorWholeReadingGeometryRequired } from "./inspector-whole-reading-presentation.js";
+export {
   renderPivotalMarker,
   type PivotalKind,
 } from "./pivotal.js";
+export { pivotalMarkerEvidence, type PresentedPivotalMarker } from "./pivotal-presentation.js";
 export {
   transitionReading,
   type TransitionObservation,
@@ -150,8 +164,16 @@ export {
   OBJECTIVE_STATE_LABELS,
   RUN_OUTCOME_LABELS,
   assertPresentationText,
+  PresentationError,
   assertPresentedEvidenceItem,
+  isGradeMeasurementSummary,
+  presentedNativeFactReport, isNativeFactSummary, type NativeFactReport,
+  presentedGradeMeasurementReport,
+  type GradeMeasurementReport,
+  movePathFrames,
   parsePresentationReceipt,
+  presentationDigest,
+  presentationAdapter,
   presentEvidenceItems,
   presentedSentence,
   type ComponentValue,
@@ -191,6 +213,7 @@ export {
 export {
   EXPLORER_SPEEDS,
 } from "./provider-types.js";
+export { normalizeExplorerPositionPageRequest } from "./provider-requests.js";
 export {
   type ImportSourceKind,
   type ImportSourceRequestKind,
@@ -227,7 +250,8 @@ export {
 export {
   declareStructuralReadingEvidence,
   declareTransitionReadingEvidence,
-  positionStructureEvidence,
+  presentMoveTransitionEvidence,
+  presentPositionStructureEvidence,
   selectedSquareSightEvidence,
 } from "./reading-evidence.js";
 export {
@@ -279,9 +303,6 @@ export {
   type ReviewMapProjection,
   type ReviewEvalGraph,
 } from "./review-map.js";
-export {
-  type ReviewAnalysis,
-} from "./review-analysis.js";
 export {
   reviewText,
 } from "./review-map-templates.js";
@@ -347,6 +368,7 @@ export {
   hintDecisionStamp,
   nextHintRung,
   parseHintResponse,
+  type HintResponseContext,
   type HintDeliveryMarks,
   type HintPolicyReason,
   type HintRequestState,

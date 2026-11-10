@@ -5,25 +5,23 @@
 
 export const CANDIDATE_COLLECTOR_PROJECTION_KEYS = Object.freeze({
   "event.structural": Object.freeze([
-    "rules.structural.event.backward_pawn@1",
-    "rules.structural.event.doubled_pawn@1",
-    "rules.structural.event.half_open_file@1",
-    "rules.structural.event.isolated_pawn@1",
-    "rules.structural.event.king_opposition@1",
     "rules.structural.event.king_zone@1",
-    "rules.structural.event.line_blockers@1",
-    "rules.structural.event.open_file@1",
     "rules.structural.event.passed_pawn@1",
     "rules.structural.event.piece_count@1",
     "rules.structural.event.direct_attack_count@1",
   ] as const),
-  "event.pawn_island": Object.freeze([
-    "rules.structural.event.pawn_islands@1",
+  "event.foundation": Object.freeze([
+    "rules.structural.event.king_opposition@2",
+    "rules.structural.event.backward_pawn@2",
+    "derived.structural.event.pawn_file_group@1",
+    "rules.transition.event.slider_ray@2",
+    "derived.activity.event.file_state@1",
+    "derived.activity.event.file_access_revealed@1",
+    "rules.structural.event.pawn_islands@2",
   ] as const),
   "event.transition": Object.freeze([
     "rules.transition.event.occupied_attack@1",
     "rules.transition.event.occupied_defence@1",
-    "rules.transition.event.slider_ray@1",
     "rules.transition.event.piece_escape@1",
     "rules.transition.event.defended_duty@1",
     "rules.transition.event.castled@1",
@@ -58,8 +56,8 @@ export const CANDIDATE_COLLECTOR_PROJECTION_KEYS = Object.freeze({
     "rules.mobility.event.piece_destinations@1",
     "rules.pawn.event.dynamics@1",
     "derived.pawn.event.transitions@1",
-    "derived.tactic.defender_exposure@1",
-    "derived.material.event.role_asymmetry@1",
+    "derived.tactic.defender_exposure@2",
+    "derived.material.event.role_asymmetry@2",
     "rules.king.event.zone_state@1",
     "derived.king.captured_zone_defender@1",
     "derived.activity.event.open_file_occupancy@1",
@@ -69,16 +67,26 @@ export const CANDIDATE_COLLECTOR_PROJECTION_KEYS = Object.freeze({
     "rules.tactic.event.defender_duty_relocated@1",
   ] as const),
   "reading.child": Object.freeze([
-    "derived.material.reading.role_signature@1",
-    "derived.tactic.promotion_pressure@1",
+    "derived.activity.reading.file_state@1",
+    "derived.material.reading.role_signature@2",
+    "derived.square.reading.capture_migration_reach@1",
+    "derived.square.reading.future_file_challenge@1",
+    "derived.structural.reading.occupied_outpost@1",
+    "derived.structural.reading.outpost_candidate@1",
+    "derived.structural.reading.pawn_file_group@1",
     "rules.castling.reading.legality@1",
     "rules.castling.reading.rights@1",
     "rules.king.reading.zone_state@1",
+    "rules.mobility.reading.legal_moves@1",
     "rules.mobility.reading.piece_destinations@1",
     "rules.pawn.reading.candidate_majority@1",
     "rules.pawn.reading.contacts@1",
     "rules.phase.development@1",
     "rules.square.reading.control@1",
+    "rules.structural.reading.backward_pawn@3",
+    "rules.structural.reading.fianchetto_knight_screen@1",
+    "rules.structural.reading.fianchetto_setup@1",
+    "rules.structural.reading.king_opposition@3",
     "rules.structural.reading.pawn_connectivity@1",
     "rules.structural.reading.space@1",
     "rules.tactic.consequence.mate_in_one@1",
@@ -86,20 +94,30 @@ export const CANDIDATE_COLLECTOR_PROJECTION_KEYS = Object.freeze({
     "rules.tactic.reading.back_rank@1",
     "rules.tactic.reading.discovered_latency@1",
     "rules.tactic.reading.loose_piece@1",
+    "rules.tactic.reading.promotion_pressure@1",
     "rules.tactic.reading.ray_classification@1",
     "rules.tactic.reading.rook_on_seventh@1",
     "rules.tactic.reading.trapped_piece@1",
+  ] as const),
+  "reading.candidate_role": Object.freeze([
+    "rules.mobility.reading.candidate_role@1",
+  ] as const),
+  "reading.pawn_extended_center": Object.freeze([
+    "rules.mobility.reading.pawn_extended_center_destination@1",
   ] as const),
   "reading.legal_exchange": Object.freeze([
     "rules.exchange.predicate.legal_exchange@1",
   ] as const),
   "reading.fork_survival": Object.freeze([
-    "derived.tactic.fork_survives_reply@1",
+    "derived.tactic.nonterminal_fork_survival@1",
   ] as const),
 } as const);
 
 export const CANDIDATE_PACKET_ABSTENTION_REASONS = Object.freeze({
   "rules.tactic.event.loose_piece@1": Object.freeze([
+    "invalid_turn_clone",
+  ] as const),
+  "derived.tactic.defender_exposure@2": Object.freeze([
     "invalid_turn_clone",
   ] as const),
 } as const);

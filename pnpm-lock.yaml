@@ -20,6 +20,9 @@ importers:
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
+      chessops:
+        specifier: 0.15.1
+        version: 0.15.1
       esbuild:
         specifier: 0.28.2
         version: 0.28.2

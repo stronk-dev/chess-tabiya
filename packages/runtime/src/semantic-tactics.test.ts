@@ -66,8 +66,16 @@ describe("semantic tactic anchors", () => {
     expect(sealed.kind).toBe("available");
     if (sealed.kind !== "available") throw new Error("Legal promotion alternatives must be computed, not abstained");
     expect(sealed.value.map(item => item.payload)).toEqual(actual.conflicts);
+    // The genuine derived prerequisite remains internal; the current Inspector independently
+    // acquires its accepted computed source from the exact legal edge, never relabelled values.
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, sealed.value).items).toEqual([]);
+    const current = invokeEvidenceValueRoute("rules.tactic.predicate.overload_conflict@1", { beforeFen: value.fen, moveUci: value.move, afterFen: next });
+    expect(current.kind).toBe("available");
+    if (current.kind !== "available") throw new Error("The current computed source must evaluate the legal promotion alternatives");
+    expect(current.value.map(item => item.payload)).toEqual(actual.conflicts);
+    for (const item of current.value) expect(evidenceValueReceipt(item)).toMatchObject({ factory: "createRulesTacticPredicateOverloadConflictV1Evidence" });
     const rendered = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(
-      evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, sealed.value),
+      evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, current.value),
     )))));
     expect(rendered).toHaveLength(value.blocked ? 1 : 0);
   });
@@ -127,6 +135,10 @@ describe("semantic tactic anchors", () => {
     const sealed = invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", { duties, capture });
     expect(sealed.kind === "available" ? sealed.value.map((item) => item.projection.id) : []).toEqual(["derived.tactic.overloaded_defender_response_conflict"]);
     expect(sealed.kind === "available" ? sealed.value[0]!.payload : undefined).toEqual(conflict.conflicts[0]);
+    if (sealed.kind !== "available") throw new Error("The original strict conflict remains available internally");
+    expect(sealed.value).toHaveLength(1);
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, sealed.value).items).toEqual([]);
+    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, sealed.value)).toThrow(/undeclared exact consumer/u);
     // Duties read at a different position cannot be joined to this capture.
     expect(() => invokeEvidenceValueRoute("derived.tactic.overloaded_defender_response_conflict@1", { duties: invokeEvidenceValueRoute("rules.tactic.reading.defender_duty_set@1", { fen: conflictAfter }), capture })).toThrow(/before position/u);
 
@@ -172,6 +184,8 @@ describe("D3645 exact en-passant target and recapture identities", () => {
       capture: invokeEvidenceValueRoute("rules.transition.event.capture@1", { beforeFen: value.fen, moveUci: value.move, afterFen: next })[0]!,
     });
     expect(declared).toMatchObject(value.kind === "unavailable" ? { kind: "unavailable", reason: "no_legal_recapture" } : { kind: "available", value: [] });
+    const current = invokeEvidenceValueRoute("rules.tactic.predicate.overload_conflict@1", { beforeFen: value.fen, moveUci: value.move, afterFen: next });
+    expect(current).toMatchObject(value.kind === "unavailable" ? { kind: "unavailable", reason: "no_legal_recapture" } : { kind: "available", value: [] });
   });
 
   it.each(enPassantOverloads)("retains the $name captured pawn separately from the recapture landing", value => {
@@ -199,7 +213,15 @@ describe("D3645 exact en-passant target and recapture identities", () => {
     expect(result.value).toHaveLength(1);
     const item = result.value[0]!;
     expect(evidenceValueReceipt(item)).toMatchObject({ factory: "createDerivedTacticOverloadedDefenderResponseConflictV1Evidence" });
-    const receipt = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, result.value))))));
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, result.value).items).toEqual([]);
+    const current = invokeEvidenceValueRoute("rules.tactic.predicate.overload_conflict@1", { beforeFen: value.fen, moveUci: value.move, afterFen: next });
+    expect(current.kind).toBe("available");
+    if (current.kind !== "available") throw new Error("Expected current computed en-passant conflict");
+    expect(current.value).toHaveLength(1);
+    expect(current.value[0]!.payload).toEqual(item.payload);
+    expect(current.value[0]).not.toBe(item);
+    expect(evidenceValueReceipt(current.value[0]!)).toMatchObject({ factory: "createRulesTacticPredicateOverloadConflictV1Evidence" });
+    const receipt = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, current.value))))));
     expect(receipt).toHaveLength(1);
     const sentence = presentedSentence(receipt[0]!);
     expect(sentence).toContain(value.san);

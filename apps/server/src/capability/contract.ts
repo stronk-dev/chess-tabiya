@@ -40,6 +40,8 @@ export const DECLARATIONS_GENERATED_PATH = "packages/runtime/src/capability/decl
 
 export interface ContractBuildOptions {
   readonly root: string;
+  /** Mutation fixtures check exact accepted projection versions through the same builder. */
+  readonly manifest?: typeof PRIMARY_EVIDENCE_MANIFEST;
   readonly overrides?: Readonly<Record<string, string>>;
   readonly lifecycle?: typeof CAPABILITY_LIFECYCLE;
   readonly previous?: readonly GeneratedCapabilityDeclaration[];
@@ -61,7 +63,7 @@ export function buildContract(options: ContractBuildOptions): BuiltCapabilityCon
     schema,
     authority: options.authority ?? readAuthority(root),
     lifecycle: options.lifecycle ?? CAPABILITY_LIFECYCLE,
-    manifest: PRIMARY_EVIDENCE_MANIFEST,
+    manifest: options.manifest ?? PRIMARY_EVIDENCE_MANIFEST,
     conventions: options.conventions ?? { BREADTH_CONVENTION_TEXT, SEMANTIC_CONVENTION_TEXT },
     shapes: loadRegistryEntries(root, "content/shapes"),
     principles: loadRegistryEntries(root, "content/principles"),

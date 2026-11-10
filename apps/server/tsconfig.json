@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "../../tools/maia-task-native-check.ts", "../../tools/d4018-longitudinal-incidence.ts"]
 }

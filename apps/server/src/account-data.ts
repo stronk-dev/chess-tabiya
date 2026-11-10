@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 
-import { parseConceptRef, readBackReplay, registeredConceptKey, type DrillRun } from "@chess-tabiya/runtime";
+import { parseConceptRef, readBackReplay, registeredConceptKey, type DrillRun, type StoredClockDocument } from "@chess-tabiya/runtime";
+import { parseStoredClockDocument } from "./recorded-clock-document.js";
 
 import { ATTEMPT_CONCEPT_LEGACY_REASONS } from "./concept-migration.js";
 
@@ -85,6 +86,9 @@ export const ACCOUNT_DATA_INVENTORY = Object.freeze([
   table("learner_observation_denominators", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_observations", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_structure_stats", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_game_facts", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_choice_facts", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_subject_observations", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_observation_jobs", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   // rfc/evidence-job-durability.md: run-owned operational evidence state. It carries no learner
   // identity, follows its run's classification (cascade on run deletion) and is not exported.
@@ -177,6 +181,9 @@ export const ACCOUNT_TAGGED_RECORD_FIELDS = {
   cohort_standings: [["classroom_id", "window_from", "window_to", "opened_at", "closed_at"]],
   learner_observation_denominators: [["run_id", "phase", "decision_class", "decisions", "observed_at", "derived_rev"]],
   learner_observations: [["run_id", "projection_id", "projection_version", "semantic_sign", "source_sign", "phase", "decision_class", "session_kind", "pack_id", "opportunities", "occurred", "alternative_share_sum", "occurredRefs", "opportunityRefs", "observed_at", "derived_rev"]],
+  learner_game_facts: [["run_id", "completed_seq", "derived_rev", "observed_at", "primary_branch_id", "learner_side", "game_json"]],
+  learner_choice_facts: [["run_id", "completed_seq", "derived_rev", "observed_at", "primary_branch_id", "cohort_json"]],
+  learner_subject_observations: [["run_id", "decision_ref_json", "source_kind", "projection_id", "projection_version", "subject_json", "parameters_json", "tested_key", "relation", "sign", "actor", "phase", "decision_class", "session_kind", "pack_id", "occurred", "legal_alternatives", "matching_alternatives", "comparable_alternatives", "observed_at", "derived_rev"]],
   learner_structure_stats: [["run_id", "root_key", "root_node_id", "session_kind", "pack_id", "branch_count", "rewound_count", "forked_count", "group_count", "outcome_count", "observed_at", "derived_rev"]],
   learner_observation_jobs: [["run_id", "requested_seq", "completed_seq", "derived_rev", "state", "retry_count", "failure_code", "next_attempt_at", "updated_at"]],
   campaign_runs: [["id", "campaign_id", "campaign_version", "campaign_document_digest", "campaign_document", "status", "active_encounter_run_id", "created_at"]],
@@ -217,6 +224,7 @@ export interface ImportedGameExport {
   readonly pgn: string;
   readonly licenceNote: string;
   readonly importedAt: string;
+  readonly clockDocument: StoredClockDocument | null;
 }
 
 export interface RunGrantExport {
@@ -302,7 +310,7 @@ export function buildAccountBundle(input: AccountBundleInput): AccountBundleV1 {
     drafts: projected(["pack_drafts", "shape_drafts", "playtest_documents"], Object.freeze([...input.drafts])),
     publications: projected(["registered_packs", "registered_shapes"], Object.freeze([...input.publications])),
     liveAndSocial: projected(["live_sessions", "session_journal", "session_proposals", "session_vote_windows", "session_votes", "session_invitations", "arena_legs", "match_states", "public_tokens", "classrooms", "classroom_members", "assignments", "assignment_submissions"], Object.freeze([...input.liveAndSocial])),
-    behavioralProfiles: projected(["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks", "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_observation_jobs"], Object.freeze([...input.behavioralProfiles])),
+    behavioralProfiles: projected(["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks", "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_observation_jobs"], Object.freeze([...input.behavioralProfiles])),
     exclusions: projected(["learners", "learner_sessions", "public_tokens", "browser_local"], Object.freeze([
       Object.freeze({ kind: "password_hash", reason: "Password hashes, login failures, and lock state are authentication material and are never exported." }),
       Object.freeze({ kind: "sessions", reason: "Authenticated sessions, bearer tokens, and token hashes are credentials and are never exported." }),
@@ -461,11 +469,13 @@ function validateOwnedRuns(value: unknown): void {
     } else throw new TypeError(`ownedRuns.value[${index}].snapshot kind is invalid`);
     if (run.importedGame !== null) {
       const imported = recordValue(run.importedGame, `ownedRuns.value[${index}].importedGame`);
-      exactKeys(imported, ["sourceKind", "sourceUrl", "movetextDigest", "headers", "result", "pgn", "licenceNote", "importedAt"], `ownedRuns.value[${index}].importedGame`);
+      exactKeys(imported, ["sourceKind", "sourceUrl", "movetextDigest", "headers", "result", "pgn", "licenceNote", "importedAt", "clockDocument"], `ownedRuns.value[${index}].importedGame`);
       for (const field of ["sourceKind", "movetextDigest", "result", "pgn", "licenceNote", "importedAt"] as const) stringValue(imported[field], `ownedRuns.value[${index}].importedGame.${field}`);
       if (imported.sourceUrl !== null) stringValue(imported.sourceUrl, `ownedRuns.value[${index}].importedGame.sourceUrl`);
       const headers = recordValue(imported.headers, `ownedRuns.value[${index}].importedGame.headers`);
       for (const [header, headerValue] of Object.entries(headers)) stringValue(headerValue, `ownedRuns.value[${index}].importedGame.headers.${header}`);
+      if (imported.clockDocument !== null) parseStoredClockDocument(imported.clockDocument,
+        { pgn: imported.pgn as string, movetextDigest: imported.movetextDigest as string }, snapshot.kind === "parsed" ? snapshot.value as unknown as DrillRun : undefined);
     }
     for (const [grantIndex, grantValue] of arrayValue(run.grants, `ownedRuns.value[${index}].grants`).entries()) {
       const grant = recordValue(grantValue, `ownedRuns.value[${index}].grants[${grantIndex}]`);

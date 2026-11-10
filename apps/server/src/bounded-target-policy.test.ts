@@ -21,6 +21,7 @@ import { MockProviderEngineClient, type MockProviderEngineOptions } from "./mock
 import { ProviderExchangeScheduler } from "./provider-exchange.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
 import type { ChessTabiyaApplication } from "./application.js";
 
@@ -173,10 +174,11 @@ describe("production execution preflight (D3613)", () => {
 describe("application execution boundary (D3613)", () => {
   let fixture: ReturnType<typeof applicationFixture<ChessTabiyaApplication>>;
   beforeAll(async () => {
+    installEmptyApplicationCatalogues();
     fixture = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));
     await fixture.ready;
   });
-  afterAll(async () => { await fixture?.close(); });
+  afterAll(async () => { try { await fixture?.close(); } finally { vi.restoreAllMocks(); } });
 
   it("the real application compiles both outputs before its shared scheduler acquires", async () => {
     const application = fixture.current()!;

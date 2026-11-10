@@ -1,6 +1,8 @@
 // D3641: the stationary-king reading reaches the actual authenticated application.
 import type { AddressInfo } from "node:net";
-import { compileAssistanceRequest, parsePresentationReceipt, presentedSentence, type DrillRun, type ModuleQueryPage } from "@chess-tabiya/runtime";
+import { compileAssistanceRequest, moduleDecisionStamp, parsePresentationReceipt, presentedSentence, type DrillRun, type ModuleQueryPage } from "@chess-tabiya/runtime";
+import type { InspectorQueryPage, InspectorQueryRequest } from "../../../packages/runtime/src/inspector-query-contract.js";
+import { parseInspectorQueryPage } from "../../web/src/lib/inspector-query-response.js";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { afterEach, beforeEach, describe, expect, it, onTestFailed, vi } from "vitest";
@@ -70,27 +72,40 @@ describe("exact castling legality in authenticated Inspector", () => {
       const id = `trapped-castle-${index}`;
       const created = await post("/runs", { id, session: { kind: "position", start: { fen, side: value.side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1 });
       expect(created.status, await created.clone().text()).toBe(201);
-      const run = (await created.json() as { run: DrillRun }).run;
-      expect((await post(`/runs/${id}/reveal`, {})).status).toBe(200);
+      const reveal = await post(`/runs/${id}/reveal`, {});
+      expect(reveal.status).toBe(200);
+      const run = (await reveal.json() as { run: DrillRun }).run;
       const savedState = async () => JSON.stringify(await Promise.all(["graph", "events"].map(async action => {
         const response = await fetch(`${origin}/runs/${id}/${action}`, { headers: { cookie } });
         expect(response.status).toBe(200); return response.json();
       })));
       const saved = await savedState();
       for (const module of ["threat_radar", "full_inspector"] as const) {
-        const request = { assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: module === "full_inspector" ? "analysis" : "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }), query: { timing: module === "full_inspector" ? "review" : "pre_commit", nodeId: run.activeCursor.nodeId, requested: [module] } };
-        const response = await post(`/runs/${id}/modules/query`, request);
+        const assistance = compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: module === "full_inspector" ? "analysis" : "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+        const inspectorRequest: InspectorQueryRequest = { protocol: "inspector.query_page@1", assistance, query: { ...run.activeCursor, decisionDigest: moduleDecisionStamp(run).digest,
+          view: { kind: "source", projection: "rules.tactic.reading.trapped_piece@1", context: { kind: "position" }, start: 0, collectionKey: null } } };
+        const request = module === "full_inspector" ? inspectorRequest : { assistance, query: { timing: "pre_commit", nodeId: run.activeCursor.nodeId, requested: [module] } };
+        const endpoint = `/runs/${id}/${module === "full_inspector" ? "inspector/query" : "modules/query"}`;
+        const response = await post(endpoint, request);
         expect(response.status, await response.clone().text()).toBe(200);
-        const page = (await response.json() as { page: ModuleQueryPage }).page;
-        const packet = page.packets.find(item => item.module === module)!;
-        expect(packet, JSON.stringify(page)).toBeDefined();
-        const items = parsePresentationReceipt(packet.receipt).filter(item => item.evidenceRef?.projection.id === "rules.tactic.reading.trapped_piece");
-        if (index === 0) expect(items).toEqual([]);
-        else if (module === "full_inspector") {
+        if (module === "full_inspector") {
+          const wire = await response.json() as InspectorQueryPage;
+          expect(wire.kind).toBe("page"); if (wire.kind !== "page") throw new Error("Expected Inspector source page");
+          const page = parseInspectorQueryPage(wire, { runId: id, request: inspectorRequest, fen: run.nodes.find(node => node.id === run.activeCursor.nodeId)!.fen, requestedDigest: wire.requestedConfigDigest, finalDigest: wire.effectiveConfigDigest });
+          expect(page.kind).toBe("page"); if (page.kind !== "page") throw new Error("Inspector receiver refused source");
+          expect(page.body).toMatchObject({ kind: "source", outcome: { kind: "available", collected: 1, displayed: 1 } });
+          const items = page.items.filter(item => item.evidenceRef?.projection.id === "rules.tactic.reading.trapped_piece");
           expect(items.length).toBeGreaterThan(0);
-          expect(items.map(presentedSentence).join(" ")).toContain(value.rook);
+          if (index === 0) expect(items).toEqual([expect.objectContaining({ component: expect.objectContaining({ id: "fact_statement", operand: expect.objectContaining({ rendererId: "inspector.whole_population@1", operands: { sourceProjection: "rules.tactic.reading.trapped_piece@1", state: "empty", count: 0 } }) }) })]);
+          else expect(items.map(presentedSentence).join(" ")).toContain(value.rook);
+        } else {
+          const page = (await response.json() as { page: ModuleQueryPage }).page;
+          const packet = page.packets.find(item => item.module === module)!;
+          expect(packet, JSON.stringify(page)).toBeDefined();
+          const items = parsePresentationReceipt(packet.receipt).filter(item => item.evidenceRef?.projection.id === "rules.tactic.reading.trapped_piece");
+          if (index === 0) expect(items).toEqual([]);
         }
-        expect((await post(`/runs/${id}/modules/query`, request, foreign)).status).toBe(404);
+        expect((await post(endpoint, request, foreign)).status).toBe(404);
       }
       expect(await savedState()).toBe(saved);
     }
@@ -132,24 +147,28 @@ describe("exact castling legality in authenticated Inspector", () => {
     const post = (path: string, body: unknown, identity: string | undefined = cookie) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", "x-writer-id": "castle-writer", ...(identity === undefined ? {} : { cookie: identity }) }, body: JSON.stringify(body) });
     const created = await post("/runs", { id: "castle-evidence", session: { kind: "position", start: { fen: value.fen, side: value.side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1 });
     expect(created.status, await created.clone().text()).toBe(201);
-    const run = (await created.json() as { run: DrillRun }).run;
-    expect((await post("/runs/castle-evidence/reveal", {})).status).toBe(200);
+    const reveal = await post("/runs/castle-evidence/reveal", {});
+    expect(reveal.status).toBe(200);
+    const run = (await reveal.json() as { run: DrillRun }).run;
     const savedState = async () => JSON.stringify(await Promise.all(["graph", "events"].map(async action => {
       const response = await fetch(`${origin}/runs/castle-evidence/${action}`, { headers: { cookie } });
       expect(response.status).toBe(200); return response.json();
     })));
     const saved = await savedState();
-    const request = { assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "analysis", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }), query: { timing: "review", nodeId: run.activeCursor.nodeId, requested: ["full_inspector"] } };
-    const response = await post("/runs/castle-evidence/modules/query", request);
+    const request: InspectorQueryRequest = { protocol: "inspector.query_page@1", assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "analysis", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }), query: { ...run.activeCursor, decisionDigest: moduleDecisionStamp(run).digest,
+      view: { kind: "source", projection: "rules.castling.reading.legality@1", context: { kind: "position" }, start: 0, collectionKey: null } } };
+    const response = await post("/runs/castle-evidence/inspector/query", request);
     expect(response.status, await response.clone().text()).toBe(200);
-    const page = (await response.json() as { page: ModuleQueryPage }).page;
-    const packet = page.packets.find(item => item.module === "full_inspector")!;
-    expect(packet).toBeDefined();
-    const items = parsePresentationReceipt(packet.receipt).filter(item => item.evidenceRef?.projection.id === "rules.castling.reading.legality");
-    expect(items, JSON.stringify(packet.empty)).toHaveLength(1);
+    const wire = await response.json() as InspectorQueryPage;
+    expect(wire.kind).toBe("page"); if (wire.kind !== "page") throw new Error("Expected castling source page");
+    const page = parseInspectorQueryPage(wire, { runId: run.id, request, fen: run.nodes.find(node => node.id === run.activeCursor.nodeId)!.fen, requestedDigest: wire.requestedConfigDigest, finalDigest: wire.effectiveConfigDigest });
+    expect(page.kind).toBe("page"); if (page.kind !== "page") throw new Error("Castling source failed receiver");
+    expect(page.body).toMatchObject({ kind: "source", outcome: { kind: "available", collected: 1, displayed: 1 } });
+    const items = page.items.filter(item => item.evidenceRef?.projection.id === "rules.castling.reading.legality");
+    expect(items).toHaveLength(1);
     expect(presentedSentence(items[0]!)).toBe(value.sentence);
-    expect((await post("/runs/castle-evidence/modules/query", request, foreign)).status).toBe(404);
-    const anonymous = await fetch(`${origin}/runs/castle-evidence/modules/query`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(request) });
+    expect((await post("/runs/castle-evidence/inspector/query", request, foreign)).status).toBe(404);
+    const anonymous = await fetch(`${origin}/runs/castle-evidence/inspector/query`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(request) });
     expect(anonymous.status).toBe(401);
     expect(await savedState()).toBe(saved);
   });

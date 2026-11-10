@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { castlingLegality, castlingRights, castlingRightsLost } from "./castling.js";
 import { evidenceValueReceipt } from "./evidence-contract.js";
+import { CANDIDATE_READINGS_SCOPE, candidatePlayedRow, compileCandidatePopulation } from "./candidate-population.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 // FIDE Laws of Chess, Guidelines II.3.2.7(4): BOTH pieces' transit and
@@ -93,16 +94,15 @@ describe("castling evidence", () => {
     expect(castlingLegality(fixture.fen)[0]!.blockedSquares).toEqual(fixture.blocked);
   });
 
-  it("D3642 carries both queenside rook-path blockers into the derived bot candidate vector", () => {
+  it("D3642 carries both queenside rook-path blockers into the current candidate packet", () => {
     const beforeFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    const input = { beforeFen, engine: { id: "fixture", name: "fixture", version: "1", seedHonored: true, searchBound: { kind: "nodes" as const, value: 1 } }, candidates: [{ moveUci: "g1f3", scoreCp: 31 }] };
-    const evidence = invokeEvidenceValueRoute("derived.opponent.candidate_feature_vector@1", input);
-    expect(evidenceValueReceipt(evidence).factory).toBe("createDerivedOpponentCandidateFeatureVectorV1Evidence");
-    expect(evidence.payload.candidates).toHaveLength(1);
-    const candidate = evidence.payload.candidates[0]!;
+    const result = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
+    if (result.kind !== "ready") throw new Error("Expected complete candidate packet");
+    const candidate = candidatePlayedRow(result.receipt, "g1f3");
     expect(candidate.moveUci).toBe("g1f3");
-    expect(candidate.scoreCp).toBe(31);
-    const readings = candidate.results.filter(item => item.source.id === "rules.castling.reading.legality").map(item => item.payload);
+    const retained = candidate.readings.filter(item => item.projection.id === "rules.castling.reading.legality");
+    expect(retained.every(item => evidenceValueReceipt(item).factory === "createRulesCastlingReadingLegalityV1Evidence")).toBe(true);
+    const readings = retained.map(item => item.payload);
     expect(readings).toHaveLength(4);
     expect(readings).toEqual(expect.arrayContaining([
       expect.objectContaining({ color: "white", wing: "queenside", blockedSquares: ["d1", "c1", "b1"] }),

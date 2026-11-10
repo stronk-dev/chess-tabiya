@@ -3,8 +3,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { AddressInfo } from "node:net";
 import { DatabaseSync } from "node:sqlite";
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { createApplication } from "./application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { DrillApi } from "../../web/src/lib/api.js";
 import { RunStateStore } from "../../web/src/lib/run-state.js";
@@ -13,9 +14,12 @@ import { WriterSession } from "../../web/src/lib/writer-session.js";
 it("carries authenticated durable admission through the production client, mutation and exact result attachment", { timeout: 20_000 }, async () => {
   const directory = mkdtempSync(join(tmpdir(), "tabiya-analysis-client-"));
   const databasePath = join(directory, "application.sqlite");
-  const application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+  let applicationToClose: Awaited<ReturnType<typeof createApplication>> | undefined;
   let store: RunStateStore | undefined;
   try {
+    installEmptyApplicationCatalogues();
+    const application = await createApplication({ development: true, engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+    applicationToClose = application;
     await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
     const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
     const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "analysis_owner", password: "analysis-client-password" }) });
@@ -67,7 +71,10 @@ it("carries authenticated durable admission through the production client, mutat
     expect((await fetch(`${origin}/runs/${run.id}/evidence`)).status).toBe(401);
   } finally {
     store?.stop();
-    await application.close();
-    rmSync(directory, { recursive: true, force: true });
+    try { await applicationToClose?.close(); }
+    finally {
+      vi.restoreAllMocks();
+      rmSync(directory, { recursive: true, force: true });
+    }
   }
 });

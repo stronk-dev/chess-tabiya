@@ -5,6 +5,8 @@ import { makeFen, parseFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
 
 import { structuralIssues } from "./pack-validation.js";
+import { readAuthoredStructuralConditionSource, type AuthoredStructuralConditionSource } from "../../../packages/runtime/src/internal/authored-structural-source.js";
+import { matchesCurrentStructuralExpression, preflightCurrentAuthoredOperation } from "../../../packages/runtime/src/structural-evidence.js";
 
 export interface Refutation { readonly rule: `R${number}`; readonly message: string }
 export interface ExpressionWitness {
@@ -14,7 +16,7 @@ export interface ExpressionWitness {
   readonly role: "anchored" | "evictable" | "undefended" | "reference" | "degenerate";
   readonly expect: boolean;
 }
-export interface WitnessResult extends ExpressionWitness { readonly fen?: string; readonly actual?: boolean; readonly error?: string; readonly code?: "WITNESS_LINE_ILLEGAL" }
+export interface WitnessResult extends ExpressionWitness { readonly fen?: string; readonly actual?: boolean; readonly error?: string; readonly code?: "WITNESS_LINE_ILLEGAL" | "WITNESS_EVALUATION_FAILED" }
 export interface SatisfiabilityResult {
   readonly verdict: "unsatisfiable" | "satisfiable" | "unknown";
   readonly basis: string;
@@ -168,7 +170,7 @@ export function refuteStructuralExpression(expression: StructuralExpression): Re
   return undefined;
 }
 
-export function playWitness(witness: ExpressionWitness, expression: StructuralExpression): WitnessResult {
+function replayWitness(witness: ExpressionWitness): { readonly kind: "played"; readonly fen: string } | { readonly kind: "failed"; readonly result: WitnessResult } {
   try {
     const position = Chess.fromSetup(parseFen(witness.from).unwrap()).unwrap();
     for (const san of witness.sans) {
@@ -176,21 +178,66 @@ export function playWitness(witness: ExpressionWitness, expression: StructuralEx
       if (move === undefined || !position.isLegal(move)) throw new TypeError(`illegal or ambiguous SAN ${san}`);
       position.play(move);
     }
-    const fen = makeFen(position.toSetup());
+    return { kind: "played", fen: makeFen(position.toSetup()) };
+  } catch (error) {
+    return { kind: "failed", result: Object.freeze({ ...witness, code: "WITNESS_LINE_ILLEGAL", error: error instanceof Error ? error.message : String(error) }) };
+  }
+}
+
+export function playWitness(witness: ExpressionWitness, expression: StructuralExpression): WitnessResult {
+  const replay = replayWitness(witness);
+  if (replay.kind === "failed") return replay.result;
+  const { fen } = replay;
+  try {
     return Object.freeze({ ...witness, fen, actual: matchesStructuralExpression(fen, expression) });
   } catch (error) {
-    return Object.freeze({ ...witness, code: "WITNESS_LINE_ILLEGAL", error: error instanceof Error ? error.message : String(error) });
+    return Object.freeze({ ...witness, fen, code: "WITNESS_EVALUATION_FAILED", error: error instanceof Error ? error.message : String(error) });
   }
+}
+
+/** The original private source supplies its own AST; no alternate expression or evaluator. */
+export function playAuthoredWitness(witness: ExpressionWitness, source: AuthoredStructuralConditionSource): WitnessResult {
+  let expression: StructuralExpression;
+  try {
+    preflightCurrentAuthoredOperation("authoring");
+    expression = readAuthoredStructuralConditionSource(source).effectiveExpression;
+  } catch (error) {
+    return Object.freeze({ ...witness, code: "WITNESS_EVALUATION_FAILED", error: error instanceof Error ? error.message : String(error) });
+  }
+  const replay = replayWitness(witness);
+  if (replay.kind === "failed") return replay.result;
+  const { fen } = replay;
+  try {
+    return Object.freeze({ ...witness, fen, actual: matchesCurrentStructuralExpression(fen, expression, "authoring") });
+  } catch (error) {
+    return Object.freeze({ ...witness, fen, code: "WITNESS_EVALUATION_FAILED", error: error instanceof Error ? error.message : String(error) });
+  }
+}
+
+function witnessedSatisfiability(results: readonly WitnessResult[]): SatisfiabilityResult {
+  const valid = results.filter(result => result.error === undefined && result.actual === result.expect);
+  const positive = valid.some(result => result.expect), negative = valid.some(result => !result.expect);
+  if (positive) return Object.freeze({ verdict: "satisfiable", basis: negative ? "witness" : "witness_positive_only", witnesses: Object.freeze(results) });
+  return Object.freeze({ verdict: "unknown", basis: "no refutation rule fired and no witness exhibited", witnesses: Object.freeze(results) });
+}
+
+export function authoredExpressionSatisfiability(source: AuthoredStructuralConditionSource, corpusHits: readonly string[] = [], witnesses: readonly ExpressionWitness[] = []): SatisfiabilityResult {
+  preflightCurrentAuthoredOperation("authoring");
+  const expression = readAuthoredStructuralConditionSource(source).effectiveExpression;
+  const refutation = refuteStructuralExpression(expression);
+  if (refutation !== undefined) return Object.freeze({ verdict: "unsatisfiable", basis: "sound_refutation", rule: refutation.rule });
+  // A caller's list is not authority. Verify every claimed hit with the same
+  // original source before letting it establish a positive satisfiability result.
+  for (const fen of corpusHits) {
+    if (!matchesCurrentStructuralExpression(fen, expression, "authoring")) throw new TypeError("Authored corpus hit does not match its original source");
+  }
+  if (corpusHits.length > 0) return Object.freeze({ verdict: "satisfiable", basis: "corpus", sampleFen: corpusHits[0]! });
+  return witnessedSatisfiability(witnesses.map(witness => playAuthoredWitness(witness, source)));
 }
 
 export function expressionSatisfiability(expression: StructuralExpression, corpusHits: readonly string[] = [], witnesses: readonly ExpressionWitness[] = []): SatisfiabilityResult {
   const refutation = refuteStructuralExpression(expression);
   if (refutation !== undefined) return Object.freeze({ verdict: "unsatisfiable", basis: "sound_refutation", rule: refutation.rule });
   if (corpusHits.length > 0) return Object.freeze({ verdict: "satisfiable", basis: "corpus", sampleFen: corpusHits[0]! });
-  const results = witnesses.map((witness) => playWitness(witness, expression));
-  const valid = results.filter((result) => result.error === undefined && result.actual === result.expect);
-  const positive = valid.some((result) => result.expect);
-  const negative = valid.some((result) => !result.expect);
-  if (positive) return Object.freeze({ verdict: "satisfiable", basis: negative ? "witness" : "witness_positive_only", witnesses: Object.freeze(results) });
-  return Object.freeze({ verdict: "unknown", basis: "no refutation rule fired and no witness exhibited", witnesses: Object.freeze(results) });
+  return witnessedSatisfiability(witnesses.map(witness => playWitness(witness, expression)));
 }

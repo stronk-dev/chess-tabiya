@@ -148,7 +148,14 @@ describe("scoped recorded semantic supplier", () => {
     for (const route of ALL.filter(route => route.endsWith("@3"))) {
       expect(SEMANTIC_EVENT_PROJECTION_REFS).toContainEqual(projection(route));
       const bindings = PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => binding.projection.id === projection(route).id && binding.projection.version === 3);
-      expect(bindings).toHaveLength(1); expect(bindings[0]!.consumer.id).toBe("research.semantic_selection");
+      // Current module registration is not semantic qualification: these exact successor
+      // consumers are accepted, while the independent validation result still refuses below.
+      expect(bindings.map(binding => `${binding.consumer.id}@${binding.consumer.version}`).sort()).toEqual([
+        "module.full_inspector@2",
+        ...(["derived.pawn.sequence.contact_timing@3", "derived.tactic.sequence.defender_consequence@3"].includes(route)
+          ? [] : ["module.postcommit_nudge@2"]),
+        "module.review_map@2", "research.semantic_validation@1",
+      ]);
       const result = available(recordedSemanticWindowSource(request(recordedSequenceWindowFixture(fixtureFor(route)), route)));
       expect(semanticValidationVerdict({ kind: "event", projection: projection(route) })?.verdict).toBe("unvalidated");
       for (const event of result.events) expect(admitValidatedSemanticInstance("event", event.evidence)).toMatchObject({ kind: "refused", reason: "event_unvalidated" });

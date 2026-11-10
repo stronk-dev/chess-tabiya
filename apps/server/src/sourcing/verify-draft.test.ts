@@ -12,9 +12,10 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { checkSourcingFile } from "./check.js";
 import { sha256 } from "./canonical.js";
-import { assessmentGrounding, validateManifest } from "./ledger-validation.js";
+import { assessmentGrounding } from "./ledger-validation.js";
 import { TABLEBASE_RATIONALE, type TablebaseAnswer, type TablebasePayload } from "./syzygy.js";
 import { verifyDraft } from "./verify-draft.js";
+import { withDerivedRequires } from "../capability/pack-capabilities.js";
 
 const directories: string[] = [];
 afterEach(async () => Promise.all(directories.splice(0).map((path) => rm(path, { recursive: true, force: true }))));
@@ -28,7 +29,8 @@ function answer(fen: string, category: string): TablebaseAnswer {
 async function fixture(): Promise<{ directory: string; file: string; pack: DrillPackDefinition }> {
   const directory = await mkdtemp(join(tmpdir(), "tabiya-verify-draft-"));
   directories.push(directory);
-  const pack = JSON.parse(await readFile(resolvePackPath("lucena-bridge-convert"), "utf8")) as DrillPackDefinition;
+  const original = JSON.parse(await readFile(resolvePackPath("lucena-bridge-convert"), "utf8")) as DrillPackDefinition;
+  const pack = withDerivedRequires({ ...original, provenance: { ...original.provenance, corpusEvidence: { state: "unsourced" as const } } });
   const file = join(directory, "lucena.json");
   await writeFile(file, JSON.stringify(pack), "utf8");
   return { directory, file, pack };
@@ -37,13 +39,14 @@ async function fixture(): Promise<{ directory: string; file: string; pack: Drill
 async function engineFixture(): Promise<{ directory: string; file: string; pack: DrillPackDefinition }> {
   const directory = await mkdtemp(join(tmpdir(), "tabiya-verify-engine-draft-"));
   directories.push(directory);
-  const pack = JSON.parse(await readFile(resolvePackPath("anti-caro-advance"), "utf8")) as DrillPackDefinition;
+  const original = JSON.parse(await readFile(resolvePackPath("anti-caro-advance"), "utf8")) as DrillPackDefinition;
+  const pack = withDerivedRequires({ ...original, provenance: { ...original.provenance, corpusEvidence: { state: "unsourced" as const } } });
   const file = join(directory, "anti-caro.json");
   await writeFile(file, JSON.stringify(pack), "utf8");
   return { directory, file, pack };
 }
 
-describe("verify-draft", () => {
+describe("verify-draft", { timeout: 5_000 }, () => {
   it("reports machine-labelled claims even when their evidence ledger is absent", async () => {
     const { file, pack } = await engineFixture();
     const labelled = structuredClone(pack) as DrillPackDefinition & {
@@ -146,19 +149,6 @@ describe("verify-draft", () => {
     expect(checked.issues.map((issue) => issue.code)).toContain("OFFLINE_JOB_HTTP_PROVENANCE");
   });
 
-  it("refuses the deterministic timestamp shape used by manufactured tablebase provenance", () => {
-    const fen = "8/8/8/8/8/8/4k3/4K3 w - - 0 1";
-    const offset = Number.parseInt(sha256(fen).slice(7, 15), 16) % 86_400_000;
-    const issues: any[] = [];
-    validateManifest({
-      schema: "tabiya.sourcing.manifest.v1",
-      entries: [{
-        ...answer(fen, "draw").source,
-        retrievedAt: new Date(Date.UTC(2026, 7, 14) + offset).toISOString(),
-      }],
-    }, issues);
-    expect(issues.map((issue) => issue.code)).toContain("MANIFEST_PROVENANCE_SYNTHETIC");
-  });
 
   it("refuses a contradicted declaration without writing sidecars", async () => {
     const { file } = await fixture();

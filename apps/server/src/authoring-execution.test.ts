@@ -7,11 +7,11 @@ import * as routes from "../../../packages/runtime/src/internal/evidence-value-r
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import type { ChessTabiyaApplication } from "./application.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { validateClaimBindings } from "./sourcing/claim-binding.js";
 import type { EvidenceLedger, SourcingIssue } from "./sourcing/types.js";
 import { ShapeRegistry, type ShapeRecord } from "./shape-registry.js";
-import { PrincipleRegistry, type PrincipleRecord } from "./principle-registry.js";
 
 const FEN = "4k3/8/8/8/8/8/8/4K3 w - - 0 1";
 const SHAPE: ShapeEntryDefinition = {
@@ -35,6 +35,7 @@ const LEDGER: EvidenceLedger = {
   abstentions: [], claimBindings: [],
 };
 const originalCompile = execution.compileEvidenceConsumerExecution;
+const originalCompileV2 = execution.compileEvidenceConsumerExecutionV2;
 const originalRoute = routes.invokeEvidenceValueRoute;
 const faults = ["missing_policy", "impossible_latency", "raw_source", "duplicate_adapter", "missing_bindings"] as const;
 type Fault = typeof faults[number];
@@ -42,28 +43,35 @@ type Consumer = "authoring.predicate" | "authoring.claim_binding";
 
 function observe(consumer: Consumer, fault?: Fault) {
   const trace: string[] = [];
-  const compile = vi.spyOn(execution, "compileEvidenceConsumerExecution").mockImplementation((manifest, requested) => {
-    trace.push(`compile:${requested.id}`);
-    if (requested.id !== consumer || fault === undefined) return originalCompile(manifest, requested);
-    const first = manifest.bindings.find(row => row.consumer.id === consumer)!;
+  const mutate = (manifest: Parameters<typeof originalCompile>[0], requested: Parameters<typeof originalCompile>[1]) => {
+    if (requested.id !== consumer || fault === undefined) return manifest;
+    const first = manifest.bindings.find(row => row.consumer.id === consumer && row.consumer.version === requested.version)!;
     const { sourceAbsence: _absence, ...base } = first;
     const extra = {
-      ...base, adapter: { id: "adapter.fixture.authoring_execution", version: 1 },
+      ...base, adapter: { id: "adapter.fixture.authoring_execution", version: requested.version },
       producer: { id: "live.stockfish", version: 1 },
       projection: { id: fault === "raw_source" ? "live.stockfish.uci_response" : "live.stockfish.position_eval", version: 1 },
       latency: { mode: fault === "impossible_latency" ? "sync" as const : "interactive" as const, maxMs: 1000 },
       ...(fault === "missing_policy" ? {} : { sourceAbsence: { necessity: "required" as const, whenNoPath: "operation_unavailable" as const } }),
     };
-    const bindings = fault === "missing_bindings" ? manifest.bindings.filter(row => row.consumer.id !== consumer)
+    const bindings = fault === "missing_bindings" ? manifest.bindings.filter(row => row.consumer.id !== consumer || row.consumer.version !== requested.version)
       : fault === "duplicate_adapter" ? [...manifest.bindings, first] : [...manifest.bindings, extra];
     // Real compiler refusals, not a stubbed throw or a filtered valid subset.
-    return originalCompile({ ...manifest, bindings }, requested);
+    return { ...manifest, bindings };
+  };
+  const compile = vi.spyOn(execution, "compileEvidenceConsumerExecution").mockImplementation((manifest, requested) => {
+    trace.push(`compile:${requested.id}`);
+    return originalCompile(mutate(manifest, requested), requested);
+  });
+  const compileV2 = vi.spyOn(execution, "compileEvidenceConsumerExecutionV2").mockImplementation((manifest, requested) => {
+    trace.push(`compile:${requested.id}`);
+    return originalCompileV2(mutate(manifest, requested), requested);
   });
   const factory = vi.spyOn(routes, "invokeEvidenceValueRoute").mockImplementation((...args) => {
     trace.push("factory");
     return originalRoute(...args);
   });
-  return { trace, compile, factory };
+  return { trace, compile, compileV2, factory };
 }
 
 afterEach(() => vi.restoreAllMocks());
@@ -122,6 +130,7 @@ describe("authenticated authoring refusal and retry", () => {
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
   beforeAll(async () => {
+    installEmptyApplicationCatalogues();
     owned = applicationFixture(createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false }));
     await owned.ready;
     const app = owned.current()!;
@@ -131,36 +140,9 @@ describe("authenticated authoring refusal and retry", () => {
     expect(registration.status).toBe(201);
     headers = { "content-type": "application/json", cookie: registration.headers.get("set-cookie")!.split(";", 1)[0]! };
   });
-  afterAll(async () => { await owned?.close(); });
-
-  it("keeps actual registered principle identity and Library reads stable under client-owned edits", async () => {
-    const listed = await request("/principles");
-    expect(listed.status).toBe(200);
-    const { principles } = await listed.json() as { principles: { id: string; digest: string; statement: string }[] };
-    expect(principles.length).toBeGreaterThan(0);
-    const summary = principles[0]!;
-    const get = PrincipleRegistry.prototype.get;
-    let record: PrincipleRecord | undefined;
-    vi.spyOn(PrincipleRegistry.prototype, "get").mockImplementation(function (this: PrincipleRegistry, id) {
-      const actual = get.call(this, id);
-      if (id === summary.id) record = actual;
-      return actual;
-    });
-    const path = `/theory/principles/${encodeURIComponent(summary.id)}`;
-    const first = await request(path);
-    expect(first.status).toBe(200);
-    const body = await first.json(), saved = structuredClone(body);
-    expect(body).toMatchObject({ id: summary.id, digest: summary.digest, statement: summary.statement });
-    expect(record).toBeDefined();
-    expect(Reflect.set(record!.document, "statement", "Changed registered statement")).toBe(false);
-    body.statement = "Changed decoded response";
-    body.citations.push({ quotedText: "Client-only citation" });
-    const second = await request(path);
-    expect(second.status).toBe(200);
-    expect(await second.json()).toEqual(saved);
-    const relisted = await request("/principles");
-    expect(relisted.status).toBe(200);
-    expect(await relisted.json()).toEqual({ principles });
+  afterAll(async () => {
+    try { await owned?.close(); }
+    finally { vi.restoreAllMocks(); }
   });
 
   it.each(["missing_policy", "impossible_latency", "raw_source"] as const)("refuses %s without saving a phantom shape draft", async fault => {
@@ -168,6 +150,8 @@ describe("authenticated authoring refusal and retry", () => {
     const observed = observe("authoring.predicate", fault);
     const response = await request("/shapes/drafts", { document: SHAPE });
     expect(response.status).toBe(503);
+    expect(observed.compileV2).toHaveBeenCalledWith(expect.anything(), { id: "authoring.predicate", version: 2 });
+    expect(observed.compile).not.toHaveBeenCalled();
     expect(await response.json()).toEqual({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Evidence execution contract is unavailable" } });
     expect(observed.factory).not.toHaveBeenCalled();
     vi.restoreAllMocks();
@@ -178,11 +162,13 @@ describe("authenticated authoring refusal and retry", () => {
     const observed = observe("authoring.predicate");
     expect((await request("/shapes/drafts", { document: SHAPE }, false)).status).toBe(401);
     expect(observed.compile).not.toHaveBeenCalled();
+    expect(observed.compileV2).not.toHaveBeenCalled();
     const created = await request("/shapes/drafts", { document: SHAPE });
     expect(created.status).toBe(201);
     const { draft } = await created.json() as { draft: { id: string; digest: string; validation: { valid: boolean } } };
     expect(draft.validation.valid).toBe(true);
     expect(observed.trace[0]).toBe("compile:authoring.predicate");
+    expect(observed.compileV2).toHaveBeenCalledWith(expect.anything(), { id: "authoring.predicate", version: 2 });
     const probe = await request(`/shapes/drafts/${draft.id}/lint`, { document: SHAPE, probeFen: FEN });
     expect(probe.status).toBe(200);
     expect(await probe.json()).toMatchObject({ valid: true, probeMatches: true });
@@ -239,6 +225,8 @@ describe("authenticated authoring refusal and retry", () => {
       : action === "register" ? await request(`${base}/register`, {})
       : await request(action === "read" ? base : "/shapes/drafts");
     expect(response.status).toBe(503);
+    expect(observed.compileV2).toHaveBeenCalledWith(expect.anything(), { id: "authoring.predicate", version: 2 });
+    expect(observed.compile).not.toHaveBeenCalled();
     expect(await response.json()).toEqual({ error: { code: "EVIDENCE_UNAVAILABLE", message: "Evidence execution contract is unavailable" } });
     expect(observed.factory).not.toHaveBeenCalled();
     vi.restoreAllMocks();

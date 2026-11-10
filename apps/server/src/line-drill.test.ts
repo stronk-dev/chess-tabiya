@@ -10,11 +10,12 @@ import { projectAuthoredFeedback } from "./authored-feedback.js";
 import { orchestratePackMove } from "./pack-orchestrator.js";
 import { PackRegistry } from "./pack-registry.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const at = "2026-08-13T09:00:00.000Z";
-const pack = JSON.parse(
+const pack = withDerivedRequires(JSON.parse(
   readFileSync(new URL(resolvePackPath("anti-caro-advance"), import.meta.url), "utf8"),
-) as DrillPackDefinition;
+) as DrillPackDefinition);
 
 function newRun() {
   return createRun({
@@ -44,7 +45,7 @@ function play(moves: readonly string[]) {
   return run;
 }
 
-describe("Line Drill orchestration", () => {
+describe("Line Drill orchestration", { timeout: 5_000 }, () => {
   it("degrades an off-objective deviation before resolving the boundary and keeps play live", () => {
     const run = play(["c8f5", "g1f3", "e7e6", "f1e2", "c6c5", "e1g1"]);
     const active = run.nodes.find((node) => node.id === run.activeCursor.nodeId)!;

@@ -74,7 +74,7 @@ export function auditGraduationRulingLine(
 
 export async function auditGraduationClearanceCorpus(roots: readonly string[] = ["content/drafts", "content/candidates"]): Promise<GraduationClearanceCorpusAudit> {
   const files = roots.flatMap(packFiles).sort();
-  const census = runExpressionCensus({ roots });
+  const census = await runExpressionCensus({ roots });
   const errors: string[] = [];
   const checkoutRoot = resolve(".");
   const commitUnderReview = execFileSync("git", ["rev-parse", "HEAD"], { cwd: checkoutRoot, encoding: "utf8" }).trim();

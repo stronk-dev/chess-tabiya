@@ -190,7 +190,7 @@ async function withApplication(position: any, variant: string, sample: number, b
       const uiMoreDisabled = await buttons.count() === 0 || await buttons.last().isDisabled();
       const trace: Trace = { entered: now(), deps: 0, sources: [], packets: [] }; active = trace;
       try {
-        const response = await post(`/runs/${run.id}/hints`, { nodeId: run.activeCursor.nodeId, rung: "move", decisionDigest: hintDecisionStamp(run).digest, assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) });
+        const response = await post(`/runs/${run.id}/hints`, { clientRequestId: "0".repeat(32), nodeId: run.activeCursor.nodeId, rung: "move", decisionDigest: hintDecisionStamp(run).digest, assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) });
         const text = await response.text(), hint = parseHintResponse(JSON.parse(text).hint);
         return { position: position.id, arm, rung: "move", sample, state: hint.state, response: hint, boundary: "rest_ceiling_control", uiMoreDisabled, sources: trace.sources, packets: trace.packets,
           clickToHonestMs: null, clickToSettledMs: null, dependenciesToFrameLowerMs: null, dependenciesToFrameUpperMs: null, payloadBytes: Buffer.byteLength(text) };

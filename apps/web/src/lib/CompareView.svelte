@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import { comparisonPresentedEngineTrajectory, comparisonNarrative, comparisonStrips, declareStructuralReadingEvidence, evidenceForConsumer, materialBalanceAt, packAbsentEvidenceRef, presentEvidenceItems, PRIMARY_EVIDENCE_MANIFEST, type BranchComparison, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry, type RunOutcome } from "@chess-tabiya/runtime/client";
+  import { comparisonPresentedEngineTrajectory, comparisonNarrative, comparisonStrips, evidenceForConsumer, materialBalanceAt, packAbsentEvidenceRef, presentEvidenceItems, presentPositionStructureEvidence, PRIMARY_EVIDENCE_MANIFEST, type BranchComparison, type DrillRun, type LineMembershipEntry, type ObjectiveTimelineEntry, type RunOutcome } from "@chess-tabiya/runtime/client";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, type Snippet } from "svelte";
   import Chessboard from "./Chessboard.svelte";
@@ -15,7 +15,7 @@
     defaultComparisonZoom,
     type ComparisonZoomBand,
   } from "./compare-geometry.js";
-  import { renderEvidenceRef } from "./evidence-sentences.js";
+  import { evidenceRefPresentation, renderEvidenceRef } from "./evidence-sentences.js";
   import { learnerMoveLabel } from "./learner-move-label.js";
   import { comparisonStepAnnouncement, comparisonStepLabel, rehearsalStepLabel, rehearsalTurnCount } from "./chronology-copy.js";
   import { resistanceModeLabel, resistanceSentences } from "./outcome-presentation.js";
@@ -68,12 +68,10 @@
   })));
   let trajectories = $derived(Object.fromEntries(comparison.columns.map((column) => [column.branchId, comparisonPresentedEngineTrajectory(run, comparison, column.branchId)])));
   let positionStructure = $derived(Object.fromEntries(comparison.columns.map((column) => {
-    const fen = run.nodes.find((node) => node.id === column.leafNodeId)?.fen ?? run.nodes[0]!.fen;
-    return [column.branchId, presentEvidenceItems(evidenceForConsumer(
-      PRIMARY_EVIDENCE_MANIFEST,
-      { id: "inspector.position_structure", version: 1 },
-      declareStructuralReadingEvidence({ fen }),
-    ))];
+    const leaf = run.nodes.find((node) => node.id === column.leafNodeId);
+    return [column.branchId, leaf === undefined
+      ? { kind: "unavailable" as const }
+      : { kind: "ready" as const, items: presentPositionStructureEvidence({ fen: leaf.fen }) }];
   })));
   let evaluationRows = $derived.by(() => {
     const offsets = new Set<number>();
@@ -152,7 +150,7 @@
   function timeline(entries: readonly ObjectiveTimelineEntry[]) {
     return entries.map((entry) => {
       if (entry.evidenceRefs.length === 0) throw new TypeError(`Comparison objective transition at event ${entry.eventSeq} has no evidence references`);
-      return { ...entry, grounds: entry.evidenceRefs.map((ref) => renderEvidenceRef(ref, pack, payloads)) };
+      return { ...entry, grounds: entry.evidenceRefs.map((ref) => evidenceRefPresentation(ref, pack, payloads)) };
     });
   }
   function outcomeAt(nodeId: string): RunOutcome | undefined {
@@ -417,12 +415,19 @@
           {#each comparison.columns as column}
             {@const consequence = comparison.consequences[column.branchId]}
             {@const entries = timeline(comparison.objectiveTimelines[column.branchId] ?? [])}
+            {@const structure = positionStructure[column.branchId]}
             <article><h4>{column.label}</h4>
               <p>Recorded objective state: {consequence === undefined ? UNRECORDED_LABEL : labelFor("objective_state", consequence.objectiveState)}.</p>
               {#if consequence}<p>Opponent: {resistanceModeLabel(consequence.resistance.requested.mode)}{consequence.resistance.requested.targetElo === undefined ? "" : ` · target ${consequence.resistance.requested.targetElo}`}.</p>{/if}
-              {#each entries as entry}<div><strong>{entry.from} → {entry.to}</strong>{#each entry.grounds as ground}<p>{ground.sourceLabel}: {ground.text}</p>{/each}</div>{/each}
-              {#if consequence}<details><summary>Opponent and authored-line context</summary>{#each resistanceSentences(run, column.leafNodeId, pack) as sentence}<p>{sentence}</p>{/each}{#each consequence.theory ?? [] as entry}<p>{theorySentence(entry)}</p>{:else}<p>No authored line is attached to this comparison.</p>{/each}</details>
-                <details data-evidence-consumer="inspector.position_structure"><summary>Position structure facts</summary><PresentedEvidence items={positionStructure[column.branchId] ?? []} /></details>{/if}
+              {#each entries as entry}<div><strong>{entry.from} → {entry.to}</strong>{#each entry.grounds as result}
+                {#if result.kind === "ready"}<p>{result.sentence.sourceLabel}: {result.sentence.text}</p>
+                {:else}<p role="status">This recorded evidence could not be displayed. That is not an empty chess result.</p>{/if}
+              {/each}</div>{/each}
+              {#if consequence}<details><summary>Opponent and authored-line context</summary>{#if structure?.kind === "ready"}{#each resistanceSentences(run, column.leafNodeId, pack) as sentence}<p>{sentence}</p>{/each}{:else}<p>Resistance history is unavailable because this branch's recorded position is missing.</p>{/if}{#each consequence.theory ?? [] as entry}<p>{theorySentence(entry)}</p>{:else}<p>No authored line is attached to this comparison.</p>{/each}</details>
+                <details data-evidence-consumer="inspector.position_structure"><summary>Position structure facts</summary>
+                  {#if structure?.kind === "ready"}<PresentedEvidence items={structure.items} />
+                  {:else}<p role="status">Position structure is unavailable because this branch's recorded position is missing. Other branches and recorded moves are unchanged.</p>{/if}
+                </details>{/if}
             </article>
           {/each}
         </section>

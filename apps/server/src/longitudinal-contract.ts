@@ -3,6 +3,9 @@
 // result grain. Every value crossing the store boundary is constructed by a parser in this module.
 import type { SemanticEventSign } from "@chess-tabiya/runtime";
 
+import { parseSubjectObservationFilter, type SubjectObservationFilter } from "./profile-subject-facts-contract.js";
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+
 import {
   LONGITUDINAL_ADMITTED_IDENTITIES,
   LONGITUDINAL_SEMANTIC_SIGNS,
@@ -372,6 +375,10 @@ export interface LongitudinalReadFilter {
   readonly packIds?: readonly string[];
 }
 export interface LongitudinalReadQuery {
+  readonly includeSubjectObservations?: boolean;
+  readonly subjectFilters?: readonly SubjectObservationFilter[];
+  readonly includeGameFacts?: true;
+  readonly includeChoiceFacts?: true;
   readonly learnerId: string;
   readonly derivationRev: number;
   readonly through:
@@ -393,7 +400,15 @@ function sortedUnique<T>(values: readonly T[], key: (value: T) => string, code: 
 export function parseLongitudinalReadQuery(value: unknown): ParsedLongitudinalReadQuery {
   const code = "LONGITUDINAL_READ_QUERY_INVALID";
   const root = record(value, code);
-  exactKeys(root, ["learnerId", "derivationRev", "through", "filter"], [], code);
+  exactKeys(root, ["learnerId", "derivationRev", "through", "filter"], ["includeGameFacts", "includeChoiceFacts", "includeSubjectObservations", "subjectFilters"], code);
+  if (root.includeGameFacts !== undefined && root.includeGameFacts !== true) fail(code, "includeGameFacts must be literal true");
+  if (root.includeChoiceFacts !== undefined && root.includeChoiceFacts !== true) fail(code, "includeChoiceFacts must be literal true");
+  if (root.includeSubjectObservations !== undefined && typeof root.includeSubjectObservations !== "boolean") fail(code, "includeSubjectObservations must be boolean");
+  let subjectFilters: readonly SubjectObservationFilter[] | undefined;
+  if (root.subjectFilters !== undefined) {
+    if (root.includeSubjectObservations !== true || !Array.isArray(root.subjectFilters)) fail(code, "subjectFilters requires the included subject lane and an array");
+    subjectFilters = sortedUnique(root.subjectFilters.map(parseSubjectObservationFilter), entry => canonicalizeJson(entry), code);
+  }
   const through = record(root.through, code);
   let parsedThrough: LongitudinalReadQuery["through"];
   if (through.kind === "all_complete") {
@@ -421,7 +436,7 @@ export function parseLongitudinalReadQuery(value: unknown): ParsedLongitudinalRe
       const version = integerAtLeast(item.version, 1, code);
       const semanticSign = item.semanticSign === undefined ? undefined : member(item.semanticSign, LONGITUDINAL_SEMANTIC_SIGNS, code);
       const sourceSign = item.sourceSign === undefined ? undefined : member(item.sourceSign, LONGITUDINAL_SEMANTIC_SIGNS, code);
-      if (!isAdmittedProjection(id, version)) fail(code, `projection ${id}@${version} is not admitted at revision 1`);
+      if (!isAdmittedProjection(id, version)) fail(code, `projection ${id}@${version} is not admitted in the current ingest registry`);
       const matches = LONGITUDINAL_ADMITTED_IDENTITIES.some((identity) => identity.projectionId === id && identity.projectionVersion === version
         && (semanticSign === undefined || identity.semanticSign === semanticSign)
         && (sourceSign === undefined || identity.sourceSign === sourceSign));
@@ -448,10 +463,14 @@ export function parseLongitudinalReadQuery(value: unknown): ParsedLongitudinalRe
     if (sessionKinds !== undefined && !sessionKinds.includes("pack")) fail(code, "packIds contradict a sessionKinds filter that excludes pack");
   }
   const parsed = Object.freeze({
+    includeSubjectObservations: root.includeSubjectObservations === true,
+    ...(subjectFilters === undefined ? {} : { subjectFilters }),
     learnerId: nonEmptyString(root.learnerId, code),
     derivationRev: integerAtLeast(root.derivationRev, 1, code),
     through: parsedThrough,
     filter: Object.freeze(out),
+    ...(root.includeGameFacts === true ? { includeGameFacts: true as const } : {}),
+    ...(root.includeChoiceFacts === true ? { includeChoiceFacts: true as const } : {}),
   }) as ParsedLongitudinalReadQuery;
   PARSED_QUERIES.add(parsed);
   return parsed;
@@ -463,6 +482,8 @@ export function assertParsedLongitudinalReadQuery(value: unknown): asserts value
 
 export type LongitudinalCompleteCut = {
   readonly kind: "complete"; readonly runId: string; readonly requestedSeq: number; readonly completedSeq: number; readonly derivedRev: number;
+  /** Existing completed job source identity; not a new hash or public profile operand. */
+  readonly sourceDigest: `sha256:${string}`;
 };
 export type LongitudinalCutOutcome =
   | LongitudinalCompleteCut
@@ -474,7 +495,10 @@ export type LongitudinalReadResult =
     readonly kind: "complete"; readonly cuts: readonly LongitudinalCompleteCut[];
     readonly denominators: readonly LongitudinalDenominatorRow[];
     readonly observations: readonly LongitudinalObservationRow[];
+    readonly subjectObservations: readonly import("./profile-subject-facts-contract.js").LongitudinalSubjectObservationRow[];
     readonly structureStats: readonly LongitudinalStructureStatRow[];
+    readonly gameFacts: readonly import("./profile-game-facts-contract.js").GameFactReadOutcome[];
+    readonly choiceFacts: readonly import("./profile-choice-facts-contract.js").ChoiceFactReadOutcome[];
   }
   | { readonly kind: "incomplete"; readonly cuts: readonly LongitudinalCutOutcome[] };
 

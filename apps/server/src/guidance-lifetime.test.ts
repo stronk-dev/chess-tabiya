@@ -1,8 +1,9 @@
 import type { AddressInfo } from "node:net";
 import { INITIAL_FEN } from "chessops/fen";
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { IdentityService } from "./identity.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -133,21 +134,28 @@ describe("narration asynchronous authority", () => {
   it.each(["voice", "speech"])("forwards %s cancellation and refuses an abort-ignoring result", async action => {
     const fixture = await setup();
     const started = deferred<AbortSignal | undefined>(), release = deferred<void>();
-    const voice: VoiceProvider = { async render(_view, _persona, text, _scope, signal) { started.resolve(signal); await release.promise; return text; } };
-    const tts: TtsProvider = { async synthesize(text, signal) { started.resolve(signal); await release.promise; return { bytes: new TextEncoder().encode(text), contentType: "audio/test" }; } };
+    let calls = 0;
+    const voice: VoiceProvider = { async render(_view, _persona, text, _scope, signal) { calls += 1; started.resolve(signal); await release.promise; return text; } };
+    const tts: TtsProvider = { async synthesize(text, signal) { calls += 1; started.resolve(signal); await release.promise; return { bytes: new TextEncoder().encode(text), contentType: "audio/test" }; } };
     const handler = createRestHandler(fixture.service, undefined, undefined, fixture.identity, undefined, undefined, undefined, undefined, voice, undefined, undefined, undefined, tts);
     const controller = new AbortController();
+    const before = fixture.service.events(fixture.run.id, fixture.principal).events;
     const pending = handler(fixture.request(action, controller.signal));
+    // Observe before abort, and join this same assertion in cleanup: no late response (and
+    // therefore no private text/audio or deterministic fallback) may be published at all.
+    const rejected = pending.then(() => { throw new Error("Cancelled narration published an HTTP response"); }, error => {
+      expect(error).toBe(controller.signal.reason);
+    });
     try {
       const signal = await started.promise;
       expect(signal).toBeDefined();
       controller.abort();
       expect(signal?.aborted).toBe(true);
       release.resolve();
-      const response = await pending;
-      expect(response.status).not.toBe(200);
-      expect(await response.text()).not.toContain("Current position");
-    } finally { release.resolve(); await pending; }
+      await rejected;
+      expect(calls).toBe(1);
+      expect(fixture.service.events(fixture.run.id, fixture.principal).events).toEqual(before);
+    } finally { release.resolve(); await rejected; }
   });
 
   describe.each(["voice", "speech"])("rechecks revoked grants through the composed %s HTTP door", action => {
@@ -159,6 +167,7 @@ describe("narration asynchronous authority", () => {
     let post: (path: string, body: unknown, cookie?: string) => Promise<Response>;
     let pending: Promise<Response> | undefined;
     beforeAll(() => {
+      installEmptyApplicationCatalogues();
       setup = (async () => {
       app = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, voiceProvider: voice, ttsProvider: tts });
       await new Promise<void>((resolve, reject) => { app.server.once("error", reject); app.server.listen(0, "127.0.0.1", resolve); });
@@ -182,7 +191,10 @@ describe("narration asynchronous authority", () => {
     afterAll(async () => {
       release.resolve();
       try { await setup?.catch(() => undefined); await pending; }
-      finally { if (app !== undefined) await app.close(); }
+      finally {
+        try { if (app !== undefined) await app.close(); }
+        finally { vi.restoreAllMocks(); }
+      }
     });
     it("refuses the real pending response after its grant is revoked", async () => {
       pending = post(`/runs/http-voice/${action}`, { nodeId, scope: "reading" }, guest);

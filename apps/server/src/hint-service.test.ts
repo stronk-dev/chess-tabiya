@@ -15,9 +15,10 @@ import {
   type HintRung,
   type TypedProviderResult,
 } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { CandidatePopulationService } from "./candidate-population-service.js";
 import { HintService, type HintAccess } from "./hint-service.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
@@ -33,6 +34,7 @@ const preference = (preset: "guided" | "quiet" | "support") => ({ kind: "explici
 describe("Guided Hint through createApplication", { timeout: 60_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
   let directory: string | undefined;
+  beforeEach(() => { installEmptyApplicationCatalogues(); });
   afterEach(async () => {
     const closing = application;
     const removing = directory;
@@ -41,6 +43,7 @@ describe("Guided Hint through createApplication", { timeout: 60_000 }, () => {
     try {
       await closing?.close();
     } finally {
+      vi.restoreAllMocks();
       if (removing !== undefined) rmSync(removing, { recursive: true, force: true });
     }
   });
@@ -68,7 +71,7 @@ describe("Guided Hint through createApplication", { timeout: 60_000 }, () => {
     };
     const ask = async (rung: HintRung, preset: "guided" | "quiet" | "support" = "guided", digest?: string): Promise<HintResponse> => {
       const current = await run();
-      const response = await post("/runs/hint-run/hints", { nodeId: current.activeCursor.nodeId, rung, decisionDigest: digest ?? hintDecisionStamp(current).digest, assistance: compileAssistanceRequest({ contextHint: "position", preference: preference(preset) }) });
+      const response = await post("/runs/hint-run/hints", { clientRequestId: "0".repeat(32), nodeId: current.activeCursor.nodeId, rung, decisionDigest: digest ?? hintDecisionStamp(current).digest, assistance: compileAssistanceRequest({ contextHint: "position", preference: preference(preset) }) });
       expect(response.status, await response.clone().text()).toBe(200);
       return parseHintResponse((await response.json() as { hint: unknown }).hint);
     };
@@ -180,18 +183,18 @@ describe("HintService source and voice arms", () => {
   it("[D1638] search absence is source_unavailable; voice absence, timeout, refusal and invalid output keep the hint available", async () => {
     const populations = new CandidatePopulationService({ capacity: 8 });
     const off = new HintService({ scheduler: null, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
-    expect(off.request(access(run, FORK_FEN), "pattern")).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
+    expect(off.request(access(run, FORK_FEN), "pattern", "0".repeat(32))).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
     // Provider health says the search source is down: honest source_unavailable before any search.
     let searched = 0;
     const unhealthy = new HintService({ scheduler: { get: async () => { searched += 1; throw new Error("must not search"); } }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8, availability: () => ({ state: "unavailable", instanceIds: [], reason: "not_configured" }) });
-    expect(unhealthy.request(access(run, FORK_FEN), "pattern")).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
+    expect(unhealthy.request(access(run, FORK_FEN), "pattern", "0".repeat(32))).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
     expect(searched).toBe(0);
     const failing = new HintService({ scheduler: { get: async (request) => ({ kind: "source_failure", operation: request.operation, normalizedRequestDigest: "sha256:0", failedAt: "2026-09-24T12:00:00.000Z", reason: "deadline_exceeded" }) as unknown as TypedProviderResult<"stockfish.principal_variation@1"> }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
-    expect(await settle(failing, failing.request(access(run, FORK_FEN), "pattern"))).toMatchObject({ state: "source_unavailable", reason: "deadline_exceeded" });
+    expect(await settle(failing, failing.request(access(run, FORK_FEN), "pattern", "0".repeat(32)))).toMatchObject({ state: "source_unavailable", reason: "deadline_exceeded" });
 
     const voiced = async (voice: (sentence: string) => Promise<string>) => {
       const service = new HintService({ scheduler: real(), requestedEngine: engine, populations, depth: 12, timeoutMs: 5_000, maxOperations: 8, voiceTimeoutMs: 200, voice: (_view, sentence) => voice(sentence) });
-      const result = await settle(service, service.request(access(run, FORK_FEN), "square"));
+      const result = await settle(service, service.request(access(run, FORK_FEN), "square", "0".repeat(32)));
       if (result.state !== "available") throw new Error(`expected available, got ${JSON.stringify(result)}`);
       return result.delivery.rendered;
     };
@@ -208,7 +211,7 @@ describe("HintService source and voice arms", () => {
     let searches = 0;
     const scheduler = real();
     const service = new HintService({ scheduler: { get: (request, scope, signal) => { searches += 1; return scheduler.get(request, scope, signal); } }, requestedEngine: engine, populations, depth: 12, timeoutMs: 5_000, maxOperations: 8 });
-    for (const rung of ["pattern", "square", "piece", "distance"] as const) expect((await settle(service, service.request({ ...access(run, FORK_FEN), voiceRequested: false }, rung))).state).toBe("available");
+    for (const rung of ["pattern", "square", "piece", "distance"] as const) expect((await settle(service, service.request({ ...access(run, FORK_FEN), voiceRequested: false }, rung, "0".repeat(32)))).state).toBe("available");
     expect(searches).toBe(1);
     expect(populations.stats()).toMatchObject({ misses: 1, retained: 1 });
     // A second consumer of the same position hits the same process-local packet.

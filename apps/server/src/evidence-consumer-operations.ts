@@ -1,3 +1,6 @@
+import { consumeProfileGameFacts } from "./profile-game-facts.js";
+import { consumeProfileSubjectFacts } from "./profile-subject-facts.js";
+import { consumeProfileChoiceFacts } from "./profile-choice-facts.js";
 import {
   comparisonNarrative,
   evidenceConsumerOperation,
@@ -12,9 +15,15 @@ import { consumeOpponentSelectionEvidence, consumeOpponentTablebaseSelectionEvid
 import { consumeRepertoireCorpus } from "./repertoire.js";
 import { consumeReturnFrequency } from "./return-frequency.js";
 import { consumeCorpus } from "./inspector-corpus.js";
+import { consumeMaiaNodeDistribution } from "./inspector-maia.js";
 import { consumeClaimBindingRecords } from "./sourcing/claim-binding.js";
+import { compileInspectorSourcePage } from "./inspector-query.js";
 
 export const SERVER_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
+  evidenceConsumerOperation("profile.subject_observations", consumeProfileSubjectFacts),
+  evidenceConsumerOperation("profile.choice_facts", consumeProfileChoiceFacts),
+  evidenceConsumerOperation("profile.game_facts", consumeProfileGameFacts),
+  evidenceConsumerOperation("module.full_inspector", compileInspectorSourcePage, 2),
   evidenceConsumerOperation("runtime.branch_decidedness", consumeBranchDecidednessEvidence),
   evidenceConsumerOperation("runtime.queued_tablebase", consumeQueuedTablebaseEvidence),
   evidenceConsumerOperation("runtime.guard_condition", consumeGuardCondition),
@@ -29,6 +38,7 @@ export const SERVER_EVIDENCE_CONSUMER_OPERATIONS = Object.freeze([
   evidenceConsumerOperation("runtime.repertoire_scan", consumeRepertoireCorpus, 2),
   evidenceConsumerOperation("runtime.return_frequency", consumeReturnFrequency, 2),
   evidenceConsumerOperation("inspector.corpus", consumeCorpus, 2),
+  evidenceConsumerOperation("inspector.human_split", consumeMaiaNodeDistribution, 2),
   evidenceConsumerOperation("authoring.claim_binding", consumeClaimBindingRecords),
   evidenceConsumerOperation("guidance.voice_compare", comparisonNarrative),
   evidenceConsumerOperation("guidance.voice_story", storyDeclaredEvidence),

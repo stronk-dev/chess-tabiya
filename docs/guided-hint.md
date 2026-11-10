@@ -84,26 +84,32 @@ independent contract repair, not a real-engine recommendation or completed coach
    execution, loose piece (`lost` only), and promotion pressure (persistent only). There are also
    five rungs, the executable `HINT_DECLARATION_MATRIX`, and the selection order.
 2. **F1 graph** (`evidence-catalog.ts`, producer `derived.hint`). This has seven operator-only
-   horizon projections `derived.hint.horizon.<family>@1`, each derived from its family source plus
+   horizon projections, each derived from its exact current family source plus
    `live.stockfish.principal_variation@1` (declared_convention / measured / reported). It also has
-   35 learner projections `derived.hint.disclosure.<family>.<rung>@1`, each derived from its
+   35 learner projections, each derived from its
    horizon alone. The real manifest compiler rejects any widening.
    The horizon value receipt retains its ordered inputs as family source, then principal
    variation, matching that declaration. Permanent controls cover all seven families (D3848);
    this corrects receipt order without changing hint selection, payloads, rungs or permissions.
+   The current matrix uses horizon/disclosure@2 for fork survival and promotion pressure;
+   the other five families retain@1. Their actual sources are nonterminal fork survival and
+   direct-FEN promotion pressure from candidate compiler2, not relabelled predecessor values.
 3. **Horizon** (`selectHintHorizon`, `hint-distance.ts`). One bounded Stockfish principal variation
    is scanned to four plies. Only the root side's own ply 1 (`root_direct`) and ply 3
    (`root_followup_in_line`) are read, joined to the original sealed events and readings of the
    complete shared candidate packet for each of those positions. The horizon payload is computed by
    the value authority (`evidence-factories.ts`) from sealed inputs, so a literal, spread, JSON or
    rebuilt occurrence cannot be disclosed. Only horizons this process selected can be disclosed.
-4. **Disclosure** (`compileHintDisclosure`). This produces a new frozen packet per rung. A lower
+4. **Disclosure** (`compileHintDisclosureV2`). This produces a new frozen packet per rung. A lower
    packet physically lacks every higher field.
 5. **Module** (`compileGuidedHintPacket`). Exactly one item is admitted through
-   `module.guided_hint@1`, and one canonical sentence is rendered by a registered renderer.
+   `module.guided_hint@2`, and one canonical sentence is rendered by a registered renderer.
 6. **Receipt** (`compileHintDeliveryReceipt`). The only thing that crosses REST is a closed wire
-   value with rung-discriminated marks and a digest. The browser (`parseHintDeliveryReceipt`)
-   validates its shape and digest and renders only what the receipt carries.
+   version2 value with the exact projection version, rung-discriminated marks and a digest.
+   The shared parser rejects version1 and wrong family/rung versions. The actual HTTP client
+   and mounted seat also bind delivery to the current run, manifest, decision, rung and operation;
+   pending polls and404 recovery cannot switch that identity. Context is checked before text,
+   marks or progression. Request/shared-horizon keys include the current compiler epoch.
 
 The optional voice sees only the one-item rendered view. `hintVoiceCheck` rejects a square, piece or
 move the rung does not carry, a different move, judgement and prescription words, and causality
@@ -112,15 +118,18 @@ and the deterministic sentence is shown byte for byte (D1638).
 
 ## Protocol
 
-- `POST /runs/:runId/hints` with body `{ nodeId, rung, decisionDigest, assistance }`, where
+- `POST /runs/:runId/hints` with body `{ clientRequestId, nodeId, rung, decisionDigest, assistance }`, where
   `assistance` is the learner's stage-1 intent receipt. The server recomputes the decision stamp,
   context, access, boundary, ceiling and module activation. The client never sends a ceiling.
+  Each explicit action uses 16 random bytes encoded as 32 lowercase hex characters. The closed
+  `{ hint, clientRequestId }` response must echo that exact key before the client accepts it.
 - `GET /runs/:runId/hints/:requestId` polls the operation. A moved decision answers `stale`.
-- `DELETE /runs/:runId/hints/:requestId` cancels it. An unknown id returns 404, and the client
-  sends the POST again.
+- `DELETE /runs/:runId/hints/:requestId` cancels only that operation. An unknown polled id returns
+  404; a still-current action re-POSTs with the same action key. A retired action never re-POSTs.
 
-Request ids are deterministic digests of decision, rung, manifest, compiler and search source, so
-repeated POSTs join the same operation. `HintService` (`apps/server/src/hint-service.ts`) is
+Request ids are deterministic digests of action key, decision, rung, manifest, compiler and search
+source, so repeated POSTs for one action join the same operation. Separate actions have separate
+waiters; late cancellation cannot remove a reopened Hint's waiter. `HintService` is
 process-local and bounded. All rungs of one decision share one search, and every packet comes
 from the injected application-lifetime `CandidatePopulationService`.
 
@@ -129,8 +138,11 @@ head, not merely by a node/FEN. A different decision cannot reuse a sealed occur
 the previous one. Pending engine discovery coalesces; failed discovery and unavailable horizons
 are not retained as successful caches. Settled operation responses remain idempotent. **Try again**
 explicitly deletes the failed operation before re-posting the unchanged decision and rung; a
-restart's 404 is harmless, but a failed cancellation does not start a replacement. Nothing retries
-autonomously or advances the rung on failure.
+restart's 404 reuses its key, while explicit retry gets a fresh key. A failed cancellation does
+not start a replacement. A source/configuration change during 404 recovery fails existing exact
+ID admission rather than silently adopting another source. Nothing retries autonomously or
+advances the rung on failure. Run-bound clients and per-action captured transport route late
+pending cleanup through the original run, even after a different run is attached.
 
 Each operation owns its cancellation lifetime. Cancel, stale, eviction and application shutdown
 abort its private voice request through the actual health/provider boundary and detach promptly

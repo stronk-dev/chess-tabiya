@@ -5,8 +5,30 @@ import type { SemanticValidationVerdictTable } from "./semantic-validation.js";
 
 export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
   "schemaVersion": 1,
-  "receiptSha256": "c067fe24cd9c4d2013f202f9bf5237937b7466622f3d59885ddc4ce862173053",
+  "receiptSha256": "a48ecd9de95da54a4fcdac17384ab2c1949e66503073cbdb715bb8e70b2ab684",
   "verdicts": [
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.activity.event.file_access_revealed",
+          "version": 1
+        }
+      },
+      "verdict": "passed",
+      "open": []
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.activity.event.file_state",
+          "version": 1
+        }
+      },
+      "verdict": "passed",
+      "open": []
+    },
     {
       "subject": {
         "kind": "event",
@@ -96,12 +118,13 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.material.event.role_asymmetry",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
       "open": [
-        "orientation"
+        "orientation",
+        "imported_population"
       ]
     },
     {
@@ -212,7 +235,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.backward_pawn",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -220,8 +243,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -229,7 +251,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.direct_attack_count",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -237,8 +259,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -246,7 +267,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.doubled_pawn",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -254,8 +275,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -263,7 +283,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.half_open_file",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -271,8 +291,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -280,7 +299,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.isolated_pawn",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -288,8 +307,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -297,7 +315,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.king_opposition",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -305,8 +323,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -314,7 +331,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.king_zone",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -322,8 +339,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -331,7 +347,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.line_blockers",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -339,8 +355,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -348,7 +363,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.loose_piece",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -356,8 +371,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -365,7 +379,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.open_file",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -373,8 +387,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -382,7 +395,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.passed_pawn",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -390,8 +403,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -399,7 +411,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.pawn_islands",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -407,8 +419,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
     },
     {
@@ -416,7 +427,7 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.semantic_avoidance.piece_count",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
@@ -424,9 +435,19 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "positive",
         "semantic_negative",
         "orientation",
-        "counterfactual",
-        "imported_population"
+        "counterfactual"
       ]
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.structural.event.pawn_file_group",
+          "version": 1
+        }
+      },
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
@@ -527,12 +548,13 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "derived.tactic.defender_exposure",
-          "version": 1
+          "version": 2
         }
       },
       "verdict": "unvalidated",
       "open": [
-        "orientation"
+        "orientation",
+        "imported_population"
       ]
     },
     {
@@ -836,10 +858,8 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
           "version": 1
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
@@ -900,13 +920,11 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "rules.structural.event.backward_pawn",
-          "version": 1
+          "version": 2
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
@@ -925,88 +943,18 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
       "subject": {
         "kind": "event",
         "projection": {
-          "id": "rules.structural.event.doubled_pawn",
-          "version": 1
-        }
-      },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
-    },
-    {
-      "subject": {
-        "kind": "event",
-        "projection": {
-          "id": "rules.structural.event.half_open_file",
-          "version": 1
-        }
-      },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
-    },
-    {
-      "subject": {
-        "kind": "event",
-        "projection": {
-          "id": "rules.structural.event.isolated_pawn",
-          "version": 1
-        }
-      },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
-    },
-    {
-      "subject": {
-        "kind": "event",
-        "projection": {
           "id": "rules.structural.event.king_opposition",
-          "version": 1
+          "version": 2
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "positive",
-        "semantic_negative",
-        "orientation",
-        "imported_population"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
         "kind": "event",
         "projection": {
           "id": "rules.structural.event.king_zone",
-          "version": 1
-        }
-      },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
-    },
-    {
-      "subject": {
-        "kind": "event",
-        "projection": {
-          "id": "rules.structural.event.line_blockers",
-          "version": 1
-        }
-      },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
-    },
-    {
-      "subject": {
-        "kind": "event",
-        "projection": {
-          "id": "rules.structural.event.open_file",
           "version": 1
         }
       },
@@ -1033,14 +981,11 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "rules.structural.event.pawn_islands",
-          "version": 1
+          "version": 2
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "semantic_negative",
-        "orientation"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
@@ -1144,10 +1089,8 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
           "version": 1
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
@@ -1157,10 +1100,8 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
           "version": 1
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
@@ -1183,10 +1124,8 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
           "version": 1
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {
@@ -1297,13 +1236,11 @@ export const SEMANTIC_VALIDATION_RECEIPT: SemanticValidationVerdictTable = {
         "kind": "event",
         "projection": {
           "id": "rules.transition.event.slider_ray",
-          "version": 1
+          "version": 2
         }
       },
-      "verdict": "unvalidated",
-      "open": [
-        "orientation"
-      ]
+      "verdict": "passed",
+      "open": []
     },
     {
       "subject": {

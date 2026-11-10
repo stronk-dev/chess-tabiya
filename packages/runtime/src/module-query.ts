@@ -23,12 +23,14 @@ import { parseUci } from "chessops/util";
 
 import type { FinalizedAssistanceV1 } from "./assistance-exchange.js";
 import { branchPath } from "./branch-path.js";
+import { presentationWordCount as words } from "./presentation-word-count.js";
 import { compareBranches, type BranchComparison } from "./compare.js";
 import { ENDGAME_SETUP_CONVENTIONS } from "./endgame-setup.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { compileEvidenceConsumerExecution, compileEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
 import { collectComparisonStructuralPopulation } from "./comparison-structural-population.js";
 import { recordedComparisonData, recordedComparisonColumnsForSubject, type RecordedComparisonSource } from "./recorded-comparison.js";
+import { recordedComparisonEvalTrail } from "./recorded-comparison-eval.js";
 import { readRecordedComparisonPointSource, type RecordedComparisonPointSource } from "./recorded-comparison-point.js";
 import { digestRunEvidenceItem, resolveRunSubject } from "./run-subject.js";
 import { evidenceDigest } from "./evidence-contract.js";
@@ -39,21 +41,25 @@ import type { AuthoredFeedbackItemRecord } from "./evidence-factories.js";
 import { feedbackDeliveryOpen } from "./feedback.js";
 import { exactLegalMoves, exactMoveDestination } from "./legal-moves.js";
 import { invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
-import { MODULE_QUERY_OPERATION, PACKET_ROUTE_KINDS, SIGHT_SOURCE_ROUTES, moduleQuerySourceRoutes, routeReads } from "./module-query-sources.js";
-import { MODULE_IDS, type InspectorFamilyId, type ModuleId, type ModuleTiming } from "./module-contract.js";
+import { MODULE_QUERY_OPERATION, SIGHT_SOURCE_ROUTES } from "./module-query-sources.js";
+import { MODULE_IDS, type InspectorFamilyId, type ModuleBudgets, type ModuleId, type ModuleTiming } from "./module-contract.js";
 import { compileModulePacket } from "./module-packets.js";
-import { MODULE_CONSUMER_ACCEPTS, MODULE_REGISTRY, moduleDeclaration } from "./module-registry.js";
+import { MODULE_CONSUMER_ACCEPTS, MODULE_OPERATIONS, MODULE_REGISTRY, moduleDeclaration } from "./module-registry.js";
 import { NULL_REDUCTION_QUALITY_RECORDER, type ModuleFact, type ReductionQualityRecorder } from "./module-reducers.js";
 import {
   presentEvidenceItems,
   presentationDigest,
   presentedSentence,
+  presentedItemOwner,
   serializePresentedEvidence,
   type PresentationReceipt,
   type PresentedEvidenceItem,
 } from "./presentation-contract.js";
-import { hasKingZoneWitness, postcommitEdgeEvidence } from "./postcommit-nudge.js";
-import type { ShapeTriggerSource } from "./shape-firing.js";
+import { hasKingZoneWitness, hasPostcommitChangeWitness, postcommitEdgeEvidence, postcommitSubjectBranch } from "./postcommit-nudge.js";
+import type { RecordedGradeSource } from "./recorded-grade-source.js";
+import { collectRecordedSequenceWindow, type prepareRecordedSemanticWindowPopulation } from "./recorded-sequence-window.js";
+import { readRegisteredShapeScan, type RegisteredShapeScan } from "./internal/registered-shape-scan.js";
+import { readCurrentShapeFiringInvocation } from "./internal/evidence-value-routes.js";
 import type { DrillRun, Node } from "./types.js";
 import { transposeKey } from "./chess.js";
 import { moduleDecisionStamp, type ModuleDecisionStamp } from "./module-decision.js";
@@ -79,7 +85,7 @@ export type ModuleQueryRequest =
   | { readonly timing: "review"; readonly nodeId: string; readonly requested: readonly ModuleId[] };
 
 export type ModuleQueryErrorCode =
-  | "MODULE_QUERY_INVALID" | "MODULE_QUERY_SUBJECT" | "MODULE_QUERY_SQUARE" | "MODULE_QUERY_CANDIDATE" | "MODULE_QUERY_WITHHELD" | "MODULE_QUERY_STALE";
+  | "MODULE_QUERY_INVALID" | "MODULE_QUERY_SUBJECT" | "MODULE_QUERY_SQUARE" | "MODULE_QUERY_CANDIDATE" | "MODULE_QUERY_WITHHELD" | "MODULE_QUERY_STALE" | "MODULE_QUERY_SOURCE_PAGE_REQUIRED";
 
 export class ModuleQueryError extends TypeError {
   readonly code: ModuleQueryErrorCode;
@@ -103,6 +109,7 @@ function moduleList(value: unknown): readonly ModuleId[] {
   if (!Array.isArray(value) || value.length > MODULE_IDS.length) return refuse("requested must be a module id array");
   const ids = value.map((entry) => ((MODULE_IDS as readonly unknown[]).includes(entry) ? entry as ModuleId : refuse("requested names an unregistered module")));
   if (new Set(ids).size !== ids.length) refuse("requested repeats a module");
+  if (ids.includes("full_inspector")) throw new ModuleQueryError("MODULE_QUERY_SOURCE_PAGE_REQUIRED", "Full Inspector requires the explicit source-page operation");
   return Object.freeze(ids);
 }
 
@@ -141,9 +148,11 @@ export function parseModuleQueryRequest(value: unknown): ModuleQueryRequest {
 
 /** Server-owned inputs the catalogue pool needs (released authored items, registered shapes). */
 export interface ModuleSourceContext {
+  readonly postcommitAt?: (nodeId: string) => Readonly<{ grade: RecordedGradeSource; windows: ReturnType<typeof prepareRecordedSemanticWindowPopulation> }>;
   readonly opening?: OpeningCatalogueAvailability | undefined;
   readonly comparison?: Readonly<{ comparison: RecordedComparisonSource; points: readonly RecordedComparisonPointSource[] }> | undefined;
-  readonly shapes?: readonly ShapeTriggerSource[];
+  /** Actual complete singleton scan over this exact recorded timing node; no raw catalogue matcher. */
+  readonly shapeAt?: (nodeId: string) => Readonly<{ kind: "available"; scan: RegisteredShapeScan } | { kind: "unavailable"; reason: "authored_source_absent" | "source_dependency_unavailable" }>;
   readonly authoredAt?: (nodeId: string) => readonly AuthoredFeedbackItemRecord[];
   /** Server-acquired source over the exact timing subject, never a browser payload. */
   readonly explorerSummary?: DeclaredEvidence<ExplorerPopulationSummary>;
@@ -205,6 +214,7 @@ export function witnessedEvidence(evidence: DeclaredEvidence<unknown>): boolean 
   const payload = evidence.payload as Readonly<Record<string, unknown>>;
   const nonEmpty = (field: string): boolean => !Array.isArray(payload[field]) || (payload[field] as readonly unknown[]).length > 0;
   switch (evidence.projection.id) {
+    case "derived.tactic.nonterminal_fork_survival": return payload.matched === true;
     case "rules.tactic.consequence.threat": return payload.kind === "threats" && nonEmpty("threats");
     case "rules.tactic.consequence.mate_in_one": return nonEmpty("mates");
     // An undefended but unattacked piece is not a threat: only a piece capturable at a gain is.
@@ -234,6 +244,9 @@ export function witnessedEvidence(evidence: DeclaredEvidence<unknown>): boolean 
   }
 }
 const witnessed = witnessedEvidence;
+/** Module-local selection belongs before both current and ancestor packet admission. */
+const moduleWitnessed = (module: ModuleId, evidence: DeclaredEvidence<unknown>): boolean =>
+  witnessed(evidence) && (module !== "postcommit_nudge" || hasPostcommitChangeWitness(evidence));
 
 const SIGHT_READINGS = SIGHT_SOURCE_ROUTES;
 
@@ -245,6 +258,17 @@ export interface ModuleSubject {
   readonly fen: string;
   readonly learner: Color;
   readonly square?: SquareName;
+}
+
+function shapePointSource(subject: ModuleSubject, context: ModuleSourceContext): ModuleSourceResult {
+  const projection = "theory.shapes.firing@3", point = context.shapeAt?.(subject.node.id);
+  if (point === undefined || point.kind === "unavailable") return Object.freeze({ kind: "unavailable", projection,
+    reason: point?.reason ?? "authored_source_absent" });
+  const data = readRegisteredShapeScan(point.scan);
+  if (data.path.length !== 1 || data.path[0]!.id !== subject.node.id || data.path[0]!.fen !== subject.fen) throw new TypeError("Module shape scan is not its exact original singleton subject");
+  const result = invokeEvidenceValueRoute(projection, { scan: point.scan });
+  readCurrentShapeFiringInvocation(result, point.scan);
+  return flatten(projection, result);
 }
 
 function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, context: ModuleSourceContext): readonly ModuleSourceResult[] {
@@ -264,7 +288,7 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
       route("rules.tactic.reading.back_rank@1", { fen }),
       at("rules.tactic.reading.trapped_piece@1", learnerToMove),
       route("rules.tactic.reading.ray_classification@1", { fen }),
-      ...(subject.edge === undefined ? [] : [route("derived.tactic.defender_exposure@1", subject.edge)]),
+      ...(subject.edge === undefined ? [] : [route("derived.tactic.defender_exposure@2", subject.edge)]),
     ];
     case "blunder_prevention": return [
       at("rules.tactic.consequence.threat@1", learnerToMove),
@@ -278,7 +302,7 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
       route("rules.structural.reading.space@1", { fen }),
       route("rules.structural.reading.pawn_connectivity@1", { fen }),
       ...ENDGAME_SETUP_CONVENTIONS.map((convention) => route("theory.endgame.setup_match@1", { fen, convention: { id: convention.id, version: convention.version } })),
-      ...(context.shapes === undefined || context.shapes.length === 0 ? [] : [route("theory.shapes.firing@1", { entries: context.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: subject.node.id, fen }] })]),
+      shapePointSource(subject, context),
     ];
     case "theory_breadcrumb": {
       const explorer = context.explorerSummary;
@@ -288,7 +312,7 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
       }
       return [
         ...(context.authoredAt?.(subject.node.id) ?? []).map((item) => route("pack.authored.claim@1", { item })),
-        ...(context.shapes === undefined || context.shapes.length === 0 ? [] : [route("theory.shapes.firing@1", { entries: context.shapes.map((shape) => ({ id: shape.id, trigger: shape.trigger })), path: [{ id: subject.node.id, fen }] })]),
+        shapePointSource(subject, context),
         openingEndpointSource(run, subject, context.opening),
         ...(explorer === undefined
           ? [Object.freeze({ kind: "unavailable" as const, projection: "derived.explorer.population_summary@1", reason: context.explorerUnavailable ?? "not_requested" })]
@@ -302,9 +326,17 @@ function sources(module: ModuleId, subject: ModuleSubject, run: DrillRun, contex
       const parent = subject.node.parentId === null ? undefined : run.nodes.find((candidate) => candidate.id === subject.node.parentId);
       if (parent === undefined) return [];
       const items = postcommitEdgeEvidence(run, parent, subject.node);
-      return items.length === 0 ? [Object.freeze({ kind: "no_witness", projection: "postcommit.edge" })] : [Object.freeze({ kind: "available", projection: "postcommit.edge", items })];
+      const captured = context.postcommitAt?.(subject.node.id);
+      const values: ModuleSourceResult[] = [items.length === 0 ? Object.freeze({ kind: "no_witness", projection: "postcommit.edge" }) : Object.freeze({ kind: "available", projection: "postcommit.edge", items })];
+      values.push(captured === undefined ? Object.freeze({ kind: "unavailable", projection: "derived.grade.move_quality@2", reason: "source_not_requested" })
+        : route("derived.grade.move_quality@2", { recordedGrade: captured.grade }));
+      if (captured !== undefined) for (const [projection, prepared] of captured.windows) {
+        if (prepared.omittedHorizons.length > 0) values.push(Object.freeze({ kind: "unavailable", projection, reason: "no_recorded_window" }));
+        for (const window of prepared.windows) values.push(flatten(projection, collectRecordedSequenceWindow(window)));
+      }
+      return Object.freeze(values);
     }
-    case "full_inspector": return inspectorSources(run, subject);
+    case "full_inspector": throw new ModuleQueryError("MODULE_QUERY_SOURCE_PAGE_REQUIRED", "Full Inspector is owned by the explicit source-page operation");
     default: return [];
   }
 }
@@ -327,36 +359,6 @@ function openingEndpointSource(run: DrillRun, subject: ModuleSubject, installati
 }
 
 
-/**
- * Full Inspector (explicit mode, review timing): the complete census of what the node's exact
- * sources can seal — every accepted projection whose value route reads the node's FEN, its incoming
- * edge, or an engine/tablebase packet recorded at the node. Every other accepted projection is a
- * `not_requested` family state (a provider page or multi-edge window the explicit surface did not
- * demand), never an empty fact.
- */
-function inspectorSources(run: DrillRun, subject: ModuleSubject): readonly ModuleSourceResult[] {
-  const parent = subject.node.parentId === null ? undefined : run.nodes.find((candidate) => candidate.id === subject.node.parentId);
-  const edge = parent === undefined || subject.node.moveUci === null ? undefined : { beforeFen: parent.fen, moveUci: subject.node.moveUci, afterFen: subject.node.fen };
-  const packets = run.events.flatMap((event) => event.type === "evidence.attached" && event.data.nodeId === subject.node.id ? [event.data.payload] : []);
-  return (MODULE_CONSUMER_ACCEPTS.full_inspector as readonly VersionedEvidenceId[]).map((ref): ModuleSourceResult => {
-    const name = `${ref.id}@${ref.version}`;
-    try {
-      if (routeReads(name, "fen")) return route(name, { fen: subject.fen });
-      if (routeReads(name, "afterFen|beforeFen|moveUci")) return edge === undefined ? Object.freeze({ kind: "no_witness", projection: name }) : route(name, edge);
-      const kind = PACKET_ROUTE_KINDS[name];
-      if (kind !== undefined && routeReads(name, "packet")) {
-        const matching = packets.filter((packet) => packet.kind === kind);
-        const results = matching.map((packet) => route(name, { packet: { kind: packet.kind, source: packet.source, values: packet.values } }));
-        const items = results.flatMap((result) => result.kind === "available" ? result.items : []);
-        return items.length === 0 ? Object.freeze({ kind: "no_witness", projection: name }) : Object.freeze({ kind: "available", projection: name, items });
-      }
-    } catch (error) {
-      if (error instanceof TypeError) return Object.freeze({ kind: "unavailable", projection: name, reason: "input_abstained" });
-      throw error;
-    }
-    return Object.freeze({ kind: "unavailable", projection: name, reason: "not_requested" });
-  });
-}
 
 /** The recorded pair used by both Compare's facts and its enter-other-attempt action. */
 export function moduleComparisonForSubject(run: DrillRun, nodeId: string): BranchComparison | undefined {
@@ -385,15 +387,11 @@ function compareSources(run: DrillRun, subject: ModuleSubject, captured: ModuleS
   const branchInput = { run: data.run, comparison, branchId };
   const population = collectComparisonStructuralPopulation({ comparison: captured.comparison });
   const path = invokeEvidenceValueRoute("run.record.comparison_path@1", { comparison: captured.comparison, branchId });
-  const nodeIds = new Set(span.map(entry => entry.node.id));
-  const packets = data.run.events.flatMap(event => {
-    if (event.type !== "evidence.attached" || event.data.payload.kind !== "eval" || event.data.payload.source !== "engine_validated" || !nodeIds.has(event.data.nodeId)) return [];
-    const values = event.data.payload.values;
-    if (!Number.isSafeInteger(values.centipawns) && !Number.isSafeInteger(values.mateIn)) return [];
+  const packets = recordedComparisonEvalTrail(captured.comparison, branchId).map(({ event }) => {
     const resolved = resolveRunSubject(data.run, { kind: "run_node", runId: data.run.id, eventHeadDigest: data.authority.eventHeadDigest, branchId, nodeId: event.data.nodeId });
     const itemDigest = digestRunEvidenceItem({ runId: data.run.id, eventHeadDigest: resolved.subject.eventHeadDigest, eventSeq: event.seq, event });
-    return [{ event, packet: invokeEvidenceValueRoute("recorded.inspector.eval_packet@1", { resolved, itemDigest }), ply: span.find(entry => entry.node.id === event.data.nodeId)!.node.ply }];
-  }).sort((left, right) => left.ply - right.ply || left.event.seq - right.event.seq);
+    return { event, packet: invokeEvidenceValueRoute("recorded.inspector.eval_packet@1", { resolved, itemDigest }) };
+  });
   const deltas = packets.slice(1).map((after, index) => route("derived.compare.eval_delta@2", { comparison: captured.comparison, branchId, before: packets[index]!.packet, after: after.packet }));
   return [route("run.record.fork@1", { run: data.run, comparison }), route("run.record.consequence@1", branchInput),
     route("run.record.objective_transition@1", branchInput), route("run.record.checkpoint_hit@1", branchInput),
@@ -418,23 +416,36 @@ export interface ModuleBudgetReceipt {
   readonly dropped: readonly { readonly fact: string; readonly exceeded: readonly ("facts" | "words" | "marks" | "arrows")[] }[];
 }
 
-const WORD = /[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu;
-const words = (sentence: string): number => sentence.normalize("NFKC").match(WORD)?.length ?? 0;
-
-function bundleCost(items: readonly PresentedEvidenceItem[]): ModuleBudgetTuple {
+export function modulePresentationBundleCost(items: readonly PresentedEvidenceItem[]): ModuleBudgetTuple {
   const sentences = new Set(items.map((item) => presentedSentence(item)));
   const marks = new Set<string>();
   const arrows = new Set<string>();
   for (const item of items) {
     const component = item.component;
-    if (component.id === "square_set") for (const square of component.operand.squares) marks.add(`${component.id}:${square}`);
+    if (component.id === "square_set") for (const square of component.operand.squares) marks.add(`${component.id}:${square}:${component.operand.brush}`);
+    // Charge all encoded ordered edges even where a receiver currently renders only the list.
+    // The closed mark units are square sets and relation nodes, not move-path endpoints.
+    // Counting is not permission to paint future plies over the current board.
+    if (component.id === "move_path") for (const ply of component.operand.plies) {
+      const from = ply.uci.slice(0, 2), to = ply.uci.slice(2, 4);
+      arrows.add(`${component.id}:${from}${to}`);
+    }
     if (component.id === "relation_overlay") {
       for (const node of component.operand.nodes) marks.add(`${component.id}:${node.square}:${node.emphasis}`);
-      for (const edge of component.operand.edges) arrows.add(`${edge.from}${edge.to}${edge.relation}${edge.sign}`);
+      for (const edge of component.operand.edges) arrows.add(`${component.id}:${edge.from}${edge.to}${edge.relation}${edge.sign}`);
     }
   }
   return { facts: 1, words: [...sentences].reduce((sum, sentence) => sum + words(sentence), 0), marks: marks.size, arrows: arrows.size };
 }
+
+const addBudget = (a: ModuleBudgetTuple, b: ModuleBudgetTuple): ModuleBudgetTuple =>
+  ({ facts: a.facts + b.facts, words: a.words + b.words, marks: a.marks + b.marks, arrows: a.arrows + b.arrows });
+const exceededBudget = (budgets: ModuleBudgets, next: ModuleBudgetTuple): readonly (keyof ModuleBudgetTuple)[] => [
+  ...(next.facts > budgets.maxFacts ? ["facts" as const] : []),
+  ...(next.words > budgets.maxWords ? ["words" as const] : []),
+  ...(budgets.maxMarks !== null && next.marks > budgets.maxMarks ? ["marks" as const] : []),
+  ...(next.arrows > budgets.maxArrows ? ["arrows" as const] : []),
+];
 
 /**
  * Keeps whole bundles in reducer order while the cumulative tuple fits all four maxima; a bundle
@@ -452,21 +463,53 @@ export function fitModulePresentation(module: ModuleId, items: readonly Presente
   const kept: PresentedEvidenceItem[] = [], keptIds: string[] = [];
   const dropped: ModuleBudgetReceipt["dropped"][number][] = [];
   for (const [fact, bundle] of bundles) {
-    const cost = bundleCost(bundle);
-    before = { facts: before.facts + cost.facts, words: before.words + cost.words, marks: before.marks + cost.marks, arrows: before.arrows + cost.arrows };
-    const next = { facts: after.facts + cost.facts, words: after.words + cost.words, marks: after.marks + cost.marks, arrows: after.arrows + cost.arrows };
-    const exceeded = [
-      ...(next.facts > budgets.maxFacts ? ["facts" as const] : []),
-      ...(next.words > budgets.maxWords ? ["words" as const] : []),
-      ...(budgets.maxMarks !== null && next.marks > budgets.maxMarks ? ["marks" as const] : []),
-      ...(next.arrows > budgets.maxArrows ? ["arrows" as const] : []),
-    ];
+    const cost = modulePresentationBundleCost(bundle);
+    before = addBudget(before, cost);
+    const next = addBudget(after, cost), exceeded = exceededBudget(budgets, next);
     if (exceeded.length > 0) { dropped.push(Object.freeze({ fact, exceeded: Object.freeze(exceeded) })); continue; }
     after = next;
     kept.push(...bundle);
     keptIds.push(fact);
   }
   return { items: Object.freeze(kept), budget: Object.freeze({ before: Object.freeze(before), after: Object.freeze(after), kept: Object.freeze(keptIds), dropped: Object.freeze(dropped) }) };
+}
+
+export type InspectorOccurrenceFit =
+  | Readonly<{ ordinal: number; kind: "presented"; items: readonly PresentedEvidenceItem[] }>
+  | Readonly<{ ordinal: number; kind: "deferred"; exceeded: readonly ("facts" | "words" | "marks" | "arrows")[] }>;
+
+/**
+ * Budget only, not source admission or a consumer operation. The source-page caller must first
+ * admit the complete immutable original collection and construct each whole registered bundle.
+ * Unlike ordinary module factIdentity reduction, original occurrence ordinals never coalesce.
+ * A deferred occurrence advances the page but exposes none of its components or sentences.
+ */
+export function fitInspectorSourceOccurrences(bundles: readonly (readonly PresentedEvidenceItem[])[], start: number): {
+  readonly range: Readonly<{ start: number; count: number; total: number; next: number | null }>;
+  readonly occurrences: readonly InspectorOccurrenceFit[];
+  readonly budget: Readonly<{ before: ModuleBudgetTuple; after: ModuleBudgetTuple }>;
+} {
+  if (!Array.isArray(bundles) || !Number.isSafeInteger(start) || start < 0
+    || (bundles.length === 0 ? start !== 0 : start >= bundles.length)) throw new TypeError("Invalid Inspector occurrence page index");
+  const budgets = moduleDeclaration("full_inspector").budgets, count = Math.min(8, bundles.length - start);
+  let before: ModuleBudgetTuple = { facts: 0, words: 0, marks: 0, arrows: 0 }, after = before;
+  const occurrences: InspectorOccurrenceFit[] = [];
+  for (let ordinal = start; ordinal < start + count; ordinal++) {
+    const bundle = bundles[ordinal];
+    if (!Array.isArray(bundle) || bundle.length === 0) throw new TypeError("Inspector occurrence needs its complete rendered bundle");
+    const owner = presentedItemOwner(bundle[0]!);
+    if (bundle.some(item => presentedItemOwner(item) !== owner)) throw new TypeError("Inspector occurrence crosses original component owners");
+    const cost = modulePresentationBundleCost(bundle);
+    before = addBudget(before, cost);
+    const next = addBudget(after, cost), exceeded = exceededBudget(budgets, next);
+    if (exceeded.length !== 0) occurrences.push(Object.freeze({ ordinal, kind: "deferred", exceeded: Object.freeze(exceeded) }));
+    else {
+      after = next;
+      occurrences.push(Object.freeze({ ordinal, kind: "presented", items: Object.freeze([...bundle]) }));
+    }
+  }
+  return Object.freeze({ range: Object.freeze({ start, count, total: bundles.length, next: start + count === bundles.length ? null : start + count }),
+    occurrences: Object.freeze(occurrences), budget: Object.freeze({ before: Object.freeze(before), after: Object.freeze(after) }) });
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -612,48 +655,34 @@ function boundaryFor(run: DrillRun, request: ModuleQueryRequest, subject: Module
   return { kind: "durable_event", eventSeq: run.events.at(-1)?.seq ?? 0 };
 }
 
-/** The admitted facts of earlier learner edges on the path (bounded novelty, §1.5). */
-function ancestorFacts(run: DrillRun, module: ModuleId, subject: ModuleSubject, input: ModuleQueryInput): readonly (readonly ModuleFact[])[] {
+/** The exact earlier learner timing subjects used by the existing bounded novelty filter. */
+function ancestorSubjects(run: DrillRun, module: ModuleId, subject: ModuleSubject): readonly ModuleSubject[] {
   const window = moduleDeclaration(module).noveltyWindow;
   if (window === 0) return [];
-  const path = branchPath(run, subject.node.branchId);
-  const index = path.findIndex((candidate) => candidate.id === subject.node.id);
-  const result: (readonly ModuleFact[])[] = [];
+  const path = branchPath(run, postcommitSubjectBranch(run, subject.node));
+  const index = path.findIndex(candidate => candidate.id === subject.node.id), result: ModuleSubject[] = [];
   for (let cursor = index - 1; cursor >= 1 && result.length < window; cursor -= 1) {
-    const node = path[cursor]!;
-    const parent = path[cursor - 1]!;
+    const node = path[cursor]!, parent = path[cursor - 1]!;
     if (node.actor !== "user" || node.moveUci === null) continue;
-    const prior: ModuleSubject = { node, fen: node.fen, learner: subject.learner, edge: { beforeFen: parent.fen, moveUci: node.moveUci, afterFen: node.fen }, square: exactMoveDestination(parent.fen, node.moveUci) };
-    const evidence = sources(module, prior, run, input.sources ?? {}).flatMap((result) => result.kind === "available" ? result.items.filter(witnessed) : []);
-    const packet = compileModulePacket({ module, timing: "post_commit", role: input.role, session: input.session, evidence, mode: "admit" });
-    result.push(packet.kind === "packet" ? packet.facts : Object.freeze([]));
+    result.push({ node, fen: node.fen, learner: subject.learner,
+      edge: { beforeFen: parent.fen, moveUci: node.moveUci, afterFen: node.fen }, square: exactMoveDestination(parent.fen, node.moveUci) });
   }
   return Object.freeze(result);
 }
 
-/** One state per family in registry order; mixed availability never collapses (§5.2). */
-function inspectorFamilies(results: readonly ModuleSourceResult[], items: readonly PresentedEvidenceItem[]): readonly InspectorFamilyState[] {
-  const facts = new Map<InspectorFamilyId, Set<string>>();
-  for (const item of items) if (item.evidenceRef !== null) {
-    const family = inspectorFamily(item.evidenceRef.projection.id);
-    facts.set(family, (facts.get(family) ?? new Set()).add(item.evidenceRef.evidenceDigest));
-  }
-  const families = moduleDeclaration("full_inspector").emptyBehavior;
-  const ids = families.kind === "family_partitioned" ? families.families : [];
-  return Object.freeze(ids.map((family): InspectorFamilyState => {
-    const count = facts.get(family)?.size ?? 0;
-    if (count > 0) return Object.freeze({ family, kind: "available", factCount: count });
-    const own = results.filter((result) => inspectorFamily(result.projection.split("@")[0]!) === family);
-    const unavailable = own.find((result) => result.kind === "unavailable" && result.reason !== "not_requested");
-    if (unavailable !== undefined && unavailable.kind === "unavailable") return Object.freeze({ family, kind: "unavailable", reason: unavailable.reason });
-    if (own.some((result) => result.kind === "no_witness" || result.kind === "available")) return Object.freeze({ family, kind: "no_witness" });
-    return Object.freeze({ family, kind: "not_requested" });
+/** The admitted facts of earlier learner edges on the path (bounded novelty, §1.5). */
+function ancestorFacts(run: DrillRun, module: ModuleId, subject: ModuleSubject, input: ModuleQueryInput): readonly (readonly ModuleFact[])[] {
+  return Object.freeze(ancestorSubjects(run, module, subject).map(prior => {
+    const evidence = sources(module, prior, run, input.sources ?? {}).flatMap(result => result.kind === "available" ? result.items.filter(item => moduleWitnessed(module, item)) : []);
+    const packet = compileModulePacket({ module, timing: "post_commit", role: input.role, session: input.session, evidence, mode: "admit" });
+    return packet.kind === "packet" ? packet.facts : Object.freeze([]);
   }));
 }
 
+
 const EMPTY_STATE = (module: ModuleId): ModuleEmptyState => {
   const behavior = moduleDeclaration(module).emptyBehavior;
-  if (behavior.kind === "family_partitioned") return Object.freeze({ kind: "family_partitioned", families: Object.freeze(behavior.families.map((family) => Object.freeze({ family, kind: "not_requested" as const }))) });
+  if (behavior.kind === "family_partitioned") throw new ModuleQueryError("MODULE_QUERY_SOURCE_PAGE_REQUIRED", "Source states belong to the explicit Inspector source page");
   return behavior as ModuleEmptyState;
 };
 
@@ -676,8 +705,9 @@ export function assertAnswerCeiling(module: ModuleId, items: readonly PresentedE
  * The one module query operation. Pure over the run and the finalized assistance: the server
  * derives role/session/context and the finalized digest itself and passes them here.
  */
-export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQueryPage; readonly items: ReadonlyMap<ModuleId, readonly PresentedEvidenceItem[]> } {
+function preflightModuleQuery(input: ModuleQueryInput) {
   const { run, assistance, request } = input;
+  if ("requested" in request) moduleList(request.requested);
   const decision = moduleDecisionStamp(run);
   const subject = subjectFor(run, request);
   // A16: post-commit output is bound to the durable feedback-delivery boundary. Pre-/at-commit
@@ -688,18 +718,17 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
   if (request.timing !== "pre_commit" && request.timing !== "at_commit" && !feedbackDeliveryOpen(run)) throw new ModuleQueryError("MODULE_QUERY_WITHHELD", `${request.timing} module output is withheld until this run opens feedback`);
   const timing: ModuleTiming = request.timing;
   const requested = new Set<ModuleId>("requested" in request ? request.requested : []);
-  const packets: ModuleQueryPacket[] = [];
   const suppressions: ModuleQueryPage["suppressions"][number][] = [];
-  const itemsByModule = new Map<ModuleId, readonly PresentedEvidenceItem[]>();
   const selected: { readonly module: ModuleId; readonly declared: ReturnType<typeof moduleDeclaration>["timings"][number] }[] = [];
   for (const module of MODULE_IDS) {
     const declared = moduleDeclaration(module).timings.find((entry) => entry.timing === timing);
     if (declared === undefined) { if (requested.has(module)) suppressions.push({ module, reason: "timing_outside_module" }); continue; }
     if (module === "guided_hint") { if (requested.has(module)) suppressions.push({ module, reason: "guided_hint_owned_elsewhere" }); continue; }
-    if (module === "review_map" || module === "rules_floor" || module === "postcommit_nudge" && timing !== "post_commit") continue;
+    if (module === "review_map" || module === "rules_floor" || module === "full_inspector" || module === "postcommit_nudge" && timing !== "post_commit") continue;
     const effect = assistance.modules.includes(module) && assistance.effects.some((entry) => entry.moduleId === module && entry.timing === timing && entry.subSurface === undefined);
     if (declared.initiative !== "proactive" && !requested.has(module)) continue;
-    if (!effect) { suppressions.push({ module, reason: "not_effective" }); continue; }
+    if (!effect || !moduleDeclaration(module).ceilings.roles.includes(input.role)
+      || !moduleDeclaration(module).ceilings.sessions.includes(input.session)) { suppressions.push({ module, reason: "not_effective" }); continue; }
     if (module === "sight_on_request" && subject.square === undefined) { suppressions.push({ module, reason: "no_square" }); continue; }
     selected.push({ module, declared });
   }
@@ -709,18 +738,34 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
   // Other consumers retain their explicit source-migration obligations; a successful local
   // preflight is not a filtered whole-manifest execution image or a provider satisfaction claim.
   for (const { module } of selected) {
-    if (module === "compare_coach") compileEvidenceConsumerExecutionV2(PRIMARY_EVIDENCE_MANIFEST, moduleDeclaration(module).consumer!);
+    if (module === "compare_coach" || module === "postcommit_nudge") compileEvidenceConsumerExecutionV2(PRIMARY_EVIDENCE_MANIFEST, moduleDeclaration(module).consumer!);
     if (module === "sight_on_request" || module === "threat_radar" || module === "blunder_prevention" || module === "structure_nudge" || module === "theory_breadcrumb") {
-      compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: `module.${module}`, version: 1 });
+      compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, moduleDeclaration(module).consumer!);
     }
   }
+  return { run, assistance, request, decision, subject, timing, suppressions, selected };
+}
+
+/** Complete admission before service-owned cooperative source preparation; no sources are read here. */
+export function moduleShapeScanSubjects(input: ModuleQueryInput): readonly Readonly<{ id: string; fen: string }>[] {
+  const { run, subject, selected } = preflightModuleQuery(input), nodes = new Map<string, Readonly<{ id: string; fen: string }>>();
+  for (const { module } of selected) {
+    if (module !== "structure_nudge" && module !== "theory_breadcrumb") continue;
+    for (const point of [subject, ...ancestorSubjects(run, module, subject)]) nodes.set(point.node.id, Object.freeze({ id: point.node.id, fen: point.fen }));
+  }
+  return Object.freeze([...nodes.values()]);
+}
+
+export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQueryPage; readonly items: ReadonlyMap<ModuleId, readonly PresentedEvidenceItem[]> } {
+  const { run, assistance, request, decision, subject, timing, suppressions, selected } = preflightModuleQuery(input);
+  const packets: ModuleQueryPacket[] = [], itemsByModule = new Map<ModuleId, readonly PresentedEvidenceItem[]>();
   for (const { module, declared } of selected) {
     const results = module === "compare_coach" ? compareSources(run, subject, input.sources?.comparison, { assistance, role: input.role, timing })
       : sources(module, subject, run, input.sources ?? {});
     if (module === "compare_coach" && results.some((result) => result.kind === "unavailable" && result.reason === "no_second_attempt")) { suppressions.push({ module, reason: "no_second_attempt" }); continue; }
     const available = results.flatMap((result) => result.kind === "available" ? result.items : []);
     const scoped = module === "sight_on_request" ? available.filter((item) => sightScope(item).includes(subject.square!)) : available;
-    const evidence = scoped.filter(witnessed);
+    const evidence = scoped.filter(item => moduleWitnessed(module, item));
     const packet = compileModulePacket({ module, timing, role: input.role, session: input.session, evidence, ancestorFacts: ancestorFacts(run, module, subject, input), recorder: input.recorder ?? NULL_REDUCTION_QUALITY_RECORDER });
     if (packet.kind === "refused") { suppressions.push({ module, reason: "not_effective" }); continue; }
     const survivors = packet.facts.map((fact) => fact.evidence);
@@ -730,9 +775,13 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
     itemsByModule.set(module, fitted.items);
     const receipt = serializePresentedEvidence(fitted.items);
     const unavailable = results.flatMap((result) => result.kind === "unavailable" ? [Object.freeze({ projection: result.projection, reason: result.reason, ...(result.nodeId === undefined ? {} : { nodeId: result.nodeId }) })] : []);
-    const empty: ModuleEmptyState | null = module === "full_inspector"
-      ? Object.freeze({ kind: "family_partitioned", families: inspectorFamilies(results, fitted.items) })
-      : fitted.items.length === 0 ? EMPTY_STATE(module) : null;
+    const empty: ModuleEmptyState | null = fitted.items.length === 0 ? module === "threat_radar" && unavailable.length > 0
+        ? Object.freeze({ kind: "unavailable_source", sentence: "Some threat checks could not be completed for this position." })
+        : (module === "structure_nudge" || module === "theory_breadcrumb") && unavailable.some(source => source.projection === "theory.shapes.firing@3")
+          ? Object.freeze({ kind: "unavailable_source", sentence: "Named-pattern recognition could not be checked for this position." })
+          : (module === "structure_nudge" || module === "theory_breadcrumb") && fitted.budget.dropped.length > 0
+            ? Object.freeze({ kind: "stated_absence", sentence: "More detail is available than fits in this compact hint." })
+            : EMPTY_STATE(module) : null;
     const disclosure = disclosureReceipt({
       runId: run.id, decisionDigest: decision.digest,
       subject: { nodeId: subject.node.id, selectedSquare: request.timing === "pre_commit" ? request.selectedSquare ?? null : null, candidateUci: request.timing === "at_commit" ? request.candidateUci : null, generation: request.timing === "at_commit" ? request.generation : null },
@@ -756,9 +805,7 @@ export function queryModules(input: ModuleQueryInput): { readonly page: ModuleQu
 
 /** The exact projections this operation acquires for one module (`MODULE_PAIR_EXECUTION`'s source image). */
 export function moduleQueryProjections(module: ModuleId): readonly VersionedEvidenceId[] {
-  const accepted = ((MODULE_CONSUMER_ACCEPTS as Readonly<Record<string, readonly VersionedEvidenceId[]>>)[module] ?? []);
-  const acquired = new Set(moduleQuerySourceRoutes(module, accepted.map((ref) => `${ref.id}@${ref.version}`)));
-  return Object.freeze(accepted.filter((ref) => acquired.has(`${ref.id}@${ref.version}`)));
+  return MODULE_OPERATIONS.find(operation => operation.module === module && operation.operation === MODULE_QUERY_OPERATION)?.projections ?? Object.freeze([]);
 }
 export { MODULE_QUERY_OPERATION };
 

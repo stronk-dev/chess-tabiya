@@ -1,5 +1,5 @@
-import type { CorpusPage, CorpusPopulation, HumanSplitPage } from "./api.js";
-import { parseSelectionCandidates, parseSelectionEngine } from "./opponent-selection-response.js";
+import type { CorpusPage, CorpusPopulation } from "./api.js";
+export { parseHumanSplitPage } from "./human-split-response.js";
 import { corpusEvidence } from "./inspector-evidence.js";
 
 type RecordValue = Readonly<Record<string, unknown>>;
@@ -63,12 +63,6 @@ function population(value: unknown, label: string): CorpusPopulation {
 }
 
 
-export function parseHumanSplitPage(value: unknown, requestedNodeId: string): HumanSplitPage {
-  const item = record(value, "human-split"); exact(item, ["nodeId", "engine", "targetElo", "candidates"], "human-split");
-  const nodeId = nonempty(item.nodeId, "human-split/nodeId"); if (nodeId !== requestedNodeId) throw new TypeError("human-split response does not match the requested node");
-  parseSelectionEngine(item.engine, "human-split/engine"); if (item.targetElo !== null) integer(item.targetElo, "human-split/targetElo", 0); parseSelectionCandidates(item.candidates, "human-split/candidates");
-  return deepFreeze(structuredClone(item)) as unknown as HumanSplitPage;
-}
 
 export function parseCorpusPage(value: unknown, requestedNodeId: string): CorpusPage {
   const item = record(value, "corpus"); exact(item, ["nodeId", "population", "status", "presentation", "committedMoveSan", "committedMoveListed"], "corpus");

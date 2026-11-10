@@ -12,12 +12,13 @@ import { parseUci } from "chessops/util";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { exactLegalMoves, exactMoveIdentity } from "./legal-moves.js";
-import { digestProviderCommands } from "./provider-digest.js";
+import { digestProviderCommands, type EngineOptionImage } from "./provider-digest.js";
 import {
   EXPLORER_RATING_BUCKETS,
   EXPLORER_SPEEDS,
   type ExplorerPositionPageRequest,
   type MaiaPolicyPageRequest,
+  type MaiaInferenceTaskRequest,
   type ProviderOperationId,
   type ProviderOperationRequestMap,
   type ProviderRequestedIdentityMap,
@@ -223,7 +224,7 @@ export function playIdentity(fen: string, uci: string): string {
   return canonicalFen(position);
 }
 
-export function normalizeMaiaPolicyPageRequest(raw: MaiaPolicyPageRequest): ProviderRequestedIdentityMap["maia.policy_page@1"] {
+function normalizeMaiaRequest(raw: MaiaPolicyPageRequest, widthBound: "legal" | "advertised"): ProviderRequestedIdentityMap["maia.policy_page@1"] {
   const record = exactKeys(raw, ["position", "requestedModel", "band", "temperature", "topP", "requestedWidth", "timeoutMs"], "maia.policy_page request");
   if (!isRecord(record.position)) invalid("position must be an object");
   const rawPosition = record.position as Readonly<Record<string, unknown>>;
@@ -258,7 +259,7 @@ export function normalizeMaiaPolicyPageRequest(raw: MaiaPolicyPageRequest): Prov
   if (!(topP > 0 && topP <= 1)) invalid("topP must lie in (0, 1]");
   const requestedWidth = positiveInteger(record.requestedWidth, "requestedWidth");
   const legal = exactLegalMoves(maiaReachedFen(position)).length;
-  if (requestedWidth > legal) invalid(`requestedWidth ${requestedWidth} exceeds the ${legal} legal moves`);
+  if (widthBound === "legal" && requestedWidth > legal) invalid(`requestedWidth ${requestedWidth} exceeds the ${legal} legal moves`);
   const request: MaiaPolicyPageRequest = Object.freeze({
     position,
     requestedModel: engineIdentity(record.requestedModel, "requestedModel"),
@@ -269,6 +270,18 @@ export function normalizeMaiaPolicyPageRequest(raw: MaiaPolicyPageRequest): Prov
     timeoutMs: positiveInteger(record.timeoutMs, "timeoutMs", MAX_PROVIDER_TIMEOUT_MS),
   });
   return Object.freeze({ request });
+}
+
+export function normalizeMaiaPolicyPageRequest(raw: MaiaPolicyPageRequest): ProviderRequestedIdentityMap["maia.policy_page@1"] {
+  return normalizeMaiaRequest(raw, "legal");
+}
+
+export function normalizeMaiaInferenceTaskRequest(raw: MaiaInferenceTaskRequest): ProviderRequestedIdentityMap["maia.inference_task@1"] {
+  const record = exactKeys(raw, ["sampleRequestId", "position", "requestedModel", "band", "temperature", "topP", "requestedWidth", "timeoutMs"], "maia.inference_task request");
+  if (typeof record.sampleRequestId !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(record.sampleRequestId)) invalid("sampleRequestId must be a canonical UUID");
+  const { sampleRequestId: _sample, ...operands } = record;
+  const { request } = normalizeMaiaRequest(operands as unknown as MaiaPolicyPageRequest, "advertised");
+  return Object.freeze({ request: Object.freeze({ ...request, sampleRequestId: record.sampleRequestId as string }) });
 }
 
 /** Descriptor-owned, literal ordered Maia command image (§6). Decimal spellings are RFC 8785. */
@@ -284,6 +297,19 @@ export function maiaCommandImage(request: MaiaPolicyPageRequest): readonly strin
     position,
     "go",
   ]);
+}
+
+/** Same captured UCI defaults as the existing selector, never caller overrides. */
+export function maiaInferenceTaskCommandImage(request: MaiaInferenceTaskRequest, optionImage: EngineOptionImage): readonly string[] {
+  const defaults = ["SelfElo", "OppoElo"].flatMap(name => {
+    const rows = optionImage.advertisedUciOptionLines.filter(line => line.startsWith(`option name ${name} type `));
+    if (rows.length > 1) return invalid(`duplicate advertised ${name} option`);
+    const value = rows[0]?.match(/\sdefault (.*?)(?: min .*| max .*| var .*|$)/u)?.[1];
+    if (value === undefined) return [];
+    text(value, `${name} default`);
+    return [`setoption name ${name} value ${value}`];
+  });
+  return Object.freeze([...defaults, ...maiaCommandImage(request)]);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -404,6 +430,7 @@ export const PROVIDER_REQUEST_NORMALIZERS: Normalizers = Object.freeze({
   "stockfish.position_evaluation@1": normalizeStockfishPositionEvaluationRequest,
   "stockfish.principal_variation@1": normalizeStockfishPrincipalVariationRequest,
   "maia.policy_page@1": normalizeMaiaPolicyPageRequest,
+  "maia.inference_task@1": normalizeMaiaInferenceTaskRequest,
   "syzygy.position@1": normalizeSyzygyPositionRequest,
   "lichess_explorer.position_page@1": normalizeExplorerPositionPageRequest,
 });

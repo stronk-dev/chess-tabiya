@@ -6,13 +6,11 @@
 // the ordered component digests it names. Extra fields, unknown modules and digest drift refuse.
 
 import {
-  INSPECTOR_FAMILY_IDS,
   MODULE_IDS,
   MODULE_CURRENT_IMAGE,
   MODULE_QUERY_PROTOCOL,
   moduleDisclosureDigest,
   parsePresentationReceipt,
-  type InspectorFamilyState,
   type ModuleBudgetReceipt,
   type ModuleDisclosureReceipt,
   type ModuleEmptyState,
@@ -73,20 +71,6 @@ function parseEmpty(value: unknown): ModuleEmptyState | null {
     if (typeof item.sentence !== "string" || item.sentence.trim() === "") fail("empty sentence");
     return Object.freeze({ kind: item.kind, sentence: item.sentence as string });
   }
-  if (item.kind === "family_partitioned") {
-    keys(item, ["kind", "families"], "empty");
-    if (!Array.isArray(item.families)) fail("families");
-    const families = (item.families as unknown[]).map((entry): InspectorFamilyState => {
-      const family = record(entry, "family");
-      if (!(INSPECTOR_FAMILY_IDS as readonly unknown[]).includes(family.family)) fail("unknown inspector family");
-      const id = family.family as InspectorFamilyState["family"];
-      if (family.kind === "available") { keys(family, ["family", "kind", "factCount"], "family"); return Object.freeze({ family: id, kind: "available", factCount: natural(family.factCount, "factCount") }); }
-      if (family.kind === "unavailable") { keys(family, ["family", "kind", "reason"], "family"); return Object.freeze({ family: id, kind: "unavailable", reason: typeof family.reason === "string" ? family.reason : fail("family reason") }); }
-      if (family.kind === "no_witness" || family.kind === "not_requested") { keys(family, ["family", "kind"], "family"); return Object.freeze({ family: id, kind: family.kind }); }
-      return fail("family kind");
-    });
-    return Object.freeze({ kind: "family_partitioned", families: Object.freeze(families) });
-  }
   return fail("empty kind");
 }
 
@@ -94,11 +78,19 @@ function parsePacket(value: unknown, page: { readonly runId: string; readonly ti
   const packet = record(value, "packet");
   keys(packet, ["module", "timing", "initiative", "receipt", "budget", "noveltyAbstained", "empty", "unavailable", "disclosure"], "packet");
   const module = moduleId(packet.module);
+  if (module === "full_inspector") return fail("Full Inspector requires the source-page protocol");
   if (packet.timing !== page.timing) fail("packet timing differs from the page");
   if (packet.initiative !== "proactive" && packet.initiative !== "on_request" && packet.initiative !== "explicit_mode") fail("initiative");
   const items = parsePresentationReceipt(packet.receipt);
   const consumer = MODULE_CURRENT_IMAGE.find(row => row.moduleId === module)?.consumer;
   if (items.some(item => item.adapter.consumer.id !== consumer?.id || item.adapter.consumer.version !== consumer.version)) fail("receipt is not from this module's current consumer");
+  if (module === "structure_nudge" || module === "theory_breadcrumb") for (const item of items) {
+    if (item.adapter.projection.id !== "theory.shapes.firing" || item.adapter.projection.version !== 3) continue;
+    const component = item.component;
+    if (component.id !== "fact_statement" || component.operand.rendererId !== "inspector.registered_shape_firing@2") return fail("shape point lacks its exact registered statement");
+    const point = component.operand.operands;
+    if (point.firstNodeId !== page.subjectNodeId || point.lastNodeId !== page.subjectNodeId || point.openEnded !== true) fail("shape point answers a different module subject");
+  }
   const disclosure = record(packet.disclosure, "disclosure") as unknown as ModuleDisclosureReceipt;
   const { digest, ...body } = disclosure;
   if (moduleDisclosureDigest(body) !== digest) fail("disclosure digest mismatch");
@@ -115,7 +107,7 @@ function parsePacket(value: unknown, page: { readonly runId: string; readonly ti
   });
   if (typeof packet.noveltyAbstained !== "boolean") fail("noveltyAbstained");
   const empty = parseEmpty(packet.empty);
-  if ((empty === null) !== (items.length > 0) && module !== "full_inspector") fail("empty state must exist exactly when nothing was delivered");
+  if ((empty === null) !== (items.length > 0)) fail("empty state must exist exactly when nothing was delivered");
   return Object.freeze({
     module, timing: page.timing, initiative: packet.initiative as ParsedModulePacket["initiative"], items, budget: packet.budget as ModuleBudgetReceipt,
     noveltyAbstained: packet.noveltyAbstained as boolean, empty, unavailable: Object.freeze(unavailable), disclosure,

@@ -4,10 +4,11 @@
  */
 import { exactLegalMoves } from "./legal-moves.js";
 import { digestEngineBinary, digestEngineContainer, digestEngineOptionImage, providerUtf8 } from "./provider-digest.js";
-import { maiaCommandImage, normalizeProviderRequest } from "./provider-requests.js";
+import { maiaCommandImage, maiaInferenceTaskCommandImage, normalizeProviderRequest } from "./provider-requests.js";
 import type {
   ExplorerPositionPageRequest,
   MaiaPolicyPageRequest,
+  MaiaInferenceTaskRequest,
   ProviderEndpointMap,
   ProviderExecutionCapture,
   ProviderRequestedIdentityMap,
@@ -103,6 +104,16 @@ export function maiaRequest(position: MaiaPolicyPageRequest["position"], overrid
 
 export function maiaCapture(identity: ProviderRequestedIdentityMap["maia.policy_page@1"], received: readonly string[], generation = 1): ProviderExecutionCapture<"maia.policy_page@1"> {
   return { endpoint: MAIA_ENDPOINT, actualIdentity: maiaActual(), generation, contentEncoding: "uci-utf8", transport: null, responseBytes: transcript(maiaCommandImage(identity.request), received) };
+}
+
+export function maiaTaskRequest(overrides: Partial<MaiaInferenceTaskRequest> = {}): MaiaInferenceTaskRequest {
+  return { ...maiaRequest({ kind: "exact_fen", fen: START_FEN }), sampleRequestId: "00000000-0000-4000-8000-000000000001", ...overrides };
+}
+
+export function maiaTaskCapture(identity: ProviderRequestedIdentityMap["maia.inference_task@1"], received: readonly string[], generation = 1): ProviderExecutionCapture<"maia.inference_task@1"> {
+  const optionImage = { advertisedUciOptionLines: ["option name SelfElo type spin default 1500 min 0 max 5000", "option name OppoElo type spin default 1500 min 0 max 5000"], appliedSetoptionCommands: [] };
+  return { endpoint: MAIA_ENDPOINT, actualIdentity: { ...maiaActual(), optionImage, optionImageDigest: digestEngineOptionImage(optionImage) }, generation,
+    contentEncoding: "uci-utf8", transport: null, responseBytes: transcript(maiaInferenceTaskCommandImage(identity.request, optionImage), received) };
 }
 
 export function syzygyRequest(fen: string): SyzygyPositionRequest {

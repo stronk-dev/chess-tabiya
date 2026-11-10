@@ -6,12 +6,15 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_DECLARATIONS } from "../packages/runtime/src/evidence-catalog.js";
+import { compileCandidatePopulation, CANDIDATE_WIDE_SCOPE } from "../packages/runtime/src/candidate-population.js";
+import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "../packages/runtime/src/semantic-subject-types.js";
 import { evidenceDigest, evidenceValueReceipt, type VersionedEvidenceId } from "../packages/runtime/src/evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS, semanticValidationImportClosure } from "../packages/runtime/src/semantic-validation-authorities.js";
 import { semanticPopulationReceiptId } from "../packages/runtime/src/semantic-validation-law.js";
-import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence, observationSubjectKind, semanticValidationPopulationOperation, type SemanticValidationObservation, type SemanticValidationOperationResult } from "../packages/runtime/src/semantic-validation-operations.js";
+import { SEMANTIC_VALIDATION_OPERATIONS, subjectOutcomesFromReceipt, observationEvidence, observationSubjectKind, semanticValidationPopulationOperation, type SemanticValidationObservation, type SemanticValidationOperationResult } from "../packages/runtime/src/semantic-validation-operations.js";
 import { executeSemanticValidationCase, semanticValidationSoleFactory, type SemanticCaseExecutionReceipt } from "../packages/runtime/src/semantic-validation-runner.js";
 import {
   SEMANTIC_VALIDATION_ARMS,
@@ -27,6 +30,7 @@ import {
   parseSemanticValidationSubject,
   semanticValidationRoots,
   semanticValidationSubjectKey,
+  semanticLegalSetDigest,
   type SemanticValidationArm,
   type SemanticValidationCell,
   type SemanticValidationCellOutcome,
@@ -35,6 +39,7 @@ import {
   type SemanticValidationReceiptDocument,
   type SemanticValidationRegistryRow,
   type SemanticValidationSubject,
+  type SemanticSubjectOutcomesInput,
 } from "../packages/runtime/src/semantic-validation.js";
 import { readSemanticValidationPopulation, type SemanticValidationPopulation } from "./semantic-validation-population.js";
 
@@ -81,35 +86,69 @@ function observationKey(observation: SemanticValidationObservation): { readonly 
   return { subject: `${observationSubjectKind(observation)}:${refKey(projection)}`, key: observation.kind === "event" ? observation.item.id : receipt.payloadDigest };
 }
 
-async function runCensus(operation: SemanticValidationOperationId, population: SemanticValidationPopulation): Promise<{ readonly projection: string; readonly inputSha: string; readonly invocations: number; readonly observations: ReadonlyMap<string, string[]>; readonly unavailable: readonly string[]; readonly abstained: ReadonlyMap<string, string[]> }> {
-  const declaration = SEMANTIC_VALIDATION_OPERATIONS[operation] as { readonly invoke: (input: unknown) => SemanticValidationOperationResult | Promise<SemanticValidationOperationResult>; readonly population: string };
-  const items: readonly { readonly identity: string; readonly input: unknown }[] =
-    declaration.population === "sampled_edges" ? population.sampledEdges.map((row) => ({ identity: `${row.site}#${row.ply}`, input: row.edge }))
-    : declaration.population === "recorded_paths" ? population.recordedPaths.map((row) => ({ identity: row.site, input: row.path }))
-    : [];
-  if (items.length === 0) throw new Error(`SEMANTIC_VALIDATION_POPULATION_INCOMPLETE: ${operation} has no compatible population`);
-  const inputSha = population.projectionDigests[declaration.population as keyof SemanticValidationPopulation["projectionDigests"]];
-  const observations = new Map<string, string[]>();
-  const unavailable: string[] = [];
-  const abstained = new Map<string, string[]>();
-  for (const item of items) {
-    const result = await declaration.invoke(item.input);
-    if (result.kind === "unavailable") {
-      unavailable.push(`${item.identity}:${result.reason}`);
-      continue;
-    }
-    for (const abstention of result.abstentions) {
-      const subject = `event:${refKey(abstention.projection)}`;
-      abstained.set(subject, [...(abstained.get(subject) ?? []), `${item.identity}:${abstention.reason}`]);
-    }
-    for (const observation of result.observations) {
-      const { subject, key } = observationKey(observation);
-      const list = observations.get(subject) ?? [];
-      list.push(`${item.identity}:${key}`);
-      observations.set(subject, list);
+interface CensusResult {
+  readonly projection: string;
+  readonly inputSha: string;
+  invocations: number;
+  readonly observations: Map<string, string[]>;
+  readonly unavailable: string[];
+  readonly abstained: Map<string, string[]>;
+}
+function addCensusResult(run: CensusResult, identity: string, result: SemanticValidationOperationResult): void {
+  run.invocations++;
+  if (result.kind === "unavailable") { run.unavailable.push(`${identity}:${result.reason}`); return; }
+  for (const abstention of result.abstentions) {
+    const subject = `event:${refKey(abstention.projection)}`;
+    run.abstained.set(subject, [...(run.abstained.get(subject) ?? []), `${identity}:${abstention.reason}`]);
+  }
+  for (const observation of result.observations) {
+    const { subject, key } = observationKey(observation), list = run.observations.get(subject) ?? [];
+    list.push(`${identity}:${key}`); run.observations.set(subject, list);
+  }
+}
+
+/** Receiving check: deleting a family or reusing another family's output is not a zero census. */
+export function assertSubjectCensusFamilies(runs: ReadonlyMap<SubjectOutcomeFamily, CensusResult>, population: SemanticValidationPopulation): void {
+  if (runs.size !== SUBJECT_OUTCOME_FAMILIES.length || SUBJECT_OUTCOME_FAMILIES.some(family => {
+    const run = runs.get(family);
+    return run === undefined || run.projection !== `subject_outcomes:${family}` || run.invocations !== population.sampledEdges.length
+      || run.inputSha !== evidenceDigest({ projection: "subject_outcomes", family, sampledEdges: population.projectionDigests.sampled_edges })
+      || [...run.observations.keys()].some(subject => subject !== `event:derived.semantic_avoidance.${family}@2`);
+  })) throw new Error("SEMANTIC_VALIDATION_POPULATION_INCOMPLETE: exact thirteen family censuses required");
+}
+
+/** One genuine root at a time, reused across all13 families and then released. No retained root cache. */
+export function runSubjectCensuses(population: SemanticValidationPopulation): ReadonlyMap<SubjectOutcomeFamily, CensusResult> {
+  if (population.sampledEdges.length === 0) throw new Error("SEMANTIC_VALIDATION_POPULATION_INCOMPLETE: no subject samples");
+  const runs = new Map(SUBJECT_OUTCOME_FAMILIES.map(family => [family, { projection: `subject_outcomes:${family}`,
+    inputSha: evidenceDigest({ projection: "subject_outcomes", family, sampledEdges: population.projectionDigests.sampled_edges }),
+    invocations: 0, observations: new Map<string, string[]>(), unavailable: [], abstained: new Map<string, string[]>() } satisfies CensusResult]));
+  for (const row of population.sampledEdges) {
+    const compiled = compileCandidatePopulation({ beforeFen: row.edge.beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+    if (compiled.kind !== "ready") throw new Error(`Subject census root failed: ${compiled.error.code}`);
+    const receipt = compiled.receipt, alternatives = receipt.packet.candidates.map(candidate => ({ kind: "edge" as const,
+      beforeFen: receipt.packet.beforeFen, moveUci: candidate.moveUci, afterFen: candidate.afterFen }));
+    for (const family of SUBJECT_OUTCOME_FAMILIES) {
+      const input: SemanticSubjectOutcomesInput = { kind: "subject_outcomes", family, population: { kind: "complete_alternatives", rootFen: receipt.packet.beforeFen,
+        played: row.edge, alternatives, legalSetDigest: semanticLegalSetDigest(receipt.packet.beforeFen, alternatives.map(edge => edge.moveUci)) } };
+      addCensusResult(runs.get(family)!, `${row.site}#${row.ply}`, subjectOutcomesFromReceipt(input, receipt));
     }
   }
-  return { projection: declaration.population, inputSha, invocations: items.length, observations, unavailable, abstained };
+  assertSubjectCensusFamilies(runs, population);
+  return runs;
+}
+
+async function runCensus(operation: SemanticValidationOperationId, population: SemanticValidationPopulation): Promise<CensusResult> {
+  const declaration = SEMANTIC_VALIDATION_OPERATIONS[operation] as { readonly invoke: (input: unknown) => SemanticValidationOperationResult | Promise<SemanticValidationOperationResult>; readonly population: string };
+  const items: readonly { readonly identity: string; readonly input: unknown }[] =
+    declaration.population === "sampled_edges" ? population.sampledEdges.map(row => ({ identity: `${row.site}#${row.ply}`, input: row.edge }))
+    : declaration.population === "recorded_paths" ? population.recordedPaths.map(row => ({ identity: row.site, input: row.path })) : [];
+  if (items.length === 0) throw new Error(`SEMANTIC_VALIDATION_POPULATION_INCOMPLETE: ${operation} has no compatible population`);
+  const run: CensusResult = { projection: declaration.population,
+    inputSha: population.projectionDigests[declaration.population as keyof SemanticValidationPopulation["projectionDigests"]], invocations: 0,
+    observations: new Map(), unavailable: [], abstained: new Map() };
+  for (const item of items) addCensusResult(run, item.identity, await declaration.invoke(item.input));
+  return run;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -183,15 +222,26 @@ export async function buildSemanticValidationReceipt(): Promise<{ readonly docum
   const operations = operationDigests();
   const implementation = new Map(operations.map((row) => [row.id, row.implementationDigest]));
   const populationSubjects = profiles.filter((profile) => profile.importedPopulation.disposition === "present");
-  const census = new Map<SemanticValidationOperationId, Awaited<ReturnType<typeof runCensus>>>();
+  const census = new Map<string, Awaited<ReturnType<typeof runCensus>>>();
+  let subjectRuns: ReadonlyMap<SubjectOutcomeFamily, CensusResult> | undefined;
+  const familyFor = (subject: SemanticValidationSubject): SubjectOutcomeFamily | undefined => subject.projection.version === 2 ? SUBJECT_OUTCOME_FAMILIES.find(family => subject.projection.id === `derived.semantic_avoidance.${family}`) : undefined;
+  const censusKey = (operation: SemanticValidationOperationId, subject: SemanticValidationSubject) => `${operation}@1:${familyFor(subject) ?? ""}`;
   for (const profile of populationSubjects) {
     const operation = semanticValidationPopulationOperation(profile.subject);
     if (operation === undefined) throw new Error(`SEMANTIC_VALIDATION_POPULATION_INCOMPLETE: ${semanticValidationSubjectKey(profile.subject)} names a population receipt but has no population operation`);
-    if (!census.has(operation)) census.set(operation, await runCensus(operation, population));
+    const key = censusKey(operation, profile.subject);
+    if (!census.has(key)) {
+      if (operation === "runtime.semantic.subject_outcomes") {
+        subjectRuns ??= runSubjectCensuses(population);
+        const family = familyFor(profile.subject);
+        if (family === undefined) throw new Error("Subject population has no exact family");
+        census.set(key, subjectRuns.get(family)!);
+      } else census.set(key, await runCensus(operation, population));
+    }
   }
   const populations: PopulationRow[] = populationSubjects.map((profile) => {
     const operation = semanticValidationPopulationOperation(profile.subject)!;
-    const run = census.get(operation)!;
+    const run = census.get(censusKey(operation, profile.subject))!;
     const key = semanticValidationSubjectKey(profile.subject);
     const observations = [...(run.observations.get(key) ?? [])].sort();
     const unavailable = [...run.unavailable, ...(run.abstained.get(key) ?? [])].sort();
@@ -277,6 +327,7 @@ export async function buildSemanticValidationReceipt(): Promise<{ readonly docum
   return { document, text, json };
 }
 
+if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
 const mode = process.argv.includes("--write") ? "write" : "check";
 const { document, text, json } = await buildSemanticValidationReceipt();
 const passed = document.verdicts.filter((row) => row.verdict === "passed").length;
@@ -293,4 +344,5 @@ if (mode === "write") {
     process.exit(1);
   }
   console.log(`${summary}\n${GENERATED_JSON} and ${GENERATED} are current`);
+}
 }

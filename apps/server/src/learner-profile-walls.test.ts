@@ -20,7 +20,7 @@ function sources(directory: string): readonly string[] {
 describe("the profile is a leaf: no grade, hint, voice, feedback or verdict path reads it", () => {
   it("keeps every chess-speaking module free of style and skill state", () => {
     const speaking = [
-      "packages/runtime/src/grade.ts", "packages/runtime/src/grade-reading.ts", "packages/runtime/src/voice.ts",
+      "packages/runtime/src/grade.ts", "packages/runtime/src/recorded-grade-source.ts", "packages/runtime/src/voice.ts",
       "packages/runtime/src/feedback.ts", "packages/runtime/src/postcommit-nudge.ts", "packages/runtime/src/review-map.ts",
       "apps/server/src/guidance.ts", "apps/server/src/external-voice.ts", "apps/server/src/feedback-policy.ts",
       "apps/server/src/authored-feedback.ts", "apps/server/src/opponent-selector.ts", "apps/server/src/service.ts",

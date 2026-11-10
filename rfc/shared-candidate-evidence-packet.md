@@ -1,5 +1,16 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
+**D4167 snapshot/advance amendment §3.1c independently accepted for bounded implementation,
+2026-11-09.** Both authorized read-only source/meaning reviews find no buildability blocker.
+Decision: planning/learner-modules/compiler2-independent-review-2026-11-02.md. Bounded code/delivery is now verified locally:389actual source/API/DOM controls,15173software/539,
+7performance/build/source11 pass; content retains62prior headings. Parent lifecycle and all wider
+D4167/D4170, qualification/native/content/release duties stay unchanged.
+
+**2026-11-09 D4167 amendment independently accepted for bounded implementation:** §3.1b specifies seven selected-edge
+structural source operations/readouts jointly with the other two parent contracts. Both read-only source/meaning reviewers accept the repaired concrete clauses; bounded implementation is now verified locally (14966software/537,7performance/build/source11);
+content/native remain held. Decision: planning/learner-modules/compiler2-independent-review-2026-11-02.md. Complete
+snapshots/advance, ordinary modules, shared-event/avoidance/bot migration remain owed.
+
 **2026-10-15 joint amendment acceptance:** independent review accepts §3.1a's five-source
 current compiler2/availability migration with the coordinated module image. Earlier unaccepted
 labels for that clause are history; actual collector/packet/selection/bot/Hint migration remains.
@@ -741,6 +752,208 @@ The complete permitted relation is literal: wide may project to wide/events/read
 project only to events; readings may project only to readings. A narrow receipt has discarded the
 other family and cannot manufacture it by projection. The generic type and runtime relation in
 §3.1 enforce the same table independently. Criterion 4.
+
+#### §3.1b D4167 — selected-edge structural source operation (independently accepted 2026-11-09)
+
+Research gate: `design/research/module-evidence-assembly.md` §D4167. This clause specifies the
+missing selected-edge operation for seven already implemented source projections, coordinated
+with module-registration§4.11f and evidence-presentation§3.10d. Parent implementing status does
+not accept this amendment. It changes neither the sole complete candidate compiler nor its
+localSemanticEventClosure during this stage. Those event/avoidance cutovers remain D4167 work.
+
+Use the existing InspectorLocalSourceOwner's original authorized selected incoming edge; callers
+supply no FEN, source value, permission, sign, payload or collector list. The source operation
+accepts one closed exact route from the following table and acquires only its necessary inputs.
+A small internal source-composition helper may be shared by later accepted operations; it is not
+a new registry, public endpoint, cache or authority. Preserve original sealed values and receipt
+input order/multiplicity. Never reconstruct a source from serialized payload or use a sibling,
+newest leaf, counterfactual child or Nudge-filtered population.
+
+| Exact requested route | Original factory input construction |
+|---|---|
+| rules.structural.event.king_opposition@2 | exact before/after legal_moves@1 at the selected edge's canonical positions → corresponding king_opposition@3 snapshots; invoke event@2 with `{before,moveUci,after}` |
+| rules.structural.event.backward_pawn@2 | exact before/after legal_moves@1 → corresponding backward_pawn@3 snapshots; same ordered event input |
+| derived.structural.event.pawn_file_group@1 | exact before/after pawn_connectivity@1 → corresponding pawn_file_group@1 snapshots; same ordered event input |
+| rules.transition.event.slider_ray@2 | original selected `{beforeFen,moveUci,afterFen}` directly; factory owns legal/physical root mapping |
+| derived.activity.event.file_state@1 | exact before/after pawn_connectivity@1 → corresponding file_state@1 snapshots; same ordered event input |
+| derived.activity.event.file_access_revealed@1 | acquire the preceding full file-state event population once, then invoke reveal factory once per ORIGINAL change object in order with `{change}`; flatten all results, preserving original ordinal order |
+| rules.structural.event.pawn_islands@2 | exact original before/after pawn_connectivity@1 and selected move; same ordered event input |
+
+The sole existing factories validate legal edge, current convention replacements and original
+sealed inputs before returning a complete available population. Unwrap actual availability; an
+unexpected unavailable result/failure is not `[]`, no_witness or a retry through @1. The source
+owner retains existing post-collection authorization/currentness/cancellation checks, including
+when output is empty. An incoming root is missing_context/no_incoming_edge and does no source
+work. A valid edge with no changed relations is no_witness. A relation with null before/after,
+zero counts or empty blocker lists is a real occurrence, never missing context or failure.
+
+Signs/subjects/cardinality are those already authored in foundation-source-identity§§3.1–3.6:
+king pair zero/one, exact pawn lineage zero/many, color/file groups zero/many, original physical
+piece/direction rays zero/many, file enums zero/eight, stationary heavy-piece reveals zero/many,
+and changed per-color island partitions zero/two. Do not map membership_changed to preserved,
+count_gained to gained or topology_changed to a count-only result. This source readout does not
+compile a semantic-event wrapper or grant independent semantic qualification.
+
+This stage provides real D3 reach only for these seven routes through selected Inspector demand.
+Eight non-style snapshots already have candidate-child reach; their complete selected readouts
+and backward legal-advance candidate consequence remain explicitly pending. Current candidate
+compiler version/source image, complete-alternative population, semantic selection/avoidance,
+Nudge, Review, Sight, bot scores/features and longitudinal projections remain under their named
+contracts. In particular target-bearing slider@1 required by current discovered-executed sources
+is a distinct unresolved derivation input, not a value that can be relabelled as physical-ray@2.
+No old/new compatibility pipeline is required; do not remove an actually consumed relation until
+its own exact replacement is specified and delivered.
+
+Acceptance: exercise every original table path, both colors and real selected/inherited/repeated-
+FEN edges; retain exact full FEN counters. Independently show original source input refs/order and
+whole resulting payloads, including all changed file events feeding reveal. Wrong/missing/copied/
+reordered/cross-position inputs refuse in the actual factory. No provider acquisition, engine,
+run append, event replay, whole candidate compilation, new worker/receipt/cache protocol or
+source-context fallback occurs. Source and normal delivery proof belong to §4.11f; source-only
+unit tests do not discharge the selected consumer.
+
+
+#### §3.1c D4167 — complete selected snapshots and actual-edge advance (independently accepted 2026-11-09)
+
+Research gate: module-evidence-assembly.md's 2026-11-09 snapshot/advance follow-up and the
+23-source projection-plan.json. This amendment is coordinated with module-registration§4.11g
+and evidence-presentation§3.10e. Parent implementing status grants no acceptance of this clause.
+It completes another selected Inspector stage, not shared semantic-event or ordinary adoption.
+
+The existing Inspector local-source owner supplies its original granted selected position or
+incoming edge. The request adds no FEN, move, source, callback, permission or collector parameter.
+Append these eight position routes in this order, acquiring only the demanded dependency chain:
+
+| Exact route | Literal sole-factory composition |
+|---|---|
+| rules.structural.reading.king_opposition@3 | selected legal_moves@1 → `{position}` |
+| rules.structural.reading.backward_pawn@3 | selected legal_moves@1 → `{position}` |
+| derived.structural.reading.pawn_file_group@1 | selected pawn_connectivity@1 → `{source}` |
+| derived.activity.reading.file_state@1 | selected pawn_connectivity@1 → `{source}` |
+| derived.square.reading.future_file_challenge@1 | selected legal_moves@1 → `{position}` |
+| derived.square.reading.capture_migration_reach@1 | selected legal_moves@1 → `{position}` |
+| derived.structural.reading.outpost_candidate@1 | selected control@1 and ORIGINAL selected future_file_challenge@1 → `{control,future}` |
+| derived.structural.reading.occupied_outpost@1 | ORIGINAL selected outpost_candidate@1 → `{source}` |
+
+All eight return availability of ONE complete snapshot; successful empty/null member populations
+still yield that original value. Retain every domain member, field and original list order. Do not
+call candidateChildReadings or compile the whole candidate population to answer one request. A
+small internal demand-composition helper may share original dependencies within this invocation;
+no new cache, source issuer, receipt format, registry or provenance store is introduced.
+
+The ninth route is `derived.pawn.consequence.backward_pawn_legal_advance@1`, incoming_edge only.
+From the original BEFORE legal-position source obtain backward_pawn@3. Obtain the original
+selected physical destination from the validated actual edge, then invoke landing_captures@1
+with EXACT AFTER FEN and that destination. Invoke advance with `{source,moveUci,landing}`. Retain
+the complete landing-capture value, including non-pawn captures excluded from the reply subset.
+Root has missing_context/no_incoming_edge and zero source work. A valid nonqualifying selected
+move yields available[]/no_witness; it NEVER means no legal advance exists. A qualifying move
+can yield one occurrence with replies:[]; these are calculated immediate legal opposing-pawn
+captures, not observed replies, predictions, forced play or a claim that the advance is safe.
+Do not add an arbitrary candidate-move parameter or enumerate alternatives through this door.
+
+Unexpected availability failure or invalid authority is failed/source-unavailable, never empty
+or a fallback to an older route. In-check is NOT an abstention arm for the eight geometric/pseudo
+snapshots: none carries an inCheck operand. Do not invent one from legal-control unavailability.
+Read turn only mechanically from original FEN. Currentness, access, cancellation and retained
+owner readback execute even on empty results. Preserve complete counter-bearing positions,
+selected/inherited/historical/repeated occurrence identity and all original receipt inputs.
+
+Before a new detail factory slices any of these values, use the EXISTING genuine foundation
+input-membership guard inside evidence-factories.ts, in addition to sealed route validation.
+No copied or resealed payload can pass as the original source. A genuinely separately minted
+same-FEN source is not globally forbidden; substitution across an already captured sourceKey,
+occurrence or target is. The private grant/source owner remains responsible for those joins.
+
+Acceptance: both colors and real roots/inherited/repeated positions; genuine empty/null/domain
+and in-check cases; exact original dependency sharing; complete large challenge/migration
+populations; actual legal quiet advance/nonqualifying/capture/promotion/occupied-stop and pinned
+pseudo-controller with zero legal pawn replies. Prove full landing captures retain a non-pawn
+capture excluded from replies. Wrong/resealed/cross-position dependencies and wrong destination
+refuse. No provider/run mutation, candidate compiler, selector, source qualification, ordinary
+policy, style/bot or content/release promotion. The later canonical wrapper cutover must retain
+original ordered/repeated inputs already in FOUNDATION_VALUE_INPUTS; adding projection refs alone
+cannot satisfy compileSemanticEvidenceEvent's receipt/declaration joins.
+
+#### §3.1d D4167 — current foundation wrapper construction (independently accepted 2026-11-09)
+
+Value-authority§2.2b owns the exact seven source tuples, finite original-input reader, computed
+prerequisite declaration rule and complete camelCase edge/source-sign joins. This bounded stage
+registers constructor/research declarations only. It does not change localSemanticEventClosure,
+complete candidate packets or actual selectLocalSemanticEvidence acquisition. The existing
+Inspector demand sources remain the original source values; registration is not execution proof.
+
+The later canonical/candidate cutover remains D4167: compose required original before/after
+source chains once; derive revelation from the same original file-state-change objects published
+by that closure; retain actual sealed legal/snapshot instances in child readings. Seven independent
+Inspector-demand calls are not that shared closure. Preserve genuine empty/unavailable distinctions,
+full legal denominators and the distinct target-bearing discovery dependency. No new cache,
+collector callback, source issuer, ordinary policy or qualification is authorized here. Module
+admission is fenced by module-registration§4.11h; full reverse-consumer adoption remains owed.
+
+#### §3.1e Accepted D4167 — shared current-source operation and real Inspector execution (2026-11-09)
+
+Research gate: module-evidence-assembly.md's shared-operation/exhaustive-case section and
+`make foundation-shared-operation-research`. The disposable opposite-color comparison preserves
+complete factory payloads and same-object file changes with 31→20 calls; selected demand preserves
+its five required calls. It establishes composition feasibility, not production reach or
+qualification. Coordinate this clause with module-registration§4.11i and semantic-validation-
+authority§4.1b. Bounded independent acceptance is recorded in planning/learner-modules/compiler2-independent-review-2026-11-02.md; parent implementing status supplies no further acceptance.
+
+**One production operation.** In the existing foundation-edge-source owner, replace the raw
+seven-source export with `collectFoundationEdgeEvents(edge, closedSourceSubset)`, returning the
+original sealed SemanticEvidenceEvent objects. Use precisely the seven source refs already
+specified in value-authority§2.2b. The subset is nonempty, unique and contains only those refs;
+unknown, duplicate or empty demands refuse before producer work. Output follows the existing
+seven-ref order, independent of subset argument order, then each original factory's own order.
+Do not accept a callback, output payload, source value, renderer, flag that skips validation, or
+caller-picked ancestry. This is a package-internal operation, not an F1 issuer or public endpoint.
+
+Validate and canonicalize the complete legal edge using the existing rules authority; a small
+nonminting re-export through the sole internal value-route owner may expose the existing edge
+validator. Preserve full FEN counters and canonical castling identity. The operation uses one
+call-local dependency graph with immutable original before/after legal and connectivity readings,
+then only the requested opposition/backward/group/file snapshots. Each required node is acquired
+at most once in that call. A single selected source does not execute unrelated families. There
+is no process cache, new source/brand/store, wire receipt or arbitrary resolver.
+
+Use existing value routes and §2.2b's original-input reader/compiler. Emit each requested source
+population once. Compute file changes once, publish those ORIGINAL values when demanded, and
+derive revelation from those SAME objects even when revelation is requested before file state.
+Reuse original legal/connectivity inputs across dependent snapshot families. Never recollect an
+equal-FEN substitute, reseal data or infer source membership from public digests. Available empty
+still validates all required inputs; unexpected unavailable/failure never becomes `[]`, no_witness
+or a fallback to @1. No wrapper is fabricated for absence.
+
+**Actual application caller.** The current incoming-edge Inspector supplier uses this operation
+for exactly the seven routes and retains the wrappers through the source owner, as specified in
+module§4.11i. Remove `collectFoundationEdgeSource` after updating every actual source, test and
+disposable caller; do not retain a compatibility raw-array export. Historical research may retain
+its explicitly labelled old-composition model, but that model is not product code or application
+reach. The operation must actually supply retained source/anchor/sign identity and the displayed
+original values; invoking it then ignoring its result does not establish a caller.
+
+This operation does not alter localSemanticEventClosure, complete candidate packets, bot vectors,
+ordinary module admission/selection, assistance or authored leaves in this stage. It supplies the
+real current application execution needed by the validation wave. The later complete canonical/
+candidate and ordinary reverse closure remains D4167; physical slider2 still cannot satisfy the
+target-bearing discovery dependency. Source qualification cannot silently activate a consumer.
+
+**Required proof.** Genuine both-color nonempty and quiet cases cover all seven families. Assert
+original input identities within each invocation and exact payload/sign/anchor/population equality
+across independent calls. Assert source node invocation counts, same original file-state→reveal
+objects, demand isolation, source failure and invalid-edge refusal, singleton and all-seven modes,
+subset order permutations, duplicate/unknown/empty subset refusal, aliases and physical special
+moves. Across all579 existing sampled edges compare the complete batch event multiset against the
+union of actual Inspector singleton collections, retaining cardinality, multiplicity and complete
+values—not sets. Empty/empty matches do not supply a family's positive proof. Every family also
+needs a genuine nonempty application-owned/cookie REST/selected DOM case through the retained
+wrapper path. No ignored wrapper, test-only collector or old local-edge adapter counts as reach.
+
+All existing source topics, presentation pairs, payloads, bounded member/detail behavior, roles,
+permissions and budgets remain. Normal focused/types/software/performance/build/content/governance
+checks and independent source/meaning review are required. Preserve the red content hold and
+report failures; no whole-parent/capability/milestone/native/release completion follows.
 
 ### §4 — The legal-move authority, and the dialect that has already bitten twice
 
@@ -1984,3 +2197,16 @@ sections below now carry those bytes instead of leaving them to the implementer.
 proved the drafted Review engine point was run-node-bound and therefore could not identify a
 hypothetical candidate child; §8.3 now owns one generic node-free position evaluation, and the
 Review RFC derives its node point from that source plus the recorded run position.
+
+
+## Independently accepted coordinated successor — 2026-11-09
+
+`subject-safe-semantic-selection.md` owns the D1716/D1719 and D4167 canonical/candidate/avoidance
+cutover. BOTH independent source/control and consumer/meaning reviews accept its repaired finite
+source-first contract: original root/child graph, two private total reads, current42/compiler7,
+thirteen source-owned@2 outcomes, fourteen current-event compact ordinary pairs and unchanged
+historical case custody. Acceptance is recorded in the existing compiler2 review receipt; it
+comes from that review, not this parent's implementing state. Production images, source
+correctness/qualification and implementation gates remain owed. D4175 retains all26 ordinary
+avoidance pairs/delivery/cost; D4167 keeps every reverse consumer and actual bot Stage-B/D3662.
+No full adoption, content/native or release completion follows.

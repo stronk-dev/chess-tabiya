@@ -1,6 +1,6 @@
 # RFC: Maia task source for selection and Inspector
 
-- **Status:** draft — resolves the D3370/D3363 source-contract gaps; independent review required, not implementation authorization
+- **Status:** implementing — independent acceptance 2026-11-02; task/selector/node, modern human-split delivery and both Full Inspector supplier primitives bounded-reviewed; criterion2 real pinned-model direct-source traversal and both packaged operator CLI arms independently pass; complete Full Inspector2/WDL delivery and authenticated/native journeys remain
 - **Author:** codex
 - **Created:** 2026-10-09
 - **Design refs:** `design/03-product-breadth.md` (shared evidence foundation); `design/05-in-run-experience.md` (explicit Inspector, disclosure and grounded help); ADR-0005 (no manufactured chess truth)
@@ -11,8 +11,60 @@
 - **Supersedes / superseded by:** —
 
 ```tabiya-claims
-provider-protocol | members maia_inference_task_v1 | same-task sampled selection and reported candidate window; exact Inspector distribution without a fabricated played move
+none
 ```
+
+**Resource claim:** `maia_inference_task_v1` is now present in the local provider-protocol tuple
+and landed register as an uncommitted implementation checkpoint. It is no longer a future
+member reservation. Both node projections exist; whole RFC adoption, Full Inspector2/WDL delivery
+and authenticated/native journeys remain open.
+
+**Real-model checkpoint, 2026-11-02:** main and independent reviewer run the ordinary
+`make maia-task-native-check` against the same source-built offline linux/arm64 image. Both
+distinct complete histories reach the same full FEN, produce20 actual candidate rows/generation1/
+band1500 and pass exact captured commands/defaults/first-and-final terminal/source/consumer/
+receiver and retained-exact/no-extra-exchange checks. Same-draw normalized comparison isolates
+history from the UUID difference. Existing OCI byte/config/rootfs identity join is reused; no
+invented artifact identity. Criterion2's bounded direct-source traversal passes, not CLI D3969,
+authenticated native UI, bot calibration, deployment footprint or whole RFC. The isolated1.5GiB
+check cap is not a measured resource result. Review remains in the existing compiler2 record;
+compact runtime report is ignored under `.cache/verification/`, not committed raw research.
+
+**Full Inspector supplier checkpoint, 2026-11-02:** independently accepted §4.0a follows an
+actual pinned-model terminal probe: checkmate, stalemate and bare kings each return zero rows/
+null termination through one real exchange. The supplier correctly does no query for those
+inapplicable next-move positions. Both distribution/WDL sources now retain the same genuine
+final task, original sealed-node inputs and exact results under current SQLite/RunService
+grants. Independent101/four files covers both-colour historical/inherited paths, actual installed
+trajectory bands, all non-human run modes mapped to human-common, late pinned-artifact/access/
+disclosure/storage/cancellation/generation refusals and health-only null retention. Full normal
+verify passes449 source checks/sixteen files, then the same eight predecessor semantic assertions
+(2546 pass/2554 authority cases); no full clearance. Internal suppliers60/65 is not complete
+consumer/API/UI/WDL delivery. The source-only native check and broader RFC obligations remain
+separately identified rather than inferred from those fixture-based service controls.
+
+The extended ordinary native check subsequently passes through the actual ProviderRegistry
+lifecycle/health, shared selector/source and real SQLite/RunService grants. Main and independent
+repeat both retain20 reported rows and nonempty reported WDL for each learner colour at the
+historical e2e4 node while the saved tip is e2e4/e7e5. Each distribution/WDL pair retains the
+identical final task; WDL and retained reads cause no extra exchange, and saved play is unchanged.
+The first service request performs one exchange; the second colour legitimately reuses the
+same exact request without one. Required available/one-value/nonempty-WDL assertions prevent a
+vacuous absence-only positive. No cookie/HTTP/native UI, whole Full Inspector consumer, deadline,
+resource, calibration or packaged CLI proof follows from this bounded native supplier check.
+
+**Packaged operator checkpoint, 2026-11-02 (D3969), uncommitted:** the actual entry now composes
+the existing Maia network spec/container probe beside streaming Stockfish artifact capture.
+No second transport/cache/health registry or supplied-digest shortcut. Four actual built-CLI
+controls first fail before the repair; final fixture controls include both arms, absent sidecar,
+malformed artifact/no evidence and zero connections on invalid requests. The initial sandbox
+listen refusals are not product failures. Main and independent normal native check with
+`MAIA_OPERATOR_CLI=1` traverses both built commands against the same byte-verified native image
+and its existing production Python sidecar; both return live exact source metadata. Temporary
+loopback container is removed. This diagnostic CLI uses the accepted operator-only health
+exception; actual application health remains unchanged. No learner HTTP/UI, calibration,
+footprint, whole RFC or release discharge follows. The earlier direct-source-only limitation
+above remains historical evidence, not the current CLI status.
 
 ## Summary
 
@@ -24,6 +76,17 @@ change sampling, strength, personality, deadlines, pack content or assistance pe
 
 This is the missing migration contract, not a new bot algorithm. Accepting it does not accept
 the separate bot-policy/calibration proposals, deeper search or every provider migration.
+
+**Independent return and author repair, 2026-11-02 ([[D3959]]):** review found three missing
+contracts: the distribution factory/arm/payload, literal modern HTTP dispatch, and missing-mass/
+empty-window presentation. §§4/4.2/4.3 now specify those contracts without widening the frozen
+distribution component or the legacy four-field parser. Criteria11–13 are their falsifiers.
+Independent reviewer `/root/objective_source_review` subsequently explicitly accepted this
+repaired scope for implementation after re-reading the actual contracts and passing81 existing
+compatibility tests/three files. This is not proposed-path proof or parent/delivery completion;
+real-model criterion2 and authenticated/native criterion7 remain mandatory. The return required
+no new owner ruling, research programme or sampler/personality change. Decision recorded in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
 
 ## Located problem and compatibility boundary
 
@@ -207,12 +270,38 @@ its own page/durable delivery path and is not silently redirected by this RFC.
 
 ### 4. Inspector has a node distribution, not an observed move
 
-Add `derived.maia.node_distribution@1` through the sole registered value factory, with literal
-inputs `[human.maia.inference_task@1, run.record.position@1]`. Its additional sealed
-`ResolvedRunSubject` must be `run_node`, not caller-authored run/FEN/history. Before deriving,
-match the recorded position and exact selected historical branch path to the task's requested
-start FEN and every prior UCI through that node. The matched head/node/branch remain ancestry.
-No active-cursor substitution, preceding-edge query or sibling transposition join is allowed.
+Register this exact closed value-factory tuple; the task source factory in §1 is not this
+derivation's factory:
+
+| Member | Contract |
+|---|---|
+| projection | `derived.maia.node_distribution@1` |
+| sole factory | `createDerivedMaiaNodeDistributionV1Evidence` |
+| exact CLI/dispatcher arm | `{task,position,resolved}`; no additional keys or alternate arms |
+| literal ordered inputs | `[human.maia.inference_task@1, run.record.position@1]` |
+| result | one declared derived value, including a valid zero-row result |
+| declaration | grounding `declared_convention`, exactness `measured`, confidence `reported`; answer content `candidate_moves`; forms `list`/`panel` |
+
+`task` is the original sealed operation-keyed task evidence, `position` the original recorded
+position evidence, and `resolved` an actual sealed `ResolvedRunSubject` of kind `run_node`.
+The latter is a scope operand, not a third fabricated evidence input. Before deriving, join
+the original recorded-position invocation to the resolved full original run/node and match its
+head/branch/node/FEN plus exact selected historical branch path to the task's requested start
+FEN and every prior UCI through that node. Do not accept caller-authored run/FEN/history,
+spread/JSON copies, a genuine foreign invocation at the same FEN, active-cursor substitution,
+a preceding-edge query, or a sibling transposition. Source/result readers retain the genuine
+inputs and exact original invocation, including a zero-row result; no second evidence issuer.
+
+The exact internal output is `{task,position,nodeId,branchId,eventHeadDigest,engine,
+requestedBand,appliedBand,coverage,candidates}`. `task` and `position` retain the complete genuine
+inputs **internally only**. Node/branch/head come from the joined subject; engine uses the
+existing `SelectionEngineIdentity` fields populated only from the actual same-task capture,
+never the requested model's unsupported claims. Requested/applied band retain their distinct
+meanings from §1. Coverage is exactly `bounded_reported_window`. Each candidate contains exactly
+`{moveUci,rank,mass}`, copied in final-task reported-rank order; mass is numeric or null. No cp,
+WDL, termination, offWindow, grade or synthesized SAN is a candidate operand. The registered
+factory profile must enumerate this arm, result, operand paths and both actual derivation inputs.
+Its positive and negative profiles execute the factory, not a local lookalike constructor.
 
 Use this source for the currently requested node's next-move window. The route uses the same
 internal `selectWithMaiaEvidence` flight/cache and at-most-two-task window selection as
@@ -228,19 +317,73 @@ accepted source branch must request this exact successor; do not add it to ordin
 voice, coaching selection or any module that did not already permit the distribution.
 
 Keep the authenticated route, node subject, permissions and before/after asynchronous rechecks.
-The modern page carries the existing node/engine/requested-band/candidate operands plus its
-registered presentation receipt. The old exact wire/parser remains a separate explicit v1 arm.
-The modern parser validates the registered component, exact node and candidate operand equality
-before display. It derives no evidence from raw HTTP rows and accepts no raw fallback if modern
-receipt validation fails. Applied band comes only from the honored source; retain the existing
-human-model, non-rating disclaimer and no-data/missing-mass distinctions.
+The modern page/dispatch is closed in §4.2, and missing-mass presentation in §4.3. The old exact
+wire/parser remains a separate explicit v1 arm. Applied band comes only from the honored source;
+retain the existing human-model, non-rating disclaimer and no-data/missing-mass distinctions.
 
 A private response must not serialize the whole source, prompts, task transcripts, source cache
 keys or terminal sampled move merely because the registered distribution has source ancestry.
 The displayed window remains reported bounded model choice, not human frequency, complete
 legal coverage, move quality, a predicted observed move or a calibrated player rating.
 
-#### 4.1 D3841 candidate WDL companion — still draft
+The whole machine-only task has evaluation as well as candidate operands; this derived
+candidate-only binding does not inherit permission to disclose every dependency field. Its
+registered renderer and answer projection read **only** the narrow metadata/candidate paths
+listed above, not `task`, `position`, captured commands, cp/WDL or termination. The original
+complete task remains accessible only to the internal source reader/machine consumer. A
+candidate-only request must neither serialize that ancestry nor expose it to voice/provider
+inputs; a generic whole-payload answer route is forbidden. A sentinel cp/WDL/bestMove in the
+retained task must not occur in candidate-only JSON, components, text or provider input.
+
+#### 4.0a D3970 terminal-node supplier handoff — independently accepted 2026-11-02
+
+Independent reviewer `/root/objective_source_review` accepted only this subsection for
+implementation after the explicit human-common/default mapping clarification. The decision and
+required retained-generation falsifier are in the existing compiler2 review; this is not
+production supplier, Full Inspector, native journey or whole-RFC completion.
+
+The actual pinned model was measured through the existing shared native task path on2026-11-02:
+checkmate, stalemate and bare-kings insufficient material each report zero rows and `bestmove
+0000`, producing a genuine null-termination source. This does not authorize calling the ordinary
+opponent selector on a terminal position; its refusal remains unchanged. Evidence: disposable
+`make maia-terminal-source-probe`, compact ignored report, and the existing compiler2 review.
+
+For Full Inspector's two on-demand Maia suppliers, check the granted selected position with the
+same `Chess.isEnd()` rules authority before asking the selector. A terminal position returns
+`unavailable/source_absent` with the fixed disclosure "This position has ended; no next-move
+model window is requested." It invokes no provider, sampler or node factory and carries no
+fabricated empty task, candidate population or zero probabilities. This is an explicitly
+inapplicable next-move source, not a failed model, `no_witness`, or an observed empty window.
+Real empty windows at nonterminal positions retain the genuine task and zero-row factory result.
+The operator task's independently acquired genuine terminal result remains valid under §2;
+this supplier rule neither deletes it nor permits its substitution for an unexecuted request.
+
+For applicable positions both suppliers use the same internal `selectWithMaiaEvidence` flight/
+cache and final genuine task. Request mode is always `human_common`, not the trajectory's
+theory/practical/engine/tablebase mode. Copy only the service-owned selected-node trajectory's
+targetElo/temperature/topP when supplied, plus the run's session digest; omitted model parameters
+use existing human-common defaults. No profile/spine or caller-authored band/candidate bytes
+enter this model request. The requested granted branch owns history and seed, including inherited nodes;
+the genuine sealed node subject and original recorded-position invocation join before either
+factory runs. Retain the original task, inputs and exact result even for empty/unavailable WDL;
+its existing `empty_population` maps only to the §4.1 missing-WDL disclosure.
+
+The existing service-owned Inspector context, current artifact/config and caller signal are
+checked before source work, after asynchronous acquisition, before factories/publication and
+on retained reads. A replaced actual task generation invalidates retained source reads without
+mistaking health-only unavailability for a replacement. Use the selector's existing generation
+authority, not a second counter/cache. Copied, foreign, stale or wrong-scope source/context
+tokens refuse; provider/protocol failure is never converted to source absence or legacy output.
+This defines supplier primitives, not complete65-topic preflight, public wire, module cutover,
+interactive deadline proof or permission to execute a partial Full Inspector consumer.
+
+Permanent falsifiers must distinguish all three actual terminal forms from a genuine acquired
+empty window; prove zero provider/factory calls in the inapplicable branch; preserve both-colour
+historical/inherited-node histories and final-task distribution/WDL identity; and reject access,
+disclosure, storage/config/generation changes and cancellation during/after acquisition before
+publication. Actual SQLite/RunService tests are required, not a Boolean permission callback.
+
+#### 4.1 D3841 candidate WDL companion — included in the independently accepted scope
 
 The policy-only `maia.policy_page@1` cannot satisfy this obligation: its frozen candidates contain
 only move and probability. Add the separate `derived.maia.node_candidate_wdl@1`, sole proposed
@@ -278,6 +421,76 @@ nor terminal sampled move is a public operand. Actual task/history/node substitu
 partial WDL, no-row/zero-value distinctions, final-window identity, cancellation/access changes
 and authenticated desktop/phone delivery are acceptance obligations, not proved by this paragraph.
 The existing v1 page, old candidate-WDL factory and standalone Inspector paths remain unchanged.
+
+#### 4.2 Closed modern distribution wire and receiver
+
+The existing authenticated human-split route returns the following exact success object for a
+modern source. This is a new explicit arm, not an optional receipt grafted onto v1:
+
+```ts
+interface HumanSplitPageV2 {
+  readonly protocol: "inspector.human_split@2";
+  readonly nodeId: string;
+  readonly status: "shown" | "empty_population";
+  readonly engine: SelectionEngineIdentity;
+  readonly requestedBand: number;
+  readonly appliedBand: number;
+  readonly coverage: "bounded_reported_window";
+  readonly candidates: readonly { readonly moveUci: string; readonly rank: number; readonly mass: number | null }[];
+  readonly presentation: PresentationReceipt; // existing presentation.receipt@1, no new receipt protocol
+}
+```
+
+All fields are required own keys; additional or inherited substitutes refuse. Bands are admitted
+safe integers and match the actual task; candidates retain canonical legal UCI, unique moves,
+strict ascending unique reported ranks (gaps allowed), nullable finite policy mass and the
+existing float32 tolerance. `shown` requires at least one row and exactly one receipt item;
+`empty_population` requires zero rows and zero receipt items, not an empty distribution chart.
+Engine identity uses the existing strict engine parser and must carry honored/applied band
+consistent with `appliedBand`. Failure/unavailable provider states use the existing route error
+boundary, not this successful empty-window arm. A legal rules-terminal task can have a genuine
+empty window; it is not a provider failure and never a playable null move.
+
+Dispatch examines an **own** `protocol` field first. Exact `inspector.human_split@2` invokes
+the modern parser only. Any other supplied protocol, malformed modern body or failed receipt
+is an error, never a v1 retry. With no protocol, only the existing exact four-key
+`{nodeId,engine,targetElo,candidates}` v1 parser is allowed; it cannot accept receipt, coverage,
+status or modern null-mass rows as extra keys. Explicit legacy acquisition may produce v1;
+failed modern acquisition may not manufacture it. No structural duck typing or raw fallback.
+
+For a shown modern page, `parsePresentationReceipt` must succeed and its only item's tuple
+must be exactly `inspector.human_split@2 × derived.maia.node_distribution@1`. Its component is
+`fact_statement` with renderer `consumer.maia_node_distribution@1` (§4.3), never an arbitrary
+registered component or the v1 distribution renderer. The receiver compares every narrow
+renderer operand to the page's node, complete engine identity, requested/applied band,
+coverage and complete ordered candidate rows including null mass and rank gaps. Requested
+node must also equal the caller's actual request. A recomputed receipt over crossed operands
+still refuses. Transport/receipt validation creates no new chess evidence or task source.
+The UI renders the validated registered component, not a second raw-row prose path. Empty
+population uses fixed absence wording and the same truthful model/band attribution, not a
+forged evidence item; it does not trigger another model task to hunt for more rows.
+
+#### 4.3 Partial mass is a reported window, not a manufactured distribution
+
+Do not widen `DistributionOperand`, fill its mandatory share field, drop rows, coerce null to
+zero, normalize measured rows or manufacture residual mass. The new modern pair always uses
+one registered `fact_statement` renderer `consumer.maia_node_distribution@1` over the exact
+closed operands `{nodeId,engine,requestedBand,appliedBand,coverage,candidates}` above. Register
+its schema through the existing fact-renderer mechanism; no new component family or generic
+raw JSON/prose escape. Its rows use canonical move notation and literal reported rank; numeric
+mass is formatted only as that row's model share, while null is exactly “model share not
+reported”. A measured zero is displayed as zero, not missing. The fixed surrounding text says
+the model reported a bounded window, that missing shares are unknown, and that the requested/
+applied band is a model setting, not the learner's rating. It makes no completeness or move-
+quality claim. Equivalent registered text retains every row in original reported order.
+
+All-numeric, partial-null and all-null nonempty windows remain `shown` and preserve all their
+rows. Zero candidates is `empty_population`, distinct from missing mass in a real candidate.
+The frozen legacy distribution renderer continues its original rules; modern source states
+never pass through it. The candidate-WDL companion remains independent: a task with no policy
+mass can still supply actual same-row WDL, and an empty WDL companion does not erase a nonempty
+distribution. Neither missing policy mass nor missing WDL justifies resampling, merging earlier
+task windows, inventing residuals, or changing the existing selector's retry rule.
 
 ### 5. Adoption, absence and retirement
 
@@ -329,6 +542,22 @@ pack/run schema, storage migration, content wave or implicit bot-calibration app
 10. Full normal software/performance/content/browser/governance gates pass; budgets, floors,
     assertions and schema readers are not weakened. Track the exact two migrated doors and
     leave broader source retirement/availability/bot qualification open when not discharged.
+11. Factory/CLI/profile controls execute the literal distribution arm: copied/foreign task,
+    position or resolved subject; same-FEN crossed history/head/node/branch; and unknown arm
+    fields refuse before derivation. Candidate-only sentinels prove retained cp/WDL/termination
+    never reach JSON, registered text/components, voice or external provider input. The genuine
+    original inputs and source/result invocation remain internally readable, even for zero rows.
+12. Permanent parser cases preserve latest row per canonical move, gaps in reported ranks and
+    same-row optional values, and reject duplicate final ranks. Exact vs bounded cp/WDL,
+    null/rules-terminal and off-window samples remain distinct. Actual selector tests prove
+    final-task-only windows, unchanged retry count/deadline and non-argmax sampled selection.
+13. Actual route → shared receiver → mounted renderer controls cover all-numeric, partial-null,
+    all-null, measured-zero and zero-row windows without dropped rows or invented residuals.
+    Null policy with valid WDL and policy rows with no WDL stay separate. Wrong protocol,
+    own-key violations, v1/v2 mixtures, unknown consumer/renderer/component, recomputed crossed
+    node/engine/band/coverage/rank/mass receipts and malformed-modern-to-v1 fallback refuse.
+    Fixtures prove old exact v1 still works without teaching it the modern payload. Real-model
+    criterion2 and authenticated/native criterion7 remain required beyond these fixture controls.
 
 ## Deviations from design
 
@@ -348,11 +577,18 @@ sampling policy, learner entry requirement or LLM-authored chess judgement.
    repeated rows/ranks, optional cp/WDL and the distinction between invalid protocol and missing
    mass. Any valid old result the new parser cannot represent must return this draft for repair,
    not be waved through as an implementation detail.
-2. Confirm the exact modern Inspector wire discriminator/receipt dispatch against retained v1
-   clients before acceptance. No structural duck typing or generic evidence payload is permitted.
+2. Author answer 2026-11-02: §§4.2–4.3 specify exact protocol-first dispatch, frozen v1 and a
+   modern nullable-mass fact renderer; criterion13 supplies crossed/partial/empty falsifiers.
+   Independent reviewer accepted this answer 2026-11-02. No owner choice is pending; actual
+   receiver/native and real-model implementation proof remains required by criteria2/7/13.
 
 ## Changelog
 
+- 2026-11-02: D3959 author repair closes the literal distribution factory/profile, candidate-
+  only disclosure, modern wire/receiver and partial/all-null/empty-window rendering contracts.
+  Independently accepted for implementation by `/root/objective_source_review`, including both
+  node derivations and modern human-split. No production Maia path or delivery is claimed;
+  compatibility81/three passes, real-model/native obligations remain.
 - 2026-10-15: D3841 authors the separate evaluation-valued node candidate-WDL companion over
   the genuine final task and recorded position. Missing WDL remains typed absence, not model
   failure, zero probabilities or a sampled-move inference. Independent review and actual

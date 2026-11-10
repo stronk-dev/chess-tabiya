@@ -10,7 +10,7 @@ import {
   type GraduationEntry,
 } from "@chess-tabiya/schema/drill-pack";
 
-import type { runExpressionCensus } from "../expression-census.js";
+import type { ExpressionCensusReport } from "../expression-census.js";
 import { EMITTER_GRADUATION_CLEARANCE_PLANS, type EmitterGraduationClearancePlan } from "../graduation-blocker-templates.mjs";
 import { objectiveRules } from "../pack-orchestrator.js";
 import { withDerivedRequires } from "../capability/pack-capabilities.js";
@@ -116,7 +116,7 @@ function paths(file: string): { pack: string; ledger: string; manifest: string; 
   };
 }
 
-function shapePredicate(pack: DrillPackDefinition, clearance: GraduationClearance, census: ReturnType<typeof runExpressionCensus>): boolean {
+function shapePredicate(pack: DrillPackDefinition, clearance: GraduationClearance, census: Pick<ExpressionCensusReport, "subjects">): boolean {
   if (clearance.subject === undefined) throw new GraduationClearanceError("GRADUATION_CLEARANCE_INVALID", "shape_firing requires subject");
   const resolved = resolvePointer(pack, clearance.subject);
   if (!resolved.found) throw new GraduationClearanceError("GRADUATION_CLEARANCE_INVALID", `${clearance.subject} does not resolve`);
@@ -272,7 +272,7 @@ function contentDeclarationPrecondition(pack: DrillPackDefinition, entryId: stri
   return true;
 }
 
-export function evaluateGraduationClearance(pack: DrillPackDefinition, packDigest: string, ledger: EvidenceLedger, manifest: SourceManifest, entryId: string, clearance: GraduationClearance, census: ReturnType<typeof runExpressionCensus>): PredicateResult | undefined {
+export function evaluateGraduationClearance(pack: DrillPackDefinition, packDigest: string, ledger: EvidenceLedger, manifest: SourceManifest, entryId: string, clearance: GraduationClearance, census: Pick<ExpressionCensusReport, "subjects">): PredicateResult | undefined {
   if (!MECHANICAL_KINDS.has(clearance.kind)) return undefined;
   const plan = assertTemplatePlan(entryId, clearance);
   switch (clearance.kind) {
@@ -365,7 +365,7 @@ async function atomicWrite(documents: readonly { path: string; value: unknown; p
   }
 }
 
-export async function clearGraduationEntries(file: string, options: { readonly now?: () => Date; readonly census: ReturnType<typeof runExpressionCensus>; readonly check?: boolean }): Promise<GraduationTransitionResult> {
+export async function clearGraduationEntries(file: string, options: { readonly now?: () => Date; readonly census: Pick<ExpressionCensusReport, "subjects">; readonly check?: boolean }): Promise<GraduationTransitionResult> {
   const target = paths(file);
   const [packValue, ledgerValue, manifestValue] = await Promise.all([readJson(target.pack), readJson(target.ledger), readJson(target.manifest)]);
   const pack = packValue as DrillPackDefinition;

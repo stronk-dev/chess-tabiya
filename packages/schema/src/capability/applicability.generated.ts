@@ -5,10 +5,10 @@ import type { CapabilityApplicability } from "./requirements.js";
 
 export const CAPABILITY_APPLICABILITY_AUTHORITY = Object.freeze({
   artifact: "tabiya.pack-capability-applicability.authority.v3",
-  schemaSha256: "7915fcac771bfe7f22fbd8eaaf3487e03d21dbf996ae0fd382083e5c80133c24",
-  inventorySha256: "352bce1865e96b4c5e3fb1bdfe7c4c7a2ba3605e885c7c6671c3f5f6a7ffa7fc",
-  expandedMappingSha256: "b7813c569037ac3460ae6aca81371db9618389eea0eb4bd6137328edb0fb2ff4",
-  expandedAuthoritySha256: "6b5615fb9af04e84bdfd4c21f5ec18e244fdb299816cd394cae997df05f0f39d",
+  schemaSha256: "081a8d9800cc0972db49dec777b0ea7dd7478c92c9fe9fc5348345daa325bae9",
+  inventorySha256: "6492e7d19d0cdfe901c8f99efd5d249bc882ccd5076861800d545a1b92f710b0",
+  expandedMappingSha256: "95fba7b7ee203f06f518cb0e39bffc3619d0ad8f4e7f3f3215ef032ef2057831",
+  expandedAuthoritySha256: "bd4eba1d67aa442096868f5380430337236e8404417178e314ff180254ecf7f9",
 } as const);
 
 export const CAPABILITY_METADATA_EXCLUSIONS: readonly string[] = Object.freeze(["/properties/requires","/$defs/capabilityRequirement","/$defs/capabilityVersion"]);
@@ -75,6 +75,8 @@ export const CAPABILITY_APPLICABILITY: readonly CapabilityApplicability[] = Obje
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/feedbackClaim/properties/evidenceTypes/items","member":"author_principle"}},"capability":{"id":"feedbackClaim.evidenceTypes.author_principle","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/objectiveGrading/properties/assessedBy","member":"authored"}},"capability":{"id":"objectiveGrading.assessedBy.authored","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/graduationClearance/oneOf/10/properties/templateId","member":"authored-teaching-absent"}},"capability":{"id":"graduationClearance.kind-content_declared.templateId.authored-teaching-absent","version":{"kind":"integer","value":1}}},
+{"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/fileTemplateFeature/oneOf/0/properties/conventionRef/properties/id","member":"backward-pawn"}},"capability":{"id":"fileTemplateFeature.kind-backward_pawn.conventionRef.id.backward-pawn","version":{"kind":"integer","value":1}}},
+{"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature/oneOf/2/properties/conventionRef/properties/id","member":"backward-pawn"}},"capability":{"id":"structuralFeature.kind-backward_pawn.conventionRef.id.backward-pawn","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/fileTemplateFeature","member":"backward_pawn"}},"capability":{"id":"fileTemplateFeature.backward_pawn","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature","member":"backward_pawn"}},"capability":{"id":"structuralFeature.backward_pawn","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/transitionExpression/oneOf/3/properties/at","member":"before"}},"capability":{"id":"transitionExpression.kind-position.at.before","version":{"kind":"integer","value":1}}},
@@ -242,6 +244,7 @@ export const CAPABILITY_APPLICABILITY: readonly CapabilityApplicability[] = Obje
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/piece/properties/role","member":"king"}},"capability":{"id":"piece.role.king","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature/oneOf/15/properties/role","member":"king"}},"capability":{"id":"structuralFeature.kind-piece_count.role.king","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature/oneOf/17/properties/role","member":"king"}},"capability":{"id":"structuralFeature.kind-piece_distance.role.king","version":{"kind":"integer","value":1}}},
+{"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature/oneOf/14/properties/conventionRef/properties/id","member":"king-opposition-unobstructed"}},"capability":{"id":"structuralFeature.kind-king_opposition.conventionRef.id.king-opposition-unobstructed","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature","member":"king_opposition"}},"capability":{"id":"structuralFeature.king_opposition","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature","member":"king_zone"}},"capability":{"id":"structuralFeature.king_zone","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/distanceTarget/oneOf/1/properties/role","member":"knight"}},"capability":{"id":"distanceTarget.kind-piece.role.knight","version":{"kind":"integer","value":1}}},
@@ -303,6 +306,8 @@ export const CAPABILITY_APPLICABILITY: readonly CapabilityApplicability[] = Obje
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/tempoVerdict","member":"outpaced"}},"capability":{"id":"tempoVerdict.outpaced","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/squareTemplateFeature","member":"outpost"}},"capability":{"id":"squareTemplateFeature.outpost","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature","member":"outpost"}},"capability":{"id":"structuralFeature.outpost","version":{"kind":"integer","value":1}}},
+{"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/squareTemplateFeature/oneOf/1/properties/conventionRef/properties/id","member":"outpost-candidate"}},"capability":{"id":"squareTemplateFeature.kind-outpost.conventionRef.id.outpost-candidate","version":{"kind":"integer","value":1}}},
+{"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/structuralFeature/oneOf/1/properties/conventionRef/properties/id","member":"outpost-candidate"}},"capability":{"id":"structuralFeature.kind-outpost.conventionRef.id.outpost-candidate","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/tempoVerdict","member":"over_budget"}},"capability":{"id":"tempoVerdict.over_budget","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/graduationEntry/properties/accepted/properties/kind","member":"owner_ruling"}},"capability":{"id":"graduationEntry.accepted.kind.owner_ruling","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/$defs/squareTemplateFeature","member":"passed_pawn"}},"capability":{"id":"squareTemplateFeature.passed_pawn","version":{"kind":"integer","value":1}}},
@@ -469,7 +474,7 @@ export const CAPABILITY_APPLICABILITY: readonly CapabilityApplicability[] = Obje
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/properties/assistanceCeilingRamp/items/properties/ceilingRung","member":3}},"capability":{"id":"assistanceCeilingRamp.ceilingRung.3","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/properties/assistanceCeilingRamp/items/properties/ceilingRung","member":4}},"capability":{"id":"assistanceCeilingRamp.ceilingRung.4","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"schema_member","sourceIdentity":{"schemaPointer":"/properties/assistanceCeilingRamp/items/properties/ceilingRung","member":5}},"capability":{"id":"assistanceCeilingRamp.ceilingRung.5","version":{"kind":"integer","value":1}}},
-{"selector":{"kind":"always"},"capability":{"id":"grade.move_quality","version":{"kind":"integer","value":1}}},
+{"selector":{"kind":"always"},"capability":{"id":"grade.move_quality","version":{"kind":"integer","value":2}}},
 {"selector":{"kind":"always"},"capability":{"id":"objective.state_machine","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"always"},"capability":{"id":"objective.transition_legality","version":{"kind":"integer","value":1}}},
 {"selector":{"kind":"always"},"capability":{"id":"outcome.terminal","version":{"kind":"integer","value":1}}},

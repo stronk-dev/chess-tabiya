@@ -12,6 +12,8 @@ import { fileURLToPath } from "node:url";
 
 import { attachEvidence } from "../evidence.js";
 import { commitMove, createRun } from "../runtime.js";
+import { evidenceDigest } from "../evidence-contract.js";
+import { evaluationDelivery, attachDelivery } from "./review-evidence-fixture.js";
 import type { DrillRun } from "../types.js";
 
 export const REVIEW_FIXTURE_AT = "2026-09-24T12:00:00.000Z";
@@ -55,20 +57,24 @@ export interface ReviewFixtureOptions {
 
 export function reviewFixtureRun(options: ReviewFixtureOptions = {}): DrillRun {
   const kind = options.kind ?? "imported";
+  const line = deterministicLine(options.plies ?? 70);
+  const movetextDigest = `sha256:${evidenceDigest({ rootFen: START, uci: line })}`;
   const session = kind === "imported"
-    ? { kind: "imported" as const, start: { fen: START, side: options.side ?? "white" }, movetextDigest: DIGEST, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } }
+    ? { kind: "imported" as const, start: { fen: START, side: options.side ?? "white" }, movetextDigest, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } }
     : { kind: "position" as const, start: { fen: START, side: options.side ?? "white" }, feedbackPolicy: "attempt_end" as const, opponentPolicy: { mode: "human_common" as const } };
   let run = createRun({ id: options.id ?? `review-${kind}`, session, sessionDigest: DIGEST, policyConfig: CONFIG, seed: 1, createdAt: REVIEW_FIXTURE_AT });
-  for (const uci of deterministicLine(options.plies ?? 70)) {
+  for (const uci of line) {
     const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
-    run = commitMove(run, uci, { actor: node.fen.split(" ")[1] === "w" ? "user" : "system", at: REVIEW_FIXTURE_AT }).run;
+    run = commitMove(run, uci, { actor: (node.fen.split(" ")[1] === "w" ? "white" : "black") === run.start.side ? "user" : "system", at: REVIEW_FIXTURE_AT }).run;
   }
   const path = [...run.nodes].sort((left, right) => left.ply - right.ply);
   path.forEach((node, index) => {
     if (options.evaluated !== undefined && !options.evaluated(index)) return;
-    run = attachEvidence(run, node.id, [`engine:${index}`], {
-      kind: "eval", source: "engine_validated",
-      values: { centipawns: fixtureCentipawns(index), perspective: "white", engineId: "stockfish-test", requestedMovetimeMs: 100, ...options.extraValues },
+    const whiteCp = fixtureCentipawns(index), rawCp = node.fen.split(" ")[1] === "w" ? whiteCp : -whiteCp;
+    run = attachDelivery(run, node.id, evaluationDelivery(node.fen, `cp ${rawCp}`, { bound: { kind: "movetime", requestedMs: 100 } }));
+    // A later untrusted scalar/PV attachment must not replace the original modern delivery.
+    if (options.extraValues !== undefined) run = attachEvidence(run, node.id, [`legacy:${index}`], {
+      kind: "eval", source: "engine_validated", values: { centipawns: whiteCp, perspective: "white", engineId: "stockfish-test", requestedMovetimeMs: 100, ...options.extraValues },
     }, REVIEW_FIXTURE_AT).run;
   });
   return run;

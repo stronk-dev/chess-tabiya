@@ -1,170 +1,159 @@
-// rfc/longitudinal-store.md §A — the closed constructor registry (the sole admission authority).
-//
-// The literal authorities are rfc/contracts/longitudinal-ingest-registry-v1.json (67 rows:
-// 46 edge / 13 population / 8 deferred path) and rfc/contracts/longitudinal-sign-subsets-v1.json.
-// This module rebuilds the same registry from the compiled runtime catalogue and refuses to load if
-// the two disagree; longitudinal-store.test.ts compares it row-for-row to both artifacts at their
-// pinned raw-byte digests.
-//
-// Revision-1 scope (2026-09-24 implementation correction): the registry is set-equal to the exact
-// **version-1** semantic-event refs. The recorded-semantic-path v2 successors ([[D1933]]) landed
-// after the RFC's registry and are outside revision 1; admitting any of them is a derivation-revision
-// bump owned by a later accepted RFC (§E.3).
+// Accepted longitudinal-store §A.2: exact current source image. Historical v1/v2 artifacts
+// remain immutable; native subjects, total condition relations and operator prevalence differ.
 import { createHash } from "node:crypto";
-
-import {
-  AVOIDANCE_EVENT_PROJECTION_IDS,
-  SEMANTIC_EVENT_DECLARATIONS,
-  SEMANTIC_EVENT_PROJECTION_REFS,
-  TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
-  type SemanticEventSign,
-} from "@chess-tabiya/runtime";
+import { SEMANTIC_EVENT_DECLARATIONS, type SemanticEventSign } from "@chess-tabiya/runtime";
+import { SEMANTIC_EVENT_SIGNS } from "../../../packages/runtime/src/evidence-contract.js";
 import { canonicalizeJson, type JsonValue } from "@chess-tabiya/schema/drill-pack";
+import { NATIVE_SUBJECT_SOURCE_REFS } from "../../../packages/runtime/src/semantic-native-subject-types.js";
+import { SUBJECT_OUTCOME_FAMILIES, BOOLEAN_SUBJECT_RELATIONS, INTEGER_SUBJECT_RELATIONS, type SubjectOutcomeFamily,
+  type BooleanSubjectRelation, type IntegerSubjectRelation } from "../../../packages/runtime/src/semantic-subject-types.js";
 
-/** Existing longitudinal-store §D/§4.4 rebuild obligation: occupied-target identity (D3762).
- * Registry/projection membership and attribution remain unchanged; startup requeues old history.
- */
-export const OBSERVATION_DERIVATION_REV = 5 as const;
-
-export const LONGITUDINAL_SEMANTIC_SIGNS = Object.freeze([
-  "state", "gained", "lost", "preserved", "removed", "avoided", "enabled", "threatened",
-] as const satisfies readonly SemanticEventSign[]);
-
-const PATH_IDS: readonly string[] = Object.freeze([
-  "derived.exchange.trade_completed",
-  "derived.tactic.deflection_observed",
-  "derived.tactic.attraction_observed",
-  "derived.tactic.line_blocker_clearance_observed",
-  "derived.tactic.square_clearance_observed",
-  "derived.tactic.interference_observed",
-  "derived.tactic.check_zwischenzug_observed",
-  "derived.tactic.overload_exploitation_observed",
-]);
-const PATH_REASON = "No complete counterfactual path population exists at revision 1.";
-const POPULATION_IDS: readonly string[] = Object.freeze([...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS]);
-
-export interface RegistryProjection { readonly id: string; readonly version: 1 }
-
+// Revision9 installs the subject table and six-family publication together.
+// Current migration/rebuild/cost acceptance remains in flight; this is not a release certificate.
+export const OBSERVATION_DERIVATION_REV = 9 as const;
+export const LONGITUDINAL_SEMANTIC_SIGNS = SEMANTIC_EVENT_SIGNS;
+export interface RegistryProjection { readonly id: string; readonly version: 1 | 2 }
 export type LongitudinalConstructor =
-  | { readonly projection: RegistryProjection; readonly signs: readonly SemanticEventSign[]; readonly kind: "edge"; readonly adapter: "local_semantic_event" }
-  | {
-    readonly projection: RegistryProjection; readonly signs: readonly ["avoided"]; readonly kind: "population";
-    readonly adapter: "complete_candidate_relation"; readonly baseProjection: RegistryProjection;
-    readonly baseSigns: readonly SemanticEventSign[];
-  }
-  | {
-    readonly projection: RegistryProjection; readonly signs: readonly SemanticEventSign[]; readonly kind: "path";
-    readonly adapter: "recorded_sequence"; readonly status: "deferred"; readonly reason: string;
-  };
-
+  | { readonly projection: RegistryProjection; readonly signs: readonly SemanticEventSign[]; readonly kind: "edge";
+      readonly adapter: "local_semantic_event"; readonly meaning: "event_prevalence"; readonly visibility: "operator_only" }
+  | { readonly projection: RegistryProjection; readonly signs: readonly SemanticEventSign[]; readonly kind: "native"; readonly adapter: "native_subject_incidence" }
+  | { readonly projection: RegistryProjection; readonly signs: readonly ["avoided"]; readonly kind: "population";
+      readonly adapter: "subject_relation_population"; readonly sourceScope: "complete_factory_result"; readonly family: SubjectOutcomeFamily;
+      readonly relations: readonly (BooleanSubjectRelation | IntegerSubjectRelation)[] }
+  | { readonly projection: RegistryProjection; readonly signs: readonly SemanticEventSign[]; readonly kind: "path";
+      readonly adapter: "recorded_sequence"; readonly status: "deferred"; readonly owner: "longitudinal-store:A.2"; readonly reason: string };
 export type AdmittedConstructor = Exclude<LongitudinalConstructor, { readonly kind: "path" }>;
-
-const V1_REFS = Object.freeze(SEMANTIC_EVENT_PROJECTION_REFS.filter((ref) => ref.version === 1));
-const signsByProjection = new Map(
-  SEMANTIC_EVENT_DECLARATIONS.filter((row) => row.projection.version === 1)
-    .map((row) => [row.projection.id, row.allowedSigns as readonly SemanticEventSign[]] as const),
-);
-
-function exactSigns(id: string): readonly SemanticEventSign[] {
-  const signs = signsByProjection.get(id);
-  if (signs === undefined || signs.length === 0) throw new TypeError(`LONGITUDINAL_SIGN_SUBSET_MISSING: ${id}`);
+const PATH_REASON = "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2.";
+const PATH_IDS: readonly string[] = Object.freeze(["derived.exchange.trade_completed", "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure", "derived.tactic.sequence.defender_consequence", "derived.tactic.deflection_observed", "derived.tactic.attraction_observed", "derived.tactic.line_blocker_clearance_observed", "derived.tactic.square_clearance_observed", "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed", "derived.tactic.overload_exploitation_observed"]);
+const NATIVE_KEYS: ReadonlySet<string> = new Set(NATIVE_SUBJECT_SOURCE_REFS);
+const INTEGER_FAMILIES: ReadonlySet<SubjectOutcomeFamily> = new Set(["line_blockers", "piece_count", "direct_attack_count", "pawn_islands"]);
+/** Literal current65 image. No latest-version, suffix alias or implicit new-family admission. */
+const CURRENT_REFS: readonly RegistryProjection[] = Object.freeze([
+  Object.freeze({ id: "rules.structural.event.king_zone", version: 1 }),
+  Object.freeze({ id: "rules.structural.event.passed_pawn", version: 1 }),
+  Object.freeze({ id: "rules.structural.event.piece_count", version: 1 }),
+  Object.freeze({ id: "rules.structural.event.direct_attack_count", version: 1 }),
+  Object.freeze({ id: "rules.structural.event.king_opposition", version: 2 }),
+  Object.freeze({ id: "rules.structural.event.backward_pawn", version: 2 }),
+  Object.freeze({ id: "derived.structural.event.pawn_file_group", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.slider_ray", version: 2 }),
+  Object.freeze({ id: "derived.activity.event.file_state", version: 1 }),
+  Object.freeze({ id: "derived.activity.event.file_access_revealed", version: 1 }),
+  Object.freeze({ id: "rules.structural.event.pawn_islands", version: 2 }),
+  Object.freeze({ id: "rules.transition.event.occupied_attack", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.occupied_defence", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.piece_escape", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.defended_duty", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.castled", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.clock_reset", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.last_of_role", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.pawn_contact", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.checkmate", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.promotion", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.capture", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.developed", version: 1 }),
+  Object.freeze({ id: "rules.tactic.event.double_attack", version: 1 }),
+  Object.freeze({ id: "rules.tactic.consequence.reply_breadth", version: 1 }),
+  Object.freeze({ id: "rules.tactic.event.check", version: 1 }),
+  Object.freeze({ id: "rules.tactic.event.loose_piece", version: 1 }),
+  Object.freeze({ id: "rules.castling.event.rights_lost", version: 1 }),
+  Object.freeze({ id: "derived.exchange.capture_class", version: 1 }),
+  Object.freeze({ id: "derived.tactic.discovered_executed", version: 1 }),
+  Object.freeze({ id: "rules.square.event.control", version: 1 }),
+  Object.freeze({ id: "rules.mobility.event.piece_destinations", version: 1 }),
+  Object.freeze({ id: "rules.pawn.event.dynamics", version: 1 }),
+  Object.freeze({ id: "derived.pawn.event.transitions", version: 1 }),
+  Object.freeze({ id: "derived.tactic.defender_exposure", version: 2 }),
+  Object.freeze({ id: "derived.material.event.role_asymmetry", version: 2 }),
+  Object.freeze({ id: "rules.king.event.zone_state", version: 1 }),
+  Object.freeze({ id: "derived.king.captured_zone_defender", version: 1 }),
+  Object.freeze({ id: "derived.activity.event.open_file_occupancy", version: 1 }),
+  Object.freeze({ id: "rules.tactic.event.defender_removed", version: 1 }),
+  Object.freeze({ id: "rules.tactic.event.defender_duty_relocated", version: 1 }),
+  Object.freeze({ id: "derived.semantic_avoidance.backward_pawn", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.doubled_pawn", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.half_open_file", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.isolated_pawn", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.king_opposition", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.king_zone", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.line_blockers", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.open_file", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.passed_pawn", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.piece_count", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.direct_attack_count", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.loose_piece", version: 2 }),
+  Object.freeze({ id: "derived.semantic_avoidance.pawn_islands", version: 2 }),
+  Object.freeze({ id: "derived.exchange.trade_completed", version: 1 }),
+  Object.freeze({ id: "derived.pawn.sequence.contact_timing", version: 1 }),
+  Object.freeze({ id: "derived.pawn.sequence.harassment_pressure", version: 1 }),
+  Object.freeze({ id: "derived.tactic.sequence.defender_consequence", version: 1 }),
+  Object.freeze({ id: "derived.tactic.deflection_observed", version: 1 }),
+  Object.freeze({ id: "derived.tactic.attraction_observed", version: 1 }),
+  Object.freeze({ id: "derived.tactic.line_blocker_clearance_observed", version: 1 }),
+  Object.freeze({ id: "derived.tactic.square_clearance_observed", version: 1 }),
+  Object.freeze({ id: "derived.tactic.interference_observed", version: 1 }),
+  Object.freeze({ id: "derived.tactic.check_zwischenzug_observed", version: 1 }),
+  Object.freeze({ id: "derived.tactic.overload_exploitation_observed", version: 1 }),
+]);
+const key = (ref: { readonly id: string; readonly version: number }) => `${ref.id}@${ref.version}`;
+const signsByProjection = new Map(SEMANTIC_EVENT_DECLARATIONS.map(row => [key(row.projection), row.allowedSigns]));
+function exactSigns(ref: RegistryProjection): readonly SemanticEventSign[] {
+  const signs = signsByProjection.get(key(ref));
+  if (signs === undefined || signs.length === 0) throw new TypeError(`LONGITUDINAL_SIGN_SUBSET_MISSING: ${key(ref)}`);
   return signs;
 }
-
-export function expectedAvoidanceBase(id: string): string {
-  const suffix = id.slice("derived.semantic_avoidance.".length);
-  return suffix === "loose_piece" ? "rules.tactic.event.loose_piece" : `rules.structural.event.${suffix}`;
+function conditionFamily(ref: RegistryProjection): SubjectOutcomeFamily | undefined {
+  return ref.version === 2 ? SUBJECT_OUTCOME_FAMILIES.find(family => ref.id === `derived.semantic_avoidance.${family}`) : undefined;
 }
-
 function buildRegistry(): readonly LongitudinalConstructor[] {
-  return Object.freeze(V1_REFS.map((ref): LongitudinalConstructor => {
-    const projection = Object.freeze({ id: ref.id, version: 1 as const });
-    const signs = Object.freeze([...exactSigns(ref.id)]);
-    if (PATH_IDS.includes(ref.id)) {
-      return Object.freeze({ projection, signs, kind: "path", adapter: "recorded_sequence", status: "deferred", reason: PATH_REASON });
+  return Object.freeze(CURRENT_REFS.map((projection): LongitudinalConstructor => {
+    const signs = Object.freeze([...exactSigns(projection)]);
+    if (PATH_IDS.includes(projection.id)) return Object.freeze({ projection, signs, kind: "path", adapter: "recorded_sequence", status: "deferred", owner: "longitudinal-store:A.2", reason: PATH_REASON });
+    if (NATIVE_KEYS.has(key(projection))) return Object.freeze({ projection, signs, kind: "native", adapter: "native_subject_incidence" });
+    const family = conditionFamily(projection);
+    if (family !== undefined) {
+      if (signs.length !== 1 || signs[0] !== "avoided") throw new TypeError("LONGITUDINAL_SOURCE_SIGN_MISMATCH");
+      return Object.freeze({ projection, signs: Object.freeze(["avoided"] as const), kind: "population", adapter: "subject_relation_population",
+        sourceScope: "complete_factory_result", family, relations: INTEGER_FAMILIES.has(family) ? INTEGER_SUBJECT_RELATIONS : BOOLEAN_SUBJECT_RELATIONS });
     }
-    if (POPULATION_IDS.includes(ref.id)) {
-      const baseProjection = Object.freeze({ id: expectedAvoidanceBase(ref.id), version: 1 as const });
-      return Object.freeze({
-        projection, signs: signs as unknown as readonly ["avoided"], kind: "population", adapter: "complete_candidate_relation",
-        baseProjection, baseSigns: Object.freeze([...exactSigns(baseProjection.id)]),
-      });
-    }
-    return Object.freeze({ projection, signs, kind: "edge", adapter: "local_semantic_event" });
+    return Object.freeze({ projection, signs, kind: "edge", adapter: "local_semantic_event", meaning: "event_prevalence", visibility: "operator_only" });
   }));
 }
 
-/** Validates a candidate registry against the compiled runtime catalogue; exported for mutation fixtures. */
+/** Exact row/schema validation against current source declarations, not legacy base-sign joins. */
 export function validateIngestRegistry(rows: readonly LongitudinalConstructor[]): void {
-  const expected = V1_REFS.map((ref) => ref.id).sort();
-  const ids = rows.map((row) => row.projection.id);
-  if (new Set(ids).size !== rows.length || [...ids].sort().join("\0") !== expected.join("\0")) {
-    throw new TypeError("LONGITUDINAL_REGISTRY_SET_MISMATCH");
-  }
-  for (const row of rows) {
-    if (row.projection.version !== 1) throw new TypeError("LONGITUDINAL_REGISTRY_VERSION_MISMATCH");
-    if (row.signs.length === 0 || row.signs.join("\0") !== exactSigns(row.projection.id).join("\0")) {
-      throw new TypeError("LONGITUDINAL_SIGN_SUBSET_MISMATCH");
-    }
-    const expectedKind = PATH_IDS.includes(row.projection.id) ? "path" : POPULATION_IDS.includes(row.projection.id) ? "population" : "edge";
-    if (row.kind !== expectedKind) throw new TypeError("LONGITUDINAL_REGISTRY_KIND_MISMATCH");
-    if (row.kind === "edge" && row.adapter !== "local_semantic_event") throw new TypeError("LONGITUDINAL_REGISTRY_ADAPTER_MISMATCH");
-    if (row.kind === "population") {
-      if (row.adapter !== "complete_candidate_relation" || row.signs.join("\0") !== "avoided") throw new TypeError("LONGITUDINAL_REGISTRY_ADAPTER_MISMATCH");
-      if (row.baseProjection.id !== expectedAvoidanceBase(row.projection.id) || row.baseProjection.version !== 1) {
-        throw new TypeError("LONGITUDINAL_POPULATION_BASE_MISMATCH");
-      }
-      if (row.baseSigns.join("\0") !== exactSigns(row.baseProjection.id).join("\0")) throw new TypeError("LONGITUDINAL_BASE_SIGN_SUBSET_MISMATCH");
-    }
-    if (row.kind === "path" && (row.adapter !== "recorded_sequence" || row.status !== "deferred" || row.reason.trim() === "")) {
-      throw new TypeError("LONGITUDINAL_PATH_REASON_MISSING");
-    }
+  const expected = buildRegistry(), expectedIds = CURRENT_REFS.map(ref => ref.id).sort(), ids = rows.map(row => row.projection.id);
+  if (rows.length !== expected.length || new Set(ids).size !== rows.length || [...ids].sort().join("\0") !== expectedIds.join("\0")) throw new TypeError("LONGITUDINAL_REGISTRY_SET_MISMATCH");
+  for (const [index, row] of rows.entries()) {
+    const target = expected[index]!;
+    if (row.projection.id !== target.projection.id) throw new TypeError("LONGITUDINAL_REGISTRY_ORDER_MISMATCH");
+    if (row.projection.version !== target.projection.version) throw new TypeError("LONGITUDINAL_REGISTRY_VERSION_MISMATCH");
+    if (row.signs.join("\0") !== target.signs.join("\0")) throw new TypeError("LONGITUDINAL_SIGN_SUBSET_MISMATCH");
+    if (row.kind !== target.kind) throw new TypeError("LONGITUDINAL_REGISTRY_KIND_MISMATCH");
+    if (row.adapter !== target.adapter) throw new TypeError("LONGITUDINAL_REGISTRY_ADAPTER_MISMATCH");
+    if (canonicalizeJson(row as unknown as JsonValue) !== canonicalizeJson(target as unknown as JsonValue)) throw new TypeError("LONGITUDINAL_REGISTRY_CONTRACT_MISMATCH");
   }
 }
-
-export const LONGITUDINAL_INGEST_REGISTRY: readonly LongitudinalConstructor[] = (() => {
-  const rows = buildRegistry();
-  validateIngestRegistry(rows);
-  return rows;
-})();
-
+export const LONGITUDINAL_INGEST_REGISTRY = buildRegistry();
+validateIngestRegistry(LONGITUDINAL_INGEST_REGISTRY);
 export function ingestRegistryDigest(rows: readonly LongitudinalConstructor[]): `sha256:${string}` {
   validateIngestRegistry(rows);
   return `sha256:${createHash("sha256").update(canonicalizeJson(rows as unknown as JsonValue)).digest("hex")}`;
 }
+export const LONGITUDINAL_REGISTRY_DIGEST = ingestRegistryDigest(LONGITUDINAL_INGEST_REGISTRY);
 
-/**
- * §D revision pair, digest 2: the canonical constructor registry. A zero-incidence registry change
- * moves this literal; longitudinal-store.test.ts fails until an accepted RFC owns the revision bump.
- */
-export const LONGITUDINAL_REGISTRY_DIGEST = "sha256:b40ab302bd081fc90b6a1e0d4746f27bec64d5d76c52b0fc67febd097b39ff74";
-
-/** One admitted, persistable identity: `(projection id, version, semantic sign, source sign)`. */
+/** Old aggregate storage holds ONLY explicitly named operator event prevalence. Native and
+ * condition metrics use the separate subject-row lane; no global absence identity remains. */
 export interface AdmittedIdentity {
-  readonly projectionId: string;
-  readonly projectionVersion: 1;
-  readonly semanticSign: SemanticEventSign;
-  readonly sourceSign: SemanticEventSign;
-  readonly kind: "edge" | "population";
-  /** The projection/sign pair whose exhibition on an edge defines membership. */
-  readonly matchProjectionId: string;
-  readonly matchSign: SemanticEventSign;
+  readonly projectionId: string; readonly projectionVersion: 1 | 2;
+  readonly semanticSign: SemanticEventSign; readonly sourceSign: SemanticEventSign;
+  readonly kind: "edge"; readonly matchProjectionId: string; readonly matchProjectionVersion: 1 | 2; readonly matchSign: SemanticEventSign;
 }
-
 export const LONGITUDINAL_ADMITTED_IDENTITIES: readonly AdmittedIdentity[] = Object.freeze(
-  LONGITUDINAL_INGEST_REGISTRY.flatMap((row): AdmittedIdentity[] => {
-    if (row.kind === "path") return [];
-    if (row.kind === "edge") {
-      return row.signs.map((sign) => Object.freeze({
-        projectionId: row.projection.id, projectionVersion: 1 as const, semanticSign: sign, sourceSign: sign,
-        kind: "edge" as const, matchProjectionId: row.projection.id, matchSign: sign,
-      }));
-    }
-    return row.baseSigns.map((sign) => Object.freeze({
-      projectionId: row.projection.id, projectionVersion: 1 as const, semanticSign: "avoided" as const, sourceSign: sign,
-      kind: "population" as const, matchProjectionId: row.baseProjection.id, matchSign: sign,
-    }));
-  }).sort((left, right) => identityKey(left) < identityKey(right) ? -1 : identityKey(left) > identityKey(right) ? 1 : 0),
+  LONGITUDINAL_INGEST_REGISTRY.flatMap((row): AdmittedIdentity[] => row.kind !== "edge" ? [] : row.signs.map(sign => Object.freeze({
+    projectionId: row.projection.id, projectionVersion: row.projection.version, semanticSign: sign, sourceSign: sign,
+    kind: "edge" as const, matchProjectionId: row.projection.id, matchProjectionVersion: row.projection.version, matchSign: sign,
+  }))).sort((a, b) => identityKey(a) < identityKey(b) ? -1 : identityKey(a) > identityKey(b) ? 1 : 0),
 );
 
 export function identityKey(value: { readonly projectionId: string; readonly projectionVersion: number; readonly semanticSign: string; readonly sourceSign: string }): string {
@@ -172,7 +161,7 @@ export function identityKey(value: { readonly projectionId: string; readonly pro
 }
 
 const ADMITTED_BY_KEY = new Map(LONGITUDINAL_ADMITTED_IDENTITIES.map((identity) => [identityKey(identity), identity] as const));
-const ADMITTED_PROJECTIONS = new Set(LONGITUDINAL_ADMITTED_IDENTITIES.map((identity) => identity.projectionId));
+const ADMITTED_PROJECTIONS = new Set(LONGITUDINAL_ADMITTED_IDENTITIES.map((identity) => `${identity.projectionId}@${identity.projectionVersion}`));
 
 /** True only for a compiled `(id, version, semanticSign, sourceSign)` tuple; no caller operand widens it. */
 export function isAdmittedIdentity(value: { readonly projectionId: string; readonly projectionVersion: number; readonly semanticSign: string; readonly sourceSign: string }): boolean {
@@ -181,5 +170,5 @@ export function isAdmittedIdentity(value: { readonly projectionId: string; reado
 
 /** Projection-level admission for query filters that may omit signs. Deferred paths stay unqueryable. */
 export function isAdmittedProjection(id: string, version: number): boolean {
-  return version === 1 && ADMITTED_PROJECTIONS.has(id);
+  return ADMITTED_PROJECTIONS.has(key({ id, version }));
 }

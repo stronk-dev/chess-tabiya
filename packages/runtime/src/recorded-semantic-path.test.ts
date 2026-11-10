@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 import { branchPath, branchPaths, resolveBranchPath } from "./branch-path.js";
-import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_FAMILY_IDS, SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
+import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_FAMILY_IDS, SEMANTIC_EVENT_PROJECTION_REFS, RECORDED_PATH_SUCCESSOR_REFS, currentRecordedModuleRefs } from "./evidence-catalog.js";
 import { EvidenceManifestError, compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceConventionReceipt, evidenceDigest, evidenceValueReceipt, identitySealedEvidenceWithoutValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
 import { CONVENTION_REGISTRY } from "./evidence-conventions.js";
 import type { LegalExchangeResult } from "./exchange.js";
@@ -519,7 +519,10 @@ describe("recorded semantic path compiler", () => {
 
   it("[criterion 4] keeps one private table set-equal to the exact v2 manifest population", () => {
     const rows = recordedPathEvaluatorRows();
-    const v2Refs = SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2);
+    const v2Refs = RECORDED_PATH_SUCCESSOR_REFS;
+    expect(SEMANTIC_EVENT_PROJECTION_REFS).toContainEqual({ id: "derived.material.event.role_asymmetry", version: 2 });
+    expect(v2Refs).not.toContainEqual({ id: "derived.material.event.role_asymmetry", version: 2 });
+    expect(currentRecordedModuleRefs([{ id: "derived.material.event.role_asymmetry", version: 2 }])).toEqual([{ id: "derived.material.event.role_asymmetry", version: 2 }]);
     expect(new Set(rows.map((row) => exact(row.projection)))).toEqual(new Set(v2Refs.map(exact)));
     expect(new Set(rows.map((row) => exact(row.projection))).size).toBe(11);
     expect(rows).toHaveLength(13);
@@ -538,7 +541,7 @@ describe("recorded semantic path compiler", () => {
     const omitted = { ...EVIDENCE_CONTRACT_DECLARATIONS, producers: EVIDENCE_CONTRACT_DECLARATIONS.producers.map((producer) => ({ ...producer, outputs: producer.outputs.map((output) => output.version === 2 ? { ...output, version: 1 } : output) })) };
     expect(() => compileEvidenceManifest(omitted)).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_PROJECTION_DUPLICATE" }));
     // v2 successors retain v1 meaning and differ only in the exact edge source.
-    for (const ref of SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2)) {
+    for (const ref of RECORDED_PATH_SUCCESSOR_REFS) {
       const one = PRIMARY_EVIDENCE_MANIFEST.projections.find((value) => value.id === ref.id && value.version === 1)!;
       const two = PRIMARY_EVIDENCE_MANIFEST.projections.find((value) => value.id === ref.id && value.version === 2)!;
       expect([two.operands, two.signs, two.grounding, two.exactness, two.limitations, two.forms]).toEqual([one.operands, one.signs, one.grounding, one.exactness, one.limitations, one.forms]);
@@ -600,7 +603,7 @@ describe("recorded semantic path compiler", () => {
       for (const event of result.events) emitted.add(exact(event.projection));
       expect(result.events.every((event) => event.projection.version === 2)).toBe(true);
     }
-    expect([...emitted].sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2).map(exact).sort());
+    expect([...emitted].sort()).toEqual(RECORDED_PATH_SUCCESSOR_REFS.map(exact).sort());
     const five = compileMain(recordedRun("attraction-five", ATTRACTION_FIVE.fen, ATTRACTION_FIVE.moves));
     expect(five.windows.find((window) => exact(window.projection) === v2("derived.tactic.attraction_observed") && window.horizon === 5)?.status).toBe("emitted");
     expect(five.windows.find((window) => exact(window.projection) === v2("derived.tactic.attraction_observed") && window.horizon === 3 && window.startNodeId === five.pathNodeIds[0])?.status).toBe("no_witness");
@@ -736,7 +739,12 @@ describe("recorded semantic path compiler", () => {
     expect(() => recordedSemanticPath({ kind: "bestline", values: { pv: ["e2e4"] } } as unknown as DrillRun, "main")).toThrow(/only a recorded DrillRun/u);
     const pv = PRIMARY_EVIDENCE_MANIFEST.projections.find((value) => value.id === "live.stockfish.pv")!;
     expect(pv.grounding).toBe("bounded_search");
-    expect(PRIMARY_EVIDENCE_MANIFEST.projections.filter((value) => value.version === 2).every((value) => !(JSON.stringify(value.derivation) ?? "").includes("live.stockfish"))).toBe(true);
+    // Version2 is not a recorded-source discriminator: current hypothetical Hint also uses it.
+    // Check every actual recorded family, including its current@3 successors, instead.
+    const recordedIds = new Set(RECORDED_PATH_SUCCESSOR_REFS.map(value => value.id));
+    const recorded = PRIMARY_EVIDENCE_MANIFEST.projections.filter(value => recordedIds.has(value.id) && value.version >= 2);
+    expect(recorded.length).toBeGreaterThanOrEqual(RECORDED_PATH_SUCCESSOR_REFS.length);
+    expect(recorded.every(value => !(JSON.stringify(value.derivation) ?? "").includes("live.stockfish"))).toBe(true);
   });
 
   it("[criterion 15] moves result identity with every exact edge, value and convention receipt", () => {

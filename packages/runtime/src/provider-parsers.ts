@@ -16,7 +16,8 @@ import { parseUci } from "chessops/util";
 
 import { positionFromFen, transposeKey } from "./chess.js";
 import { exactLegalMoves, exactMoveIdentity } from "./legal-moves.js";
-import { maiaCommandImage, maiaReachedFen, playIdentity } from "./provider-requests.js";
+import { maiaCommandImage, maiaInferenceTaskCommandImage, maiaReachedFen, playIdentity } from "./provider-requests.js";
+import { FLOAT32_POLICY_MASS_TOLERANCE } from "./practical-difficulty.js";
 import {
   SYZYGY_TABLEBASE_CATEGORIES,
   type ExplorerHistoryRow,
@@ -29,6 +30,7 @@ import {
   type LegalRootScore,
   type LiveSyzygyPosition,
   type MaiaPolicyPage,
+  type MaiaInferenceTaskResult,
   type ProviderExecutionCapture,
   type ProviderOperationId,
   type ProviderOperationResultMap,
@@ -118,10 +120,10 @@ interface ScoreLine {
   readonly policy: number | null;
 }
 
-function scoreLine(line: string): ScoreLine | null {
+function scoreLine(line: string, allowMissingDepth = false, policyMaximum = 1): ScoreLine | null {
   if (!line.startsWith("info ")) return null;
-  if (token(line, "depth") === undefined) return null;
-  const depth = safeInt(token(line, "depth"), "depth");
+  if (token(line, "depth") === undefined && !allowMissingDepth) return null;
+  const depth = token(line, "depth") === undefined ? 0 : safeInt(token(line, "depth"), "depth");
   const multipvToken = token(line, "multipv");
   const multipv = multipvToken === undefined ? null : safeInt(multipvToken, "multipv");
   const scoreMatch = /(?:^|\s)score (cp|mate) (\S+)/u.exec(line);
@@ -147,7 +149,7 @@ function scoreLine(line: string): ScoreLine | null {
   let policy: number | null = null;
   if (policyToken !== undefined) {
     policy = Number(policyToken);
-    if (!/^[0-9]+(?:\.[0-9]+)?(?:e[+-]?\d+)?$/iu.test(policyToken) || !Number.isFinite(policy) || policy < 0 || policy > 1) bad(`invalid policy mass ${policyToken}`);
+    if (!/^[0-9]+(?:\.[0-9]+)?(?:e[+-]?\d+)?$/iu.test(policyToken) || !Number.isFinite(policy) || policy < 0 || policy > policyMaximum) bad(`invalid policy mass ${policyToken}`);
   }
   return { depth, multipv, bounded: /(?:^|\s)(?:upperbound|lowerbound)(?:\s|$)/u.test(line), score, pv, wdl, policy };
 }
@@ -344,6 +346,45 @@ function parseMaiaPolicyPage(capture: ProviderExecutionCapture<"maia.policy_page
   });
 }
 
+function parseMaiaInferenceTask(capture: ProviderExecutionCapture<"maia.inference_task@1">, requested: ProviderRequestedIdentityMap["maia.inference_task@1"]): MaiaInferenceTaskResult {
+  const { request } = requested;
+  const task = readUciTask(capture, maiaInferenceTaskCommandImage(request, capture.actualIdentity.optionImage));
+  const fen = maiaReachedFen(request.position);
+  const byMove = new Map<string, MaiaInferenceTaskResult["candidates"][number]>();
+  for (const line of task.output) {
+    if (!line.startsWith("info ") || !/(?:^|\s)pv(?:\s|$)/u.test(line)) continue;
+    const row = scoreLine(line, true, 1 + FLOAT32_POLICY_MASS_TOLERANCE);
+    if (row?.pv === null || row === null || row.pv.length === 0) return bad("a Maia task candidate has no PV move");
+    const rank = row.multipv ?? bad("a Maia task candidate omitted its MultiPV rank");
+    if (rank < 1 || rank > request.requestedWidth) bad(`unknown MultiPV rank ${rank}`);
+    if (/(?:^|\s)policy(?:\s|$)/u.test(line) && token(line, "policy") === undefined) bad("malformed policy mass");
+    let moveUci: string;
+    try { moveUci = exactMoveIdentity(fen, row.pv[0]!); } catch { return bad(`illegal Maia candidate ${row.pv[0]}`); }
+    byMove.set(moveUci, Object.freeze({ moveUci, rank, mass: row.policy,
+      scoreCp: !row.bounded && row.score?.kind === "cp" ? row.score.value : null,
+      wdl: row.bounded || row.wdl === null ? null : Object.freeze({ win: row.wdl[0], draw: row.wdl[1], loss: row.wdl[2] }),
+    }));
+  }
+  const candidates = [...byMove.values()].sort((a, b) => a.rank - b.rank);
+  if (new Set(candidates.map(row => row.rank)).size !== candidates.length) bad("duplicate final Maia ranks");
+  const mass = candidates.reduce((sum, row) => sum + (row.mass ?? 0), 0);
+  if (!Number.isFinite(mass) || mass > 1 + FLOAT32_POLICY_MASS_TOLERANCE) bad("reported Maia mass exceeds one");
+  const terminal = /^bestmove (\S+)(?: ponder ([a-h][1-8][a-h][1-8][qrbn]?))?$/u.exec(task.bestmove);
+  if (terminal === null) return bad("malformed Maia task termination");
+  const raw = terminal[1]!, isNull = raw === "(none)" || raw === "0000";
+  let moveUci: string | null = null;
+  if (isNull) {
+    if (!positionFromFen(fen).isEnd() || terminal[2] !== undefined) bad("null bestmove at a nonterminal root or with a ponder move");
+  } else {
+    try {
+      moveUci = exactMoveIdentity(fen, raw);
+      if (terminal[2] !== undefined) exactMoveIdentity(playIdentity(fen, moveUci), terminal[2]);
+    } catch { return bad("illegal Maia task terminal/ponder move"); }
+  }
+  return Object.freeze({ request, appliedBand: request.band, coverage: "bounded_reported_window",
+    candidates: Object.freeze(candidates), termination: Object.freeze({ rawBestMoveUci: isNull ? null : raw, moveUci }) });
+}
+
 // ---------------------------------------------------------------------------------------------
 // HTTP bodies
 // ---------------------------------------------------------------------------------------------
@@ -491,6 +532,7 @@ export const PROVIDER_RESPONSE_PARSERS: ProviderResponseParsers = Object.freeze(
   "stockfish.position_evaluation@1": Object.freeze({ operation: "stockfish.position_evaluation@1", id: "parse.stockfish_position_evaluation@1", parse: parsePositionEvaluation }),
   "stockfish.principal_variation@1": Object.freeze({ operation: "stockfish.principal_variation@1", id: "parse.stockfish_principal_variation@1", parse: parsePrincipalVariation }),
   "maia.policy_page@1": Object.freeze({ operation: "maia.policy_page@1", id: "parse.maia_policy_page@1", parse: parseMaiaPolicyPage }),
+  "maia.inference_task@1": Object.freeze({ operation: "maia.inference_task@1", id: "parse.maia_inference_task@1", parse: parseMaiaInferenceTask }),
   "syzygy.position@1": Object.freeze({ operation: "syzygy.position@1", id: "parse.syzygy_position@1", parse: parseSyzygyPosition }),
   "lichess_explorer.position_page@1": Object.freeze({ operation: "lichess_explorer.position_page@1", id: "parse.lichess_explorer_position_page@1", parse: parseExplorerPositionPage }),
 } satisfies ProviderResponseParsers);

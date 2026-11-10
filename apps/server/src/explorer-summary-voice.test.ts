@@ -12,7 +12,7 @@ describe("external voice Explorer transport", () => {
     const parsed = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
     const page = providerSourceEvidence(operation, PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, ...parsed, servedAt: FIXTURE_AT }));
     const summary = deriveExplorerPopulationSummary(page);
-    const rendered = renderPresentedEvidenceView(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 1 }, [summary]));
+    const rendered = renderPresentedEvidenceView(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 2 }, [summary]));
     expect(JSON.stringify(rendered)).toContain("MOVE_ROW_SENTINEL"); // Negative control: the source is genuinely present internally.
     const outbound = vi.fn<typeof fetch>(async (_input, init) => {
       const bytes = String(init?.body);

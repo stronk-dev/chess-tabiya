@@ -9,7 +9,7 @@ deadlines, cancellation, deduplication and bounded retention. A consumer receive
 source evidence, a typed local-domain fact or a typed source failure. It never receives a
 provider-private shortcut.
 
-## The six operations
+## The seven operations
 
 | operation | provider | endpoint | source projection | CLI name |
 |---|---|---|---|---|
@@ -17,6 +17,7 @@ provider-private shortcut.
 | `stockfish.position_evaluation@1` | stockfish | `stockfish-analysis` supervisor | `live.stockfish.position_eval@1` | `stockfish-position-evaluation` |
 | `stockfish.principal_variation@1` | stockfish | `stockfish-analysis` supervisor | `live.stockfish.principal_variation@1` | `stockfish-principal-variation` |
 | `maia.policy_page@1` | maia | `maia-5m` supervisor | `human.maia.policy_page@1` | `maia-policy-page` |
+| `maia.inference_task@1` | maia | `maia-5m` supervisor | `human.maia.inference_task@1` | `maia-inference-task` |
 | `syzygy.position@1` | syzygy | `https://tablebase.lichess.org/standard` | `live.syzygy.position_result@2` | `syzygy-position` |
 | `lichess_explorer.position_page@1` | lichess_explorer | `https://explorer.lichess.org/lichess` | `human.explorer.position_page@1` | `explorer-position-page` |
 
@@ -63,7 +64,7 @@ keeps no score, rank or verdict. The only consumer is Review's explicit Analyze 
 - `apps/server/src/provider-operations.ts` contains the six descriptors.
 - `apps/server/src/engine-supervisor.ts#exchange` runs one serialized task. That task captures the
   generation, identity, option image and launched artifact, and runs the `finally` reset.
-- `apps/server/src/provider-traversal.ts` is the operator capability, the six `providerTraversal*`
+- `apps/server/src/provider-traversal.ts` is the operator capability, the seven `providerTraversal*`
   callables and the CLI.
 - `packages/runtime/src/evidence-execution.ts` compiles literal execution paths. Nested choices
   form Cartesian products; repeated inputs retain their full occurrence addresses; semantic
@@ -184,9 +185,20 @@ data; only the actual appliance journey proves real bot play. Amendment and reta
 projection/receipt digest line with the compiled execution image on evidence success. Each
 traversal validates its registered operation, whole-delivery type and source-factory identity
 before acquiring anything. Exit codes: 0 evidence or local-domain result, 3 typed source
-failure, 64 usage error. `PROVIDER_TRAVERSAL_OFFLINE=1` disables network providers.
-`LICHESS_EXPLORER_TOKEN` enables the explorer and `STOCKFISH_COMMAND` selects the engine. The
+failure, 64 usage error. `PROVIDER_TRAVERSAL_OFFLINE=1` disables remote HTTP providers, not
+the configured Maia UCI sidecar. `LICHESS_EXPLORER_TOKEN` enables the explorer and
+`STOCKFISH_COMMAND` selects the engine. Both Maia arms use the existing pinned network spec
+at `MAIA_HOST`/`MAIA_PORT` (defaults `maia:7000`) and the running sidecar's actual container
+identity probe. The Node bridge executable is never substituted for that artifact. Startup is
+lazy: invalid arguments/JSON/requests do not connect. Missing or invalid sidecar identity yields
+a typed source failure, not evidence. Operator composition does not claim application provider
+health; learner paths still use their actual health authority. The
 bounds are explicit operator values (`OPERATOR_PROVIDER_BOUNDS`) and are not production capacity.
+
+`make maia-task-native-check MAIA_OPERATOR_CLI=1` additionally exercises both built Maia CLI
+arms against the byte-verified native image and its existing Python sidecar. Its temporary
+container is loopback-bound and removed afterwards. This opt-in proof is not authenticated
+Inspector UI, calibration, deployment footprint or release clearance.
 
 `make provider-exchange-check` runs the focused contract. After a parser source change, regenerate
 the parser digest with `UPDATE_PROVIDER_PARSER_IMPLEMENTATION=1`.

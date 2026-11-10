@@ -1,152 +1,107 @@
 import { describe, expect, it } from "vitest";
-
+import * as runtime from "@chess-tabiya/runtime";
+import { capabilityKey } from "@chess-tabiya/schema";
 import {
-  BREADTH_COLLECTOR_PROJECTION_IDS,
-  CANDIDATE_READINGS_SCOPE,
-  TACTICAL_COLLECTOR_PROJECTION_IDS,
-  candidatePlayedRow,
-  compileCandidatePopulation,
-  trappedPieceReading,
-  type SquareControlReading,
+  CANDIDATE_READINGS_SCOPE, CANDIDATE_WIDE_SCOPE, candidatePlayedRow,
+  compileCandidatePopulation, exactLegalMoves, trappedPieceReading,
+  type CandidatePacketScope, type SquareControlReading,
 } from "@chess-tabiya/runtime";
-
 import { BOT_POLICY_PROFILES } from "./bot-policy-catalog.js";
-import { CANDIDATE_COLLECTOR_IDS, candidateFeatureVector } from "./candidate-evidence.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
+import { runtimeSupportedCapabilities, unmetRequirements } from "./capability/pack-capabilities.js";
 
 const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-const ENGINE = Object.freeze({
-  id: "stockfish-play",
-  name: "Stockfish",
-  version: "17",
-  seedHonored: true,
-  searchBound: Object.freeze({ kind: "nodes" as const, value: 25_000 }),
-});
+function packet(beforeFen: string, scope: CandidatePacketScope = CANDIDATE_WIDE_SCOPE) {
+  const result = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope });
+  if (result.kind !== "ready") throw new Error(`Expected complete candidate packet: ${JSON.stringify(result.error)}`);
+  return result.receipt;
+}
 
-describe("candidate evidence adapter", () => {
-  it("features every legal candidate with registered child readings and edge events", () => {
-    const vector = candidateFeatureVector({
-      beforeFen: START,
-      engine: ENGINE,
-      candidates: [
-        { moveUci: "g1f3", scoreCp: 31 },
-        { moveUci: "e2e4", scoreCp: 27 },
-      ],
-    });
-
-    expect(vector.scoreFrame).toBe("root_side");
-    expect(vector.engine.searchBound).toEqual({ kind: "nodes", value: 25_000 });
-    expect(vector.candidates.map((row) => [row.moveUci, row.scoreCp])).toEqual([["g1f3", 31], ["e2e4", 27]]);
-    expect(new Set(vector.candidates.map((row) => row.afterFen))).toHaveLength(2);
-
-    const allowed = new Set<string>([...TACTICAL_COLLECTOR_PROJECTION_IDS, ...BREADTH_COLLECTOR_PROJECTION_IDS]);
-    for (const row of vector.candidates) {
-      expect(row.results.length).toBeGreaterThan(15);
-      expect(row.results.every((result) => result.source.version === 1 && allowed.has(result.source.id))).toBe(true);
-      expect(row.results.map((result) => result.source.id)).toEqual(expect.arrayContaining([
-        "rules.mobility.reading.piece_destinations",
-        "rules.king.reading.zone_state",
+describe("current candidate evidence (D3853 unused vector retirement)", () => {
+  it("retains the complete legal population, child readings and edge events without caller scores", () => {
+    const receipt = packet(START);
+    expect(receipt.packet.candidates.map(row => row.moveUci).sort()).toEqual(exactLegalMoves(START).map(move => move.uci).sort());
+    expect(receipt.packet.candidates).toHaveLength(20);
+    const selected = ["g1f3", "e2e4"].map(move => candidatePlayedRow(receipt, move));
+    expect(new Set(selected.map(row => row.afterFen))).toHaveLength(2);
+    for (const row of selected) {
+      expect(row.readings.length).toBeGreaterThan(15);
+      expect(row.readings.map(item => item.projection.id)).toEqual(expect.arrayContaining([
+        "rules.mobility.reading.piece_destinations", "rules.king.reading.zone_state",
         "rules.tactic.reading.loose_piece",
-        "rules.tactic.consequence.reply_breadth",
       ]));
-      // D3642: the real opponent consumer receives both pieces' clearance
-      // blockers, not merely a new Inspector caption or a refreshed snapshot.
-      expect(row.results.filter(result => result.source.id === "rules.castling.reading.legality").map(result => result.payload)).toEqual(expect.arrayContaining([
+      expect(row.events.some(item => item.projection.id === "rules.tactic.consequence.reply_breadth")).toBe(true);
+      // D3642 remains a real current source regression, not an obsolete vector snapshot.
+      expect(row.readings.filter(item => item.projection.id === "rules.castling.reading.legality").map(item => item.payload)).toEqual(expect.arrayContaining([
         expect.objectContaining({ color: "white", wing: "queenside", blockedSquares: ["d1", "c1", "b1"] }),
         expect.objectContaining({ color: "black", wing: "queenside", blockedSquares: ["d8", "c8", "b8"] }),
       ]));
-      // D3656: actual opponent input receives attack-only legal controllers, not
-      // merely a corrected caption or a refreshed authority-profile digest.
-      const control = row.results.find(result => result.source.id === "rules.square.reading.control")!.payload as SquareControlReading;
+      // D3656: every legal controller must be an actual attack, not a quiet destination.
+      const control = row.readings.find(item => item.projection.id === "rules.square.reading.control")!.payload as SquareControlReading;
       for (const color of control.colors) {
         if (color.legal.kind !== "available") continue;
-        const pseudoEdges = new Set(color.pseudo.flatMap(cell => cell.controllers.map(piece => `${piece.square}:${cell.target}`)));
+        const pseudo = new Set(color.pseudo.flatMap(cell => cell.controllers.map(piece => `${piece.square}:${cell.target}`)));
         for (const cell of color.legal.squares) for (const piece of cell.controllers) {
-          expect(pseudoEdges.has(`${piece.square}:${cell.target}`), `${row.moveUci} ${piece.square} → ${cell.target}`).toBe(true);
+          expect(pseudo.has(`${piece.square}:${cell.target}`), `${row.moveUci} ${piece.square} → ${cell.target}`).toBe(true);
         }
       }
       const white = control.colors.find(color => color.color === "white")!;
       if (white.legal.kind !== "available") throw new Error("Expected available white control");
       expect(white.legal.squares.find(cell => cell.target === "e4")!.controllers.map(piece => piece.square)).not.toContain("e2");
+      expect([...row.readings, ...row.events].some(item => item.projection.id === "human.maia.candidate_wdl")).toBe(false);
     }
-    expect(vector.candidates[0]!.results.some((result) => result.source.id === "rules.transition.event.developed")).toBe(true);
-    expect(JSON.stringify(vector)).not.toMatch(/sentence|personality|move_quality|learner/u);
+    expect(selected[0]!.events.some(item => item.projection.id === "rules.transition.event.developed")).toBe(true);
+    expect(JSON.stringify(receipt.packet)).not.toMatch(/scoreCp|scoreFrame|sentence|personality|move_quality|learner/u);
   });
 
-  it("is admitted only to the opponent selector and retains its literal dependencies", () => {
-    const projection = EVIDENCE_MANIFEST.projections.find((item) => item.id === "derived.opponent.candidate_feature_vector")!;
-    expect(projection.dependsOn).toEqual(expect.arrayContaining([
-      { id: "live.stockfish.eval", version: 1 },
-      { id: "rules.tactic.event.double_attack", version: 1 },
-      { id: "rules.mobility.reading.piece_destinations", version: 1 },
-    ]));
-    expect(EVIDENCE_MANIFEST.bindings.filter((binding) => binding.projection.id === projection.id).map((binding) => binding.consumer.id)).toEqual(["opponent.selection"]);
+  it("has no vector callable or binding, while preserving its historical meaning and real opponent inputs", () => {
+    for (const name of ["candidateFeatureVectorEvidence", "candidateCollectorIds"]) expect(name in runtime).toBe(false);
+    const projection = EVIDENCE_MANIFEST.projections.find(item => item.id === "derived.opponent.candidate_feature_vector")!;
+    expect(projection.version).toBe(1);
+    expect(projection.disposition?.kind).toBe("retired");
+    const current = runtime.CAPABILITY_REGISTRY.current(projection.id)!;
+    expect(current.id).toEqual({ id: projection.id, version: { kind: "integer", value: 1 } });
+    expect(current.disposition).toMatchObject({ kind: "withdrawn", successor: null,
+      noSuccessor: { kind: "replacement_refused", authority: { kind: "accepted_rfc", document: "rfc/evidence-value-authority.md" } },
+    });
+    const support = runtimeSupportedCapabilities();
+    expect(support.supported.has(capabilityKey(current.id))).toBe(false);
+    expect(unmetRequirements([current.id], support)).toEqual([current.id]);
+    expect(EVIDENCE_MANIFEST.bindings.filter(binding => binding.projection.id === projection.id)).toEqual([]);
+    expect(EVIDENCE_MANIFEST.consumers.find(item => item.id === "opponent.selection" && item.version === 1)?.accepts).toEqual([
+      ...["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result"].map(id => ({ id, version: 1 })),
+      { id: "live.syzygy.position_result", version: 2 },
+    ]);
   });
 
   it.each([
     { beforeFen: "r7/7k/8/8/8/8/b1n5/R1K5 b A - 0 1", move: "h7h8", rook: "a1" },
     { beforeFen: "r1k5/B1N5/8/8/8/8/7K/R7 w a - 0 1", move: "h2h1", rook: "a8" },
-  ])("D3652 retains a castling escape in both the complete candidate packet and actual opponent consumer: $move", value => {
-    const packet = compileCandidatePopulation({ beforeFen: value.beforeFen, ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
-    if (packet.kind !== "ready") throw new Error("expected a complete legal packet");
-    const played = candidatePlayedRow(packet.receipt, value.move);
-    const reading = played.readings.find(item => item.projection.id === "rules.tactic.reading.trapped_piece");
-    expect(reading).toBeDefined();
-    const population = reading!.payload as { readonly kind: string; readonly pieces: readonly unknown[] };
-    expect(population.kind).toBe("pieces");
-    expect(population.pieces.length).toBe(0);
-    const vector = candidateFeatureVector({ beforeFen: value.beforeFen, engine: ENGINE, candidates: [{ moveUci: value.move, scoreCp: 31 }] });
-    const candidate = vector.candidates[0]!;
-    const retained = candidate.results.filter(item => item.source.id === "rules.tactic.reading.trapped_piece");
-    expect(candidate.moveUci).toBe(value.move);
-    expect(candidate.scoreCp).toBe(31);
-    expect(candidate.afterFen).toBe(played.afterFen);
-    expect(retained).toHaveLength(1);
-    expect(retained[0]!.payload).toEqual(reading!.payload);
-    // Removing the right is the same legal position with the escape removed,
-    // not a no-attacker or irrelevant-side negative.
-    const noCastle = candidate.afterFen.replace(/ [Qq] /u, " - ");
-    const original = trappedPieceReading(noCastle);
-    expect(original).toMatchObject({ kind: "pieces", pieces: expect.arrayContaining([expect.objectContaining({ piece: expect.objectContaining({ square: value.rook }) })]) });
+  ])("D3652 retains a genuine castling escape in the current packet: $move", value => {
+    const row = candidatePlayedRow(packet(value.beforeFen, CANDIDATE_READINGS_SCOPE), value.move);
+    const readings = row.readings.filter(item => item.projection.id === "rules.tactic.reading.trapped_piece");
+    expect(readings).toHaveLength(1);
+    expect(readings[0]!.payload).toEqual({ kind: "pieces", conventionId: "trapped@1", fen: row.afterFen, sideToMove: value.move === "h7h8" ? "white" : "black", pieces: [] });
+    // Same geometry without the right: this is not an irrelevant-side/no-attacker negative.
+    const noCastle = row.afterFen.replace(/ [Qq] /u, " - ");
+    expect(trappedPieceReading(noCastle)).toMatchObject({ kind: "pieces", pieces: expect.arrayContaining([
+      expect.objectContaining({ piece: expect.objectContaining({ square: value.rook }) }),
+    ]) });
   });
 
-  it("retains the declared empty threat collection when a candidate gives check", () => {
-    const vector = candidateFeatureVector({
-      beforeFen: "4k3/8/8/8/8/8/Q7/4K3 w - - 0 1",
-      engine: ENGINE,
-      candidates: [{ moveUci: "a2e6", scoreCp: 100 }],
-    });
-    const threat = vector.candidates[0]!.results.find((result) => result.source.id === "rules.tactic.consequence.threat");
-    expect(threat?.payload).toEqual({
-      kind: "abstained",
-      reason: "pass_while_in_check",
-      conventionId: "threat@1",
-      threats: [],
+  it("retains explicit pass-while-in-check abstention for a checking candidate", () => {
+    const row = candidatePlayedRow(packet("4k3/8/8/8/8/8/Q7/4K3 w - - 0 1"), "a2e6");
+    expect(row.readings.find(item => item.projection.id === "rules.tactic.consequence.threat")?.payload).toEqual({
+      kind: "abstained", reason: "pass_while_in_check", conventionId: "threat@1", threats: [],
     });
   });
 
-  it("refuses illegal, duplicate, unbounded, empty, and unevaluated candidates", () => {
-    const { searchBound: _searchBound, ...unboundedEngine } = ENGINE;
-    expect(() => candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [] })).toThrow(/at least one/u);
-    expect(() => candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [{ moveUci: "e2e5", scoreCp: 0 }] })).toThrow(/illegal/u);
-    expect(() => candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [{ moveUci: "e2e4", scoreCp: 0 }, { moveUci: "e2e4", scoreCp: 1 }] })).toThrow(/duplicated/u);
-    expect(() => candidateFeatureVector({ beforeFen: START, engine: unboundedEngine, candidates: [{ moveUci: "e2e4", scoreCp: 0 }] })).toThrow(/fixed engine search bound/u);
-    expect(() => candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [{ moveUci: "e2e4", scoreCp: Number.NaN }] })).toThrow(/not finite/u);
+  it("refuses an illegal candidate identity rather than inventing a scored row", () => {
+    const receipt = packet(START, CANDIDATE_READINGS_SCOPE);
+    expect(() => candidatePlayedRow(receipt, "e2e5")).toThrow();
   });
 
-  it("closes the Maia leak and reads child readings from the one runtime authority (shared-candidate-evidence-packet §8.2, criterion 9/20)", () => {
-    expect(CANDIDATE_COLLECTOR_IDS.has("human.maia.candidate_wdl")).toBe(false);
-    expect(TACTICAL_COLLECTOR_PROJECTION_IDS).toContain("human.maia.candidate_wdl");
-    const vector = candidateFeatureVector({ beforeFen: START, engine: ENGINE, candidates: [{ moveUci: "g1f3", scoreCp: 31 }] });
-    const packet = compileCandidatePopulation({ beforeFen: START, ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
-    if (packet.kind !== "ready") throw new Error("expected packet");
-    const row = candidatePlayedRow(packet.receipt, "g1f3");
-    const readingIds = new Set(row.readings.map((value) => value.projection.id));
-    const vectorReadings = vector.candidates[0]!.results.filter((result) => readingIds.has(result.source.id)).map((result) => `${result.source.id}:${JSON.stringify(result.payload)}`).sort();
-    expect(vectorReadings).toEqual(row.readings.map((value) => `${value.projection.id}:${JSON.stringify(value.payload)}`).sort());
-  });
-
-  it("the packet foundation claims no bot consumer: the production bot profile roster stays empty (criterion 23)", () => {
+  it("does not claim bot adoption or calibration from source availability", () => {
     expect(BOT_POLICY_PROFILES).toEqual([]);
   });
 });

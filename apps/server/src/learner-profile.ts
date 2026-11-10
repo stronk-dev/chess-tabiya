@@ -6,14 +6,11 @@
 // weakness ranking or advice anywhere in this module.
 import {
   castledWing,
-  decisionTraitPopulation,
   deriveConceptMarks,
   EMPTY_CATEGORY_REASONS,
   gameBootstrapInterval,
   gameEligibilityCount,
   gameUnitRate,
-  hasFianchettoConfiguration,
-  holdsCastlingRight,
   insufficientTier,
   readBackReplay,
   sealHabitCard,
@@ -59,12 +56,16 @@ import type { Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
 import {
   parseLongitudinalReadQuery,
+  type LongitudinalCompleteCut,
   type LongitudinalCutOutcome,
-  type LongitudinalObservationRow,
   type LongitudinalPhase,
   type LongitudinalReadResult,
   type ParsedLongitudinalReadQuery,
 } from "./longitudinal-contract.js";
+import { profileGameFactReferenceIndex, assertProfileGameFactReferenceIndex } from "./profile-game-fact-references.js";
+import { parseLongitudinalGameFactRow, type GameFactReadOutcome } from "./profile-game-facts-contract.js";
+import { profileChoiceFactReferenceIndex, assertProfileChoiceFactReferenceIndex } from "./profile-choice-fact-references.js";
+import { parseLongitudinalChoiceFactRow, type ChoiceFactReadOutcome } from "./profile-choice-facts-contract.js";
 import { normativeDecisions } from "./longitudinal-decisions.js";
 import { LONGITUDINAL_TABLES } from "./longitudinal-store.js";
 import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
@@ -77,6 +78,7 @@ import { deepestOpeningReached, recordedOpeningPosition, type OpeningCatalogueAv
 export interface LearnerProfileStorage {
   readLongitudinalSnapshot(actorLearnerId: string, query: ParsedLongitudinalReadQuery): LongitudinalReadResult;
   longitudinalSourceImageV4(runId: string, requestedSeq: number): LongitudinalSourceImageV4;
+  longitudinalSourceDigestV4(image: LongitudinalSourceImageV4): `sha256:${string}`;
   applicationTableNames(): readonly string[];
 }
 
@@ -127,10 +129,10 @@ interface DecisionFact {
   readonly phase: LongitudinalPhase;
   readonly beforeFen: string;
   readonly moveUci: string;
-  readonly traits: { readonly pawn: boolean; readonly centerPawn: boolean; readonly queen: boolean };
-  readonly share: { readonly pawn: number; readonly centerPawn: number; readonly queen: number };
+  readonly traits: { readonly pawn: boolean; readonly centerPawn: boolean; readonly queen: boolean } | undefined;
+  readonly share: { readonly pawn: number; readonly centerPawn: number; readonly queen: number } | undefined;
   readonly beforePly: number;
-  readonly legalMoves: readonly string[];
+  readonly legalMoves: readonly string[] | undefined;
 }
 
 interface OpeningFact { readonly eco: string; readonly name: string; readonly nodeId: string; readonly ply: number }
@@ -139,10 +141,10 @@ interface GameFact {
   readonly primaryBranchId: string;
   readonly learnerColor: "white" | "black";
   readonly decisions: readonly DecisionFact[];
-  readonly castlingEligible: boolean;
+  readonly castlingEligible: boolean | undefined;
   readonly castled: { readonly wing: "kingside" | "queenside"; readonly ref: StyleContributorRef } | null;
-  readonly fianchetto: StyleContributorRef | null;
-  readonly knightScreen: StyleContributorRef | null;
+  readonly fianchetto: StyleContributorRef | null | undefined;
+  readonly knightScreen: StyleContributorRef | null | undefined;
   readonly opening: OpeningFact | null;
   readonly outcome: "win" | "loss" | "draw" | null;
   readonly lastPly: number;
@@ -158,6 +160,8 @@ interface RunFact {
   readonly playedDecisions: number;
   readonly nodes: ReadonlyMap<string, { readonly ply: number; readonly moveSan: string | null }>;
   readonly game: GameFact | null;
+  readonly gameReferenceIndex: ReturnType<typeof profileGameFactReferenceIndex>;
+  readonly choiceReferenceIndex: ReturnType<typeof profileChoiceFactReferenceIndex>;
 }
 
 const STANDARD_START_KEY = transposeKey(STANDARD_START_FEN);
@@ -181,6 +185,7 @@ function deriveRunFact(image: LongitudinalSourceImageV4, catalogue: OpeningCatal
   const nodeById = new Map(run.nodes.map((node) => [node.id, node] as const));
   const standardStart = transposeKey(run.start.fen) === STANDARD_START_KEY;
   const line = primaryLine(run);
+  const rootedIndex = new Map(line.map((node, index) => [node.id, index] as const));
   const primaryId = run.branches[0]?.id ?? "";
   const onLine = new Set(line.map((node) => node.id));
   const lineDecisions = decisions.filter((decision) => onLine.has(decision.ref.nodeId));
@@ -192,29 +197,24 @@ function deriveRunFact(image: LongitudinalSourceImageV4, catalogue: OpeningCatal
     for (const decision of lineDecisions) {
       const node = nodeById.get(decision.ref.nodeId)!;
       const parent = node.parentId === null ? undefined : nodeById.get(node.parentId);
-      const population = decisionTraitPopulation(decision.beforeFen, decision.moveUci);
       const ref = contributor(run.id, node, observedAt);
       if (castled === null) {
         const wing = castledWing(decision.beforeFen, decision.moveUci);
         if (wing !== null) castled = Object.freeze({ wing, ref });
       }
-      if (population === undefined) continue;
+      const beforePly = parent === undefined ? undefined : rootedIndex.get(parent.id);
+      if (beforePly === undefined) throw new TypeError("Profile choice metadata has no original primary BEFORE");
       facts.push(Object.freeze({
         ref,
         phase: decision.phase,
         beforeFen: decision.beforeFen,
         moveUci: decision.moveUci,
-        traits: population.played,
-        share: population.share,
-        beforePly: parent?.ply ?? node.ply - 1,
-        legalMoves: population.legalUcis,
+        traits: undefined,
+        share: undefined,
+        beforePly,
+        legalMoves: undefined,
       }));
     }
-    const firstFen = lineDecisions[0]!.beforeFen;
-    const firstWith = (screened: boolean): StyleContributorRef | null => {
-      const node = line.find((candidate) => candidate.parentId !== null && hasFianchettoConfiguration(candidate.fen, color, screened));
-      return node === undefined ? null : contributor(run.id, node, observedAt);
-    };
     let opening: OpeningFact | null = null;
     if (catalogue.kind === "available") {
       const deepest = deepestOpeningReached(catalogue, line.map((node) => recordedOpeningPosition(node.id, node.ply, node.fen)));
@@ -231,10 +231,10 @@ function deriveRunFact(image: LongitudinalSourceImageV4, catalogue: OpeningCatal
       primaryBranchId: primaryId,
       learnerColor: color,
       decisions: Object.freeze(facts),
-      castlingEligible: holdsCastlingRight(firstFen, color),
+      castlingEligible: undefined,
       castled,
-      fianchetto: firstWith(false),
-      knightScreen: firstWith(true),
+      fianchetto: undefined,
+      knightScreen: undefined,
       opening,
       outcome,
       lastPly: line[line.length - 1]?.ply ?? 0,
@@ -250,6 +250,8 @@ function deriveRunFact(image: LongitudinalSourceImageV4, catalogue: OpeningCatal
     playedDecisions: decisions.length,
     nodes,
     game,
+    gameReferenceIndex: profileGameFactReferenceIndex(image, run),
+    choiceReferenceIndex: profileChoiceFactReferenceIndex(image, run),
   });
 }
 
@@ -351,7 +353,8 @@ export interface LearnerProfileView {
     readonly rateStatement: string;
     readonly source: string | null;
   };
-  readonly observations: { readonly rows: readonly ObservationLedgerRow[]; readonly playedDecisions: number; readonly statement: string };
+  readonly observationStatus: { readonly kind: "unavailable"; readonly reason: "subject_metrics_not_adopted" };
+  readonly observations: readonly never[];
   readonly skills: SkillsView;
   readonly history: ProfilePage<ProfileHistoryRow>;
   readonly privacy: {
@@ -371,7 +374,7 @@ const STYLE_DISCLOSURES = Object.freeze([
 ] as const);
 
 const OPENING_RATE_STATEMENT = "Results are shown as counts. No win rate is shown: no measured floor says how many games in one opening a rate needs before it means anything.";
-const OBSERVATION_STATEMENT = "These are counts of what the recorded moves show, each against the decisions where it could have happened. No rate, trend or comparison is shown: no stability floor has been measured for any of them.";
+
 
 // ---------------------------------------------------------------------------------------------
 
@@ -420,6 +423,58 @@ function abstainedCard(input: CardInput, abstention: StyleAbstention): HabitCard
   });
 }
 
+/** Only the current parsed GAME lane supplies these operands, including on a warm RunFact. */
+function withGameFacts(fact: RunFact, outcome: GameFactReadOutcome | undefined): RunFact {
+  if (fact.game === null || outcome?.kind !== "available") return fact;
+  try {
+    const row = parseLongitudinalGameFactRow(outcome.row);
+    if (row.derivedRev !== OBSERVATION_DERIVATION_REV) return fact;
+    assertProfileGameFactReferenceIndex(row, fact.gameReferenceIndex);
+    if (row.game.kind !== "eligible") return fact;
+    const ref = (field: typeof row.game.fianchetto): StyleContributorRef | null | undefined => {
+      if (field.kind !== "observed") return undefined;
+      if (field.first === null) return null;
+      const node = fact.nodes.get(field.first.nodeId)!;
+      return Object.freeze({ runId: fact.runId, nodeId: field.first.nodeId, ply: node.ply, moveSan: node.moveSan, observedAt: fact.observedAt });
+    };
+    return Object.freeze({ ...fact, game: Object.freeze({ ...fact.game,
+      fianchetto: ref(row.game.fianchetto), knightScreen: ref(row.game.knightScreen),
+      castlingEligible: row.game.castling.kind === "observed" ? row.game.castling.kingside || row.game.castling.queenside : undefined }) });
+  } catch { return fact; } // Invalid received data affects these cards, not independently counted history.
+}
+/** Always join the current parsed choice lane; the cached raw fact never stores its operands. */
+function withChoiceFacts(fact: RunFact, outcome: ChoiceFactReadOutcome | undefined): RunFact {
+  if (fact.game === null || outcome?.kind !== "available") return fact;
+  try {
+    const row = parseLongitudinalChoiceFactRow(outcome.row);
+    if (row.derivedRev !== OBSERVATION_DERIVATION_REV) return fact;
+    assertProfileChoiceFactReferenceIndex(row, fact.choiceReferenceIndex);
+    if (row.cohort.kind !== "eligible") return fact;
+    const byNode = new Map(row.cohort.decisions.map(decision => [decision.ref.nodeId, decision] as const));
+    const decisions = fact.game.decisions.map(base => {
+      const source = byNode.get(base.ref.nodeId);
+      if (source === undefined || source.result.kind !== "available") return base;
+      const n = source.result.legalUcis.length, counts = source.result.counts;
+      return Object.freeze({ ...base, beforePly: source.ref.sourcePly,
+        traits: source.result.chosen, share: Object.freeze({ pawn: counts.pawn / n, centerPawn: counts.centerPawn / n, queen: counts.queen / n }),
+        legalMoves: source.result.legalUcis });
+    });
+    return Object.freeze({ ...fact, game: Object.freeze({ ...fact.game, decisions: Object.freeze(decisions) }) });
+  } catch { return fact; } // Received invalid data affects choice cards, not known history/other cards.
+}
+
+function incompleteGameCard(metric: StyleMetric, games: Games, fields: readonly ("fianchetto" | "knightScreen" | "castlingEligible")[]): HabitCard | undefined {
+  const missing = fields.filter(field => games.some(run => run.game[field] === undefined));
+  if (missing.length === 0) return undefined;
+  const known = games.filter(run => fields.every(field => run.game[field] !== undefined)
+    && (!fields.includes("castlingEligible") || run.game.castlingEligible === true));
+  return abstainedCard({ metric, games: games.length, decisions: games.reduce((sum, run) => sum + run.game.decisions.length, 0), refs: known.flatMap(gameRef) }, { code: "incomplete_card", missing: missing.map(field => ({
+    fianchetto: "fianchetto information from one or more games",
+    knightScreen: "bishop and knight setup information from one or more games",
+    castlingEligible: "castling information from before your first move in one or more games",
+  })[field]) });
+}
+
 function measuredCard(input: CardInput & {
   readonly value: number;
   readonly valueText: string;
@@ -452,6 +507,12 @@ function measuredCard(input: CardInput & {
 }
 
 type Games = readonly (RunFact & { readonly game: GameFact })[];
+type KnownChoiceDecision = DecisionFact & { readonly traits: NonNullable<DecisionFact["traits"]>;
+  readonly share: NonNullable<DecisionFact["share"]>; readonly legalMoves: readonly string[] };
+const knownChoiceDecision = (fact: DecisionFact): fact is KnownChoiceDecision => fact.traits !== undefined && fact.share !== undefined && fact.legalMoves !== undefined;
+function knownChoiceGames(games: Games, select: (fact: DecisionFact) => boolean): Games {
+  return games.filter(run => { const selected = run.game.decisions.filter(select); return selected.length > 0 && selected.every(knownChoiceDecision); });
+}
 
 /**
  * An abstaining card's drill-down lists the games measured so far (its denominator), never the
@@ -462,7 +523,7 @@ function gameRef(run: RunFact & { readonly game: GameFact }): readonly StyleCont
   return first === undefined ? [] : [first];
 }
 
-function gameRateCard(metric: StyleMetric<"game">, eligible: Games, occurred: (game: GameFact) => StyleContributorRef | null, phrase: (k: number, n: number, interval: string) => string): HabitCard {
+function gameRateCard(metric: StyleMetric<"game">, eligible: Games, occurred: (game: GameFact) => StyleContributorRef | null | undefined, phrase: (k: number, n: number, interval: string) => string): HabitCard {
   const decisions = eligible.reduce((sum, run) => sum + run.game.decisions.length, 0);
   const hits = eligible.map((run) => occurred(run.game));
   const refs = hits.filter((ref): ref is StyleContributorRef => ref !== null);
@@ -481,12 +542,20 @@ function gameRateCard(metric: StyleMetric<"game">, eligible: Games, occurred: (g
 }
 
 function residualCard(metric: StyleMetric<"decision">, games: Games, select: (fact: DecisionFact) => boolean, trait: "pawn" | "centerPawn" | "queen", label: string): HabitCard {
+  const selected = games.map(run => ({ run, decisions: run.game.decisions.filter(select) })).filter(entry => entry.decisions.length > 0);
+  if (selected.some(entry => entry.decisions.some(fact => !knownChoiceDecision(fact)))) {
+    return abstainedCard({ metric, games: selected.length, decisions: selected.reduce((sum, entry) => sum + entry.decisions.length, 0),
+      refs: knownChoiceGames(games, select).flatMap(gameRef) }, { code: "incomplete_card", missing: ["legal choice and playing-role information for one or more recorded moves"] });
+  }
   const perGame = games.map((run) => {
     const decisions = run.game.decisions.filter(select);
-    return { run, decisions, sum: decisions.reduce((sum, fact) => sum + (fact.traits[trait] ? 1 : 0) - fact.share[trait], 0) };
+    return { run, decisions, sum: decisions.reduce((sum, fact) => {
+      if (!knownChoiceDecision(fact)) throw new TypeError("Choice residual cannot consume unknown data");
+      return sum + (fact.traits[trait] ? 1 : 0) - fact.share[trait];
+    }, 0) };
   }).filter((entry) => entry.decisions.length > 0);
   const decisions = perGame.reduce((sum, entry) => sum + entry.decisions.length, 0);
-  const refs = perGame.flatMap((entry) => entry.decisions.filter((fact) => fact.traits[trait]).map((fact) => fact.ref));
+  const refs = perGame.flatMap((entry) => entry.decisions.filter((fact) => fact.traits![trait]).map((fact) => fact.ref));
   if (perGame.length < metric.floor) {
     return abstainedCard({ metric, games: perGame.length, decisions, refs: perGame.flatMap((entry) => gameRef(entry.run)) }, { code: "below_floor", floor: metric.floor, measuredGames: perGame.length });
   }
@@ -539,15 +608,20 @@ function styleCards(games: Games, catalogue: OpeningCatalogueAvailability): read
   const decisions = games.reduce((sum, run) => sum + run.game.decisions.length, 0);
   return Object.freeze(STYLE_METRICS.map((metric): HabitCard => {
     if (metric.production.kind === "blocked") return blockedCard(metric, games.length, decisions);
+    const fields = metric.metricId === "fianchetto_setup_rate" ? ["fianchetto" as const]
+      : metric.metricId === "fianchetto_knight_screen_rate" ? ["knightScreen" as const]
+        : metric.metricId === "castle_kingside_rate" || metric.metricId === "castle_queenside_rate" ? ["castlingEligible" as const] : [];
+    const incomplete = incompleteGameCard(metric, games, fields);
+    if (incomplete !== undefined) return incomplete;
     switch (metric.metricId) {
       case "opening_family_entropy": return entropyCard(metric as StyleMetric<"game">, games, catalogue);
       case "fianchetto_setup_rate": return gameRateCard(metric as StyleMetric<"game">, games, (game) => game.fianchetto,
         (k, n, interval) => `You reached the declared fianchetto setup in ${k} of ${n} measured games (${interval}).`);
       case "fianchetto_knight_screen_rate": return gameRateCard(metric as StyleMetric<"game">, games, (game) => game.knightScreen,
         (k, n, interval) => `You reached the declared fianchetto-with-knight-screen setup in ${k} of ${n} measured games (${interval}).`);
-      case "castle_kingside_rate": return gameRateCard(metric as StyleMetric<"game">, games.filter((run) => run.game.castlingEligible), (game) => game.castled?.wing === "kingside" ? game.castled.ref : null,
+      case "castle_kingside_rate": return gameRateCard(metric as StyleMetric<"game">, games.filter((run) => run.game.castlingEligible === true), (game) => game.castled?.wing === "kingside" ? game.castled.ref : null,
         (k, n, interval) => `You castled kingside in ${k} of ${n} measured games that began with a castling right (${interval}).`);
-      case "castle_queenside_rate": return gameRateCard(metric as StyleMetric<"game">, games.filter((run) => run.game.castlingEligible), (game) => game.castled?.wing === "queenside" ? game.castled.ref : null,
+      case "castle_queenside_rate": return gameRateCard(metric as StyleMetric<"game">, games.filter((run) => run.game.castlingEligible === true), (game) => game.castled?.wing === "queenside" ? game.castled.ref : null,
         (k, n, interval) => `You castled queenside in ${k} of ${n} measured games that began with a castling right (${interval}).`);
       case "pawn_choice_residual": return residualCard(metric as StyleMetric<"decision">, games, () => true, "pawn", "pawn-choice");
       case "center_pawn_choice_residual": return residualCard(metric as StyleMetric<"decision">, games, () => true, "centerPawn", "extended-center pawn");
@@ -555,12 +629,6 @@ function styleCards(games: Games, catalogue: OpeningCatalogueAvailability): read
       default: throw new TypeError(`LEARNER_PROFILE_METRIC_UNWIRED: ${metric.metricId}`);
     }
   }));
-}
-
-function projectionLabel(row: Pick<LongitudinalObservationRow, "projectionId" | "semanticSign">): string {
-  const tail = row.projectionId.split(".").slice(-1)[0] ?? row.projectionId;
-  const family = row.projectionId.startsWith("derived.semantic_avoidance.") || row.projectionId.startsWith("derived.tactic_avoidance.") ? " (population)" : "";
-  return `${tail.replace(/_/gu, " ")} — ${row.semanticSign.replace(/_/gu, " ")}${family}`;
 }
 
 function sessionKindPlain(value: RunSessionKind): string {
@@ -577,7 +645,6 @@ interface Snapshot {
   readonly cuts: readonly LongitudinalCutOutcome[];
   readonly runs: readonly RunFact[];
   readonly rejected: ReadonlyMap<string, ProfileRunStatus>;
-  readonly observations: readonly LongitudinalObservationRow[];
   readonly playedDecisionsInStore: number;
   /** The recorded result per run: a rated game's sealed result, else the run's own terminal outcome. */
   readonly results: ReadonlyMap<string, "win" | "loss" | "draw">;
@@ -594,14 +661,17 @@ export class LearnerProfileService {
   }
 
   #query(learnerId: string, through: ParsedLongitudinalReadQuery["through"]): ParsedLongitudinalReadQuery {
-    return parseLongitudinalReadQuery({ learnerId, derivationRev: OBSERVATION_DERIVATION_REV, through, filter: { decisionClasses: ["played"] } });
+    return parseLongitudinalReadQuery({ learnerId, derivationRev: OBSERVATION_DERIVATION_REV, through, includeGameFacts: true, includeChoiceFacts: true, filter: { decisionClasses: ["played"] } });
   }
 
-  #fact(runId: string, completedSeq: number): RunFact {
-    const key = `${runId}@${completedSeq}@${OBSERVATION_DERIVATION_REV}`;
+  #fact(learnerId: string, cut: LongitudinalCompleteCut): RunFact | undefined {
+    const { runId, completedSeq, sourceDigest } = cut;
+    const key = JSON.stringify([learnerId, runId, completedSeq, OBSERVATION_DERIVATION_REV, sourceDigest]);
     const cached = this.#cache.get(key);
     if (cached !== undefined) return cached;
-    const fact = deriveRunFact(this.#deps.storage.longitudinalSourceImageV4(runId, completedSeq), this.#deps.openingCatalogue);
+    const image = this.#deps.storage.longitudinalSourceImageV4(runId, completedSeq);
+    if (image.ownerLearnerId !== learnerId || this.#deps.storage.longitudinalSourceDigestV4(image) !== sourceDigest) return undefined;
+    const fact = deriveRunFact(image, this.#deps.openingCatalogue);
     if (this.#cache.size >= LearnerProfileService.CACHE_LIMIT) this.#cache.delete(this.#cache.keys().next().value!);
     this.#cache.set(key, fact);
     return fact;
@@ -623,7 +693,6 @@ export class LearnerProfileService {
     }
     const runs: RunFact[] = [];
     const rejected = new Map<string, ProfileRunStatus>();
-    let observations: readonly LongitudinalObservationRow[] = [];
     let playedDecisionsInStore = 0;
     if (complete !== undefined && complete.kind === "complete") {
       const played = new Map<string, number>();
@@ -632,12 +701,15 @@ export class LearnerProfileService {
         played.set(row.runId, (played.get(row.runId) ?? 0) + row.decisions);
         playedDecisionsInStore += row.decisions;
       }
+      const gameRows = new Map(complete.gameFacts.map(outcome => [outcome.kind === "available" ? outcome.row.runId : outcome.runId, outcome] as const));
+      const choiceRows = new Map(complete.choiceFacts.map(outcome => [outcome.kind === "available" ? outcome.row.runId : outcome.runId, outcome] as const));
       for (const cut of complete.cuts) {
-        const fact = this.#fact(cut.runId, cut.completedSeq);
+        const raw = this.#fact(learnerId, cut);
+        if (raw === undefined) { rejected.set(cut.runId, "store_mismatch"); continue; }
+        const fact = withChoiceFacts(withGameFacts(raw, gameRows.get(cut.runId)), choiceRows.get(cut.runId));
         if ((played.get(cut.runId) ?? 0) !== fact.playedDecisions) { rejected.set(cut.runId, "store_mismatch"); continue; }
         runs.push(fact);
       }
-      observations = complete.observations.filter((row) => row.decisionClass === "played" && !rejected.has(row.runId));
     }
     const rated = this.#deps.ratedResults?.(learnerId) ?? new Map<string, "win" | "loss" | "draw">();
     const results = new Map<string, "win" | "loss" | "draw">();
@@ -645,7 +717,7 @@ export class LearnerProfileService {
       const result = rated.get(run.runId) ?? run.game?.outcome ?? null;
       if (result !== null) results.set(run.runId, result);
     }
-    return { cuts, runs, rejected, observations, playedDecisionsInStore, results };
+    return { cuts, runs, rejected, playedDecisionsInStore, results };
   }
 
   #games(snapshot: Snapshot): Games {
@@ -669,7 +741,7 @@ export class LearnerProfileService {
           playedDecisions: fact.playedDecisions,
           opening: fact.game === null || fact.game.opening === null ? null : Object.freeze({ eco: fact.game.opening.eco, name: fact.game.opening.name }),
           outcome: snapshot.results.get(cut.runId) ?? null,
-          detail: status === "counted_game" ? null : status === "not_from_start_position" ? `A ${sessionKindPlain(fact.sessionKind)} that did not begin from the standard starting position: its moves count only in the recorded observations below.` : "No move in this run is attributed to you (imported games' moves belong to the players who made them).",
+          detail: status === "counted_game" ? null : status === "not_from_start_position" ? `A ${sessionKindPlain(fact.sessionKind)} that did not begin from the standard starting position: it is listed in your history and does not count toward game-based cards.` : "No move in this run is attributed to you (imported games' moves belong to the players who made them).",
         });
       }
       if (cut.kind === "complete") {
@@ -729,32 +801,6 @@ export class LearnerProfileService {
     });
   }
 
-  #observations(snapshot: Snapshot): LearnerProfileView["observations"] {
-    const groups = new Map<string, { row: LongitudinalObservationRow; occurred: number; opportunities: number; runs: Set<string>; phases: Map<LongitudinalPhase, { occurred: number; opportunities: number }> }>();
-    for (const row of snapshot.observations) {
-      const key = `${row.projectionId}@${row.projectionVersion}:${row.semanticSign}:${row.sourceSign}`;
-      const group = groups.get(key) ?? { row, occurred: 0, opportunities: 0, runs: new Set<string>(), phases: new Map() };
-      group.occurred += row.occurred;
-      group.opportunities += row.opportunities;
-      group.runs.add(row.runId);
-      const phase = group.phases.get(row.phase) ?? { occurred: 0, opportunities: 0 };
-      phase.occurred += row.occurred;
-      phase.opportunities += row.opportunities;
-      group.phases.set(row.phase, phase);
-      groups.set(key, group);
-    }
-    const played = snapshot.runs.reduce((sum, run) => sum + run.playedDecisions, 0);
-    const decisionsIn = (runs: ReadonlySet<string>): number => snapshot.runs.filter((run) => runs.has(run.runId)).reduce((sum, run) => sum + run.playedDecisions, 0);
-    const rows = [...groups.entries()].map(([key, group]): ObservationLedgerRow => Object.freeze({
-      key, projectionId: group.row.projectionId, projectionVersion: group.row.projectionVersion, semanticSign: group.row.semanticSign,
-      sourceSign: group.row.sourceSign, label: projectionLabel(group.row), occurred: group.occurred, opportunities: group.opportunities,
-      runs: group.runs.size, decisions: decisionsIn(group.runs),
-      byPhase: Object.freeze([...group.phases.entries()].map(([phase, counts]) => Object.freeze({ phase, ...counts })).sort((left, right) => left.phase.localeCompare(right.phase))),
-      derivedRev: group.row.derivedRev,
-    })).sort((left, right) => left.key.localeCompare(right.key));
-    return Object.freeze({ rows: Object.freeze(rows), playedDecisions: played, statement: OBSERVATION_STATEMENT });
-  }
-
   #skills(snapshot: Snapshot): SkillsView {
     const register = this.#deps.valenceRegister ?? { formatVersion: "tabiya.valence-register.v1", declarations: [] };
     const issues = validateValenceRegister(register, evidenceGroundingOf);
@@ -780,7 +826,9 @@ export class LearnerProfileService {
     // written opportunity rule. The derivation still runs, over the learner's own decisions, so the
     // mechanism is exercised on every read rather than dormant.
     const admitted: readonly AdmittedSkillLeaf[] = Object.freeze([]);
-    const decisions = this.#games(snapshot).flatMap((run) => run.game.decisions.map((fact) => Object.freeze({
+    const games = this.#games(snapshot);
+    const missingChoices = games.some(run => run.game.decisions.some(fact => !knownChoiceDecision(fact)));
+    const decisions = games.flatMap((run) => run.game.decisions.filter(knownChoiceDecision).map((fact) => Object.freeze({
       runId: run.runId, branchId: run.game.primaryBranchId, nodeId: fact.ref.nodeId, beforeFen: fact.beforeFen, moveUci: fact.moveUci,
       legalMoves: fact.legalMoves, occurredAt: run.observedAt,
     })));
@@ -802,7 +850,7 @@ export class LearnerProfileService {
       conceptIdentity: concepts === undefined
         ? "The concept registry is unavailable, so no pack concept is listed."
         : `Concepts come from the concept registry, one identity across every pack. An idea is listed here only when at least ${SKILL_CONCEPT_LEAF_MIN_PACKS} packs name it.${(concepts.abstainedPacks?.length ?? 0) === 0 ? "" : ` Some packs are left out because their concept references could not be verified: ${concepts.abstainedPacks!.join(", ")}.`}`,
-      marksStatement: "A mark records the first time you played a creditable idea when you had a real alternative. It is earned once, never taken away, and links to the move.",
+      marksStatement: "A mark records the first time you played a creditable idea when you had a real alternative. It is earned once, never taken away, and links to the move." + (missingChoices ? " Some recorded moves lack verified choice or playing-role information, so they cannot earn marks." : ""),
     });
   }
 
@@ -840,7 +888,8 @@ export class LearnerProfileService {
       }),
       style: Object.freeze({ cards: styleCards(games, this.#deps.openingCatalogue), disclosures: STYLE_DISCLOSURES }),
       openings: this.#openings(games, snapshot.results),
-      observations: this.#observations(snapshot),
+      observationStatus: Object.freeze({ kind: "unavailable", reason: "subject_metrics_not_adopted" }),
+      observations: Object.freeze([]),
       skills: this.#skills(snapshot),
       history: this.#history(snapshot, 0, PROFILE_HISTORY_PREVIEW),
       privacy: Object.freeze({
@@ -868,10 +917,12 @@ export class LearnerProfileService {
     const metric = styleMetric(metricId)!;
     if (metric.production.kind === "blocked") return [];
     const games = this.#games(snapshot);
-    const population = metricId === "castle_kingside_rate" || metricId === "castle_queenside_rate" ? games.filter((run) => run.game.castlingEligible)
+    const population = metricId === "castle_kingside_rate" || metricId === "castle_queenside_rate" ? games.filter((run) => run.game.castlingEligible === true)
       : metricId === "opening_family_entropy" ? games.filter((run) => run.game.opening !== null)
-        : metricId === "early_queen_choice_residual" ? games.filter((run) => run.game.decisions.some((fact) => fact.beforePly < EARLY_QUEEN_PLY_BOUND))
-          : metric.unit === "decision" ? games.filter((run) => run.game.decisions.length > 0) : games;
+        : metricId === "early_queen_choice_residual" ? knownChoiceGames(games, fact => fact.beforePly < EARLY_QUEEN_PLY_BOUND)
+          : metric.unit === "decision" ? knownChoiceGames(games, () => true)
+            : metricId === "fianchetto_setup_rate" ? games.filter(run => run.game.fianchetto !== undefined)
+              : metricId === "fianchetto_knight_screen_rate" ? games.filter(run => run.game.knightScreen !== undefined) : games;
     return population.flatMap(gameRef);
   }
 
@@ -879,13 +930,13 @@ export class LearnerProfileService {
     const games = this.#games(snapshot);
     switch (metricId) {
       case "opening_family_entropy": return games.filter((run) => run.game.opening !== null).map((run) => Object.freeze({ runId: run.runId, nodeId: run.game.opening!.nodeId, ply: run.game.opening!.ply, moveSan: run.nodes.get(run.game.opening!.nodeId)?.moveSan ?? null, observedAt: run.observedAt }));
-      case "fianchetto_setup_rate": return games.flatMap((run) => run.game.fianchetto === null ? [] : [run.game.fianchetto]);
-      case "fianchetto_knight_screen_rate": return games.flatMap((run) => run.game.knightScreen === null ? [] : [run.game.knightScreen]);
+      case "fianchetto_setup_rate": return games.flatMap((run) => run.game.fianchetto == null ? [] : [run.game.fianchetto]);
+      case "fianchetto_knight_screen_rate": return games.flatMap((run) => run.game.knightScreen == null ? [] : [run.game.knightScreen]);
       case "castle_kingside_rate": return games.flatMap((run) => run.game.castlingEligible && run.game.castled?.wing === "kingside" ? [run.game.castled.ref] : []);
       case "castle_queenside_rate": return games.flatMap((run) => run.game.castlingEligible && run.game.castled?.wing === "queenside" ? [run.game.castled.ref] : []);
-      case "pawn_choice_residual": return games.flatMap((run) => run.game.decisions.filter((fact) => fact.traits.pawn).map((fact) => fact.ref));
-      case "center_pawn_choice_residual": return games.flatMap((run) => run.game.decisions.filter((fact) => fact.traits.centerPawn).map((fact) => fact.ref));
-      case "early_queen_choice_residual": return games.flatMap((run) => run.game.decisions.filter((fact) => fact.traits.queen && fact.beforePly < EARLY_QUEEN_PLY_BOUND).map((fact) => fact.ref));
+      case "pawn_choice_residual": return games.flatMap((run) => run.game.decisions.filter((fact) => fact.traits?.pawn === true).map((fact) => fact.ref));
+      case "center_pawn_choice_residual": return games.flatMap((run) => run.game.decisions.filter((fact) => fact.traits?.centerPawn === true).map((fact) => fact.ref));
+      case "early_queen_choice_residual": return games.flatMap((run) => run.game.decisions.filter((fact) => fact.traits?.queen === true && fact.beforePly < EARLY_QUEEN_PLY_BOUND).map((fact) => fact.ref));
       default: return [];
     }
   }
@@ -901,20 +952,8 @@ export class LearnerProfileService {
     return Object.freeze({ row: Object.freeze({ ...row, contributors: preview }), games: history });
   }
 
-  observation(principal: Principal, key: string, offset: number, limit: number): { readonly row: ObservationLedgerRow; readonly occurred: ProfilePage<StyleContributorRef>; readonly opportunities: number } {
-    const snapshot = this.#snapshot(principal);
-    const row = this.#observations(snapshot).rows.find((candidate) => candidate.key === key);
-    if (row === undefined) throw new ServerError("INVALID_REQUEST", "No recorded observation has that key");
-    const facts = new Map(snapshot.runs.map((run) => [run.runId, run] as const));
-    const refs = snapshot.observations
-      .filter((candidate) => candidate.projectionId === row.projectionId && candidate.projectionVersion === row.projectionVersion && candidate.semanticSign === row.semanticSign && candidate.sourceSign === row.sourceSign)
-      .flatMap((candidate) => candidate.occurredRefs.map((ref) => {
-        const fact = facts.get(candidate.runId);
-        const node = fact?.nodes.get(ref.nodeId);
-        return Object.freeze({ runId: candidate.runId, nodeId: ref.nodeId, ply: node?.ply ?? 0, moveSan: node?.moveSan ?? null, observedAt: fact?.observedAt ?? candidate.observedAt });
-      }));
-    const page = contributors(refs, limit, offset);
-    return Object.freeze({ row, occurred: Object.freeze({ total: page.total, offset, items: page.shown, hiddenCount: page.hiddenCount }), opportunities: row.opportunities });
+  observation(_principal: Principal, _key: string, _offset: number, _limit: number): never {
+    throw new ServerError("PROFILE_OBSERVATIONS_NOT_ADOPTED", "Detailed structure statistics are unavailable.");
   }
 
   historyPage(principal: Principal, offset: number, limit: number): ProfilePage<ProfileHistoryRow> {

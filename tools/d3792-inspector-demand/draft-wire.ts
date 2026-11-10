@@ -6,7 +6,6 @@ import { evidenceValueRouteRegistry } from "../../packages/runtime/src/internal/
 import { routeReads } from "../../packages/runtime/src/module-query-sources.js";
 import type { ModuleDecisionStamp } from "../../packages/runtime/src/module-query.js";
 import { presentationDigest, type PresentationReceipt } from "../../packages/runtime/src/presentation-contract.js";
-import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import type { InspectorFamilyId } from "../../packages/runtime/src/module-contract.js";
 import { EXPLORER_RATING_BUCKETS, EXPLORER_SPEEDS } from "../../packages/runtime/src/provider-types.js";
 
@@ -318,15 +317,14 @@ for (const range of [{ start: 0, count: 0, total: 1, next: null }, { start: 0, c
 }
 console.log(JSON.stringify({ scope: "D3801 disposable request/context and page-range grammar only; NOT response admission, source execution, access or production", sources: sources.size, positives, refusals }));
 
-// D3843: exact unavailable outcome and disclosure binding, not an invented provider response.
+// D3843 historical held-source grammar and disclosure binding, not a current source invocation.
+// Installed opening factories now require their genuine source and recorded position; the
+// completed held-dependency experiment cannot establish that today's opening source is held.
 const opening = "theory.opening.catalogue_membership@1";
-const actualOpening = invokeEvidenceValueRoute(opening, { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" });
-assert.equal(actualOpening.kind, "unavailable");
-assert("dependency" in actualOpening && actualOpening.dependency === "runtime-opening-identity");
-const held: DraftUnavailableOutcome = { kind: "unavailable", reason: "source_version_held", dependency: actualOpening.dependency };
+const held: DraftUnavailableOutcome = { kind: "unavailable", reason: "source_version_held", dependency: "runtime-opening-identity" };
 const admittedHeld = parseDraftUnavailableOutcome(opening, JSON.parse(JSON.stringify(held)));
 assertDraftUnavailableBinding(opening, held, admittedHeld);
-let absenceChecks = 3;
+let absenceChecks = 1;
 const rejectAbsence = (projection: string, value: unknown) => {
   assert.throws(() => parseDraftUnavailableOutcome(projection, value)); absenceChecks++;
 };
@@ -352,7 +350,7 @@ for (const sourceOutcome of [null, { kind: "unavailable", reason: "provider_unav
   assert.notEqual(presentationDigest("inspector.disclosure_receipt@1", { ...disclosureBody, sourceOutcome }), bound); absenceChecks++;
 }
 console.log(JSON.stringify({ scope: "D3843 disposable unavailable-branch/receipt metadata controls only; NOT full response, source authority or API",
-  absenceChecks, actualOpeningDependencyRetained: true, nonHeldHasNoDependencyField: true }));
+  absenceChecks, historicalHeldDependencyRetained: true, nonHeldHasNoDependencyField: true, currentSourceInvocations: 0 }));
 
 for (const projection of ["recorded.engine.eval@1", "recorded.tablebase.result@1"]) {
   assert.deepEqual(parseDraftUnavailableOutcome(projection, { kind: "unavailable", reason: "recorded_measurement_unavailable" }),

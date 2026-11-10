@@ -15,9 +15,8 @@ const identity = fileBackedDatabaseIdentity(path ?? "");
 const database = openLongitudinalDatabase(identity, STORAGE_VERSION);
 try {
   const store = new LongitudinalStore(database);
-  const project = (image: Parameters<typeof projectObservations>[0]) => projectObservations(image);
-  const report = store.rebuild({ write, project });
-  const after = write && report.mismatches.length > 0 ? store.rebuild({ write: false, project }) : report;
+  const report = store.rebuild({ write, project: projectObservations });
+  const after = write && report.mismatches.length > 0 ? store.rebuild({ write: false, project: projectObservations }) : report;
   console.log(JSON.stringify({ event: "longitudinal_rebuild", database: identity.absolutePath, write, report, ...(after === report ? {} : { after }) }, null, 2));
   if (after.mismatches.length > 0) process.exitCode = 1;
 } finally {

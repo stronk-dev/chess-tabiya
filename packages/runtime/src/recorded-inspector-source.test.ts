@@ -180,11 +180,23 @@ describe("recorded Inspector reports retain exact stored occurrence authority", 
     expect(evidenceValueReceipt(band.value).inputDigest).not.toBe(evidenceValueReceipt(left.value).inputDigest);
   });
 
-  it("does not bind internal historical reports as live engine, grade, packet or learner evidence", () => {
+  it("binds the exact six historical reports only to Full2, never live engine/grade consumers; old Maia selection stays internal", () => {
     const sources = ["recorded.inspector.eval_packet", "recorded.inspector.wdl_packet", "recorded.inspector.pv_packet", "recorded.inspector.tablebase_packet", "recorded.inspector.maia_selection", "derived.inspector.tablebase_category", "derived.inspector.tablebase_distance"];
     expect(PRIMARY_EVIDENCE_MANIFEST.projections.filter(row => sources.includes(row.id))).toHaveLength(7);
-    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(row => sources.includes(row.projection.id))).toEqual([]);
-    for (const id of sources) expect(PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === id)).toMatchObject({ grounding: "recorded_run", exactness: "measured", confidence: "reported", disposition: { kind: "experimental" } });
+    const bindings = PRIMARY_EVIDENCE_MANIFEST.bindings.filter(row => sources.includes(row.projection.id));
+    expect(bindings).toHaveLength(6);
+    for (const id of sources) {
+      const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === id)!;
+      expect(declaration).toMatchObject({ grounding: "recorded_run", exactness: "measured", confidence: "reported" });
+      const actual = bindings.filter(row => row.projection.id === id);
+      if (id === "recorded.inspector.maia_selection") {
+        expect(actual).toEqual([]); expect(declaration.disposition).toMatchObject({ kind: "experimental" });
+      } else {
+        expect(actual).toEqual([expect.objectContaining({ projection: { id, version: 1 }, consumer: { id: "module.full_inspector", version: 2 },
+          sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } })]);
+        expect(declaration.disposition).toBeUndefined();
+      }
+    }
     for (const id of ["derived.inspector.tablebase_category", "derived.inspector.tablebase_distance"]) expect(PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === id)!.derivation).toEqual({ inputs: [{ id: "recorded.inspector.tablebase_packet", version: 1 }] });
   });
 });

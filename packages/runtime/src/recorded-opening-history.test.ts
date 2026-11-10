@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { branchPath } from "./branch-path.js";
 import { admitInstalledOpeningCatalogue } from "./opening-catalogue.js";
-import { importedRun, play } from "./testing/review-evidence-fixture.js";
+import { attachDelivery, evaluationDelivery, importedRun, play } from "./testing/review-evidence-fixture.js";
 import { collectRecordedOpeningHistory, readRecordedOpeningHistory } from "./recorded-opening-history.js";
 import * as routes from "./internal/evidence-value-routes.js";
 import { fork } from "./runtime.js";
@@ -22,6 +22,19 @@ function collect({ source, run, branchId, throughNodeId }: Parameters<typeof col
 }
 
 describe("complete recorded opening history source", () => {
+  it("D3925 retains actual later evidence while checking the immutable original creation identity", () => {
+    const f = fixture();
+    const run = attachDelivery(f.run, f.path[1]!.id, evaluationDelivery(f.path[1]!.fen, "cp 20"));
+    expect(run.nodes[1]!.evidenceRefs.length).toBeGreaterThan(f.path[1]!.evidenceRefs.length);
+    const history = collect({ ...f, run }), data = readRecordedOpeningHistory(history);
+    expect(data.rows).toHaveLength(f.path.length);
+    expect(data.run.events).toEqual(run.events);
+    expect(data.rows[1]!.node.evidenceRefs).toEqual(run.nodes[1]!.evidenceRefs);
+    const result = routes.invokeEvidenceValueRoute("derived.opening.deepest_reached@2", { history });
+    expect(result.length).toBeGreaterThan(0);
+    const corrupt = structuredClone(run); Object.assign(corrupt.nodes[1]!, { moveSan: "wrong" });
+    expect(() => collect({ ...f, run: corrupt })).toThrow();
+  });
   it("captures every original root-inclusive occurrence, paired lookup and original point array", () => {
     const f = fixture(), history = collect(f), data = readRecordedOpeningHistory(history);
     expect(data.rows).toHaveLength(f.path.length);

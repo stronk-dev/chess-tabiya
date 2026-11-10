@@ -1,20 +1,32 @@
 // rfc/semantic-validation-authority.md — acceptance criteria and §10 able-to-fail fixtures.
+import { SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
+import { BACKWARD_LITERAL_SOURCE } from "./semantic-validation-backward-sources.js";
+import { PAWN_FILE_LITERAL_SOURCES } from "./semantic-validation-pawn-file-sources.js";
+import { OPPOSITION_LITERAL_SOURCE } from "./semantic-validation-opposition-sources.js";
+import { SEMANTIC_VALIDATION_CASTLING_SOURCES } from "./semantic-validation-castling-sources.js";
+import { SEMANTIC_VALIDATION_RIGHTS_SOURCES } from "./semantic-validation-rights-sources.js";
+import { SEMANTIC_VALIDATION_TRANSITION_SOURCES } from "./semantic-validation-transition-sources.js";
 import { readFileSync } from "node:fs";
+import { RETIRED_SEMANTIC_VALIDATION_ASSERTION_BODIES, RETIRED_SEMANTIC_VALIDATION_CASES, retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
+import { SUBJECT_SAFE_RETIRED_CASES } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_DECLARATIONS } from "./evidence-catalog.js";
-import { compileEvidenceManifest, declareEvidence, identitySealedEvidenceWithoutValueReceipt, type EvidenceManifestError, type VersionedEvidenceId } from "./evidence-contract.js";
+import { compileEvidenceManifest, declareEvidence, evidenceDigest, identitySealedEvidenceWithoutValueReceipt, type EvidenceManifestError, type VersionedEvidenceId } from "./evidence-contract.js";
+import { evidenceValueRouteRegistry } from "./internal/evidence-value-routes.js";
 import { localSemanticEvents } from "./semantic-evidence.js";
 import {
   SEMANTIC_VALIDATION_REPOSITORY_ROOT,
   SEMANTIC_VALIDATION_RESOLVERS,
   resolveSemanticValidationProposition,
+  semanticFrozenExpectationSha256,
+  sha256Text,
   semanticValidationImportClosure,
 } from "./semantic-validation-authorities.js";
 import { semanticValidationLawProfile } from "./semantic-validation-law.js";
-import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, canonicalSemanticEdge, type SemanticValidationOperationResult } from "./semantic-validation-operations.js";
 import { executeSemanticValidationOracle, type SemanticValidationOracleWitness } from "./semantic-validation-oracles.js";
 import { SEMANTIC_VALIDATION_PROFILES, SEMANTIC_VALIDATION_ROOTS, admitValidatedSemanticInstance, semanticValidationSummary, semanticValidationVerdict } from "./semantic-validation-registry.js";
@@ -36,6 +48,7 @@ import {
   parseSemanticValidationFactConstraints,
   parseSemanticValidationOwnerAuthorityStore,
   parseSemanticValidationProfile,
+  parseSemanticValidationExpectation,
   semanticFactConstraintSha256,
   semanticLegalSetDigest,
   semanticPopulationProjectionDigest,
@@ -51,8 +64,12 @@ import {
 const ROOT = SEMANTIC_VALIDATION_REPOSITORY_ROOT;
 const casesJson = (): { readonly cases: readonly Record<string, unknown>[] } => JSON.parse(readFileSync(resolve(ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8"));
 const CASES = casesJson().cases.map(parseSemanticValidationCase);
+const addedCastleIds = new Set(SEMANTIC_VALIDATION_CASTLING_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+const HISTORICAL_CASES = retainHistoricalSemanticCaseFixtures(casesJson().cases).map(parseSemanticValidationCase);
 const CASE_MAP = new Map(CASES.map((value) => [value.id, value]));
-const rawCase = (id: string): Record<string, unknown> => JSON.parse(JSON.stringify(casesJson().cases.find((value) => value.id === id)));
+// Historical inputs remain legal for grammar/authority negatives; real positive executions
+// below use live CASES only and confer no successor qualification from custody.
+const rawCase = (id: string): Record<string, unknown> => JSON.parse(JSON.stringify(casesJson().cases.find(value => value.id === id) ?? HISTORICAL_CASES.find(value => value.id === id)));
 const code = (run: () => unknown): string | undefined => {
   try {
     run();
@@ -63,6 +80,45 @@ const code = (run: () => unknown): string | undefined => {
 };
 const event = (id: string, version = 1): SemanticValidationSubject => ({ kind: "event", projection: { id, version } });
 const run = (value: SemanticValidationCase) => executeSemanticValidationCase(value, SEMANTIC_VALIDATION_RESOLVERS, CASE_MAP);
+
+describe("coordinated predecessor source retirement", () => {
+  it("preserves all thirteen original records and authority bytes without live qualification", () => {
+    expect(RETIRED_SEMANTIC_VALIDATION_CASES).toHaveLength(13);
+    expect(evidenceDigest(RETIRED_SEMANTIC_VALIDATION_CASES)).toBe("440cfd7ee0d3182aa107592e01b4ffc3513346f419b27f20f69013c0101c8e56");
+    expect(RETIRED_SEMANTIC_VALIDATION_CASES.filter(row => row.arm === "positive")).toHaveLength(8);
+    expect(RETIRED_SEMANTIC_VALIDATION_CASES.filter(row => row.arm === "semantic_negative")).toHaveLength(5);
+    for (const row of RETIRED_SEMANTIC_VALIDATION_CASES) expect(CASE_MAP.has(row.id as string)).toBe(false);
+    const retired = ["derived.material.event.role_asymmetry", "derived.material.reading.role_signature", "derived.tactic.defender_exposure"];
+    for (const id of retired) {
+      expect(SEMANTIC_VALIDATION_ROOTS.some(row => row.projection.id === id && row.projection.version === 1)).toBe(false);
+      expect(SEMANTIC_VALIDATION_PROFILES.some(row => row.subject.projection.id === id && row.subject.projection.version === 1)).toBe(false);
+      expect(evidenceValueRouteRegistry().some(row => row.route === `${id}@1`)).toBe(false);
+      expect(semanticValidationVerdict({ kind: "event", projection: { id, version: 1 } })).toBeUndefined();
+    }
+  });
+
+  it.each(RETIRED_SEMANTIC_VALIDATION_CASES.map(parseSemanticValidationCase))("$id retains its original authority, not a retargeted receipt", value => {
+    const crossed = { ...value, subject: { ...value.subject, projection: { ...value.subject.projection, version: 2 } } };
+    if (value.authority.kind === "existing_assertion") {
+      // Frozen source excerpts remain historical evidence even after the executable
+      // source regression is migrated. No current collector receipt is manufactured.
+      const body = RETIRED_SEMANTIC_VALIDATION_ASSERTION_BODIES[value.authority.testSite];
+      expect(body).toBeDefined();
+      expect(sha256Text(body!)).toBe(value.authority.sourceSha256);
+      expect(semanticFrozenExpectationSha256(value)).toBe(value.authority.frozenExpectationSha256);
+      expect(semanticFrozenExpectationSha256(crossed)).not.toBe(value.authority.frozenExpectationSha256);
+    } else {
+      expect(resolveSemanticValidationProposition(value)).toMatchObject({ subject: value.subject, case: { id: value.id, version: 1 }, expectation: value.expectation });
+      expect(() => resolveSemanticValidationProposition(crossed)).toThrow();
+    }
+    const current = CASES.filter(row => row.subject.projection.id === value.subject.projection.id && row.subject.projection.version === 2 && evidenceDigest(row.input) === evidenceDigest(value.input));
+    expect(current, `Missing separately grounded current control for ${value.id}`).toHaveLength(1);
+    expect(current[0]!.arm).toBe(value.arm);
+    expect(current[0]!.id).not.toBe(value.id);
+    expect(current[0]!.authority).not.toEqual(value.authority);
+    expect(resolveSemanticValidationProposition(current[0]!)).toMatchObject({ subject: current[0]!.subject, expectation: current[0]!.expectation });
+  });
+});
 
 describe.each(["transition.short-castle.castled", "migration.deflection.positive"])("D3672 exact semantic wrapper: %s", id => {
   const actual = async () => {
@@ -181,17 +237,20 @@ describe("semantic-validation roots, profiles and verdicts", () => {
     expect(code(() => assertSemanticValidationRegistryJoins(SEMANTIC_VALIDATION_ROOTS, SEMANTIC_VALIDATION_PROFILES, [...rows, rows[0]!]))).toBe("SEMANTIC_VALIDATION_DUPLICATE");
   });
 
-  it("[27] keeps a debt-only root honest: zero cases, every arm required, verdict unvalidated", () => {
+  it("[27] keeps new source qualification separate from its actual complete population coverage", () => {
     const debt = SEMANTIC_VALIDATION_PROFILES.find((profile) => profile.subject.projection.id === "derived.semantic_avoidance.isolated_pawn")!;
-    expect(SEMANTIC_VALIDATION_ARMS.filter((arm) => arm !== "external_label").every((arm) => {
+    expect(SEMANTIC_VALIDATION_ARMS.filter((arm) => arm !== "external_label" && arm !== "imported_population").every((arm) => {
       const key = ({ positive: "positive", semantic_negative: "semanticNegative", orientation: "orientation", counterfactual: "counterfactual", imported_population: "importedPopulation" } as const)[arm as Exclude<typeof arm, "external_label">];
       const cell = debt[key];
       return cell.disposition === "required" && cell.owner === "D1716";
     })).toBe(true);
+    expect(debt.subject.projection.version).toBe(2);
+    expect(debt.importedPopulation.disposition).toBe("present");
     expect(CASES.some((value) => value.subject.projection.id === debt.subject.projection.id)).toBe(false);
     expect(semanticValidationVerdict(debt.subject)?.verdict).toBe("unvalidated");
-    const opposition = SEMANTIC_VALIDATION_PROFILES.find((profile) => profile.subject.projection.id === "rules.structural.event.king_opposition")!;
-    expect(opposition.positive).toMatchObject({ disposition: "required", owner: "D1717" });
+    expect(SEMANTIC_VALIDATION_PROFILES.find(profile => profile.subject.projection.id === "rules.structural.event.king_opposition" && profile.subject.projection.version === 1)).toBeUndefined();
+    const opposition = SEMANTIC_VALIDATION_PROFILES.find(profile => profile.subject.projection.id === "rules.structural.event.king_opposition" && profile.subject.projection.version === 2)!;
+    expect(opposition.positive.disposition).toBe("present"); // Independently grounded current cases, not the retired slot.
   });
 
   it("[21] keeps the literal profiles equal to the §3.2 requirement-law exhibit", () => {
@@ -204,9 +263,12 @@ describe("semantic-validation roots, profiles and verdicts", () => {
   it("[25] reports passed/open subjects by arm rather than one blended percentage", () => {
     const summary = semanticValidationSummary();
     expect(summary.subjects).toBe(SEMANTIC_VALIDATION_ROOTS.length);
-    // Slice A lands with zero passing verdicts: orientation has no emitter-level authority anywhere.
-    expect(summary.passed).toBe(0);
-    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length);
+    // Four basic transitions plus all seven independently grounded current foundation profiles.
+    expect(summary.passed).toBe(11);
+    expect(SEMANTIC_VALIDATION_RECEIPT.verdicts.filter(row => row.verdict === "passed").map(row => row.subject))
+      .toEqual([event("derived.activity.event.file_access_revealed"), event("derived.activity.event.file_state"), event("derived.structural.event.pawn_file_group"), event("rules.castling.event.rights_lost"), { kind: "event", projection: { id: "rules.structural.event.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.king_opposition", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.pawn_islands", version: 2 } }, event("rules.transition.event.capture"),
+        event("rules.transition.event.castled"), event("rules.transition.event.clock_reset"), { kind: "event", projection: { id: "rules.transition.event.slider_ray", version: 2 } }]);
+    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length - 11);
     const verdict = compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => ({ arm, status: "passed" as const, refs: ["a"] })));
     expect(verdict.verdict).toBe("passed");
     expect(compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => arm === "orientation" ? { arm, status: "required" as const, owner: "o", discharge: "d" } : { arm, status: "passed" as const, refs: ["a"] })).open).toEqual(["orientation"]);
@@ -219,6 +281,15 @@ function readProfile(id: string): unknown {
 }
 
 describe("semantic-validation cases and execution", () => {
+  it("accepts the four foundation signs literally and refuses invented or malformed signs", () => {
+    const subject: SemanticValidationSubject = { kind: "event", projection: { id: "rules.structural.event.king_opposition", version: 2 } };
+    for (const sign of ["membership_changed", "count_gained", "count_lost", "topology_changed"]) {
+      expect(parseSemanticValidationExpectation({ kind: "emits", minimum: 1, sign }, subject)).toEqual({ kind: "emits", minimum: 1, sign });
+    }
+    for (const sign of ["improved", "count_gain", null, 1, ["membership_changed"]]) {
+      expect(() => parseSemanticValidationExpectation({ kind: "emits", minimum: 1, sign }, subject)).toThrow();
+    }
+  });
   it("resolves pinned independent castling positives and nearby negatives through the production emitter", async () => {
     for (const id of ["cited.python-chess.king-to-rook.castled", "cited.python-chess.king-step.no-castle", "cited.python-chess.adjacent-rook.castled", "cited.python-chess.stationary-king.castled"]) {
       const value = CASE_MAP.get(id)!;
@@ -269,15 +340,19 @@ describe("semantic-validation cases and execution", () => {
     }
   });
 
-  it("[16][21] executes every migrated D1713 emitter case through its production operation", async () => {
-    const receipts = await Promise.all(CASES.map(run));
-    expect(receipts.filter((receipt) => receipt.status !== "passed").map((receipt) => `${receipt.case}: ${receipt.failure?.message}`)).toEqual([]);
-    for (const receipt of receipts) {
-      expect(receipt.invocations).toBe(1);
-      if (receipt.arm === "positive") expect(receipt.targetCount).toBeGreaterThan(0);
-      else expect(receipt.targetCount).toBe(0);
-      for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
-    }
+  it.each(CASES)("[16][21] executes canonical $id through its production operation", async value => {
+    const receipt = await run(value);
+    expect(receipt.case).toBe(value.id);
+    expect(receipt.arm).toBe(value.arm);
+    expect(receipt.status, receipt.failure?.message).toBe("passed");
+    expect(receipt.invocations).toBe(value.arm === "orientation" ? 2 : 1);
+    if (receipt.arm === "positive" || receipt.arm === "orientation") expect(receipt.targetCount).toBeGreaterThan(0);
+    else expect(receipt.targetCount).toBe(0);
+    for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
+  });
+
+  it("[16][21] retains the complete canonical and cited-extension case populations", () => {
+    // Inventory is fixture coverage, not a substitute for each real production execution above.
     // Keep the predecessor population's assertions; the source-bound extension is additive.
     const addedIds = new Set(ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
     const pressureIds = new Set(RECORDED_CITED_SOURCES.filter(source => source.sourceId === "python-chess.recorded.pressure").flatMap(source => source.cases.map(row => row.proposition.case.id)));
@@ -285,53 +360,82 @@ describe("semantic-validation cases and execution", () => {
     const discoveredIds = new Set(DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id));
     const kingZoneIds = new Set(KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id));
     const boundedIds = new Set(BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id));
-    const historical = receipts.filter(receipt => !boundedIds.has(receipt.case) && !kingZoneIds.has(receipt.case) && !pressureIds.has(receipt.case));
-    const predecessor = historical.filter(receipt => !addedIds.has(receipt.case) && !recordedIds.has(receipt.case) && !discoveredIds.has(receipt.case));
-    const added = receipts.filter(receipt => addedIds.has(receipt.case));
+    const materialIds = new Set(MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id));
+    const exposureIds = new Set(EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id));
+    const historical = HISTORICAL_CASES.filter(item => !exposureIds.has(item.id) && !materialIds.has(item.id) && !boundedIds.has(item.id) && !kingZoneIds.has(item.id) && !pressureIds.has(item.id));
+    const predecessor = historical.filter(item => !addedIds.has(item.id) && !recordedIds.has(item.id) && !discoveredIds.has(item.id));
+    const added = HISTORICAL_CASES.filter(item => addedIds.has(item.id));
     expect(predecessor).toHaveLength(213);
-    expect(predecessor.filter(receipt => receipt.arm === "positive")).toHaveLength(129);
-    expect(predecessor.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(84);
+    expect(predecessor.filter(item => item.arm === "positive")).toHaveLength(129);
+    expect(predecessor.filter(item => item.arm === "semantic_negative")).toHaveLength(84);
     expect(added).toHaveLength(16);
-    expect(added.filter(receipt => receipt.arm === "positive")).toHaveLength(8);
-    expect(added.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(8);
-    const prior = historical.filter(receipt => !recordedIds.has(receipt.case) && !discoveredIds.has(receipt.case));
+    expect(added.filter(item => item.arm === "positive")).toHaveLength(8);
+    expect(added.filter(item => item.arm === "semantic_negative")).toHaveLength(8);
+    const prior = historical.filter(item => !recordedIds.has(item.id) && !discoveredIds.has(item.id));
     expect(prior).toHaveLength(229);
-    expect(prior.filter(receipt => receipt.arm === "positive")).toHaveLength(137);
-    expect(prior.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(92);
-    const recorded = receipts.filter(receipt => recordedIds.has(receipt.case));
+    expect(prior.filter(item => item.arm === "positive")).toHaveLength(137);
+    expect(prior.filter(item => item.arm === "semantic_negative")).toHaveLength(92);
+    const recorded = HISTORICAL_CASES.filter(item => recordedIds.has(item.id));
     expect(recorded).toHaveLength(20);
-    expect(recorded.filter(receipt => receipt.arm === "positive")).toHaveLength(10);
-    expect(recorded.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(10);
-    const retained = historical.filter(receipt => !discoveredIds.has(receipt.case));
+    expect(recorded.filter(item => item.arm === "positive")).toHaveLength(10);
+    expect(recorded.filter(item => item.arm === "semantic_negative")).toHaveLength(10);
+    const retained = historical.filter(item => !discoveredIds.has(item.id));
     expect(retained).toHaveLength(249);
-    expect(retained.filter(receipt => receipt.arm === "positive")).toHaveLength(147);
-    expect(retained.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(102);
-    const discovered = receipts.filter(receipt => discoveredIds.has(receipt.case));
+    expect(retained.filter(item => item.arm === "positive")).toHaveLength(147);
+    expect(retained.filter(item => item.arm === "semantic_negative")).toHaveLength(102);
+    const discovered = HISTORICAL_CASES.filter(item => discoveredIds.has(item.id));
     expect(discovered).toHaveLength(16);
-    expect(discovered.filter(receipt => receipt.arm === "positive")).toHaveLength(6);
-    expect(discovered.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(10);
+    expect(discovered.filter(item => item.arm === "positive")).toHaveLength(6);
+    expect(discovered.filter(item => item.arm === "semantic_negative")).toHaveLength(10);
     expect(historical).toHaveLength(265);
-    expect(historical.filter((receipt) => receipt.arm === "positive")).toHaveLength(153);
-    expect(historical.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(112);
-    const kingZones = receipts.filter(receipt => kingZoneIds.has(receipt.case));
+    expect(historical.filter((item) => item.arm === "positive")).toHaveLength(153);
+    expect(historical.filter((item) => item.arm === "semantic_negative")).toHaveLength(112);
+    const kingZones = HISTORICAL_CASES.filter(item => kingZoneIds.has(item.id));
     expect(kingZones).toHaveLength(24);
-    expect(kingZones.filter(receipt => receipt.arm === "positive")).toHaveLength(20);
-    expect(kingZones.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(4);
-    const retainedCases = receipts.filter(receipt => !boundedIds.has(receipt.case) && !pressureIds.has(receipt.case));
+    expect(kingZones.filter(item => item.arm === "positive")).toHaveLength(20);
+    expect(kingZones.filter(item => item.arm === "semantic_negative")).toHaveLength(4);
+    const retainedCases = HISTORICAL_CASES.filter(item => !exposureIds.has(item.id) && !materialIds.has(item.id) && !boundedIds.has(item.id) && !pressureIds.has(item.id));
     expect(retainedCases).toHaveLength(289);
-    expect(retainedCases.filter((receipt) => receipt.arm === "positive")).toHaveLength(173);
-    expect(retainedCases.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(116);
-    const pressure = receipts.filter(receipt => pressureIds.has(receipt.case));
+    expect(retainedCases.filter((item) => item.arm === "positive")).toHaveLength(173);
+    expect(retainedCases.filter((item) => item.arm === "semantic_negative")).toHaveLength(116);
+    const pressure = HISTORICAL_CASES.filter(item => pressureIds.has(item.id));
     expect(pressure).toHaveLength(18);
-    expect(pressure.filter(receipt => receipt.arm === "positive")).toHaveLength(4);
-    expect(pressure.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(14);
-    const bounded = receipts.filter(receipt => boundedIds.has(receipt.case));
+    expect(pressure.filter(item => item.arm === "positive")).toHaveLength(4);
+    expect(pressure.filter(item => item.arm === "semantic_negative")).toHaveLength(14);
+    const bounded = HISTORICAL_CASES.filter(item => boundedIds.has(item.id));
     expect(bounded).toHaveLength(36);
-    expect(bounded.filter(receipt => receipt.arm === "positive")).toHaveLength(22);
-    expect(bounded.filter(receipt => receipt.arm === "semantic_negative")).toHaveLength(14);
-    expect(receipts).toHaveLength(343);
-    expect(receipts.filter((receipt) => receipt.arm === "positive")).toHaveLength(199);
-    expect(receipts.filter((receipt) => receipt.arm === "semantic_negative")).toHaveLength(144);
+    expect(bounded.filter(item => item.arm === "positive")).toHaveLength(22);
+    expect(bounded.filter(item => item.arm === "semantic_negative")).toHaveLength(14);
+    const material = HISTORICAL_CASES.filter(item => materialIds.has(item.id));
+    expect(material).toHaveLength(29);
+    expect(material.filter(item => item.arm === "positive")).toHaveLength(23);
+    expect(material.filter(item => item.arm === "semantic_negative")).toHaveLength(6);
+    const exposure = HISTORICAL_CASES.filter(item => exposureIds.has(item.id));
+    expect(exposure).toHaveLength(16);
+    expect(exposure.filter(item => item.arm === "positive")).toHaveLength(8);
+    expect(exposure.filter(item => item.arm === "semantic_negative")).toHaveLength(8);
+    expect(HISTORICAL_CASES).toHaveLength(388);
+    const addedRightsIds = new Set(SEMANTIC_VALIDATION_RIGHTS_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    expect(addedRightsIds.size).toBe(8);
+    const addedTransitionIds = new Set(SEMANTIC_VALIDATION_TRANSITION_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    expect(addedTransitionIds.size).toBe(28);
+    const addedOppositionIds = new Set(OPPOSITION_LITERAL_SOURCE.cases.map(row => row.proposition.case.id));
+    expect(addedOppositionIds.size).toBe(46);
+    const opposition = CASES.filter(row => addedOppositionIds.has(row.id));
+    expect(opposition.map(row => row.id).sort()).toEqual([...addedOppositionIds].sort());
+    expect(opposition.filter(row => row.arm === "positive")).toHaveLength(18);
+    expect(opposition.filter(row => row.arm === "semantic_negative")).toHaveLength(6);
+    expect(opposition.filter(row => row.arm === "orientation")).toHaveLength(22);
+    const addedPawnFileIds = new Set(PAWN_FILE_LITERAL_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    expect(addedPawnFileIds.size).toBe(220);
+    const addedBackwardIds = new Set(BACKWARD_LITERAL_SOURCE.cases.map(row => row.proposition.case.id));
+    expect(addedBackwardIds.size).toBe(74);
+    const addedSliderIds = new Set(SLIDER_LITERAL_SOURCE.cases.map(row => row.proposition.case.id));
+    expect(addedSliderIds.size).toBe(116);
+    expect(CASES.filter(row => !addedOppositionIds.has(row.id) && !addedPawnFileIds.has(row.id) && !addedBackwardIds.has(row.id) && !addedSliderIds.has(row.id))).toHaveLength(419 - SUBJECT_SAFE_RETIRED_CASES.length);
+    expect(CASES).toHaveLength(375 + addedCastleIds.size + addedRightsIds.size + addedTransitionIds.size + addedOppositionIds.size + addedPawnFileIds.size + addedBackwardIds.size + addedSliderIds.size - SUBJECT_SAFE_RETIRED_CASES.length);
+    expect(HISTORICAL_CASES.filter((item) => item.arm === "positive")).toHaveLength(230);
+    expect(HISTORICAL_CASES.filter((item) => item.arm === "semantic_negative")).toHaveLength(158);
   });
 
   it("[5][27] refuses callbacks, prebuilt evidence, forged keys, generated ids and @-suffixed dialects", () => {
@@ -516,7 +620,8 @@ describe("semantic-validation orientation", () => {
     expect(await executeSemanticValidationCase(crossedSource, resolvers, map)).toMatchObject({ status: "failed", invocations: 2, resultKind: "completed", targetCount: 1, failure: { code: "SEMANTIC_VALIDATION_ORIENTATION_SCHEMA" } });
     for (const change of [{ beforeFen: crossedSource.input.beforeFen }, { moveUci: crossedSource.input.moveUci }, { afterFen: crossedSource.input.afterFen }]) {
       map.set(legalPartner.id, parseSemanticValidationCase({ ...legalPartner, input: { ...partnerInput, ...change } }));
-      expect(await executeSemanticValidationCase(crossedSource, resolvers, map)).toMatchObject({ status: "failed", invocations: 0, resultKind: "not_run", targetCount: 0, failure: { code: "SEMANTIC_VALIDATION_ORIENTATION_SCHEMA" } });
+      // §4.1a now checks the partner's own complete legal edge before its relation to the source.
+      expect(await executeSemanticValidationCase(crossedSource, resolvers, map)).toMatchObject({ status: "failed", invocations: 0, resultKind: "not_run", targetCount: 0, failure: { code: "SEMANTIC_VALIDATION_FIXTURE_INVALID" } });
     }
   });
 });

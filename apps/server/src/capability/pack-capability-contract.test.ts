@@ -26,6 +26,8 @@ import {
   type GeneratedCapabilityDeclaration,
 } from "@chess-tabiya/runtime";
 import { GENERATED_CAPABILITY_DECLARATIONS } from "../../../../packages/runtime/src/capability/declarations.generated.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "../../../../packages/runtime/src/evidence-catalog.js";
+import { STRUCTURAL_CONVENTION_REFS as STRUCTURAL_REFS } from "@chess-tabiya/schema/drill-pack";
 
 import { ServerError } from "../errors.js";
 import { PackRegistry } from "../pack-registry.js";
@@ -61,7 +63,7 @@ import { CapabilitySourceIndex } from "./source-image.js";
 const ROOT = resolve(import.meta.dirname, "../../../..");
 const SLOW = 180_000;
 const read = (path: string): string => readFileSync(resolve(ROOT, path), "utf8");
-const example = JSON.parse(read("schemas/drill_pack.example.json")) as Record<string, unknown>;
+const example: Record<string, unknown> = withDerivedRequires(JSON.parse(read("schemas/drill_pack.example.json")) as Record<string, unknown>);
 const schema = JSON.parse(read("schemas/drill_pack.schema.json")) as unknown;
 const i = (id: string, value = 1): CapabilityId => capabilityId(id, value);
 
@@ -206,6 +208,50 @@ export const unrelatedSchema = "tabiya.sourcing.evidence.v1";
 });
 
 describe("criterion 7 — requirement scope", () => {
+  it("D4081 parallel active projection versions create no self-migration, while explicit deprecation still needs judgement", () => {
+    const fixture = withDerivedRequires({ ...example, objective: { ...(example.objective as object), successConditions: [{ kind: "structural_feature", feature: { kind: "feature", feature: { kind: "outpost", color: "white", square: "e5" } } }] } });
+    const inputs = { root: ROOT, schema, population: { roots: { draftPacks: ["mechanical-active-version.json"], candidatePacks: [], draftSidecars: [], candidateSourcing: [], shapes: [], principles: [] } },
+      baseline: { draftPacks: 1, candidatePacks: 0, draftSidecars: 0, candidateSourcing: 0, shapes: 0, principles: 0 }, readDocument: () => fixture };
+    const active = buildMigrationPlan(inputs);
+    expect(CAPABILITY_REGISTRY.byKey.get(capabilityKey(capabilityId("rules.structural.predicate.outpost", 1)))!.disposition.kind).toBe("active");
+    expect(CAPABILITY_REGISTRY.current("rules.structural.predicate.outpost")!.id).toEqual(capabilityId("rules.structural.predicate.outpost", 2));
+    expect(active.judgement).toEqual([]); expect(active.transitions).toEqual([]); expect(active.mechanical).toEqual([]);
+    const subjectId = "rules.structural.predicate.outpost";
+    const lifecycle: CapabilityLifecycleRow[] = [...CAPABILITY_LIFECYCLE.filter(row => row.subjectId !== subjectId), { subjectId, versions: [
+      { version: { kind: "integer", value: 1 }, disposition: { kind: "deprecated", successor: capabilityId(subjectId, 2), reason: "Mechanical transition fixture", reasonCode: "superseded" } },
+      { version: { kind: "integer", value: 2 }, disposition: { kind: "active" } },
+    ] }];
+    const registry = buildCapabilityRegistry(GENERATED_CAPABILITY_DECLARATIONS, lifecycle);
+    const deprecated = buildMigrationPlan({ ...inputs, registry });
+    expect(deprecated.judgement).toContainEqual(expect.objectContaining({ capability: capabilityId(subjectId, 1), successor: capabilityId(subjectId, 2) }));
+    expect(deprecated.mechanical).toEqual([]);
+  });
+  it("D4078 only explicit structural refs add predicate2; legacy and template dependencies stay at predicate1", () => {
+    const cases = [
+      ["king_opposition", { kind: "feature", feature: { kind: "king_opposition", color: "white", form: "direct" } }],
+      ["backward_pawn", { kind: "feature", feature: { kind: "backward_pawn", color: "white", file: "b" } }],
+      ["outpost", { kind: "feature", feature: { kind: "outpost", color: "white", square: "e5" } }],
+      ["backward_pawn", { kind: "quantified", quantifier: "some", over: { files: { from: "a", to: "h" } }, feature: { kind: "backward_pawn", color: "white" } }],
+      ["outpost", { kind: "quantified", quantifier: "some", over: { squares: { files: { from: "a", to: "h" }, ranks: { from: 4, to: 6 } } }, feature: { kind: "outpost", color: "white" } }],
+    ] as const;
+    for (const [kind, expression] of cases) {
+      const stamp = (feature: unknown) => withDerivedRequires({ ...example, objective: { ...(example.objective as object), successConditions: [{ kind: "structural_feature", feature }] } }).requires.map(capabilityKey);
+      const legacy = stamp(expression), selected = stamp({ ...expression, feature: { ...expression.feature, conventionRef: STRUCTURAL_REFS[kind] } });
+      expect(legacy).toContain(`rules.structural.predicate.${kind}@i:1`);
+      expect(legacy).not.toContain(`rules.structural.predicate.${kind}@i:2`);
+      expect(selected).toContain(`rules.structural.predicate.${kind}@i:2`);
+      expect(selected.filter(key => key.includes("conventionRef"))).toHaveLength(1);
+      expect(legacy.filter(key => key.includes("conventionRef"))).toEqual([]);
+      expect(CAPABILITY_REGISTRY.byKey.get(capabilityKey(capabilityId(`structuralFeature.${kind}`, 1)))!.dependsOn.map(capabilityKey)).toContain(`rules.structural.predicate.${kind}@i:1`);
+    }
+  });
+  it("D4078 removing only successor consumer acceptance cannot hide behind a same-id legacy accept", () => {
+    const manifest = { ...PRIMARY_EVIDENCE_MANIFEST, consumers: PRIMARY_EVIDENCE_MANIFEST.consumers.map(consumer => ({ ...consumer, accepts: consumer.accepts.filter(ref => !ref.id.startsWith("rules.structural.predicate.") || ref.version !== 2) })) };
+    expect(PRIMARY_EVIDENCE_MANIFEST.consumers.some(consumer => consumer.id === "authoring.predicate" && consumer.accepts.some(ref => ref.id === "rules.structural.predicate.backward_pawn" && ref.version === 1))).toBe(true);
+    expect(() => buildContract({ root: ROOT, manifest })).toThrow(/CAPABILITY_SCOPE_VIOLATION/);
+    const unbound = { ...PRIMARY_EVIDENCE_MANIFEST, bindings: PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => !binding.projection.id.startsWith("rules.structural.predicate.") || binding.projection.version !== 2) };
+    expect(() => buildContract({ root: ROOT, manifest: unbound })).toThrow(/CAPABILITY_SCOPE_VIOLATION/);
+  }, SLOW);
   it("a pack's derived projections are only those the three pack-meaning consumers accept", () => {
     const stamped = withDerivedRequires({ ...example, guard: { conditions: [{ kind: "engine_eval_swing", cp: 150 }, { kind: "tablebase_category_regression" }] } });
     const projections = stamped.requires.filter((row) => CAPABILITY_REGISTRY.byKey.get(capabilityKey(row))?.subject === "projection").map((row) => row.id);

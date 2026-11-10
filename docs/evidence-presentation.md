@@ -5,6 +5,14 @@ Checkpoints P, A and B landed 2026-09-24. Runtime: `packages/runtime/src/present
 (components, parsers, seals, wire, registry) with its adapter groups; client:
 `apps/web/src/lib/evidence/`.
 
+Post-commit Nudge's exact grade@2 adapter uses `play.move_quality_summary@1`, a fixed concise
+statement over the complete current grade operands. Review retains the full grade renderer.
+The selected summary's **How measured** opens its original canonical full report locally; the
+manual view admits one whole report up to400 words, otherwise states its limit without cropping.
+Its words use the same counter as the unchanged proactive50-word fit. The full report is absent
+from default DOM/AT/provider grounding, and active packet/region/per-opening ownership retires
+both the report and retained controls on context changes. No new query, evidence or grading.
+
 ## Components
 
 `COMPONENT_DECLARATIONS` declares the fourteen closed components — `distribution`,
@@ -65,6 +73,16 @@ dispatched by `PresentedEvidence.svelte`.
 - `relation_overlay` edges must join retained nodes; its visible caption and endpoint labels name
   only those endpoints. Native caption/endpoint controls expose the same full relation through
   the owning board callback, never a second query or a wider paint budget.
+- `move_path` retains its source's canonical starting FEN and every original UCI/SAN/ply.
+  Registered construction checks all original before-positions; the receiver replays the whole
+  line, refusing missing/noncanonical starts, illegal moves or mismatched SAN/ply rather than
+  accepting a prefix. Castling normalization does not rewrite the recorded UCI. Selecting SAN
+  opens a labelled read-only board preview with Start/Previous/Next and direct position controls.
+  It uses the path's own positions, never the saved cursor, and performs no game/help/provider
+  writes. The exact presented item owns the modal: replacement, navigation or host destruction
+  retires it and its handlers. Escape/Close return focus only to a still-owned opener. Optional
+  future arrows are not painted on the active board. This local implementation has DOM/service
+  controls; actual default-startup/native desktop/phone geometry remains open under D3979/D3928.
 - `citation` retains its quoted passage and complete attribution. When its source carries an
   absolute HTTP(S) URL without embedded credentials, the source title opens that exact URL in a
   new tab. Missing, malformed or unsafe URLs remain plain attribution; the renderer never invents
@@ -92,6 +110,12 @@ construction kit by injection (no import cycle): `presentation-play-adapters.ts`
 `presentation-consumer-adapters.ts` (the ordinary, Inspector and author/operator consumers). Fact
 renderers are fixed templates over strict operand schemas (`presentation-schema.ts`); every sentence
 passes `assertPresentationText`.
+
+The exact eight multi-ply Nudge2/current@3 bindings in module-registration §4.5c are complete
+singleton square-set/caption representations, with no arrow form. Their source/renderer/typed
+operands and geometry validation remain; the same sources still produce full recorded paths in
+Review and Inspector. Old Nudge path/composition receipts refuse. This is declared at original
+construction, never an after-the-fact component crop to get under a budget.
 
 ## Checkpoint P (manifest repairs)
 

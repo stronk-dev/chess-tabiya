@@ -1,8 +1,9 @@
 import type { AddressInfo } from "node:net";
 import { INITIAL_FEN } from "chessops/fen";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EngineCapabilities } from "./capabilities.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { OpponentSelector } from "./opponent-selector.js";
 
 function deferred<T>() {
@@ -15,6 +16,8 @@ function deferred<T>() {
 // gate controls the async selector/capability boundary; selector/provider execution is covered
 // independently in opponent-cancellation.test.ts, without pretending mock Maia is a live model.
 describe("human distribution asynchronous access boundary", { timeout: 15_000 }, () => {
+  beforeEach(() => { installEmptyApplicationCatalogues(); });
+  afterEach(() => { vi.restoreAllMocks(); });
   it("forwards a real select-move disconnect without adding cancellation to the wire", async () => {
     const app = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
     const started = deferred<AbortSignal | undefined>(), aborted = deferred<void>(), release = deferred<void>();

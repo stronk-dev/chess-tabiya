@@ -5,7 +5,7 @@ import { mount, tick, unmount } from "svelte";
 import { SvelteMap } from "svelte/reactivity";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { compileAssistanceRequest, hintDecisionStamp, hintReceiptDigest, type DrillRun, type HintDeliveryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime";
+import { PRIMARY_EVIDENCE_MANIFEST, compileAssistanceRequest, hintDecisionStamp, hintReceiptDigest, type DrillRun, type HintDeliveryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime";
 
 import { ApiError, DrillApi, type GuidedHintClient, type HintRequestBody } from "./api.js";
 import GuidedHintSeat from "./GuidedHintSeat.svelte";
@@ -26,11 +26,13 @@ const SENTENCES: Readonly<Record<HintRung, string>> = {
   piece: "piece", distance: "distance", move: "move",
 };
 
-function receipt(run: DrillRun, rung: HintRung): HintDeliveryReceipt {
-  const marks = rung === "pattern" ? { rung } : { rung, squares: ["d1", "d3"] };
+function receipt(run: DrillRun, rung: HintRung, requestId = `${rung === "pattern" ? "a" : "b"}`.repeat(32)): HintDeliveryReceipt {
+  const marks = rung === "pattern" ? { rung } : { rung, squares: ["d1", "d3"],
+    ...(["piece", "distance", "move"].includes(rung) ? { piece: { color: "white", role: "knight", square: "b4" } } : {}),
+    ...(rung === "move" ? { arrow: { from: "b4", to: "c2" } } : {}) };
   const body = {
-    version: 1 as const, requestId: `${rung === "pattern" ? "a" : "b"}`.repeat(32), runId: run.id, decision: hintDecisionStamp(run), rung, family: "double_attack" as const,
-    projectionId: `derived.hint.disclosure.double_attack.${rung}` as const, disclosureDigest: "c".repeat(64), manifestDigest: "d".repeat(64),
+    version: 2 as const, requestId, runId: run.id, decision: hintDecisionStamp(run), rung, family: "double_attack" as const,
+    projectionId: `derived.hint.disclosure.double_attack.${rung}` as const, projectionVersion: 1, disclosureDigest: "c".repeat(64), manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest,
     rendered: { source: "deterministic" as const, sentence: SENTENCES[rung], voice: { state: "not_requested" as const } }, marks,
   };
   return { ...body, receiptDigest: hintReceiptDigest(body as never) } as HintDeliveryReceipt;
@@ -52,11 +54,23 @@ it("Guided Hint shares the one-expanded authority without entering the module-pa
 });
 
 describe("DrillApi Guided Hint wire", () => {
+  it.each(["run", "manifest", "request", "wire_version", "projection_version"])("rejects an integrity-valid crossed %s at the real polling API", async fault => {
+    const run = revealedRun(), expectedId = "a".repeat(32), valid = receipt(run, "pattern", expectedId);
+    const { receiptDigest: _digest, ...body } = valid;
+    const changed = { ...body, ...(fault === "run" ? { runId: "foreign-run" } : {}),
+      ...(fault === "manifest" ? { manifestDigest: "f".repeat(64) } : {}),
+      ...(fault === "request" ? { requestId: "f".repeat(32) } : {}),
+      ...(fault === "wire_version" ? { version: 1 } : {}), ...(fault === "projection_version" ? { projectionVersion: 2 } : {}) };
+    const delivery = { ...changed, receiptDigest: hintReceiptDigest(changed as never) };
+    const api = new DrillApi("", async () => new Response(JSON.stringify({ hint: { state: "available", delivery } }), { status: 200 }));
+    await expect(api.hintPoll(run.id, expectedId)).rejects.toThrow(/HINT_EXCHANGE_INVALID/u);
+  });
+
   it("POSTs the decision with the writer header, polls and cancels one exact id, and refuses a malformed envelope", async () => {
     const run = revealedRun();
     const calls: { url: string; method: string; writer: string | null; body: unknown }[] = [];
     const responses: unknown[] = [
-      { hint: { state: "pending", requestId: "a".repeat(32), rung: "pattern" } },
+      { clientRequestId: "0".repeat(32), hint: { state: "pending", requestId: "a".repeat(32), rung: "pattern" } },
       { hint: { state: "available", delivery: receipt(run, "pattern") } },
       { hint: { state: "cancelled", requestId: "a".repeat(32), rung: "pattern" } },
       { hint: { state: "available", delivery: { ...receipt(run, "pattern"), seal: true } } },
@@ -66,7 +80,7 @@ describe("DrillApi Guided Hint wire", () => {
       calls.push({ url: String(input), method: init?.method ?? "GET", writer: new Headers(init?.headers).get("x-writer-id"), body: init?.body === undefined ? undefined : JSON.parse(String(init.body)) });
       return new Response(JSON.stringify(responses.shift()), { status: 200, headers: { "content-type": "application/json" } });
     });
-    const body: HintRequestBody = { nodeId: "n0", rung: "pattern", decisionDigest: hintDecisionStamp(run).digest, assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) };
+    const body: HintRequestBody = { clientRequestId: "0".repeat(32), nodeId: "n0", rung: "pattern", decisionDigest: hintDecisionStamp(run).digest, assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) };
     expect(await api.hint("hint-run", body, "writer-1")).toEqual({ state: "pending", requestId: "a".repeat(32), rung: "pattern" });
     expect((await api.hintPoll("hint-run", "a".repeat(32))).state).toBe("available");
     expect((await api.hintCancel("hint-run", "a".repeat(32))).state).toBe("cancelled");
@@ -76,13 +90,137 @@ describe("DrillApi Guided Hint wire", () => {
       ["DELETE", `/runs/hint-run/hints/${"a".repeat(32)}`, null],
     ]);
     // The body carries a decision, a rung and stage-1 intent — never a ceiling, source or projection.
-    expect(Object.keys(calls[0]!.body as object).sort()).toEqual(["assistance", "decisionDigest", "nodeId", "rung"]);
+    expect(Object.keys(calls[0]!.body as object).sort()).toEqual(["assistance", "clientRequestId", "decisionDigest", "nodeId", "rung"]);
     await expect(api.hintPoll("hint-run", "a".repeat(32))).rejects.toThrow(/HINT_EXCHANGE_INVALID/u);
     await expect(api.hintPoll("hint-run", "a".repeat(32))).rejects.toThrow(/malformed/u);
   });
 });
 
+describe("Hint action response correlation", () => {
+  it.each([undefined, null, 42, "A".repeat(32), "0".repeat(31)])("rejects runtime key %s without HTTP or legacy envelope fallback", async clientRequestId => {
+    const fetcher = vi.fn(async () => new Response(JSON.stringify({ hint: { state: "pending", requestId: "a".repeat(32), rung: "pattern" } }), { status: 200 }));
+    const api = new DrillApi("", fetcher);
+    await expect(Reflect.apply(api.hint, api, ["hint-run", { clientRequestId }, "writer"])).rejects.toThrow(/clientRequestId/u);
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
+  it.each(["missing", "different", "extra"])("refuses a %s POST action envelope before admitting pending output", async fault => {
+    const run = revealedRun(), clientRequestId = "0".repeat(32);
+    const envelope = { hint: { state: "pending", requestId: "a".repeat(32), rung: "pattern" },
+      ...(fault === "missing" ? {} : { clientRequestId: fault === "different" ? "1".repeat(32) : clientRequestId }),
+      ...(fault === "extra" ? { extra: true } : {}) };
+    const api = new DrillApi("", async () => new Response(JSON.stringify(envelope), { status: 200 }));
+    const assistance = compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+    await expect(api.hint(run.id, { clientRequestId, nodeId: "n0", rung: "pattern", decisionDigest: hintDecisionStamp(run).digest, assistance }, "writer")).rejects.toThrow(/malformed/u);
+  });
+});
+
 describe("GuidedHintSeat", () => {
+  it.each(["before-404", "during-repost"])("retirement %s never leaves restart work owned by a dead seat", async timing => {
+    const run = revealedRun(), requestId = "e".repeat(32);
+    let rejectPoll!: (error: Error) => void, releasePost!: (value: HintResponse) => void;
+    const bodies: HintRequestBody[] = [];
+    const request = vi.fn<GuidedHintClient["request"]>(async body => {
+      bodies.push(body);
+      return bodies.length === 1 ? { state: "pending", requestId, rung: "pattern" }
+        : new Promise<HintResponse>(resolve => { releasePost = resolve; });
+    });
+    const poll = vi.fn<GuidedHintClient["poll"]>(() => new Promise((_resolve, reject) => { rejectPoll = reject; }));
+    const cancel = vi.fn<GuidedHintClient["cancel"]>(async id => ({ state: "cancelled", requestId: id, rung: "pattern" }));
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client: { request, poll, cancel }, assistanceRequest, pollIntervalMs: 1 } });
+    await settle(); document.querySelector<HTMLButtonElement>(".hint-actions button")!.click();
+    await vi.waitFor(() => expect(poll).toHaveBeenCalledOnce());
+    if (timing === "before-404") await unmount(component);
+    rejectPoll(new ApiError(404, "NOT_FOUND", "server restarted"));
+    if (timing === "during-repost") {
+      await vi.waitFor(() => expect(request).toHaveBeenCalledTimes(2));
+      expect(bodies[1]).toEqual(bodies[0]);
+      await unmount(component);
+      releasePost({ state: "pending", requestId, rung: "pattern" });
+    }
+    await settle();
+    expect(request).toHaveBeenCalledTimes(timing === "before-404" ? 1 : 2);
+    expect(cancel).toHaveBeenCalledTimes(timing === "before-404" ? 1 : 2);
+    expect(cancel.mock.calls.every(call => call[0] === requestId)).toBe(true);
+    expect(document.querySelector(".hint-sentence")).toBeNull();
+  });
+
+  it.each(["pending", "refused", "malformed"])("a retired creation never invents cleanup for %s output", async kind => {
+    const run = revealedRun();
+    let release!: (value: unknown) => void;
+    const request = vi.fn<GuidedHintClient["request"]>(() => new Promise(resolve => { release = value => resolve(value as HintResponse); }));
+    const cancel = vi.fn<GuidedHintClient["cancel"]>(async requestId => ({ state: "cancelled", requestId, rung: "pattern" }));
+    const poll = vi.fn<GuidedHintClient["poll"]>();
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client: { request, poll, cancel }, assistanceRequest } });
+    await settle(); document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+    await unmount(component);
+    release(kind === "pending" ? { state: "pending", requestId: "e".repeat(32), rung: "pattern" }
+      : kind === "refused" ? { state: "policy_refused", rung: "pattern", reason: "module_inactive" }
+      : { state: "pending", requestId: "e".repeat(32), rung: "move", rogue: true });
+    await settle();
+    expect(cancel).toHaveBeenCalledTimes(kind === "pending" ? 1 : 0);
+    if (kind === "pending") expect(cancel).toHaveBeenCalledWith("e".repeat(32));
+    expect(poll).not.toHaveBeenCalled(); expect(request).toHaveBeenCalledOnce();
+    expect(document.querySelector(".hint-sentence")).toBeNull();
+  });
+
+  it.each(["run", "manifest", "request", "pending_request"])("404 recovery cannot bypass the same %s admission", async fault => {
+    const run = revealedRun(), requestId = "e".repeat(32), valid = receipt(run, "pattern", requestId);
+    const { receiptDigest: _digest, ...body } = valid;
+    const changed = { ...body, ...(fault === "run" ? { runId: "foreign-run" } : {}),
+      ...(fault === "manifest" ? { manifestDigest: "f".repeat(64) } : {}), ...(fault === "request" ? { requestId: "f".repeat(32) } : {}) };
+    const delivery = { ...changed, receiptDigest: hintReceiptDigest(changed) };
+    let posts = 0;
+    const client: GuidedHintClient = {
+      async request() { posts += 1; return posts === 1 ? { state: "pending", requestId, rung: "pattern" }
+        : fault === "pending_request" ? { state: "pending", requestId: "f".repeat(32), rung: "pattern" } : { state: "available", delivery }; },
+      async poll() { throw new ApiError(404, "NOT_FOUND", "server restarted"); },
+      async cancel(id) { return { state: "cancelled", requestId: id, rung: "pattern" }; },
+    };
+    const marks = vi.fn();
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client,
+      assistanceRequest, pollIntervalMs: 1, onMarks: marks } });
+    try {
+      await settle(); document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+      expect(posts).toBe(2);
+      expect(document.querySelector(".hint-sentence")).toBeNull();
+      expect(marks.mock.calls.every(([value]) => value === undefined)).toBe(true);
+      expect(document.querySelector(".hint-actions button")?.textContent).toContain("Hint");
+    } finally { await unmount(component); }
+  });
+
+  it.each([
+    ["run", false], ["run", true], ["manifest", false], ["manifest", true],
+    ["decision_cursor", false], ["decision_cursor", true], ["wire_version", false],
+    ["projection_version", false], ["request", true], ["pending_request", true], ["pending_rung", true],
+  ] as const)("refuses a crossed %s response (polled %s) before text, marks or progression", async (fault, polled) => {
+    const run = revealedRun(), requestId = "e".repeat(32), valid = receipt(run, "pattern", requestId);
+    const { receiptDigest: _digest, ...body } = valid;
+    const changed = { ...body, ...(fault === "run" ? { runId: "foreign-run" } : {}),
+      ...(fault === "manifest" ? { manifestDigest: "f".repeat(64) } : {}),
+      ...(fault === "decision_cursor" ? { decision: { ...body.decision, cursor: { ...body.decision.cursor, nodeId: "foreign-node" } } } : {}),
+      ...(fault === "wire_version" ? { version: 1 } : {}), ...(fault === "projection_version" ? { projectionVersion: 2 } : {}),
+      ...(fault === "request" ? { requestId: "f".repeat(32) } : {}) };
+    const delivery = { ...changed, receiptDigest: hintReceiptDigest(changed as never) } as HintDeliveryReceipt;
+    const available: HintResponse = { state: "available", delivery };
+    const poll = vi.fn<GuidedHintClient["poll"]>(async () => fault === "pending_request" || fault === "pending_rung"
+      ? { state: "pending", requestId: fault === "pending_request" ? "f".repeat(32) : requestId, rung: fault === "pending_rung" ? "square" : "pattern" }
+      : available);
+    const client: GuidedHintClient = { async request() { return polled ? { state: "pending", requestId, rung: "pattern" } : available; }, poll,
+      async cancel(id) { return { state: "cancelled", requestId: id, rung: "pattern" }; } };
+    const marks = vi.fn();
+    const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client,
+      assistanceRequest, pollIntervalMs: 1, onMarks: marks } });
+    try {
+      await settle();
+      document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
+      expect(document.querySelector(".hint-sentence")).toBeNull();
+      expect(document.querySelector(".hint-actions button")?.textContent).toContain("Hint");
+      expect(marks.mock.calls.every(([value]) => value === undefined)).toBe(true);
+      expect(poll).toHaveBeenCalledTimes(polled ? 1 : 0);
+    } finally { await unmount(component); }
+  });
+
   it("D3744 shows the declared question without advancing a hint", async () => {
     const run = revealedRun();
     const client = fakeClient(body => ({ state: "honest_empty", requestId: "f".repeat(32), rung: body.rung, reason: "no_admitted_occurrence" }));
@@ -238,7 +376,7 @@ describe("GuidedHintSeat", () => {
     const run = revealedRun(), requestId = "e".repeat(32);
     const client: GuidedHintClient = {
       async request(body) { return { state: "pending", requestId, rung: body.rung }; },
-      async poll() { return Date.now() >= readyAt ? { state: "available", delivery: receipt(run, "pattern") } : { state: "pending", requestId, rung: "pattern" }; },
+      async poll() { return Date.now() >= readyAt ? { state: "available", delivery: receipt(run, "pattern", requestId) } : { state: "pending", requestId, rung: "pattern" }; },
       async cancel(id) { return { state: "cancelled", requestId: id, rung: "pattern" }; },
     };
     const component = mount(GuidedHintSeat, { target: target(), props: { run, ceiling: "distance", canWrite: true, client, assistanceRequest } });
@@ -340,7 +478,8 @@ describe("GuidedHintSeat", () => {
       if (action === "retry") {
         button().click(); await vi.advanceTimersByTimeAsync(0); await tick();
         expect(trace).toEqual(["POST", `DELETE:${requestId}`, "POST"]);
-        expect(bodies[1]).toEqual(bodies[0]);
+        expect(bodies[1]).toEqual({ ...bodies[0], clientRequestId: bodies[1]!.clientRequestId });
+      expect(bodies[1]!.clientRequestId).not.toBe(bodies[0]!.clientRequestId);
         expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
       }
       await unmount(component);
@@ -366,7 +505,8 @@ describe("GuidedHintSeat", () => {
       expect(document.querySelector(".hint-sentence")).toBeNull();
       button().click(); await settle();
       expect(trace).toEqual(["POST", `DELETE:${requestId}`, "POST"]);
-      expect(bodies[1]).toEqual(bodies[0]);
+      expect(bodies[1]).toEqual({ ...bodies[0], clientRequestId: bodies[1]!.clientRequestId });
+      expect(bodies[1]!.clientRequestId).not.toBe(bodies[0]!.clientRequestId);
       expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
     } finally { await unmount(component); }
   });
@@ -377,7 +517,7 @@ describe("GuidedHintSeat", () => {
     let queued: HintResponse | undefined;
     return {
       bodies, cancelled,
-      async request(body) { bodies.push(body); const result = answer(body); if (!pending) return result; queued = result; return { state: "pending", requestId: "e".repeat(32), rung: body.rung }; },
+      async request(body) { bodies.push(body); const result = answer(body); if (!pending || result.state === "policy_refused") return result; queued = result; return { state: "pending", requestId: result.state === "available" ? result.delivery.requestId : result.requestId, rung: body.rung }; },
       async poll() { const result = queued!; queued = undefined; return result; },
       async cancel(requestId) { cancelled.push(requestId); return { state: "cancelled", requestId, rung: "pattern" }; },
     };
@@ -496,7 +636,8 @@ describe("GuidedHintSeat", () => {
     expect(document.querySelector(".hint-sentence")).toBeNull();
     document.querySelector<HTMLButtonElement>(".hint-actions button")!.click(); await settle();
     expect(trace).toEqual(["POST", `DELETE:${failedId}`, "POST"]);
-    expect(bodies[1]).toEqual(bodies[0]);
+    expect(bodies[1]).toEqual({ ...bodies[0], clientRequestId: bodies[1]!.clientRequestId });
+      expect(bodies[1]!.clientRequestId).not.toBe(bodies[0]!.clientRequestId);
     expect(document.querySelector(".hint-sentence")?.textContent).toBe(SENTENCES.pattern);
     expect(document.querySelector(".hint-actions button")?.textContent?.trim()).toBe("A little more");
     await unmount(component);

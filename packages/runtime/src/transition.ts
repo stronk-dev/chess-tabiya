@@ -13,6 +13,7 @@ import {
 } from "@chess-tabiya/schema/drill-pack";
 
 import { positionFromFen } from "./position-cache.js";
+import { matchesCurrentStructuralExpression, preflightCurrentAuthoredOperation, requireCurrentStructuralExpression } from "./structural-evidence.js";
 import { DEVELOPMENT_CONVENTION, isDevelopmentHome } from "./phase.js";
 import {
   matchesStructuralExpression,
@@ -470,6 +471,30 @@ function matchesTransitionExpressionUnchecked(beforeFen: string, moveUci: string
 export function matchesTransitionExpression(beforeFen: string, moveUci: string, afterFen: string, expression: TransitionExpression): boolean {
   return isPlayedEdge(beforeFen, moveUci, afterFen)
     && matchesTransitionExpressionUnchecked(beforeFen, moveUci, afterFen, expression);
+}
+
+/** Check all original origins before any edge/boolean early exit, without acquiring board leaves. */
+export function assertCurrentTransitionSources(expression: TransitionExpression): void {
+  if (expression.kind === "all" || expression.kind === "any") expression.of.forEach(assertCurrentTransitionSources);
+  else if (expression.kind === "not") assertCurrentTransitionSources(expression.of);
+  else if (expression.kind === "position") requireCurrentStructuralExpression(expression.expression);
+  else if (expression.kind !== "feature") throw new TypeError("Unknown current transition expression");
+}
+
+function matchesCurrentTransitionExpressionUnchecked(beforeFen: string, moveUci: string, afterFen: string, expression: TransitionExpression, purpose: "authoring" | "objective"): boolean {
+  if (expression.kind === "all") return expression.of.every(child => matchesCurrentTransitionExpressionUnchecked(beforeFen, moveUci, afterFen, child, purpose));
+  if (expression.kind === "any") return expression.of.some(child => matchesCurrentTransitionExpressionUnchecked(beforeFen, moveUci, afterFen, child, purpose));
+  if (expression.kind === "not") return !matchesCurrentTransitionExpressionUnchecked(beforeFen, moveUci, afterFen, expression.of, purpose);
+  if (expression.kind === "feature") return matchesTransitionFeature(beforeFen, moveUci, afterFen, expression.feature);
+  if (expression.kind === "position") return matchesCurrentStructuralExpression(expression.at === "before" ? beforeFen : afterFen, expression.expression, purpose);
+  const exhaustive: never = expression;
+  throw new TypeError(`Unhandled current transition expression: ${JSON.stringify(exhaustive)}`);
+}
+
+export function matchesCurrentTransitionExpression(beforeFen: string, moveUci: string, afterFen: string, expression: TransitionExpression, purpose: "authoring" | "objective" = "objective"): boolean {
+  preflightCurrentAuthoredOperation(purpose);
+  assertCurrentTransitionSources(expression);
+  return isPlayedEdge(beforeFen, moveUci, afterFen) && matchesCurrentTransitionExpressionUnchecked(beforeFen, moveUci, afterFen, expression, purpose);
 }
 
 export function transitionFeatureKinds(expression: TransitionExpression): readonly (TransitionFeatureKind | `structure:${string}`)[] {

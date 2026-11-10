@@ -13,9 +13,10 @@ export function collectSemanticMemberships(
     return undefined;
   }
   if (events === undefined) return undefined;
-  // Keep the original v1-only Boolean algebra, including empty successful readings.
-  return Object.freeze([...new Set(events.filter((event) => event.projection.version === 1)
-    .map((event) => `${event.projection.id}\0${event.sign}`))]);
+  // Membership is not admission: the projector joins only its exact registered identities.
+  // Retain versions here so neither an old nor a foreign same-name event can satisfy that join.
+  return Object.freeze([...new Set(events
+    .map((event) => `${event.projection.id}@${event.projection.version}\0${event.sign}`))]);
 }
 
 /** Bounded FIFO, owned by this process/thread and its fixed collector implementation. */

@@ -3,7 +3,7 @@ import { compareBranches } from "./compare.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { evidenceValueReceipt } from "./evidence-contract.js";
 import { attachEvidence } from "./evidence.js";
-import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { invokeEvidenceValueRoute, readRecordedCompareEvalInvocation } from "./internal/evidence-value-routes.js";
 import { createRecordedComparisonSource } from "./recorded-comparison.js";
 import { fork } from "./runtime.js";
 import type { EvidenceAttachedEvent } from "./types.js";
@@ -18,6 +18,17 @@ function inputs(value = fixture(), before = 0, after = 1) {
 const delta = (value = fixture(), before = 0, after = 1) => invokeEvidenceValueRoute(ROUTE, inputs(value, before, after));
 
 describe("exact recorded comparison numerical differences", () => {
+  it.each([false, true])("authenticates only its original complete pair invocation, empty=%s", empty => {
+    const value = fixture([{ nodeIndex: 2, values: { centipawns: 0 } }, { nodeIndex: 3, values: { centipawns: empty ? 0 : 150 } }]);
+    const input = inputs(value), result = invokeEvidenceValueRoute(ROUTE, input), proof = readRecordedCompareEvalInvocation(result, input);
+    expect(proof).toEqual(input); expect(Object.isFrozen(proof)).toBe(true);
+    for (const copy of [[...result], result.slice(0, 0), Object.create(result)]) expect(() => readRecordedCompareEvalInvocation(copy, input)).toThrow();
+    const other = inputs(fixture()), foreign = invokeEvidenceValueRoute(ROUTE, other);
+    expect(() => readRecordedCompareEvalInvocation(foreign, input)).toThrow();
+    const before = input.before; input.before = input.after;
+    expect(() => readRecordedCompareEvalInvocation(result, input)).toThrow();
+    expect(readRecordedCompareEvalInvocation(result, { ...input, before })).toBe(proof);
+  });
   it.each([false, true])("retains ordered original packets without color normalization, black=%s", black => {
     const value = fixture(undefined, black), saved = JSON.stringify(value.run), input = inputs(value), result = delta(value);
     expect(result.map(item => item.payload)).toEqual([{ before: 0, after: 150, delta: 150, plyOffset: 1,

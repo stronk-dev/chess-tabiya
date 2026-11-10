@@ -958,3 +958,17 @@ It compares the node with its persisted parent and renders rules-derived counts 
 no transition, candidate moves are never accepted, and toggling the disclosure does not write to
 the run. R3 refused a live-marker tier, so this reading is always learner-initiated. See
 `docs/transition-primitives.md`.
+
+## Selected native fact details
+
+The current compact Nudge and Review cards can offer **Inspect this fact** for opposition,
+backward-pawn changes, pawn-file membership, physical slider blockers, file class, revealed
+stationary rook/queen file access, and pawn-island topology. The explicit expansion renders the
+complete original members and coordinates already retained in that selected fact. It uses the
+registered full human template and makes no additional source, engine, network or LLM request.
+
+The control is scoped to the actual selected item and packet. Rewind, row/packet replacement,
+help/access changes, refresh/retry and unmount retire the old controls and focus restoration.
+Review permits this read-only action for a spectator; an observed authenticated read refusal
+retires it until a successful read restores access. Retry/write permission remains separate.
+This local expansion does not grant the advanced Inspector's independently permissioned APIs.

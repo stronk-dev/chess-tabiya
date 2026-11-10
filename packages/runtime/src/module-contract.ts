@@ -89,6 +89,16 @@ export interface ModuleSelectionDeclaration {
   readonly familyPrecedence: readonly VersionedEvidenceId[];
 }
 
+/** D4058: an explicit Nudge-only presentation convention, not a source exactness claim. */
+export const POSTCOMMIT_OBSERVED_WINDOW_POLICY: VersionedEvidenceId = Object.freeze({ id: "production.postcommit_observed_window", version: 3 });
+
+/** D4095: presentation priority only; original source exactness remains unchanged. */
+export const STRUCTURE_RECOGNITION_POLICY: VersionedEvidenceId = Object.freeze({ id: "production.structure_recognition", version: 1 });
+export const STRUCTURE_SELECTION_GROUPS = Object.freeze({
+  recognition: Object.freeze(["rules.structural.reading.named_structure@2", "theory.endgame.setup_match@1", "theory.shapes.firing@3"]),
+  generic: Object.freeze(["rules.structural.reading.space@1", "rules.structural.reading.pawn_connectivity@1", "rules.phase.reading@2", "rules.endgame.classification@1"]),
+});
+
 /** rfc/module-registration.md §5.2: the eight evidence families Full Inspector states separately. */
 export const INSPECTOR_FAMILY_IDS = Object.freeze([
   "local_rules", "authored_theory", "recorded_run", "stockfish", "syzygy", "maia", "explorer", "derived",
@@ -226,7 +236,8 @@ function assertDisclosureDeclaration(module: ModuleDeclaration): void {
   const live = module.timings.some((value) => value.timing === "pre_commit" || value.timing === "at_commit");
   if (module.accepts.kind !== "manifest") return;
   for (const accepted of module.accepts.projections) {
-    const identity = accepted.projection.version === 1 ? hintDisclosureIdentity(accepted.projection.id) : undefined;
+    const parsed = hintDisclosureIdentity(accepted.projection.id);
+    const identity = parsed !== undefined && hintDeclarationRow(parsed.family).disclosures[parsed.rung].version === accepted.projection.version ? parsed : undefined;
     if (identity === undefined) fail("MODULE_STAGE_INVALID", `${module.id} accepts ${refKey(accepted.projection)}, which is not one exact hint disclosure projection`);
     if (HINT_RUNGS.indexOf(identity.rung) > HINT_RUNGS.indexOf(disclosure.ceiling)) fail("MODULE_STAGE_INVALID", `${module.id} accepts rung ${identity.rung} above its declared ceiling ${disclosure.ceiling}`);
     if (identity.rung === "move" && live) fail("MODULE_STAGE_INVALID", `${module.id} would admit the move rung at a pre- or at-commit timing`);

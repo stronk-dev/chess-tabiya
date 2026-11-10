@@ -1,5 +1,55 @@
 # RFC: Executable semantic-validation authority
 
+**Current bounded Slice B checkpoint — 2026-11-09, uncommitted.**
+
+Current 2026-11-09: 98 required subjects retain 419 passing canonical cases. Exactly castled@1,
+rights_lost@1, capture@1 and clock_reset@1 satisfy all required arms. The seven current edge roots
+remain required and unqualified; the new snapshot/detail bindings add no event-root waiver.
+Selected Inspector delivery now includes the sixteen foundation sources described in
+`planning/foundation-source-identity/plan.md`. Source reach does not qualify a detector or activate
+ordinary guidance. That plan holds current software/build/content evidence and the remaining
+D4167/D4170 canonical/ordinary/avoidance/bot cutover. Parent and release duties remain open.
+
+D4167 owns the remaining source/operation/consumer migration; this is not parent RFC completion.
+Earlier dated checkpoints below retain their history.
+
+**Current D3564/D3781 implementation checkpoint, 2026-11-02 — uncommitted:** separately reviewed/
+accepted §4.1a now has the actual closed parser, total comparator and exact two-input runner
+handoff. Seven root spellings retain same-side byte equality; both complete legal fixtures precede
+either collector.34 permanent controls and independent85-test/three-file review pass, including
+simultaneous input/operand corruption with zero actual callable invocations. No canonical
+orientation case/profile, nested/non-edge scope or qualification is added. The106-case research
+matrix passes separately. Full normal verify fails1/2129 authority cases (2128 pass), no skips/
+setup-blocked; complete14-file validation fails7/543 on old targets. Generated387 cases retain379
+passes/eight failures,93 subjects/zero qualified. Types/research/build pass separately. Remaining
+consumer/API/native delivery, current-version authorities and coupled landing stay open.
+
+**Earlier bounded Slice B checkpoint, 2026-11-02 (D3950):**16 fresh exposure@2 cases
+ground both-colour lost pseudo-control/retained identities and complete legal captures including
+all four promotions in independent board arithmetic. Multiple targets and populated empty/zero/
+negative exchange are checked; checking/pass-illegal inputs remain unavailable, never negatives.
+Original371 records/frozen authorities remain. Only positive/negative profile arms become present;
+orientation and exact-version population stay required.20 current controls pass. Normal rebuild:
+93 subjects/zero qualified,387 cases379 passed/eight predecessor failures,53 population/eight
+external receipts. Complete13-file validation fails7/509 (502 pass) on old targets; normal full
+verify fails1/2095 authority cases (2094 pass), no skips/setup-blocked. Types/research/build pass
+separately; later aggregate pools/content/native/trailing build remain unreached. No qualification,
+RFC lifecycle change or coupled commit. Review receipt remains the existing compiler2 document.
+
+**Earlier bounded Slice B checkpoint, 2026-11-02 (D3949):**28 new exact material@2 cases
+cover the full22-edge preservation matrix (four rises/ten falls/eight unchanged magnitudes) plus
+six populated legal quiet/castling negatives, both colours. Independent pinned role/colour
+membership and explicit unweighted product arithmetic ground the propositions; no production
+collector produces its own expectations. Original343 cases/frozen authority bytes remain intact.
+Case version stays1. Only current positive/negative profile arms become present; orientation and
+exact-version imported population remain required.31 current cases pass; independent review
+passes218 tests/three files. New tests join ordinary fast/cited Make gates.
+Normal rebuild is93 subjects/zero qualified,371 cases (363 passed/eight predecessor failures),
+53 population/eight external receipts. Full normal verify fails1/2075 authority cases (2074 pass),
+no skips/setup-blocked. Types/research/build pass separately; later aggregate pools/content/native/
+trailing build are unreached. This local checkpoint is not a parent completion or qualification.
+Scope/review: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+
 - **Status:** implementing — **Slice A
   implemented 2026-09-24 at the owner's direction, no review round.** The authority mechanism,
   81-root profile register (78 original subjects plus three bounded-target subjects),
@@ -678,12 +728,16 @@ Zero/zero fails `SEMANTIC_VALIDATION_MIRROR_EMPTY`; zero/non-zero or unequal car
 inside each unique pair. Reordering equal events passes; deleting, duplicating, changing the subject,
 changing a sign field or changing one operand cannot pass by preserving the aggregate count.
 
-### 4.1a Draft amendment — exact retained-input comparison (D3564)
+### 4.1a Accepted amendment — exact retained-input comparison (D3564)
 
-**Not yet accepted.** This bounded amendment changes only the orientation comparator and its
+**Accepted for bounded implementation, 2026-11-02, after separate independent review.**
+The reviewer runs the normal106-case/four-file matrix against all387 current registered cases
+and finds no specification blocker. Decision/limits are recorded in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+This bounded amendment changes only the orientation comparator and its
 runner handoff. It does not create a chess proposition, register an orientation case, change a
 collector or admit a learner event. The existing five rules above remain the production contract
-until this amendment receives independent review and acceptance.
+until this amendment's permanent production implementation lands. No source qualification follows.
 
 **Measured need.** The existing research matrix executes both real castling directions and finds
 retained `before_fen`, `move_uci` and `after_fen` operands on thirteen kinds across thirty migrated
@@ -797,6 +851,162 @@ case/profile, production parser/comparator, learner eligibility or qualification
 Evidence: `design/research/semantic-validation-closure.md` D3781 section and the existing
 `tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts`; the small generated field
 inventory stays ignored and is not a progress dependency.
+
+### 4.1b Accepted D4167/D4171–D4173 — exact current-source operation and propositions (2026-11-09)
+
+Research gate: module-evidence-assembly.md's dated shared-operation/exhaustive-case section and
+disposable foundation-shared-operation-research. This is coordinated with shared-packet§3.1e
+and module-registration§4.11i, not acceptance from the parent's implementing status. It owns no
+new chess definition, owner-authority store, ranking or ordinary consumer release.
+
+#### Production operation and honest reach
+
+Register `runtime.semantic.foundation_edge@1` in the existing operation/input/result/case parser
+maps. Input is the existing SemanticEdgeInput, not a new input kind. Its adapter invokes the
+actual `collectFoundationEdgeEvents` with the fixed seven-ref subset; it returns the original
+compiled event observations. The production symbol has the real runtime Inspector caller in
+module§4.11i. Its implementation entry closure includes the actual source operation, factories
+and shared original dependencies. Keep the existing direct reach kind; do not add another reach
+protocol. Do not declare direct merely because a regex finds a name: require the application-owned
+retention, genuine cookie REST/DOM proof and full579-edge singleton-demand union/batch multiset
+controls from the companion clauses. Cross-request equality compares content, not object identity;
+original identity is proved within each invocation. No test-only helper, ignored wrapper or old
+local-edge through-claim can satisfy this gate.
+
+Map every exact current source ref to this operation BEFORE generic version1 population fallback.
+Keep all98 root/profile/verdict subjects. Once the operation and real reach exist, discharge only
+the D4167 missing-operation/reach barrier; missing independent case cells remain required until
+actually supplied. Limit D1717's blocker to its actual legacy opposition@1 subject; do not release
+that source or leave opposition@2 blocked by base id. The fixed sampled_edges projection remains
+all579 current edges, with its unchanged identity/denominator and all occurrences, failures and
+abstentions. Zero positives in a census never replaces a positive witness. No source qualification
+or overall-wave completion is inferred from operation registration or a census alone.
+
+#### D4171 — five exact nested input-relative scalar paths
+
+Retain all seven existing top-level input paths. Add ONLY the following paths to the same closed
+input-relative type/parser/mapping:
+
+| Rule value | Additional exact operand path |
+|---|---|
+| input_before_fen | before.fen; fileChange.beforeFen |
+| input_move_uci | fileChange.moveUci |
+| input_after_fen | after.fen; fileChange.afterFen |
+
+Each source and partner path must be identical, scalar and one exact registered path for that
+rule. The leaf must equal the corresponding FULL same-side retained edge input, including clocks;
+only the typed input discriminant is compared between sides. Keep total coverage, duplicate and
+overlap rejection. Arbitrary nesting, wildcard input paths, cross-side/root remapping, arrays,
+unknown aliases and geometric/generic FEN normalization refuse. Invalid fixture inputs refuse
+before dispatch; wrong nested result bytes refuse in the actual mirror check. Do not promise to
+inspect output operands before their producer runs.
+
+#### D4173 — two typed domains, not generic string rewriting
+
+Add only `file` and `file_state` to the existing closed geometric value rule list. `file` accepts
+exact lowercase a..h: horizontal reflection maps a↔h, b↔g, c↔f, d↔e; other admitted geometries keep
+the file. `file_state` accepts exactly open/closed/half_open_white/half_open_black: color_and_vertical
+swaps the two half-open states and keeps open/closed; the other geometries retain the state.
+Invalid values refuse. Preserve all old transforms and existing same-side input checks. These
+rules express the already admitted source domains; they do not change source semantics or add a
+new classifier. Ordered ray/blocker and semantic pawn sequences stay ordered. Canonical-set rules
+may not erase a contractual ordered fact; use explicit case-bound scalar index mappings when a
+geometric transform reverses an ordering. Complete absolute partners must also retain exact source
+serialization/population order; symmetry alone is not truth.
+
+#### D4172 — one exact positive event expectation
+
+Add one closed expectation:
+
+```ts
+{ readonly kind: "emits_exact";
+  readonly events: readonly { readonly sign: SemanticEventSign;
+    readonly operands: { readonly [key: string]: SemanticCanonicalValue } }[] }
+```
+
+It is legal ONLY for positive event cases and the expected array must be nonempty. The case's
+existing exact subject/version selects the targets; expected rows have only sign and operands,
+not caller-selected projection or ids. Parse every complete operand as the existing canonical
+JSON-value record. Reject malformed/unknown fields, empty arrays, invalid signs and noncanonical
+values. Canonical arrays have ordinary prototypes and dense own data indices only; inspect
+descriptors without invoking accessors/iterators and reject extra/hidden/symbol fields. Reject
+negative zero in this new expectation, so canonical authority bytes and exact numeric equality
+cannot disagree. Existing witness expectations keep their old semantics. Use the existing sign vocabulary as one shared literal/type, without introducing new
+signs, resources or a second authority. An empty correct population uses existing `omits` in a
+semantic-negative case.
+
+The runner checks completed source execution and the COMPLETE ordered target population: equal
+length, sign at each ordinal and deep equality of ALL operand keys/types/values and nested arrays.
+Object key insertion order is immaterial; array order/multiplicity and missing/null/empty/false/zero
+remain material. Do not use semanticOperandsMatch's subset semantics, sort/deduplicate targets,
+ignore unexpected fields or replace full equality with a sampled hash. Extra unrelated projections
+are outside the selected subject, as before. An observationally identical payload swap is equal;
+this is not private original-object authentication. Preserve targetCount and normal failure
+receipts; reuse existing expectation-unmet errors rather than adding another result protocol.
+
+The ENTIRE expected array must pass the existing proposition parser/resolver and exact expectation-
+digest binding. A correct minimal-witness authority cannot authorize a stronger array by sharing
+its case id. No injected authority store, made-up owner receipt or emitter output recorded as an
+oracle. Every old emits case and witness-only meaning remains byte-for-byte unchanged; the research
+duplicate case correctly passes that old meaning. Only newly independently bound propositions
+choose emits_exact. Mirrors still require complete absolute partners and total walks.
+
+#### Case-specific grounding and qualification
+
+The same four arms remain required for each of the seven: positive, semantic negative, orientation,
+imported population. Their counterfactual/external-taxonomy inapplicability remains scoped to
+literal observed relations. No canonical current-source case is inherited from the 67 constructor
+controls, old blocker-blind/file/count assertions or historical population counts.
+
+Use the existing cited_proposition/rules_and_proposition machinery. Retained independent primary
+piece-placement, pawn-control, line-occupancy and legal move/capture/castling/EP/promotion facts
+supply board truth; disclose the exact accepted product convention supplying membership/sign/
+partition arithmetic, as in the accepted material2 precedent. A citation lead or broad dossier
+paragraph is not automatically a case proposition. New expectations must be computed independently
+from literal input boards and retained facts, never by importing a collector/source helper or
+recording its output. Do not create or synthesize the protected owner store.
+
+For each exact source, bind independent complete absolute emitted populations and real nearby
+whole-family omissions in both colors. Include opposition blockers and true holder changes,
+backward exact subject/support/controller and same-file two-pawn lineages, group membership versus
+unchanged booleans, all file classes and physical causes, stationary-versus-moving heavy pieces,
+island count-versus-equal-count topology, and slider null/empty/identity/special-move boundaries.
+An unreachable equality of present opposition is algebra-only, not a legal-edge witness. Cover
+relevant files/ranks and both colors/valid horizontal and color-vertical geometry without turning
+an invalid reflected castle into evidence. Every nonempty mirror needs independently grounded
+absolute partners, complete typed walks and symmetric wrong-output controls. Never ignore fields,
+reuse a predecessor meaning or waive a case because the prototype agrees with itself.
+
+Imported receipts execute the real operation over every current sampled edge; retain exact
+invocation counts, event multiplicity, all source identities and failure/abstention distinctions.
+Profiles may become present only arm by arm when these actual references resolve. Full current
+qualification requires all four arms and genuine reach; otherwise the explicit required/failed
+cells remain. Even all seven passing grants no ordinary admission: module§4.11h's image fence and
+all separate learner/bot/source significance policies remain.
+
+#### Able-to-fail acceptance
+
+1. Actual source graph/caller proofs in both companion clauses pass, including all579 current
+   singleton/batch comparisons, same original references within each call, genuine nonempty cookie
+   REST/strict receiver/selected DOM for all seven, quiet/root/failure/access/cancel controls and
+   unchanged public wire/topic/budget/ordinary/candidate images.
+2. Each old top-level input rule still works. Every new exact nested path works only against its
+   complete same-side field. Reject arbitrary/wildcard/deeper paths, wrong mapping/side, duplicate
+   coverage and geometric FEN laundering; clock-only output corruption on either/both sides fails.
+3. Exhaustively test file letters/four states across every admitted geometry and invalid inputs.
+   Wrong file/state/delta/colour and source order cannot hide in a matching mirror. No new string
+   transform, input wildcard or namespace is silently admitted.
+4. Genuine complete source positives pass emits_exact. Added, missing, duplicated, reordered,
+   wrong-sign/field/null/list-order and extra-key targets fail. A genuine duplicated target keeps
+   old emits witness behavior but fails exact mode. Malformed/empty/non-event/foreign-property
+   exact cases fail. Changed expected arrays without matching retained authority fail resolution.
+5. Independent new absolute/negative/mirror propositions and the complete real census discharge
+   each exact profile only when proven; every old case/authority/expectation remains unchanged.
+   Current root/declaration/profile/verdict and retained case/source equalities stay set-equal.
+6. Independent source/meaning and case-authority review plus normal focused/types/full software,
+   performance/build/content/governance and actual source/API/UI gates pass as appropriate. Record
+   failures and the content hold; do not weaken earlier checks, enlarge budgets or infer whole
+   parent, capability, milestone, native/release or full1.0 completion.
 
 ### 4.2 Closed operation results
 
@@ -1928,3 +2138,16 @@ review remains outstanding; implementation is still unauthorized.
   [[D2194]]–[[D2197]]. Four executable arms cover undefined operation/case types, projection-wide
   laundering of unverified mint routes, ungrounded LLM-authored chess expectations and vacuous
   zero-event mirrors. Earlier repairs survive; no implementation is authorized.
+
+
+## Independently accepted coordinated successor — 2026-11-09
+
+`subject-safe-semantic-selection.md` owns the D1716/D1719 and D4167 canonical/candidate/avoidance
+cutover. BOTH independent source/control and consumer/meaning reviews accept its repaired finite
+source-first contract: original root/child graph, two private total reads, current42/compiler7,
+thirteen source-owned@2 outcomes, fourteen current-event compact ordinary pairs and unchanged
+historical case custody. Acceptance is recorded in the existing compiler2 review receipt; it
+comes from that review, not this parent's implementing state. Production images, source
+correctness/qualification and implementation gates remain owed. D4175 retains all26 ordinary
+avoidance pairs/delivery/cost; D4167 keeps every reverse consumer and actual bot Stage-B/D3662.
+No full adoption, content/native or release completion follows.

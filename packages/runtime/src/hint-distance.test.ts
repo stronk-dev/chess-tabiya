@@ -15,7 +15,7 @@ import {
   assertHintDisclosurePacket,
   compileGuidedHintPacket,
   compileHintDeliveryReceipt,
-  compileHintDisclosure,
+  compileHintDisclosureV2,
   hintHorizonOwner,
   hintSentence,
   hintVoiceCheck,
@@ -55,15 +55,15 @@ describe("criterion 1 — measured registry equality", () => {
     const frozen = JSON.parse(readFileSync(new URL("planning/evidence-foundation-ux/d1397-hint-relation-results.json", ROOT), "utf8")) as { readonly contract: { readonly families: readonly string[] } };
     expect([...HINT_FAMILIES].sort()).toEqual([...frozen.contract.families].sort());
     expect([...HINT_SELECTION_ORDER].sort()).toEqual([...HINT_FAMILIES].sort());
-    expect(HINT_HORIZON_PROJECTION_IDS.map(key)).toEqual(HINT_FAMILIES.map((family) => `derived.hint.horizon.${family}@1`));
+    expect(HINT_HORIZON_PROJECTION_IDS.map(key)).toEqual(HINT_FAMILIES.map((family) => `derived.hint.horizon.${family}@${["fork_survives_reply", "promotion_pressure"].includes(family) ? 2 : 1}`));
     expect(HINT_DECLARATION_MATRIX.map((row) => [row.family, key(row.source), row.role])).toEqual([
       ["mate_in_one", "rules.tactic.consequence.mate_in_one@1", "reading"],
       ["forced_mate", "rules.tactic.consequence.forced_mate_after_move@1", "predicate"],
       ["double_attack", "rules.tactic.event.double_attack@1", "event"],
-      ["fork_survives_reply", "derived.tactic.fork_survives_reply@1", "predicate"],
+      ["fork_survives_reply", "derived.tactic.nonterminal_fork_survival@1", "predicate"],
       ["discovered_executed", "derived.tactic.discovered_executed@1", "event"],
       ["loose_piece", "rules.tactic.event.loose_piece@1", "event"],
-      ["promotion_pressure", "derived.tactic.promotion_pressure@1", "reading"],
+      ["promotion_pressure", "rules.tactic.reading.promotion_pressure@1", "reading"],
     ]);
     // Negative: a list that is not the frozen seven (the returned D1066 draft) fails equality.
     expect(["mate_in_one", "forced_mate", "double_attack", "pin", "skewer", "loose_piece", "promotion_pressure"].sort()).not.toEqual([...frozen.contract.families].sort());
@@ -134,10 +134,10 @@ describe("criteria 2–5 — occurrence identity, perspective, sign and relation
     expect(followup).toMatchObject({ relation: "root_followup_in_line", occurrencePly: 3, firstMove: { uci: "h7h6" } });
     const direct = selected(HINT_FAMILY_POSITIVES.double_attack).payload;
     expect(direct.relation).toBe("root_direct");
-    const sentence = hintSentence(compileHintDisclosure(selected(HINT_FOLLOWUP), "distance").payload);
+    const sentence = hintSentence(compileHintDisclosureV2(selected(HINT_FOLLOWUP), "distance").payload);
     expect(sentence).toContain("on your next turn in this searched line");
     expect(sentence).not.toMatch(/\b(because|sets up|prevents|best|recommended)\b/u);
-    expect(hintSentence(compileHintDisclosure(selected(HINT_FAMILY_POSITIVES.double_attack), "distance").payload)).toContain("after this move");
+    expect(hintSentence(compileHintDisclosureV2(selected(HINT_FAMILY_POSITIVES.double_attack), "distance").payload)).toContain("after this move");
   });
 
   it("[D1640] the horizon compiler refuses forged, rebuilt and crossed authorities before disclosure", () => {
@@ -146,16 +146,16 @@ describe("criteria 2–5 — occurrence identity, perspective, sign and relation
     const packets = hintPackets(line);
     const good = selectHintHorizon({ root: { ...HINT_ROOT, fen: fixture.fen }, line, packets });
     if (good.kind !== "selected") throw new Error("expected selection");
-    expect(hintHorizonOwner(good.horizon)).toMatchObject({ runId: "hint-run", nodeId: "n0", sourceProjection: "derived.tactic.fork_survives_reply@1" });
+    expect(hintHorizonOwner(good.horizon)).toMatchObject({ runId: "hint-run", nodeId: "n0", sourceProjection: "derived.tactic.nonterminal_fork_survival@1" });
     // Literal, spread, JSON and double-asserted horizons fail.
     for (const forged of [{ ...good.horizon }, JSON.parse(JSON.stringify(good.horizon)), { projection: good.horizon.projection, payload: good.horizon.payload } as unknown as SealedHintHorizon]) {
-      expect(() => compileHintDisclosure(forged as SealedHintHorizon, "move")).toThrow();
+      expect(() => compileHintDisclosureV2(forged as SealedHintHorizon, "move")).toThrow();
     }
     // A correctly sealed horizon minted outside the selector (a rebuilt occurrence) is refused.
     const doubleAttack = (invokeEvidenceValueRoute("rules.tactic.event.double_attack@1", { beforeFen: fixture.fen, moveUci: "b4c2", afterFen: "4k3/8/8/8/8/8/2n5/R3K3 w - - 1 2" } as never) as readonly DeclaredEvidence<unknown>[])[0]!;
     const rebuilt = (invokeEvidenceValueRoute("derived.hint.horizon.double_attack@1", { line, source: doubleAttack, ply: 1 } as never) as { readonly value: SealedHintHorizon }).value;
     expect(rebuilt.payload.family).toBe("double_attack");
-    expect(() => compileHintDisclosure(rebuilt, "pattern")).toThrow(/HINT_HORIZON_IDENTITY/u);
+    expect(() => compileHintDisclosureV2(rebuilt, "pattern")).toThrow(/HINT_HORIZON_IDENTITY/u);
     // A line for another root, a crossed packet, an opponent ply and a value-unverified line all fail.
     expect(() => selectHintHorizon({ root: { ...HINT_ROOT, fen: HINT_FAMILY_POSITIVES.loose_piece.fen }, line, packets })).toThrow(/HINT_HORIZON_IDENTITY/u);
     expect(() => selectHintHorizon({ root: { ...HINT_ROOT, fen: fixture.fen }, line, packets: hintPackets(sealedHintLine(HINT_FAMILY_POSITIVES.loose_piece.fen, HINT_FAMILY_POSITIVES.loose_piece.moves)) })).toThrow(/HINT_HORIZON_IDENTITY/u);
@@ -170,15 +170,15 @@ describe("criteria 2–5 — occurrence identity, perspective, sign and relation
 describe("criteria 6–8 — five sealed byte images and the exact declaration registry", () => {
   it("serialised packets are cumulative; every higher-field sentinel is absent from every lower packet", () => {
     const horizon = selected(HINT_FAMILY_POSITIVES.loose_piece);
-    const packets = Object.fromEntries(HINT_RUNGS.map((rung) => [rung, JSON.stringify(compileHintDisclosure(horizon, rung).payload)])) as Record<HintRung, string>;
+    const packets = Object.fromEntries(HINT_RUNGS.map((rung) => [rung, JSON.stringify(compileHintDisclosureV2(horizon, rung).payload)])) as Record<HintRung, string>;
     expect(Object.keys(JSON.parse(packets.pattern))).toEqual(["rung", "family", "attribution"]);
     for (const [field, from] of [["targetSquares", "square"], ["actor", "piece"], ["relation", "distance"], ["occurrencePly", "distance"], ["firstMove", "move"]] as const) {
       for (const rung of HINT_RUNGS) expect(packets[rung].includes(`"${field}"`), `${rung}/${field}`).toBe(HINT_RUNGS.indexOf(rung) >= HINT_RUNGS.indexOf(from));
     }
     // The first-move bytes (UCI and SAN) appear only in the move packet.
     for (const rung of HINT_RUNGS) expect(/e4c3|Nc3/u.test(packets[rung]), rung).toBe(rung === "move");
-    // Only compileHintDisclosure mints the brand.
-    const disclosure = compileHintDisclosure(horizon, "square");
+    // Only compileHintDisclosureV2 mints the brand.
+    const disclosure = compileHintDisclosureV2(horizon, "square");
     expect(() => assertHintDisclosurePacket(disclosure)).not.toThrow();
     for (const forged of [{ ...disclosure }, JSON.parse(JSON.stringify(disclosure)), invokeEvidenceValueRoute("derived.hint.disclosure.loose_piece.square@1", { horizon } as never)]) expect(() => assertHintDisclosurePacket(forged)).toThrow();
   });
@@ -186,12 +186,12 @@ describe("criteria 6–8 — five sealed byte images and the exact declaration r
   it("the F1 graph declares the weakest tuple, per-rung answers and forms; widening fails the real compiler", () => {
     const projections = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [key(projection), projection]));
     for (const row of HINT_DECLARATION_MATRIX) {
-      const horizon = projections.get(`derived.hint.horizon.${row.family}@1`)!;
+      const horizon = projections.get(key(row.horizon))!;
       expect([horizon.grounding, horizon.exactness, horizon.confidence, horizon.disposition?.kind]).toEqual(["declared_convention", "measured", "reported", "operator_only"]);
       expect(horizon.derivation?.inputs?.map(key)).toEqual([key(row.source), "live.stockfish.principal_variation@1"]);
       expect(horizon.abstention.reasons).toContain("input_abstained");
       for (const rung of HINT_RUNGS) {
-        const disclosure = projections.get(`${hintDisclosureProjectionId(row.family, rung)}@1`)!;
+        const disclosure = projections.get(key(row.disclosures[rung]))!;
         expect(disclosure.answerContent).toEqual(row.rungAnswers[rung]);
         expect(disclosure.answerContent.includes("move")).toBe(rung === "move");
         expect(disclosure.answerContent.some((answer) => ["evaluation", "principal_variation", "ranked_moves", "theory"].includes(answer))).toBe(false);
@@ -233,7 +233,7 @@ describe("criteria 6–8 — five sealed byte images and the exact declaration r
 describe("criteria 9, 12 (runtime) — one rendered authority, voice check and the closed receipt", () => {
   const horizon = () => selected(HINT_FAMILY_POSITIVES.double_attack);
   const rendered = (rung: HintRung) => {
-    const packet = compileGuidedHintPacket({ disclosure: compileHintDisclosure(horizon(), rung), role: "learner", session: "position" });
+    const packet = compileGuidedHintPacket({ disclosure: compileHintDisclosureV2(horizon(), rung), role: "learner", session: "position" });
     if (packet.kind !== "rendered") throw new Error("expected a rendered packet");
     return packet;
   };
@@ -242,8 +242,8 @@ describe("criteria 9, 12 (runtime) — one rendered authority, voice check and t
     const packet = rendered("piece");
     expect(packet.view.items).toHaveLength(1);
     expect(packet.view.items[0]!.sentences[0]).toBe("A Stockfish 19 search from here (depth 12) finds a double attack that still stands after every reply for you. It involves a1 and e1. The piece involved is your knight on b4.");
-    expect(compileGuidedHintPacket({ disclosure: compileHintDisclosure(horizon(), "piece"), role: "spectator", session: "position" })).toMatchObject({ kind: "refused", reason: "role_outside_ceiling" });
-    expect(compileGuidedHintPacket({ disclosure: compileHintDisclosure(horizon(), "piece"), role: "learner", session: "match" })).toMatchObject({ kind: "refused", reason: "session_outside_ceiling" });
+    expect(compileGuidedHintPacket({ disclosure: compileHintDisclosureV2(horizon(), "piece"), role: "spectator", session: "position" })).toMatchObject({ kind: "refused", reason: "role_outside_ceiling" });
+    expect(compileGuidedHintPacket({ disclosure: compileHintDisclosureV2(horizon(), "piece"), role: "learner", session: "match" })).toMatchObject({ kind: "refused", reason: "session_outside_ceiling" });
   });
 
   it("voiceCheck refuses absent squares, a different move, judgements and causality; the canonical sentence passes", () => {
@@ -334,8 +334,8 @@ describe("evidence-presentation Checkpoint B — the module.guided_hint seat ada
     for (const family of HINT_FAMILIES) {
       const horizon = selected(HINT_FAMILY_POSITIVES[family]);
       for (const rung of HINT_RUNGS) {
-        const disclosure = compileHintDisclosure(horizon, rung);
-        const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 1 }, [disclosure]));
+        const disclosure = compileHintDisclosureV2(horizon, rung);
+        const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 2 }, [disclosure]));
         const bytes = JSON.stringify(items);
         expect(bytes, `${family}/${rung}`).toContain(JSON.stringify(hintSentence(disclosure.payload)).slice(1, -1));
         expect(bytes.includes("\"moves_to\""), `${family}/${rung}`).toBe(rung === "move");
@@ -346,7 +346,7 @@ describe("evidence-presentation Checkpoint B — the module.guided_hint seat ada
 
 describe("criterion 14 — no optional answer bypass (module compiler)", () => {
   it("every disclosure row carries its exact answer image; a PV or horizon cannot become a module item", () => {
-    const disclosure: DeclaredEvidence<HintDisclosurePayload> = compileHintDisclosure(selected(HINT_FAMILY_POSITIVES.promotion_pressure), "move");
+    const disclosure: DeclaredEvidence<HintDisclosurePayload> = compileHintDisclosureV2(selected(HINT_FAMILY_POSITIVES.promotion_pressure), "move");
     expect(disclosure.projection.id).toBe("derived.hint.disclosure.promotion_pressure.move");
     const line = sealedHintLine(HINT_FAMILY_POSITIVES.promotion_pressure.fen, HINT_FAMILY_POSITIVES.promotion_pressure.moves);
     expect(() => compileGuidedHintPacket({ disclosure: line as never, role: "learner", session: "position" })).toThrow();

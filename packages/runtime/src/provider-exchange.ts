@@ -19,6 +19,7 @@ import {
   PROVIDER_DIGEST_PATTERN,
   canonicalProviderJson,
   digestProviderActualImage,
+  digestEngineOptionImage,
   digestProviderPayload,
   digestProviderPending,
   digestProviderRequestImage,
@@ -190,7 +191,7 @@ function checkActualIdentity<K extends ProviderOperationId>(operation: K, reques
     if (value.id !== request.requestedEngine.id || value.version !== request.requestedEngine.version) mismatch(`captured engine ${String(value.id)} ${String(value.version)} is not the requested ${request.requestedEngine.id} ${request.requestedEngine.version}`);
     if (value.id !== (row.endpoint as { engineId: string }).engineId) mismatch(`captured engine ${String(value.id)} is not the ${row.operation} endpoint`);
   } else if (row.provider === "maia") {
-    const value = exactKeys(actual, ["id", "kind", "name", "version", "modelId", "containerDigest", "seedHonored", "eloHonored", "optionImageDigest"], "Maia actual identity");
+    const value = exactKeys(actual, ["id", "kind", "name", "version", "modelId", "containerDigest", "seedHonored", "eloHonored", "optionImageDigest", ...(operation === "maia.inference_task@1" ? ["optionImage"] : [])], "Maia actual identity");
     const request = (requested as ProviderRequestedIdentityMap["maia.policy_page@1"]).request;
     if (value.kind !== "opponent") mismatch("Maia actual identity must be an opponent engine");
     if (value.eloHonored !== true) mismatch("Maia actual identity must honour Elo");
@@ -198,6 +199,11 @@ function checkActualIdentity<K extends ProviderOperationId>(operation: K, reques
     TEXT(value.name, "name");
     DIGEST_TEXT(value.containerDigest, "containerDigest");
     DIGEST_TEXT(value.optionImageDigest, "optionImageDigest");
+    if (operation === "maia.inference_task@1") {
+      const image = exactKeys(value.optionImage, ["advertisedUciOptionLines", "appliedSetoptionCommands"], "Maia task actual option image");
+      if (!Array.isArray(image.advertisedUciOptionLines) || !Array.isArray(image.appliedSetoptionCommands)) mismatch("Maia task option image must contain captured line arrays");
+      if (digestEngineOptionImage(image as unknown as import("./provider-digest.js").EngineOptionImage) !== value.optionImageDigest) mismatch("Maia task option image digest differs from its captured image");
+    }
     if (value.id !== (row.endpoint as { engineId: string }).engineId) mismatch(`captured engine ${String(value.id)} is not the Maia endpoint`);
     if (value.modelId !== request.requestedModel.id || value.version !== request.requestedModel.version) mismatch(`captured model ${String(value.modelId)} ${String(value.version)} is not the requested ${request.requestedModel.id} ${request.requestedModel.version}`);
   } else {

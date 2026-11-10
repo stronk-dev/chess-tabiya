@@ -9,7 +9,22 @@
   export/deletion coverage ship; no consumer, route or client surface is wired, by §Scope.
   *(Prior state: returned by the tenth fresh independent review on 2026-09-06; accepted 2026-08-22
   and returned 2026-08-23 before that.)*
+- **Bounded independently accepted companion (2026-11-05):** `profile-game-facts.md` alone
+  owns D4147/D4149 claimed GAME scope, fourth derived row family and three-ref existing-card
+  adoption. Both source/ABI and meaning/consumer reviews accept; bounded implementation starts.
+  Parent-wide implementation/completion is not implied.
 - **Author:** claude
+- **Accepted amendment 2026-11-03 — D4018, §A.1:** the current source cutover removed
+  `derived.material.event.role_asymmetry@1` and `derived.tactic.defender_exposure@1`, exposing
+  this real V1-only ingest consumer. The bounded proposal preserves all 67 families, admits
+  only their two exact @2 successors and requires derivation revision 6 plus an actual saved-history
+  rebuild. Separate independent buildability review accepted the exact bounded contract including
+  criterion7's incidence measurement; receipt: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+  The bounded implementation and main81-case/six-file verification are recorded in
+  `planning/longitudinal-store/implementation-2026-09-24.md`, including genuine revision5
+  startup/worker/reopen/rebuild and criterion7 incidence. Separate source review clears the
+  bounded changes. Final whole gates and coupled landing remain; no whole history or
+  learner-model completion.
 - **Implementation checkpoint 2026-10-13 — D3762:** §D/§4.4 require derivation revision 5
   after the existing occupied-target collector stops joining a departed Chess960 rook to the
   king replacing it. The 67-member ingest registry, source attribution and complete legal
@@ -91,7 +106,6 @@ byte-identical at derivation revision 1. Cold-game cost and the full RFC dischar
 receipt: `planning/longitudinal-store/prefix-reuse-2026-10-06.md`.
 
 ```tabiya-claims
-none
 ```
 
 ## Summary
@@ -189,6 +203,506 @@ a finite value in `[0,1]` per opportunity. Occurred and opportunity refs are the
 `DecisionRef` once per decision, never once per operand. The disposable author model invokes the
 real `legalAlternativeEdges` / `localSemanticEvents` boundary by default and crosses mixed,
 all-exhibit, none, duplicate-operand, forced and unavailable populations.
+
+### A.1 Accepted D4018 — exact material/exposure successors and revision-6 history
+
+**Status: accepted for bounded buildability after separate independent review, 2026-11-03.** Only two
+edge-source versions and their §E.3 rebuild change. Existing design linkage, opportunity,
+authorship, imports, phases, structure attribution and all other family policies stand. This is
+not source qualification or whole-RFC completion. The owner's pre-launch no-legacy ruling and
+F2 D3851 already require actual callers to migrate; no new compatibility choice is opened.
+
+**Measured defect and boundary.** `longitudinal-registry.ts` currently derives its authority by
+filtering `SEMANTIC_EVENT_PROJECTION_REFS` to version 1. The accepted current-source cutover
+removed these two V1 identities. The executable registry is now 44/13/8 while both published
+V1 artifacts still match §A's raw-byte pins and require 46/13/8. Three observation identities
+were lost. The revision-pair test fails on registry equality before computing fixture output;
+this is not evidence to refresh hashes or shrink the accepted set. These facts were checked
+against the current catalogue, registry constructor and published artifacts.
+
+#### A.1.1 One complete, explicitly versioned ingest image
+
+The revision-6 registry retains exactly the 67 base families already published in
+`longitudinal-ingest-registry-v1.json`, in the same original row order. Replace only:
+
+| Prior exact edge identity | Current exact edge identity | Exact signs, in order |
+|---|---|---|
+| `derived.material.event.role_asymmetry@1` | `derived.material.event.role_asymmetry@2` | `state` |
+| `derived.tactic.defender_exposure@1` | `derived.tactic.defender_exposure@2` | `gained`, `state` |
+
+Both remain edge rows with adapter `local_semantic_event`; no population or path row is added,
+removed, promoted or reinterpreted. The other 65 exact refs, their signs, all 13 population
+`baseProjection` refs/base signs, all eight deferred path statuses/reasons, and every existing
+adapter discriminator remain unchanged. Totals remain **46 edge / 13 population / 8 deferred
+path**: 65 declarations are still @1 and precisely the two listed declarations are @2. This
+does not admit recorded-path @2/@3 successors, arbitrary later versions of these two families,
+new tactical families, observed-only path rates or a blanket “latest” projection rule.
+
+Implementing acceptance publishes `rfc/contracts/longitudinal-ingest-registry-v2.json` with the
+same closed per-row grammar as the V1 registry: edge `{projection:{id,version},kind,adapter}`;
+population additionally `baseProjection`; path additionally `status,reason`. Here `version` is
+the row's exact admitted version, not a file-wide default. Publish the paired
+`longitudinal-sign-subsets-v2.json` as an object whose keys are the exact `id@version` refs of
+all 67 rows and whose values are their ordered sign arrays. Each population base-sign lookup
+joins its exact `baseProjection` ref to that same sign authority. The V1 files and their recorded
+pins remain historical facts; do not rewrite them to make a shrinking current registry pass.
+This is the next edition of the existing artifacts, not a second runtime registry.
+
+The sole registry must equal this image in both directions: versions, order, signs, bases and
+deferred reasons. Verify exact catalogue/declaration admission. Keep the existing digest/revision
+guard; establish new artifact/output pins only from these declared changes and genuine outputs.
+Restoring obsolete factories or reducing the expected edge count is not an implementation.
+
+#### A.1.2 Version-preserving complete memberships and typed absence
+
+Update the existing registry identity types, `LONGITUDINAL_ADMITTED_IDENTITIES`, parser/filter
+admission and projector joins to carry each declared exact projection version. The production
+membership reader must not retain its global `event.projection.version === 1` filter, hard-code
+`projectionVersion:1`, or key Boolean membership by base id/sign alone. Its key and an identity's
+match key include **id, version and sign**; population rows match their exact base ref/source
+sign. Deduplicate equal exact memberships once; never alias opposite signs or versions. Foreign
+versions cannot widen admission. Keep the existing bounded cache, full edge key, collector
+isolation and failure-not-cached behavior; no new cache or caller authority is required.
+
+For the actual runtime adapter, obtain the genuine `localSemanticEventClosure` for each original
+committed/legal-alternative edge rather than discarding its outcomes through the events-only
+`localSemanticEvents` convenience view. The existing closure owns both events and typed
+abstentions; preserve the actual exposure result `unavailable/invalid_turn_clone` for
+`derived.tactic.defender_exposure@2`. A copied public label is not a source issuer. An internal
+bridge, if needed, may expose the existing original-closure outcome reader to this concrete
+adapter; it must not add a general callback, new factory or reconstruction from arbitrary prose.
+
+For a non-forced decision, if **any** edge in its full original legal population has that exposure result, return
+the existing `decisionPopulation` result `{kind:"unavailable",reason:"population_incomplete"}`
+before computing absent/none-exhibit memberships. Do not translate it into `[]`, a successful
+empty reading, no exposure, an avoidance, a zero share, or a complete negative observation.
+A legal pass clone with genuinely available empty exposure is different: it contributes a
+known non-exhibiting edge to the unchanged complete-population algebra. Unavailable population
+results are not retained as successful empty cache entries. No alternative, including a checking
+move or an unrelated-looking move, can be pruned to obtain a convenient denominator.
+
+This preserves §A's existing incomplete-population policy, **not** a new all-job failure or
+per-family partial table. The normative `(phase,decision_class)` decision denominator counts
+the same decisions regardless of collector availability. An incomplete decision adds no family
+opportunity, occurrence, alternative share or ref under the existing whole-population result;
+other decisions continue normally. Existing undefined/thrown population behavior and all other
+collector-family policies remain unchanged. No changed attribution, forced-move or all/none-exhibit
+rule is implied.
+
+**Visible read limit:** the existing store/read result can complete after this projection, and
+reports only opportunities established from complete populations, alongside the unchanged
+normative decision count. It does not expose a new per-family unavailable-decision count.
+Absence of an exposure row therefore means **no established opportunity under this computation**,
+not “the learner never exposed a defender,” “every legal move was checked successfully,” or a
+zero tendency. This amendment adds no learner claim, new HTTP endpoint or completeness badge.
+The typed `decisionPopulation` boundary distinguishes unavailable from known empty even where
+both result in no durable family row; do not claim storage alone preserves that distinction.
+
+#### A.1.3 Concrete revision-5 to revision-6 stored-data transition
+
+Set `OBSERVATION_DERIVATION_REV` to **6** as this accepted amendment's implementation, and
+update the existing registry/output revision pair with real recomputation. Original revision-5
+rows are genuinely obsolete even when their counts happen to equal revision-6 counts. The
+current reader must never relabel their @1 identities as @2, treat their unchanged job head as
+current, pool @1/@2 rows, or manufacture current rows from an old report. Older revisions remain
+subject to the same existing reconciliation; no revision becomes newly readable by this bump.
+
+Use the existing `LongitudinalStore.reconcile`/`refreshWatermarkInTransaction` revision-reset
+path: invalidate/delete prior derived observation, denominator and structure rows, advance the
+existing claim generation and mark the original run/head pending at revision 6. The existing
+file-backed worker claims and projects the exact saved contiguous run prefix, attribution records
+and complete legal populations, then publishes all three row families transactionally through
+its actual claim/source checks. Existing leases, retries, publication CAS, budgets, fair scheduling,
+account suppression/deletion and startup ordering are unchanged. There is no SQL table/run schema
+migration, new background mechanism or synchronous projection on a request path.
+
+Normal `createApplication` startup reconciliation and the worker must repair an **untouched**
+revision-5 saved history without a new move/import or manual metadata edit. Through the existing
+typed `parseLongitudinalReadQuery` / `LongitudinalStore.readSnapshot` API and real current callers,
+pending/refusal/revision-mismatch states remain visible while old data is invalidated; old rows
+must not appear as revision-6 complete. A retained revision-5 claim/query cannot publish or acquire
+new authority merely because the original event head is unchanged. After real publication, reads
+at the current cut admit only exact current versions. If a concurrent real move changes the head,
+the existing cut-superseded/pending rules still govern.
+
+Use the same original source/projector for once/rebuild. After reconciliation, dry/write/dry
+must detect and repair deliberately corrupted current rows; a revision-mismatch skip is not an
+equality proof. Saved play/import/attribution/access/account data remain unchanged; only
+re-derivable history rows/jobs move.
+
+#### A.1.4 Acceptance and able-to-fail controls
+
+1. Permanent registry closure checks prove the original 67-family set/order, 46/13/8 split,
+   exact two @2 replacements and unchanged remaining 65 refs/signs/bases/deferred rows. A missing
+   old family, retained @1 successor, arbitrary @2 family, @3 replacement, changed sign/base,
+   duplicate or row-order swap fails. Check both new artifacts row-for-row and at their actual
+   pins; retain the old artifact facts without pretending they are the new live image.
+2. Real current material/exposure collector positives and nearby hard negatives produce admitted
+   @2 observations. An unadmitted same-base @1/@3 result cannot satisfy a current identity; a
+   population base-version mutation cannot satisfy an avoidance. Retain all existing full
+   alternative enumeration, duplicate/opposite-sign, forced/all/none, attribution, phase and
+   prediction controls. The revision-pair fixture includes both new successors and their
+   negatives as well as all existing special-move/occupied-target fixtures. Only the actual
+   validated output establishes the new output pin.
+3. Use actual legal chess edges to establish exposure's invalid-turn-clone and legal-empty
+   distinction, including a decision whose **alternative**, not merely its committed move, is
+   unavailable. Assert the genuine original closure result, `decisionPopulation`'s unavailable
+   reason versus available non-exhibiting memberships, unchanged normative decisions, and no
+   fabricated exposure opportunity/share/ref in actual published storage. An injected/copy-only
+   test is additional, never the sole positive. Verify an unavailable cache attempt is recollected
+   while an original complete empty result is cacheable; include exact-version collision controls.
+4. Real SQLite upgrade fixtures begin with populated, complete revision-5 jobs/rows for both
+   changed families and unchanged event heads, not rows newly computed at revision 6 then
+   mislabeled as the sole predecessor fixture. Preserve the original run/import/attribution bytes.
+   Exercise actual startup reconciliation, then a real file-backed worker and typed read API:
+   old complete data becomes pending, original old claims cannot publish, and the worker's real
+   output becomes revision-6 complete with exact @2 rows and no retained @1 counterpart. Both
+   colors, a genuine unavailable decision and an unaffected family remain covered. A control
+   without the revision bump must demonstrably retain obsolete history/fail the upgrade assertion.
+5. Reopen the database and repeat current reads; check exact current-filter admission and refusal
+   of both superseded @1 refs without a legacy alias. Rebuild dry/write/dry compares and repairs
+   actual current rows, not a skipped old revision. Test the existing worker/service/read doors
+   that really exist; do not invent a longitudinal HTTP endpoint to make this criterion look broad.
+6. Snapshot and compare the original saved play, imported data, attribution/access/account rows
+   before and after upgrade and rebuild. Keep existing lease-loss/source-change/cancellation,
+   current-cut, privacy/deletion, account export/restore and no-request-path-projection controls.
+   Run the ordinary software/type/build gates without changing deadlines or narrowing these
+   obligations. Passing this bounded amendment does not close unrelated cold-cost, content,
+   learner-model consumer or whole-RFC discharges.
+7. Report the inherited whole-population availability rule's incidence over the unchanged
+   revision-pair fixtures and a fixed, explicitly listed existing saved-run population. Use all
+   normative decisions and their complete legal alternatives; report complete, unavailable and
+   forced decisions, exact unavailable reasons, and established opportunities by exact
+   id/version/sign, including zero counts and allowed-but-unemitted signs (D4019). Do not prune
+   checking moves, replace unavailable with empty or claim that preserving 67 registered families
+   preserves their opportunity coverage. This is a bounded diagnostic, not a new threshold,
+   family-local policy, learner claim, performance gate or source qualification. The existing
+   normative decision denominator and incomplete-population policy remain unchanged.
+
+No new owner question. Separate independent review accepted this bounded contract and cleared
+the local implementation by source read. Main81-case/six-file verification and criterion7's
+fixed-population results are recorded in the existing implementation receipt; final whole
+gates/coupled landing and the parent's other discharges remain outstanding.
+
+### A.2 Draft D4181 — coordinated current subjects and complete opportunities
+
+**Status: independently accepted for bounded implementation2026-11-09 by both source/storage
+and meaning reviewers after original-publication, native-ABI, query, learner-withholding and
+per-decision lifetime repairs.** No implementation/qualification/learner-model completion is implied. §A/A.1 remains
+historical authority for the installed old revision. Current canonical cutover makes the eager
+67-row registry throw at import; its global family/sign absence algebra cannot represent the
+new source meanings. Do not restore obsolete wrappers, refresh old hashes as if meaning were
+unchanged, hide the import in tests, delete a family or mark this dependency complete on boot.
+This amendment owns registry/projector/schema/worker/read/rebuild adoption together.
+
+#### A.2.1 One exact image; separate meanings
+
+Publish new literal `longitudinal-ingest-registry-v3.json` and sign subsets in rfc/contracts.
+Keep v1/v2 unchanged. Derive and prove the exact image from the current canonical source census:
+
+- Retire the nine old public event refs as current ingestion authorities; retain their historical
+  records. Add the exact seven replacements from subject-safe-semantic-selection §2.
+- The seven native sources use **native event incidence**, not the thirteen condition relations.
+  Group member change with unchanged flags, equal-count ray/island membership changes and
+  stationary file-access causes remain their own events; no count/boolean substitution.
+- The thirteen outcome sources are exact family@2 and use **condition relation incidence** from
+  their complete total-state populations. They never match a v1 baseProjection/sourceSign.
+- Retained local projection/sign incidence is explicitly **event prevalence**, not subject-owned
+  outcome or avoidance. It has no learner/provider/trait binding under the source contract.
+- All eleven multi-edge families are explicit deferred recorded paths until a complete path
+  opportunity authority exists. This includes contact_timing1, harassment_pressure1 and
+  defender_consequence1, formerly incorrectly classified as local edge suppliers, as well as
+  the original eight deferred rows. No local negative is manufactured for an uncalled emitter.
+
+Expected reconciliation is41 local event rows (seven native plus34 prevalence),13 condition rows
+and11 deferred path rows:65 total. This number is a result to verify with exact source lists,
+not permission to filter rows until a count passes. Registry validation is exact in both directions,
+including source version, signs, adapter, kind and explicit deferred owner/reason. The full sign
+vocabulary includes the current native membership/count/topology signs. No version/prefix/latest
+fallback. Registry startup must load its own coherent current contract; disagreement is a real
+contract error, never a profile-count default or silently empty list.
+
+#### A.2.2 Complete source-owned state table before reduction
+
+Use the actual genuine wide candidate owner for every normative decision. Root/played/all legal
+children, source availability, actor and original inputs are the same source graph accepted by
+subject-safe-semantic-selection. Do not use selected hints, top-two facts, synthesized FEN rows,
+projection/sign membership caches or collector callbacks as authority for subject relations.
+
+The thirteen existing source factories keep their CLOSED public available-values/unavailable
+ABI. Refactor their internal calculation to retain the complete typed subject/parameter/root/
+played/all-child state table in the EXISTING original invocation record before projecting the
+public differing-relation facts. A finite internal `readSubjectOutcomePopulation` requires that
+original factory result/receipt, authenticates its exact family/member/full vector and returns
+that retained table. It is not a new issuer, caller resolver, event route or payload hash authority.
+Available[] still has a complete table. No event is claimed when played matches the tested relation.
+
+Native incidence uses every original emitted event from the same wide packet. Add a finite
+seven-source native-subject reader over the exact grammars used for played occurrence, including
+gained-backward physical root join, original slider/direction, color/file, original stationary
+heavy/file and color-islands. Parameters remain family-specific. It does not change factory
+population order or claim that two different native outcomes are equal. The statistic below is
+explicitly event incidence for a tested sign, not a preference for an exact after-state.
+
+Keep original source populations in memory only during one decision. No alternative arrays,
+engine dumps, source copies or opaque evidence graphs are persisted. Source ownership and all
+semantic/rendering qualification gates remain separate from a statistical row.
+
+The persisted native union is closed by exact source ref, with empty parameters in all seven:
+
+| Source | Native subject |
+|---|---|
+| opposition2 | `{kind:"king_opposition",whiteRootSquare,blackRootSquare}` from ORIGINAL two kings |
+| backward2 | `{kind:"backward_pawn",color,rootSquare}`; gained uses original physical pawn join |
+| group1 | `{kind:"pawn_file_group",color,file}` |
+| physical slider2 | `{kind:"physical_slider",root:SliderIdentity,direction:{df,dr}}` |
+| file-state1 | `{kind:"file_state",file}` |
+| stationary access1 | `{kind:"file_access",piece:{color,role:"rook"|"queen",square},file}` with original stationary piece |
+| islands2 | `{kind:"pawn_islands",color}` |
+
+Squares/files/colors/roles and the eight existing direction pairs are closed literal domains.
+Condition rows use the existing exact SubjectByFamily/ParametersByFamily unions (including
+holder/form and zone parameters); a native event subject never becomes a condition subject by
+string suffix. Persist neither a played occurrence-key string nor a projection-only subject.
+
+#### A.2.3 Exact opportunity algebra, including negative outcomes
+
+Unit: ONE original DecisionRef × source kind/version × exact decision-local typed root subject
+× predicate parameters × tested relation (condition) or tested sign (native). Preserve all same-
+move subjects; deduplicate an event only inside that exact subject/sign on that same legal edge.
+Root squares identify pieces within that decision, not a game-long or cross-game piece identity.
+Actor is the decision root's actual side to move; subject color/controller/holder stays explicit.
+
+For a condition row, enumerate the family's complete declared relation domain: booleans in
+false_to_true/true_to_false/true_to_true/false_to_false order, integers increase/decrease/equal.
+Derive each legal child's relation to the same root state. Require a comparable root→played
+relation. For a tested R an opportunity exists exactly when the SAME subject has at least one
+comparable legal child matching R and at least one comparable child not matching R, including
+played. A noncomparable removed/promoted/null/border/role child never supplies the second truth
+value. Noncomparable played means no subject opportunity, never false/zero.
+
+`occurred` is whether PLAYED matches R. Keep false as a real negative opportunity. It is not
+“an avoidance event emitted”; public outcome2 facts intentionally emit only alternative relations
+different from played. `matchingAlternatives` counts distinct OTHER legal UCIs matching R;
+`legalAlternatives` is ALL other legal UCIs, including noncomparable states. Share is that exact
+ratio. Store comparable-alternative count separately; never divide by only comparable moves.
+“avoided” is not a persisted generic family verdict. Any later literal explanation must name the
+same subject/parameters/R and both counts; another subject still satisfying R is not suppressed.
+
+For native incidence, use the same root subject/parameters and tested source sign. A completed
+legal edge matches only if it emits that exact native event subject/sign. Opportunity requires
+both a matching and nonmatching legal edge in the COMPLETE set including played; `occurred`
+means played emits it, share counts distinct other matching UCIs / all other legal moves. This
+measures a literal change event; it does not compare complete outcomes, rate strength or grade
+intent. Missing collector availability is not a nonmatch.
+
+Retain whole-decision incomplete behavior from §A.1: any required canonical source or total-state
+family genuinely unavailable gives no observation/opportunity rows for that decision; normative
+decision counts/phase/class still stand. Invalid/copied/crossed authority is a typed worker/source
+failure, not an unavailable or empty success. Forced one-legal-move roots have no opportunities.
+All-match/no-match/no-comparable populations are evaluated zeros, not silently dropped decisions.
+
+#### A.2.4 Durable row grain and additive storage change
+
+Add `learner_subject_observations`, separate from the existing event-prevalence aggregate table.
+Each row belongs to learner/run plus the exact normative DecisionRef, phase BEFORE and original
+played/game/predicted class, session/pack cohort, observedAt and derivedRev. Closed extra fields:
+
+- `sourceKind`: native_incidence | condition_relation;
+- exact `projectionId`/`projectionVersion` (native source or complete family factory result,
+  not a claim that a played-matching semantic event exists);
+- `actor`: white | black; exact typed `subject` and `parameters` from the finite source grammar;
+- condition `relation` or native `sign`, mutually exclusive, validated against the exact family;
+- `occurred`: boolean; `legalAlternatives` positive integer; `matchingAlternatives` integer
+  0..legalAlternatives; `comparableAlternatives` integer 0..legalAlternatives.
+
+The primary key includes learner/run, canonical DecisionRef JSON, source kind/ref, canonical
+subject JSON, parameters JSON and a nonnullable tested key (`relation:<R>` or `sign:<S>`). These JSONs are literal validated
+closed operands, NOT hashes or caller-supplied subject IDs. Native counts have comparableAlternatives
+=legalAlternatives after complete source admission. SQL CHECKs enforce types/ranges and the tag/
+relation/sign exclusivity; parser enforces the finite grammar, original DecisionRef association,
+actor/source/phase/cohort and opportunity algebra before publication. No arbitrary JSON bags. Enforce matchingAlternatives <= comparableAlternatives <= legalAlternatives;
+if occurred=true then comparableAlternatives > matchingAlternatives, and if occurred=false then
+matchingAlternatives > 0. Native comparableAlternatives equals legalAlternatives. These are
+necessary row checks; they do not replace the original complete-source reduction authority.
+ObservedAt remains the existing immutable time authority; no default wall-clock restamping.
+
+This is one additive migration after the currently installed profile-choice-facts schema34;
+claim the next execution position through the existing shared register. No run/pack/source-V4
+rewrite. Index learner/run/phase/class/source for existing query cuts and account lifecycle.
+Source parse/strict query/worker DTO schemas carry the same union. Exact source filtering must
+not pool subjects, params, relations or actors. The old aggregate table remains only for explicitly
+named event prevalence; it does not receive collapsed subject rows or claim an @1 avoidance.
+
+#### A.2.5 Worker, reads and saved history are one adoption
+
+Advance observation derivation8→9 with the new exact registry and genuine complete fixture.
+Retain V4 source image, normativeDecisions owner journal, imported game class, prediction proof,
+phase BEFORE and source/lease/claimGeneration fences. Recompute from original saved prefixes;
+never retag previous counts or infer actor from viewer/start.side/last mover. Startup reconciles
+old revisions into queued work, clears every derived family for a stale cut and refuses old-
+claim publication. Add subject rows to the SAME atomic publication, rollback/reset/rebuild,
+reopen, once operator, compare instrument, account export/delete and ownership cascade as the
+existing denominator/observation/structure/GAME/choice families. All six families share one cut.
+A failed subject projection cannot publish partial rows or erase independent durable run events.
+
+The actual sole reducer is `consumeProfileSubjectFacts(image, {gameSource,derivedRev,checkpoint})`
+in apps/server/src/profile-subject-facts.ts, called by projectLongitudinalObservations in the
+existing worker/rebuild/once scope. gameSource is REQUIRED and must be the existing original
+ProfileGameSource bound to this same V4 image/revision/claim. Extend its concrete original-decision
+selection seam, not caller Principal/run objects, to give the reducer the authentic normative
+DecisionRef, actor/root and one genuine wide owner. The fixed machine consumer is
+`profile.subject_observations@1`: exactly native7 plus outcome13@2, operator/analysis,
+machine_condition/fact only, local synchronous with no fact/form cap. Its registered callable is
+consumeProfileSubjectFacts. Perform complete consumer/source preflight before acquisition;
+only available original semantic/native values are admitted, and genuine empty/unavailable
+complete result tables authenticate their existing invocation rather than invent a value.
+No new API/provider/learner/trait binding follows from this worker machine consumer.
+
+During each decision the sole reducer authenticates the COMPLETE original decision/table and
+computes its finite rows. Release that decision's full tables, factory results and wide receipt
+before advancing to the next decision. The finite returned-array proof retains only the exact
+frozen literal rows/list and their established DecisionRef/actor/domain associations, under
+the same original ProfileGameSource/image/revision/cut; it retains no source graph or table.
+Store that proof in the finite source-specific WeakMap keyed by the returned frozen array. No exported caller-output registration function or
+alternate source issuer. Export only the finite read/assert operation used by LongitudinalStore.
+publish and compare require the EXACT original array and each exact row member once/in order,
+including original empty arrays, matching this current claim's source image/scope/cut. They
+authenticate that original proof/list and the live source scope; they do not replay retained
+per-decision source populations. Parser
+shape and a legitimate GAME/choice scope cannot authorize a substituted subject list/count.
+Copied/truncated/reordered/extra/cross-cut arrays and changed actor/subject/parameter/count rows
+fail before any write. Existing worker execution and publication share their original process
+scope; no authority is reconstructed from serialized worker messages or a claimed digest.
+
+Persisted reads do not pretend that decoded SQL objects have runtime original-object identity.
+They read the atomically published cut, enforce current derivation/registry/source completion,
+strict closed row grammar and original DecisionRef/actor/domain association against that cut's
+saved prefix. A parser alone never promotes supplied DTO rows into publication authority.
+Reopen/rebuild comparisons use a fresh genuine source scope and its own complete reduction;
+export remains a literal stored-data operation. Retain current source/claim/account fences.
+
+Use one original wide receipt per decision in this worker scope; no global cache or second
+issuer. Checkpoint/lease renewal remains actual per-decision progress. Measure real cold/warm
+cost with existing ceilings; no deadline increases.
+
+Extend the EXISTING branded parseLongitudinalReadQuery with includeSubjectObservations:boolean
+(default false) and optional subjectFilters (default no extra subject filter). Filters without
+includeSubjectObservations=true refuse. subjectFilters is a closed array of entries, OR across
+entries; each entry requires sourceKind and exact projection, and optionally exact typed subject,
+parameters, actor and the kind-correlated tested relation/sign. Within an entry all supplied
+operands are ANDed. Validate subject/parameter/test grammar against THAT exact source; no
+arbitrary objects, projection prefixes or latest refs. Existing phase/class/session/pack/run and
+owner cuts also apply. Existing projection/semanticSign/sourceSign aggregate filters keep their
+old lane semantics and do not accidentally filter or pool the new subject lane. Read results
+have a separate subjectObservations array, default[], with full tagged rows and deterministic
+DecisionRef/source/typed-subject/parameter/test ordering. Complete storage/account/DTO tooling
+adopts this lane; no new query framework or public route is created.
+
+**Cut the existing learner prevalence path explicitly.** LearnerProfileService.#snapshot and
+#observations must not publish complete.observations as personal habits; observation() must not
+serve its old aggregate contributor detail. Public Profile overview DTO instead has the closed
+observationStatus `{kind:"unavailable",reason:"subject_metrics_not_adopted"}` and observations:[],
+NOT an observed-zero/healthy-empty result. Existing public observation detail returns typed409
+PROFILE_OBSERVATIONS_NOT_ADOPTED. Update actual API/strict client parser/detail route and
+ProfileScreen to show “Detailed structure statistics are unavailable.” and remove stale aggregate
+links; no retry promise for an unadopted metric. Account export still includes actual private data.
+GAME/choice/structure cards retain their source/cohort/absence behavior. Profile overview/detail
+must not accept includeSubjectObservations/subjectFilters from public request data; that lane
+remains an internal/operator read until an accepted qualified consumer adopts it.
+
+This is an explicit temporary withholding of unsound metrics during the prelaunch migration,
+NOT a 1.0 descope or completion of Profile/player-style. No unqualified thirteen-family source
+or global prevalence becomes a learner/provider/trait. A subsequent accepted subject-metric
+projection must retain exact actor/subject/parameters/relation and its semantic qualification;
+it cannot reuse generic “you avoided X”. The full1.0 learner-model milestone remains open.
+
+#### A.2.5a Same-population prevalence handoff — independently accepted2026-11-10, including exact answer correlation
+
+The implemented subject-only slice would otherwise run after the old projector's independent
+local-closure census. The coordinated adoption uses ONE original WIDE population per normative
+decision for native7, condition13 and the retained34 operator-prevalence sources. Expand the
+EXISTING profile.subject_observations@1 machine image from20 to exactly54 sources (current
+local41 plus condition13@2, excluding trade and all11 deferred paths), retaining operator/analysis,
+machine_condition, sync/no cap, the same sole callable and no learner/provider/trait
+activation. The consumer accepts fact/threat source inputs; its exact double_attack1 binding is
+machine_condition/threat because that source is threat-only. The other53 bindings remain
+machine_condition/fact. Prove every exact output allows its binding's form/answer; never rely on
+adapter fallback or broaden a projection's existing declaration. This is input correlation for
+literal incidence arithmetic, not a threat judgement, new source meaning or learner output.
+The first real manifest check refused double_attack1 under fact-only, retained as a red control.
+
+The runtime collectProfileSubjectPopulation bridge reduces all54 ORIGINAL admitted values from
+that one receipt. After full native/canonical/13-table completeness, return evidence-free literal
+prevalence incidences for only the existing34 refs/signs: projectionId/version, sign, occurred,
+legalAlternatives and matchingAlternatives, with the unchanged 0<matching-all<legal-all
+opportunity and other-matching/all-other denominator. Per-edge duplicate operands deduplicate by
+exact projection/version/sign. A genuinely unavailable required source yields no subject OR
+prevalence opportunities for that decision; a forced or uniform available decision is evaluated
+zero. No selected/top-two output, callbacks, synthetic population or second acquisition.
+
+consumeProfileSubjectFacts keeps its exact ORIGINAL frozen subject-array return. Its EXISTING
+finite private proof additionally retains an immutable evidence-free decision summary for EVERY
+normative DecisionRef in original order: ref, phase, decisionClass, complete/unavailable status
+and finite prevalence incidences above. It retains no WIDE receipt, event, input/table, child
+array, source FEN or graph. The rows remain parsed/detached literals. One finite nonminting
+readProfileSubjectReduction(rows,image,scope,rev) authenticates the same original complete array,
+image/revision/cut/live source scope and returns only that summary; there is no exported caller
+registration or new issuer.
+
+projectObservations uses those same original summaries to fold the existing34 aggregate rows;
+remove its production decisionPopulation/semanticMembership acquisition. Normative denominators
+still count every original decision, including unavailable/zero. A cheap shared literal fold,
+not a collector or source resolver, computes BOTH normative denominator rows (every positive-count
+phase/class band, no invented zero-count bands) and canonical expected prevalence rows from the
+owned summary and original run cohort/time. publish and compare authenticate the original subject
+list AND exactly compare BOTH denominator and aggregate prevalence rows to that fold before writes. Thus authentic
+subject rows cannot authorize forged, omitted or independently collected prevalence. Existing
+GAME/choice/source/lease fences and all-six-family atomicity remain. Legacy decisionPopulation
+may survive only as an explicitly unowned arithmetic test/measurement helper; it is not a
+production acquisition path or a publication authority.
+
+Module-boundary repair (independently accepted2026-11-10): keep the existing finite subject-array proof in
+a data-only private profile-subject-facts-authority module. LongitudinalStore imports ONLY its
+finite assert/read functions, never the worker reducer/runtime collector bridge. Permit exactly
+one private ESM writer, ownProfileSubjectReduction, imported/called ONLY by the actual
+consumeProfileSubjectFacts implementation; a permanent production AST importer/call census
+refuses every other writer caller and every public barrel export. This is the existing computed
+result's module boundary, not an alternate source/factory issuer, public output registration,
+caller callback or DTO-restoration path. The writer requires the original active source/image/
+revision and deeply frozen complete rows/summary; it retains no per-decision WIDE/evidence/
+factory/table graph. The original V4 image and scope references remain ownership metadata. All source/math
+truth is still constructed only inside the sole reducer. Add an HTTP import-graph negative proving
+main cannot reach the worker reducer and neither the thin store nor proof module imports the
+runtime bridge/dispatcher. Do not disguise this writer as a source-data reader or use dynamic
+imports/global mutable registration to bypass the boundary. This explicit private-writer exception
+supersedes the earlier no-export wording only at this audited module seam; public/caller output
+registration remains refused.
+
+Required nonvacuous controls: one actual compiler call per normative decision; real incomplete
+source suppresses BOTH lanes with denominator intact; forced/uniform evaluated zero; old34
+complete-root arithmetic parity; copied/reordered/foreign/closed-scope/empty original-list refusals;
+changed/omitted aggregate AND denominator rows refused under a genuine subject list (including
+authentic empty lists for forced/unavailable/uniform runs); bounded proof contains only
+literal summaries/rows. Existing source qualification and actual cost/lease gates remain required.
+This addition changes no personal metric, chess meaning, user preset or release scope.
+
+#### A.2.6 Required proof cuts
+
+Exact65 registry/source census and all deferred reasons; no old public wrapper/current avoidance1
+admission; original result/table reuse even for available[]; every13 family and all seven native
+subject grammars; same-sign different files/pawns/targets and multiple subjects on one move;
+played-matching and differing R, false/zero, all/none/forced/incomparable; promotion/EP/castling/
+removed/null lifecycle; both actors/colors and variable legal counts; whole unavailable versus
+invalid authority. Verify literal opportunity/numerator/denominator rows independently.
+
+Run actual populated revision8/schema34→revision9/next-schema startup, original saved-prefix
+worker claim/publication, reopen and explicit rebuild equality across ALL six derived families;
+stale claims, crash/rollback, source/counter changes, external contributors, import/prediction
+ownership, strict source/subject filters, account export/delete and current independent Profile
+cards. Prove an omitted expected subject fails complete source-reduction tests, and changed actor/
+parameters fail original-domain admission/read/publication checks, not just SQL shape. Actual worker cost/lease progress and normal CI gates remain required. No parent/D1716/
+D4167/learner-model/1.0 completion follows from compiling this row schema.
 
 ### B. Exact decision references and immutable time
 
@@ -2242,3 +2756,7 @@ head after that renumbering and **not yet written**:
   all seven blocker assertions, the intended inversion. Exact receipt:
   `planning/longitudinal-store/second-author-repair-2026-08-30.md`. Fresh independent review still
   gates acceptance and implementation.
+- 2026-11-03 — D4018 drafts §A.1: preserve all 67 families while moving material asymmetry and
+  defender exposure to their exact @2 sources; retain complete-population abstention semantics,
+  version-aware membership, and require revision-6 startup/worker/read/rebuild controls over real
+  revision-5 saved history. Unaccepted; no production migration or broader completion claimed.

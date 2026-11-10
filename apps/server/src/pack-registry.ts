@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import {
   canonicalizeJson,
   digestDrillPack,
+  normalizeShapeReferences,
   type DrillPackDefinition,
   type FeedbackPolicy,
   type PackPhase,
@@ -20,6 +21,7 @@ import { assertCompiledConceptRegistry, invokeRecordedMeasurementReading, record
   type CompiledConceptRegistry, type DeclaredEvidence, type PositionEvidenceIndex } from "@chess-tabiya/runtime";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
+import { captureRegisteredPackStructuralDocument, type AuthoredStructuralDocument } from "../../../packages/runtime/src/internal/authored-structural-source.js";
 
 import { capabilityKey, type CapabilityId } from "@chess-tabiya/schema";
 
@@ -743,7 +745,19 @@ export class PackRegistry {
   }
 
   get(packId: string): PackRecord | undefined {
-    return this.#records.get(packId);
+    const record = this.#records.get(packId);
+    if (record !== undefined) this.captureAuthoredStructuralDocument(packId);
+    return record;
+  }
+
+  captureAuthoredStructuralDocument(packId: string): AuthoredStructuralDocument | undefined {
+    const record = this.#records.get(packId);
+    if (record === undefined) return undefined;
+    const shapes = normalizeShapeReferences(record.document.shapes).flatMap(reference => {
+      const captured = this.#shapes?.captureAuthoredStructuralDocument?.(reference.shape);
+      return captured === undefined ? [] : [captured];
+    });
+    return captureRegisteredPackStructuralDocument(record, () => this.#records.get(packId), shapes);
   }
 
   required(packId: string): PackRecord {

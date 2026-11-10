@@ -29,16 +29,16 @@ The sources are deliberately narrow:
 
 - pasted PGN is bounded to 64 KiB and re-serialized through `stripPgnAnnotations` before storage,
   exactly like the lichess fetch: tags and moves are kept; comments, `%eval`/`%clk`/`%cal`
-  commands and NAGs are removed ([[D959]], 2026-09-24);
+  commands and NAGs are removed from the stored PGN ([[D959]], 2026-09-24). Recorded clock times are extracted numerically before stripping;
 - a public `https://lichess.org/<game-id>` URL is fetched without credentials,
   serially, with a bounded timeout and server evaluations disabled;
 - chess.com URLs are refused with guidance to paste the PGN because no supported
   per-game public fetch contract exists.
 
 Before submission, the client states the durable-storage boundary: the PGN's tags,
-including player names, and its moves are kept beside the parsed main line and any
+including player names, moves and recorded clock times are kept beside the parsed main line and any
 rehearsal branches added later, while comments, engine evaluations and move
-annotations are removed before storage.
+annotations are removed from the stored PGN.
 It also states that these bytes are included in account export and removed with
 the imported run or account, subject to the documented backup limits. Chess.com
 guidance asks for one completed-game export, not an analysis tree containing
@@ -70,6 +70,29 @@ attempt, schedule, progress, or position-statistic rows.
 
 Migration 12 creates `imported_games`, advances storage 11→12, and stamps existing
 run snapshots from schema 0.9 to 0.10 using frozen version literals.
+
+## Retained recorded clocks (implementing locally)
+
+Migration32 adds one nullable clock_document_json column to imported_games. Paste and fetch
+extract exact integer millisecond samples before annotation stripping, and fetch requests clocks
+without evaluations/commentary. Every original move retains its source-local ply/mover/canonical
+UCI and one original node mapping, even if its sample is missing or invalid. Duplicate/malformed/
+unsafe samples stay typed issues. No raw comments are saved in this document.
+
+New extraction-empty, unexamined null and legacy parsed-empty/unknown retention differ. Authorized
+clock operations can lazily compare-and-set a null legacy document; retained clock annotations may
+be recovered, stripped history cannot. Actual original session/move identity is checked; later
+same-FEN branches cannot replace the original node. Unexpected internal/storage faults stay
+retryable rather than being persisted as terminal absence. Account export/restore/delete carry
+the same typed document; restore reads old retained annotations before stripping them.
+
+The shared declared-control parser supports only exact integer-seconds base+increment; unsupported
+or invalid controls remain explicit. Original source/factories and the registered historical
+`GET /runs/:runId/recorded-clock?branchId=...&nodeId=...` now supply Review's fixed recorded-clock
+readout through a strict receiver. It shows the original mover's remaining time **after this move**,
+the declared control and exact clock use when all original operands exist. No live clock, rating, bot timing, thinking-time
+measurement or source28 qualification is claimed. Current verification/remaining duties:
+planning/time-controls/implementation-2026-11-05.md and rfc/recorded-clocks.md.
 
 ## Results and evidence
 
@@ -262,15 +285,17 @@ evaluation job, writes no event and persists no grade.
   played), reviewed line first, capped at the shipped compare's eight columns. The row (and moment
   card) at that position offers *Compare lines from here*, which opens the run with the shipped N-way
   compare on exactly those branch ids; no comparison machinery is added.
-- **Analyze.** An explicit, secondary action under the evidence panel. `GET
-  /runs/:id/review-analysis?node=<nodeId>` (read-only, like the review) returns the recorded engine
-  line from the position before that move. That is the bounded `stockfish.principal_variation@1` line
-  the Review pass recorded with the position's evaluation
-  ([review evidence](review-evidence.md#the-analyze-line)). If there is none, it falls back to an
-  attached `bestline` packet's principal variation, then to the eval packet's recorded search first
-  move. It comes back as one template sentence naming the engine and the requested search bound,
-  plus a caveat that it is not advice. It is admitted only through `module.full_inspector@1`. A line without its search bound is not
-  shown. The reveal closes when the selection moves or a retry starts, and it is **withheld** (server
+- **Analyze.** An explicit, secondary action under the evidence panel. The client confirms the
+  exact historical target through `POST /runs/:id/assistance`, then reads admitted source pages
+  through `POST /runs/:id/inspector/query`, without modifying saved preferences or the run.
+  Three exact `module.full_inspector@2` sources distinguish the bounded captured
+  `stockfish.principal_variation@1` line, a saved `bestline` report, and the eval report's saved
+  first move ([review evidence](review-evidence.md#the-analyze-line)). Only genuine absence
+  permits another source probe; corrupt, empty or attribution-incomplete selected reports never
+  silently fall back. Registered templates preserve legal numbered SAN, engine attribution,
+  requested bound and recorded ply scope, explicitly distinguishing captured execution from
+  historical reported metadata. Attribution-incomplete reports show no moves. The old GET
+  endpoint and raw runtime helper are removed. The reveal closes when the selection moves or a retry starts, and it is **withheld** (server
   and client) for the position a retry is open from: the run's active line leaves the reviewed line
   there and has reached no outcome (`openRetryEntryNodeId`).
 - **Prose.** Every authored string is a registered template (`REVIEW_MAP_TEMPLATES`); none carries a

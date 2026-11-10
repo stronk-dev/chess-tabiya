@@ -16,6 +16,7 @@ import type { ProviderEndpointMap, ProviderOperationId, ProviderOperationProvide
 
 export const PROVIDER_PROTOCOL_MEMBERS = [
   "lichess_explorer_position_page_v1",
+  "maia_inference_task_v1",
   "maia_policy_page_v1",
   "stockfish_legal_root_table_v1",
   "stockfish_position_evaluation_v1",
@@ -25,10 +26,11 @@ export const PROVIDER_PROTOCOL_MEMBERS = [
 
 export const PROVIDER_PROTOCOL_RESOURCE = Object.freeze({
   id: "provider-protocol",
-  version: 3,
+  version: 4,
   payload: Object.freeze({
     operations: Object.freeze([
       Object.freeze({ member: "lichess_explorer_position_page_v1", operation: "lichess_explorer.position_page@1", provider: "lichess_explorer", endpoint: Object.freeze({ kind: "https", origin: "https://explorer.lichess.org", path: "/lichess" }), parserId: "parse.lichess_explorer_position_page@1", sourceProjection: "human.explorer.position_page@1", sourceFactoryId: "createHumanExplorerPositionPageV1Evidence", cliName: "explorer-position-page" }),
+      Object.freeze({ member: "maia_inference_task_v1", operation: "maia.inference_task@1", provider: "maia", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "maia-5m" }), parserId: "parse.maia_inference_task@1", sourceProjection: "human.maia.inference_task@1", sourceFactoryId: "createHumanMaiaInferenceTaskV1Evidence", cliName: "maia-inference-task" }),
       Object.freeze({ member: "maia_policy_page_v1", operation: "maia.policy_page@1", provider: "maia", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "maia-5m" }), parserId: "parse.maia_policy_page@1", sourceProjection: "human.maia.policy_page@1", sourceFactoryId: "createHumanMaiaPolicyPageV1Evidence", cliName: "maia-policy-page" }),
       Object.freeze({ member: "stockfish_legal_root_table_v1", operation: "stockfish.legal_root_table@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_legal_root_table@1", sourceProjection: "live.stockfish.legal_root_table@1", sourceFactoryId: "createLiveStockfishLegalRootTableV1Evidence", cliName: "stockfish-legal-roots" }),
       Object.freeze({ member: "stockfish_position_evaluation_v1", operation: "stockfish.position_evaluation@1", provider: "stockfish", endpoint: Object.freeze({ kind: "uci_supervisor", engineId: "stockfish-analysis" }), parserId: "parse.stockfish_position_evaluation@1", sourceProjection: "live.stockfish.position_eval@1", sourceFactoryId: "createLiveStockfishPositionEvalV1Evidence", cliName: "stockfish-position-evaluation" }),
@@ -98,6 +100,7 @@ const RELATIONS_HOLD = {
   "stockfish.position_evaluation@1": { member: true, provider: true, endpoint: true, parser: true },
   "stockfish.principal_variation@1": { member: true, provider: true, endpoint: true, parser: true },
   "maia.policy_page@1": { member: true, provider: true, endpoint: true, parser: true },
+  "maia.inference_task@1": { member: true, provider: true, endpoint: true, parser: true },
   "syzygy.position@1": { member: true, provider: true, endpoint: true, parser: true },
   "lichess_explorer.position_page@1": { member: true, provider: true, endpoint: true, parser: true },
 } as const satisfies ProviderProtocolTypeRelations;

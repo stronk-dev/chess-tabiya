@@ -70,8 +70,8 @@ async function pair(id: string, projection: string, family: SemanticSequenceFami
 
 describe("grounded semantic negatives through production evidence", () => {
   it("D3628 exposure: completes the legal edge without a positive target capture", async () => {
-    await checked(null, "derived.tactic.defender_exposure", 1, "runtime.semantic.breadth_edge", edges("r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", ["c5b6"])[0]!, true);
-    await checked("migration.exposure.negative", "derived.tactic.defender_exposure", 1, "runtime.semantic.breadth_edge", edges("3rk3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", ["c5b6"])[0]!, false);
+    await checked("cited.python-chess.exposure-v2.one.white", "derived.tactic.defender_exposure", 2, "runtime.semantic.breadth_edge", edges("r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", ["c5b6"])[0]!, true);
+    await checked("cited.python-chess.exposure-v2.no-retained-target.white", "derived.tactic.defender_exposure", 2, "runtime.semantic.breadth_edge", edges("3rk3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1", ["c5b6"])[0]!, false);
   });
 
   it("D3628 open file: a stationary rook is not an occupancy move", async () => {

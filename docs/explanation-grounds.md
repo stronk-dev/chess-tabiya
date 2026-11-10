@@ -378,11 +378,12 @@ the reference is source data, not permission to inspect a branch.
 
 ## Optional Theory source execution
 
-The authenticated Theory query compiles all four `module.theory_breadcrumb@1` bindings
+The authenticated Theory query compiles all four current `module.theory_breadcrumb@2` bindings
 before online acquisition. Each binding declares optional-source omission. Missing recorded
 claims or Explorer population facts therefore omit their own input; they do not make matched
-local shape or opening theory unavailable. If no usable fact exists, the module still states
-honest absence. An invalid source-absence declaration or non-executable binding is a contract
+local shape or opening theory unavailable. If no usable fact exists, the module distinguishes
+a genuine no-witness from unavailable named-pattern recognition and complete facts deferred by
+the compact card’s word budget. An invalid source-absence declaration or non-executable binding is a contract
 failure, not an ordinary provider absence, and prevents acquisition.
 
 The opening leg uses the same admitted installation loaded once for the application. Genuine
@@ -398,3 +399,27 @@ Authorization, disclosure and decision identity are checked again after acquisit
 candidate moves never enter the Theory receipt. This consumer-level preflight does not claim
 complete source resolution, whole-manifest execution, durable provider persistence or global
 request-specific availability.
+
+
+## Current point-module registered patterns
+
+Structure and Theory use `theory.shapes.firing@3` through their current consumer2 bindings.
+RunService asynchronously prepares genuine registry-owned singleton scans for the exact requested
+point; Structure also prepares its three actual prior learner-move novelty subjects. Both pure
+source-demand preflight and packet admission use the same timing, role/session and complete-consumer
+checks. Original replay and legal-graph validation precede scans. Preview and final Theory queries
+reuse the same prepared source set across optional Explorer I/O, with current run, grant, help,
+registered record and cancellation checks.
+
+The full registered pattern name, publisher and source identity reach the registered renderer;
+raw shape JSON never substitutes for those scans. Registered statements link their exact retained
+entryId to the catalogue; a title-only statement cannot guess an entry. The receiving point-module parser requires the
+firing’s first and last node to equal the requested point, with an open-ended singleton interval.
+Full retained operands must agree with the supplied evidence reference; this is wire consistency,
+not an independent signature or permission to invent chess claims.
+
+Installed-empty and missing registries remain distinct. Oversized complete facts defer atomically
+under the unchanged1fact/80word Structure or1fact/60word Theory budget and report that more detail
+exists than fits. Neither source unavailability nor fit loss means no theory exists. Existing
+Structure ordering still prevents authored patterns from winning its one-fact selection (D4095);
+the current source migration does not claim to repair that selector or complete the module.

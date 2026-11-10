@@ -7,12 +7,15 @@ import { parseUci } from "chessops/util";
 import {
   canonicalMoveUci,
   legalAlternativeEdges,
-  localSemanticEvents,
+  localSemanticEventClosure,
   readBackReplay,
   type DrillRun,
   type DrillRunEvent,
   type Node,
 } from "@chess-tabiya/runtime";
+// Concrete internal source bridge; this reader requires the original collected closure.
+// It is intentionally not exposed through the runtime's public/client barrel.
+import { localSemanticCollectorOutcomes } from "../../../packages/runtime/src/semantic-evidence.js";
 
 import {
   compareText,
@@ -31,7 +34,12 @@ import { LONGITUDINAL_ADMITTED_IDENTITIES, OBSERVATION_DERIVATION_REV, identityK
 import { LongitudinalSnapshotError, type LongitudinalSourceImageV4 } from "./longitudinal-source.js";
 import { rootKey } from "./progress.js";
 import { collectSemanticMemberships, createSemanticMembershipReader } from "./longitudinal-membership-cache.js";
+import { readProfileGameSource } from "./profile-game-source.js";
+import { consumeProfileGameFacts } from "./profile-game-facts.js";
+import { consumeProfileChoiceFacts } from "./profile-choice-facts.js";
 
+import { consumeProfileSubjectFacts, readProfileSubjectReduction } from "./profile-subject-facts.js";
+import { foldProfileSubjectReduction } from "./profile-subject-reduction.js";
 export interface LongitudinalEdge { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }
 
 export interface PopulationDependencies {
@@ -41,7 +49,14 @@ export interface PopulationDependencies {
 
 export const RUNTIME_POPULATION_DEPENDENCIES: PopulationDependencies = Object.freeze({
   alternatives: legalAlternativeEdges,
-  events: localSemanticEvents,
+  events: (beforeFen: string, moveUci: string, afterFen: string) => {
+    const closure = localSemanticEventClosure(beforeFen, moveUci, afterFen);
+    // D4018 adopts only exposure's exact successor and its original unavailable result.
+    // Other collector-family absence policies are unchanged by this bounded migration.
+    if (localSemanticCollectorOutcomes(closure).some(outcome => outcome.projection === "derived.tactic.defender_exposure@2"
+      && outcome.result.kind === "unavailable")) return undefined;
+    return closure.events;
+  },
 });
 
 const runtimeMemberships = createSemanticMembershipReader(RUNTIME_POPULATION_DEPENDENCIES.events);
@@ -53,6 +68,8 @@ export type { LongitudinalProjection } from "./longitudinal-store.js";
 import type { LongitudinalProjection } from "./longitudinal-store.js";
 
 export interface ProjectOptions {
+  /** Genuine worker/rebuild source scope. Never a caller-authored Principal or run snapshot. */
+  readonly gameSource?: import("./profile-game-source.js").ProfileGameSource;
   /** Synchronous progress checkpoint after every decision (lease renewal lives here, never a timer). */
   readonly checkpoint?: (completedDecisions: number, totalDecisions: number) => void;
   readonly dependencies?: PopulationDependencies;
@@ -110,7 +127,7 @@ export function decisionPopulation(
   }
   const memberships = new Map<string, { readonly opportunity: boolean; readonly occurred: boolean; readonly share: number }>();
   for (const identity of identities) {
-    const target = `${identity.matchProjectionId}\0${identity.matchSign}`;
+    const target = `${identity.matchProjectionId}@${identity.matchProjectionVersion}\0${identity.matchSign}`;
     let exhibiting = 0;
     let counterfactualExhibiting = 0;
     exhibited.forEach((set, index) => {
@@ -123,7 +140,7 @@ export function decisionPopulation(
     const playedExhibits = exhibited[0]!.has(target);
     memberships.set(identityKey(identity), Object.freeze({
       opportunity,
-      occurred: identity.kind === "edge" ? playedExhibits : !playedExhibits,
+      occurred: playedExhibits,
       share: counterfactualExhibiting / alternatives.length,
     }));
   }
@@ -194,7 +211,13 @@ interface FamilyAccumulator {
  * Denominators are computed family-independently per `(phase, decision_class)` ([[D1614]]), then
  * family numerators accumulate in ascending event order so the REAL sums are byte-deterministic.
  */
-export function projectObservations(image: LongitudinalSourceImageV4, options: ProjectOptions = {}): LongitudinalProjection {
+export function projectObservations(image: LongitudinalSourceImageV4, supplied: ProjectOptions = {}): LongitudinalProjection {
+  // Capture callback-bearing options once; callbacks cannot exchange source scopes mid-run.
+  const options = Object.freeze({ gameSource: supplied.gameSource, derivedRev: supplied.derivedRev,
+    checkpoint: supplied.checkpoint, dependencies: supplied.dependencies });
+  if (options.gameSource !== undefined && readProfileGameSource(options.gameSource).image !== image) {
+    throw new LongitudinalSnapshotError("LONGITUDINAL_GAME_SOURCE_IMAGE_MISMATCH");
+  }
   const derivedRev = options.derivedRev ?? OBSERVATION_DERIVATION_REV;
   let run: DrillRun;
   try {
@@ -210,7 +233,9 @@ export function projectObservations(image: LongitudinalSourceImageV4, options: P
   const decisions = normativeDecisions(image, run);
   const denominatorCounts = new Map<string, number>();
   const families = new Map<string, FamilyAccumulator>();
-  decisions.forEach((decision, index) => {
+  // Scope-less calls are unowned arithmetic instruments and cannot pass publication authority.
+  // The actual worker/rebuild/once path has a required original scope and one shared WIDE census.
+  if (options.gameSource === undefined) decisions.forEach((decision, index) => {
     const band = `${decision.phase}\0${decision.decisionClass}`;
     denominatorCounts.set(band, (denominatorCounts.get(band) ?? 0) + 1);
     const population = decisionPopulation(decision.beforeFen, decision.moveUci, LONGITUDINAL_ADMITTED_IDENTITIES, options.dependencies);
@@ -237,13 +262,13 @@ export function projectObservations(image: LongitudinalSourceImageV4, options: P
   });
   const sessionKind = run.sessionKind;
   const packId = sessionKind === "pack" ? run.packId : null;
-  const denominators = [...denominatorCounts.entries()]
+  let denominators = [...denominatorCounts.entries()]
     .map(([band, decisionsInBand]) => {
       const [phase, decisionClass] = band.split("\0") as [LongitudinalPhase, LongitudinalDecisionClass];
       return parseLongitudinalDenominatorRow({ learnerId, runId, phase, decisionClass, decisions: decisionsInBand, observedAt, derivedRev });
     })
     .sort((left, right) => compareText(`${left.phase}\0${left.decisionClass}`, `${right.phase}\0${right.decisionClass}`));
-  const observations = [...families.values()]
+  let observations = [...families.values()]
     .map((family) => parseLongitudinalObservationRow({
       learnerId, runId, phase: family.phase, decisionClass: family.decisionClass,
       decisions: denominatorCounts.get(`${family.phase}\0${family.decisionClass}`)!,
@@ -254,6 +279,20 @@ export function projectObservations(image: LongitudinalSourceImageV4, options: P
       alternativeShareSum: family.share, occurredRefs: family.occurredRefs, opportunityRefs: family.opportunityRefs,
     }))
     .sort((left, right) => compareText(observationSortKey(left), observationSortKey(right)));
+  const subjectObservations = options.gameSource === undefined ? Object.freeze([]) : consumeProfileSubjectFacts(image, {
+    gameSource: options.gameSource, derivedRev, ...(options.checkpoint === undefined ? {} : { checkpoint: options.checkpoint }),
+  });
+  if (options.gameSource !== undefined) {
+    const summary = readProfileSubjectReduction(subjectObservations, image, options.gameSource, derivedRev);
+    const folded = foldProfileSubjectReduction(summary, { learnerId, runId, observedAt, derivedRev, sessionKind, packId });
+    denominators = [...folded.denominators]; observations = [...folded.observations];
+  }
   const structureStats = structureStatistics(image, run).map((row) => parseLongitudinalStructureStatRow({ ...row, learnerId, runId, observedAt, derivedRev }));
-  return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats) });
+  const gameFacts = Object.freeze([consumeProfileGameFacts(image, { derivedRev,
+    ...(options.gameSource === undefined ? {} : { gameSource: options.gameSource }),
+    ...(options.checkpoint === undefined ? {} : { checkpoint: () => options.checkpoint!(decisions.length, decisions.length) }) })]);
+  const choiceFacts = Object.freeze([consumeProfileChoiceFacts(image, { derivedRev,
+    ...(options.gameSource === undefined ? {} : { gameSource: options.gameSource }),
+    ...(options.checkpoint === undefined ? {} : { checkpoint: () => options.checkpoint!(decisions.length, decisions.length) }) })]);
+  return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts, choiceFacts, subjectObservations });
 }

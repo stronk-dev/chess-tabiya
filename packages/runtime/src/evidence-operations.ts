@@ -9,11 +9,11 @@
 import type { DrillPackDefinition, StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 
 import type { DeclaredEvidence } from "./evidence-contract.js";
+import type { EvidenceReferenceResolution } from "./evidence-ref-resolution.js";
 import type { AuthoredFeedbackItemRecord, BoundedTargetPolicyBoundsFactoryResult, EngineTargetPolicyFactoryResult, PackConceptReferencePayload } from "./evidence-factories.js";
 import type { CompiledConceptRegistry } from "./concept-registry.js";
 
 export type { PackConceptReferencePayload } from "./evidence-factories.js";
-import type { CandidateFeatureInput, CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { positiveMaterialThreatExchanges, type LegalExchangeEvidence, type SourceLegalMovesEvidence, type ThreatEvidence } from "./bounded-target-chess.js";
 import { threatEvidencePassAnchor } from "./threat-pass-authority.js";
@@ -23,7 +23,7 @@ import { pivotalMarkerEvidenceItems } from "./pivotal.js";
 import type { SourcingLedgerRecord } from "./recorded-reading.js";
 import type { ShapeTriggerSource } from "./shape-firing.js";
 import { STRUCTURAL_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
-import type { DrillRun, EvidencePayload, Node, SelectionEngineIdentity } from "./types.js";
+import type { DrillRun, EvidencePayload, Node } from "./types.js";
 import type { RecordedReading } from "./voice.js";
 import type { RecordedEdge } from "./recorded-edge.js";
 import type { ExplorerPopulationSummary, ExplorerPositionFrequency, ExplorerInspectorPopulation } from "./explorer-summary.js";
@@ -203,17 +203,14 @@ export function claimDeliveryEvidence<T extends object>(item: T): DeclaredEviden
 }
 
 /** The evidence-reference resolution plus the attached packet it names, if any. */
-export function evidenceReferenceEvidence(reference: string, pack?: DrillPackDefinition, payloads?: ReadonlyMap<string, EvidencePayload>): readonly DeclaredEvidence<unknown>[] {
+export function evidenceReferenceEvidence(reference: string, pack?: DrillPackDefinition, payloads?: ReadonlyMap<string, EvidencePayload>): readonly DeclaredEvidence<EvidenceReferenceResolution | EvidencePayload>[] {
   const resolution = invokeEvidenceValueRoute("run.record.evidence_ref_resolution@1", { reference, ...(pack === undefined ? {} : { pack }), ...(payloads === undefined ? {} : { payloads }) });
   const packet = payloads?.get(reference);
   const attached = packet !== undefined && (reference.startsWith("engine:") || reference.startsWith("tablebase:")) ? [attachedPacketEvidence(packet)] : [];
-  return Object.freeze([resolution, ...attached]);
+  return Object.freeze([resolution, ...attached]) as readonly DeclaredEvidence<EvidenceReferenceResolution | EvidencePayload>[];
 }
 
 /** The candidate feature vector recomputed through the collector factories. */
-export function candidateFeatureVectorEvidence(input: { readonly beforeFen: string; readonly engine: SelectionEngineIdentity; readonly candidates: readonly CandidateFeatureInput[] }): DeclaredEvidence<CandidateFeatureVector> {
-  return invokeEvidenceValueRoute("derived.opponent.candidate_feature_vector@1", input);
-}
 
 /** The sole move-free Explorer derivation; callers supply only the admitted source page. */
 export function deriveExplorerPopulationSummary(page: DeclaredEvidence<ProviderEvidenceDelivery<ExplorerPositionPage, "lichess_explorer.position_page@1">>): DeclaredEvidence<ExplorerPopulationSummary> {

@@ -11,15 +11,18 @@ import { DatabaseSync } from "node:sqlite";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { buildSync } from "esbuild";
-import { afterEach, describe, expect, it } from "vitest";
+import { localSemanticEventClosure } from "@chess-tabiya/runtime";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { OCCUPIED_TARGET_IDENTITY_CASES } from "../../../packages/runtime/src/testing/occupied-target-fixtures.js";
 import { canonicalFen, positionFromFen } from "../../../packages/runtime/src/chess.js";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { parseLongitudinalReadQuery } from "./longitudinal-contract.js";
+import { LONGITUDINAL_ADMITTED_IDENTITIES, identityKey } from "./longitudinal-registry.js";
 import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
-import { projectObservations, RUNTIME_POPULATION_DEPENDENCIES } from "./longitudinal-projector.js";
+import { decisionPopulation, normativeDecisions, projectObservations, RUNTIME_POPULATION_DEPENDENCIES } from "./longitudinal-projector.js";
 import { runLongitudinalBatch } from "./longitudinal-worker-core.js";
 import { LongitudinalStore } from "./longitudinal-store.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
@@ -59,6 +62,7 @@ afterEach(async () => {
   try {
     await closing?.close();
   } finally {
+    vi.restoreAllMocks();
     for (const directory of removing) rmSync(directory, { recursive: true, force: true });
   }
 });
@@ -91,6 +95,7 @@ function fakeThread(directory: string, body: string): URL {
 }
 
 describe("criteria 16, 29 — the production-composed file-backed worker", { timeout: 120_000 }, () => {
+  beforeEach(() => installEmptyApplicationCatalogues());
   it("D3762 rebuilds revision-4 false occupied-target counts without changing either saved game", async () => {
     const databasePath = join(temp(), "target-history.sqlite");
     const seed = new SQLiteRunStorage(databasePath, { onMigration: () => {} });
@@ -98,23 +103,35 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     for (const value of OCCUPIED_TARGET_IDENTITY_CASES.slice(0, 2)) {
       seed.create(play(positionRun(`target-${value.side}`, canonicalFen(positionFromFen(value.fen)), value.side), value.uci), owner);
     }
-    // Historical fixture: reproduce the projection/sign membership independently observed in
-    // D3762's failing predecessor. This dependency never enters production or evidence minting.
+    // Historical fixture: reproduce only the false projection/sign membership independently
+    // observed in D3762's predecessor. Do not pass it through today's all-family availability
+    // policy: that may correctly abstain before this historical false row can be constructed.
+    // Real legal alternatives and recorded games remain; this finite synthetic dependency never
+    // enters production or evidence minting and claims no complete predecessor projection.
     const legacy = {
-      ...RUNTIME_POPULATION_DEPENDENCIES,
-      events: (beforeFen: string, moveUci: string, afterFen: string) => {
-        const events = RUNTIME_POPULATION_DEPENDENCIES.events(beforeFen, moveUci, afterFen)!;
-        return moveUci === "f1c1" || moveUci === "f8c8"
-          ? [...events, { projection: { id: "rules.transition.event.occupied_defence", version: 1 }, sign: "gained" }]
-          : events;
-      },
+      alternatives: RUNTIME_POPULATION_DEPENDENCIES.alternatives,
+      events: (_beforeFen: string, moveUci: string) => moveUci === "f1c1" || moveUci === "f8c8"
+        ? [{ projection: { id: "rules.transition.event.occupied_defence", version: 1 }, sign: "gained" }]
+        : [],
     };
     const raw = new DatabaseSync(databasePath);
-    const legacyStore = new LongitudinalStore(raw);
-    for (let index = 0; index < 2; index += 1) {
-      expect(runLongitudinalBatch(legacyStore, LONGITUDINAL_WORKER_DEFAULTS, "historical-fixture", {
-        project: (image, checkpoint) => projectObservations(image, { checkpoint, dependencies: legacy }),
-      }).completed).toBe(1);
+    // The retired false rows are a literal predecessor fixture, not a modern source result.
+    // Today's genuine publisher must not accept a fake dependency's projection as authority.
+    const identity = LONGITUDINAL_ADMITTED_IDENTITIES.find(r => r.projectionId === "rules.transition.event.occupied_defence" && r.semanticSign === "gained")!;
+    for (const value of OCCUPIED_TARGET_IDENTITY_CASES.slice(0, 2)) {
+      const id = `target-${value.side}`, run = seed.read(id)!.run;
+      const image = seed.longitudinalSourceImageV4(id, run.events.length), decision = normativeDecisions(image, run)[0]!;
+      const unowned = decisionPopulation(value.fen, value.uci, [identity], legacy);
+      expect(unowned.kind).toBe("available");
+      const membership = unowned.kind === "available" ? unowned.memberships.get(identityKey(identity)) : undefined;
+      expect(membership).toMatchObject({ opportunity: true, occurred: true });
+      const refs = JSON.stringify([decision.ref]);
+      raw.prepare("INSERT INTO learner_observation_denominators(learner_id,run_id,phase,decision_class,decisions,observed_at,derived_rev) VALUES(?,?,?,'played',1,?,4)")
+        .run(owner.learnerId!, id, decision.phase, AT);
+      raw.prepare(`INSERT INTO learner_observations(learner_id,run_id,projection_id,projection_version,semantic_sign,source_sign,phase,decision_class,session_kind,pack_id,opportunities,occurred,alternative_share_sum,occurred_refs,opportunity_refs,observed_at,derived_rev)
+        VALUES(?,?,'rules.transition.event.occupied_defence',1,'gained','gained',?,'played','position',NULL,1,1,?,?,?, ?,4)`)
+        .run(owner.learnerId!, id, decision.phase, membership!.share, refs, refs, AT);
+      raw.prepare("UPDATE learner_observation_jobs SET state='complete',completed_seq=requested_seq,derived_rev=4 WHERE run_id=?").run(id);
     }
     const saved = raw.prepare("SELECT id, snapshot_json FROM drill_runs ORDER BY id").all();
     expect(raw.prepare("SELECT run_id, occurred FROM learner_observations WHERE projection_id='rules.transition.event.occupied_defence' AND semantic_sign='gained' ORDER BY run_id").all())
@@ -129,8 +146,12 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
       return result.kind === "complete" ? result : undefined;
     });
     expect(rebuilt.cuts).toHaveLength(2);
-    expect(rebuilt.observations.filter(row => row.projectionId === "rules.transition.event.occupied_defence" && row.semanticSign === "gained").every(row => row.occurred === 0)).toBe(true);
-    expect(rebuilt.observations.length).toBeGreaterThan(0);
+    // The accepted revision-six policy refuses these incomplete alternative populations.
+    // Join that actual outcome explicitly: an empty filtered .every() is not zero-count proof.
+    for (const value of OCCUPIED_TARGET_IDENTITY_CASES.slice(0, 2)) {
+      expect(decisionPopulation(value.fen, value.uci)).toEqual({ kind: "unavailable", reason: "population_incomplete" });
+    }
+    expect(rebuilt.observations).toEqual([]);
     expect(rebuilt.denominators.reduce((total, row) => total + row.decisions, 0)).toBe(2);
     const closing = application; application = undefined; await closing.close();
     const after = new DatabaseSync(databasePath);
@@ -148,8 +169,18 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     const seed = new SQLiteRunStorage(databasePath, { onMigration: () => {} });
     const owner = learner(seed, "owner");
     seed.create(play(positionRun("preexisting"), "e2e4"), owner);
-    seed.create(play(positionRun("legacy-promotion", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8n"), owner);
-    seed.create(play(positionRun("legacy-castling", "4k3/8/8/8/8/8/8/4K2R w K - 0 1"), "e1h1"), owner);
+    const specialMoves = [
+      { id: "legacy-promotion", fen: "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1", uci: "b7b8n", projection: "rules.tactic.event.defender_duty_relocated" },
+      { id: "legacy-castling", fen: "4k3/8/8/8/8/8/8/4K2R w K - 0 1", uci: "e1h1", projection: "rules.mobility.event.piece_destinations" },
+    ];
+    for (const value of specialMoves) {
+      const run = play(positionRun(value.id, value.fen), value.uci);
+      seed.create(run, owner);
+      // The original special-move fact remains real even when one counterfactual
+      // makes its whole opportunity population unavailable at the current revision.
+      expect(localSemanticEventClosure(run.nodes[0]!.fen, value.uci, run.nodes[1]!.fen).events)
+        .toContainEqual(expect.objectContaining({ projection: { id: value.projection, version: 1 } }));
+    }
     seed.create(play(positionRun("legacy-white-pawn", "4k3/8/8/2PP4/2P5/8/8/4K3 w - - 0 1"), "d5d6"), owner);
     seed.create(play(positionRun("legacy-black-pawn", "4k3/8/8/2p5/2pp4/8/8/4K3 b - - 0 1", "black"), "d4d3"), owner);
     const raw = new DatabaseSync(databasePath);
@@ -188,9 +219,18 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
       const result = application!.longitudinal.read("owner", parseLongitudinalReadQuery({ learnerId: "owner", derivationRev: OBSERVATION_DERIVATION_REV, through: { kind: "all_complete" }, filter: {} }));
       return result.kind === "complete" ? result : undefined;
     });
-    expect(preexisting.cuts).toEqual(["legacy-black-pawn", "legacy-castling", "legacy-promotion", "legacy-white-pawn", "preexisting"].map(runId => ({ kind: "complete", runId, requestedSeq: 2, completedSeq: 2, derivedRev: OBSERVATION_DERIVATION_REV })));
-    expect(preexisting.observations).toContainEqual(expect.objectContaining({ runId: "legacy-castling", projectionId: "rules.mobility.event.piece_destinations", occurred: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
-    expect(preexisting.observations).toContainEqual(expect.objectContaining({ runId: "legacy-promotion", projectionId: "rules.tactic.event.defender_duty_relocated", occurred: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
+    const completedJobs = new DatabaseSync(databasePath);
+    try {
+      expect(preexisting.cuts).toEqual(["legacy-black-pawn", "legacy-castling", "legacy-promotion", "legacy-white-pawn", "preexisting"].map(runId => ({
+        kind: "complete", runId, requestedSeq: 2, completedSeq: 2, derivedRev: OBSERVATION_DERIVATION_REV,
+        sourceDigest: (completedJobs.prepare("SELECT requested_source_digest FROM learner_observation_jobs WHERE run_id=?").get(runId) as { requested_source_digest: string }).requested_source_digest,
+      })));
+    } finally { completedJobs.close(); }
+    for (const value of specialMoves) {
+      expect(decisionPopulation(value.fen, value.uci)).toEqual({ kind: "unavailable", reason: "population_incomplete" });
+      expect(preexisting.observations.filter(row => row.runId === value.id)).toEqual([]);
+      expect(preexisting.denominators).toContainEqual(expect.objectContaining({ runId: value.id, decisions: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
+    }
     for (const runId of ["legacy-white-pawn", "legacy-black-pawn"]) {
       const pawnRows = preexisting.observations.filter(row => row.runId === runId && row.projectionId === "rules.pawn.event.dynamics");
       expect(pawnRows.length).toBeGreaterThan(0);
@@ -278,7 +318,7 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     for (const id of ["long-1", "long-2", "long-3"]) {
       seed.createImportedRun(importedRun(id, moves), owner, id, {
         runId: id, sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"e".repeat(64)}`, headers: {}, result: "*",
-        pgn: "fixed corpus", licenceNote: "fixture", importedAt: AT,
+        pgn: "fixed corpus", licenceNote: "fixture", importedAt: AT, clockDocument: null,
       } as never);
     }
     seed.close();
@@ -298,11 +338,21 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     // The thread handed the claim back at a decision checkpoint rather than finishing it.
     expect(closing.longitudinal.progress()).toMatchObject({ abandoned: 1 });
     expect(jobs().find((job) => job.run_id === inFlight)?.state).toBe("running");
+    const abandoned = new DatabaseSync(databasePath, { readOnly: true });
+    try {
+      for (const table of ["learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations"]) {
+        expect(abandoned.prepare(`SELECT count(*) AS n FROM ${table} WHERE run_id=?`).get(inFlight), table).toEqual({ n: 0 });
+      }
+    } finally { abandoned.close(); }
 
     // Restart on the same file: the abandoned lease is re-leased at once and every job completes.
     application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
     await until(() => jobs().every((job) => job.state === "complete") ? true : undefined, 110_000);
     expect(jobs()).toEqual([{ run_id: "long-1", state: "complete" }, { run_id: "long-2", state: "complete" }, { run_id: "long-3", state: "complete" }]);
+    const resumed = new DatabaseSync(databasePath, { readOnly: true });
+    try {
+      for (const sourceKind of ["native_incidence", "condition_relation"]) expect(Number(resumed.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id=? AND source_kind=?").get(inFlight, sourceKind)!.n), sourceKind).toBeGreaterThan(0);
+    } finally { resumed.close(); }
   }, 180_000);
 
   it("supervises the real thread: crash marks degraded; drain waits and closes", async () => {
@@ -347,6 +397,8 @@ describe("operator doors and packaging", { timeout: 120_000 }, () => {
     expect(JSON.parse(first.stdout.trim().split("\n").at(-1)!)).toMatchObject({ event: "longitudinal_worker_once", claimed: 1, completed: 1, failed: 0 });
     const database = new DatabaseSync(databasePath);
     expect(database.prepare("SELECT run_id, state FROM learner_observation_jobs ORDER BY run_id").all()).toEqual([{ run_id: "one", state: "complete" }, { run_id: "two", state: "pending" }]);
+    for (const sourceKind of ["native_incidence", "condition_relation"]) expect(Number(database.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id='one' AND source_kind=?").get(sourceKind)!.n), sourceKind).toBeGreaterThan(0);
+    expect(database.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id='two'").get()).toEqual({ n: 0 });
     database.close();
     const rebuild = bundle("longitudinal-rebuild.ts");
     const clean = spawnSync(process.execPath, [rebuild, "--database", databasePath], { encoding: "utf8", cwd: ROOT });
@@ -391,7 +443,7 @@ describe("criterion 14 — reachability boundaries", () => {
 
   it("keeps the semantic executor out of the HTTP process module graph", () => {
     const http = closure("main.ts");
-    for (const forbidden of ["longitudinal-projector.ts", "longitudinal-worker-core.ts", "longitudinal-worker-thread.ts", "in-memory-test-application.ts", "longitudinal-test-support.ts"]) {
+    for (const forbidden of ["longitudinal-projector.ts", "longitudinal-worker-core.ts", "longitudinal-worker-thread.ts", "in-memory-test-application.ts", "longitudinal-test-support.ts", "profile-subject-facts.ts"]) {
       expect(http.has(forbidden), forbidden).toBe(false);
     }
     expect(http.has("longitudinal-worker.ts")).toBe(true);
@@ -417,9 +469,11 @@ describe("criterion 14 — reachability boundaries", () => {
       expect([...reach].filter((name) => name.startsWith("rating")), module).toEqual([]);
     }
     // No production module outside the store/storage/account inventory reads the tables directly.
-    const readers = [...sources.entries()].filter(([name, text]) => /learner_observations|learner_observation_denominators|learner_structure_stats|learner_observation_jobs/u.test(text)).map(([name]) => name).sort();
+    const readers = [...sources.entries()].filter(([name, text]) => /learner_observations|learner_observation_denominators|learner_structure_stats|learner_game_facts|learner_observation_jobs/u.test(text)).map(([name]) => name).sort();
     // account-import.ts names the four tables only to declare them re-derived (never copied) on import.
-    expect(readers).toEqual(["account-data.ts", "account-import.ts", "longitudinal-store.ts", "storage.ts"]);
+    expect(readers).toEqual(["account-data.ts", "account-import.ts", "longitudinal-store.ts", "profile-subject-facts-storage.ts", "storage.ts"]);
+    // The extra module declares SQL/decodes literal rows; it opens/prepares/executes no database.
+    expect(sources.get("profile-subject-facts-storage.ts")).not.toMatch(/\.(?:prepare|exec)\s*\(/u);
   });
 });
 

@@ -11,6 +11,7 @@ import { corpusPageEvidence, evidenceReferenceEvidence, humanSplitPageEvidence, 
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { pivotalMarkerEvidenceItems } from "./pivotal.js";
 import { declareStructuralReadingEvidence, declareTransitionReadingEvidence } from "./reading-evidence.js";
+import { STRUCTURAL_DETAIL_KINDS } from "./structural-reading-detail.js";
 import {
   PRESENTATION_ADAPTERS,
   adapterComponents,
@@ -18,12 +19,17 @@ import {
   assertPresentationText,
   parseComponentValue,
   parsePresentationReceipt,
+  factStatementOperand,
+  presentationDigest,
   presentEvidenceItems,
   presentedSentence,
   serializePresentedEvidence,
   type PresentedEvidenceItem,
+  type PresentationReceipt,
 } from "./presentation-contract.js";
-import { CONSUMER_FACT_RENDERERS, PRESENTATION_CONSUMER_CLASSES, STRUCTURED_DOCUMENT_SCHEMAS, presentationConsumerClass } from "./presentation-consumer-adapters.js";
+import { CONSUMER_FACT_RENDERERS, PRESENTATION_CONSUMER_CLASSES, STRUCTURED_DOCUMENT_SCHEMAS, consumerAdapterSpecs, presentationConsumerClass } from "./presentation-consumer-adapters.js";
+import { inspectorSourcePresentationKit } from "./testing/inspector-source-presentation-kit.js";
+import { registeredShapeFixture } from "./testing/registered-shape-fixture.js";
 import { branchPath } from "./branch-path.js";
 import { compareBranches } from "./compare.js";
 import { comparisonNarrative } from "./compare-strips.js";
@@ -48,8 +54,8 @@ const covered = new Set<string>();
 const ref = (id: string) => ({ id, version: 1 });
 
 /** Presents one consumer view, round-trips the receipt and checks every sentence. */
-function present(consumer: string, evidence: readonly DeclaredEvidence<unknown>[]): readonly PresentedEvidenceItem[] {
-  const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref(consumer), evidence));
+function present(consumer: string, evidence: readonly DeclaredEvidence<unknown>[], version = 1): readonly PresentedEvidenceItem[] {
+  const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version }, evidence));
   const parsed = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
   expect(parsed.map(presentedSentence)).toEqual(items.map(presentedSentence));
   for (const item of parsed) {
@@ -58,11 +64,16 @@ function present(consumer: string, evidence: readonly DeclaredEvidence<unknown>[
     for (const pattern of FORBIDDEN) expect(sentence, `${consumer} × ${item.adapter.projection.id}: ${sentence}`).not.toMatch(pattern);
     // The citation's registered revision label is the one versioned token a learner sees (reported upstream).
     if (item.component.id !== "citation") expect(sentence, sentence).not.toMatch(VERSION_TOKEN);
-    covered.add(`${consumer}@1 × ${item.adapter.projection.id}@${item.adapter.projection.version}`);
+    covered.add(`${consumer}@${version} × ${item.adapter.projection.id}@${item.adapter.projection.version}`);
   }
   return parsed;
 }
 const sentences = (items: readonly PresentedEvidenceItem[]): readonly string[] => items.map(presentedSentence);
+
+function redigestReceipt(receipt: PresentationReceipt): PresentationReceipt {
+  const items = receipt.items.map(({ componentDigest: _digest, ...body }) => ({ ...body, componentDigest: presentationDigest("presentation.component@1", body) }));
+  return { ...receipt, items, digest: presentationDigest("presentation.receipt@1", items) };
+}
 
 function run(id: string, startFen = INITIAL): DrillRun {
   return createRun({ id, packId: "p", packDigest: digest, startFen, seed: 1, createdAt: at, policyConfig });
@@ -75,16 +86,79 @@ function play(start: DrillRun, moves: readonly string[]): DrillRun {
 const castled = () => play(run("consumer-castle"), ["e2e4", "e7e5", "g1f3", "b8c6", "f1c4", "f8c5", "e1g1"]);
 
 describe("consumer adapters: position guidance, board sight and the Inspector structure", () => {
+  it("D3948 retains wire validators for every consumer-group fact/caption declaration", () => {
+    // Inventory construction only: this kit neither mints source evidence nor exercises payloads.
+    const specs = consumerAdapterSpecs(inspectorSourcePresentationKit);
+    const textSpecs = specs.filter(spec => adapterComponents(spec).some(id => id === "fact_statement" || id === "square_set"));
+    expect(textSpecs.length).toBeGreaterThan(0);
+    for (const spec of textSpecs) {
+      const actual = PRESENTATION_ADAPTERS.find(entry => entry.consumer.id === spec.consumer.id && entry.consumer.version === spec.consumer.version
+        && entry.projection.id === spec.projection.id && entry.projection.version === spec.projection.version);
+      expect(actual, `${spec.consumer.id} × ${spec.projection.id}`).toBeDefined();
+      expect(actual!.validateWireComponent).toBeTypeOf("function");
+    }
+  });
+
+  it("D3948 rejects a sibling pivotal kind using the same valid renderer and convention", () => {
+    const game = castled();
+    const evidence = pivotalMarkerEvidenceItems(game, game.activeCursor.branchId).find(item => item.projection.id === "derived.pivotal.irreversibility");
+    expect(evidence).toBeDefined();
+    const wire = serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 2 }, [evidence!])));
+    expect(wire.items).toHaveLength(1);
+    const items = wire.items.map(item => ({ ...item, component: { id: "fact_statement" as const,
+      operand: factStatementOperand("consumer.pivotal_marker@1", "declared_convention", "board-rules@1", { kind: "option_collapse", color: "black", priorCount: 12, count: 2, nextCount: 1 }) } }));
+    expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/source|kind/u);
+  });
+
+  it.each(["renderer", "binding", "convention", "kind"] as const)("D3948 binds structural fact and nested board caption %s to their declared source", field => {
+    const evidence = declareStructuralReadingEvidence({ fen: IQP }).find(item => item.projection.id === "rules.structural.reading.king_zone");
+    expect(evidence).toBeDefined();
+    for (const consumer of ["board.selected_square_sight"]) {
+      const wire = serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref(consumer), [evidence!])));
+      expect(wire.items).toHaveLength(1);
+      expect(() => parsePresentationReceipt(wire)).not.toThrow();
+      const items = wire.items.map(item => {
+        const original = item.component.id === "square_set" ? item.component.operand.caption : item.component.id === "fact_statement" ? item.component.operand : undefined;
+        if (original?.rendererId !== "consumer.structural_squares@1") throw new Error("Expected actual structural statement/caption");
+        const operand = field === "renderer"
+          ? factStatementOperand("play.castling_rights@1", "declared_convention", "board-rules@1", { white: { kingside: false, queenside: false }, black: { kingside: false, queenside: false } })
+          : factStatementOperand("consumer.structural_squares@1", field === "binding" ? "recorded_run" : "declared_convention",
+            field === "convention" ? "pawn-structure@1" : "board-rules@1", { ...original.operands, kind: field === "kind" ? "open_file" : original.operands.kind });
+        const component = item.component.id === "square_set"
+          ? { ...item.component, operand: { ...item.component.operand, caption: operand } }
+          : { id: "fact_statement" as const, operand };
+        return { ...item, component };
+      });
+      expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items })), consumer).toThrow(/registered|source|fact/u);
+    }
+  });
+
+  it.each(["renderer", "binding", "convention"] as const)("D3948 binds voiced phase %s to the exact ordinary adapter", field => {
+    const game = castled(), node = branchPath(game, game.activeCursor.branchId).at(-1)!;
+    const evidence = positionGuidanceEvidence({ run: game, node }).filter(item => item.projection.id === "rules.phase.reading");
+    expect(evidence).toHaveLength(1);
+    const wire = serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("guidance.deterministic"), evidence)));
+    expect(wire.items).toHaveLength(1);
+    const items = wire.items.map(item => ({ ...item, component: { id: "fact_statement" as const, operand: field === "renderer"
+      ? factStatementOperand("play.castling_rights@1", "declared_convention", "board-rules@1", { white: { kingside: false, queenside: false }, black: { kingside: false, queenside: false } })
+      : factStatementOperand("play.phase@1", field === "binding" ? "recorded_run" : "declared_convention", field === "convention" ? "board-rules@1" : "phase-bands@1", { phase: "opening" }) } }));
+    expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/registered|source|fact/u);
+  });
+
   it("presents structural readings as one fact's squares, lit on the board and listed in the Inspector", () => {
     const evidence = [...declareStructuralReadingEvidence({ fen: IQP }), ...declareStructuralReadingEvidence({ fen: MAROCZY })];
     const board = present("board.selected_square_sight", evidence.filter((item) => ((item.payload as { readonly squares?: readonly string[] }).squares ?? []).length > 0));
-    const inspector = present("inspector.position_structure", evidence);
+    const detailed = [IQP, MAROCZY].flatMap(fen => [
+      ...STRUCTURAL_DETAIL_KINDS.flatMap<DeclaredEvidence<unknown>>(kind => invokeEvidenceValueRoute(`rules.structural.reading.${kind}@2`, { fen })),
+      ...invokeEvidenceValueRoute("rules.structural.reading.named_structure@2", { fen }),
+    ]);
+    const inspector = present("inspector.position_structure", detailed, 2);
     expect(board.length).toBeGreaterThan(3);
     expect(board.every((item) => item.component.id === "square_set")).toBe(true);
     expect(inspector.every((item) => item.component.id === "fact_statement")).toBe(true);
-    expect(sentences(inspector)).toContain("Position reading: open file.");
+    expect(sentences(inspector)).toContain("The c-file is open: neither side has a pawn on it.");
     expect(sentences(inspector)).toContain("Recognized pawn structure: Maroczy Bind (pawns on c4 and e4).");
-    expect(sentences(inspector)).toContain("Position reading: isolated pawn.");
+    expect(sentences(inspector)).toContain("White has an isolated pawn on the d-file.");
   });
 
   it("voices phase, pack phase, named structure, endgame type, pivotal markers and authored claims", () => {
@@ -106,8 +180,28 @@ describe("consumer adapters: position guidance, board sight and the Inspector st
       expect(spoken.some((sentence) => / under the declared endgame convention\.$/u.test(sentence))).toBe(true);
       expect(spoken.some((sentence) => /Maroczy Bind/u.test(sentence))).toBe(true);
     }
-    present("board.pivotal_marker", pivotalMarkerEvidenceItems(castle, castle.activeCursor.branchId));
+    present("board.pivotal_marker", pivotalMarkerEvidenceItems(castle, castle.activeCursor.branchId).filter(item => item.payload.kind === "irreversibility" || item.payload.kind === "phase_change"), 2);
     present("board.selected_square_sight", maroczy.filter((item) => ((item.payload as { readonly squares?: readonly string[] }).squares ?? []).length > 0));
+  });
+
+  it("presents ordinary current registered-shape evidence using its exact successor adapter", async () => {
+    const { ShapeRegistry } = await import("../../../apps/server/src/shape-registry.js");
+    const registry = new ShapeRegistry(); await registry.add(registeredShapeFixture(), "community", "coach_one");
+    const game = play(run("ordinary-current-shape"), ["g1f3"]);
+    const builder = await registry.beginCurrentShapeScan(branchPath(game, game.activeCursor.branchId).map(({ id, fen }) => ({ id, fen })), new AbortController().signal);
+    for (;;) {
+      const step = registry.advanceCurrentShapeScan(builder);
+      if (step.kind === "complete") {
+        const evidence = invokeEvidenceValueRoute("theory.shapes.firing@3", { scan: step.scan }) as readonly DeclaredEvidence<unknown>[];
+        const items = present("theory.shape_firing", evidence, 2);
+        expect(items).toHaveLength(1); expect(presentedSentence(items[0]!)).toContain("Matched authored pattern");
+        expect(presentationConsumerClass("theory.shape_firing@2")).toBe("ordinary_presented");
+        expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => binding.consumer.id === "theory.shape_firing" && binding.consumer.version === 2).map(binding => binding.projection))
+          .toEqual([{ id: "theory.shapes.firing", version: 3 }]);
+        return;
+      }
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
   });
 
   it("renders every pivotal-marker arm in learner vocabulary", () => {
@@ -132,6 +226,30 @@ describe("consumer adapters: position guidance, board sight and the Inspector st
 });
 
 describe("consumer adapters: the Inspector's transitions, Explorer and human-move model", () => {
+  it.each(["kind", "direction", "subkind"] as const)("D3948 binds transition %s to the exact declared reading", field => {
+    const sources = declareTransitionReadingEvidence(field === "subkind"
+      ? { before: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", moveUci: "e4d5", after: "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2" }
+      : { before: "7k/8/8/3N4/4q1r1/8/8/K7 w - - 0 1", moveUci: "d5f6", after: "7k/8/5N2/8/4q1r1/8/8/K7 b - - 1 1" });
+    const evidence = sources.find(item => item.projection.id.startsWith(field === "subkind" ? "rules.transition.reading.move_irreversibility." : "rules.transition.reading.attacked_squares_changed."));
+    expect(evidence).toBeDefined();
+    const wire = serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("inspector.move_transition"), [evidence!])));
+    expect(wire.items).toHaveLength(1);
+    const items = wire.items.map(item => {
+      if (item.component.id !== "fact_statement") throw new Error("Expected genuine transition fact");
+      const original = item.component.operand;
+      if (field === "subkind") {
+        if (original.rendererId !== "consumer.irreversibility@1") throw new Error("Expected actual irreversibility");
+        return { ...item, component: { id: "fact_statement" as const, operand: factStatementOperand("consumer.irreversibility@1", "declared_convention", "board-rules@1", { subkind: original.operands.subkind === "castled" ? "clock_zeroed" : "castled" }) } };
+      }
+      if (original.rendererId !== "consumer.transition_count@1") throw new Error("Expected actual transition count");
+      return { ...item, component: { id: "fact_statement" as const, operand: factStatementOperand("consumer.transition_count@1", "declared_convention", "piece-geometry@1", {
+        ...original.operands, kind: field === "kind" ? "defended_squares_changed" : original.operands.kind,
+        direction: field === "direction" ? original.operands.direction === "gained" ? "lost" : "gained" : original.operands.direction,
+      }) } };
+    });
+    expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/source|kind|direction/u);
+  });
+
   it("states move-transition counts and irreversibility without grading", () => {
     const items = present("inspector.move_transition", declareTransitionReadingEvidence({
       before: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
@@ -199,6 +317,39 @@ describe("consumer adapters: the Inspector's transitions, Explorer and human-mov
 describe("consumer adapters: the evidence-reference sentence and the recorded readings", () => {
   const engine = { kind: "eval", source: "engine_validated", values: { centipawns: 35, perspective: "white", depth: 18, engineId: "stockfish-local", engineName: "Stockfish", engineVersion: "17" } } as const;
   const tablebase = { kind: "tablebase", source: "tablebase_exact", values: { category: "win", pieceCount: 4, dtz: 3 } } as const;
+
+  it.each([
+    { kind: "eval", values: { centipawns: 35 } },
+    { kind: "wdl", values: { win: 0.2, draw: 0.5, loss: 0.3 } },
+    { kind: "bestline", values: { movesUci: ["e2e4", "e7e5"] } },
+  ] as const)("D3948 retains the genuine model $kind presentation arm", reading => {
+    const packet = { ...reading, source: "human_model_predicted" as const };
+    const evidence = invokeEvidenceValueRoute("human.maia.event@1", { packet });
+    const items = present("runtime.evidence_ref", [evidence]);
+    expect(items).toHaveLength(1);
+    expect(items[0]!.component).toMatchObject({ id: "fact_statement", operand: { operands: { kind: reading.kind, reader: "model" } } });
+    expect(presentedSentence(items[0]!)).toContain("human-move model");
+  });
+
+  it("D4020 retains actual model packet admission but refuses unsupported exact-tablebase presentation", () => {
+    const packet = { ...tablebase, source: "human_model_predicted" as const };
+    const evidence = invokeEvidenceValueRoute("human.maia.event@1", { packet });
+    expect(evidence.projection).toEqual({ id: "human.maia.event", version: 1 });
+    expect(evidence.payload).toEqual(packet);
+    expect(() => presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("runtime.evidence_ref"), [evidence]))).toThrow(/source kind\/reader/u);
+  });
+
+  it.each(["kind", "reader"] as const)("D3948 binds an attached engine %s to its exact source", field => {
+    const evidence = evidenceReferenceEvidence("engine:source-owner", undefined, new Map([["engine:source-owner", engine]]))
+      .filter(item => item.projection.id === "live.stockfish.eval");
+    expect(evidence).toHaveLength(1);
+    const wire = serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, ref("runtime.evidence_ref"), evidence)));
+    const operand = factStatementOperand("consumer.attached_reading@1", "declared_convention", "recorded-engine@1", field === "kind"
+      ? { kind: "tablebase", category: "win", pieceCount: 4, dtz: 3 }
+      : { kind: "eval", reader: "model", score: { kind: "cp", value: 35, perspective: "white" }, bound: {} });
+    const items = wire.items.map(item => ({ ...item, component: { id: "fact_statement" as const, operand } }));
+    expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/source|kind|reader/u);
+  });
 
   it("renders the resolution and every attached reading kind in learner vocabulary", () => {
     const packets = [
@@ -327,17 +478,43 @@ describe("consumer adapters: author/operator structured documents (criterion 14)
   it("classifies each non-module consumer version and every module consumer exactly once", () => {
     const consumers = PRESENTATION_CONSUMER_CLASSES.map((row) => row.consumer);
     expect(new Set(consumers).size).toBe(consumers.length);
-    expect(PRESENTATION_CONSUMER_CLASSES.filter((row) => !row.consumer.startsWith("module.")).length).toBe(23);
+    const nonModule = PRESENTATION_CONSUMER_CLASSES.filter((row) => !row.consumer.startsWith("module."));
+    // Exact Maia and registered-shape successors coexist with all original twenty-three
+    // non-module consumer obligations and their truthful historical receipts.
+    expect(nonModule).toHaveLength(26);
+    expect(nonModule.filter(row => row.consumer !== "inspector.human_split@2" && row.consumer !== "theory.shape_firing@2" && row.consumer !== "review.recorded_clock@1")).toHaveLength(23);
+    expect(nonModule.find(row => row.consumer === "review.recorded_clock@1")).toEqual({
+      consumer: "review.recorded_clock@1", class: "ordinary_presented",
+      reachabilityAnchor: "packages/runtime/src/recorded-clock-review.ts", operation: "consumeRecordedClockEvidence",
+    });
+    expect(nonModule.find(row => row.consumer === "inspector.human_split@2")).toEqual({
+      consumer: "inspector.human_split@2", class: "inspector_presented",
+      reachabilityAnchor: "apps/server/src/inspector-maia.ts", operation: "consumeMaiaNodeDistribution",
+    });
+    expect(presentationConsumerClass("inspector.human_split@1")).toBe("inspector_presented");
+    expect(presentationConsumerClass("inspector.human_split@2")).toBe("inspector_presented");
+    expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => binding.consumer.id === "inspector.human_split"
+      && binding.consumer.version === 2).map(binding => binding.projection)).toEqual([{ id: "derived.maia.node_distribution", version: 1 }]);
     expect(presentationConsumerClass("inspector.corpus@2")).toBe("inspector_presented");
     expect(presentationConsumerClass("runtime.branch_decidedness@1")).toBe("non_presentational_operation");
     expect(presentationConsumerClass("runtime.queued_tablebase@1")).toBe("non_presentational_operation");
-    expect(presentationConsumerClass("module.full_inspector@1")).toBe("inspector_presented");
-    expect(presentationConsumerClass("module.review_map@1")).toBe("module_presented");
+    expect(presentationConsumerClass("module.full_inspector@2")).toBe("inspector_presented");
+    expect(presentationConsumerClass("module.full_inspector@1")).toBeUndefined();
+    expect(presentationConsumerClass("module.review_map@2")).toBe("module_presented");
   });
 
   it("reports the minted-pair coverage of this suite", () => {
-    const presented = PRESENTATION_ADAPTERS.filter((entry) => { const cls = presentationConsumerClass(`${entry.consumer.id}@${entry.consumer.version}`); return cls === "ordinary_presented" || cls === "inspector_presented" || cls === "author_operator_presented"; });
-    process.stderr.write(`consumer adapters minted from real evidence: ${covered.size} of ${presented.length} presented non-module pairs\n`);
-    expect(covered.size).toBeGreaterThan(60);
+    const presented = PRESENTATION_ADAPTERS.filter((entry) => {
+      const cls = presentationConsumerClass(`${entry.consumer.id}@${entry.consumer.version}`);
+      return !entry.consumer.id.startsWith("module.")
+        && (cls === "ordinary_presented" || cls === "inspector_presented" || cls === "author_operator_presented");
+    });
+    const declaredPairs = new Set(presented.map(entry => `${entry.consumer.id}@${entry.consumer.version} × ${entry.projection.id}@${entry.projection.version}`));
+    // This suite's actual sources only: never merge another suite or silently drop a foreign
+    // covered key by filtering the numerator against the declared population itself.
+    const mintedPairs = [...covered].filter(pair => !pair.startsWith("module."));
+    for (const pair of mintedPairs) expect(declaredPairs.has(pair), pair).toBe(true);
+    process.stderr.write(`consumer adapters minted from real evidence in this suite: ${mintedPairs.length} of ${declaredPairs.size} presented non-module pairs\n`);
+    expect(mintedPairs.length).toBeGreaterThan(60);
   });
 });

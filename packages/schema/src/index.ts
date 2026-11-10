@@ -1,5 +1,5 @@
 export const DRILL_RUN_SCHEMA_VERSION = "0.19" as const;
-export const DRILL_PACK_SCHEMA_VERSION = "0.32" as const;
+export const DRILL_PACK_SCHEMA_VERSION = "0.33" as const;
 export const DRILL_PACK_REQUIRED_FIELDS = Object.freeze([
   "id",
   "version",
@@ -13,7 +13,7 @@ export const DRILL_PACK_REQUIRED_FIELDS = Object.freeze([
   "provenance",
   "requires",
 ] as const);
-export const SHAPE_ENTRY_SCHEMA_VERSION = "0.3" as const;
+export const SHAPE_ENTRY_SCHEMA_VERSION = "0.4" as const;
 
 export type DrillRunSchemaVersion = typeof DRILL_RUN_SCHEMA_VERSION;
 export type DrillPackSchemaVersion = typeof DRILL_PACK_SCHEMA_VERSION;

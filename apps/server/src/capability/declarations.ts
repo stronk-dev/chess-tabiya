@@ -34,6 +34,7 @@ import type {
 import type { CompiledEvidenceManifest } from "@chess-tabiya/runtime";
 
 import { sha256Hex } from "./source-image.js";
+import { STRUCTURAL_CONVENTION_REFS } from "@chess-tabiya/schema/drill-pack";
 
 export interface ApplicabilityAuthority {
   readonly artifact: string;
@@ -280,10 +281,14 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
     if (draft === undefined) throw new TypeError(`CAPABILITY_DECLARATION_MISSING: ${subjectId} is referenced by a member dependency and is not declared`);
     return draft;
   };
-  const scope = new Set(manifest.consumers.filter((consumer) => (PACK_SCOPE_CONSUMERS as readonly string[]).includes(consumer.id)).flatMap((consumer) => consumer.accepts.map((ref) => ref.id)));
-  const addDependency = (from: string, to: string): void => {
-    const target = bySubject(to);
-    if (target.subject === "projection" && !scope.has(to)) throw new TypeError(`CAPABILITY_SCOPE_VIOLATION: ${from} depends on projection ${to}, which no pack-meaning consumer accepts`);
+  const scope = new Set(manifest.bindings.filter(binding => manifest.consumers.some(consumer =>
+    (PACK_SCOPE_CONSUMERS as readonly string[]).includes(consumer.id) && consumer.id === binding.consumer.id && consumer.version === binding.consumer.version
+    && consumer.accepts.some(ref => ref.id === binding.projection.id && ref.version === binding.projection.version)))
+    .map(binding => capabilityKey(capabilityId(binding.projection.id, binding.projection.version))));
+  const addDependency = (from: string, to: string, exactVersion?: number): void => {
+    const target = exactVersion === undefined ? bySubject(to) : drafts.get(capabilityKey(capabilityId(to, exactVersion)));
+    if (target === undefined) throw new TypeError(`CAPABILITY_DECLARATION_MISSING: ${to}@${exactVersion}`);
+    if (target.subject === "projection" && !scope.has(capabilityKey(target.id))) throw new TypeError(`CAPABILITY_SCOPE_VIOLATION: ${from} depends on projection ${capabilityKey(target.id)}, which no pack-meaning consumer accepts`);
     const draft = bySubject(from);
     if (!draft.dependsOn.some((existing) => capabilityKey(existing) === capabilityKey(target.id))) draft.dependsOn.push(target.id);
   };
@@ -292,7 +297,18 @@ export function buildCapabilityContract(inputs: DeclarationBuildInputs): BuiltCa
   for (const identity of authority.closedVocabulary.sourceInventory) {
     if (identity.schemaPointer === structuralUnion) {
       const predicate = `rules.structural.predicate.${String(identity.member)}`;
-      if (drafts.has(capabilityKey(capabilityId(predicate, 1))) && scope.has(predicate)) addDependency(`structuralFeature.${String(identity.member)}`, predicate);
+      // Absent-ref syntax still executes predicate1. Installing an optional successor must not
+      // repoint every existing pack/template to the numerically greatest projection version.
+      if (drafts.has(capabilityKey(capabilityId(predicate, 1)))) addDependency(`structuralFeature.${String(identity.member)}`, predicate, 1);
+    }
+    const selected = /^\/\$defs\/(structuralFeature|fileTemplateFeature|squareTemplateFeature)\/oneOf\/([0-9]+)\/properties\/conventionRef\/properties\/id$/u.exec(identity.schemaPointer);
+    if (selected !== null) {
+      const pair = Object.entries(STRUCTURAL_CONVENTION_REFS).find(([, ref]) => ref.id === identity.member);
+      const defs = (schema as { $defs: Record<string, { oneOf: { properties: { kind: { const: string } } }[] }> }).$defs;
+      if (pair === undefined || defs[selected[1]!]!.oneOf[Number(selected[2])]!.properties.kind.const !== pair[0]) throw new TypeError("CAPABILITY_CONVENTION_KIND_MISMATCH: optional ref does not select its exact feature kind");
+      const member = members.get(canonicalJson({ member: identity.member, schemaPointer: identity.schemaPointer }));
+      if (member === undefined) throw new TypeError("CAPABILITY_DECLARATION_MISSING: explicit structural convention member");
+      addDependency(member.id, `rules.structural.predicate.${pair[0]}`, 2);
     }
     if (identity.schemaPointer === "/$defs/fileTemplateFeature" || identity.schemaPointer === "/$defs/squareTemplateFeature") {
       const owner = identity.schemaPointer.split("/").at(-1)!;

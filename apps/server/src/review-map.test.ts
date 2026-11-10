@@ -6,8 +6,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import { afterEach, describe, expect, it, onTestFailed, vi } from "vitest";
-import { MODULE_CONSUMER_ACCEPTS, compileAssistanceRequest, compileModulePacket, parsePresentationReceipt, presentedSentence, recordedSemanticPath, renderMoveQualityGrade, type DrillRun, type MoveQualityGrade, type PresentationReceipt, type ModuleQueryPage } from "@chess-tabiya/runtime";
+import { afterEach, beforeEach, describe, expect, it, onTestFailed, vi } from "vitest";
+import { MODULE_CONSUMER_ACCEPTS, compileAssistanceRequest, compileModulePacket, parsePresentationReceipt, presentedSentence, presentedGradeMeasurementReport, recordedSemanticPath, renderMoveQualityGrade, type DrillRun, type MoveQualityGrade, type PresentationReceipt, type ModuleQueryPage } from "@chess-tabiya/runtime";
 import { RATED_OPPONENT_CALIBRATION } from "@chess-tabiya/runtime/rating";
 import { postcommitEdgeEvidence } from "../../../packages/runtime/src/postcommit-nudge.js";
 import { evidenceValueReceipt } from "../../../packages/runtime/src/evidence-contract.js";
@@ -17,9 +17,14 @@ import { parseUci } from "chessops/util";
 import { positionFromFen } from "../../../packages/runtime/src/chess.js";
 import { RECORDED_SEQUENCE_POSITIVES, RECORDED_SEQUENCE_HARD_NEGATIVES, RECORDED_ATTRACTION_FIVE, RECORDED_DEFLECTION_CHECK, RECORDED_CASTLING_ATTRACTION, RECORDED_CASTLING_CLEARANCE, RECORDED_CASTLING_DEFENDER } from "../../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
 import type { ReviewMap } from "../../web/src/lib/api.js";
+import { DrillApi } from "../../web/src/lib/api.js";
+import { requestReviewAnalyze, reviewAnalyzeTarget, type ReviewAnalyzeResult } from "../../web/src/lib/review-analyze.js";
+import { assertReviewMapResponse } from "../../web/src/lib/review-response.js";
+import { parseRecordedAnalyzeLineOperands } from "../../../packages/runtime/src/recorded-analyze-presentation.js";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
@@ -27,6 +32,8 @@ import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator } from "./review-evidence.js";
 import * as phaseSources from "./phase-source-composition.js";
+import { invokeEvidenceValueRoute } from "../../../packages/runtime/src/internal/evidence-value-routes.js";
+import { moduleDecisionStamp, parseFinalizedAssistanceV1 } from "@chess-tabiya/runtime";
 
 // A pasted broadcast-style PGN: third-party SAN glyphs outside comments, a NAG, and a third-party
 // eval comment. None of it may reach the review surface (§8).
@@ -50,8 +57,42 @@ function queryNudge(origin: string, cookie: string | undefined, runId: string, n
   });
 }
 
+/** The actual browser transport/driver: authenticate, confirm the saved target, strict-parse Full2. */
+function reviewApi(origin: string, cookie: string): DrillApi {
+  return new DrillApi(origin, (input, init) => {
+    const headers = new Headers(init?.headers); headers.set("cookie", cookie);
+    return fetch(input, { ...init, headers });
+  });
+}
+async function currentReview(origin: string, cookie: string, runId: string, branchId?: string): Promise<ReviewMap> {
+  const value = await reviewApi(origin, cookie).review(runId, branchId);
+  assertReviewMapResponse(value, { runId, ...(branchId === undefined ? {} : { branchId }) });
+  return value;
+}
+function analyzeRecorded(origin: string, cookie: string, review: ReviewMap, nodeId: string) {
+  return requestReviewAnalyze(reviewApi(origin, cookie), reviewAnalyzeTarget(review, nodeId), new AbortController().signal);
+}
+function recordedAnalyzeLine(result: ReviewAnalyzeResult) {
+  if (result.page.kind !== "page" || result.page.body.kind !== "source" || result.page.body.outcome.kind !== "available"
+    || result.page.items.length !== 1) throw new Error("Expected one actual available Analyze source component");
+  const item = result.page.items[0]!;
+  if (item.component.id !== "fact_statement") throw new Error("Expected registered Analyze fact statement");
+  const operands = parseRecordedAnalyzeLineOperands(item.component.operand.operands, "actual HTTP Analyze");
+  if (operands.kind !== "line") throw new Error("Expected attributed original Analyze line");
+  return { operands, sentence: presentedSentence(item), item };
+}
+/** Exercise server refusal directly rather than the client's preventive open-retry/root check. */
+function confirmRecordedTarget(origin: string, cookie: string, review: ReviewMap, nodeId: string, entryNodeId: string) {
+  const assistance = compileAssistanceRequest({ contextHint: review.workflowContext, preference: {
+    kind: "explicit", preset: "analysis", overrides: {}, moduleOverrides: { include: [], exclude: [] },
+  } });
+  return fetch(`${origin}/runs/${review.runId}/assistance`, { method: "POST", headers: { "content-type": "application/json", cookie },
+    body: JSON.stringify({ assistance, review: { branchId: review.branchId, nodeId, entryNodeId, decisionDigest: review.decision.digest } }) });
+}
+
 const recordedSequenceIds = new Set<string>(RECORDED_SEQUENCE_POSITIVES.map(value => value.projection));
-const admittedSequence = new Set(MODULE_CONSUMER_ACCEPTS.review_map.filter(ref => ref.version === 2 && recordedSequenceIds.has(ref.id)).map(ref => ref.id));
+const currentSequenceVersion = (id: string) => id === "derived.exchange.trade_completed" ? 2 : 3;
+const admittedSequence = new Set(MODULE_CONSUMER_ACCEPTS.review_map.filter(ref => ref.version === currentSequenceVersion(ref.id) && recordedSequenceIds.has(ref.id)).map(ref => ref.id));
 function sequencePgn(fen: string, moves: readonly string[]): string {
   const position = positionFromFen(fen);
   const line = moves.map(uci => {
@@ -124,6 +165,10 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
   let directory: string | undefined;
   let phase: (label: string) => void = () => {};
+  // These PGN-only software journeys own no authored pack/training/campaign catalogue. Keep
+  // the real application, validation, workers, SQLite, identity and HTTP; D3928's installed
+  // content/default-app proof remains separately held, including across the restart below.
+  beforeEach(() => { installEmptyApplicationCatalogues(); });
   // Detach this test's application and directory before awaiting close(): a teardown that outlives
   // its hook must never close or delete the next test's live database (D3300). close() is bounded by
   // the longitudinal drain grace, so the default hook budget holds.
@@ -269,13 +314,13 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
 
     const expected = path.events.filter(event => admittedSequence.has(event.projection.id));
     const observed = review.rows.flatMap(row => parsePresentationReceipt(row.packet)
-      .filter(item => item.adapter.projection.version === 2 && admittedSequence.has(item.adapter.projection.id))
+      .filter(item => item.adapter.projection.version === currentSequenceVersion(item.adapter.projection.id) && admittedSequence.has(item.adapter.projection.id))
       .map(item => ({ nodeId: row.nodeId, item })));
     for (const event of expected) {
       const digest = `sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`;
       const rendered = observed.filter(({ nodeId, item }) => nodeId === event.anchor.nodeId && item.evidenceRef?.evidenceDigest === digest);
       expect(rendered.length, `recorded ${event.projection.id} at ${event.anchor.nodeId}`).toBeGreaterThan(0);
-      expect(rendered.every(({ item }) => item.adapter.projection.id === event.projection.id && item.adapter.projection.version === 2)).toBe(true);
+      expect(rendered.every(({ item }) => item.adapter.projection.id === event.projection.id && item.adapter.projection.version === currentSequenceVersion(event.projection.id))).toBe(true);
     }
     for (const { nodeId, item } of observed) {
       expect(expected.some(event => event.anchor.nodeId === nodeId && event.projection.id === item.adapter.projection.id &&
@@ -309,7 +354,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
       const event = events[0]!;
       expect(event.anchor.nodeId).toBe(review.rows.at(-1)!.nodeId);
       for (const item of items) {
-        expect(item.evidenceRef?.projection).toEqual({ id: projection, version: 2 });
+        expect(item.evidenceRef?.projection).toEqual({ id: projection, version: 3 });
         expect(item.evidenceRef?.evidenceDigest).toBe(`sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`);
       }
       expect(presentedSentence(items[0]!)).toContain(`rook on ${value.before} moved to ${value.after}`);
@@ -341,7 +386,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
       expect(event.anchor.nodeId).toBe(review.rows.at(-1)!.nodeId);
       const rendered = items.filter(item => item.evidenceRef?.evidenceDigest === `sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`);
       expect(rendered.map(item => item.component.id)).toEqual(["square_set", "move_path"]);
-      expect(rendered.every(item => item.evidenceRef?.projection.version === 2)).toBe(true);
+      expect(rendered.every(item => item.evidenceRef?.projection.version === 3)).toBe(true);
       expect(rendered.map(presentedSentence).join(" ")).toContain((event.operands as { vacatedSquare: string }).vacatedSquare);
     }
     for (const row of review.rows.slice(0, -1)) expect(row.packet.items.some(item => item.adapter.projection.id === projection)).toBe(false);
@@ -369,7 +414,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     if (event !== undefined) {
       expect(event.anchor.nodeId).toBe(review.rows.at(-1)!.nodeId);
       for (const item of items) {
-        expect(item.evidenceRef?.projection).toEqual({ id: projection, version: 2 });
+        expect(item.evidenceRef?.projection).toEqual({ id: projection, version: 3 });
         expect(item.evidenceRef?.evidenceDigest).toBe(`sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`);
       }
       expect(items.map(presentedSentence).join(" ")).toContain(value.arrival);
@@ -393,7 +438,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const recovered = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
     expect(recovered.status).toBe(200);
     const review = await recovered.json() as ReviewMap;
-    expect(review.rows.some(row => parsePresentationReceipt(row.packet).some(item => item.adapter.projection.id === value.projection && item.adapter.projection.version === 2))).toBe(true);
+    expect(review.rows.some(row => parsePresentationReceipt(row.packet).some(item => item.adapter.projection.id === value.projection && item.adapter.projection.version === currentSequenceVersion(value.projection)))).toBe(true);
   });
 
   it.each([
@@ -441,7 +486,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const projection = "derived.tactic.check_zwischenzug_observed";
     const items = parsePresentationReceipt(review.rows[3]!.packet).filter(item => item.adapter.projection.id === projection);
     expect(items.map(item => item.component.id)).toEqual(value.emitted ? ["square_set", "move_path"] : []);
-    expect(items.every(item => item.evidenceRef?.projection.version === 2)).toBe(true);
+    expect(items.every(item => item.evidenceRef?.projection.version === 3)).toBe(true);
     for (const row of review.rows.slice(0, 3)) expect(row.packet.items.some(item => item.adapter.projection.id === projection)).toBe(false);
     expect(eventKinds(databasePath, runId)).toEqual(before);
     expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
@@ -469,7 +514,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });
     expect(presentedSentence(items[0]!)).toContain(value.text);
     expect(items[1]!.component).toMatchObject({ operand: { plies: [{}, {}, {}] } });
-    expect(items.every(item => item.evidenceRef?.projection.version === 2)).toBe(true);
+    expect(items.every(item => item.evidenceRef?.projection.version === 3)).toBe(true);
     for (const row of review.rows.slice(0, 2)) expect(row.packet.items.some(item => item.adapter.projection.id === value.projection)).toBe(false);
     expect(eventKinds(databasePath, runId)).toEqual(before);
     expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
@@ -498,7 +543,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });
     expect(presentedSentence(items[0]!)).toContain(value.text);
     expect(items[1]!.component).toMatchObject({ operand: { plies: [{}, {}, {}] } });
-    expect(items.every(item => item.evidenceRef?.projection.version === 2)).toBe(true);
+    expect(items.every(item => item.evidenceRef?.projection.version === 3)).toBe(true);
     for (const row of review.rows.slice(0, 2)) expect(row.packet.items.some(item => item.adapter.projection.id === "derived.tactic.sequence.defender_consequence")).toBe(false);
     const repeated = await (await ask()).json() as ReviewPayload;
     expect(repeated.rows[2]!.packet).toEqual(review.rows[2]!.packet);
@@ -648,9 +693,15 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(publicEvents).toHaveLength(privateEvents.length);
     expect(publicEvents.every(event => typeof event.data.payload?.values.centipawns === "number")).toBe(true);
     expect(JSON.stringify(page).match(/providerDelivery|providerLineDelivery|bodyBase64|bestMoveUci/u)?.[0]).toBeUndefined();
-    const analyze = await fetch(restartedOrigin + "/runs/" + runId + "/review-analysis?node=" + encodeURIComponent(target.nodeId), { headers: { cookie } });
-    expect(analyze.status).toBe(200);
-    expect(await analyze.json()).toMatchObject({ kind: "line", source: "bestline", entryNodeId: target.entryNodeId });
+    const restartedReview = await currentReview(restartedOrigin, cookie, runId, review.branchId);
+    const analyze = await analyzeRecorded(restartedOrigin, cookie, restartedReview, target.nodeId);
+    expect(analyze.target.entryNodeId).toBe(target.entryNodeId);
+    const line = recordedAnalyzeLine(analyze);
+    expect(line.item.adapter.projection).toEqual({ id: "derived.review.analysis_typed_pv", version: 1 });
+    expect(line.operands).toMatchObject({ sourceArm: "typed_pv", engine: { id: "stockfish-analysis", name: "Mock Stockfish", version: "mock-1" }, bound: { kind: "movetime", requestedMs: 100 } });
+    expect(line.operands.line.length).toBeGreaterThan(0);
+    expect(line.sentence).toContain("reported this principal variation");
+    expect((await fetch(restartedOrigin + "/runs/" + runId + "/review-analysis?node=" + encodeURIComponent(target.nodeId), { headers: { cookie } })).status).toBe(404);
     expect(get).not.toHaveBeenCalled();
     expect(readSnapshot()).toBe(stored);
   });
@@ -721,14 +772,29 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(review.rows).toHaveLength(1);
     const sentence = review.rows[0]!.grade!.sentence;
     expect(sentence).toMatch(/^Blunder/u);
-    for (const part of ["+1.00 (59.1%)", "−1.00 (40.9%)", "18.2 win-points", "threshold of 15", "grade-convention@1/imported_analysis"]) expect(sentence).toContain(part);
-    // The Review row's grade is a separately admitted full sentence, not part of its
-    // compiler-family packet. Do not mistake that established wire shape for missing adoption.
+    for (const part of ["+1.00 (59.1%)", "−1.00 (40.9%)", "18.2 win-points", "threshold of 15", "single move-loss convention, version 2"]) expect(sentence).toContain(part);
+    expect(parsePresentationReceipt(review.rows[0]!.packet).filter(item => item.adapter.projection.id === "derived.grade.move_quality").map(presentedSentence)).toEqual([sentence]);
     const nudge = (JSON.parse(nudgeBytes) as { page: ModuleQueryPage }).page.packets.find(packet => packet.module === "postcommit_nudge")!;
     expect(nudge).toBeDefined();
     const node = saved.nodes.find(item => item.id === nodeId)!;
     const parent = saved.nodes.find(item => item.id === node.parentId)!;
-    const admitted = compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: "learner", session: "imported", mode: "admit", evidence: postcommitEdgeEvidence(saved, parent, node) });
+    const intent = compileAssistanceRequest({ contextHint: "imported", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+    const configured = await fetch(`${origin}/runs/${runId}/assistance`, { method: "POST", headers: { cookie, "content-type": "application/json" }, body: JSON.stringify(intent) });
+    expect(configured.status).toBe(200);
+    const assistance = parseFinalizedAssistanceV1((await configured.json() as { assistance: unknown }).assistance);
+    const sourceStorage = new SQLiteRunStorage(databasePath, { onMigration: () => {} });
+    let gradeValue;
+    try {
+      const learner = sourceStorage.learnerByHandle(handle)!;
+      const service = new RunService(sourceStorage), signal = new AbortController().signal;
+      const context = service.resolveGradeRecordedContext(runId, { learnerId: learner.id, handle }, assistance,
+        { branchId: saved.activeCursor.branchId, throughNodeId: nodeId, decisionDigest: moduleDecisionStamp(saved).digest, timing: "post_commit" }, signal);
+      const source = service.resolveGradeMoveSource(context, { nodeId, signal });
+      const result = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: source });
+      if (result.kind !== "available" || result.value.length !== 1) throw new Error("Actual recorded grade source unavailable");
+      gradeValue = result.value[0]!;
+    } finally { sourceStorage.close(); }
+    const admitted = compileModulePacket({ module: "postcommit_nudge", timing: "post_commit", role: "learner", session: "imported", mode: "admit", evidence: [...postcommitEdgeEvidence(saved, parent, node), gradeValue] });
     expect(admitted.kind).toBe("packet");
     if (admitted.kind !== "packet") throw new Error("Nudge admission refused");
     const grade = admitted.facts.find(fact => fact.projection.id === "derived.grade.move_quality")!;
@@ -736,11 +802,13 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const gradeSentence = renderMoveQualityGrade(grade.evidence.payload as MoveQualityGrade);
     expect(gradeSentence).toMatch(/^Blunder/u);
     expect(gradeSentence).toContain("18.2 win-points");
-    expect(gradeSentence).toContain("grade-convention@1/drill");
-    // D3767: admission is real, but current state-fact selection consumes the two slots.
-    // This is a recorded product gap, not permission to raise the budget or force a grade.
+    expect(gradeSentence).toBe(sentence);
+    // D3767/§4b: actual selected Nudge is compact; its same-item full report still equals Review.
     expect(nudge.budget.after.facts).toBe(2);
-    expect(parsePresentationReceipt(nudge.receipt).some(item => item.adapter.projection.id === "derived.grade.move_quality")).toBe(false);
+    const selectedGrade = parsePresentationReceipt(nudge.receipt).filter(item => item.adapter.projection.id === "derived.grade.move_quality");
+    expect(selectedGrade).toHaveLength(1);
+    expect(presentedSentence(selectedGrade[0]!)).toBe("Blunder: the recorded evaluation lost 18.2 win-points.");
+    expect(presentedGradeMeasurementReport(selectedGrade[0]!)).toMatchObject({ kind: "available", sentence });
 
     // Vary an actual populated, authenticated rating record, not an ignored extra function arg.
     const database = new DatabaseSync(databasePath);
@@ -776,15 +844,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "review_remainder");
     const runId = await importReviewedGame(origin, cookie, "writer-remainder");
-    interface Remainder {
-      readonly branchId: string;
-      readonly rows: readonly { readonly nodeId: string; readonly entryNodeId: string; readonly label: string }[];
-      readonly evalGraph: { readonly kind: string; readonly side: string; readonly evaluated: number; readonly points: readonly { readonly kind: string; readonly percent?: number }[] };
-      readonly compareDoors: readonly { readonly entryNodeId: string; readonly branchIds: readonly string[]; readonly omitted: number }[];
-      readonly openRetryEntryNodeId: string | null;
-    }
-    const read = async (): Promise<Remainder> => await (await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } })).json() as Remainder;
-    const analyze = (nodeId: string) => fetch(`${origin}/runs/${runId}/review-analysis?node=${encodeURIComponent(nodeId)}`, { headers: { cookie } });
+    const read = () => currentReview(origin, cookie, runId);
 
     phase("read Review map");
     const review = await read();
@@ -802,21 +862,24 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const events = eventKinds(databasePath, runId);
     const target = review.rows[10]!;
     phase("explicit Analyze request");
-    const revealed = await analyze(target.nodeId);
-    expect(revealed.status, await revealed.clone().text()).toBe(200);
+    const revealed = await analyzeRecorded(origin, cookie, review, target.nodeId);
     // The Review pass recorded this position's bounded line (stockfish.principal_variation@1) beside its
     // evaluation; the reveal re-derives it, attributed to the actual engine and the requested bound.
     // The evaluation delivery itself still carries no best move or PV (refusal 7).
-    const line = await revealed.json() as { kind: string; sentence: string; caveat: string; entryNodeId: string; engineId: string; bound: unknown; moves: readonly string[] };
+    const line = recordedAnalyzeLine(revealed);
     phase("Analyze body read");
-    expect(line).toMatchObject({ kind: "line", source: "bestline", entryNodeId: target.entryNodeId, engineId: "stockfish-analysis", bound: { requestedMovetimeMs: 100 } });
-    expect(line.moves).toHaveLength(2);
-    expect(line.sentence).toBe(`Mock Stockfish mock-1 (100 ms search) reported this principal variation from the position before ${target.label}: ${line.moves.join(" ")}.`);
-    expect(line.caveat).toMatch(/It is not advice/u);
+    expect(revealed.target.entryNodeId).toBe(target.entryNodeId);
+    expect(line.item.adapter.projection).toEqual({ id: "derived.review.analysis_typed_pv", version: 1 });
+    expect(line.operands).toMatchObject({ sourceArm: "typed_pv", engine: { id: "stockfish-analysis", name: "Mock Stockfish", version: "mock-1" }, bound: { kind: "movetime", requestedMs: 100 } });
+    expect(line.operands.line).toHaveLength(2);
+    const san = line.operands.line.map((move, index) => move.side === "white" || index === 0 ? `${move.fullmove}${move.side === "white" ? "." : "…"} ${move.san}` : move.san).join(" ");
+    expect(line.sentence).toContain(`Mock Stockfish mock-1 (100 ms search) reported this principal variation from the position before ${target.label}: ${san}.`);
+    expect(line.sentence).toContain("It is not advice");
     expect(tableSnapshot(databasePath)).toEqual(tables);
     expect(eventKinds(databasePath, runId)).toEqual(events);
-    expect((await analyze(review.rows[0]!.entryNodeId)).status).toBe(400);
-    expect((await fetch(`${origin}/runs/${runId}/review-analysis`, { headers: { cookie } })).status).toBe(400);
+    expect((await confirmRecordedTarget(origin, cookie, review, review.rows[0]!.entryNodeId, review.rows[0]!.entryNodeId)).status).toBe(400);
+    expect((await fetch(`${origin}/runs/${runId}/review-analysis`, { headers: { cookie } })).status).toBe(404);
+    expect((await fetch(`${origin}/runs/${runId}/review-analysis?node=${encodeURIComponent(target.nodeId)}`, { headers: { cookie } })).status).toBe(404);
 
     // Retry from that position (as the Review Map does): the reveal is withheld while the retry is open.
     const post = (path: string, body: unknown) => fetch(`${origin}${path}`, { method: "POST", headers: { "content-type": "application/json", cookie, "x-writer-id": "writer-remainder" }, body: JSON.stringify(body) });
@@ -828,10 +891,14 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(opened.openRetryEntryNodeId).toBe(target.entryNodeId);
     // §4: an empty retry is not a second line yet.
     expect(opened.compareDoors).toEqual([]);
-    const withheld = await (await analyze(target.nodeId)).json() as { kind: string; sentence: string };
-    expect(withheld).toMatchObject({ kind: "withheld" });
+    const refused = await confirmRecordedTarget(origin, cookie, opened, target.nodeId, target.entryNodeId);
+    // Existing assistance refusals use409; role FORBIDDEN alone uses403.
+    expect(refused.status).toBe(409);
+    const withheld = await refused.json();
+    expect(withheld).toMatchObject({ error: { code: "ASSISTANCE_WITHHELD" } });
     expect(JSON.stringify(withheld)).not.toMatch(/"moves"|mock-evidence|Mock Stockfish/u);
-    expect((await (await analyze(review.rows[12]!.nodeId)).json() as { kind: string }).kind).toBe("line");
+    const otherLine = recordedAnalyzeLine(await analyzeRecorded(origin, cookie, opened, review.rows[12]!.nodeId));
+    expect(otherLine.operands.sourceArm).toBe("typed_pv");
 
     // Play one move on the retry: the compare door appears, and the shipped compare accepts it verbatim.
     phase("commit retry move");

@@ -1,9 +1,9 @@
-import { parsePresentationReceipt, presentedSentence, reviewMoveNumber, reviewText } from "@chess-tabiya/runtime/client";
+import { parsePresentationReceipt, presentedSentence, reviewMoveNumber, reviewText, WORKFLOW_CONTEXTS } from "@chess-tabiya/runtime/client";
+import { parseReviewDecision } from "./review-analyze.js";
 
-import type { ReviewAnalysisPage, ReviewMap } from "./api.js";
+import type { ReviewMap } from "./api.js";
 
 const GRAPH_KINDS = new Set(["complete", "partial", "abstained"]);
-const ANALYSIS_ABSTENTIONS = new Set(["none", "unattributed", "withheld"]);
 const SIDES = new Set(["white", "black"]);
 const CLASSES = new Set(["inaccuracy", "mistake", "blunder"]);
 const ACCURACY_KINDS = new Set(["rendered", "abstained", "no_decisions"]);
@@ -21,9 +21,9 @@ export function isGroundedGradeSentence(klass: string, sentence: string): boolea
   return sentence.startsWith(`${word} — `)
     && /[+−]\d+\.\d{2} \(\d+\.\d%\)|mate #\d+/u.test(sentence)
     && /a drop of \d+\.\d win-points/u.test(sentence)
-    && /\(grade-convention@\d+\/(?:review|imported_analysis)\)\.$/u.test(sentence);
+    && /requested (?:depth \d+|\d+ (?:ms|nodes)); single move-loss convention, version 2\)\.$/u.test(sentence)
+    && /recorded provider delivery, generation \d+|pinned pack report, Threads \d+, Hash \d+ MiB, MultiPV 1/u.test(sentence);
 }
-
 function fail(message: string): never {
   throw new TypeError(`Invalid review map response: ${message}`);
 }
@@ -32,6 +32,8 @@ function fail(message: string): never {
 export function assertReviewMapResponse(value: unknown, subject: { readonly runId: string; readonly branchId?: string }): asserts value is ReviewMap {
   const body = record(value) ?? fail("not an object");
   if (body.runId !== subject.runId) fail("runId mismatch");
+  parseReviewDecision(body.decision);
+  if (!(WORKFLOW_CONTEXTS as readonly unknown[]).includes(body.workflowContext)) fail("workflow context");
   if (subject.branchId !== undefined && body.branchId !== subject.branchId) fail("branchId mismatch");
   if (!text(body.branchId) || !SIDES.has(body.side as string) || typeof body.ready !== "boolean" || !natural(body.pendingEvidence)) fail("header fields");
   if (!text(body.storyTitle)) fail("storyTitle");
@@ -56,12 +58,20 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
     // receipt whose equivalent sentences are exactly the tail of the row's facts.
     let packet: ReturnType<typeof parsePresentationReceipt>;
     try { packet = parsePresentationReceipt(row.packet); } catch (error) { return fail(`row ${index} packet: ${error instanceof Error ? error.message : String(error)}`); }
+    for (const item of packet) {
+      if (item.adapter.consumer.id !== "module.review_map" || item.adapter.consumer.version !== 2) fail(`row ${index} packet has a foreign consumer`);
+      const objectiveSource = item.adapter.projection.id === "run.record.objective_transition";
+      const objectiveRenderer = item.component.id === "fact_statement" && item.component.operand.rendererId === "review.objective_transition@1";
+      if ((objectiveSource || objectiveRenderer) && (!objectiveSource || item.adapter.projection.version !== 2 || !objectiveRenderer)) fail(`row ${index} objective has a different renderer or source`);
+    }
     const facts = row.facts as readonly string[];
     const tail = facts.slice(facts.length - packet.length);
     if (packet.length > facts.length || packet.some((item, position) => presentedSentence(item) !== tail[position])) fail(`row ${index} packet sentences are not its facts`);
     if (row.grade !== undefined) {
       const grade = record(row.grade) ?? fail(`row ${index} grade`);
       if (!CLASSES.has(grade.klass as string) || !text(grade.sentence) || !isGroundedGradeSentence(grade.klass as string, grade.sentence as string)) fail(`row ${index} grade is not a grounded sentence`);
+      const admitted = packet.filter(item => item.component.id === "fact_statement" && item.component.operand.rendererId === "grade.move_quality@2");
+      if (admitted.length !== 1 || presentedSentence(admitted[0]!) !== grade.sentence) fail(`row ${index} grade does not match its complete typed component`);
     }
   });
   if (!Array.isArray(body.moments) || (body.moments as unknown[]).length > 3) fail("moments");
@@ -93,6 +103,7 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
     if (point.nodeId !== row.nodeId || point.ply !== row.ply || !text(point.sentence)) fail(`evalGraph point ${index} identity`);
     if (point.kind === "evaluated") {
       if (typeof point.percent !== "number" || point.percent < 0 || point.percent > 100) fail(`evalGraph point ${index} percent`);
+      if (typeof point.joinFromPrevious !== "boolean" || point.joinFromPrevious && (index === 0 || record((graph.points as unknown[])[index - 1])?.kind !== "evaluated")) fail(`evalGraph point ${index} has an invalid comparison segment`);
       drawn += 1;
     } else if (point.kind !== "missing" || "percent" in point) fail(`evalGraph point ${index} draws without a recorded evaluation`);
   });
@@ -111,21 +122,4 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
 
   // §7 / criterion 12: the ordinary map carries no engine line; only the explicit Analyze action does.
   if (/"(?:bestMoveUci|movesUci|pv|bestline)":/u.test(JSON.stringify(body))) fail("the ordinary map carries an engine line");
-}
-
-/** Closed check for the explicit Analyze reveal (rfc/review-map.md §7, O7.3). */
-export function assertReviewAnalysisResponse(value: unknown, subject: { readonly runId: string; readonly branchId: string; readonly nodeId: string; readonly entryNodeId: string }): asserts value is ReviewAnalysisPage {
-  const body = record(value) ?? fail("analysis is not an object");
-  if (body.runId !== subject.runId || body.branchId !== subject.branchId || body.nodeId !== subject.nodeId || body.entryNodeId !== subject.entryNodeId || !text(body.branchId) || !text(body.entryNodeId) || !text(body.sentence)) fail("analysis identity");
-  if (body.kind === "line") {
-    const bound = record(body.bound) ?? fail("analysis bound");
-    const positive = (value: unknown): boolean => Number.isSafeInteger(value) && (value as number) > 0;
-    const attributed = positive(bound.requestedMovetimeMs) || positive(bound.requestedDepth) || positive(bound.requestedNodes);
-    // Law 8: an engine line renders only attributed to its engine and search bound, never as advice.
-    if (!attributed || !text(body.engineId) || !text(body.engine) || !(body.sentence as string).startsWith(`${body.engine as string} (`)) fail("analysis line is not attributed to engine and search bound");
-    if (!texts(body.moves) || (body.moves as readonly string[]).length === 0 || !text(body.caveat)) fail("analysis line shape");
-    if (/\b(?:best|should|must|strongest|winning)\b/iu.test(`${body.sentence as string} ${body.caveat as string}`)) fail("analysis line is phrased as advice");
-    return;
-  }
-  if (!ANALYSIS_ABSTENTIONS.has(body.kind as string) || "moves" in body) fail("analysis abstention shape");
 }

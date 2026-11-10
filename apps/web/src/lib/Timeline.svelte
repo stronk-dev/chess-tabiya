@@ -15,8 +15,8 @@
     authoredSpineNodeIds?: ReadonlySet<string>;
     checkpointLabels?: Readonly<Record<string, string>>;
     rootNodeId?: string | undefined;
-    shapeMarkers?: readonly { readonly nodeId: string; readonly entryId: string; readonly label: string; readonly channel: "official" | "community" }[];
-    onOpenShape?: (entryId: string) => void;
+    shapeMarkers?: readonly { readonly sourceKey: string; readonly generation: number; readonly nodeId: string; readonly entryId: string; readonly label: string; readonly channel: "official" | "community" }[];
+    onOpenShape?: (entryId: string, firstNodeId: string, sourceKey: string, generation: number) => void;
     pivotalMarkers?: readonly { readonly nodeId: string; readonly label: string }[];
     onOpenPivotal?: (nodeId: string) => void;
     branches?: readonly { readonly id: string; readonly label: string; readonly forkNodeId: string; readonly leafNodeId: string }[];
@@ -81,7 +81,7 @@
         <button type="button" aria-label="Start position" tabindex={previewNodeId === rootNodeId || (previewNodeId === undefined && activeNodeId === rootNodeId) ? 0 : -1} data-timeline-node={rootNodeId} class:preview={previewNodeId === rootNodeId} onclick={() => onPreview(rootNodeId)}>
           <span class="ply">0</span><span>Start</span>
         </button>
-        {#each rootMarkers as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
+        {#each rootMarkers as marker (`${marker.sourceKey}|${marker.generation}|${marker.entryId}|${marker.nodeId}`)}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId, marker.nodeId, marker.sourceKey, marker.generation)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
         {#if rootPivotal.length > 0}<button class="pivotal-marker" type="button" aria-label={`Open ${pivotalLabel(rootPivotal)} at ${rehearsalStepLabel(0).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(rootNodeId)}><span aria-hidden="true"></span></button>{/if}
         {#if branchesAt(rootNodeId).length > 0}<div class="branch-links" aria-label="Branches from the start">{#each branchesAt(rootNodeId) as branch}<button type="button" disabled={openingBranch} aria-describedby={openingBranch ? "branch-switch-status" : undefined} onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>
@@ -111,7 +111,7 @@
             <span class="guard-marker" aria-label="Review marker">G</span>
           {/if}
         </button>
-        {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
+        {#each shapeMarkers.filter((marker) => marker.nodeId === entry.nodeId) as marker (`${marker.sourceKey}|${marker.generation}|${marker.entryId}|${marker.nodeId}`)}<button class="shape-marker" type="button" onclick={() => onOpenShape(marker.entryId, marker.nodeId, marker.sourceKey, marker.generation)}>{marker.label}{marker.channel === "community" ? " · community" : ""}</button>{/each}
         {#if pivotalAt(entry.nodeId).length > 0}<button class="pivotal-marker" type="button" aria-label={`Open ${pivotalLabel(pivotalAt(entry.nodeId))} at ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`} onclick={() => onOpenPivotal(entry.nodeId)}><span aria-hidden="true"></span></button>{/if}
         {#if branchesAt(entry.nodeId).length > 0}<div class="branch-links" aria-label={`Branches from ${rehearsalStepLabel(entry.ply).toLocaleLowerCase()}`}>{#each branchesAt(entry.nodeId) as branch}<button type="button" disabled={openingBranch} aria-describedby={openingBranch ? "branch-switch-status" : undefined} onclick={() => onOpenBranch(branch.leafNodeId, branch.id)}>{branch.label}</button>{/each}</div>{/if}
       </li>

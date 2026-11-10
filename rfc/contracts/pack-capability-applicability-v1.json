@@ -3,24 +3,24 @@
   "artifact": "tabiya.pack-capability-applicability.authority.v3",
   "schema": {
     "path": "schemas/drill_pack.schema.json",
-    "sha256": "7915fcac771bfe7f22fbd8eaaf3487e03d21dbf996ae0fd382083e5c80133c24",
+    "sha256": "081a8d9800cc0972db49dec777b0ea7dd7478c92c9fe9fc5348345daa325bae9",
     "targetTransition": "rfc/contracts/pack-capability-schema-transition-v1.json",
-    "canonicalSha256": "ead208d1689d9ee3e5965493b11b11494561007f2d53026a7d3c91825313f2ce"
+    "canonicalSha256": "defb8e8f6efc8bbcde37d067f679e7d8099a390c345433d516f18b69366cd87e"
   },
   "closedVocabulary": {
     "inventoryAlgorithm": "closed-schema-members-v2",
     "mappingAlgorithm": "stable-schema-member-v3",
     "generator": "tools/d2152-pack-capability-author-repair/contract.mjs",
-    "inventorySha256": "352bce1865e96b4c5e3fb1bdfe7c4c7a2ba3605e885c7c6671c3f5f6a7ffa7fc",
-    "expandedMappingSha256": "b7813c569037ac3460ae6aca81371db9618389eea0eb4bd6137328edb0fb2ff4",
+    "inventorySha256": "6492e7d19d0cdfe901c8f99efd5d249bc882ccd5076861800d545a1b92f710b0",
+    "expandedMappingSha256": "95fba7b7ee203f06f518cb0e39bffc3619d0ad8f4e7f3f3215ef032ef2057831",
     "counts": {
-      "enumNodes": 108,
-      "enumMembers": 330,
+      "enumNodes": 113,
+      "enumMembers": 335,
       "valueUnionNodes": 20,
       "valueUnionMembers": 104,
       "keyUnionNodes": 6,
       "keyUnionMembers": 19,
-      "mappedMembers": 453,
+      "mappedMembers": 458,
       "excludedMembers": 0
     },
     "sourceInventory": [
@@ -259,6 +259,14 @@
       {
         "schemaPointer": "/$defs/graduationClearance/oneOf/10/properties/templateId",
         "member": "authored-teaching-absent"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/0/properties/conventionRef/properties/id",
+        "member": "backward-pawn"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/2/properties/conventionRef/properties/id",
+        "member": "backward-pawn"
       },
       {
         "schemaPointer": "/$defs/fileTemplateFeature",
@@ -929,6 +937,10 @@
         "member": "king"
       },
       {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/conventionRef/properties/id",
+        "member": "king-opposition-unobstructed"
+      },
+      {
         "schemaPointer": "/$defs/structuralFeature",
         "member": "king_opposition"
       },
@@ -1171,6 +1183,14 @@
       {
         "schemaPointer": "/$defs/structuralFeature",
         "member": "outpost"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/1/properties/conventionRef/properties/id",
+        "member": "outpost-candidate"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/1/properties/conventionRef/properties/id",
+        "member": "outpost-candidate"
       },
       {
         "schemaPointer": "/$defs/tempoVerdict",
@@ -1853,7 +1873,8 @@
       "subject": "verdict_producer",
       "sites": [
         "packages/runtime/src/grade.ts#moveQualityGrade",
-        "packages/runtime/src/grade.ts#classFromThresholds"
+        "packages/runtime/src/grade.ts#classifyWinPercentLoss",
+        "packages/runtime/src/grade.ts#recordedGradeScore"
       ],
       "dependencies": [
         "packages/runtime/src/grade.ts#GRADE_CONVENTION"
@@ -2170,7 +2191,9 @@
           "apps/server/src/pack-orchestrator.ts#conditionEvidenceRefs",
           "packages/runtime/src/objective.ts#evaluateObjectivePredicate"
         ],
-        "admissionSites": []
+        "admissionSites": [
+          "packages/runtime/src/internal/authored-structural-source.ts#authoredStructuralSites"
+        ]
       },
       {
         "subject": "SimpleTrigger",
@@ -2189,6 +2212,7 @@
         "sites": [
           "apps/server/src/pack-orchestrator.ts#containsPlanSignature",
           "apps/server/src/pack-orchestrator.ts#expandStructuralExpression",
+          "packages/runtime/src/authored-predicate-population.ts#capturePopulation",
           "packages/runtime/src/structural-evidence.ts#evaluateNode",
           "packages/runtime/src/structure.ts#evaluateStructuralExpressionWithWitness",
           "packages/runtime/src/structure.ts#matchesStructuralExpression",
@@ -2196,13 +2220,17 @@
           "packages/runtime/src/structure.ts#structuralFeatureKinds"
         ],
         "admissionSites": [
+          "apps/server/src/authored-convention-migration.ts#evaluate",
+          "apps/server/src/authored-convention-migration.ts#familyOf",
           "apps/server/src/expression-satisfiability.ts#allRefutation",
           "apps/server/src/expression-satisfiability.ts#isPawnBackRank",
           "apps/server/src/expression-satisfiability.ts#leafRefutation",
           "apps/server/src/expression-satisfiability.ts#refuteStructuralExpression",
           "apps/server/src/pack-validation.ts#runtimeIssues",
           "apps/server/src/pack-validation.ts#structuralIssues",
-          "apps/server/src/shape-validation.ts#containsPlanSignature"
+          "apps/server/src/shape-validation.ts#containsPlanSignature",
+          "packages/runtime/src/internal/authored-structural-source.ts#authoredStructuralSites",
+          "packages/runtime/src/internal/authored-structural-source.ts#selectAuthoredStructuralCondition"
         ]
       },
       {
@@ -2210,6 +2238,7 @@
         "schemaPointer": "/$defs/structuralFeature",
         "property": "kind",
         "sites": [
+          "packages/runtime/src/authored-predicate-population.ts#leaf",
           "packages/runtime/src/structure.ts#matchesStructuralFeature",
           "packages/runtime/src/structure.ts#mirrorFeature"
         ],
@@ -2247,10 +2276,13 @@
         "sites": [
           "apps/server/src/pack-orchestrator.ts#expandTransitionExpression",
           "packages/runtime/src/transition.ts#matchesTransitionExpressionUnchecked",
-          "packages/runtime/src/transition.ts#transitionFeatureKinds"
+          "packages/runtime/src/transition.ts#transitionFeatureKinds",
+          "packages/runtime/src/transition.ts#matchesCurrentTransitionExpressionUnchecked"
         ],
         "admissionSites": [
-          "apps/server/src/pack-validation.ts#transitionExpressionIssues"
+          "apps/server/src/pack-validation.ts#transitionExpressionIssues",
+          "packages/runtime/src/internal/authored-structural-source.ts#authoredStructuralSites",
+          "packages/runtime/src/transition.ts#assertCurrentTransitionSources"
         ]
       },
       {
@@ -2534,5 +2566,5 @@
       "source file location"
     ]
   },
-  "expandedAuthoritySha256": "6b5615fb9af04e84bdfd4c21f5ec18e244fdb299816cd394cae997df05f0f39d"
+  "expandedAuthoritySha256": "bd4eba1d67aa442096868f5380430337236e8404417178e314ff180254ecf7f9"
 }

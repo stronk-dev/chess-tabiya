@@ -1,11 +1,173 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
+**D4167 snapshot/advance amendment §4.11g independently accepted for bounded implementation,
+2026-11-09.** Both authorized read-only source/meaning reviews find no buildability blocker.
+Decision: planning/learner-modules/compiler2-independent-review-2026-11-02.md. Bounded code/delivery is now verified locally:389actual source/API/DOM controls,15173software/539,
+7performance/build/source11 pass; content retains62prior headings. Parent lifecycle and all wider
+D4167/D4170, qualification/native/content/release duties stay unchanged.
+
+**2026-11-09 D4167 amendment independently accepted for bounded implementation:** §4.11f specifies seven selected-edge
+structural source operations/readouts jointly with the other two parent contracts. Both read-only source/meaning reviewers accept the repaired concrete clauses; bounded implementation is now verified locally (14966software/537,7performance/build/source11);
+content/native remain held. Decision: planning/learner-modules/compiler2-independent-review-2026-11-02.md. Complete
+snapshots/advance, ordinary modules, shared-event/avoidance/bot migration remain owed.
+
+**D4060 bounded source delivery implemented locally/uncommitted, 2026-11-04:** independent
+contract/source/control and final closeout review accept all12 original structural/island edge
+sources, the80-topic/86-Full2-pair/297-module image and complete strict before/after rendering.
+Actual factories, root/inherited/repeated/both-colour service controls, exact-pair received
+negatives and24 cookie REST/selected DOM journeys retain original values/order/counts/zeros,
+nulls, role, ray endpoints and same-zone king relocation. Full13762software/all496files367.82s,
+performance7/four58.94s, types/build/4667authority/375semantic/governance pass. Full verify exits2
+at actual content261pass/60fail/18setup-blocked cases43files33.00s; native37004 builds but default
+prepare-start refuses the anti-caro grade@i1/@i2 mismatch, zero native journeys. D3928, D3979
+native/default-App, qualification and whole-parent/release obligations stay open. No ordinary
+module policy change or content migration. Existing compiler2 review receipt records acceptance.
+
+**Bounded genuine-empty recovery closed locally, 2026-11-04:** D3713 now has real canonical and
+stored-service empty/silent prerequisites. The accepted §4.5a criterion5 repair retires only the
+vanished Nudge selection/paint, retains existing default More/Support, and binds Retry focus to
+its own current parsed result and active region. Unresolved teardown and no-focus outer-tab/
+leave-return falsifiers fail before correction. Final401/six35.01s and clean types pass sixteen
+actual-service desktop/tablet/phone cases plus original controls; independent bounded review
+accepts. Full13548software/all494files, performance7/four, types/build/authority/semantic and
+corrected complete governance pass. Actual content261pass/60fail/18setup-blocked cases43files
+32.51s remains red at D3928; later corpus recipes unreached. No source/grade/novelty/budget or
+parent/native/release promotion. D4061 separately owns unmeasured preset-driven removal.
+
+**Bounded original ten-motif delivery checkpoint, 2026-11-04, uncommitted:** D3792 closes its finite
+zero-of-ten defect after independent current reconciliation; current80topics/86pairs supersede the
+historical68/74 inventory, and later full13804 software includes this established cohort. It has
+all40 original ten-family positive/hard-negative/both-colour cells through real cookie-auth REST,
+strict receiver and actual selected browser, preserving complete identities/multiplicity, captions,
+paths, budgets and saved play. Four inherited positives, root/short-prefix future-witness exclusion
+and anonymous401 checks join the168/four44.28s focused cohort. Independent bounded review accepts;
+full13532software/all494files, isolated7/four performance, types/build/4559authority/375semantic
+pass. Actual content261pass/60fail/18setup-blocked cases43files32.85s remains red at D3928; later
+corpus recipes are unreached. D4060 exact structural event coverage and D3979 local caller proofs close separately. D3791
+specifically retains native selection/reload/return under actualD3928 startup refusal; broader
+D3979/native/default-content/qualification and whole-parent obligations remain open.
+
+**Bounded D3982/D4058 implementation checkpoint, 2026-11-03, uncommitted:** independently
+accepted §4.5c–d now delivers complete original recorded-window Nudge captions through real
+selected service/REST and mounted seats, not only adapter fit. Exact8 singleton forms and
+Nudge-only observed-window/overload product ordering preserve critical-first, original sources,
+fixed budgets, other modules and Review/Inspector full paths. Actual20-cell auth/storage/REST,
+four mounted lifetime/input cases, finite policy/geometry and isolated word-only controls pass;
+independent bounded source/control review accepts. Full13268software/489files348.64s, unchanged
+performance7/four58.39s, types/build/4559authority/77/375semantic/governance pass. Actual content
+261pass/60fail/18setup skips43files33.58s stays red at held D3928. Two bounded rows close locally,
+not this parent/native/qualification/release or coupled landing. D3979 recorded-line preview is
+separately accepted in evidence-presentation §3.6b, not implemented.
+
+**Independently accepted bounded D4056 amendment, 2026-11-03:** §4.11d specifies the source-free historical
+Inspector confirmation/bootstrap missing from D3999, including roots. Existing source/context
+grant and Review Analyze confirmation controls pass63/two3.12s; Analyze's incoming-edge/root
+refusal is not a generic Inspector bootstrap. Independent review accepts this clause with the
+parser/authority controls recorded below. The bounded service/REST/API/App/DrillScreen journey
+and corrected receiver/errors are locally implemented and independently reviewed: focused528/
+seven31.33s and full13302software/489files437.32s pass, as do unchanged performance7/four59.25s,
+build/types/source/governance. Actual content remains red at held D3928; no parent archival,
+qualification/native/default/release or coupled landing. Other accepted clauses stand.
+
+**D4009 corrected repair independently accepted on buildability, 2026-11-03:** the formerly
+accepted single-projection D4004 image fails the unchanged compiler and remains superseded.
+Separate review accepts §4.11c's three honest projections and68/74/285 contract plus the actual
+Review/help bootstrap after the real10-case whole-graph witness and historical/campaign fixes.
+The compiler2 review receipt records both decisions; implementation is not release completion.
+
+**D4004 amendment accepted for implementation, 2026-11-03:** separate independent cross-review
+accepts corrected §4.11c and review-map §7a on buildability, recorded in the compiler2 independent
+review. Its66/72/283 target totals are not claims of implemented delivery; the actual current
+65/71/282 checkpoint below remains until the complete source/API/UI cutover is verified.
+
 **Current-source amendment accepted for implementation, 2026-10-15.** Authorized independent
 review accepts §4.11a's corrected source/detail contract and the sole ten-consumer/282-pair
 image with linked exact owner contracts. Earlier unaccepted/returned labels for those clauses
 are retained review history, not current blockers. Actual source/consumer/UI delivery and
 unrelated parent obligations remain. Scope and decision:
 `planning/learner-modules/inspector-source-independent-review-2026-10-15.md`.
+
+**Current source/page cutover, 2026-11-03, uncommitted:** the sole actual current Full Inspector
+consumer is2, with65 topics/six detail views and exact registered server callable
+`compileInspectorSourcePage`. The authenticated REST/API and strict receiver are implemented;
+the demand-driven browser is wired, with independent283/two mounted browser/screens tests
+passing twice, including actual health-change recovery and owned keyboard-focus continuity. Full1/generic module
+delivery is explicitly refused, not retained as compatibility. Actual71 registered construction/
+serialization/parser pairs execute. Independent source/query174, REST5 and receiver130 tests
+pass. D3992 rejects unestablished held-source slugs; D3993 closes rehashed renderer/binding/
+convention/producer/conditional-geometry mutations through registered wire validation. Public
+digests do not issue source evidence. The finite semantic-retirement slice retains original13
+cases in test-only history and genuine successors; current375 cases/91 subjects remain zero
+qualified.319 current factory profiles remain. Full normal verification is not yet green:
+retirement/census assertions were repaired, then in-flight mounted-test types stopped the next
+run. Subsequent ordinary source/authority/semantic tiers pass; generated shape capability D3995
+and exact class-anchor D4001 are repaired against their unchanged gates. The complete subsequent
+software attempt is red294failed/10151passed/40existing skips across475 files; finite later caller,
+palette/export/selector/cleanup repairs pass focused checks, not a new whole-suite run. D4004
+finds the actual Review Analyze source/callable contract gap; its corrected three-arm amendment
+is separately accepted and its internal source collector implemented, not the full delivery.
+Separate production build/research types pass. D3994 transport repair passes focused/independent
+checks with remaining old cancellation-response tests migrated; coupled gate remains.
+D3999 historical target/assistance UI reach, D3928 default-app admission and native/whole-RFC
+qualification remain open; no release clearance.
+
+**Earlier source/page increment, 2026-11-02, uncommitted:** actual65-owner demand dispatch and
+the in-flight page compiler/service operation retain original ordinals/coverage/current reads.
+Independent16 source and10 request controls pass; D3988 fixes three reproduced request leaks.
+D3989/D3990 policy/failure-scope corrections are statically reviewed, not positive-page proof.
+D3991's actual authority-gate failure is repaired with runtime-only six-detail invocation,
+without weakening the gate. Current1/75 refuses before acquisition. Complete actual71-pair
+current image/callable/adapters, positive page/receipt tests, API/client/native and old-caller
+retirement remain required; §4.11b/D3983 presentation primitives stay intact. Final normal gate
+passes1026/34 then same8fail2552pass/2560 authority;472 software files. Separate build/research
+types pass. No whole compiler/module, qualification, milestone or release clearance.
+
+**Earlier source implementation increment, 2026-11-02, uncommitted:** internal current-run
+suppliers now cover65/65 topics, including registered shapes, captured Story rank, the two explicit-endpoint Compare paths, both
+original-final-task Maia projections and actual application-owned whole-page/narrow Explorer.
+Compare54 service cases and independent193/six pass;240 focused/six includes module-query.
+Complete structural populations/results and exact original consecutive recorded-eval pairs
+retain empty proofs, mate barriers, original full head/trail/columns and current grants.
+No newest-sibling selection, cropped whole-tip result, grade or comparability claim.
+Explorer42 service cases and
+independent82/three pass; its genuine0/99/100 values remain source results before rendering.
+D3971's equal-stamp/page, different-full-history control first fails1/42 and is repaired using
+the existing full event head in the existing source key. Broad default-app provider-corpus
+remains red65/99 at D3928 pack admission; no HTTP/native Explorer clearance. D3972's bounded
+source/factory contract is independently accepted and implemented locally: actual complete
+registry admission, exact shape@2 attribution and full-source/path proof.55 new source cases
+and independent1461/seven pass after D3975's five closed-path controls first fail then are repaired.
+This validates no authored plan or strategic significance. Story rank retains the actual whole captured12-adapter
+Review/moment/last-level source and original rank3 proof under current endpoint/storage/import
+and captured provider/registry states.37 service and independent177/six pass after D3973's
+original-source/issuer joins and D3974's actual out-of-prefix parser work first fail, then are
+repaired before preparation/parsing. Observation is bounded and does not enqueue; rank[] is
+singleton admitted-moment ordering, not finished analysis. Direct authored provenance is not
+claimed or waived by Story. Complete consumer
+preflight/source pages/paired UX/WDL/native and original motif reach remain. Normal full verify
+passes701 source/budget checks/24 files then8fail2552pass/2560 authority tests; types/research/standalone
+build pass separately. Registered Full Inspector1 still75 refs; no full-RFC/qualification or
+coupled landing. Exact scoped reviews remain in the existing compiler2 review record.
+
+**Presentation increment, 2026-11-02:** six registered closed historical-report renderers now
+read the actual producer/factory fields, plus one registered exact shape@2 attribution renderer.
+D3976's executor-to-component controls retain complete legal PVs, asymmetric reported WDL and
+distinct missing/uninterpretable/zero/null states without a provider-validation upgrade. D3977
+repairs legitimate account attribution after a real raw-ID-guard failure; D3978 independently
+finds and tests the actual publish/delete/hydrate tombstone, which is not an account mention.
+Independent194/four and focused224/four pass. No broad renderer-version exception, source
+authority, consumer pair or Inspector2 API/UI is introduced by these unbound renderer primitives.
+
+**Budget increment, 2026-11-02:** D3980 adds an internal occurrence-aware fit helper, not the
+complete compileInspectorSourcePage operation. It retains original ordinal multiplicity, at
+most eight consecutive complete bundles, all-deferred progress and the accepted nonempty-range
+guard. Generic factIdentity grouping is unchanged. Independent182/three and broader341/four
+pass, including genuine combined word overflow where each component separately fits. D3979
+repairs actual missing move-path arrow charges under unchanged closed mark units; the local
+endpoint-mark overread is explicitly refuted as D3981, not adopted. D3982 measures current
+harassment@3→Nudge2 deferral solely because two arrows exceed maxArrows1. Learner-specific
+composition repair and recorded-line navigation/current-board scope remain open; these checks
+do not establish complete source pages/71 pairs/API/UI/native or qualified guidance.
 
 **Current-context/ledger implementation checkpoint, 2026-11-01:** the accepted §4.11a now has
 server-private RunService context and recorded ledger operations, with original canonical full
@@ -65,10 +227,10 @@ learner journey, qualify the events or discharge the parent RFC. D3847/D3841 rem
   request-local views and a complete-legality envelope are authored for independent review.
   This amendment is **not accepted** by this RFC's existing implementing status. No production
   binding, permission, default, source or exact-mobility discharge changes until acceptance.
-- **Draft amendment 2026-10-12 — D3715, §4.5a:** the Post-commit Nudge's retained
-  structural states require a change witness. This clarification is **not accepted** by
-  the parent's implementing status. Its disposable source-bound controls check the proposed
-  distinction, not a shipped selection repair; D3713's real empty-result recovery remains open.
+- **Independently accepted amendment 2026-11-04 — D3715, §4.5a:** the refreshed canonical
+  current/ancestor admission contract is independently accepted in the compiler2 review receipt.
+  Nudge-only change selection must preserve shared Review/Inspector sources. Disposable controls
+  are not implementation proof; D3713 recovery and D3767 grade selection remain separate.
 - **Draft amendment 2026-10-14 — D3792, §4.11a:** explicit Inspector demand and bounded
   source-member detail, grounded by D3795/D3797. This amendment is **not accepted** by the
   parent implementing status. The six-source detail model is not a production factory,
@@ -1631,10 +1793,18 @@ thing in the product to a module today, and it fires **only** under
 | the `immediate_guard`-only firing condition | **widened by the module's own timing** — `post_commit`, gated by `feedbackDeliveryOpen`, in seven workflow contexts. This is a genuine behaviour change and it is the module's purpose |
 | the sibling `.evidence-reveal` block and its two sentences (`:957-963`) | **kept**, as region-4 chrome, not a module |
 
-#### 4.5a Draft D3715 — a complete state is not a post-move change witness
+#### 4.5a D3715 — a complete state is not a post-move change witness
 
-**Author: Codex, 2026-10-12. Pending independent review and acceptance; no production
-authorization.** This amends only `postcommit_nudge` at `post_commit`, not the source
+**Author: Codex, 2026-10-12; refreshed and independently accepted 2026-11-04 after return.**
+Acceptance covers this bounded current/ancestor selection contract, not implementation, grade
+prominence, empty-result recovery or parent completion. The return and actual current-symbol
+audit are recorded in `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+Local implementation and final414-case source/service/REST/mounted controls are independently
+reviewed on 2026-11-04. Full13484software/all494files, isolated7/four performance, types/build,
+4559authority/375semantic and governance pass. Real content stays red60 cases/two setup suites
+at D3928; later corpus recipes unreached. This is not parent/native/content
+or D4060 exact event-query clearance.
+This amends only `postcommit_nudge` at `post_commit`, not the source
 projection, generic module witness policy or the interpretation of a saved event.
 
 The legal d2–f3 edge from
@@ -1648,8 +1818,10 @@ The existing legal-edge controls in `module-query.test.ts` retain this distincti
 requiring the erroneous populated Nudge to survive.
 
 **Proposed selection rule:** after exact source acquisition and before module admission,
-novelty, reducers, ordering and budget fitting, both the query and legacy Nudge paths apply
-the same module-specific predicate to their sealed, accepted evidence:
+novelty, reducers, ordering and budget fitting, the sole canonical query applies the same
+module-specific predicate at current-subject assembly and at each earlier-user-edge assembly
+in `ancestorFacts`. D3851/D3862 removed the raw legacy Nudge operation: do not restore it to
+satisfy old acceptance wording. Apply the predicate to sealed, accepted evidence:
 
 | exact source shape | required witness |
 |---|---|
@@ -1660,11 +1832,28 @@ the same module-specific predicate to their sealed, accepted evidence:
 
 The structural row ranges over this module's **current exact accepts**, intersected with
 `STRUCTURAL_EVENT_PROJECTION_IDS`, not a prefix match admitting future families or versions.
+At this author image the exact eight structural @1 families are `backward_pawn`, `doubled_pawn`,
+`half_open_file`, `isolated_pawn`, `king_opposition`, `king_zone`, `open_file` and `passed_pawn`.
+Pin set equality between this finite image and the current exact acceptance intersection;
+`piece_count`, `direct_attack_count` and `line_blockers` are not Nudge accepts. The separately
+shaped numeric `pawn_islands@1` and detailed `rules.king.event.zone_state@1` are not cast to
+StructuralSemanticEventOperands. Other sources, including grade@2 and all nine recorded-window
+families, keep their existing source/witness rules and D4058 ordering. No grade priority is added.
 Full observation equality ignores the enclosing FEN/move identity: a legal move changes that
 identity even when the observed property stays unchanged. Compare typed values, not object
 references, JSON field insertion order or a new source-hash mechanism. `sign === "preserved"`
 is insufficient: `structuralEventSign` uses magnitude and can classify different observations
 with the same magnitude as preserved. Existing king-zone handling is subsumed, not bypassed.
+Retained observation arrays already have deterministic source order; compare every typed field,
+including optional fields and nested values, not an unordered partial identity or a magnitude.
+
+`postcommitEdgeEvidence` is shared with Review's `collectRelations`, so the new Nudge-only rule
+must not be inserted into that shared source helper or generic `witnessedEvidence`. Keep complete
+source acquisition unchanged and select only inside Nudge's current/ancestor admission assembly.
+The server's existing endpoint-local `postcommitAt` context still supplies each ancestor's own
+authorization, grade and original windows; never reuse the current tip for earlier edges. The
+existing novelty window and admission/reducer ordering otherwise remain unchanged. Unavailable
+sources remain unavailable, not an empty success or permission to backfill another fact.
 
 This is **change selection, not importance or chess valence**. A changed count does not mean
 good/bad, useful/harmful, forced or the engine's reason. Unchanged island counts do not imply
@@ -1680,19 +1869,29 @@ validation conflict and D1164's cross-node novelty are separate obligations.
    Retain the original two-colour factory population while excluding unchanged counts from
    Nudge. Do not assert every legal move is silent: a king move or another real change may
    legitimately qualify. The specific locked-pawn d2–f3 control must lose its unchanged
-   island facts in the real query and legacy operation, but must not be required to become
+   island facts in the real canonical query/service operation, but must not be required to become
    empty: its actual source closure includes a lost d2 knight contribution to the White
    king zone. Preserve that changed relation. This draft does not specify selection for
    the closure's retained `rules.tactic.event.loose_piece@1` facts.
 2. Add genuine gained/lost structural and changed-island-count controls. Equal-magnitude
    but different retained observations must survive; a changed FEN alone must not qualify.
    Run predecessor code against the no-change controls to demonstrate the defect.
-3. Exercise both Nudge call paths and their ancestor/novelty acquisition. Exclude unchanged
+3. Exercise current-subject and ancestor/novelty acquisition in the one canonical Nudge query,
+   including the actual service and authenticated REST delivery. Exclude unchanged
    states before they consume admission or budgets; do not backfill a short/empty packet.
    Existing disclosures, exact-subject admission, ceilings and source-unavailable handling
    remain unchanged.
-4. Through Inspector's real query, retain the same source's complete unchanged states and
-   identities. Packs and saved event bytes remain unchanged. Neither the disposable model
+4. Through actual Review delivery and the original factories, preserve exact complete unchanged
+   structural/island event populations and identities, despite sharing postcommitEdgeEvidence
+   with Nudge. Separately, Inspector's real source query retains its complete original
+   pawn-connectivity position reading, both colors/zero counts and original member identities;
+   the existing position-structure and move-transition reading consumers remain unchanged.
+   A corresponding reading is not an event receipt. **Bounded D4060 clarification, independently
+   accepted in the compiler2 receipt, 2026-11-04:** the closed current Inspector query has no topics for
+   those exact structural/island events. Their event-query coverage remains explicitly owned by
+   D4060/Full Inspector source-contract reconciliation, not discharged by this reading test or
+   waived from1.0. Do not add accepts/topics or restore a legacy query under this Nudge filter.
+   Packs and saved event bytes remain unchanged. Neither the disposable model
    nor a passing Nudge test qualifies a semantic root.
 5. Discharge D3713 separately, once a genuinely empty legal control is identified, with
    an actual API-returned empty packet: selected-card
@@ -1702,9 +1901,9 @@ validation conflict and D1164's cross-node novelty are separate obligations.
 Disposable source-bound checks are in
 `tools/d2120-module-registration-author-contract/postcommit-change-witness.test.ts`, run by
 `make postcommit-change-witness-check`. They neither change the production query nor
-claim UI recovery. Independent review must check observation equality, both operation paths,
-the positive controls and the Inspector/pack preservation boundary before this becomes work
-the implementer may take.
+claim UI recovery. Independent review of observation equality, current/ancestor admission,
+the positive controls and the Inspector/Review/pack preservation boundary accepts this refreshed
+contract on 2026-11-04 in the compiler2 receipt. Actual implementation/control review remains owed.
 
 #### 4.5b Draft D3859 — recorded windows for the actual committed learner subject
 
@@ -1759,8 +1958,8 @@ Merge genuine sequence events with current admitted one-edge events and source-o
 before existing witness/admission/reducers/budget fitting. Retain each sequence's exact start/end
 anchors, all operands and convention. No projection-id sentence fallback. Use registered exact
 presentation pairs for module.postcommit_nudge@2. Source eligibility is not usefulness: the
-two-fact/50-word ceiling, current ordering, no-praise rule and D3715's separately unaccepted
-change-selection proposal remain distinct. A withheld/absent grade cannot hide structural facts.
+two-fact/50-word ceiling, current ordering, no-praise rule and D3715's separately owned
+change-selection policy remain distinct. A withheld/absent grade cannot hide structural facts.
 
 Novelty retains the existing last-three-earlier-user-decision bound, not three arbitrary plies.
 Resolve each ancestor's own past prefix/edge/windows under that same grant and actual ancestor
@@ -1788,6 +1987,103 @@ all nine families for both learner colours and46 future-witness exclusions. The 
 one-edge source supplies none of those sequence items. This is source feasibility, not new source
 issuance, automatic-opponent integration, @3 mints or delivered Nudge coverage.
 
+#### 4.5e D3767/D4064 — selected grade feedback with complete measurement details
+
+**Independently accepted for bounded implementation, 2026-11-04; existing compiler2 review
+receipt records joint acceptance.** The independent research gate accepted
+authoring this joint amendment, not its remedy. `module-evidence-assembly.md` §Current grade
+selection and pinned-report presentation loss records173 research tests and159 affected software
+tests:52 current grades lose at the two-fact backstop, while20 pinned mate-grade variants exceed
+50 words alone. These require coordinated selection AND representation changes. No producer,
+classification, ladder, preset, budget increase, pack migration or source-qualification change.
+
+**Ordinary flow.** A selected grade contributes one short, deterministic statement to the
+existing Nudge card. A directly adjacent **How measured** disclosure opens its complete original
+report; no settings, Inspector mode, new engine work or game navigation is required. The report
+is measurement attribution, not an explanation of why a move is good/bad. No causal join to the
+other Nudge fact, new board paint, praise, recommendation or LLM-authored sentence is implied.
+Absent/below-threshold/incomparable/pending/withheld grades keep their existing distinct states;
+no grade becomes an all-clear or a disabled empty details button.
+
+**Exact selection successor.** Only the current `module.postcommit_nudge@2` uses
+`production.postcommit_observed_window@2` (successor of@1). Its keys, in order, are:
+
+1. Existing critical events, unchanged: checkmate, promotion, castled and last_of_role.
+2. The same eight exact completed@3 window refs from §4.5c/POSTCOMMIT_OBSERVED_WINDOW_REFS,
+   preserving the accepted overload-first ordering within that group.
+3. Exact `derived.grade.move_quality@2`, when the original current source emits a grade.
+4. All remaining admitted facts under the current exactness/lift/accepts-order/square/event/
+   retained-operand tie rules. Existing within-group ties remain; no new scored ranking.
+
+Implement this finite key before exactness, not by changing source exactness, accepts order,
+family membership or a source-prefix match. Other consumers/policies remain unchanged. Trade@2
+stays in the remaining group; contact timing/defender consequence do not become Nudge accepts.
+Every severity/arm has the same grade key; no extra threshold, force-slot, age/skill/rating dial
+or search-quality inference. Two critical/completed-window facts may legitimately consume both
+slots. The amendment repairs crowding by simpler changes, not universal grade display.
+
+The current source acquisition, exact learner subject/horizon, unchanged-state filter, admission,
+dedupe/subsumption, actual ancestor novelty/abstention, two-fact backstop and atomic fit remain.
+Do not make a below-threshold grade fire, suppress a genuine critical/window fact, relabel
+novelty abstention as successful suppression or reuse an opponent/later-edge grade. All standard
+proactive limits stay two facts/50 words/two marks/one arrow. Acceptance cannot be obtained by
+raising those limits, exempting a grade from fact count or dropping other returned sources.
+
+**Complete registered presentation.** Evidence-presentation§3.10c owns the new exact Nudge
+renderer `play.move_quality_summary@1`, its complete current grade operands and same-item explicit
+report view. Nudge uses that renderer only; Review retains `grade.move_quality@2` and full prose.
+Move-quality-grades§4b preserves entire public-payload and canonical full-report byte parity.
+No source field or attribution is truncated or replaced by a generic sentence. The proactive
+50-word fit charges the entire registered summary; explicit report rendering is a separately
+named view of that same fact, with no extra fact, source query or assistance-ceiling increase.
+
+**Lifetime and access.** Full details exist in the DOM/semantic tree only after an explicit
+press. Bind that state to the actual selected packet's disclosure/subject and active seat/region,
+not only componentDigest or equal grade numbers: repeated edges may have identical grade bytes.
+Retire it on subject/branch/run, observed source/access/config/preset, packet replacement,
+collapse/region deactivation and unmount. Old callbacks, even reinserted controls, cannot open
+the old report in a current seat. Use the existing currentness/focus-recovery ownership and
+companion-region scrolling; no new persistence, global modal, realtime discovery or provider
+operation. Quiet/theory-only/rated/withheld flows cannot obtain a grade/details through this UI.
+
+**Acceptance is the complete source-to-learner journey.**
+
+1. Retain all90 grade-alone source cells and80 actual canonical-query strata. Pin actual source
+   origin, requested bound, mover, full operands and current/private parent/child/branch. New
+   summaries must fit all90 without trimming operands; all full reports remain byte-equal to
+   their current canonical reports. Never replace truthful no-grade cases with fixture grades.
+2. Record every actual selection stage. Original e-pawn grades now reach default Nudge instead
+   of two slider-ray changes; quiet/repeated positives remain. Critical and completed-window
+   precedence survives, including legitimate grade exclusion when their two facts fill the cap.
+   All9 acquired window families and both colors/main/inherited paths remain complete.
+3. Fit real registered summary+rival bundles, preserving complete rival geometry/captions and
+   the shared limits. Retain genuine oversized-rival/other-family deferral negatives; do not
+   assume this bounded corpus proves every possible two-fact combination fits.
+4. Exact current wire tuples reject the old full Nudge renderer, partial grade operands, caller
+   prose/details, wrong convention/consumer and mixed representations. Review full rendering
+   and canonical report parity remain; public JSON digests are not private source authority.
+5. Actual cookie REST/strict client/mounted UI prove selected grade summary and manually opened
+   full report for provider and pinned-pack sources, mate/cp arms and both colors. Include
+   unavailable/incomparable/below-threshold, no live executor with valid durable evidence,
+   same-looking repeated edges, old-callback and run/config/access/preset/collapse retirement.
+   No provider calls, saved-run changes or move/rewind actions result from inspecting a report.
+6. Pointer/touch/keyboard/AT follow the same control and visible text. Test default full-report
+   absence, Enter/Space, close/focus return, wrapped long attribution, no board shrink/overlay and
+   independently scrolling companion region. Run normal source/types/build/software/performance/
+   governance/content/native gates; record D3928 refusal honestly if it still prevents native
+   startup. Fixture proof never closes default/native/qualification/parent/release obligations.
+
+**Resources/compatibility.** Same source/consumer@2 pair, full grade payload/convention@2, module
+forms and source/answer ceilings; one new renderer id and explicit product-policy successor.
+Transient current Nudge receipts cut over strictly. No persisted run/pack schema, shared version
+lane, new API, generic disclosure registry or executable legacy fallback. Claims remain none.
+Independent joint review accepts these companions for bounded implementation. Final bounded
+implementation closeout accepts D3767/D4064/D3766 locally/uncommitted:13804software/497,
+7performance/types/build/source/governance pass, with complete source/selected-HTTP/UI/lifetime/
+voice controls. Native rebuild succeeds then actual startup refusalD3928 prevents all journeys.
+That outstanding native/default/qualification/parent/release scope is retained; D3765/D879 authenticated9-cell consumer parity now closes locally on independent review and
+current200/seven+clean types; whole-parent obligations are separate. No whole-parent clearance follows.
+
 #### 4.6 `structure_nudge` — **precursor is split; two halves become the module, one is corrected**
 
 - Shape-entry chips on the timeline (`Timeline.svelte:51,78`) and `ShapePanel.svelte` **become the
@@ -1801,6 +2097,21 @@ issuance, automatic-opponent integration, @3 mints or delivered Nudge coverage.
 - `assistance.guided === "live"` as the firing gate (`DrillScreen.svelte:282`) is **retired**: the
   gate becomes preset composability, which is what `presets.ts:33` already encodes
   (`structure_nudge` ∈ `guided`).
+
+##### D4095 recognition selection companion (accepted, 2026-11-05)
+
+`learner-modules.md` §3's independently accepted Structure recognition amendment is the sole proposed ordering
+change for this seat. Actual current consumer is `module.structure_nudge@2`, seven current refs;
+only its exact new `production.structure_recognition@1` policy enables the recognition group.
+This companion changes no source/consumer/renderer identity, budget, disclosure, preset, layout,
+novelty, attribution, navigation, source-absence or atomic-fit rule. Named/setup matches keep
+convention grounding; authored matches keep authored grounding. If no recognition survives, retain
+the ordinary generic facts. A too-large winning recognition remains an honest compact deferral,
+never a shortened title or generic backfill. The existing actual selected receipt and library
+link, both colors, lifetime and word-budget controls are required implementation evidence.
+Separate source/ABI and meaning/consumer reviews accept this companion after clean dedicated types
+and49/49disposable source-stage controls3.02s. Actual production/UI and normal-gate discharges
+remain required before D4095 closes.
 
 #### 4.7 `theory_breadcrumb` — **four scattered precursors, three kept and runtime opening identity replaces the authoring record**
 
@@ -1857,6 +2168,83 @@ game."* Corrected: the **false Story footer** ([[D687]], leak L15) is an attribu
 fixed in place. **Not absorbed:** `review.story`'s *selection* stays [[D901]]'s lane and
 `rfc/review-map.md`'s; this RFC seats the module and does not re-base the Story. The `/review` run
 list is navigation, not a module.
+
+#### 4.10a D3927 — objective transitions on one recorded Review line
+
+**State: accepted for bounded implementation, 2026-11-02.** Separate independent review finds no
+blocking specification defect; receipt and required implementation falsifiers:
+`planning/learner-modules/objective-source-independent-review-2026-11-02.md`.
+This acceptance does not claim implementation or parent completion. This source correction does not reopen the
+grading ladder, campaign objectives or a permission ceiling. Current code establishes the gap:
+`createRunRecordObjectiveTransitionV1Evidence` in `evidence-factories.ts` has only the
+`{run,comparison,branchId}` arm; `comparisonFacts` checks real compared branches and
+`compareBranches` refuses fewer than two distinct attempts. Its `objectiveTimeline` preserves
+original `objective.state_changed` events at on-path nodes, using a fork-relative offset.
+`RecordedReviewBoundary` already retains an independently validated original run, complete event
+head and exact permitted path; the twelve Story adapters contain no objective adapter. These
+existing sources prove that inventing a sibling/comparison is neither necessary nor valid.
+
+**Proposed sole Review successor.** Add `run.record.objective_transition@2`, source-receipt
+factory `createRunRecordObjectiveTransitionV2Evidence`, with exactly one input arm
+`{recordedReview: RecordedReviewBoundary}`. Reuse the existing genuine storage-boundary reader;
+no caller run, event list, outcome, FEN, from/to override or verified flag is accepted. Only the
+actual current Review workflow supplies its own boundary after complete consumer/access
+preflight, and rechecks its issuer, stored run, selected branch disclosure and cancellation
+before publication. This factory neither grants access nor borrows Inspector permission.
+
+Enumerate the **original full event order**, retaining every objective.state_changed event whose
+data.nodeId is on that boundary's granted path. The boundary's existing whole-run replay and
+path validation precede filtering. Shared-prefix events are included regardless of the node's
+creating branch; sibling/off-path events and nodes beyond the granted endpoint are excluded.
+This is current recorded state, not chronological replay: a legitimate later-recorded evidence
+update to an on-path node remains an original event, not an excuse to crop current history.
+Do not synthesize a transition from a node's final objectiveState, an imported result, engine
+score or two consecutive node snapshots. Preserve repeated same-node and same-from/to
+occurrences in their original order; neither an event set nor newest-only selection is valid.
+
+Each output item has exactly `{evidence,nodeId,plyOffset}`. nodeId is the event's actual original
+node; plyOffset is that node's original root-relative ply, not an invented comparison offset.
+The sealed evidence payload is exactly `{context:"review",from,to}`, using the six existing
+ObjectiveState values in types.ts. Its receipt binds the genuine complete boundary and original
+event sequence/ordinal, including the actual retained evidenceRefs in that event's source image.
+Keep those refs as original provenance, not a new assertion that an old objective was correctly
+assessed. There is no evaluation, suggested move or new objective judgement in this payload.
+
+The immutable result population, including a successful empty array, must retain authentic
+factory-invocation membership against that exact boundary. Runtime Review verifies original
+invocation/route/boundary and exact event lineage before admitting items; copied/reordered/
+foreign or caller-empty arrays fail. A valid line with no such recorded events is available
+with zero items, not a missing source. An invalid/stale boundary or failed source is never
+relabelled as empty success. A genuine root event stays at ply0 in the retained source image;
+Review's move rows still exclude the root. Do not attach it to the first move, invent a root
+move or discard its source occurrence while claiming source completeness.
+
+**Integration boundary.** Replace only Review@2's objective-transition@1 acceptance/binding
+with@2 in the still-unfinished coordinated current image: its complete count stays72. Compare's
+genuinely different comparison source remains@1 for its actual current consumer; it is not a
+compatibility fallback for Review. The new exact Review pair uses a strict current-payload
+parser and registered renderer over the existing OBJECTIVE_STATE_LABELS/from-to sentence,
+never raw enum prose or a caller-authored sentence. Reuse the existing source-currentness and
+presentation mechanisms; add no protocol, stored field, schema lane, provider task or cache.
+This is a Review source alongside the exact twelve Story adapters, not a thirteenth Story
+moment kind, a new ranking rule or an amendment to Story's selection. Independent ledger
+acquisition remains a separate obligation and cannot substitute for this source.
+
+**Acceptance before implementation.** Independently review this exact source contract jointly
+with value-authority/Review compiler owners. Require genuine stored single-branch positive and
+empty cases; repeated transitions and original event order; root and inherited-prefix events;
+later valid on-prefix updates versus sibling/future-node exclusion; both learner colours;
+malformed whole graph/replay, forged/cross-issuer boundary, copied/foreign/reordered output and
+forged empty populations. Exercise stale/revoked/rated/cancelled workflow refusals before work
+and after collection, exact registered component/HTTP delivery and unchanged Compare behavior.
+No fixture may manufacture a second branch or partial DrillRun. At acceptance the producer had no
+such arm. The subsequent bounded local implementation adds the sole factory and runtime collection
+to the existing source owner, exact Review-only binding and registered renderer, without changing
+this contract. Its source/SQLite/access/REST/component controls live in
+`recorded-objective-transition.test.ts`, `recorded-review-delivery.test.ts` and
+`review-map-screen.test.ts`. D3947 fences both directions of the current objective wire pair;
+D3948 retains the distinct generic renderer-admission debt. This is not parent completion,
+default-application/native proof or semantic qualification; the independent receipt records scope.
 
 #### 4.11 `full_inspector` — **precursor is subsumed; its four consumers keep their bindings**
 
@@ -2730,7 +3118,119 @@ latency guarantee, API/native proof or semantic qualification. Production accept
 owes typed source/context/response binding, horizon-crossing/stale/cancel controls and actual
 authenticated/native delivery. See `module-evidence-assembly.md` §Dependent incoming-edge sources.
 
-**D3833 authored-shape interval binding (2026-10-15), still unaccepted:** resolve entries
+**D4082 paired current-shape migration (independently accepted, 2026-11-04).** Separate
+delivery and source/execution reviews accept the repaired bounded contract; decisions are in the
+existing compiler2 review receipt. It depends on F2 §2.4b and does not redefine the accepted firing2
+paragraph below. The foundation 23+5 source inventory is unchanged. Introduce exact current
+`theory.shapes.firing@3` bindings and registered presentation tuples; preserve truthful old
+declarations instead of rewriting their dependencies or accepting either version on one current
+tuple. The existing declaration generator/lifecycle checks perform this coordinated cutover.
+
+Inspector replaces its one modern shape topic with firing3 (same topic count, position/branch
+contexts). Its actual registered supplier awaits the complete source-owned scan, preserving
+original context/graph/current grant, complete invocation and existing unavailable/no-witness
+distinction. Topic descriptors, exact Full2 pair, factory route, selected renderers, source
+adapter, strict receiver and paging/detail controls migrate together. No local `{entries,path}`
+fallback or direct JSON re-sealing. The Inspector confirmation/disclosure workflow is unchanged.
+
+Ordinary guided board recognition is a separate authorized read, not a hidden Inspector call.
+Add `POST /runs/:runId/shape-firings/query` to the existing authenticated JSON read-query
+RunService/REST/client path, with closed `{assistance:RequestedAssistanceV1,
+query:{branchId,endpointId,decisionDigest}}`. The requested browser intent is legitimate input;
+it is not a claimed ceiling, finalized config or permission. Parse through existing assistance
+intent and read-query/decision helpers; refuse unknown fields and caller FENs, shape lists,
+trigger objects or finalized permission claims. The service validates actual run access,
+graph/edges and branch endpoint, resolves the requested intent against actual server availability,
+role/session/ceiling, and refuses source work unless guided is live at
+that actual ceiling. Scope is the branch's complete root-to-requested-endpoint path, never its
+later tip. Missing registry returns unavailable; registry/contract faults are failures, not
+empty success. Existing disconnect cancellation/current-read retirement applies throughout
+cooperative capture. This read writes no run/event, requests no engine/provider and grants no
+additional assistance.
+
+The closed response is `{runId,branchId,endpointId,decisionDigest,effectiveConfigDigest,sourceKey,
+outcome,firings}`. Outcome is exactly `available`, `no_witness` or
+`{kind:"unavailable",reason:"authored_source_absent"|"source_dependency_unavailable"}`;
+the first two are represented as `{kind:"available"}` and `{kind:"no_witness"}`. Unavailable
+and no-witness carry an empty firings array; available carries one or more complete items.
+Each firing is `{value,presentation}`: value is the full RegisteredShapeFiring payload and
+presentation is the existing registered PresentedEvidenceItem population from exact current
+`theory.shape_firing@2` bound only to firing3. Its exact adapter is
+`theory.shape_firing@2 × theory.shapes.firing@3 × inspector.registered_shape_firing@2 ×
+shape-catalogue@1`, using the existing complete registered-shape operands and sentence/panel/
+timeline-marker forms. The new Inspector firing3 tuple uses the same renderer/convention with
+its actual Full2 consumer/context. Preserve existing sentence/panel/
+timeline-marker forms and existing budget rules; do not turn matched catalogue plans into
+validated advice. sourceKey binds the original complete source/path/invocation, not just visible
+positive items. decisionDigest/effectiveConfigDigest use the existing current run/assistance
+decision helpers. No private token or raw trace population is serialized to the browser.
+
+The strict client checks the closed envelope, original requested run/branch/endpoint, canonical
+firing3 consumer/presentation tuples, attribution/interval endpoints and response outcome before
+the mounted seat accepts it. It also checks request-local decision/config expectations, retains
+the exact received source key and retires on any current run/branch/endpoint/assistance change,
+401/403, registry invalidation or later stale completion. Refresh after actual source-affecting
+changes; never display a stale response while recomputing the new scope. DrillScreen replaces
+local shapeFiringEvidence(shapes,path) with this delivered population and existing loading/empty/
+unavailable state. Catalogue data supplies navigation and authored plan text only. Marker labels
+and panel recognition attribution come from admitted values. Recognition follows the same
+guided ceiling in visual and semantic views. Preserve existing focus retirement/return behavior.
+
+The two point modules use the same source-owned preparation before their existing pure selection/
+render steps: structure_nudge and theory_breadcrumb receive the original point scan over their
+exact timing subject. Replace their current raw-shapes input path and exact projection lists/bindings together;
+do not pass registered JSON into a legacy matcher. Migrate only shape-source members, preserving
+their existing selection policies, budgets, ordering, ceilings and nonshape sources. Current
+module source-list and consumer changes use the existing coordinated successor generator rather
+than rewriting frozen accepts. No extra prominence or statistical chess judgement is authorized.
+
+Story/guidance remain a separately owned **unimplemented D4077 cutover**: actual storyMomentsForRun,
+guidance.voice_story, review.story and derived.story.rank@2/derived.story.title@2 still depend on
+firing1; the authentic rank3 reduction's closed element list also needs a truthful successor if
+fed firing3. This bounded amendment authorizes none of those dependency rewrites or new rank/title versions.
+They require an exact independently reviewed downstream amendment before their migration; adding
+firing3 to a top-level consumer without its real derived inputs does not close them. No remaining
+live firing1/2 path may be represented as complete current foundation adoption.
+
+Make RunService.shapeRecommendations asynchronous and await it at GET /progress/recommendations.
+Capture only the actual authenticated learner-owned run population; for every branch await the
+same owned complete scan, then preserve the existing per-run deduplication, countable attempted
+shape exclusion, matching present-shape pack links, run-count sort/id tiebreak and ten-item limit.
+Keep the existing public recommendation DTO. Capture the actual learner-owned run/head/branch
+population once and recheck it and the authenticated principal at every chunk/yield and before
+publication, using the existing storage/access owner. Pass the actual request AbortSignal.
+Missing required registry/progress/pack configuration, unavailable branch or failed scan refuses
+the **whole endpoint** through existing typed HTTP service-unavailable/source-failure errors;
+never merge a successful repertoire page with a fabricated successful empty shape contribution.
+An installed genuinely empty shape registry is a valid empty contribution. No stored fact/style/
+skill credit, provider request or write is added.
+
+In addition to F2's complete source falsifiers, permanent real HTTP/strict-client/mounted controls
+cover both colors, positive/negative/explicit-ref truth, every disappearance/return prefix,
+inherited branch and repeated FENs, silent/limited assistance before source work, changing
+grant/config/run/cursor during capture and after delivery, stale/out-of-order responses, no
+future endpoint, semantic assistance parity and focus lifecycle. Recommendations cover multiple
+branches in one run, repeated encounters in distinct runs, actual countable-attempt exclusion,
+missing/unavailable source and no writes/providers. Current module/Story operation tests prove
+source membership and exact tuple migration; an anchor census alone does not prove consumption.
+Complete normal software/content/governance and separate implementation review remain required;
+neither this contract nor a fast primitive benchmark qualifies a source or closes a capability.
+
+**D3972 bounded clarification, independently accepted 2026-11-02.** Exact decision and returned
+bootstrap/probe-order repair: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`. F2
+§2.4a specifies the missing actual registered-document/trigger source owner and exact
+`theory.shapes.firing@2` successor. Only the modern direct Inspector shape
+topic replaces v1 with that exact source-backed successor, preserving one of65 topics and
+position/branch contexts. Its authority includes actual registered document identity/version/
+digest, literal `/trigger`, registered name/channel/handle and original complete invocation.
+The registry issues/checks the source; runtime owns factory execution/proof. Empty installed
+sources and actual missing registry remain distinct; metadata alone never establishes a hold.
+The following earlier `{entries,path}` interval rules remain the algorithm/scope basis, not
+authorization to treat their legacy receipt as registered provenance. Whole captured Review
+uses retain their accepted weaker trigger authority until separately migrated. No new schema
+lane or generic provenance framework, strategic claim, partial public consumer or self-acceptance.
+
+**D3833 authored-shape interval binding (2026-10-15), earlier source arm:** resolve entries
 through RunService's actual `ShapeRegistry`, not caller triggers, names, rendered plans or
 an independently copied catalogue. Capture the selected registry records, their document
 identity/digest and exact triggers independently of mutable caller arrays. Revalidate current
@@ -3506,6 +4006,690 @@ grammar, including real source/response admission controls (not just request-sha
 The request and six-type boundary
 above are a bounded draft, not an executable contract or authority to implement a guessed response.
 
+#### 4.11b Draft D3984 — keep whole readings when no board witness can be drawn
+
+**State: accepted for bounded implementation, 2026-11-02.** Independent decision is recorded
+in `planning/learner-modules/compiler2-independent-review-2026-11-02.md` after the companion's
+relation-overlay caption clarification. This is not complete source-page/API/UI or parent
+acceptance. This narrowly amends the accepted Full Inspector2
+presentation image, not its65 acquisition topics, source meanings, six detail projections,
+wire outcomes, permissions or budgets. The accepted §4.11a/source contract remains in force.
+Exploration evidence: `design/research/module-evidence-assembly.md` §Whole Inspector readings
+without drawable witnesses; `presentation-inspector-source.test.ts`; dated independent D3984
+return and subsequent bounded acceptance in the existing compiler2 review.
+
+**A source reading is not a selected positive annotation.** A genuine nonempty occurrence
+collection stays available even if a retained reading has no named/flagged member or no
+drawable geometry. Retain that original occurrence's source projection, owner, source key,
+ordinal, context and actual typed state. Never replace it with no_witness, source_absent,
+below_floor, a fake over-budget deferred entry, an unowned question, a detail projection or
+an empty square/zero-length relation. A genuinely empty *collection* keeps its source owner's
+existing no_witness outcome. Source invalidity, unavailable input and missing context remain
+distinct; rendering an existing reading's internal unavailable state does not claim its
+calculation succeeded or grant new source authority.
+
+**Closed whole-reading population.** Only the17 exact@1 refs below receive this construction.
+The predicates are source-derived presentation predicates, not source filters or safety tests.
+They retain every reading, including all empty and internally unavailable variants. No caller
+Boolean, exception handler, projection prefix or arbitrary function chooses components.
+
+| Exact source (`@1`) | Complete required statement operands / zero or unavailable case | Optional geometry, from the current witness recipe only |
+|---|---|---|
+| rules.tactic.reading.loose_piece | Existing flagged-piece operands when flags exist; otherwise count0 plus the original pieces.length, never “safe” | none |
+| rules.tactic.reading.ray_classification | Existing five-kind ray operands; rays[] states count0 | square_set: actual slider/blocker/target squares |
+| rules.tactic.reading.rook_on_seventh | Existing rook operands; rooks[] states count0 | square_set: existing rook/king/pawn witnesses |
+| rules.tactic.reading.trapped_piece | Existing pieces when kind=pieces/nonempty; pieces[] states count0 only for kind=pieces; kind=abstained retains trapped_while_in_check with no count0 assertion | relation_overlay: actual distinct attacker→piece edges |
+| rules.tactic.reading.back_rank | Existing susceptible kings/escapes/heavy operands, including nonempty on_back_rank cases; susceptible[] states count0; equal heavy square/target means already occupies, not “can move there” | relation_overlay: existing heavy→fileTarget edges with from!=to only |
+| rules.tactic.reading.discovered_latency | Existing screen operands; screens[] states count0 | relation_overlay: actual screen→target edges |
+| rules.tactic.consequence.threat | Existing threats when kind=threats/nonempty; threats[] states count0 only for kind=threats; kind=abstained retains pass_while_in_check without a count0 assertion | none |
+| rules.tactic.consequence.mate_in_one | Existing mate operands; mates[] states count0 within this immediate legal-move reading only | none |
+| rules.structural.reading.space | Existing color totals and all differential-zone operands, including zero totals; no whole-position space/safety inference | square_set: existing color-zone squares |
+| rules.structural.reading.pawn_connectivity | Existing per-color island/pair/chain counts, including zeros | square_set: existing island squares |
+| rules.phase.development | Existing White/Black home-square piece operands, including both empty lists; never “fully developed” | square_set: existing home-square members |
+| rules.tactic.reading.promotion_pressure | Existing pawn operands; pawns[] states count0 for this pressure convention, not no future promotion | square_set: existing pawn/promotion squares |
+| rules.mobility.reading.legal_moves | Existing turn, movable-piece and exact move counts, including0 | square_set: existing actually movable-piece origins |
+| rules.mobility.reading.piece_destinations | Complete per-color availability plus available piece/legal/local-non-losing counts; an invalid_turn_clone color is not0 available moves | relation_overlay: existing available piece→legal destination edges |
+| rules.pawn.reading.contacts | Existing contact/lock/passed/connected-passed-pair counts, independently retained even with contacts[] | relation_overlay: existing attacker→target contacts |
+| rules.pawn.reading.candidate_majority | Existing candidate operands; candidates[] states count0 under the candidate-passer convention | square_set: existing candidate-pawn squares |
+| rules.tactic.reading.defender_duty_set | Existing duty and distinct-defender counts, including0 | relation_overlay: existing defender→target duties |
+
+For the14 geometric rows, the Full2 adapter's component order is mandatory fact_statement,
+then optional square_set or relation_overlay. Its registered composition is
+`inspector_whole_reading_geometry`; exactly one optional member has the single closed condition
+`inspector_whole_reading_has_geometry`. The condition is permitted only for these14 exact
+Full2 pairs. The statement owns list/panel forms; the optional geometry owns the exact
+remaining forms of that pair. Static union equals the unchanged binding form set even when
+an occurrence has no actual geometry. The three text-only rows remain single fact_statement.
+No detail condition is broadened and no ordinary module/Full1 construction is changed by this
+new composition. The obsolete Full1 table is still removed at actual coordinated cutover.
+
+Extract statement operands independently of drawing; do not invoke an old witness-only
+constructor and catch its exception as a source status. Reuse existing reviewed fixed
+templates where they support exact zeros. The presentation companion below owns the finite
+new empty/unavailable grammar and destination availability grammar. Whole-source construction
+must check the genuine declared item and exact ref, and source-retention admission must
+recompute the statement and geometry from that item. Source kind/reason are real operands:
+correct the existing threat/trapped F1 operand declarations to include kind and optional reason
+already present in their unchanged factory payloads. No new payload meaning, evidence version,
+semantic convention, factory, data migration or independently allocated shared resource is added.
+
+Keep the complete owned statement+geometry bundle atomic, charged once per original source
+occurrence using the unchanged shared budgets. Do not crop operands, subtract words/marks,
+split captions, change policies or remove a family to fit. Zero geometry costs zero geometry;
+the real statement still costs its actual equivalent words. Deferred entries require real
+exceeded dimensions; all-deferred source-order paging still advances. Detail payloads and
+their independently accepted conditional composition retain their own exact contracts.
+
+**Required falsifiers and completion boundary:** genuine factories for all17 rows, zero and
+positive cases, both learner colors where the source carries color; trapped/pass-threat
+abstention distinct from calculated zero; contacts[] with nonzero passed-pair data; a nonempty
+already-on-back-rank source with no invented arrow; per-color clone-unavailable destinations;
+copied/crossed source, forged count/state/reason/geometry/caption/owner and omitted/extra
+components refuse. Ordinary-module/positive source semantics remain unchanged. Test real
+whole bundles under budget, including a combined-overflow case with zero partial output.
+Then actual source→complete Full2 consumer/compiler→wire receiver must preserve original
+source key/projection/ordinal for a presented text-only reading and budget-deferred reading.
+Constructor/parser tests alone may clear only this prerequisite, never D3792/API/UI/native
+or parent/module completion. This amendment is accepted only after independent review of
+both RFC clauses and their exact source/renderer/form/retention contracts.
+
+#### 4.11c D4004 source handoff; D4009 accepted three-projection/bootstrap repair
+
+**Independently accepted on buildability 2026-11-03.** This subsection and
+review-map §7a were jointly reviewed after four concrete author repairs, with the separate
+verdict recorded in the compiler2 independent review. The exploration is the concrete three-arm source/caller audit in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`, not a new chess hypothesis.
+
+**D4009 buildability return and independently accepted representation repair.** Actual attempted
+registration failed the unchanged compiler's per-anyOf grounding/answer/abstention checks before
+tests loaded. D4004's original recorded-source mechanics remain accepted; its one-projection
+image does not compile. This draft supersedes only that image and supplies the missing actual
+Review confirmation/caller bootstrap jointly with review-map §7a. The separate acceptance
+permits this bounded implementation, not whole-parent, native or release clearance.
+
+The current sole Full2 source-page operation is retained; do not revive `compileModulePacket`'s
+Full Inspector arm, add a raw-packet alias, or create a second Analyze consumer/admission pipeline.
+The rejected zero-cost alternative is merely changing a consumer version: existing historical PV
+sources lack engine/bound output; eval-first is not a PV source; actual durable typed PV lives
+inside an eval event and cannot honestly be minted as an original bestline occurrence.
+
+**Exact cost of the selected extension, conditional on acceptance:**
+
+| Item | Current accepted/implemented image | D4009 proposed image |
+|---|---|---|
+| Exact evidence consumers / actual Full Inspector callable | ten; `module.full_inspector@2` / `compileInspectorSourcePage` | unchanged |
+| Full Inspector source topics |65 |68, appending only the three exact Analyze refs below |
+| Full Inspector detail topics |six |same six |
+| Full Inspector consumer×projection/presentation pairs |71 |74 |
+| Whole ten-consumer pair image |282 |285 |
+| Evidence producers |existing image |unchanged; use existing `derived.review` |
+| Added projection / sole value factory / registered renderer |none |three each; common pure parser/formatter may be shared, exact registrations may not |
+| Public source-page protocol / closed outcome reasons |current |same shapes/version; three exact refs and one `analyze_variant_not_selected` unavailable reason |
+| Ordinary Review metadata |no decision/workflow metadata |actual decision stamp + actual workflow context, no line/raw run |
+| Existing assistance endpoint |plain RequestedAssistanceV1 |unchanged ordinary arm plus one closed recorded-Analyze confirmation envelope/target response (§7a.3) |
+| Analyze source request count |broken retired flat admission |max3 sequential exact source queries, continue only source_absent; no new selector view/alias |
+| Stored run format, presets, budgets, source-page callable |current |unchanged |
+| Old Analyze compatibility route/wire |existing legacy caller still broken |retired at actual current caller cutover, not retained as a second authority |
+
+Earlier65/71/282 paragraphs remain accurate checkpoints, not automatically updated acceptance.
+On acceptance/implementation regenerate the actual **whole** inventories/pairs/callable checks and
+named fixtures to68/74/285 with set equality; never quietly replace numbers, subtract a difficult
+topic, narrow the manifest or count an unregistered spec as a current pair.
+
+Append three topics under family `derived`: **Captured bounded engine line**, **Saved engine
+line**, **Saved search first move**, respectively in the table order below. All are
+**incoming_edge** only. Source enumeration stays metadata-only, at most eight at a time;
+requesting any topic uses the selected actual incoming edge's parent for analysis, never the
+current tip or another equal-FEN node. There is no new detail ref, automatic query, engine call,
+move-selection effect, Hint/grade/bot/pack binding or widening of an existing source projection.
+
+**Three literal sources and sole factories.** All use existing producer `derived.review`,
+exactness measured, confidence reported, forms list/panel. Each accepts only
+`{source:RecordedAnalyzeLineSource}` from the genuine private collection, with **its own exact
+selected source arm**, not a raw payload, caller prose, generic wrapper, Boolean approval,
+empty-input derivation or arbitrary weaker alias. Factory symbols follow the existing canonical
+evidenceFactorySymbol rule. Their contracts are literal, not anyOf alternatives:
+
+| Exact projection | Exact sole factory | Selected arm / original inputs in order | Grounding / answers |
+|---|---|---|---|
+| `derived.review.analysis_typed_pv@1` | `createDerivedReviewAnalysisTypedPvV1Evidence` | typed_pv: edge1, eval_packet1, live.stockfish.principal_variation1 | declared_convention / move,principal_variation |
+| `derived.review.analysis_recorded_pv@1` | `createDerivedReviewAnalysisRecordedPvV1Evidence` | recorded_bestline: edge1, pv_packet1 | recorded_run / move,principal_variation |
+| `derived.review.analysis_recorded_first@1` | `createDerivedReviewAnalysisRecordedFirstV1Evidence` | recorded_search_first: edge1, eval_packet1 | recorded_run / move only |
+
+Here edge1 means `run.record.edge@1`; eval_packet1/pv_packet1 mean exact
+`recorded.inspector.eval_packet@1`/`recorded.inspector.pv_packet@1`. The typed row declares
+abstention possible with `input_abstained`, preserving its actual provider dependency. All other
+source outcome handling remains §7a's source-page status contract, not a fabricated source
+value. The first-move row never claims principal_variation; the historical PV row does not
+discard its legitimate PV answer. Mixed typed inputs require declared_convention, not a claim
+that bounded search is recorded_run; historical reports remain reported, not validated search.
+
+The disposable **pre-adoption** `tools/d4009-analyze-declaration/contract.test.ts` uses the **entire actual**
+declaration graph/original bindings. It proves the original single row and each candidate
+two-group grounding combination fail unchanged EVIDENCE_DERIVATION_WIDENS, while these three
+literal rows compile to74/285. Its metadata adapter prototypes are compiler witnesses only,
+not actual registered renderer construction/source-admission proof. Run via the isolated normal
+`make review-analysis-declaration-research`, not the product software/verify pool. A generalized
+conditional-answer mechanism, dummy convention input or source-grounding change is refused.
+Once the real three refs register, retain this witness as historical authoring evidence;
+double-appending them is intentionally not an after-adoption passing gate. An explicit later
+research revision may check the actual registered rows without duplicate candidate declarations.
+
+Declare all three exact derivation/factory/profile/source bindings and require each reader's
+exact selected arm at execution. Before collection, the actual server uses §7a.1's shared pure
+`selectRecordedAnalyzeMetadata` on the current authorized original run; it does no evidence
+factory/parser work simply to choose a topic. The collector independently reselects that actual
+event. Genuine higher absence permits the next explicit query; a lower requested variant with
+an existing higher occurrence returns only `unavailable/analyze_variant_not_selected` and does
+no nonselected factory work. An available
+weaker alternative never substitutes for a present failed stronger arm. In this owner the typed
+PV source is **re-derived from the selected original persisted capture only**; its literal input
+ref is not permission for a fresh provider resolver. Whole Full Inspector static compilation and
+the source-specific recorded supplier must agree on that path. No current-health/provider-off
+fallback is allowed to erase a genuine retained historical capture or to issue a new query.
+
+The factory and retained reader join original parent/child edge, recorded subject/full event head,
+event ordinal/item, exact source kind, byte-complete original persisted capture and actual typed
+delivery before projecting; retain exact original objects/receipts, not equivalent caller values.
+Missing/invalid/empty/unattributed/line selection, source-key inputs and forbidden fallback follow
+§7a exactly. The output's closed `line | unattributed` union has a fixed reviewed-move/SAN/engine/
+bound recipe. A present-empty typed capture fails the unchanged provider parser; no genuine
+typed-empty source/fixture is claimed. Completed-empty is specifically an original historical
+bestline movesUci[] accepted by the actual recorded source factory, retaining that original
+packet and yielding no_witness. The typed line retains its original maxPlies/truncated in the
+closed lineScope operands; whole-line preservation means the complete admitted delivery, not a
+false assertion that its longer raw engine PV was wholly emitted. No renderer crop follows.
+Historical requested bounds select the first usable positive-safe value in movetime/depth/nodes
+order. Unattributed reason-specific templates never claim an absent bound when only the engine
+is unusable. Static recorded grounding never promotes a historical label into validated search,
+and a typed child's actual proof is neither discarded nor laundered by the containing report.
+Source keys use the existing Inspector source/occurrence domains including full current grant,
+original whole run/head/edge and actual selected occurrence, including failed/empty/unattributed
+states; no new hash/freshness register is introduced.
+
+**Presentation/admission.** Register exactly three actual `module.full_inspector@2` pairs for
+the literal projections above and exact fact renderers `review.analysis_typed_pv@1`,
+`review.analysis_recorded_pv@1`, `review.analysis_recorded_first@1`, respectively. The common
+pure operand parser/formatter may be shared, but each registered renderer/source-retention
+contract rejects another projection's sourceArm/lineScope; a first-move receipt cannot be
+presented as typed/historical PV. The actual factories, complete metadata/operands, fixed
+templates, parsers, source retention and serializer must agree for both line/unattributed arms.
+Whole numbered SAN is re-derived from the source's original parent, never copied from the client.
+Typed source uses actual engine name/version; historical source uses literal explicitly-reported
+attribution. No raw provider capture, event, engine option image or caller string crosses the
+presentation wire. Unattributed operands cannot include the private line.
+
+Keep the existing Full2 role/workflow/disclosure/rated/help ceilings and requested/current
+identity checks, plus the selected-parent open-retry withholding specified in §7a before source
+work and publication. The actual server supplier reuses the current Inspector context owner,
+not a parallel access issuer. `compileInspectorSourcePage` still compiles the entire current
+consumer before demand-local resolution, then fits a whole single occurrence under unchanged
+budgets. Over-budget remains deferred, never cropped; no bounded detail exists for this source.
+
+Review Analyze's client bootstraps only from the actual new Review decision/workflow metadata,
+then confirms its in-memory explicit analysis preference with the exact new recorded-target
+arm of existing /assistance (§7a.3). That arm reuses the sole actual Inspector context owner,
+current Full2 preflight/provider-health availability and real branch/retry authorization;
+ordinary active-Play deliveryOpen is not a historical authorization. It emits only finalized
+help plus exact actual target metadata, never a source, capture, raw run or line. No saved
+preference/preset or current assistance caller changes. Client exact target/stamp/context/help
+checks precede at most three exact source-page requests in the fixed typed/PV/first order.
+Only source_absent advances; no values from probes combine and no false cryptographic fullhead
+claim is made for the existing eventHeadSeq-based decision digest. Each actual source owner
+still binds/rechecks complete original run/head/current grant. Its explicit seat preserves Analyze/Hide/Retry focus/lifetime
+rules while never putting a line in ordinary Review data. Remove the predecessor
+`GET review-analysis` and raw-packet admission caller only with actual runtime/server/client
+migration and preserved meaningful tests. No compatibility shim, synthetic stored bestline event,
+in-memory packet masquerading as an occurrence, weakened consumer check or ignored refusal is
+permitted.
+
+Acceptance is review-map §7a.4 **plus** actual set-equality of all ten current consumers and all285
+pairs, all68 source owners and all74 Full Inspector registered constructors/receiver parsers;
+literal dependency alternatives/callable profiles and actual source/authenticated transport/native
+checks must be present. Existing71 positive pair controls remain; no new pair can pass through
+a missing binding or forged view. Current Full1-refusal tests stay negative. This clause grants
+no semantic qualification or whole-parent completion.
+
+
+#### 4.11d D4056 — explicit historical Inspector target and help
+
+**State: accepted for implementation, independent review recorded in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`.** This closes D3999's missing UI reach, not
+a new disclosure policy. The existing server-owned `resolveInspectorRecordedContext` admits a
+disclosed imported/completed line while active retry help is closed. Ordinary `/assistance`
+confirms active Play only; §4.11c/Review §7a's `review` envelope confirms an incoming edge and
+correctly refuses roots. Neither is permission to borrow active help or omit historical roots.
+Evidence: `inspector-recorded-context.test.ts`'s completed/imported disclosure control and
+`review-analyze-confirmation.test.ts`'s source-free/root refusal controls,63/two passing3.12s.
+
+**One source-free arm of the existing endpoint.** `POST /runs/:id/assistance` additionally accepts
+exactly this closed body, with no new route, protocol/resource version or persisted schema:
+
+```ts
+{
+  assistance: RequestedAssistanceV1;
+  inspector: { branchId: string; nodeId: string; decisionDigest: string };
+}
+```
+
+IDs are nonempty strings and the decision digest has its existing exact grammar. Unknown,
+accessor, extra, crossed or combined `review`/`inspector` fields refuse. The sole original
+requested-assistance parser is `parseInspectorRequestedAssistance`, whose own-data snapshot
+precedes the existing intent parser; never pass untrusted intent straight to the latter.
+The sole original Inspector context owner resolves the exact target with `context: {kind: "position"}`; a root
+is a real position, not an invented incoming edge. Current authentication/read role, branch
+disclosure, rated/live locks, workflow context and Full2 effect apply. Complete74-binding
+preflight and current provider-health availability apply as for the existing demand operation.
+Re-read the original context before publication and honor cancellation. Do not change ordinary
+active-Play confirmation, Analyze's edge/retry rules or any source-page permission.
+
+Success contains exactly `{assistance, inspector}`, where assistance is the actual finalized
+receipt from that owner and inspector is exactly `{runId, branchId, nodeId, fen, decision}`
+from the actual selected position/current decision.
+The historical branch/node may intentionally differ from `decision.cursor`: the stamp is
+the actual current full-run decision, never a synthetic target-cursor decision.
+No caller FEN/role/permission, source,
+capture, raw run, evidence or query result crosses this confirmation. It invokes no source,
+factory, provider parser/acquisition, analysis enqueue or storage writer. It is not a reusable
+grant token: every later source-page request still performs its original current authorization.
+Existing HTTP errors remain typed errors; no raw failure text becomes learner prose.
+
+**Actual client and explicit advanced journey.** Add a strict client operation for this arm,
+leaving ordinary `assistance()` and Review Analyze unchanged. At the Advanced Inspector, offer
+an explicit historical line/position selector and an action to open its recorded evidence,
+including roots and inherited-prefix positions. It does not switch the active branch/cursor,
+reveal current Play, modify stored preferences or acquire evidence before that action. Use an
+in-memory explicit Analysis preference for this requested historical inspection, under the
+actual current workflow context; its ordinary role/workflow ceiling still applies. Describe
+the separation visibly: this is recorded evidence for the selected line, not active retry help.
+An undisclosed selected line remains a visible withheld/failure result, never a local grant.
+
+The strict receiver matches the exact requested run/branch/node/FEN/current decision and
+requested receipt/context before mounting `InspectorSourceBrowser` with those confirmed target
+and help props. Its own-data snapshot and closed-record checks cover every nested finalized-help
+record (config, permission, effects, suppressions, hint ceiling, source authority and optional
+Campaign receipt), as well as the envelope and decision. Then the existing finalized parser
+checks its established digest/domains. In particular an effect must match a declared registry
+effect exactly; extra effect fields or a forged Full Inspector effect do not pass merely because
+the public final digest was recomputed. This is receiver validation, not a second assistance
+compiler or a claim that the generic finalized parser already closes those records.
+It requires the finalized Full Inspector review effect; it never substitutes
+the active branch, current board, a guessed ancestor or active Play's finalized digest. Reuse
+the existing demand browser/source/detail controls, exact source-page grammar, source health
+refresh and original peer endpoints. Selecting another target first retires pending confirmation,
+pages/paint and ready state. Changes to the actual run snapshot, role/context/access or source-
+health identity, close and teardown likewise abort/retire them; a matching decision digest alone
+cannot preserve an old run snapshot. No late response may reopen a retired target. Duplicated
+in-flight actions deduplicate only that exact target; later explicit retry remains available.
+An explicit source-health refresh re-confirms this historical target/help, not active Play's
+settings, and retires old pages while confirming. Pending, unavailable/withheld, retry and close
+states are visible. Target changes/close preserve meaningful owned focus without stealing moved
+focus; actual board actions remain usable after leaving the historical seat. The normal active
+Inspector door keeps its existing gates and is not replaced by this separate explicit journey.
+
+**Acceptance controls.** Authenticated/source-free tests cover genuine disclosed root/nonroot
+targets/both colors, imported/completed history while retry help is closed, unchanged active
+assistance/storage, current roles/revocation/rated/context/refusal/cancellation/stale/off-branch
+states, exact closed envelopes and zero source/factory/provider work.
+Current Campaign controls use the actual issued origin/receipt and `assistanceAuthority`,
+not a session-kind inference; copied-receipt controls remain negative. Existing Analyze root and
+open-retry negatives remain. Client mutations of target/FEN/decision/context/help, extra fields
+and missing Full2 effect fail. Actual mounted DrillScreen/App wiring exercises line/position
+selection, explicit confirmation before inventory, exact old-branch/root targets despite active
+closed retry, current-help noninterference, late/replaced/closed/teardown results, pending/retry/
+health refresh and owned focus/real board input. Normal Make software/types/build/governance and
+actual content/native journeys retain their own gates; fixture proof is not default/native
+clearance. No new source/consumer, source qualification, campaign/rating policy, preference
+persistence or D3928 migration is implied.
+
+#### 4.11e D4060 — exact structural-event sources in explicit Inspector
+
+**State: independently accepted for implementation, 2026-11-04; decision recorded in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`.**
+This bounded clause completes an unimplemented source class in this active RFC; it does not
+reopen its ordinary module policy. Research gate: `design/research/module-evidence-assembly.md`
+§D4060 twelve-source gap checks the original factories, payloads, current omissions and renderer
+loss. The missing data is already computed. A position reading is not its incoming-edge event.
+
+**Closed source image.** Add exactly the following twelve `local_rules` topics, all solely
+`incoming_edge`, appended in this order after the current68 topics:
+
+| Exact projection | Original population |
+|---|---|
+| rules.structural.event.backward_pawn@1 | optional color/file before/after observations |
+| rules.structural.event.doubled_pawn@1 | optional color/file before/after observations |
+| rules.structural.event.half_open_file@1 | optional color/file before/after observations |
+| rules.structural.event.isolated_pawn@1 | optional color/file before/after observations |
+| rules.structural.event.king_opposition@1 | optional color/form/ordered king-square observations |
+| rules.structural.event.king_zone@1 | optional color/zone/king-square observations |
+| rules.structural.event.line_blockers@1 | ordered ray endpoints and interior blocker counts |
+| rules.structural.event.open_file@1 | optional file observations |
+| rules.structural.event.passed_pawn@1 | optional color/pawn-square observations |
+| rules.structural.event.piece_count@1 | twelve color/role count states on every valid edge |
+| rules.structural.event.direct_attack_count@1 | positive geometric counts at non-pawn targets |
+| rules.structural.event.pawn_islands@1 | two color counts on every valid edge |
+
+The result is80 topics, unchanged six detail views,86 Full Inspector2 pairs and297 pairs across
+the same current module image (previously68/74/285). Membership must equal the original eleven
+STRUCTURAL_EVENT_FAMILIES plus islands, not Nudge's eight-family list. Preserve the current68
+topics/order and all existing exact pairs. No new detail source or generic JSON source is added.
+All twelve use the current `module.full_inspector@2`, `list`/`panel` forms only; they add no board
+paint, live move recommendation, new normal card or setting. Friendly labels describe the
+family's changes without displaying a raw projection id. Quiet/preset/context/rated rules remain.
+
+**One original supplier per family.** Extend the existing closed local-edge supplier table;
+each entry invokes its literal existing value route with `{beforeFen, moveUci, afterFen}` from
+the selected incoming edge of the original Inspector context. Reuse InspectorLocalSourceOwner,
+complete-consumer preflight, original source receipts/key, authorization and post-collection
+currentness/cancellation checks. The caller supplies no FEN, payload, permission or renderer.
+Do not use postcommitEdgeEvidence, hasPostcommitChangeWitness or a reused Nudge packet: those
+already narrow populations. Return every original occurrence, unchanged values, duplicates and
+ordinal order. Source scope is the selected historical/current edge, never a newest sibling.
+
+**Population honesty.** A root returns existing missing_context/no_incoming_edge with zero
+collector work. Optional-family absence is genuine no_witness. Piece counts always retain all
+twelve color/role states and islands always retain both colors, including0→0; they cannot be
+called no_witness on a valid edge. Direct attacks retain positive counts; absence is null on an
+individual relation, not a synthesized measured0. Line blockers retain ordered endpoints and
+zero interior counts. Before/after nulls and unchanged relations are observations, not grades,
+importance, intent, legality of an attack, or an all-clear. Source failure is never empty evidence.
+
+**Complete registered presentation.** Evidence-presentation§3.10b specifies the eleven-family
+Inspector-only before/after statement. Islands may reuse its existing complete two-count
+statement. Register actual constructor/strict wire semantics for every exact pair. Retain every
+kind-specific field; do not route the extra three through the old eight-family after-or-before
+renderer. That old renderer and ordinary Nudge/Review filters, forms, order and budgets remain
+unchanged. Every new occurrence is one whole fact; current source paging/whole-item deferral and
+20-fact/400-word/20-mark/8-arrow policy remain. The occurrence itself is never cropped to fit.
+The full twelve piece-count records need not fit an arbitrary eight-item page; completeness is
+proved across the declared continuation, with no silent loss or forced first-page admission.
+
+**Compatibility and scope.** The existing source-page protocol/grammar and F1 compiled consumer
+are extended coherently, with strict current manifest/ref/renderer validation. No persisted run,
+pack or shared schema/resource version changes; claims remain none. No legacy fallback. Retain
+committed capability declarations/conventions and let the existing history gates reject a real
+meaning rewrite; no baseline weakening is authorized. No new detector/search/ranking, semantic
+qualification or ordinary-noise expansion follows. Protected intent is unchanged.
+
+**Acceptance (D4060's bounded source-delivery work).**
+
+1. Set equality proves all original68 topics/six details/current pairs survive and all twelve
+   literal source/adapter/binding/receiver rows execute:80/86/297, no extra topic or held family.
+2. Actual factories cover all twelve, both colors, source-present/no-witness where possible,
+   null appearance/disappearance, unchanged and changed values. Mandatory counts use genuine
+   zeros and12/two records, not impossible empty fixtures. An invalid/crossed edge refuses.
+3. Construction and strict JSON parsing preserve complete original before/after values, role,
+   color, count, file/form/zone and ordered squares. Wrong family, mismatched before/after subject,
+   missing/negative/invalid count, unknown fields, wrong convention/renderer/binding and illegal
+   edge fail at their real boundary. Wire validation is not a private evidence seal across JSON.
+   Genuine same-zone king relocation retains both different squares under structuralSubject's
+   king_zone exception; both-color positives and crossed color/zone negatives pin this rule.
+4. Actual source owner/RunService/cookie REST verify original selected/root/inherited/repeated
+   edge, permissions/revocation/rated/withheld/cancellation, source failure and zero acquisition
+   on refusal. Requested source work never reuses another subject or normal-card selection.
+5. Actual strict receiver and mounted Inspector select/display all twelve; text preserves both
+   states and uses friendly labels. Counts/zeros are not empty; paging returns the complete
+   original population, with valid whole-item budget deferral and no saved-run writes/provider
+   work. Current private/retired-source and ordinary Nudge/Review/source tests stay green.
+6. Run normal software/types/build/source/governance and real-content/native gates. Record actual
+   D3928 startup refusal if still present; fixture delivery never establishes native/default-App,
+   source qualification, full parent or release clearance. Those existing owners remain explicit.
+
+Independent contract/source/control review and the bounded D4060 closeout are recorded above;
+its source delivery is implemented locally. Native/qualification/parent/release obligations
+elsewhere in this RFC are unchanged.
+
+#### 4.5c D3982 — complete recorded-window captions within Nudge's fixed budget
+
+**Independently accepted for bounded implementation, 2026-11-03.** The existing compiler2
+independent review receipt records acceptance after checking the original census and symbols.
+This is not implementation/parent/release completion. The original
+factory/adapter/fit census in `design/research/module-evidence-assembly.md` §Complete recorded-window
+Nudge captions measures18 cells, not a new collector or usefulness study. §4.5b's exact learner
+subject, recorded horizons, source image, admission, novelty and selection rules remain binding.
+
+For `module.postcommit_nudge@2` only, the following exact projection pairs use one `square_set`
+with its complete existing registered caption, instead of the square_set/move_path composition:
+
+| Exact projection | Complete caption's existing highlight footprint |
+|---|---|
+| derived.pawn.sequence.harassment_pressure@3 | pawn and relocated minor-piece squares |
+| derived.tactic.deflection_observed@3 | relocated defender and target squares |
+| derived.tactic.attraction_observed@3 | arrival square (both three-/five-ply sources) |
+| derived.tactic.line_blocker_clearance_observed@3 | slider and target squares |
+| derived.tactic.square_clearance_observed@3 | vacated square |
+| derived.tactic.interference_observed@3 | interposition and target squares |
+| derived.tactic.check_zwischenzug_observed@3 | recapture square |
+| derived.tactic.overload_exploitation_observed@3 | defender-recapture and target squares |
+
+These are complete representations, not fragments of the former composition: construct that
+single component directly from the same genuine source and full existing typed caption operands.
+Retain its original owner, renderer, convention, assertions and source-operand declaration,
+including anchors; do not invent a short paraphrase, omit an expected-move list, crop a constructed
+path or mutate a source. Exact Nudge binding forms remove only `arrows`: harassment retains
+list/lit_squares/panel/piece_halo; the other seven retain list/lit_squares/panel. Their single
+component serves that exact union. Other Nudge sources and Review/Inspector's complete paths
+and forms are unchanged. No global sequence heuristic or adaptive post-render component dropping.
+
+Keep the two-fact/50-word/two-mark/one-arrow backstop, existing whole-fact fitting, reducers,
+priority, novelty, no-praise rule and source qualification. Larger legitimate captions may still
+defer for words; this is not a promise that every completed motif is selected. The actual user
+node closes the window: never offer a completed opponent-ending motif at the preceding learner
+move or retarget it to the opponent tip. Highlighted past witness squares are observed fact
+geometry, not a recommended future move or a safe-square verdict.
+
+This prelaunch representation repair retains existing source/consumer/component/binding IDs:
+no new source payload, component grammar or durable run field is introduced. Current query pages
+are transient (RunService.queryModules returns the page; DrillScreen owns request-scoped seat
+packets), and their disclosure's durable-event reference identifies the committed subject, not
+a persisted component schema. Strict current received validation must reject the old two-member
+Nudge representation and unregistered arrow form; no legacy parser or migration is added.
+
+Acceptance requires the original18-cell census to become complete singleton delivery controls
+for every family/color/horizon, with exact original source and complete caption/footprint;
+unchanged Review/Inspector full paths; forged caption/geometry/owner/form and old-composition
+refusal; genuine actor-labelled service/REST learner timing and insufficient/future/opponent
+exclusions; existing reducer/novelty/fact/word budget controls; mounted current module receipt
+rendering with no raw IDs or path, usable board geometry and request/currentness retirement.
+Run ordinary source/types/software gates. Passing adapter fit alone does not close D3982 or the
+parent RFC; actual-content/native/qualification obligations remain separate.
+
+#### 4.5d D4058 — completed observed-window ordering, not a source-risk ranking
+
+**Independently accepted, 2026-11-03.** The existing compiler2 review receipt records the bounded
+decision. Companion to learner-modules §3's D4058 amendment: only current Nudge2 declares
+`production.postcommit_observed_window@1`. After the exact
+existing critical set, the eight exact §4.5c @3 pairs precede other admitted noncritical facts;
+existing exactness/lift/family/tie ordering remains within those two groups. Their source risk,
+grounding and qualification never change. All other modules/policies remain unchanged. This
+explicitly amends §1.3's formerly universal module_local policy statement, not its accepts-order
+familyPrecedence equality. It is product-convention ordering, not proof a move is good or a
+motif is strategically important. No forced slots, hidden subsumption, budget change, factual
+paraphrase or earlier/opponent retargeting. The companion owns the complete source/selection/
+duplicate/critical/budget/actual-delivery falsifiers. D3715's unchanged-count filtering and
+D3767's grade-specific starvation remain distinct; neither is silently closed by this change.
+
+The learner-modules §3 bounded coexistence revision is separately **independently accepted**: exact
+overload@3 precedes the other seven within the already completed-window group. It does not
+authorize source subsumption or budget changes. Original both-color overlap and a genuine
+non-overload deflection must both receive actual selected-delivery controls before closure.
+
+#### 4.11f D4167 — current structural edge sources in Inspector (independently accepted 2026-11-09)
+
+Coordinated with shared-candidate-evidence-packet§3.1b and evidence-presentation§3.10d. Research:
+`design/research/module-evidence-assembly.md` §D4167 complete source/operation/consumer map.
+Independent acceptance of these three clauses precedes production implementation. No new product
+ruling is requested: this is explicit factual source readout under the existing Inspector choice,
+permissions and budget, not a change to ordinary assistance or feature scope.
+
+**Exact current image.** Replace only three Full Inspector2 topics IN PLACE:
+
+- rules.structural.event.backward_pawn@1 → rules.structural.event.backward_pawn@2;
+- rules.structural.event.king_opposition@1 → rules.structural.event.king_opposition@2;
+- rules.structural.event.pawn_islands@1 → rules.structural.event.pawn_islands@2.
+
+Append the following four exact topics, in this order:
+
+1. derived.structural.event.pawn_file_group@1 (`derived`);
+2. rules.transition.event.slider_ray@2 (`local_rules`);
+3. derived.activity.event.file_state@1 (`derived`);
+4. derived.activity.event.file_access_revealed@1 (`derived`).
+
+All seven use incoming_edge only, list/panel only, and the existing current consumer
+module.full_inspector@2. Replacements retain local_rules family. Preserve the other77 topics in
+order and all six detail sources; result84 topics,90 Full2 pairs and301 pairs in the otherwise
+unchanged current module image (formerly80/86/297). No @1 alias/fallback/maximum-version lookup
+exists at this current door; remove exactly its three old Full2 pairs, not separately consumed
+old ordinary-module bindings. The unchanged modules' pair sets, forms, order, preferences and
+policy budgets must remain equal. Closed query grammar, supplier inventory, labels, requirements,
+actual construction, strict wire decoding and browser choice must agree on this exact image.
+
+**Acquisition and results.** Extend the existing local source supplier using §3.1b's closed
+seven-route composition. Keep InspectorLocalSourceOwner, original selected context, source key,
+receipts/ordinals, complete consumer preflight and post-collection checks. Do not call
+postcommitEdgeEvidence, localSemanticEventClosure or hasPostcommitChangeWitness to obtain or
+filter Inspector sources. Original dependency factories are necessary even if final events are
+empty. Root, available empty, failure and cancellation remain distinct. Preserve original event
+signs, all fields and every occurrence; no source policy invents a stable/unchanged event.
+
+**Readout.** Use the seven exact source-specific registered renderers in §3.10d. Friendly choices
+are “Backward-pawn changes”, “Unobstructed opposition changes”, “Pawn-island topology changes”,
+“Pawn-file group changes”, “Slider blocker changes”, “File-class changes” and “Stationary rook
+and queen file changes”. No raw projection IDs/JSON or strategic judgment appear as ordinary
+text. Each occurrence is a whole factual statement with source context and full before/after
+operands; a null ray is distinct from an empty blocker list. Use existing whole-occurrence
+continuation and20-fact/400-word/20-mark/8-arrow limits, with existing honest over-budget outcome;
+never crop an occurrence to fit or silently mark undeliverable evidence delivered. All7 add no
+board marks/arrows, prediction, live recommendation, setting or provider. Source reading access
+uses current quiet/preset/context/rated/help rules and inherited visible-board assistance ceiling.
+
+**Exact disposition boundary.** These seven projection declarations gain their explicit Full2
+LP bindings; remove only their orphan experimental dispositions as required by manifest binding
+exclusivity, add list to existing panel/machine_condition forms, and retain grounding, exactness,
+convention/source requirements, semantics and limitations. Do not register them as active
+semantic-event wrappers, erase D1717's old root blocker, pass independent validation, add ordinary
+bindings or alter any other orphan disposition. Full Inspector source reach is not semantic
+qualification, significance, candidate selection, bot/personality support or release clearance.
+
+**Must-fail and complete delivery controls.**
+
+1. Prove exact topic/order/pair set equality and continued refusal of old three Full2 tuples;
+   unrelated valid renderer/convention/extra field and wrong source/version/target refuse.
+   The exact seven full-payload/source-reference joins must reject genuinely re-digested nested
+   mutations that preserve the original evidenceRef; public receipt hashes alone are insufficient.
+2. Both-color real source→authenticated service/REST→strict receiver→selected mounted DOM tests
+   retain original input refs/digests, signs, all identities and whole rendered operands.
+   No test-created payload, direct component prop or canned API response replaces this chain.
+3. Opposition: interior blocker absence, both holder flips as one event, root vs legal no-witness;
+   backward: multiple same-file subjects, stationary then physical mover join, captured subjects,
+   occupied stop, zero legal-inference claims and true no-change edge.
+4. Groups/files: membership change with booleans unchanged, color-relative ordering and >2-pawn
+   groups, enum unchanged despite rank/member motion, actual en-passant capture square, promotions
+   and both castling relocations. Reveal: moved heavy piece excluded, stationary sibling included,
+   missing/minor/other-file/same-class negatives and all original file-change occurrences.
+5. Islands: equal-count changed partition, merge/split, opponent-only change, zero-count partitions,
+   rank-only no-witness; slider: equal-count swapped blocker identities, root relocation, capture,
+   promotion/castling roots, offboard/null ray versus real empty strict interior/blockers, no
+   invented tactical target.
+6. Current/inherited/historical/repeated-FEN targets retain exact selected full counter identity.
+   Wrong/stale/off-branch context, revoked/closed/rated help, cancellation and late response retire
+   work. Root/permission refusal performs zero source/factory work. Acquired sources retain the
+   existing post-collection checks. Strict client corruption never becomes an empty success.
+7. Page full populations across existing continuation, assert exact original ordinals and no
+   omission/duplication; verify conservative legal-source/template word bounds with genuine dense-source measurements;
+   retain existing genuine401-word whole-bundle deferral controls and exercise real same-source
+   aggregate-page deferral where reachable. Do not fabricate an individually oversized source. All
+   providers off still supports allowed local sources with zero provider work. No active run,
+   current assistance, ordinary modules, storage or main-board geometry/input changes.
+8. Normal Make software/performance/types/build/source/governance and complete content comparison
+   are required. D3928/default native, official-content/release and owner-use remain distinct held
+   gates; synthetic selected-UI proof does not clear them.
+
+**Word-bound clarification (independently accepted 2026-11-09).** A genuine individual event over
+400words is not established and must not be manufactured. The admitted chessops domain has no
+material-count cap; use48 pawn squares globally (no rank1/8 pawns), six on one file, at most12
+pawns on two adjacent files, two geometric pawn controllers and two immediate pawn captures, and
+six strict-interior/blocker squares per ray. Both complete before/after sides fit the fixed human
+templates conservatively below250words: island members/partitions below200, backward subjects
+below250, rays below160, groups/files/reveals below200, opposition below100. Verify the actual
+word-cost function on genuine dense and structural source cases and retain the derivation; do
+not assert bounds from an8-pawns/color assumption. All400/whole-item limits remain. Real cumulative
+same-source page deferral and existing genuine generic401-word whole-bundle controls exercise the
+reachable budget boundary. No skipped source occurrence may be labelled displayed.
+
+**D4168 required-root bookkeeping correction (independently accepted 2026-11-09).**
+Removing the seven orphan dispositions makes them ordinary active event roots under the existing
+semantic-validation-authority root predicate, even though this stage does not collect semantic
+wrappers. Declare exactly these seven in the EXISTING explicit event-validation declaration
+register (which already contributes required declarations independently of wrappers), append
+exact required/unvalidated profiles and regenerate the receipt. Do not add the seven to
+SEMANTIC_EVENT_PROJECTION_REFS, research selector bindings or current candidate/local closure.
+Keep positive, semantic-negative, orientation and imported-population arms required, owned by
+D4167 until exact current operation/cases land; counterfactual and external applicability retain
+the existing literal/observed-event/no-independent-taxonomy rules. No canonical case is relabelled,
+removed or invented. Root count becomes98;419 existing cases/four passed profiles remain unchanged.
+The exact set proof must show no root/profile/verdict omission or accidental qualification and
+no change to semantic wrappers, candidate event image, selector eligibility or ordinary pairs.
+This records existing validation debt, not a new source, waiver, lifecycle or chess authority.
+
+**Remaining D4167 work is mandatory.** All eight complete selected position readouts, backward
+legal-advance consequence, shared/candidate event migration, exact independent current profiles,
+ordinary Sight/Nudge/Review and subject-safe avoidance/bot adoption remain at their existing
+owners. This stage does not close D4167 or foundation D3/D6/D7/D8 in full. Do not keep old ordinary
+paths permanently, silently broaden eligibility or claim a finished consumer because Full2 works.
+
+
+#### 4.11g D4167 — complete snapshot and advance source doors (independently accepted 2026-11-09)
+
+Coordinated with shared-candidate-evidence-packet§3.1c and evidence-presentation§3.10e. Append the
+eight position topics in §3.1c order and then its one incoming_edge advance topic. Opposition and
+backward snapshots are local_rules; the other seven topics are derived. Keep the existing84
+topics and their order, six details and all unrelated module images/policies. Use the existing
+module.full_inspector@2 list/panel door, permissions, answer ceilings and source-page operation.
+No new settings, endpoint, migration or provider is required. No ordinary bindings are added.
+
+Append these EIGHT literal detail/source mappings (all version1) in the order shown:
+
+| `derived.inspector.detail.<kind>@1` | Original source |
+|---|---|
+| backward_pawns | rules.structural.reading.backward_pawn@3 |
+| pawn_file_groups | derived.structural.reading.pawn_file_group@1 |
+| file_states | derived.activity.reading.file_state@1 |
+| future_file_challenges | derived.square.reading.future_file_challenge@1 |
+| capture_migration_reaches | derived.square.reading.capture_migration_reach@1 |
+| outpost_candidates | derived.structural.reading.outpost_candidate@1 |
+| occupied_outposts | derived.structural.reading.occupied_outpost@1 |
+| backward_pawn_advance | derived.pawn.consequence.backward_pawn_legal_advance@1 |
+
+Opposition fits a direct whole statement. Other sources receive one explicitly labelled complete-
+source overview plus their literal detail door. The overview is not a claim that all members have
+been displayed. It retains the full original payload/reference; never change source cardinality
+to per-row facts or crop its stored/wire members. These new details are text-only list/panel,
+whole scope only, under existing8-member/400-word whole-item fitting and honest detail_limited
+outcome. No new geometry, significance/quality ranking or arbitrary JSON/path slicing. Detail
+pages keep the original source occurrence key, context, member/range ordinals and lifetimes.
+Original source-occurrence count and expanded detail-member total use different human labels.
+
+The exact new image is93topics/14details/107Full2pairs/318modulepairs (from84/6/90/301). Preserve
+the prior pair order; source pairs follow the sole topic order, then sole detail order. New
+sources gain list alongside existing panel/machine forms; remove only their orphan experimental
+dispositions. New detail projections inherit their exact source's grounding/exactness/limitations
+and actual versioned derivation input. Expand catalogue lookup to these exact sources rather
+than resolving newest/base ids. Existing detail routes and ordinary consumers stay equal.
+
+Friendly choices: Unobstructed opposition; Backward pawns; Pawn-file groups; File classes;
+Hypothetical same-file pawn challenges; Hypothetical capture-migration reach; Outpost candidates;
+Occupied outposts; Played backward-pawn advance. Technical ids stay out of ordinary labels/text.
+
+Acceptance must exercise the real source→owned service→authenticated REST→strict receiver→selected
+mounted browser, both colors, large and empty sources, all detail continuations and actual emitted
+controls. Prove complete expanded source coverage with no lost/duplicated/reordered leaf, exact
+source vs member totals, invalid scopes/ordinals, copied/resealed/wrong occurrence/retired grants,
+late results/cancel/retry and unchanged quiet/rated/help ceilings. Whole source/derived-view
+reference correspondence tests must mutate nested actual payloads while retaining original refs
+and recomputing public wire checksums. Current native/content hold D3928 and all remaining D4167
+canonical/ordinary/avoidance/bot/qualification duties remain. No parent/capability completion.
+
 ### §5 — Budgets and `emptyBehavior` are the shipped invariants
 
 #### 5.1 Budgets are backstops, and the instrument is the point
@@ -3654,6 +4838,61 @@ Arrow-bearing modules are `sight_on_request`, `blunder_prevention`, `threat_rada
 per-family horizon/disclosure registries and rung compiler land. `structure_nudge` and `theory_breadcrumb` remain square/card
 components because their evidence is a shape/citation, not a directed relation. The module budget
 is a maximum, never a request to fill the board.
+
+#### 4.11h D4167 — wrapper registration does not activate guidance (independently accepted 2026-11-09)
+
+Value-authority§2.2b/shared-packet§3.1d supply seven current foundation wrapper construction
+primitives only. Preserve the exact existing ordinary accepted/supplied/adapter/source-image
+sets, selectors, novelty, budgets, permissions and defaults. Exactly three new refs are version1:
+derived.structural.event.pawn_file_group@1, derived.activity.event.file_state@1 and
+derived.activity.event.file_access_revealed@1. They must not enter ONE_EDGE_EVENT_REFS or its
+Post-commit/Review operation image merely because version===1. Fence that exact set with permanent
+image equality controls; do not broaden eligibility as a side effect of registration.
+
+The four current version2 refs do not acquire ordinary admission either. The seven required
+validation roots retain their profiles/statuses, including the four previously qualified roots
+elsewhere in the98-subject inventory; declaration ownership transfer grants no qualification.
+D4167 remains doing for canonical/candidate acquisition and every separately traced Sight, Nudge,
+Review, Play/Compare, comparison, guidance/voice, authored, avoidance and bot consumer. This clause
+contains no new learner-facing priority or delivery claim.
+
+#### 4.11i Accepted D4167 — retained current semantic sources below Inspector views (2026-11-09)
+
+Coordinate shared-packet§3.1e with semantic-validation§4.1b. The real source owner must retain and
+consume the new operation's wrappers; constructor tests or an unconsumed batch are not caller
+reach. No new learner-facing source choice or ordinary policy is introduced.
+
+Change the existing incoming-edge collection result to a closed record containing `values` and
+`semanticEvents`. For the current seven exact routes, semanticEvents is the original frozen event
+array (including genuine `[]`), and values[i] is EXACTLY semanticEvents[i].evidence. Other existing
+edge suppliers use semanticEvents:null. Position suppliers keep their own value result. The
+InspectorLocalSourceOwner stores that result: root/no incoming context does no collection and
+uses null, whereas a real quiet edge retains [] and no_witness with a non-null source key. Keep
+the complete existing 53-supplier image/order; update all call sites rather than keeping a second
+legacy/raw-array API. No caller may supply a result record or a semantic event.
+
+On acquisition AND retained read, require the exact event projection, original selected complete
+edge, source sign and original tuple construction under value§2.2b; assert each event's seal and
+values↔events ordinal identity. Current requested/effective config, context/access/viewer, signal
+and post-collection checks all remain. The existing opaque sourceKey additionally binds the
+retained semantic event ids/anchors/signs for these seven, alongside the original value receipts.
+This is not a new public field/receipt/schema, nor a key compatibility requirement before launch.
+It is real consumption of the wrappers, not metadata calculated then discarded.
+
+The public Full2 source/page/detail/receiver wire shapes, 93 topics/14 details/107 pairs, complete
+original evidence refs, source-member continuation, 400-word/eight-member caps and existing
+geometry/text disclosure stay. Strict server/client and actual selected-page controls must retain
+all of them. Exercise cancellation, grant/config/target/account change, quiet/root difference,
+foreign edge/source/event, copied/incomplete/extra event populations, wrong projection/sign and
+source-key binding, with unchanged providers and saved runs. A real both-color cookie REST→strict
+receiver→selected DOM path for every family must consume the original retained values; all579
+actual runtime singleton demands must match the shared all-seven computation as specified above.
+
+Semantic validation direct reach is allowed only after this real caller and evidence exist.
+Constructor/shared computation does not itself grant the seven qualifications. All ordinary
+accepted/supplied/adapter images, 41-source one-edge image, budgets, priorities, permissions and
+defaults remain. D4167 retains canonical/candidate acquisition and the complete separate Sight,
+Nudge/Review, Play/Compare, guidance/voice, authored, avoidance and bot migrations.
 
 ## Deviations from design
 
@@ -4037,6 +5276,35 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-11-04: draft D4060§4.11e from the source-backed twelve-family census. Exact incoming-edge
+  suppliers and complete Inspector-only before/after presentation replace a tempting enum-only
+  patch; normal-card eligibility and current source authority are unchanged. Independent review
+  is required before implementation; no new source image is yet shipped.
+
+- 2026-11-04: refreshed unaccepted D3715 §4.5a after independent return: sole canonical
+  current/ancestor admission replaces removed legacy duties, finite eight-family exact-ref image,
+  complete typed equality, unchanged grade/window/order rules and actual Review preservation
+  across shared acquisition. Subsequent independent re-review accepts the bounded refreshed
+  contract in the compiler2 receipt; implementation and actual delivery proof remain owed.
+- 2026-11-04: independent D4060 clarification separates exact Review event preservation from
+  the current Inspector's distinct whole reading. Exact Inspector event-query coverage remains
+  open under D4060/Full1.0 reconciliation; a reading cannot discharge it or authorize new topics.
+
+- 2026-11-03 — Independently accepted D4056 §4.11d adds source-free historical Inspector
+  confirmation and explicit actual-client roots/nonroots/old-line journey without borrowing
+  active Play help. Deep closed receiver and genuine Campaign-context controls are pinned;
+  D4057 types existing workflow errors in both confirmation arms. Local implementation and
+  full software/performance/source/governance gates pass; real content remains held at D3928.
+
+- 2026-11-03 — D4004 draft §4.11c prices a single actual recorded Analyze topic under the
+  existing current consumer/callable, with three exact original source alternatives and no
+  synthetic event/packet or retired Full1 fallback. Joint independent acceptance with
+  review-map §7a remains required; accepted current counts remain checkpoints until then.
+
+- 2026-11-02 — Unaccepted D3927 §4.10a names the missing single-line Review objective source,
+  exact original event population and v2 factory/result/presentation obligations. Code audit
+  distinguishes it from Compare's existing real multi-attempt source. No production input arm,
+  accepted reference, schema reservation or source qualification changes before independent review.
 - 2026-10-15 — D3862 implements D3851's no-legacy ruling for the unused raw-string Nudge API:
   retire route/service/runtime packet/client decoder; keep actual shared evidence/witness helpers
   and canonical module query/presentation. Its useful HTTP/role/subject/budget/read-only/rating
@@ -4407,3 +5675,16 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   Claims: **none**. The recomputability argument recorded in that round was narrowed by the
   2026-08-30 return repair: revealing pre-/at-commit output now requires the explicit ephemeral
   receipt and coordinated intent-presets amendment in §2.5/A16.
+
+
+## Independently accepted coordinated successor — 2026-11-09
+
+`subject-safe-semantic-selection.md` owns the D1716/D1719 and D4167 canonical/candidate/avoidance
+cutover. BOTH independent source/control and consumer/meaning reviews accept its repaired finite
+source-first contract: original root/child graph, two private total reads, current42/compiler7,
+thirteen source-owned@2 outcomes, fourteen current-event compact ordinary pairs and unchanged
+historical case custody. Acceptance is recorded in the existing compiler2 review receipt; it
+comes from that review, not this parent's implementing state. Production images, source
+correctness/qualification and implementation gates remain owed. D4175 retains all26 ordinary
+avoidance pairs/delivery/cost; D4167 keeps every reverse consumer and actual bot Stage-B/D3662.
+No full adoption, content/native or release completion follows.

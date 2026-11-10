@@ -35,6 +35,15 @@ function invokeReading(record: SourcingLedgerRecord) {
     : invokeEvidenceValueRoute("sourcing.ledger.tablebase_result@1", { record });
   const result = engine ? invokeEvidenceValueRoute("recorded.engine.eval@1", { ledger })
     : invokeEvidenceValueRoute("recorded.tablebase.result@1", { ledger });
+  assertRecordedMeasurementInvocation(record, { ledger, result });
+  return Object.freeze({ ledger, result: result as EvidenceAvailability<DeclaredEvidence<RecordedReading>> });
+}
+
+/** Package-private retained invocation check. It dispatches no factory and mints no evidence. */
+export function assertRecordedMeasurementInvocation(record: SourcingLedgerRecord,
+  value: Readonly<{ ledger: DeclaredEvidence<SourcingLedgerRecord>; result: EvidenceAvailability<DeclaredEvidence<unknown>> }>): void {
+  if (record.kind !== "engine_eval" && record.kind !== "tablebase_result") throw new TypeError("Recorded measurement requires an exact engine/tablebase record kind");
+  const { ledger, result } = value, engine = record.kind === "engine_eval";
   const invocation = readRecordedReadingInvocation(result);
   if (ledger.payload !== record || invocation.ledger !== ledger || invocation.route !== (engine ? "recorded.engine.eval@1" : "recorded.tablebase.result@1") || (result.kind === "available"
     && (evidenceValueReceipt(result.value).sourceDigests.length !== 1
@@ -42,5 +51,4 @@ function invokeReading(record: SourcingLedgerRecord) {
     throw new TypeError("Recorded measurement lost its original ledger/reading lineage");
   }
   if (result.kind === "unavailable" && result.reason !== "ledger_record_not_admitted") throw new TypeError("Recorded measurement has an unexpected factory outcome");
-  return Object.freeze({ ledger, result: result as EvidenceAvailability<DeclaredEvidence<RecordedReading>> });
 }

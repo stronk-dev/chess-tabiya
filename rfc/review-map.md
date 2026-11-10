@@ -1,10 +1,23 @@
 # RFC: Review Map — the learner-facing review surface
 
+- **Corrected amendment independently accepted on buildability 2026-11-03 — [[D4009]]:**
+  the single-projection D4004 image failed the unchanged actual compiler and remains superseded.
+  Separate review accepted §7a's three literal projections, exact source-page probes and actual
+  target-scoped assistance bootstrap after the real10-case whole-graph compile witness and
+  historical/campaign permission corrections. The same compiler2 review receipt records the
+  return and corrected acceptance. Actual API/UI/native/parent completion is still separate.
+
+- **Amendment accepted for implementation 2026-11-03 — [[D4004]]:** separate independent
+  cross-review accepts corrected §7a and module-registration §4.11c on buildability. Typed empty
+  remains parser-failed; genuine empty historical reports, recorded ply limits, usable bounds and
+  truthful attribution remain distinct. Receipt: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+  Implementation/API/UI/native and earlier parent discharges are not complete.
+
 - **Draft amendment 2026-10-13 — [[D3758]]:** §2a specifies the consumer boundary for the
   compiler's proposed local incoming-edge sources. It is **not accepted** by this parent's
   awaiting status. The delivered screen and existing discharge states are unchanged.
 
-- **Status:** awaiting D1–D6 — implemented 2026-09-24 at the owner's direction in session (build now as a parallel agent, no further review cycle); acceptance criteria 1–14 have able-to-fail tests and [[D1409]] is enforced in `voiceCheck` (judgement arm). The owner rulings (D1, D2) and the cross-lane amendments (D3, D4, D6) remain open; D5 (the module-registry invocation) is discharged at `63902370`. Receipt: `planning/review/implementation-2026-09-24.md`. Drafted 2026-08-23 on owner ruling [[D1273]] (*"Full surface plus accuracy and longitudinal"*).
+- **Status:** implementing — D4004 accepted current-source Analyze repair; D1–D6 remain undischarged. Earlier delivered-surface checkpoint: implemented 2026-09-24 at the owner's direction in session (build now as a parallel agent, no further review cycle); acceptance criteria 1–14 have able-to-fail tests and [[D1409]] is enforced in `voiceCheck` (judgement arm). The owner rulings (D1, D2) and the cross-lane amendments (D3, D4, D6) remain open; D5 (the module-registry invocation) is discharged at `63902370`. Receipt: `planning/review/implementation-2026-09-24.md`. Drafted 2026-08-23 on owner ruling [[D1273]] (*"Full surface plus accuracy and longitudinal"*).
 - **Author:** claude (drafted from `planning/review/rfc-derivation.md`, 646 lines, the HEAD derivation of every surface this document consumes)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md:134-138` (the failure shape this surface must not become), `design/03-product-breadth.md:57-67`, `:290` (the intent tier's "Review" is branch-compare — see Deviations)
@@ -319,6 +332,371 @@ fixture. Free-form authored prose is not admitted on this surface. Two specific 
   beside a structural sentence invites *"+0.54, so the knight is strong"*. The template table
   therefore fixes the *sentence*, not the fragments.
 
+### §7a — D4004 source handoff; D4009 accepted representation/bootstrap repair
+
+**Independently accepted on buildability, 2026-11-03.** This bounded amendment
+and module-registration §4.11c form one separately reviewed contract; the decision and all four
+author corrections are recorded in the compiler2 independent review. No owner product
+choice, schema/version-lane claim, protected-design edit or archive change is inferred.
+
+**D4009 buildability return and independently accepted repair, 2026-11-03.** Actual implementation
+of the originally accepted single projection failed the unchanged manifest compiler before
+tests loaded: every `anyOf` alternative must independently support the output's grounding,
+answers and abstention. The typed arm has mixed recorded/bounded-search inputs, historical PV
+has recorded inputs, and historical first-move has no PV answer. The source mechanics below
+remain the accepted D4004 work; this separately reviewed repair replaces its unbuildable
+single-projection image and makes the missing real Review→assistance→source bootstrap explicit.
+The independent acceptance permits bounded implementation, not completion or release clearance.
+
+**Measured gap, not a new feature.** `review-analysis.ts:68–108,153–162` currently flattens a
+re-derived typed line into an invented in-memory bestline packet, or reads historical bestline/
+eval-first fields, then calls the retired generic Full Inspector operation. The actual guard in
+`module-packets.ts:70` correctly returns `source_page_required`. Ordinary focused runtime/web
+remainder tests on 2026-11-03 execute35 cases:17 pass/18 fail, with Analyze failures rooted at
+that call. The coordinator's real typed PV is stored under `providerLineDelivery` inside an
+**eval** attachment (`review-evidence.ts:1391–1409,1434–1448`); it is not an original bestline
+attachment. Existing `recorded.inspector.pv_packet@1` admits only original bestline events, and
+its renderer carries only report sequence/legal SAN, not Analyze's engine/bound. The eval
+renderer carries score/frame, not the search first move. Existing evidence is sufficient to
+specify the repair; fabricating an event, weakening a factory or restoring Full1 is not.
+
+**Smallest buildable composition.** Reuse Full Inspector's current consumer and sole source-page
+callable. Three exact static projections under existing `derived.review` preserve the three
+actual input contracts: `analysis_typed_pv@1`, `analysis_recorded_pv@1`, and
+`analysis_recorded_first@1` (all prefixed `derived.review.`). They are three technical Inspector
+topics, not three Analyze buttons or three competing admissions. One explicit Analyze action
+performs at most three exact source requests in that order, advancing only on genuine
+`unavailable/source_absent`. Module-registration §4.11c prices every projection/pair/renderer
+and the bounded confirmation bootstrap. Six detail views and the original65 topics stay intact.
+
+The disposable **pre-adoption** witness `tools/d4009-analyze-declaration/contract.test.ts` compiles the complete
+original declaration graph plus these literal rows, preserving all original bindings. The old
+single row and every two-group combination fail unchanged `EVIDENCE_DERIVATION_WIDENS`;
+the three rows compile. This is metadata authoring evidence, not production adapter/source
+proof or permission to run research as product software CI. No conditional-answer framework,
+dummy convention input, PV-to-move downgrade or weakened compiler is justified by one seat.
+After real registration, appending the same three refs would correctly fail duplicate checks:
+retain this as historical authoring evidence, not a promised after-adoption passing product gate.
+Any later research rerun must explicitly inspect actual registered rows instead of double-appending.
+
+#### 7a.1 Actual recorded source, occurrence and selection
+
+The new runtime helper `collectRecordedAnalyzeLine` receives the actual unchanged complete run,
+granted branch and selected **reviewed move node**, not a caller packet, text, arbitrary FEN or
+list of candidate lines. It uses the existing full-run legal graph/branch validation, exact
+`run.record.edge@1` source and sealed selected-parent subject. The edge's parent is the analysis
+position; its child is the requested reviewed move. Retain original run/head/branch/parent/child
+identity, original event ordinals and complete selected event. Same FEN, engine, line bytes or
+hash is not the occurrence identity. An inherited original parent can be used on a granted
+branch; a different branch/node at the same FEN cannot be borrowed.
+
+One original-source collection has a private invocation reader, like the existing recorded
+comparison/packet owners: copies, reconstructed objects and genuine foreign endpoint/head
+collections refuse. This is not a new evidence/access issuer. Existing sole factories issue
+actual edge/record/provider evidence, and the new sole derived factory consumes only that
+genuine collection. It retains all exact original input evidence objects, including successful
+empty or failed source outcomes internally; no new generic trust callback, approval Boolean,
+digest domain or provenance framework is introduced.
+
+At the selected **parent node**, enumerate original `evidence.attached` events in event order.
+Only the existing Analyze `engine_validated` source-label population is eligible; that stored
+label alone establishes no modern provider authority. Apply this closed precedence:
+
+The shared pure `selectRecordedAnalyzeMetadata` performs this precedence scan over the actual
+validated original run/branch/reviewed node, selecting an original event ordinal and arm or no
+occurrence. It runs only after actual current context authorization, and performs no evidence
+factory, provider-capture parser, rendering, coordinator or provider work. The service compares
+that selection to the one exact requested topic **before** `collectRecordedAnalyzeLine`.
+The collector independently invokes the same selector on its actual original inputs; a caller
+selection object/arm/Boolean is never authority and cannot select a lower occurrence.
+
+1. If any eligible eval attachment **owns** `providerLineDelivery`, select the last such original
+   event, re-derive its actual persisted `stockfish.principal_variation@1` capture through the
+   existing parser and sole `live.stockfish.principal_variation@1` factory, and require exact
+   parent FEN. Retain that original eval packet source, exact re-derived provider source and
+   original edge. Assert the provider source belongs to those literal persisted bytes through
+   the original collection/reader; an unrelated genuine same-FEN/same-value delivery cannot join.
+   Corruption/refusal of this selected typed capture is **failed**, never permission to select
+   an older typed event, historical bestline or eval-first move. **The existing provider grammar
+   rejects an empty PV** (`provider-parsers.ts:282`, also used by persisted re-derivation).
+   Present-empty typed bytes therefore fail, with the original event/capture retained privately
+   but no successful typed source issued. No genuine captured-empty typed-source fixture exists
+   under this grammar; do not widen the parser or synthesize such a source for this amendment.
+2. Only when **no** eligible attachment owns the typed key, select the last eligible original
+   bestline attachment, if any, through its genuine `recorded.inspector.pv_packet@1` source.
+   Do not synthesize a bestline from another record. An original `movesUci: []` is a genuine
+   completed-empty historical report: the existing recorded packet factory accepts it, and
+   `inspector-recorded-presentation.test.ts:57–64` proves its reported-empty field state through
+   that actual source. Retain its original packet and emit `no_witness`, without engine/bound
+   invention or older-source fallback. Malformed present line fields are failed, not permission
+   to skip that occurrence for an older bestline/eval.
+3. Only when neither typed-key nor bestline occurrence exists, select the last eligible eval
+   attachment owning `bestMoveUci`, through its genuine `recorded.inspector.eval_packet@1`
+   source. Interpret exactly that one move as `search_first_move`, never a fabricated PV or a
+   recommendation. A malformed present token is failed; absent records are source-absent.
+
+The topic mapping is literal: typed_pv→analysis_typed_pv, recorded_bestline→analysis_recorded_pv,
+recorded_search_first→analysis_recorded_first. A requested absent higher-priority arm yields
+`unavailable/source_absent` without nonselected factories; this alone permits the next explicit
+probe. A requested lower arm when a higher selected occurrence exists yields the new closed
+`unavailable/analyze_variant_not_selected`, not false absence, and stops. A matching selected
+arm then collects/parses only that original source. Present-corrupt higher metadata still selects
+that arm, so its matching request fails instead of falling back; a direct lower request cannot
+bypass it. True no occurrence is source_absent; genuine selected historical empty is no_witness;
+invalid present input is failed; attribution-incomplete is a presented unattributed state.
+These outcomes are never inferred from an empty rendered list or provider readiness.
+
+This closes the current `reviewDurableEngineLine` absent/invalid collapse for this consumer:
+source absence, invalid/empty stronger capture, genuine empty historical report, missing attribution and a legal
+line are different private outcomes. Existing unrelated callers of that helper need not be
+changed merely for compatibility. No current engine readiness, provider query, new search,
+coordinator observation, cache insertion, storage write or synthetic evidence event is required
+or allowed by Analyze.
+
+#### 7a.2 Closed output and wording
+
+For a chosen nonempty line, walk **every** move in its actual admitted recorded scope legally
+from the exact parent FEN; normalize
+castling with the existing chess rules and derive full numbered SAN, including Black-to-move,
+promotion and en-passant. One illegal/malformed token fails the whole source. Do not truncate,
+skip an illegal suffix, normalize to another FEN or keep only a displayable prefix. For typed
+PV this means the whole existing delivery's `movesUci` within its literal requested `maxPlies`,
+not a claim that every raw engine PV token was emitted. The existing provider parser validates
+the selected raw PV legally and then applies its recorded `maxPlies` request bound. Preserve
+the original `maxPlies` and `truncated` in source/operands and state the recorded ply limit;
+when truncated, state that the engine reported a longer line. This is existing acquisition
+scope, not permission for a second renderer/budget truncation. Historical bestline walks every
+literal recorded token; its unknown raw-search completeness is not inferred.
+
+Require a nonempty recorded engine id and a positive safe-integer requested bound. Typed captures
+use their literal actual engine id/name/version and exact bound discriminant. Historical reports
+use only their literal reported fields; retain the existing first **usable positive-safe-integer**
+value in movetime → depth → nodes order. A malformed/nonpositive movetime does not conceal a
+valid depth/nodes field; an existing but unusable field is not selected merely by presence. Missing
+engine/bound produces a singleton **unattributed** derived state with no public line, rather than
+inventing identity/bound or treating the source as absent.
+
+The three projections share a closed payload recipe, each accepting **only its literal source
+arm**, with the full original source retained privately rather than copied into renderer operands:
+
+- `line`: source arm `typed_pv | recorded_bestline | recorded_search_first`; requested child
+  and parent identities; reviewed move number/side/SAN; exact recorded engine attribution and
+  bound; the complete numbered SAN array; the literal source-input refs/occurrence relationship.
+- `unattributed`: the same exact occurrence/selected-move identity, source arm, and closed
+  unusable-attribution reason `engine_unusable | bound_unusable | engine_and_bound_unusable`;
+  no line, candidate, raw capture or inferred values may enter public operands.
+
+Three exact registered fact renderers `review.analysis_typed_pv@1`,
+`review.analysis_recorded_pv@1` and `review.analysis_recorded_first@1` parse the separate closed
+operand union below and additionally enforce their exact source arm/projection pair. They may
+share a pure parser/formatter implementation, never a generic renderer authorization or
+projection alias. Their literal common grammar is:
+
+```ts
+type RecordedAnalyzeArm = "typed_pv" | "recorded_bestline" | "recorded_search_first";
+type AnalyzeMoveOperand = {
+  fullmove: number; // positive safe integer
+  side: "white" | "black";
+  san: string; // existing strict SAN grammar; source walks the actual complete legal line
+};
+type AnalyzeBoundOperand =
+  | { kind: "movetime"; requestedMs: number }
+  | { kind: "depth"; requestedDepth: number }
+  | { kind: "nodes"; requestedNodes: number }; // each bound value positive safe integer
+type AnalyzeLineScope =
+  | { kind: "typed_request"; maxPlies: number; truncated: boolean }
+  | { kind: "recorded_report" }; // no invented raw-search scope for historical reports
+type AnalyzeLineOperands =
+  | { kind: "line"; sourceArm: RecordedAnalyzeArm; reviewedMove: AnalyzeMoveOperand;
+      engine: { id: string; name: string | null; version: string | null };
+      bound: AnalyzeBoundOperand; lineScope: AnalyzeLineScope; line: readonly AnalyzeMoveOperand[] }
+  | { kind: "unattributed"; sourceArm: RecordedAnalyzeArm; reviewedMove: AnalyzeMoveOperand;
+      reason: "engine_unusable" | "bound_unusable" | "engine_and_bound_unusable" };
+```
+
+All object keys are closed own-data fields; no empty line or empty engine id is legal in `line`.
+`typed_pv` requires `typed_request` with the exact original positive-safe-integer maxPlies,
+literal truncated flag and line length no greater than maxPlies; historical arms require
+`recorded_report`. Crossed scopes or a changed truncation/ply limit refuse.
+`recorded_search_first` requires exactly one line member. Typed engine name/version are actual
+captured values; historical name/version are null and the id is explicitly a reported label.
+Fullmove/side/SAN derive from the exact original parent and every following legal position, not
+client numbering. The adapter source-retention validator recomputes the complete operand union
+from its exact original admitted source and refuses any changed arm/identity/bound/number/SAN,
+omitted suffix or added field. The renderer formats first Black-to-move as `N… SAN`, every White
+move as `N. SAN`, and subsequent Black moves as SAN, retaining the existing full-line meaning.
+Use the existing presentation plain-text/SAN/raw-id/safety guards; do not add a generic free-prose
+or guard exemption. An unrenderable literal attribution is not permission to invent a name.
+
+The renderer reuses the frozen `analysis.line`,
+`analysis.first`, bound and caveat templates for typed evidence. Historical templates explicitly
+say **the saved report names** its engine and requested bound, rather than claiming independently
+verified engine execution. Unattributed state uses three registered reason-specific templates:
+engine attribution unusable, requested bound unusable, or both unusable. Each states that the
+recorded line is not shown because that attribution cannot be established. Do not reuse the
+old `analysis.unattributed` literal, which says only that its bound is absent and would be
+false for engine_unusable with a valid bound. No unattributed state reveals private moves.
+No caller sentence, arbitrary source path, raw eval, first-move
+alias, score/grade, cause, recommended/best move or LLM output is accepted.
+
+Empty/unavailable/failed/withheld/display-limited captions are fixed, separately registered
+surface templates, not source findings: no record; selected historical report carries an empty line; record
+cannot be interpreted; attribution incomplete; assistance withheld; complete line exceeds the
+unchanged display budget. A malformed stronger source never renders as an available historical
+line. Actual source outcomes remain distinguishable in the strict source-page wire.
+
+#### 7a.3 Current explicit delivery and permissions
+
+Each new source uses `incoming_edge` at the reviewed move and the unchanged current
+`inspector/query` request/receipt/strict parser. The selected reviewed node/FEN is the query
+subject; the line begins at its genuine entry parent. Never substitute the entry FEN for the
+query's selected-node FEN or reinterpret the active cursor as the reviewed selection.
+
+**Actual source-free bootstrap, not callback magic.** Current `ReviewMap` carries no decision
+stamp and `App.analyzeFromReview` has only run/branch/row identities; it must not fetch a raw
+run or a provider capture to obtain authorization. Extend the ordinary Review response with
+only `decision:ModuleDecisionStamp` and `workflowContext:WorkflowContextId`, computed from the
+same actual run and real service workflow/campaign authority as its map. The context recipe
+uses actual `assistanceAuthority(runId,principal).origin`: for `campaign_encounter`, verify the
+original issued receipt with the same `verifyCampaignEncounterReceipt` used by
+`compileAuthoritativeAssistance`, then report campaign; otherwise use `deriveWorkflowContext`
+on that actual ordinary origin. Do **not** copy `#moduleViewer.session` or
+`#assistanceContext.workflowContext`, which derive from raw session fields and can label a real
+campaign encounter as pack. Recheck the same actual map run/decision before publishing metadata.
+Strict
+`assertReviewMapResponse` parses the closed stamp shape and existing digest recipe and known
+context; these are request metadata, never an access grant, chess evidence or a line. Existing
+row nodeId/entryNodeId/fen remain the selected child, real parent and selected child FEN.
+
+On Analyze, compile the existing explicit `analysis` preference for that actual workflow
+context **in memory**, without writing saved preferences, changing a preset or overriding a
+ceiling. Ordinary `POST /assistance` uses active-cursor `feedbackDeliveryOpen(run)`;
+`resolveInspectorRecordedContext` instead authorizes the requested historical branch before
+setting deliveryOpen:true. Therefore ordinary Play confirmation is not interchangeable with
+historical Review confirmation. Add precisely one closed alternate body to that existing route:
+
+```ts
+{ assistance: RequestedAssistanceV1,
+  review: { branchId: string; nodeId: string; entryNodeId: string; decisionDigest: string } }
+```
+
+The existing plain RequestedAssistanceV1 request/response stays unchanged. The new arm rejects
+extra/inherited/accessor fields and unknown contexts; it is selected by the exact envelope, not
+by a truthy review flag. After ordinary cookie authentication and complete current Full2
+`compileEvidenceConsumerExecutionV2` preflight, capture current provider-health availability exactly as the actual source
+route does. Resolve the existing Inspector context owner with context `{kind:"incoming_edge"}`,
+the exact selected branch/node/decision and intent; verify its genuine two-node path's parent
+equals entryNodeId, and apply the same selected-parent open-retry gate. Re-read that owned
+context and check cancellation/currentness before replying. No supplier, collector,
+`compileInspectorSourcePage`, evidence factory, provider query or storage write runs for confirmation. Do not introduce a
+second access owner or accept a client-supplied disclosure-open bit. The response is closed:
+
+```ts
+{ assistance: FinalizedAssistanceV1,
+  review: { runId: string; branchId: string; nodeId: string; entryNodeId: string;
+    fen: string; decision: ModuleDecisionStamp } }
+```
+
+These are the actual owned target and selected-child FEN, not blind request echoes. The client
+strictly checks this whole target/stamp against its snapshotted map row/decision, parses the
+existing finalized assistance and requires its requested digest to match the exact in-memory
+intent and its context to match the confirmed map context. A refusal/failure/stale stamp stops;
+the caller does not mutate its preferences or borrow another target's equal-valued help receipt.
+Use the same provider availability and finalize function as Inspector source requests, so a
+legally disclosed historical branch can confirm while active Play remains closed, but undisclosed
+unfinished, rated, spectator, participant or open-retry targets never become authorized by this
+envelope. An unfinished position already disclosed by the existing explicit-reveal/checkpoint
+policy remains eligible under that actual owner; this amendment neither tightens nor opens its ceiling.
+
+Only after that confirmation does the one UI action issue typed-PV, historical-PV, then
+historical-first source requests, at most three. Each uses start:0/collectionKey:null, its exact
+projection, context incoming_edge, the same snapshot run/branch/child/entry/FEN/decision and
+requested/final assistance identities. Continue solely on exact source_absent; stop on failed,
+refused, no_witness, unattributed, available (including deferred), any other unavailable or
+cancellation. Never combine evidence or source keys from probes; only one final selected source
+can render. A source appearing before a lower probe is independently reselected by its actual
+owner and blocks fallback. No work occurs for a nonselected arm.
+
+The existing decision digest binds eventHeadSeq/cursor/disclosureBoundarySeq, **not full event
+bytes**. Reusing it across these read requests relies on legitimate append-only run mutation
+(an append changes eventHeadSeq), while each actual source owner independently binds/rechecks
+the complete original run/head/current grant. Do not claim a cryptographic cross-request fullhead
+join, add a new head protocol or combine captures across probes. A changed decision/help/target
+retires the whole action and requires explicit confirmation; no automatic retry loop or source
+fallback after a mismatched receipt. Initial ordinary Review load acquires no line.
+
+Full current Full Inspector compilation must succeed before any source resolution. The actual
+server-owned current context supplies role, workflow, selected full run/head/branch/edge and
+disclosure; sources/handles do not grant access. Refuse spectators/participants and workflows
+outside the current Full Inspector ceiling **before** capture parsing/factory work. Additionally,
+the source owner checks `openRetryEntry(actualRun, reviewedBranch) === parent.id` before work
+and at retained read/publication: only that entry is withheld, not unrelated reviewed positions.
+The ordinary map and Retry preparation never carry the line.
+
+The current source-page operation owns complete-item fitting under unchanged Full Inspector
+budgets. A complete over-budget line is **deferred** with an honest fixed caption; it is never
+cropped or converted to a successful empty/shorter line. This topic has no bounded-detail door.
+Analyze renders actual admitted components or actual source-status captions, not a parallel
+unsealed `ReviewAnalysis.sentence` payload. Preserve the same focused Analyze/Hide/Retry action,
+single-flight behavior, no private-error leakage, and independent request lifetime bound to
+run/branch/move/entry/decision/help identities. Selection, branch/run replacement, help change,
+Retry opening, Hide, close and unmount retire old completions before parsing/painting or focus
+restoration. Authenticated service access/revoke/storage/role changes refuse before publication.
+
+At the atomic caller cutover, retire the old runtime raw-packet admission helper and
+`GET review-analysis`/old flat `ReviewAnalysisPage` delivery after all actual callers and
+meaningful tests migrate. Pre-launch requires no legacy route or compatibility parser. A
+temporary disconnected frontend/route or raw Full1 fallback is not a staged completion.
+
+#### 7a.4 Acceptance / falsifiers for this bounded amendment
+
+1. Actual complete Full Inspector compilation admits all three exact new source/view pairs; missing
+   any source alternative, factory, nominal reader, convention or renderer fails before work.
+   Every old65 source and six detail pair remains present. Exact totals are the ones in §4.11c.
+2. Genuine recorded typed capture, original historical bestline and original eval-first sources
+   each reach their exact sole factory, current operation, authenticated transport, strict receiver and
+   explicit mounted Analyze seat for **both colours**. Typed input retains its original parsed
+   provider source; no synthetic event/packet is required, and source acquisition writes nothing.
+3. A genuine typed-only eval event (no bestline event) succeeds. Its same-FEN foreign capture,
+   wrong original event ordinal, copied collection, crossed parent/child, current head, branch
+   and caller-provided packet/text refuse. Actual source spies show only the selected path.
+4. Corrupt latest typed capture plus a perfectly valid older typed/historical line fails without
+   fallback. Absent typed key permits genuine historical selection. Present-empty typed capture
+   is failed under the unchanged parser, not a fabricated genuine empty source. An actual original
+   historical bestline with movesUci[] is the populated-record completed-empty control; no source,
+   malformed historical, unattributed and whole-over-budget lines stay distinct. Preserve the
+   typed request's literal maxPlies/truncated and its honest bounded-line caption; no second crop.
+   Direct lower requests with present stronger metadata refuse variant selection without any
+   nonselected factory; absent higher requests alone allow the next explicit probe. Same-value
+   crossed renderer/projection/sourceArm receipts refuse, especially first move labelled as PV.
+5. Preserve all existing full legal SAN/bound/engine, original FEN/colour/promotion/en-passant,
+   first-move-versus-PV, read-only/provider-count, no-map-leak, role/session, open-retry/other-entry,
+   cookie-auth and crossed receiver/lifetime/focus assertions. Rewrite obsolete transport
+   fixtures to genuine current sources; do not delete those cases or make every outcome empty.
+   Genuine authenticated Review→target-scoped assistance→source→mounted Analyze tests must
+   cover an imported/completed historical branch while active Play disclosure is closed, the
+   corresponding undisclosed/rated/open-retry refusals, actual changed provider availability,
+   wrong entry/FEN/context/stamp/requested/final help, cancellation between probes and a stronger
+   source appearing before a lower request. Ordinary assistance callers retain strict old shapes;
+   ordinary Review remains source-free. Test spies require max3 queries and no extra parsing or
+   source factories merely to discover the preferred topic.
+   A genuine issued campaign encounter reports campaign (not raw pack), confirms only its
+   actual earned/equipped ceiling, and cannot turn an ordinary pack into campaign via contextHint
+   or a copied/forged receipt. Existing campaign suppression remains authoritative for Analyze.
+6. Actual source/service spies prove zero provider requests/coordinator jobs/storage events even
+   with an engine offline. Actual unrelated current Inspector topics remain demand-local.
+   Revoke, disclosure, retry, storage and cancellation during acquisition/retained read/publication
+   refuse; late successful replies do not become a live retry feed.
+7. Normal focused runtime/server/web gates and full software/source/census/type/build gates run
+   without skips, increased timeouts, changed budgets or threshold relaxation. Native authenticated
+   desktop/phone Analyze→Hide→Retry and keyboard focus remain required independent journey proof;
+   scripted DOM/source checks do not discharge them or this parent RFC's other obligations.
+
+No new chess detector, strategic truth, engine calibration, campaign/pack scope, owner-preference
+ruling or new review-selection policy is created. This is the explicit Analyze door already
+required by §7, with its missing current-source contract made concrete.
+
+
 ### §8 — Imported games: what may honestly be said about someone else's moves
 
 **`decision_class` does not exist in production code** (zero hits across runtime, server and web).
@@ -466,6 +844,11 @@ Proposed; id assigned at landing (head was **D1284** at drafting).
    an owner.
 
 ## Changelog
+
+- 2026-11-03 — D4004 bounded draft: actual Analyze source audit finds the retired Full1 call and
+  three distinct original source paths; §7a specifies one new current source-topic derivation,
+  no synthetic bestline/old admission bypass and unchanged explicit/retry/read-only meaning.
+  Joint independent review with module-registration §4.11c is required before implementation.
 
 - 2026-10-13 — D3758 draft §2a separates exact incoming-edge collection from useful selected-move
   explanation. The 32-source compiler proposal does not expand moments, Inspector or Story and

@@ -147,6 +147,8 @@ export const PRESENTATION_ADAPTER_FAMILIES: readonly AdapterFamilyPlan[] = Objec
     "sourcing.ledger.tablebase_result@1", "sourcing.ledger.citable_text@1",
     "theory.opening_identity.record@1",
   ], parser: "parseEvidenceRecordDocument", retained: ["kind", "sourceId", "retrievedAt", "values"], components: ["structured_document"], assertions: ["record_kind_schema_matches", "canonical_values_preserved"], disposition: "adapt" }),
+  // Historical pre-factory family proposal, including its old consumer/source identities.
+  // Actual current classification/callable anchors are in PRESENTATION_CONSUMER_CLASSES below.
   family({ id: "pivotal_marker", consumers: ["board.pivotal_marker@1", "compare.structure_strip@1", "guidance.deterministic@1", "guidance.voice_compare@1", "guidance.voice_story@1", "guidance.voice@1", "review.story@1"], projections: ["rules.pivotal.marker@1"], parser: "parsePivotalMarker", retained: ["nodeId", "kind", "detail", "provenanceNote"], components: ["enum_state"], assertions: ["marker_kind_registered", "node_and_detail_preserved"], disposition: "adapt" }),
   family({ id: "structural_square_set", consumers: ["board.selected_square_sight@1", "inspector.position_structure@1"], projections: structural, parser: "parseStructuralObservation", retained: ["kind", "squares"], components: ["square_set", "enum_state"], assertions: ["kind_registered", "squares_byte_equal", "one_fact_per_square_set"], disposition: "adapt" }),
   family({ id: "named_structure_nonboard", consumers: ["inspector.position_structure@1", ...guidanceTextConsumers], projections: ["rules.structural.reading.named_structure@1"], parser: "parseNamedStructureMatch", retained: ["id", "name", "provenanceNote", "squares"], components: ["enum_state"], assertions: ["structure_id_resolves_registered_name", "provenance_preserved", "witness_squares_preserved"], disposition: "repair_projection_operands" }),
@@ -210,7 +212,7 @@ const consumerClass = (
 
 export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRow[] = Object.freeze([
   consumerClass("authoring.claim_binding@1", "author_operator_presented", "apps/server/src/sourcing/claim-binding.ts", "consumeClaimBindingRecords"),
-  consumerClass("board.pivotal_marker@1", "ordinary_presented", "packages/runtime/src/pivotal.ts", "consumePivotalMarkers"),
+  consumerClass("board.pivotal_marker@2", "ordinary_presented", "packages/runtime/src/pivotal-presentation.ts", "consumePivotalMarkers"),
   consumerClass("board.selected_square_sight@1", "ordinary_presented", "packages/runtime/src/reading-evidence.ts", "consumeSelectedSquareSight"),
   consumerClass("compare.engine_trajectory@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "consumeComparisonEngineTrajectory"),
   consumerClass("compare.structure_strip@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "consumeComparisonStripEvidence"),
@@ -228,7 +230,7 @@ export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRo
   consumerClass("review.story@1", "ordinary_presented", "packages/runtime/src/story.ts", "renderReviewStoryEvidence"),
   consumerClass("runtime.evidence_ref@1", "inspector_presented", "apps/web/src/lib/evidence-sentences.ts", "renderDeclaredEvidenceRef"),
   consumerClass("runtime.repertoire_scan@1", "non_presentational_operation", "apps/server/src/repertoire.ts", "consumeRepertoireCorpus"),
-  consumerClass("theory.shape_firing@1", "ordinary_presented", "packages/runtime/src/shape-firing.ts", "consumeShapeFiring"),
+  consumerClass("theory.shape_firing@1", "ordinary_presented", "packages/runtime/src/shape-presentation.ts", "consumeShapeFiring"),
 ]);
 
 type NonMachineEvidenceForm = "sentence" | "list" | "timeline_marker" | "lit_squares" | "arrows" | "piece_halo" | "panel" | "audio";

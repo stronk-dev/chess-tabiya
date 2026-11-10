@@ -28,10 +28,14 @@ being misreported as a completed learner capability.
 2. Follow its source row/RFC/research link. `make work-index` prints citation routing;
    `make work-state` prints durable assignment and the remaining untriaged population.
 3. Respect the exploration/RFC gate and all resource claims in `rfc/README.md`.
+   Routine independent reviews are owner-authorized: delegate them without another permission
+   question. This does not authorize self-acceptance or decisions that change product scope.
 4. Deliver a vertical slice through evidence, state, production API, UX/defaults, content fixture,
    verification and release impact. If a dimension is intentionally absent, record why.
 5. Close out the ledger and required log in the same commit. Update docs and propose protected
    intent flow-back where shipped reality changed. Update the roadmap if capability state changed.
+   Commit each verified dependency slice before starting another implementation wave; a parent
+   RFC can remain implementing while its completed slices receive their own checkpoints.
 
 ## Source lanes
 

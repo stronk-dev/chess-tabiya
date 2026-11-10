@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { isPackDocumentFileName } from "@chess-tabiya/schema/pack-path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import { validatePackDocument, type PackShapeLookup } from "./pack-validation.js";
 import { ShapeRegistry } from "./shape-registry.js";
@@ -15,9 +15,8 @@ const chain = JSON.parse(readFileSync(
   new URL("../../../content/shapes/closed-centre-chain.json", import.meta.url),
   "utf8",
 ));
-const shapes: PackShapeLookup = {
-  get: (id) => id === "closed-centre-chain" ? { document: chain } : undefined,
-};
+const shapes = new ShapeRegistry();
+beforeAll(async () => { await shapes.add(chain, "official"); });
 
 describe("authored consequence lifecycle", () => {
   it("refuses an absorbing success before authored descendants and admits it at a leaf", () => {

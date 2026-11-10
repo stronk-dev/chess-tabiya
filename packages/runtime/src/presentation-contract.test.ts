@@ -12,19 +12,28 @@ import {
   PRESENTATION_SELECTION_ONLY,
   assertPresentationText,
   assertPresentedEvidenceItem,
+  factStatementOperand,
   citationFromEvidence,
   parsePresentationReceipt,
   presentEvidenceItems,
   presentedItemOwner,
   presentedSentence,
+  presentationDigest,
   serializePresentedEvidence,
   type AbstentionOperand,
   type MagnitudeOperand,
+  type PresentationReceipt,
 } from "./presentation-contract.js";
 import { presentReviewFamilyAbstentions, reviewPacketForRun } from "./review-evidence.js";
 import { attachDelivery, evaluationDelivery, importRecord, importedRun, mainPath, play } from "./testing/review-evidence-fixture.js";
+import { recordedGradeFixture } from "./testing/recorded-grade-fixture.js";
+import { recordedPivotalFixture, PIVOTAL_RULE_KINDS } from "./testing/recorded-pivotal-fixture.js";
+import { pivotalMarkerEvidenceItems } from "./pivotal.js";
+import { appendOpponentPly, createRun } from "./runtime.js";
+import { storyMomentsForRun } from "./story.js";
+import type { ReviewEnginePoint } from "./review-points.js";
 
-const REVIEW_MAP = { id: "module.review_map", version: 1 } as const;
+const REVIEW_MAP = { id: "module.review_map", version: 2 } as const;
 const REVIEW_STORY = { id: "review.story", version: 1 } as const;
 
 function evaluatedPacket() {
@@ -41,6 +50,165 @@ function panelItems() {
   const offered = node.items.filter((item) => item.projection.id.startsWith("derived.review."));
   return { packet, path, offered, items: presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_MAP, offered)) };
 }
+
+function redigestReceipt(receipt: PresentationReceipt): PresentationReceipt {
+  const items = receipt.items.map(({ componentDigest: _digest, ...body }) => ({
+    ...body, componentDigest: presentationDigest("presentation.component@1", body),
+  }));
+  return { ...receipt, items, digest: presentationDigest("presentation.receipt@1", items) };
+}
+
+function humanPivotalSource(bound: "nodes" | "movetime" = "nodes"): readonly DeclaredEvidence<unknown>[] {
+  const initial = play(createRun({ id: "root-human-pivotal", session: { kind: "position",
+    start: { fen: importedRun("human-start").start.fen, side: "white" }, feedbackPolicy: "attempt_end",
+    opponentPolicy: { mode: "human_common", targetElo: 1500 } }, sessionDigest: `sha256:${"b".repeat(64)}`,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-09-24T12:00:00.000Z",
+  }), ["e2e4"]);
+  const run = appendOpponentPly(initial, { moveUci: "e7e5", policyModeApplied: "human_common",
+    candidates: ["e7e5", "c7c5", "e7e6", "c7c6", "d7d5"].map((moveUci, index) => ({ moveUci, rank: index + 1, mass: [.31, .24, .19, .16, .1][index]! })),
+    engine: { id: "fixture-maia", name: "Synthetic policy source", version: "test", seedHonored: false,
+      modelId: "synthetic-model", containerDigest: `sha256:${"a".repeat(64)}`, eloHonored: true, eloApplied: 1500,
+      searchBound: { kind: bound, value: 1 } },
+  }).run;
+  return pivotalMarkerEvidenceItems(run, run.activeCursor.branchId).filter(item => item.projection.id === "derived.pivotal.human_divergence");
+}
+
+const pivotalCases = [
+  ...PIVOTAL_RULE_KINDS.map(kind => ({ name: kind, consumer: REVIEW_STORY, projection: `derived.pivotal.${kind}`, acquire: () => {
+    const run = recordedPivotalFixture(kind);
+    return pivotalMarkerEvidenceItems(run, run.activeCursor.branchId).filter(item => item.projection.id === `derived.pivotal.${kind}`);
+  } })),
+  { name: "human_divergence", consumer: REVIEW_STORY, projection: "derived.pivotal.human_divergence", acquire: humanPivotalSource },
+];
+
+const rootFactCases = [
+  ...pivotalCases,
+  { name: "Story shape", consumer: REVIEW_STORY, projection: "theory.shapes.firing", acquire: () => invokeEvidenceValueRoute("theory.shapes.firing@1", {
+    entries: [{ id: "king-on-edge", trigger: { kind: "feature", feature: { kind: "king_zone", color: "white", zone: "edge" } } }],
+    path: [{ id: "root", fen: importedRun("shape-position").start.fen }],
+  }) },
+  { name: "Story terminal consequence", consumer: REVIEW_STORY, projection: "run.record.consequence", acquire: () => {
+    const run = play(importedRun("root-terminal-story"), ["f2f3", "e7e5", "g2g4", "d8h4"]);
+    return invokeEvidenceValueRoute("run.record.consequence@1", { run, branchId: run.activeCursor.branchId }).map(item => item.evidence);
+  } },
+  { name: "Story imported result", consumer: REVIEW_STORY, projection: "run.record.imported_result", acquire: () => {
+    const run = play(importedRun("root-imported-result"), ["e2e4"]);
+    return invokeEvidenceValueRoute("run.record.imported_result@1", { run, branchId: run.activeCursor.branchId, recordedResult: "0-1" }).map(item => item.evidence);
+  } },
+  { name: "Story endgame", consumer: REVIEW_STORY, projection: "rules.endgame.classification", acquire: () => invokeEvidenceValueRoute("rules.endgame.classification@1", { fen: "1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1" }) },
+  ...([REVIEW_STORY, REVIEW_MAP] as const).map(consumer => ({ name: `${consumer.id} mate transition`, consumer, projection: "derived.review.mate_transition", acquire: () => evaluatedPacket().packet.nodes.flatMap(node => node.items.filter(item => item.projection.id === "derived.review.mate_transition")) })),
+  { name: "Story last level", consumer: REVIEW_STORY, projection: "derived.story.last_level", acquire: () => {
+    const { packet } = evaluatedPacket();
+    const points = packet.nodes.flatMap(node => node.items.filter((item): item is DeclaredEvidence<ReviewEnginePoint> => item.projection.id === "derived.review.eval_point"));
+    return invokeEvidenceValueRoute("derived.story.last_level@1", { path: packet.subject.pathNodeIds, side: packet.subject.learnerSide,
+      recordedResult: "0-1", points }).map(item => item.evidence);
+  } },
+  { name: "Story title", consumer: REVIEW_STORY, projection: "derived.story.title", acquire: () => {
+    const { run } = evaluatedPacket();
+    return [storyMomentsForRun(run, run.activeCursor.branchId).title.evidence];
+  } },
+  { name: "Review WDL", consumer: REVIEW_MAP, projection: "derived.review.wdl_point", acquire: () => evaluatedPacket().packet.nodes.flatMap(node => node.items.filter(item => item.projection.id === "derived.review.wdl_point")) },
+  { name: "Review grade", consumer: REVIEW_MAP, projection: "derived.grade.move_quality", acquire: () => {
+    // Raw UCI scores are side-to-move: equal positive reports on opposite turns are a
+    // large White-side loss, not equal normalized evaluations.
+    const fixture = recordedGradeFixture({ before: "cp 1000", after: "cp 1000" });
+    const result = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: fixture.source });
+    if (result.kind !== "available") throw new Error("Expected actual recorded grade");
+    return result.value;
+  } },
+  { name: "Nudge grade summary", consumer: { id: "module.postcommit_nudge", version: 2 }, projection: "derived.grade.move_quality", acquire: () => {
+    const fixture = recordedGradeFixture({ timing: "post_commit", before: "cp 0", after: "cp 200" });
+    const result = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: fixture.source });
+    if (result.kind !== "available") throw Error("Expected current original grade");
+    return result.value;
+  } },
+];
+
+function rootFactReceipt(testCase: typeof rootFactCases[number]): PresentationReceipt {
+  const evidence = testCase.acquire();
+  expect(evidence.length, testCase.name).toBeGreaterThan(0);
+  expect(evidence.every(item => item.projection.id === testCase.projection)).toBe(true);
+  const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, testCase.consumer, evidence));
+  const wire = serializePresentedEvidence(items);
+  expect(wire.items.length).toBeGreaterThan(0);
+  expect(parsePresentationReceipt(JSON.parse(JSON.stringify(wire))).map(presentedSentence)).toEqual(items.map(presentedSentence));
+  return wire;
+}
+
+describe("D3948 root Story and Review exact fact associations", () => {
+  it("D4064 refuses both fully redigested full→summary and summary→full renderer swaps", () => {
+    for (const name of ["Review grade", "Nudge grade summary"]) {
+      const wire = rootFactReceipt(rootFactCases.find(row => row.name === name)!);
+      const items = wire.items.map(item => {
+        if (item.component.id !== "fact_statement") throw Error("Expected actual grade statement");
+        const original = item.component.operand;
+        if (original.rendererId !== "grade.move_quality@2" && original.rendererId !== "play.move_quality_summary@1") throw Error("Expected closed grade operand");
+        const renderer = name === "Review grade" ? "play.move_quality_summary@1" : "grade.move_quality@2";
+        const operand = factStatementOperand(renderer, original.binding, original.convention, original.operands);
+        return { ...item, component: { ...item.component, operand } };
+      });
+      expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/registered|renderer/u);
+    }
+  });
+  it.each([
+    { subkind: "castled", fen: "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", move: "e1g1" },
+    { subkind: "pawn_break", fen: "4k3/8/8/3p4/8/4P3/8/4K3 w - - 0 1", move: "e3e4" },
+  ])("D4028 retains the genuine $subkind detail variant", ({ subkind, fen, move }) => {
+    const run = play(importedRun(`root-${subkind}-pivotal`, "white", fen), [move]);
+    const evidence = pivotalMarkerEvidenceItems(run, run.activeCursor.branchId).filter(item => item.projection.id === "derived.pivotal.irreversibility");
+    expect(evidence.length).toBeGreaterThan(0);
+    expect(evidence.every(item => "subkind" in item.payload.detail && item.payload.detail.subkind === subkind)).toBe(true);
+    const original = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_STORY, evidence));
+    expect(parsePresentationReceipt(serializePresentedEvidence(original)).map(presentedSentence)).toEqual(original.map(presentedSentence));
+  });
+  it.each(["nodes", "movetime"] as const)("D4028 retains optional target and all engine fields with %s metadata", bound => {
+    const evidence = humanPivotalSource(bound);
+    expect(evidence).toHaveLength(1);
+    expect(evidence[0]!.payload).toMatchObject({ detail: { targetElo: 1500, engine: { modelId: "synthetic-model", containerDigest: `sha256:${"a".repeat(64)}`,
+      eloHonored: true, eloApplied: 1500, searchBound: { kind: bound, value: 1 } } } });
+    const original = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_STORY, evidence));
+    const parsed = parsePresentationReceipt(serializePresentedEvidence(original));
+    expect(parsed.map(presentedSentence)).toEqual(original.map(presentedSentence));
+    expect(parsed[0]!.component).toEqual(original[0]!.component);
+  });
+  it.each(rootFactCases)("round-trips the genuine $name source", testCase => { rootFactReceipt(testCase); });
+  for (const field of ["renderer", "binding", "convention"] as const) {
+    it.each(rootFactCases)(`refuses re-digested ${field} substitution for $name`, testCase => {
+      const wire = rootFactReceipt(testCase);
+      const items = wire.items.map(item => {
+        if (item.component.id !== "fact_statement") throw new Error("Expected root fact statement");
+        const original = item.component.operand;
+        const operand = field === "renderer" ? factStatementOperand("play.phase@1", "declared_convention", "phase-bands@1", { phase: "opening" })
+          : factStatementOperand(original.rendererId, field === "binding" ? original.binding === "recorded_run" ? "declared_convention" : "recorded_run" : original.binding,
+            field === "convention" ? "board-rules@1" : original.convention, original.operands);
+        return { ...item, component: { ...item.component, operand } };
+      });
+      expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/registered|renderer|binding|convention/u);
+    });
+  }
+  it.each(pivotalCases)("refuses a genuine sibling pivotal kind under $name ownership", testCase => {
+    const wire = rootFactReceipt(testCase), sibling = pivotalCases.find(candidate => candidate.name !== testCase.name)!;
+    const other = rootFactReceipt(sibling).items[0]!;
+    const items = wire.items.map(item => ({ ...item, component: other.component }));
+    expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/kind/u);
+  });
+  for (const stage of ["process", "wire"] as const) {
+    it.each(pivotalCases)(`D4028 refuses undeclared $name detail on the ${stage} path without changing prose`, testCase => {
+      const wire = rootFactReceipt(testCase);
+      const items = wire.items.map(item => {
+        if (item.component.id !== "fact_statement" || item.component.operand.rendererId !== "story.pivotal_marker@1") throw new Error("Expected genuine pivotal fact");
+        const original = item.component.operand;
+        const operands = { ...original.operands, detail: { ...original.operands.detail, suggestion: "HIDDEN_TEST_SENTINEL" } };
+        if (stage === "process") expect(() => factStatementOperand(original.rendererId, original.binding, original.convention, operands)).toThrow(/unknown key suggestion/u);
+        // The old renderer ignores this extra field. Keep its original text, so a text mismatch
+        // cannot masquerade as the exact operand grammar refusing the undeclared data.
+        return { ...item, component: { ...item.component, operand: { ...original, operands,
+          sourceDigest: presentationDigest("presentation.fact.operands@1", operands) } } };
+      });
+      if (stage === "wire") expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/unknown key suggestion/u);
+    });
+  }
+});
 
 describe("evidence presentation Checkpoint A: the closed component vocabulary", () => {
   it("declares exactly the fourteen §3 ids, frozen, each with all eight fields (criterion 1)", () => {
@@ -129,9 +297,21 @@ describe("evidence presentation Checkpoint A: the sealed path and the closed wir
   it("refuses an admitted projection with no registered adapter and skips only declared selection-only bindings", () => {
     const { run, path } = evaluatedPacket();
     const position = invokeEvidenceValueRoute("run.record.position@1", { run, nodeId: path[1]!.id });
-    // run.record.position@1 is not bound to module.review_map@1, so it is not admitted, not presented.
+    // run.record.position@1 is not bound to module.review_map@2, so it is not admitted, not presented.
     expect(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, REVIEW_MAP, [position]))).toEqual([]);
     expect(PRESENTATION_SELECTION_ONLY).toEqual(["review.story@1\u0000derived.story.rank@2"]);
+  });
+
+  it.each(["id", "version"] as const)("D3948 refuses a re-digested foreign producer %s on a genuine adapter", field => {
+    const wire = serializePresentedEvidence(panelItems().items);
+    expect(() => parsePresentationReceipt(wire)).not.toThrow();
+    const foreign = PRIMARY_EVIDENCE_MANIFEST.producers.find(candidate => candidate.id !== wire.items[0]!.evidenceRef!.producer.id)!;
+    const items = wire.items.map(item => item.evidenceRef === null ? item : {
+      ...item, evidenceRef: { ...item.evidenceRef, producer: field === "id"
+        ? { id: foreign.id, version: foreign.version }
+        : { ...item.evidenceRef.producer, version: item.evidenceRef.producer.version + 1 } },
+    });
+    expect(() => parsePresentationReceipt(redigestReceipt({ ...wire, items }))).toThrow(/producer/u);
   });
 
   it("maps every review.story@1 binding to exactly one adapter or the selection-only list, and every adapter to a real binding", () => {

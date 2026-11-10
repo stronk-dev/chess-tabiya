@@ -47,6 +47,18 @@ async function consentToShare(target: HTMLElement): Promise<void> {
 }
 
 describe("profile surface", () => {
+  it("withholds a measured-denominator claim for an incomplete card", async () => {
+    const fixture = profileFixture(), base = fixture.profile.style.cards[1]!;
+    const incomplete = { ...base, sentence: "Some required game evidence is unavailable.", abstention: { code: "incomplete_card", missing: ["castlingEligible"] } };
+    const response = { profile: { ...fixture.profile, style: { ...fixture.profile.style, cards: [incomplete] } } };
+    const { target, component } = render({ learnerProfile: async () => parseLearnerProfile(response) });
+    try {
+      await settle();
+      expect(target.textContent).toContain("Some required game evidence is unavailable.");
+      expect(target.textContent).not.toContain("Measured so far");
+      expect(target.textContent).toContain("25 measured games");
+    } finally { await unmount(component); }
+  });
   it("refuses malformed initial history without exposing its operands and recovers on explicit retry", async () => {
     const fixture = profileFixture();
     const malformed = { profile: { ...fixture.profile, history: { ...fixture.profile.history,
@@ -354,32 +366,15 @@ describe("profile surface", () => {
     unmount(component);
   });
 
-  it("paginates observation moves, prevents duplicate pending requests and retains exact node links", async () => {
-    const fixture = profileFixture();
-    const row = { ...fixture.profile.observations.rows[0]!, occurred: 101, opportunities: 201, byPhase: [{ phase: "opening", occurred: 101, opportunities: 201 }] };
-    const refs = Array.from({ length: 101 }, (_, index) => ({ runId: "same-run", nodeId: `move-${index}`, ply: index + 1, moveSan: "e4", observedAt: "2026-10-07T10:00:00.000Z" }));
-    let release!: () => void;
-    const hold = new Promise<void>((resolve) => { release = resolve; });
-    const learnerProfileObservation = vi.fn(async (_key: string, offset = 0) => {
-      if (offset === 100) await hold;
-      return parseObservationDetail({ row, opportunities: row.opportunities, occurred: { total: 101, offset, items: refs.slice(offset, offset + 100), hiddenCount: Math.max(0, 1 - offset) } });
-    });
-    const { target, component, onNavigate } = render({ learnerProfile: async () => parseLearnerProfile(fixture), learnerProfileObservation });
+  it("states unavailable structure statistics and offers no stale aggregate drill-down or retry", async () => {
+    const fixture = profileFixture(), learnerProfileObservation = vi.fn();
+    const { target, component } = render({ learnerProfile: async () => parseLearnerProfile(fixture), learnerProfileObservation });
     await settle();
-    button(target, "Show moves").click();
-    await settle();
-    const more = button(target, "Show more moves");
-    more.click(); more.click();
-    await settle();
-    expect(learnerProfileObservation).toHaveBeenCalledTimes(2);
-    expect(more.disabled).toBe(true);
-    release();
-    await settle();
-    const list = target.querySelector("ol[aria-label='open file — gained: moves']")!;
-    expect(list.children).toHaveLength(101);
-    (list.lastElementChild!.querySelector("button") as HTMLButtonElement).click();
-    expect(onNavigate).toHaveBeenCalledWith("/review/game/same-run?node=move-100");
-    expect(target.textContent).toContain("Showing 101 of 101 moves.");
+    const section = target.querySelector("section[aria-labelledby='observations-title']")!;
+    expect(section.textContent).toContain("Detailed structure statistics are unavailable.");
+    expect(section.textContent).not.toContain("No observation has been recorded");
+    expect(section.querySelector("button, table, a")).toBeNull();
+    expect(learnerProfileObservation).not.toHaveBeenCalled();
     unmount(component);
   });
 

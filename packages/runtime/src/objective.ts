@@ -3,18 +3,20 @@ import { makeSquare, opposite, parseSquare } from "chessops/util";
 
 import { positionFromFen } from "./chess.js";
 import { RuntimeError, unknownNode } from "./errors.js";
-import { evidenceForConsumer } from "./evidence-contract.js";
-import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { appendEvents } from "./events.js";
 import { exactMoveIdentity } from "./legal-moves.js";
 import { assertObjectiveTransition } from "./objective-state.js";
 import type { StructuralExpression } from "./structure.js";
-import { declareStructuralPredicateEvidence, structuralEvidenceForObjective } from "./structural-evidence.js";
-import { matchesTransitionExpression } from "./transition.js";
+import { AuthoredStructuralSourceError, declareCurrentStructuralPredicateEvidence, preflightCurrentAuthoredOperation, requireCurrentStructuralExpression } from "./structural-evidence.js";
+import type { AuthoredStructuralConditionSource } from "./internal/authored-structural-source.js";
+import { matchesStructuralExpression } from "./structure.js";
+import { assertCurrentTransitionSources, matchesCurrentTransitionExpression, matchesTransitionExpression } from "./transition.js";
 import type { TransitionExpression } from "@chess-tabiya/schema/drill-pack";
 import {
   tempoMovesFromRun,
   windowStates,
+  currentWindowStates,
+  assertCurrentWindowSources,
   type TempoVerdict,
 } from "./tempo.js";
 import type { TimingWindowDefinition } from "@chess-tabiya/schema/drill-pack";
@@ -69,7 +71,7 @@ export type FenPredicate =
       readonly white: readonly SquareName[];
       readonly black: readonly SquareName[];
     }
-  | { readonly type: "structuralFeature"; readonly feature: StructuralExpression };
+  | { readonly type: "structuralFeature"; readonly feature: StructuralExpression; readonly authoredSource?: AuthoredStructuralConditionSource };
 
 export type ObjectivePredicate =
   | RulesFactPredicate
@@ -91,13 +93,13 @@ export type ObjectivePredicate =
       readonly fenPredicates: readonly FenPredicate[];
     }
   | {
-      readonly type: "timingWindow";
+      readonly type: "timingWindow" | "authoredTimingWindow";
       readonly window: TimingWindowDefinition;
       readonly learner: Color;
       readonly verdict: TempoVerdict;
       readonly openingTrigger?: ObjectivePredicate;
     }
-  | { readonly type: "transitionFeature"; readonly transition: TransitionExpression }
+  | { readonly type: "transitionFeature" | "authoredTransitionFeature"; readonly transition: TransitionExpression }
   | {
       readonly type: "all" | "any";
       readonly predicates: readonly [ObjectivePredicate, ...ObjectivePredicate[]];
@@ -176,7 +178,7 @@ function squareSetMatches(
   return [...required].every((square) => actual.has(square));
 }
 
-function matchesFenPredicate(node: Node, predicate: FenPredicate, documentId: string): boolean {
+function matchesFenPredicate(node: Node, predicate: FenPredicate, purpose: "authoring" | "objective" = "objective"): boolean {
   switch (predicate.type) {
     case "transposeKey": return node.transposeKey === predicate.value;
     case "pieceOnSquare": {
@@ -195,12 +197,11 @@ function matchesFenPredicate(node: Node, predicate: FenPredicate, documentId: st
       return squareSetMatches(pawns("white"), predicate.white, predicate.mode) && squareSetMatches(pawns("black"), predicate.black, predicate.mode);
     }
     case "structuralFeature": {
-      const declared = declareStructuralPredicateEvidence(node.fen, predicate.feature, { source: "pack", documentId, pointer: "runtime.objective_condition" }).result;
-      return structuralEvidenceForObjective(evidenceForConsumer(
-        PRIMARY_EVIDENCE_MANIFEST,
-        { id: "runtime.objective_condition", version: 1 },
-        [declared],
-      ));
+      if (predicate.authoredSource === undefined) return matchesStructuralExpression(node.fen, predicate.feature);
+      if (requireCurrentStructuralExpression(predicate.feature) !== predicate.authoredSource) throw new AuthoredStructuralSourceError("Objective expression differs from its original authenticated source identity");
+      const declared = declareCurrentStructuralPredicateEvidence(node.fen, predicate.authoredSource, "predicate", purpose);
+      if (declared.kind !== "available") throw new AuthoredStructuralSourceError(`Objective structural source unavailable: ${declared.reason}`);
+      return declared.value.payload.observation.matched;
     }
     default: {
       const exhaustive: never = predicate;
@@ -244,7 +245,9 @@ function drawIsAvailable(run: DrillRun, node: Node): boolean {
 export function evaluateObjectivePredicate(
   run: DrillRun,
   predicate: ObjectivePredicate,
+  purpose: "authoring" | "objective" = "objective",
 ): boolean {
+  if (purpose !== "authoring" && purpose !== "objective") throw new TypeError("Unknown objective operation");
   const node = activeNode(run);
 
   switch (predicate.type) {
@@ -266,7 +269,7 @@ export function evaluateObjectivePredicate(
       return balance === predicate.value;
     }
     case "fenPredicate":
-      return matchesFenPredicate(node, predicate.predicate, run.packId ?? run.id);
+      return matchesFenPredicate(node, predicate.predicate, purpose);
     case "checkpointReached":
       return checkpointWasReached(run, node, predicate.checkpointId);
     case "checkpointReachedHere":
@@ -298,12 +301,18 @@ export function evaluateObjectivePredicate(
       if (predicate.plyHorizon !== undefined && node.ply > predicate.plyHorizon) return true;
       if (predicate.spineTransposeKeys.includes(node.transposeKey)) return false;
       return !predicate.fenPredicates.some((fenPredicate) =>
-        matchesFenPredicate(node, fenPredicate, run.packId ?? run.id),
+        matchesFenPredicate(node, fenPredicate, purpose),
       );
     }
-    case "timingWindow": {
+    case "timingWindow":
+    case "authoredTimingWindow": {
+      if (predicate.type === "authoredTimingWindow") {
+        preflightCurrentAuthoredOperation(purpose);
+        assertCurrentWindowSources([predicate.window]);
+        if (predicate.openingTrigger !== undefined) assertCurrentObjectiveSources(predicate.openingTrigger);
+      }
       const path = tempoMovesFromRun(run, node.id);
-      const state = windowStates(
+      const state = (predicate.type === "authoredTimingWindow" ? currentWindowStates : windowStates)(
         [predicate.window],
         path,
         predicate.learner,
@@ -315,28 +324,49 @@ export function evaluateObjectivePredicate(
               return evaluateObjectivePredicate(
                 { ...run, activeCursor: { ...run.activeCursor, nodeId: pathNodeId } },
                 predicate.openingTrigger!,
+                purpose,
               );
             },
+        purpose,
       )[0];
       return state?.verdict === predicate.verdict;
     }
-    case "transitionFeature": {
+    case "transitionFeature":
+    case "authoredTransitionFeature": {
+      if (predicate.type === "authoredTransitionFeature") { preflightCurrentAuthoredOperation(purpose); assertCurrentTransitionSources(predicate.transition); }
       if (node.parentId === null || node.moveUci === null) return false;
       const parent = run.nodes.find((candidate) => candidate.id === node.parentId);
       return parent === undefined
         ? false
-        : matchesTransitionExpression(parent.fen, node.moveUci, node.fen, predicate.transition);
+        : (predicate.type === "authoredTransitionFeature" ? matchesCurrentTransitionExpression : matchesTransitionExpression)(parent.fen, node.moveUci, node.fen, predicate.transition, purpose);
     }
     case "all":
-      return predicate.predicates.every((child) => evaluateObjectivePredicate(run, child));
+      return predicate.predicates.every((child) => evaluateObjectivePredicate(run, child, purpose));
     case "any":
-      return predicate.predicates.some((child) => evaluateObjectivePredicate(run, child));
+      return predicate.predicates.some((child) => evaluateObjectivePredicate(run, child, purpose));
     case "not":
-      return !evaluateObjectivePredicate(run, predicate.predicate);
+      return !evaluateObjectivePredicate(run, predicate.predicate, purpose);
     default: {
       const exhaustive: never = predicate;
       throw new TypeError(`Unhandled objective predicate: ${JSON.stringify(exhaustive)}`);
     }
+  }
+}
+
+/** Source-only preflight of a compiled trigger, including boundary arms an early exit can skip. */
+export function assertCurrentObjectiveSources(predicate: ObjectivePredicate): void {
+  const check = (value: FenPredicate) => {
+    if (value.type === "structuralFeature" && requireCurrentStructuralExpression(value.feature) !== value.authoredSource)
+      throw new AuthoredStructuralSourceError("Compiled trigger lost its original authored source identity");
+  };
+  if (predicate.type === "fenPredicate") check(predicate.predicate);
+  else if (predicate.type === "outsideAuthoredBoundary") predicate.fenPredicates.forEach(check);
+  else if (predicate.type === "all" || predicate.type === "any") predicate.predicates.forEach(assertCurrentObjectiveSources);
+  else if (predicate.type === "not") assertCurrentObjectiveSources(predicate.predicate);
+  else if (predicate.type === "authoredTransitionFeature") assertCurrentTransitionSources(predicate.transition);
+  else if (predicate.type === "authoredTimingWindow") {
+    assertCurrentWindowSources([predicate.window]);
+    if (predicate.openingTrigger !== undefined) assertCurrentObjectiveSources(predicate.openingTrigger);
   }
 }
 

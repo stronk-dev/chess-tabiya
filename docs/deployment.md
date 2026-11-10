@@ -159,6 +159,10 @@ restore, upgrade and rollback are covered in
 - `make verify-deployment`: `caddy validate` of every rendered profile with the pinned image.
 - `make http-streaming-check`: real Node HTTP first-byte, backpressure, cancellation and failure
   controls. Responses stream; HEAD/204/304 carry no body, and partial responses cannot become JSON.
+  The REST handler propagates its actual request's cancellation reason instead of logging an
+  internal error. The Node adapter cancels late bodies and closes aborted transports without
+  publishing an error page; a provider AbortError on a still-live request remains an ordinary
+  service error, not evidence of a client disconnect.
 - `make http-ingress-check`: real unfinished-upload Host/Origin refusals, progressive original
   bytes, cancellation followed by a response, strict header bounds and actual 10 s/30 s receive
   deadlines. Body consumption is lazy; this does not provide the missing endpoint budget registry.

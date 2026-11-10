@@ -41,7 +41,7 @@ describe("Explorer move-free population summary", () => {
       expect(JSON.stringify(wire)).not.toMatch(/MOVE_ROW_SENTINEL|providerSan|acquisition|payloadReceipt|requestedIdentity/u);
       expect(parsePresentationReceipt(wire).map(presentedSentence).join(" ")).toContain("e4");
     }
-    for (const consumer of ["module.theory_breadcrumb", "guidance.voice", "runtime.return_frequency", "runtime.repertoire_scan"]) expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, [population]).items).toEqual([]);
+    for (const consumer of ["module.theory_breadcrumb", "guidance.voice", "runtime.return_frequency", "runtime.repertoire_scan"]) expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: consumer === "module.theory_breadcrumb" ? 2 : 1 }, [population]).items).toEqual([]);
     for (const candidate of [{ ...page }, page.payload, JSON.parse(JSON.stringify(page)), deriveExplorerPopulationSummary(page)]) expect(() => invokeEvidenceValueRoute("derived.explorer.inspector_population@1", { page: candidate } as never)).toThrow();
     expect(() => invokeEvidenceValueRoute("derived.explorer.inspector_population@1", { page, moves: [] } as never)).toThrow(/extra/u);
   });
@@ -54,7 +54,7 @@ describe("Explorer move-free population summary", () => {
     expect(evidenceValueReceipt(frequency).sourceDigests).toEqual([evidenceValueReceipt(page).payloadDigest]);
     expect(compileProjectionExecution(PRIMARY_EVIDENCE_MANIFEST, frequency.projection).paths.map(path => path.sourceRequirements.map(row => row.providerOperation))).toEqual([["lichess_explorer.position_page@1"]]);
     expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "runtime.return_frequency", version: 1 }, [frequency]).items).toEqual([frequency]);
-    for (const consumer of ["module.theory_breadcrumb", "guidance.voice", "runtime.repertoire_scan"]) expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 1 }, [frequency]).items).toEqual([]);
+    for (const consumer of ["module.theory_breadcrumb", "guidance.voice", "runtime.repertoire_scan"]) expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: consumer === "module.theory_breadcrumb" ? 2 : 1 }, [frequency]).items).toEqual([]);
     for (const candidate of [{ ...page }, page.payload, JSON.parse(JSON.stringify(page)), deriveExplorerPopulationSummary(page)]) expect(() => invokeEvidenceValueRoute("derived.explorer.position_frequency@1", { page: candidate } as never)).toThrow();
     expect(() => invokeEvidenceValueRoute("derived.explorer.position_frequency@1", { page, total: 999999 } as never)).toThrow(/extra/u);
   });
@@ -82,7 +82,7 @@ describe("Explorer move-free population summary", () => {
     expect(wire.source.delivery).toBe("retained_exact");
     expect(wire.source.responseDigest).toBe(page.payload.acquisition.responseDigest);
     expect(JSON.stringify(summary.payload.page)).toContain(SENTINEL);
-    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 1 }, [summary]);
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 2 }, [summary]);
     const presented = presentEvidenceItems(view);
     expect(presented.map(presentedSentence).join(" ")).toContain(CORPUS_GUARD);
     expect(presented.map(presentedSentence).join(" ")).toContain("37 games");
@@ -99,6 +99,6 @@ describe("Explorer move-free population summary", () => {
     for (const candidate of [{ ...page }, page.payload, JSON.parse(JSON.stringify(page)), summary]) expect(() => invokeEvidenceValueRoute("derived.explorer.population_summary@1", { page: candidate } as never)).toThrow();
     expect(() => invokeEvidenceValueRoute("derived.explorer.population_summary@1", { page, disclosure: "invented" } as never)).toThrow(/extra/u);
     for (const candidate of [{ ...summary }, JSON.parse(JSON.stringify(summary)), page]) expect(() => explorerPopulationSummaryWire(candidate as never)).toThrow();
-    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 1 }, [page]).items).toEqual([]);
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 2 }, [page]).items).toEqual([]);
   });
 });

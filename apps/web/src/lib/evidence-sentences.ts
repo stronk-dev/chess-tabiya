@@ -4,6 +4,9 @@ import {
   assertConsumerEvidenceView,
   evidenceForConsumer,
   evidenceReferenceEvidence,
+  presentEvidenceItems,
+  presentedSentence,
+  PresentationError,
   type EvidencePayload,
   type ConsumerEvidenceView,
   type EvidenceReferenceResolution,
@@ -32,6 +35,13 @@ export function evidencePayloadTable(
 
 type EvidenceReferencePayload = EvidenceReferenceResolution | EvidencePayload;
 
+class EvidenceReferenceSourceError extends TypeError {}
+
+/** Presentation failure is UI state, never a replacement chess evidence sentence. */
+export type EvidenceReferencePresentation =
+  | { readonly kind: "ready"; readonly sentence: EvidenceSentence }
+  | { readonly kind: "failed"; readonly reference: string };
+
 export function renderDeclaredEvidenceRef(
   view: ConsumerEvidenceView<EvidenceReferencePayload>,
 ): EvidenceSentence {
@@ -43,10 +53,24 @@ export function renderDeclaredEvidenceRef(
   if (resolution === undefined || !("reference" in resolution)) {
     throw new TypeError("Evidence-reference consumer requires a declared resolution");
   }
-  const source = view.items.find((item) => item.projection.id !== "run.record.evidence_ref_resolution")?.payload;
+  const sources = view.items.filter((item) => item.projection.id !== "run.record.evidence_ref_resolution" && "kind" in item.payload);
+  if (sources.length > 1) throw new EvidenceReferenceSourceError("Evidence reference has more than one attached source");
+  const attached = sources[0];
+  const source = attached?.payload;
+  if (attached !== undefined && source !== undefined && "kind" in source) {
+    if (attached.projection.id === "human.maia.event" && source.kind === "tablebase") {
+      throw new EvidenceReferenceSourceError("Attached fact crosses its declared source kind/reader");
+    }
+    const label = attached.projection.id === "human.maia.event" ? "Human model"
+      : attached.projection.id === "live.syzygy.result" ? "Tablebase" : "Engine";
+    if (resolution.sourceLabel !== label) throw new EvidenceReferenceSourceError("Evidence reference source and label disagree");
+  }
+  // Consume every admitted component, including the attached source's formatter. Reading only
+  // the resolution would bypass its source-kind/reader checks and permit false exactness.
+  const presented = presentEvidenceItems(view);
   return Object.freeze({
     reference: resolution.reference,
-    text: resolution.text,
+    text: presented.map(presentedSentence).join(" "),
     sourceLabel: resolution.sourceLabel,
     ...(source === undefined || !("kind" in source) ? {} : { payload: source }),
   });
@@ -65,6 +89,21 @@ export function renderEvidenceRef(
   return renderDeclaredEvidenceRef(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
     { id: "runtime.evidence_ref", version: 1 },
-    evidenceReferenceEvidence(reference, pack, payloads) as readonly never[],
+    evidenceReferenceEvidence(reference, pack, payloads),
   ));
+}
+
+/** Keep known source inconsistencies local to the affected evidence row, not the whole board. */
+export function evidenceRefPresentation(
+  reference: string,
+  pack?: DrillPackDefinition,
+  payloads: ReadonlyMap<string, EvidencePayload> = new Map(),
+): EvidenceReferencePresentation {
+  try {
+    return Object.freeze({ kind: "ready", sentence: renderEvidenceRef(reference, pack, payloads) });
+  } catch (error) {
+    if (!(error instanceof EvidenceReferenceSourceError)
+      && !(error instanceof PresentationError && error.code === "PRESENTATION_INVALID")) throw error;
+    return Object.freeze({ kind: "failed", reference });
+  }
 }

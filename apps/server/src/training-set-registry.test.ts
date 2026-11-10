@@ -8,9 +8,11 @@ import { digestDrillPack, type DrillPackDefinition, type TrainingSetDefinition }
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import type { ChessTabiyaApplication } from "./application.js";
-import type { PackRegistry, PackSummary } from "./pack-registry.js";
+import { PackRegistry, type PackSummary } from "./pack-registry.js";
 import { TrainingSetRegistry, type TrainingSetPackLookup } from "./training-set-registry.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const example = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as DrillPackDefinition;
 const document = (overrides: Partial<TrainingSetDefinition> = {}): TrainingSetDefinition => ({
@@ -94,6 +96,19 @@ describe("installed training sets", () => {
     let application: ChessTabiyaApplication | undefined;
     let origin = "";
     beforeAll(async () => {
+      installEmptyApplicationCatalogues();
+      // A real admitted member, not a fabricated PackRecord or an installed lesson.
+      const memberDocument = withDerivedRequires({
+        id: "training-set-http-member", version: "0.1.0", title: "Catalogue routing fixture", mode: "plan", phase: "opening",
+        start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" },
+        objective: { type: "play_until_checkpoint", summary: "Exercise catalogue membership, not chess instruction." },
+        checkpoints: [{ id: "ready", trigger: { atStart: true } }],
+        opponentPolicy: { mode: "human_common", seedMode: "fixed" }, feedbackPolicy: "delayed_checkpoint",
+        provenance: { reviewStatus: "draft", sources: ["Synthetic catalogue routing fixture."] }, requires: [],
+      });
+      vi.spyOn(PackRegistry, "loadDefault").mockImplementation(options => PackRegistry.fromDocuments([
+        { source: "training-set-http-member.json", value: memberDocument, channel: "community" },
+      ], options));
       vi.spyOn(TrainingSetRegistry, "loadDefault").mockImplementation(lookup => {
         servedMemberId = (lookup as PackRegistry).list()[0]!.id;
         return installed(document({ members: [{ packId: servedMemberId, ordinal: 1 }] }), lookup);
@@ -102,7 +117,10 @@ describe("installed training sets", () => {
       await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
       origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
     });
-    afterAll(async () => { await application?.close(); });
+    afterAll(async () => {
+      try { await application?.close(); }
+      finally { vi.restoreAllMocks(); }
+    });
     it("serves installed ordered members, separate pack access and typed route refusals", async () => {
       const read = async (path: string, method = "GET") => {
         const response = await fetch(`${origin}${path}`, { method, headers: { accept: "text/html" } });

@@ -7,6 +7,57 @@ const rfc = readFileSync("rfc/foundation-source-identity.md", "utf8");
 
 const key = (row) => row.projection;
 
+test("group/file before-empty authority is a complete position snapshot, not absent positive rows", () => {
+  const section = rfc.split("### 3.0 Reading cardinality and empty authority")[1].split("### 3.1")[0];
+  const rows = section.split("\n").filter(line => /^\| (?:rules|derived)\./u.test(line));
+  assert.equal(rows.length, 10);
+  for (const projection of ["derived.structural.reading.pawn_file_group@1", "derived.activity.reading.file_state@1"]) {
+    const row = plan.rows.find(value => value.projection === projection);
+    assert.equal(row.resultCardinality, "one_complete_position_snapshot");
+    assert.deepEqual(row.sourceDependencies, [{ kind: "projection", ref: "rules.structural.reading.pawn_connectivity@1" }]);
+    assert.ok(rows.some(row => row.startsWith(`| ${projection} | one complete snapshot`)));
+  }
+  assert.ok(rfc.includes("emits only when a file's four-way state enum changes"));
+  assert.ok(rfc.includes("Do not suppress a stationary sibling"));
+  assert.ok(rfc.includes("identical\nfile partitions emit nothing"));
+});
+
+test("quiet backward advance uses complete original landing authority before empty replies", () => {
+  const row = plan.rows.find(value => value.projection === "derived.pawn.consequence.backward_pawn_legal_advance@1");
+  assert.deepEqual(row.sourceDependencies.map(value => value.ref).sort(), ["rules.exchange.reading.landing_captures@1", "rules.structural.reading.backward_pawn@3"]);
+  const section = rfc.split("#### 3.2a Complete post-advance capture authority")[1].split("### 3.3")[0];
+  for (const phrase of ["independently accepted", "original invocations", "precede an empty result", "every legal capture by an opposing pawn", "Zero such", "pinned"]) assert.ok(section.includes(phrase), phrase);
+});
+
+test("candidate role uses the complete legal domain and preserves rules-plane receipts", () => {
+  const row = plan.rows.find(value => value.projection === "rules.mobility.reading.candidate_role@1");
+  assert.deepEqual(row.sourceDependencies, [{ kind: "projection", ref: "rules.mobility.reading.legal_moves@1" }]);
+  const section = rfc.split("### 3.8a Complete candidate-role domain")[1].split("## 4.")[0];
+  for (const phrase of ["independently accepted", "rules-plane", "dependsOn", "actual original invocation", "canonical UCI membership", "promotion roles", "king landing square", "no recorded path ply"]) assert.ok(section.includes(phrase), phrase);
+});
+
+test("configuration sources are complete ten-snapshot members with exact centre authority", () => {
+  for (const id of ["fianchetto_setup", "fianchetto_knight_screen"]) {
+    const row = plan.rows.find(value => value.projection === `rules.structural.reading.${id}@1`);
+    assert.equal(row.resultCardinality, "one_complete_position_snapshot");
+    assert.deepEqual(row.sourceDependencies, id === "fianchetto_setup" ? [] : [{ kind: "projection", ref: "rules.structural.reading.fianchetto_setup@1" }]);
+  }
+  const section = rfc.split("### 3.8b Complete fianchetto snapshots")[1].split("## 4.")[0];
+  for (const text of ["independently accepted", "| white | queenside | b2 | b3 | c3 |", "| white | kingside | g2 | g3 | f3 |", "| black | queenside | b7 | b6 | c6 |", "| black | kingside | g7 | g6 | f6 |", "available setups:[]", "genuine original candidate_role", "source role is pawn", "actual destination"]) assert.ok(section.includes(text), text);
+});
+
+test("replacement rows stay in their exact four-column table, separate from snapshot cardinality", () => {
+  const section = rfc.split("### 2.1 Exact direct convention closure")[1].split("## 3. Exact projection image")[0];
+  const rows = section.split("\n").filter(line => /^\| rules\./u.test(line)).map(line => line.split("|").slice(1, -1).map(cell => cell.trim()));
+  assert.deepEqual(rows, [
+    ["rules.structural.event.king_opposition@2", "king-opposition-blocker-blind@1", "king-opposition-unobstructed@1", "rules.structural.reading.king_opposition@3"],
+    ["rules.structural.event.backward_pawn@2", "backward-pawn-legacy@1", "backward-pawn@1", "rules.structural.reading.backward_pawn@3"],
+    ["rules.structural.predicate.king_opposition@2", "king-opposition-blocker-blind@1", "king-opposition-unobstructed@1", "rules.structural.reading.king_opposition@3"],
+    ["rules.structural.predicate.backward_pawn@2", "backward-pawn-legacy@1", "backward-pawn@1", "rules.structural.reading.backward_pawn@3"],
+    ["rules.structural.predicate.outpost@2", "maximal_pawn_reach@1", "outpost-candidate@1", "derived.structural.reading.outpost_candidate@1"],
+  ]);
+});
+
 test("the source wave is one closed 23-projection image", () => {
   assert.equal(plan.schemaVersion, 2);
   assert.equal(plan.rows.length, 23);
@@ -72,9 +123,15 @@ test("external owners stay explicit and outside the source projection image", ()
   assert.ok(!plan.rows.some((row) => row.projection.includes("promotion")));
 });
 
-test("the RFC claims both duplicated authored-expression schemas and no product operation", () => {
-  assert.match(rfc, /pack-schema \| lane 0\.33/u);
-  assert.match(rfc, /shape-entry-schema \| lane 0\.5/u);
+test("both duplicated authored-expression schema lanes are installed and have the same grammar", () => {
+  const pack = JSON.parse(readFileSync("schemas/drill_pack.schema.json", "utf8"));
+  const shape = JSON.parse(readFileSync("schemas/shape_entry.schema.json", "utf8"));
+  assert.match(pack.$id, /0\.33/u);
+  assert.match(shape.$id, /0\.4/u);
+  for (const name of ["structuralFeature", "fileTemplateFeature", "squareTemplateFeature", "structuralExpression"]) assert.deepEqual(pack.$defs[name], shape.$defs[name]);
+  const register = readFileSync("rfc/README.md", "utf8");
+  assert.match(register, /\| 0\.33 \| `foundation-source-identity\.md` \| in-tree syntax/u);
+  assert.match(register, /\| 0\.4 \| `foundation-source-identity\.md` \| in-tree syntax/u);
   assert.match(rfc, /Absence means the legacy v1/u);
   assert.match(rfc, /No automatic migration is allowed/u);
   assert.match(rfc, /This RFC deliberately stops at exact source identity/u);

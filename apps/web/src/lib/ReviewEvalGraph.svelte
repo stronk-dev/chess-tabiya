@@ -23,12 +23,15 @@
   const y = (percent: number): number => 5 + (100 - percent);
   const selectedIndex = $derived(graph.points.findIndex((point) => point.nodeId === selectedId));
   const focusIndex = $derived(selectedIndex < 0 ? 0 : selectedIndex);
-  /** Maximal runs of drawn points: the line never bridges a stretch without a recorded evaluation. */
+  /** A recorded point is not a comparable pair: never join across missing or incomparable inputs. */
   const segments = $derived.by(() => {
     const out: string[] = [];
     let current: string[] = [];
     graph.points.forEach((point, index) => {
-      if (point.kind === "evaluated") current.push(`${current.length === 0 ? "M" : "L"}${x(index)} ${y(point.percent)}`);
+      if (point.kind === "evaluated") {
+        if (!point.joinFromPrevious && current.length > 0) { out.push(current.join(" ")); current = []; }
+        current.push(`${current.length === 0 ? "M" : "L"}${x(index)} ${y(point.percent)}`);
+      }
       else if (current.length > 0) { out.push(current.join(" ")); current = []; }
     });
     if (current.length > 0) out.push(current.join(" "));

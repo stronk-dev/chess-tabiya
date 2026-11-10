@@ -26,7 +26,7 @@ import {
 } from "./evidence-conventions.js";
 import { ENDGAME_SETUP_CONVENTIONS, endgameSetupConvention } from "./endgame-setup.js";
 import { ENDGAME_METHOD_CONVENTIONS, endgameMethodConvention } from "./endgame-method.js";
-import { SEMANTIC_EVENT_PROJECTION_REFS } from "./evidence-catalog.js";
+import { RECORDED_PATH_SUCCESSOR_REFS } from "./evidence-catalog.js";
 import { METHOD_DECLARATIONS, SETUP_DECLARATIONS, namedStructureDefinition, phaseBandsDefinition } from "./testing/convention-bindings.js";
 
 const ROOT = new URL("../../../", import.meta.url);
@@ -51,7 +51,7 @@ function projectionWitnessExists(witness: string): boolean {
 interface InitialRow { readonly ref: string; readonly definition: string; readonly limitations: readonly string[]; readonly witnesses: readonly string[] }
 const initial = JSON.parse(read("planning/semantic-convention-provenance/initial-declarations.json")) as { readonly snapshotRef: string; readonly declarations: readonly InitialRow[] };
 const seed = JSON.parse(read("planning/semantic-convention-register/initial-members.json")) as { readonly members: readonly { readonly ref: string }[] };
-const AUTHORED = ["endgame-material-census@1", "named-structure-catalogue@1", "phase-bands@1", "lucena-setup@1", "philidor-third-rank-setup@1", "vancura-setup@1", "lucena-bridge-method@1", "philidor-third-rank-method@1", "vancura-method@1", "fork-survival@2", "promotion-pressure-geometry@1", "comparison-structure-appearance@1"];
+const AUTHORED = ["endgame-material-census@1", "named-structure-catalogue@1", "phase-bands@1", "lucena-setup@1", "philidor-third-rank-setup@1", "vancura-setup@1", "lucena-bridge-method@1", "philidor-third-rank-method@1", "vancura-method@1", "fork-survival@2", "promotion-pressure-geometry@1", "comparison-structure-appearance@1", "grade-convention@2", "king-opposition-unobstructed@1", "backward-pawn@1", "pawn-island-topology@1", "future-file-challenge@1", "capture-migration-reach@1", "outpost-candidate@1", "line-blocker-membership@1", "fianchetto-configuration@1", "extended-center-destination@1", "early-queen-ply@1", "castling-first-decision@1", "clock-spend-input@1"];
 
 const declaration = (overrides: Partial<ConventionDeclaration> = {}): ConventionDeclaration => ({
   ref: { id: "fixture", version: 1 },
@@ -63,9 +63,9 @@ const declaration = (overrides: Partial<ConventionDeclaration> = {}): Convention
 });
 
 describe("semantic-convention registry (rfc/semantic-convention-provenance.md §1)", () => {
-  it("registers exactly the 39 reviewed initial members plus the twelve authored declarations", () => {
+  it("registers exactly the 39 reviewed initial members plus the twenty-five authored declarations", () => {
     const declared = CONVENTION_REGISTRY.declarations.map((value) => conventionRefKey(value.ref));
-    expect(declared).toHaveLength(51);
+    expect(declared).toHaveLength(64);
     const initialRefs = initial.declarations.map((row) => row.ref).sort();
     expect(initialRefs).toEqual(seed.members.map((member) => member.ref).sort());
     expect(initialRefs).toHaveLength(39);
@@ -174,13 +174,74 @@ describe("append-only semantic history (make semantic-convention-history-check)"
     expect(byRef.size).toBe(rows.length);
     for (const value of CONVENTION_REGISTRY.declarations) expect(byRef.get(conventionRefKey(value.ref))?.semanticDigest, conventionRefKey(value.ref)).toBe(conventionSemanticDigest(value));
     expect(rows).toHaveLength(CONVENTION_REGISTRY.declarations.length);
-    for (const ref of AUTHORED) expect(byRef.get(ref)!.ownerRfc).toBe("evidence-value-authority.md");
+    for (const ref of AUTHORED) expect(byRef.get(ref)!.ownerRfc).toBe(ref === "grade-convention@2" ? "move-quality-grades.md" : ["king-opposition-unobstructed@1", "backward-pawn@1", "pawn-island-topology@1", "future-file-challenge@1", "capture-migration-reach@1", "outpost-candidate@1", "line-blocker-membership@1", "fianchetto-configuration@1", "extended-center-destination@1", "early-queen-ply@1", "castling-first-decision@1", "clock-spend-input@1"].includes(ref) ? "foundation-source-identity.md" : "evidence-value-authority.md");
   });
 });
 
 describe("direct convention closure per projection (rfc/semantic-convention-provenance.md §2)", () => {
+  it.each([
+    ["rules.structural.event.king_opposition@2", "king-opposition-blocker-blind@1", "king-opposition-unobstructed@1", "rules.structural.reading.king_opposition@3"],
+    ["rules.structural.event.backward_pawn@2", "backward-pawn-legacy@1", "backward-pawn@1", "rules.structural.reading.backward_pawn@3"],
+    ["rules.structural.predicate.king_opposition@2", "king-opposition-blocker-blind@1", "king-opposition-unobstructed@1", "rules.structural.reading.king_opposition@3"],
+    ["rules.structural.predicate.backward_pawn@2", "backward-pawn-legacy@1", "backward-pawn@1", "rules.structural.reading.backward_pawn@3"],
+    ["rules.structural.predicate.outpost@2", "maximal_pawn_reach@1", "outpost-candidate@1", "derived.structural.reading.outpost_candidate@1"],
+  ] as const)("%s replaces only its exact witnessed predecessor through the installed source", (route, from, to, source) => {
+    const pair = { from, to, source };
+    const derive = (pairs: unknown, manifest = PRIMARY_EVIDENCE_MANIFEST, registry = CONVENTION_REGISTRY) =>
+      deriveProjectionConventionTable(manifest, registry, DECLARED_CONVENTION_INHERITANCE, { [route]: pairs } as never);
+    expect(derive([pair]).get(route)!.refs.map(key)).toEqual([to]);
+    const noReplacement = deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST, CONVENTION_REGISTRY, DECLARED_CONVENTION_INHERITANCE, {});
+    expect(noReplacement.get(route)!.refs.map(key)).toEqual(expect.arrayContaining([from, to]));
+    for (const invalid of [
+      [], [{ from, to }], [{ ...pair, source: "rules.mobility.reading.legal_moves@1" }], [{ ...pair, source: source.replace(/@(\d+)$/u, (_, version: string) => `@${Number(version) + 1}`) }],
+      [{ ...pair, to: from }], [{ ...pair, from: to, to: from }], [pair, pair], [{ ...pair, extra: true }],
+    ]) expect(() => derive(invalid)).toThrow();
+    const [id, version] = source.split("@"), sourceMatch = (value: { id: string; version: number }) => value.id === id && value.version === Number(version);
+    expect(() => derive([pair], { ...PRIMARY_EVIDENCE_MANIFEST, projections: PRIMARY_EVIDENCE_MANIFEST.projections.filter(value => !sourceMatch(value)) })).toThrow(/installed source/u);
+    for (const mutate of [
+      (value: (typeof PRIMARY_EVIDENCE_MANIFEST.projections)[number]) => ({ ...value, role: "predicate" as const }),
+      (value: (typeof PRIMARY_EVIDENCE_MANIFEST.projections)[number]) => ({ ...value, disposition: { kind: "retired" as const, reason: "test: inactive source" } }),
+      (value: (typeof PRIMARY_EVIDENCE_MANIFEST.projections)[number]) => ({ ...value, semantics: "test: replacement meaning absent", limitations: [] }),
+    ]) expect(() => derive([pair], { ...PRIMARY_EVIDENCE_MANIFEST, projections: PRIMARY_EVIDENCE_MANIFEST.projections.map(value => sourceMatch(value) ? mutate(value) : value) })).toThrow(/installed source/u);
+    expect(() => derive([pair], { ...PRIMARY_EVIDENCE_MANIFEST, projections: PRIMARY_EVIDENCE_MANIFEST.projections.map(value => key(value) === route ? { ...value, dependsOn: [] } : value) })).toThrow(/installed source/u);
+    const wrongHelper = compileConventionRegistry(CONVENTION_REGISTRY.declarations.map(value => conventionRefKey(value.ref) !== to ? value : { ...value, authority: [{ kind: "position_rules", implementation: "packages/runtime/src/foundation-position-sources.ts#unrelated" }] }));
+    expect(() => derive([pair], PRIMARY_EVIDENCE_MANIFEST, wrongHelper)).toThrow(/helper authority/u);
+    expect(() => deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST, CONVENTION_REGISTRY, DECLARED_CONVENTION_INHERITANCE, { "rules.structural.reading.king_opposition@3": [pair] })).toThrow();
+    const unwitnessed = compileConventionRegistry(CONVENTION_REGISTRY.declarations.map(value => conventionRefKey(value.ref) !== from ? value : { ...value, authority: value.authority.map(authority => authority.kind !== "landed_contract" ? authority : { ...authority, witnesses: authority.witnesses.filter(witness => witness !== route.replace("@2", "@1")) }) }));
+    expect(() => derive([pair], PRIMARY_EVIDENCE_MANIFEST, unwitnessed)).toThrow(/predecessor witness/u);
+  });
+
+  it("replaces only automatic grade predecessor inheritance, with a failing no-row control", () => {
+    expect(refs("derived.grade.move_quality@2")).toContain("grade-convention@2");
+    expect(refs("derived.grade.move_quality@2")).not.toContain("grade-convention@1");
+    const predecessor = deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST, CONVENTION_REGISTRY, DECLARED_CONVENTION_INHERITANCE, {});
+    expect(predecessor.get("derived.grade.move_quality@2")!.refs.map(key)).toEqual(["grade-convention@1", "grade-convention@2"]);
+  });
+  it("refuses missing/skipped/swapped/conflicting replacement identities and a removed historical witness", () => {
+    for (const pairs of [
+      [{ from: "grade-convention@0", to: "grade-convention@2" }], [{ from: "grade-convention@1", to: "grade-convention@3" }],
+      [{ from: "grade-convention@2", to: "grade-convention@1" }], [{ from: "grade-convention@1", to: "grade-convention@1" }],
+      [{ from: "grade-convention@1", to: "grade-convention@2" }, { from: "grade-convention@1", to: "grade-convention@2" }], [],
+    ]) expect(() => deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST, CONVENTION_REGISTRY, DECLARED_CONVENTION_INHERITANCE, { "derived.grade.move_quality@2": pairs })).toThrow();
+    expect(() => deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST, CONVENTION_REGISTRY, {}, { "derived.unknown@2": [{ from: "grade-convention@1", to: "grade-convention@2" }] })).toThrow();
+    const registry = compileConventionRegistry(CONVENTION_REGISTRY.declarations.map(value => value.ref.id !== "grade-convention" || value.ref.version !== 1 ? value : {
+      ...value, authority: value.authority.map(authority => authority.kind !== "landed_contract" ? authority : { ...authority,
+        witnesses: authority.witnesses.filter(witness => witness !== "derived.grade.move_quality@1") }),
+    }));
+    expect(() => deriveProjectionConventionTable(PRIMARY_EVIDENCE_MANIFEST, registry)).toThrow(/predecessor witness/u);
+  });
   it("carries every witnessed convention onto its live projection or its retaining successor", () => {
     const live = new Set(PROJECTION_CONVENTION_TABLE.keys());
+    // Independent literal accepted replacements. Same-id version succession does not mean
+    // the old chess definition survives: each changed source has mutation controls above.
+    const replacements: Record<string, readonly [string, string]> = {
+      "derived.grade.move_quality@2": ["grade-convention@1", "grade-convention@2"],
+      "rules.structural.event.king_opposition@2": ["king-opposition-blocker-blind@1", "king-opposition-unobstructed@1"],
+      "rules.structural.event.backward_pawn@2": ["backward-pawn-legacy@1", "backward-pawn@1"],
+      "rules.structural.predicate.king_opposition@2": ["king-opposition-blocker-blind@1", "king-opposition-unobstructed@1"],
+      "rules.structural.predicate.backward_pawn@2": ["backward-pawn-legacy@1", "backward-pawn@1"],
+      "rules.structural.predicate.outpost@2": ["maximal_pawn_reach@1", "outpost-candidate@1"],
+    };
     for (const value of CONVENTION_REGISTRY.declarations) {
       for (const authority of value.authority) {
         if (authority.kind !== "landed_contract") continue;
@@ -189,7 +250,9 @@ describe("direct convention closure per projection (rfc/semantic-convention-prov
           const successor = `${id}@${Number(version) + 1}`;
           const holder = live.has(witness) ? witness : live.has(successor) ? successor : undefined;
           if (holder === undefined) continue; // retired without a same-id successor
-          expect(refs(holder), `${holder} ← ${conventionRefKey(value.ref)}`).toContain(conventionRefKey(value.ref));
+          const replacement = replacements[holder];
+          const expected = replacement?.[0] === conventionRefKey(value.ref) ? replacement[1] : conventionRefKey(value.ref);
+          expect(refs(holder), `${holder} ← ${conventionRefKey(value.ref)}`).toContain(expected);
         }
       }
     }
@@ -209,7 +272,7 @@ describe("direct convention closure per projection (rfc/semantic-convention-prov
   });
 
   it("gives the eleven recorded @2 sequences their predecessor's and catalogue's conventions", () => {
-    const v2 = SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2).map(key).sort();
+    const v2 = RECORDED_PATH_SUCCESSOR_REFS.map(key).sort();
     expect(v2).toHaveLength(11);
     expect(Object.fromEntries(v2.map((route) => [route, refs(route)]))).toEqual({
       "derived.exchange.trade_completed@2": ["trade-completed@1"],

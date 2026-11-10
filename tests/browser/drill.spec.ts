@@ -9,7 +9,7 @@ import { chooseBot, chooseRawRung, returnFromRunActions, showRunActions } from "
 import { inspectComposition, type CompositionConformance } from "./composition-conformance.js";
 import { inspectCompositionVocabulary } from "./composition-vocabulary.js";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
-import type { DrillRun, ModuleQueryPage } from "@chess-tabiya/runtime";
+import type { BranchComparison, DrillRun, ModuleQueryPage } from "@chess-tabiya/runtime";
 import { compileAssistanceRequest } from "../../packages/runtime/src/assistance-exchange.js";
 import { BOT_PROFILE_CATALOG } from "../../packages/runtime/src/bot-profile-catalog.js";
 import { hintDecisionStamp } from "../../packages/runtime/src/hint-exchange.js";
@@ -18,6 +18,90 @@ import type { HumanSplitPage } from "../../apps/web/src/lib/api.js";
 import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
 
 const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
+
+for (const mobile of [false, true]) {
+  test(`D3309 detailed structural facts reach both native Inspector screens${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    const id = `structural-fidelity-${randomUUID()}`, writer = `writer-${randomUUID()}`;
+    const fen = "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10";
+    const headers = { "x-writer-id": writer };
+    const created = await page.request.post("/runs", { headers, data: { id,
+      session: { kind: "position", start: { fen, side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 3,
+    } });
+    expect(created.status(), await created.text()).toBe(201);
+    await page.evaluate(({ id, writer }) => localStorage.setItem(`chess-tabiya:run:${id}:writer-id`, writer), { id, writer });
+    const graph = async () => (await (await page.request.get(`/runs/${id}/graph`)).json() as { graph: RunGraph }).graph;
+    await page.goto(`/play/run/${id}`);
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+    await returnFromRunActions(page);
+    const before = await graph(), boardBefore = await page.getByLabel("Chessboard").boundingBox();
+    await page.getByRole("button", { name: "Inspector", exact: true }).click();
+    const section = page.getByRole("region", { name: "Evidence inspector: position structure", exact: true });
+    const toggle = section.getByRole("button", { name: "Position structure", exact: true });
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await expect(section.locator("[data-presented]")).toHaveCount(0);
+    await toggle.click();
+    await expect(section).toContainText("White has 7 pawns."); await expect(section).toContainText("Black has 7 pawns.");
+    await expect(section).toContainText("White's bishop on d3 stands on a light square.");
+    await expect(section.locator('[data-component="fact_statement"]').first()).toBeVisible();
+    await expect(section).not.toContainText("Position reading:");
+    await expect(section).not.toContainText("structural_detail");
+    await toggle.click(); await expect(section.locator("[data-presented]")).toHaveCount(0);
+    await toggle.click(); await expect(section).toContainText("Black has 7 pawns.");
+    await page.getByRole("button", { name: "Return to play", exact: true }).click();
+    expect(await graph()).toEqual(before);
+    const boardAfter = await page.getByLabel("Chessboard").boundingBox();
+    expect(boardAfter!.width).toBeCloseTo(boardBefore!.width, 0);
+    // Opening/closing the section must not leave an overlay intercepting actual board squares.
+    expect(await page.getByLabel("Chessboard").evaluate(element => {
+      const box = element.getBoundingClientRect();
+      return Array.from({ length: 64 }, (_, square) => element.contains(document.elementFromPoint(
+        box.left + (square % 8 + .5) * box.width / 8, box.top + (Math.floor(square / 8) + .5) * box.height / 8))).every(Boolean);
+    })).toBe(true);
+
+    // Prepare two saved legal branches away from the live client, so no automatic reply races
+    // the setup. Then enter the actual Compare UI, rather than mounting an imitation screen.
+    await page.goto("/settings");
+    const root = before.nodes.find(node => node.parentId === null)!;
+    for (const [action, data] of [["moves", { uci: "d7f8" }], ["rewind", { nodeId: root.id }],
+      ["fork", { nodeId: root.id, label: "Other structural line" }], ["moves", { uci: "h7h6" }]] as const) {
+      const response = await page.request.post(`/runs/${id}/${action}`, { headers, data });
+      expect(response.ok(), await response.text()).toBe(true);
+    }
+    await page.goto(`/play/run/${id}`);
+    await expect(page.locator("[data-status-announcement]")).not.toContainText("Thinking", { timeout: 15_000 });
+    await showRunActions(page);
+    const comparisonResponse = page.waitForResponse(response => new URL(response.url()).pathname === `/runs/${id}/compare` && response.request().method() === "POST");
+    await page.getByRole("button", { name: "Compare branches", exact: true }).click();
+    const { comparison } = await (await comparisonResponse).json() as { comparison: BranchComparison };
+    await expect(page.getByRole("heading", { name: "Same decision, two consequences.", exact: true })).toBeVisible();
+    const recorded = await graph();
+    await page.getByRole("button", { name: "Evidence inspector", exact: true }).click();
+    const compare = page.getByRole("dialog", { name: "Recorded facts behind this comparison", exact: true });
+    const details = compare.locator('[data-evidence-consumer="inspector.position_structure"]');
+    await expect(details).toHaveCount(2);
+    for (const [index, detail] of (await details.all()).entries()) {
+      await expect(detail).not.toHaveAttribute("open", "");
+      await detail.locator("summary").click();
+      const leaf = recorded.nodes.find(node => node.id === comparison.columns[index]!.leafNodeId)!;
+      // Read literal pawn counts independently from that exact saved leaf, not from the active
+      // cursor or a presumed mock reply. The mounted control separately proves the known7→6 case.
+      const placement = leaf.fen.split(" ")[0]!;
+      for (const [side, piece] of [["White", "P"], ["Black", "p"]] as const) {
+        const count = [...placement].filter(token => token === piece).length;
+        await expect(detail).toContainText(`${side} has ${count} ${count === 1 ? "pawn" : "pawns"}.`);
+      }
+      await expect(detail.locator('[data-component="fact_statement"]').first()).toBeVisible();
+      await expect(detail).not.toContainText("Position reading:");
+      await detail.locator("summary").click();
+    }
+    await compare.getByRole("button", { name: "Return to comparison", exact: true }).click();
+    expect(await graph()).toEqual(recorded);
+    await page.getByRole("button", { name: "Close comparison", exact: true }).click();
+    await returnFromRunActions(page);
+    await expect(page.getByLabel("Chessboard")).toBeVisible();
+  });
+}
 
 for (const mobile of [false, true]) {
   test(`D3741 help styles keep their disclosure order from Settings into actual Play${mobile ? " @mobile" : ""}`, async ({ page }) => {
@@ -725,25 +809,41 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
     const analyze = page.locator(".analysis button");
     const handle = await analyze.elementHandle();
     expect(handle).not.toBeNull();
-    const endpoint = `**/runs/${runId}/review-analysis?*`;
+    const confirmationEndpoint = `**/runs/${runId}/assistance`;
+    const sourceEndpoint = `**/runs/${runId}/inspector/query`;
     let requests = 0;
+    let sourceRequests = 0;
     let release!: () => void;
     let received!: () => void;
     let delivered!: () => void;
     const held = new Promise<void>(done => { release = done; });
     const arrived = new Promise<void>(done => { received = done; });
     const delivery = new Promise<void>(done => { delivered = done; });
-    await page.route(endpoint, async route => {
+    await page.route(confirmationEndpoint, async route => {
       requests += 1;
       const response = await route.fetch();
-      const body = await response.json() as { runId: string; branchId: string; nodeId: string; entryNodeId: string; kind: string };
-      expect(body.runId).toBe(runId);
-      expect(new URL(route.request().url()).searchParams.get("branch")).toBe(original.activeCursor.branchId);
-      expect(new URL(route.request().url()).searchParams.get("node")).toBe(body.nodeId);
+      expect(response.status()).toBe(200);
+      const body = await response.json() as { assistance: unknown; review: { runId: string; branchId: string; nodeId: string; entryNodeId: string } };
+      const requested = route.request().postDataJSON() as { review: { branchId: string; nodeId: string; entryNodeId: string } };
+      expect(body.review.runId).toBe(runId);
+      expect(requested.review.branchId).toBe(original.activeCursor.branchId);
+      expect(requested.review.nodeId).toBe(selectedNode);
+      expect(requested.review.entryNodeId).toBe(body.review.entryNodeId);
       if (requests <= 2) {
-        await route.fulfill({ response, json: { ...body, [requests === 1 ? "branchId" : "entryNodeId"]: "crossed-position" } });
-      } else if (requests === 3) {
-        expect(body.kind).toBe("line");
+        await route.fulfill({ response, json: { ...body, review: { ...body.review, [requests === 1 ? "branchId" : "entryNodeId"]: "crossed-position" } } });
+      } else await route.fulfill({ response, json: body });
+    });
+    await page.route(sourceEndpoint, async route => {
+      sourceRequests += 1;
+      const requested = route.request().postDataJSON() as { query: { branchId: string; nodeId: string; view: { projection: string; context: { kind: string } } } };
+      expect(requested.query).toMatchObject({ branchId: original.activeCursor.branchId, nodeId: selectedNode,
+        view: { projection: "derived.review.analysis_typed_pv@1", context: { kind: "incoming_edge" } } });
+      const response = await route.fetch();
+      expect(response.status()).toBe(200);
+      const body = await response.json();
+      expect(body).toMatchObject({ kind: "page", runId, branchId: original.activeCursor.branchId, nodeId: selectedNode,
+        body: { kind: "source", projection: "derived.review.analysis_typed_pv@1", outcome: { kind: "available" } } });
+      if (sourceRequests === 1) {
         received();
         await held;
         await route.fulfill({ response, json: body });
@@ -758,6 +858,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
         await expect(page.locator(".analysis-sentence")).toHaveCount(0);
         await expect(analyze).toBeFocused();
         expect(await handle!.evaluate(element => element.isConnected)).toBe(true);
+        expect(sourceRequests).toBe(0);
       }
       await page.keyboard.press("Enter");
       await arrived;
@@ -765,6 +866,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       await expect(analyze).toBeFocused();
       await page.keyboard.press("Enter");
       expect(requests).toBe(3);
+      expect(sourceRequests).toBe(1);
       // Deliberate navigation retires this pending read, even when its correct response arrives.
       await selectors.nth(3).click();
       release();
@@ -804,7 +906,8 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 390, height: 844 
       await expect(page.getByRole("heading", { name: "Same decision, two consequences." })).toBeVisible();
     } finally {
       release();
-      await page.unroute(endpoint);
+      await page.unroute(confirmationEndpoint);
+      await page.unroute(sourceEndpoint);
     }
   });
 }
@@ -1755,10 +1858,10 @@ test(`Guided Hint retries ${failure} explicitly without changing its decision or
     // Simulate the typed failed transport reply using a real server-issued operation identity.
     // Retry then traverses the actual DELETE and fresh production POST, not a mocked success.
     const response = await route.fetch();
-    const body = await response.json() as { hint: { state: string; requestId?: string; delivery?: { requestId: string } } };
+    const body = await response.json() as { clientRequestId: string; hint: { state: string; requestId?: string; delivery?: { requestId: string } } };
     failedId = body.hint.requestId ?? body.hint.delivery?.requestId;
     expect(failedId).toMatch(/^[a-f0-9]{32}$/u);
-    await route.fulfill({ response, json: { hint: failure === "server_failed"
+    await route.fulfill({ response, json: { clientRequestId: body.clientRequestId, hint: failure === "server_failed"
       ? { state: "failed", requestId: failedId, rung: "pattern", reason: "internal_error" }
       : { state: "pending", requestId: failedId, rung: "pattern" } } });
   });
@@ -1769,7 +1872,9 @@ test(`Guided Hint retries ${failure} explicitly without changing its decision or
   await seat.getByRole("button", { name: "Hint", exact: true }).click();
   await expect(seat).toContainText("finds a double attack for you.");
   expect(trace).toEqual(["POST", "DELETE", "POST"]);
-  expect(posts[1]).toEqual(posts[0]);
+  const [firstAction, secondAction] = posts as { clientRequestId: string }[];
+  expect(secondAction).toEqual({ ...firstAction, clientRequestId: secondAction!.clientRequestId });
+  expect(secondAction!.clientRequestId).not.toBe(firstAction!.clientRequestId);
   await expect(seat.getByRole("button", { name: "A little more" })).toBeVisible();
   await expect(seat).not.toContainText("Nb2");
 });

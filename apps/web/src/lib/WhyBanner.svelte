@@ -8,7 +8,8 @@
   }
 
   let { model }: Props = $props();
-  let summaries = $derived(model === undefined ? [] : objectiveChangeSummaries(model.sentences));
+  let summaries = $derived(model === undefined ? [] : objectiveChangeSummaries(model.sentences.flatMap(result => result.kind === "ready" ? [result.sentence] : [])));
+  let failed = $derived(model?.sentences.some(result => result.kind === "failed") === true);
 </script>
 
 {#if model}
@@ -17,6 +18,7 @@
     <span class="state">{objectiveStateLabel(model.state)}</span>
     <div>
       {#each summaries as sentence}<p>{sentence}</p>{/each}
+      {#if failed}<p role="status">This recorded evidence could not be displayed. That is not an empty chess result.</p>{/if}
     </div>
   </aside>
 {/if}

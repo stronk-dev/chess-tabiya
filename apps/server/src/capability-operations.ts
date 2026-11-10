@@ -112,8 +112,11 @@ export const RUN_ROUTE_OPERATIONS: readonly CapabilityRouteBranch[] = Object.fre
   run("GET", "import", none("run.import_record")),
   run("GET", "story", session("run.story", "review.story_evidence")),
   run("GET", "review", none("run.review")),
-  run("GET", "review-analysis", none("run.review_analysis")),
+  run("GET", "recorded-clock", none("run.recorded_clock")),
   run("POST", "modules/query", none("run.modules.query")),
+  // Full2's read operation owns exact source/provider admission, not pack/session creation.
+  run("POST", "inspector/query", none("run.inspector.query")),
+  run("POST", "shape-firings/query", none("run.shape_firings.query")),
   run("POST", "hints", session("run.hint.request", "module.guided_hint")),
   run("GET", "share", none("run.share.list")),
   run("POST", "share", session("run.share.create", "review.story_evidence")),

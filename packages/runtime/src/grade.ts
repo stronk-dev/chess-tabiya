@@ -1,12 +1,13 @@
 import type { ComparisonScore } from "./compare.js";
+import type { RecordedEngineAvailable, RecordedEngineInstrument, RecordedEngineRequestedBound } from "./internal/recorded-engine-endpoint-values.js";
 
 export type MoveQualityClass = "inaccuracy" | "mistake" | "blunder";
 export type MoveQualityArm = "eval_delta" | "mate_lost" | "mate_allowed";
 export type GradeContext = "drill" | "review" | "imported_analysis";
-export type GradeLane = "recorded" | "live";
 export type GradeSide = "white" | "black";
 export type MoveQualityAbstentionReason =
   | "input_abstained"
+  | "source_pending"
   | "missing_eval"
   | "unequal_instrument"
   | "mate_score_inconsistent";
@@ -25,14 +26,11 @@ const cited = (value: number, source: string): CitedGradeConstant => Object.free
 
 export const GRADE_CONVENTION = Object.freeze({
   id: "grade-convention" as const,
-  version: 1 as const,
+  version: 2 as const,
   constants: Object.freeze({
-    reportInaccuracy: cited(5, ADVICE_SOURCE),
-    reportMistake: cited(10, ADVICE_SOURCE),
-    reportBlunder: cited(15, ADVICE_SOURCE),
-    practiceInaccuracy: cited(2.5, PRACTICE_SOURCE),
-    practiceMistake: cited(6, PRACTICE_SOURCE),
-    practiceBlunder: cited(14, PRACTICE_SOURCE),
+    inaccuracy: cited(2.5, PRACTICE_SOURCE),
+    mistake: cited(10, ADVICE_SOURCE),
+    blunder: cited(15, ADVICE_SOURCE),
     mateLostInaccuracy: cited(999, ADVICE_SOURCE),
     mateLostMistake: cited(700, ADVICE_SOURCE),
     mateAllowedInaccuracy: cited(-999, ADVICE_SOURCE),
@@ -40,25 +38,10 @@ export const GRADE_CONVENTION = Object.freeze({
     centipawnClamp: cited(1000, WIN_CHANCES_SOURCE),
     logisticCoefficient: cited(0.00368208, WIN_CHANCES_SOURCE),
   }),
-  contexts: Object.freeze({
-    drill: "practice" as const,
-    review: "report" as const,
-    imported_analysis: "report" as const,
-  }),
 });
 
-interface GradeEvaluationBase {
-  readonly engineId: string;
-  readonly score: ComparisonScore;
-  readonly sideToMove: GradeSide;
-  readonly depth?: number;
-  readonly requestedMovetimeMs?: number;
-}
-
-export type GradeEvaluation = GradeEvaluationBase & (
-  | { readonly lane: "recorded"; readonly perspective: "white" }
-  | { readonly lane: "live"; readonly perspective: "side_to_move" }
-);
+/** Learner-facing attribution; the exact machine convention remains in every typed grade. */
+export const GRADE_CONVENTION_LABEL = `single move-loss convention, version ${GRADE_CONVENTION.version}`;
 
 export interface AbstainedGradeEvaluation {
   readonly abstained: true;
@@ -76,12 +59,13 @@ export interface MoveQualityGrade {
   readonly after: GradeScore;
   readonly dropWinPercent: number;
   readonly thresholdCrossed: number | "mate_lost_tier" | "mate_allowed_tier";
-  readonly convention: { readonly id: "grade-convention"; readonly version: 1; readonly context: GradeContext };
+  readonly convention: { readonly id: "grade-convention"; readonly version: 2 };
   readonly engineId: string;
-  readonly lane: GradeLane;
-  readonly depth?: number;
-  readonly requestedMovetimeMs?: number;
+  readonly lane: "recorded";
+  readonly bound: RecordedEngineRequestedBound;
+  readonly instrument: RecordedEngineInstrument;
 }
+export type MoveQualityGradeV2 = MoveQualityGrade;
 
 export interface MoveQualityAbstention {
   readonly abstained: true;
@@ -96,13 +80,11 @@ export function winPercentFromCp(cp: number): number {
   return 100 / (1 + Math.exp(-GRADE_CONVENTION.constants.logisticCoefficient.value * clampCp(cp)));
 }
 
-function normalizeScore(reading: GradeEvaluation, learnerSide: GradeSide): GradeScore {
-  const factor = reading.perspective === "white"
-    ? learnerSide === "white" ? 1 : -1
-    : reading.sideToMove === learnerSide ? 1 : -1;
-  const score: ComparisonScore = reading.score.kind === "cp"
-    ? Object.freeze({ kind: "cp", value: reading.score.value * factor })
-    : Object.freeze({ kind: "mate", movesTo: reading.score.movesTo * factor });
+export function recordedGradeScore(reading: RecordedEngineAvailable, mover: GradeSide): GradeScore {
+  const factor = mover === "white" ? 1 : -1;
+  const score: ComparisonScore = reading.score.kind === "centipawns"
+    ? Object.freeze({ kind: "cp", value: reading.score.value === 0 ? 0 : reading.score.value * factor })
+    : Object.freeze({ kind: "mate", movesTo: reading.score.distance * (reading.score.side === mover ? 1 : -1) });
   const winPercent = score.kind === "cp" ? winPercentFromCp(score.value) : score.movesTo > 0 ? 100 : 0;
   return Object.freeze({ score, winPercent });
 }
@@ -111,24 +93,24 @@ function abstention(reason: MoveQualityAbstentionReason): MoveQualityAbstention 
   return Object.freeze({ abstained: true, reason });
 }
 
-function classFromThresholds(drop: number, context: GradeContext): { klass: MoveQualityClass; threshold: number } | undefined {
-  const prefix = GRADE_CONVENTION.contexts[context] === "practice" ? "practice" : "report";
-  const values = prefix === "practice"
-    ? { inaccuracy: GRADE_CONVENTION.constants.practiceInaccuracy.value, mistake: GRADE_CONVENTION.constants.practiceMistake.value, blunder: GRADE_CONVENTION.constants.practiceBlunder.value }
-    : { inaccuracy: GRADE_CONVENTION.constants.reportInaccuracy.value, mistake: GRADE_CONVENTION.constants.reportMistake.value, blunder: GRADE_CONVENTION.constants.reportBlunder.value };
-  if (drop >= values.blunder) return { klass: "blunder", threshold: values.blunder };
-  if (drop >= values.mistake) return { klass: "mistake", threshold: values.mistake };
-  if (drop >= values.inaccuracy) return { klass: "inaccuracy", threshold: values.inaccuracy };
+export function classifyWinPercentLoss(drop: number): { klass: MoveQualityClass; threshold: number } | undefined {
+  if (!Number.isFinite(drop)) throw new TypeError("Grade loss must be finite");
+  const { inaccuracy, mistake, blunder } = GRADE_CONVENTION.constants;
+  if (drop >= blunder.value) return { klass: "blunder", threshold: blunder.value };
+  if (drop >= mistake.value) return { klass: "mistake", threshold: mistake.value };
+  if (drop >= inaccuracy.value) return { klass: "inaccuracy", threshold: inaccuracy.value };
   return undefined;
 }
 
-function instrument(before: GradeEvaluation, after: GradeEvaluation): { readonly depth?: number; readonly requestedMovetimeMs?: number } | undefined {
-  if (before.lane !== after.lane || before.engineId !== after.engineId) return undefined;
-  if (before.depth !== undefined && after.depth !== undefined) return before.depth === after.depth ? { depth: before.depth } : undefined;
-  if (before.requestedMovetimeMs !== undefined && after.requestedMovetimeMs !== undefined) {
-    return before.requestedMovetimeMs === after.requestedMovetimeMs ? { requestedMovetimeMs: before.requestedMovetimeMs } : undefined;
-  }
-  return undefined;
+function sameInstrument(before: RecordedEngineAvailable, after: RecordedEngineAvailable): boolean {
+  const a = before.instrument, b = after.instrument, x = before.bound, y = after.bound;
+  const sameBudget = x.kind === "depth" && y.kind === "depth" ? x.requestedDepth === y.requestedDepth
+    : x.kind === "movetime" && y.kind === "movetime" ? x.requestedMs === y.requestedMs
+      : x.kind === "nodes" && y.kind === "nodes" && x.requestedNodes === y.requestedNodes;
+  return sameBudget && before.engineId === after.engineId && a.engineVersion === b.engineVersion
+    && (a.origin === "provider_delivery" && b.origin === "provider_delivery" ? a.generation === b.generation
+      : a.origin === "offline_engine" && b.origin === "offline_engine" && a.profile.threads === b.profile.threads
+        && a.profile.hashMb === b.profile.hashMb && a.profile.multiPv === b.profile.multiPv);
 }
 
 function grade(
@@ -137,48 +119,44 @@ function grade(
   before: GradeScore,
   after: GradeScore,
   thresholdCrossed: MoveQualityGrade["thresholdCrossed"],
-  context: GradeContext,
-  source: GradeEvaluation,
-  limit: { readonly depth?: number; readonly requestedMovetimeMs?: number },
+  source: RecordedEngineAvailable,
 ): MoveQualityGrade {
   return Object.freeze({
     klass, arm, before, after, dropWinPercent: before.winPercent - after.winPercent,
-    thresholdCrossed, convention: Object.freeze({ id: "grade-convention", version: 1, context }),
-    engineId: source.engineId, lane: source.lane, ...limit,
+    thresholdCrossed, convention: Object.freeze({ id: "grade-convention", version: 2 }),
+    engineId: source.engineId, lane: "recorded", bound: source.bound, instrument: source.instrument,
   });
 }
 
 export function moveQualityGrade(
-  beforeInput: GradeEvaluation | AbstainedGradeEvaluation | undefined,
-  afterInput: GradeEvaluation | AbstainedGradeEvaluation | undefined,
-  context: GradeContext,
-  learnerSide: GradeSide,
+  beforeInput: RecordedEngineAvailable | AbstainedGradeEvaluation | undefined,
+  afterInput: RecordedEngineAvailable | AbstainedGradeEvaluation | undefined,
+  mover: GradeSide,
 ): MoveQualityResult {
   if (beforeInput === undefined || afterInput === undefined) return abstention("missing_eval");
   if ("abstained" in beforeInput || "abstained" in afterInput) return abstention("input_abstained");
-  const limit = instrument(beforeInput, afterInput);
-  if (limit === undefined) return abstention("unequal_instrument");
+  if (!sameInstrument(beforeInput, afterInput)) return abstention("unequal_instrument");
 
-  const before = normalizeScore(beforeInput, learnerSide);
-  const after = normalizeScore(afterInput, learnerSide);
+  const before = recordedGradeScore(beforeInput, mover);
+  const after = recordedGradeScore(afterInput, mover);
   if (before.score.kind === "cp" && after.score.kind === "cp") {
-    const classified = classFromThresholds(before.winPercent - after.winPercent, context);
-    return classified === undefined ? undefined : grade(classified.klass, "eval_delta", before, after, classified.threshold, context, beforeInput, limit);
+    const classified = classifyWinPercentLoss(before.winPercent - after.winPercent);
+    return classified === undefined ? undefined : grade(classified.klass, "eval_delta", before, after, classified.threshold, beforeInput);
   }
   if (before.score.kind === "mate" && before.score.movesTo > 0) {
     if (after.score.kind === "mate") {
-      return after.score.movesTo < 0 ? grade("blunder", "mate_lost", before, after, "mate_lost_tier", context, beforeInput, limit) : undefined;
+      return after.score.movesTo < 0 ? grade("blunder", "mate_lost", before, after, "mate_lost_tier", beforeInput) : undefined;
     }
     const klass: MoveQualityClass = after.score.value > GRADE_CONVENTION.constants.mateLostInaccuracy.value
       ? "inaccuracy"
       : after.score.value > GRADE_CONVENTION.constants.mateLostMistake.value ? "mistake" : "blunder";
-    return grade(klass, "mate_lost", before, after, "mate_lost_tier", context, beforeInput, limit);
+    return grade(klass, "mate_lost", before, after, "mate_lost_tier", beforeInput);
   }
   if (before.score.kind === "cp" && after.score.kind === "mate" && after.score.movesTo < 0) {
     const klass: MoveQualityClass = before.score.value < GRADE_CONVENTION.constants.mateAllowedInaccuracy.value
       ? "inaccuracy"
       : before.score.value < GRADE_CONVENTION.constants.mateAllowedMistake.value ? "mistake" : "blunder";
-    return grade(klass, "mate_allowed", before, after, "mate_allowed_tier", context, beforeInput, limit);
+    return grade(klass, "mate_allowed", before, after, "mate_allowed_tier", beforeInput);
   }
   if (before.score.kind === "mate" && before.score.movesTo < 0 && after.score.kind === "cp") return abstention("mate_score_inconsistent");
   return undefined;
@@ -194,8 +172,12 @@ const mateTierText = (value: MoveQualityGrade): string => value.arm === "mate_lo
   : value.klass === "inaccuracy" ? "below −9.99" : value.klass === "mistake" ? "inside −9.99..−7.01" : "at or above −7.00";
 
 export function renderMoveQualityGrade(value: MoveQualityGrade): string {
-  const source = value.lane === "recorded" ? "recorded" : "live";
-  const suffix = `grade-convention@1/${value.convention.context}`;
+  const source = "recorded";
+  const instrument = value.instrument.origin === "provider_delivery" ? `recorded provider delivery, generation ${value.instrument.generation}`
+    : `pinned pack report, Threads ${value.instrument.profile.threads}, Hash ${value.instrument.profile.hashMb} MiB, MultiPV ${value.instrument.profile.multiPv}`;
+  const budget = value.bound.kind === "depth" ? `requested depth ${value.bound.requestedDepth}`
+    : value.bound.kind === "movetime" ? `requested ${value.bound.requestedMs} ms` : `requested ${value.bound.requestedNodes} nodes`;
+  const suffix = `${value.engineId} ${value.instrument.engineVersion}; ${instrument}; ${budget}; ${GRADE_CONVENTION_LABEL}`;
   if (value.arm === "eval_delta") {
     return `${titleCase(value.klass)} — the ${source} evaluation moved ${scoreText(value.before)} → ${scoreText(value.after)} across this move, a drop of ${value.dropWinPercent.toFixed(1)} win-points against a threshold of ${value.thresholdCrossed} (${suffix}).`;
   }
@@ -207,6 +189,14 @@ export function renderMoveQualityGrade(value: MoveQualityGrade): string {
 
 export function assertMoveQualityGradeSentence(value: MoveQualityGrade, sentence: string): void {
   if (sentence !== renderMoveQualityGrade(value)) throw new TypeError("GRADE_RENDER_INCOMPLETE: grade sentences must retain every operand and convention");
+}
+
+/** D3767/D4064: a registered view of an already emitted grade, never a second classifier. */
+export function renderMoveQualityGradeSummary(value: MoveQualityGrade): string {
+  const label = titleCase(value.klass);
+  if (value.arm === "eval_delta") return `${label}: the recorded evaluation lost ${value.dropWinPercent.toFixed(1)} win-points.`;
+  if (value.arm === "mate_lost") return `${label}: the recorded mate for the moving side was lost.`;
+  return `${label}: the recorded reading now reports mate against the moving side.`;
 }
 
 export function renderMoveQualityResult(value: MoveQualityResult): readonly string[] {

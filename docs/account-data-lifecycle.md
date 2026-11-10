@@ -13,8 +13,9 @@ returns `application/vnd.tabiya.account+json; version=1` as an attachment and su
 `X-Tabiya-Export-Sha256`. Unchanged storage produces byte-identical canonical UTF-8
 JSON. The bundle separates owned run snapshots from references to runs owned by other
 learners. It includes progress, marks, repertoires, authored drafts, immutable
-publications, live/social history, and rating/profile records — including the four
-longitudinal classes (denominators, observations, structure stats and projection jobs),
+publications, live/social history, and rating/profile records — including the five
+longitudinal derived families (denominators, observations, structure stats, GAME facts and choice
+facts) and their projection jobs,
 which account and per-run deletion previews list and deletion removes.
 
 The server emits the canonical bytes as a 64 KiB-chunked response stream and imposes
@@ -88,7 +89,7 @@ authentication, so an anonymous upload is never buffered.
 
 **Portability versioning.** A bundle's `formatVersion` names its closed shape.
 `ACCOUNT_BUNDLE_UPGRADES` lists every version this build reads with the upgrader that
-lifts it to the current shape (today only version 1, whose upgrader is the identity); an
+lifts it to the current shape (today only version 1; its upgrader supplies legacy-null for an older imported-game record without the recorded-clock document); an
 unknown or future version is refused with `ACCOUNT_IMPORT_UNSUPPORTED_VERSION` and the
 readable set. The upgraded value then passes the same closed `validateAccountBundleV1`
 export uses, including run replay; anything else is `ACCOUNT_IMPORT_INVALID`.
@@ -100,7 +101,7 @@ both runs are in the file, board marks on restored runs, attempts on restored ru
 their registered and quarantined concept rows, schedules, repertoires with moves, scans
 and gap links, and pack drafts, playtest documents and shape drafts. Imported-game PGN is
 re-stripped of third-party annotations on the way in ([[D959]]), and its source kind must
-be a durable `import-source-protocol` member. Position statistics are rebuilt from the
+be a durable `import-source-protocol` member. Its closed numeric clock document and exact original-node mapping are validated/restored together. Older retained clock annotations are extracted before stripping; already lost values stay unknown. Position statistics are rebuilt from the
 restored attempts and the longitudinal projections are re-derived from the restored runs
 through the ordinary watermark (the restore is a registered longitudinal source mutation);
 neither is copied from the file.

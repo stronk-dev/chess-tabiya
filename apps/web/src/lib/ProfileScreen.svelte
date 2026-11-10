@@ -9,7 +9,6 @@
   import type {
     HabitCard,
     LearnerProfileView,
-    ObservationDetail,
     OpeningDetail,
     ProfilePage,
     ProfileHistoryRow,
@@ -33,11 +32,8 @@
   let cardDrill: Record<string, { readonly contributors: StyleContributors; readonly offset: number } | undefined> = $state({});
   let cardDrillError: Record<string, string | undefined> = $state({});
   let openingDrill: Record<string, OpeningDetail | undefined> = $state({});
-  let observationDrill: Record<string, ObservationDetail | undefined> = $state({});
   let openingBusy: Record<string, boolean> = $state({});
-  let observationBusy: Record<string, boolean> = $state({});
   let openingError: Record<string, string | undefined> = $state({});
-  let observationError: Record<string, string | undefined> = $state({});
   let cardBusy: Record<string, boolean> = $state({});
   let drillError: string | undefined = $state();
   let historyPage: ProfilePage<ProfileHistoryRow> | undefined = $state();
@@ -68,7 +64,6 @@
     error = undefined;
     cardDrill = {}; cardDrillError = {}; cardBusy = {};
     openingDrill = {}; openingBusy = {}; openingError = {};
-    observationDrill = {}; observationBusy = {}; observationError = {};
     drillError = undefined; historyBusy = false;
     try {
       if (api.learnerProfile === undefined) throw new Error("The profile is unavailable.");
@@ -186,25 +181,6 @@
       if (attached && current === generation) openingError = { ...openingError, [key]: "These games could not be loaded. Your current list is unchanged. Try again, or reload these games." };
     } finally {
       if (attached && current === generation) openingBusy = { ...openingBusy, [key]: false };
-    }
-  }
-
-  async function openObservation(key: string, offset = 0): Promise<void> {
-    if (api.learnerProfileObservation === undefined || observationBusy[key]) return;
-    const current = generation;
-    observationBusy = { ...observationBusy, [key]: true };
-    observationError = { ...observationError, [key]: undefined };
-    try {
-      const detail = await api.learnerProfileObservation(key, offset, 100);
-      if (!attached || current !== generation) return;
-      const previous = observationDrill[key];
-      if (detail.row.key !== key || (offset > 0 && !sameRead(previous?.row, detail.row))) throw new Error("Changed observation");
-      const occurred = appendPage(detail.occurred, previous?.occurred, offset, (ref) => JSON.stringify([ref.runId, ref.nodeId]));
-      observationDrill = { ...observationDrill, [key]: { ...detail, occurred } };
-    } catch {
-      if (attached && current === generation) observationError = { ...observationError, [key]: "These moves could not be loaded. Your current list is unchanged. Try again, or reload these moves." };
-    } finally {
-      if (attached && current === generation) observationBusy = { ...observationBusy, [key]: false };
     }
   }
 
@@ -334,7 +310,7 @@
                 <div><dt>Counted</dt><dd>{card.games} games, {card.decisions} of your moves</dd></div>
                 <div><dt>This card's floor</dt><dd>{card.floor} games</dd></div>
                 <div><dt>Window</dt><dd>{readableDate(card.window.from)} to {readableDate(card.window.to)}</dd></div>
-                <div><dt>Scope</dt><dd>{phaseText(card.phaseScope)}; all of your recorded games (time controls are not recorded yet)</dd></div>
+                <div><dt>Scope</dt><dd>{phaseText(card.phaseScope)}; all of your recorded games (these cards are not grouped by time control)</dd></div>
                 <div><dt>State</dt><dd>{labelFor("style_tier_state", card.tier.state)} under {labelFor("style_tier_rule", card.tier.rule)}</dd></div>
                 <div><dt>Metric</dt><dd>Version {card.version}{card.reference ? ` · reference population version ${card.reference.version}` : ""}</dd></div>
               </dl>
@@ -343,7 +319,7 @@
                 <div><dt>This card's floor</dt><dd>{plural(card.floor, "game")}</dd></div>
                 {#if card.abstention.code === "blocked"}
                   <div><dt>Waiting on</dt><dd>{card.abstention.home}</dd></div>
-                {:else}
+                {:else if card.abstention.code === "below_floor"}
                   <div><dt>Measured so far</dt><dd>{plural(card.games, "game")}</dd></div>
                 {/if}
               </dl>
@@ -434,31 +410,8 @@
     </section>
 
     <section aria-labelledby="observations-title">
-      <h2 id="observations-title">Recorded observations</h2>
-      <p class="honest">{profile.observations.statement}</p>
-      {#if profile.observations.rows.length === 0}
-        <p>No observation has been recorded from your moves yet.</p>
-      {:else}
-        <details>
-          <summary>Show the recorded observations</summary>
-          <div class="table-scroll"><table>
-            <thead><tr><th scope="col">Observation</th><th scope="col">Happened</th><th scope="col">Could have happened</th><th scope="col">Games</th><th scope="col">Your moves in those games</th><th scope="col"><span class="visually-hidden">Details</span></th></tr></thead>
-            <tbody>
-              {#each profile.observations.rows as row (row.key)}
-                <tr>
-                  <th scope="row">{row.label}<br /><small>Version {row.projectionVersion}</small></th>
-                  <td>{row.occurred}</td><td>{row.opportunities}</td><td>{row.runs}</td><td>{row.decisions}</td>
-                  <td><button type="button" disabled={row.occurred === 0 || observationBusy[row.key]} onclick={() => void openObservation(row.key)}>{observationDrill[row.key] ? "Reload these moves" : "Show moves"}</button>{#if observationBusy[row.key]}<p role="status">Loading moves…</p>{/if}{#if observationError[row.key]}<p role="alert">{observationError[row.key]}</p>{/if}</td>
-                </tr>
-                {#if observationDrill[row.key]}
-                  {@const detail = observationDrill[row.key]!}
-                  <tr><td colspan="6">{@render refList(detail.occurred.items, `${row.label}: moves`)}<p class="honest">Showing {detail.occurred.items.length} of {detail.occurred.total} moves.{detail.occurred.hiddenCount > 0 ? ` ${detail.occurred.hiddenCount} more moves not shown.` : ""}</p>{#if detail.occurred.hiddenCount > 0}<button type="button" disabled={observationBusy[row.key]} onclick={() => void openObservation(row.key, detail.occurred.items.length)}>Show more moves</button>{/if}</td></tr>
-                {/if}
-              {/each}
-            </tbody>
-          </table></div>
-        </details>
-      {/if}
+      <h2 id="observations-title">Structure statistics</h2>
+      <p class="honest">Detailed structure statistics are unavailable.</p>
     </section>
 
     <section aria-labelledby="skills-title">
@@ -551,11 +504,6 @@
   .opening-list { list-style: none; padding: 0; }
   .opening-list > li { display: grid; gap: .5rem; padding: .75rem 0; border-bottom: 1px solid var(--line); }
   .honest { color: var(--muted); }
-  .table-scroll { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { padding: .5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-  thead th { color: var(--muted); font-size: .72rem; text-transform: uppercase; }
-  td { font-variant-numeric: tabular-nums; }
   textarea { width: 100%; box-sizing: border-box; }
   .error { padding: 1rem; border: 1px solid var(--warning); border-radius: .75rem; }
   @media (max-width: 720px) { dl div { grid-template-columns: 1fr; } }

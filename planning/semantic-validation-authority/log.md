@@ -215,3 +215,128 @@ strategic content, permission, pack bytes, whole capability/milestone, remote CI
   verify-governance` and the final `make roadmap-receipt roadmap-check work-state` pass.
   No application code changed, so prior production software/browser gates are not presented
   as newly rerun for this research-only change. No push or remote-CI/release claim.
+
+## 2026-11-02 — D3949 current material@2 positive/negative authority
+
+- Execute accepted Slice B/§7.2 and material §2.3c with28 new exact-subject cases, caseVersion1:
+  full22-edge preservation matrix (four rises/ten falls/eight equal magnitudes), both colours,
+  captures/en passant/all four promotions/capture-promotions, plus six populated quiet/castling
+  negatives. Original343 JSON records/frozen authorities remain byte-identical and ordered.
+- Rechecked the existing pinned Python-chess role/colour membership excerpt at its actual source:
+  https://github.com/niklasf/python-chess/blob/3516d7c6c0879af724c2855fac5a304a4ef40949/chess/__init__.py#L748-L763
+  Literal FEN-character counts ground each vector; neutral Chessops board counts independently
+  verify them and actual capture/promotion causes. Absolute role differences/unweighted magnitude
+  remain an explicit product convention, not upstream strategic value or move advice. No collector
+  produces its own expected payload, and no frozen predecessor assertion is rebound to@2.
+- The31-case suite first fails30 cases on missing canonical/profile authority. Registration
+  exposes16 failures in a guessed test-only promotedTo field; the actual existing field is
+  detail.promotionRole. Correct the harness, not production data.31/31 then pass, including
+  exact current-subject/input/expectation/operation/arm forgery controls before invocation.
+- Independent218-test/three-file review finds one missing named later-cohort exclusion in an old
+  remainder guard. Retain original63/counts/digests while naming the new cohort; no test is removed.
+  Review then clears bounded D3949. Receipt is the existing compiler2 independent-review document.
+- Only positive/negative profile arms become present. Orientation still needs a total-operand
+  mirror authority; exact@2 imported population remains required. Normal rebuild reports93
+  subjects/zero qualified,371 cases363 pass/eight predecessor failures,53 population/eight external
+  receipts. These are actual new executions, not renamed old census receipts.
+- The full12-file validation command initially fails8/489 (481 pass) including the remainder
+  guard; final7/489 (482 pass) are six old material positives plus the all-case assertion exposing
+  eight old targets. New suite joins ordinary fast/cited Make gates; full discovery retains438
+  software files. Normal full verify/build finally fails1/2075 authority cases/19files,2074 pass,
+  no skips/setup-blocked; later full pools/content/native/trailing build are unreached. Workspace/
+  research types and standalone build pass separately. No retry/deadline/assertion waiver.
+- Existing queue/roadmap/docs/ledger record this increment; acquisition remains Nudge42/52,
+  Review62/72. D3928 default-app content migration remains a separate pending ruling, D3948 generic
+  renderer audit remains assigned. Continue fresh exposure authority, exact-version orientation/
+  population and real current callers/Inspector/API/native, then atomic predecessor retirement.
+  No staging, commit, push, content/schema change, qualification, milestone promotion or goal pause.
+
+Final normal `make work-state-sync roadmap-receipt verify-governance` passes. All1777 live rows
+remain assigned/routed with zero untriaged. Separate `make semantic-validation-check` reproduces
+the371-case report exactly, including its eight failures; this is report consistency, not a
+passing semantic-quality gate. `git diff --check` passes. The goal remains active.
+
+## 2026-11-02 — D3950 current exposure canonical validation (uncommitted)
+
+Sixteen distinct exposure@2 cases now bind accepted Slice B to independent pseudo-attack
+geometry, exact retained piece identities and complete finite legal-capture populations. Both
+colours cover multiple targets, all four promotion choices and populated empty/zero/negative
+exchange. Checking/pass-illegal inputs remain unavailable, never negative examples. Explicit
+piece units, promotion gain and optional stopping are product conventions, not strategic grades.
+Original371 canonical records/frozen authorities are unchanged; caseVersion remains1.
+
+The first baseline reports18 missing-case/profile failures and two unavailable controls passing.
+Registration then exposes invalid minimum2 declarations; preserve schema minimum1 and exact full
+counts in independent tests. Review also catches shadowing in the historical retention filter and
+count-plus-membership accepting duplicated targets. Fix the filter, preserve old counts/digests,
+and require exact defender:target multiset plus ordered capture UCI/value equality. The remaining
+forgery probe now uses a schema-valid changed operand, so it reaches authority refusal. No parser,
+production collector, selection budget or validation rule is weakened to pass these tests.
+
+All20 current controls pass; independent review passes182 tests/three complete files. Only
+positive/negative profile arms become present. Orientation and exact-version population remain
+required; paired colours do not discharge mirror authority. Normal rebuild reports93 subjects/
+zero qualified,387 cases379 passed/eight old failures,53 population/eight external receipts.
+Complete13-file validation reports7 failed/502 passed in509 tests on predecessor targets; ordinary
+full verify reports1 failed/2094 passed in2095 authority tests/20files, no skips/setup-blocked.
+Later full pools/content/native/trailing build are unreached. Workspace/research types and
+standalone production build pass separately. New tests run in ordinary fast/cited Make gates;
+full scheduling preserves439 software files. No historical receipt is relabelled or case removed.
+
+Roadmap, queue, docs, register and ledger record this increment. Acquisition stays Nudge42/52
+Review62/72; D3928 remains a separate pending real-pack ruling and D3948 remains assigned.
+Continue exact-version orientation/population, remaining actual callers/Inspector/API/native and
+atomic predecessor retirement. No source qualification, content/schema edit, parent completion,
+staging/commit/push or goal pause. The full1.0 goal remains active.
+
+Final normal work-state/roadmap/governance refresh passes:1778 live rows remain assigned/routed,
+zero untriaged. Separate semantic-validation-check reproduces387 cases379 pass/eight fail exactly;
+it checks report consistency, not quality clearance. git diff --check passes. Routine independent
+review of the already-drafted D3564/D3781 orientation amendment is next, without another owner
+permission question; acceptance still precedes production grammar changes.
+
+## 2026-11-02 — D3564/D3781 accepted orientation repair, implemented locally
+
+Use the standing review authorization, without another permission question. Separate read-only
+buildability review accepts §4.1a after the normal106-check/four-file research matrix over387
+current cases (295 edge/56 recorded/36 bounded;58 subjects/519 targets). That is research
+inventory, not qualification. Record the acceptance in the existing RFC/review receipt.
+
+Implement only the accepted closed input-relative rules: seven literal root spellings, exact
+same-side original input bytes before comparison tokens, total scalar coverage and unchanged
+complete unique event pairing. Preserve original payloads and receipts. The real runner validates
+both complete legal fixtures and the geometric relation before either production collector;
+only its two actual edge inputs become comparator context. No callback, ignored operand, alias
+inference, context brand, schema/resource reservation or nested/non-edge coercion is introduced.
+
+Permanent new suite first fails23/32 on the missing grammar. The32 initially pass after the
+implementation; normal types catch overly broad test helper unions, fixed with narrowed geometric
+and discriminated tuple builders, not weaker production types. Existing D3566 malformed partner
+controls now precisely expect earlier FIXTURE_INVALID while retaining zero invocations; a legal
+crossed partner still fails ORIENTATION_SCHEMA. Independent implementation review identifies the
+missing simultaneous input-plus-operand counterexample. Add both-side controls: value comparison
+alone accepts matching corrupt bytes, but the real runner rejects the illegal candidate before
+acquisition. A spy wraps the genuine callable and is proved active once before the zero-call
+assertion. Final34 current tests and independent85/three-file review pass; no bounded blocker.
+
+The suite runs in ordinary fast/cited Make gates; actual discovery retains440 software files.
+Final normal make verify build fails1/2129 authority tests/21files (2128 pass), no skips or setup
+blocks. Complete14-file validation fails7/543 (536 pass) on the same eight predecessor targets.
+Later aggregate pools/content/native/trailing build are unreached. Workspace/research types,
+standalone production build and106 research controls pass separately. Regeneration preserves
+387 canonical cases379 passed/eight failed,93 subjects/zero qualified,53 population/eight external
+receipts. No canonical orientation case/profile or chess authority is added by this mechanism.
+
+Existing queue/roadmap/docs/ledger/register are refreshed. D3564 remains doing pending coupled
+landing; nested/recorded/bounded frame scopes remain open. Acquisition stays Nudge42/52 Review62/72.
+Continue actual accepted Inspector source-demand/preflight/API/receiver/native delivery and
+remaining callers, independent current-version orientation/populations, then lawful atomic
+predecessor retirement. D3928/D3948 stay separately owned. No content/schema edit, staging,
+commit/push, qualification, whole milestone completion or goal pause.
+
+Final governance first catches the changed D3781 source-row reference in the older foundation
+checkpoint. Reconcile that checkpoint to the actual accepted/local orientation repair and its
+still-open authorities, retain the prior installed-opening achievement, and refresh its existing
+reference. Normal roadmap-receipt/verify-governance then passes. Work-state retains1778 assigned/
+routed live rows, zero untriaged. Semantic-validation-check reproduces the387-case report exactly
+with its eight failures; git diff --check passes. Nothing is staged or pushed; the1.0 goal stays active.

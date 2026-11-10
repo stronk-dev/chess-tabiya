@@ -1,5 +1,19 @@
 # Review evidence
 
+Review has a fixed historical “Recorded clock” region beneath its board navigation. It uses the
+selected original move, not the live cursor or selected learner colour. The exact registered
+reading/use statements show millisecond remaining time after the move, declared control, and
+optional recorded clock use. Empty, invalid, unknown older retention and unavailable source/use
+states remain distinct. The region does not tick or draw board marks.
+
+Only the authenticated recorded-clock operation supplies it. The complete historical consumer is
+checked before acquiring original data or backfilling legacy metadata; an available decision
+must carry its original imported actor/decision occurrence. The strict receiver checks retained
+operands, source-specific presentation receipts and the actual selected Review row. Selection,
+observed help/settings, access/snapshot/account or route changes retire old requests. This gives
+no new engine, grade, bot, rating or live-clock permission. Native layout/release proof remains
+separate from the mounted/source controls. Contract: `rfc/recorded-clocks.md`.
+
 `rfc/review-evidence-compiler.md` replaces Story's untyped engine scalar with a typed, partial
 post-game packet. Runtime: `packages/runtime/src/review-points.ts`, `review-evidence.ts` and
 `story.ts`; server: `apps/server/src/review-evidence.ts`.
@@ -64,6 +78,22 @@ slots use the already validated captured image rather than replaying storage for
 That collector does not itself assemble/rank moments, request providers, expose a public
 authority facade or adopt a learner binding.
 
+Single-line objective transitions are a separate recorded source, not a thirteenth Story adapter.
+`collectRecordedReviewObjectives` invokes `run.record.objective_transition@2` over the actual
+workflow-owned boundary. It retains original event ordinals, references, order and root-relative
+nodes, including repeated events and legitimate later updates to inherited path nodes. Siblings
+and nodes beyond the endpoint are excluded only after whole-run replay validation. Successful
+empty populations remain authenticated; copied, foreign and reordered arrays fail. Root events
+remain privately at ply0; Review move rows never retarget them. This repeats recorded assessments;
+it does not establish their chess truth or assess a new objective.
+
+The actual service checks current access/storage/disclosure/rated state and cancellation around
+collection and publication. Source-contract failures return typed unavailability. The production
+REST handler delivers its registered objective components through real cookie authentication;
+the strict web receiver binds all components/abstentions to current Review and the objective
+source to its sole objective renderer in both directions. Default-app startup, complete native
+delivery and the coordinated source migration remain open; these bounded tests do not clear them.
+
 Internal `derived.story.rank@3` now consumes only the original complete recorded moment source.
 Its single `{rank}` payload retains the current nine presentation bands, not chess significance.
 Every group/item is joined to its original source slot/item and actual ordered minted inputs;
@@ -98,11 +128,64 @@ score a second time or turn mate into cp. A node's selection is independent of b
 A/X, B/Y-then-X, C/Y selects B/Y once; a later pair calculation cannot rescue A→B with B/X.
 
 Every retained read checks the original storage boundary, registry membership, actual pending
-reservation appearance/retirement and cancellation. This source prerequisite does not issue
-current Nudge/Review/Compare access, a `RecordedGradeSource`, a comparison-point factory or an
-execution grant. The future queued Stockfish-reference arm, complete current preflight and
-grade/accuracy/graph/Compare/API/native migration remain. No provider call or run write occurs
-in source capture/readback. The existing learner paths are not partially switched to it.
+reservation appearance/retirement and cancellation. That reader does not itself grant access.
+`apps/server/src/recorded-grade-sources.ts` now owns current Nudge/Review permission and issues
+opaque `RecordedGradeSource` values over exact original edges and endpoints. The sole grade@2
+factory accepts those sources, not copied readings or a caller context. Current Review grade
+components, accuracy and graph share the fixed endpoint selections; an incomparable pair cannot
+join a graph segment. Graph/accuracy captions use the same readable convention label as grades,
+with the exact machine convention retained in their underlying typed grade values.
+
+The shared grade reader also rechecks its issuing service's actual current access, role,
+disclosure, artifact and pending-source owners before and after each read. A retained source
+cannot survive a revoked grant or changed role, including when the factory would otherwise
+emit no grade or report missing engine readings. That internal lifetime check supplies no
+scores, operands or source-valid Boolean; original nominal source/plan/edge checks remain.
+
+Compare's separately issued engine-point source has the same lifetime guarantee through its
+own service context. Role downgrade/revocation refuses direct trajectory-factory reads even
+when no point is recorded; it does not inherit Review's broader viewer roles.
+
+Repeated reads reuse only pure bytes/digests of validated, deeply immutable run/event data.
+Storage, permission and source lookups still run. Mutable data, frozen envelopes with mutable
+descendants, accessors and sparse arrays cannot enter that reuse path. Real SQLite/service
+controls retain all70 decisions,71 original evaluated positions and both35-decision accuracy
+denominators under the unchanged functional deadline. These controls are not a default-app,
+HTTP, live-engine or full-source readiness claim. Separate service controls verify installed
+opening history and phase/setup delivery with no engine reports and no recording writes.
+
+The loose-packet `grade-reading.ts` parser and unused `GradeEvaluation`/`GradeLane` input API are
+retired, not retained as another grading path. Current source, arithmetic, perspective and
+cross-workflow checks run in the ordinary recorded-grade and Review tests. The completed
+predecessor-only research models remain reproducible from Git at `48a6e0f5`; their recorded
+findings are historical, not current integration-gate results. No user recordings are removed.
+
+Capture/readback schedules no provider call and writes no run. The queued Stockfish-reference
+arm and full current-consumer source/receiver/native completion remain separate obligations.
+In particular, the single-line objective source remains incomplete. The92-pack requirement migration is held for D3928's per-release ruling, so focused
+source and mounted UI proofs are not a working-default-installation or release-readiness claim.
+
+### Independent historical engine and tablebase reports
+
+Review now acquires `recorded.engine.eval@1` and `recorded.tablebase.result@1` separately from
+the fixed grading endpoints. `RecordedGradeSourceOwner.reviewMeasurements` reads the actual
+pinned registry source through Review's own current workflow context. Every original position,
+including the root, retains both complete populations and their original ordinals/source links,
+two-step factory outcomes, duplicate reports and abstentions. Modern evaluations do not suppress
+these reports; grading metadata does not establish or withhold their measurement existence.
+
+The package-private `recorded-review-ledger.ts` handle retains the actual registry readers.
+Copied handles, crossed positions/invocations, changed grants/artifacts/storage and cancellation
+refuse. Absence, validated zero matches, refused reports, abstentions and failed sources stay
+distinct. Review renders only admitted readings at their own move, with registered partial/failure
+notices beside other facts; it never retargets root reports onto the first move. Raw ledgers and
+source links do not enter the response. Historical tablebase categories are labelled for the
+side to move, preserving their recorded category/distances, not relabelled as White's result.
+
+Real SQLite/service controls pass these results through JSON and the client's strict response
+parser. Their synthetic reports test source/receipt delivery, not chess truth or qualification.
+Mounted Review controls cover the normal component path separately; a complete authenticated
+browser journey remains unproved while default-pack migration is held.
 
 ## Recorded reductions and moment assembly
 
@@ -254,8 +337,10 @@ targets and preserves authored pack/evidence claims.
 
 ## The Analyze line
 
-The Review Map's explicit Analyze action (`GET /runs/:id/review-analysis`, rfc/review-map.md §7)
-reveals a line that the compilation pass already recorded. After each evaluation is delivered, the
+The Review Map's explicit Analyze action (rfc/review-map.md §7a) confirms its exact historical
+target on the existing `POST /runs/:id/assistance`, then reads the sole Full Inspector2
+source-page operation. It reveals a line that the compilation pass already recorded; it starts
+no new engine search. After each evaluation is delivered, the
 coordinator requests `stockfish.principal_variation@1` for the same FEN, engine and movetime, bounded
 to `REVIEW_EVIDENCE_PROFILE.linePlies` (12) plies. The request goes through the same scheduler and
 runs after the evaluation, so a node never holds two exchange slots. The sealed line is stored on
@@ -263,7 +348,8 @@ the same durable event under `values.providerLineDelivery` (`REVIEW_PROVIDER_LIN
 `bestline` row is attached, so Compare's line overlay does not change.
 
 The line never holds back the evaluation. If the line can't be obtained, the evaluation is still
-attached and Analyze says that no engine line is recorded. The packet, Story and the Review Map never
+attached. A genuinely absent source differs from a present corrupt capture or empty historical
+report; the latter two cannot silently fall back to a weaker line. The packet, Story and the Review Map never
 read the line, so the evaluation delivery and its projections still carry no best move or PV
 (refusal 7).
 
@@ -281,22 +367,28 @@ withholds repeat reads without disabling or replacing the focused control, and s
 and hide preserve keyboard focus. Navigation, retry and departure retire pending reveals; late
 responses cannot reopen them or alter the game. A failed read can be retried explicitly.
 
-`reviewDurableEngineLine(run, node)` re-derives the recorded bytes through
-`parsePersistedProviderDelivery` and seals them as `live.stockfish.principal_variation@1`. A line
-whose bytes no longer re-derive is not a line. `reviewAnalysis` turns it into the attributed
-`bestline` packet sealed by `live.stockfish.pv@1`. That packet carries the actual engine id, name
-and version, the requested bound, the reached depth and the provider payload digest. It is admitted
-only through `module.full_inspector@1`. The sentence names the engine and the search bound and adds
-the not-advice caveat. The reveal is withheld while a retry from that position is open. It is read
-only: it enqueues nothing and writes nothing (criterion 14). Explicitly attached `bestline` packets
-and legacy eval first moves remain fallbacks for runs that have no typed line.
+`collectRecordedAnalyzeLine` retains the exact incoming edge and original attachment occurrence.
+Three literal `derived.review` projections preserve the distinct captured-PV, saved-PV and saved
+first-move contracts. Captured bytes re-derive through the existing provider parser; historical
+engine/bound fields are explicitly reported, not promoted to independent execution authority.
+Complete legal numbered SAN and original typed ply limits survive without a second crop.
+Missing attribution renders a reason-specific state without private moves. Selected corrupt or
+empty sources stop; only genuine source absence permits the next of at most three exact probes.
+Registered renderers and the strict source-page receiver replace flat sentence admission.
+The actual current Inspector owner applies historical disclosure, role/workflow/help ceilings,
+open-retry withholding and currentness before source work and publication. Confirmation itself
+acquires no evidence and writes nothing. The predecessor raw runtime helper, public exports and
+`GET /runs/:id/review-analysis` have been removed; the old endpoint returns 404. Restart,
+saved-capture privacy, read-only, permission and retry controls exercise the current source-page
+flow instead of retaining a second admission path. This does not establish default installed
+content or release readiness.
 
 ## Story and the Review Map
 
 `renderReviewStoryReceipt(packet)` is the one server consumer on `GET /runs/:id/story`; see
 [game import and story](game-import-and-story.md). The Review Map evidence panel admits the
 packet's `eval_point`, `eval_delta`, `mate_transition` and `wdl_point` items through
-`module.review_map@1`, presents them through the registered pair-keyed adapters
+`module.review_map@2`, presents them through the registered pair-keyed adapters
 ([evidence presentation](evidence-presentation.md)) and states engine-family absence with
 packet-issued abstention components. The row carries the closed receipt as `packet`; its sentences
 are the tail of the row's `facts`.

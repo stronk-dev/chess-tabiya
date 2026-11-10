@@ -12,7 +12,8 @@ import type { AttemptVerdict } from "./progress.js";
 import { SQLiteRunStorage } from "./storage.js";
 import { validateTrainingSet } from "./training-set-validation.js";
 
-const example = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as Record<string, unknown>;
+// Current synthetic input, not a rewrite of the committed example or authored corpus.
+const example = withDerivedRequires(JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as Record<string, unknown>);
 const provenance = { reviewStatus: "draft" as const, sources: ["fixture"] };
 const members = (count: number) => Array.from({ length: count }, (_, index) => ({ packId: `pack-${index + 1}`, ordinal: index + 1 }));
 const set = (overrides: Partial<TrainingSetDefinition> = {}): TrainingSetDefinition => ({ id: "chapter-one", formatVersion: "0.1", title: "Chapter one", members: members(3), provenance, ...overrides });

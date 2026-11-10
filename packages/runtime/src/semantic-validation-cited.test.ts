@@ -2,6 +2,9 @@
 // excerpts are pinned in semantic-validation-cited-sources; every case executes the
 // registered production operation, including nearby negatives that emit other events.
 import { readFileSync } from "node:fs";
+import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
+import { SEMANTIC_VALIDATION_RIGHTS_SOURCES } from "./semantic-validation-rights-sources.js";
+import { SEMANTIC_VALIDATION_TRANSITION_SOURCES } from "./semantic-validation-transition-sources.js";
 import { resolve } from "node:path";
 import { pawnAttacks, rookAttacks } from "chessops/attacks";
 import { opposite, parseSquare } from "chessops/util";
@@ -13,9 +16,13 @@ import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
-import { BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, CAPTURE_DEPENDENT_NEGATIVE_FAMILIES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, CAPTURE_DEPENDENT_NEGATIVE_FAMILIES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 
-const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
+const liveDocument = JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] };
+const liveIds = new Set(liveDocument.cases.map(row => row.id));
+// Earlier frozen population assertions retain all rows. Only live rows execute current
+// production operations; retired authorities are covered in subject-safe-retirement.test.ts.
+const raw = retainHistoricalSemanticCaseFixtures(liveDocument.cases);
 const cases = raw.map(parseSemanticValidationCase);
 const byId = new Map(cases.map(value => [value.id, value]));
 
@@ -29,7 +36,7 @@ const pawnPositiveRows = pawnAbsenceFamilies.flatMap(family => ["gained", "lost"
     caseId: `cited.stockfish.pawn-files.${family}.${sign}.${color}` }))));
 
 describe("D3685 source-bound pawn/file membership", () => {
-  it.each(pawnPositiveRows)("$caseId retains the exact membership through legal production play", async row => {
+  it.each(pawnPositiveRows.filter(row => liveIds.has(row.caseId)))("$caseId retains the exact membership through legal production play", async row => {
     const value = byId.get(row.caseId);
     expect(value, `missing canonical positive ${row.caseId}`).toBeDefined();
     expect(value!.arm).toBe("positive");
@@ -86,7 +93,7 @@ describe("D3685 source-bound pawn/file membership", () => {
     expect(membership).toEqual([row.sign !== "gained", row.sign !== "lost"]);
   });
 
-  it.each(pawnAbsenceFamilies)("%s closes its positive arm and rejects borrowed inputs/operands", async family => {
+  it.each(pawnAbsenceFamilies.filter(family => liveIds.has(`cited.python-chess.pawn-absence.${family}.white`)))("%s closes its positive arm and rejects borrowed inputs/operands", async family => {
     const subject = { kind: "event" as const, projection: { id: `rules.structural.event.${family}`, version: 1 } };
     const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
     expect(profile.positive).toMatchObject({ disposition: "present", refs: pawnPositiveRows.filter(row => row.family === family)
@@ -104,7 +111,7 @@ describe("D3685 source-bound pawn/file membership", () => {
   });
 
   it("retains all 139 predecessor records alongside 36 new positives", () => {
-    const laterIds = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+    const laterIds = new Set([...EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
     expect(cases.filter(value => pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(36);
     expect(cases.filter(value => !laterIds.has(value.id) && !pawnPositiveRows.some(row => row.caseId === value.id))).toHaveLength(139);
     expect(evidenceDigest(raw.filter(value => !laterIds.has(value.id as string) && !pawnPositiveRows.some(row => row.caseId === value.id))))
@@ -113,7 +120,7 @@ describe("D3685 source-bound pawn/file membership", () => {
 });
 
 describe("D3676 populated pawn-structure absence", () => {
-  it.each(pawnAbsenceRows)("$caseId omits the exact family after completed legal play", async row => {
+  it.each(pawnAbsenceRows.filter(row => liveIds.has(row.caseId)))("$caseId omits the exact family after completed legal play", async row => {
     const value = byId.get(row.caseId);
     expect(value, `missing populated canonical negative ${row.caseId}`).toBeDefined();
     expect(value!.arm).toBe("semantic_negative");
@@ -144,7 +151,7 @@ describe("D3676 populated pawn-structure absence", () => {
     }
   });
 
-  it.each(pawnAbsenceFamilies)("%s retains its omission arm and refuses borrowed authority", async family => {
+  it.each(pawnAbsenceFamilies.filter(family => liveIds.has(`cited.python-chess.pawn-absence.${family}.white`)))("%s retains its omission arm and refuses borrowed authority", async family => {
     const subject = { kind: "event" as const, projection: { id: `rules.structural.event.${family}`, version: 1 } };
     const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
     expect(profile.semanticNegative).toMatchObject({ disposition: "present", refs: [
@@ -165,7 +172,7 @@ describe("D3676 populated pawn-structure absence", () => {
   });
 
   it("adds twelve absence cases without retiring any of the 127 prior cases", () => {
-    const laterIds = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+    const laterIds = new Set([...EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
     expect(cases.filter(value => pawnAbsenceRows.some(row => value.id === row.caseId))).toHaveLength(12);
     expect(cases.filter(value => !laterIds.has(value.id) && !pawnAbsenceRows.some(row => value.id === row.caseId) &&
       !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(127);
@@ -178,7 +185,7 @@ const contactTransitions = positiveContacts.flatMap(family => ["gained", "lost",
     caseId: `cited.python-chess.${family}.${sign}.${color}` }))));
 
 describe("D3667 exact contact transitions", () => {
-  it.each(contactTransitions)("$caseId retains its actor, targets and direction through real play", async row => {
+  it.each(contactTransitions.filter(row => liveIds.has(row.caseId)))("$caseId retains its actor, targets and direction through real play", async row => {
     const value = byId.get(row.caseId);
     expect(value, `missing canonical transition ${row.caseId}`).toBeDefined();
     const negative = row.sign === "populated-negative";
@@ -252,7 +259,7 @@ describe("D3667 exact contact transitions", () => {
     }
   });
 
-  it.each(positiveContacts)("%s closes its positive arm without borrowing another operation or expectation", async family => {
+  it.each(positiveContacts.filter(family => liveIds.has(`cited.python-chess.${family}.gained.white`)))("%s closes its positive arm without borrowing another operation or expectation", async family => {
     const subject = { kind: "event" as const, projection: { id: `rules.transition.event.${family}`, version: 1 } };
     const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
     expect(profile.positive).toMatchObject({ disposition: "present", refs: ["gained", "lost"].flatMap(sign =>
@@ -272,7 +279,7 @@ describe("D3667 exact contact transitions", () => {
   it("retains every prior canonical case while adding exactly sixteen positives and eight negatives", () => {
     expect(contactTransitions).toHaveLength(24);
     expect(cases.filter(value => contactTransitions.some(row => value.id === row.caseId))).toHaveLength(24);
-    const laterIds = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
+    const laterIds = new Set([...EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...KING_ZONE_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...DISCOVERED_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...RECORDED_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...ATTACK_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...RULE_STATE_CITED_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)), ...PAWN_DYNAMICS_CITED_SOURCE.cases.map(row => row.proposition.case.id)]);
     expect(cases.filter(value => !laterIds.has(value.id) && !contactTransitions.some(row => value.id === row.caseId) &&
       !pawnAbsenceRows.some(row => value.id === row.caseId) &&
       !pawnPositiveRows.some(row => value.id === row.caseId))).toHaveLength(103);
@@ -288,7 +295,7 @@ const contactRows = contactFamilies.flatMap(family => ["white", "black"].map(col
 })));
 
 describe("D3666 completed contact negatives", () => {
-  it.each(contactRows)("$caseId records the played pawn advance without inventing contacts", async row => {
+  it.each(contactRows.filter(row => liveIds.has(row.caseId)))("$caseId records the played pawn advance without inventing contacts", async row => {
     const value = byId.get(row.caseId);
     expect(value, `missing source-bound case ${row.caseId}`).toBeDefined();
     expect(value!.subject).toEqual({ kind: "event", projection: {
@@ -310,7 +317,7 @@ describe("D3666 completed contact negatives", () => {
     });
   });
 
-  it.each(contactFamilies)("%s binds its negatives without waiving other validation arms", async family => {
+  it.each(contactFamilies.filter(family => liveIds.has(`cited.python-chess.${family}.isolated-push.white`)))("%s binds its negatives without waiving other validation arms", async family => {
     const projection = { id: `rules.transition.event.${family}`, version: 1 };
     const subject = { kind: "event" as const, projection };
     const profile = SEMANTIC_VALIDATION_PROFILES.find(value => evidenceDigest(value.subject) === evidenceDigest(subject))!;
@@ -382,7 +389,7 @@ describe("source-grounded literal event validation", () => {
   it("closes only the four legal-negative cells; preserves all prior cases and orientation debt", () => {
     expect(rows).toHaveLength(24);
     expect(cases.filter(value => rows.some(row => row.caseId === value.id))).toHaveLength(24);
-    const added = new Set([...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.flatMap(family =>
+    const added = new Set([...EXPOSURE_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...MATERIAL_V2_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...BOUNDED_TARGET_CITED_SOURCE.cases.map(row => row.proposition.case.id), ...CAPTURE_DEPENDENT_NEGATIVE_FAMILIES.flatMap(family =>
       ["white", "black"].map(color => `cited.python-chess.${family.id}.castle-negative.${color}`)),
       ...contactRows.map(row => row.caseId), ...contactTransitions.map(row => row.caseId),
       ...pawnAbsenceRows.map(row => row.caseId), ...pawnPositiveRows.map(row => row.caseId),
@@ -395,8 +402,25 @@ describe("source-grounded literal event validation", () => {
         { id: `cited.python-chess.${family.id}.${family.examples[2]}.white` },
         { id: `cited.python-chess.${family.id}.${family.examples[2]}.black` },
       ] });
-      expect(profile.orientation.disposition).toBe("required");
-      expect(semanticValidationVerdict(subject)?.verdict).toBe("unvalidated");
+      if (family.id === "rights") {
+        // D4164 separately discharges this exact current arm; historical cases above stay intact.
+        const refs = SEMANTIC_VALIDATION_RIGHTS_SOURCES.flatMap(source => source.cases)
+          .filter(row => row.arm === "orientation").map(row => ({ id: row.proposition.case.id }));
+        expect(refs).toHaveLength(6);
+        expect(profile.orientation).toMatchObject({ disposition: "present", refs });
+        expect(semanticValidationVerdict(subject)).toMatchObject({ verdict: "passed", open: [] });
+      } else if (family.id === "capture" || family.id === "zeroing") {
+        // D4166 discharges only these two additional current arms; all historical cases remain.
+        const refs = SEMANTIC_VALIDATION_TRANSITION_SOURCES.flatMap(source => source.cases)
+          .filter(row => row.arm === "orientation" && row.proposition.subject.projection.id === family.projection)
+          .map(row => ({ id: row.proposition.case.id }));
+        expect(refs).toHaveLength(family.id === "capture" ? 6 : 8);
+        expect(profile.orientation).toMatchObject({ disposition: "present", refs });
+        expect(semanticValidationVerdict(subject)).toMatchObject({ verdict: "passed", open: [] });
+      } else {
+        expect(profile.orientation.disposition).toBe("required");
+        expect(semanticValidationVerdict(subject)?.verdict).toBe("unvalidated");
+      }
     }
   });
 });

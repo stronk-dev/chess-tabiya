@@ -1,4 +1,8 @@
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { permutePostcommitSummaryFacts } from "./internal/postcommit-summary-order.js";
+import { orderModuleFactsByBaseKeys, type ModuleLiftEntry } from "./internal/module-fact-comparison.js";
+export { POSTCOMMIT_OBSERVED_WINDOW_REFS, type ModuleLiftEntry } from "./internal/module-fact-comparison.js";
 
 import {
   assertConsumerEvidenceView,
@@ -8,7 +12,7 @@ import {
   type DeclaredEvidence,
   type ProjectionDeclaration,
 } from "./evidence-contract.js";
-import { moduleAnswerImage, type ModuleDeclaration, type ModuleId, type ModuleTiming } from "./module-contract.js";
+import { moduleAnswerImage, POSTCOMMIT_OBSERVED_WINDOW_POLICY, STRUCTURE_RECOGNITION_POLICY, type ModuleDeclaration, type ModuleId, type ModuleTiming } from "./module-contract.js";
 
 export const MODULE_REDUCER_VERSION = "module-reducers@1" as const;
 
@@ -19,6 +23,10 @@ export interface ModuleFact<T = unknown> {
   readonly subjectSquare: string | null;
   readonly eventId: string | null;
 }
+
+// Public summaries cannot relabel evidence or alter its source risk for the recognition policy.
+// The shared admission constructor owns these immutable facts; copying one loses that ownership.
+const originalModuleFacts = new WeakSet<object>();
 
 export interface FactEquivalenceClass {
   readonly id: string;
@@ -143,13 +151,15 @@ export function moduleFact<T>(manifest: CompiledEvidenceManifest, evidence: Decl
     throw new TypeError(`MODULE_FACT_UNDECLARED: ${projectionKey(evidence.projection)}`);
   }
   const operands = retainedOperands(projection, evidence.payload);
-  return Object.freeze({
+  const fact = Object.freeze({
     evidence,
     projection,
     retainedOperands: operands,
     subjectSquare: firstSquare(operands),
     eventId: eventIdentity(objectPayload(evidence.payload)),
   });
+  originalModuleFacts.add(fact);
+  return fact;
 }
 
 export function admitModuleFacts<T>(
@@ -183,60 +193,24 @@ export function admitModuleFacts<T>(
   }));
 }
 
-const exactnessOrder: Readonly<Record<ProjectionDeclaration["exactness"], number>> = Object.freeze({
-  exact: 0,
-  convention: 1,
-  measured: 2,
-  authored: 3,
-});
-
-const criticalProjectionIds = new Set([
-  "rules.transition.event.checkmate",
-  "rules.transition.event.promotion",
-  "rules.transition.event.castled",
-  "rules.transition.event.last_of_role",
-]);
-
-export interface ModuleLiftEntry {
-  readonly projectionId: string;
-  readonly lift: number;
-  readonly source: string;
-  readonly measuredAt: string;
-  readonly corpus: string;
-}
-
 export function orderAdmittedFacts<T>(
   module: ModuleDeclaration,
   facts: readonly ModuleFact<T>[],
   lifts: readonly ModuleLiftEntry[] = [],
 ): readonly ModuleFact<T>[] {
-  const familyOrder = new Map(module.selection.familyPrecedence.map((projection, index) => [projectionKey(projection), index]));
-  const lift = new Map(lifts.map((entry) => [entry.projectionId, entry]));
-  for (const entry of lifts) {
-    if (!Number.isFinite(entry.lift) || entry.lift < 0 || entry.source.trim() === "" || entry.measuredAt.trim() === "" || entry.corpus.trim() === "") {
-      throw new TypeError(`MODULE_LIFT_INVALID: ${entry.projectionId}`);
-    }
+  const captured = [...facts];
+  const observedWindowOrder = module.id === "postcommit_nudge" && module.consumer?.id === "module.postcommit_nudge" && module.consumer.version === 2
+    && module.selection.policy.id === POSTCOMMIT_OBSERVED_WINDOW_POLICY.id && module.selection.policy.version === POSTCOMMIT_OBSERVED_WINDOW_POLICY.version;
+  const recognitionOrder = module.id === "structure_nudge" && module.consumer?.id === "module.structure_nudge" && module.consumer.version === 2
+    && projectionKey(module.selection.policy) === projectionKey(STRUCTURE_RECOGNITION_POLICY);
+  if (recognitionOrder || observedWindowOrder) for (const fact of captured) {
+    if (!originalModuleFacts.has(fact)) throw new TypeError("MODULE_FACT_UNOWNED: current selection requires the original admitted fact");
+    assertDeclaredEvidence(fact.evidence);
+    const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => projectionKey(row) === projectionKey(fact.evidence.projection));
+    if (fact.projection !== declaration) throw new TypeError("MODULE_FACT_DECLARATION: current selection requires the original current catalogue declaration");
   }
-  return Object.freeze([...facts].sort((left, right) => {
-    const critical = Number(criticalProjectionIds.has(right.projection.id)) - Number(criticalProjectionIds.has(left.projection.id));
-    if (critical !== 0) return critical;
-    const exactness = exactnessOrder[left.projection.exactness] - exactnessOrder[right.projection.exactness];
-    if (exactness !== 0) return exactness;
-    const leftLift = lift.get(left.projection.id)?.lift;
-    const rightLift = lift.get(right.projection.id)?.lift;
-    if (leftLift !== undefined || rightLift !== undefined) {
-      if (leftLift === undefined) return 1;
-      if (rightLift === undefined) return -1;
-      if (leftLift !== rightLift) return rightLift - leftLift;
-    }
-    const precedence = (familyOrder.get(projectionKey(left.projection)) ?? Number.MAX_SAFE_INTEGER) - (familyOrder.get(projectionKey(right.projection)) ?? Number.MAX_SAFE_INTEGER);
-    if (precedence !== 0) return precedence;
-    const square = (left.subjectSquare ?? "z9").localeCompare(right.subjectSquare ?? "z9");
-    if (square !== 0) return square;
-    const event = (left.eventId ?? "").localeCompare(right.eventId ?? "");
-    if (event !== 0) return event;
-    return canonicalizeJson(left.retainedOperands).localeCompare(canonicalizeJson(right.retainedOperands));
-  }));
+  const ordered = orderModuleFactsByBaseKeys(module, captured, lifts);
+  return observedWindowOrder ? permutePostcommitSummaryFacts(ordered) : ordered;
 }
 
 function equivalence(projectionId: string): FactEquivalenceClass | undefined {

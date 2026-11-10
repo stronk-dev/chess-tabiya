@@ -1,12 +1,18 @@
 // rfc/player-style.md criteria 7, 11, 14, 15 and rfc/skills.md criteria 9, 12, 13 through the real
-// longitudinal store: file-backed SQLite, the real decision algebra, the worker's batch executor.
+// longitudinal store: file-backed SQLite, real decision attribution/default batch, GAME/choice
+// factories and card arithmetic. Unadopted subject collection is explicitly controlled unavailable
+// in THIS math cohort. Unmocked subject storage/application/worker/performance cohorts own the
+// real54-source pipeline, lifecycle and throughput proof.
 import { rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
+import * as runtime from "@chess-tabiya/runtime";
 import { appendOpponentPly, commitMove, STYLE_METRICS, type DrillRun, type MeasuredHabitCard } from "@chess-tabiya/runtime";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { serializeAccountBundle } from "./account-data.js";
+import { readPortableAccountBundle, planAccountRestore } from "./account-import.js";
 import { assertLongitudinalStorePresent, LearnerProfileService } from "./learner-profile.js";
 import { projectObservations } from "./longitudinal-projector.js";
 import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
@@ -16,18 +22,22 @@ import { AT, FIXTURE_DEPENDENCIES, fileFixture, importedRun, learner, positionRu
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
 import { LONGITUDINAL_TABLES, type LongitudinalStore } from "./longitudinal-store.js";
 
+import * as subjectBridge from "../../../packages/runtime/src/internal/profile-subject-facts.js";
+beforeEach(() => {
+  vi.spyOn(subjectBridge, "collectProfileSubjectPopulation").mockReturnValue(Object.freeze({ kind: "unavailable", reason: "counterfactual_population_incomplete" }));
+});
+
 const fixtures: FileFixture[] = [];
 afterEach(() => {
+  vi.restoreAllMocks();
   for (const fixture of fixtures.splice(0)) {
     try { fixture.storage.close(); } catch { /* closed */ }
     rmSync(dirname(fixture.path), { recursive: true, force: true });
   }
 });
 
-const FAST = { project: (image: Parameters<typeof projectObservations>[0], checkpoint: () => void) => projectObservations(image, { checkpoint, dependencies: FIXTURE_DEPENDENCIES }) };
-
 function drain(store: LongitudinalStore): void {
-  for (;;) if (runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "profile-test", FAST).claimed === 0) return;
+  for (;;) if (runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "profile-test").claimed === 0) return;
 }
 
 function selection(moveUci: string) {
@@ -127,7 +137,7 @@ describe("the profile abstains until each card's own denominator clears", () => 
       expect(read).toHaveBeenCalledTimes(2);
       expect(first.store).toMatchObject({ runs: 3, counted: 0, pending: 1, unavailable: 2 });
       expect(first.population.measuredGames).toBe(0);
-      expect(first.observations.rows).toEqual([]);
+      expect(first.observations).toEqual([]);
       expect(first.history.items.find(row => row.runId === "ready-but-unread")).toMatchObject({ state: "unavailable", status: null, detail: "We couldn't load this run's counts for this profile. Refresh the profile to check again." });
       const refreshed = profileService.profile({ learnerId: "owner", handle: "owner" });
       expect(refreshed.store).toMatchObject({ runs: 3, counted: 1, pending: 2, unavailable: 0 });
@@ -232,20 +242,16 @@ describe("opening performance uses the runtime opening identity", () => {
   });
 });
 
-describe("the observation ledger carries occurrence and opportunity denominators with drill-down", () => {
-  it("sums store rows for played decisions only and resolves each occurred ref to its move", async () => {
+describe("unadopted subject metrics are explicitly withheld", () => {
+  it("does not expose old pooled prevalence as habits or a known-zero read", async () => {
     const fixture = setup();
     const owner = learner(fixture.storage, "owner");
     fixture.storage.create(game("o1", ITALIAN_CASTLE), owner);
     drain(fixture.workerStore());
-    const profiles = await service(fixture);
-    const ledger = profiles.profile({ learnerId: "owner", handle: "owner" }).observations;
-    expect(ledger.statement).toMatch(/No rate, trend or comparison is shown/u);
-    const openFile = ledger.rows.find((row) => row.projectionId === "rules.structural.event.open_file")!;
-    expect(openFile).toMatchObject({ occurred: 1, runs: 1, decisions: 4, derivedRev: OBSERVATION_DERIVATION_REV });
-    expect(openFile.opportunities).toBeGreaterThanOrEqual(1);
-    const detail = profiles.observation({ learnerId: "owner", handle: "owner" }, openFile.key, 0, 50);
-    expect(detail.occurred.items).toEqual([expect.objectContaining({ runId: "o1", moveSan: "e4", ply: 1 })]);
+    const profiles = await service(fixture), overview = profiles.profile({ learnerId: "owner", handle: "owner" });
+    expect(overview.observations).toEqual([]);
+    expect(overview.observationStatus).toEqual({ kind: "unavailable", reason: "subject_metrics_not_adopted" });
+    expect(() => profiles.observation({ learnerId: "owner", handle: "owner" }, "rules.structural.event.open_file@1:gained:gained", 0, 50)).toThrow("Detailed structure statistics are unavailable.");
   });
 });
 
@@ -256,7 +262,7 @@ describe("history, pending work and attribution", () => {
     const other = learner(fixture.storage, "other");
     fixture.storage.create(game("mine", ITALIAN_CASTLE), owner);
     fixture.storage.createImportedRun(importedRun("imported", ["e2e4", "e7e5", "g1f3"]), owner, "Imported", {
-      runId: "imported", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"b".repeat(64)}`, headers: {}, result: "*", pgn: "1. e4 e5 2. Nf3 *", licenceNote: "fixture", importedAt: AT,
+      runId: "imported", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"b".repeat(64)}`, headers: {}, result: "*", pgn: "1. e4 e5 2. Nf3 *", licenceNote: "fixture", importedAt: AT, clockDocument: null,
     });
     fixture.storage.create(game("theirs", FIANCHETTO), other);
     drain(fixture.workerStore());
@@ -292,6 +298,240 @@ describe("player-style criterion 11 — privacy and sharing", () => {
     expect(share.text).toMatch(/13 of 25 measured games/u);
     expect(JSON.stringify(share)).not.toMatch(/"s\d+"|runId|nodeId/u);
     expect(Object.keys(share).sort()).toEqual(["decisions", "floor", "games", "interval", "metric", "scope", "sentence", "text", "title", "window"]);
+  });
+});
+
+describe("profile-game-facts — current durable evidence across every profile path", () => {
+  it("warm overview/detail/share cannot reuse stale source fields or hide the counted cohort", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    for (let index = 0; index < 25; index++) f.storage.create(game(`evidence-${index}`, FIANCHETTO), owner);
+    drain(f.workerStore());
+    const profiles = await service(f);
+    expect(profiles.profile(principal).style.cards.find(card => card.metricId === "fianchetto_setup_rate")).toMatchObject({ state: "measured", numerator: 25, games: 25 });
+    expect(profiles.styleCard(principal, "fianchetto_setup_rate", 0, 50).contributors.total).toBe(25);
+    expect(profiles.shareCard(principal, "fianchetto_setup_rate", true).share.games).toBe(25);
+    const readImage = vi.spyOn(f.storage, "longitudinalSourceImageV4");
+    const db = new DatabaseSync(f.path);
+    try {
+      db.prepare("DELETE FROM learner_game_facts WHERE run_id=?").run("evidence-0");
+      const view = profiles.profile(principal);
+      expect(view.population.measuredGames).toBe(25);
+      expect(view.store.counted).toBe(25);
+      expect(view.style.cards.map(card => card.sentence).join(" ")).not.toMatch(/castlingEligible|knightScreen/u);
+      expect(view.history.items.every(row => row.state === "counted")).toBe(true);
+      for (const id of ["fianchetto_setup_rate", "fianchetto_knight_screen_rate", "castle_kingside_rate", "castle_queenside_rate"]) {
+        expect(view.style.cards.find(card => card.metricId === id)).toMatchObject({ state: "abstained", games: 25, abstention: { code: "incomplete_card" } });
+        const detail = profiles.styleCard(principal, id, 0, 50);
+        expect(detail.contributors.total).toBe(24);
+        expect(detail.contributors.shown.every(ref => ref.runId !== "evidence-0")).toBe(true);
+        expect(() => profiles.shareCard(principal, id, true)).toThrow(/Only a measured card/u);
+      }
+      expect(readImage).not.toHaveBeenCalled();
+      const project = (image: Parameters<typeof projectObservations>[0], options: Parameters<typeof projectObservations>[1]) => projectObservations(image, { ...options, dependencies: FIXTURE_DEPENDENCIES });
+      f.workerStore().rebuild({ write: true, project });
+      expect(profiles.profile(principal).style.cards.find(card => card.metricId === "fianchetto_setup_rate")).toMatchObject({ state: "measured", numerator: 25 });
+      expect(profiles.shareCard(principal, "fianchetto_setup_rate", true).share.games).toBe(25);
+    } finally { db.close(); }
+  });
+  it("refreshes cached attribution after a real same-head write-capable sharing grant", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), guest = learner(f.storage, "guest"), principal = { learnerId: "owner", handle: "owner" };
+    const run = game("same-head-sharing", FIANCHETTO); f.storage.create(run, owner); drain(f.workerStore());
+    const warm = await service(f);
+    expect(warm.profile(principal).population.measuredGames).toBe(1);
+    f.storage.grantRole(run.id, guest.learnerId, "participant", owner, AT);
+    drain(f.workerStore());
+    expect(f.storage.read(run.id)!.run.events).toEqual(run.events);
+    const after = warm.profile(principal), cold = (await service(f)).profile(principal);
+    expect(after).toEqual(cold);
+    expect(after.store).toMatchObject({ counted: 1, unavailable: 0 });
+    expect(after.population.measuredGames).toBe(0);
+    expect(after.history.items[0]).toMatchObject({ state: "counted", status: "no_decisions_of_yours" });
+  });
+  it("cannot reuse cached facts after deleting and recreating an id/cut with a reset job generation", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    const first = game("reused-id", FIANCHETTO); f.storage.create(first, owner); const store = f.workerStore(); drain(store);
+    const profiles = await service(f); profiles.profile(principal);
+    const before = store.jobs().find(job => job.runId === first.id)!;
+    const preview = f.storage.deletionPreview(owner.learnerId, { kind: "run", runId: first.id }, AT);
+    f.storage.deleteOwnedRun(owner.learnerId, first.id, AT, preview.digest);
+    const replacement = game(first.id, ["e2e4", "e7e5", "g1f3", "b8c6", "f1c4", "g8f6"]);
+    expect(replacement.events.length).toBe(first.events.length);
+    f.storage.create(replacement, owner); drain(store);
+    const after = store.jobs().find(job => job.runId === first.id)!;
+    expect(after.claimGeneration).toBe(before.claimGeneration);
+    expect(after.requestedSourceDigest).not.toBe(before.requestedSourceDigest);
+    expect(profiles.profile(principal)).toEqual((await service(f)).profile(principal));
+  });
+  it("refuses a cold source change with unchanged decision counts and recovers without caching it", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), guest = learner(f.storage, "guest"), principal = { learnerId: "owner", handle: "owner" };
+    const run = positionRun("cold-race"); f.storage.create(run, owner); drain(f.workerStore());
+    const profiles = await service(f), read = f.storage.longitudinalSourceImageV4.bind(f.storage);
+    let first = true;
+    const capture = vi.spyOn(f.storage, "longitudinalSourceImageV4").mockImplementation((id, seq) => {
+      if (first) { first = false; f.storage.grantRole(run.id, guest.learnerId, "participant", owner, AT); }
+      return read(id, seq);
+    });
+    try {
+      const raced = profiles.profile(principal);
+      expect(raced.store).toMatchObject({ counted: 0, unavailable: 1 });
+      expect(raced.population.playedDecisions).toBe(0);
+      drain(f.workerStore());
+      expect(profiles.profile(principal)).toEqual((await service(f)).profile(principal));
+      const reads = capture.mock.calls.length;
+      profiles.profile(principal); expect(capture).toHaveBeenCalledTimes(reads);
+    } finally { capture.mockRestore(); }
+  });
+  it("reuses the service safely when another owner restores the same exact run and reset job generation", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), restored = learner(f.storage, "restored"), principal = { learnerId: "owner", handle: "owner" };
+    const run = game("restored-id", FIANCHETTO); f.storage.create(run, owner); drain(f.workerStore());
+    const profiles = await service(f); profiles.profile(principal);
+    const bundle = readPortableAccountBundle(JSON.parse(new TextDecoder().decode(serializeAccountBundle(f.storage.accountBundle(owner.learnerId)).bytes)));
+    const preview = f.storage.deletionPreview(owner.learnerId, { kind: "run", runId: run.id }, AT);
+    f.storage.deleteOwnedRun(owner.learnerId, run.id, AT, preview.digest);
+    f.storage.restoreAccountBundle(restored.learnerId, planAccountRestore(bundle), { commit: true, at: AT });
+    drain(f.workerStore());
+    const next = { learnerId: restored.learnerId, handle: "restored" };
+    expect(profiles.profile(next)).toEqual((await service(f)).profile(next));
+    expect(profiles.profile(next).style.cards.find(card => card.metricId === "fianchetto_setup_rate")).toMatchObject({ state: "abstained", abstention: { code: "below_floor" } });
+  });
+  it("choice absence cannot retarget the raw first-owner BEFORE or first public metadata CHILD", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    const run = game("filtered-first", ["e2e4", "e7e5", "g1f3"]);
+    f.storage.create(run, owner); drain(f.workerStore());
+    const collect = vi.spyOn(runtime, "decisionTraitPopulation").mockImplementation(() => { throw Error("HTTP choice collection is retired"); });
+    const db = new DatabaseSync(f.path);
+    try {
+      const stored = db.prepare("SELECT cohort_json FROM learner_choice_facts WHERE run_id=?").get(run.id) as { cohort_json: string };
+      const row = JSON.parse(stored.cohort_json);
+      row.decisions[0].result = { kind: "unavailable", reason: "source_context_unavailable" };
+      db.prepare("UPDATE learner_choice_facts SET cohort_json=? WHERE run_id=?").run(JSON.stringify(row), run.id);
+      const profiles = await service(f), view = profiles.profile(principal);
+      expect(view.population.measuredGames).toBe(1); expect(view.store.counted).toBe(1);
+      expect(view.style.cards.find(card => card.metricId === "pawn_choice_residual")).toMatchObject({ state: "abstained", games: 1, abstention: { code: "incomplete_card" } });
+      expect(view.style.cards.find(card => card.metricId === "castle_kingside_rate")).toMatchObject({ state: "abstained", games: 1, abstention: { code: "below_floor" } });
+      const detail = profiles.styleCard(principal, "castle_kingside_rate", 0, 50);
+      expect(detail.contributors.shown).toMatchObject([{ nodeId: run.nodes[1]!.id }]);
+      const gameRow = JSON.parse(String(db.prepare("SELECT game_json FROM learner_game_facts WHERE run_id=?").get(run.id)!.game_json));
+      expect(gameRow.castling.before.nodeId).toBe(run.nodes[0]!.id);
+      expect(collect).not.toHaveBeenCalled();
+    } finally { collect.mockRestore(); db.close(); }
+  });
+  it("a wrong creation sequence in the received GAME lane abstains cards before below-floor math", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    f.storage.create(game("bad-ref", FIANCHETTO), owner); drain(f.workerStore());
+    const profiles = await service(f); profiles.profile(principal);
+    const db = new DatabaseSync(f.path);
+    try {
+      const stored = db.prepare("SELECT game_json FROM learner_game_facts WHERE run_id=?").get("bad-ref") as { game_json: string };
+      const row = JSON.parse(stored.game_json); row.firstOwnerDecision.eventSeq = 2;
+      db.prepare("UPDATE learner_game_facts SET game_json=? WHERE run_id=?").run(JSON.stringify(row), "bad-ref");
+      const view = profiles.profile(principal);
+      expect(view.population.measuredGames).toBe(1); expect(view.store.counted).toBe(1);
+      expect(view.style.cards.find(card => card.metricId === "castle_kingside_rate")).toMatchObject({ state: "abstained", games: 1, abstention: { code: "incomplete_card" } });
+      expect(profiles.styleCard(principal, "castle_kingside_rate", 0, 50).contributors.total).toBe(0);
+      expect(view.style.cards.find(card => card.metricId === "pawn_choice_residual")).toMatchObject({ state: "abstained", abstention: { code: "below_floor" } });
+    } finally { db.close(); }
+  });
+});
+
+describe("profile-choice-facts — current parsed source rows across every Profile path", () => {
+  it("weights all retained decisions rather than averaging unequal-length game means", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    const short = game("weight-short", ["e2e4"]), long = game("weight-long", ["e2e4", "e7e5", "g1f3"]);
+    // Independent old helper over actual original owner moves; no stored choice row/card is oracle.
+    const sums = [short, long].map(run => {
+      const ownerNodes = run.nodes.filter(node => node.actor === "user" && node.parentId !== null);
+      return { count: ownerNodes.length, sum: ownerNodes.reduce((sum, node) => {
+        const before = run.nodes.find(parent => parent.id === node.parentId)!;
+        const old = runtime.decisionTraitPopulation(before.fen, node.moveUci!)!;
+        return sum + Number(old.played.pawn) - old.share.pawn;
+      }, 0) };
+    });
+    const weighted = (sums[0]!.sum + sums[1]!.sum) / (sums[0]!.count + sums[1]!.count);
+    const meanOfMeans = (sums[0]!.sum / sums[0]!.count + sums[1]!.sum / sums[1]!.count) / 2;
+    expect(Math.abs(weighted - meanOfMeans)).toBeGreaterThan(0.01);
+    for (let index = 0; index < 100; index++)
+      f.storage.create(game(`weighted-${index}`, index % 2 === 0 ? ["e2e4"] : ["e2e4", "e7e5", "g1f3"]), owner);
+    drain(f.workerStore());
+    const profiles = await service(f), card = profiles.profile(principal).style.cards.find(card => card.metricId === "pawn_choice_residual")!;
+    expect(card).toMatchObject({ state: "measured", games: 100, decisions: 150 });
+    if (card.state !== "measured") throw Error("Existing100game floor must clear");
+    expect(card.value).toBeCloseTo(weighted, 12);
+    expect(card.value).not.toBeCloseTo(meanOfMeans, 3);
+    expect(profiles.styleCard(principal, "pawn_choice_residual", 0, 100).contributors.total).toBe(100);
+    expect(profiles.shareCard(principal, "pawn_choice_residual", true).share).toMatchObject({ games: 100, decisions: 150 });
+  });
+
+  it("warm cards/details/shares cannot hide missing choices or collect them on the request", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    // One real owner move per game reaches the genuine floor without re-running a whole
+    // repertoire here. Rebuild/repair has its own real-store controls in profile-choice-store.
+    for (let index = 0; index < 100; index++) f.storage.create(game(`choices-${index}`, ["g2g3"]), owner);
+    drain(f.workerStore());
+    const profiles = await service(f);
+    expect(profiles.profile(principal).style.cards.find(card => card.metricId === "pawn_choice_residual")).toMatchObject({ state: "measured", games: 100 });
+    expect(profiles.shareCard(principal, "pawn_choice_residual", true).share.games).toBe(100);
+    const image = vi.spyOn(f.storage, "longitudinalSourceImageV4");
+    const collect = vi.spyOn(runtime, "decisionTraitPopulation").mockImplementation(() => { throw Error("No request-time choice collection"); });
+    const db = new DatabaseSync(f.path);
+    try {
+      const original = db.prepare("SELECT * FROM learner_choice_facts WHERE run_id=?").get("choices-0")!;
+      db.prepare("DELETE FROM learner_choice_facts WHERE run_id=?").run("choices-0");
+      const view = profiles.profile(principal);
+      expect(view.population.measuredGames).toBe(100); expect(view.store.counted).toBe(100);
+      expect(view.history.items.every(row => row.state === "counted")).toBe(true);
+      expect(view.style.cards.find(card => card.metricId === "fianchetto_setup_rate")).toMatchObject({ state: "measured", numerator: 0 });
+      for (const id of ["pawn_choice_residual", "center_pawn_choice_residual", "early_queen_choice_residual"]) {
+        expect(view.style.cards.find(card => card.metricId === id)).toMatchObject({ state: "abstained", games: 100, abstention: { code: "incomplete_card" } });
+        const detail = profiles.styleCard(principal, id, 0, 100);
+        expect(detail.contributors.total).toBe(99);
+        expect(detail.contributors.shown.some(ref => ref.runId === "choices-0")).toBe(false);
+        expect(() => profiles.shareCard(principal, id, true)).toThrow(/Only a measured card/u);
+      }
+      expect(view.skills.marksStatement).toContain("lack verified choice");
+      expect(view.style.cards.map(card => card.sentence).join(" ")).not.toMatch(/choice_facts|source_context|derivedRev/u);
+      expect(image).not.toHaveBeenCalled(); expect(collect).not.toHaveBeenCalled();
+      // Restore exactly the genuine worker row removed above: test fresh receiving reads,
+      // not another 100-game rebuild (covered independently by the persistence tests).
+      db.prepare("INSERT INTO learner_choice_facts(learner_id,run_id,completed_seq,derived_rev,observed_at,primary_branch_id,cohort_json) VALUES(?,?,?,?,?,?,?)")
+        .run(original.learner_id!, original.run_id!, original.completed_seq!, original.derived_rev!, original.observed_at!, original.primary_branch_id!, original.cohort_json!);
+      expect(profiles.profile(principal).style.cards.find(card => card.metricId === "pawn_choice_residual")).toMatchObject({ state: "measured", games: 100 });
+      expect(profiles.shareCard(principal, "pawn_choice_residual", true).share.games).toBe(100);
+      expect(image).not.toHaveBeenCalled(); expect(collect).not.toHaveBeenCalled();
+    } finally { collect.mockRestore(); image.mockRestore(); db.close(); }
+    expect(profiles.profile(principal)).toEqual((await service(f)).profile(principal));
+  });
+
+  it("invalid current choice references keep the game/history and independent GAME cards", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    f.storage.create(game("wrong-choice-ref", FIANCHETTO), owner); drain(f.workerStore());
+    const profiles = await service(f); profiles.profile(principal);
+    const db = new DatabaseSync(f.path);
+    try {
+      db.prepare("UPDATE learner_choice_facts SET cohort_json=json_set(cohort_json,'$.decisions[0].ref.eventSeq',3) WHERE run_id=?").run("wrong-choice-ref");
+      const view = profiles.profile(principal);
+      expect(view.population.measuredGames).toBe(1); expect(view.store.counted).toBe(1);
+      expect(view.style.cards.find(card => card.metricId === "pawn_choice_residual")).toMatchObject({ state: "abstained", abstention: { code: "incomplete_card" } });
+      expect(profiles.styleCard(principal, "pawn_choice_residual", 0, 50).contributors.total).toBe(0);
+      expect(view.style.cards.find(card => card.metricId === "fianchetto_setup_rate")).toMatchObject({ state: "abstained", abstention: { code: "below_floor" } });
+    } finally { db.close(); }
+  });
+
+  it("a missing choice at rooted16 cannot block the early-queen metric's complete earlier scope", async () => {
+    const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
+    const line = ["e2e4", "e7e5", "g1f3", "b8c6", "f1c4", "f8c5", "d2d3", "d7d6", "b1c3", "g8f6", "a2a3", "a7a6", "h2h3", "h7h6", "d1e2", "d8e7", "e2d1"];
+    f.storage.create(game("late-choice-unknown", line), owner); drain(f.workerStore());
+    const db = new DatabaseSync(f.path);
+    try {
+      const row = JSON.parse(String(db.prepare("SELECT cohort_json FROM learner_choice_facts WHERE run_id=?").get("late-choice-unknown")!.cohort_json));
+      const late = row.decisions.find((value: { ref: { sourcePly: number } }) => value.ref.sourcePly === 16);
+      expect(late).toBeDefined(); late.result = { kind: "unavailable", reason: "source_context_unavailable" };
+      db.prepare("UPDATE learner_choice_facts SET cohort_json=? WHERE run_id=?").run(JSON.stringify(row), "late-choice-unknown");
+      const profiles = await service(f), view = profiles.profile(principal);
+      expect(view.style.cards.find(card => card.metricId === "pawn_choice_residual")).toMatchObject({ state: "abstained", abstention: { code: "incomplete_card" } });
+      expect(view.style.cards.find(card => card.metricId === "early_queen_choice_residual")).toMatchObject({ state: "abstained", games: 1, abstention: { code: "below_floor" } });
+      expect(profiles.styleCard(principal, "early_queen_choice_residual", 0, 50).contributors.total).toBe(1);
+    } finally { db.close(); }
   });
 });
 

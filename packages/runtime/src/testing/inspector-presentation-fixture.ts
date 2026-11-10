@@ -16,6 +16,11 @@ import type { RecordedMoveAnchor } from "../pawn-dynamics.js";
 import { commitMove, createRun, fork, rewind } from "../runtime.js";
 import { legalAlternativeEdges, localSemanticEventClosure, loosePieceSemanticEvents, pawnIslandSemanticEvents, structuralSemanticEvents } from "../semantic-evidence.js";
 import type { DrillRun } from "../types.js";
+import { collectRecordedSequenceWindow, prepareRecordedSemanticWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "../recorded-sequence-window.js";
+import { recordedSequenceRouteFixture, recordedSequenceWindowFixture } from "./recorded-sequence-window-fixture.js";
+import { recordedGradeFixture } from "./recorded-grade-fixture.js";
+import { applyObjectiveEvidenceProposal } from "../objective.js";
+import { createRecordedReviewBoundarySourceOwner } from "../recorded-review-boundary.js";
 
 const at = "2026-09-24T00:00:00.000Z";
 const policyConfig = { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } as const;
@@ -115,6 +120,39 @@ export function inspectorFixtureEvidence(routes: readonly string[]): ReadonlyMap
     }
   };
   const tryPush = (route: string, inputs: unknown) => { try { push(sealedItems(invoke(route, inputs))); } catch (error) { if (!(error instanceof TypeError)) throw error; } };
+  // Successor presentation fixtures must use the actual owned recorded windows, not relabelled
+  // predecessor values or an assertion cast. Each demanded family has its real positive path.
+  for (const route of routes.filter((value): value is RecordedSequenceRoute => Object.hasOwn(RECORDED_SEQUENCE_HORIZONS, value))) {
+    const run = recordedSequenceRouteFixture(route);
+    for (const window of prepareRecordedSemanticWindows({ run, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId, route }).windows) push(collectRecordedSequenceWindow(window));
+  }
+  // Trade has its own accepted two-edge capture authority, outside the @3 horizon map. Build
+  // the actual current source rather than leaving its @2 pair silently unexercised or relabeling@1.
+  if (routes.includes("derived.exchange.trade_completed@2")) {
+    const run = recordedSequenceWindowFixture({ fen: "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", moves: ["e4d5", "e6d5"] });
+    const prepared = prepareRecordedSemanticWindows({ run, branchId: run.activeCursor.branchId,
+      throughNodeId: run.activeCursor.nodeId, route: "derived.exchange.trade_completed@2" });
+    const values = prepared.windows.flatMap(window => collectRecordedSequenceWindow(window));
+    if (values.length !== 1) throw new Error("Current trade presentation fixture did not execute its genuine two-edge source");
+    push(values);
+  }
+  if (routes.includes("run.record.objective_transition@2")) {
+    const initial = recordedSequenceWindowFixture({ fen: INITIAL, moves: ["e2e4"] });
+    const node = initial.nodes.find(value => value.id === initial.activeCursor.nodeId)!;
+    // Records the original transition, not a claim that the proposed objective was correct.
+    const run = applyObjectiveEvidenceProposal(initial, { nodeId: node.id, from: node.objectiveState,
+      to: "preserved", evidenceRefs: ["recorded:objective-fixture"] }, "2026-11-03T00:00:00.000Z").run;
+    const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined });
+    const boundary = owner.resolve({ runId: run.id, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId });
+    const values = invokeEvidenceValueRoute("run.record.objective_transition@2", { recordedReview: boundary });
+    if (values.length !== 1) throw new Error("Current objective presentation fixture did not retain its genuine recorded transition");
+    push(values.map(value => value.evidence));
+  }
+  if (routes.includes("derived.grade.move_quality@2")) {
+    const grade = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: recordedGradeFixture().source });
+    if (grade.kind !== "available" || grade.value.length !== 1) throw new Error("Current grade presentation fixture did not execute");
+    push(grade.value);
+  }
   const edges = inspectorFixtureEdges();
   for (const route of routes) {
     for (const fen of INSPECTOR_FIXTURE_FENS) tryPush(route, { fen });
@@ -128,7 +166,9 @@ export function inspectorFixtureEvidence(routes: readonly string[]): ReadonlyMap
   // Sealed-input derivations.
   const doubleAttackEdge = edge("4k3/8/8/8/1n6/8/8/R3K3 b - - 0 1", "b4c2");
   tryPush("derived.tactic.fork_survives_reply@1", { doubleAttack: sealedOne("rules.tactic.event.double_attack@1", doubleAttackEdge), breadth: sealedOne("rules.tactic.consequence.reply_breadth@1", doubleAttackEdge) });
+  tryPush("derived.tactic.nonterminal_fork_survival@1", { doubleAttack: sealedOne("rules.tactic.event.double_attack@1", doubleAttackEdge), breadth: sealedOne("rules.tactic.consequence.reply_breadth@1", doubleAttackEdge) });
   const conflictEdge = edge("1B5k/r2pq3/2n5/8/8/8/8/4R1K1 w - - 0 1", "b8a7");
+  tryPush("rules.tactic.predicate.overload_conflict@1", conflictEdge);
   tryPush("derived.tactic.overloaded_defender_response_conflict@1", { duties: sealedOne("rules.tactic.reading.defender_duty_set@1", { fen: conflictEdge.beforeFen }), capture: sealedOne("rules.transition.event.capture@1", conflictEdge) });
   const discoveredEdge = edge("7k/8/8/8/4r3/5N2/6B1/7K w - - 0 1", "f3h4");
   tryPush("derived.tactic.discovered_executed@1", { latency: sealedOne("rules.tactic.reading.discovered_latency@1", { fen: discoveredEdge.beforeFen }), rays: sealedItems(invoke("rules.transition.event.slider_ray@1", discoveredEdge)) });
@@ -266,7 +306,6 @@ export function inspectorFixtureEvidence(routes: readonly string[]): ReadonlyMap
   tryPush("recorded.engine.eval@1", { ledger: sealedOne("sourcing.ledger.engine_eval@1", ledgerRecord("engine_eval", { centipawns: 20, depth: 20, multiPv: 1, perspective: "white", engineId: "sf", engineName: "Stockfish", engineVersion: "17" })) });
   tryPush("recorded.tablebase.result@1", { ledger: sealedOne("sourcing.ledger.tablebase_result@1", ledgerRecord("tablebase_result", { category: "draw", dtz: 0, precise_dtz: 0, dtm: null, pieceCount: 3, checkmate: false, stalemate: false, insufficient_material: true })) });
   const evalPacket = (centipawns: number) => sealedOne("live.stockfish.eval@1", packet("eval", "engine_validated", { centipawns, perspective: "white", engineId: "sf", requestedMovetimeMs: 100 }));
-  tryPush("derived.grade.move_quality@1", { before: evalPacket(20), after: evalPacket(-300), mover: "white", context: "drill" });
   return found;
 }
 

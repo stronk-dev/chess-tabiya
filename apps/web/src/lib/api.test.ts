@@ -34,6 +34,15 @@ function json(value: unknown, init: ResponseInit = {}): Response {
 }
 
 describe("DrillApi", () => {
+  it("D4101 forwards recommendation cancellation and preserves endpoint failure instead of inventing an empty page", async () => {
+    const abort = new AbortController();
+    const api = new DrillApi("", async (input, init) => {
+      expect(String(input)).toBe("/progress/recommendations");
+      expect(init?.signal).toBe(abort.signal);
+      return json({ error: { code: "EVIDENCE_UNAVAILABLE", message: "source unavailable" } }, { status: 503 });
+    });
+    await expect(api.recommendations(abort.signal)).rejects.toMatchObject({ status: 503, code: "EVIDENCE_UNAVAILABLE" });
+  });
   it("reads the requested private Studio draft through its encoded owner-scoped GET", async () => {
     const draft = { id: "draft / one", packId: "one", document: { id: "one" }, digest: "saved-revision", state: "draft", validation: { valid: false, issues: [] } };
     const requests: string[] = [];

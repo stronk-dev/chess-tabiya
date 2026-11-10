@@ -192,3 +192,107 @@ string.
 - `[M]` The most useful future breadth will probably be composed questions over exact atoms rather
   than additional single-position labels. That hypothesis must be evaluated per consumer rather
   than promoted to chess truth.
+
+## 2026-11-04 — actual authored scan cost and current firing migration (D4082–D4084)
+
+`[V]` The current source implementation and its remaining obligations are recorded in
+`planning/foundation-source-identity/plan.md`; the original census above is historical. The
+next actual consumer migration exposes a contract conflict: F2 §2.4a fixes firing2 to the
+legacy `shapeFirings` algorithm and document-only receipts, whereas foundation §4.2 requires
+the owned current predicate visitor. Changing firing2's generated dependencies in place is
+not a valid successor. The actual callers include Inspector, service recommendations and
+DrillScreen's client-side `shapeFiringEvidence`, not merely the registered factory.
+Sources: `rfc/evidence-value-authority.md` §2.4a,
+`rfc/foundation-source-identity.md` §4.2, `packages/runtime/src/shape-firing.ts`,
+`apps/server/src/service.ts#shapeRecommendations`, `apps/web/src/lib/DrillScreen.svelte`.
+
+`[V]` Disposable `tools/d4082-shape-firing/measure.ts` measures all 25 actual registered
+triggers on legal prefixes of the existing 85-ply
+`apps/server/src/sourcing/fixtures/masters-game-aAbqI4ey.pgn`. Commands use the normal pinned
+toolchain: `make foundation-shape-firing-measurement`,
+`make foundation-shape-firing-profile` and
+`make foundation-shape-firing-captured-measurement`. The last command runs a fresh process,
+times the full captured-only scan before computing its legacy reference, and retains every
+original visitor population including negatives. It issues no firing3 values and supplies no
+API/UI. Measurements below are local Node v24.22.1, macOS arm64, on this one game; they are
+neither endpoint latency budgets nor population, learner-usefulness or qualification evidence.
+
+| Actual implementation measured | Prefix positions | Completed cells | Scan time | Exact legacy interval parity |
+|---|---:|---:|---:|---|
+| Initial aggregate2 per cell | 1 | 25/25 | 484.48 ms | yes |
+| Initial aggregate2 per cell | 32 | 800/800 | 15,013.17 ms | yes |
+| Initial aggregate2 per cell | 64 | 1,600/1,600 | 24,617.26 ms | yes |
+| Initial aggregate2 per cell | 86 | 1,953/2,150 | 30,004.53 ms; stopped at instrument bound | unmeasured |
+| Immutable projection-plan reuse | 86 | 2,150/2,150 | 7,673.23 ms | yes |
+| Plan plus immutable source/proof byte verification reuse | 86 | 2,150/2,150 | 2,880.57 ms | yes |
+| Disposable shared-root/original-capture prototype, fresh process, with registry equivalence reuse | 86 | 2,150/2,150 | 424.20 ms | yes |
+
+`[V]` Scoped CPU profiles identified repeated compiler work, followed by repeated source/proof
+hashing. The fixes reuse only already verified immutable bytes/plans. Original source/record
+membership, exact object identity, current registry state, reduction bindings and live callable
+checks still run; mutable/shallow/opaque objects retain full comparison. Registry admission
+and capture in the last fresh process took 189.84 ms and 80.62 ms respectively, outside the
+424.20 ms scan. The actual serialisation control was red at 60 calls over 20 retained reads,
+then green at zero with replacement/changed-metadata refusals intact. Permanent controls:
+`packages/runtime/src/evidence-binding-execution.test.ts`,
+`apps/server/src/authored-structural-source.test.ts`,
+`apps/server/src/registered-shape-source.test.ts`. These cost repairs are D4083, separately
+reviewed; complete software/content verification is tracked in the source plan.
+
+`[V]` The shared-root prototype avoids materializing a position aggregate projection for every
+shape/node when the desired output is an interval. It retains the original owned visitor
+captures and shares one genuine legal-position root per node. In the separate aggregate-first
+comparison, all measured prefixes (1/8/32/64/86) had equal interval, source/policy/trace and leaf
+receipt images; that order warms shared caches and must not be reported as a cold comparison.
+The fresh captured-only run above checks intervals, not cross-method trace equivalence.
+Heap/RSS snapshots include garbage collection effects and are not an allocation bound.
+This supports drafting a native captured-scan firing successor, with actual declared inputs,
+complete negatives and current consumer delivery. It does not accept or implement that contract.
+
+`[V]` The compiler audit also found an independent consumer-request cache defect (D4084):
+re-reading a changing id/version request during spread/lookup/insertion could cache an authoring
+consumer under an objective consumer key. The permanent Proxy/accessor falsifier failed before
+the fix. Both compiler entry points now snapshot primitive consumer identity once and use that
+same identity throughout; no source authority or permission is widened. Source/control and
+independent review: `packages/runtime/src/evidence-binding-execution.ts`, its test, and
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+
+### Same-day actual native source/factory follow-up
+
+`[V]` After separate source/execution and delivery review accepted F2 §2.4b, the current
+registered scan/factory and Inspector cutover were implemented. The normal command
+`make foundation-shape-firing-current-measurement` now executes actual ShapeRegistry admission,
+finite owned scan chunks and `theory.shapes.firing@3` over the same25×86 population. First result:
+2150/2150cells, two intervals,95chunks,918.14ms preparation/548.88ms synchronous mint, max observed
+chunk8.77ms. Inspection found repeated hashes of the exact source image the sole input2 mint
+already retains. Comparing original immutable image identity instead preserves private minted
+value membership and live registry/record checks; separate review and real replacement controls
+accept it. Re-measured:84chunks,755.15ms preparation/67.25ms mint, max8.75ms, identical intervals.
+This measures real source/factory work, not the application context, HTTP/UI, a general latency
+bound or qualification. The time condition is checked after a leaf and does not interrupt it.
+Sources: `tools/d4082-shape-firing/measure.ts`, `packages/runtime/src/internal/registered-shape-scan.ts`,
+`packages/runtime/src/evidence-factories.ts`, `apps/server/src/registered-shape-scan.test.ts`.
+
+`[V]` Independent implementation review found final advance replaying/hash-verifying the whole
+matrix after its bounded loop (D4085). The repaired completion issues only its private original
+token; complete verification/immutable image hashing stays at synchronous mint/read. Restoring
+the former full read makes the70-cell multi-chunk control fail at70 distinct populations against
+32; the repaired9-test source suite passes. The control also rejects any later advance rereading
+an earlier chunk's populations. This is an executed falsifier, not a timing assertion on a quiet
+machine. Inspector's current context owner drives each chunk/yield and retains its original
+source/result proof. Full implementation/release and other consumers remain separately tracked
+in `planning/foundation-source-identity/plan.md`; no source-parent completion is inferred.
+
+`[V]` The later ordinary-board implementation replaces DrillScreen's local raw-catalogue firing
+with its own authenticated guided read. Actual requested intent/server authority gates source
+work independently of Inspector/reveal; complete original replay and branch validation precede
+prefix scanning. Exact current consumer2/firing3 canonical presentation reaches the strict
+API and mounted board. Registered attribution owns labels, and catalogue plans/Inspect require
+the admitted document digest. Separate reviews returned D4086 (typed authority failures),
+D4087 (retained Svelte callbacks) and D4088 (Inspect's id-only sibling join), then accepted the
+bounded repairs. Actual ten-file523-case boundary proof passes; full gates remain recorded in
+the source plan. Source outputs remain25of28; point modules/recommendations and other callers
+remain open. Sources: `apps/server/src/service.ts#queryShapeFirings`,
+`apps/web/src/lib/guided-shape-response.ts`, `apps/web/src/lib/DrillScreen.svelte`,
+`apps/web/src/lib/screens.test.ts`, `planning/foundation-source-identity/plan.md`,
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`.

@@ -1,5 +1,121 @@
 # Evidence contract
 
+Advanced Inspector now has 93 source topics and 14 bounded detail views. Sixteen current
+foundation sources have selected delivery: seven edge families, eight complete position snapshots
+and the played backward-pawn advance. Whole source operands retain their original references;
+large populations use typed member pages, including every exchange alternative, chosen-line step,
+stop decision and calculated pawn reply. Overviews do not claim every member has been displayed.
+Ordinary Sight/Nudge/Review, avoidance and bot adoption remain separate D4167 work.
+
+The current checkpoint and measured gates are in `planning/foundation-source-identity/plan.md`.
+Software and builds pass locally; content/default native/release remain held at D3928. This is
+neither full foundation qualification nor parent/capability completion.
+
+Play's twelve relation-overlay adapters share each family's fixed relation kind, sign, answer
+distance and optional convention between construction and received validation. A received arrow
+must retain its evidence owner; declared conventions also retain that owner's exact producer,
+projection, digest and perspective. Original node/edge deduplication and caption renderers remain.
+This is a consistency check, not source authentication or proof that every endpoint matches its
+original source. The separately sealed Guided Hint seat is unchanged.
+
+Position structure in the Play and Compare Inspectors uses `inspector.position_structure@2`.
+`presentPositionStructureEvidence({fen})` preflights its complete17-source contract before
+collecting16 detailed structural families and the existing named-structure source. Required
+side/file/role/count/shade fields and complete pawn-reach geometry survive into registered typed
+facts. Geometric/convention limitations remain explicit; richer prose does not qualify a detector
+or judge a move. Both screens use their exact displayed FEN; a missing Compare leaf displays a
+local unavailable state rather than root-position facts. The obsolete Inspector1/raw-returning
+helper is removed. Original reading sources remain for independent current Sight/pack consumers;
+file/count facts still have no witness squares. Local production/mounted checks pass; native
+journeys remain unreached behind installed-content admission, so this is not release clearance.
+
+Full Inspector's sole current consumer is `module.full_inspector@2`, with93 exact source topics
+and fourteen detail views. `compileInspectorSourcePage` is its registered server operation;
+`POST /runs/:id/inspector/query` and `DrillApi.inspector` carry its closed page protocol. Generic
+module queries and packet/response compilers refuse Full Inspector instead of serving a second
+legacy pipeline. The advanced browser loads inventory without acquiring evidence, then requests
+one explicit source/scope at a time. Its actual mounted source/lifecycle/recovery/focus tests
+pass; native and full-release verification remain. Registration and focused tests are not a
+completed learner capability. Historical target access while active Play help is closed remains
+a separate UI obligation, not permission to remove current Play gates.
+
+Analyze now has three literal registered projections under `derived.review`: `analysis_typed_pv@1`,
+`analysis_recorded_pv@1` and `analysis_recorded_first@1`. The original-record collector detaches
+the whole run before replay, validates complete
+original paths before narrowing, and retains the exact incoming edge/event/ordinal plus its
+original packet and typed capture where present. Three closed source arms preserve no-fallback
+failure semantics, genuine historical empty reports, bounded typed-line scope and truthful
+attribution abstention. Each sole factory and renderer enforces its exact source arm; the
+first-move report cannot be relabelled as a PV. Typed mixed inputs remain declared-convention
+grounded; historical reports retain recorded-run grounding and explicitly reported attribution.
+The actual source-page supplier selects original metadata before any nonselected collection,
+capture parsing or factory work. The strict client recognizes its scoped variant-not-selected
+status. Target-scoped historical assistance and the new Analyze seat are wired. The predecessor
+raw runtime helper, exports and GET route are removed; its meaningful tests now exercise the
+current source path. Full/native verification remains before whole-cutover completion.
+
+The original six geometry-bearing detail views use a single closed, source-derived
+conditional composition: their registered statement is mandatory, actual witness squares add
+one neutral blue square set with that exact caption/owner, and witness-free empty/unavailable
+groups remain text-only. Arbitrary caller predicates, empty square sets and foreign same-geometry
+captions refuse. Independently accepted D3984 also retains all17 whole-reading families as
+attributed statements, adding their original geometry only when drawable. Zero populations,
+in-check calculations not evaluated, unavailable turn clones and positive non-drawable readings
+remain distinct; none becomes an all-clear or source absence. Exact source matching, original
+piece identities and conventions are independently tested. The closed93-topic request parser
+validates intent only; the actual RunService source owners establish access and source identity.
+The strict receiver detaches plain JSON, checks request/run/decision/config correspondence,
+original occurrence ranges and coverage, budgets and registered component semantics. Recomputing
+public digests cannot legalize a different renderer, binding, producer, convention or missing
+required geometry. A valid page remains a rendering of admitted evidence, not proof that an
+untrusted caller issued the source or that its chess significance is qualified.
+
+The source-page operation dispatches through those original RunService owners,
+retaining source identity, original sparse ordinals, complete ledger coverage and actual owner
+readback across permission/source changes. The compiler requires the complete current107 image
+with exact required/operation_unavailable policies and refuses mismatched images before any
+source acquisition rather than inventing a reduced manifest or sealed view. Original available,
+empty, sparse-population, unavailable, failed and stale outcomes remain distinct. No current
+source issues a version-held outcome; an arbitrary dependency slug cannot manufacture one.
+Six detail factory calls stay inside the runtime boundary; the server never invokes the internal
+value dispatcher directly. The unchanged authority gate verifies that architecture.
+
+The internal Full Inspector report renderers now read exact saved packet fields through closed
+registered components, including the production executor's movesUci PV field. Missing,
+uninterpretable, zero and null reports remain distinguishable; legal PV conversion retains the
+whole line or states it is uninterpretable. Unknown attachment prose is never rendered. The
+registered shape@2 renderer retains actual document/trigger attribution and distinguishes an
+account handle from the existing deleted-account tombstone. These bounded renderers do not
+establish modern engine authority, move grades, authored plan truth or complete Inspector2
+consumer/API/UI delivery.
+
+Two new complete source snapshots are available through the sole value dispatcher:
+`rules.structural.reading.king_opposition@3` and `rules.structural.reading.backward_pawn@3`.
+Each consumes a genuine sealed legal-position reading; an absent opposition is `null`, and zero
+qualifying backward pawns remains a complete available snapshot with its full pawn domain. The
+candidate collector retains each child's exact position source and passes that same object to both
+factories. The current compiler version6 retains these same source bindings. Old reading versions keep their meanings.
+These source values are experimental; registration does not qualify a detector or activate a
+learner module, authored predicate, bot preference or move-quality claim.
+
+The corresponding experimental event@2 factories accept their actual original before/after
+reading@3 values and a move, then verify the legal edge. Opposition changes retain one stable
+color-identified king pair. Backward-pawn changes match stationary subjects before the physical
+pawn mover; captures retain the removed square, including en passant. A quiet edge with equal
+rows emits no event. Copied or re-sealed sources are refused even when their factory names match,
+and source authority is checked before returning an empty population. Exact convention replacement
+removes only automatic predecessor inheritance; actual input conventions remain in the receipt.
+These event values have no new semantic-event, learner or bot bindings yet.
+
+Complete pawn-file group and eight-file state snapshots now derive from the genuine original
+pawn-connectivity value. The candidate collector retains that exact child source for both snapshots
+(current compiler version6,31 child source routes). Groups retain every pawn in color-relative order,
+adjacent occupied files and island files. File-class and group changes retain the exact legal cause,
+including promotion and en passant's captured square. Stationary rook/queen access uses exact
+class transitions and preserves stationary siblings when another piece moves. New island events
+compare file partitions while retaining member pawns; rank motion alone emits no topology event.
+These six source/value outputs remain experimental without new event or learner bindings.
+
 Tabiya does not treat “evidence” as one bag of engine output. The production contract is compiled
 from one static catalogue in `packages/runtime/src/evidence-catalog.ts` and one server availability
 join in `apps/server/src/evidence-manifest.ts`.
@@ -21,6 +137,89 @@ There are no wildcard or “latest” bindings. The compiled manifest is sorted,
 by a SHA-256 digest. `/capabilities` returns that digest, current producer availability, and a
 consumer-safe binding summary. It never returns engine lines, authored prose, provider secrets, or
 corpus rows.
+
+The internal Maia task source (`maia.inference_task@1` / `human.maia.inference_task@1`) now uses
+the shared provider exchange and sole source factory. It retains the sampled terminal move
+separately from its reported candidate window, including literal ranks, missing mass and each
+row's own unbounded cp/WDL. A new draw's server-owned UUID separates pending/cache observations;
+an identical request reuses the same observation. The actual captured option image checks the
+advertised SelfElo/OppoElo reset commands without confusing startup settings with task commands.
+The registered operator CLI is `maia-inference-task`; the frozen policy-page source is unchanged.
+Real Maia application composition now supplies the shared source to the exact machine consumer
+`opponent.maia_task@1`. Human-common retains only its final task alongside the existing bounded
+selection cache; theory and practical resistance preserve their original transformations without
+retaining extra task sources. Numeric task generations guard replacement independently of health
+readiness. Source/selection cache hits do not resample or heal provider health. Explicit standalone
+fixtures remain separate; a supplied modern source never falls back to raw UCI. Public selection
+responses strip internal source evidence. The two internal node factories now join the genuine
+task/recorded-position inputs to the sealed historical node and exact ordered path. Distribution
+retains rank gaps/unknown shares; candidate WDL retains only same-row reported operands, with
+authentic empty-population results. Distribution now serves the authenticated, explicitly
+requested `inspector.human_split@2` route through its registered consumer/fact renderer and closed
+protocol-first receiver. Its candidate-only wire retains actual model/bands, ordered ranks and
+nullable shares; zero is not unknown, and empty reported windows have explicit attributed text.
+The mounted client uses the registered component and retires pages across run/decision changes.
+No task ancestry, sampled move or cp/WDL enters that wire or its prose. The candidate-WDL
+projection is also bound to Full Inspector2; the separate candidate-only door still does not
+establish native Full Inspector delivery. Its two RunService suppliers share the same final task for distribution
+and same-row WDL at the granted historical node, with actual selected trajectory parameters and
+granted-branch history/seed. They retain original inputs and factory results, including genuine
+empty WDL; terminal positions instead return explicit no-query source absence. Current access,
+disclosure, pinned pack, signal and existing task/registry generations are rechecked around
+acquisition and retained reads. Health-only unavailability is not model replacement. These
+suppliers now feed Full Inspector2 source pages; real-model native UI proof remains separate.
+`make maia-task-native-build` builds the pinned native model using the existing
+verified source-build OCI join; `make maia-task-native-check` repeats the isolated offline
+descriptor/exchange/parser/source/consumer/receiver check and actual SQLite/RunService suppliers.
+Two same-board/different-history tasks and both-colour historical-node distribution/nonempty-WDL
+pairs pass independently on linux/arm64, preserving exact retention and unchanged saved play.
+This is bounded direct-source/service proof,
+not authenticated native UI, operator CLI, bot calibration or deployed resource proof; the check's
+1.5GiB cap is not a footprint measurement. Full native journeys remain required by the RFC.
+
+The Full Inspector Explorer supplier is also implemented internally under actual current
+RunService/SQLite position grants. It uses the application-owned whole-page source and existing
+narrow population factory, validates both full normalized request images before derivation,
+and retains original whole/narrow values at totals0/99/100. No legacy-statistics fallback or
+below-floor fact rendering occurs. The existing occurrence-key body binds the full recorded
+event head as well as the current grant and original receipts; a module decision stamp alone
+does not identify different full histories. Typed provider failure and caller expiry remain
+failures, and current access/disclosure/pinned artifact/signal checks repeat around I/O/readback.
+The source-page operation applies complete consumer preflight and exact below-floor outcomes;
+authenticated/native whole-app proof remains separate from supplier tests.
+
+The two private Inspector Compare sources retain the actual ordered, explicitly granted branch
+prefixes from an unchanged complete saved run. The structural source authenticates the complete
+17-family reduction and original result array, including empty output. The evaluation source
+uses the same original eligible report trail as pair admission and ordinary module comparison:
+stable ply/event order, cp-first decoding, mate barriers, safe signed subtraction and the existing
+150cp threshold. Each genuine recorded packet and complete original pair invocation is retained;
+a copied array or a genuine array from another invocation is not proof, even when both are empty.
+These are recorded numerical changes with provider comparability unestablished, never grades.
+Keys bind original full head/ordered columns/complete trail, and real access/disclosure/signal
+checks repeat around work/publication/readback. Both feed the current Inspector2 operation;
+native complete-journey proof remains.
+
+Inspector's private `derived.story.rank@3` supplier uses the complete actual captured Review
+population at its explicitly granted endpoint: storage/import boundary, current coordinator/
+durable states, registry trigger operands, every source slot/state and unrendered moment plus
+the original last-level reduction. It authenticates the population's exact boundary/provider/
+trigger inputs, joins moments to that original population and the rank to that exact moment
+source. The own boundary issuer is checked before preparation; genuine foreign objects cannot
+stand in for those input joins. Provider observations do not enqueue new work. Empty ordering
+is singleton `{rank:[]}`, not a missing source or diagnosis. Real provider-state changes and
+byte-identical registry-record replacement retire retained results alongside current grants,
+storage/import, disclosure and cancellation. This accepted Review source contract does not
+assert direct authored document/pointer provenance, pattern truth or educational rank value;
+The separate D3972 shape supplier now admits complete actual registered documents before firing;
+it does not retroactively strengthen this captured Review contract. Its exact shape@2 values
+retain matched document/trigger attribution, full admitted-source/path receipts and original
+complete invocation proof, including no matches. Point and granted-prefix intervals are computed
+at their requested endpoint, not cropped later. Malformed/digest-invalid sources fail; genuine
+empty and missing installation remain distinct. No caller prose, plan judgement or move advice
+is admitted. Actual issuer/record identity and current grants/cancellation revalidate through
+publication and retained reads. These sources feed the current Inspector2 operation; mounted/
+native/full-release adoption is still under verification.
 
 Completed-trade declarations retain both captures and both recorded moves/edges in their actual
 factory order, rather than collapsing four operands into two dependency families (D3865).
@@ -208,12 +407,13 @@ The internal `derived.tactic.defender_exposure@2` factory joins an exact lost-co
 `rules.exchange.reading.landing_captures@1`. It retains every positive capture with exactly two
 sealed inputs and returns `invalid_turn_clone` as typed unavailability, never an empty event
 population. The full-FEN/target joins reject crossed or copied inputs before no-witness handling.
-It is not yet bound to a learner module; the coordinated Threat/packet migration remains open.
+It is bound to current Threat/packet and Full Inspector source operations. This does not by
+itself establish qualified tactical significance or complete native module journeys.
 
-Three further internal replacements are unbound until the coordinated current image migrates:
+The current Full Inspector image also binds two computed replacements:
 `rules.tactic.reading.promotion_pressure@1` computes its complete canonical-FEN geometry and
 nested availability directly; `rules.tactic.predicate.overload_conflict@1` computes the existing
-strict response conflict from a validated legal edge; and
+strict response conflict from a validated legal edge. The separate internal
 `derived.tactic.nonterminal_fork_survival@1` consumes exactly same-edge double-attack/reply-breadth
 sources, requiring at least one reply. Mate/stalemate are total negative survival results, not
 vacuous positives. New reviewed convention definitions disclose these bounded computations;
@@ -308,6 +508,32 @@ a source-version hold. Trade@2 keeps its original C,C,E,E receipt and computatio
 
 The ten sequence@3 event versions are registered for operator research only. Their ten separate
 qualification profiles are required/unvalidated; predecessor qualification is not inherited.
+
+Material event@2 now has28 distinct current-subject canonical validation cases: the existing
+full22-edge preservation matrix and six populated legal quiet/castling negatives, both colours.
+Literal role/colour counts are bound to the pinned independent source and checked against neutral
+board counts; absolute role differences/unweighted magnitude remain a stated product convention,
+not material value. The ordinary fast/cited validation Make targets run the new independent suite.
+Only positive/negative profile arms pass. Orientation and exact-version game-population validation
+remain required; original@1 cases/receipts are unchanged, and no event qualification is implied.
+
+Exposure event@2 likewise has16 distinct current-subject canonical cases. Independent pseudo
+control/retained identities and complete finite legal capture trees ground both-colour positive
+populations, all promotion choices and populated empty/zero/negative exchange controls. Multiple
+targets require exact identity-multiset equality, not merely a count and per-item membership.
+Checking/pass-illegal results remain unavailable. Only positive/negative arms become present;
+orientation/population stay required. Neither these controls nor paired colours qualify the event.
+
+The accepted retained-input orientation comparator now supports seven closed root FEN/UCI
+spellings. Each raw string must equal that same side's declared original edge before comparison
+uses its input-relative identity. The actual runner validates both complete legal fixtures and
+their geometric relation before either collector runs. This preserves full FEN clocks, immutable
+payloads and exhaustive leaf/population comparison; it does not strip metadata or add arbitrary
+transforms. Its34 permanent controls enable later authority-bearing orientation cases, not a
+passing orientation profile or support for nested/recorded/bounded input frames.
+
+The following full-green figures describe the earlier sequence-source checkpoint, not current
+integration verification:
 110 new supplier cases pass within the normal727-case focused gate; independent implementation
 review finds no blocker. Full normal make verify build passes6381 software/401 files, seven
 isolated performance/257 content and all remaining gates. Exact current consumer/presentation
@@ -723,3 +949,292 @@ D956 is closed. D963 now holds only the two promotion-race projections: their re
 exact input/value/source and occurrence authority, not alternative-derivation support. Twelve
 Wave-C projections compile; their events remain research-only and add no learner surface, preset,
 renderer or raw setting.
+
+### Received presentation association
+
+The presentation receipt parser joins each non-abstention evidence reference to its exact
+projection's declared producer in the existing manifest. Recomputing public component/receipt
+digests cannot substitute another producer id or version. This is declared wire association,
+not proof that the client possesses the original process-local evidence authority.
+
+Story separately admits only its current title pair/renderer/binding/convention in the title
+seat, requires Story-owned moment components and refuses title-only sources as move moments.
+The standalone Corpus receiver also pins its population renderer's declared binding and
+convention. These checks preserve genuine empty/round-trip states. D3948 still owns remaining
+ordinary-module and Review renderer-to-adapter closure; globally registered text alone is not
+the intended exact-pair guarantee, and these bounded repairs do not claim it is complete.
+
+Ordinary consumer fact/caption adapters now capture their renderer, binding and convention once
+for construction and received validation; the received path also retains declared source
+kind/direction/reader checks. The live Structure Nudge pawn-connectivity query and shared
+named-structure Sight/Nudge tuples use that same private plumbing. This is not a second registry
+or proof that every remaining Play/MAP/Story adapter has migrated.
+
+The Play adapter group now requires a received validator on each fact/caption declaration,
+including composed statements and nested square captions. All Nudge, Sight, threat, theory and
+Compare Coach tuples use the same bound construction/validation plumbing; Compare's existing
+named/ordinary structural rendering alternatives stay distinct. Setup names and shape titles
+retain their declared deterministic relationships. Structural Sight keeps its original convention
+partition and exact source kind. This does not invent missing file/pawn geometry in retained v1
+sources or establish correspondence between every received value and process-local source bytes.
+
+Guided Hint additionally joins the renderer's family/rung to the literal declaration and uses the
+existing redaction function to require exactly that rung's cumulative fields. A pattern hint
+cannot carry hidden move SAN, and a valid move statement cannot stand in for pattern-only text.
+Distance/move operands preserve the existing direct-ply1 and later-root-ply3 relationship; valid
+later-root hints remain supported. Process-constructor refusal and independently redigested wire
+refusal are tested separately. These checks concern generic presentation receipts, not a newly
+claimed bypass of the separate closed HintDeliveryReceipt or a change to hint selection/ceilings.
+
+Root Story and Review Map fact rows also retain their exact construction tuple on receipt input.
+Story's four pivotal rows require their declared kind; pivotal detail is parsed as the existing
+closed kind/subkind variants, including optional recorded engine metadata. Extra detail cannot
+ride beside unchanged text. These presentation checks preserve actual castling, pawn contact,
+target-Elo and both recorded engine-bound shapes. They do not establish original source occurrence,
+run-schema admission or semantic qualification.
+
+Postcommit/Map's twelve transition statement families, pawn-island event, check/double-attack/
+loose/rights/capture/trade/fork statements and Nudge grade now bind literal renderer, convention
+and binding before reading their operands. Current successor refs are exercised, including the
+real two-edge trade window; each selected pair requires a nonempty genuine fixture. Family hooks
+reach the current adapters without replacing Full Inspector's stronger source-specific validator.
+Structural event adapters now bind their literal family, both non-null source observations and
+the received observation kind. They retain the original event convention partition (backward
+pawns/king opposition use the pawn-structure convention; the other six use board rules), not
+Sight's different reading partition. Avoidance adapters retain the full original family source
+projection/version, not just its last name, plus the received family and original sign/counts.
+These36 formatter pairs do not enable missing candidate acquisition or avoidance delivery;
+the actual ten requirements remain explicitly blocked.
+
+All119 current Nudge/Map pairs in the Inspector adapter group now require received validators:
+41 static statements,36 conditional-family statements and42 remaining pairs. The latter retain
+29 board/recorded-line compositions,12 Map facts and one recorded magnitude. Square captions and
+recorded sequences capture their declared tuple before reading operands; geometry, move order,
+forms and equivalent sentences keep their original transformations. The Map objective fixture
+uses an actual recorded single-line transition, not the comparison predecessor.
+
+Pivotal statements use closed kind/subkind operands with no invented template defaults and bind
+their literal kind at construction and receipt input. Setup names keep the existing technique
+lookup. Recorded magnitudes retain their exact source, producer, unit and perspective checks;
+recorded tablebase statements retain their constructor's side-to-move perspective. Full Inspector's
+non-whole-reading path runs its existing stronger checks before these same-constructor family
+checks; its distinct whole-reading path is unchanged. Tuple/family association alone does not
+prove source-value authenticity or generic geometry correspondence, semantic qualification,
+additional acquisition, native delivery or whole-product completion.
+
+All41 shared square-caption/recorded-line compositions (29 current Nudge/Map and12 Full2) now
+use mandatory typed coordinate recipes for construction and received consistency. Marks must
+match their caption witnesses with the declared blue brush and same-owner reference; equivalent
+set ordering remains valid. Pawn dynamics preserves its original first-two footprint, except
+candidate-majority advancement lights the after-square; extra recorded supporters remain in the
+caption. Destination events light legal deltas, not the different local-exchange subsets.
+
+The independently accepted D4035 amendment closes the last eight pairs: role-asymmetry retains
+deduplicated source-event destinations, zwischenzug retains its recorded recapture square, and
+overload retains the defender-recapture destination beside its existing target. Existing templates,
+source identities, mark order and move lines are unchanged; no source-only geometry exception or
+legacy parser remains. Missing/malformed coordinates refuse rather than receive guessed defaults.
+Actual capture-promotions retain both original source events but one highlighted square.
+
+Recorded-line siblings retain the original fact distance, recorded origin, declared recorded-run
+convention, not-applicable perspective and exact source/producer/owner association. These checks
+preserve original plies; they do not authenticate a coherently forged private source or infer exact
+path plies from public hashes. Other geometry families, source qualification and native/whole-release
+proof remain separate obligations.
+
+The remaining ordinary selected-square, Play Sight, ray and generic Hint square captions also
+use one private typed recipe for construction and receipt checks. Caption parsing precedes
+coordinate reads; the original per-family brush and same evidence owner are fixed, and square
+membership is unordered. Actual generic Guided Hint adapters remain yellow; the separate closed
+Hint delivery/seat keeps its own yellow-target/green-actor behavior and is not replaced here.
+
+The accepted legal-move caption additionally retains exact movable-piece coordinates with
+piece-count/cardinality consistency. Both Sight and Full2 whole readings copy those squares
+from original sources. Full2 keeps a valid terminal zero-count sentence and no board; Sight
+never seals an empty square set. Its received whole guard checks retained legal coordinates,
+blue brush and owner after existing source-specific checks. No run/pack schema changes.
+
+The58 remaining generic pairs have46 genuine nonempty witness paths and12 current source-empty
+paths: six file/count structural families in ordinary Sight and Play Sight retain no square
+witnesses. They refuse board construction instead of receiving invented coordinates; text-only
+facts remain legal. D1723/D3309/D3654 retain their separate source/fidelity obligations. Hook
+inventory and internal consistency do not turn those12 into delivered square guidance or
+authenticate a coherently forged original source.
+
+Play/Compare evidence-reference text consumes all admitted registered presentation components,
+not the raw resolution's prose. The strict consumer refuses a model tablebase presented as exact
+and an attached source whose attribution contradicts its reference label. Source factory/history
+bytes are not narrowed or rewritten. Screens treat these known refusals as a separate failed
+presentation result, never a fabricated empty chess result or raw-text fallback; valid siblings
+and board/objective state remain. Metadata-only terminal/count/inspection controls read original
+reference metadata without requiring successful text rendering. Remaining source-policy repair,
+other consumer pairs and whole release verification are distinct obligations.
+
+Fact construction and received receipt parsing use the same registered operand parser before
+deterministic text is produced. Known schema-input failures, including invalid attached UCI,
+normalize to the existing typed invalid-presentation error with their cause; unexpected
+programming errors are not converted into an empty result. Reference screens handle the typed
+invalid-presentation result locally. The exact tablebase reading retains signed DTZ literally,
+including precise-DTZ precedence; the renderer does not turn a negative source report positive.
+
+### Foundation position operands (implementation in progress)
+
+`packages/runtime/src/foundation-position-sources.ts` contains package-internal helpers for
+unobstructed king opposition and complete backward-pawn operands. They require an actual sealed
+`rules.mobility.reading.legal_moves@1` value, derive the canonical position from that one source,
+and return deeply immutable owned snapshots. Opposition records both kings and an explicit null
+when the declared geometry/occupancy does not match. The pawn snapshot retains the complete pawn
+domain, qualifying subjects, exact controller/support/stop fields and an explicit opponent-color
+half-open perspective. Pseudo-capturable enemy pawns are separate from legal captures.
+
+These helpers now have installed sealed factories/profiles/convention receipts, as do the complete
+pawn-file/file-state and future-file/capture-migration/outpost snapshots. The real candidate
+collector retains all ten snapshots and their exact original inputs. Future-file candidacy uses
+only genuine same-position square control plus complete future-file challenge; capture migration
+is a separate source and never an exclusion. Occupation additionally requires an actual same-color
+bishop/knight/rook/queen, without asserting arrival, survival or value.
+
+The slider successor follows each original physical piece/direction through relocation, castling,
+capture and promotion. Before/after rays retain strict-interior occupied membership and an edge
+endpoint that is never a target. The legal backward-pawn advance consequence uses a genuine
+complete post-push landing-capture source, retaining every opposing-pawn capture of the advanced
+pawn and genuine empty populations; a capture-only predicate cannot prove that absence. Both
+inputs and exact legal child/target joins are authenticated before empty handling. Existing landing
+source receipt identity remains unchanged.
+
+All28 source/value outputs are installed locally under `rfc/foundation-source-identity.md`.
+Seven experimental events and one candidate consequence do not yet activate collector event
+routing, semantic qualification, learner/bot eligibility or authored migration. All five authored
+companions and the recorded early-queen/castling pair have actual factories. Original clock
+retention, reading/decision factories, imported occurrence and historical Review API/readout also
+exist; live/enforced clocks and native discharges remain separate. Existing source meanings remain
+unchanged; new complete king/backward reading identities are@3, event identities@2.
+
+The four literal configuration/candidate sources now have original-input guarded factories.
+Fianchetto setup and screen are complete snapshots (including empty) over four exact R12 tuples;
+the actual collector passes its retained setup to screen. Candidate role selects an exact canonical
+member of the original parent legal map, covering pawns/kings/all promotions and physical castle
+destinations. Pawn extended-centre facts filter only that genuine candidate by original pawn
+role and the eight declared destinations. Compiler6 retains31child/35local reading refs. These
+source facts remain experimental and actor-neutral; actual recorded occurrences, habit/style
+aggregation, bot traits and learner module eligibility require their separately declared owners.
+
+The recorded pair uses internal RunService sources over the actual read-authorized original run,
+not caller-written ply/color or a FEN counter. Early-queen evidence is a genuine offered candidate
+at rooted index below16, not proof of a chosen move. Castling retains the stored color's first
+represented rights baseline, including pending endpoints; it does not assert castling legality.
+No represented turn is unavailable; two false rights are a real available observation. Source
+captures and retained value reads retire on run/account/grant/import/cancellation changes. These
+experimental factories add no automatic collector or learner/bot consumer. Their separate recorded
+occurrence operation now supplies bounded historical context as described below; semantic
+qualification remains separate. Source-only methods add no public endpoint or preference.
+
+### Recorded context for the six non-clock style sources
+
+The longitudinal worker and rebuild tool now own a separate genuine completed-cut GAME source
+scope. It validates the entire legal graph and original creation identities before selecting
+the primary path. Its private claimed prefix feeds the unchanged first-side castling factory;
+live decision, actor and clock issuers refuse it. Renewal, loss, close and rebuild source checks
+belong to the actual store, without a fabricated request Principal. Details:
+`docs/longitudinal-store.md`. This source scope does not yet supply the planned three-ref Profile
+consumer or fourth durable family; existing profile rates still await that migration (D4147).
+
+`RecordedFoundationSourceOwner.contextualize` and the internal RunService wrapper accept one genuine
+source value plus an original decision/prefix selector. Their finite private bridge reads the
+original factory input objects, not matching payloads or claimed factory names. The result binds
+an actual outgoing committed event, its BEFORE decision, original full event head, mover side and
+complete source receipt. Three subjects stay distinct:
+
+- legal candidates retain both candidate and chosen canonical UCI, with chosen/alternative;
+- complete position snapshots retain the actual BEFORE or AFTER node, both colors and empty
+  member arrays; they do not say the actor just created that structure;
+- castling baseline retains its own first decision/event, even when the granted endpoint is later.
+
+Original imported moves are classified first through the actual initial import root/session and
+complete original legal node map. Identical-looking later rehearsal nodes are independently proved
+owner/played actions. Native learner context additionally requires actual same-store historical
+owner MOVE proof and the monotone single_player marker; author identity alone cannot turn an
+academy teacher into a learner. Unknown author or unsupported shared/coach/Match/legacy role
+produces explicit context-unavailable, not a guessed actor. This does not drop those roles from1.0.
+
+Actual profile-bot decisions may also supply opponent/played context. The owner joins the original
+adjacent selection and committed move, exact BEFORE node, actual child branch, canonical UCI and
+opposite stored learner side, then invokes the existing durable stored-policy parser. It uses
+retained decisions/deliveries without contacting providers. Partial profile/policy data or invalid
+pairs refuse; a genuine unprofiled legacy opponent remains unsupported. The stored learner's first
+castling baseline is never retargeted to the bot. This adds no hypothetical bot-search context or
+new operation authenticity claim beyond that existing parser.
+
+Each retained context rechecks actual account/grant/run/import/cancellation and its original
+historical actor authority (same-store journal for native learner, original map for imports,
+retained selection/durable parse for profile bots). Once a live check fails, that context remains retired even if storage later
+returns to the original bytes. Neutral source facts keep their own lifetimes; a new authorized
+capture may succeed. Clock metadata backfill is independent of original style actor proof.
+Known source/member joins are checked before pending/actor-unavailable results, so a crossed
+source is refused rather than hidden as absence. Matching pending decisions remain unavailable
+until an actual committed event exists. Clock and style readers reject each other's occurrences.
+
+These are private operation contexts, not new chess projections or stored run events. They add
+no automatic Review/module/bot/drill/longitudinal consumer, opportunity denominator, player habit,
+personality label or LLM claim. Offered/predicted and other actor arms, qualified consumer delivery,
+content/native and whole foundation completion remain open. Current execution status and receipts:
+`planning/foundation-source-identity/plan.md`.
+
+### Shared incoming-edge source execution
+
+`collectFoundationEdgeEvents` computes the seven current structural/file/physical-ray event
+families from one legal edge and a closed, nonempty source subset. Its call-local graph shares
+original legal-position/connectivity snapshots and the same file-change objects used by file
+revelation. Output retains fixed source/factory order and original sealed inputs. Inspector's
+existing supplier returns values with the original semantic events; its server owner retains
+those events, checks them at acquisition and read through the runtime source assertion, and binds
+their identities into its opaque source key. Quiet execution is an empty event array; a source
+that did not run uses null. Public source/page/detail shapes and budgets are unchanged.
+
+The build-only `runtime.semantic.foundation_edge@1` operation runs this actual source graph.
+All seven imported-population arms now execute the existing 579 sampled edges. Their positive,
+semantic-negative and orientation arms still require independent case authority. The validation
+grammar supports only five additional exact nested edge paths and the two typed file transforms.
+New positive event cases can use `emits_exact` for complete ordered sign/operand populations,
+with data-only canonical expectations; existing `emits` remains a minimum witness. Ordinary module,
+candidate, avoidance and bot adoption remains tracked by D4167. See the current source plan and
+coordinated shared-packet §3.1e/module-registration §4.11i/semantic-validation §4.1b contracts.
+
+The current opposition event's independent literal source adds 46 canonical propositions:
+18 complete positive populations, six whole-family omissions and 22 ordered orientation cases.
+The board/turn facts are retained separately from its disclosed product convention. Real source
+fault controls show why symmetry alone is insufficient: symmetric wrong holders/forms/interiors/
+kings/signs still mirror, while the complete absolute propositions refuse them. The generated
+registry now qualifies opposition@2 alongside the four basic transitions; legacy opposition@1
+and the other six current foundation source profiles retain their missing requirements. This is
+source qualification, with candidate/ordinary/bot adoption still tracked separately under D4167.
+
+### Authored structural execution
+
+Current authored timing and transition execution now uses the original document-owned expression
+identities. It admits the complete selected authoring/objective consumer before dependency work
+and validates opening, closing and compiled boundary origins before an early exit. Only visited
+operands acquire board evidence. The three default timing rules preserve their actual resolver;
+validation never substitutes a schema-only king predicate for a missing plan. Missing/stale/copied
+sources remain explicit failures, separate from a false condition or invalid chess position.
+The pure research matchers remain separate.
+
+The authored expression census now awaits real shape-registry dependency admission and validates
+each original draft document before selecting its typed expression roots. Corpus, owned-pack,
+shape-denominator, degenerate and witness probes use those genuine sources through authoring2.
+An external selected draft never registers a dependency. Missing, stale or unavailable sources
+remain faults, including witness-only failures; they are distinct from false conditions, empty
+denominators and illegal witness moves. Claimed corpus hits are re-evaluated before establishing
+satisfiability. The explicit bare-expression research mode keeps its legacy matcher. This does
+not complete semantic qualification or authored content migration. The separate read-only
+old/new convention report and original clock source are implemented; neither performs an authored
+migration or grants new consumer eligibility.
+
+
+Within one census invocation, successful boolean results may be reused only for the exact original
+source token and complete FEN, after current source and consumer checks. Original position rows
+still determine counts, sample order and subset denominators; failures are not cached as false.
+The input2 factory also reuses its original immutable, position-independent source-image value,
+checking live ownership and its private original-mint association on every fresh or cached return.
+Root positions, evaluated leaves, populations, results and reduction proofs remain distinct.
+Replacing a registered record with identical bytes still retires its previous source and input.

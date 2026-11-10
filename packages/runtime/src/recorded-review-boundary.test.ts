@@ -8,6 +8,7 @@ import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { createRecordedReviewBoundarySourceOwner, isRecordedReviewBoundary, readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import { readBackReplay } from "./replay.js";
 import * as replay from "./replay.js";
+import * as providerJson from "./provider-digest.js";
 import { createReviewPrefixAuthority, type ReviewImportRecordImage } from "./review-evidence.js";
 import { commitMove, fork, rewind } from "./runtime.js";
 import * as semanticPath from "./recorded-semantic-path.js";
@@ -35,6 +36,40 @@ function results(boundary: RecordedReviewBoundary) { return invokeEvidenceValueR
 function consequences(boundary: RecordedReviewBoundary) { return invokeEvidenceValueRoute(CONSEQUENCE, { recordedReview: boundary }); }
 
 describe("recorded Review boundary source (Review §4.5)", () => {
+  it("D3935 reuses only unchanged deeply immutable bytes while still reading actual storage", () => {
+    const run = play(importedRun("immutable-currentness"), ["e2e4", "e7e5"]), record = importRecord(run, "1-0");
+    const loadRun = vi.fn(() => run), loadImportRecord = vi.fn(() => record);
+    const owner = createRecordedReviewBoundarySourceOwner({ loadRun, loadImportRecord });
+    const serialize = vi.spyOn(providerJson, "canonicalProviderJson");
+    try {
+      const boundary = owner.resolve(request(run));
+      for (let index = 0; index < 5; index++) readRecordedReviewBoundary(boundary);
+      expect(loadRun.mock.calls.length).toBeGreaterThanOrEqual(6);
+      expect(loadImportRecord.mock.calls.length).toBeGreaterThanOrEqual(6);
+      expect(serialize.mock.calls.filter(([value]) => value === run)).toHaveLength(1);
+    } finally { serialize.mockRestore(); }
+  });
+
+  it("D3935 never reuses a frozen envelope with mutable descendants", () => {
+    const run = Object.freeze(structuredClone(play(importedRun("mutable-currentness"), ["e2e4", "e7e5"])));
+    const source = stored(run, importRecord(run, "1-0")), boundary = source.owner.resolve(request(run));
+    readRecordedReviewBoundary(boundary);
+    Object.assign(run.nodes[1]!, { moveSan: "different-same-source" });
+    expect(() => readRecordedReviewBoundary(boundary)).toThrow(/no longer/u);
+    expect(Object.isFrozen(run.nodes)).toBe(false);
+  });
+
+  it("compares borrowed live storage bytes without cloning or freezing the storage-owned graph", () => {
+    const run = structuredClone(play(importedRun("read-only-currentness"), ["e2e4", "e7e5"])), source = stored(run, importRecord(run, "1-0"));
+    const boundary = source.owner.resolve(request(run)), clone = vi.spyOn(globalThis, "structuredClone");
+    try {
+      for (let index = 0; index < 3; index++) readRecordedReviewBoundary(boundary);
+      expect(clone).not.toHaveBeenCalled();
+      expect(Object.isFrozen(run)).toBe(false);
+      source.setRun(attachEvidence(run, run.activeCursor.nodeId, ["changed"], { kind: "eval", source: "engine_validated", values: {} }, REVIEW_AT).run);
+      expect(() => readRecordedReviewBoundary(boundary)).toThrow(/no longer/u);
+    } finally { clone.mockRestore(); }
+  });
   it("D3914 rereads live run/import storage without replaying the same validated game", () => {
     const run = play(importedRun("currentness-replay"), ["e2e4", "e7e5"]), record = importRecord(run, "1-0");
     const loadRun = vi.fn(() => structuredClone(run)), loadImportRecord = vi.fn(() => ({ ...record }));

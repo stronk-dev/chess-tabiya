@@ -1,4 +1,5 @@
-// DISPOSABLE RFC-0000 exploration, D3309. Real FEN -> real factories -> real presentation.
+// DISPOSABLE RFC-0000 exploration, D3309. Historical controls refreshed after the accepted
+// successor migration: current production uses @2; no obsolete consumer is kept for this tool.
 // The candidate reader below is research only: it creates no declared evidence, version,
 // binding or presented component. Its output must never be used as production guidance.
 import { Chess } from "chessops/chess";
@@ -9,8 +10,8 @@ import { describe, expect, it } from "vitest";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 import { STRUCTURAL_FEATURE_KINDS } from "../../packages/schema/src/drill-pack/index.js";
 import { evidenceForConsumer } from "../../packages/runtime/src/evidence-contract.js";
-import { declareStructuralReadingEvidence } from "../../packages/runtime/src/reading-evidence.js";
-import { presentEvidenceItems, presentedSentence } from "../../packages/runtime/src/presentation-contract.js";
+import { declareStructuralReadingEvidence, presentPositionStructureEvidence } from "../../packages/runtime/src/reading-evidence.js";
+import { presentedSentence } from "../../packages/runtime/src/presentation-contract.js";
 import { structuralReading, type StructuralObservation } from "../../packages/runtime/src/structure.js";
 import { renderStructuralObservation } from "../../apps/web/src/lib/structural-sentences.js";
 
@@ -77,7 +78,7 @@ describe("D3309 actual producer-to-Inspector fidelity census", () => {
     expect(active.map(p => p.id.split(".").at(-1)).sort()).toEqual([...KINDS].sort());
     expect(KINDS).toHaveLength(16);
   });
-  it.each(KINDS)("%s: actual emitted operands survive sealing but are absent from the declared typed view", kind => {
+  it.each(KINDS)("%s: original source remains narrow and its current successor retains the missing fields", kind => {
     const { fen, observation } = specimen(kind);
     const declared = declareStructuralReadingEvidence({ fen });
     const item = declared.find(item => item.projection.id === `rules.structural.reading.${kind}` && exact(item.payload) === exact(observation));
@@ -88,26 +89,27 @@ describe("D3309 actual producer-to-Inspector fidelity census", () => {
       expect(Object.hasOwn(item!.payload as object, field), field).toBe(true);
       expect(declaration.operands, field).not.toContain(field);
     }
-    const typed = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.position_structure", version: 1 }, [item!]));
-    expect(typed).toHaveLength(1);
-    expect(presentedSentence(typed[0]!)).toMatch(/^Position reading/u);
-    expect(presentedSentence(typed[0]!)).not.toEqual(renderStructuralObservation(observation));
+    const typed = presentPositionStructureEvidence({ fen }).filter(value => value.adapter.projection.id === item!.projection.id);
+    expect(typed.length).toBeGreaterThan(0);
+    const fields = ["kind", "squares", ...REQUIRED[kind]];
+    expect(typed.some(value => value.component.id === "fact_statement" && fields.every(field => isDeepStrictEqual(
+      (value.component.id === "fact_statement" ? value.component.operand.operands as unknown as Record<string, unknown> : {})[field], plain(observation)[field])))).toBe(true);
   });
-  it("Pack B loses seven-pawn side/count and bishop-shade statements on the real typed path", () => {
+  it("Pack B now retains seven-pawn side/count and bishop-shade statements on the real typed path", () => {
     const observations = structuralReading(CARLSBAD).features;
     const legacy = observations.map(renderStructuralObservation);
     expect(legacy).toContain("White has 7 pawns.");
     expect(legacy).toContain("Black has 7 pawns.");
     expect(legacy).toContain("White's bishop on d3 stands on a light square.");
-    const typed = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.position_structure", version: 1 }, declareStructuralReadingEvidence({ fen: CARLSBAD }))).map(presentedSentence);
-    for (const text of ["White has 7 pawns.", "Black has 7 pawns.", "White's bishop on d3 stands on a light square."]) expect(typed).not.toContain(text);
+    const typed = presentPositionStructureEvidence({ fen: CARLSBAD }).map(presentedSentence);
+    for (const text of ["White has 7 pawns.", "Black has 7 pawns.", "White's bishop on d3 stands on a light square."]) expect(typed).toContain(text);
   });
-  it("distinct real pawn counts collide in one typed caption, rather than merely changing wording", () => {
+  it("distinct real side-role counts no longer collide in one typed caption", () => {
     const items = declareStructuralReadingEvidence({ fen: CARLSBAD }).filter(item => item.projection.id === "rules.structural.reading.piece_count");
-    const typed = items.flatMap(item => presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.position_structure", version: 1 }, [item])).map(presentedSentence));
+    const typed = presentPositionStructureEvidence({ fen: CARLSBAD }).filter(item => item.adapter.projection.id === "rules.structural.reading.piece_count").map(presentedSentence);
     expect(items).toHaveLength(12);
     expect(new Set(items.map(item => renderStructuralObservation(item.payload as StructuralObservation))).size).toBeGreaterThan(1);
-    expect(new Set(typed).size).toBe(1);
+    expect(new Set(typed).size).toBe(12);
   });
 });
 
@@ -172,6 +174,6 @@ describe("D3309 disposable operand-reader controls, NOT a v2 admission or compon
   it("the production view still rejects a copied/mutated sealed reading", () => {
     const item = declareStructuralReadingEvidence({ fen: CARLSBAD })[0]!;
     const forged = { ...item, payload: { ...(item.payload as object), sentence: "This wins" } };
-    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.position_structure", version: 1 }, [forged])).toThrow();
+    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.position_structure", version: 2 }, [forged])).toThrow();
   });
 });

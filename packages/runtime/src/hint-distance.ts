@@ -30,6 +30,7 @@ import {
   HINT_SEARCH_SOURCE,
   HINT_SELECTION_ORDER,
   hintDisclosureIdentity,
+  hintDeclarationRow,
   hintDisclosureProjectionId,
   hintHorizonProjectionId,
   type HintDisclosureProjectionId,
@@ -42,7 +43,7 @@ import { BANNED_JUDGEMENTS, voiceCheck, type VoiceCheckResult } from "./voice.js
 import type { SemanticEvidenceEvent } from "./semantic-evidence.js";
 
 /** The compiler identity carried by every receipt; moving construction semantics moves this literal. */
-export const HINT_COMPILER_VERSION = "guided_hint_compiler@1" as const;
+export const HINT_COMPILER_VERSION = "guided_hint_compiler@2" as const;
 /**
  * The forced-mate proof horizon the hint path requests. 2026-09-24 implementation choice: two attacker
  * moves keeps the proof inside the interaction budget (§10); a proof is still a proof, and the deeper
@@ -75,6 +76,7 @@ export interface HintHorizonAuthority {
 export type SealedHintHorizon = DeclaredEvidence<HintHorizonOccurrence>;
 
 interface HorizonOwner {
+  readonly compiler: typeof HINT_COMPILER_VERSION;
   readonly root: HintRootIdentity;
   readonly line: DeclaredEvidence<unknown>;
   readonly packet: CandidatePopulationReceipt;
@@ -103,12 +105,12 @@ export function hintPacketRoots(line: DeclaredEvidence<unknown>): readonly strin
   return Object.freeze(replay.edges.filter((edge) => edge.ply === 1 || edge.ply === 3).map((edge) => edge.beforeFen));
 }
 
-function eventSources(row: { readonly events: readonly SemanticEvidenceEvent[] }, projectionId: string): readonly DeclaredEvidence<unknown>[] {
-  return row.events.filter((event) => event.projection.id === projectionId && event.projection.version === 1).map((event) => event.evidence);
+function eventSources(row: { readonly events: readonly SemanticEvidenceEvent[] }, source: { readonly id: string; readonly version: number }): readonly DeclaredEvidence<unknown>[] {
+  return row.events.filter((event) => event.projection.id === source.id && event.projection.version === source.version).map((event) => event.evidence);
 }
 
-function readingSources(row: { readonly readings: readonly DeclaredEvidence<unknown>[] }, projectionId: string): readonly DeclaredEvidence<unknown>[] {
-  return row.readings.filter((reading) => reading.projection.id === projectionId && reading.projection.version === 1);
+function readingSources(row: { readonly readings: readonly DeclaredEvidence<unknown>[] }, source: { readonly id: string; readonly version: number }): readonly DeclaredEvidence<unknown>[] {
+  return row.readings.filter((reading) => reading.projection.id === source.id && reading.projection.version === source.version);
 }
 
 /**
@@ -117,20 +119,18 @@ function readingSources(row: { readonly readings: readonly DeclaredEvidence<unkn
  * are minted by their own registered value routes over that same exact edge.
  */
 function familySources(family: HintFamily, beforeFen: string, row: { readonly events: readonly SemanticEvidenceEvent[]; readonly readings: readonly DeclaredEvidence<unknown>[] }): readonly DeclaredEvidence<unknown>[] {
+  const source = hintDeclarationRow(family).source;
   switch (family) {
     case "mate_in_one":
-      return eventSources(row, "rules.transition.event.checkmate").length === 0 ? [] : [invoke("rules.tactic.consequence.mate_in_one@1", { fen: beforeFen }) as DeclaredEvidence<unknown>];
+      return eventSources(row, { id: "rules.transition.event.checkmate", version: 1 }).length === 0 ? [] : [invoke(`${source.id}@${source.version}`, { fen: beforeFen }) as DeclaredEvidence<unknown>];
     case "forced_mate": {
-      const breadth = eventSources(row, "rules.tactic.consequence.reply_breadth")[0];
+      const breadth = eventSources(row, { id: "rules.tactic.consequence.reply_breadth", version: 1 })[0];
       if (breadth === undefined) return [];
-      const proof = invoke("rules.tactic.consequence.forced_mate_after_move@1", { beforeFen, breadth, maxAttackerMoves: HINT_FORCED_MATE_ATTACKER_MOVES }) as { readonly kind: string; readonly value?: DeclaredEvidence<unknown> };
+      const proof = invoke(`${source.id}@${source.version}`, { beforeFen, breadth, maxAttackerMoves: HINT_FORCED_MATE_ATTACKER_MOVES }) as { readonly kind: string; readonly value?: DeclaredEvidence<unknown> };
       return proof.kind === "available" && proof.value !== undefined ? [proof.value] : [];
     }
-    case "double_attack": return eventSources(row, "rules.tactic.event.double_attack");
-    case "fork_survives_reply": return readingSources(row, "derived.tactic.fork_survives_reply");
-    case "discovered_executed": return eventSources(row, "derived.tactic.discovered_executed");
-    case "loose_piece": return eventSources(row, "rules.tactic.event.loose_piece");
-    case "promotion_pressure": return readingSources(row, "derived.tactic.promotion_pressure");
+    case "double_attack": case "discovered_executed": case "loose_piece": return eventSources(row, source);
+    case "fork_survives_reply": case "promotion_pressure": return readingSources(row, source);
   }
 }
 
@@ -160,12 +160,13 @@ export function selectHintHorizon(authority: HintHorizonAuthority): HintHorizonS
     const row = candidatePlayedRow(receipt, edge.moveUci);
     for (const family of HINT_FAMILIES) {
       for (const source of familySources(family, edge.beforeFen, row)) {
-        const result = invoke(`${hintHorizonProjectionId(family)}@1`, { line: authority.line, source, ply: edge.ply }) as { readonly kind: string; readonly value?: SealedHintHorizon };
+        const projection = hintDeclarationRow(family).horizon;
+        const result = invoke(`${projection.id}@${projection.version}`, { line: authority.line, source, ply: edge.ply }) as { readonly kind: string; readonly value?: SealedHintHorizon };
         if (result.kind !== "available" || result.value === undefined) continue;
         const occurrence = result.value.payload;
         candidates.push({
           horizon: result.value,
-          owner: Object.freeze({ root: authority.root, line: authority.line, packet: receipt, source }),
+          owner: Object.freeze({ compiler: HINT_COMPILER_VERSION, root: authority.root, line: authority.line, packet: receipt, source }),
           key: [HINT_SELECTION_ORDER.indexOf(family), occurrence.relation === "root_direct" ? 0 : 1, occurrence.occurrencePly, occurrence.targetSquares.join(","), edge.moveUci, evidenceDigest(occurrence)],
         });
       }
@@ -200,12 +201,14 @@ export function hintHorizonOwner(horizon: SealedHintHorizon): Readonly<{ runId: 
  * selector minted AND owns: a correctly sealed horizon minted outside `selectHintHorizon` (e.g. from a
  * rebuilt occurrence) is refused before disclosure ([[D1640]]).
  */
-export function compileHintDisclosure(horizon: SealedHintHorizon, rung: HintRung): DeclaredEvidence<HintDisclosurePayload> {
+export function compileHintDisclosureV2(horizon: SealedHintHorizon, rung: HintRung): DeclaredEvidence<HintDisclosurePayload> {
   assertDeclaredEvidence(horizon);
-  if (!HORIZON_OWNERS.has(horizon)) throw new HintHorizonMismatch("the horizon was not selected and owned by this process's selector");
+  if (HORIZON_OWNERS.get(horizon)?.compiler !== HINT_COMPILER_VERSION) throw new HintHorizonMismatch("the horizon was not selected and owned by this process's current selector");
   const family = horizon.payload.family;
-  if (horizon.projection.id !== hintHorizonProjectionId(family)) throw new HintHorizonMismatch("the horizon projection does not name its own family");
-  const disclosure = invoke(`${hintDisclosureProjectionId(family, rung)}@1`, { horizon }) as DeclaredEvidence<HintDisclosurePayload>;
+  const row = hintDeclarationRow(family);
+  if (horizon.projection.id !== row.horizon.id || horizon.projection.version !== row.horizon.version) throw new HintHorizonMismatch("the horizon projection is not its exact current family/version");
+  const projection = row.disclosures[rung];
+  const disclosure = invoke(`${projection.id}@${projection.version}`, { horizon }) as DeclaredEvidence<HintDisclosurePayload>;
   DISCLOSURES.add(disclosure);
   return disclosure;
 }
@@ -213,7 +216,9 @@ export function compileHintDisclosure(horizon: SealedHintHorizon, rung: HintRung
 /** The disclosure brand: a runtime property backed by a private WeakSet, never a structural shape. */
 export function assertHintDisclosurePacket(value: unknown): asserts value is DeclaredEvidence<HintDisclosurePayload> {
   assertDeclaredEvidence(value);
-  if (!DISCLOSURES.has(value) || hintDisclosureIdentity(value.projection.id) === undefined) throw new TypeError("HINT_DISCLOSURE_UNSEALED: value was not minted by compileHintDisclosure");
+  const identity = hintDisclosureIdentity(value.projection.id);
+  const current = identity === undefined ? undefined : hintDeclarationRow(identity.family).disclosures[identity.rung];
+  if (!DISCLOSURES.has(value) || current?.id !== value.projection.id || current.version !== value.projection.version) throw new TypeError("HINT_DISCLOSURE_UNSEALED: value was not minted by the current compileHintDisclosureV2");
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -238,7 +243,7 @@ export function compileGuidedHintPacket(input: { readonly disclosure: DeclaredEv
   const packet = compileModulePacket({ module: "guided_hint", timing: "checkpoint", role: input.role, session: input.session, evidence: [input.disclosure], mode: "admit" });
   if (packet.kind === "refused") return Object.freeze({ kind: "refused", reason: packet.reason });
   if (packet.facts.length !== 1 || packet.facts[0]!.evidence !== input.disclosure) return Object.freeze({ kind: "refused", reason: "disclosure_not_admitted" });
-  const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 1 }, [input.disclosure]);
+  const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.guided_hint", version: 2 }, [input.disclosure]);
   return Object.freeze({ kind: "rendered", view: renderEvidenceItems(view, HINT_DISCLOSURE_RENDERERS), disclosure: input.disclosure });
 }
 
@@ -294,13 +299,14 @@ export function compileHintDeliveryReceipt(input: {
   const payload = input.packet.disclosure.payload;
   const identity = hintDisclosureIdentity(input.packet.disclosure.projection.id)!;
   const body: Omit<HintDeliveryReceipt, "receiptDigest"> = {
-    version: 1,
+    version: 2,
     requestId: input.requestId,
     runId: input.runId,
     decision: input.decision,
     rung: identity.rung,
     family: identity.family,
     projectionId: input.packet.disclosure.projection.id as HintDisclosureProjectionId,
+    projectionVersion: input.packet.disclosure.projection.version,
     disclosureDigest: evidenceDigest(payload),
     manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest,
     rendered: { source: "deterministic", sentence: item.sentences.join(" "), voice: input.voice },

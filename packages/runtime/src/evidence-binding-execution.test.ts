@@ -1,10 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import * as routes from "./internal/evidence-value-routes.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST as MANIFEST } from "./evidence-catalog.js";
 import { compileEvidenceManifest, type BindingSourceAbsence, type CompiledEvidenceManifest, type EvidenceBinding, type LatencyMode, type ProjectionDeclaration, type VersionedEvidenceId } from "./evidence-contract.js";
 import { aggregateEvidenceConsumerSourceAvailability as aggregate, compileEvidenceConsumerExecution as compile } from "./evidence-binding-execution.js";
 import { compileEvidenceConsumerExecutionV2, assertEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
+import { compileProjectionExecutionV2, executionPlanDigest } from "./evidence-execution-v2.js";
+import { isImmutableOwnData } from "./internal/immutable-data.js";
 
-const ref = (id: string): VersionedEvidenceId => ({ id, version: 1 });
+const ref = (id: string, version = 1): VersionedEvidenceId => ({ id, version });
 const consumer = ref("fixture.consumer");
 const OPTIONAL = { necessity: "optional", whenNoPath: "omit_optional_item" } as const;
 const EMPTY = { necessity: "required", whenNoPath: "honest_empty" } as const;
@@ -30,6 +33,96 @@ function satisfied(compiled: ReturnType<typeof compile>, ids: readonly string[])
 }
 
 describe("binding execution and source absence", () => {
+  it("D4084 an accessor request cannot insert one consumer's plan under another consumer key", () => {
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const first = "authoring.predicate", second = "runtime.objective_condition";
+    let spreading = false, alternate = false;
+    const request = new Proxy({ id: first, version: 2 }, {
+      ownKeys(target) { spreading = true; return Reflect.ownKeys(target); },
+      get(target, property, receiver) {
+        if (property === "id") return alternate ? second : first;
+        if (property === "version" && spreading) alternate = true;
+        return Reflect.get(target, property, receiver);
+      },
+    });
+    const original = compileEvidenceConsumerExecutionV2(manifest, request);
+    expect(original.consumer).toEqual({ id: first, version: 2 });
+    const other = compileEvidenceConsumerExecutionV2(manifest, { id: second, version: 2 });
+    expect(other.consumer).toEqual({ id: second, version: 2 });
+    expect(other).not.toBe(original);
+  });
+
+  it("D4083 reuses a plan only for its exact immutable manifest and root", () => {
+    const root = { id: "derived.structural.predicate_result", version: 2 };
+    const original = compileProjectionExecutionV2(MANIFEST, root);
+    for (let index = 0; index < 100; index++) expect(compileProjectionExecutionV2(MANIFEST, { ...root })).toBe(original);
+    const other = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const equal = compileProjectionExecutionV2(other, root);
+    expect(equal).not.toBe(original);
+    expect(executionPlanDigest(equal)).toBe(executionPlanDigest(original));
+    const changed = Object.freeze({ ...MANIFEST, projections: Object.freeze(MANIFEST.projections.map(row => row.id === root.id && row.version === root.version
+      ? Object.freeze({ ...row, semantics: `${row.semantics} Mechanical alternate image.` }) : row)) });
+    const different = compileProjectionExecutionV2(changed, root);
+    expect(different).not.toBe(original);
+    expect(executionPlanDigest(different)).not.toBe(executionPlanDigest(original));
+    expect(() => executionPlanDigest({ ...original })).toThrow(/not issued/u);
+  });
+
+  it("D4083 keeps validating shallow-frozen mutable and accessor-backed manifests", () => {
+    const root = { id: "derived.structural.predicate_result", version: 2 };
+    const projections = [...MANIFEST.projections], shallow = Object.freeze({ ...MANIFEST, projections });
+    compileProjectionExecutionV2(shallow, root);
+    projections.push(projections[0]!);
+    expect(() => compileProjectionExecutionV2(shallow, root)).toThrow(/duplicate declaration/u);
+    let current = MANIFEST.projections;
+    const accessor = Object.freeze({ ...MANIFEST, get projections() { return current; } });
+    compileProjectionExecutionV2(accessor, root);
+    current = [...current, current[0]!];
+    expect(() => compileProjectionExecutionV2(accessor, root)).toThrow(/duplicate declaration/u);
+    const cycle: { self?: unknown } = {}; cycle.self = cycle; Object.freeze(cycle);
+    for (const unstable of [shallow, accessor, Object.freeze([,]), Object.freeze({ fn: () => 1 }), Object.freeze(new Map()), cycle]) expect(isImmutableOwnData(unstable)).toBe(false);
+  });
+
+  it("D4083 rechecks a cached projection's live reduction binding before returning it", () => {
+    const root = { id: "derived.structural.predicate_result", version: 2 };
+    const original = compileProjectionExecutionV2(MANIFEST, root), inspect = routes.inspectEvidenceReductionBinding;
+    const crossed = vi.spyOn(routes, "inspectEvidenceReductionBinding").mockImplementation(operation => ({ ...inspect(operation) }));
+    try { expect(() => compileProjectionExecutionV2(MANIFEST, root)).toThrow(/binding changed/u); }
+    finally { crossed.mockRestore(); }
+    expect(compileProjectionExecutionV2(MANIFEST, root)).toBe(original);
+  });
+
+  it("D4083 snapshots a requested root once so an accessor cannot poison another root's cache", () => {
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const first = "rules.castling.reading.rights", second = "rules.castling.reading.legality";
+    let reads = 0;
+    const original = compileProjectionExecutionV2(manifest, { get id() { return ++reads === 1 ? first : second; }, version: 1 });
+    expect(reads).toBe(1);
+    expect(original).toMatchObject({ kind: "fixed", execution: { projection: ref(first) } });
+    expect(compileProjectionExecutionV2(manifest, ref(first))).toBe(original);
+    expect(compileProjectionExecutionV2(manifest, ref(second))).toMatchObject({ kind: "fixed", execution: { projection: ref(second) } });
+    expect(() => compileProjectionExecutionV2(manifest, { id: first, version: Number.NaN })).toThrow(/invalid projection reference/u);
+  });
+
+  it("rechecks live reduction callables even for the cached exact immutable consumer", () => {
+    const consumer = { id: "module.review_map", version: 2 };
+    const original = compileEvidenceConsumerExecutionV2(MANIFEST, consumer), inspect = routes.inspectEvidenceReductionBinding;
+    const crossed = vi.spyOn(routes, "inspectEvidenceReductionBinding").mockImplementation(operation => ({ ...inspect(operation) }));
+    try { expect(() => compileEvidenceConsumerExecutionV2(MANIFEST, consumer)).toThrow(/binding changed/u); }
+    finally { crossed.mockRestore(); }
+    expect(compileEvidenceConsumerExecutionV2(MANIFEST, consumer)).toBe(original);
+  });
+  it("reuses only complete immutable consumer images, never mutable or crossed manifests", () => {
+    const ref = { id: "module.review_map", version: 2 };
+    const original = compileEvidenceConsumerExecutionV2(MANIFEST, ref);
+    expect(compileEvidenceConsumerExecutionV2(MANIFEST, { ...ref })).toBe(original);
+    const mutable = { ...MANIFEST, bindings: [...MANIFEST.bindings] };
+    expect(compileEvidenceConsumerExecutionV2(mutable, ref)).not.toBe(original);
+    const shallow = Object.freeze(mutable);
+    compileEvidenceConsumerExecutionV2(shallow, ref);
+    mutable.bindings.splice(mutable.bindings.findIndex(row => row.consumer.id === ref.id && row.consumer.version === ref.version), 1);
+    expect(() => compileEvidenceConsumerExecutionV2(shallow, ref)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+  });
   it("keeps a complete reduction plan and exact binding policies without inventing realized paths", () => {
     const comparison = MANIFEST.projections.find(row => row.id === "derived.compare.structure_delta" && row.version === 2)!;
     const row = binding("fixture.comparison", comparison, UNAVAILABLE, "sync"), manifest = fixture([row]);
@@ -49,7 +142,7 @@ describe("binding execution and source absence", () => {
     expect(() => compileEvidenceConsumerExecutionV2(crossed, consumer)).toThrow(/exact admitted adapter/);
   });
   it("refuses a missing accepted binding even when the semantic manifest still compiles", () => {
-    const theory = ref("module.theory_breadcrumb");
+    const theory = ref("module.theory_breadcrumb", 2);
     const declarations = { ...EVIDENCE_CONTRACT_DECLARATIONS,
       adapters: EVIDENCE_CONTRACT_DECLARATIONS.adapters.filter(row =>
         !(row.consumer.id === theory.id && row.consumer.version === theory.version && row.projection.id === "theory.shapes.firing")),
@@ -60,20 +153,32 @@ describe("binding execution and source absence", () => {
     expect(() => compile(incomplete, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
   });
 
-  it("cannot make all75 Inspector declarations executable by removing twelve refused bindings", () => {
-    const inspector = ref("module.full_inspector");
-    const failed = new Set(["live.stockfish.eval@1", "live.stockfish.wdl@1", "live.stockfish.pv@1",
+  it("cannot weaken the exact current102 Inspector image by removing twelve actual source bindings", () => {
+    const inspector = { id: "module.full_inspector", version: 2 };
+    const retired = ["live.stockfish.eval@1", "live.stockfish.wdl@1", "live.stockfish.pv@1",
       "human.maia.policy@1", "human.maia.candidate_wdl@1", "human.explorer.population@1",
       "live.syzygy.result@1", "live.syzygy.category@1", "live.syzygy.distance@1",
-      "derived.pivotal.human_divergence@1", "derived.compare.eval_delta@1", "derived.story.rank@2"]);
+      "derived.pivotal.human_divergence@1", "derived.compare.eval_delta@1", "derived.story.rank@2",
+      "rules.structural.event.backward_pawn@1", "rules.structural.event.king_opposition@1", "rules.structural.event.pawn_islands@1",
+      "rules.structural.event.doubled_pawn@1", "rules.structural.event.isolated_pawn@1", "rules.structural.event.open_file@1", "rules.structural.event.half_open_file@1", "rules.structural.event.line_blockers@1"];
+    const current = MANIFEST.consumers.find(row => row.id === inspector.id)!;
+    expect(current.version).toBe(2);
+    expect(current.accepts).toHaveLength(102);
+    for (const old of retired) expect(current.accepts.map(row => `${row.id}@${row.version}`)).not.toContain(old);
+    const failed = new Set(["recorded.inspector.eval_packet@1", "recorded.inspector.wdl_packet@1", "recorded.inspector.pv_packet@1",
+      "derived.maia.node_distribution@1", "derived.maia.node_candidate_wdl@1", "derived.explorer.inspector_population@1",
+      "recorded.inspector.tablebase_packet@1", "derived.inspector.tablebase_category@1", "derived.inspector.tablebase_distance@1",
+      "derived.pivotal.human_divergence@2", "derived.compare.eval_delta@2", "derived.story.rank@3"]);
     const bindings = MANIFEST.bindings.filter(row => row.consumer.id !== inspector.id || !failed.has(`${row.projection.id}@${row.projection.version}`));
-    expect(bindings.filter(row => row.consumer.id === inspector.id)).toHaveLength(63);
-    expect(() => compile({ ...MANIFEST, bindings }, inspector)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
-    expect(() => compile(MANIFEST, inspector)).toThrow(/EXECUTION_SOURCE_UNREGISTERED/u);
+    expect(bindings.filter(row => row.consumer.id === inspector.id)).toHaveLength(current.accepts.length - failed.size);
+    expect(() => compileEvidenceConsumerExecutionV2({ ...MANIFEST, bindings }, inspector)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+    expect(compileEvidenceConsumerExecutionV2(MANIFEST, inspector).bindings).toHaveLength(102);
+    expect(() => compile(MANIFEST, inspector)).toThrow(/V2/u);
+    expect(() => compileEvidenceConsumerExecutionV2(MANIFEST, ref("module.full_inspector"))).toThrow();
   });
 
   it("refuses an extra projection outside the exact accepted image", () => {
-    const theory = ref("module.theory_breadcrumb");
+    const theory = ref("module.theory_breadcrumb", 2);
     const original = MANIFEST.bindings.find(row => row.consumer.id === theory.id)!;
     const projection = ref("rules.mobility.reading.legal_moves");
     const extra = { ...original, adapter: ref("fixture.extra"), projection };
@@ -81,20 +186,20 @@ describe("binding execution and source absence", () => {
   });
 
   it("refuses duplicate exact consumer declarations", () => {
-    const theory = ref("module.theory_breadcrumb");
+    const theory = ref("module.theory_breadcrumb", 2);
     const declaration = MANIFEST.consumers.find(row => row.id === theory.id)!;
     expect(() => compile({ ...MANIFEST, consumers: [...MANIFEST.consumers, declaration] }, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
   });
 
   it("refuses duplicate accepted refs instead of silently collapsing the declaration", () => {
-    const theory = ref("module.theory_breadcrumb");
+    const theory = ref("module.theory_breadcrumb", 2);
     const declaration = MANIFEST.consumers.find(row => row.id === theory.id)!;
     const consumers = MANIFEST.consumers.map(row => row === declaration ? { ...row, accepts: [...row.accepts, row.accepts[0]!] } : row);
     expect(() => compile({ ...MANIFEST, consumers }, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
   });
 
   it("preserves every declared adapter when two valid adapters serve the same accepted projection", () => {
-    const theory = ref("module.theory_breadcrumb");
+    const theory = ref("module.theory_breadcrumb", 2);
     const original = MANIFEST.bindings.find(row => row.consumer.id === theory.id && row.projection.id === "theory.shapes.firing")!;
     const extra = { ...original, adapter: ref("fixture.second_form") };
     const compiled = compile({ ...MANIFEST, bindings: [...MANIFEST.bindings, extra] }, theory);
@@ -110,10 +215,10 @@ describe("binding execution and source absence", () => {
   });
 
   it("compiles the complete production Theory consumer with optional source policies", () => {
-    const theory = compile(MANIFEST, ref("module.theory_breadcrumb"));
+    const theory = compile(MANIFEST, ref("module.theory_breadcrumb", 2));
     expect(theory.bindings.map(row => `${row.binding.projection.id}@${row.binding.projection.version}`).sort()).toEqual([
       "derived.explorer.population_summary@1", "pack.authored.claim@1",
-      "theory.opening.current_endpoint@1", "theory.shapes.firing@1",
+      "theory.opening.current_endpoint@1", "theory.shapes.firing@3",
     ]);
     for (const row of theory.bindings) expect(row.sourceAbsence).toEqual(OPTIONAL);
     const unavailable = aggregate(theory, satisfied(theory, []));
@@ -136,10 +241,10 @@ describe("binding execution and source absence", () => {
       const { sourceAbsence: _policy, ...withoutPolicy } = row;
       return withoutPolicy;
     });
-    expect(() => compile({ ...MANIFEST, bindings }, ref("module.theory_breadcrumb"))).toThrow(/BINDING_SOURCE_ABSENCE/u);
+    expect(() => compile({ ...MANIFEST, bindings }, ref("module.theory_breadcrumb", 2))).toThrow(/BINDING_SOURCE_ABSENCE/u);
     const crossed = bindings.map(row => row.consumer.id === "module.theory_breadcrumb" && row.projection.id === "derived.explorer.population_summary"
       ? { ...row, sourceAbsence: { necessity: "optional", whenNoPath: "operation_unavailable" } as unknown as BindingSourceAbsence } : row);
-    expect(() => compile({ ...MANIFEST, bindings: crossed }, ref("module.theory_breadcrumb"))).toThrow(/BINDING_SOURCE_ABSENCE/u);
+    expect(() => compile({ ...MANIFEST, bindings: crossed }, ref("module.theory_breadcrumb", 2))).toThrow(/BINDING_SOURCE_ABSENCE/u);
   });
 
   it.each([OPTIONAL, EMPTY, UNAVAILABLE])("compiles each literal absence arm: $whenNoPath", policy => {

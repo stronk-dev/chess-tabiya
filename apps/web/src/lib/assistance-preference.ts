@@ -28,6 +28,10 @@ export const assistanceProfile = deriveWorkflowContext;
 export interface PreferenceStorage { getItem(key: string): string | null; setItem(key: string, value: string): void; }
 
 export function workflowPreferenceKey(context: WorkflowContextId): string { return `tabiya.workflow.v2.${context}`; }
+export const WORKFLOW_PREFERENCE_CHANGED = "tabiya:workflow-preference-changed";
+export function isWorkflowPreferenceStorageKey(context: WorkflowContextId, key: string | null): boolean {
+  return key === null || key === workflowPreferenceKey(context) || key === legacyWorkflowKey(context) || key === legacyAssistanceKey(context);
+}
 const legacyAssistanceKey = (context: WorkflowContextId): string => `tabiya.assistance.v1.${context}`;
 const legacyWorkflowKey = (context: WorkflowContextId): string => `tabiya.workflow.v1.${context}`;
 
@@ -90,7 +94,10 @@ export function loadWorkflowPreference(context: WorkflowContextId, storage?: Pre
 export function saveWorkflowPreference(context: WorkflowContextId, value: WorkflowPreferenceV2, storage?: PreferenceStorage): boolean {
   const serialized = serializeWorkflowPreferenceV2(value);
   if (storage === undefined) return false;
-  try { storage.setItem(workflowPreferenceKey(context), serialized); return true; } catch { return false; }
+  try { storage.setItem(workflowPreferenceKey(context), serialized); } catch { return false; }
+  // Storage events cover other documents; a successful write in this document is observed here.
+  try { if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(WORKFLOW_PREFERENCE_CHANGED, { detail: { context } })); } catch { /* a notification failure cannot undo a successful write */ }
+  return true;
 }
 
 /** The requested (pre-server) nine fields, for Advanced editors and non-run surfaces. */

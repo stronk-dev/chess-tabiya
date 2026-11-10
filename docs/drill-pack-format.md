@@ -1,8 +1,36 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.32; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.33; a pack's own
 `version` remains semver and is part of its digest.
+
+Version 0.33 adds optional, closed `conventionRef` pairs to `king_opposition`,
+`backward_pawn` and `outpost`, including their applicable quantified templates. The exact
+pairs are `king-opposition-unobstructed@1`, `backward-pawn@1` and `outpost-candidate@1`;
+the JSON field is `{ "id": "…", "version": 1 }`. An absent ref retains the legacy meaning.
+Both schemas derive this compatibility table from one checked source. Explicit refs earn
+separate capability requirements for the exact successor predicate; old requirements do not
+silently change. Runtime migration remains in progress under `rfc/foundation-source-identity.md`;
+schema acceptance is not proof that every authoring and learner workflow has migrated. Existing
+content has not been rewritten.
+
+`make expression-census` evaluates authored structural sites through original validator-issued
+documents and actual registered shape dependencies. It includes plan-consequence and transition
+position roots without counting their nested AST nodes again. Reports distinguish unavailable
+sources and witness evaluation failures from non-firing expressions or illegal chess lines;
+`shape-check` preserves those errors for selected external drafts too. This diagnostic path
+does not rewrite content, register selected drafts, or qualify a pack for publication.
+
+`make foundation-authored-migration-report` compares the accepted36 literal king-opposition,
+backward-pawn and outpost sites with their exact successor refs. Each experiment changes one ref
+in a detached whole-document draft; original files, versions and requirements remain unchanged.
+Standalone subtree truth and its containing structural condition are separate, including mirrors
+and quantified members. Counts compare matched booleans; joint migration effects are unmeasured.
+Every original position occurrence is counted; illegal replay omissions prevent completeness.
+The exact file/document/kind/pointer inventory must match, beyond the8/5/23 totals. Author choices
+remain pending. Optional `OUT=.cache/authored-convention-migration.json` writes bounded trace
+samples and complete counts outside the inputs, with physical alias checks and atomic replacement.
+This is a local diagnostic, not a publication or semantic-qualification decision.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
 supplies leg entries and objectives, not authored position jumps or automatic phase
@@ -416,3 +444,12 @@ the expression census use the same expansion seam, while the registry-free runti
 an unresolved raw reference. `plan_consequence` remains readable but is deprecated; author
 `structural_feature` with `plan_signature` instead. Pack check warns when a bound plan signature
 has been copied inline.
+
+
+Current authored timing/transition evaluation keeps original document-owned expression identities
+through compilation. Default timing rules, opening/closing conditions and explicit current boundary
+checks share the same authoring/objective source path. Complete consumer admission and source
+checks precede early exits; a missing plan is unavailable rather than a synthetic true condition.
+These handles are ephemeral, not pack JSON or persisted run fields. Pack files stay portable;
+remaining authored census/witness tooling and content migration are separately tracked in
+`planning/foundation-source-identity/plan.md`.

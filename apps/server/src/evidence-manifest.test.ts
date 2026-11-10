@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { EVIDENCE_CONTRACT_DECLARATIONS, compileEvidenceManifest } from "@chess-tabiya/runtime";
+import { CURRENT_CONSUMER_OPERATION_IDS, MODULE_CONSUMER_IDS, MODULE_EVIDENCE_CONSUMER_OPERATIONS, RUNTIME_EVIDENCE_CONSUMER_OPERATIONS, EVIDENCE_CONTRACT_DECLARATIONS, assertEvidenceConsumerOperations, compileEvidenceManifest } from "@chess-tabiya/runtime";
+
+import { WEB_EVIDENCE_CONSUMER_OPERATIONS } from "../../web/src/lib/evidence-consumer-operations.js";
+import { SERVER_EVIDENCE_CONSUMER_OPERATIONS } from "./evidence-consumer-operations.js";
 
 import {
   EVIDENCE_MANIFEST,
@@ -18,6 +21,17 @@ import { EVIDENCE_KINDS } from "./sourcing/types.js";
 import { CAPABILITY_DISPOSITIONS } from "./capabilities.js";
 
 describe("server evidence manifest aggregate", () => {
+  it("registers every actual consumer operation and refuses an omitted modern model operation", () => {
+    const operations = [...RUNTIME_EVIDENCE_CONSUMER_OPERATIONS, ...SERVER_EVIDENCE_CONSUMER_OPERATIONS,
+      ...WEB_EVIDENCE_CONSUMER_OPERATIONS, ...MODULE_EVIDENCE_CONSUMER_OPERATIONS];
+    const ids = [...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS];
+    expect(() => assertEvidenceConsumerOperations(ids, EVIDENCE_MANIFEST.consumers, operations)).not.toThrow();
+    expect(() => assertEvidenceConsumerOperations(ids, EVIDENCE_MANIFEST.consumers,
+      operations.filter(row => row.consumer.id !== "inspector.human_split" || row.consumer.version !== 2))).toThrow();
+    expect(() => assertEvidenceConsumerOperations(ids, EVIDENCE_MANIFEST.consumers,
+      operations.filter(row => row.consumer.id !== "profile.game_facts"))).toThrow();
+  });
+
   const successorFamilies = ["inspector.corpus", "runtime.repertoire_scan", "runtime.return_frequency", "opponent.selection"] as const;
 
   function distinctPolicyManifest() {
@@ -107,7 +121,8 @@ describe("server evidence manifest aggregate", () => {
   it("exposes only consumer-safe binding summaries, never payloads or provider secrets", async () => {
     const value = evidenceManifestCapabilities(await testProviderHealth({ "stockfish-analysis": "available", "maia-inference": "available", "external-voice": "unverified", "explorer-primary": "unverified", "tablebase-primary": "unverified" }));
     expect(value.digest).toMatch(/^[a-f0-9]{64}$/);
-    expect(value.counts).toEqual({ producers: 49, projections: 320, consumers: 42, bindings: 566, semanticEvents: 88, eligibility: 88, reasons: 16, selectionPolicies: 1 });
+    // Current selector2, separate validation1 and private subject consumer are distinct images.
+    expect(value.counts).toEqual({ producers: 50, projections: 404, consumers: 52, bindings: 698, semanticEvents: 86, eligibility: 141, reasons: 16, selectionPolicies: 1 });
     expect(JSON.stringify(value)).not.toMatch(/bestMoveUci|principalVariation|apiKey|authoredText/);
     expect(value.bindings.every((binding) => binding.consumerId.length > 0 && binding.projectionId.length > 0)).toBe(true);
   });

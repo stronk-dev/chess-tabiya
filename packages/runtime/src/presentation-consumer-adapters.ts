@@ -17,10 +17,17 @@ import { MODULE_CURRENT_IMAGE } from "./evidence-catalog.js";
 import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evidence-contract.js";
 import { RULES_EVIDENCE_FACTS, type RulesEvidenceFact } from "./evidence-ref.js";
 import type { AdapterSpec, ComponentValue, ConventionReceipt, DistributionOperand, PresentationKit } from "./presentation-contract.js";
+import { bindFactStatement, bindSquareFactStatement } from "./presentation-fact-contract.js";
 import { PresentationSchemaError, factRenderer, listPhrase, plural, s, side, type Parser } from "./presentation-schema.js";
 import type { ReviewEnginePoint, ReviewEvalDelta, ReviewMateTransition } from "./review-points.js";
 import { CORPUS_GUARD } from "./population-guard.js";
 import type { ExplorerInspectorPopulation } from "./explorer-summary.js";
+import type { MaiaNodeDistribution } from "./maia-node.js";
+import { parseMaiaNodeDistributionOperands, parseMaiaNodeWdlOperands, maiaNodeBandSentence } from "./maia-node-presentation.js";
+import { STRUCTURAL_DETAIL_FIELDS, STRUCTURAL_DETAIL_KINDS, STRUCTURAL_DETAIL_RENDERERS } from "./structural-reading-detail.js";
+import { assertRegisteredShapeFiringWire, registeredShapeFiringOperands } from "./registered-shape-presentation.js";
+import { parseRecordedClockReading, parseRecordedClockDecision, recordedClockRemainingSentence, recordedClockUsedSentence,
+  assertRecordedClockStatement } from "./recorded-clock-presentation.js";
 
 // ---------------------------------------------------------------------------------------------
 // §2.3 — the production consumer classification
@@ -28,7 +35,7 @@ import type { ExplorerInspectorPopulation } from "./explorer-summary.js";
 
 /**
  * The route-backed presentation class of a consumer. `module_presented` is the Checkpoint-B learner
- * module-seat population; `module.full_inspector@1` joins the Inspector class (§2.3).
+ * module-seat population; current `module.full_inspector@2` joins the Inspector class (§2.3).
  */
 export type PresentationConsumerClass =
   | "ordinary_presented"
@@ -55,7 +62,7 @@ const classRow = (consumer: string, classification: PresentationConsumerClass, r
  */
 export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRow[] = Object.freeze([
   classRow("authoring.claim_binding@1", "author_operator_presented", "apps/server/src/sourcing/claim-binding.ts", "consumeClaimBindingRecords"),
-  classRow("board.pivotal_marker@1", "ordinary_presented", "packages/runtime/src/pivotal.ts", "consumePivotalMarkers"),
+  classRow("board.pivotal_marker@2", "ordinary_presented", "packages/runtime/src/pivotal-presentation.ts", "consumePivotalMarkers"),
   classRow("board.selected_square_sight@1", "ordinary_presented", "packages/runtime/src/reading-evidence.ts", "consumeSelectedSquareSight"),
   classRow("compare.engine_trajectory@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "consumeComparisonEngineTrajectory"),
   classRow("compare.structure_strip@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "consumeComparisonStripEvidence"),
@@ -68,16 +75,21 @@ export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRo
   classRow("inspector.corpus@1", "inspector_presented", "apps/server/src/inspector-corpus.ts", "consumeCorpus"),
   classRow("inspector.corpus@2", "inspector_presented", "apps/server/src/inspector-corpus.ts", "consumeCorpus"),
   classRow("inspector.human_split@1", "inspector_presented", "apps/web/src/lib/inspector-evidence.ts", "consumeHumanSplit"),
+  classRow("inspector.human_split@2", "inspector_presented", "apps/server/src/inspector-maia.ts", "consumeMaiaNodeDistribution"),
   classRow("inspector.move_transition@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumeMoveTransition"),
-  classRow("inspector.position_structure@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumePositionStructure"),
+  classRow("inspector.position_structure@2", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumePositionStructure"),
   classRow("opponent.selection@1", "non_presentational_operation", "apps/server/src/opponent-selector.ts", "consumeOpponentSelectionEvidence"),
   classRow("review.story@1", "ordinary_presented", "packages/runtime/src/story.ts", "renderReviewStoryReceipt"),
+  classRow("review.recorded_clock@1", "ordinary_presented", "packages/runtime/src/recorded-clock-review.ts", "consumeRecordedClockEvidence"),
   classRow("runtime.evidence_ref@1", "inspector_presented", "apps/web/src/lib/evidence-sentences.ts", "renderDeclaredEvidenceRef"),
   classRow("runtime.branch_decidedness@1", "non_presentational_operation", "apps/server/src/branch-tablebase.ts", "consumeBranchDecidednessEvidence"),
   classRow("runtime.queued_tablebase@1", "non_presentational_operation", "apps/server/src/queued-tablebase.ts", "consumeQueuedTablebaseEvidence"),
   classRow("runtime.repertoire_scan@1", "non_presentational_operation", "apps/server/src/repertoire.ts", "consumeRepertoireCorpus"),
-  classRow("theory.shape_firing@1", "ordinary_presented", "packages/runtime/src/shape-firing.ts", "consumeShapeFiring"),
-  ...MODULE_CURRENT_IMAGE.map(({ consumer, implementation }) => classRow(`${consumer.id}@${consumer.version}`, consumer.id === "module.full_inspector" ? "inspector_presented" : "module_presented", "packages/runtime/src/module-packets.ts", implementation)),
+  classRow("theory.shape_firing@1", "ordinary_presented", "packages/runtime/src/shape-presentation.ts", "consumeShapeFiring"),
+  classRow("theory.shape_firing@2", "ordinary_presented", "packages/runtime/src/shape-presentation.ts", "consumeCurrentShapeFiring"),
+  ...MODULE_CURRENT_IMAGE.map(({ consumer, implementation }) => classRow(`${consumer.id}@${consumer.version}`,
+    consumer.id === "module.full_inspector" ? "inspector_presented" : "module_presented",
+    consumer.id === "module.full_inspector" ? "apps/server/src/inspector-query.ts" : "packages/runtime/src/module-packets.ts", implementation)),
 ]);
 
 /** The class of one `id@version` consumer, or `undefined` when it is unclassified. */
@@ -240,7 +252,7 @@ type AttachedOperands = ReturnType<typeof attachedSchema>;
 
 function attachedSentence(value: AttachedOperands): string {
   if (value.kind === "tablebase") {
-    const details = [...(value.pieceCount === undefined ? [] : [plural(value.pieceCount, "piece")]), ...(value.dtz === undefined ? [] : [`DTZ ${Math.abs(value.dtz)}`])];
+    const details = [...(value.pieceCount === undefined ? [] : [plural(value.pieceCount, "piece")]), ...(value.dtz === undefined ? [] : [`DTZ ${value.dtz}`])];
     return `Attached exact tablebase reading: ${value.category === undefined ? "no category retained" : `${TABLEBASE_CATEGORIES[value.category]} for the side to move`}${details.length === 0 ? "" : ` (${details.join(", ")})`}.`;
   }
   const reader = READERS[value.reader];
@@ -277,6 +289,19 @@ const recordedMoveSchema = s.obj({ offset: s.nat, move: s.union("kind", {
 }) });
 
 export const CONSUMER_FACT_RENDERERS = Object.freeze({
+  "review.clock_remaining@1": factRenderer(parseRecordedClockReading, recordedClockRemainingSentence),
+  "review.clock_used@1": factRenderer(parseRecordedClockDecision, recordedClockUsedSentence),
+  ...STRUCTURAL_DETAIL_RENDERERS,
+  "consumer.maia_node_distribution@1": factRenderer(parseMaiaNodeDistributionOperands, value => {
+    if (value.candidates.length === 0) throw new TypeError("An empty model window is stated as absence, not a presented evidence item");
+    return [maiaNodeBandSentence(value), "The model reported a bounded window of moves. Missing shares are unknown; these are not move-quality ratings.",
+      ...value.candidates.map(row => `${coordinates(uciParts(row.moveUci))} — reported rank ${row.rank}: ${row.mass === null ? "model share not reported" : `${Math.round(row.mass * 10000) / 100}% model share`}.`)].join("\n");
+  }),
+  "consumer.maia_node_candidate_wdl@1": factRenderer(parseMaiaNodeWdlOperands, value => {
+    if (value.candidates.length === 0) throw new TypeError("Absent reported WDL is not a presented evidence item");
+    return [maiaNodeBandSentence(value), "Reported model win/draw/loss values for these candidate rows; not move grades or a predicted learner move.",
+      ...value.candidates.map(row => `${coordinates(uciParts(row.moveUci))} — reported rank ${row.rank}: win ${row.wdl.win}/1000, draw ${row.wdl.draw}/1000, loss ${row.wdl.loss}/1000.`)].join("\n");
+  }),
   "consumer.explorer_population@1": factRenderer(s.obj({ total: s.nat, white: s.nat, draws: s.nat, black: s.nat, ratings: s.arr(s.nat), speeds: s.arr(s.str), since: s.nullable(s.str), until: s.nullable(s.str), unlisted: s.nat, lastPlayedMonth: s.nullable(s.str), moves: s.arr(s.obj({ san: s.san, uci: s.uci, playedCount: s.nat, white: s.nat, draws: s.nat, black: s.nat })) }), (value) => {
     if (value.total < 100 || value.white + value.draws + value.black !== value.total || value.unlisted + value.moves.reduce((sum, row) => sum + row.playedCount, 0) !== value.total || value.moves.some(row => row.white + row.draws + row.black !== row.playedCount)) throw new TypeError("Inspector population counts do not retain the admitted totals");
     const month = /^\d{4}-(0[1-9]|1[0-2])$/u;
@@ -356,7 +381,7 @@ const SAN_SHAPE = /^(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[
 const PROMOTION_ROLES: Readonly<Record<string, Role>> = Object.freeze({ q: "queen", r: "rook", b: "bishop", n: "knight" });
 function uciParts(uci: string): { readonly from: SquareName; readonly to: SquareName; readonly promotion?: Role } {
   const match = UCI_SHAPE.exec(uci);
-  if (match === null) throw new TypeError("an attached move is not canonical UCI");
+  if (match === null) throw new PresentationSchemaError("attached move is not canonical UCI");
   return { from: match[1] as SquareName, to: match[2] as SquareName, ...(match[3] === undefined ? {} : { promotion: PROMOTION_ROLES[match[3]]! }) };
 }
 
@@ -437,45 +462,86 @@ const GUIDANCE_TEXT = Object.freeze(["guidance.deterministic", "guidance.voice",
 const PAWN_STRUCTURE_KINDS: ReadonlySet<StructuralKind> = new Set(["backward_pawn", "outpost", "pawn_safe_square"]);
 export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
   const specs: AdapterSpec[] = [];
-  const add = (consumer: string | VersionedEvidenceId, projection: VersionedEvidenceId, component: AdapterSpec["component"], forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], construct: Construct, composition?: AdapterSpec["composition"]) =>
-    specs.push({ consumer: typeof consumer === "string" ? V1(consumer) : consumer, projection, component, forms, sourceOperands, assertions, construct, ...(composition === undefined ? {} : { composition }) });
-  const statement = (rendererId: Parameters<PresentationKit["fact"]>[0], convention: Convention, operands: unknown, binding: Binding = "declared_convention"): ComponentValue =>
-    ({ id: "fact_statement", operand: kit.fact(rendererId, binding, convention, operands as never) });
-  const factAdapter = (consumer: string, projection: VersionedEvidenceId, forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], rendererId: Parameters<PresentationKit["fact"]>[0], convention: Convention | ((payload: unknown) => Convention), read: (payload: unknown) => unknown, binding: Binding = "declared_convention") =>
-    add(consumer, projection, "fact_statement", forms, sourceOperands, assertions, (evidence) => statement(rendererId, typeof convention === "function" ? convention(evidence.payload) : convention, read(evidence.payload), binding));
+  const add = (consumer: string | VersionedEvidenceId, projection: VersionedEvidenceId, component: AdapterSpec["component"], forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], construct: Construct, composition?: AdapterSpec["composition"], validateWireComponent?: AdapterSpec["validateWireComponent"]) => {
+    const components = composition?.members.map(member => member.component) ?? [component];
+    if (components.some(id => id === "fact_statement" || id === "square_set") && validateWireComponent === undefined) throw new TypeError("Consumer fact/caption adapter requires its registered wire validator");
+    specs.push({ consumer: typeof consumer === "string" ? V1(consumer) : consumer, projection, component, forms, sourceOperands, assertions, construct, ...(composition === undefined ? {} : { composition }), ...(validateWireComponent === undefined ? {} : { validateWireComponent }) });
+  };
+  const factAdapter = (consumer: string | VersionedEvidenceId, projection: VersionedEvidenceId, forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], rendererId: Parameters<PresentationKit["fact"]>[0], convention: Convention, read: (payload: unknown) => unknown, binding: Binding = "declared_convention", assertOperands?: (operands: unknown) => void) => {
+    const contract = bindFactStatement(kit.fact, rendererId, binding, convention);
+    add(consumer, projection, "fact_statement", forms, sourceOperands, assertions, evidence => {
+      const operands = read(evidence.payload); assertOperands?.(operands);
+      return contract.statement(operands as never);
+    }, undefined, component => {
+      contract.validateWireComponent(component);
+      if (component.id === "fact_statement") assertOperands?.(component.operand.operands);
+    });
+  };
+
+  // Original historical clock facts retain their full factory payload, not caller prose.
+  for (const [projection, renderer, convention] of [
+    ["run.record.clock_reading", "review.clock_remaining@1", "recorded-run@1"],
+    ["run.record.clock_decision", "review.clock_used@1", "clock-spend-input@1"],
+  ] as const) {
+    const contract = bindFactStatement(kit.fact, renderer, "recorded_run", convention);
+    add("review.recorded_clock", V1(projection), "fact_statement", ["panel", "sentence"],
+      projection.endsWith("clock_reading") ? ["subject", "original", "retention", "sample", "control"]
+        : ["subject", "actor", "decision", "phase", "current", "previous", "control", "availableMs", "clockUsedMs"],
+      ["copied_byte_equal", "retained_convention"], evidence => contract.statement(evidence.payload as never), undefined,
+      (component, ref) => { contract.validateWireComponent(component); assertRecordedClockStatement(component, ref); });
+  }
 
   // --- pivotal markers: four exact derived projections, six consumers (review.story is Checkpoint A)
   const pivotalForms: Readonly<Record<string, readonly EvidenceForm[]>> = Object.freeze({
-    "board.pivotal_marker": ["panel", "sentence", "timeline_marker"], "compare.structure_strip": ["panel", "sentence", "timeline_marker"],
+    "compare.structure_strip": ["panel", "sentence", "timeline_marker"],
     "guidance.deterministic": ["sentence"], "guidance.voice": ["sentence"], "guidance.voice_story": ["sentence"], "guidance.voice_compare": ["sentence"],
   });
   for (const [consumer, forms] of Object.entries(pivotalForms)) for (const kind of PIVOTAL_KINDS) {
-    factAdapter(consumer, V1(`derived.pivotal.${kind}`), forms, ["kind", "detail"], ["mechanical_transform"], "consumer.pivotal_marker@1", PIVOTAL_CONVENTIONS[kind], pivotalOperands);
+    factAdapter(consumer, V1(`derived.pivotal.${kind}`), forms, ["kind", "detail"], ["mechanical_transform"], "consumer.pivotal_marker@1", PIVOTAL_CONVENTIONS[kind], pivotalOperands, "declared_convention", operands => {
+      if ((operands as { readonly kind: string }).kind !== kind) throw new TypeError("Pivotal fact crosses its declared source kind");
+    });
+  }
+  for (const kind of ["irreversibility", "phase_change"] as const) {
+    factAdapter({ id: "board.pivotal_marker", version: 2 }, V1(`derived.pivotal.${kind}`), ["panel", "sentence", "timeline_marker"],
+      ["kind", "detail"], ["mechanical_transform"], "consumer.pivotal_marker@1", PIVOTAL_CONVENTIONS[kind], pivotalOperands,
+      "declared_convention", operands => {
+        if ((operands as { readonly kind: string }).kind !== kind) throw new TypeError("Pivotal fact crosses its declared source kind");
+      });
   }
 
   // --- structural readings: one fact's squares per reading (board sight lights them; Inspector lists them)
   // A file-level reading (open file, isolated pawn, …) retains no squares within its declared
   // `kind, squares` operands: the Inspector states it; the board has nothing to light.
-  const structuralCaption = (evidence: DeclaredEvidence<unknown>) => {
-    const observation = evidence.payload as { readonly kind: StructuralKind; readonly squares: readonly SquareName[] };
-    const squares = [...new Set(observation.squares)];
-    return { squares, caption: kit.fact("consumer.structural_squares@1", "declared_convention", PAWN_STRUCTURE_KINDS.has(observation.kind) ? "pawn-structure@1" : "board-rules@1", { kind: observation.kind, squares }) };
-  };
   for (const kind of STRUCTURAL_KINDS) {
+    const contract = bindSquareFactStatement(kit, "consumer.structural_squares@1", "declared_convention", PAWN_STRUCTURE_KINDS.has(kind) ? "pawn-structure@1" : "board-rules@1", value => value.squares, "blue");
+    const structuralCaption = (evidence: DeclaredEvidence<unknown>) => {
+      const observation = evidence.payload as { readonly kind: StructuralKind; readonly squares: readonly SquareName[] };
+      if (observation.kind !== kind) throw new TypeError("Structural statement crosses its declared source kind");
+      const squares = [...new Set(observation.squares)];
+      return { kind, squares };
+    };
+    const validateWireComponent: NonNullable<AdapterSpec["validateWireComponent"]> = (component, evidence) => {
+      contract.validateWireComponent(component, evidence);
+      const caption = component.id === "fact_statement" ? component.operand : component.id === "square_set" ? component.operand.caption : undefined;
+      if (caption?.rendererId !== "consumer.structural_squares@1" || caption.operands.kind !== kind) throw new TypeError("Structural fact crosses its declared source kind");
+    };
     add("board.selected_square_sight", V1(`rules.structural.reading.${kind}`), "square_set", ["lit_squares", "piece_halo"], ["kind", "squares"], ["copied_byte_equal"], (evidence) => {
-      const { squares, caption } = structuralCaption(evidence);
-      if (squares.length === 0) throw new TypeError("a reading with no retained squares has nothing to light; the selected-square operation offers only readings containing a square");
-      return kit.squareSet(evidence, squares, "blue", caption);
-    });
-    add("inspector.position_structure", V1(`rules.structural.reading.${kind}`), "fact_statement", ["list", "panel"], ["kind", "squares"], ["copied_byte_equal"], (evidence) => ({ id: "fact_statement", operand: structuralCaption(evidence).caption }));
+      return contract.square(evidence, structuralCaption(evidence));
+    }, undefined, validateWireComponent);
+  }
+  for (const kind of STRUCTURAL_DETAIL_KINDS) {
+    factAdapter(V1("inspector.position_structure", 2), V1(`rules.structural.reading.${kind}`, 2),
+      ["list", "panel"], STRUCTURAL_DETAIL_FIELDS[kind], ["copied_byte_equal"],
+      `consumer.structural_detail.${kind}@2`, PAWN_STRUCTURE_KINDS.has(kind) ? "pawn-structure@1" : "board-rules@1", payload => payload);
   }
   const namedStructure = (payload: unknown) => { const match = payload as { readonly id: string; readonly name: string; readonly squares: readonly SquareName[] }; return { id: match.id, name: match.name, squares: [...match.squares] }; };
   const NAMED = V1("rules.structural.reading.named_structure", 2);
+  const namedContract = bindSquareFactStatement(kit, "play.named_structure@1", "declared_convention", "structure-catalogue@1", value => value.squares, "blue");
   add("board.selected_square_sight", NAMED, "square_set", ["lit_squares", "piece_halo"], ["id", "name", "squares"], ["copied_byte_equal"], (evidence) => {
     const operands = namedStructure(evidence.payload);
-    return kit.squareSet(evidence, operands.squares, "blue", kit.fact("play.named_structure@1", "declared_convention", "structure-catalogue@1", operands as never));
-  });
-  factAdapter("inspector.position_structure", NAMED, ["list", "panel"], ["id", "name", "squares"], ["copied_byte_equal"], "play.named_structure@1", "structure-catalogue@1", namedStructure);
+    return namedContract.square(evidence, operands as never);
+  }, undefined, namedContract.validateWireComponent);
+  factAdapter(V1("inspector.position_structure", 2), NAMED, ["list", "panel"], ["id", "name", "squares"], ["copied_byte_equal"], "play.named_structure@1", "structure-catalogue@1", namedStructure);
 
   // --- position guidance text (deterministic, voice, voice-story)
   for (const consumer of GUIDANCE_TEXT) {
@@ -503,6 +569,10 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
   factAdapter(story, V1("run.record.imported_result"), ["sentence"], ["result"], ["copied_byte_equal"], "story.imported_result@1", "recorded-run@1", (payload) => ({ result: (payload as { readonly result: string }).result }), "recorded_run");
   factAdapter(story, V1("theory.shapes.firing"), ["sentence"], ["entryId"], ["mechanical_transform"], "play.shape@1", "shape-catalogue@1", (payload) => ({ title: shapeTitle((payload as { readonly entryId: string }).entryId) }));
   factAdapter("theory.shape_firing", V1("theory.shapes.firing"), ["panel", "sentence", "timeline_marker"], ["entryId"], ["mechanical_transform"], "play.shape@1", "shape-catalogue@1", (payload) => ({ title: shapeTitle((payload as { readonly entryId: string }).entryId) }));
+  const currentShape = bindFactStatement(kit.fact, "inspector.registered_shape_firing@2", "declared_convention", "shape-catalogue@1");
+  add(V2("theory.shape_firing"), { id: "theory.shapes.firing", version: 3 }, "fact_statement", ["panel", "sentence", "timeline_marker"],
+    ["entryId", "firstNodeId", "lastNodeId", "openEnded", "authority"], ["copied_byte_equal", "retained_convention"],
+    evidence => currentShape.statement(registeredShapeFiringOperands(evidence)), undefined, assertRegisteredShapeFiringWire);
 
   // --- recorded consequence (both voice consumers; review.story is Checkpoint A)
   const consequence = (payload: unknown) => {
@@ -560,36 +630,46 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
     factAdapter("inspector.move_transition", V1(`rules.transition.reading.${kind}.${direction}`), ["list", "panel"], ["kind", "color", "direction", "count"], ["copied_byte_equal"], "consumer.transition_count@1", "piece-geometry@1", (payload) => {
       const observation = payload as { readonly kind: string; readonly color: Color; readonly direction: string; readonly count: number };
       return { kind: observation.kind, color: observation.color, direction: observation.direction, count: observation.count };
+    }, "declared_convention", operands => {
+      const value = operands as { readonly kind: string; readonly direction: string };
+      if (value.kind !== kind || value.direction !== direction) throw new TypeError("Transition fact crosses its declared source kind/direction");
     });
   }
   for (const subkind of ["castled", "clock_zeroed", "last_of_role", "pawn_break"] as const) {
-    factAdapter("inspector.move_transition", V1(`rules.transition.reading.move_irreversibility.${subkind}`), ["list", "panel"], ["subkind"], ["copied_byte_equal"], "consumer.irreversibility@1", "board-rules@1", (payload) => ({ subkind: (payload as { readonly subkind: string }).subkind }));
+    factAdapter("inspector.move_transition", V1(`rules.transition.reading.move_irreversibility.${subkind}`), ["list", "panel"], ["subkind"], ["copied_byte_equal"], "consumer.irreversibility@1", "board-rules@1", (payload) => ({ subkind: (payload as { readonly subkind: string }).subkind }), "declared_convention", operands => {
+      if ((operands as { readonly subkind: string }).subkind !== subkind) throw new TypeError("Irreversibility fact crosses its declared source subkind");
+    });
   }
 
   // --- Inspector: whole-source and explicit standalone population presentations.
   // Only canonical moves and literal counts cross the receipt door. Provider SAN, source
   // bodies, seals, headers and diagnostics remain internal; no client mints source evidence.
-  for (const version of [1, 2]) add({ id: "inspector.corpus", version }, V1("derived.explorer.inspector_population"), "fact_statement", ["list", "panel"], ["request", "totals", "moves", "unlisted", "lastPlayedMonth"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => {
-    const { request, totals, moves, unlisted, lastPlayedMonth } = evidence.payload as ExplorerInspectorPopulation;
-    return statement("consumer.explorer_population@1", "explorer-population@1", {
+  for (const version of [1, 2]) factAdapter({ id: "inspector.corpus", version }, V1("derived.explorer.inspector_population"), ["list", "panel"], ["request", "totals", "moves", "unlisted", "lastPlayedMonth"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], "consumer.explorer_population@1", "explorer-population@1", payload => {
+    const { request, totals, moves, unlisted, lastPlayedMonth } = payload as ExplorerInspectorPopulation;
+    return {
       ...totals, ratings: [...request.ratingBuckets], speeds: [...request.speeds], since: request.since, until: request.until,
       unlisted, lastPlayedMonth, moves,
-    });
+    };
   });
-  add("inspector.corpus", V1("human.explorer.population"), "fact_statement", ["list", "panel"], ["result"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], (evidence) => {
-    const page = evidence.payload as { readonly result: import("./corpus-result.js").CorpusResult };
+  factAdapter("inspector.corpus", V1("human.explorer.population"), ["list", "panel"], ["result"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], "consumer.explorer_population@1", "explorer-population@1", payload => {
+    const page = payload as { readonly result: import("./corpus-result.js").CorpusResult };
     const result = page.result;
     if (result.kind !== "stats") throw new TypeError("An unavailable standalone source cannot render population facts");
-    return statement("consumer.explorer_population@1", "explorer-population@1", {
+    return {
       total: result.total, white: result.white, draws: result.draws, black: result.black,
       ratings: [...result.population.ratings], speeds: [...result.population.speeds], since: result.population.since, until: result.population.until,
       unlisted: result.total - result.moves.reduce((sum, row) => sum + row.playedCount, 0),
       lastPlayedMonth: result.recency.kind === "month" ? result.recency.lastPlayedMonth : null,
       moves: result.moves.map(({ sharePct: _share, ...row }) => row),
-    });
+    };
   });
 
   // --- Inspector: the human-move model's policy (a model output, never a grade)
+  factAdapter({ id: "inspector.human_split", version: 2 }, V1("derived.maia.node_distribution"), ["list", "panel"],
+    ["nodeId", "engine", "requestedBand", "appliedBand", "coverage", "candidates"], ["copied_byte_equal", "retained_convention"], "consumer.maia_node_distribution@1", "maia-reported-window@1", payload => {
+      const { nodeId, engine, requestedBand, appliedBand, coverage, candidates } = payload as MaiaNodeDistribution;
+      return { nodeId, engine, requestedBand, appliedBand, coverage, candidates };
+    });
   add("inspector.human_split", V1("human.maia.policy"), "distribution", ["list", "panel"], ["engine", "targetElo", "candidates"], ["copied_byte_equal", "retained_convention"], (evidence) => {
     const page = evidence.payload as { readonly engine: { readonly name: string; readonly version: string; readonly eloHonored?: boolean; readonly eloApplied?: number }; readonly targetElo: number | null; readonly candidates: readonly { readonly moveUci: string; readonly mass?: number }[] };
     if (page.candidates.length === 0) throw new TypeError("a human-split page with no candidates is stated through its abstention seat, never drawn");
@@ -612,11 +692,19 @@ export function consumerAdapterSpecs(kit: PresentationKit): readonly AdapterSpec
   // --- the evidence-reference sentence: its resolution, its attached source reading and its citation
   const REF = "runtime.evidence_ref";
   factAdapter(REF, V1("run.record.evidence_ref_resolution"), ["sentence"], ["reference", "text", "sourceLabel"], ["authored_text_copied", "mechanical_transform"], "consumer.evidence_reference@1", "recorded-run@1", referenceOperands);
-  const attachedForms: Readonly<Record<string, readonly EvidenceForm[]>> = Object.freeze({
-    "human.maia.event": ["panel"], "live.stockfish.eval": ["panel"], "live.stockfish.pv": ["list", "panel"], "live.stockfish.wdl": ["panel"], "live.syzygy.result": ["panel"],
+  const attachedForms: Readonly<Record<string, { readonly forms: readonly EvidenceForm[]; readonly kind?: AttachedOperands["kind"]; readonly reader?: "engine" | "model" }>> = Object.freeze({
+    "human.maia.event": { forms: ["panel"], reader: "model" },
+    "live.stockfish.eval": { forms: ["panel"], kind: "eval", reader: "engine" },
+    "live.stockfish.pv": { forms: ["list", "panel"], kind: "bestline", reader: "engine" },
+    "live.stockfish.wdl": { forms: ["panel"], kind: "wdl", reader: "engine" },
+    "live.syzygy.result": { forms: ["panel"], kind: "tablebase" },
   });
-  for (const [projection, forms] of Object.entries(attachedForms)) {
-    factAdapter(REF, V1(projection), forms, ["kind", "source", "values"], ["copied_byte_equal", "mechanical_transform"], "consumer.attached_reading@1", "recorded-engine@1", attachedOperands);
+  for (const [projection, source] of Object.entries(attachedForms)) {
+    factAdapter(REF, V1(projection), source.forms, ["kind", "source", "values"], ["copied_byte_equal", "mechanical_transform"], "consumer.attached_reading@1", "recorded-engine@1", attachedOperands, "declared_convention", operands => {
+      const value = operands as AttachedOperands;
+      if (source.kind !== undefined && value.kind !== source.kind
+        || source.reader !== undefined && (value.kind === "tablebase" || value.reader !== source.reader)) throw new TypeError("Attached fact crosses its declared source kind/reader");
+    });
   }
   add(REF, V1("derived.citation.attribution"), "citation", ["list", "panel", "sentence"], ["content", "source"], ["copied_byte_equal", "authored_text_copied"], (evidence) => ({ id: "citation", operand: kit.citation(evidence) }));
 

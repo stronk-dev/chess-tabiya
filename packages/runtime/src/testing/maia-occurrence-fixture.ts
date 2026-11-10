@@ -4,10 +4,16 @@ import { commitMove, createRun } from "../runtime.js";
 import { deriveMaiaRunMoveOccurrence, providerSourceEvidence, recordedEdgeEvidence } from "../evidence-operations.js";
 import { PROVIDER_EXCHANGE_AUTHORITY } from "../provider-exchange.js";
 import { normalizeProviderRequest } from "../provider-requests.js";
-import { maiaCapture, maiaRequest, FIXTURE_AT } from "../provider-test-fixtures.js";
+import { maiaCapture, maiaRequest, maiaTaskCapture, maiaTaskRequest, FIXTURE_AT } from "../provider-test-fixtures.js";
 import { digestRunEventHead, resolveRunSubject } from "../run-subject.js";
 import type { DrillRun, Node } from "../types.js";
 import type { MaiaPolicyPageRequest } from "../provider-types.js";
+import { deriveMaiaNodeDistribution, maiaNodeInputsFromSubject } from "../maia-node.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "../evidence-catalog.js";
+import { evidenceForConsumer } from "../evidence-contract.js";
+import { presentEvidenceItems, serializePresentedEvidence } from "../presentation-contract.js";
+import type { ResolvedRunSubject } from "../run-subject.js";
+import type { HumanSplitPageV2 } from "../maia-node-presentation.js";
 
 export function occurrenceRun(moves: readonly string[] = ["e2e4"], id = "maia-occurrence-fixture", startFen = INITIAL_FEN): DrillRun {
   let run = createRun({ id, packId: "pack", packDigest: `sha256:${"a".repeat(64)}`,
@@ -41,4 +47,22 @@ export function occurrenceFixture() {
   const edge = recordedEdgeEvidence(run, run.nodes[0]!, run.nodes[1]!);
   const page = occurrencePage({ kind: "history_conditioned", startFen: run.start.fen, historyUci: [] });
   return { run, resolved, edge, page, evidence: deriveMaiaRunMoveOccurrence(page, resolved) };
+}
+
+/** Genuine task-source fixture; all receipts still come from the shared provider authority. */
+export function nodeTask(position: MaiaPolicyPageRequest["position"], lines: readonly string[] = ["info multipv 1 policy 0.4 score cp 12 wdl 400 300 300 pv e2e4", "info multipv 3 pv d2d4", "bestmove g1f3"]) {
+  const request = normalizeProviderRequest("maia.inference_task@1", maiaTaskRequest({ position }));
+  const capture = maiaTaskCapture(request, lines);
+  const acquisition = PROVIDER_EXCHANGE_AUTHORITY.makeProviderAcquisitionReceipt({ operation: "maia.inference_task@1", requestedIdentity: request, capture, requestedAt: FIXTURE_AT, retrievedAt: FIXTURE_AT });
+  const { payload, payloadReceipt } = PROVIDER_EXCHANGE_AUTHORITY.makeProviderParsedPayload(acquisition);
+  return providerSourceEvidence("maia.inference_task@1", PROVIDER_EXCHANGE_AUTHORITY.makeProviderDelivery({ kind: "live", acquisition, payload, payloadReceipt, servedAt: FIXTURE_AT }));
+}
+
+/** A public page built from the real factory/consumer/component path, never hand-authored evidence. */
+export function nodePageFixture(task: ReturnType<typeof nodeTask>, resolved: ResolvedRunSubject): HumanSplitPageV2 {
+  const item = deriveMaiaNodeDistribution(maiaNodeInputsFromSubject(task, resolved));
+  const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.human_split", version: 2 }, [item]);
+  const { nodeId, engine, requestedBand, appliedBand, coverage, candidates } = item.payload;
+  return { protocol: "inspector.human_split@2", nodeId, status: candidates.length ? "shown" : "empty_population", engine, requestedBand, appliedBand, coverage, candidates,
+    presentation: serializePresentedEvidence(candidates.length ? presentEvidenceItems(view) : []) };
 }

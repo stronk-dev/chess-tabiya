@@ -1,5 +1,10 @@
 import type { ProviderHealthCapabilities } from "@chess-tabiya/runtime/client";
+import { parseRecordedClockView, type RecordedClockView } from "../../../../packages/runtime/src/recorded-clock-view.js";
+import { parseGuidedShapeQuery, type GuidedShapePage, type GuidedShapeQuery } from "../../../../packages/runtime/src/guided-shape-query.js";
+import { parseGuidedShapePage, type GuidedShapeExpectation } from "./guided-shape-response.js";
 import { assertSavedPackDraft } from "./pack-draft-response.js";
+import type { ReviewAssistanceRequest, ReviewDecision } from "./review-analyze.js";
+import type { InspectorAssistanceRequest } from "./historical-inspector.js";
 import { parseConceptCatalogueView, type ConceptCatalogueView, type ConceptLabelView } from "@chess-tabiya/runtime/client";
 import type {
   DrillPackDefinition,
@@ -29,7 +34,6 @@ import type {
   ReasoningTranscript,
   RunMark,
   ReviewStoryReceipt,
-  ReviewAnalysis,
   ReviewMapProjection,
   BotCardSourceId,
   BotCardStatementId,
@@ -45,10 +49,12 @@ import type {
   FinalizedAssistanceV1,
   RequestedAssistanceV1,
   ModuleQueryRequest,
+  InspectorQueryRequest,
   ImportSourceKind,
   ImportSourceRequestKind,
+  WorkflowContextId,
 } from "@chess-tabiya/runtime/client";
-import { parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseHintResponse, parseReviewStoryReceipt, type HintResponse, type HintRung } from "@chess-tabiya/runtime/client";
+import { PRIMARY_EVIDENCE_MANIFEST, parseBotOpponentPlyResultRow, parseFinalizedAssistanceV1, parseHintResponse, parseReviewStoryReceipt, type HintResponse, type HintResponseContext, type HintRung } from "@chess-tabiya/runtime/client";
 import type { RatingPublication } from "@chess-tabiya/runtime/rating";
 
 import { parsePackCatalog, parsePrincipleCatalog, parseShapeCatalog } from "./content-catalog-response.js";
@@ -153,6 +159,8 @@ export interface PrincipleSummary {
 export type ShapeEntryView = ShapeEntryDefinition & {
   readonly channel: "official" | "community";
   readonly publisherHandle?: string;
+  /** Local transport metadata from the existing /shapes/:id digest header; not authored JSON. */
+  readonly documentDigest?: string;
 };
 
 export interface ShapeDocument {
@@ -670,12 +678,13 @@ export interface Capabilities {
   };
 }
 
-export interface HumanSplitPage {
+export interface LegacyHumanSplitPage {
   readonly nodeId: string;
   readonly engine: OpponentSelection["engine"];
   readonly targetElo: number | null;
   readonly candidates: readonly NonNullable<OpponentSelection["candidates"]>[number][];
 }
+export type HumanSplitPage = LegacyHumanSplitPage | import("@chess-tabiya/runtime/client").HumanSplitPageV2;
 
 export type { CorpusPopulation, CorpusResult } from "@chess-tabiya/runtime/client";
 export type CorpusPage = import("@chess-tabiya/runtime/client").CorpusInspectorPage;
@@ -718,6 +727,8 @@ export type ReviewOutcomeSummary =
 export type GameStory = ReviewStoryReceipt;
 /** rfc/review-map.md: the whole-game Review Map payload from `GET /runs/:id/review`. */
 export type ReviewMap = ReviewMapProjection & {
+  readonly decision: ReviewDecision;
+  readonly workflowContext: WorkflowContextId;
   readonly campaignOrigin?: { readonly campaignRunId: string; readonly nodeId: string; readonly campaignDocumentDigest: string } | null;
   readonly runId: string;
   readonly branchId: string;
@@ -730,8 +741,6 @@ export type ReviewMap = ReviewMapProjection & {
   readonly viewer: { readonly mayWrite: boolean };
   readonly semanticPath: { readonly kind: "available"; readonly events: number } | { readonly kind: "refused"; readonly reason: string };
 };
-/** rfc/review-map.md §7 (O7.3): the explicit Analyze reveal from `GET /runs/:id/review-analysis`. */
-export type ReviewAnalysisPage = ReviewAnalysis & { readonly runId: string; readonly branchId: string };
 export interface StoryShare { readonly id: string; readonly scope: "story_read"; readonly runId: string; readonly branchId: string; readonly createdAt: string; readonly revokedAt: string | null; }
 export interface CreatedStoryShare extends Omit<StoryShare, "revokedAt"> { readonly token: string; readonly url: string; readonly revokedAt: null; }
 export interface RevokedStoryShare { readonly revoked: true; readonly runId: string; readonly tokenId: string; readonly revokedAt: string; }
@@ -973,6 +982,7 @@ export interface PgnDownload {
 
 /** rfc/hint-distance.md §7: the POST body. It names a decision and a rung, never a ceiling or source. */
 export interface HintRequestBody {
+  readonly clientRequestId: string;
   readonly nodeId: string;
   readonly rung: HintRung;
   readonly decisionDigest: string;
@@ -986,9 +996,10 @@ export interface GuidedHintClient {
   cancel(requestId: string): Promise<HintResponse>;
 }
 
-function hintEnvelope(value: unknown): HintResponse {
-  if (value === null || typeof value !== "object" || Array.isArray(value) || Object.keys(value).length !== 1 || !("hint" in value)) throw new TypeError("Hint response is malformed");
-  return parseHintResponse((value as { readonly hint: unknown }).hint);
+function hintEnvelope(value: unknown, context: HintResponseContext, clientRequestId?: string): HintResponse {
+  if (value === null || typeof value !== "object" || Array.isArray(value) || Object.keys(value).length !== (clientRequestId === undefined ? 1 : 2) || !("hint" in value)
+    || (clientRequestId !== undefined && (!("clientRequestId" in value) || value.clientRequestId !== clientRequestId))) throw new TypeError("Hint response is malformed");
+  return parseHintResponse((value as { readonly hint: unknown }).hint, context);
 }
 
 export class ApiError extends Error {
@@ -1153,20 +1164,24 @@ export interface DrillClientApi extends RunApi {
   importRecord?(runId: string): Promise<ImportedGameRecord>;
   story?(runId: string, branchId?: string): Promise<GameStory>;
   review?(runId: string, branchId?: string): Promise<ReviewMap>;
+  recordedClock?(runId: string, branchId: string, nodeId: string, signal: AbortSignal): Promise<RecordedClockView>;
   /**
    * rfc/module-registration.md §2.5.2 / intent-presets Checkpoint B: the one module query. The
    * body is the requested-assistance receipt (untrusted intent) plus the closed timing request; the
    * raw page is returned for the screen to strict-parse against its own finalized digest.
    */
   modules?(runId: string, body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }): Promise<unknown>;
-  reviewAnalysis?(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage>;
+  shapeFirings?(runId: string, body: GuidedShapeQuery, expected: GuidedShapeExpectation, signal: AbortSignal): Promise<GuidedShapePage>;
+  inspector?(runId: string, body: InspectorQueryRequest, signal?: AbortSignal): Promise<unknown>;
+  reviewAssistance?(runId: string, body: ReviewAssistanceRequest, signal?: AbortSignal): Promise<unknown>;
+  inspectorAssistance?(runId: string, body: InspectorAssistanceRequest, signal?: AbortSignal): Promise<unknown>;
   shareStory?(runId: string, branchId: string): Promise<CreatedStoryShare>;
   storyShares?(runId: string): Promise<readonly StoryShare[]>;
   revokeStoryShare?(runId: string, tokenId: string): Promise<RevokedStoryShare>;
   flipRun?(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }>;
   runDerivations?(runId: string): Promise<RunDerivationPage>;
   milestones?(): Promise<readonly ProgressMilestone[]>;
-  recommendations?(): Promise<ProgressRecommendationPage>;
+  recommendations?(signal?: AbortSignal): Promise<ProgressRecommendationPage>;
   distillRun?(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>;
   progress?(): Promise<readonly ProgressAttempt[]>;
   dueProgress?(): Promise<DueQueuePage>;
@@ -1512,9 +1527,19 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/review${query}`);
   }
 
-  reviewAnalysis(runId: string, nodeId: string, branchId?: string): Promise<ReviewAnalysisPage> {
-    const branch = branchId === undefined ? "" : `&branch=${encoded(branchId)}`;
-    return this.#json(`/runs/${encoded(runId)}/review-analysis?node=${encoded(nodeId)}${branch}`);
+  async recordedClock(runId: string, branchId: string, nodeId: string, signal: AbortSignal): Promise<RecordedClockView> {
+    const response = await this.#response(`/runs/${encoded(runId)}/recorded-clock?branchId=${encoded(branchId)}&nodeId=${encoded(nodeId)}`, { signal });
+    return parseRecordedClockView(await response.json(), { runId, branchId, nodeId });
+  }
+
+  async reviewAssistance(runId: string, body: ReviewAssistanceRequest, signal?: AbortSignal): Promise<unknown> {
+    const response = await this.#response(`/runs/${encoded(runId)}/assistance`, { method: "POST", body, signal });
+    return response.json();
+  }
+
+  async inspectorAssistance(runId: string, body: InspectorAssistanceRequest, signal?: AbortSignal): Promise<unknown> {
+    const response = await this.#response(`/runs/${encoded(runId)}/assistance`, { method: "POST", body, signal });
+    return response.json();
   }
 
   async story(runId: string, branchId?: string): Promise<GameStory> {
@@ -1735,15 +1760,17 @@ export class DrillApi implements DrillClientApi {
   corpus(runId: string, nodeId: string): Promise<CorpusPage> { return this.#json<unknown>(`/runs/${encoded(runId)}/corpus?nodeId=${encoded(nodeId)}`).then((value) => parseCorpusPage(value, nodeId)); }
 
   hint(runId: string, request: HintRequestBody, writerId: string): Promise<HintResponse> {
-    return this.#json<unknown>(`/runs/${encoded(runId)}/hints`, { method: "POST", writerId, body: request }).then(hintEnvelope);
+    const { clientRequestId, rung, decisionDigest } = request;
+    if (typeof clientRequestId !== "string" || !/^[0-9a-f]{32}$/u.test(clientRequestId)) return Promise.reject(new TypeError("Invalid Hint clientRequestId"));
+    return this.#json<unknown>(`/runs/${encoded(runId)}/hints`, { method: "POST", writerId, body: request }).then(value => hintEnvelope(value, { runId, manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest, rung, decision: decisionDigest }, clientRequestId));
   }
 
   hintPoll(runId: string, requestId: string): Promise<HintResponse> {
-    return this.#json<unknown>(`/runs/${encoded(runId)}/hints/${encoded(requestId)}`).then(hintEnvelope);
+    return this.#json<unknown>(`/runs/${encoded(runId)}/hints/${encoded(requestId)}`).then(value => hintEnvelope(value, { runId, requestId, manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest }));
   }
 
   hintCancel(runId: string, requestId: string): Promise<HintResponse> {
-    return this.#json<unknown>(`/runs/${encoded(runId)}/hints/${encoded(requestId)}`, { method: "DELETE" }).then(hintEnvelope);
+    return this.#json<unknown>(`/runs/${encoded(runId)}/hints/${encoded(requestId)}`, { method: "DELETE" }).then(value => hintEnvelope(value, { runId, requestId, manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest }));
   }
 
   assistance(runId: string, request: RequestedAssistanceV1): Promise<FinalizedAssistanceV1> {
@@ -1755,6 +1782,22 @@ export class DrillApi implements DrillClientApi {
 
   modules(runId: string, body: { readonly assistance: RequestedAssistanceV1; readonly query: ModuleQueryRequest }): Promise<unknown> {
     return this.#json<unknown>(`/runs/${encoded(runId)}/modules/query`, { method: "POST", body });
+  }
+
+  async shapeFirings(runId: string, body: GuidedShapeQuery, expected: GuidedShapeExpectation, signal: AbortSignal): Promise<GuidedShapePage> {
+    const request = parseGuidedShapeQuery(body), scope = Object.freeze({ effectiveConfigDigest: expected.effectiveConfigDigest, nodeIds: Object.freeze([...expected.nodeIds]) });
+    const response = await this.#response(`/runs/${encoded(runId)}/shape-firings/query`, { method: "POST", body: request, signal });
+    const value: unknown = await response.json();
+    parseGuidedShapePage(value, runId, request, scope);
+    return value as GuidedShapePage;
+  }
+
+  async inspector(runId: string, body: InspectorQueryRequest, signal?: AbortSignal): Promise<unknown> {
+    // This operation has its own closed, fact-free refusal protocol on these HTTP statuses.
+    const response = await this.#response(`/runs/${encoded(runId)}/inspector/query`, {
+      method: "POST", body, signal, acceptedStatuses: [403, 404, 409, 422],
+    });
+    return response.json();
   }
 
   voice(runId: string, nodeId: string, scope: VoicePage["scope"]): Promise<VoicePage> {
@@ -1770,7 +1813,9 @@ export class DrillApi implements DrillClientApi {
     return response.blob();
   }
 
-  recommendations():Promise<ProgressRecommendationPage>{return this.#json<unknown>("/progress/recommendations").then(parseProgressRecommendations);}
+  async recommendations(signal?: AbortSignal): Promise<ProgressRecommendationPage> {
+    return parseProgressRecommendations(await (await this.#response("/progress/recommendations", { signal })).json());
+  }
   distillRun(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>{return this.#json(`/runs/${encoded(runId)}/distill`,{method:"POST",body:input});}
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {
@@ -2012,6 +2057,8 @@ export class DrillApi implements DrillClientApi {
       readonly body?: unknown;
       readonly rawBody?: string;
       readonly headers?: Readonly<Record<string, string>>;
+      readonly signal?: AbortSignal | undefined;
+      readonly acceptedStatuses?: readonly number[];
     } = {},
   ): Promise<Response> {
     const response = await this.#fetch(`${this.#baseUrl}${path}`, {
@@ -2027,8 +2074,9 @@ export class DrillApi implements DrillClientApi {
         ? { body: options.rawBody }
         : options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
       credentials: "same-origin",
+      ...(options.signal === undefined ? {} : { signal: options.signal }),
     });
-    if (response.ok) return response;
+    if (response.ok || options.acceptedStatuses?.includes(response.status)) return response;
     if (response.status === 401) await this.#announceSessionExpiry(path);
 
     let envelope: ErrorEnvelope = {};

@@ -7232,12 +7232,12 @@
     },
     {
       "id": "D879",
-      "state": "blocked",
-      "sourceGlyph": "🏗",
-      "sourceDigest": "sha256:0dca27a54834baef60f22553e4260d2e56790ccb449a8cf9e36d5c1dc946b058",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:58db5e745d67cc52665fb2687dc7110afb90eeeeb7835d61cdebd7e2da73dc92",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "item:D3767"
+      "evidence": "apps/server/src/grade-workflow-parity.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D880",
@@ -13446,39 +13446,39 @@
     },
     {
       "id": "D1716",
-      "state": "blocked",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c63b2482b4c0f4333ac62aec42d6dc812a75a0dfe8447f786e7dd7890e22b225",
+      "sourceDigest": "sha256:629df6d0693600e29d42274c627bb48feff368c2b9fd8f3156b802c8ea258e84",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-validation-authority.md"
+      "since": "2026-11-04"
     },
     {
       "id": "D1717",
       "state": "blocked",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:446f42659ba5e34d6d3ffec9891b5290d907328f89bddf2a17cd99f674d92425",
+      "sourceDigest": "sha256:74c7771172795f6fb67867c5fc65d33c6f3390c9379693ace18cd8a39f3e3d44",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
     },
     {
       "id": "D1718",
-      "state": "blocked",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:1a4f8a448f186abd86911c34102aa07b4ae7eebd82a6f578be2d107071ef86f7",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:985d63d759d001488dc41b0625be4a6fcdb16266552f503f2298caddd3b2e6c7",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:foundation-source-identity.md"
+      "evidence": "design/research/avoidance-subject-identity.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1719",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0122ed4028fd61d6ef19ccc31dd27fb24cc306fe9700dcd8838706d43a1093bf",
+      "sourceDigest": "sha256:0a0f30c2a25f01e7fcd34ad84a0b9b54531cdd8f09fff8673da2861e6ee1c992",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:foundation-source-identity.md"
+      "blocker": "item:D1716"
     },
     {
       "id": "D1720",
@@ -13511,7 +13511,7 @@
       "id": "D1723",
       "state": "todo",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:3ab4a762d92bb4c2bbe6ac87bf4baff9c6515e2c00106aff5c2dcbcfce031cdd",
+      "sourceDigest": "sha256:c24afe876daffe50ffc2a8e4341b18799ed875854bb4e6bcb9687d076f39fb58",
       "uxItems": [],
       "owner": "evidence-foundation"
     },
@@ -13615,11 +13615,12 @@
     },
     {
       "id": "D1736",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "📝",
-      "sourceDigest": "sha256:f5b5e6802c557a4a6f3b802782a8c1112c27ca204f92c8e1aff234dda01ca9d4",
+      "sourceDigest": "sha256:639c2f52fc60101b3a4e31d77970c491790f1eeb99d07252a5c567a118c54128",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-11-04"
     },
     {
       "id": "D1737",
@@ -15625,13 +15626,14 @@
     },
     {
       "id": "D2021",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c476c936ee0458c493647cdff555d1e8750df4e5a771e996026dda665ca535e5",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:75b034cf6b19b22cd548a6220dc04698e41af060a8b4999871671337cc5e3ecf",
       "uxItems": [
         "IMP-a6"
       ],
-      "state": "todo",
-      "owner": "account-and-data"
+      "evidence": "apps/server/src/recorded-clock-import.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2022",
@@ -18015,93 +18017,90 @@
     },
     {
       "id": "D2286",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5819c7f440125121f4fd473c18066c38b6e5a9005decd839988ebc94cbf5f2b6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1b6bb399bf26f33fadeb12b56aeeafb7e671e65ca32c464f4593b3c1dc0e8f71",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "evidence": "rfc/recorded-clocks.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2287",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7f54f556315e939f37e8ccdbfa0371506773251cba584863acb215c82c51f4d3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d1d5f22831dbc209e484afe922243d49df81e02d8c147f84416092dacf5a5110",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "evidence": "apps/server/src/recorded-clock-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2288",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:570c588e7297a0fa609140abfa1e1f90b55c166d78238e6da7591be96b1837c3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:108b8289fd46a8f9b7d9d37ba0a5f8bc78dfb3f4ce94eefa76dcca27b94e1332",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "evidence": "apps/server/src/recorded-clock-delivery.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2289",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3325a7a43581ff6ba549663d79f68263526cec9be5e258a7d945a504ee03a4bc",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b0fc7f32c866be623436ee678bf08ea28626cae7b58b183cc72c078466499b76",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "evidence": "packages/runtime/src/recorded-clocks.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2290",
-      "state": "blocked",
+      "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e77cb5eae19346d397ed790e56fd59c7f27842efefdb334075388066146e2e6a",
+      "sourceDigest": "sha256:6cdc6d20bf817198896768d769282f3591a1c7c4f665a221673f7db3fb566f2b",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "owner": "live-and-social"
     },
     {
       "id": "D2291",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:575bf8b4b473040ce1537312e66682729931e7a78dd94f9ca364579b7e49d7d4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:739d99ac40fe4a712c12d48d8f6be7cec5313bade848a6e509b768abeb55f39b",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "evidence": "apps/server/src/recorded-clock-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2292",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d9be495c189c6eed4d6c5160cce25183f6a4dcc2b942fce66b5f68c5099fb63d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e25de28206fb2722534c990e0f23a05ffb2685190fabf1616712757a7456be89",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "evidence": "rfc/recorded-clocks.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2293",
-      "state": "blocked",
+      "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9373e5363d990940bb75dc1baba4186280067b64a3eb2d3c46f8170b1ab6ed58",
+      "sourceDigest": "sha256:c3064bb814864246ed634fff4e59e76c1c7efe8bb086966ed4421fbce091a1f4",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "owner": "live-and-social"
     },
     {
       "id": "D2294",
-      "state": "blocked",
+      "state": "todo",
       "sourceGlyph": "📊",
-      "sourceDigest": "sha256:7975c466cd37ab0d4d99b0b1f21936aa72edd84d90cbc4bdd4a42092c037a42a",
+      "sourceDigest": "sha256:ca272dad7f4b1c3c77710527ae39a1ace1f7bfc22305c27a5fdd9fe07c386b81",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "owner": "live-and-social"
     },
     {
       "id": "D2295",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e28a74f6b1c49befa011f28f125397adfb6f5a75d3e0730a3ceb849f562466c9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a032297fb31cc3edbf1c49f4cfe7df389859a32d4a8c5686acb1077041048fb5",
       "uxItems": [],
-      "owner": "live-and-social",
-      "blocker": "rfc:recorded-clocks.md"
+      "evidence": "apps/server/src/recorded-clock-storage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D2296",
@@ -27180,13 +27179,12 @@
     },
     {
       "id": "D3309",
-      "state": "blocked",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8e213c65162de8a042b9fc542eb7a7f1b802c32f3312a1a997709362f9a7fd37",
+      "sourceDigest": "sha256:d623210f600e8e96d5f3ae83af22ad78da1c152ef2f4cb877cf3194236d4ca3c",
       "uxItems": [],
       "owner": "assistance-and-presentation",
-      "blocker": "rfc:evidence-presentation.md",
-      "question": "Independent review of the authored structural Inspector successor contract before production migration"
+      "since": "2026-11-03"
     },
     {
       "id": "D3310",
@@ -29476,12 +29474,12 @@
     },
     {
       "id": "D3564",
-      "state": "blocked",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:be0bf8dec5b281c58ae26b8269fad00291118395f4a8682a60db06d4de0468ba",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2b7d1d96af2f5f52dab939318f054e86c5e8bcbdb76aa39a85a651b393cbf45b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-validation-authority.md"
+      "evidence": "packages/runtime/src/semantic-validation-orientation.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3565",
@@ -30290,13 +30288,12 @@
     },
     {
       "id": "D3654",
-      "state": "blocked",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8c136d910ed528a4d3cf1b3ab5ce58de31af4acecc8bd6e81f51500597aed1f9",
+      "sourceDigest": "sha256:175df04c32f3f60a20a5dcf812c07b4c8115fdcee92a01694a70261b26abd1f8",
       "uxItems": [],
       "owner": "assistance-and-presentation",
-      "blocker": "rfc:evidence-presentation.md",
-      "question": "Independent review of the authored structural Inspector successor contract before production migration"
+      "since": "2026-11-03"
     },
     {
       "id": "D3655",
@@ -30822,12 +30819,12 @@
     },
     {
       "id": "D3713",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:a4df027d49bb658cfc0e3494319466f0fa954676e0a0e9d38b1611f6ddf81fe3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:411dccb2ab6932eff350127663ba65aba21e054842d2ae54c44e50a70586b750",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "item:D3715"
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3714",
@@ -30840,12 +30837,12 @@
     },
     {
       "id": "D3715",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:23d8de5ff50921bc0b18c21200de78b1e4f4cd5c4bcfabcec06d31cc45fdef84",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:807da89e2baf05b08921387d4574d5fab64f11a9bb180109d11689ad630d8f4d",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3716",
@@ -31287,30 +31284,30 @@
     },
     {
       "id": "D3765",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:8c93f663b8ea1f9d5a9b62c2ae385ec1d434506f1f00255c4e98598a26785a5f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7783c2bc18fcf143363164287191cce78d61e2b946c9bc013c670856a4370cc6",
       "uxItems": [],
-      "owner": "review-and-return",
-      "blocker": "item:D3767"
+      "evidence": "apps/server/src/grade-workflow-parity.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3766",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d0b1e333d632191e5c26442abee5cdef675187a0848bc1d7084b50fda5d90391",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:22915a6e654c85d568174815073bce6037acb063449efb70905c4a749dda38c8",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "item:D3767"
+      "evidence": "apps/web/src/lib/preset-change.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3767",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:32ba5eba578ffe83a6a1bccee24ffe4a71c5acb363cf394e16f97bf8fa662eb9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a3127c91c664e0b7afae89737ed76105a00f85518c77596ceb0ce528d2b62054",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "item:D3715"
+      "evidence": "apps/web/src/lib/preset-change.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3768",
@@ -31432,7 +31429,7 @@
       "id": "D3781",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:136e016081a44b667b861884eb229e109209b24dd70336d0f476c5bc73efbcfa",
+      "sourceDigest": "sha256:34b9d02f1939e459753e284e2493fcba2b20e3b655f42cc040e4b11eb214675d",
       "uxItems": [],
       "evidence": "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
       "evidenceKind": "path"
@@ -31524,19 +31521,19 @@
       "id": "D3791",
       "state": "blocked",
       "sourceGlyph": "💡",
-      "sourceDigest": "sha256:b1cd877f7f1bbcc5427ffc696dd57db5d5b2deba0ea06c12951acbe845484176",
+      "sourceDigest": "sha256:e571b8bba131688006f6b2ae63776a6198152f9de17f54f8d5ca7f1e9685b059",
       "uxItems": [],
       "owner": "assistance-and-presentation",
-      "blocker": "item:D3792"
+      "blocker": "item:D3928"
     },
     {
       "id": "D3792",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:9ea74edf1b0ae7b0b73cdc94aa8d375c9905f246ca7e1447d175502d13ef16c7",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3451ea76eb41e21658d3dff574c904a96087ba7ef3d1faa095db89df20eab165",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "item:D3841"
+      "evidence": "apps/web/src/lib/inspector-source-browser.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3793",
@@ -32093,7 +32090,7 @@
       "id": "D3853",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:d41bf44bf430fc0f3fdada0538523c94a284cb70faac4f77dce4be87a9917d8a",
+      "sourceDigest": "sha256:9132e08541fbf3ff67082f7a5d6c163498512c6afb48e1cafa03e54d425471d7",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32147,7 +32144,7 @@
       "id": "D3859",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7bc5d19077fca5110dc640342670b40628b410aaa016fb0426e7e43d3c8db5cd",
+      "sourceDigest": "sha256:b21e62d9a12a7d92929b183fe328eadc7bb4f1ea84a5fe567365ddc1a7a08969",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32210,7 +32207,7 @@
       "id": "D3866",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7fa0cd43cacfd4bcf5b7eabddbd8836fc7c6e52ef16e3f1b81e0965c7ffd0782",
+      "sourceDigest": "sha256:bd0e484f9d8b49c676253da88910152dbe149a49e79337df0aca1dc999e78f30",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32219,7 +32216,7 @@
       "id": "D3867",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:24a905860ca54021db6318e9730618f101e159c0d8b65395766d39516a250791",
+      "sourceDigest": "sha256:17c6d9303af37ea560e877bb98369a5e60792ef0339c9a4abbbc5c754262e317",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32228,7 +32225,7 @@
       "id": "D3868",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7192242ec545d0b647bcb3b45c4a9a462668d82eb7b67ae865ddf8b31e965b27",
+      "sourceDigest": "sha256:fe8ecada92e3ae62f5e923491338dee87397fee3a6fe4e8302cdecaef3cd41b7",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-10-15"
@@ -32699,6 +32696,2506 @@
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3921",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4e47d086822cc9213da39cdcaf1fcb9a59773fe7e9c3d357f8362d147d21918b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3922",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a06ef27cfe6efa095bab9b99a17cc02a7346dd81ef47c0e5384f34e20302813c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3923",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c767924375e98960c8e44e3e7ffb03e5ac5e5a1dcddf6804a9859e520a51d04b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3924",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b709b16fc943820b1dfa94e756d19861037855fbe7404aa7a68759f522a71680",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3925",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:014bd26366952524dc8ef716933e8acbffd5788d0eac08dd589ce4df45c2cf88",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3926",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:116963b4a93579133e90185b7fe18704cff31b29eabb7f7473344bdb36d77205",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3927",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5be4421617d5f16d8abfa2cfc284387d9fc9bc2e42c76fbedfd13f26b7deac31",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3928",
+      "state": "blocked",
+      "sourceGlyph": "⚖️",
+      "sourceDigest": "sha256:4eb8ba2566300532fc860f024ac017d1cd2039e1a9b31f49615efb921aebb65d",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Apply the approved unified grader to all92 packs through requirements and linked-digest updates only, without authored chess-content edits?"
+    },
+    {
+      "id": "D3929",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f28da3e82eb6ae4c13af6ee87615755e3fa2b0b1b5f2ac91de6b9d459b025765",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3930",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:555a554d92eb96afe10f6f9287c032ceaf9cff2bd08abbf12c42dbf38cce57ec",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3931",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:663803f6c6186e6441a06aeb10ca3fe07009fcb67bc597d23e138dcbaa55b4f0",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3932",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6e02a0fd4ccaa8d31a9c8162b6a1a00ef4e75becc7feee14718ab1e34eb6b3c1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3933",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e4b56a61a7b5c4664f3dc43484d20102981a6db7c6c0a5fd11d36cf3a63e2924",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3934",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d56d6b6254aba6ff015d53dd7ec55e2b87e3bcffd839dab4ac71fbfe04a97847",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3935",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:10bc17c2ca2ff1caa97e13a98b83218990553aab28d0e2408fc0d19eb56974fd",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3936",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:88ba080e1ac11b48e78fd076a833390ad693bd4cfa7d7cd2c139c179f2762cfc",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3937",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:978d5e8cfb57994a2ae74943ceb52474f12b4927a6d17567d5f42e8d075793ac",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3938",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:153160352d97ea177e6a4975eae3d8d5798c40e57bdc61aff6d8c4c18fc02d8c",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3939",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:214f77d07dad8a2abcc62552dd88bfc0547537a5f53e3a226945c93b0ad01bb1",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3940",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1691c3e523e476d393875e7aed0945fe9225a3fb7b1cab9ca1bf4b3f01e5752b",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3941",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7460c575f0ece08caae6690cd71ff71ac0dbd152257c0e86d0ebd657ee29a723",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3942",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b76a08a3d8ac650d09358b24c109c80b0529111cde8bbc47048cfe71bb53c98c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3943",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e53d03154872bbdc2ce39f802ae7f8d8e649c41a9299b7a14dd16b024d4a48f8",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3944",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8b04c8070847fb534b80cbff390e9657506a083a5f70697cff0d5838e44bb151",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3945",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4f260a455669840833328497794ab2f95c3eb5c4fd088017a48152c5104e3f11",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3946",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:56e8ef05aed2cc49617a9d7b60392742c2b0d8b75e57f80fd2e300ebfd5b9c4b",
+      "uxItems": [],
+      "evidence": "1aeccaa0",
+      "evidenceKind": "commit"
+    },
+    {
+      "id": "D3947",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a04868c53de0c3fa3d3cb3799243e29bf6f1eb9a7f51ad62724732b7a30ebe76",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3948",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a15ef52a83745f2ca896ece0f57e4b47284914cefd92c2e8e6bf9db6f6fab249",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3949",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2208f63343eb88e04720d4a30c1e40cdd4f824538898fceefd46dabd6c4d610d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3950",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8ec953011a37b108d14a9e4f446a011547f07b87041d3006c82b331479541883",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3951",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5be23b9330066b1226a2aaa072327546ecbbc11de428e28d54ca4d9f15adbc50",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3952",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:26c667c2754206006d9d1f419e1b6d1f69afb34bf3631572f7aa011dc0a669a7",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3953",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:63198cba1cdea61fbfb325d4104aec4aea6253dc62acdb8e17547f31899add9b",
+      "uxItems": [],
+      "evidence": "39f243b8",
+      "evidenceKind": "commit"
+    },
+    {
+      "id": "D3954",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eced4b98642ab423df7ccd3b588feb93a0a1897b260d40621539daa5fd51613c",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3955",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:76b18300f31c6654b7384ef5540d3643ab3030e04a61f9c5e9b998f6e30389fc",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3956",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:38d0191d974fc20c66dea47db10dd1371066aa5e5af763e6cec506909f80aab5",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3957",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:97ed19382a1451d881b6bcbd0e5565767facfdea38031f18a05f7c65cd33d52e",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3958",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2ae0058a78ef10616f49245b9aca5e99532c72f7a070f84523c7a24bb1f1a41a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3959",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8022a8c92661c716f3a09195ee3a52a8ed373ab053ecfb01e316ad078e387ea7",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3960",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b1f79cef2f1b502abb4f11d24d6ad69e910837b8ffdae6652b64d755bd47cd53",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3961",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d026b4b92c1926f79c427bc04491c01006c785d1973e7ca2485808fc739ceb39",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3962",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:39897eac75590dfbaa4970c81a15faf19e0918f6ee4edcb5f0a772f80323b119",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3963",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4d3b83e712595dbe4873b2c24493183d9361fa779c1dd5214c313f8a6e9830a9",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3964",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ac901af6cbc983bbfbc4a28e83cc95b60ec232ec745edd1362fa865b419d95cf",
+      "uxItems": [],
+      "owner": "bot-play",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3965",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c8d1d8548ac52964ea2eb04cf7336d180513e75492dc524de34ac936aaa88369",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3966",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4d2fea07d064229dd2299c8d15775e61b06567c765910c9558a3cbc8bca0c512",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3967",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:63315b17a9f77c0fb91b6436adc2bbd4f08846983f4f616f04dd652b2fe130a8",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3968",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a0b365f671e9d308f268476a0ddc38b36d5a962c79b5e66e5cb23d054bbb01e1",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3969",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0a0102f43621fd0946922210afc7cfae9a2a3cc2dc7241af49dadc807d6bc076",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3970",
+      "state": "doing",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:8018312c49beefcd6589741d2be30efd068ead45dedf10fab395e88f6602b8eb",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3971",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4a4726b166230bf4773082848593cd981086645b040ae0717807817979fb865d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3972",
+      "state": "doing",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:1d5c7fc570023c60491525146695d7b79b0f57072db96fc8fc20650a671c4354",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3973",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ee418b5f55241e37ad407cd41f2a93cea9257e78eee4d4e912b0a47e724da8d3",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3974",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0353248d48695bd97bb4978f3c886886b6983a6a5cd528d4b5f3aeeb177019df",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3975",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a113b7045cee7dbbcf150260e08ced85e896cfaeebda9b3906b6b55cef118a8a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3976",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c01007020b34ba6dd713f5b4fca327140bf9e2262ac3b20e9a800f8b7077d141",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3977",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5c2211a99f89c6066813a6411eef9dbefae7de2d7a6ad6de9b41e73f932df53f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3978",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f29c1dc9584a92862e6cb9f031ec2f8ab0e8ff09bf6150ccaeb8150fe7f99ac7",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3979",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5a5bdd3a2f5537a3a021654b7325e6070d1595efd2f5c55d7361abf194d29960",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3980",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4a791e3bf9781addeea17b125afcdffb584d33b846103ee3897834f64592cd31",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3981",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:b2be7bda3ab6b50d9470e2546971d43ba382ab1f91b9623dc997e08ae528c2a0",
+      "uxItems": [],
+      "ruling": "ledger:D3981",
+      "rulingKind": "source-row"
+    },
+    {
+      "id": "D3982",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a309204387d8bcdde4d12ac4760917dcda5f0ab2ef88a6ea304a8f3403e487ce",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3983",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0c8507461fe508a7aba749512ac7c560aa81ee0bea42f8dc2a0ee8f80b66a1ea",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3984",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0c4e622c2a99dfc856249948857aeeedbe021212a15fd43c5beb1f8986f302e9",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3985",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:64cdc74fb1beede661200a5c8385f5a63bfbbc60653604308312af6ed3ca15fa",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3986",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4d4238feae80afe8ecbbf9aee3ae0a965bd5ed2c7746eff3a26acb6c8589402d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3987",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:074905b7e7abea1a13a82fe00382fa61704118a5d6f641fb7e08d46c935d6093",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3988",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3ff2bb3f60ad964161cf82a756c2010031ec0fe4b8dc4d0a3cd6bf94c0855c6b",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3989",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:99858c1069eb25a2bdeb77898e69c36c4e6a4007bbc6d8f1b6c09108c24390f2",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3990",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:778e39d681276db41a8d66ed28924038b803e5cf367ca486f375574bf31abc4f",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3991",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3077cb9bbbfc4198e415160c1e6d25fb13b6fa6f32ae721c1eb23609bb51b1fd",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-02"
+    },
+    {
+      "id": "D3992",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6ed51707540844c07ca30e5565d2552f43953a4d8b37db7c0fa6298b28a19ea9",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D3993",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0902e5d08585066c43233aeaa3f92baeb30f229af3c8d72aeef28c10c446e6ca",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D3994",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:335ae2bc96642798d34f1fecd6422ceed15b6ad79cbcaa02adad29ad855ff7de",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D3995",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6e9b977b5908112d020d1b1fc2f0b44d44983e2a0b6ca9f21764da16b5ed8698",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D3996",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e467bd68e86dd2e4067d077c421cf97cda10bb7ed482c52ab0a6fecbdc8eeeb5",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D3997",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0cf3b03c837f68ad1a61e0df15dbce9a8743a8fa221de6f2dcd3c33dc7751a4b",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D3998",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6eba0abec9619246e979864e4e433ce9fcea87901821972ae737fc9cad99a5f9",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D3999",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:50b2983c1978519bcebacb9b28e3383c54ca54455aee0ebf7c1e2fa635717bb4",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4000",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d2d842ef677e60f3c696d86d9fa455f1ffee6eeb8196c6ba8aafd25ca1dadf6c",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4001",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ccb3bfd19819d4ea5c67deaf828b2c9a1e77b2e87c4495df3e9d1e1ea8463efd",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4002",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8cc87f23c94e6164afb2735fcad3095b7643494161b7748e2578b0829bab2bc1",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4003",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:22c71412623abaf752a0cf7691a11613f0477940cf6eb13c3659e230dd84035e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4004",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1fe9b205490691fec0a7da7217801196b6681c7e58e089a1bee39b348a73b9db",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4005",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1ffdaf0a611c43c687729bc056f3f65f50c5396512142c3138a1d2c148779f2e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4006",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b82876e73cbd961035805769f85fb10e2b6cca172677eb3b9ce166811807bd76",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4007",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a52c9b8ddd537301e0ab9d645455929229a250b75341bb0fa179d4e13f3322d5",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4008",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:174239294168eb64c6f47004b420cd5d0a634e666ae79bf027efb417fb150e11",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4009",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7d80c2a41a204d00ad32367d49d7e8aea15be302e23ea68902b1d598380daea1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4010",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f957db64e3c66b7355ab3d928e2c8fea7e7221c6d3abf37e9e258af1946ec2d0",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4011",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cd512e2d47d25ad955028cdb163b99c4dbdedfb30e83460017fdc44e8ab43911",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4012",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2cf6e00f34140e9a3abddf376eb4d45c72593fcc4635f008c0c2c9e31e8c3829",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4013",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:17fc3d0188bb161d11d137f9ab1ac72a9a1b2f920740202920ee2b98f1fdbc76",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4014",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:60cbd016926b88184e501faf4e7492b0bb1068cdf45691081f90bf4481be8723",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4015",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:761b13be3a55bdb7739318348b6ed44249038bf2cdf8ef1e39a3efa54c13fce4",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4016",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4e9a8845ecab52eafd3407d9a933f5c8c2a52a8a79653731be58e96284c5c72b",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4017",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0b09161974165bc664ba392925deaf4757670591ff34f753066da82fb19f50ef",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4018",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:60e285cadde4e1b403438066764822411334874afb14937ba1cf0b817f265b28",
+      "uxItems": [],
+      "owner": "learner-history",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4019",
+      "state": "todo",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:ebae50c37f9b177192d1ebed28277cddf515de3f05fca73b1b1b2fa7271cbf4e",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D4020",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:51f516fd5e685539a26f4100b246cd04ec716dd6990e46cae398ccb11f3dc34c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4021",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:516d7df807f398f71f03265f163a884026391f21237a90191d9cf773e7785d8d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4022",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1a733db4dcad1784a812eacf55c067307d0c3b1ddc41a0e1a9c924bcf1f0fd57",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4023",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b96166e6ea14bc09678e33629939c1434bfb6668fe04a86670985a2a82e3e8f7",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4024",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4a52f2d26b8cc0727e5b928e44fd73edda55620c0fff655af84f2414f632cc96",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4025",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ed09f1b2bfa944e18009c678178d588e7f187498ed9de6565127eee48f92dcce",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4026",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d66516ed6055a772b63f7587d269dc8c537e6051d3eee13eeb02c2cb5736c785",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4027",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1fae0738a19f90a95a01bf98a585076858fd396ea13f7fe2f26f9a169d9b80f4",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4028",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5f5432b3fe46e04b2f23db0c05701c81d0f93ffdfba972d7960d09ad5b167cee",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4029",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6c3e346b9d5bf6e3e39114104af969ee5dffbf3e3f8e7f40b20cbd70efdcec24",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4030",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:231ca6abcec7976107650dd3de62e295e92920938976a00b355a02b81d9379bc",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4031",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1efa3ef4107609e2c2c546f77019dd42bf6a8188769f54a1a22137289efe666a",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4032",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2904ab1849c44b805fc83e3b2cc49c6e6289f323771e458e7ae6ceb6141a62f8",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4033",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:64d6d4415265bc14e77998cab2b7bf51911c49b256dde52503ff51b370157961",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4034",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b8c61a5c0570194c4257840693bd6160f9147fc43ce10f67ab58b9de95d14dd6",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4035",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:667b5180ee39fad8d958e2565886da6d73bb81b2d7b21c0234eb059a78978b3b",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4036",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9c5f240b6745497d88388e1da755010b0d48eb6f60b2840bf8e859bbe1784930",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4037",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cc29ec5081f068ef18e8ad80b067e59e56c13f1e235203f2931bff2c18efe310",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4038",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0bea835759c98e0a9db39c5e5b29bd6237955ffa2402a853c55bb51a65574e41",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4039",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5e5f3a783bb9e787b63c9ba7141257d8893c069edb517c997e738318a446e1d3",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4040",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5bf32b651a27d0fab76512e72e957f7b4cce012f72df626cfd1e272ec894d495",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4041",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:91c4ed6744e5a14e51bafb8ba45dd62570a874507352cead5ad468387fa151ab",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4042",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2e44c7e8232d88a8d3e7082d5b233c33da70893447a87c90a35c1ee13925afad",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4043",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:37b87eeefee3d8a84a7b26da3d9bfff82857118ef6232291bc1ffb17e9fe2ac4",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4044",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:59a02065683ce84cc1ae1b4c9662fd468ff07a95c1efc8b880380b981923546d",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4045",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:25330b0decb9b724d89274c6320d1ef896e7f1381802a06f65ded2586333776a",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4046",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1fc27d2b2f431925c3c1b424383e9f58cd780d4a9e70a6746b17b798434b284b",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4047",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b00ccf370063e806a0dabf355bd856a592af34bc9cfb5097c628fa19daadb3d3",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4048",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4c53142fa1a633d4d6186b31997b62017e842cff4df3915bd04200328f0a099a",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4049",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1c26b34b1f77f234fdcab81f4b829347f929dd298bbfaeaa8dbc5bdb53715221",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4050",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ce7057b5db7dac83e6c11fa422f83c0a285cdaac772a501bb7aefd74179e5f83",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4051",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a5177156b833212be1f32dc5e192ed49b105895697956f95d80a99abb5a245ce",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4052",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:513e33dd07d6793a6eaaa1fff4620bcca9646901445adc22d25f4f72599873a7",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4053",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6de230e8691c53dd11803bf251e082ff8f236b351cbfc3b6abff329e01da6285",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "since": "2026-11-03"
+    },
+    {
+      "id": "D4054",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ff150f14e2d438a550dfd79e0badd4f231ae24a5fb49adf841caa919f38132b0",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4055",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ceaf149ae3210307f0e3e61d68a3fcff5639dfede950f91375e379aca576def3",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4056",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5b67b878c1eb83382de9887080812a5f0d6fc5a811cc5851d350c7b6627cd886",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4057",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b87e6442c58d8fdbf4a449fc2322291aa488ee0697cffa6f3f840b588ad1427d",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4058",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:83691ddf1945f13f6d2b1dee9507394d1a060d92f27202b7f30f3173ac7bdd9f",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4059",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c54a6f1293036e4c6c2e3fbdbe8cd56c2549598a70e53515fb86d2ea7f4a2e62",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4060",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:02262b14eb3265f2200b8e805db2e606800e3fd28c6eff9848f4f08ec1809a6c",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/inspector-structural-event-presentation.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4061",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:31e0c92b1d2dc199c20dd3d4d3ebb6f1f4a72c97e5e00d7852ed313251de95ac",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4062",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b84ced9662ff9b084b76dc28c283433f137ff08d02b38444410718f3bc21b35a",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4063",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:625b5bb71811240beda27629ef3055e67f0e729eb956ca943c2fe8614c32449c",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4064",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9c1850aa043f34b5230e136786b6f4a505cbc6720a84512def728deee16d251e",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/preset-change.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4065",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d94f166be45f7d8e336f3034973bd9fae64b817dd4a72f6ece101a35f1e8528f",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4066",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4d5dc680ea4854789e5c3d5184dca10078891ae2c325c55a74cbb7193926c041",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-predicate-leaves.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4067",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:04161d49f943f736c43ceb06087d4bb9e36183896c7b89a913ec2bc24a66139a",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4068",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f63405e8901dc637ddf5b13bdcda50aa37389128c7f8133eb804cc9acdcc0f58",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-predicate-leaves.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4069",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2a2dffbb6d55be44fb609c5bddedaa4ed22e9fcd3c4a835c82cb3879b24e4342",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-square-sources.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4070",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:26ae62261a98d580c3985b0d98e4dcf7cc8fd8d2da3d75406d02596c2ffeb070",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-edge-consequence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4071",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c2455860947b24daf9279c196c4736a94700d1c4e4484ff1d84b73a826eb9934",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-position-sources.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4072",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c474427cb92e3755474cde876e8b9430a618142da0206b2fabd68ed1b430ffe5",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-evidence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4073",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4a5632fcefbebf64b18e26f693e05982b777a144fa8b4b7113499c40e39445f2",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-value-import-order.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4074",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0f4a2df5099b930e6709de0b448e5e70bc1b4ad64290316b1bc76af72ce9c4f4",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-edge-consequence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4075",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c6338cc43a9f52ab3602e841d46403dce44011e3398d65d0cea3af212293a0bc",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-style-sources.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4076",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3f2b8e8a23a4ed7143fdc2dc376402ea85fcbad38c684c0fee88497ed600d889",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-foundation-sources.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4077",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b521e72ee7b9eb081029e9fc006a65b5f6fd531c8be27b221b539ab29124b48e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-04"
+    },
+    {
+      "id": "D4078",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8214d2a27919b1dcc99f062f18cb85e1be7f3ba06c1fe7ff1a45d25e71ebf207",
+      "uxItems": [],
+      "evidence": "apps/server/src/capability/pack-capability-contract.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4079",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:40c859d70b24582a812c5bc009bd49fc4d9133c191c15207dd105203aae4ab01",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-structural-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4080",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1d8d4a33d2f9864949dbd7cef737c955ef2e3d712c94577b9e93b86c00d54c9c",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-structural-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4081",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:30d1e0cf08aac598c29713f5b50eb0feca84ec5a2e50506fba65fb34a752545b",
+      "uxItems": [],
+      "evidence": "apps/server/src/capability/pack-capability-contract.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4082",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3b54b434b4ec2649f90587ccc38b85fa29a1e6538b732be21c7a365e7e53d326",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-04"
+    },
+    {
+      "id": "D4083",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e37bf962c8ad64eeaa84a6ccf1e5debcaf1f73e8275956a774123595c503360a",
+      "uxItems": [],
+      "evidence": "planning/foundation-source-identity/plan.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4084",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bb4592d9287ef1b33dd56c7c9a09bf300333b7436b4c12b048a123ba27a655df",
+      "uxItems": [],
+      "evidence": "planning/foundation-source-identity/plan.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4085",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7bb8234efd6972c1f8e9f9c45a92029bb7eae323c3c6852e7bd195c72e38843d",
+      "uxItems": [],
+      "evidence": "apps/server/src/registered-shape-scan.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4086",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:82408accafaae0e0876773cc3d06a4ef40d89071399425ed9f0e476904cd8998",
+      "uxItems": [],
+      "evidence": "apps/server/src/guided-shape-query.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4087",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:33cf6fd569722061cfe41cd98b0962b162b58b907c77410ea3bdfc61663e1492",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/screens.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4088",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b824ff4d05f4bbfeecac8624d047f6a6077400d253520ba1259536f6486c083c",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/screens.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4089",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9b7a2b839d3605314f2f96c7744873201dab67f04e91a5364b5e308e3af7a9ac",
+      "uxItems": [],
+      "evidence": "apps/server/src/shape-recommendations-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4090",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0770a384d2f063a4c7c7d5551320c190f3193c333bc5ced3dcc1672d16aed8bc",
+      "uxItems": [],
+      "evidence": "apps/server/src/guided-shape-query.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4091",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:25526f477da032469f633763de4b290eefc12ee3fc252aad6a55bc523da82464",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/registered-shape-wire.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4092",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e7abce7cd418faee94997ed0ae61fa0818786ff420c7e377acfa13bccb61d008",
+      "uxItems": [],
+      "evidence": "apps/server/src/module-shape-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4093",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1fe600f9af3be07a3587cecc609001caeb4407d4bce2fbffada3dfd365d3829f",
+      "uxItems": [],
+      "evidence": "apps/server/src/module-shape-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4094",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e45ed0d40039bccc43798dc22214f86c0b9e4648a6b5aea9896c48e04cc730a5",
+      "uxItems": [],
+      "evidence": "apps/server/src/module-shape-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4095",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c57a5a6ef9c8d65d19b3d10b60f299806603373923c0fc1aa8e70bc783a4d82f",
+      "uxItems": [],
+      "evidence": "apps/server/src/structure-selection-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4096",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e2c7430eefa2b8287e5ce6f7a82629c981a15ca0491727a0f20f6a87a6e98345",
+      "uxItems": [],
+      "evidence": "apps/server/src/module-shape-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4097",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ae9b9770fd2269a4d6a8da30885be1a01233d68589cc0c30c4e935e493fd71b5",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/evidence/components.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4098",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ff7286dedd9e9c45e3877a13834d318babe3eeaa75a344444e7c68073a3f8b43",
+      "uxItems": [],
+      "evidence": "apps/server/src/shape-recommendations-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4099",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2116758422dd8800ecaaf7d9ba2cb0faf3d14b7f8746a302706f30880532f899",
+      "uxItems": [],
+      "evidence": "apps/server/src/shape-recommendations-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4100",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cdba7308da7b7b2ae6ec05e565f1dc64c4f44060b2d32f7fcd6590e71b0df130",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4101",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:39a277bfc1bfb030537b90cc98a53ab0e7ebfce4d212657eff0bfee77d4a0e5b",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4102",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2e4adb2b460bdcca061179fecd4416ca4def9273c4bdf557b672240ee976356d",
+      "uxItems": [],
+      "evidence": "apps/server/src/progress.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4103",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ae91b66224060185059743175050ecfa69342dd3a097c67b96c3765adc25f677",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-foundation-sources.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4104",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:843a88504f98215ba967cd93d13d510303f4a9c6f97ac034ddbbdd6f3e978bcf",
+      "uxItems": [],
+      "evidence": "apps/server/src/shape-recommendations-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4105",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a34e6c9736315da1c89610d3f35e1f09276f9fa5d2744e6ba2ef738c3d6ffa10",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4106",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:32c9967d6db8a28d3320dab696c51dae98a34691301811e01ddfb311959da892",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-tempo-transition.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4107",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:292626dec9b3b899542de37697ac4b3748ce0407ea1e7389e37b4e188e596d47",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-census-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4108",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:05856f757dda2dc693f02e24ff5e7c3c0a27f70d0e6b9fb332f6e63a8223e483",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-structural-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4109",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:684cec03fcb1e84ffd0c7489cb8c930c49f236abef9dcd69fb193397c944b2ed",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-tempo-transition.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4110",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:006b6d929de203c66ed512123d0d91c26dfb73e45c9446c998ef368230aafe90",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-tempo-transition.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4111",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3abb13a7378d7470e309fbe480dfa2da683a88566d4657c4dc885c9d871c3758",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-tempo-transition.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4112",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:62f859ba19d275354014944e2200ccff7e6104f3ca840a734daa5e771743fc7c",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-tempo-transition.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4113",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:facb4dd3246bb1bea73a4b89383d011f06d04a37586914b24b8dc7ec6b891b20",
+      "uxItems": [],
+      "evidence": "apps/server/src/structural-reading.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4114",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d52e45e470f598fb04e8db38990c8bec3fa158e03043c2582ca517024880a8eb",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-census-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4115",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cc51c133ca5791b46654079ab6c84aa88a8d7ea32e6c225f5b47120b1e508a2b",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-census-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4116",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f93b1c7a3b20a0451e73b67d7b8799f83812458935b00b48c47eb03bbe444e77",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-census-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4117",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c5c2934ccd0f2d0b034fd727cee918234030911cb73a3028ec43e5e86059324d",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-census-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4118",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e1cb404e5b5d3898534cdaee21e4e888a841334f6af1fad20b16f1152ff57614",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-census-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4119",
+      "state": "todo",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:9eca4329726f3b7c30a270e0f726633beed840dfdb1354894d3687d06dc7b8d0",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D4120",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:eaa05b4fe99434a6d15ba0de2780bde8f1b5eeedf78f93815bab4e47bd538df9",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-convention-migration.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4121",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:df389412962befc6eef863f49168da596bae3d270a9136813a06586569fd063a",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-convention-migration.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4122",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:06c3f21b2d0a6ba641e917ecce9894c78482460459f109dbe64e6b25a7f75864",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-convention-migration.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4123",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:39ef67b5d4c8533deff19225997ee69a35d68e26fdcbb48469ac8a7af3724eb0",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-storage.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4124",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:65cc1543139abcd65b8675411c6f6f4423d34e5a979c5b496a1ca48e0bdb93f4",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-storage.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4125",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b3850b99971fe00b77d072856447fd694c47abd16379885e9ce39c35025ccf93",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-storage.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4126",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:052c73c3896056988f1ae9aceb651f7bced0a08bc4b1c4265e786d2492e165d2",
+      "uxItems": [],
+      "evidence": "apps/web/src/App.svelte",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4127",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f51fec67e4bca3d49b35f494ffaf84e4d11ce8223f9522bcd68d5f6793eee1f5",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4128",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:dd2580ff9e8e92100dc15560abd763230c07e234ac6fe29205e4b60a7b8285bf",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4129",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e05d06b91f6ad9077875e9a8ff789774da7d27b294e48b06de6bd6f5bdc5ff78",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4130",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:af1edc3f60fc89bab2fa4149392293c43bea8105ce48dcd6039f85e1af778d2d",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/recorded-clock-readout.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4131",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bf8a8a2d36e4442a3377130f9e95bede8e752664c9aac9e8fe516b9bfe100ff7",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-delivery.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4132",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e5862de4b03bcad8c4b368590c06fa82e919f8acadf7d44b84c08ddae1d28ba1",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/recorded-clock-readout.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4133",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f21ee0b0919af40b16a1a4bac999a4e79676b09845ac6b4bad85b4103c8403a5",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-delivery.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4134",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7d82af6293a10d610ce1b7c190f7ff2facdda38a946f44b8f99e754da9ae4b1a",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-delivery.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4135",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f2396545e5ef544f5ffd28b05fa6ab8e1f3709a607a6035a27e47a511573a507",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/recorded-clock-readout.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4136",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4941abf08e02bd2cdb1e563e55ff78fa38dbc4740bfeca41f3abf61cc77b2503",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/theme/theme.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4137",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1cf6fbef9dd30224bb4e4897a89e3b695054b119694237d1d2fa574918359ce6",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4138",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e526a65b8b036bfcc88a369f3706deb48f9c3b4a5d67096b49bf9218adaef9e3",
+      "uxItems": [],
+      "evidence": "tools/label-sweep/label-sweep.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4139",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2ec3e5232c6f87b94a0a9221aba3c70336e5fbfc65227045d1ba7141ee74a788",
+      "uxItems": [],
+      "evidence": "apps/server/src/structure-selection-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4140",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b09e0c3644766e7c9f2185000053d2416f5e5dd1c8533da20f076dcdf76f556c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-05"
+    },
+    {
+      "id": "D4141",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b3495b28cdf8ef9f1c1780dc1ab5ebfb44b22272c8ed0d1b11119a283705c443",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/module-query-response.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4142",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fe9102e002a2dbb9dd6042a1f63188309c4b567075e75ae3d6309fe781b9885c",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-style-occurrence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4143",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a77fd08d8c54f2ecf57373174a62a96b00ab824ec319677f8742efd5a8ba1d16",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-style-occurrence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4144",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f88da0824adfe28c82cf09dd99c3fe325d0d78dd1f8980b34931bab55c1bab29",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-style-occurrence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4145",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1f029b756ae5a709f3c0c81c72c81c5362416a2c0a0b3a69d5b98608d3b53be9",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-style-occurrence.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4146",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:77b47552b25b3d293b4e33e5983a1a89820022b112945181676ff2bd38ba980c",
+      "uxItems": [],
+      "evidence": "docs/evidence-contract.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4147",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:accd542c4afe89086eedc2078f4474b979d4866d59a1ae4ad0ffc3317b7fc8fb",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-game-facts.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4148",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:99f83c7546eb1b2ca87ac3efa36f5f07969fd0eef88158791682af4cbaab1f91",
+      "uxItems": [],
+      "evidence": "a8b5c82e",
+      "evidenceKind": "commit"
+    },
+    {
+      "id": "D4149",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e2f9e1973b61edb27c9dd87e0b0d849e3612dc5b15b8c13d03505975d06a2be8",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-game-facts.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4150",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9f3e75c7b3533deaf2f4215f0940665e1843b273bbf8f1f8b8305583cd38ca41",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-game-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4151",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f7deb42bb62d737dfbe02e0a18f5172b99d796b428c0c6f4a0b7ca7a61a96dc8",
+      "uxItems": [],
+      "evidence": "apps/server/src/learner-profile.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4152",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ce51c8731b04a9dd6ed23ab2b2d07e7e8dd59943d6bb47a3a19f8d2743387f8d",
+      "uxItems": [],
+      "evidence": "planning/roadmap-1.0.json",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4153",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:61cbd124f0762fdf9a0b41b6039bb66eabdea1834d66a74453b7045605e197dc",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-05"
+    },
+    {
+      "id": "D4154",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:71413d47a1fc3828d2fb4971ec16d8bc93e46ecfaae69c2651c8b6f6bd5bbbe9",
+      "uxItems": [],
+      "evidence": "apps/server/src/authored-census-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4155",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:df8f6dd1d2cf8600d80671c5fdac17c60a0bf9ce85d2d3ee6f08cd3d132578f3",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-game-facts.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4156",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:247c2b5624bb83f4d510040b9543c9b3106a084c9e36e33e22b11ef56e5cbb2c",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-game-facts.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4157",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ccecc99d139ddbf3a1f88b79477ec619d92043f8d887f3ba3eab85718e7be144",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-game-facts.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4158",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:73519f0aff8251b489ba248e9972a44c64e0ba1d69e62be13cab754237c37fbb",
+      "uxItems": [],
+      "evidence": "apps/server/src/learner-profile.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4159",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6ce114186f82787df301d04c1b9c3cafcbeee00140bb8a07f6e7d1f3cdec1c20",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-choice-store.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4160",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:eb5ffd197deda05523d3fcb0ca03d5c0bb097dd17828e871ca7da954d28b897c",
+      "uxItems": [],
+      "evidence": "apps/server/src/recorded-clock-delivery.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4161",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:370200d523aa0b575cb7a6b8d9449b40676151b2b56544643c2b4c8ec4285e11",
+      "uxItems": [],
+      "evidence": "apps/server/src/evidence-manifest.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4162",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7982d8b6684e9a9b2fbb2f18eb0638430d558408bdd23375db265929822f06e2",
+      "uxItems": [],
+      "evidence": "apps/server/src/storage.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4163",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d30d0575e75e69c26f04d02650cc9286d1a08868e17fa8b733cb74bf2c546c99",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-castling.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4164",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:416e2038014331f638e9593aeeb611e5bf2ea1e69fe2e666c0b8dc95724ad4dc",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-rights.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4165",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7d54de0be2fafab39c466dd9ec760c450ec9d5915c61378ea95eaa84d4ca1451",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-rights.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4166",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:60cc1c12811fa5c24cf02a5d80d7a75fe648f9d0611ac4bd200703da8232c570",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-transition-fields.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4167",
+      "state": "doing",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:bc54044697843dae08daf278ec6d5c9b8b8b4aeea1c9b3af0953b056134de0c8",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-09"
+    },
+    {
+      "id": "D4168",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:40e06025af3ef30c45cffe552da82fadef1e55df59ae1f0a9c2c504e764f1e2a",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-edge-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4169",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:762d8965476680b36197ae673e434ec8e6f5d6b9b4e78f60bc6485434b6345a5",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/inspector-source-browser.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4170",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0c86d9b32b40299cca9398f467a30d6197901ffcd10efc6369715b2bc833f599",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-semantic-event.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4171",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ffaf58987f5de523ba43e3ddbf2f210209a5a6fb421b1c4da1ec56591ed53bed",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-current-source.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4172",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ead43e401dfcc5f4b32f90f0ab91e5ac9ff4910f21eac830ca66a38751d1e5fb",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-slider.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4173",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ca3bdbec44dca38879fb3b1aa7dec145f0a595fe30670f718c7d954d528757ea",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-pawn-file.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4174",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9af8e01a0c491c1ae24ab6818cbf72c0c79e27dc8bc56cb17ececcc420e91413",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-slider.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4175",
+      "state": "blocked",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:61f0b1a0769389996ef02d7531a8b62c9617569138a8055ec49f32c39074ab76",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "item:D1716"
+    },
+    {
+      "id": "D4176",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:239a2a07da5b61912c9bf502fa2679dc2136afc66765f18268de95c37d94c831",
+      "uxItems": [],
+      "evidence": "docs/semantic-evidence.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4177",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5a8e53e6925652373bf999833a0bd0e18735468dbf40853c1a8e9fda1d6238f0",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/foundation-position-cells.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4178",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2e8fd62512428a94d6c21a042ddc7996defc7bf1a964736dee31eb7556404f77",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4179",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:65be2e6de75124386cd2e67f091c2ac47d82801ee17e5c09212785b40a612baa",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D4180",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0e21ca4d6335e0187f5dd2822a7b8d6e7c8bf63264f2a802a23c0337a1777e19",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4181",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-09"
+    },
+    {
+      "id": "D4182",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:142be084904d39e994c247e72c13e1ea5d53f6402d84eb01cbaaadae6b392a4f",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-subject-store.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4183",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6784f481ec068f298f6dbd7637a66f3d54b2658e0928851540c19d285cff27dc",
+      "uxItems": [],
+      "evidence": "apps/server/src/inspector-query.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4184",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:32eaa1923a033a70bcc58a2814c453d5f5249d626d080ca0fbfebd6f748de4a1",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-conventions.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4185",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7f8ff8fb44aeb2775b1384e62e57d3794b53a767a58e0772f58e0b822738e1ab",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/current-native-module-delivery.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4186",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:711b3e022d4dbc66bfe91d6b3990b867faf26538763f8a080debc7730bb33556",
+      "uxItems": [],
+      "evidence": "tools/software-scheduling.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4187",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bf0da68d8007fdeafa017a378b5762b628ffb41931f77651814394be0b2dc933",
+      "uxItems": [],
+      "evidence": "tools/software-scheduling.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4188",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cb4e0b3f294d0fd44ebc303859439327e9c5cae6b72b6b4c4e73f567adbfe395",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/evidence/components/TextStatementView.svelte",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4189",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0a9c9c67604c3bd92f04bfc67344003d21243c00fc0baba1696c47944dc4c105",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/module-registry.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4190",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e63149bc3d07daa960777528dc163a3c187b371674c726b260bc6da71ab42d50",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/inspector-source-browser.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4191",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4a107e98537ae7c3cd9578f6c019dca88a2b33404eca8bb0fcd706640aaf4b6b",
+      "uxItems": [],
+      "evidence": "apps/server/src/storage.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4192",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cada71e7abc2f6c6b81998ec2e8fe6059b199bb27aaa2c1f531dce4d99aeb872",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-pawn-dynamics.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4193",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:021a9da719074805a5dbe05025722366f6487f8403c9f940062d98cf90e91a50",
+      "uxItems": [],
+      "evidence": "apps/server/src/postcommit-change-delivery.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4194",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:deffcd8e1b2c40f79f23324bd445fa3a7d258f26b927210c27ebd5c9c06e88c0",
+      "uxItems": [],
+      "evidence": "apps/server/src/profile-game-facts.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4195",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9503cb3db6438d18bbe3bcfbd4f92d8c9d7490e51e815d59c9f4a5b1b66a45f9",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/capability/declarations.generated.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4196",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6ccc02ed7222ab28bdf29cddd350a15fb13d8debe58d84955c02835b0328b5dd",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/candidate-population-census.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4197",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-11-10"
+    },
+    {
+      "id": "D4198",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c5fb6b4ba01f25ce951f9a59c176a456ddb6ae50479697573c7e0563c262bbee",
+      "uxItems": [],
+      "evidence": "77e8528f",
+      "evidenceKind": "commit"
     }
   ]
 }

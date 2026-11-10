@@ -79,7 +79,7 @@ made visible**, and §3a-note plus §Open questions 2 now carry it: the `census.
 express a reading about part of an expression.
 
 ```tabiya-claims
-shape-entry-schema | lane 0.4 | measurements property; $defs/measurementRecord; $defs/measurementSpan; $defs/measurementDisposition
+shape-entry-schema | lane 0.5 | measurements property; $defs/measurementRecord; $defs/measurementSpan; $defs/measurementDisposition
 ```
 
 ---
@@ -340,7 +340,7 @@ and the honest one-line summary is that this RFC makes *corpus* claims self-inva
 
 | Register | Claim | Detail |
 |---|---|---|
-| **Shape-entry schema** | **0.4** | `urn:chess-tabiya:schema:shape-entry:0.3` → `:0.4`; `SHAPE_ENTRY_SCHEMA_VERSION` (`packages/schema/src/index.ts`, reads `"0.3"`) and the pin in `packages/schema/src/shape-entry.test.ts:32` move with it. **One additive optional top-level property, `measurements`, plus three `$defs` — `measurementRecord`, `measurementSpan`, `censusAssertion`** (§4b, §4c, §3d). |
+| **Shape-entry schema** | **0.5** | `urn:chess-tabiya:schema:shape-entry:0.3` → `:0.5`; `SHAPE_ENTRY_SCHEMA_VERSION` (`packages/schema/src/index.ts`, reads `"0.3"`) and the pin in `packages/schema/src/shape-entry.test.ts:32` move with it. **One additive optional top-level property, `measurements`, plus three `$defs` — `measurementRecord`, `measurementSpan`, `censusAssertion`** (§4b, §4c, §3d). |
 | **Pack schema** | **NONE** | `DRILL_PACK_SCHEMA_VERSION` reads **`0.27`** in the tree (`pack-graduation` landed; see fact 1 below). **0.28 remains the next free lane and this RFC leaves it free.** |
 | **Run schema** | **NONE** | Nothing is persisted. No event, no event field, no vocabulary value. |
 | **Migration** | **NONE** | `STORAGE_VERSION` reads **22** (`apps/server/src/storage.ts`, `export const STORAGE_VERSION = 22`). Untouched. If a later revision needs one it takes `STORAGE_VERSION + 1` **at landing**, per the register's standing rule; it needs none. |
@@ -1585,3 +1585,8 @@ none
   position-anchored class (§Scope boundary), and the admission that
   `docs/expression-census.md`'s *"deliberately absent from `make verify`"* is **broken, not
   extended**, by this RFC. Refusal codes: **+9 new, 7 reused**, swept to zero.
+
+
+- 2026-11-04 scheduling only: the unshipped optional-measurement shape claim moves0.4→0.5
+  so accepted foundation kind/ref compatibility can implement the next0.4 head first. Owner
+  preauthorized pre-launch ordering changes; feature scope and returned status stay unchanged.

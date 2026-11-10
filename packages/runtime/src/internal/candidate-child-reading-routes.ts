@@ -1,11 +1,34 @@
+/** Sole compiler2 replacement slots (accepted shared packet §3.1a). The actual collectors,
+ * generated closure and Hint source matrix share these exact refs, not base-id/max-version guesses. */
+export const CANDIDATE_CURRENT_SOURCE_ROUTES = Object.freeze({
+  forkSurvival: "derived.tactic.nonterminal_fork_survival@1",
+  promotionPressure: "rules.tactic.reading.promotion_pressure@1",
+  materialSignature: "derived.material.reading.role_signature@2",
+  materialEvent: "derived.material.event.role_asymmetry@2",
+  defenderExposure: "derived.tactic.defender_exposure@2",
+  candidateRole: "rules.mobility.reading.candidate_role@1",
+  extendedCenterDestination: "rules.mobility.reading.pawn_extended_center_destination@1",
+} as const);
+
 /** Exact sources actually executed by candidateChildReadings; also drives its packet closure. */
 export const CANDIDATE_CHILD_READING_ROUTES = Object.freeze([
+  "rules.mobility.reading.legal_moves@1",
+  "rules.structural.reading.king_opposition@3",
+  "rules.structural.reading.backward_pawn@3",
+  "rules.structural.reading.fianchetto_setup@1",
+  "rules.structural.reading.fianchetto_knight_screen@1",
   "rules.castling.reading.rights@1",
   "rules.castling.reading.legality@1",
   "rules.tactic.reading.loose_piece@1",
   "rules.tactic.reading.ray_classification@1",
   "rules.tactic.consequence.threat@1",
   "rules.structural.reading.pawn_connectivity@1",
+  "derived.structural.reading.pawn_file_group@1",
+  "derived.activity.reading.file_state@1",
+  "derived.square.reading.future_file_challenge@1",
+  "derived.square.reading.capture_migration_reach@1",
+  "derived.structural.reading.outpost_candidate@1",
+  "derived.structural.reading.occupied_outpost@1",
   "rules.phase.development@1",
   "rules.tactic.reading.rook_on_seventh@1",
   "rules.structural.reading.space@1",
@@ -13,11 +36,11 @@ export const CANDIDATE_CHILD_READING_ROUTES = Object.freeze([
   "rules.tactic.reading.trapped_piece@1",
   "rules.tactic.reading.back_rank@1",
   "rules.tactic.consequence.mate_in_one@1",
-  "derived.tactic.promotion_pressure@1",
+  CANDIDATE_CURRENT_SOURCE_ROUTES.promotionPressure,
   "rules.square.reading.control@1",
   "rules.mobility.reading.piece_destinations@1",
   "rules.pawn.reading.contacts@1",
   "rules.pawn.reading.candidate_majority@1",
-  "derived.material.reading.role_signature@1",
+  CANDIDATE_CURRENT_SOURCE_ROUTES.materialSignature,
   "rules.king.reading.zone_state@1",
 ] as const);

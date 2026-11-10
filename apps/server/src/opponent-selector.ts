@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -9,6 +9,8 @@ import {
   applicationProviderExecution,
   assertConsumerEvidenceView,
   assertProviderDelivery,
+  canonicalProviderJson,
+  normalizeProviderRequest,
   compileEvidenceConsumerExecution,
   opponentProviderEvidence as declareOpponentProviderEvidence,
   evidenceForConsumer,
@@ -26,7 +28,10 @@ import {
   type ProviderInstanceId,
   type LiveSyzygyPosition,
   type ProviderEvidenceDelivery,
+  type MaiaInferenceTaskResult,
 } from "@chess-tabiya/runtime";
+import { evidenceValueReceipt } from "../../../packages/runtime/src/evidence-contract.js";
+import type { MaiaTaskEvidence, MaiaTaskSource } from "./provider-maia.js";
 
 import type {
   EngineHealth,
@@ -89,6 +94,9 @@ export interface SelectorEngineClient {
 }
 
 export interface OpponentSelectorOptions {
+  /** Explicit modern source; failures never fall back to raw engine execution. */
+  readonly maiaTaskSource?: MaiaTaskSource;
+  readonly sampleRequestId?: () => string;
   readonly maiaEngineId?: string;
   readonly strongEngineId?: string;
   readonly strongEngineMovetimeMs?: number;
@@ -116,6 +124,16 @@ export interface ReceiptedOpponentSelection {
   readonly receipt: OpponentSelectionReceipt;
 }
 
+export interface ReceiptedMaiaSelection extends ReceiptedOpponentSelection {
+  /** Original final task, internal only. Legacy or non-human-common selections have no task. */
+  readonly maiaEvidence: MaiaTaskEvidence | null;
+}
+interface SelectionOutcome { readonly selection: OpponentSelection; readonly maiaEvidence: MaiaTaskEvidence | null }
+type MaiaSelectionTask = { readonly identity: EngineIdentity; readonly eloApplied?: number } & (
+  | { readonly kind: "legacy"; readonly lines: readonly string[] }
+  | { readonly kind: "modern"; readonly candidates: readonly SelectionCandidate[]; readonly sampledMoveUci: string | null; readonly evidence: MaiaTaskEvidence }
+);
+
 /** §7 defaults: 512 settled entries and a TTL enforced at insertion (at most 24 hours). */
 export const OPPONENT_SELECTION_CACHE_BOUNDS = Object.freeze({ maxEntries: 512, ttlMs: 6 * 60 * 60 * 1000 });
 const MAX_SELECTION_TTL_MS = 24 * 60 * 60 * 1000;
@@ -130,6 +148,8 @@ const MODE_INSTANCES: Readonly<Record<RunOpponentMode, readonly ProviderInstance
 
 interface SettledSelection {
   readonly selection: OpponentSelection;
+  readonly maiaEvidence: MaiaTaskEvidence | null;
+  readonly taskGeneration: number | null;
   readonly generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>;
   readonly producedAt: string;
   readonly expiresAtMonotonic: number;
@@ -237,6 +257,17 @@ export function consumeOpponentSelectionEvidence(view: ConsumerEvidenceView<Oppo
 }
 
 const TABLEBASE_SELECTION_CONSUMER = Object.freeze({ id: "opponent.selection", version: 2 });
+const MAIA_TASK_CONSUMER = Object.freeze({ id: "opponent.maia_task", version: 1 });
+type MaiaTaskDelivery = ProviderEvidenceDelivery<MaiaInferenceTaskResult, "maia.inference_task@1">;
+
+export function consumeOpponentMaiaTaskEvidence(view: ConsumerEvidenceView<MaiaTaskDelivery>): MaiaTaskDelivery {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== MAIA_TASK_CONSUMER.id || view.consumer.version !== 1 || view.items.length !== 1
+    || view.items[0]!.projection.id !== "human.maia.inference_task" || view.items[0]!.projection.version !== 1) throw new TypeError("Expected one whole opponent.maia_task@1 source");
+  const delivery = view.items[0]!.payload;
+  assertProviderDelivery("maia.inference_task@1", delivery);
+  return delivery;
+}
 type OpponentTablebaseDelivery = ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">;
 
 /** Exact successor admission; the multi-provider/standalone v1 callable is unchanged. */
@@ -631,12 +662,16 @@ export class OpponentSelector {
   }>();
   readonly #monotonic: () => number;
   readonly #wall: () => string;
+  readonly #maiaTaskSource: MaiaTaskSource | undefined;
+  readonly #sampleRequestId: () => string;
 
   constructor(
     client: SelectorEngineClient | EngineSupervisor,
     options: OpponentSelectorOptions = {},
   ) {
     this.#client = client;
+    this.#maiaTaskSource = options.maiaTaskSource;
+    this.#sampleRequestId = options.sampleRequestId ?? randomUUID;
     this.#maiaEngineId = options.maiaEngineId ?? "maia-5m";
     this.#strongEngineId = options.strongEngineId ?? "stockfish-play";
     const profile = resolveStrongEngineProfile({
@@ -673,6 +708,19 @@ export class OpponentSelector {
    * live provider and fails with the typed, bounded unavailable outcome — never a different mode.
    */
   selectWithReceipt(request: SelectMoveRequest, options: { readonly signal?: AbortSignal } = {}): Promise<ReceiptedOpponentSelection> {
+    return this.selectWithMaiaEvidence(request, options).then(({ selection, receipt }) => Object.freeze({ selection, receipt }));
+  }
+
+  /** Explicit server composition, not response-shape fallback or learner-controlled configuration. */
+  hasMaiaTaskSource(): boolean { return this.#maiaTaskSource !== undefined; }
+
+  /** The same two authorities used by selection retention, not a new counter or health decision. */
+  maiaTaskGenerationState(): Readonly<{ task: number | null; registry: string | null }> {
+    return Object.freeze({ task: this.#taskGeneration("human_common"), registry: this.#generationImage("human_common")["maia-inference"] ?? null });
+  }
+
+  /** Shares the same bounded selection flight/cache; never reads an ambient last-task slot. */
+  selectWithMaiaEvidence(request: SelectMoveRequest, options: { readonly signal?: AbortSignal } = {}): Promise<ReceiptedMaiaSelection> {
     // Request refusals (band, policy, terminal position) stay synchronous, before any provider.
     this.validatePolicy(request.policy);
     if (currentPosition(request).isEnd()) {
@@ -681,22 +729,28 @@ export class OpponentSelector {
     return this.#selectWithReceipt(request, options.signal);
   }
 
-  async #selectWithReceipt(request: SelectMoveRequest, signal?: AbortSignal): Promise<ReceiptedOpponentSelection> {
+  async #selectWithReceipt(request: SelectMoveRequest, signal?: AbortSignal): Promise<ReceiptedMaiaSelection> {
     signal?.throwIfAborted();
     const generations = this.#generationImage(request.policy.mode);
+    const taskGeneration = this.#taskGeneration(request.policy.mode);
     const key = `${selectionCacheKey(request)}\0${JSON.stringify(generations)}`;
+    const flightKey = `${key}\0${taskGeneration}`;
     const hit = this.#settled.get(key, this.#monotonic());
-    if (hit !== undefined) {
-      return Object.freeze({ selection: hit.selection, receipt: Object.freeze({ source: "cached_exact", generations: hit.generations, producedAt: hit.producedAt, servedAt: this.#wall() }) });
+    // A readiness-only null is not a new registry generation. Retain the original observation
+    // while health is down; an actually ready replacement must match the captured task generation.
+    if (hit !== undefined && (hit.taskGeneration === taskGeneration
+      || taskGeneration === null && this.#health !== undefined && hit.generations["maia-inference"] != null)) {
+      return Object.freeze({ selection: hit.selection, maiaEvidence: hit.maiaEvidence, receipt: Object.freeze({ source: "cached_exact", generations: hit.generations, producedAt: hit.producedAt, servedAt: this.#wall() }) });
     }
-    let pending = this.#inFlight.get(key);
+    let pending = this.#inFlight.get(flightKey);
     if (pending === undefined) {
       const controller = new AbortController();
-      const started = this.#selectLive(request, generations, controller.signal).then((settled) => {
+      const started = this.#selectLive(request, generations, taskGeneration, controller.signal).then((settled) => {
         controller.signal.throwIfAborted();
         // A result produced under a generation that has since been replaced never reaches a
         // response and never populates the new generation's cache (§3, criterion 19).
-        if (JSON.stringify(this.#generationImage(request.policy.mode)) !== JSON.stringify(generations)) {
+        if (JSON.stringify(this.#generationImage(request.policy.mode)) !== JSON.stringify(generations)
+          || this.#taskGeneration(request.policy.mode) !== taskGeneration) {
           throw this.#generationChanged(request.policy.mode);
         }
         this.#settled.put(key, this.#monotonic(), settled);
@@ -705,10 +759,10 @@ export class OpponentSelector {
       const entry = { controller, waiters: 0, settled: false, promise: started.finally(() => {
         entry.settled = true;
         // An abandoned flight may finish after a replacement with the same key was admitted.
-        if (this.#inFlight.get(key) === entry) this.#inFlight.delete(key);
+        if (this.#inFlight.get(flightKey) === entry) this.#inFlight.delete(flightKey);
       }) };
       pending = entry;
-      this.#inFlight.set(key, pending);
+      this.#inFlight.set(flightKey, pending);
     }
     const flight = pending;
     flight.waiters += 1;
@@ -720,7 +774,7 @@ export class OpponentSelector {
         signal?.removeEventListener("abort", onAbort);
         flight.waiters -= 1;
         if (flight.waiters === 0 && !flight.settled) {
-          if (this.#inFlight.get(key) === flight) this.#inFlight.delete(key);
+          if (this.#inFlight.get(flightKey) === flight) this.#inFlight.delete(flightKey);
           flight.controller.abort();
         }
         return true;
@@ -735,20 +789,24 @@ export class OpponentSelector {
       if (signal?.aborted) onAbort();
     });
     signal?.throwIfAborted();
-    return Object.freeze({ selection: settled.selection, receipt: Object.freeze({ source: "live", generations: settled.generations, producedAt: settled.producedAt, servedAt: this.#wall() }) });
+    return Object.freeze({ selection: settled.selection, maiaEvidence: settled.maiaEvidence, receipt: Object.freeze({ source: "live", generations: settled.generations, producedAt: settled.producedAt, servedAt: this.#wall() }) });
   }
 
-  async #selectLive(request: SelectMoveRequest, generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>, signal: AbortSignal): Promise<Omit<SettledSelection, "expiresAtMonotonic">> {
+  async #selectLive(request: SelectMoveRequest, generations: Readonly<Partial<Record<ProviderInstanceId, string | null>>>, taskGeneration: number | null, signal: AbortSignal): Promise<Omit<SettledSelection, "expiresAtMonotonic">> {
     const deadline = this.#monotonic() + applicationProviderExecution("opponent.maia_inference").consumerBudgetMs;
-    const selection = await this.#selectUncached(request, deadline, signal);
+    const outcome = await this.#selectUncached(request, deadline, signal);
     signal.throwIfAborted();
-    return Object.freeze({ selection, generations, producedAt: this.#wall() });
+    return Object.freeze({ ...outcome, generations, taskGeneration, producedAt: this.#wall() });
   }
 
   #generationImage(mode: string): Readonly<Partial<Record<ProviderInstanceId, string | null>>> {
     const instances = MODE_INSTANCES[mode as RunOpponentMode] ?? [];
     const health = this.#health;
     return Object.freeze(Object.fromEntries(instances.map((instanceId) => [instanceId, health === undefined ? null : health.generation(instanceId)])));
+  }
+
+  #taskGeneration(mode: string): number | null {
+    return MODE_INSTANCES[mode as RunOpponentMode]?.includes("maia-inference") ? this.#maiaTaskSource?.currentGeneration() ?? null : null;
   }
 
   #generationChanged(mode: string): ProviderUnavailableError {
@@ -870,19 +928,19 @@ export class OpponentSelector {
     );
   }
 
-  async #selectUncached(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
+  async #selectUncached(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<SelectionOutcome> {
     signal.throwIfAborted();
     switch (request.policy.mode) {
       case "human_common":
         return this.#humanCommon(request, deadline, signal);
       case "strong_engine":
-        return this.#strongEngine(request, deadline, signal);
+        return { selection: await this.#strongEngine(request, deadline, signal), maiaEvidence: null };
       case "theory_strict":
         return this.#theoryStrict(request, deadline, signal);
       case "perfect_tablebase":
-        return this.#perfectTablebase(request, deadline, signal);
+        return { selection: await this.#perfectTablebase(request, deadline, signal), maiaEvidence: null };
       case "practical_resistance":
-        return this.#practicalResistance(request, deadline, signal);
+        return { selection: await this.#practicalResistance(request, deadline, signal), maiaEvidence: null };
       default:
         throw policyModeUnsupported(request.policy.mode);
     }
@@ -893,7 +951,7 @@ export class OpponentSelector {
     multiPv: number,
     deadline: number,
     signal: AbortSignal,
-  ): Promise<{ readonly lines: readonly string[]; readonly identity: EngineIdentity; readonly eloApplied?: number }> {
+  ): Promise<MaiaSelectionTask> {
     const health = this.#client.health(this.#maiaEngineId);
     const identity = engineIdentity(this.#client, this.#maiaEngineId);
     const eloApplied = appliedTargetElo(health, request.policy.targetElo);
@@ -901,6 +959,31 @@ export class OpponentSelector {
     const optionDefault = (name: string) => health.options?.find((item) => item.name === name)?.default;
     const maximum = spin("MultiPV")?.max;
     const appliedMultiPv = maximum === undefined ? multiPv : Math.min(multiPv, maximum);
+    if (this.#maiaTaskSource !== undefined) {
+      signal.throwIfAborted();
+      const remaining = Math.floor(deadline - this.#monotonic());
+      if (remaining < 1 || eloApplied === undefined || identity.modelId === undefined) throw engineUnavailable(this.#maiaEngineId, 0);
+      const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, MAIA_TASK_CONSUMER);
+      if (execution.bindings.length !== 1 || execution.bindings[0]!.binding.projection.id !== "human.maia.inference_task"
+        || execution.bindings[0]!.binding.projection.version !== 1 || execution.bindings[0]!.paths.some(path => path.sourceRequirements.length !== 1 || path.sourceRequirements[0]!.providerOperation !== "maia.inference_task@1")) throw new TypeError("Maia task has no complete exact consumer execution");
+      const taskRequest = normalizeProviderRequest("maia.inference_task@1", { sampleRequestId: this.#sampleRequestId(),
+        position: { kind: "history_conditioned", startFen: request.startFen, historyUci: request.historyUci },
+        requestedModel: { id: identity.modelId, version: identity.version }, band: eloApplied,
+        temperature: request.policy.temperature ?? DEFAULT_TEMPERATURE, topP: request.policy.topP ?? DEFAULT_TOP_P,
+        requestedWidth: appliedMultiPv, timeoutMs: remaining }).request;
+      const evidence = await this.#maiaTaskSource.acquire(taskRequest, { signal, deadlineMonotonic: deadline });
+      signal.throwIfAborted();
+      if (evidenceValueReceipt(evidence).factory !== "createHumanMaiaInferenceTaskV1Evidence") throw new TypeError("Maia task source has another value factory");
+      const delivery = consumeOpponentMaiaTaskEvidence(evidenceForConsumer(EVIDENCE_MANIFEST, MAIA_TASK_CONSUMER, [evidence]));
+      if (delivery.acquisition.generation !== this.#maiaTaskSource.currentGeneration()
+        || canonicalProviderJson(delivery.payload.request) !== canonicalProviderJson(taskRequest)) throw new TypeError("Maia task source crosses its requested draw/history/options/generation");
+      const actual = delivery.acquisition.actualIdentity;
+      const candidates = Object.freeze(delivery.payload.candidates.map(row => Object.freeze({ moveUci: row.moveUci, rank: row.rank,
+        ...(row.mass === null ? {} : { mass: row.mass }), ...(row.scoreCp === null ? {} : { scoreCp: row.scoreCp }), ...(row.wdl === null ? {} : { wdl: row.wdl }) })));
+      return Object.freeze({ kind: "modern", identity: Object.freeze({ id: actual.id, kind: "opponent", name: actual.name, version: actual.version,
+        modelId: actual.modelId, containerDigest: actual.containerDigest, seedHonored: actual.seedHonored, eloHonored: actual.eloHonored }),
+        eloApplied: delivery.payload.appliedBand, candidates, sampledMoveUci: delivery.payload.termination.moveUci, evidence });
+    }
     const bandDefaults = ["SelfElo", "OppoElo"].flatMap((name) => {
       const value = optionDefault(name);
       return value === undefined ? [] : [`setoption name ${name} value ${value}`];
@@ -924,25 +1007,28 @@ export class OpponentSelector {
       until: (line) => line.startsWith("bestmove "),
     }, deadline, 1, signal));
     return Object.freeze({
+      kind: "legacy",
       lines,
       identity,
       ...(eloApplied === undefined ? {} : { eloApplied }),
     });
   }
 
-  async #humanCommon(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
+  async #humanCommon(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<SelectionOutcome> {
     const health = this.#client.health(this.#maiaEngineId);
     const maximum = health.options?.find((item) => item.name === "MultiPV" && item.type === "spin")?.max;
     const requestedWidth = Math.max(8, legalMoveCount(currentPosition(request)));
     const width = maximum === undefined ? requestedWidth : Math.min(requestedWidth, maximum);
     let result = await this.#maia(request, width, deadline, signal);
     const fen = requestPositionFen(request);
-    let candidates = candidateLines(result.lines, fen);
-    let moveUci = bestMove(result.lines, fen);
+    const reported = (task: MaiaSelectionTask) => task.kind === "modern" ? task.candidates : candidateLines(task.lines, fen);
+    const sampled = (task: MaiaSelectionTask) => task.kind === "modern" ? task.sampledMoveUci ?? (() => { throw invalid("Maia returned no legal sampled move"); })() : bestMove(task.lines, fen);
+    let candidates = reported(result);
+    let moveUci = sampled(result);
     if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
       result = await this.#maia(request, width, deadline, signal);
-      candidates = candidateLines(result.lines, fen);
-      moveUci = bestMove(result.lines, fen);
+      candidates = reported(result);
+      moveUci = sampled(result);
     }
     if (!candidates.some((candidate) => candidate.moveUci === moveUci)) {
       const maxRank = candidates.reduce((rank, candidate) => Math.max(rank, candidate.rank), 0);
@@ -951,13 +1037,14 @@ export class OpponentSelector {
         Object.freeze({ moveUci, rank: maxRank + 1, offWindow: true as const }),
       ]);
     }
-    return makeSelection(
+    const selection = makeSelection(
       moveUci,
       candidates,
       result.identity,
       "human_common",
       result.eloApplied,
     );
+    return Object.freeze({ selection, maiaEvidence: result.kind === "modern" ? result.evidence : null });
   }
 
   /** @instrument-fed Stockfish 51-position reproducibility corpus */
@@ -984,7 +1071,7 @@ export class OpponentSelector {
     );
   }
 
-  async #theoryStrict(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
+  async #theoryStrict(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<SelectionOutcome> {
     const children = spineChildren(request);
     if (children === undefined || children.length === 0) {
       console.warn(
@@ -995,7 +1082,7 @@ export class OpponentSelector {
     const result = await this.#maia(request, Math.max(8, children.length), deadline, signal);
     const fen = requestPositionFen(request);
     const allowed = new Set(children.map((child) => normalizeInboundMove(fen, child.moveUci, "pack_move_uci").moveUci));
-    const matching = candidateLines(result.lines, fen).filter((candidate) =>
+    const matching = (result.kind === "modern" ? result.candidates : candidateLines(result.lines, fen)).filter((candidate) =>
       allowed.has(candidate.moveUci),
     );
     const hash = historyHash(request);
@@ -1017,7 +1104,7 @@ export class OpponentSelector {
             ),
           )
         : matching;
-    return makeSelection(moveUci, candidates, result.identity, "theory_strict", result.eloApplied);
+    return Object.freeze({ selection: makeSelection(moveUci, candidates, result.identity, "theory_strict", result.eloApplied), maiaEvidence: null });
   }
 
   async #perfectTablebase(request: SelectMoveRequest, deadline: number, signal: AbortSignal): Promise<OpponentSelection> {
@@ -1098,7 +1185,7 @@ export class OpponentSelector {
         historyUci: Object.freeze([...request.historyUci, candidate.uci]),
       });
       const maia = await this.#maia(childRequest, Math.max(8, legalMoveCount(child)), deadline, signal);
-      const policy = candidateLines(maia.lines, childFen);
+      const policy = maia.kind === "modern" ? maia.candidates : candidateLines(maia.lines, childFen);
       const conceding = new Set(
         childTablebase.moves
           .filter((reply) => invertTablebaseCategory(reply.category) !== childTablebase.category)

@@ -33156,3 +33156,6901 @@ self-acceptance, feature permission or partial current consumer image follows fr
   path evidence; D3859 remains doing. Four active/five blocked milestones, the historical462
   prose-only closures and zero graduated official packs remain unchanged. Stage only this
   checkpoint's24 explicit owned paths; normal commit hooks validate the exact index.
+
+## 2026-11-02 — D3859 actual grade/Review integration in flight; D3921 recorded
+
+- Previous goal turn only resolved the already-landed telemetry scheduling answer: no implementation
+  progress. Revalidated HEAD48a6e0f5 and the two existing untracked grade-source files, then continued
+  the accepted coupled source/consumer migration. No worktree, push, goal pause or replacement goal.
+- Implemented the private recorded-grade handle and sole RunService issuer, original fixed-pair/
+  edge/mover joins, independent permission ownership, pre-source finalized-ceiling validation,
+  original candidate dispositions and cancellation/current-storage checks. A dedicated Review page
+  uses its actual review-only module ceiling without inventing a live-play preset; this null live-
+  assistance arm is refused for Nudge, which retains its finalized assistance and learner subject.
+- Added the sole grade@2 route over the exact modern-point/modern-point/edge or ledger/ledger/edge
+  member, replaced context-selecting arithmetic with D1422's cited2.5/10/15 convention, retained
+  typed mates and actual instrument/requested depth/time/nodes. A strict full renderer uses a
+  learner-readable convention label; no context-bearing or partial grade payload is a current arm.
+- Registered convention@2 and its narrow automatic-predecessor replacement; initial39 declarations
+  and historical@1 meaning remain unchanged. Normal history update appends exactly one row owned
+  by move-quality-grades.md. Negative missing/swapped/duplicate/witness controls retain closure.
+- Real RunService Review now reads grades/accuracy/graph from the same genuine sources, includes
+  the complete grade component in the row receipt, and distinguishes individual graph points
+  from comparable pairs. Client parsing and graph drawing now require the actual join flag and
+  matching typed grade component. These receiver/native changes still need their complete tests.
+- Added one validated demanded trailing-edge/capture/check union for current recorded windows;
+  actual Nudge source collection now requests its nine families rather than narrative successors.
+  Sharing overlapping preparation across the three earlier learner decisions is NOT yet finished.
+- Normal source checks first fail on fixture feedback policy, historical digest and preset choices,
+  absent binding-local source policies, an invalid declaration snapshot ref, registry/validation
+  gaps and a missing learner timestamp; each failure was observed, not relabelled as a green run.
+  The first convention/window combined run also fails four old-population assertions; update only
+  the accepted exact current populations/owner and keep all negative controls and old meanings.
+- D3921 is reproduced by normal semantic generation: eleven recorded families versus twelve
+  version-2 events after material@2 becomes live. Record/assign it before repair. Use an explicit
+  recorded-family vocabulary, preserve the complete event vocabulary and retain all eleven
+  families/thirteen evaluator rows. Its permanent path/control tests pass; full verification is open.
+- Semantic generation passes343 cases/53 population/eight external receipts. It now reports92
+  subjects and zero passed; material@2 has four explicit required arms, not copied predecessor
+  qualification. This registration is not semantic validation, useful selection or content readiness.
+- Focused normal Make result:57 grade/source/service tests across three files, plus240 convention/
+  path/window tests across three files, pass. Genuine source and actual service tests include both
+  colors, complete scalar/mate operands, all requested-budget arms, below-floor silence, exact
+  receipt inputs, full cross-workflow payload/prose equality with separate authority, Compare/
+  foreign-plan rejection, cancellation, invalid ceilings, original-storage changes and constructor
+  import isolation. One real RunService Review case proves its typed grade/accuracy/graph path;
+  it is not the whole Review journey or a native/browser/HTTP release result.
+- Ordinary workspace typecheck remains red on the predecessor caller/fixture migration. New
+  source-test typing faults were corrected afterwards; do not infer a green workspace from focused
+  Vitest. The initial un-escalated Make attempt also fails because pnpm cannot write its lockfile
+  under the sandbox; subsequent normal Make commands use the existing approved Make permission,
+  not altered Node/test env, timeouts, retries or weakened gates.
+- Keep D3859/D3921 doing and this batch uncommitted. Finish all72 Review source obligations and
+  the exact Story adapter, Nudge ancestor sharing, all remaining genuine-source fixtures/callers,
+  source absence/access/client/HTTP/native tests, then full normal verification/build and closeout.
+  No new milestone, whole consumer/RFC, source qualification, graduated pack or1.0 completion.
+  Work-state includes3670 ledger rows, zero untriaged, with D3921 assigned to evidence-foundation.
+
+- Final focused expansion covers genuine requested depth/time/node budgets in both workflow
+  sources and both colors, not only pure arithmetic. Latest normal recorded-grade-contract-check
+  exits0:69 grade/source/service cases/three files and240 convention/path/window cases/three files.
+  The earlier57-case result remains its historical reading. No whole-workspace, browser/native or
+  remote-CI green is inferred, and no commit is made from this still-incomplete coupled migration.
+
+### 2026-11-02 — D3859 current recorded source integration, further in-flight checkpoint
+
+- The owner's delayed schema-order answer introduces no new feature/policy decision. The
+  independently accepted telemetry0.19/storage31 repair and eight-slot reservation rebase already
+  landed on November1. Do not reopen scheduling or ask the owner to manage ordinary version order.
+- Actual Review now collects all eleven current sequence families through owned windows and
+  the existing complete twelve-adapter recorded source population. One original branch window
+  batch shares exact edges/captures/checks across families and endpoints; every window ends at
+  its actual node and retains complete/omitted horizons. Trade keeps its distinct genuine
+  four-operand factory rather than a nonexistent window arm. Material-event@2 is computed, not cast.
+- Actual Nudge service queries share preparation for the current learner decision and its three
+  earlier learner decisions under the same request/access image. Both colours retain own
+  endpoint identities and shared edge objects; a later automatic reply never enters those windows.
+  Current Review permission/source capture now precedes Story/phase source collection. The public
+  Story card uses the unchanged common moment selector directly, without acquiring unused private
+  grades/graph operands.
+- D3922's permanent counter first records ten immutable attachment-membership checks over two
+  reads; another records four immutable pair reconstructions. Both are now zero after original
+  complete validation. Live full run/import bytes, actual request cancellation, source-owner
+  access/registry/pending checks and callable-plan invalidation remain. Only deeply immutable exact
+  consumer images reuse compilation; mutable descendants and changed reduction callables refuse.
+  Resolve still owns a detached snapshot; read-only currentness no longer clones storage again.
+- The long70-ply genuine fixture first fails the unchanged5000ms budget at6426/7682/5182ms in
+  separate measured iterations. Temporary scalar timing output identifies source/grade work and
+  is removed; the complete permanent long-run case now passes. This is not a benchmark clearance.
+  Independent complete graph fixtures use separate normal hooks; each workflow/role remains a
+  real case. No test deadline, skip, retry, population, threshold or performance budget is raised.
+- D3923 first reproduces twelve Black zero-score exact JSON round-trip failures. The sole mover
+  conversion normalizes only zero; all nonzero scores, mate rules and thresholds remain unchanged.
+  Genuine successor presentation fixtures replace old route calls. Leakage checks retain their
+  forbidden moves and fields with standalone-token positives and hash-substring negatives, because
+  additional legitimate receipt digests can contain the same four hexadecimal characters.
+- Latest focused passes:75 grade/source/service/three files;274 convention/path/window/binding/
+  four;221 endpoint/source/five;23 boundary/one;129 runtime Review/presentation/four;108 mounted/
+  presentation/two. Workspace TypeScript/Svelte passes with zero errors/warnings. The additional
+  catalogue check correctly fails its stale299-pair expectation at actual286; current inventory
+  updates are being checked, not a full282-pair Inspector completion.
+- Failed attempts remain evidence: the first broad consumer gate reports48 failures, including
+  genuine source omissions/timeouts and stale predecessor assertions. The first current runtime
+  attempt also finds the invalid trade-window dispatch and signed zero. The superseded second
+  wide run is explicitly cancelled (exit143) after exact PID/CPU inspection; it is neither a pass
+  nor a silent observation timeout. Later runtime129 and mounted108 gates pass. The new boundary
+  no-freeze assertion initially used an already frozen runtime fixture; a truly mutable stored
+  clone corrects that control without relaxing the production check.
+- This batch remains uncommitted. Full72 source obligations (including independent ledger,
+  installed opening, phase/setup/objective delivery and complete operation coverage), broader
+  HTTP/client/native controls, metadata/history refresh, full normal verify/build/browser and
+  closeout remain. Keep D3859/D3921–D3923 doing; no source qualification, whole RFC/capability,
+  milestone, official pack or release completion. No push or remote-CI result is claimed.
+
+- Further current-source checks now pass75 plus297 contract/catalogue cases. The actual catalogue
+  delta is one new grade declaration and one new material research binding, not another material
+  declaration:49 producers/321 projections/42 consumers/554 bindings,286 of them module pairs.
+  The first incorrect322/553 expected image remains an observed failed test, then is corrected by
+  reading the catalogue diff; no historical declaration is deleted or full282-pair image claimed.
+- The broad real HTTP gate completes34 failures: most assert predecessor sequence versions;
+  every motif/payload/anchor/component assertion is retained under exact current trade2/others3.
+  D3765 now obtains its Nudge grade through an actual storage/principal/finalized-assistance
+  workflow source, not the deleted one-edge grade supplier, and checks full equality with Review.
+  The same gate also exposes D3924: an active retry's live-feedback closure wrongly withdraws
+  disclosed-mainline Review access. Dedicated Review now revalidates its selected branch's
+  existing disclosure rule on every read; live Nudge and undisclosed retries remain constrained.
+  Source/plan failures keep typed errors, not unhandled permission500 or chess absence.
+- An attempted public-card optimization initially substitutes raw selected moments for their
+  formatted presentation; its HTML call returns404. The common moment presenter is now factored
+  from Review instead, retaining headings, move labels, source labels and honest selected-source
+  footer without collecting unused private per-move grades/graph/relations. Full workspace types
+  catch and prevent the raw-shape mismatch. Four complete authenticated grade/share/retry/Analyze/
+  Compare journeys pass with their existing budgets; this targeted run selects four of81 cases,
+  not a full HTTP suite pass. The complete81-case replacement run is now in flight.
+- Review additionally connects actual phase-band@2, registered endgame setup and complete installed
+  opening-history@2 acquisition to current presentation. Installation absence stays absence, not an
+  old factory alias or inferred opening. Latest runtime129/mounted108 and full types pass after
+  this wiring. Independent ledger/objective suppliers, actual full operation coverage, source
+  absence/root cases, old caller retirement, native/browser and normal verification remain.
+  D3924 is assigned doing; work-state has3673 rows and zero untriaged. No commit or completion.
+
+- Correction to the preceding public-card bullet: the raw selected-moment shape mismatch was
+  identified from the actual HTML404 and source inspection, not an observed compiler rejection.
+  The subsequent complete workspace typecheck passes the corrected common presenter. Do not
+  attribute a diagnostic result to an instrument that did not report it.
+
+- The next complete HTTP run fails76/81 cases after newly connected installed openings expose
+  D3925: whole current nodes legitimately change evidence/checkpoint/objective projections after
+  creation. A genuine attached-delivery history case reproduces the same error. The repair keeps
+  complete snapshot/event replay, unique creation and every immutable identity field, while
+  comparing only those creation-invariant fields at that join. No event deletion, shortened
+  snapshot, lookup fallback or field-parser relaxation.85 complete opening/source/cross-reduction
+  cases pass, and all four full authenticated workflows pass again.
+- The full replacement consumer suite then passes186 cases/six files, including all81 actual
+  HTTP Review cases with every motif/component/source/no-write/share/retry/Analyze/Compare check.
+  Its trailing workspace typecheck still fails because the new negative directly assigns readonly
+  moveSan. The established explicit Object.assign corruption pattern fixes only that test input;
+  fresh complete workspace TypeScript/Svelte then passes (zero errors/warnings), followed by all85
+  opening/source/reduction cases. The combined earlier command's exit2 remains a failure, not a
+  falsely reported all-green command. No full normal verify/build/browser or remote CI yet.
+- Work-state/roadmap/status checks pass with zero untriaged, R1-R10 and P1-P7 green. Register-check
+  first fails C4/C6 on the in-tree grade-convention@2 still advertised as a held member51 resource.
+  The actual tree member is now registered as member52, the implementing RFC declares none, and
+  C1-C8 pass. Removing the claim block entirely briefly fails C1; the required explicit `none`
+  declaration corrects that metadata. This is routine implementation bookkeeping, not new
+  acceptance or owner policy. Convention meaning/history and full consumer completion stay apart.
+- Semantic refresh remains92 subjects/zero passed,343 passing cases/53 populations/eight external
+  receipts. D3925 is assigned doing;3674 ledger rows, zero untriaged. D3859/D3921–D3925 and the
+  coupled batch remain open/uncommitted. Independent ledger/objective suppliers, exact actual
+  operation coverage, root/absence delivery, retired caller cleanup, native/browser, complete
+  normal verification and required closeout still precede any completion or push-ready claim.
+
+- The final tracker reconciliation initially refuses the changed move-quality RFC-row checkpoint
+  reference. Refreshing that one exact existing reference (no milestone/capability transition)
+  restores the normal roadmap join. This does not retroactively make the earlier refused
+  reconciliation pass, and no checker is weakened or new tracking layer introduced.
+
+### 2026-11-02 — D3859 complete-gate reconciliation, still in flight
+
+- Owner dismisses routine pre-launch schema scheduling as an implementation detail. The human
+  empty-telemetry correction is already archived at run0.19/storage31, with its reservations
+  reconciled November1. No repeated owner question or new schema migration follows this reply.
+- Normal `make verify build` passes workspace types/scaffold/packaging, then stops before build
+  at nine evidence-authority failures. The current consumer image had left predecessor-only
+  assertions, the all-factory grade@1 fixture and a new material-profile ordering/law mismatch.
+  Correct actual accepted bindings, keep retired factories refused, and give grade@2 a genuine
+  original workflow source plus copied-source falsifier. Full factory cardinality/immutability
+  and exact inventory checks remain; no skip, timeout, retry or qualification relaxation.
+- Intermediate attempts are retained: first the grade pin still names its predecessor; then
+  incorrect assumed material bindings fail. The first new grade source is a silent improvement
+  because the after report is Black-to-move. Correct its literal provider perspective and require
+  one emitted grade before the all-factory profile can run; the final pin changes only that
+  predecessor entry to the genuine grade@2 result. All626 factory/falsifier cases pass. The full
+  authority gate then passes2044 cases/18 files, followed by136 source cases/six and322 recorded
+  Review cases/ten. All validation-required cells stay required; the new v2 root is ordered with
+  its family and cannot inherit a predecessor's population receipts.
+- Fresh normal verification/build is running. D3859/D3921–D3925 remain doing, all work remains
+  uncommitted, and independent ledger/objective/operation coverage plus complete native delivery
+  are still owed. No milestone, capability, qualified detector or official pack is promoted.
+
+- The next normal verification reaches candidate-packet-projections-check and refuses two
+  same-family material versions. D3926 records the class: a global semantic-event registry is
+  not the exact output vocabulary of every operation. The current one-edge candidate collector
+  still invokes@1; Review's registered@2 does not silently migrate that separate operation.
+  Resolve its actual exact version, retain generated bytes unchanged, and add coexistence,
+  missing-original, duplicate-original and duplicate-declaration controls. Normal named
+  `make candidate-population-check` passes29 cases/three files, including source authority and
+  observed-output-versus-closure controls. This is not the future candidate-compiler2 cutover.
+- The first new-row assignment command uses done-only evidence fields and omits doing's since;
+  it refuses without publishing an intermediate state. The corrected normal command assigns
+  D3926 doing/evidence-foundation, zero untriaged. An initially guessed candidate-packet-check
+  target does not exist; the existing closure check passes but Make correctly exits2. The new
+  straightforward candidate-population-check target invokes that closure plus its three actual
+  permanent test files, without environment overrides. D3926 stays open pending full gates.
+- A fresh `make roadmap-receipt verify build` now runs. All earlier full-gate refusals remain
+  failures, and the in-flight batch remains uncommitted and not push-ready.
+
+- Verification next reaches capability-check and correctly refuses the unregistered grade@2
+  declaration. Its normal regeneration first refuses the removed classFromThresholds site rather
+  than inventing a declaration. Point the current evaluator sites at actual moveQualityGrade,
+  classifyWinPercentLoss and recordedGradeScore, and explicitly register the accepted grade
+  producer/evaluator/threshold v2 successors. The existing generator appends exactly three
+  declarations (1019→1022); no committed declaration is rewritten or removed. Applicability,
+  complete capability history/check/census/site/lifecycle gates pass, with472 applicability rows
+  and73 resolving production sites. This is actual changed grade meaning, not a source-hash bump
+  or new owner decision. Full normal verification/build runs again; parent completion remains open.
+
+- That complete software run ends292 failed/8174 passed/40 unchanged skips over434 files,
+  duration344.98s. No full verification/build pass follows. An existing confidence-domain-check
+  diagnosis also fails all seven real application cases: default packs still require the old
+  always-on grade.move_quality@1, while current derivation correctly requires@2. The normal
+  migration plan measures352 documents,92 judgement rows for that single capability, zero
+  mechanical rows/refusals. D3928 records the existing D996 per-release decision and the exact
+  proposed metadata-only migration; async owner feedback is requested once. No pack/sidecar
+  is changed, no readiness refusal bypassed and no compatibility grader restored.
+- Independently migrate current-consumer fixtures rather than alias removed consumers:109
+  special-move/tactical and74 occupied-target/transition cases pass. An initial wrong-occurrence
+  change briefly points the retained pure fork factory test at its new successor; restoring that
+  historical-source test and migrating only the actual learner presentation closes the failure.
+  Full current presentation target then exposes six obsolete registry assertions; exact286
+  pairs/205 unique module refs, original Inspector sources and Nudge/Review successors now join.
+  Add only the eleven genuinely consumed Review window refs to the operation inventory, not all
+  accepted72. The expanded target passes108 mounted/presentation plus96 registry/adapter/castling
+  cases, retaining missing adapter, retired ref, duplicate family and exact source negatives.
+- D3927 separately records the verified single-line objective-source contract gap: the sole
+  objective factory requires a genuine multi-attempt comparison, while the Review population
+  lacks an objective adapter. No fabricated sibling, caller raw sentence or unaccepted source
+  arm is added. Two malformed tracker blocker strings refuse without publishing; the correct
+  rfc:module-registration.md blocker assigns the row. D3926/D3927/D3928 are owned and zero
+  untriaged. Other mounted Review fixture/template/timeout and full-run residuals remain. The
+  complete goal stays active; the coupled batch is uncommitted and not push-ready.
+
+### 2026-11-02 — Independent Review repairs while D3928 awaits its ruling
+
+- Previous goal turn is progress, not a wait: source/consumer tests and actual authority state
+  changed. This turn re-reads the shared worktree and current queue, leaves the pack migration
+  untouched, and reproduces nine failures in the existing make review-route-check (217 pass).
+  The failures include first-component/paragraph-only assumptions, a stale grade version and
+  two dead template keys, plus complete70-ply fixtures redundantly rebuilt inside one test.
+- Bind the actual harassment@3 square/path components, retaining both learner colours and
+  stale-caption paint retirement. Check every actual component's exact visible or accessible
+  equivalent sentence, order and count; a move path's aria-label and square-caption button are
+  not paragraphs. Reuse one unchanged70-ply response only across alternate UI states in a
+  multi-mount case, and build the graph/rows once for a single projection assertion. Split full
+  versus partial accuracy assertions into independent complete-fixture cases. No deadline,
+  retry, population, source acquisition requirement or assertion is dropped. Remove the two
+  templates no production code references. The complete same route gate passes227 cases/six.
+- D3929 records and repairs actual raw convention keys in accuracy/graph readouts. Grade,
+  graph and accuracy share the readable versioned label; machine convention identity and all
+  scores/thresholds/instruments remain.75 grade/source cases and all227 route cases pass again;
+  capability-check preserves every committed meaning and all1022 current declarations.
+- The existing server recorded-path gate separately reproduces D3921's remaining version2=
+  sequence inference (155 pass/one fail). Its exact eleven-family authority replaces that
+  heuristic, explicitly retaining the independently registered material@2 outside the sequence
+  set; all156 cases/three files pass. The normal recorded-path command also retains its complete
+ 108-game/6991-ply eager-parity census. This is not qualification of the new window sources.
+- Complete workspace types pass. Unchanged isolated performance runs6 pass/one fail: the real
+  80-ply HTTP/worker case refuses at default pack admission under D3928, before responsiveness
+  can be measured. The combined command therefore never reaches build. Standalone normal
+  make build subsequently exits0 for schema/runtime/server/web. These independent results do
+  not turn the earlier full292-failure software run into a pass or clear full verify/browser.
+- Canonical module/Review docs now describe the actual workflow-owned grade and current window
+  path without implying full source or release completion. Unaccepted module-registration
+  §4.10a drafts D3927's single-line objective source from the existing original-boundary and
+  recorded-event contracts. No new factory, current reference, schema lane, moment type or
+  producer is implemented or self-accepted. Independent joint review remains its prerequisite.
+  The owner migration answer is still pending; no authored pack or linked digest changes.
+
+- Final reconciliation first flags D3927's stale tracker reference after its draft-status text
+  changes. Normal work-state-sync refreshes it; types, semantic generation, roadmap R1-R10,
+  lifecycle P1-P7, resource C1-C8 and docs-check pass.3678 rows, zero untriaged;92 semantic
+  subjects/zero qualified remain. This is tracker integrity, not software/release completion.
+
+### 2026-11-02 — D3930 actual Nudge operation/source coverage
+
+- Record the reproduced false acquisition claim before fixing it: all52 requirements were
+  copied into the operation inventory even though the collector never requests the ten
+  avoidance populations. Retain all52 requirements and bindings; the actual operation now
+  declares42 collected sources and explicitly blocked avoidance. The public query accessor
+  reads the same existing operation registry instead of a second, inconsistent source image.
+- Permanent predecessor-red inventory/accessor controls and actual both-colour query tests
+  verify nonempty registered local feedback with no candidate acquisition and no avoidance
+  receipt items. First fixture attempts correctly fail on missing reveal and on treating
+  rendered strings as receipt items; fix fixtures through the real reveal/strict receipt APIs,
+  leaving production guards intact. The unchanged Make gate passes108 mounted/presentation
+  and166 runtime query/registry/adapter cases, complete workspace types and1022 capabilities.
+- Re-read the existing measured D1716/D1718/D1719 repair: broad-family avoidance drops exact
+  root-subject outcomes and denominators before grouping. Candidate wiring alone cannot discharge
+  that defect; its independently accepted successor is still required. No new source/ref or
+  learner assertion is invented. D3930 and the coupled D3859 integration remain doing; no pack,
+  family qualification, full software/HTTP/browser result or milestone is changed.
+
+### 2026-11-02 — D3931–D3933 source cleanup and actual Review execution inventory
+
+- The permanent grade retirement test first fails on the dead loose-packet parser. Remove it,
+  unused public input types and only the completed predecessor-specific grade research models.
+  The original47-line parser,212-line research model and older operand experiment remain
+  recoverable in Git at48a6e0f5; no recording, authored pack, archive or historical definition
+  is deleted. Other source experiments remain.44 arithmetic/retirement and79 actual source/
+  profile-wall cases pass; the sole current grading/source/logistic path remains covered.
+- The standalone normal research typecheck fails on one over-removed receipt import and two
+  obsolete opening assumptions. Restore the needed import. D3932 replaces a fabricated available
+  catalogue with genuine installed admission and a former held-source invocation with explicitly
+  historical prototype data, not a claim about current source availability. The shared project
+  then typechecks with no casts, input-factory relaxation or historical rerun claim.
+- D3933's exact blocked-complement test reproduces43 actual Review sources omitted from its
+  execution inventory. Reconcile with the real local, recorded population, phase/setup and
+  installed-history collectors:59/72 acquired and13 still blocked (ten avoidance, two ledger,
+  one objective). The actual rendered Review regression verifies delivered evidence joins back
+  to that operation image.108 mounted/presentation,167 query/registry/adapter and228 complete
+  Review route/runtime/UI cases pass, then complete workspace types and research typecheck.
+  git diff --check first catches a removed-function trailing blank line; its correction passes.
+- All failures remain failures of their original attempts. D3859/D3931–D3933 remain doing;
+  D3928's per-release migration answer and D3927's independent source acceptance are still
+  pending. No pack/content/digest, semantic qualification, full normal/HTTP/browser gate,
+  remote-CI result or1.0 milestone is promoted. The coupled batch stays uncommitted.
+
+- Final reconciliation first refuses the roadmap anchor to the retired grade-source experiment.
+  Replace it with the actual current recorded-grade-source test, not a completion/promotion.
+  Normal work-state sync, roadmap R1-R10, lifecycle P1-P7, resources C1-C8 and docs checks pass;
+  3682 rows are assigned, zero untriaged. Fresh production build and1022 capability checks pass.
+  Semantic generation stays92 subjects/zero qualified with343 passing cases,53 population and
+  eight external receipts. No full integration/HTTP/browser/remote-CI pass is inferred.
+
+### 2026-11-02 — D3934 actual retained-grade access and D3935 full Review service cost
+
+- Start from actual current service/storage code. Eight real SQLite/RunService controls first
+  prove the direct grade factory can outlive a revoked grant or role change for both colours,
+  including positive, available-empty and missing-input outcomes. The service reader already
+  fails appropriately. The shared source reader now invokes the sole issuer's actual current
+  context before/after reads, not a callback supplying scores or a source-valid Boolean. Original
+  source/edge/plan checks remain, and duplicate service wrapper reads are removed. Fresh allowed
+  role contexts still work; nominal copies, Boolean checks and foreign source operands refuse.
+- Add real native Review controls for installed complete/repeated opening history and phase,
+  genuinely missing/unnamed opening sources, positive both-colour Lucena geometry and a cited
+  pawn-sixth near miss. There is no engine report: local/theory facts remain available while
+  grade/accuracy/graph abstain. Entire stored recordings remain unchanged. These are actual
+  service controls, not empty default-catalogue substitutes or whole-app/HTTP readiness claims.
+- Two complete70-ply service cases first fail17739ms/16135ms against the unchanged5000ms
+  deadline. Profiling reads45170 canonicalization calls. Pure immutable run-byte reuse passes
+  its predecessor-red counter and mutable-descendant falsifier but leaves both cases near10s.
+  A separate node-only event memo passes its counter without clearing the service failure.
+  Further grouping measures7213 array hashes at about6.1s: original position/head checks
+  repeatedly hash unchanged event streams. Retain every predicate but share its existing pure
+  digest for deeply immutable data. New actual position-use counter first reads five hashes
+  instead of zero; mutable event arrays under frozen envelopes still detect changed originals.
+- A small internal immutable-data guard refuses mutable children, accessors, sparse arrays,
+  non-JSON built-in state and cycles without freezing borrowed data. It gates pure serialization/
+  event calculations only. Actual storage/role/disclosure/pending/artifact/callable checks still
+  run; no persisted cache, new hash format or source-valid identity is introduced.
+- Both70-ply service cases then pass with their full70 decisions,71 original evaluated
+  positions and35 decisions/evaluated per colour.29 boundary/immutable,224 endpoint,97 source/
+  service/grade/profile,228 Review route/runtime/UI and2044+136+327 complete authority cases,
+  complete workspace types and production build pass. Profiling is removed. Factor duplicate
+  event memos into one internal pure helper and rerun those same normal gates. All failed
+  commands remain failures of their original attempts. D3934/D3935 and D3859 stay doing until
+  coupled verification; no pack/migration/qualification/HTTP/browser/remote-CI or1.0 promotion.
+
+### 2026-11-02 — D3936 class-wide retained Compare source access
+
+- Inspect the other workflow-issued point source rather than stopping at the grade instance.
+  The shared comparison reader revalidates its immutable source but not the actual issuing
+  grant. Existing D3899 tests checked only the service context. Extend the actual SQLite/
+  RunService case through the trajectory factory for available/missing points; both cases
+  first fail at role downgrade, before their later revocation assertions are reached.
+- Retain the sole issuer's live context check before/after shared reads, including absence,
+  while preserving all original source/position/plan/assistance checks. Remove only duplicate
+  outer wrapper reads. New Boolean-check/foreign-node negatives remain; raw constructor
+  fixture controls are explicitly source-only, while live grant tests use RunService. No
+  Review/Nudge role ceiling, public grammar, provider call or score is introduced.
+- Fresh152 full Compare source/API/client/module cases,97 grade/Review service cases and
+  workspace/research types pass. Complete source-authority/Review/build and tracker gates run
+  again after all final caller migrations. D3936 remains doing with D3859; no source image,
+  qualification, full normal/remote CI or1.0 completion follows from these focused passes.
+
+- Final post-constructor-migration checks pass2044+136+327 authority cases,228 Review route/
+  runtime/UI, production build, semantic generation and1022 capabilities. Roadmap R1-R10,
+  lifecycle P1-P7, resources C1-C8 and docs checks pass. Semantic generation remains92 subjects/
+  zero qualified,343 passing cases/53 population/eight external receipts.3685 rows are assigned,
+  zero untriaged. Add actual current source/performance test anchors to the existing roadmap
+  checkpoint and reconcile its prose without changing milestone/capability completion state.
+  D3928/D3927 remain pending; all current work remains uncommitted and not full-CI/push-ready.
+
+### 2026-11-02 — D3937 current fixture repairs; D3938 tier audit; D3939 normal focused command
+
+- Ordinary `make verify build` subsequently exits2:239 failed/8263 passed/40 existing skips
+  across436 software files. Performance, governance, content and trailing build are not reached.
+  Preserve the failed result; current source-focused passes do not make that gate green.
+- Positive software examples and temporary pack copies still contain predecessor requirement
+  stamps or omit their explicit unsourced corpus state. Derive their current requirements using
+  the existing helper; keep actual authored files, malformed/predecessor negatives, complete
+  behavior assertions and default registry refusal unchanged. The earlier171-case attempt
+  first exposes PackStudio's remaining raw fixture, and the next typecheck exposes narrowed
+  readonly fixture typing. Repair the fixture and retain its original mutable unknown-valued
+  test interface for deliberate negative mutations. All119 affected cases/eight files then pass,
+  followed by complete workspace types/Svelte zero errors or warnings.
+- D3938 audits23 test files using the canonical resolvePackPath, which the existing literal
+  checker does not recognize. Several are mixed suites, so route a proper split/checker repair
+  to release-engineering; do not bulk move them to longer content deadlines, omit cases or hide
+  the still-real92-pack admission blocker. No resolver-checker repair is claimed here.
+- D3939 supplies one ordinary pinned Make entry point for complete selected software files.
+  Its real Make-plan regression first fails on the missing target.14 tier/scheduling controls
+  now pass, including actual Make refusals before runner launch for invalid/empty/wrong-tier
+  input and proof that TEST_FILES cannot narrow test-software or verify-software's full pool.
+  No wrapper environment, deadline, retry, skip or new per-defect alias is needed.
+- D3937/D3939 stay doing pending the coupled integration/commit; D3938 is assigned todo to
+  release-engineering. D3928/D3927 remain pending; no real-content migration, source-complete
+  module, semantic qualification, browser/default-app or remote-CI pass follows.
+
+- Final ordinary full rerun exits2:225 failed/8277 passed/40 existing skips,436 software files
+  (31 failed files),256.80seconds. Fourteen fixture failures are repaired; later tiers and the
+  trailing build are still not reached. Follow-up normal Make reproduction isolates five more
+  stale-requirement failures in Line Drill, outcome checkpoint validation and catalogue sibling
+  validation. Derive only these positive in-memory requirements; all original assertions,
+  validation-call counts and negative sibling cases remain. Their28 cases then pass.
+- Final combined run passes all147 cases/eleven repaired fixture files. Complete workspace
+  types/Svelte and production build pass separately, followed by14 tier/scheduling regressions.
+  The real Make-plan control now explicitly checks test-software, verify-software and verify
+  with TEST_FILES supplied: each retains exactly the unfiltered software command. No later
+  full rerun, real-pack migration, source completeness or push readiness is claimed.
+
+### 2026-11-02 — D3938 canonical resolver ownership and mixed-suite repair
+
+- Previous goal turn made concrete progress (fixture repairs/147 cases and the focused command),
+  not a verified wait. Continue with the independently actionable testing debt instead of
+  repeating the pending D3928 migration/D3927 review questions. No agent is delegated here.
+- The canonical resolver guard first fails for a real call, then covers aliases/dynamic imports
+  as well. Baseline23 files contain that resolver; sixteen were not content-classified. Read
+  their actual cases before classifying. Move source-free cases out of genuinely authored suites
+  and authored cases out of software suites; do not bulk reclassify mixed suites. Retain every
+  relocated test body verbatim. Share only the existing pure authored-feedback run helpers.
+- Controller ownership/opponent-policy and return-forwarding tests need synthetic configuration,
+  not an opening book. Their original assertions remain, with explicit legal black-to-move input
+  and the existing schema fixture respectively. Actual authored opening paths still have their
+  complete independent content tests. No authored pack, sidecar or requirement bytes change.
+- Focused Make callers now execute both sides of each split in their proper tiers, including
+  tablebase census/walk/verification. The new resolver regression first goes red; focused tier
+  checks then catch a newly reclassified path in their own fixture. Fix that software fixture
+  to name a software file. Typecheck catches still-used guidance imports removed during the
+  split; restore them. Failed attempts remain failed, not evidence of completion.
+- All165 retained software controls pass. The complete content run preserves334 cases (the
+  previous271 plus63 relocated cases), with56 failed/261 passed/17 setup-blocked skips; all14
+  relocated files pass. Default real-pack admission still refuses predecessor grader requirements.
+  Do not call the full content gate green or count setup-blocked cases as verified behavior.
+- Actual Vitest collection independently verifies all63 cases/14 files at the original5000ms
+  deadline; missing/skip/30000ms mutations fail. Discovery retains432 software/41 content/four
+  performance files, with no omitted or duplicated software files.16 tier/scheduling controls,
+  workspace types/Svelte and production build pass. D3938 remains doing pending the coupled
+  commit/integration; no consumer-source, semantic qualification or1.0 promotion follows.
+
+- The new actual-case collector initially imports authored cases from software-scheduling-check,
+  contradicting the very ownership boundary being repaired. Move that collector, unchanged, into
+  tools/content-scheduling.test.mjs and the owning test-content recipe. A real Make-plan negative
+  proves verify-software does not invoke it; content invokes it before its full pool. All17 tier/
+  scheduling controls pass. Complete content repeats56 failed/261 passed/17 setup-blocked skips
+  in334 cases; all63 moved cases pass. Keep that failed tier visible.
+- The full ordinary verify/build rerun exits2 with226 failed/8213 passed/40 existing skips in432
+  software files,714.76seconds. Later tiers/trailing build are not reached. Five UI cases hit
+  their original5000ms ceiling and HTTP ingress adds a failure beyond the known default-pack
+  blocker. Record D3940 immediately, assigned release-engineering, with no unproved root cause.
+  Do not call focused passes full readiness or blame host load/raise deadlines. Inspect the
+  actual UI fixtures/workflows/cleanup and reproduce all400 cases/four complete suites through
+  the normal Make command before selecting a fix. D3928/D3927 remain pending; the goal stays
+  active and the entire current integration is still uncommitted.
+
+- D3940 diagnostic command completes:400/400 cases in all four complete suites pass together
+  with unchanged deadlines,68.99seconds. Preserve the failed full-pool result; this is scoped
+  evidence that changes the next diagnostic action, not a retry-to-green release claim.
+  Inspecting application.ts confirms default-pack admission precedes SQLite/engine/worker
+  acquisition; do not invent a resource-leak cause at that path. Actual fixture/workflow/cleanup
+  profiling and full-pool interaction remain open. No timeout, skip, retry, case population,
+  authored file or production implementation changes for D3940 so far.
+
+### 2026-11-02 — D3940 measured fixture work and D3941 actual component teardown
+
+- Previous goal turn made concrete progress through the tier split/guard and complete new
+  failure inventory, not a verified wait or status-only turn. Continue from D3940's actual
+  full-pool failures; do not re-ask pending migration/source-review questions or restart a live
+  process after an observation timeout. Every profiling/test handle here reaches a terminal state.
+- Disposable profiling inside the actual28-case Review suite finds13673ms across28 projection
+  builds, compared with306ms across23 mounts, plus2849ms story/1130ms grade-source/603ms fixture
+  work. The first passing run's console output is not exposed by the reporter; a small direct
+  diagnostic write provides the measurements without an environment/runner/budget change.
+- Reuse only the unchanged full default70-ply JSON wire fixture and return a fresh clone on
+  every call. Explicit run/coverage/packet inputs retain the original builder. The new control
+  verifies70 rows,71 positions,both35-decision counts, exact equality and independent mutation;
+  an explicit20-ply variant remains distinct. This is UI fixture work reuse, not caching live
+  source/access/provider decisions or claiming faster production Review.
+- D3941 is separately ledgered before implementation. Naming the actual existing screen cleanup
+  and calling it with a mounted Chessboard first fails destroy0 versus1; all original235 screen
+  cases still pass. The test's finally unmounts its deliberate leaked predecessor instance so
+  the negative control does not poison subsequent tests.
+- Add one test-only component owner used by app-shell/screens/Review. Dispose roots before DOM
+  clearing/mock restoration, remove explicitly disposed roots, retain the existing class test
+  adapters, continue after a destructor error and report aggregated cleanup failure. Controls
+  cover early exit, both explicit disposal forms/no double-destroy and all-root teardown after
+  an error. Typecheck initially catches lost generic export inference in the wrapper; explicit
+  forwarding of Svelte's original type parameters fixes it without assertions or weakened types.
+- All405 complete UI/HTTP cases pass under the original deadlines. The subsequent29-case Review
+  profile records15 projection builds/4445ms and9543ms total case work, with all original28 cases
+  retained plus the isolation control. No cross-run CPU/latency guarantee is inferred. Remove
+  all temporary instrumentation; complete workspace types/Svelte and production build pass.
+  D3940/D3941 stay doing pending ordinary full-pool/coupled commit evidence; no retry, skip,
+  smaller baseline, production workaround, content migration or1.0 completion is claimed.
+
+- Final ordinary `make verify build` exits2:220 failed/8224 passed/40 existing skips across
+  8484 software cases/432 files,268.08seconds. No timeout, failed web test file or HTTP-ingress
+  failure remains. All distinct reported error groups meet the default-pack requires@1 versus
+  current grader@2 admission refusal. Explicitly inspect the native valence/worker/refusal and
+  concept-migration close assertions: their intended later resource/preconditions are not reached
+  because admission happens first. Do not change correct early-refusal behavior to satisfy them.
+- The entire original400 UI/HTTP cases remain, plus five new controls; no skip/retry/deadline
+  changes. Later performance/governance/content/trailing build are not reached by this aggregate
+  command; separate types/build and governance checks passed. D3940/D3941 remain doing pending
+  coupled commit/integration, not a green whole gate. Keep the full1.0 goal active and update its
+  current verdict separately from historical receipts; Nudge42/52 and Review59/72 still hold.
+  D3928 migration and D3927 independent review remain pending. Audit the separately accepted
+  ledger source next; do not fabricate an objective comparison or wire unsafe avoidance.
+
+### 2026-11-02 — D3942–D3945 independent Review reports and occurrence-safe rendering
+
+- The late scheduling answer concerns D3870's routine version order, not a new feature scope:
+  verify the November1 register completion rather than rebasing those already-completed slots
+  again. Keep D3928's real-content release ruling and D3927's independent objective-source
+  review unanswered; do not reinterpret the scheduling answer as either permission.
+- Before acquiring historical reports in Review, find D3942: sourcing retains tablebase category
+  for the side to move, but both recorded Review/Full Inspector adapters label it White.20 real
+  two-step factory/registered presentation controls over both turns/all five categories first
+  fail, then pass after changing only the perspective operand. Source category, distances,
+  schema/version meaning and engine White-perspective conventions stay unchanged.
+- D3943 connects the already accepted two ledger refs through Review's own actual current source
+  context, not an Inspector grant or modern selected endpoint fallback. Retain every original
+  position including root, both original registry populations, exact source/record ordinals,
+  same-record ledger→reading invocations, duplicate readings, refusals and abstentions. Missing,
+  validated zero, source failure and factory-unavailable remain distinct. Current real grants,
+  roles, stored run/artifacts and cancellation govern retained reads; copied/crossed handles
+  refuse. No providers, disk reads, authored pack edits or new schema/evidence projection.
+- Actual Registry/SQLite/RunService proofs serialize the full response and pass the client's
+  strict parser. Historical reports coexist with modern evaluations even though the pack's
+  grading metadata is unverified. Root reports are retained privately, never attached to the
+  first move. Registered partial/failure notices stay beside other facts. Deliberately removing
+  only actual report consumption fails3 of10 service controls (both-color duplicate delivery
+  and root/no-retarget count); restore the production path immediately afterward.
+- Initial synthetic fixtures incorrectly use a non-pack feedback policy, then an unsupported
+  immediate spelling, and leave an unused manifest entry in the zero-match variant. Those are
+  instrument failures, not product findings. Correct to the actual delayed-checkpoint flow and
+  source linkage; do not relax production admission. An attempted Node/SQLite fixture import
+  into happy-dom fails file-URL loading before any native case runs. Remove that cross-environment
+  test coupling; no authenticated browser/native receipt is claimed from it.
+- Complete70-ply service cases expose5-second failures during this work. Disposable profiles
+  measure new ledger capture11–20ms versus existing grade acquisition1.2–1.85s and Map row
+  work2.88–3.71s. D3944 shares the existing strict immutable-run serialization for its private
+  run comparison, separately comparing freshly derived current permission/access fields. No
+  new hash, source/freshness protocol, cached grant or increased deadline. Mutable and frozen-
+  envelope descendant corruption remains a refusal. Both full70-ply/both-color controls pass;
+  all profiling is removed. A root-only Review regression also preserves zero move windows.
+- Inspecting native rendering finds D3945 before calling the source path complete: identical
+  admitted report components share a digest, and the Svelte list keys only that digest. Actual
+  two-step engine/tablebase factories→Review admission→JSON receipts→mounted renderer first
+  fail both duplicate-key controls. Include list occurrence in the UI key, preserving all three
+  reports and their order, without changing evidence identity or deduplicating.
+-196 focused cases/six complete files pass, retaining the original70-ply/both-color5000ms
+  controls. Workspace/research types and production build pass separately. Actual acquisition
+  is now Nudge42/52 and Review61/72, with ten unsafe avoidance requirements and the single-line
+  objective requirement still explicit. No semantic qualification, official content, whole
+  capability/RFC/milestone or push-ready claim. D3942–D3945 remain doing in the uncommitted coupled
+  D3859 wave; run the ordinary complete gate and preserve its actual result.
+
+- Ordinary verification first refuses stale generated semantic receipts after the source edits.
+  Normal regeneration retains92 subjects/zero qualified and343/343 registered cases; no gate is
+  weakened. The subsequent complete normal verify/build run fails220/8258/40 in8518 software
+  cases/433 files (287.48seconds). No timeout or failed web file occurs. Distinct error groups
+  again meet default-pack admission, including resource assertions whose later fault point
+  cannot run. Later tiers/trailing build are not reached; do not call the failed gate green.
+- Add three further actual source controls after that full run: both colors without modern or
+  gradeable endpoints, plus real registry lookup failure distinct from absence with modern facts
+  retained.199 focused cases/six files pass; these three are not counted retroactively in the full
+  run. Real content/schema bytes remain unchanged. Separate final governance/type/build checks
+  first catch three unrouted rows (D3932/D3943/D3944): a range heading does not name every row.
+  Restore their explicit queue IDs without changing states, owners or closing unfinished work.
+
+- The next governance pass clears those routes but catches three duplicate evidence paths in
+  the updated roadmap checkpoint; remove only duplicate list entries, retaining all evidence.
+  During that pass, D3946 identifies why work-index itself takes minutes: durableRouteText
+  reparses every document inside the open-row×document loop. A deterministic text instrument
+  first fails five preparations versus one. Prepare durable text once per audit and retain the
+  original exact-id regex, exclusions, route sorting and complete output contract. All nine
+  checker controls pass; this adds no persistent cache, hashes, tracking format or looser gate.
+  Add/assign D3946 immediately, retaining zero untriaged work. Re-run final governance/types/build
+  after the routing/evidence-list repairs, not against the earlier stale snapshot.
+
+- Final ordinary `make verify-governance typecheck inspector-research-typecheck build` exits0.
+  All3695 rows are assigned; all1774 live rows route, with zero untriaged/unrouted. The standalone
+  final work-index check passes all nine controls, including no document preparation with zero
+  live rows. Roadmap/resources/lifecycle/content-tier/docs checks pass without relaxing any
+  definitions. No content/schema bytes changed, staging/commit/push occurred or new qualification
+  was claimed. D3859/D3942–D3946 remain doing until the coupled migration can be committed under
+  its actual full gate; D3928/D3927 remain pending, and the full1.0 goal stays active.
+
+## 2026-11-02 — authorized independent review and actual compiler2 source collection
+
+- The owner directs routine independent reviews to run without repeated delegation questions.
+  A separate read-only review accepts D3927/module-registration §4.10a for bounded implementation,
+  preserving exact original objective-event ordinals, complete invocation/empty membership,
+  Review-only access/currentness and Compare's separate source. D3927 moves blocked→todo;
+  factory/API/parser/renderer delivery is still work. Receipt:
+  `planning/learner-modules/objective-source-independent-review-2026-11-02.md`.
+- Accepted D3866–D3868 collector migration now actually invokes nonterminal forks, direct-FEN
+  promotion, material signature/event@2 and exposure@2. New permanent controls first fail against
+  predecessor dispatch. Actual exposure factory unavailability is retained by original object
+  identity once per event/wide row, through narrowing; readings-only retains private tactical
+  prerequisites but no event abstention. Loose-piece absence and complete-population refusal
+  remain independent. Generated exact routes and validation adapters follow actual collection.
+- Nudge's two new source-spy controls first fail two material calls versus one for both colours.
+  Reuse the original collected material evidence instead of discarding it and invoking again.
+  Final normal focused checking passes244 cases/seven files. Workspace types pass. Separate
+  independent narrow review finds no collector/Nudge blocker and passes133 cases/six files;
+  scope and concrete successor-validation path are recorded in
+  `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+- Honest integration failures remain: the broad76-case run fails7, including a catalogue count
+  subsequently corrected for the actual research-semantic binding. Fresh Hint/semantic checking
+  still fails6/32 (26 pass): five unmigrated Hint source paths and an old exposure target. The
+  normal semantic rebuild reports93 subjects/zero qualified,343 canonical cases/335 passed/eight
+  failed predecessor targets. Old negative@1 absence is not new@2 proof. Add distinct new cases
+  and independent exact-source authorities; do not refresh frozen assertion hashes, relabel old
+  receipts, create a compiler1 validation operation or invent a retirement state.
+- The first two D3927 work-state commands use unsupported ready and then forbidden todo evidence;
+  both refuse without writing. The normal todo transition with its assigned owner succeeds.
+  Coupled integration stays uncommitted; no content/schema edits, staging, commit, push, new
+  qualification or milestone completion. The full1.0 goal remains active. Next is actual Hint/
+  Threat/current-consumer cutover and the source's independent new-version validation, alongside
+  the now-accepted objective implementation; D3928's separate real-content ruling stays pending.
+
+- Final ordinary `make verify-governance` and `make typecheck inspector-research-typecheck build`
+  exit0. Exact generated packet closure and semantic receipt recomputation match, and normal
+  work-state/roadmap refresh passes. The semantic instrument still contains its eight failed
+  cases; a current receipt is not a passed qualification. All1774 live rows remain routed and
+  assigned, zero untriaged. No new full software/content/browser or remote-CI pass is claimed.
+
+## 2026-11-02 — current Hint, unused-vector retirement and actual Threat delivery
+
+- Accepted D3866 Hint migration reaches the exact source/horizon/disclosure matrix, sole compiler/
+  module2, closed wire2 with projectionVersion, actual service preflight and API/seat admission.
+  Run/decision/rung/manifest/operation checks precede display and include every pending reply and
+  recovery POST. Four404 recovery controls first expose wrong displays/repeated requests; the
+  same admission repairs them. Full exact convention closures and terminal/nonterminal controls
+  remain. Independent source/receiver review passes86 cases. No legacy wire fallback remains.
+- Accepted D3853 retirement removes the unused vector wrapper, runtime collector, factory,
+  dispatcher, exports and binding without replacing them with compiler1 compatibility. Shared
+  packet/detectors and actual Maia/Stockfish/Syzygy consumers remain. Meaningful castling, legal
+  control, both-colour castling escape, threat abstention and complete-population tests migrate
+  to current sources. Historical projection/convention/frozen migration receipt remain. Review
+  catches the capability still advertised active; existing withdrawn/no-successor semantics and
+  actual runtime support/unmet tests close that seam. Initial migrated-test expectations and
+  historical partition lookup fail before correction; no source assertion is weakened.
+- Capability generation initially refuses12 missing Hint lifecycle successors. Add the accepted
+  exact twelve1→2 transitions, preserve frozen predecessor declarations, regenerate normally:
+  1034 declarations, capability/lifecycle/convention checks pass. The sandbox twice refuses pnpm
+  cache writes; the same ordinary Make command runs with tool permission, no env/deadline change.
+  One verification overlaps lifecycle regeneration and refuses its incomplete intermediate image;
+  the subsequent stable image passes. This is not a test skip or a compatibility exception.
+- Accepted D3867/D3868 Threat migration first fails four new source/availability controls. Actual
+  consumer2/exposure2 now retains complete captures and two ordered original inputs, with exact
+  factory availability and renderer pair. Complete acquisition's operation witness is post_commit;
+  pre_commit has no edge and never invents one. No-facts plus unavailable checks uses the existing
+  unavailable-source seat, not “No one-ply threat”. Genuine completed-empty remains distinct.
+- Independent review requires proof that a positive exposure itself reaches presentation, not
+  merely another fact's successful packet. Dense fixtures lawfully lose exposure under unchanged
+  selection/budgets; the first sparse pair has an unintended pin and exhausts marks. Moving only
+  the fixture king off the pin yields genuine both-colour query→JSON→strict receiver→mounted seat
+  positives, asserting exposure2/consumer2, lost-defends geometry and registered caption. Separate
+  unavailable cases render no all-clear. Reviewer independently passes95 cases/three files.
+- Final ordinary focused checking passes1577 cases/14 complete files, including authenticated
+  local-module HTTP. Workspace/research types and production build pass. Full normal `make verify
+  build` still fails1/2040 authority cases (2039 pass, no skipped/setup-blocked cases/suites): the
+ 343-case canonical population has eight predecessor targets failing,335 passing. Separate normal
+  rebuild retains93 subjects/zero qualified. The vector setup failures are gone; no old receipt
+  becomes new qualification. Later aggregate pools/content/native/trailing build remain unreached.
+- Existing queue/roadmap/ledger/work-state carry the next work: new independently grounded exact-
+  version cases and remaining caller retirement; accepted D3927 objective delivery; Inspector/API/
+  native source completion. D3928 real-content migration remains a separate pending owner ruling.
+  Current Nudge/Review acquisition stays42/52 and61/72. No content/schema edit, official graduation,
+  staging, commit, push, source qualification, milestone promotion or goal pause in this checkpoint.
+
+Final `make work-state-sync roadmap-receipt` and `make roadmap-receipt verify-governance` exit0;
+all1774 live rows remain assigned/routed with zero untriaged. `git diff --check` passes. These
+tracker/governance passes do not supersede the explicitly failed full software gate above.
+
+## 2026-11-02 — Accepted D3927 objective source reaches actual Review; D3947 receiver repaired
+
+- Implemented the independently accepted single-line source in the existing runtime factory and
+  Review collection/owner. Exact original ordinal/event/references and complete invocation identity
+  survive, including empty/repeated/root/shared-prefix/later updates. Whole-run replay validation
+  precedes path filtering. Only Review adopts objective@2; Compare remains its genuine@1.
+- Actual SQLite/current access/production REST cookie-auth and both-colour mounted controls cover
+  stale/revoked/cancelled/rated refusals before/after acquisition. Three forged-population cases
+  first fail typed error expectations and now receive EVIDENCE_UNAVAILABLE, never empty success.
+- Independent review discovers D3947; four genuine/re-digested receiver negatives reproduce foreign
+  consumer/abstention and crossed objective-renderer accepts. Existing Review receiver now binds
+  current consumer plus objective source/renderer in both directions. Generic remaining renderer
+  audit is recorded/assigned D3948, not silently closed or replaced by another registry.
+- 182 integration cases/nine complete files pass. Independent read-only review passes100/four,
+  no bounded blocker. Workspace/research types and standalone build pass separately. Full verify
+  first catches the new direct server dispatcher import, fixed by existing runtime source
+  collection, not an allow-list exception. Fresh unchanged full verify then fails1/2044 authority
+  cases,2043 passing/no skips/setup-blocked; canonical343 retain eight predecessor failures.
+  Normal rebuild retains93 subjects/zero qualified. Default-app Review remains77/81 failed at
+  D3928 before Review. The ten-file attempt records78 failures/184 passes including the separately
+  repaired source-count assertion. Later aggregate pools/content/native/trailing build unreached.
+- Actual acquisition advances Review61→62/72; Nudge stays42/52. Existing roadmap, queue, docs,
+  ledger and independent receipt updated. D3927/D3947 stay doing until coupled landing; D3948 is
+  assigned todo. D3928's content migration ruling remains separate. No staging/commit/push,
+  content/schema edit, qualification, milestone promotion or goal pause. Continue exact-version
+  independent validation/caller retirement and Inspector source/API/native work.
+
+Final normal governance initially catches a duplicate checkpoint path added in this update; the
+duplicate is removed, not the check. `make roadmap-receipt verify-governance` and
+`make roadmap-progress` then pass. All1776 live rows remain assigned/routed, zero untriaged;
+the final ordinary nine-file regression again passes182/182. This does not clear the failed full
+software gate or promote any release milestone.
+
+## 2026-11-02 — D3949 adds independently grounded current material cases, keeps old failures visible
+
+- Accepted Slice B adds28 distinct exact material@2 canonical cases: complete22-edge preservation
+  matrix and six populated legal quiet/castling negatives, both colours. Rechecked the pinned
+  Python-chess membership excerpt; literal FEN counts and separate neutral board/cause checks ground
+  expectations. Unweighted asymmetry is a product convention, never material value or advice.
+- Original343 records/frozen authority bytes stay unchanged. New caseVersion1 identities bind
+  exact current subjects; no old assertion/census is relabelled. Only positive/negative arms become
+  present; orientation/population remain required. Normal rebuild is93 subjects/zero qualified,
+  371 cases363 pass/eight predecessor failures,53 population/eight external receipts.
+- New31-case suite first fails30 missing-authority cases, then exposes16 test-only field-name
+  assumptions; correcting to the existing promotionRole gives31 pass without a product change.
+  Independent review catches one missing named later-cohort exclusion while preserving its old63
+  remainder and frozen counts/digests; corrected independent218/three-file review passes.
+- Complete12-file validation finally fails7/489 (482 pass) on old targets only; initial8/489 also
+  included that remainder guard. New tests join existing normal fast/cited Make targets; full
+  discovery retains438 software files. Latest normal verify/build fails1/2075 authority cases,
+  2074 pass/no skips/setup-blocked. Later pools/content/native/trailing build unreached; types/
+  research/build pass separately. No skip, deadline/retry waiver or compiler1 compatibility path.
+- Existing roadmap/queue/program/ledger/docs updated, no new tracker. Current acquisition stays
+  Nudge42/52 and Review62/72. D3928/D3948 remain separately owned. Continue fresh exposure cases,
+  exact-version orientation/population and real caller/Inspector/API/native migration before
+  atomic predecessor retirement. No content/schema edit, staging/commit/push, qualification,
+  milestone promotion or goal pause.
+
+Final normal work-state/roadmap/governance refresh passes,1777 live rows all assigned/routed,
+zero untriaged. `make semantic-validation-check` reproduces371 cases363 pass/eight fail exactly;
+it confirms the report, not semantic qualification or full verification. `git diff --check` passes.
+
+## 2026-11-02 — D3950 current exposure canonical validation (uncommitted)
+
+Sixteen distinct exposure@2 cases now bind accepted Slice B to independent pseudo-attack
+geometry, exact retained piece identities and complete finite legal-capture populations. Both
+colours cover multiple targets, all four promotion choices and populated empty/zero/negative
+exchange. Checking/pass-illegal inputs remain unavailable, never negative examples. Explicit
+piece units, promotion gain and optional stopping are product conventions, not strategic grades.
+Original371 canonical records/frozen authorities are unchanged; caseVersion remains1.
+
+The first baseline reports18 missing-case/profile failures and two unavailable controls passing.
+Registration then exposes invalid minimum2 declarations; preserve schema minimum1 and exact full
+counts in independent tests. Review also catches shadowing in the historical retention filter and
+count-plus-membership accepting duplicated targets. Fix the filter, preserve old counts/digests,
+and require exact defender:target multiset plus ordered capture UCI/value equality. The remaining
+forgery probe now uses a schema-valid changed operand, so it reaches authority refusal. No parser,
+production collector, selection budget or validation rule is weakened to pass these tests.
+
+All20 current controls pass; independent review passes182 tests/three complete files. Only
+positive/negative profile arms become present. Orientation and exact-version population remain
+required; paired colours do not discharge mirror authority. Normal rebuild reports93 subjects/
+zero qualified,387 cases379 passed/eight old failures,53 population/eight external receipts.
+Complete13-file validation reports7 failed/502 passed in509 tests on predecessor targets; ordinary
+full verify reports1 failed/2094 passed in2095 authority tests/20files, no skips/setup-blocked.
+Later full pools/content/native/trailing build are unreached. Workspace/research types and
+standalone production build pass separately. New tests run in ordinary fast/cited Make gates;
+full scheduling preserves439 software files. No historical receipt is relabelled or case removed.
+
+Roadmap, queue, docs, register and ledger record this increment. Acquisition stays Nudge42/52
+Review62/72; D3928 remains a separate pending real-pack ruling and D3948 remains assigned.
+Continue exact-version orientation/population, remaining actual callers/Inspector/API/native and
+atomic predecessor retirement. No source qualification, content/schema edit, parent completion,
+staging/commit/push or goal pause. The full1.0 goal remains active.
+
+Final normal work-state/roadmap/governance refresh passes:1778 live rows remain assigned/routed,
+zero untriaged. Separate semantic-validation-check reproduces387 cases379 pass/eight fail exactly;
+it checks report consistency, not quality clearance. git diff --check passes. Routine independent
+review of the already-drafted D3564/D3781 orientation amendment is next, without another owner
+permission question; acceptance still precedes production grammar changes.
+
+## 2026-11-02 — D3564/D3781 accepted orientation repair, implemented locally
+
+Use the standing review authorization, without another permission question. Separate read-only
+buildability review accepts §4.1a after the normal106-check/four-file research matrix over387
+current cases (295 edge/56 recorded/36 bounded;58 subjects/519 targets). That is research
+inventory, not qualification. Record the acceptance in the existing RFC/review receipt.
+
+Implement only the accepted closed input-relative rules: seven literal root spellings, exact
+same-side original input bytes before comparison tokens, total scalar coverage and unchanged
+complete unique event pairing. Preserve original payloads and receipts. The real runner validates
+both complete legal fixtures and the geometric relation before either production collector;
+only its two actual edge inputs become comparator context. No callback, ignored operand, alias
+inference, context brand, schema/resource reservation or nested/non-edge coercion is introduced.
+
+Permanent new suite first fails23/32 on the missing grammar. The32 initially pass after the
+implementation; normal types catch overly broad test helper unions, fixed with narrowed geometric
+and discriminated tuple builders, not weaker production types. Existing D3566 malformed partner
+controls now precisely expect earlier FIXTURE_INVALID while retaining zero invocations; a legal
+crossed partner still fails ORIENTATION_SCHEMA. Independent implementation review identifies the
+missing simultaneous input-plus-operand counterexample. Add both-side controls: value comparison
+alone accepts matching corrupt bytes, but the real runner rejects the illegal candidate before
+acquisition. A spy wraps the genuine callable and is proved active once before the zero-call
+assertion. Final34 current tests and independent85/three-file review pass; no bounded blocker.
+
+The suite runs in ordinary fast/cited Make gates; actual discovery retains440 software files.
+Final normal make verify build fails1/2129 authority tests/21files (2128 pass), no skips or setup
+blocks. Complete14-file validation fails7/543 (536 pass) on the same eight predecessor targets.
+Later aggregate pools/content/native/trailing build are unreached. Workspace/research types,
+standalone production build and106 research controls pass separately. Regeneration preserves
+387 canonical cases379 passed/eight failed,93 subjects/zero qualified,53 population/eight external
+receipts. No canonical orientation case/profile or chess authority is added by this mechanism.
+
+Existing queue/roadmap/docs/ledger/register are refreshed. D3564 remains doing pending coupled
+landing; nested/recorded/bounded frame scopes remain open. Acquisition stays Nudge42/52 Review62/72.
+Continue actual accepted Inspector source-demand/preflight/API/receiver/native delivery and
+remaining callers, independent current-version orientation/populations, then lawful atomic
+predecessor retirement. D3928/D3948 stay separately owned. No content/schema edit, staging,
+commit/push, qualification, whole milestone completion or goal pause.
+
+Final governance first catches the changed D3781 source-row reference in the older foundation
+checkpoint. Reconcile that checkpoint to the actual accepted/local orientation repair and its
+still-open authorities, retain the prior installed-opening achievement, and refresh its existing
+reference. Normal roadmap-receipt/verify-governance then passes. Work-state retains1778 assigned/
+routed live rows, zero untriaged. Semantic-validation-check reproduces the387-case report exactly
+with its eight failures; git diff --check passes. Nothing is staged or pushed; the1.0 goal stays active.
+
+## 2026-11-02 — accepted Inspector detail primitives and registered text (D3792/D3951)
+
+Implemented six complete-source detail routes through the existing sole factories/dispatcher,
+not a new mint or copied research WeakSet. Eighteen closed member alternatives preserve full
+nested pieces/optional flags, comparisons/co-defenders, all destination bits, context, source order,
+original ordinals and empty/unavailable sentinels. Whole/control-target pages retain complete
+members under unchanged Full Inspector budgets; a real eight-co-defender source exercises the
+word cutoff. Standard canonical factory names replace the companion's proposed shorter names;
+no name-exception registry. Six registered exact renderers parse operands and recompute the same
+complete-member text on construction and JSON component parsing, never caller sentences.
+
+Initial real routes fail seven positives, catalogue abstention inheritance refuses setup once,
+and an invalid test FEN correctly refuses. Correct the fixtures/declaration, not source semantics.
+All18 actual member kinds gain positive/nested malformed controls. A promoted-FEN test incorrectly
+expects true although the genuine orthodox source supplies false; retain the actual source flag
+and separately label true/false/absent parser-only controls. Sparse fixtures do not reach the word
+limit: keep the failing non-vacuity assertion and add the genuine dense source. The F2 gate rejects
+noncanonical proposed names; align exports/meta/dispatcher to its existing naming convention.
+
+Independent review finds D3951: JSON own constructor/toString/__proto__ fields and inherited
+required fields pass the shared closed parser. Four permanent controls first fail; fix the existing
+s.obj own-property checks for allowed/required/optional fields. Primitive review passes71/three;
+registered-text extension independently passes174/four with no bounded blocker.45 detail tests,
+1323 full value-authority profile/registry cases and174 detail/presentation tests pass in their
+complete selected files. The explicit profile update runs638 profile checks and685 unrelated
+cases are unselected by that existing refresh command, not a full-suite success. No frozen
+migration receipt is rewritten. Six additions remain experimental/unbound; current Inspector2
+adapters/source/convention admission, witness-only square-set composition, API/client/disclosure/
+native delivery and original ten-motif reach are not cleared by these checks. D3948 stays separate.
+
+Normal full verify first catches a new test-helper TypeScript union error; repair the helper, then
+workspace types pass with zero Svelte warnings. The final normal gate passes45 detail tests then
+fails1/2154 authority cases (2153 pass), the unchanged eight predecessor semantic targets. No skip
+or setup-blocked case in these gates. Later aggregate pools/content/native/trailing build are not
+reached. Standalone research types and production build pass separately. An attempted nonexistent
+typecheck-research target fails after workspace types; use the existing inspector-research-typecheck
+and build targets. No deadline, retry, candidate population, production source or old failure is waived.
+
+Manifest49/328/42/554, semantic90/90/16/1;319 route profiles,1041 capabilities,441 software files.
+Canonical rebuild retains387 cases379 pass/eight fail,93 subjects/zero qualified,53 population/eight
+external receipts. Acquisition stays Nudge42/52 Review62/72. D3792 is doing, not blocked on another
+contract/review; D3951 remains locally implemented inside the coupled change. The first governance
+attempt catches the new unrouted D3951 row; route it in the existing queue and synchronize work-state/
+roadmap. No content/schema edit, staged files, coupled commit/push, milestone completion or goal pause.
+Next: actual accepted Inspector2 source/preflight/page operation, paired components, strict current
+access/request/response/disclosure, authenticated API and mounted/native source/detail/focus/page/return.
+
+Final normal verify-governance exits zero after the existing queue route is added: all1779 live
+rows are assigned/routed, zero untriaged; roadmap R1–R10 and the refreshed receipt pass.
+Semantic-validation-check reproduces387/379/eight exactly; git diff --check is clean after removing
+only a new trailing blank line in each appended entry. Independent registered-text review passes
+174/four as reported above. Nothing is staged/committed/pushed; the full1.0 goal remains active.
+
+## 2026-11-02 — D3792 demand-local suppliers; D3952 empty-input keys; D3953 normal Make
+
+Actual current RunService/SQLite grants now supply26 demand-local sources:23 position/three
+incoming edge topics. Each demand calls only its exact sole factory, retaining complete original
+values/order; root-missing and genuine zero-witness successes differ. Getter/coercion/extra/copy/
+foreign/scope refusals precede collection. Genuine storage advancement/cancellation during actual
+collection refuses publication. Stored runs are neither shortened nor mutated.
+
+Independent review returns D3952: empty receipt arrays fail to identify the actual source input.
+Two legal same-ID/head/cursor stored runs first reproduce colliding position/edge keys, then pass
+with frozen actual FEN/legal-edge input retained in the existing private image/key. Initial
+king-only fixtures correctly refuse terminal starts; legal pawn fixtures establish the collision.
+Initial missing service methods and reply-breadth's incorrectly guessed position scope fail for
+real; actual incoming-edge scope fixes the caller, not the factory. Nine source controls and107
+complete source/detail cases/four files pass, independently rerun and bounded-reviewed. No new
+source authority, declaration, Inspector2 consumer/API/UI or ten-motif delivery is claimed.
+
+D3953 separately fixes repeated pre-Vitest pnpm global-write failures. Official pnpm settings
+distinguish machine-level home/state from project store/cache; normal Make now exports ignored
+checkout-local home/state, with unchanged Node/packageManager/dependency pins, signature/integrity/
+peer settings. Actual child-env regression first fails then passes. Normal setup initially refuses
+identity verification after sandboxed signature-fetch failure; the same permitted setup succeeds
+with pnpm11.18.0 and unchanged package/lock manifests. Subsequent normal sandboxed commands work.
+A possibly overlapping attempt is excluded from final proof. No global config edit, disabled trust
+check, per-test flag or repeated privileged test invocation is introduced.
+
+The next full run exposes a stale scaffold check requiring ineffective workspace stateDir.
+Replace that existing requirement with both effective Make exports, retaining missing-either and
+workspace-text-only negatives plus the executed child-env check. Independent serial normal
+schema17/toolchain9 and the separately repeated source9 pass; scaffold/packaging/hooks are green.
+Final fresh normal make verify build passes toolchain/scheduling442/types (zero Svelte warnings)/
+schema/manifest and107 source/detail cases, then fails1/2154 authority cases (2153 pass), exactly
+the eight existing predecessor targets. No skips/setup-blocked cases, raised deadlines or reduced
+populations. Later aggregate/content/native/trailing build gates remain unreached. Standalone
+research types/build pass. Canonical rebuild remains387/379/eight,93 subjects/zero qualified,
+53 population/eight external receipts; acquisition Nudge42/52 Review62/72 remains unchanged.
+
+D3792/D3952/D3953 remain doing in the coupled uncommitted integration. Complete remaining
+suppliers, total Inspector2 static preflight/source-page operation, witness-only paired
+components, strict receiver/disclosure/API and mounted/native paging/focus/return. Preserve
+D3928's separate pack decision and D3948's generic-renderer debt. Routine independent reviews
+are authorized without repeated permission questions. No milestone/content/schema/qualification
+promotion, staged files, coupled commit/push or goal pause.
+
+Final normal verify-governance exits zero with3702 ledger rows/1781 live assigned and zero
+untriaged; all569 UX items retain durable assignments, roadmap R1–R10 and refreshed receipt pass.
+git diff --check is clean, staging is empty, and package.json/pnpm-lock.yaml remain unchanged.
+This administrative clearance does not alter the red full software gate described above.
+
+## 2026-11-02 — D3792/D3836 actual dependent sources; D3954 retained factory results
+
+Previous goal turn is progress, not blocked:26 real local sources and the normal Make repair
+were implemented/independently reviewed and their red aggregate gate recorded. This turn adds
+five actual dependent incoming-edge suppliers to the same current RunService/SQLite grant:
+discovered execution, nonterminal fork survival, computed overload, mate@1 and mate@2. Internal
+source coverage is31 topics; no current Inspector2/API/UX/ten-motif delivery count advances.
+
+The existing recorded-edge factory receives actual nodes from the original validated full run.
+Only the demanded exact dependency path executes. Actual original edge/dependencies/values,
+creating/requested branch identity and conditional empty/terminal-false/unavailable results remain.
+Both mate versions require detached/frozen closed1..4-attacker-move parameters, included in exact
+source keys. Caller FEN/result/node cap/implicit horizon/legacy fork override is refused.
+Root performs no factory work; inherited prefixes cannot borrow later play. Real storage changes
+or cancellation during actual computation refuse publication/readback; retained copies/foreign
+owners are rejected. No new evidence factory, declaration, issuer, provider or schema is added.
+
+Independent review returns D3954 after an initial24+62 existing cases pass: normalized values
+and reasons do not retain genuine availability or derived evidence/inputs wrappers. Record the
+row before repair. Eleven actual result-identity controls first fail among26 cases, then pass
+with the exact dispatcher result retained beside normalized outcome. Null denotes only the
+conditional fork target not invoked after its genuine empty event population. No reconstructed
+wrapper/ancestry. The final independent five-suite run passes133/133 with no bounded supplier
+blocker: dependent26/local9/context27/ledger26/detail45. Detachment and malformed nested accessor/
+symbol/extra/horizon controls ensure callers cannot change saved parameters or perform work.
+
+Fresh normal make verify build passes toolchain9, scheduling443, workspace types with zero
+Svelte warnings, schema17/packaging/manifest and133 source/detail cases. It then fails1/2154
+authority cases (2153 pass), exactly the eight existing predecessor targets. No skips/setup-blocked
+tests, raised deadlines, reduced populations or old-receipt relabelling. Later aggregate/content/
+native/trailing build gates remain unreached. Normal research types and standalone build pass.
+Manifest49/328/42/554,319 routes/1041 capabilities, acquisition Nudge42/52 Review62/72 and existing
+canonical387/379/eight/93 subjects/zero qualified remain unchanged.
+
+Natural250k mate exhaustion and actual interactive deadline/isolation are not established by
+these internal helpers. Complete remaining recorded/compound/provider/authored suppliers, total
+65-topic/six-detail static preflight/page operation, witness-only paired components, strict wire/
+disclosure/access, authenticated API and mounted/native paging/focus/return remain executable.
+D3954 stays doing with D3792 in the coupled integration. Initial work-state sync catches the new
+unassigned row; explicitly assign it doing to assistance-and-presentation with the actual start
+date, preserving the zero-untriaged ceiling. Routine independent reviews remain authorized.
+No content/schema/qualification/milestone promotion, staged files, coupled commit/push or goal pause.
+
+Final normal semantic-validation-check confirms generated387/379/eight receipts are current.
+Normal verify-governance exits zero:3703 ledger rows,1782 live assigned, zero untriaged; all569
+UX assignments, roadmap R1–R10 and refreshed receipt pass. git diff --check is clean and staging
+is empty. These checks do not clear the red full software gate or complete Inspector delivery.
+
+## 2026-11-02 — D3792/D3815 current recorded-window service delivery
+
+Previous goal turn is progress: five real dependent source paths and D3954's independently
+verified original-result retention repair changed production state. This turn connects the ten
+recorded-window@3 families to actual current RunService/SQLite grants through the existing runtime
+recordedSemanticWindowSource, not another detector pipeline. It receives the full unchanged run,
+requested branch/endpoint and one exact family, retains original result/events/operands and
+complete/omitted horizons, and rechecks exact returned scope/currentness/cancellation. Inspector
+does not accept the generic trade@2 sibling. Missing, complete-empty and source failure differ.
+
+Two actual service controls first fail absent methods; after wiring69 pass, then three genuine
+crossed-endpoint/projection and later-original-graph controls bring the permanent suite to72.
+Independent final normal seven-suite review passes315/315 (window service72/runtime110, dependent26,
+local9, context27, ledger26, detail45) with no bounded blocker. Both colours/all ten families and
+earlier prefixes/special moves/empty/failed/copy/foreign/stale/cancel/disclosure controls remain.
+A genuine version-hold journey is not proved; today's runtime returns populations, and malformed
+held metadata is contract failure. Interactive deadline/API/native/qualification remain open.
+
+Internal source coverage is41 topics (26 local/five dependent/ten windows), not current Inspector
+API/UX adoption. Fresh full normal verify passes205/six source/detail cases then fails1/2154
+authority cases (2153 pass), exactly eight predecessor targets; no skipped/setup-blocked cases,
+raised deadlines or reduced population.444 software files; types/research/build pass separately
+with zero Svelte errors/warnings. Later aggregate/content/native/trailing build remains unreached.
+Manifest49/328/42/554,319 routes/1041 capabilities, acquisition Nudge42/52 Review62/72 and existing
+canonical387/379/eight/93 subjects/zero qualified remain unchanged.
+
+Consolidate the live D3792 queue/plan/RFC-index snapshots into one current handoff instead of
+adding competing stale latest checkpoints; all failed runs/returns remain in the existing review
+and these append-only logs. Update D3792's actual checkpoint/state/roadmap, not a new work file.
+Finish remaining suppliers/complete65-topic/six-detail preflight/page operation, paired components/
+strict wire/disclosure/authenticated API/native next. D3951/D3952/D3954 repairs remain coupled,
+D3928/D3948 separate; no content/schema/qualification/milestone promotion, staged files, commit/
+push or goal pause. Routine independent review continues without permission questions.
+
+The first normal governance run catches a duplicated existing recorded-semantic-window evidence
+path in the roadmap checkpoint; remove only the duplicate and refresh the existing receipt.
+Final normal verify-governance exits zero:3703 rows/1782 live assigned+routed, zero untriaged,
+all569 UX assignments and roadmap R1–R10/receipt pass. git diff --check is clean and staging
+is empty. This does not clear the separate red full software gate or complete Inspector delivery.
+
+## 2026-11-02 — D3792 saved-report suppliers; D3955 occurrence joins; D3956 case isolation
+
+Six actual saved-report topics now use the accepted existing packet/tablebase-view factories on
+unchanged current RunService/SQLite position grants. All matching non-model event occurrences,
+duplicates/global ordinals/seq/item digests and original source/value objects survive. Historical
+report-only authority, optional/null/signed values and absent-versus-failed outcomes remain exact;
+no fresh provider work. Initial suite cannot collect the missing module (zero tests, not assertion
+failures). After wiring, genuine foreign-packet/collection controls first fail: D3955 now joins
+packets before derived work and collections to the genuine current selection/head before publish.
+Independent complete nine-suite review passes387/387, including41 new actual service controls.
+
+Internal coverage is49 topics:26 local/five dependent/ten recorded-window/six saved-report/two
+already-implemented ledger topics. Earlier41 omitted the ledger pair; its inclusion is inventory
+correction, not new delivery. No current Inspector API/UI/native or qualification is promoted.
+
+The first normal full verify passes246 source checks then actually times out the single5000ms
+case bundling387 semantic operations. D3956 parameterizes those same cases with every original
+assertion plus case/arm identity and preserves all fixture population checks separately. No raised
+deadline/retry/skip/configuration/production/population change. Independent complete file452 tests,
+444 pass/eight explicit predecessor failures/zero timeouts. Fresh full normal make verify build
+passes246/seven source checks then reports8failed/2533passed authority tests across21 files,
+2541 total, zero timeouts/skips/setup-blocked. The prior timeout is not relabelled as assertions.
+Types have zero errors/warnings; research types/standalone build pass separately. Later aggregate/
+content/native/trailing build remains unreached; no full/remote/release/coupled landing clearance.
+
+445 software files; manifest49/328/42/554,319 routes/1041 capabilities and canonical387/379/eight/
+93 subjects/zero qualified/53 population/eight external receipts unchanged. Acquisition remains
+Nudge42/52 Review62/72; D3928 pack decision/D3948 renderer debt remain separate. Update existing
+queue/plan/RFC-index/roadmap/work-state rather than another competing work document. Next:
+remaining suppliers/full65-topic/six-detail preflight/page/paired components/wire/disclosure/
+deadline/API/native and independently grounded orientation/current populations/lawful predecessor
+retirement. Routine independent reviews need no repeated permission question. No staging/commit/
+push or goal pause; D3955/D3956 remain coupled integration work, not parent completion.
+
+Normal work-state-sync and roadmap-receipt/verify-governance exit zero:3705 rows/1784 live,
+zero untriaged, all569 UX assignments and roadmap checks pass. This is tracker consistency,
+not clearance of the separate red software gate.
+
+## 2026-11-02 — D3792 material/defender suppliers; independently audited52-topic coverage
+
+Extend the existing local table with defender removal/duty relocation and the existing dependent
+owner with material role_asymmetry2. Fourteen actual tests first fail missing sources; nine
+intermediate material controls reject misfiled derived wrappers. The final material path retains
+the complete original SemanticFact[] result and original evidence/inputs. Positive capture/
+defender cases, root-versus-empty and both-colour/all-four promotions retain every source control.
+Main focused92/three files and independent119/four files pass; local13/dependent37 add15 cases.
+
+Independent set audit confirms52 distinct accepted-target topics:28 local/six dependent/ten
+windows/six packets/two ledger, no overlap/out-of-target refs. Actual registered Inspector remains
+75-ref consumer1/compileModulePacket;65-topic consumer2 is still the jointly accepted target,
+not a delivered compiler/API/UX. Six detail views are separate. Remaining13 exact sources/owner
+seams are recorded in the existing queue and compiler2 review: Maia2 (actual task/factories still
+missing), Explorer1, authored shapes1, pivotal4, comparisons2, whole-Review Story1, installed
+opening point/history2. No blanket absent stubs or permission/source borrowing is authorized.
+
+Normal sandbox pnpm initially fails DNS before types, not chess checks. Normal Make network
+escalation passes workspace/research types/build without env/deadline/pin changes, zero Svelte
+errors/warnings; existing bundle warnings remain. Fresh full normal verify passes261/seven
+source/detail checks, then exits2 on unchanged8 failed/2533 passed authority tests/21 files,
+2541 total, zero timeouts/skips/setup-blocked; later full/content/native/trailing build unreached.
+445 software files; unchanged canonical qualification, manifest and Nudge42/52 Review62/72.
+No source qualification, pack/schema edit, milestone promotion, coupled commit/push or goal pause.
+
+## 2026-11-02 — D3792 pivotal branch sources; D3957 cancellation; D3958 runtime boundary
+
+Add four internal exact scoped pivotal topics on current RunService/SQLite branch grants:
+irreversibility1, phase_change2, human_divergence2, option_collapse2. Preserve unchanged full run,
+exact through-endpoint even when selected earlier, complete original results/proofs/inputs and
+historical human observations with actual origin branches/dispositions. Later option-collapse
+confirmation cannot leak into an earlier prefix. Missing human selection/candidates stays absent;
+present-empty/nonmatching is no_witness; mixed absence retains internal evidence without claiming
+complete availability. No fresh model/provider operation, ranking or quality judgement.
+
+Six first rule cases fail missing methods; two human fixtures fail strict replay, and a direct
+opponent commit also refuses. Correct fixtures with actual appendOpponentPly, not relaxed replay.
+Initial independent109/four passes but finds D3957: genuine constructor abort still calls target
+once. New falsifier proves it; same request signal now checked before construction/target and
+publication. Independent31-service version110/four passes, preserving final owned current reads.
+
+First full normal verify passes292/eight source checks but adds D3958 criterion19a: server imports
+the private dispatcher. Authority9failed/2532passed/2541 is recorded, not called old8. Keep the
+guard unchanged and move actual collection/dispatch/proofs into runtime. Server only grants and
+rejoins original nominal collection to current full run/head/decision/branch/prefix/path before
+publication. Four genuine copied/foreign prefix/head/projection controls make35 service tests.
+Independent final1437/five suites passes, including unchanged authority1323/context27/runtime52.
+
+Fresh full normal make verify build passes296/eight source checks, then exits2 on original8
+predecessor failures/2533passes/2541 authority tests/21 files, no timeouts/skips/setup-blocked.
+Workspace/research types and standalone build pass separately, zero Svelte errors/warnings;
+existing bundle warnings retained, later full/content/native/trailing build unreached.446 software
+files; manifest49/328/42/554,319 routes/1041 capabilities and canonical qualification unchanged.
+
+Internal target coverage56/65 (28local/six dependent/ten windows/six packets/two ledger/four
+pivotal), not consumer/API/UX delivery. Registered Inspector remains75-ref consumer1; six detail
+views remain unbound. Remaining9 suppliers: Maia2 (actual whole final task still missing),
+Explorer1, shapes1, Compare2, Story1, installed opening2. Full preflight/page/paired components/
+wire/disclosure/deadline/API/native and lawful predecessor retirement remain open. Nudge42/52
+Review62/72, no qualified sources/new official graduation/milestone promotion. Record D3957/
+D3958 as owned doing/local repairs within coupled work, not closed parent features. Update existing
+state/queue/plan/RFC-index/roadmap/review, no new work document, staging/commit/push or goal pause.
+
+Final normal work-state-sync and roadmap-receipt/verify-governance exit zero:3707 ledger rows,
+1786 live assigned/routed, zero untriaged, all569 UX assignments and roadmap checks pass.
+git diff --check is clean; staging and package/dependency pin diffs remain empty. This is
+tracker consistency, not clearance of the separate red software gate.
+
+
+## 2026-11-02 — D3792 opening pair and independent Maia contract acceptance
+
+Two internal installed-opening suppliers now retain genuine installed point/history results,
+paired lookups, negative/repeated visits, exact requested prefix/full image and current access.
+D3960's actual source-key collision negatives first fail, then pass with genuine source scope/
+head in the existing key. Independent review finds D3961's genuine same-ID crossed-resolution
+lookup: two unwanted dispatcher calls before final refusal. Actual negative first fails, then
+proves zero calls after pre-target original subject/head/full-image joins. Independent1428/six
+complete files passes;34 service controls pass. Internal coverage58/65; registered Inspector
+remains75-ref consumer1, not current API/UI/native completion. Earlier failures stay recorded.
+
+Main repairs D3959's three returned Maia draft seams in the existing RFC: exact distribution
+factory/profile and disclosure, modern protocol-first wire/receiver, nullable-mass fact renderer/
+zero-window policy. Independent reviewer explicitly accepts task operation/parser/source, both
+node derivations and modern human-split for implementation under criteria1–13. Compatibility
+baseline81/three passes; real-model criterion2 and authenticated/native criterion7 still required.
+No sampler/calibration/personality or broader parent acceptance. Routine reviews need no new
+permission prompt. Attributed decision: existing compiler2-independent-review-2026-11-02.md.
+
+Normal make verify build passes330 source/detail checks/nine files then fails the same eight
+predecessor assertions/2533 passes/2541 authority cases.447 discovered software files; no timeouts,
+skips or setup-blocked cases. Workspace types/schema pass; research types and standalone build
+pass separately earlier. Later aggregate/content/native/trailing build unreached. Canonical
+387/379/eight/93 subjects/zero qualified and acquisition Nudge42/52 Review62/72 unchanged. No
+content/schema edit, milestone promotion, staging, coupled commit/push or goal pause. Remaining
+seven suppliers, full65-topic/six-detail preflight/pages/paired UX/wire/API/native and actual
+caller retirement remain active work; existing trackers updated, no new planning document.
+
+Final normal work-state-sync and roadmap-receipt/verify-governance pass:3710 ledger rows,
+1789 live assigned items, zero untriaged; all569 UX assignments and roadmap checks remain green.
+The updated Maia lifecycle and source checkpoint anchors agree. Final normal research typecheck
+and standalone production build pass; full software remains red as recorded above. No staging,
+commit or push; this governance result does not clear the software, content or native gates.
+
+## 2026-11-02 — D3959 task source implemented; independent review and real red gates
+
+Accepted Maia §§1–2 now traverse registered descriptor/shared exchange/parser/sole factory/
+operator CLI. Sampled termination stays separate from literal reported rows/missing mass/same-row
+cp/WDL. UUID/history isolate observations; actual option image/defaults/generation, original
+source seals, retained reuse and independent cancellation are tested. Frozen page/selector/client
+remain unchanged. Independent final task/parser43/three passes; main source/scheduler/protocol
+71/five passes. Broader compatibility98pass/one existing D3928 startup failure, traversal17/18
+including new operator arm and real Stockfish CLI. No real pinned Maia or native proof claimed.
+
+D3962 first full run passes355 source checks but adds two exact inventory failures to the old8;
+actual329-projection reconciliation preserves all structural/privacy assertions. D3963 genuine
+insufficient-material null controls first fail1/18, then pass using opponent admission's existing
+isEnd() rule; independent43/three passes again. Normal metadata regeneration retains320 exact
+factory profiles/1042 capability declarations; canonical387/379/eight/93 subjects/zero qualified/
+53 population/eight external receipts stays unchanged. Full normal make verify build now passes
+355 source checks/eleven files, then the same8fail2537pass/2545 authority cases, no timeouts/skips/
+setup-blocked.449 software files,49/329/42/554 manifest,seven provider operations. Workspace/research
+types and standalone build pass separately; later full/content/native/trailing build unreached.
+
+Internal Inspector target coverage remains58/65; base task source does not count as either node
+topic. Next accepted work is exact opponent.maia_task consumer/selector final-source retention,
+both node derivations/modern renderer/wire/receiver, then authenticated/real-model/native proof.
+Existing trackers/RFC/register/docs/review updated, no new work document, content/schema change,
+qualified-source/milestone promotion, staging, coupled commit/push or goal pause.
+
+Final normal governance/roadmap checks pass with3712 ledger rows/1791 live/zero untriaged,
+all569 UX assignments, seven landed provider members and coherent implementing lifecycle.
+Fresh research typecheck/standalone build after D3963 also pass. Staging/content/schema/package
+pin diffs remain empty; full software is still red as recorded, not ready to push.
+
+## 2026-11-02 — D3959 actual selector adoption and exact node factories, bounded-reviewed
+
+Implemented accepted Maia §3 through real Maia application composition and the shared provider
+scheduler/health wrapper: exact opponent.maia_task@1 compiles before acquisition; human-common
+retains only its final genuine task in the existing512-entry/TTL selection cache; theory/practical
+preserve their existing policy/concession transforms. Public selection shape and explicit legacy
+fixtures remain; supplied modern failures never fall back to raw UCI. D3964's real health-down
+and null-evidence theory-generation controls first fail, then pass with separate numeric task
+generation and unchanged registry-keyed settled reuse. Actual wrapped controls prove once/new
+task, zero/cache, no healing and protocol rejection before malformed captured identity succeeds.
+Independent selector/source71/three passes.
+
+Implemented accepted §§4/4.1 exact node_distribution and node_candidate_wdl factories/closed
+arms through the sole dispatcher. Original task/position/subject invocation and full historical
+path are joined; rank gaps/unknown shares, same-row WDL/zero and authentic zero-row/unavailable
+results remain separate. Independent node/source/authority1374/four passes. Both projections stay
+operator-only/unbound: service coverage58/65 and current75-ref Inspector1 have not advanced.
+Exact modern consumers/renderers/wire/receiver/API and actual requested-node delivery remain next.
+
+New-node aggregate first adds one320-vs322 route-count assertion (9fail2544pass) to the oldeight;
+D3962 records that actual failure. Correct only the count/comment, preserving exact set-equality
+and structural/privacy guards. Final ordinary make verify build passes385 source controls/thirteen
+files then fails8/2553 authority tests (2545 pass), only the eight predecessor semantic targets.
+No timeouts/ordinary skips/setup-blocked/assertion or budget changes. Workspace/research types
+and standalone build separately pass, existing chunk warnings retained.451 software files,
+manifest49/331/43/555,322 routes/1044 capabilities; normal factory-profile update executes644
+valid/falsifier cases (691 unrelated cases intentionally unselected only in that opt-in update).
+Canonical387/379/eight/93 subjects/zero qualified,53 population/eight external receipts and
+Nudge42/52 Review62/72 remain. Real local Maia image is absent; scripted tests do not discharge
+real-model criterion2 or authenticated/native criterion7. D3928/D3948 remain separate.
+
+Existing RFC/register/ledger/queue/roadmap/docs/review updated; no new work document, pack/schema
+edit, staging, coupled commit/push, qualification/milestone promotion or goal pause. Routine
+independent reviews proceed under the owner's standing authorization, without permission churn.
+
+Final ordinary governance passes after restoring the D3963 tactical route removed during the
+status rewrite:3713 ledger rows/1792 live/zero untriaged,569 UX assignments,77 active/77 archived
+RFCs and all resource/roadmap/intent checks green. Staging and content/schema/pin diffs remain
+empty. This does not clear the eight software assertions or authorize a coupled commit/push.
+
+## 2026-11-02 — D3959 modern human-model Inspector delivery; bounded, uncommitted
+
+Accepted Maia §§4.2/4.3 now reach the actual authenticated human-split route, exact consumer2,
+registered candidate-only fact renderer, strict protocol-first receiver and mounted Inspector.
+The shared final sampled task supplies the requested historical node; source preflight and
+access/disclosure/currentness/cancellation checks surround acquisition/publication. No sample,
+task ancestry, option image or cp/WDL enters the narrow page/component/prose. Zero, unknown and
+genuine empty reported windows stay distinct, with actual model/band attribution, not a rating.
+Existing legacy fixtures remain explicit; modern errors never retry raw UCI or legacy parsing.
+
+Failures retained rather than smoothed away:
+- D3965 mounted white/black initially raises two DataCloneErrors; an attempted process-only
+  serializer repair fails too and is rejected. Validate original receipt, take its plain JSON
+  snapshot, validate snapshot and return fresh narrow operands; process/client seals unchanged.
+- D3967's genuine recomputed same-value binding/convention control fails1/10, then the receiver
+  pins the exact accepted declared-convention/model-window pair. Generic D3948 remains separate.
+- D3966 ordinary assistance-query pending/shown cross-run controls pass before any repair.
+  Only the supported no-query embedding reproduces stale pending/shown pages (2fail244pass).
+  Valid replayed runs retain stored ids/equal stamps; ordinary generated ids do not collide.
+  Including run.id in the existing Inspector authority image repairs both without a new domain.
+- D3968 the first normal full gate stops at operation-set equality: the declared modern
+  consumer lacked its real server function registration. Register the actual function/version
+  and retain complete-operation plus omitted-modern negatives; no count-only or predecessor bypass.
+
+Main and independent reviewer both pass279/four complete files: mounted246, authenticated
+SQLite/REST10, modern receiver10, manifest13, with no unhandled errors. Both new delivery files
+join the ordinary source gate. Final normal make verify build passes types/scaffold/manifest and
+405 source tests/fifteen files, then fails exactly8/2554 authority tests (2546 pass), the same
+canonical predecessor targets; no timeout/skip/retry/population/budget changes.453 software files,
+manifest49/331/44/556,322 active routes/1044 capabilities, seven provider operations.
+Standalone make build inspector-research-typecheck passes separately with existing chunk warnings;
+later full pools/content/native/trailing build remain unreached. This is not green CI/push clearance.
+
+Full Inspector service coverage stays58/65 and its registered full module stays75-ref consumer1.
+Candidate WDL remains unbound;65-topic/six-detail source pages/paired UX cutover, real pinned Maia
+and authenticated/native proof remain open. Local real-model image is absent; scripted tests are
+not that proof. Nudge42/52 Review62/72 and canonical387/379/eight/93 subjects/zero qualified remain.
+Existing docs/RFC/register/queue/roadmap/ledger/work-state updated; independent review appended to
+the existing compiler2 record. No new work document, content/schema/pin edit, staging, coupled
+commit/push, qualification, milestone completion or goal pause.
+
+## 2026-11-02 — D3959 real offline Maia source traversal independently verified
+
+Built the pinned Maia CPU image locally; no service deployed or image published. The opt-in
+ordinary Make targets maia-task-native-build / maia-task-native-check reuse the existing
+source builder and byte-verified local OCI/config/rootfs join, then launch the exact inspected
+image offline. No duplicate identity/digest authority or unverified configured artifact label.
+
+Main and independent repeat both pass two real linux/arm64 model tasks. Histories
+g1f3 g8f6 b1c3 b8c6 and b1c3 b8c6 g1f3 g8f6 reach the same full FEN; each retains20 reported
+rows, generation1 and applied band1500. Actual captured commands/defaults/history and first/final
+terminal agree with the source; exact consumer2/rendering/strict receiver and original retained
+acquisition pass. Retained lookup runs no extra exchange; copied delivery refuses. Same-draw
+normalized comparison independently isolates history identity from the changing UUID.
+
+Actual image/config sha256:27474b971e84d6801163121ccec699b816fbcd77dfc2260ff4e637a4d7f65a10;
+manifest sha256:dbd0b06810a49b76f3ead65c17b9fdd8f4ab466b871dddc5f9f7a91a49d3a99e.
+Only criterion2 direct-source traversal clears: not calibration, CLI D3969, authenticated native
+UI, Full Inspector2/WDL, deployed footprint or whole RFC. The isolated1.5GiB cap is not measured
+resource evidence. Independent source-deployment contracts also pass13/13.
+
+Probe implementation returns are retained: missing run-subject subpath imports fail build;
+bundled CLI helpers trigger their entry guards, fixed by original-module dynamic import; normal
+types and the first native run catch the nonexistent requestedIdentity.requestDigest assertion.
+Use the existing normalized digest helper, actual exchange observations and identical-ID history
+comparison instead. Current workspace typecheck passes including the native probe. Compact
+result remains ignored in .cache/verification; OCI layers/model/transcripts are not Git content.
+
+D3969 records the separate packaged operator composition gap: its named Maia arms currently
+compose only Stockfish/binary artifact probing. Direct native-source proof does not repair that.
+Independent old-eight audit also confirms material1 remains genuinely acquired by Full Inspector1;
+do not restore validation-only emissions or delete still-current features to make CI green.
+Complete Full Inspector2 and the explicit frozen-history retirement contract remain the lawful
+route. Existing ledger/queue/RFC/docs/roadmap/review updated, no new work document or qualification.
+
+The preceding full software gate still records405 source passes then8fail2546pass/2554 authority
+tests; its first operation-registration failure and three route/receipt fixes remain in the
+prior entry. Governance initially catches three lost tactical route mentions after queue
+condensation and two duplicate checkpoint paths; both are corrected, not waived. Last repeat
+passes all governance checks with3717 rows/1796 live/zero untriaged before D3969's assigned row.
+Final post-probe gate results are reported separately; no push clearance, staging or goal pause.
+
+Final post-probe ordinary gates: workspace types (including the native checker), scaffold and
+manifest pass;405 source checks/fifteen files pass; the same eight canonical predecessor
+assertions remain (2546/2554 pass). Complete governance passes with3718 ledger rows/1797 live/
+zero untriaged,569 assigned UX items and unchanged77 active/77 archived RFCs. Diff check passes;
+staging is empty. Model/OCI/report outputs are ignored, not new Git blobs. Goal remains active.
+
+## 2026-11-02 — Real current-node Maia supplier increment, not full Inspector completion
+
+D3970 terminal exploration observes genuine zero-row/null tasks for mate, stalemate and bare
+kings through one real exchange each. Independent existing-RFC §4.0a acceptance precedes the
+production no-query terminal absence branch; ordinary selector refusal remains. Two actual
+RunService/SQLite suppliers share the original final task and exact factory inputs/results,
+selected trajectory policy and granted-branch history/seed. Initial seven real29-case failures
+and later invalid pack/context test setups are retained in the learner log/review rather than
+turned into source truth. Final44 supplier controls and independent101/four pass, including
+both-colour historical/inherited paths and late artifact/access/disclosure/storage/cancel/
+generation changes. Health-only null is distinct from actual model replacement.
+
+Main and independent strengthened pinned-native repeat pass real health/selector/source and
+service grants: baseline two20-row histories plus both-colour historical20-row distribution/
+nonempty-WDL pairs. Exact shared task, no extra WDL/read inference and unchanged saved play are
+asserted; second colour legitimately reuses the existing request. The bundled concept-directory
+setup failure is repaired via actual installed registry configuration. Positive available/
+one-value/nonempty-WDL assertions are mandatory. Reports/model/OCI output remain ignored.
+
+Full normal verify passes449 source checks/16 files, then the same8fail2546pass/2554 authority
+cases, no timeout/retry/skip. Later aggregate/content/native/build remain unreached; workspace/
+research types, standalone build and279/four modern delivery regression pass separately.
+Governance passes3719 ledger/1798 live/zero untriaged and569 assigned UX items. Existing trackers
+now report60/65 internal Inspector suppliers, not full consumer cutover: registered Inspector1
+still75 refs; WDL learner binding, five suppliers, complete source pages/API/UX/native remain.
+Canonical387/379/eight/93 subjects/zero qualified, Nudge42/52 Review62/72 and separate D3928/
+D3948/D3969 obligations stand. No qualification/milestone/RFC completion, staged bytes, commit,
+push or goal pause. Exact independent results remain in the existing compiler2 review record.
+
+## 2026-11-02 — Explorer source61/65; genuine occurrence-key and shape-admission findings
+
+Accepted §4.11a/D3858/provider§8 source reuse now reaches actual application-owned CorpusSource
+and real current RunService/SQLite grants. Both full normalized request images and the genuine
+whole delivery validate before the existing narrow factory; original0/99/100 values remain
+private source successes, with no stats fallback, sparse fact renderer or partial public
+consumer. Current selected trajectory population, access/disclosure/pinned pack/config/signal
+checks survive awaits/publication/readback; complete public consumer preflight is still required.
+
+Independent review finds D3971 and the actual equal-stamp/root/exact-retained-page/different-
+legal-history test first fails1/42. Existing full event head in the existing source-key body
+repairs it; main42 and independent82/three source/context/summary pass. Broad independent group
+180 has114pass66fail initially (one listener sandbox refusal), then115pass65fail unchanged
+elevated; provider-corpus itself34pass65fail/99 at D3928 default-app pack admission. No broader
+HTTP/native clearance is inferred. Failures/commands remain in the existing compiler2 review.
+
+D3972 records actual missing shape-source admission, not an executable version hold: the named
+registered-authored-provenance dependency is metadata, the factory computes and no issuer/hold
+owner exists. Independent code/contract audit agrees. A bounded independently reviewed existing-
+RFC admission clarification is required before that supplier; no permanent stub is accepted.
+
+Final full verify passes491 source checks/17 files then the same8fail2546pass/2554 authority
+cases,455 software files, no timeout/retry/skip/waiver. Later full tiers remain unreached;
+standalone build/research types and complete governance pass separately.3721 ledger/1800 live/
+zero untriaged,569 assigned UX items. Existing strategic/checkpoint/RFC/docs registers are
+reconciled to61/65 internal suppliers, not complete Inspector delivery. Four suppliers, full
+preflight/source pages/paired UX/WDL/native and original motif reach remain; current full
+consumer1 still75 refs. No content/schema/source qualification/milestone/RFC completion,
+staging/commit/push or goal pause. D3928/D3948/D3969 and canonical zero-qualified state stand.
+
+### 2026-11-02 — Both actual Compare Inspector suppliers;63/65 source coverage
+
+Implemented accepted module-registration §4.11a/F2 §§2.3a/d/i's two private suppliers, not
+a new RFC or public partial consumer. Actual RunService/SQLite grants select explicit ordered
+primary/peer endpoints over the unchanged original run. Structural acquisition retains the
+complete17-family two-prefix population, original reduction result and proof, including empty.
+Recorded eval acquisition shares the sole original report trail with pair admission and ordinary
+module comparison; stable ply/event order, original packets, every consecutive original result,
+cp-first decoding, mate barriers, safe signed threshold150 and weaker reported-only meaning stand.
+The new original-array reader snapshots pair inputs and rejects copied/foreign empty arrays.
+Keys bind actual full head/columns/complete inputs; current access/disclosure/signal repeat before
+work/publication/readback. No new provider search, grading, comparability or source qualification.
+
+The first focused47-control service run passes45/fails2 because its storage mutation calls
+revealFeedback on an already-open run. Replace that no-op instrument with a genuine appended
+recorded report; no production guard is weakened. Two normal verify attempts then catch readonly
+mutation in the added malformed-graph test; construct the immutable corrupted fixture instead.
+Final240/six focused pass. Independent193/six includes54 actual service and27 current-context
+controls; review clears this bounded implementation and appends the existing compiler2 record.
+
+Final ordinary make verify build passes types, scaffold/packaging/manifest49/331/44/556 and
+545 source/detail cases/18 files, then fails the same8 predecessor assertions/2548 passes/2556
+authority cases.456 software files; no retries/skips/deadline/population waiver. Later full
+tiers/trailing build unreached. Standalone build and inspector research types pass separately
+(initially misspelled research target refused before execution). Existing bundle-size warnings
+remain. Tracker/ledger/RFC row/docs/roadmap reflect63/65, not Full Inspector2 completion.
+Story rank and actual shape admission/source D3972, full preflight/source pages/paired UX/WDL/
+native and original motif reach remain. Nudge42/52 Review62/72, canonical387/379/eight/93 subjects/
+zero qualified unchanged. No content/schema/protected intent edit, staging/commit/push or goal pause.
+
+### 2026-11-02 — Captured Story Inspector source; original joins and pre-parser scope repaired
+
+Independent contract review confirms accepted Review §4.5/F2 §2.3g permits the complete actual
+captured Review source now; direct shape document/pointer provenance D3972 remains separate.
+Implemented private RunService/storage/import boundary resolution, current grant and actual
+registry trigger/provider-state capture, complete12-adapter population, original moment and
+last-level source, sole rank3 factory/result/proof. No full Story/title crop or provider enqueue.
+Empty rank is singleton ordering of currently admitted moments, not absence/finished analysis.
+
+Initial28-case service run passes23/fails5. Two genuine foreign population/moment controls expose
+missing input joins (D3973); add exact boundary/captured trigger/provider inputs and exact moment
+population joins before further work, retained in the reader. Other initial failures distinguish
+overbroad last-dispatch assertions and imported fixture reveal/context mistakes; production
+permission is not weakened. Own-issuer control initially intercepts the wrong constructor, then
+meaningfully fails1/33 on collection before issuer refusal; own boundary authority now checks
+immediately after resolve. Actual same-byte registry replacement, coordinator state change,
+storage/grant/disclosure/cancellation and retained reads remain guarded.146/five then pass.
+
+Review correctly refuses to clear that green run: provider observation still parses full-branch
+durable reports before filtering. Actual root-only controls with later distinct-FEN deliveries
+fail2/36 under both coordinator and fallback (D3974). Shared observedReviewPath bounds the path
+before reviewDurableEngineStates; no-endpoint whole-tip observation and ensureBranch scheduling
+remain unchanged.37 service cases and main/independent177/six now pass, including genuine later-
+source refusal, invalid/crossbranch endpoint-before-parse and unchanged coordinator behavior.
+The existing compiler2 review preserves every return and supplies bounded source-only clearance.
+
+Final normal make verify build passes types/scaffold/packaging/manifest49/331/44/556 and582 source
+checks/19 files, then the same eight predecessor assertions fail (2548 pass/2556 authority cases).
+457 software files; no timeout/retry/skip/population/deadline waiver. Later full pools/content/
+native/trailing build remain unreached. Inspector research types and standalone production build
+pass separately; existing bundle warnings remain. No green CI/push readiness is claimed.
+Current registers now report64/65 internal suppliers, not complete Full Inspector2. D3973/D3974
+remain doing as locally repaired coupled work; D3972, full65-topic preflight/source pages/paired
+UX/WDL/native/original motif reach and D3928/D3948/D3969 stay open. Nudge42/52 Review62/72 and
+canonical387/379/eight/93 subjects/zero qualified are unchanged. No raw recording/content/schema/
+protected intent edit, staging/commit/push, full RFC/milestone closure or goal pause.
+
+Story closeout checks: the first governance run rejects a duplicate checkpoint evidence path
+introduced while adding the real source files. Remove only that duplicate; complete repeated
+verify-governance exits0 without weakening the check. Work-state remains3723 ledger rows/
+1802 live/zero untriaged; all569 UX items assigned. Final diff whitespace check passes and
+the staged file list is empty. The earlier integration-green D3859 row is explicitly historical;
+its current full-gate red is recorded rather than reusing that old receipt as push clearance.
+
+## 2026-11-02 — registered shapes complete internal Inspector sources, not delivery
+
+Implemented independently accepted D3972 F2 §2.4a + module-registration companion after one
+concrete bootstrap/probe-order author return. Actual ShapeRegistry admits complete active source
+documents/digests/schema; runtime independently binds originals/current identities. Exact
+shape@2 carries actual document/trigger attribution and full source/path invocation proof.
+The saved-run supplier honors current point/complete-prefix grants, empty/repeated intervals,
+source failures, issuer replacement and cancellation. Pattern attribution validates no plan.
+
+D3975 actual sole-factory controls first fail5/33 (getters/hidden/symbol/inherited fields), then
+local closed-data capture/retained-read repair passes. Real HTTP bypass is not claimed; the
+actual supplier already creates frozen paths. Main and independent1461/seven pass, including55
+new source controls. Source count64→65/65, with full Inspector still75-ref consumer1. Four
+additional initial full-gate failures are new-route exact census expectations, repaired without
+omitting assertions. Final normal full check passes637 source/21files then the same8fail2552pass/
+2560 authority cases; no timeout/retry/skip/waiver. Separate types/research/build pass. Frozen
+migration receipt regeneration is refused and not forced.459 software files,49/332/44/556,
+323 routes/1045 capabilities. Complete65-topic/six-detail preflight/source pages/paired UX/WDL/
+API/client/native and original motif reach remain. Existing trackers/RFC/ledger/docs/map updated;
+3724 ledger/1803 live/zero untriaged. D3928/D3948/D3969 and canonical zero-qualified stay open.
+No raw dumps, content/schema/protected intent edit, staged bytes/commit/push or goal pause.
+
+## 2026-11-02 — D3969 actual operator composition, not another nominal CLI arm
+
+Independent accepted-contract check confirms the diagnostic operator-only health exception;
+do not invent another health registry. Actual entry now uses existing Maia network spec/real
+container probe, streaming Stockfish capture and unchanged shared scheduler/parser/factory.
+First normal fixture run: one real spec failure/seven EPERM; same elevated Make command:
+four actual failures/four pass. Final9 actual built-entry controls pass in main and independent
+repeat, including absent sidecar, malformed identity/no source and real zero connections on
+invalid requests. Correct the initial new no-go assertion: existing descriptor validates
+nullable capture after exchange, so its contract promises no evidence, not zero query. Broader
+traversal25pass/1fail26 remains blocked at existing D3928 pack admission.
+
+Both main and independent make maia-task-native-check MAIA_OPERATOR_CLI=1 exit0. Existing
+production Python sidecar from the same byte-verified native image receives actual OCI identity;
+both packaged arms return live exact source metadata. Only its own UUID temporary loopback
+container is created/removed; unchanged1.5GiB check cap is not a footprint measurement. Existing
+native histories/both-colour20-row/WDL/shared-task/retention/saved-byte controls still pass.
+No new transport/cache/pin/health or learner/calibration/parent/release claim. Final full gate:
+646 source tests/22files pass then old8fail2552pass/2560authority;460 software files. Types/
+research/build pass separately. Tracker/RFC/docs/ledger/map updated, zero untriaged; coupled
+integration still uncommitted/red. Full Inspector2 complete preflight/source pages/paired UX/
+WDL/API/client/native and lawful predecessor retirement next. Goal remains active, not paused.
+
+CLI closeout governance initially rejects a duplicate native-check evidence path introduced
+into the existing checkpoint list. Remove only the new duplicate; retain the original evidence
+path and repeat the unchanged governance gate. No check is weakened or RFC capability promoted.
+
+Repeated complete verify-governance exits0. Final diff whitespace check passes; staged list
+is empty. Goal remains active and the next delivery boundary is complete Full Inspector2,
+not another source-count or release-completion claim.
+
+## 2026-11-02 — D3792 recorded-report and shape presentation increment
+
+Registered six closed saved-report renderers plus actual shape@2 attribution; these are
+unbound presentation primitives, not the complete Inspector2 consumer/API/UI. D3976 replaces
+the PV fixture's false values.pv field with actual executor movesUci and adds36 real executor/
+attachment/factory/component controls. Complete legal PVs, asymmetric historical WDL for both
+colours, and absent/uninterpretable/zero/null fields stay distinct; attachment prose never
+becomes a sentence or new provider truth/grade. D3977's actual underscore publisher initially
+fails the raw-ID guard; explicit @account attribution fixes it without weakening that guard.
+Independent review finds D3978's actual deleted-author publication retention. The real
+publish/delete/hydrate/service/component path first fails, then the exact tombstone is stated
+neutrally, preserving its literal source operand. New renderer-name permission is exact.
+
+Independent194/four and focused224/four pass; earlier193-case stale-name failure and actual
+49/1 deleted-account falsifier are retained in the existing independent review. Normal make
+verify build passes692 source tests/23 files, then the same8fail2552pass/2560 authority tests;
+no retries/timeouts/skips/waivers. Workspace types/scaffold/manifest pass. Separate ordinary
+make build inspector-research-typecheck passes; later full native/content tiers remain unreached.
+461 software files; internal sources65/65 and current75-ref Full Inspector1 remain unchanged,
+as do Nudge42/52 Review62/72 and canonical zero qualification. D3928/D3948 remain separate.
+
+Existing tracking surfaces are refreshed, new rows owned/doing, no new competing work document.
+Complete65-topic/six-detail consumer preflight,71 exact presentation pairs/source-order atomic
+pages, WDL/API/client/native and lawful actual-caller retirement remain. No content/schema/
+protected intent edit, coupled commit/push or capability/release promotion. Goal remains active.
+
+## 2026-11-02 — Inspector occurrence budget primitive and a real Nudge composition gap
+
+D3980 adds budget-only occurrence fitting, preserving original ordinals/equal-value multiplicity,
+eight consecutive complete bundles, all-deferred page progress and accepted nonempty-range
+refusal. It does not acquire/admit sources or establish complete71 pairs/API/UI. Generic module
+factIdentity grouping remains unchanged. Actual equal-payload/different-input/owner sources
+demonstrate why Inspector cannot reuse generic value grouping. The nonempty end-index control
+first fails, then repairs. Genuine fixed word atomicity uses366 prior words and a62-word whole
+bundle whose29/25/8-word members separately fit the34 remaining; no partial component survives.
+
+D3979's two actual controls first find ordered two-ply paths charged as zero arrows, including
+survival under zero-arrow policy. Cost repair retains all policy limits and generic grouping.
+The initial endpoint-as-mark reading is wrong under the existing closed units; it is corrected
+and D3981 explicitly refuted, not sold as an existing product defect. Real one-edge Nudge remains
+1mark/1arrow under unchanged2/1. No current-board paint of future/historical paths is inferred.
+Recorded-line navigation and exact-position optional paint remain open. Independent182/three
+and actual runtime/server/web regressions341/four pass. Fixture-only too-short padding and
+incorrect guessed unhighlighted-word count are retained as test-author errors, not prod defects.
+
+D3982 separately confirms current harassment@3's owned source→Nudge2→registered composition
+defers solely because two arrows exceed its one-arrow policy. The permanent green measurement
+does not bless this UX. Learner-specific composition/sibling audit is owned/todo in existing
+module-registration work, not a new competing plan or a reason to raise budgets/drop families.
+
+Final normal make verify build:701 source/budget tests/24 files pass, same8fail2552pass/2560
+authority cases remain,462 software files. Types/scaffold/manifest pass; standalone ordinary
+build/research types pass separately. No retries/timeouts/skips/waivers; later native/content
+full tiers unreached. Internal suppliers65/65, current75-ref Inspector1, Nudge42/52 Review62/72,
+canonical qualification and official content states unchanged. Existing tracking updated with
+zero untriaged. No content/schema/protected-intent edit, coupled commit/push or goal pause.
+
+Final work-state/roadmap-receipt/verify-governance exits0 with zero untriaged of1809 live;
+3731 total rows. Final whitespace check passes; staged file list empty. Software readiness is
+not implied: the full gate still fails its eight named predecessor semantic cases.
+
+### 2026-11-02 — D3792 exact source/detail presentation prerequisites, not a consumer cutover
+
+Standing owner authorization is applied: routine independent reviews run without another
+permission question. Accepted D3802/D3983's six-ref conditional composition is implemented
+locally, with genuine payload-derived neutral geometry, exact source-owned caption and text-only
+empty/unavailable groups; no generic condition or empty square-set exception. Ten real detail
+factory controls start red before the production specs exist, then pass including copied/
+crossed/omitted/extra and foreign same-geometry negatives. The71 literal prospective Full2 specs
+cover65 actual supplier topics plus six details, not a renamed Full1 table or registered view.
+Declared operands/module-form audit and44 actual local/dependent/current-window source families
+reach strict parsed complete components. Actual saved-report/published-shape independent checks
+add36 cases. Fixture audit corrects old first-twelve positive selection, explicitly checks empty
+constructor refusal and adds a real trapped-piece positive; no source population is changed.
+
+D3984 records the real remaining whole-reading empty/non-drawable admission/status obligation
+before page delivery; test selection is not its implementation. D3985 broader independent
+regression first measures375pass/1fail: a23-class expectation omitted the accepted modern Maia
+receiver. Repair requires24 total, prior23 excluding that exact new row, its exact class/anchor/
+sole binding and unchanged uniqueness/legacy controls. Final independent376/eight and repeated
+ordinary workspace typecheck pass, Svelte0errors/0warnings; review is bounded, not new acceptance.
+
+Actual normal make verify build passes863 source/presentation/budget tests/27 files, then the
+same8fail2552pass/2560 authority cases;465 software files, manifest49/332/44/556. Later full
+native/content tiers and trailing build are unreached. Separate ordinary make build
+inspector-research-typecheck exits0 with existing chunk warnings. No retries, skipped cases,
+timeouts, policy raises, content/schema/protected-intent changes, coupled commit/push or goal
+pause. Current Full Inspector remains75-ref consumer1; Nudge42/52 Review62/72, zero canonical
+qualification and zero official-content graduations unchanged. Complete source-page preflight/
+status/strict API/receiver/client/WDL/native and actual predecessor retirement remain next;
+D3982 composition and D3979 scope-safe recorded-line navigation remain distinct.
+
+Final make work-state-sync roadmap-receipt verify-governance exits0:3734 ledger rows,
+zero untriaged of1812 live;630todo/100doing/1082blocked/1759done/163refused. D3983/D3984/D3985
+are explicitly owned doing, not coupled-completion claims. Whitespace check passes; staging
+is empty. The full software gate remains red at the eight named predecessor semantic cases.
+
+### 2026-11-02 — D3792 closed request grammar and independently accepted D3984 rendering
+
+The actual65-topic source/context inventory now has a closed source/detail request parser;
+it validates intent only, not access or an endpoint. Independent shared-array compiled-digest
+positive first fails73pass/1fail of74, then ancestor-only snapshot preserves serializable
+shared data and still refuses cycles/getters/hidden fields (D3986). Independent347/eight and
+workspace types pass. No new preference/paging store or source authority.
+
+D3984's genuine whole-reading empty/non-drawable gap is researched, its finite17-family
+module/presentation amendment independently accepted before production, then implemented.
+All17 actual empty controls first fail; the116-case supplier audit now constructs empty and
+positive values. Mandatory source-owned text plus optional original geometry preserves zeros,
+in-check not-evaluated states, unavailable turn clones and positive non-drawable observations.
+No source absence, all-clear, fake defer or six-detail substitution. Independent review first
+11pass/4fail exposes missing destination convention, two mirrored piece-identity losses and
+crossed genuine exact-source construction (D3987). Restore exact convention/node priority and
+pair closure; final423/ten and normal workspace types pass. Reviewer fixture extensions first
+27pass/3fail are separately corrected for a missing trapped positive and wrong promotion turn;
+collectors are not weakened. Final30 adversarial cases include13 old positive-geometry
+comparisons and both-color current promotion controls. Review receipt is the existing
+planning/learner-modules/compiler2-independent-review-2026-11-02.md, not a new work register.
+
+First normal make verify build catches reviewer-test implicit-any callbacks at workspace
+typecheck; explicit component typing repairs those tests. Final normal make verify build
+passes types/Svelte0/0, scaffold/packaging and984 source/presentation/budget checks/30files,
+then fails the same8 predecessor cases (2552/2560 authority pass). Scheduling retains all468
+software files without omission/duplication. Later full tiers/build are unreached. Separate
+ordinary make build inspector-research-typecheck exits0, with existing bundle-size warnings.
+Manifest49/332/44/556 remains, with truthful existing trapped/threat kind/reason operands.
+
+Current Full Inspector remains75-ref consumer1; the71 specs are prospective. Complete actual
+current-image preflight/source-page status/compiler/API/receiver/client/WDL/native and lawful
+real-caller retirement remain next. D3982 Nudge composition, D3979 line scope, D3928 pack ruling,
+D3948 renderer admission, Nudge42/52 Review62/72 and canonical zero qualification remain open.
+No source version/content/schema/protected-intent edit, coupled commit/push, milestone
+promotion, retry/skip/budget increase or goal pause. Tracker/queue/docs are reconciled to this
+bounded result; D3984/D3986/D3987 stay doing until actual coupled completion.
+
+Final make work-state-sync roadmap-receipt verify-governance exits0:3736 rows, zero untriaged
+of1814 live;630todo/102doing/1082blocked/1759done/163refused. Final whitespace check passes and
+staging is empty. Governance does not clear the eight failing software cases or authorize a
+coupled landing. The existing1.0 goal remains active; no new approval is needed for routine
+independent reviews.
+
+### 2026-11-02 — D3792 actual demand dispatch and in-flight source-page operation
+
+Previous goal turn was progress: independently accepted D3984 rendering/request prerequisites
+changed production state. This turn composes all65 actual source owners through
+RunService.acquireInspectorQuerySource. Complete original sparse packet/ledger ordinals,
+equal-value occurrences, whole coverage and source-owner read closures survive; no evidence
+mint/cache/provider fallback or new permission authority. Main mirrored65-topic traversal
+passes; independent16 genuine SQLite/RunService controls pass for mixed/refused/abstained/zero/
+missing ledgers, repeated packets, cancellation/access/artifact retirement, mixed human absence
+and stripping private terminal-model disclosure. Two reviewer fixtures fail before dispatch
+(wrong pack context and forbidden terminal createRun), then are corrected with actual run
+context and a legal mating move, not production weakening.
+
+New compileInspectorSourcePage and RunService.queryInspectorSources implement the in-flight
+closed page/status/detail/whole-budget/disclosure flow. They are NOT registered or exposed via
+HTTP/client: actual current1/75 must refuse before acquisition, even inventory. No fake/narrowed/
+rebased manifest or ConsumerEvidenceView is created to make available pages pass. The atomic
+actual71 image/callable/adapters and positive-page/receipt/failure proof remain required. The
+detail-limit factory error now retains its actual selected/full totals and ordinal, not a
+server-recomputed source guess. Six detail invocations remain below the runtime boundary.
+
+D3988: main5pass/2fail7 and independent7pass/3fail10 reproduce actual ASSISTANCE_WITHHELD,
+STORY_UNAVAILABLE and wrong-context AssistanceExchangeError escaping the closed request result.
+Explicit mappings repair them; a first combined repair35pass/1fail36 catches the missing class
+import, then actual query/source gates pass. Independent26/26 and workspace types pass.
+D3989/D3990 are independently found static adoption gaps, not claimed failed successful pages:
+exact required/operation_unavailable policy, source-local failure vs request refusal, failed
+continuations refusing stale, and unsuppressible context/cancel checks around actual owner
+readback. Exact corrections are statically re-reviewed; no full compiler acceptance follows.
+
+First normal make verify build passes1020/34 source cases, then9fail2551pass/2560 authority.
+The ninth failure is NEW D3991: server imported internal/evidence-value-routes for details.
+Keep criterion19a unchanged; move only exact six-detail invocation to runtime's genuine-source
+supplier. Six controls compare actual factory payload/receipt and reject copied/crossed/unknown
+sources. Focused1407/four then pass. Final ordinary make verify build passes types/Svelte0/0,
+scaffold/packaging and1026/34 source cases, then the same8fail2552pass/2560 predecessor authority
+cases. Scheduling retains all472 software files; later full tiers/build unreached. Separate
+ordinary make build inspector-research-typecheck exits0 with existing bundle warnings. No
+retry, skip, policy increase, guard weakening or source version/content/schema/protected-intent
+edit. Manifest49/332/44/556 and canonical387/379/eight/93subjects/zeroqualified unchanged.
+
+Current Full Inspector remains1/75; Nudge42/52 Review62/72/official-content graduation unchanged.
+Complete atomic current71/callable/adapter image, strict receiver/API/client/WDL/native and
+lawful real-caller retirement remain next. Existing singleton compileModulePacket guards must
+become exact actual per-row callable joins, not be removed. D3982/D3979/D3928/D3948 remain.
+D3988–D3991 are owned doing, not closed. Incorrect work-state transition arguments/partial batch
+assignments first refuse; correct combined assignment then lane assignment succeeds with zero
+untriaged, without weakening the ratchet. No staging, coupled commit/push, milestone promotion,
+goal pause or new permission request. Existing review record/roadmap/queue/docs updated.
+
+Final make work-state-sync roadmap-receipt verify-governance exits0:3740 rows, zero untriaged
+of1818 live;630todo/106doing/1082blocked/1759done/163refused. Whitespace passes, staging empty.
+Scope clarification: only the NEW internal source-page operation refuses requests against the
+old current image. The existing user-facing Inspector continues on its old path, unchanged;
+no API/client cutover is inferred. Later software/native/content tiers remain unverified after
+the eight predecessor failures. Goal remains active and no coupled commit/push clearance.
+
+### 2026-11-03 — actual Inspector2 cutover, independent receiver attacks and finite retirement
+
+Owner authorizes routine independent reviews without further permission prompts. The goal
+remains active. Actual Full Inspector now has one current consumer2 with65 topics/six detail
+views and registered server callable compileInspectorSourcePage. Runtime/server operation
+registration and manifest checks retain exact per-row pointer/name joins, not the old universal
+compileModulePacket assumption. Generic Full1 module-query/packet/receiver delivery refuses;
+old13 geometry recipes remain test-only history, not production compatibility. Inventory/page
+contracts share one dependency-free source inventory, not a copied75-ref rebase table.
+
+Authenticated POST /runs/:id/inspector/query, DrillApi.inspector, strict page receiver and
+advanced source-browser/App/DrillScreen wiring are implemented locally. Inventory acquires no
+evidence; source demands retain original sparse ordinals, equal-value occurrence multiplicity,
+complete ledger coverage and whole registered bundles under unchanged limits. Original source
+owners and runtime-only detail dispatch retain currentness/cancellation; no source mint, cache,
+permission, schema or authored chess claim is introduced. Mounted/browser/native proof is still
+in progress, not implied by the wiring. Default whole-app boot remains blocked by D3928's
+separately requested per-release92-pack grade requirement migration.
+
+Independent source/query174 and REST5 controls pass. D3992 finds arbitrary held-owner slugs;
+no actual65 owner issues that state, so both actual normalization and receiver refuse it.
+D3993's first94 receiver controls pass92/fail2: deleting required legal-move/detail geometry
+and recomputing public digests was admitted. Further genuine-page mutations expose the same
+class at renderer/binding/convention/producer/engine-unit/model-node joins. Registered wire
+validation now checks those exact semantics and conditional geometry; final independent130/130
+pass, including all71 actual source/detail pairs. Public digests are correlation, not issuance.
+Focused actual presentation construction/parser suite451/ten, module-query/registry92/two and
+updated binding census415/eight pass. Four actual terminal source pages retain an available
+zero-move reading/text, not absence. D3994 separately records generic REST cancellation logging
+UNHANDLED_SERVER_ERROR/500; its permanent test requires rejection/no acquisition, not that500.
+Transport lifecycle repair remains release-engineering todo, not an invented successful page.
+
+Finite semantic retirement preserves all13 original cases/assertions in test-only history,
+with independent genuine successors. The current375-case/91-subject population has zero
+qualifications. Obsolete material/exposure and pending deepest-opening factories/routes retire;
+current complete-history opening@2 remains genuine. Independent authority/profile review
+passes1364/three. The captured this-turn323→319 profile comparison removes exactly four old@1
+entries, adds none and changes no surviving values/cardinalities/digests. The original frozen
+204-route receipt is byte-unchanged. Raw catalogue helpers used elsewhere are outside this
+factory retirement. Three disposable research tools now typecheck against actual@2 controls;
+historical75/81/compiler1/proposal bodies/results are not relabelled as current experiment proof.
+
+Ordinary make verify build first passes types/packaging/source1249, then exposes stale exact
+census/profile assertions, subsequently repaired. A sandbox loopback EPERM in packaged CLI
+tests is separately recorded; the unchanged ordinary Make command receives actual escalation,
+not an environment wrapper, skip or deadline change. A later full run stops at four in-flight
+mounted-test type errors; subsequent make typecheck passes all packages/Svelte0/0. The next
+normal full run passes source1249/34, authority2547/21, reduction136/six and recorded327/ten,
+then correctly refuses stale generated semantic metadata after retirement. Documented
+make semantic-validation-update recomputes all375 passing cases/91 subjects/zero qualified;
+no threshold or assertion changes. Full verification is restarted and still pending at this
+entry. Standalone production build and disposable research typechecking pass separately.
+
+Roadmap/queue/current RFC checkpoint/docs now name actual consumer2/71, not yesterday's1/75.
+Earlier dated checkpoints remain history. D3988–D3993 remain owned doing pending coupled proof;
+D3994 is owned todo. D3982 Nudge composition, D3979 recorded-line scope and D3948 stay separate.
+No staging/commit/push, whole capability/milestone promotion, semantic qualification or goal
+pause. No native, whole-app or remote-CI clearance is claimed.
+
+### 2026-11-03 — Inspector integration review: real selection/retry/recovery/focus repairs
+
+The current browser and complete mounted screens suite pass283/283 in main and independent
+ordinary two-file repeats; workspace typechecking reports Svelte0 errors/0 warnings. The old
+Full1 lifecycle block is migrated through genuine Node RunService/SQLite source pages, not fake
+payloads or seals. All16 expanded lifecycle scenarios remain. The test-only Node worker solves
+Vite happy-dom rewriting filesystem import.meta URLs; it bundles in memory, preserves original
+module filesystem identities and sends actual JSON pages. A narrow happy-dom20 :checked
+SELECT discrepancy is corrected in the test instrument from actual option.selected state,
+not by changing production. Original sparse packet10→8+2 and detail14→8+6 pagination, six detail
+doors, explicit black/legal/e4 focus, deferred whole-source text, empty/zero/unavailable, stale
+responses and source/context/horizon/run/node/config retirement all execute.
+
+D3995: the ordinary full gate reaches capability-check and finds the accepted shape@2 successor
+missing from generated capabilities. Existing make capability-declarations capability-check
+adds exactly one accepted declaration and preserves all released rows;1045 declarations now
+match. This is not D3928 permission or authored content migration. D4001: the next full gate
+passes source/authority/semantic/capability/release checks, then component-coverage7/8 because
+the actual Full2 callable still has the old runtime presentation-class file anchor. Correct
+only exact Full2 to apps/server/src/inspector-query.ts; nine runtime anchors remain. The
+unchanged all-consumer resolution plus explicit current-image guard pass8/8,421 presented pairs,
+zero misses. Documented semantic metadata refresh retains375/375 cases/91 subjects/zero
+qualified. No declarations or qualification thresholds are weakened.
+
+D3996: independently traced no-peer comparison selection leaves old settled/pending source facts
+under the new heading because no send occurs. Retire selection before resolving every source;
+actual settled and delayed no-peer mounted controls pass. D3997: preserved D3655 retry double-
+click genuinely acquires initial+two retries rather than initial+one; first two-file run269/271
+also contains one unrelated fixture lease defect. Guard only identical pending identity/view,
+retaining source/scope/config replacement and later retry. The fixture uses the actual writer
+lease, not a storage waiver. Final duplicate test passes unchanged.
+
+D3998: actual installed Explorer/mechanical401 changes real ProviderRegistry health, producing
+the same requested assistance digest but a different server finalized digest. Strict current
+page verification rejects the old browser expectation. Explicit Refresh help and source list
+now uses the parent's existing authoritative compiler without changing preference or loosening
+correlation; double-click compiles once, remount acquires inventory only, then explicit source
+read succeeds. Failed confirmation retains an in-dialog pending/unavailable retry, rather than
+trapping the learner away from the outside help menu. D4000: the first new genuine direct-retry
+focus test30/31 passes and one fails with actual BODY focus instead of the result heading.
+Owned focus restoration now transfers only a removed invoker's focus for the same current
+request/identity/modal, never deliberate movement, close/replacement or destruction. Five
+additional parent recovery/remount tests pass on repaired bytes; those predecessor findings
+are source-traced, not falsely called asserted-red. Independent final283/283 and static
+integration review accept this bounded active path.
+
+D3999 explicitly retains historical UI reach: the server already permits a completed/imported
+mainline while active retry Play help is closed; the current browser still uses active Play
+assistance/branch gates. It needs a real historical target/assistance journey, not deleting
+permission gates. D3994 generic transport cancellation remains todo. D3995–D3998/D4000/D4001
+are owned doing; D3999 is owned todo. First separate assignment of two new rows refuses the
+zero-untriaged guard; combined assignment then correct per-row state restores zero without
+weakening the guard. Governance also catches four prerequisite rows after a historical-heading
+reconciliation removes their live routing; explicit current-lane adoption restores1821/1821
+routed at that checkpoint. Subsequent new rows are likewise assigned/routed.
+
+Normal make verify build is rerun after each failure. A later attempt separately hits actual
+sandbox loopback EPERM in eight packaged-CLI tests; unchanged Make receives actual escalation,
+not a wrapper or test change. The current full attempt passes complete source1249/34,
+authority2547/21, reductions136/six and327/ten,375-case metadata,1045 capability checks,
+release-policy133, component coverage and build before reaching the complete475-file software
+pool. That pool is running and already reports default-application failures, not a green gate.
+Final counts/root-cause split remain to be appended. No skipped tests or changed deadlines are
+introduced by this work. No coupled commit, staging, push, native clearance, qualification,
+whole capability/milestone promotion or goal pause. The authoritative machine checkpoint and
+roadmap prose now report actual consumer2/71, not yesterday's unregistered1/75 checkpoint.
+
+### 2026-11-03 — complete software run reaches remaining callers, not a green release
+
+The full ordinary make verify build attempt finishes its475-file software pool red:
+294failed/10151passed/40existing skips,10485 cases,302.54s pool. Earlier source1249/authority2547/
+reductions136+327/375-case semantic/capability1045/release133/component coverage/build passed.
+Later performance/content/trailing aggregate stages are not reached. Do not attribute every
+failure to D3928: actual retired Full1 callers, palette/export mismatches and a now-incomplete
+selector fixture are separate. This run exercised earlier bytes; later focused repairs below
+are not a fabricated fresh full-suite pass.
+
+Authenticated castling/king/terminal tests first reproduce27fail/1pass28; actual loopback EPERM
+is separately escalated using the identical normal Make command. Genuine current source-page
+queries and strict receiver replace old generic Full1 positive calls. All original castling
+FEN/rights/color/false-trapped-rook/legal+occupied+attacked sentences and separate Threat Radar
+module path remain. King retains both physical escape overlays; its explicitly empty catalogue
+fixtures are position-only software ownership, not default-app content readiness. Four original
+played mate/stalemate cases now require the actual complete-zero legal-moves text/pieces0/moves0,
+not omitted components; owner/foreign/anonymous controls and saved graph/events remain.
+Main's two original4/2 square-control cases use separate actual /assistance expectations and
+current source pages, retaining exact captions/no64/unchanged run and adding real old-query400.
+All four files39/39 pass independently.
+
+Runtime king-state/semantic-tactics first reproduce33pass/10Full1fail43; after finite test-only
+migration43/43 pass with unchanged case count and all original identity/role/blocker/promotion/
+EP hard negatives. Old strict-overload source remains genuinely tested internally and explicitly
+unbound; a separately computed current predicate receives genuine Full2 admission, not relabelled
+old payloads. Special-move tests first79pass/10fail89, then89/89 using two already-current exact
+Full2 roots, preserving all geometry/caption/castled-rook/promotion/lost-defence/Nudge-absence
+controls. D4002 removes a newly introduced literal muted fallback using the existing palette;
+D4003 re-exports the same new pure client grammar/budget/detail implementations through the
+canonical runtime entry, without private issuer/dispatcher exports. Original boundary/theme
+tests15/15 pass independently.
+
+D4005's actual selector failure is a correct abstention: original castling fixture has25 legal
+alternatives but only23 evaluated, because a1a8/h1h8 checking captures make defender-exposure@2
+turn-clone unavailable. Preserve that exact original population as a negative; add a separate
+legal bishop-shielded complete castling positive with every original seal/no-valence/population
+assertion.24/24 pass, no production selector change or dropped alternative/abstention.
+D4006's lifecycle fault was failing before storage existed at unrelated D3928 pack admission.
+Existing fixture-owned empty catalogues now let real composition reach its requested malformed
+valence-register SyntaxError; original exactly-one-close and existing30s deadline remain.
+24/24 pass. Independent combined special-move/selector/cleanup137/137 finds no weakened fault
+or assertion. Fresh normal workspace and disposable research types pass, Svelte0/0.
+
+D4004 is a genuine remaining production defect: reviewAnalysis still invokes retired Full1
+packet admission, and the service misreports that refusal as an invalid reviewed node. Audit
+finds a real current-source contract gap across historical bestline, historical eval first move
+and the Review coordinator's genuine nested durable typed PV. Existing Full2 report renderers
+do not establish all original Analyze engine/bound/source-selection semantics. No fake stored
+bestline, raw module bypass, restored Full1 or source relabelling is implemented. Independent
+source audit/authoring is commissioned directly under the standing owner review authorization;
+the proposed amendment must remain draft until separate review. D3928's per-release92-pack
+migration remains pending and default-application admission remains real; D3994/D3999 likewise
+remain open. No source qualification, pack content/schema edit, staging/commit/push, full gate/
+native clearance, capability/milestone promotion or goal pause.
+
+### 2026-11-03 — Routine separate reviews proceed; D4004 accepted source-first repair, D3994 transport and D4007 census
+
+The owner's latest direction removes routine review-permission prompts, not independent
+review itself. The existing objective-source agent authored Review§7a/Module§4.11c; the
+separate canonical reviewer returned four concrete issues and then explicitly accepted the
+corrected joint amendment on buildability. The actual provider parser cannot issue an empty
+typed PV; only genuine historical bestline[] supplies completed-empty. Original maxPlies/
+truncated, first usable positive-safe historical bound and truthful engine/bound-specific
+attribution abstentions are pinned. Parent Review moves from awaiting to implementing because
+this accepted repair again owns code work; earlier D1–D6 discharges remain open. No self-acceptance,
+new owner choice, provider grammar widening or synthetic bestline is used.
+
+The internal `recorded-analyze-line` source now validates complete original replay/all branch
+paths before narrowing; retains its exact incoming edge, original attachment ordinal/event,
+original packet and the literal persisted typed capture where present; and keeps three-arm
+precedence, failure/no-fallback, legal whole numbered SAN, typed bounds/scope and attribution
+abstention. Initial21 controls first18pass/3fixturefail plus type errors (unsupported findLast
+and wrong ForkOptions field), then21pass without target/config changes. Ten independent
+adversarial controls add equal-valued duplicate occurrence, equal-FEN foreign branch, illegal
+other-branch source, both-color castle/promotion/en-passant and mutable-input isolation.
+That last control exposed real borrowed-input freezing D4008:30pass/1fail, then31pass after
+clone-before-digest/replay. The reviewer explicitly corrects its initial fixture diagnosis.
+Independent source/supporting74/74 and workspace types/Svelte0/0 pass. This source-only review
+does not claim the derived factory/renderer, new72nd Full2 pair, actual supplier/API/Analyze
+seat or native journey. Actual65/71/282 remains unchanged until that atomic cutover.
+
+D3994 tests reproduce four real cancellation failures: original Inspector client logs abort,
+pre-cancelled anonymous Request reaches auth401, mid-acquisition abort becomes500, and actual
+Node socket disconnect logs an internal error. Sandbox-first5pass/4fail includes oneEPERM;
+same ordinary Make with actual loopback access reproduces5pass/4genuinefail. The shared handler
+now checks its actual request signal before auth/error mapping and propagates that exact
+reason. Node response handling cancels late bodies/closes actually aborted transport without
+an error page. A provider AbortError on a live HTTP request still logs/returns generic500.
+Main33 HTTP/streaming/ingress/error controls and independent30 transport controls pass with
+unchanged real10/30s receive deadlines, early413, backpressure and partial-error semantics.
+Broader old cancellation-response fixtures are migrated, not used to restore500: Maia10/10;
+Maia/narration69pass plus two actual D3928 setup blocks. The correct reasoning content gate
+remains26pass/13PACK_INVALID before those three cancellation arms, both before and after its
+static assertion migration; no runtime proof is claimed for those blocked arms.
+
+D4007's missing Inspector route declaration first reproduces8pass/1fail in the unchanged live
+route census. Its exact POST run.inspector.query/no-pack-operation declaration sits beside
+modules/query; actual Full2/source/provider admission is unchanged. Eighteen route/auth controls
+pass, with separate static review. No route is excluded from set-equality or disguised as a
+session-create capability operation.
+
+The first wider normal evidence-value-authority attempt passes1240/1249 but fails eight actual
+loopbackEPERM and one old Maia cancellation-response assertion. Same normal Make, after that
+test migration and actual loopback escalation, passes1280/35source,2547/21authority,136/six
+reduction and327/ten recorded checks:4290 tests/72files, no skips. The new31 source controls
+are in its ordinary maintained Make selection and ordinary software discovery. Normal workspace
+typecheck, production build and Inspector research typecheck also pass; pre-existing bundle
+size warnings remain. The last complete475-file software run remains the earlier real
+294failed/10151passed/40existing-skipped result, not superseded by these focused gates.
+D3928's per-release92-pack migration, D3999 historical UI reach, D3982 Nudge composition,
+D3979 line scope and full current Analyze delivery remain open. No content/schema change,
+qualification, native/default-app/full-CI clearance, staged bytes, coupled commit/push,
+milestone completion or goal pause. Continue accepted D4004 through its actual registered
+factory/strict renderer/source supplier/Analyze seat, then repeat the full normal gates.
+
+Closeout tracking check: ordinary `make work-state-sync roadmap-receipt verify-governance`
+first catches the two existing Review Map checkpoint anchors made stale by its real
+awaiting→implementing transition. Both are reconciled to that actual register row; no checker
+or status is weakened. Repeated ordinary `make roadmap-receipt verify-governance` exits0,
+including status/resource/roadmap/work assignment checks. All1835 live rows remain assigned,
+zero untriaged; `git diff --check` passes and the index remains empty. These governance
+results do not supersede the explicitly red full software/default-content/native obligations.
+
+### 2026-11-03 — corrected Analyze registration, historical confirmation and mounted UI; predecessor retirement open
+
+D4009's originally accepted single-projection metadata failed the unchanged real manifest
+compiler before tests. The author and separate reviewer returned that seam, then accepted the
+three literal captured-PV/saved-PV/saved-first projections after the isolated pre-adoption
+whole-declaration witness passed10/10. No compiler weakening, fabricated bestline event, PV-to-
+first-move laundering or new generic authorization framework was introduced. The actual image
+is now68 source topics/six details/74 Full2 pairs and285 module pairs. The normal profile writer
+appended exactly three genuine cases to322; all319 predecessor outcomes and frozen204 migration
+receipt remain unchanged. The witness is research history, not a product CI dependency.
+
+Actual source owners select original metadata before nonselected collector/parser/factory work;
+they retain the original full run, incoming edge, selected occurrence/ordinal and exact source
+inputs. Registered renderers preserve complete legal numbered SAN, attribution and original
+typed ply scope. Missing/invalid/empty/unattributed outcomes remain distinct. Review now obtains
+decision/workflow metadata from actual authority, including genuine issued campaign context.
+The existing assistance route has a strict source-free historical-target confirmation arm;
+ordinary active-Play assistance is unchanged. The new API/driver probes at most three exact
+sources, advancing only on genuine absence, and the mounted seat renders admitted components
+or fixed source-status captions with cancellation/currentness/focus lifecycle checks.
+
+Independent falsifiers found and boundedly repaired D4010 import initialization, D4011 direct-
+factory crossed-arm minting (15pass/3fail before the body guard), D4012 nested help data
+(21pass/4fail), D4013 fully rehashed unrelated-source status (39pass/1fail), and D4014 late
+map-publication storage/grant changes (29pass/2fail). The earlier wrong-seam D4014 instrument
+was explicitly not treated as bug evidence. The existing compiler2 review receipt records the
+separate acceptances and actual controls. D4015 splits the same fourteen Story endpoint reads
+into unchanged-five-second cases, preserving all prefix/root/group checks and mandatory complete
+distinct keys; no acquisitions moved into setup, requests dropped or deadlines raised.
+
+Verification checkpoint: ordinary `make evidence-value-authority`, with actual loopback access
+after sandbox EPERM, exits0:1448 source/40 files,2559 authority/21,136 reduction/6,327 recorded/10
+— **4470 tests/77 files, no skips**. Earlier informative failures include the actual default
+watchdog and stale exact-image census pins; their guards remain and now name the actual image.
+Ordinary frontend/API/mounted Review/shell cohort passes197/four. Ordinary
+`make typecheck build inspector-research-typecheck` exits0, Svelte zero errors/warnings; existing
+bundle-size warnings remain. `git diff --check` passes; no staging, commit or push.
+
+This is not whole-cutover, native, full-software or release clearance. The old raw Analyze
+runtime helper and GET route are still live at this checkpoint. Their atomic retirement and
+meaningful runtime/authenticated-restart/retry test migration is now assigned in the same D4004
+lane. D3928 holds the default-app92-pack requirements; no content/schema/qualification or
+milestone state is promoted. All3764 rows remain tracked, zero untriaged of1842 live; the goal
+remains active. Final normal/full/native proof must cover the final retirement bytes.
+
+## 2026-11-03 — retire raw Analyze delivery and transfer its meaningful controls
+
+The accepted D4004/D4009 source-page cutover now removes the raw `reviewAnalysis` helper,
+runtime/client exports, service method, GET route and route-operation census row. No prelaunch
+compatibility wrapper remains. Six unused legacy-only templates are removed rather than given
+invented references. Runtime cases exercise the actual original-record collector, selected
+factory, Full2 admission and registered rendering. Original EvalGraph/Compare and special-move
+controls remain. Real saved grants and live-session origins replace synthetic viewer arguments;
+independent review caught a nominal host positive using the learner owner, then verified the
+corrected imported-run host grant and both actual role assertions.
+
+Normal focused verification passes112 runtime/authority/source/factory checks across four files,
+90 authenticated application/restart/route checks across two, and63 coordinator/template checks
+across two. Original saved captures, public redaction, full numbered SAN, engine/bound/scope,
+no-write/no-search, retry withholding/recovery and unrelated-position access survive. The actual
+server restart fixture retains byte-identical saved snapshots. D4016 explicitly separates these
+PGN-only software fixtures from installed pack content using the existing validated catalogue
+helper; actual default-content contracts remain unchanged. Independent source review is recorded
+in the existing compiler2 receipt; author runs are not mislabelled as independent executions.
+
+D4017 records the last native caller instrument: six existing desktop/mobile, White/Black and
+non-one-fullmove browser journeys still intercepted the deleted GET. They now intercept real
+historical-target confirmation and source-page responses, retaining crossed branch/parent,
+pending deduplication, late response, same-control keyboard focus, read-only history, Retry/play
+and Compare. Separate source review finds no bounded blocker. The ordinary
+`make review-analysis-browser-check` cannot start its actual server: installed
+anti-caro-advance-early-c5 still requires grade.move_quality@i:1 while the current contract requires
+i:2 (held D3928). Zero native cases execute; no native cancellation/focus/geometry claim is made.
+
+Post-retirement `make typecheck build inspector-research-typecheck` exits0, Svelte zero
+errors/warnings, with existing bundle-size warnings. A new complete `make verify build` run is
+in progress; the earlier4470-test authority result is not a substitute for final-byte proof.
+All3766 ledger rows are assigned; zero untriaged of1844 live. No content/schema changes,
+qualification/milestone promotion, staging, commit or push; the 1.0 goal remains active.
+
+## 2026-11-03 — final-byte gate exposes omitted history consumer, not merely stale pins
+
+Post-retirement normal `make verify build` first passes4475 authority checks/77 files and all375
+semantic cases, then stops on the computed semantic receipt. The existing
+`make semantic-validation-update` rewrites that receipt without changing subjects/cases or
+qualifying any source. The next gate passes it and finds three accepted Analyze declarations
+missing from generated capabilities. Ordinary `make capability-declarations capability-check`
+adds exactly those three (1045→1048); independent review verifies all1019 committed records
+remain unchanged, with no tracked content migration. D3995 records this same omission class.
+
+The next complete normal run passes the authority/semantic/capability/release/presentation
+prerequisites and reaches all482 software files:453 passed/29 failed;10543 cases passed,
+145 failed and40 existing skips, in336.18s. Later performance/governance/content/trailing build
+steps of that command are not reached. The earlier294-failure475-file result is superseded as
+a whole-run measurement, not replaced by any focused green claim.
+
+Three failures are stale current-image controls: current semantic membership still expects a
+retired v1 root, module census misses three accepted Analyze pairs, and Inspector adapter census
+misses the same three exact registered renderer ids. Their repairs preserve historical retired
+declarations, missing/duplicate/separately registered @3 refusal controls, exact285+1/188/74
+counts and renderer set equality. Normal focused verification passes130/3; independent source
+review finds no weakening. A subsequent typecheck catches one optional-field access in the new
+test, corrected to an optional read with the same strict retired equality; full workspace and
+research typechecks then pass, Svelte zero errors/warnings.
+
+D4018 is different: the longitudinal artifacts still match their pinned bytes. The live
+V1-only ingest join silently removes the two upgraded material/exposure families (46→44 edge
+constructors), its cache erases versions and discards typed-unavailable closure outcomes, while
+revision5 persisted histories would retain current authority. Blind digest/count refresh is
+refused. The existing longitudinal contract requires a concrete exact-successor, membership,
+availability and revision/rebuild migration before implementation; that bounded amendment is
+being authored for separate independent review. All67 intended families and existing independent
+decision-denominator policy must survive. Original fixture-output hash is not declared stale:
+the test fails at registry equality before reaching it.
+
+D3928 still blocks actual installed-content application/native startup. D4017's six browser
+cases execute zero journeys, not a successful native result. No content/schema, qualification
+or milestone promotion; no staging/commit/push. Current tracking3767 rows, zero untriaged of1845
+live, with D4018 explicitly assigned learner-history and this actual failure state in the same
+roadmap/queue. The 1.0 goal remains active.
+
+## 2026-11-03 — exact successor history migration and real predecessor upgrade proof
+
+D4018's bounded longitudinal-store §A.1 contract is separately independently accepted, including
+criterion7's descriptive incidence measurement. Local implementation retains all67 ordered
+families, the original46/13/8 split and all65 unchanged references. Only material/exposure move
+to their exact @2 identities. Versioned cache and projector membership prevent old/foreign
+versions from satisfying the current join. The concrete adapter reads the original closure's
+private outcome; exact exposure unavailability remains population_incomplete, not known empty,
+while normative decision denominators remain unchanged. Revision6 reuses existing startup
+reconciliation and background rebuilding; no SQL/run-schema migration or new request-time census.
+V1 artifacts remain historical, with separate V2 current artifacts rather than parallel live
+execution. No digest-only repair is used.
+
+The predecessor fixture is produced by executing the actual committed revision5 projector in
+a disposable git-archive extraction, not current rows relabelled old. Five193811-byte histories
+cover both changed families/both colors, unaffected rows and a real unavailable alternative.
+Permanent tests need only that small fixture, not Git/raw recordings. Actual application startup
+invalidates unchanged-head old rows before worker start, increments claim generation and exposes
+pending; the real file-backed worker/typed reader then publishes only current rows. Reopen,
+old-filter refusal, stale-claim fencing and dry/write/dry over deliberately corrupted current
+rows pass, with saved/import/attribution/grant/account data unchanged. Its explicit source-free
+software catalogues do not waive D3928 default-content startup.
+
+Main's final five-file44-case migration cohort passes. The next complete normal run reaches
+all484 software files and reports10565 passed/143 failed/40 existing skips (458 passed files/
+26 failed),327.15s. Three remaining old store durable-positive expectations need migration;
+the original inputs and exact source-positive assertions are retained, now explicitly asserting
+actual full-population unavailability and normative denominator1 without fabricated rows.
+Three separate genuine complete counterparts retain the original durable-positive bug controls
+and all revision/reset/worker/read/reconcile/no-write assertions. Author37/37 and subsequent
+main combined81/six-file checks pass, unchanged deadlines; separate source review finds no
+weakening. Another whole run starts on these final bytes. Its first terminal handle disappears
+after scaffold output; a narrowed process inspection confirms no live matching verification
+process before restarting the same ordinary make command. This interrupted attempt is not
+reported as completed or green.
+
+Ordinary opt-in `make longitudinal-incidence` reports the unchanged original fixtures21 decisions:
+6 complete/15 unavailable; eight new controls all complete; three fixed existing PGNs109
+decisions:60 complete/49 unavailable. Every legal alternative is retained. Exact135 identity/
+version/sign/source-sign rows include zeroes. D4019 records the allowed exposure state sign
+which the actual source does not emit. No prevalence, usefulness or semantic qualification is
+inferred. The first diagnostic fails because its own floating addition order differs across
+phase/class groups; comparison is repaired to the exact same grain with strict equality, no
+tolerance or production math change. The successful aggregate is110945 ignored bytes, not a raw
+capture/progress dependency. Detailed fixed sources/counts remain in the existing implementation
+receipt. All3768 ledger rows are assigned; zero untriaged of1846 live. No content change,
+qualification/milestone promotion, staging, commit or push. The 1.0 goal remains active.
+
+## 2026-11-03 — final history pool result and bounded receiver-association repair
+
+The final normal `make verify build` completes its484-file software pool:459 passed files/
+25 failed;10571 passed cases/140 failed/40 existing skips,448.05s. All history controls now pass
+in that whole pool. Remaining application groups encounter D3928's held installed-pack grade
+requirement mismatch, including cleanup cases whose later intended failure cannot be reached.
+This is not downstream-contract proof. The command stops at software failure, before its later
+performance/governance/content/trailing build steps. No full-green or push clearance is claimed.
+
+Independent D3948 production-path audit identifies ordinary-module/Review renderer swaps,
+Story title/moment ownership, Corpus binding/convention and declared producer association.
+The first actual tests fail4/33: two producer id/version substitutions and two Corpus attribution
+changes, all with recomputed public digests. Three genuine valid but foreign/same-consumer
+non-title Story receipt replacements fail3/42. The bounded repair derives producer association
+from the existing manifest, pins Story's exact title tuple/current consumer and moment ownership,
+and pins Corpus's existing declared population binding/convention. No second registry or claim
+that public digests prove original source issuance. The first repaired75/three-file cohort and
+workspace typecheck pass, Svelte zero errors/warnings; separate source review clears this scope.
+
+A genuine own-title-as-moment follow-up fails1/46, then the receiver refuses that title-only
+source in moments. Three additional fully re-digested title renderer/binding/convention controls
+pass through generic parsing and fail at the exact Story seat. The actual expanded current
+Inspector/consumer/modern-Maia/mounted-Review cohort passes339/seven files. An initially mistyped
+nonexistent test-file selection is correctly refused before running any tests; it is not coverage.
+Independent source review clears the final bounded changes. Ordinary-module and remaining Review
+renderer association stay open under D3948, with a concrete single-authority constructor/validator
+builder plan in the same existing review receipt, not a new competing work document.
+
+Actual authenticated Review HTTP/API regression initially reports77 failures/20 passes because
+the sandbox refuses localhost listen with EPERM. The identical normal Make command is rerun with
+actual sandbox escalation; that result is recorded separately after completion, not treated as
+a product failure or success here. No deadline/retry/skip/pack migration or authored content
+changes. All3768 ledger rows remain assigned, zero untriaged; D3948 is doing in its existing
+presentation lane. No staging, commit, push, qualification or milestone promotion; goal active.
+
+The identical escalated HTTP/API command completes97/97 in two files,113.62s, preserving real
+application/authentication/SQLite/worker/HTTP and read-only assertions. The earlier sandbox
+EPERM result is not hidden or called a product defect. Clarification of the history paragraph:
+the five predecessor histories occupy193811 bytes **in total**, not per history. Final type/
+build and existing tracker/governance checks run after the final bounded receiver bytes; no
+whole green result or native installed-content clearance is inferred from these focused passes.
+
+Final `make typecheck build` passes on the bounded receiver bytes, Svelte zero errors/warnings;
+the existing bundle-size warnings remain. Tracker sync reports3768 rows, zero untriaged of1846
+live. The first governance continuation catches an accidentally duplicated longitudinal-registry
+checkpoint anchor; only that duplicate is removed, retaining the original reference. Repeated
+`make work-state-sync roadmap-receipt verify-governance` exits0, including all R1–R10 and the
+existing register/status/append-only guards. `git diff --check` passes and the index is empty.
+No whole-software/content/native clearance, staging, commit, push, milestone or source qualification
+is inferred. Next lawful work is D3948's remaining single-authority adapter tuple migration;
+default installed-content/native D3928 remains a distinct held decision. The goal remains active.
+
+## 2026-11-03 — D3948 actual consumer closure, ordinary tuples and reference presentation
+
+Routine independent reviews continue through the already authorized reviewer; no new owner
+permission is required for each round. Existing review receipt:
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`. No new competing work
+document, source registry or version reservation is introduced.
+
+Ordinary consumer fact/caption construction and received validation now share one private bound
+renderer/binding/convention tuple. Received source kind, transition direction, irreversibility
+subkind and reader checks also retain their original declaration. Six permanent source-discriminant
+controls fail when only that received join is temporarily removed; the actual join is restored.
+The restored expanded cohort passes322 tests/six files, with69/213 actual non-module source pairs
+covered, not a claim of complete adoption. The existing factory invocation remains the issuer.
+
+Actual Structure Nudge assistance/query → JSON → strict parser → existing mounted ModuleSeats
+now proves its selected pawn-connectivity delivery and refusal of three fully re-digested tuple
+swaps. Initial fixture assumptions were wrong twice: Support did not request structure_nudge
+without its normal explicit include/guided setting, and the real bounded selector chose pawn
+connectivity rather than named structure. Those failures are fixture corrections, not product
+defect evidence. Once corrected, actual one-positive/three-negative test reports1pass/3fail before
+the tuple fix and all four pass after it. Shared named-structure Sight/Nudge tuple construction and
+validation is also migrated without changing any source/preset/budget/selection. Four-file
+query/presentation/threat-delivery cohort passes97.
+
+Independent actual-consumer tracing then finds that Play/Compare reference prose never calls
+registered presentation. D4020's adapter-only model-tablebase refusal therefore did not protect
+those screens. The strict reference helper now consumes every admitted registered component,
+not raw resolution prose. One registered-output and two genuine model-tablebase controls fail
+before that cutover. The very first negative run had an irrelevant pointer-identity assertion;
+it was removed and all three intended assertions reproduced before implementation. Source
+factories/history are not narrowed or rewritten.
+
+D4021 records and repairs contradictory reference/source labels before presentation. Strict
+rendering throws; UI state is a separate ready/failed result, not fabricated evidence or an empty
+chess result. Play/Compare/objective banner preserve the board, valid siblings and original run
+bytes. Calculation metadata and terminal counts no longer format prose just to expose inspection.
+An eight-file run catches25 banner caller propagation failures, then one old bare-model fixture;
+both are repaired without removing assertions. Actual eight-file regression passes407, including
+two mounted failed-source Play cases, a failed-source Compare case and mixed valid/failed banner.
+
+Independent continuation catches D4022's process-versus-received parser asymmetry and untyped
+malformed-UCI refusal, plus D4023's dropped signed DTZ. Three genuine original-source controls
+fail before repair. The existing operand parser now runs before process fact text as well as
+received text. Only known schema-input errors normalize to the existing typed invalid-presentation
+error with cause; arbitrary programming exceptions still propagate. The UI handles that known
+invalid-input status locally. Signed DTZ, including precise-DTZ precedence, remains literal through
+process/reference/receipt parsing. No new schema, source acceptance or chess judgement is added.
+The existing source operation's return type now states its actual resolution/payload union; the
+browser no longer needs an as-never cast. Nine-file regression passes413 before two additional
+mounted malformed-UCI/category cases. Independent bounded source review clears these changes.
+
+Current-byte `make typecheck build` passes with Svelte zero errors/warnings; the earlier attempt
+caught three new test generic-type errors, repaired by the truthful operation return type rather
+than casting test values to never. Existing bundle warnings remain. Complete normal
+`make verify build` is running with the already demonstrated required localhost access; no
+completed result is assumed yet. D4020–D4023 remain doing pending coupled closeout, remaining
+Play/MAP/Story-root pairs remain D3948, and held D3928 default-content/native admission remains
+separate. No staging/commit/push, qualification, source version or milestone promotion.
+
+The first complete continuation passes4482 authority tests/77 files and375 semantic cases, then
+stops at the computed semantic-receipt check before the software pool: its source inputs changed.
+The ordinary `make semantic-validation-update` writer regenerates only the two existing receipt
+files and still reports91 subjects/zero passed qualifications,375 passed cases,51 population and
+eight external receipts. No thresholds/qualifications/source admission are changed. The unchanged
+normal complete command is repeated after this writer; its result remains pending. This early
+stop is not represented as a full software pass or an installed-pack clearance.
+
+The repeated complete command reaches all485 software files:10616 passed/141 failed/40 existing
+skips (459 passed files/26 failed),337.69s;4482 authority tests/77 files and375 semantic cases
+pass first. Installed-pack D3928 failures remain. The extra independent-receiver census failure
+is D4024: its last assertion prohibited every non-Full2 semantic validator. Independent review
+accepts removing only that stale restriction, preserving exact74 Full2 roots/all74 hooks and every
+real attack. After the full measurement, that minimal test correction is applied; actual ten-file
+receiver/consumer/query/Play/Compare/banner/client regression passes548/548,27.33s. This later
+focused result does not rewrite the complete red run. No skipped tests/deadlines changed.
+
+Separate normal performance initially reports6pass/1fail of7: its actual80-ply imported-game
+worker/HTTP arm loads unrelated installed packs and stops at D3928 before sampling. D4025 records
+that instrument dependency, then only the fixture's catalogue acquisition is replaced with the
+existing validated empty-catalogue helper. Actual imported PGN/run/file-backed SQLite/thread/
+application/HTTP/20Hz probes/30-second minimum/every budget, lease and publication assertion plus
+the able-to-fail same-projector main-thread arm remain unchanged. Cleanup closes the real app
+before restoring catalogue spies, even after failure. Independent read review clears the bounded
+isolation, not production/native startup. Actual unchanged `make test-performance` repeat passes
+all7 tests/four files,61.70s. Earlier independent governance continuation exits0. Final current-byte
+type/build/tracker/governance refresh follows; full software/content/native clearance and coupled
+landing remain open. All3774 ledger rows are assigned, zero untriaged of1852 live; D4020–D4025
+remain doing pending coupled closeout. No staging/commit/push or source qualification/milestone
+promotion; the 1.0 goal remains active. Next finite D3948 wave is five static Structure Nudge
+tuples and sixteen Sight captions, preserving the exact existing Play convention partition and
+source-kind identity, then other Play/MAP/Story-root pairs. The same independent receipt maps it;
+no new work plan or permission question is required.
+
+Final current-byte `make typecheck build work-state-sync roadmap-receipt verify-governance`
+exits0 with Svelte zero errors/warnings and the existing bundle warnings unchanged. Independent
+review records all bounded changes without claiming to have run the main tests. Summary prose
+is updated to completed548/ten-file and7/four-file results, while the exact485-file red reading
+remains visible. Final summary/receipt check follows; the index stays empty and `git diff --check`
+passes. No goal pause/completion, staging, commit, push or release clearance.
+
+### 2026-11-03 — D3948 Play tuple continuation and D4026 Guided Hint association (uncommitted)
+
+Continued the active1.0 goal under implementing evidence-presentation §3.10a, not a new source
+grant or parent completion. All seven Structure Nudge rows and16 structural Sight captions now
+capture their construction tuple for received validation, preserving source-kind identity and
+the existing Play convention partition. Setup-name and shape-title joins use the same existing
+functions in construction/receipt validation. Genuine unclear-phase and null endgame positives
+remain legitimate; retained-v1 empty pawn/file geometry remains D1723/D3309/D3654, not invented.
+
+D4026's original source-based negatives report49pass/6fail of55: valid move-level text is accepted
+under pattern ownership, crossed family, hidden move field and tuple mutations survive public
+redigestion, plus missing-hook inventory. The existing35 declarations now bind exact family/rung
+on construction and received fact/caption. Exact fields derive from existing hint redaction;
+direct1/later-root3 relation/ply is validated rather than coercing any non1 to3. Seven genuine
+selected families, all five follow-up rungs, nested-caption substitutions and separate process/
+raw-wire field/ply negatives pass165/fivefiles. The old duplicate double-attack fixture remains
+honestly fork-survival; a genuine non-surviving double-attack source supplies the missing positive.
+This is generic presentation repair, not a newly claimed live closed HintDeliveryReceipt bypass.
+
+The next17 real static Play source paths pass all positives but accept51 tuple forgeries
+(82pass/51fail of133). Six remaining Sight, ten threat/blunder and four theory declarations now
+capture their exact tuple, without changing geometry/forms/selection. Later genuine exposure,
+installed opening/recorded e4 and parsed-provider Explorer sources exercise the other3 paths.
+Eight genuine Compare source paths similarly pass positives but accept24 tuple forgeries
+(153pass/24fail of177). They now retain static tuples or the existing named/ordinary structure
+alternatives. A genuine d2d4 single-d-pawn owned comparison separately exercises both arms;
+no payload is relabelled. The private Play declaration helper now refuses a missing fact/caption
+hook because the current group is migrated, not because other groups are presumed complete.
+
+Normal seven-file regression passes329; actual expanded15-file receiver/query/mounted-screen/
+Compare/Explorer/Guided group passes889,27.78s. Normal typecheck/build pass with Svelte zero
+errors/warnings and existing bundle warnings retained. Independent bounded source reviews are
+recorded in the same compiler2 receipt; a recommended named-only mutation is now permanent
+(ordinary siblings untouched) with its repeat in flight. Final full verification/tracker refresh
+follows. The previous485-file whole gate remains red; D3928 installed content/native hold,
+MAP/post-commit/Story-root association and source/geometry proof remain. No source qualification,
+schema/content/milestone promotion, staging/commit/push or goal pause/completion.
+
+Final same-wave normal full `make verify build` passes4482 authority checks/77 files and375
+semantic cases, then reaches all486 software files:10803pass/140fail/40existing skips
+(461passfiles/25failed),341.83s. D4024 no longer fails; the remaining application groups encounter
+held D3928 installed grade requirements. Later combined performance/governance/content/build
+steps are not reached, and no whole-green claim follows. No production bytes change afterwards.
+
+A final test-only precision refinement uses the genuine later-root source for follow-up-ply1
+refusal, retaining its original relation/text and mutating only ply. This prevents rendered-text
+mismatch from masking the grammar check. Independent final read accepts it; normal focused
+15-file repeat passes892/892,28.03s, followed by clean types/build and all7 performance cases/
+four files,59.24s, retaining all original budgets. Standalone governance passes after normal
+work-state/roadmap writers. All3775 rows are assigned, zero untriaged of1853 live. The next exact
+D3948 slice is root Review Map/Story fact-pair validation, then postcommit/MAP families in the
+Inspector adapter group; remaining source/geometry/native proof and held D3928 stay open. Final
+summary/receipt check follows. No staging, commit, push, source qualification, milestone promotion
+or goal pause/completion.
+
+Final summary/receipt refresh and `make roadmap-check work-state` exit0, R1–R10 green;
+`git diff --check` is clean and the index remains empty. This closes the checkpoint's tracking,
+not D3948, its parent RFC or the active1.0 goal.
+
+### 2026-11-03 — D3948 root Story/Review tuples and D4027/D4028 (uncommitted)
+
+All14 root fact pairs share construction/received renderer, binding and convention. Four pivotal
+rows also bind their source kind. Actual factory→consumer→JSON→receiver positives pass before
+the repair while42 tuple swaps and four pivotal-kind substitutions fail their refusal assertions.
+No source factory, ranking, grading, assistance or geometry policy changes.
+
+D4027 records and corrects only three existing title tests requiring generic acceptance of that
+bypass; original public redigestion, genuine title/seat controls and outer refusals remain.
+D4028's eight process/wire extra-detail attacks survive before repair despite unchanged text.
+The existing typed pivotal detail/subkind variants are now closed, including retained optional
+engine metadata. Genuine sources cover four kinds, all three irreversibility arms, targetElo1500
+and both nodes/movetime metadata. Final normal nine-file regression447/447,7.91s, and
+typecheck/build pass, Svelte zero errors/warnings with existing bundle warnings unchanged.
+Independent final source/coverage review accepts in the same compiler2 receipt; no reviewer test
+run is implied. This is presentation grammar, not source occurrence/run-schema/semantic proof.
+
+Existing queue, roadmap, RFC checkpoint and canonical docs are updated; D4027/D4028 remain doing
+pending the coupled wave's landing. Current-byte full gates follow. Prior486-file full result is
+still red on held D3928 installed-pack admission. Continue postcommit/MAP families rather than
+repeating root14. No staging, commit, push, milestone promotion or goal pause/completion.
+
+Root14's actual full normal `make verify build` subsequently passes4482 authority/77 and375
+semantic cases, then486 software files finish10875pass/140fail/40existing skips,348.12s.
+All remaining failure groups encounter the held D3928 pack-grade mismatch; later combined steps
+are not reached. This supersedes the preceding10803 reading for those bytes, not release truth.
+
+D3948's next finite41 postcommit/Map statement pairs use a private typed singleFact helper:
+literal renderer/convention/binding before source reads, shared constructor/received hook, optional
+Family hook forwarded only through current add. Full2 retains its existing stronger source hook.
+Twelve transition families, pawn-island/check/double/loose/rights/capture/trade/fork and Nudge grade
+retain all original source operands/forms/templates. No source admission or selection change.
+D4029 records a genuine test gap: no current trade@2 fixture, hidden by aggregate missing-value
+skips. Independent source trace confirms it. A real modern two-capture run and original owned
+window prepare/collect now supplies exactly one@2 result. All finite current rebased/deduplicated
+pairs require actual nonempty sources; no predecessor payload is relabelled.
+
+The new262-case suite first reports136pass/126fail; two genuine trade positives and their six
+attack arms lack sources,117 other tuple attacks and the hook inventory fail. Fixture-only repair
+gives138pass/124fail: all41 real positives pass, all123 tuple attacks plus inventory still expose
+the bypass. Production binding repair then passes617/four files6.06s and normal types, Svelte
+zero errors/warnings. Broader1376/15-file mounted/API/Full2-receiver controls44.62s and actual build
+pass. Independent bounded source review accepts in the same receipt, without claiming its own
+test execution. Final full gates follow. Conditional structural/avoidance/composed families and
+source/geometry proof remain; no stage/commit/push, parent/milestone or active-goal promotion.
+
+Final current-byte normal `make verify build` passes4482 authority/77 and375 semantic cases,
+then reaches all486 software files:11040pass/140fail/40existing skips (461passedfiles/25failed),
+348.81s. All remaining failure groups reach the held D3928 installed-pack grade requirement;
+later combined performance/governance/content/trailing build are not reached. No production
+bytes change afterwards. Separate unchanged-budget performance, governance and real-content
+gates follow so their actual status is not inferred from the early aggregate failure.
+
+Standalone unchanged-budget performance passes7/four files59.01s. Governance initially catches
+two duplicate evidence-path entries added to this checkpoint's metadata; removing only those
+duplicates and refreshing the normal receipt makes the full standalone governance pass. No
+validator is weakened. All3778 rows stay assigned, zero untriaged of1856 live. The separately
+executed real-content gate retains all41 files and finishes261pass/56fail/17setup skips33.11s;
+the complete92-pack census reports184 under/over-declarations for the held grader migration,
+and actual appliance/Campaign startup refuses before its later journeys. Later graduation/
+capability recipes do not run after the test failure. Raw output remains tool-only, not committed
+research data. Full software/content/native/release clearance remains red; no stage/commit/push
+or goal pause/completion. Final summary/state receipt check follows.
+
+Final normal state/summary writers and `make roadmap-check work-state` exit0 after the complete
+measurements are recorded, with all3778 rows assigned and zero untriaged of1856 live. The held
+D3928 row now links the actual latest software/content/performance readings rather than repeating
+its earlier434-file snapshot. Final refresh follows that row-only change. Diff-check is clean and
+the index remains empty. Next D3948 work is the independently read conditional36 structural/
+avoidance pairs, retaining exact source refs and original conventions; actual avoidance collection
+stays42 acquired/ten blocked until its separate source obligations land. No pause/completion.
+
+### 2026-11-03 — D3948 literal structural/avoidance family continuation (uncommitted)
+
+The preceding goal turn made concrete implementation/verification/tracking progress; this turn
+continues the next lawful slice, not the held pack migration. All16 structural and20 avoidance
+current pairs have genuine nonempty fixture sources. New443-case file reports298pass/145fail:
+all36 positives pass,108 tuple substitutions and36 isolated family substitutions are accepted,
+and the mandatory-hook inventory fails. No missing fixture or lowered pair count masks the result.
+
+Structural declarations now capture their literal family and original convention, check event
+family plus both non-null before/after kinds, and preserve after??before/change transformations.
+Avoidance captures the exact original family source id/version, retaining sign/counts and its
+original convention partition. Received checks use the same bound tuple then literal family.
+The private singleFact helper's mandatory hook is inferred, not asserted optional. Full2's stronger
+hooks and source factories are unchanged. Actual Nudge42/52 and Review62/72 acquisition retain
+ten blocked avoidance requirements; direct-factory presentation fixtures are not delivery proof.
+
+Five-file814 controls6.46s plus normal types pass, Svelte zero errors/warnings. Thirty-six further
+constructor negatives pass genuine same-consumer sibling sealed values directly to the original
+adapter, without fabricated consumer/source authority; repeat850/five files6.24s passes.
+Independent bounded source/negative review accepts in the existing compiler2 receipt, with main
+test execution correctly attributed. Broader mounted/API/build proof and remaining composed/Map
+family migration follow. No source qualification, changed chess claims, staging, commit, push,
+parent/milestone or active-goal completion.
+
+### 2026-11-03 — D3948 remaining42 current pairs; D4029/D4030/D4031/D4032 (uncommitted)
+
+The conditional36 continuation's full16-file regression passes1609/1609,41.20s, plus build.
+The actual remaining current-group census is42:29 board/recorded-line compositions,12 Map facts,
+one recorded magnitude. Every positive is required and nonempty; the missing objective@2 path
+uses a real recorded proposal and owned single-line Review boundary, not relabelled comparison.
+D4029 owns this second instance. Recording the proposal is not validating its judgement.
+
+D4030 reproduces32 missing/extra-field pivotal grammar negatives, then closes only the existing
+kind/subkind shape and removes template fallback claims. Genuine castling/pawn-break/last-role
+and nullable/applied-band controls remain. D4031 reproduces a changed perspective under genuine
+recorded tablebase sources in both consumers; same-constructor validation now retains its literal
+side-to-move perspective. Full2's stronger non-whole guard stays first, its separate whole-reading
+constructor is untouched. No source policy, sign/units, grading or chess-truth inference changes.
+
+All119 current Inspector-group Nudge/Map pairs (41+36+42) now require received validators.
+Captions and sequences capture tuples before source reads; forms, geometry, moves and original
+transformations remain. Genuine pivotal sibling sources are refused at construction as well as
+on wire. Renderer attacks retain original binding/convention and explicitly change the renderer.
+The initial711-case result562pass/149fail included a no-op phase-renderer attack and four precise
+refusals with the older error matcher; those test-instrument errors were corrected explicitly.
+Focused1082/five-file controls6.39s and types pass. Broader1839pass/2fail39.19s exposes D4032's
+obsolete objective generic-acceptance expectations; both attacks now require generic refusal
+and reach the actual outer Review checker with raw matching text, not a helper that first parses
+the invalid packet. Genuine foreign-consumer/abstention controls stay. Final1841/16-file controls
+39.30s, types/build and independent bounded source/test review pass; source is frozen for full
+verification. Svelte has zero errors/warnings; existing bundle-size warnings remain.
+
+All3781 rows are assigned, zero untriaged of1859 live. Actual Nudge42/52 and Review62/72
+acquisition, ten blocked avoidance requirements, Full2 image and zero semantic qualification are
+unchanged. Source/value/generic geometry correspondence, held D3928 and content/native/release
+proof remain. No staging, commit, push, parent/milestone or goal pause/completion.
+
+### 2026-11-03 — D4033 contact consistency and final current-source gates (uncommitted)
+
+After the preceding119-pair increment, the actual complete gate passes4482 authority/77 and375
+semantic cases, then486 software files finish11489pass/140fail/40existing skips375.33s, red at
+held D3928. Independent source trace identifies a real narrower contact geometry/caption gap,
+recorded/assigned D4033 before implementation. Genuine722-case baseline717pass/5fail reproduces
+both consumers' square/brush substitutions and Map's owner substitution; Full2's owner check
+already refuses. Each attack retains original caption/source refs and unchanged recorded-line
+sibling, recomputing public digests. Source-coordinate positives and reversed-set positives pass.
+
+One typed contact coordinate recipe now drives both original construction and received exact-set
+consistency, with declared blue brush and same-owner reference. Ordering remains irrelevant.
+Full2's stronger non-whole guard stays first; its distinct whole/detail handling is untouched.
+Actual1852/16-file mounted/API/receiver regression39.84s, normal types/build and independent
+bounded source/test review pass, Svelte zero errors/warnings. No additional production edits follow.
+
+Final normal `make verify build` passes4482 authority/77 and375 semantic cases, then all486
+software files finish11500pass/140fail/40existing skips (461passedfiles/25failed),387.05s.
+Remaining reported failures reach held D3928; later combined gates/trailing build are not reached.
+Standalone unchanged-budget performance7/four files62.02s passes. Real-content runs all41 files:
+261pass/56fail/17setup skips38.85s, including the184 complete92-pack declarations and actual
+appliance/Campaign startup refusal. Later graduation/capability corpus recipes do not run.
+No raw result dumps are written into the repository. Final governance/tracker validation follows;
+all3782 ledger items are assigned, zero untriaged of1860 live. Source/value/other-family geometry,
+semantic qualification, D3928 and native/whole-release discharges remain open. No milestone,
+staging, commit, push or goal pause/completion.
+
+Standalone normal governance exits0 on the final source, with the existing complete register,
+state, roadmap, intent, tier and staging-contract guards unchanged. No duplicate evidence paths
+or weakened criteria are needed. Final summary/row refresh records that result; normal state/
+roadmap receipt writers and final roadmap/state checks follow. Index remains empty, diff-check
+clean. The full software/content reds and every open source/native/release obligation stand.
+
+Final normal tracker/receipt writers and roadmap/state checks exit0: R1–R10 green, all3782
+rows assigned, zero untriaged of1860 live. The current summaries record that completed reading;
+only their normal receipt refresh remains after this append. No product source bytes change.
+
+### 2026-11-03 — D4034/D4035 complete shared board-caption footprints (uncommitted)
+
+Actual census finds41 compositions,29 current and12 Full2. Initial1273-case run883pass/390fail
+reproduces31 coordinate,39 brush,28 owner and292 recorded-path inconsistencies; already-stronger
+Full2 refusals are not claimed new. Shared typed recipes now join construction and receipt input
+over original retained operands; blue brush/same owner and recorded origin/fact/basis/perspective/
+producer/source convention remain literal. Exact deduplicated membership preserves unordered sets.
+All six pawn-dynamics branches, both colors and consumers retain distinct original recipes;
+legal-destination geometry is not replaced by the different locally-safe destination subsets.
+
+Eight remaining role-asymmetry/zwischenzug/overload pairs omit coordinates their sources already
+retain. D4035 is recorded before authoring; the existing evidence-presentation RFC gets a bounded
+amendment and actual persistence-owner audit. Independent buildability acceptance precedes source
+changes. Required closed squares/recaptureSquare/defenderRecaptureSquare now copy original inputs;
+no source/schema identity, legacy parser, guessed coordinate or source-only geometry fallback.
+Initial1390 cases1358pass/32fail establish missing fields, swapped geometry and process/raw-wire
+refusals. Independent wire controls construct raw invalid operands rather than invoke the checked
+constructor. Duplicate role presentation coordinates refuse with the known typed input error.
+All four capture-promotion roles, both colors and both consumers provide16 real source positives:
+two retained original events at one destination still yield one highlighted square.
+
+Three actual pre-amendment text/marks/line preimages remain byte-equal. Final1777/five-file7.18s
+and2536/16-file mounted/API/receiver regression39.39s pass, normal types/build pass with Svelte
+zero errors/warnings. Independent final source/coverage review accepts the bounded implementation;
+reviewer performs no tests or production edits. Full2 stronger-first/non-whole and separate whole/
+detail handling remain unchanged. Source freezes for normal full gates after normal receipt/state
+writers. Older full red runs remain history, not clearance for these bytes.
+
+Remaining genuine non-module source coverage is69/213, not full adoption. Public digests cannot
+authenticate a coherently forged original occurrence. Source/value, held D3928/default content,
+semantic qualification and native/whole-release obligations remain open. No staging, commit,
+push, parent/milestone promotion or goal pause/completion. Tracker and full readings follow.
+
+Independent continuation finds D4036 outside those41: ordinary selected-square structural16+
+named and Play Sight structural16+named+rook/legal-moves lack the corresponding receipt geometry/
+fixed-brush/owner joins; generic shape/digest checks and Full2 source-retention do not repair
+these consumers. This is source-trace evidence, not an executed forgery result. Legal-move
+captions retain only counts, so exact footprint closure requires separate accepted operands,
+not inferred coordinates. Existing stronger Hint outer delivery remains a separate audit.
+
+D4037 corrects my repeated69/213 non-module claim above: the reporter filters presentation
+classes and deliberately includes Full Inspector2 under inspector_presented. The denominator
+therefore includes module pairs; the numerator is this one suite's covered set, not combined
+adoption proof. Current summaries are corrected; prior append-only log history remains with this
+explicit retraction. Neither changed ratio nor registered inventory establishes missing source
+delivery. Both new rows are assigned, zero untriaged of1864 live/all3786 rows after the atomic
+batch transition. Two initial single-row transitions correctly refuse the leftover unassigned
+second row without persisting; batch assignment plus separate owner correction succeeds.
+
+The final normal production-source `make verify build` passes4482 authority checks/77 files
+and375 semantic cases/91 subjects/zero qualifications, then all486 software files finish
+12184pass/140fail/40existing skips (461passedfiles/25failed),351.46s. Reported failure groups
+reach held D3928 installed-pack grader requirements. Performance/governance/content and trailing
+build of that combined command do not execute. No software/whole-release green is inferred.
+
+Only after that full run, D4037's independently reviewed test-only reporter excludes module.*
+from both independent populations, checks counted-key membership before reporting and retains
+the existing>60 minimum. Actual39-case repeat1.54s reports69/139 non-module pairs in this suite,
+not a new adoption claim or a merge with Full2's other suites. No production bytes change after
+the full run. Sequential standalone unchanged-budget performance passes7/four files61.40s.
+Real-content finishes261pass/56fail/17setup skips in41 files33.06s; actual appliance/Campaign
+startup and184 under/over-declarations across the complete92 packs remain red. Later content
+graduation/capability recipes are unreached. No raw result captures are written into the repo.
+
+Independent D4036 read completes58 generic square pairs: ordinary selected-square17, Play
+Sight19, threat-ray1 and generic Guided Hint21. Current captions recover57 footprints; legal
+moves needs D4038. Actual Hint seat uses a separate closed receipt and yellow-target/green-actor
+rendering, not these generic components; no live Hint bypass is established. D4038's first draft
+is independently returned for missing its second Full2 consumer and valid terminal zero. Repaired
+draft is independently accepted after actual per-renderer persistence audit: required dedup squares
+allow[], Sight still needs marks, Full2 preserves exact zero-count sentence/no board and its
+stronger guard, with received geometry checks added explicitly. Implementation is next, not done.
+All3787 rows assigned/zero untriaged of1865 live. Final normal types/build/governance and tracker
+readings follow; source/value, actual source delivery, qualification, D3928 and native/whole-release
+obligations remain. No staging, commit, push, parent/milestone or goal status promotion.
+
+Final normal types/build pass, Svelte zero errors/warnings. Governance correctly refuses two
+duplicate checkpoint evidence paths I added without reading the full long evidence list; the
+original Inspector adapter/test paths already exist later in that same checkpoint. Remove only
+the new duplicates, retain original anchors and every uniqueness check, refresh the ordinary
+receipt and repeat governance. This failed metadata run is not product or governance clearance.
+
+The repeated standalone normal governance exits0, with all original uniqueness/register/state/
+intent/tier/staging guards intact. Final source types/build also pass, Svelte zero errors/warnings.
+All3787 rows assigned, zero untriaged of1865 live. Current summaries record that complete reading;
+the ordinary receipt writer and final roadmap/state checks follow this append. Source bytes
+remain frozen after the full red run except D4037's separately verified test-only reporter.
+Index remains empty and diff-check clean. Full software/content reds, D4036/D4038 implementation,
+source/qualification/default-content/native/whole-release obligations remain open. Goal stays active.
+
+### 2026-11-03 — D4036/D4038/D4039 remaining square-caption consistency (uncommitted)
+
+Previous goal turn made implementation and measured-gate progress, not a wait/no-progress turn.
+Re-read current source/RFC/tracker. Accepted D4038 is implemented in both actual Sight and Full2
+whole legal-move constructors and retained precursor. Closed required deduplicated coordinates
+copy only original movable-piece squares; piece counts match cardinality, zero pieces require
+zero moves. Sight stays nonempty; Full2 terminal retains its original zero-count sentence/no board.
+Existing strong whole guard runs first, then received legal coordinates/blue brush/owner checks.
+No source/run/pack schema changes or legacy parser.
+
+Initial244-case run224pass/20fail includes a wrong expected phrase and raw digest-field test bug.
+Correct both before implementation; actual baseline220pass/24fail5.02s then reproduces required
+coordinates and accepted substitutions. Process/raw tests are independent, use the actual sourceDigest
+and outer public digests, and count attacks independently update matching rendered text. Genuine
+both-turn/immobile exclusions/original text and mark order plus terminal zero are retained. First
+291/three-file pass exposes only a missing test renderer narrowing in typecheck; repair it.
+Reviewer requests a guard-specific zero-pieces/nonzero-moves control; four actual terminal process/
+raw controls retain pieces0/squares[] and mutate moves only.295/three-file4.24s, types and bounded
+independent implementation read pass.
+
+D4036 actual58-pair inventory partitions17 ordinary selected-square,19 Play Sight,1 threat-ray
+and21 generic Hint paths. Twelve current v1 file/count pairs have no square witnesses (six kinds
+per consumer), not a reason to fabricate marks. Initial445 cases302pass/143fail includes a missing
+actual outpost positive and six unexpected Sight empty-component seals. Add a legal knight-e4/
+pawn-d3 positive without relabelling sources; corrected baseline304pass/141fail5.84s reproduces
+135 isolated re-digested square/brush/owner admissions plus six empty seals. D4039 is recorded and
+assigned before repair. Shared private typed binder now parses bound facts before coordinate reads,
+uses the same footprint at construction/receipt, and refuses empty before any squareSet/seal.
+Original source order, templates, forms, convention partitions and blue/red/yellow brushes remain.
+Actual Hint seat keeps its separate closed delivery and target-yellow/actor-green rendering.
+
+New source controls prove46 genuine witnessed pairs, exact source-derived footprints, isolated
+public-redigestion attacks, equivalent-set acceptance and12 genuine source-empty refusals. They
+do not claim12 new delivered features or independent chess/source qualification. Initial531/four
+green reveals only test SquareName narrowing and one named Nudge caller still using the refactored
+operands helper as a caption; fix both without assertion relaxation. Final531/four-file5.09s,
+normal types (Svelte0errors/0warnings) and broader2843/19-file41.81s mounted/API/receiver/terminal
+regression plus types/build pass. Independent bounded implementation/source review accepts.
+Source freezes for normal full gates after ordinary semantic/state/roadmap writers.
+
+All3788 rows assigned/zero untriaged of1866 live. Held D3928, D1723/D3309/D3654 source/fidelity,
+source/value authority, semantic qualification and native/whole-release obligations remain. The
+previous software/content reds are history, not clearance for these new bytes. No staging,
+commit, push, parent/milestone or goal status promotion. Existing D3309 draft is sent for a real
+current-source independent review in parallel, not implemented or self-accepted.
+
+That D3309/D3654 review independently returns concrete stale ABI/registry/preflight/caller seams,
+not a missing chess-research premise. The existing draft is repaired from actual source: no
+fictional context parameter, exact version2 sealed-view operation distinct from public FEN helper,
+complete preflight before17 sole-factory/named calls, actual private dispatcher/class registry,
+retirement of obsolete position_structure consumer/raw helper while still-needed v1 Sight/pack
+source contracts remain. Pin both real raw-Drill/typed-Compare doors, exact displayed leaf/FEN,
+own parent gates, explicit missing-leaf failure rather than root substitution, reactive lifetime
+and no raw fallback. Independent repeat review accepts bounded implementation, recorded after
+the return in the same receipt. The16-source fidelity wave is now executable but unbuilt;
+its empty file/count witnesses do not solve D1723 or the12 current geometry-source gaps.
+Old opt-in195 consumer diagnostics must be updated/retired honestly rather than preserve an
+obsolete runtime to keep them green. Both rows move blocked→todo under the same existing owner;
+all3788 items assigned/zero untriaged of1866 live, todo633/doing153/blocked1080/done1759/refused163.
+No new policy/owner question, speculative data collector, production change or parent acceptance.
+
+Final current-source normal `make verify build` passes4482 authority checks/77 files and375
+semantic cases/91 subjects/zero qualifications, then finishes all486 software files:
+12443pass/140fail/40existing skips (461passedfiles/25failed),378.45s. Reported failures reach held
+D3928 installed-pack grader admission. Later combined performance/governance/content/trailing
+build do not execute. No product source changes follow. Standalone unchanged-budget performance
+passes7/four files61.20s; real-content finishes261pass/56fail/17setup skips in41files33.81s,
+including184 complete92-pack under/over-declarations and failed actual appliance/Campaign boot.
+Later graduation/capability corpus recipes are unreached. Final ordinary governance and tracker
+checks follow; no green-software/content/native/release inference or raw-capture artifact.
+
+The first final governance run correctly refuses the stable-board checkpoint's D3309 source
+anchor after the actual blocked→accepted/todo contract reconciliation. Refresh that one anchor
+from its current work-state row and record accepted/unbuilt status in that milestone's checkpoint,
+retaining the prior2026-10-16 D3838 implementation as dated history. No milestone gate promotion,
+stale source pin retained or check weakened. Normal receipt/governance repeat follows.
+
+Repeated normal standalone governance exits0 with unchanged register/state/intent/roadmap/tier/
+staging guards. The D3309 acceptance is independently confirmed in the saved receipt, not merely
+the agent's message. All3788 items assigned, zero untriaged of1866 live;633todo/153doing/
+1080blocked/1759done/163refused. Current summaries record actual full red software/content and
+separate passing focused/types/build/performance/governance readings. Final ordinary receipt/
+roadmap/state checks follow this append. Index stays empty, diff-check clean. No product source
+changes after the complete full run, no qualification/parent/milestone/release promotion, no
+staging/commit/push, and goal remains active. Next executable work is the accepted16-source
+structural fidelity with both actual screen migrations, not another generic geometry rewrite.
+
+## 2026-11-03 — D3309/D3654 detailed structural fidelity implemented locally; full proof in progress
+
+The independently accepted amendment now has sixteen closed own-FEN successor sources, required
+operand parsers, qualified fact renderers and the actual seventeen-binding Inspector2 operation.
+The public FEN helper performs complete preflight before all seventeen source calls. Both real
+DrillScreen/Compare sections render typed presented items; the old Inspector1/raw helper and
+adapters/exports retire. Independent current source1/Sight/pack contracts remain unchanged.
+Exact leaf/FEN replacement, twelve distinct side-role counts, seven-pawn/shade examples, zero
+counts, genuine safe/unsafe pawn readings and complete push/capture routes have process/wire/
+mounted proof. This is same-collector fidelity, not independent chess-semantic qualification.
+
+Independent review finds and the implementation repairs D4040's safe/retained-route contradiction
+and D4041's masked raw-wire negatives. Actual mounted missing-leaf testing reproduces D4042:
+resistance history throws before the local unavailable section. That leaf-only lookup is now
+guarded too, retaining siblings, boards and saved play without root fallback.528 production
+controls across five files pass in29.03s;195 refreshed historical controls pass in1.35s. Normal
+types/build pass with Svelte zero errors/warnings. The normal profile writer passes676 genuine
+authority/falsifier controls. Separate source/UI review finds no remaining bounded blocker.
+
+The ordinary desktop/phone target builds successfully, then actual storage preflight refuses
+held D3928 installed-pack grader requirements before either journey runs. No altered catalogues,
+startup waiver, legacy grader, native pass or release inference. Normal full verification first
+finds three obsolete sixteen-source inventory expectations; exact assertions are repaired while
+the frozen migration receipt remains unchanged. An attempted frozen receipt writer correctly
+refuses to rewrite its retired-adapter history and changes nothing. Normal capability generation
+adds exactly sixteen declarations, retaining existing meanings and authored pack requirements.
+The subsequent normal checks pass1064 declarations/history, sites/lifecycle and the unchanged
+352-document migration plan (92 judgement, zero mechanical). Full software/content/performance/
+governance proof continues. No intent override, source qualification, missing file/count geometry,
+parent/milestone/1.0 completion, staging, commit or push. All3791 rows assigned, zero untriaged of
+1869 live; goal remains active. Existing queue/roadmap/docs/registers are updated, not a new queue.
+
+Final full verification of that source reaches all487 software files:12706pass/140fail/40existing
+skips391.03s, still red at held installed-pack admission. All4546 source-authority cases across77
+files,375 semantic cases and unchanged capability/history/census/site/lifecycle/plan checks pass
+before the pool. Later combined gates/trailing build are unreached. Separate unchanged-budget
+performance7/four files64.22s passes; actual content261pass/56fail/17setup skips across41files
+34.09s stays red, including the complete92-pack184 under/over-declarations and actual appliance/
+Campaign startup. Later corpus graduation/capability recipes are unreached.
+
+A final source-order audit then finds D4043: the schema object's insertion order reorders the
+new helper's visible population. A genuine original-source versus actual helper control fails
+at Carlsbad (196pass/1fail) before the repair. Iteration now filters the original canonical feature
+vocabulary by own schema membership, with the existing named route still final. Full ordered
+projection identities, multiplicity and every indexed retained field pass across seven FENs.
+The expected JSON operand comparison preserves the existing wire treatment of arithmetic
+negative zero as count0; no field, array occurrence or nonzero value is discarded. All529/five-file
+production controls pass30.95s, refreshed195 historical controls pass1.77s, normal types/build and
+375-case generation pass. Separate independent source read accepts the small order repair.
+
+The just-recorded full software/performance/content results are now historical, not automatically
+clearance for that later source change. A fresh complete normal verify/build runs on frozen
+corrected source. Final standalone gates/summary reconciliation follow. No scope/default/source
+meaning change, native/semantic/parent/milestone promotion, staging/commit/push or new raw dump.
+All3792 rows assigned, zero untriaged of1870live; goal remains active.
+
+The order-fixed full run finishes all487 software files12707pass/140fail/40existing skips348.09s,
+after4546 authority/77 and375 semantic cases pass. Actual content remains261pass/56fail/17setup
+skips32.47s, performance7/four files61.10s passes under unchanged budgets. Held D3928 and actual
+native/default startup remain unresolved; later combined/corpus recipes stay unreached.
+
+The final copy audit records D4044: the regular plural prints5pushs in a genuine retained pawn
+route. Strengthening the real multi-push wording assertion reproduces196pass/1fail. The renderer
+uses the existing plural helper's explicit pushes form; no source/schema/order/disclosure or
+chess meaning changes.529/five-file controls pass27.36s, normal types/build and375-case generation
+pass; independent bounded source read accepts. Final normal verification repeats after that copy
+change; preceding full results remain dated checkpoints. No raw dump, staging, commit, push or
+capability/milestone/qualification promotion. All3793 rows assigned, zero untriaged of1871 live.
+
+Final frozen-source verification after D4044 finishes all487 software files:12707pass/140fail/
+40existing skips357.03s, after4546 authority cases across77files and375 semantic cases pass.
+Later combined gates/trailing build are unreached. Separate unchanged-budget performance passes
+7cases/four files58.93s. Actual content remains261pass/56fail/17setup skips across41files31.41s,
+including the complete92-pack184 under/over-declarations and actual appliance/Campaign boot;
+later corpus recipes are unreached. Actual desktop/phone startup still refuses held D3928 before
+either native journey runs. Standalone final types/build pass; no CI/native/release clearance.
+
+Final normal governance initially catches a missing explicit D4041 queue route, then one duplicate
+CompareView checkpoint evidence path. Repair the actual records, retaining every guard. The full
+normal governance repeat exits zero: all3793 ledger rows assigned, all1871 live rows routed,
+zero untriaged; roadmap/receipt, lifecycle/resource, intent, tier and documentation checks pass.
+Existing queue, roadmap, register and compact receipt reflect the actual current source and gate
+results. No qualification, whole capability/milestone, staging, commit or push; the1.0 goal stays
+active. Routine independent reviews proceed under the owner's authorization without repeated
+permission requests. Remaining source/value authority and the held content/native obligations
+stay separate from the sixteen locally implemented detailed structural families.
+
+## 2026-11-03 — D4045 Play relation semantics, complete twelve-pair local repair
+
+The next accepted §2.2/§3.6a source-to-presentation audit finds the Play relation compositions
+reuse text-only validation. Genuine source fixtures reproduce72 accepted mismatches: owner,
+answer distance, relation kind, sign and omitted/injected convention across all12 adapters,
+plus all6 declared-convention fields on the2 threat-convention pairs. The initial normal
+530-case run reports458passed/72failed5.09s. Every negative retains genuine statement/source
+siblings and recomputes public receipt digests; stale-checksum failure is not the tested guard.
+
+One private bound relation helper now supplies the original family constants for both construction
+and received validation, composing the existing exact-caption hook. All12 Play declarations use
+it: Sight pawn contacts/control, Threat back-rank/trapped/defender exposure and all7 generic Hint
+move disclosures. First-square node deduplication, first-occurrence endpoint deduplication and
+original node/edge order remain. Profiles bind owner, distance, kind/sign and exact optional
+declared convention. No collector, source version, registry/preset, payload grammar or actual
+Hint-seat change; no source authentication or unretained endpoint correspondence claim.
+
+The repaired530-case run passes; the final8-file cohort passes2606/2606 in26.51s, including real
+mounted/screens/component/Hint and independent Full2 regression. Exact12+12 census checks prevent
+the focused population shrinking with a deleted non-Hint adapter. Types and standalone build
+pass, Svelte zero errors/warnings. Normal375-case semantic generation passes,91subjects/zero
+qualified. Separate source/test review accepts only this profile/owner/convention scope and
+records remaining source/endpoint/node-identity joins in the existing receipt. The ordinary full
+verification/build runs on frozen source; D3928 default-content/native admission is still held.
+All3794 rows assigned, zero untriaged of1872 live. Coupled landing/full1.0 remain open; no staging,
+commit, push or milestone promotion. No new work document, shadow registry or raw capture.
+
+The frozen D4045 full source run finishes4546 authority/77 and375 semantic cases green, then
+all487 software files12792pass/140fail/40skips333.66s; later combined gates/trailing build are
+unreached. Seven suites fail setup; the40 skips include setup-blocked security/authoring/claim
+cases and must not be described as entirely optional. D4046 records the indirect acquisition
+class rather than treating every failure solely as an authored requirement decision.
+
+## 2026-11-03 — D4046 first finite software/content fixture separation
+
+Independent source review classifies all7 original application cases:3 intentionally assert
+installed PackA/Carlsbad/principle data,4 exercise software API behavior. Move only the3 cases
+to application-content.test.ts in the content tier, retaining their exact bodies/assertions and
+the original15000ms deadline. Keep the4 API cases in software with the existing validated empty
+lesson-catalogue helper; actual opening loader/missing-artifact and repertoire/import/privacy/
+atomic-entry/surviving-run workflows remain. The18-case security fixture uses the same helper
+without changing its30000ms deadline, assertions, HTTP/auth/SQLite/router or invitation journey.
+Always restore test spies after application close. No production options/helper/startup change.
+
+The normal focused HTTP run passes22/22 cases/two files4.63s, replacing unrelated catalogue
+setup refusal with actual software-boundary execution. Independent review compares all7 original
+application case bodies byte-for-byte to HEAD and confirms security changes only acquisition/
+cleanup. Review receipt remains the existing compiler2 document. Broader indirect application
+coupling is still open under D4046; source-text tier checking is explicitly not general transitive
+isolation proof. Actual installed-content/native/default startup continues to refuse held D3928;
+no rewritten requirements, legacy grader, deadline extension or silent suite migration. Full
+current fixture gates follow. All3795 rows assigned, zero untriaged of1873live; no coupled landing,
+commit, push, semantic qualification, capability/milestone or1.0 completion.
+
+Final separate performance passes all7 unchanged-budget cases/four files63.15s. Actual content
+finishes261pass/59fail/17setup-blocked skips across42files38.61s, including all3 unchanged moved
+catalogue failures and complete92-pack184 capability mismatches. The3 added failures are the
+preserved assertions moving between tiers, not new authored-content changes. Later corpus
+recipes stay unreached. The complete normal current software/types/scaffold/authority gate now
+repeats on frozen tests; earlier full333.66s remains a source checkpoint, not the current fixture
+gate. Production and default/native startup remain untouched. No stage/commit/push or promotion.
+
+Final current normal full verification terminates after all487 software files:12813passed/
+133failed/23skipped338.37s,23failed/464passed files and6 setup-failed suites. All4546 authority
+cases/77files and375 semantic cases pass first, alongside types/scaffold, unchanged1064
+capability declarations/history and352-document migration plan (92judgement/zero mechanical).
+The21 restored passes and17 fewer setup skips agree with the22-case fixture proof;3 original
+failing catalogue cases remain in the actual content run, not removed. Remaining software
+failures reach installed-pack admission; later combined gates/trailing build remain unreached.
+Standalone governance passes with42 actual-content files, all3795 rows assigned and1873 live
+rows routed/zero untriaged. Independent routing review identifies84 additional lesson-catalogue-
+independent application arms in7 files for the next D4046 wave; none is claimed tested/repaired
+yet. Existing queue records exact counts and preservation constraints. Final standalone build/
+compact receipt/metadata verification follows; no fresh remote CI or native/release clearance.
+
+Final normal standalone build, work-state sync, compact roadmap receipt and complete governance
+exit zero. All3795 ledger rows are assigned; all1873 live rows routed and zero untriaged. Exact
+roadmap/resource/lifecycle/intent/tier/docs checks retain their guards. Source/test bytes are
+unchanged after the terminal full software and separate performance/content runs; only bounded
+tracker/summary/log closeout follows. Existing parent D3948 now reports the actual final gate
+rather than a stale pre-copy run. The84-case next fixture population is reviewed, not implemented.
+No index entries, staging, commit, push, native/remote CI, whole milestone or qualification
+promotion; the full1.0 goal remains active. No new permission question for routine reviews.
+
+### 2026-11-03 — D4046 application-fixture waves; D4047/D4048 historical-worker checks
+
+The84 application arms previously source-reviewed are now implemented and exercised. Six new
+focused cohorts pass220/7files12.00s,143/7files11.87s,51/3files14.58s,28/2files3.00s,
+14/2files3.01s and11/2files4.92s:467 cases/23 software files beyond the prior22 API/security
+controls. Isolate only five unrelated lesson acquisitions using the existing helper. Preserve
+actual HTTP/auth/SQLite, opening lookup, masters PGN, corpus/provider exchange, source compilers,
+engines and file-backed workers where required. The claim fixture still reads all eight owned
+pack/ledger pairs into genuine validation; the training member is actually admitted; private/
+public pack fixtures retain nonempty redaction witnesses and the validator-produced mechanical
+principle fixture. That extracted helper is byte-identical apart from export/name. Actual
+Stockfish startup cleanup retains the original Campaign loader on its owned malformed directory.
+Fixture spies restore only after owned application close, including failure.
+
+Two further actual-catalogue API cases move byte-identically to content: installed principle/
+Library identity keeps5000ms and default acquisition; concept/profile keeps120000ms and actual
+served packs. Together with the prior3 application cases15000ms, all5 remain present, not
+empty replacements. The schema example, installed requirements, graders and default/native
+loaders are unchanged. Independent bounded source reviews accept each wave; no reviewer tests.
+
+The first complete normal run passes4546 authority cases/77files and375 semantic cases, then
+all487 software files finish12961pass/6fail/no skips387.66s. Correcting the preliminary startup
+classification: only5 failures encounter D3928; the sixth fails the historical false-row witness
+before startup. D4047 is ledgered before repair. Today's all-family availability policy cannot
+construct the intended revision-four false membership. A finite explicit synthetic historical
+membership over real legal alternatives preserves the original nonempty SQL witness, then the
+real current worker/restart rebuild asserts actual population_incomplete, exact no observations,
+denominator2 and unchanged saved games. This does not claim an entire captured predecessor image.
+
+Scoped worker catalogue isolation first reaches18pass/1fail12.00s. Newly ledgered D4048 owns
+the actual castling read assertion now reached: committed-edge facts remain genuine, but current
+incomplete populations withhold aggregate rows. Original special-move FEN/id/UCI/seed order remain;
+both original facts are explicitly witnessed before asserting genuine population_unavailable,
+exact no rows per run and retained denominator1. Other imported/pawn/readiness/drain/restart/SQL
+controls and deadlines remain. Independent bounded reviews accept both corrections. All19
+worker cases then pass12.66s, including actual worker/crash/restart/shutdown behavior. No source
+policy, production admission or identity is weakened; unknown is never called zero.
+
+The complete normal gate repeats on final test changes. Earlier separate performance/content/
+build/governance readings are historical, not current-byte clearance. All3797 ledger rows are
+assigned; zero untriaged of1875live. Existing queue/roadmap/docs/register carry progress, and
+the routine-review permission loop is not repeated. No staging/commit/push, native/remote-CI,
+semantic qualification, milestone or1.0 promotion. D3928 remains held with the existing decision
+request; the goal stays active. Next source review distinguishes3 complete-caption Play relations
+from9 lossy-caption pairs, requiring an occurrence-safe retained-operand contract rather than
+new collectors, invented coordinates or hash-based source authentication.
+
+Final current normal verification passes all4546 authority cases/77files,375 semantic cases
+and12967 software cases/all487files366.12s, with no software failures or skips. Performance
+passes7/four files60.96s under unchanged budgets. Complete governance passes, including43
+actual-content test files and original63-case deadline collection guard. Actual content then
+finishes261pass/60fail/18setup-blocked skips across43files36.12s; the two added actual-content
+cases remain present (one new failing case, one setup-blocked case), not removed or weakened.
+Complete92-pack184 under/over-declarations and actual installed/Campaign/appliance startup remain
+red at held D3928. Later corpus recipes/trailing combined build are unreached. The first
+12961/6 software reading is now historical, not the current result.
+
+Separate final normal build, work-state sync, compact roadmap receipt and complete governance
+exit zero after result recording. All3797 rows assigned;1875live routed/zero untriaged. Existing
+roadmap/queue/register and parent D3948 report the actual final result and preserve remaining
+source/value/endpoint/qualification obligations. No test/source changes follow terminal gates;
+only tracker/log prose reconciliation. No staging, commit, push, actual native/remote CI,
+semantic qualification, milestone or release clearance. The1.0 goal remains active.
+
+## 2026-11-03 — D4049–D4053 relation integrity and actual Recorded moment adoption
+
+Independently accepted and implemented the twelve Play relation/caption recipes over retained
+original directed contacts/controllers/move UCI. Construction, serialization and receipt parsing
+require complete positional occurrences; process serialization also checks private construction
+ownership. Original geometry/order/dedup/text, shared Full2 conditional/zero behavior and actual
+separate live Hint delivery remain. The genuine651-case baseline542pass/109fail10.31s is retained.
+Both-color independent source traversals, sibling/layout/process-mixing attacks, repeated whole
+pairs, actual promotion/follow-up and lower-rung redaction remain permanent controls.
+
+Independent review finds D4051: seven missing-UCI negatives could throw in the test renderer
+before parsing. Corrected raw wire is fully re-digested outside the assertion with original
+non-prose text, so the actual receiver must refuse; repaired2808/15-file34.39s passes. Earlier
+green did not prove those seven wire refusals. No production workaround or weakened guard.
+
+D4052 replaces actual Recorded moment raw formatting with each source's registered component,
+retaining marker metadata for navigation. Its real269-case baseline267pass/twofail28.44s becomes
+a complete-preflight failure198pass/71fail92.48s plus70 mounted errors: board1 still declares a
+never-live legacy Maia source. D4053's independently accepted amendment replaces only that live
+consumer with board2/exact original irreversibility1+phase-change1. Preflight precedes exactly
+those two factories; original live subkind filtering/path/kind order and all four retrospective
+sources/other consumers remain. No source alias, legacy provider, filtered compiler or raw-text
+fallback. Original-owner/equal-repeat, mirrored genuine phase/order and mounted known-failure/
+intact-board controls are independently reviewed. Routine review authorization is now also in
+WORK.md, not just buried in the tactical queue.
+
+Final2920/20-file36.09s and13 server cases2.29s pass, as do workspace types/build. Final normal
+4555authority/77,375semantic and13218software/all487files391.53s pass with no software skips;
+unchanged performance7/four63.16s passes. Earlier full commands stopped at a stale existing
+semantic receipt and the two exact553→551 binding-count assertions; ordinary refresh and the
+accepted two-binding retirement repair those facts, not the guards. The full run then reaches
+one duplicate checkpoint evidence path; removing only that duplicate preserves uniqueness.
+Final standalone normal build, tracking reconciliation and complete governance pass.
+
+Actual content remains red:261pass/60fail/18setup-blocked skips,43files48.12s, including two
+setup-failed suites and the complete92-pack184 under/over capability mismatches at held D3928.
+The later corpus recipes are unreached. No actual default/native, remote CI, source qualification,
+official-content, milestone or release clearance. No staging/commit/push. All3803 ledger rows
+are assigned;1881live/zero untriaged. D4054 is the next independently reviewed actual-consumer
+gap: bind the selected shape firing's registered recognition without rewriting authored plans,
+using exact run/branch/entry/first-node and current eligibility rather than a first-entry fallback.
+The1.0 goal remains active; held D3928 is not permission to stop other accepted foundation work.
+
+## 2026-11-03 — D4054 actual named-structure recognition
+
+Under the existing accepted presentation adoption, the selected ShapePanel now consumes each
+original firing's own registered recognition, with original navigation metadata and unchanged
+authored catalogue plans/watch/mistakes. A separate cycle-safe module preflights the complete
+unchanged consumer before its original factory. Selection binds current run/branch/entry/first
+node and guidance eligibility; loss retires the panel without later resurrection. Only known
+formatting failure becomes local visible absence; other contract/programming errors propagate.
+
+The genuine corrected267-case baseline264pass/threefail28.04s witnesses raw consumer delivery,
+Timeline's lost occurrence and missing actual registered UI. Initial missing-import and later
+wrong-prop/helper-inference failures were test setup/type repairs, not product witnesses.
+Final310/four27.71s passes mirrored legal repeated spans, last-before-first mounted original
+owner observations, distinct equal/repeated owners, complete preflight, runtime refusals,
+run/branch/source/guidance retirement without resurrection and known failure retaining authored
+Carlsbad plans plus actual board input. Independent bounded source/control review accepts;
+workspace types have zero errors/warnings.
+
+First full gate passes4555authority/77 and375semantic then stops before software on its two
+existing generated semantic receipts. Their normal writer refreshes only those existing files.
+The complete repeat passes4555authority/77,375semantic and13230software/all487files358.31s
+without software skips, plus unchanged-budget performance7/four59.66s. Governance subsequently
+finds the compact roadmap receipt stale after tracker edits; normal refresh then build and
+complete governance pass. Actual content remains261pass/60fail/18setup-blocked skips across
+43files35.43s, including two setup-failed suites and all92 packs/184 capability mismatches at
+held D3928. Later corpus recipes are unreached. No default/native, remote CI, qualification,
+official-content, parent, milestone or release clearance; no staging/commit/push.
+
+All3804 ledger rows are assigned/zero untriaged of1882 live. D4055 owns the next independently
+reviewed concrete gap: the actual transition panel already renders registered components but
+bypasses its accepted complete-consumer preflight before collection. It needs wiring and a real
+mounted compiler-refusal/zero-factory witness, not another consumer/source image or owner prompt.
+
+## 2026-11-03 — D4055 actual transition preflight and bounded D3948 closeout
+
+The actual transition Inspector now uses one typed presented-transition entry point under the
+existing accepted D3618/presentation contracts. Complete exact consumer1 preflight precedes all14
+original leaf factories, then the genuine admitted view supplies registered components. Existing
+root/no-UCI/missing-parent/null-reading branches, source image/order/operands/text and raw operation
+remain unchanged. No new registry, schema, consumer/source version, fallback or owner question.
+
+Genuine mounted baseline270cases269pass/onefail29.60s executes all14 factories despite the
+injected missing-binding image, without calling its required compiler. Repaired focused312/four
+29.24s passes the actual button/flushSync compiler-specific refusal with zero leaf dispatch,
+five independent real compiler fault images, repeated exact14 source/order/original-owner checks,
+mirrored real component equivalence and genuine root inapplicability. Independent review accepts.
+First types fail only a generic mock-result union; the repair checks returned arrays and asserts
+each original sealed evidence item rather than casting or dropping a result. Clean types then
+have zero errors/warnings, and independent review accepts that instrument repair separately.
+
+Final normal build and complete source gates pass:4555authority/77,375semantic and13240software/
+all487files369.30s with no software skips. Unchanged-budget performance7/four59.69s and complete
+governance pass on frozen source/tracker inputs. Actual content finishes261pass/60fail/18setup-
+blocked skips43files35.07s, including two setup-failed suites and all92packs/184 grading capability
+mismatches at held D3928. Later corpus recipes are unreached. The whole verify command remains
+nonzero; no content/default/native, remote CI, semantic qualification or release clearance.
+
+The separate bounded closeout finds no remaining concrete defect within D3948's exact renderer/
+source-correspondence/actual-adoption scope. D3948/D4054/D4055 therefore close locally using the
+existing independent review receipt as real path evidence; those three completed code repairs
+are not held open on every unrelated1.0 obligation. All3804 rows remain assigned, now1879live/
+zero untriaged. Source qualification, useful delivery, held D3928 and native/release/coupled
+landing retain their own duties; the parent RFCs remain implementing. No staging/commit/push or
+milestone promotion. The required ledger/log changes are in the same working-tree change set;
+these local closures do not pretend that a commit or deployment occurred. Next is current-symbol
+reconciliation of the actual remaining D3859/D3792 parent discharges, not another D3948 replay.
+
+Final normal work-state sync, compact roadmap receipt and complete governance recheck exit0 after
+the three path-evidenced closures. Diff-check is clean and the staging area remains empty. The
+1.0 goal remains active; routine independent parent-discharge reconciliation continues without
+another owner-permission loop. No production/test bytes changed after the final full source gate.
+
+## 2026-11-03 — D3999/D4056 historical Inspector reach; bounded review and implementation
+
+Current-symbol parent reconciliation distinguishes already implemented source/Review duties
+from the genuine missing historical UI door. Original context/Analyze controls pass63/two3.12s:
+the context owner admits disclosed old history while active retry is closed, but Analyze's
+edge-only source-free confirmation correctly refuses roots. Accepted §4.11d therefore adds one
+closed inspector arm to the existing assistance endpoint, not a permission bypass or a fake
+edge. Separate review pins accessor-safe intent parsing, nested help-record closure, exact
+registered effects, genuine Campaign authority and historical target/current-cursor separation.
+
+Actual service/REST/API/App/DrillScreen now offer explicit recorded line/position selection and
+ephemeral Analysis confirmation before the original demand browser mounts. Every later source
+request retains original server authorization; active cursor/reveal/preferences do not change.
+Snapshot/access/context/health/target changes, close and teardown retire pending work/pages,
+including same-stamp snapshot replacements. Focus and actual board input are exercised.
+
+Initial12-case control has two genuine missing-endpoint failures and one incorrect test
+assumption about ordinary compiled help; the latter is replaced with exact before/after
+noninterference, not claimed as a production witness. Endpoint111/four3.92s and corrected
+mounted14/one4.17s then pass. The first combined413-case run has one incorrect board-input
+fixture expectation: a White learner cannot play Black's turn. The repaired control uses the
+actual Black learner, without lifting the input rule. Typecheck's three fixture typing errors
+are corrected with a typed confirmation callback and the complete current graph-viewer shape.
+
+Independent review finds a real receiver context gap. Genuine CampaignService empty/Full2-kit
+fixtures and public-redigested presence/deletion controls reproduce both summary directions;
+80/two77pass/threefail3.03s also catches a wrong-workflow500. D4057 is ledgered before its second
+arm control;44/one41pass/threefail2.89s additionally reproduces the same Analyze500. The receiver
+now requires a Campaign summary iff context is Campaign, and both confirmation methods map
+existing assistance exchange errors to typed INVALID_REQUEST. Copied-receipt refusal remains;
+its API-facing assertions require the typed error rather than raw internal error prose.
+
+Final focused528 cases/seven files31.33s pass, including genuine issued Campaign summary,
+unchanged root/open-retry negatives, getter/extra-field/effect forgeries, actual App callbacks,
+late-result retirement and real board input. The actual source-browser recovery button consumes
+a genuine server stale refusal, reconfirms exact historical root/imported Analysis, retires old
+pages while held, and recovers inventory/focus without source acquisition. Independent bounded
+implementation/control review accepts. Normal build/source/full gates now follow; no green
+whole-verify, content/default/native, semantic qualification, parent archival, milestone or
+release claim. D3928's already-requested decision remains held; no repeat permission question.
+No staging/commit/push. Goal remains active and the existing tracker, not a new queue, owns work.
+
+The first normal full command stops at the readonly Campaign fixture assertion after build,
+before authority/software gates. A typed fixture construction replaces that assertion without
+changing its issued-origin/kit cases; focused81/two9.97s passes. Complete frozen-source repeat
+then passes build/types, all normal source-authority contracts,375semantic cases and all13302
+software cases/all489files437.32s with no software skips. Unchanged-budget performance7/four
+59.25s and complete governance pass. Actual content completes261pass/60fail/18setup-blocked skips
+across43files34.23s, including two setup-failed suites and the complete92-pack/184 requirement
+mismatch census at held D3928; later corpus recipes remain unreached. Whole verify is nonzero.
+
+D3999/D4056/D4057 close locally with the independent review receipt as path evidence. All3806
+rows stay assigned/zero untriaged of1878live; no new closeout-prose evidence. This is completed
+bounded implementation, not a commit, parent/milestone/native/default/source-qualification or
+release promotion. Canonical roadmap/queue/index/ledger now agree on those boundaries. Final
+normal tracker/compact receipt/governance recheck follows the closeout edits.
+
+Independent next-duty review identifies existing D3982 as concrete useful-delivery work: the
+genuine harassment window's full two-arrow Nudge bundle is wholly deferred by maxArrows1.
+Eight current Nudge window families share that path builder statically; that is not yet an
+eight-family measured result. Next run original factory/adapter/fit controls for both colors and
+attraction3/5, preserving complete sources/captions, fixed budgets and Review/Inspector paths.
+A learner-specific form change requires independent acceptance before implementation. Actual
+committed-learner delivery and word costs remain part of that work, not just a successful fit.
+The subject-safe avoidance successor remains its own later source contract. No new work docs,
+raw recordings, legacy fallback, permission question, staging, commit or push; goal remains active.
+
+Final normal tracker sync/compact roadmap receipt/complete governance50373 exits0 after the
+three local path-evidenced closures. Diff-check is clean and the staging area is empty. The
+independent receipt also records the completed full run and bounded next D3982 duty. No
+production/test bytes changed after the final source gate, and the 1.0 goal remains active.
+
+### 2026-11-03 — D3982 complete-window representation census and bounded draft
+
+The original factory→Nudge2→registered adapter→atomic fit census now measures18 cells across
+eight multi-ply families, both colors and attraction3/5. All full bundles exceed one arrow;
+all separately costed original complete caption/square-set members fit fixed facts/words/marks.
+The first probe91288 fails on an opaque token's nonexistent edges field (9pass/1fail), an
+instrument error rather than a product result. Original reader repair43780 passes10/one1.35s;
+final assertion-only census80459 passes10/one1.27s, without raw dumps. Research and its existing
+index record the distinction between feasibility and actual learner delivery.
+
+Existing module-registration §4.5c and evidence-presentation §2.3 now contain a bounded draft:
+exactly8 Nudge2/current@3 pairs construct a complete singleton square-set/caption, remove only
+their arrow forms, preserve sources/anchors/ownership/fixed budgets/selection and full Review/
+Inspector paths. Routine independent review delegated without another permission question.
+No production implementation before acceptance. Actual actor-labelled timing, transient/current
+receipts, forgery controls and mounted delivery remain required. D3982 is doing in ledger and
+work-state. No content waiver, native/release/qualification promotion, stage, commit or push.
+
+### 2026-11-03 — D3982 representation implemented; D4058 actual selection remains
+
+Independent review accepts the finite8-pair Nudge-only form amendment before implementation.
+Catalogue and original adapter construction now emit a complete source-owned singleton caption/
+square-set, not a cropped path; MAP/Full2 remain complete paths. Original geometry population
+stays41:33 full paths plus8 singleton Nudge captions. Footprint/brush/owner and original renderer
+mutations still cover all41; extra old paths/form forgery controls cover all8. Initial43386
+fails8pass/2fail on an incorrect test-only adapter.forms access and stale old-bundle expectation.
+17855 then passes1287/fails3 on old composition census counts; correct them without dropping
+geometry coverage. Actual REST84554/32286 each pass32/fail2 on missing selected harassment,
+which is D4058's live witness, not a failed caption constructor.
+
+Actor-labelled authenticated census then measures18 actual completed windows: every genuine
+source reaches the real reducer, zero sequence captions is selected. Earlier learner prefixes
+exclude future motifs; opponent nodes refuse and stored run bytes are unchanged. Final10367
+passes1466/five8.92s. Types91707 stops on an excess test-fixture handle field; that field is
+removed, types must repeat. No full gate/native/qualification claim. Existing D3715 is not
+authority to invent sequence priority; independent read-only selection scope review continues.
+D3982/D4058 stay doing. No content change, staging, commit or push; full1.0 goal stays active.
+
+### 2026-11-03 — D4058 finite product order and actual selected Nudge journey
+
+Independent current-authority review confirms starvation follows the accepted old order, not
+a broken collector. D3715 cannot authorize a shortcut; harassment does not entail either whole
+transition projection. Research precedes a bounded learner-modules/module-registration amendment:
+Nudge2 alone declares production.postcommit_observed_window@1, critical-first unchanged, exact8
+completed @3 windows next, then old ordering. Original evidence/grounding, reducers, novelty,
+fixed budgets and all other modules remain. Independent review accepts before implementation.
+
+Actual76789 improves0/18 to16/18 (131pass/2fail8.25s). Overload/deflection coexist in both original
+shared samples. The first explanation—combined words exceed50—was an unverified inference by
+author and reviewer, not a measurement. Diagnostic60606 disproves it: critical last_of_role
+claims slot1, leaving one window slot at the fact backstop. No presentation word deferral exists.
+Research/RFC and independent receipt correct that premise explicitly. The grounded non-entailment
+finding remains: overload need not lose the defender's other duty, so do not add false subsumption.
+A separately reviewed transitive within-group overload-first convention is accepted. Original
+coexisting sources remain admitted, the critical fact remains selected, and deflection's genuine
+check-induced arm supplies its separate selected-delivery control. There is no budget increase.
+
+Tests80076 initially fail2 on that wrong word-deferral assertion (60pass);60606 repeats the actual
+fact-cap witness (32pass/2fail). Corrected actual20-cell cookie-auth/storage/service/REST controls
+cover all8/both colors/attraction3+5 plus the separate check-induced deflection. Earlier learner
+prefixes exclude future motifs; automatic-opponent nodes refuse; run bytes stay unchanged.
+Comparator27/one1.25s then28-case controls pin exact8/nonoverlap, all4 critical events, predecessor/
+consumer/policy negatives, every non-Nudge module's old order, conservative duplicates and transitivity.
+
+Mounted original stored-service controls51381 fail2/273pass31.52s;27896 reproduces the cause with
+307pass/2fail32.05s: a Svelte request proxy cannot cross the worker's structured-clone boundary.
+The test transport now uses the same ordinary JSON serialization as the actual API. Delayed
+controls wait for real successful source work before withholding its reply, then wait for actual
+fulfillment after retirement; they cannot pass merely because the query failed. Original complete
+text/two chips/no path, returned board input and visible/late reply retirement pass in both colors.
+Focused33539 passes1689/five29.95s; strengthened32174 passes1804/nine29.93s.
+
+Independent source/control review accepts the bounded implementation but spots a word-test confound:
+two captions also exceed marks. Keep that atomicity control, add genuine original computed grade+
+harassment items with individually fitting whole bundles; combined2facts/2marks/0arrows exceeds
+only words and refuses exactly that. Final83473 passes12/one1.44s. No source test is detector
+qualification. Current normal full5853 runs types/build/semantic writer/work-state/compact receipt/
+verify; types and build pass,375 semantic cases pass while91subjects remain zero qualified.
+All3807 ledger rows assigned/zero untriaged of1879live. No closure until complete current gates;
+no content/schema/legacy workaround, native/default/parent/milestone/release promotion, stage,
+commit or push. Existing D3928 owner request stays pending. The1.0 goal remains active.
+
+### 2026-11-03 — current full Nudge gates and bounded closeout; recorded-line next duty
+
+Normal full5853 completes: clean types/build,4559 original authority cases/77 files,375 semantic
+cases,13268software/all489files348.64s with no software skips, unchanged performance7/four58.39s
+and complete governance pass. Actual content completes261pass/60fail/18setup-blocked skips across
+43files33.58s, with two setup-failed suites and the same complete92-pack/184 requirement mismatch
+census at held D3928. Later corpus recipes remain unreached; whole verify is nonzero. No content,
+threshold, gate, tier-exclusion, legacy grader or empty-catalogue workaround is introduced.
+
+Independent source/control review accepts D3982/D4058 including the isolated word-only falsifier.
+Both close locally with path evidence to the existing independent receipt. First transition
+command includes live-only owner/since fields and refuses atomically; corrected ordinary command
+omits them and passes. All3807rows assigned/zero untriaged of1877live, doing168/done1767 and
+closeout-prose462 unchanged. Canonical queue/roadmap/index/ledger record actual selected delivery
+and these limits, not parent/capability/milestone/native/qualification/release or coupled landing.
+
+Current-duty review verifies D3979 remains real: accepted move_path promises board stepping,
+but the actual renderer lists SAN and the original constructor discards FEN/scope on wire.
+Existing research dossier/index record the original33-path/41-footprint boundary. Independent
+review accepts bounded evidence-presentation §3.6b after checking every actual original constructor:
+retained start-FEN, full original replay/continuity, normalized castling without UCI rewriting,
+strict wire consistency and explicit source-trust boundary; read-only local preview on the exact
+sealed item's lifetime, no saved writes or active-board resize. No new collector/hash store/run
+schema/legacy mode. Native desktop/phone proof remains held at real startup, not replaced by DOM
+claims. This is accepted next implementation, not already shipped. Source/test bytes stay frozen
+after5853; final metadata/compact receipt/governance follows. No stage/commit/push;1.0 goal active.
+
+Final metadata3843 catches three duplicate checkpoint evidence paths introduced in the roadmap
+closeout, not a software/source regression. Remove only the duplicate entries, retain their
+existing original anchors and the new reducer evidence; normal compact writer and complete
+governance84382 then pass. Diff-check is clean and the staging area remains empty. No production
+or test bytes changed after full5853. The bounded Nudge repairs are complete locally; D3979 is
+accepted next work, held D3928/native/content and full1.0 remain open. Goal stays active.
+
+### 2026-11-04 — D3979 original-position replay and read-only line preview in flight
+
+Previous goal turn made concrete source/test progress; its interrupted test handle48263 is now
+missing, so resume with the normal targeted Make command, not an assumed live wait. Original
+all33 genuine missing-start controls failed before implementation (33fail/1342pass1375cases).
+Registered path construction now retains canonical startFen and checks every original before-FEN,
+legal normalized UCI/SAN/ply and full sequence. Shared replay preserves original castling UCI;
+strict parser refuses missing/noncanonical/illegal/crossed lines whole, never a prefix. No new
+collector/source/run schema/hash store/legacy fallback; wire consistency is not source issuance.
+
+MovePathView opens an exact-item-owned read-only local board, root/previous/next/direct ply
+controls and modal/focus boundary; no saved rewind/move/fork/provider/help/preference effects.
+Independent early review finds two in-flight lifetime defects, now D4059: render-current owner
+instead of original SAN owner, and stale Close focus after same-owner reopen. Keyed original
+SAN handlers, exact preview ownership and a close generation guard repair them. Detached clicks
+alone are insufficient: final tests capture the actual Svelte delegated callback and invoke it
+with its reconnected original currentTarget. A same-owner closed/reopened preview is a separate
+negative, not conflated with owner replacement.
+
+Instrument corrections are not product witnesses: a stationary-rook castling fixture supplied
+noncanonical F rather than canonical K; a contact fixture chose a two-ply window rather than its
+actual three-ply source; four DOM expectations assumed unset movable colour, while the existing
+read-only board actually supplies an empty move map. Initial actual-caller controls selected the
+wrong sibling path and an absent navigation label. Correct exact packet item/topic controls pass.
+The first explicit captured-handler probe assumed obsolete __click storage, then overmatched DOM
+symbols; inspecting installed Svelte identifies its exact symbol(events).click. No production
+guard was weakened to fix these instruments.
+
+Focused24770 passes1445/five5.27s; expanded20497 passes1613/seven9.43s including all33 genuine
+paths, redigested missing-start/wrong-turn/SAN negatives, all original semantic fixture lines/
+both colors/castling/en-passant/underpromotion/repeated positions, actual authenticated Review
+REST, real stored-service/strict-received/mounted Review and Inspector, inherited branches,
+unchanged persisted game and main Review board lifetime. Inspector source/host retirement is
+tested, not relabelled as a permission-downgrade journey. New same-owner retained-control case
+awaits the complete run. Native geometry/default content bootstrap remains held D3928; D3979
+and full1.0 remain open. No content waiver, qualification promotion, staging, commit or push.
+
+First complete gate13969 stops at a negative-test typing error: a purposely missing startFen
+cannot be passed as a valid typed receipt. Use explicit runtime property deletion on the copied
+wire instead of asserting malformed bytes valid; no parser weakening. Normal complete gates
+restart on current source, with independent bounded implementation/control review in parallel.
+
+Second type gate50011 finds four web-test errors from findLast outside the existing library
+target; copy/reverse/find fixes the test helpers without changing tsconfig or production support.
+Complete repeat25804 passes clean types/build, all4559 authority cases/77files,375 semantic
+cases and startup/scaffold/source checks, then enters492-file software. Its export-parity test
+finds the new shared movePathFrames missing from the main runtime barrel. The browser and main
+entries must re-export the same original helper, not diverge. Add that missing export;25804 is
+already failing and cannot be claimed current passing proof after this correction. Await its
+terminal handle, then rerun normal complete gates on frozen corrected source.
+
+Independent source/control review accepts the bounded D4059 repair conditional on the final
+same-owner retained-handler case passing. It distinguishes actual source/host retirement from
+an unexecuted Inspector access downgrade; the test title now says exactly source/host. Actual
+Review/Inspector/storage/REST controls establish original delivery, not native geometry or D668.
+D3979 stays open for remaining native/context/path duties.
+
+Parallel independent review returns stale D3715 draft on two actual seams: the legacy operation
+was retired, and its shared edge helper also supplies Review. Refresh the existing clause to
+sole-query current/ancestor admission, exact eight structural@1 families plus separately shaped
+islands/detailed king zone, full typed equality and complete Inspector/Review/pack preservation.
+No generic/source filter, new accepts, grade priority, recorded-window ordering or budget change.
+Independent re-review accepts that bounded contract; mirror acceptance into RFC/register/docs
+and transition D3715 from blocked to todo with the normal tool. Production implementation still
+awaits the next source boundary. D3767/D1164/subject-safe avoidance and genuine empty recovery
+remain distinct. The independent current-symbol audit also corrects D3859/D3792/register's old
+consumer1/eight-failure/absent-cutover claims. Original ten-motif actual selected-browser reach,+complete exact-operation current image and held native/content/qualification remain real duties;
+supplier/pair counts are not closure. Existing receipt reused; no new tracking hierarchy.
+
+### 2026-11-04 — complete corrected preview software/performance and bounded closeout
+
+Failed25804 terminates13460pass/one missing-main-export failure across492files347.18s; it is
+not current passing proof. Correct shared movePathFrames export, then normal47040 first passes
+19/three3.95s including original browser/main identity, all10 preview lifetime/retained-callback
+cases and six actual callers. Independent final source/control review accepts D4059 for local
+closure. No new production/test bytes change after that corrected boundary.
+
+Complete47040 passes clean types/build,4559authority/77,375semantic,13461software/all492files
+357.14s with no software skips, and unchanged isolated performance7/four57.16s. Governance then
+stops at four stale checkpoint references after current work/register corrections, before content.
+Refresh only the reviewed current source-row/register anchors; complete governance36583 passes,
+including R1–R10, P1–P7, C1–C8 and full staged-contract controls. Actual content48165 separately
+completes261pass/60fail/18setup-blocked skips across43files37.95s, with the same two setup-failed
+suites/all92packs/184 requirement mismatches at held D3928. Later corpus recipes are unreached.
+No content edit, legacy grader, catalogue exclusion, threshold/gate weakening or release claim.
+
+D4059 closes locally through normal path-evidenced transition to the existing independent receipt;
+all3808rows assigned, zero untriaged of1877live, done1768/doing168, closeout-prose462 unchanged.
+D3979 remains doing for actual context/repeated-caller/native duties, not recycled as a new missing
+source supplier. Roadmap/machine map/queue/docs/RFC reflect source-local stepping and its actual
+verification boundary. D3715 is independently accepted/todo for the next canonical Nudge selection
+increment; original ten-motif actual Inspector display is the next separate accepted proof task.
+No protected intent edit is needed: original stepping promise is being implemented, not changed.
+No staging, commit, push, parent archival, qualification/native/default/milestone or full1.0 claim.
+Final tracker sync/compact receipt/governance follows these documentation-only closeouts. Goal active.
+
+Final75673 completes the ordinary sync/compact-receipt/full-governance sequence green after all
+documentation-only closeouts. R1–R10 and zero-untriaged remain green; diff-check is clean and
+the staging area is empty. Production/test bytes remain those of47040. Actual content48165 stays
+red; no compound/full verification success is claimed. The1.0 goal remains active, with accepted
+D3715 and remaining D3979/ten-motif proof duties queued, not a pause or completion.
+
+### 2026-11-04 — D3715 canonical current/ancestor change selection in flight
+
+Previous goal turn made source/actual-caller progress and verified the preview checkpoint; this
+increment starts a new source boundary. Independently accepted §4.5a is now implemented before
+current and ancestor packet admission in the one canonical query. Exact8 structural@1 refs use
+complete JSON observation value equality; islands use numeric before/after and detailed king
+events keep the existing witness. Shared postcommitEdgeEvidence, generic witnessedEvidence,
+factories, sources, ordering, budgets, novelty, grade/windows and pack/saved bytes remain unchanged.
+No new hash, collector, legacy operation or chess valuation.
+
+Initial38500 finds5 genuine no-change/ancestor failures plus a test's bare-kings terminal-start
+error; corrected32687 reproduces5fail/2pass. Initial repaired75929 passes83/two. New explicit
+equal-magnitude assertion mistakenly required every king observation to have two nonnull equal
+magnitudes, including legitimate gained/lost corner observations; require a genuine nonnull
+equal-magnitude changed member instead, while preserving the entire changed source population.
+Existing four all-legal source cohorts keep complete zero/unchanged factory states.
+
+D4060 records a real accepted-criterion/source-image mismatch: current Inspector has distinct
+position/transition readings, not the exact structural/island event topics. Independent review
+accepts a bounded clarification preserving exact events through factories/actual Review and
+separately current Inspector readings. Exact event-query coverage remains open Full1.0 work,
+not waived, hidden behind a reading test or implemented through undeclared topics. D4060 is
+durably todo; D3715 doing. No new scope ruling or repeated permission question.
+
+Actual server/REST and mounted controls expose two obsolete seat tests pinned to two unchanged
+counts:62366 reports294pass/2fail296, then28655 reports299pass/1fail300 when the test guessed the
+remaining pawn-free fact incorrectly. Actual receipts show one piece_escape there and one
+loose_piece for locked d2–f3; keep exact receipts/Retry/focus and do not claim either move silent.
+Corrected99017 passes412/six30.18s. Independent review strengthens Review preservation from a
+weak some-events/two-islands test to every original exact factory identity/multiplicity against
+whole-branch admission and each actual row. First24955 measures the wrong branch-versus-edge
+scope; corrected88316 passes93/three3.56s, using all9 original factories independently of the
+shared helper under audit. Added inherited branches correctly refuse until their new feedback
+reveal is explicitly performed:65909 reports412pass/2withheld failures414, not a product bug or
+permission to widen disclosure. Corrected83769 passes414/six30.06s, including all10 actual server/
+REST cases, both colors, inherited original paths, original Inspector reading/Review events,
+four stored-service→actual DrillScreen card/input/retirement controls and prior window delivery.
+
+Independent final code/control review accepts this bounded implementation. Earlier standalone
+types11324 pass; current normal81838 runs typecheck/build/semantic writer/sync/compact receipt/
+verify on frozen source. Clean types/build pass; source gates underway. The stale registry comment
+claiming single-line objectives lack a source is corrected against actual objective@2 membership
+and invocation, with no registry/runtime behavior change. Full current gates are still required;
+no local closure, content/native/qualification/parent/milestone/release clearance, staging or push.
+D3928's existing owner request remains pending; no re-ask or content waiver. Goal active.
+
+Terminal81838 completes software13484/all494files361.50s (no skips), unchanged isolated
+performance7/four57.02s, clean types/build,4559authority/77,375semantic and complete governance.
+The compound verify exits2 at actual content:60 failed cases and two setup-failed suites at
+held D3928; later corpus recipes are unreached. No inferred fresh content pass count/duration.
+No production/test edits followed that source freeze. Independent bounded source/control review
+accepts D3715. Its complete original Review identity/multiplicity and distinct Inspector reading
+controls do not close D4060 exact event-query coverage, qualification or parent/native duties.
+
+Normal dependent-first transitions move D3713/D3767 to todo measurement before D3715 closes
+with path evidence. Tracker reads3809 rows,0untriaged/1877live,632todo/168doing/1077blocked/
+1769done/163refused; closeout-prose462 unchanged. Neither newly unblocked measurement authorizes
+grade priority or forced silence. Roadmap/queue/register retain current red content explicitly.
+Routine independent reviews remain authorized without further permission questions. Next accepted
+work: original ten-motif actual Inspector query/received/browser display controls, not another
+supplier rewrite. No staging, commit, push, milestone/release promotion or goal pause.
+
+### 2026-11-04 — D3792 original ten-motif delivery proof
+
+Independent read-only audit identifies the original ten@3 positives/hard-negatives minus trade.
+Private-source tests already cover them; the generic68-topic query loop does not establish
+positive browser reach. Extend the existing test-only Node worker with optional real registration/
+cookie-authenticated REST, keeping original SQLite/RunService/source/page/receiver/components.
+Fast test-only password derive tests session authorization, not production KDF. No production
+collector/source/API rewrite. The40 original both-colour positive/negative cells retain every
+original event/component identity and multiplicity, complete captions/chips/start-FEN/UCI/SAN,
+fixed budgets, source-only-on-demand and unchanged saved play. Negatives distinguish no_witness
+from incomplete/failed/budget-limited outcomes. Four inherited positives, two root/short-prefix
+journeys and anonymous401/zero-acquisition checks extend actual scope delivery.
+
+Initial6411 runs71:51pass/20fail because the test imported a package-private receipt reader from
+the public barrel; correct the test import, not exports. Corrected52267 passes71/one28.01s.
+Expanded63766 reports165pass/2fail167/four36.77s: test props replacement removes the retained
+query spy, so it rereads the old positive rather than the new earlier-position response.
+Independent review finds that measurement defect and requests an original-cohort set equality.
+Preserve the spy, pin both canonical ten-family sets against actual recorded-window topics and
+label fast-KDF scope. Final61491 passes168/four44.28s. Independent code/oracle review accepts
+the bounded cohort and appends only its existing receipt; it does not self-accept a feature.
+
+Current99921 runs normal typecheck/build/semantic writer/verify-software after source freeze.
+Types/build and375semantic pass; complete software/performance gates follow. D3792 remains
+doing for parent/native/qualification duties; D3979/D4060/D3928 keep distinct scope. Prior13484
+is historical after worker/test changes, not current clearance. Queue/docs/research now describe
+current delivery rather than the obsolete zero-of-ten mixed pool. No staging/commit/push or
+goal pause. Full gate results and final register/roadmap/tracker reconciliation follow.
+
+Terminal99921 passes clean types/build and375semantic, then source-authority execution stops at
+1449pass/8fail1457 across40files35.12s: all eight failures are localhost listen EPERM in the
+actual provider CLI transport suite. Full software/performance pools are unreached. Run the same
+normal `make verify-software` as25828 with tool-approved localhost execution, preserving all
+tests/deadlines/source declarations. No sandbox-specific exclusions or product/test fixes.
+
+Terminal25828 passes all4559 authority cases across77files,375semantic, clean types and the
+complete13532software/all494files355.22s (no skips), then unchanged isolated performance7/four
+58.46s. Build already passed on the same frozen source in99921. No production/test edits
+followed this source boundary. Actual79202 real-content execution exits2:261pass/60fail/
+18setup-blocked skips across43files32.85s, two setup-failed suites and the held D3928 all92-pack
+requirement mismatch. Later graduation/capability corpus recipes are unreached. No full verify,
+native/default, parent, source qualification, milestone or release claim.
+
+D3792's original finite selected-delivery duty is independently accepted and locally verified;
+the parent row remains doing. Its old zero-of-ten result is retained as historical research,
+not current delivery. D3715 stays path-evidenced done, D3713/D3767 todo measurements, D4060 todo
+source-contract work. All3809 rows remain assigned,0untriaged/1877live; closeout-prose462 unchanged.
+Roadmap, queue, register, docs and research now report this current source boundary. Refresh
+their reviewed source anchors/compact receipt and run complete governance before the next
+source increment. No staging/commit/push or goal pause.
+
+Final18602 completes compact receipt and complete governance green on the reconciled metadata.
+R1–R10 pass, every ledger row is assigned, diff-check is clean and staging remains empty.
+Software/performance remain terminal25828; real content remains terminal79202 red, so no whole
+verification/release success is claimed. Next source increment takes D3713's real empty-return
+measurement and accepted recovery journey; prior locked/pawn-free populated controls remain.
+
+### 2026-11-04 — D3713 genuine empty recovery reproduction
+
+Start a new source/test boundary after the verified D3792 checkpoint. Move D3713 to doing.
+Legal f3d4 from7k/p7/8/8/8/2P1PN2/6P1/K7 w - - 0 1 returns a genuine canonical query
+empty receipt with silent behavior; no evidence is edited/suppressed. Initial69258 reports
+279pass/1fail28029.52s: delayed successful Retry removes its row and leaves focus on BODY.
+Expanded58665 uses independent soft assertions so all failures remain visible and the no-write/
+request assertions still execute:279pass/1fail28029.50s, lost body/region focus and zero tablet
+queue heads. Neither prior populated locked/pawn-free control is relabelled empty.
+
+Independent read-only review confirms local lifecycle repair is accepted §4.5a criterion5/seat
+scope, not a new selection policy: retire only vanished current Nudge expansion/paint, use existing
+default More/Support head and preserve initiating Retry focus ownership. Protect deliberate
+focus/newer selection/staged cue/context/destruction; no placeholder/all-clear/refill. The first
+reproduction uses actual canonical runtime query with test authority, not RunService/auth. Current
+71245 strengthens it with both-colour actual SQLite/RunService Node-worker authority and returned
+empty packets before production changes. No full-current gate or closure claimed after these
+test edits; previous13532 software/7 performance is the prior frozen checkpoint.
+
+Actual-service baseline71245 passes279/fails2 of28129.07s: both colours return genuine []/silent
+packets and independently reproduce BODY focus, missing region focus and zero tablet heads.
+The bounded repair retires only the current settled silent-empty Nudge to the existing default
+More/Support state, clears its paint, and uses the actual current parsed return packet to bind
+Retry focus. Initial28589 passes289/three29.21s. Independent review catches document-listener
+cleanup waiting on an unresolved promise; add a before-resolution teardown falsifier first.
+11337 reports293pass/2fail295/three29.23s, solely the mirrored pending-unmount listener failures.
+Add immediate destroy/supersession cleanup with idempotent finally. Final23861 passes393/six
+34.10s and clean normal types: real service both-colour success/moved-focus/newer-More/unmount,
+stored bytes, populated predecessors, actual Nudge runtime/service and original Inspector cohort.
+
+Review next finds outer Support→Branches/Actions navigation can leave seatExpanded unchanged
+without a browser focusin. Current9537 adds desktop/phone success and exact no-focus outer-tab/
+leave-and-return controls before any extra repair; phone explicitly opens its real sheet.
+This is source/UI lifetime proof, not native geometry or permission to manufacture an empty
+packet. D3713 stays doing; no whole-current source gate/closure or source/grade/novelty changes.
+
+Terminal9537 reproduces six no-focus outer-tab/leave-return failures across desktop/tablet/phone;
+desktop/phone successful fallback counterparts pass. Add actual region eligibility and a local
+navigation generation so leaving and returning cannot requalify an old Retry. Preserve listener
+cleanup, exact current packet, selection/staged/focus guards and default-head semantics. Final
+67130 passes401/six35.01s and clean normal types. Independent bounded review accepts, appending
+its existing receipt without source edits or another permission question. No source/test edits
+followed this freeze. Current30607 runs ordinary build/semantic writer/compact receipt/full
+verify with localhost-capable execution; full results are pending, not inferred from focused.
+
+D4061 records a separate source-audit question, not a fabricated observation: clearSeat removes
+packet/request state while configuration-driven removal has no silent packet to trigger D3713.
+Measure real preset-removal tablet head/focus before calling it a defect or widening this repair.
+It is assigned todo immediately; no untriaged debt is introduced. This does not delay current
+verification or claim that the preset-removal path is already broken/fixed. Goal stays active.
+
+Terminal30607 passes13548software/all494files357.68s(no skips), unchanged isolated performance
+7/four57.17s, clean build/types/4559authority/375semantic. Full verify then stops in governance:
+new D4061 has a durable owner/state but no routing entry,3810rows/1878open/1877routed/one unrouted.
+This is my missing queue route, not a product failure or a full-gate pass. Add its explicit next
+measurement in the canonical Codex queue and rerun current compact receipt/full governance/content;
+no source/test changes or redundant software/performance rerun. Real content is unreached by
+30607, so its previous60-failure reading is not transcribed as a fresh execution.
+
+Terminal82988 restores complete governance after the explicit queue route, then reaches actual
+real content:261pass/60fail/18setup-blocked cases43files32.51s at unchanged held D3928. Later
+corpus recipes are unreached. The source freeze's13548software/all494files357.68s(no skips),
+isolated performance7/four57.17s, clean types/build/4559authority/375semantic remain valid; no
+product/test changes followed67130. No whole-verify/content/native/release success is claimed.
+
+Normal path-evidenced transition closes bounded D3713; no blocked dependent points to it.
+All3810 rows assigned,0untriaged/1877live,632todo/168doing/1077blocked/1770done/163refused;
+closeout-prose462 unchanged. Independent final review appends current terminal results to its
+existing receipt, retaining prior failures and reviewer-vs-main execution scope. Roadmap, queue,
+register, docs and research carry current closure and the still-red actual content. D4061 remains
+todo measurement, not assumed broken or discharged by silence. Refresh final anchors/compact
+receipt and full governance before the next source increment. No staging, commit, push, parent/
+qualification/native/milestone/release promotion or goal pause.
+
+Final63369 completes compact receipt/full governance/roadmap-progress green after bounded
+closeout; all3810 ledger rows remain assigned,0untriaged/1877live. Software/performance stay
+terminal30607; actual content stays terminal82988 red. Diff-check is clean and staging empty.
+The1.0 goal remains active. Next source boundary measures D4061 real preset-driven removal,
+separating selected Nudge/Retry from Guided Hint's independently retained lifecycle.
+
+### 2026-11-04 — D4061 actual preset removal; D4062 late-create ownership
+
+Corrected source-owned controls reproduce absent selected heads for populated/pending Nudge in
+both colours and available/pending/late-POST Hint. The settled-composition-only repair retires
+only an absent selection/paint, retaining Hint through temporary authority compilation. Fast
+`preset-change.test.ts`95410 passes6/7; the remaining hard-awaited failure is the independently
+recorded D4062 late-create leak (zero cancellation, one real operation), not head membership.
+The helper runs actual stored runs, scheduler/MockProviderEngineClient, HintService, cookie REST
+and strict DrillApi with no fabricated HintResponse. Native geometry is not measured. Typecheck
+76291 caught unsupported test-only findLast; use reverse/find without widening compiler targets.
+
+D4062 review found deterministic per-question IDs conflate separate UI owners and dynamic
+controller delegation can route cleanup through the wrong run. A naive late cancel is unsafe.
+Draft hint-distance§7a specifies per-action delivery keys, exact POST echo validation, unchanged
+shared-search identity and immutable run-bound transport. Independent acceptance is requested
+before wire implementation; routine reviews are authorized without further permission prompts.
+No full-current verification, closure, staging/commit/push or goal pause is claimed.
+
+Independent review accepts hint-distance§7a before implementation. Required per-action keys
+separate waiter identities while the original horizon key still shares search. POST echoes its
+key and DrillApi requires exact correlation; receiptv2 and GET/DELETE stay unchanged. Immutable
+store-bound clients and captured async requesters route original-scope late pending cleanup.
+Retired poll404 cannot re-POST; already-started restart creation is parsed and cleaned. Pending
+ownership is registered before another await boundary. No legacy fallback/schema reservation.
+
+Focused67499 passes499/eight30.53s, including actual Quiet→Guide reopen with delayed old POST/
+DELETE, two independent waiters/one search, idempotent retransmission, newer completion after old
+cancellation, eight invalid HTTP keys/zero sources, strict echo negatives, retired malformed/
+refused replies,404 timing and old/current run/same-ID attachment transport controls. Existing
+source/private voice/last-subscriber/cache-pressure tests pass. Independent bounded implementation
+review accepts. Strict local missing-key controls are added explicitly before final verification;
+14475 typecheck is clean but precedes these final test/API capture refinements.
+
+Native `make guided-hint-ownership-browser-check`86515 builds actual web/server bytes, then fails
+before Chromium journeys: storage preflight refuses anti-caro-advance-early-c5's old
+grade.move_quality@i1 requirement against current@i2. This is existing held D3928, not a Hint
+journey pass or authority to change the corpus. Its original content blockers remain. Full-current
+normal Make verification follows on stable source; no staging/commit/push or goal pause.
+
+Final focused96977 passes504/eight30.31s after five explicit runtime missing/malformed expected
+key controls (zero HTTP/legacy envelope fallback); expected action context is captured before
+await. Independent bounded review records this refinement. Full99371 passes build/types/
+4559authority/375semantic and reaches every one of495 software files:13571pass/onefail13572,
+356.08s. The sole failure is candidate-population-census counting the test-only browser worker's
+embedded constructor/import as production source. Performance/governance/content are unreached.
+
+Correct the production census to exclude conventional `.test-support.ts` alongside test/typecheck
+files, retain the exact three production service users and sole application constructor, and
+require production not to import excluded supporting fixtures. This preserves the production
+cache rule instead of expanding its allow-list to a test harness. Focused regression and an
+independent boundary review precede a normal full rerun; no first-attempt full pass is claimed.
+
+Boundary80368 passes86/three11.15s and independent review accepts its unchanged production
+invariants. Normal repeat42712 passes all13572 software cases/all495files349.95s(no skips),
+isolated performance7/four56.86s, types/build/4559authority/375semantic and complete governance.
+Actual real content remains261pass/60fail/18setup-blocked cases43files32.20s at D3928; later
+corpus recipes are unreached. Native86515 remains a successful build followed by startup refusal,
+not a browser pass. No product/test source changes followed the census correction.
+
+Close bounded D4061/D4062 locally with path evidence, retaining the genuine baselines and first
+full census failure. Update existing queue/register/roadmap/research/docs rather than opening
+another work document. Routine independent reviews require no further permission prompt. No
+parent/qualification/native/content/milestone/release promotion, staging/commit/push or goal pause.
+
+Read-only next-duty review identifies actual D3979 first/fifth same-looking Nf3 incoming-edge
+identity, inherited contact/overload stepping, active Analysis→Quiet→Analysis and separate
+historical target/run/branch/provider-health retirement. Historical confirmation owns its own
+ephemeral analysis grant; ordinary Play Quiet is not an assumed revocation of that grant. Actual
+service outcomes are required for health/access claims; synthetic role/health props prove only
+UI invalidation. These duties stay queued and unclaimed until their actual cohorts execute.
+
+Final50041 passes compact roadmap receipt, complete governance and roadmap-progress after local
+closeout. All3811 rows remain assigned; zero untriaged of1876 live,1772 done and462 prose-only
+closeouts unchanged. Both new closures use path evidence. Milestone/capability gates are not
+promoted by these bounded fixes. No staging/commit/push or goal pause; the1.0 goal stays active.
+
+### 2026-11-04 — D3979 actual repeated/inherited callers and active help scope
+
+Continue the accepted remaining duty after D4061/D4062 closeout; production source is unchanged.
+Actual modern same-game first/fifth knight moves retain distinct full original FENs despite equal
+SAN/UCI/placement. Cookie REST demand opens exact original parents/children, and captured emitted
+callbacks reconnected after endpoint replacement reject retirement. Main/inherited contact and
+overload paths in both colours open/step original frames with all200 responses and no saved cursor
+or provider changes.76496 passes24/two8.05s; independent bounded review accepts.
+
+The active Play context arm uses actual settings storage events from another tab while the
+preview modal makes its background menu inert. Quiet retires the open preview; restoring Analyze
+does not re-acquire the source until explicit demand. Old emitted opener reconnection still
+rejects; server authority, visible preset labels and stored bytes are checked. Initial8046 waits
+on stale nav count and never selects the topic; corrected pending/selected checks pass49005.
+Strengthened96831 wrongly expects label Analysis rather than existing Analyze; correct the test,
+not the product. Final75398 passes35/three8.27s; clean final70770 types and independent bounded
+review accept. This is a verification-only increment, not a new product-source implementation or
+a claimed repeat of the13572-case full pool. Current metadata/governance are refreshed separately.
+
+D3979 remains doing for actual historical target/run/branch/provider-health/access retirement
+and native/default bootstrap. Its independently confirmed historical grant is not ordinary Play's
+preset scope; synthetic health/role hints are not server authority. No parent/qualification/
+milestone/release promotion, staging/commit/push or goal pause.
+
+Final35742 passes the refreshed compact receipt and complete governance with the exact live
+D3979 work-state row anchored in the current checkpoints. Final source diff-check is clean and
+staging remains empty. Product verification remains42712; subsequent test-only verification
+remains75398/70770, not an invented new whole-pool total. The1.0 goal remains active.
+
+### 2026-11-04 — D3979 genuine historical scope changes expose D4063
+
+Continue the active1.0 goal; previous turn is progress, not a wait/no-progress turn. Current tree
+and canonical queue confirm historical target/run/branch/health/access are still owned duties.
+The existing Node fixture now optionally registers a second actual principal/cookie and owner
+grant. Owner RunService.updateGrant revoke/restore produces actual access outcomes; source REST
+refuses404 before acquisition and confirmation fails until explicit recovery. A genuine Explorer
+descriptor401 at the selected historical target settles its actual ProviderRegistry snapshot,
+instead of passing a fabricated health prop. Local math is reconfirmed independently afterward.
+
+Target/branch/run/health/access×both learner sides yields22pass/2fail24 in23901, with two unhandled
+UNKNOWN_BRANCH errors. Both genuine run replacements render old branch selection against the new
+run before the reset effect executes, leaving the old preview modal visible. Record D4063 and
+its queue route, assign doing, then guard only transient branch membership in path derivation.
+Canonical graph validation for actual branches/peers is untouched; no new source, policy, ceiling,
+legacy path, run field or chess claim is introduced. Parent D3979/native duties remain open.
+
+Focused46161 passes50/three13.67s after the repair, including genuine repeated/inherited controls,
+historical source/confirmation lifetimes and preset/Hint ownership cases. Source/control review
+finds no concrete blocker; final independent acceptance, types and normal full gates follow. No
+push/commit/staging or goal pause. This is a new product-source boundary after42712.
+
+Final affected-consumer26983 passes587/nine57.49s;69979 types are clean. Independent bounded
+review accepts D4063 and the actual historical notification matrix. Full57005 passes all13591
+software cases/all495files361.80s(no skips), isolated performance7/four58.97s, types/build/
+4559authority/375semantic and complete governance. Actual content remains261pass/60fail/
+18setup-blocked cases43files33.93s at D3928; later corpus recipes are unreached. No source/test
+changes followed the accepted focused cohort. Close D4063 locally with path evidence, retaining
+the two genuine failures/unhandled errors. D3979 remains doing for native/default-App proof.
+
+Read-only App trace finds no missing forwarding once actual capability/access snapshots arrive;
+it does not establish realtime external-change discovery, and no polling/SSE scope is invented.
+Independent reviewer ran no tests and records main's execution separately. All3812 rows assigned,
+zero untriaged of1876live;1773done/168doing/631todo/1077blocked/163refused, prose-only462 unchanged.
+No parent/qualification/milestone/release promotion, staging/commit/push or goal pause.
+
+During the stable-source wait, D4060 research broadens the same gap class correctly: eleven
+original structural edge factories plus islands all lack Full Inspector topics/suppliers. The
+three noisy families are excluded from ordinary Nudge, not demonstrated as banned in explicit
+Inspector. The existing8-family renderer drops count/role and selects one observation; an enum
+addition would lose source data. Research records complete before/after/role/count/null/ordered
+identity retention and source-specific population semantics: piece-count12 and islands2 are
+mandatory even at zero, unlike optional-family absence/root missing context. Existing D4060 now
+owns that full12 contract; no source code, new detector, ranking or pack migration is implemented.
+Draft/review the exact closed image before implementation, preserving ordinary-card policy.
+
+Final73927 passes compact receipt, complete governance and roadmap-progress after D4063
+closeout and D4060 research routing. Diff-check is clean; staging is empty. The source repair
+remains independently accepted, D3979 native proof and D3928 content remain open, and the
+full1.0 goal stays active. No new source changes follow terminal57005.
+
+## 2026-11-04 — D4060 accepted twelve-source Inspector implementation, in flight
+
+The prior goal turn made concrete D4063 progress; it was not a no-progress wait. Continued
+the active full1.0 goal with the original twelve structural event sources. Independent first
+contract review corrected the king_zone subject rule: original same-zone relocation joins
+different king squares. Independent re-review accepted §4.11e/§3.10b; source review accepts the
+closed parser/renderers, exact suppliers/pair semantics and unchanged ordinary Nudge/Review.
+No additional owner permission was requested for routine reviews.
+
+Implemented the existing original edge routes directly as80 literal topics/86 Full2 pairs/
+297 current module pairs. Complete before/after operands preserve counts, roles, nulls, ordered
+ray endpoints and moving king squares; islands reuse their complete existing renderer. No
+new collector, persisted schema, normal-card selection, provider/search, pack migration or
+scientific qualification. The initial normal focused API/UI run failed at the retained74-pair
+server preflight; corrected the production image to86 rather than narrowing the manifest.
+Initial test-only assumptions omitted the real rendered-text/source digest and used a same-role
+mutation; corrected the harness and moved convention negatives to the actual per-pair boundary.
+
+All12×both-colour selected cookie REST/browser positives now execute, including complete
+piece-count continuation and no provider/storage writes. Original root/inherited/repeated
+edge and redigested wrong-family/renderer/binding/convention controls are being finished.
+Normal full verification has not run for these new bytes. D4060 stays doing; D3979 native proof,
+D3928 content/startup and whole-parent/release obligations remain open. Nothing staged,
+committed or pushed in this shared coupled implementation.
+
+### D4060 final bounded checkpoint
+
+Independent source/control review requested explicit genuine population pins; before-null,
+after-null, changed positive counts and ordered zero-blocker rays now execute original factories.
+Added all12 source access/disclosure/cancel-before-collection and fact-free source-failure controls.
+Initial failure fixture was at root and correctly returned missing_context; corrected to a real
+g1f3 edge. Final55629 passes235/two. Normal86778 passes1565/40 then refuses one stale aggregate
+assertion (551 rather than the actual563 bindings); corrected current aggregate/image assertions,
+preserving all version/source/history checks. No production weakening follows either test repair.
+
+Final normal73789:13762 software/all496files367.82s, zero skips; isolated performance7/four58.94s;
+types/build/schema/4667 authority checks across77 files/375 semantic cases and complete governance
+pass. Core image49/351/44/563; semantic91 subjects remain0qualified. Full verify exits2 at actual
+content261pass/60fail/18setup-blocked cases43files33.00s, the retained D3928 capability mismatch;
+later corpus recipes are unreached. Actual native37004 builds successfully then prepare-start
+refuses anti-caro-advance-early-c5.json: grade.move_quality@i:2 missing and @i:1 obsolete. Zero
+native journeys executed, no bypass or pack migration. Independent final bounded closeout accepts
+D4060 source delivery; D3979 native/default-App, D3928, qualification, parent and release remain.
+
+D4060 closes locally/uncommitted with source-path evidence. All3812 rows remain assigned; zero
+untriaged of1875 live, closeout-prose462 unchanged. Current docs/register/queue and both affected
+roadmap checkpoints record actual delivery and limits. Protected intent is unchanged. No files
+staged, committed or pushed; the full1.0 goal remains active.
+
+Next D3767 measurement has independent read-only review: use canonical current query sources,
+not manual compile as a selection oracle. Actual Nudge window image is the eight priority refs
+plus trade_completed@2, not Inspector's contact-timing/defender-consequence set. Begin with
+complete grade-alone cost under the fixed50-word policy, then distinguish source absence,
+admission, critical/window/exactness/family order, dedupe/subsumption, actual novelty/abstention,
+two-fact backstop and whole-component presentation deferral. Preserve durable grades during live
+engine outage. No universal grade priority or budget change is authorized by measurement.
+
+Final95170 passes the compact roadmap receipt, complete governance and roadmap-progress after
+the bounded D4060 closeout. Diff-check is clean and staging remains empty. The full1.0 goal
+stays active; D3767's reviewed measurement is next, with no production selection change yet.
+
+## 2026-11-04 — D3767 actual selection census and D4064 pinned-report fit defect
+
+Previous goal turn made concrete progress: D4060 source delivery and its full/limited-native
+results were independently reviewed and tracked. Continued the active full1.0 goal through the
+next accepted research question, not a status-only wait. D3767 is doing. New source/format defect
+D4064 is recorded and assigned in the same existing ledger/state/queue; both need one reviewed
+representation/selection remedy before code. No grade-first policy or budget increase is inferred.
+
+The explicit disposable make grade-selection-measurement target typechecks its own instrument,
+then executes173 tests/two files4.18s (final24608). Ninety grade-alone source cases:54 provider
+variants all fit42–48 words;36 actual in-memory pinned-pack source variants fit16 and drop20
+solely at words47–53. Failed offline mate cases are51–53 words, despite no rival and successful
+admission. Both movers, all3arms/3classes and actual source origin/requested bounds are asserted.
+Offline pack reports retain original complete ledger/manifest through PackRegistry/SQLite/
+RunService, not an invented output payload or existing-content migration. Runtime guards first
+refused an invalid delayed-policy reveal and raw pack context; the fixture now uses legal
+immediate_guard and deriveWorkflowContext over actual server authority. Source/import/type
+assumptions are corrected in the instrument, without weakening production.
+
+Eighty source-owned actual cookie REST/strict-client strata cover all9 real Nudge windows,
+both colors/main/inherited subjects, four critical families, quiet/repeated grades and truthful
+availability counterparts. Sixty grades are available;8 render and52 survive novelty but lose
+at the two-fact backstop. Twenty cases are12 missing_eval,4 unequal_instrument and4 comparable
+available-empty/below-threshold, including4 terminal fixtures lacking a final report. The latter
+is not an impossibility claim about all terminal grading. Genuine repeated-grade ancestors are
+present; the current reducer reports novelty abstention. Stage reconstruction equals the actual
+packet AND complete received presentation/fit/budget, including source identities/multiplicity.
+Current provider-backed query samples have zero fit loss. Hypothetical grade/first-rival pairs
+take49–73 words:28/52 fit together,24 drop a whole fact at words in either order. These read-only
+pair-fit experiments do not modify production selection or override critical/window rules.
+
+Six mounted actual-cookie REST controls corroborate both-color quiet-grade positives and
+overload/castling grade nonselection, exact complete source-derived sentences/items and unchanged
+run/play. Final54577 passes17/one6.73s including11 earlier controls; the first new assertions
+incorrectly read the Inspector-only status log, corrected to actual module HTTP calls. ES2023
+findLastIndex was replaced with the repository's ES2022-compatible map/lastIndexOf. Workspace
+typecheck22425 passes with0errors/0warnings. Broader shared-fixture cohort41684 is live at this
+entry, not yet a claimed pass. The last full product gate remains D4060's13762 checkpoint;
+there has been no full-pool rerun after these test/research-only additions.
+
+Findings and bounded inference are in the existing module-evidence-assembly dossier/matrix;
+the research README documents the normal Make target and ignored compact outputs. Ordinary CI
+and progress do not require raw recordings. Independent measurement review supports separate
+selection and standalone-word-fit findings, with actual origin/bound guards now passing.
+Source/provider/convention/preset/budget/product behavior remain unchanged. Default native,
+actual engine quality, authored content, source qualification, parents and release stay open;
+D3928's pending decision is neither re-asked nor bypassed. No staging/commit/push/goal pause.
+
+Final41684 passes the broader shared actual-source/REST fixture consumers159/four47.90s.
+Final24608 passes strict instrument tsc and173/two4.18s with the review's explicit origin/bound
+guards. Independent reviewer accepts the bounded research gate for AUTHORING the joint
+D3767/D4064 amendment; no remedy, selector/renderer, budget or production implementation is
+accepted. Both rows stay doing. Dossier/matrix/queue and both affected roadmap checkpoints now
+record actual findings with product impact held and the older complete product result retained
+as history. Final work-state6772c7:3813rows, todo629/doing170/blocked1077/done1774/refused163;
+0untriaged of1876live, closeout-prose462 unchanged. This includes the separately owned D4064.
+
+Final51608 passes the compact receipt, complete governance and roadmap-progress after these
+research/ownership updates. Diff-check is clean, staging is empty and no heavy process remains.
+Full1.0 goal remains active. Next lawful action is the jointly authored/reviewed D3767/D4064
+representation/selection amendment; the accepted research is not an accepted implementation.
+
+## 2026-11-04 — Joint grade selection/representation amendment drafted
+
+The preceding goal turn made concrete progress, with independently accepted D3767/D4064
+research, real measured source/selection/format/UI results and durable defect ownership. This
+turn uses that research gate to draft one coordinated amendment in the active parents:
+module-registration§4.5e, evidence-presentation§3.10c, move-quality-grades§4b and learner-modules§3.
+The independent reviewer is now examining those exact clauses; no permission was re-requested.
+
+Proposal: keep current critical and exact eight completed-window/overload priority, then prefer
+exact available grade@2 to routine changes. No universal grade slot, source-risk rewrite or
+accepts/novelty/budget change. Default Nudge grade becomes a fixed compact registered summary
+over the same COMPLETE payload. How measured manually opens its one canonical full report
+through a narrow sealed-item helper; no source query, extra identity, generic caller prose or
+new grading. Whole-payload/canonical-full-report parity and full Review remain. The existing
+proactive50-word/two-fact/two-mark/one-arrow limit stays; a named manual one-fact400-word report
+view has no board paint and no full prose in default DOM/AT/provider grounding. View state binds
+to actual packet/subject and active region, including equal-grade repeated edges, not only a
+component digest. It retires through existing observed context/currentness and focus ownership.
+
+Source/math/convention, defaults/presets, pack/run schemas and installed content are unchanged;
+no shared version lane or new API is claimed. Full current source/canonical-query/strict-client/
+selected UI/lifetime/word/role/native acceptance is specified, including honest existing D3928
+startup refusal rather than claiming fixture/native clearance. The D4060 clause's stale
+implementation-in-flight sentence is mechanically reconciled to its recorded local closeout.
+Drafts/register/ledger/queue are current, both defects stay doing, no policy/renderer/UI code
+has changed, no staging/commit/push/goal pause. Independent joint acceptance is required next.
+
+## 2026-11-04 — Joint grade amendment independently accepted; implementation under test
+
+The four D3767/D4064 joint clauses passed independent review, authorizing the exact Nudge policy
+successor, complete-operand compact renderer and explicit same-item full report. No routine-review
+permission was requested again. The implementation preserves the canonical full formatter/checker,
+Review report and source payloads, source/assistance ceilings and proactive budgets; the manual
+one-fact400-word disclosure uses the same canonical word counter with an honest limited status.
+
+Independent source review found same-owner close/reopen ABA. Actual reinserted delegated handlers
+then also exposed Svelte's latest-value wrapper; keyed handler bindings plus per-opening epochs
+and bounded focus restoration now pass all8 direct disclosure controls. Initial broader focused
+tests exposed the intended castling+grade selection change; its exact expected source output is
+updated, overload still excludes grade. Actual REST/strict-client/mounted details/no-work/preset
+counterparts and current90/80 research instruments are being verified. Both defects remain doing;
+no native, qualification, parent or release clearance and no staging/commit/push.
+
+## 2026-11-04 — Grade selection and full measurement disclosure close, with exact downstream duty
+
+Independent joint contract/source/control/final review accepts D3767/D4064/D3766's bounded
+implementation locally/uncommitted. Nudge keeps critical/completed-window precedence then current
+grade before routine facts; its complete-operand concise summary opens the original full report
+only by How measured. Full Review/checker, source/math/convention, ceilings and proactive budgets
+remain. All90 source variants fit8–11words/all90 reports equal canonical/Review bytes; the same80
+actual source-owned strata deliver40/60grades(previous8),20 legitimate earlier-fact exclusions and
+20 truthful no-grade outcomes,0actualfitdrops. Pair cost now uses actual fitter budget.before with
+exact2facts instead of the one-fact component-bundle helper; no primary measurement changes.
+
+Actual12 provider/offline×3arms×2colours selected cookieREST/strict-client/web reports, stored
+repeated-edge/inherited-branch/run and real shared-host grant changes, retained Open/Close,
+whole-limit/exact tuple/complete operand negatives and6 real-grade voice controls pass. Independent
+review found and corrected the same-opening ABA/latest-wrapper class before acceptance. The full
+checker's incomplete-report rejection remains. The old grade+caption word-overflow example now
+correctly fits at39words; true two-caption/401word Inspector/manual-overlimit negatives remain.
+The old actual-HTTP absence and66 full-default adapter expectations were cut over with independent
+review; failed43188 result69fail/13729pass was retained, not called a pass.
+
+Final25264 normal:13804software/all497files370.27s(no skips),7performance/four56.88s,
+types/build/4667authority77/375semantic/complete governance pass. Actual content261pass/60fail/
+18setup-blocked43files33.82s keeps verify exit2; later corpus recipes unreached. Final3027
+current test types0errors0warnings and strict instrument173/two3.93s pass; native rebuild succeeds
+then prepare-start refuses the same anti-caro predecessor grade requirement, zero journeys.
+D3928/D3979/default native, source qualification, parents and release remain open. No existing
+content change, gate waiver, staging/commit/push or goal pause.
+
+D3765 returns to its review owner with ONE exact remaining acceptance cohort:9 authenticated
+workflow/pair full-payload/full-report parity cells (drill/Nudge, position Review, imported Review;
+0→−28/−66/−157). Six current source-backed voice controls now close its other named gap. D879 tracks
+that live duty; neither is left blocked on closedD3767 or assigned a made-up native gate. Historical
+D1 stays discharged. Ledger/state/register/current queue/roadmap are synchronized in this closeout;
+no protected intent sentence was found falsified by the bounded rendering/selection change.
+
+## 2026-11-04 — Actual grade workflow parity closes the consumer duty
+
+The preceding goal turn made concrete progress: independent bounded selection/presentation
+closeout and13804 software cases, with exact9 authenticated workflow/pair controls explicitly
+queued rather than hidden behind native or a dead selection blocker. This turn implements them
+in grade-workflow-parity.test.ts. Each of0→−28/−66/−157 runs through actual drill/Nudge, position
+Review and PGN-import Review authentication/storage/source/factory/registered rendering. Same
+provider-origin scores/instrument are selected even with real pack ledger fallback, all expected
+unified classes/thresholds are populated, every payload field and canonical full report compare
+byte-equal, anonymous requests refuse and saved bytes remain unchanged. Imported durable records
+come from the real import route. Nothing erases context in a comparator, equates workflow-specific
+receipts, forces selection or counts missing grades as equal positives.
+
+The first three parameterized tests stop on a fixture typo (nonexistent storage.importRecord),
+then pass after using actual importedGame and checking the complete persisted import record.
+Focused33979:3tests/ninecells2.63s. Final affected91497:200/seven60.77s, including current source,
+real rating-inert HTTP, arithmetic/mate/abstention, voice and module-ceiling regressions.
+Workspace83477 types0errors0warnings pass. Product source is unchanged since full25264; its
+13804/497+7performance/build/source/governance result is retained as the preceding complete
+baseline, not miscounted as including this new test-only file.
+
+Independent current-consumer/final review accepts D3765 and the finite D879 producer/consumer row
+for local path-evidenced closure. Current9 constants,6 actual-grade voice guards, exact2 consumer
+acquisition, rating/no-persistence/hygiene/full checker and historical D1 stand. No whole-grade RFC
+archive, Review/semantic qualification, default/native/content or release clearance, no source/
+policy/content/schema change, staging/commit/push or goal pause. Existing D3928 content/native
+hold remains. Next independently reconcile D3792/D3791's actual delivered motif scope and refresh
+only the complete current foundation image, without a subset receipt or duplicate precursor work.
+
+## 2026-11-04 — Ten-motif delivery defect reconciled; native duty remains precise
+
+Independent current-source/control review closes finiteD3792 on its established exact10@3 set,
+40 original positive/hard-negative/both-colour actual-cookieREST→strict receiver→selected browser
+cells, inherited/root-prefix/anonymouszero-work controls, complete identities/multiplicity/path
+frames/captions, fixed budgets and read-only saved state. Its168/four44.28s cohort is included in
+later full25264's13804/497(no skips). Current80-topic/86-pair Full2 afterD4060 supersedes68/74
+without rewriting the earlier evidence. No duplicate source/collector/UI implementation or new
+test run was manufactured to close already-delivered finite work.
+
+D3791 is broader: source/scope/access/read-only/display arms are supported, but its explicit
+native Inspector selection/reload/return remains unexecuted because actualD3928 prepare-start
+refuses the corpus. Its live blocker moves from closedD3792 toD3928; zero native journeys and
+D3979/qualification/whole-Inspector/parent/release duties remain. No source restoration, timeout
+waiver, content migration, staging/commit/push or goal pause.
+
+Next foundation work is current-source revalidation ofD1716/D1718/D1719 subject-safe avoidance:
+the old thirteen-family broad count cannot become a precise learner claim by renaming it. Reuse
+the existing research and original counterexamples against complete current candidate/source ABI,
+then independently accept the current producer/renderer contract before implementation. OwnerD745
+already authorizes the negative surface with a denominator; no new owner question is inferred.
+
+## 2026-11-04 — Current avoidance experiment separates three gates
+
+Existing D1718 research instrument now runs via normal make avoidance-subject-measurement
+with strict project types. The original root genuinely abstains41/40 on d3h7 defender_exposure@2
+invalid_turn_clone; a mechanical bishop-removed root completes34/34 and issues the real sealed
+subjectless candidate while the played child retains another file's isolated pawn. The exact
+eligible/rejected candidate id and two selected played_event facts separate source issuance
+from cap loss; actual12 same-edge subjects remain. Final41571 passes5/one explicit expensive
+census skip1.90s. Historical790/754/579 is not a fresh census. Old assertions and initial TS alias
+failed and were corrected with explicit current stage witnesses, not a weaker production guard.
+Independent bounded review requested the added rejection guard; final source reread pending.
+D1716 doing research only; current full13 ABI/domain/outcome audit and accepted successor remain
+before production. No consumer/source/content/policy change, milestone/qualification/release
+clearance, staging/commit/push or goal pause.
+
+## 2026-11-04 — Thirteen current avoidance source domains audited
+
+Independent reread accepts the exact eligible/rejected candidate identity guard. The existing
+dossier now maps every current source ABI, emitted domain, sparse/zero behavior and missing
+root/played join, including historical opposition's blocked-line boundary. Eleven new disposable
+controls cover all thirteen families. Normal make avoidance-subject-measurement42828 passes
+strict types and16 tests/twofiles1.86s, with only the explicitly expensive census skipped.
+The initial half-open-file assertion failed because an empty file is open, not half-open under
+the actual convention; the fixture now pins enemy-pawn/no-own positive and empty negative.
+No production predicate or guard was changed. Current sparse attacks omit positive empty/pawn
+target values; moved slider/pawn events split identities; zero material/island values and loose
+unavailability remain distinct. These are bounded source facts, not chess-quality validation.
+Independent review of this source map is in progress. D1716 remains research-doing; no new RFC,
+learner admission, corpus recensus, qualification, content/native/parent/release clearance,
+commit/push or goal pause. Next author a total successor only after the source research passes,
+with explicit source dependencies and no legacy pipeline requirement in new learner flows.
+
+## 2026-11-04 — Loose-piece source boundary and current rollup
+
+Independent thirteen-source review returns only the omitted loose-piece domain restriction:
+mover-color non-king pieces. The source table now states that domain, and a real preserved
+rook event pins exact sealed source operands alongside available-empty and unavailable cases.
+Final make avoidance-subject-measurement26463 passes strict types and17 tests/twofiles1.80s
+with1explicit expensive census skip. Final independent reread pending. No production change.
+The existing roadmap latest checkpoints now include D3765/D879/D3792 finite closures and this
+bounded current research, rather than still advertising the completed parity test as next.
+Normal roadmap-receipt/verify-governance/roadmap-progress1405 passed before this final metadata
+refresh; final governance will be rerun. 3813rows/0untriaged/1870live/1780done; closeout-prose462
+unchanged. Native/content D3928 and whole release duties remain, no staging/commit/push or pause.
+
+## 2026-11-04 — Current thirteen-source study accepted for successor authoring
+
+Independent final reread accepts the explicit mover-only/non-king loose-piece domain and actual
+available preserved/available empty/unavailable controls. The complete current source study is
+accepted for authoring the D1716/D1718/D1719 successor only. Final normal26463 strict types and
+17 tests/twofiles1.80s pass,1explicit expensive census skip. Existing author handoff, research
+coverage, tactical queue and roadmap next actions now point to the total source/subject/outcome
+contract; source-version choices, physical lifecycles, complete denominators and draft foundation
+dependencies remain explicit work. No production, qualification, learner delivery or release
+acceptance is inferred. Routine independent reviews remain preauthorized with no new prompt.
+
+## 2026-11-04 — Foundation source dependency revalidated against the current core
+
+D4065 records a stale blocker in the23-source foundation draft: the convention registry/resource
+reader/history/per-value receipt core already exists, while the draft still waits on the whole
+predecessor as draft. Baseline normal semantic-convention-source-check/history-check/register-check/
+foundation-source-author-repair passes:39 original definitions agree,52 live declarations/history
+rows,76 active RFCs/24 prior claims,11 historical author controls. The12 planned convention bases
+are absent from the current tree and unclaimed; the existing exact plan set is now promoted into
+the RFC/register claim, not installed. Core dependencies are distinguished from still-unfinished
+instance extraction/disclosure/durable attestation; independent review must judge sufficiency.
+No source helper/schema/content/consumer/predicate implementation or self-acceptance. D4065 doing,
+3814 rows/0untriaged/1871live. Routine independent review is preauthorized.
+
+## 2026-11-04 — Current source review replaces stale blockers with exact author repairs
+
+Independent review accepts finite D4065 dependency refresh and D4067 identity rebase, returning
+the full source RFC for exact closure, dispatch, outpost and event joins. Existing reading@2
+identities already mint old semantics; current occupancy instrument6246 fails on exactly those
+two collisions,18pass/one explicit census skip. Proposed reading@3 refs and dependencies repair
+the collision without changing existing factories. Final72719 strict types,20 research cases/
+twofiles1.79s(one explicit expensive census skip),11 historical author controls and register76/
+25claims/C1-C8 pass. First claim check failed because declaration/register purpose prose differed;
+exact prose was corrected, not the checker. No production source changed.
+
+D4066/D4068/D4069/D4070 record the genuine remaining convention/predicate/outpost/event gaps.
+One coherent draft repair now defines direct vs actual-input convention closure and bounded
+replacement, stable king-pair/physical-ray joins, a fixed future-file outpost basis, three exact
+kind/ref predicate routes and their input/aggregate companions. Scope is23 sources plus5 explicit
+companions,28 proposed refs; current census proves all28 free. This remains under independent
+rereview, not implementation acceptance. Source dependencies/core and research fixtures remain
+separate from semantic qualification, authored migration, native/content D3928 and 1.0 release.
+
+## 2026-11-04 — Source repair scope and tracking are explicit
+
+Independent review accepts D4065's finite dependency refresh and D4067's identity correction,
+not the entire source RFC. Both rows transition done atomically on the review receipt. Separate
+single-row transitions first refused because the other glyph was already changed; the batch
+transition keeps both stores coherent (3819rows/0untriaged/1874live/1782done). Four concrete
+contract findings remain doing under independent rereview. The28-ref occupancy control includes
+the five now-explicit predicate companions, and actual old@1 accepts a future-ref extra field
+while returning legacy truth; this is a disposable internal counterexample, no widened API.
+Roadmap/queue now name this actual source dependency before avoidance successor authoring; no
+new runtime/source/schema/content behavior, broad milestone, qualification, push or goal pause.
+
+## 2026-11-04 — Accepted source contract enters actual helper implementation
+
+Independent final review accepts the repaired23-source/five-predicate-companion contract for
+bounded implementation. Empty authority uses six explicit one-value snapshots; variable authored
+leaves use one bounded extension of the existing reduction binding/proof mechanism. Fixed
+future-file outpost fixtures now distinguish new admission from old maximal refusal. Opposition's
+equal-present algebra case is honestly unreachable over a legal ply, not a fabricated positive.
+Source RFC/register status is implementing and its complete execution plan exists; no source
+or downstream completion is inferred.
+
+New foundation-position-sources helpers require an actual sealed legal-position value and compute
+complete opposition/backward operands with owned deep immutability. Initial18-unit run fails2/16
+because copying a raw chessops piece leaks promoted:false beyond the intended occupancy fields;
+explicit color/role projection fixes the code without relaxing expected values. Final86655 passes
+18/one1.28s, including a genuine legal quiet-rook holder flip, blocked/gap/diagonal negatives,
+doubled-file subjects, own/enemy stops, pinned pseudo-controller, complete empty domain and forged/
+crossed source refusals. Workspace69520 types0errors0warnings pass. Independent code review accepts
+this bounded helper stage and the directly researched opponent-half-open/enemy-pawn-target operand
+clarifications. No new route/definition/factory/event/consumer/qualification is installed yet.
+
+Normal full make verify-software71379 is running; no result claimed. This changes runtime source,
+so the previous full baseline is historical until the new gate completes. ExistingD3928 content/
+native/release holds, complete28 scope and all downstream discharges remain. No commit/push/pause.
+
+## 2026-11-04 — Current full software/build proof for first source helpers
+
+Normal make verify-software71379 completes:13825 software/all499files367.97s,zero skips,
+7 isolated performance/four56.45s, workspace types/schema/source/authority/capability/other
+pre-pool checks pass. This supersedes the preceding product software baseline for the current
+helper code;20 disposable research controls/one expensive census skip stay outside that total.
+Normal make build verify-content22363 builds server/web successfully, then the separate actual
+content pool fails60cases/261passes/18setup-blocked43files31.98s (17failed/26passed files).
+Later corpus recipes are not reached. The known source-reference/capability content hold is not
+waived or misreported as green, and no new native journey is claimed.
+
+Queue, roadmap and source implementation plan now name accepted28-output work and actual helper
+proof, with exact factory/definition/event bindings next. Source/kernel/operation/qualification/
+consumer/content completion remain distinct. Ledger3820/0untriaged/1875live/1782done; no source
+feature closes merely on these helpers. No staging/commit/push/release promotion or goal pause.
+
+## 2026-11-04 — Final source-helper governance closeout
+
+First governance3567 correctly refuses two unrouted live rows: a D4065–D4071 grouped heading
+is not an individual route. Queue now explicitly routes D4066/D4068/D4069/D4070/D4071; no parser
+or gate was weakened. Existing affected roadmap checkpoints also bind the actual foundation RFC
+register row. Final normal roadmap-receipt/verify-governance/roadmap-progress83676 passes all
+checks, with3820rows/0untriaged/1875live/1782done and76 activeRFCs(21draft/46implementing/9awaiting).
+The older queue next-work paragraph is reconciled with accepted research/source implementation.
+Full current software71379/13825+7performance, clean types and build stand; actual content stays
+60fail/261pass/18setup-blocked43files, no later corpus/native or release clearance. No source
+routes/factories/definitions/consumer activation claimed; exact bindings and remaining28-output
+implementation are next. No staged files, commit, push or goal pause.
+
+
+## 2026-11-04 — Complete source readings reach the real candidate collector
+
+The two foundation reading@3 routes now have real sole factories, catalogue declarations and
+source-reviewed convention definitions. Both compute from sealed legal_moves@1; null/empty is
+available, not unavailable. The candidate compiler retains one genuine child legal map and passes
+that same object to both factories. Generated child closure is23 routes; compiler literal is3.
+The original reading@2 meanings remain unchanged. Four fine change signs enter shared types,
+validation parsing and total labels, with a synthetic compiler control proving that existing
+consumer eligibility does not acquire them. No new event source or learner binding is claimed.
+
+Independent review caught two staged authoring errors before commit: new meanings cannot use
+migration-only landed_contract authority, and new disclosures cannot use migration-only
+initial-recovery wording. Corrected to actual position_rules helpers and reviewed_text. All52
+preexisting workspace history rows remain byte-identical (HEAD51 plus the prior grade addition);
+only the two pending new rows were regenerated. The exact revised foundation§2.1 is independently
+accepted before implementing its bounded different-base validator.
+
+First six-file run14205:1948pass/two stale inventory assertions fail. Expanded38900:1974pass/
+one exact history-owner expectation fails; corrected explicit new-owner mapping. Full62814 then
+passes types/schema and1565 Inspector checks but stops on two additional actual projection-count
+tripwires (353 vs351); corrected only those exact counts, retaining49producers/44consumers/
+563bindings. Current full17225 is in flight, not green by assertion. Research11454 passes20/
+one intentionally disabled expensive census; its installed-ref check now admits exactly the two
+implemented readings and refuses occupation of the remaining26 proposed outputs. The attempted
+migration-route-map update refuses because that historical adapter receipt is frozen; no receipt
+was rewritten or checker weakened. Source/value profile update was680pass/727filtered-out, not a
+full suite receipt. D1736 and all remaining source/operation/qualification/content duties stay open.
+
+
+## 2026-11-04 — New-source generated-image integration
+
+Normal17225 passes2641 authority/core checks,136 reduction/convention checks and334 Review
+checks, then correctly refuses the stale semantic-validation image. Update11938 reruns all375
+cases (375pass), retaining91subjects/0qualified/51population/8external receipts. Normal94306
+then passes that current semantic image and candidate closure but detects the two genuinely new
+capability declarations. Existing capability-declarations9879 adds exactly2 declarations
+(1066 total);472 applicability rows remain unchanged. No old declaration rewrite or compatibility
+rule relaxation. Subsequent normal full software run is in flight. The fast failures were new
+namespace integration obligations, recorded here rather than hidden behind a prior helper receipt.
+
+
+## 2026-11-04 — Full-pool candidate construction controls retained
+
+Full13389 passes types/build, source/semantic/capability/label contracts and reaches every499
+software file:13837pass/two fail in366.84s, no skips. Both failures are construction tripwires:
+current-source test still pins compiler2, and authority source-graph test still expects only the
+root legal-map call site. Updated controls pin compiler3, refuse both previous1/2 receipts, and
+require exactly root+child registered-dispatch call sites plus the retained child-source statement.
+The genuine call-through child object-identity test remains, as do old authority refusal checks.
+No production source or timeout changed during this repair. Full13389 remains recorded failed;
+focused rerun and final normal full verification follow. Governance95672 already passes current
+3821/0untriaged/1876live/1782done tracking, with no capability/milestone promotion.
+
+
+## 2026-11-04 — Reading and fine-sign implementation verified, content remains red
+
+Normal24379 passes13839 software/all499 files365.27s(no skips),7performance/four56.60s, clean types/build and all source contracts. Current actual content73139 remains red:62fail/259pass/18setup-blocked43files29.68s; later corpus recipes unreached. The prior60fail/261pass receipt remains historical; the two-case delta is not attributed without a paired failure inventory. Actual pack-check22787 confirms the existing grade.move_quality@1→@2 requirement mismatch on the Campaign browser fixture. No native/release clearance.
+
+Bounded independent review accepts the source/control slice and both construction-tripwire
+repairs. D4072 closes with path evidence; D1736 and all remaining26 outputs stay open. Real
+Guided Hint readingSources still matches exact projection id/version, so pool registration does
+not activate a new hint family. Current work state3821/0untriaged/1875live/1783done;462 prose-only
+closeouts unchanged. Two installed source routes and two reviewed definitions are actual progress;
+no new source events, qualification, authored predicate adoption, whole capability or milestone
+completion is implied. Next: guarded exact convention replacement and physical event joins, then
+remaining source families/predicates. Routine reviews stay preauthorized. No staged files, commit,
+push, native bypass, release promotion or goal pause.
+
+
+## 2026-11-04 — Final reading-stage tracker verification
+
+Normal roadmap-receipt/verify-governance/roadmap-progress50198 exits zero after D4072 closes
+and D3928 records the fresh content result without guessing the two-case delta's cause. All3821
+rows have states;1875 live rows are routed/assigned,1783 are done,462 prose-only closeouts remain.
+Current full software24379/build/types/performance pass; actual content73139 remains red.
+Diff whitespace check passes and staging remains empty. Source implementation continues at the
+accepted exact-replacement/event-join frontier; no whole-source, capability, milestone or release
+completion, new owner question, commit/push or goal pause.
+
+
+## 2026-11-04 — Foundation source event joins and actual source guards
+
+New king-opposition/backward-pawn event@2 factories consume their exact original reading@3
+before/after values plus a submitted move, verify the actual legal edge, and retain original
+ordered inputs and conventions. Opposition joins one color-identified king pair; backward pawns
+join stationary identities first and then the physical pawn mover. Complete available empty
+populations remain distinct from unavailable. A private factory-invocation membership map rejects
+re-sealed wrappers even when their factory symbol and copied receipts match. The sole mint also
+checks ordered source membership. The bounded different-base convention validator admits only
+the five accepted final/source mappings; currently two event mappings are installed. Same-base
+grade behavior and old source identities remain unchanged. No new semantic-event declaration,
+collector routing, qualification or learner eligibility is activated by these experimental sources.
+
+First normal15723 reveals16 actual event test failures from a preexisting import-order defect,
+not the detector algebra: factory-first imports eagerly capture undefined factory constants in the
+central route table. D4073 records this defect. The repair delays the same typed literal table
+and four reduction identity records until runtime, caches complete frozen results, and preserves
+all binding identity checks. Fresh both-order tests inspect all four reductions, set-equal active
+route inventories and actual legal-source dispatch; changing test import order was refused.
+Normal24820 passes57/three;7982 passes97/six including all four real reductions;25965 passes
+1493/six including exact closure/missing-source/helper/witness negatives. Types43671 are clean.
+Profile59230 passes684 cases with731 intentionally filtered, not a full-suite receipt. Existing
+capability generator93948 adds exactly2 declarations(1068total), leaving472 applicability rows.
+Semantic39143 reruns375 cases(allpass), retains91subjects/0qualified and refreshes the generated
+receipt and candidate closure. Avoidance25093 is the current strict research check. Independent
+bounded code/control review accepts the repair and event stage, contingent on full verification.
+The actual complete source/value inventory is now4/28; all24 remaining outputs and downstream
+source/operation/qualification/consumer/content duties remain open. Routine reviews stay authorized.
+
+
+## 2026-11-04 — Source-event and initialization checkpoint verified
+
+Normal full71865 passes13,869 software tests/all501 files in370.58s(no skips),7performance cases/fourfiles57.34s, clean types/build and source contracts.
+Actual content37629 reproduces62fail/259pass/18setup-blocked43files30.44s,17failed/26passedfiles; later corpus recipes are unreached. This matches the preceding62/259/18 result; the older60/261 delta remains unattributed. D3928/native/release remain open.
+
+Independent bounded execution review accepts the code/control result. D4073 closes with an
+actual import-order test path. Source parents remain partial:4/28 source/value outputs, no new
+event collector routing/qualification/learner adoption. Work state3822rows/0untriaged/1875live/
+1784done;462 prose-only closeouts unchanged. No new native journey, whole capability/milestone,
+staging/commit/push/release or goal pause. Next: remaining pawn-file, slider, file-state/island
+sources and remaining families/predicates; review authority persists without a new question.
+
+Current content failure-header inventory (includes suite-setup headers; not test-case counts):
+- `apps/server/src/application-content.test.ts`: 3 failure headers.
+- `apps/server/src/authoring-content.test.ts`: 1 failure headers.
+- `apps/server/src/campaign-account-lifecycle.test.ts`: 5 failure headers.
+- `apps/server/src/campaign-core.test.ts`: 8 failure headers.
+- `apps/server/src/capability/pack-capability-corpus.test.ts`: 2 failure headers.
+- `apps/server/src/concept-registry-content.test.ts`: 1 failure headers.
+- `apps/server/src/evidence-at-runtime.test.ts`: 5 failure headers.
+- `apps/server/src/feedback-delivery.test.ts`: 2 failure headers.
+- `apps/server/src/graduation-report.test.ts`: 1 failure headers.
+- `apps/server/src/guidance.test.ts`: 13 failure headers.
+- `apps/server/src/local-module-content.test.ts`: 2 failure headers.
+- `apps/server/src/pack-authoring.test.ts`: 5 failure headers.
+- `apps/server/src/principle-registry.test.ts`: 1 failure headers.
+- `apps/server/src/reasoning.test.ts`: 3 failure headers.
+- `apps/server/src/storage-appliance.test.ts`: 8 failure headers.
+- `apps/server/src/theory-library.test.ts`: 1 failure headers.
+- `apps/server/src/validator-integrity.test.ts`: 3 failure headers.
+
+
+## 2026-11-04 — Final event-stage governance and non-vacuity check
+
+Normal roadmap-receipt/verify-governance/roadmap-progress90568 passes all checks after parent-row
+flow-back:3822rows/0untriaged/1875live/1784done;462 closeout-prose unchanged. No whole capability
+or milestone promotion. Final source-control reread caught one weak negative: the old-version
+fixture used a position with an empty old reading, so it rejected undefined rather than an actual
+old value. Production code is unchanged; the two controls now mint known-positive genuine old@2
+values, assert nonempty/sealed authority and require the exact wrong-version diagnostic. Focused
+normal11820 passes all20 affected tests/twofiles1.24s after this test-only strengthening. Prior
+full71865 remains13869/all501 +7performance/types/build/source checks; content37629 stays
+62fail/259pass/18setup-blocked. Whitespace check and staging are clean/empty. Routine independent
+reviews remain authorized; the full 1.0 goal stays active at the remaining source-family frontier.
+
+
+## 2026-11-04 — Six pawn/file source outputs and real collector inputs
+
+Independent review accepted the narrow source contract clarification before factories: complete
+pawn-file group and eight-file state snapshots from genuine connectivity; file-state emission
+only on enum changes; stationary-piece access with same-piece/edge cause scope and exact class
+transition whitelist; island emission on file partitions, not rank/member-only motion. The first
+amendment insertion accidentally hit a replacement-table source cell; review returned it and the
+corrected five-tuple/eight-snapshot sections are now parsed separately by author controls. No
+source scope, product decision, id or schema lane was added by the clarification.
+
+Implemented six actual source/value factories. Groups retain arbitrary member counts, color-relative
+front/rear order, adjacent occupied files and exact island files. File state retains every file,
+both pawn sets, exact legal cause/capture/promotion and en-passant capture square. Unchanged
+rook/queen access preserves stationary siblings while excluding the physical mover. Islands retain
+exact members with count_gained/count_lost/topology_changed; unchanged file partitions emit none.
+Original connectivity invocation and private foundation-value input membership are checked even
+before empty outputs. Actual source digests/conventions retain ordered inputs and multiplicity.
+The real candidate collector shares one retained child connectivity object with both new snapshots;
+compiler4 and25 child readings identify that construction. No new event collector or learner binding
+is activated. Total source/value implementation is10/28; remaining18 outputs and downstream
+operation/qualification/consumer/content duties remain open.
+
+First74888 has39pass/one invalid positive FEN (queen b2 already checked the nonmoving h8 king).
+Fixture king corrected tog8; validation unchanged. Normal57585 passes51/four;60420 passes1548/
+eight including authority, source, manifest and actual candidate controls. Final85144 covers the
+added exact direct/input closure and last-pawn/gained/lost group controls. Types75689 are clean.
+Profile12581 passes696 with743 intentionally filtered, not a full-suite receipt. Author contract
+passes all8 controls; register C1–C8 and append-only history pass55definitions/55rows. Exactly one
+new topology definition is appended; prior54 rows unchanged. Capability55519 adds exactly6
+new declarations(1074total), leaving472 applicability rows unchanged. Semantic31608 reruns375
+cases(allpass),91subjects/0qualified, then refreshes generated current images. Strict avoidance
+46148 passes20/one deliberately disabled expensive census, now exact10 installed/18 reserved.
+Independent bounded implementation review accepts the stage; normal full software verification
+is in flight. Prior green receipts remain historical. Existing D3928/content/native hold remains.
+
+
+## 2026-11-04 — Pawn/file source batch verified
+
+Normal full12384 passes13,915 software tests/all502files372.86s(no skips),7performance/four57.94s, clean workspace types/build and source contracts.
+Actual content2671 reproduces62fail/259pass/18setup-blocked43files31.71s,17failed/26passedfiles; later corpus recipes are unreached. This matches the preceding event-stage result. D3928/content migration/native/release remain open.
+
+Ten of28 source/value outputs now exist, with four actual child snapshot bindings. Eighteen
+outputs, event collector routing, semantic qualification and learner adoption remain. Source
+parents stay open. Prior54 convention rows remain unchanged; one new reviewed topology definition
+raises the registry to55 and leaves9 claimed definitions. No content edits, new native journey,
+whole capability/milestone, staged files, commit/push/release or goal pause. Next: physical slider
+membership and legal backward-pawn advance, then future-file/capture-migration/outpost and
+seven neutral style/recorded source outputs plus all five authored predicates. Routine independent
+reviews stay authorized. Current content failure-header groups (including suite setup headers,
+not test-case counts) remain available for comparison:
+- `apps/server/src/application-content.test.ts`: 3 failure headers.
+- `apps/server/src/authoring-content.test.ts`: 1 failure headers.
+- `apps/server/src/campaign-account-lifecycle.test.ts`: 5 failure headers.
+- `apps/server/src/campaign-core.test.ts`: 8 failure headers.
+- `apps/server/src/capability/pack-capability-corpus.test.ts`: 2 failure headers.
+- `apps/server/src/concept-registry-content.test.ts`: 1 failure headers.
+- `apps/server/src/evidence-at-runtime.test.ts`: 5 failure headers.
+- `apps/server/src/feedback-delivery.test.ts`: 2 failure headers.
+- `apps/server/src/graduation-report.test.ts`: 1 failure headers.
+- `apps/server/src/guidance.test.ts`: 13 failure headers.
+- `apps/server/src/local-module-content.test.ts`: 2 failure headers.
+- `apps/server/src/pack-authoring.test.ts`: 5 failure headers.
+- `apps/server/src/principle-registry.test.ts`: 1 failure headers.
+- `apps/server/src/reasoning.test.ts`: 3 failure headers.
+- `apps/server/src/storage-appliance.test.ts`: 8 failure headers.
+- `apps/server/src/theory-library.test.ts`: 1 failure headers.
+- `apps/server/src/validator-integrity.test.ts`: 3 failure headers.
+
+
+## 2026-11-04 — Pawn/file checkpoint tracker verification
+
+Normal roadmap-receipt/verify-governance/roadmap-progress46070 passes after source-parent and
+roadmap flow-back. Current work state3822rows/0untriaged/1875live/1784done;462 prose-only
+closeouts unchanged. Full12384 is green for13915 software/all502 +7performance, types/build and
+source contracts; actual content2671 stays62fail/259pass/18setup-blocked. Independent bounded
+execution review accepts only the six-output stage, bringing source/value progress to10/28.
+Eighteen outputs, new event collection, qualification/adoption and full release remain open.
+Whitespace check passes and staging is empty. No source-parent archive, content migration,
+native/release or whole capability/milestone promotion, commit/push or goal pause. The same
+accepted source plan continues at physical slider membership and legal backward-pawn advances.
+
+
+## 2026-11-04 — six geometric source/value outputs and real snapshot bindings
+
+Implemented accepted foundation-source-identity’s slider2, backward legal advance1 and complete
+future-file/capture-migration/candidate-outpost/occupied-outpost1 values. The real candidate
+collector retains all eight new complete snapshots with exact original shared input instances;
+compiler5 has29 child source routes/31 local reading routes. Source/value total is16of28, not
+a full foundation or learner capability. Seven event sources and one consequence remain
+experimental without automatic semantic/learner/bot admission.
+
+D4074 records the genuine quiet-advance negative-authority gap. A separate author drafted
+§3.2a; Codex independently accepted the exact complete landing-capture contract before factory
+implementation. Original inputs, legal child/actual destination and advanced-pawn victim joins
+precede empties, and all original pawn-capture exchange operands survive. The old landing source
+already canonicalized its authority; its actual committed receipt semantics are preserved.
+Independent review’s false raw-input objection was re-derived against HEAD and retracted.
+A noncanonical/canonical receipt control pins the actual behavior.
+
+Twenty-five new source controls and actual collector instance controls cover current versus future
+challenge, hypothetical capture migration, empty/occupied/opponent-occupied outposts, all supports,
+pawn-less empty snapshots, wrong/resealed sources, physical castling/capture/promotion/en-passant
+slider joins, strict-interior endpoint exclusion, equal-count membership changes, real pawn replies
+and pinned legally empty reply sets. The late castling nonqualifying-query correction uses actual
+king destination, not canonical UCI’s rook square; independent review accepted.1559 focused checks
+in seven files and28 final controls/two files pass, workspace types pass,9author controls/5repair
+controls pass,59conventions/history and registerC1–C8 pass. Full gates remain pending.
+
+The first complete gate could not bind localhost under sandbox (TCP listen EPERM). The same
+normal make target was rerun with local-network permission and found one stale server manifest
+count; exact50/367/44/563 core/unchanged88/88/16/1semantic inventory corrected. Complete final
+software gate5912 is running. No code check weakened, content migrated, archive edited or
+protected intent rewritten. Twelve source/value outputs, operation/qualification/adoption and
+D3928’s content/native/release hold remain. Routine reviews are preauthorized; full1.0 goal active.
+
+
+## 2026-11-04 — geometric source checkpoint full execution and finite closeout
+
+Final normal software68184 passes13965tests/all504files399.10s(no software skips),
+7isolatedperformance/all4files57.77s, clean types/build/schema/source/manifest contracts.
+The final source bytes were regenerated before this gate; previous EPERM/stale-count/stale-receipt
+attempts are not presented as successful full gates.10author controls and5author-repair controls
+pass. Core50/367/44/563, semantic88/88/16/1,1080capability declarations,472applicability rows,
+59definitions/history, seven installed wave definitions/five claimed.
+
+Actual content12350 is red60fail/261pass/18setup-blocked43files35.22s,17failed26passed; later
+corpus recipes unreached. Paired failure-heading inventory against the prior pawn-stage log
+removes exactly storage-appliance D3811 packaged-ruling/refusal and missing-deployment-profile
+cases, both previously in the listenEPERM group; no added failure headings. No source/content
+causality is invented beyond that paired observation. D3928 remains the content/native owner hold.
+
+D4070 andD4074 close only their finite subject-join and complete reply-authority gaps with
+packages/runtime/src/foundation-edge-consequence.test.ts path evidence and bounded independent
+review. D1736/D4066/D4071 and all broader operations/qualification/adoption remain open.
+D4075's candidate-domain amendment is separately authored and independently accepted after
+repairing its rules-plane dependsOn/receipt wording; source implementation remains queued.
+D4076 keeps recorded-index early-queen authority explicit rather than substituting FEN counters.
+Current3825ledger rows/0untriaged/1876live/1786done;462closeout-prose unchanged. The real next
+lanes are four standalone style sources and five authored predicates, with three genuine recorded
+context/clock sources repaired through their actual owners. The existing clock draft is being
+authored in parallel; not accepted or implemented by this receipt. Full1.0 goal active, no
+whole-source/RFC archive/capability/milestone/content/native/release completion, commit or push.
+
+
+## 2026-11-04 — geometric checkpoint governance and clock-audit correction
+
+Final governance27653 passes after restoring explicit queue routing for D4069 that the source
+summary rewrite had dropped. Roadmap receipts/anchors, register/history, work-state and all
+roadmap checks pass;3825ledger rows/1876open all routed,0untriaged/1786done. Whitespace check
+passes and staging is empty. No new source edits occurred after the passing full software gate.
+
+The parallel clock audit initially inferred stored PGN retained clock comments. Root repeated
+that finding before tracing ingestion, then explicitly corrected it to the user after reading
+apps/server/src/import-source.ts#stripPgnAnnotations and resolveImportSource: paste and URL
+imports strip annotations before ImportedGameRecord persistence. Existing D2021 already owns
+this exact loss; no duplicate row is created. Reparse-only repair cannot recover discarded tags.
+The unaccepted clock authoring pass must extract typed numeric clock facts before prose stripping,
+retain actual source/node joins and use truthful not-retained history rather than manufacture
+missing data. D2295 permits deriving declared control from retained headers; this does not waive
+D2021's full ingestion/persistence/export/delete and real-fixture unit. The false inference is
+retracted before it becomes implementation authority. Full1.0 goal remains active.
+
+
+## 2026-11-04 — four literal style source implementations and actual collector paths
+
+Previous goal turn made verified progress: six source/value outputs, actual child bindings and
+full software/performance/governance proof, with content honestly red. This turn implements
+accepted candidate_role1, pawn_extended_center_destination1, fianchetto_setup1 and
+fianchetto_knight_screen1. Source/value count is20of28. Separate author §3.8b clarified ten complete
+position snapshots and genuine setup/centre inputs; root independently read R12 CONFIGS and
+accepted before factory implementation. No new source ids, style verdicts or automatic consumers.
+
+Exact original complete legal map supplies every source role, pawn/king/promotion candidate and
+physical castle destination. Centre filters only a genuine role source by source-pawn and eight
+destinations. Exact four-tuple setup/screen snapshots include complete empties, all piece identities
+and actual same-child source sharing. Real compiler6/31child/35reading refs carry parent candidate
+facts from the original root legal map, never the opponent child. Original source authentication
+precedes absence; missing/extra keys, aliases, wrong-kind and copied/resealed inputs refuse.
+
+Independent separate static review accepts only these four paths.1590focused checks/seven files,
+clean types,11author+5repair controls,716profile positive/falsifier checks (763intentionally
+filtered, not a full suite),61conventions/history/registerC1–C8 pass.1084declarations/472applicability
+and375semantic cases/91subjects/0qualified subjects regenerate; prior59history rows are retained.
+A fixture initially removed White's shielding knight and left the nonmoving king in check; fixed
+its legal witness positions rather than weaken standard FEN validation. No product defect or
+source unavailability is inferred from that invalid test setup.
+
+Normal complete software89136 is running on final source bytes. Current full/content success is
+not claimed; previous16-output receipts remain historical. Eight outputs and all operation/
+occurrence/qualification/consumer/content/native/release duties remain. D4075 is doing with actual
+code, not still advertised unbuilt. Clock author repair is stable/draft and now under separate
+independent review; it does not authorize implementation or alter the foundation23+5 image.
+Full1.0 goal active; staging empty, no commit/push or protected intent/archive edits.
+
+
+## 2026-11-04 — recorded-clocks repair independently accepted, implementation still queued
+
+Separate author move_path_review repaired the existing clock contract and register; independent
+reviewer foundation_style_review read the full contract and actual source/ingress/storage/account/
+operation/client seams and accepted it in the existing time-controls independent buildability
+review receipt. Root inspected that actual receipt, then recorded accepted status in the RFC/
+register and current queue. No self-acceptance, runtime edits or testing was delegated.
+
+Acceptance retains D2021 extraction-before-strip plus typed persistence/account/source identity,
+honest historical not-retained data, exact original selected-game nodes, unsupported-control and
+sparse/truncated/unproven-start guards, a complete standalone clock_reading frame distinct from
+foundation's clock_decision source, actual service/REST/strict historical readout and all D1041
+simulated/real/bot timing obligations. It does not claim that existing imports retained their
+stripped clocks or that Node.createdAt measures thinking. All clock code/migration/operation/UI/
+native proof and D361/protected-intent/live-sources/enforced-clocks discharges remain owed.
+The current four-source software89136 gate still runs on unchanged source bytes. Full1.0 active.
+
+
+## 2026-11-04 — four literal style sources: full gates and finite execution closeout
+
+Normal full software89136 passes14008tests/all505files440.71s(no software skips),7isolated
+performance/all4files58.75s, clean types/build/schema/source/manifest contracts. Final source
+bytes stayed frozen through generation/execution.1590focused/seven,11author+5repair,61convention/
+history/register checks pass; prior59history rows unchanged.1084capability declarations/472
+applicability and375semantic cases/91subjects/0qualified subjects remain the generated source
+metadata. Independent separate source4 implementation verdict/execution receipt is in the
+existing compiler2 review. No whole-source, occurrence, consumer or qualification promotion.
+
+Actual content35861 RED60fail/261pass/18setup-blocked43files35.58s,17failed26passed. Later
+corpus recipes unreached; paired failure-heading counters against the geometric source stage
+are identical (62headings each, no added/removed headings). D3928/content/native/release remain
+open; no invented repair or source causality. D4075 finite candidate-domain gap closes with
+packages/runtime/src/foundation-style-sources.test.ts permanent path proof; D1736/D4066/D4068/
+D4069/D4071/D4076 and remaining8outputs stay open.
+
+Clock acceptance also flows to execution state: D2286–D2295 move blocked-rfc→todo under their
+existing owner, not done; actual parser/storage/source/API/UI/permanent controls remain. IMP-a6
+moves blocked_rfc→queued with the same account-data ownership and end-to-end retention unit.
+D2021 explicitly remains unimplemented. Current3825ledger rows/0untriaged/1875live/1787done,
+462closeout-prose unchanged. No protected intent/archive edits, source-parent archive, actual
+content migration, commit/push or goal pause. Next is the five-predicate source/aggregate/schema/
+real consumer lane, independently of the genuine recorded/context sources.
+
+
+## 2026-11-04 — style checkpoint final governance
+
+Final governance63544 passes: register/history, status parity, explicit work routing, work-state,
+work-item and roadmap receipts/checkpoints. Source/gate counters remain20of28, normal software
+14008/505 and7performance, actual content60fail/261pass/18setup-blocked with unchanged paired
+failure headings.3825ledger rows/1875open all routed,0untriaged/1787done; clock acceptance
+moves10rfc-blockers to executable todo and IMP-a6 to queued. No whole capability/milestone
+promotion. Whitespace clean and staging empty; no commit/push or goal pause.
+
+The first governance attempt caught only accepted clock RFC process-format seams: a ### trace
+table was parsed as discharge rows until changed to its own## section; D2/D3/D5 now name
+OWNER, the existing planning owner path and codex rather than prose-only role labels. Same
+obligations/actors remain and the checker is unchanged. The source contract's independent
+acceptance stands; no clock runtime or consumer code is asserted by that metadata repair.
+
+Next source lane is all five authored companions with the exact closed kind/ref schema table,
+one current dispatcher/private captured aggregate reduction, actual pack/shape/objective
+operations and preserved pre-migration authored truth. The accepted shape claim0.5 currently
+follows measurement-records' returned/unshipped0.4; pre-launch scheduling may be mechanically
+rebased under the owner's existing ordering approval, preserving both feature scopes and
+register agreement. This is routine resource sequencing, not a reason to block implementation
+or ask the owner another number-only question. Three actual recorded/context sources and all
+source-to-consumer/module/content/release duties remain. Full1.0 objective active.
+
+## 2026-11-04 — Authored source companions, bounded repairs and final software checkpoint
+
+Implemented the accepted five authored companions: original-document input2, exact selected
+king-opposition/backward-pawn/outpost predicate2 leaves and the source-owned aggregate2 visitor
+and closed reduction. Actual pack/shape validators and registries issue immutable provisional or
+registered document authority; literal pointers retain actual plan use-sites, shape references
+and effective ASTs. Current authoring2/objective2 use the compiled path. Predicate and witness
+policies retain their distinct visitation, multiplicity and witness semantics; unreferenced legacy
+meaning/content bytes remain unchanged. The source/value inventory is now 25 of 28, not complete.
+
+Independent schema/leaf, issuer, visitor/reduction and capability reviews found actual issues
+and their repairs were re-read. D4078 preserves exact legacy requirements and requires real
+successor-version accepts/bindings for optional refs. D4079 joins registered shape semver to the
+pack requirement before fresh source issuance. D4080 preflights every expanded mirror/ref before
+issuance even in a skipped branch, without acquiring runtime leaves. Their complete 86138 gate
+passed 14,071 software tests/all 510 files and seven performance tests/four files.
+
+The earlier full pool exposed eleven failures, repaired at their boundaries: real HTTP fault
+instrumentation now exercises authoring2; noncanonical undefined values return SCHEMA_JSON;
+actual shape admission and fixtures, optional tempo fields and nested Make scheduling controls
+were corrected. The subsequent real content run exposed six additional failures. Five were
+stale fixture/refusal controls; the production error was D4081's false active-version self-
+migration. Its planner now honors each active exact declaration while explicit deprecation still
+requires judgement. The paired one-document lifecycle control uses an explicit local baseline;
+default corpus counts and mismatch refusal are unchanged. Independent follow-up confirmed the
+baseline type across input, assertion and output.
+
+Final normal32309 `make verify-software` passes 14,074 tests/all 510 files, no skips, 479.56s,
+plus seven isolated performance tests/four files, 67.32s, and types/build/schema/source/capability
+checks. Focused86065 passes 48 tests/two files. Fresh real content74257 returns to the prior
+baseline: 60fail/261pass/18setup-blocked, 43files (17failed/26passed), 54.13s. Exact failure
+headings match the previous baseline with zero additions/removals. Content is still red and later
+corpus recipes are unreached; no authored pack migration or graduation is inferred.
+
+D4078–D4081 close locally with permanent path evidence. D4077 remains doing: actual shape
+firing/recommendations, Studio/probes, census/satisfiability, pack-validation probes, timing/
+transition consumers and the read-only migration report still need the current source path.
+Three recorded/context sources remain and cannot use FEN fullmove or caller clock substitutions.
+Existing plan/queue/roadmap now point to the measured checkpoint rather than repeating stale
+factory counts. No whole capability/milestone, qualification, D3928 hold, native or release
+completion is claimed. Routine independent reviews proceed under the owner's standing approval;
+full 1.0 goal remains active. No staging, commit or push in this checkpoint.
+
+Final authored-checkpoint tracking: normal69791 roadmap receipt, full governance and progress
+exit zero. Register C1–C8, parity P1–P7 and roadmap R1–R10 pass; all3830 ledger rows are assigned,
+0untriaged/1876live/1791done,462closeout-prose unchanged. Generated milestone checkpoints now
+report25of28 rather than the stale20of28; strict milestone states are unchanged. The first two
+roadmap refresh attempts rejected a nonexistent test citation and then its duplicate replacement;
+both references were corrected before the final green run. No guard was weakened. Next actual
+caller work stays under D4077; no new approval question or goal pause.
+
+## 2026-11-04 — Actual authored Studio, shape-probe and pack-probe migration
+
+D4077 now routes unsaved ShapeStudio corpus previews, standalone trigger/non-null-plan probing
+and the pack validator's three direct probes through original document sources and current
+authoring2. Shapes retain registered trigger authority; consequences retain the exact pack
+use-site and shape substitution; reasoning points retain their literal pack pointer. A false
+result requires available evaluation. Missing/visited-unavailable sources produce explicit
+STRUCTURAL_SOURCE_UNAVAILABLE rather than false absence or partial preview. The normal
+`make shape-probe` target uses the pinned toolchain and the existing authoring probe command;
+its actual Carlsbad position reports FIRES without changing content.
+
+Separate source/control reviews accept the bounded paths. Focused61665 passes21/three10.84s;
+actual authenticated HTTP15822 passes43/four9.67s after the first sandbox attempt refused local
+listen. The positive pack control was strengthened to require zero real validation errors;
+it caught the mechanical fixture completing at interior Be3. Requiring actual terminal b5
+occupancy repairs the fixture, retaining the absorption guard. Final87943 passes13/one3.93s.
+The initial Studio observer had a test-only generic type error, corrected with the actual generic
+call signature and a real payload guard. Studio/probe full workspace types,1094-declaration
+census and77 named sites then pass. The subsequent full caller-wave software gate is in flight;
+the previous14074/510 complete gate predates this wave and is not claimed as its full result.
+
+Actual content38307 initially reports64fail/257pass/18setup-blocked. Two negative controls had
+only get() stubs rather than genuine registry authority; two further differences were sandbox
+localhost failures. The negative controls now admit their actual shape documents and preserve
+their absence assertions. Normal integration-permitted content49104 returns60fail/261pass/
+18setup-blocked across43files,17failed/26passed,61.93s. Failure headings exactly match the prior
+baseline, no additions/removals. No production assertion was weakened and no pack bytes migrated.
+
+Registered firing/recommendations, census/satisfiability, timing/transition and the read-only
+migration report remain D4077 work; these direct probes do not close that parent. The independent
+firing preflight is retained in the existing source plan: original trigger/source-to-record join,
+all actual path aggregates/interval boundaries, exact current consumer bindings and shared firing2
+for recommendations. Three recorded/context sources, qualification/module/content/native/release
+remain open. No source-parent, whole capability/milestone, staging/commit/push or goal pause.
+
+### 2026-11-04 — D4082 current firing contract and D4083/D4084 repeated-work repairs
+
+The actual Studio/standalone probe/three direct pack probes complete normal software gate9195:
+14,080 tests/all511files with no skips,460.41s, plus seven isolated performance/fourfiles65.25s
+and types/build/schema/source/capability checks. This is the final caller checkpoint that was
+still in flight in the preceding entry. Actual content49104 remains exactly60fail/261pass/
+18setup-blocked across43files61.93s, with no added/removed failure headings. No authored content
+migration or D4077/parent closure.
+
+The registered firing preflight then exposes D4082: firing2's accepted fixed legacy algorithm
+and document-only receipt cannot silently become a current aggregate-owned scan. Its pending
+candidate is not a committed declaration rewrite. The actual consumer list additionally includes
+DrillScreen, module sources and Story/guidance, not just Inspector and recommendations. Drafted
+explicit F2 §2.4b and paired module-registration delivery; separate reviewers are reviewing source/
+execution and complete delivery automatically under the owner's standing authorization. Neither
+is accepted or implemented by this entry.
+
+Disposable normal-Make instrument tools/d4082-shape-firing/measure.ts scans one existing legal
+85-ply PGN against all25 registered shapes. The original86-position aggregate scan exceeds30s
+at1953/2150cells. Profiling finds repeated compilation, then source/proof hashing. D4083's pure
+immutable-plan/byte reuse preserves exact original membership, live bindings/source/current
+record checks and mutable/opaque full comparison. Complete aggregate scan falls to2880.57ms.
+A native shared-root/original-visitor-capture prototype takes424.20ms for all2150cells in a
+fresh process, with legacy reference computed afterwards; admission189.84ms/capture80.62ms
+separate. Aggregate-first comparison checks full trace/source/policy/leaf-receipt parity but
+warms caches. The compact existing foundation dossier records commands, limits and measurements;
+no new source dumps/progress artifact dependency. Root chessops0.15.1 dev dependency matches the
+existing workspace version and supports strict instrument typechecking. New Make commands use
+the pinned toolchain; CPU profiles stay in ignored .cache.
+
+Independent source review also finds D4084: changing request accessors can poison the consumer
+execution cache under another consumer key. A real Proxy falsifier fails before the fix; both
+entry points now capture primitive consumer identity once. Separate bounded reviews accept the
+plan/source/proof/registry reuse and request-identity repair. Latest focused1621/six6.33s passes.
+First full follow-up gate stops on stale generated semantic receipts after375/375cases pass;
+normal semantic-validation-update regenerates them and a complete rerun is in flight. No latest
+full-gate success, D4083/D4084 closeout, capability promotion, staging/commit/push or goal pause
+is asserted. Next: complete normal gates, review/correct the firing contract and continue actual
+current authored caller adoption while the remaining three recorded/context sources stay owned.
+
+### 2026-11-04 — D4083/D4084 bounded closeout and independently accepted firing contract
+
+Complete normal verify-software26486 passes14,089 software tests/all511files418.19s(no skips),
+seven isolated performance/fourfiles59.13s and all preceding type/schema/source/capability checks.
+Normal semantic regeneration resolved the prior stale receipt without changing375/375case truth.
+Actual integration-permitted content66885 exits2:60fail/261pass/18setup-blocked43files38.19s.
+All62 failure headings match49104 exactly, none added/removed. D3928 hold is not discharged;
+no authored content migrated and later content recipes remain unreached.
+
+The final normal scan instrument1878 completes every1/8/32/64/86prefix. At86positions the actual
+aggregate scan takes2909.61ms and captured-source prototype435.21ms, with exact interval/trace/
+leaf-receipt equality. The latter is aggregate-first warmed ordering; the earlier424.20ms fresh
+captured-only process remains separately labelled. No new production firing/API or qualification.
+D4083 repeated immutable work and D4084 changing consumer request identity close at their bounded
+code/control boundaries after independent review and full normal verification. Two individual
+state transitions correctly refuse W6 while both ledger rows are already flipped; one normal
+batched transition records both done with the existing source-plan path evidence. No guard is
+relaxed. Work-state3833total,1793done,0untriaged/1877live; closeout-prose462unchanged.
+
+Two separate reviewers accept the repaired F2 §2.4b and paired module-registration contract.
+It explicitly owns23-route/factory preflight, exact original record/trigger joins, complete
+negative-cell ancestry, context-owned chunk/yield checks, actual requested-intent/ceiling-guided
+read-query and awaited whole-population recommendations. The first returns remain in the existing
+compiler2 review receipt. Source/factory/API/client/mounted implementation remains next, not
+completed by the contract. Story/guidance and their actual rank/title dependencies require the
+separately owned exact downstream amendment. Foundation source outputs remain25of28; no new
+source/schema lane or whole capability/milestone promotion.
+
+Final complete governance77174 passes register C1–C8/parity P1–P7/roadmap R1–R10 and zero untriaged;
+normal production build25755 passes. Research/coverage, ledger/state, queue, source checkpoint,
+RFC register/review and machine roadmap are reconciled in the existing files. No staging,
+commit, push, remote-CI success or goal pause is claimed. Next: implement the accepted current
+firing source and real delivery while keeping all remaining authored callers/context sources,
+content/native/qualification and full1.0 duties active.
+
+### 2026-11-04 — actual native registered scan and first current Inspector consumer
+
+The preceding goal turn made concrete progress: two reviewed cost/cache repairs passed full
+normal gates and the bounded firing contract gained separate source/execution and delivery
+acceptance. This turn implements that contract's actual native scan/factory and first current
+Inspector path, not a new plan in place of code. ShapeRegistry alone composes the original
+registered-record→literal-trigger join. The finite source owner preflights23 real dependency
+plans/routes/callables, retains every positive/negative cell and shared genuine roots; firing3
+receipts bind whole-matrix invocation and complete repeated matched-row ancestry/conventions.
+Inspector drives finite chunks under its own actual graph/grant/config/signal context and moves
+its current topic, Full2 pair, registered renderer/strict receiver/label together to3. Old2
+contract/algorithm remains truthful. Missing registry, installed-empty, no witness and visited
+source-unavailable remain distinct; no partial intervals or raw trigger fallback.
+
+Separate implementation reviewers accept the bounded source/factory and Inspector seams and
+return the real final-chunk replay defect D4085. A70-cell control fails on the restored old read:
+70 distinct populations against32,1fail/8pass. The repair completes only its private token inside
+advance and leaves whole verification/hash to synchronous mint/read;9/9passes and independent
+review accepts. Original-value source lookup additionally compares the exact frozen source
+image retained by the sole mint instead of hashing it twice; actual membership/current registry
+checks remain. A new original-image/repeated-read/same-byte replacement control and separate
+review accept that simpler stronger identity join. No generic provenance/cache framework.
+
+Focused source/Inspector/presentation378/four5.53s and service/strict/mounted1601/four48.61s pass.
+Five new real cookie REST→strict→selected browser controls cover both-color repeated intervals,
+earlier negative endpoint retirement, explicit current outpost truth and actual empty-vs-absent
+sources. Two initial endpoint waits raced refreshed source navigation; corrected waits follow
+actual received inventory, and those browser controls pass. Four additional real grant/storage/
+cancellation/registry mutation controls exercise the actual cooperative yield before any factory
+publication. These are in the complete normal gate, not a claim of native/default-content proof.
+
+Normal capability generation adds exactly one declaration:1095/477applicability. The first
+complete value profile gate refuses the missing364th route profile, leaving728cases setup-skipped;
+normal opt-in update then executes all728 authority/falsifier cases and writes the image. Full86588
+fails two stale manifest-count assertions; count377 and exact Full2→firing3-only binding are now
+pinned. Full55968 then catches the old authored interpreter root name after shared visitor
+extraction; authoritative site now names capturePopulation, with census preserved and zero further
+declaration changes. Normal semantic update preserves375/375case results. Current full normal
+software/performance59028 is running; no new complete green receipt is claimed yet.
+
+The disposable current measurement command now runs real production registry/scan/firing3 on
+one existing legal86-position/25-shape game:2150cells/twointervals. Initial918.14ms preparation/
+548.88ms mint falls to755.15/67.25ms after the source-image identity join,84chunks/max8.75ms.
+This is source/factory cost only, not application/HTTP/UI latency, qualification or a universal
+budget. Compact source/coverage/measurements are in the existing foundation dossier/plan.
+
+D4082/D4077 stay doing. Ordinary guided board, point modules and awaited recommendations are
+not implemented by this Inspector cutover; Story/guidance/rank/title require the exact separate
+downstream amendment. Three context sources, content/D3928/native/qualification/release remain.
+A read-only preflight identifies the concrete ordinary guided flow next: legitimate requested
+intent with actual server ceiling, without Inspector's full-inspector/review-only grant override.
+No new owner question is needed. Work-state3834total/0untriaged/1878live; no source-parent or
+milestone promotion, staging/commit/push or goal pause.
+
+### 2026-11-04 — first current Inspector3 slice verified; D4085 closes, next consumer owned
+
+Complete normal software59028 passes14,112tests/all512files390.29s(no skips), seven isolated
+performance tests/fourfiles58.77s and all preceding type/schema/source/capability checks. Census
+retains its actual capturePopulation site after normal authoritative-register regeneration;
+all1019 committed declarations remain and1095candidate declarations reconcile. The earlier
+profile/count/site failures above remain history, not suppressed checks or changed budgets.
+
+Actual content81087 exits2 at the exact prior baseline:60fail/261pass/18setup-blocked43files,
+38.00s; all62 failure headings match66885, zero additions/removals. No content apply and no D3928
+hold discharge; later content recipes remain unreached. Production build84906 and complete
+governance33341 pass: register C1–C8, parity P1–P7, roadmap R1–R10,569 UX items with zero unassigned.
+D4085 closes with the real old-code red/repaired multi-chunk work-count control and separate
+source review. Work-state3834total/1794done/0untriaged of1877live; closeout-prose462unchanged.
+
+The separate final source/control reviewer accepts only this first actual Inspector3 delivery:
+real registry→cookie REST→strict receiver→selected DOM, both colors and repeated intervals,
+earlier negative endpoint replacement (not a claimed registry-replacement DOM experiment),
+explicit current outpost meaning, distinct empty/absent and actual cooperative grant/head/
+cancel/registry retirement before firing publication. Existing full-prefix/inherited/retained
+controls complement it. No reviewer's tests/builds or source qualification is invented.
+
+Existing plan/ledger/state/queue/research/coverage/docs/RFC review-register and roadmap reconcile
+to the actual code. Source outputs remain25of28; route count364/core50/377/46/587. D4082/D4077
+stay doing: ordinary guided read API/App/DrillScreen, point modules and awaited recommendations
+remain, plus separately amended Story/guidance/rank/title, other authored callers and3 context
+sources. Native/default-content, qualification and whole capability/milestone/release remain
+open. Next is the already accepted ordinary guided read, using actual requested intent/server
+ceiling and its own context; never an Inspector/reveal permission bypass or raw JSON fallback.
+No staging/commit/push, remote-CI success, goal pause or smaller1.0 objective is claimed.
+
+## 2026-11-04 (codex) — ordinary guided registered-pattern delivery and four verified repairs
+
+- Implemented the accepted D4082 ordinary shape-firings query through actual requested intent/
+  server-derived assistance, whole replay/graph-before-prefix validation, live grant/context/
+  registry/cancellation checks and the existing finite owned scan. It does not borrow Inspector
+  or reveal permission. Exact current theory.shape_firing2/firing3 consumer/operation/adapter
+  reaches canonical presentation wire, strict signal-aware API, originating-run App callback,
+  actual DrillScreen markers and attributed panel. Raw catalogue matching no longer mints
+  current board recognition. General plans and Inspect require the admitted document digest.
+- Routine independent source/execution and delivery reviews run under the standing authorization.
+  D4086 repairs wrong-workflow authority errors becoming500; D4087 repairs retained emitted
+  Svelte callbacks (key alone still failed; snapshot callbacks/onDestroy ownership fixes it);
+  D4088 repairs Inspect's same-id/different-document sibling join. Targeted source rereview then
+  finds D4090: dependency checks were not complete consumer admission before registry access.
+  Actual populated/empty/absent invalid-binding controls fail3/22 (19pass) before repair; the
+  repaired70-test/three-file cohort and independent rereview pass. All four close locally with
+  actual test-file evidence. No accepted contract/permission/threshold is weakened.
+- Final normal make verify-software41648 passes14,141software/all513files386.84s with no skips;
+  seven isolated performance cases/fourfiles58.20s; types/schema/source/capability/presentation
+  checks and production build. The earlier14138-case full pass is explicitly pre-D4090 repair.
+  Actual make test-content56003 remains60fail/261pass/18setup-blocked43files38.19s; all62 failure
+  headings are set-equal to the prior source checkpoint, zero added/removed. This remains red;
+  later content recipes and D3928 authored/native hold remain. No content bytes are migrated.
+- The existing source plan, queue, ledger/state, research coverage, docs, RFC registers, roadmap
+  checkpoints and receipt are reconciled. Final make roadmap-receipt verify-governance
+  roadmap-progress51973 passes C1–C8/P1–P7/R1–R10 and all569persistent UX assignments.
+  Ledger3839/done1798/live1878/untriaged0; closeout-prose462 unchanged. Core50/377/47/588;
+  semantic88/88/16/1;1095capability declarations/477applicability, no rewritten declarations.
+- Next: accepted Structure/Theory point-module cutover, including Structure's actual three
+  ancestor novelty subjects and unchanged selection/budgets/nonshape sources, then async
+  learner-owned recommendations. Independent preflight records D4089: visible granted runs are
+  not the accepted owned-run population. Whole run/source/progress/pack snapshots and whole-
+  endpoint failure are required. Other authored callers,3context sources and separate
+  Story/guidance/rank/title amendment remain. D4082/D4077 and all whole-product/native/content/
+  release gates stay open. The full1.0 goal remains active; no staging/commit/push, remote-green
+  claim, pause or smaller objective.
+
+### 2026-11-04 — Current point-module source and actual selected delivery
+
+The accepted D4082 Structure/Theory cutover now uses original owned singleton scans at actual
+current and Structure ancestor subjects. Current consumer2/firing3 rows/adapters agree; complete
+consumer and actual role/session preflight precedes source work. Theory preview/final retain one
+original source population across Explorer I/O, with source/run/grant/help/signal currentness.
+Nonshape sources, order, budgets, timing and novelty remain unchanged.
+
+Independent source/execution and receiving-delivery reviews return and accept bounded repairs
+D4091–D4094/D4096/D4097: full retained operands agree with their supplied ref; foreign-point
+receipts fail; absent/empty sources remain distinct; ineligible roles acquire zero scans;
+complete oversized facts defer honestly; current registered statements restore exact entry links
+without title guessing. Actual source/strict and cookie REST/API/mounted controls prove selected
+sentences/actions, both colors, inherited scopes, source/head/grant/abort changes during capture
+and real provider await, genuine positive held-response retirement and no provider/run mutation.
+
+The corrected D4091 falsifier is red32/32, distinct from its first too-shallow inner-digest test.
+The first complete pool33099 has14207pass/3fail: retired navigation fixtures and absent-as-empty
+opening expectation. Genuine current fixture migration reveals D4097's real missing link; its
+corrected Node-worker source control is red2/40 before repair. Whole-wrapper text checks are then
+split into exact statement and exact action href assertions. Final focused75204 passes349/three.
+Final normal make verify-software71203 passes14,210software/all515files508.15s(no skips),
+7isolated performance/fourfiles59.82s, types/schema/source/capability/presentation and server/web
+production build. Actual make test-content80874 remains red60fail/261pass/18setup-blocked43files
+39.03s; all62 failure headings exactly equal the prior checkpoint, none added/removed. Later
+content recipes remain unreached. No authored-content change, restamp or qualification is made.
+
+D4095 separately proves normal phase/source-risk-first ordering prevents every authored Structure
+match from reaching its one-fact selection. Actual Structure selects connectivity; Theory selects
+genuine firing3. Research supports a bounded Structure-only deterministic amendment and independent
+review accepts authoring, not a remedy. Full-source stage/fit controls remain required. D4089's
+already accepted next async recommendation cutover needs real ownership, complete population,
+source/progress/pack/current authentication and whole-endpoint failure, with exact preflight now
+recorded in the existing source plan. No new owner permission question is needed.
+
+Ledger/state now close the six bounded fixes locally on actual test-file evidence:1804done,
+0untriaged of1879live, closeout-prose unchanged462. D4082/D4077,25of28 source inventory, remaining
+caller/context/Story contracts, D4095, recommendations and content/native/qualification/release
+remain open. Existing plan/queue/RFC register/roadmap are reconciled; final governance refresh
+follows. No staging/commit/push or whole-capability/milestone/1.0 completion is claimed.
+
+### 2026-11-04 — Point-module final register reconciliation
+
+Final make roadmap-receipt verify-governance roadmap-progress12824 passes registerC1–C8,
+status-parityP1–P7, roadmapR1–R10 and all569UX assignments. Six locally verified bounded fixes
+have durable actual test-file evidence;1804done/0untriaged of1879live, closeout-prose462 unchanged.
+The first done-assignment attempt correctly refuses W6 before ledger glyphs change and writes no
+state; the synchronized assignment after all six actual ledger closeouts passes. Existing
+source plan/queue/register/strategic rollup and generated receipt now agree. D4095 selection,
+D4089 recommendations, all parent/content/native/qualification/release obligations and the active
+full1.0 goal remain; no staging/commit/push, whole-capability completion or pause occurs.
+
+### 2026-11-04 — Owned recommendations final implementation gates
+
+Final normal make verify-software68775 passes14,241software tests/all516files418.38s with no
+skips,7isolated performance/fourfiles61.73s, types/schema/source/capability/presentation and
+actual server/web production builds. The early type failures and corrected fixtures remain
+recorded above. Actual make test-content3893 remains red60fail/261pass/18setup-blocked43files
+37.80s; all62 failure headings exactly equal the previous point-module checkpoint, none added
+or removed. Content stays red; later recipes remain unreached. No authored conversion/restamp,
+new semantic qualification, native journey or remote CI claim follows.
+
+D4089/D4098/D4100/D4102 now close locally on actual source/progress/mounted test-file evidence,
+with separate source/execution and receiving-delivery reviews.3851ledger rows/1808done/
+1880live/0untriaged, closeout-prose462 unchanged. D4095 selected Structure recognition,
+D4099 repertoire answered/stale scan semantics and D4101 optional Learn failure isolation stay
+open.25of28 factories, remaining D4077 callers/3recorded-context sources, exact Story/guidance/
+rank/title amendment, parent/content/native/qualification/capability/milestone/release duties
+remain. Current source plan/queue/RFC register/roadmap now stop queuing the completed source
+cutovers. Full1.0 goal remains active. No staging/commit/push or goal pause.
+
+### 2026-11-04 — Recommendation final register reconciliation
+
+Actual make roadmap-receipt verify-governance roadmap-progress28699 exits zero: C1–C8/P1–P7/
+R1–R10 and all569UX assignments pass.3851ledger rows,1808done,1880live,0untriaged;
+closeout-prose462 unchanged. The four bounded source/race/control/copy closeouts are reflected
+in the existing source plan, queue, current RFC register, strategic roadmap and generated receipt.
+Historical gate results remain history; no current queue repeats the completed point-module or
+recommendation cutover. Full1.0 remains active; no milestone/capability/remote-green claim or
+staging/commit/push. Next actual foundation work is the remaining genuine recorded/context owners
+and authored callers; separate D4095/D4099/D4101 and Story/guidance contract duties remain open.
+
+### 2026-11-04 — Optional Learn and exact first-move recommendation source, in verification
+
+Independent preflight confirms accepted additive authority (archived return-and-progression§12/
+A9 and orphan-completion§3) for D4101: optional recommendations must not delay or hide core Learn.
+Actual source503 and held genuine200empty controls first fail2/132. Source-backed local loading/
+ready/unavailable, per-learner/visit/request cancellation, section-only retry and all local repertoire
+mutation suspension/settlement are implemented. Separate delivery review catches same-visit mutation
+publication and exact older Retry ABA, and then accepts their source shape subject to final controls.
+The corrected direct emitted-handler control fails1/144: an older failure's Retry launches a third
+read after a newer same-visit failure. The prior newvisit-empty test was not an ABA falsifier;
+newvisit-unavailable and actual captured callbacks now test the real guard. Retry and deferred focus
+are bound to the literal failed request and newly launched action, without a new UI framework.
+
+Actual empty repertoire create/scan/cookie/receiver exposes D4104. First held test times out because
+its helper never reaches the real parsed response; the corrected explicit source assertion fails
+in34ms with recommendations/0/replySan nonempty refusal (1/139). Existing accepted root sentinel
+is emptySAN/emptyline/gamesUntilSeen1. Its exact admission, whitespace/near-sentinel refusals and
+starting-position copy preserve nonroot policy/DTO and literal corpus guard. Independent source
+review accepts the bounded correction; no source authentication is claimed from wire consistency.
+Both-color actual create/scan/strict/mounted and actual server/client sentence parity controls exist.
+
+Focused203/five pass before final ABA/account/focus additions. Intermediate fixtures expose invalid
+same scheduling kind (types), wrong ResponseInit shape (one API test), missing real selector on gap
+entry, then the legitimate missing evidence queue on attempted HTTP move. Correct fixtures use the
+supported blocked schedule, proper ResponseInit and actual mock-identity selector with engine
+execution forbidden. Answer setup records a genuine legal runtime/store move in the actual entered
+gap run; it does not claim the HTTP move/queued-engine journey. No production guard/deadline/retry
+was weakened. Actual account/cookie replacement, signout/unmount, stale success/failure, source
+mutation and direct retained-handler/focus controls are under final normal execution. D4099 and
+whole Learn/module/native/content qualification remain open.
+
+Separately, independent preflight of the final recorded style sources identifies actual missing
+input authority, not a reason to invent caller context. D4076 early queen needs the zero-based
+original read-authorized path index; D4103 needs exact first-decision selection/absence on a genuine
+frozen prefix. RecordedReviewBoundary plus the application permission owner provide reusable seams;
+castlingRights is distinct from current legality. Bounded independent contract clarifications precede
+those factories. No new factory, actor/style judgement, content migration or whole1.0 closure follows.
+
+### 2026-11-04 — D4076/D4103 recorded-input clarification independently accepted
+
+Two independent reviews accept repaired foundation-source-identity §3.8c: actual original
+read-authorized prefix/decision membership, rooted source index, exact genuine candidate join,
+first represented stored-color castling rights and typed absence. Source review first returns
+the draft for a precise private authority/mint input recipe (opaque tokens otherwise hash as
+empty objects) and the missing application-owned all-branch legality requirement. The reused
+RecordedReviewBoundary alone checks selected/imported lines, so the new clause does not falsely
+attribute stronger validation to it. The repaired actual clause pins both before acceptance.
+
+Pending endpoints support neutral position/candidate facts, never proof someone acted. Stored
+color does not authenticate a learner choice; custom roots do not establish unseen game history.
+Existing ContextualFoundationOccurrence and every consumer's operation/assistance admission
+remain owed. No new projection/schema/resource lane or invented context evidence receipt is
+introduced. Actual factories stay25of28; no source/code/semantic/consumer/content/native/whole
+capability or release completion follows. D4076/D4103 remain doing with the bounded implementation
+now lawful. Source plan, current RFC register, research coverage and existing review receipt
+record both the return and acceptance. Routine independent reviews used standing authorization.
+
+### 2026-11-04 — D4105 whole root-summary wording and final-byte verification
+
+The first final normal gate39950 passes14261software/all516files414.46s,7isolated performance/
+fourfiles59.27s, types/build/source, with0Svelte errors/warnings. Source-author contract11 passes;
+actual content4807 remains60fail/261pass/18setup-blocked43files38.04s. All62 failure headings
+exactly match the preceding checkpoint; zero added/removed. No content/native/whole gate closure.
+
+A bounded class check then identifies D4105, separate from D4104 recommendation receiving:
+actual root gap list still says100%games contain opponent replies above the bound. Independent
+source review confirms the category error while preserving valid normalized mass1/gamesUntilSeen1.
+Both-color actual mounted root controls fail2/147 before correction. Root summary now explicitly
+states the scan found no first answer and queried no opponent reply; row retains First move/state
+without presenting normalization as reply frequency. Actual source numbers stay unchanged, nonroot
+wording/stale notice stay intact, and actual current answer e4 remains visible beside historical
+scan-time wording. Separate static implementation review accepts this repair; focused207/five32.26s
+passes. Because production UI changed after the first green gate, the complete normal gate runs
+again on the final bytes. Earlier green proof is not misreported as the final revision. No staging,
+commit/push, larger scope reduction or goal pause; full1.0 remains active.
+
+### 2026-11-04 — Final Learn/root production-byte gates and closeout
+
+Final normal make verify-software26222 exits zero on the final D4105 UI bytes:14261software
+tests/all516files574.60s with no skips,7isolated performance/fourfiles61.29s,0Svelte errors/
+warnings, types/schema/source/capability/presentation and actual server/web builds. The earlier
+first green39950 remains history, not substituted for this run. Final source-author contract11
+passes. Actual make test-content73710 stays red60fail/261pass/18setup-blocked43files38.55s;
+all62 failure headings exactly equal the preceding checkpoint, none added/removed. Later content
+recipes remain unreached; no authored conversion/restamp, semantic/native qualification or remote
+CI success is claimed.
+
+D4101/D4104/D4105 close locally on actual test-file evidence and separate bounded reviews. All
+ledger glyphs close together before the synchronized batch assignment; source/route/UI lifecycle,
+root consistency/copy and legitimate root arithmetic remain distinct.3854ledger rows/1811done/
+1880live/0untriaged, closeout-prose462 unchanged. D4076/D4103 remain doing with independently
+accepted input authority, not factories; actual source count25of28. D4095/D4099/D4077/D4082/
+D3928, exact Story/guidance migration, actor/consumer/semantic/content/native/whole-capability/
+milestone/release duties remain open. Existing source plan/queue/current RFC register/strategic
+rollup and machine map are reconciled for final governance. No new competing tracker, staging,
+commit/push, worktree, smaller goal or goal pause. Full1.0 remains active.
+
+### 2026-11-04 — Learn/root final register reconciliation
+
+Actual make roadmap-receipt verify-governance roadmap-progress17418 exits zero: registerC1–C8,
+status-parityP1–P7, roadmapR1–R10 and all569UX assignments pass.3854ledger rows,1811done,
+1880live,0untriaged; closeout-prose462 unchanged. D4101/D4104/D4105 have actual test-file evidence;
+D4076/D4103 remain assigned implementation after bounded independent contract acceptance. Current
+queue and source handoff no longer queue completed point-module/recommendation adoption or these
+Learn/root fixes; dated checkpoint history is explicitly history. The strategic rollup, checked
+machine map, current RFC register and generated receipt agree. No milestone/capability, native/
+semantic/content/release or remote CI promotion, commit/push, worktree or goal pause.
+
+### 2026-11-04 — Original recorded style source implementation in flight
+
+Under independently accepted foundation§3.8c, D4076/D4103 now have a source-only RunService/SQLite
+owner, original private prefix/decision identities, explicit authorityShape images and the two
+experimental factories. Current account/read role/full original run/import/signal checks precede
+and follow source reads; full all-branch legality precedes narrowing. Factory vectors remain exact:
+early queen takes the genuine candidate receipt only, castling takes no projection input. No
+consumer/actor envelope, ordinary candidate auto-activation, public route or learner/UI feature is
+added. Source/value implementation is not occurrence/qualification/default/release completion.
+
+Initial13source controls have9passes/4setup failures: first king cycle legally terminates by
+repetition, incorrect grant/deletion calls and noncanonical Chess960 constructor input never reach
+the intended assertions. A canonical helper is then imported from the wrong barrel, failing all
+13early; actual position-cache imports fix that instrument. Corrected37source/style cases pass.
+The expanded controls add actual imported prefix/record failures, unselected-branch illegal SAN
+with replay equality, capture-time current-head mutation, no-read invalid args and stored Black
+custom root. Their normal execution is in flight. No guard/deadline/retry is weakened.
+
+Independent source preflight/review catches the incorrect StoredRun owner field assumption; the
+actual storage.ownerLearnerId API is used. Permanent factory profiles use actual RunService/SQLite,
+not fabricated runtime token payloads; normal profile update passes732selected cases, with779
+intentionally unselected by that explicit generation command. These are not full-suite skips.
+Two exact convention definitions/history rows are installed; register63members/clock-only claim
+reflects the actual tree. The tree has27registered factories but the last fully verified inventory
+remains25until complete source/profile/generated/full gates and separate review. No content is
+migrated. Existing source plan and doing ledger states retain the current work; full1.0 active.
+
+
+### 2026-11-04 — Original recorded foundation pair verified locally (D4076/D4103)
+
+Actual source-only RunService/SQLite owners now issue private original rooted prefix/decision
+inputs. Full original replay and all-branch legality precede narrowing; every retained read checks
+run/account/role/owner/import/signal currentness. Genuine candidate/index and first stored-color
+rights factories preserve pending endpoints, alternatives, custom-root indices, promotion source
+roles, Chess960 and real all-false rights. Neither factory adds actor/learner/bot consumers.
+Separate source/ABI and consumer/meaning reviewers accept this bounded implementation. Review
+found castling's missing declared absence reason; declaration now matches first_decision_not_represented.
+Retained positive readbacks refuse after authority changes. Exact source issuer/reexport closure,
+input receipts, copied/resealed/foreign inputs,15/16/custom-root and malformed full graph controls
+are permanent. Fixture failures (repetition, real grant/delete APIs, canonical Chess960 helper)
+and stale61/377 inventory assertions were corrected; no guard, threshold, retry or skip was relaxed.
+
+Final focused make test-software-files:1613/six-files5.69s. Normal make verify-software40645:
+14289software/all517files411.62s/no skips;7isolated performance/four64.64s; types/schema/source/
+capability/presentation checks and0Svelte errors/warnings. Separate make build89680 passes actual
+server/web bundles. Source-author contract11 passes. Actual make test-content56516 remains red:
+60fail/261pass/18setup-blocked43files40.53s, all62 failure headings exactly match prior completed
+Learn baseline, zero added/removed; later recipes unreached. No content migration, remote CI,
+native/default, qualification, actor or whole-parent/capability/milestone/release closure.
+
+D4076/D4103 now close with apps/server/src/recorded-foundation-sources.test.ts path evidence.
+Verified source/value inventory27of28; conventions/history63 with clock-only claim; capability
+1097/applicability477; core50/379/47/588, unchanged semantic/binding counts. Clock data/operation
+and28th factory remain executable accepted work. D4077/D4082, exact Story/guidance/rank/title,
+D4095/D4099 and D3928 remain open. Independent next-caller preflight identifies current timing/
+transition entry points with mandatory original sources and closed authoring/objective selection;
+D4106 default resolver loss, D4107 witness error misclassification and D4108 copied-root identity
+are now durable assigned todo rows. Source failures must not become legacy fallback/no-fire/illegal
+chess diagnostics. Issuer-backed census/witness/degenerate lanes and read-only migration report
+remain owed; these do not need another RFC or review-permission question.
+
+Ledger/state/source plan/queue/docs/RFC register/roadmap reconciled;3857rows/1813done/1881live/
+0untriaged, closeout-prose462 unchanged. No staging, commit, push or goal pause. Full1.0 stays active.
+
+
+2026-11-04 closeout check: make roadmap-receipt verify-governance roadmap-progress37528 exits0;
+registerC1–C8, parityP1–P7, roadmapR1–R10 and569UX assignments pass.3857ledger rows/1813done/
+1881live/0untriaged; closeout-prose462 unchanged. git diff --check is clean. Two source rows close;
+all whole capability and milestone states remain unchanged. The current source checkpoint is
+27of28, not a28-source or release completion. Routine independent reviews continue without prompts.
+
+
+### 2026-11-05 — Current timing/transition caller migration in full verification
+
+Accepted foundation§4.2 now has explicit current transition/timing operations and objective arms.
+Every original opening/closing/boundary origin and complete selected consumer2 are checked before
+outer no-edge/unopened/boolean exits; board leaves remain visited-only. Closed authoring/objective
+purpose follows recursive objectives, opening predicates, checkpoint timing and explicit current
+boundary evaluation. All three default timing builders retain the actual owned resolver. The
+actual validator's schema-only king-count resolver is removed from semantic execution; unresolved
+required original plans report unavailable. New exact interpreter/preflight sites are registered;
+normal generated capability declarations remain1097/0changed, applicability477;375 semantic cases
+remain passed with0qualified subjects. No authored content or legacy pure matcher meaning changed.
+
+D4108 original-root counterexample was red1/16, then repaired; D4107 legal e4/evaluation-failure
+counterexample was red1/5, then repaired with exact FEN and no invented actual truth. Public census
+JSON preserves unknown; authentic authored census ownership is still owed. The new runtime suite
+initially had2 actual missing-source failures and5 fixture failures (terminal kings/initial trigger).
+D4109 records the actual diagnostic-resolver substitution. Corrected fixtures keep production
+schema/source guards; a later empty timingWindows array was also rejected and properly omitted.
+
+Separate source/ABI and consumer reviews returned three real seams rather than accepting early:
+D4110 opening origins/purpose, D4111 static consumer admission before outer exits, D4112 source
+selection errors swallowed before evaluation. All are recorded/assigned and repaired in current
+code, with actual copied/stale/no-move opening and compiled boundary controls, authoring2/no-
+objective2 opener/direct-checkpoint checks, typed unavailable/root-diagnostic checks, compiler-
+failure/zero-mint short circuits and real missing registered plan expansion. Both reviewers now
+accept the bounded slice. Final focused62/seven4.21s passes, including two real registered packs,
+owned SQLite/RunService moves, exact persisted objectives and replay with queued engine unavailable.
+This proves rule-derived objectives without inventing engine evidence; no native/browser claim.
+
+Normal make verify-software50673 is running on frozen current production/test/contract bytes.
+Prior complete27of28 source checkpoint does not prove this later caller code. Source contract/
+actual content baseline, actual build, current types/metadata and final governance remain to finish.
+All live rows stay open until their exact obligations pass. D4077 census/witness/degenerate and
+read-only migration report, broader callers, clock, Story/guidance, D4095/D4099 and D3928 remain.
+Full1.0 goal stays active; no permission question, staging, commit, push or release promotion.
+
+
+2026-11-05 current-runtime first full gate50673 finished all518 software files:14303pass/1fail/
+0skips421.61s. The sole failure pinned the old source-error message while the substituted AST
+was correctly refused. Its test now requires AuthoredStructuralSourceError, retaining the genuine
+positive and invalid alternative; production code unchanged. Focused74/eight4.14s passes. Normal
+full gate restarted on these frozen bytes; isolated performance and later steps were not reached
+by the failed first gate. No pass or completion is inferred from that run.
+
+
+### 2026-11-05 — Current authored timing/transition duties verified locally
+
+D4106/D4108–D4113 close at their bounded runtime/source/fixture boundaries. Current operations
+admit the complete selected consumer2 and original opening/closing/compiled boundary sources
+before no-edge/unopened/boolean exits; only visited board operands acquire evidence. Closed
+purpose propagates through recursion, openers, checkpoints and explicit current line-boundary
+reads. Three default timing rules retain actual resolver ownership. Semantic probes no longer
+execute an arbitrary schema-only king predicate; missing plan selection is a source diagnostic.
+Source/ABI and consumer/meaning reviewers returned real seams (D4110–D4112), then accepted the
+repairs. D4113's final real issuer/registry fixture correction also has separate bounded review.
+
+Actual controls cover precise before/after pointers and all3explicit refs; original/copy/stale
+sources; zero-mint exits with compiler fault; authoring2/no-objective2 opener/direct checkpoint;
+source-unavailable-not-start-FEN and missing registered plan expansion. Two real registered packs
+perform owned SQLite/RunService moves with correct persisted objectives and exact event replay
+while queued engine execution is unavailable. No fake engine outcome, native or browser proof.
+
+Final focused74/eight4.14s. Normal make verify-software50880 exits0:14304software/all518files/
+434.96s/no skips;7isolated performance/four62.16s;0Svelte errors/warnings; types/schema/source/
+capability/presentation checks. First full50673 had14303pass/1old-message assertion failure421.61s
+while correctly refusing the substituted AST; its assertion now requires the typed source error,
+retaining genuine success and invalid alternative. That failed run did not reach performance.
+
+Actual content82802 first added2unauthenticated old fixture failures. Structural-reading now
+uses the validator-returned document; vocabulary transition uses real admitted ShapeRegistry and
+actual validator ownership. Only detached test variants receive current requirements/truthful
+unsourced note. Original move/grade/attribution assertions and5s deadlines remain. Production and
+software bytes are unchanged after the full gate. Current make typecheck foundation-source-author-
+contract test-content94940 passes types/source11; content returns60fail/261pass/18setup-blocked/
+43files40.13s, all62 prior headings identical,0added/removed; later recipes unreached. Current
+supplementary authority80822 passes4794/77 and actual server/web build. Its prior default-sandbox
+attempt had8localhost EPERM setup failures; same normal Make target reran with existing localhost
+integration permission. No guard/deadline/retry waiver, content migration or remote-CI assertion.
+
+Source/value inventory27of28, conventions/history63 and clock-only claim, core50/379/47/588,
+capabilities1097/0changed and applicability477 remain.375semantic cases pass,0qualified subjects;
+no new learner/bot/actor/style eligibility follows. D4107's exact legal/evaluation diagnostic split
+is verified but remains open for genuine authored census/witness ownership. D4077/D4082, async
+census/witness/degenerate/migration report and other callers, clock data/operation and28th output,
+Story/guidance/rank/title,D4095/D4099,D3928/native/content/release remain open. Five production census
+callers are already async-capable; exact lawful next implementation is in the existing source plan.
+
+Ledger/state/queue/source plan/docs/RFC register/roadmap reconciled.3862rows/1820done/1879live/
+0untriaged; closeout-prose462 unchanged. Final governance/receipt check follows these text updates;
+no whole parent/capability/milestone promotion, staging, commit, push or goal pause. Full1.0 active.
+
+
+2026-11-05 final tracker verification: make roadmap-receipt verify-governance roadmap-progress2643
+exits0, registerC1–C8/statusP1–P7/roadmapR1–R10 and all569UX assignments green.3862ledger rows,
+1820done/1879live/0untriaged; closeout-prose462 unchanged. git diff --check clean. D4113 final
+content-fixture preparation also passed separate read-only review after its actual content rerun.
+D4106/D4108–D4113 are bounded local closures; D4107/D4077 and all stated wider source/content/
+release duties remain. The full1.0 goal is active; no staging/commit/push or whole-capability promotion.
+
+
+### 2026-11-05 — D4077/D4107 source-aware census/witness implementation in verification
+
+Implemented the accepted asynchronous census using actual validator documents, one real temporary
+ShapeRegistry, typed original root pointers and authoring2 for authored coverage/own-pack/shape
+limits/degenerates/witnesses. Five production consumers await the actual report. Selected external
+drafts never register dependencies. Bare-expression research remains explicitly legacy. Separate
+source/consumer reviews found and then accepted repairs for D4114 claimed hits, D4115 external
+file joins and D4116 witness-only source errors. Focused25/three passes5.34s; normal full software
+is running, then actual content comparison and final tracker reconciliation remain owed. No
+source qualification, content migration, whole capability or release claim; full1.0 goal active.
+
+
+### 2026-11-05 — Authored census/witness verified; six bounded defects closed
+
+D4107/D4114–D4118 close locally with path evidence after actual issuer-backed async census,
+all5 awaited readers, typed original sites, real external/witness/compiler diagnostic delivery,
+and independently reviewed repeated-work repairs. Final normal generation/software/performance/
+build21467 exits0:14318/all519files447.41s/no software skips,7performance/four60.07s,
+0Svelte errors/warnings and actual server/web builds. Source-author11 passes. Actual content19253
+returns60fail/261pass/18setup-blocked43files194.59s; all62 earlier headings byte-identical and
+unchanged10s shape-check case passes. The two preceding cost readings506.99s and285.38s were
+red; no assertion, deadline, corpus or source check was weakened. Only actual now-tested
+FILE_READ_ERROR leaves mutable refusal debt; the historical ceiling remains unchanged.
+
+One original occurrence matrix, scoped successful-only original-source/full-FEN reuse and genuine
+immutable input2 reuse retain real positions/results/proofs and live registered ownership. Actual
+first identity control is red1/14, repaired57/five pass7.78s, with transient retry, duplicate counts,
+positive reference projections, forged/equal-byte source handles, two-FEN and crossed-proof
+controls and same-byte actual registry replacement. Both independent reviewers accept source/
+meaning boundaries. Current inventory27of28; declarations1097/0changed,375semantic cases pass/
+0qualified subjects. Ledger3868rows/1826done/1879live/0untriaged,closeout-prose462 unchanged.
+
+D4119 now owns separately observed per-file graduation CLI batch work; do not reuse stale reports
+across async writes. Next accepted implementation is the read-only36-leaf legacy/successor report,
+then remaining callers and recorded clocks. D4077/D4082/Story/guidance/D4095/D4099, actor/semantic
+qualification and D3928/content/native/release remain. Tracker/queue/roadmap and RFC implementation
+status reconciled; final governance verification follows. Full1.0 goal active; no whole capability/
+milestone promotion or staging/commit/push/worktree.
+
+
+2026-11-05 tracker discharge after authored census closeout: normal36598 governance/receipt/
+roadmap-progress exits0, C1–C8/P1–P7/R1–R10 and569UX assignments green;3868rows/1826done/
+1879live/0untriaged, closeout-prose462 unchanged. Source/code tests remain those of final21467;
+only checkpoint/hand-off text is reconciled after it. The dependent board checkpoint records
+source progress without new UI/native proof. Last text-only source-author/governance rerun follows.
+Next lawful implementation is the accepted read-only36-leaf comparison report; goal stays active.
+
+
+### 2026-11-05 — Accepted read-only convention report implemented, under final verification
+
+Built the D4077 read-only old/new report with actual draft issuers/current authoring2 for all
+36literal sites, typed exact addresses and one-ref whole-document counterfactuals. Shared actual
+shape/dependency loading reuses census ownership. Standalone and containing structural truth,
+mirror/quantifier traces, source/validation status and unavailable pairs remain distinct; full
+counts plus4bounded reason samples replace raw per-position dumps. No original refs/versions/
+requirements are written and author choices stay pending. Actual normal Make74214 matches
+36sites/8documents/827expected-replayed positions,0omissions and exact8/5/23/addresses; report is
+576521bytes in ignored cache. Observed site-position changes: opposition30literal/30context,
+backward0/0,outpost242/7; one-at-time experiments do not measure joint migration or typical games.
+
+Both independent reviewers first return and then accept D4120physical output alias protection,
+D4121illegal-spine omission/completeness and D4122explicit AST metadata admission. Real first
+controls fail3/11; current35/three pass4.60s, with actual file/parent/nested aliases, hardlinks,
+matching-scope positive→illegal replay negative, source/counterfactual and actual transformed/
+quantified operands. Metadata generator/site check passes81sites/477applicability/1097declarations,
+0changed. An imprecise preflight 'two opposition packs' is corrected: one pack plus one shape.
+First full attempt79698 stops at2fixture nonempty-tuple type declarations; same36cases now have
+explicit first elements, reconciled normal83812 is running. Actual content/full final gates and
+tracker closure remain; no milestone, classification, content, qualification or release promotion.
+Goal active; no staging/commit/push/worktree.
+
+
+2026-11-05 — Accepted authored convention report verified locally, uncommitted. Actual36-site/
+827-position comparison, one-ref literal/context separation and pending author choices use the
+current original-source dispatcher; no authored bytes/requires changed. Independent source/meaning
+reviews accept repairs after real red alias/replay controls. D4120–D4122 and finite already
+implemented D4066/D4068/D4069/D4071 close with test-path evidence. Final normal83812 passes14334/
+520software537.00s,7/fourperformance64.84s/types/build; source-author11 passes. Actual content14865
+retains60fail/261pass/18setup43files200.40s, all62previous headings identical and10s case passes.
+D4077/clock/actor/broader callers/qualification/D3928content/native/release remain open. Next is
+accepted recorded clocks, not another owner permission question. No stage/commit/push/worktree.
+
+
+2026-11-05 — Recorded-clock retained-data prerequisite verified locally/uncommitted. Same original
+legal PGN walk extracts numeric clocks before stripping; all original nodes/session, SQL32's sole
+nullable document, closed getters/account export/restore/delete and legacy CAS/retry now connect.
+Independent source/meaning returns D4123 proper-prefix substitution and D4124 coercible enums
+first fail2/16, then close under complete original-session binding and literal types. D4125 internal
+fault first red1/18 now propagates/leaves null; D4126 storage disclosure names retained times.
+First normal51014 stops at an overstrict metadata-vs-operation extension distinction; corrected
+original metadata remains readable while existing operation refuses appended mainline. Reconciled
+normal14990 passes14394/523software400.25s+7/fourperformance58.77s. Late literal App edit receives
+separate current155/two controls28.08s/types/build in53162; source-author11 passes. Actual content
+retains60fail/261pass/18setup43files175.34s and all62previous headings. Four child defects close,
+parent/D2021/D2287/D2289 remain doing. Next reviewed private clock source/real factories/actor
+occurrence/API/fixed readout; inventory27of28 and all qualification/content/native/release holds
+remain. No stage/commit/push/worktree or goal pause. Current receipts in existing source/time plans.
+
+2026-11-05 retained-clock final tracker reconciliation6180 passes complete governance/progress:
+3875ledger/1837done/1875live/0untriaged, closeout-prose462 unchanged; all569UX andC1–C8/P1–P7/
+R1–R10 remain green. Normal recorded-clocks-check60/three2.55s passes; git diff --check clean.
+Retained-data gate scope is frozen here; next accepted private-source work is a new scope, not
+covered by these results. No goal pause or whole-source/API/UI/capability promotion.
+
+
+2026-11-05 — Accepted recorded-clock private operation/input construction starts after the
+verified retention checkpoint. Actual SQL capture binds original incoming parent decision and
+sparse source identity, access/cancellation/currentness before mint and sticky observed retirement.
+Source fences close the sole issuer/public-export seam. Independent review returns D4127 initial
+base From Position gap and D4128 within-read metadata race; real negatives first fail1/14 then2/15.
+Repaired private capture checks variant/start operands and full source again after nested reads.
+Focused/types running; no new factory/catalog/API/UI/readout or full-source/whole-goal closure.
+D2288/D4127/D4128 are assigned doing in the live tracker; new bytes start their own proof scope.
+
+2026-11-05 — Original clock source/factories and clock-specific imported actor occurrence pass
+independent source/meaning reviews and normal89974:14434software/524files402.49s,7performance/
+four57.34s/types/build; source-author11. Actual content21904 remains60fail/261pass/18setup43files
+176.71s, all62prior headings identical. D4127–D4129 close boundedly with permanent actual-source
+path evidence. Fixed foundation inventory now28of28 factories plus separate dependency reading1;
+375semantic cases/91subjects/0qualified,1099declarations/477applicability/64conventions. Historical
+consumer/API/strict receiver/fixed ClockReadout is next; parent/D2021/D2287/D2288/D2289 and other
+actor/native/content/qualification/1.0 discharges remain open. No Git mutation or goal pause.
+
+2026-11-05 — Historical recorded clock delivery verified locally through actual original source/
+occurrence, registered two-fact consumer, cookie API, strict receiver and fixed selected Review
+readout. Final47123:14464software/526files395.48s,7performance/four57.28s/types/build; source-author11.
+Current App/readout161/two28.17s and dedicated118/six6.26s also pass. D4130–D4138 source/UI/access/
+Retry/theme/label returns close after real controls and independent reviews; earlier failed
+71758/92229 are not final passes. Actual content67052 remains60fail/261pass/18setup43files169.45s,
+all62prior headings identical. D2021/D2287–89/D2291–92/D2295 and IMP-a6 close finite own-game
+obligations; D2286 closes accepted dependency/claim repair only. ParentD5/native, D2290/D2293/
+D2294/D1048/D1041, other six actor envelopes and semantic/content/release discharges remain open.
+Protected clock intent correction proposed, never written to design00–06.3887ledger/1857done/
+1867live/0untriaged, closeout-prose462 unchanged; UX283completed/24retired/262live. Next lawful
+item D4099: stale/current-answer repertoire recommendations, bounded by accepted existing contract
+and independently reviewed preflight; D3146 settings digest remains separate. No Git mutation or
+goal pause. Full1.0 remains active.
+
+2026-11-05 — D4099 starts its own post-clock verification scope under the accepted repertoire/
+orphan-completion contracts. Actual cookie create/scan/chooseAnswer without entering a gap run
+first fails1/31 on fresh recommendations. The read now withholds stale answer-map rankings and
+independently excludes current rank0 answers, preserving stale/answered history, explicit rescan,
+linked-run exclusion, sorting/total-before10 and read-only/provider behavior.36/two controls3.34s
+and clean types pass, including an independently current-digest falsifier; both bounded source/
+meaning reviews accept. Normal generation remains375cases/0qualified,1099declarations/0changes.
+Complete normal software/performance/build is running; no new terminal row yet. D3146 settings/
+band/bound identity and whole repertoire/native/1.0 remain separate. Goal active; no Git mutation.
+
+2026-11-05 — D4099 repertoire repair closes locally with real API path evidence. Actual cookie
+create/scan/chooseAnswer without linked-run exclusion first fails1/31;36/two repaired controls
+include stale/answered history, isolated current-digest/answered guard, explicit rescan and no
+provider/scan/run writes on read. Both independent reviews accept. Final32388 normal verification
+passes14466software/526files395.52s,7performance/four56.96s/types/build/source11; generation375cases/
+0qualified and1099declarations unchanged. Content25868 retains60fail/261pass/18setup43files165.57s,
+all62prior headings identical. D3146 settings/band/bound identity remains separate. D4119 independent
+preflights retain correct per-file behavior: safe mutating batch reuse lacks a declared lifetime/
+write contract; no cached plain reports or snapshot/hash framework added. Next D4095 Structure-only
+recognition selection amendment, independently accepted research for authoring only. No parent/
+capability/milestone/native/release/remote-CI promotion or Git mutation; full1.0 goal remains active.
+
+2026-11-05 — D4095 Structure recognition selection authoring starts from its independently accepted
+research gate. Both read-only preflights support the bounded three-recognition/four-generic split;
+material classification positive/null and phase unclear stay generic. Learner-modules§3 and module-
+registration§4.6 carry draft companions, actual current consumer2 plus a distinct exact policy,
+unchanged risk/critical-first/within-group ties/novelty/atomic fit. Disposable source-stage harness
+uses actual registry/SQLite/cookieREST/strict receiver, with a test-local proposed reducer only;
+initial target stops at wrong test imports, corrected in the instrument. No production policy
+change or acceptance yet; root owns execution, routine independent reviews authorized.
+
+2026-11-05 — Both independent reviewers accept the bounded D4095 Structure selection amendment
+after49/one3.02s and dedicated clean types. Actual policy/currentconsumer2/seven-ref guard and
+production reducer now implement recognition before generic summaries after unchanged critical
+priority. Original production source test first fails2/29. Permanent49-source cases replace the
+disposable candidate: actual production compiler result is returned untouched; only former-order
+baseline remains test-local. Current mounted Structure checks exact selected firing3/source/href.
+Initial438/five33.84s+clean types pass. Independent source review finds D4139: public constructor
+can mark caller-altered/mutable declaration facts owned. Actual genuine firing source control
+first fails1/49; current repair joins original immutable catalogue declaration by identity.
+Mounted selected Structure held-response retirement and atomic-overlong deferral now join focused
+verification. No policy/source-risk/budget widening, parent closure or Git mutation; full gates owed.
+
+2026-11-05 — Current D4095 full77979 reaches527files:14519pass/4fail407.40s. All four failures
+are actual receiver tests pinned to old pawn connectivity at a real Maroczy; D4141 owns the
+fixture adoption. Position and complete source set remain; selected named2 text/renderer and all
+re-digested renderer/binding/convention attacks now pass4/one2.34s. Full normal69763 restarts;
+no first-run green/performance claim. D4140 independent preflight identifies missing six-atom
+occurrence joins: actual outgoing event vs candidate alternatives, actual position vs hypothetical
+fianchetto child, first represented castling baseline and historical journal/import actor proof.
+Current research dossier and foundation§3.8d draft record bounded original-committed source reuse,
+no new detector/style/registry/schema and no premature caller completion. Pending/offered/predicted/
+opponent/coach and consumer arms remain owed. Independent draft acceptance pending; no new
+production bytes in this next wave while D4095 code verification is running. Goal remains active.
+
+2026-11-05 — D4140 foundation§3.8d independently accepted after exact finite ABI, fresh same-store
+historical authorship, import-first/owner-rehearsal and empty/member/token clarifications. Existing
+clock semantics and D3878 refusals preserved; no source implementation or wider actor/consumer/
+qualification completion follows. Both reviewers performed no edits/tests; source code stays
+frozen for D4095 full69763. Accepted next recorded slice covers six refs via existing source owner
+and finite private occurrence store, not a new registry/hash framework.
+
+2026-11-05 — D4095/D4139/D4141 close locally on current production path evidence. Actual selected
+Structure now exposes complete recognized named/setup/authored facts before generic summaries,
+with original source risk/ties/critical/novelty and1fact80word atomic fit. Actual source red2/29
+and genuine constructor red1/49 precede repairs; permanent49-source and mounted source/text/href/
+held-ceiling-retirement/overlong controls pass. Both independent implementation reviews accept.
+Initial full77979 fails4/14523 at oldreceiver fixtures; real named2 and all three re-digested
+attacks now pass, no decoder relaxation. Final69763 normal14523software/all527files411.04s,
+7performance/four57.28s/types/build/source11 pass. Content54848 retains60fail/261pass/18setup43files
+166.14s, all62prior headings identical.3890ledger/1861done/1866live/0untriaged, closeout-prose462
+unchanged. Full1.0 remains active with no capability/milestone/qualification/native/release or
+remote-CI promotion, Git mutation or goal pause. Next accepted D4140 six-source recorded occurrence
+implementation, with wider actor/consumer/denominator duties retained; D3928 content/native held.
+
+2026-11-05 — Accepted D4140 implementation begins with the finite original-six-source reader and
+sole internal nonminting bridge, not actor minting. Genuine actual input chains/copy/reseal/unknown/
+recorded-abort controls pass78/three3.42s. Independent source review accepts this prerequisite.
+Full types catches only the new test's heterogeneous generic evidence array; annotated as retained
+DeclaredEvidence<unknown> values, then normal focused/types rerun. Original private source chains
+remain unchanged; no new output/consumer/schema or historical actor claim. Next exact owned context/
+actual fresh journal+import authority/sealer/readers/allsix tests. Verified D4095 checkpoint does
+not cover these new bytes, and no D4140 closure or goal pause is claimed.
+
+2026-11-05 — D4140 actual six-source contextualization is in flight, not complete: original private
+context/sealer and callable actual source owner use exact outgoing events, original-import-first
+and fresh same-store V4 owner proof. Initial source/meaning review finds D4142 preflight-before-
+absence, D4143 sticky retirement, D4144 authorship-vs-coach-role. Genuine controls first fail3/7,
+then4/8 with actual same-head journal mutation/failure/exact rollback. Both reviewers accept the
+D4144 single_player+proved-owner native role clarification before implementation; other actor
+contexts remain owed. Root audit D4145 clock metadata coupling first fails1/15 on actual legacy
+clock CAS; proof narrowed to original PGN/movetext/node map, no clock work from style. Expanded
+source controls cover promotions/castles/empty/before-after/baseline/realm/grant/head/abort/forks.
+Initial111/four has2test-only noncanonical Chess960 starts; canonicalRunStart fixes the instrument
+without weakening guards. Earlier generic-array/closure-narrowing and opponent-tag test errors are
+instrument corrections, not product findings. Current focused/types rerun; full new-byte gates and
+final independent review owed. Verified Structure checkpoint remains historical, no D4140 closure,
+consumer adoption/qualification/native/release or Git mutation/goal pause.
+
+2026-11-05 — Current D4140/D4142–45 focused78778 passes111/four4.16s and full types after actual
+source/role/realm/event/currentness falsifiers. Both independent repaired implementation reviews
+accept bounded source/sealer/control scope; no reviewer edits/tests. Actualsource mismatch refuses
+before pending/unknown actor, observed context failure stays retired after exact journal rollback,
+real owner-teacher role abstains under accepted single_player admission, and legacy clock CAS does
+not invalidate original import actor proof. All-six/bothcolor/nativeimport, chosenalternatives,
+complete before/after/empty, promotions/canonicalcastles/960, firstbaseline, identicalFenrehearsal,
+forgedselectors/wrongstore and grant/head/abort controls pass. Normal metadata generation starts
+before complete fullgates; no new-byte terminalclosure yet. Widerroles/consumers/qualification/
+D3928contentnative/fullfoundation and release remain open; no Git mutation or goal pause.
+
+2026-11-05 — Bounded D4140 recorded6 context is verified locally after independent source/meaning
+reviews; D4142–D4146 close finite repaired authority/role/lifetime/docs defects with actual path
+evidence. Final50446:14557software/528files399.15s,7performance/four57.05s/types/build; source11.
+Content96534 remains60fail/261pass/18setup43files167.49s; all62prior failure headings identical.
+Generation375cases/91subjects/0qualified,1099declarations/0changes; source/manifest counts unchanged.
+3895ledger/1866done/1866live/0untriaged, closeout-prose462 unchanged. D4140 wider actor/consumer/
+denominator/qualification duties stay open. Next finite bot-opponent contract from actual retained
+selection/envelope; learner-profile exact-cut/cache companion is also necessary before adoption.
+No protected intent edit, Git mutation, remote-CI/release/whole-capability promotion or goal pause.
+
+2026-11-05 — D4140 actual profile-bot arm research and independently reviewed§3.8e land before
+production. Original selection/move pair plus existing durable parse supplies opponent/played,
+without a new pre-commit head proof/provider call/source/schema/consumer. Runtime issuer/read
+forbid opponent baseline/own-side; partial profile/policy refuses, true legacy unsupported. Actual
+source positives first fail2/2 after missing-queue fixture correction. Expanded158/five15.41s and
+full types pass; inherited-fork25/one5.10s passes. Both independent static implementation reviews
+accept bounded scope. Initial cohort's localhost EPERM and test-only future-parent/method/target-
+library/optional/narrowing mistakes remain recorded, not product failures. Complete metadata/full
+new-byte gates still owed. D4140 broader actors/consumers/qualification and D3928 remain open;
+no Git mutation, whole-capability/release/remote-CI claim or goal pause.
+
+2026-11-05 — Independent next-wave audits become durable D4147(profile exact-cut consumer/cost)
+and D4148(bot rewind automatic-fork root/seed mismatch). D4147 has no current three-ref manifest
+consumer and must preserve card/detail/denominator/contributor/share semantics while measuring
+200-game cost; nested V4 transactions/fake storage adapters/new generic caches are refused. D4148
+is currently static, not observed: bot compiles old branch/seed while runtime auto-forks at commit,
+and durable parser requires actual new branch. Explicit prior-fork source coverage does not hit
+this. Next after current full gates is actual fixed/per_branch rewind→auto-fork→parse/retry
+falsifier, then contract-bound repair. Both rows have owners/states; no product completion or
+permission request. D4140 source context gates stay frozen while this read-only audit proceeds.
+
+2026-11-05 — Actual profile-bot context verified locally after both independent implementation
+reviews:158/five15.41s+types; normal86758 passes14582software/all529files430.93s,7performance/four
+57.51s/types/build/source11. Content12088 remains60fail/261pass/18setup43files173.70s; all62prior
+failure headings identical.375semantic cases/91subjects/0qualified,1099declarations/0changes and
+477applicability; manifest/source counts unchanged.3897ledger/1866done/1868live/0untriaged;
+462closeout-prose unchanged. D4140 wider actors/consumers/denominators/qualification remains open.
+Next D4148 actual auto-fork gameplay falsifier, then accepted repair; D4147 profile exact-cut/cost
+still real owed work. D3928content/native held; no Git mutation, full capability/milestone/release
+or remote-CI promotion, permission question or goal pause.
+
+2026-11-05 — D4148 moves static→OBSERVED: actual create/bot/rewind/bot REST controls fail2/48 in
+both fixed and per_branch,46existing pass, normal99076. Durable parser correctly refuses envelope
+root on old branch versus actual automatic new selection branch; per_branch seed also diverges.
+The14582/529 full source checkpoint predates these two new intentional failing tests. Current
+software is red on the exposed gameplay defect. Finite original-request/execution-root companion
+is in independent author review before any production change; no weaker parser/manual-fork/
+speculative-write workaround. Full1.0 continues, no permission question or goal pause.
+
+2026-11-05 — D4148 bounded bot-policy§4.1a independently accepted before code; shared runtime
+preparation and finite original-prefix reconstruction now repair the actual2seed-mode reds.
+Current27549 passes180/five6.61s plus full types: real provider/stale failures save no previewfork,
+original vs execution request identity, same/different concurrent winner/conflict, explicit/nonzero/
+later forks,11replayable payload/seed/at/head/adjacency corruptions, bothseed restart/account export
+zero exchanges and actual auto-fork style occurrence. Intermediate failed-provider fixture assumed
+502; actual closed base_provider_unavailable503 is now asserted, with unchanged stored-byte guard.
+No product response was weakened. Implementation review and complete new-byte gates remain owed;
+prior14582/529 checkpoint is historical. D4147/D4140/D3928 remain real open duties, no Git mutation,
+whole capability/release/remote claim, permission question or goal pause.
+
+2026-11-05 — D4147 source/consumer reinspection favors existing exact-cut worker materialization
+under player-style D1/D2, instead of adding per-node HTTP source work. Existing claim/revision/
+publication/read lifecycle already owns currentness; current decision/root-counter rows cannot
+be relabelled game facts. A finite paired companion must specify real claimed-cut issuer,3ref
+consumer, game-unit result/status/contributor/storage ABI and account/rebuild lifecycle. No table,
+migration/contract acceptance or production change follows yet. Actual once-per-run/cold-warm
+200-game cost and lifecycle/parity measurements remain owed. D4148 production bytes stay frozen
+while final content/governance gates finish.
+
+2026-11-05 — D4148 closes locally after independent contract/source/meaning review and real
+2seed-mode reds2/48. Shared branch preparation separates original CAS/retry from actual execution
+root/seed; strict2-prefix/full event reconstruction preserves provider admission and atomicity.
+Final27549:180/five6.61s+types; normal58203 passes14604software/all529files425.56s,7performance/
+four58.67s/types/build/source11. Content15733 stays60fail/261pass/18setup43files171.27s with all62
+previous headings identical.375cases/91subjects/0qualified,1099declarations/0changes/477applicability;
+source/manifest counts unchanged.3897ledger/1867done/1867live/0untriaged,462closeout-prose unchanged.
+Next D4147 paired worker-owned3ref/game-unit read model/consumer with200-game cost+parity gate;
+reuse existing claims/revisions/publication/read, no request-side source loops/new cache/hash/
+snapshot framework. D4140 broader actors/consumers/qualification and D3928content/native remain
+open. No whole capability/milestone/release/remote claim, Git mutation or goal pause.
+
+2026-11-05 — Previous goal turn is progress: D4148 actual code/review/full gates and tracker
+closeout were re-read at this turn's start. D4147 now has a disposable actual200-native64ply
+source/cost/parity instrument, optional make profile-source-cost (outside CI/no timing threshold).
+9428 exits0: actual full projector545853.71ms, source operands3389.04ms/26200values;200jobs complete
+at552931.04ms. Current profile854.35ms cold/200V4 reads and351.57ms warm/0new; exact first-source
+refs, four rate cards/denominators/contributors/share pass. Ten repeated CC0 lines/100eachside are
+scripted workload, not human-style validity, new claimed issuer/storage/consumer or HTTP proof.
+Initial test-only Node assert narrowing error is repaired. Original final elapsed label included
+profile/detail/share; corrected code separates scopes without rerunning/wasting the whole study.
+D4149 actual201st rights-loss-before-owner case yields source node0=true versus metric node4=false,
+201counted/200eligible. No silent baseline substitution allowed. Native/source truth remains
+unmodified; paired worker source/store/consumer contract and new-path measurement remain owed.
+No Git mutation, capability/milestone/release/remote-CI promotion or goal pause.
+
+2026-11-05 — D4147/D4149 profile-game-facts companion independently accepted after separate
+source/meaning returns: whole legal graph and original creation identity, separate short-read
+complete-job rebuild scope, exact machine consumer, closed failure taxonomy and original BEFORE/
+snapshot refs. First source-only slice is implemented in actual worker/rebuild; same-store original
+claim/image, renewal, sticky loss/close, every-node legal edge/declared branch and private claimed
+prefix retain unchanged castling source while live actor/clock arms refuse it. Both implementation
+reviews accept after D4150 actual stored orphan-branch illegal-move red18cases17pass/1fail; fixed
+focused1628/five and final20controls/types pass. New test-only rights spelling, ES target findLast
+and prefix-union clock narrowing were corrected without relaxing types or deadlines.
+
+Normal74135 fails after many zero-test collection failures and one server persistence failure,
+ending Node version without usable exception/summary. Do NOT assert a flake or source root cause.
+Exact failed4files83869 pass56. Optional Make diagnostic target adds early public-reporter error
+printing with the same complete suite/config;1234 passes14624/all530in438.71s, zero failures.
+Canonical55208 is now running. D4153 owns unresolved diagnosis; no final-whole-gates claim yet.
+D4151 records the verified future incomplete-denominator UI integration seam; accepted contract
+pins unknown-before-floor and raw first-owner BEFORE independent of filtered public contributors.
+D4152 fixes three existing roadmap nextAction fields that requeued already verified code; separate
+review accepts without changing milestone states. Consumer/fourth family/profile/account/new-path
+200-game proof remain D4147/D4149; no source qualification, content/native/release promotion,
+Git mutation or goal pause. Raw diagnostic logs remain /tmp, not research blobs in the repository.
+
+2026-11-05 — Canonical55208 passes14624software/all530in435.54s,7performance/four59.80s,
+types/build; D4153 retains earlier74135 unexplained failure rather than declaring a flake.
+Actual content38784 adds a real61st failure: expression-census opt-in warnings exceeds its10s
+ceiling. D4154 is recorded before work. Existing shape-check CLI is correct; isolated actual
+content19passes166.03s. Independent read-only source and meaning reviews accept early filtering
+of SUBJECT construction only: all registrations/pack validation/duplicate checks/corpus replay/
+evidence and selected/external/final source checks remain. Entire selected report29602bytes is
+exactly equal over827positions/56packs/25shapes/771transitions/5subjects. One normal CLI9.392s to
+8.715s is bounded observation, not statistical attribution or full-census latency qualification.
+Permanent real-selector software15passes and original unconditional construction fails1/14pass;
+current is restored in finally. Complete51553 recovers60fail/261pass/18setup43files201.12s,
+all62previous headings identical, keeping original10s. Broader CLI costD4119 stays open. Final
+combined normal/gov/tracker reconciliation is next; no whole source/profile/native/release or
+remote-CI claim, Git mutation or goal pause. Raw reports/profile logs stay /tmp only.
+
+2026-11-05 — Final combined44384 passes14625software/all530in410.40s,7performance/four58.11s,
+full types/build and final source-author11. Content51553 is the exact recovered62-heading
+baseline:60fail/261pass/18setup43files201.12s; no content/native clearance. Both source-scope
+and selected-census implementation reviews accept. D4150/D4152/D4154 close with real test/JSON
+paths, not prose-only evidence.3903ledger/1870done/1870live/0untriaged,462closeout-prose unchanged.
+The three roadmap checkpoints and stale execution instructions are reconciled; strict milestone
+states do not change. Governance/roadmap receipt is next. D4153 original abrupt full-run failure
+remains open with diagnostic/canonical/final passes retained, no invented flake/root-cause claim.
+Next D4147/D4149/D4151 accepted exact3ref consumer, strict fourth GAME family/read lane/migration/
+account/rebuild, five Profile paths and incomplete-denominator UI, then actual new-path200-game
+cost/parity. Original raw-first-owner BEFORE stays distinct from snapshot and public contributor.
+No generic cache/hash framework, source qualification, wider-role/content/native/release promotion,
+Git mutation or goal pause; full1.0 remains active.
+
+2026-11-05 — First final governance66969 refuses the new profile-game-facts RFC because it lacks
+capability ownership and the exact RFC anchors for its three current checkpoints. Corrected the
+existing roadmap map: learner_model owns this bounded companion; all three checkpoints now bind
+the existing register/work-state rows. No validator weakened, milestone state promoted or new
+tracking instrument added. Final governance rerun follows.
+
+2026-11-05 — Final73688 roadmap receipt/complete governance/progress pass after missing new-RFC
+ownership/anchor repair. Current3903ledger/1870done/1870live/0untriaged;462closeout-prose unchanged.
+Latest44384 normal14625software/530410.40s+7performance/four58.11s/types/build/source11 and
+51553content60fail/261pass/18setup43files201.12s/all62old headings stand. D4150/D4152/D4154
+finite fixes close; D4147/D4149/D4151 three-source consumer/fourth row/profile/UI/new-path cost
+and D4153 original unexplained run remain open, alongside D4140/D4119/D3928. Full1.0 goal
+continues active with no Git mutation, remote-CI/release claim or pause.
+
+
+## 2026-11-05 — bounded GAME source-to-Profile companion verified locally
+
+Accepted profile-game-facts now reaches the actual exact3ref worker callable, strict fourth
+GAME family/migration33/revision7, atomic publication/read/rebuild/account lifecycle and all5
+Profile/card/detail/contributor/denominator/share paths. Unknown sources/roles/rights abstain
+before floors, preserve counted history and show readable missing-information text rather than
+raw ids or a false measured denominator. Existing source identity/owner cache keys and cold
+same-store checks handle same-head grants, reset-job ID reuse, other-owner restore and cold races.
+Original factory inputs and computed row/scope membership reject genuine substitutions/copies;
+known absence, original first-owner BEFORE and public retained-DecisionFact CHILD stay distinct.
+Both independent contract/implementation reviews accept after genuine reds.
+
+Actual40985 optional200-native64ply workload exits0:570788.45ms full projection, cold/warm
+1061.71/381.78ms with200/zero V4 reads. Independent assertions cover migrated operands,
+setup/screen refs/counts and castling eligibility; all4cards/details/shares execute. It does not
+independently rebuild unchanged castling contributor/statistic or complete shared bytes. The201st
+mixed-control case stays201counted/200known eligible refs/whole-card incomplete. Compact receipt
+under10KB, no raw recordings/progress dependency, statistical attribution, human or browser proof.
+
+Local normal attempts retained actual failures: invalid test enum, missing expected operation
+family D4161, stale census tests/receipt and complete48261 migration-fixture33fail/14627pass.
+D4162 removes only future GAME tables from synthetic old schemas and updates exact migration/
+schema expectations. Production DDL and corruption/rollback guards stay strict; independent
+fixture review and146/seven5.56s focused pass. Final44045 normal exits0:14660software/all531
+421.19s,7performance/four59.76s, types/build/schema/packaging/manifest50/381/49/593. Source-author11
+passes. Complete69588 content remains60fail/261pass/18setup43files179.98s with all62previous
+failure headings matching in order; D3928/native/content remain held.375cases/91subjects/0qualified,
+1099declarations/0changes/477applicability stand. D4153's earlier unexplained failure remains open.
+
+D4147/D4149/D4151,D4155–D4158,D4160–D4162 close locally with real path evidence. Independent scope
+review also closes D3564's grammar-only repair after current full proof, not case authority or
+qualification.3912ledger/1881done/1868live/0untriaged;462closeout-prose unchanged. Source plan,
+roadmap/checkpoints, RFC/migration register, canonical docs and the current queue are reconciled;
+the old duplicate queue headline now points at the checked authorities. Final governance runs
+next. No staging, commit, push, archive, worktree, capability/milestone/native/release promotion
+or goal pause. Next is already accepted SliceB D4163 independent absolute king-destination and
+complete castled1 orientation data, then D4159 exact all-legal choice-residual source research.
+
+
+2026-11-05 final GAME companion reconciliation:28568 roadmap receipt, complete governance and
+roadmap-progress exit0. All register/status/work-state/roadmap/569UX checks reconcile;
+3912rows/1881done/1868live/0untriaged and462older closeout-prose stand. Eleven finite items close
+on real test paths. No whole milestone/capability, qualification, content/native/release, Git
+mutation or goal pause. Next production work is already accepted SliceB D4163; its case data and
+any qualified verdict have not shipped in this checkpoint.
+
+## 2026-11-09 — D4163 bounded castling qualification closeout
+
+Collected the November5 normal executions and closed D4163 locally with the actual castling test
+path.383/383 canonical cases/91subjects execute; exactly castled@1 passes every required arm.
+Pinned python-chess1.11.2 Board.push full branch context grounds four absolute physical king
+destinations; four complete ten-rule mirror cases use original resolvers/factories and preserve
+old four cited cases. Symmetric wrong destinations mirror but fail absolute matching. Both
+independent read-only reviews accept, including exact-eight-ID historical-test filtering.
+
+Earlier generated/focused fixture failures and generic orientation/predecessor-test failures
+remain failed attempts, not designed falsifiers or production detector defects. The actual
+normal29074 exits0:14691software/532415.86s,7performance/four59.02s/types/contracts. Focused923
+cases/14files and all types pass. Actual1414 source-author11 passes; content60fail/261pass/
+18setup43files181.41s retains all62prior failure headings exactly in order. D3928/native/content
+and release stay held. No parent RFC/capability/milestone/archive/Git promotion.
+
+Next D4159 research must measure complete chosen-inclusive legal populations and retained forced/
+unanimous zeros before a finite claimed-decision/trait-store contract. Existing opportunity rows
+have a different denominator; GAME rows cannot substitute. Routine independent reviews remain
+authorized without further permission questions. Source plan and roadmap carry the handoff.
+
+2026-11-09 D4163 final reconciliation: actual91320 roadmap-receipt/complete verify-governance/
+roadmap-progress exits0.3912rows/1882done/1867live/0untriaged; older462closeout-prose unchanged.
+All strict capability/milestone/native/content/release holds remain.
+
+## 2026-11-09 — D4159 source arithmetic experiment
+
+Actual23898 make profile-choice-source exits0 with43positions/284original legal/candidate/centre
+sources compared to current decisionTraitPopulation. Both-color N4/N6 pawn-choice counterexamples
+retain different3/4versus5/6residuals but identical calculated opportunity-algebra tuples. Forced/
+unanimous/all-false zeros remain in averages. Promotions/castling/centre/terminal controls pass.
+No new production trait row or worker-decision source is fabricated.23.76ms is finite instrument
+time, not worker/Profile cost. Existing live claimed-GAME decision refusal is a real contract gap.
+Research dossier/coverage updated; independent research review precedes narrow contract drafting.
+All prior content/native/release holds and no-Git wave remain.
+
+2026-11-09 independent D4159 exploration review accepts finite math for companion drafting.
+Precision:43means sample calls with repeated FENs;284means candidate-member visits, not all
+factory values. Castle alias negatives stop at harness literal-membership admission; bare-kings
+all-false proves arithmetic only, not an accepted committed runtime decision. No production or
+worker-cost permission follows. Earlier broad wording is superseded by this clarification.
+
+2026-11-09 D4159 companion drafted after independent exploration acceptance: profile-choice-facts
+owns exact original claimed decisions, four-source complete-legal reduction, separate derived
+family and every Profile/non-choice/Skills/account consumer seam. Registered next migration
+position without a number. Buildability review pending; no production authority is self-accepted.
+
+2026-11-09 D4159 independent buildability return: parent foundation§3.8 requires contextual
+occurrences, while draft worker decisions deliberately refuse live occurrence APIs. The draft
+now explicitly owns a finite actor_decision exception only for profile.choice_facts, original
+owner-played claimed decisions and complete original member joins. No live envelope or other
+consumer/actor/skill authority is manufactured. Independent rereview remains pending.
+
+2026-11-09 D4159 second buildability return repaired: actual teacher-owner MOVE is not learner
+role (D4144). Supported role requires actual single_player+owner MOVE; unsupported decisions stay
+counted with role_unavailable. No speculative source-unavailable producer arm; invalid contexts
+and execution throw. Exact includeChoiceFacts receiving lane, complete-run outcomes, unaffected
+phase/class/projection filters and C<=P/P+Q<=N are pinned. Independent rereview remains pending.
+
+2026-11-09 D4159 profile-choice-facts is independently accepted for bounded implementation by
+both existing read-only reviewers after all finite returns. It is now implementing; source slice
+starts, complete consumer/row/Profile/Skills/account and new200-game parity/cost remain owed.
+No author self-acceptance, new product ruling, content/native/release or milestone promotion.
+
+## 2026-11-09 — D4159 actual source, consumer and fifth-family integration in flight
+
+Independent source71673 proof passes1637/six/types; consumer55590 passes94/four/types. Original
+worker decision is distinct from live grants, includes existing job identity and actual owner/
+role/root/event/BEFORE/chosen joins, and retires through original scope. Both source and finite
+collector/parser reviews accept. Current schema34/revision8 fifth family reaches real worker,
+atomic publication/read/rebuild and account lifecycle. Broad4893 passes1694/eight; direct new-
+family controls are added and current28783 awaits collection. Profile adoption and200-game new-
+path/full normal proof remain unimplemented/owed; D4159 is not closed.
+
+Failed local attempts remain: initially omitted unclear phase in hand-written type, omitted
+RebuildMismatch table union and empty invalid-projection test fields, exact schema/migration
+expectations, old legal-binding census, then direct-control authenticated read argument and
+startup reconciliation omission. Compiler/fixtures were corrected against existing contracts;
+no production guard, timeout, assertion or metric was weakened. Current source plan owns next.
+
+2026-11-09 D4159 current Profile adoption: actual28783 direct persistence136/six and94466
+Profile/application/walls/UI/persistence71/five plus types pass. Current parsed rows supply all
+choice operands; warm metadata caches cannot hide missing rows, unknowns precede floors and
+rooted16 unknown stays outside early-queen scope. Independent GAME refs/history and Skills
+non-credit semantics stay. Earlier84414 obsolete helper-spy expectation and13983 duplicate
+100-game rebuild timeout remain failed attempts; narrowed receiving test uses100 actual one-
+move games/restores its exact genuine row, while independent actual rebuild tests remain. No
+timeout raised. Expanded200-game full numeric/ref/interval/share proof and normal gates owed.
+Coupled45212 source experiment43sample calls/284candidate visits24.83ms, semantic383/383/91
+subjects/exactly1qualified and1099declarations/0changed/477applicability pass. No closure/promotion.
+
+2026-11-09 independent next-slice review routes accepted SliceB rights_lost@1 orientation
+coverage to D4164/evidence-foundation, without source/consumer/content activation. Actual emitter,
+pinned authority and local-edge operation already exist; mirror controls and independent
+absolute proposition remain required. Initial sidecar update used an invalid short owner and a
+forbidden todo since; corrected to the existing evidence-foundation owner without since.
+Current D4159 remains doing while the expanded200game proof runs.
+
+2026-11-09 D4159 actual11538 make profile-source-cost exits0:200native64ply/100eachside jobs,
+6400original decisions independently match complete old-helper legal/chosen/share/metadata. All
+three existing cards match weighted values, separate BigInt/PRNG bootstrap, full contributor
+paging and consented shared object/text. Projection609174.98ms/worker+probe613892.17ms; cold/
+warm1174.1/501.07ms with200/zero V4reads. Separate actual41217 mixed-length150decision control
+passes23/one. Original GAME source/ref controls and201st source-first0 versus owner-first4 pass.
+4956byte compact receipt retained, no raw recording dependency. Independent final review finds
+no concrete contract blocker; root ran the measurements. No human/personality/source qualification
+or performance attribution is claimed. Current migrations45426 pass146/seven after1696 caught
+an additional stale concept-schema expected table list; strict production DDL unchanged. Final
+full software/content/governance gates and closeout remain owed; D4159 stays doing.
+
+2026-11-09 D4159 first normal98645 stops in authority preflight: one manifest-capability
+summary assertion still expected49consumers/593bindings. Actual core50/381/50/597 is already
+registered; exact summary expectation now includes the one consumer/four bindings. Dedicated
+44671 passes13/one; no production factory/budget/admission changed. The failed full run is not
+final proof; complete normal verification is being rerun.
+
+2026-11-09 D4159 full44000 reaches all534software files:2fail/14728pass410.70s, exactly
+two stale literal revision7 assertions. The accepted migration uses8; no production issue
+is inferred. Source/capability/types/build/authority prerequisites passed. After pin repair,
+35365 passes real startup reconciliation and reaches only the naturally changed full-output
+digest. Crucially its exact predecessor4family hash still passes after removing ONLY choiceFacts
+and normalizing derivedRev7; other fields/counts/order remain exact. Independent review accepts
+that finite preservation and requires all5family rows first assert revision8. Current94667
+passes28/two with original4family hash retained and new5family output pinned. No old fixture,
+collector, source guard, publication check or deadline is weakened. Complete final normal rerun
+remains required; earlier failed full results are not reported green.
+
+## 2026-11-09 — D4159 complete-legal choice migration verified locally
+
+Final40427 make verify-software exits0:14730software/all534410.56s,7performance/four58.02s,
+types/schema/build/contracts. Actual16758 source-author11 passes; complete content60fail/
+261pass/18setup43files172.73s, all62 old failure headings EXACT in order versus D4163 baseline.
+Actual200game/6400decision old-helper legal/chosen/share/ref and every choice-card numeric/
+independent interval/contributor page/shared-byte proof passes; compact4956byte receipt only.
+Separate100game150decision control proves weighting. Both independent reviews accept the
+bounded implementation. No production guard/metric/deadline/old fixture was weakened.
+
+D4159 closes with real profile-choice-store.test.ts path evidence; source/worker/fifth-family/
+Profile/Skills/account lifecycle all flow back to docs/RFC/register/research/roadmap. Normal
+failures and repairs remain above. Content/native/official-content/release remain red/held; no
+whole-source, actor, learner-model or milestone promotion. D4164 is queued and owned for accepted
+rights_lost1 orientation coverage; wider D4140/D4119/D3146/D3928 and downstream story/guidance/
+rank/title remain open. No staging/commit/push/worktree/archive or goal pause. Final governance
+reconciliation follows the actual proof rather than declaring it from the partial runs.
+
+2026-11-09 D4159 final82617 make roadmap-receipt verify-governance roadmap-progress exits0.
+First63305 correctly refused the new active RFC lacking a checkpoint anchor; existing three
+checkpoints now include that exact current RFC row. All3913ledger rows assigned:1883done/
+1867live/0untriaged,462older prose-only closeouts unchanged; UX569 still283complete/24retired/
+262live. States of whole1.0 milestones/capabilities stay unchanged. Source/worker/Profile bounded
+checkpoint advances while stable-board/presets is held. No Git/archive/goal-state mutation.
+
+2026-11-09 D4164 begins under accepted semantic-validation-authority SliceB/§4.1a. Independent
+read-only preflight identifies rights_lost@1 orientation as the sole remaining arm for this
+finite exact-version subject, with existing pinned absolute rule and actual local-edge reach.
+Complete operand/input mirrors and independent absolute failure controls are required. No source
+factory/consumer/content/qualification change is authorized merely by beginning case-data work.
+D4159 remains the last full verified source/worker/Profile checkpoint; full1.0 goal stays active.
+
+2026-11-09 D4164 eight original-source case additions preserve383old cases. Initial local
+1538 refs lacked required full raw case identity;34428 caught new test narrowing/types;6621
+caught unreferenced positive rows. Corrected data then75859 generates383pass/8fail with wrong
+proposition digest because my Python omitted the existing fact-constraint domain; focused18fail/
+586pass includes those authority failures and count expectation. These are fixture mistakes,
+not detector failures. Independent source review additionally required the complete actual
+Board.push rights-update rule instead of Boolean-only grounding. Root inspected pinned local
+2373–2384 and verified old3321–3326 bytes against retained source, preserving old records.
+
+Actual88862 then generates391/391 but permanent controls expose six WRONG partner-version cases
+passing with2invocations; seventh focused failure is stale qualified count. D4165 is ledgered
+before bounded accepted-contract repair. Runner now checks exact partner object id/version
+before dispatch. Both independent reviewers accept finite source/control design; source reviewer
+accepts both repairs. Actual74155 full types/generation391/391/91subjects/exactly2finite passed
+profiles and604focused/six3.00s pass. Historical reconstruction excludes only exact new8IDs,
+not live cases; old frozen expectations remain. Coupled generation/full normal gates remain
+owed. D4164/D4165 stay doing; D4159 is the last complete verified checkpoint.
+
+2026-11-09 D4164 first normal28908 reaches535files,1fail/14761pass409.33s: existing cited-
+source historical control still requires rights1 orientation to be missing. Exact current
+rights1 now has its own six refs/passed result; other three old families retain required/
+unvalidated checks and original cases/counts. Dedicated37730 passes640/three2.57s after that
+finite expectation update. No source/factory/runner/deadline change. Coupled64600 leaves1099
+declarations/0changes/477applicability. Complete final normal verification is rerun before
+closure; D4164/D4165 remain doing and D4159 remains the last full verified checkpoint.
+
+## 2026-11-09 — D4164/D4165 independently reviewed and verified locally
+
+Final10066 make verify-software exits0:14762software/all535410.11s,7performance/four58.51s,
+types/build/schema/source contracts. Actual19610 source-author11 passes; complete content60fail/
+261pass/18setup43files172.36s, all62prior failure headings identical in order versus D4159.
+391/391canonical cases/91subjects pass; exactly castled1 and rights_lost1 satisfy required arms.
+All383prior records remain. Six mirrors are three color pairs, not six pairs. Complete primary
+Board.push2373–2384 rights updates plus original Boolean text are retained under NEWsource ID;
+old source/cases unchanged. Symmetric wrongfields still fail independent absolute propositions.
+
+Actual six wrongversion partner falsifiers had passed with2invocations. D4165's exact returned
+object id/version preflight repairs that observed runner defect, preserving authority/geometry/
+source checks. Both independent reviews accept final bounded meaning/source/guard. D4164/D4165
+close with real test-path evidence; earlier generation/type/digest/expected-count failures remain
+above. Current docs/RFC/register/research/source-plan and roadmap reflect local proof. D4166 is
+ledgered/owned for the next accepted capture+clock-reset finite case wave. Other89subjects and
+all wider actor/consumer/style/content/native/release duties remain open. No Git/archive/goal
+pause. Complete governance reconciliation follows this proof, not a presumed green run.
+
+2026-11-09 D4164/D4165 final1548 make roadmap-receipt verify-governance roadmap-progress
+exits0. All3915ledger rows assigned:1885done/1867live/0untriaged,462older prose-only closeouts
+unchanged. UX569 remains283complete/24retired/262live. Strict capability/milestone states are
+unchanged; bounded foundation/spine checkpoints advance, stable-board/presets held. Actual
+software/content/source proofs stand; no staging/commit/push/worktree/archive/goal pause.
+
+2026-11-09 D4166 begins as one accepted two-subject SliceB wave after D4164/D4165 complete
+verification. Independent preflight and root inspection confirm actual12-leaf capture/11-leaf
+clock-reset payloads and pinned source spans. No captured-square field exists in the payload;
+role is original BEFORE, before promotion. EP keeps original0halfmove counter; other fixtures
+start nonzero. Complete absolute/mirror controls and source scope precede qualification. No
+factory/consumer/policy/content change or new schema lane is introduced by this case-data work.
+
+2026-11-09 D4166 batch28cases preserves391prior records. Initial81989 fails a generic rule
+union type,2442 catches my misplaced historical-test branch. Corrected35720 exposes an actual
+preflight omission: direct captured board Piece retains promoted:false (13leaves) while EP's
+constructed victim has only color/role (12); clock-reset11. Gen415pass/4fail and focused20fail/
+790pass are incomplete case/test assumptions, not detector failure. Root traces actual helper/
+board code and retains independently pinned complete FEN initialization/insertion/marker code.
+False means input metadata, never historical never-promoted truth. Collectors/types/policy stay.
+
+Both independent reviewers accept literal complete direct13/EP12/clock11 walks and source scope.
+Actual8690 clean types/gen419/419/91subjects/exact4profiles and813focused/six3.20s pass. New
+controls reject missing direct flag, symmetricwrongtrue and invented EPfalse; all other complete
+fields/identities/negative/counter paths remain. Entire17file validation family/coupled/full
+normal verification remains owed; D4166 stays doing. No D6/actor/style/content/native/release
+clearance or Git/archive/goal pause.
+
+
+### 2026-11-09 — D4166 bounded capture/halfmove-reset closeout (local, uncommitted)
+
+D4166 is verified locally: 28 independent capture/halfmove-reset absolute and mirror cases
+preserve all 391 earlier records. All 419 canonical cases over 91 subjects pass; exactly castled@1,
+rights_lost@1, capture@1 and clock_reset@1 satisfy every required arm. Complete payload walks retain
+13 direct-capture leaves, 12 en-passant leaves and 11 halfmove-reset leaves. Supplied-FEN promotion
+markers remain distinct from historical promotion claims. Both independent reviews accept.
+
+Full normal software passes 14,878 tests in 536 files (415.07s), seven performance tests in four
+files (60.17s), types, build and source contracts. All 1,084 tests across the 17 validation files
+pass; coupled generation retains 1,099 declarations, zero changes and 477 applicability entries.
+Source-author checks pass 11/11. Complete content remains 60 failed, 261 passed and 18 setup-skipped
+in 43 files (172.09s), with the exact 62 prior failure headings in order. D3928, default native,
+official content and release remain held. Failed fixture assumptions are retained in the source plan.
+No whole capability or milestone is promoted.
+
+D4166 is path-backed done; 3,916 ledger rows, 1,886 done, 1,867 live and zero untriaged.
+The 462 older prose-only closeouts remain. Governance/roadmap reconciliation follows. D4167
+owns the next actual source/operation/consumer map. No gate definition, release state, Git or
+whole-goal state changes.
+
+
+### 2026-11-09 — D4166 complete tracker verification
+
+Complete43675 normal governance and roadmap-progress exit0 after exact source/row/checkpoint
+flow-back. All3,916 ledger rows assigned;1,886done/1,867live/0untriaged. Four active/five blocked
+milestones and the112 dimension states stay unchanged. D4167 research is next. No Git mutation,
+remote CI, capability promotion or goal pause. Final lightweight tracker receipt follows.
+
+
+### 2026-11-09 — D4167 class-wide source/operation/consumer audit and draft
+
+Root and both authorized read-only reviewers trace all16 non-style routes within the existing23.
+Eight snapshots already execute in candidateChildReadings; source absence is not universal. Seven
+new edge-event factories have no selected Inspector operation/readout, while backward advance
+remains a separate candidate consequence. Current signs/subjects/cardinality differ from old
+versions; target-bearing discovery rays cannot be relabelled as physical blocker rays. Existing
+module-evidence-assembly dossier/coverage now records the full map and ordinary/bot/avoidance
+owners. Three active-parent draft clauses specify seven exact selected-edge source joins and
+Full2 readouts (84topics/90Full2/301pairs), strict complete payloads and real API→selected-UI proof.
+No production change or self-acceptance: independent buildability review follows. Remaining
+snapshot/advance/ordinary/shared/validation/avoidance/bot duties stay explicit; D4167 stays doing.
+No new tracker document, Git mutation, protected intent, qualification or goal-state change.
+
+
+### 2026-11-09 — D4167 independent draft return and exact receiving join
+
+Move-path review accepts the bounded seven-edge contract. Independent source/presentation review
+returns one concrete gap: generic renderer/operand/receipt checks do not join plausible altered
+full payloads to the genuine original evidenceRef (the existing D4091 class). §3.10d now requires
+stripping only SAN and comparing the complete retained payload with the existing F1 payload
+digest at construction AND exact received-wire adapter; genuinely re-digested mutations retaining
+original evidenceRef must refuse. No new digest/store/signature/authorization claim is introduced.
+Correction is returned for independent re-review; no production implementation has begun.
+
+
+### 2026-11-09 — D4167 real source tests and D4168 root closure
+
+Initial75970 typecheck caught my renderer generic callback inference; corrected literal callback.
+Actual6345 then passes types but2/18source tests fail: my rook fixture had a diagonal blocker,
+and my quiet fixture moved a slider and genuinely changed rays. Correct source fixtures pass
+18/18 in70135; no detector bug or intentional falsifier is claimed. Current34791 passes types
+but two import suites expose seven undeclared active validation roots once Full2 binds them,
+plus an obsolete combined pair count. D4168 records the real root seam. A narrow draft correction
+uses the existing explicit-event validation declaration register and required/unvalidated profiles,
+without collecting semantic wrappers or broadening candidate/selector inputs. Separate independent
+review precedes that correction. No candidate/ordinary/source-qualification release is inferred.
+
+
+### 2026-11-09 — D4167 actual selected delivery and budget controls
+
+Complete source plan records all initial type/fixture/count/preflight failures without calling them
+detector defects or intentional falsifiers.2250/five and533/four pass; actual cookie REST→strict
+receiver→selected DOM covers all7 families/bothcolors, root/inherited/repeated/access/cancel/error
+retirement and genuine re-digested corruption. Review's nullable-opposition turn omission is fixed
+from original FEN.277/three proves genuine dense source bounds/current required roots and unchanged
+401-word generic whole-bundle behavior; real first fixture357words correctly failed the intended
+deferral assertion, then actual dense capture-promotion source passes. Final283/two includes both-
+color same-source page deferral and exact ordinal continuation.98roots retain419canonical passes
+and exactly4qualified; seven new source roots remain required under D4168, not semantic wrappers.
+Normal full source/software/content/governance proof follows before closeout. No source/content/
+ordinary policy/qualification/native/release, Git or whole-goal state promotion.
+
+
+### 2026-11-09 — D4167 full-gate ordering refusal
+
+Normal55229 passes types, then its40-file value-authority cohort fails1/1607 (1606pass):
+Inspector constructors were grouped by payload shape while the accepted topic table keeps three
+replacements in place. The exact-order assertion correctly refuses those unequal84-member orders.
+Remaining normal stages did not execute. Adapter output now uses the existing sole topic order
+and exact source/detail map, rejecting missing/extra/duplicate constructor entries, while ordinary
+adapters are untouched. No assertion is weakened; fresh complete normal verification follows.
+
+
+### 2026-11-09 — D4167 remaining finite image assertions
+
+Fresh normal10167 passes the repaired40-file1607-test image cohort, then the binding-execution
+cohort fails1/143 (142pass) on its obsolete86 accepts count. Its strict missing-twelve-binding
+negative remains; current image90 implies78 remaining, and the three retired current tuples are
+now explicitly refused alongside earlier retirements. The same audit finds the real REST inventory
+assertion still expected80 instead of84. Correcting these exact accepted counts/order assertions
+changes no threshold or consumer behavior. Remaining normal tiers did not execute. Focused binding/
+REST/query controls then precede the next complete normal run; no remote or green release claim.
+
+
+### 2026-11-09 — D4167 complete-pool retirement and full-field receive controls
+
+Actual61433 complete normal pool reaches all537files:4failed/14952passed (14956total),419.39s.
+Only the old D4060 structural-presentation test still requests retired backward1/opposition1/
+islands1 at the current Inspector door. Performance did not execute. The nine still-current
+old-family positives stay; all three retired source tuples now explicitly fail local acquisition,
+have no current adapter and yield no presented F1 items from genuine old factory values. An
+initial test incorrectly expected generic F1 filtering to throw (it correctly returns no items);
+the negative now checks actual refusal/no output rather than altering production behavior.
+Current island2 quiet absence is distinct from actual both-color count loss ending at0/no islands.
+Initial55954 hit a test generic-flatMap union type error; a typed evidence array fixes it.
+
+Seven real service-issued current source pages now independently omit/change EVERY retained nested
+leaf (including null/empty-array state), recomputing all public operand/component/receipt hashes
+while retaining the genuine original reference. Existing fully valid re-rendered mutation controls
+still distinguish the actual correspondence check. Selected UI now includes tripled pawn groups,
+both-color own-bishop→enemy-pawn stop occupancy and true blocker-constrained opposition no-witness,
+plus actual dense physical rays/budget continuation. Full68719 types and309/three68.52s pass.
+Normal full regeneration/software follows against frozen sources; no completion or release claim.
+
+
+### 2026-11-09 — D4167 full normal software and D4169 read access
+
+Normal67661 exits0:14966software/all537files423.48s,7performance/four58.93s and all normal
+types/source/generated/schema prerequisites. Content/build/governance have not been claimed.
+D4169 is a real remaining usability defect: cumulative-page deferral can leave a <250word fact
+with no detail permanently unreadable through8-step continuation. Independent read-only review
+confirms the existing accepted arbitrary nonnegative source-start contract already authorizes
+showing that original ordinal first with the same context/collection key; no new RFC/ruling is
+needed. UI adds that action only for a deferred no-detail fact at page-local i>0, avoiding a
+first-item futile loop. Actual both-color dense-source tests click the emitted button and require
+the exact original payload/ref to become whole/presented under the unchanged400word cap.
+Focused and complete normal tests must run again for this final UI change. Source semantics,
+permission, defaults, schemas, settings, ordinary modules and state remain unchanged.
+
+
+### 2026-11-09 — D4169 actual read-first verification and factual tracker correction
+
+Corrected86335 passes132/two69.24s. Both-color real cookie REST/strict/selected DOM tests click
+the emitted control, request the original deferred ordinal with original source/context/collection
+key and show its exact whole payload/reference under400words; no run/provider change. Initial
+48939 caught only a test request.view/query.view access. Independent read-only implementation
+review accepts this bounded fix under the existing pagination contract, subject to fresh normal
+gates. Automatic approval review refused a combined tracker/test command as possible self-
+acceptance. Tests33222 run separately; the safer factual update cites existing independent
+review receipts and actual measured tests, explicitly preserves all parent implementing states
+and changes only existing reference digests. No RFC, milestone, release or goal-state promotion.
+
+
+### 2026-11-09 — selected-edge Inspector verified; D4168/D4169 close locally
+
+Independent move-path review accepts the seven-edge implementation subject to final normal gates:
+actual original source→authenticated REST→strict receiver→selected UI, retained-reference nested
+mutation refusals, dense-source continuation and whole-item deferral. Independent source/meaning
+review accepts D4169 under the already accepted arbitrary source-start contract: the emitted
+button retains exact source/context/collectionKey and original ordinal, complete payload/ref,
+400-word cap, unchanged stored run and no provider work. No new owner decision or self-acceptance.
+Root alone runs final33222:14966software/537421.11s+7performance/four57.87s and prerequisites pass.
+Final85059 builds/source11 pass; complete content retains the exact62 baseline headings,
+60fail/261pass/18setup43files172.29s. D4168/D4169 close locally on actual test paths; D4167 stays
+doing for full remaining consumers. Seven newly active roots stay required/unqualified. No parent
+lifecycle, whole-capability/milestone, native/content/release or full-goal transition.
+
+Ledger now3918:1888done/1867live/0untriaged;462 older prose-only closeouts remain. All accumulated
+fixture/type/preflight/receipt failures remain in the source plan. No Git mutations or archival
+operations. Governance/roadmap reconciliation follows.
+
+
+### 2026-11-09 — selected-edge closeout governance reconciliation
+
+make roadmap-receipt verify-governance roadmap-progress exits0 (61320). R1–R10 green;3918ledger,
+1888done/1867live/0untriaged. Strict milestone/capability states remain unchanged. Full goal stays
+active. No Git/archive changes. Next D4167 snapshot/advance contract audit proceeds with the two
+already authorized independent read-only reviewers; no permission dialog.
+
+
+### 2026-11-09 — D4167 snapshot/advance coordinated draft, no production change
+
+Both authorized independent read-only audits identify complete selected-source detail as the next
+gap; existing factories suffice. Draft shared§3.1c/module§4.11g/presentation§3.10e covers eight
+whole snapshots plus actual-edge advance, exact original dependencies, nine topics/eight typed
+text-only detail views, complete root domains and finite lossless exchange traversal. No generic
+JSON slicer, all-candidate acquisition, new cache/provenance/authority or owner product question.
+Independent review now follows; draft is not self-accepted. D4167 remains doing, all ordinary,
+canonical/avoidance/bot/profile/content/release obligations stay owned. Research gate and original
+canonical-input seam recorded in existing module-evidence-assembly dossier; no new tracking silo.
+
+
+### 2026-11-09 — D4167 complete snapshots/advance implementation in flight
+
+Both authorized reviewers independently accept the three concrete companion clauses and later
+find no static source/meaning/integrated guard/ref blocker, conditional on complete real controls
+and normal gates. Source4703 types+28 and38943 types+398/five7.37s pass. No new source collector
+or author content is invented. Finite detail pages reconstruct original snapshots and recursive
+exchange alternatives; original source guard executes before even zero-member slicing.
+61444 real API/DOM fails18/389 (371pass,87.27s), exposing only stale90/84 assertions, a10-page test
+navigation cap and a no-advance/position fixture for the new incoming-edge source. Tests now use
+exact accepted107/93 image, total-derived page navigation and an actual genuine selected advance.
+5701 rerun is in flight; full normal proof follows only after it finishes. All failed compiler/
+fixture attempts remain recorded in the existing source plan. No parent/D4167/release completion,
+Git/archive change, qualification or user permission question.
+
+
+### 2026-11-09 — D4167 selected snapshots/advance verified locally
+
+Both authorized independent reviewers accept the bounded source/detail implementation conditional
+on final normal gates. Actual389/four92.31s proves original source/API/received/selected DOM and
+all emitted member continuations in both colors. Complete snapshot and recursive exchange graph
+reconstruction, genuine membership before slicing, original-ref retained leaf corruption/omission,
+text-only400word/8member budgets and unchanged saved runs/providers stand. No self-acceptance.
+Final18210 normal verify-software passes15173/all539443.17s,7performance/four58.16s and all normal
+prerequisites. Build31916 server/web/source-author11 pass. Complete content stays60fail/261pass/
+18setup43files170.71s; all62prior headings identical. Factory376 adds8 profiles, all368prior
+outcomes unchanged; normal3121/six6.81s passes without skips. Validation stays98/419/4. Failed
+preflights/matrix fixture assumptions and filtered profile generation remain in the source plan.
+D4167 remains doing; no ordinary/canonical/avoidance/bot/qualification, parent/capability/milestone,
+native/content/release, Git/archive or full-goal completion follows. D4170 is owned migration debt.
+
+D4170 wording is narrowed after reading the actual compiler's explicit legacy-family branch:
+this is scoped literal-input migration debt, not an observed production consumer fault. The next
+class-wide canonical/ordinary audit is recorded in the existing module-evidence-assembly dossier;
+no extra tracker or new hash/provenance mechanism. Governance reconciliation follows.
+
+
+### 2026-11-09 — complete selected-source closeout and broader reverse trace
+
+Complete36967 governance/roadmap-progress exits0, R1–R10 green;3919ledger,1888done/1868live/
+0untriaged. Strict states remain4active/5blocked milestones,2proven/61partial/39blocked/2missing/
+8notapplicable dimensions; no default/native/content/release promotion. The additional independent
+reverse audit finds Play/Compare position_structure2, separate board Sight, both comparison
+paths and guidance/voice/speech still on predecessor definitions. These now appear explicitly in
+D4167, its source plan and existing module-evidence-assembly dossier. Valid complementary file/
+connectivity/material readings and deliberate unreferenced authored predicate1 stay distinct;
+the latter requires explicit authored migration. No global latest-version lookup, code change,
+new tracker, owner permission question, Git operation or whole-goal transition.
+
+
+### 2026-11-09 — post-reverse-trace tracker check
+
+Final56921 roadmap receipt/check, status parity, work-state and docs-check exit0. The broader
+D4167 consumer inventory is reflected in the existing source plan, ledger, dossier and roadmap;
+3919rows/1888done/1868live/0untriaged. Runtime code remains the final18210/31916 verified bytes.
+The full1.0 goal remains active; no pause, completion, Git/archive or release transition.
+
+
+### 2026-11-09 — D4170 actual factory receipt-order research and bounded draft
+
+The prior goal turn made verified code/tracker progress; this continuation now observes a specific
+remaining join. Disposable make semantic-input-order-research81494 passes2/2 in1.70s: genuine
+both-color capture_class1 wrappers accept reversed capture/exchange inputs under the same event
+id, while missing/duplicate/extra vectors refuse. This is receipt correspondence evidence, not
+an observed learner fault or invented chess truth. Existing value-authority§2.2 explicitly names
+multisets; draft§2.2a separates that declaration rule from the actual factory's ordered receipt.
+It requires ordinal digest equality at consumption, no new format/registry/hash/store, and keeps
+variable populations, ids, source eligibility and D4167 original-object/anchor/sign duties intact.
+The existing dossier/README/Make research target record the result; no bulk payload output.
+Independent review precedes production. D4170 is doing; no owner permission question or Git action.
+
+
+## 2026-11-09 — ordered factory inputs repaired; next source wrapper clause reviewed
+
+D4170's genuine both-color capture and variable source controls failed83pass/3fail before the
+one-line ordinal receipt repair. Both independent reviewers accept corrected genuine equal-
+digest/different-instance controls;86pass3.65s. Complete95437 software reached15233pass/one
+error-message assertion failure; retain original `exact sealed inputs` diagnostic wording,
+without changing the test or join. Corrected94/two4.65s pass. Normal96077 catches stale generated
+semantic receipts after that source-byte change;98subjects/419passing/fourqualified unchanged.
+Required regeneration and full gates follow. Restricted95138 was stopped130 after local listener
+preflight failure; permission-corrected preflights pass. No CI/release/parent completion is claimed.
+
+Next D4167 wrapper construction is independently accepted in existing value§2.2b/shared§3.1d/
+module§4.11h. Review fixes exact computed tuple arity, singleton reversal,3new@1 inventory and
+seven-root declaration ownership; all98root statuses/pending blockers stay. Actual35472 small
+research4/4cases1.36s also proves both-color original castle spelling differs from normalized
+payload input digest. Reuse sole-mint tuple membership, not reconstructed authority; no new hash,
+store or issuer. Canonical/candidate/ordinary/avoidance/bots and complete reverse closure stay
+owned/open. D4167/D4170 remain doing; full1.0 goal active, no Git/archive or content/native release.
+
+
+## 2026-11-09 — final ordered-input gate result and current handoff
+
+Normal 21549 exits 0 after the required generated-receipt refresh: 15,234 software tests in all
+539 files (625.59 s), seven performance tests in four files (64.20 s), types and all prerequisites.
+Build/source-author 25753 passes production builds and 11 checks. Full content remains 60 failed,
+261 passed and 18 setup-skipped across 43 files (290.08 s); all 62 prior failure headings match in
+order. Later content targets did not execute. The unchanged D3928/native/content/release hold is
+recorded as red, not release proof. Prior failures remain in the source plan and review receipt.
+
+The independently accepted next work is value§2.2b/shared§3.1d/module§4.11h, not another owner
+question: finite current-source original tuples, three literal computed prerequisites, original
+slider edge, exact anchor/sign joins and unchanged ordinary admission. Canonical acquisition and
+all reverse-traced consumers remain D4167/D4170 work. Tracker/checkpoint flow-back retains those
+rows doing; semantic qualification remains 98 subjects/419 passing/four qualified. No parent or
+milestone completion, Git/archive mutation or goal pause. Governance verification follows.
+
+
+Final governance 49927 exits 0 after the current flow-back: register C1–C8, status parity P1–P7,
+roadmap R1–R10 and complete governance pass. The report retains 3,919 assigned ledger rows,
+1,868 live and zero untriaged; D4167/D4170 remain doing. The latest checkpoint names the verified
+receipt repair and the accepted, unimplemented next construction clause separately. Diff whitespace
+check passes. No Git mutation, release/capability promotion or full-goal pause.
+
+
+## 2026-11-09 — seven-source construction verified; bounded D4170 closeout
+
+Accepted value§2.2b/shared§3.1d/module§4.11h now has genuine construction proof: all seven positive
+sources fail before the implementation, then clean types and 759 focused/eight pass (5.90 s).
+Both independent reviewers accept original object/tuple/anchor/sign guards, exact computed arity,
+original slider edge, declaration transfer and unchanged ordinary41-source image. The67new cases
+preserve typed source meanings, both colors, raw castle spelling and physical special moves.
+Synthetic mechanics retain every old positive and require new protected manufactured values to
+refuse. Earlier type/fixture/path/count failures remain in the source plan; none is hidden.
+
+Final normal4013 passes15301software/all540566.64s,7performance/four61.00s/types/all prerequisites.
+Build22244 and source-author11 pass. Complete content remains60fail/261pass/18setup43files203.45s;
+all62prior headings match in order, later content targets did not run. Manifest50/389/50/625 and
+95events/95research eligibility add only seven research bindings.98subjects/419passing/fourqualified
+stay. Both reviewers independently confirm D4170's finite construction obligation is complete;
+D4167 remains doing for real shared/candidate acquisition, independent semantic qualification and
+the complete ordinary/comparison/guidance/authored/avoidance/bot migration. No parent, milestone,
+content/native/release or full-goal promotion. No Git/archive mutation; governance flow-back follows.
+
+The next dependency audit requires source-specific independent case authority AND true production
+reach, not another batch export or constructor-test qualification. Define exact new source ops
+before version1 fallback; keep D1717 legacy-only; run the fixed579-edge population with complete
+outcome/denominator retention and absolute mirror partners. Existing source handoffs are leads,
+not automatically current canonical propositions. Author/review that coherent amendment next.
+
+
+Final construction governance74363 exits0 after flow-back: register C1–C8, status parity P1–P7,
+roadmap R1–R10 and all governance checks pass. D4170 is path-backed done; D4167 remains doing.
+The current report has3919assigned rows,1889done,1867live and0untriaged. Strict capability and
+milestone states stay unchanged; content retains its exactly matched red hold. Diff whitespace
+passes. No Git/archive mutation or goal pause; next shared execution/semantic-evidence authoring
+remains the current handoff, without another routine-review permission question.
+
+
+## 2026-11-09 — shared-operation research and new exact-case requirements
+
+Disposable D4167 model preserves both-color complete source payloads while reducing required
+factory calls31→20 and retaining same-object file-change→revelation inputs. Single-source demand
+still runs only five required calls and refuses a wrong edge even when its normal population is
+empty. This is not application reach, latency or source qualification. Current shared operation
+must have a real retained Inspector caller; batch and actual singleton application demands need
+full multiplicity/value equality over the existing579-edge population plus real nonempty APIs.
+
+D4171 records five currently unrepresentable nested input-relative fields; D4172 records the need
+for exhaustive new positive propositions, demonstrated by a duplicated genuine material2 target
+still satisfying its intended witness-only case. D4173 records actual file/file-state transform
+domains. All three are owned doing in the existing state register, with no false current detector
+qualification claimed. Existing source meanings and profile requirements stand. The same existing
+dossier and coverage matrix now retain the research; active-parent drafting/review follows.
+
+
+### 2026-11-09 — D4167 concrete execution/validation drafts sent to independent review
+
+The disposable shared-operation instrument passes six controls (research4, 1.58 s). Complete
+White/Black payloads agree with the original source composition while calls reduce 31→20;
+original file-change objects feed revelation. It also reproduces D4171's five rejected nested
+input paths, D4173's two rejected typed file transforms and D4172's genuine duplicated target
+passing existing witness-only emits. No false current-source qualification is alleged.
+Coordinated shared-packet §3.1e, module-registration §4.11i and semantic-validation-authority
+§4.1b are concrete unaccepted drafts now with both independent reviewers. D4171–D4173 retain
+doing/evidence-foundation. Production, ordinary selection, release holds and Git are unchanged.
+
+
+### 2026-11-09 — shared current-source execution and exact validation mechanics verified locally
+
+Both independent contract/code reviews accept the bounded shared§3.1e/module§4.11i/validation§4.1b
+implementation. The actual Inspector retains original semantic events, calls the runtime-owned
+source validator at acquisition/read and binds event ids/anchors/signs to its existing key. One
+call-local graph shares legal/connectivity/snapshot/file-change inputs; the raw export is retired.
+Actual579-edge singleton/batch plus genuine both-color source/API/DOM delivery pass566 controls.
+Five exact nested paths, two typed file transforms and a complete ordered exact expectation now
+work; strict canonical envelope/row/array/discriminator and negative-zero fixes preserve old emits.
+
+Final normal verify-software29029 exits0:15,418tests/all541 (467.46s), seven performance/four
+(60.03s), types and every prerequisite. Build/source11 pass70181; complete content remains60fail/
+261pass/18setup-skipped/43files (183.23s). All62 prior headings match in order; later verify-content
+targets did not run. D3928/native/content/release stay held. All419 canonical cases remain unchanged
+and pass; actual seven579-edge imported arms bring receipts to58, with98subjects/four qualified.
+
+Failures are retained in the source plan/review: test-title/fixture/envelope mistakes, mapped-array
+typing, review's complete parser returns, unchanged architectureguard catching server route-bridge
+access (moved to runtime source assertion), and one stale all-four-arms-missing test in88122
+(15,417pass/1fail), strengthened to require actual current census receipts. Focused1861/three and
+193/three pass after repairs. No criterion, authority, population, deadline or budget was weakened.
+D4171 closes bounded representation. D4172/D4173 remain doing for independently grounded complete
+source cases/absolute partners; D4167 retains qualification and every canonical/candidate/ordinary/
+authored/avoidance/bot consumer. Final tracking/governance follows; no parent/capability/milestone,
+Git/archive or full1.0 completion. The goal remains active; next case authoring is already accepted.
+
+
+### 2026-11-09 — shared-execution tracking and governance flow-back complete
+
+Complete make roadmap-receipt verify-governance roadmap-progress74668 exits0 after the source
+checkpoint/ledger/register/roadmap update. C1–C8/P1–P7/R1–R10 pass. All3922 rows remain assigned:
+1890done,1869live and zero untriaged (doing175/todo631/blocked1063/refused163). D4171 has actual
+path-backed done evidence; D4172/D4173 remain doing, preserving independent complete source
+populations/absolute partners. D4167 remains doing for qualification and full reverse adoption.
+Strict112dimensions and milestones are unchanged; native/content/release hold persists. Both
+reviewers accept code; the narrow closeout review explicitly refused calling D4173 complete
+without its absolute partners. No requirement was moved away to manufacture a closeout.
+No Git/archive operation and no full-goal completion.
+
+
+### 2026-11-09 — opposition2 literal source propositions integrated, final gates pending
+
+Continuing directly from shared execution, both independent reviewers accept24 full literal
+legal edges and46 complete opposition2 propositions, separating retained primary board/turn
+facts from the accepted geometry/holder/sign convention. Real resolver/source controls103/one
+pass, including symmetric wrong outputs minted by genuine factories, complete populations and
+unchanged-authority refusals. No fake evidence or resolver is used. The canonical fixture edit
+preserves all419 predecessor rows and advances only opposition2's case arms. Generator465/465
+passes/98subjects/fivequalified/58populations; clean types and743focused/four pass. Other six
+current-source case arms, D4172/D4173 and all D4167 consumers stay open. Full final verification
+and independent integration readback follow; this is not a whole-parent/capability/release claim.
+
+
+### 2026-11-09 — opposition2 qualification full local gates complete
+
+Both independent source/control/integration reviews accept46 exact/negative/ordered-mirror
+propositions over24 independent literal legal edges. Genuine factory-minted semantic faults
+prove mirrors alone insufficient; complete absolutes/populations/fixed source authority refuse
+the wrong outputs. Missing nested walk fields and symmetric clocks refuse. The prior419 cases
+remain unchanged; all465 execute,98subjects/fivequalified/58censuses. Only opposition2 advances;
+legacy1 and other six current source profiles keep requirements. Clean types/744focused pass.
+
+Final complete normal verify-software61321 exits0:15,569tests/all542 (480.65s), seven unchanged
+performance/four (59.95s), types/every prerequisite. Build/source-author11 pass35488; complete
+content remains60fail/261pass/18setup-skipped/43files (174.45s), all62 prior headings identical
+in order. Later verify-content targets did not run. The extra walker test initially exposed
+a parsed-input union type error, corrected by actual edge discriminants, not a cast waiver.
+D3928/native/content/release remain held. D4172/D4173 and D4167 stay doing for six source families
+and full reverse adoption. Tracking/governance follow; no whole parent/capability/milestone,
+Git/archive or full-goal completion. Next batch is the six remaining independent source families.
+
+
+### 2026-11-09 — opposition qualification tracking/governance flow-back complete
+
+Complete make roadmap-receipt verify-governance roadmap-progress44064 exits0 after the actual
+case/profile/ledger/register/roadmap update: C1–C8/P1–P7/R1–R10 green. All3922 ledger rows
+remain assigned,1890done/1869live and zero untriaged (doing175/todo631/blocked1063/refused163).
+The source checkpoint now reports465cases/fivequalified and the full15569software+7performance/
+types/build/source proof; strict capability/milestone states remain unchanged. Other six source
+families, D4172/D4173/D4167 consumer duties and D3928/native/content/release hold are explicit.
+No Git/archive mutation or full-goal completion; no owner/review permission is pending.
+
+
+### 2026-11-09 — four pawn/file source families independently qualified
+
+Both read-only independent source/control/integration reviewers accept28 literal legal edges and
+220 full propositions for group1/state1/access1/islands2, including all complete absolute mirror
+partners and meaningful whole-family omissions. Genuine pre-factory faults distinguish absolute
+truth from symmetric agreement and refuse duplicate/omitted/reordered populations; changing full
+expected arrays refuses authority before any dispatch. Review repaired the stationary destination-
+file open→own-half omission's nonvacuity. Prior465 rows remain unchanged; every685live case runs,
+98subjects/ninequalified/58populations. Backward2/physical-slider2 remain required; ordinary41,
+candidate/eligibility and all downstream adoption fences stay. No new grammar/framework/store.
+
+Clean types+1471focused/five62264 pass. Complete normal verify-software53112 exits0:16296software/
+all543files463.20s, seven serial performance/four60.20s, types/every prerequisite. Production
+builds/source-author11 pass24235. Complete content still60fail/261pass/18setup-skipped/43files
+188.06s; all62 prior failure headings match in order. verify-content exits2 at test-content;
+later recipes did not run. D3928/native/content/release held. One mistaken generic test target
+was cancelled, test tuple narrowing and an expected lexical-order typo were fixed; no checker/
+authority/budget/deadline weakened. No code/fixture changed during verification.
+
+D4173 closes bounded typed-file/absolute-partner debt; D4172 stays doing for independent complete
+backward2/slider2 source cases and D4167 for full consumer reverse closure. Read-only audits find
+no concrete remaining algorithm defect but supply the exact identity/special-move checklist in
+the current plan; no qualification follows from that audit. No parent/capability/milestone/pack
+promotion, Git/archive mutation or goal completion. Tracking/governance follows.
+
+
+### 2026-11-09 — pawn/file qualification tracking and governance verified
+
+Complete make roadmap-receipt verify-governance roadmap-progress72982 exits0 after actual
+ledger/state/register/research/roadmap flow-back: C1–C8/P1–P7/R1–R10 green. All3922 rows assigned,
+1891done/1868live/0untriaged; doing174/todo631/blocked1063/refused163 and closeout-prose462. D4173
+is path-backed done; D4172/D4167 stay doing with backward2/physical-slider2 then full consumer
+reverse closure. Plain state-sync initially refused a closed glyph paired with old doing state;
+the explicit evidence-backed transition repaired it before final governance. Strict112dimensions,
+all milestone states and zero graduated packs stay unchanged. All685cases/ninequalified/58censuses
+and16296software+7performance/types/build/source11 remain verified; exact prior content hold
+stands. No Git/archive mutation; HEAD48a6e0f5 unchanged. Full1.0 goal remains active.
+
+
+### 2026-11-09 — backward-pawn2 complete source qualification verified
+
+Both independent source/control/integration reviewers accept40literal full legal edges and74new
+complete propositions:30exact/10negative/34orientation. Actual fixed resolver and foundation_edge
+operation preserve original square subjects, stationary-first/mover lineage, two same-file pawns,
+full pseudo controllers/captures including pinned pieces, support/occupancy/perspective and EP/
+promotion consequences. Four mixed-lineage inputs have full both-color absolutes; representative
+uniform populations supply total mirrors/absolute partners without new grammar or skipped fields.
+Eight genuine field faults still mirror but fail absolutes; actual wrong file-based joining, subject
+coordinates, duplicate/split/omit/reordered populations and quiet false events fail real runner
+expectations. Changed full expected arrays refuse authority before dispatch. Authoring error:
+same-file lost rows originally omitted b5/b4 targets; broad correction polluted two EP rows,
+causing four source-author failures. Localized repair and direct board/independent capture-list
+rechecks pass; no collector output became authority and no production/checker was weakened.
+
+All685 prior rows and original JSON text prefix stay byte-identical; only backward2's three case
+cells change among98profiles. Generator759/759passed/98subjects/tenqualified/58populations. Every
+live predecessor case executes; frozen historical data stays.225source/clean types+1771focused/six
+63482 pass. Complete normal verify-software46302 exits0:16596software/all544files452.97s, unchanged
+performance7/four58.56s, types/every prerequisite. Production builds/source-author11 pass17592;
+complete content remains60fail/261pass/18setup-skipped/43files177.06s. All62 prior failure headings
+match in order; later verify-content recipes did not run. D3928/native/content/release held.
+
+D4172 stays doing for physical-slider2; D4173 remains path-backed done; D4167 retains all consumer
+adoption. Existing plan holds the independently reviewed manual slider proposal checklist, marked
+unexecuted/non-authoritative; no qualification follows. Ordinary41/candidate/eligibility/defaults/
+budgets remain. No parent/milestone/capability/pack promotion, Git/archive operation or goal
+completion. Tracking/governance follows; full1.0 goal remains active.
+
+
+### 2026-11-09 — backward qualification tracking/governance complete
+
+Complete make roadmap-receipt verify-governance roadmap-progress91715 exits0: C1–C8/P1–P7/
+R1–R10 green after actual ledger/state/register/research/roadmap flow-back. All3922 rows assigned,
+1891done/1868live/0untriaged; doing174/todo631/blocked1063/refused163 and closeout-prose462
+unchanged. Foundation/spine checkpoints now report759cases/tenqualified; board/preset checkpoint
+retains held impact with current prerequisite truth. Strict112dimensions/all milestone states
+and zero graduated packs stay unchanged. D4172 physical-slider2 and full D4167 consumer duties
+remain doing; D4173 stays path-backed done. Complete16596software+7performance/types/build/source11
+pass; exact62-heading content hold remains. HEAD48a6e0f5 and Git/archive untouched; no owner/review
+permission pending for the next source work. Full1.0 goal stays active.
+
+
+### 2026-11-09 — all seven current source families independently qualified
+
+Both independent source/control/canonical reviewers accept physical-slider2's62 literal full legal
+edges/116 propositions (46exact/16negative/54orientation). Full near→far paths/interior occupancy,
+root/current/target distinction, same-count/moving/unchanged cases, replacement, promotions, both
+standard/three960 castle forms and EP are independently complete. Every mirror has full absolute
+partners; no collector-output oracle, geometry classifier, new grammar or protected owner store.
+
+D4174 catches a real test instrument gap before promotion: four omit controls returned cached
+10/16 split events instead of0. Latest exact-edge retention is correct production behavior. Real
+alternate legal inputs now evict before fault arming, with exact mutated counts and helper-call
+proofs for every controlled fault; repeat-value/real-eviction behavior is permanent.13 semantic
+field faults fail absolutes while mirrors agree; both-color complete populations and6negative
+faults reject corruption through genuine sole-factory/actual fixed-resolver paths. Authority
+changes fail before dispatch. No cache reset/disable or weaker expected code. Four failed87056
+controls and diagnostic55339 remain historical; types/374source97217 and2262focused/seven84322 pass.
+
+All759 predecessor records/rawprefix remain unchanged; only slider2's three case cells advance.
+Normal generation3056 gives875/875passing cases/98subjects/elevenqualified/58populations; all7current
+source families now pass, not the other87 subjects or legacy slider1. Frozen retired records/bodies
+stay; all live cases execute. Complete normal verify-software66738 exits0:17087software/all545files
+461.50s, performance7/four59.65s, types/every prerequisite. Build/source-author11 pass39364. Complete
+content remains60fail/261pass/18setup-skipped/43files198.29s; all62 prior failure headings identical
+in order, later verify-content recipes unreached. D3928/native/content/release stay held.
+
+D4172/D4174 close bounded case-authority/instrument debt; D4171/D4173 stay done. D4167 remains the
+whole canonical/candidate and reverse-consumer task. Read-only next-contract audits are recorded
+in the existing source plan and rechecked at symbols: original root/child graph, exact successor
+image, private target-bearing discovery, both Sight/position/comparison flows, Nudge vs Review,
+guidance/voice/speech, authored, subject-safe avoidance and actual bot Stage-B path. Retired vector
+must not return; D3662 already owns its held packet/persistence successor. Existing staged clauses
+exclude ordinary activation, so coordinated amendments/review precede production. Protected intent
+search found no falsified source-qualification sentence. No Git/archive/design00–06 change or
+whole-parent/capability/milestone/content promotion. Tracking/governance follows; full1.0 goal active.
+
+
+### 2026-11-09 — current-seven qualification tracking/governance complete
+
+Complete make roadmap-receipt verify-governance roadmap-progress40167 exits0: C1–C8/P1–P7/
+R1–R10 green after actual ledger/state/register/research/roadmap flow-back. All3923 rows assigned,
+1893done/1867live/0untriaged; doing173/todo631/blocked1063/refused163, closeout-prose462 unchanged.
+D4172/D4174 are path-backed done, D4171/D4173 remain done. D4167 stays doing for coordinated next
+contracts and entire canonical/candidate/consumer adoption. Updated checkpoints show875cases/
+elevenqualified/all7current sources, not the other87 subjects; board/preset impact stays held.
+Strict112dimensions/all milestone states/zero graduated packs remain. Full17087software+7performance/
+types/build/source11 pass; exact prior62-heading content/native/release hold stays. HEAD48a6e0f5
+and Git/archive unchanged. No owner/review permission pending for this continuation; full1.0 goal
+remains active.
+
+### 2026-11-09 — D4167 original candidate-owner composition research started
+
+A disposable extension in the existing semantic-validation matrix answers the next source-owner
+ABI question before authoring the canonical/ordinary amendment. Existing factories supply every
+value; six common foundation readings and seven current event families share one original root
+and each child, retaining quiet empty sources as well as emitted tuples. It compares equivalent
+route-acquisition work, not latency/full31reading completeness or production packet execution.
+No production API/source issuer/cache/store or ordinary behavior changes. Normal existing
+make foundation-shared-operation-research additionally typechecks this bounded prototype.
+Source/case authority remains875/98/eleven/58. Results and independent review are pending.
+
+
+### 2026-11-09 — candidate graph research, total-state probes and successor under review
+
+Normal make foundation-shared-operation-research16683 strictly typechecks allthree disposable
+files and passes41tests/three1.80s. Complete29/29/6/15 legal child sets preserve original6common
+readings/7event outputs, true empty sources, direct scopes and native condition truth; route
+reductions are not latency/full-packet proof. Total-ray/actor-risk extraction probes cover real
+false states, invalid clone, EP victim, promotion roles and castles. Initial46157 exact literal
+ray fails on MODEL-only promoted:false spread; explicit identity fixes preserve expected/source.
+
+New subject-safe-semantic-selection.md follows the frozen selection contract without editing
+it; active source/module parents link it. Both independent reviews return concrete factory/state/
+vector/operation/consumer gaps; repaired round3 is pending, no self-acceptance. Current7ordinary
+event delivery and13avoidance families are separate: newD4175 owns the latter26actual module
+pairs/shared source/full strict UI/cost, stagedblocked itemD1716. Current compiler6/ordinary41/
+875sourcecases/98subjects/elevenqualified/58populations and prior full17087software+7performance
+remain current, not rerun/changed by research. D3928/content/native/release holds stand.
+
+Independent scope review closesD1718 historical research only, path-backed to its accepted
+dossier/author handoff. D1716/D1719/D4167 andD4175 stay live. Two attempted separate tracker
+transitions correctly refused W6/unassigned staged debt and terminal-owner errors without writing;
+an atomic update using the existing synchronize/set/validate functions assignsD4175 and closes
+D1718 with no done owner.3924ledger/1894done/1867live/0untriaged; closeout-prose462 unchanged.
+No Git/archive/protected-intent edit, whole-parent/milestone/capability/content promotion or
+1.0goal pause/completion. Next: final independent buildability disposition, normal governance
+flow-back and accepted source-first implementation; all reverse consumers remain in existing plan.
+
+
+### 2026-11-09 — repaired source-first successor independently accepted
+
+Both source/control and consumer/meaning reviewers accept the final subject-safe-semantic-
+selection contract after three rounds. Actual risk joins, complete typed family states and
+ordered original sources, comparable played guard, closed nested input/legal-set/mirror joins,
+family-aware full census, exact native/current played modes and policy2, fourteen current-event
+ordinary pairs and explicit13held/26pairD4175 discharge are concrete. Acceptance is now recorded
+in RFC/index and six active-parent links. This records their acceptance, not root self-acceptance.
+
+Next implementation is total ray/risk sources, original candidate graph, all13source-owned
+subject outcomes, then coordinated compiler7/current42/history/private discovery/current7
+ordinary delivery and exact semantic cases/populations/full checks. Source code/image is still
+unchanged; prior17087software/545+7performance and actual content62-heading hold stand. New41/
+three dedicated types/research pass16683 is feasibility only. D1718 closes historicalresearch
+only; D1716/D1719/D4167/D4175 remain live. Full1.0goal active; no Git/archive/milestone promotion.
+
+
+### 2026-11-09 — contract/tracking verification complete; source implementation starts
+
+Full normal make roadmap-receipt verify-governance roadmap-progress15908 exits0: registerC1–C8,
+statusP1–P7, work-state and roadmapR1–R10 green.3924ledger/1894done/1867live/0untriaged,
+closeout-prose462.79productRFCs20draft/1accepted/49implementing/9awaiting; strict112dimensions/
+all milestone states unchanged. Before that final run, new-RFC metadata guards correctly
+refused missing claims block, missing standard Summary boundary and missing Discharges section.
+Normal register/status checks pass after adding standard claims:none, Summary and Discharges:none;
+no gate/claim weakened. The new RFC is explicitly assigned to the evidence capability.
+
+Source code implementation now begins under both independent acceptances; RFC/index move to
+implementing. Physical total rays reuse the existing geometry; actor risk reuses actual clone/
+SEE and exact castle/promotion piece relocations. No source factory/complete graph/canonical/
+consumer/case correctness is claimed yet. Normal dedicated research41/three/types remains the
+feasibility proof; prior production full/software/content checkpoint stands. Full1.0goal active.
+
+
+## 2026-11-09 — implement two private total-state source prerequisites
+
+Implemented the accepted subject-safe source contract's physical-ray and mover-piece-risk
+factories, using existing geometry/SEE, original legal-source invocation records and complete
+null/empty/false/unavailable domains. Both independent bounded reviews accept; no learner
+binding or public candidate image changes. Added21permanent source controls and exact2registry
+profiles/2capability declarations, with all predecessor outcomes/declarations unchanged.
+`make verify-software` passes17,116software/546files,7serialperformance/types/contracts; builds
+and source-author11 pass. Earlier stale manifest count and missing generated declarations were
+caught and repaired without weakening guards. Complete content remains60fail/261pass/18setup/
+43files, all62previous failure headings identical. D3928 remains held. D4176 closes current-doc
+drift; D1719 now waits on D1716 implementation. Next: original shared candidate owner, thirteen
+subject-safe outcomes and coordinated current-source image/consumer delivery under D4167;
+D4175 still owns26ordinary avoidance pairs. Full1.0 and strict milestone/capability states stay.
+
+
+### 2026-11-09 — source prerequisite tracking checks
+
+Normal roadmap-receipt/verify-governance/roadmap-progress exit0 after the bounded source
+checkpoint: register C1–C8, status P1–P7 and roadmap R1–R10 pass. Work-state has3,925rows,
+zero untriaged,1,867live; D4176 is path-backed done and D1719 blocked on actual D1716 work.
+Strict capability dimensions stay2proven/61partial/39blocked/2missing/8not-applicable; no
+milestone changed state. RFC lifecycle remains20draft/50implementing/9awaiting. The active
+source RFC/index now distinguish its two verified private prerequisites from the remaining
+coordinated implementation. No commit, push, archive move or release claim.
+
+
+## 2026-11-09 — retain original candidate source positions
+
+Implemented finite shared position cells and complete original six-source validation in existing
+factory machinery. The candidate's existing receipt owner now retains original root/child tuples,
+same public child readings, private ray/risk results, exact legal order and identity-preserving
+wide narrowing; narrow receipts cannot gain wide authority. Both independent bounded reviews
+accept. D4177 raw-FEN regression was reproduced before repair, with original invocation retained;
+an actual same-byte wrong-parent snapshot guard was separately proven absent then fixed.
+
+Normal types/focused128/eleven and full17136software/all548files+7serialperformance pass. Production
+builds and source-author11 pass. Semantic875cases/98subjects/elevenqualified/58populations passes;
+cases/profiles unchanged. Content60fail/261pass/18setup43files retains exact62prior failure
+headings; D3928 stays held. Earlier path/static/sandbox failures and their scope are recorded in
+the existing independent review receipt. No new public route/binding, source schema or policy.
+Next: remaining total predicates/counts/control, actual canonical events consuming this frame,
+all13 exact outcomes and the coordinated current42/retirement/fourteen compact pairs. D4175
+retains26ordinary avoidance pairs. Whole source/consumer/milestone/capability/1.0 stays open;
+no Git/archive/publish/release action.
+
+
+### 2026-11-09 — original ownership checkpoint governance verified
+
+Normal roadmap-receipt/verify-governance/roadmap-progress exit0: registerC1–C8, statusP1–P7,
+roadmapR1–R10 and existing work/UX checks pass. Work-state3926rows has zero untriaged and
+1867live; D4177 is path-backed done. Both independent source/meaning reviews and final current
+doc/plan review accept the bounded ownership result. Strict milestone/capability states stay
+unchanged; source/migration/outcome/consumer/content/native/release obligations remain live.
+
+
+## 2026-11-09 — complete total inputs for the subject-safe families
+
+Implemented original total king-zone/passed-pawn predicates, complete12piece counts and reused
+child control in the existing wide source frame. Every original pawn keeps both-color/root-square
+identity; capture/EP/removal/promotion is explicit and never fabricated false membership. Counts
+keep original producer collection/order and zero entries; four king predicates keep false;
+complete pseudo control coexists with typed legal/risk unavailable. No new source route, issuer,
+store, public slot or feature/policy activation. Both independent bounded reviews accept.
+
+Normal final143focused/twelve/types and full17151software/all549+7serialperformance pass, as do
+production builds/source-author11. Fifteen new literal/source-negative controls include real
+producer12→returned11 refusal with original12still valid. A test-only controller literal omitted
+existing promoted:false and was corrected while preserving source data; type-only fixture errors
+are recorded in the existing review receipt. Semantic875/98/eleven/58 passes, cases/profiles
+unchanged. Content60fail/261pass/18setup43files retains exact62prior headings; D3928 remains held.
+Next: actual event/frame sharing, all13 source-owned outcome factories and coordinated current42/
+retirement/fourteen compact pairs, then complete source operations/census/qualification. D4175
+retains26ordinary avoidance pairs and D4167 all reverse consumers. Full1.0 remains active.
+
+
+### 2026-11-09 — total-input checkpoint governance verified
+
+Normal roadmap-receipt/verify-governance/roadmap-progress exit0: C1–C8/P1–P7/R1–R10 and existing
+work/UX checks pass. Work-state3926rows has zero untriaged and1867live. Final independent bounded
+source/docs/status review accepts complete total inputs while event sharing/all13outcome factories/
+qualification/current42/consumer adoption stay open. Strict milestone/capability states are
+unchanged. Full1.0 goal confirmed active; no commit, push, archive or release action.
+
+### 2026-11-09 — shared current image and13 source factories remain in coordinated implementation
+
+Canonical42/compiler7 now shares original root/child sources with readings; events-only retains
+quiet source tuples privately, and discovery uses raw target-bearing slider1 privately. Both
+independent bounded reviews accept their source/factory slices after concrete events-only and
+operation-image corrections. All13 typed source-owned outcome factories preserve complete legal
+alternatives, exact subjects/lifecycles and original repeated vectors/results in existing stores.
+Current Make typecheck/generated-image and184tests/eight pass; additional physical castling/
+capturing-promotion controls pass94/four with types. Existing review receipt records details.
+Previous full gates predate this migration: selector/constructor, retirement/history, source
+operations/qualification and14compact current-event consumer pairs remain unfinished. An old
+selector-result expectation is still recorded open. Existing plan/roadmap/register/ledger are
+updated without a new work queue; D1716/D4167 doing, D1719/D4175 blocked as before. D3928/content/
+native/release holds remain. Full1.0 active; no commits, push, archive or milestone promotion.
+
+### 2026-11-09 — subject-owned selector/source-operation continuation, full gates still open
+
+Selector/policy2 now uses exact42 played modes plus13 complete subject outcomes. Routine review
+is permanently authorized. Independent review found collector-order native tie selection; the
+repair uses original root-subject order while keeping canonical source order, with an actual
+same-file pawn cap1 regression. The separate accepted D4180 validation consumer preserves real
+recorded sources outside selector2 exact55 and is consumed at the actual event-authority boundary.
+New complete-family operation captures parsed input once; review found and corrected a changing-
+getter reread. Exact complete-edge/digest/root/counter/played admission and nested mirrors have
+real boundary controls. Latest full types and150tests/five pass; the sixth retirement suite refuses
+stale old1 generated verdicts. Normal generation with13 fresh imported-population arms is running.
+Census processes each genuine root across all13 then releases it, preserving complete output
+multiplicity, zeros and unavailable invocations; missing/reused/relabelled arms have receiving guards.
+Existing51 original cases/9profiles/8population receipts retain unchanged custody. Earlier compact/
+grade1345/five and retirement1091/six are bounded prior checkpoints, not current full readiness.
+Plan/roadmap/register/ledger updated. Complete independent qualification, real14compact-pair
+journeys and full gates remain owed; D4175 retains26ordinary avoidance pairs, D4179 Review exposure,
+D4167 reverse consumers, D3928/content/native/release holds. Full1.0 active; no Git mutations.
+
+### 2026-11-09 — complete-family census/current cases pass; longitudinal reverse-closure blocker identified
+
+Current full types and246source/control tests/eightfiles plus1067catalogue/canonical/history
+checks/fourfiles pass. Actual source census reports824/824cases,89subjects/11qualified and63
+population receipts. Every13 family executes579samples, retaining257unavailable; opposition
+has real zero output, not a missing family. Prior822/824failure remains: two unchanged retained
+predicates cited omnibus tests modified for unrelated retired meanings. Independently accepted
+focused authority reanchors preserve subject/input/operation/expectation/frozen-expectation bytes;
+original historical records remain in test custody so frozen139-case comparisons stay unchanged.
+D4178 grade-plan and D4180 original validation consumption close locally with path evidence.
+
+Broader factory-profile execution fails before collection at LONGITUDINAL_SIGN_SUBSET_MISSING:
+current eager longitudinal67 registry requires retired backward1 and its family/sign absence
+rows cannot preserve new subject/outcome meaning. D4181 is ledgered/doing, not hidden by lazy
+imports, legacy factories, deletion or a waiver. Draft longitudinal-store§A.2/current registry/
+subject-grain/private complete source table/opportunity algebra/additive next migration/revision9/
+all-six-family worker/rebuild/read/account adoption is independently reviewing. No A.2 code yet.
+D4179 Review exposure amendment was returned before implementation for absent complete source
+sharing, duplicated merge paths, missing real Inspector detail and hidden source abstention.
+
+Existing plan/roadmap/register/work-state are updated, with0untriaged. Thirteen independent case
+qualification, real14current pairs, D4175all26ordinary avoidance and D4167reverse/bot duties remain.
+D3928/content/native/release and parent/capability/milestone holds stand. No full current software
+or push-ready claim, Git mutation or archive move. Full1.0 goal stays active.
+
+### 2026-11-10 — current longitudinal sources and explicit Profile withholding verified
+
+D4181/A.2 remains in flight. The exact v3 registry now loads65sources: native7, operator-only
+prevalence34, complete condition13@2 and deferred recorded-path11 with explicit owner/reason.
+Bidirectional controls join the executed candidate42 image (minus trade1), native7 and all13
+families; historical v1/v2 artifacts stay unchanged. Generic projection/sign absence identities
+are removed from aggregate admission, not aliased to the new subject semantics.
+
+The source-owned complete table, literal condition/native opportunity arithmetic and closed
+20-source subject-row grammar are implemented. The actual worker-only consumer preflights its
+exact20 machine bindings before acquisition, uses one genuine WIDE population per original
+normative owner decision and returns an original frozen list bound to the same live store scope,
+image, revision and cut. Private proof retains literal rows, not all-decision source graphs.
+Independent reviews returned and then accepted three repaired seams: options captured once
+against real same-ref/different-root callback switching; dispatcher stays inside runtime; and
+exact keyed bindings instead of lexicographic adapter-order assumptions. Source-grammar review
+also enforces mover/nonking loose-piece roots and stationary piece/file correlation.
+
+Profile now explicitly withholds the old pooled prevalence: no personal aggregation, exact
+unavailable/subject_metrics_not_adopted status and observations[], authenticated typed409 for
+old observation detail, strict client refusal of old success bodies, and a mounted friendly
+unavailable state without stale links/retry. GAME/choice/style/skills/history remain separate.
+The permanent factory-profile update now passes740cases; the retired-source import blocker is
+repaired. Full normal types and1762tests/eightfiles pass, including permanent factory authority,
+real SQLite source ownership, real Profile HTTP and mounted client boundaries
+(/tmp/tabiya-subject-profile-vertical-final.log). Both independent reviewers accept only these
+bounded slices. One broader longitudinal test remains intentionally red on the OLD revision
+fixture because the admitted meanings changed; it is not repinned until genuine rev9 adoption.
+
+Next: install the next additive subject table and revision9, exact opt-in internal query and
+saved-prefix/actor/domain read checks, all-six-family publication/reset/rebuild/once/export/delete,
+real old-revision rederivation, source-currentness/lease/drain and cold/warm cost proof. Do not
+mark D4181/D1716/D4167, a milestone, source qualification or learner traits complete from these
+source/Profile checks. D4175 ordinary26, real14current-pair journeys, D4179 returned authoring,
+D3928/content/native/release holds and full current gates remain. No Git mutation or push.
+
+### 2026-11-10 — same-population revision9 and six-family storage integration
+
+Longitudinal-store A.2.5a is independently accepted after actual54-source answer compatibility
+refused threat-only double_attack1 under fact-only. Exact binding is threat for that one source,
+fact for53 others; source declarations remain unchanged. One original WIDE per normative decision
+now owns native7/condition13/prevalence34. Every decision's complete/unavailable/evaluated-zero
+summary retains only literal incidence data beside the original frozen subject-array proof.
+The original V4/scope references remain ownership metadata; no per-decision evidence graph is
+retained. A thin data-only proof module and sole-writer AST/public-barrel/import guards keep
+reduction outside the HTTP storage graph.
+
+Local migration35 adds the exact subject-grain table; revision9 joins all SIX families in atomic
+publication, rollback, source advance/quarantine, reset/rebuild, saved read/domain checks and
+account export/delete/rederivation. The private opt-in query preserves actor/subject/parameters/
+test and keeps old aggregate filters separate. Both denominator AND34 prevalence folds are checked
+against the same original summary before writes. Real source movement now clears every stale
+family in the writer transaction. Startup reconciliation remains the actual application seam,
+not an implicit raw-storage-constructor promise. Prior-schema34/revision8-shaped data rederives
+without rewriting run snapshots; conflicting migration objects refuse without stamping.
+
+Independent native-domain review repaired positive/false ray presence and backward-pawn lifecycle
+correlations; actual saved SQL relabeling controls reject impossible rows while retaining genuine
+false subjects. D4182 additionally reproduces TWO executable-envelope bypasses: changing getter,
+then a Proxy of a frozen array changing its inherited iterator. Exact immutable six-family
+snapshot plus recursive descriptor-only Node Proxy refusal closes both without executing traps.
+Frozen forged-list/count controls still reach actual source/fold checks. Both bounded reviews
+accept the repairs; D4182 closes locally, parent adoption remains open.
+
+Full normal types and1843tests/ten pass (/tmp/tabiya-revision9-source-profile-integrated.log),
+including genuine six-family revision9 fixture/publication, permanent source authority, history/
+account/reset and real Profile HTTP/mounted client. Old store/choice/worker regressions65/three
+pass (/tmp/tabiya-subject-legacy-fixtures-repair.log). Historical hash assertions were not silently
+retagged: current criterion12 uses original SQLite claims and ALL6 families; first run26/27 failed
+only its pending pin, measured/reviewed current digest375d8dc3…ea76187. Previous revision7/8 pins
+remain historical. Profile math tests explicitly control ONLY unrelated unadopted subject
+collection as unavailable; real GAME/choice/attribution/publication stay, and the separate real
+HTTP journey asserts positive subject rows. No timeout/budget increase or production test hook.
+
+Unchanged actual performance7/four passes on the pre-final-Proxy-guard image:80-ply worker publishes
+in13125.7ms with12renewals; 591HTTP probes show p95delay12.08ms/max18.17ms/maxprobe15.39ms.
+This is not final-byte performance certification: repeat full software/performance, metadata and
+cold/warm bulk proof next. D4181/D1716/D4167 remain doing; independent source13 qualification,
+real14current pairs/D4175ordinary26/D4179returned authoring and D3928/content/native/release holds
+remain. No Git mutation, push, whole milestone/capability/source/learner-model/1.0 completion.
+
+
+### 2026-11-10 — actual full-gate Inspector and current-contract repairs
+
+The first complete software run stopped at199failed/1470passed in40 Inspector files.
+D4183 repairs the actual source-page preflight from obsolete107 to exact current102 refs
+(88topics/14details), retaining duplicate/set/version/callable/absence/adapter refusals.
+Current pagination and explicit retired5 negatives are tested; original both-color native7
+events remain source-owned. Independent review accepts this bounded repair.
+
+The next complete run passed Inspector1663/40, then found four obsolete consumer expectations.
+After their correction3215/21 passed, then two binding/convention expectations failed. D4184
+reconciles exact selector2/private subject1/separate validation1 sets without ordinary activation,
+and explicitly tests only the six accepted convention replacements (grade plus five foundation
+tuples). All five source/helper/version/dependency/witness negative cohorts execute. Both
+independent reviews accept the bounded tests; current complete authority batches pass5358tests
+across77files, and normal types/scaffold/manifest also pass. No deadlines or guards weakened.
+
+Actual successor-history controls originally failed773/774 at the unchanged5s limit, then
+failed again isolated at5.535s. The repair keeps mixed-six-history real startup/worker/read/reopen
+and separates per-history corrupt/compare/repair/clean checks for ALL five retained originalrev5
+outputs. All8 checks now pass, including every old semantic/protected-byte assertion. Renewal,
+once CLI, drain/restart and per-run deletion also assert actual positive native AND condition
+subject rows; expired/abandoned claims leave all six families empty. The separate schema34/rev8
+fixture is explicitly SHAPED and does not certify genuine revision8-output parity.
+
+The latest full gate then executes824/824 semantic cases with89subjects/11qualified/63population
+receipts, and stops on stale generated receipt bytes after source adoption. Standard
+make semantic-validation-update is running; generated freshness, the remaining full software
+and final performance gates, current200-game cost and metadata validation are NOT yet certified.
+The existing cost instrument now labels current54/six-family work and checks actual both-kind
+subject SQL presence/current revision; it does not claim independent200-game subject-math parity.
+
+D4183/D4184 close locally; D4181/D1716/D4167 remain doing. Next accepted product cut is real
+seven-current-event ×Nudge2/Review2 source→service→cookie REST→strict parser→selected DOM journeys
+(14pairs), then independent13-source qualification. Their production paths already exist; add
+proof and fix observed defects without creating a duplicate acquisition layer. D4175ordinary26,
+D4179returned authoring, concrete Sight/comparison/voice handoffs, bot StageB/D3662 and
+D3928/content/native/release holds remain. No Git mutation/push or milestone/1.0 completion.
+
+
+### 2026-11-10 — source-free smoke, preserved content tier and measured Nudge shadows
+
+Fresh semantic receipt regeneration completes824/824; the next actual full gate also passes
+freshness, then semantic-evidence-check fails on retired research policy1. D4186 moves the
+instrument to policy2 using ONE original WIDE receipt for selection and exact19/19 legal
+comparison/played child FEN. Current source tests now pin exact39 one-edge and89 root/profile
+images, compiler7 source membership and all six real consumers with separate research-only
+validation. All101tests/three pass, preserving historical source/receipt custody.
+
+D4187 fixes the software smoke's remaining authored-content dependency. The old three-document
+outpost count becomes a stronger exact-three-path inventory in an explicit five-second content
+cohort; no content is edited and D3928 stays held. The actual compiled software smoke runs in
+an empty temp cwd and passes policy2/legal19/19 without a content tree. Normal direct smoke,
+focused content1, scheduling8 and tier9 checks pass; the tiers report44content/four performance
+files. Independent review accepts both bounded repairs after the last candidate-membership
+assertion is corrected. They do not certify the still-incomplete global software gate.
+
+The accepted14-pair delivery preflight found a real product problem, D4185. Complete original
+source/runtime28 now gives24passes/four failures: both-color Nudge file_access_revealed1 and
+pawn_islands2 are never selected because their genuine group/state parents exhaust cap2 first.
+Review retains both; the other five current families have actual passing selection controls.
+First run had four additional zero-source slider fixture failures plus two stale source-image
+expectations. The quiet lone-rook move truly changes no blocker membership; the fixture now uses
+a genuine bishop departure, without weakening the detector. The confirmed failure is the real
+Nudge summary selection, not fabricated evidence or a missing collector.
+
+Existing RFC§6.2 is a bounded draft: authenticate finite same-edge/file/color parent relationships,
+then stably permute only causal component slots access→topology→state→group, retaining all
+originals and outsider positions. Exact source risk/cap2/critical→window→grade order remain.
+Square-set membership uses copies because native source arrays have distinct valid orders;
+missing required siblings exclude that summary instead of inventing/acquiring inputs. First
+independent reviewer accepts buildability; the separate meaning review is pending before policy
+code. No new producer/registry/hash/acquisition or claimed source/learner qualification.
+
+Current full software remains red/unfinished; D4181/D1716/D4167 stay active. Policy implementation,
+forgery/current+ancestor controls,14 cookie REST→strict selected DOM/detail journeys, final
+performance/current200-game Profile cost and all broader source/content/release work remain.
+No Git mutation/push or capability/milestone/1.0 completion.
+
+### 2026-11-10 — current consumer regressions and same-fact native inspection
+
+Continued actual80 failures/17,110passes/565files from the complete software pool. D4189 and
+D4190–D4196 close only their bounded current-test/declaration repairs after independent review:
+Inspector/caller1605tests/five, migration/GAME171/eight, live/history1240/five and current/ancestor
+Nudge24/two pass. Live824 and frozen51 remain separate; strict migration35/real all-six-family
+ownership stay. The normal capability generator adds EXACT13 source@2 definitions (1122 total),
+with predecessor/no-op/receipt-only invariance guards intact; it activates no ordinary avoidance.
+
+Subject-safe§6.2 causal-summary policy3 is independently accepted and implemented. Actual
+source-positive compact Nudge/Review delivery now covers all7families×2consumers×2colors under
+ordinary Guided/default budgets. Original facts/multiplicity/outsider slots and critical/window/
+grade precedence remain; a partial summary cannot suppress an independent complete summary.
+
+Accepted§6.3/D4188 is implemented and independently accepted at the real UI boundary. Inspect this
+fact expands SAME selected original evidence through its existing full human renderer, no Full2
+mint/query or provider. Exact source/ref checks, selectedItems identity and existing scoped
+Open/Close/Escape/focus lifetime remain. Full types and223tests/five pass; final strengthened App
+and native203/three pass. Direct22 include genuinely usable closed Open, open Close/Escape,
+same-byte replacement, foreign selected membership, unmount and replacement focus. Actual28
+cookie REST/strict selected DOM journeys include genuine spectator self-demotion. Actual App
+revokes a real grant (HTTP404; only denied ERROR status mapped to401/403 for those branches),
+requires authenticated restore and re-demotion to spectator, and rejects retained controls on
+replacement reports. D4188 closes locally; no browser-geometry or source qualification follows.
+
+Normal semantic regeneration is running against the stabilized source tree; complete software,
+final performance after Proxy guards and current200-game Profile cost remain owed. D4181,
+D4185 whole final gate, D4167 reverse consumers,13qualification, ordinary26 and D3928 holds stay.
+No Git mutation/push, archive/intent edits or capability/milestone/1.0 completion.
+
+### 2026-11-10 — restore independent commit checkpoints (D4197)
+
+Owner flags the huge open diff; actual inventory finds798 changed/untracked paths since the
+2026-11-02 source checkpoint. Root incorrectly deferred independent fixes with the unfinished
+integration. D3953 is now committed39f243b8 (five explicit files/hunks,9 normal toolchain controls,
+16 scaffold/CI controls and normal hooks). D3946 is committed1aeccaa0 (two explicit files,
+9 controls and actual1870/1870 live routing). No hooks bypassed or changes pushed.
+
+An independent read-only dependency review identifies the existing D4148 gameplay repair as
+four separable code/test files. Only their actual bot-root allocation/replay/CAS/test hunks are
+staged. Its exact staged export installs a frozen dependency graph and runs normal type/bot
+checks; no new Git worktree. Initial linked-dependency attempt fails before tests and is retained.
+The broader normal software gate remains running. Coordinated foundation changes and D4197
+recovery stay open; foreign agent worktrees/out.txt are excluded from feature staging.
+
+### 2026-11-10 — exact-index type hook and invalidated concurrent verification (D4198)
+
+D4148 exact four-file staged export installs pinned frozen dependencies in2.4s and passes ALL
+workspace types/Svelte0errors0warnings plus108 actual bot source/compiler/REST controls/three.
+Independent read-only review accepts its actual cached diff and complete source dependencies.
+The normal commit attempt then fails: Lefthook hides unstaged hunks only in partially staged
+service/bot-test files while other unfinished foundation files remain, so live project typechecks
+see a mixed image. All tracked source is restored and the owned bot patch is preserved. No
+commit or pass is invented. The concurrent whole software run sees three temporary old bot
+fixture failures and is explicitly interrupted130; it cannot be a readiness certificate.
+
+D4198 moves existing project types to one complete index export, reusing the existing materializer
+and normal make setup/typecheck with frozen install. It shares only downloaded tool/package
+caches, never node_modules/workspace source. No Git worktree, new source hash, hook bypass,
+changed timeout or dependency pin. Twelve actual staged-process/TypeScript controls pass,
+including mixed-tree predecessor failure, valid staged dependency closure, untracked poison
+exclusion, invalid-stage/fixed-working-copy refusal, unchanged index/worktree and cleanup.
+The normal hook config validates. Independent review and actual hook landing remain pending;
+commit hooks and working-tree verification must run sequentially.
+
+2026-11-10 follow-through: independent D4198 review accepts the bounded hook fix; commit77e8528f
+passes normal scaffold/history/size hooks. Normal new staged typecheck then installs frozen
+dependencies and checks all project types in21.12s; D4148 commits a8b5c82e, four explicit files.
+Its exact index previously passed108 source/compiler/REST tests. The accepted contract and two
+matching docs commit cd35afa2 through real staged process checks. D4198 closes; D4197 remains
+open for the coordinated remainder. Whole software is rerun only after commits finish.
+
+### 2026-11-10 — fresh serial software, performance, governance and build pass
+
+Normal make verify-software completes after the commit hooks finish:17,205software tests/all566
+files pass555.42s; unchanged performance7/four pass59.38s, with normal types/schema/source/
+capability/semantic gates. Normal make verify-governance build then exits0. The earlier run
+interrupted130 remains invalid, not a pass. D4185 closes its bounded selection/delivery repair,
+with D4188 already independently accepted; parents/source qualification/release stay open.
+
+Read-only review recovers the actual old revision8/schema34 five-family executable in ignored
+dist. Its original bytes are preserved in ignored cache before rebuilding; a disposable fixture
+harness keeps the production prefix byte-for-byte and awaits execution. No current9 retagging,
+new Git worktree, tracked bulk artifact or inherited qualification. Genuine8 execution and the
+current200-game cost still gate D4181. No content/native/release action or push.

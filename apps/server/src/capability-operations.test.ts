@@ -110,6 +110,8 @@ describe("the HTTP capability-operation census (§1)", () => {
     // Analysis and Story on a position run are run-session operations, not registered-pack ones.
     expect(resolveRouteOperation("POST", "/runs/:runId/:action", "analysis").source).toEqual({ kind: "run_session_operation" });
     expect(resolveRouteOperation("GET", "/runs/:runId/:action", "story").source).toEqual({ kind: "run_session_operation" });
+    expect(resolveRouteOperation("POST", "/runs/:runId/:action", "inspector/query"))
+      .toEqual({ operationId: "run.inspector.query", source: { kind: "none" } });
   });
 });
 

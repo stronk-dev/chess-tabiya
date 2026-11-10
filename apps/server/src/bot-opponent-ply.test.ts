@@ -44,6 +44,7 @@ import { EvidenceJobQueue, type EvidenceExecutor, type EvidenceJob } from "./evi
 import type { EngineExchangeCapture, EngineExchangeRequest } from "./engine-supervisor.js";
 import { MockProviderEngineClient, type MockProviderEngineOptions } from "./mock-provider-engine.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
 import { createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -310,7 +311,7 @@ describe("run lane 0.18: create, resume and rematch carry the exact profile (A1)
     fixture.storage.save(recorded, WRITER);
     const raw = new DatabaseSync(filename);
     raw.prepare("UPDATE drill_runs SET schema_version='0.18',snapshot_json=? WHERE id=?").run(JSON.stringify({ ...recorded, schemaVersion: "0.18" }), initial.id);
-    raw.exec("PRAGMA user_version=30"); raw.close();
+    raw.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json; DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version=30"); raw.close();
     const migrated = new SQLiteRunStorage(filename, { onMigration: () => {} });
     const after = migrated.read(initial.id)!.run;
     expect(after.schemaVersion).toBe("0.19");
@@ -764,12 +765,12 @@ describe("migration 29: the stamp-only 0.17 → 0.18 upgrade", () => {
     const fixture = new DatabaseSync(filename);
     const stored = fixture.prepare("SELECT snapshot_json FROM drill_runs WHERE id = 'prior-run'").get() as { snapshot_json: string };
     fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.17' WHERE id = 'prior-run'").run(JSON.stringify({ ...JSON.parse(stored.snapshot_json), schemaVersion: "0.17" }));
-    fixture.exec("PRAGMA user_version = 28");
+    fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json; DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 28");
     fixture.close();
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(log).toEqual([{ version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     const after = upgraded.read("prior-run")!.run;
     expect(after.schemaVersion).toBe("0.19");
     expect(after.events).toEqual(run.events);
@@ -799,6 +800,7 @@ describe("the event-head CAS token", () => {
 
 describe("through createApplication: choose → play → resume → rematch (A12/A13 route census)", () => {
   it("the composed application observes Maia through the exchange, starts a bot run and plays it", async () => {
+    installEmptyApplicationCatalogues();
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
     cleanups.push(() => application.close());
     await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });

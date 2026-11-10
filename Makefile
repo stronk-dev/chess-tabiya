@@ -72,6 +72,11 @@ export SF_CMD
 setup:
 	pnpm install --frozen-lockfile
 
+.PHONY: add-dev-dependency
+add-dev-dependency:
+	@test -n "$(PACKAGE)" || (echo "Usage: make add-dev-dependency PACKAGE=<name@version>" >&2; exit 2)
+	pnpm add -Dw --save-exact "$(PACKAGE)"
+
 # Raw recordings are opt-in research inputs, never a normal application-CI download.
 RESEARCH_ARTIFACT_STORE ?= $(HOME)/.local/share/tabiya/research-artifacts
 .PHONY: research-artifacts-test research-artifacts-import research-artifacts-restore research-artifacts-check research-artifacts-manifest-check git-size-check
@@ -125,6 +130,16 @@ test:
 test-software:
 	pnpm test:software
 
+# Optional D4153 diagnosis: same complete suite/config; print failures before a final reporter crash.
+.PHONY: test-software-diagnostics
+test-software-diagnostics:
+	pnpm test:software --reporter=./tools/software-failure-reporter.mjs --reporter=default
+
+.PHONY: test-software-files
+test-software-files:
+	$(CI_NODE) tools/test-tier-check.mjs --software-files $(TEST_FILES)
+	pnpm test:software $(TEST_FILES)
+
 .PHONY: import-workflow-check import-workflow-browser-check
 import-workflow-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/ImportSourceFields.test.ts apps/web/src/lib/import-presentation.test.ts apps/web/src/lib/app-shell.test.ts apps/server/src/game-import.test.ts apps/server/src/repertoire.test.ts
@@ -151,7 +166,12 @@ queued-stockfish-check:
 	./node_modules/.bin/vitest run apps/server/src/evidence-queue.test.ts apps/server/src/evidence-job-durability.test.ts apps/server/src/sourcing/syzygy.test.ts
 
 test-content:
+	$(CI_NODE) --test tools/content-scheduling.test.mjs
 	pnpm test:content
+
+.PHONY: expression-census-check
+expression-census-check:
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/expression-census.test.ts
 
 test-tier-check:
 	$(CI_NODE) --test tools/test-tier-check.test.mjs
@@ -319,8 +339,15 @@ test-browser-ci-awake:
 ci-local:
 	$(CI_NODE) tools/ci-local.mjs
 
-schema-check:
+schema-check: structural-convention-schemas-check
 	pnpm schema:check
+
+.PHONY: structural-convention-schemas-check structural-convention-schemas-update
+structural-convention-schemas-check:
+	$(CI_NODE) tools/structural-convention-schemas.mjs
+
+structural-convention-schemas-update:
+	$(CI_NODE) tools/structural-convention-schemas.mjs --write
 
 register-check:
 	$(CI_NODE) --test tools/register-check.test.mjs
@@ -339,6 +366,10 @@ semantic-convention-source-check:
 semantic-convention-history-check:
 	$(CI_NODE) --test tools/semantic-convention-history-check.test.mjs
 	$(CI_NODE) tools/semantic-convention-history-check.mjs --staged
+
+.PHONY: semantic-convention-history-update
+semantic-convention-history-update:
+	$(CI_NODE) tools/semantic-convention-history-check.mjs --append --owner="$(CONVENTION_OWNER_RFC)"
 
 status-parity:
 	$(CI_NODE) --test tools/status-parity.test.mjs
@@ -509,6 +540,10 @@ semantic-evidence-check:
 	./node_modules/.bin/esbuild apps/server/src/semantic-evidence-check.ts --bundle --platform=node --format=esm --outfile=apps/server/dist/semantic-evidence-check.js
 	$(CI_NODE) apps/server/dist/semantic-evidence-check.js
 
+.PHONY: semantic-content-dependencies-check
+semantic-content-dependencies-check:
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/semantic-content-dependencies.test.ts
+
 .PHONY: castling-open-file-check
 castling-open-file-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/castling-open-file.test.ts packages/runtime/src/breadth-semantic.test.ts apps/server/src/castling-open-file.test.ts
@@ -520,6 +555,10 @@ candidate-packet-projections:
 
 candidate-packet-projections-check:
 	$(CI_NODE) tools/generate-candidate-packet-projections.mjs --check
+
+.PHONY: candidate-population-check
+candidate-population-check: candidate-packet-projections-check
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/candidate-population.test.ts packages/runtime/src/candidate-population-authority.test.ts packages/runtime/src/candidate-population-census.test.ts
 
 # Prevalence/cost census over a fixed sample (POSITIONS=<file of FENs> to override); never the schema.
 candidate-closure-census:
@@ -582,6 +621,7 @@ test-comparison-grounding:
 .PHONY: test-pivotal-grounding
 test-pivotal-grounding:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/pivotal-evidence.test.ts packages/runtime/src/adaptive-guidance.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/review-evidence.test.ts packages/runtime/src/story.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts packages/runtime/src/adaptive-guidance-content.test.ts
 	$(MAKE) typecheck
 
 # Disposable source-owner model; no production scope operation or permission.
@@ -625,6 +665,15 @@ inspector-recorded-prefix-research:
 	$(CI_NODE) .cache/d3792-inspector-demand/prefix_candidate.mjs candidate
 	$(CI_NODE) .cache/d3792-inspector-demand/window_candidate.mjs
 	$(CI_NODE) .cache/d3792-inspector-demand/recorded-origin.mjs
+
+.PHONY: inspector-research-typecheck
+inspector-research-typecheck:
+	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
+
+# Disposable D4009 authoring witness, deliberately outside product software/content CI.
+.PHONY: review-analysis-declaration-research
+review-analysis-declaration-research:
+	./node_modules/.bin/vitest run --config tools/d4009-analyze-declaration/vitest.config.ts
 
 inspector-source-contract-research:
 	./node_modules/.bin/tsc -p tools/d3792-inspector-demand/tsconfig.json --noEmit
@@ -1667,7 +1716,8 @@ semantic-tactics-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-tactics.test.ts packages/runtime/src/special-move-tactics.test.ts
 
 semantic-validation-cited-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-cited.test.ts packages/runtime/src/semantic-validation-rule-state.test.ts packages/runtime/src/semantic-validation-pawn-dynamics.test.ts packages/runtime/src/semantic-validation-attacks.test.ts packages/runtime/src/semantic-validation-recorded.test.ts packages/runtime/src/semantic-validation-discovered.test.ts packages/runtime/src/semantic-validation-king-zone.test.ts packages/runtime/src/semantic-validation-harassment.test.ts packages/runtime/src/semantic-validation-bounded.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-castling.test.ts packages/runtime/src/semantic-validation.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-cited.test.ts packages/runtime/src/semantic-validation-rule-state.test.ts packages/runtime/src/semantic-validation-pawn-dynamics.test.ts packages/runtime/src/semantic-validation-attacks.test.ts packages/runtime/src/semantic-validation-recorded.test.ts packages/runtime/src/semantic-validation-discovered.test.ts packages/runtime/src/semantic-validation-king-zone.test.ts packages/runtime/src/semantic-validation-harassment.test.ts packages/runtime/src/semantic-validation-bounded.test.ts packages/runtime/src/semantic-validation-material.test.ts packages/runtime/src/semantic-validation-exposure.test.ts packages/runtime/src/semantic-validation-orientation.test.ts
 
 .PHONY: castling-evidence-check
 castling-evidence-check:
@@ -1684,7 +1734,8 @@ claim-backing-check:
 evidence-foundation-check: mobility-check king-state-check
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/pawn-dynamics.test.ts packages/runtime/src/recorded-semantic-path.test.ts apps/server/src/recorded-semantic-path.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-migration.test.ts packages/runtime/src/semantic-validation-cited.test.ts packages/runtime/src/semantic-validation-rule-state.test.ts packages/runtime/src/semantic-validation-pawn-dynamics.test.ts packages/runtime/src/semantic-validation-attacks.test.ts packages/runtime/src/semantic-validation-recorded.test.ts packages/runtime/src/semantic-validation-discovered.test.ts packages/runtime/src/semantic-validation-king-zone.test.ts
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts packages/runtime/src/semantic-validation.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/candidate-population-census.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/structural-evidence.test.ts packages/runtime/src/transition.test.ts packages/runtime/src/castling-evidence.test.ts packages/runtime/src/tactics.test.ts packages/runtime/src/semantic-tactics.test.ts packages/runtime/src/special-move-tactics.test.ts packages/runtime/src/reading-execution.test.ts packages/runtime/src/reading-evidence.test.ts packages/runtime/src/shape-firing.test.ts apps/web/src/lib/claim-presentation.test.ts apps/server/src/authoring-execution.test.ts apps/server/src/sourcing/claim-binding.test.ts apps/server/src/shape-validation.test.ts apps/server/src/shape-studio.test.ts apps/server/src/bounded-target-policy.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/bounded-target.test.ts packages/runtime/src/semantic-validation.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/candidate-population-census.test.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/structural-evidence.test.ts packages/runtime/src/transition.test.ts packages/runtime/src/castling-evidence.test.ts packages/runtime/src/tactics.test.ts packages/runtime/src/semantic-tactics.test.ts packages/runtime/src/special-move-tactics.test.ts packages/runtime/src/reading-execution.test.ts packages/runtime/src/reading-evidence.test.ts packages/runtime/src/shape-firing.test.ts apps/web/src/lib/claim-presentation.test.ts apps/server/src/authoring-execution.test.ts apps/server/src/sourcing/claim-binding.test.ts apps/server/src/shape-studio.test.ts apps/server/src/bounded-target-policy.test.ts apps/server/src/phase-source-composition.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/semantic-validation-material.test.ts packages/runtime/src/semantic-validation-exposure.test.ts packages/runtime/src/semantic-validation-orientation.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/shape-validation.test.ts packages/runtime/src/shape-firing-content.test.ts
 
 semantic-validation-build:
 	./node_modules/.bin/esbuild tools/semantic-validation-build.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/semantic-validation/dist/semantic-validation-build.mjs --log-level=warning
@@ -1886,6 +1937,22 @@ storage-backup-fifth-fresh-review: storage-backup-fourth-author-repair
 
 module-evidence-assembly:
 	./node_modules/.bin/vitest run --config tools/d1865-evidence-assembly-harness/vitest.config.ts --reporter=verbose
+
+.PHONY: structure-selection-measurement
+structure-selection-measurement:
+	$(CI_NODE) ./node_modules/typescript/bin/tsc --project tools/d1865-evidence-assembly-harness/tsconfig.structure.json
+	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config tools/d1865-evidence-assembly-harness/vitest.config.ts tools/d1865-evidence-assembly-harness/structure-selection.test.ts
+
+.PHONY: grade-selection-measurement
+grade-selection-measurement:
+	$(CI_NODE) ./node_modules/typescript/bin/tsc --project tools/d1865-evidence-assembly-harness/tsconfig.grade.json
+	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config tools/d1865-evidence-assembly-harness/vitest.config.ts tools/d1865-evidence-assembly-harness/grade-presentation.test.ts tools/d1865-evidence-assembly-harness/grade-source-selection.test.ts
+
+# Disposable D1716/D1718/D1719 research; default counterexamples, no bulk census or learner delivery.
+.PHONY: avoidance-subject-measurement
+avoidance-subject-measurement:
+	$(CI_NODE) ./node_modules/typescript/bin/tsc --project tools/d1718-avoidance-subject-harness/tsconfig.json
+	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config tools/d1718-avoidance-subject-harness/vitest.config.ts
 
 module-registration-author-contract-update:
 	./node_modules/.bin/esbuild tools/d2120-module-registration-author-contract/generate.ts --bundle --platform=node --format=esm --outfile=/tmp/chess-tabiya-module-registration-generate.mjs
@@ -2232,7 +2299,7 @@ provider-traversal: build
 
 .PHONY: provider-traversal-check
 provider-traversal-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-traversal.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/provider-traversal.test.ts apps/server/src/provider-traversal-cli.test.ts
 
 # Permanent value-authority gate (rfc/evidence-value-authority.md §8): single mint, central invoker,
 # registry = non-retired catalogue, receipts, positives and falsifiers for every factory.
@@ -2249,7 +2316,8 @@ recorded-comparison-browser-check:
 	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "D3837 missing comparison"
 
 evidence-value-authority:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-catalog.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/landing-captures.test.ts packages/runtime/src/defender-exposure-source.test.ts packages/runtime/src/local-tactical-sources.test.ts packages/runtime/src/material-sources.test.ts packages/runtime/src/recorded-inspector-source.test.ts packages/runtime/src/recorded-comparison.test.ts packages/runtime/src/recorded-comparison-eval.test.ts packages/runtime/src/pivotal-evidence.test.ts packages/runtime/src/recorded-pivotal.test.ts packages/runtime/src/recorded-sequence-window.test.ts packages/runtime/src/recorded-semantic-window.test.ts packages/runtime/src/semantic-validation.test.ts packages/runtime/src/recorded-semantic-path.test.ts packages/runtime/src/comparison-structural-population.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/inspector-query.test.ts apps/server/src/inspector-analyze-source.test.ts apps/server/src/review-analyze-confirmation.test.ts apps/server/src/review-analyze-rest.test.ts apps/server/src/inspector-query-independent.test.ts apps/server/src/inspector-query-source.test.ts apps/server/src/inspector-query-source-independent.test.ts packages/runtime/src/inspector-query-contract.test.ts packages/runtime/src/inspector-whole-reading-presentation.test.ts packages/runtime/src/inspector-whole-reading-independent.test.ts packages/runtime/src/inspector-detail.test.ts packages/runtime/src/inspector-occurrence-budget.test.ts packages/runtime/src/presentation-inspector-detail.test.ts packages/runtime/src/presentation-inspector-source.test.ts apps/server/src/inspector-source-adapter-presentation.test.ts apps/server/src/inspector-local-source.test.ts apps/server/src/inspector-dependent-source.test.ts apps/server/src/inspector-window-source.test.ts apps/server/src/inspector-packet-source.test.ts apps/server/src/inspector-recorded-presentation.test.ts packages/runtime/src/recorded-analyze-line.test.ts packages/runtime/src/recorded-analyze-line-evidence.test.ts packages/runtime/src/recorded-analyze-presentation.test.ts apps/server/src/inspector-pivotal-source.test.ts apps/server/src/inspector-opening-source.test.ts apps/server/src/inspector-explorer-source.test.ts apps/server/src/inspector-comparison-source.test.ts apps/server/src/inspector-story-source.test.ts apps/server/src/registered-shape-source.test.ts apps/server/src/inspector-shape-source.test.ts apps/server/src/inspector-recorded-context.test.ts apps/server/src/inspector-ledger-source.test.ts packages/runtime/src/maia-inference-task.test.ts apps/server/src/maia-task-source.test.ts apps/server/src/maia-selector.test.ts packages/runtime/src/maia-node.test.ts apps/server/src/inspector-maia.test.ts apps/server/src/inspector-maia-source.test.ts apps/web/src/lib/maia-node-response.test.ts apps/server/src/provider-traversal-cli.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-value-authority.test.ts packages/runtime/src/evidence-contract.test.ts packages/runtime/src/evidence-catalog.test.ts apps/server/src/evidence-manifest.test.ts packages/runtime/src/landing-captures.test.ts packages/runtime/src/defender-exposure-source.test.ts packages/runtime/src/local-tactical-sources.test.ts packages/runtime/src/material-sources.test.ts packages/runtime/src/recorded-inspector-source.test.ts packages/runtime/src/recorded-comparison.test.ts packages/runtime/src/recorded-comparison-eval.test.ts packages/runtime/src/pivotal-evidence.test.ts packages/runtime/src/recorded-pivotal.test.ts packages/runtime/src/recorded-sequence-window.test.ts packages/runtime/src/recorded-semantic-window.test.ts packages/runtime/src/semantic-validation.test.ts packages/runtime/src/recorded-semantic-path.test.ts packages/runtime/src/comparison-structural-population.test.ts packages/runtime/src/semantic-validation-material.test.ts packages/runtime/src/semantic-validation-exposure.test.ts packages/runtime/src/semantic-validation-orientation.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/comparison-reduction.test.ts packages/runtime/src/last-level-reduction.test.ts packages/runtime/src/story-rank-reduction.test.ts packages/runtime/src/evidence-execution.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-conventions.test.ts
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-review-boundary.test.ts apps/server/src/recorded-review-boundary.test.ts packages/runtime/src/recorded-last-level-population.test.ts packages/runtime/src/review-evidence.test.ts packages/runtime/src/recorded-human-divergence.test.ts packages/runtime/src/recorded-review-source-population.test.ts packages/runtime/src/recorded-review-moments.test.ts packages/runtime/src/recorded-review-operands.test.ts packages/runtime/src/recorded-engine-attachments.test.ts packages/runtime/src/story.test.ts
 
@@ -2279,7 +2347,7 @@ opening-source-check:
 .PHONY: opening-point-check
 .PHONY: recorded-review-boundary-check
 recorded-review-boundary-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-review-boundary.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/recorded-review-boundary.test.ts packages/runtime/src/internal/immutable-json.test.ts
 
 .PHONY: guidance-lifetime-check
 guidance-lifetime-check:
@@ -2353,6 +2421,22 @@ concept-registry-revise:
 style-registry-check:
 	./node_modules/.bin/vitest run apps/server/src/style-registry-check.test.ts
 
+# Disposable D4147/D4149 source/cost research; optional, not CI or product completion proof.
+.PHONY: profile-source-cost profile-source-cost-check
+profile-source-cost-check:
+	./node_modules/.bin/tsc -p tools/r12-player-style-harness/profile-source-cost.tsconfig.json
+profile-source-cost: profile-source-cost-check
+	./node_modules/.bin/esbuild tools/r12-player-style-harness/profile-source-cost.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/r12-profile-source-cost.js --log-level=warning
+	$(CI_NODE) apps/server/dist/r12-profile-source-cost.js
+
+# Disposable D4159 finite source arithmetic; no raw corpus input, production reducer or CI gate.
+.PHONY: profile-choice-source profile-choice-source-check
+profile-choice-source-check:
+	./node_modules/.bin/tsc -p tools/r12-player-style-harness/choice-source.tsconfig.json
+profile-choice-source: profile-choice-source-check
+	./node_modules/.bin/esbuild tools/r12-player-style-harness/choice-source.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/r12-profile-choice-source.js --log-level=warning
+	$(CI_NODE) apps/server/dist/r12-profile-choice-source.js
+
 learner-rating-bracket:
 	./node_modules/.bin/esbuild tools/learner-rating-bracket-harness/simulate.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-learner-rating-bracket.mjs
 	$(CI_NODE) /tmp/tabiya-learner-rating-bracket.mjs --update
@@ -2363,6 +2447,17 @@ learner-rating-bracket-check:
 learner-rating-isolation-check:
 	$(CI_NODE) --test tools/learner-rating-isolation-harness/import-graph.test.mjs
 	./node_modules/.bin/vitest run --config tools/learner-rating-isolation-harness/vitest.config.ts
+
+.PHONY: longitudinal-successor-fixture
+# Manual historical fixture capture only; never a dependency of normal verification.
+longitudinal-successor-fixture:
+	$(CI_NODE) tools/d4018-longitudinal-successor-fixture.mjs
+
+.PHONY: longitudinal-incidence
+# D4018 criterion7: opt-in fixed-population diagnostic, never a verification dependency.
+longitudinal-incidence:
+	./node_modules/.bin/esbuild tools/d4018-longitudinal-incidence.ts --bundle --platform=node --format=esm --outfile=tools/dist/d4018-longitudinal-incidence.mjs --log-level=warning
+	$(CI_NODE) tools/dist/d4018-longitudinal-incidence.mjs
 
 longitudinal-projector-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/longitudinal-contract.test.ts apps/server/src/longitudinal-projector-cache.test.ts apps/server/src/longitudinal-membership-cache.test.ts apps/server/src/longitudinal-store.test.ts apps/server/src/longitudinal-worker.test.ts
@@ -2488,11 +2583,18 @@ bot-calibration-verdict-contract:
 bot-calibration-numerical-author-check:
 	$(CI_NODE) --test tools/d2236-bot-calibration-verdict-contract/numerical-author-examples.test.mjs
 
-# Disposable D3309 producer/presentation fidelity census. No v2 production migration.
+# Opt-in historical D3309 same-collector controls, refreshed for the production @2 migration.
 .PHONY: structural-inspector-fidelity-check
 structural-inspector-fidelity-check:
 	$(CI_NODE) node_modules/typescript/bin/tsc --project tools/d3309-structural-fidelity/tsconfig.json
 	$(CI_NODE) node_modules/vitest/vitest.mjs run --config tools/d3309-structural-fidelity/vitest.config.ts
+
+.PHONY: structural-inspector-check structural-inspector-browser-check
+structural-inspector-check:
+	$(MAKE) test-software-files TEST_FILES='packages/runtime/src/structural-reading-detail.test.ts packages/runtime/src/reading-evidence.test.ts packages/runtime/src/reading-execution.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts apps/web/src/lib/screens.test.ts'
+
+structural-inspector-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep 'D3309 detailed structural facts'
 
 .PHONY: bot-calibration-population-check bot-calibration-population bot-calibration-population-report bot-calibration-population-report-update bot-calibration-population-report-check
 bot-calibration-population-check: bot-calibration-verdict-contract
@@ -3557,6 +3659,10 @@ live-sources-fresh-review:
 live-sources-author-repair: live-sources-fresh-review
 	$(CI_NODE) --test tools/d2277-live-sources-author-repair/contract.test.mjs
 
+.PHONY: recorded-clocks-check
+recorded-clocks-check:
+	$(MAKE) test-software-files TEST_FILES='packages/runtime/src/recorded-clocks.test.ts apps/server/src/recorded-clock-import.test.ts apps/server/src/recorded-clock-storage.test.ts apps/server/src/recorded-clock-source.test.ts apps/server/src/recorded-clock-delivery.test.ts apps/web/src/lib/recorded-clock-readout.test.ts'
+
 .PHONY: recorded-clocks-fresh-review
 recorded-clocks-fresh-review:
 	$(CI_NODE) --test tools/d2286-recorded-clocks-fresh-review/contract.test.mjs
@@ -3587,9 +3693,10 @@ principle-registry-check:
 
 .PHONY: shape-registry-check
 # Frozen registered documents, authoring/hydration and exact trigger/signature validation.
-# Permanent tests also run in the ordinary software tier; no corpus coverage gate is added.
+# Software ownership controls and authored-Carlsbad checks run in their respective ordinary tiers.
 shape-registry-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/shape-registry.test.ts apps/server/src/shape-studio.test.ts apps/server/src/shape-validation.test.ts apps/server/src/authoring-execution.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/shape-registry.test.ts apps/server/src/shape-studio.test.ts apps/server/src/authoring-execution.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/shape-validation.test.ts
 
 .PHONY: web-bundle-report
 # D3722 disposable measurement: real Vite configuration, no asset/source-map writes.
@@ -3833,10 +3940,41 @@ pack-check:
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js
 	$(CI_NODE) apps/server/dist/pack-check.js "$(abspath $(FILE))"
 
+# Accepted foundation-source-identity §4.1: bounded read-only comparisons, never content edits.
+.PHONY: foundation-authored-migration-report
+foundation-authored-migration-report:
+	pnpm --filter @chess-tabiya/server exec esbuild src/authored-convention-migration-cli.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/authored-convention-migration-cli.js
+	$(CI_NODE) apps/server/dist/authored-convention-migration-cli.js --corpus "$(if $(CORPUS),$(CORPUS),content/drafts,content/packs)" --shapes "$(if $(SHAPES),$(SHAPES),content/shapes)" $(if $(OUT),--out "$(OUT)",)
+
 shape-check:
 	@test -n "$(FILE)" || (echo "Usage: make shape-check FILE=<path-to-shape.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/shape-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/shape-check.js
 	$(CI_NODE) apps/server/dist/shape-check.js "$(FILE)" "$(PROBE)" "$(CORPUS)"
+
+.PHONY: shape-probe
+shape-probe:
+	@test -n "$(SHAPE)$(PACK)" || (echo "Usage: make shape-probe SHAPE=<id> PROBE='<fen>' or PACK=<pack.json> [SHAPE=<extra-id>]" >&2; exit 2)
+	pnpm --filter @chess-tabiya/server exec esbuild src/shape-probe.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/shape-probe.js
+	$(CI_NODE) apps/server/dist/shape-probe.js $(if $(PACK),--pack "$(PACK)" $(if $(SHAPE),"$(SHAPE)",),"$(SHAPE)" "$(PROBE)")
+
+.PHONY: foundation-shape-firing-measurement-build foundation-shape-firing-measurement foundation-shape-firing-captured-measurement foundation-shape-firing-profile
+.PHONY: foundation-shape-firing-current-measurement
+foundation-shape-firing-current-measurement: foundation-shape-firing-measurement-build
+	$(CI_NODE) apps/server/dist/d4082-shape-firing-measurement.js --current-scan $(if $(PGN),"$(PGN)",)
+
+foundation-shape-firing-measurement-build:
+	./node_modules/.bin/tsc -p tools/d4082-shape-firing/tsconfig.json
+	./node_modules/.bin/esbuild tools/d4082-shape-firing/measure.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/d4082-shape-firing-measurement.js --log-level=warning
+
+foundation-shape-firing-measurement: foundation-shape-firing-measurement-build
+	$(CI_NODE) apps/server/dist/d4082-shape-firing-measurement.js $(if $(PGN),"$(abspath $(PGN))",)
+
+foundation-shape-firing-captured-measurement: foundation-shape-firing-measurement-build
+	$(CI_NODE) apps/server/dist/d4082-shape-firing-measurement.js --captured-only $(if $(PGN),"$(abspath $(PGN))",)
+
+foundation-shape-firing-profile: foundation-shape-firing-measurement-build
+	mkdir -p .cache/profiles/d4082
+	$(CI_NODE) apps/server/dist/d4082-shape-firing-measurement.js --profile $(if $(PGN),"$(abspath $(PGN))",)
 
 expression-census:
 	pnpm --filter @chess-tabiya/server exec esbuild src/expression-census.ts --bundle --platform=node --format=esm --external:typescript --outfile=dist/expression-census.js
@@ -3899,7 +4037,8 @@ tablebase-census:
 	$(CI_NODE) apps/server/dist/tablebase-census.js --file "$(abspath $(FILE))" $(if $(MAX_QUERIES),--max-queries "$(MAX_QUERIES)",)
 
 tablebase-census-contract:
-	./node_modules/.bin/vitest run apps/server/src/sourcing/tablebase-census.test.ts apps/server/src/sourcing/tablebase-walk.test.ts apps/server/src/sourcing/verify-draft.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/sourcing/tablebase-census.test.ts apps/server/src/sourcing/tablebase-walk.test.ts apps/server/src/sourcing/manifest-provenance.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/sourcing/tablebase-census-content.test.ts apps/server/src/sourcing/tablebase-walk-content.test.ts apps/server/src/sourcing/verify-draft.test.ts
 
 tablebase-census-check:
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/tablebase-census.ts --bundle --platform=node --format=esm --outfile=dist/tablebase-census.js
@@ -4043,7 +4182,8 @@ application-startup-cleanup-check:
 .PHONY: bot-rematch-check bot-rematch-browser-check bot-label-check bot-label-browser-check
 .PHONY: predicate-validation-check play-start-check play-start-browser-check
 predicate-validation-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/predicate-wave-3-validation.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/predicate-distance-validation.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts apps/server/src/predicate-wave-3-validation.test.ts
 
 play-start-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/web/src/lib/screens.test.ts apps/web/src/lib/session-controller.test.ts -t "D3673|D3674|bot-profile play through|starts Just Play|offers the bot roster|D3664"
@@ -4207,9 +4347,29 @@ occupied-target-identity-check:
 .PHONY: structural-reading-work-check
 structural-reading-work-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/structure-work.test.ts packages/runtime/src/structure.test.ts packages/runtime/src/structural-evidence.test.ts packages/runtime/src/transition.test.ts packages/runtime/src/reading-evidence.test.ts packages/runtime/src/shape-firing.test.ts apps/server/src/capability/pack-capability-contract.test.ts
+	./node_modules/.bin/vitest run --config vitest.content.config.ts packages/runtime/src/shape-firing-content.test.ts
 	$(MAKE) capability-check typecheck
 
 .PHONY: move-grade-consumer-check
+.PHONY: review-map-runtime-check
+review-map-runtime-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/review-map.test.ts packages/runtime/src/review-map-remainder.test.ts packages/runtime/src/presentation-inspector-adapters.test.ts
+
+.PHONY: review-grade-workflow-check
+review-grade-workflow-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/review-map.test.ts -t 'D3765|serves the eval graph|serves every ply'
+.PHONY: grade-arithmetic-check
+grade-arithmetic-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/grade.test.ts
+
+.PHONY: recorded-grade-source-check
+recorded-grade-source-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/grade.test.ts packages/runtime/src/recorded-grade-source.test.ts apps/server/src/recorded-grade-sources.test.ts apps/server/src/recorded-review-delivery.test.ts apps/server/src/learner-profile-walls.test.ts
+
+.PHONY: recorded-grade-contract-check
+recorded-grade-contract-check: recorded-grade-source-check
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/evidence-conventions.test.ts packages/runtime/src/recorded-semantic-path.test.ts packages/runtime/src/recorded-sequence-window.test.ts packages/runtime/src/evidence-binding-execution.test.ts packages/runtime/src/evidence-catalog.test.ts
+
 move-grade-consumer-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/grade.test.ts packages/runtime/src/evidence-catalog.test.ts packages/runtime/src/postcommit-nudge.test.ts packages/runtime/src/review-map.test.ts packages/runtime/src/voice.test.ts apps/server/src/review-map.test.ts
 	$(MAKE) typecheck
@@ -4217,6 +4377,7 @@ move-grade-consumer-check:
 .PHONY: nudge-grade-presentation-check
 nudge-grade-presentation-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/presentation-inspector-adapters.test.ts apps/web/src/lib/evidence/components.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/module-registry.test.ts packages/runtime/src/module-query.test.ts packages/runtime/src/presentation-contract.test.ts packages/runtime/src/presentation-consumer-adapters.test.ts packages/runtime/src/castling-evidence.test.ts
 
 .PHONY: legal-move-context-check
 legal-move-context-check:
@@ -4322,6 +4483,10 @@ guided-hint-lifetime-check:
 guided-hint-client-check:
 	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts apps/web/src/lib/guided-hint.test.ts
 
+.PHONY: guided-hint-ownership-browser-check
+guided-hint-ownership-browser-check:
+	./node_modules/.bin/playwright test tests/browser/drill.spec.ts --grep "Guided Hint retries"
+
 .PHONY: assistance-codec-check
 assistance-codec-check:
 	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config vitest.software.config.ts packages/runtime/src/assistance-codec.test.ts packages/runtime/src/assistance-register.test.ts packages/runtime/src/presets.test.ts packages/runtime/src/assistance-exchange.test.ts apps/web/src/lib/assistance-preference.test.ts
@@ -4410,6 +4575,19 @@ maia-option-contract-drill:
 	@test -n "$(MAIA_IMAGE_ID)" || (echo "Usage: make maia-option-contract-drill MAIA_IMAGE_ID=sha256:<actual-local-id>" >&2; exit 2)
 	$(CI_NODE) tools/maia-option-contract-drill.mjs --image $(MAIA_IMAGE_ID) $(if $(filter 1,$(POLICY)),--policy,)
 
+# Opt-in actual offline model integration; reuses verified source-build OCI identity, no publish.
+.PHONY: maia-task-native-check maia-task-native-build maia-terminal-source-probe
+maia-task-native-check:
+	./node_modules/.bin/esbuild tools/maia-task-native-check.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/verification/maia-task-native-check.mjs
+	$(CI_NODE) .cache/verification/maia-task-native-check.mjs --image $(LOCAL_MAIA_IMAGE) --oci-dir $(DEPLOY_RENDER_DIR)/maia-oci $(if $(filter 1,$(MAIA_TASK_BUILD)),--build,) $(if $(filter 1,$(MAIA_TERMINAL_PROBE)),--terminal-probe,) $(if $(filter 1,$(MAIA_OPERATOR_CLI)),--operator-cli,)
+
+maia-task-native-build:
+	$(MAKE) maia-task-native-check MAIA_TASK_BUILD=1
+
+# Disposable D3970 observation, not a production/CI terminal-behavior assertion.
+maia-terminal-source-probe:
+	$(MAKE) maia-task-native-check MAIA_TERMINAL_PROBE=1
+
 engine-sharing-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/provider-digest.test.ts packages/runtime/src/provider-protocol.test.ts apps/server/src/engine-binary-digest.test.ts apps/server/src/engine-supervisor.test.ts apps/server/src/engine-supervisor-exchange.test.ts apps/server/src/provider-health.test.ts apps/server/src/provider-traversal.test.ts
 
@@ -4468,3 +4646,25 @@ storage-recover: storage-maintenance-check
 
 provider-protocol-author-repair:
 	$(CI_NODE) --test tools/d2361-provider-protocol-author-repair/*.test.mjs
+
+# Disposable D4167/D4170 evidence: original move spelling and receipt order, outside release/software CI.
+.PHONY: semantic-input-order-research
+semantic-input-order-research:
+	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/input-order.test.ts
+
+# Disposable D4167 composition evidence; no production reach or source qualification.
+.PHONY: foundation-shared-operation-research
+foundation-shared-operation-research:
+	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
+	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/foundation-operation.test.ts tools/d1713-semantic-validation-matrix/candidate-foundation-frame.test.ts tools/d1713-semantic-validation-matrix/total-foundation-states.test.ts
+
+# Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
+.PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
+longitudinal-registry-build:
+	./node_modules/.bin/esbuild tools/longitudinal-registry-artifacts.ts --bundle --platform=node --format=esm --outfile=tools/longitudinal-registry/dist/registry-artifacts.mjs --log-level=warning
+
+longitudinal-registry-check: longitudinal-registry-build
+	$(CI_NODE) tools/longitudinal-registry/dist/registry-artifacts.mjs --check
+
+longitudinal-registry-update: longitudinal-registry-build
+	$(CI_NODE) tools/longitudinal-registry/dist/registry-artifacts.mjs --write

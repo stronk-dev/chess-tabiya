@@ -174,16 +174,54 @@ Those limits are scoped to the return and progression surfaces. The separate lea
 system records whole-game results against calibrated opponents and never feeds this scheduler,
 its recommendations, or its milestones.
 
-`GET /progress/recommendations` is a read-only, learner-scoped projection. It
-may name an unaddressed stored repertoire gap or a shape encountered in a
-preserved run but absent from every countable attempt. Its closed sentences
-state only those events and corpus population counts; they never infer weakness,
-mastery, rating, or what other learners struggle with. Empty history produces no
-section, and reading recommendations writes no schedule or attempt. Repertoire and shape
-recommendations each have a deterministic ten-item display budget. The endpoint returns their
-combined shown and eligible counts, and Learn states that denominator whenever eligible grounded
-recommendations exceed the visible set. Shape eligibility scans every preserved run in bounded
-storage pages; the display budget does not become an evidence-population cutoff.
+`GET /progress/recommendations` is a read-only, authenticated learner projection. It can name
+stored repertoire gaps or registered patterns encountered in the learner's own preserved runs.
+Readable pattern sentences state the observed encounter count. They do not infer weakness,
+mastery, rating, or absence of an attempt in every rehearsal that mentions a pattern.
+
+Pattern eligibility excludes countable attempts in current registered packs whose reference
+marks the pattern `present`; `prospective` references and noncountable attempts do not exclude it.
+The complete paginated run population is filtered by the stored owner, not grant visibility. All
+original branch paths use current registry-owned scans, including genuine no-match results.
+Repeated branches count once per run. Distinct run counts sort descending, with pattern ID ties;
+pack links sort by ID and use only present references. The ten-item display budget does not limit
+the evidence population. Repertoire and pattern contributions each have their existing ten-item
+budget, and the response includes combined shown/eligible counts for Learn's bounded display.
+
+The asynchronous read checks the real account/session, full owned-run population, registered
+patterns, attempts and pack records during capture and before publication. Missing required
+configuration or an unavailable/invalid branch source returns a typed unavailable response for
+the whole endpoint. A genuinely installed empty registry remains valid empty. The repertoire
+contribution is read after successful pattern collection and final authentication, so deletion
+while collection yields cannot leave an old repertoire link in the merged response. Existing
+answered/stale repertoire-scan semantics remain separate debt (D4099). Reading this endpoint
+writes no attempt, schedule or credit.
+
+Learn loads recommendations independently from its required data. Slow collection shows a local
+loading state; an unavailable source shows a local explanation and **Retry recommendations**.
+Neither delays nor hides usable returns, assignments, attempts or repertoire controls. Retry reads
+only this section. A genuine initial empty response omits the section; a successful explicit retry
+with no recommendations confirms that result locally. An absent optional API omits the section
+without pretending that a configured source succeeded.
+
+Every read and retry belongs to one learner, Learn visit and request. Navigation, account changes,
+unmount and local repertoire mutations retire and abort old requests. Repertoire import, deletion,
+scan and answer changes suspend recommendations until all current changes settle, then re-read
+current facts, including after an uncertain failed response. Retained old Retry callbacks cannot
+adopt a newer failure's request. Focus stays in the owned section only while that request is still
+current and the learner has not moved it elsewhere. Required Learn data still uses its existing
+page-level failure path; only the optional section is isolated.
+
+The repertoire scan's existing first-move sentinel is an empty reply and line with gamesUntilSeen
+of one, derived from the normalized declared-root mass rather than a sampled game count. The
+receiver accepts that exact shape, retaining strict nonroot validation. It says
+that the repertoire has no answer recorded at its starting position, with the corpus guard retained;
+it uses no blank move slots or sampled-frequency claim for this unsampled root. The gap list also
+uses a scan-time first-answer summary instead of calling that position an opponent reply, retaining
+the current answer state and stale notice. The normalized root mass of one remains unchanged in
+the source; the root row does not present it as an opponent-reply frequency. These corrections do
+not repair the separate D4099 answered/stale-gap recommendation eligibility defect.
+
 Each shape recommendation resolves every currently served matching pack through the
 catalogue, names its phase, and starts that exact rehearsal. It does not discard the
 recommendation by sending the learner to an unfiltered pack shelf. A stale pack id is

@@ -96,19 +96,41 @@ No module renders through `compiled.modules` yet (Checkpoint B).
 separate pivotal-moment channel. The two controls do not depend on each other. When guidance is
 live but no shape matches, the learner-opened structure inspector reports that honest absence.
 
+The named-shape path preflights the complete `theory.shape_firing@1` consumer before its
+original firing factory. Each original occurrence retains its own registered `play.shape@1`
+recognition and separate navigation metadata. The learner-selected panel renders those
+`PresentedEvidence` items; authored catalogue plans, watch items and mistakes remain general
+catalogue content, not inferred advice. Selection includes the run, branch, entry and first
+recorded node, so a later recurrence never opens the first occurrence by accident. Withdrawing
+guidance or changing the run, branch or selected source retires the panel; restoring eligibility
+does not reopen it. A known formatting failure shows a local recognition-unavailable status
+beside the unchanged catalogue, with no raw-text fallback. Other contract/programming errors
+propagate rather than being relabeled as missing evidence.
+
+The move-transition Inspector uses `presentMoveTransitionEvidence`: complete exact
+`inspector.move_transition@1` preflight precedes all fourteen original leaf factories, and
+the resulting admitted view supplies its registered components in original source order.
+A root, missing parent/move or null transition reading remains inapplicable; it does not
+invoke collection or manufacture a successful empty reading.
+
 ## Pivotal markers
 
 `pivotalMarkers(run, branchId)` derives the complete, stable, path-ordered list from persisted
 FENs and events. Learner-requested comparison, story, and evidence-packet surfaces keep that
-complete projection. `liveMarkers(run, branchId, context)` is the narrower unasked projection
-used by the timeline: castling and pawn-contact irreversibility are omitted, while capture of the
-last piece of a role remains. A capture leaving both sides queenless renders “The queens have
-left the board.” Nothing opens automatically; the learner must open a dot to see its sentences.
+complete projection. The timeline's `pivotalMarkerEvidence(run, branchId, context)` preflights
+the complete `board.pivotal_marker@2` consumer, then invokes only the original irreversibility
+and phase-change sources. Its unchanged live rule omits castling and pawn-contact irreversibility,
+while capture of the last piece of a role remains. Human divergence and option collapse are
+retrospective/on-request evidence, never unsolicited live markers (D3048). The raw `liveMarkers`
+utility retains that same filter; it is not a presentation path.
 
-The live projection also applies the human-split permission. Recorded human divergence is absent
-for participants and spectators, and for solo/host viewers while feedback delivery is closed.
-Phase-change and option-collapse markers remain live but explicitly grandfathered and unmeasured;
-the admission register records that debt rather than treating their presence as evidence.
+Each delivered marker carries its own registered presentation alongside node/kind navigation
+metadata. Nothing opens automatically: the learner opens a dot and then its recorded evidence.
+The panel renders `PresentedEvidence`, not a second formatter over the raw marker. A queenless
+capture uses the registered sentence “Both queens have left the board.” Known formatting failure
+is shown for that marker without raw-text fallback or suppressing valid siblings; unexpected
+programming errors still propagate. Other retrospective consumers keep all four original sources
+and meanings. Neither this wiring nor the version change qualifies the marker convention.
 
 Four detector families ship:
 

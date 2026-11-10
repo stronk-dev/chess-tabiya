@@ -395,6 +395,11 @@ export function parseReviewStoryReceipt(value: unknown, request?: { readonly run
   let title: readonly PresentedEvidenceItem[];
   try { title = parsePresentationReceipt(item.title); } catch (error) { return fail(`title: ${error instanceof Error ? error.message : String(error)}`); }
   if (title.length !== 1 || title[0]!.component.id !== "fact_statement") fail("title is one fact_statement component");
+  const titleItem = title[0]!;
+  if (titleItem.adapter.consumer.id !== "review.story" || titleItem.adapter.consumer.version !== 1
+    || titleItem.adapter.projection.id !== "derived.story.title" || titleItem.adapter.projection.version !== 2
+    || titleItem.component.id !== "fact_statement" || titleItem.component.operand.rendererId !== "story.title@1"
+    || titleItem.component.operand.binding !== "declared_convention" || titleItem.component.operand.convention !== "story-compatibility@1") fail("title does not belong to the exact Story title seat");
   if (!Array.isArray(item.moments)) fail("moments");
   const pathIndex = new Map(subject.pathNodeIds.map((id, index) => [id, index]));
   const moments = (item.moments as unknown[]).map((candidate, index) => {
@@ -409,6 +414,8 @@ export function parseReviewStoryReceipt(value: unknown, request?: { readonly run
     let components: readonly PresentedEvidenceItem[];
     try { components = parsePresentationReceipt(moment.presentation); } catch (error) { return fail(`moment ${index} presentation: ${error instanceof Error ? error.message : String(error)}`); }
     if (components.length === 0) fail(`moment ${index} has no component`);
+    if (components.some(component => component.adapter.consumer.id !== "review.story" || component.adapter.consumer.version !== 1)) fail(`moment ${index} has a foreign consumer`);
+    if (components.some(component => component.adapter.projection.id === "derived.story.title")) fail(`moment ${index} uses the title-only source`);
     return Object.freeze({ decisionNodeId: moment.decisionNodeId as string, evidenceNodeId: moment.evidenceNodeId as string, stopNodeId: moment.stopNodeId as string, ply: natural(moment.ply, "ply"), san: moment.san as string | null, fen: canonicalFenText(moment.fen, "moment.fen"), kinds: Object.freeze([...(moment.kinds as StoryMomentKind[])]), evaluation, presentation: moment.presentation as PresentationReceipt, components });
   });
   const ids = moments.map((moment) => moment.evidenceNodeId);

@@ -20,6 +20,18 @@ function target(): HTMLElement {
 afterEach(() => document.body.replaceChildren());
 
 describe("timeline rewind timing", () => {
+  it("D4054 carries the exact first-node identity for root and later spans of the same shape", async () => {
+    const onOpenShape = vi.fn();
+    const component = mount(Timeline, { target: target(), props: {
+      entries, rootNodeId: "root", activeNodeId: "checkpoint-1", onPreview: vi.fn(), onConfirm: vi.fn(), rewindPolicy: "free",
+      shapeMarkers: ["root", "move-1"].map(nodeId => ({ sourceKey: "current-source", generation: 4, nodeId, entryId: "same", label: "Same structure", channel: "official" as const })),
+      onOpenShape,
+    } });
+    await tick();
+    for (const button of document.querySelectorAll<HTMLButtonElement>(".shape-marker")) button.click();
+    expect(onOpenShape.mock.calls).toEqual([["same", "root", "current-source", 4], ["same", "move-1", "current-source", 4]]);
+    await unmount(component);
+  });
   it("announces the detected moment instead of a generic pivotal marker", async () => {
     const component = mount(Timeline, { target: target(), props: {
       entries,

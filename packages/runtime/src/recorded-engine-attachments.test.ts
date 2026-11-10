@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import { attachEvidence } from "./evidence.js";
 import { collectRecordedEngineAttachments, collectRecordedEngineEdge, readRecordedEngineAttachments, type RecordedEngineAttachments } from "./internal/recorded-engine-attachments.js";
 import * as routes from "./internal/evidence-value-routes.js";
+import * as contracts from "./evidence-contract.js";
+import { readRecordedEngineNode } from "./internal/recorded-engine-node.js";
 import { readReviewPointInvocation } from "./internal/evidence-value-routes.js";
 import { recordedLastLevelFixture } from "./testing/recorded-last-level-fixture.js";
 import { attachDelivery, evaluationDelivery, REVIEW_AT, lineDelivery } from "./testing/review-evidence-fixture.js";
@@ -21,6 +23,45 @@ const legacy = (centipawns = 999): EvidencePayload => ({ kind: "eval", source: "
 const modern = (value: unknown): EvidencePayload => ({ kind: "eval", source: "engine_validated", values: { centipawns: 999, [REVIEW_PROVIDER_DELIVERY_KEY]: value } });
 
 describe("original durable modern engine attachment source primitive", () => {
+  it("D3935 preserves every position/head check without rehashing the same immutable event stream", () => {
+    const f = fixture(), source = f.collect(), image = readRecordedEngineAttachments(source);
+    const digests = vi.spyOn(contracts, "evidenceDigest");
+    try {
+      for (const row of image.rows) routes.assertRecordedPositionInvocation(row.position, image.boundary.run, row.position.payload.nodeId);
+      expect(digests.mock.calls.filter(([value]) => value === image.boundary.run.events)).toHaveLength(0);
+    } finally { digests.mockRestore(); }
+  });
+
+  it("D3935 rehashes mutable events even beneath a frozen run envelope", () => {
+    const f = fixture(), run = Object.freeze(structuredClone(f.current())), node = run.nodes[0]!;
+    const position = routes.invokeEvidenceValueRoute("run.record.position@1", { run, nodeId: node.id });
+    routes.assertRecordedPositionInvocation(position, run, node.id);
+    Object.assign(run.events[0]!, { at: "2026-11-02T00:00:00.000Z" });
+    expect(() => routes.assertRecordedPositionInvocation(position, run, node.id)).toThrow(/original/u);
+  });
+
+  it("D3935 shares the original position factory's immutable event identity without rehashing each node", () => {
+    const f = fixture(), attachments = f.collect(), image = readRecordedEngineAttachments(attachments);
+    const digests = vi.spyOn(contracts, "evidenceDigest");
+    try {
+      for (const row of image.rows) readRecordedEngineNode({ attachments, nodeId: row.position.payload.nodeId, offline: null, pending: null });
+      expect(digests.mock.calls.filter(([value]) => value === image.boundary.run.events)).toHaveLength(0);
+      f.attach(0, legacy());
+      expect(() => readRecordedEngineNode({ attachments, nodeId: image.rows[0]!.position.payload.nodeId, offline: null, pending: null })).toThrow(/no longer/u);
+    } finally { digests.mockRestore(); }
+  });
+
+  it("validates immutable original attachment membership once but still checks changed live storage", () => {
+    const f = fixture(); f.delivery(1);
+    const source = f.collect(), memberships = vi.spyOn(routes, "assertRecordedPositionInvocation");
+    try {
+      const first = readRecordedEngineAttachments(source);
+      expect(readRecordedEngineAttachments(source)).toBe(first);
+      expect(memberships).not.toHaveBeenCalled();
+      f.attach(0, legacy());
+      expect(() => readRecordedEngineAttachments(source)).toThrow(/no longer/u);
+    } finally { memberships.mockRestore(); }
+  });
   for (const side of ["white", "black"] as const) it(`acquires only the actual incoming ${side} edge through the registered dispatcher`, () => {
     const f = fixture(side), source = f.collect(1), image = readRecordedEngineAttachments(source);
     const invoke = vi.spyOn(routes, "invokeEvidenceValueRoute");

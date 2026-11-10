@@ -130,9 +130,11 @@ describe("complete recorded opening reduction", () => {
     expect(() => assertDeclaredEvidence({ ...evidence })).toThrow();
   });
 
-  it("does not redefine the historical @1 route", () => {
+  it("retires the historical @1 route instead of redefining it or retaining a pending stub", () => {
     const f = fixture();
-    expect(bindings.invokeEvidenceValueRoute("derived.opening.deepest_reached@1", { run: f.run, branchId: f.branchId })).toEqual({ kind: "unavailable", reason: "input_abstained", dependency: "runtime-opening-identity" });
-    expect(() => bindings.invokeEvidenceValueRoute("derived.opening.deepest_reached@1", { history: f.history } as never)).toThrow();
+    expect(bindings.evidenceValueRouteRegistry().some(meta => String(meta.route) === "derived.opening.deepest_reached@1")).toBe(false);
+    // Deliberately invalid predecessor calls remain refused for both old and new input shapes.
+    expect(() => bindings.invokeEvidenceValueRoute("derived.opening.deepest_reached@1" as never, { run: f.run, branchId: f.branchId } as never)).toThrow(/Unknown evidence value route/u);
+    expect(() => bindings.invokeEvidenceValueRoute("derived.opening.deepest_reached@1" as never, { history: f.history } as never)).toThrow(/Unknown evidence value route/u);
   });
 });

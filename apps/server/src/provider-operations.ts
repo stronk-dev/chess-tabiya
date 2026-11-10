@@ -13,6 +13,8 @@ import {
   STOCKFISH_RESET_COMMANDS,
   explorerRequestUrl,
   maiaCommandImage,
+  digestEngineOptionImage,
+  maiaInferenceTaskCommandImage,
   normalizeProviderRequest,
   providerUtf8,
   syzygyPreflight,
@@ -213,6 +215,46 @@ export function MaiaPolicyPageOperation(engines: ProviderEngineClient | null): P
   });
 }
 
+/** Accepted maia-task-source: same task's reported window and terminal sample, without clamping. */
+export function MaiaInferenceTaskOperation(engines: ProviderEngineClient | null): ProviderOperationDescriptor<"maia.inference_task@1"> {
+  return describe<"maia.inference_task@1">({
+    operation: "maia.inference_task@1", provider: "maia",
+    normalizeRequest: request => normalizeProviderRequest("maia.inference_task@1", request), preflight: () => null,
+    async execute({ request }, context) {
+      if (engines === null) throw new ProviderSourceUnavailable("provider_unavailable", "no Maia engine is configured");
+      await engines.start(MAIA_ENGINE_ID);
+      const before = engines.health(MAIA_ENGINE_ID), generation = engines.establishedGeneration(MAIA_ENGINE_ID);
+      if (generation === null || before.identity?.modelId !== request.requestedModel.id || before.identity.version !== request.requestedModel.version) throw new ProviderSourceUnavailable("identity_mismatch", "Maia task model/generation differs from its requested source");
+      checkMaiaLiveBounds(request, before, before.options);
+      const defaults = ["SelfElo", "OppoElo"].flatMap(name => {
+        const matching = before.options?.filter(option => option.name === name) ?? [];
+        if (matching.length > 1) throw new ProviderSourceUnavailable("invalid_response", `duplicate Maia ${name} option`);
+        const value = matching[0]?.default;
+        if (value === undefined) return [];
+        if (value === "" || /[\r\n\0]/u.test(value)) throw new ProviderSourceUnavailable("invalid_response", `invalid Maia ${name} default`);
+        return [`setoption name ${name} value ${value}`];
+      });
+      const commands = Object.freeze([...defaults, ...maiaCommandImage(request)]);
+      const capture = await engineExchange(engines, MAIA_ENGINE_ID, commands, [], context);
+      if (capture.generation !== generation || engines.establishedGeneration(MAIA_ENGINE_ID) !== generation) throw new ProviderSourceUnavailable("identity_mismatch", "Maia generation changed during task admission/exchange");
+      checkMaiaLiveBounds(request, { ...before, identity: capture.identity, options: capture.options }, capture.options);
+      const capturedCommands = maiaInferenceTaskCommandImage(request, capture.optionImage);
+      if (digestEngineOptionImage(capture.optionImage) !== capture.optionImageDigest) throw new ProviderSourceUnavailable("identity_mismatch", "Maia actual option image differs from its captured digest");
+      if (commands.length !== capturedCommands.length || commands.some((command, index) => command !== capturedCommands[index])) throw new ProviderSourceUnavailable("identity_mismatch", "Maia captured defaults differ from task admission");
+      if (capture.artifact?.kind !== "container" || capture.identity.modelId === undefined || capture.identity.eloHonored !== true) throw new ProviderSourceUnavailable("identity_mismatch", "Maia task has no captured honored model/container");
+      return Object.freeze({ endpoint: endpoint("maia.inference_task@1"),
+        actualIdentity: Object.freeze({ id: capture.identity.id, kind: "opponent", name: capture.identity.name,
+          version: capture.identity.version, modelId: capture.identity.modelId, containerDigest: capture.artifact.containerDigest,
+          seedHonored: capture.identity.seedHonored, eloHonored: true, optionImageDigest: capture.optionImageDigest,
+          optionImage: capture.optionImage }),
+        generation: capture.generation, contentEncoding: "uci-utf8", transport: null, responseBytes: uciBytes(capture),
+      });
+    },
+    retainedWeight: payload => Math.max(1, payload.candidates.length),
+    admitRetained: acquisition => engines !== null && acquisition.generation !== null && engines.establishedGeneration(MAIA_ENGINE_ID) === acquisition.generation,
+  });
+}
+
 // ---------------------------------------------------------------------------------------------
 // §§7–8 HTTP providers
 // ---------------------------------------------------------------------------------------------
@@ -286,6 +328,7 @@ export function providerOperationDescriptors(sources: ProviderOperationSources):
     "stockfish.position_evaluation@1": StockfishPositionEvaluationOperation(sources.engines),
     "stockfish.principal_variation@1": StockfishPrincipalVariationOperation(sources.engines),
     "maia.policy_page@1": MaiaPolicyPageOperation(sources.engines),
+    "maia.inference_task@1": MaiaInferenceTaskOperation(sources.engines),
     "syzygy.position@1": SyzygyPositionOperation(sources.tablebaseFetch),
     "lichess_explorer.position_page@1": ExplorerPositionPageOperation(sources.explorerFetch, sources.explorerToken),
   });

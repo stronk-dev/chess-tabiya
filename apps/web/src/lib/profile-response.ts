@@ -68,7 +68,8 @@ export interface LearnerProfileView {
   readonly population: { readonly measuredGames: number; readonly playedDecisions: number; readonly otherRuns: number; readonly definition: string; readonly window: { readonly from: string; readonly to: string } | null };
   readonly style: { readonly cards: readonly HabitCard[]; readonly disclosures: readonly string[] };
   readonly openings: { readonly available: boolean; readonly unavailableReason: string | null; readonly rows: readonly OpeningPerformanceRow[]; readonly unresolvedGames: number; readonly rateStatement: string; readonly source: string | null };
-  readonly observations: { readonly rows: readonly ObservationLedgerRow[]; readonly playedDecisions: number; readonly statement: string };
+  readonly observationStatus: { readonly kind: "unavailable"; readonly reason: "subject_metrics_not_adopted" };
+  readonly observations: readonly never[];
   readonly skills: SkillsView;
   readonly history: ProfilePage<ProfileHistoryRow>;
   readonly privacy: { readonly visibility: "private"; readonly statements: readonly string[] };
@@ -239,8 +240,9 @@ export function parseLearnerProfile(value: unknown): LearnerProfileView {
   const openings = object(root.openings, "$.profile.openings");
   array(openings.rows, "$.profile.openings.rows").forEach((row, index) => openingRow(row, `$.profile.openings.rows[${index}]`));
   text(openings.rateStatement, "$.profile.openings.rateStatement");
-  const observations = object(root.observations, "$.profile.observations");
-  array(observations.rows, "$.profile.observations.rows").forEach((row, index) => observationRow(row, `$.profile.observations.rows[${index}]`));
+  const observationStatus = object(root.observationStatus, "$.profile.observationStatus");
+  if (Object.keys(observationStatus).length !== 2 || observationStatus.kind !== "unavailable" || observationStatus.reason !== "subject_metrics_not_adopted") throw new ProfileResponseError("$.profile.observationStatus");
+  if (array(root.observations, "$.profile.observations").length !== 0) throw new ProfileResponseError("$.profile.observations");
   const skills = object(root.skills, "$.profile.skills");
   array(skills.categories, "$.profile.skills.categories").forEach((category, index) => { const item = object(category, `$.profile.skills.categories[${index}]`); text(item.label, `$.profile.skills.categories[${index}].label`); array(item.marks, `$.profile.skills.categories[${index}].marks`); });
   array(skills.candidateLeaves, "$.profile.skills.candidateLeaves");
@@ -260,9 +262,8 @@ export function parseOpeningDetail(value: unknown): OpeningDetail {
   return { row: openingRow(root.row, "$.row"), games: page(root.games, "$.games", historyRow) };
 }
 
-export function parseObservationDetail(value: unknown): ObservationDetail {
-  const root = object(value, "$");
-  return { row: observationRow(root.row, "$.row"), occurred: page(root.occurred, "$.occurred", contributorRef), opportunities: count(root.opportunities, "$.opportunities") };
+export function parseObservationDetail(_value: unknown): never {
+  throw new ProfileResponseError("$.observationStatus: subject metrics are not adopted");
 }
 
 export function parseProfileHistory(value: unknown): ProfilePage<ProfileHistoryRow> {

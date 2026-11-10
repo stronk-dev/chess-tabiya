@@ -1,10 +1,14 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { authoredStructuralSites, captureDraftPackStructuralDocument, maybeAuthoredStructuralDocument, selectAuthoredStructuralCondition, type AuthoredStructuralDocument } from "../../../packages/runtime/src/internal/authored-structural-source.js";
+import { AuthoredStructuralSourceError, declareCurrentStructuralPredicateEvidence } from "../../../packages/runtime/src/structural-evidence.js";
+import { matchesCurrentTransitionExpression } from "../../../packages/runtime/src/transition.js";
 
 import {
   CHECKPOINT_ACTIONS,
   FEEDBACK_POLICIES,
   lintDrillPack,
+  canonicalizeJson,
   normalizeShapeReferences,
   type DrillPackDefinition,
   type StructuralExpression,
@@ -18,8 +22,6 @@ import {
   commitMove,
   createRun,
   evaluateObjectivePredicate,
-  matchesStructuralExpression,
-  matchesTransitionExpression,
   transposeKey,
   validateConceptReferences,
   type CompiledConceptRegistry,
@@ -154,6 +156,7 @@ function graduationClearanceIssues(document: Record<string, unknown>, entry: Rec
 }
 
 export interface PackShapeLookup {
+  captureAuthoredStructuralDocument?(id: string): import("../../../packages/runtime/src/internal/authored-structural-source.js").AuthoredStructuralDocument | undefined;
   get(id: string): { readonly document: { readonly trigger: StructuralExpression; readonly plans: readonly { readonly id: string; readonly success: { readonly note: string; readonly signature: StructuralExpression | null } }[] } } | undefined;
 }
 
@@ -870,18 +873,28 @@ function runtimeIssues(
   compile: ObjectiveCompiler = objectiveRules,
 ): readonly PackValidationIssue[] {
   const issues: PackValidationIssue[] = [];
+  const probeAny = (document: AuthoredStructuralDocument | undefined, pointer: string, fens: readonly string[], issuePath: string): boolean | undefined => {
+    try {
+      if (document === undefined) throw new TypeError("Required authored document source is unavailable");
+      const source = selectAuthoredStructuralCondition(document, pointer);
+      for (const fen of fens) {
+        const result = declareCurrentStructuralPredicateEvidence(fen, source);
+        if (result.kind !== "available") throw new TypeError(result.reason);
+        if (result.value.payload.observation.matched) return true;
+      }
+      return false;
+    } catch (error) {
+      issues.push(runtimeIssue("STRUCTURAL_SOURCE_UNAVAILABLE", issuePath, error instanceof Error ? error.message : String(error)));
+      return undefined;
+    }
+  };
   const containsPlanSignature = (expression: StructuralExpression): boolean => {
     if (expression.kind === "plan_signature") return true;
     if (expression.kind === "all" || expression.kind === "any") return expression.of.some(containsPlanSignature);
     if (expression.kind === "not" || expression.kind === "mirrored") return containsPlanSignature(expression.of);
     return false;
   };
-  const resolved = planSignatureResolver(pack, shapes);
-  const resolvePlanSignature: PlanSignatureResolver = shapes === undefined
-    ? (planClassId) => pack.planClasses?.find((candidate) => candidate.id === planClassId)?.shapePlan === undefined
-      ? undefined
-      : { kind: "feature", feature: { kind: "piece_count", color: "white", role: "king", basis: "count", comparison: "equal", count: 1 } }
-    : resolved;
+  const resolvePlanSignature = planSignatureResolver(pack, shapes);
   issues.push(...structuralIssuesInPack(pack));
   const raw = pack as unknown as Record<string, unknown>;
   const difficulty = (raw.difficulty ?? {}) as { readonly branchLengthTarget?: number };
@@ -892,7 +905,7 @@ function runtimeIssues(
     shapeIds.add(reference.shape);
     const entry = shapes?.get(reference.shape);
     if (shapes !== undefined && entry === undefined) issues.push(runtimeIssue("SHAPE_REFERENCE_UNKNOWN", `/shapes/${index}`, `unknown shape ${reference.shape}`));
-    if (entry !== undefined && reference.relation === "present" && !authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, entry.document.trigger))) issues.push(runtimeIssue("SHAPE_REFERENCE_NEVER_PRESENT", `/shapes/${index}`, `shape ${reference.shape} never matches an authored spine position`));
+    if (entry !== undefined && reference.relation === "present" && probeAny(shapes?.captureAuthoredStructuralDocument?.(reference.shape), "/trigger", authoredSpineFens(pack), `/shapes/${index}`) === false) issues.push(runtimeIssue("SHAPE_REFERENCE_NEVER_PRESENT", `/shapes/${index}`, `shape ${reference.shape} never matches an authored spine position`));
   }
   for (const [index, planClass] of (pack.planClasses ?? []).entries()) {
     if (planClass.shapePlan === undefined) continue;
@@ -916,7 +929,7 @@ function runtimeIssues(
       const entry = shapes?.get(planClass.shapePlan.shape);
       const plan = entry?.document.plans.find((candidate) => candidate.id === planClass.shapePlan!.plan);
       if (entry !== undefined && plan?.success.signature === null) { issues.push(runtimeIssue("PLAN_CONSEQUENCE_NOT_COMPUTABLE", `${conditionPath}/planClassId`, plan.success.note)); continue; }
-      if (plan?.success.signature !== undefined && plan.success.signature !== null && !containsPlanSignature(plan.success.signature) && !authoredSpineFens(pack).some((fen) => matchesStructuralExpression(fen, plan.success.signature!))) issues.push(runtimeIssue("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT", `${conditionPath}/planClassId`, `the authored signature for ${condition.planClassId} never matches an authored spine position`));
+      if (plan?.success.signature !== undefined && plan.success.signature !== null && !containsPlanSignature(plan.success.signature) && probeAny(maybeAuthoredStructuralDocument(pack), conditionPath, authoredSpineFens(pack), `${conditionPath}/planClassId`) === false) issues.push(runtimeIssue("PLAN_CONSEQUENCE_SIGNATURE_NEVER_PRESENT", `${conditionPath}/planClassId`, `the authored signature for ${condition.planClassId} never matches an authored spine position`));
     }
   };
   checkPlanConsequences(pack.objective, "/objective");
@@ -938,9 +951,17 @@ function runtimeIssues(
         transition = expandTransitionExpression(condition.transition, conditionPath, resolvePlanSignature).value;
       } catch (error) {
         if (error instanceof PackCompileError) issues.push(runtimeIssue(error.code, error.pointer, error.message));
+        else if (error instanceof TypeError) issues.push(runtimeIssue("STRUCTURAL_SOURCE_UNAVAILABLE", conditionPath, error.message));
+        else throw error;
         continue;
       }
-      const results = transitions.map((edge) => matchesTransitionExpression(edge.before, edge.moveUci, edge.after, transition));
+      let results: boolean[];
+      try { results = transitions.map(edge => matchesCurrentTransitionExpression(edge.before, edge.moveUci, edge.after, transition, "authoring")); }
+      catch (error) {
+        if (!(error instanceof AuthoredStructuralSourceError)) throw error;
+        issues.push(runtimeIssue("STRUCTURAL_SOURCE_UNAVAILABLE", conditionPath, error.message));
+        continue;
+      }
       const to = condition.to ?? "achieved";
       const positive = to === "achieved" || to === "preserved" || to === "transitioned";
       if (positive && !results.some(Boolean)) {
@@ -1096,14 +1117,9 @@ function runtimeIssues(
         if (!new Set(normalizeShapeReferences(pack.shapes).map((shape) => shape.shape)).has(ground.shape) || entry === undefined || !entry.document.plans.some((plan) => plan.id === ground.plan)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground`, `shape plan ${ground.shape}/${ground.plan} is not resolvable`));
       } else if (ground.kind === "spine_move" && !spineIds.has(ground.spineNodeId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/spineNodeId`, `unknown spine node ${ground.spineNodeId}`));
       else if (ground.kind === "claim" && !claimIds.has(ground.claimId)) issues.push(runtimeIssue("KEY_POINT_GROUND_UNRESOLVED", `${pointPath}/ground/claimId`, `unknown feedback claim ${ground.claimId}`));
-      else if (ground.kind === "structural" && checkpointFen !== undefined && !matchesStructuralExpression(
-        checkpointFen,
-        expandStructuralExpression(
-          ground.expression,
-          `${pointPath}/ground/expression`,
-          resolvePlanSignature,
-        ).value,
-      )) issues.push(runtimeIssue("KEY_POINT_GROUND_FALSE_AT_CHECKPOINT", `${pointPath}/ground/expression`, "structural ground is false at the statically resolved checkpoint position"));
+      else if (ground.kind === "structural" && checkpointFen !== undefined && probeAny(
+        maybeAuthoredStructuralDocument(pack), `${pointPath}/ground/expression`, [checkpointFen], `${pointPath}/ground/expression`,
+      ) === false) issues.push(runtimeIssue("KEY_POINT_GROUND_FALSE_AT_CHECKPOINT", `${pointPath}/ground/expression`, "structural ground is false at the statically resolved checkpoint position"));
     }
   }
   const mode = raw.mode;
@@ -1536,6 +1552,7 @@ function runtimeIssues(
         checkpoint,
         resolvePlanSignature,
         `/checkpoints/${index}/trigger`,
+        "authoring",
       )) {
         issues.push(
           runtimeIssue(
@@ -1549,8 +1566,8 @@ function runtimeIssues(
   } catch (error) {
     issues.push(
       runtimeIssue(
-        "START_POSITION_UNRUNNABLE",
-        "/start/fen",
+        error instanceof AuthoredStructuralSourceError ? "STRUCTURAL_SOURCE_UNAVAILABLE" : "START_POSITION_UNRUNNABLE",
+        error instanceof AuthoredStructuralSourceError ? "/checkpoints" : "/start/fen",
         error instanceof Error ? error.message : String(error),
       ),
     );
@@ -1586,6 +1603,16 @@ export function validatePackDocument(value: unknown, options: {
   }
 
   const document = structuredClone(value) as DrillPackDefinition;
+  try { canonicalizeJson(document); }
+  catch { return Object.freeze({ valid: false, issues: Object.freeze([runtimeIssue("SCHEMA_JSON", "/", "Document must contain only canonicalizable JSON values")]) }); }
+  const structuralSyntaxIssues = [...authoredStructuralSites("pack", document)].flatMap(([pointer, expression]) => structuralIssues(expression, pointer));
+  if (!structuralSyntaxIssues.some(issue => issue.severity === "error")) {
+    const shapes = normalizeShapeReferences(document.shapes).flatMap(reference => {
+      const source = options.shapes?.captureAuthoredStructuralDocument?.(reference.shape);
+      return source === undefined ? [] : [source];
+    });
+    captureDraftPackStructuralDocument(document, shapes);
+  }
   const issues: PackValidationIssue[] = [
     ...lintDrillPack(document, { resolvePlanSignature: planSignatureResolver(document, options.shapes) }).map((issue) =>
       Object.freeze({

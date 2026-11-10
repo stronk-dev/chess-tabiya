@@ -5,9 +5,11 @@
   import { onDestroy, untrack } from "svelte";
   import {
     HINT_DISTANCES,
+    PRIMARY_EVIDENCE_MANIFEST,
     MODULE_POLICIES,
     hintDecisionStamp,
     nextHintRung,
+    parseHintResponse,
     type DrillRun,
     type HintDeliveryMarks,
     type HintDistance,
@@ -60,6 +62,7 @@
   let busy = $state(false);
   let activeRequestId: string | undefined;
   let retryRequestId: string | undefined;
+  let operationClient: GuidedHintClient | undefined;
   let generation = 0;
   let alive = true;
 
@@ -94,7 +97,9 @@
     const pending = activeRequestId ?? retryRequestId;
     activeRequestId = undefined;
     retryRequestId = undefined;
-    if (pending !== undefined) void client.cancel(pending).catch(() => undefined);
+    const requester = operationClient;
+    operationClient = undefined;
+    if (pending !== undefined) void requester?.cancel(pending).catch(() => undefined);
     progress = undefined;
     response = undefined;
     clientProblem = undefined;
@@ -105,9 +110,10 @@
   // §5: commit, rewind, fork, cursor or boundary change and a replaced run reset the ladder.
   $effect(() => {
     void decisionDigest;
+    void client;
     untrack(reset);
   });
-  onDestroy(() => { alive = false; generation += 1; const pending = activeRequestId ?? retryRequestId; if (pending !== undefined) void client.cancel(pending).catch(() => undefined); onMarks?.(undefined); });
+  onDestroy(() => { alive = false; reset(); });
 
   function keepPlaying(delivered: HintResponse): void {
     if (!alive || !canWrite || !decisionReady || busy || keepPlayingBlocked !== undefined || response !== delivered
@@ -130,20 +136,44 @@
     const assistance = assistanceRequest();
     if (rung === undefined || assistance === undefined) return;
     const mine = ++generation;
+    const requester = client;
     const digest = decisionDigest;
-    const body: HintRequestBody = { nodeId: run.activeCursor.nodeId, rung, decisionDigest: digest, assistance };
+    const runId = run.id, decision = hintDecisionStamp(run);
+    let operationId: string | undefined;
+    const admit = (incoming: HintResponse): HintResponse => {
+      const parsed = parseHintResponse(incoming, { runId, decision, rung, manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest, ...(operationId === undefined ? {} : { requestId: operationId }) });
+      if (parsed.state !== "policy_refused") operationId ??= parsed.state === "available" ? parsed.delivery.requestId : parsed.requestId;
+      return parsed;
+    };
+    const bytes = new Uint8Array(16);
+    globalThis.crypto.getRandomValues(bytes);
+    const clientRequestId = Array.from(bytes, byte => byte.toString(16).padStart(2, "0")).join("");
+    const body: HintRequestBody = { clientRequestId, nodeId: run.activeCursor.nodeId, rung, decisionDigest: digest, assistance };
+    // Both initial creation and restart recovery can acknowledge after this action retires.
+    const create = async (): Promise<HintResponse | undefined> => {
+      const parsed = admit(await requester.request(body));
+      if (mine === generation) {
+        // Own pending work before crossing another await where reset may retire this action.
+        if (parsed.state === "pending") activeRequestId = parsed.requestId;
+        return parsed;
+      }
+      if (parsed.state === "pending") await requester.cancel(parsed.requestId).catch(() => undefined);
+      return undefined;
+    };
     busy = true;
     clientProblem = undefined;
     try {
       // A failed operation is still an idempotently settled server record. Explicit retry
       // removes that exact record before re-POSTing the same decision/rung; polling never retries.
       if (retryRequestId !== undefined) {
-        try { await client.cancel(retryRequestId); }
+        try { await (operationClient ?? requester).cancel(retryRequestId); }
         catch (error) { if (!(error instanceof ApiError && error.status === 404)) throw error; }
         if (mine !== generation) return;
         retryRequestId = undefined;
       }
-      let current = await client.request(body);
+      operationClient = requester;
+      let current = await create();
+      if (current === undefined || mine !== generation) return;
       // §10/D3503: leave transport/paint room in the 150 ms budget. The measured
       // 100 ms wait exhausted it even with no optional voice call. Keep the
       // original 200 × 350 ms pending window, separately from polling frequency.
@@ -159,10 +189,15 @@
         await wait(Math.min(cadence, Math.max(0, deadline - Date.now())));
         if (mine !== generation) return;
         try {
-          current = await client.poll(current.requestId);
+          current = admit(await requester.poll(current.requestId));
         } catch (error) {
           // §7 step 5: after a server restart the id is unknown; re-POST the same decision and rung.
-          if (error instanceof ApiError && error.status === 404) current = await client.request(body);
+          if (error instanceof ApiError && error.status === 404) {
+            if (mine !== generation) return;
+            const replacement = await create();
+            if (replacement === undefined || mine !== generation) return;
+            current = replacement;
+          }
           else throw error;
         }
       }

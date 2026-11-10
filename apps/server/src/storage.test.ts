@@ -58,13 +58,14 @@ describe("SQLite run-storage migrations and summaries", () => {
 
     const fixture = new DatabaseSync(filename);
     for (const table of ["learner_marks", "standing_members", "cohort_standings", "rating_periods", "rated_games", "learner_ratings"]) fixture.exec(`DROP TABLE ${table}`);
-    fixture.exec("PRAGMA user_version = 24");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 24");
     fixture.close();
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(STORAGE_VERSION).toBe(31);
-    expect(log).toEqual([{ version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(STORAGE_VERSION).toBe(35);
+    expect(log).toEqual([{ version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     upgraded.close();
 
     const inspected = new DatabaseSync(filename);
@@ -137,7 +138,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
       { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
-      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" },
+      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" },
     ]);
     expect(upgraded.list(10, 0)).toEqual([]);
     expect(upgraded.read("legacy-run")).toBeUndefined();
@@ -155,7 +156,7 @@ describe("SQLite run-storage migrations and summaries", () => {
     expect(
       (inspection.prepare("PRAGMA user_version").get() as { user_version: number })
         .user_version,
-    ).toBe(31);
+    ).toBe(35);
     inspection.close();
   });
 
@@ -181,10 +182,11 @@ describe("SQLite run-storage migrations and summaries", () => {
         SELECT id,run_id,kind,title,board_control,scheduled_for,vote_adapter_learner_id,
           rotation_json,handoff_learner_id,rotation_cursor,created_by,created_at,closed_at
         FROM live_sessions_v14; DROP TABLE live_sessions_v14;
-      PRAGMA user_version=13;
+      ALTER TABLE imported_games DROP COLUMN clock_document_json;
+      DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version=13;
     `);fixture.close();
 
-    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"},{version:24,name:"classrooms, assignments, submissions, and expiring run grants"},{version:25,name:"learner ratings, rated games, periods, standings, and marks"},{version:26,name:"longitudinal observation ledger, structure stats, and projection jobs"},{version:27,name:"durable evidence job batches, jobs, result sequences and application transitions"},{version:28,name:"registered global concept identities and the legacy concept quarantine"},{version:29,name:"bot profile run schema"},{version:30,name:"campaign runs, creations, events, charged commands and durable awards"},{version:31,name:"preserve explicitly empty recorded human-selection telemetry"}]);
+    const log:StorageMigrationLog[]=[];const upgraded=new SQLiteRunStorage(filename,{onMigration:(entry)=>log.push(entry)});expect(log).toEqual([{version:14,name:"native matches and session join tokens"},{version:15,name:"learner repertoires, scans, and gap-run links"},{version:16,name:"immediate guard run schema"},{version:17,name:"stated reasoning run schema"},{version:18,name:"perfect tablebase run schema"},{version:19,name:"practical resistance run schema"},{version:20,name:"engine request record run schema"},{version:21,name:"engine leverage run schema"},{version:22,name:"learner board annotations"},{version:23,name:"opponent ordering basis run schema"},{version:24,name:"classrooms, assignments, submissions, and expiring run grants"},{version:25,name:"learner ratings, rated games, periods, standings, and marks"},{version:26,name:"longitudinal observation ledger, structure stats, and projection jobs"},{version:27,name:"durable evidence job batches, jobs, result sequences and application transitions"},{version:28,name:"registered global concept identities and the legacy concept quarantine"},{version:29,name:"bot profile run schema"},{version:30,name:"campaign runs, creations, events, charged commands and durable awards"},{version:31,name:"preserve explicitly empty recorded human-selection telemetry"},{version:32,name:"typed retained original imported clock document"},{version:33,name:"profile GAME facts from original foundation sources"},{version:34,name:"profile complete legal choice facts"},{version:35,name:"subject-grain longitudinal observations"}]);
     expect(upgraded.liveSession(session.id)?.title).toBe("Old class");expect(upgraded.publicTokenByHash("hash-old")).toMatchObject({scope:"story_read",runId:value.id});upgraded.close();
     const inspection=new DatabaseSync(filename);expect((inspection.prepare("PRAGMA foreign_key_check").all())).toEqual([]);for(const table of ["session_proposals","session_vote_windows","session_invitations","arena_legs"]){const targets=(inspection.prepare(`PRAGMA foreign_key_list(${table})`).all() as readonly Record<string,unknown>[]).map((row)=>row.table);expect(targets).toContain("live_sessions");expect(targets).not.toContain("live_sessions_v14");}expect(String((inspection.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='live_sessions'").get() as {sql:string}).sql)).toContain("'match'");inspection.close();
     const freshFile=join(directory,"fresh.sqlite"),freshStorage=new SQLiteRunStorage(freshFile,{onMigration:()=>{}});freshStorage.close();const upgradedSchema=new DatabaseSync(filename),freshSchema=new DatabaseSync(freshFile);
@@ -224,7 +226,8 @@ describe("SQLite run-storage migrations and summaries", () => {
       }),
       forged.id,
     );
-    fixture.exec("PRAGMA user_version = 3");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 3");
     fixture.close();
 
     const migrations: StorageMigrationLog[] = [];
@@ -254,7 +257,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
       { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
-      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" },
+      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.19");
     expect(upgraded.list(10, 0).map((entry) => entry.id)).toEqual([ordinary.id]);
@@ -293,7 +296,8 @@ describe("SQLite run-storage migrations and summaries", () => {
       });
       update.run(JSON.stringify({ ...snapshot, schemaVersion: "0.6", events }), row.id);
     }
-    fixture.exec("PRAGMA user_version = 4");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 4");
     fixture.close();
 
     const migrated = new SQLiteRunStorage(filename, { onMigration: () => {} });
@@ -330,7 +334,8 @@ describe("SQLite run-storage migrations and summaries", () => {
       const schemaVersion = row.id === quarantined.id ? "quarantined:pre-0.5" : "0.8";
       downgrade.run(JSON.stringify({ ...snapshot, schemaVersion: "0.8" }), schemaVersion, row.id);
     }
-    fixture.exec("PRAGMA user_version = 10");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 10");
     fixture.close();
 
     const migrations: StorageMigrationLog[] = [];
@@ -351,7 +356,7 @@ describe("SQLite run-storage migrations and summaries", () => {
       { version: 23, name: "opponent ordering basis run schema" },
       { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" },
       { version: 25, name: "learner ratings, rated games, periods, standings, and marks" },
-      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" },
+      { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" },
     ]);
     expect(upgraded.read(ordinary.id)?.run.schemaVersion).toBe("0.19");
     expect(upgraded.read(quarantined.id)).toBeUndefined();
@@ -419,12 +424,13 @@ describe("SQLite run-storage migrations and summaries", () => {
     const snapshot = JSON.parse(row.snapshot_json) as Record<string, unknown>;
     fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.10' WHERE id = ?")
       .run(JSON.stringify({ ...snapshot, schemaVersion: "0.10" }), "guard-migration");
-    fixture.exec("PRAGMA user_version = 15");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 15");
     fixture.close();
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(log).toEqual([{ version: 16, name: "immediate guard run schema" }, { version: 17, name: "stated reasoning run schema" }, { version: 18, name: "perfect tablebase run schema" }, { version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     expect(upgraded.read("guard-migration")?.run.schemaVersion).toBe("0.19");
     upgraded.close();
 
@@ -461,12 +467,13 @@ describe("SQLite run-storage migrations and summaries", () => {
     const snapshot = JSON.parse(before.snapshot_json) as Record<string, unknown>;
     fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.13' WHERE id = ?")
       .run(JSON.stringify({ ...snapshot, schemaVersion: "0.13" }), selected.id);
-    fixture.exec("PRAGMA user_version = 18");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 18");
     fixture.close();
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(log).toEqual([{ version: 19, name: "practical resistance run schema" }, { version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.19");
     expect(after.events).toEqual(selected.events);
@@ -492,12 +499,13 @@ describe("SQLite run-storage migrations and summaries", () => {
     const snapshot = JSON.parse(before.snapshot_json) as Record<string, unknown>;
     fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.14' WHERE id = ?")
       .run(JSON.stringify({ ...snapshot, schemaVersion: "0.14" }), selected.id);
-    fixture.exec("PRAGMA user_version = 19");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 19");
     fixture.close();
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(log).toEqual([{ version: 20, name: "engine request record run schema" }, { version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.19");
     expect(after.events).toEqual(selected.events);
@@ -524,12 +532,13 @@ describe("SQLite run-storage migrations and summaries", () => {
     const snapshot = JSON.parse(before.snapshot_json) as Record<string, unknown>;
     fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.15' WHERE id = ?")
       .run(JSON.stringify({ ...snapshot, schemaVersion: "0.15" }), selected.id);
-    fixture.exec("PRAGMA user_version = 20");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 20");
     fixture.close();
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(log).toEqual([{ version: 21, name: "engine leverage run schema" }, { version: 22, name: "learner board annotations" }, { version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.19");
     expect(after.events).toEqual(selected.events);
@@ -557,12 +566,13 @@ describe("SQLite run-storage migrations and summaries", () => {
     const snapshot = JSON.parse(before.snapshot_json) as Record<string, unknown>;
     fixture.prepare("UPDATE drill_runs SET snapshot_json = ?, schema_version = '0.16' WHERE id = ?")
       .run(JSON.stringify({ ...snapshot, schemaVersion: "0.16" }), selected.id);
-    fixture.exec("PRAGMA user_version = 22");
+    if (fixture.prepare("PRAGMA table_info(imported_games)").all().some(column => column.name === "clock_document_json")) fixture.exec("ALTER TABLE imported_games DROP COLUMN clock_document_json");
+    fixture.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version = 22");
     fixture.close();
 
     const log: StorageMigrationLog[] = [];
     const upgraded = new SQLiteRunStorage(filename, { onMigration: (entry) => log.push(entry) });
-    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }]);
+    expect(log).toEqual([{ version: 23, name: "opponent ordering basis run schema" }, { version: 24, name: "classrooms, assignments, submissions, and expiring run grants" }, { version: 25, name: "learner ratings, rated games, periods, standings, and marks" }, { version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
     const after = upgraded.read(selected.id)!.run;
     expect(after.schemaVersion).toBe("0.19");
     expect(after.events).toEqual(selected.events);

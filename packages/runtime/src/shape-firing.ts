@@ -1,14 +1,11 @@
 import { matchesStructuralExpression, type StructuralExpression } from "./structure.js";
-import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
-import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
+import type { DeclaredEvidence } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 export interface ShapeTriggerSource {
   readonly id: string;
   readonly trigger: StructuralExpression;
 }
-
 export interface ShapeFiring {
   readonly entryId: string;
   readonly firstNodeId: string;
@@ -58,26 +55,4 @@ export function declareShapeFiringEvidence(
   path: readonly { readonly id: string; readonly fen: string }[],
 ): readonly DeclaredEvidence<ShapeFiring>[] {
   return invokeEvidenceValueRoute("theory.shapes.firing@1", { entries, path: path.map((node) => ({ id: node.id, fen: node.fen })) }) as readonly DeclaredEvidence<ShapeFiring>[];
-}
-
-export function consumeShapeFiring(
-  view: ConsumerEvidenceView<ShapeFiring>,
-): readonly ShapeFiring[] {
-  assertConsumerEvidenceView(view);
-  if (view.consumer.id !== "theory.shape_firing" || view.consumer.version !== 1) {
-    throw new TypeError("Expected theory.shape_firing@1 consumer view");
-  }
-  return Object.freeze(view.items.map((item) => item.payload));
-}
-
-export function shapeFiringEvidence(
-  entries: readonly ShapeTriggerSource[],
-  path: readonly { readonly id: string; readonly fen: string }[],
-): readonly ShapeFiring[] {
-  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 });
-  return consumeShapeFiring(evidenceForConsumer(
-    PRIMARY_EVIDENCE_MANIFEST,
-    { id: "theory.shape_firing", version: 1 },
-    declareShapeFiringEvidence(entries, path),
-  ));
 }

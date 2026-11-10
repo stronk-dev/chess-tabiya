@@ -295,3 +295,45 @@ TABIYA_R11_BOOK_PGN=/private/tmp/r12-style-prefix-2g.pgn \
 node tools/r11-bot-policy-harness/generate-blind-set.mts
 node tools/r11-bot-policy-harness/validate-blind-set.mts
 ```
+
+## 2026-11-05 — Automatic branch creation crosses the bot operation root (D4148)
+
+A real profile REST flow create→bot reply→rewind→bot reply reaches a new branch, but its retained
+envelope names the old requested branch. New permanent controls for fixed and per_branch seeds
+both fail at durable parse: operation root is not this event position. The46existing bot cases
+pass. This is observed executable behavior, not only the earlier static trace. `[V]`
+`apps/server/src/bot-opponent-ply.test.ts` automatic-fork controls; normal99076 result2fail/48,
+`/tmp/tabiya-bot-auto-fork-red.log`.
+
+The service captures branch/root/seed before acquisition; runtime commit automatically forks when
+the cursor already has children. The actual selection names that new child branch, and the durable
+parser correctly refuses the old root. per_branch also changes the effective seed. Explicitly
+forking before a request is a different path and its passing source test does not cover this one.
+`[V]` `service.ts#botOpponentPly/#commitOpponentSelection`; `runtime.ts#commitMove/nextBranch`;
+`bot-opponent-operation.ts#parseStoredBotEnvelope`; `recorded-bot-occurrence.test.ts` inherited test.
+
+Proposed repair retains one runtime branch-preparation rule, plans the execution branch/seed in
+memory before acquisition and checks the original request head before atomic persistence. Original
+request and execution branches are distinct operation operands; replay must reconstruct them from
+the actual original events, not accept a caller envelope or relax the selected-branch join. No
+provider retry, manual-fork requirement or speculative persisted branch. `[M]` bounded companion
+proposal under existing bot-policy4.1; independent author review pending. No production repair or
+new current green software gate is claimed by this finding.
+
+### D4148 verified repair checkpoint
+
+The independently accepted§4.1a repair uses one shared pure branch preparation and keeps original
+request CAS/retry distinct from actual execution branch/seed. Exact2-prefix unique reconstruction
+reproduces complete branch metadata at committed timestamps; original full provider/profile/
+decision admission remains.180focused/five6.61s+types and normal58203 pass14604software/529files
+425.56s,7performance/four58.67s/types/build/source11; actual content stays60fail/261pass/18setup
+43files171.27s with all62prior headings identical. Both independent static implementation reviews
+accept. `[V]` permanent bot and recorded occurrence tests; current source plan/full gate logs.
+
+Actual provider/stale failures save no preview branch; original-vs-execution request substitution,
+identical/differing concurrent flights, explicit/nonzero/later forks,11replayable full-operand
+corruptions, bothseed real restart/account export with zero provider calls and auto-fork source
+occurrences pass. The intermediate failed-provider fixture expected502; actual unchanged closed
+base_provider_unavailable503 is now asserted. No new timeout/retry/skip, projection/profile/schema,
+old corrupt-history rewrite, bot calibration or whole-capability/release clearance is claimed. `[V]`
+`bot-opponent-ply.test.ts`, `recorded-bot-occurrence.test.ts`; normal source plan receipts.

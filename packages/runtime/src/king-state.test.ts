@@ -84,7 +84,8 @@ describe("D3635 physical king escapes through production evidence boundaries", (
     const event = invokeEvidenceValueRoute("rules.king.event.zone_state@1", input).map(item => item.payload as KingZoneEvent).find(item => item.color === fixture.color)!;
     expect(event.escapes.before).toEqual({ kind: "available", squares: fixture.squares });
     expect(event.escapes.lost).not.toContain(fixture.phantom);
-    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, [reading]));
+    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, [reading])).toThrow(/undeclared exact consumer/u);
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [reading]));
     const parsed = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
     const relation = parsed.find(item => item.component.id === "relation_overlay")!;
     expect(relation).toBeDefined();

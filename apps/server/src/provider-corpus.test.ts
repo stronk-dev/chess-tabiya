@@ -12,6 +12,7 @@ import { responseStatus } from "./http-response.test-support.js";
 import { providerOperationDescriptors } from "./provider-operations.js";
 import { testRegistry } from "./provider-health.test-support.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { repertoireDigest, scanRepertoire } from "./repertoire.js";
 import { createHttpServer } from "./rest.js";
 import { createRestHandler } from "./rest.js";
@@ -53,6 +54,12 @@ async function harness() {
 const PREFLIGHT_FAULTS = ["missing_binding_policy", "non_executable_binding", "extra_unregistered_binding"] as const;
 // Restore even if application construction fails before a scenario's try/finally.
 afterEach(() => vi.restoreAllMocks());
+// Only lesson acquisition is isolated; real opening lookup, corpus providers and application
+// composition remain. Each owning scenario closes its application before the afterEach restore.
+function createCorpusTestApplication(options: Parameters<typeof createInMemoryTestApplication>[0]) {
+  installEmptyApplicationCatalogues();
+  return createInMemoryTestApplication(options);
+}
 const compileConsumerExecution = runtime.compileEvidenceConsumerExecution;
 function preflightControl(id: string, arm: string) {
   const trace: string[] = [];
@@ -116,7 +123,7 @@ describe("learner Explorer shared exchange", () => {
       }
     }
     const supplied = new SuppliedSource();
-    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
+    const application = await createCorpusTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
     try {
       await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
@@ -234,7 +241,7 @@ describe("learner Explorer shared exchange", () => {
       started();
       return pending;
     });
-    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: { stats, page } });
+    const application = await createCorpusTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: { stats, page } });
     const caller = new AbortController();
     try {
       await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
@@ -293,7 +300,7 @@ describe("learner Explorer shared exchange", () => {
       }
     }
     const supplied = new SuppliedSource();
-    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
+    const application = await createCorpusTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
     try {
       await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
@@ -411,7 +418,7 @@ describe("learner Explorer shared exchange", () => {
       }
     }
     const supplied = new SuppliedSource();
-    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: supplied });
+    const application = await createCorpusTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: supplied });
     try {
       await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
@@ -535,7 +542,7 @@ describe("learner Explorer shared exchange", () => {
     }
     const supplied = new SuppliedSource();
     boundary = "application composition";
-    const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
+    const application = await createCorpusTestApplication({ engineMode: "mock", cookieSecure: false, corpusSource: arm === "legacy" ? { stats } : supplied });
     const originalCompile = execution.compileEvidenceConsumerExecution;
     const compileConsumer = vi.spyOn(execution, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
       if (consumer.id !== "module.theory_breadcrumb" || !["missing_binding_policy", "non_executable_binding"].includes(arm)) return originalCompile(manifest, consumer);
@@ -636,11 +643,11 @@ describe("learner Explorer shared exchange", () => {
       const response = await pending;
       boundary = "Theory response validation";
       const responseText = await response.text();
-      // Preview, pre-provider check, and the authorized post-I/O query each recheck.
-      // Revocation refuses before that last query can begin.
-      expect(compileConsumer).toHaveBeenCalledTimes(arm === "revoked" ? 2 : 3);
+      // Source-demand preflight, pure preview, provider preflight, then final query.
+      // Changed decisions and revocation refuse before that last query can begin.
+      expect(compileConsumer).toHaveBeenCalledTimes(arm === "revoked" || arm === "changed" ? 3 : 4);
       const [manifest, consumer] = compileConsumer.mock.calls[0]!;
-      expect(consumer).toEqual({ id: "module.theory_breadcrumb", version: 1 });
+      expect(consumer).toEqual({ id: "module.theory_breadcrumb", version: 2 });
       expect(manifest.bindings.filter(binding => binding.consumer.id === consumer.id)).toHaveLength(4);
       if (arm === "changed" || arm === "revoked") {
         expect(response.status, responseText).toBe(arm === "changed" ? 400 : 404);
@@ -922,7 +929,7 @@ describe("learner Explorer shared exchange", () => {
     }) satisfies typeof fetch);
     let application: Awaited<ReturnType<typeof createInMemoryTestApplication>> | undefined;
     try {
-      application = await createInMemoryTestApplication({ engineMode: "maia", stockfishCommand: "/nonexistent/tabiya-test-stockfish", maiaHost: "127.0.0.1", maiaPort: 1, cookieSecure: false, corpusToken: "fixture-token" });
+      application = await createCorpusTestApplication({ engineMode: "maia", stockfishCommand: "/nonexistent/tabiya-test-stockfish", maiaHost: "127.0.0.1", maiaPort: 1, cookieSecure: false, corpusToken: "fixture-token" });
       await new Promise<void>((resolve, reject) => { application!.server.once("error", reject); application!.server.listen(0, "127.0.0.1", resolve); });
       const origin = `http://127.0.0.1:${(application.server.address() as AddressInfo).port}`;
       const registered = await realFetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "explorer_shared", password: "explorer-test-password" }) });

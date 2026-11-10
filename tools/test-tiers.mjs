@@ -1,4 +1,27 @@
+export const FIVE_SECOND_CONTENT_TESTS = Object.freeze([
+  // D3938: authored cases split from source-free software controls. These suites retain
+  // their former five-second deadline explicitly; content ownership is not more time.
+  "apps/server/src/authored-feedback-content.test.ts",
+  "apps/server/src/format-surface-content.test.ts",
+  "apps/server/src/line-drill.test.ts",
+  "apps/server/src/outcome-grading-content.test.ts",
+  "apps/server/src/predicate-wave-3-validation.test.ts",
+  "apps/server/src/shape-validation.test.ts",
+  "apps/server/src/semantic-content-dependencies.test.ts",
+  "apps/server/src/structural-reading.test.ts",
+  "apps/server/src/vocabulary-wiring.test.ts",
+  "apps/server/src/sourcing/deviation-cost.test.ts",
+  "apps/server/src/sourcing/tablebase-census-content.test.ts",
+  "apps/server/src/sourcing/tablebase-walk-content.test.ts",
+  "apps/server/src/sourcing/verify-draft.test.ts",
+  "packages/runtime/src/adaptive-guidance-content.test.ts",
+  "packages/runtime/src/shape-firing-content.test.ts",
+]);
+
 export const CONTENT_CONTRACT_TESTS = Object.freeze([
+  ...FIVE_SECOND_CONTENT_TESTS,
+  "apps/server/src/application-content.test.ts",
+  "apps/server/src/authoring-content.test.ts",
   "apps/server/src/authored-consequence-lifecycle.test.ts",
   "apps/server/src/capability/pack-capability-corpus.test.ts",
   "apps/server/src/concept-registry-content.test.ts",

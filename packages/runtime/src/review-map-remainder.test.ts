@@ -1,12 +1,15 @@
 // rfc/review-map.md — the remainder: the eval graph (§6, [[D880]]), the Compare handoff (§4) and the
 // explicit Analyze action (§7, O7.3). Each test names the wrong implementation it would catch.
 
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import { branchPath } from "./branch-path.js";
 import { attachEvidence } from "./evidence.js";
 import { winPercentFromCp } from "./grade.js";
-import { reviewAnalysis } from "./review-analysis.js";
+import { collectRecordedAnalyzeLine, deriveRecordedAnalyzeLineSource, readRecordedAnalyzeLineSource } from "./recorded-analyze-line.js";
+import { evidenceForConsumer } from "./evidence-contract.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { parsePresentationReceipt, presentedSentence, presentEvidenceItems, serializePresentedEvidence } from "./presentation-contract.js";
 import { REVIEW_PROVIDER_LINE_KEY, reviewDeliveryEvidencePayload } from "./review-evidence.js";
 import { REVIEW_COMPARE_LIMIT, openRetryEntry, reviewMapProjection, type ReviewMapProjection } from "./review-map.js";
 import { reviewText } from "./review-map-templates.js";
@@ -16,9 +19,10 @@ import { attachDelivery, evaluationDelivery, importedRun, lineDelivery, play } f
 import { REVIEW_FIXTURE_AT, fixtureCentipawns, reviewFixtureRun } from "./testing/review-map-fixture.js";
 import type { DrillRun } from "./types.js";
 import { judgementWordsOutsideGrounding } from "./voice.js";
+import { recordedReviewFixtureSources } from "./testing/recorded-grade-fixture.js";
 
 function projectionOf(run: DrillRun, branchId = run.branches[0]!.id): ReviewMapProjection {
-  return reviewMapProjection({ run, branchId, story: storyMomentsForRun(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", viewer: { role: "learner", session: "imported" } });
+  return reviewMapProjection({ run, branchId, story: storyMomentsForRun(run, branchId, { recordedResult: "1-0" }), context: run.sessionKind === "imported" ? "imported_analysis" : "review", viewer: { role: "learner", session: run.sessionKind }, ...recordedReviewFixtureSources(run, branchId) });
 }
 
 /** A retry exactly as the Review Map performs it: rewind to the entry, fork `story-reentry`, optionally play. */
@@ -36,10 +40,14 @@ function backToReviewed(run: DrillRun): DrillRun {
 }
 
 describe("eval graph (§6, D880)", () => {
+  let white: ReviewMapProjection["evalGraph"], black: ReviewMapProjection["evalGraph"];
+  // These are two complete independently acquired recorded workflows. Keep each actual fixture
+  // under its normal hook budget; the comparison below retains every point of both graphs.
+  beforeAll(() => { white = projectionOf(reviewFixtureRun({ id: "graph-side-w" })).evalGraph; });
+  beforeAll(() => { black = projectionOf(reviewFixtureRun({ id: "graph-side-b", side: "black" })).evalGraph; });
   it("draws one point per ply from the recorded White-perspective evaluation, as win-points for the reviewed side", () => {
     const run = reviewFixtureRun({ id: "graph-white" });
-    const graph = projectionOf(run).evalGraph;
-    const rows = projectionOf(run).rows;
+    const { evalGraph: graph, rows } = projectionOf(run);
     expect(graph.kind).toBe("complete");
     expect(graph.side).toBe("white");
     expect(graph.points.map((point) => point.nodeId)).toEqual(rows.map((row) => row.nodeId));
@@ -50,13 +58,13 @@ describe("eval graph (§6, D880)", () => {
       expect(point.percent).toBeCloseTo(winPercentFromCp(fixtureCentipawns(index + 1)), 1);
     });
     expect(graph.caption).toContain("win-points for White");
-    expect(graph.caption).toContain("stockfish-test, 100 ms");
+    expect(graph.caption).toContain("single move-loss convention, version 2");
+    expect(graph.caption).not.toMatch(/grade-convention@\d/u);
+    expect(graph.caption).toContain("stockfish-analysis, requested 100 ms");
     expect(graph.coverage).toBe(`${rows.length} of ${rows.length} moves have a recorded evaluation after them.`);
   });
 
   it("renders the learner side correctly: a Black review mirrors the White-perspective reading, never copies it", () => {
-    const white = projectionOf(reviewFixtureRun({ id: "graph-side-w" })).evalGraph;
-    const black = projectionOf(reviewFixtureRun({ id: "graph-side-b", side: "black" })).evalGraph;
     expect(black.side).toBe("black");
     expect(black.caption).toContain("win-points for Black");
     let differing = 0;
@@ -82,15 +90,17 @@ describe("eval graph (§6, D880)", () => {
     expect(graph.gaps).toEqual([{ fromPly: 13, toPly: projection.rows.length, sentence: reviewText("graph.gap", { from: projection.rows[12]!.label, to: projection.rows.at(-1)!.label }) }]);
     expect(graph.coverage).toBe(`12 of ${projection.rows.length} moves have a recorded evaluation after them.`);
     expect(projection.accuracy.white.kind).toBe("abstained");
+  });
 
-    // Same gate as accuracy: a recorded packet that cannot be read as a grade operand is a gap, not a point.
+  it("does not let a later unreadable scalar erase a genuine modern endpoint", () => {
+    // A later scalar packet is not a modern endpoint and cannot erase the original delivery.
     let unreadable = reviewFixtureRun({ id: "graph-unreadable" });
     const path = branchPath(unreadable, unreadable.branches[0]!.id);
     unreadable = attachEvidence(unreadable, path[5]!.id, ["engine:unreadable"], { kind: "eval", source: "engine_validated", values: { centipawns: 40, perspective: "white", requestedMovetimeMs: 100 } }, REVIEW_FIXTURE_AT).run;
     const gated = projectionOf(unreadable);
-    expect(gated.evalGraph.points[4]).toMatchObject({ kind: "missing", sentence: reviewText("graph.point.missing", { move: gated.rows[4]!.label }) });
-    expect(gated.evalGraph.gaps).toEqual([{ fromPly: 5, toPly: 5, sentence: reviewText("graph.gap.one", { move: gated.rows[4]!.label }) }]);
-    expect(gated.accuracy.white.kind).toBe("abstained");
+    expect(gated.evalGraph.points[4]).toMatchObject({ kind: "evaluated", percent: Math.round(winPercentFromCp(fixtureCentipawns(5)) * 10) / 10 });
+    expect(gated.evalGraph.gaps).toEqual([]);
+    expect(gated.accuracy.white.kind).toBe("rendered");
   });
 
   it("abstains outright, in words, when no position carries a recorded evaluation", () => {
@@ -172,80 +182,92 @@ describe("Analyze (§7, O7.3)", () => {
     let recorded = play(importedRun(`analysis-number-${value.side}`, value.side, fen), value.moves);
     const map = projectionOf(recorded);
     const target = map.rows[2]!;
-    expect(reviewAnalysis(recorded, recorded.activeCursor.branchId, target.nodeId, { role: "learner", session: "imported" }).sentence).toContain(value.label);
+    const absent = readRecordedAnalyzeLineSource(collectRecordedAnalyzeLine(recorded, recorded.activeCursor.branchId, target.nodeId, new AbortController().signal));
+    expect(absent.outcome).toEqual({ kind: "unavailable", reason: "source_absent" });
+    expect(absent.reviewed.id).toBe(target.nodeId); expect(absent.parent.id).toBe(target.entryNodeId);
+    expect(target.label).toBe(value.label); expect(absent.edge.payload.moveSan).toBe(value.label.split(" ")[1]);
     recorded = attachEvidence(recorded, target.entryNodeId, ["engine:number-line"], { kind: "bestline", source: "engine_validated", values: { engineId: "stockfish-test", requestedDepth: 18, movesUci: value.line } }, REVIEW_FIXTURE_AT).run;
     const before = JSON.stringify(recorded);
-    const analysis = reviewAnalysis(recorded, recorded.activeCursor.branchId, target.nodeId, { role: "learner", session: "imported" });
-    expect(analysis).toMatchObject({ kind: "line", moves: value.rendered, sentence: `stockfish-test (depth 18 search) reported this principal variation from the position before ${value.label}: ${value.rendered.join(" ")}.` });
+    const source = collectRecordedAnalyzeLine(recorded, recorded.activeCursor.branchId, target.nodeId, new AbortController().signal);
+    const result = deriveRecordedAnalyzeLineSource(source, "derived.review.analysis_recorded_pv@1", new AbortController().signal);
+    expect(result.kind).toBe("available"); if (result.kind !== "available") throw new Error("Expected genuine historical line");
+    expect(result.value.payload.operands).toMatchObject({ kind: "line", sourceArm: "recorded_bestline", reviewedMove: { fullmove: 38, side: value.side }, bound: { kind: "depth", requestedDepth: 18 } });
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [result.value]));
+    expect(items).toHaveLength(1); expect(parsePresentationReceipt(serializePresentedEvidence(items))).toEqual(items);
+    expect(presentedSentence(items[0]!)).toBe(`The saved report names stockfish-test (depth 18 search) and records this reported line from the position before ${value.label}: ${value.rendered.join(" ")}. ${reviewText("analysis.saved.caveat")}`);
     expect(JSON.stringify(recorded)).toBe(before);
   });
 
   it("reveals the recorded principal variation, attributed to engine and search bound, and not phrased as advice", () => {
-    const analysis = reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
-    expect(analysis).toMatchObject({ kind: "line", source: "bestline", engineId: "stockfish-test", bound: { requestedDepth: 18 }, moves: ["1. e4", "e5", "2. Nf3"], entryNodeId: rows[0]!.entryNodeId });
-    if (analysis.kind !== "line") throw new Error("unreachable");
-    expect(analysis.sentence).toBe(`stockfish-test (depth 18 search) reported this principal variation from the position before ${rows[0]!.label}: 1. e4 e5 2. Nf3.`);
-    expect(analysis.caveat).toBe(reviewText("analysis.caveat"));
-    for (const text of [analysis.sentence, analysis.caveat]) {
+    const signal = new AbortController().signal, source = collectRecordedAnalyzeLine(run, main, rows[0]!.nodeId, signal);
+    const result = deriveRecordedAnalyzeLineSource(source, "derived.review.analysis_recorded_pv@1", signal);
+    if (result.kind !== "available") throw new Error("Expected genuine historical principal variation");
+    expect(result.value.payload).toMatchObject({ entryNodeId: rows[0]!.entryNodeId, operands: { kind: "line", sourceArm: "recorded_bestline", engine: { id: "stockfish-test" }, bound: { kind: "depth", requestedDepth: 18 }, line: [{ fullmove: 1, side: "white", san: "e4" }, { fullmove: 1, side: "black", san: "e5" }, { fullmove: 2, side: "white", san: "Nf3" }] } });
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [result.value]));
+    const sentence = presentedSentence(items[0]!);
+    expect(sentence).toBe(`The saved report names stockfish-test (depth 18 search) and records this reported line from the position before ${rows[0]!.label}: 1. e4 e5 2. Nf3. ${reviewText("analysis.saved.caveat")}`);
+    for (const text of [sentence, reviewText("analysis.saved.caveat")]) {
       expect(judgementWordsOutsideGrounding([], text)).toEqual([]);
       expect(text).not.toMatch(/\b(?:should|best|must|recommend|try)\b/iu);
     }
   });
 
-  it("[module-registration] admits the recorded line only through module.full_inspector@1", () => {
-    // A principal variation is Full Inspector's capability: spectators, participants and contexts
-    // whose ceiling excludes the inspector (academy, onramp, match) get a stated withholding.
-    for (const viewer of [{ role: "spectator" as const, session: "imported" }, { role: "participant" as const, session: "imported" }, { role: "learner" as const, session: "academy" }]) {
-      const analysis = reviewAnalysis(run, main, rows[0]!.nodeId, viewer);
-      expect(analysis.kind).toBe("withheld");
-      expect(JSON.stringify(analysis)).not.toMatch(/"moves"|stockfish-test|2\. Nf3/u);
-    }
-    const reason = reviewText("module.refusal.inspector.role_outside_ceiling");
-    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "spectator", session: "imported" })).toMatchObject({ sentence: reviewText("analysis.module.withheld", { move: rows[0]!.label, reason }) });
-    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "host", session: "imported" }).kind).toBe("line");
-  });
+  // Role/workflow/retry publication controls now live in actual RunService/SQLite confirmation
+  // and source tests, not synthetic viewer arguments to a runtime raw-packet admission helper.
 
   it("renders a recorded search's first move as exactly that, with Black-to-move numbering", () => {
-    const analysis = reviewAnalysis(run, main, rows[1]!.nodeId, { role: "learner", session: "imported" });
-    expect(analysis).toMatchObject({ kind: "line", source: "search_first_move", bound: { requestedMovetimeMs: 100 }, moves: ["1… c5"] });
-    if (analysis.kind !== "line") throw new Error("unreachable");
-    expect(analysis.sentence).toBe(`stockfish-test (100 ms search) reported 1… c5 as the first move of its search from the position before ${rows[1]!.label}; no longer line is recorded.`);
+    const signal = new AbortController().signal, source = collectRecordedAnalyzeLine(run, main, rows[1]!.nodeId, signal);
+    const result = deriveRecordedAnalyzeLineSource(source, "derived.review.analysis_recorded_first@1", signal);
+    if (result.kind !== "available") throw new Error("Expected genuine historical search first move");
+    expect(result.value.payload.operands).toMatchObject({ kind: "line", sourceArm: "recorded_search_first", bound: { kind: "movetime", requestedMs: 100 }, line: [{ fullmove: 1, side: "black", san: "c5" }] });
+    if (result.value.payload.operands.kind !== "line") throw new Error("Expected one actual move");
+    expect(result.value.payload.operands.line).toHaveLength(1);
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [result.value]));
+    expect(presentedSentence(items[0]!)).toBe(`The saved report names stockfish-test (100 ms search) and records 1… c5 as the first move of its search from the position before ${rows[1]!.label}; no longer line is recorded. ${reviewText("analysis.saved.caveat")}`);
   });
 
   it("abstains when the line lacks its search bound, is not legal, or is not recorded", () => {
-    expect(reviewAnalysis(run, main, rows[2]!.nodeId, { role: "learner", session: "imported" })).toEqual({ kind: "unattributed", nodeId: rows[2]!.nodeId, entryNodeId: rows[2]!.entryNodeId, sentence: reviewText("analysis.unattributed", { move: rows[2]!.label }) });
-    expect(reviewAnalysis(run, main, rows[3]!.nodeId, { role: "learner", session: "imported" })).toMatchObject({ kind: "none" });
-    expect(reviewAnalysis(run, main, rows[6]!.nodeId, { role: "learner", session: "imported" })).toEqual({ kind: "none", nodeId: rows[6]!.nodeId, entryNodeId: rows[6]!.entryNodeId, sentence: reviewText("analysis.none", { move: rows[6]!.label }) });
-    expect(() => reviewAnalysis(run, main, branchPath(run, main)[0]!.id, { role: "learner", session: "imported" })).toThrow(/not a move/u);
-    expect(() => reviewAnalysis(run, main, "nope", { role: "learner", session: "imported" })).toThrow(/not a move/u);
+    const signal = new AbortController().signal, unbounded = collectRecordedAnalyzeLine(run, main, rows[2]!.nodeId, signal);
+    const result = deriveRecordedAnalyzeLineSource(unbounded, "derived.review.analysis_recorded_pv@1", signal);
+    if (result.kind !== "available") throw new Error("Expected grounded attribution-incomplete state");
+    expect(result.value.payload.operands).toMatchObject({ kind: "unattributed", reason: "bound_unusable" });
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [result.value]));
+    expect(presentedSentence(items[0]!)).toBe(reviewText("analysis.unattributed.bound_unusable", { move: rows[2]!.label }));
+    expect(JSON.stringify(items)).not.toMatch(/"line":|"moves":/u);
+    const illegal = collectRecordedAnalyzeLine(run, main, rows[3]!.nodeId, signal);
+    expect(readRecordedAnalyzeLineSource(illegal).outcome).toEqual({ kind: "failed", reason: "source_contract_invalid" });
+    expect(deriveRecordedAnalyzeLineSource(illegal, "derived.review.analysis_recorded_pv@1", signal)).toMatchObject({ kind: "unavailable", reason: "source_contract_invalid" });
+    const absent = readRecordedAnalyzeLineSource(collectRecordedAnalyzeLine(run, main, rows[6]!.nodeId, signal));
+    expect(absent).toMatchObject({ outcome: { kind: "unavailable", reason: "source_absent" }, parent: { id: rows[6]!.entryNodeId }, reviewed: { id: rows[6]!.nodeId } });
+    expect(() => collectRecordedAnalyzeLine(run, main, branchPath(run, main)[0]!.id, signal)).toThrow(/not a move/u);
+    expect(() => collectRecordedAnalyzeLine(run, main, "nope", signal)).toThrow(/not a move/u);
   });
 
   it("is withheld while a retry from that position is open, and returns once the learner leaves it", () => {
     const opened = retry(run, rows[0]!.entryNodeId);
     expect(openRetryEntry(opened, main)).toBe(rows[0]!.entryNodeId);
     expect(projectionOf(opened).openRetryEntryNodeId).toBe(rows[0]!.entryNodeId);
-    const withheld = reviewAnalysis(opened, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
-    // Wrong implementation caught: a client-only hide, with the server still serving the line.
-    expect(withheld).toEqual({ kind: "withheld", nodeId: rows[0]!.nodeId, entryNodeId: rows[0]!.entryNodeId, sentence: reviewText("analysis.withheld", { move: rows[0]!.label }) });
-    expect(JSON.stringify(withheld)).not.toMatch(/"moves"|"engineId"|2\. Nf3/u);
-    // Other positions stay analysable during that retry.
-    expect(reviewAnalysis(opened, main, rows[1]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("line");
+    expect(() => collectRecordedAnalyzeLine(opened, main, rows[0]!.nodeId, new AbortController().signal)).toThrow(/open retry entry/u);
+    expect(readRecordedAnalyzeLineSource(collectRecordedAnalyzeLine(opened, main, rows[1]!.nodeId, new AbortController().signal)).outcome.kind).toBe("available");
     const playing = commitMove(opened, "d2d4", { actor: "user", at: REVIEW_FIXTURE_AT }).run;
-    expect(reviewAnalysis(playing, main, rows[0]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("withheld");
+    expect(() => collectRecordedAnalyzeLine(playing, main, rows[0]!.nodeId, new AbortController().signal)).toThrow(/open retry entry/u);
     const left = backToReviewed(playing);
     expect(openRetryEntry(left, main)).toBeNull();
-    expect(reviewAnalysis(left, main, rows[0]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("line");
+    expect(readRecordedAnalyzeLineSource(collectRecordedAnalyzeLine(left, main, rows[0]!.nodeId, new AbortController().signal)).outcome.kind).toBe("available");
   });
 
   it("[criterion 12] the ordinary map never carries the line the Analyze action can reveal", () => {
     const serialized = JSON.stringify(projectionOf(run));
-    expect(serialized).not.toMatch(/movesUci|bestMove|principal|c7c5|1\. e4 e5 2\. Nf3|1… c5/u);
+    const leak = /movesUci|bestMove|principal|\bc7c5\b|1\. e4 e5 2\. Nf3|1… c5/u;
+    expect("sha256:00c7c500".match(leak)).toBeNull();
+    expect('"c7c5"'.match(leak)).not.toBeNull();
+    expect(serialized.match(leak)?.[0]).toBeUndefined();
   });
 });
 
 describe("Analyze over the Review pass's typed line (§7, provider exchange §5.2)", () => {
   // The Review coordinator records `stockfish.principal_variation@1` beside each evaluation on the same
-  // durable event; Analyze re-derives it and admits it through module.full_inspector@1.
+  // durable event; Analyze re-derives it and admits it through the actual module.full_inspector@2.
   const typed = (): DrillRun => {
     let run = reviewFixtureRun({ id: "analyze-typed", plies: 6, evaluated: () => false });
     const path = branchPath(run, run.branches[0]!.id);
@@ -260,34 +282,44 @@ describe("Analyze over the Review pass's typed line (§7, provider exchange §5.
   const rows = projectionOf(run).rows;
 
   it("reveals the recorded bounded line, attributed to the actual engine and requested bound", () => {
-    const analysis = reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
-    expect(analysis).toMatchObject({ kind: "line", source: "bestline", engineId: "stockfish-analysis", bound: { requestedMovetimeMs: 100 }, moves: ["1. e4", "e5", "2. Nf3"] });
-    if (analysis.kind !== "line") throw new Error("unreachable");
-    expect(analysis.sentence.endsWith(` 19 (100 ms search) reported this principal variation from the position before ${rows[0]!.label}: 1. e4 e5 2. Nf3.`)).toBe(true);
-    expect(judgementWordsOutsideGrounding([], analysis.sentence)).toEqual([]);
-    expect(reviewAnalysis(run, main, rows[1]!.nodeId, { role: "learner", session: "imported" })).toMatchObject({ kind: "none" });
+    const signal = new AbortController().signal, source = collectRecordedAnalyzeLine(run, main, rows[0]!.nodeId, signal);
+    const result = deriveRecordedAnalyzeLineSource(source, "derived.review.analysis_typed_pv@1", signal);
+    if (result.kind !== "available") throw new Error("Expected real bounded provider source");
+    expect(result.value.payload.operands).toMatchObject({ kind: "line", sourceArm: "typed_pv", engine: { id: "stockfish-analysis", version: "19" }, bound: { kind: "movetime", requestedMs: 100 }, lineScope: { kind: "typed_request", maxPlies: 3, truncated: true }, line: [{ san: "e4" }, { san: "e5" }, { san: "Nf3" }] });
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [result.value]));
+    const sentence = presentedSentence(items[0]!);
+    expect(sentence).toContain(` 19 (100 ms search) reported this principal variation from the position before ${rows[0]!.label}: 1. e4 e5 2. Nf3.`);
+    expect(sentence).toContain(reviewText("analysis.scope.truncated", { plies: 3 })); expect(sentence).toContain("longer line");
+    expect(sentence).toContain(reviewText("analysis.caveat")); expect(judgementWordsOutsideGrounding([], sentence)).toEqual([]);
+    expect(readRecordedAnalyzeLineSource(collectRecordedAnalyzeLine(run, main, rows[1]!.nodeId, signal)).outcome).toEqual({ kind: "unavailable", reason: "source_absent" });
   });
 
-  it("keeps module, retry and read-only gates: no inspector ceiling, an open retry, and no write", () => {
-    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "academy" }).kind).toBe("withheld");
-    expect(reviewAnalysis(run, main, rows[0]!.nodeId, { role: "spectator", session: "imported" }).kind).toBe("withheld");
-    expect(reviewAnalysis(retry(run, rows[0]!.entryNodeId), main, rows[0]!.nodeId, { role: "learner", session: "imported" }).kind).toBe("withheld");
+  it("keeps genuine typed source retry/read-only gates; real role/session checks live in server authority tests", () => {
+    expect(() => collectRecordedAnalyzeLine(retry(run, rows[0]!.entryNodeId), main, rows[0]!.nodeId, new AbortController().signal)).toThrow(/open retry entry/u);
     const before = JSON.stringify(run);
-    reviewAnalysis(run, main, rows[0]!.nodeId, { role: "learner", session: "imported" });
+    const signal = new AbortController().signal, source = collectRecordedAnalyzeLine(run, main, rows[0]!.nodeId, signal);
+    const result = deriveRecordedAnalyzeLineSource(source, "derived.review.analysis_typed_pv@1", signal);
+    if (result.kind !== "available") throw new Error("Expected genuine typed source");
+    presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, [result.value]));
     expect(JSON.stringify(run)).toBe(before);
     // The ordinary map carries neither the line nor its record.
     expect(JSON.stringify(projectionOf(run))).not.toMatch(/movesUci|providerLineDelivery|principal|1\. e4 e5 2\. Nf3/u);
   });
 
   it("does not reveal a line whose recorded bytes no longer re-derive", () => {
-    const tampered = structuredClone(run) as DrillRun;
+    const parent = branchPath(run, main)[0]!;
+    const withValidWeakerReport = attachEvidence(run, parent.id, ["engine:valid-weaker-pv"], { kind: "bestline", source: "engine_validated",
+      values: { engineId: "saved-weaker-engine", requestedDepth: 18, movesUci: ["d2d4", "d7d5"] } }, REVIEW_FIXTURE_AT).run;
+    const tampered = structuredClone(withValidWeakerReport) as DrillRun;
     for (const event of tampered.events) {
       if (event.type !== "evidence.attached") continue;
       const values = event.data.payload.values as Record<string, { response?: { bodyBase64: string } }>;
       const line = values[REVIEW_PROVIDER_LINE_KEY];
       if (line?.response !== undefined) line.response.bodyBase64 = Buffer.from(Buffer.from(line.response.bodyBase64, "base64").toString("utf8").replace("pv e2e4 e7e5", "pv d2d4 d7d5")).toString("base64");
     }
-    expect(reviewAnalysis(tampered, main, rows[0]!.nodeId, { role: "learner", session: "imported" })).toMatchObject({ kind: "none" });
+    const signal = new AbortController().signal, source = collectRecordedAnalyzeLine(tampered, main, rows[0]!.nodeId, signal);
+    expect(readRecordedAnalyzeLineSource(source)).toMatchObject({ sourceArm: "typed_pv", outcome: { kind: "failed", reason: "source_contract_invalid" } });
+    expect(deriveRecordedAnalyzeLineSource(source, "derived.review.analysis_typed_pv@1", signal)).toMatchObject({ kind: "unavailable", reason: "source_contract_invalid" });
   });
 
   it("refuses to record a line searched from another position", () => {

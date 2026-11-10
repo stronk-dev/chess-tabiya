@@ -4,7 +4,7 @@
 identity to support truthful learner-facing “you avoided …” evidence, and what total grammar would
 make it safe?
 
-**Status:** answered `[V]` at 2026-08-26 HEAD for the shipped selector and fixed authored/imported
+**Status:** historical research answered `[V]` at 2026-08-26 HEAD for the shipped selector and fixed authored/imported
 populations. The current output is useful as broad research prevalence, but not as exact avoidance
 evidence. It groups by family/sign, drops same-move subjects, and retains no played/root outcome
 join. A successor must enumerate root subjects and typed outcomes before counting moves.
@@ -14,7 +14,7 @@ and 579 imported decisions through the actual `selectLocalSemanticEvidence` oper
 every legal alternative and the experimental policy's top-two cap. Default cases pin the all-family
 grammar, the D1716 isolated-pawn counterexample and a twelve-subject same-edge collision.
 
-## What the current selector measures
+## What the 2026-08-26 selector measured
 
 `familyKey` is exactly `projection@version:sign`. Alternative events enter one map under that key;
 the selector retains at most one event for each `moveUci`, divides those move entries by the number
@@ -26,7 +26,7 @@ had some `isolated_pawn:preserved` transition?” It cannot answer which file/pa
 refer to, whether the played child still has the condition elsewhere, or how many subjects within
 one alternative supported the outcome. `[V]` (D1718 cases 2–3)
 
-Across the current policy's selected top two facts, avoidance appears **790 times**: 462 across 754
+Across the historical policy's selected top two facts, avoidance appears **790 times**: 462 across 754
 authored decisions and 328 across 579 imported decisions. Nine of thirteen families appear; the
 current fixed populations select zero `half_open_file`, `king_opposition`, `passed_pawn` or
 `piece_count` avoidance facts. Zero here is observed reach under this policy/corpus, not proof the
@@ -168,3 +168,140 @@ The successor must:
 - No external chess label is needed to establish these data-loss defects. Whether a source
   predicate such as opposition is good chess semantics remains separate research.
 - No production, RFC, schema, content, pack or learner-UX byte changed.
+
+## 2026-11-04 current-source revalidation
+
+The old selected witness cannot be repeated unchanged. At the original authored a4b5 root,
+the current full events-scope packet has41 legal alternatives and40 evaluated alternatives.
+The exact unavailable row is d3h7: derived.tactic.defender_exposure@2 / invalid_turn_clone.
+The actual selector returns counterfactual_population_incomplete and no selected facts.
+The played child still has White b-file isolation and no a-file isolation. This is a real
+current availability guard, not a subject-identity repair. `[V]` (`tools/d1718-avoidance-subject-harness/avoidance-subject.test.ts`, historical-root case)
+
+Removing only the d3 bishop produces a disposable mechanical variant with34/34 complete
+alternatives. A call-through observer retains the actual sealed isolated-pawn avoidance
+factory output:34 distinct moves all preserve White a-file isolation, while a4b5 leaves
+White b-file isolation. The payload still lacks a played subject/outcome join. This issued
+candidate is eligible but not selected: its exact reconstructed event id appears in the
+real rejected set and the two selected facts are played_event values. No factory argument,
+return, policy or eligibility is replaced. This establishes the current candidate-stage
+identity defect, not current learner exposure. `[V]` (same instrument, complete-variant case;
+`packages/runtime/src/semantic-evidence.ts`, selectSemanticEvidence)
+
+The actual d4c5 source still emits12 distinct direct-attack subjects for one family/sign/edge;
+current byFamily logic retains at most one event per move before sealing alternativeEvents.
+Subject-first counting remains necessary. The frozen790/754/579 census is historical, not a
+current prevalence reading. Set-equal13 grammar keys alone do not validate current source
+values/domains/availability. `[V]` (same instrument, same-edge and frozen-receipt cases;
+`packages/runtime/src/semantic-evidence.ts`, familyKey/selectSemanticEvidence)
+
+Normal `make avoidance-subject-measurement` strictly typechecks, then passes5 cases with the
+expensive full-census case explicitly skipped (41571,1.90s). Earlier historical selected
+assertions failed against the current incomplete root and the variant's actual cap loss;
+they were replaced with the two separately pinned stages, not relaxed into success. No
+production fix, accepted successor contract, qualification or full current13-source gate
+is claimed. Independent review requested exact rejection/eligibility identity before cap
+attribution; those assertions now pass. `[V]` (instrument; existing independent review receipt)
+
+## 2026-11-04 source ABI, domain and availability audit
+
+This section reads the current producers, not the unimplemented successor described above.
+The eleven structural sources are `rules.structural.event.<family>@1`, with exact edge fields
+`before_fen`, `move_uci`, `after_fen`, `family`, and nullable `before`/`after`
+`StructuralObservation` values. Observations are a broad interface with optional dimensions;
+the producer, not that TypeScript interface alone, establishes the family-specific shape.
+Its private join includes kind, present color/role/file/shade/form/zone, and squares (except
+king-zone squares). Sign is absent→present gained, present→absent lost, otherwise count
+increase/decrease or preserved. The two other source ABIs are listed separately below. `[V]`
+(`packages/runtime/src/semantic-evidence.ts`, StructuralSemanticEventOperands,
+structuralSubject, structuralEventSign, structuralSemanticEventPayloads)
+
+| Family | Current emitted value and domain | Consequence for exact root/played/alternative comparison |
+|---|---|---|
+| backward_pawn | Positive color/file observation; any pawn on that file satisfying the registered support/stop-control predicate | File boolean is evaluable for all16 color/files, but does not identify a pawn. The separate draft backward-pawn successor is pawn-based and cannot be silently substituted. |
+| doubled_pawn | Positive color/file observation for at least two own pawns | File boolean across16 subjects; retain actual membership if wording names pawns. |
+| isolated_pawn | Positive color/file observation with own pawn(s) and no own pawn on neighboring files | File boolean across16 subjects. Removing isolation on a-file does not imply no isolation elsewhere. |
+| half_open_file | Positive color/file observation with no own pawn and at least one opposing pawn | File boolean across16 subjects; fully open is false for this predicate. |
+| open_file | Positive file observation with no pawn of either color; no color field | Boolean across8 files; do not invent a perspective-colored source identity. |
+| king_opposition | Positive color/form with both king squares sorted; only side-to-move opponent of color qualifies; orthogonal direct/distant gaps | The current predicate ignores intervening occupancy. Its truth must not be upgraded to unobstructed opposition. The independently required source successor remains unavailable. |
+| king_zone | Positive color/zone with actual king square, zones edge/corner | Four color/zone subjects; moving within a zone retains identity and changes square. Absence is false only after a valid king/position is established. |
+| line_blockers | Each eligible bishop/rook/queen ray with nonempty strict interior; squares are slider and board-edge endpoint; integer occupied-interior count including zero; no color/role fields | Root board must supply original slider identity and direction. Old events split moved sliders into lost/gained square subjects. The board-edge endpoint is excluded from count and is not a tactical target. Missing ray after capture/promotion/short edge is not integer zero. |
+| passed_pawn | Positive color/square observation under the no-opposing-pawn-ahead-on-adjacent-files predicate | Root pawn identity requires exact legal relocation. Old square-key events split an advance into lost/gained. Promotion/removal needs a declared disposition, not false pawn weakness. |
+| piece_count | All12 color/role integer rows, including zero; empty squares | Total count over12 subjects; color/role is factual identity. No automatic favorable/unfavorable interpretation. |
+| direct_attack_count | Positive integer pseudo-attack counts for each color, but emitted only at occupied non-pawn squares; no target piece identity | Sparse omission is not zero: empty and pawn targets are omitted even when count is positive. A fixed-square state query can evaluate all64 squares, but this is broader than current reading emission and needs an explicit new source contract. |
+| loose_piece | `rules.tactic.event.loose_piece@1`: mover-color non-king pieces only; exact camelCase edge, color plus original/current square and role, full before/after loose states, gained/lost/preserved enPrise relation | Opponent pieces and kings are outside this event domain. Original-piece join uses physical relocations including both castling pieces. Both-false emits no event. Invalid turn-clone returns unavailable, not false; full root-piece state needs actual readings and availability. Promotion changes role and must retain the root piece explicitly. |
+| pawn_islands | `rules.structural.event.pawn_islands@1`: exact snake_case edge, family/color and numeric before/after; always one row per color, including zero and equality | Two total color/count subjects. Count differences say nothing by themselves about structural quality. |
+
+`[V]` for this entire current-source table: `packages/runtime/src/structure.ts`,
+computeStructuralReading, matchesStructuralFeature and their private predicates;
+`packages/runtime/src/semantic-evidence.ts`, structural/pawnIsland/loosePieceSemanticEvents;
+`packages/runtime/src/tactics.ts`, pieceRelocations, loosePieceReadingForColor, loosePieceEvents;
+`packages/runtime/src/evidence-factories.ts`, createRulesStructuralEventPawnIslandsV1Evidence.
+The differing intended successors remain **draft**, not alternate live sources:
+`rfc/foundation-source-identity.md` §§3.1–3.4 and its lifecycle row in `rfc/README.md`.
+
+The disposable `current-source-abi.test.ts` supplies twelve independently expected controls
+covering all thirteen families: five file predicates with explicit positive/negative files;
+material zeros plus both island colors/zero/equality; sparse attack omission versus actual
+positive/zero queries; strict-interior ray endpoint and moving-slider subject split;
+passed-pawn advance split; moving king-zone identity plus blocked historical opposition;
+and in-check loose-piece unavailability plus an available mover-only/non-king preserved event and both-false omission. These test source boundaries, not external chess
+quality or usefulness, complete branch search, consumer delivery or every identity lifecycle.
+`[V]` (instrument and cited producer operations)
+
+### Requirements established before successor authoring
+
+The complete source inventory is now mapped, but a generic adapter over emitted events cannot
+supply the required total child values. At minimum the successor contract must explicitly choose
+its source version, finite subject domain, exact state evaluator and unsupported/removed cases
+per family; require every legal child for the denominator; and retain multiple subjects from one
+move before counting distinct moves. Captured, promoted, absent, inapplicable and unavailable
+are different cases. Incomplete evidence must not shrink the denominator or yield a reassuring
+negative claim. These are contract requirements inferred from the verified ABI boundaries,
+not production behavior added by this pass. `[M]`
+
+Opposition cannot be made correct by a subject-only adapter over the current blocked-line
+predicate. Backward-pawn file state cannot satisfy a contract naming a specific pawn without
+the pawn-based source. Ray and passed-pawn subjects require the same exact physical relocation
+rules already used by legal chess operations, including castling and en passant; raw UCI slices
+are insufficient as a universal identity function. Source-version/dependency choices must be
+reviewed together with the avoidance successor. No legacy input pipeline is required for new
+learner flows; frozen evidence identities still cannot be reinterpreted in place. `[M]`
+
+Independent review identified the mover-only/non-king restriction as an omitted loose-piece
+domain boundary. The table now states it explicitly. A real available preserved rook event
+pins exact edge, original/current role/square and both enPrise values; a safe-rook counterpart
+returns an available empty list, distinct from the unavailable in-check case. Final normal
+26463 strictly typechecks and passes17 tests/two files1.80s, with one explicit expensive-census
+skip. `[V]` (instrument; `planning/learner-modules/compiler2-independent-review-2026-11-02.md`)
+
+The corrected thirteen-source study is independently accepted for successor authoring only.
+The reviewer checked the source table and the finite domain correction; final26463 results
+were reported by the main agent. Source versions, root-piece lifecycle rules, full legal
+denominators and still-draft foundation dependencies must be explicit in the successor.
+No implementation, source qualification or learner delivery is accepted by this research
+review. `[V]` (`planning/learner-modules/compiler2-independent-review-2026-11-02.md`,
+current thirteen-source acceptance)
+
+## Current predecessor contract audit — 2026-11-04
+
+Fresh review of the source dependency found a stale blanket registry block: the52-member core
+and per-value receipt mechanism are implemented. Independent review accepts correcting that
+status and reserving the exact twelve source-definition members (D4065); it does not accept
+the full source RFC. The actual current detailed king-opposition/backward reading@2 factories
+already mint original-semantics payloads. Reusing those identities for unobstructed/per-pawn
+semantics would be invalid. A real live-manifest/sole-route audit fails on exactly those two
+collisions; the proposed readings now move to@3. The old@2 outputs remain pinned unchanged.
+All28 proposed refs (23 sources and five explicitly required authored-predicate companions)
+are absent from the current declaration/route sets. `[V]` (current-source-abi.test.ts D4067
+controls; rfc/foundation-source-identity.md; existing independent review receipt)
+
+The same current internal predicate@1 factory accepts an extra future conventionRef while
+still applying legacy blocker-blind truth. This does not prove a learner/API schema accepts
+it; it proves why schema-only convention discrimination cannot safely dispatch an authored
+condition. Source convention closure, exact kind/ref dispatch, outpost challenge semantics and
+physical event joins require the coherent author repair under D4066/D4068–D4070. That repair
+is drafted, not accepted or implemented. Final normal72719 runs strict types,20 research tests
+with one explicit expensive-census skip1.79s,11 historical author controls and current register
+C1-C8. These are authoring/identity facts, not a new detector or semantic qualification. `[V]`
+(same instrument and primary source paths; rfc/foundation-source-identity.md §§2.1,3,4)

@@ -12,6 +12,7 @@ import {
 } from "./account-data.js";
 import { ServerError } from "./errors.js";
 import { stripPgnAnnotations } from "./import-source.js";
+import { parseStoredClockDocument, legacyStoredClockDocument } from "./recorded-clock-document.js";
 
 /**
  * Account-level import of an exported bundle (roadmap `account_data`; completes
@@ -36,7 +37,16 @@ export const ACCOUNT_IMPORT_MAX_BYTES = 32 * 1024 * 1024;
  * reads, never guessed at.
  */
 export const ACCOUNT_BUNDLE_UPGRADES: Readonly<Record<number, (value: Readonly<Record<string, unknown>>) => unknown>> = Object.freeze({
-  [ACCOUNT_BUNDLE_VERSION]: (value) => value,
+  [ACCOUNT_BUNDLE_VERSION]: (value) => {
+    // Before the nullable document existed, an absent member meant unexamined legacy bytes.
+    const upgraded = structuredClone(value);
+    const runs = (upgraded.ownedRuns as { value?: unknown } | undefined)?.value;
+    if (Array.isArray(runs)) for (const run of runs) {
+      const game = run !== null && typeof run === "object" ? run.importedGame : null;
+      if (game !== null && typeof game === "object" && !Object.hasOwn(game, "clockDocument")) game.clockDocument = null;
+    }
+    return upgraded;
+  },
 });
 export const ACCOUNT_BUNDLE_READABLE_VERSIONS: readonly number[] = Object.freeze(Object.keys(ACCOUNT_BUNDLE_UPGRADES).map(Number).sort((a, b) => a - b));
 
@@ -105,7 +115,7 @@ export const ACCOUNT_NOT_RESTORED_REASONS: Readonly<Record<AccountNotRestoredKin
 /** Classes rebuilt from the restored runs rather than copied from the file. */
 export const ACCOUNT_REDERIVED_TABLES = Object.freeze([
   "learner_position_stats",
-  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_observation_jobs",
+  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_observation_jobs",
 ] as const);
 
 export interface RestoredRun {
@@ -131,12 +141,13 @@ function recordsOf<T extends AccountRecordTable>(records: readonly TaggedAccount
  * must be a durable `import-source-protocol` member, and its PGN is stripped of third-party
  * annotations ([[D959]]) — a file exported before that fix may still carry them.
  */
-function restoredImportedGame(runId: string, game: ImportedGameExport | null): ImportedGameExport | null {
+function restoredImportedGame(run: DrillRun, game: ImportedGameExport | null): ImportedGameExport | null {
   if (game === null) return null;
   if (!isImportSourceKind(game.sourceKind)) {
-    throw new ServerError("ACCOUNT_IMPORT_INVALID", `Run ${runId} has an imported-game source this installation does not know`);
+    throw new ServerError("ACCOUNT_IMPORT_INVALID", `Run ${run.id} has an imported-game source this installation does not know`);
   }
-  return Object.freeze({ ...game, pgn: stripPgnAnnotations(game.pgn) });
+  const clockDocument = game.clockDocument === null ? legacyStoredClockDocument(game, run) : parseStoredClockDocument(game.clockDocument, game, run);
+  return Object.freeze({ ...game, pgn: stripPgnAnnotations(game.pgn), clockDocument });
 }
 
 /** A pure projection of a validated bundle into what restore writes and what it declines. */
@@ -206,7 +217,7 @@ export function planAccountRestore(bundle: AccountBundleV1): AccountRestorePlan 
       id: run.id,
       title: run.title,
       run: (run.snapshot as { readonly kind: "parsed"; readonly value: DrillRun }).value,
-      importedGame: restoredImportedGame(run.id, run.importedGame),
+      importedGame: restoredImportedGame((run.snapshot as { readonly kind: "parsed"; readonly value: DrillRun }).value, run.importedGame),
     }))),
     derivations: Object.freeze(derivations),
     records: Object.freeze({

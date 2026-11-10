@@ -1,0 +1,658 @@
+{
+  "originalIndices": [
+    78,
+    126,
+    129,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228
+  ],
+  "cases": [
+    {
+      "id": "migration.exposure.negative",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.defender_exposure",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "3rk3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "3rk3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:derived.tactic.defender_exposure",
+        "testSite": "packages/runtime/src/semantic-validation-migration.test.ts#D3628 exposure: completes the legal edge without a positive target capture",
+        "sourceSha256": "c10af6f718e7f479b2876f6c840b0d62ba77e78f12cdbe08871cff990c0a5b8a",
+        "frozenExpectationSha256": "0d349825de4d3158733324cf5387fa1031053015eba4ceac09a90ed94a76c77b"
+      }
+    },
+    {
+      "id": "breadth.bishop-takes-b6.exposure",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.tactic.defender_exposure",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1",
+        "moveUci": "c5b6",
+        "afterFen": "r3k3/8/1B6/8/8/8/8/R3K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.tactic.defender_exposure",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#routes one-edge breadth facts through the compiled semantic-event authority",
+        "sourceSha256": "d54e3652a937513208773f87180e0b70446e117ce05aeb649b4f347e87470c15",
+        "frozenExpectationSha256": "8265da9381684552c801659254be324781b43af8a72da83f14dd9f156314776d"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "breadth.a-pawn-queens.role-asymmetry",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.breadth_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/P7/8/8/8/8/8/4K3 w - - 0 1",
+        "moveUci": "a7a8q",
+        "afterFen": "Q3k3/8/8/8/8/8/8/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:derived.material.event.role_asymmetry",
+        "testSite": "packages/runtime/src/breadth-semantic.test.ts#retains promotion-only and capture-promotion authorities for material-role events",
+        "sourceSha256": "8862ef8374e6734a037ff91348091bb0f0fe54b87d170813020c9e080a56e6b9",
+        "frozenExpectationSha256": "a007409d13e5d29307d12fa5773274037f83aace9d5313cf42e102ef4839d3a1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.capture.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/n7/R3K3 w - - 7 1",
+        "moveUci": "a1a2",
+        "afterFen": "4k3/8/8/8/8/8/R7/4K3 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "changedRoles": [
+            "knight"
+          ],
+          "before": {
+            "vector": {
+              "pawn": 0,
+              "knight": 1,
+              "bishop": 0,
+              "rook": 1,
+              "queen": 0
+            },
+            "magnitude": 2
+          },
+          "after": {
+            "vector": {
+              "pawn": 0,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 1,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "increased": false
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "298688980f503e6f5505957e33ef9dbc1f5e5a4afda094d6312d3111c5f66e2d"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.capture.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k3/N7/8/8/8/8/8/4K3 b - - 7 1",
+        "moveUci": "a8a7",
+        "afterFen": "4k3/r7/8/8/8/8/8/4K3 w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "changedRoles": [
+            "knight"
+          ],
+          "before": {
+            "vector": {
+              "pawn": 0,
+              "knight": 1,
+              "bishop": 0,
+              "rook": 1,
+              "queen": 0
+            },
+            "magnitude": 2
+          },
+          "after": {
+            "vector": {
+              "pawn": 0,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 1,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "increased": false
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "bb10669d41675ef0ed712d49288d34d99b46f870d6e15c5b559f342d79c97596"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.promotion-queen.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/P7/8/8/8/8/8/7K w - - 7 1",
+        "moveUci": "a7a8q",
+        "afterFen": "Q6k/8/8/8/8/8/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "changedRoles": [
+            "pawn",
+            "queen"
+          ],
+          "before": {
+            "vector": {
+              "pawn": 1,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "after": {
+            "vector": {
+              "pawn": 0,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 1
+            },
+            "magnitude": 1
+          },
+          "increased": false
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "4e851b5f486fe62d292b56ec80cb7ef3890a5ddceccf31344e9e363ea3dfcc75"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.promotion-queen.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/p7/7K b - - 7 1",
+        "moveUci": "a2a1q",
+        "afterFen": "7k/8/8/8/8/8/8/q6K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "changedRoles": [
+            "pawn",
+            "queen"
+          ],
+          "before": {
+            "vector": {
+              "pawn": 1,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "after": {
+            "vector": {
+              "pawn": 0,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 1
+            },
+            "magnitude": 1
+          },
+          "increased": false
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "2851c82717aee9929fe71eafde14963412d128bf70a70dc0d1fa530956db0859"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.promotion-knight.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/P7/8/8/8/8/8/7K w - - 7 1",
+        "moveUci": "a7a8n",
+        "afterFen": "N6k/8/8/8/8/8/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "changedRoles": [
+            "pawn",
+            "knight"
+          ],
+          "before": {
+            "vector": {
+              "pawn": 1,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "after": {
+            "vector": {
+              "pawn": 0,
+              "knight": 1,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "increased": false
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "9b83dadbf7c05d96e237f1cf645f9ed75b2587ab57795b25e1b3ab1b333c1585"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.promotion-knight.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/p7/7K b - - 7 1",
+        "moveUci": "a2a1n",
+        "afterFen": "7k/8/8/8/8/8/8/n6K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "changedRoles": [
+            "pawn",
+            "knight"
+          ],
+          "before": {
+            "vector": {
+              "pawn": 1,
+              "knight": 0,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "after": {
+            "vector": {
+              "pawn": 0,
+              "knight": 1,
+              "bishop": 0,
+              "rook": 0,
+              "queen": 0
+            },
+            "magnitude": 1
+          },
+          "increased": false
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "09d1484e6ac9b2db54774626b7f900e68c313bdee43fa9e06a78ba3a13396dc7"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.quiet-negative.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "6k1/8/8/8/8/2B5/P7/6K1 w - - 7 1",
+        "moveUci": "a2a3",
+        "afterFen": "6k1/8/8/8/8/P1B5/8/6K1 b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "9f234ad4f48c98f4e39704325cbcb0bde5dd9ff34f02b7f1417919a6d14cde6d"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.quiet-negative.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "6k1/p7/2b5/8/8/8/8/6K1 b - - 7 1",
+        "moveUci": "a7a6",
+        "afterFen": "6k1/8/p1b5/8/8/8/8/6K1 w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "5789eea92a9b3013bdd6fae439d7c5d7193be7a4f680655184d34583590b1079"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.castle-negative.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 7 1",
+        "moveUci": "e1h1",
+        "afterFen": "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 8 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "f0bdb466917e73b5e6caf875e327e4d1fa59cd8a0bc913134c68961d9a4c37b6"
+      }
+    },
+    {
+      "id": "cited.python-chess.rule-state.material.castle-negative.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "derived.material.event.role_asymmetry",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 7 1",
+        "moveUci": "e8h8",
+        "afterFen": "r4rk1/8/8/8/8/8/8/R3K2R w KQ - 8 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.rule-state.material",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 418,
+          "textSha256": "b0b23382e3119d78bf043d6c291c32cae8995026bb6b6a7731c2b9fb5e427389"
+        },
+        "propositionSha256": "63f86a95e7d1a8b5cad5a56c813e561a66c20396f2d4151bb54bd11500a55cc6"
+      }
+    }
+  ],
+  "assertionBodies": {
+    "packages/runtime/src/semantic-validation-migration.test.ts#D3628 exposure: completes the legal edge without a positive target capture": "{\n    await checked(null, \"derived.tactic.defender_exposure\", 1, \"runtime.semantic.breadth_edge\", edges(\"r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1\", [\"c5b6\"])[0]!, true);\n    await checked(\"migration.exposure.negative\", \"derived.tactic.defender_exposure\", 1, \"runtime.semantic.breadth_edge\", edges(\"3rk3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1\", [\"c5b6\"])[0]!, false);\n  }",
+    "packages/runtime/src/breadth-semantic.test.ts#routes one-edge breadth facts through the compiled semantic-event authority": "{\n    const exposed = \"r3k3/8/1n6/2B5/8/8/8/R3K3 w - - 0 1\";\n    const ids = breadthSemanticEvents(exposed, \"c5b6\", after(exposed, \"c5b6\")).map((event) => event.projection.id);\n    expect(ids).toContain(\"rules.square.event.control\");\n    expect(ids).toContain(\"rules.mobility.event.piece_destinations\");\n    expect(ids).toContain(\"derived.tactic.defender_exposure\");\n    expect(ids).toContain(\"derived.material.event.role_asymmetry\");\n    expect(ids).toContain(\"rules.king.event.zone_state\");\n\n    const open = \"4k3/8/8/8/8/8/P7/R3K3 w - - 0 1\";\n    expect(breadthSemanticEvents(open, \"a1d1\", after(open, \"a1d1\")).map((event) => event.projection.id)).toContain(\"derived.activity.event.open_file_occupancy\");\n\n    const halfOpen = \"4k3/8/3p4/8/8/8/P7/R3K3 w - - 0 1\";\n    expect(openFileOccupancyOperands(halfOpen, \"a1d1\", after(halfOpen, \"a1d1\"))?.fileClass).toBe(\"half_open_file\");\n    const halfOpenEvent = breadthSemanticEvents(halfOpen, \"a1d1\", after(halfOpen, \"a1d1\")).find((event) => event.projection.id === \"derived.activity.event.open_file_occupancy\");\n    expect(halfOpenEvent).toMatchObject({ derivationInputs: [{ projection: { id: \"rules.structural.reading.half_open_file\" } }] });\n  }",
+    "packages/runtime/src/breadth-semantic.test.ts#retains promotion-only and capture-promotion authorities for material-role events": "{\n    const promotion = \"4k3/P7/8/8/8/8/8/4K3 w - - 0 1\";\n    const promotionEvent = breadthSemanticEvents(promotion, \"a7a8q\", after(promotion, \"a7a8q\")).find((event) => event.projection.id === \"derived.material.event.role_asymmetry\");\n    expect(promotionEvent?.derivationInputs.map((value) => value.projection.id)).toEqual([\n      \"derived.material.reading.role_signature\", \"derived.material.reading.role_signature\", \"rules.transition.event.promotion\",\n    ]);\n\n    const capturePromotion = \"r3k3/1P6/8/8/8/8/8/4K3 w - - 0 1\";\n    const capturePromotionEvent = breadthSemanticEvents(capturePromotion, \"b7a8q\", after(capturePromotion, \"b7a8q\")).find((event) => event.projection.id === \"derived.material.event.role_asymmetry\");\n    expect(capturePromotionEvent?.derivationInputs.map((value) => value.projection.id)).toEqual([\n      \"derived.material.reading.role_signature\", \"derived.material.reading.role_signature\", \"rules.transition.event.capture\", \"rules.transition.event.promotion\",\n    ]);\n  }"
+  }
+}

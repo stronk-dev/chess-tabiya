@@ -475,3 +475,95 @@ all 150 exact submissions (six served endgames × five viewports × click, drag,
 touch, keyboard and text), plus the held-touch subtree/submit control. The
 failure and repair are retained here; neither is a comparative usability verdict.
 Evidence: `tests/browser/drill.spec.ts` and `docs/drill-client.md`.
+
+### 2026-11-09 — finite castling semantic qualification
+
+D4163 executes383/383 cases/91subjects; castled@1 alone now passes every required validation arm.
+Source-grounded absolute king destinations accompany complete mirrors; symmetry is insufficient.
+Normal software/performance/types pass; held content failures are unchanged. This is one finite
+rules profile, not Gate-F whole-foundation clearance, D6 consumer release or broader Chess960/
+actor/style/content qualification. Evidence: planning/foundation-source-identity/plan.md and
+packages/runtime/src/semantic-validation-castling.test.ts. Gate definitions/states are unchanged.
+
+### 2026-11-09 — complete chosen-inclusive Profile source adoption
+
+D4159 now reaches the actual original claimed source, four-source consumer, strict fifth family,
+worker lifecycle and all Profile/Skills/account paths. Actual200game/6400decision operand/
+statistic/independent interval/contributor/shared-byte proof and normal14730software/534+
+7performance/types/build/source11 pass. Complete content keeps the exact62prior red headings.
+This closes one bounded source-adoption debt, not Gate-F whole foundation, a new style/human
+qualification, official-content/native/release or any1.0 milestone. Gate definitions/states stay.
+Evidence: planning/foundation-source-identity/plan.md and compact profile-choice-facts-cost-
+2026-11-09.json there; apps/server/src/profile-choice-store.test.ts.
+
+### 2026-11-09 — rights-loss finite validation and exact partner admission
+
+D4164/D4165 retain all383prior cases and execute391/391 over91subjects; exactly castled1 and
+rights_lost1 now satisfy required arms. Complete independently pinned rights-update semantics,
+total input/operand mirrors and absolute falsifiers pass. Actual version2 partner substitutions
+were accepted with2invocations; exact id/version now refuses before dispatch. Full software/
+performance/types/build/source pass; exact prior red-content headings remain. This is two finite
+profiles, not Gate-F whole foundation, D6 consumer release, wider Chess960/actor/style or native/
+content/release clearance. Gate definitions/states remain. Evidence: existing source plan and
+packages/runtime/src/semantic-validation-rights.test.ts.
+
+
+### 2026-11-09 — D4166 bounded capture/halfmove-reset closeout (local, uncommitted)
+
+D4166 is verified locally: 28 independent capture/halfmove-reset absolute and mirror cases
+preserve all 391 earlier records. All 419 canonical cases over 91 subjects pass; exactly castled@1,
+rights_lost@1, capture@1 and clock_reset@1 satisfy every required arm. Complete payload walks retain
+13 direct-capture leaves, 12 en-passant leaves and 11 halfmove-reset leaves. Supplied-FEN promotion
+markers remain distinct from historical promotion claims. Both independent reviews accept.
+
+Full normal software passes 14,878 tests in 536 files (415.07s), seven performance tests in four
+files (60.17s), types, build and source contracts. All 1,084 tests across the 17 validation files
+pass; coupled generation retains 1,099 declarations, zero changes and 477 applicability entries.
+Source-author checks pass 11/11. Complete content remains 60 failed, 261 passed and 18 setup-skipped
+in 43 files (172.09s), with the exact 62 prior failure headings in order. D3928, default native,
+official content and release remain held. Failed fixture assumptions are retained in the source plan.
+No whole capability or milestone is promoted.
+
+D4166 is path-backed done; 3,916 ledger rows, 1,886 done, 1,867 live and zero untriaged.
+The 462 older prose-only closeouts remain. Governance/roadmap reconciliation follows. D4167
+owns the next actual source/operation/consumer map. No gate definition, release state, Git or
+whole-goal state changes.
+
+
+### 2026-11-09 — selected-edge Inspector measurement, no gate-state change
+
+Seven current selected-edge source families are verified locally in Advanced Inspector: opposition,
+backward pawns, pawn-file groups, slider rays, file-state changes, revealed file access and pawn
+islands. Three old current tuples are replaced and four added: 84 source topics, six detail views,
+90 Full Inspector pairs and 301 module pairs. Typed readouts retain complete original payloads and
+source references; both construction and received validation check their correspondence. Deferred
+facts without a detail view can be requested first at their original ordinal, with unchanged whole-
+fact and 400-word limits. D4168/D4169 close locally; D4167 stays open for the remaining consumers.
+
+Final normal software passes 14,966 tests in 537 files (421.11s), seven performance tests in four
+files (57.87s), types, production builds and 11 source-author checks. Validation retains 419 passing
+canonical cases over 98 required subjects; exactly castled@1, rights_lost@1, capture@1 and
+clock_reset@1 qualify. The seven newly active roots remain required and unqualified. Complete
+content remains 60 failed, 261 passed and 18 setup-skipped in 43 files (172.29s), with the exact
+62 prior failure headings in order. D3928, default native, official content and release remain held.
+No whole capability, milestone or parent lifecycle is promoted.
+
+This is bounded source delivery, not Gate-F whole-foundation, D6 consumer release or content
+clearance. Evidence: foundation-edge-source.test.ts, inspector-source-browser.test.ts, the source
+plan and independent review receipt. Gate definitions and states remain unchanged.
+
+
+### 2026-11-09 — selected-source delivery measurement; no gate change
+
+Both authorized independent reviewers accept the bounded source/detail implementation conditional
+on final normal gates. Actual389/four92.31s proves original source/API/received/selected DOM and
+all emitted member continuations in both colors. Complete snapshot and recursive exchange graph
+reconstruction, genuine membership before slicing, original-ref retained leaf corruption/omission,
+text-only400word/8member budgets and unchanged saved runs/providers stand. No self-acceptance.
+Final18210 normal verify-software passes15173/all539443.17s,7performance/four58.16s and all normal
+prerequisites. Build31916 server/web/source-author11 pass. Complete content stays60fail/261pass/
+18setup43files170.71s; all62prior headings identical. Factory376 adds8 profiles, all368prior
+outcomes unchanged; normal3121/six6.81s passes without skips. Validation stays98/419/4. Failed
+preflights/matrix fixture assumptions and filtered profile generation remain in the source plan.
+D4167 remains doing; no ordinary/canonical/avoidance/bot/qualification, parent/capability/milestone,
+native/content/release, Git/archive or full-goal completion follows. D4170 is owned migration debt.

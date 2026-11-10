@@ -39,8 +39,12 @@ export interface RecordedComparisonEnginePoint {
 declare const comparisonPointBrand: unique symbol;
 export interface RecordedComparisonPointSource { readonly [comparisonPointBrand]: true }
 type PointData = ReturnType<typeof compute>;
-const points = new WeakMap<object, { readonly capture: RecordedComparisonPointCapture; readonly data: PointData }>();
+const points = new WeakMap<object, { readonly capture: RecordedComparisonPointCapture; readonly data: PointData; readonly assertOwnerCurrent: () => void }>();
 const refuse = (message: string): never => { throw new TypeError(`Comparison point: ${message}`); };
+// Internal issuer lifetime only; it supplies no evidence or source-valid Boolean.
+function assertOwnerCurrent(check: () => void): void {
+  if (typeof check !== "function" || check() !== undefined) return refuse("requires the source owner's current access check");
+}
 const exact = (value: unknown, keys: readonly string[]) => value !== null && typeof value === "object"
   && Object.getPrototypeOf(value) === Object.prototype && Reflect.ownKeys(value).length === keys.length
   && keys.every(key => { const field = Object.getOwnPropertyDescriptor(value, key); return field?.enumerable && "value" in field; });
@@ -84,22 +88,27 @@ export function isRecordedComparisonPointSource(value: unknown): value is Record
 export function readRecordedComparisonPointSource(source: RecordedComparisonPointSource): PointData {
   if (!isRecordedComparisonPointSource(source)) return refuse("not issued by the sole source owner");
   const owned = points.get(source)!;
+  owned.capture.signal.throwIfAborted();
+  assertOwnerCurrent(owned.assertOwnerCurrent);
   compute(owned.capture); // original boundary, operands and cancellation before any empty shortcut
+  assertOwnerCurrent(owned.assertOwnerCurrent);
   return owned.data;
 }
 
 /** Constructor authority is absent from both public barrels; census restricts its sole importer. */
 export const RECORDED_COMPARISON_POINT_AUTHORITY = Object.freeze({
-  issue(input: RecordedComparisonPointCapture): RecordedComparisonPointSource {
+  issue(input: RecordedComparisonPointCapture, checkCurrentOwner: () => void): RecordedComparisonPointSource {
     if (!exact(input, ["comparison", "branchId", "nodeId", "permission", "attachments", "offline", "pending", "signal"])) return refuse("wrong constructor image");
+    assertOwnerCurrent(checkCurrentOwner);
     compute(input); // validate original occurrence identities before making owned envelopes
     const assistance = parseFinalizedAssistanceV1(structuredClone(input.permission.assistance));
     const offline = snapshotRecordedEngineOffline(input.offline);
     const capture = Object.freeze({ ...input, offline, permission: Object.freeze({ ...input.permission,
       principal: Object.freeze({ ...input.permission.principal }), assistance }) });
     const data = freeze(compute(capture));
+    assertOwnerCurrent(checkCurrentOwner);
     const source = Object.freeze({}) as RecordedComparisonPointSource;
-    points.set(source, { capture, data }); return source;
+    points.set(source, { capture, data, assertOwnerCurrent: checkCurrentOwner }); return source;
   },
 });
 

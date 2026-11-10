@@ -176,12 +176,16 @@ describe("material sources derive from actual count and capture/promotion inputs
     expect(invokeEvidenceValueRoute(EVENT, anchor)[0]!.evidence.payload.after.vector.knight).toBe(1);
   });
 
-  it("registers the exact fixed ten-count tuple and three complete event arms without partial consumer cutover", () => {
+  it("registers the fixed ten-count tuple and the jointly accepted current module bindings", () => {
     for (const key of [SIGNATURE, EVENT]) {
       const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(value => `${value.id}@${value.version}` === key)!;
-      expect(declaration).toMatchObject({ grounding: "position_rules", exactness: "exact", confidence: "not_applicable", answerContent: ["fact"], disposition: { kind: "experimental" } });
-      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some(value => `${value.projection.id}@${value.projection.version}` === key)).toBe(false);
-      expect(PRIMARY_EVIDENCE_MANIFEST.semanticEvents.some(value => `${value.projection.id}@${value.projection.version}` === key)).toBe(false);
+      expect(declaration).toMatchObject({ grounding: "position_rules", exactness: "exact", confidence: "not_applicable", answerContent: ["fact"] });
+      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(value => `${value.projection.id}@${value.projection.version}` === key)
+        .map(value => `${value.consumer.id}@${value.consumer.version}`).sort()).toEqual(key === EVENT
+          ? ["module.full_inspector@2", "module.review_map@2", "profile.subject_observations@1", "research.semantic_selection@2", "research.semantic_validation@1"]
+          : ["module.full_inspector@2"]);
+      expect(declaration.disposition).toBeUndefined();
+      expect(PRIMARY_EVIDENCE_MANIFEST.semanticEvents.some(value => `${value.projection.id}@${value.projection.version}` === key)).toBe(key === EVENT);
     }
     expect(PRIMARY_EVIDENCE_MANIFEST.projections.find(value => `${value.id}@${value.version}` === SIGNATURE)!.derivation).toEqual({ inputs: Array.from({ length: 10 }, () => ({ id: "rules.structural.reading.piece_count", version: 1 })) });
   });

@@ -3,9 +3,11 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { compileLoadedOpeningCatalogue, deepestOpeningReached, recordedOpeningPosition, type OpeningCatalogueAvailability } from "../../apps/server/src/opening-catalogue.js";
+import { admitInstalledOpeningCatalogue } from "../../packages/runtime/src/opening-catalogue.js";
 import { branchPath, commitMove, rewind, fork, type DrillRun } from "../../packages/runtime/src/index.js";
 import { importedRun, play, REVIEW_AT } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
-import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import { evidenceValueRouteRegistry, invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import { collectRecordedOpeningHistory, readRecordedOpeningHistory } from "../../packages/runtime/src/recorded-opening-history.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 import { evidenceValueReceipt, type DeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
 import { presentationDigest } from "../../packages/runtime/src/presentation-contract.js";
@@ -13,8 +15,9 @@ import { presentationDigest } from "../../packages/runtime/src/presentation-cont
 export function runOpeningSourceResearch() {
   let controls = 0;
   const check = (test: () => void) => { test(); controls++; };
-  const catalogue = compileLoadedOpeningCatalogue(JSON.parse(readFileSync("apps/server/artifacts/runtime-opening-catalogue.json", "utf8")));
-  const available: OpeningCatalogueAvailability = { kind: "available", catalogue };
+  const available = admitInstalledOpeningCatalogue(JSON.parse(readFileSync("apps/server/artifacts/runtime-opening-catalogue.json", "utf8")));
+  if (available.kind !== "available") throw new TypeError(`Installed opening source is unavailable: ${available.reason}`);
+  const catalogue = available.catalogue;
   // Actual recorded legal moves with repeated endpoint positions at later observed plies.
   const run = play(importedRun("d3857-opening-history"), ["e2e4", "e7e5", "g1f3", "b8c6", "f3g1", "c6b8", "g1f3", "b8c6"]);
   function collect(input: DrillRun, branchId: string, throughNodeId: string) {
@@ -54,13 +57,19 @@ export function runOpeningSourceResearch() {
   const imageDigest = (image: unknown) => presentationDigest("disposable.opening-population", image);
   check(() => assert.notEqual(imageDigest(complete.image), imageDigest(short.image)));
 
-  // The current production declaration has exactly one endpoint/position tuple, not a prefix.
-  const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.opening.deepest_reached" && row.version === 1)!;
-  assert(declaration.derivation && "inputs" in declaration.derivation);
-  const inputs = declaration.derivation.inputs!;
-  check(() => assert.deepEqual(inputs.map(ref => `${ref.id}@${ref.version}`), ["theory.opening.current_endpoint@1", "run.record.position@1"]));
-  check(() => assert(complete.rows.length + completeHistory.visits.length > inputs.length));
-  check(() => assert.equal(invokeEvidenceValueRoute("derived.opening.deepest_reached@1", { run, branchId: run.activeCursor.branchId }).kind, "unavailable"));
+  // The old fixed pair/pending stub is retired. Use the genuine installed owner and complete
+  // recorded history for current controls; retain the pure predecessor comparison above.
+  check(() => assert(!evidenceValueRouteRegistry().some(row => row.route === "derived.opening.deepest_reached@1")));
+  const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(row => row.id === "derived.opening.deepest_reached" && row.version === 2)!;
+  check(() => assert(declaration.derivation?.reduction));
+  const history = collectRecordedOpeningHistory({ source: available.source, run, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId });
+  const sourceRows = readRecordedOpeningHistory(history).rows;
+  check(() => assert.deepEqual(sourceRows.map(row => row.node.id), complete.rows.map(row => row.node.id)));
+  check(() => assert.equal(sourceRows.length, 9));
+  const result = invokeEvidenceValueRoute("derived.opening.deepest_reached@2", { history });
+  check(() => assert.equal(result.length, 1));
+  check(() => assert.deepEqual(result[0]!.evidence.payload, { ...completeHistory, projectionId: "derived.opening.deepest_reached@2" }));
+  check(() => assert(complete.rows.length + completeHistory.visits.length > 2, "historical fixed two-input recipe cannot express the complete history"));
 
   // A genuine same-key re-entry is a later visit, not one deduplicated name.
   const repeatedEndpoint = catalogue.currentEndpoint(path[2]!.fen, 2);
@@ -85,6 +94,8 @@ export function runOpeningSourceResearch() {
   check(() => assert.equal(empty.rows.length, 1));
   check(() => assert.equal(empty.history.kind, "absent"));
   check(() => assert(empty.rows.every(row => row.lookup.kind === "absent")));
+  const emptyHistory = collectRecordedOpeningHistory({ source: available.source, run: emptyRun, branchId: emptyRun.activeCursor.branchId, throughNodeId: emptyRun.activeCursor.nodeId });
+  check(() => assert.deepEqual(invokeEvidenceValueRoute("derived.opening.deepest_reached@2", { history: emptyHistory }), []));
   const emptyLaterRun = commitMove(emptyRun, "e1e2", { at: REVIEW_AT }).run;
   const emptyLater = collect(emptyLaterRun, emptyLaterRun.activeCursor.branchId, emptyLaterRun.activeCursor.nodeId);
   check(() => assert.deepEqual(empty.history, emptyLater.history));
@@ -97,8 +108,8 @@ export function runOpeningSourceResearch() {
     const absentSource: OpeningCatalogueAvailability = { kind: "unavailable", reason };
     check(() => assert.deepEqual(deepestOpeningReached(absentSource, []), { kind: "abstained", projectionId: "derived.opening.deepest_reached@1", reason: "input_abstained" }));
   }
-  console.log(JSON.stringify({ scope: "D3857 actual opening source population, NOT installed-source issuer/successor/API proof",
+  console.log(JSON.stringify({ scope: "Current opening@2 source control against historical pure helper; NOT original D3857 counts or API/consumer qualification",
     controls, recordedPositions: complete.rows.length, matchedVisits: completeHistory.visits.length,
-    declaredFixedInputs: inputs.length, negativeLookupPositions: emptyLater.rows.length,
+    originalHistoryRows: sourceRows.length, negativeLookupPositions: emptyLater.rows.length,
     liveProviderCalls: 0, productionChanges: 0 }));
 }

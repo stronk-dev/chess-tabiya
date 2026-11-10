@@ -1,6 +1,7 @@
 // D3717: independent legal replay, integer diagonal occupancy and literal role scope.
 // Never use pressureLines, harassmentPressureSequence or collector output as the oracle.
 import { readFileSync } from "node:fs";
+import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -9,12 +10,13 @@ import { makeSquare, opposite, parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
-import { BOUNDED_TARGET_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
+import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE, RECORDED_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const raw = JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] };
+const liveDocument = JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] };
+const raw = { cases: retainHistoricalSemanticCaseFixtures(liveDocument.cases) };
 const byId = new Map(raw.cases.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
 const source = RECORDED_CITED_SOURCES.find(source => source.sourceId === "python-chess.recorded.pressure")!;
 const position = (fen: string) => Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
@@ -81,7 +83,7 @@ describe("D3717 independent recorded bishop harassment pressure", () => {
 
   it("retains every canonical predecessor byte and registers exactly eighteen new cases", () => {
     const added = new Set(source.cases.map(row => row.proposition.case.id));
-    const prior = raw.cases.filter(row => !added.has(row.id as string) && !BOUNDED_TARGET_CITED_SOURCE.cases.some(value => value.proposition.case.id === row.id));
+    const prior = raw.cases.filter(row => !added.has(row.id as string) && !EXPOSURE_V2_CITED_SOURCE.cases.some(value => value.proposition.case.id === row.id) && !MATERIAL_V2_CITED_SOURCE.cases.some(value => value.proposition.case.id === row.id) && !BOUNDED_TARGET_CITED_SOURCE.cases.some(value => value.proposition.case.id === row.id));
     expect(prior).toHaveLength(289);
     expect(evidenceDigest(prior)).toBe("961d7271b56f50a74bf4da58f20f3c16495688635a3a3a15ed6499bbf6ef82c9");
     expect(raw.cases.filter(row => added.has(row.id as string))).toHaveLength(18);

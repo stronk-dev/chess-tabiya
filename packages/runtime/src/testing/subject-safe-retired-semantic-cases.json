@@ -1,0 +1,3700 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "cited.python-chess.slider_ray.isolated-push.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/P7/7K w - - 7 1",
+        "moveUci": "a2a3",
+        "afterFen": "7k/8/8/8/8/P7/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.slider_ray",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "eede5bd2934cc987f56a59d2191912385b5cac92fa792867b5bfd3906c2e1cee"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.isolated-push.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/p7/8/8/8/8/8/7K b - - 7 1",
+        "moveUci": "a7a6",
+        "afterFen": "7k/8/p7/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.slider_ray",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 280,
+          "textSha256": "961fa44a97ff432716a83f100b1b12e6812b865012f287738832a035076b7898"
+        },
+        "propositionSha256": "1980f296bcbfee0468b0093e882dbf46bea27dd300f9533fa47b6502ccdb369a"
+      }
+    },
+    {
+      "id": "structural.b-pawn-double.islands",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.pawn_islands",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/PP1P4/4K3 w - - 0 1",
+        "moveUci": "b2b4",
+        "afterFen": "4k3/8/8/8/1P6/8/P2P4/4K3 b - - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.structural.event.pawn_islands",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits pawn-island and mover-relative loose-piece events through the compiled path",
+        "sourceSha256": "434f688d433a5e5ee0e1c366b8082d36f6f6b899239a4617d1b28f580260948a",
+        "frozenExpectationSha256": "c03be587c0bf39bc9c96f241e5d846715a06dace13db8fd3bd63cb7664d73898"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "preserved"
+      }
+    },
+    {
+      "id": "local.french-exchange.blockers-lost",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.line_blockers",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+        "moveUci": "d4c5",
+        "afterFen": "rnbqkbnr/pp2pppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR b KQkq - 0 4"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.structural.event.line_blockers",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#pins five legal positives through the local emitter boundary",
+        "sourceSha256": "eb0ce2c1a248a5abcc00f998aa848c61f2f123772a8a044bdda55e8c3ff3fc49",
+        "frozenExpectationSha256": "aa34f2e5b754594f10dd39385671d8a9ba12d70f5b9dc96034ebe8ac685cb534"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "lost"
+      }
+    },
+    {
+      "id": "local.bare-kings.no-blockers",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.line_blockers",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+        "moveUci": "e1d1",
+        "afterFen": "4k3/8/8/8/8/8/8/3K4 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "NEGATIVE:rules.structural.event.line_blockers",
+        "testSite": "tools/d1714-authority-empty-harness/authority-empty.test.ts#reaches nearby legal local-emitter negatives without corrupting an operand",
+        "sourceSha256": "03684eaeee587d7e6e7b60df65152593ad0218a8deb34daac44c71a7416353d4",
+        "frozenExpectationSha256": "016eac04cc6c9a0c3c5957ebf2c6767d84eca1891f9aa4c82f6896dc9eacbf3b"
+      },
+      "expectation": {
+        "kind": "omits"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.gained.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/8/R1P5/7K w - - 7 1",
+        "moveUci": "c2c3",
+        "afterFen": "7k/8/8/8/8/2P5/R7/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "subject": {
+            "slider": "a2",
+            "color": "white",
+            "role": "rook",
+            "endpoint": "h2"
+          },
+          "sign": "gained",
+          "targets_before": [
+            "c2"
+          ],
+          "targets_after": []
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.contact-transitions",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 564,
+          "textSha256": "6ef3e53aa5ec0ec2ad4ceff2259a443c2d52ec993cf113b5740471b65e292b27"
+        },
+        "propositionSha256": "93389494529e59f9271a665679c1e765d77677a9c35a62f82d218f63e150d755"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.gained.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/r1p5/8/8/8/8/8/7K b - - 7 1",
+        "moveUci": "c7c6",
+        "afterFen": "7k/r7/2p5/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "subject": {
+            "slider": "a7",
+            "color": "black",
+            "role": "rook",
+            "endpoint": "h7"
+          },
+          "sign": "gained",
+          "targets_before": [
+            "c7"
+          ],
+          "targets_after": []
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.contact-transitions",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 564,
+          "textSha256": "6ef3e53aa5ec0ec2ad4ceff2259a443c2d52ec993cf113b5740471b65e292b27"
+        },
+        "propositionSha256": "ca573b744f521f066a2eeb73ab771b241c7894b9f9a41b08692c3f54234e5454"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.lost.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/R7/2P5/7K w - - 7 1",
+        "moveUci": "c2c3",
+        "afterFen": "7k/8/8/8/8/R1P5/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "subject": {
+            "slider": "a3",
+            "color": "white",
+            "role": "rook",
+            "endpoint": "h3"
+          },
+          "sign": "lost",
+          "targets_before": [],
+          "targets_after": [
+            "c3"
+          ]
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.contact-transitions",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 564,
+          "textSha256": "6ef3e53aa5ec0ec2ad4ceff2259a443c2d52ec993cf113b5740471b65e292b27"
+        },
+        "propositionSha256": "287277fbf78dd44e42264f05e6b7197a8fb190dd9508bfceccf2306dc1f067c4"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.lost.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/2p5/r7/8/8/8/8/7K b - - 7 1",
+        "moveUci": "c7c6",
+        "afterFen": "7k/8/r1p5/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "subject": {
+            "slider": "a6",
+            "color": "black",
+            "role": "rook",
+            "endpoint": "h6"
+          },
+          "sign": "lost",
+          "targets_before": [],
+          "targets_after": [
+            "c6"
+          ]
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.contact-transitions",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 564,
+          "textSha256": "6ef3e53aa5ec0ec2ad4ceff2259a443c2d52ec993cf113b5740471b65e292b27"
+        },
+        "propositionSha256": "f3f673c7ec52dd9c1482b06b07c69ede438d1c46a0e4ed56958c771981d70e8d"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.populated-negative.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/1P6/R1P5/7K w - - 7 1",
+        "moveUci": "b3b4",
+        "afterFen": "7k/8/8/8/1P6/8/R1P5/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.contact-transitions",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 564,
+          "textSha256": "6ef3e53aa5ec0ec2ad4ceff2259a443c2d52ec993cf113b5740471b65e292b27"
+        },
+        "propositionSha256": "75effbcab09816445f6b7548cb720ccad05f938305c7310683d57fac3e7c5e35"
+      }
+    },
+    {
+      "id": "cited.python-chess.slider_ray.populated-negative.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.transition_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/r1p5/1p6/8/8/8/8/7K b - - 7 1",
+        "moveUci": "b6b5",
+        "afterFen": "7k/r1p5/8/1p6/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.contact-transitions",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 564,
+          "textSha256": "6ef3e53aa5ec0ec2ad4ceff2259a443c2d52ec993cf113b5740471b65e292b27"
+        },
+        "propositionSha256": "46e15c034af619af725f9b1e7872b5c0ffd0ec6c543412d233af99a0ad2643ca"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.backward_pawn.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.backward_pawn",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "454c2b6dbc0bf3a741edaf44f334584d9780bfedf2b7a1e83b492cfffd07c623"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.backward_pawn.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.backward_pawn",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "910ef342a61d2493fccea11a21678fe9e29dff25f8685116ee5d2cd2ccd975d3"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.isolated_pawn.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.isolated_pawn",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "a8ba7cce3d16f3f72a0140dadc4dd3477fc5f1cb4f5f5026a200d011332bbb9c"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.isolated_pawn.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.isolated_pawn",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "166099e48e36e44838d2cb6c24dff5ea54c5cbed382cea24670c4404b779567b"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.doubled_pawn.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.doubled_pawn",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "db3d4ee68b91f1bb9735ab292451e425ccbffa312734b4982aaab047ea8dd0ab"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.doubled_pawn.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.doubled_pawn",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "9221e994fea8974c86541efc51d96a03c6e5cd021493ab026d0a69f2bef81013"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.open_file.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.open_file",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "65d85962d72ed8bf2c9e0d0870bca50ba1d2c0b4778d655825d4485b746fb2a3"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.open_file.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.open_file",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "1b7435264fb2338e31265e2b40d26abff8a39fe7e02dd043eee7e8a88a009511"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.half_open_file.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.half_open_file",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "966a7a500590e39578d68217fa545ea37145854f04cb43fdbaa93e87746cbc26"
+      }
+    },
+    {
+      "id": "cited.python-chess.pawn-absence.half_open_file.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "semantic_negative",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/pppppppp/8/8/8/8/PPPPPPPP/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/pppppppp/8/8/8/8/PPPPPPPP/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "omits"
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "python-chess.pawn-absence.half_open_file",
+        "sourceRevision": "3516d7c6c0879af724c2855fac5a304a4ef40949",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 162,
+          "textSha256": "efd23fc6ee534cf427f5bc7ebf310bdff4c6e934dd6f008c53058f3c64ebcb8c"
+        },
+        "propositionSha256": "e11959e0fe2775b2f878a28a6f8bd07004409fcaa59c0c6e2be03abcc2378229"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.backward_pawn.gained.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/p7/1N6/3P4/2P5/8/7K b - - 7 1",
+        "moveUci": "a6b5",
+        "afterFen": "7k/8/8/1p6/3P4/2P5/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "backward_pawn",
+          "before": null,
+          "after": {
+            "kind": "backward_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "ae0a59a1d0a079a55e3f3e88193152bec6bd01078f7d96a46f06d5477c78754e"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.backward_pawn.gained.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/3p4/1n6/P7/8/7K w - - 7 1",
+        "moveUci": "a3b4",
+        "afterFen": "7k/8/2p5/3p4/1P6/8/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "backward_pawn",
+          "before": null,
+          "after": {
+            "kind": "backward_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "1f51c479f1f117647374dbd604fd458fc2a7f37b77b45d39610d3efa3d0a33de"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.backward_pawn.lost.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/1p6/3P4/N1P5/8/7K w - - 7 1",
+        "moveUci": "a3b5",
+        "afterFen": "7k/8/8/1N6/3P4/2P5/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "backward_pawn",
+          "before": {
+            "kind": "backward_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "92cf7c49beed0207fae18c29f38eafc68bb9669ab1e1a6a828758df3df014317"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.backward_pawn.lost.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/n1p5/3p4/1P6/8/8/7K b - - 7 1",
+        "moveUci": "a6b4",
+        "afterFen": "7k/8/2p5/3p4/1n6/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "backward_pawn",
+          "before": {
+            "kind": "backward_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "c9a22caa7bb5f874f4385873c7186b899f6afa05060dd3f3a3727b83bfdf3706"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.backward_pawn.preserved.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/1p6/3P4/2P5/8/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/8/8/1p6/3P4/2P5/8/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "backward_pawn",
+          "before": {
+            "kind": "backward_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "backward_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "3614b2cd8a83cb7bc99898762b670a38a730d1abfc20bcd60af686ffd31e1177"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.backward_pawn.preserved.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/3p4/1P6/8/8/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/8/2p5/3p4/1P6/8/8/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "backward_pawn",
+          "before": {
+            "kind": "backward_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "backward_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "5d2e65364e1949409d309a4094fd36fc782ade9c965025afbbb2e9cc80251820"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.isolated_pawn.gained.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/4p3/3P4/2P5/8/7K w - - 7 1",
+        "moveUci": "d4e5",
+        "afterFen": "7k/8/8/4P3/8/2P5/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "isolated_pawn",
+          "before": null,
+          "after": {
+            "kind": "isolated_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "54bc1285f0b0ff3df67d9143a431eaa6874e343209131f159b6794f60885d232"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.isolated_pawn.gained.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/3p4/4P3/8/8/7K b - - 7 1",
+        "moveUci": "d5e4",
+        "afterFen": "7k/8/2p5/8/4p3/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "isolated_pawn",
+          "before": null,
+          "after": {
+            "kind": "isolated_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "1a44f689831ad8b5f81014825a031314c8cc8ae043520cfe30c51fdeadb4f45e"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.isolated_pawn.lost.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/2Pn4/4P3/7K w - - 7 1",
+        "moveUci": "e2d3",
+        "afterFen": "7k/8/8/8/8/2PP4/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "isolated_pawn",
+          "before": {
+            "kind": "isolated_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "0f8ad1467a979713847a596fd6a2dccefccf2cd32ca9bd89886008066520863b"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.isolated_pawn.lost.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/4p3/2pN4/8/8/8/8/7K b - - 7 1",
+        "moveUci": "e7d6",
+        "afterFen": "7k/8/2pp4/8/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "isolated_pawn",
+          "before": {
+            "kind": "isolated_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "bd9e59f4aad34240c164cf622fb0e7e18de119e07fd9ed4ebb678126358af7cf"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.isolated_pawn.preserved.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/2P5/8/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/8/8/8/8/2P5/8/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "isolated_pawn",
+          "before": {
+            "kind": "isolated_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "isolated_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "70fe6bcfc8689a1a9acf7d71ecb0a01533f20765bec9794cf2f7361bd2efb707"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.isolated_pawn.preserved.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/8/8/8/8/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/8/2p5/8/8/8/8/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "isolated_pawn",
+          "before": {
+            "kind": "isolated_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "isolated_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "79bf923c210bc7d5e77cc093e5819b669e61da4bcb34242a99fec606ec6f21ae"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.doubled_pawn.gained.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/2n5/2PP4/8/7K w - - 7 1",
+        "moveUci": "d3c4",
+        "afterFen": "7k/8/8/8/2P5/2P5/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "doubled_pawn",
+          "before": null,
+          "after": {
+            "kind": "doubled_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "13494f3c4b95652b8fd6f318eaab19c69d3da08e752b9bfed49cc87f04c69c33"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.doubled_pawn.gained.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2pp4/2N5/8/8/8/7K b - - 7 1",
+        "moveUci": "d6c5",
+        "afterFen": "7k/8/2p5/2p5/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "doubled_pawn",
+          "before": null,
+          "after": {
+            "kind": "doubled_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "4d56e5e97a99caa816a8fc9849ec1aee854afac804547f1fcaf5f5af1ddd111d"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.doubled_pawn.lost.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/3b4/2P5/2P5/8/7K w - - 7 1",
+        "moveUci": "c4d5",
+        "afterFen": "7k/8/8/3P4/8/2P5/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "doubled_pawn",
+          "before": {
+            "kind": "doubled_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "bb7ce611e5b39a828132e9bb06b2fc6eef1ed17ab2af71abc3bedb5b964b2d2b"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.doubled_pawn.lost.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/2p5/3B4/8/8/7K b - - 7 1",
+        "moveUci": "c5d4",
+        "afterFen": "7k/8/2p5/8/3p4/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "doubled_pawn",
+          "before": {
+            "kind": "doubled_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "5fdc30b027208a4f72bd359a7b69ffca5071e81ed9951776ee2a30e53e184258"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.doubled_pawn.preserved.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/2P5/2P5/8/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/8/8/8/2P5/2P5/8/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "doubled_pawn",
+          "before": {
+            "kind": "doubled_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "doubled_pawn",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "165d69a6a70362fa264455b77281471b91668ceea3b81c9b1acc7a3c567a2033"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.doubled_pawn.preserved.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/2p5/8/8/8/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/8/2p5/2p5/8/8/8/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "doubled_pawn",
+          "before": {
+            "kind": "doubled_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "doubled_pawn",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "277628d8a719d253bb1930d7876fb5834c37f21730fd4a57d63a13cd0d7249c7"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.open_file.gained.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/3n4/2P5/8/7K w - - 7 1",
+        "moveUci": "c3d4",
+        "afterFen": "7k/8/8/8/3P4/8/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "open_file",
+          "before": null,
+          "after": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "f483e942c5f3ce52f297e759abc78020658a6657cd1eb9b7b6647dc62d4f7156"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.open_file.gained.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/3N4/8/8/8/7K b - - 7 1",
+        "moveUci": "c6d5",
+        "afterFen": "7k/8/8/3p4/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "open_file",
+          "before": null,
+          "after": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "53bf2a5d9de9de84daae9411d83e3fd1373dd90dc892baa72bb860d0010c9f09"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.open_file.lost.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/2n5/3P4/8/7K w - - 7 1",
+        "moveUci": "d3c4",
+        "afterFen": "7k/8/8/8/2P5/8/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "open_file",
+          "before": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "45fdc226168838cec5ee57fdda3678ef630527476b7a7e7caddabbcaafdeac97"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.open_file.lost.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/3p4/2N5/8/8/8/7K b - - 7 1",
+        "moveUci": "d6c5",
+        "afterFen": "7k/8/8/2p5/8/8/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "open_file",
+          "before": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "61156d5bc4edb4e8a6f6b44560a7dd60ac7b0397a8eefee204c7448329dff9b8"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.open_file.preserved.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/3p4/8/8/3P4/8/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/8/3p4/8/8/3P4/8/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "open_file",
+          "before": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "69c273f7407b3ad6aaa3dd790214b1d7caa5935057b15260579304d7ffb356c7"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.open_file.preserved.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/3p4/8/8/3P4/8/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/8/3p4/8/8/3P4/8/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "open_file",
+          "before": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "open_file",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "5894ca0bb39684c33d047d52cbff86a231351029765ccc2d01fb2df749b46535"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.half_open_file.gained.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/8/3n4/2P5/8/7K w - - 7 1",
+        "moveUci": "c3d4",
+        "afterFen": "7k/8/2p5/8/3P4/8/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "half_open_file",
+          "before": null,
+          "after": {
+            "kind": "half_open_file",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "ffbcd9f13f01b76a2acb5a2e8895a0e7a171964da1e860033ed5f1edd4fffe02"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.half_open_file.gained.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/3N4/8/2P5/8/7K b - - 7 1",
+        "moveUci": "c6d5",
+        "afterFen": "7k/8/8/3p4/8/2P5/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "half_open_file",
+          "before": null,
+          "after": {
+            "kind": "half_open_file",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "a427f4207f81ac52f07c9732aeba216b9826a04a848d5abc02943df36cccf263"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.half_open_file.lost.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/8/2n5/3P4/8/7K w - - 7 1",
+        "moveUci": "d3c4",
+        "afterFen": "7k/8/2p5/8/2P5/8/8/7K b - - 0 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "half_open_file",
+          "before": {
+            "kind": "half_open_file",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "287f7ea1d1f782004bc8d006e2552006be63063a8598acf5aaed9d37aa9dfce5"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.half_open_file.lost.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/3p4/2N5/8/2P5/8/7K b - - 7 1",
+        "moveUci": "d6c5",
+        "afterFen": "7k/8/8/2p5/8/2P5/8/7K w - - 0 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "half_open_file",
+          "before": {
+            "kind": "half_open_file",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": null
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "68e23fd6ac057a16fb90ad8e98c1726bda52b700cad2277dc7d1b04efb755f70"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.half_open_file.preserved.white",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/2p5/8/8/8/8/7K w - - 7 1",
+        "moveUci": "h1g1",
+        "afterFen": "7k/8/2p5/8/8/8/8/6K1 b - - 8 1"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "half_open_file",
+          "before": {
+            "kind": "half_open_file",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "half_open_file",
+            "color": "white",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "587fd3440715a456f0c28a8f45606b53caeeb53f3bdff9f37193e06ba94927ba"
+      }
+    },
+    {
+      "id": "cited.stockfish.pawn-files.half_open_file.preserved.black",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "7k/8/8/8/8/2P5/8/7K b - - 7 1",
+        "moveUci": "h8g8",
+        "afterFen": "6k1/8/8/8/8/2P5/8/7K w - - 8 2"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "operandMatch": {
+          "family": "half_open_file",
+          "before": {
+            "kind": "half_open_file",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          },
+          "after": {
+            "kind": "half_open_file",
+            "color": "black",
+            "file": "c",
+            "squares": []
+          }
+        }
+      },
+      "authority": {
+        "kind": "cited_proposition",
+        "sourceId": "stockfish.pawn-files",
+        "sourceRevision": "e6e324eb28fd49c1fc44b3b65784f85a773ec61c",
+        "licence": "GPL-3.0-or-later",
+        "span": {
+          "start": 0,
+          "end": 726,
+          "textSha256": "c7841360bfe30bf44daa006c2a4ab535484d3789894865f6dfa3d3de6d889e9a"
+        },
+        "propositionSha256": "10c5f660a9ed0bb44c4dc78703e96dbfbbc269132a815b3aa21334dbab1a027d"
+      }
+    }
+  ],
+  "originalIndices": [
+    48,
+    49,
+    103,
+    104,
+    133,
+    152,
+    153,
+    154,
+    155,
+    164,
+    165,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215
+  ],
+  "profiles": [
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.backward_pawn.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.backward_pawn.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.backward_pawn.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.backward_pawn.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.backward_pawn.preserved.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.backward_pawn.preserved.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.backward_pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.backward_pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.1cb6ff2f33c3a9dc",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.backward_pawn",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.doubled_pawn.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.doubled_pawn.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.doubled_pawn.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.doubled_pawn.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.doubled_pawn.preserved.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.doubled_pawn.preserved.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.doubled_pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.doubled_pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.2b07823cefbc89d3",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.doubled_pawn",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.half_open_file.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.half_open_file.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.half_open_file.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.half_open_file.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.half_open_file.preserved.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.half_open_file.preserved.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.half_open_file.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.half_open_file.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.db44c7a5f6108d05",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.half_open_file",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.isolated_pawn.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.isolated_pawn.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.isolated_pawn.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.isolated_pawn.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.isolated_pawn.preserved.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.isolated_pawn.preserved.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.isolated_pawn.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.isolated_pawn.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.829fa6115d1c1e60",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.isolated_pawn",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.king_opposition",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "required",
+        "owner": "D1717",
+        "discharge": "blocker-blind king opposition successor (semantic-validation D2): distant opposition ignores occupied intervening squares"
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "D1717",
+        "discharge": "blocker-blind king opposition successor (semantic-validation D2): distant opposition ignores occupied intervening squares"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "D1717",
+        "discharge": "blocker-blind king opposition successor (semantic-validation D2): distant opposition ignores occupied intervening squares"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "required",
+        "owner": "D1717",
+        "discharge": "blocker-blind king opposition successor (semantic-validation D2): distant opposition ignores occupied intervening squares"
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.line_blockers",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "local.french-exchange.blockers-lost",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.line_blockers",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "local.bare-kings.no-blockers",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.line_blockers",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.838944582d167420",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.line_blockers",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.open_file.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.open_file.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.open_file.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.open_file.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.open_file.preserved.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.stockfish.pawn-files.open_file.preserved.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.open_file.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.pawn-absence.open_file.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.3cfd842bf25ca64c",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.open_file",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.pawn_islands",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "structural.b-pawn-double.islands",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.pawn_islands",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "required",
+        "owner": "semantic-validation D4/D5",
+        "discharge": "a nearby legal input reaching the production operation that omits the exact event, with an independent authority"
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.50ebf1291fd64b7d",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.structural.event.pawn_islands",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    },
+    {
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
+      },
+      "positive": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.gained.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.gained.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.lost.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.lost.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "positive"
+          }
+        ]
+      },
+      "semanticNegative": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.isolated-push.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.isolated-push.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.populated-negative.white",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.python-chess.slider_ray.populated-negative.black",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
+      },
+      "orientation": {
+        "disposition": "required",
+        "owner": "semantic-validation D5",
+        "discharge": "a mirrored case pair with a total operand rule walk and an independent authority; no emitter-level orientation authority exists"
+      },
+      "counterfactual": {
+        "disposition": "not_applicable",
+        "reason": "literal_or_observed_event_makes_no_alternative_claim"
+      },
+      "importedPopulation": {
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "population_receipt",
+            "id": "r2-2026-07.f26a98c0a305b801",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "rules.transition.event.slider_ray",
+                "version": 1
+              }
+            },
+            "inputVersion": 1,
+            "resultVersion": 1
+          }
+        ]
+      },
+      "externalLabel": {
+        "disposition": "not_applicable",
+        "reason": "no_independent_external_taxonomy"
+      }
+    }
+  ],
+  "populations": [
+    {
+      "id": "r2-2026-07.1cb6ff2f33c3a9dc",
+      "subject": "event:rules.structural.event.backward_pawn@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "a1896989c9c082b98fcb0b2d37af1cc00bbebed6fafed9329f2dd3aeb9fa958d",
+        "positiveCount": 273,
+        "abstainedCount": 0
+      }
+    },
+    {
+      "id": "r2-2026-07.2b07823cefbc89d3",
+      "subject": "event:rules.structural.event.doubled_pawn@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "8a9737ff57f7f68f532ff8d3d4fd9ca32e7ba04b60c303645050c88c368790f5",
+        "positiveCount": 195,
+        "abstainedCount": 0
+      }
+    },
+    {
+      "id": "r2-2026-07.db44c7a5f6108d05",
+      "subject": "event:rules.structural.event.half_open_file@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "121fbcf03c01db4e98d3984911ed6c3845c70683c044a6d2428607d01616bac8",
+        "positiveCount": 1001,
+        "abstainedCount": 0
+      }
+    },
+    {
+      "id": "r2-2026-07.829fa6115d1c1e60",
+      "subject": "event:rules.structural.event.isolated_pawn@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "db98a970dc7c6e7d972a1912dca6256b45e0c5f74dc1d389e68a4ddb76516b02",
+        "positiveCount": 383,
+        "abstainedCount": 0
+      }
+    },
+    {
+      "id": "r2-2026-07.838944582d167420",
+      "subject": "event:rules.structural.event.line_blockers@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "5f68216b063f10993df82e15ae9ff5a5677cab9b769408b292327e5877784f23",
+        "positiveCount": 15513,
+        "abstainedCount": 0
+      }
+    },
+    {
+      "id": "r2-2026-07.3cfd842bf25ca64c",
+      "subject": "event:rules.structural.event.open_file@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "812b45f2b1e955fcbb1d1a72117dff65f59c7e792ef387dfe233e2786c2196fc",
+        "positiveCount": 300,
+        "abstainedCount": 0
+      }
+    },
+    {
+      "id": "r2-2026-07.50ebf1291fd64b7d",
+      "subject": "event:rules.structural.event.pawn_islands@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "84b865036043d8d8db5a53ad8bd26dba7e77202aeccf4628a7b5c530ff623afe",
+        "positiveCount": 1158,
+        "abstainedCount": 0
+      }
+    },
+    {
+      "id": "r2-2026-07.f26a98c0a305b801",
+      "subject": "event:rules.transition.event.slider_ray@1",
+      "operation": "runtime.semantic.local_edge",
+      "predicateImplementationDigest": "f8b0bd9b41e58ee9cb0cb44b7015b69e767d0a4225c367aa555d7d6332dc8bfd",
+      "input": {
+        "id": "r2-imported-sample-2026-07",
+        "version": 1,
+        "projection": "sampled_edges",
+        "sha256": "66ad71208f707e991d897484988afed06e2008107f124645a96d80a44b3f5233",
+        "invocations": 579
+      },
+      "result": {
+        "version": 1,
+        "sha256": "20df02360efe9a44ef635617710a6dfaa113412ecde31de6936c5a3ae02fa966",
+        "positiveCount": 1168,
+        "abstainedCount": 0
+      }
+    }
+  ],
+  "assertionBodies": {
+    "packages/runtime/src/semantic-evidence.test.ts#emits pawn-island and mover-relative loose-piece events through the compiled path": "{\n    const pawnFen = \"4k3/8/8/8/8/8/PP1P4/4K3 w - - 0 1\";\n    const pawnAfter = after(pawnFen, \"b2b4\");\n    const islandEvents = pawnIslandSemanticEvents(pawnFen, \"b2b4\", pawnAfter);\n    expect(islandEvents.find((value) => value.operands.color === \"white\")).toMatchObject({\n      projection: { id: \"rules.structural.event.pawn_islands\" },\n      operands: { before: 2, after: 2 },\n      sign: \"preserved\",\n    });\n\n    const looseFen = \"4r1k1/8/8/8/8/8/3Q4/6K1 w - - 0 1\";\n    const loose = localSemanticEvents(looseFen, \"d2e2\", after(looseFen, \"d2e2\")).find((value) => value.projection.id === \"rules.tactic.event.loose_piece\");\n    expect(loose).toMatchObject({ sign: \"gained\", operands: { mover: { before: { square: \"d2\" }, after: { square: \"e2\" } } } });\n    expect(() => assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, loose)).not.toThrow();\n  }",
+    "tools/d1714-authority-empty-harness/authority-empty.test.ts#pins five legal positives through the local emitter boundary": "{\n    const wanted = AUTHORITY_EMPTY_IDS.filter((id) => !id.startsWith(\"derived.semantic_avoidance.\") && !id.includes(\"sequence.\"));\n    expect(new Set(LOCAL_FIXTURES.map((fixture) => fixture.id))).toEqual(new Set(wanted));\n    for (const fixture of LOCAL_FIXTURES) {\n      const afterFen = playedFen(fixture.beforeFen, fixture.moveUci);\n      expect(localSemanticEvents(fixture.beforeFen, fixture.moveUci, afterFen).some((event) => event.projection.id === fixture.id && event.sign === fixture.sign), fixture.id).toBe(true);\n    }\n  }",
+    "tools/d1714-authority-empty-harness/authority-empty.test.ts#reaches nearby legal local-emitter negatives without corrupting an operand": "{\n    const kingOnly = anchorsFromUci(\"4k3/8/8/8/8/8/8/4K3 w - - 0 1\", [\"e1d1\"])[0]!;\n    const openingPawn = anchorsFromUci(\"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1\", [\"e2e4\"])[0]!;\n    const remotePawn = anchorsFromUci(\"k7/8/8/8/8/8/4P3/K7 w - - 0 1\", [\"e2e3\"])[0]!;\n    const cases = [\n      { id: \"rules.structural.event.line_blockers\", edge: kingOnly },\n      { id: \"rules.transition.event.piece_escape\", edge: remotePawn },\n      { id: \"rules.transition.event.developed\", edge: openingPawn },\n      { id: \"derived.king.captured_zone_defender\", edge: kingOnly },\n    ] as const;\n    for (const value of cases) expect(localSemanticEvents(value.edge.beforeFen, value.edge.moveUci, value.edge.afterFen).some((event) => event.projection.id === value.id), value.id).toBe(false);\n  }"
+  },
+  "reanchoredCases": [
+    {
+      "id": "structural.initial-e4.piece-count",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.structural.event.piece_count",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.structural_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moveUci": "e2e4",
+        "afterFen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.structural.event.piece_count",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits identity-preserving structural relations while leaving raw readings independent",
+        "sourceSha256": "a96133c14d979fe358409b0d1f72db67fb122f792faad4a33d5b095ce0f2bf1d",
+        "frozenExpectationSha256": "0406f29d1aaf0f4497219bd517ed8af87c65eaf1a9c6301a46533cdf40b947be"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1
+      }
+    },
+    {
+      "id": "local.queen-steps-e2.loose",
+      "version": 1,
+      "subject": {
+        "kind": "event",
+        "projection": {
+          "id": "rules.tactic.event.loose_piece",
+          "version": 1
+        }
+      },
+      "arm": "positive",
+      "operation": {
+        "id": "runtime.semantic.local_edge",
+        "version": 1
+      },
+      "input": {
+        "kind": "edge",
+        "beforeFen": "4r1k1/8/8/8/8/8/3Q4/6K1 w - - 0 1",
+        "moveUci": "d2e2",
+        "afterFen": "4r1k1/8/8/8/8/8/4Q3/6K1 b - - 1 1"
+      },
+      "authority": {
+        "kind": "existing_assertion",
+        "matrixRow": "POSITIVE:rules.tactic.event.loose_piece",
+        "testSite": "packages/runtime/src/semantic-evidence.test.ts#emits pawn-island and mover-relative loose-piece events through the compiled path",
+        "sourceSha256": "434f688d433a5e5ee0e1c366b8082d36f6f6b899239a4617d1b28f580260948a",
+        "frozenExpectationSha256": "c5108562df35773b910df2306c16b09cec1c434a5fc385ba83b87f935d9712cc"
+      },
+      "expectation": {
+        "kind": "emits",
+        "minimum": 1,
+        "sign": "gained"
+      }
+    }
+  ]
+}

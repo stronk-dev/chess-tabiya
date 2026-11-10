@@ -1,3 +1,5 @@
+import { SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS } from "./semantic-validation.js";
+import { isFoundationDetailKind } from "./foundation-snapshot-detail.js";
 /**
  * The sole production mint boundary (rfc/evidence-value-authority.md §1–§2).
  *
@@ -10,16 +12,23 @@
  * `invokeEvidenceValueRoute` is the single dispatcher; `make evidence-value-authority` enforces
  * both edges. Nothing here is re-exported from the package barrel.
  */
-import { canonicalizeJson, STRUCTURAL_FEATURE_KINDS, type DrillPackDefinition, type StructuralFeature } from "@chess-tabiya/schema/drill-pack";
-import { normalizeMove } from "chessops/chess";
-import { parseSquare, parseUci } from "chessops/util";
+import { canonicalizeJson, STRUCTURAL_FEATURE_KINDS, assertLegacyStructuralExpression, assertStructuralConventionSelection, type StructuralConventionKind, type DrillPackDefinition, type StructuralFeature } from "@chess-tabiya/schema/drill-pack";
+import { castlingSide, normalizeMove } from "chessops/chess";
+import { kingCastlesTo, parseSquare, parseUci } from "chessops/util";
 import type { SquareName } from "chessops/types";
+import type { FoundationPositionTuple } from "./foundation-position-cells.js";
+import { candidatePlayedRow, readCandidateFoundationSources, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { computeSubjectOutcomes } from "./semantic-subject-outcomes.js";
+import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily, type SubjectOutcomePayload, type SubjectOutcomePopulationResult } from "./semantic-subject-types.js";
 
 import { sha256Hex } from "./assistance-exchange.js";
 import { castlingLegality, castlingRights, castlingRightsLost } from "./castling.js";
 import { parseCorpusResultAbstention } from "./corpus-result.js";
 import { isCompiledConceptRegistry, type CompiledConceptRegistry, type ConceptRef } from "./concept-registry.js";
 import { canonicalFen, positionFromFen } from "./position-cache.js";
+import { isRecordedClockSource, readRecordedClockSource, type RecordedClockSource } from "./recorded-clock-source.js";
+import { recordedClockUseOperands, type RecordedClockReading, type RecordedClockDecision } from "./recorded-clock-operands.js";
+import type { PhaseBandReadingV2 } from "./phase.js";
 import { recordedBranchFacts, type BranchComparison, type ComparisonEvidenceEntry, type ComparisonScore, type RecordedBranchFacts } from "./compare.js";
 import { endgameClassification } from "./endgame.js";
 import { endgameMethodConvention, replayEndgameMethod, type MethodStage } from "./endgame-method.js";
@@ -36,14 +45,19 @@ import {
   type ProjectionDeclaration,
   type VersionedEvidenceId,
 } from "./evidence-contract.js";
-import { directProjectionConventions } from "./evidence-convention-closure.js";
+import { directProjectionConventions, conventionReplacementSource } from "./evidence-convention-closure.js";
 import { computeComparisonReduction } from "./internal/comparison-reduction-authority.js";
 import { computeLastLevelReduction, type RecordedLastLevelValue } from "./internal/last-level-reduction-authority.js";
 import { computeOpeningHistoryReduction, type RecordedDeepestOpeningReached } from "./internal/opening-history-reduction-authority.js";
+import { readAuthoredStructuralConditionSource, type AuthoredStructuralConditionSource, type AuthoredStructuralSourceImage } from "./internal/authored-structural-source.js";
+import { readAuthoredPredicatePopulation, type AuthoredPredicatePopulation } from "./authored-predicate-population.js";
+import { computeAuthoredPredicateReduction } from "./internal/authored-predicate-reduction-authority.js";
+import { readRegisteredShapeScan, registeredShapeReceiptImage, type RegisteredShapeScan } from "./internal/registered-shape-scan.js";
 import { isRecordedOpeningHistorySource, type RecordedOpeningHistorySource } from "./recorded-opening-history.js";
 import { computeStoryRankReduction } from "./internal/story-rank-reduction-authority.js";
 import { readRecordedReviewMoments, type RecordedReviewMomentSource } from "./recorded-review-moments.js";
 import { readRecordedLastLevelPopulation, type RecordedLastLevelPopulation } from "./review-evidence.js";
+import { readRecordedAnalyzeLineSource, type RecordedAnalyzeArm, type RecordedAnalyzeLineSource, type AnalyzeLineOperands } from "./recorded-analyze-line.js";
 import { initiateEvidenceReduction, publishEvidenceReduction, publishSingleEvidenceReduction } from "./internal/evidence-reduction-seal.js";
 import { readComparisonStructuralPopulation, type RecordedComparisonStructuralPopulation, type ScopedStructuralObservationChange } from "./comparison-structural-population.js";
 import { COMPARISON_STRUCTURAL_ROUTES, type ComparisonStructuralRoute } from "./internal/comparison-structural-families.js";
@@ -51,12 +65,14 @@ import { conventionReceipt, type ConventionReceipt } from "./evidence-convention
 import { resolveEvidenceReference, type EvidenceReferenceResolution } from "./evidence-ref-resolution.js";
 import { resolveSourceAttribution, type SourceAttributionReceipt } from "./source-attribution.js";
 import { kingZoneEvents, kingZoneReading } from "./king-state.js";
-import { exactLegalMoveMap, exactMoveIdentity, type ExactLegalMove } from "./legal-moves.js";
+import { exactLegalMoveMap, exactMoveIdentity, type ExactLegalMove, type ExactLegalMoveMap } from "./legal-moves.js";
+import { STRUCTURAL_DETAIL_KINDS, structuralDetail, type StructuralDetailByKind, type StructuralDetailKind } from "./structural-reading-detail.js";
 import { materialRoleAsymmetryEvent, materialRoleSignatureReading } from "./material-state.js";
 import { MATERIAL_COUNT_SLOTS, assertMaterialCauses, materialSignatureValue, materialAsymmetryValue } from "./internal/material-sources.js";
 import { forcedMateAfterMove } from "./mate-proof.js";
-import { moveQualityGrade, type GradeContext, type GradeSide, type MoveQualityGrade } from "./grade.js";
-import { gradeReadingFromPayload } from "./grade-reading.js";
+import { moveQualityGrade, type MoveQualityGrade } from "./grade.js";
+import { recordedEventDigest } from "./internal/recorded-event-digest.js";
+import { isRecordedGradeSource, readRecordedGradeSource, type RecordedGradeSource } from "./recorded-grade-source.js";
 import { isInstalledOpeningCatalogue, type InstalledOpeningCatalogue, type CurrentOpeningEndpoint, type OpeningCatalogueMembership } from "./opening-catalogue.js";
 import { recordedOpeningLookup, readRecordedOpeningLookup, type RecordedOpeningLookup } from "./internal/recorded-opening-lookup.js";
 import { pieceDestinationEvents, pieceDestinationsReading } from "./mobility.js";
@@ -67,7 +83,6 @@ import { RECORDED_EDGE_FACTORY, recordedEdgePayload, type RecordedEdge } from ".
 import { isRecordedSequenceWindow, readRecordedSequenceWindow, recordedSequenceWindowOperands, recordedSequenceWindowInputs, recordedSequenceWindowValueAuthority, type RecordedSequenceWindow, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import { recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 import {
-  assertSemanticEvidenceEvent,
   attractionObservedOperands,
   recordedAttractionObservedOperands,
   checkZwischenzugObservedOperands,
@@ -78,7 +93,6 @@ import {
   deflectionObservedInduction,
   deflectionObservedOperands,
   interferenceObservedOperands,
-  legalAlternativeEdges,
   lineBlockerClearanceObservedOperands,
   recordedDeflectionObservedOperands,
   recordedLineBlockerClearanceObservedOperands,
@@ -92,11 +106,12 @@ import {
   recordedEdgeAnchors,
   structuralSemanticEventPayloads,
   transitionSemanticEventPayloads,
-  type CounterfactualAbsenceOperands,
-  type SemanticEvidenceEvent,
 } from "./semantic-evidence.js";
 import { shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
-import { squareControlEvents, squareControlReading } from "./square-control.js";
+import { readRegisteredShapeSource, registeredShapeRecordsImage, type RegisteredShapeSource } from "./registered-shape-source.js";
+import { squareControlEvents, squareControlReading, type SquareControlReading } from "./square-control.js";
+import { INSPECTOR_DETAIL_SOURCES, buildInspectorDetailPayload, parseInspectorDetailScope,
+  type InspectorDetailKind, type InspectorDetailPayload, type InspectorDetailSources, type InspectorDetailScope } from "./inspector-detail.js";
 import { defenderExposurePassFen, defenderExposureTarget, defenderExposureValue, type AvailableDefenderExposureOperands } from "./internal/defender-exposure.js";
 import { STORY_PIVOT_CP, rankStoryMoments, suggestTitle, type StoryMoment, type StoryTitleInput } from "./story.js";
 import {
@@ -115,7 +130,15 @@ import {
   type WhiteWdlPoint,
 } from "./review-points.js";
 import { evaluateStructuralPredicate } from "./structural-evidence.js";
-import { evaluateNamedStructureWithWitness, matchesStructuralExpression, pawnConnectivityReading, spaceReading, structuralReading, type StructuralReading } from "./structure.js";
+import { readPawnFileGroups, readFileStates, pawnFileGroupChanges, fileStateChanges, fileAccessRevealed, readPawnIslandChanges, type FileStateChange } from "./foundation-pawn-sources.js";
+import { readUnobstructedOpposition, readBackwardPawns, oppositionChanges, backwardPawnChanges, readFutureFileChallenges, readCaptureMigrationReach, readOutpostCandidates, readOccupiedOutposts, type FutureFileSnapshot, type OutpostCandidateSnapshot } from "./foundation-position-sources.js";
+import { sliderMembershipChanges, readPhysicalSliderRays, type PhysicalSliderRaySnapshot } from "./foundation-slider-sources.js";
+import { readMoverPieceRisk, type MoverPieceRiskInput, type MoverPieceRiskSnapshot } from "./foundation-risk-sources.js";
+import type { BackwardPawnSnapshot, BackwardPawnSubject } from "./foundation-position-sources.js";
+import { readCandidateRole, readPawnExtendedCenterDestination, readFianchettoSetups, readFianchettoScreens, readEarlyQueenCandidate, readFirstDecisionCastling, type CandidateRoleReading, type FianchettoSetupSnapshot, type FirstDecisionCastling } from "./foundation-style-sources.js";
+import { isFoundationRecordedPrefix, isFoundationRecordedDecision, isFoundationClaimedChoiceDecision, isFoundationEarlyQueenDecision, readFoundationRecordedPrefix, readFoundationRecordedDecision, readFoundationClaimedChoiceDecision, readFoundationEarlyQueenDecision, type FoundationRecordedPrefix, type FoundationEarlyQueenDecision } from "./recorded-foundation-source.js";
+import { matchingUnobstructedOpposition, matchingBackwardPawns, matchingOutpostCandidates, type SelectedStructuralFeature } from "./foundation-predicate-leaves.js";
+import { evaluateNamedStructureWithWitness, matchesStructuralExpression, pawnConnectivityReading, spaceReading, structuralReading, type StructuralReading, type PawnConnectivityReading } from "./structure.js";
 import {
   backRankReading,
   checkEvent,
@@ -178,16 +201,17 @@ import { recordedComparisonEvalDeltaValue, type RecordedCompareEvalDeltaInput } 
 import { isRecordedComparisonPointSource, readRecordedComparisonPointSource, type RecordedComparisonPointSource, type RecordedComparisonEnginePoint } from "./recorded-comparison-point.js";
 import { isRecordedReviewBoundary, readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
 import type { DrillRun, EvidencePayload, Node, RunOutcome, SelectionEngineIdentity } from "./types.js";
-import { candidateCollectorResults, type CandidateFeatureInput, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 import { assertProviderDelivery, assertProviderLocalDomainResult } from "./provider-exchange.js";
 import { providerProtocolRow, providerProtocolSourceBinding } from "./provider-protocol.js";
 import { CORPUS_GUARD } from "./population-guard.js";
 import type { ExplorerPopulationSummary, ExplorerPositionFrequency, ExplorerInspectorPopulation } from "./explorer-summary.js";
 import type { ExplorerRepertoireFrontier } from "./explorer-frontier.js";
 import { maiaExactFenOccurrencePayload, maiaRunOccurrencePayload, type MaiaExactFenMoveOccurrence, type MaiaOccurrencePageEvidence, type MaiaRunMoveOccurrence } from "./maia-occurrence.js";
+import type { MaiaNodeInputs, MaiaNodeDistribution, MaiaNodeCandidateWdl } from "./maia-node.js";
+import { resolveBranchPath } from "./branch-path.js";
 import { assertResolvedRunSubject, type ResolvedRunSubject } from "./run-subject.js";
 import type { RunEvidenceItemDigest } from "./run-subject.js";
-import type { EvidenceKind } from "./types.js";
+import type { EvidenceKind, ObjectiveState, ObjectiveStateChangedEvent } from "./types.js";
 import { isRecordedInspectorNode, recordedInspectorPacketValue, recordedInspectorSelectionValue, recordedInspectorCategoryValue, recordedInspectorDistanceValue, type RecordedInspectorPacket, type RecordedInspectorSelection } from "./recorded-inspector.js";
 import type { ExplorerPositionPage } from "./provider-types.js";
 import type { FixedBoundPrincipalVariation, ProviderDelivery, ProviderEvidenceDelivery, ProviderLocalDomainResult, ProviderOperationId, ProviderOperationResultMap } from "./provider-types.js";
@@ -206,7 +230,6 @@ export type EvidenceInputSpec =
   | { readonly kind: "edge" }
   | { readonly kind: "sealed"; readonly routes: readonly string[] }
   | { readonly kind: "sealed_list"; readonly routes: readonly string[]; readonly min: number; readonly max: number | null }
-  | { readonly kind: "semantic_events"; readonly min: number }
   | { readonly kind: "run" }
   | { readonly kind: "comparison" }
   | { readonly kind: "value"; readonly label: string; readonly accepts: (value: unknown) => boolean };
@@ -267,6 +290,12 @@ const optional = <T extends EvidenceInputSpec>(spec: T): T & { readonly optional
 const isText = (candidate: unknown): candidate is string => typeof candidate === "string" && candidate.trim() !== "";
 const isRecord = (candidate: unknown): candidate is Readonly<Record<string, unknown>> => typeof candidate === "object" && candidate !== null && !Array.isArray(candidate);
 const hasExactKeys = (candidate: unknown, keys: readonly string[]): boolean => isRecord(candidate) && Object.keys(candidate).length === keys.length && keys.every((key) => key in candidate);
+const hasExactOwnDataKeys = (candidate: unknown, keys: readonly string[]): boolean => {
+  if (!isRecord(candidate) || ![Object.prototype, null].includes(Object.getPrototypeOf(candidate))) return false;
+  const own = Reflect.ownKeys(candidate);
+  return own.length === keys.length && own.every(key => typeof key === "string" && keys.includes(key)
+    && Object.hasOwn(Object.getOwnPropertyDescriptor(candidate, key)!, "value"));
+};
 
 const EDGE_CACHE = new Map<string, EvidenceEdge>();
 const MEMO = new Map<string, unknown>();
@@ -348,11 +377,7 @@ export function admitInputValue(spec: EvidenceInputSpec, candidate: unknown): st
         }
         return undefined;
       }
-      case "semantic_events": {
-        if (!Array.isArray(candidate) || candidate.length < spec.min) return "is not a non-empty semantic-event list";
-        for (const item of candidate) assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, item);
-        return undefined;
-      }
+
       case "value": return spec.accepts(candidate) ? undefined : `is not ${spec.label}`;
       default: { const exhaustive: never = spec; return `has unknown spec ${String(exhaustive)}`; }
     }
@@ -378,10 +403,14 @@ function projectionFor(route: string): ProjectionDeclaration {
 function authorityShape(candidate: unknown): unknown {
   if (candidate === null || typeof candidate !== "object") return candidate;
   if (Array.isArray(candidate)) return candidate.map(authorityShape);
+  if (isFoundationRecordedPrefix(candidate)) return readFoundationRecordedPrefix(candidate).authority;
+  if (isFoundationRecordedDecision(candidate)) return readFoundationRecordedDecision(candidate).authority;
+  if (isFoundationClaimedChoiceDecision(candidate)) return readFoundationClaimedChoiceDecision(candidate).authority;
   if (isRecordedSequenceWindow(candidate)) return readRecordedSequenceWindow(candidate).authority;
   if (isRecordedPivotalSource(candidate)) return recordedPivotalData(candidate).authority;
   if (isRecordedComparisonSource(candidate)) return recordedComparisonData(candidate).authority;
   if (isRecordedComparisonPointSource(candidate)) return readRecordedComparisonPointSource(candidate).authority;
+  if (isRecordedGradeSource(candidate)) return readRecordedGradeSource(candidate).authority;
   if (isRecordedReviewBoundary(candidate)) return readRecordedReviewBoundary(candidate);
   if (isRun(candidate)) return { run: candidate.id, nodes: candidate.nodes.length, events: candidate.events.length };
   if (candidate instanceof Map) return { map: [...candidate].map(([key, entry]) => [key, authorityShape(entry)]) };
@@ -487,10 +516,62 @@ function mintConventionReceipt(route: string, sources: readonly (DeclaredEvidenc
  * payload instance selected (a setup or method convention ref); unregistered refs fail the receipt.
  */
 const REVIEW_MEMBER_INPUTS = new WeakMap<object, readonly DeclaredEvidence<unknown>[]>();
+/** Actual reading factory membership, not a caller-supplied factory name or digest list. */
+const FOUNDATION_VALUE_INPUTS = new WeakMap<object, readonly DeclaredEvidence<unknown>[]>();
+const LANDING_CAPTURE_INPUTS = new WeakMap<object, Readonly<{ fen: string; landingSquare: SquareName }>>();
 const REVIEW_MEMBER_ROUTES = new Set(["derived.review.eval_point@1", "derived.review.eval_delta@2", "derived.review.mate_transition@2",
   "derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@2", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2"]);
 type LocalReadingInvocation = Readonly<{ kind: "fen"; fen: string }> | Readonly<{ kind: "edge"; edge: EvidenceEdge }>;
-const LOCAL_READING_INVOCATIONS = new WeakMap<object, LocalReadingInvocation>();
+export type MoverPieceRiskFactoryResult =
+  | { readonly kind: "available"; readonly value: DeclaredEvidence<MoverPieceRiskSnapshot> }
+  | { readonly kind: "unavailable"; readonly reason: "invalid_turn_clone" };
+type TotalRayInvocation = Readonly<{ kind: "total_ray"; position: DeclaredEvidence<ExactLegalMoveMap> }>;
+type TotalRiskInvocation = Readonly<MoverPieceRiskInput & { kind: "total_risk"; result: MoverPieceRiskFactoryResult }>;
+export interface SubjectOutcomeFactoryInput {
+  readonly receipt: CandidatePopulationReceipt<CandidateWideScope>;
+  readonly moveUci: string;
+}
+export type SubjectOutcomeFactoryResult<F extends SubjectOutcomeFamily> =
+  | { readonly kind: "available"; readonly values: readonly DeclaredEvidence<SubjectOutcomePayload<F>>[] }
+  | { readonly kind: "unavailable"; readonly reason: "counterfactual_population_incomplete" };
+type SubjectOutcomeInvocation = Readonly<SubjectOutcomeFactoryInput & {
+  kind: "subject_outcomes"; family: SubjectOutcomeFamily; edge: EvidenceEdge;
+  inputs: readonly DeclaredEvidence<unknown>[]; result: SubjectOutcomeFactoryResult<SubjectOutcomeFamily>;
+  population: SubjectOutcomePopulationResult<SubjectOutcomeFamily>;
+}>;
+const LOCAL_READING_INVOCATIONS = new WeakMap<object, LocalReadingInvocation | TotalRayInvocation | TotalRiskInvocation | SubjectOutcomeInvocation>();
+
+/** Exact thirteen-family original invocation. Copied results/values have no membership. */
+export function readSubjectOutcomeInvocation(value: DeclaredEvidence<unknown> | SubjectOutcomeFactoryResult<SubjectOutcomeFamily>): SubjectOutcomeInvocation {
+  const original = LOCAL_READING_INVOCATIONS.get(value);
+  if (original?.kind !== "subject_outcomes" || !(original.result === value || original.result.kind === "available" && original.result.values.some(item => item === value))) {
+    throw new TypeError("Subject outcome requires its original factory value or complete result");
+  }
+  readCandidateFoundationSources(original.receipt);
+  const played = candidatePlayedRow(original.receipt, original.moveUci);
+  if (original.receipt.packet.compilerVersion !== 7 || played.afterFen !== original.edge.afterFen) throw new TypeError("Subject outcome lost its original compiler/played member");
+  if (original.result !== value) {
+    assertDeclaredEvidence(value);
+    const route = `derived.semantic_avoidance.${original.family}@2`, receipt = evidenceValueReceipt(value);
+    const saved = FOUNDATION_VALUE_INPUTS.get(value);
+    if (sealedRoute(value) !== route || receipt.factory !== evidenceFactorySymbol(route)
+      || saved?.length !== original.inputs.length || saved.some((item, index) => item !== original.inputs[index])
+      || receipt.sourceDigests.length !== saved.length || receipt.sourceDigests.some((digest, index) => digest !== evidenceValueReceipt(saved[index]!).payloadDigest)
+      || receipt.inputDigest !== authorityDigest({ packetId: original.receipt.packet.id, compilerVersion: 7, moveUci: original.moveUci, family: original.family })) {
+      throw new TypeError("Subject outcome lost its complete original ordered inputs");
+    }
+  }
+  return original;
+}
+/** Internal nonminting reader of the complete original table. A public event/result copy or
+ * another family's original result cannot authorize played-matching or empty population states. */
+export function readSubjectOutcomePopulation<F extends SubjectOutcomeFamily>(family: F, result: SubjectOutcomeFactoryResult<F>): SubjectOutcomePopulationResult<F> {
+  const original = readSubjectOutcomeInvocation(result);
+  if (original.result !== result || original.family !== family) throw new TypeError("Subject population requires its exact family's original complete result");
+  // Original invocation membership and the exact family check establish this dependent type.
+  return original.population as SubjectOutcomePopulationResult<F>;
+}
+
 /** Original input membership at the sole mint, never inferred from payload or source digests. */
 export function readReviewMemberInputs(value: DeclaredEvidence<unknown>): readonly DeclaredEvidence<unknown>[] {
   assertDeclaredEvidence(value);
@@ -502,12 +583,85 @@ export function readReviewMemberInputs(value: DeclaredEvidence<unknown>): readon
 export function readLocalReadingInvocation(value: DeclaredEvidence<unknown>): LocalReadingInvocation {
   assertDeclaredEvidence(value);
   const input = LOCAL_READING_INVOCATIONS.get(value);
-  if (input === undefined) throw new TypeError("Local reading lacks its original FEN/edge factory invocation");
+  if (input === undefined || input.kind !== "fen" && input.kind !== "edge") throw new TypeError("Local reading lacks its original FEN/edge factory invocation");
   const authority = input.kind === "fen" ? { fen: input.fen } : input.edge;
   if (evidenceValueReceipt(value).inputDigest !== authorityDigest(authority)) throw new TypeError("Local reading differs from its original literal factory input");
   return input;
 }
+
+/** Finite total-source readers reuse the existing factory stores; public bytes are not membership. */
+export function readPhysicalSliderRaysInvocation(value: DeclaredEvidence<PhysicalSliderRaySnapshot>) {
+  assertDeclaredEvidence(value);
+  const original = LOCAL_READING_INVOCATIONS.get(value), inputs = FOUNDATION_VALUE_INPUTS.get(value);
+  const route = "rules.transition.reading.physical_slider_rays@1", receipt = evidenceValueReceipt(value);
+  if (original?.kind !== "total_ray" || sealedRoute(value) !== route || receipt.factory !== evidenceFactorySymbol(route)
+    || inputs?.length !== 1 || inputs[0] !== original.position
+    || receipt.sourceDigests.length !== 1 || receipt.sourceDigests[0] !== evidenceValueReceipt(original.position).payloadDigest
+    || receipt.inputDigest !== authorityDigest({ position: original.position })) throw new TypeError("Total ray source lost its original position invocation");
+  assertPawnFoundationSource(original.position, "rules.mobility.reading.legal_moves@1");
+  return Object.freeze({ position: original.position, inputs });
+}
+
+export function readMoverPieceRiskInvocation(result: MoverPieceRiskFactoryResult) {
+  const original = LOCAL_READING_INVOCATIONS.get(result), inputs = FOUNDATION_VALUE_INPUTS.get(result);
+  if (original?.kind !== "total_risk" || original.result !== result || inputs?.length !== 2
+    || inputs[0] !== original.root || inputs[1] !== original.position) throw new TypeError("Risk result is not an original complete factory invocation");
+  assertPawnFoundationSource(original.root, "rules.mobility.reading.legal_moves@1");
+  assertPawnFoundationSource(original.position, "rules.mobility.reading.legal_moves@1");
+  if (result.kind === "available") {
+    assertDeclaredEvidence(result.value);
+    const route = "rules.tactic.reading.mover_piece_risk@1", receipt = evidenceValueReceipt(result.value);
+    const saved = FOUNDATION_VALUE_INPUTS.get(result.value);
+    if (sealedRoute(result.value) !== route || receipt.factory !== evidenceFactorySymbol(route)
+      || saved?.length !== 2 || saved.some((value, i) => value !== inputs[i])
+      || receipt.sourceDigests.length !== 2 || receipt.sourceDigests.some((value, i) => value !== evidenceValueReceipt(inputs[i]!).payloadDigest)
+      || receipt.inputDigest !== authorityDigest({ root: original.root, position: original.position, moveUci: original.moveUci })) {
+      throw new TypeError("Risk source lost its original ordered root/position inputs");
+    }
+  }
+  return Object.freeze({ root: original.root, position: original.position, moveUci: original.moveUci, inputs, result });
+}
+/** Value-authority §2.2b. Nonminting, exact-seven hand-off of the original factory inputs.
+ * For tuple factories membership is the construction proof: raw move spelling need not equal
+ * normalized payload spelling, so never reconstruct their original inputDigest authority. */
+export function readFoundationEventInvocation(value: DeclaredEvidence<unknown>): Readonly<{ edge: EvidenceEdge; inputs: readonly DeclaredEvidence<unknown>[] }> {
+  assertDeclaredEvidence(value);
+  const route = sealedRoute(value), receipt = evidenceValueReceipt(value);
+  if (!SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS.some(ref => `${ref.id}@${ref.version}` === route)
+    || receipt.factory !== evidenceFactorySymbol(route)) throw new TypeError("Foundation event requires its exact original source factory");
+  if (route === "rules.transition.event.slider_ray@2") {
+    const original = readLocalReadingInvocation(value);
+    if (original.kind !== "edge" || receipt.sourceDigests.length !== 0) throw new TypeError("Physical slider requires its original edge invocation");
+    return Object.freeze({ edge: original.edge, inputs: Object.freeze([]) });
+  }
+  const inputs = FOUNDATION_VALUE_INPUTS.get(value);
+  if (inputs === undefined || inputs.length !== receipt.sourceDigests.length
+    || inputs.some((input, i) => evidenceValueReceipt(input).payloadDigest !== receipt.sourceDigests[i])) throw new TypeError("Foundation event lost its original ordered factory inputs");
+  const payload = value.payload as EvidenceEdge;
+  return Object.freeze({ edge: Object.freeze({ beforeFen: payload.beforeFen, moveUci: payload.moveUci, afterFen: payload.afterFen }), inputs });
+}
+
+function assertFoundationReplacementInputs(route: string, authority: unknown, sources: readonly (DeclaredEvidence<unknown> | string)[]): void {
+  const required = conventionReplacementSource(route);
+  if (required === undefined) return;
+  const events = route.startsWith("rules.structural.event.");
+  if (!isRecord(authority) || sources.length !== (events ? 2 : 1)
+    || (events ? authority.before !== sources[0] || authority.after !== sources[1] : authority.source !== sources[0])) {
+    throw new TypeError(`Convention replacement requires its original ordered source inputs: ${route}`);
+  }
+  for (const source of sources) {
+    if (typeof source === "string") throw new TypeError(`Convention replacement refuses a source digest: ${route}`);
+    assertDeclaredEvidence(source);
+    const original = FOUNDATION_VALUE_INPUTS.get(source), receipt = evidenceValueReceipt(source);
+    if (sealedRoute(source) !== required || receipt.factory !== evidenceFactorySymbol(required) || original === undefined
+      || original.length !== receipt.sourceDigests.length || original.some((input, index) => evidenceValueReceipt(input).payloadDigest !== receipt.sourceDigests[index])) {
+      throw new TypeError(`Convention replacement requires its genuine source factory invocation: ${route}`);
+    }
+  }
+}
+
 function mint<T>(route: string, symbol: string, payload: T, authority: unknown, sources: readonly (DeclaredEvidence<unknown> | string)[] = [], instance: readonly VersionedEvidenceId[] = []): DeclaredEvidence<T> {
+  assertFoundationReplacementInputs(route, authority, sources);
   const projection = projectionFor(route);
   const result = declareEvidence(projection.producer, { id: projection.id, version: projection.version }, present(payload, route), {
     factory: symbol,
@@ -520,6 +674,57 @@ function mint<T>(route: string, symbol: string, payload: T, authority: unknown, 
     REVIEW_MEMBER_INPUTS.set(result, Object.freeze([...sources] as DeclaredEvidence<unknown>[]));
   }
   return result;
+}
+
+/** Keep the actual immutable inputs, including complete empty source domains, at construction. */
+function mintFoundationValue<T>(route: string, symbol: string, payload: T, authority: unknown, inputs: readonly DeclaredEvidence<unknown>[]): DeclaredEvidence<T> {
+  const result = mint(route, symbol, payload, authority, inputs);
+  FOUNDATION_VALUE_INPUTS.set(result, Object.freeze([...inputs]));
+  return result;
+}
+
+function assertPawnFoundationSource(source: DeclaredEvidence<unknown>, route: string): void {
+  assertDeclaredEvidence(source);
+  const receipt = evidenceValueReceipt(source);
+  if (sealedRoute(source) !== route || receipt.factory !== evidenceFactorySymbol(route)) throw new TypeError(`Pawn/file source requires ${route}`);
+  if (["rules.structural.reading.pawn_connectivity@1", "rules.mobility.reading.legal_moves@1", "rules.square.reading.control@1", "rules.structural.reading.fianchetto_setup@1"].includes(route)) {
+    if (readLocalReadingInvocation(source).kind !== "fen") throw new TypeError("Position source requires its original position invocation");
+    return;
+  }
+  const inputs = FOUNDATION_VALUE_INPUTS.get(source);
+  if (inputs === undefined || inputs.length !== receipt.sourceDigests.length || inputs.some((input, index) => evidenceValueReceipt(input).payloadDigest !== receipt.sourceDigests[index])) {
+    throw new TypeError(`Pawn/file source is not its genuine original invocation: ${route}`);
+  }
+}
+
+/** Finite nonminting join for the six original position sources, including quiet populations.
+ * Equal payload bytes cannot replace the legal/connectivity object actually used by a snapshot. */
+export function readFoundationPositionTuple(tuple: FoundationPositionTuple): FoundationPositionTuple {
+  if (!Array.isArray(tuple) || tuple.length !== 6 || !Object.isFrozen(tuple)
+    || Reflect.ownKeys(tuple).some(key => !["0", "1", "2", "3", "4", "5", "length"].includes(String(key)))
+    || [0, 1, 2, 3, 4, 5].some(index => !("value" in (Object.getOwnPropertyDescriptor(tuple, index) ?? {})))) {
+    throw new TypeError("Foundation handoff requires the complete immutable six-source tuple");
+  }
+  const routes = ["rules.mobility.reading.legal_moves@1", "rules.structural.reading.pawn_connectivity@1",
+    "rules.structural.reading.king_opposition@3", "rules.structural.reading.backward_pawn@3",
+    "derived.structural.reading.pawn_file_group@1", "derived.activity.reading.file_state@1"] as const;
+  routes.forEach((route, index) => assertPawnFoundationSource(tuple[index]!, route));
+  const fen = tuple[0].payload.fen;
+  if (tuple.some(source => source.payload.fen !== fen)) throw new TypeError("Foundation handoff crosses position/counter identity");
+  for (const source of [tuple[0], tuple[1]]) {
+    const original = readLocalReadingInvocation(source);
+    if (original.kind !== "fen" || canonicalFen(positionFromFen(original.fen)) !== fen) {
+      throw new TypeError("Foundation position differs from its original source invocation");
+    }
+  }
+  for (const [index, parentIndex, parameter] of [[2, 0, "position"], [3, 0, "position"], [4, 1, "source"], [5, 1, "source"]] as const) {
+    const source = tuple[index], parent = tuple[parentIndex], inputs = FOUNDATION_VALUE_INPUTS.get(source);
+    if (inputs?.length !== 1 || inputs[0] !== parent
+      || evidenceValueReceipt(source).inputDigest !== authorityDigest({ [parameter]: parent })) {
+      throw new TypeError("Foundation snapshot does not retain its original exact position prerequisite");
+    }
+  }
+  return tuple;
 }
 
 function factory<I, R>(meta: Omit<EvidenceValueFactoryMeta, "dependency"> & { readonly dependency?: string }, body: (input: I, meta: EvidenceValueFactoryMeta) => R): EvidenceValueFactory<I, R> {
@@ -582,13 +787,272 @@ export const createRulesTacticConsequenceMateInOneV1Evidence = fenReading("rules
 export const createRulesSquareReadingControlV1Evidence = fenReading("rules.square.reading.control@1", squareControlReading, { dependency: "semantic-convention-provenance" });
 export const createRulesMobilityReadingPieceDestinationsV1Evidence = fenReading("rules.mobility.reading.piece_destinations@1", pieceDestinationsReading);
 export const createRulesMobilityReadingLegalMovesV1Evidence = fenReading("rules.mobility.reading.legal_moves@1", exactLegalMoveMap);
+export const createRulesMobilityReadingCandidateRoleV1Evidence = (() => {
+  const route = "rules.mobility.reading.candidate_role@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ position: sealed("rules.mobility.reading.legal_moves@1"), moveUci: value("an exact canonical legal UCI member", isText) }], result: "availability" },
+    (input: { readonly position: DeclaredEvidence<ExactLegalMoveMap>; readonly moveUci: string }) => {
+      assertPawnFoundationSource(input.position, "rules.mobility.reading.legal_moves@1");
+      return available(mintFoundationValue(route, symbol, readCandidateRole(input.position.payload, input.moveUci), input, [input.position]));
+    });
+})();
+export const createRulesMobilityReadingPawnExtendedCenterDestinationV1Evidence = (() => {
+  const route = "rules.mobility.reading.pawn_extended_center_destination@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ source: sealed("rules.mobility.reading.candidate_role@1") }], result: "availability" },
+    ({ source }: { readonly source: DeclaredEvidence<CandidateRoleReading> }) => {
+      assertPawnFoundationSource(source, "rules.mobility.reading.candidate_role@1");
+      return available(Object.freeze(readPawnExtendedCenterDestination(source.payload).map(payload => mintFoundationValue(route, symbol, payload, { source }, [source]))));
+    });
+})();
+const RECORDED_FOUNDATION_INVOCATIONS = new WeakMap<object, Readonly<{
+  prefix?: FoundationRecordedPrefix;
+  decision?: FoundationEarlyQueenDecision;
+  candidate?: DeclaredEvidence<CandidateRoleReading>;
+}>>();
+/** Original context membership remains live even though the emitted fact is immutable. */
+export function readRecordedFoundationInvocation(value: DeclaredEvidence<unknown>) {
+  assertDeclaredEvidence(value);
+  const original = RECORDED_FOUNDATION_INVOCATIONS.get(value);
+  if (original === undefined) throw new TypeError("Recorded foundation value is not an original factory invocation");
+  if (original.prefix !== undefined) readFoundationRecordedPrefix(original.prefix);
+  if (original.decision !== undefined) {
+    if (isFoundationClaimedChoiceDecision(original.decision) && sealedRoute(value) !== "rules.mobility.reading.early_queen_move@1") throw new TypeError("Worker choice cannot become a live recorded invocation");
+    readFoundationEarlyQueenDecision(original.decision);
+  }
+  if (original.candidate !== undefined) assertPawnFoundationSource(original.candidate, "rules.mobility.reading.candidate_role@1");
+  return original;
+}
+
+/** D4140: finite, nonminting original-input reader for the recorded style occurrence owner. */
+export function readRecordedStyleValueInput(value: DeclaredEvidence<unknown>) {
+  const route = sealedRoute(value);
+  if (!["rules.structural.reading.fianchetto_setup@1", "rules.structural.reading.fianchetto_knight_screen@1",
+    "rules.mobility.reading.candidate_role@1", "rules.mobility.reading.pawn_extended_center_destination@1",
+    "rules.mobility.reading.early_queen_move@1", "run.record.castling_eligibility@1"].includes(route)) {
+    throw new TypeError("Recorded style occurrence requires one of its six exact original source factories");
+  }
+  assertPawnFoundationSource(value, route);
+  if (route === "rules.structural.reading.fianchetto_setup@1") {
+    const original = readLocalReadingInvocation(value);
+    if (original.kind !== "fen") throw new TypeError("Fianchetto requires its original position invocation");
+    return Object.freeze({ kind: "position" as const, route, fen: original.fen,
+      setup: value as DeclaredEvidence<FianchettoSetupSnapshot> });
+  }
+  const inputs = FOUNDATION_VALUE_INPUTS.get(value)!;
+  if (route === "rules.structural.reading.fianchetto_knight_screen@1") {
+    if (inputs.length !== 1 || sealedRoute(inputs[0]!) !== "rules.structural.reading.fianchetto_setup@1") throw new TypeError("Screen lost its original setup source");
+    const original = readLocalReadingInvocation(inputs[0]!);
+    if (original.kind !== "fen") throw new TypeError("Screen requires an original position setup");
+    return Object.freeze({ kind: "position" as const, route, fen: original.fen,
+      setup: inputs[0] as DeclaredEvidence<FianchettoSetupSnapshot> });
+  }
+  if (route === "run.record.castling_eligibility@1") {
+    const original = readRecordedFoundationInvocation(value);
+    if (original.prefix === undefined || inputs.length !== 0) throw new TypeError("Castling lost its original prefix invocation");
+    return Object.freeze({ kind: "baseline" as const, route, prefix: original.prefix });
+  }
+  const original = route === "rules.mobility.reading.early_queen_move@1" ? readRecordedFoundationInvocation(value) : undefined;
+  const candidate = route === "rules.mobility.reading.candidate_role@1" ? value as DeclaredEvidence<CandidateRoleReading>
+    : inputs[0] as DeclaredEvidence<CandidateRoleReading>;
+  if (inputs.length !== 1 || candidate === undefined || original !== undefined && (original.candidate !== candidate || original.decision === undefined)) {
+    throw new TypeError("Candidate occurrence lost its original complete input invocation");
+  }
+  assertPawnFoundationSource(candidate, "rules.mobility.reading.candidate_role@1");
+  const position = FOUNDATION_VALUE_INPUTS.get(candidate)?.[0];
+  if (position === undefined) throw new TypeError("Candidate lost its original complete legal-map source");
+  assertPawnFoundationSource(position, "rules.mobility.reading.legal_moves@1");
+  const origin = readLocalReadingInvocation(position);
+  if (origin.kind !== "fen") throw new TypeError("Candidate requires its original position invocation");
+  return Object.freeze({ kind: "candidate" as const, route, fen: origin.fen, candidate,
+    position: position as DeclaredEvidence<ExactLegalMoveMap>,
+    ...(original?.decision === undefined ? {} : { decision: original.decision }) });
+}
+export const createRulesMobilityReadingEarlyQueenMoveV1Evidence = (() => {
+  const route = "rules.mobility.reading.early_queen_move@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ decision: value("an original live or claimed choice decision", isFoundationEarlyQueenDecision), candidate: sealed("rules.mobility.reading.candidate_role@1") }], result: "availability" },
+    (input: { readonly decision: FoundationEarlyQueenDecision; readonly candidate: DeclaredEvidence<CandidateRoleReading> }) => {
+      const decision = readFoundationEarlyQueenDecision(input.decision);
+      assertPawnFoundationSource(input.candidate, "rules.mobility.reading.candidate_role@1");
+      const values = Object.freeze(readEarlyQueenCandidate(decision.authority, input.candidate.payload).map(payload => {
+        const result = mintFoundationValue(route, symbol, payload, input, [input.candidate]);
+        RECORDED_FOUNDATION_INVOCATIONS.set(result, Object.freeze({ decision: input.decision, candidate: input.candidate }));
+        readRecordedFoundationInvocation(result); return result;
+      }));
+      // False outcomes still belong to an authentic current original decision and candidate.
+      readFoundationEarlyQueenDecision(input.decision); return available(values);
+    });
+})();
+interface RecordedClockInvocation { readonly source: RecordedClockSource; readonly phase?: DeclaredEvidence<PhaseBandReadingV2> }
+const RECORDED_CLOCK_INVOCATIONS = new WeakMap<object, RecordedClockInvocation>();
+function actualClockPhase(phase: DeclaredEvidence<PhaseBandReadingV2>, beforeFen: string): void {
+  assertDeclaredEvidence(phase);
+  if (sealedRoute(phase) !== "rules.phase.reading@2" || evidenceValueReceipt(phase).factory !== evidenceFactorySymbol("rules.phase.reading@2")) throw new TypeError("Clock decision requires the exact phase2 factory");
+  const original = readLocalReadingInvocation(phase);
+  if (original.kind !== "fen" || original.fen !== beforeFen || phase.payload.fen !== beforeFen) throw new TypeError("Clock decision phase is not its original BEFORE position");
+}
+export function readRecordedClockInvocation(value: DeclaredEvidence<unknown>): RecordedClockInvocation {
+  const input = RECORDED_CLOCK_INVOCATIONS.get(value);
+  if (input === undefined) throw new TypeError("Recorded clock value is not an original factory invocation");
+  const clock = readRecordedClockSource(input.source);
+  if (input.phase !== undefined) actualClockPhase(input.phase, clock.authority.original.beforeFen);
+  readRecordedClockSource(input.source);
+  return input;
+}
+export const createRunRecordClockReadingV1Evidence = (() => {
+  const route = "run.record.clock_reading@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ source: value("an original owned clock source", isRecordedClockSource) }], result: "single", dependency: "recorded-clocks" },
+    ({ source }: { readonly source: RecordedClockSource }): DeclaredEvidence<RecordedClockReading> => {
+      const a = readRecordedClockSource(source).authority;
+      const payload: RecordedClockReading = Object.freeze({ subject: a.subject, original: a.original, retention: a.retention, sample: a.sample, control: a.control });
+      const result = mintFoundationValue(route, symbol, payload, { clock: a }, []);
+      RECORDED_CLOCK_INVOCATIONS.set(result, Object.freeze({ source })); readRecordedClockInvocation(result); return result;
+    });
+})();
+export const createRunRecordClockDecisionV1Evidence = (() => {
+  const route = "run.record.clock_decision@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ source: value("an original owned clock source", isRecordedClockSource), phase: sealed("rules.phase.reading@2") }], result: "availability", dependency: "recorded-clocks" },
+    (input: { readonly source: RecordedClockSource; readonly phase: DeclaredEvidence<PhaseBandReadingV2> }): EvidenceAvailability<DeclaredEvidence<RecordedClockDecision>> => {
+      const a = readRecordedClockSource(input.source).authority;
+      actualClockPhase(input.phase, a.original.beforeFen);
+      const operands = recordedClockUseOperands(input.source);
+      if (operands.kind === "unavailable") { actualClockPhase(input.phase, a.original.beforeFen); readRecordedClockSource(input.source); return operands; }
+      const payload: RecordedClockDecision = Object.freeze({ subject: a.subject,
+        actor: Object.freeze({ kind: "imported", side: a.original.side }),
+        decision: Object.freeze({ nodeId: a.original.beforeNodeId, rootedIndex: a.original.decisionIndex,
+          eventSeq: a.original.eventSeq, moveUci: a.original.moveUci, beforeFen: a.original.beforeFen }),
+        phase: input.phase.payload, ...operands.value });
+      const result = mintFoundationValue(route, symbol, payload, { clock: a, phase: evidenceValueReceipt(input.phase).payloadDigest }, [input.phase]);
+      RECORDED_CLOCK_INVOCATIONS.set(result, Object.freeze({ source: input.source, phase: input.phase }));
+      readRecordedClockInvocation(result); return available(result);
+    });
+})();
+export const createRunRecordCastlingEligibilityV1Evidence = (() => {
+  const route = "run.record.castling_eligibility@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ prefix: value("an original recorded prefix", isFoundationRecordedPrefix) }], result: "availability" },
+    (input: { readonly prefix: FoundationRecordedPrefix }): EvidenceAvailability<DeclaredEvidence<FirstDecisionCastling>> => {
+      const prefix = readFoundationRecordedPrefix(input.prefix), payload = readFirstDecisionCastling(prefix.authority);
+      if (payload === undefined) { readFoundationRecordedPrefix(input.prefix); return unavailable("first_decision_not_represented"); }
+      const result = mintFoundationValue(route, symbol, payload, input, []);
+      RECORDED_FOUNDATION_INVOCATIONS.set(result, Object.freeze({ prefix: input.prefix }));
+      readRecordedFoundationInvocation(result); return available(result);
+    });
+})();
+export const createRulesStructuralReadingFianchettoSetupV1Evidence = fenReading("rules.structural.reading.fianchetto_setup@1", readFianchettoSetups);
+export const createRulesStructuralReadingFianchettoKnightScreenV1Evidence = (() => {
+  const route = "rules.structural.reading.fianchetto_knight_screen@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ source: sealed("rules.structural.reading.fianchetto_setup@1") }], result: "availability" },
+    ({ source }: { readonly source: DeclaredEvidence<FianchettoSetupSnapshot> }) => {
+      assertPawnFoundationSource(source, "rules.structural.reading.fianchetto_setup@1");
+      return available(mintFoundationValue(route, symbol, readFianchettoScreens(source.payload), { source }, [source]));
+    });
+})();
+/** Complete snapshots from one real position authority; callers cannot supply another FEN/payload. */
+function foundationPositionFactory<T>(route: string, read: (position: DeclaredEvidence<ExactLegalMoveMap>) => T) {
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: route.startsWith("derived.") ? "derived" : "computed", arms: [{ position: sealed("rules.mobility.reading.legal_moves@1") }], result: "availability" }, ({ position }: { readonly position: DeclaredEvidence<ExactLegalMoveMap> }) => {
+    assertPawnFoundationSource(position, "rules.mobility.reading.legal_moves@1");
+    return available(mintFoundationValue(route, symbol, read(position), { position }, [position]));
+  });
+}
+export const createRulesStructuralReadingKingOppositionV3Evidence = foundationPositionFactory("rules.structural.reading.king_opposition@3", readUnobstructedOpposition);
+export const createRulesStructuralReadingBackwardPawnV3Evidence = foundationPositionFactory("rules.structural.reading.backward_pawn@3", readBackwardPawns);
+export const createRulesTransitionReadingPhysicalSliderRaysV1Evidence = (() => {
+  const route = "rules.transition.reading.physical_slider_rays@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ position: sealed("rules.mobility.reading.legal_moves@1") }], result: "single" },
+    (input: { readonly position: DeclaredEvidence<ExactLegalMoveMap> }) => {
+      if (!hasExactOwnDataKeys(input, ["position"])) throw new TypeError("Total ray source requires exactly its position data field");
+      const position = input.position;
+      assertPawnFoundationSource(position, "rules.mobility.reading.legal_moves@1");
+      const result = mintFoundationValue(route, symbol, readPhysicalSliderRays(position), { position }, [position]);
+      LOCAL_READING_INVOCATIONS.set(result, Object.freeze({ kind: "total_ray", position }));
+      return result;
+    });
+})();
+export const createRulesTacticReadingMoverPieceRiskV1Evidence = (() => {
+  const route = "rules.tactic.reading.mover_piece_risk@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ root: sealed("rules.mobility.reading.legal_moves@1"), position: sealed("rules.mobility.reading.legal_moves@1"),
+    moveUci: value("null for the original root or an exact canonical child UCI", candidate => candidate === null || isText(candidate)) }], result: "availability" },
+    (input: MoverPieceRiskInput): MoverPieceRiskFactoryResult => {
+      if (!hasExactOwnDataKeys(input, ["root", "position", "moveUci"])) throw new TypeError("Risk source requires exactly its original frame data fields");
+      const captured = Object.freeze({ root: input.root, position: input.position, moveUci: input.moveUci });
+      assertPawnFoundationSource(captured.root, "rules.mobility.reading.legal_moves@1");
+      assertPawnFoundationSource(captured.position, "rules.mobility.reading.legal_moves@1");
+      const computed = readMoverPieceRisk(captured);
+      const inputs = Object.freeze([captured.root, captured.position]);
+      const result: MoverPieceRiskFactoryResult = computed.kind === "unavailable" ? computed
+        : Object.freeze({ kind: "available", value: mintFoundationValue(route, symbol, computed.value, captured, inputs) });
+      FOUNDATION_VALUE_INPUTS.set(result, inputs);
+      LOCAL_READING_INVOCATIONS.set(result, Object.freeze({ kind: "total_risk", ...captured, result }));
+      return result;
+    });
+})();
+export const createDerivedSquareReadingFutureFileChallengeV1Evidence = foundationPositionFactory("derived.square.reading.future_file_challenge@1", readFutureFileChallenges);
+export const createDerivedSquareReadingCaptureMigrationReachV1Evidence = foundationPositionFactory("derived.square.reading.capture_migration_reach@1", readCaptureMigrationReach);
+export const createDerivedStructuralReadingOutpostCandidateV1Evidence = (() => {
+  const route = "derived.structural.reading.outpost_candidate@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ control: sealed("rules.square.reading.control@1"), future: sealed("derived.square.reading.future_file_challenge@1") }], result: "availability" },
+    (input: { readonly control: DeclaredEvidence<SquareControlReading>; readonly future: DeclaredEvidence<FutureFileSnapshot> }) => {
+      assertPawnFoundationSource(input.control, "rules.square.reading.control@1");
+      assertPawnFoundationSource(input.future, "derived.square.reading.future_file_challenge@1");
+      return available(mintFoundationValue(route, symbol, readOutpostCandidates(input.control.payload, input.future.payload), input, [input.control, input.future]));
+    });
+})();
+export const createDerivedStructuralReadingOccupiedOutpostV1Evidence = (() => {
+  const route = "derived.structural.reading.occupied_outpost@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ source: sealed("derived.structural.reading.outpost_candidate@1") }], result: "availability" },
+    ({ source }: { readonly source: DeclaredEvidence<OutpostCandidateSnapshot> }) => {
+      assertPawnFoundationSource(source, "derived.structural.reading.outpost_candidate@1");
+      return available(mintFoundationValue(route, symbol, readOccupiedOutposts(source.payload), { source }, [source]));
+    });
+})();
+
+function foundationEventFactory<S extends { readonly fen: string }, T>(route: "rules.structural.event.king_opposition@2" | "rules.structural.event.backward_pawn@2", source: string, changes: (edge: EvidenceEdge, before: S, after: S) => readonly T[]) {
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ before: sealed(source), moveUci: value("a UCI move", input => typeof input === "string" && input.length > 0), after: sealed(source) }], result: "availability" }, (input: { readonly before: DeclaredEvidence<S>; readonly moveUci: string; readonly after: DeclaredEvidence<S> }) => {
+    const sources = [input.before, input.after];
+    if (conventionReplacementSource(route) !== source) throw new TypeError(`Source event lacks its exact convention replacement: ${route}`);
+    // Guard even an available empty event population; missing authority can never become false.
+    assertFoundationReplacementInputs(route, input, sources);
+    const edge = validEdge({ beforeFen: input.before.payload.fen, moveUci: input.moveUci, afterFen: input.after.payload.fen });
+    const events = changes(edge, input.before.payload, input.after.payload);
+    return available(Object.freeze(events.map(payload => mintFoundationValue(route, symbol, payload, input, sources))));
+  });
+}
+export const createRulesStructuralEventKingOppositionV2Evidence = foundationEventFactory("rules.structural.event.king_opposition@2", "rules.structural.reading.king_opposition@3", oppositionChanges);
+export const createRulesStructuralEventBackwardPawnV2Evidence = foundationEventFactory("rules.structural.event.backward_pawn@2", "rules.structural.reading.backward_pawn@3", backwardPawnChanges);
+function pawnFoundationSnapshot<T>(route: string, read: (source: PawnConnectivityReading) => T) {
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ source: sealed("rules.structural.reading.pawn_connectivity@1") }], result: "availability" }, ({ source }: { readonly source: DeclaredEvidence<PawnConnectivityReading> }) => {
+    assertPawnFoundationSource(source, "rules.structural.reading.pawn_connectivity@1");
+    return available(mintFoundationValue(route, symbol, read(source.payload), { source }, [source]));
+  });
+}
+export const createDerivedStructuralReadingPawnFileGroupV1Evidence = pawnFoundationSnapshot("derived.structural.reading.pawn_file_group@1", readPawnFileGroups);
+export const createDerivedActivityReadingFileStateV1Evidence = pawnFoundationSnapshot("derived.activity.reading.file_state@1", readFileStates);
+
+function pawnFoundationEvent<S extends { readonly fen: string }, T>(route: string, source: string, read: (edge: EvidenceEdge, before: S, after: S) => readonly T[], shape: EvidenceValueFactoryShape = "derived") {
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape, arms: [{ before: sealed(source), moveUci: value("a UCI move", isText), after: sealed(source) }], result: "availability" }, (input: { readonly before: DeclaredEvidence<S>; readonly moveUci: string; readonly after: DeclaredEvidence<S> }) => {
+    assertPawnFoundationSource(input.before, source);
+    assertPawnFoundationSource(input.after, source);
+    const edge = validEdge({ beforeFen: input.before.payload.fen, moveUci: input.moveUci, afterFen: input.after.payload.fen });
+    return available(Object.freeze(read(edge, input.before.payload, input.after.payload).map(payload => mintFoundationValue(route, symbol, payload, input, [input.before, input.after]))));
+  });
+}
+export const createDerivedStructuralEventPawnFileGroupV1Evidence = pawnFoundationEvent("derived.structural.event.pawn_file_group@1", "derived.structural.reading.pawn_file_group@1", pawnFileGroupChanges);
+export const createDerivedActivityEventFileStateV1Evidence = pawnFoundationEvent("derived.activity.event.file_state@1", "derived.activity.reading.file_state@1", fileStateChanges);
+export const createRulesStructuralEventPawnIslandsV2Evidence = pawnFoundationEvent("rules.structural.event.pawn_islands@2", "rules.structural.reading.pawn_connectivity@1", readPawnIslandChanges, "computed");
+export const createDerivedActivityEventFileAccessRevealedV1Evidence = (() => {
+  const route = "derived.activity.event.file_access_revealed@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ change: sealed("derived.activity.event.file_state@1") }], result: "availability" }, ({ change }: { readonly change: DeclaredEvidence<FileStateChange> }) => {
+    assertPawnFoundationSource(change, "derived.activity.event.file_state@1");
+    return available(Object.freeze(fileAccessRevealed(change.payload).map(payload => mintFoundationValue(route, symbol, payload, { change }, [change]))));
+  });
+})();
 export const createRulesPawnReadingContactsV1Evidence = fenReading("rules.pawn.reading.contacts@1", pawnContactsReading);
 export const createRulesPawnReadingCandidateMajorityV1Evidence = fenReading("rules.pawn.reading.candidate_majority@1", candidateMajorityReading);
 export const createRulesKingReadingZoneStateV1Evidence = fenReading("rules.king.reading.zone_state@1", kingZoneReading);
 export const createRulesTacticReadingDefenderDutySetV1Evidence = fenReading("rules.tactic.reading.defender_duty_set@1", defenderDutyReading, { dependency: "semantic-convention-provenance" });
 export const createRulesPhaseReadingV2Evidence = fenReading("rules.phase.reading@2", phaseBandReading, { dependency: "semantic-convention-provenance" });
-/** Derived reading whose declared piece-count inputs are recomputed in the same pass from the FEN. */
-export const createDerivedMaterialReadingRoleSignatureV1Evidence = fenReading("derived.material.reading.role_signature@1", materialRoleSignatureReading, { shape: "derived" });
 /** Derived reading whose declared predicate inputs are recomputed in the same pass from the FEN. */
 export const createDerivedTacticPromotionPressureV1Evidence = fenReading("derived.tactic.promotion_pressure@1", (fen) => promotionPressureReading(fen), { shape: "derived" });
 
@@ -672,6 +1136,13 @@ export const STRUCTURAL_READING_FACTORIES = Object.freeze(Object.fromEntries(STR
   return [route, fenPopulation(route, (fen) => cachedStructuralReading(fen).features.filter((feature) => feature.kind === kind))];
 })) as Readonly<Record<`rules.structural.reading.${StructuralReadingKind}@1`, EvidenceValueFactory<{ readonly fen: string }, readonly DeclaredEvidence<StructuralReading["features"][number]>[]>>>);
 
+/** Sixteen own-FEN sources; never issue caller-authored observations or widen @1 sources. */
+export const STRUCTURAL_DETAIL_FACTORIES = Object.freeze(Object.fromEntries(STRUCTURAL_DETAIL_KINDS.map(kind => {
+  const route = `rules.structural.reading.${kind}@2`;
+  return [route, fenPopulation(route, fen => cachedStructuralReading(fen).features
+    .filter(observation => observation.kind === kind).map(observation => structuralDetail(kind, observation)))];
+})) as { readonly [K in StructuralDetailKind as `rules.structural.reading.${K}@2`]: EvidenceValueFactory<{ readonly fen: string }, readonly DeclaredEvidence<StructuralDetailByKind[K]>[]> });
+
 export const createDerivedMaterialReadingRoleSignatureV2Evidence = (() => {
   const route = "derived.material.reading.role_signature@2", symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ fen: FEN }], result: "single" }, ({ fen }: { readonly fen: string }) => {
@@ -687,6 +1158,12 @@ export const createDerivedMaterialReadingRoleSignatureV2Evidence = (() => {
 })();
 
 /** One `{ fen, feature }` predicate factory per structural feature kind (eighteen). */
+const STRUCTURAL_PREDICATE_INVOCATIONS = new WeakMap<object, Readonly<{ fen: string; feature: StructuralFeature; sources: readonly DeclaredEvidence<unknown>[] }>>();
+export function readStructuralPredicateInvocation(value: DeclaredEvidence<unknown>) {
+  const input = STRUCTURAL_PREDICATE_INVOCATIONS.get(value);
+  if (input === undefined) throw new TypeError("Structural leaf is not an original predicate invocation");
+  assertDeclaredEvidence(value); return input;
+}
 export const STRUCTURAL_PREDICATE_FACTORIES = Object.freeze(Object.fromEntries(STRUCTURAL_FEATURE_KINDS.map((kind) => {
   const route = `rules.structural.predicate.${kind}@1`;
   const symbol = evidenceFactorySymbol(route);
@@ -697,9 +1174,37 @@ export const STRUCTURAL_PREDICATE_FACTORIES = Object.freeze(Object.fromEntries(S
     const captured = structuredClone(feature);
     if (captured.kind !== kind) throw new TypeError(`Evidence route ${route} requires a ${kind} StructuralFeature`);
     const matched = matchesStructuralExpression(valid, { kind: "feature", feature: captured });
-    return mint(route, symbol, Object.freeze({ fen: valid, feature: captured, matched }), { fen, feature: captured });
+    const result = mint(route, symbol, Object.freeze({ fen: valid, feature: captured, matched }), { fen, feature: captured });
+    STRUCTURAL_PREDICATE_INVOCATIONS.set(result, Object.freeze({ fen: valid, feature: result.payload.feature, sources: Object.freeze([]) }));
+    return result;
   })];
 })) as Readonly<Record<`rules.structural.predicate.${(typeof STRUCTURAL_FEATURE_KINDS)[number]}@1`, EvidenceValueFactory<{ readonly fen: string; readonly feature: StructuralFeature }, DeclaredEvidence<{ readonly fen: string; readonly feature: StructuralFeature; readonly matched: boolean }>>>>);
+
+function isSelectedStructuralFeature<K extends StructuralConventionKind>(kind: K, candidate: unknown): candidate is SelectedStructuralFeature<K> {
+  if (!isRecord(candidate) || candidate.kind !== kind || !hasExactKeys(candidate, ["kind", "color", kind === "king_opposition" ? "form" : kind === "backward_pawn" ? "file" : "square", "conventionRef"])
+    || candidate.color !== "white" && candidate.color !== "black") return false;
+  try { assertStructuralConventionSelection(candidate); } catch { return false; }
+  return kind === "king_opposition" ? candidate.form === "direct" || candidate.form === "distant"
+    : kind === "backward_pawn" ? typeof candidate.file === "string" && /^[a-h]$/u.test(candidate.file)
+    : typeof candidate.square === "string" && /^[a-h][1-8]$/u.test(candidate.square);
+}
+function foundationPredicateFactory<K extends StructuralConventionKind, S extends { readonly fen: string }, T>(kind: K, sourceRoute: string, matching: (source: S, feature: SelectedStructuralFeature<K>) => readonly T[]) {
+  const route = `rules.structural.predicate.${kind}@2`, symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "computed", arms: [{ source: sealed(sourceRoute), feature: value("the exact selected structural feature", input => isSelectedStructuralFeature(kind, input)) }], result: "single" },
+    (input: { readonly source: DeclaredEvidence<S>; readonly feature: SelectedStructuralFeature<K> }) => {
+      assertPawnFoundationSource(input.source, sourceRoute);
+      const feature = structuredClone(input.feature);
+      if (!isSelectedStructuralFeature(kind, feature)) throw new TypeError(`Predicate ${route} requires its exact kind/convention feature`);
+      const subjects = matching(input.source.payload, feature);
+      const result = mintFoundationValue(route, symbol, Object.freeze({ fen: input.source.payload.fen, feature, matched: subjects.length > 0, subjects }),
+        { source: input.source, feature }, [input.source]);
+      STRUCTURAL_PREDICATE_INVOCATIONS.set(result, Object.freeze({ fen: input.source.payload.fen, feature: result.payload.feature, sources: Object.freeze([input.source]) }));
+      return result;
+    });
+}
+export const createRulesStructuralPredicateKingOppositionV2Evidence = foundationPredicateFactory("king_opposition", "rules.structural.reading.king_opposition@3", matchingUnobstructedOpposition);
+export const createRulesStructuralPredicateBackwardPawnV2Evidence = foundationPredicateFactory("backward_pawn", "rules.structural.reading.backward_pawn@3", matchingBackwardPawns);
+export const createRulesStructuralPredicateOutpostV2Evidence = foundationPredicateFactory("outpost", "derived.structural.reading.outpost_candidate@1", matchingOutpostCandidates);
 
 // ---------------------------------------------------------------------------------------------
 // Computed: validated-edge populations
@@ -713,7 +1218,11 @@ function edgePopulation<T>(route: string, compute: (edge: EvidenceEdge) => reado
   return factory({ route, symbol, shape: "computed", arms: [{ beforeFen: FEN, moveUci: value("a UCI string", isText), afterFen: FEN }], result: "population", ...(options.dependency === undefined ? {} : { dependency: options.dependency }), ...(options.pending === undefined ? {} : { pending: options.pending }) }, (input: EvidenceEdge) => {
     const edge = validEdge({ beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen });
     if (previous?.edge === edge) return previous.values;
-    const values = Object.freeze(compute(edge).map((payload) => mint(route, symbol, payload, edge)));
+    const values = Object.freeze(compute(edge).map((payload) => {
+      const result = mint(route, symbol, payload, edge);
+      if (route === "rules.transition.event.slider_ray@2") LOCAL_READING_INVOCATIONS.set(result, Object.freeze({ kind: "edge", edge }));
+      return result;
+    }));
     previous = { edge, values }; // empty successes are complete; exceptions are never retained
     return values;
   });
@@ -722,15 +1231,6 @@ function edgePopulation<T>(route: string, compute: (edge: EvidenceEdge) => reado
 const edgeKey = (edge: EvidenceEdge): string => `${edge.beforeFen}|${edge.moveUci}|${edge.afterFen}`;
 
 export const createRulesCastlingEventRightsLostV1Evidence = edgePopulation("rules.castling.event.rights_lost@1", (edge) => castlingRightsLost(edge.beforeFen, edge.moveUci, edge.afterFen));
-export const createRulesStructuralEventPawnIslandsV1Evidence = edgePopulation("rules.structural.event.pawn_islands@1", (edge) => {
-  const before = pawnConnectivityReading(edge.beforeFen);
-  const after = pawnConnectivityReading(edge.afterFen);
-  return (["white", "black"] as const).map((color) => Object.freeze({
-    before_fen: edge.beforeFen, move_uci: edge.moveUci, after_fen: edge.afterFen, family: "pawn_islands" as const, color,
-    before: before.colors.find((entry) => entry.color === color)!.islandCount,
-    after: after.colors.find((entry) => entry.color === color)!.islandCount,
-  }));
-});
 export const createRulesTacticConsequenceReplyBreadthV1Evidence = (() => {
   const route = "rules.tactic.consequence.reply_breadth@1";
   const symbol = evidenceFactorySymbol(route);
@@ -741,6 +1241,7 @@ export const createRulesTacticConsequenceReplyBreadthV1Evidence = (() => {
     return mint(route, symbol, breadth, edge);
   });
 })();
+export const createRulesTransitionEventSliderRayV2Evidence = edgePopulation("rules.transition.event.slider_ray@2", sliderMembershipChanges);
 export const createRulesTacticEventCheckV1Evidence = edgePopulation("rules.tactic.event.check@1", (edge) => { const check = checkEvent(edge.beforeFen, edge.moveUci); return check === undefined ? [] : [check]; });
 export const createRulesTacticEventDoubleAttackV1Evidence = edgePopulation("rules.tactic.event.double_attack@1", (edge) => { const fork = doubleAttackEvent(edge.beforeFen, edge.moveUci); return fork === undefined ? [] : [fork]; });
 export const createRulesSquareEventControlV1Evidence = edgePopulation("rules.square.event.control@1", (edge) => squareControlEvents(edge.beforeFen, edge.moveUci, edge.afterFen).events, { dependency: "semantic-convention-provenance" });
@@ -780,9 +1281,42 @@ export const createRulesExchangeReadingLandingCapturesV1Evidence = (() => {
       if (result === undefined) throw new TypeError("Enumerated legal capture has no exchange result");
       return result;
     });
-    return mint(route, symbol, { fen: canonical, landingSquare, captures: Object.freeze(captures) },
-      { fen: canonical, landingSquare });
+    const authority = Object.freeze({ fen: canonical, landingSquare });
+    const result = mint(route, symbol, { fen: canonical, landingSquare, captures: Object.freeze(captures) }, authority);
+    LANDING_CAPTURE_INPUTS.set(result, authority);
+    return result;
   });
+})();
+
+interface BackwardPawnLegalAdvance extends EvidenceEdge {
+  readonly pawn: BackwardPawnSubject;
+  readonly advancedPawn: { readonly color: "white" | "black"; readonly role: "pawn"; readonly square: SquareName };
+  readonly landing: LandingCaptureReading;
+  readonly replies: readonly LegalExchangeResult[];
+}
+export const createDerivedPawnConsequenceBackwardPawnLegalAdvanceV1Evidence = (() => {
+  const route = "derived.pawn.consequence.backward_pawn_legal_advance@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ source: sealed("rules.structural.reading.backward_pawn@3"), moveUci: value("a UCI move", isText), landing: sealed("rules.exchange.reading.landing_captures@1") }], result: "availability" },
+    (input: { readonly source: DeclaredEvidence<BackwardPawnSnapshot>; readonly moveUci: string; readonly landing: DeclaredEvidence<LandingCaptureReading> }) => {
+      assertPawnFoundationSource(input.source, "rules.structural.reading.backward_pawn@3");
+      assertDeclaredEvidence(input.landing);
+      const original = LANDING_CAPTURE_INPUTS.get(input.landing), receipt = evidenceValueReceipt(input.landing);
+      if (sealedRoute(input.landing) !== "rules.exchange.reading.landing_captures@1" || original === undefined
+        || receipt.factory !== evidenceFactorySymbol("rules.exchange.reading.landing_captures@1") || receipt.inputDigest !== authorityDigest(original)
+        || original.fen !== input.landing.payload.fen || original.landingSquare !== input.landing.payload.landingSquare) throw new TypeError("Advance requires its genuine complete landing-capture invocation");
+      const edge = validEdge({ beforeFen: input.source.payload.fen, moveUci: input.moveUci, afterFen: input.landing.payload.fen });
+      const move = parseUci(edge.moveUci)!;
+      const position = positionFromFen(edge.beforeFen);
+      const castle = castlingSide(position, move), destination = castle === undefined ? move.to : kingCastlesTo(position.turn, castle);
+      if (!("from" in move) || parseSquare(input.landing.payload.landingSquare) !== destination) throw new TypeError("Advance landing square differs from the exact edge destination");
+      const pawn = input.source.payload.pawns.find(row => row.color === position.turn && row.pawn === edge.moveUci.slice(0, 2) && row.stop === input.landing.payload.landingSquare && row.stopOccupancy.kind === "empty");
+      if (pawn === undefined || position.board.get(move.from)?.role !== "pawn" || move.promotion !== undefined) return available(Object.freeze([]));
+      const advancedPawn = { color: pawn.color, role: "pawn" as const, square: pawn.stop };
+      const replies = input.landing.payload.captures.filter(reply => reply.capturer.role === "pawn" && reply.capturer.color !== pawn.color
+        && reply.captured.color === pawn.color && reply.captured.role === "pawn" && reply.captured.square === pawn.stop);
+      const payload: BackwardPawnLegalAdvance = { ...edge, pawn, advancedPawn, landing: input.landing.payload, replies: Object.freeze(replies) };
+      return available(Object.freeze([mintFoundationValue(route, symbol, payload, input, [input.source, input.landing])]));
+    });
 })();
 
 export const createRulesExchangePredicateLegalExchangeV1Evidence = (() => {
@@ -828,11 +1362,12 @@ export const createRulesTacticConsequenceForcedMateAfterMoveV2Evidence = (() => 
 function structuralEventsForEdge(edge: EvidenceEdge) {
   return memo(`structuralEvents|${edgeKey(edge)}`, () => structuralSemanticEventPayloads(edge.beforeFen, edge.moveUci, edge.afterFen));
 }
-/** One population factory per structural event family (eleven). */
-export const STRUCTURAL_EVENT_FACTORIES = Object.freeze(Object.fromEntries(STRUCTURAL_EVENT_FAMILIES.map((family) => {
+const RETAINED_STRUCTURAL_EVENT_FAMILIES = Object.freeze(["king_zone", "passed_pawn", "piece_count", "direct_attack_count"] as const);
+/** The four retained public structural populations; predecessor meanings stay in test custody. */
+export const STRUCTURAL_EVENT_FACTORIES = Object.freeze(Object.fromEntries(RETAINED_STRUCTURAL_EVENT_FAMILIES.map((family) => {
   const route = `rules.structural.event.${family}@1`;
   return [route, edgePopulation(route, (edge) => structuralEventsForEdge(edge).filter((payload) => payload.family === family))];
-})) as Readonly<Record<`rules.structural.event.${(typeof STRUCTURAL_EVENT_FAMILIES)[number]}@1`, EvidenceValueFactory<EvidenceEdge, readonly DeclaredEvidence<ReturnType<typeof structuralSemanticEventPayloads>[number]>[]>>>);
+})) as Readonly<Record<`rules.structural.event.${(typeof RETAINED_STRUCTURAL_EVENT_FAMILIES)[number]}@1`, EvidenceValueFactory<EvidenceEdge, readonly DeclaredEvidence<ReturnType<typeof structuralSemanticEventPayloads>[number]>[]>>>);
 
 function transitionEventsForEdge(edge: EvidenceEdge) {
   return memo(`transitionEvents|${edgeKey(edge)}`, () => transitionSemanticEventPayloads(edge.beforeFen, edge.moveUci, edge.afterFen));
@@ -1013,15 +1548,6 @@ export const createDerivedPawnEventTransitionsV1Evidence = edgeDerived("derived.
   return pawnTransitionEvents(edge.beforeFen, edge.moveUci, edge.afterFen).map((payload) => ({ payload, inputs: [contacts] }));
 });
 
-export const createDerivedTacticDefenderExposureV1Evidence = edgeDerived("derived.tactic.defender_exposure@1", (edge) => {
-  const controls = createRulesSquareEventControlV1Evidence(edge);
-  return defenderExposureOperands(edge.beforeFen, edge.moveUci, edge.afterFen).flatMap((payload) => {
-    if (payload.kind !== "available") return [];
-    const control = selectByPayload(controls, payload.controllerEvent, "Defender exposure controller event");
-    const exchanges = payload.captures!.map((capture) => selectByPayload(createRulesExchangePredicateLegalExchangeV1Evidence({ fen: capture.beforeFen, captureUci: capture.captureUci }), capture, "Defender exposure exchange"));
-    return [{ payload, inputs: [control, ...exchanges] }];
-  });
-});
 
 export const createDerivedTacticDefenderExposureV2Evidence = (() => {
   const route = "derived.tactic.defender_exposure@2", symbol = evidenceFactorySymbol(route);
@@ -1049,14 +1575,6 @@ export const createDerivedTacticDefenderExposureV2Evidence = (() => {
     });
 })();
 
-export const createDerivedMaterialEventRoleAsymmetryV1Evidence = edgeDerived("derived.material.event.role_asymmetry@1", (edge) => {
-  const material = materialRoleAsymmetryEvent(edge.beforeFen, edge.moveUci, edge.afterFen);
-  if (material === undefined) return [];
-  const readings = [createDerivedMaterialReadingRoleSignatureV1Evidence({ fen: edge.beforeFen }), createDerivedMaterialReadingRoleSignatureV1Evidence({ fen: edge.afterFen })];
-  const families = [...new Set(material.sourceEvents.map((source) => source.family))];
-  const authorities = families.flatMap((family) => (TRANSITION_EVENT_FACTORIES as Readonly<Record<string, EvidenceValueFactory<EvidenceEdge, readonly DeclaredEvidence<unknown>[]>>>)[`rules.transition.event.${family}@1`]!(edge));
-  return [{ payload: material, inputs: [...readings, ...authorities] }];
-});
 
 export const createDerivedMaterialEventRoleAsymmetryV2Evidence = edgeDerived("derived.material.event.role_asymmetry@2", edge => {
   const captures = TRANSITION_EVENT_FACTORIES["rules.transition.event.capture@1"](edge);
@@ -1156,27 +1674,51 @@ export const createDerivedTacticOverloadExploitationObservedV1Evidence = sequenc
 }, (input) => [...(input.moves as readonly DeclaredEvidence<unknown>[]), input.duty as DeclaredEvidence<unknown>, ...(input.captures as readonly DeclaredEvidence<unknown>[]), input.exchange as DeclaredEvidence<unknown>]);
 
 // Counterfactual absence: computed only from the complete sealed alternative population.
-const AVOIDANCE_FAMILIES = Object.freeze([...STRUCTURAL_EVENT_FAMILIES, "loose_piece", "pawn_islands"] as const);
-/** One factory per counterfactual-absence family (thirteen). */
-export const AVOIDANCE_FACTORIES = Object.freeze(Object.fromEntries(AVOIDANCE_FAMILIES.map((family) => {
-  const route = `derived.semantic_avoidance.${family}@1`;
-  const symbol = evidenceFactorySymbol(route);
-  const source = family === "loose_piece" ? "rules.tactic.event.loose_piece@1" : `rules.structural.event.${family}@1`;
-  return [route, factory({ route, symbol, shape: "derived", arms: [{ beforeFen: FEN, moveUci: value("a UCI string", isText), afterFen: FEN, sign: value("a semantic event sign", isText), events: { kind: "semantic_events", min: 1 } }], result: "single" }, (input: EvidenceEdge & { readonly sign: string; readonly events: readonly SemanticEvidenceEvent[] }) => {
-    const edge = validEdge({ beforeFen: input.beforeFen, moveUci: input.moveUci, afterFen: input.afterFen });
-    const alternatives = legalAlternativeEdges(edge.beforeFen, edge.moveUci);
-    const alternativeMoves = new Set(alternatives.map((alternative) => alternative.moveUci));
-    const seen = new Set<string>();
-    for (const event of input.events) {
-      if (`${event.projection.id}@${event.projection.version}` !== source || event.sign !== input.sign) throw new TypeError(`Counterfactual absence ${family} mixes another event family or sign`);
-      if (event.anchor.beforeFen !== edge.beforeFen || !alternativeMoves.has(event.anchor.moveUci)) throw new TypeError(`Counterfactual absence ${family} names an edge that is not a legal alternative`);
-      if (seen.has(event.anchor.moveUci)) throw new TypeError(`Counterfactual absence ${family} repeats an alternative`);
-      seen.add(event.anchor.moveUci);
-    }
-    const payload: CounterfactualAbsenceOperands = Object.freeze({ relation: "avoided", family: Object.freeze({ projection: input.events[0]!.projection, sign: input.sign as never }), legalAlternatives: alternatives.length, alternativesWithFamily: input.events.length, alternativeEvents: Object.freeze([...input.events]) });
-    return mint(route, symbol, payload, { edge, sign: input.sign, events: input.events.map((event) => event.evidence) }, input.events.map((event) => event.evidence));
-  })];
-})) as Readonly<Record<`derived.semantic_avoidance.${(typeof AVOIDANCE_FAMILIES)[number]}@1`, EvidenceValueFactory<EvidenceEdge & { readonly sign: string; readonly events: readonly SemanticEvidenceEvent[] }, DeclaredEvidence<CounterfactualAbsenceOperands>>>>);
+function subjectOutcomeFactory<F extends SubjectOutcomeFamily>(family: F): EvidenceValueFactory<SubjectOutcomeFactoryInput, SubjectOutcomeFactoryResult<F>> {
+  const route = `derived.semantic_avoidance.${family}@2`, symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{
+    receipt: value("an original wide candidate receipt", candidate => {
+      try { readCandidateFoundationSources(candidate as CandidatePopulationReceipt<CandidateWideScope>); return true; } catch { return false; }
+    }), moveUci: value("an exact played member of the original receipt", isText),
+  }], result: "availability" }, input => {
+    if (!hasExactOwnDataKeys(input, ["receipt", "moveUci"])) throw new TypeError("Subject outcome factory requires exactly receipt and moveUci data fields");
+    readCandidateFoundationSources(input.receipt);
+    const played = candidatePlayedRow(input.receipt, input.moveUci);
+    if (input.receipt.packet.compilerVersion !== 7) throw new TypeError("Subject outcomes require compiler7 original sources");
+    const computed = computeSubjectOutcomes(family, input.receipt, input.moveUci);
+    const inputs = computed.kind === "available" ? computed.inputs : Object.freeze([]);
+    const authority = { packetId: input.receipt.packet.id, compilerVersion: 7, moveUci: input.moveUci, family };
+    const result: SubjectOutcomeFactoryResult<F> = computed.kind === "unavailable" ? computed
+      : Object.freeze({ kind: "available", values: Object.freeze(computed.payloads.map(payload => mintFoundationValue(route, symbol, payload, authority, inputs))) });
+    const invocation: SubjectOutcomeInvocation = Object.freeze({ kind: "subject_outcomes", receipt: input.receipt, moveUci: input.moveUci, family,
+      edge: Object.freeze({ beforeFen: input.receipt.packet.beforeFen, moveUci: played.moveUci, afterFen: played.afterFen }), inputs, result,
+      population: computed.kind === "available" ? Object.freeze({ kind: "available", population: computed.population })
+        : Object.freeze({ kind: "unavailable", family, reason: computed.reason }) });
+    LOCAL_READING_INVOCATIONS.set(result, invocation);
+    if (result.kind === "available") for (const item of result.values) LOCAL_READING_INVOCATIONS.set(item, invocation);
+    return result;
+  });
+}
+
+/** All thirteen source-owned factories; neither a selected top-two list nor a caller event list. */
+export const SUBJECT_OUTCOME_FACTORIES = Object.freeze(Object.fromEntries(SUBJECT_OUTCOME_FAMILIES.map(family =>
+  [`derived.semantic_avoidance.${family}@2`, subjectOutcomeFactory(family)])) as {
+    readonly [F in SubjectOutcomeFamily as `derived.semantic_avoidance.${F}@2`]: EvidenceValueFactory<SubjectOutcomeFactoryInput, SubjectOutcomeFactoryResult<F>>;
+  });
+
+export const createDerivedStructuralPredicateResultV2Evidence = (() => {
+  const route = "derived.structural.predicate_result@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ population: value("an original authored predicate population", candidate => {
+    try { readAuthoredPredicatePopulation(candidate as AuthoredPredicatePopulation); return true; } catch { return false; }
+  }) }], result: "single" }, ({ population }: { readonly population: AuthoredPredicatePopulation }) => {
+    const computed = computeAuthoredPredicateReduction(population), projection = projectionFor(route), proof = computed.proof;
+    const authority = initiateEvidenceReduction(computed.authority);
+    const value = declareEvidence(projection.producer, { id: projection.id, version: projection.version }, computed.payload, {
+      factory: symbol, inputDigest: proof.inputDigest, sourceDigests: [], convention: proof.convention, reduction: { authority, ordinal: 0 },
+    });
+    publishSingleEvidenceReduction(authority, value); return value;
+  });
+})();
 
 export const createDerivedStructuralPredicateResultV1Evidence = (() => {
   const route = "derived.structural.predicate_result@1";
@@ -1214,7 +1756,7 @@ export function readRecordedPositionInvocation(position: DeclaredEvidence<Record
 export function assertRecordedPositionInvocation(position: DeclaredEvidence<RecordedPosition>, run: DrillRun, nodeId: string): void {
   const invocation = readRecordedPositionInvocation(position), node = runNode(run, nodeId), receipt = evidenceValueReceipt(position);
   if (invocation.runId !== run.id || invocation.nodeId !== nodeId
-    || invocation.headDigest !== evidenceDigest(run.events) || sealedRoute(position) !== "run.record.position@1"
+    || invocation.headDigest !== recordedEventDigest(run.events) || sealedRoute(position) !== "run.record.position@1"
     || receipt.factory !== "createRunRecordPositionV1Evidence"
     || receipt.inputDigest !== evidenceDigest({ run: { run: run.id, nodes: run.nodes.length, events: run.events.length }, nodeId })
     || position.payload.nodeId !== nodeId || position.payload.ply !== node.ply || position.payload.fen !== node.fen) {
@@ -1228,7 +1770,7 @@ export const createRunRecordPositionV1Evidence = (() => {
   return factory({ route, symbol, shape: "source_receipt", arms: [{ run: RUN, nodeId: value("a node id", isText) }], result: "single", dependency: "recorded-semantic-path", pending: RUN_PENDING }, ({ run, nodeId }: { readonly run: DrillRun; readonly nodeId: string }) => {
     const node = runNode(run, nodeId);
     const position = mint(route, symbol, Object.freeze({ nodeId: node.id, ply: node.ply, fen: node.fen }), { run, nodeId });
-    RECORDED_POSITION_INVOCATIONS.set(position, Object.freeze({ runId: run.id, headDigest: evidenceDigest(run.events), nodeId,
+    RECORDED_POSITION_INVOCATIONS.set(position, Object.freeze({ runId: run.id, headDigest: recordedEventDigest(run.events), nodeId,
       pack: run.sessionKind === "pack" && run.packId !== null && run.packDigest !== null
         ? Object.freeze({ id: run.packId, digest: run.packDigest }) : null,
     }));
@@ -1300,6 +1842,39 @@ export const createRunRecordObjectiveTransitionV1Evidence = (() => {
   });
 })();
 
+/** D3927: original events on one genuine recorded Review path, not comparison snapshots. */
+export interface RecordedReviewObjectiveTransition {
+  readonly context: "review";
+  readonly from: ObjectiveState;
+  readonly to: ObjectiveState;
+}
+export interface RecordedReviewObjectives {
+  readonly boundary: RecordedReviewBoundary;
+  readonly items: readonly RunEvidenceItem<RecordedReviewObjectiveTransition>[];
+}
+function recordedObjectiveOccurrences(image: ReturnType<typeof readRecordedReviewBoundary>) {
+  const path = new Map(image.path.map(entry => [entry.node.id, entry.node]));
+  return image.run.events.flatMap((event, eventOrdinal) => {
+    if (event.type !== "objective.state_changed") return [];
+    const node = path.get(event.data.nodeId);
+    return node === undefined ? [] : [{ event: event as ObjectiveStateChangedEvent, eventOrdinal, node }];
+  });
+}
+export const createRunRecordObjectiveTransitionV2Evidence = (() => {
+  const route = "run.record.objective_transition@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "source_receipt", arms: [{ recordedReview: value("a storage-owned recorded Review boundary", isRecordedReviewBoundary) }], result: "items" },
+    ({ recordedReview }: { readonly recordedReview: RecordedReviewBoundary }): readonly RunEvidenceItem<RecordedReviewObjectiveTransition>[] => {
+      const image = readRecordedReviewBoundary(recordedReview);
+      const items = Object.freeze(recordedObjectiveOccurrences(image).map(({ event, eventOrdinal, node }) => Object.freeze({
+        evidence: mint(route, symbol, Object.freeze({ context: "review" as const, from: event.data.from, to: event.data.to }),
+          { recordedReview, eventOrdinal, event }), nodeId: node.id, plyOffset: node.ply,
+      })));
+      publishRecordedReviewItems(route, recordedReview, items);
+      assertRecordedReviewResultInvocation(items, route, recordedReview);
+      return items;
+    });
+})();
+
 const RECORDED_REVIEW_RESULT_INVOCATIONS = new WeakMap<object, Readonly<{ route: string; boundary: RecordedReviewBoundary }>>();
 function publishRecordedReviewItems(route: string, boundary: RecordedReviewBoundary, items: readonly RunEvidenceItem<unknown>[]): readonly RunEvidenceItem<unknown>[] {
   RECORDED_REVIEW_RESULT_INVOCATIONS.set(items, Object.freeze({ route, boundary }));
@@ -1310,11 +1885,22 @@ export function assertRecordedReviewResultInvocation(items: readonly RunEvidence
   const invocation = RECORDED_REVIEW_RESULT_INVOCATIONS.get(items);
   if (invocation === undefined || invocation.route !== route || invocation.boundary !== boundary || !Object.isFrozen(items)) throw new TypeError("Recorded Review result is not its original boundary/factory invocation");
   const image = readRecordedReviewBoundary(boundary);
-  for (const item of items) {
+  const objectives = route === "run.record.objective_transition@2" ? recordedObjectiveOccurrences(image) : undefined;
+  if (objectives !== undefined && objectives.length !== items.length) throw new TypeError("Recorded objective result omits an original event occurrence");
+  for (const [index, item] of items.entries()) {
     assertDeclaredEvidence(item.evidence);
     const receipt = evidenceValueReceipt(item.evidence);
+    const original = objectives?.[index];
+    const authority = original === undefined ? { recordedReview: image }
+      : { recordedReview: image, eventOrdinal: original.eventOrdinal, event: original.event };
     if (sealedRoute(item.evidence) !== route || receipt.factory !== evidenceFactorySymbol(route)
-      || receipt.inputDigest !== evidenceDigest({ recordedReview: image })) throw new TypeError("Recorded Review result differs from its original full boundary authority");
+      || receipt.inputDigest !== evidenceDigest(authority)) throw new TypeError("Recorded Review result differs from its original full boundary authority");
+    if (original !== undefined && (!Object.isFrozen(item)
+      || Object.keys(item).sort().join("|") !== "evidence|nodeId|plyOffset"
+      || item.nodeId !== original.node.id || item.plyOffset !== original.node.ply
+      || evidenceDigest(item.evidence.payload) !== evidenceDigest({ context: "review", from: original.event.data.from, to: original.event.data.to }))) {
+      throw new TypeError("Recorded objective item differs from its exact original event ordinal/node/payload");
+    }
   }
 }
 
@@ -1455,13 +2041,28 @@ export const createDerivedCompareEvalDeltaV1Evidence = (() => {
   });
 })();
 
+const RECORDED_COMPARE_EVAL_INVOCATIONS = new WeakMap<object, Readonly<RecordedCompareEvalDeltaInput>>();
+/** Authenticate the original complete factory array, including an exact successful empty pair. */
+export function readRecordedCompareEvalInvocation(items: readonly DeclaredEvidence<unknown>[], input: RecordedCompareEvalDeltaInput) {
+  const original = RECORDED_COMPARE_EVAL_INVOCATIONS.get(items);
+  if (original === undefined || original.comparison !== input.comparison || original.branchId !== input.branchId
+    || original.before !== input.before || original.after !== input.after) throw new TypeError("Recorded comparison result crosses its original pair invocation");
+  for (const item of items) {
+    assertDeclaredEvidence(item);
+    if (sealedRoute(item) !== "derived.compare.eval_delta@2" || evidenceValueReceipt(item).factory !== "createDerivedCompareEvalDeltaV2Evidence") throw new TypeError("Recorded comparison result crosses its exact factory");
+  }
+  return original;
+}
+
 export const createDerivedCompareEvalDeltaV2Evidence = (() => {
   const route = "derived.compare.eval_delta@2", symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("recorded.inspector.eval_packet@1"), after: sealed("recorded.inspector.eval_packet@1"),
     comparison: value("an owned recorded comparison", isRecordedComparisonSource), branchId: value("a granted branch id", isText) }], result: "population" },
     (input: RecordedCompareEvalDeltaInput) => {
       const payload = recordedComparisonEvalDeltaValue(input);
-      return Object.freeze(payload === undefined ? [] : [mint(route, symbol, payload, input, [input.before, input.after])]);
+      const result = Object.freeze(payload === undefined ? [] : [mint(route, symbol, payload, input, [input.before, input.after])]);
+      RECORDED_COMPARE_EVAL_INVOCATIONS.set(result, Object.freeze({ ...input }));
+      return result;
     });
 })();
 
@@ -1633,6 +2234,77 @@ export function readReviewPointInvocation(point: DeclaredEvidence<ReviewEnginePo
     || receipt.sourceDigests[1] !== evidenceValueReceipt(inputs.position).payloadDigest) throw new TypeError("Review point is not the original ordered evaluation/position invocation");
   return inputs;
 }
+
+export interface RecordedAnalyzeLineValue {
+  readonly nodeId: string;
+  readonly entryNodeId: string;
+  readonly operands: AnalyzeLineOperands;
+}
+type AnalyzeRoute = "derived.review.analysis_typed_pv@1" | "derived.review.analysis_recorded_pv@1" | "derived.review.analysis_recorded_first@1";
+const ANALYZE_ROUTE_ARM: Readonly<Record<AnalyzeRoute, RecordedAnalyzeArm>> = Object.freeze({
+  "derived.review.analysis_typed_pv@1": "typed_pv",
+  "derived.review.analysis_recorded_pv@1": "recorded_bestline",
+  "derived.review.analysis_recorded_first@1": "recorded_search_first",
+});
+const ANALYZE_INVOCATIONS = new WeakMap<object, Readonly<{ route: AnalyzeRoute; source: RecordedAnalyzeLineSource }>>();
+/** Original invocation and complete retained operands, not a copied or rehashed payload. */
+export function readRecordedAnalyzeLineInvocation(result: unknown) {
+  const invocation = result !== null && typeof result === "object" ? ANALYZE_INVOCATIONS.get(result) : undefined;
+  if (invocation === undefined) throw new TypeError("Analyze value is not its original factory invocation");
+  const data = readRecordedAnalyzeLineSource(invocation.source);
+  if (data.sourceArm !== null && data.sourceArm !== ANALYZE_ROUTE_ARM[invocation.route]) throw new TypeError("Analyze invocation crosses its literal route/source arm");
+  if (isDeclaredEvidence(result)) {
+    const receipt = evidenceValueReceipt(result);
+    if (sealedRoute(result) !== invocation.route || receipt.factory !== evidenceFactorySymbol(invocation.route)
+      || data.outcome.kind !== "available" || data.operands === null
+      || !sameDigest(result.payload, { nodeId: data.reviewed.id, entryNodeId: data.parent.id, operands: data.operands })
+      || !sameDigest(receipt.sourceDigests, data.inputs.map(input => evidenceValueReceipt(input).payloadDigest))) {
+      throw new TypeError("Analyze value lost its original source/operand relationship");
+    }
+  }
+  return Object.freeze({ ...invocation, data });
+}
+const analyzeSource = (expected: RecordedAnalyzeArm) => value(`an original ${expected} Analyze collection or actual absence`, candidate => {
+  try {
+    const data = readRecordedAnalyzeLineSource(candidate as RecordedAnalyzeLineSource);
+    return data.sourceArm === expected || data.sourceArm === null && data.outcome.kind === "unavailable";
+  } catch { return false; }
+});
+function analyzeValue(route: AnalyzeRoute, source: RecordedAnalyzeLineSource): EvidenceAvailability<DeclaredEvidence<RecordedAnalyzeLineValue>> {
+  const data = readRecordedAnalyzeLineSource(source), invocation = Object.freeze({ route, source });
+  if (data.sourceArm !== null && data.sourceArm !== ANALYZE_ROUTE_ARM[route]) throw new TypeError("Analyze factory crosses its literal route/source arm");
+  if (data.outcome.kind !== "available" || data.operands === null) {
+    const result = unavailable<DeclaredEvidence<RecordedAnalyzeLineValue>>(data.outcome.kind === "unavailable" || data.outcome.kind === "failed" ? data.outcome.reason : "no_witness");
+    ANALYZE_INVOCATIONS.set(result, invocation); return result;
+  }
+  if (data.packet === null || data.event === null || data.ordinal === null || data.sourceArm === null) throw new TypeError("Analyze available value has no original selected occurrence");
+  const expected = data.sourceArm === "typed_pv" ? ["run.record.edge@1", "recorded.inspector.eval_packet@1", "live.stockfish.principal_variation@1"]
+    : ["run.record.edge@1", data.sourceArm === "recorded_bestline" ? "recorded.inspector.pv_packet@1" : "recorded.inspector.eval_packet@1"];
+  if (!sameDigest(data.inputs.map(sealedRoute), expected) || data.inputs[0] !== data.edge || data.inputs[1] !== data.packet
+    || data.sourceArm === "typed_pv" && (data.typed === null || data.inputs[2] !== data.typed)
+    || data.packet.payload.event !== data.event || data.run.events[data.ordinal] !== data.event) throw new TypeError("Analyze source crosses its literal original inputs");
+  const payload = Object.freeze({ nodeId: data.reviewed.id, entryNodeId: data.parent.id, operands: data.operands });
+  const item = mint(route, evidenceFactorySymbol(route), payload,
+    { branchId: data.branchId, nodeId: data.reviewed.id, edge: data.edge, packet: data.packet, ordinal: data.ordinal }, data.inputs);
+  const result = available(item);
+  ANALYZE_INVOCATIONS.set(item, invocation); ANALYZE_INVOCATIONS.set(result, invocation);
+  readRecordedAnalyzeLineInvocation(item); return result;
+}
+export const createDerivedReviewAnalysisTypedPvV1Evidence = (() => {
+  const route = "derived.review.analysis_typed_pv@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ source: analyzeSource("typed_pv") }], result: "availability", dependency: "review-map" },
+    ({ source }: { readonly source: RecordedAnalyzeLineSource }) => analyzeValue(route, source));
+})();
+export const createDerivedReviewAnalysisRecordedPvV1Evidence = (() => {
+  const route = "derived.review.analysis_recorded_pv@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ source: analyzeSource("recorded_bestline") }], result: "availability", dependency: "review-map" },
+    ({ source }: { readonly source: RecordedAnalyzeLineSource }) => analyzeValue(route, source));
+})();
+export const createDerivedReviewAnalysisRecordedFirstV1Evidence = (() => {
+  const route = "derived.review.analysis_recorded_first@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ source: analyzeSource("recorded_search_first") }], result: "availability", dependency: "review-map" },
+    ({ source }: { readonly source: RecordedAnalyzeLineSource }) => analyzeValue(route, source));
+})();
 
 export const createDerivedReviewEvalPointV1Evidence = (() => {
   const route = "derived.review.eval_point@1";
@@ -1931,6 +2603,7 @@ export const createLiveStockfishLegalRootTableV1Evidence = providerSourceFactory
 export const createLiveStockfishPositionEvalV1Evidence = providerSourceFactory("stockfish.position_evaluation@1");
 export const createLiveStockfishPrincipalVariationV1Evidence = providerSourceFactory("stockfish.principal_variation@1");
 export const createHumanMaiaPolicyPageV1Evidence = providerSourceFactory("maia.policy_page@1");
+export const createHumanMaiaInferenceTaskV1Evidence = providerSourceFactory("maia.inference_task@1");
 export const createLiveSyzygyPositionResultV1Evidence = providerSourceFactory("syzygy.position@1", "syzygy-position-v1");
 export const createLiveSyzygyPositionResultV2Evidence = providerSourceFactory("syzygy.position@1");
 export const createHumanExplorerPositionPageV1Evidence = providerSourceFactory("lichess_explorer.position_page@1");
@@ -2004,6 +2677,76 @@ export const createDerivedMaiaExactFenMoveOccurrenceV1Evidence = (() => {
   });
 })();
 
+const MAIA_NODE_INVOCATIONS = new WeakMap<object, Readonly<MaiaNodeInputs>>();
+/** Includes authentic empty WDL results; no reconstructed/caller-authored source lookup. */
+export function readMaiaNodeInvocation(result: unknown): Readonly<MaiaNodeInputs> {
+  const input = result !== null && typeof result === "object" ? MAIA_NODE_INVOCATIONS.get(result) : undefined;
+  if (input === undefined) throw new TypeError("Maia node result is not an original factory invocation");
+  return input;
+}
+
+const MAIA_NODE_ARM = Object.freeze({ task: sealed("human.maia.inference_task@1"), position: sealed("run.record.position@1"),
+  resolved: value("an exact sealed run-node subject", isRecordedInspectorNode) });
+
+function maiaNodeInputs(input: MaiaNodeInputs): MaiaNodeInputs & { readonly engine: SelectionEngineIdentity; readonly nodeId: string } {
+  const { task, position, resolved } = input;
+  assertResolvedRunSubject(resolved);
+  if (resolved.subject.kind !== "run_node") throw new TypeError("Maia node source requires a run-node subject");
+  const subject = resolved.subject;
+  assertRecordedPositionInvocation(position, resolved.run, subject.nodeId);
+  // The sealed resolver owns the domain-specific event head; the original position invocation
+  // above owns this exact run prefix. Do not compare that head to the different evidence digest.
+  if (subject.runId !== resolved.run.id || subject.fen !== position.payload.fen) throw new TypeError("Maia node source has a crossed recorded subject");
+  assertProviderDelivery("maia.inference_task@1", task.payload);
+  const request = task.payload.payload.request, requestedPosition = request.position;
+  if (requestedPosition.kind !== "history_conditioned") throw new TypeError("Maia node source requires history-conditioned task input");
+  const path = resolveBranchPath(resolved.run, subject.branchId);
+  if (path.kind !== "resolved") throw new TypeError("Maia node source has no selected branch path");
+  const index = path.nodes.findIndex(node => node.id === subject.nodeId), startFen = resolved.run.start.fen;
+  if (index < 0 || path.nodes[0]?.fen !== startFen || canonicalFen(positionFromFen(startFen)) !== startFen) throw new TypeError("Maia node source start/node is not canonical");
+  const historyUci = path.nodes.slice(1, index + 1).map((node, i) => recordedEdgePayload(resolved.run, path.nodes[i]!, node).moveUci);
+  if (requestedPosition.startFen !== startFen || requestedPosition.historyUci.length !== historyUci.length
+    || requestedPosition.historyUci.some((move, i) => move !== historyUci[i])) throw new TypeError("Maia node task history identity mismatch");
+  const actual = task.payload.acquisition.actualIdentity;
+  const engine: SelectionEngineIdentity = Object.freeze({ id: actual.id, name: actual.name, version: actual.version,
+    modelId: actual.modelId, containerDigest: actual.containerDigest, seedHonored: actual.seedHonored,
+    eloHonored: actual.eloHonored, eloApplied: task.payload.payload.appliedBand });
+  return Object.freeze({ task, position, resolved, engine, nodeId: subject.nodeId });
+}
+
+export const createDerivedMaiaNodeDistributionV1Evidence = (() => {
+  const route = "derived.maia.node_distribution@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [MAIA_NODE_ARM], result: "single", dependency: "provider-exchange-and-execution" }, (input: MaiaNodeInputs): DeclaredEvidence<MaiaNodeDistribution> => {
+    const { task, position, resolved, engine, nodeId } = maiaNodeInputs(input);
+    if (resolved.subject.kind !== "run_node") throw new TypeError("Maia distribution has no node subject");
+    const payload: MaiaNodeDistribution = Object.freeze({ task, position, nodeId, branchId: resolved.subject.branchId,
+      eventHeadDigest: resolved.subject.eventHeadDigest, engine, requestedBand: task.payload.payload.request.band,
+      appliedBand: task.payload.payload.appliedBand, coverage: "bounded_reported_window",
+      candidates: Object.freeze(task.payload.payload.candidates.map(({ moveUci, rank, mass }) => Object.freeze({ moveUci, rank, mass }))) });
+    const result = mint(route, symbol, payload, { task, position, subject: resolved.subject }, [task, position]);
+    MAIA_NODE_INVOCATIONS.set(result, Object.freeze({ task, position, resolved }));
+    return result;
+  });
+})();
+
+export const createDerivedMaiaNodeCandidateWdlV1Evidence = (() => {
+  const route = "derived.maia.node_candidate_wdl@1", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [MAIA_NODE_ARM], result: "availability", dependency: "provider-exchange-and-execution" }, (input: MaiaNodeInputs): EvidenceAvailability<DeclaredEvidence<MaiaNodeCandidateWdl>> => {
+    const { task, position, resolved, engine, nodeId } = maiaNodeInputs(input), original = Object.freeze({ task, position, resolved });
+    const candidates = Object.freeze(task.payload.payload.candidates.flatMap(({ moveUci, rank, wdl }) => wdl === null ? [] : [Object.freeze({ moveUci, rank, wdl })]));
+    if (candidates.length === 0) {
+      const result = unavailable<DeclaredEvidence<MaiaNodeCandidateWdl>>("empty_population");
+      MAIA_NODE_INVOCATIONS.set(result, original);
+      return result;
+    }
+    const payload: MaiaNodeCandidateWdl = Object.freeze({ task, position, nodeId, engine,
+      requestedBand: task.payload.payload.request.band, appliedBand: task.payload.payload.appliedBand, candidates });
+    const item = mint(route, symbol, payload, { task, position, subject: resolved.subject }, [task, position]), result = available(item);
+    MAIA_NODE_INVOCATIONS.set(item, original); MAIA_NODE_INVOCATIONS.set(result, original);
+    return result;
+  });
+})();
+
 function recordedInspectorPacketFactory<K extends EvidenceKind>(route: string, kind: K) {
   const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "source_receipt", arms: [{ resolved: value("an exact sealed run-node subject", isRecordedInspectorNode), itemDigest: value("an existing run evidence-item digest", candidate => typeof candidate === "string" && /^sha256:[0-9a-f]{64}$/u.test(candidate)) }], result: "single" },
@@ -2031,6 +2774,30 @@ function recordedInspectorTablebaseView<T>(route: string, compute: (record: Decl
 }
 export const createDerivedInspectorTablebaseCategoryV1Evidence = recordedInspectorTablebaseView("derived.inspector.tablebase_category@1", recordedInspectorCategoryValue);
 export const createDerivedInspectorTablebaseDistanceV1Evidence = recordedInspectorTablebaseView("derived.inspector.tablebase_distance@1", recordedInspectorDistanceValue);
+
+/** Accepted D3802: one original complete source, never caller rows or another detail view. */
+function inspectorDetailFactory<K extends InspectorDetailKind>(kind: K) {
+  const route = `derived.inspector.detail.${kind}@1`, sourceRoute = INSPECTOR_DETAIL_SOURCES[kind];
+  const symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "derived", arms: [{ source: sealed(sourceRoute),
+    scope: value("the closed source-specific detail scope", candidate => {
+      try { parseInspectorDetailScope(kind, candidate); return true; } catch { return false; }
+    }), start: value("a non-negative safe member index", candidate => Number.isSafeInteger(candidate) && (candidate as number) >= 0) }], result: "single" },
+  (input: { readonly source: DeclaredEvidence<InspectorDetailSources[K]>; readonly scope: InspectorDetailScope; readonly start: number }): DeclaredEvidence<InspectorDetailPayload<K>> => {
+    assertDeclaredEvidence(input.source);
+    if (sealedRoute(input.source) !== sourceRoute) throw new TypeError("Inspector detail needs its exact original source");
+    if (isFoundationDetailKind(kind)) assertPawnFoundationSource(input.source, sourceRoute);
+    const scope = parseInspectorDetailScope(kind, input.scope);
+    const payload = buildInspectorDetailPayload(kind, input.source.payload, scope, input.start);
+    return mint(route, symbol, payload, { source: input.source, scope, start: input.start }, [input.source]);
+  });
+}
+export const createDerivedInspectorDetailRaysV1Evidence = inspectorDetailFactory("rays");
+export const createDerivedInspectorDetailSquareControlV1Evidence = inspectorDetailFactory("square_control");
+export const createDerivedInspectorDetailPieceDestinationsV1Evidence = inspectorDetailFactory("piece_destinations");
+export const createDerivedInspectorDetailDestinationChangesV1Evidence = inspectorDetailFactory("destination_changes");
+export const createDerivedInspectorDetailKingZoneV1Evidence = inspectorDetailFactory("king_zone");
+export const createDerivedInspectorDetailDefenderDutiesV1Evidence = inspectorDetailFactory("defender_duties");
 
 /** §7: the one adapter for the scheduler-sealed whole Syzygy outside-domain envelope. */
 export const createRulesEndgameTablebaseDomainV1Evidence = (() => {
@@ -2252,8 +3019,41 @@ export const createPackAuthoredClaimDeliveryV1Evidence = (() => {
 export const createAuthoredStructuralConditionInputV1Evidence = (() => {
   const route = "authored.structural_condition.input@1";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "authored_authority", arms: [{ source: value("pack | shape", (candidate) => candidate === "pack" || candidate === "shape"), documentId: value("a document id", isText), pointer: value("a document pointer", isText), expression: value("a StructuralExpression", isRecord) }], result: "single", dependency: "registered-authored-provenance", pending: AUTHORED_PENDING }, (input: { readonly source: "pack" | "shape"; readonly documentId: string; readonly pointer: string; readonly expression: Readonly<Record<string, unknown>> }) =>
-    mint(route, symbol, Object.freeze({ source: input.source, documentId: input.documentId, pointer: input.pointer, expression: input.expression }), input, [evidenceDigest({ documentId: input.documentId, pointer: input.pointer })]));
+  return factory({ route, symbol, shape: "authored_authority", arms: [{ source: value("pack | shape", (candidate) => candidate === "pack" || candidate === "shape"), documentId: value("a document id", isText), pointer: value("a document pointer", isText), expression: value("a StructuralExpression", isRecord) }], result: "single", dependency: "registered-authored-provenance", pending: AUTHORED_PENDING }, (input: { readonly source: "pack" | "shape"; readonly documentId: string; readonly pointer: string; readonly expression: Readonly<Record<string, unknown>> }) => {
+    const expression = structuredClone(input.expression);
+    assertLegacyStructuralExpression(expression);
+    return mint(route, symbol, Object.freeze({ source: input.source, documentId: input.documentId, pointer: input.pointer, expression }), { ...input, expression }, [evidenceDigest({ documentId: input.documentId, pointer: input.pointer })]);
+  });
+})();
+
+const AUTHORED_STRUCTURAL_INPUTS = new WeakMap<object, AuthoredStructuralConditionSource>();
+export function readAuthoredStructuralInput(value: DeclaredEvidence<AuthoredStructuralSourceImage>): AuthoredStructuralConditionSource {
+  const source = AUTHORED_STRUCTURAL_INPUTS.get(value);
+  if (source === undefined || sealedRoute(value) !== "authored.structural_condition.input@2"
+    // The sole mint retains this exact immutable source image. Identity is stronger than
+    // re-hashing two equal document trees, and the source reader still checks live ownership.
+    || readAuthoredStructuralConditionSource(source) !== value.payload) throw new TypeError("Authored predicate input is not its original current document-source invocation");
+  assertDeclaredEvidence(value); return source;
+}
+export const createAuthoredStructuralConditionInputV2Evidence = (() => {
+  const route = "authored.structural_condition.input@2", symbol = evidenceFactorySymbol(route);
+  // This input contains no position or evaluation state. Reuse only this original
+  // source's genuine immutable mint; root/leaf/population/result values remain separate.
+  const inputs = new WeakMap<AuthoredStructuralConditionSource, DeclaredEvidence<AuthoredStructuralSourceImage>>();
+  return factory({ route, symbol, shape: "authored_authority", arms: [{ source: value("an original authored structural condition source", candidate => {
+    try { readAuthoredStructuralConditionSource(candidate as AuthoredStructuralConditionSource); return true; } catch { return false; }
+  }) }], result: "single" }, ({ source }: { readonly source: AuthoredStructuralConditionSource }) => {
+    const image = readAuthoredStructuralConditionSource(source);
+    const cached = inputs.get(source);
+    if (cached !== undefined) {
+      if (readAuthoredStructuralInput(cached) !== source) throw new TypeError("Authored input crosses its original source");
+      return cached;
+    }
+    const result = mint(route, symbol, image, image, [image.origin.digest.slice(7), ...image.substitutions.map(row => row.shape.digest.slice(7))]);
+    AUTHORED_STRUCTURAL_INPUTS.set(result, source);
+    if (readAuthoredStructuralInput(result) !== source) throw new TypeError("Authored input lost its original source during mint");
+    inputs.set(source, result); return result;
+  });
 })();
 
 const SHAPE_FIRING_INVOCATIONS = new WeakMap<object, Readonly<{
@@ -2283,6 +3083,129 @@ export const createTheoryShapesFiringV1Evidence = (() => {
   });
 })();
 
+export interface RegisteredShapeFiring {
+  readonly entryId: string;
+  readonly firstNodeId: string;
+  readonly lastNodeId: string;
+  readonly openEnded: boolean;
+  readonly authority: Readonly<{ documentId: string; documentVersion: string; documentDigest: string;
+    pointer: "/trigger"; name: string; channel: "official" | "community"; publisherHandle: string | null }>;
+}
+interface RegisteredShapeInvocation {
+  readonly source: RegisteredShapeSource;
+  readonly path: readonly { readonly id: string; readonly fen: string }[];
+  readonly inputDigest: string;
+  readonly items: readonly DeclaredEvidence<RegisteredShapeFiring>[];
+}
+const REGISTERED_SHAPE_INVOCATIONS = new WeakMap<object, RegisteredShapeInvocation>();
+function registeredShapePath(path: RegisteredShapeInvocation["path"]): RegisteredShapeInvocation["path"] {
+  const ids = new Set<string>();
+  if (!Array.isArray(path) || Object.getPrototypeOf(path) !== Array.prototype || path.length === 0
+    || Reflect.ownKeys(path).length !== path.length + 1) throw new TypeError("Registered shape path must be a complete ordinary data array");
+  const captured: { readonly id: string; readonly fen: string }[] = [];
+  for (let index = 0; index < path.length; index += 1) {
+    const member = Object.getOwnPropertyDescriptor(path, index);
+    if (member === undefined || !member.enumerable || !("value" in member)) throw new TypeError("Registered shape path must have own data members");
+    const node: unknown = member.value;
+    if (node === null || typeof node !== "object" || Object.getPrototypeOf(node) !== Object.prototype
+      || Reflect.ownKeys(node).length !== 2) throw new TypeError("Registered shape node must be exactly an own data id/FEN record");
+    const id = Object.getOwnPropertyDescriptor(node, "id"), fen = Object.getOwnPropertyDescriptor(node, "fen");
+    if (id === undefined || fen === undefined || !id.enumerable || !fen.enumerable || !("value" in id) || !("value" in fen)
+      || !isText(id.value) || ids.has(id.value) || canonicalFen(positionFromFen(validFen(fen.value))) !== fen.value) throw new TypeError("Registered shape path must have canonical FENs and unique complete node identities");
+    ids.add(id.value); captured.push(Object.freeze({ id: id.value, fen: fen.value as string }));
+  }
+  return Object.freeze(captured);
+}
+function registeredShapeAuthority(source: RegisteredShapeSource, path: RegisteredShapeInvocation["path"]) {
+  return { records: registeredShapeRecordsImage(readRegisteredShapeSource(source)), path: registeredShapePath(path) };
+}
+/** Original complete calculation, including an empty result. Never reconstructed by rerunning. */
+export function readRegisteredShapeFiringInvocation(items: readonly DeclaredEvidence<RegisteredShapeFiring>[], source: RegisteredShapeSource, path: RegisteredShapeInvocation["path"]) {
+  const proof = REGISTERED_SHAPE_INVOCATIONS.get(items);
+  if (proof === undefined || proof.source !== source || proof.path !== path || proof.items !== items
+    || proof.inputDigest !== evidenceDigest(registeredShapeAuthority(source, path))) throw new TypeError("Registered shape firing differs from its original source/path invocation");
+  for (const item of items) {
+    assertDeclaredEvidence(item);
+    const receipt = evidenceValueReceipt(item);
+    if (sealedRoute(item) !== "theory.shapes.firing@2" || receipt.factory !== "createTheoryShapesFiringV2Evidence"
+      || receipt.inputDigest !== proof.inputDigest) throw new TypeError("Registered shape firing lost its original authority");
+  }
+  return proof;
+}
+
+export const createTheoryShapesFiringV2Evidence = (() => {
+  const route = "theory.shapes.firing@2", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "authored_authority", arms: [{ source: value("the original registered shape source", candidate => {
+    try { readRegisteredShapeSource(candidate as RegisteredShapeSource); return true; } catch { return false; }
+  }), path: value("the complete ordered recorded node path", Array.isArray) }], result: "population", dependency: "evidence-value-authority" },
+  ({ source, path }: { readonly source: RegisteredShapeSource; readonly path: RegisteredShapeInvocation["path"] }) => {
+    const records = readRegisteredShapeSource(source), nodes = registeredShapePath(path);
+    const authority = registeredShapeAuthority(source, nodes), inputDigest = evidenceDigest(authority);
+    const entries = records.map(record => ({ id: record.document.id, trigger: record.document.trigger }));
+    const byId = new Map(records.map(record => [record.document.id, record]));
+    const items = Object.freeze(shapeFirings(entries, nodes).map(firing => {
+      const record = byId.get(firing.entryId);
+      if (record === undefined) throw new TypeError("Shape firing has no admitted registered document");
+      const attribution = Object.freeze({ documentId: record.document.id, documentVersion: record.document.version,
+        documentDigest: record.digest, pointer: "/trigger" as const, name: record.document.name,
+        channel: record.channel, publisherHandle: record.publisherHandle });
+      return mint(route, symbol, Object.freeze({ ...firing, authority: attribution }), authority,
+        [evidenceDigest({ document: record.document, authority: attribution })]);
+    }));
+    readRegisteredShapeSource(source);
+    REGISTERED_SHAPE_INVOCATIONS.set(items, Object.freeze({ source, path, inputDigest, items }));
+    readRegisteredShapeFiringInvocation(items, source, path); return items;
+  });
+})();
+
+const CURRENT_SHAPE_INVOCATIONS = new WeakMap<object, Readonly<{ scan: RegisteredShapeScan; inputDigest: string; items: readonly DeclaredEvidence<RegisteredShapeFiring>[] }>>();
+export function readCurrentShapeFiringInvocation(items: readonly DeclaredEvidence<RegisteredShapeFiring>[], scan: RegisteredShapeScan) {
+  const source = readRegisteredShapeScan(scan), proof = CURRENT_SHAPE_INVOCATIONS.get(items);
+  if (proof === undefined || proof.scan !== scan || proof.items !== items || proof.inputDigest !== source.inputDigest) throw new TypeError("Current shape result lost its original complete scan invocation");
+  for (const item of items) {
+    assertDeclaredEvidence(item);
+    const receipt = evidenceValueReceipt(item);
+    if (sealedRoute(item) !== "theory.shapes.firing@3" || receipt.factory !== "createTheoryShapesFiringV3Evidence"
+      || receipt.inputDigest !== proof.inputDigest) throw new TypeError("Current shape result crosses its original factory");
+  }
+  return proof;
+}
+export const createTheoryShapesFiringV3Evidence = (() => {
+  const route = "theory.shapes.firing@3", symbol = evidenceFactorySymbol(route);
+  return factory({ route, symbol, shape: "authored_authority", arms: [{ scan: value("the original complete current registered shape scan", candidate => {
+    try { readRegisteredShapeScan(candidate as RegisteredShapeScan); return true; } catch { return false; }
+  }) }], result: "population", dependency: "evidence-value-authority" }, ({ scan }: { readonly scan: RegisteredShapeScan }) => {
+    const source = readRegisteredShapeScan(scan), items: DeclaredEvidence<RegisteredShapeFiring>[] = [];
+    for (const row of source.rows) {
+      const record = row.record, authority = Object.freeze({ documentId: record.document.id, documentVersion: record.document.version,
+        documentDigest: record.digest, pointer: "/trigger" as const, name: record.document.name, channel: record.channel, publisherHandle: record.publisherHandle });
+      const sourceDigests = [evidenceDigest({ document: record.document, authority })], refs: VersionedEvidenceId[] = [];
+      const matches = row.cells.map(cell => {
+        const data = readAuthoredPredicatePopulation(cell);
+        for (const input of [data.condition, data.position, ...data.leaves.map(row => row.value)]) {
+          sourceDigests.push(evidenceDigest(registeredShapeReceiptImage(input)));
+          refs.push(...(evidenceValueReceipt(input).convention?.refs ?? []));
+        }
+        return data.observation.matched;
+      });
+      let first = -1;
+      for (let index = 0; index <= source.path.length; index++) {
+        const matched = index < source.path.length && matches[index]!;
+        if (matched && first < 0) first = index;
+        if (!matched && first >= 0) {
+          const payload = Object.freeze({ entryId: record.document.id, firstNodeId: source.path[first]!.id,
+            lastNodeId: source.path[index - 1]!.id, openEnded: index === source.path.length, authority });
+          items.push(mint(route, symbol, payload, source.image, sourceDigests, refs)); first = -1;
+        }
+      }
+    }
+    const result = Object.freeze(items);
+    readRegisteredShapeScan(scan);
+    CURRENT_SHAPE_INVOCATIONS.set(result, Object.freeze({ scan, inputDigest: source.inputDigest, items: result }));
+    readCurrentShapeFiringInvocation(result, scan); return result;
+  });
+})();
+
 /** `theory.endgame.setup_match@1` result: a sealed positive, an explicit operand-level miss, or unavailable. */
 export type EndgameSetupMatchAvailability =
   | { readonly kind: "available"; readonly value: DeclaredEvidence<EndgameSetupMatch> }
@@ -2304,27 +3227,18 @@ export const createTheoryEndgameSetupMatchV1Evidence = (() => {
 // No-route projections gaining factories (§4): unavailable until their upstream authority lands
 // ---------------------------------------------------------------------------------------------
 
-const GRADE_CONTEXTS: ReadonlySet<unknown> = new Set(["drill", "review", "imported_analysis"]);
-const isGradeSide = (candidate: unknown): candidate is GradeSide => candidate === "white" || candidate === "black";
-
-/**
- * rfc/move-quality-grades.md D1 / rfc/review-map.md §3: the single production caller of the shipped
- * grader. It grades one move from two sealed evaluation readings of the positions before and after it,
- * from the mover's side, under the context's ladder. Below threshold it emits nothing ("good is the
- * absence of a grade"); an abstention is returned as an unavailable reason, never as a class.
- */
-export const createDerivedGradeMoveQualityV1Evidence = (() => {
-  const route = "derived.grade.move_quality@1";
+/** The sole current grader consumes its actual workflow-issued source, never caller readings. */
+export const createDerivedGradeMoveQualityV2Evidence = (() => {
+  const route = "derived.grade.move_quality@2";
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ before: sealed("recorded.engine.eval@1", "live.stockfish.eval@1"), after: sealed("recorded.engine.eval@1", "live.stockfish.eval@1"), mover: value("the moving side", isGradeSide), context: value("a grade context", (candidate) => GRADE_CONTEXTS.has(candidate)) }], result: "availability", dependency: "provider-exchange-and-execution", pending: "Paired-instrument identity (engine id, lane, requested search limit) is checked value-for-value from the two sealed readings; the provider exchange receipt that would attest each request lands with provider-exchange-and-execution." }, ({ before, after, mover, context }: { readonly before: DeclaredEvidence<unknown>; readonly after: DeclaredEvidence<unknown>; readonly mover: GradeSide; readonly context: GradeContext }): EvidenceAvailability<readonly DeclaredEvidence<MoveQualityGrade>[]> => {
-    // The payload reader normalizes both packet and ledger readings to recorded White POV.
-    // Check their admitted projection origins before that normalization loses the distinction,
-    // including before a below-threshold empty result. Accepted grade §2 never permits mixing.
-    if (sealedRoute(before) !== sealedRoute(after)) return unavailable("unequal_instrument");
-    const result = moveQualityGrade(gradeReadingFromPayload(before.payload, mover), gradeReadingFromPayload(after.payload, mover === "white" ? "black" : "white"), context, mover);
+  return factory({ route, symbol, shape: "derived", arms: [{ recordedGrade: value("the original workflow-owned recorded grade source", isRecordedGradeSource) }], result: "availability" },
+    (input: { readonly recordedGrade: RecordedGradeSource }): EvidenceAvailability<readonly DeclaredEvidence<MoveQualityGrade>[]> => {
+    const source = readRecordedGradeSource(input.recordedGrade), pair = source.state;
+    if (pair.kind === "unavailable") return unavailable(pair.reason);
+    const result = moveQualityGrade(pair.before, pair.after, source.mover);
     if (result === undefined) return available(Object.freeze([]));
     if ("abstained" in result) return unavailable(result.reason);
-    return available(Object.freeze([mint(route, symbol, result, { mover, context }, [before, after])]));
+    return available(Object.freeze([mint(route, symbol, result, input, pair.inputs)]));
   });
 })();
 
@@ -2374,11 +3288,6 @@ function openingPointFactory<Route extends OpeningPointRoute>(route: Route) {
 export const createTheoryOpeningCurrentEndpointV1Evidence = openingPointFactory("theory.opening.current_endpoint@1");
 export const createTheoryOpeningCatalogueMembershipV1Evidence = openingPointFactory("theory.opening.catalogue_membership@1");
 
-export const createDerivedOpeningDeepestReachedV1Evidence = (() => {
-  const route = "derived.opening.deepest_reached@1";
-  const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ run: RUN, branchId: value("a branch id", isText) }], result: "availability", dependency: "runtime-opening-identity", pending: "Requires theory.opening.current_endpoint@1, which is unavailable in runtime." }, (): EvidenceAvailability<DeclaredEvidence<unknown>> => unavailable("input_abstained", "runtime-opening-identity"));
-})();
 
 export const createDerivedOpeningDeepestReachedV2Evidence = (() => {
   const route = "derived.opening.deepest_reached@2", symbol = evidenceFactorySymbol(route);
@@ -2393,26 +3302,6 @@ export const createDerivedOpeningDeepestReachedV2Evidence = (() => {
       publishEvidenceReduction(authority, result); return result;
     });
 })();
-
-// ---------------------------------------------------------------------------------------------
-// Opponent candidate feature vector
-// ---------------------------------------------------------------------------------------------
-
-export const createDerivedOpponentCandidateFeatureVectorV1Evidence = (() => {
-  const route = "derived.opponent.candidate_feature_vector@1";
-  const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ beforeFen: FEN, engine: value("a fixed-bound engine identity", isRecord), candidates: value("a candidate list", Array.isArray) }], result: "single", dependency: "provider-exchange-and-execution", pending: "Candidate scores are the bounded Stockfish reading supplied with the request; the exchange receipt lands with provider-exchange-and-execution. Collector results are recomputed by their factories." }, (input: { readonly beforeFen: string; readonly engine: SelectionEngineIdentity; readonly candidates: readonly CandidateFeatureInput[] }): DeclaredEvidence<CandidateFeatureVector> => {
-    const built = candidateCollectorResults(input, COLLECTOR_FACTORIES);
-    return mint(route, symbol, built.vector, { beforeFen: input.beforeFen, engine: input.engine, candidates: input.candidates }, built.sources);
-  });
-})();
-
-/** Collector factories the candidate vector recomputes on each hypothetical child. */
-const COLLECTOR_FACTORIES = Object.freeze({
-  exchange: (fen: string, moveUci: string) => createRulesExchangePredicateLegalExchangeV1Evidence({ fen, captureUci: moveUci }),
-  forkSurvival: (doubleAttack: DeclaredEvidence<DoubleAttackEvent>, edge: EvidenceEdge) => createDerivedTacticForkSurvivesReplyV1Evidence({ doubleAttack, breadth: createRulesTacticConsequenceReplyBreadthV1Evidence(edge) }),
-});
-export type CandidateCollectorFactories = typeof COLLECTOR_FACTORIES;
 
 // ---------------------------------------------------------------------------------------------
 // Recorded semantic path (rfc/recorded-semantic-path): run.record.edge@1 and the eleven v2
@@ -2703,9 +3592,9 @@ export const createDerivedPivotalOptionCollapseV2Evidence = pivotalFactory("opti
 type HintLineEvidence = DeclaredEvidence<ProviderEvidenceDelivery<FixedBoundPrincipalVariation, "stockfish.principal_variation@1">>;
 
 function hintHorizonFactory(family: HintFamily): EvidenceValueFactory<{ readonly line: HintLineEvidence; readonly source: DeclaredEvidence<unknown>; readonly ply: 1 | 3 }, EvidenceAvailability<DeclaredEvidence<HintHorizonOccurrence>>> {
-  const route = `${hintHorizonProjectionId(family)}@1`;
-  const symbol = evidenceFactorySymbol(route);
   const row = hintDeclarationRow(family);
+  const route = `${row.horizon.id}@${row.horizon.version}`;
+  const symbol = evidenceFactorySymbol(route);
   return factory({ route, symbol, shape: "derived", arms: [{ line: sealed(`${HINT_SEARCH_SOURCE.id}@${HINT_SEARCH_SOURCE.version}`), source: sealed(`${row.source.id}@${row.source.version}`), ply: value("the searched root-side ply 1 or 3", (candidate) => candidate === 1 || candidate === 3) }], result: "availability" }, ({ line, source, ply }: { readonly line: HintLineEvidence; readonly source: DeclaredEvidence<unknown>; readonly ply: 1 | 3 }): EvidenceAvailability<DeclaredEvidence<HintHorizonOccurrence>> => {
     const occurrence = hintHorizonOccurrence(family, line.payload, source.payload, ply);
     if (occurrence === undefined) return unavailable("no_admitted_occurrence");
@@ -2714,14 +3603,30 @@ function hintHorizonFactory(family: HintFamily): EvidenceValueFactory<{ readonly
 }
 
 /** One availability factory per hint family (seven). */
-export const HINT_HORIZON_FACTORIES = Object.freeze(Object.fromEntries(HINT_FAMILIES.map((family) => [`${hintHorizonProjectionId(family)}@1`, hintHorizonFactory(family)])) as Readonly<Record<`derived.hint.horizon.${HintFamily}@1`, ReturnType<typeof hintHorizonFactory>>>);
+export const HINT_HORIZON_FACTORIES = Object.freeze(Object.fromEntries(HINT_FAMILIES.map((family) => {
+  const ref = hintDeclarationRow(family).horizon;
+  return [`${ref.id}@${ref.version}`, hintHorizonFactory(family)];
+})) as Readonly<Record<`derived.hint.horizon.${HintFamily}@${1 | 2}`, ReturnType<typeof hintHorizonFactory>>>);
 
 function hintDisclosureFactory(family: HintFamily, rung: HintRung): EvidenceValueFactory<{ readonly horizon: DeclaredEvidence<HintHorizonOccurrence> }, DeclaredEvidence<HintDisclosurePayload>> {
-  const route = `${hintDisclosureProjectionId(family, rung)}@1`;
+  const row = hintDeclarationRow(family), disclosure = row.disclosures[rung];
+  const route = `${disclosure.id}@${disclosure.version}`;
   const symbol = evidenceFactorySymbol(route);
-  return factory({ route, symbol, shape: "derived", arms: [{ horizon: sealed(`${hintHorizonProjectionId(family)}@1`) }], result: "single" }, ({ horizon }: { readonly horizon: DeclaredEvidence<HintHorizonOccurrence> }) =>
+  return factory({ route, symbol, shape: "derived", arms: [{ horizon: sealed(`${row.horizon.id}@${row.horizon.version}`) }], result: "single" }, ({ horizon }: { readonly horizon: DeclaredEvidence<HintHorizonOccurrence> }) =>
     mint(route, symbol, hintDisclosurePayload(horizon.payload, rung), { horizon }, [horizon]));
 }
 
 /** One single-value factory per hint family x rung (thirty-five). */
-export const HINT_DISCLOSURE_FACTORIES = Object.freeze(Object.fromEntries(HINT_FAMILIES.flatMap((family) => HINT_RUNGS.map((rung) => [`${hintDisclosureProjectionId(family, rung)}@1`, hintDisclosureFactory(family, rung)]))) as Readonly<Record<`${HintDisclosureProjectionId}@1`, ReturnType<typeof hintDisclosureFactory>>>);
+export const HINT_DISCLOSURE_FACTORIES = Object.freeze(Object.fromEntries(HINT_FAMILIES.flatMap((family) => HINT_RUNGS.map((rung) => {
+  const ref = hintDeclarationRow(family).disclosures[rung];
+  return [`${ref.id}@${ref.version}`, hintDisclosureFactory(family, rung)];
+}))) as Readonly<Record<`${HintDisclosureProjectionId}@${1 | 2}`, ReturnType<typeof hintDisclosureFactory>>>);
+
+export const createDerivedInspectorDetailBackwardPawnsV1Evidence = inspectorDetailFactory("backward_pawns");
+export const createDerivedInspectorDetailPawnFileGroupsV1Evidence = inspectorDetailFactory("pawn_file_groups");
+export const createDerivedInspectorDetailFileStatesV1Evidence = inspectorDetailFactory("file_states");
+export const createDerivedInspectorDetailFutureFileChallengesV1Evidence = inspectorDetailFactory("future_file_challenges");
+export const createDerivedInspectorDetailCaptureMigrationReachesV1Evidence = inspectorDetailFactory("capture_migration_reaches");
+export const createDerivedInspectorDetailOutpostCandidatesV1Evidence = inspectorDetailFactory("outpost_candidates");
+export const createDerivedInspectorDetailOccupiedOutpostsV1Evidence = inspectorDetailFactory("occupied_outposts");
+export const createDerivedInspectorDetailBackwardPawnAdvanceV1Evidence = inspectorDetailFactory("backward_pawn_advance");

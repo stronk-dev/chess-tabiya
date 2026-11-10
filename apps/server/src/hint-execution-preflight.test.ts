@@ -2,16 +2,18 @@ import type { AddressInfo } from "node:net";
 import * as runtime from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { CandidatePopulationService } from "./candidate-population-service.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 
 const FEN = "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1";
-const originalCompile = runtime.compileEvidenceConsumerExecution;
+const originalCompile = runtime.compileEvidenceConsumerExecutionV2;
 const faults = ["missing_policy", "impossible_latency", "extra_raw_binding"] as const;
 type Fault = typeof faults[number];
 afterEach(() => vi.restoreAllMocks());
 
 async function control(initialFault?: Fault) {
+  installEmptyApplicationCatalogues();
   const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
   try {
     await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
@@ -34,7 +36,7 @@ async function control(initialFault?: Fault) {
     // fault controls run the real compiler over changed declarations, not a fake rejection.
     let fault = initialFault;
     const trace: string[] = [];
-    const compile = vi.spyOn(runtime, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => {
+    const compile = vi.spyOn(runtime, "compileEvidenceConsumerExecutionV2").mockImplementation((manifest, consumer) => {
       if (consumer.id !== "module.guided_hint") return originalCompile(manifest, consumer);
       trace.push("compile");
       if (fault === undefined) return originalCompile(manifest, consumer);
@@ -53,7 +55,7 @@ async function control(initialFault?: Fault) {
     const exchange = vi.spyOn(MockProviderEngineClient.prototype, "exchange");
     const packets = vi.spyOn(CandidatePopulationService.prototype, "wide");
     const ask = async (rung: runtime.HintRung) => {
-      const response = await post("/runs/hint-preflight/hints", { nodeId: graph.graph.activeCursor.nodeId, rung, decisionDigest: decision.digest,
+      const response = await post("/runs/hint-preflight/hints", { clientRequestId: "0".repeat(32), nodeId: graph.graph.activeCursor.nodeId, rung, decisionDigest: decision.digest,
         assistance: runtime.compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) });
       expect(response.status, await response.clone().text()).toBe(200);
       return runtime.parseHintResponse((await response.json() as { hint: unknown }).hint);
@@ -69,7 +71,7 @@ async function control(initialFault?: Fault) {
       return result;
     };
     return { application, compile, trace, start, exchange, packets, ask, settle, fault(value: Fault) { fault = value; } };
-  } catch (error) { vi.restoreAllMocks(); await application.close(); throw error; }
+  } catch (error) { try { await application.close(); } finally { vi.restoreAllMocks(); } throw error; }
 }
 
 describe("authenticated complete Guided Hint preflight", () => {
@@ -81,7 +83,7 @@ describe("authenticated complete Guided Hint preflight", () => {
       expect(app.start).not.toHaveBeenCalled();
       expect(app.exchange).not.toHaveBeenCalled();
       expect(app.packets).not.toHaveBeenCalled();
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { try { await app.application.close(); } finally { vi.restoreAllMocks(); } }
   });
 
   it.each(faults)("%s cannot reuse a previously valid cached horizon", { timeout: 30_000 }, async fault => {
@@ -94,7 +96,7 @@ describe("authenticated complete Guided Hint preflight", () => {
       expect(await app.ask("distance")).toEqual({ state: "failed", requestId: expect.stringMatching(/^[a-f0-9]{32}$/u), rung: "distance", reason: "contract_violation" });
       expect(app.trace).toEqual(["compile"]);
       expect(app.start).not.toHaveBeenCalled(); expect(app.exchange).not.toHaveBeenCalled(); expect(app.packets).not.toHaveBeenCalled();
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { try { await app.application.close(); } finally { vi.restoreAllMocks(); } }
   });
 
   it("preflights each authenticated request and retains one shared search for all permitted rungs", { timeout: 30_000 }, async () => {
@@ -106,9 +108,9 @@ describe("authenticated complete Guided Hint preflight", () => {
         if (result.state === "available") expect(result.delivery.marks.rung).toBe(rung);
       }
       expect(app.trace).toEqual(["compile", "compile", "compile", "compile"]);
-      expect(app.compile.mock.calls.filter(([, consumer]) => consumer.id === "module.guided_hint").every(([, consumer]) => consumer.version === 1)).toBe(true);
+      expect(app.compile.mock.calls.filter(([, consumer]) => consumer.id === "module.guided_hint").every(([, consumer]) => consumer.version === 2)).toBe(true);
       expect(app.exchange).toHaveBeenCalledTimes(1);
       expect(app.packets).toHaveBeenCalledTimes(1);
-    } finally { vi.restoreAllMocks(); await app.application.close(); }
+    } finally { try { await app.application.close(); } finally { vi.restoreAllMocks(); } }
   });
 });

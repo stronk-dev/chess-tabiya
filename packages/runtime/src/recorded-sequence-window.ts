@@ -90,9 +90,23 @@ export function prepareRecordedSemanticWindows(input: Readonly<{ run: DrillRun; 
   run: DrillRun; eventHeadDigest: string; windows: readonly RecordedSequenceWindow[]; omittedHorizons: readonly number[]; availableEdges: number;
 }> {
   if (input === null || typeof input !== "object" || Reflect.ownKeys(input).length !== 4 || !["run", "branchId", "throughNodeId", "route"].every(field => Object.hasOwn(input, field))) throw new TypeError("Recorded sequence requires exactly {run,branchId,throughNodeId,route}");
-  const { branchId, throughNodeId, route } = input;
-  if (typeof route !== "string" || route !== "derived.exchange.trade_completed@2" && !Object.hasOwn(RECORDED_SEQUENCE_HORIZONS, route)) throw new RecordedSequenceScopeError("projection_unsupported", "Recorded sequence projection unsupported");
-  if (typeof branchId !== "string" || !branchId || typeof throughNodeId !== "string" || !throughNodeId) throw new TypeError("Recorded sequence needs exact branch and endpoint");
+  return prepareRecordedSemanticWindowPopulation({ run: input.run, branchId: input.branchId, throughNodeId: input.throughNodeId, routes: [input.route] }).get(input.route)!;
+}
+
+/** One full validation and one trailing-edge/capture/check union for all demanded families. */
+export function prepareRecordedSemanticWindowPopulation(input: Readonly<{ run: DrillRun; branchId: string; throughNodeId: string; routes: readonly RecordedWindowRoute[] }>): RecordedSemanticWindowPopulation {
+  if (input === null || typeof input !== "object" || Reflect.ownKeys(input).length !== 4 || !["run", "branchId", "throughNodeId", "routes"].every(field => Object.hasOwn(input, field))) throw new TypeError("Recorded sequence population requires exactly {run,branchId,throughNodeId,routes}");
+  return prepareRecordedSemanticBranchWindows({ run: input.run, branchId: input.branchId, throughNodeIds: [input.throughNodeId], routes: input.routes }).get(input.throughNodeId)!;
+}
+
+/** The same original branch can serve several actual endpoints without reminting their shared
+ * edges/captures/checks. Each result retains its own endpoint and complete horizon population. */
+export function prepareRecordedSemanticBranchWindows(input: Readonly<{ run: DrillRun; branchId: string; throughNodeIds: readonly string[]; routes: readonly RecordedWindowRoute[] }>) {
+  if (input === null || typeof input !== "object" || Reflect.ownKeys(input).length !== 4 || !["run", "branchId", "throughNodeIds", "routes"].every(field => Object.hasOwn(input, field))) throw new TypeError("Recorded branch windows require exactly {run,branchId,throughNodeIds,routes}");
+  const { branchId, throughNodeIds, routes } = input;
+  if (!Array.isArray(routes) || routes.length === 0 || new Set(routes).size !== routes.length || routes.some(route => typeof route !== "string" || route !== "derived.exchange.trade_completed@2" && !Object.hasOwn(RECORDED_SEQUENCE_HORIZONS, route))) throw new RecordedSequenceScopeError("projection_unsupported", "Recorded sequence projection unsupported or duplicated");
+  if (typeof branchId !== "string" || !branchId || !Array.isArray(throughNodeIds) || throughNodeIds.length === 0
+    || new Set(throughNodeIds).size !== throughNodeIds.length || throughNodeIds.some(id => typeof id !== "string" || !id)) throw new TypeError("Recorded sequence needs exact branch and endpoints");
   const snapshot = structuredClone(input.run);
   const originalResolution = resolveBranchPath(snapshot, branchId);
   if (originalResolution.kind !== "resolved") throw new RecordedSequenceScopeError(originalResolution.reason, `Recorded sequence original graph refused: ${originalResolution.reason}`);
@@ -108,21 +122,29 @@ export function prepareRecordedSemanticWindows(input: Readonly<{ run: DrillRun; 
     } catch { throw new RecordedEdgeError("broken_fen_boundary", node.id, "Recorded sequence original FEN is invalid or not canonical"); }
     if (index > 0) recordedEdgePayload(run, original[index - 1]!, node);
   }
-  const endpoint = original.findIndex(node => node.id === throughNodeId);
-  if (endpoint < 0) throw new RecordedSequenceScopeError("endpoint_not_on_branch", "Recorded sequence endpoint is not on branch");
-  // Validate and obtain genuine prefix edges on original references, not reconstructed stand-ins.
-  const edges = original.slice(1, endpoint + 1).map((child, index) => {
-    const parent = original[index]!, value = acquireSource("run.record.edge@1", { run, parent, child });
+  const endpoints = throughNodeIds.map(id => original.findIndex(node => node.id === id));
+  if (endpoints.some(index => index < 0)) throw new RecordedSequenceScopeError("endpoint_not_on_branch", "Recorded sequence endpoint is not on branch");
+  const requestedHorizons = (route: RecordedWindowRoute): readonly number[] => route === "derived.exchange.trade_completed@2" ? [2] : RECORDED_SEQUENCE_HORIZONS[route];
+  const wanted = new Set(endpoints.flatMap(endpoint => routes.flatMap(route => requestedHorizons(route).filter(horizon => horizon <= endpoint)
+    .flatMap(horizon => Array.from({ length: horizon }, (_, index) => endpoint - horizon + index + 1)))));
+  // Full graph validation above remains unconditional; acquisition is only the demanded union.
+  const edges = new Map([...wanted].sort((a, b) => a - b).map(index => {
+    const parent = original[index - 1]!, child = original[index]!, value = acquireSource("run.record.edge@1", { run, parent, child });
     assertSource(value, "run.record.edge@1", "createRunRecordEdgeV1Evidence", { run: { run: run.id, nodes: run.nodes.length, events: run.events.length }, parentId: parent.id, childId: child.id });
     if (evidenceDigest(value.payload) !== evidenceDigest(recordedEdgePayload(run, parent, child))) throw new TypeError("Recorded sequence edge payload crosses its original occurrence");
-    return value;
-  });
+    return [index, value] as const;
+  }));
   const captures = new Map<number, readonly Value[]>(), checks = new Map<number, readonly Value[]>();
+  const subjects = new Map<string, RecordedSemanticWindowPopulation>();
+  for (const [subjectIndex, endpoint] of endpoints.entries()) {
+  const throughNodeId = throughNodeIds[subjectIndex]!;
+  const result = new Map<RecordedWindowRoute, Readonly<{ run: DrillRun; eventHeadDigest: string; windows: readonly RecordedSequenceWindow[]; omittedHorizons: readonly number[]; availableEdges: number }>>();
+  for (const route of routes) {
   const needsCapture = route === "derived.exchange.trade_completed@2" || route === "derived.tactic.deflection_observed@3" || route === "derived.tactic.attraction_observed@3" || route === "derived.tactic.overload_exploitation_observed@3";
   const own: RecordedSequenceWindow[] = [], omitted: number[] = [];
-  for (const horizon of route === "derived.exchange.trade_completed@2" ? [2] : RECORDED_SEQUENCE_HORIZONS[route]) {
-    if (edges.length < horizon) { omitted.push(horizon); continue; }
-    const start = edges.length - horizon, selected = Object.freeze(edges.slice(start));
+  for (const horizon of requestedHorizons(route)) {
+    if (endpoint < horizon) { omitted.push(horizon); continue; }
+    const start = endpoint - horizon + 1, selected = Object.freeze(Array.from({ length: horizon }, (_, index) => edges.get(start + index)!));
     const captureRows = selected.map((value, index): readonly Value[] => {
       if (!needsCapture && !(route === "derived.tactic.check_zwischenzug_observed@3" && index === 0)) return Object.freeze([]);
       const ordinal = start + index;
@@ -143,8 +165,14 @@ export function prepareRecordedSemanticWindows(input: Readonly<{ run: DrillRun; 
       captures: Object.freeze(captureRows), checks: Object.freeze(checkRows) }));
     lazySources.set(window, new Map()); own.push(window);
   }
-  return Object.freeze({ run, eventHeadDigest, windows: Object.freeze(own), omittedHorizons: Object.freeze(omitted), availableEdges: endpoint });
+    result.set(route, Object.freeze({ run, eventHeadDigest, windows: Object.freeze(own), omittedHorizons: Object.freeze(omitted), availableEdges: endpoint }));
+  }
+    subjects.set(throughNodeId, result);
+  }
+  return subjects as ReadonlyMap<string, RecordedSemanticWindowPopulation>;
 }
+
+export type RecordedSemanticWindowPopulation = ReadonlyMap<RecordedWindowRoute, Readonly<{ run: DrillRun; eventHeadDigest: string; windows: readonly RecordedSequenceWindow[]; omittedHorizons: readonly number[]; availableEdges: number }>>;
 
 /** The ten @3 factory issuer remains closed; trade is reachable only through its exact supplier. */
 export function createRecordedSequenceWindows(input: Readonly<{ run: DrillRun; branchId: string; throughNodeId: string; route: RecordedSequenceRoute }>) {
@@ -163,6 +191,17 @@ export function readRecordedSequenceWindow(window: RecordedSequenceWindow, route
   const data = windows.get(window)!;
   if (route !== undefined && data.authority.route !== route) throw new TypeError("Recorded sequence window belongs to another exact projection");
   return data;
+}
+
+/** Dispatch the exact source-owned successor, retaining trade's distinct four-operand authority.
+ * A complete edge without a capture is a nonmatching trade, not a missing recorded horizon. */
+export function collectRecordedSequenceWindow(window: RecordedSequenceWindow): readonly Value[] {
+  const source = readRecordedSequenceWindow(window), route = source.authority.route;
+  if (route !== "derived.exchange.trade_completed@2") return invokeEvidenceValueRoute(route, { window });
+  if (source.edges.length !== 2 || source.captures.length !== 2) throw new TypeError("Recorded trade lost its complete two-edge capture population");
+  const first = source.captures[0]![0], second = source.captures[1]![0];
+  return first === undefined || second === undefined ? Object.freeze([])
+    : invokeEvidenceValueRoute(route, { first, second, firstEdge: source.edges[0]!, secondEdge: source.edges[1]! });
 }
 
 /** Existing recorded computations, never their node-free narrative counterparts. */

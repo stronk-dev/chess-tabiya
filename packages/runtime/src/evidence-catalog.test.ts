@@ -26,7 +26,7 @@ import { compileEvidenceManifest } from "./evidence-contract.js";
 import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
-const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame", "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy"]);
+const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame", "theory.shapes", "authored.structural_condition", "derived.structural", "derived.square", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy"]);
 const ref = (id: string) => ({ id, version: 1 } as const);
 
 function jsonFiles(url: URL): readonly URL[] {
@@ -44,24 +44,72 @@ function canonical(value: unknown): string {
 }
 
 describe("primary evidence catalogue", () => {
+  it("keeps the fourteen bounded details source-limited and bound only to the current Full2 consumer", () => {
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const sources = {
+      rays: "rules.tactic.reading.ray_classification@1", square_control: "rules.square.reading.control@1",
+      piece_destinations: "rules.mobility.reading.piece_destinations@1", destination_changes: "rules.mobility.event.piece_destinations@1",
+      king_zone: "rules.king.reading.zone_state@1", defender_duties: "rules.tactic.reading.defender_duty_set@1",
+      backward_pawns: "rules.structural.reading.backward_pawn@3", pawn_file_groups: "derived.structural.reading.pawn_file_group@1",
+      file_states: "derived.activity.reading.file_state@1", future_file_challenges: "derived.square.reading.future_file_challenge@1",
+      capture_migration_reaches: "derived.square.reading.capture_migration_reach@1", outpost_candidates: "derived.structural.reading.outpost_candidate@1",
+      occupied_outposts: "derived.structural.reading.occupied_outpost@1", backward_pawn_advance: "derived.pawn.consequence.backward_pawn_legal_advance@1",
+    };
+    const rows = manifest.projections.filter(row => row.id.startsWith("derived.inspector.detail."));
+    expect(rows.map(row => row.id).sort()).toEqual(Object.keys(sources).map(kind => `derived.inspector.detail.${kind}`).sort());
+    for (const [kind, sourceRef] of Object.entries(sources)) {
+      const [sourceId, version] = sourceRef.split("@"), input = { id: sourceId!, version: Number(version) };
+      const source = manifest.projections.find(row => row.id === sourceId && row.version === input.version)!;
+      const detail = rows.find(row => row.id === `derived.inspector.detail.${kind}`)!;
+      expect(detail.producer).toEqual(ref("derived.inspector"));
+      expect(detail.derivation).toEqual({ inputs: [input] });
+      expect(detail.dependsOn).toEqual([input]);
+      expect([detail.grounding, detail.exactness, detail.confidence, detail.answerContent]).toEqual([source.grounding, source.exactness, source.confidence, source.answerContent]);
+      expect(detail.disposition).toBeUndefined();
+      expect(manifest.bindings.filter(binding => binding.projection.id === detail.id)).toEqual([
+        expect.objectContaining({ projection: { id: detail.id, version: 1 }, consumer: { id: "module.full_inspector", version: 2 },
+          sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } }),
+      ]);
+    }
+  });
+
   it("compiles all audited producer paths and current consumer operations", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     expect(EVIDENCE_PRODUCER_IDS).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia", "recorded.inspector", "derived.inspector"]);
     // Declarations are unordered compiler input; compare the exact inventory, retaining duplicates.
     expect(EVIDENCE_PRODUCERS.map((item) => item.id).sort()).toEqual([...EXPECTED_PRODUCERS, "derived.explorer", "derived.maia", "recorded.inspector", "derived.inspector"].sort());
-    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(26);
+    expect(CURRENT_CONSUMER_OPERATION_IDS).toHaveLength(30);
     // rfc/module-registration.md §2.2: ten module consumers join (rules_floor has no evidence);
     // rfc/hint-distance.md adds module.guided_hint over its 35 disclosure projections.
     expect(MODULE_CONSUMER_IDS).toHaveLength(10);
-    expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"]);
+    expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection", "research.semantic_validation"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
-    // 263 module pairs = the post-successor-rebase 237, the 21 recorded-path v2 successors, and the
-    // five review-evidence-compiler projections (four Review Map, one Full Inspector forced-mate v2).
-    // rfc/hint-distance.md: +35 guided_hint disclosure pairs.
-    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(299);
+    // Current Full2 retains88 source topics and14 details; retired duplicate topics are absent.
+    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(291);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([49, 320, 42, 566]); // Internal complete opening-history@2 adds one projection, not a current consumer migration.
+    // D4053 replaces the four-binding board1 image with the ruled two-binding board2 image.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([50, 404, 52, 698]); // Exact current source/selector/validation image; no ordinary avoidance2 bindings.
+    for (const id of ["rules.mobility.reading.early_queen_move"]) {
+      expect(manifest.projections.filter(row => row.id === id)).toHaveLength(1);
+      expect(manifest.projections.find(row => row.id === id)?.disposition).toBeUndefined();
+      expect(manifest.bindings.filter(row => row.projection.id === id)).toMatchObject([{ consumer: { id: "profile.choice_facts", version: 1 }, forms: ["machine_condition"], roles: ["operator"] }]);
+      expect(manifest.semanticEvents.filter(row => row.projection.id === id)).toEqual([]);
+    }
+    for (const id of ["rules.structural.reading.fianchetto_setup", "rules.structural.reading.fianchetto_knight_screen", "run.record.castling_eligibility"]) {
+      expect(manifest.projections.filter(row => row.id === id)).toHaveLength(1);
+      expect(manifest.projections.find(row => row.id === id)?.disposition).toBeUndefined();
+      expect(manifest.bindings.filter(row => row.projection.id === id)).toEqual([
+        expect.objectContaining({ projection: { id, version: 1 }, consumer: { id: "profile.game_facts", version: 1 },
+          forms: ["machine_condition"], answerContent: ["fact"], timing: ["analysis"], roles: ["operator"] }),
+      ]);
+      expect(manifest.semanticEvents.filter(row => row.projection.id === id)).toEqual([]);
+    }
+    expect(manifest.projections.find(row => row.id === "run.record.castling_eligibility")?.abstention)
+      .toEqual({ possible: true, reasons: ["first_decision_not_represented"] });
+    expect(manifest.projections.filter(projection => projection.id === "theory.shapes.firing").map(projection => projection.version)).toEqual([1, 2, 3]);
+    expect(manifest.bindings.filter(binding => binding.consumer.id === "module.full_inspector" && binding.consumer.version === 2
+      && binding.projection.id === "theory.shapes.firing").map(binding => binding.projection.version)).toEqual([3]);
     const syzygySources = manifest.projections.filter(projection => projection.id === "live.syzygy.position_result");
     expect(syzygySources.map(projection => projection.version).sort()).toEqual([1, 2]);
     expect(syzygySources.find(projection => projection.version === 1)?.disposition?.kind).toBe("operator_only");
@@ -85,13 +133,13 @@ describe("primary evidence catalogue", () => {
       expect(manifest.projections.find(projection => projection.id === id)?.disposition?.kind).toBe("operator_only");
       expect(manifest.bindings.some(binding => binding.projection.id === id)).toBe(false);
     }
-    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([88, 88, 16, 1]);
+    expect([manifest.semanticEvents.length, manifest.eligibility.length, manifest.reasons.length, manifest.selectionPolicies.length]).toEqual([86, 141, 16, 1]);
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());
-    // Semantic eligibility stays the single research authority, byte-identical (§2.2, [[D1854]]).
-    expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@1"]));
+    // Source validation preserves all live roots; selector2 owns only the exact current55.
+    expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@2", "research.semantic_validation@1"]));
     const semanticKeys = new Set(SEMANTIC_EVENT_PROJECTION_REFS.map(exact));
-    expect(manifest.bindings.filter((binding) => semanticKeys.has(exact(binding.projection))).every((binding) => binding.consumer.id === "research.semantic_selection" || binding.consumer.id.startsWith("module."))).toBe(true);
+    expect(manifest.bindings.filter((binding) => semanticKeys.has(exact(binding.projection))).every((binding) => ["research.semantic_selection", "research.semantic_validation", "profile.subject_observations"].includes(binding.consumer.id) || binding.consumer.id.startsWith("module."))).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
   });
 
@@ -137,23 +185,23 @@ describe("primary evidence catalogue", () => {
   it("registers move quality as an evaluation-only derived projection bound to exactly its two module consumers", () => {
     const grade = EVIDENCE_PRODUCERS.find((item) => item.id === "derived.grade")?.outputs[0];
     expect(grade).toMatchObject({
-      id: "derived.grade.move_quality", version: 1, grounding: "bounded_search",
+      id: "derived.grade.move_quality", version: 2, grounding: "declared_convention",
       exactness: "convention", answerContent: ["evaluation"],
     });
     // rfc/move-quality-grades.md D1: the experimental disposition lifted when the consumers compiled.
     expect(grade?.disposition).toBeUndefined();
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
-    expect(manifest.bindings.filter((binding) => binding.projection.id === "derived.grade.move_quality").map((binding) => binding.consumer.id).sort())
-      .toEqual(["module.postcommit_nudge", "module.review_map"]);
+    expect(manifest.bindings.filter((binding) => binding.projection.id === "derived.grade.move_quality").map((binding) => `${binding.consumer.id}@${binding.consumer.version}`).sort())
+      .toEqual(["module.postcommit_nudge@2", "module.review_map@2"]);
     expect(grade?.derivation).toEqual({ anyOf: [
-      [{ id: "recorded.engine.eval", version: 1 }, { id: "recorded.engine.eval", version: 1 }],
-      [{ id: "live.stockfish.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }],
+      [{ id: "derived.review.eval_point", version: 1 }, { id: "derived.review.eval_point", version: 1 }, { id: "run.record.edge", version: 1 }],
+      [{ id: "recorded.engine.eval", version: 1 }, { id: "recorded.engine.eval", version: 1 }, { id: "run.record.edge", version: 1 }],
     ] });
     expect(grade?.derivation).not.toHaveProperty("inputs");
     expect(grade?.answerContent).not.toContain("move");
   });
 
-  it("binds exact legal moves only to requested Sight and the explicit Inspector", () => {
+  it("binds exact legal moves to requested Sight, explicit Inspector and the operator choice worker", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const projection = manifest.projections.find((item) => item.id === "rules.mobility.reading.legal_moves");
     expect(projection).toMatchObject({
@@ -165,7 +213,7 @@ describe("primary evidence catalogue", () => {
     expect(projection?.disposition).toBeUndefined();
     // exact-legal-mobility D1: the `candidates` capability of requested Sight, never a proactive module.
     expect(manifest.bindings.filter((binding) => binding.projection.id === projection?.id).map((binding) => binding.consumer.id).sort())
-      .toEqual(["module.full_inspector", "module.sight_on_request"]);
+      .toEqual(["module.full_inspector", "module.sight_on_request", "profile.choice_facts"]);
     const old = manifest.projections.find((item) => item.id === "rules.mobility.reading.piece_destinations");
     expect(old).toMatchObject({ grounding: "declared_convention", exactness: "convention" });
   });
@@ -185,8 +233,8 @@ describe("primary evidence catalogue", () => {
   it("keeps move-quality lanes alternative rather than requiring or mixing them", () => {
     const grade = EVIDENCE_PRODUCERS.find((item) => item.id === "derived.grade")?.outputs[0];
     expect(grade?.derivation).toEqual({ anyOf: [
-      [{ id: "recorded.engine.eval", version: 1 }, { id: "recorded.engine.eval", version: 1 }],
-      [{ id: "live.stockfish.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }],
+      [{ id: "derived.review.eval_point", version: 1 }, { id: "derived.review.eval_point", version: 1 }, { id: "run.record.edge", version: 1 }],
+      [{ id: "recorded.engine.eval", version: 1 }, { id: "recorded.engine.eval", version: 1 }, { id: "run.record.edge", version: 1 }],
     ] });
     expect(grade?.derivation).not.toEqual({ inputs: [
       { id: "recorded.engine.eval", version: 1 },
@@ -228,7 +276,15 @@ describe("primary evidence catalogue", () => {
     expect(new Set(TRANSITION_READING_PROJECTION_IDS.map((id) => id.split(".").at(-2)))).toEqual(new Set(TRANSITION_FEATURE_KINDS));
     expect(TRANSITION_READING_PROJECTION_IDS).toHaveLength(14);
     const outputs = EVIDENCE_PRODUCERS.find((item) => item.id === "rules.transition")!.outputs.filter((item) => item.role === "reading");
-    expect(outputs.every((item) => item.forms.includes("arrows") === false && item.limitations.some((line) => line.includes("not a semantic learner event")))).toBe(true);
+    const leaves = outputs.filter(item => TRANSITION_READING_PROJECTION_IDS.includes(item.id));
+    expect(leaves.map(item => item.id).sort()).toEqual([...TRANSITION_READING_PROJECTION_IDS].sort());
+    expect(leaves.every((item) => item.forms.includes("arrows") === false && item.limitations.some((line) => line.includes("not a semantic learner event")))).toBe(true);
+    // The complete private snapshot is deliberately not one of the fourteen lossy leaf views.
+    const total = outputs.filter(item => !TRANSITION_READING_PROJECTION_IDS.includes(item.id));
+    expect(total.map(item => `${item.id}@${item.version}`)).toEqual(["rules.transition.reading.physical_slider_rays@1"]);
+    expect(total[0]!.forms).toEqual(["machine_condition"]);
+    expect(total[0]!.disposition?.kind).toBe("inspector_only");
+    expect(total[0]!.dependsOn).toEqual([ref("rules.mobility.reading.legal_moves")]);
   });
 
   it("keeps rules refs explicitly mapped to structural/transition projections", () => {

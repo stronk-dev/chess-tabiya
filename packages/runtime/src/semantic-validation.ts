@@ -15,7 +15,8 @@ import { SquareSet } from "chessops/squareSet";
 import type { Color, Role, Square } from "chessops/types";
 import { makeSquare, parseSquare } from "chessops/util";
 
-import { evidenceDigest, type CompiledEvidenceManifest, type ProjectionDeclaration, type VersionedEvidenceId } from "./evidence-contract.js";
+import { SEMANTIC_EVENT_SIGNS, evidenceDigest, type SemanticEventSign, type CompiledEvidenceManifest, type ProjectionDeclaration, type VersionedEvidenceId } from "./evidence-contract.js";
+import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
 
 // ---------------------------------------------------------------------------------------------
 // Errors
@@ -293,6 +294,7 @@ export function parseSemanticValidationProfile(value: unknown): SemanticValidati
 
 export const SEMANTIC_VALIDATION_OPERATION_IDS = Object.freeze([
   "runtime.semantic.local_edge",
+  "runtime.semantic.foundation_edge",
   "runtime.semantic.structural_edge",
   "runtime.semantic.transition_edge",
   "runtime.semantic.breadth_edge",
@@ -300,6 +302,7 @@ export const SEMANTIC_VALIDATION_OPERATION_IDS = Object.freeze([
   "runtime.semantic.recorded_path",
   "runtime.semantic.recorded_sequence",
   "runtime.semantic.complete_alternatives",
+  "runtime.semantic.subject_outcomes",
   "runtime.semantic.bounded_target_batch",
 ] as const);
 export type SemanticValidationOperationId = (typeof SEMANTIC_VALIDATION_OPERATION_IDS)[number];
@@ -357,6 +360,12 @@ export interface SemanticCompleteAlternativesInput {
   readonly legalSetDigest: string;
 }
 
+export interface SemanticSubjectOutcomesInput {
+  readonly kind: "subject_outcomes";
+  readonly family: SubjectOutcomeFamily;
+  readonly population: SemanticCompleteAlternativesInput;
+}
+
 /** The bounded-target batch operation's case input: one exact source FEN (rfc/bounded-policy-targets.md). */
 export interface SemanticBoundedTargetInput {
   readonly kind: "bounded_target_source";
@@ -365,6 +374,7 @@ export interface SemanticBoundedTargetInput {
 
 export type SemanticValidationOperationInputMap = {
   readonly "runtime.semantic.local_edge": SemanticEdgeInput;
+  readonly "runtime.semantic.foundation_edge": SemanticEdgeInput;
   readonly "runtime.semantic.structural_edge": SemanticEdgeInput;
   readonly "runtime.semantic.transition_edge": SemanticEdgeInput;
   readonly "runtime.semantic.breadth_edge": SemanticEdgeInput;
@@ -372,11 +382,12 @@ export type SemanticValidationOperationInputMap = {
   readonly "runtime.semantic.recorded_path": SemanticRecordedPathInput;
   readonly "runtime.semantic.recorded_sequence": SemanticRecordedSequenceInput;
   readonly "runtime.semantic.complete_alternatives": SemanticCompleteAlternativesInput;
+  readonly "runtime.semantic.subject_outcomes": SemanticSubjectOutcomesInput;
   readonly "runtime.semantic.bounded_target_batch": SemanticBoundedTargetInput;
 };
 export type SemanticValidationOperationInput<K extends SemanticValidationOperationId> = SemanticValidationOperationInputMap[K];
 
-const EDGE_OPERATIONS: readonly SemanticValidationOperationId[] = ["runtime.semantic.local_edge", "runtime.semantic.structural_edge", "runtime.semantic.transition_edge", "runtime.semantic.breadth_edge", "runtime.semantic.duty_edge"];
+const EDGE_OPERATIONS: readonly SemanticValidationOperationId[] = ["runtime.semantic.local_edge", "runtime.semantic.foundation_edge", "runtime.semantic.structural_edge", "runtime.semantic.transition_edge", "runtime.semantic.breadth_edge", "runtime.semantic.duty_edge"];
 
 function parseEdgeInput(value: unknown, label = "edge"): SemanticEdgeInput {
   if (!isRecord(value) || value.kind !== "edge") fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", `${label}.kind must be edge (got ${isRecord(value) ? String(value.kind) : typeof value})`);
@@ -417,6 +428,13 @@ export function semanticLegalSetDigest(rootFen: string, moves: readonly string[]
 export function parseSemanticValidationOperationInput<K extends SemanticValidationOperationId>(operation: K, value: unknown): SemanticValidationOperationInput<K> {
   if (EDGE_OPERATIONS.includes(operation)) return parseEdgeInput(value) as SemanticValidationOperationInput<K>;
   switch (operation) {
+    case "runtime.semantic.subject_outcomes": {
+      const record = exactKeys(value, ["kind", "family", "population"], [], "subject outcomes", "SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID");
+      const family = record.family;
+      if (record.kind !== "subject_outcomes" || !(SUBJECT_OUTCOME_FAMILIES as readonly unknown[]).includes(family)) fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", "subject outcomes require an exact declared family");
+      return Object.freeze({ kind: "subject_outcomes", family: family as SubjectOutcomeFamily,
+        population: parseSemanticValidationOperationInput("runtime.semantic.complete_alternatives", record.population) }) as SemanticValidationOperationInput<K>;
+    }
     case "runtime.semantic.recorded_path": return parsePathInput(value) as SemanticValidationOperationInput<K>;
     case "runtime.semantic.recorded_sequence": {
       const record = exactKeys(value, ["kind", "path", "family", "fromPly", "horizon"], [], "recorded sequence", "SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID");
@@ -434,6 +452,7 @@ export function parseSemanticValidationOperationInput<K extends SemanticValidati
       const played = parseEdgeInput(record.played, "played");
       if (!Array.isArray(record.alternatives) || record.alternatives.length === 0) return fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", "complete alternatives need the exact legal set");
       const alternatives = Object.freeze(record.alternatives.map((edge, index) => parseEdgeInput(edge, `alternatives[${index}]`)));
+      if (new Set(alternatives.map(edge => edge.moveUci)).size !== alternatives.length) fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", "complete alternatives contain duplicate moves");
       const legalSetDigest = parseSha(record.legalSetDigest, "legalSetDigest");
       if (semanticLegalSetDigest(rootFen, alternatives.map((edge) => edge.moveUci)) !== legalSetDigest) fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", "legal set digest does not match the alternatives");
       if (!alternatives.some((edge) => edge.moveUci === played.moveUci)) fail("SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID", "complete alternatives must include the played move");
@@ -457,14 +476,63 @@ export type SemanticValidationUnavailableReason = "source_predicate_unavailable"
 const UNAVAILABLE_REASONS: readonly SemanticValidationUnavailableReason[] = ["source_predicate_unavailable", "recorded_path_incomplete", "complete_alternative_population_unavailable"];
 
 export type SemanticMirrorGeometry = "vertical" | "horizontal" | "color_and_vertical";
-export type SemanticMirrorValueRule = "identity" | "square" | "color" | "signed_file_delta" | "signed_rank_delta";
+export type SemanticMirrorValueRule = "identity" | "square" | "color" | "signed_file_delta" | "signed_rank_delta" | "file" | "file_state";
 export type SemanticOperandPathSegment = string | "*";
 
-export interface SemanticMirrorOperandRule {
+interface SemanticMirrorGeometricOperandRule {
   readonly sourcePath: readonly SemanticOperandPathSegment[];
   readonly partnerPath: readonly SemanticOperandPathSegment[];
   readonly value: SemanticMirrorValueRule;
   readonly collection: "scalar" | "ordered" | "canonical_set";
+}
+
+type SemanticMirrorInputOperandRule =
+  | { readonly value: "input_before_fen"; readonly sourcePath: (readonly ["before_fen" | "beforeFen"] | readonly ["before", "fen"] | readonly ["fileChange", "beforeFen"]); readonly partnerPath: (readonly ["before_fen" | "beforeFen"] | readonly ["before", "fen"] | readonly ["fileChange", "beforeFen"]); readonly collection: "scalar" }
+  | { readonly value: "input_move_uci"; readonly sourcePath: (readonly ["move_uci" | "moveUci" | "triggeringMove"] | readonly ["fileChange", "moveUci"]); readonly partnerPath: (readonly ["move_uci" | "moveUci" | "triggeringMove"] | readonly ["fileChange", "moveUci"]); readonly collection: "scalar" }
+  | { readonly value: "input_after_fen"; readonly sourcePath: (readonly ["after_fen" | "afterFen"] | readonly ["after", "fen"] | readonly ["fileChange", "afterFen"]); readonly partnerPath: (readonly ["after_fen" | "afterFen"] | readonly ["after", "fen"] | readonly ["fileChange", "afterFen"]); readonly collection: "scalar" };
+
+export type SemanticMirrorOperandRule = SemanticMirrorGeometricOperandRule | SemanticMirrorInputOperandRule;
+
+/** §4.1a: supplied only by the runner from its two actual registered edge inputs. */
+export interface SemanticMirrorInputContext {
+  readonly source: SemanticEdgeInput;
+  readonly partner: SemanticEdgeInput;
+}
+
+const MIRROR_INPUT_FIELDS = {
+  input_before_fen: { field: "beforeFen", paths: [["before_fen"], ["beforeFen"], ["before", "fen"], ["fileChange", "beforeFen"]] },
+  input_move_uci: { field: "moveUci", paths: [["move_uci"], ["moveUci"], ["triggeringMove"], ["fileChange", "moveUci"]] },
+  input_after_fen: { field: "afterFen", paths: [["after_fen"], ["afterFen"], ["after", "fen"], ["fileChange", "afterFen"]] },
+} as const;
+const isInputMirrorRule = (rule: SemanticMirrorOperandRule): rule is SemanticMirrorInputOperandRule =>
+  rule.value === "input_before_fen" || rule.value === "input_move_uci" || rule.value === "input_after_fen";
+
+function parseMirrorOperandRules(value: unknown): readonly SemanticMirrorOperandRule[] {
+  const code = "SEMANTIC_VALIDATION_ORIENTATION_SCHEMA";
+  if (!Array.isArray(value) || value.length === 0) return fail(code, "a mirror needs a total operand rule list");
+  const rules = value.map((raw, index): SemanticMirrorOperandRule => {
+    const entry = exactKeys(raw, ["sourcePath", "partnerPath", "value", "collection"], [], `operandRules[${index}]`, code);
+    const sourcePath = parsePath(entry.sourcePath, "sourcePath"), partnerPath = parsePath(entry.partnerPath, "partnerPath");
+    if (typeof entry.value === "string" && Object.hasOwn(MIRROR_INPUT_FIELDS, entry.value)) {
+      const value = entry.value as keyof typeof MIRROR_INPUT_FIELDS, field = MIRROR_INPUT_FIELDS[value];
+      if (entry.collection !== "scalar" || canonicalBytes(sourcePath) !== canonicalBytes(partnerPath)
+        || !field.paths.some(path => canonicalBytes(path) === canonicalBytes(sourcePath))) {
+        return fail(code, "input rule must bind the same exact registered scalar path on each side");
+      }
+      // The closed mapping and exact checks above establish this discriminated tuple type.
+      return Object.freeze({ sourcePath, partnerPath, value, collection: "scalar" }) as SemanticMirrorInputOperandRule;
+    }
+    if (!["identity", "square", "color", "signed_file_delta", "signed_rank_delta", "file", "file_state"].includes(entry.value as string)) return fail(code, `operand rule transform ${String(entry.value)} is not closed`);
+    if (!["scalar", "ordered", "canonical_set"].includes(entry.collection as string)) return fail(code, `operand rule collection ${String(entry.collection)} is not closed`);
+    return Object.freeze({ sourcePath, partnerPath, value: entry.value as SemanticMirrorValueRule, collection: entry.collection as SemanticMirrorGeometricOperandRule["collection"] });
+  });
+  for (const [index, rule] of rules.entries()) if (isInputMirrorRule(rule)) {
+    if (rules.some((other, otherIndex) => otherIndex !== index
+      && (canonicalBytes(other.sourcePath) === canonicalBytes(rule.sourcePath) || canonicalBytes(other.partnerPath) === canonicalBytes(rule.partnerPath)))) {
+      fail(code, "an input operand path is duplicated or overlaps a geometric rule");
+    }
+  }
+  return Object.freeze(rules);
 }
 
 export type SemanticValidationExpectation =
@@ -475,6 +543,7 @@ export type SemanticValidationExpectation =
       readonly sign?: string;
       readonly operandMatch?: { readonly [key: string]: SemanticCanonicalValue };
     }
+  | { readonly kind: "emits_exact"; readonly events: readonly { readonly sign: SemanticEventSign; readonly operands: { readonly [key: string]: SemanticCanonicalValue } }[] }
   | { readonly kind: "abstains"; readonly reason: SemanticValidationUnavailableReason }
   | { readonly kind: "omits" }
   | {
@@ -490,13 +559,56 @@ function parsePath(value: unknown, label: string): readonly SemanticOperandPathS
   return Object.freeze([...value] as string[]);
 }
 
+/** Strict copy of the existing canonical JSON-value type for complete expectations. */
+function parseCanonicalValue(value: unknown, label: string, ancestors = new Set<object>()): SemanticCanonicalValue {
+  if (value === null || typeof value === "string" || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value) && !Object.is(value, -0))) return value;
+  if (typeof value !== "object" || ancestors.has(value)) return fail("SEMANTIC_VALIDATION_CASE_INVALID", `${label} must contain only finite canonical JSON values`);
+  if (!Array.isArray(value) && Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) return fail("SEMANTIC_VALIDATION_CASE_INVALID", `${label} must contain plain records`);
+  if (Object.getOwnPropertySymbols(value).length !== 0) return fail("SEMANTIC_VALIDATION_CASE_INVALID", `${label} cannot contain symbol keys`);
+  ancestors.add(value);
+  let result: SemanticCanonicalValue;
+  if (Array.isArray(value)) {
+    const descriptors: Readonly<Record<string, PropertyDescriptor>> = Object.getOwnPropertyDescriptors(value);
+    if (Object.getPrototypeOf(value) !== Array.prototype || Object.keys(descriptors).length !== value.length + 1
+      || !descriptors.length || descriptors.length.enumerable || !("value" in descriptors.length)) return fail("SEMANTIC_VALIDATION_CASE_INVALID", `${label} needs an ordinary dense JSON array`);
+    const items: SemanticCanonicalValue[] = [];
+    for (let index = 0; index < value.length; index++) {
+      const descriptor = descriptors[String(index)];
+      if (descriptor === undefined || !descriptor.enumerable || !("value" in descriptor)) return fail("SEMANTIC_VALIDATION_CASE_INVALID", `${label} needs own data array indices`);
+      items.push(parseCanonicalValue(descriptor.value, label, ancestors));
+    }
+    result = Object.freeze(items);
+  } else {
+    const entries = Object.entries(Object.getOwnPropertyDescriptors(value));
+    if (entries.some(([, descriptor]) => !descriptor.enumerable || !("value" in descriptor))) return fail("SEMANTIC_VALIDATION_CASE_INVALID", `${label} needs enumerable data fields`);
+    result = Object.freeze(Object.fromEntries(entries.map(([key, descriptor]) => [key, parseCanonicalValue(descriptor.value, label, ancestors)])));
+  }
+  ancestors.delete(value);
+  return result;
+}
+
 export function parseSemanticValidationExpectation(value: unknown, subject: SemanticValidationSubject): SemanticValidationExpectation {
   if (!isRecord(value)) return fail("SEMANTIC_VALIDATION_CASE_INVALID", "expectation must be an object");
-  switch (value.kind) {
+  const discriminator = Object.getOwnPropertyDescriptor(value, "kind");
+  if (discriminator === undefined || !discriminator.enumerable || !("value" in discriminator) || typeof discriminator.value !== "string") return fail("SEMANTIC_VALIDATION_CASE_INVALID", "expectation needs its own literal data kind");
+  switch (discriminator.value) {
+    case "emits_exact": {
+      // Capture the whole new expectation as data before reading its outer array/rows.
+      const record = exactKeys(parseCanonicalValue(value, "exact event expectation"), ["kind", "events"], [], "exact event expectation");
+      if (subject.kind !== "event" || !Array.isArray(record.events) || record.events.length === 0) fail("SEMANTIC_VALIDATION_CASE_INVALID", "exact positive expectation needs a nonempty event population");
+      const events = (record.events as unknown[]).map((raw, index) => {
+        const event = exactKeys(raw, ["sign", "operands"], [], `exact event[${index}]`);
+        if (!(SEMANTIC_EVENT_SIGNS as readonly unknown[]).includes(event.sign) || !isRecord(event.operands)) fail("SEMANTIC_VALIDATION_CASE_INVALID", "exact event needs a declared sign and complete operand record");
+        // The canonical parser rejects undefined, non-finite and non-JSON values at every depth.
+        const operands = parseCanonicalValue(event.operands, "exact event operands");
+        return Object.freeze({ sign: event.sign as SemanticEventSign, operands: operands as { readonly [key: string]: SemanticCanonicalValue } });
+      });
+      return Object.freeze({ kind: "emits_exact", events: Object.freeze(events) });
+    }
     case "emits": {
       const record = exactKeys(value, ["kind", "minimum"], ["sign", "operandMatch"], "emits expectation");
       if (record.minimum !== 1) fail("SEMANTIC_VALIDATION_CASE_INVALID", "emits.minimum must be exactly 1");
-      if (record.sign !== undefined && !["state", "gained", "lost", "preserved", "removed", "avoided", "enabled", "threatened"].includes(record.sign as string)) fail("SEMANTIC_VALIDATION_CASE_INVALID", `emits.sign ${String(record.sign)} is not a declared sign`);
+      if (record.sign !== undefined && !(SEMANTIC_EVENT_SIGNS as readonly unknown[]).includes(record.sign)) fail("SEMANTIC_VALIDATION_CASE_INVALID", `emits.sign ${String(record.sign)} is not a declared sign`);
       if (record.operandMatch !== undefined && (!isRecord(record.operandMatch) || Object.keys(record.operandMatch).length === 0)) fail("SEMANTIC_VALIDATION_CASE_INVALID", "emits.operandMatch must be a non-empty object");
       return Object.freeze({ kind: "emits", minimum: 1, ...(record.sign === undefined ? {} : { sign: record.sign as string }), ...(record.operandMatch === undefined ? {} : { operandMatch: record.operandMatch as { readonly [key: string]: SemanticCanonicalValue } }) });
     }
@@ -514,17 +626,11 @@ export function parseSemanticValidationExpectation(value: unknown, subject: Sema
       if (!["vertical", "horizontal", "color_and_vertical"].includes(record.geometry as string)) fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", `geometry ${String(record.geometry)} is not closed`);
       const target = exactKeys(record.targetEvents, ["nonEmpty", "pairing"], [], "targetEvents");
       if (target.nonEmpty !== true || target.pairing !== "canonical_subject_sign_operands") fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "targetEvents must be { nonEmpty: true, pairing: canonical_subject_sign_operands }");
-      if (!Array.isArray(record.operandRules) || record.operandRules.length === 0) return fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "a mirror needs a total operand rule list");
-      const rules = record.operandRules.map((rule, index) => {
-        const entry = exactKeys(rule, ["sourcePath", "partnerPath", "value", "collection"], [], `operandRules[${index}]`);
-        if (!["identity", "square", "color", "signed_file_delta", "signed_rank_delta"].includes(entry.value as string)) fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", `operand rule transform ${String(entry.value)} is not closed`);
-        if (!["scalar", "ordered", "canonical_set"].includes(entry.collection as string)) fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", `operand rule collection ${String(entry.collection)} is not closed`);
-        return Object.freeze({ sourcePath: parsePath(entry.sourcePath, "sourcePath"), partnerPath: parsePath(entry.partnerPath, "partnerPath"), value: entry.value as SemanticMirrorValueRule, collection: entry.collection as SemanticMirrorOperandRule["collection"] });
-      });
+      const rules = parseMirrorOperandRules(record.operandRules);
       return Object.freeze({ kind: "mirrors", partnerCase: partner, geometry: record.geometry as SemanticMirrorGeometry, targetEvents: Object.freeze({ nonEmpty: true, pairing: "canonical_subject_sign_operands" }), operandRules: Object.freeze(rules) });
     }
     default:
-      return fail("SEMANTIC_VALIDATION_CASE_INVALID", `expectation kind ${String(value.kind)} is unknown`);
+      return fail("SEMANTIC_VALIDATION_CASE_INVALID", `expectation kind ${discriminator.value} is unknown`);
   }
 }
 
@@ -753,11 +859,13 @@ export function parseSemanticValidationCase(value: unknown): SemanticValidationC
   if (!(SEMANTIC_VALIDATION_CASE_ARMS as readonly unknown[]).includes(record.arm)) fail("SEMANTIC_VALIDATION_CASE_INVALID", `case ${id} arm ${String(record.arm)} is not a case arm`);
   const operation = parseSemanticValidationOperationRef(record.operation);
   const input = parseSemanticValidationOperationInput(operation.id, record.input);
+  if (input.kind === "subject_outcomes" && (subject.kind !== "event" || subject.projection.id !== `derived.semantic_avoidance.${input.family}` || subject.projection.version !== 2)) fail("SEMANTIC_VALIDATION_CASE_INVALID", "subject-outcome input family must match its exact event subject at version 2");
   const expectation = parseSemanticValidationExpectation(record.expectation, subject);
   const arm = record.arm as SemanticValidationCaseArm;
   if (arm === "orientation" && expectation.kind !== "mirrors") fail("SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE", `orientation case ${id} needs a mirrors expectation`);
   if (arm !== "orientation" && expectation.kind === "mirrors") fail("SEMANTIC_VALIDATION_CASE_INVALID", `only an orientation case may mirror`);
-  if (arm === "positive" && expectation.kind !== "emits") fail("SEMANTIC_VALIDATION_CASE_INVALID", `positive case ${id} must expect emits`);
+  if (arm === "positive" && expectation.kind !== "emits" && expectation.kind !== "emits_exact") fail("SEMANTIC_VALIDATION_CASE_INVALID", `positive case ${id} must expect emits or emits_exact`);
+  if (arm !== "positive" && expectation.kind === "emits_exact") fail("SEMANTIC_VALIDATION_CASE_INVALID", `only a positive event case may expect emits_exact`);
   if (arm === "semantic_negative" && expectation.kind !== "omits" && expectation.kind !== "abstains") fail("SEMANTIC_VALIDATION_CASE_INVALID", `negative case ${id} must expect omits or abstains`);
   const authority = parseSemanticValidationCaseAuthority(record.authority, subject, id);
   return Object.freeze({ id, version: 1, subject, arm, operation, input, authority, expectation }) as SemanticValidationCase;
@@ -783,7 +891,20 @@ export const SEMANTIC_READING_VALIDATION_ROOTS: readonly VersionedEvidenceId[] =
  * and requires it to enter validation. An inspector-only event opts in here exactly like a
  * reading root; it has no `SemanticEventDeclaration` (the F1 compiler refuses a disposed event).
  */
+/** D4168/D4167: the seven current source roots. Wrappers now own their declarations;
+ * retain this explicit root set and its pending-source obligations through the consumer cutover. */
+export const SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS: readonly VersionedEvidenceId[] = Object.freeze([
+  Object.freeze({ id: "rules.structural.event.king_opposition", version: 2 }),
+  Object.freeze({ id: "rules.structural.event.backward_pawn", version: 2 }),
+  Object.freeze({ id: "derived.structural.event.pawn_file_group", version: 1 }),
+  Object.freeze({ id: "rules.transition.event.slider_ray", version: 2 }),
+  Object.freeze({ id: "derived.activity.event.file_state", version: 1 }),
+  Object.freeze({ id: "derived.activity.event.file_access_revealed", version: 1 }),
+  Object.freeze({ id: "rules.structural.event.pawn_islands", version: 2 }),
+]);
+
 export const SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS: readonly VersionedEvidenceId[] = Object.freeze([
+  ...SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS,
   Object.freeze({ id: "derived.bounded_target.immediate", version: 1 }),
 ]);
 
@@ -794,7 +915,10 @@ export interface SemanticReadingValidationDeclaration {
 
 export const SEMANTIC_READING_VALIDATION_DECLARATIONS: readonly SemanticReadingValidationDeclaration[] = Object.freeze([
   ...SEMANTIC_READING_VALIDATION_ROOTS.map((projection) => Object.freeze({ subject: Object.freeze({ kind: "reading" as const, projection }) })),
-  ...SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS.map((projection) => Object.freeze({ subject: Object.freeze({ kind: "event" as const, projection }) })),
+  // Value-authority §2.2b transfers these seven declarations to their actual wrappers. The
+  // root list/pending blockers remain; only the without-wrapper contribution changes owner.
+  ...SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS.filter(projection => !SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS.some(root => refKey(root) === refKey(projection)))
+    .map((projection) => Object.freeze({ subject: Object.freeze({ kind: "event" as const, projection }) })),
 ]);
 
 function activeMachineCondition(projection: ProjectionDeclaration): boolean {
@@ -964,6 +1088,14 @@ function matchPattern(pattern: readonly SemanticOperandPathSegment[], concrete: 
 
 function transformLeaf(value: unknown, rule: SemanticMirrorValueRule, geometry: SemanticMirrorGeometry): unknown {
   switch (rule) {
+    case "file": {
+      if (typeof value !== "string" || !/^[a-h]$/u.test(value)) return fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "file must be a lowercase letter a..h");
+      return geometry === "horizontal" ? String.fromCharCode(201 - value.charCodeAt(0)) : value;
+    }
+    case "file_state": {
+      if (!["open", "closed", "half_open_white", "half_open_black"].includes(value as string)) return fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "file_state must be an exact file state");
+      return geometry === "color_and_vertical" ? value === "half_open_white" ? "half_open_black" : value === "half_open_black" ? "half_open_white" : value : value;
+    }
     case "identity": return value;
     case "square": return typeof value === "string" ? mirrorSquare(value, geometry) : fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", `square rule over ${JSON.stringify(value)}`);
     case "color": return geometry === "color_and_vertical" ? swapColor(String(value)) : value;
@@ -1001,13 +1133,28 @@ function assertTotalCoverage(leaves: readonly Leaf[], side: "sourcePath" | "part
  * pairing uses canonical `{projection, sign, operands}` keys — never an implementer-picked subset.
  * Empty, unequal, duplicate and unmatched populations fail before any pair is accepted.
  */
-export function compareSemanticMirror(source: readonly SemanticMirrorObservation[], partner: readonly SemanticMirrorObservation[], geometry: SemanticMirrorGeometry, rules: readonly SemanticMirrorOperandRule[]): void {
+export function compareSemanticMirror(source: readonly SemanticMirrorObservation[], partner: readonly SemanticMirrorObservation[], geometry: SemanticMirrorGeometry, rules: readonly SemanticMirrorOperandRule[], inputContext?: SemanticMirrorInputContext): void {
   if (source.length === 0 && partner.length === 0) fail("SEMANTIC_VALIDATION_MIRROR_EMPTY", "neither mirror side emitted a target observation");
   if (source.length !== partner.length) fail("SEMANTIC_VALIDATION_MIRROR_MISMATCH", `mirror cardinality ${source.length} ≠ ${partner.length}`);
+  const admittedRules = parseMirrorOperandRules(rules);
+  if (admittedRules.some(isInputMirrorRule) && (inputContext?.source?.kind !== "edge" || inputContext.partner?.kind !== "edge"
+    || [inputContext.source, inputContext.partner].some(input => [input.beforeFen, input.moveUci, input.afterFen].some(value => typeof value !== "string")))) {
+    fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "input rules require both exact edge inputs");
+  }
   const key = (observation: SemanticMirrorObservation, side: "sourcePath" | "partnerPath"): string => {
     const leaves = operandLeaves(observation.operands);
-    assertTotalCoverage(leaves, side, rules);
-    const values = rules.map((rule) => ruleValues(leaves, rule[side], rule, side === "sourcePath" ? (value) => transformLeaf(value, rule.value, geometry) : (value) => value));
+    assertTotalCoverage(leaves, side, admittedRules);
+    const values = admittedRules.map(rule => {
+      if (isInputMirrorRule(rule)) {
+        const field = MIRROR_INPUT_FIELDS[rule.value].field;
+        const input = side === "sourcePath" ? inputContext!.source : inputContext!.partner;
+        return ruleValues(leaves, rule[side], rule, value => {
+          if (typeof value !== "string" || value !== input[field]) return fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", `same-side input field ${field} does not equal its retained operand`);
+          return `input.${field}`;
+        });
+      }
+      return ruleValues(leaves, rule[side], rule, side === "sourcePath" ? value => transformLeaf(value, rule.value, geometry) : value => value);
+    });
     return evidenceDigest({ projection: observation.projection, sign: observation.sign, values });
   };
   const count = (keys: readonly string[]): Map<string, number> => keys.reduce((map, value) => map.set(value, (map.get(value) ?? 0) + 1), new Map<string, number>());

@@ -100,8 +100,8 @@ describe("R13 current coaching topology and safe aggregate", () => {
       conceptTagsCarrySourceNode: /nodeId/u.test(interfaceBody(progress, "ConceptTagRow")),
       aggregateMetricsCarrySourceRows: /runId/u.test(progressMetricsSignature(storage)),
       aggregateMetricsCarryOpportunityDenominator: /opportun/u.test(progressMetricsSignature(storage)),
-      shapeRecommendationCarriesRunIds: between(service, "  shapeRecommendations(", "\n  async createGroup(").includes("runIds: Object.freeze"),
-      shapeRecommendationCarriesNodeIds: /nodeIds:/u.test(between(service, "  shapeRecommendations(", "\n  async createGroup(")),
+      shapeRecommendationCarriesRunIds: between(service, "  async shapeRecommendations(", "\n  async createGroup(").includes("runIds: Object.freeze"),
+      shapeRecommendationCarriesNodeIds: /nodeIds:/u.test(between(service, "  async shapeRecommendations(", "\n  async createGroup(")),
       reviewConsumesSemanticEvents: /id: "review\.story"[\s\S]*?projections: \[([^\]]+)/u.exec(catalog)?.[1]?.includes("rules.transition.event") ?? false,
     };
 

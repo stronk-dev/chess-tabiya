@@ -4,6 +4,16 @@ import { profileFixture } from "./profile-fixture.test-support.js";
 import { parseLearnerProfile, parseOpeningDetail, parseProfileHistory, parseSharedCard, parseStyleCardPage } from "./profile-response.js";
 
 describe("learner profile response parser", () => {
+  it("requires the explicit unavailable status and refuses pooled/legacy/mislabeled observations", () => {
+    const fixture = profileFixture();
+    expect(parseLearnerProfile(fixture).observationStatus).toEqual({ kind: "unavailable", reason: "subject_metrics_not_adopted" });
+    for (const patch of [
+      { observationStatus: undefined }, { observationStatus: { kind: "available", reason: "subject_metrics_not_adopted" } },
+      { observationStatus: { kind: "unavailable", reason: "source_missing" } },
+      { observationStatus: { kind: "unavailable", reason: "subject_metrics_not_adopted", retry: true } },
+      { observations: [{}] }, { observations: { rows: [] } },
+    ]) expect(() => parseLearnerProfile({ profile: { ...fixture.profile, ...patch } })).toThrow();
+  });
   describe.each(["profile", "history", "opening"] as const)("%s history operands", (door) => {
     function parseRow(row: unknown) {
       const fixture = profileFixture();

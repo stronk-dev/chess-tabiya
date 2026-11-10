@@ -2,22 +2,29 @@
 // rfc/review-map.md — the remainder on the web surface: the eval graph (§6, [[D880]]), the Compare
 // handoff (§4) and the explicit Analyze action (§7, O7.3).
 
-import { attachEvidence, branchPath, commitMove, fork, reviewAnalysis, reviewMapProjection, reviewText, rewind, storyMomentsForRun, type DrillRun } from "@chess-tabiya/runtime";
+import { attachEvidence, branchPath, commitMove, fork, moduleDecisionStamp, parsePresentationReceipt, revealFeedback, reviewMapProjection, reviewText, rewind, storyMomentsForRun, type DrillRun } from "@chess-tabiya/runtime";
 import { mount, tick, unmount } from "svelte";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { createComponentTestScope } from "./component-test-lifecycle.js";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
+import { inspectorBrowserFixture, disposeInspectorBrowserFixtures, terminateInspectorBrowserFixture } from "./inspector-source-browser.test-support.js";
 
 import { REVIEW_FIXTURE_AT, reviewFixtureRun } from "../../../../packages/runtime/src/testing/review-map-fixture.js";
-import type { ReviewAnalysisPage, ReviewMap } from "./api.js";
+import { recordedReviewFixtureSources } from "../../../../packages/runtime/src/testing/recorded-grade-fixture.js";
+import type { ReviewMap } from "./api.js";
 import ReviewMapScreen from "./ReviewMapScreen.svelte";
-import { assertReviewAnalysisResponse, assertReviewMapResponse } from "./review-response.js";
+import { assertReviewMapResponse } from "./review-response.js";
+import { assertReviewAnalyzeResult, requestReviewAnalyze, reviewAnalyzeTarget, type ReviewAnalyzeResult } from "./review-analyze.js";
 
-afterEach(() => document.body.replaceChildren());
+afterEach(async () => { document.body.replaceChildren(); await disposeInspectorBrowserFixtures(); });
+afterAll(async () => { await terminateInspectorBrowserFixture(); });
+const replacementScope = createComponentTestScope();
+afterEach(async () => { await replacementScope.cleanup(); });
 
 function payloadOf(run: DrillRun, side: "white" | "black" = run.start.side): ReviewMap {
   const branchId = run.branches[0]!.id;
-  const projection = reviewMapProjection({ run, branchId, story: storyMomentsForRun(run, branchId, { recordedResult: "1-0" }), context: "imported_analysis", side, viewer: { role: "learner", session: "imported" } });
+  const projection = reviewMapProjection({ run, branchId, story: storyMomentsForRun(run, branchId, { recordedResult: "1-0" }), context: run.sessionKind === "imported" ? "imported_analysis" : "review", side, viewer: { role: "learner", session: run.sessionKind }, ...recordedReviewFixtureSources(run, branchId) });
   return JSON.parse(JSON.stringify({
-    runId: run.id, branchId, side, ready: true, pendingEvidence: 0,
+    runId: run.id, branchId, side, ready: true, pendingEvidence: 0, decision: moduleDecisionStamp(run), workflowContext: run.sessionKind === "imported" ? "imported" : "position",
     source: { kind: "pgn_paste", headers: { White: "Alice", Black: "Bob" }, result: "1-0", importedAt: "2026-09-24T12:00:00.000Z" },
     outcome: { kind: "recorded_result", result: "1-0" }, storyTitle: "Won at move 12",
     viewer: { mayWrite: true }, semanticPath: { kind: "available", events: 0 },
@@ -34,7 +41,7 @@ function retried(run: DrillRun, entryNodeId: string, moves: readonly string[]): 
 type Props = {
   onRetry?: (entryNodeId: string) => Promise<void>;
   onCompare?: (branchIds: readonly string[]) => Promise<void>;
-  onAnalyze?: (nodeId: string) => Promise<ReviewAnalysisPage>;
+  onAnalyze?: (nodeId: string, signal: AbortSignal, current: () => boolean) => Promise<ReviewAnalyzeResult>;
 };
 function render(review: ReviewMap, props: Props = {}) {
   assertReviewMapResponse(review, { runId: review.runId });
@@ -164,23 +171,23 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     let run = reviewFixtureRun({ id: "web-analyze", plies: 12 });
     const path = branchPath(run, run.branches[0]!.id);
     run = attachEvidence(run, path[2]!.id, ["engine:line"], { kind: "bestline", source: "engine_validated", values: { engineId: "stockfish-test", requestedDepth: 18, movesUci: ["g1f3", "b8c6"] } }, REVIEW_FIXTURE_AT).run;
-    return run;
+    return revealFeedback(run, REVIEW_FIXTURE_AT).run;
   };
-  const answer = (run: DrillRun) => vi.fn(async (nodeId: string): Promise<ReviewAnalysisPage> => {
-    const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId, { role: "learner", session: "imported" }) };
-    assertReviewAnalysisResponse(page, { runId: run.id, branchId: page.branchId, nodeId, entryNodeId: page.entryNodeId });
-    return page;
+  const answer = (run: DrillRun) => vi.fn(async (nodeId: string, signal = new AbortController().signal, current = () => true): Promise<ReviewAnalyzeResult> => {
+    const fixture = await inspectorBrowserFixture({ run, preserveRun: true });
+    return requestReviewAnalyze({ reviewAssistance: (_id, body, abort) => fixture.reviewConfirm(body, abort),
+      inspector: (_id, body, abort) => fixture.send(body, abort ?? signal) }, reviewAnalyzeTarget(payloadOf(run), nodeId), signal, current);
   });
 
   it.each(["branchId", "entryNodeId"] as const)("D3665 refuses a crossed Analyze %s before rendering", async field => {
     const run = lined();
     const review = payloadOf(run);
     const target = review.rows[2]!;
-    const subject = { runId: run.id, branchId: review.branchId, nodeId: target.nodeId, entryNodeId: target.entryNodeId };
+    const subject = reviewAnalyzeTarget(review, target.nodeId);
     const page = await answer(run)(target.nodeId);
-    expect(() => assertReviewAnalysisResponse(page, subject)).not.toThrow();
-    const crossed = { ...page, [field]: "another-recorded-position" };
-    expect(() => assertReviewAnalysisResponse(crossed, subject)).toThrow(/analysis identity/u);
+    expect(() => assertReviewAnalyzeResult(page, subject)).not.toThrow();
+    const crossed = { ...page, target: { ...page.target, [field]: "another-recorded-position" } };
+    expect(() => assertReviewAnalyzeResult(crossed, subject)).toThrow(/analysis identity/u);
     const component = render(review, { onAnalyze: vi.fn(async () => crossed) });
     document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
     await tick();
@@ -194,9 +201,9 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     const run = lined();
     const review = payloadOf(run);
     const target = review.rows[2]!;
-    let resolve!: (value: ReviewAnalysisPage) => void;
-    const pending = new Promise<ReviewAnalysisPage>(done => { resolve = done; });
-    const onAnalyze = vi.fn(() => pending);
+    let resolve!: (value: ReviewAnalyzeResult) => void;
+    const pending = new Promise<ReviewAnalyzeResult>(done => { resolve = done; });
+    const onAnalyze = vi.fn((_nodeId: string, _signal: AbortSignal, _current: () => boolean) => pending);
     const component = render(review, { onAnalyze });
     document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
     await tick();
@@ -210,6 +217,9 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     control.click();
     await tick();
     expect(onAnalyze).toHaveBeenCalledTimes(1);
+    const [, signal, current] = onAnalyze.mock.calls[0]!;
+    expect(signal.aborted).toBe(false);
+    expect(current()).toBe(true);
     resolve(await answer(run)(target.nodeId));
     await vi.waitFor(() => expect(document.querySelector(".analysis-sentence")).not.toBeNull());
     expect(document.querySelector(".analysis button")).toBe(control);
@@ -221,6 +231,8 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     expect(document.querySelector(".analysis button")).toBe(control);
     expect(document.activeElement).toBe(control);
     expect(control.textContent).toBe(reviewText("analysis.action"));
+    expect(signal.aborted).toBe(true);
+    expect(current()).toBe(false);
     await unmount(component);
   });
 
@@ -228,19 +240,24 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     const run = lined();
     const review = payloadOf(run);
     const target = review.rows[2]!;
-    let resolve!: (value: ReviewAnalysisPage) => void;
-    const pending = new Promise<ReviewAnalysisPage>(done => { resolve = done; });
-    const onAnalyze = vi.fn(() => pending);
+    let resolve!: (value: ReviewAnalyzeResult) => void;
+    const pending = new Promise<ReviewAnalyzeResult>(done => { resolve = done; });
+    const onAnalyze = vi.fn((_nodeId: string, _signal: AbortSignal, _current: () => boolean) => pending);
     const onRetry = vi.fn(async () => {});
     const component = render(review, { onAnalyze, onRetry });
     document.querySelectorAll<HTMLButtonElement>(".move-select")[2]!.click();
     await tick();
     document.querySelector<HTMLButtonElement>(".analysis button.analyze")!.click();
     await tick();
+    const [, signal, current] = onAnalyze.mock.calls[0]!;
+    expect(signal.aborted).toBe(false);
+    expect(current()).toBe(true);
     if (action === "navigation") document.querySelectorAll<HTMLButtonElement>(".move-select")[4]!.click();
     else if (action === "retry") document.querySelectorAll<HTMLButtonElement>(".move-row button.retry")[2]!.click();
     else await unmount(component);
     await tick();
+    expect(signal.aborted).toBe(true);
+    expect(current()).toBe(false);
     resolve(await answer(run)(target.nodeId));
     await tick();
     expect(document.querySelector(".analysis-sentence")).toBeNull();
@@ -250,6 +267,35 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
       expect(onRetry).toHaveBeenCalledTimes(action === "retry" ? 1 : 0);
       await unmount(component);
     }
+  });
+
+  it.each(["run", "branch", "decision", "context"] as const)("retires Analyze before reading a stale completion when its %s is replaced", async field => {
+    const run = lined(), review = payloadOf(run), row = review.rows[2]!;
+    const genuine = await answer(run)(row.nodeId);
+    let resolve!: (value: ReviewAnalyzeResult) => void, reads = 0;
+    const pending = new Promise<ReviewAnalyzeResult>(done => { resolve = done; });
+    const onAnalyze = vi.fn((_nodeId: string, _signal: AbortSignal, _current: () => boolean) => pending);
+    const component = replacementScope.createClassComponent({ component: ReviewMapScreen, target: document.body,
+      props: { review, initialNodeId: row.nodeId, onAnalyze, onRetry: vi.fn(async () => {}), onExport: vi.fn() } });
+    await tick();
+    document.querySelector<HTMLButtonElement>(".analysis button.analyze")!.click();
+    await tick();
+    const [, signal, current] = onAnalyze.mock.calls[0]!;
+    const replacement = field === "run" ? { ...review, runId: "other-run" }
+      : field === "branch" ? { ...review, branchId: "other-branch" }
+      : field === "context" ? { ...review, workflowContext: "position" as const }
+      : { ...review, decision: moduleDecisionStamp(rewind(run, run.nodes[0]!.id, "2026-11-03T00:00:00.000Z").run) };
+    expect(field === "context" ? replacement.workflowContext !== review.workflowContext : field === "decision" ? replacement.decision.digest !== review.decision.digest : true).toBe(true);
+    component.$set({ review: replacement });
+    await tick();
+    expect(signal.aborted).toBe(true);
+    expect(current()).toBe(false);
+    resolve({ ...genuine, get target() { reads++; return genuine.target; } });
+    await tick();
+    expect(reads).toBe(0);
+    expect(document.querySelector(".analysis-sentence")).toBeNull();
+    expect(document.querySelector(".analysis [role=alert]")).toBeNull();
+    component.$destroy();
   });
 
   it("D3665 recovers a rejected Analyze read on the same focused action without private error text", async () => {
@@ -288,9 +334,10 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     expect(button.textContent).toBe(reviewText("analysis.action"));
     expect(button.getAttribute("aria-label")).toBe(reviewText("analysis.action.label", { number: target.moveNumber, san: target.san }));
     button.click();
-    await vi.waitFor(() => expect(document.querySelector(".analysis-sentence")?.textContent).toBe(`stockfish-test (depth 18 search) reported this principal variation from the position before ${target.label}: 2. Nf3 Nc6.`));
-    expect(onAnalyze).toHaveBeenCalledWith(target.nodeId);
-    expect(document.querySelector(".analysis")!.textContent).toContain(reviewText("analysis.caveat"));
+    await vi.waitFor(() => expect(document.querySelector(".analysis-sentence")?.textContent).toContain(`saved report names stockfish-test (depth 18 search)`));
+    expect(document.querySelector(".analysis-sentence")?.textContent).toContain("2. Nf3 Nc6");
+    expect(onAnalyze).toHaveBeenCalledWith(target.nodeId, expect.any(AbortSignal), expect.any(Function));
+    expect(document.querySelector(".analysis")!.textContent).toContain(reviewText("analysis.saved.caveat"));
     // Selecting another move closes the reveal; it never follows the learner around the map.
     document.querySelectorAll<HTMLButtonElement>(".move-select")[5]!.click();
     await tick();
@@ -332,17 +379,20 @@ describe("Analyze on the Review Map (§7, O7.3)", () => {
     await unmount(component);
   });
 
-  it("refuses an engine line that is unattributed or phrased as advice, and an ordinary map that carries one", () => {
+  it("refuses edited attribution/bound/advice inside the actual registered receipt, and an ordinary map that carries a line", async () => {
     const run = lined();
     const nodeId = payloadOf(run).rows[2]!.nodeId;
-    const page = { runId: run.id, branchId: run.branches[0]!.id, ...reviewAnalysis(run, run.branches[0]!.id, nodeId, { role: "learner", session: "imported" }) };
-    const subject = { runId: run.id, branchId: page.branchId, nodeId, entryNodeId: page.entryNodeId };
-    expect(() => assertReviewAnalysisResponse(page, subject)).not.toThrow();
-    expect(() => assertReviewAnalysisResponse({ ...page, bound: {} }, subject)).toThrow(/attributed/u);
-    // The sentence must open with the named engine attribution (a typed line names engine and version).
-    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1" }, subject)).toThrow(/attributed/u);
-    expect(() => assertReviewAnalysisResponse({ ...page, engine: "Mock Stockfish mock-1", sentence: page.sentence.replace(/^stockfish-test/u, "Mock Stockfish mock-1") }, subject)).not.toThrow();
-    expect(() => assertReviewAnalysisResponse({ ...page, sentence: `stockfish-test (depth 18 search): the best line is ${"3. Nf3"}.` }, subject)).toThrow(/advice/u);
+    const result = await answer(run)(nodeId);
+    if (result.page.kind !== "page" || result.page.body.kind !== "source" || result.page.body.outcome.kind !== "available") throw new Error("Expected actual available Analyze source page");
+    const wire = result.page.body.outcome.presentation;
+    expect(() => parsePresentationReceipt(wire)).not.toThrow();
+    for (const mutation of [{ bound: {} }, { engine: { id: "Mock Stockfish", name: "invented", version: "mock-1" } }, { sentence: "The best line is Nf3." }]) {
+      const changed = structuredClone(wire);
+      const item = changed.items[0]!;
+      if (item.component.id !== "fact_statement") throw new Error("Expected registered Analyze statement");
+      Object.assign(item.component.operand.operands, mutation);
+      expect(() => parsePresentationReceipt(changed)).toThrow();
+    }
     const review = payloadOf(run);
     expect(() => assertReviewMapResponse({ ...review, rows: review.rows.map((row, index) => index === 0 ? { ...row, bestMoveUci: "e2e4" } : row) }, { runId: review.runId })).toThrow(/engine line/u);
   });

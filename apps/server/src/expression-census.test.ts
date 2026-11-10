@@ -27,7 +27,9 @@ const walkTracked = (path: string): string[] => readdirSync(path, { withFileType
 });
 const trackedDigest = () => trackedRoots.flatMap(walkTracked).sort().map((file) => [file, createHash("sha256").update(readFileSync(file)).digest("hex")]);
 const trackedBeforeFullCensus = trackedDigest();
-const fullDeclarationReport = runExpressionCensus({ witnesses, declarations: true });
+const declarationCensus = await runExpressionCensus({ witnesses, declarations: true });
+if (declarationCensus.declarations === undefined || declarationCensus.totals.declarations === undefined) throw new Error("Requested declaration census is absent");
+const fullDeclarationReport = { ...declarationCensus, declarations: declarationCensus.declarations, totals: { ...declarationCensus.totals, declarations: declarationCensus.totals.declarations } };
 const fullReport = (() => {
   const { declarations: _declarations, totals, ...report } = fullDeclarationReport;
   const { declarations: _declarationTotals, ...reportTotals } = totals;
@@ -151,26 +153,26 @@ describe("expression census", () => {
     const empty = report.subjects.filter((subject: any) => subject.observations.includes("IN_SHAPE_DENOMINATOR_EMPTY"));
     expect(empty.length).toBeGreaterThan(0);
     // An empty denominator is preserved as its own observation, never collapsed into a rate.
-    for (const subject of empty) expect(subject.coverage.inShape.of).toBe(0);
+    for (const subject of empty) expect(subject.coverage.inShape!.of).toBe(0);
 
     const outside = report.subjects.filter((subject: any) => subject.observations.includes("FIRES_ONLY_OUTSIDE_SHAPE"));
     expect(outside.length).toBeGreaterThan(0);
     for (const subject of outside) {
       expect(subject.coverage.corpus.fires).toBeGreaterThan(0);
-      expect(subject.coverage.inShape.fires).toBe(0);
-      expect(subject.coverage.inShape.of).toBeGreaterThan(0);
+      expect(subject.coverage.inShape!.fires).toBe(0);
+      expect(subject.coverage.inShape!.of).toBeGreaterThan(0);
     }
 
     // The three classifications are distinct: firing nowhere is not firing outside.
     expect(never.some((subject: any) => outside.includes(subject))).toBe(false);
   });
 
-  it("reports vacuous degeneracy without turning it into an error", () => {
+  it("reports vacuous degeneracy without turning it into an error", async () => {
     const expression: StructuralExpression = { kind: "feature", feature: { kind: "piece_reach_count", color: "white", role: "bishop", scope: "every", comparison: "atLeast", count: 0 } };
-    const report = runExpressionCensus({ expression, witnesses: {} });
-    expect(report.subjects[0].observations).toContain("FIRES_ON_DEGENERATE");
-    expect(report.subjects[0].degenerate).toContain("bare_kings");
-    expect(report.subjects[0].observations).not.toContain("UNSATISFIABLE");
+    const report = await runExpressionCensus({ expression, witnesses: {} });
+    expect(report.subjects[0]!.observations).toContain("FIRES_ON_DEGENERATE");
+    expect(report.subjects[0]!.degenerate).toContain("bare_kings");
+    expect(report.subjects[0]!.observations).not.toContain("UNSATISFIABLE");
   });
 
   it("resolves pack-local plan signatures before measuring coverage", () => {
@@ -190,7 +192,7 @@ describe("expression census", () => {
     }
   });
 
-  it("is deterministic and does not mutate content", () => {
+  it("is deterministic and does not mutate content", async () => {
     const root = mkdtempSync(resolve(tmpdir(), "tabiya-expression-determinism-"));
     const packs = resolve(root, "packs");
     const shapes = resolve(root, "shapes");
@@ -199,8 +201,8 @@ describe("expression census", () => {
     const file = resolve(packs, "sample.json");
     writeFileSync(file, readFileSync(resolvePackPath("anti-caro-advance-early-c5")));
     const before = [statSync(file).mtimeMs, createHash("sha256").update(readFileSync(file)).digest("hex")] as const;
-    const one = canonicalizeJson(runExpressionCensus({ roots: [packs], shapeRoot: shapes, witnesses: {} }));
-    const two = canonicalizeJson(runExpressionCensus({ roots: [packs], shapeRoot: shapes, witnesses: {} }));
+    const one = canonicalizeJson(await runExpressionCensus({ roots: [packs], shapeRoot: shapes, witnesses: {} }));
+    const two = canonicalizeJson(await runExpressionCensus({ roots: [packs], shapeRoot: shapes, witnesses: {} }));
     expect(two).toBe(one);
     expect([statSync(file).mtimeMs, createHash("sha256").update(readFileSync(file)).digest("hex")]).toEqual(before);
   });
@@ -208,8 +210,9 @@ describe("expression census", () => {
   it("reuses the shipped walker and leaves the verification gate report-free", () => {
     const source = readFileSync(new URL("./expression-census.ts", import.meta.url), "utf8");
     const testSource = readFileSync(new URL("./expression-census.test.ts", import.meta.url), "utf8");
-    expect(source).toContain('import { authoredSpineFens } from "./pack-validation.js"');
-    expect(source).toContain('import { matchesStructuralExpression } from "@chess-tabiya/runtime"');
+    expect(source).toContain('import { authoredSpineFens, validatePackDocument } from "./pack-validation.js"');
+    expect(source).toContain("authoredStructuralSites(kind, document)");
+    expect(source).toContain('matchesCurrentStructuralExpression(fen, readAuthoredStructuralConditionSource(target.source).effectiveExpression, "authoring")');
     expect(source).toContain('resolve("content/witnesses/expression-witnesses.json")');
     expect(source).not.toContain('resolve("apps/server/src/fixtures/expression-witnesses.json")');
     expect(source).not.toMatch(/chessops\/(?:util|chess)|\.spine|moveUci|parseUci/u);
@@ -287,6 +290,7 @@ describe("expression census", () => {
     const observation = (value: string) => rows.find((row: any) => row.subject === `TransitionObservation=${JSON.stringify(value)}`);
     const clock = observation("clock_zeroed");
     expect(clock).toMatchObject({ corpusFirings: expect.any(Number) });
+    if (clock === undefined) throw new Error("clock declaration is absent");
     expect(clock.producers.length).toBeGreaterThanOrEqual(2);
     expect(clock.corpusFirings).toBeGreaterThan(0);
     const others = ["pawn_break", "castled", "last_of_role"].map((value) => observation(value));
@@ -328,6 +332,7 @@ describe("expression census", () => {
   it("rejects inferred verdict fields rather than arbitrary source words", () => {
     const row = fullDeclarationReport.declarations[0];
     expect(row).toBeDefined();
+    if (row === undefined) throw new Error("declaration is absent");
     for (const verdict of ["dead", "unreachable", "unsatisfiable", "unused"]) {
       expect(() => expectFactualDeclaration({ ...row, verdict })).toThrow();
       expect(() => expectFactualDeclaration({ ...row, declaredAt: { ...row.declaredAt, verdict } })).toThrow();
@@ -336,10 +341,10 @@ describe("expression census", () => {
     expect(() => expectFactualDeclaration({ ...row, corpusFirings: "unused" })).toThrow();
   });
 
-  it("keeps declaration discovery opt-in, deterministic, and content-read-only", () => {
+  it("keeps declaration discovery opt-in, deterministic, and content-read-only", async () => {
     const empty = mkdtempSync(resolve(tmpdir(), "tabiya-expression-opt-in-"));
-    const omitted = runExpressionCensus({ roots: [empty], shapeRoot: empty, witnesses: {} });
-    const explicitFalse = runExpressionCensus({ roots: [empty], shapeRoot: empty, witnesses: {}, declarations: false });
+    const omitted = await runExpressionCensus({ roots: [empty], shapeRoot: empty, witnesses: {} });
+    const explicitFalse = await runExpressionCensus({ roots: [empty], shapeRoot: empty, witnesses: {}, declarations: false });
     expect(explicitFalse).toEqual(omitted);
     expect(omitted).not.toHaveProperty("declarations");
     expect(fullReport).not.toHaveProperty("declarations");

@@ -1,15 +1,45 @@
 # Semantic evidence
 
+Current qualification is reported by `make semantic-validation-check` and the generated
+semantic-validation receipt. The four transition sources castled1/rights_lost1/capture1/
+clock_reset1 and seven current foundation event sources have complete required validation
+arms: opposition2, backward2, pawn-file-group1, physical-slider2, file-state1, stationary
+file-access1 and pawn-islands2. Other subjects retain their own outstanding profile arms.
+Qualification is separate from consumer admission, application reach and release proof.
+
+`planning/foundation-source-identity/plan.md` records the current implementation/checkpoint and
+remaining D4167 canonical/candidate/ordinary/avoidance/bot adoption. The accepted source-first
+successor is `rfc/subject-safe-semantic-selection.md`; its private source primitives are described
+below. It does not automatically activate consumer bindings.
+
 Semantic evidence is the typed bridge between Tabiya's raw detectors and later learner-facing
 modules. It does not itself choose a hint, name a tactic, grade a move, or turn on assistance.
+
+## Factory input order
+
+A semantic event retains the factory receipt's complete ordered input digest vector. Compilation
+refuses a missing, extra, replaced or reordered distinct digest before checking declaration
+membership. Declaration families still describe variable populations where declared; they are not
+silently converted to fixed tuples. Equal digest occurrences do not authenticate object identity.
+The seven current foundation event sources additionally require their original factory input
+objects, exact computed before/after tuples, complete canonical camelCase anchors and matching
+payload signs. Physical slider2 retains its original canonical edge; tuple sources retain raw
+factory spelling without incorrectly rebuilding it from normalized castling UCI. The finite
+constructor boundary is implemented under value-authority§2.2b and its shared/module companions.
+
+Genuine controls are in `foundation-semantic-event.test.ts` and `semantic-evidence.test.ts`.
+Shared Inspector collection uses those original wrappers and complete source inputs, including
+available empty populations. D4170 closes the constructor repair; D4167 retains canonical/candidate
+and learner/bot adoption. Current execution receipts and checks live in the source plan rather
+than copied test counters in this behavior document.
 
 ## Reading, event, eligibility, selection
 
 A **reading** describes a position or a reduced transition count. Existing inspector surfaces keep
 using these values. An **event** is an identity-preserving relation across one legal edge: exact
 before/after FENs, canonical UCI, a declared sign, and the pieces, squares, rays, roles or counts
-that make the relation true. F2 registered 22 direct event projections and eleven derived
-counterfactual-absence projections.
+that make the relation true. The registry declares direct event sources and derived
+counterfactual-absence projections separately.
 The tactical foundation adds four direct research events: identity-retaining capture,
 exchange-filtered double attack, complete one-reply breadth, and exact check. Module admission
 comes from the exact consumer table: fork survival is also accepted by Post-commit Nudge and
@@ -37,8 +67,10 @@ rook and Chess960 swaps. A stationary rook does not fire. The source file must p
 been neither open nor mover-half-open; the destination class comes from the exact admitted
 structural reading. This says where the rook moved, not that it improved or controls the file.
 The sole factory, complete candidate packet and authenticated Nudge acquisition retain this
-identity. Selection and qualification are separate; Review's declared pair still lacks its
-incoming-edge delivery (D3758), and Full Inspector does not accept this projection.
+identity. Review acquires incoming-edge evidence through `collectRelations` and
+`postcommitEdgeEvidence`, admits it through its registered module and renders it at the event's
+recorded node. Delivery does not establish usefulness or semantic qualification; Full Inspector
+does not accept this projection.
 
 Occupied-target attack/defence events retain the target's color and role as well as its square.
 A Chess960 castle that replaces a rook with its king does not report a new defence of the
@@ -79,14 +111,17 @@ The legality reading also retains rook-only transit/landing blockers using the r
 combined clearance path. It preserves existing king-path ordering, excludes both castling pieces
 and names shared blockers only once. Both-color geometry controls and authenticated Inspector
 positive/nearby-negative cases cover orthodox queenside and Chess960 stationary/overlapping paths.
-The same corrected operands reach the existing opponent candidate-vector consumer; bounded
-score inputs are retained. This is collector fidelity, not a new personality or calibrated bot.
+These operands reach their current registered evidence consumers. The former opponent
+candidate-feature-vector projection/adapter is retired. Actual bot Stage A consumes its typed
+pawn-role classifier view; Stage B source/persistence adoption remains D3662. Collector fidelity
+alone is not a personality or calibration claim.
 
 Local trapped-piece readings also include the rook's physical destination when the legal
 command is castling. A safe landing is an escape; a landing admitting a positive local capture
 remains locally losing. Having castling rights alone is not an exemption. Both-color/wing
-controls reach the sealed factory, complete candidate packet, opponent consumer and authenticated
-Inspector; nearby positions without the right remain trapped. The convention remains the bounded
+controls reach the sealed factory, complete candidate packet and authenticated Inspector;
+nearby positions without the right remain trapped. The retired bot-vector path supplies no
+current bot-consumption proof. The convention remains the bounded
 `trapped@1` test, not a claim that the piece is lost under every possible defensive plan.
 
 Pawn protection and connected-pair gains follow the exact moved pawn across its legal edge;
@@ -143,14 +178,42 @@ consumer bindings remain incomplete, and these three projections stay inspector-
 consumer; it does not say the event is useful, visible or enabled. Every row names its validation
 posture explicitly (`semanticValidation`): `required` compiles eligible only over a `passed`
 generated verdict, while `research_only` is legal only for an author/operator analysis consumer
-whose forms and answers exclude learner prose, board paint, hints, grades and moves. The current 78
-rows target only `research.semantic_selection@1` and are `research_only`. Existing product
-consumers receive no new evidence.
+whose forms and answers exclude learner prose, board paint, hints, grades and moves. The exact
+rows live in the compiled manifest. Research-selector eligibility is distinct from the actual
+ordinary modules' independently registered source operations, bindings and selected delivery.
 
 **Selection** compares the played edge with every other legal move from the same parent position.
 The denominator includes alternatives that emit no event. The versioned research policy keeps at
 most two locally distinctive facts and treats an empty result as normal output. It is a regression
 profile, not a learner default.
+
+## Subject-owned source outcomes
+
+The implementing subject-safe successor uses an original **wide** candidate receipt and exact
+played member. Each of thirteen registered `derived.semantic_avoidance.<family>@2` factories reads
+its declared root subjects at the root, played child and every legal alternative. It retains full
+states, original repeated source inputs and the complete legal denominator. Removed/promoted
+pieces and inapplicable rays remain typed states; they cannot become false membership or zero.
+A source-owned available-empty result is distinct from an unavailable population.
+
+`research.r2_candidate@2` uses seven exact native subject/outcome comparisons and35 explicitly
+registered projection/sign prevalence modes. Native ties follow original board subject order,
+independently of a collector's output order. It keeps the existing two-fact cap and thresholds;
+it is operator research, not an ordinary learner preset. Selector1 is no longer executable.
+
+Source validation calls `runtime.semantic.subject_outcomes@1` with one exact family and complete
+canonical legal population, including the played move. It checks the detached parsed input
+against an original wide receipt and returns ALL source outcomes, including zero/unavailable;
+it does not validate a capped selection as if it were the source. Census execution streams one
+sampled root across all13 family operations, preserving every invocation, complete output
+multiplicity and unavailable samples. Numeric population coverage does not establish independent
+positive/negative/orientation/counterfactual qualification.
+
+The separate `research.semantic_validation@1` consumer admits original current semantic evidence
+at the existing validation boundary. It preserves recorded sources outside selector2's exact55
+sources without adding learner bindings. The thirteen outcome2 ordinary pairs remain held under
+D4175. Nine old public event meanings have unchanged test-only historical custody; current
+candidate collection, wrapper admission and qualification do not reinterpret those records.
 
 ## Candidate evidence packet
 
@@ -168,10 +231,25 @@ accepts only a `CandidatePopulationReceipt` minted by `compileCandidatePopulatio
   `localSemanticEvents`, the packet and local selection all read. The narrower eight-family inline
   closure is gone. The loose-piece collector's `invalid_turn_clone` becomes a typed row abstention
   instead of being dropped. The permitted projections are the generated literal `id@version` map in
-  `candidate-population-projections.generated.ts`: 44 one-edge events plus the twenty
-  `candidateChildReadings`, legal exchange and fork survival. The map is regenerated or checked with
+  `candidate-population-projections.generated.ts`. Child reading sources are the exact
+  `CANDIDATE_CHILD_READING_ROUTES`; additional candidate/edge slots retain exact move role,
+  extended-center destination, legal exchange and nonterminal fork survival. This generated
+  inventory is the authority for the current image, rather than copied counts. The map is regenerated or checked with
   `node tools/generate-candidate-packet-projections.mjs [--check]`. `human.maia.candidate_wdl` is
   outside it.
+- **Original quiet sources are retained.** Wide receipts also own root and child six-source
+  tuples (legal moves, pawn connectivity, opposition, backward pawns, pawn-file groups and file
+  states), plus private total ray/risk results. The child tuple values are the same original
+  objects held in public readings. The finite tuple reader validates actual factory ancestry and
+  complete FEN/counters even when no event fires; a genuine equal-byte snapshot from another
+  legal source refuses. Total complements retain four exact king-zone predicates (false included),
+  the original complete piece-count collection (zero included), original square control and each
+  original pawn's passed predicate while it remains a pawn. Removed and promoted subjects retain
+  explicit lifecycle entries, without fabricated false predicates. Child square control is the
+  same object in retained readings. Raw accepted FEN spelling remains in its original invocation while the
+  position join compares canonical bytes. The sole mint validates the source graph; later reads
+  check immutable membership. This is an ownership step: current canonical events still use
+  their existing composition and do not yet consume the retained frame.
 - **Retention is by reference.** Rows hold the original sealed events and readings. A private
   `WeakMap` receipt authority recognises only receipts the compiler minted, and
   `assertCandidatePacketEvent` admits an event only if it `===` a retained value. A byte-identical
@@ -187,10 +265,12 @@ accepts only a `CandidatePopulationReceipt` minted by `compileCandidatePopulatio
   `MOVE_IDENTITY_CONVENTION` identities. `e1g1` fails with `CandidatePacketMoveError`, so conversion
   happens at the engine or pack boundary.
 
-The packet is process-local and operator-only. It is never persisted and has no product consumer:
-`make semantic-evidence-check` is a contract instrument. It carries no score, rank, salience or
-valence. The bounded service and cache are `rfc/candidate-population-service.md`'s work, and the
-collector registry and full outcome algebra are `rfc/candidate-collector-registry.md`'s.
+The factual packet is process-local and is not persisted or sent directly to the learner. It
+carries no score, rank, salience or valence. Guided Hint is a real product consumer: HintService
+receives the application-lifetime CandidatePopulationService and reads its complete wide packets.
+That service retains a bounded process-local LRU; its caller receives the injected instance,
+not a request-local replacement. Broader collector/outcome duties remain in their accepted or
+pending contracts; the existing real service is not described as future work.
 
 ## Sign is not valence
 
@@ -229,11 +309,11 @@ rejected position-cache experiment are recorded in the existing D3300 projector 
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 47 producers, 290 projections, 42 consumers and 556 bindings, plus
-78 semantic events, 78 eligibility rows, 16 reasons and one selection policy. These are registered
-declarations, not proof of complete production consumption or a useful learner workflow. All collections
-contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
-startup and by `make semantic-evidence-check`.
+The compiled primary manifest is the source of producer/projection/consumer/binding inventories,
+semantic-event and eligibility rows, reasons and policies. `/capabilities` reports that actual
+tuple and the same canonical digest used at startup and by `make semantic-evidence-check`.
+Registered declarations are separate from complete production consumption and useful learner
+workflows. This document does not maintain a second numerical manifest.
 
 The exact semantic-event authority is `SEMANTIC_EVENT_PROJECTION_REFS` (`id@version`). The former
 base-id string inventory was removed because v1 and the recorded-path v2 successors coexist under
@@ -243,9 +323,13 @@ only and never polices manifest or consumer closure.
 ## Recorded semantic paths
 
 `recordedSemanticPath(run, branchId)` (`packages/runtime/src/recorded-semantic-path.ts`,
-`rfc/recorded-semantic-path.md`) is the only producer of the eleven multi-edge sequence projections
-over a real run. It accepts a `DrillRun` and a branch id only — never nodes, anchors, PGN arrays or an
-engine principal variation.
+`rfc/recorded-semantic-path.md`) is the branch-wide v2 sequence compiler described below. It accepts
+a `DrillRun` and branch id, not caller nodes, anchors, PGN arrays or an engine principal variation.
+Current learner modules separately prepare and collect owned windows through
+`recorded-sequence-window.ts`: trade_completed uses@2 and the other ten families use@3, with
+complete original edge occurrences and the exact declared horizons. The module/Review path is
+not evidence of a call to the older whole-branch compiler. Both use the validated recorded graph
+and actual edge authority; neither treats a provider PV as recorded play.
 
 - **Path authority.** `branchPath`/`branchPaths` delegate to `resolveBranchPath`, a total graph
   resolver: unique branch and node ids, exactly one parentless root declared by exactly one
@@ -288,13 +372,16 @@ engine principal variation.
   receipts. The result's `conventionReceipt` (`status: "registered"`) names the registry digest, the
   union of the emitted events' convention refs and each event's receipt digest in emission order.
 - **Server.** `apps/server/src/recorded-semantic-path.ts` exposes the injected, read-authorised
-  `compileRecordedSemanticPath`; there is no public raw-evidence route. Review consumes the same
-  runtime authority through its `compilePhaseArc` path and storage-authorised Review prefix.
-  Registered event compositions retain their own end-node identity through the row's presentation
-  receipt, including caption-owned squares and recorded moves. Review paints only the focused
-  fact's squares, retiring paint on navigation or replacement. D3735 tests actual saved-source
-  and authenticated Review adoption for all eleven recorded families, eleven hard negatives and
-  two extra horizons, preserving event identity and enforcing read authority/no-write behavior.
+  `compileRecordedSemanticPath`; there is no public raw-evidence route. The Review service still
+  constructs a branch-v2 PhaseArc through `compilePhaseArc`, passes its semantic-path result and
+  returns availability metadata. Current Review rows acquire their eleven recorded families
+  separately through `collectRelations` and owned sequence windows; the projection does not read
+  the passed branch-v2 result to construct those rows. Registered event compositions retain their
+  own end-node identity through the row's presentation receipt, including caption-owned squares
+  and recorded moves. Review paints only the focused fact's squares, retiring paint on navigation
+  or replacement. D3735 tests actual saved-source and authenticated Review adoption for all eleven
+  recorded families, eleven hard negatives and two extra horizons, preserving event identity and
+  enforcing read authority/no-write behavior.
   `make recorded-consumer-adoption-check` also proves the source boundary is load-bearing.
   D2 and Review D5 are discharged; longitudinal D6 and downstream eligibility discharges stay
   open. The RFC remains `awaiting D3`, not helper-only or complete. Longitudinal cannot use
@@ -373,189 +460,64 @@ with four independent authorities:
    subject verdict is `passed` *and* the instance carries the sole-factory value receipt with a
    reproduced payload digest. A missing, alternate or swapped receipt is `event_value_unverified`.
 
-The current register has 81 subjects. The 38 migrated cases remain, D3563 adds the independent
-standard castling positive/nearby negative, and D3616 adds adjacent-rook and stationary-king
-positives. D3628 adds twelve legal nearby negatives and nine v2 recorded-path positives,
-giving 63 cases (41 positives, 22 negatives). D3639 adds 24 source-bound literal-rule cases
-for capture, clock reset, check and castling-rights loss, bringing that checkpoint to 87
-(57 positives, 30 negatives). D3663 adds six source-bound legal castling negatives for
-capture class, removed defender and last-of-role: that checkpoint has 93 (57 positives,
-36 negatives). D3666 adds ten both-colour legal isolated-pawn-advance negatives for
-occupied attack/defence, slider ray, pawn contact and defended duty, bringing the total
-to 103 (57 positives, 46 negatives). The complete operation must emit clock reset while
-omitting each contact family; exact input/subject/operation/expectation borrowing refuses.
-The source store retains separately labelled pawn and king branches of the same pinned
-python-chess movement function, not a fabricated contiguous excerpt. Castling touches a
-friendly rook but removes no piece; each completed
-operation emits the real castling event and omits the capture-dependent subject.
-D3667 adds sixteen both-colour gained/lost positives and eight populated negatives for
-occupied attack/defence, slider ray and defended duty: that checkpoint has 127 (73 positives,
-54 negatives). Exact actor/occupant addresses, ray endpoints, blocker sets and gained/lost
-direction are asserted. Existing contact persists when a redundant defender moves; an
-unchanged blocked rook ray is not a newly opened line; one newly attacked defended target
-does not cross the existing two-duty threshold. Opponent pawn advances also create/release
-the stationary defender's counted duties. These are geometric/count facts, never an overload,
-strategic advantage or move grade. The new manifest retains the separately labelled rook branch
-at the same pinned revision without changing any prior source or case.
-D3676 adds twelve both-colour populated legal negatives for backward, isolated, doubled and
-passed pawns and open/half-open files. One pawn per colour per file at ranks 2/7 gives adjacent
-friendly support and an opposing pawn ahead; king steps preserve those literal operands.
-The complete structural operation emits other events while omitting the exact subject.
-That checkpoint totals 139 (73 positives, 66 negatives), retaining all 127 prior cases unchanged.
-The independently retained piece-set excerpt establishes colour/pawn extraction only: the
-case's arithmetic binds absence under the existing vocabulary, not strategic value, general
-positive correctness or a new chess teaching claim.
-D3685 adds 36 source-bound positives: both colours, gained/lost/preserved exact membership
-for those six families. Five separately labelled Stockfish rule excerpts are checked verbatim
-at commit `e6e324eb28fd49c1fc44b3b65784f85a773ec61c`; literal pawn sets, relative ranks,
-empty stop squares and attack directions independently check the retained operands.
-Opponent moves can change a stationary pawn's status. Open and half-open remain distinct;
-these finite backward/doubled examples do not adopt the engine's broader evaluation heuristics.
-The positive cells are now present; the 139 predecessor records remain byte-for-byte unchanged.
-That checkpoint totals 175 (109 positives, 66 negatives), over 81 subjects. Orientation, the draft window
-repair and other required arms remain open: zero subjects are fully qualified and no subject
-becomes learner-eligible. No new collector, strategic value judgement or pack bytes are added.
-D3688 adds sixteen source-bound material/mobility cases through the real local-edge operation:
-six role-count positives, four populated material negatives, four exact destination-change
-positives and two populated unchanged-bishop negatives. Capture can reduce the count-based
-asymmetry; queen/knight promotion can change its vector without increasing its magnitude.
-A pawn advance can remove one stationary knight's locally non-losing destination while
-leaving its full legal destination set unchanged. Vacating a friendly rook-ray blocker
-retains the exact new destinations. Neither finding means strategic advantage, a forced
-move or general safety. Neutral role counts/geometry and actual legal capture continuations
-independently check these finite cases. Four separately labelled primary-source excerpts
-match python-chess's pinned revision. All 175 predecessor records remain unchanged.
-The register now totals 191 (119 positives, 72 negatives), over the same 81 subjects.
-Material/mobility negative arms are present; orientation and other required arms stay open,
-with zero subjects fully qualified. The real quiet edges also retain both king-state payloads
-with empty deltas: D3687's whole-event omission contract conflict remains an author blocker,
-not an invented negative, source abstention or permission to silently filter v1.
-D3691 adds 22 source-bound pawn-dynamics cases through the real local-edge operation:
-ten both-colour positives for new locks, pawn harassment of knights/bishops, new
-pawn-protected passers and new adjacent-file passed pairs; twelve populated negatives
-for retained locks, diagonal contact instead of a lock, a passer whose pawn protector
-changes, a physical pair whose display order changes, attacking a rook rather than
-a minor, and bishop rather than pawn protection. Neutral rank/file/piece arithmetic
-checks exact identities and gains independently of the pawn collector helpers.
-Retained-property negatives still emit the separate actual passer-advance event.
-Seven labelled Stockfish snippets match the fixed source revision used by D3685.
-All 191 predecessor case records remain unchanged. The register totals 213 passing
-cases (129 positives, 84 negatives), still 81 subjects and zero fully qualified.
-Only this family's positive/negative cells become present; candidate-majority
-conventions are not endorsed and orientation/other qualification debt remains.
-No attack implies a forced retreat, a strategically good move or a promotion result.
+The live register and generated receipt are the current inventory. Historical wave counts and
+failed attempts are retained in `planning/exploration/log.md` and the source implementation plan.
+They are not a second current-status register.
 
-D3701 adds sixteen source-bound cases: eight direct-count positives, four populated
-direct-count negatives and four loose-piece omissions, all in both colours. Independent
-rank/file/ray arithmetic checks the complete non-pawn target/count population, including
-one-to-two and two-to-one attacker changes, unchanged contacts, friendly ray blockers,
-pawn-target exclusion and pinned geometric attackers. Independent legal destination sets
-show that the loose-piece cases have no legal capture of any mover-colour non-king piece.
-The pinned-capturer negatives retain a real geometric attack, not an empty board or an
-unavailable source. They do not claim that defender count proves an exchange outcome.
-The three retained python-chess functions match their pinned primary-source bytes exactly.
-All 213 predecessor records remain unchanged; 229 cases pass (137 positive/92 negative).
-Direct-count positive/negative and loose-piece negative cells are present. Orientation,
-counterfactual/other required arms and the complete-state omission conflict remain;
-zero subjects are fully qualified and learner eligibility is unchanged. This is qualification
-work under existing collectors, not a new recommendation, strategy claim or content wave.
+Current source cases include independently literal complete populations, genuine whole-family
+negatives and complete ordered orientations. A minimum-witness `emits` case is deliberately
+different from `emits_exact`: the latter compares all occurrences, order and multiplicity.
+Neither a set comparison nor an expected array recorded from the collector establishes that
+a population is correct. Every mirror has independent complete absolute partners; symmetric
+producer errors must still fail those partners. Closed square/color/file/file-state transforms
+and complete original input-FEN/UCI bindings preserve counters and every declared operand.
 
-D3710 adds sixteen independent discovered-execution cases through the completed local
-operation: rook, bishop and queen discovered checks in both colours, plus both-colour
-direct-check, second-blocker, retained-screen, unrelated-move and moved-slider negatives.
-Legal replay and separate integer ray geometry check exact screen, slider and king identities.
-These controls exposed D3711: a king at a slider ray's board-edge endpoint was absent from
-the interior blocker arrays, so the execution join discarded its true before-state latency.
-The join now admits that exact retained endpoint without changing the ray's interior blocker
-meaning. All 249 predecessor cases remain unchanged. That checkpoint's 265 cases pass (153 positive,
-112 negative); discovered execution's negative cell becomes present. Orientation and all other
-required qualification, source adoption and learner eligibility obligations remain open;
-zero subjects are fully qualified. This repairs the accepted executed relation, not a claim
-that the move is best, forcing or strategically useful.
+The build-only cited store retains pinned primary rule excerpts, revisions, attribution and
+licence. Source propositions bind exact case, subject, operation, expectation and legal input
+before production invocation. The protected owner store is not synthesized by an implementer.
+Frozen retired cases retain their historical meanings and source bytes; successors receive their
+own cases and profiles. Zero natural firing, unavailable source evaluation and a genuine
+negative population remain distinct. No qualification transfers from an input to its derivation.
 
-D3714 adds thirty-six independently checked structural king-zone cases: entry into all
-four corners, corner-to-edge/interior exit, file-edge entry/exit/preservation, stationary
-corner preservation and populated both-interior omissions, for both colours. Independent
-square-name boundary sets and legal replay check the entire emitted edge/corner population,
-including exact before/after king squares and gained/lost/preserved signs. The canonical
-receipt executes 289 cases (173 positive/116 negative), retaining all 265 predecessors.
-This fills the structural king-zone positive and negative cells, not the distinct broad
-king-zone state projection's omission requirement. Orientation stays required and zero
-subjects are fully qualified. No king safety, opposition, strategic value, learner admission,
-source protocol or pack content changes.
+## Private total-state prerequisites
 
-D3717 adds thirty-six independently checked two-edge bishop-pressure cases (four positive,
-fourteen negative), retaining every previous canonical case. Both colours include competing
-attacked knights/bishops; unrelated replies, lost diagonals, missing/multiple/friendly screens
-and excluded target/value roles reach completed legal paths without the exact retained relation.
-Separate integer diagonal occupancy and legal replay check the pawn, moved bishop and unchanged
-screen/target identities through the production recorded-path operation. Existing migrated case
-references remain alongside the new source-bound cases. This records a pawn attack followed by
-retained pressure, not forced retreat, intent or move quality. Orientation remains required,
-zero whole subjects qualify, and learner eligibility and authored content are unchanged.
-The canonical register now executes 307 cases (177 positive/130 negative).
+Two sole-factory readings support complete subject-state evaluation:
 
-2026-10-12: D3730 adds thirty-six source-bound cases for the three bounded material-target
-projections. Both colours execute the complete registered batch. A loose knight establishes the
-exact bishop/knight capture; capturing the original bishop establishes immediate removal and
-that original identity's non-return. A defended equal-value capture and a blocked diagonal are
-completed negative populations, not unavailable operations. Independent legal occupancy/capture
-checks and D3720's complete-candidate oracle remain separate from the implementation.
-Two additional populated boundaries retain two actual material targets and all four candidate
-relations, each preserved, while correctly omitting bounded return. Thus the return negative is
-not limited to an empty target population.
-The restored-diagonal cases additionally record each non-return/existential/all-defences outcome.
-The complete finite oracle enumerates every legal defence, requires a nonempty reply set and
-rejects mate's zero replies as an all-defences or existential witness.
-All 307 predecessor records remain unchanged; the current register executes 343 cases
-(199 positive/144 negative), over 81 subjects and zero fully qualified. The six positive/negative
-cells become present; orientation, imported-population obligations and inspector-only consumer
-status remain unchanged. These finite cases do not establish whole-subject qualification,
-select a useful hint, grade a move or admit a new learner consumer.
+| Internal route | Inputs | Retained data |
+|---|---|---|
+| `rules.transition.reading.physical_slider_rays@1` | original exact legal-position source | Complete both-color board, every occupied piece × eight ordered directions; each null or full ray retains its edge endpoint, ordered strict interior and all occupied blockers |
+| `rules.tactic.reading.mover_piece_risk@1` | original root and evaluation legal-position sources, canonical child UCI or root null | Actor fixed by root turn; original/current own non-king identity, actual/turn-clone FEN and complete existing local-exchange risk states, including false values |
 
-Run `make semantic-validation-bounded-check` for the finite cases and complete-batch oracle;
-`make semantic-validation-cited-check` includes the new cases, and the ordinary software gate
-executes the canonical register and checks its generated receipt.
+Rays use the same geometry as physical-slider events. A missing/border/role-incompatible ray is
+null; an adjacent endpoint has an available empty interior. An endpoint is not a tactical target.
+The complete board comes from the original legal source's canonical FEN: its legal-move pieces
+array contains the mover only.
 
-D3690 widens the complete-state omission conflict to piece counts, pawn islands
-and reply breadth. Actual white/black bare-king edges retain twelve role counts,
-two zero island readings and one reply reading. A legal mate retains the terminal
-zero-reply observation. These are not whole-event omissions. All four affected
-negative arms remain required; the source-bound author handoff is
-`planning/platform-alignment/semantic-state-negative-contract.md`. No frozen v1
-filter, waived negative, collector mutation or consumer permission follows.
+Root risk requires the same original position object twice. Child risk requires the original
+legal-member spelling and complete actual child FEN/counters; castling aliases do not substitute
+for that member. Physical relocation preserves the rook during castling and the original pawn
+during promotion, with the promoted role retained as current data. The full original
+LoosePieceState preserves legal capture/exchange/defender data and permitted piece metadata.
+The hypothetical root turn clone clears EP under the existing risk rule; an actual child retains
+its legal EP victim/landing identity. Invalid clone returns unavailable/invalid_turn_clone even
+if the own non-king domain is empty. It is never an available empty or false risk.
 
-All prior cases remain. Both colors have completed legal hard
-negatives, exact operands and pre-invocation forged-authority rejection. Each sequence fixture also checks its completed
-production window; canonical qualification invokes the complete recorded application path,
-not the broken sequence-to-parent reach adapter tracked as D3629. The original 42 cases
-remain, one missing-capture-operand predicate is not promoted to a legal chess negative,
-and orientation/eligibility rules are unchanged. The build-only cited-source store retains the
-original six-line castling excerpt and four small literal-rule excerpts from python-chess 1.11.2
-at a fixed commit, with attribution and licence; the four additions were compared byte-for-byte
-with that pinned upstream source. Resolution checks the
-exact source, revision, licence, excerpt and proposition, then binds its case, subject,
-expectation, legal input, production operation and arm. Unknown references fail before production invocation; no network
-lookup, caller-provided source or protected owner-store bootstrap is involved. All 80 cited cases run
-through actual registered production operations. This is not independent strategic judgement or a new
-learner permission. The source store is excluded from the production runtime import closure.
-
-53 subjects carry an executed population receipt and 8 carry D872 external-disagreement
-receipts — and **zero** subjects are fully validated, because required arms remain missing,
-including emitter-level orientation authority. The
-avoidance family (D1716) and king opposition (D1717) abstain on every arm until their successors
-land; the eleven v1 multi-edge window events have no production operation (their v2 successors
-do). Validation never transfers from inputs to a derived event, and a new projection version
-starts with no verdict.
-
-The real-payload orientation check has a measured contract gap (D3564): thirteen kinds
-within thirty migrated positive edge cases retain FEN/UCI operands that none of the five
-closed mirror rules can compare. Exact-input-binding rules are a research proposal awaiting
-author/cross-review, not shipping behavior. The suspected fullmove-counter input defect is
-refuted by legal castling, en-passant and promotion controls. D3566 separately implements
-the already-required missing/crossed-partner preflight before either collector invocation;
-valid pairs still reach the total operand comparison. See
-`design/research/semantic-validation-closure.md` for the bounded experiment and handoff.
+Finite nonminting readers retain original source vectors and actual result membership through
+the existing factory stores, including repeated root inputs and unavailable results. Copied or
+resealed values do not acquire that invocation authority. Both routes currently have explicit
+private-prerequisite disposition. The existing wide candidate receipt owner retains their
+original root/child results privately. Its internal nonminting source reader accepts only a
+compiler-minted wide receipt. Narrowing preserves original references without granting wide
+outcome authority, and direct narrow compilation does not acquire the two private totals.
+In-flight compiler7 canonical events now consume those same original common sources; events-only
+receipts retain quiet prerequisites privately without acquiring wide-only total readings.
+Thirteen registered subject-outcome@2 factories consume complete original wide states, keeping
+all legal alternatives and exact ordered source vectors. Copied values/results cannot supply
+original invocation membership. Selector/constructor adoption, contract retirement, semantic
+qualification and ordinary presentation remain unfinished under
+`rfc/subject-safe-semantic-selection.md`. These routes add neither public child-reading slots nor
+direct learner bindings. Complete local exchange-model facts do not grade a move or assert a
+forced win.
 
 ## Adding a product module
 
@@ -566,8 +528,11 @@ En passant's victim square remains distinct from the landing square. The sole cl
 accepts only FEN and landing square; callers cannot supply capture results. It has no direct
 learner/provider binding or packet child-reading slot. Its permanent tests independently check
 complete destination enumeration while reusing the already-tested exchange arithmetic.
-The accepted exposure@2/availability/current-module migration is separate unfinished work;
-adding this prerequisite alone does not fix today's exposure factory or learner surfaces.
+The current candidate composition executes defender_exposure@2 and preserves its typed
+invalid_turn_clone result. Threat Radar's incoming-edge source also acquires that successor;
+Blunder Prevention has its own exact threat/mate/loose-reading source image. Further source
+sharing, subject-safe avoidance and full consumer journeys remain separate obligations; the
+landing-capture primitive alone is not proof those workflows are complete.
 
 F5 must add a named consumer, literal eligibility rows, exact bindings, a versioned production
 policy and workflow defaults together. Raw producer toggles are not a product configuration

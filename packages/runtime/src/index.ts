@@ -1,6 +1,11 @@
 import { DRILL_RUN_SCHEMA_VERSION } from "@chess-tabiya/schema";
 
 export { canonicalFen, transposeKey } from "./chess.js";
+export { parseDeclaredTimeControl, type ParsedTimeControl, type RecordedClockMove, type RecordedClockSample,
+  type ClockSampleIssue, type StoredClockDocument } from "./recorded-clocks.js";
+export { deriveMaiaNodeDistribution, deriveMaiaNodeCandidateWdl, maiaNodeInputsFromSubject, type MaiaNodeInputs, type MaiaNodeDistribution, type MaiaNodeCandidateWdl } from "./maia-node.js";
+export { parseMaiaNodeDistributionOperands, parseMaiaNodeWdlOperands, maiaNodeBandSentence, maiaNodeEmptySentence,
+  type HumanSplitPageV2, type MaiaNodeDistributionOperands, type MaiaNodeWdlOperands } from "./maia-node-presentation.js";
 export {
   PROMOTION_ROLES,
   MOVE_DESTINATION_CONVENTION,
@@ -55,7 +60,8 @@ export {
 } from "./errors.js";
 export { appendEvents, deriveSegments, eventsSince, groupsFromEvents, projectRun } from "./events.js";
 export { feedbackDeliveryOpen, feedbackDisclosed } from "./feedback.js";
-export { consumeShapeFiring, declareShapeFiringEvidence, renderShapeFiring, shapeFiringEvidence, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
+export { declareShapeFiringEvidence, renderShapeFiring, shapeFirings, type ShapeFiring, type ShapeTriggerSource } from "./shape-firing.js";
+export { consumeShapeFiring, shapeFiringEvidence, type PresentedShapeFiring } from "./shape-presentation.js";
 export { classifyPhase, developmentReading, isDevelopmentHome, phaseBandReading, renderPhaseReading, PHASE_BAND_CONVENTION, type PhaseBandDecision, type PhaseBandReadingV2, DEVELOPMENT_CONVENTION, DEVELOPMENT_HOMES, ENDGAME_MATERIAL_MAX, DEVELOPED_MATERIAL_MIN, OPENING_UNDEVELOPED_MIN, MIDDLEGAME_UNDEVELOPED_MAX, PHASE_PROVENANCE, type DetectedPhase, type DevelopmentReading, type PhaseReading } from "./phase.js";
 export { backRankReading, defenderDutyReading, defenderDutyRelocatedEvents, defenderRemovedEvents, discoveredExecutedEvents, discoveredLatencyReading, loosePieceEvents, loosePieceReading, mateInOne, overloadedDefenderResponseConflict, promotionPressureReading, rayClassificationReading, rookOnSeventhReading, trappedPieceReading, BACK_RANK_CONVENTION, DEFENCE_DUTY_CONVENTION, TRAPPED_CONVENTION, type BackRankReading, type DefenderDuty, type DefenderDutyReading, type DefenderDutyRelocatedEvent, type DefenderRemovedEvent, type DiscoveredExecutedEvent, type DiscoveredLatencyReading, type GainedSliderRay, type LoosePieceEvent, type LoosePieceEventResult, type LoosePieceReading, type LoosePieceState, type MateInOneReading, type OverloadedDefenderConflict, type OverloadedDefenderConflictResult, type PromotionAvailability, type PromotionPressureReading, type RayClassification, type RayClassificationKind, type RayClassificationReading, type RookOnSeventhReading, type TrappedPieceReading, type TrappedPieceState } from "./tactics.js";
 export { forcedMateAfterMove, MATE_PROOF_CONVENTION, MATE_PROOF_NODE_CAP, type ForcedMateAfterMoveProof, type ForcedMateAfterMoveResult, type MateProofStatus } from "./mate-proof.js";
@@ -141,11 +147,21 @@ export {
 export { compileModulePacket, type ModulePacket, type ModulePacketRefusal, type ModulePacketRequest } from "./module-packets.js";
 export {
   MODULE_QUERY_OPERATION, MODULE_QUERY_PROTOCOL, ModuleQueryError, fitModulePresentation, inspectorFamily, moduleDecisionStamp, moduleDisclosureDigest,
-  moduleComparisonForSubject, moduleQueryProjections, parseModuleQueryRequest, passFen, queryModules, sightScope, witnessedEvidence,
+  moduleComparisonForSubject, modulePresentationBundleCost, moduleQueryProjections, parseModuleQueryRequest, passFen, queryModules, sightScope, witnessedEvidence,
   type InspectorFamilyState, type ModuleBudgetReceipt, type ModuleBudgetTuple, type ModuleDecisionStamp, type ModuleDisclosureReceipt, type ModuleEmptyState,
   type ModuleQueryErrorCode, type ModuleQueryInput, type ModuleQueryPacket, type ModuleQueryPage, type ModuleQueryRequest, type ModuleSourceContext,
   type ModuleSourceResult, type ModuleSuppressionReason,
 } from "./module-query.js";
+export {
+  INSPECTOR_SOURCE_TOPICS, parseInspectorQueryRequest,
+  type InspectorQueryRequest, type InspectorQueryView, type InspectorQueryPage, type InspectorPageBody,
+  type InspectorDisclosureReceipt, type InspectorSourceRef, type InspectorSourceContext,
+  type InspectorSourceOutcome, type InspectorSourceStatus, type InspectorRecordedCoverage,
+  type InspectorPageRange, type InspectorDetailRef, type InspectorBudgetDimension,
+} from "./inspector-query-contract.js";
+export { INSPECTOR_DETAIL_SOURCES, parseInspectorDetailScope, parseInspectorDetailPayload, inspectorDetailSquares, type InspectorDetailKind, type InspectorDetailScope } from "./inspector-detail.js";
+export { isInspectorWholeReading, inspectorWholeReadingGeometryRequired } from "./inspector-whole-reading-presentation.js";
+export { normalizeExplorerPositionPageRequest } from "./provider-requests.js";
 export {
   ArrayReductionQualityRecorder,
   FACT_EQUIVALENCE_CLASSES,
@@ -182,7 +198,8 @@ export {
   CampaignReceiptError, issueCampaignEncounterReceipt, verifyCampaignEncounterReceipt,
   type CampaignAssistanceSubject, type CampaignEncounterReceipt, type CampaignReceiptErrorCode,
 } from "./campaign-receipt.js";
-export { PIVOTAL_MARKER_ROUTES, consumePivotalMarkers, liveAdmitted, liveMarkers, pivotalMarkerEvidence, pivotalMarkerEvidenceItems, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
+export { PIVOTAL_MARKER_ROUTES, liveAdmitted, liveMarkers, pivotalMarkerEvidenceItems, pivotalMarkers, renderPivotalMarker, type PivotalKind, type PivotalMarker, type IrreversibilityDetail, type PhaseChangeDetail, type DivergenceDetail, type CollapseDetail } from "./pivotal.js";
+export { consumePivotalMarkers, pivotalMarkerEvidence, type PresentedPivotalMarker } from "./pivotal-presentation.js";
 export {
   TRANSITION_FEATURE_KINDS,
   capturedRole,
@@ -205,13 +222,15 @@ export {
   CLAIM_EVIDENCE_TYPE_LABELS, SIDE_LABELS, type ClaimEvidenceType, type LabelVocabularyMembers, type ReviewSide,
   COMPONENT_DECLARATIONS, COMPONENT_IDS, GROUNDING_LABELS, LABEL_VOCABULARIES, OBJECTIVE_STATE_LABELS, PRESENTATION_ADAPTERS, PRESENTATION_CONVENTIONS,
   PRESENTATION_QUESTIONS, PRESENTATION_SELECTION_ONLY, PRESENTATION_SOURCE_REASONS, PresentationError, RECORDED_RELATION_LABELS, RUN_OUTCOME_LABELS,
-  assertPresentationText, assertPresentedEvidenceItem, citationFromEvidence, isPresentedAbstention, parsePresentationReceipt, presentEvidenceItems, renderPresentedEvidenceView,
+  assertPresentationText, assertPresentedEvidenceItem, citationFromEvidence, isPresentedAbstention, movePathFrames, parsePresentationReceipt, presentEvidenceItems, renderPresentedEvidenceView,
   presentScore, presentSearchBound, presentationAdapter, presentationDigest, presentedSentence, serializePresentedEvidence,
   type AbstentionOperand, type CitationOperand, type ClaimOperand, type ComponentDeclaration, type ComponentId, type ComponentValue, type ConventionReceipt,
   type EnumStateOperand, type FactStatementOperand, type LabelEntry, type LabelVocabulary, type MagnitudeOperand, type PresentationReceipt,
   type PresentedEvidenceItem, type ProjectionPresentationAdapter,
   BOARD_RELATION_KINDS, DENOMINATOR_MEANINGS, DISTRIBUTION_RESIDUAL_LABELS, MAGNITUDE_SCALE_POLICIES, RELATION_PHRASES, STRUCTURED_DOCUMENT_SCHEMAS,
   adapterComponents, componentValueSentence, conventionAttribution, factStatementOperand, formatShare, parseComponentValue,
+  isNativeFactSummary, presentedNativeFactReport, type NativeFactReport,
+  isGradeMeasurementSummary, presentedGradeMeasurementReport, type GradeMeasurementReport,
   type AdapterSpec, type BoardRelationKind, type ConventionBasis, type CountWithDenominatorOperand, type DistributionOperand, type MagnitudeScalePolicyId,
   type MagnitudeTrailOperand, type MovePathOperand, type OutcomeSplitOperand, type PopulationDescriptor, type PresentationComposition, type PresentationKit,
   type RelationOverlayOperand, type SquareSetOperand, type StructuredDocumentOperand,
@@ -392,7 +411,6 @@ export {
 export { attachEvidence } from "./evidence.js";
 export {
   attachedPacketEvidence,
-  candidateFeatureVectorEvidence,
   claimDeliveryEvidence,
   corpusPageEvidence,
   corpusPositionEvidence,
@@ -458,6 +476,8 @@ export {
   STOCKFISH_RESET_COMMANDS,
   explorerRequestUrl,
   maiaCommandImage,
+  maiaInferenceTaskCommandImage,
+  normalizeMaiaInferenceTaskRequest,
   maiaReachedFen,
   normalizeProviderRequest,
   syzygyPieceCount,
@@ -491,7 +511,6 @@ export {
 export type { AuthoredFeedbackItemRecord, EvidenceAvailability } from "./evidence-factories.js";
 export { RECORDED_ASSESSMENT_CATEGORIES, recordedReadingFromLedgerRecord, type SourcingLedgerRecord } from "./recorded-reading.js";
 export { evidenceSentenceTable, resolveEvidenceReference, type EvidenceReferenceResolution, type EvidenceSentence } from "./evidence-ref-resolution.js";
-export { candidateCollectorIds, type CandidateCollectorResult, type CandidateFeatureInput, type CandidateFeatureRow, type CandidateFeatureVector } from "./candidate-feature-vector.js";
 export {
   CANDIDATE_EVENTS_SCOPE,
   CANDIDATE_PACKET_COMPILER_VERSION,
@@ -538,8 +557,6 @@ export {
   type AbstainedGradeEvaluation,
   type CitedGradeConstant,
   type GradeContext,
-  type GradeEvaluation,
-  type GradeLane,
   type GradeScore,
   type GradeSide,
   type MoveQualityAbstention,
@@ -601,7 +618,6 @@ export {
   MODULE_CONSUMER_ACCEPTS,
   MODULE_CURRENT_IMAGE,
   MODULE_CONSUMER_IDS,
-  MODULE_CONSUMER_IMPLEMENTATION,
   MODULE_SUCCESSOR_REBASE,
   RECORDED_PATH_SUCCESSOR_REFS,
   WAVE_C_MODULE_PROJECTION_REFS,
@@ -680,7 +696,6 @@ export {
   structuralSemanticEvents,
   tacticalSemanticEvents,
   transitionSemanticEvents,
-  type CounterfactualAbsenceOperands,
   type CapturedZoneDefenderOperands,
   type DefenderConsequenceOperands,
   type DeflectionObservedInduction,
@@ -863,7 +878,8 @@ export {
   declareStructuralReadingEvidence,
   declareTransitionReadingEvidence,
   moveTransitionEvidence,
-  positionStructureEvidence,
+  presentMoveTransitionEvidence,
+  presentPositionStructureEvidence,
   selectedSquareSightEvidence,
 } from "./reading-evidence.js";
 export {
@@ -1125,7 +1141,6 @@ export {
   type ReviewEvalGraph,
   type ReviewEvalPoint,
 } from "./review-map.js";
-export { reviewAnalysis, type ReviewAnalysis } from "./review-analysis.js";
 export { REVIEW_MAP_TEMPLATES, reviewText, type ReviewTemplateId } from "./review-map-templates.js";
 export { judgementWordsOutsideGrounding, ungroundedResidue } from "./voice.js";
 export {
@@ -1246,7 +1261,7 @@ export {
 export {
   HINT_EMPTY_REASONS, HINT_FAILURE_REASONS, HINT_POLICY_REASONS, HINT_SOURCE_REASONS, HintExchangeError, hintDecisionStamp, hintDisclosureBoundarySeq,
   hintPolicyDecision, hintReceiptDigest, hintRequestId, nextHintRung, parseHintDeliveryReceipt, parseHintResponse,
-  type HintDecisionStamp, type HintDeliveryMarks, type HintDeliveryReceipt, type HintEmptyReason, type HintFailureReason, type HintPieceMark,
+  type HintDecisionStamp, type HintResponseContext, type HintDeliveryMarks, type HintDeliveryReceipt, type HintDeliveryReceiptV2, type HintEmptyReason, type HintFailureReason, type HintPieceMark,
   type HintPolicyDecision, type HintPolicyReason, type HintRequestState, type HintResponse, type HintSourceReason, type HintVoiceState,
 } from "./hint-exchange.js";
 export { HintHorizonMismatch, type HintDisclosurePayload, type HintHorizonOccurrence, type HintPieceIdentity } from "./hint-horizon.js";
@@ -1264,6 +1279,6 @@ export {
 } from "./opening-catalogue.js";
 export {
   HINT_COMPILER_VERSION, HINT_DISCLOSURE_RENDERERS, HINT_FORCED_MATE_ATTACKER_MOVES, assertHintDisclosurePacket, compileGuidedHintPacket,
-  compileHintDeliveryReceipt, compileHintDisclosure, hintHorizonOwner, hintPacketRoots, hintSearchLineEvidence, hintSentence, hintVoiceCheck, selectHintHorizon,
+  compileHintDeliveryReceipt, compileHintDisclosureV2, hintHorizonOwner, hintPacketRoots, hintSearchLineEvidence, hintSentence, hintVoiceCheck, selectHintHorizon,
   type GuidedHintPacket, type HintHorizonAuthority, type HintHorizonSelection, type HintRootIdentity, type SealedHintHorizon,
 } from "./hint-distance.js";

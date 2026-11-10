@@ -1,7 +1,7 @@
 // rfc/evidence-presentation.md Checkpoint B / rfc/module-registration.md A5 — the play-seat
 // modules' exact pair-keyed presentation adapters and their registered fact renderers:
-// `module.sight_on_request@1`, `module.threat_radar@1`, `module.blunder_prevention@1`,
-// `module.structure_nudge@1`, `module.theory_breadcrumb@1` and `module.compare_coach@1`.
+// `module.sight_on_request@1`, `module.threat_radar@2`, `module.blunder_prevention@1`,
+// `module.structure_nudge@2`, `module.theory_breadcrumb@2` and `module.compare_coach@1`.
 //
 // Every renderer is a fixed template over the parsed, retained operands (§3.10a). Sentences use
 // learner vocabulary only (play-composition §5.1): chess notation, registered labels and the
@@ -16,33 +16,37 @@ import type { DeclaredEvidence, EvidenceForm, VersionedEvidenceId } from "./evid
 import { MODULE_CURRENT_IMAGE } from "./evidence-catalog.js";
 import type { RecordedComparisonEnginePoint } from "./recorded-comparison-point.js";
 import type { RecordedCompareEvalDelta } from "./recorded-comparison-eval.js";
-import type { AdapterSpec, ComponentValue, ConventionReceipt, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
+import type { ObjectiveState } from "./types.js";
+import type { AdapterSpec, ComponentValue, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
 import { controlledSquareCount, factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, s, side, PresentationSchemaError, type Parser, type SchemaPiece } from "./presentation-schema.js";
 import type { SquareControlReading } from "./square-control.js";
 import { hintSentence, type HintDisclosurePayload } from "./hint-horizon.js";
-import { HINT_FAMILIES, HINT_RELATIONS, HINT_RUNGS, hintDisclosureProjectionId, type HintFamily, type HintRelation, type HintRung } from "./hint-registry.js";
+import { HINT_FAMILIES, HINT_RELATIONS, HINT_RUNGS, hintDeclarationRow, type HintFamily, type HintRelation, type HintRung } from "./hint-registry.js";
 import { CORPUS_GUARD } from "./population-guard.js";
 import { explorerPopulationSummaryWire, type ExplorerPopulationSummary } from "./explorer-summary.js";
+import { assertRegisteredShapeFiringWire, registeredShapeFiringOperands } from "./registered-shape-presentation.js";
+import { bindFactStatement, bindRelationFactStatement, bindSquareFactStatement } from "./presentation-fact-contract.js";
 
 /**
  * rfc/hint-distance.md §3/§4: the Guided Hint disclosure operands. The adapter retains exactly the
  * packet's own bytes (a lower rung carries no higher field) and renders the one canonical sentence.
  */
-const hintSchema = s.obj(
+const hintShape = s.obj(
   { rung: s.lit(...HINT_RUNGS), family: s.lit(...HINT_FAMILIES), engine: s.str, bound: s.str },
-  { squares: s.arr(s.square, { min: 1 }), piece: s.obj({ color: s.color, role: s.role, square: s.square }), relation: s.lit(...HINT_RELATIONS), ply: s.nat, san: s.san },
+  { squares: s.arr(s.square, { min: 1 }), piece: s.obj({ color: s.color, role: s.role, square: s.square }), relation: s.lit(...HINT_RELATIONS), ply: s.nat, san: s.san, uci: s.uci },
 );
+type HintOperands = ReturnType<typeof hintShape>;
 function hintOperands(payload: HintDisclosurePayload): Readonly<Record<string, unknown>> {
   return {
     rung: payload.rung, family: payload.family, engine: payload.attribution.engine, bound: payload.attribution.bound,
     ...(payload.rung === "pattern" ? {} : { squares: [...payload.targetSquares] }),
     ...(payload.rung === "piece" || payload.rung === "distance" || payload.rung === "move" ? { piece: { color: payload.actor.color, role: payload.actor.role, square: payload.actor.square } } : {}),
     ...(payload.rung === "distance" || payload.rung === "move" ? { relation: payload.relation, ply: payload.occurrencePly } : {}),
-    ...(payload.rung === "move" ? { san: payload.firstMove.san } : {}),
+    ...(payload.rung === "move" ? { san: payload.firstMove.san, uci: payload.firstMove.uci } : {}),
   };
 }
-function hintPayloadOf(value: ReturnType<typeof hintSchema>): HintDisclosurePayload {
-  const need = <T>(field: T | undefined, label: string): T => { if (field === undefined) throw new TypeError(`hint operands omit ${label} at rung ${value.rung}`); return field; };
+function hintPayloadOf(value: HintOperands): HintDisclosurePayload {
+  const need = <T>(field: T | undefined, label: string): T => { if (field === undefined) throw new PresentationSchemaError(`hint operands omit ${label} at rung ${value.rung}`); return field; };
   const base = { family: value.family as HintFamily, attribution: { engine: value.engine, bound: value.bound } };
   const rung = value.rung as HintRung;
   if (rung === "pattern") return { rung, ...base };
@@ -53,7 +57,53 @@ function hintPayloadOf(value: ReturnType<typeof hintSchema>): HintDisclosurePayl
   const relation = need(value.relation, "relation") as HintRelation;
   const occurrencePly = need(value.ply, "ply") === 1 ? 1 : 3;
   if (rung === "distance") return { rung, ...base, targetSquares, actor, relation, occurrencePly };
-  return { rung, ...base, targetSquares, actor, relation, occurrencePly, firstMove: { uci: "", san: need(value.san, "san") } };
+  return { rung, ...base, targetSquares, actor, relation, occurrencePly, firstMove: { uci: need(value.uci, "uci"), san: need(value.san, "san") } };
+}
+
+const hintSchema: Parser<HintOperands> = (value, label) => {
+  const parsed = hintShape(value, label);
+  if (parsed.ply !== undefined && (parsed.ply !== 1 && parsed.ply !== 3
+    || parsed.relation === "root_direct" && parsed.ply !== 1
+    || parsed.relation === "root_followup_in_line" && parsed.ply !== 3)) throw new PresentationSchemaError("hint relation and occurrence ply disagree");
+  // The same existing redaction that constructs a rung determines its exact retained fields.
+  const expected = hintOperands(hintPayloadOf(parsed));
+  if (Object.keys(parsed).sort().join(",") !== Object.keys(expected).sort().join(",")) throw new PresentationSchemaError("hint fields exceed their disclosure rung");
+  return parsed;
+};
+
+const placed = s.obj({ piece: pieceSchema, square: s.square });
+const pawnContactShape = s.obj({ contacts: s.nat, locks: s.nat, passed: s.nat, connectedPassedPairs: s.nat,
+  directedContacts: s.arr(s.obj({ attacker: placed, target: placed })) });
+const pawnContactSchema: typeof pawnContactShape = (value, label) => {
+  const parsed = pawnContactShape(value, label);
+  if (parsed.contacts !== parsed.directedContacts.length) throw new PresentationSchemaError("Pawn contact count differs from retained directed contacts");
+  return parsed;
+};
+const squareControlShape = s.obj({ colors: s.arr(s.obj({ color: s.color, pseudo: s.nat, legal: s.nullable(s.nat),
+  pseudoControls: s.arr(s.obj({ target: s.square, controllers: s.arr(placed) })) }), { min: 1 }) });
+const squareControlSchema: typeof squareControlShape = (value, label) => {
+  const parsed = squareControlShape(value, label);
+  if (parsed.colors.some(color => color.pseudo !== color.pseudoControls.filter(row => row.controllers.length > 0).length)) {
+    throw new PresentationSchemaError("Square control count differs from retained target/controller entries");
+  }
+  return parsed;
+};
+
+/** Exact copies used by all current shared-renderer constructors, including Full2 zero readings. */
+export function pawnContactCaptionOperands(reading: { readonly contacts: readonly { readonly attacker: PieceAt; readonly target: PieceAt }[];
+  readonly locks: readonly unknown[]; readonly passed: readonly { readonly passed: boolean }[]; readonly connectedPassedPairs: readonly unknown[] }) {
+  const at = (value: PieceAt) => ({ piece: { color: value.piece.color, role: value.piece.role }, square: value.square });
+  return { contacts: reading.contacts.length, locks: reading.locks.length, passed: reading.passed.filter(row => row.passed).length,
+    connectedPassedPairs: reading.connectedPassedPairs.length,
+    directedContacts: reading.contacts.map(row => ({ attacker: at(row.attacker), target: at(row.target) })) };
+}
+export function squareControlCaptionOperands(reading: SquareControlReading) {
+  return { colors: reading.colors.map(entry => ({ color: entry.color, pseudo: controlledSquareCount(entry.pseudo),
+    legal: entry.legal.kind === "available" ? controlledSquareCount(entry.legal.squares) : null,
+    pseudoControls: entry.pseudo.map(row => ({ target: row.target, controllers: row.controllers.map(controller => ({
+      square: controller.square, piece: { color: controller.piece.color, role: controller.piece.role },
+    })) })),
+  })) };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -110,6 +160,13 @@ export const STRUCTURE_NAMES = Object.freeze({
 } as const);
 type StructureName = keyof typeof STRUCTURE_NAMES;
 const namedStructureSchema = s.obj({ id: s.lit(...(Object.keys(STRUCTURE_NAMES) as StructureName[])), name: s.str, squares: s.arr(s.square, { min: 1 }) });
+const legalMovesShape = s.obj({ turn: s.color, pieces: s.nat, moves: s.nat, squares: s.arr(s.square) });
+const legalMovesSchema: typeof legalMovesShape = (value, label) => {
+  const parsed = legalMovesShape(value, label);
+  if (new Set(parsed.squares).size !== parsed.squares.length || parsed.pieces !== parsed.squares.length
+    || parsed.pieces === 0 && parsed.moves !== 0) throw new PresentationSchemaError(`${label} legal move counts/squares disagree`);
+  return parsed;
+};
 
 const wings = (rights: { readonly kingside: boolean; readonly queenside: boolean }): string =>
   rights.kingside && rights.queenside ? "kingside and queenside" : rights.kingside ? "kingside only" : rights.queenside ? "queenside only" : "no castling rights";
@@ -180,11 +237,11 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
   }),
   "play.rook_on_seventh@1": factRenderer(s.obj({ rooks: s.arr(s.obj({ color: s.color, square: s.square, king: s.nullable(s.square), pawns: s.arr(s.square) }), { min: 1 }) }), (value) =>
     value.rooks.map((rook) => `${side(rook.color)}'s rook on ${rook.square} stands on the seventh rank${rook.king === null ? "" : `, with ${otherSide(rook.color)}'s king on ${rook.king} on the back rank`}${rook.pawns.length === 0 ? "" : ` and ${otherSide(rook.color)} pawns on ${listPhrase(rook.pawns)}`}.`).join(" ")),
-  "play.legal_moves@1": factRenderer(s.obj({ turn: s.color, pieces: s.nat, moves: s.nat }), (value) =>
+  "play.legal_moves@1": factRenderer(legalMovesSchema, (value) =>
     `${side(value.turn)} has ${plural(value.moves, "legal move")} spread over ${plural(value.pieces, "piece")}.`),
-  "play.pawn_contacts@1": factRenderer(s.obj({ contacts: s.nat, locks: s.nat, passed: s.nat, connectedPassedPairs: s.nat }), (value) =>
+  "play.pawn_contacts@1": factRenderer(pawnContactSchema, (value) =>
     `Pawn contacts: ${plural(value.contacts, "attacking contact")}, ${plural(value.locks, "locked pair")}, ${plural(value.passed, "passed pawn")} and ${plural(value.connectedPassedPairs, "connected passed pair")}.`),
-  "play.square_control@1": factRenderer(s.obj({ colors: s.arr(s.obj({ color: s.color, pseudo: s.nat, legal: s.nullable(s.nat) }), { min: 1 }) }), (value) =>
+  "play.square_control@1": factRenderer(squareControlSchema, (value) =>
     `Square control: ${value.colors.map((entry) => `${side(entry.color)} attacks ${plural(entry.pseudo, "square")}${entry.legal === null ? "" : ` (${entry.legal} with legal moves)`}`).join("; ")}.`),
   "play.threats@1": factRenderer(threatSchema, (value) => {
     const mover = value.threats[0]!.piece.color;
@@ -201,7 +258,7 @@ export const PLAY_FACT_RENDERERS = Object.freeze({
     return `${pieceOn(entry.piece, entry.square)} ${state}${entry.capturers.length === 0 ? "" : ` (attacked from ${listPhrase(entry.capturers)})`}.`;
   }).join(" ")),
   "play.back_rank@1": factRenderer(s.obj({ kings: s.arr(s.obj({ color: s.color, king: s.square, blockedEscapes: s.arr(s.square), attackedEscapes: s.arr(s.square), heavy: s.arr(s.obj({ piece: pieceSchema, square: s.square, target: s.square })) }), { min: 1 }) }), (value) =>
-    value.kings.map((king) => `${side(king.color)}'s king on ${king.king} has no free escape off the back rank${king.blockedEscapes.length === 0 ? "" : ` (${listPhrase(king.blockedEscapes)} blocked by its own pieces)`}${king.attackedEscapes.length === 0 ? "" : `${king.blockedEscapes.length === 0 ? " (" : "; "}${listPhrase(king.attackedEscapes)} attacked${king.blockedEscapes.length === 0 ? ")" : ""}`}${king.blockedEscapes.length > 0 && king.attackedEscapes.length > 0 ? ")" : ""}${king.heavy.length === 0 ? "" : `, and ${listPhrase(king.heavy.map((piece) => `${pieceOn(piece.piece, piece.square)} can reach ${piece.target}`))}`}.`).join(" ")),
+    value.kings.map((king) => `${side(king.color)}'s king on ${king.king} has no free escape off the back rank${king.blockedEscapes.length === 0 ? "" : ` (${listPhrase(king.blockedEscapes)} blocked by its own pieces)`}${king.attackedEscapes.length === 0 ? "" : `${king.blockedEscapes.length === 0 ? " (" : "; "}${listPhrase(king.attackedEscapes)} attacked${king.blockedEscapes.length === 0 ? ")" : ""}`}${king.blockedEscapes.length > 0 && king.attackedEscapes.length > 0 ? ")" : ""}${king.heavy.length === 0 ? "" : `, and ${listPhrase(king.heavy.map((piece) => `${pieceOn(piece.piece, piece.square)} ${piece.square === piece.target ? "already occupies" : "can reach"} ${piece.target}`))}`}.`).join(" ")),
   "play.trapped_pieces@1": factRenderer(s.obj({ pieces: s.arr(s.obj({ piece: pieceSchema, square: s.square, attackers: s.arr(s.square), moves: s.nat }), { min: 1 }) }), (value) =>
     value.pieces.map((entry) => `${pieceOn(entry.piece, entry.square)} is trapped under the declared convention: ${entry.moves === 0 ? "it has no legal move" : `each of its ${plural(entry.moves, "move")} loses material`}${entry.attackers.length === 0 ? "" : `, and it is attacked from ${listPhrase(entry.attackers)}`}.`).join(" ")),
   "play.rays@1": factRenderer(raySchema, (value) =>
@@ -262,26 +319,25 @@ const MODULE = (id: string): VersionedEvidenceId => MODULE_CURRENT_IMAGE.find(ro
 type Construct = (evidence: DeclaredEvidence<unknown>) => ComponentValue | readonly ComponentValue[];
 
 export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
-  const fact = (rendererId: Parameters<PresentationKit["fact"]>[0], convention: Parameters<PresentationKit["fact"]>[2], operands: unknown, binding: "recorded_run" | "declared_convention" = "declared_convention") =>
-    kit.fact(rendererId, binding, convention, operands as never);
-  const statement = (rendererId: Parameters<PresentationKit["fact"]>[0], convention: Parameters<PresentationKit["fact"]>[2], operands: unknown, binding: "recorded_run" | "declared_convention" = "declared_convention"): ComponentValue =>
-    ({ id: "fact_statement", operand: fact(rendererId, convention, operands, binding) });
-  const relation = (evidence: DeclaredEvidence<unknown>, nodes: RelationOverlayOperand["nodes"], edges: RelationOverlayOperand["edges"], answerDistance: RelationOverlayOperand["answerDistance"], convention?: ConventionReceipt): ComponentValue => {
-    const unique = new Map<string, RelationOverlayOperand["nodes"][number]>();
-    for (const node of nodes) if (!unique.has(node.square)) unique.set(node.square, node);
-    const edgeKeys = new Set<string>();
-    const kept = edges.filter((edge) => { const key = `${edge.from}${edge.to}${edge.relation}${edge.sign}`; if (edgeKeys.has(key)) return false; edgeKeys.add(key); return true; });
-    return { id: "relation_overlay", operand: { nodes: [...unique.values()], edges: kept, owner: { factRef: kit.factRef(evidence) }, answerDistance, ...(convention === undefined ? {} : { convention }) } };
-  };
   const specs: AdapterSpec[] = [];
-  const add = (module: string, projection: VersionedEvidenceId, component: AdapterSpec["component"], forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], construct: Construct, composition?: AdapterSpec["composition"]) =>
-    specs.push({ consumer: MODULE(module), projection, component, forms, sourceOperands, assertions, construct, ...(composition === undefined ? {} : { composition }) });
+  const add = (module: string, projection: VersionedEvidenceId, component: AdapterSpec["component"], forms: readonly EvidenceForm[], sourceOperands: readonly string[], assertions: AdapterSpec["assertions"], construct: Construct, composition?: AdapterSpec["composition"], validateWireComponent?: AdapterSpec["validateWireComponent"], validateWireComposition?: AdapterSpec["validateWireComposition"]) => {
+    const hasText = component === "fact_statement" || component === "square_set"
+      || composition?.members.some(member => member.component === "fact_statement" || member.component === "square_set");
+    if (hasText && validateWireComponent === undefined) throw new TypeError(`Play fact/caption adapter omits received validation: ${module} × ${projection.id}`);
+    specs.push({ consumer: MODULE(module), projection, component, forms, sourceOperands, assertions, construct, ...(composition === undefined ? {} : { composition }), ...(validateWireComponent === undefined ? {} : { validateWireComponent }), ...(validateWireComposition === undefined ? {} : { validateWireComposition }) });
+  };
   const SQUARE_FORMS: readonly EvidenceForm[] = ["list", "lit_squares", "panel", "piece_halo"];
 
   // --- sight_on_request: the shipped sight renderer, one fact per gesture (module-registration §4.2)
   for (const kind of STRUCTURAL_KINDS) {
+    const caption = bindSquareFactStatement(kit, "play.structural_observation@1", "declared_convention",
+      kind === "backward_pawn" || kind === "outpost" ? "pawn-structure@1" : "board-rules@1", value => value.squares, "blue");
+    const assertKind = (actual: StructuralKind): void => {
+      if (actual !== kind) throw new TypeError("Structural caption crosses its declared source kind");
+    };
     add("sight_on_request", V1(`rules.structural.reading.${kind}`), "square_set", SQUARE_FORMS, ["kind", "squares"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
       const observation = evidence.payload as { readonly kind: StructuralKind; readonly squares: readonly SquareName[]; readonly color?: Color; readonly role?: Role; readonly file?: string; readonly count?: number; readonly shade?: "light" | "dark"; readonly form?: "direct" | "distant"; readonly zone?: "edge" | "corner"; readonly detail?: { readonly pushAttackers: readonly { readonly pushes: number }[]; readonly captureAttackers: readonly { readonly captures: number }[] } };
+      assertKind(observation.kind);
       const pushes = observation.detail?.pushAttackers[0]?.pushes;
       const captures = observation.detail?.captureAttackers[0]?.captures;
       const operands = {
@@ -292,209 +348,302 @@ export function playAdapterSpecs(kit: PresentationKit): readonly AdapterSpec[] {
         ...(observation.zone === undefined ? {} : { zone: observation.zone }),
         ...(pushes === undefined ? {} : { pushes }), ...(pushes === undefined && captures !== undefined ? { captures } : {}),
       };
-      return kit.squareSet(evidence, observation.squares, "blue", fact("play.structural_observation@1", kind === "backward_pawn" || kind === "outpost" ? "pawn-structure@1" : "board-rules@1", operands));
+      return caption.square(evidence, operands);
+    }, undefined, (component, evidence) => {
+      caption.validateWireComponent(component, evidence);
+      if (component.id === "square_set" && component.operand.caption.rendererId === "play.structural_observation@1") assertKind(component.operand.caption.operands.kind);
     });
   }
-  const namedStructureCaption = (evidence: DeclaredEvidence<unknown>) => {
+  const namedStructure = bindSquareFactStatement(kit, "play.named_structure@1", "declared_convention", "structure-catalogue@1", value => value.squares, "blue");
+  const namedStructureOperands = (evidence: DeclaredEvidence<unknown>) => {
     const match = evidence.payload as { readonly id: StructureName; readonly name: string; readonly squares: readonly SquareName[] };
-    return fact("play.named_structure@1", "structure-catalogue@1", { id: match.id, name: match.name, squares: [...match.squares] });
+    return { id: match.id, name: match.name, squares: [...match.squares] };
   };
   add("sight_on_request", V1("rules.structural.reading.named_structure", 2), "square_set", ["list", "lit_squares", "panel", "piece_halo", "sentence"], ["id", "name", "squares"], ["copied_byte_equal"], (evidence) => {
-    const caption = namedStructureCaption(evidence);
-    const match = evidence.payload as { readonly squares: readonly SquareName[] };
-    return [kit.squareSet(evidence, match.squares, "blue", caption), { id: "fact_statement", operand: caption }];
-  }, { id: "named_structure_board", members: [{ component: "square_set", forms: SQUARE_FORMS }, { component: "fact_statement", forms: ["sentence"] }] });
+    const operands = namedStructureOperands(evidence);
+    return [namedStructure.square(evidence, operands), namedStructure.statement(operands)];
+  }, { id: "named_structure_board", members: [{ component: "square_set", forms: SQUARE_FORMS }, { component: "fact_statement", forms: ["sentence"] }] }, namedStructure.validateWireComponent);
+  const castlingRights = bindFactStatement(kit.fact, "play.castling_rights@1", "declared_convention", "board-rules@1");
   add("sight_on_request", V1("rules.castling.reading.rights"), "fact_statement", ["list", "panel"], ["white", "black"], ["copied_byte_equal"], (evidence) => {
     const rights = evidence.payload as { readonly white: { readonly kingside: boolean; readonly queenside: boolean }; readonly black: { readonly kingside: boolean; readonly queenside: boolean } };
-    return statement("play.castling_rights@1", "board-rules@1", { white: { ...rights.white }, black: { ...rights.black } });
-  });
+    return castlingRights.statement({ white: { ...rights.white }, black: { ...rights.black } });
+  }, undefined, castlingRights.validateWireComponent);
+  const castlingLegality = bindFactStatement(kit.fact, "play.castling_legality@1", "declared_convention", "board-rules@1");
   add("sight_on_request", V1("rules.castling.reading.legality"), "fact_statement", ["list", "panel"], ["color", "wing", "legalNow", "inCheck", "blockedSquares", "attackedSquares"], ["copied_byte_equal"], (evidence) => {
     const issue = evidence.payload as { readonly color: Color; readonly wing: "kingside" | "queenside"; readonly legalNow: boolean; readonly inCheck: boolean; readonly blockedSquares: readonly SquareName[]; readonly attackedSquares: readonly SquareName[] };
-    return statement("play.castling_legality@1", "board-rules@1", { color: issue.color, wing: issue.wing, legalNow: issue.legalNow, inCheck: issue.inCheck, blocked: [...issue.blockedSquares], attacked: [...issue.attackedSquares] });
-  });
+    return castlingLegality.statement({ color: issue.color, wing: issue.wing, legalNow: issue.legalNow, inCheck: issue.inCheck, blocked: [...issue.blockedSquares], attacked: [...issue.attackedSquares] });
+  }, undefined, castlingLegality.validateWireComponent);
+  const rookOnSeventh = bindSquareFactStatement(kit, "play.rook_on_seventh@1", "declared_convention", "board-rules@1",
+    value => value.rooks.flatMap(rook => [rook.square, ...(rook.king === null ? [] : [rook.king]), ...rook.pawns]), "blue");
   add("sight_on_request", V1("rules.tactic.reading.rook_on_seventh"), "square_set", SQUARE_FORMS, ["rooks"], ["mechanical_transform"], (evidence) => {
     const reading = evidence.payload as { readonly rooks: readonly { readonly rook: PieceAt; readonly enemyKingOnBackRank: PieceAt | null; readonly enemyPawnsOnSeventh: readonly PieceAt[] }[] };
     const rooks = reading.rooks.map((rook) => ({ color: rook.rook.piece.color, square: rook.rook.square, king: rook.enemyKingOnBackRank?.square ?? null, pawns: rook.enemyPawnsOnSeventh.map((pawn) => pawn.square) }));
-    return kit.squareSet(evidence, reading.rooks.flatMap((rook) => [rook.rook.square, ...(rook.enemyKingOnBackRank === null ? [] : [rook.enemyKingOnBackRank.square]), ...rook.enemyPawnsOnSeventh.map((pawn) => pawn.square)]), "blue", fact("play.rook_on_seventh@1", "board-rules@1", { rooks }));
-  });
+    return rookOnSeventh.square(evidence, { rooks });
+  }, undefined, rookOnSeventh.validateWireComponent);
+  const legalMoves = bindSquareFactStatement(kit, "play.legal_moves@1", "declared_convention", "board-rules@1", value => value.squares, "blue");
   add("sight_on_request", V1("rules.mobility.reading.legal_moves"), "square_set", SQUARE_FORMS, ["turn", "pieces"], ["mechanical_transform"], (evidence) => {
     const map = evidence.payload as { readonly turn: Color; readonly pieces: readonly { readonly piece: { readonly square: SquareName }; readonly moves: readonly unknown[] }[] };
     const movable = map.pieces.filter((entry) => entry.moves.length > 0);
-    return kit.squareSet(evidence, movable.map((entry) => entry.piece.square), "blue", fact("play.legal_moves@1", "board-rules@1", { turn: map.turn, pieces: movable.length, moves: movable.reduce((sum, entry) => sum + entry.moves.length, 0) }));
-  });
+    return legalMoves.square(evidence, { turn: map.turn, pieces: movable.length, moves: movable.reduce((sum, entry) => sum + entry.moves.length, 0), squares: [...new Set(movable.map(entry => entry.piece.square))] });
+  }, undefined, legalMoves.validateWireComponent);
   const relationWithStatement = (id: string, relationForms: readonly EvidenceForm[], statementForms: readonly EvidenceForm[]): AdapterSpec["composition"] =>
     ({ id, members: [{ component: "relation_overlay", forms: relationForms }, { component: "fact_statement", forms: statementForms }] });
+  const pawnContacts = bindFactStatement(kit.fact, "play.pawn_contacts@1", "declared_convention", "board-rules@1");
+  const pawnContactOverlay = bindRelationFactStatement<"play.pawn_contacts@1">(kit, pawnContacts,
+    { answerDistance: "fact", relation: "attacks", sign: "state" }, value => ({
+      nodes: value.directedContacts.flatMap(contact => [
+        { square: contact.attacker.square, ...contact.attacker.piece, emphasis: "source" as const },
+        { square: contact.target.square, ...contact.target.piece, emphasis: "target" as const },
+      ]), endpoints: value.directedContacts.map(contact => ({ from: contact.attacker.square, to: contact.target.square })),
+    }));
   add("sight_on_request", V1("rules.pawn.reading.contacts"), "relation_overlay", ["arrows", "list", "lit_squares", "panel", "piece_halo"], ["contacts", "locks", "passed", "connectedPassedPairs"], ["mechanical_transform"], (evidence) => {
     const reading = evidence.payload as { readonly contacts: readonly { readonly attacker: PieceAt; readonly target: PieceAt }[]; readonly locks: readonly unknown[]; readonly passed: readonly { readonly passed: boolean }[]; readonly connectedPassedPairs: readonly unknown[] };
-    const contactNodes = reading.contacts.flatMap((contact) => [{ square: contact.attacker.square, role: contact.attacker.piece.role, color: contact.attacker.piece.color, emphasis: "source" as const }, { square: contact.target.square, role: contact.target.piece.role, color: contact.target.piece.color, emphasis: "target" as const }]);
-    const summary = statement("play.pawn_contacts@1", "board-rules@1", { contacts: reading.contacts.length, locks: reading.locks.length, passed: reading.passed.filter((entry) => entry.passed).length, connectedPassedPairs: reading.connectedPassedPairs.length });
-    if (contactNodes.length === 0) throw new TypeError("a pawn-contact overlay needs at least one contact; the operation offers only witnessed readings");
-    return [relation(evidence, contactNodes, reading.contacts.map((contact) => ({ from: contact.attacker.square, to: contact.target.square, relation: "attacks" as const, sign: "state" as const })), "fact"), summary];
-  }, relationWithStatement("pawn_contacts_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]));
-  add("sight_on_request", V1("rules.square.reading.control"), "relation_overlay", ["arrows", "list", "lit_squares", "panel", "piece_halo"], ["colors"], ["mechanical_transform"], (evidence) => {
-    const reading = evidence.payload as SquareControlReading;
+    if (reading.contacts.length === 0) throw new TypeError("a pawn-contact overlay needs at least one contact; the operation offers only witnessed readings");
+    return pawnContactOverlay.components(evidence, pawnContactCaptionOperands(reading));
+  }, relationWithStatement("pawn_contacts_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]), pawnContactOverlay.validateWireComponent, pawnContactOverlay.validateWireComposition);
+  const squareControl = bindFactStatement(kit.fact, "play.square_control@1", "declared_convention", "piece-geometry@1");
+  const squareControlOverlay = bindRelationFactStatement<"play.square_control@1">(kit, squareControl,
+    { answerDistance: "fact", relation: "controls", sign: "state" }, value => {
     const nodes: RelationOverlayOperand["nodes"][number][] = [];
-    const edges: RelationOverlayOperand["edges"][number][] = [];
-    for (const entry of reading.colors) for (const controlled of entry.pseudo) {
+    const edges: Pick<RelationOverlayOperand["edges"][number], "from" | "to">[] = [];
+    for (const entry of value.colors) for (const controlled of entry.pseudoControls) {
       nodes.push({ square: controlled.target, emphasis: "target" });
       for (const controller of controlled.controllers) {
         nodes.push({ square: controller.square, role: controller.piece.role, color: controller.piece.color, emphasis: "source" });
-        edges.push({ from: controller.square, to: controlled.target, relation: "controls", sign: "state" });
+        edges.push({ from: controller.square, to: controlled.target });
       }
     }
     const controllerNodes = nodes.filter((node) => node.emphasis === "source");
     const ordered = [...controllerNodes, ...nodes.filter((node) => node.emphasis !== "source")];
-    const summary = statement("play.square_control@1", "piece-geometry@1", { colors: reading.colors.map((entry) => ({ color: entry.color, pseudo: controlledSquareCount(entry.pseudo), legal: entry.legal.kind === "available" ? controlledSquareCount(entry.legal.squares) : null })) });
-    return [relation(evidence, ordered, edges.filter((edge) => edge.from !== edge.to), "fact"), summary];
-  }, relationWithStatement("square_control_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]));
+    return { nodes: ordered, endpoints: edges.filter(edge => edge.from !== edge.to) };
+  });
+  add("sight_on_request", V1("rules.square.reading.control"), "relation_overlay", ["arrows", "list", "lit_squares", "panel", "piece_halo"], ["colors"], ["mechanical_transform"], evidence =>
+    squareControlOverlay.components(evidence, squareControlCaptionOperands(evidence.payload as SquareControlReading)),
+  relationWithStatement("square_control_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]), squareControlOverlay.validateWireComponent, squareControlOverlay.validateWireComposition);
 
   // --- threat_radar and blunder_prevention: opponent resources, rendered as fact statements
   // (their bindings serve list/panel) or relation overlays where the binding admits arrows.
-  const threatConstruct = (renderer: "play.threats@1" | "play.staged_threats@1"): Construct => (evidence) => {
-    const result = evidence.payload as { readonly kind: "threats" | "abstained"; readonly threats: readonly { readonly threateningPiece: PieceAt; readonly target?: PieceAt; readonly threatenedMove: string; readonly mate: boolean }[] };
-    return statement(renderer, "threat-convention@1", { threats: result.threats.map((threat) => ({ piece: piece(threat.threateningPiece.piece), from: threat.threateningPiece.square, mate: threat.mate, ...(threat.target === undefined ? {} : { target: piece(threat.target.piece) }), to: toSquare(threat.threatenedMove) })) });
+  const threatConstruct = (renderer: "play.threats@1" | "play.staged_threats@1") => {
+    const bound = bindFactStatement(kit.fact, renderer, "declared_convention", "threat-convention@1");
+    const construct: Construct = evidence => {
+      const result = evidence.payload as { readonly kind: "threats" | "abstained"; readonly threats: readonly { readonly threateningPiece: PieceAt; readonly target?: PieceAt; readonly threatenedMove: string; readonly mate: boolean }[] };
+      return bound.statement({ threats: result.threats.map((threat) => ({ piece: piece(threat.threateningPiece.piece), from: threat.threateningPiece.square, mate: threat.mate, ...(threat.target === undefined ? {} : { target: piece(threat.target.piece) }), to: toSquare(threat.threatenedMove) })) });
+    };
+    return { construct, validateWireComponent: bound.validateWireComponent };
   };
+  const mate = bindFactStatement(kit.fact, "play.mate_in_one@1", "declared_convention", "board-rules@1");
   const mateConstruct: Construct = (evidence) => {
     const reading = evidence.payload as { readonly mates: readonly { readonly moveUci: string; readonly mover: { readonly piece: SchemaPiece; readonly from: SquareName; readonly to: SquareName }; readonly matedKing: { readonly square: SquareName } }[] };
-    return statement("play.mate_in_one@1", "board-rules@1", { mates: reading.mates.map((mate) => ({ piece: piece(mate.mover.piece), from: mate.mover.from, to: mate.mover.to, king: mate.matedKing.square })) });
+    return mate.statement({ mates: reading.mates.map((mate) => ({ piece: piece(mate.mover.piece), from: mate.mover.from, to: mate.mover.to, king: mate.matedKing.square })) });
   };
+  const loose = bindFactStatement(kit.fact, "play.loose_pieces@1", "declared_convention", "threat-convention@1");
   const looseConstruct: Construct = (evidence) => {
     const reading = evidence.payload as { readonly pieces: readonly { readonly piece: Occupant; readonly legalCapturers: readonly { readonly square: SquareName }[]; readonly defenders: readonly unknown[]; readonly enPrise: boolean; readonly loose: boolean; readonly underDefended: boolean }[] };
     const flagged = reading.pieces.filter((entry) => entry.enPrise); // only a piece capturable at a material gain is a concrete exposure
-    return statement("play.loose_pieces@1", "threat-convention@1", { pieces: flagged.map((entry) => ({ piece: piece(entry.piece.occupant), square: entry.piece.square, enPrise: entry.enPrise, loose: entry.loose, underDefended: entry.underDefended, capturers: entry.legalCapturers.map((capturer) => capturer.square), defenders: entry.defenders.length })) });
+    return loose.statement({ pieces: flagged.map((entry) => ({ piece: piece(entry.piece.occupant), square: entry.piece.square, enPrise: entry.enPrise, loose: entry.loose, underDefended: entry.underDefended, capturers: entry.legalCapturers.map((capturer) => capturer.square), defenders: entry.defenders.length })) });
   };
   for (const module of ["threat_radar", "blunder_prevention"] as const) {
-    add(module, V1("rules.tactic.consequence.threat"), "fact_statement", ["list", "panel"], ["threats"], ["mechanical_transform"], threatConstruct(module === "blunder_prevention" ? "play.staged_threats@1" : "play.threats@1"));
-    add(module, V1("rules.tactic.consequence.mate_in_one"), "fact_statement", ["list", "panel"], ["mates"], ["mechanical_transform"], mateConstruct);
-    add(module, V1("rules.tactic.reading.loose_piece"), "fact_statement", ["list", "panel"], ["pieces"], ["mechanical_transform"], looseConstruct);
+    const threat = threatConstruct(module === "blunder_prevention" ? "play.staged_threats@1" : "play.threats@1");
+    add(module, V1("rules.tactic.consequence.threat"), "fact_statement", ["list", "panel"], ["threats"], ["mechanical_transform"], threat.construct, undefined, threat.validateWireComponent);
+    add(module, V1("rules.tactic.consequence.mate_in_one"), "fact_statement", ["list", "panel"], ["mates"], ["mechanical_transform"], mateConstruct, undefined, mate.validateWireComponent);
+    add(module, V1("rules.tactic.reading.loose_piece"), "fact_statement", ["list", "panel"], ["pieces"], ["mechanical_transform"], looseConstruct, undefined, loose.validateWireComponent);
   }
+  const backRank = bindFactStatement(kit.fact, "play.back_rank@1", "declared_convention", "threat-convention@1");
+  const backRankOverlay = bindRelationFactStatement<"play.back_rank@1">(kit, backRank,
+    { answerDistance: "threat", relation: "moves_to", sign: "state", convention: "threat-convention@1" }, value => {
+      const endpoints = value.kings.flatMap(entry => entry.heavy.filter(heavy => heavy.square !== heavy.target).map(heavy => ({ from: heavy.square, to: heavy.target })));
+      if (endpoints.length === 0) throw new PresentationSchemaError("a back-rank overlay needs an accessing heavy piece; the operation offers only witnessed readings");
+      return { nodes: value.kings.flatMap(entry => [
+        { square: entry.king, role: "king" as const, color: entry.color, emphasis: "target" as const },
+        ...entry.heavy.flatMap(heavy => [{ square: heavy.square, ...heavy.piece, emphasis: "source" as const }, { square: heavy.target, emphasis: "target" as const }]),
+      ]), endpoints };
+    });
   add("threat_radar", V1("rules.tactic.reading.back_rank"), "relation_overlay", ["arrows", "list", "lit_squares", "panel", "piece_halo"], ["susceptible"], ["mechanical_transform", "retained_convention"], (evidence) => {
     const reading = evidence.payload as { readonly susceptible: readonly { readonly color: Color; readonly kingSquare: SquareName; readonly escapes: readonly { readonly square: SquareName; readonly blockedByOwn?: unknown; readonly attackedBy: readonly unknown[] }[]; readonly accessingHeavyPieces: readonly { readonly square: SquareName; readonly piece: SchemaPiece; readonly fileTarget: SquareName }[] }[] };
-    const nodes = reading.susceptible.flatMap((entry) => [
-      { square: entry.kingSquare, role: "king" as const, color: entry.color, emphasis: "target" as const },
-      ...entry.accessingHeavyPieces.flatMap((heavy) => [{ square: heavy.square, role: heavy.piece.role, color: heavy.piece.color, emphasis: "source" as const }, { square: heavy.fileTarget, emphasis: "target" as const }]),
-    ]);
-    const edges = reading.susceptible.flatMap((entry) => entry.accessingHeavyPieces.filter((heavy) => heavy.square !== heavy.fileTarget).map((heavy) => ({ from: heavy.square, to: heavy.fileTarget, relation: "moves_to" as const, sign: "state" as const })));
-    const summary = statement("play.back_rank@1", "threat-convention@1", { kings: reading.susceptible.map((entry) => ({ color: entry.color, king: entry.kingSquare, blockedEscapes: entry.escapes.filter((escape) => escape.blockedByOwn !== undefined).map((escape) => escape.square), attackedEscapes: entry.escapes.filter((escape) => escape.blockedByOwn === undefined && escape.attackedBy.length > 0).map((escape) => escape.square), heavy: entry.accessingHeavyPieces.map((heavy) => ({ piece: piece(heavy.piece), square: heavy.square, target: heavy.fileTarget })) })) });
-    if (edges.length === 0) throw new TypeError("a back-rank overlay needs an accessing heavy piece; the operation offers only witnessed readings");
-    return [relation(evidence, nodes, edges, "threat", kit.declared(evidence, "threat-convention@1")), summary];
-  }, relationWithStatement("back_rank_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]));
+    return backRankOverlay.components(evidence, { kings: reading.susceptible.map((entry) => ({ color: entry.color, king: entry.kingSquare, blockedEscapes: entry.escapes.filter((escape) => escape.blockedByOwn !== undefined).map((escape) => escape.square), attackedEscapes: entry.escapes.filter((escape) => escape.blockedByOwn === undefined && escape.attackedBy.length > 0).map((escape) => escape.square), heavy: entry.accessingHeavyPieces.map((heavy) => ({ piece: piece(heavy.piece), square: heavy.square, target: heavy.fileTarget })) })) });
+  }, relationWithStatement("back_rank_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]), backRankOverlay.validateWireComponent, backRankOverlay.validateWireComposition);
+  const trappedPieces = bindFactStatement(kit.fact, "play.trapped_pieces@1", "declared_convention", "threat-convention@1");
+  const trappedOverlay = bindRelationFactStatement<"play.trapped_pieces@1">(kit, trappedPieces,
+    { answerDistance: "threat", relation: "attacks", sign: "state", convention: "threat-convention@1" }, value => ({
+      nodes: value.pieces.flatMap(entry => [{ square: entry.square, ...entry.piece, emphasis: "target" as const },
+        ...entry.attackers.map(square => ({ square, emphasis: "source" as const }))]),
+      endpoints: value.pieces.flatMap(entry => entry.attackers.map(from => ({ from, to: entry.square }))),
+    }));
   add("threat_radar", V1("rules.tactic.reading.trapped_piece"), "relation_overlay", ["arrows", "list", "lit_squares", "panel", "piece_halo"], ["pieces"], ["mechanical_transform", "retained_convention"], (evidence) => {
     const reading = evidence.payload as { readonly kind: "pieces" | "abstained"; readonly pieces: readonly { readonly piece: Occupant; readonly attackers: readonly { readonly moveUci: string }[]; readonly moves: readonly unknown[] }[] };
-    const nodes = reading.pieces.flatMap((entry) => [{ square: entry.piece.square, role: entry.piece.occupant.role, color: entry.piece.occupant.color, emphasis: "target" as const }, ...entry.attackers.map((attacker) => ({ square: fromSquare(attacker.moveUci), emphasis: "source" as const }))]);
-    const edges = reading.pieces.flatMap((entry) => entry.attackers.map((attacker) => ({ from: fromSquare(attacker.moveUci), to: entry.piece.square, relation: "attacks" as const, sign: "state" as const })));
-    const summary = statement("play.trapped_pieces@1", "threat-convention@1", { pieces: reading.pieces.map((entry) => ({ piece: piece(entry.piece.occupant), square: entry.piece.square, attackers: entry.attackers.map((attacker) => fromSquare(attacker.moveUci)), moves: entry.moves.length })) });
-    return [relation(evidence, nodes, edges, "threat", kit.declared(evidence, "threat-convention@1")), summary];
-  }, relationWithStatement("trapped_piece_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]));
+    return trappedOverlay.components(evidence, { pieces: reading.pieces.map((entry) => ({ piece: piece(entry.piece.occupant), square: entry.piece.square, attackers: entry.attackers.map((attacker) => fromSquare(attacker.moveUci)), moves: entry.moves.length })) });
+  }, relationWithStatement("trapped_piece_overlay", ["arrows", "lit_squares", "panel", "piece_halo"], ["list"]), trappedOverlay.validateWireComponent, trappedOverlay.validateWireComposition);
+  const raysCaption = bindSquareFactStatement(kit, "play.rays@1", "declared_convention", "threat-convention@1",
+    value => value.rays.flatMap(ray => [ray.sliderSquare, ray.blockerSquare, ray.targetSquare]), "red");
   add("threat_radar", V1("rules.tactic.reading.ray_classification"), "square_set", SQUARE_FORMS, ["rays"], ["mechanical_transform"], (evidence) => {
     const reading = evidence.payload as { readonly rays: readonly { readonly slider: PieceAt; readonly blocker: Occupant; readonly target: Occupant; readonly kind: "absolute_pin" | "relative_pin" | "skewer" | "xray_attack" | "xray_defense" }[] };
     const rays = reading.rays.map((ray) => ({ kind: ray.kind, slider: piece(ray.slider.piece), sliderSquare: ray.slider.square, blocker: piece(ray.blocker.occupant), blockerSquare: ray.blocker.square, target: piece(ray.target.occupant), targetSquare: ray.target.square }));
-    return kit.squareSet(evidence, reading.rays.flatMap((ray) => [ray.slider.square, ray.blocker.square, ray.target.square]), "red", fact("play.rays@1", "threat-convention@1", { rays }));
-  });
-  add("threat_radar", V1("derived.tactic.defender_exposure"), "relation_overlay", ["arrows", "list", "lit_squares", "panel"], ["defender", "target"], ["mechanical_transform"], (evidence) => {
+    return raysCaption.square(evidence, { rays });
+  }, undefined, raysCaption.validateWireComponent);
+  const defenderExposure = bindFactStatement(kit.fact, "play.defender_exposure@1", "declared_convention", "piece-geometry@1");
+  const defenderOverlay = bindRelationFactStatement<"play.defender_exposure@1">(kit, defenderExposure,
+    { answerDistance: "fact", relation: "defends", sign: "lost" }, value => ({
+      nodes: [{ square: value.defenderSquare, ...value.defender, emphasis: "source" as const },
+        { square: value.targetSquare, ...value.target, emphasis: "target" as const }],
+      endpoints: [{ from: value.defenderSquare, to: value.targetSquare }],
+    }));
+  add("threat_radar", V1("derived.tactic.defender_exposure", 2), "relation_overlay", ["arrows", "list", "lit_squares", "panel"], ["defender", "target"], ["mechanical_transform"], (evidence) => {
     const exposure = evidence.payload as { readonly kind: "available" | "unavailable"; readonly defender?: PieceAt; readonly target?: PieceAt };
     if (exposure.kind !== "available" || exposure.defender === undefined || exposure.target === undefined) throw new TypeError("an unavailable defender exposure is an abstention, never a relation");
-    const nodes = [{ square: exposure.defender.square, role: exposure.defender.piece.role, color: exposure.defender.piece.color, emphasis: "source" as const }, { square: exposure.target.square, role: exposure.target.piece.role, color: exposure.target.piece.color, emphasis: "target" as const }];
-    return [relation(evidence, nodes, [{ from: exposure.defender.square, to: exposure.target.square, relation: "defends", sign: "lost" }], "fact"), statement("play.defender_exposure@1", "piece-geometry@1", { defender: piece(exposure.defender.piece), defenderSquare: exposure.defender.square, target: piece(exposure.target.piece), targetSquare: exposure.target.square })];
-  }, relationWithStatement("defender_exposure_overlay", ["arrows", "lit_squares", "panel"], ["list"]));
+    return defenderOverlay.components(evidence, { defender: piece(exposure.defender.piece), defenderSquare: exposure.defender.square, target: piece(exposure.target.piece), targetSquare: exposure.target.square });
+  }, relationWithStatement("defender_exposure_overlay", ["arrows", "lit_squares", "panel"], ["list"]), defenderOverlay.validateWireComponent, defenderOverlay.validateWireComposition);
 
   // --- structure_nudge: what kind of position this is (module-registration §4.6)
-  add("structure_nudge", V1("rules.structural.reading.named_structure", 2), "fact_statement", ["list", "panel"], ["id", "name", "squares"], ["copied_byte_equal"], (evidence) => ({ id: "fact_statement", operand: namedStructureCaption(evidence) }));
+  add("structure_nudge", V1("rules.structural.reading.named_structure", 2), "fact_statement", ["list", "panel"], ["id", "name", "squares"], ["copied_byte_equal"], (evidence) => namedStructure.statement(namedStructureOperands(evidence)), undefined, namedStructure.validateWireComponent);
+  const space = bindFactStatement(kit.fact, "play.space@1", "declared_convention", "pawn-structure@1");
   add("structure_nudge", V1("rules.structural.reading.space"), "fact_statement", ["list", "panel"], ["colors", "differentials"], ["mechanical_transform"], (evidence) => {
     const reading = evidence.payload as { readonly colors: readonly { readonly color: Color; readonly total: number }[]; readonly differentials: readonly { readonly zone: "queenside" | "central" | "kingside"; readonly white: number; readonly black: number }[] };
-    return statement("play.space@1", "pawn-structure@1", { totals: reading.colors.map((entry) => ({ color: entry.color, total: entry.total })), zones: reading.differentials.map((zone) => ({ zone: zone.zone, white: zone.white, black: zone.black })) });
-  });
+    return space.statement({ totals: reading.colors.map((entry) => ({ color: entry.color, total: entry.total })), zones: reading.differentials.map((zone) => ({ zone: zone.zone, white: zone.white, black: zone.black })) });
+  }, undefined, space.validateWireComponent);
+  const pawnConnectivity = bindFactStatement(kit.fact, "play.pawn_connectivity@1", "declared_convention", "board-rules@1");
   add("structure_nudge", V1("rules.structural.reading.pawn_connectivity"), "fact_statement", ["list", "panel"], ["colors"], ["mechanical_transform"], (evidence) => {
     const reading = evidence.payload as { readonly colors: readonly { readonly color: Color; readonly islandCount: number; readonly connectedPawnPairs: readonly unknown[]; readonly chains: readonly unknown[] }[] };
-    return statement("play.pawn_connectivity@1", "board-rules@1", { colors: reading.colors.map((entry) => ({ color: entry.color, islands: entry.islandCount, connectedPairs: entry.connectedPawnPairs.length, chains: entry.chains.length })) });
-  });
+    return pawnConnectivity.statement({ colors: reading.colors.map((entry) => ({ color: entry.color, islands: entry.islandCount, connectedPairs: entry.connectedPawnPairs.length, chains: entry.chains.length })) });
+  }, undefined, pawnConnectivity.validateWireComponent);
+  const phase = bindFactStatement(kit.fact, "play.phase@1", "declared_convention", "phase-bands@1");
   add("structure_nudge", V1("rules.phase.reading", 2), "fact_statement", ["panel"], ["phase", "decision"], ["copied_byte_equal"], (evidence) =>
-    statement("play.phase@1", "phase-bands@1", { phase: (evidence.payload as { readonly phase: "opening" | "middlegame" | "endgame" | "unclear" }).phase }));
+    phase.statement({ phase: (evidence.payload as { readonly phase: "opening" | "middlegame" | "endgame" | "unclear" }).phase }), undefined, phase.validateWireComponent);
+  const endgame = bindFactStatement(kit.fact, "play.endgame_type@1", "declared_convention", "endgame-convention@1");
   add("structure_nudge", V1("rules.endgame.classification"), "fact_statement", ["panel"], ["type"], ["copied_byte_equal"], (evidence) =>
-    statement("play.endgame_type@1", "endgame-convention@1", { label: (evidence.payload as { readonly type: { readonly label: string } | null }).type?.label ?? null }));
+    endgame.statement({ label: (evidence.payload as { readonly type: { readonly label: string } | null }).type?.label ?? null }), undefined, endgame.validateWireComponent);
+  const setup = bindFactStatement(kit.fact, "play.endgame_setup@1", "declared_convention", "endgame-convention@1");
+  const setupName = (technique: string): string => SETUP_NAMES[technique] ?? "registered endgame";
   add("structure_nudge", V1("theory.endgame.setup_match"), "fact_statement", ["panel"], ["technique", "convention"], ["copied_byte_equal"], (evidence) => {
     const match = evidence.payload as { readonly technique: string; readonly convention: { readonly id: string } };
-    return statement("play.endgame_setup@1", "endgame-convention@1", { technique: match.technique, name: SETUP_NAMES[match.technique] ?? "registered endgame" });
+    return setup.statement({ technique: match.technique, name: setupName(match.technique) });
+  }, undefined, component => {
+    setup.validateWireComponent(component);
+    if (component.id === "fact_statement" && component.operand.rendererId === "play.endgame_setup@1"
+      && component.operand.operands.name !== setupName(component.operand.operands.technique)) throw new TypeError("Setup name disagrees with its registered technique");
   });
-  const shapeTitle = (entryId: string): string => entryId.split("-").map((word, index) => index === 0 ? `${word.slice(0, 1).toUpperCase()}${word.slice(1)}` : word).join(" ");
-  add("structure_nudge", V1("theory.shapes.firing"), "fact_statement", ["panel", "timeline_marker"], ["entryId"], ["mechanical_transform"], (evidence) =>
-    statement("play.shape_entry@1", "shape-catalogue@1", { entryId: (evidence.payload as { readonly entryId: string }).entryId, title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
+  const shape = bindFactStatement(kit.fact, "inspector.registered_shape_firing@2", "declared_convention", "shape-catalogue@1");
+  add("structure_nudge", V1("theory.shapes.firing", 3), "fact_statement", ["panel", "timeline_marker"],
+    ["entryId", "firstNodeId", "lastNodeId", "openEnded", "authority"], ["copied_byte_equal", "retained_convention"],
+    evidence => shape.statement(registeredShapeFiringOperands(evidence)), undefined, assertRegisteredShapeFiringWire);
 
   // --- theory_breadcrumb: cited or authored theory for this position (module-registration §4.7)
+  const explorer = bindFactStatement(kit.fact, "play.explorer_summary@1", "declared_convention", "explorer-population@1");
   add("theory_breadcrumb", V1("derived.explorer.population_summary"), "fact_statement", ["list", "panel", "sentence"], ["position", "totals", "opening", "disclosure"], ["copied_byte_equal", "mechanical_transform"], (evidence) => {
     const summary = explorerPopulationSummaryWire(evidence as DeclaredEvidence<ExplorerPopulationSummary>);
-    return statement("play.explorer_summary@1", "explorer-population@1", { total: summary.totals.total, white: summary.totals.white, draws: summary.totals.draws, black: summary.totals.black, ratings: summary.position.population.ratingBuckets, speeds: summary.position.population.speeds, since: summary.position.population.since, until: summary.position.population.until, opening: summary.opening.kind === "reported" ? `${summary.opening.eco} ${summary.opening.name}` : null, disclosure: summary.disclosure.statement });
-  });
-  add("theory_breadcrumb", V1("theory.shapes.firing"), "fact_statement", ["panel", "sentence"], ["entryId"], ["mechanical_transform"], (evidence) =>
-    statement("play.shape_entry@1", "shape-catalogue@1", { entryId: (evidence.payload as { readonly entryId: string }).entryId, title: shapeTitle((evidence.payload as { readonly entryId: string }).entryId) }));
+    return explorer.statement({ total: summary.totals.total, white: summary.totals.white, draws: summary.totals.draws, black: summary.totals.black, ratings: summary.position.population.ratingBuckets, speeds: summary.position.population.speeds, since: summary.position.population.since, until: summary.position.population.until, opening: summary.opening.kind === "reported" ? `${summary.opening.eco} ${summary.opening.name}` : null, disclosure: summary.disclosure.statement });
+  }, undefined, explorer.validateWireComponent);
+  add("theory_breadcrumb", V1("theory.shapes.firing", 3), "fact_statement", ["panel", "sentence"],
+    ["entryId", "firstNodeId", "lastNodeId", "openEnded", "authority"], ["copied_byte_equal", "retained_convention"],
+    evidence => shape.statement(registeredShapeFiringOperands(evidence)), undefined, assertRegisteredShapeFiringWire);
+  const opening = bindFactStatement(kit.fact, "play.opening@1", "declared_convention", "opening-catalogue@1");
   add("theory_breadcrumb", V1("theory.opening.current_endpoint"), "fact_statement", ["list", "panel", "sentence"], ["eco", "name"], ["copied_byte_equal"], (evidence) => {
     const endpoint = evidence.payload as { readonly eco: string; readonly name: string };
-    return statement("play.opening@1", "opening-catalogue@1", { eco: endpoint.eco, name: endpoint.name });
-  });
+    return opening.statement({ eco: endpoint.eco, name: endpoint.name });
+  }, undefined, opening.validateWireComponent);
+  const authoredClaim = bindFactStatement(kit.fact, "play.authored_claim@1", "declared_convention", "authored-claim@1");
   add("theory_breadcrumb", V1("pack.authored.claim"), "fact_statement", ["panel", "sentence"], ["text"], ["authored_text_copied"], (evidence) =>
-    statement("play.authored_claim@1", "authored-claim@1", { text: (evidence.payload as { readonly text: string }).text }));
+    authoredClaim.statement({ text: (evidence.payload as { readonly text: string }).text }), undefined, authoredClaim.validateWireComponent);
 
   // --- compare_coach: the smallest recorded difference between two attempts (§4.9)
+  const enginePoint = bindFactStatement(kit.fact, "compare.engine_point@2", "declared_convention", "recorded-comparison@1");
   add("compare_coach", V1("derived.compare.engine_trajectory", 2), "fact_statement", ["list", "panel"], ["nodeId", "plyOffset", "whiteScore", "engineId", "instrument", "bound"], ["copied_byte_equal", "retained_convention"], evidence =>
-    statement("compare.engine_point@2", "recorded-comparison@1", evidence.payload as RecordedComparisonEnginePoint));
+    enginePoint.statement(evidence.payload as RecordedComparisonEnginePoint), undefined, enginePoint.validateWireComponent);
+  const evalDelta = bindFactStatement(kit.fact, "compare.recorded_delta@2", "recorded_run", "recorded-comparison@1");
   add("compare_coach", V1("derived.compare.eval_delta", 2), "fact_statement", ["list", "panel", "sentence"], ["before", "after", "delta", "plyOffset", "frame", "comparability"], ["copied_byte_equal"], evidence =>
-    statement("compare.recorded_delta@2", "recorded-comparison@1", evidence.payload as RecordedCompareEvalDelta, "recorded_run"));
+    evalDelta.statement(evidence.payload as RecordedCompareEvalDelta), undefined, evalDelta.validateWireComponent);
+  const comparedStructure = bindFactStatement(kit.fact, "play.compare_structure@1", "declared_convention", "pawn-structure@1");
   add("compare_coach", V1("derived.compare.structure_delta", 2), "fact_statement", ["list", "panel", "sentence"], ["observation", "namedStructure"], ["copied_byte_equal"], (evidence) => {
     const named = (evidence.payload as { readonly namedStructure: { readonly id: StructureName; readonly name: string } | null }).namedStructure;
     const observation = (evidence.payload as { readonly observation: { readonly kind: StructuralKind } & Readonly<Record<string, unknown>> }).observation;
-    if (named !== null) return statement("play.named_structure@1", "structure-catalogue@1", { ...named, squares: observation.squares });
+    if (named !== null) return namedStructure.statement(namedStructureSchema({ ...named, squares: observation.squares }, "Compared named structure"));
     const { detail: _detail, provenanceNote: _note, ...rest } = observation as Readonly<Record<string, unknown>>;
-    return statement("play.compare_structure@1", "pawn-structure@1", { observation: rest });
+    return comparedStructure.statement({ observation: observationSchema(rest, "Compared structure") });
+  }, undefined, component => {
+    if (component.id !== "fact_statement") return;
+    // This existing source has two declared rendering arms, not an arbitrary renderer choice.
+    if (component.operand.rendererId === "play.named_structure@1") namedStructure.assertOperand(component.operand);
+    else comparedStructure.assertOperand(component.operand);
   });
+  const pieceRoute = bindFactStatement(kit.fact, "play.compare_route@1", "recorded_run", "recorded-comparison@1");
   add("compare_coach", V1("derived.compare.piece_route", 2), "fact_statement", ["list", "panel"], ["pieceId", "squares"], ["copied_byte_equal"], (evidence) => {
     const route = evidence.payload as { readonly pieceId: string; readonly squares: readonly SquareName[] };
-    return statement("play.compare_route@1", "recorded-comparison@1", { piece: route.pieceId.replace(/^(White|Black) /u, (match) => match.toLowerCase()), squares: [...route.squares] }, "recorded_run");
-  });
+    return pieceRoute.statement({ piece: route.pieceId.replace(/^(White|Black) /u, (match) => match.toLowerCase()), squares: [...route.squares] });
+  }, undefined, pieceRoute.validateWireComponent);
+  const recordedFork = bindFactStatement(kit.fact, "play.recorded_fork@1", "recorded_run", "recorded-run@1");
   add("compare_coach", V1("run.record.fork"), "fact_statement", ["list", "panel", "sentence"], ["sharedPly"], ["copied_byte_equal"], (evidence) =>
-    statement("play.recorded_fork@1", "recorded-run@1", { sharedPly: (evidence.payload as { readonly sharedPly: number }).sharedPly }, "recorded_run"));
+    recordedFork.statement({ sharedPly: (evidence.payload as { readonly sharedPly: number }).sharedPly }), undefined, recordedFork.validateWireComponent);
+  const checkpoint = bindFactStatement(kit.fact, "play.checkpoint_hit@1", "recorded_run", "recorded-run@1");
   add("compare_coach", V1("run.record.checkpoint_hit"), "fact_statement", ["panel", "sentence"], ["plyOffset"], ["copied_byte_equal"], (evidence) =>
-    statement("play.checkpoint_hit@1", "recorded-run@1", { plyOffset: (evidence.payload as { readonly plyOffset: number }).plyOffset }, "recorded_run"));
+    checkpoint.statement({ plyOffset: (evidence.payload as { readonly plyOffset: number }).plyOffset }), undefined, checkpoint.validateWireComponent);
+  const objective = bindFactStatement(kit.fact, "play.objective_transition@1", "recorded_run", "recorded-run@1");
   add("compare_coach", V1("run.record.objective_transition"), "fact_statement", ["panel", "sentence"], ["from", "to"], ["copied_byte_equal"], (evidence) => {
-    const transition = evidence.payload as { readonly from: string; readonly to: string };
-    return statement("play.objective_transition@1", "recorded-run@1", { from: transition.from, to: transition.to }, "recorded_run");
-  });
+    const transition = evidence.payload as { readonly from: ObjectiveState; readonly to: ObjectiveState };
+    return objective.statement({ from: transition.from, to: transition.to });
+  }, undefined, objective.validateWireComponent);
+  const consequence = bindFactStatement(kit.fact, "story.consequence@1", "recorded_run", "recorded-run@1");
   add("compare_coach", V1("run.record.consequence"), "fact_statement", ["panel", "sentence"], ["terminal", "outcome", "plies", "objectiveState"], ["copied_byte_equal"], (evidence) => {
-    const value = evidence.payload as { readonly terminal: boolean; readonly outcome?: "win" | "loss" | "draw"; readonly plies?: number; readonly objectiveState?: string };
-    return { id: "fact_statement", operand: kit.fact("story.consequence@1", "recorded_run", "recorded-run@1", (value.terminal ? { terminal: true, outcome: value.outcome! } : { terminal: false, plies: value.plies!, objectiveState: value.objectiveState! }) as never) };
-  });
+    const value = evidence.payload as { readonly terminal: boolean; readonly outcome?: "win" | "loss" | "draw"; readonly plies?: number; readonly objectiveState?: ObjectiveState };
+    return consequence.statement(value.terminal ? { terminal: true, outcome: value.outcome! } : { terminal: false, plies: value.plies!, objectiveState: value.objectiveState! });
+  }, undefined, consequence.validateWireComponent);
 
   // --- guided_hint: one adapter per family x rung disclosure (rfc/hint-distance.md §3, §4). The
   // learner surface is the Guided Hint seat's closed delivery receipt; this adapter is the same
   // canonical sentence for any consumer that presents the admitted disclosure.
   const hintSources = (rung: HintRung): readonly string[] => ["rung", "family", "attribution", ...(rung === "pattern" ? [] : ["targetSquares"]), ...(["piece", "distance", "move"].includes(rung) ? ["actor"] : []), ...(["distance", "move"].includes(rung) ? ["relation", "occurrencePly"] : []), ...(rung === "move" ? ["firstMove"] : [])];
-  const hintSentenceOf = (evidence: DeclaredEvidence<unknown>) => statement("play.guided_hint@1", "guided-hint@1", hintOperands(evidence.payload as HintDisclosurePayload));
   for (const family of HINT_FAMILIES) {
-    const projection = (rung: HintRung) => V1(hintDisclosureProjectionId(family, rung));
+    const projection = (rung: HintRung) => hintDeclarationRow(family).disclosures[rung];
+    const hintContract = (rung: HintRung) => {
+      const bound = bindSquareFactStatement(kit, "play.guided_hint@1", "declared_convention", "guided-hint@1", value => {
+        if (value.squares === undefined || value.rung !== "square" && value.rung !== "piece" && value.rung !== "distance") throw new TypeError("Expected square-disclosing hint rung");
+        if (value.rung === "square") return value.squares;
+        if (value.piece === undefined) throw new TypeError("Expected disclosed actor");
+        return [value.piece.square, ...value.squares];
+      }, "yellow");
+      const payloadOf = (evidence: DeclaredEvidence<unknown>): HintDisclosurePayload => {
+        const payload = evidence.payload as HintDisclosurePayload;
+        if (payload.family !== family || payload.rung !== rung) throw new TypeError("Hint crosses its declared family or rung");
+        return payload;
+      };
+      const operandsOf = (evidence: DeclaredEvidence<unknown>) => hintSchema(hintOperands(payloadOf(evidence)), "Guided Hint");
+      const validateWireComponent: NonNullable<AdapterSpec["validateWireComponent"]> = (component, evidence) => {
+        bound.validateWireComponent(component, evidence);
+        const text = component.id === "fact_statement" ? component.operand : component.id === "square_set" ? component.operand.caption : undefined;
+        if (text?.rendererId === "play.guided_hint@1" && (text.operands.family !== family || text.operands.rung !== rung)) throw new TypeError("Hint crosses its declared family or rung");
+      };
+      return { bound, operandsOf, payloadOf, operand: (evidence: DeclaredEvidence<unknown>) => bound.operand(operandsOf(evidence)),
+        statement: (evidence: DeclaredEvidence<unknown>) => bound.statement(operandsOf(evidence)),
+        square: (evidence: DeclaredEvidence<unknown>) => bound.square(evidence, operandsOf(evidence)), validateWireComponent };
+    };
+    const pattern = hintContract("pattern");
     // pattern: the family sentence alone (no board coordinate).
-    add("guided_hint", projection("pattern"), "fact_statement", ["sentence"], hintSources("pattern"), ["copied_byte_equal"], hintSentenceOf);
+    add("guided_hint", projection("pattern"), "fact_statement", ["sentence"], hintSources("pattern"), ["copied_byte_equal"], pattern.statement, undefined, pattern.validateWireComponent);
     // square / piece / distance: the disclosed squares (plus the actor's halo), captioned by the sentence.
     for (const rung of ["square", "piece", "distance"] as const) {
+      const hint = hintContract(rung);
       const squareForms: readonly EvidenceForm[] = rung === "square" ? ["lit_squares"] : ["lit_squares", "piece_halo"];
       add("guided_hint", projection(rung), "square_set", [...squareForms, "sentence"], hintSources(rung), ["copied_byte_equal", "mechanical_transform"], (evidence) => {
-        const payload = evidence.payload as Extract<HintDisclosurePayload, { readonly rung: "square" | "piece" | "distance" }>;
-        const caption = fact("play.guided_hint@1", "guided-hint@1", hintOperands(payload));
-        const squares = payload.rung === "square" ? payload.targetSquares : [payload.actor.square, ...payload.targetSquares];
-        return [kit.squareSet(evidence, squares as readonly SquareName[], "yellow", caption), hintSentenceOf(evidence)];
-      }, { id: `guided_hint_${rung}_marks`, members: [{ component: "square_set", forms: squareForms }, { component: "fact_statement", forms: ["sentence"] }] });
+        return [hint.square(evidence), hint.statement(evidence)];
+      }, { id: `guided_hint_${rung}_marks`, members: [{ component: "square_set", forms: squareForms }, { component: "fact_statement", forms: ["sentence"] }] }, hint.validateWireComponent);
     }
-    // move: the actor, targets and the one first-move arrow, captioned by the sentence.
-    add("guided_hint", projection("move"), "relation_overlay", ["arrows", "lit_squares", "piece_halo", "sentence"], hintSources("move"), ["copied_byte_equal", "mechanical_transform"], (evidence) => {
-      const payload = evidence.payload as Extract<HintDisclosurePayload, { readonly rung: "move" }>;
-      const from = fromSquare(payload.firstMove.uci);
-      const to = toSquare(payload.firstMove.uci);
+    const moveHint = hintContract("move");
+    const moveOverlay = bindRelationFactStatement<"play.guided_hint@1">(kit, moveHint.bound,
+      { answerDistance: "move", relation: "moves_to", sign: "state" }, value => {
+      if (value.rung !== "move" || value.piece === undefined || value.squares === undefined || value.uci === undefined) {
+        throw new PresentationSchemaError("Move relation requires its exact disclosed actor, targets and UCI");
+      }
+      const from = fromSquare(value.uci), to = toSquare(value.uci);
       const nodes = [
-        { square: payload.actor.square as SquareName, role: payload.actor.role, color: payload.actor.color, emphasis: "source" as const },
-        ...(from === payload.actor.square ? [] : [{ square: from, emphasis: "context" as const }]),
+        { square: value.piece.square, role: value.piece.role, color: value.piece.color, emphasis: "source" as const },
+        ...(from === value.piece.square ? [] : [{ square: from, emphasis: "context" as const }]),
         { square: to, emphasis: "context" as const },
-        ...payload.targetSquares.map((square) => ({ square: square as SquareName, emphasis: "target" as const })),
+        ...value.squares.map(square => ({ square, emphasis: "target" as const })),
       ];
-      return [relation(evidence, nodes, [{ from, to, relation: "moves_to" as const, sign: "state" as const }], "move"), hintSentenceOf(evidence)];
-    }, relationWithStatement(`guided_hint_move_overlay`, ["arrows", "lit_squares", "piece_halo"], ["sentence"]));
+      return { nodes, endpoints: [{ from, to }] };
+    }, moveHint.validateWireComponent);
+    // move: the actor, targets and exact retained first-move arrow, captioned by the sentence.
+    add("guided_hint", projection("move"), "relation_overlay", ["arrows", "lit_squares", "piece_halo", "sentence"], hintSources("move"), ["copied_byte_equal", "mechanical_transform"], evidence =>
+      moveOverlay.components(evidence, moveHint.operandsOf(evidence)),
+    relationWithStatement(`guided_hint_move_overlay`, ["arrows", "lit_squares", "piece_halo"], ["sentence"]), moveOverlay.validateWireComponent, moveOverlay.validateWireComposition);
   }
 
   return Object.freeze(specs);

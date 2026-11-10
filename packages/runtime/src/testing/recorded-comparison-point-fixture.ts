@@ -30,10 +30,12 @@ export function recordedComparisonPointFixture(black = false, score = "cp 25", o
   const run = attachDelivery(fixture.run, node.id, evaluationDelivery(node.fen, score, options));
   const comparison = createRecordedComparisonSource({ run, columns: fixture.columns });
   const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined });
-  const attachments = collectRecordedEngineAttachments({ boundary: owner.resolve({ runId: run.id, branchId: fixture.peer, throughNodeId: node.id }) });
+  const boundary = owner.resolve({ runId: run.id, branchId: fixture.peer, throughNodeId: node.id });
+  const attachments = collectRecordedEngineAttachments({ boundary });
   const controller = new AbortController();
   const capture: RecordedComparisonPointCapture = { comparison, branchId: fixture.peer, nodeId: node.id, permission: comparisonAssistance(), attachments, offline: null, pending: null, signal: controller.signal };
-  return { ...fixture, run, comparison, controller, capture, source: RECORDED_COMPARISON_POINT_AUTHORITY.issue(capture) };
+  const assertCurrent = () => { owner.assertCurrent(boundary); };
+  return { ...fixture, run, comparison, controller, capture, assertCurrent, source: RECORDED_COMPARISON_POINT_AUTHORITY.issue(capture, assertCurrent) };
 }
 
 /** Genuine runtime operands; production additionally obtains current service grants. */
@@ -41,9 +43,10 @@ export function comparisonSourcesForRun(run: DrillRun, assistance: FinalizedAssi
   const columns = recordedComparisonColumnsForSubject(run, nodeId);
   if (columns === undefined) throw new Error("Fixture requires two attempts");
   const comparison = createRecordedComparisonSource({ run, columns }), data = recordedComparisonData(comparison);
-  const boundary = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined }).resolve({ runId: run.id, branchId: columns[1].branchId, throughNodeId: columns[1].throughNodeId });
+  const owner = createRecordedReviewBoundarySourceOwner({ loadRun: () => run, loadImportRecord: () => undefined });
+  const boundary = owner.resolve({ runId: run.id, branchId: columns[1].branchId, throughNodeId: columns[1].throughNodeId });
   const attachments = collectRecordedEngineAttachments({ boundary }), permission = { ...comparisonAssistance(timing), assistance, role };
   const path = data.authority.paths[1], span = path.slice(path.findIndex(entry => entry.node.id === data.authority.forkNodeId));
   return { comparison, points: span.map(({ node }) => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ comparison, branchId: columns[1].branchId,
-    nodeId: node.id, permission, attachments, offline: null, pending: null, signal: new AbortController().signal })) };
+    nodeId: node.id, permission, attachments, offline: null, pending: null, signal: new AbortController().signal }, () => { owner.assertCurrent(boundary); })) };
 }

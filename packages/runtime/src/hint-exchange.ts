@@ -14,6 +14,7 @@ import {
   HINT_RELATIONS,
   HINT_RUNGS,
   hintDisclosureIdentity,
+  hintDeclarationRow,
   hintDisclosureProjectionId,
   type HintDisclosureProjectionId,
   type HintFamily,
@@ -65,7 +66,8 @@ export function hintDecisionStamp(run: DrillRun): HintDecisionStamp {
 }
 
 /** §7 step 2: deterministic request identity; a repeated POST joins the same operation. */
-export function hintRequestId(input: { readonly decisionDigest: string; readonly rung: HintRung; readonly manifestDigest: string; readonly compiler: string; readonly source: string }): string {
+export function hintRequestId(input: { readonly clientRequestId: string; readonly decisionDigest: string; readonly rung: HintRung; readonly manifestDigest: string; readonly compiler: string; readonly source: string }): string {
+  if (!/^[0-9a-f]{32}$/u.test(input.clientRequestId)) throw new TypeError("Invalid Hint clientRequestId");
   return assistanceDigest({ kind: "guided_hint_request@1", ...input }).slice("sha256:".length, "sha256:".length + 32);
 }
 
@@ -87,14 +89,15 @@ export type HintVoiceState =
   | { readonly state: "rendered"; readonly sentence: string }
   | { readonly state: "fallback"; readonly reason: "provider_unavailable" | "deadline_exceeded" | "refused" | "invalid_output" };
 
-export interface HintDeliveryReceipt {
-  readonly version: 1;
+export interface HintDeliveryReceiptV2 {
+  readonly version: 2;
   readonly requestId: string;
   readonly runId: string;
   readonly decision: HintDecisionStamp;
   readonly rung: HintRung;
   readonly family: HintFamily;
   readonly projectionId: HintDisclosureProjectionId;
+  readonly projectionVersion: number;
   readonly disclosureDigest: string;
   readonly manifestDigest: string;
   readonly rendered: {
@@ -105,6 +108,8 @@ export interface HintDeliveryReceipt {
   readonly marks: HintDeliveryMarks;
   readonly receiptDigest: AssistanceDigest;
 }
+/** Sole current wire image; no version1 compatibility reader. */
+export type HintDeliveryReceipt = HintDeliveryReceiptV2;
 
 // ---------------------------------------------------------------------------------------------
 // §7 — the closed response union. `source_unavailable` (search) and voice fallback are distinct
@@ -199,15 +204,16 @@ function parseStamp(value: unknown): HintDecisionStamp {
  * contract drift; it does not pretend to recreate the server's F1 seal.
  */
 export function parseHintDeliveryReceipt(value: unknown): HintDeliveryReceipt {
-  const keys = ["version", "requestId", "runId", "decision", "rung", "family", "projectionId", "disclosureDigest", "manifestDigest", "rendered", "marks", "receiptDigest"];
+  const keys = ["version", "requestId", "runId", "decision", "rung", "family", "projectionId", "projectionVersion", "disclosureDigest", "manifestDigest", "rendered", "marks", "receiptDigest"];
   if (!plain(value) || !exactKeys(value, keys)) return fail("receipt carries missing or extra fields");
-  if (value.version !== 1 || typeof value.requestId !== "string" || !REQUEST_ID.test(value.requestId) || typeof value.runId !== "string" || value.runId === "") fail("receipt identity");
+  if (value.version !== 2 || typeof value.requestId !== "string" || !REQUEST_ID.test(value.requestId) || typeof value.runId !== "string" || value.runId === "") fail("receipt identity");
   parseStamp(value.decision);
   const rung = value.rung as HintRung;
   const family = value.family as HintFamily;
   if (!HINT_RUNGS.includes(rung) || !HINT_FAMILIES.includes(family)) fail("unknown rung or family");
   const identity = typeof value.projectionId === "string" ? hintDisclosureIdentity(value.projectionId) : undefined;
-  if (identity === undefined || identity.family !== family || identity.rung !== rung || value.projectionId !== hintDisclosureProjectionId(family, rung)) fail("projection id is not the exact family x rung registry member");
+  const current = HINT_FAMILIES.includes(family) && HINT_RUNGS.includes(rung) ? hintDeclarationRow(family).disclosures[rung] : undefined;
+  if (identity === undefined || identity.family !== family || identity.rung !== rung || current === undefined || current.id !== value.projectionId || current.version !== value.projectionVersion) fail("projection id/version is not the exact current family x rung registry member");
   if (typeof value.disclosureDigest !== "string" || !/^[0-9a-f]{64}$/u.test(value.disclosureDigest) || typeof value.manifestDigest !== "string" || value.manifestDigest === "") fail("receipt digests");
   const rendered = value.rendered;
   if (!plain(rendered) || !exactKeys(rendered, ["source", "sentence", "voice"]) || rendered.source !== "deterministic" || typeof rendered.sentence !== "string" || rendered.sentence.trim() === "") fail("rendered sentence");
@@ -219,7 +225,7 @@ export function parseHintDeliveryReceipt(value: unknown): HintDeliveryReceipt {
 }
 
 /** Strict parser of the closed response union. */
-export function parseHintResponse(value: unknown): HintResponse {
+function parseHintResponseShape(value: unknown): HintResponse {
   if (!plain(value) || typeof value.state !== "string") return fail("response must be a discriminated object");
   const rung = value.rung as HintRung;
   const requestIdOk = typeof value.requestId === "string" && REQUEST_ID.test(value.requestId);
@@ -242,6 +248,35 @@ export function parseHintResponse(value: unknown): HintResponse {
     default:
       return fail(`unknown response state ${String(value.state)}`);
   }
+}
+
+/** Request-local expectations, not evidence authority or an additional wire image. */
+export interface HintResponseContext {
+  readonly runId: string;
+  readonly manifestDigest: string;
+  readonly requestId?: string;
+  readonly rung?: HintRung;
+  readonly decision?: string | HintDecisionStamp;
+}
+
+/** The same closed parser, optionally bound to the actual HTTP/seat request owner. */
+export function parseHintResponse(value: unknown, context?: HintResponseContext): HintResponse {
+  const response = parseHintResponseShape(value);
+  if (context === undefined) return response;
+  const delivery = response.state === "available" ? response.delivery : undefined;
+  const rung = delivery?.rung ?? (response.state === "available" ? undefined : response.rung);
+  const requestId = delivery?.requestId ?? (response.state === "available" || response.state === "policy_refused" ? undefined : response.requestId);
+  if (context.rung !== undefined && rung !== context.rung) fail("response belongs to another requested rung");
+  if (context.requestId !== undefined && response.state !== "policy_refused" && requestId !== context.requestId) fail("response belongs to another request");
+  if (delivery !== undefined) {
+    if (delivery.runId !== context.runId || delivery.manifestDigest !== context.manifestDigest) fail("delivery belongs to another run or manifest");
+    const decision = context.decision;
+    if (typeof decision === "string" && delivery.decision.digest !== decision) fail("delivery belongs to another decision");
+    if (typeof decision === "object" && (delivery.decision.digest !== decision.digest || delivery.decision.eventHeadSeq !== decision.eventHeadSeq
+      || delivery.decision.disclosureBoundarySeq !== decision.disclosureBoundarySeq || delivery.decision.cursor.branchId !== decision.cursor.branchId
+      || delivery.decision.cursor.nodeId !== decision.cursor.nodeId)) fail("delivery belongs to another decision");
+  }
+  return response;
 }
 
 // ---------------------------------------------------------------------------------------------

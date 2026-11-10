@@ -45,6 +45,7 @@ export const MIGRATION_POPULATION_BASELINE = Object.freeze({
 });
 
 export type PopulationRoot = keyof typeof MIGRATION_POPULATION_BASELINE;
+export type MigrationPopulationBaseline = Readonly<Record<PopulationRoot, number>>;
 
 /** Roots under `content/` the population deliberately does not walk, each with its stated reason. */
 export const EXCLUDED_ROOTS = Object.freeze([
@@ -96,7 +97,7 @@ export class MigrationPopulationError extends TypeError {
   constructor(message: string) { super(`MIGRATION_POPULATION_MOVED: ${message}`); }
 }
 
-export function assertPopulationBaseline(population: MigrationPopulation, baseline: typeof MIGRATION_POPULATION_BASELINE = MIGRATION_POPULATION_BASELINE): void {
+export function assertPopulationBaseline(population: MigrationPopulation, baseline: MigrationPopulationBaseline = MIGRATION_POPULATION_BASELINE): void {
   const moved = (Object.keys(baseline) as PopulationRoot[]).filter((root) => population.roots[root].length !== baseline[root]);
   if (moved.length > 0) throw new MigrationPopulationError(moved.map((root) => `${root} ${baseline[root]} -> ${population.roots[root].length}`).join("; "));
 }
@@ -149,7 +150,7 @@ export interface MigrationPlan {
   readonly judgement: readonly JudgementRow[];
   readonly refusals: readonly RefusalRow[];
   readonly digestConsequences: readonly DigestConsequence[];
-  readonly assertion: { readonly baseline: typeof MIGRATION_POPULATION_BASELINE; readonly total: number };
+  readonly assertion: { readonly baseline: MigrationPopulationBaseline; readonly total: number };
 }
 
 export const MIGRATION_HOLD = Object.freeze({
@@ -167,7 +168,7 @@ export interface PlanInputs {
   readonly shapes?: CapabilityEntryLookup;
   readonly principles?: CapabilityEntryLookup;
   readonly registry?: CapabilityRegistry;
-  readonly baseline?: typeof MIGRATION_POPULATION_BASELINE;
+  readonly baseline?: MigrationPopulationBaseline;
 }
 
 const sha256 = (value: string): string => createHash("sha256").update(value).digest("hex");
@@ -204,7 +205,9 @@ export function buildMigrationPlan(inputs: PlanInputs): MigrationPlan {
       }
       const history = histories.get(declaration.subjectId);
       const isCurrent = history !== undefined && capabilityKey(history.current) === capabilityKey(declaration.id);
-      if (isCurrent && (declaration.disposition.kind === "active" || declaration.disposition.kind === "deprecated")) continue;
+      // Parallel active meanings coexist (e.g. absent-ref predicate1 and selected predicate2).
+      // A greater version number alone is not a lifecycle successor or migration obligation.
+      if (declaration.disposition.kind === "active" || isCurrent && declaration.disposition.kind === "deprecated") continue;
       if (isCurrent) {
         refusals.push({ document, capability, successor: null, reason: `${capabilityKey(capability)} is ${declaration.disposition.kind}` });
         debt = true;

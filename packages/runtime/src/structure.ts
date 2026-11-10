@@ -1,7 +1,7 @@
 import { attacks, between, pawnAttacks } from "chessops/attacks";
 import type { Color, FileName, Role, Square, SquareName } from "chessops/types";
 import { makeSquare, opposite, parseSquare } from "chessops/util";
-import { STRUCTURAL_FEATURE_KINDS, type StructuralFeatureKind } from "@chess-tabiya/schema/drill-pack";
+import { STRUCTURAL_FEATURE_KINDS, assertLegacyStructuralExpression, type StructuralFeatureKind, type StructuralFeature, type FileTemplateFeature, type SquareTemplateFeature } from "@chess-tabiya/schema/drill-pack";
 
 import { positionFromFen } from "./position-cache.js";
 import { memoByInput } from "./fen-memo.js";
@@ -19,38 +19,7 @@ export type Quantifier = "some" | "every";
 export interface FileRange { readonly from: FileName; readonly to: FileName }
 export interface RankRange { readonly from: number; readonly to: number }
 export interface SquareRegion { readonly files: FileRange; readonly ranks: RankRange }
-export type FileTemplateFeature =
-  | { readonly kind: "backward_pawn"; readonly color: Color }
-  | { readonly kind: "isolated_pawn"; readonly color: Color }
-  | { readonly kind: "doubled_pawn"; readonly color: Color }
-  | { readonly kind: "half_open_file"; readonly color: Color }
-  | { readonly kind: "open_file" };
-export type SquareTemplateFeature =
-  | { readonly kind: "pawn_safe_square"; readonly color: Color }
-  | { readonly kind: "outpost"; readonly color: Color }
-  | { readonly kind: "passed_pawn"; readonly color: Color }
-  | { readonly kind: "direct_attack_count"; readonly color: Color; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "piece"; readonly piece: { readonly color: Color; readonly role: Role } | null };
-
-export type StructuralFeature =
-  | { readonly kind: "pawn_safe_square"; readonly color: Color; readonly square: SquareName }
-  | { readonly kind: "outpost"; readonly color: Color; readonly square: SquareName }
-  | { readonly kind: "backward_pawn"; readonly color: Color; readonly file: FileName }
-  | { readonly kind: "isolated_pawn"; readonly color: Color; readonly file: FileName }
-  | { readonly kind: "doubled_pawn"; readonly color: Color; readonly file: FileName }
-  | { readonly kind: "passed_pawn"; readonly color: Color; readonly square: SquareName }
-  | { readonly kind: "open_file"; readonly file: FileName }
-  | { readonly kind: "half_open_file"; readonly color: Color; readonly file: FileName }
-  | { readonly kind: "line_blockers"; readonly from: SquareName; readonly to: SquareName; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "direct_attack_count"; readonly square: SquareName; readonly color: Color; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "piece_reach_count"; readonly color: Color; readonly role: ReachRole; readonly scope: ReachScope; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "named_structure"; readonly id: StructureId }
-  | { readonly kind: "bishop_on_shade"; readonly color: Color; readonly shade: "light" | "dark" }
-  | { readonly kind: "pawn_count"; readonly color: Color; readonly basis: "count" | "difference"; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "king_opposition"; readonly color: Color; readonly form: "direct" | "distant" }
-  | { readonly kind: "piece_count"; readonly color: Color; readonly role: Role; readonly basis: "count" | "difference"; readonly comparison: FeatureComparison; readonly count: number }
-  | { readonly kind: "king_zone"; readonly color: Color; readonly zone: "edge" | "corner" }
-  | { readonly kind: "piece_distance"; readonly color: Color; readonly role: DistanceRole; readonly target: DistanceTarget; readonly comparison: FeatureComparison; readonly count: number };
+export type { StructuralFeature, FileTemplateFeature, SquareTemplateFeature };
 
 export { STRUCTURAL_FEATURE_KINDS };
 export type { StructuralFeatureKind };
@@ -435,6 +404,7 @@ function pieceOnSquareHolds(fen: string, expression: Extract<StructuralExpressio
  * An unmatched expression has no witness.
  */
 export function evaluateStructuralExpressionWithWitness(fen: string, expression: StructuralExpression): StructuralExpressionWitness {
+  assertLegacyStructuralExpression(expression);
   if (expression.kind === "plan_signature") throw new TypeError("plan_signature must be expanded before runtime evaluation");
   if (expression.kind === "all") {
     const squares: SquareName[] = [];
@@ -616,6 +586,7 @@ function kingInZone(position: ReturnType<typeof positionFromFen>, color: Color, 
 }
 
 export function matchesStructuralFeature(fen: string, feature: StructuralFeature): boolean {
+  if (Object.hasOwn(feature, "conventionRef")) throw new TypeError("Explicit structural convention requires the current sealed predicate dispatcher, not a legacy helper");
   const position = positionFromFen(fen);
   if (feature.kind === "pawn_safe_square") return pawnSafetyOnPosition(position, feature.color, feature.square).safe;
   if (feature.kind === "outpost") return outpostOnPosition(position, feature.color, feature.square);
@@ -666,6 +637,7 @@ export function matchesStructuralFeature(fen: string, feature: StructuralFeature
 }
 
 export function matchesStructuralExpression(fen: string, expression: StructuralExpression): boolean {
+  assertLegacyStructuralExpression(expression);
   if (expression.kind === "plan_signature") throw new TypeError("plan_signature must be expanded before runtime evaluation");
   if (expression.kind === "all" || expression.kind === "any") return expression.kind === "all" ? expression.of.every((item) => matchesStructuralExpression(fen, item)) : expression.of.some((item) => matchesStructuralExpression(fen, item));
   if (expression.kind === "not") return !matchesStructuralExpression(fen, expression.of);

@@ -4,11 +4,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 
 import { PROVIDER_PROTOCOL_RESOURCE, ProviderRequestInvalid, assertProviderDelivery, exactLegalMoves, normalizeProviderRequest, parsePersistedProviderDelivery, serializeProviderDelivery } from "@chess-tabiya/runtime";
 
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { CAPABILITY_DISPOSITIONS } from "./capabilities.js";
 import { EngineSupervisor, binaryArtifactProbe } from "./engine-supervisor.js";
 import { ControlledFetch, FakeEngines, ManualClock, flush, syzygyBody } from "./provider-exchange.test-support.js";
@@ -33,6 +34,7 @@ const REQUESTS = {
   "stockfish-position-evaluation": { fen: START, requestedEngine: { id: "stockfish-analysis", version: "19" }, bound: { kind: "depth", requestedDepth: 9 }, timeoutMs: 5_000 },
   "stockfish-principal-variation": { fen: START, requestedEngine: { id: "stockfish-analysis", version: "19" }, bound: { kind: "depth", requestedDepth: 9 }, maxPlies: 4, timeoutMs: 5_000 },
   "maia-policy-page": MAIA_REQUEST,
+  "maia-inference-task": { ...MAIA_REQUEST, sampleRequestId: "00000000-0000-4000-8000-000000000001" },
   "syzygy-position": { rules: "chess", variant: "standard", fen: KQK, timeoutMs: 5_000 },
   "explorer-position-page": { rules: "chess", setupFamily: "standard_start", variant: "standard", positionFen4: START.split(" ").slice(0, 4).join(" "), requestFen6: START, ratingBuckets: [1600], speeds: ["blitz"], since: null, until: null, moveWidth: 3, history: { kind: "requested" }, topWidth: 0, recentWidth: 0, timeoutMs: 5_000 },
 } as const;
@@ -90,7 +92,7 @@ describe("§9 operator traversal", () => {
     }
   });
 
-  it("traverses all six arms descriptor → scheduler → parser → sole source factory → declared projection", async () => {
+  it("traverses all registered arms descriptor → scheduler → parser → sole source factory → declared projection", async () => {
     for (const row of PROVIDER_PROTOCOL_RESOURCE.payload.operations) {
       const { application } = fixtureApplication();
       const out = new Output();
@@ -307,12 +309,14 @@ describe("§5 capability register", () => {
 });
 
 describe("§9 application composition and degradation", () => {
+  afterEach(() => { vi.restoreAllMocks(); });
   // Composes the whole application (registries compile at import); under shared-host load this
   // exceeds the 5 s default.
   it("composes one scheduler; with remote providers off those operations are honestly unavailable", { timeout: 30_000 }, async () => {
+    installEmptyApplicationCatalogues();
     const application = await createInMemoryTestApplication({ engineMode: "mock", cookieSecure: false });
-    await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
     try {
+      await new Promise<void>((resolve, reject) => { application.server.once("error", reject); application.server.listen(0, "127.0.0.1", resolve); });
       const result = await application.providers.scheduler.get({ operation: "syzygy.position@1", request: REQUESTS["syzygy-position"] as never }, { id: "t", budgetMs: 5_000 }, new AbortController().signal);
       expect(result).toMatchObject({ kind: "source_failure", reason: "provider_unavailable" });
       // rfc/bot-policy.md §4.1: mock-engine deployments also run the exchange over a labelled mock

@@ -89,7 +89,7 @@ export class RecordedComparisonPointOwner {
     if (input.comparison !== owned.comparison || input.signal !== owned.signal) return refuse("crossed comparison/request");
     const capture = this.#endpoints.nodeCapture(owned.endpoints, input.nodeId);
     const source = RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...capture, comparison: owned.comparison,
-      branchId: owned.columns[1].branchId, nodeId: input.nodeId, permission: owned.permission, signal: owned.signal });
+      branchId: owned.columns[1].branchId, nodeId: input.nodeId, permission: owned.permission, signal: owned.signal }, () => { this.read(context); });
     this.#points.set(source, context);
     const value = this.readPoint(source), selected = this.#endpoints.resolveRecordedEngineEndpoint(owned.endpoints, input.nodeId).state;
     if (selected.kind === "available" ? value.payload === null || canonicalizeJson({ engineId: value.payload.engineId, score: value.payload.whiteScore,
@@ -100,9 +100,8 @@ export class RecordedComparisonPointOwner {
   readPoint(source: RecordedComparisonPointSource) {
     const context = this.#points.get(source);
     if (context === undefined) return refuse("foreign point");
-    this.read(context);
-    const value = readRecordedComparisonPointSource(source);
-    this.read(context); return value;
+    // The shared reader checks this same live owner before/after use, including direct factories.
+    return readRecordedComparisonPointSource(source);
   }
   sources(context: RecordedComparisonContext) {
     const owned = this.read(context), data = recordedComparisonData(owned.comparison), peer = data.authority.paths[1];

@@ -1,9 +1,15 @@
+import { PROFILE_SUBJECT_PROJECTIONS } from "./profile-subject-sources.js";
+import { isFoundationDetailKind } from "./foundation-snapshot-detail.js";
 import { SEMANTIC_VALIDATION_RECEIPT } from "./semantic-validation-receipt.generated.js";
 import { STRUCTURAL_FEATURE_KINDS, TRANSITION_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 
 import { CORPUS_RESULT_ABSTENTION_REASONS } from "./corpus-result.js";
-import { compileEvidenceManifest } from "./evidence-contract.js";
-import { COMPARISON_REDUCTION_CONTRACT, LAST_LEVEL_REDUCTION_CONTRACT, STORY_RANK_REDUCTION_CONTRACT, OPENING_HISTORY_REDUCTION_CONTRACT } from "./evidence-reduction-contract.js";
+import { RECORDED_CLOCK_USE_ABSTENTION_REASONS } from "./recorded-clocks.js";
+import { INSPECTOR_SOURCE_TOPICS, INSPECTOR_DETAIL_SOURCES } from "./inspector-source-topics.js";
+import { compileEvidenceManifest, FOUNDATION_COMPUTED_EVENT_INPUTS } from "./evidence-contract.js";
+import { SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS } from "./semantic-validation.js";
+import { STRUCTURAL_DETAIL_FIELDS, STRUCTURAL_DETAIL_KINDS } from "./structural-reading-detail.js";
+import { COMPARISON_REDUCTION_CONTRACT, LAST_LEVEL_REDUCTION_CONTRACT, STORY_RANK_REDUCTION_CONTRACT, OPENING_HISTORY_REDUCTION_CONTRACT, AUTHORED_PREDICATE_REDUCTION_CONTRACT } from "./evidence-reduction-contract.js";
 import type {
   AdapterDeclaration,
   BindingSourceAbsence,
@@ -39,12 +45,16 @@ import {
 } from "./hint-registry.js";
 import { MODULE_IDS, type ModuleId } from "./module-contract.js";
 import { moduleConsumerCeilings } from "./module-policy.js";
+import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
+import { SEMANTIC_PLAYED_RANKING_MODES } from "./semantic-played-types.js";
+import type { InspectorDetailKind } from "./inspector-source-topics.js";
 
 const ref =(id: string): VersionedEvidenceId => Object.freeze({ id, version: 1 });
 /** Explicit v2 ref; the v1 `ref`/`projection` helpers never mint a v2 identity by omission. */
 const ref2 = (id: string): VersionedEvidenceId => Object.freeze({ id, version: 2 });
 const refKey = (value: VersionedEvidenceId): string => `${value.id}@${value.version}`;
 const retired = (reason: string): EvidenceDispositionDeclaration => Object.freeze({ kind: "retired", reason });
+const inspectorOnly = (reason: string): EvidenceDispositionDeclaration => Object.freeze({ kind: "inspector_only", reason });
 // rfc/provider-exchange-and-execution.md §§3, 9: every provider source seals the whole delivery.
 const PROVIDER_DELIVERY_OPERANDS = Object.freeze(["kind", "servedAt", "cacheIdentity", "acquisition", "payload", "payloadReceipt"]);
 const PROVIDER_SOURCE_REASONS = Object.freeze(["provider_unavailable", "deadline_exceeded", "queue_full", "cancelled", "invalid_response", "identity_mismatch"]);
@@ -147,7 +157,7 @@ function recordedPathSuccessor(v1: ProjectionDeclaration): ProjectionDeclaration
 }
 
 function withRecordedPathSuccessors(outputs: readonly ProjectionDeclaration[]): readonly ProjectionDeclaration[] {
-  const v2 = new Set(SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2).map((value) => value.id));
+  const v2 = new Set<string>(RECORDED_PATH_EVENT_PROJECTION_IDS);
   const previous = outputs.filter((output) => v2.has(output.id)).map(recordedPathSuccessor);
   return Object.freeze([...outputs, ...previous, ...previous.filter(value => value.id !== "derived.exchange.trade_completed").map(recordedWindowSuccessor)]);
 }
@@ -182,7 +192,7 @@ function recordedWindowSuccessor(previous: ProjectionDeclaration): ProjectionDec
 
 export const EVIDENCE_PRODUCER_IDS = Object.freeze([
   "rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "derived.pivotal", "rules.endgame", "theory.endgame",
-  "theory.shapes", "authored.structural_condition", "derived.structural", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
+  "theory.shapes", "authored.structural_condition", "derived.structural", "derived.square", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish",
   "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record",
   "derived.compare_narrative", "derived.story", "derived.review", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger",
   "derived.semantic_avoidance", "derived.citation", "derived.hint", "derived.bounded_target", "derived.bounded_target_policy", "derived.explorer", "derived.maia",
@@ -190,12 +200,15 @@ export const EVIDENCE_PRODUCER_IDS = Object.freeze([
 ] as const);
 
 export const CURRENT_CONSUMER_OPERATION_IDS = Object.freeze([
+  "profile.game_facts",
+  "profile.choice_facts",
+  "profile.subject_observations",
   "authoring.predicate", "runtime.objective_condition", "runtime.guard_condition",
   "guidance.deterministic", "guidance.voice", "guidance.recorded_reading", "runtime.evidence_ref",
   "inspector.position_structure", "inspector.move_transition", "board.selected_square_sight",
   "theory.shape_firing", "compare.structure_strip", "compare.engine_trajectory", "inspector.human_split",
   "inspector.corpus", "opponent.selection", "guidance.authored_claim",
-  "board.pivotal_marker", "review.story", "runtime.repertoire_scan", "runtime.return_frequency", "authoring.claim_binding",
+  "board.pivotal_marker", "review.story", "review.recorded_clock", "runtime.repertoire_scan", "runtime.return_frequency", "authoring.claim_binding",
   "guidance.voice_compare", "guidance.voice_story", "runtime.branch_decidedness", "runtime.queued_tablebase",
 ] as const);
 
@@ -255,7 +268,18 @@ export const SEMANTIC_WAVE_EVENT_PROJECTION_IDS = Object.freeze([
   "derived.tactic.interference_observed", "derived.tactic.check_zwischenzug_observed",
   "derived.tactic.overload_exploitation_observed",
 ] as const);
-const SEMANTIC_EVENT_V1_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS, ...BREADTH_EVENT_PROJECTION_IDS, ...SEMANTIC_WAVE_EVENT_PROJECTION_IDS]);
+const RETIRED_PUBLIC_EDGE_IDS = Object.freeze([
+  "rules.structural.event.backward_pawn", "rules.structural.event.king_opposition", "rules.structural.event.pawn_islands",
+  "rules.structural.event.isolated_pawn", "rules.structural.event.doubled_pawn", "rules.structural.event.open_file",
+  "rules.structural.event.half_open_file", "rules.structural.event.line_blockers", "rules.transition.event.slider_ray",
+]);
+const SEMANTIC_EVENT_V1_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJECTION_IDS, ...TACTICAL_STRUCTURAL_EVENT_PROJECTION_IDS, ...TRANSITION_EVENT_PROJECTION_IDS, ...TACTICAL_EVENT_PROJECTION_IDS, ...CASTLING_EVENT_PROJECTION_IDS, ...DERIVED_EXCHANGE_EVENT_PROJECTION_IDS, ...DERIVED_TACTIC_EVENT_PROJECTION_IDS, ...BREADTH_EVENT_PROJECTION_IDS.filter(id => id !== "derived.material.event.role_asymmetry" && id !== "derived.tactic.defender_exposure"), ...SEMANTIC_WAVE_EVENT_PROJECTION_IDS].filter(id => !RETIRED_PUBLIC_EDGE_IDS.includes(id)));
+const RECORDED_PATH_EVENT_PROJECTION_IDS = Object.freeze([
+  "derived.exchange.trade_completed", "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure",
+  "derived.tactic.sequence.defender_consequence", "derived.tactic.deflection_observed", "derived.tactic.attraction_observed",
+  "derived.tactic.line_blocker_clearance_observed", "derived.tactic.square_clearance_observed", "derived.tactic.interference_observed",
+  "derived.tactic.check_zwischenzug_observed", "derived.tactic.overload_exploitation_observed",
+]);
 
 /**
  * rfc/recorded-semantic-path §3 ([[D1933]]): the one exact semantic-event authority. It replaces the
@@ -265,17 +289,7 @@ const SEMANTIC_EVENT_V1_PROJECTION_IDS = Object.freeze([...STRUCTURAL_EVENT_PROJ
  */
 export const SEMANTIC_EVENT_PROJECTION_REFS: readonly VersionedEvidenceId[] = Object.freeze([
   ...SEMANTIC_EVENT_V1_PROJECTION_IDS.map(ref),
-  ref2("derived.exchange.trade_completed"),
-  ref2("derived.pawn.sequence.contact_timing"),
-  ref2("derived.pawn.sequence.harassment_pressure"),
-  ref2("derived.tactic.sequence.defender_consequence"),
-  ref2("derived.tactic.deflection_observed"),
-  ref2("derived.tactic.attraction_observed"),
-  ref2("derived.tactic.line_blocker_clearance_observed"),
-  ref2("derived.tactic.square_clearance_observed"),
-  ref2("derived.tactic.interference_observed"),
-  ref2("derived.tactic.check_zwischenzug_observed"),
-  ref2("derived.tactic.overload_exploitation_observed"),
+  ...RECORDED_PATH_EVENT_PROJECTION_IDS.map(ref2),
   // Accepted F2 §2.3j: exact new event identities, research-only until current consumer cutover.
   ...[
     "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure",
@@ -284,6 +298,17 @@ export const SEMANTIC_EVENT_PROJECTION_REFS: readonly VersionedEvidenceId[] = Ob
     "derived.tactic.check_zwischenzug_observed", "derived.tactic.overload_exploitation_observed",
     "derived.tactic.deflection_observed", "derived.tactic.attraction_observed",
   ].map(id => Object.freeze({ id, version: 3 })),
+  ref2("derived.material.event.role_asymmetry"),
+  ref2("derived.tactic.defender_exposure"),
+  // Value-authority §2.2b: construction/research declarations, not current collection/admission.
+  ...SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS,
+  ...SUBJECT_OUTCOME_FAMILIES.map(family => ref2(`derived.semantic_avoidance.${family}`)),
+]);
+
+/** The exact source image of the current research selector; validation has its own consumer. */
+export const SEMANTIC_SELECTION_PROJECTION_REFS: readonly VersionedEvidenceId[] = Object.freeze([
+  ...Object.keys(SEMANTIC_PLAYED_RANKING_MODES).map(route => { const [id, version] = route.split("@"); return Object.freeze({ id: id!, version: Number(version) }); }),
+  ...SUBJECT_OUTCOME_FAMILIES.map(family => ref2(`derived.semantic_avoidance.${family}`)),
 ]);
 
 /**
@@ -351,6 +376,7 @@ const structuralEventOutputs = STRUCTURAL_EVENT_FAMILIES.map((family) => project
   grounding: family === "backward_pawn" || family === "king_opposition" ? "declared_convention" : "position_rules",
   exactness: family === "backward_pawn" || family === "king_opposition" ? "convention" : "exact",
   forms: ["list", "panel", "machine_condition"],
+  ...(RETIRED_PUBLIC_EDGE_IDS.includes(`rules.structural.event.${family}`) ? { disposition: retired("Accepted subject-safe-semantic-selection: historical event meaning retained only in test custody; current source-owned events replace public delivery.") } : {}),
   limitations: ["The signed relation is literal and carries no learner valence or importance judgement."],
 }));
 
@@ -415,8 +441,158 @@ const structuralOutputs = [
     role: "event", payloadType: "PawnIslandEventOperands", semantics: "Exact per-color before/after occupied-file island count across one legal edge.",
     operands: ["before_fen", "move_uci", "after_fen", "family", "color", "before", "after"], signs: ["gained", "lost", "preserved"], forms: ["list", "panel", "machine_condition"],
     limitations: ["The signed count relation carries no learner valence or inferred plan."],
+    disposition: retired("Accepted subject-safe-semantic-selection: current delivery uses exact topology pawn_islands@2; the old count-only event has no executable factory or public wrapper."),
   }),
   ...structuralEventOutputs,
+];
+
+// These successors retain the original computation and authority. Only the closed retained
+// payload grows; independent current consumers keep the original reading contracts.
+const detailedStructuralOutputs: readonly ProjectionDeclaration[] = STRUCTURAL_DETAIL_KINDS.map(kind => {
+  const predecessor = structuralOutputs.find(output => output.id === `rules.structural.reading.${kind}` && output.version === 1);
+  if (predecessor === undefined) throw new TypeError(`Missing structural predecessor for ${kind}`);
+  return Object.freeze({ ...predecessor, version: 2, payloadType: `StructuralDetail.${kind}`,
+    semantics: `Complete kind-specific retained facts from structuralReading for family ${kind}; no new detector or judgement.`,
+    operands: STRUCTURAL_DETAIL_FIELDS[kind] });
+});
+
+const foundationSquareSourceOutputs = [
+    projection("derived.square", "derived.square.reading.future_file_challenge", "derived", {
+      payloadType: "FutureFileSnapshot", semantics: "future-file-challenge@1: complete root-pawn domain and all pawn/target/nonnegative-push-count rows that pseudo-attack the target from the pawn's unchanged file; zero pushes includes current control.",
+      operands: ["fen", "pawnDomain", "challenges"], grounding: "position_rules", exactness: "convention",
+      dependsOn: [ref("rules.mobility.reading.legal_moves")], derivation: { inputs: [ref("rules.mobility.reading.legal_moves")] },
+      forms: ["machine_condition", "panel", "list"], limitations: ["Ignores blockers, turn, double-push timing and king safety. No pawn remains a pawn on a promotion rank. Hypothetical challenge is not a legal line, force or advice."],
+    }),
+    projection("derived.square", "derived.square.reading.capture_migration_reach", "derived", {
+      payloadType: "CaptureMigrationSnapshot", semantics: "capture-migration-reach@1: complete root-pawn domain and all pawn/target/capture-count/push-count rows reaching a target-attacking adjacent file through at least one hypothetical board-valid diagonal capture and optional forward pushes.",
+      operands: ["fen", "pawnDomain", "reaches"], grounding: "position_rules", exactness: "convention",
+      dependsOn: [ref("rules.mobility.reading.legal_moves")], derivation: { inputs: [ref("rules.mobility.reading.legal_moves")] },
+      forms: ["machine_condition", "panel", "list"], limitations: ["Ignores victims, blockers, turn and legal paths; no pawn survives promotion as a pawn. Distinct from same-file challenge, current control, safe occupation and advice."],
+    }),
+];
+
+const foundationSourceOutputs = [
+  ...([
+    ["king_opposition", "rules.structural.reading.king_opposition", 3, "king-opposition-unobstructed@1"],
+    ["backward_pawn", "rules.structural.reading.backward_pawn", 3, "backward-pawn@1"],
+    ["outpost", "derived.structural.reading.outpost_candidate", 1, "outpost-candidate@1"],
+  ] as const).map(([kind, source, version, convention]) => projection("rules.structural", `rules.structural.predicate.${kind}`, "rules", {
+    version: 2, role: "predicate", payloadType: "SelectedStructuralPredicateResult",
+    semantics: `${convention}: recompute the exact selected feature from its one genuine complete current snapshot, retaining matched and every matching subject; no supplied verdict, alternate source or legacy fallback.`,
+    operands: ["fen", "feature", "matched", "subjects"], dependsOn: [{ id: source, version }],
+    grounding: "declared_convention", exactness: "convention", forms: ["machine_condition", "panel"],
+    limitations: ["A declared structural predicate, not quality, weakness, advice or intention. Explicit kind/convention compatibility is mandatory; unavailable authority never becomes false."],
+  })),
+  projection("rules.structural", "rules.structural.reading.fianchetto_setup", "rules", {
+    payloadType: "FianchettoSetupSnapshot", semantics: "fianchetto-configuration@1: complete position snapshot of exactly White b2/b3 or g2/g3 and Black b7/b6 or g7/g6 same-color bishop/pawn configurations, retaining all exact piece identities and wing, including genuine setups:[] absence.",
+    operands: ["fen", "setups"], grounding: "declared_convention", exactness: "convention", forms: ["machine_condition", "panel"],
+    limitations: ["A current configuration, not original-piece or arrival history, an attack, quality, intent or style conclusion. Actual actor/decision context is required before occurrence consumers."],
+  }),
+  projection("rules.structural", "rules.structural.reading.fianchetto_knight_screen", "rules", {
+    payloadType: "FianchettoScreenSnapshot", semantics: "fianchetto-configuration@1: complete genuine setup snapshot plus the exact same-color knight on the bishop's first inward diagonal square c3/f3/c6/f6, retaining all three pieces and genuine empty screens:[].",
+    operands: ["fen", "screens"], dependsOn: [ref("rules.structural.reading.fianchetto_setup")], grounding: "declared_convention", exactness: "convention", forms: ["machine_condition", "panel"],
+    limitations: ["Screen configuration is not a legal discovered attack, observed unblocking, purpose, quality or style conclusion. No caller-written source/FEN/knight list is admitted."],
+  }),
+  projection("rules.structural", "rules.structural.event.pawn_islands", "rules", {
+    version: 2, role: "event", payloadType: "PawnIslandTopologyChange",
+    semantics: "pawn-island-topology@1: per-color exact file partitions and member pawns across one legal edge; compare file partitions only, retaining count_gained/count_lost/topology_changed without rank-only events.",
+    operands: ["beforeFen", "moveUci", "afterFen", "color", "sign", "beforeCount", "afterCount", "before", "after"],
+    signs: ["count_gained", "count_lost", "topology_changed"], dependsOn: [ref("rules.structural.reading.pawn_connectivity")],
+    grounding: "declared_convention", exactness: "convention", forms: ["machine_condition", "panel", "list"],
+    limitations: ["No pawn weakness, importance, move quality or player-style inference. Identical file partitions emit nothing even when member squares/counts change."],
+  }),
+  ...(["king_opposition", "backward_pawn"] as const).map(kind => projection("rules.structural", `rules.structural.event.${kind}`, "rules", {
+    version: 2, role: "event", payloadType: kind === "king_opposition" ? "OppositionChange" : "BackwardPawnChange",
+    semantics: kind === "king_opposition"
+      ? "king-opposition-unobstructed@1: exact before/after complete snapshots joined by the stable color-identified king pair; holder and geometry changes are one membership_changed event, never two color subjects."
+      : "backward-pawn@1: exact qualifying rows joined by unchanged color/pawn identity first and then the exact physical pawn mover, retaining gained/lost/membership_changed without a file-only join.",
+    operands: ["beforeFen", "moveUci", "afterFen", "subject", "sign", "before", "after"],
+    signs: ["gained", "lost", "membership_changed"], dependsOn: [{ id: `rules.structural.reading.${kind}`, version: 3 }],
+    grounding: "declared_convention", exactness: "convention", forms: ["machine_condition", "panel", "list"],
+    limitations: ["Available empty means no qualifying change across the authenticated edge. No importance, weakness, purpose, best move or outcome is inferred."],
+  })),
+  projection("rules.structural", "rules.structural.reading.king_opposition", "rules", {
+    version: 3, payloadType: "UnobstructedOppositionSnapshot", grounding: "declared_convention", exactness: "convention",
+    semantics: "king-opposition-unobstructed@1: one complete canonical-position snapshot, both color-identified kings, and null or the turn-dependent orthogonal unobstructed opposition reading with every interior square.",
+    operands: ["fen", "kings", "opposition"], dependsOn: [ref("rules.mobility.reading.legal_moves")], forms: ["machine_condition", "panel", "list"],
+    limitations: ["Null is an available geometric absence, never a missing position. No endgame restriction, outcome, importance, force or best-play claim."],
+  }),
+  projection("rules.structural", "rules.structural.reading.backward_pawn", "rules", {
+    version: 3, payloadType: "BackwardPawnSnapshot", grounding: "declared_convention", exactness: "convention",
+    semantics: "backward-pawn@1: one complete canonical-position snapshot with every pawn in its domain and every qualifying pawn's exact stop, pseudo-pawn controllers, support/ahead pawns, occupancy, pseudo-capturable enemy pawns and explicit opponent-color half-open relation.",
+    operands: ["fen", "pawnDomain", "pawns"], dependsOn: [ref("rules.mobility.reading.legal_moves")], forms: ["machine_condition", "panel", "list"],
+    limitations: ["Empty qualifying rows remain an available complete reading. This narrow convention asserts neither weakness nor legal advance/capture, importance, advice or move quality."],
+  }),
+];
+
+const foundationSliderOutputs = [projection("rules.transition", "rules.transition.reading.physical_slider_rays", "transition", {
+  payloadType: "PhysicalSliderRaySnapshot",
+  semantics: "line-blocker-membership@1: complete both-color canonical board from the original legal-position source, all occupied pieces and eight signed directions in order, retaining each null or full physical ray, strict interior and every occupied blocker.",
+  operands: ["fen", "rows"], dependsOn: [ref("rules.mobility.reading.legal_moves")],
+  grounding: "declared_convention", exactness: "convention", forms: ["machine_condition"],
+  disposition: inspectorOnly("Private original wide-receipt state prerequisite under subject-safe-semantic-selection §3.1; no public child slot or ordinary UI binding."),
+  limitations: ["Null is not an adjacent empty interior. Board-edge endpoint is not a tactical target; no pin, advantage, importance or legal penetration is inferred."],
+}), projection("rules.transition", "rules.transition.event.slider_ray", "transition", {
+  version: 2, role: "event", payloadType: "SliderMembershipChange",
+  semantics: "line-blocker-membership@1: join each original physical piece and signed board direction through the exact legal edge, both castling pieces, promotion and actual captured square. Retain nullable current rays with board-edge endpoint, strict interior and ordered occupied blockers. Compare blocker identities, not counts or endpoints.",
+  operands: ["beforeFen", "moveUci", "afterFen", "root", "direction", "sign", "before", "after"], signs: ["gained", "lost", "membership_changed"],
+  grounding: "declared_convention", exactness: "convention", forms: ["machine_condition", "panel", "list"],
+  limitations: ["Non-slider/removed/offboard ray is null; an on-board ray can have zero blockers. A board-edge endpoint is not a target; no pin, skewer, discovery, clearance, purpose or quality is inferred."],
+})];
+
+const foundationPawnConsequenceOutputs = [projection("derived.pawn", "derived.pawn.consequence.backward_pawn_legal_advance", "derived", {
+  role: "predicate", payloadType: "BackwardPawnLegalAdvance",
+  semantics: "backward-pawn@1 plus legal-exchange@1: exact qualifying pawn's single legal quiet advance to its empty stop and every opposing-pawn legal capture of that advanced pawn from the complete original landing-capture population, including a genuine empty reply list.",
+  operands: ["beforeFen", "moveUci", "afterFen", "pawn", "advancedPawn", "landing", "replies"], grounding: "declared_convention", exactness: "convention",
+  dependsOn: [{ id: "rules.structural.reading.backward_pawn", version: 3 }, ref("rules.exchange.reading.landing_captures")],
+  derivation: { inputs: [{ id: "rules.structural.reading.backward_pawn", version: 3 }, ref("rules.exchange.reading.landing_captures")] },
+  forms: ["machine_condition", "panel", "list"], limitations: ["A complete legal reply fact and convention exchange units, never safety, strength, force or advice. Pseudo-control alone does not populate replies."],
+})];
+
+const foundationPawnGroupOutputs = [
+  projection("derived.structural", "derived.structural.reading.outpost_candidate", "derived", {
+    payloadType: "OutpostCandidateSnapshot", semantics: "outpost-candidate@1: complete both-color/all-square snapshot with basis future_file, relative rank4..6, exact own pseudo-pawn support and no enemy future-file challenge including zero pushes. Occupancy is irrelevant.",
+    operands: ["fen", "basis", "candidates"], grounding: "position_rules", exactness: "convention", abstention: { possible: true, reasons: ["input_abstained"] },
+    dependsOn: [ref("rules.square.reading.control"), ref("derived.square.reading.future_file_challenge")], derivation: { inputs: [ref("rules.square.reading.control"), ref("derived.square.reading.future_file_challenge")] },
+    forms: ["machine_condition", "panel", "list"], limitations: ["Capture-migration reach is separate, never an exclusion here. Candidacy asserts no safety, value, permanence or recommendation."],
+  }),
+  projection("derived.structural", "derived.structural.reading.occupied_outpost", "derived", {
+    payloadType: "OccupiedOutpostSnapshot", semantics: "outpost-candidate@1: retain each same-color bishop/knight/rook/queen actually occupying a genuine future_file candidate, with its exact candidate and occupant.",
+    operands: ["fen", "basis", "occupied"], grounding: "position_rules", exactness: "convention", abstention: { possible: true, reasons: ["input_abstained"] },
+    dependsOn: [ref("derived.structural.reading.outpost_candidate")], derivation: { inputs: [ref("derived.structural.reading.outpost_candidate")] },
+    forms: ["machine_condition", "panel", "list"], limitations: ["Empty is a complete available snapshot. Occupation establishes neither arrival, exchange survival, safety, value nor permanence."],
+  }),
+  projection("derived.structural", "derived.structural.reading.pawn_file_group", "derived", {
+    payloadType: "PawnFileGroupSnapshot", semantics: "Complete two-color/eight-file domain from the exact pawn-connectivity source; every nonempty color/file group retains all pawns in color-relative front-to-rear order, adjacent occupied files, island files and literal isolated/doubled booleans.",
+    operands: ["fen", "groups"], dependsOn: [ref("rules.structural.reading.pawn_connectivity")], derivation: { inputs: [ref("rules.structural.reading.pawn_connectivity")] },
+    forms: ["machine_condition", "panel", "list"], limitations: ["Empty groups is an available complete snapshot. These memberships do not establish a weakness or recommendation."],
+  }),
+  projection("derived.structural", "derived.structural.event.pawn_file_group", "derived", {
+    role: "event", payloadType: "PawnFileGroupChange", semantics: "Complete before/after pawn-file groups joined by color/file, retaining exact gained/lost/membership_changed rows and legal move/capture cause; equal groups emit nothing.",
+    operands: ["beforeFen", "moveUci", "afterFen", "subject", "sign", "before", "after", "cause"], signs: ["gained", "lost", "membership_changed"],
+    dependsOn: [ref("derived.structural.reading.pawn_file_group")], derivation: { inputs: [ref("derived.structural.reading.pawn_file_group"), ref("derived.structural.reading.pawn_file_group")] },
+    forms: ["machine_condition", "panel", "list"], limitations: ["A membership change is not a quality, improvement, weakness or purpose claim."],
+  }),
+];
+
+const foundationFileActivityOutputs = [
+  projection("derived.activity", "derived.activity.reading.file_state", "derived", {
+    payloadType: "FileStateSnapshot", semantics: "Exactly eight file rows from complete pawn connectivity, retaining both colors' pawn sets and open/half_open_white/half_open_black/closed; open is not half-open.",
+    operands: ["fen", "files"], dependsOn: [ref("rules.structural.reading.pawn_connectivity")], derivation: { inputs: [ref("rules.structural.reading.pawn_connectivity")] },
+    forms: ["machine_condition", "panel", "list"], limitations: ["No activity, control, accessible legal path or recommendation is inferred from a file class."],
+  }),
+  projection("derived.activity", "derived.activity.event.file_state", "derived", {
+    role: "event", payloadType: "FileStateChange", semantics: "One event per file whose four-way state enum changes across the actual legal edge; retain exact before/after pawn sets and move/capture/promotion cause, including the en-passant capture square.",
+    operands: ["beforeFen", "moveUci", "afterFen", "file", "sign", "before", "after", "cause"], signs: ["membership_changed"],
+    dependsOn: [ref("derived.activity.reading.file_state")], derivation: { inputs: [ref("derived.activity.reading.file_state"), ref("derived.activity.reading.file_state")] },
+    forms: ["machine_condition", "panel", "list"], limitations: ["Rank/member-only motion with the same file class emits nothing; no strategic valence is inferred."],
+  }),
+  projection("derived.activity", "derived.activity.event.file_access_revealed", "derived", {
+    role: "event", payloadType: "FileAccessRevealed", semantics: "An unchanged rook/queen's file becomes open from another class, or its own-color half-open from a class other than open or that same half-open. Retain exact piece, class transition and original file-state cause; moving siblings do not suppress stationary subjects.",
+    operands: ["beforeFen", "moveUci", "afterFen", "file", "piece", "sign", "beforeState", "afterState", "fileChange"], signs: ["gained"],
+    dependsOn: [ref("derived.activity.event.file_state")], derivation: { inputs: [ref("derived.activity.event.file_state")] },
+    forms: ["machine_condition", "panel", "list"], limitations: ["Literal file-class change, not an unblocked legal slider path, activity, control, improvement or purpose. Open to own-half-open is not new access."],
+  }),
 ];
 
 const transitionOutputs = TRANSITION_READING_LEAVES.map((leaf) => projection("rules.transition", `rules.transition.reading.${leaf}`, "transition", {
@@ -433,6 +609,7 @@ const transitionEventOutputs = [
     role: "event", payloadType: "TransitionGeometryEventOperands", semantics: `Identity-preserving signed transition geometry for ${family}.`,
     operands: ["before_fen", "move_uci", "after_fen", "subject", "targets_before", "targets_after"], signs: ["gained", "lost", "preserved"],
     forms: ["list", "panel", "machine_condition"], limitations: ["Pseudo-legal geometry is not a tactical label, safety claim, or move grade."],
+    ...(family === "slider_ray" ? { disposition: { kind: "operator_only" as const, reason: "Accepted subject-safe-semantic-selection: private target-bearing discovery prerequisite only; no public semantic wrapper, ordinary binding or current event qualification." } } : {}),
   })),
   ...TRANSITION_RULE_EVENT_FAMILIES.map((family) => projection("rules.transition", `rules.transition.event.${family}`, "transition", {
     role: "event", payloadType: "TransitionRuleEventOperands", semantics: `Independent exact transition-rule event for ${family}.`,
@@ -452,6 +629,31 @@ const avoidanceOutputs = [...STRUCTURAL_EVENT_FAMILIES, "loose_piece", "pawn_isl
     ...(family === "loose_piece" ? { abstention: { possible: true as const, reasons: ["input_abstained"] } } : {}),
     forms: ["list", "panel", "machine_condition"], dependsOn: [input], derivation: { inputs: [input] },
     limitations: ["Avoided describes a complete local alternative relation, never inferred intent, praise, or move quality."],
+    disposition: retired("Accepted subject-safe-semantic-selection: family/sign-only avoidance has no executable factory or consumer; subject-owned@2 replaces its meaning with independently required validation."),
+  });
+});
+
+const subjectOutcomeSource: Readonly<Record<SubjectOutcomeFamily, VersionedEvidenceId>> = Object.freeze({
+  backward_pawn: { id: "rules.structural.reading.backward_pawn", version: 3 },
+  doubled_pawn: ref("derived.structural.reading.pawn_file_group"), isolated_pawn: ref("derived.structural.reading.pawn_file_group"),
+  half_open_file: ref("derived.activity.reading.file_state"), open_file: ref("derived.activity.reading.file_state"),
+  king_opposition: { id: "rules.structural.reading.king_opposition", version: 3 },
+  king_zone: ref("rules.structural.predicate.king_zone"), line_blockers: ref("rules.transition.reading.physical_slider_rays"),
+  passed_pawn: ref("rules.structural.predicate.passed_pawn"), piece_count: ref("rules.structural.reading.piece_count"),
+  direct_attack_count: ref("rules.square.reading.control"), loose_piece: ref("rules.tactic.reading.mover_piece_risk"),
+  pawn_islands: ref("rules.structural.reading.pawn_connectivity"),
+});
+const subjectOutcomeOutputs = SUBJECT_OUTCOME_FAMILIES.map(family => {
+  const inputs = [ref("rules.mobility.reading.legal_moves"), subjectOutcomeSource[family]];
+  const convention = ["backward_pawn", "king_opposition", "loose_piece", "line_blockers"].includes(family);
+  return projection("derived.semantic_avoidance", `derived.semantic_avoidance.${family}`, "derived", {
+    version: 2, role: "event", payloadType: `SubjectOutcomePayload<${family}>`,
+    semantics: `Complete original wide-population root/played/alternative relations for each exact ${family} subject and predicate parameter. Preserve all legal alternatives, explicit noncomparable lifecycle states, distinct supporting move identities and original ordered source inputs.`,
+    operands: ["beforeFen", "moveUci", "afterFen", "family", "actor", "subject", "parameters", "root", "played", "alternativeRelation", "alternatives", "supportingMoves", "legalAlternatives", "alternativesWithOutcome"],
+    signs: ["avoided"], grounding: convention ? "declared_convention" : "position_rules", exactness: convention ? "convention" : "exact",
+    abstention: { possible: true, reasons: ["input_abstained", "counterfactual_population_incomplete"] },
+    forms: ["machine_condition"], dependsOn: inputs, derivation: { inputs },
+    limitations: ["A differing local alternative relation is not intent, praise, causality, move quality or a recommendation. Removed/promoted/null-ray states never become false or zero."],
   });
 });
 
@@ -499,10 +701,19 @@ const castlingOutputs = [
 ];
 
 const tacticalOutputs = [
+  projection("rules.tactic", "rules.tactic.reading.mover_piece_risk", "rules", {
+    payloadType: "MoverPieceRiskSnapshot",
+    semantics: "legal-exchange@1: complete original mover-only/non-king domain over a genuine root and root-or-exact-child legal source, retaining root/current piece identity, actual evaluation/turn-clone FEN and every original LoosePieceState including both-false states and promotion's new role.",
+    operands: ["rootFen", "fen", "moveUci", "actor", "evaluationFen", "pieces"],
+    dependsOn: [ref("rules.mobility.reading.legal_moves"), ref("rules.exchange.predicate.legal_exchange")],
+    grounding: "declared_convention", exactness: "convention", forms: ["machine_condition"],
+    abstention: { possible: true, reasons: ["invalid_turn_clone"] },
+    disposition: inspectorOnly("Private original wide-receipt state prerequisite under subject-safe-semantic-selection §3.1; no public child slot or ordinary UI binding."),
+    limitations: ["Exact local exchange-model arithmetic, not a forced win, move grade or strategic value. Invalid actor turn clone is unavailable even on an empty own-piece domain; actual child en-passant retains the real victim."],
+  }),
   projection("rules.tactic", "rules.tactic.reading.promotion_pressure", "rules", {
     role: "reading", payloadType: "PromotionPressureReading", semantics: "Computed passed-pawn geometry and legal pass/immediate-reply availability under promotion-pressure-geometry@1.",
     operands: ["fen", "pawns"], signs: ["state"], answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "machine_condition"],
-    disposition: { kind: "experimental", reason: "Internal current-source prerequisite; coordinated packet/Hint/module cutover remains." },
     limitations: ["Pressure description only; winner, drawing status and outcome words stay with Syzygy."],
   }),
   projection("rules.tactic", "rules.tactic.predicate.overload_conflict", "rules", {
@@ -510,7 +721,6 @@ const tacticalOutputs = [
     operands: ["candidate", "soleDefender", "capturedTarget", "retainedTargets", "legalRecaptures", "positiveCaptures"], signs: ["state"],
     grounding: "declared_convention", exactness: "convention", answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
     abstention: { possible: true, reasons: ["no_legal_recapture"] },
-    disposition: { kind: "experimental", reason: "Internal current-source prerequisite; complete Inspector cutover remains." },
     limitations: ["Candidate-time arithmetic only; it does not grade or recommend the candidate."],
   }),
   projection("rules.tactic", "rules.tactic.reading.loose_piece", "rules", {
@@ -538,7 +748,7 @@ const tacticalOutputs = [
   }),
   projection("rules.tactic", "rules.tactic.reading.trapped_piece", "rules", {
     payloadType: "TrappedPieceReading", semantics: "trapped@1: a non-pawn, non-king piece of the side to move is locally trapped only when the opponent-turn clone has a positive legal-exchange@1 capture on its current square and every legal destination is locally losing. Capture destinations use their own exchange result; quiet destinations retain every positive opponent capture after relocation.",
-    operands: ["kind", "conventionId", "pieces"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "threat"], forms: ["list", "panel", "lit_squares", "arrows", "piece_halo", "machine_condition"],
+    operands: ["kind", "reason", "conventionId", "pieces"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "threat"], forms: ["list", "panel", "lit_squares", "arrows", "piece_halo", "machine_condition"],
     abstention: { possible: true, reasons: ["trapped_while_in_check"] }, dependsOn: [ref("rules.exchange.predicate.legal_exchange")],
     limitations: ["Local exchange and legal destinations only; defending moves, intermezzi, compensation, counterattacks and search-derived claims that the piece is lost are outside scope."],
   }),
@@ -554,7 +764,7 @@ const tacticalOutputs = [
   }),
   projection("rules.tactic", "rules.tactic.consequence.threat", "rules", {
     role: "reading", payloadType: "ThreatResult", semantics: THREAT_SEMANTICS,
-    operands: ["kind", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",
+    operands: ["kind", "reason", "conventionId", "threats"], signs: ["threatened"], grounding: "declared_convention", exactness: "convention",
     abstention: { possible: true, reasons: ["pass_while_in_check"] }, answerContent: ["threat"], forms: ["list", "panel", "machine_condition"],
     dependsOn: [ref("rules.exchange.predicate.legal_exchange")],
     limitations: ["Threat presence is not a move grade, recommendation, forcing claim or statement of intent."],
@@ -628,10 +838,10 @@ const derivedTacticOutputs = [
     answerContent: ["threat"], forms: ["machine_condition", "list", "panel"],
     dependsOn: [ref("rules.tactic.event.double_attack"), ref("rules.tactic.consequence.reply_breadth")],
     derivation: { inputs: [ref("rules.tactic.event.double_attack"), ref("rules.tactic.consequence.reply_breadth")] },
-    disposition: { kind: "experimental", reason: "Internal current-source prerequisite; complete packet/Hint/module cutover remains." },
     limitations: ["One-reply local conventional claim only; no force, inevitability, quality, best move, significance or whole-position assessment."],
   }),
   projection("derived.tactic", "derived.tactic.fork_survives_reply", "derived", {
+    disposition: inspectorOnly("Internal predecessor observation only; current recorded consumers bind derived.tactic.nonterminal_fork_survival@1, not this narrative-path result."),
     role: "predicate", payloadType: "ForkSurvivalResult", semantics: "For every exact legal reply, the moved piece survives and retains a positive legal-exchange@1 capture of at least one original non-king target on its original square. False results retain refuting replies.",
     operands: ["matched", "doubleAttack", "replyBreadth", "refutingReplies"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["threat"], forms: ["machine_condition", "list", "panel"],
@@ -646,12 +856,14 @@ const derivedTacticOutputs = [
     limitations: ["Execution inherits the bounded latency relation; it does not infer importance, intent, or move quality."],
   }),
   projection("derived.tactic", "derived.tactic.promotion_pressure", "derived", {
+    disposition: inspectorOnly("Internal transition prerequisite only; Inspector2 exposes the complete rules.tactic.reading.promotion_pressure@1 source, not this predecessor projection."),
     role: "reading", payloadType: "PromotionPressureReading", semantics: "Exact passed-pawn promotion geometry with typed pass-clone and all-opponent-reply availability; it carries no outcome verdict.",
     operands: ["fen", "pawns"], signs: ["state"], answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "machine_condition"],
     dependsOn: [ref("rules.structural.predicate.passed_pawn"), ref("rules.structural.predicate.direct_attack_count"), ref("rules.structural.predicate.line_blockers")], derivation: { inputs: [ref("rules.structural.predicate.passed_pawn"), ref("rules.structural.predicate.direct_attack_count"), ref("rules.structural.predicate.line_blockers")] },
     limitations: ["Pressure description only; winner, drawing status and outcome words stay with Syzygy."],
   }),
   projection("derived.tactic", "derived.tactic.defender_exposure", "derived", {
+    disposition: retired("Accepted F2/Full Inspector2: replaced by the independently grounded complete-capture @2 source; incomplete predecessor is historical only."),
     role: "event", payloadType: "DefenderExposureOperands", semantics: "An exact lost pseudo-controller defence edge of the non-moving side joined to a retained target and positive legal-exchange@1 capture under the mover-turn/en-passant-cleared pass clone.",
     operands: ["beforeFen", "moveUci", "afterFen", "kind", "passConvention", "defender", "target", "captures", "controllerEvent"], signs: ["gained", "state"], grounding: "declared_convention", exactness: "convention", answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["invalid_turn_clone"] }, dependsOn: [ref("rules.square.event.control"), ref("rules.exchange.predicate.legal_exchange")], derivation: { inputs: [ref("rules.square.event.control"), ref("rules.exchange.predicate.legal_exchange")] },
@@ -665,7 +877,6 @@ const derivedTacticOutputs = [
     forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"], abstention: { possible: true, reasons: ["invalid_turn_clone"] },
     dependsOn: [ref("rules.square.event.control"), ref("rules.exchange.reading.landing_captures")],
     derivation: { inputs: [ref("rules.square.event.control"), ref("rules.exchange.reading.landing_captures")] },
-    disposition: { kind: "experimental", reason: "Internal source component; coordinated Threat/packet/current-module cutover is not yet delivered." },
     limitations: ["The exact edge/capture join does not name removal, deflection, overload, force, success, safety, or move quality."],
   }),
   projection("derived.tactic", "derived.tactic.sequence.defender_consequence", "derived", {
@@ -675,6 +886,7 @@ const derivedTacticOutputs = [
     limitations: ["Observed order does not emit removal, deflection, overload, force, tactic success, quality, intent, or causality."],
   }),
   projection("derived.tactic", "derived.tactic.overloaded_defender_response_conflict", "derived", {
+    disposition: inspectorOnly("Internal candidate prerequisite retained for recorded derivations; Inspector2 exposes rules.tactic.predicate.overload_conflict@1 through its exact source owner."),
     role: "predicate", payloadType: "OverloadedDefenderConflict", semantics: SEMANTIC_CONVENTION_TEXT.overloadConflict,
     operands: ["candidate", "soleDefender", "capturedTarget", "retainedTargets", "legalRecaptures", "positiveCaptures"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "machine_condition"],
@@ -771,7 +983,6 @@ const derivedExchangeOutputs = [
   }),
 ];
 
-const inspectorOnly = (reason: string): EvidenceDispositionDeclaration => Object.freeze({ kind: "inspector_only", reason });
 
 const BOUNDED_TARGET_ABSTENTIONS = ["input_abstained", "position_mismatch", "target_mismatch", "multiplication_limit", "batch_budget_exhausted", "queue_full", "cancelled", "service_closed"] as const;
 
@@ -864,6 +1075,24 @@ const squareOutputs = [
 ];
 
 const mobilityOutputs = [
+  projection("rules.mobility", "rules.mobility.reading.early_queen_move", "rules", {
+    payloadType: "EarlyQueenReading", semantics: "early-queen-ply@1: a genuine legal queen-source candidate at original rooted represented index below16, from a live read-authorized decision or original store-claimed owner-played choice decision. The alternative need not be the recorded choice; nonqueen or index16+ is available empty.",
+    operands: ["runId", "branchId", "beforeNodeId", "sourcePly", "fen", "turn", "moveUci", "sourcePiece", "candidate"], dependsOn: [ref("rules.mobility.reading.candidate_role")],
+    grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "candidate_moves"], forms: ["machine_condition", "panel"],
+    limitations: ["Source index is rooted represented-line position, not FEN move count or unseen game history. Promotion source remains pawn. No actual choice, learner action, opening quality or style follows."],
+  }),
+  projection("rules.mobility", "rules.mobility.reading.pawn_extended_center_destination", "rules", {
+    payloadType: "CandidateRoleReading", semantics: "extended-center-destination@1: exact genuine candidate_role@1 with source role pawn and actual destination in c4/d4/e4/f4/c5/d5/e5/f5. Available singleton for a match, available empty for a genuine nonmatch.",
+    operands: ["fen", "turn", "moveUci", "sourcePiece", "candidate"], dependsOn: [ref("rules.mobility.reading.candidate_role")],
+    grounding: "declared_convention", exactness: "convention", answerContent: ["fact", "candidate_moves"], forms: ["machine_condition", "panel"],
+    limitations: ["A fixed pawn-destination fact, not control, space gained, quality or style. Recorded actor/decision occurrence remains separate."],
+  }),
+  projection("rules.mobility", "rules.mobility.reading.candidate_role", "rules", {
+    payloadType: "CandidateRoleReading", semantics: "One exact original canonical legal_moves@1 member and its source piece/role, retaining full promotion identity and physical semantic destination separately from UCI; no second enumeration or alias conversion.",
+    operands: ["fen", "turn", "moveUci", "sourcePiece", "candidate"], dependsOn: [ref("rules.mobility.reading.legal_moves")],
+    answerContent: ["fact", "candidate_moves"], forms: ["machine_condition", "panel"],
+    limitations: ["Source role remains pawn on promotion. An actor-neutral candidate fact supplies neither recorded ply, learner identity, style, safety nor move quality."],
+  }),
   projection("rules.mobility", "rules.mobility.reading.legal_moves", "rules", {
     payloadType: "ExactLegalMoveMap",
     semantics: "Complete exact legal moves for the supplied FEN's actual side to move, retaining Chess960-safe king-to-rook move identity separately from semantic destination, plus origin, role and promotion identity.",
@@ -943,14 +1172,12 @@ const derivedPawnOutputs = [
 const derivedMaterialOutputs = [
   projection("derived.material", "derived.material.reading.role_signature", "derived", {
     version: 2, payloadType: "MaterialRoleSignatureReading", semantics: BREADTH_CONVENTION_TEXT.materialRole,
-    disposition: { kind: "experimental", reason: "Accepted internal count-derived source; complete current-consumer cutover remains pending." },
     operands: ["fen", "conventionId", "colors", "asymmetry", "magnitude"], grounding: "position_rules", exactness: "exact", forms: ["list", "panel"],
     dependsOn: [ref("rules.structural.reading.piece_count")], derivation: { inputs: Array.from({ length: 10 }, () => ref("rules.structural.reading.piece_count")) },
     limitations: ["No scalar material advantage, imbalance quality, or exchange advice is emitted."],
   }),
   projection("derived.material", "derived.material.event.role_asymmetry", "derived", {
     version: 2, role: "event", payloadType: "MaterialRoleAsymmetryEvent", semantics: "All exact role-vector changes with a strictly-increased unweighted-magnitude flag; no material value or advice.",
-    disposition: { kind: "experimental", reason: "Accepted internal capture/promotion derivation; complete current-consumer cutover remains pending." },
     operands: ["beforeFen", "moveUci", "afterFen", "conventionId", "before", "after", "changedRoles", "increased", "sourceEvents"], signs: ["state"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
     dependsOn: [ref2("derived.material.reading.role_signature"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")],
     derivation: { anyOf: [
@@ -962,12 +1189,14 @@ const derivedMaterialOutputs = [
   }),
   projection("derived.material", "derived.material.reading.role_signature", "derived", {
     payloadType: "MaterialRoleSignatureReading", semantics: BREADTH_CONVENTION_TEXT.materialRole,
+    disposition: retired("Accepted F2/Full Inspector2: the incomplete one-reading lineage is historical only; current consumers use the independently grounded @2 signature."),
     operands: ["fen", "conventionId", "colors", "asymmetry", "magnitude"], grounding: "position_rules", exactness: "exact", forms: ["list", "panel"],
     dependsOn: [ref("rules.structural.reading.piece_count")], derivation: { inputs: [ref("rules.structural.reading.piece_count")] },
     limitations: ["No scalar material advantage, imbalance quality, or exchange advice is emitted."],
   }),
   projection("derived.material", "derived.material.event.role_asymmetry", "derived", {
     role: "event", payloadType: "MaterialRoleAsymmetryEvent", semantics: "Exact before/after material-role vectors and strictly rising unweighted asymmetry magnitude, retaining applicable capture/promotion facts.",
+    disposition: retired("Accepted F2/Full Inspector2: replaced by exact cause-bearing @2 material events; incomplete predecessor is historical only."),
     operands: ["beforeFen", "moveUci", "afterFen", "conventionId", "before", "after", "changedRoles", "increased", "sourceEvents"], signs: ["state"], grounding: "position_rules", exactness: "exact", forms: breadthForms,
     dependsOn: [ref("derived.material.reading.role_signature"), ref("rules.structural.event.piece_count"), ref("rules.transition.event.capture"), ref("rules.transition.event.promotion")],
     derivation: { anyOf: [
@@ -1001,6 +1230,7 @@ const candidateCollectorInputs = Object.freeze([
 ].filter((id) => id !== "human.maia.candidate_wdl"));
 
 const derivedOpponentOutputs = [projection("derived.opponent", "derived.opponent.candidate_feature_vector", "derived", {
+  disposition: retired("Accepted F2 §2.3f / D3851 / D3853: unused score-bearing vector retired without a successor; actual candidate collectors remain in compiler2. Historical declaration only, no callable or binding."),
   payloadType: "CandidateFeatureVector",
   semantics: "A typed record of one fixed-bound engine evaluation and the literal registered tactical/breadth collector results for each legal candidate child position. It adds no detector, grade, trait, or prose.",
   operands: ["beforeFen", "scoreFrame", "engine", "candidates"],
@@ -1025,6 +1255,7 @@ const derivedOpponentOutputs = [projection("derived.opponent", "derived.opponent
 function hintOutputs(): readonly ProjectionDeclaration[] {
   const abstention = Object.freeze({ possible: true, reasons: HINT_ABSTENTION_REASONS });
   const horizons = HINT_DECLARATION_MATRIX.map((row) => projection("derived.hint", hintHorizonProjectionId(row.family), "derived", {
+    version: row.horizon.version,
     payloadType: "HintHorizonOccurrence",
     semantics: `One relation-safe ${row.family} occurrence (${row.status}) on one exact searched principal-variation edge: the root side's own ply 1 (root_direct) or ply 3 (root_followup_in_line) of the scanned four-ply line, joined to the exact family source evaluated at that edge. Opponent-line occurrences are refused before minting.`,
     operands: ["family", "sourceRole", "relation", "occurrencePly", "rootSide", "edgeSide", "signOrStatus", "actor", "targetSquares", "firstMove", "search"],
@@ -1035,12 +1266,13 @@ function hintOutputs(): readonly ProjectionDeclaration[] {
     disposition: { kind: "operator_only", reason: "rfc/hint-distance.md §1: the full occurrence is operator-only; learners receive only a separately sealed per-rung disclosure." },
   }));
   const disclosures = HINT_DECLARATION_MATRIX.flatMap((row) => HINT_RUNGS.map((rung) => projection("derived.hint", hintDisclosureProjectionId(row.family, rung), "derived", {
+    version: row.disclosures[rung].version,
     payloadType: `HintDisclosure${rung.slice(0, 1).toUpperCase()}${rung.slice(1)}Packet`,
     semantics: `The ${rung} rung of one ${row.family} hint horizon: a new frozen packet whose bytes carry only what the ${rung} rung may reveal (cumulative in meaning, never by inheritance).`,
     operands: ["rung", "family", "attribution", ...(HINT_RUNGS.indexOf(rung) >= 1 ? ["targetSquares"] : []), ...(HINT_RUNGS.indexOf(rung) >= 2 ? ["actor"] : []), ...(HINT_RUNGS.indexOf(rung) >= 3 ? ["relation", "occurrencePly"] : []), ...(rung === "move" ? ["firstMove"] : [])],
     grounding: "declared_convention", exactness: "measured", confidence: "reported", abstention,
     answerContent: row.rungAnswers[rung], forms: HINT_RUNG_FORMS[rung],
-    dependsOn: [ref(hintHorizonProjectionId(row.family))], derivation: { inputs: [ref(hintHorizonProjectionId(row.family))] },
+    dependsOn: [row.horizon], derivation: { inputs: [row.horizon] },
     limitations: ["A disclosure of a searched line's occurrence; it never says best, strongest, forced unless proved, or why the first move works."],
   })));
   if (disclosures.length !== HINT_DISCLOSURE_PROJECTION_IDS.length) throw new TypeError("hint disclosure projections are not the registry product");
@@ -1048,13 +1280,13 @@ function hintOutputs(): readonly ProjectionDeclaration[] {
 }
 
 export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze([
-  producer("rules.structural", "rules", "packages/runtime/src/structure.ts", "local", "sync", structuralOutputs),
-  producer("rules.transition", "transition", "packages/runtime/src/transition.ts", "local", "sync", [...transitionOutputs, ...transitionEventOutputs]),
+  producer("rules.structural", "rules", "packages/runtime/src/structure.ts; packages/runtime/src/foundation-position-sources.ts; packages/runtime/src/foundation-pawn-sources.ts; packages/runtime/src/foundation-style-sources.ts", "local", "sync", [...structuralOutputs, ...detailedStructuralOutputs, ...foundationSourceOutputs]),
+  producer("rules.transition", "transition", "packages/runtime/src/transition.ts; packages/runtime/src/foundation-slider-sources.ts", "local", "sync", [...transitionOutputs, ...transitionEventOutputs, ...foundationSliderOutputs]),
   producer("rules.castling", "rules", "packages/runtime/src/castling.ts", "local", "sync", castlingOutputs),
   producer("rules.exchange", "rules", "packages/runtime/src/exchange.ts", "local", "sync", exchangeOutputs),
-  producer("rules.tactic", "rules", "packages/runtime/src/tactics.ts", "local", "sync", tacticalOutputs),
+  producer("rules.tactic", "rules", "packages/runtime/src/tactics.ts; packages/runtime/src/foundation-risk-sources.ts", "local", "sync", tacticalOutputs),
   producer("rules.square", "rules", "packages/runtime/src/square-control.ts", "local", "sync", squareOutputs),
-  producer("rules.mobility", "rules", "packages/runtime/src/mobility.ts", "local", "sync", mobilityOutputs),
+  producer("rules.mobility", "rules", "packages/runtime/src/mobility.ts; packages/runtime/src/foundation-style-sources.ts", "local", "sync", mobilityOutputs),
   producer("rules.pawn", "rules", "packages/runtime/src/pawn-dynamics.ts", "local", "sync", pawnOutputs),
   producer("rules.king", "rules", "packages/runtime/src/king-state.ts", "local", "sync", kingOutputs),
   producer("rules.phase", "rules", "packages/runtime/src/phase.ts", "local", "sync", [
@@ -1112,7 +1344,6 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       abstention: { possible: true, reasons: ["input_abstained"] },
       derivation: { inputs: [ref("recorded.inspector.maia_selection"), ref("run.record.position")] },
       limitations: ["Recorded model-choice spread only; not quality, intent, strength, calibration or strategic significance. Missing candidate arrays retain private source_absent dispositions; they are not completed nonmatches."],
-      disposition: { kind: "experimental", reason: "Accepted F2 §2.3a internal recorded successor; D3870 empty telemetry and complete consumer/API/native adoption remain open." },
     }),
     ...(["phase_change", "option_collapse"] as const).map(kind => projection("derived.pivotal", `derived.pivotal.${kind}`, "derived", {
       version: 2, payloadType: `PivotalMarker.${kind}`, grounding: "declared_convention", exactness: "convention", confidence: "not_applicable",
@@ -1120,7 +1351,6 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       operands: ["nodeId", "kind", "detail", "provenanceNote"], forms: ["timeline_marker", "sentence", "panel"],
       derivation: { inputs: Array.from({ length: kind === "phase_change" ? 2 : 3 }, () => [kind === "phase_change" ? ref2("rules.phase.reading") : ref("rules.mobility.reading.legal_moves"), ref("run.record.position")]).flat() },
       limitations: ["A product convention over a complete permitted witness span, not full-branch absence, quality, significance, intent or difficulty."],
-      disposition: { kind: "experimental", reason: "Accepted F2 §2.3b internal fixed-tuple successor; complete current consumers and receiver/API/native adoption remain open." },
     })),
   ]),
   producer("rules.endgame", "rules", "packages/runtime/src/endgame.ts", "local", "sync", [
@@ -1158,17 +1388,42 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       disposition: { kind: "inspector_only", reason: "No consumer binding: the factory replays registered method conventions, but ordinary-player wording and module eligibility are not established." },
     }),
   ]),
-  producer("theory.shapes", "theory", "packages/runtime/src/shape-firing.ts; apps/server/src/shape-registry.ts", "local", "sync", [projection("theory.shapes", "theory.shapes.firing", "theory", { payloadType: "ShapeFiring", grounding: "authored_claim", exactness: "authored", operands: ["entryId", "firstNodeId", "lastNodeId", "openEnded"], answerContent: ["pattern", "theory", "plan"], forms: ["sentence", "panel", "timeline_marker"], limitations: ["A trigger match does not infer an uncited strategic consequence."] })]),
+  producer("theory.shapes", "theory", "packages/runtime/src/shape-firing.ts; apps/server/src/shape-registry.ts", "local", "sync", [
+    projection("theory.shapes", "theory.shapes.firing", "theory", { payloadType: "ShapeFiring", grounding: "authored_claim", exactness: "authored", operands: ["entryId", "firstNodeId", "lastNodeId", "openEnded"], answerContent: ["pattern", "theory", "plan"], forms: ["sentence", "panel", "timeline_marker"], limitations: ["A trigger match does not infer an uncited strategic consequence."] }),
+    projection("theory.shapes", "theory.shapes.firing", "theory", { version: 2, payloadType: "RegisteredShapeFiring", grounding: "authored_claim", exactness: "authored", confidence: "reported",
+      operands: ["entryId", "firstNodeId", "lastNodeId", "openEnded", "authority"], answerContent: ["pattern", "theory"], forms: ["sentence", "panel", "timeline_marker"],
+      limitations: ["A registered trigger match attributes its authored pattern only; it validates no plan, strategic significance or recommended move."],
+      disposition: { kind: "experimental", reason: "Preserved firing2 source contract; the current direct Inspector uses the owned visitor successor firing3." },
+      }),
+    projection("theory.shapes", "theory.shapes.firing", "theory", { version: 3, payloadType: "RegisteredShapeFiring", grounding: "authored_claim", exactness: "authored", confidence: "reported",
+      operands: ["entryId", "firstNodeId", "lastNodeId", "openEnded", "authority"], answerContent: ["pattern", "theory"], forms: ["sentence", "panel", "timeline_marker"],
+      dependsOn: AUTHORED_PREDICATE_REDUCTION_CONTRACT.elements,
+      limitations: ["Complete current source-owned trigger scan, including negative cells; validates neither strategic advice, plans nor significance."],
+    }),
+  ]),
   producer("authored.structural_condition", "authored", "packages/runtime/src/structural-evidence.ts; apps/server/src/pack-orchestrator.ts; apps/server/src/shape-registry.ts", "recorded", "sync", [
     projection("authored.structural_condition", "authored.structural_condition.input", "authored", { role: "predicate", payloadType: "AuthoredStructuralCondition", grounding: "authored_claim", exactness: "authored", operands: ["source", "documentId", "pointer", "expression"], answerContent: ["fact"], forms: ["machine_condition"], limitations: ["Source identifies pack or shape authority; authored input is not a computed truth value or learner guidance."] }),
+    projection("authored.structural_condition", "authored.structural_condition.input", "authored", { version: 2, role: "predicate", payloadType: "AuthoredStructuralSourceImage", grounding: "authored_claim", exactness: "authored", operands: ["origin", "pointer", "authoredNode", "expression", "effectiveExpression", "substitutions"], answerContent: ["fact"], forms: ["machine_condition"], limitations: ["Captures the actual complete draft or registered document and exact addressed AST; a draft source is neither semantic validation nor publication authority.", "Plan substitution retains both the pack use-site and actual registered shape signature source; the authored statement is not chess truth."] }),
   ]),
-  producer("derived.structural", "derived", "packages/runtime/src/structural-evidence.ts", "local", "sync", [
+  producer("derived.square", "derived", "packages/runtime/src/foundation-position-sources.ts", "local", "sync", [
+    ...foundationSquareSourceOutputs,
+  ]),
+  producer("derived.structural", "derived", "packages/runtime/src/structural-evidence.ts; packages/runtime/src/foundation-pawn-sources.ts; packages/runtime/src/foundation-position-sources.ts", "local", "sync", [
+    ...foundationPawnGroupOutputs,
     projection("derived.structural", "derived.structural.predicate_result", "derived", {
       role: "predicate", payloadType: "StructuralPredicateResult", grounding: "authored_claim", exactness: "authored",
       semantics: "Total computed result of exactly the sealed authored StructuralExpression on the retained FEN, with the exact path/node/result evaluation trace. The proposition remains the author's; evaluation never upgrades it to position-rule truth.",
       operands: ["fen", "condition", "matched", "trace"], forms: ["machine_condition"],
       derivation: { inputs: [ref("authored.structural_condition.input")] },
       limitations: ["plan_signature must be expanded before runtime evaluation, matching the structural evaluator contract."],
+    }),
+    projection("derived.structural", "derived.structural.predicate_result", "derived", {
+      version: 2, role: "reading", payloadType: "AuthoredPredicateResult", grounding: "declared_convention", exactness: "convention", confidence: "not_applicable",
+      semantics: "One authenticated authored condition and legal-position source evaluated by the owned current visitor, retaining policy, every visited leaf occurrence and full trace; no skipped leaf is fabricated.",
+      operands: ["observation"], answerContent: ["fact"], signs: ["state"], forms: ["machine_condition", "panel"],
+      abstention: { possible: true, reasons: ["source_dependency_unavailable", "input_abstained"] },
+      derivation: { reduction: { operation: AUTHORED_PREDICATE_REDUCTION_CONTRACT.operation, elements: AUTHORED_PREDICATE_REDUCTION_CONTRACT.elements } },
+      limitations: ["Reports evaluation of the encoded authored condition under explicitly selected rules; does not establish strategic truth or quality.", "Predicate and witness visitation policies are explicit; no caller boolean, trace, ancestry, leaf population or evaluator callback is accepted."],
     }),
   ]),
   producer("pack.authored", "authored", "apps/server/src/authored-feedback.ts", "recorded", "sync", [
@@ -1197,19 +1452,39 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
   producer("live.syzygy", "search", "apps/server/src/tablebase.ts; apps/server/src/evidence-queue.ts", "provider", "interactive", [
     projection("live.syzygy", "live.syzygy.probe_result", "search", { role: "source_record", payloadType: "TablebasePosition", grounding: "tablebase_exact", operands: ["category", "moves"], answerContent: ["fact", "evaluation", "candidate_moves", "move"], forms: ["machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] }, limitations: ["Raw position-and-move probe used by opponent selection; not an attached run event."] }),
     projection("live.syzygy", "live.syzygy.result", "search", { role: "event", payloadType: "EvidencePayload.tablebase", grounding: "tablebase_exact", operands: ["kind", "source", "values"], answerContent: ["fact", "evaluation"], forms: ["panel"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] }, limitations: ["Whole attached tablebase event retained for evidence-reference delivery; category/distance consumers use their narrower projections."] }),
-    projection("live.syzygy", "live.syzygy.category", "search", { role: "event", payloadType: "Tablebase category", grounding: "tablebase_exact", operands: ["category"], answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] } }),
+projection("live.syzygy", "live.syzygy.category", "search", { role: "event", payloadType: "Tablebase category", grounding: "tablebase_exact", operands: ["category"], answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] } }),
     projection("live.syzygy", "live.syzygy.distance", "search", { role: "event", payloadType: "Tablebase distances", grounding: "tablebase_exact", operands: ["category", "dtz"], answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], abstention: { possible: true, reasons: ["outside_tablebase_domain", "provider_unavailable"] }, limitations: ["Distance is a measurement; no optimality-boundary verdict is inferred."] }),
     projection("live.syzygy", "live.syzygy.position_result", "search", { role: "source_record", payloadType: "ProviderEvidenceDelivery<LiveSyzygyPosition, \"syzygy.position@1\">", grounding: "tablebase_exact", exactness: "exact", confidence: "exact", semantics: "One exact in-domain tablebase probe of the full canonical FEN, with legal-move identities validated and the same-exchange receipts sealed.", operands: PROVIDER_DELIVERY_OPERANDS, answerContent: ["fact", "evaluation", "candidate_moves", "move"], forms: ["list", "panel"], abstention: { possible: true, reasons: PROVIDER_SOURCE_REASONS }, limitations: ["Outside-domain is the separate local rules.endgame.tablebase_domain@1 fact; provider absence is never a draw."], disposition: PROVIDER_OPERATOR_ONLY }),
     projection("live.syzygy", "live.syzygy.position_result", "search", { version: 2, role: "source_record", payloadType: "ProviderEvidenceDelivery<LiveSyzygyPosition, \"syzygy.position@1\">", grounding: "tablebase_exact", exactness: "exact", confidence: "exact", semantics: "One exact in-domain tablebase probe of the full canonical FEN, with legal-move identities validated and the same-exchange receipts sealed.", operands: PROVIDER_DELIVERY_OPERANDS, answerContent: ["fact", "evaluation", "candidate_moves", "move"], forms: ["machine_condition"], abstention: { possible: true, reasons: PROVIDER_SOURCE_REASONS }, limitations: ["Outside-domain is the separate local rules.endgame.tablebase_domain@1 fact; provider absence is never a draw."] }),
   ]),
   producer("human.maia", "human", "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts", "provider", "interactive", [
+    projection("human.maia", "human.maia.inference_task", "human", { role: "source_record", payloadType: "ProviderEvidenceDelivery<MaiaInferenceTaskResult, \"maia.inference_task@1\">", grounding: "human_model", exactness: "measured", confidence: "reported", semantics: "One requested sampled Maia task: original terminal sample and independently reported bounded candidate rows, including missing mass and same-row exact cp/WDL. Same-task acquisition and payload receipts retain the actual model, options and generation.", operands: PROVIDER_DELIVERY_OPERANDS, answerContent: ["candidate_moves", "move", "evaluation"], forms: ["machine_condition"], abstention: { possible: true, reasons: PROVIDER_SOURCE_REASONS }, limitations: ["Internal whole-task observation, never a player rating, move grade, recommendation or inferred observed learner move. The terminal sample is not policy argmax. Public node views may expose only their separately declared narrow operands; no whole ancestry serialization."] }),
     projection("human.maia", "human.maia.uci_response", "human", { role: "source_record", payloadType: "readonly UCI line[]", grounding: "human_model", exactness: "measured", confidence: "reported", answerContent: ["candidate_moves", "move"], forms: ["machine_condition"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure"] }, limitations: ["Raw model response used by opponent selection; policy mass describes model choice, not move quality."] }),
     projection("human.maia", "human.maia.policy", "human", { role: "source_record", payloadType: "HumanSplitPage", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["nodeId", "engine", "targetElo", "candidates"], answerContent: ["candidate_moves"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure"] }, limitations: ["Policy mass describes model choice, not move quality."] }),
-    projection("human.maia", "human.maia.candidate_wdl", "human", { role: "source_record", payloadType: "MaiaCandidateWdlProjection", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["nodeId", "engine", "targetElo", "candidates"], answerContent: ["evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure", "empty_population"] }, limitations: ["Per-candidate model WDL is retained exactly for inspection; it is not a move grade, recommendation, or middlegame oracle."] }),
+    projection("human.maia", "human.maia.candidate_wdl", "human", { disposition: inspectorOnly("Historical narrow model record; Inspector2 uses derived.maia.node_candidate_wdl@1 with the actual node task and same-row signed measurements."), role: "source_record", payloadType: "MaiaCandidateWdlProjection", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["nodeId", "engine", "targetElo", "candidates"], answerContent: ["evaluation"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure", "empty_population"] }, limitations: ["Per-candidate model WDL is retained exactly for inspection; it is not a move grade, recommendation, or middlegame oracle."] }),
     projection("human.maia", "human.maia.event", "human", { role: "event", payloadType: "EvidencePayload.human_model_predicted", grounding: "human_model", exactness: "measured", confidence: "reported", operands: ["kind", "source", "values"], answerContent: ["candidate_moves", "move"], forms: ["panel"], abstention: { possible: true, reasons: ["provider_unavailable", "model_failure"] }, limitations: ["Attached model event records a model output, not move quality or advice."] }),
     projection("human.maia", "human.maia.policy_page", "human", { role: "source_record", payloadType: "ProviderEvidenceDelivery<MaiaPolicyPage, \"maia.policy_page@1\">", grounding: "human_model", exactness: "measured", confidence: "reported", semantics: "One bounded top-k Maia policy page for a history-conditioned or exact-FEN request under a declared model, band, temperature, top-p and width, sealed with the same-exchange receipts.", operands: PROVIDER_DELIVERY_OPERANDS, answerContent: ["candidate_moves"], forms: ["list", "panel"], abstention: { possible: true, reasons: PROVIDER_SOURCE_REASONS }, limitations: ["Model mass is likelihood under one declared request, never move quality, intent or a player diagnosis; unlisted mass is unobserved, not impossible."], disposition: PROVIDER_OPERATOR_ONLY }),
   ]),
   producer("derived.maia", "derived", "packages/runtime/src/maia-occurrence.ts; packages/runtime/src/evidence-factories.ts", "local", "sync", [
+    projection("derived.maia", "derived.maia.node_distribution", "derived", {
+      payloadType: "MaiaNodeDistribution", grounding: "declared_convention", exactness: "measured", confidence: "reported",
+      semantics: "Final sampled-task reported candidate window joined to the exact requested historical run node and ordered path. Terminal sample is not an observed learner move.",
+      operands: ["nodeId", "branchId", "eventHeadDigest", "engine", "requestedBand", "appliedBand", "coverage", "candidates"],
+      answerContent: ["candidate_moves"], forms: ["list", "panel"],
+      abstention: { possible: true, reasons: ["input_abstained", "identity_mismatch"] },
+      dependsOn: [ref("human.maia.inference_task"), ref("run.record.position")],
+      derivation: { inputs: [ref("human.maia.inference_task"), ref("run.record.position")] },
+      limitations: ["Bounded model-reported ranks/shares, not complete legal coverage, a recommendation or player rating. Missing mass is unknown. Whole task/position ancestry remains internal and is never a candidate-only answer operand."],
+    }),
+    projection("derived.maia", "derived.maia.node_candidate_wdl", "derived", {
+      payloadType: "MaiaNodeCandidateWdl", grounding: "declared_convention", exactness: "measured", confidence: "reported",
+      semantics: "Same-row reported candidate WDL from the final sampled task joined to the exact requested historical run node and ordered path; rows without WDL are omitted without inventing zero.",
+      operands: ["nodeId", "engine", "requestedBand", "appliedBand", "candidates"], answerContent: ["evaluation"], forms: ["list", "panel"],
+      abstention: { possible: true, reasons: ["input_abstained", "identity_mismatch", "empty_population"] },
+      dependsOn: [ref("human.maia.inference_task"), ref("run.record.position")],
+      derivation: { inputs: [ref("human.maia.inference_task"), ref("run.record.position")] },
+      limitations: ["Reported model WDL is neither a move grade nor predicted observed move. No resampling/merging to find WDL; whole task/position ancestry remains internal."],
+    }),
     projection("derived.maia", "derived.maia.run_move_occurrence", "derived", {
       payloadType: "MaiaRunMoveOccurrence", grounding: "declared_convention", exactness: "measured", confidence: "reported",
       semantics: "One history-conditioned policy page joined to an actually committed move at an exact historical run head. The start FEN and ordered before-move path come only from the sealed stored subject and exact recorded edge; every prior edge is legally replayed.",
@@ -1239,11 +1514,35 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("theory.opening.runtime", "theory.opening.current_endpoint", "theory", { payloadType: "CurrentOpeningEndpoint", grounding: "cited_theory", exactness: "exact", confidence: "exact", operands: ["positionKey", "observedPly", "eco", "name", "sourcePly", "catalogue"], answerContent: ["fact", "theory"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["artifact_missing", "artifact_invalid", "digest_mismatch"] }, limitations: ["Exact endpoint only; never sticky, fuzzy, or a move prior."] }),
     projection("theory.opening.runtime", "theory.opening.catalogue_membership", "theory", { payloadType: "OpeningCatalogueMembership", grounding: "cited_theory", exactness: "exact", confidence: "exact", operands: ["positionKey", "observedPly", "descendantEndpointCount", "catalogue"], answerContent: ["fact"], forms: ["list", "panel"], abstention: { possible: true, reasons: ["artifact_missing", "artifact_invalid", "digest_mismatch"] }, limitations: ["Path membership never selects or exposes a descendant opening identity."] }),
   ]),
-  producer("run.record", "record", "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; packages/runtime/src/recorded-semantic-path.ts; apps/web/src/lib/evidence-sentences.ts", "recorded", "sync", [
+  producer("run.record", "record", "apps/server/src/recorded-clock-operation.ts; packages/runtime/src/recorded-clock-values.ts; packages/runtime/src/recorded-clock-operands.ts; packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; packages/runtime/src/recorded-semantic-path.ts; apps/web/src/lib/evidence-sentences.ts", "recorded", "sync", [
+    projection("run.record", "run.record.clock_reading", "record", {
+      role: "source_record", payloadType: "RecordedClockReading", grounding: "recorded_run", exactness: "exact", confidence: "reported",
+      semantics: "One actual original imported incoming move's complete postmove clock frame, including original identity, exact numeric sample or truthful missing/invalid/unknown-retention state and declared control. Missing samples/control remain available frames; missing original context does not.",
+      operands: ["subject", "original", "retention", "sample", "control"], answerContent: ["fact"], forms: ["sentence", "list", "panel"],
+      abstention: { possible: true, reasons: ["missing_context", "source_failed"] },
+      limitations: ["Supplied PGN evidence, not verified external timing, a live clock, deliberation, quality or learner attribution. No invented remaining value for a missing sample."],
+    }),
+    projection("run.record", "run.record.clock_decision", "record", {
+      role: "source_record", payloadType: "RecordedClockDecision", grounding: "recorded_run", exactness: "convention", confidence: "reported",
+      semantics: "clock-spend-input@1: original imported actor/incoming event and BEFORE decision/phase, adjacent same-side previous or proven initial base, postmove current sample, declared increment and exact recorded clock-use arithmetic. Zero use is available; missing operands or unsafe/impossible allowance abstain.",
+      operands: ["subject", "actor", "decision", "phase", "current", "previous", "control", "availableMs", "clockUsedMs"], answerContent: ["fact"], forms: ["sentence", "list", "panel", "machine_condition"],
+      dependsOn: [ref2("rules.phase.reading")], abstention: { possible: true, reasons: [...RECORDED_CLOCK_USE_ABSTENTION_REASONS] },
+      limitations: ["Reported clock arithmetic includes the postmove increment allowance, not time already available before choosing. No cognition, quality, style, learner history or source-risk permission is inferred. Occurrence consumers still require the sealed actor/decision envelope."],
+    }),
+    projection("run.record", "run.record.castling_eligibility", "record", {
+      role: "source_record", payloadType: "FirstDecisionCastling", grounding: "recorded_run", exactness: "exact", confidence: "exact",
+      semantics: "castling-first-decision@1: retained rights at the first represented stored-color turn in an original read-authorized rooted prefix, including a pending endpoint. No represented stored-color turn is unavailable; both false rights is an available baseline.",
+      operands: ["runId", "branchId", "throughNodeId", "firstDecisionNodeId", "sourcePly", "learnerColor", "fen", "rights"], forms: ["machine_condition", "panel"],
+      abstention: { possible: true, reasons: ["first_decision_not_represented"] },
+      limitations: ["Retained Chess960-aware sides, not current castling legality, advice, actual actor choice or unseen history before a custom root. Inherited branches do not reset the first decision."],
+    }),
     projection("run.record", "run.record.fork", "record", { payloadType: "RecordedForkNarrative", grounding: "recorded_run", operands: ["context", "forkNodeId", "sharedPly"], forms: ["sentence", "list", "panel"] }),
     projection("run.record", "run.record.move", "record", { payloadType: "RecordedMoveNarrative", grounding: "recorded_run", operands: ["context", "offset", "moveSan"], answerContent: ["fact", "move"], forms: ["sentence", "list", "panel"], limitations: ["This is an already-played recorded move, never a recommendation."] }),
     projection("run.record", "run.record.checkpoint_hit", "record", { payloadType: "RecordedCheckpointNarrative", grounding: "recorded_run", operands: ["context", "checkpointId", "plyOffset"], forms: ["sentence", "timeline_marker", "panel"] }),
     projection("run.record", "run.record.objective_transition", "record", { payloadType: "RecordedObjectiveNarrative", grounding: "recorded_run", operands: ["context", "from", "to"], forms: ["sentence", "timeline_marker", "panel"] }),
+    projection("run.record", "run.record.objective_transition", "record", { version: 2, payloadType: "RecordedReviewObjectiveTransition", grounding: "recorded_run", operands: ["context", "from", "to"], forms: ["sentence", "timeline_marker", "panel"],
+      semantics: "Each original objective.state_changed occurrence on one granted recorded Review path, in full original event order with its actual root-relative node/ply. Receipt binds complete original boundary, event ordinal and original evidenceRefs; no new objective assessment or comparison.",
+      limitations: ["Reports an original recorded transition, not proof that its objective judgement or evidence reference was correct. Root occurrences remain at ply0; move rows never retarget them."] }),
     // rfc/evidence-presentation.md Checkpoint P (consequence operand repair, landed with the Review
     // Story slice): the declared operands are the discriminated terminal:true+outcome |
     // terminal:false+plies+objectiveState union the factory already emits ([[D2140]]).
@@ -1306,13 +1605,40 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       operands: ["rank"], answerContent: ["fact"], forms: ["list", "panel", "machine_condition"], abstention: { possible: true, reasons: ["input_abstained"] },
       semantics: "story-rank@1 presentation order over authentic recorded moment groups: outcome, mate transition, cp pivot, last level, phase change, endgame entry, shape, other, irreversibility; cp magnitude only for cp-typed endpoints, then ply/node id. Not chess significance, move quality or complete analysis; no child evaluation/pattern permission is conferred.",
       derivation: { reduction: { operation: STORY_RANK_REDUCTION_CONTRACT.operation, elements: STORY_RANK_REDUCTION_CONTRACT.elements } },
-      disposition: { kind: "experimental", reason: "Accepted F2 §2.3g internal rank reduction; complete current consumer/receiver/API/native adoption remains gated." } }),
+      }),
     projection("derived.story", "derived.story.title", "derived", { version: 2, payloadType: "StoryTitle", grounding: "declared_convention", exactness: "convention", confidence: "reported", operands: ["title", "rank", "outcome"], semantics: "Fixed title composition over rank, recorded outcome/result, learner side, and endgame label; imported result verbs are learner-relative.", answerContent: ["fact", "pattern", "evaluation"], forms: ["sentence", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, derivation: { inputs: [ref2("derived.story.rank"), ref("run.record.consequence"), ref("run.record.imported_result"), ref("rules.endgame.classification")] } }),
   ]),
   // rfc/review-evidence-compiler.md §§1–3: the typed Review projections over the one shared
   // live.stockfish.position_eval@1 delivery. Node-free sources join a recorded occurrence only by
   // exact canonical FEN; every derivation is measured/reported and never widens the delivery.
   producer("derived.review", "derived", "packages/runtime/src/review-evidence.ts", "local", "sync", [
+    projection("derived.review", "derived.review.analysis_typed_pv", "derived", {
+      payloadType: "RecordedAnalyzeLineValue", grounding: "declared_convention", exactness: "measured", confidence: "reported",
+      operands: ["nodeId", "entryNodeId", "operands"], answerContent: ["move", "principal_variation"], forms: ["list", "panel"],
+      semantics: "An explicit recorded Analyze view of the selected parent's original persisted typed PV, retaining the exact incoming edge, original eval attachment and re-derived captured delivery. Complete legal numbered SAN, literal engine/bound and recorded ply scope; no new search.",
+      abstention: { possible: true, reasons: ["input_abstained"] },
+      dependsOn: [ref("run.record.edge"), ref("recorded.inspector.eval_packet"), ref("live.stockfish.principal_variation")],
+      derivation: { inputs: [ref("run.record.edge"), ref("recorded.inspector.eval_packet"), ref("live.stockfish.principal_variation")] },
+      limitations: ["No recommendation, move grade or strategic purpose. Missing attribution withholds private moves; corrupt stronger capture never permits fallback."],
+    }),
+    projection("derived.review", "derived.review.analysis_recorded_pv", "derived", {
+      payloadType: "RecordedAnalyzeLineValue", grounding: "recorded_run", exactness: "measured", confidence: "reported",
+      operands: ["nodeId", "entryNodeId", "operands"], answerContent: ["move", "principal_variation"], forms: ["list", "panel"],
+      semantics: "An explicit recorded Analyze view of the selected parent's original saved bestline report and incoming edge. Complete legal numbered SAN and explicitly reported engine/bound; no independent execution authority or new search.",
+      abstention: { possible: true, reasons: ["input_abstained"] },
+      dependsOn: [ref("run.record.edge"), ref("recorded.inspector.pv_packet")],
+      derivation: { inputs: [ref("run.record.edge"), ref("recorded.inspector.pv_packet")] },
+      limitations: ["Historical report only, not independently verified analysis or a current recommendation. Selected empty or malformed reports never fall back."],
+    }),
+    projection("derived.review", "derived.review.analysis_recorded_first", "derived", {
+      payloadType: "RecordedAnalyzeLineValue", grounding: "recorded_run", exactness: "measured", confidence: "reported",
+      operands: ["nodeId", "entryNodeId", "operands"], answerContent: ["move"], forms: ["list", "panel"],
+      semantics: "An explicit recorded Analyze view of exactly one original saved eval search-first-move token at the selected incoming edge's parent, with its reported attribution and legal numbered SAN. It is not a principal variation.",
+      abstention: { possible: true, reasons: ["input_abstained"] },
+      dependsOn: [ref("run.record.edge"), ref("recorded.inspector.eval_packet")],
+      derivation: { inputs: [ref("run.record.edge"), ref("recorded.inspector.eval_packet")] },
+      limitations: ["One historical reported move only; no fabricated continuation, independently verified search, recommendation, grade or strategic purpose."],
+    }),
     projection("derived.review", "derived.review.eval_point", "derived", { payloadType: "ReviewEnginePoint", grounding: "declared_convention", exactness: "measured", confidence: "reported", operands: ["position", "evaluation"], semantics: "One sealed live.stockfish.position_eval@1 delivery joined to one exact run.record.position@1 occurrence by byte-identical canonical six-field FEN; node identity comes only from the recorded position.", answerContent: ["evaluation"], forms: ["list", "panel", "machine_condition"], abstention: { possible: true, reasons: ["position_mismatch", "input_abstained"] }, dependsOn: [ref("live.stockfish.position_eval"), ref("run.record.position")], derivation: { inputs: [ref("live.stockfish.position_eval"), ref("run.record.position")] }, limitations: ["No best move, principal variation, clamp or mate sentinel; a transposeKey match is not a join."] }),
     projection("derived.review", "derived.review.eval_delta", "derived", { version: 2, payloadType: "ReviewEvalDelta", grounding: "declared_convention", exactness: "measured", confidence: "reported", operands: ["before", "after", "deltaCp"], semantics: "White-perspective signed difference of two cp-typed review points taken with the same actual engine id/version, generation, normalized command and bound.", answerContent: ["evaluation"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["missing_endpoint", "mate_operand", "engine_mismatch", "bound_mismatch", "input_abstained"] }, dependsOn: [ref("derived.review.eval_point")], derivation: { inputs: [ref("derived.review.eval_point"), ref("derived.review.eval_point")] }, limitations: ["One recorded measurement changed; not a grade, blunder label, pivotality claim or recommendation."] }),
     projection("derived.review", "derived.review.mate_transition", "derived", { version: 2, payloadType: "ReviewMateTransition", grounding: "declared_convention", exactness: "measured", confidence: "reported", operands: ["before", "after", "changes"], semantics: "Typed mate-state change between two comparable review points: appeared, disappeared, side_changed or distance_changed, sorted in that order. Never a cp conversion.", answerContent: ["evaluation"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["no_mate_transition", "no_mate_operand", "engine_mismatch", "bound_mismatch", "input_abstained"] }, dependsOn: [ref("derived.review.eval_point")], derivation: { inputs: [ref("derived.review.eval_point"), ref("derived.review.eval_point")] }, limitations: ["Bounded search, not a rules proof; an exact forced_mate_after_move@2 proof links separately and never upgrades it."] }),
@@ -1320,10 +1646,27 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
     projection("derived.review", "derived.review.wdl_point", "derived", { payloadType: "ReviewWdlPoint", grounding: "declared_convention", exactness: "measured", confidence: "reported", operands: ["position", "normalized"], semantics: "One White-normalized WDL joined to one exact run.record.position@1 occurrence by byte-identical canonical FEN; both inputs retained.", answerContent: ["evaluation"], forms: ["list", "panel", "machine_condition"], abstention: { possible: true, reasons: ["input_abstained", "position_mismatch"] }, dependsOn: [ref("derived.review.wdl_white"), ref("run.record.position")], derivation: { inputs: [ref("derived.review.wdl_white"), ref("run.record.position")] }, limitations: ["No WDL delta, threshold or grade."] }),
   ]),
   producer("derived.opening", "derived", "apps/server/src/opening-catalogue.ts", "local", "sync", [
-    projection("derived.opening", "derived.opening.deepest_reached", "derived", { version: 2, payloadType: "RecordedDeepestOpeningReached", semantics: "opening-deepest-reached@1 over every authentic captured installed-catalogue lookup in the complete recorded prefix: greatest observed ply, lowest node id on ties, retaining all matched visits and actual negative lookup authority. Empty results mint no fact.", grounding: "declared_convention", exactness: "exact", confidence: "exact", operands: ["deepest", "visits", "catalogue"], answerContent: ["fact", "theory"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["artifact_missing", "artifact_invalid", "digest_mismatch"] }, derivation: { reduction: { operation: OPENING_HISTORY_REDUCTION_CONTRACT.operation, elements: OPENING_HISTORY_REDUCTION_CONTRACT.elements } }, limitations: ["Source-bounded retrospective matching, never current-position identity, inferred move order, book quality or a theory recommendation. Installation absence is resolved before factory invocation."], disposition: { kind: "experimental", reason: "Accepted F2 §2.3k internal complete-history reduction; coordinated current Inspector/Review adoption remains open." } }),
-    projection("derived.opening", "derived.opening.deepest_reached", "derived", { payloadType: "DeepestOpeningReached", semantics: "Greatest recorded matched ply with lowest node id as the deterministic tie break; all matched visits are retained.", grounding: "declared_convention", exactness: "exact", confidence: "exact", operands: ["deepest", "visits", "catalogue"], answerContent: ["fact", "theory"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, dependsOn: [ref("theory.opening.current_endpoint"), ref("run.record.position")], derivation: { inputs: [ref("theory.opening.current_endpoint"), ref("run.record.position")] }, limitations: ["Retrospective deepest match never labels the current position and never infers move order from FEN."] }),
+    projection("derived.opening", "derived.opening.deepest_reached", "derived", {
+      version: 2, payloadType: "RecordedDeepestOpeningReached",
+      semantics: "opening-deepest-reached@1 over every authentic captured installed-catalogue lookup in the complete recorded prefix: greatest observed ply, lowest node id on ties, retaining all matched visits and actual negative lookup authority. Empty results mint no fact.",
+      grounding: "declared_convention", exactness: "exact", confidence: "exact", operands: ["deepest", "visits", "catalogue"], answerContent: ["fact", "theory"], forms: ["sentence", "list", "panel"],
+      abstention: { possible: true, reasons: ["artifact_missing", "artifact_invalid", "digest_mismatch"] },
+      derivation: { reduction: { operation: OPENING_HISTORY_REDUCTION_CONTRACT.operation, elements: OPENING_HISTORY_REDUCTION_CONTRACT.elements } },
+      limitations: ["Source-bounded retrospective matching, never current-position identity, inferred move order, book quality or a theory recommendation. Installation absence is resolved before factory invocation."],
+    }),
+projection("derived.opening", "derived.opening.deepest_reached", "derived", { payloadType: "DeepestOpeningReached", disposition: retired("Accepted F2/Full Inspector2: current recorded consumers use the complete recorded @2 opening history; predecessor declaration retained historically only."), semantics: "Greatest recorded matched ply with lowest node id as the deterministic tie break; all matched visits are retained.", grounding: "declared_convention", exactness: "exact", confidence: "exact", operands: ["deepest", "visits", "catalogue"], answerContent: ["fact", "theory"], forms: ["sentence", "list", "panel"], abstention: { possible: true, reasons: ["input_abstained"] }, dependsOn: [ref("theory.opening.current_endpoint"), ref("run.record.position")], derivation: { inputs: [ref("theory.opening.current_endpoint"), ref("run.record.position")] }, limitations: ["Retrospective deepest match never labels the current position and never infers move order from FEN."] }),
   ]),
   producer("derived.grade", "derived", "packages/runtime/src/grade.ts", "local", "sync", [
+    projection("derived.grade", "derived.grade.move_quality", "derived", {
+      version: 2, payloadType: "MoveQualityGradeV2", grounding: "declared_convention", exactness: "convention", confidence: "reported",
+      operands: ["klass", "arm", "before", "after", "dropWinPercent", "thresholdCrossed", "convention", "engineId", "lane", "bound", "instrument"],
+      semantics: "Mover-relative loss class under grade-convention@2's one 2.5/10/15 ladder, computed from the actual workflow-owned recorded incoming edge and fixed original engine endpoints. Typed scores, unrounded loss, threshold, original instrument and requested budget are retained; workflow context stays private.",
+      abstention: { possible: true, reasons: ["source_pending", "missing_eval", "input_abstained", "unequal_instrument", "mate_score_inconsistent"] },
+      answerContent: ["evaluation"], forms: ["sentence", "panel"],
+      derivation: { anyOf: [[ref("derived.review.eval_point"), ref("derived.review.eval_point"), ref("run.record.edge")],
+        [ref("recorded.engine.eval"), ref("recorded.engine.eval"), ref("run.record.edge")]] },
+      limitations: ["Paired recorded readings from one engine and requested search budget; not a reason, lesson, player judgement, best move or principal variation."],
+    }),
     projection("derived.grade", "derived.grade.move_quality", "derived", {
       payloadType: "MoveQualityGrade",
       semantics: "Learner-POV loss class under grade-convention@1, retaining both typed scores, the unrounded win-percentage drop, threshold, context, lane, engine and search limit; no best move or principal variation.",
@@ -1333,11 +1676,12 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       answerContent: ["evaluation"], forms: ["sentence", "panel"],
       derivation: { anyOf: [[ref("recorded.engine.eval"), ref("recorded.engine.eval")], [ref("live.stockfish.eval"), ref("live.stockfish.eval")]] },
       limitations: ["Single-line evals only: the drop compares one engine's paired readings at one search limit.", "Not a lesson: the grade can be right about the position and wrong about the reason."],
+      disposition: retired("Accepted move-quality-grades §§2a/4a: replaced by source-owned derived.grade.move_quality@2 and the unified convention. Historical meaning is retained; no compatibility-only executable grade path."),
     }),
   ]),
   producer("derived.exchange", "derived", "packages/runtime/src/exchange.ts", "local", "sync", withRecordedPathSuccessors(derivedExchangeOutputs)),
   producer("derived.tactic", "derived", "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts", "local", "sync", withRecordedPathSuccessors(derivedTacticOutputs)),
-  producer("derived.pawn", "derived", "packages/runtime/src/pawn-dynamics.ts", "local", "sync", withRecordedPathSuccessors(derivedPawnOutputs)),
+  producer("derived.pawn", "derived", "packages/runtime/src/pawn-dynamics.ts; packages/runtime/src/evidence-factories.ts", "local", "sync", [...withRecordedPathSuccessors(derivedPawnOutputs), ...foundationPawnConsequenceOutputs]),
   producer("derived.material", "derived", "packages/runtime/src/material-state.ts", "local", "sync", derivedMaterialOutputs),
   producer("recorded.inspector", "record", "packages/runtime/src/recorded-inspector.ts", "recorded", "sync", [
     ...([
@@ -1346,7 +1690,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       role: "source_record", payloadType: "RecordedInspectorPacket", semantics: "One complete stored attachment at its exact resolved run node and event head; recorded report only, not independently established provider truth.",
       operands: ["subject", "itemDigest", "event", "authority"], grounding: "recorded_run", exactness: "measured", confidence: "reported",
       answerContent: suffix === "pv_packet" ? ["move", "principal_variation"] : suffix === "tablebase_packet" ? ["fact", "evaluation"] : [answer],
-      forms: ["panel", "machine_condition"], disposition: { kind: "experimental", reason: "Accepted internal historical source; complete current-consumer migration remains pending." },
+      forms: ["panel", "machine_condition"],
       limitations: ["The packet source label does not establish a modern exchange, engine bound, model options, calibration or exact tablebase truth. Raw reports remain server-internal."],
     })),
     projection("recorded.inspector", "recorded.inspector.maia_selection", "record", {
@@ -1357,25 +1701,38 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       limitations: ["Stored requestedTargetElo is neither applied band nor player rating or calibrated playing strength. No candidate is claimed played merely because it was recorded."],
     }),
   ]),
-  producer("derived.inspector", "derived", "packages/runtime/src/recorded-inspector.ts", "local", "sync", [
+  producer("derived.inspector", "derived", "packages/runtime/src/recorded-inspector.ts; packages/runtime/src/inspector-detail.ts", "local", "sync", [
     ...(["category", "distance"] as const).map(kind => projection("derived.inspector", `derived.inspector.tablebase_${kind}`, "derived", {
       payloadType: kind === "category" ? "RecordedInspectorTablebaseCategory" : "RecordedInspectorTablebaseDistance", semantics: "Fixed typed fields of the complete historical tablebase report; absent, uninterpretable, null and signed values remain distinct.",
       operands: kind === "category" ? ["record", "category"] : ["record", "category", "dtz", "preciseDtz", "dtm"], grounding: "recorded_run", exactness: "measured", confidence: "reported",
       answerContent: ["fact", "evaluation"], forms: ["panel", "machine_condition"], dependsOn: [ref("recorded.inspector.tablebase_packet")], derivation: { inputs: [ref("recorded.inspector.tablebase_packet")] },
-      disposition: { kind: "experimental", reason: "Internal fixed historical field view; no current learner bindings or raw JSON delivery." },
       limitations: ["No absolute distance, substituted category, assumed optimality, modern provider identity or tablebase exactness is inferred."],
     })),
+    ...(Object.keys(INSPECTOR_DETAIL_SOURCES) as InspectorDetailKind[]).map(kind => {
+      const source = [...tacticalOutputs, ...squareOutputs, ...mobilityOutputs, ...kingOutputs, ...foundationSourceOutputs, ...foundationPawnGroupOutputs, ...foundationFileActivityOutputs, ...foundationPawnConsequenceOutputs, ...foundationSquareSourceOutputs].find(row => refKey(row) === INSPECTOR_DETAIL_SOURCES[kind]);
+      if (source === undefined) throw new TypeError(`Missing exact Inspector detail source ${kind}`);
+      return projection("derived.inspector", `derived.inspector.detail.${kind}`, "derived", {
+        payloadType: `InspectorDetailPayload<${kind}>`, semantics: "Bounded complete source-order members of one admitted source. Original context, member identities, availability and source ordinals are retained without a quality or significance judgement.",
+        operands: ["sourceProjection", "context", "scope", "range", "fullSourceTotal", "members"],
+        grounding: source.grounding, exactness: source.exactness, confidence: source.confidence,
+        answerContent: source.answerContent, forms: isFoundationDetailKind(kind) ? ["list", "panel"] : ["list", "panel", "lit_squares"],
+        abstention: source.abstention.possible ? { possible: true, reasons: ["input_abstained", ...source.abstention.reasons] } : source.abstention,
+        dependsOn: [{ id: source.id, version: source.version }], derivation: { inputs: [{ id: source.id, version: source.version }] },
+        limitations: [...source.limitations, "Source validation and current Inspector access remain required; this view grants neither. Internal until the complete current Inspector source/page/consumer cutover."],
+      });
+    }),
   ]),
   producer("derived.king", "derived", "packages/runtime/src/semantic-evidence.ts", "local", "sync", derivedKingOutputs),
-  producer("derived.activity", "derived", "packages/runtime/src/semantic-evidence.ts", "local", "sync", derivedActivityOutputs),
-  producer("derived.opponent", "derived", "apps/server/src/candidate-evidence.ts", "local", "sync", derivedOpponentOutputs),
+  producer("derived.activity", "derived", "packages/runtime/src/semantic-evidence.ts; packages/runtime/src/foundation-pawn-sources.ts", "local", "sync", [...derivedActivityOutputs, ...foundationFileActivityOutputs]),
+  // D3853: retain the historical meaning here, not a nonexistent implementation or callable.
+  producer("derived.opponent", "derived", "packages/runtime/src/evidence-catalog.ts", "local", "sync", derivedOpponentOutputs),
   producer("sourcing.ledger", "record", "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts", "recorded", "sync", [
     projection("sourcing.ledger", "sourcing.ledger.engine_eval", "record", { role: "source_record", payloadType: "engine_eval EvidenceRecord", grounding: "bounded_search", exactness: "measured", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a runtime engine reading."] }),
     projection("sourcing.ledger", "sourcing.ledger.tablebase_result", "record", { role: "source_record", payloadType: "tablebase_result EvidenceRecord", grounding: "tablebase_exact", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["fact", "evaluation"], forms: ["list", "panel"], limitations: ["Offline sourcing record including anchor and provenance; not a live tablebase event."] }),
     projection("sourcing.ledger", "sourcing.ledger.explorer_position_census", "record", { role: "source_record", payloadType: "explorer_position_census EvidenceRecord", grounding: "human_corpus", exactness: "measured", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values"], answerContent: ["fact"], forms: ["list", "panel"], limitations: ["Offline position-census record; not an on-request Explorer page."] }),
     projection("sourcing.ledger", "sourcing.ledger.citable_text", "record", { role: "source_record", payloadType: "citable_text EvidenceRecord", grounding: "cited_theory", exactness: "authored", confidence: "reported", operands: ["kind", "sourceId", "retrievedAt", "values", "supports"], answerContent: ["fact", "theory", "principle", "plan"], forms: ["list", "panel"], limitations: ["Grounds authored prose only; it is neither a measurement nor a learner-facing runtime reading."] }),
   ]),
-  producer("derived.semantic_avoidance", "derived", "packages/runtime/src/semantic-evidence.ts", "local", "sync", avoidanceOutputs),
+  producer("derived.semantic_avoidance", "derived", "packages/runtime/src/semantic-evidence.ts", "local", "sync", [...avoidanceOutputs, ...subjectOutcomeOutputs]),
   // rfc/evidence-presentation.md Checkpoint P ([[D2158]]/[[D3102]]): the one source-bound citation.
   producer("derived.citation", "derived", "packages/runtime/src/evidence-factories.ts:createDerivedCitationAttributionV1Evidence", "local", "sync", [
     projection("derived.citation", "derived.citation.attribution", "derived", {
@@ -1424,7 +1781,7 @@ export const MODULE_SUCCESSOR_REBASE: readonly { readonly retired: VersionedEvid
  * review-timed module that accepts a v1 predecessor also accepts its v2 successor, immediately
  * after it; a post-commit module does not, because it reads one committed edge, not a window.
  */
-export const RECORDED_PATH_SUCCESSOR_REFS: readonly VersionedEvidenceId[] = Object.freeze(SEMANTIC_EVENT_PROJECTION_REFS.filter((value) => value.version === 2));
+export const RECORDED_PATH_SUCCESSOR_REFS: readonly VersionedEvidenceId[] = Object.freeze(RECORDED_PATH_EVENT_PROJECTION_IDS.map(ref2));
 
 const rebased = (values: readonly (string | VersionedEvidenceId)[]): readonly VersionedEvidenceId[] => Object.freeze(values.flatMap((value) => {
   const exact = typeof value === "string" ? ref(value) : value;
@@ -1436,14 +1793,33 @@ const withRecordedPathSuccessorRefs = (values: readonly VersionedEvidenceId[]): 
   return successor === undefined ? [value] : [value, successor];
 }));
 
-const MODULE_POSTCOMMIT_EVENTS: readonly string[] = Object.freeze([
-  ...STRUCTURAL_EVENT_PROJECTION_IDS.filter((id) => !["rules.structural.event.piece_count", "rules.structural.event.direct_attack_count", "rules.structural.event.line_blockers"].includes(id)),
-  ...TRANSITION_GEOMETRY_EVENT_FAMILIES.map((family) => `rules.transition.event.${family}`),
+/** Current recorded consumers replace narrative/recorded duplicates, never source occurrences. */
+export function currentRecordedModuleRefs(values: readonly VersionedEvidenceId[]): readonly VersionedEvidenceId[] {
+  const sequences = new Set(RECORDED_PATH_SUCCESSOR_REFS.map(value => value.id));
+  const successors: Readonly<Record<string, VersionedEvidenceId>> = {
+    "derived.grade.move_quality@1": ref2("derived.grade.move_quality"),
+    "derived.tactic.fork_survives_reply@1": ref("derived.tactic.nonterminal_fork_survival"),
+    "derived.pivotal.human_divergence@1": ref2("derived.pivotal.human_divergence"),
+    "derived.pivotal.phase_change@1": ref2("derived.pivotal.phase_change"),
+    "derived.pivotal.option_collapse@1": ref2("derived.pivotal.option_collapse"),
+    "derived.material.event.role_asymmetry@1": ref2("derived.material.event.role_asymmetry"),
+    "derived.opening.deepest_reached@1": ref2("derived.opening.deepest_reached"),
+  };
+  const seen = new Set<string>();
+  return Object.freeze(values.map(value => sequences.has(value.id)
+    ? Object.freeze({ id: value.id, version: value.id === "derived.exchange.trade_completed" ? 2 : 3 })
+    : successors[refKey(value)] ?? value).filter(value => {
+      const key = refKey(value); if (seen.has(key)) return false; seen.add(key); return true;
+    }));
+}
+
+const MODULE_POSTCOMMIT_EVENTS: readonly (string | VersionedEvidenceId)[] = Object.freeze([
+  ...["king_zone", "passed_pawn"].map(family => `rules.structural.event.${family}`),
+  ...SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS,
+  ...TRANSITION_GEOMETRY_EVENT_FAMILIES.filter(family => family !== "slider_ray").map((family) => `rules.transition.event.${family}`),
   ...TRANSITION_RULE_EVENT_FAMILIES.filter((family) => family !== "clock_reset").map((family) => `rules.transition.event.${family}`),
   "rules.castling.event.rights_lost", "rules.tactic.event.double_attack", "rules.tactic.event.check", "rules.tactic.event.loose_piece",
-  "derived.exchange.capture_class", "derived.exchange.trade_completed", "rules.structural.event.pawn_islands",
-  ...AVOIDANCE_EVENT_PROJECTION_IDS.filter((id) => !["derived.semantic_avoidance.piece_count", "derived.semantic_avoidance.direct_attack_count", "derived.semantic_avoidance.line_blockers"].includes(id)),
-  ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
+  "derived.exchange.capture_class", "derived.exchange.trade_completed",
   "rules.pawn.event.dynamics", "derived.pawn.event.transitions", "rules.king.event.zone_state", "derived.king.captured_zone_defender",
   "derived.activity.event.open_file_occupancy", "derived.grade.move_quality", "derived.tactic.fork_survives_reply",
   "derived.pawn.sequence.harassment_pressure",
@@ -1470,66 +1846,49 @@ const MODULE_ACCEPTANCE_IMAGE = Object.freeze({
     "rules.square.reading.control", "rules.pawn.reading.contacts", "rules.mobility.reading.legal_moves",
   ]),
   blunder_prevention: rebased(["rules.tactic.consequence.threat", "rules.tactic.consequence.mate_in_one", "rules.tactic.reading.loose_piece"]),
-  threat_radar: rebased([
+  threat_radar: [...rebased([
     "rules.tactic.consequence.threat", "rules.tactic.consequence.mate_in_one", "rules.tactic.reading.loose_piece",
     "rules.tactic.reading.back_rank", "rules.tactic.reading.trapped_piece", "rules.tactic.reading.ray_classification",
-    "derived.tactic.defender_exposure",
-  ]),
-  postcommit_nudge: rebased(MODULE_POSTCOMMIT_EVENTS),
+  ]), ref2("derived.tactic.defender_exposure")],
+  postcommit_nudge: currentRecordedModuleRefs(rebased(MODULE_POSTCOMMIT_EVENTS)),
   structure_nudge: rebased([
-    "theory.shapes.firing", "rules.structural.reading.named_structure", "rules.structural.reading.space",
+    { id: "theory.shapes.firing", version: 3 }, "rules.structural.reading.named_structure", "rules.structural.reading.space",
     "rules.structural.reading.pawn_connectivity", "rules.phase.reading", "rules.endgame.reading",
   ]),
-  theory_breadcrumb: rebased(["pack.authored.claim", "theory.shapes.firing", "theory.opening.current_endpoint", "derived.explorer.population_summary"]),
+  theory_breadcrumb: rebased(["pack.authored.claim", { id: "theory.shapes.firing", version: 3 }, "theory.opening.current_endpoint", "derived.explorer.population_summary"]),
   // rfc/hint-distance.md §3/§9: the literal family x rung disclosure registry, never a horizon,
   // raw PV, Syzygy, authored claim or endgame reading ([[D1569]]).
   guided_hint: HINT_DISCLOSURE_PROJECTION_IDS,
   compare_coach: [ref2("derived.compare.structure_delta"), ref2("derived.compare.eval_delta"), ref2("derived.compare.engine_trajectory"), ref2("derived.compare.piece_route"),
     ref("run.record.fork"), ref("run.record.consequence"), ref("run.record.objective_transition"), ref("run.record.checkpoint_hit")],
-  review_map: withRecordedPathSuccessorRefs(rebased([
+  review_map: currentRecordedModuleRefs(rebased([
     ...MODULE_POSTCOMMIT_EVENTS, "rules.pivotal.marker", "rules.phase.reading", "rules.endgame.reading",
-    "recorded.engine.eval", "recorded.tablebase.result", "live.stockfish.eval", "live.stockfish.wdl",
-    "run.record.objective_transition", "run.record.consequence", "run.record.imported_result",
+    "recorded.engine.eval", "recorded.tablebase.result",
+    ref2("run.record.objective_transition"), "run.record.consequence", "run.record.imported_result",
     "derived.pawn.sequence.contact_timing", "derived.tactic.sequence.defender_consequence",
     "derived.material.event.role_asymmetry", "derived.opening.deepest_reached",
     // rfc/review-evidence-compiler.md: the typed Review packet projections the panel admits.
     "derived.review.eval_point", ref2("derived.review.eval_delta"), ref2("derived.review.mate_transition"), "derived.review.wdl_point",
   ])),
-  full_inspector: withRecordedPathSuccessorRefs(rebased([
-    "rules.tactic.reading.loose_piece", "rules.tactic.reading.ray_classification", "rules.tactic.reading.rook_on_seventh",
-    "rules.tactic.reading.trapped_piece", "rules.tactic.reading.back_rank", "rules.tactic.reading.discovered_latency",
-    "rules.tactic.consequence.threat", "rules.tactic.consequence.mate_in_one", "rules.tactic.consequence.reply_breadth",
-    "rules.structural.reading.space", "rules.structural.reading.pawn_connectivity", "rules.phase.development",
-    "rules.castling.reading.rights", "rules.castling.reading.legality", "derived.tactic.discovered_executed",
-    "derived.tactic.promotion_pressure", "derived.tactic.fork_survives_reply", "rules.square.reading.control",
-    "rules.mobility.reading.piece_destinations", "rules.mobility.reading.legal_moves", "rules.square.event.control",
-    "rules.mobility.event.piece_destinations", "rules.pawn.reading.contacts", "rules.pawn.reading.candidate_majority",
-    "derived.pawn.sequence.contact_timing", "derived.pawn.sequence.harassment_pressure",
-    "derived.tactic.sequence.defender_consequence", "derived.material.event.role_asymmetry",
-    "derived.material.reading.role_signature", "rules.king.reading.zone_state", "live.stockfish.eval", "live.stockfish.wdl",
-    "live.stockfish.pv", "human.maia.policy", "human.maia.candidate_wdl", "human.explorer.population", "live.syzygy.result",
-    "live.syzygy.category", "live.syzygy.distance", "recorded.engine.eval", "recorded.tablebase.result", "theory.shapes.firing",
-    "rules.phase.reading", "rules.pivotal.marker", "derived.compare.structure_delta", "derived.compare.eval_delta",
-    ref2("derived.story.rank"), "theory.opening.catalogue_membership", "derived.opening.deepest_reached",
-    ...WAVE_C_MODULE_PROJECTION_REFS,
-    // rfc/review-evidence-compiler.md §3.2: the exact-occurrence proof successor (candidate_moves).
-    ref2("rules.tactic.consequence.forced_mate_after_move"),
-  ])),
+  // The sole accepted Full2 image:65 source topics and their six explicit bounded views.
+  full_inspector: Object.freeze([
+    ...INSPECTOR_SOURCE_TOPICS.map(row => { const [id, version] = row.projection.split("@"); return Object.freeze({ id: id!, version: Number(version) }); }),
+    ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => Object.freeze({ id: `derived.inspector.detail.${kind}`, version: 1 })),
+  ]),
 } as const satisfies Readonly<Partial<Record<ModuleId, readonly VersionedEvidenceId[]>>>);
 
 export type EvidenceModuleId = keyof typeof MODULE_ACCEPTANCE_IMAGE;
 /** One current catalogue image; every consumer/acceptance/operation view derives from these rows. */
 export const MODULE_CURRENT_IMAGE = Object.freeze((Object.entries(MODULE_ACCEPTANCE_IMAGE) as [EvidenceModuleId, readonly VersionedEvidenceId[]][]).map(([moduleId, accepts]) => Object.freeze({
-  moduleId, consumer: Object.freeze({ id: `module.${moduleId}` as const, version: moduleId === "compare_coach" ? 2 : 1 }), accepts,
-  implementation: "compileModulePacket" as const, disclosureCompiler: moduleId === "guided_hint" ? Object.freeze({ id: "compileHintDisclosure", version: 1 }) : null,
+  moduleId, consumer: Object.freeze({ id: `module.${moduleId}` as const, version: ["compare_coach", "postcommit_nudge", "review_map", "guided_hint", "threat_radar", "full_inspector", "structure_nudge", "theory_breadcrumb"].includes(moduleId) ? 2 : 1 }), accepts,
+  implementation: moduleId === "full_inspector" ? "compileInspectorSourcePage" as const : "compileModulePacket" as const,
+  disclosureCompiler: moduleId === "guided_hint" ? Object.freeze({ id: "compileHintDisclosure", version: 2 }) : null,
 })));
 export const MODULE_CONSUMER_ACCEPTS = Object.freeze(Object.fromEntries(MODULE_CURRENT_IMAGE.map(row => [row.moduleId, row.accepts]))) as typeof MODULE_ACCEPTANCE_IMAGE;
 export const MODULE_CONSUMER_IDS = Object.freeze(MODULE_CURRENT_IMAGE.map(row => row.consumer.id));
-export const EVIDENCE_CONSUMER_IDS = Object.freeze([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection"] as const);
+export const EVIDENCE_CONSUMER_IDS = Object.freeze([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection", "research.semantic_validation"] as const);
 export const EVIDENCE_MODULE_IDS: readonly EvidenceModuleId[] = Object.freeze(MODULE_IDS.filter((id): id is EvidenceModuleId => id in MODULE_CONSUMER_ACCEPTS));
 if (EVIDENCE_MODULE_IDS.map((id) => `module.${id}`).join("|") !== MODULE_CONSUMER_IDS.join("|")) throw new TypeError("MODULE_CONSUMER_IDS is not order-equal to the module acceptance image");
-/** The one shared module operation every `module.*` consumer names (`module-packets.ts`). */
-export const MODULE_CONSUMER_IMPLEMENTATION = "compileModulePacket" as const;
 
 function moduleConsumerSpec(id: EvidenceModuleId): ConsumerSpec {
   const current = MODULE_CURRENT_IMAGE.find(row => row.moduleId === id)!;
@@ -1549,9 +1908,9 @@ function moduleConsumerSpec(id: EvidenceModuleId): ConsumerSpec {
     // Every Hint family/rung requires the same bounded search. Source absence is
     // operation-unavailable; a successful search with no admitted occurrence is
     // separately honest-empty (hint-distance §7/§10), never a local fallback.
-    ...(id === "guided_hint" ? { sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } as const } : {}),
+    ...(id === "guided_hint" || id === "full_inspector" ? { sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } as const } : {}),
     // Missing points omit only their own item; invalid original authority still throws.
-    ...(id === "compare_coach" ? { sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } as const } : {}),
+    ...(["compare_coach", "postcommit_nudge", "review_map"].includes(id) ? { sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } as const } : {}),
   };
 }
 
@@ -1589,28 +1948,39 @@ const PIVOTAL_MARKER_IDS = Object.freeze(["derived.pivotal.irreversibility", "de
 const POSITION_GUIDANCE_IDS = Object.freeze([ref2("rules.phase.reading"), "pack.authored.phase", ref2("rules.structural.reading.named_structure"), ...PIVOTAL_MARKER_IDS, "rules.endgame.classification", "pack.authored.claim"]);
 const allTransitionReadingIds = TRANSITION_READING_PROJECTION_IDS;
 const CONSUMER_SPECS: readonly ConsumerSpec[] = [
+  { id: "profile.subject_observations", implementation: "consumeProfileSubjectFacts", projections: PROFILE_SUBJECT_PROJECTIONS, forms: ["machine_condition"], timing: ["analysis"], roles: ["operator"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: null }, budget: { maxFacts: null, maxForms: null } },
+  { id: "profile.choice_facts", implementation: "consumeProfileChoiceFacts", projections: ["rules.mobility.reading.legal_moves", "rules.mobility.reading.candidate_role", "rules.mobility.reading.pawn_extended_center_destination", "rules.mobility.reading.early_queen_move"], forms: ["machine_condition"], timing: ["analysis"], roles: ["operator"], answerContent: ["fact"], latency: { mode: "background", maxMs: 120000 }, budget: { maxFacts: null, maxForms: 1 } },
+  { id: "profile.game_facts", implementation: "consumeProfileGameFacts", projections: ["rules.structural.reading.fianchetto_setup", "rules.structural.reading.fianchetto_knight_screen", "run.record.castling_eligibility"], forms: ["machine_condition"], timing: ["analysis"], roles: ["operator"], answerContent: ["fact"], latency: { mode: "background", maxMs: 120000 }, budget: { maxFacts: 3, maxForms: 1 } },
+  { id: "review.recorded_clock", implementation: "consumeRecordedClockEvidence", projections: ["run.record.clock_reading", "run.record.clock_decision"],
+    timing: ["review"], forms: ["panel", "sentence"], answerContent: ["fact"], budget: { maxFacts: 2, maxForms: 1 },
+    providerOff: "honest_empty", sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } },
+  { id: "opponent.maia_task", implementation: "consumeOpponentMaiaTaskEvidence", projections: ["human.maia.inference_task"], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["candidate_moves", "move", "evaluation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable", sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "runtime.queued_tablebase", implementation: "consumeQueuedTablebaseEvidence", projections: [ref2("live.syzygy.position_result")], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"], providerOff: "unavailable", sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "runtime.branch_decidedness", implementation: "consumeBranchDecidednessEvidence", projections: [ref2("live.syzygy.position_result")], timing: ["review", "analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"], providerOff: "honest_empty", sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } },
   { id: "authoring.predicate", implementation: "structuralEvidenceForAuthoring", projections: [authoredStructuralConditionId, structuralPredicateResultId, ...allPredicateIds], timing: ["analysis"], roles: ["author"], forms: ["machine_condition"], answerContent: ["fact"] },
+  { id: "authoring.predicate", version: 2, implementation: "declareCurrentStructuralPredicateEvidence", projections: [ref2(authoredStructuralConditionId), ref2(structuralPredicateResultId), ...AUTHORED_PREDICATE_REDUCTION_CONTRACT.elements.slice(2)], timing: ["analysis"], roles: ["author"], forms: ["machine_condition"], answerContent: ["fact"], sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "runtime.objective_condition", implementation: "structuralEvidenceForObjective", projections: [structuralPredicateResultId, "live.stockfish.eval", "live.syzygy.category"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },
+  { id: "runtime.objective_condition", version: 2, implementation: "declareCurrentStructuralPredicateEvidence", projections: [ref2(structuralPredicateResultId)], forms: ["machine_condition"], answerContent: ["fact"], sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "runtime.guard_condition", implementation: "consumeGuardCondition", projections: ["live.stockfish.eval", "live.syzygy.category", "live.syzygy.distance"], forms: ["machine_condition"], answerContent: ["fact", "evaluation"] },
   { id: "guidance.deterministic", implementation: "renderedEvidenceItems", projections: POSITION_GUIDANCE_IDS, forms: ["sentence"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
   { id: "guidance.voice", implementation: "voiceEvidenceView", projections: POSITION_GUIDANCE_IDS, forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan"], providerOff: "available" },
   { id: "guidance.recorded_reading", implementation: "renderRecordedReadingEvidence", projections: ["recorded.engine.eval", "recorded.tablebase.result"], timing: ["postcommit", "checkpoint", "attempt_end", "terminal", "review"], forms: ["sentence"], answerContent: ["fact", "evaluation"] },
   { id: "runtime.evidence_ref", implementation: "renderDeclaredEvidenceRef", projections: ["run.record.evidence_ref_resolution", "live.stockfish.eval", "live.stockfish.wdl", "live.stockfish.pv", "live.syzygy.result", "human.maia.event", "derived.citation.attribution"], forms: ["sentence", "list", "panel", "machine_condition"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"] },
-  { id: "inspector.position_structure", implementation: "consumePositionStructure", projections: allStructuralReadingIds },
+  { id: "inspector.position_structure", version: 2, implementation: "consumePositionStructure", projections: [...STRUCTURAL_DETAIL_KINDS.map(kind => ref2(`rules.structural.reading.${kind}`)), ref2("rules.structural.reading.named_structure")] },
   { id: "inspector.move_transition", implementation: "consumeMoveTransition", projections: allTransitionReadingIds },
   { id: "board.selected_square_sight", implementation: "consumeSelectedSquareSight", projections: allStructuralReadingIds, timing: ["precommit", "postcommit"], forms: ["lit_squares", "piece_halo"], answerContent: ["fact"], budget: { maxFacts: 16, maxForms: 2 } },
   { id: "theory.shape_firing", implementation: "consumeShapeFiring", projections: ["theory.shapes.firing"], forms: ["sentence", "panel", "timeline_marker"], answerContent: ["pattern", "theory", "plan"] },
+  { id: "theory.shape_firing", version: 2, implementation: "consumeCurrentShapeFiring", projections: [{ id: "theory.shapes.firing", version: 3 }], forms: ["sentence", "panel", "timeline_marker"], answerContent: ["pattern", "theory"], sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "compare.structure_strip", implementation: "consumeComparisonStripEvidence", projections: ["run.record.checkpoint_hit", "run.record.objective_transition", ...PIVOTAL_MARKER_IDS, "derived.compare.structure_delta", "derived.compare.piece_route"], timing: ["review"], forms: ["sentence", "list", "timeline_marker", "panel"], answerContent: ["fact", "move"] },
   { id: "compare.engine_trajectory", implementation: "consumeComparisonEngineTrajectory", projections: ["derived.compare.engine_trajectory"], timing: ["review"], forms: ["list", "panel"], answerContent: ["evaluation"] },
   { id: "inspector.human_split", implementation: "consumeHumanSplit", projections: ["human.maia.policy"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["candidate_moves"], providerOff: "unavailable" },
+  { id: "inspector.human_split", version: 2, implementation: "consumeMaiaNodeDistribution", projections: ["derived.maia.node_distribution"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["candidate_moves"], providerOff: "unavailable", sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "inspector.corpus", implementation: "consumeCorpus", projections: ["human.explorer.population", "derived.explorer.inspector_population"], timing: ["postcommit", "review", "analysis"], forms: ["list", "panel"], answerContent: ["fact", "candidate_moves"], providerOff: "honest_empty", sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } },
-  { id: "opponent.selection", implementation: "consumeOpponentSelectionEvidence", projections: ["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result", "derived.opponent.candidate_feature_vector", ref2("live.syzygy.position_result")], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable" },
+  { id: "opponent.selection", implementation: "consumeOpponentSelectionEvidence", projections: ["human.maia.uci_response", "live.stockfish.uci_response", "live.syzygy.probe_result", ref2("live.syzygy.position_result")], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable" },
   // Complete modern tablebase execution is distinct from the retained multi-provider v1 image.
   { id: "opponent.selection", version: 2, implementation: "consumeOpponentTablebaseSelectionEvidence", projections: [ref2("live.syzygy.position_result")], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "evaluation", "candidate_moves", "move", "principal_variation"], budget: { maxFacts: null, maxForms: null }, providerOff: "unavailable", sourceAbsence: { necessity: "required", whenNoPath: "operation_unavailable" } },
   { id: "guidance.authored_claim", implementation: "claimProvenanceDeclared", projections: ["pack.authored.claim_delivery"], forms: ["sentence", "panel"], answerContent: ["fact", "pattern", "theory", "principle", "plan"] },
-  { id: "board.pivotal_marker", implementation: "consumePivotalMarkers", projections: PIVOTAL_MARKER_IDS, forms: ["timeline_marker", "sentence", "panel"], answerContent: ["fact"] },
+  { id: "board.pivotal_marker", version: 2, implementation: "consumePivotalMarkers", projections: ["derived.pivotal.irreversibility", "derived.pivotal.phase_change"], forms: ["timeline_marker", "sentence", "panel"], answerContent: ["fact"] },
   { id: "review.story", implementation: "renderReviewStoryReceipt", projections: [...PIVOTAL_MARKER_IDS, "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", "rules.endgame.classification", ref2("derived.review.eval_delta"), ref2("derived.review.mate_transition"), "derived.story.last_level", ref2("derived.story.rank"), ref2("derived.story.title")], timing: ["review"], roles: ["learner", "host", "participant", "spectator"], forms: ["sentence", "timeline_marker", "list", "panel", "machine_condition"], answerContent: ["fact", "pattern", "evaluation"] },
   { id: "runtime.repertoire_scan", implementation: "consumeRepertoireCorpus", projections: ["human.explorer.position_stats", "derived.explorer.repertoire_frontier"], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "candidate_moves"], budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty", sourceAbsence: { necessity: "required", whenNoPath: "honest_empty" } },
   { id: "runtime.return_frequency", implementation: "consumeReturnFrequency", projections: ["human.explorer.position_stats", "derived.explorer.position_frequency"], timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact"], budget: { maxFacts: null, maxForms: null }, providerOff: "honest_empty", sourceAbsence: { necessity: "optional", whenNoPath: "omit_optional_item" } },
@@ -1622,7 +1992,8 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "guidance.voice_compare", implementation: "comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", ...PIVOTAL_MARKER_IDS, "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
   { id: "guidance.voice_story", implementation: "storyDeclaredEvidence", projections: [...POSITION_GUIDANCE_IDS, "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", ref2("derived.review.eval_delta"), ref2("derived.review.mate_transition"), "derived.story.last_level", ref2("derived.story.title")], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
   { id: "assistance.arrows", implementation: "experimentalProducerlessArrows", disposition: { kind: "experimental", reason: "D546: migrated preference has no producer and no renderer; F5 or an owner ruling decides activation or retirement." } },
-  { id: "research.semantic_selection", implementation: "selectLocalSemanticEvidence", projections: SEMANTIC_EVENT_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
+  { id: "research.semantic_selection", version: 2, implementation: "selectLocalSemanticEvidence", projections: SEMANTIC_SELECTION_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
+  { id: "research.semantic_validation", implementation: "assertSemanticTargetValueAuthority", projections: SEMANTIC_EVENT_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: null }, budget: { maxFacts: null, maxForms: null } },
   ...EVIDENCE_MODULE_IDS.map(moduleConsumerSpec),
 ];
 
@@ -1649,6 +2020,17 @@ export const SELECTION_ONLY_BINDINGS: ReadonlySet<string> = new Set(["review.sto
 /** Consumers whose `machine_condition` form exists only for their selection-only bindings. */
 const SELECTION_ONLY_CONSUMERS: ReadonlySet<string> = new Set(["review.story"]);
 
+/** D3982 / module-registration §4.5c: complete captions, not truncated recorded paths. */
+const NUDGE_RECORDED_CAPTION_REFS: ReadonlySet<string> = new Set([
+  "derived.pawn.sequence.harassment_pressure@3", "derived.tactic.deflection_observed@3",
+  "derived.tactic.attraction_observed@3", "derived.tactic.line_blocker_clearance_observed@3",
+  "derived.tactic.square_clearance_observed@3", "derived.tactic.interference_observed@3",
+  "derived.tactic.check_zwischenzug_observed@3", "derived.tactic.overload_exploitation_observed@3",
+]);
+export function isNudgeRecordedCaptionBinding(consumer: VersionedEvidenceId, projection: VersionedEvidenceId): boolean {
+  return consumer.id === "module.postcommit_nudge" && consumer.version === 2 && NUDGE_RECORDED_CAPTION_REFS.has(refKey(projection));
+}
+
 export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CONSUMER_SPECS.flatMap((spec) => (spec.projections ?? []).map((projectionValueRef, index) => {
   const projectionRef = exactRef(projectionValueRef);
   const source = producerByProjection.get(refKey(projectionRef));
@@ -1657,8 +2039,13 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
   // rfc/evidence-presentation.md Checkpoint P ([[D2048]]): an exact selection-only binding keeps no visual form.
   const forms = SELECTION_ONLY_BINDINGS.has(`${spec.id}\u0000${refKey(projectionRef)}`)
     ? ["machine_condition" as const]
-    : (spec.forms ?? DEFAULT_FORMS).filter((form) => projectionValue.forms.includes(form) && !(form === "machine_condition" && SELECTION_ONLY_CONSUMERS.has(spec.id)));
-  const answers = (spec.answerContent ?? DEFAULT_ANSWERS).filter((answer) => projectionValue.answerContent.includes(answer));
+    : (spec.forms ?? DEFAULT_FORMS).filter((form) => projectionValue.forms.includes(form)
+      && !(form === "machine_condition" && SELECTION_ONLY_CONSUMERS.has(spec.id))
+      && !(form === "arrows" && isNudgeRecordedCaptionBinding({ id: spec.id, version: spec.version ?? 1 }, projectionRef)));
+  const answers = spec.id === "profile.subject_observations"
+    ? [projectionRef.id === "rules.tactic.event.double_attack" ? "threat" as const : "fact" as const]
+    : (spec.answerContent ?? DEFAULT_ANSWERS).filter((answer) => projectionValue.answerContent.includes(answer));
+  if (spec.id === "profile.subject_observations" && (!projectionValue.forms.includes("machine_condition") || !answers.every(answer => projectionValue.answerContent.includes(answer)))) throw new TypeError("Subject machine binding exceeds its exact source form/answer");
   if (spec.id.startsWith("module.") && (forms.length === 0 || answers.length === 0)) throw new TypeError(`Current module binding has an empty form/answer intersection: ${spec.id}/${refKey(projectionRef)}`);
   return Object.freeze({
     id: `adapter.${spec.id}.${index + 1}`,
@@ -1686,7 +2073,9 @@ export const SEMANTIC_EVENT_DECLARATIONS: readonly SemanticEventDeclaration[] = 
   if (output.derivation?.reduction !== undefined) throw new TypeError("Semantic events cannot use collection reductions");
   return Object.freeze({
     projection: projectionRef,
-    ...(output.derivation === undefined ? {}
+    ...(Object.hasOwn(FOUNDATION_COMPUTED_EVENT_INPUTS, refKey(projectionRef))
+      ? { derivationInputs: FOUNDATION_COMPUTED_EVENT_INPUTS[refKey(projectionRef)]! }
+      : output.derivation === undefined ? {}
       : output.derivation.inputs !== undefined
         ? { derivationInputs: Object.freeze(output.derivation.inputs) }
         : { derivationAnyOf: Object.freeze(output.derivation.anyOf.map((member) => Object.freeze(member))) }),
@@ -1712,21 +2101,18 @@ export const EVIDENCE_REASON_DECLARATIONS: readonly EvidenceReasonDeclaration[] 
   ...SELECTION_REASON_IDS.map((id) => Object.freeze({ id, version: 1, stage: "selection" as const, meaning: id.replaceAll("_", " ") })),
 ]);
 
-export const EVIDENCE_ELIGIBILITY_DECLARATIONS: readonly EvidenceEligibilityDeclaration[] = Object.freeze(SEMANTIC_EVENT_DECLARATIONS.map((event) => Object.freeze({
-  event: event.projection,
-  consumer: ref("research.semantic_selection"),
-  disposition: "eligible" as const,
-  reason: ref("eligible_validated_literal"),
-  allowedSigns: event.allowedSigns,
-  requiredOperands: event.requiredOperands,
-  valenceAuthority: Object.freeze([]),
-  // §7.1 / Slice A item 6: the operator research selector names its validation posture explicitly.
+const selectionSourceKeys = new Set(SEMANTIC_SELECTION_PROJECTION_REFS.map(refKey));
+export const EVIDENCE_ELIGIBILITY_DECLARATIONS: readonly EvidenceEligibilityDeclaration[] = Object.freeze(SEMANTIC_EVENT_DECLARATIONS.flatMap(event => [
+  ref("research.semantic_validation"), ...(selectionSourceKeys.has(refKey(event.projection)) ? [ref2("research.semantic_selection")] : []),
+].map(consumer => Object.freeze({
+  event: event.projection, consumer, disposition: "eligible" as const, reason: ref("eligible_validated_literal"),
+  allowedSigns: event.allowedSigns, requiredOperands: event.requiredOperands, valenceAuthority: Object.freeze([]),
   semanticValidation: "research_only" as const,
-})));
+}))));
 
 export const EVIDENCE_SELECTION_POLICIES: readonly EvidenceSelectionPolicyDeclaration[] = Object.freeze([
   Object.freeze({
-    id: "research.r2_candidate", version: 1, consumer: ref("research.semantic_selection"), disposition: "experimental",
+    id: "research.r2_candidate", version: 2, consumer: ref2("research.semantic_selection"), disposition: "experimental",
     minimumAlternatives: 8, maximumSameFamilyShare: 0.20, minimumAlternativeOnlyShare: 0.30, maxFacts: 2,
     criticalEvents: Object.freeze(["checkmate", "promotion", "castled", "last_of_role"].map((family) => ref(`rules.transition.event.${family}`))),
   }),

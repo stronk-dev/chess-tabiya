@@ -1,5 +1,14 @@
 # R12 disposable player-style harness
 
+`make profile-source-cost` is the optional D4147/D4149 continuation. It creates and removes an
+isolated SQLite database, replays ten existing CC0 lines into200native64-ply sessions (100per side),
+runs the complete current production projector, probes the three existing source operands and
+compares current profile cards/contributors/denominators. It also reproduces first-owner versus
+first-side castling mismatch. Expect roughly ten minutes on the measured development host.
+Only compact timings/counts print; no raw dumps are written. It is outside ordinary CI, carries
+no timing threshold and does not implement or authenticate a new worker game context/read model.
+The measured checkpoint is in `design/research/player-style-metrics.md` (2026-11-05).
+
 This harness measures short-session stability; it is not production ingestion code. Raw public
 usernames, PGNs, profile responses and decision traces stay in `/private/tmp`.
 

@@ -7,6 +7,7 @@ import type { LongitudinalWorkerConfig } from "./longitudinal-worker-config.js";
 import { projectObservations } from "./longitudinal-projector.js";
 import { LongitudinalSnapshotError, type LongitudinalSourceImageV4 } from "./longitudinal-source.js";
 import type { LongitudinalClaim, LongitudinalProjection, LongitudinalStore } from "./longitudinal-store.js";
+import type { ProfileGameSource } from "./profile-game-source.js";
 
 export interface LongitudinalBatchReceipt {
   readonly claimed: number;
@@ -23,7 +24,7 @@ export interface LongitudinalBatchReceipt {
 export interface LongitudinalBatchOptions {
   /** Monotonic milliseconds for the progress-checkpoint heartbeat. */
   readonly monotonicNow?: () => number;
-  readonly project?: (image: LongitudinalSourceImageV4, checkpoint: () => void) => LongitudinalProjection;
+  readonly project?: (image: LongitudinalSourceImageV4, checkpoint: () => void, gameSource: ProfileGameSource) => LongitudinalProjection;
   readonly onClaim?: (claim: LongitudinalClaim) => void;
   /**
    * Drain probe, read before each claim and at every decision checkpoint ([[D3300]]). Once true the
@@ -52,6 +53,7 @@ type ClaimOutcome = "completed" | "failed" | "conflict" | "abandoned";
 function processClaim(store: LongitudinalStore, config: LongitudinalWorkerConfig, claim: LongitudinalClaim, options: LongitudinalBatchOptions, counters: { renewals: number; claimElapsedMs: number }): ClaimOutcome {
   const monotonic = options.monotonicNow ?? (() => performance.now());
   const started = monotonic();
+  let gameSource: ProfileGameSource | undefined;
   try {
     let current = claim;
     let lastRenewal = started;
@@ -82,9 +84,11 @@ function processClaim(store: LongitudinalStore, config: LongitudinalWorkerConfig
     };
     let projection: LongitudinalProjection;
     try {
+      checkpoint();
+      gameSource = store.openClaimedGameSource(claim, image);
       projection = options.project === undefined
-        ? projectObservations(image, { checkpoint })
-        : options.project(image, checkpoint);
+        ? projectObservations(image, { checkpoint, gameSource })
+        : options.project(image, checkpoint, gameSource);
     } catch (error) {
       if (error instanceof LongitudinalDrainRequested) {
         store.abandon(current);
@@ -101,6 +105,7 @@ function processClaim(store: LongitudinalStore, config: LongitudinalWorkerConfig
       return store.fail(current, "publication_conflict") ? "failed" : "conflict";
     }
   } finally {
+    if (gameSource !== undefined) store.closeGameSource(gameSource);
     const elapsed = monotonic() - started;
     if (!Number.isFinite(elapsed) || elapsed < 0) throw new TypeError("Longitudinal claim requires a finite monotonic duration");
     counters.claimElapsedMs += elapsed;

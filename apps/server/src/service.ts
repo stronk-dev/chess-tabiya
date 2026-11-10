@@ -1,7 +1,18 @@
 import type { CampaignEncounterReceipt } from "@chess-tabiya/runtime";
+import { readBackReplay } from "@chess-tabiya/runtime";
+import { assertRunEventSequence } from "@chess-tabiya/runtime/run-subject";
+import { recordedEdgePayload } from "../../../packages/runtime/src/recorded-edge.js";
+import { canonicalFen, positionFromFen } from "../../../packages/runtime/src/position-cache.js";
+import { parseGuidedShapeQuery, type GuidedShapePage } from "../../../packages/runtime/src/guided-shape-query.js";
+import { moduleShapeScanSubjects } from "../../../packages/runtime/src/module-query.js";
+import { CURRENT_SHAPE_CONSUMER, currentShapeFiringsForGuidance } from "../../../packages/runtime/src/shape-presentation.js";
+import { readRegisteredShapeScan, RegisteredShapeScanUnavailable } from "../../../packages/runtime/src/internal/registered-shape-scan.js";
+import { readRegisteredShapeSource, registeredShapeRecordsImage, type RegisteredShapeSource } from "../../../packages/runtime/src/registered-shape-source.js";
+import { presentationDigest } from "../../../packages/runtime/src/presentation-digest.js";
 import type { EvidenceAvailabilitySubjectRef, RunEvidenceItemDigest } from "@chess-tabiya/runtime/run-subject";
 import { requireRunEvidenceItem, requireRunSubject } from "./run-subject-access.js";
 import { branchTablebasePosition } from "./branch-tablebase.js";
+import { reviewMomentPresentation } from "../../../packages/runtime/src/review-map.js";
 import {
   applyObjectiveEvidenceProposal,
   appendOpponentPly,
@@ -23,6 +34,7 @@ import {
   canonicalRunStart,
   digestSessionSource,
   deriveWorkflowContext,
+  verifyCampaignEncounterReceipt,
   exactMoveIdentity,
   isPackSession,
   importedMainlineBranchId,
@@ -39,13 +51,15 @@ import {
   isMachineEvidenceRef,
   rewind,
   rewindToCheckpoint,
-  reviewAnalysis,
   reviewMapProjection,
+  selectReviewMoments,
   moduleEvidenceRole,
   moduleDecisionStamp,
+  openRetryEntry,
   queryModules,
   assertProviderDelivery,
   compileEvidenceConsumerExecution,
+  compileEvidenceConsumerExecutionV2,
   EvidenceBindingExecutionError,
   EvidenceExecutionError,
   deriveExplorerPopulationSummary,
@@ -64,7 +78,6 @@ import {
   reviewSubjectPath,
   type ReviewProviderNodeState,
   trajectoryPolicyAt,
-  shapeFirings,
   type BranchComparison,
   type Decidedness,
   type BranchGroup,
@@ -184,14 +197,49 @@ import {
 } from "./authorization.js";
 import type { LeaseHolder, RunGrant, RunRole } from "./storage.js";
 import { parsePgnMainline, PgnImportError } from "./pgn-import.js";
+import { createStoredClockDocument } from "./recorded-clock-document.js";
+import { recordedClockOperation } from "./recorded-clock-operation.js";
+import { preflightRecordedClockConsumer, consumeRecordedClockEvidence } from "../../../packages/runtime/src/recorded-clock-review.js";
+import { parseRecordedClockView, type RecordedClockView } from "../../../packages/runtime/src/recorded-clock-view.js";
+import { digestRunEventHead } from "../../../packages/runtime/src/run-subject.js";
+import { serializePresentedEvidence } from "../../../packages/runtime/src/presentation-contract.js";
 import { compilePhaseArc, compileRecordedEvidenceSnapshot, type PhaseSourceDependencies } from "./phase-source-composition.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
-import { InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
+import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext, type InspectorRecordedSelection } from "./inspector-recorded-context.js";
 import { RecordedComparisonContextError, RecordedComparisonPointOwner, type RecordedComparisonContext, type ComparisonSelection } from "./recorded-comparison-points.js";
+import { RecordedGradeContextError, RecordedGradeSourceOwner, type RecordedGradeContext, type GradeSelection } from "./recorded-grade-sources.js";
+import { RecordedFoundationSourceOwner } from "./recorded-foundation-sources.js";
+import type { FoundationRecordedPrefix, FoundationRecordedDecision } from "../../../packages/runtime/src/recorded-foundation-source.js";
+import type { RecordedGradeSource } from "../../../packages/runtime/src/recorded-grade-source.js";
+import { postcommitSubjectBranch } from "../../../packages/runtime/src/postcommit-nudge.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "../../../packages/runtime/src/evidence-catalog.js";
 import type { RecordedComparisonSource } from "../../../packages/runtime/src/recorded-comparison.js";
 import { InspectorLedgerSourceOwner, type InspectorLedgerSource } from "./inspector-ledger-source.js";
-import { compileAuthoritativeAssistance, finalizeAssistanceEffects, MODULE_SOURCE_AUTHORITY, parseRequestedAssistanceV1, type RequestedAssistanceV1, type ServerEvidenceAvailabilityReceipt } from "../../../packages/runtime/src/assistance-exchange.js";
-import type { ReviewEvidenceCoordinator } from "./review-evidence.js";
+import { InspectorLocalSourceOwner, type InspectorLocalSource } from "./inspector-local-source.js";
+import { InspectorDependentSourceOwner, type InspectorDependentSource } from "./inspector-dependent-source.js";
+import { InspectorWindowSourceOwner, type InspectorWindowSource } from "./inspector-window-source.js";
+import { InspectorPacketSourceOwner, type InspectorPacketSource } from "./inspector-packet-source.js";
+import { InspectorPivotalSourceOwner, type InspectorPivotalSource } from "./inspector-pivotal-source.js";
+import type { InspectorPivotalProjection } from "../../../packages/runtime/src/inspector-pivotal-source.js";
+import { InspectorOpeningSourceOwner, type InspectorOpeningSource } from "./inspector-opening-source.js";
+import { InspectorMaiaSourceOwner, type InspectorMaiaSource, type InspectorMaiaProjection } from "./inspector-maia-source.js";
+import { InspectorExplorerSourceOwner, type InspectorExplorerSource } from "./inspector-explorer-source.js";
+import { InspectorComparisonSourceOwner, type InspectorComparisonSource } from "./inspector-comparison-source.js";
+import { InspectorStorySourceOwner, type InspectorStorySource } from "./inspector-story-source.js";
+import { InspectorShapeSourceOwner, type InspectorShapeSource } from "./inspector-shape-source.js";
+import { InspectorAnalyzeSourceOwner, type InspectorAnalyzeSource } from "./inspector-analyze-source.js";
+import type { InspectorAnalyzeProjection } from "../../../packages/runtime/src/recorded-analyze-line.js";
+import { acquireInspectorQuerySource } from "./inspector-query-source.js";
+import { assertInspectorSourcePagePreflight, compileInspectorSourcePage } from "./inspector-query.js";
+import { InspectorQueryError, parseInspectorQueryRequest, parseInspectorRequestedAssistance, type InspectorQueryView, type InspectorQueryPage } from "../../../packages/runtime/src/inspector-query-contract.js";
+import type { InspectorComparisonProjection } from "../../../packages/runtime/src/inspector-comparison-source.js";
+import type { InspectorOpeningProjection } from "../../../packages/runtime/src/inspector-opening-source.js";
+import type { InspectorPacketProjection } from "../../../packages/runtime/src/inspector-packet-source.js";
+import type { RecordedSequenceRoute } from "../../../packages/runtime/src/recorded-sequence-window.js";
+import type { InspectorDependentRequest } from "../../../packages/runtime/src/inspector-dependent-source.js";
+import type { InspectorLocalProjection } from "../../../packages/runtime/src/inspector-local-source.js";
+import { AssistanceExchangeError, compileAuthoritativeAssistance, finalizeAssistanceEffects, MODULE_SOURCE_AUTHORITY, parseRequestedAssistanceV1, type RequestedAssistanceV1, type ServerEvidenceAvailabilityReceipt } from "../../../packages/runtime/src/assistance-exchange.js";
+import { observedReviewPath, type ReviewEvidenceCoordinator } from "./review-evidence.js";
 import { IMPORT_PGN_MAX_BYTES, resolveImportSource, type ImportSource } from "./import-source.js";
 import type { DeletionPreviewV1 } from "./account-data.js";
 
@@ -553,14 +601,53 @@ function evidenceJobRequest(
   };
 }
 
+type PreparedModuleShapeSources = Readonly<{
+  assertCurrent: () => void;
+  shapeAt: NonNullable<ModuleSourceContext["shapeAt"]>;
+}>;
+
 export class RunService {
   readonly #storage: RunStorage;
   readonly #evidenceQueue: EvidenceJobQueue | undefined;
   readonly #packRegistry: PackRegistry | undefined;
   readonly #openingCatalogue: OpeningCatalogueAvailability | undefined;
   readonly #inspectorContexts = new InspectorRecordedContextOwner();
+  readonly #inspectorLocalSources = new InspectorLocalSourceOwner(this.#inspectorContexts);
+  readonly #inspectorDependentSources = new InspectorDependentSourceOwner(this.#inspectorContexts);
+  readonly #inspectorWindowSources = new InspectorWindowSourceOwner(this.#inspectorContexts);
+  readonly #inspectorPacketSources = new InspectorPacketSourceOwner(this.#inspectorContexts);
+  readonly #inspectorPivotalSources = new InspectorPivotalSourceOwner(this.#inspectorContexts);
+  readonly #inspectorOpeningSources = new InspectorOpeningSourceOwner(this.#inspectorContexts, () => this.#openingCatalogue);
+  readonly #inspectorComparisonSources = new InspectorComparisonSourceOwner(this.#inspectorContexts);
+  readonly #inspectorAnalyzeSources = new InspectorAnalyzeSourceOwner(this.#inspectorContexts);
+  readonly #inspectorExplorerSources = new InspectorExplorerSourceOwner(this.#inspectorContexts, () => this.#corpusSource, context => {
+    const current = this.#inspectorContexts.read(context), pack = this.#requiredRegisteredPack(current.run);
+    const policy = this.#policyAt(current.run, current.selected.id, pack);
+    const population = corpusPopulation(policy.mode === "human_common" ? policy.targetElo : undefined);
+    return Object.freeze({ ...population, fen: current.selected.fen,
+      ratings: Object.freeze([...population.ratings]), speeds: Object.freeze([...population.speeds]) });
+  });
+  readonly #inspectorMaiaSources = new InspectorMaiaSourceOwner(this.#inspectorContexts, () => this.#opponentSelector, context => {
+    const current = this.#inspectorContexts.read(context), pack = this.#requiredRegisteredPack(current.run);
+    const authored = this.#policyAt(current.run, current.selected.id, pack);
+    const branch = current.run.branches.find(item => item.id === current.selection.branchId);
+    if (branch === undefined) throw new InspectorContextError("source_contract_invalid");
+    const path = branchPath(current.run, branch.id), end = path.findIndex(node => node.id === current.selected.id);
+    if (end < 0) throw new InspectorContextError("source_contract_invalid");
+    return Object.freeze({ startFen: current.run.start.fen,
+      historyUci: Object.freeze(path.slice(0, end + 1).flatMap(node => node.moveUci === null ? [] : [node.moveUci])),
+      policy: Object.freeze({ mode: "human_common", policyConfigDigest: current.run.sessionDigest,
+        ...(authored.targetElo === undefined ? {} : { targetElo: authored.targetElo }),
+        ...(authored.temperature === undefined ? {} : { temperature: authored.temperature }),
+        ...(authored.topP === undefined ? {} : { topP: authored.topP }) }),
+      seed: branch.seed, ...(pack === undefined ? {} : { packId: pack.document.id }) });
+  });
   readonly #comparisonPoints: RecordedComparisonPointOwner;
+  readonly #gradeSources: RecordedGradeSourceOwner;
+  readonly #foundationSources: RecordedFoundationSourceOwner;
   readonly #inspectorLedgerSources: InspectorLedgerSourceOwner;
+  readonly #inspectorStorySources: InspectorStorySourceOwner;
+  readonly #inspectorShapeSources: InspectorShapeSourceOwner;
   readonly #evidenceMovetimeMs: number;
   readonly #progress: ProgressStorage | undefined;
   readonly #rating: RatingStorage | undefined;
@@ -568,6 +655,7 @@ export class RunService {
   readonly #opponentSelector: OpponentSelector | undefined;
   readonly #importFetch: typeof fetch;
   readonly #shapes: ShapeRegistry | undefined;
+  readonly #corpusSource: CorpusSource | undefined;
   readonly #tablebase: TablebaseSource | undefined;
   readonly #reviewEvidence: ReviewEvidenceCoordinator | undefined;
   readonly #botOpponent: BotOpponentAcquirer | undefined;
@@ -594,6 +682,8 @@ export class RunService {
       readonly opponentSelector?: OpponentSelector;
       readonly importFetch?: typeof fetch;
       readonly shapeRegistry?: ShapeRegistry;
+      /** Actual application-owned modern Explorer source, not a caller response or legacy stats. */
+      readonly corpusSource?: CorpusSource;
       readonly tablebaseSource?: TablebaseSource;
       /** rfc/review-evidence-compiler.md §4.1: the one application-lifetime Review coordinator. */
       readonly reviewEvidence?: ReviewEvidenceCoordinator;
@@ -615,6 +705,8 @@ export class RunService {
     }
     this.#packRegistry = options.packRegistry;
     this.#comparisonPoints = new RecordedComparisonPointOwner(storage, this.#packRegistry, this.#reviewEvidence);
+    this.#gradeSources = new RecordedGradeSourceOwner(storage, this.#packRegistry, this.#reviewEvidence);
+    this.#foundationSources = new RecordedFoundationSourceOwner(storage);
     this.#inspectorLedgerSources = new InspectorLedgerSourceOwner(this.#inspectorContexts, this.#packRegistry);
     this.#openingCatalogue = options.openingCatalogue;
     this.#progress = options.progressStorage;
@@ -631,6 +723,10 @@ export class RunService {
     this.#opponentSelector = options.opponentSelector;
     this.#importFetch = options.importFetch ?? fetch;
     this.#shapes = options.shapeRegistry;
+    this.#inspectorShapeSources = new InspectorShapeSourceOwner(this.#inspectorContexts, this.#shapes);
+    this.#inspectorStorySources = new InspectorStorySourceOwner(this.#inspectorContexts, storage, this.#shapes,
+      (runId, branchId, throughNodeId) => this.#reviewEngineStates(runId, branchId, false, throughNodeId).states);
+    this.#corpusSource = options.corpusSource;
     this.#tablebase = options.tablebaseSource;
     this.#evidenceMovetimeMs =
       options.evidenceMovetimeMs ?? DEFAULT_STRONG_ENGINE_PROFILE.movetimeMs;
@@ -1057,12 +1153,7 @@ export class RunService {
     if (new TextEncoder().encode(source.pgn).byteLength > IMPORT_PGN_MAX_BYTES) {
       throw new ServerError("IMPORT_INVALID_PGN", "PGN exceeds the 64 KiB import limit");
     }
-    let parsed;
-    try { parsed = parsePgnMainline(source.pgn, { requireMoves: true }); }
-    catch (error) {
-      if (error instanceof PgnImportError) throw new ServerError("IMPORT_INVALID_PGN", error.message);
-      throw error;
-    }
+    const parsed = source.clockGame.game;
     const movetextDigest = `sha256:${createHash("sha256").update(canonicalizeJson({
       rootFen: parsed.rootFen,
       uci: parsed.moves.map((move) => move.uci),
@@ -1076,6 +1167,7 @@ export class RunService {
     };
     this.validateOpponentPolicy(session.opponentPolicy);
     let run: DrillRun;
+    const originalNodeIds: string[] = [];
     try {
       run = createRun({
         id: input.id,
@@ -1085,10 +1177,12 @@ export class RunService {
         seed: input.seed,
         ...(input.createdAt === undefined ? {} : { createdAt: input.createdAt }),
       });
+      originalNodeIds.push(run.activeCursor.nodeId);
       for (const move of parsed.moves) {
         const node = run.nodes.find((candidate) => candidate.id === run.activeCursor.nodeId)!;
         const actor = node.fen.split(" ")[1] === input.side[0] ? "user" : "system";
         run = commitMove(run, move.uci, { actor, ...(input.createdAt === undefined ? {} : { at: input.createdAt }) }).run;
+        originalNodeIds.push(run.activeCursor.nodeId);
       }
     } catch (error) {
       throw new ServerError(
@@ -1108,6 +1202,7 @@ export class RunService {
       pgn: source.pgn,
       licenceNote: source.licenceNote,
       importedAt,
+      clockDocument: createStoredClockDocument(source.clockGame, run, originalNodeIds, movetextDigest, "extracted_before_strip"),
     });
     const title = parsed.headers.White !== undefined && parsed.headers.Black !== undefined
       ? `${parsed.headers.White} – ${parsed.headers.Black} (${parsed.result})`
@@ -1152,17 +1247,60 @@ export class RunService {
    * evidence panel consumes the recorded-semantic-path operation (its D1 production consumer) and
    * the typed Review packet through `module.review_map@1` (rfc/review-evidence-compiler.md).
    */
-  async review(runId: string, principal: Principal, requestedBranchId?: string) {
-    const context = this.#storyContext(runId, principal, requestedBranchId, false);
+  recordedClock(runId: string, principal: Principal, branchId: string, nodeId: string, signal: AbortSignal): RecordedClockView {
+    signal.throwIfAborted();
+    const { stored } = requireRead(this.#storage, runId, principal), run = stored.run;
+    let represented = false;
+    try { represented = branchPath(run, branchId).some(node => node.id === nodeId); } catch { /* non-disclosing unknown selection below */ }
+    if (!represented) throw new ServerError("RUN_NOT_FOUND", `Unknown run: ${runId}`);
+    // Complete actual consumer admission precedes source acquisition, legacy parse or metadata CAS.
+    preflightRecordedClockConsumer();
+    const selection = Object.freeze({ runId, branchId, nodeId });
+    const collection = recordedClockOperation(this.#storage)(selection, principal, signal);
+    const eventHead = Object.freeze({ seq: run.events.length, digest: digestRunEventHead({ runId, headSeq: run.events.length, events: run.events }) });
+    const result = collection.kind === "available"
+      ? { protocol: "recorded-clock-view@1" as const, subject: { kind: "resolved" as const, ...collection.reading.payload.subject }, ...consumeRecordedClockEvidence(collection) }
+      : { protocol: "recorded-clock-view@1" as const, subject: { kind: "unresolved" as const, ...selection, eventHead },
+          reading: { kind: "unavailable" as const, reason: collection.reason }, use: { kind: "unavailable" as const, reason: collection.reason },
+          presentation: serializePresentedEvidence([]) };
+    signal.throwIfAborted();
+    if (requireRead(this.#storage, runId, principal).stored.run !== run) throw new TypeError("Historical clock run changed during delivery");
+    return parseRecordedClockView(result, { ...selection, eventHeadSeq: run.events.length, rootNodeId: branchPath(run, branchId)[0]!.id });
+  }
+
+  async review(runId: string, principal: Principal, requestedBranchId?: string, signal: AbortSignal = new AbortController().signal) {
+    try {
+    signal.throwIfAborted();
+    compileEvidenceConsumerExecutionV2(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 });
+    const selection = this.#storySelection(runId, principal, requestedBranchId);
+    const gradeContext = this.#reviewGradeContext(runId, principal, selection.run, selection.branchId, signal);
+    const context = this.#compileStoryContext(selection, false);
     // rfc/phase-source-composition.md §5: Review compiles one ordered PhaseArc over the exact
     // selected run/branch; the arc invokes the sole recorded-path operation itself, and Review's
     // evidence panel consumes that same retained path. The server-private arc is never serialized.
     const phaseArc = compilePhaseArc(context.run, context.branchId, this.#phaseSourceDependencies(context.run));
     const semanticPath = phaseArc.kind === "arc" ? phaseArc.arc.path : phaseArc.path;
-    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role), packet: context.packet });
+    const recordedGrades = this.#gradeSources.reviewSources(gradeContext);
+    const recordedSources = this.#gradeSources.reviewPopulation(gradeContext, context.sourceContext);
+    const recordedMeasurements = this.#gradeSources.reviewMeasurements(gradeContext);
+    const recordedObjectives = this.#gradeSources.reviewObjectives(gradeContext);
+    const projection = reviewMapProjection({ run: context.run, branchId: context.branchId, story: context.projection, context: context.record === undefined ? "review" : "imported_analysis", semanticPath, side: context.run.start.side, viewer: this.#moduleViewer(runId, principal, context.run, context.role), packet: context.packet,
+      recordedGrades, recordedSources, recordedMeasurements, recordedObjectives,
+      ...(this.#openingCatalogue === undefined ? {} : { opening: this.#openingCatalogue }) });
+    this.#gradeSources.read(gradeContext); signal.throwIfAborted();
+    // The issued campaign origin, not the underlying pack session, owns the workflow ceiling.
+    const authority = this.assistanceAuthority(runId, principal);
+    const workflowContext = authority.origin.kind === "campaign_encounter"
+      ? (verifyCampaignEncounterReceipt(authority.origin.receipt), "campaign" as const)
+      : deriveWorkflowContext(authority.origin);
+    const campaignOrigin = this.#storage.ownerLearnerId?.(runId) === principal.learnerId ? this.#campaignGate?.origin(runId) ?? null : null;
+    // Metadata reads do not authorize publication of an older map or a revoked grant.
+    this.#gradeSources.read(gradeContext); signal.throwIfAborted();
     return Object.freeze({
       runId,
       branchId: context.branchId,
+      decision: moduleDecisionStamp(context.run),
+      workflowContext,
       side: context.run.start.side,
       // Generated summaries of the packet's orthogonal completion fields; never a web input authority.
       ready: context.pass.ready,
@@ -1171,28 +1309,16 @@ export class RunService {
       outcome: context.outcome,
       storyTitle: context.projection.title.text,
       // The durable campaign join is navigation context, not a caller-supplied return URL.
-      campaignOrigin: this.#storage.ownerLearnerId?.(runId) === principal.learnerId ? this.#campaignGate?.origin(runId) ?? null : null,
+      campaignOrigin,
       viewer: Object.freeze({ mayWrite: mayWrite(context.role) }),
       semanticPath: Object.freeze(semanticPath.kind === "available" ? { kind: "available" as const, events: semanticPath.events.length } : { kind: "refused" as const, reason: semanticPath.reason }),
       ...projection,
     });
-  }
-
-  /**
-   * rfc/review-map.md §7 (O7.3): the explicit Analyze reveal for one reviewed move — the recorded
-   * engine line from the position before it, attributed to engine and search bound. Read-only like
-   * `review()`: it enqueues no job and writes nothing. Withheld while a retry from that position is
-   * open; the ordinary review payload never carries a line.
-   */
-  reviewAnalysis(runId: string, principal: Principal, nodeId: string, requestedBranchId?: string) {
-    const context = this.#storyContext(runId, principal, requestedBranchId, false);
-    let analysis: ReturnType<typeof reviewAnalysis>;
-    try {
-      analysis = reviewAnalysis(context.run, context.branchId, nodeId, this.#moduleViewer(runId, principal, context.run, context.role));
     } catch (error) {
-      throw new ServerError("INVALID_REQUEST", "node is not a reviewed move on this branch", { cause: error });
+      if (error instanceof RecordedGradeContextError) throw new ServerError(error.reason === "permission_withheld" ? "ASSISTANCE_WITHHELD" : "EVIDENCE_UNAVAILABLE", error.message);
+      if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Review execution contract is unavailable");
+      throw error;
     }
-    return Object.freeze({ runId, branchId: context.branchId, ...analysis });
   }
 
   #requireRecordedBranchDisclosure(runId: string, principal: Principal, run: DrillRun, branchId: string): void {
@@ -1212,6 +1338,10 @@ export class RunService {
   }
 
   #storyContext(runId: string, principal: Principal, requestedBranchId: string | undefined, enqueue: boolean) {
+    return this.#compileStoryContext(this.#storySelection(runId, principal, requestedBranchId), enqueue);
+  }
+
+  #storySelection(runId: string, principal: Principal, requestedBranchId: string | undefined) {
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
     const outcomeEvents = run.events.filter((event): event is Extract<DrillRunEvent,{type:"outcome.reached"}> => event.type === "outcome.reached");
@@ -1221,6 +1351,11 @@ export class RunService {
     const branchId = requestedBranchId ?? defaultBranch;
     this.#requireRecordedBranchDisclosure(runId, principal, run, branchId);
     const record = run.sessionKind === "imported" ? this.importRecord(runId, principal) : undefined;
+    return { run, role, branchId, record };
+  }
+
+  #compileStoryContext(selection: { readonly run: DrillRun; readonly role: RunRole; readonly branchId: string; readonly record: ImportedGameRecord | undefined }, enqueue: boolean) {
+    const { run, role, branchId, record } = selection, runId = run.id;
     // rfc/review-evidence-compiler.md §4: the subject is derived from parsed storage only.
     const authorize = createReviewPrefixAuthority({
       loadRun: (id) => this.#storage.read(id)?.run,
@@ -1238,7 +1373,7 @@ export class RunService {
     const pass = Object.freeze(progress.kind === "settled" ? { ready: true, pending: 0 } : { ready: false, pending: progress.pendingNodeCount + progress.notYetScheduledNodeCount });
     const outcome = packet.subject.outcome;
     return {
-      run, role, branchId, record, pass, projection, packet,
+      run, role, branchId, record, pass, projection, packet, sourceContext: { engine, shapes },
       source: record===undefined?Object.freeze({kind:"native" as const}):Object.freeze({ kind: record.sourceKind, ...(record.sourceUrl === null ? {} : { url: record.sourceUrl }), headers: record.headers, result: record.result, importedAt: record.importedAt }),
       // The same branch-bound authority supplies Story and the visible Review result. The
       // archive's original result tag remains source metadata, not an alternate retry's result.
@@ -1268,7 +1403,9 @@ export class RunService {
     if(learner===undefined)throw new ServerError("RUN_NOT_FOUND","Shared story not found");
     const context=this.#storyContext(record.runId,{learnerId:learner.id,handle:learner.handle},record.branchId,false);
     // rfc/review-map.md §5 ([[D688]]): the public card reads the same moment selection as the private review.
-    const review=reviewMapProjection({run:context.run,branchId:context.branchId,story:context.projection,context:context.record===undefined?"review":"imported_analysis",viewer:this.#moduleViewer(record.runId,{learnerId:learner.id,handle:learner.handle},context.run,context.role)});
+    // The shared card consumes moment selection, not private per-move grades/graph/relations.
+    // Use the very same selector directly instead of acquiring unconsumed Review operands.
+    const review=reviewMomentPresentation(selectReviewMoments(context.projection));
     // rfc/review-evidence-compiler.md §4: the public share is a strict narrower projection of the
     // same selected presentation receipts, copied byte-for-byte from the authorized story receipt.
     const receipt=projectPublicReviewStory(renderReviewStoryReceipt(context.packet),review.moments.map((moment)=>moment.nodeId));
@@ -1792,32 +1929,124 @@ export class RunService {
     return Object.freeze({ run: stored.run, ...(pack === undefined ? {} : { pack }) });
   }
 
-  shapeRecommendations(principal: Principal) {
-    if (this.#shapes === undefined || this.#packRegistry === undefined || this.#progress === undefined) return Object.freeze({ recommendations: Object.freeze([]), total: 0 });
-    const attemptedShapes = new Set<string>();
-    for (const attempt of this.#progress.progress(principal.learnerId)) {
-      if (!attempt.countable || attempt.packId === null) continue;
-      for (const shape of normalizeShapeReferences(this.#packRegistry.get(attempt.packId)?.document.shapes)) {
-        if (shape.relation === "present") attemptedShapes.add(shape.shape);
+  async shapeRecommendations(principal: Principal, signal: AbortSignal = new AbortController().signal,
+    authenticate?: () => Principal) {
+    try {
+      const owner = Object.freeze({ ...principal }), shapes = this.#shapes, packs = this.#packRegistry, progress = this.#progress;
+      const ownerLearnerId = this.#storage.ownerLearnerId?.bind(this.#storage);
+      if (shapes === undefined || packs === undefined || progress === undefined || ownerLearnerId === undefined) {
+        throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation sources are not configured");
       }
-    }
-    const triggers = this.#shapes.list().map((summary) => ({ id: summary.id, trigger: this.#shapes!.required(summary.id).document.trigger }));
-    const encountered = new Map<string, Set<string>>();
-    for (let offset = 0; ; offset += 100) {
-      const page = this.#storage.list(principal.learnerId, 100, offset);
-      for (const summary of page) {
-        const run = this.#storage.read(summary.id)?.run; if (run === undefined) continue;
-        const ids = new Set(run.branches.flatMap((branch) => shapeFirings(triggers, branchPath(run, branch.id)).map((firing) => firing.entryId)));
-        for (const id of ids) { const runs = encountered.get(id) ?? new Set<string>(); runs.add(run.id); encountered.set(id, runs); }
+      const assertPrincipal = () => {
+        signal.throwIfAborted();
+        const actual = authenticate?.() ?? owner;
+        if (actual.learnerId !== owner.learnerId || this.#storage.learnerById(owner.learnerId) === undefined) {
+          throw new ServerError("UNAUTHENTICATED", "Pattern recommendation account is no longer current");
+        }
+      };
+      const captureRuns = () => {
+        assertPrincipal();
+        const owned: { readonly run: DrillRun; readonly role: RunRole }[] = [], seen = new Set<string>();
+        // list is grant-visible. Only the actual stored owner can make an encounter personal.
+        // Capture the complete population synchronously, before the first scan await.
+        for (let offset = 0; ; offset += 100) {
+          const page = this.#storage.list(owner.learnerId, 100, offset);
+          for (const summary of page) {
+            if (seen.has(summary.id)) throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation run population changed");
+            seen.add(summary.id);
+            const actualOwner = ownerLearnerId(summary.id);
+            if (actualOwner === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation run ownership is unavailable");
+            if (actualOwner !== owner.learnerId) continue;
+            const stored = this.#storage.read(summary.id);
+            if (stored === undefined || stored.run.id !== summary.id) throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation run disappeared or changed identity");
+            const access = requireRead(this.#storage, summary.id, owner);
+            if (canonicalizeJson(access.stored.run) !== canonicalizeJson(stored.run)) throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation run changed during capture");
+            owned.push(Object.freeze({ run: stored.run, role: access.role }));
+          }
+          if (page.length < 100) break;
+        }
+        return Object.freeze(owned);
+      };
+      const runs = captureRuns(), runImage = canonicalizeJson(runs);
+      const attempts = progress.progress(owner.learnerId), attemptImage = canonicalizeJson(attempts);
+      const packRecords = packs.list().map(summary => {
+        const record = packs.get(summary.id);
+        if (record === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation pack disappeared");
+        return record;
+      });
+      const packImage = canonicalizeJson(packRecords.map(record => ({ document: record.document, summary: record.summary, digest: record.digest })));
+      let registered: RegisteredShapeSource | undefined;
+      const current = () => {
+        assertPrincipal();
+        if (canonicalizeJson(captureRuns()) !== runImage || canonicalizeJson(progress.progress(owner.learnerId)) !== attemptImage) {
+          throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation history changed");
+        }
+        const now = packs.list().map(summary => packs.get(summary.id));
+        if (now.length !== packRecords.length || now.some((record, index) => record !== packRecords[index])
+          || canonicalizeJson(now.map(record => ({ document: record!.document, summary: record!.summary, digest: record!.digest }))) !== packImage) {
+          throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation catalogue changed");
+        }
+        if (registered !== undefined) shapes.assertRegisteredTriggersCurrent(registered);
+      };
+      // Do not validate only a convenient branch or silently omit a missing legal edge.
+      for (const { run } of runs) {
+        assertRunEventSequence(run.id, run.events);
+        if (canonicalizeJson(readBackReplay(run.events).run) !== canonicalizeJson(run)) throw new TypeError("Original recommendation graph differs from replay");
+        for (const branch of run.branches) {
+          for (const [index, node] of branchPath(run, branch.id).entries()) {
+            if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new TypeError("Noncanonical recommendation node");
+            if (index > 0) recordedEdgePayload(run, run.nodes.find(candidate => candidate.id === node.parentId)!, node);
+          }
+        }
       }
-      if (page.length < 100) break;
+      compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, CURRENT_SHAPE_CONSUMER);
+      current(); registered = await shapes.captureRegisteredTriggers(signal); current();
+      const records = readRegisteredShapeSource(registered), byPack = new Map(packRecords.map(record => [record.document.id, record]));
+      const attemptedShapes = new Set<string>();
+      for (const attempt of attempts) {
+        if (!attempt.countable || attempt.packId === null) continue;
+        for (const reference of normalizeShapeReferences(byPack.get(attempt.packId)?.document.shapes)) {
+          if (reference.relation === "present") attemptedShapes.add(reference.shape);
+        }
+      }
+      const encountered = new Map<string, Set<string>>();
+      for (const { run } of runs) {
+        const ids = new Set<string>();
+        for (const branch of run.branches) {
+          current();
+          const builder = await shapes.beginCurrentShapeScan(branchPath(run, branch.id).map(node => ({ id: node.id, fen: node.fen })), signal); current();
+          for (;;) {
+            current(); const step = shapes.advanceCurrentShapeScan(builder); current();
+            if (step.kind === "complete") {
+              shapes.assertCurrentShapeScan(step.scan);
+              // Existing runtime owner verifies the original complete firing3 invocation and
+              // exact consumer. Recommendations consume only its admitted values, not its prose.
+              for (const firing of currentShapeFiringsForGuidance(step.scan)) ids.add(firing.value.entryId);
+              current(); break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 0)); current();
+          }
+        }
+        for (const id of ids) { const runIds = encountered.get(id) ?? new Set<string>(); runIds.add(run.id); encountered.set(id, runIds); }
+      }
+      const names = new Map(records.map(record => [record.document.id, record.document.name]));
+      const eligible = [...encountered].filter(([id]) => !attemptedShapes.has(id)).map(([id, runIds]) => {
+        const name = names.get(id);
+        if (name === undefined) throw new TypeError("Encountered pattern is not in the original registered source");
+        const packIds = packRecords.filter(record => normalizeShapeReferences(record.document.shapes)
+          .some(reference => reference.shape === id && reference.relation === "present")).map(record => record.document.id).sort();
+        return Object.freeze({ kind: "shape_encounter" as const, shapeId: id, shapeName: name, runCount: runIds.size,
+          runIds: Object.freeze([...runIds].sort()), packIds: Object.freeze(packIds),
+          sentence: `You met ${name} in ${runIds.size} of your preserved runs.` });
+      }).sort((left, right) => right.runCount - left.runCount || left.shapeId.localeCompare(right.shapeId));
+      current();
+      return Object.freeze({ recommendations: Object.freeze(eligible.slice(0, 10)), total: eligible.length });
+    } catch (error) {
+      if (error instanceof RegisteredShapeScanUnavailable || error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError || error instanceof TypeError) {
+        throw new ServerError("EVIDENCE_UNAVAILABLE", "Pattern recommendation source is unavailable or invalid");
+      }
+      throw error;
     }
-    const eligible = [...encountered].filter(([id]) => !attemptedShapes.has(id)).map(([id, runIds]) => {
-      const shape = this.#shapes!.required(id).summary;
-      const packIds = this.#packRegistry!.list().filter((pack) => normalizeShapeReferences(this.#packRegistry!.get(pack.id)?.document.shapes).some((shape) => shape.shape === id && shape.relation === "present")).map((pack) => pack.id).sort();
-      return Object.freeze({ kind: "shape_encounter" as const, shapeId: id, shapeName: shape.name, runCount: runIds.size, runIds: Object.freeze([...runIds].sort()), packIds: Object.freeze(packIds), sentence: `You met ${shape.name} in ${runIds.size} of your preserved runs and have no countable attempt recorded in any pack that names it.` });
-    }).sort((left, right) => right.runCount - left.runCount || left.shapeId.localeCompare(right.shapeId));
-    return Object.freeze({ recommendations: Object.freeze(eligible.slice(0, 10)), total: eligible.length });
   }
 
   async createGroup(
@@ -2910,13 +3139,14 @@ export class RunService {
    * surfaces) the coordinator is only observed. No coordinator means no analysis engine: every node
    * without a durable delivery is `provider_off`.
    */
-  #reviewEngineStates(runId: string, branchId: string, request: boolean): { readonly states: ReadonlyMap<string, ReviewProviderNodeState>; readonly requested: number } {
+  #reviewEngineStates(runId: string, branchId: string, request: boolean, throughNodeId?: string): { readonly states: ReadonlyMap<string, ReviewProviderNodeState>; readonly requested: number } {
+    if (request && throughNodeId !== undefined) throw new TypeError("Bounded Review observation must not enqueue work");
     if (this.#reviewEvidence !== undefined) {
-      const result = request ? this.#reviewEvidence.ensureBranch(runId, branchId) : this.#reviewEvidence.observe(runId, branchId);
+      const result = request ? this.#reviewEvidence.ensureBranch(runId, branchId) : this.#reviewEvidence.observe(runId, branchId, throughNodeId);
       return Object.freeze({ states: result.states, requested: [...result.states.values()].filter((state) => state.kind === "pending").length });
     }
     const run = this.#required(runId).run;
-    const path = branchPath(run, branchId);
+    const path = observedReviewPath(run, branchId, throughNodeId);
     const durable = reviewDurableEngineStates(run, path);
     const states = new Map<string, ReviewProviderNodeState>(path.map((node) => [node.id, durable.get(node.id)?.kind === "delivered" ? durable.get(node.id)! : exactLegalMoves(node.fen).length === 0 ? Object.freeze({ kind: "honest_empty" as const, reason: "outside_domain" as const }) : Object.freeze({ kind: "unavailable" as const, reason: "provider_off" as const })]));
     return Object.freeze({ states, requested: 0 });
@@ -2964,6 +3194,190 @@ export class RunService {
 
   readInspectorRecordedContext(context: InspectorRecordedContext) { return this.#inspectorContexts.read(context); }
 
+  /** Module registration §4.11d: confirm a recorded position, including a genuine root.
+   * This is metadata only. Every later source request re-enters the original context owner. */
+  confirmRecordedInspectorAssistance(runId: string, principal: Principal, body: unknown,
+    availability: ServerEvidenceAvailabilityReceipt, signal: AbortSignal) {
+    signal.throwIfAborted();
+    assertInspectorSourcePagePreflight();
+    const closed = (input: unknown, fields: readonly string[]): Record<string, unknown> => {
+      if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
+        || Reflect.ownKeys(input).length !== fields.length || fields.some(key => {
+          const field = Object.getOwnPropertyDescriptor(input, key);
+          return field === undefined || !field.enumerable || !("value" in field);
+        })) throw new ServerError("INVALID_REQUEST", "Recorded Inspector confirmation requires its exact data envelope");
+      return input as Record<string, unknown>;
+    };
+    const envelope = closed(body, ["assistance", "inspector"]), target = closed(envelope.inspector, ["branchId", "nodeId", "decisionDigest"]);
+    for (const key of ["branchId", "nodeId", "decisionDigest"] as const) if (typeof target[key] !== "string" || target[key].trim() === "") throw new ServerError("INVALID_REQUEST", "Recorded Inspector confirmation target is invalid");
+    let intent: RequestedAssistanceV1;
+    try { intent = parseInspectorRequestedAssistance(envelope.assistance); }
+    catch (error) {
+      if (error instanceof InspectorQueryError) throw new ServerError("INVALID_REQUEST", "Recorded Inspector requested help is invalid");
+      throw error;
+    }
+    try {
+      const context = this.resolveInspectorRecordedContext(runId, principal, intent, availability, {
+        branchId: target.branchId as string, nodeId: target.nodeId as string,
+        decisionDigest: target.decisionDigest as string, context: { kind: "position" },
+      }, signal);
+      const current = this.readInspectorRecordedContext(context);
+      this.readInspectorRecordedContext(context); signal.throwIfAborted();
+      return Object.freeze({ assistance: current.assistance, inspector: Object.freeze({
+        runId: current.run.id, branchId: current.selection.branchId, nodeId: current.selected.id,
+        fen: current.selected.fen, decision: current.decision,
+      }) });
+    } catch (error) {
+      signal.throwIfAborted();
+      if (error instanceof InspectorContextError) throw new ServerError(error.reason === "withheld" ? "ASSISTANCE_WITHHELD"
+        : error.reason === "stale" ? "INVALID_REQUEST" : "EVIDENCE_UNAVAILABLE", "Recorded Inspector confirmation is unavailable");
+      if (error instanceof AssistanceExchangeError) throw new ServerError("INVALID_REQUEST", "Recorded Inspector requested help does not match the current workflow");
+      throw error;
+    }
+  }
+
+  /** Accepted Review §7a: source-free confirmation for one actual historical incoming edge.
+   * Ordinary active-Play assistance is unchanged; the sole Inspector owner establishes disclosure. */
+  confirmRecordedAnalyzeAssistance(runId: string, principal: Principal, body: unknown,
+    availability: ServerEvidenceAvailabilityReceipt, signal: AbortSignal) {
+    signal.throwIfAborted();
+    assertInspectorSourcePagePreflight();
+    const closed = (input: unknown, fields: readonly string[]): Record<string, unknown> => {
+      if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
+        || Reflect.ownKeys(input).length !== fields.length || fields.some(key => {
+          const field = Object.getOwnPropertyDescriptor(input, key);
+          return field === undefined || !field.enumerable || !("value" in field);
+        })) throw new ServerError("INVALID_REQUEST", "Recorded Analyze confirmation requires its exact data envelope");
+      return input as Record<string, unknown>;
+    };
+    const envelope = closed(body, ["assistance", "review"]), target = closed(envelope.review, ["branchId", "nodeId", "entryNodeId", "decisionDigest"]);
+    for (const key of ["branchId", "nodeId", "entryNodeId", "decisionDigest"] as const) if (typeof target[key] !== "string" || target[key].trim() === "") throw new ServerError("INVALID_REQUEST", "Recorded Analyze confirmation target is invalid");
+    let intent: RequestedAssistanceV1;
+    try { intent = parseInspectorRequestedAssistance(envelope.assistance); }
+    catch (error) {
+      if (error instanceof InspectorQueryError) throw new ServerError("INVALID_REQUEST", "Recorded Analyze requested help is invalid");
+      throw error;
+    }
+    try {
+      const context = this.resolveInspectorRecordedContext(runId, principal, intent, availability, {
+        branchId: target.branchId as string, nodeId: target.nodeId as string,
+        decisionDigest: target.decisionDigest as string, context: { kind: "incoming_edge" },
+      }, signal);
+      const current = this.readInspectorRecordedContext(context), nodes = current.paths[0]!.nodes;
+      if (nodes.length !== 2 || nodes[0]!.id !== target.entryNodeId) throw new ServerError("INVALID_REQUEST", "Recorded Analyze target is not its original incoming edge");
+      if (openRetryEntry(current.run, current.selection.branchId) === nodes[0]!.id) throw new ServerError("ASSISTANCE_WITHHELD", "Recorded Analyze is withheld at this open retry entry");
+      this.readInspectorRecordedContext(context); signal.throwIfAborted();
+      return Object.freeze({ assistance: current.assistance, review: Object.freeze({
+        runId: current.run.id, branchId: current.selection.branchId, nodeId: current.selected.id,
+        entryNodeId: nodes[0]!.id, fen: current.selected.fen, decision: current.decision,
+      }) });
+    } catch (error) {
+      signal.throwIfAborted();
+      if (error instanceof InspectorContextError) throw new ServerError(error.reason === "withheld" ? "ASSISTANCE_WITHHELD"
+        : error.reason === "stale" ? "INVALID_REQUEST" : "EVIDENCE_UNAVAILABLE", "Recorded Analyze confirmation is unavailable");
+      if (error instanceof AssistanceExchangeError) throw new ServerError("INVALID_REQUEST", "Recorded Analyze requested help does not match the current workflow");
+      throw error;
+    }
+  }
+
+  acquireInspectorLocalSource(context: InspectorRecordedContext,
+    input: Readonly<{ projection: InspectorLocalProjection; signal: AbortSignal }>) {
+    if (input === null || typeof input !== "object" || Object.getPrototypeOf(input) !== Object.prototype
+      || Reflect.ownKeys(input).length !== 2 || !["projection", "signal"].every(key => {
+        const field = Object.getOwnPropertyDescriptor(input, key);
+        return field !== undefined && field.enumerable && "value" in field;
+      }) || !(input.signal instanceof AbortSignal)) throw new TypeError("Inspector local source requires exactly {projection,signal}");
+    return this.#inspectorLocalSources.acquire(context, input.projection, input.signal);
+  }
+
+  readInspectorLocalSource(source: InspectorLocalSource) { return this.#inspectorLocalSources.read(source); }
+
+  acquireInspectorDependentSource(context: InspectorRecordedContext, request: InspectorDependentRequest, signal: AbortSignal) {
+    return this.#inspectorDependentSources.acquire(context, request, signal);
+  }
+
+  readInspectorDependentSource(source: InspectorDependentSource) { return this.#inspectorDependentSources.read(source); }
+
+  acquireInspectorWindowSource(context: InspectorRecordedContext, projection: RecordedSequenceRoute, signal: AbortSignal) {
+    return this.#inspectorWindowSources.acquire(context, projection, signal);
+  }
+
+  readInspectorWindowSource(source: InspectorWindowSource) { return this.#inspectorWindowSources.read(source); }
+
+  acquireInspectorPacketSource(context: InspectorRecordedContext, projection: InspectorPacketProjection, signal: AbortSignal) {
+    return this.#inspectorPacketSources.acquire(context, projection, signal);
+  }
+
+  readInspectorPacketSource(source: InspectorPacketSource) { return this.#inspectorPacketSources.read(source); }
+
+  acquireInspectorPivotalSource(context: InspectorRecordedContext, projection: InspectorPivotalProjection, signal: AbortSignal) {
+    return this.#inspectorPivotalSources.acquire(context, projection, signal);
+  }
+
+  readInspectorPivotalSource(source: InspectorPivotalSource) { return this.#inspectorPivotalSources.read(source); }
+
+  acquireInspectorOpeningSource(context: InspectorRecordedContext, projection: InspectorOpeningProjection, signal: AbortSignal) {
+    return this.#inspectorOpeningSources.acquire(context, projection, signal);
+  }
+
+  readInspectorOpeningSource(source: InspectorOpeningSource) { return this.#inspectorOpeningSources.read(source); }
+
+  acquireInspectorMaiaSource(context: InspectorRecordedContext, projection: InspectorMaiaProjection, signal: AbortSignal) {
+    return this.#inspectorMaiaSources.acquire(context, projection, signal);
+  }
+
+  readInspectorMaiaSource(source: InspectorMaiaSource) { return this.#inspectorMaiaSources.read(source); }
+
+  acquireInspectorExplorerSource(context: InspectorRecordedContext, signal: AbortSignal) {
+    return this.#inspectorExplorerSources.acquire(context, signal);
+  }
+
+  readInspectorExplorerSource(source: InspectorExplorerSource) { return this.#inspectorExplorerSources.read(source); }
+
+  acquireInspectorComparisonSource(context: InspectorRecordedContext, projection: InspectorComparisonProjection, signal: AbortSignal) {
+    return this.#inspectorComparisonSources.acquire(context, projection, signal);
+  }
+
+  readInspectorComparisonSource(source: InspectorComparisonSource) { return this.#inspectorComparisonSources.read(source); }
+
+  acquireInspectorStorySource(context: InspectorRecordedContext, signal: AbortSignal) { return this.#inspectorStorySources.acquire(context, signal); }
+  readInspectorStorySource(source: InspectorStorySource) { return this.#inspectorStorySources.read(source); }
+
+  acquireInspectorShapeSource(context: InspectorRecordedContext, signal: AbortSignal) { return this.#inspectorShapeSources.acquire(context, signal); }
+  readInspectorShapeSource(source: InspectorShapeSource) { return this.#inspectorShapeSources.read(source); }
+
+  acquireInspectorAnalyzeSource(context: InspectorRecordedContext, projection: InspectorAnalyzeProjection, signal: AbortSignal) { return this.#inspectorAnalyzeSources.acquire(context, projection, signal); }
+  readInspectorAnalyzeSource(source: InspectorAnalyzeSource) { return this.#inspectorAnalyzeSources.read(source); }
+
+  /** Internal complete source composition; not an HTTP endpoint or current-consumer preflight. */
+  acquireInspectorQuerySource(context: InspectorRecordedContext, view: Exclude<InspectorQueryView, { kind: "inventory" }>, signal: AbortSignal) {
+    return acquireInspectorQuerySource(this, context, view, signal);
+  }
+
+  /** Accepted demand operation. The complete Full2 current image must be installed before
+   * inventory or source acquisition; older deployments return a closed version refusal. */
+  async queryInspectorSources(runId: string, principal: Principal, value: unknown,
+    availability: ServerEvidenceAvailabilityReceipt, signal: AbortSignal): Promise<InspectorQueryPage> {
+    const refused = (code: Extract<InspectorQueryPage, { kind: "refused" }>["code"]): InspectorQueryPage =>
+      Object.freeze({ protocol: "inspector.query_page@1", kind: "refused", code });
+    try {
+      const request = parseInspectorQueryRequest(value), view = request.query.view;
+      const context = this.resolveInspectorRecordedContext(runId, principal, request.assistance, availability,
+        { branchId: request.query.branchId, nodeId: request.query.nodeId, decisionDigest: request.query.decisionDigest,
+          context: view.kind === "inventory" ? { kind: "position" } : view.context }, signal);
+      return await compileInspectorSourcePage(this, context, request, signal);
+    } catch (error) {
+      if (signal.aborted) throw error;
+      if (error instanceof InspectorQueryError) return refused(error.code);
+      if (error instanceof InspectorContextError) return refused(error.reason === "source_contract_invalid" ? "invalid_request" : error.reason);
+      if (error instanceof ServerError && error.code === "RUN_NOT_FOUND") return refused("not_found");
+      if (error instanceof ServerError && (error.code === "FORBIDDEN" || error.code === "UNAUTHENTICATED" || error.code === "ASSISTANCE_WITHHELD")) return refused("withheld");
+      if (error instanceof ServerError && error.code === "STORY_UNAVAILABLE") return refused("invalid_request");
+      if (error instanceof AssistanceExchangeError) return refused("invalid_request");
+      throw error;
+    }
+  }
+
   resolveComparisonRecordedContext(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, query: ComparisonSelection, signal: AbortSignal) {
     const owner = Object.freeze({ ...principal }), finalized = structuredClone(assistance), selection = Object.freeze({ ...query });
     return this.#comparisonPoints.resolve(selection, columns => {
@@ -2980,6 +3394,56 @@ export class RunService {
   }
 
   readComparisonRecordedContext(context: RecordedComparisonContext) { return this.#comparisonPoints.read(context); }
+
+  // Internal source-only operation: this is not an assistance or learner-actor grant.
+  resolveFoundationRecordedPrefix(runId: string, principal: Principal, query: Readonly<{ branchId: string; throughNodeId: string }>, signal: AbortSignal) {
+    if (query === null || typeof query !== "object" || Reflect.ownKeys(query).length !== 2
+      || !["branchId", "throughNodeId"].every(key => {
+        const field = Object.getOwnPropertyDescriptor(query, key); return field?.enumerable && "value" in field && typeof field.value === "string" && field.value.length > 0;
+      })) throw new TypeError("Recorded foundation requires exactly branchId/throughNodeId");
+    return this.#foundationSources.resolve({ runId, branchId: query.branchId, throughNodeId: query.throughNodeId }, principal, signal);
+  }
+  resolveFoundationRecordedDecision(prefix: FoundationRecordedPrefix, nodeId: string) { return this.#foundationSources.decision(prefix, nodeId); }
+  readFoundationRecordedPrefix(prefix: FoundationRecordedPrefix) { return this.#foundationSources.readPrefix(prefix); }
+  readFoundationRecordedDecision(decision: FoundationRecordedDecision) { return this.#foundationSources.readDecision(decision); }
+  contextualizeFoundationRecordedValue(value: import("@chess-tabiya/runtime").DeclaredEvidence<unknown>, selection: import("../../../packages/runtime/src/recorded-foundation-occurrence.js").RecordedStyleSelection) {
+    return this.#foundationSources.contextualize(value, selection);
+  }
+
+  resolveGradeRecordedContext(runId: string, principal: Principal, assistance: FinalizedAssistanceV1 | null, query: GradeSelection, signal: AbortSignal) {
+    const owner = Object.freeze({ ...principal }), finalized = structuredClone(assistance), selection = Object.freeze({ ...query });
+    return this.#gradeSources.resolve(selection, () => {
+      signal.throwIfAborted(); this.#refuseRatedAssistance(runId);
+      const { stored, role } = requireRead(this.#storage, runId, owner);
+      this.#requireRecordedBranchDisclosure(runId, owner, stored.run, selection.branchId);
+      const access = this.assistanceAuthority(runId, owner);
+      // Dedicated historical Review just passed its selected branch's disclosure rule above.
+      // An active retry can close live feedback without withdrawing an already disclosed import
+      // or completed line. Nudge still uses the actual live delivery ceiling unchanged.
+      const workflowAccess = selection.timing === "review" && finalized === null
+        ? { ...access, access: { ...access.access, deliveryOpen: true } } : access;
+      return { run: stored.run, principal: owner, role: moduleEvidenceRole(role), assistance: finalized,
+        timing: selection.timing, session: this.#moduleViewer(runId, owner, stored.run, role).session,
+        access: workflowAccess };
+    }, signal);
+  }
+
+  resolveGradeMoveSource(context: RecordedGradeContext, input: Readonly<{ nodeId: string; signal: AbortSignal }>) {
+    return this.#gradeSources.resolveMove(context, input);
+  }
+
+  readGradeRecordedContext(context: RecordedGradeContext) { return this.#gradeSources.read(context); }
+  readGradeMoveSource(source: RecordedGradeSource) { return this.#gradeSources.readSource(source); }
+  resolveReviewMeasurementSource(context: RecordedGradeContext) { return this.#gradeSources.reviewMeasurements(context); }
+
+  #reviewGradeContext(runId: string, principal: Principal, run: DrillRun, branchId: string, signal: AbortSignal) {
+    const path = branchPath(run, branchId), throughNodeId = path.at(-1)?.id;
+    if (throughNodeId === undefined) throw new ServerError("EVIDENCE_UNAVAILABLE", "Review has no original recorded path");
+    // Review's existing dedicated page owns its review-only ceiling; it never turns on a
+    // live-play preset or borrows Inspector permission to grade historical moves.
+    return this.resolveGradeRecordedContext(runId, principal, null, { branchId, throughNodeId,
+      decisionDigest: moduleDecisionStamp(run).digest, timing: "review" }, signal);
+  }
 
   acquireInspectorLedgerSource(context: InspectorRecordedContext,
     input: Readonly<{ projection: "recorded.engine.eval@1" | "recorded.tablebase.result@1"; signal: AbortSignal }>) {
@@ -3005,20 +3469,190 @@ export class RunService {
    * persisted): post-commit/checkpoint/review receipts join their existing durable boundary events;
    * pre-/at-commit receipts are the ephemeral request receipts ([[D1866]]).
    */
-  queryModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = {}, signal: AbortSignal = new AbortController().signal) {
+  async queryShapeFirings(runId: string, principal: Principal, value: unknown,
+    availability: ServerEvidenceAvailabilityReceipt, signal: AbortSignal): Promise<GuidedShapePage> {
+    let request: ReturnType<typeof parseGuidedShapeQuery>;
+    try { request = parseGuidedShapeQuery(value); }
+    catch { throw new ServerError("INVALID_REQUEST", "Guided pattern request is invalid"); }
+    const owner = Object.freeze({ ...principal }), sourceState = structuredClone(availability);
+    const read = () => {
+      signal.throwIfAborted(); this.#refuseRatedAssistance(runId);
+      const { stored, role } = requireRead(this.#storage, runId, owner);
+      const authority = this.assistanceAuthority(runId, owner);
+      let assistance: FinalizedAssistanceV1;
+      try {
+        assistance = finalizeAssistanceEffects(compileAuthoritativeAssistance(request.assistance,
+          { ...authority, availability: sourceState }), { authority: MODULE_SOURCE_AUTHORITY, availability: sourceState });
+      } catch (error) {
+        if (error instanceof AssistanceExchangeError) throw new ServerError("INVALID_REQUEST", "Guided pattern requested help does not match the current workflow");
+        throw error;
+      }
+      if (assistance.config.guided !== "live" || !assistance.effects.some(effect => effect.effectId === "structure_nudge:post_commit:proactive")) {
+        throw new ServerError("ASSISTANCE_WITHHELD", "Named-pattern guidance is not enabled in this context");
+      }
+      if (moduleDecisionStamp(stored.run).digest !== request.query.decisionDigest) throw new ServerError("INVALID_REQUEST", "Guided pattern subject changed");
+      return { run: stored.run, role, assistance };
+    };
+    const initial = read(), originalBytes = canonicalizeJson(initial.run);
+    const current = () => {
+      const state = read();
+      if (state.role !== initial.role || state.assistance.finalDigest !== initial.assistance.finalDigest
+        || canonicalizeJson(state.run) !== originalBytes) throw new ServerError("EVIDENCE_UNAVAILABLE", "Guided pattern context changed");
+      return state;
+    };
+    // Validate the whole stored graph before narrowing. Ordinary guidance does not borrow
+    // Inspector's full-inspector permission or its forced recorded-review disclosure override.
+    try {
+      assertRunEventSequence(initial.run.id, initial.run.events);
+      if (canonicalizeJson(readBackReplay(initial.run.events).run) !== originalBytes) throw new TypeError("Original run differs from replay");
+      for (const branch of initial.run.branches) {
+        const nodes = branchPath(initial.run, branch.id);
+        for (const [index, node] of nodes.entries()) {
+          if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new TypeError("Noncanonical recorded node");
+          if (index > 0) recordedEdgePayload(initial.run, nodes[index - 1]!, node);
+        }
+      }
+    } catch { throw new ServerError("EVIDENCE_UNAVAILABLE", "Guided pattern graph is invalid"); }
+    if (!initial.run.branches.some(branch => branch.id === request.query.branchId)) throw new ServerError("INVALID_REQUEST", "Guided pattern branch is not recorded");
+    const branch = branchPath(initial.run, request.query.branchId), endpoint = branch.findIndex(node => node.id === request.query.endpointId);
+    if (endpoint < 0) throw new ServerError("INVALID_REQUEST", "Guided pattern endpoint is not on this branch");
+    const path = Object.freeze(branch.slice(0, endpoint + 1).map(({ id, fen }) => Object.freeze({ id, fen })));
+    // Complete consumer admission precedes even an empty/missing source, not merely final mint.
+    try { compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, CURRENT_SHAPE_CONSUMER); }
+    catch (error) {
+      if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError || error instanceof TypeError) {
+        throw new ServerError("EVIDENCE_UNAVAILABLE", "Guided pattern execution contract is unavailable");
+      }
+      throw error;
+    }
+    let registered: RegisteredShapeSource | null = null, inputDigest: string | null = null;
+    let firings: GuidedShapePage["firings"] = Object.freeze([]);
+    let outcome: GuidedShapePage["outcome"] = Object.freeze({ kind: "unavailable", reason: "authored_source_absent" });
+    if (this.#shapes !== undefined) {
+      try {
+        const builder = await this.#shapes.beginCurrentShapeScan(path, signal); current();
+        registered = this.#shapes.sourceForCurrentShapeScan(builder);
+        for (;;) {
+          current(); const step = this.#shapes.advanceCurrentShapeScan(builder); current();
+          if (step.kind === "complete") {
+            this.#shapes.assertCurrentShapeScan(step.scan);
+            firings = currentShapeFiringsForGuidance(step.scan);
+            inputDigest = readRegisteredShapeScan(step.scan).inputDigest;
+            outcome = Object.freeze({ kind: firings.length === 0 ? "no_witness" : "available" }); break;
+          }
+          await new Promise(resolve => setTimeout(resolve, 0)); current();
+        }
+      } catch (error) {
+        if (error instanceof RegisteredShapeScanUnavailable) outcome = Object.freeze({ kind: "unavailable", reason: error.reason });
+        else if (error instanceof TypeError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Guided pattern source is invalid or changed");
+        else throw error;
+      }
+    }
+    current();
+    if (registered !== null) this.#shapes!.assertRegisteredTriggersCurrent(registered);
+    const effectiveConfigDigest = initial.assistance.finalDigest;
+    const sourceKey = presentationDigest("guided.shape_source@1", { runId, subject: request.query, role: initial.role,
+      effectiveConfigDigest, path, outcome, inputDigest,
+      records: registered === null ? null : registeredShapeRecordsImage(readRegisteredShapeSource(registered)) });
+    current(); if (registered !== null) this.#shapes!.assertRegisteredTriggersCurrent(registered);
+    return Object.freeze({ runId, ...request.query, effectiveConfigDigest, sourceKey, outcome, firings });
+  }
+
+  async #prepareModuleShapeSources(runId: string, principal: Principal, assistance: FinalizedAssistanceV1,
+    request: ModuleQueryRequest, signal: AbortSignal): Promise<PreparedModuleShapeSources> {
+    try {
+      const owner = Object.freeze({ ...principal });
+      signal.throwIfAborted(); this.#refuseRatedAssistance(runId);
+      const initial = requireRead(this.#storage, runId, owner), run = initial.stored.run;
+      const original = canonicalizeJson(run), authority = canonicalizeJson(this.assistanceAuthority(runId, owner));
+      const assertCurrent = () => {
+        signal.throwIfAborted(); this.#refuseRatedAssistance(runId);
+        const now = requireRead(this.#storage, runId, owner);
+        if (now.role !== initial.role || canonicalizeJson(now.stored.run) !== original
+          || canonicalizeJson(this.assistanceAuthority(runId, owner)) !== authority) throw new ServerError("EVIDENCE_UNAVAILABLE", "Module source context changed");
+      };
+      // This is the very same pure timing/selection/complete-consumer preflight queryModules uses.
+      // It reads no source, including for Quiet, unrelated modules or a closed disclosure boundary.
+      const points = moduleShapeScanSubjects({ run, assistance, request, ...this.#moduleViewer(runId, owner, run, initial.role) });
+      const prepared = new Map<string, ReturnType<NonNullable<ModuleSourceContext["shapeAt"]>>>();
+      let registered: RegisteredShapeSource | undefined;
+      const current = () => { assertCurrent(); if (registered !== undefined) this.#shapes!.assertRegisteredTriggersCurrent(registered); };
+      if (points.length > 0) {
+        assertRunEventSequence(run.id, run.events);
+        if (canonicalizeJson(readBackReplay(run.events).run) !== original) throw new TypeError("Original module graph differs from replay");
+        for (const branch of run.branches) {
+          const nodes = branchPath(run, branch.id);
+          for (const [index, node] of nodes.entries()) {
+            if (canonicalFen(positionFromFen(node.fen)) !== node.fen) throw new TypeError("Noncanonical recorded module node");
+            if (index > 0) recordedEdgePayload(run, nodes[index - 1]!, node);
+          }
+        }
+      }
+      for (const point of points) {
+        current();
+        if (this.#shapes === undefined) { prepared.set(point.id, Object.freeze({ kind: "unavailable", reason: "authored_source_absent" })); continue; }
+        try {
+          const builder = await this.#shapes.beginCurrentShapeScan([point], signal); current();
+          registered ??= this.#shapes.sourceForCurrentShapeScan(builder); current();
+          for (;;) {
+            current(); const step = this.#shapes.advanceCurrentShapeScan(builder); current();
+            if (step.kind === "complete") {
+              this.#shapes.assertCurrentShapeScan(step.scan);
+              prepared.set(point.id, Object.freeze({ kind: "available", scan: step.scan })); break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 0)); current();
+          }
+        } catch (error) {
+          if (!(error instanceof RegisteredShapeScanUnavailable)) throw error;
+          current(); prepared.set(point.id, Object.freeze({ kind: "unavailable", reason: error.reason }));
+        }
+      }
+      current();
+      return Object.freeze({ assertCurrent: current, shapeAt: (nodeId: string) => {
+        current(); const point = prepared.get(nodeId);
+        if (point === undefined) throw new TypeError("Module requested an unprepared shape timing subject");
+        if (point.kind === "available") this.#shapes!.assertCurrentShapeScan(point.scan);
+        return point;
+      } });
+    } catch (error) {
+      if (error instanceof ModuleQueryError) throw new ServerError(error.code === "MODULE_QUERY_WITHHELD" ? "ASSISTANCE_WITHHELD" : "INVALID_REQUEST", error.message);
+      if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Module execution contract is unavailable");
+      if (error instanceof TypeError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Module source contract is unavailable");
+      throw error;
+    }
+  }
+
+  async queryModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest,
+    explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = {}, signal: AbortSignal = new AbortController().signal) {
+    const prepared = await this.#prepareModuleShapeSources(runId, principal, assistance, request, signal);
+    return this.#queryPreparedModules(runId, principal, assistance, request, prepared, explorer, signal);
+  }
+
+  #queryPreparedModules(runId: string, principal: Principal, assistance: FinalizedAssistanceV1, request: ModuleQueryRequest, prepared: PreparedModuleShapeSources, explorer: Pick<ModuleSourceContext, "explorerSummary" | "explorerUnavailable"> = {}, signal: AbortSignal = new AbortController().signal) {
     this.#refuseRatedAssistance(runId);
     const { stored, role } = requireRead(this.#storage, runId, principal);
     const run = stored.run;
-    // Each input is lazy independently: local position/recorded-run modules do not need
-    // catalogue reads; Structure needs shapes, while Theory also needs released claims.
-    // The runtime still preflights every effective local consumer before acquiring either.
-    let shapes: ModuleSourceContext["shapes"];
+    prepared.assertCurrent();
+    // Prepared shape points are source-owned. Other inputs remain independently lazy.
+
     let authoredAt: ModuleSourceContext["authoredAt"];
     let comparisonContext: RecordedComparisonContext | undefined;
+    const postcommitContexts = new Map<string, RecordedGradeContext>();
     let openingConsulted = false;
     const service = this;
     const sources: ModuleSourceContext = {
-      ...explorer,
+      ...explorer, shapeAt: prepared.shapeAt,
+      postcommitAt(nodeId) {
+        let context = postcommitContexts.get(nodeId);
+        if (context === undefined) {
+          const subject = run.nodes.find(node => node.id === nodeId);
+          if (subject === undefined) throw new TypeError("Nudge source subject is not recorded");
+          context = service.resolveGradeRecordedContext(runId, principal, assistance, { branchId: postcommitSubjectBranch(run, subject),
+            throughNodeId: nodeId, decisionDigest: moduleDecisionStamp(run).digest, timing: "post_commit" }, signal);
+          postcommitContexts.set(nodeId, context);
+        }
+        return service.#gradeSources.postcommitSources(context);
+      },
       get opening() { openingConsulted = true; return service.#openingCatalogue; },
       get comparison() {
         if (request.timing !== "checkpoint" && request.timing !== "review") return undefined;
@@ -3031,12 +3665,6 @@ export class RunService {
           if (error instanceof TypeError) throw new ServerError("EVIDENCE_UNAVAILABLE", "Recorded comparison source is invalid or changed");
           throw error;
         }
-      },
-      get shapes() {
-        return shapes ??= service.#shapes?.list().map((summary) => {
-          const document = service.#shapes!.required(summary.id).document;
-          return { id: document.id, trigger: document.trigger };
-        }) ?? [];
       },
       get authoredAt() {
         if (authoredAt === undefined) {
@@ -3057,9 +3685,11 @@ export class RunService {
         sources,
       }).page;
       if (comparisonContext !== undefined) this.readComparisonRecordedContext(comparisonContext);
-      signal.throwIfAborted(); return result;
+      for (const context of postcommitContexts.values()) this.readGradeRecordedContext(context);
+      signal.throwIfAborted(); prepared.assertCurrent(); return result;
     } catch (error) {
       if (error instanceof RecordedComparisonContextError) throw new ServerError(error.reason === "permission_withheld" ? "ASSISTANCE_WITHHELD" : "EVIDENCE_UNAVAILABLE", error.message);
+      if (error instanceof RecordedGradeContextError) throw new ServerError(error.reason === "permission_withheld" ? "ASSISTANCE_WITHHELD" : "EVIDENCE_UNAVAILABLE", error.message);
       if (error instanceof EvidenceBindingExecutionError || error instanceof EvidenceExecutionError) {
         throw new ServerError("EVIDENCE_UNAVAILABLE", "Module execution contract is unavailable");
       }
@@ -3067,7 +3697,7 @@ export class RunService {
         if (error.code === "MODULE_QUERY_WITHHELD") throw new ServerError("ASSISTANCE_WITHHELD", error.message);
         throw new ServerError("INVALID_REQUEST", error.message);
       }
-      if (error instanceof RecordedMeasurementSourceError || ((comparisonContext !== undefined || openingConsulted) && error instanceof TypeError)) throw new ServerError("EVIDENCE_UNAVAILABLE", "Requested recorded evidence source is invalid or changed");
+      if (error instanceof RecordedMeasurementSourceError || ((comparisonContext !== undefined || postcommitContexts.size > 0 || openingConsulted) && error instanceof TypeError)) throw new ServerError("EVIDENCE_UNAVAILABLE", "Requested recorded evidence source is invalid or changed");
       throw error;
     }
   }
@@ -3077,11 +3707,12 @@ export class RunService {
     const requestSignal = signal ?? new AbortController().signal;
     // The pure preview validates authority/subject/disclosure and determines admitted demand.
     // It does not persist novelty, history or credit and is never returned to the browser.
-    const preview = this.queryModules(runId, principal, assistance, request, {}, requestSignal);
+    const prepared = await this.#prepareModuleShapeSources(runId, principal, assistance, request, requestSignal);
+    const preview = this.#queryPreparedModules(runId, principal, assistance, request, prepared, {}, requestSignal);
     if (!preview.packets.some((packet) => packet.module === "theory_breadcrumb")) return preview;
     // Compile the complete consumer, including transitive source-absence and latency policies.
     // A separately valid provider projection cannot bypass another invalid Theory binding.
-    const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 1 });
+    const execution = compileEvidenceConsumerExecution(EVIDENCE_MANIFEST, { id: "module.theory_breadcrumb", version: 2 });
     const populationBinding = execution.bindings.find(row => row.binding.projection.id === "derived.explorer.population_summary" && row.binding.projection.version === 1);
     if (populationBinding === undefined || populationBinding.sourceAbsence?.necessity !== "optional" || populationBinding.sourceAbsence.whenNoPath !== "omit_optional_item"
       || populationBinding.paths.length !== 1 || populationBinding.paths[0]!.sourceRequirements.length !== 1
@@ -3119,8 +3750,12 @@ export class RunService {
       }
     }
     if (signal?.aborted) throw Object.assign(new Error("Module request cancelled"), { name: "AbortError" });
-    // Re-read authorization/run after I/O. A changed decision must not disclose an old request.
-    const page = this.queryModules(runId, principal, assistance, request, explorer, requestSignal);
+    // Re-read authorization/run after I/O before touching prepared sources. Preserve the
+    // existing changed-decision response; other source/authority changes still fail closed.
+    const currentRun = requireRead(this.#storage, runId, principal).stored.run;
+    if (moduleDecisionStamp(currentRun).digest !== preview.decision.digest) throw new ServerError("INVALID_REQUEST", "Module decision changed while acquiring Explorer evidence");
+    prepared.assertCurrent();
+    const page = this.#queryPreparedModules(runId, principal, assistance, request, prepared, explorer, requestSignal);
     if (page.decision.digest !== preview.decision.digest) throw new ServerError("INVALID_REQUEST", "Module decision changed while acquiring Explorer evidence");
     return page;
   }

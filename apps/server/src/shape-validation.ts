@@ -3,13 +3,15 @@ import { fileURLToPath } from "node:url";
 
 import type { ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
 import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
-import { evaluateAuthoredStructuralPredicate } from "@chess-tabiya/runtime";
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { declareCurrentStructuralPredicateEvidence } from "../../../packages/runtime/src/structural-evidence.js";
 import { INITIAL_FEN } from "chessops/fen";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
 import { structuralIssues, type PackValidationIssue } from "./pack-validation.js";
 import { refuteStructuralExpression } from "./expression-satisfiability.js";
+import { captureDraftShapeStructuralDocument, selectAuthoredStructuralCondition } from "../../../packages/runtime/src/internal/authored-structural-source.js";
 
 export interface ShapeValidationResult {
   readonly valid: boolean;
@@ -67,6 +69,8 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
   const validate = validator();
   if (!validate(value)) return Object.freeze({ valid: false, issues: Object.freeze((validate.errors ?? []).map(schemaIssue)) });
   const document = structuredClone(value) as ShapeEntryDefinition;
+  try { canonicalizeJson(document); }
+  catch { return Object.freeze({ valid: false, issues: Object.freeze([issue("SCHEMA_JSON", "/", "Document must contain only canonicalizable JSON values", "schema")]) }); }
   const issues: PackValidationIssue[] = [...structuralIssues(document.trigger, "/trigger")];
   if (containsPlanSignature(document.trigger)) issues.push(issue("PLAN_SIGNATURE_NESTED", "/trigger", "shape entries cannot resolve pack-local plan_signature references"));
   for (const [index, plan] of document.plans.entries()) {
@@ -76,7 +80,10 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
     }
   }
   const expressionValid = !issues.some((candidate) => candidate.severity === "error");
-  if (expressionValid && evaluateAuthoredStructuralPredicate(INITIAL_FEN, document.trigger, { source: "shape", documentId: document.id, pointer: "/trigger" })) {
+  const source = expressionValid ? selectAuthoredStructuralCondition(captureDraftShapeStructuralDocument(document), "/trigger") : undefined;
+  const initial = source === undefined ? undefined : declareCurrentStructuralPredicateEvidence(INITIAL_FEN, source);
+  if (initial?.kind === "unavailable") issues.push(issue("STRUCTURAL_SOURCE_UNAVAILABLE", "/trigger", initial.reason));
+  if (initial?.kind === "available" && initial.value.payload.observation.matched) {
     issues.push(issue("SHAPE_TRIGGER_TRUE_AT_INITIAL", "/trigger", "shape trigger must not match the standard initial position"));
   }
   const triggerRefutation = containsPlanSignature(document.trigger) ? undefined : refuteStructuralExpression(document.trigger);
@@ -103,10 +110,12 @@ export function validateShapeEntry(value: unknown, options: { readonly probeFen?
   for (const [path, text] of prose) {
     if (FEN_IN_PROSE.test(text)) issues.push(issue("SHAPE_PROSE_CONTAINS_FEN", path, "shape prose cannot contain a FEN"));
   }
+  const probe = options.probeFen === undefined || source === undefined ? undefined : declareCurrentStructuralPredicateEvidence(options.probeFen, source);
+  if (probe?.kind === "unavailable") issues.push(issue("STRUCTURAL_SOURCE_UNAVAILABLE", "/trigger", probe.reason));
   return Object.freeze({
     valid: !issues.some((candidate) => candidate.severity === "error"),
     issues: Object.freeze(issues),
     document,
-    ...(options.probeFen === undefined || !expressionValid ? {} : { probeMatches: evaluateAuthoredStructuralPredicate(options.probeFen, document.trigger, { source: "shape", documentId: document.id, pointer: "/trigger" }) }),
+    ...(probe?.kind !== "available" ? {} : { probeMatches: probe.value.payload.observation.matched }),
   });
 }

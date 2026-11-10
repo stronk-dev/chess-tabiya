@@ -1,9 +1,10 @@
 import type { AddressInfo } from "node:net";
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { IMPORTED_GAME_PREDICTION_CHECKPOINT } from "./service.js";
 import { OpponentSelector } from "./opponent-selector.js";
 
@@ -22,7 +23,11 @@ function scan(value: unknown, keys: string[] = [], strings: string[] = []): { ke
 
 describe("return scheduling through the production application", { timeout: 20_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
-  afterEach(async () => { await application?.close(); application = undefined; vi.restoreAllMocks(); });
+  beforeEach(() => { installEmptyApplicationCatalogues(); });
+  afterEach(async () => {
+    try { await application?.close(); }
+    finally { application = undefined; vi.restoreAllMocks(); }
+  });
 
   async function start() {
     application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });

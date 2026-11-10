@@ -1,18 +1,18 @@
 // DISPOSABLE D3859 complete module execution research. Existing declarations/compiler only;
 // proposed Inspector rebase rows are an inventory aid, NOT new module bindings or source proof.
+// The completed predecessor-only grade experiments were retired by D3931. Their original
+// code/results remain in Git at 48a6e0f5 and the dated research dossier; current grade source,
+// arithmetic and cross-workflow controls live in the normal recorded-grade/Review tests.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { EVIDENCE_CONTRACT_DECLARATIONS, EVIDENCE_MODULE_IDS, MODULE_CONSUMER_ACCEPTS, PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 import { compileProjectionExecution, EvidenceExecutionError } from "../../packages/runtime/src/evidence-execution.js";
 import { compileEvidenceConsumerExecution } from "../../packages/runtime/src/evidence-binding-execution.js";
 import type { VersionedEvidenceId } from "../../packages/runtime/src/evidence-contract.js";
-import { compileEvidenceManifest, evidenceValueReceipt, type DeclaredEvidence, type ProjectionDeclaration } from "../../packages/runtime/src/evidence-contract.js";
-import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
+import { compileEvidenceManifest, evidenceValueReceipt, type ProjectionDeclaration } from "../../packages/runtime/src/evidence-contract.js";
+import { evidenceValueRouteRegistry, invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 import { importedRun, play } from "../../packages/runtime/src/testing/review-evidence-fixture.js";
-import { moveQualityGrade, type MoveQualityGrade } from "../../packages/runtime/src/grade.js";
-import { gradeReadingFromPayload } from "../../packages/runtime/src/grade-reading.js";
 import { SEQUENCE_SOURCE_REBASES } from "./recorded-sequence-contract.js";
-import { runGradeSourceResearch } from "./grade-source.js";
 import { defenderExposureOperands, localSemanticEventClosure, localSemanticEvents } from "../../packages/runtime/src/semantic-evidence.js";
 import { candidateChildReadings, CANDIDATE_PACKET_COMPILER_VERSION, CANDIDATE_WIDE_SCOPE, compileCandidatePopulation } from "../../packages/runtime/src/candidate-population.js";
 import { HINT_DECLARATION_MATRIX } from "../../packages/runtime/src/hint-registry.js";
@@ -27,7 +27,9 @@ const declarations = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map(row => [k
 const parse = (value: string): VersionedEvidenceId => {
   const [id, version] = value.split("@"); return { id: id!, version: Number(version) };
 };
-export function runModuleSourceResearch() {
+// The proposal census below is retained as historical research, not an executable current
+// manifest assertion. Its 299→282 counterfactual and compiler-1 premises were superseded.
+function runHistoricalModuleSourceResearch() {
   let controls = 0;
   const check = (test: () => void) => { test(); controls++; };
   const sourceMap = readFileSync("rfc/module-registration.md", "utf8")
@@ -111,12 +113,22 @@ export function runModuleSourceResearch() {
   check(() => assert.deepEqual(grade.derivation?.anyOf?.map(member => member.map(key)), pairedMembers));
   console.log(JSON.stringify({ scope: "D3859 current complete module/ref/source census; conditional Inspector mapping is NOT new module authority/adoption",
     controls, rows, counterfactualDroppingLiveGradeCompiles: true, oldDeclarationsChanged: false, providerCalls: 0, productionChanges: 0 }));
-  runGradeOperandResearch();
   runPrelaunchRetirementResearch(replacements);
   runWholeCurrentModuleInventory(replacements);
-  runGradeSourceResearch();
   runExposureWitnessDiagnostic();
   runCurrentPacketSourceDiagnostic();
+  runExposureAbsenceDiagnostic();
+  runLandingCaptureSourceRecipe();
+}
+
+export function runModuleSourceResearch() {
+  for (const retired of ["derived.tactic.defender_exposure@1", "derived.material.reading.role_signature@1", "derived.material.event.role_asymmetry@1"]) {
+    assert(!evidenceValueRouteRegistry().some(route => route.route === retired));
+  }
+  console.log(JSON.stringify({ scope: "D3859 historical proposal/compiler-1 census retired; original bodies and dated results retained, not remeasured",
+    retiredDiagnostics: ["299-to-282 proposal inventory", "prelaunch replacement counterfactual", "active compiler-1 source diagnostic"],
+    historicalCountsReproduced: false, currentConsumerQualification: false }));
+  runExposureWitnessDiagnostic();
   runExposureAbsenceDiagnostic();
   runLandingCaptureSourceRecipe();
 }
@@ -177,10 +189,11 @@ function runLandingCaptureSourceRecipe() {
     installedInternalExposure: true, publicExposureCutover: false, instrumentProductionChanges: 0 }));
 }
 
-// DISPOSABLE D3868 actual absence path; no corrected source, packet or learner operation.
+// Current source control replacing the historical D3868 unavailable-to-empty diagnostic.
 function runExposureAbsenceDiagnostic() {
   let controls = 0;
   const check = (test: () => void) => { test(); controls++; };
+  check(() => assert.equal(CANDIDATE_PACKET_COMPILER_VERSION, 2));
   for (const fixture of [
     { side: "white" as const, fen: "r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", move: "c5b6" },
     { side: "black" as const, fen: "3k3r/8/8/8/5b2/6N1/6b1/4K2R b - - 0 1", move: "f4g3" },
@@ -191,22 +204,22 @@ function runExposureAbsenceDiagnostic() {
     check(() => assert.equal(raw.length, 1));
     check(() => assert.equal(raw[0]!.kind, "unavailable"));
     check(() => assert.equal(raw[0]!.reason, "invalid_turn_clone"));
-    check(() => assert.deepEqual(invokeEvidenceValueRoute("derived.tactic.defender_exposure@1", { beforeFen: root.fen, moveUci: child.moveUci!, afterFen: child.fen }), []));
+    check(() => assert.deepEqual(invokeEvidenceValueRoute("derived.tactic.defender_exposure@2", { beforeFen: root.fen, moveUci: child.moveUci!, afterFen: child.fen }), { kind: "unavailable", reason: "invalid_turn_clone" }));
     const closure = localSemanticEventClosure(root.fen, child.moveUci!, child.fen);
-    check(() => assert(!closure.abstentions.map(value => String(value.projection)).includes("derived.tactic.defender_exposure@1")));
+    check(() => assert(closure.abstentions.some(value => String(value.projection) === "derived.tactic.defender_exposure@2")));
     const packet = compileCandidatePopulation({ beforeFen: root.fen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
     check(() => assert.equal(packet.kind, "ready"));
     if (packet.kind !== "ready") throw new Error("actual exposure absence packet did not compile");
     const row = packet.receipt.packet.candidates.find(value => value.moveUci === child.moveUci)!;
     check(() => assert(row));
-    check(() => assert(!row.abstentions.map(value => String(value.projection)).includes("derived.tactic.defender_exposure@1")));
+    check(() => assert(row.abstentions.some(value => String(value.projection) === "derived.tactic.defender_exposure@2")));
   }
   const empty = play(importedRun("exposure-absence:real-empty", "white", "r3k3/8/1n6/2B5/8/8/8/4K3 w - - 0 1"), ["c5b6"]);
   const root = empty.nodes.find(node => node.parentId === null)!, child = empty.nodes.find(node => node.parentId === root.id)!;
   check(() => assert.deepEqual(defenderExposureOperands(root.fen, child.moveUci!, child.fen), []));
-  check(() => assert.deepEqual(invokeEvidenceValueRoute("derived.tactic.defender_exposure@1", { beforeFen: root.fen, moveUci: child.moveUci!, afterFen: child.fen }), []));
-  console.log(JSON.stringify({ scope: "DISPOSABLE D3868 actual unavailable-to-empty loss, NOT corrected source/consumer proof",
-    controls, legalCheckingEdges: 2, helperUnavailable: 2, factoryEmpty: 2, packetAbstentionMissing: 2, realEmptyControls: 1, productionChanges: 0 }));
+  check(() => assert.deepEqual(invokeEvidenceValueRoute("derived.tactic.defender_exposure@2", { beforeFen: root.fen, moveUci: child.moveUci!, afterFen: child.fen }), { kind: "available", value: [] }));
+  console.log(JSON.stringify({ scope: "Current exposure@2 unavailable-versus-empty source control; NOT old D3868 counts or learner qualification",
+    controls, legalCheckingEdges: 2, helperUnavailable: 2, factoryUnavailable: 2, packetAbstentions: 2, realEmptyControls: 1, productionChanges: 0 }));
 }
 
 // DISPOSABLE D3866 active-path falsifier, not a corrected packet or Hint implementation.
@@ -239,16 +252,19 @@ function runExposureWitnessDiagnostic() {
   const root = run.nodes.find(node => node.parentId === null)!, child = run.nodes.find(node => node.parentId === root.id)!;
   const exposures = localSemanticEvents(root.fen, child.moveUci!, child.fen)
     .filter(event => event.projection.id === "derived.tactic.defender_exposure");
-  const multi = exposures.find(event => event.derivationInputs.filter(input => input.projection.id === "rules.exchange.predicate.legal_exchange").length > 1);
-  assert(multi, "independent-review fixture must reach multiple real positive exchange witnesses");
-  const declared = declarations.get("derived.tactic.defender_exposure@1")!.derivation!.inputs!;
+  const multi = exposures[0];
+  assert(multi, "independent-review fixture must reach a real exposure");
+  const declared = declarations.get("derived.tactic.defender_exposure@2")!.derivation!.inputs!;
   assert.equal(declared.length, 2);
-  assert.equal(multi.derivationInputs.length, 3);
-  assert.equal(evidenceValueReceipt(multi.evidence).sourceDigests.length, 3);
-  assert.equal(multi.derivationInputs.filter(input => input.projection.id === "rules.exchange.predicate.legal_exchange").length, 2);
-  assert.notDeepEqual(declared, multi.derivationInputs.map(input => input.projection));
-  console.log(JSON.stringify({ scope: "DISPOSABLE actual defender-exposure literal-count falsifier, NOT successor/adoption proof",
-    controls: 6, fen, move: child.moveUci, declaredInputs: declared.length, actualInputs: multi.derivationInputs.length,
+  assert.equal(multi.derivationInputs.length, 2);
+  assert.equal(evidenceValueReceipt(multi.evidence).sourceDigests.length, 2);
+  assert.equal(defenderExposureOperands(root.fen, child.moveUci!, child.fen)[0]!.captures!.length, 2);
+  const completeReading = invokeEvidenceValueRoute("rules.exchange.reading.landing_captures@1", { fen: passFen(child.fen)!, landingSquare: "b6" });
+  assert.equal(completeReading.payload.captures.filter(capture => capture.resultUnits > 0).length, 2);
+  assert.deepEqual(multi.derivationInputs[1]!.payload, completeReading.payload);
+  assert.deepEqual(declared, multi.derivationInputs.map(input => input.projection));
+  console.log(JSON.stringify({ scope: "Current defender-exposure fixed-tuple control replacing historical literal-count falsifier; NOT learner qualification",
+    controls: 8, fen, move: child.moveUci, declaredInputs: declared.length, actualInputs: multi.derivationInputs.length,
     positiveExchangeWitnesses: 2, productionChanges: 0 }));
   let breadthControls = 0;
   const check = (test: () => void) => { test(); breadthControls++; };
@@ -263,7 +279,11 @@ function runExposureWitnessDiagnostic() {
     check(() => assert.equal(events.length, fixture.captures === 0 ? 0 : 1));
     if (fixture.captures === 0) continue;
     const event = events[0]!;
-    check(() => assert.deepEqual(event.derivationInputs.map(input => key(input.projection)), ["rules.square.event.control@1", ...Array.from({ length: fixture.captures }, () => "rules.exchange.predicate.legal_exchange@1")]));
+    check(() => assert.deepEqual(event.derivationInputs.map(input => key(input.projection)), ["rules.square.event.control@1", "rules.exchange.reading.landing_captures@1"]));
+    check(() => assert.equal(defenderExposureOperands(before.fen, after.moveUci!, after.fen)[0]!.captures!.length, fixture.captures));
+    const completeReading = invokeEvidenceValueRoute("rules.exchange.reading.landing_captures@1", { fen: passFen(after.fen)!, landingSquare: fixture.side === "black" ? "g3" : "b6" });
+    check(() => assert.equal(completeReading.payload.captures.filter(capture => capture.resultUnits > 0).length, fixture.captures));
+    check(() => assert.deepEqual(event.derivationInputs[1]!.payload, completeReading.payload));
     check(() => assert.deepEqual(evidenceValueReceipt(event.evidence).sourceDigests, event.derivationInputs.map(input => evidenceValueReceipt(input).payloadDigest)));
   }
   console.log(JSON.stringify({ scope: "DISPOSABLE D3867 actual witness breadth, NOT source successor or qualification",
@@ -388,57 +408,4 @@ function runPrelaunchRetirementResearch(inspectorReplacements: ReadonlyMap<strin
   assert.deepEqual(rows.map(row => row.conditionalTarget), [52, 72, 65]); controls++;
   console.log(JSON.stringify({ scope: "D3851 pre-launch family-preserving retirement inventory; NOT complete consumer bindings, source acceptance or production deletion",
     controls, rows, sourceIssuersImplemented: false, compatibilityRequired: false, productionChanges: 0 }));
-}
-
-function runGradeOperandResearch() {
-  let pairedOutputs = 0, mixedSourceRefusals = 0;
-  const sourceCombinations = new Set<string>(), declaredInputCounts = new Set<number>();
-  const grade = declarations.get("derived.grade.move_quality@1")!;
-  grade.derivation!.anyOf!.forEach(member => declaredInputCounts.add(member.length));
-  assert.deepEqual([...declaredInputCounts], [2]);
-  for (const mover of ["white", "black"] as const) {
-    const run = play(importedRun(`d3859-grade-${mover}`, mover,
-      `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR ${mover === "white" ? "w" : "b"} KQkq - 0 1`),
-    [mover === "white" ? "e2e4" : "e7e5"]);
-    const parent = run.nodes.find(node => node.parentId === null)!, child = run.nodes.find(node => node.parentId === parent.id)!;
-    const edge = invokeEvidenceValueRoute("run.record.edge@1", { run, parent, child });
-    assert.equal(edge.payload.beforeFen, parent.fen); assert.equal(edge.payload.afterFen, child.fen);
-    function inputs(fen: string, cp: number): readonly DeclaredEvidence<unknown>[] {
-      const values = { fen, centipawns: cp, engineId: "synthetic", engineName: "Synthetic fixture (not an engine run)",
-        engineVersion: "fixture", perspective: "white", depth: 12, requestedDepth: 12, multiPv: 1 };
-      const ledger = invokeEvidenceValueRoute("sourcing.ledger.engine_eval@1", { record: {
-        kind: "engine_eval", sourceId: "synthetic-report", retrievedAt: "2026-10-15T00:00:00.000Z", grounds: "machine_validation",
-        anchor: { fen }, supports: [], values } });
-      const recorded = invokeEvidenceValueRoute("recorded.engine.eval@1", { ledger });
-      assert.equal(recorded.kind, "available");
-      const packet = invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: { kind: "eval", source: "engine_validated", values } });
-      return [recorded.value, packet];
-    }
-    const beforeInputs = inputs(parent.fen, mover === "white" ? 200 : -200);
-    const afterInputs = inputs(child.fen, mover === "white" ? -200 : 200);
-    for (const context of ["drill", "review", "imported_analysis"] as const) {
-      for (const before of beforeInputs) for (const after of afterInputs) {
-        const output = invokeEvidenceValueRoute("derived.grade.move_quality@1", { before, after, mover, context });
-        sourceCombinations.add(`${key(before.projection)},${key(after.projection)}`);
-        if (key(before.projection) !== key(after.projection)) {
-          assert.deepEqual(output, { kind: "unavailable", reason: "unequal_instrument" });
-          mixedSourceRefusals++;
-          continue;
-        }
-        assert.equal(output.kind, "available"); assert.equal(output.value.length, 1);
-        const value = output.value[0] as DeclaredEvidence<MoveQualityGrade>;
-        assert.deepEqual(value.payload, moveQualityGrade(gradeReadingFromPayload(before.payload, mover),
-          gradeReadingFromPayload(after.payload, mover === "white" ? "black" : "white"), context, mover));
-        assert.equal(value.payload.lane, "recorded", "the old live-labelled wrapper does not establish live search origin");
-        assert.deepEqual(evidenceValueReceipt(value).sourceDigests,
-          [evidenceValueReceipt(before).payloadDigest, evidenceValueReceipt(after).payloadDigest]);
-        pairedOutputs++;
-      }
-    }
-  }
-  assert.equal(sourceCombinations.size, 4); assert.equal(pairedOutputs, 12); assert.equal(mixedSourceRefusals, 12);
-  console.log(JSON.stringify({ scope: "D3860 repaired accepted grade pairing over synthetic reports, NOT a new source/edge join or measured move quality",
-    movers: 2, contexts: 3, pairedOutputs, mixedSourceRefusals, declaredInputCounts: [...declaredInputCounts], actualSealedInputCount: 2,
-    sourceCombinations: [...sourceCombinations], allActualPayloadLanesRecorded: true,
-    samePureGradingAlgorithm: true, newSourceAuthority: false, providerCalls: 0, productionChanges: 0 }));
 }

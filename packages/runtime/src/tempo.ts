@@ -2,6 +2,7 @@ import type {
   MoveCondition,
   SimpleTrigger,
   TimingWindowDefinition,
+  StructuralExpression,
 } from "@chess-tabiya/schema/drill-pack";
 import type { Color, Role, SquareName } from "chessops/types";
 import { isNormal } from "chessops/types";
@@ -10,6 +11,7 @@ import { parseUci } from "chessops/util";
 import { positionFromFen } from "./chess.js";
 import { exactLegalMoves, exactMoveDestination, exactMoveIdentity } from "./legal-moves.js";
 import { matchesStructuralExpression } from "./structure.js";
+import { matchesCurrentStructuralExpression, preflightCurrentAuthoredOperation, requireCurrentStructuralExpression } from "./structural-evidence.js";
 import type { DrillRun, Node } from "./types.js";
 
 export const TEMPO_VERDICTS = Object.freeze([
@@ -182,6 +184,7 @@ function evaluateWindow(
   path: readonly TempoMove[],
   learner: Color,
   resolveTrigger?: TriggerResolver,
+  purpose?: "authoring" | "objective",
 ): TimingWindowState {
   const opened = openingIndex(window, path, resolveTrigger);
   if (opened === undefined) return unresolved(window);
@@ -216,7 +219,8 @@ function evaluateWindow(
       } else if (close.kind === "release") {
         matched = move.mover === learner && moveMatches(move, close.move);
       } else {
-        matched = matchesStructuralExpression(move.fen, close.feature);
+        matched = purpose === undefined ? matchesStructuralExpression(move.fen, close.feature)
+          : matchesCurrentStructuralExpression(move.fen, close.feature, purpose);
       }
       if (matched) {
         closedBy = close.kind;
@@ -289,6 +293,24 @@ export function windowStates(
   return Object.freeze(
     windows.map((window) => evaluateWindow(window, path, learner, resolveTrigger)),
   );
+}
+
+/** Current authored execution; missing/stale origins cannot select the pure compatibility path. */
+export function currentWindowStates(windows: readonly TimingWindowDefinition[], path: readonly TempoMove[], learner: Color,
+  resolveTrigger?: TriggerResolver, purpose: "authoring" | "objective" = "objective"): readonly TimingWindowState[] {
+  preflightCurrentAuthoredOperation(purpose);
+  assertCurrentWindowSources(windows);
+  return Object.freeze(windows.map(window => evaluateWindow(window, path, learner, resolveTrigger, purpose)));
+}
+
+export function assertCurrentWindowSources(windows: readonly TimingWindowDefinition[]): void {
+  for (const window of windows) {
+    for (const close of window.closes) if (close.kind === "position") requireCurrentStructuralExpression(close.feature);
+    if ("onTrigger" in window.opens && "fenPredicate" in window.opens.onTrigger) {
+      const predicate = window.opens.onTrigger.fenPredicate;
+      if (predicate.type === "structuralFeature") requireCurrentStructuralExpression(predicate.feature as StructuralExpression);
+    }
+  }
 }
 
 export function unauthoredTempoTransition(verdict: TempoVerdict): "failed" | null {

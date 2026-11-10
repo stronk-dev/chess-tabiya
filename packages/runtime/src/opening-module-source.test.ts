@@ -7,6 +7,7 @@ import { admitInstalledOpeningCatalogue } from "./opening-catalogue.js";
 import { parsePresentationReceipt, presentedSentence } from "./presentation-contract.js";
 import { commitMove, revealFeedback } from "./runtime.js";
 import * as routes from "./internal/evidence-value-routes.js";
+import { registeredShapePointFixture } from "./testing/registered-shape-fixture.js";
 import { recordedLastLevelFixture } from "./testing/recorded-last-level-fixture.js";
 
 const artifact = JSON.parse(await readFile(new URL("../../../apps/server/artifacts/runtime-opening-catalogue.json", import.meta.url), "utf8"));
@@ -33,16 +34,20 @@ const sentences = (packet: ReturnType<typeof query>) => parsePresentationReceipt
 afterEach(() => vi.restoreAllMocks());
 
 describe("actual installed opening source in Theory module queries", () => {
-  it("renders the current sealed endpoint, then removes it at an unnamed member without leaking the membership fact", () => {
-    const named = query();
+  it("renders the current sealed endpoint, then removes it at an unnamed member without leaking the membership fact", async () => {
+    const namedRun = fixture(), unnamedRun = fixture(["d2d4", "g8f6", "c2c4", "e7e6"]);
+    const namedShape = await registeredShapePointFixture(namedRun.nodes.filter(node => node.id === namedRun.activeCursor.nodeId), []);
+    const unnamedShape = await registeredShapePointFixture(unnamedRun.nodes.filter(node => node.id === unnamedRun.activeCursor.nodeId), []);
+    const namedSources = { opening, shapeAt: namedShape.shapeAt };
+    const named = query(namedRun, namedSources);
     expect(sentences(named).join(" ")).toContain("King's Pawn Game");
     expect(named.receipt.items.filter(item => item.evidenceRef?.projection.id === "theory.opening.current_endpoint")).toHaveLength(1);
     expect(named.receipt.items.some(item => item.evidenceRef?.projection.id === "theory.opening.catalogue_membership")).toBe(false);
-    const unnamed = query(fixture(["d2d4", "g8f6", "c2c4", "e7e6"]));
+    const unnamed = query(unnamedRun, { opening, shapeAt: unnamedShape.shapeAt });
     expect(sentences(unnamed).join(" ")).not.toMatch(/King's Pawn Game|Opening in the cited catalogue/u);
     expect(unnamed.unavailable.some(row => row.projection === "theory.opening.current_endpoint@1")).toBe(false);
     expect(unnamed.empty?.kind).toBe("stated_absence");
-    expect(sentences(query()).join(" ")).toContain("King's Pawn Game");
+    expect(sentences(query(namedRun, namedSources)).join(" ")).toContain("King's Pawn Game");
   });
   it.each(["artifact_missing", "artifact_invalid", "digest_mismatch"] as const)("preserves the exact %s installation state rather than reporting a successful negative", reason => {
     const packet = query(fixture(), { opening: { kind: "unavailable", reason } });

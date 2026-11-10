@@ -1,10 +1,14 @@
+import { progressRecommendationSentence } from "../../web/src/lib/progress-response.js";
+import { readFileSync } from "node:fs";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
+import { registeredShapeFixture } from "../../../packages/runtime/src/testing/registered-shape-fixture.js";
 import { commitMove, createRun, fork } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { automaticScheduleDecision, projectAttempts, type AttemptRow } from "./progress.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
-import type { PackRegistry } from "./pack-registry.js";
-import type { ShapeRegistry } from "./shape-registry.js";
+import { PackRegistry } from "./pack-registry.js";
+import { ShapeRegistry } from "./shape-registry.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
 
@@ -207,38 +211,39 @@ describe("return and progression projection", () => {
     });
   });
 
-  it("recommends only packs where an encountered shape is present", () => {
-    const storage = new SQLiteRunStorage();
-    stores.push(storage);
-    const played = commitMove(run("prospective-attempt", "prospective-pack"), "e2e4", { at }).run;
+  it("recommends only packs where an encountered shape is present", async () => {
+    const storage = new SQLiteRunStorage(); stores.push(storage);
+    const shapeRegistry = new ShapeRegistry();
+    await shapeRegistry.add({ ...registeredShapeFixture("encountered-shape"), trigger: {
+      kind: "pieceOnSquare", square: "c3", piece: { color: "white", role: "knight" } } }, "community", "fixture-author");
+    const example = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8"));
+    const packRegistry = await PackRegistry.fromDocuments(["z-present-pack", "present-pack", "a-present-pack", "prospective-pack"].map(id => ({
+      source: `mechanical-${id}`, channel: "community" as const, value: withDerivedRequires({ ...example,
+        id, shapes: [{ shape: "encountered-shape", relation: id === "prospective-pack" ? "prospective" : "present" }] }, { shapes: shapeRegistry }) })), { shapes: shapeRegistry });
+    const pack = packRegistry.required("prospective-pack");
+    const start = createRun({ id: "prospective-attempt", packId: pack.document.id, packDigest: pack.digest, startFen: pack.document.start.fen,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 12, createdAt: at });
+    const played = commitMove(start, "c1e3", { at }).run;
     storage.create(played, "writer-a", "Prospective reference");
     const projected = projectAttempts({ run: played, learnerId: "__legacy" });
     storage.upsertAttempts(projected.attempts, projected.conceptTags);
-
-    const trigger = { kind: "pieceOnSquare", square: "e1", piece: { color: "white", role: "king" } } as const;
-    const shapeRegistry = {
-      list: () => [{ id: "encountered-shape" }],
-      required: () => ({
-        document: { trigger },
-        summary: { id: "encountered-shape", name: "Encountered shape" },
-      }),
-    } as unknown as ShapeRegistry;
-    const documents = new Map<string, { readonly shapes: readonly unknown[] }>([
-      ["present-pack", { shapes: [{ shape: "encountered-shape", relation: "present" }] }],
-      ["prospective-pack", { shapes: [{ shape: "encountered-shape", relation: "prospective" }] }],
-    ]);
-    const packRegistry = {
-      list: () => [...documents.keys()].map((id) => ({ id })),
-      get: (id: string) => {
-        const document = documents.get(id);
-        return document === undefined ? undefined : { document };
-      },
-    } as unknown as PackRegistry;
     const service = new RunService(storage, { progressStorage: storage, packRegistry, shapeRegistry });
-
-    expect(service.shapeRecommendations({ learnerId: "__legacy", handle: "__legacy" })).toMatchObject({
-      total: 1,
-      recommendations: [{ shapeId: "encountered-shape", packIds: ["present-pack"] }],
-    });
+    expect(await service.shapeRecommendations({ learnerId: "__legacy", handle: "__legacy" })).toMatchObject({ total: 1,
+      recommendations: [{ shapeId: "encountered-shape", packIds: ["a-present-pack", "present-pack", "z-present-pack"] }] });
+    expect(storage.progress("__legacy").find(row => row.runId === played.id)).toMatchObject({ countable: true, packId: "prospective-pack" });
+    const offered = await service.shapeRecommendations({ learnerId: "__legacy", handle: "__legacy" });
+    expect(offered.recommendations[0]!.sentence).toBe("You met Mechanical test occupancy in 1 of your preserved runs.");
+    expect(progressRecommendationSentence(offered.recommendations[0]!)).toBe(offered.recommendations[0]!.sentence);
+    const present = packRegistry.required("present-pack");
+    const unplayed = createRun({ id: "unplayed-present", packId: present.document.id, packDigest: present.digest, startFen: present.document.start.fen,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 14, createdAt: at });
+    storage.create(unplayed, "unplayed-writer");
+    const empty = projectAttempts({ run: unplayed, learnerId: "__legacy" }); storage.upsertAttempts(empty.attempts, empty.conceptTags);
+    expect(storage.progress("__legacy").find(row => row.runId === unplayed.id)?.countable).toBe(false);
+    expect((await service.shapeRecommendations({ learnerId: "__legacy", handle: "__legacy" })).total).toBe(1);
+    const attempted = commitMove(unplayed, "c1e3", { at }).run; storage.save(attempted, "unplayed-writer");
+    const counted = projectAttempts({ run: attempted, learnerId: "__legacy" }); storage.upsertAttempts(counted.attempts, counted.conceptTags);
+    expect(storage.progress("__legacy").find(row => row.runId === attempted.id)?.countable).toBe(true);
+    expect(await service.shapeRecommendations({ learnerId: "__legacy", handle: "__legacy" })).toEqual({ recommendations: [], total: 0 });
   });
 });

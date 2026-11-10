@@ -9,7 +9,7 @@ import { projectRun } from "./events.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import * as routes from "./internal/evidence-value-routes.js";
 import { recordedSemanticPath } from "./recorded-semantic-path.js";
-import { createRecordedSequenceWindows, readRecordedSequenceWindow, recordedSequenceWindowInputs, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
+import { createRecordedSequenceWindows, prepareRecordedSemanticWindowPopulation, prepareRecordedSemanticBranchWindows, readRecordedSequenceWindow, recordedSequenceWindowInputs, RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import * as semantics from "./semantic-evidence.js";
 import { fork, rewind } from "./runtime.js";
 import { recordedSequenceRouteFixture, recordedSequenceWindowFixture, RECORDED_SEQUENCE_AT as at } from "./testing/recorded-sequence-window-fixture.js";
@@ -20,6 +20,54 @@ const ref = (value: DeclaredEvidence<unknown>) => `${value.projection.id}@${valu
 const prepare = (run: ReturnType<typeof recordedSequenceRouteFixture>, route: RecordedSequenceRoute, throughNodeId = run.activeCursor.nodeId, branchId = run.activeCursor.branchId) => createRecordedSequenceWindows({ run, branchId, throughNodeId, route });
 const invoke = (route: string, input: unknown) => routes.invokeEvidenceValueRoute(route as never, input as never) as unknown as readonly DeclaredEvidence<unknown>[];
 const ordered = (values: readonly unknown[]) => values.map(value => JSON.stringify(value)).sort();
+
+describe("one trailing recorded source population", () => {
+  it("shares overlapping actual endpoints without borrowing any later edge into an earlier window", () => {
+    const run = recordedSequenceRouteFixture("derived.tactic.attraction_observed@3"), path = branchPath(run, run.activeCursor.branchId);
+    const subjects = path.slice(1).map(node => node.id), calls = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      const population = prepareRecordedSemanticBranchWindows({ run, branchId: run.activeCursor.branchId,
+        throughNodeIds: subjects, routes: ["derived.tactic.attraction_observed@3", "derived.tactic.deflection_observed@3"] });
+      const acquired = calls.mock.calls.filter(([route]) => route === "run.record.edge@1");
+      expect(new Set(acquired.map(([, input]) => (input as { child: { id: string } }).child.id)).size).toBe(acquired.length);
+      const shared = new Map<string, unknown>();
+      for (const [id, families] of population) for (const result of families.values()) for (const window of result.windows) {
+        const source = readRecordedSequenceWindow(window);
+        expect(source.authority.throughNodeId).toBe(id);
+        expect(source.edges.at(-1)!.payload.afterNodeId).toBe(id);
+        const end = subjects.indexOf(id);
+        for (const edge of source.edges) {
+          expect(subjects.indexOf(edge.payload.afterNodeId)).toBeLessThanOrEqual(end);
+          const previous = shared.get(edge.payload.afterNodeId); if (previous !== undefined) expect(edge).toBe(previous);
+          shared.set(edge.payload.afterNodeId, edge);
+        }
+      }
+      expect(population.size).toBe(subjects.length);
+      expect(() => prepareRecordedSemanticBranchWindows({ run, branchId: run.activeCursor.branchId,
+        throughNodeIds: [subjects[0]!, "missing"], routes: ["derived.tactic.attraction_observed@3"] })).toThrow(/endpoint/u);
+    } finally { calls.mockRestore(); }
+  });
+  it("shares original edge and capture/check values across complete demanded windows without acquiring future moves", () => {
+    const run = recordedSequenceRouteFixture("derived.tactic.attraction_observed@3"), path = branchPath(run, run.activeCursor.branchId);
+    const calls = vi.spyOn(routes, "invokeEvidenceValueRoute");
+    try {
+      const population = prepareRecordedSemanticWindowPopulation({ run, branchId: run.activeCursor.branchId, throughNodeId: path.at(-1)!.id,
+        routes: ["derived.tactic.attraction_observed@3", "derived.tactic.deflection_observed@3", "derived.tactic.check_zwischenzug_observed@3"] });
+      const edges = calls.mock.calls.filter(([route]) => route === "run.record.edge@1");
+      expect(edges.length).toBeLessThanOrEqual(5);
+      expect(new Set(edges.map(([, value]) => (value as { child: { id: string } }).child.id)).size).toBe(edges.length);
+      const captures = calls.mock.calls.filter(([route]) => route === "rules.transition.event.capture@1");
+      expect(new Set(captures.map(([, input]) => JSON.stringify(input))).size).toBe(captures.length);
+      const checks = calls.mock.calls.filter(([route]) => route === "rules.tactic.event.check@1");
+      expect(new Set(checks.map(([, input]) => JSON.stringify(input))).size).toBe(checks.length);
+      const byEdge = new Map<string, unknown>();
+      for (const result of population.values()) for (const window of result.windows) for (const edge of readRecordedSequenceWindow(window).edges) {
+        const old = byEdge.get(edge.payload.afterNodeId); if (old !== undefined) expect(edge).toBe(old); byEdge.set(edge.payload.afterNodeId, edge);
+      }
+      expect(population.size).toBe(3);
+    } finally { calls.mockRestore(); }
+  });
+});
 
 if (false) {
   // @ts-expect-error Source-owned successors accept no raw caller edge arm.
@@ -140,13 +188,18 @@ describe("source-owned recorded sequence windows", () => {
     expect(() => prepare(duplicated, route, root)).toThrow();
   });
 
-  it("keeps all23 finite tuple members and ten source-only routes without current consumer cutover", () => {
+  it("keeps all23 finite tuple members and exact Nudge/Review/Full2 bindings without qualification promotion", () => {
     for (const values of Object.values(RECORDED_SEQUENCE_HORIZONS)) expect(Object.isFrozen(values)).toBe(true);
     const projections = ALL.map(route => PRIMARY_EVIDENCE_MANIFEST.projections.find(value => `${value.id}@${value.version}` === route)!);
     expect(projections.reduce((sum, value) => sum + (value.derivation!.inputs === undefined ? value.derivation!.anyOf!.length : 1), 0)).toBe(23);
     const bindings = PRIMARY_EVIDENCE_MANIFEST.bindings.filter(binding => ALL.includes(`${binding.projection.id}@${binding.projection.version}` as RecordedSequenceRoute));
-    expect(bindings).toHaveLength(10);
-    expect(bindings.every(binding => binding.consumer.id === "research.semantic_selection")).toBe(true);
+    expect(bindings).toHaveLength(38);
+    expect(bindings.filter(binding => binding.consumer.id === "research.semantic_selection")).toEqual([]);
+    expect(bindings.filter(binding => binding.consumer.id === "research.semantic_validation" && binding.consumer.version === 1)).toHaveLength(10);
+    expect(bindings.filter(binding => binding.consumer.id === "module.postcommit_nudge" && binding.consumer.version === 2)).toHaveLength(8);
+    expect(bindings.filter(binding => binding.consumer.id === "module.review_map" && binding.consumer.version === 2)).toHaveLength(10);
+    expect(bindings.filter(binding => binding.consumer.id === "module.full_inspector" && binding.consumer.version === 2)).toHaveLength(10);
+    expect(bindings.every(binding => ["research.semantic_validation", "module.postcommit_nudge", "module.review_map", "module.full_inspector"].includes(binding.consumer.id))).toBe(true);
   });
 
   it("removing a retained direct convention token really drops the new route's closure", () => {

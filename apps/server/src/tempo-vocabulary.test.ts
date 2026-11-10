@@ -77,9 +77,9 @@ describe("tempo vocabulary integration", () => {
   it("keeps authored outpaced ungraded by default and permits an explicit opt-in", () => {
     const base = structuredClone(example) as any;
     base.mode = "plan";
-    base.legs = undefined;
-    base.spine = undefined;
-    base.authoredBoundary = undefined;
+    delete base.legs;
+    delete base.spine;
+    delete base.authoredBoundary;
     base.checkpoints = [{ id: "after", trigger: { atPly: 2 } }];
     base.timingWindows = [{
       id: "short-race",
@@ -139,7 +139,7 @@ describe("tempo vocabulary integration", () => {
 
     const noWindow = structuredClone(example) as any;
     noWindow.objective = { type: "preserve_plan_window", summary: "Window." };
-    noWindow.timingWindows = undefined;
+    delete noWindow.timingWindows;
     expect(validatePackDocument(noWindow).issues).toContainEqual(expect.objectContaining({ code: "PLAN_WINDOW_NEEDS_WINDOW" }));
   });
 });

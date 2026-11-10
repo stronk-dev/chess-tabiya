@@ -9,7 +9,7 @@ const results = [];
 for (const file of files) {
   results.push(await clearGraduationEntries(file, {
     check: process.env.CHECK === "1",
-    census: runExpressionCensus({ roots: [dirname(resolve(file))] }),
+    census: await runExpressionCensus({ roots: [dirname(resolve(file))] }),
   }));
 }
 process.stdout.write(`${JSON.stringify(results.length === 1 ? results[0] : results, null, 2)}\n`);

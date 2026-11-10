@@ -5,10 +5,11 @@ export const PROVIDER_PARSER_IMPLEMENTATION = Object.freeze({
   files: Object.freeze([
     "packages/runtime/src/chess.ts",
     "packages/runtime/src/legal-moves.ts",
+    "packages/runtime/src/practical-difficulty.ts",
     "packages/runtime/src/provider-digest.ts",
     "packages/runtime/src/provider-parsers.ts",
     "packages/runtime/src/provider-requests.ts",
     "packages/runtime/src/provider-types.ts"
   ] as readonly string[]),
-  closureDigest: "sha256:d46c888cd97511ca9aa45c0343bbfa006ef343bbb5304ad9f16be9cbd58f3419",
+  closureDigest: "sha256:0c562408cc7b0dbdba6e6a9615cccd65d05efd8f72ae72681af18d5d4eec65b9",
 } as const);

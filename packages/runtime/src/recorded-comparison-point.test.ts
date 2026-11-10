@@ -13,6 +13,12 @@ import { fork } from "./runtime.js";
 
 const route = "derived.compare.engine_trajectory@2";
 describe("nominal exact comparison engine points", () => {
+  it("D3936 requires the private issuer lifetime check without accepting a source-valid Boolean", () => {
+    const f = fixture();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(f.capture, undefined as never)).toThrow(/owner/u);
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(f.capture, () => true)).toThrow(/owner/u);
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, nodeId: "foreign-node" }, f.assertCurrent)).toThrow();
+  });
   for (const black of [false, true]) for (const bound of [{ kind: "depth", requestedDepth: 12 }, { kind: "movetime", requestedMs: 100 }, { kind: "nodes", requestedNodes: 2048 }] as const) {
     it(`retains original modern White score and requested ${bound.kind}, black=${black}`, () => {
       const f = fixture(black, "cp 25", { bound }), source = readRecordedComparisonPointSource(f.source);
@@ -36,10 +42,10 @@ describe("nominal exact comparison engine points", () => {
       // @ts-expect-error deliberately unbranded source
       expect(() => invokeEvidenceValueRoute(route, { comparisonPoint })).toThrow();
     }
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, comparison: { ...f.comparison } })).toThrow();
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, branchId: f.main })).toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, comparison: { ...f.comparison } }, f.assertCurrent)).toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, branchId: f.main }, f.assertCurrent)).toThrow();
     const comparison = createRecordedComparisonSource({ run: f.run, columns: [f.columns[0], { branchId: f.peer, throughNodeId: f.shared.id }] });
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, comparison })).toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, comparison }, f.assertCurrent)).toThrow();
     const extra = { comparisonPoint: f.source, score: 99 };
     expect(() => invokeEvidenceValueRoute(route, extra)).toThrow();
   });
@@ -47,14 +53,14 @@ describe("nominal exact comparison engine points", () => {
     const f = fixture();
     const execution = compileEvidenceConsumerExecutionV2({ ...PRIMARY_EVIDENCE_MANIFEST }, { id: "module.compare_coach", version: 2 });
     expect(execution.bindings).toHaveLength(8);
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, permission: { ...f.capture.permission, execution } })).toThrow(/different manifest/u);
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(f.capture)).not.toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...f.capture, permission: { ...f.capture.permission, execution } }, f.assertCurrent)).toThrow(/different manifest/u);
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue(f.capture, f.assertCurrent)).not.toThrow();
   });
   it("binds cancellation, current role and assistance before a missing-point shortcut", () => {
     const f = fixture(), missing = { ...f.capture, nodeId: f.shared.id };
-    expect(readRecordedComparisonPointSource(RECORDED_COMPARISON_POINT_AUTHORITY.issue(missing))).toMatchObject({ payload: null, unavailable: "missing_eval" });
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...missing, permission: { ...missing.permission, role: "author" } })).toThrow();
-    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...missing, permission: { ...missing.permission, assistance: { ...missing.permission.assistance, modules: [] } } })).toThrow();
+    expect(readRecordedComparisonPointSource(RECORDED_COMPARISON_POINT_AUTHORITY.issue(missing, f.assertCurrent))).toMatchObject({ payload: null, unavailable: "missing_eval" });
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...missing, permission: { ...missing.permission, role: "author" } }, f.assertCurrent)).toThrow();
+    expect(() => RECORDED_COMPARISON_POINT_AUTHORITY.issue({ ...missing, permission: { ...missing.permission, assistance: { ...missing.permission.assistance, modules: [] } } }, f.assertCurrent)).toThrow();
     f.controller.abort(); expect(() => invokeEvidenceValueRoute(route, { comparisonPoint: f.source })).toThrow();
   });
   it("D3897 owns permission envelopes without freezing caller objects", () => {

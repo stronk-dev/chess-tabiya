@@ -17,7 +17,7 @@ describe("R18 data-lifecycle regression arm", () => {
     storage.createImportedRun!(run, lease, "R18 solo run", {
       runId: run.id, sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"7".repeat(64)}`,
       headers: { Event: "R18 destructive fixture", White: "R18", Black: "Fixture" }, result: "*",
-      pgn: '[Event "R18 destructive fixture"]\n\n1. e4 *', licenceNote: "Learner-supplied PGN", importedAt: AT,
+      pgn: '[Event "R18 destructive fixture"]\n\n1. e4 *', licenceNote: "Learner-supplied PGN", importedAt: AT, clockDocument: null,
     });
     storage.replaceRunMarks({ runId: run.id, learnerId: learner.id, scope: "position", scopeKey: run.nodes[0]!.transposeKey, shapes: [{ brush: "green", orig: "e2", dest: "e4" }], relayed: false, at: AT });
     const attempts = projectAttempts({ run, learnerId: learner.id });

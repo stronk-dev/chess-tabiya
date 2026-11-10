@@ -51,6 +51,7 @@ const PROVIDER_PAYLOAD_TYPES = Object.freeze({
   "stockfish.position_evaluation@1": "FixedBoundPositionEvaluation",
   "stockfish.principal_variation@1": "FixedBoundPrincipalVariation",
   "maia.policy_page@1": "MaiaPolicyPage",
+  "maia.inference_task@1": "MaiaInferenceTaskResult",
   "syzygy.position@1": "LiveSyzygyPosition",
   "lichess_explorer.position_page@1": "ExplorerPositionPage",
 } as const satisfies Readonly<Record<ProviderOperationId, string>>);

@@ -12,4 +12,8 @@ export const SEMANTIC_EVENT_SIGN_LABELS: LabelVocabulary<SemanticEventSign> = Ob
   avoided: { label: "avoided" },
   enabled: { label: "made possible" },
   threatened: { label: "threatened" },
+  membership_changed: { label: "membership changed" },
+  count_gained: { label: "count increased" },
+  count_lost: { label: "count decreased" },
+  topology_changed: { label: "arrangement changed" },
 });

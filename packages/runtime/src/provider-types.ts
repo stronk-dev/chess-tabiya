@@ -8,6 +8,7 @@ import type {
   EngineBinaryDigest,
   EngineContainerDigest,
   EngineOptionImageDigest,
+  EngineOptionImage,
   ProviderCacheIdentity,
   ProviderCommandsDigest,
   ProviderRequestDigest,
@@ -19,6 +20,7 @@ export type ProviderOperationId =
   | "stockfish.position_evaluation@1"
   | "stockfish.principal_variation@1"
   | "maia.policy_page@1"
+  | "maia.inference_task@1"
   | "syzygy.position@1"
   | "lichess_explorer.position_page@1";
 
@@ -27,6 +29,7 @@ export type ProviderOperationProviderMap = {
   readonly "stockfish.position_evaluation@1": "stockfish";
   readonly "stockfish.principal_variation@1": "stockfish";
   readonly "maia.policy_page@1": "maia";
+  readonly "maia.inference_task@1": "maia";
   readonly "syzygy.position@1": "syzygy";
   readonly "lichess_explorer.position_page@1": "lichess_explorer";
 };
@@ -36,6 +39,7 @@ export type ProviderEndpointMap = {
   readonly "stockfish.position_evaluation@1": Readonly<{ kind: "uci_supervisor"; engineId: "stockfish-analysis" }>;
   readonly "stockfish.principal_variation@1": Readonly<{ kind: "uci_supervisor"; engineId: "stockfish-analysis" }>;
   readonly "maia.policy_page@1": Readonly<{ kind: "uci_supervisor"; engineId: "maia-5m" }>;
+  readonly "maia.inference_task@1": Readonly<{ kind: "uci_supervisor"; engineId: "maia-5m" }>;
   readonly "syzygy.position@1": Readonly<{ kind: "https"; origin: "https://tablebase.lichess.org"; path: "/standard" }>;
   readonly "lichess_explorer.position_page@1": Readonly<{ kind: "https"; origin: "https://explorer.lichess.org"; path: "/lichess" }>;
 };
@@ -45,6 +49,7 @@ export type ProviderResponseParserIdMap = {
   readonly "stockfish.position_evaluation@1": "parse.stockfish_position_evaluation@1";
   readonly "stockfish.principal_variation@1": "parse.stockfish_principal_variation@1";
   readonly "maia.policy_page@1": "parse.maia_policy_page@1";
+  readonly "maia.inference_task@1": "parse.maia_inference_task@1";
   readonly "syzygy.position@1": "parse.syzygy_position@1";
   readonly "lichess_explorer.position_page@1": "parse.lichess_explorer_position_page@1";
 };
@@ -169,6 +174,24 @@ export interface MaiaPolicyPage {
   readonly returnedProbabilityMass: number;
   readonly coverage: "bounded_top_k";
   readonly candidates: readonly { readonly moveUci: string; readonly probability: number }[];
+}
+
+/** One requested sampled draw; its reported window is not the sampled move. */
+export interface MaiaInferenceTaskRequest extends MaiaPolicyPageRequest {
+  readonly sampleRequestId: string;
+}
+export interface MaiaInferenceTaskResult {
+  readonly request: MaiaInferenceTaskRequest;
+  readonly appliedBand: number;
+  readonly coverage: "bounded_reported_window";
+  readonly candidates: readonly {
+    readonly moveUci: string;
+    readonly rank: number;
+    readonly mass: number | null;
+    readonly scoreCp: number | null;
+    readonly wdl: { readonly win: number; readonly draw: number; readonly loss: number } | null;
+  }[];
+  readonly termination: { readonly rawBestMoveUci: string | null; readonly moveUci: string | null };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -301,6 +324,7 @@ export interface ProviderOperationRequestMap {
   readonly "stockfish.position_evaluation@1": StockfishPositionEvaluationRequest;
   readonly "stockfish.principal_variation@1": StockfishPrincipalVariationRequest;
   readonly "maia.policy_page@1": MaiaPolicyPageRequest;
+  readonly "maia.inference_task@1": MaiaInferenceTaskRequest;
   readonly "syzygy.position@1": SyzygyPositionRequest;
   readonly "lichess_explorer.position_page@1": ExplorerPositionPageRequest;
 }
@@ -310,6 +334,7 @@ export interface ProviderOperationResultMap {
   readonly "stockfish.position_evaluation@1": FixedBoundPositionEvaluation;
   readonly "stockfish.principal_variation@1": FixedBoundPrincipalVariation;
   readonly "maia.policy_page@1": MaiaPolicyPage;
+  readonly "maia.inference_task@1": MaiaInferenceTaskResult;
   readonly "syzygy.position@1": LiveSyzygyPosition;
   readonly "lichess_explorer.position_page@1": ExplorerPositionPage;
 }
@@ -319,6 +344,7 @@ export interface ProviderOperationLocalResultMap {
   readonly "stockfish.position_evaluation@1": never;
   readonly "stockfish.principal_variation@1": never;
   readonly "maia.policy_page@1": never;
+  readonly "maia.inference_task@1": never;
   readonly "syzygy.position@1": SyzygyOutsideDomain;
   readonly "lichess_explorer.position_page@1": never;
 }
@@ -328,6 +354,7 @@ export type ProviderRequestedIdentityMap = {
   readonly "stockfish.position_evaluation@1": Readonly<{ request: StockfishPositionEvaluationRequest; command: StockfishCommandIdentity }>;
   readonly "stockfish.principal_variation@1": Readonly<{ request: StockfishPrincipalVariationRequest; command: StockfishCommandIdentity }>;
   readonly "maia.policy_page@1": Readonly<{ request: MaiaPolicyPageRequest }>;
+  readonly "maia.inference_task@1": Readonly<{ request: MaiaInferenceTaskRequest }>;
   readonly "syzygy.position@1": Readonly<{ request: SyzygyPositionRequest }>;
   readonly "lichess_explorer.position_page@1": Readonly<{ request: ExplorerPositionPageRequest }>;
 };
@@ -357,6 +384,8 @@ export type ProviderActualIdentityMap = {
   readonly "stockfish.position_evaluation@1": StockfishActualIdentity;
   readonly "stockfish.principal_variation@1": StockfishActualIdentity;
   readonly "maia.policy_page@1": MaiaActualIdentity;
+  /** Captured actual option image makes auxiliary reset commands checkable on replay. */
+  readonly "maia.inference_task@1": MaiaActualIdentity & Readonly<{ optionImage: EngineOptionImage }>;
   readonly "syzygy.position@1": Readonly<{ source: "lichess_syzygy"; endpoint: ProviderEndpointMap["syzygy.position@1"]; apiVersion: "standard-v1" }>;
   readonly "lichess_explorer.position_page@1": Readonly<{ source: "lichess_explorer"; endpoint: ProviderEndpointMap["lichess_explorer.position_page@1"]; apiVersion: "lichess-v1" }>;
 };
@@ -371,6 +400,7 @@ export type ProviderTransportMetadataMap = {
   readonly "stockfish.position_evaluation@1": null;
   readonly "stockfish.principal_variation@1": null;
   readonly "maia.policy_page@1": null;
+  readonly "maia.inference_task@1": null;
   readonly "syzygy.position@1": ProviderHttpResponseMetadata;
   readonly "lichess_explorer.position_page@1": ProviderHttpResponseMetadata;
 };

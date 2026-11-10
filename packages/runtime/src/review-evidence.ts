@@ -10,7 +10,7 @@ import { branchPath } from "./branch-path.js";
 import { importedMainlineBranchId } from "./branch-scale.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
-import type { DerivedEvidence } from "./evidence-factories.js";
+import type { DerivedEvidence, RecordedReviewObjectives } from "./evidence-factories.js";
 import { orderedReviewEvidence } from "./internal/review-moment-assembly.js";
 import { assertRecordedPositionInvocation, assertRecordedReviewResultInvocation, invokeEvidenceValueRoute, readReviewPointInvocation, readReviewPointResultInvocation, readRecordedHumanDivergenceInvocation, readRecordedRulePivotalInvocation, readEndgamePopulationInvocation, readShapeFiringInvocation, readReviewTransitionResultInvocation, readReviewMemberInputs, readLocalReadingInvocation, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { readRecordedReviewBoundary, type RecordedReviewBoundary } from "./recorded-review-boundary.js";
@@ -951,6 +951,14 @@ const RECORDED_REVIEW_POPULATIONS = new WeakMap<object, Readonly<{
   boundary: RecordedReviewBoundary; execution: RecordedPointExecution; data: RecordedReviewSourceData;
 }>>();
 
+/** D3927's captured original objective population. Source scope alone grants no access; the
+ * existing server workflow owner must check its permission before and after this call. */
+export function collectRecordedReviewObjectives(boundary: RecordedReviewBoundary): RecordedReviewObjectives {
+  const items = invokeEvidenceValueRoute("run.record.objective_transition@2", { recordedReview: boundary });
+  assertRecordedReviewResultInvocation(items, "run.record.objective_transition@2", boundary);
+  return Object.freeze({ boundary, items });
+}
+
 /** The accepted complete 12-adapter source image, internal and captured-only. No moment/title/API. */
 export function collectRecordedReviewSourcePopulation(input: Readonly<{ boundary: RecordedReviewBoundary; context: ReviewSourceContext }>): RecordedReviewSourcePopulation {
   if (!closedSource(input, ["boundary", "context"])) throw new TypeError("Recorded Review collection requires exactly {boundary,context}");
@@ -979,6 +987,17 @@ export function collectRecordedReviewSourcePopulation(input: Readonly<{ boundary
   RECORDED_REVIEW_POPULATIONS.set(population, Object.freeze({ boundary, execution, data }));
   readRecordedReviewSourcePopulation(population);
   return population;
+}
+
+/** Original complete population input join, not a second collection or a displayed-value check. */
+export function assertRecordedReviewSourcePopulationInputs(population: RecordedReviewSourcePopulation, boundary: RecordedReviewBoundary, context: ReviewSourceContext): void {
+  const data = readRecordedReviewSourcePopulation(population), proof = RECORDED_REVIEW_POPULATIONS.get(population)!;
+  if (proof.boundary !== boundary || evidenceDigest(data.shapes) !== evidenceDigest(context.shapes)) throw new TypeError("Recorded Review population crosses its original boundary or shape inputs");
+  for (const { node } of data.boundary.path) {
+    const captured = proof.execution.context.engine.get(node.id), supplied = Map.prototype.get.call(context.engine, node.id) as ReviewProviderNodeState | undefined;
+    if (evidenceDigest(captured ?? null) !== evidenceDigest(supplied ?? null)
+      || captured?.kind === "delivered" && (supplied?.kind !== "delivered" || captured.delivery !== supplied.delivery)) throw new TypeError("Recorded Review population crosses its captured provider input");
+  }
 }
 
 /** Original complete source/slot/result membership; this read performs no factory dispatch. */
@@ -1322,7 +1341,7 @@ export function presentReviewFamilyAbstentions(packet: ReviewEvidencePacket, nod
       const reason = row.state.kind === "unavailable" ? row.state.reason : row.state.kind === "honest_empty" ? row.state.reason : "input_abstained";
       operand = { kind: "settled_abstention", ...base, absence: PRESENTATION_SOURCE_REASONS[reason].absence, reason, sourceReceipt: { producer: { ...producer }, projection: { ...adapter.projection }, receiptDigest: presentationDigest("review.source-row@1", { packet: packet.packetDigest, row }) } };
     }
-    return [sealPresentedItemForOwner(packet, null, { consumer: { id: "module.review_map", version: 1 }, projection: REVIEW_PACKET_FAMILY_SEAT }, { id: "abstention", operand })];
+    return [sealPresentedItemForOwner(packet, null, { consumer: { id: "module.review_map", version: 2 }, projection: REVIEW_PACKET_FAMILY_SEAT }, { id: "abstention", operand })];
   }));
 }
 

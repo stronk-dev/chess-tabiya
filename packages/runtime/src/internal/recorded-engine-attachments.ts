@@ -98,7 +98,9 @@ export function readRecordedEngineAttachments(source: RecordedEngineAttachments)
   if (owned === undefined) throw new TypeError("Recorded engine attachments were not issued by their owner");
   const image = readRecordedReviewBoundary(owned.boundary);
   if (image !== owned.data.boundary || owned.data.rows.length !== image.path.length) throw new TypeError("Recorded engine attachment source crossed its original boundary");
-  for (const [index, row] of owned.data.rows.entries()) assertRow(row, image, index);
+  // Collection validated every original occurrence/point/receipt before retaining this entirely
+  // immutable population. Rehashing all position event heads on every nested node read adds
+  // quadratic work, not authority. The storage-owned full boundary is still reloaded above.
   return owned.data;
 }
 

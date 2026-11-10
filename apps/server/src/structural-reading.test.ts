@@ -8,21 +8,23 @@ import { describe, expect, it } from "vitest";
 
 import { objectiveRules, orchestratePackMove, planSignatureResolver } from "./pack-orchestrator.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
-const pack = JSON.parse(readFileSync(new URL(resolvePackPath("carlsbad-minority-attack"), import.meta.url), "utf8")) as DrillPackDefinition;
-const carlsbad = JSON.parse(readFileSync(new URL("../../../content/shapes/carlsbad.json", import.meta.url), "utf8"));
-const shapes = { get: (id: string) => id === "carlsbad" ? { document: carlsbad } : undefined };
-const resolvePlan = planSignatureResolver(pack, shapes);
+const original = JSON.parse(readFileSync(new URL(resolvePackPath("carlsbad-minority-attack"), import.meta.url), "utf8")) as DrillPackDefinition;
+// Only this in-memory orchestration fixture is current; no authored file is migrated.
+const pack = withDerivedRequires({ ...original, provenance: { ...original.provenance, corpusEvidence: { state: "unsourced" as const } } });
 const at = "2026-08-14T12:00:00.000Z";
 
 function newRun() {
   return createRun({ id: "carlsbad-structure", packId: pack.id, packDigest: `sha256:${"c".repeat(64)}`, startFen: pack.start.fen, seed: 3, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
 }
 
-describe("structural pack orchestration", () => {
+describe("structural pack orchestration", { timeout: 5_000 }, () => {
   it("grades Pack B on the transition that produces both structural leaves", () => {
-    expect(validatePackDocument(pack).valid).toBe(true);
-    expect(objectiveRules(pack, pack.objective, "/objective", resolvePlan)).toHaveLength(3);
+    const checked = validatePackDocument(pack);
+    expect(checked.valid).toBe(true);
+    const current = checked.document!, resolvePlan = planSignatureResolver(current);
+    expect(objectiveRules(current, current.objective, "/objective", resolvePlan)).toHaveLength(3);
     let run = newRun();
     const moves = ["d7f8", "a2a3", "f6e4", "a1b1", "e4c3", "b2b4", "c8g4", "b4b5", "h7h6", "b5c6", "b7c6"];
     for (const [index, moveUci] of moves.entries()) {
@@ -30,7 +32,7 @@ describe("structural pack orchestration", () => {
       const mutation = index % 2 === 0
         ? appendOpponentPly(run, { moveUci, policyModeApplied: "human_common", engine: { id: "mock", name: "Mock", version: "1", seedHonored: true } }, { at })
         : commitMove(run, moveUci, { actor: "user", at });
-      run = orchestratePackMove(pack, before, mutation, resolvePlan).run;
+      run = orchestratePackMove(current, before, mutation, resolvePlan).run;
     }
     const transitions = run.events.filter((event) => event.type === "objective.state_changed");
     expect(transitions).toHaveLength(1);

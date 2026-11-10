@@ -2,7 +2,7 @@
  * Test-only provider fixtures: deterministic clocks, a controllable fetch and a scripted engine.
  * Imported only by provider *.test.ts files (never by production; census in the value-authority gate).
  */
-import { digestEngineBinary, exactLegalMoves, providerUtf8 } from "@chess-tabiya/runtime";
+import { digestEngineBinary, digestEngineOptionImage, exactLegalMoves, providerUtf8 } from "@chess-tabiya/runtime";
 
 import type { EngineExchangeCapture, EngineExchangeRequest, EngineHealth, EngineIdentity, EngineOption } from "./engine-supervisor.js";
 import type { ProviderTimers } from "./provider-exchange.js";
@@ -106,15 +106,18 @@ export class FakeEngines implements ProviderEngineClient {
     this.calls.push(request);
     if (request.signal?.aborted) throw Object.assign(new Error("aborted"), { name: "AbortError" });
     const lines = this.respond(request);
+    const options = engineId === "maia-5m" ? this.maiaOptions.map(option => ({ ...option })) : [];
+    const optionImage = { advertisedUciOptionLines: options.map(option => `option name ${option.name} type ${option.type}${option.default === undefined ? "" : ` default ${option.default}`}${option.min === undefined ? "" : ` min ${option.min}`}${option.max === undefined ? "" : ` max ${option.max}`}`),
+      appliedSetoptionCommands: [] };
     return Object.freeze({
       generation: this.generation,
       identity: this.identity(engineId),
-      optionImage: { advertisedUciOptionLines: [], appliedSetoptionCommands: [] },
-      optionImageDigest: `sha256:${"a".repeat(64)}` as never,
+      optionImage,
+      optionImageDigest: digestEngineOptionImage(optionImage),
       artifact: engineId === "maia-5m"
         ? (this.containerCaptured ? { kind: "container" as const, containerDigest: `sha256:${"c".repeat(64)}` as never } : null)
         : { kind: "binary" as const, binaryDigest: digestEngineBinary(providerUtf8("fake stockfish")) },
-      options: engineId === "maia-5m" ? this.maiaOptions : [],
+      options,
       transcript: [...request.commands.map((command) => `> ${command}`), ...lines.map((line) => `< ${line}`)],
     });
   }

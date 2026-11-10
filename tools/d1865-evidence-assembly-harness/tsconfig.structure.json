@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.grade.json",
+  "include": ["structure-selection.test.ts"]
+}

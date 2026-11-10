@@ -210,6 +210,7 @@ describe("adaptive guidance server seams", () => {
     const response = await createRestHandler(service, selector, capabilities)(request(`/runs/guide/human-split?nodeId=${encodeURIComponent(run.activeCursor.nodeId)}`));
     expect(response.status).toBe(200);
     const page = parseHumanSplitPage(await response.json(), run.activeCursor.nodeId);
+    if ("protocol" in page) throw new Error("Explicit standalone selector must retain its legacy wire");
     expect(page.candidates).toEqual(selected.candidates?.filter(candidate => candidate.offWindow !== true));
     expect(page.candidates.map(candidate => candidate.mass)).toEqual([0.31, 0.24, 0.19]); // No normalization of the reported 0.74 window.
     expect(page.candidates.some(candidate => candidate.moveUci === sampledMove)).toBe(false);
@@ -558,11 +559,15 @@ describe("adaptive guidance server seams", () => {
     } };
     const handler = createRestHandler(service, undefined, undefined, identity, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, provider);
     const before = service.events("reasoning-lifetime", principal).events;
-    const response = await handler(new Request(request("/runs/reasoning-lifetime/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, guest.cookie), { signal: controller.signal }));
+    const pending = handler(new Request(request("/runs/reasoning-lifetime/reasoning-review", "POST", { checkpointEventSeq: checkpoint.seq }, guest.cookie), { signal: controller.signal }));
     if (change === "cancelled") {
-      expect(response.status).not.toBe(200);
-      expect(await response.text()).not.toContain("proposals");
+      // Attach immediately, before asynchronous provider work aborts this request. No HTTP
+      // response/proposals/fallback are publishable; the original signal reason must escape.
+      await pending.then(() => { throw new Error("Cancelled reasoning review published an HTTP response"); }, error => {
+        expect(error).toBe(controller.signal.reason);
+      });
     } else {
+      const response = await pending;
       expect(response.status).toBe(change === "revoked" ? 404 : 409);
       expect(await response.json()).toMatchObject({ error: { code: change === "revoked" ? "RUN_NOT_FOUND" : "ASSISTANCE_WITHHELD" } });
     }

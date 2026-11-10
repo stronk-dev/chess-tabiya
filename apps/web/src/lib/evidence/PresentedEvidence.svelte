@@ -23,14 +23,17 @@
 
   interface Props {
     items: readonly PresentedEvidenceItem[];
+    detailsScope?: object | undefined;
+    detailsActive?: boolean;
+    detailsGeneration?: number;
     /** Caption↔square focus binding (§3.5): the owning seat paints the focused fact's squares. */
     onFocusSquares?: ((squares: readonly string[] | undefined) => void) | undefined;
   }
-  let { items, onFocusSquares }: Props = $props();
+  let { items, onFocusSquares, detailsScope, detailsActive = false, detailsGeneration = 0 }: Props = $props();
   const views = $derived(presentedViews(items));
 </script>
 
-{#each views as view (view.digest)}
+{#each views as view, index (`${view.digest}:${index}`)}
   <div class="presented" data-presented={view.id}>
     {#if view.component.id === "abstention"}<AbstentionView component={view.component} sentence={view.sentence} />
     {:else if view.component.id === "distribution"}<DistributionView component={view.component} sentence={view.sentence} />
@@ -38,13 +41,13 @@
     {:else if view.component.id === "magnitude"}<MagnitudeView component={view.component} sentence={view.sentence} />
     {:else if view.component.id === "magnitude_trail"}<MagnitudeTrailView component={view.component} sentence={view.sentence} />
     {:else if view.component.id === "square_set"}<SquareSetView component={view.component} sentence={view.sentence} {onFocusSquares} />
-    {:else if view.component.id === "move_path"}<MovePathView component={view.component} sentence={view.sentence} />
+    {:else if view.component.id === "move_path"}<MovePathView owner={view.owner} component={view.component} sentence={view.sentence} />
     {:else if view.component.id === "relation_overlay"}<RelationOverlayView component={view.component} sentence={view.sentence} {onFocusSquares} />
     {:else if view.component.id === "count_with_denominator"}<CountView component={view.component} sentence={view.sentence} />
     {:else if view.component.id === "citation"}<CitationView component={view.component} sentence={view.sentence} />
     {:else if view.component.id === "enum_state"}<EnumStateView component={view.component} sentence={view.sentence} />
     {:else if view.component.id === "structured_document"}<StructuredDocumentView component={view.component} sentence={view.sentence} />
-    {:else}<TextStatementView component={view.component} sentence={view.sentence} />
+    {:else}<TextStatementView selectedItems={items} owner={view.owner} component={view.component} sentence={view.sentence} {detailsScope} {detailsActive} {detailsGeneration} />
     {/if}
   </div>
 {/each}

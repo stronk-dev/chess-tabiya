@@ -137,3 +137,156 @@ from the normative interface.
 5. Replace deployment-data acceptance with committed able-to-fail fixtures, then repeat review.
 
 No implementation is authorized by this return.
+
+## 2026-11-04 — Concrete author repair prepared for separate independent review
+
+The historical return above is retained. The active rfc/recorded-clocks.md now contains a
+concrete author repair; this entry does not accept it or report tests as passed.
+
+Current source trace corrects the old raw-PGN assumption: resolveImportSource strips paste and
+remote PGN before RunService writes ImportedGameRecord.pgn. stripNodeAnnotations replaces each
+move's data with {san}; remote export also requests clocks=false. D2021 already requires the
+request/extract-before-strip/typed persistence/account-lifecycle/real-fixture unit. The repair
+therefore retains one exact nullable clock_document_json column, not a read-only reparse design
+that cannot recover discarded bytes. Declared control is parsed from already-retained headers;
+there is no second timeControl column.
+
+The repaired contract specifies a closed selected-game/source-ply/sample document, original
+import-node mapping, atomic new import and idempotent legacy null→parsed transition. Unknown
+historical retention remains unknown; valid retained samples may project, but missing stripped
+samples are never reconstructed or called original no-clock evidence. Account export, restore
+validation/id mapping and delete are part of the declared durable image.
+
+It names the authorized source operation, actual original-prefix/node joins, private source
+factory, REST/strict receiver and bounded historical readout. One explicit clock_reading@1 frame
+owns sample/control/absence wording independently of foundation clock_decision availability.
+It is an additional clock-dependency source, not an unregistered extra foundation row. No raw
+sentence or caller-authored clock/control/actor list may mint evidence. Both source/renderer
+tuples must actually exist before learner delivery is claimed.
+
+D1041 still requires simulated pressure, real play clocks, bot move-time models and rating
+consequences. Recorded clock-use arithmetic is allowed only for complete adjacent same-player
+samples/control. The learner's own live measurement remains an explicit server-clock authority
+discharge; client Node.createdAt is not substituted for it. D361 is not falsely closed, and
+the enforced-clock successor must refresh its old ClockReading/source and run-lane assumptions
+against this repaired contract before implementation. Its existing D2296–D2307 review still
+owns the real-clock problems. Existing protected-intent amendments remain owner-tier work.
+
+The source RFC's unnecessary run0.20 claim was released; no other run claimant was renumbered.
+Its one migration claim and rfc/README.md row now name the complete numeric document/account
+image. The migration's existing behind-live-sources scheduling label is not a claim of accepted
+or installed broadcast behavior; ordinary pre-launch order remains engineering-owned.
+
+Every original D2286–D2295 return and D2021 has an explicit trace row/control in the repaired
+RFC. Historical902 is still only a round census and nine-of-ten selected-game coverage stays
+visible. Correctness now requires hermetic sparse/duplicate/malformed/control/branch/access/
+SQLite/REST/strict-client/UI/account/transaction fixtures, not mutable private production data.
+No implementation or tests/builds were run by this authoring pass. Separate independent review
+must decide buildability and scope before code begins.
+
+## 2026-11-04 — independent acceptance of the separately authored recorded-source repair
+
+**Verdict: accepted for the bounded recorded-clock source implementation described by the
+repaired RFC.** The August return and its reproduction result above remain historical. This
+review is a fresh static buildability/source/intent review, not a rerun of that harness and not
+acceptance of a clock implementation, the returned enforced-clocks contract or whole D1041.
+Reviewer authored none of the repaired RFC and made no implementation/contract amendments.
+
+The reviewer read the complete repaired rfc/recorded-clocks.md, D2021 and D2286–D2295,
+the D1041/D330/D361/D364 intent trace and current import, parser, service, SQLite, account,
+recorded-path/boundary and presentation/client machinery. No genuine buildability blocker
+remains in this repair. The following source observations substantiate that bounded verdict.
+
+### Actual ingestion and durable image
+
+apps/server/src/import-source.ts currently strips both pasted and fetched PGN before returning
+ResolvedImportSource; stripNodeAnnotations replaces each move's data with {san}, and the game
+export URL requests clocks=false. RunService.importGame stores that already-sanitized source.pgn.
+The repair correctly treats request, extraction before this transformation, typed persistence,
+account lifecycle and a real resolver-to-storage fixture as one D2021 unit. Stored PGN is not
+presumed to retain historical clock comments. The existing parsePgnMainline in
+apps/server/src/pgn-import.ts supplies a real shared validation seam: exactly one game,
+no variations, Standard/From Position root validation, fully legal mainline and300-ply bound.
+Its current return omits comments, so the new parser must walk the selected original game
+before stripping while sharing that validation; reparsing its sanitized output cannot fulfill
+extraction. The RFC's64KiB source bound applies before this new parse/extraction work.
+
+SQLiteRunStorage.createImportedRun already transactions the run/grant/import record together.
+The repair's one nullable clock_document_json column extends this real owner instead of
+inventing a second clock/run authority. Complete sourcePly/side/UCI samples and root-plus-all-
+original-node mapping preserve sparse identity. Declared control derives from existing
+ImportedGameRecord.headers.TimeControl, with no unclaimed control column. New empty extraction,
+legacy unknown retention, unexamined null, terminal unavailable and transient source failure
+are distinct; null-CAS/reload and transactional restore give the promised retroactivity an actor
+and retry boundary. No historical re-fetch or lost-comment reconstruction is licensed.
+
+Account exported ImportedGameExport, strict validateOwnedRuns, restoredImportedGame and the
+storage export/restore SQL are actual required extension points. They currently have closed
+field lists and explicit columns; the implementing change must add/validate the document to
+all of them and retain the existing prose-strip boundary. The RFC now expressly owns that
+complete image, source/node validation, rollback, id mapping or refusal, and deletion. This
+acceptance does not pretend those edits already exist or close D2021/D2295 on a schema alone.
+
+### Original source, clock arithmetic and absence
+
+The proposed recordedClockOperation has a real storage/access host: requireRead in
+authorization.ts and RunStorage's own run/import readers. Existing recorded-review-boundary.ts
+already validates complete event replay, exact unique creation-event identities, legal original
+paths and imported-mainline movetext digest before endpoint narrowing; recorded-semantic-path
+is an existing recorded-edge authority, not a clock owner. These mechanisms make the specified
+private original-import clock owner buildable. The new owner must retain its own captured
+document/access/head membership; caller callbacks, copied documents, generic seals, same-ply
+or same-FEN retry nodes cannot become that owner. New original import mapping is captured
+before learner branching; legacy mapping must prove the actual immutable import prefix or
+return its explicit terminal unavailable state. Shared original ancestors remain distinct
+from later lookalike nodes.
+
+The first-decision attack does not require a new product ruling. Repaired §5 explicitly allows
+base fallback only for an established standard initial-game first decision, and refuses a
+truncated or unproven start. A first stored node, sourcePly1, a FEN fullmove counter or an equal
+starting-board position alone is not that proof; Setup/FEN/custom/truncated and unproven imports
+must abstain unless the specified genuine start basis is established. Acceptance2 and9 require
+setup/root and initial-base eligibility controls. Previous means the immediately preceding
+original same-side decision; a missing intervening tag cannot be skipped to a nearest earlier
+sample. The post-move increment allowance is explicit, with safe exact arithmetic, prior-source
+identity and missing/nonpositive/overflow/current-greater-than-available abstention. Staged,
+delayed and other unsupported controls cannot borrow simple Fischer arithmetic; remaining
+clock may still be shown with typed control absence. No thought-time inference follows.
+
+clock_reading@1 is explicitly one additional dependency-owned source_record frame, with sample
+and ParsedTimeControl status even when remaining/spend data is absent. It is not an extra row
+silently inserted into foundation's23-source/five-predicate scope. Foundation clock_decision@1
+remains a separate exact recorded actor/decision/event/phase source with genuine spend operands
+or typed unavailable. Imported actor context cannot become learner context merely through
+selected side. No generic constructor or unavailable-only factory counts as either source.
+
+### Delivery and preserved intent
+
+The repair now names a complete RunService.recordedClock → authenticated read-only REST →
+strict DrillApi → bounded ClockReadout path and exact review.recorded_clock@1 consumer plus
+two registered renderer bindings. These fit existing exact consumer execution/presentation
+registries and strict client seams, while requiring actual source/operation/renderer installation
+before learner delivery is claimed. Successful truthful absence belongs to the complete source
+frame; missing/broken source authority produces no successful evidence item. Source/subject/
+receipt/arithmetic crossing, help/access changes, cancellation and late-response retirement
+are required permanent controls. Readout stays after-this-move, fixed in the historical rail,
+and cannot grant existing grade/eval access, tick or affect run/cursor/branches/provider work.
+Only the declared authorized null-to-document metadata transition may write on query.
+
+D1041's simulated drill pressure and real clocks wherever play occurs, bot move-time models,
+rating consequences and timed campaign work remain required. D2290's false createdAt/“thinking
+time” arm is replaced by honest recorded clock use; the learner's own measured-live arm remains
+an explicit real server-issued decision/clock source discharge on enforced-clocks, not a stub
+or an implicit deletion. That returned successor must refresh its obsolete ClockReading/run
+assumptions before implementation. D361's opaque legacy field and the protected campaign
+intent amendments remain explicitly owed; this RFC makes neither a false closure nor an owner
+ruling. Broadcast integration likewise remains a conditional live-sources discharge without
+blocking independent correct paste/fetch extraction or advertising an unbuilt handoff.
+
+All acceptance evidence must still be implemented and executed, including hermetic sparse,
+setup/truncated-start, malformed/duplicate, transaction/CAS/account, exact original-node,
+REST/strict parser, mounted layout/lifecycle and actual native delivery controls. Reviewer ran
+no tests/builds or heavy commands, changed only this append-only review and the separately
+requested four-source execution follow-up receipt, and did not edit/stage/commit production,
+RFC, protected intent or archive bytes. Main may now record this separate contract acceptance;
+it must not count it as source4/full foundation/clock implementation or release completion.

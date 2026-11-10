@@ -9,13 +9,15 @@ import { describe, expect, it } from "vitest";
 import { checkpointMatches, expandPackAuthoredBoundary, objectiveRules, planSignatureResolver } from "./pack-orchestrator.js";
 import { validatePackDocument, type PackShapeLookup } from "./pack-validation.js";
 import { validateShapeEntry } from "./shape-validation.js";
+import { ShapeRegistry } from "./shape-registry.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const json = (relative: string): any => JSON.parse(readFileSync(new URL(relative, import.meta.url), "utf8"));
 const sourcePack = json(resolvePackPath("carlsbad-minority-attack")) as DrillPackDefinition;
 const sourceShape = json("../../../content/shapes/carlsbad.json");
 const lookup = (document = sourceShape): PackShapeLookup => ({ get: (id) => id === "carlsbad" ? { document } : undefined });
 
-describe("vocabulary wiring", () => {
+describe("vocabulary wiring", { timeout: 5_000 }, () => {
   it("compiles plan_consequence and plan_signature to the same predicate and evidence", () => {
     const legacy = structuredClone(sourcePack) as any;
     legacy.objective.successConditions = [{ kind: "plan_consequence", planClassId: "minority-attack", to: "achieved" }];
@@ -41,20 +43,24 @@ describe("vocabulary wiring", () => {
     expect(matchesStructuralExpression(pack.start.fen, rule.when.predicate.feature)).toBe(true);
   });
 
-  it("expands plan_signature inside a transition position node and attributes it", () => {
+  it("expands plan_signature inside a transition position node and attributes it", async () => {
     const pack = structuredClone(sourcePack) as any;
     pack.objective.successConditions = [{
       kind: "transition_feature",
       transition: { kind: "position", at: "after", expression: { kind: "plan_signature", planClassId: "minority-attack" } },
       to: "achieved",
     }];
-    const rule = objectiveRules(pack, pack.objective, "/objective", planSignatureResolver(pack, lookup()))[0]!;
+    const registry = new ShapeRegistry(); await registry.add(sourceShape, "official");
+    const checked = validatePackDocument(withDerivedRequires({ ...pack, provenance: { ...pack.provenance, corpusEvidence: { state: "unsourced" } } }, { shapes: registry }), { shapes: registry });
+    expect(checked.valid).toBe(true);
+    const current = checked.document!;
+    const rule = objectiveRules(current, current.objective, "/objective", planSignatureResolver(current, registry))[0]!;
     expect(rule.evidenceRefs).toContain("planClass#minority-attack");
     expect(JSON.stringify(rule.when)).not.toContain("plan_signature");
-    expect(() => validatePackDocument(pack, { shapes: lookup() })).not.toThrow();
+    expect(() => validatePackDocument(current, { shapes: registry })).not.toThrow();
   });
 
-  it("expands plan_signature before checkpoint and boundary validation", () => {
+  it("expands plan_signature before checkpoint and boundary validation", async () => {
     const pack = structuredClone(sourcePack) as any;
     pack.checkpoints = [{
       id: "plan-reached",
@@ -72,7 +78,8 @@ describe("vocabulary wiring", () => {
         feature: { kind: "plan_signature", planClassId: "minority-attack" },
       }],
     };
-    const validation = validatePackDocument(pack, { shapes: lookup() });
+    const registry = new ShapeRegistry(); await registry.add(sourceShape, "official");
+    const validation = validatePackDocument(pack, { shapes: registry });
     expect(validation.issues).not.toContainEqual(expect.objectContaining({ code: "START_POSITION_UNRUNNABLE" }));
 
     const rootShape = structuredClone(sourceShape);

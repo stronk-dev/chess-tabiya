@@ -15,8 +15,7 @@ import type { DrillRun, Node, OpponentMoveSelectedEvent, OpponentSelection } fro
 import type { RecordedInspectorSelection } from "./recorded-inspector.js";
 import type { RecordedPosition } from "./review-points.js";
 import { irreversibility, type IrreversibilityDetail } from "./transition.js";
-import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { assertConsumerEvidenceView, evidenceForConsumer, type ConsumerEvidenceView, type DeclaredEvidence } from "./evidence-contract.js";
+import type { DeclaredEvidence } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 
 export type PivotalKind = "irreversibility" | "phase_change" | "human_divergence" | "option_collapse";
@@ -221,8 +220,17 @@ export function pivotalRecordedPayloads(source: RecordedPivotalSource, kind: Piv
  * evidence and a Maia split cannot be relabelled a position-rule marker.
  */
 export function pivotalMarkerEvidenceItems(run: DrillRun, branchId: string): readonly DeclaredEvidence<PivotalMarker>[] {
+  return markerEvidenceForKinds(run, branchId, Object.keys(PIVOTAL_MARKER_ROUTES) as PivotalKind[]);
+}
+
+/** D4053: only the already-ruled live families; retrospective callers keep all four above. */
+export function livePivotalMarkerEvidenceItems(run: DrillRun, branchId: string): readonly DeclaredEvidence<PivotalMarker>[] {
+  return markerEvidenceForKinds(run, branchId, ["irreversibility", "phase_change"]);
+}
+
+function markerEvidenceForKinds(run: DrillRun, branchId: string, kinds: readonly PivotalKind[]): readonly DeclaredEvidence<PivotalMarker>[] {
   const order = new Map(branchPath(run, branchId).map((node, index) => [node.id, index]));
-  const items = (Object.keys(PIVOTAL_MARKER_ROUTES) as PivotalKind[]).flatMap((kind) => invokeEvidenceValueRoute(PIVOTAL_MARKER_ROUTES[kind], { run, branchId }).map((item) => item.evidence as DeclaredEvidence<PivotalMarker>));
+  const items = kinds.flatMap((kind) => invokeEvidenceValueRoute(PIVOTAL_MARKER_ROUTES[kind], { run, branchId }).map((item) => item.evidence as DeclaredEvidence<PivotalMarker>));
   return Object.freeze(items.sort((a, b) => (order.get(a.payload.nodeId)! - order.get(b.payload.nodeId)!) || a.payload.kind.localeCompare(b.payload.kind)));
 }
 
@@ -254,27 +262,6 @@ export function liveMarkers(
 ): readonly PivotalMarker[] {
   const permission = permittedAssistance(context);
   return Object.freeze(pivotalMarkers(run, branchId).filter((marker) => liveAdmitted(marker, permission)));
-}
-
-export function consumePivotalMarkers(
-  view: ConsumerEvidenceView<PivotalMarker>,
-): readonly PivotalMarker[] {
-  assertConsumerEvidenceView(view);
-  if (view.consumer.id !== "board.pivotal_marker" || view.consumer.version !== 1) {
-    throw new TypeError("Expected board.pivotal_marker@1 consumer view");
-  }
-  return Object.freeze(view.items.map((item) => item.payload));
-}
-
-/** Live board markers: factory-minted, filtered by the live admission rule, then admitted. */
-export function pivotalMarkerEvidence(run: DrillRun, branchId: string, context: AssistanceContext): readonly PivotalMarker[] {
-  const permission = permittedAssistance(context);
-  const declared = pivotalMarkerEvidenceItems(run, branchId).filter((item) => liveAdmitted(item.payload, permission));
-  return consumePivotalMarkers(evidenceForConsumer(
-    PRIMARY_EVIDENCE_MANIFEST,
-    { id: "board.pivotal_marker", version: 1 },
-    declared,
-  ));
 }
 
 export function renderPivotalMarker(marker: PivotalMarker): readonly string[] {

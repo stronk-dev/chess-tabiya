@@ -6,17 +6,36 @@ import { DatabaseSync } from "node:sqlite";
 
 import { attachEvidence, feedbackDisclosed, fork, projectRun, transitionObjective, type BranchComparison, type DrillRun } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { applicationFixture } from "./application-fixture.test-support.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
+import { mechanicalPrincipleFixture } from "./mechanical-principle.test-support.js";
+import { PrincipleRegistry } from "./principle-registry.js";
+import { withDerivedRequires } from "./capability/pack-capabilities.js";
 import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
 import { SQLiteRunStorage } from "./storage.js";
 
-const fixture = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8"));
+const example = JSON.parse(readFileSync(new URL("../../../schemas/drill_pack.example.json", import.meta.url), "utf8")) as DrillPackDefinition;
+const principle = mechanicalPrincipleFixture();
+// Retain nonempty claims, annotations and success conditions so answer redaction
+// cannot pass vacuously. Only the test-owned principle reference and requirements
+// are made current; the installed example and lesson corpus are never rewritten.
+const fixture = withDerivedRequires({ ...example, feedbackClaims: example.feedbackClaims!.map(claim => ({
+  ...claim, principles: [principle.document.id],
+})) }, { principles: { get: id => id === principle.document.id ? principle : undefined } });
 let application: ChessTabiyaApplication | undefined;
 let constructingApplication: ReturnType<typeof applicationFixture<ChessTabiyaApplication>> | undefined;
 let directory: string | undefined;
+beforeEach(async () => {
+  installEmptyApplicationCatalogues();
+  const principles = new PrincipleRegistry();
+  await principles.add(principle.document, principle.citations);
+  vi.spyOn(PrincipleRegistry, "loadDefault").mockResolvedValue(principles);
+  expect(fixture.feedbackClaims).not.toHaveLength(0);
+  expect(fixture.objective.successConditions).not.toHaveLength(0);
+});
 afterEach(async () => {
   const closing = application;
   const removing = directory;
@@ -25,7 +44,10 @@ afterEach(async () => {
   constructingApplication = undefined;
   directory = undefined;
   try { if (constructing !== undefined) await constructing.close(); else await closing?.close(); }
-  finally { if (removing !== undefined) rmSync(removing, { recursive: true, force: true }); }
+  finally {
+    vi.restoreAllMocks();
+    if (removing !== undefined) rmSync(removing, { recursive: true, force: true });
+  }
 });
 
 describe("pinned pack production HTTP retrieval", { timeout: 120_000 }, () => {

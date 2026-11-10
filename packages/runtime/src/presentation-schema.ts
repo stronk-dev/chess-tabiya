@@ -67,13 +67,13 @@ export const s = Object.freeze({
   obj<R extends Shape, O extends Shape = Readonly<Record<never, Parser<unknown>>>>(required: R, optional?: O): Parser<Out<R> & OptionalOut<O>> {
     return (value, label) => {
       if (!isRecord(value)) return fail(label, "must be an object");
-      for (const key of Object.keys(value)) if (!(key in required) && !(optional !== undefined && key in optional)) fail(label, `has the unknown key ${key}`);
+      for (const key of Object.keys(value)) if (!Object.hasOwn(required, key) && !(optional !== undefined && Object.hasOwn(optional, key))) fail(label, `has the unknown key ${key}`);
       const result: Record<string, unknown> = {};
       for (const [key, parser] of Object.entries(required)) {
-        if (!(key in value)) fail(label, `omits ${key}`);
+        if (!Object.hasOwn(value, key)) fail(label, `omits ${key}`);
         result[key] = parser(value[key], `${label}.${key}`);
       }
-      if (optional !== undefined) for (const [key, parser] of Object.entries(optional)) if (key in value && value[key] !== undefined) result[key] = parser(value[key], `${label}.${key}`);
+      if (optional !== undefined) for (const [key, parser] of Object.entries(optional)) if (Object.hasOwn(value, key) && value[key] !== undefined) result[key] = parser(value[key], `${label}.${key}`);
       return Object.freeze(result) as Out<R> & OptionalOut<O>;
     };
   },

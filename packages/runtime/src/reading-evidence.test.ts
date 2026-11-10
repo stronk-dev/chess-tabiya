@@ -8,6 +8,7 @@ import {
   consumeSelectedSquareSight,
   declareStructuralReadingEvidence,
   declareTransitionReadingEvidence,
+  presentPositionStructureEvidence,
 } from "./reading-evidence.js";
 import { structuralReading } from "./structure.js";
 import { transitionReading } from "./transition.js";
@@ -18,9 +19,10 @@ const afterE4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
 describe("reading consumer boundaries", () => {
   it("admits structural readings independently for inspector and board sight", () => {
     const declared = declareStructuralReadingEvidence(structuralReading(initial));
-    const inspector = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.position_structure", version: 1 }, declared);
     const sight = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.selected_square_sight", version: 1 }, declared);
-    expect(consumePositionStructure(inspector)).toHaveLength(declared.length);
+    expect(presentPositionStructureEvidence({ fen: initial })).toHaveLength(declared.length);
+    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.position_structure", version: 1 }, declared)).toThrow(/undeclared exact consumer/u);
+    expect(() => consumePositionStructure(sight)).toThrow(/@2 consumer view/u);
     expect(consumeSelectedSquareSight(sight)).toHaveLength(declared.length);
     if (false) {
       // @ts-expect-error Inspector rejects a bare structural observation list.

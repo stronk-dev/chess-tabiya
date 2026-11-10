@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e0a23287bab09ebad4167007d258ae5d2291f14ad0dbfb5d08439d9493f48b16",
-    "workItems": "sha256:976dd00b2b6253acb5cd6a07c5b4df063c06c9946245822bcf4b98174f9271d6",
-    "workState": "sha256:abd23cb60c506d21ac5ffeeb083a1dd57d82ae6fe7e9b4b87fbcf4658dcfa975",
-    "rfcRegister": "sha256:81c80f8dddc935467fa98f9ff9716745f5a83554d17a9117f9dea71b45d458e9",
-    "uxIndex": "sha256:058ce92e6fbf8d9fc1e904c8c6baa53485e29ff710a26f824e11b4520c2e5cfb",
+    "roadmap": "sha256:b1f1b46e668f8ef5d86e4ae994a78ea8d0cbddd53a42bf013608e096eb4e6795",
+    "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
+    "workState": "sha256:dcbbccc55fa6a359812b067c9a14e08ded731b5f24697a5814f670d9dafc77ec",
+    "rfcRegister": "sha256:c843c75a7380211f611387b7027ae976d928ba1b1f01381ae4a941150c351f3d",
+    "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
-    "application": "sha256:c76df519f8a758f09672482f3f329304ece0bec27c0fc7d2e588fe8396408553",
-    "rest": "sha256:cea5d7c7b22807ee26871a83b959a216e365acfb758fbf8d4a91853b1118c878"
+    "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
+    "rest": "sha256:109e4a47ea219749546ffd71bb2eff296fb7ea9c559e571e27fbd180641e13bc"
   },
   "summary": {
     "capabilities": 14,
@@ -18,29 +18,29 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 76,
+    "assignedRfcs": 79,
     "activeRfcLifecycle": {
-      "draft": 23,
+      "draft": 20,
       "accepted": 0,
-      "implementing": 43,
-      "awaiting": 10,
+      "implementing": 50,
+      "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
       "withdrawn": 0
     },
     "workState": {
       "untriaged": 0,
-      "todo": 628,
-      "doing": 37,
-      "blocked": 1083,
-      "done": 1759,
-      "refused": 162
+      "todo": 632,
+      "doing": 173,
+      "blocked": 1063,
+      "done": 1916,
+      "refused": 163
     },
     "workItems": {
       "queued": 79,
       "blocked_owner": 62,
-      "blocked_rfc": 122,
-      "completed": 282,
+      "blocked_rfc": 121,
+      "completed": 283,
       "retired": 24
     },
     "dimensionStates": {
@@ -354,12 +354,13 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Resolve D3687/D3690's negative contract across the four complete-state families and D3745's unavoidable sparse square-controller deltas; the 127-edge/97-check audit closes research, not qualification. Use the existing state-negative handoff and independently accept the orientation/reach amendments before their production implementation; retain required cells and frozen v1. Complete admitted D1700/D1701 consumer execution, source resolution and exact availability without treating compilation as adoption. Independently review maia-task-source for D3370/D3363 before implementing its sampled-task source and exact Inspector migration; preserve draw isolation, final-task windows and existing selection cache/recorded replay. Complete D3376's installed opening point lookup-result authority and complete recorded history on the implemented schema/pure loader/package pin/source handles; independently review remaining D3564 orientation and D3373 durable-Stockfish drafts before implementing those. D3590's loader repair is closed, not installed-source integration. Preserve selected move versus PV, configured MultiPV, frozen v1 replay and migration order. D3429 calibration and D3410 opening-source repair remain held; frozen reference, thresholds, production sampler and native ladder are unchanged/open.",
+      "nextAction": "Finish current full software/performance gates and current200-game Profile cost; prove actual predecessor8 rederivation separately from the shaped fixture; then complete independent13 source qualifications and D4167 reverse consumers. Do not promote whole foundation or held content.",
       "latestCheckpoint": {
-        "at": "2026-10-16",
-        "summary": "Installed-opening §§1–2 source foundation now implements the shared existing-document schema, pure runtime loader/paired maps,263-byte generated package pin and genuine source handles used by actual application loading. Canonical keys and complete relationships precede digest decisions; dedicated mismatch classification and generator-before-final-bundle ordering close all independent returns. Original three compiler tests remain intact beside real stale-pin regeneration/bundled-admission controls. Independent bounded re-review,95 source cases/six files,39 register cases/types and seven unchanged-budget performance cases pass. Full normal make verify build passes6723 software/415 files (442.53s), seven performance/four files (61.37s),257 content/26 files (56.24s) and all remaining gates, with no assertion/deadline/retry/skip/coverage or budget relaxation. Original3810 endpoint/7854 membership tables remain unchanged. D3376 is doing, not complete: actual point/history factory/result authority, complete history and coordinated current delivery remain. No D3082 discharge, qualification, content or whole milestone claim.",
+        "at": "2026-11-10",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
+          "packages/runtime/src/semantic-validation-orientation.test.ts",
           "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
           "design/research/semantic-validation-closure.md",
           "planning/semantic-validation-authority/plan.md",
@@ -400,13 +401,192 @@
           "packages/runtime/src/opening-catalogue.test.ts",
           "packages/runtime/src/opening-catalogue-registration.json",
           "apps/server/src/opening-catalogue-build.test.ts",
-          "docs/runtime-opening-identity.md"
+          "docs/runtime-opening-identity.md",
+          "rfc/foundation-source-identity.md",
+          "planning/foundation-source-identity/projection-plan.json",
+          "tools/d1718-avoidance-subject-harness/current-source-abi.test.ts",
+          "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+          "packages/runtime/src/foundation-position-sources.ts",
+          "packages/runtime/src/foundation-position-sources.test.ts",
+          "planning/foundation-source-identity/plan.md",
+          "packages/runtime/src/candidate-population.ts",
+          "packages/runtime/src/candidate-population.test.ts",
+          "packages/runtime/src/internal/candidate-child-reading-routes.ts",
+          "packages/runtime/src/evidence-conventions.test.ts",
+          "packages/runtime/src/semantic-evidence.test.ts",
+          "apps/web/src/lib/labels/semantic-event-sign.ts",
+          "packages/runtime/src/foundation-source-events.test.ts",
+          "packages/runtime/src/evidence-value-import-order.test.ts",
+          "packages/runtime/src/internal/evidence-value-routes.ts",
+          "packages/runtime/src/foundation-pawn-sources.ts",
+          "packages/runtime/src/foundation-pawn-sources.test.ts",
+          "tools/d1736-foundation-source-author-contract/contract.test.mjs",
+          "packages/runtime/src/foundation-square-sources.test.ts",
+          "packages/runtime/src/foundation-edge-consequence.test.ts",
+          "packages/runtime/src/foundation-style-sources.test.ts",
+          "packages/runtime/src/foundation-predicate-leaves.test.ts",
+          "apps/server/src/authored-structural-source.test.ts",
+          "apps/server/src/capability/pack-capability-contract.test.ts",
+          "apps/server/src/shape-studio.test.ts",
+          "apps/server/src/shape-probe.test.ts",
+          "apps/server/src/predicate-wave-3-validation.test.ts",
+          "packages/runtime/src/evidence-binding-execution.test.ts",
+          "apps/server/src/registered-shape-source.test.ts",
+          "tools/d4082-shape-firing/measure.ts",
+          "packages/runtime/src/internal/registered-shape-scan.ts",
+          "apps/server/src/registered-shape-scan.test.ts",
+          "apps/server/src/inspector-shape-source.test.ts",
+          "apps/web/src/lib/inspector-source-browser.test.ts",
+          "apps/server/src/guided-shape-query.test.ts",
+          "apps/web/src/lib/guided-shape-response.ts",
+          "apps/web/src/lib/screens.test.ts",
+          "apps/server/src/module-shape-source.test.ts",
+          "packages/runtime/src/registered-shape-wire.test.ts",
+          "apps/server/src/local-module-execution.test.ts",
+          "apps/web/src/lib/evidence/components.test.ts",
+          "apps/web/src/lib/evidence/components/TextStatementView.svelte",
+          "packages/runtime/src/opening-module-source.test.ts",
+          "apps/server/src/shape-recommendations-source.test.ts",
+          "apps/server/src/progress.test.ts",
+          "apps/web/src/lib/app-shell.test.ts",
+          "apps/web/src/lib/progress-response.ts",
+          "docs/return-and-progression.md",
+          "apps/server/src/repertoire.ts",
+          "apps/web/src/lib/progress-response.test.ts",
+          "apps/web/src/lib/api.test.ts",
+          "apps/server/src/recorded-foundation-sources.ts",
+          "apps/server/src/recorded-foundation-sources.test.ts",
+          "packages/runtime/src/recorded-foundation-source.ts",
+          "packages/runtime/src/recorded-foundation-source-authority.ts",
+          "apps/server/src/authored-tempo-transition.test.ts",
+          "apps/server/src/authored-predicate-current.test.ts",
+          "apps/server/src/expression-satisfiability.test.ts",
+          "apps/server/src/structural-reading.test.ts",
+          "apps/server/src/vocabulary-wiring.test.ts",
+          "packages/runtime/src/structural-evidence.ts",
+          "packages/runtime/src/transition.ts",
+          "packages/runtime/src/tempo.ts",
+          "packages/runtime/src/objective.ts",
+          "packages/runtime/src/line.ts",
+          "apps/server/src/pack-orchestrator.ts",
+          "apps/server/src/pack-validation.ts",
+          "rfc/contracts/pack-capability-applicability-v1.json",
+          "apps/server/src/authored-census-source.test.ts",
+          "apps/server/src/expression-census.ts",
+          "apps/server/src/expression-satisfiability.ts",
+          "apps/server/src/shape-check.ts",
+          "apps/server/src/fixtures/refusal-debt.fixture.json",
+          "apps/server/src/authored-convention-migration.test.ts",
+          "apps/server/src/authored-convention-migration.ts",
+          "apps/server/src/authored-convention-migration-cli.ts",
+          "rfc/contracts/foundation-authored-convention-sites-v1.json",
+          "apps/server/src/recorded-clock-storage.test.ts",
+          "apps/server/src/recorded-clock-import.test.ts",
+          "packages/runtime/src/recorded-clocks.test.ts",
+          "apps/server/src/recorded-clock-document.ts",
+          "planning/time-controls/implementation-2026-11-05.md",
+          "apps/server/src/recorded-clock-source.test.ts",
+          "packages/runtime/src/recorded-foundation-occurrence.ts",
+          "apps/server/src/recorded-clock-delivery.test.ts",
+          "apps/web/src/lib/recorded-clock-readout.test.ts",
+          "apps/web/src/lib/ClockReadout.svelte",
+          "planning/platform-alignment/recorded-clocks-intent-amendment-2026-11-05.md",
+          "apps/server/src/profile-game-source.ts",
+          "apps/server/src/profile-game-source.test.ts",
+          "rfc/profile-game-facts.md",
+          "planning/foundation-source-identity/profile-game-facts-review.md",
+          "tools/r12-player-style-harness/profile-source-cost.ts",
+          "apps/server/src/profile-game-facts.test.ts",
+          "apps/server/src/learner-profile.test.ts",
+          "apps/server/src/storage.test.ts",
+          "apps/web/src/lib/ProfileScreen.test.ts",
+          "planning/foundation-source-identity/profile-game-facts-cost-2026-11-05.json",
+          "apps/server/src/profile-choice-source.test.ts",
+          "apps/server/src/profile-choice-store.test.ts",
+          "apps/server/src/profile-choice-facts.ts",
+          "apps/server/src/profile-choice-facts-contract.ts",
+          "apps/server/src/profile-choice-fact-references.ts",
+          "packages/runtime/src/internal/profile-choice-facts.ts",
+          "apps/server/src/longitudinal-contract.test.ts",
+          "apps/server/src/longitudinal-successor-upgrade.test.ts",
+          "rfc/profile-choice-facts.md",
+          "planning/foundation-source-identity/profile-choice-facts-cost-2026-11-09.json",
+          "docs/learner-profile.md",
+          "docs/longitudinal-store.md",
+          "packages/runtime/src/semantic-validation-rights-sources.ts",
+          "packages/runtime/src/semantic-validation-rights.test.ts",
+          "packages/runtime/src/semantic-validation-runner.ts",
+          "packages/runtime/src/semantic-validation-cited.test.ts",
+          "packages/runtime/src/semantic-validation.test.ts",
+          "packages/runtime/src/testing/retired-semantic-validation-cases.ts",
+          "packages/runtime/src/semantic-validation-transition-sources.ts",
+          "packages/runtime/src/semantic-validation-transition-fields.test.ts",
+          "packages/runtime/src/foundation-edge-source.ts",
+          "packages/runtime/src/foundation-edge-source.test.ts",
+          "packages/runtime/src/foundation-edge-presentation.ts",
+          "packages/runtime/src/foundation-snapshot-source.ts",
+          "packages/runtime/src/foundation-snapshot-source.test.ts",
+          "packages/runtime/src/foundation-snapshot-presentation.ts",
+          "packages/runtime/src/foundation-snapshot-detail.ts",
+          "packages/runtime/src/foundation-snapshot-detail.test.ts",
+          "apps/server/src/inspector-receiver-independent.test.ts",
+          "packages/runtime/src/breadth-semantic.test.ts",
+          "packages/runtime/src/foundation-semantic-event.test.ts",
+          "packages/runtime/src/inspector-local-source.ts",
+          "apps/server/src/inspector-local-source.ts",
+          "packages/runtime/src/semantic-validation-current-source.test.ts",
+          "packages/runtime/src/semantic-validation-operations.ts",
+          "packages/runtime/src/semantic-validation-opposition-sources.ts",
+          "packages/runtime/src/semantic-validation-opposition.test.ts",
+          "packages/runtime/src/semantic-validation-cases.json",
+          "packages/runtime/src/semantic-validation-profiles.json",
+          "packages/runtime/src/semantic-validation-pawn-file-sources.ts",
+          "packages/runtime/src/semantic-validation-pawn-file.test.ts",
+          "packages/runtime/src/semantic-validation-backward-sources.ts",
+          "packages/runtime/src/semantic-validation-backward.test.ts",
+          "packages/runtime/src/semantic-validation-slider-sources.ts",
+          "packages/runtime/src/semantic-validation-slider.test.ts",
+          "rfc/subject-safe-semantic-selection.md",
+          "tools/d1713-semantic-validation-matrix/candidate-foundation-frame.test.ts",
+          "tools/d1713-semantic-validation-matrix/total-foundation-states.test.ts",
+          "packages/runtime/src/foundation-total-sources.test.ts",
+          "packages/runtime/src/foundation-risk-sources.ts",
+          "packages/runtime/src/foundation-slider-sources.ts",
+          "packages/runtime/src/foundation-position-cells.ts",
+          "packages/runtime/src/foundation-position-cells.test.ts",
+          "packages/runtime/src/candidate-foundation-sources.test.ts",
+          "packages/runtime/src/candidate-total-inputs.ts",
+          "packages/runtime/src/candidate-total-inputs.test.ts",
+          "rfc/longitudinal-store.md",
+          "apps/server/src/profile-subject-source.test.ts",
+          "apps/server/src/profile-subject-facts-contract.test.ts",
+          "apps/server/src/learner-profile-application.test.ts",
+          "packages/runtime/src/longitudinal-subject-relations.test.ts",
+          "packages/runtime/src/longitudinal-native-incidence.test.ts",
+          "apps/server/src/profile-subject-store.test.ts",
+          "apps/server/src/profile-subject-facts-authority.ts",
+          "apps/server/src/profile-subject-fact-references.ts",
+          "apps/server/src/inspector-query.test.ts",
+          "apps/web/src/lib/current-native-module-journeys.test.ts",
+          "apps/web/src/lib/evidence/native-fact-detail.test.ts",
+          "packages/runtime/src/current-native-module-delivery.test.ts",
+          "packages/runtime/src/presentation-contract.ts",
+          "packages/runtime/src/capability/declarations.generated.ts",
+          "packages/runtime/src/testing/subject-safe-retired-semantic-cases.ts",
+          "tools/staged-typecheck.mjs",
+          "tools/staged-typecheck.test.mjs",
+          "apps/server/src/bot-opponent-operation.ts",
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "rfc/bot-policy.md",
+          "rfc/learner-modules.md",
+          "rfc/live-following.md",
+          "rfc/measurement-records.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
             "id": "D3781",
-            "digest": "sha256:136e016081a44b667b861884eb229e109209b24dd70336d0f476c5bc73efbcfa"
+            "digest": "sha256:34b9d02f1939e459753e284e2493fcba2b20e3b655f42cc040e4b11eb214675d"
           },
           {
             "kind": "work_state",
@@ -431,7 +611,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
+            "digest": "sha256:cac3a82a4c60a4728459baaae790865c465a7f1c46e5281d3f74043a507cf6d6"
           },
           {
             "kind": "work_state",
@@ -451,7 +631,7 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
-            "digest": "sha256:02d863fdb3b8ef4f2d6bdc97d2e158c511f248ecdf5ab71b1a09e316d827ae9c"
+            "digest": "sha256:d188283c3a784ce77fb4fba518e037816d7258dc6b0795be16578ef08acca7d7"
           },
           {
             "kind": "work_state",
@@ -467,6 +647,546 @@
             "kind": "work_state",
             "id": "D3719",
             "digest": "sha256:c26d8ff9b418f0fd6313c2384898c758b65ddfb90ebd856e953a2d6df15aca4b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4065",
+            "digest": "sha256:d94f166be45f7d8e336f3034973bd9fae64b817dd4a72f6ece101a35f1e8528f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4066",
+            "digest": "sha256:4d5dc680ea4854789e5c3d5184dca10078891ae2c325c55a74cbb7193926c041"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4067",
+            "digest": "sha256:04161d49f943f736c43ceb06087d4bb9e36183896c7b89a913ec2bc24a66139a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4068",
+            "digest": "sha256:f63405e8901dc637ddf5b13bdcda50aa37389128c7f8133eb804cc9acdcc0f58"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4069",
+            "digest": "sha256:2a2dffbb6d55be44fb609c5bddedaa4ed22e9fcd3c4a835c82cb3879b24e4342"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4070",
+            "digest": "sha256:26ae62261a98d580c3985b0d98e4dcf7cc8fd8d2da3d75406d02596c2ffeb070"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1736",
+            "digest": "sha256:639c2f52fc60101b3a4e31d77970c491790f1eeb99d07252a5c567a118c54128"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4071",
+            "digest": "sha256:c2455860947b24daf9279c196c4736a94700d1c4e4484ff1d84b73a826eb9934"
+          },
+          {
+            "kind": "rfc",
+            "id": "foundation-source-identity.md",
+            "digest": "sha256:525c9035337f614e9bc1d0c802dcdf5673bf2d3891c867e664f0ff7964e2148e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4077",
+            "digest": "sha256:b521e72ee7b9eb081029e9fc006a65b5f6fd531c8be27b221b539ab29124b48e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4078",
+            "digest": "sha256:8214d2a27919b1dcc99f062f18cb85e1be7f3ba06c1fe7ff1a45d25e71ebf207"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4079",
+            "digest": "sha256:40c859d70b24582a812c5bc009bd49fc4d9133c191c15207dd105203aae4ab01"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4080",
+            "digest": "sha256:1d8d4a33d2f9864949dbd7cef737c955ef2e3d712c94577b9e93b86c00d54c9c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4081",
+            "digest": "sha256:30d1e0cf08aac598c29713f5b50eb0feca84ec5a2e50506fba65fb34a752545b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4082",
+            "digest": "sha256:3b54b434b4ec2649f90587ccc38b85fa29a1e6538b732be21c7a365e7e53d326"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4083",
+            "digest": "sha256:e37bf962c8ad64eeaa84a6ccf1e5debcaf1f73e8275956a774123595c503360a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4084",
+            "digest": "sha256:bb4592d9287ef1b33dd56c7c9a09bf300333b7436b4c12b048a123ba27a655df"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4085",
+            "digest": "sha256:7bb8234efd6972c1f8e9f9c45a92029bb7eae323c3c6852e7bd195c72e38843d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4090",
+            "digest": "sha256:0770a384d2f063a4c7c7d5551320c190f3193c333bc5ced3dcc1672d16aed8bc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4091",
+            "digest": "sha256:25526f477da032469f633763de4b290eefc12ee3fc252aad6a55bc523da82464"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4092",
+            "digest": "sha256:e7abce7cd418faee94997ed0ae61fa0818786ff420c7e377acfa13bccb61d008"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4093",
+            "digest": "sha256:1fe600f9af3be07a3587cecc609001caeb4407d4bce2fbffada3dfd365d3829f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4094",
+            "digest": "sha256:e45ed0d40039bccc43798dc22214f86c0b9e4648a6b5aea9896c48e04cc730a5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4095",
+            "digest": "sha256:c57a5a6ef9c8d65d19b3d10b60f299806603373923c0fc1aa8e70bc783a4d82f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4096",
+            "digest": "sha256:e2c7430eefa2b8287e5ce6f7a82629c981a15ca0491727a0f20f6a87a6e98345"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4097",
+            "digest": "sha256:ae9b9770fd2269a4d6a8da30885be1a01233d68589cc0c30c4e935e493fd71b5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4089",
+            "digest": "sha256:9b7a2b839d3605314f2f96c7744873201dab67f04e91a5364b5e308e3af7a9ac"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4098",
+            "digest": "sha256:ff7286dedd9e9c45e3877a13834d318babe3eeaa75a344444e7c68073a3f8b43"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4099",
+            "digest": "sha256:2116758422dd8800ecaaf7d9ba2cb0faf3d14b7f8746a302706f30880532f899"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4100",
+            "digest": "sha256:cdba7308da7b7b2ae6ec05e565f1dc64c4f44060b2d32f7fcd6590e71b0df130"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4101",
+            "digest": "sha256:39a277bfc1bfb030537b90cc98a53ab0e7ebfce4d212657eff0bfee77d4a0e5b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4102",
+            "digest": "sha256:2e4adb2b460bdcca061179fecd4416ca4def9273c4bdf557b672240ee976356d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4076",
+            "digest": "sha256:3f2b8e8a23a4ed7143fdc2dc376402ea85fcbad38c684c0fee88497ed600d889"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4103",
+            "digest": "sha256:ae91b66224060185059743175050ecfa69342dd3a097c67b96c3765adc25f677"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4104",
+            "digest": "sha256:843a88504f98215ba967cd93d13d510303f4a9c6f97ac034ddbbdd6f3e978bcf"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4105",
+            "digest": "sha256:a34e6c9736315da1c89610d3f35e1f09276f9fa5d2744e6ba2ef738c3d6ffa10"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4106",
+            "digest": "sha256:32c9967d6db8a28d3320dab696c51dae98a34691301811e01ddfb311959da892"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4107",
+            "digest": "sha256:292626dec9b3b899542de37697ac4b3748ce0407ea1e7389e37b4e188e596d47"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4108",
+            "digest": "sha256:05856f757dda2dc693f02e24ff5e7c3c0a27f70d0e6b9fb332f6e63a8223e483"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4109",
+            "digest": "sha256:684cec03fcb1e84ffd0c7489cb8c930c49f236abef9dcd69fb193397c944b2ed"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4110",
+            "digest": "sha256:006b6d929de203c66ed512123d0d91c26dfb73e45c9446c998ef368230aafe90"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4111",
+            "digest": "sha256:3abb13a7378d7470e309fbe480dfa2da683a88566d4657c4dc885c9d871c3758"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4112",
+            "digest": "sha256:62f859ba19d275354014944e2200ccff7e6104f3ca840a734daa5e771743fc7c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4113",
+            "digest": "sha256:facb4dd3246bb1bea73a4b89383d011f06d04a37586914b24b8dc7ec6b891b20"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4114",
+            "digest": "sha256:d52e45e470f598fb04e8db38990c8bec3fa158e03043c2582ca517024880a8eb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4115",
+            "digest": "sha256:cc51c133ca5791b46654079ab6c84aa88a8d7ea32e6c225f5b47120b1e508a2b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4116",
+            "digest": "sha256:f93b1c7a3b20a0451e73b67d7b8799f83812458935b00b48c47eb03bbe444e77"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4117",
+            "digest": "sha256:c5c2934ccd0f2d0b034fd727cee918234030911cb73a3028ec43e5e86059324d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4118",
+            "digest": "sha256:e1cb404e5b5d3898534cdaee21e4e888a841334f6af1fad20b16f1152ff57614"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4119",
+            "digest": "sha256:9eca4329726f3b7c30a270e0f726633beed840dfdb1354894d3687d06dc7b8d0"
+          },
+          {
+            "kind": "rfc",
+            "id": "profile-game-facts.md",
+            "digest": "sha256:3a0f9927dc63d4e1ca74a55437dd4f4c24a146d504de714a882b4210f2bf7026"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4147",
+            "digest": "sha256:accd542c4afe89086eedc2078f4474b979d4866d59a1ae4ad0ffc3317b7fc8fb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4149",
+            "digest": "sha256:e2f9e1973b61edb27c9dd87e0b0d849e3612dc5b15b8c13d03505975d06a2be8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4150",
+            "digest": "sha256:9f3e75c7b3533deaf2f4215f0940665e1843b273bbf8f1f8b8305583cd38ca41"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4151",
+            "digest": "sha256:f7deb42bb62d737dfbe02e0a18f5172b99d796b428c0c6f4a0b7ca7a61a96dc8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4152",
+            "digest": "sha256:ce51c8731b04a9dd6ed23ab2b2d07e7e8dd59943d6bb47a3a19f8d2743387f8d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4153",
+            "digest": "sha256:61cbd124f0762fdf9a0b41b6039bb66eabdea1834d66a74453b7045605e197dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4154",
+            "digest": "sha256:71413d47a1fc3828d2fb4971ec16d8bc93e46ecfaae69c2651c8b6f6bd5bbbe9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3564",
+            "digest": "sha256:2b7d1d96af2f5f52dab939318f054e86c5e8bcbdb76aa39a85a651b393cbf45b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4155",
+            "digest": "sha256:df8f6dd1d2cf8600d80671c5fdac17c60a0bf9ce85d2d3ee6f08cd3d132578f3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4156",
+            "digest": "sha256:247c2b5624bb83f4d510040b9543c9b3106a084c9e36e33e22b11ef56e5cbb2c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4157",
+            "digest": "sha256:ccecc99d139ddbf3a1f88b79477ec619d92043f8d887f3ba3eab85718e7be144"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4158",
+            "digest": "sha256:73519f0aff8251b489ba248e9972a44c64e0ba1d69e62be13cab754237c37fbb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4160",
+            "digest": "sha256:eb5ffd197deda05523d3fcb0ca03d5c0bb097dd17828e871ca7da954d28b897c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4161",
+            "digest": "sha256:370200d523aa0b575cb7a6b8d9449b40676151b2b56544643c2b4c8ec4285e11"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4162",
+            "digest": "sha256:7982d8b6684e9a9b2fbb2f18eb0638430d558408bdd23375db265929822f06e2"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4163",
+            "digest": "sha256:d30d0575e75e69c26f04d02650cc9286d1a08868e17fa8b733cb74bf2c546c99"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4159",
+            "digest": "sha256:6ce114186f82787df301d04c1b9c3cafcbeee00140bb8a07f6e7d1f3cdec1c20"
+          },
+          {
+            "kind": "rfc",
+            "id": "profile-choice-facts.md",
+            "digest": "sha256:527e82abc62086a5c86b433dbbe9283806e6c901f689596338ef7d5ef831bc50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4164",
+            "digest": "sha256:416e2038014331f638e9593aeeb611e5bf2ea1e69fe2e666c0b8dc95724ad4dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4165",
+            "digest": "sha256:7d54de0be2fafab39c466dd9ec760c450ec9d5915c61378ea95eaa84d4ca1451"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4166",
+            "digest": "sha256:60cc1c12811fa5c24cf02a5d80d7a75fe648f9d0611ac4bd200703da8232c570"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4167",
+            "digest": "sha256:bc54044697843dae08daf278ec6d5c9b8b8b4aeea1c9b3af0953b056134de0c8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4168",
+            "digest": "sha256:40e06025af3ef30c45cffe552da82fadef1e55df59ae1f0a9c2c504e764f1e2a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4169",
+            "digest": "sha256:762d8965476680b36197ae673e434ec8e6f5d6b9b4e78f60bc6485434b6345a5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4170",
+            "digest": "sha256:0c86d9b32b40299cca9398f467a30d6197901ffcd10efc6369715b2bc833f599"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4171",
+            "digest": "sha256:ffaf58987f5de523ba43e3ddbf2f210209a5a6fb421b1c4da1ec56591ed53bed"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4172",
+            "digest": "sha256:ead43e401dfcc5f4b32f90f0ab91e5ac9ff4910f21eac830ca66a38751d1e5fb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4173",
+            "digest": "sha256:ca3bdbec44dca38879fb3b1aa7dec145f0a595fe30670f718c7d954d528757ea"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4174",
+            "digest": "sha256:9af8e01a0c491c1ae24ab6818cbf72c0c79e27dc8bc56cb17ececcc420e91413"
+          },
+          {
+            "kind": "rfc",
+            "id": "subject-safe-semantic-selection.md",
+            "digest": "sha256:f261cc360b433685b9342a96998ab26a55fbe2e1db22b1fda27adf0f5a753d55"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1716",
+            "digest": "sha256:629df6d0693600e29d42274c627bb48feff368c2b9fd8f3156b802c8ea258e84"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1718",
+            "digest": "sha256:985d63d759d001488dc41b0625be4a6fcdb16266552f503f2298caddd3b2e6c7"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1719",
+            "digest": "sha256:0a0f30c2a25f01e7fcd34ad84a0b9b54531cdd8f09fff8673da2861e6ee1c992"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4175",
+            "digest": "sha256:61f0b1a0769389996ef02d7531a8b62c9617569138a8055ec49f32c39074ab76"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4176",
+            "digest": "sha256:239a2a07da5b61912c9bf502fa2679dc2136afc66765f18268de95c37d94c831"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4177",
+            "digest": "sha256:5a8e53e6925652373bf999833a0bd0e18735468dbf40853c1a8e9fda1d6238f0"
+          },
+          {
+            "kind": "rfc",
+            "id": "longitudinal-store.md",
+            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4181",
+            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4182",
+            "digest": "sha256:142be084904d39e994c247e72c13e1ea5d53f6402d84eb01cbaaadae6b392a4f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4183",
+            "digest": "sha256:6784f481ec068f298f6dbd7637a66f3d54b2658e0928851540c19d285cff27dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4184",
+            "digest": "sha256:32eaa1923a033a70bcc58a2814c453d5f5249d626d080ca0fbfebd6f748de4a1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4185",
+            "digest": "sha256:7f8ff8fb44aeb2775b1384e62e57d3794b53a767a58e0772f58e0b822738e1ab"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4188",
+            "digest": "sha256:cb4e0b3f294d0fd44ebc303859439327e9c5cae6b72b6b4c4e73f567adbfe395"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4189",
+            "digest": "sha256:0a9c9c67604c3bd92f04bfc67344003d21243c00fc0baba1696c47944dc4c105"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4190",
+            "digest": "sha256:e63149bc3d07daa960777528dc163a3c187b371674c726b260bc6da71ab42d50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4191",
+            "digest": "sha256:4a107e98537ae7c3cd9578f6c019dca88a2b33404eca8bb0fcd706640aaf4b6b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4192",
+            "digest": "sha256:cada71e7abc2f6c6b81998ec2e8fe6059b199bb27aaa2c1f531dce4d99aeb872"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4193",
+            "digest": "sha256:021a9da719074805a5dbe05025722366f6487f8403c9f940062d98cf90e91a50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4194",
+            "digest": "sha256:deffcd8e1b2c40f79f23324bd445fa3a7d258f26b927210c27ebd5c9c06e88c0"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4195",
+            "digest": "sha256:9503cb3db6438d18bbe3bcfbd4f92d8c9d7490e51e815d59c9f4a5b1b66a45f9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4196",
+            "digest": "sha256:6ccc02ed7222ab28bdf29cddd350a15fb13d8debe58d84955c02835b0328b5dd"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4197",
+            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4198",
+            "digest": "sha256:c5fb6b4ba01f25ce951f9a59c176a456ddb6ae50479697573c7e0563c262bbee"
+          },
+          {
+            "kind": "rfc",
+            "id": "bot-policy.md",
+            "digest": "sha256:b947e600637dde02d1fa510ac4b15a34c256f1c19b2ecb4bbf51fc9541636105"
+          },
+          {
+            "kind": "rfc",
+            "id": "learner-modules.md",
+            "digest": "sha256:d6c2808a2a608b1f01df8aeb5fd7f51476266caade6257c6d3400158a0a9e1a7"
+          },
+          {
+            "kind": "rfc",
+            "id": "live-following.md",
+            "digest": "sha256:e2c265474b1b13f9ed9c3b508f0d4be6568db1be021ab57166c009523c5048f5"
+          },
+          {
+            "kind": "rfc",
+            "id": "measurement-records.md",
+            "digest": "sha256:3d0740faa0d97234fed16bcf9c4b288508888c3cbf15868363d4822d241f5c7e"
           }
         ]
       },
@@ -487,12 +1207,156 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish D3859's workflow-issued GradeSource, fixed paired arithmetic/accuracy/graph and coordinated complete Nudge/Review images, plus D3841's complete Inspector execution/source-page/renderer/receiver/API/native delivery. D3376/D3857's internal complete recorded opening history/reduction is implemented, not its complete current consumers or general catalogue pool. D3864 retains nonmodule Compare caller/obsolete-path retirement. No compatibility-only pipeline, partial learner image or source-qualification promotion.",
+      "nextAction": "Complete current full gate after independently reviewed current-consumer repairs and accepted native same-fact inspection. Then finish D4167 Sight/Play/Compare/guidance/voice reverse bindings and independent13 source qualifications; D4175 ordinary26 remain held.",
       "latestCheckpoint": {
-        "at": "2026-11-02",
-        "summary": "Current Compare and incoming-edge pairs now share the runtime original engine-node reader, retaining exact position/delivery/artifact/source/reading joins and fixed selections with independent current workflow/server checks. D3919's off-position source-kind record/abstention conflict is reproduced and fixed at both registry and runtime boundaries before filtering. D3920 repairs normal one-command new-row assignment and preserves prior register bytes on refused combined commands.220 source cases/five files,146 Compare/eight,12 tracker controls and types pass. Full normal verification/build exits0:8453 software/432 files, seven unchanged-budget performance/four,271 content/27 and governance/corpus/build. Earlier failures stay logged. D3859 remains doing for actual workflow-issued GradeSource, grade@2/convention@2, shared accuracy/graph and complete current Nudge/Review source-to-seat delivery; full Inspector and catalogue pool also remain open. No current-module, qualification, official-content, whole milestone/RFC, browser/remote CI or release promotion.",
+        "at": "2026-11-10",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
+          "packages/runtime/src/presentation-move-path.ts",
+          "packages/runtime/src/presentation-move-path.test.ts",
+          "apps/web/src/lib/evidence/move-path.test.ts",
+          "apps/web/src/lib/evidence/move-path-callers.test.ts",
+          "packages/runtime/src/module-reducers.test.ts",
+          "apps/server/src/inspector-confirmation.test.ts",
+          "apps/web/src/lib/historical-inspector.test.ts",
+          "apps/web/src/lib/HistoricalInspector.svelte",
+          "apps/server/src/application.test.ts",
+          "apps/server/src/application-content.test.ts",
+          "apps/server/src/application-security.test.ts",
+          "apps/server/src/authoring-content.test.ts",
+          "apps/server/src/mechanical-principle.test-support.ts",
+          "tools/test-tiers.mjs",
+          "packages/runtime/src/structural-reading-detail.ts",
+          "packages/runtime/src/structural-reading-detail.test.ts",
+          "packages/runtime/src/reading-evidence.ts",
+          "packages/runtime/src/reading-execution.test.ts",
+          "apps/web/src/lib/CompareView.svelte",
+          "packages/runtime/src/presentation-contract.test.ts",
+          "packages/runtime/src/testing/inspector-presentation-fixture.ts",
+          "packages/runtime/src/presentation-fact-contract.ts",
+          "packages/runtime/src/presentation-consumer-adapters.ts",
+          "packages/runtime/src/presentation-consumer-adapters.test.ts",
+          "packages/runtime/src/presentation-play-adapters.ts",
+          "packages/runtime/src/presentation-play-adapters.test.ts",
+          "packages/runtime/src/pivotal-presentation.ts",
+          "packages/runtime/src/shape-presentation.ts",
+          "apps/web/src/lib/module-query-response.test.ts",
+          "apps/web/src/lib/evidence-sentences.test.ts",
+          "apps/web/src/lib/evidence-sentences.ts",
+          "apps/web/src/lib/WhyBanner.svelte",
+          "packages/runtime/src/story.ts",
+          "packages/runtime/src/review-evidence.test.ts",
+          "apps/web/src/lib/human-evidence-response.test.ts",
+          "apps/server/src/longitudinal-successor-population.test.ts",
+          "apps/server/src/longitudinal-successor-upgrade.test.ts",
+          "apps/server/src/longitudinal-store.test.ts",
+          "planning/longitudinal-store/implementation-2026-09-24.md",
+          "apps/web/src/lib/InspectorSourceBrowser.svelte",
+          "packages/runtime/src/recorded-analyze-line.ts",
+          "packages/runtime/src/recorded-analyze-line.test.ts",
+          "packages/runtime/src/recorded-analyze-line-evidence.test.ts",
+          "packages/runtime/src/recorded-analyze-presentation.test.ts",
+          "apps/server/src/inspector-analyze-source.test.ts",
+          "apps/server/src/review-analyze-confirmation.test.ts",
+          "apps/server/src/review-analyze-rest.test.ts",
+          "apps/web/src/lib/review-analyze.ts",
+          "apps/web/src/lib/review-analyze.test.ts",
+          "apps/web/src/lib/inspector-source-browser.test.ts",
+          "apps/web/src/lib/inspector-query-response.ts",
+          "apps/server/src/inspector-receiver-independent.test.ts",
+          "apps/server/src/inspector-rest-independent.test.ts",
+          "packages/runtime/src/testing/retired-semantic-validation-cases.json",
+          "tools/component-coverage/coverage.test.ts",
+          "packages/runtime/src/inspector-pivotal-source.ts",
+          "apps/server/src/maia-task-source.test.ts",
+          "apps/server/src/maia-selector.test.ts",
+          "apps/server/src/provider-maia.ts",
+          "packages/runtime/src/maia-node.ts",
+          "packages/runtime/src/maia-node.test.ts",
+          "packages/runtime/src/maia-node-presentation.ts",
+          "tools/maia-task-native-check.ts",
+          "apps/server/src/inspector-maia.ts",
+          "apps/server/src/inspector-maia.test.ts",
+          "apps/server/src/inspector-maia-source.ts",
+          "apps/server/src/inspector-maia-source.test.ts",
+          "apps/server/src/inspector-explorer-source.ts",
+          "apps/server/src/inspector-explorer-source.test.ts",
+          "apps/server/src/inspector-comparison-source.ts",
+          "apps/server/src/inspector-comparison-source.test.ts",
+          "apps/server/src/inspector-story-source.ts",
+          "apps/server/src/inspector-shape-source.ts",
+          "apps/server/src/inspector-shape-source.test.ts",
+          "apps/server/src/provider-traversal-cli.test.ts",
+          "apps/server/src/provider-traversal.ts",
+          "packages/runtime/src/recorded-inspector-presentation.ts",
+          "packages/runtime/src/inspector-query-contract.ts",
+          "apps/server/src/inspector-query-source.ts",
+          "apps/server/src/inspector-query-source.test.ts",
+          "apps/server/src/inspector-query-source-independent.test.ts",
+          "apps/server/src/inspector-query.ts",
+          "apps/server/src/inspector-query.test.ts",
+          "apps/server/src/inspector-query-independent.test.ts",
+          "packages/runtime/src/inspector-detail-source.ts",
+          "packages/runtime/src/inspector-query-contract.test.ts",
+          "packages/runtime/src/inspector-whole-reading-presentation.ts",
+          "packages/runtime/src/inspector-whole-reading-presentation.test.ts",
+          "packages/runtime/src/inspector-whole-reading-independent.test.ts",
+          "packages/runtime/src/registered-shape-presentation.ts",
+          "apps/server/src/inspector-recorded-presentation.test.ts",
+          "packages/runtime/src/inspector-occurrence-budget.test.ts",
+          "packages/runtime/src/presentation-inspector-source.test.ts",
+          "packages/runtime/src/presentation-inspector-detail.test.ts",
+          "packages/runtime/src/testing/inspector-source-presentation-kit.ts",
+          "apps/server/src/inspector-source-adapter-presentation.test.ts",
+          "apps/server/src/registered-shape-source.test.ts",
+          "packages/runtime/src/registered-shape-source.ts",
+          "packages/runtime/src/inspector-shape-source.ts",
+          "apps/server/src/inspector-story-source.test.ts",
+          "packages/runtime/src/inspector-story-source.ts",
+          "packages/runtime/src/inspector-comparison-source.ts",
+          "apps/server/src/evidence-consumer-operations.ts",
+          "apps/web/src/lib/human-split-response.ts",
+          "apps/web/src/lib/maia-node-response.test.ts",
+          "packages/runtime/src/maia-inference-task.test.ts",
+          "apps/server/src/provider-operations.ts",
+          "packages/runtime/src/provider-parsers.ts",
+          "packages/runtime/src/inspector-opening-source.ts",
+          "apps/server/src/inspector-opening-source.ts",
+          "apps/server/src/inspector-opening-source.test.ts",
+          "rfc/maia-task-source.md",
+          "apps/server/src/inspector-pivotal-source.ts",
+          "apps/server/src/inspector-pivotal-source.test.ts",
+          "packages/runtime/src/inspector-packet-source.ts",
+          "apps/server/src/inspector-packet-source.ts",
+          "apps/server/src/inspector-packet-source.test.ts",
+          "apps/server/src/inspector-window-source.ts",
+          "apps/server/src/inspector-window-source.test.ts",
+          "packages/runtime/src/inspector-dependent-source.ts",
+          "apps/server/src/inspector-dependent-source.ts",
+          "apps/server/src/inspector-dependent-source.test.ts",
+          "packages/runtime/src/semantic-validation-orientation.test.ts",
+          "packages/runtime/src/semantic-validation-exposure.test.ts",
+          "packages/runtime/src/semantic-validation-material.test.ts",
+          "packages/runtime/src/semantic-validation-literal-sources.ts",
+          "packages/runtime/src/semantic-validation-cases.json",
+          "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+          "packages/runtime/src/recorded-objective-transition.test.ts",
+          "apps/web/src/lib/review-map-screen.test.ts",
+          "apps/web/src/lib/review-response.ts",
+          "packages/runtime/src/recorded-review-ledger.ts",
+          "packages/runtime/src/candidate-current-sources.test.ts",
+          "packages/runtime/src/hint-current-sources.test.ts",
+          "apps/web/src/lib/threat-delivery.test.ts",
+          "apps/server/src/candidate-evidence.test.ts",
+          "packages/runtime/src/hint-distance.ts",
+          "packages/runtime/src/hint-exchange.ts",
+          "apps/web/src/lib/guided-hint.test.ts",
+          "packages/runtime/src/semantic-validation-operations.ts",
+          "planning/learner-modules/objective-source-independent-review-2026-11-02.md",
+          "apps/server/src/recorded-review-ledger.test.ts",
+          "apps/server/src/recorded-grade-sources.ts",
+          "apps/web/src/lib/evidence/PresentedEvidence.svelte",
           "packages/runtime/src/recorded-opening-point.test.ts",
           "packages/runtime/src/recorded-opening-history.ts",
           "packages/runtime/src/recorded-opening-history.test.ts",
@@ -614,7 +1478,10 @@
           "tools/d3792-inspector-demand/build-prefix.mjs",
           "tools/d3792-inspector-demand/recorded-origin.ts",
           "tools/d3792-inspector-demand/module-source.ts",
-          "tools/d3792-inspector-demand/grade-source.ts",
+          "packages/runtime/src/recorded-grade-source.test.ts",
+          "apps/server/src/recorded-grade-sources.test.ts",
+          "apps/server/src/recorded-review-delivery.test.ts",
+          "packages/runtime/src/internal/immutable-json.test.ts",
           "packages/runtime/src/postcommit-nudge.ts",
           "packages/runtime/src/postcommit-nudge.test.ts",
           "tools/d3792-inspector-demand/ledger-source.ts",
@@ -744,7 +1611,177 @@
           "rfc/recorded-clocks.md",
           "rfc/social-play.md",
           "rfc/training-mode-variants.md",
-          "rfc/variants.md"
+          "rfc/variants.md",
+          "packages/runtime/src/postcommit-change-witness.test.ts",
+          "apps/server/src/postcommit-change-delivery.test.ts",
+          "packages/runtime/src/testing/postcommit-change-fixture.ts",
+          "apps/web/src/lib/inspector-source-browser.test-support.ts",
+          "apps/web/src/lib/ModuleSeats.svelte",
+          "apps/web/src/lib/preset-change.test.ts",
+          "apps/web/src/lib/session-controller.test.ts",
+          "apps/server/src/hint-lifetime.test.ts",
+          "apps/server/src/hint-service.ts",
+          "packages/runtime/src/inspector-structural-event-presentation.ts",
+          "packages/runtime/src/inspector-structural-event-presentation.test.ts",
+          "packages/runtime/src/inspector-local-source.ts",
+          "packages/runtime/src/inspector-source-topics.ts",
+          "tools/d1865-evidence-assembly-harness/grade-presentation.test.ts",
+          "tools/d1865-evidence-assembly-harness/grade-source-selection.test.ts",
+          "tools/d1865-evidence-assembly-harness/grade-offline-fixture.ts",
+          "apps/server/src/grade-workflow-parity.test.ts",
+          "tools/d1718-avoidance-subject-harness/current-source-abi.test.ts",
+          "tools/d1718-avoidance-subject-harness/avoidance-subject.test.ts",
+          "design/research/avoidance-subject-identity.md",
+          "rfc/foundation-source-identity.md",
+          "planning/foundation-source-identity/projection-plan.json",
+          "packages/runtime/src/foundation-position-sources.ts",
+          "packages/runtime/src/foundation-position-sources.test.ts",
+          "planning/foundation-source-identity/plan.md",
+          "packages/runtime/src/candidate-population.ts",
+          "packages/runtime/src/evidence-conventions.test.ts",
+          "packages/runtime/src/semantic-evidence.test.ts",
+          "apps/web/src/lib/labels/semantic-event-sign.ts",
+          "packages/runtime/src/foundation-source-events.test.ts",
+          "packages/runtime/src/evidence-value-import-order.test.ts",
+          "packages/runtime/src/foundation-pawn-sources.ts",
+          "packages/runtime/src/foundation-pawn-sources.test.ts",
+          "tools/d1736-foundation-source-author-contract/contract.test.mjs",
+          "packages/runtime/src/foundation-square-sources.test.ts",
+          "packages/runtime/src/foundation-edge-consequence.test.ts",
+          "packages/runtime/src/foundation-style-sources.test.ts",
+          "packages/runtime/src/foundation-predicate-leaves.test.ts",
+          "apps/server/src/authored-structural-source.test.ts",
+          "apps/server/src/capability/pack-capability-contract.test.ts",
+          "apps/server/src/shape-studio.test.ts",
+          "apps/server/src/shape-probe.test.ts",
+          "apps/server/src/predicate-wave-3-validation.test.ts",
+          "tools/d4082-shape-firing/measure.ts",
+          "packages/runtime/src/internal/registered-shape-scan.ts",
+          "apps/server/src/registered-shape-scan.test.ts",
+          "apps/server/src/guided-shape-query.test.ts",
+          "apps/web/src/lib/guided-shape-response.ts",
+          "apps/server/src/module-shape-source.test.ts",
+          "packages/runtime/src/registered-shape-wire.test.ts",
+          "apps/web/src/lib/evidence/components/TextStatementView.svelte",
+          "apps/server/src/shape-recommendations-source.test.ts",
+          "apps/server/src/progress.test.ts",
+          "apps/web/src/lib/app-shell.test.ts",
+          "apps/web/src/lib/progress-response.ts",
+          "docs/return-and-progression.md",
+          "apps/server/src/repertoire.ts",
+          "apps/web/src/lib/progress-response.test.ts",
+          "apps/web/src/lib/api.test.ts",
+          "apps/server/src/recorded-foundation-sources.ts",
+          "apps/server/src/recorded-foundation-sources.test.ts",
+          "packages/runtime/src/recorded-foundation-source.ts",
+          "packages/runtime/src/recorded-foundation-source-authority.ts",
+          "apps/server/src/authored-tempo-transition.test.ts",
+          "apps/server/src/authored-predicate-current.test.ts",
+          "apps/server/src/expression-satisfiability.test.ts",
+          "apps/server/src/structural-reading.test.ts",
+          "apps/server/src/vocabulary-wiring.test.ts",
+          "packages/runtime/src/structural-evidence.ts",
+          "packages/runtime/src/tempo.ts",
+          "packages/runtime/src/objective.ts",
+          "packages/runtime/src/line.ts",
+          "apps/server/src/pack-orchestrator.ts",
+          "apps/server/src/pack-validation.ts",
+          "rfc/contracts/pack-capability-applicability-v1.json",
+          "apps/server/src/authored-census-source.test.ts",
+          "apps/server/src/expression-census.ts",
+          "apps/server/src/expression-satisfiability.ts",
+          "apps/server/src/shape-check.ts",
+          "apps/server/src/fixtures/refusal-debt.fixture.json",
+          "apps/server/src/authored-convention-migration.test.ts",
+          "apps/server/src/authored-convention-migration.ts",
+          "apps/server/src/authored-convention-migration-cli.ts",
+          "rfc/contracts/foundation-authored-convention-sites-v1.json",
+          "apps/server/src/recorded-clock-storage.test.ts",
+          "apps/server/src/recorded-clock-import.test.ts",
+          "packages/runtime/src/recorded-clocks.test.ts",
+          "apps/server/src/recorded-clock-document.ts",
+          "planning/time-controls/implementation-2026-11-05.md",
+          "apps/server/src/recorded-clock-source.test.ts",
+          "packages/runtime/src/recorded-foundation-occurrence.ts",
+          "apps/server/src/recorded-clock-delivery.test.ts",
+          "apps/web/src/lib/recorded-clock-readout.test.ts",
+          "apps/web/src/lib/ClockReadout.svelte",
+          "planning/platform-alignment/recorded-clocks-intent-amendment-2026-11-05.md",
+          "apps/server/src/profile-game-source.ts",
+          "apps/server/src/profile-game-source.test.ts",
+          "rfc/profile-game-facts.md",
+          "planning/foundation-source-identity/profile-game-facts-review.md",
+          "tools/r12-player-style-harness/profile-source-cost.ts",
+          "apps/server/src/profile-game-facts.test.ts",
+          "apps/server/src/learner-profile.test.ts",
+          "apps/server/src/storage.test.ts",
+          "apps/web/src/lib/ProfileScreen.test.ts",
+          "planning/foundation-source-identity/profile-game-facts-cost-2026-11-05.json",
+          "apps/server/src/profile-choice-source.test.ts",
+          "apps/server/src/profile-choice-store.test.ts",
+          "apps/server/src/profile-choice-facts.ts",
+          "apps/server/src/profile-choice-facts-contract.ts",
+          "apps/server/src/profile-choice-fact-references.ts",
+          "packages/runtime/src/internal/profile-choice-facts.ts",
+          "rfc/profile-choice-facts.md",
+          "planning/foundation-source-identity/profile-choice-facts-cost-2026-11-09.json",
+          "docs/learner-profile.md",
+          "packages/runtime/src/semantic-validation-rights-sources.ts",
+          "packages/runtime/src/semantic-validation-rights.test.ts",
+          "packages/runtime/src/semantic-validation-runner.ts",
+          "packages/runtime/src/semantic-validation-cited.test.ts",
+          "packages/runtime/src/semantic-validation.test.ts",
+          "packages/runtime/src/testing/retired-semantic-validation-cases.ts",
+          "packages/runtime/src/semantic-validation-transition-sources.ts",
+          "packages/runtime/src/semantic-validation-transition-fields.test.ts",
+          "packages/runtime/src/foundation-edge-source.ts",
+          "packages/runtime/src/foundation-edge-source.test.ts",
+          "packages/runtime/src/foundation-edge-presentation.ts",
+          "packages/runtime/src/foundation-snapshot-source.ts",
+          "packages/runtime/src/foundation-snapshot-source.test.ts",
+          "packages/runtime/src/foundation-snapshot-presentation.ts",
+          "packages/runtime/src/foundation-snapshot-detail.ts",
+          "packages/runtime/src/foundation-snapshot-detail.test.ts",
+          "packages/runtime/src/breadth-semantic.test.ts",
+          "packages/runtime/src/foundation-semantic-event.test.ts",
+          "apps/server/src/inspector-local-source.ts",
+          "packages/runtime/src/semantic-validation-current-source.test.ts",
+          "packages/runtime/src/semantic-validation-opposition-sources.ts",
+          "packages/runtime/src/semantic-validation-opposition.test.ts",
+          "packages/runtime/src/semantic-validation-pawn-file-sources.ts",
+          "packages/runtime/src/semantic-validation-pawn-file.test.ts",
+          "packages/runtime/src/semantic-validation-backward-sources.ts",
+          "packages/runtime/src/semantic-validation-backward.test.ts",
+          "packages/runtime/src/semantic-validation-slider-sources.ts",
+          "packages/runtime/src/semantic-validation-slider.test.ts",
+          "rfc/subject-safe-semantic-selection.md",
+          "tools/d1713-semantic-validation-matrix/candidate-foundation-frame.test.ts",
+          "tools/d1713-semantic-validation-matrix/total-foundation-states.test.ts",
+          "packages/runtime/src/foundation-total-sources.test.ts",
+          "packages/runtime/src/foundation-risk-sources.ts",
+          "packages/runtime/src/foundation-slider-sources.ts",
+          "packages/runtime/src/foundation-position-cells.ts",
+          "packages/runtime/src/foundation-position-cells.test.ts",
+          "packages/runtime/src/candidate-foundation-sources.test.ts",
+          "packages/runtime/src/candidate-total-inputs.ts",
+          "packages/runtime/src/candidate-total-inputs.test.ts",
+          "apps/server/src/profile-subject-source.test.ts",
+          "apps/server/src/profile-subject-facts-contract.test.ts",
+          "apps/server/src/learner-profile-application.test.ts",
+          "packages/runtime/src/longitudinal-subject-relations.test.ts",
+          "packages/runtime/src/longitudinal-native-incidence.test.ts",
+          "apps/server/src/profile-subject-store.test.ts",
+          "apps/server/src/profile-subject-facts-authority.ts",
+          "apps/server/src/profile-subject-fact-references.ts",
+          "apps/web/src/lib/current-native-module-journeys.test.ts",
+          "apps/web/src/lib/evidence/native-fact-detail.test.ts",
+          "packages/runtime/src/current-native-module-delivery.test.ts",
+          "packages/runtime/src/presentation-contract.ts",
+          "packages/runtime/src/testing/subject-safe-retired-semantic-cases.ts",
+          "tools/staged-typecheck.mjs",
+          "tools/staged-typecheck.test.mjs",
+          "apps/server/src/bot-opponent-operation.ts",
+          "apps/server/src/bot-opponent-ply.test.ts"
         ],
         "anchors": [
           {
@@ -795,7 +1832,7 @@
           {
             "kind": "work_state",
             "id": "D3791",
-            "digest": "sha256:b1cd877f7f1bbcc5427ffc696dd57db5d5b2deba0ea06c12951acbe845484176"
+            "digest": "sha256:e571b8bba131688006f6b2ae63776a6198152f9de17f54f8d5ca7f1e9685b059"
           },
           {
             "kind": "rfc",
@@ -805,7 +1842,12 @@
           {
             "kind": "work_state",
             "id": "D3792",
-            "digest": "sha256:9ea74edf1b0ae7b0b73cdc94aa8d375c9905f246ca7e1447d175502d13ef16c7"
+            "digest": "sha256:3451ea76eb41e21658d3dff574c904a96087ba7ef3d1faa095db89df20eab165"
+          },
+          {
+            "kind": "rfc",
+            "id": "maia-task-source.md",
+            "digest": "sha256:80259310b99509958084b904edf08246a6160e8a4695c81d908168cff66ec4d3"
           },
           {
             "kind": "work_state",
@@ -920,7 +1962,7 @@
           {
             "kind": "rfc",
             "id": "evidence-value-authority.md",
-            "digest": "sha256:71850529754d74c1000ac72af90d9aaae0c065fd471bc5e9b4b6839c95ae0e34"
+            "digest": "sha256:cac3a82a4c60a4728459baaae790865c465a7f1c46e5281d3f74043a507cf6d6"
           },
           {
             "kind": "rfc",
@@ -980,7 +2022,7 @@
           {
             "kind": "rfc",
             "id": "module-registration.md",
-            "digest": "sha256:f829923970114538d86b62039d2acc8a357a716920b32a5d2fb109c4267f4fe0"
+            "digest": "sha256:4afa147260f3a12684ea7ab993da09f61d37884d5a31345aca2103564e2ff565"
           },
           {
             "kind": "rfc",
@@ -990,12 +2032,12 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:97d0c2af31a7b7a979978cb76da1eb197b98bb69a53cfec54333a63812c37b3e"
+            "digest": "sha256:c86443f0e87cc1f5e0ee50258974278710ae48db811d70ad0905dab5d067f68c"
           },
           {
             "kind": "rfc",
             "id": "shared-candidate-evidence-packet.md",
-            "digest": "sha256:fbe3488b8a3ba3dcadc73eb262aa9ad63b25da8113b7c1c939f26a84d726c23e"
+            "digest": "sha256:761e2b358fa3d27327977a1bbc542c11e14ff55f4e7934303eb40ec87cda81c1"
           },
           {
             "kind": "rfc",
@@ -1005,7 +2047,7 @@
           {
             "kind": "rfc",
             "id": "review-map.md",
-            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+            "digest": "sha256:36cfe2cdbf10b96ff4745c200b0f7c48ce65d00f314e5770b0c51aabfcc35b93"
           },
           {
             "kind": "work_state",
@@ -1020,7 +2062,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
+            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
           },
           {
             "kind": "work_state",
@@ -1040,32 +2082,32 @@
           {
             "kind": "rfc",
             "id": "move-quality-grades.md",
-            "digest": "sha256:c1add86f9dbdd0cd764c9dd5232d79ae781b9294dd95be7b261d30965959a295"
+            "digest": "sha256:bdc3f13eb5250f258cebc6616c96abf3fc961c2947a409a7b85b95d4b58943b1"
           },
           {
             "kind": "rfc",
             "id": "evidence-presentation.md",
-            "digest": "sha256:60390e33f6d19cb011f65417b2d47a249ed56566b3394d8c7838dd4885b8ce8a"
+            "digest": "sha256:78d8f25c34c2801e785b7a1618e00f9b94da6fc084e9fce4e2cde9d3e13bb0ce"
           },
           {
             "kind": "work_state",
             "id": "D3765",
-            "digest": "sha256:8c93f663b8ea1f9d5a9b62c2ae385ec1d434506f1f00255c4e98598a26785a5f"
+            "digest": "sha256:7783c2bc18fcf143363164287191cce78d61e2b946c9bc013c670856a4370cc6"
           },
           {
             "kind": "work_state",
             "id": "D3766",
-            "digest": "sha256:d0b1e333d632191e5c26442abee5cdef675187a0848bc1d7084b50fda5d90391"
+            "digest": "sha256:22915a6e654c85d568174815073bce6037acb063449efb70905c4a749dda38c8"
           },
           {
             "kind": "work_state",
             "id": "D3767",
-            "digest": "sha256:32ba5eba578ffe83a6a1bccee24ffe4a71c5acb363cf394e16f97bf8fa662eb9"
+            "digest": "sha256:a3127c91c664e0b7afae89737ed76105a00f85518c77596ceb0ce528d2b62054"
           },
           {
             "kind": "rfc",
             "id": "bot-policy.md",
-            "digest": "sha256:8df99e5b923947b7ee4317bf013d07cede1ca0c3fefa0f84f3386d2fabe73ada"
+            "digest": "sha256:b947e600637dde02d1fa510ac4b15a34c256f1c19b2ecb4bbf51fc9541636105"
           },
           {
             "kind": "rfc",
@@ -1110,7 +2152,7 @@
           {
             "kind": "rfc",
             "id": "recorded-clocks.md",
-            "digest": "sha256:10539e27ae2e31b95b36b9a7bcd6c52aa92da062fff0a56d4f1d32b7ff948658"
+            "digest": "sha256:1a18e04d8e61747b2e9d9b5b9de65989607015e1a373d88bfa7fd44c9cfd991c"
           },
           {
             "kind": "rfc",
@@ -1161,6 +2203,561 @@
             "kind": "work_state",
             "id": "D3894",
             "digest": "sha256:d8588f7f47ff845b09473addd632865f9bfb90a400705c6f7a8834407879c7d4"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3713",
+            "digest": "sha256:411dccb2ab6932eff350127663ba65aba21e054842d2ae54c44e50a70586b750"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4061",
+            "digest": "sha256:31e0c92b1d2dc199c20dd3d4d3ebb6f1f4a72c97e5e00d7852ed313251de95ac"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4062",
+            "digest": "sha256:b84ced9662ff9b084b76dc28c283433f137ff08d02b38444410718f3bc21b35a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3979",
+            "digest": "sha256:5a5bdd3a2f5537a3a021654b7325e6070d1595efd2f5c55d7361abf194d29960"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4063",
+            "digest": "sha256:625b5bb71811240beda27629ef3055e67f0e729eb956ca943c2fe8614c32449c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4060",
+            "digest": "sha256:02262b14eb3265f2200b8e805db2e606800e3fd28c6eff9848f4f08ec1809a6c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4064",
+            "digest": "sha256:9c1850aa043f34b5230e136786b6f4a505cbc6720a84512def728deee16d251e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D879",
+            "digest": "sha256:58db5e745d67cc52665fb2687dc7110afb90eeeeb7835d61cdebd7e2da73dc92"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1716",
+            "digest": "sha256:629df6d0693600e29d42274c627bb48feff368c2b9fd8f3156b802c8ea258e84"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1718",
+            "digest": "sha256:985d63d759d001488dc41b0625be4a6fcdb16266552f503f2298caddd3b2e6c7"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1719",
+            "digest": "sha256:0a0f30c2a25f01e7fcd34ad84a0b9b54531cdd8f09fff8673da2861e6ee1c992"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4065",
+            "digest": "sha256:d94f166be45f7d8e336f3034973bd9fae64b817dd4a72f6ece101a35f1e8528f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4066",
+            "digest": "sha256:4d5dc680ea4854789e5c3d5184dca10078891ae2c325c55a74cbb7193926c041"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4067",
+            "digest": "sha256:04161d49f943f736c43ceb06087d4bb9e36183896c7b89a913ec2bc24a66139a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4068",
+            "digest": "sha256:f63405e8901dc637ddf5b13bdcda50aa37389128c7f8133eb804cc9acdcc0f58"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4069",
+            "digest": "sha256:2a2dffbb6d55be44fb609c5bddedaa4ed22e9fcd3c4a835c82cb3879b24e4342"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4070",
+            "digest": "sha256:26ae62261a98d580c3985b0d98e4dcf7cc8fd8d2da3d75406d02596c2ffeb070"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1736",
+            "digest": "sha256:639c2f52fc60101b3a4e31d77970c491790f1eeb99d07252a5c567a118c54128"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4071",
+            "digest": "sha256:c2455860947b24daf9279c196c4736a94700d1c4e4484ff1d84b73a826eb9934"
+          },
+          {
+            "kind": "rfc",
+            "id": "foundation-source-identity.md",
+            "digest": "sha256:525c9035337f614e9bc1d0c802dcdf5673bf2d3891c867e664f0ff7964e2148e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4077",
+            "digest": "sha256:b521e72ee7b9eb081029e9fc006a65b5f6fd531c8be27b221b539ab29124b48e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4078",
+            "digest": "sha256:8214d2a27919b1dcc99f062f18cb85e1be7f3ba06c1fe7ff1a45d25e71ebf207"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4079",
+            "digest": "sha256:40c859d70b24582a812c5bc009bd49fc4d9133c191c15207dd105203aae4ab01"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4080",
+            "digest": "sha256:1d8d4a33d2f9864949dbd7cef737c955ef2e3d712c94577b9e93b86c00d54c9c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4081",
+            "digest": "sha256:30d1e0cf08aac598c29713f5b50eb0feca84ec5a2e50506fba65fb34a752545b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4082",
+            "digest": "sha256:3b54b434b4ec2649f90587ccc38b85fa29a1e6538b732be21c7a365e7e53d326"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4083",
+            "digest": "sha256:e37bf962c8ad64eeaa84a6ccf1e5debcaf1f73e8275956a774123595c503360a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4084",
+            "digest": "sha256:bb4592d9287ef1b33dd56c7c9a09bf300333b7436b4c12b048a123ba27a655df"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4085",
+            "digest": "sha256:7bb8234efd6972c1f8e9f9c45a92029bb7eae323c3c6852e7bd195c72e38843d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4090",
+            "digest": "sha256:0770a384d2f063a4c7c7d5551320c190f3193c333bc5ced3dcc1672d16aed8bc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4091",
+            "digest": "sha256:25526f477da032469f633763de4b290eefc12ee3fc252aad6a55bc523da82464"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4092",
+            "digest": "sha256:e7abce7cd418faee94997ed0ae61fa0818786ff420c7e377acfa13bccb61d008"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4093",
+            "digest": "sha256:1fe600f9af3be07a3587cecc609001caeb4407d4bce2fbffada3dfd365d3829f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4094",
+            "digest": "sha256:e45ed0d40039bccc43798dc22214f86c0b9e4648a6b5aea9896c48e04cc730a5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4095",
+            "digest": "sha256:c57a5a6ef9c8d65d19b3d10b60f299806603373923c0fc1aa8e70bc783a4d82f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4096",
+            "digest": "sha256:e2c7430eefa2b8287e5ce6f7a82629c981a15ca0491727a0f20f6a87a6e98345"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4097",
+            "digest": "sha256:ae9b9770fd2269a4d6a8da30885be1a01233d68589cc0c30c4e935e493fd71b5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4089",
+            "digest": "sha256:9b7a2b839d3605314f2f96c7744873201dab67f04e91a5364b5e308e3af7a9ac"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4098",
+            "digest": "sha256:ff7286dedd9e9c45e3877a13834d318babe3eeaa75a344444e7c68073a3f8b43"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4099",
+            "digest": "sha256:2116758422dd8800ecaaf7d9ba2cb0faf3d14b7f8746a302706f30880532f899"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4100",
+            "digest": "sha256:cdba7308da7b7b2ae6ec05e565f1dc64c4f44060b2d32f7fcd6590e71b0df130"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4101",
+            "digest": "sha256:39a277bfc1bfb030537b90cc98a53ab0e7ebfce4d212657eff0bfee77d4a0e5b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4102",
+            "digest": "sha256:2e4adb2b460bdcca061179fecd4416ca4def9273c4bdf557b672240ee976356d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4076",
+            "digest": "sha256:3f2b8e8a23a4ed7143fdc2dc376402ea85fcbad38c684c0fee88497ed600d889"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4103",
+            "digest": "sha256:ae91b66224060185059743175050ecfa69342dd3a097c67b96c3765adc25f677"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4104",
+            "digest": "sha256:843a88504f98215ba967cd93d13d510303f4a9c6f97ac034ddbbdd6f3e978bcf"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4105",
+            "digest": "sha256:a34e6c9736315da1c89610d3f35e1f09276f9fa5d2744e6ba2ef738c3d6ffa10"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4106",
+            "digest": "sha256:32c9967d6db8a28d3320dab696c51dae98a34691301811e01ddfb311959da892"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4107",
+            "digest": "sha256:292626dec9b3b899542de37697ac4b3748ce0407ea1e7389e37b4e188e596d47"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4108",
+            "digest": "sha256:05856f757dda2dc693f02e24ff5e7c3c0a27f70d0e6b9fb332f6e63a8223e483"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4109",
+            "digest": "sha256:684cec03fcb1e84ffd0c7489cb8c930c49f236abef9dcd69fb193397c944b2ed"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4110",
+            "digest": "sha256:006b6d929de203c66ed512123d0d91c26dfb73e45c9446c998ef368230aafe90"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4111",
+            "digest": "sha256:3abb13a7378d7470e309fbe480dfa2da683a88566d4657c4dc885c9d871c3758"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4112",
+            "digest": "sha256:62f859ba19d275354014944e2200ccff7e6104f3ca840a734daa5e771743fc7c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4113",
+            "digest": "sha256:facb4dd3246bb1bea73a4b89383d011f06d04a37586914b24b8dc7ec6b891b20"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4114",
+            "digest": "sha256:d52e45e470f598fb04e8db38990c8bec3fa158e03043c2582ca517024880a8eb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4115",
+            "digest": "sha256:cc51c133ca5791b46654079ab6c84aa88a8d7ea32e6c225f5b47120b1e508a2b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4116",
+            "digest": "sha256:f93b1c7a3b20a0451e73b67d7b8799f83812458935b00b48c47eb03bbe444e77"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4117",
+            "digest": "sha256:c5c2934ccd0f2d0b034fd727cee918234030911cb73a3028ec43e5e86059324d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4118",
+            "digest": "sha256:e1cb404e5b5d3898534cdaee21e4e888a841334f6af1fad20b16f1152ff57614"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4119",
+            "digest": "sha256:9eca4329726f3b7c30a270e0f726633beed840dfdb1354894d3687d06dc7b8d0"
+          },
+          {
+            "kind": "rfc",
+            "id": "profile-game-facts.md",
+            "digest": "sha256:3a0f9927dc63d4e1ca74a55437dd4f4c24a146d504de714a882b4210f2bf7026"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4147",
+            "digest": "sha256:accd542c4afe89086eedc2078f4474b979d4866d59a1ae4ad0ffc3317b7fc8fb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4149",
+            "digest": "sha256:e2f9e1973b61edb27c9dd87e0b0d849e3612dc5b15b8c13d03505975d06a2be8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4150",
+            "digest": "sha256:9f3e75c7b3533deaf2f4215f0940665e1843b273bbf8f1f8b8305583cd38ca41"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4151",
+            "digest": "sha256:f7deb42bb62d737dfbe02e0a18f5172b99d796b428c0c6f4a0b7ca7a61a96dc8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4152",
+            "digest": "sha256:ce51c8731b04a9dd6ed23ab2b2d07e7e8dd59943d6bb47a3a19f8d2743387f8d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4153",
+            "digest": "sha256:61cbd124f0762fdf9a0b41b6039bb66eabdea1834d66a74453b7045605e197dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4154",
+            "digest": "sha256:71413d47a1fc3828d2fb4971ec16d8bc93e46ecfaae69c2651c8b6f6bd5bbbe9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3564",
+            "digest": "sha256:2b7d1d96af2f5f52dab939318f054e86c5e8bcbdb76aa39a85a651b393cbf45b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4155",
+            "digest": "sha256:df8f6dd1d2cf8600d80671c5fdac17c60a0bf9ce85d2d3ee6f08cd3d132578f3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4156",
+            "digest": "sha256:247c2b5624bb83f4d510040b9543c9b3106a084c9e36e33e22b11ef56e5cbb2c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4157",
+            "digest": "sha256:ccecc99d139ddbf3a1f88b79477ec619d92043f8d887f3ba3eab85718e7be144"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4158",
+            "digest": "sha256:73519f0aff8251b489ba248e9972a44c64e0ba1d69e62be13cab754237c37fbb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4160",
+            "digest": "sha256:eb5ffd197deda05523d3fcb0ca03d5c0bb097dd17828e871ca7da954d28b897c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4161",
+            "digest": "sha256:370200d523aa0b575cb7a6b8d9449b40676151b2b56544643c2b4c8ec4285e11"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4162",
+            "digest": "sha256:7982d8b6684e9a9b2fbb2f18eb0638430d558408bdd23375db265929822f06e2"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4163",
+            "digest": "sha256:d30d0575e75e69c26f04d02650cc9286d1a08868e17fa8b733cb74bf2c546c99"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4159",
+            "digest": "sha256:6ce114186f82787df301d04c1b9c3cafcbeee00140bb8a07f6e7d1f3cdec1c20"
+          },
+          {
+            "kind": "rfc",
+            "id": "profile-choice-facts.md",
+            "digest": "sha256:527e82abc62086a5c86b433dbbe9283806e6c901f689596338ef7d5ef831bc50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4164",
+            "digest": "sha256:416e2038014331f638e9593aeeb611e5bf2ea1e69fe2e666c0b8dc95724ad4dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4165",
+            "digest": "sha256:7d54de0be2fafab39c466dd9ec760c450ec9d5915c61378ea95eaa84d4ca1451"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4166",
+            "digest": "sha256:60cc1c12811fa5c24cf02a5d80d7a75fe648f9d0611ac4bd200703da8232c570"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4167",
+            "digest": "sha256:bc54044697843dae08daf278ec6d5c9b8b8b4aeea1c9b3af0953b056134de0c8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4168",
+            "digest": "sha256:40e06025af3ef30c45cffe552da82fadef1e55df59ae1f0a9c2c504e764f1e2a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4169",
+            "digest": "sha256:762d8965476680b36197ae673e434ec8e6f5d6b9b4e78f60bc6485434b6345a5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4170",
+            "digest": "sha256:0c86d9b32b40299cca9398f467a30d6197901ffcd10efc6369715b2bc833f599"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4171",
+            "digest": "sha256:ffaf58987f5de523ba43e3ddbf2f210209a5a6fb421b1c4da1ec56591ed53bed"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4172",
+            "digest": "sha256:ead43e401dfcc5f4b32f90f0ab91e5ac9ff4910f21eac830ca66a38751d1e5fb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4173",
+            "digest": "sha256:ca3bdbec44dca38879fb3b1aa7dec145f0a595fe30670f718c7d954d528757ea"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4174",
+            "digest": "sha256:9af8e01a0c491c1ae24ab6818cbf72c0c79e27dc8bc56cb17ececcc420e91413"
+          },
+          {
+            "kind": "rfc",
+            "id": "subject-safe-semantic-selection.md",
+            "digest": "sha256:f261cc360b433685b9342a96998ab26a55fbe2e1db22b1fda27adf0f5a753d55"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4175",
+            "digest": "sha256:61f0b1a0769389996ef02d7531a8b62c9617569138a8055ec49f32c39074ab76"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4176",
+            "digest": "sha256:239a2a07da5b61912c9bf502fa2679dc2136afc66765f18268de95c37d94c831"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4177",
+            "digest": "sha256:5a8e53e6925652373bf999833a0bd0e18735468dbf40853c1a8e9fda1d6238f0"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4181",
+            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4182",
+            "digest": "sha256:142be084904d39e994c247e72c13e1ea5d53f6402d84eb01cbaaadae6b392a4f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4183",
+            "digest": "sha256:6784f481ec068f298f6dbd7637a66f3d54b2658e0928851540c19d285cff27dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4184",
+            "digest": "sha256:32eaa1923a033a70bcc58a2814c453d5f5249d626d080ca0fbfebd6f748de4a1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4185",
+            "digest": "sha256:7f8ff8fb44aeb2775b1384e62e57d3794b53a767a58e0772f58e0b822738e1ab"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4188",
+            "digest": "sha256:cb4e0b3f294d0fd44ebc303859439327e9c5cae6b72b6b4c4e73f567adbfe395"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4189",
+            "digest": "sha256:0a9c9c67604c3bd92f04bfc67344003d21243c00fc0baba1696c47944dc4c105"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4190",
+            "digest": "sha256:e63149bc3d07daa960777528dc163a3c187b371674c726b260bc6da71ab42d50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4191",
+            "digest": "sha256:4a107e98537ae7c3cd9578f6c019dca88a2b33404eca8bb0fcd706640aaf4b6b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4192",
+            "digest": "sha256:cada71e7abc2f6c6b81998ec2e8fe6059b199bb27aaa2c1f531dce4d99aeb872"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4193",
+            "digest": "sha256:021a9da719074805a5dbe05025722366f6487f8403c9f940062d98cf90e91a50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4194",
+            "digest": "sha256:deffcd8e1b2c40f79f23324bd445fa3a7d258f26b927210c27ebd5c9c06e88c0"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4195",
+            "digest": "sha256:9503cb3db6438d18bbe3bcfbd4f92d8c9d7490e51e815d59c9f4a5b1b66a45f9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4196",
+            "digest": "sha256:6ccc02ed7222ab28bdf29cddd350a15fb13d8debe58d84955c02835b0328b5dd"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4197",
+            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4198",
+            "digest": "sha256:c5fb6b4ba01f25ce951f9a59c176a456ddb6ae50479697573c7e0563c262bbee"
           }
         ]
       },
@@ -1178,12 +2775,20 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Finish the remaining module/source and whole-journey discharges, including D3578's selected-square scope and D3376 opening authority, without bypassing their author/review contracts. Independently review and accept D3715's drafted change-witness rule in module-registration section 4.5a before implementation. Complete pawn-island states currently fill Nudge even when counts did not change; preserve them for Inspector/drills. The source-bound d2-f3 probe changes a king-zone defender and must not be called wholly quiet. Find a genuinely empty legal result before proving D3713's actual card/head/focus retirement. D1164 novelty and unchanged loose-piece selection remain separate. Preserve D3712's actual automatic failure/retry and populated focus controls, D3592/D3593's native readiness, one-shot hydration and authoritative access/reload. Keep D3558's existing UI failures open until diagnosed. D3540 installed-versus-reviewed content, Inspector fidelity, Hint defaults/latency, owner use and original intermittent causes remain open. No whole milestone or 1.0 promotion.",
+      "nextAction": "Verify complete current software and real-browser geometry/owner-use after the actual14 native pair/default-budget/selected inspection lifetimes. Keep broader presets, all workflows and accessibility release proof open.",
       "latestCheckpoint": {
-        "at": "2026-10-16",
-        "summary": "D3838 closes duplicated ordinary Support questions and clipped empty-answer recovery. Full questions remain once in desktop/phone rows and in tablet heads; mounted state, accessible names, counts, focus and the board rectangle remain. Current selected-seat delivery reveals actual recovery controls within its own scroller, with a rounding-safe inset and no page scroll or evidence request. Two predecessor component and four native failures become 290 focused passes plus both-color desktop/mobile recovery and seven-viewport clipping/native-hit checks. Full frozen normal verification/build/all browser tiers exit zero: 5871 software, unchanged-budget performance,257 content,332 smoke/five content-browser/59 matrix/one packaged production; one configured optional Maia skip, zero matrix retries/errors and112 composition cells. D3837's preserved attempts and exact retry remain. Wider INR-a7, source execution/qualification, useful Sight/Nudge/Inspector/Review, owner use, official content and remote/release proof remain. No source/preset/schema/wire, whole capability or milestone promotion; no push.",
+        "at": "2026-11-10",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
+          "apps/web/src/lib/evidence/move-path-callers.test.ts",
+          "apps/web/src/lib/evidence/move-path.test.ts",
+          "packages/runtime/src/presentation-move-path.test.ts",
+          "apps/web/src/lib/HistoricalInspector.svelte",
+          "apps/web/src/lib/historical-inspector.test.ts",
+          "apps/server/src/inspector-confirmation.test.ts",
+          "packages/runtime/src/structural-reading-detail.test.ts",
+          "packages/runtime/src/reading-evidence.ts",
           "apps/web/src/lib/RehearsalAction.svelte",
           "apps/web/src/lib/SettingsScreen.svelte",
           "apps/web/src/lib/PackAuthoringEditors.svelte",
@@ -1348,7 +2953,157 @@
           "packages/runtime/src/structure.test.ts",
           "apps/server/src/local-module-execution.test.ts",
           "packages/runtime/src/recorded-semantic-path.performance.test.ts",
-          "planning/exploration/log.md"
+          "planning/exploration/log.md",
+          "apps/web/src/lib/inspector-source-browser.test.ts",
+          "apps/web/src/lib/inspector-source-browser.test-support.ts",
+          "apps/web/src/lib/preset-change.test.ts",
+          "packages/runtime/src/inspector-structural-event-presentation.ts",
+          "packages/runtime/src/inspector-structural-event-presentation.test.ts",
+          "packages/runtime/src/inspector-local-source.ts",
+          "packages/runtime/src/inspector-source-topics.ts",
+          "apps/server/src/inspector-query.ts",
+          "apps/server/src/inspector-query-independent.test.ts",
+          "apps/server/src/inspector-receiver-independent.test.ts",
+          "tools/d1865-evidence-assembly-harness/grade-presentation.test.ts",
+          "tools/d1865-evidence-assembly-harness/grade-source-selection.test.ts",
+          "tools/d1865-evidence-assembly-harness/grade-offline-fixture.ts",
+          "design/research/module-evidence-assembly.md",
+          "apps/server/src/grade-workflow-parity.test.ts",
+          "tools/d1718-avoidance-subject-harness/current-source-abi.test.ts",
+          "tools/d1718-avoidance-subject-harness/avoidance-subject.test.ts",
+          "design/research/avoidance-subject-identity.md",
+          "rfc/foundation-source-identity.md",
+          "planning/foundation-source-identity/projection-plan.json",
+          "planning/learner-modules/compiler2-independent-review-2026-11-02.md",
+          "packages/runtime/src/foundation-position-sources.ts",
+          "packages/runtime/src/foundation-position-sources.test.ts",
+          "planning/foundation-source-identity/plan.md",
+          "packages/runtime/src/candidate-population.ts",
+          "packages/runtime/src/candidate-population.test.ts",
+          "packages/runtime/src/internal/candidate-child-reading-routes.ts",
+          "packages/runtime/src/evidence-conventions.test.ts",
+          "packages/runtime/src/semantic-evidence.test.ts",
+          "apps/web/src/lib/labels/semantic-event-sign.ts",
+          "packages/runtime/src/foundation-source-events.test.ts",
+          "packages/runtime/src/evidence-value-import-order.test.ts",
+          "packages/runtime/src/internal/evidence-value-routes.ts",
+          "packages/runtime/src/foundation-pawn-sources.ts",
+          "packages/runtime/src/foundation-pawn-sources.test.ts",
+          "tools/d1736-foundation-source-author-contract/contract.test.mjs",
+          "packages/runtime/src/foundation-square-sources.test.ts",
+          "packages/runtime/src/foundation-edge-consequence.test.ts",
+          "packages/runtime/src/foundation-style-sources.test.ts",
+          "packages/runtime/src/foundation-predicate-leaves.test.ts",
+          "packages/runtime/src/evidence-value-authority.test.ts",
+          "apps/server/src/authored-structural-source.test.ts",
+          "apps/server/src/shape-studio.test.ts",
+          "apps/server/src/shape-probe.test.ts",
+          "apps/server/src/predicate-wave-3-validation.test.ts",
+          "packages/runtime/src/evidence-binding-execution.test.ts",
+          "apps/server/src/registered-shape-source.test.ts",
+          "tools/d4082-shape-firing/measure.ts",
+          "packages/runtime/src/internal/registered-shape-scan.ts",
+          "apps/server/src/registered-shape-scan.test.ts",
+          "apps/server/src/inspector-shape-source.test.ts",
+          "apps/server/src/guided-shape-query.test.ts",
+          "apps/web/src/lib/guided-shape-response.ts",
+          "apps/server/src/module-shape-source.test.ts",
+          "packages/runtime/src/registered-shape-wire.test.ts",
+          "packages/runtime/src/opening-module-source.test.ts",
+          "apps/server/src/shape-recommendations-source.test.ts",
+          "apps/server/src/progress.test.ts",
+          "apps/web/src/lib/progress-response.ts",
+          "docs/return-and-progression.md",
+          "apps/server/src/repertoire.ts",
+          "apps/web/src/lib/progress-response.test.ts",
+          "apps/web/src/lib/api.test.ts",
+          "apps/server/src/recorded-foundation-sources.ts",
+          "apps/server/src/recorded-foundation-sources.test.ts",
+          "packages/runtime/src/recorded-foundation-source.ts",
+          "packages/runtime/src/recorded-foundation-source-authority.ts",
+          "apps/server/src/authored-census-source.test.ts",
+          "apps/server/src/authored-convention-migration.test.ts",
+          "apps/server/src/authored-convention-migration.ts",
+          "apps/server/src/authored-convention-migration-cli.ts",
+          "rfc/contracts/foundation-authored-convention-sites-v1.json",
+          "apps/server/src/recorded-clock-storage.test.ts",
+          "apps/server/src/recorded-clock-import.test.ts",
+          "packages/runtime/src/recorded-clocks.test.ts",
+          "apps/server/src/recorded-clock-document.ts",
+          "planning/time-controls/implementation-2026-11-05.md",
+          "apps/server/src/recorded-clock-source.test.ts",
+          "packages/runtime/src/recorded-foundation-occurrence.ts",
+          "apps/server/src/recorded-clock-delivery.test.ts",
+          "apps/web/src/lib/recorded-clock-readout.test.ts",
+          "apps/web/src/lib/ClockReadout.svelte",
+          "planning/platform-alignment/recorded-clocks-intent-amendment-2026-11-05.md",
+          "apps/server/src/profile-game-source.ts",
+          "apps/server/src/profile-game-source.test.ts",
+          "rfc/profile-game-facts.md",
+          "planning/foundation-source-identity/profile-game-facts-review.md",
+          "tools/r12-player-style-harness/profile-source-cost.ts",
+          "apps/server/src/expression-census.ts",
+          "apps/server/src/profile-game-facts.test.ts",
+          "apps/server/src/learner-profile.test.ts",
+          "apps/server/src/storage.test.ts",
+          "apps/web/src/lib/ProfileScreen.test.ts",
+          "planning/foundation-source-identity/profile-game-facts-cost-2026-11-05.json",
+          "apps/server/src/profile-choice-source.test.ts",
+          "apps/server/src/profile-choice-store.test.ts",
+          "apps/server/src/profile-choice-facts.ts",
+          "apps/server/src/profile-choice-facts-contract.ts",
+          "apps/server/src/profile-choice-fact-references.ts",
+          "packages/runtime/src/internal/profile-choice-facts.ts",
+          "apps/server/src/longitudinal-contract.test.ts",
+          "apps/server/src/longitudinal-successor-upgrade.test.ts",
+          "rfc/profile-choice-facts.md",
+          "planning/foundation-source-identity/profile-choice-facts-cost-2026-11-09.json",
+          "docs/learner-profile.md",
+          "docs/longitudinal-store.md",
+          "packages/runtime/src/semantic-validation-rights-sources.ts",
+          "packages/runtime/src/semantic-validation-rights.test.ts",
+          "packages/runtime/src/semantic-validation-runner.ts",
+          "packages/runtime/src/semantic-validation-cited.test.ts",
+          "packages/runtime/src/semantic-validation.test.ts",
+          "packages/runtime/src/testing/retired-semantic-validation-cases.ts",
+          "docs/semantic-evidence.md",
+          "packages/runtime/src/semantic-validation-transition-sources.ts",
+          "packages/runtime/src/semantic-validation-transition-fields.test.ts",
+          "packages/runtime/src/foundation-edge-source.ts",
+          "packages/runtime/src/foundation-edge-source.test.ts",
+          "packages/runtime/src/foundation-edge-presentation.ts",
+          "packages/runtime/src/foundation-snapshot-source.ts",
+          "packages/runtime/src/foundation-snapshot-source.test.ts",
+          "packages/runtime/src/foundation-snapshot-presentation.ts",
+          "packages/runtime/src/foundation-snapshot-detail.ts",
+          "packages/runtime/src/foundation-snapshot-detail.test.ts",
+          "packages/runtime/src/breadth-semantic.test.ts",
+          "packages/runtime/src/foundation-semantic-event.test.ts",
+          "packages/runtime/src/evidence-contract.ts",
+          "packages/runtime/src/semantic-validation-backward-sources.ts",
+          "packages/runtime/src/semantic-validation-backward.test.ts",
+          "packages/runtime/src/semantic-validation-slider-sources.ts",
+          "packages/runtime/src/semantic-validation-slider.test.ts",
+          "rfc/longitudinal-store.md",
+          "apps/server/src/profile-subject-source.test.ts",
+          "apps/server/src/profile-subject-facts-contract.test.ts",
+          "apps/server/src/learner-profile-application.test.ts",
+          "packages/runtime/src/longitudinal-subject-relations.test.ts",
+          "packages/runtime/src/longitudinal-native-incidence.test.ts",
+          "apps/server/src/profile-subject-store.test.ts",
+          "apps/server/src/profile-subject-facts-authority.ts",
+          "apps/server/src/profile-subject-fact-references.ts",
+          "apps/server/src/inspector-query.test.ts",
+          "apps/web/src/lib/current-native-module-journeys.test.ts",
+          "apps/web/src/lib/evidence/native-fact-detail.test.ts",
+          "packages/runtime/src/current-native-module-delivery.test.ts",
+          "packages/runtime/src/capability/declarations.generated.ts",
+          "packages/runtime/src/testing/subject-safe-retired-semantic-cases.ts",
+          "tools/staged-typecheck.mjs",
+          "tools/staged-typecheck.test.mjs",
+          "apps/server/src/bot-opponent-operation.ts",
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "rfc/bot-policy.md"
         ],
         "anchors": [
           {
@@ -1459,12 +3214,12 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:97d0c2af31a7b7a979978cb76da1eb197b98bb69a53cfec54333a63812c37b3e"
+            "digest": "sha256:c86443f0e87cc1f5e0ee50258974278710ae48db811d70ad0905dab5d067f68c"
           },
           {
             "kind": "rfc",
             "id": "module-registration.md",
-            "digest": "sha256:f829923970114538d86b62039d2acc8a357a716920b32a5d2fb109c4267f4fe0"
+            "digest": "sha256:4afa147260f3a12684ea7ab993da09f61d37884d5a31345aca2103564e2ff565"
           },
           {
             "kind": "rfc",
@@ -1479,7 +3234,7 @@
           {
             "kind": "rfc",
             "id": "evidence-presentation.md",
-            "digest": "sha256:60390e33f6d19cb011f65417b2d47a249ed56566b3394d8c7838dd4885b8ce8a"
+            "digest": "sha256:78d8f25c34c2801e785b7a1618e00f9b94da6fc084e9fce4e2cde9d3e13bb0ce"
           },
           {
             "kind": "work_state",
@@ -1499,12 +3254,12 @@
           {
             "kind": "work_state",
             "id": "D3715",
-            "digest": "sha256:23d8de5ff50921bc0b18c21200de78b1e4f4cd5c4bcfabcec06d31cc45fdef84"
+            "digest": "sha256:807da89e2baf05b08921387d4574d5fab64f11a9bb180109d11689ad630d8f4d"
           },
           {
             "kind": "work_state",
             "id": "D3309",
-            "digest": "sha256:8e213c65162de8a042b9fc542eb7a7f1b802c32f3312a1a997709362f9a7fd37"
+            "digest": "sha256:d623210f600e8e96d5f3ae83af22ad78da1c152ef2f4cb877cf3194236d4ca3c"
           },
           {
             "kind": "work_state",
@@ -1775,6 +3530,496 @@
             "kind": "work_state",
             "id": "D3503",
             "digest": "sha256:625ba3641a4f1392f4be9adb66e4a73e650280b98fde94e3fdcac41ddeadf000"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3713",
+            "digest": "sha256:411dccb2ab6932eff350127663ba65aba21e054842d2ae54c44e50a70586b750"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4061",
+            "digest": "sha256:31e0c92b1d2dc199c20dd3d4d3ebb6f1f4a72c97e5e00d7852ed313251de95ac"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4062",
+            "digest": "sha256:b84ced9662ff9b084b76dc28c283433f137ff08d02b38444410718f3bc21b35a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3979",
+            "digest": "sha256:5a5bdd3a2f5537a3a021654b7325e6070d1595efd2f5c55d7361abf194d29960"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4063",
+            "digest": "sha256:625b5bb71811240beda27629ef3055e67f0e729eb956ca943c2fe8614c32449c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4060",
+            "digest": "sha256:02262b14eb3265f2200b8e805db2e606800e3fd28c6eff9848f4f08ec1809a6c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3767",
+            "digest": "sha256:a3127c91c664e0b7afae89737ed76105a00f85518c77596ceb0ce528d2b62054"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4064",
+            "digest": "sha256:9c1850aa043f34b5230e136786b6f4a505cbc6720a84512def728deee16d251e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3765",
+            "digest": "sha256:7783c2bc18fcf143363164287191cce78d61e2b946c9bc013c670856a4370cc6"
+          },
+          {
+            "kind": "work_state",
+            "id": "D879",
+            "digest": "sha256:58db5e745d67cc52665fb2687dc7110afb90eeeeb7835d61cdebd7e2da73dc92"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3792",
+            "digest": "sha256:3451ea76eb41e21658d3dff574c904a96087ba7ef3d1faa095db89df20eab165"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3791",
+            "digest": "sha256:e571b8bba131688006f6b2ae63776a6198152f9de17f54f8d5ca7f1e9685b059"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1716",
+            "digest": "sha256:629df6d0693600e29d42274c627bb48feff368c2b9fd8f3156b802c8ea258e84"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1718",
+            "digest": "sha256:985d63d759d001488dc41b0625be4a6fcdb16266552f503f2298caddd3b2e6c7"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1719",
+            "digest": "sha256:0a0f30c2a25f01e7fcd34ad84a0b9b54531cdd8f09fff8673da2861e6ee1c992"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4065",
+            "digest": "sha256:d94f166be45f7d8e336f3034973bd9fae64b817dd4a72f6ece101a35f1e8528f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4066",
+            "digest": "sha256:4d5dc680ea4854789e5c3d5184dca10078891ae2c325c55a74cbb7193926c041"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4067",
+            "digest": "sha256:04161d49f943f736c43ceb06087d4bb9e36183896c7b89a913ec2bc24a66139a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4068",
+            "digest": "sha256:f63405e8901dc637ddf5b13bdcda50aa37389128c7f8133eb804cc9acdcc0f58"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4069",
+            "digest": "sha256:2a2dffbb6d55be44fb609c5bddedaa4ed22e9fcd3c4a835c82cb3879b24e4342"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4070",
+            "digest": "sha256:26ae62261a98d580c3985b0d98e4dcf7cc8fd8d2da3d75406d02596c2ffeb070"
+          },
+          {
+            "kind": "work_state",
+            "id": "D1736",
+            "digest": "sha256:639c2f52fc60101b3a4e31d77970c491790f1eeb99d07252a5c567a118c54128"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4071",
+            "digest": "sha256:c2455860947b24daf9279c196c4736a94700d1c4e4484ff1d84b73a826eb9934"
+          },
+          {
+            "kind": "rfc",
+            "id": "foundation-source-identity.md",
+            "digest": "sha256:525c9035337f614e9bc1d0c802dcdf5673bf2d3891c867e664f0ff7964e2148e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4077",
+            "digest": "sha256:b521e72ee7b9eb081029e9fc006a65b5f6fd531c8be27b221b539ab29124b48e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4078",
+            "digest": "sha256:8214d2a27919b1dcc99f062f18cb85e1be7f3ba06c1fe7ff1a45d25e71ebf207"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4079",
+            "digest": "sha256:40c859d70b24582a812c5bc009bd49fc4d9133c191c15207dd105203aae4ab01"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4080",
+            "digest": "sha256:1d8d4a33d2f9864949dbd7cef737c955ef2e3d712c94577b9e93b86c00d54c9c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4081",
+            "digest": "sha256:30d1e0cf08aac598c29713f5b50eb0feca84ec5a2e50506fba65fb34a752545b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4082",
+            "digest": "sha256:3b54b434b4ec2649f90587ccc38b85fa29a1e6538b732be21c7a365e7e53d326"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4083",
+            "digest": "sha256:e37bf962c8ad64eeaa84a6ccf1e5debcaf1f73e8275956a774123595c503360a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4084",
+            "digest": "sha256:bb4592d9287ef1b33dd56c7c9a09bf300333b7436b4c12b048a123ba27a655df"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4085",
+            "digest": "sha256:7bb8234efd6972c1f8e9f9c45a92029bb7eae323c3c6852e7bd195c72e38843d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4090",
+            "digest": "sha256:0770a384d2f063a4c7c7d5551320c190f3193c333bc5ced3dcc1672d16aed8bc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4091",
+            "digest": "sha256:25526f477da032469f633763de4b290eefc12ee3fc252aad6a55bc523da82464"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4092",
+            "digest": "sha256:e7abce7cd418faee94997ed0ae61fa0818786ff420c7e377acfa13bccb61d008"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4093",
+            "digest": "sha256:1fe600f9af3be07a3587cecc609001caeb4407d4bce2fbffada3dfd365d3829f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4094",
+            "digest": "sha256:e45ed0d40039bccc43798dc22214f86c0b9e4648a6b5aea9896c48e04cc730a5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4095",
+            "digest": "sha256:c57a5a6ef9c8d65d19b3d10b60f299806603373923c0fc1aa8e70bc783a4d82f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4096",
+            "digest": "sha256:e2c7430eefa2b8287e5ce6f7a82629c981a15ca0491727a0f20f6a87a6e98345"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4097",
+            "digest": "sha256:ae9b9770fd2269a4d6a8da30885be1a01233d68589cc0c30c4e935e493fd71b5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4089",
+            "digest": "sha256:9b7a2b839d3605314f2f96c7744873201dab67f04e91a5364b5e308e3af7a9ac"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4098",
+            "digest": "sha256:ff7286dedd9e9c45e3877a13834d318babe3eeaa75a344444e7c68073a3f8b43"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4099",
+            "digest": "sha256:2116758422dd8800ecaaf7d9ba2cb0faf3d14b7f8746a302706f30880532f899"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4100",
+            "digest": "sha256:cdba7308da7b7b2ae6ec05e565f1dc64c4f44060b2d32f7fcd6590e71b0df130"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4101",
+            "digest": "sha256:39a277bfc1bfb030537b90cc98a53ab0e7ebfce4d212657eff0bfee77d4a0e5b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4102",
+            "digest": "sha256:2e4adb2b460bdcca061179fecd4416ca4def9273c4bdf557b672240ee976356d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4076",
+            "digest": "sha256:3f2b8e8a23a4ed7143fdc2dc376402ea85fcbad38c684c0fee88497ed600d889"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4103",
+            "digest": "sha256:ae91b66224060185059743175050ecfa69342dd3a097c67b96c3765adc25f677"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4104",
+            "digest": "sha256:843a88504f98215ba967cd93d13d510303f4a9c6f97ac034ddbbdd6f3e978bcf"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4105",
+            "digest": "sha256:a34e6c9736315da1c89610d3f35e1f09276f9fa5d2744e6ba2ef738c3d6ffa10"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4107",
+            "digest": "sha256:292626dec9b3b899542de37697ac4b3748ce0407ea1e7389e37b4e188e596d47"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4118",
+            "digest": "sha256:e1cb404e5b5d3898534cdaee21e4e888a841334f6af1fad20b16f1152ff57614"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4119",
+            "digest": "sha256:9eca4329726f3b7c30a270e0f726633beed840dfdb1354894d3687d06dc7b8d0"
+          },
+          {
+            "kind": "rfc",
+            "id": "profile-game-facts.md",
+            "digest": "sha256:3a0f9927dc63d4e1ca74a55437dd4f4c24a146d504de714a882b4210f2bf7026"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4147",
+            "digest": "sha256:accd542c4afe89086eedc2078f4474b979d4866d59a1ae4ad0ffc3317b7fc8fb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4149",
+            "digest": "sha256:e2f9e1973b61edb27c9dd87e0b0d849e3612dc5b15b8c13d03505975d06a2be8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4150",
+            "digest": "sha256:9f3e75c7b3533deaf2f4215f0940665e1843b273bbf8f1f8b8305583cd38ca41"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4151",
+            "digest": "sha256:f7deb42bb62d737dfbe02e0a18f5172b99d796b428c0c6f4a0b7ca7a61a96dc8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4152",
+            "digest": "sha256:ce51c8731b04a9dd6ed23ab2b2d07e7e8dd59943d6bb47a3a19f8d2743387f8d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4153",
+            "digest": "sha256:61cbd124f0762fdf9a0b41b6039bb66eabdea1834d66a74453b7045605e197dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4154",
+            "digest": "sha256:71413d47a1fc3828d2fb4971ec16d8bc93e46ecfaae69c2651c8b6f6bd5bbbe9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3564",
+            "digest": "sha256:2b7d1d96af2f5f52dab939318f054e86c5e8bcbdb76aa39a85a651b393cbf45b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4155",
+            "digest": "sha256:df8f6dd1d2cf8600d80671c5fdac17c60a0bf9ce85d2d3ee6f08cd3d132578f3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4156",
+            "digest": "sha256:247c2b5624bb83f4d510040b9543c9b3106a084c9e36e33e22b11ef56e5cbb2c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4157",
+            "digest": "sha256:ccecc99d139ddbf3a1f88b79477ec619d92043f8d887f3ba3eab85718e7be144"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4158",
+            "digest": "sha256:73519f0aff8251b489ba248e9972a44c64e0ba1d69e62be13cab754237c37fbb"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4160",
+            "digest": "sha256:eb5ffd197deda05523d3fcb0ca03d5c0bb097dd17828e871ca7da954d28b897c"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4161",
+            "digest": "sha256:370200d523aa0b575cb7a6b8d9449b40676151b2b56544643c2b4c8ec4285e11"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4162",
+            "digest": "sha256:7982d8b6684e9a9b2fbb2f18eb0638430d558408bdd23375db265929822f06e2"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4163",
+            "digest": "sha256:d30d0575e75e69c26f04d02650cc9286d1a08868e17fa8b733cb74bf2c546c99"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4159",
+            "digest": "sha256:6ce114186f82787df301d04c1b9c3cafcbeee00140bb8a07f6e7d1f3cdec1c20"
+          },
+          {
+            "kind": "rfc",
+            "id": "profile-choice-facts.md",
+            "digest": "sha256:527e82abc62086a5c86b433dbbe9283806e6c901f689596338ef7d5ef831bc50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4164",
+            "digest": "sha256:416e2038014331f638e9593aeeb611e5bf2ea1e69fe2e666c0b8dc95724ad4dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4165",
+            "digest": "sha256:7d54de0be2fafab39c466dd9ec760c450ec9d5915c61378ea95eaa84d4ca1451"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4166",
+            "digest": "sha256:60cc1c12811fa5c24cf02a5d80d7a75fe648f9d0611ac4bd200703da8232c570"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4167",
+            "digest": "sha256:bc54044697843dae08daf278ec6d5c9b8b8b4aeea1c9b3af0953b056134de0c8"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4168",
+            "digest": "sha256:40e06025af3ef30c45cffe552da82fadef1e55df59ae1f0a9c2c504e764f1e2a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4169",
+            "digest": "sha256:762d8965476680b36197ae673e434ec8e6f5d6b9b4e78f60bc6485434b6345a5"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4170",
+            "digest": "sha256:0c86d9b32b40299cca9398f467a30d6197901ffcd10efc6369715b2bc833f599"
+          },
+          {
+            "kind": "rfc",
+            "id": "longitudinal-store.md",
+            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4181",
+            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4182",
+            "digest": "sha256:142be084904d39e994c247e72c13e1ea5d53f6402d84eb01cbaaadae6b392a4f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4183",
+            "digest": "sha256:6784f481ec068f298f6dbd7637a66f3d54b2658e0928851540c19d285cff27dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4184",
+            "digest": "sha256:32eaa1923a033a70bcc58a2814c453d5f5249d626d080ca0fbfebd6f748de4a1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4185",
+            "digest": "sha256:7f8ff8fb44aeb2775b1384e62e57d3794b53a767a58e0772f58e0b822738e1ab"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4188",
+            "digest": "sha256:cb4e0b3f294d0fd44ebc303859439327e9c5cae6b72b6b4c4e73f567adbfe395"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4189",
+            "digest": "sha256:0a9c9c67604c3bd92f04bfc67344003d21243c00fc0baba1696c47944dc4c105"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4190",
+            "digest": "sha256:e63149bc3d07daa960777528dc163a3c187b371674c726b260bc6da71ab42d50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4191",
+            "digest": "sha256:4a107e98537ae7c3cd9578f6c019dca88a2b33404eca8bb0fcd706640aaf4b6b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4192",
+            "digest": "sha256:cada71e7abc2f6c6b81998ec2e8fe6059b199bb27aaa2c1f531dce4d99aeb872"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4193",
+            "digest": "sha256:021a9da719074805a5dbe05025722366f6487f8403c9f940062d98cf90e91a50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4194",
+            "digest": "sha256:deffcd8e1b2c40f79f23324bd445fa3a7d258f26b927210c27ebd5c9c06e88c0"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4195",
+            "digest": "sha256:9503cb3db6438d18bbe3bcfbd4f92d8c9d7490e51e815d59c9f4a5b1b66a45f9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4196",
+            "digest": "sha256:6ccc02ed7222ab28bdf29cddd350a15fb13d8debe58d84955c02835b0328b5dd"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4197",
+            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4198",
+            "digest": "sha256:c5fb6b4ba01f25ce951f9a59c176a456ddb6ae50479697573c7e0563c262bbee"
+          },
+          {
+            "kind": "rfc",
+            "id": "bot-policy.md",
+            "digest": "sha256:b947e600637dde02d1fa510ac4b15a34c256f1c19b2ecb4bbf51fc9541636105"
           }
         ]
       },
@@ -1795,10 +4040,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Preserve and verify the shipped longitudinal, evidence-job, concept, bot and Campaign migrations 26–30 instead of commissioning them again. Complete the remaining owner/consumer discharges, Catalogue progression migration 31 and the clock/variant/social-result contracts in register order, including account lifecycle, restart, backup/restore and upgrade/rollback journeys.",
+      "nextAction": "Complete final post-Proxy performance/current200-game Profile cost and genuine predecessor8 execution. Migration35/revision9/all-six-family ownership are local tested implementation, not whole learner-model completion.",
       "latestCheckpoint": {
-        "at": "2026-10-16",
-        "summary": "D3840 closes repeated complete-edge population sealing: both-color composition seals 22 source values once instead of 66 times. Exact authority, immutable complete/empty outputs, admission and one-entry eviction remain. Final eight-pair whole-projector comparisons retain every event/receipt/row/checkpoint with a 2.56% lower local time sum; D3300's roughly three-second cold path remains open. Reject D3839's position cache; none ships. D3358 is reconciled against shipped D3528: 984 declarations and all capability/migration documents need zero pack edits/restamps. Frozen production/tests pass 5,875 software, seven performance, 257 content and 397 browser cases, with one configured optional Maia skip and 112 unretried composition cells. Interrupted timing and corrected routing failures remain logged. Semantic implementation metadata refresh changes no case result or qualification. Source/consumer/lifecycle and release obligations remain; no whole-capability/milestone promotion, push or remote qualification.",
+        "at": "2026-11-10",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",
@@ -1837,7 +4082,33 @@
           "rfc/longitudinal-store.md",
           "rfc/campaign-core.md",
           "rfc/campaign-boss-games.md",
-          "rfc/intent-presets.md"
+          "rfc/intent-presets.md",
+          "planning/foundation-source-identity/plan.md",
+          "apps/server/src/profile-subject-source.test.ts",
+          "apps/server/src/profile-subject-facts-contract.test.ts",
+          "apps/server/src/learner-profile-application.test.ts",
+          "apps/web/src/lib/ProfileScreen.test.ts",
+          "packages/runtime/src/longitudinal-subject-relations.test.ts",
+          "packages/runtime/src/longitudinal-native-incidence.test.ts",
+          "apps/server/src/profile-subject-store.test.ts",
+          "apps/server/src/profile-subject-facts-authority.ts",
+          "apps/server/src/profile-subject-fact-references.ts",
+          "apps/server/src/inspector-query.test.ts",
+          "packages/runtime/src/evidence-conventions.test.ts",
+          "apps/server/src/longitudinal-successor-upgrade.test.ts",
+          "apps/web/src/lib/current-native-module-journeys.test.ts",
+          "apps/web/src/lib/evidence/native-fact-detail.test.ts",
+          "apps/web/src/lib/app-shell.test.ts",
+          "apps/web/src/lib/evidence/components/TextStatementView.svelte",
+          "packages/runtime/src/current-native-module-delivery.test.ts",
+          "packages/runtime/src/presentation-contract.ts",
+          "packages/runtime/src/capability/declarations.generated.ts",
+          "packages/runtime/src/testing/subject-safe-retired-semantic-cases.ts",
+          "tools/staged-typecheck.mjs",
+          "tools/staged-typecheck.test.mjs",
+          "apps/server/src/bot-opponent-operation.ts",
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "rfc/bot-policy.md"
         ],
         "anchors": [
           {
@@ -1878,7 +4149,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
+            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
           },
           {
             "kind": "work_state",
@@ -1924,6 +4195,91 @@
             "kind": "rfc",
             "id": "return-scheduling.md",
             "digest": "sha256:8d6892b7cc11bb253813c8df35918f4d0b3d29131ceb10a80e26ee535dd08329"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4181",
+            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4182",
+            "digest": "sha256:142be084904d39e994c247e72c13e1ea5d53f6402d84eb01cbaaadae6b392a4f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4183",
+            "digest": "sha256:6784f481ec068f298f6dbd7637a66f3d54b2658e0928851540c19d285cff27dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4184",
+            "digest": "sha256:32eaa1923a033a70bcc58a2814c453d5f5249d626d080ca0fbfebd6f748de4a1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4185",
+            "digest": "sha256:7f8ff8fb44aeb2775b1384e62e57d3794b53a767a58e0772f58e0b822738e1ab"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4188",
+            "digest": "sha256:cb4e0b3f294d0fd44ebc303859439327e9c5cae6b72b6b4c4e73f567adbfe395"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4189",
+            "digest": "sha256:0a9c9c67604c3bd92f04bfc67344003d21243c00fc0baba1696c47944dc4c105"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4190",
+            "digest": "sha256:e63149bc3d07daa960777528dc163a3c187b371674c726b260bc6da71ab42d50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4191",
+            "digest": "sha256:4a107e98537ae7c3cd9578f6c019dca88a2b33404eca8bb0fcd706640aaf4b6b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4192",
+            "digest": "sha256:cada71e7abc2f6c6b81998ec2e8fe6059b199bb27aaa2c1f531dce4d99aeb872"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4193",
+            "digest": "sha256:021a9da719074805a5dbe05025722366f6487f8403c9f940062d98cf90e91a50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4194",
+            "digest": "sha256:deffcd8e1b2c40f79f23324bd445fa3a7d258f26b927210c27ebd5c9c06e88c0"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4195",
+            "digest": "sha256:9503cb3db6438d18bbe3bcfbd4f92d8c9d7490e51e815d59c9f4a5b1b66a45f9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4196",
+            "digest": "sha256:6ccc02ed7222ab28bdf29cddd350a15fb13d8debe58d84955c02835b0328b5dd"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4197",
+            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4198",
+            "digest": "sha256:c5fb6b4ba01f25ce951f9a59c176a456ddb6ae50479697573c7e0563c262bbee"
+          },
+          {
+            "kind": "rfc",
+            "id": "bot-policy.md",
+            "digest": "sha256:b947e600637dde02d1fa510ac4b15a34c256f1c19b2ecb4bbf51fc9541636105"
           }
         ]
       },
@@ -2107,7 +4463,7 @@
           {
             "kind": "rfc",
             "id": "bot-policy.md",
-            "digest": "sha256:8df99e5b923947b7ee4317bf013d07cede1ca0c3fefa0f84f3386d2fabe73ada"
+            "digest": "sha256:b947e600637dde02d1fa510ac4b15a34c256f1c19b2ecb4bbf51fc9541636105"
           },
           {
             "kind": "rfc",
@@ -2137,7 +4493,7 @@
           {
             "kind": "rfc",
             "id": "review-map.md",
-            "digest": "sha256:9a6e604715ceccc69fa8ee9d521ee76a0ccd584da9043b4e8dc6f3906224a8ba"
+            "digest": "sha256:36cfe2cdbf10b96ff4745c200b0f7c48ce65d00f314e5770b0c51aabfcc35b93"
           },
           {
             "kind": "work_state",
@@ -2357,10 +4713,10 @@
       "dependsOn": [
         "official-content"
       ],
-      "nextAction": "Preserve D3746's completed full-population local image journey and D3811's packaged-facts refusal/portable mechanical fixture regression; do not repeat them as missing implementation. D3747's current environment hold has cleared through actual capacity/cold-boot proof, not restart or pruning. Run D3726's private directory, administrator selection and offline-copy procedure on an actual differing-UID Linux host; isolated Linux controls are not that discharge. Diagnose D3723's original transport cause without claiming a green rerun proves it. Qualify prior-release migration/rollback and both actual release-native architectures. Do not substitute tmpfs backups, weaken privacy or run the application as root. Independently fresh-review the draft D3334/D3335 §8 ingress repair, then implement D1846's reader/dispatcher and proxy limits. Resolve D3397's CSP/audience-preview and D3393's public/internal probe contracts. Exercise all ten clean-host release journeys, including provider-off degradation, accessibility, rights/resources and owner-device use.",
+      "nextAction": "Keep release blocked: no current complete software/performance certificate yet. Current consumer/storage/declaration repairs and native inspection are bounded local progress; content/native/release D3928 hold and full release journeys remain.",
       "latestCheckpoint": {
-        "at": "2026-10-14",
-        "summary": "D3746/D3747/D3811 close the local full-population image slice. Docker responds and unchanged non-root capacity/cold boot pass. The first restore retains bytes but correctly refuses the mechanical boss fixture's checkout-only ruling. A permanent actual-packaged-facts control retains GRADUATION_RULING_UNCITED; temporary community copies assert no graduation clearance and explicitly abstain. Native restart removes source-fixture selectors. Normal storage-drill then completes all seven Make operations, exact rows/identities/authorization, private export/classroom/authoring and bot/Campaign replay/continuation on unchanged linux/arm64 development image 61dd097981a4e29702f2d35e3a127f8be0ee95890a8664db9f80c6e963aee80b. Only owned labelled resources are cleaned. Original failed runs remain logged. Mock-provider/local proof only; differing-UID host, prior-release, both actual release architectures and final release discharges remain. No production validator/bundle widening, timeout/retry waiver, push, remote-CI or whole capability/milestone promotion.",
+        "at": "2026-11-10",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent toolchain/routing/hook fixes and D4148 bot code/contract; coordinated kernel checkpoint follows. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 executable is recovered/preserved; actual predecessor startup/current worker/reopen/rebuild and current200-game bulk cost remain owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
         "impact": "advanced",
         "evidence": [
           "Makefile",
@@ -2439,7 +4795,34 @@
           "apps/server/src/http-representation.ts",
           "apps/web/public/session-join.js",
           "tests/browser/security.spec.ts",
-          "rfc/learner-rating.md"
+          "rfc/learner-rating.md",
+          "planning/foundation-source-identity/plan.md",
+          "apps/server/src/profile-subject-source.test.ts",
+          "apps/server/src/profile-subject-facts-contract.test.ts",
+          "apps/server/src/learner-profile-application.test.ts",
+          "apps/web/src/lib/ProfileScreen.test.ts",
+          "packages/runtime/src/longitudinal-subject-relations.test.ts",
+          "packages/runtime/src/longitudinal-native-incidence.test.ts",
+          "apps/server/src/profile-subject-store.test.ts",
+          "apps/server/src/profile-subject-facts-authority.ts",
+          "apps/server/src/profile-subject-fact-references.ts",
+          "apps/server/src/longitudinal-contract.test.ts",
+          "apps/server/src/inspector-query.test.ts",
+          "packages/runtime/src/evidence-conventions.test.ts",
+          "apps/server/src/longitudinal-successor-upgrade.test.ts",
+          "apps/web/src/lib/current-native-module-journeys.test.ts",
+          "apps/web/src/lib/evidence/native-fact-detail.test.ts",
+          "apps/web/src/lib/app-shell.test.ts",
+          "apps/web/src/lib/evidence/components/TextStatementView.svelte",
+          "packages/runtime/src/current-native-module-delivery.test.ts",
+          "packages/runtime/src/presentation-contract.ts",
+          "packages/runtime/src/capability/declarations.generated.ts",
+          "packages/runtime/src/testing/subject-safe-retired-semantic-cases.ts",
+          "tools/staged-typecheck.mjs",
+          "tools/staged-typecheck.test.mjs",
+          "apps/server/src/bot-opponent-operation.ts",
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "rfc/bot-policy.md"
         ],
         "anchors": [
           {
@@ -2625,7 +5008,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:1b4af6a7ff92d346dcf78dc14a05d6b9a3cc16033fb2eee33daa5a3c357b74ff"
+            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
           },
           {
             "kind": "work_state",
@@ -2656,6 +5039,91 @@
             "kind": "rfc",
             "id": "learner-rating.md",
             "digest": "sha256:3189387e5bb418f5da499f93a2e674aac1cff6ca253bf5a51e17926d9833424a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4181",
+            "digest": "sha256:ce1bdd8e99fdbdaed16cadb2116d263afb31ff685e971499aa4f5d79f32ed85f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4182",
+            "digest": "sha256:142be084904d39e994c247e72c13e1ea5d53f6402d84eb01cbaaadae6b392a4f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4183",
+            "digest": "sha256:6784f481ec068f298f6dbd7637a66f3d54b2658e0928851540c19d285cff27dc"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4184",
+            "digest": "sha256:32eaa1923a033a70bcc58a2814c453d5f5249d626d080ca0fbfebd6f748de4a1"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4185",
+            "digest": "sha256:7f8ff8fb44aeb2775b1384e62e57d3794b53a767a58e0772f58e0b822738e1ab"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4188",
+            "digest": "sha256:cb4e0b3f294d0fd44ebc303859439327e9c5cae6b72b6b4c4e73f567adbfe395"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4189",
+            "digest": "sha256:0a9c9c67604c3bd92f04bfc67344003d21243c00fc0baba1696c47944dc4c105"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4190",
+            "digest": "sha256:e63149bc3d07daa960777528dc163a3c187b371674c726b260bc6da71ab42d50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4191",
+            "digest": "sha256:4a107e98537ae7c3cd9578f6c019dca88a2b33404eca8bb0fcd706640aaf4b6b"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4192",
+            "digest": "sha256:cada71e7abc2f6c6b81998ec2e8fe6059b199bb27aaa2c1f531dce4d99aeb872"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4193",
+            "digest": "sha256:021a9da719074805a5dbe05025722366f6487f8403c9f940062d98cf90e91a50"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4194",
+            "digest": "sha256:deffcd8e1b2c40f79f23324bd445fa3a7d258f26b927210c27ebd5c9c06e88c0"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4195",
+            "digest": "sha256:9503cb3db6438d18bbe3bcfbd4f92d8c9d7490e51e815d59c9f4a5b1b66a45f9"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4196",
+            "digest": "sha256:6ccc02ed7222ab28bdf29cddd350a15fb13d8debe58d84955c02835b0328b5dd"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4197",
+            "digest": "sha256:879bedd4f46d0520df1b650ecf42b4f9e680103ed7ece0ad9438a1436d6af854"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4198",
+            "digest": "sha256:c5fb6b4ba01f25ce951f9a59c176a456ddb6ae50479697573c7e0563c262bbee"
+          },
+          {
+            "kind": "rfc",
+            "id": "bot-policy.md",
+            "digest": "sha256:b947e600637dde02d1fa510ac4b15a34c256f1c19b2ecb4bbf51fc9541636105"
           }
         ]
       },
@@ -2727,7 +5195,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 27,
+      "rfcCount": 28,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,
@@ -3081,7 +5549,7 @@
       "name": "Rating, longitudinal observations, skills, style, and recommendations",
       "release": "core",
       "owner": "learner-history",
-      "rfcCount": 4,
+      "rfcCount": 6,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,
@@ -3380,8 +5848,8 @@
       "workItems": {
         "queued": 3,
         "blocked_owner": 10,
-        "blocked_rfc": 5,
-        "completed": 26,
+        "blocked_rfc": 4,
+        "completed": 27,
         "retired": 0
       },
       "routes": {

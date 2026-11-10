@@ -3,7 +3,7 @@
 // closed story receipt on the production `story()` route.
 import { readFileSync } from "node:fs";
 
-import { assertReviewEvidencePacket, commitMove, compileReviewPacketForSubject, createReviewPrefixAuthority, parseReviewStoryReceipt, presentedSentence, renderReviewStoryReceipt } from "@chess-tabiya/runtime";
+import { assertReviewEvidencePacket, commitMove, compileReviewPacketForSubject, createReviewPrefixAuthority, parseReviewStoryReceipt, presentedSentence, renderReviewStoryReceipt, serverAvailabilityFromProviders } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
@@ -14,6 +14,10 @@ import { ReviewAttemptOutcomeStore, ReviewEvidenceCoordinator, type ReviewEviden
 import { RunService } from "./service.js";
 import { createRestHandler } from "./rest.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { DrillApi } from "../../web/src/lib/api.js";
+import { requestReviewAnalyze, reviewAnalyzeTarget, type ReviewAnalyzeResult } from "../../web/src/lib/review-analyze.js";
+import { assertReviewMapResponse } from "../../web/src/lib/review-response.js";
+import { parseRecordedAnalyzeLineOperands } from "../../../packages/runtime/src/recorded-analyze-presentation.js";
 
 const PGN = `[Event "Review evidence"]
 [White "Alice"]
@@ -69,6 +73,25 @@ function harness(options: { readonly engine?: MockProviderEngineClient; readonly
   });
   const service = new RunService(storage, { reviewEvidence: coordinator, ...(options.queue === undefined ? {} : { evidenceQueue: options.queue }) });
   return { storage, service, coordinator, attempts, gets: () => gets, lineGets: () => lineGets, entered: entered.promise, release: () => release.resolve(), heldKey: () => heldKey };
+}
+
+/** Actual historical confirmation and current Full2 source operation, not the retired flat read. */
+async function analyzeRecorded(service: RunService, runId: string, nodeId: string) {
+  const review = await service.review(runId, principal);
+  assertReviewMapResponse(review, { runId });
+  const availability = serverAvailabilityFromProviders({ opponent: "none", judge: "none", llm: "none", corpus: "none", tts: "none", tablebase: "none" });
+  return requestReviewAnalyze({
+    reviewAssistance: (id, body, signal) => Promise.resolve(service.confirmRecordedAnalyzeAssistance(id, principal, body, availability, signal ?? new AbortController().signal)),
+    inspector: (id, body, signal) => service.queryInspectorSources(id, principal, body, availability, signal ?? new AbortController().signal),
+  }, reviewAnalyzeTarget(review, nodeId), new AbortController().signal);
+}
+function actualAnalyzeLine(result: ReviewAnalyzeResult) {
+  if (result.page.kind !== "page" || result.page.body.kind !== "source" || result.page.body.outcome.kind !== "available" || result.page.items.length !== 1) throw new Error("Expected one actual Analyze component");
+  const item = result.page.items[0]!;
+  if (item.component.id !== "fact_statement") throw new Error("Expected actual registered Analyze statement");
+  const operands = parseRecordedAnalyzeLineOperands(item.component.operand.operands, "actual coordinator Analyze");
+  if (operands.kind !== "line") throw new Error("Expected attributed recorded line");
+  return { operands, sentence: presentedSentence(item) };
 }
 
 describe("Review coordinator application lifetime (D3561)", () => {
@@ -560,11 +583,12 @@ describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)
     const secondMove = run.nodes.find((node) => node.branchId === branchId && node.ply === 3)!;
     const eventsBefore = storage.read("review-line")!.run.events.length;
     const callsBefore = gets() + lineGets();
-    const analysis = service.reviewAnalysis(imported.run.id, principal, secondMove.id);
-    expect(analysis).toMatchObject({ kind: "line", source: "bestline", engineId: "stockfish-analysis", bound: { requestedMovetimeMs: 50 } });
-    if (analysis.kind !== "line") throw new Error("line expected");
-    expect(analysis.sentence).toMatch(/^Mock Stockfish mock-1 \(50 ms search\) reported this principal variation from the position before 2\. Nf3: 2\. \S+ \S+\.$/u);
-    expect(analysis.caveat).toMatch(/not advice/u);
+    const analysis = actualAnalyzeLine(await analyzeRecorded(service, imported.run.id, secondMove.id));
+    expect(analysis.operands).toMatchObject({ sourceArm: "typed_pv", engine: { id: "stockfish-analysis", name: "Mock Stockfish", version: "mock-1" },
+      bound: { kind: "movetime", requestedMs: 50 }, lineScope: { kind: "typed_request", maxPlies: 8, truncated: false } });
+    expect(analysis.sentence).toMatch(/^Mock Stockfish mock-1 \(50 ms search\) reported this principal variation from the position before 2\. Nf3: 2\. \S+ \S+\./u);
+    expect(analysis.sentence).toContain("Recorded scope: up to 8 plies.");
+    expect(analysis.sentence).toMatch(/not advice/u);
     // Criterion 14: the explicit read writes nothing and requests nothing.
     await coordinator.whenIdle();
     expect(storage.read("review-line")!.run.events.length).toBe(eventsBefore);
@@ -581,7 +605,7 @@ describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)
         return super.exchange(engineId, request);
       }
     }
-    const { service, coordinator, storage } = harness({ engine: new LineFailing({ score: swinging }), windowNodes: 2, maxOutstandingPerRun: 2 });
+    const { service, coordinator, storage, gets, lineGets } = harness({ engine: new LineFailing({ score: swinging }), windowNodes: 2, maxOutstandingPerRun: 2 });
     const imported = await service.importGame({ id: "review-no-line", side: "white", opponentPolicy: { mode: "human_common" }, policyConfig, seed: 3, source: { kind: "pgn", pgn: PGN } }, "writer");
     await coordinator.whenIdle();
     const run = storage.read("review-no-line")!.run;
@@ -593,7 +617,11 @@ describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)
     expect(receipt.progress).toEqual({ kind: "settled" });
     expect(receipt.families.engine_eval.unavailable).toEqual([]);
     const secondMove = run.nodes.find((node) => node.branchId === imported.run.branches[0]!.id && node.ply === 3)!;
-    expect(service.reviewAnalysis(imported.run.id, principal, secondMove.id)).toMatchObject({ kind: "none", sentence: "No engine line is recorded for the position before 2. Nf3." });
+    const eventsBefore = storage.read(run.id)!.run.events, callsBefore = gets() + lineGets();
+    const analysis = await analyzeRecorded(service, imported.run.id, secondMove.id);
+    expect(analysis.page).toMatchObject({ kind: "page", body: { kind: "source", projection: "derived.review.analysis_recorded_first@1", outcome: { kind: "unavailable", reason: "source_absent" } }, items: [] });
+    expect(storage.read(run.id)!.run.events).toEqual(eventsBefore);
+    expect(gets() + lineGets()).toBe(callsBefore);
   });
 
   it("keeps actual durable provider captures out of ordinary HTTP responses without disabling explicit Analyze", async () => {
@@ -627,9 +655,20 @@ describe("ReviewEvidenceCoordinator through RunService (criteria 12, 13, 14, 17)
       expect(wire.match(/providerDelivery|providerLineDelivery|bodyBase64/u)?.[0], surface).toBeUndefined();
     }
     const node = run.nodes.find(candidate => candidate.ply === 3)!;
-    const analysis = await handler(new Request(`http://tabiya.test/runs/${run.id}/review-analysis?node=${encodeURIComponent(node.id)}`, { headers: { "x-writer-id": "writer" } }));
-    expect(analysis.status).toBe(200);
-    expect(await analysis.json()).toMatchObject({ kind: "line", source: "bestline" });
+    const requests: Request[] = [];
+    const api = new DrillApi("http://tabiya.test", (input, init) => {
+      const headers = new Headers(init?.headers); headers.set("x-writer-id", "writer");
+      const request = new Request(String(input), { ...init, headers }); requests.push(request.clone());
+      return handler(request);
+    });
+    const review = await api.review(run.id);
+    assertReviewMapResponse(review, { runId: run.id });
+    const analysis = actualAnalyzeLine(await requestReviewAnalyze(api, reviewAnalyzeTarget(review, node.id), new AbortController().signal));
+    expect(analysis.operands).toMatchObject({ sourceArm: "typed_pv", engine: { id: "stockfish-analysis", name: "Mock Stockfish", version: "mock-1" }, bound: { kind: "movetime", requestedMs: 50 }, lineScope: { kind: "typed_request", maxPlies: 8 } });
+    expect(analysis.sentence).toMatch(/position before 2\. Nf3: 2\. \S+ \S+\./u);
+    expect(requests.map(request => [request.method, new URL(request.url).pathname])).toEqual([
+      ["GET", `/runs/${run.id}/review`], ["POST", `/runs/${run.id}/assistance`], ["POST", `/runs/${run.id}/inspector/query`],
+    ]);
     expect(storage.read(run.id)!.run.events).toEqual(eventsBefore);
     expect(gets() + lineGets()).toBe(callsBefore);
     expect(storage.read(run.id)!.run.events.filter(event => event.type === "evidence.attached")).toEqual(attached);

@@ -2,16 +2,27 @@ import { describe, expect, it, vi } from "vitest";
 import * as phaseSource from "./phase.js";
 import * as transitionSource from "./transition.js";
 import * as legalSource from "./legal-moves.js";
+import * as markerSource from "./pivotal.js";
+import * as valueRoutes from "./internal/evidence-value-routes.js";
+import * as bindingExecution from "./evidence-binding-execution.js";
+import * as presentation from "./presentation-contract.js";
+import { humanObservationRun, recordHumanObservation, splitCandidates } from "./testing/recorded-human-divergence-fixture.js";
+import { recordedPivotalFixture } from "./testing/recorded-pivotal-fixture.js";
+import { mirrorSemanticFen, mirrorSemanticUci } from "./semantic-validation.js";
+import { permittedAssistance } from "./assistance.js";
 
 import { evidenceForConsumer, evidenceValueReceipt, identitySealedEvidenceWithoutValueReceipt } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
-import { consumePivotalMarkers, pivotalMarkerEvidence, pivotalMarkerEvidenceItems, pivotalMarkerRecordedSelection, pivotalMarkers } from "./pivotal.js";
+import { pivotalMarkerEvidenceItems, pivotalMarkerRecordedSelection, pivotalMarkers } from "./pivotal.js";
+import { consumePivotalMarkers, pivotalMarkerEvidence } from "./pivotal-presentation.js";
 import { appendOpponentPly, commitMove, createRun, fork, rewind } from "./runtime.js";
 import { branchPath } from "./branch-path.js";
 import { assertReviewEvidencePacket, compileReviewPacketForSubject, createReviewPrefixAuthority } from "./review-evidence.js";
 
 const at = "2026-09-24T00:00:00.000Z";
+const liveContext = { workflowContext: "position" as const, deliveryOpen: true, role: "solo" as const, seatedInContest: false, reviewing: false };
 const created = (id: string, fen: string) => createRun({ id, packId: "p", packDigest: `sha256:${"a".repeat(64)}`, startFen: fen, seed: 1, createdAt: at, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
 const reviewItems = (run: ReturnType<typeof created>) => {
   const authorize = createReviewPrefixAuthority({ loadRun: id => id === run.id ? run : undefined, loadImportRecord: () => undefined });
@@ -21,6 +32,113 @@ const reviewItems = (run: ReturnType<typeof created>) => {
 };
 
 describe("pivotal marker consumer boundary", () => {
+  it("D4053 compiles the complete current two-ref declaration without a provider waiver or consumer1 fallback", () => {
+    const id = "board.pivotal_marker";
+    const accepts = [{ id: "derived.pivotal.irreversibility", version: 1 }, { id: "derived.pivotal.phase_change", version: 1 }];
+    expect(PRIMARY_EVIDENCE_MANIFEST.consumers.filter(row => row.id === id).map(row => ({ version: row.version, accepts: row.accepts })))
+      .toEqual([{ version: 2, accepts }]);
+    const execution = compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id, version: 2 });
+    expect(execution.bindings.map(row => row.binding.projection)).toEqual(accepts);
+    expect(execution.bindings.every(row => row.paths.length > 0)).toBe(true);
+    expect(execution.bindings.flatMap(row => row.paths.flatMap(path => path.sourceRequirements))
+      .some(source => source.availability === "provider")).toBe(false);
+    expect(() => compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, { id, version: 1 })).toThrow(/UNDECLARED/u);
+    const run = recordedPivotalFixture("irreversibility");
+    const original = pivotalMarkerEvidenceItems(run, run.activeCursor.branchId);
+    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id, version: 1 }, original)).toThrow();
+    const wrongView = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "guidance.deterministic", version: 1 }, original);
+    expect(() => consumePivotalMarkers(wrongView)).toThrow(/board.pivotal_marker@2/u);
+  });
+  it.each([false, true])("D4052 preserves each actual owner and repeated occurrence in registered marker delivery, black=%s", black => {
+    const fen = "4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1";
+    const run = commitMove(created(`marker-owner-${black}`, black ? mirrorSemanticFen(fen, "color_and_vertical") : fen),
+      black ? mirrorSemanticUci("e2e7", "color_and_vertical") : "e2e7", { at }).run;
+    const a = pivotalMarkerEvidenceItems(run, run.activeCursor.branchId)[0]!;
+    const b = pivotalMarkerEvidenceItems(run, run.activeCursor.branchId)[0]!;
+    expect(a).not.toBe(b); expect(a.payload).toEqual(b.payload);
+    const input = [a, b, a];
+    const delivered = consumePivotalMarkers(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 2 }, input));
+    expect(delivered).toHaveLength(3);
+    delivered.forEach((entry, index) => {
+      expect(entry.marker).toBe(input[index]!.payload);
+      expect(entry.presentation.kind).toBe("ready");
+      if (entry.presentation.kind !== "ready") throw new Error("Expected actual registered marker presentation");
+      expect(entry.presentation.items).toHaveLength(1);
+      const item = entry.presentation.items[0]!;
+      expect(presentation.presentedItemOwner(item)).toBe(input[index]);
+      expect(item.component.id).toBe("fact_statement");
+      if (item.component.id !== "fact_statement") throw new Error("Expected marker statement");
+      expect(item.component.operand.rendererId).toBe("consumer.pivotal_marker@1");
+      expect(presentation.parsePresentationReceipt(presentation.serializePresentedEvidence(entry.presentation.items))).toHaveLength(1);
+    });
+    if (delivered[0]!.presentation.kind === "ready" && delivered[2]!.presentation.kind === "ready") {
+      expect(delivered[0]!.presentation.items[0]).not.toBe(delivered[2]!.presentation.items[0]);
+    }
+  });
+  it.each([false, true])("D4053 preserves genuine phase/last-role path and kind order in live presentation, black=%s", black => {
+    const fen = "r2qk2r/8/8/8/8/8/8/R2QK2R w - - 0 1";
+    let run = created(`live-phase-${black}`, black ? mirrorSemanticFen(fen, "color_and_vertical") : fen);
+    for (const move of ["d1d8", "e8d8"]) run = commitMove(run, black ? mirrorSemanticUci(move, "color_and_vertical") : move, { at }).run;
+    const original = pivotalMarkerEvidenceItems(run, run.activeCursor.branchId);
+    const permitted = original.filter(item => markerSource.liveAdmitted(item.payload, permittedAssistance(liveContext)));
+    expect(permitted.some(item => item.payload.kind === "phase_change")).toBe(true);
+    expect(permitted.some(item => item.payload.kind === "irreversibility")).toBe(true);
+    const before = JSON.stringify(run);
+    const delivered = pivotalMarkerEvidence(run, run.activeCursor.branchId, liveContext);
+    expect(delivered.map(entry => entry.marker)).toEqual(permitted.map(item => item.payload));
+    const phase = delivered.find(entry => entry.marker.kind === "phase_change")!;
+    expect(phase.presentation.kind).toBe("ready");
+    if (phase.presentation.kind !== "ready") throw new Error("Expected genuine phase presentation");
+    const component = phase.presentation.items[0]!.component;
+    if (component.id !== "fact_statement") throw new Error("Expected exact registered phase statement");
+    expect(component.operand).toMatchObject({ rendererId: "consumer.pivotal_marker@1",
+      convention: "phase-bands@1", operands: { kind: "phase_change", ...phase.marker.detail } });
+    expect(JSON.stringify(run)).toBe(before);
+  });
+  it("D4052 isolates known presentation failure, preserves valid siblings and propagates unexpected errors", () => {
+    const run = recordedPivotalFixture("irreversibility");
+    const item = pivotalMarkerEvidenceItems(run, run.activeCursor.branchId)[0]!;
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 2 }, [item, item]);
+    const spy = vi.spyOn(presentation, "presentEvidenceItems");
+    try {
+      spy.mockImplementationOnce(() => { throw new presentation.PresentationError("PRESENTATION_INVALID", "fixture known formatting failure"); });
+      const delivered = consumePivotalMarkers(view);
+      expect(delivered[0]).toEqual({ marker: item.payload, presentation: { kind: "failed" } });
+      expect(delivered[1]!.presentation.kind).toBe("ready");
+      const unexpected = new Error("fixture unexpected programmer error");
+      spy.mockImplementationOnce(() => { throw unexpected; });
+      expect(() => consumePivotalMarkers(view)).toThrow(unexpected);
+    } finally { spy.mockRestore(); }
+  });
+  it("D4053 preflights the complete current image before either permitted factory, even at an empty root", () => {
+    const root = created("pivotal-preflight-root", "4k3/4q3/8/8/8/8/4R3/4K3 w - - 0 1");
+    const blocked = new Error("fixture preflight refusal");
+    const compile = vi.spyOn(bindingExecution, "compileEvidenceConsumerExecution").mockImplementation(() => { throw blocked; });
+    const invoke = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    const allKinds = vi.spyOn(markerSource, "pivotalMarkerEvidenceItems");
+    try {
+      expect(() => pivotalMarkerEvidence(root, root.activeCursor.branchId, liveContext)).toThrow(blocked);
+      expect(compile).toHaveBeenCalledExactlyOnceWith(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 2 });
+      expect(invoke).not.toHaveBeenCalled();
+      expect(allKinds).not.toHaveBeenCalled();
+    } finally { compile.mockRestore(); invoke.mockRestore(); allKinds.mockRestore(); }
+  });
+  it.each(["human_divergence", "option_collapse"] as const)("D4053 never invokes the forbidden %s factory even with its real recorded source", kind => {
+    const run = kind === "human_divergence" ? recordHumanObservation(humanObservationRun(), splitCandidates()) : recordedPivotalFixture("option_collapse");
+    const original = pivotalMarkerEvidenceItems(run, run.activeCursor.branchId);
+    expect(original.some(item => item.payload.kind === kind)).toBe(true);
+    const expected = original.filter(item => markerSource.liveAdmitted(item.payload, permittedAssistance(liveContext))).map(item => item.payload);
+    const before = JSON.stringify(run);
+    const invoke = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    const allKinds = vi.spyOn(markerSource, "pivotalMarkerEvidenceItems");
+    try {
+      const delivered = pivotalMarkerEvidence(run, run.activeCursor.branchId, liveContext);
+      expect(delivered.map(entry => entry.marker)).toEqual(expected);
+      expect(invoke.mock.calls.map(args => args[0])).toEqual(["derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@1"]);
+      expect(allKinds).not.toHaveBeenCalled();
+      expect(JSON.stringify(run)).toBe(before);
+    } finally { invoke.mockRestore(); allKinds.mockRestore(); }
+  });
   it("retains distinct recorded occurrences even when shared-node policy images are identical", () => {
     let run = commitMove(created("human-occurrences", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), "e2e4", { at }).run;
     const nodeId = run.activeCursor.nodeId;
@@ -178,10 +296,10 @@ describe("pivotal marker consumer boundary", () => {
     expect(derived.inputs.map((value) => `${value.projection.id}@${value.projection.version}`)).toEqual(["rules.transition.reading.move_irreversibility.last_of_role@1", "run.record.position@1"]);
     expect(evidenceValueReceipt(derived.evidence).sourceDigests).toEqual(derived.inputs.map((value) => evidenceValueReceipt(value).payloadDigest));
 
-    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 1 }, items);
-    expect(consumePivotalMarkers(view)).toEqual(items.map((item) => item.payload));
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 2 }, items);
+    expect(consumePivotalMarkers(view).map(item => item.marker)).toEqual(items.map((item) => item.payload));
     const free = { workflowContext: "position" as const, deliveryOpen: true, role: "solo" as const, seatedInContest: false, reviewing: false };
-    expect(pivotalMarkerEvidence(queen, branchId, free).map((marker) => marker.kind)).toEqual(["irreversibility"]);
+    expect(pivotalMarkerEvidence(queen, branchId, free).map(item => item.marker.kind)).toEqual(["irreversibility"]);
     if (false) {
       // @ts-expect-error Marker delivery rejects a bare marker list.
       consumePivotalMarkers(items.map((item) => item.payload));
@@ -195,10 +313,10 @@ describe("pivotal marker consumer boundary", () => {
     // The human-divergence factory computes from recorded model selections only: none exist here.
     expect(invokeEvidenceValueRoute("derived.pivotal.human_divergence@1", { run: queen, branchId })).toEqual([]);
     const relabelled = identitySealedEvidenceWithoutValueReceipt({ id: "derived.pivotal", version: 1 }, { id: "derived.pivotal.human_divergence", version: 1 }, rule.payload);
-    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 1 }, [relabelled])).toThrow(/value-authority receipt/u);
+    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 2 }, [relabelled])).toThrow(/value-authority receipt/u);
     // The retired single-projection v1 id cannot be minted or bound.
     expect(PRIMARY_EVIDENCE_MANIFEST.bindings.some((binding) => binding.projection.id === "rules.pivotal.marker")).toBe(false);
     const retired = identitySealedEvidenceWithoutValueReceipt({ id: "rules.pivotal", version: 1 }, { id: "rules.pivotal.marker", version: 1 }, rule.payload);
-    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 1 }, [retired])).toThrow(/value-authority receipt/u);
+    expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "board.pivotal_marker", version: 2 }, [retired])).toThrow(/value-authority receipt/u);
   });
 });

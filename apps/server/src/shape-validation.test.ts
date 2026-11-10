@@ -9,7 +9,7 @@ import { ShapeRegistry } from "./shape-registry.js";
 
 const entry = JSON.parse(readFileSync(new URL("../../../content/shapes/carlsbad.json", import.meta.url), "utf8"));
 
-describe("shape entry validation", () => {
+describe("shape entry validation", { timeout: 5_000 }, () => {
   it("accepts the official Carlsbad entry and reports probe matches", () => {
     const result = validateShapeEntry(entry, { probeFen: "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10" });
     expect(result.valid).toBe(true);
@@ -43,7 +43,7 @@ describe("shape entry validation", () => {
   });
 });
 
-describe("pack shape references", () => {
+describe("pack shape references", { timeout: 5_000 }, () => {
   it.each([
     ["SHAPE_REFERENCE_UNKNOWN", (pack: any) => ({ ...pack, shapes: ["missing"] })],
     ["SHAPE_PLAN_REF_UNLISTED", (pack: any) => ({ ...pack, shapes: ["iqp-white"], planClasses: [{ ...pack.planClasses[0], shapePlan: { shape: "carlsbad", plan: "white-minority-attack" } }] })],

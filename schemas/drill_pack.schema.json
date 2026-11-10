@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.32",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.33",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.32 format with required semantic capability declarations, typed source-game provenance and training forms.",
+  "description": "Living v0.33 format with required semantic capability declarations, typed source-game provenance and training forms.",
   "type": "object",
   "required": [
     "id",
@@ -518,7 +518,7 @@
     "squareRegion": { "type": "object", "required": ["files", "ranks"], "properties": { "files": { "$ref": "#/$defs/fileRange" }, "ranks": { "$ref": "#/$defs/rankRange" } }, "additionalProperties": false },
     "fileTemplateFeature": {
       "oneOf": [
-        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "backward_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        {"type":"object","required":["kind","color"],"properties":{"kind":{"const":"backward_pawn"},"color":{"enum":["white","black"]},"conventionRef":{"type":"object","required":["id","version"],"properties":{"id":{"enum":["backward-pawn"]},"version":{"const":1}},"additionalProperties":false}},"additionalProperties":false},
         { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "isolated_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "doubled_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "half_open_file" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
@@ -528,7 +528,7 @@
     "squareTemplateFeature": {
       "oneOf": [
         { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "pawn_safe_square" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "outpost" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
+        {"type":"object","required":["kind","color"],"properties":{"kind":{"const":"outpost"},"color":{"enum":["white","black"]},"conventionRef":{"type":"object","required":["id","version"],"properties":{"id":{"enum":["outpost-candidate"]},"version":{"const":1}},"additionalProperties":false}},"additionalProperties":false},
         { "type": "object", "required": ["kind", "color"], "properties": { "kind": { "const": "passed_pawn" }, "color": { "enum": ["white", "black"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "comparison", "count"], "properties": { "kind": { "const": "direct_attack_count" }, "color": { "enum": ["white", "black"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "piece"], "properties": { "kind": { "const": "piece" }, "piece": { "oneOf": [{ "$ref": "#/$defs/piece" }, { "type": "null" }] } }, "additionalProperties": false }
@@ -537,8 +537,8 @@
     "structuralFeature": {
       "oneOf": [
         { "type": "object", "required": ["kind", "color", "square"], "properties": { "kind": { "const": "pawn_safe_square" }, "color": { "enum": ["white", "black"] }, "square": { "$ref": "#/$defs/square" } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "color", "square"], "properties": { "kind": { "const": "outpost" }, "color": { "enum": ["white", "black"] }, "square": { "$ref": "#/$defs/square" } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "color", "file"], "properties": { "kind": { "const": "backward_pawn" }, "color": { "enum": ["white", "black"] }, "file": { "$ref": "#/$defs/file" } }, "additionalProperties": false },
+        {"type":"object","required":["kind","color","square"],"properties":{"kind":{"const":"outpost"},"color":{"enum":["white","black"]},"square":{"$ref":"#/$defs/square"},"conventionRef":{"type":"object","required":["id","version"],"properties":{"id":{"enum":["outpost-candidate"]},"version":{"const":1}},"additionalProperties":false}},"additionalProperties":false},
+        {"type":"object","required":["kind","color","file"],"properties":{"kind":{"const":"backward_pawn"},"color":{"enum":["white","black"]},"file":{"$ref":"#/$defs/file"},"conventionRef":{"type":"object","required":["id","version"],"properties":{"id":{"enum":["backward-pawn"]},"version":{"const":1}},"additionalProperties":false}},"additionalProperties":false},
         { "type": "object", "required": ["kind", "color", "file"], "properties": { "kind": { "const": "isolated_pawn" }, "color": { "enum": ["white", "black"] }, "file": { "$ref": "#/$defs/file" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "file"], "properties": { "kind": { "const": "doubled_pawn" }, "color": { "enum": ["white", "black"] }, "file": { "$ref": "#/$defs/file" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "square"], "properties": { "kind": { "const": "passed_pawn" }, "color": { "enum": ["white", "black"] }, "square": { "$ref": "#/$defs/square" } }, "additionalProperties": false },
@@ -550,7 +550,7 @@
         { "type": "object", "required": ["kind", "id"], "properties": { "kind": { "const": "named_structure" }, "id": { "enum": ["carlsbad", "iqp-white", "iqp-black", "maroczy-bind"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "shade"], "properties": { "kind": { "const": "bishop_on_shade" }, "color": { "enum": ["white", "black"] }, "shade": { "enum": ["light", "dark"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "basis", "comparison", "count"], "properties": { "kind": { "const": "pawn_count" }, "color": { "enum": ["white", "black"] }, "basis": { "enum": ["count", "difference"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "color", "form"], "properties": { "kind": { "const": "king_opposition" }, "color": { "enum": ["white", "black"] }, "form": { "enum": ["direct", "distant"] } }, "additionalProperties": false },
+        {"type":"object","required":["kind","color","form"],"properties":{"kind":{"const":"king_opposition"},"color":{"enum":["white","black"]},"form":{"enum":["direct","distant"]},"conventionRef":{"type":"object","required":["id","version"],"properties":{"id":{"enum":["king-opposition-unobstructed"]},"version":{"const":1}},"additionalProperties":false}},"additionalProperties":false},
         { "type": "object", "required": ["kind", "color", "role", "basis", "comparison", "count"], "properties": { "kind": { "const": "piece_count" }, "color": { "enum": ["white", "black"] }, "role": { "enum": ["pawn", "knight", "bishop", "rook", "queen", "king"] }, "basis": { "enum": ["count", "difference"] }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "zone"], "properties": { "kind": { "const": "king_zone" }, "color": { "enum": ["white", "black"] }, "zone": { "enum": ["edge", "corner"] } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "color", "role", "target", "comparison", "count"], "properties": { "kind": { "const": "piece_distance" }, "color": { "enum": ["white", "black"] }, "role": { "enum": ["king", "knight", "bishop", "rook", "queen"] }, "target": { "$ref": "#/$defs/distanceTarget" }, "comparison": { "enum": ["atLeast", "atMost", "equal"] }, "count": { "type": "integer" } }, "additionalProperties": false }

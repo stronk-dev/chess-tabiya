@@ -29,12 +29,12 @@ import { SQLiteRunStorage } from "./storage.js";
 import { withDerivedRequires } from "./capability/pack-capabilities.js";
 
 const at = "2026-08-12T20:00:00.000Z";
-const fixture = JSON.parse(
+const fixture = withDerivedRequires(JSON.parse(
   readFileSync(
     new URL("../../../schemas/drill_pack.example.json", import.meta.url),
     "utf8",
   ),
-) as DrillPackDefinition;
+) as DrillPackDefinition);
 const policyConfig: PolicyConfig = {
   seedMode: "fixed",
   locus: { executedAt: "server", engineIds: [], modelIds: [] },

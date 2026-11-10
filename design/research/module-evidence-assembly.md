@@ -2608,3 +2608,1479 @@ actual values. Exposure@2, actual availability propagation and public current co
 remain unfinished. `[V]` landing-captures.test.ts; evidence-factories.ts;
 evidence-catalog.ts; normal make evidence-value-profile-update/evidence-value-authority;
 dated independent final review; owner RFC acceptance notes.
+
+## Whole Inspector readings without drawable witnesses — D3984 (2026-11-02)
+
+The actual65-topic supplier inventory is not itself a complete presentation contract. The
+prospective source-adapter audit executes28 local/six dependent/ten recorded-window families
+through genuine factories and strict component parsing. At discovery, before D3984 implementation,
+its116 tests passed only after the test fixture explicitly separated positive witness construction
+from empty constructor refusal.
+The old fixture's twelve-value cap can fill with empties before a positive FEN. Neither test
+selection nor a larger fixture cap repairs the production source-page boundary. `[V]`
+`packages/runtime/src/presentation-inspector-source.test.ts`;
+`packages/runtime/src/testing/inspector-presentation-fixture.ts`; ordinary
+`make test-software-files TEST_FILES='packages/runtime/src/presentation-inspector-source.test.ts'`.
+
+Seventeen exact whole-reading families have the gap: loose pieces, rays, seventh-rank rooks,
+trapping, back-rank state, discovered latency, pass-threats, mate-in-one, space, pawn connectivity,
+development, promotion pressure, legal moves, piece destinations, pawn contacts, candidate
+majorities and defender duties. Eight are square-set-only, six relation-plus-statement and three
+statement-only in the prospective table. Current geometry rejects empty sets/relations; several
+fixed templates require a first witness or render an empty string. Sources still retain their
+genuine whole-reading occurrence. `[V]` `presentation-inspector-adapters.ts`'s named17 families
+and literal Full2 table; `presentation-play-adapters.ts` threat/mate/loose/back-rank schemas;
+same116-case audit, including explicit empty refusals.
+
+An empty relation population is not necessarily an empty source. PawnContactsReading contains
+contacts, locks, per-pawn passed state and connected-passed pairs independently. Trapping and
+pass-threat readings carry distinct in-check abstention variants; piece destinations retain
+per-color invalid-turn-clone availability. BackRankReading's `on_back_rank` mode can put the
+heavy piece exactly on fileTarget; relation construction rightly refuses a zero-length arrow,
+but the positive observation remains. The old caption's unconditional “can reach” also fails
+to distinguish already occupying that square. None establishes whole-position safety. `[V]`
+`pawn-dynamics.ts` PawnContactsReading; `tactics.ts` TrappedPieceReading/ThreatResult/
+BackRankReading; `mobility.ts` ColorPieceDestinations; `presentation-inspector-adapters.ts`
+relation, contacts, backRank; `presentation-play-adapters.ts` play.back_rank@1.
+
+Independent accepted-contract review finds no licensed fallback. The source collection/ordinal
+must survive; `no_witness` cannot represent an existing reading, `deferred` requires an actual
+budget excess, and the six D3802 detail projections cannot masquerade as the original source.
+An unowned abstention question likewise cannot replace an evidence-owned component. `[V]`
+`rfc/module-registration.md` §4.11a source-order delivery and closed outcomes;
+`rfc/evidence-presentation.md` D3802 component composition;
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`, D3984 independent return.
+
+Recommendation: author finite Full2 whole-reading statement/optional-geometry cases, with
+actual unavailable state and exact source retention, then independently review before code.
+Preserve the17 source refs, all original occurrences, unchanged budgets and ordinary-module
+selection. This is rendering/representation repair, not a new collector, relevance heuristic,
+safe-move judgement or evidence version. `[M]` author recommendation derived from the bounded
+observations above; the companion amendment must make its exact grammar and falsifiers binding.
+
+Follow-through: the finite D3984 amendment was independently accepted before implementation.
+All17 actual empty-reading controls first failed, then pass with source-owned text and optional
+original geometry; the116-case audit now constructs empty as well as positive readings rather
+than expecting empty refusal. Independent review first exposes four rewrite defects (missing
+destination convention, two mirrored piece-identity losses and crossed exact source), then
+passes423 cases/ten files plus workspace types after their repair. The30-case adversarial file
+includes13 original-geometry comparisons and both-color current promotion controls. These are
+bounded rendering results, not complete source-page/API/UI or whole D3984 completion. `[V]`
+`packages/runtime/src/inspector-whole-reading-presentation.test.ts`;
+`packages/runtime/src/inspector-whole-reading-independent.test.ts`;
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`;
+`rfc/module-registration.md` §4.11b; `rfc/evidence-presentation.md` D3984 companion.
+
+## Complete recorded-window Nudge captions — D3982 (2026-11-03)
+
+The genuine factory→current Nudge2→registered adapter→atomic fit census covers all eight
+multi-ply families: harassment, deflection, attraction, line-blocker clearance, square clearance,
+interference, check-zwischenzug and overload exploitation. Both colors and attraction's three-
+and five-ply horizons yield18 cells. Every source emits one genuine value and the current
+square_set/move_path pair; every complete pair is dropped for exceeding the unchanged one-arrow
+ceiling. This is not missing collector output or evidence for increasing budgets. `[V]`
+`packages/runtime/src/inspector-occurrence-budget.test.ts`, D3982 census;
+`make test-software-files TEST_FILES='packages/runtime/src/inspector-occurrence-budget.test.ts'`
+passes10 cases/one file1.27s (session80459).
+
+Separately costed original square-set members retain their complete registered caption and
+all its typed operands. All18 fit one fact, at most50 words/two marks and zero arrows. This is
+representation feasibility, not authorization to crop the existing registered composition after
+rendering. Fixtures own real legal windows but commit all moves as user: they do not prove the
+actual learner/opponent post-commit subject, novelty, HTTP or mounted delivery. Long variable
+zwischenzug expected-move lists still face the ordinary whole-fact word backstop. `[V]` same
+census; `testing/recorded-sequence-window-fixture.ts`; `presentation-inspector-adapters.ts`
+sequence builders; `module-policy.ts` Nudge budgets.
+
+The bounded proposal is an explicit Nudge-only no-arrow binding for exactly those eight pairs,
+constructed as one complete original square_set and caption. Review/Inspector retain the full
+recorded paths. Sources, anchors, exact ownership, selection/reducers and fixed budgets do not
+change. It requires independent acceptance of the existing module/presentation contract amendment
+and actual actor-labelled delivery controls before implementation/completion. `[M]` proposal
+derived from the measured cells above, not a broader usefulness or detector-qualification claim.
+
+Actual actor-labelled delivery follow-through exposes a second boundary, D4058. Real cookie
+authentication, SQLite storage, RunService and production module REST queries cover the same18
+completed windows with the final mover explicitly made the learner. Every original sequence
+value reaches the actual reducer; zero of18 reaches the selected Nudge receipt. Harassment's
+selected facts are genuine occupied_attack/slider_ray changes, not fabricated empty evidence.
+Earlier learner prefixes do not borrow the later motif, opponent nodes refuse and the stored
+run stays byte-identical. `[V]` `apps/server/src/recorded-review-delivery.test.ts`, D3982 group;
+normal focused five-file Make run10367 passes1466 cases8.92s (the occurrence-budget,
+presentation-inspector-adapters, module-query, recorded-review-delivery and web module-query-response
+suites). This is an actual selection census, not delivered sequence UX.
+
+The existing order places exactness before lift/family precedence, then reducers and the two-fact
+backstop. Current sequence exactness cannot win those slots merely because its registered caption
+now fits. Independent authority inspection confirms current code follows learner-modules §3;
+D3715's unaccepted change-witness filter is not sequence priority authority, and D3767 names
+analogous grade starvation. The new representation is independently accepted; useful Nudge
+selection still requires its own bounded contract, not false closure or an implementation-only
+priority change. `[V]` `packages/runtime/src/module-reducers.ts` orderAdmittedFacts/
+reduceModulePacket; `rfc/learner-modules.md` §3/3a; `rfc/module-registration.md` §4.5a–c;
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`, D4058 authority inspection.
+
+The independently accepted finite completed-window priority improves the original REST census
+from0/18 to16/18. Both overload cases now compete with a genuine deflection over the same legal
+three-move example. The existing family order selects deflection first. A follow-up packet
+diagnostic (60606) corrects the initial unverified word-budget explanation: critical last_of_role
+takes the first slot, leaving one completed-window slot at the fact backstop before presentation.
+The missing window is not listed as a presentation word deferral. This is no reason to raise budgets or
+drop words. Overload's collector does not require the second duty be lost after relocation,
+whereas deflection does; a universal overload→deflection subsumption is therefore unsupported.
+`[V]` normal four-file run76789:131pass/2failed8.25s; actual selected-route diff and unchanged
+word fitter; `semantic-evidence.ts` overloadExploitationObservedOperands and
+recordedDeflectionObservedOperands; independent D4058 coexistence review in the same receipt.
+
+## Recorded move paths still cannot step their board — D3979 (2026-11-03)
+
+The accepted presentation contract says move_path is a numbered list that steps the board,
+optionally painting one arrow per ply. The actual Svelte component renders only SAN list items
+and convention attribution. It has no selection callback/board, and PresentedEvidence passes
+only the component and its sentence. This remains a real delivery gap after arrow-cost and
+Nudge repairs; neither a correct arrow budget nor complete prose implements stepping. `[V]`
+`rfc/evidence-presentation.md` §3.6; `apps/web/src/lib/evidence/components/MovePathView.svelte`;
+`apps/web/src/lib/evidence/PresentedEvidence.svelte`; independent current-duty review in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+
+The original Inspector-family line constructor receives each retained move's FEN and UCI, uses
+them for ply/SAN, then serializes only ply/SAN/UCI. The closed MovePathOperand/parser retains
+no starting FEN or exact run/branch/node navigation context. Its current board-line population
+is33 full paths after D3982's8 Nudge singleton changes; original source/caption footprints still
+cover all41 pairs. A ply number or repeated UCI does not identify one saved branch position.
+Recovering navigation by consulting today's active cursor would silently reinterpret inherited,
+Compare or historical paths. `[V]` `presentation-inspector-adapters.ts` line/squaresLine/sequence;
+`presentation-contract.ts` MovePathOperand/parseMovePath; `presentation-inspector-adapters.test.ts`
+complete41-footprint/33-path census (focused32174 passes1804/nine); `branch-path.ts` inherited paths.
+
+Next author a bounded source-retained path/preview scope amendment, not a new collector. It
+must specify which exact original position data crosses the component boundary, construction
+and received correspondence, and whether selecting a ply is a read-only local preview or an
+explicit saved-run action. Original source/disclosure/answer ceilings and retired-view ownership
+must survive; do not guess positions from SAN, paint future arrows on today's board or change
+the Play cursor as a side effect of inspecting evidence. Actual current callers, keyboard/focus,
+same-run/branch/report retirement and returned board-input/viewport controls are then required.
+This is a recommendation, not accepted UI/data authority; old parent duties cannot be closed by
+adding a click handler without this missing contract. `[M]` bounded proposal from the observed
+wire/surface gap; independent next-duty review concurs that contract correction precedes code.
+
+Follow-through: independent current-constructor review accepts evidence-presentation §3.6b's
+bounded start-FEN/full-replay/read-only preview contract, with castling normalization preserving
+original UCI and exact sealed-item lifetime. It is accepted next work, not implemented/native
+delivery or parent completion. `[V]` that clause and the existing compiler2 independent receipt.
+
+**2026-11-04 implementation follow-through:** the original missing-start witness fails on all33
+actual current path pairs, then registered construction retains startFen and checks complete
+original FEN/UCI replay. The strict receiver and read-only local preview now use the same rules;
+the genuine source/caller cohort passes1613/seven9.43s. Actual SQLite/service→JSON→strict
+Review/Inspector callers and authenticated REST retain complete original positions, both colors
+and inherited paths without saved writes. Repeated board positions have separate complete-FEN
+steps in runtime controls; this is not yet a complete actual-caller repeated-path/native cohort.
+`[V]` `packages/runtime/src/presentation-move-path.test.ts`,
+`packages/runtime/src/presentation-inspector-adapters.test.ts`,
+`apps/server/src/recorded-review-delivery.test.ts`,
+`apps/web/src/lib/evidence/move-path-callers.test.ts`; normal targeted20497 output.
+
+Independent review finds and accepts the bounded D4059 exact-handler/Close-focus correction.
+Actual captured Svelte callbacks are invoked with their connected original controls, including
+same-byte replacement and same-owner reopen; detached clicks alone are not a valid falsifier.
+Final targeted19/three3.95s also checks the shared browser/main export. The first full software
+run reports13460pass/one missing-export failure, not a passing run; correct the omitted export
+and repeat complete gates. Native/default-content/qualification and D3979 remain open. `[V]`
+`apps/web/src/lib/evidence/move-path.test.ts`, `packages/runtime/src/client.test.ts`, focused47040
+and failed full25804 output; existing compiler2 independent review receipt.
+
+## Nudge change selection and distinct Inspector reading/event coverage — D3715/D4060 (2026-11-04)
+
+The current canonical Nudge admits unchanged island states and open-file observations at both
+current-subject and ancestor admission, not only on the visible card. Corrected predecessor
+controls reproduce five failures/two passes; the first attempt also contained a separate terminal
+bare-kings fixture error. A Nudge-local complete-value comparison repairs this without changing
+shared postcommitEdgeEvidence, generic witnessedEvidence, any collector, ordering or budget.
+All four original legal-move cohorts retain complete source populations, genuine gained/lost
+and equal-magnitude changed observations, and d2–f3's real lost king defender. `[V]`
+`packages/runtime/src/postcommit-change-witness.test.ts`, normal32687/75929 output;
+`postcommit-nudge.ts`, `module-query.ts` current/ancestor assembly; accepted module-registration §4.5a.
+
+The original criterion incorrectly presumed Inspector exposes those exact structural/island
+event types. Full Inspector2's closed source topics instead include pawn-connectivity position
+readings; position-structure2 and move-transition1 consume different reading families. An actual
+reading is not an event receipt. Independent review accepts a bounded preservation clarification:
+exact original events remain in factories and Review, while Inspector retains its own complete
+original readings. D4060 keeps exact event-query coverage/source-contract reconciliation open
+for full1.0; it is not waived or discharged by comparing reading types. `[V]`
+`inspector-source-topics.ts`, `reading-evidence.ts`, `review-map.ts` collectRelations;
+module-registration §4.5a criterion4 and the existing compiler2 independent D4060 review.
+
+Real storage/service/REST and strict receivers exercise current and ancestor admission, grade
+unavailability and preserved saved bytes. The strengthened Review control compares every original
+event identity/multiplicity from all nine exact original factories at every selected path edge,
+against whole-branch admission and each actual returned row. Its initial stronger version
+mistook a whole-branch admission call for one edge; correcting measurement scope, not product
+filtering, yields93/three passing cases. Separate mounted actual-service controls preserve
+selected text/input/retirement. Two prior seat tests pinned two unchanged counts; current
+receipts retain one piece-escape or one loose-piece fact with original Retry/focus semantics,
+not a fabricated empty result. `[V]` `apps/server/src/postcommit-change-delivery.test.ts`,
+`apps/web/src/lib/screens.test.ts`; normal88316 output. Current inherited-path controls require
+the real new branch's feedback reveal, not a disclosure waiver. No source qualification/native
+or parent completion follows from this finite source/delivery cohort.
+
+### Original ten-motif Inspector delivery — D3792 (2026-11-04)
+
+The original cohort is the canonical recorded-sequence positives and paired hard negatives,
+excluding two-capture trade completion: ten exact@3 families, not a new detector list. Existing
+private-supplier tests covered their sources in both colours, but the generic68-topic query
+loop did not prove positives reached display; actual browser path coverage reached contact
+timing alone. Independent source audit therefore required delivery proof rather than a collector
+rewrite. `[V]` `packages/runtime/src/testing/recorded-sequence-fixtures.ts`,
+`apps/server/src/inspector-window-source.test.ts`, `apps/server/src/inspector-query.test.ts`,
+`apps/web/src/lib/evidence/move-path-callers.test.ts`; compiler2 independent review, D3792 cohort.
+
+The actual Node-worker fixture now optionally registers a learner and sends ordinary JSON through
+the cookie-authenticated REST handler, original SQLite/RunService/source-page compiler and strict
+browser receiver. It retains its original non-REST callers. Fast test-only password derivation
+does not prove production password hashing; this instrument proves session/route authorization.
+The original40 cells (ten families × positive/hard-negative × both colours) all reach their
+actual selected browser outcome. Every positive retains the original event-digest/component
+multiset, complete captions/square chips and source start-FEN/UCI/SAN lines within unchanged
+20fact/400word/20mark/8arrow budgets. Hard negatives return genuine no_witness with zero items,
+not missing_context, failed or deferred. No automatic provider fetch or saved-play mutation.
+`[V]` `apps/web/src/lib/inspector-source-browser.test.ts` and its existing `.test-support.ts`.
+
+Four inherited contact/overload positives retain original creating-branch operands. Two further
+journeys select roots and both short prefixes while the later overload witness remains in the
+full saved graph; all six demands return missing_context, with no future witness displayed.
+Anonymous delivery refuses401 before acquisition. Explicit set equality pins the original ten
+families against both canonical populations and the actual recorded-window topic image.
+Final61491 normal four-suite run passes168 cases44.28s. Initial6411 stopped20 positive tests at
+an unavailable public-barrel test import; corrected52267 passes71 browser cases. Expanded63766
+passes165/fails2 because test props replacement removed its query spy; preserving the wrapper
+corrects measurement, not source scope. Independent bounded source/oracle review accepts the
+corrected cohort. `[V]` same tests, compiler2 independent review and dated exploration log.
+
+Current normal gates pass13532software/all494files355.22s(no skips), unchanged isolated
+performance7/four58.46s, clean types/build/4559authority/375semantic. Real content remains
+261pass/60fail/18setup-blocked cases43files32.85s at D3928; later corpus recipes are unreached.
+`[V]` normal25828/79202 terminal outputs, recorded in the exploration log. This DOM cohort does not prove
+native geometry/reload/return, arbitrary motif usefulness, source qualification, D4060 structural
+event-query coverage, all D3979 path callers or whole D3792/full1.0 completion. Default/native
+startup remains held at D3928. `[V]` current tests and `planning/codex-queue.md`.
+
+### Genuine empty Nudge recovery — D3713 (2026-11-04)
+
+The legal f3d4 edge from `7k/p7/8/8/8/2P1PN2/6P1/K7 w - - 0 1` supplies the missing
+genuine empty control. Canonical query first returns an empty receipt with silent behavior;
+actual SQLite/RunService authority and module queries confirm it in both colours. Existing
+locked-pawn and pawn-free controls remain populated, never relabelled empty. The stronger
+service-returned baseline71245 passes279/fails2 of281: successful delayed Retry removes the
+quiet row, leaves focus on BODY and produces zero tablet queue heads. No source payload,
+receipt, selection rule or disclosure was edited to make this outcome. `[V]`
+`apps/web/src/lib/screens.test.ts` D3713 cases, existing Node-worker fixture and exploration log.
+
+The local repair returns to the existing default Support/More state only after the selected
+Nudge settles silent-empty. Focus handoff uses the initiating request's actual parsed packet,
+current packet identity, live owner/selection, region eligibility and deliberately retained focus.
+Independent review finds two further able-to-fail lifecycle cases: an unresolved request retained
+its document listener after unmount (11337), and pointer/touch outer-tab navigation without
+focusin allowed focus into hidden Support or after leave-and-return (9537). Their corrections
+remove listeners immediately on destroy/supersession and fence recovery by actual region/open
+identity and navigation generation. This is ephemeral UI lifetime, not a new evidence identity
+or persistent setting. `[V]` `ModuleSeats.svelte`, `DrillScreen.svelte`, those source-bound cases
+and compiler2 independent review, D3713.
+
+Final67130 passes401 checks/six files35.01s with clean types. Sixteen actual-service cases cover
+desktop/tablet/phone, mirrored tablet success, moved focus, newer More selection, unresolved
+unmount, outer navigation and leave-return. They retain exact stored bytes, two UI requests,
+no mutation callbacks, no provider work and original populated/failure controls. Independent
+bounded source/control review accepts; reviewer execution and main execution are distinguished.
+Full normal30607 passes13548software/all494files357.68s(no skips), unchanged performance7/four
+57.17s, types/build/4559authority/375semantic, then catches D4061 missing from the queue.
+Queue-only correction82988 restores complete governance before actual content fails261pass/
+60fail/18setup-blocked cases43files32.51s at D3928; later corpus recipes unreached. `[V]` terminal
+outputs recorded in the exploration log. Native geometry/default-content/source
+qualification/parent/release are not established by this DOM cohort. D4061 separately owns the
+unmeasured preset-removal path; it is not quietly discharged by a silent-packet test. `[V]`
+same tests, review receipt, `design/BACKLOG.md` D3713/D4061 and exploration log.
+
+### 2026-11-04 — Settled preset removal and Hint action ownership (D4061/D4062)
+
+Preset removal is a distinct path from a settled empty packet: real Nudge/Hint modules can leave
+composition while retaining an absent selected head. The ready-only membership repair restores
+existing More/Support and preserves available Hint progress through temporary compilation. A
+gated real Hint POST then exposes a second issue: dropping a retired reply leaves its operation
+alive. Old question-level IDs also let old cancellation target a reopened learner action. `[V]`
+`apps/web/src/lib/preset-change.test.ts`, `GuidedHintSeat.svelte`, `DrillScreen.svelte`.
+
+Independently accepted hint-distance§7a separates per-action delivery identity from unchanged
+shared-search identity. Real cookie REST/DrillApi/HintService/scheduler/Mock engine controls show
+two action IDs sharing one search; old delayed POST/DELETE cleanup leaves the new waiter alive
+and it completes. Same-action retransmission joins; invalid keys acquire zero sources. Run-bound
+controller clients and original-action admission prevent wrong-run cleanup and invented cleanup
+from malformed/refused replies. Final focused504/eight30.31s and bounded independent review pass;
+this is mechanical ownership evidence, not chess strength or native layout. `[V]` same test,
+`guided-hint.test.ts`, `session-controller.test.ts`, service/lifetime controls and existing
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md` receipt.
+
+Native retry86515 builds but cannot start under existing D3928 corpus grade@i1→@i2 mismatch;
+no browser/parent/qualification/release clearance follows. Normal repeat42712 passes all13572
+software cases/all495files349.95s, isolated performance7/four56.86s, types/build/4559authority/
+375semantic and complete governance. Real content remains261pass/60fail/18setup-blocked cases
+43files32.20s; later corpus recipes are unreached. The first full census failure and conventional
+test-support boundary correction remain recorded in the log and independent review.
+`[V]` `planning/exploration/log.md` and the normal Make terminal results recorded there.
+
+### 2026-11-04 — Repeated-position and inherited preview caller proof (D3979)
+
+The same modern saved game reaches identical SAN/UCI/placement at its first and fifth knight
+move, with different full FEN counters. Actual cookie REST incoming-edge requests open each
+preview from its original parent and step to its original child; captured emitted callbacks
+reconnected after endpoint replacement cannot reopen the retired owner. Contact and overload
+source pages also step every original frame across main/inherited branches in both colours,
+with all HTTP replies200 and unchanged saved cursor/provider work. `[V]`
+`apps/web/src/lib/evidence/move-path-callers.test.ts` and its genuine stored-service fixture.
+
+Active Play cross-tab settings are a separate scope: actual Quiet retires an open source preview;
+restoring Analyze does not acquire its source until fresh explicit demand. The test uses the
+supported storage event while the modal makes its background menu inert, and checks visible
+preset labels, real server authority, old callback rejection and unchanged stored play. Final
+75398 passes35/three8.27s;70770 types are clean and independent bounded review accepts. `[V]`
+`preset-change.test.ts`, existing compiler2 review and exploration log. Product source is
+unchanged since the13572-case full run; that full pool predates these added tests. Actual
+historical target/run/branch/health/access and native/default-startup duties remain open.
+
+### 2026-11-04 — Genuine historical notifications and the run-switch failure (D4063)
+
+Historical target/branch/run/provider-health/access×both learner sides now uses actual SQLite,
+registered cookie sessions and the original server confirmation/source paths. A second principal
+receives a real owner-issued host grant; revocation returns404 before source collection and
+confirmation fails until the owner restores it. A real Explorer descriptor receives injected
+HTTP401, settling its original ProviderRegistry snapshot; local math can be explicitly confirmed
+again independently of that failed provider. `[V]` `inspector-source-browser.test-support.ts` and
+`evidence/move-path-callers.test.ts`, actual service/registry methods rather than fabricated props.
+
+Genuine run replacement fails in both colours before repair: the old selected branch is rendered
+against the replacement run before the reset effect executes, raising UNKNOWN_BRANCH and leaving
+the old modal. Guarding selected-branch membership before calling canonical branchPath fixes the
+transient state without catching or weakening canonical graph errors.587/nine57.49s, clean types
+and independent bounded review pass; full13591software/all495files361.80s(no skips), performance
+7/four58.97s, types/build/4559authority/375semantic/governance pass. Content remains261pass/60fail/
+18setup-blocked cases43files33.93s at D3928. `[V]` `HistoricalInspector.svelte`, cited actual cases,
+existing compiler2 review and `planning/exploration/log.md` terminal57005.
+
+This proves retirement when observed notifications reach the component. App forwards fresh
+capability/access snapshots through its existing workflows; it does not supply continuous
+external-change discovery. No missing binding was found in that source trace, and no polling/SSE
+contract is invented. Native/default-App proof remains open under D3979. `[V]` `App.svelte`,
+`DrillScreen.svelte`, `run-state.ts`, `session-controller.ts` and the cited independent review.
+
+### 2026-11-04 — D4060 is a twelve-source presentation gap
+
+The full event class is eleven STRUCTURAL_EVENT_FAMILIES plus pawn islands, not only the eight
+ordinary structural-card families plus islands. Every original exact route accepts the existing
+EvidenceEdge `{ beforeFen, moveUci, afterFen }` and validates its legal edge. None of the twelve
+is a current Full Inspector topic/local supplier. `[V]` `evidence-catalog.ts` declarations,
+`evidence-factories.ts` structuralEventsForEdge/STRUCTURAL_EVENT_FACTORIES/pawn-islands factory,
+`internal/evidence-value-routes.ts`, `inspector-source-topics.ts`, `inspector-local-source.ts`.
+
+The extra three are piece_count, direct_attack_count and line_blockers. Their exclusion in
+MODULE_POSTCOMMIT_EVENTS is an ordinary Nudge eligibility decision; it is not an established
+ban on explicit Advanced Inspector. Reusing that eligibility or postcommitEdgeEvidence would
+silently filter the requested original population. The current eight-family structuralEvent
+renderer selects after-or-before and omits count/role, so widening its enum cannot deliver the
+complete before/after source. An Inspector-only constructor/closed operand parser/renderer is
+needed under an independently accepted amendment; existing normal-card policy must stand. `[V]`
+`evidence-catalog.ts` MODULE_POSTCOMMIT_EVENTS, `postcommit-nudge.ts`,
+`presentation-inspector-adapters.ts` structuralEvent/STRUCTURAL_FAMILIES and source review.
+
+Non-vacuity is source-specific. piece_count always emits twelve color/role states, including
+zero; islands always emits two color counts, including0→0. These cannot honestly be tested as
+no-witness on a valid edge. Direct-attack populations retain positive geometric counts on a
+non-pawn target, with absence represented by null; line blockers retain ordered ray endpoints
+and counts including zero. Optional populations may be absent, while a root has missing incoming
+context. Preserve original roles, colors, counts, ordered identities, nulls and unchanged values
+through whole-occurrence paging; do not manufacture a common empty predicate. `[V]`
+`structure.ts` structuralReading, `semantic-evidence.ts` structuralSubject and
+structuralSemanticEventPayloads, `evidence-factories.ts` and cited source-owner code.
+
+This research supports an exact source/query/presentation amendment, not new detector/search,
+ranking, ordinary unsolicited noise, pack migration or semantic qualification. No new source
+implementation is authorized by this dossier. The current closed68-topic/74-pair image needs
+independent contract acceptance before expansion. `[V]` `rfc/module-registration.md` §4.11a/§4.11c,
+`rfc/evidence-presentation.md` and `design/BACKLOG.md` D4060; next work stays on the existing row.
+
+### 2026-11-04 — Current grade selection and pinned-report presentation loss (D3767/D4064)
+
+This is a synthetic source/delivery/selection experiment, not chess grading validation or a
+natural-game prevalence estimate. Replay `make grade-selection-measurement`: the explicit
+research target typechecks the instrument and runs173 tests in two files. Its small
+regenerable JSON outputs live only under ignored `.cache/`; ordinary CI/progress checks do not
+read or require recordings. The maintained evidence is this bounded result and its executable
+instrument, not a new hash/freshness system. `[V]` `Makefile` grade-selection-measurement;
+`tools/d1865-evidence-assembly-harness/{grade-presentation.test.ts,grade-source-selection.test.ts,grade-offline-fixture.ts,grade-cases.ts}`;
+final24608:173/two4.18s, including explicit actual source-origin/requested-bound assertions.
+
+**Grade alone.** The original recorded-source factory, current Nudge2 admission/reducer,
+registered full renderer, strict presentation receipt and whole-bundle fit execute unchanged.
+Provider cases use genuine typed synthetic delivery attachments through their existing runtime
+source owner. Offline cases use an in-memory current synthetic pack and complete original
+ledger/manifest through actual PackRegistry/SQLite/RunService ownership; no existing pack,
+sidecar, migration or installed-content requirement is changed. Its immediate_guard policy is
+legal, and the workflow comes from deriveWorkflowContext over actual server authority (onramp
+for this fixture), not a false delayed-policy reveal or an assumed raw pack context. Both movers,
+all three loss arms and all three severity classes execute. Provider requested bounds are depth12,
+100ms and2000nodes; offline tested bounds are depth12 and100ms. Engine19/generation1 and the
+offline Threads1/Hash16/MultiPV1 profile are synthetic fixture inputs. This does not quantify
+other engine/version/profile strings or unsupported inputs. `[V]` cited instrument and original
+`recorded-grade-source.ts`, `grade.ts`, `recorded-engine-endpoints.ts`, `presentation-contract.ts`,
+`module-query.ts` fitModulePresentation.
+
+| Original source class | Cases | Full grade fits alone | Words | Loss |
+|---|---:|---:|---:|---|
+| provider_delivery |54|54|42–48|none|
+| pinned offline_engine |36|16|47–53|20 whole facts dropped solely at words|
+
+For the pinned source, mate-lost inaccuracy is50 words and fits; its mistake/blunder variants
+are52 and fail. Mate-allowed variants are51/53/53 and all fail. The20 failures are eight
+mate-lost and twelve mate-allowed cells over the two bounds/two movers. Grade admission and
+complete source retention succeed before fit; no rival fact is involved. This is **D4064**, a
+representation/budget failure distinct from selection starvation. Priority cannot repair an
+oversized standalone fact. This source/format proof is not offline pack HTTP/DOM/native proof
+or an assertion that every real pack has such an engine report. `[V]` grade-presentation.test.ts
+actual payload origin/bound/arm/class, cost and exact dropped.exceeded checks; grade-offline-fixture.ts.
+
+**Canonical selection.** Eighty original-source strata execute actual SQLite, real cookie
+authorization and REST modules/query followed by the strict client. Only the password derivation
+is a fast stand-in; credential hardening and live engine/coordinator behavior are not measured.
+The nine accepted Nudge windows are derived from actual consumer/acquisition and asserted equal
+to the eight POSTCOMMIT_OBSERVED_WINDOW_REFS plus trade_completed@2. Contact timing and defender
+consequence are not silently imported from Inspector. Original positive paths, both colors,
+four critical event classes, inherited endpoints, a quiet edge, actual repeated-grade ancestors,
+and missing-before/missing-after/incomparable/below-threshold cases execute. Observational wrappers
+delegate the real source owner and compileModulePacket unchanged. The privately issued selected
+source must retain original parent/child/branch. Reconstructed admission/order/dedupe/subsumption/
+novelty/backstop and complete presentation/fit equal the actual query result and strict received
+items/budget, including identities/multiplicity. Stored run bytes remain unchanged. `[V]`
+grade-source-selection.test.ts; `recorded-grade-sources.ts` postcommitSources;
+`module-query.ts`, `module-packets.ts`, `module-reducers.ts`; `module-query-response.ts`.
+
+There are60 populated grades: eight reach the client (quiet and repeated-quiet strata), while52
+survive through novelty but lose at the two-fact backstop. There is no actual post-selection fit
+loss in this provider-backed census. Twenty cases honestly have no grade:12 missing_eval,
+four unequal_instrument and four comparable available-empty/below-threshold outcomes. The four
+terminal checkmate cases deliberately have no final engine report; this is a missing-report
+control, not a theorem that a terminal position can never receive a grade. Novelty abstains in
+all60 populated-grade cases, including four whose genuine ancestor already has a grade; do not
+claim repeated-grade suppression. Source availability, reducer loss and presentation loss are
+separate findings. `[V]` same current instrument; original source/factory outcome and stage checks.
+
+**Fit sensitivity, not an implemented policy.** Offering the current grade and first selected
+rival alone to the unchanged fit function requires49–73 words in the52 crowded strata. Both
+facts fit in28;24 exceed words in either hypothetical order. Putting the grade first merely
+changes which whole fact is deferred there. These explicitly labelled pair-fit rows do not
+mutate the real selection. Actual critical/window precedence stays unchanged; hypothetical
+orders are not permission to override it, increase budgets or hide source operands. `[V]`
+grade-source-selection.test.ts hypotheticalPairFitOnly; current module-query.ts fit function.
+
+Six actual cookie REST/strict-client/mounted Svelte controls corroborate both-color quiet-grade
+display and overloaded-window/castling grade nonselection, exact complete sentences/items,
+no provider calls, no move/rewind mutation and unchanged stored run. The first UI harness read
+the Inspector-only status log instead of the module HTTP log; correcting the instrument yields
+17/one6.73s, including11 original controls. Chessground is the existing DOM test stand-in;
+this is not geometry/native proof. Final broader shared-fixture cohort41684 passes159/four
+47.90s; the independent research gate accepts authoring one joint amendment, with no remedy yet
+accepted. The existing compiler2 review receipt records that bounded decision. `[V]` `apps/web/src/lib/preset-change.test.ts`;
+`inspector-source-browser.test-support.ts` modulesRest/httpCalls; final54577, workspace typecheck22425.
+
+The evidence now supports a joint representation/selection amendment under D3767/D4064 before
+production changes. Source/provider/renderer/protocol/default policy remain unchanged. Current
+partial measurements do not close either defect, the module parent, native/default-content
+D3928/D3979, grading qualification or release. `[V]` accepted module-registration§4.5a and
+evidence-presentation contracts, BACKLOG and existing compiler2 independent review receipt.
+
+### 2026-11-04 — Accepted grade remedy: bounded implementation remeasurement
+
+[V] Following independent joint acceptance in the four current RFC clauses, the same explicit
+make grade-selection-measurement instrument now strictly typechecks and passes173/two5.03s.
+All90 source-owned grade variants retain complete operands and fit the concise Nudge renderer
+at8–11 canonical words; every manual report is available whole and byte-equal to the unchanged
+renderMoveQualityGrade/Review report. Literal/spread copies refuse the helper, and full Review
+items receive no alternate Nudge disclosure. The full-report check rejects the compact summary.
+
+[V] The same80 original source-owned/cookie REST/strict-client strata now deliver40/60 available
+grades, compared with8/60 before. The remaining20 grades lose to completed-window/critical
+precedence at the two-fact backstop, with zero actual fit drops. All20 no-grade outcomes remain:
+12 missing_eval,4 unequal_instrument,4 genuinely available-empty. Quiet/repeated, e-pawn, trade,
+harassment, attraction, square clearance, promotion/castling/last-of-role examples contribute
+selected grades; the other five measured window setups legitimately fill the earlier slots.
+This is the fixed synthetic-score corpus, not a prevalence, detector-quality or engine-quality
+estimate. The original research numbers above remain the before measurement.
+
+[V] Eight actual mounted disclosure controls pin default full-text absence, exact manual report,
+Escape/focus, true oversized source status, unmount/region/inactive/packet and retained handler
+retirement. An independent source review found same-item close/reopen ABA, and the emitted
+Svelte handler test caught its latest-value-wrapper variant. Keyed handlers and per-opening
+epochs now pass actual retained Open/Close invocation. The existing six cookie REST/current
+DrillScreen controls additionally test local report opening/no work and Quiet retirement;
+broader focused software1044/eleven15.70s passes. Full gates/final independent implementation
+closeout are still in flight; actual native startup remains separately held D3928. Source:
+the two grade research tests, evidence/grade-measurement.test.ts, preset-change.test.ts and
+the existing compiler2-independent-review-2026-11-02.md receipt. No chess qualification.
+
+### 2026-11-04 — Bounded grade implementation closeout, distinct from consumer acceptance
+
+[V] Independent compiler2 final review accepts D3767/D4064/D3766's bounded selector/summary/report
+implementation. Full normal25264 passes13804 software cases/all497 files in370.27s, zero skips;
+7 performance/four56.88s; types/build/4667authority77/375semantic/complete governance pass.
+Final3027 current test types report0errors0warnings, and the strict instrument passes173/two3.93s.
+The pair instrument now records the actual fitter budget.before with exact2facts, rather than
+calling a one-fact bundle cost for two facts; no source/ordering/word measurements changed.
+
+[V] Actual12 cookieREST→strict client→selected DrillScreen reports cover provider/offline origins,
+all3arms and both colours, pin actual instrument/arm/full text and no extra HTTP/provider/write/
+move effects. Stored append-only repeated edges, inherited branches and different runs retain
+equal canonical report text while retiring original controls; actual shared-host grant revoke/
+restore plus the observed role update retires them too. This is not automatic external discovery.
+Six real grade@2→registered rendered-view→voiceCheck controls now prove exact-summary licensing,
+wrong-class/empty-grade refusal, no manual/full-report licence from raw operands, and Review's
+own full-report licence. Full checker/complete operands and true overflow negatives remain.
+
+[V] The full gate remains nonzero only at actual content261pass/60fail/18setup-blocked43files
+33.82s; later corpus recipes were not reached. Native rebuild succeeds, then actual prepare-start
+refuses anti-caro-advance-early-c5.json (missinggrade.move_quality@i:2/obsolete@i:1), zero journeys.
+No fixture bypass or content migration was applied. D3928/default-native/D3979, qualification,
+parents and release stay open. D3765 independent consumer review retains an exact9-cell current
+authenticated drill/Nudge + position Review + imported Review source-parity duty at0→−28/−66/
+−157; those checks are not substituted by runtime-only fixtures or by the bounded repair.
+Sources: current Make outputs25264/3027, the existing compiler2 review receipt, voice.test.ts,
+preset-change.test.ts, presentation-inspector-adapters.test.ts and review-map.test.ts.
+
+### 2026-11-04 — Structure's recognition source is never selectable (D4095)
+
+The accepted current point-source cutover exposes a selector defect that acquisition alone cannot
+repair. Actual registered ShapeRegistry→SQLite/RunService→strict receiving queries in both colors
+admit a positive current firing3 but select `rules.structural.reading.pawn_connectivity@1` instead.
+The ordinary cookie REST→DrillApi→mounted Structure seat retains exactly that selected receipt and
+sentence. Theory's separate on-request seat selects and displays the genuine firing3 with its
+registered attribution. These are synthetic legal paths, not natural-game prevalence or chess
+usefulness measurements. `[V]` `apps/server/src/module-shape-source.test.ts` current+ancestor cases;
+`apps/web/src/lib/screens.test.ts` “current point-module cookie REST to mounted seats”; normal
+focused189/six and mounted309/one execution logs are local `/tmp` instruments, not required assets.
+
+The cause generalizes beyond those samples. Structure's unchanged source list always constructs
+`rules.phase.reading@2`; the current original phase factory yields one convention fact even for
+`unclear`. `witnessedEvidence` retains that fact. `orderAdmittedFacts` orders convention before
+authored, ahead of declared family precedence, while current firing3 is honestly authored.
+Neither fact belongs to a current equivalence/subsumption relation. The novelty filter sees
+unregistered phase/shape families, explicitly abstains and preserves them. `applyBackstop` keeps
+only the first fact before adapters/fit. Thus with normal successful current phase acquisition on valid supported positions, every
+successfully admitted authored shape loses to at least phase, whether another exact structural
+reading is present or not. Historical firing1
+had the same source-risk ordering; this is a pre-existing whole-class delivery problem, not a
+reason to change current shape exactness. `[V]` `module-query.ts` sources/witnessedEvidence;
+`evidence-factories.ts` createRulesPhaseReadingV2Evidence; `phase.ts` phaseBandReading;
+`module-reducers.ts` exactnessOrder/orderAdmittedFacts/FACT_EQUIVALENCE_CLASSES/SUBSUMPTION/
+applyPositionNovelty/applyBackstop; `module-policy.ts` structure_nudge; `module-packets.ts`.
+
+A lower source-risk ordinal is not a judgement of pedagogical significance. That conflation
+prevents the module's declared recognition/action intent—“what kind of position” and opening a
+cited shape entry—from succeeding. Merely reordering the source array or familyPrecedence cannot
+repair an earlier exactness key. Increasing the one-fact budget, filtering rivals in fixtures,
+shortening names, promoting authored matches to convention truth, and claiming source coverage
+as selected delivery would each evade the demonstrated failure. `[V]` cited exact production
+sort and backstop; `module-policy.ts` intent/learnerAction/budgets; accepted
+`rfc/module-registration.md` §4.6 and D4082 source-only selection preservation clause.
+
+This establishes the research gate for a separately reviewed, Structure-only deterministic
+selection amendment. Authoring must declare the finite recognition families, their relationship
+to generic phase/space/connectivity summaries, simultaneous named-structure/setup/authored-match
+behavior and existing within-group ties. Preserve actual source risk, all source operands,
+nonshape availability, existing ceilings/timing/novelty and 1fact/80word atomic fit. No statistical
+ranking, stronger chess claim, new detector or whole-product completion follows. Before acceptance,
+run actual full-source stage controls for both colors, named/setup/authored and simultaneous
+recognition, no-match and unavailable, generic-only, inherited ancestor and budget-deferral cases.
+Trace admitted→ordered→novelty→backstop→fit→strict selected identities; the current four positive
+UI cases alone do not prove an amendment. `[M]` bounded remedy recommendation derived from the
+verified class proof above; D4095 owns the still-open remedy and executable controls.
+
+### 2026-11-04 — Owned encounter recommendations and a sentence that exceeds its evidence
+
+The recommendation consumer cannot treat storage visibility as personal history. Actual
+SQLite.list includes unexpired shared-host grants; a genuine owned multi-branch run and another
+person's readable host run first produce the wrong personal count. The accepted async cutover
+uses stored owner identity, complete pre-await paging, full original replay/branch paths and
+current registry-owned firing3 scans. Original source, whole owned history, account/session,
+progress and exact pack records are rechecked around yields. This is bounded source/delivery
+proof, not natural prevalence, chess usefulness or play-style inference. `[V]`
+`apps/server/src/shape-recommendations-source.test.ts`, `service.ts` shapeRecommendations,
+`storage.ts` list/ownerLearnerId and accepted `rfc/module-registration.md` D4082 clause.
+
+Actual controls distinguish per-run dedup from distinct-run counts;13 eligible patterns from
+10 displayed; current `present` links/exclusions from `prospective`; unavailable from genuinely
+installed-empty; same-count second-page replacement from an unchanged population; and a complete
+initial match from a later failed branch. Real cookie/session expiry/logout, signal and mounted
+Learn request epochs retain those distinctions. The source-specific outpost pair proves current
+explicit-ref truth while its actual absent-ref entry remains a nonmatch, in both colors; this
+would not be established by a piece-occupancy positive alone. `[V]` cited source tests;
+`progress.test.ts`, `app-shell.test.ts` actual-source recommendation cases; focused35/two and
+160/three; final normal software14,241/all516 and7isolated performance/four pass, including types/build/source. Actual content retains60fail/261pass/18setup-blocked and the exact same62 failure headings. Full execution is recorded in `planning/foundation-source-identity/plan.md`.
+
+A separate wording counterexample is real: a projected countable attempt in a registered
+prospective pack is correctly not an eligibility exclusion, yet the previous sentence claimed
+there was no attempt in every pack/rehearsal naming the pattern. That conclusion is broader than
+its operands/policy. D4102's actual fixture first fails; server/client now state the supported
+encounter count, with exact sentence parity and unchanged eligibility/DTO/actions. This repair
+needs no new judgement, schema or synthetic grounding. `[V]` `progress.test.ts` actual registered
+present/prospective/countable source fixture; `progress-response.ts` progressRecommendationSentence;
+focused43/three3.00s; independent bounded review in the existing compiler2 receipt.
+
+The new await also exposes an adjacent lifetime class: a different contribution captured before
+I/O can remain stale even when the new shape source rechecks correctly. Actual repertoire deletion
+while a real scan is held first leaks the deleted recommendation. Reading that synchronous
+contribution after successful shape completion/final auth fixes D4098. This does not fix the
+repertoire's own pre-existing answered/stale scan semantics (D4099), nor isolate a failed optional
+recommendation section from Learn's other usable data (D4101). Source, composition and UX remain
+separate obligations. `[V]` actual D4098 HTTP source control; `rest.ts` progress/recommendations;
+`repertoire.ts` recommendations; `App.svelte` Learn Promise.all and source plan.
+
+### 2026-11-04 — Remaining recorded style inputs are not candidate/FEN fields
+
+D4076's candidate-role source authenticates the exact legal move and source piece, but contains
+no original recorded path index or access grant. R12's early-queen experiment used the zero-based
+move-loop index before applying that move, not FEN fullmove counters. A custom/truncated root can
+therefore disagree with a FEN-derived index; a genuine arithmetic candidate cannot fill the missing
+recorded-context operand. `[V]` `packages/runtime/src/foundation-style-sources.ts` CandidateRoleReading;
+`evidence-factories.ts` candidate-role invocation; `tools/r12-player-style-harness/measure.test.ts` recorded move loop; accepted
+`rfc/foundation-source-identity.md` §3.8/§3.8a; independent source preflight in the source plan.
+
+D4103 is a distinct missing contract, not missing castling arithmetic. Existing castlingRights
+reads exact per-color retained rook-origin rights, including Chess960; current castlingLegality
+also considers blockers/check. Neither function chooses the stored color's first decision in an
+original recorded prefix. The accepted source row currently names that grain but not the private
+input issuer, exact first-decision/pending-endpoint selection or typed absence before the stored
+color has a represented decision. `[V]` `packages/runtime/src/castling.ts` castlingRights/
+castlingLegality; `rfc/foundation-source-identity.md` §3.8 and its projection plan; independent
+source review recorded in `planning/foundation-source-identity/plan.md`.
+
+RecordedReviewBoundary is an existing reusable storage/path boundary: it checks original event
+replay, unique creation events, legal edges, stored import identity and current storage before
+narrowing the original rooted branch path. It explicitly issues no read/assistance permission.
+The actual application owner must compose current account/run access and cancellation, as the
+existing recorded-grade source owner does. A generic seal, run.record.position invocation or typed
+semantic call cannot replace that composition. This is source analysis, not a new running source,
+consumer, learner occurrence or semantic qualification. `[V]` `recorded-review-boundary.ts`,
+`evidence-factories.ts` readRecordedPositionInvocation; `apps/server/src/recorded-grade-sources.ts`
+RecordedGradeSourceOwner.resolve/read. Bounded §3.8 clarification is under independent review;
+its proposed selection semantics are authoring, not observations of current behavior.
+
+### 2026-11-04 — Optional availability and the real first-move gap
+
+D4101 is reproduced through the actual recommendation endpoint: typed503 replaces all Learn with
+the page error, while a held genuine200empty delays usable core data. The accepted event-fact
+recommender is strictly additive and cannot determine another surface's availability. Independent
+review confirms isolating only this section restores that contract; the endpoint still refuses
+unavailable whole-source results. The correction uses local pending/ready/unavailable and exact
+learner/visit/request ownership, with source-changing repertoire mutations suspending publication
+until settled. This is bounded delivery/lifetime proof, not evidence of coaching usefulness or
+native accessibility. `[V]` archived `orphan-completion.md` §3; `return-and-progression.md` §12/A9;
+`apps/web/src/App.svelte`; actual controls in `app-shell.test.ts`; independent review in the existing
+compiler2 receipt; source plan records final gates.
+
+The first retained-button test after reentry ended in valid empty, so it could not falsify an
+older callback accidentally adopting a new failed request. The replacement enters a new unavailable
+state and invokes the actual captured emitted handler, with a current usable Retry as positive
+control. A separate same-visit failure→retry→failure control first starts an unwanted third read;
+request-specific callback and deferred-focus ownership repair it. Route/account/unmount and actual
+repertoire delete/scan/answer controls retain this distinction. `[V]` `app-shell.test.ts` D4101
+cases; `App.svelte` recommendationRetryFor/retryRecommendations; real older-handler red1/144.
+
+D4104 is a producer/receiver mismatch, not missing corpus evidence. The accepted root-no-answer
+scan emits empty reply/line, gamesUntilSeen1 and queriesUsed0; the actual cookie response is200,
+but the former decoder rejects empty replySan. The corrected explicit assertion fails in34ms,
+rather than treating the earlier unresolved helper timeout as the source result. The receiver
+now admits only that exact sentinel and refuses near-sentinels; both stored colors reach mounted
+starting-position copy, with no blank move slots or sampled-frequency claim. Server/client exact
+copy and the mandatory corpus guard agree. This closed-wire consistency check does not authenticate
+a root independently; the original scan remains the source. `[V]` `repertoire.ts` root scan and
+recommendations; `progress-response.ts`; `shape-recommendations-source.test.ts` parity;
+`progress-response.test.ts` negatives; actual both-color API/mounted cases in `app-shell.test.ts`.
+D4099 answered/stale-gap semantics remain open.
+
+D4105 is a separate root-summary category error: the actual mounted repertoire list calls the
+root a reply above the learner's bound. Both-color controls reproduce that wording2/147, despite
+empty reply/line and queriesUsed0. Independent review distinguishes this from a mathematical
+error: the accepted model normalizes declared-root mass to1 and derives gamesUntilSeen1. The
+correction uses scan-time first-answer wording and retains current answer/stale states; source
+arithmetic and ordinary nonroot frequency rendering remain unchanged. Actual root source fields
+and answered-e4 control are asserted;207/five pass after repair and bounded review accepts it.
+Full final gates are in the source plan. `[V]` archived `repertoire-gap-finding.md` §2 root/mass
+rules; `App.svelte` gap-results; `app-shell.test.ts` both-color root and actual answer controls.
+
+
+### 2026-11-04 — Recorded candidate/rights source boundary
+
+[V] The foundation now has27of28 actual verified source/value factories: original recorded
+prefix/decision owners supply exact early-queen candidate indices and first represented stored-
+color castling rights. Actual SQLite/RunService controls include pending endpoints, alternative
+candidates, custom root/FEN counters,15/16 boundary, promotion source role, Chess960/blocked/
+checked/all-false rights, inherited branches and retained account/grant/head/import/abort
+retirement (`apps/server/src/recorded-foundation-sources.test.ts`; `rfc/foundation-source-identity.md`
+§3.8c). Separate source/ABI and consumer/meaning reviews and final normal software14289/517 plus
+performance7/four/build pass. Actual content retains its exact60-failure/62-heading baseline.
+These experimental source factories add no actor occurrence, automatic collector, learner/bot
+consumer or semantic qualification. Clock is still missing. D4077's runtime/census caller duties,
+D4095 selection and D3928 content/native remain open; source inventory is not selected UX delivery.
+
+
+### 2026-11-05 — Current authored timing and transition sources
+
+[V] Current timing/transition operations now admit complete consumer2 and all original opening,
+closing and compiled boundary origins before outer early exits, while acquiring only visited
+board leaves. Actual validator-issued pointers, closed authoring/objective purpose, default
+resolver propagation, unavailable diagnostics and registered-source retirement are exercised in
+`apps/server/src/authored-tempo-transition.test.ts`. Two real registered packs perform owned
+SQLite/RunService moves and exact persisted objective/replay with the engine unavailable; these
+are source/operation facts, not detector or engine qualification. Separate source and consumer
+reviews plus final14304software/518+7performance/four pass. Current type/source/authority/build
+and content60fail/261pass/18setup-blocked retain exactly62old headings after two content fixtures
+were corrected to genuine issuers. D4106/D4108–D4113 close bounded duties; D4107/authored census,
+clock, broader callers, semantic qualification, content/native and whole capability remain open.
+
+
+## 2026-11-05 — Authored census/witness evidence and receiver faults
+
+The authored census now selects typed original roots from real validator-issued documents and
+awaits actual temporary ShapeRegistry dependency admission. Draft source authority survives a
+semantic validation refusal where the issuer legitimately captured the schema/static-valid
+original; a selected external draft does not become a registered dependency. Plan-consequence
+and transition-position roots are counted, with nested structural nodes kept inside their owning
+visitor. All five production callers await the report. `[V]` (`apps/server/src/expression-census.ts`;
+`apps/server/src/authored-census-source.test.ts`; `shape-check.ts`; `graduation-clearance-corpus.ts`;
+`sourcing/graduation-clear-cli.ts`)
+
+Independent review found three authority/receiving failures: unverified caller-claimed corpus
+hits could establish satisfiability (D4114), the CLI's cwd slicing lost external-file diagnostics
+(D4115), and returned witness-only evaluation failures did not become report faults (D4116).
+The repaired actual controls verify false/malformed/real hits, original/copy/retired sources,
+legal versus illegal witness moves, all three explicit convention refs, unavailable trigger
+populations, and a source failure confined to a custom witness FEN. That last case has successful
+corpus and degenerate probes, exactly one fault, the precise external-file receiving error and
+no other-file diagnostic. Focused25/three passes5.34s; final normal gates remain in progress.
+These are synthetic software/source-boundary observations, not natural prevalence or chess
+qualification. `[V]` (`apps/server/src/authored-census-source.test.ts`;
+`apps/server/src/expression-satisfiability.test.ts`;
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`)
+
+At the initial review, a separate outer standalone-validator catch mapped thrown operation failures
+to FILE_READ_ERROR while safely failing validation (D4117). Its repaired read/JSON versus actual
+compiler/source boundary now passes actual file/registry/receiving controls and independent review.
+The census loader rejects a thrown admission failure rather than claiming false/no-fire. No complete
+authored-content, source-qualification or release inference follows. `[V]` (`apps/server/src/shape-check.ts#checkShapeFile`;
+`apps/server/src/shape-validation.ts#validateShapeEntry`)
+
+
+2026-11-05 final discharge for this bounded slice: D4107/D4114–D4118 close locally after the
+independent source/meaning reviews and final normal14318software/all519files447.41s,
+7isolated performance/four60.07s, types and actual server/web builds. Source-author11 passes.
+Actual content remains60fail/261pass/18setup-blocked43files194.59s, all62 old headings identical.
+The new10s regression first failed at506.99s and285.38s full-content readings; it passes after
+original-occurrence projection, scoped successful-only reuse and genuine immutable input2 reuse.
+The old40.13s pure-matcher cost is not claimed restored. Actual visitor count, positive reference
+parity, transient retry, distinct original source handles/root/population/proof and same-byte
+registry retirement controls retain source checks and corpus/assertion/deadline scope. D4119
+records separate CLI per-file batch cost; D4077/read-only report/clock/caller/qualification/native/
+content/release remain open. `[V]` (`apps/server/src/authored-census-source.test.ts`;
+`packages/runtime/src/evidence-factories.ts#createAuthoredStructuralConditionInputV2Evidence`;
+`planning/foundation-source-identity/plan.md`;
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`)
+
+
+## Authored legacy/successor literal comparison, 2026-11-05
+
+[V] The accepted report calls real document validators, registry, original sources and the current
+dispatcher; all36exact sites and827expected/replayed positions are covered. One-ref experiments
+retain standalone/enclosing results and actual trace operands separately. King30/30, backward0/0
+and outpost242/7 are site-position changes on this fixed population, not joint migration or general
+prevalence. Every author decision remains pending. Exact baseline and permanent alias/replay/
+source/admission controls: `rfc/contracts/foundation-authored-convention-sites-v1.json`,
+`apps/server/src/authored-convention-migration.test.ts`, `apps/server/src/authored-convention-migration.ts`.
+Both independent reviews and final normal14334software/520+7performance/types/build pass;
+actual content retains all62previous headings/60failures. Detailed receipts/limits and finite
+D4066/D4068/D4069/D4071/D4120–D4122 closeouts are in
+`planning/foundation-source-identity/plan.md`. No authored migration/qualification/release claim.
+
+
+## Retained original clocks before source construction, 2026-11-05
+
+[V] Original same-game legal parser extraction precedes stripping for paste/fetch. Actual SQL32
+and account lifecycle retain typed numeric sparse samples and complete original node/session
+mapping; unexpected source failures remain retryable null. Both independent reviews found and
+then accepted D4123/D4124/D4125 repairs with genuine truncated/extended/fork/JSON/internal-fault
+controls. Final14394software/523+7performance passes; current155/two App checks/types/rebuild
+cover the disclosure, and actual content retains all62prior failure headings/60failures.
+Source28/private actor occurrence/API/readout remain absent, not implied by data retention.
+Sources: apps/server/src/recorded-clock-storage.test.ts, recorded-clock-import.test.ts,
+packages/runtime/src/recorded-clocks.test.ts and planning/time-controls/implementation-2026-11-05.md.
+
+## Original clock source and actor occurrence checkpoint
+
+[V] Actual SQL-backed original imports now feed private reading1/decision1 factories and the
+clock-specific imported/game occurrence. Source28 is implemented; selected-side cannot reattribute
+the mover and copied/resealed/retired source values refuse. Separate independent reviews and normal
+14434software/524+7performance/types/build pass. Actual content retains all62previous failure
+headings;91subjects remain unqualified. Historical consumer/API/strict readout, other six actor
+envelopes and native/live timing remain open. Evidence: `apps/server/src/recorded-clock-source.test.ts`,
+`packages/runtime/src/recorded-foundation-occurrence.ts` and
+`planning/time-controls/implementation-2026-11-05.md`. This is source implementation, not a
+player-style, learning-effect, UI or release claim.
+
+## Historical clock consumer delivery checkpoint
+
+[V] The actual original clock source and imported occurrence now reach their explicit historical
+consumer, authenticated API, strict receiver and selected Review readout. Complete retained operands
+and actual known row/parent/prior/root identities, observed help/access/account/route retirement
+and real emitted Retry control are checked. Independent reviews and final14464software/526+
+7performance/types/build pass. Actual content retains exactly62previous failure headings;
+375semantic cases still qualify0of91subjects. Evidence: `apps/server/src/recorded-clock-delivery.test.ts`,
+`apps/web/src/lib/recorded-clock-readout.test.ts`, actual App callback tests in
+`apps/web/src/lib/app-shell.test.ts` and `planning/time-controls/implementation-2026-11-05.md`.
+Native geometry/release, measured-live/enforced/broadcast and the other actor families remain open.
+
+### 2026-11-05 — Structure recognition proposal, complete-source stage evidence (D4095)
+
+The disposable `make structure-selection-measurement` instrument passes49cases/onefile3.02s and
+its dedicated clean TypeScript check. Forty-eight cells cover12setups ×bothcolors ×actual original/
+inherited branch subjects, plus the exact current consumer2/seven-ref image check. Every cell
+uses real registered shape acquisition, stored legal runs, cookie-authenticated REST and the
+strict receiving parser. A test-local reducer stable-partitions the unchanged original comparator
+into the proposed recognition/generic groups; no production policy or source filter is changed.
+It records/asserts full admission, original within-group order, ancestor novelty, one-fact backstop
+and atomic fitted items/budgets. Original saved-run bytes remain unchanged. `[V]`
+`tools/d1865-evidence-assembly-harness/structure-selection.test.ts`; normal Make session97136,
+local `/tmp/tabiya-structure-selection-research-final.log` (optional local output, not a required
+tracked artifact).
+
+Authored occupancy and repeated authored matches become selectable while keeping their original
+authored risk. Named IQP and actual Lucena setup facts retain convention risk and win simultaneous
+authored matches through the old within-group comparator. Generic-only, unavailable shape source,
+material classification positive/null and phase `unclear` preserve their source semantics; no
+missing-source state replaces a nonempty generic packet. Genuine100word authored title remains
+the selected whole fact but exceeds80words, so fitted output is empty with the existing compact-
+detail message and no generic backfill. Actual inherited branches preserve original node identity.
+These are synthetic legal source-stage controls, not natural-game prevalence, strategic usefulness,
+mounted UI or implementation proof. `[V]` same instrument assertions and actual collector/adapter/
+receiver paths cited in the preceding D4095 section.
+
+Initial research runs stopped at wrong harness imports, then4/49cells exposed a false instrument
+assumption: the catalogue deliberately defines Maroczy for White only. The repaired both-color
+named cells use the independently declared White/Black IQP entries; no detector/convention changed
+and no defect is inferred from that intended asymmetry. `[V]` `structure.ts` STRUCTURE_PREDICATES/
+STRUCTURE_METADATA; initial/current research logs, same test source.
+
+This discharges the bounded draft's pre-acceptance source-stage evidence requirement only. Both
+independent contract/control reviews are pending. D4095 stays open, production order unchanged;
+actual shipped policy/forged-summary/old-policy/other-module/critical/UI controls and normal full
+gates remain required before closeout. `[M]` execution-scope limit; draft `rfc/learner-modules.md`
+§3 Structure recognition amendment and `rfc/module-registration.md` §4.6 companion.
+
+### 2026-11-05 — Structure policy delivered and independently reviewed (D4095/D4139/D4141)
+
+Both reviewers accepted the bounded contract after49/one3.02s, then separately accepted repaired
+production/source/actual-selected receiving controls. The prototype now delegates to permanent
+`apps/server/src/structure-selection-source.test.ts`: the candidate returns the untouched actual
+compiler result; only the former-order comparison remains test-local. Genuine constructor forgery
+first fails1/49; original fact ownership plus identical immutable PRIMARY metadata now refuses
+false source risk and later mutation. Exact policy/currentconsumer2/closed7ref, old/other policy,
+critical and within-group controls preserve the contract. `[V]` those actual tests, module-reducers/
+module-registry tests and existing compiler2 independent review receipt.
+
+Actual mounted Structure now retains firing3/source/text/library href, refuses a held successful
+response after a real help-ceiling change and atomically defers genuine oversized recognition
+without generic backfill. Focused440/five33.96s+clean types pass. First full14519pass/4old-receiver
+failures across527files407.40s is repaired without source filtering; all re-digested strict
+renderer/binding/convention attacks now execute and refuse. Final69763 normal14523/all527software
+411.04s+7performance/four57.28s/types/build/source-author11 pass. Content54848 stays60fail/261pass/
+18setup43files166.14s, all62prior failure headings identical. `[V]` screens.test.ts, actual receiver
+tests and local Make logs; optional `/tmp` output is not a repository/CI input.
+
+D4095/D4139/D4141 close their finite local units. This is no natural-game prevalence/usefulness
+measurement, semantic qualification, native/default/whole-module/parent/release clearance. D3928
+content/native remains held. D4140's next original recorded occurrence clause is independently
+accepted, not implemented by this policy repair. `[M]` scope; current source plan and ledger.
+
+## 2026-11-09 — D4167 current source-to-consumer cutover map
+
+This is a production code/contract audit, not a natural-game prevalence or chess-meaning study.
+The existing 23-row source inventory remains authoritative; five authored-predicate companions
+are separate. All eight non-style position snapshots already execute in
+`candidate-population.ts::candidateChildReadings` using the original selected child position,
+legal map, connectivity and control inputs. Source construction is therefore not uniformly
+missing. Exact incoming-edge events and current learner delivery are the gap. `[V]`
+`planning/foundation-source-identity/projection-plan.json`, `candidate-population.ts:243–282`,
+`internal/candidate-child-reading-routes.ts` and `evidence-factories.ts:814–887`.
+
+| Family | Current exact source and joins | Operation and consumer consequence |
+|---|---|---|
+| Opposition | reading@3 is one complete legal-position snapshot with both kings and nullable unobstructed opposition. event@2 consumes ordered before/after reading@3 and exact legal move; stable color-identified king-pair subject; gained/lost/membership_changed; zero or one event | Candidate children retain reading@3. Local semantic closure, Nudge/Review and Full Inspector still request event@1. Holder change is one event, not the old two-color gained/lost pair. Old renderer cannot parse the new complete snapshots |
+| Backward pawn | reading@3 retains complete pawn domain, qualifying pawn/stop, controllers, supports, ahead pawns, occupancy, pseudo captures and explicit opposing-color half-open relation. event@2 joins stationary color/square first, then physical mover; gained/lost/membership_changed, no equal-row event | Child reading@3 is real. Shared old event@1 joins by file and uses old observations; new payload cannot be cast into it. Multiple same-file subjects and mover lineage must survive |
+| Backward advance | derived.pawn.consequence.backward_pawn_legal_advance@1 consumes original backward@3 plus genuine complete landing_captures@1 at actual resulting FEN/destination | Separate candidate consequence, not the event@2 population or an observed reply. Complete landing input may yield replies:[] when a geometric controller is pinned. No Inspector topic or shared edge operation currently publishes this source |
+| Pawn groups | derived.structural.reading.pawn_file_group@1 is one complete connectivity-derived snapshot. event@1 consumes ordered original group snapshots, exact move, color/file subject and full move/capture cause | Child snapshot exists; event operation/delivery absent. Not a one-to-one rewrite of doubled/isolated old boolean events: member changes while booleans stay true are real changes |
+| File class | derived.activity.reading.file_state@1 retains all eight files/four exact enum states and pawn memberships. event.file_state@1 emits only enum changes, preserving both complete rows and move/capture cause | Child snapshot exists; current open/half-open events and moved-heavy occupancy are different relations. Same-enum rank/member change is not a file-state event |
+| Stationary heavy-piece reveal | derived.activity.event.file_access_revealed@1 consumes each original file-state event; preserves unchanged rook/queen identity and complete nested cause | Missing from actual edge operations/Inspector. Different from derived.activity.event.open_file_occupancy@1, which describes the moving piece. Neither is a legal access/control/quality verdict |
+| Pawn islands | rules.structural.event.pawn_islands@2 consumes ordered original connectivity snapshots and exact move; per-color complete partitions; count_gained/count_lost/topology_changed | Actual operation/Inspector still emits two count-only @1 states on every valid edge. @2 emits only changed file partitions, including equal-count topology, excluding rank-only moves. Cannot reuse old sign or no-witness policy |
+| Slider rays | rules.transition.event.slider_ray@2 joins original physical piece/direction, actual captures, promotions and both castling relocations; nullable full rays, endpoint, strict interior and ordered blocker identities | Sole value route exists; actual transition/discovered suppliers use target-bearing @1. Board-edge endpoint is not a target. Equal-count blocker replacement matters. @1-derived discovered evidence cannot be relabelled as @2; that distinct target relation needs its own explicit successor analysis |
+| Future pawn challenge | derived.square.reading.future_file_challenge@1 is one complete legal-position snapshot under the fixed same-file/future-push convention | Actual child reading exists; no selected Inspector topic or ordinary module binding. Not a forced legal future sequence |
+| Capture migration | derived.square.reading.capture_migration_reach@1 is its separate complete snapshot | Actual child reading exists; must remain separate from future-file challenge and not silently broaden outpost exclusion |
+| Outpost candidate/occupation | derived.structural.reading.outpost_candidate@1 consumes original control and future-file snapshot; occupied_outpost@1 consumes that original candidate value | Both actual child readings exist; exact candidate also powers current authored outpost predicate@2. No automatic ordinary card, recommendation, survival claim or player-style conclusion |
+
+All rows are verified against `foundation-position-sources.ts`, `foundation-pawn-sources.ts`,
+`foundation-slider-sources.ts`, source factories and the original operation dispatch. `[V]`
+The seven style rows have separate real Profile/recorded/clock paths and remaining actor/role
+obligations in the source plan. They are not forgotten or reimplemented by this map. The five
+predicate companions retain their existing authored-population owner. `[V]`
+`planning/foundation-source-identity/plan.md`, `rfc/profile-game-facts.md`,
+`rfc/profile-choice-facts.md`, `recorded-foundation-sources.ts` and `recorded-foundation-source.ts`.
+
+### Actual consumer boundaries
+
+Full Inspector's current 80-topic/six-detail source image and local suppliers literally include
+old backward/opposition/island events. Its full before/after renderer is faithful to those old
+payloads, not the new ones. Nudge's exact eight-family @1 change policy is separate from shared
+collection; islands currently compares counts only. Review also receives the old full local
+closure through postcommitEdgeEvidence. Sight still uses the structural reading contract.
+`[V]` `inspector-source-topics.ts`, `inspector-local-source.ts`, `postcommit-nudge.ts`,
+`presentation-inspector-adapters.ts`, `module-registration.md` §§4.5a/4.11e and module sources.
+
+The candidate packet already retains current snapshots but its event closure is older. Avoidance
+still aggregates family/sign and emits its old derived.semantic_avoidance.*@1 values; it cannot
+receive subject-preserving successors by changing an allow-list. The bot policy compiler's
+features population is empty; no structural personality/score activation follows from retained
+readings. `[V]` `semantic-evidence.ts::localSemanticEventClosure/selectSemanticEvidence`,
+`candidate-population.ts`, `bot-policy-compiler.ts`, `rfc/foundation-source-identity.md` D3/D7/D8.
+
+### Bounded implementation order, without losing the rest
+
+1. Independently review explicit Inspector delivery for the seven current edge-event families:
+   opposition@2, backward@2, pawn_file_group@1, slider_ray@2, file_state@1,
+   file_access_revealed@1 and pawn_islands@2. This closes selected-edge delivery only. It needs
+   original complete input acquisition, exact topic/pair replacement and complete typed human
+   readouts. It does not need a new provider, public query kind, cache, source schema or ruling.
+2. Keep all eight current snapshot readouts and the separate backward-advance consequence as
+   explicit remaining D4167 obligations. Complete snapshots with large square/reply populations
+   need a concrete whole-source/detail paging contract; a generic raw JSON panel or silently
+   cropped single fact is not a solution. This is source presentation work, not absent collectors.
+3. Migrate shared local/candidate events under their existing operation owner with exact version,
+   sign, identity, population and unavailable semantics. Independently validate current event
+   versions, then migrate ordinary Sight/Nudge/Review and subject-safe avoidance under their
+   existing owners. Source reach and finite qualification do not themselves choose significance.
+4. Bot feature compilation and grounded ordinary support still need explicit consuming policies;
+   do not count this Inspector stage as either completion. Authored packs, longitudinal style,
+   native/default-App and content/release holds retain their current owners.
+
+Steps 1–4 are delivery sequencing, not a permanent descope or requirement to maintain a legacy
+compatibility pipeline. Exact old Inspector tuples must leave that current door when their new
+counterparts land; independently owed old ordinary/derived relations stay only until their own
+specified cutover. Parent ownership is `shared-candidate-evidence-packet` for source operation,
+`module-registration` for demand/consumer and `evidence-presentation` for complete representation.
+The coordinated draft must pass independent buildability review before production changes. `[V]`
+`rfc/foundation-source-identity.md` §§5/8/D3/D6/D7/D8 and the owner's D3851 pre-launch ruling.
+
+
+## 2026-11-09 — verified follow-up to the D4167 pre-implementation map
+
+The preceding table records the audited pre-cutover state. Seven selected-edge source paths and
+complete typed readouts now execute; three old current Inspector tuples are removed and four new
+ones appended (84topics/90Full2/301module pairs). Original payload/ref correspondence is enforced
+at construction and receiving; real same-source deferred ordinals are explicitly reachable without
+cropping or increasing budgets. Both independent bounded reviews and full14966software/537 plus
+7performance/build/source-author11 pass. Required roots98 retain419passing cases/fourqualified;
+complete content retains exact62 prior failures. `[V]` foundation-edge-source.ts/test.ts,
+foundation-edge-presentation.ts, inspector-query-contract.test.ts,
+apps/web/src/lib/inspector-source-browser.test.ts and the existing source plan/review receipt.
+
+D4167 remains doing: the eight snapshot readouts, advance consequence, canonical event closure,
+ordinary modules, exact-subject avoidance and bots do not inherit this stage's completion. `[V]`
+existing projection-plan.json and actual consumer paths recorded in the pre-cutover table.
+
+
+## 2026-11-09 — next complete snapshot/advance delivery gate
+
+Independent source/meaning audits confirm all eight non-style snapshots already execute in
+candidateChildReadings, each as one whole original value. Selected demand can reuse the literal
+legal/connectivity/control/future/candidate joins without invoking the complete candidate compiler.
+Backward legal advance is a separate selected incoming-edge source, retaining a complete landing
+capture population and its calculated legal opposing-pawn subset, including zero replies. It is
+not observed continuation or enumeration of all available advances. `[V]` candidate-population.ts
+candidateChildReadings; foundation-position-sources.ts; foundation-pawn-sources.ts;
+evidence-factories.ts createDerivedPawnConsequenceBackwardPawnLegalAdvanceV1Evidence;
+exchange.ts LegalExchangeResult and LandingCaptureReading.
+
+The actual missing contract is complete usable detail: future/migration populations can exceed a
+whole-source prose budget; recursive exchange alternatives cannot be replaced by one chosen line.
+Existing inspector-detail.ts supports a closed typed source-order expansion and bounded page,
+not arbitrary new kinds. New coordinated drafts shared§3.1c/module§4.11g/presentation§3.10e specify
+nine source topics/eight literal text-only details, complete domains and finite branch-path
+traversal. Independent acceptance remains required before code. `[V]` actual eight source shapes,
+inspectorDetailMembers/buildInspectorDetailPayload and the three draft clauses.
+
+Canonical migration seam, still pending: mintFoundationValue already retains original ordered
+source objects in FOUNDATION_VALUE_INPUTS; computed new opposition/backward/island events also
+have receipt input digests. compileSemanticEvidenceEvent checks supplied original inputs against
+that receipt AND the declared derivation; adding only seven wrapper refs will fail that join.
+Use existing original input membership and truthful literal derivation declarations in the later
+cutover, not a second provenance store/recomputed copies/renamed old semantic events. Target-
+bearing slider1 remains different from physical board-edge ray2. `[V]` evidence-factories.ts
+mintFoundationValue/assertPawnFoundationSource and semantic-evidence.ts compileSemanticEvidenceEvent.
+
+
+## 2026-11-09 — current snapshot/advance delivery and next canonical/ordinary audit
+
+The previous same-day snapshot/advance drafts received both independent buildability acceptances
+and bounded implementation reviews. All16 current foundation selected readouts now reach the
+actual Inspector:93topics/14details/107Full2/318modulepairs. Complete payloads and source/view
+reference correspondence, genuine source membership, lossless full-domain/tree paging and
+both-color authenticated REST/strict receiver/emitted DOM controls pass389/four. Full15173software/
+539 plus7performance/build/source11 pass; all368prior profile outcomes remain equal after adding8.
+Content keeps exact62prior headings. This is local delivery, not qualification or wholeD4167.
+`[V]` foundation-snapshot-source.ts/test.ts; foundation-snapshot-presentation.ts;
+foundation-snapshot-detail.ts/test.ts; inspector-receiver-independent.test.ts;
+inspector-source-browser.test.ts and the existing source plan/review receipt.
+
+Independent code audits identify the next exact consuming boundaries. Sight's SIGHT_SOURCE_ROUTES
+still acquires structural@1; sightScope requires payload.squares, so raw new snapshot substitution
+would silently lose selected-square results. Nudge postcommitEdgeEvidence uses local closure and
+D3715 current/ancestor change witnesses; Review collects that closure per original edge and
+intersects REVIEW_SOURCE_KEYS without Nudge's filter. ONE_EDGE_EVENT_REFS also filters version1.
+Structure consumes none of the seven edge families; keep its separate7-ref recognition table.
+`[V]` module-query-sources.ts; module-query.ts::sightScope/sources/moduleWitnessed;
+postcommit-nudge.ts; review-map.ts::collectRelations/admitForReview; module-registry.ts.
+
+Computed opposition2/backward2/islands2 have genuine receipt inputs but no projection.derivation;
+only derived-plane projections may declare that metadata. Existing SEMANTIC_EVENT_DECLARATIONS
+needs an explicit finite computed-source tuple contract. Existing FOUNDATION_VALUE_INPUTS retains
+original ordered before/after inputs; use it, not recomputed equivalent values. Current wrapper
+anchor checks name only snake_case operands, and generic allowed-sign checks do not bind the new
+payload's actual sign. New current tuples require exact camelCase anchor/sign joins. D4170's
+unique-ref bag/set branch is explicitly legacy dependency-family behavior in code; it is recorded
+as migration debt, not an observed generic consumer defect. `[V]` evidence-factories.ts;
+evidence-contract.ts::compileEvidenceManifest; evidence-catalog.ts::SEMANTIC_EVENT_DECLARATIONS;
+semantic-evidence.ts::compileSemanticEvidenceEvent.
+
+Physical ray2 has no target-bearing family field; current discovery consumes original latency1
+and slider1 target relations. Keep that distinct internal dependency until a genuine successor
+is authored, never relabel or duplicate public pipelines. Avoidance currently groups projection/
+version/sign and one event per alternative; that collapses different root subjects and outcomes.
+Subject-safe successor needs complete legal alternatives, original root physical identity and
+outcome signatures, every per-move subject and truthful missing-vs-empty authority. Wholepayload
+hashes include edge/FEN and cannot provide cross-alternative identity. `[V]`
+semantic-evidence.ts::discoveredExecutedSemanticEvents/familyKey/selectSemanticEvidence;
+evidence-factories.ts::createDerivedTacticDiscoveredExecutedV1Evidence/AVOIDANCE_FACTORIES.
+
+These audits authorize drafting, not unreviewed ordinary significance/default changes. Preserve
+existing priorities, budgets, novelty and source meanings. Actual square reach, topology with
+unchanged count, unchanged group booleans, moved-vs-stationary file relations, discovery target,
+repeated original Review edges and subject collisions need genuine falsifiers in the next cut.
+`[V]` existing parent clauses and actual symbol maps above; D4167/D4170 stay owned/open.
+
+
+### Additional live consumers in the same D4167 reverse closure
+
+Play DrillScreen calls presentPositionStructureEvidence and CompareView calls it for each leaf.
+That separate inspector.position_structure@2 acquires16detailed structural reading2 values plus
+named_structure2. structuralDetail(cachedStructuralReading(fen).features,kind) retains predecessor
+file-level backward observations, maximal-reach occupied outposts and blocker-blind opposition;
+operand fidelity did not change definitions. Separate selectedSquareSightEvidence/rawStructure
+feeds board.selected_square_sight1, independently of module.sight_on_request1. comparisonStrips
+still uses structure_delta1/structure_strip1; COMPARISON_STRUCTURAL_ROUTES deliberately pins17
+original reading families for the owned comparison2 population. Its ownership proof is not current
+definition adoption. `[V]` DrillScreen.svelte; CompareView.svelte; evidence-factories.ts detailed
+structural factories; structural-reading-detail.ts; reading-evidence.ts;
+compare-strips.ts; comparison-structural-population.ts.
+
+Support guidance.ts::evidencePacket still reads structuralReading; positionGuidanceEvidence also
+mints reading1/firing1 values for actual voice/speech routes, alongside an outstanding raw authored
+matchesStructuralExpression caller. These belong in the coordinated consumer inventory before
+D4167 closes. Explicit authored refs already use genuine opposition3/backward3/outpost-candidate1
+and predicate2 via authored-predicate-population; unreferenced leaves deliberately select
+predicate1 under the accepted author-choice contract. Change those only through explicit authored
+migration. Original open/half-open pawn-presence relations and pawn_connectivity partitions remain
+valid complementary readings; material-count-only uses of structuralReading are not obsolete
+semantic consumers. `[V]` guidance.ts; evidence-operations.ts; authored-predicate-population.ts;
+structure.ts; source-owned comparison source table and D3309's accepted migration boundary.
+
+This expands the actual reverse-trace checklist inside the already open D4167; it is not a new
+feature, automatic latest-version lookup or acceptance of an unwritten ordinary policy. Current
+qualified/source/default/content/release states remain as recorded above. `[V]` code paths and
+existing accepted parent boundaries cited in this section.
+
+
+## 2026-11-09 — D4170 actual receipt-order experiment
+
+Disposable input-order.test.ts obtains genuine capture-class events from the current shared local
+closure in both colors. Each retains exact original capture/exchange values and receipt vector.
+The compiler accepts the original AND reversed vectors with the same event id; missing, duplicate-
+instead-of-another and extra inputs refuse.2/2research cases pass in1.70s. No output, semantic
+case or chess expectation is manufactured, and no production code is changed. `[V]`
+`make semantic-input-order-research`; tools/d1713-semantic-validation-matrix/input-order.test.ts;
+semantic-evidence.ts::derivedExchangeSemanticEvents/compileSemanticEvidenceEvent.
+
+The accepted value-authority§2.2 deliberately names declaration-level multisets. This observation
+therefore does not prove that every unique-ref declaration should become a fixed tuple, or that
+a learner already received a wrong answer. It isolates the separate consuming comparison of the
+factory's recorded ordered receipt. Draft§2.2a requires ordinal receipt equality while preserving
+legacy declaration-family semantics, variable populations, current payloads/ids and all policies.
+Private original object ownership and D4167's new computed-source/anchor/sign contracts remain
+separate. The draft needs independent acceptance before implementation. `[V]` existing§2.2,
+EvidenceValueReceipt.sourceDigests and draft§2.2a; no new registry or receipt-format proposal.
+
+
+## 2026-11-09 — receipt repair and genuine normalized-input reader preflight
+
+D4170§2.2a is now independently accepted and its ordinal receipt join is implemented. The same
+actual instrument now refuses reversed inputs in both colors; all four research cases pass1.36s.
+Permanent86-case source suite also distinguishes genuinely separate equal-digest instances from
+original-object identity; legacy wrappers correctly accept those equivalents at the same ordinal.
+This does not qualify the known family/sign avoidance claim. `[V]` semantic-evidence.test.ts;
+`make semantic-input-order-research`; evidence-value-authority§2.2a; compiler2 review receipt.
+
+The added D4167 source control legally castles White/Black with e1g1/e8g8 aliases into a gained
+unobstructed opposition relation. Calling the same original before/after source factory with the
+canonical e1h1/e8h8 move yields identical canonical payload and payloadDigest, but a DIFFERENT
+inputDigest. Thus a reader cannot recreate original authority from normalized payload spelling.
+The six tuple sources' existing sole-mint map membership and ordered receipts establish actual
+construction; slider2 separately minted its canonical edge and can check that retained invocation.
+Both reviewers independently accept this simpler bounded clarification. No shipped wrapper bug
+or source-definition change is claimed. `[V]` input-order.test.ts genuine four-case run above;
+evidence-factories.ts::validEdge/foundationEventFactory/mintFoundationValue/edgePopulation;
+evidence-value-authority§2.2b and existing compiler2 review receipt.
+
+
+## 2026-11-09 — seven current constructor boundary and next semantic evidence dependency
+
+The seven-source construction amendment is implemented and independently reviewed. Genuine
+predecessor controls fail for all seven source families; 67 new permanent cases cover both colors,
+original objects and source copies, counterfactual input substitution (not an avoidance claim),
+complete anchor/sign joins, raw castle aliases, physical special moves, null/zero/count/topology
+relations, exact computed tuple arity and the pre-cutover ordinary image. Actual normal gates pass
+15,301 software/all540 plus seven performance tests, types/build/source-author 11. The seven added
+bindings are research declarations, not newly acquired canonical events or ordinary admission.
+`[V]` foundation-semantic-event.test.ts; semantic-evidence.ts; evidence-contract.ts; evidence-
+factories.ts; semantic-validation.ts; module-registry.ts; current source plan and review receipt.
+
+Both independent next-dependency audits find that source qualification requires actual production
+reach as well as cases and a census. A new validation-only helper cannot mark itself direct;
+exact_projection_multiset invokes the declared parent and compares retained outputs. New version1
+group/file/revelation refs need explicit population mapping before legacy fallback. D1717's current
+base-id opposition block must remain for the legacy subject while a separately accepted successor
+operation is introduced. This is a future routing requirement, not a currently observed false
+qualification: D4167 still blocks all seven. `[V]` semantic-validation-operations.ts::
+SEMANTIC_VALIDATION_BLOCKED_FAMILIES/semanticValidationPopulationOperation; semantic-validation-
+runner.ts; tools/semantic-validation-build.ts; current 98-subject profiles and review receipt.
+
+There are no existing canonical cases that establish the seven exact new versions. The source
+handoffs give fixture requirements and citation leads; they are not automatically retained case
+propositions. Required arms are positive, semantic negative, orientation and imported population;
+counterfactual/external taxonomy are already inapplicable. Use case-specific independently retained
+board/rules facts with the accepted literal convention; do not create owner-authored receipts,
+retag old blocker-blind/file/count expectations or use the implementation as its own oracle. Keep
+absolute mirror partners and wrong-output controls, actual 579 sampled edges, every occurrence and
+failure/abstention, and true caller retention. Ordinary adoption stays separate. `[V]` exact seven
+profile rows in semantic-validation-profiles.json; canonical-case register; existing source handoffs;
+accepted semantic-validation-authority §§4–5 and both independent dependency reviews.
+
+
+## 2026-11-09 — shared source operation and exhaustive-case research gate (D4167/D4171–D4173)
+
+The disposable model preserves complete original payloads in two genuine opposite-color capture
+edges while sharing required before/after source chains: seven independent collections perform
+31 factory invocations; one shared request-local graph performs 20. Both produce seven events;
+revelation consumes the same original file-change objects emitted by that graph. Selected backward
+source demand executes only its five required calls, even when the available population is empty;
+a wrong successor still throws. This is invocation/identity evidence, not latency, application
+reach or qualification. `[V]` `make foundation-shared-operation-research`;
+`tools/d1713-semantic-validation-matrix/foundation-operation.test.ts` (model only).
+
+D4171 measures the parser refusing all five actual nested input-relative paths: before.fen,
+after.fen, fileChange.beforeFen, fileChange.moveUci and fileChange.afterFen. The seven sources
+already contain those operands; the current closed input grammar only admits top-level scalars.
+A complete new-source walk cannot replace them with ignored fields or generic FEN normalization.
+`[V]` same disposable instrument; foundation-position-sources.ts; foundation-pawn-sources.ts;
+semantic-validation.ts::MIRROR_INPUT_FIELDS/parseMirrorOperandRules.
+
+D4172 executes a real retained material2 cited proposition with its actual authority resolvers.
+A test-only spy adds the SAME genuine target a second time: target count changes from one to two,
+while the existing emits case correctly passes its stated minimum-witness claim. This does not
+prove false current qualification. It proves that new complete-population propositions need a
+stronger exact expectation; symmetric extra events can also agree in a mirror. Preserve all old
+witness semantics. `[V]` same instrument; semantic-validation-runner.ts::executeSemanticValidationCase;
+immutable cited.python-chess.rule-state.material-v2.en-passant.white and its retained source.
+
+D4173 identifies the remaining typed domains in actual current payloads: file letters reflect
+horizontally and half_open_white/half_open_black swap with colors. The present square/color/delta
+transform list cannot express these domains. Add only their closed file/file_state transforms;
+absolute partners must retain complete operands and canonical source order. Do not choose weaker
+symmetry or drop fields to make the case pass. `[V]` same instrument; FileState/PawnFileGroup/
+PawnIslandPartition types and current semantic-validation.ts::SemanticMirrorValueRule/transformLeaf.
+
+Both independent design preflights support one shared production helper, real retained Inspector
+wrappers, exact source-demand/batch multiset proof, a five-path grammar extension and one closed
+emits_exact positive event expectation. Cases still require independent board facts and the
+accepted disclosed convention, as in material2; no recording of collector output as an oracle,
+owner-store synthesis, old-case retag, ordinary activation or qualification from this model.
+The coordinated active-parent draft still needs independent acceptance before implementation.
+`[V]` existing compiler2 review receipt; current source plan; actual model and resolver paths above.
+
+
+### 2026-11-09 — implemented shared source and exact-validation mechanism follow-through
+
+The preceding disposable observations describe the pre-implementation grammar/composition. Both
+independent reviewers subsequently accepted the coordinated active-parent amendments and code.
+One production graph now supplies retained Inspector events, original input objects and their
+existing source key through the runtime-owned validator. The actual579-edge singleton/batch
+comparison and both-color nonempty source/API/selected DOM controls pass. Full15,418software/541
+and seven performance checks, types/build/source-author11 pass. The five nested paths and typed
+file transforms are represented; exact expectations use complete ordered populations and strict
+canonical data while old witness cases stay unchanged. `[V]` foundation-edge-source.ts; runtime/
+server inspector-local-source.ts; semantic-validation.ts/runner; foundation-edge-source.test.ts;
+semantic-validation-current-source.test.ts; inspector-source-browser.test.ts; current source plan
+and compiler2 independent review receipt (2026-11-09 shared-operation entries).
+
+The new actual operation executes all579 sampled edges, producing seven imported-population arms
+(58 receipts total). This leaves98subjects/419passing cases/four qualified; independent positive,
+negative and orientation arms remain required. Opposition's corpus zero is retained as zero, not
+a positive witness. D4171 closes representation; D4172/D4173 remain doing for complete independent
+source populations/absolute partners. The exact62 prior content failure headings remain, so
+D3928/native/content/release stay held. `[V]` generated semantic-validation receipt; literal profiles;
+foundation-semantic-event.test.ts; current source plan; actual full gate29029/build-content70181.
+
+
+### 2026-11-09 — first current-source independent qualification: opposition2
+
+The current opposition event now has46 new canonical source propositions over24 independently
+literal legal edges:18 exact complete populations, six genuine whole-family omissions and22
+complete ordered mirrors. Both axes,2/4/6 gaps, gained/lost/holder changes, both colors, nulls,
+full edge counters and horizontal partners are covered. Primary Python placement/role/color/turn
+facts are retained from the pinned source; the already accepted king-opposition-unobstructed1
+convention and§3.1 supply geometry/holder/sign. The source does not attribute opposition detection
+or strategic value to Python. `[V]` semantic-validation-opposition-sources.ts; registered convention;
+https://github.com/niklasf/python-chess/blob/3516d7c6c0879af724c2855fac5a304a4ef40949/chess/__init__.py
+(Piece.from_symbol, _clear_board/_set_piece_at, FEN insertion and Board.set_fen).
+
+Real fixed-resolver/source controls inject faults before genuine factory minting: absolute cases
+reject symmetric wrong holders/forms/interiors/kings/signs while mirrors still agree. Duplicate/
+split populations2 and omission0 fail exact expectations; changed expected arrays fail source
+authority before execution. Missing nested FEN/interior walk rules and either/both corrupt clock
+fields refuse. No manufactured evidence or resolver supports qualification. `[V]` semantic-validation-opposition.test.ts; both independent source/control/integration review entries in the
+existing compiler2 receipt; final clean types/744focused controls.
+
+All419 prior canonical rows remain unchanged;46 append. Actual generation is465/465passing,
+98subjects/fivequalified/58populations. Only current opposition2's case arms advance; legacy1 and
+other six current families keep their requirements. Final normal15569software/542, seven unchanged
+performance/four, types/build/source-author11 pass; exact62 prior content headings remain. This
+is source qualification, with full D4167 adoption and D4172/D4173 remaining six-family authority
+still open. `[V]` literal cases/profiles/generated receipt; semantic-validation.test.ts and frozen
+predecessor guards; current source plan and final61321/build-content35488 records.
+
+
+## Four current pawn/file families independently qualified — 2026-11-09
+
+[V] The independently reviewed28 literal legal edges now supply220 complete exact/negative/ordered-
+mirror propositions for group1/state1/access1/islands2. They preserve physical causes, neighbor
+metadata, triple front/rear order, multi-heavy occurrence order, stationary-versus-moving/new
+pieces, island count/topology and empty shapes. Review added an actual stationary opposing heavy
+on the destinationfile to falsify spurious open→own-half revelation. Expectations are explicitly
+assembled board facts plus accepted product arithmetic, never recorded detector output.
+Sources: semantic-validation-pawn-file-sources.ts; foundation-source-identity§§3.3/3.5/3.6; retained
+primary text/licence in that source.
+
+[V] Actual fixed resolver and production operation execute all220; symmetric wrong facts still
+mirror but fail complete absolutes. Duplicate/omit/reordered populations and changed expected
+arrays refuse (the latter before dispatch). Both full absolute partners anchor every orientation;
+no canonical_set or empty-array scalar leaf claim. All prior465 rows remain unchanged;685/685
+cases/98subjects/ninequalified/58censuses. Types/1471focused/full16296software+7performance/build/
+source11 pass; exact prior62-heading content hold stays. Sources: semantic-validation-pawn-file.test.ts;
+canonical cases/profiles/generated receipts; both independent source/integration entries in the
+existing compiler2 receipt; current source plan53112/24235 gates. D4173 closes bounded file-domain
+partners only. Backward2/physical-slider2 and all D4167 consumers remain; no ordinary policy,
+capability/milestone/content/native/release completion.
+
+
+## Current backward-pawn source independently qualified — 2026-11-09
+
+[V]40literal full legal edges now supply74 complete exact/negative/orientation propositions for
+backward2. Retained primary pseudo-pawn-control facts explicitly include pinned pieces; the accepted
+product convention separately supplies narrow qualification, subject joins and membership. Exact
+stationary-first/mover order, two same-file pawns, controller/capture arrays, support direction,
+all stop occupancies, opponent half-open perspective, four EP losses and promotion's informational
+changes are preserved. No final-rank backward pawn is invented. Sources: semantic-validation-backward-sources.ts;
+retained primary text/licence; foundation-source-identity§3.2; current source plan.
+
+[V] Actual fixed resolver/operation controls reject symmetric wrong fields even while mirrors agree,
+wrong color/file pairing, extra/split/missing/reordered occurrences, quiet false events and changed
+full expected arrays (before dispatch). Both independent reviews accept source/control/integration.
+Every prior685 record/text prefix remains unchanged;759/759cases/98subjects/tenqualified/58censuses.
+Full16596software/all544+7performance/types/build/source11 pass; exact prior62-heading content hold
+remains. Sources: semantic-validation-backward.test.ts; canonical cases/profiles/generated receipts;
+existing compiler2 review receipt; source plan46302/17592 verification. Physical-slider2 and all
+D4167 consumers remain open; no ordinary policy, capability/milestone/content/native/release claim.
+
+
+## All seven current source families independently qualified — 2026-11-09
+
+[V] Physical-slider2 adds62 literal legal edges/116complete propositions:46exact/16negative/54
+orientation. Original root/current ray identities, full near→far occupancy beyond first blocker,
+endpoint exclusion, null/empty, moving/same-count/unchanged, capture replacement, all promotions,
+standard+three960 castles and EP are exact. Expectations are manually supplied board facts plus
+disclosed accepted line-blocker convention, never collector output. Source: semantic-validation-slider-sources.ts;
+retained primary physical facts/licence; foundation-source-identity§3.4.
+
+[V] D4174 exposed source-fault masking by legitimate latest-edge retention before qualification.
+Real alternate legal inputs now evict before arming each fault; exact counts/helper executions
+and a permanent actual retained-value/eviction control preserve production behavior.375source
+controls including canonical join,2262focused/seven and full17087software/545+7performance/types/
+build/source11 pass. Real fixed-resolver faults cover13symmetric errors, population corruption and
+negative emissions, with altered arrays refused before dispatch. Prior759 records/rawprefix stay;
+875/875cases/98subjects/elevenqualified/58populations. Exact62-heading content hold stays. Sources:
+semantic-validation-slider.test.ts; canonical cases/profiles/generated receipts; existing compiler2
+review receipt; source plan66738/39364 verification. All7current sources qualify, not the other87
+subjects or legacy slider1. D4172/D4174 close only bounded source/instrument debt; D4167 and current
+staged clauses still require coordinated full consumer amendments and implementation.
+
+## Original candidate-owner graph and exact replacement image — 2026-11-09
+
+**Question D4167:** can one finite source graph retain the original root across legal alternatives
+and each child's original prerequisites across event and reading outputs, including available
+empty event populations? The disposable `candidate-foundation-frame.test.ts` answers this bounded
+composition question with the existing factories; it does not construct a production candidate
+receipt, issue evidence, select ordinary hints or measure latency. `[V]` instrument, existing
+`foundation-edge-source.ts` and `candidate-population.ts::compileLegalPopulation/compileRow`.
+
+The four roots enumerate all29/29/6/15 actual legal alternatives in opposite-color capture,
+same-file and castling positions. For exactly six common readings and the current seven event
+families, independent composition versus shared ownership has identical complete payloads,
+signs and legal edges. Actual route invocations are699→356,699→356,147→80,361→186. The baseline
+does not acquire unused root snapshots merely to inflate this comparison. These are route-call
+counts; nested helper work, full31-child-reading acquisition and end-to-end time are not measured.
+`[V]` instrument; normal `make foundation-shared-operation-research`.
+
+Original legal move members, root legal/connectivity sources and each child's corresponding
+sources are retained by reference. Opposition/backward/group/file/island tuples use those exact
+objects; revelation uses the exact file-change evidence also published in that edge population.
+Both-color quiet populations genuinely emit no current events while retaining all six child
+readings. The research-owned pointer guard rejects copied rows, missing inputs, crossed children
+and genuinely sealed equal-byte root/child replacements. It models the existing owner's future
+handoff, not production authority. Direct events-only execution preserves full event payloads and
+required private inputs with no retained readings; readings-only does no root connectivity/event
+work. Manual narrowing preserves references but does not test the production receipt projector.
+`[V]` same instrument; `internal/evidence-value-routes.ts::readFoundationEventInvocation`.
+
+### Native conditions replace duplicate collectors, not condition capabilities
+
+All83 root/child samples across these complete legal populations compare56 file-condition
+booleans each (4,648 comparisons): current group.isolated/doubled, null-group false, and complete
+four-state file rows reproduce the old isolated/doubled/open/half-open truth. A specific a3→a4
+advance changes the full a-file group while isolation and doubling remain true. A quiet king
+move leaves both groups and file states unchanged, produces no such events and still supplies
+their true position readings. Therefore membership_changed is not a flag toggle; unchanged
+condition feedback must consume its snapshot. It must not be reconstructed as an old preserved
+edge event. `[V]` instrument; `foundation-pawn-sources.ts`; `structure.ts` predicates.
+
+The existing candidate vocabulary is44 event keys plus35 reading slots (31child and four edge/
+candidate slots). The current ordinary fence is41, a strict subset: candidate-only keys are
+trade_completed1, defender_exposure2 and role_asymmetry2. Registration/qualification alone has
+not activated the new seven in either output image. `[V]` dedicated instrument audit using the
+actual `deriveCandidatePacketProjectionGroups` and `ONE_EDGE_EVENT_REFS`, not a hand-copied count.
+
+The independently audited replacement proposal is42 event keys plus the same35 reading slots:
+
+| Retire from new public canonical outputs | Current replacement / retained meaning |
+|---|---|
+| backward_pawn1, king_opposition1, pawn_islands1 | exact backward2, unobstructed opposition2, island topology2 |
+| isolated_pawn1, doubled_pawn1 | original group1 event/snapshot flags and members; literal flag-change views |
+| open_file1, half_open_file1 | original file_state1 event/snapshot enum; exact open or perspective-half-open views |
+| structural.line_blockers1 and transition.slider_ray1 | physical slider_ray2 with original root/direction/full interior; no endpoint-as-target claim |
+| No prior counterpart | stationary file_access_revealed1; original file-change object retained |
+
+Retain the four other structural families (king_zone, passed_pawn, piece_count, direct_attack_count),
+the other12 transitions and19 other event refs. Moving-heavy open_file_occupancy1 is a different
+physical cause, not the stationary-access event. Target-bearing slider1 raw evidence remains a
+necessary PRIVATE discovery prerequisite: physical2 has no target. New learner execution must not
+mint old boolean evidence from current views or run duplicate old/new collectors. These are
+proposed dispositions for a coordinated successor, not production retirement. `[V]` current types,
+factory dependencies and both independent audits in the existing compiler2 review receipt.
+
+### Required contract scope discovered by following real callers
+
+Changing localSemanticEventClosure immediately changes postcommitEdgeEvidence, candidate packets
+and recorded eager acquisition. It cannot be hidden behind an unchanged41-ref declarative fence.
+The successor must coordinate exact operation/acceptance/presentation images, literal native
+signs/flag witnesses, complete Review populations and Nudge-only selection, private discovery,
+recorded exact/eager capture/check parity and all declared typed abstentions. Recorded windows
+still use their original11 successors/13 horizons; this source migration is not a window change.
+`[V]` `postcommit-nudge.ts`; `recorded-semantic-path.ts`; both independent current caller audits.
+
+Five old incoming Inspector topics (isolated/doubled/open/half-open/line-blockers) remain live;
+their actual suppliers/pairs must retire in favor of the existing current topics/views too.
+Both Sight paths, Play/Compare panels, both comparisons and guidance/voice/speech still require
+the separately traced readout migrations. Full source fidelity does not choose salience or
+authorize an ungrounded strategic caption. `[V]` `inspector-source-topics.ts`; existing source-plan
+reverse map; `module-query-sources.ts`; `reading-evidence.ts`; comparison/guidance callers.
+
+The nine proposed old public event refs own51 live cases and eight current population arms.
+They cannot simply be deleted or retagged to a successor. Preserve original records/authorities
+as test-only history while updating live root/profile/declaration/case/population joins together.
+The existing frozen retired records remain untouched. Arithmetic would leave824 live cases,
+89subjects/elevenqualified/50populations, to VERIFY after actual withdrawal; current truth stays
+875/98/eleven/58. The retired wrapper is distinct from still-executed raw slider1 ancestry.
+`[V]` dedicated literal image/case audit; semantic-validation-cases/profiles/operations and fixed
+registry joins; independent retirement audit in the existing compiler2 review receipt.
+
+Family/sign avoidance still discards subjects before counting moves; this cannot be adapted by
+version substitution. Its successor must retain exact root/played/alternative subject states,
+all same-move subjects and the full legal denominator. The retired bot vector is not a consumer;
+actual Stage-A typed rows still have features:never[]. D1718/D1719 and D3662 remain explicit
+mandatory handoffs, not claims discharged by acquisition. `[V]` `semantic-evidence.ts::familyKey/
+selectSemanticEvidence`; current avoidance dossier; `bot-policy-compiler.ts`; bot-policy§5a.
+
+Independent review accepts composition research only, with events-only/real-receipt/typecheck
+limits recorded; follow-through added direct events-only controls and dedicated typechecks for
+BOTH research files. No production graph/API, compiler version, ordinary consumer, case meaning,
+pack, milestone or release state changes in this research pass. `[V]` instrument/config/Make
+target; existing compiler2 independent review receipt. D4167 remains the whole adoption task.
+
+
+### Finite total-state extraction probes — 2026-11-09
+
+[V] The separate disposable total-foundation-states.test.ts tests the two missing source-state
+extractions without production edits. A research copy of existing private ray algebra preserves
+all occupied-piece/eight-direction rows, null versus adjacent-empty, ordered full blockers and
+an unchanged ray with no emitted event. All four promotions have explicit current ray domains.
+Actual existing sealed loose-piece readings under the exact current turn-clone rule retain
+both-false non-king states, real enPrise true→false, invalid root clone even on an empty own-piece
+domain, the actual child EP victim versus landing, all promotion roles and White/Black castles.
+Complete both-color board domains come from the original legal source FEN; its pieces array is
+side-to-move only. Sources: probe; foundation-slider-sources.ts; tactics.ts; legal-moves.ts.
+
+The initial46157 run had33passes/one literal-ray failure: the model spread a Piece's extra
+promoted:false into a narrower physical identity. Explicit color/role/square extraction fixes
+the MODEL; the literal full expected ray stayed unchanged. Production source shapes did not
+change. Final16683 normal make foundation-shared-operation-research strictly typechecks all
+three files and passes41 tests/three in1.80s, including the earlier candidate graph/image study.
+This is extraction feasibility, not a source factory/receipt ABI, qualification, full graph
+consumer, natural prevalence or latency proof. Proposed source ABIs still require review/code.
+
+The new subject-safe-semantic-selection.md draft links the immutable old selection contract and
+active parents rather than editing the frozen contract. First/second independent reviews return
+finite source/payload/vector/operation and consumer gaps. Repairs now explicitly separate the
+seven current-event ordinary pairs from13 subject-safe avoidance families: the latter's26 future
+consumer pairs stay held under newD4175, blocked onD1716 with a staged discharge. A source-first
+contract cannot claim learner avoidance merely from registration. The current raw source/case
+images stay unchanged. Sources: draft; existing compiler2 review receipt; source plan and ledger.
+
+
+[V] Subsequent round3 review accepts the repaired source-first contract from BOTH independent
+source/control and consumer/meaning reviewers. Exact risk identities, comparable played states,
+closed complete-set/family validation and census, original source vectors and all13explicit
+ordinary holds resolve the returns. This authorizes implementation; it does not implement or
+qualify the new sources or deliver ordinary avoidance. D4175 retains26module pairs, fullD4167
+retains every reverse consumer. Source: existing compiler2 receipt, round3 decisions; accepted
+subject-safe-semantic-selection.md; current foundation plan.

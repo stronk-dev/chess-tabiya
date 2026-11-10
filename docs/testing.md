@@ -1,5 +1,17 @@
 # Testing and CI
 
+`make test-software-diagnostics` retains the complete software configuration and prints failures
+as they occur, before a potentially missing final summary. Its additional reporter uses Vitest's
+public hooks; scheduling, timeouts, assertions and the native startup partition are unchanged.
+Use the normal `make verify-software` for the canonical result. A diagnostic pass cannot explain
+an earlier crash or establish remote CI qualification.
+
+`make expression-census-check` runs the real-corpus expression census file in the content tier.
+Selected-file census requests now skip unused subject construction for unselected documents;
+all shape registration, pack validation, duplicate checks, corpus replay and evidence work remain.
+Permanent controls compare selected subjects and the whole corpus/evidence result, retain original
+unselected trigger validation, and reject a duplicate unselected pack. No test deadline is widened.
+
 For ledger assignments, `make work-state-transition` now synchronizes new rows and applies the
 requested state/owner/date in one command before final validation. No separately failing sync is
 needed to assign a new row after the untriaged ceiling reaches zero. A refused combined assignment
@@ -366,9 +378,12 @@ not a validator performance benchmark or proof of a particular runtime latency.
 `make review-route-check` includes exact Analyze run/branch/move/entry admission, crossed
 responses, single-flight focus continuity, read failure/retry and departed-result controls.
 `make review-analysis-browser-check` exercises the built application on desktop and a
-touch-enabled phone: two crossed HTTP responses, a late navigated-away read, keyboard
-Analyze/Hide, unchanged recorded play, a real different retry move and Compare. Both journeys
-also run in ordinary browser CI; they add no source, search or move-quality policy.
+touch-enabled phone: crossed branch/parent target confirmations (with no source request), a
+late navigated-away source page, keyboard Analyze/Hide, unchanged recorded play, a real different
+retry move and Compare. All six color/fullmove/viewport cases use the current assistance and
+Full2 source-page endpoints and also run in ordinary browser CI; they add no source, search or
+move-quality policy. They require real application startup; a failed installed-content
+preflight is not native proof and must not be bypassed with an empty browser catalogue.
 
 `make bot-label-check` covers the distinction between raw Maia model-band settings and
 measured profile strength through shared copy, mounted Play/Rating, all four unchanged
@@ -734,6 +749,32 @@ The installed pack-list case similarly lives in `evidence-at-runtime.test.ts`, r
 fifteen-second limit and every fixture-exclusion assertion. The existing tier guard now also
 recognizes the default PackRegistry loader; fixture-only `fromDocuments` tests remain software.
 
+The three installed-catalogue application cases live in `application-content.test.ts` with
+their original fifteen-second deadline. The installed-principle/Library identity case lives in
+`authoring-content.test.ts` under its original five-second deadline, and the actual served-pack
+concept/profile case lives in `concept-registry-content.test.ts` under its original120s limit.
+These five moved cases retain default content acquisition and their original assertions.
+
+Source-free API/security, position-session, provider, Hint, analysis, bot and learner-profile
+fixtures isolate only the five lesson-catalogue acquisitions using validated empty registries.
+Actual HTTP/auth/SQLite, opening lookup, masters PGN, supplied corpus/exchanges, real source
+compilation, engines and file-backed longitudinal workers remain wherever the case requires them.
+The fixture owns its spies through application close, including failed startup.
+
+Nonempty-fixture controls do not use empty data in place of their subject. Claim attribution
+reads its own pack/ledger files into `PackRegistry.fromDocuments`, retaining genuine validation
+but explicitly not testing default filesystem enumeration. Training-set HTTP uses a real admitted
+member. Pack private/public/restart controls retain nonempty claim/annotation/success-condition
+redaction witnesses and a validated mechanical principle; only their test-owned requirements
+are derived against the current runtime. The installed schema example and authored corpus are
+unchanged. The mechanical source fixture has no fetched source-byte proof or chess assertion.
+Startup cleanup retains its real Stockfish process and calls the original Campaign loader on
+its owned directory, including malformed-file failures. It is lifecycle proof, not a default
+native/release journey. Default application/content/native startup is not replaced.
+The tier checker scans test source; it does not prove transitive isolation through application
+helpers. D4046 remains open through complete verification and the coupled landing, not counted
+as resolved by the checker passing. Setup-blocked cases in a red run are not optional skips.
+
 `make docs-check` is a deliberately narrow navigation contract. It requires every Markdown file
 directly under `docs/` to appear exactly once in `docs/README.md` and requires the root README to
 link the architecture, feature map, extension guide, contributor guide and complete docs index. It
@@ -744,6 +785,17 @@ the tier reconciliation process remain the truth checks for content.
 candidates without failing CI; it fails only when stale or unreadable evidence would otherwise be
 called graduable. The real-content suite also examines every published pack directly, so moving a
 stale pair into `content/packs/` cannot bypass the report by changing roots.
+
+The source-aware expression census is asynchronous; its production consumers await the real
+report. Authored coverage and satisfiability use validator-issued sources and one actual temporary
+shape registry. The explicit bare-expression research path stays separate. The software controls
+in `authored-census-source.test.ts` exercise real source issuance, all three explicit structural
+conventions, copied/retired handles, false/malformed claimed corpus hits, legal versus illegal
+witness replay, unavailable detectors, typed root cardinality, absent registered dependencies
+and external-file diagnostic delivery. A witness-only detector failure must reach both the report
+fault count and shape-check's actual file join. These controls do not qualify authored content.
+The content census tests share one awaited full report; their installed-content assertions and
+existing deadlines remain separate from the software fixtures.
 
 Release proof remains a separate roadmap obligation: application-boundary API reachability,
 container boot, prior-schema migration, provider degradation, backup/restore, update/rollback and
@@ -771,3 +823,54 @@ readiness-only stub, not model inference. The five JS/Python checks also run in 
 release-policy tier, and the six TCP tests run in software contracts, including observed real
 fragmentation and an abandoned probe followed by intact UCI commands. Native release CI runs the
 named identity target on both architectures. Python 3 is required for these bounded sidecar tests.
+
+
+`authored-tempo-transition.test.ts` checks real validator/registry ownership, current compiler and
+objective execution, static admission before early exits, typed source failure and registered
+retirement. Two actual owned SQLite/RunService pack moves persist/replay correct rule-derived
+objectives with the queued engine unavailable. They are software source contracts, not detector
+qualification. Structural-reading and vocabulary-wiring retain real-content orchestration checks
+using actual issued documents; their detached test variants do not migrate authored files.
+
+
+Authored-census cost controls retain the original10-second opt-in shape-check deadline. They
+compare real positive corpus/own-pack/trigger projections with an unoptimized finite rules-only
+reference, prove duplicate occurrence and full-FEN-counter retention, count actual visitor calls,
+retry failed duplicate probes and reject actual registered-record retirement. Factory-input reuse
+has a first red control, equal-byte distinct source handles, forged-source refusal, two genuine
+root/result/population proofs and same-byte registry replacement. Only the source-image input is
+shared; crossed reduction proofs still fail. The real content rerun must retain its exact existing
+failure headings; a faster report cannot substitute for those assertions. FILE_READ_ERROR now has
+actual missing-file/malformed-JSON controls and is removed only from the mutable uncovered-code
+list; the historical refusal-debt ceiling remains unchanged.
+
+
+The authored convention report uses the same real draft/registry loading seams as the census.
+Its permanent software fixtures cover independent literal versus containing-condition truth,
+all3actual successor routes, mirror-transformed operands, expanded quantified members, unavailable
+pairs, unchanged source bytes/requirements, duplicate positions, exact-address drift with matching
+36counts, and bounded deterministic samples. A matching-inventory positive followed by an actual
+illegal edge keeps inventory/admission/paired gates true while replay omission alone prevents
+comparison completeness; only fixture inventory metadata changes in that test, restored in finally.
+Real output-file, parent-directory and nonexistent-nested-directory symlink controls refuse input
+writes. A real output hardlink is atomically replaced while its original authored inode stays
+unchanged. Report generation is opt-in; ignored report JSON is never an ordinary CI/progress input.
+
+
+`make recorded-clocks-check` runs the six permanent declared-control, original-PGN ingress,
+SQL/account retention, original-source/factory, actual authenticated API and mounted readout suites
+through the normal software selector.
+They cover sparse/both-colour/
+setup/duplicate/bad/unsafe tokens, extract-before-strip paste/fetch, populated31→32/null migration,
+transaction rollback/retry, real CAS winner interleaving, exact original session/node joins,
+unknown versus empty historical retention and closed account getter/restore/delete. Source controls
+use actual SQL-backed imports, exact original incoming events/parent decisions, genuine BEFORE
+phase invocations, adjacent same-side samples, safe clock arithmetic, private actor occurrences,
+source replacement and abort retirement. Real cookie REST/DrillApi controls check authorization,
+closed query fields, numeric/source/receipt correlation, source-failure retry and independent
+contract refusal. Mounted readout controls use the existing real Node-worker/HTTP fixture and
+exercise selected move/help/access/account-owner retirement, coherent redigested wrong-edge
+receiving and the actual emitted old Retry handler against a newer failure. The actual App
+both-mover callback is additionally covered in app-shell.test.ts. These do not prove native
+desktop/tablet/phone geometry, concurrent-worker stress or live timing. Full software discovery
+includes these suites; this target is local focused verification.

@@ -4,29 +4,54 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-import { REVIEW_MAP_TEMPLATES, attachEvidence, commitMove, exactLegalMoves, fork, judgementWordsOutsideGrounding, recordedSemanticPath, reviewMapProjection, reviewPacketForRun, reviewText, rewind, storyMomentsForRun, type DrillRun, type ReviewMapProjection } from "@chess-tabiya/runtime";
-import { mount, tick, unmount } from "svelte";
+import { REVIEW_MAP_TEMPLATES, attachEvidence, commitMove, exactLegalMoves, fork, judgementWordsOutsideGrounding, moduleDecisionStamp, parsePresentationReceipt, presentedSentence, recordedSemanticPath, reviewMapProjection, reviewPacketForRun, reviewText, rewind, storyMomentsForRun, type DrillRun, type ReviewMapProjection } from "@chess-tabiya/runtime";
+import { tick } from "svelte";
+import { createComponentTestScope } from "./component-test-lifecycle.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { reviewFixtureRun } from "../../../../packages/runtime/src/testing/review-map-fixture.js";
+import { recordedReviewFixtureSources } from "../../../../packages/runtime/src/testing/recorded-grade-fixture.js";
 import { importedRun, play } from "../../../../packages/runtime/src/testing/review-evidence-fixture.js";
 import type { ReviewMap } from "./api.js";
 import ReviewMapScreen from "./ReviewMapScreen.svelte";
 import { assertReviewMapResponse, isGroundedGradeSentence } from "./review-response.js";
 import { storyCardDocument } from "./story-card.js";
+import { applyObjectiveEvidenceProposal } from "../../../../packages/runtime/src/objective.js";
+import { compareBranches } from "../../../../packages/runtime/src/compare.js";
+import { invokeEvidenceValueRoute } from "../../../../packages/runtime/src/internal/evidence-value-routes.js";
+import { PRIMARY_EVIDENCE_MANIFEST } from "../../../../packages/runtime/src/evidence-catalog.js";
+import { evidenceForConsumer } from "../../../../packages/runtime/src/evidence-contract.js";
+import { factStatementOperand, presentationDigest, presentEvidenceItems, serializePresentedEvidence } from "../../../../packages/runtime/src/presentation-contract.js";
 
 const ROOT = `${process.cwd()}/`;
-afterEach(() => { document.body.replaceChildren(); vi.restoreAllMocks(); });
+const componentScope = createComponentTestScope();
+const { mount, unmount } = componentScope;
+afterEach(async () => {
+  try { await componentScope.cleanup(); } finally { document.body.replaceChildren(); vi.restoreAllMocks(); }
+});
 
-function payload(options: { readonly run?: DrillRun; readonly mayWrite?: boolean; readonly evaluated?: (index: number) => boolean; readonly noMoments?: boolean; readonly plies?: number; readonly packet?: boolean } = {}): ReviewMap {
+type PayloadOptions = { readonly run?: DrillRun; readonly mayWrite?: boolean; readonly evaluated?: (index: number) => boolean; readonly noMoments?: boolean; readonly plies?: number; readonly packet?: boolean };
+let defaultPayload: ReviewMap | undefined;
+function payload(options: PayloadOptions = {}): ReviewMap {
+  // UI tests consume wire data, not a fresh source-acquisition job on every assertion.
+  // Retain the complete 70-ply baseline, never return the private cached object, and
+  // leave every explicit run/coverage/packet variant on its original construction path.
+  if (Object.keys(options).length === 0) {
+    defaultPayload ??= buildPayload(options);
+    return structuredClone(defaultPayload);
+  }
+  return buildPayload(options);
+}
+
+function buildPayload(options: PayloadOptions): ReviewMap {
   const run = options.run ?? reviewFixtureRun({ id: "web-review", ...(options.evaluated === undefined ? {} : { evaluated: options.evaluated }), ...(options.plies === undefined ? {} : { plies: options.plies }) });
   const branchId = run.activeCursor.branchId;
   const story = options.noMoments === true ? { moments: [], rank: [] } : storyMomentsForRun(run, branchId, { recordedResult: "1-0" });
   const packet = options.packet === true ? reviewPacketForRun(run, branchId, { importRecord: { runId: run.id, result: "1-0", movetextDigest: run.sessionDigest }, engine: new Map(run.nodes.map((node, index) => [node.id, index % 2 === 0 ? { kind: "pending" as const, jobCount: 1, retrying: 0 } : { kind: "unavailable" as const, reason: "provider_off" as const }])) }) : undefined;
-  const projection: ReviewMapProjection = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, ...(packet === undefined ? {} : { packet }) });
+  const projection: ReviewMapProjection = reviewMapProjection({ run, branchId, story, context: run.sessionKind === "imported" ? "imported_analysis" : "review", viewer: { role: "learner", session: run.sessionKind }, ...recordedReviewFixtureSources(run, branchId), ...(packet === undefined ? {} : { packet }) });
   // A JSON round trip: the component renders exactly what crosses the wire.
   return JSON.parse(JSON.stringify({
-    runId: run.id, branchId, side: run.start.side, ready: true, pendingEvidence: 0,
+    runId: run.id, branchId, side: run.start.side, ready: true, pendingEvidence: 0, decision: moduleDecisionStamp(run), workflowContext: run.sessionKind === "imported" ? "imported" : "position",
     source: { kind: "pgn_paste", headers: { White: "Alice", Black: "Bob" }, result: "1-0", importedAt: "2026-09-24T12:00:00.000Z" },
     outcome: { kind: "recorded_result", result: "1-0" }, storyTitle: "Won at move 12",
     viewer: { mayWrite: options.mayWrite ?? true }, semanticPath: { kind: "available", events: 0 },
@@ -37,6 +62,74 @@ function payload(options: { readonly run?: DrillRun; readonly mayWrite?: boolean
 function render(review: ReviewMap, onRetry: (entryNodeId: string) => Promise<void> = vi.fn(async () => {}), initialNodeId?: string) {
   assertReviewMapResponse(review, { runId: review.runId });
   return mount(ReviewMapScreen, { target: document.body, props: { review, onRetry, onExport: vi.fn(), initialNodeId } });
+}
+
+function objectiveRun(side: "white" | "black"): DrillRun {
+  let run = play(importedRun(`web-objective-${side}`, side), ["e2e4", "e7e5"]);
+  for (const nodeId of [run.nodes[0]!.id, run.activeCursor.nodeId, run.activeCursor.nodeId, run.activeCursor.nodeId]) {
+    const node = run.nodes.find(value => value.id === nodeId)!;
+    run = applyObjectiveEvidenceProposal(run, { nodeId, from: node.objectiveState,
+      to: node.objectiveState === "active" ? "preserved" : "active", evidenceRefs: ["recorded:original-objective"] }, "2026-11-02T00:00:00.000Z").run;
+  }
+  return run;
+}
+
+/** Ordinary public digests detect corruption, not authority. Negatives recompute them so the
+ * receiver must actually check its current consumer/renderer instead of failing a checksum. */
+function redigestPacket(packet: ReviewMap["rows"][number]["packet"]): typeof packet {
+  const items = packet.items.map(item => ({ ...item, componentDigest: presentationDigest("presentation.component@1", {
+    evidenceRef: item.evidenceRef, adapter: item.adapter, component: item.component,
+  }) }));
+  return { ...packet, items, digest: presentationDigest("presentation.receipt@1", items) };
+}
+
+function replacePacket(review: ReviewMap, packet: ReviewMap["rows"][number]["packet"]): ReviewMap {
+  const index = review.rows.length - 1, row = review.rows[index]!, original = parsePresentationReceipt(row.packet);
+  return { ...review, rows: review.rows.map((value, position) => position !== index ? value : {
+    ...value, packet, facts: [...row.facts.slice(0, row.facts.length - original.length), ...parsePresentationReceipt(packet).map(presentedSentence)],
+  }) };
+}
+
+/** Malformed wire must reach the actual response checker, not fail in a test assembly helper.
+ * These attacks change only fact operands; retain untouched siblings and matching raw fact text. */
+function replaceUntrustedFactPacket(review: ReviewMap, packet: ReviewMap["rows"][number]["packet"]): ReviewMap {
+  const index = review.rows.length - 1, row = review.rows[index]!, original = parsePresentationReceipt(row.packet);
+  expect(packet.items).toHaveLength(original.length);
+  const sentences = packet.items.map((item, position) => {
+    if (item.component.id === "fact_statement") return item.component.operand.renderedText;
+    expect(item).toEqual(row.packet.items[position]);
+    return presentedSentence(original[position]!);
+  });
+  return { ...review, rows: review.rows.map((value, position) => position !== index ? value : {
+    ...value, packet, facts: [...row.facts.slice(0, row.facts.length - original.length), ...sentences],
+  }) };
+}
+
+/** Every actual component must expose its own exact equivalent sentence, not necessarily a p.
+ * Move paths announce it on the ordered list; square captions are buttons, and count views keep
+ * it as screen-reader text beside their visual denominator. Preserve exact order and coverage. */
+function assertRenderedFacts(row: ReviewMap["rows"][number]): void {
+  const evidence = document.querySelector<HTMLElement>(".evidence")!;
+  const items = parsePresentationReceipt(row.packet);
+  const rendered = [...evidence.querySelectorAll<HTMLElement>(":scope > .presented")];
+  expect(rendered).toHaveLength(items.length);
+  for (const [index, item] of items.entries()) {
+    const root = rendered[index]!, sentence = presentedSentence(item);
+    expect(root.dataset.presented).toBe(item.component.id);
+    expect([root, ...root.querySelectorAll<HTMLElement>("*")].some(element =>
+      element.textContent?.trim() === sentence || element.getAttribute("aria-label") === sentence),
+    `missing equivalent sentence for ${item.adapter.projection.id}/${item.component.id}`).toBe(true);
+  }
+  const plain = [...evidence.querySelectorAll<HTMLElement>(":scope > p")].map(element => element.textContent);
+  expect([...plain, ...items.map(presentedSentence)]).toEqual(row.facts);
+}
+
+function harassmentComponent(row: ReviewMap["rows"][number], component: "move_path" | "square_set"): HTMLElement {
+  const index = parsePresentationReceipt(row.packet).findIndex(item =>
+    item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure" && item.adapter.projection.version === 3
+      && item.component.id === component);
+  expect(index, `missing current harassment ${component}`).toBeGreaterThanOrEqual(0);
+  return document.querySelectorAll<HTMLElement>(".evidence > .presented")[index]!;
 }
 
 /** Every text-bearing leaf the learner can read, one per element, so sentence spans stay intact. */
@@ -62,6 +155,77 @@ function files(directory: string): string[] {
 }
 
 describe("Review Map screen (rfc/review-map.md)", () => {
+  it.each(["white", "black"] as const)("D3927 renders %s's three repeated current objective facts, not its root event", async side => {
+    const run = objectiveRun(side), review = payload({ run }), row = review.rows.at(-1)!;
+    const objective = parsePresentationReceipt(row.packet).filter(item => item.adapter.projection.id === "run.record.objective_transition");
+    expect(objective).toHaveLength(3);
+    expect(objective.every(item => item.adapter.projection.version === 2 && item.component.id === "fact_statement" && item.component.operand.rendererId === "review.objective_transition@1")).toBe(true);
+    expect(parsePresentationReceipt(review.rows[0]!.packet).some(item => item.adapter.projection.id === "run.record.objective_transition")).toBe(false);
+    const component = render(review, undefined, row.nodeId); await tick();
+    assertRenderedFacts(row);
+    const texts = [...document.querySelectorAll(".evidence > .presented")].map(element => element.textContent?.trim());
+    for (const sentence of new Set(objective.map(presentedSentence))) expect(texts.filter(text => text === sentence)).toHaveLength(objective.map(presentedSentence).filter(text => text === sentence).length);
+    await unmount(component);
+  });
+
+  it("D3947 refuses genuine Compare objective evidence even with matching Review facts", () => {
+    let run = objectiveRun("white");
+    const main = run.activeCursor.branchId, root = run.nodes[0]!.id;
+    run = fork(run, root, { label: "genuine-comparison", at: "2026-11-02T00:00:00.000Z" }).run;
+    run = commitMove(run, "d2d4", { at: "2026-11-02T00:00:00.000Z" }).run;
+    const comparison = compareBranches(run, [main, run.activeCursor.branchId]);
+    const evidence = invokeEvidenceValueRoute("run.record.objective_transition@1", { run, comparison, branchId: main });
+    const foreign = serializePresentedEvidence(presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.compare_coach", version: 2 }, evidence.map(item => item.evidence))));
+    expect(foreign.items.length).toBeGreaterThan(0);
+    expect(() => parsePresentationReceipt(foreign)).not.toThrow();
+    expect(() => assertReviewMapResponse(replacePacket(payload({ run: objectiveRun("white") }), foreign), { runId: "web-objective-white" })).toThrow(/consumer/u);
+  });
+
+  it("D3947 refuses an objective with a different registered renderer despite valid ordinary digests", () => {
+    const review = payload({ run: objectiveRun("white") }), packet = review.rows.at(-1)!.packet;
+    const mutated = redigestPacket({ ...packet, items: packet.items.map(item => item.adapter.projection.id !== "run.record.objective_transition" ? item : {
+      ...item, component: { id: "fact_statement", operand: factStatementOperand("play.objective_transition@1", "recorded_run", "recorded-run@1", { from: "active", to: "preserved" }) },
+    }) });
+    expect(() => parsePresentationReceipt(mutated)).toThrow(/registered adapter renderer/u);
+    const untrusted = replaceUntrustedFactPacket(review, mutated);
+    expect(() => assertReviewMapResponse(untrusted, { runId: review.runId })).toThrow(/packet:.*registered adapter renderer/u);
+  });
+
+  it("D3947 binds abstention seats to the same current Review consumer", () => {
+    const review = payload({ plies: 2, packet: true }), packet = review.rows.at(-1)!.packet;
+    expect(packet.items.some(item => item.component.id === "abstention")).toBe(true);
+    const mutated = redigestPacket({ ...packet, items: packet.items.map(item => item.component.id !== "abstention" ? item : {
+      ...item, adapter: { ...item.adapter, consumer: { id: "module.compare_coach", version: 2 } },
+    }) });
+    expect(() => parsePresentationReceipt(mutated)).not.toThrow();
+    expect(() => assertReviewMapResponse(replacePacket(review, mutated), { runId: review.runId })).toThrow(/consumer/u);
+  });
+
+  it("D3947 refuses the objective renderer laundered through a different genuine Review pair", () => {
+    const review = payload({ run: objectiveRun("white") }), packet = review.rows.at(-1)!.packet;
+    expect(packet.items.some(item => item.adapter.projection.id === "rules.phase.reading")).toBe(true);
+    const mutated = redigestPacket({ ...packet, items: packet.items.map(item => item.adapter.projection.id !== "rules.phase.reading" ? item : {
+      ...item, component: { id: "fact_statement", operand: factStatementOperand("review.objective_transition@1", "recorded_run", "recorded-run@1", { from: "active", to: "preserved" }) },
+    }) });
+    expect(() => parsePresentationReceipt(mutated)).toThrow(/registered adapter renderer/u);
+    const untrusted = replaceUntrustedFactPacket(review, mutated);
+    expect(() => assertReviewMapResponse(untrusted, { runId: review.runId })).toThrow(/packet:.*registered adapter renderer/u);
+  });
+  it("D3940 reuses the complete default wire fixture without sharing mutable test data", () => {
+    const first = payload(), second = payload();
+    expect(first).not.toBe(second);
+    expect(first.rows).toHaveLength(70);
+    expect(first.coverage.positions).toBe(71);
+    expect(first.accuracy.white.decisions).toBe(35);
+    expect(first.accuracy.black.decisions).toBe(35);
+    expect(first).toEqual(second);
+    const original = JSON.stringify(second);
+    (first.rows[0]!.facts as string[])[0] = "test-local mutation";
+    expect(JSON.stringify(second)).toBe(original);
+    expect(JSON.stringify(payload())).toBe(original);
+    expect(payload({ plies: 20 }).rows).toHaveLength(20);
+  });
+
   it.each([
     { side: "white" as const, moves: ["e2e4", "e7e5", "g1f3", "b8c6"], numbers: [37, 37, 38, 38] },
     { side: "black" as const, moves: ["e7e5", "e2e4", "b8c6", "g1f3"], numbers: [37, 38, 38, 39] },
@@ -125,13 +289,14 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     });
     const run = play(importedRun("web-harassment", value.side, value.fen), value.moves);
     const branchId = run.activeCursor.branchId;
-    const projection = reviewMapProjection({ run, branchId, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, semanticPath: recordedSemanticPath(run, branchId) });
-    const review = JSON.parse(JSON.stringify({ ...payload({ noMoments: true }), ...projection, runId: run.id, branchId, side: value.side })) as ReviewMap;
+    const projection = reviewMapProjection({ run, branchId, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "learner", session: "imported" }, semanticPath: recordedSemanticPath(run, branchId), ...recordedReviewFixtureSources(run, branchId) });
+    const review = JSON.parse(JSON.stringify({ ...payload({ noMoments: true }), ...projection, runId: run.id, branchId, side: value.side, decision: moduleDecisionStamp(run), workflowContext: "imported" })) as ReviewMap;
     const component = render(review, vi.fn(), review.rows.at(-1)!.nodeId);
     await tick();
-    const caption = document.querySelector<HTMLButtonElement>('.evidence [data-component="square_set"] .caption')!;
+    const last = review.rows.at(-1)!;
+    const caption = harassmentComponent(last, "square_set").querySelector<HTMLButtonElement>('.caption')!;
     expect(caption).not.toBeNull();
-    expect(document.querySelector('.evidence [data-component="move_path"] .plies')?.children).toHaveLength(2);
+    expect(harassmentComponent(last, "move_path").querySelector('.plies')?.children).toHaveLength(2);
     expect(document.querySelectorAll('.stage .cg-shapes circle')).toHaveLength(0);
     caption.focus();
     await tick();
@@ -141,7 +306,8 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     document.querySelector<HTMLButtonElement>('.nav button')!.click();
     await tick();
     await expect.poll(() => document.querySelectorAll('.stage .cg-shapes circle').length).toBe(0);
-    expect(document.querySelector('.evidence [data-component="square_set"]')).toBeNull();
+    expect(parsePresentationReceipt(review.rows[0]!.packet).some(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure")).toBe(false);
+    expect(caption.isConnected).toBe(false);
     // A departed caption cannot paint the new row, even if a retained DOM reference dispatches.
     caption.dispatchEvent(new FocusEvent("focus"));
     await tick();
@@ -149,7 +315,7 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     document.querySelectorAll<HTMLButtonElement>('.nav button')[1]!.click();
     await tick();
     expect(document.querySelectorAll('.stage .cg-shapes circle')).toHaveLength(0);
-    const fresh = document.querySelector<HTMLButtonElement>('.evidence [data-component="square_set"] .caption')!;
+    const fresh = harassmentComponent(last, "square_set").querySelector<HTMLButtonElement>('.caption')!;
     fresh.click();
     await expect.poll(() => document.querySelectorAll('.stage .cg-shapes circle').length).toBe(2);
     fresh.dispatchEvent(new FocusEvent("blur"));
@@ -159,11 +325,12 @@ describe("Review Map screen (rfc/review-map.md)", () => {
   });
 
   it("offers an exact campaign-map return only for a retained campaign origin", async () => {
-    const review = { ...payload(), campaignOrigin: { campaignRunId: "campaign/run one", nodeId: "node-one", campaignDocumentDigest: `sha256:${"a".repeat(64)}` } };
+    const base = payload();
+    const review = { ...base, campaignOrigin: { campaignRunId: "campaign/run one", nodeId: "node-one", campaignDocumentDigest: `sha256:${"a".repeat(64)}` } };
     const component = render(review);
     expect(document.querySelector<HTMLAnchorElement>('a[href="/campaign/campaign%2Frun%20one"]')?.textContent).toBe("Return to campaign map");
     await unmount(component);
-    const ordinary = render(payload());
+    const ordinary = render(base);
     expect(document.querySelector('a[href^="/campaign/"]')).toBeNull();
     await unmount(ordinary);
   });
@@ -340,7 +507,8 @@ describe("Review Map screen (rfc/review-map.md)", () => {
   });
 
   it("[criterion 5] renders retry as unavailable with its reason on a device or account that cannot write, and never throws", async () => {
-    const readOnly = render(payload({ mayWrite: false }));
+    const review = payload();
+    const readOnly = render({ ...review, viewer: { ...review.viewer, mayWrite: false } });
     const reason = document.querySelector<HTMLElement>("#review-retry-unavailable")!;
     expect(reason.textContent).toBe(reviewText("retry.unavailable.read_only"));
     for (const button of document.querySelectorAll<HTMLButtonElement>("button.retry")) {
@@ -351,11 +519,11 @@ describe("Review Map screen (rfc/review-map.md)", () => {
 
     const unhandled = vi.fn();
     window.addEventListener("unhandledrejection", unhandled);
-    const held = render(payload(), vi.fn(async () => { throw Object.assign(new Error("held"), { code: "BOARD_HELD" }); }));
+    const held = render(review, vi.fn(async () => { throw Object.assign(new Error("held"), { code: "BOARD_HELD" }); }));
     document.querySelector<HTMLButtonElement>(".move-row button.retry")!.click();
     await vi.waitFor(() => expect(document.querySelector(".retry-error")?.textContent).toBe(reviewText("retry.failed.board_held")));
     await unmount(held);
-    const denied = render(payload(), vi.fn(async () => { throw Object.assign(new Error("no"), { code: "FORBIDDEN" }); }));
+    const denied = render(review, vi.fn(async () => { throw Object.assign(new Error("no"), { code: "FORBIDDEN" }); }));
     document.querySelector<HTMLButtonElement>(".moment-card button.retry")!.click();
     await vi.waitFor(() => expect(document.querySelector("#review-retry-unavailable")?.textContent).toBe(reviewText("retry.failed.forbidden")));
     expect([...document.querySelectorAll<HTMLButtonElement>("button.retry")].every((button) => button.disabled)).toBe(true);
@@ -364,10 +532,14 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     await unmount(denied);
   });
 
-  it("[criterion 6] shows the accuracy abstention with its coverage fraction when evaluations are partial", async () => {
+  it("[criterion 6] shows complete accuracy with its full decision denominator", async () => {
     const full = render(payload());
-    expect(document.querySelector("[data-accuracy]")!.textContent).toMatch(/^White: \d+\.\d% under grade-convention@1 — 100 minus the mean win-point drop across all \d+ of White's evaluated decisions/u);
+    expect(document.querySelector("[data-accuracy]")!.textContent).toMatch(/^White: \d+\.\d% under single move-loss convention, version 2 — 100 minus the mean win-point drop across all \d+ of White's evaluated decisions/u);
+    expect(document.querySelector("[data-accuracy]")!.textContent).not.toMatch(/grade-convention@\d/u);
     await unmount(full);
+  });
+
+  it("[criterion 6] shows the accuracy abstention with its coverage fraction when evaluations are partial", async () => {
     const partial = render(payload({ evaluated: (index) => index < 10 }));
     const texts = [...document.querySelectorAll("[data-accuracy]")].map((element) => element.textContent);
     expect(texts[0]).toMatch(/^White: no accuracy figure\. 5 of \d+ of White's decisions have paired recorded evaluations/u);
@@ -389,7 +561,8 @@ describe("Review Map screen (rfc/review-map.md)", () => {
       screen: readFileSync(resolve(ROOT, "apps/web/src/lib/ReviewMapScreen.svelte"), "utf8"),
       graph: readFileSync(resolve(ROOT, "apps/web/src/lib/ReviewEvalGraph.svelte"), "utf8"),
       projection: readFileSync(resolve(ROOT, "packages/runtime/src/review-map.ts"), "utf8"),
-      analysis: readFileSync(resolve(ROOT, "packages/runtime/src/review-analysis.ts"), "utf8"),
+      recordedAnalysis: readFileSync(resolve(ROOT, "packages/runtime/src/recorded-analyze-presentation.ts"), "utf8"),
+      recordedClock: readFileSync(resolve(ROOT, "apps/web/src/lib/ClockReadout.svelte"), "utf8"),
       card: readFileSync(resolve(ROOT, "apps/web/src/lib/story-card.ts"), "utf8"),
       publicPage: readFileSync(resolve(ROOT, "apps/server/src/rest.ts"), "utf8"),
     };
@@ -402,6 +575,17 @@ describe("Review Map screen (rfc/review-map.md)", () => {
       }
       // Ids passed by name (typed unions, lookup tables) are string literals equal to a key.
       for (const match of source.matchAll(/"([a-z_]+(?:\.[a-z_]+)+)"/gu)) if (keys.has(match[1]!)) referenced.add(match[1]!);
+      // The Analyze renderer selects one reason-specific key from its actual closed parser
+      // union. Derive those dynamic keys from that union, not a handwritten coverage waiver.
+      if (source.includes('`analysis.unattributed.${value.reason}`')) {
+        const reasons = /reason: s\.lit\(([^)]+)\)/u.exec(source);
+        expect(reasons, "Analyze reason template must retain a closed parser union").not.toBeNull();
+        for (const match of reasons![1]!.matchAll(/"([^"]+)"/gu)) {
+          const id = `analysis.unattributed.${match[1]}`;
+          expect(keys.has(id), `Unknown dynamic Analyze reason ${id}`).toBe(true);
+          referenced.add(id);
+        }
+      }
     }
     expect([...referenced].sort()).toEqual([...keys].sort());
 
@@ -485,7 +669,7 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     // Value components never carry the abstention attribute, and the packet never renders a raw id.
     expect([...evidence.querySelectorAll("[data-component]:not([data-component='abstention'])")].every((element) => !element.hasAttribute("data-abstention"))).toBe(true);
     expect([...evidence.querySelectorAll("[data-component]")].map((element) => element.textContent).join(" ")).not.toMatch(/review\.source\.|derived\.review|@\d|provider_off/u);
-    expect([...evidence.querySelectorAll("p")].map((element) => element.textContent)).toEqual(review.rows.find((row) => row.nodeId === document.querySelector(".move-row.selected")!.getAttribute("data-node-id"))!.facts);
+    assertRenderedFacts(review.rows.find((row) => row.nodeId === document.querySelector(".move-row.selected")!.getAttribute("data-node-id"))!);
     await unmount(component);
   });
 
@@ -500,7 +684,7 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     await tick();
     expect(document.querySelector(".move-row.selected")!.getAttribute("data-node-id")).toBe(review.rows[4]!.nodeId);
     expect(document.querySelector(".stage .eyebrow")!.textContent).toBe(reviewText("board.after", { move: review.rows[4]!.label }));
-    expect([...document.querySelectorAll(".evidence p")].map((element) => element.textContent)).toEqual(review.rows[4]!.facts);
+    assertRenderedFacts(review.rows[4]!);
     await unmount(component);
   });
 });

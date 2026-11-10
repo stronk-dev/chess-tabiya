@@ -19,6 +19,7 @@ import {
 
 export type ModulePacketRefusal =
   | "module_has_no_evidence"
+  | "source_page_required"
   | "module_blocked"
   | "timing_outside_module"
   | "role_outside_ceiling"
@@ -66,6 +67,7 @@ function refusal<T>(module: ModuleId, reason: ModulePacketRefusal): ModulePacket
 
 /** The single production module operation (`module.*` consumers' declared implementation). */
 export function compileModulePacket<T>(request: ModulePacketRequest<T>, manifest: CompiledEvidenceManifest = PRIMARY_EVIDENCE_MANIFEST): ModulePacket<T> {
+  if (request.module === "full_inspector") return refusal(request.module, "source_page_required");
   const module: ModuleDeclaration | undefined = MODULE_REGISTRY.byId.get(request.module);
   if (module === undefined) throw new TypeError(`Unknown learner module ${String(request.module)}`);
   if (module.accepts.kind === "none") return refusal(module.id, "module_has_no_evidence");

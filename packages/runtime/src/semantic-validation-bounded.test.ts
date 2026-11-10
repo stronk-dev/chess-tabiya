@@ -1,5 +1,6 @@
 // D3730: the registered batch, canonical authority and independent legal operands.
 import { readFileSync } from "node:fs";
+import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
@@ -8,13 +9,13 @@ import { describe, expect, it } from "vitest";
 import { evidenceDigest, evidenceValueReceipt } from "./evidence-contract.js";
 import { SEMANTIC_VALIDATION_REPOSITORY_ROOT, SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
 import { BOUNDED_VALIDATION_FIXTURES } from "./semantic-validation-bounded-sources.js";
-import { BOUNDED_TARGET_CITED_SOURCE } from "./semantic-validation-literal-sources.js";
+import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE } from "./semantic-validation-literal-sources.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-validation-operations.js";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases;
+const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
 const byId = new Map(raw.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
 const rows = BOUNDED_TARGET_CITED_SOURCE.cases;
 const position = (fen: string) => Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
@@ -127,7 +128,7 @@ describe("D3730 source-bound bounded material-target cases", () => {
   it("retains every predecessor case and adds exactly thirty-six explicitly source-bound cases", () => {
     const ids = new Set(rows.map(row => row.proposition.case.id));
     expect(raw.filter(value => ids.has(value.id as string))).toHaveLength(36);
-    const prior = raw.filter(value => !ids.has(value.id as string));
+    const prior = raw.filter(value => !ids.has(value.id as string) && !EXPOSURE_V2_CITED_SOURCE.cases.some(row => row.proposition.case.id === value.id) && !MATERIAL_V2_CITED_SOURCE.cases.some(row => row.proposition.case.id === value.id));
     expect(prior).toHaveLength(307);
     expect(evidenceDigest(prior)).toBe("bb70a8da0f7b37bb882cb197ccf89fc8c487a0c702d87e4acc80de8eec7e6beb");
   });

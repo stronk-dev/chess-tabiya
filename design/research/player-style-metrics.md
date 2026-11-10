@@ -223,3 +223,354 @@ vitest run --config tools/r12-player-style-harness/vitest.config.ts tools/r12-pl
 
 The extraction helpers record exact source counts and digests; the tests regenerate the full
 pass/fail table, controls, pseudonymous trace artifact and aggregate result.
+
+## 2026-11-05 — Recorded context needed before source facts become player observations (D4140)
+
+All six non-clock style sources now have actual factories, but their actor-neutral source truth
+does not establish a played learner choice. Candidate-role/centre/early-queen cover legal moves
+that were not selected; early queen explicitly permits that alternative. Fianchetto factories
+return complete both-color snapshots, and candidate-population computes them at hypothetical
+child FENs. Castling baseline selects the first represented stored-color decision, including a
+pending endpoint. The imported clock constructor alone binds one real outgoing edge and original
+import actor; changing its source ref would not authenticate those different grains. `[V]`
+`rfc/foundation-source-identity.md` §§3.8–3.8c; `candidate-population.ts` current local style sources;
+`recorded-foundation-occurrence.ts`; `recorded-foundation-source.ts`.
+
+The smallest real recorded slice reuses the actual source owner and an original BEFORE member
+with its exact next committed child. Preserve canonical candidate and chosen UCI separately; an
+alternative can enter an opportunity denominator but is not an observed choice. Bind fianchetto
+state to an explicitly actual BEFORE/AFTER node, retaining whole two-color payloads; actor-specific
+readers may not claim every configuration belongs to that actor, or count a persistent position
+as repeated decisions. First-decision castling binds its own baseline/event, not a later endpoint.
+These are finite context joins, not new chess detection, strategy or a style score. `[M]` bounded
+proposal from the accepted research boundary; source handoff
+`planning/evidence-foundation-ux/style-foundation-atoms-author-repair-2026-08-26.md`; draft
+`rfc/foundation-source-identity.md` §3.8d.
+
+Historical authorship cannot be inferred from current grants, the viewer or user/opponent/system
+Node.actor. The existing sealed LongitudinalSourceImageV4 and closed journal matrix can prove owner
+commits; grant-only shared authorship remains null, and predictions have their narrower provability
+rule. Original import identity must precede owner attribution and use the actual initial legal
+import map/session join, not current first-branch maximum ply or session.kind. A later rehearsal
+branch is not original imported play. The clock document already implements that original map
+join, which can be reused read-only without clock backfill. `[V]` `longitudinal-source.ts`,
+`longitudinal-store.ts` #resolveAuthorship, `longitudinal-decisions.ts` normativeDecisions;
+`recorded-clock-document.ts` originalImportNodes; `recorded-foundation-sources.ts`.
+
+Both independent read-only preflights identify these missing finite joins and support authoring
+a bounded companion with no new product ruling. Pending/offered/predicted/opponent/coach contexts
+and every consumer/denominator/qualification remain explicitly separate. No production constructor,
+new context variant, style claim or six-atom completion follows from this inspection. `[M]`
+preflight scope; current source plan and D4140; draft acceptance pending.
+
+### Recorded-context implementation checkpoint
+
+The bounded companion is independently accepted and now implemented for all six neutral sources.
+Original recorded choices, alternatives, actual whole before/after snapshots and first baseline
+remain distinct. Historical imported identity precedes fresh same-store owner proof; native
+learner additionally requires single_player, so an actual academy owner-teacher abstains rather
+than becoming a learner. Real source/role/lifetime falsifiers and111focused controls pass; full
+14557software/528+7performance/types/build/source pass. This establishes bounded context, not
+consumer adoption or player-style validity. `[V]` `recorded-style-occurrence.test.ts` and the
+current source plan; `rfc/foundation-source-identity.md` §3.8d.
+
+Next-consumer inspection finds `learner-profile.ts#deriveRunFact` still invokes direct fianchetto,
+castling-right and decision-population helpers. Its cache keys completedSeq rather than current
+source authority, while the new recorded owner validates a current full head. A migration must
+pin the same completed population and refresh authority before cached card or detail publication;
+latest-run substitution would change the population. Two existing fianchetto rates and castling
+eligibility are game units, not per-decision opportunities. Preserve same-side member selection,
+reached-at-least-once deduplication, contributors/floors and explicit unavailable. `[V]` live
+`learner-profile.ts#deriveRunFact/#fact`; independent read-only consumer preflight,2026-11-05.
+No consumer implementation or independent companion acceptance follows from this inspection.
+
+### Actual bot-opponent attribution preflight (D4140)
+
+The existing `commitMove`/`appendOpponentPly` path records opponent.move_selected immediately
+before its move.committed, retaining the exact BEFORE node, branch and canonical UCI. The server
+profile operation atomically retains its decision, operation and provider deliveries after the
+write lease/current-root check. `parseStoredBotEnvelope` rebuilds legal/classifier inputs and
+provider receipts and compares the retained decision/profile/root; it performs no provider request.
+These actual records can substantiate opponent/played without interpreting an arbitrary Node.actor
+as historical identity. `[V]` `packages/runtime/src/runtime.ts#commitMove/appendOpponentPly`;
+`apps/server/src/service.ts#botOpponentPly`; `bot-opponent-operation.ts#parseStoredBotEnvelope`.
+
+This is a finite new actor arm, not a new detector or bot behavior. Existing recorded§3.8d admits
+only imported/learner and therefore needs a separately accepted companion before code. Restrict the
+first arm to actual profile selections whose stored envelope passes the existing durable parser;
+legacy unprofiled selections, human Match moves and coach demonstrations cannot borrow its proof.
+Castling source is explicitly the stored learner side's first baseline and must not be silently
+retargeted to the bot side. Candidate/position subjects may retain opponent context; actual chosen
+and alternative remain distinct. `[V]` current recorded source/occurrence implementations and
+foundation§3.8c–d; `[M]` bounded companion proposal following independent source/ABI preflight.
+
+Human journals contain board possession and historical authorship, but academy roles and Match
+pause/demonstrations have different meanings. Current classroom roles, owner/start.side or a live
+seat are not a total historical learner/coach classifier. A later finite historical role contract
+must handle ambiguity and deletion before relaxing single_player admission. `[V]` `live-session.ts`
+`deriveMoveAuthorship`; `longitudinal-store.ts#resolveAuthorship`; storage Match/session journal
+operations. Separate read-only source/meaning preflights were performed2026-11-05; no tests or
+production changes follow from this desk audit. The existing full1.0 actor duties remain open.
+
+### Exact-cut consumer admission and cost gate (D4147)
+
+Current profile has no manifest consumer for the three neutral sources. `/learner-profile`, style
+card/detail, history, opening and observation routes all enter a shared snapshot without forwarding
+request.signal; share-card rereads a card through that same path. Five affected derived paths are
+summary cards, detail cards, measured-denominator refs, numerator contributors and consent-gated
+share output. A finite named three-ref operation must preserve the exact completed cohort while
+other profile data retains its independent availability. `[V]` `learner-profile.ts#snapshot/#fact`,
+`#measuredGames/#allContributors/shareCard`; `rest.ts` learner-profile routes; `evidence-catalog.ts`.
+
+Existing incomplete_card abstention can represent an unresolved source population without a new
+card grammar. Abstain the affected whole card rather than zeroing unknown occurrences or shrinking
+its denominator; unavailable castling eligibility is not false. Do not mark the run store_mismatch
+or disable unrelated history/cards merely because a new card-specific source could not be proved.
+This is a proposed consumer behavior pending its compound contract. `[V]` `style-contract.ts`
+StyleAbstention and existing card/share rendering; `[M]` bounded consumer proposal.
+
+A simple loop is not yet an accepted design: each original occurrence read refreshes full source
+and actor authority; V4 opens its own transaction. There is no reusable public nested transaction,
+per-request source memo or trusted frozen RunStorage substitute. At the existing200-game floor,
+per-position full clone/replay/journal work needs actual cold/warm measurement and call counts.
+Measure complete legal native games at realistic lengths, same-color first contributors/empty
+snapshots, actual live head beyond completed cut, same-head journal/role changes and abort. A
+finite source-owned aggregate may amortize its own explicit group admission/publication checks;
+it cannot silently weaken existing point-occurrence currentness or persist opaque proofs. `[V]`
+`longitudinal-source.ts` and `longitudinal-store.ts` sourceImageInTransaction/inTransaction;
+`recorded-foundation-sources.ts`; `[M]` measurement question. Both independent preflights agree.
+No aggregation implementation, source-cost number or new consumer acceptance is asserted.
+
+### Follow-up: use the existing exact-cut worker, not repeated HTTP chess work
+
+Independent source and consumer reinspection finds that player-style§2.2/D1/D2 and its implementation
+record explicitly route the final atoms through store rows. Existing longitudinal claim/generation/
+lease, genuine same-store V4 capture, atomic publication, invalidation/rebuild and complete-cut read
+already provide the required lifecycle. A finite game-fact read model in that worker is therefore
+a better direction to evaluate than expanding per-request source checks across200games. `[V]`
+`rfc/player-style.md` §§2.2–2.3/Discharges/Implementation record; `longitudinal-store.ts` claim,
+publish/readSnapshot and source-image methods; `longitudinal-worker.ts`; `[M]` implementation
+recommendation following both independent preflights, not a new consumer acceptance.
+
+Current observation rows have decision-opportunity units and structure rows hold root/branch
+counters. Neither can hold first-per-game setup/screen or first-rights eligibility honestly. The
+old generic D2 rev-bump/no-migration sentence does not authorize overloading them. A paired finite
+foundation/longitudinal/player-style companion must explicitly define the minimal game-unit row,
+actual worker claimed-cut issuer, exact three-ref consumer, positive/proved-none/unavailable
+states, earliest contributors, atomic complete-cut availability and account/delete/export/rebuild
+lifecycle. Keep existing job/revision/fence mechanisms; do not introduce another scheduler, cache,
+unbounded metric vector, prose store or request-path projection. `[V]` current longitudinal row
+DTOs/registry/projector and source owner; `[M]` bounded companion scope. No table choice or schema
+reservation is made by this audit.
+
+Before acceptance, compare genuine once-per-changed-run derivation and cold/warm completed-row
+profile/detail/share reads at realistic200-game scale, including earlier-cut→new-pending and
+same-head journal/marker changes, stale/aborted claims, known false versus unknown, contributor/
+cohort parity and deletion/rebuild. Existing V4 does not bind original imported PGN/map; no new
+imported-game cohort may be manufactured from its old max-ply field. Current three-source scope
+and all broader style/actor duties stay open. `[V]` V4/source and profile cohort code; `[M]`
+measurement/discharge requirements. No timings or production implementation are asserted.
+
+### 2026-11-05 — Actual200-session source-cost/parity baseline (D4147/D4149)
+
+`make profile-source-cost` executes the disposable, typed instrument in
+`tools/r12-player-style-harness/profile-source-cost.ts`. The input is the existing CC0
+`tools/r2-selection-harness/imported-sample.pgn` and its fixture.json. Ten legal64-ply lines are
+replayed into200native SQLite sessions,100per learner side. These are scripted workload sessions,
+not200independent observed human games. Every actual store claim uses the complete production
+semantic projector and its ordinary lease/checkpoint/publication code; no fake event population,
+manual completed watermark or narrowed family set is used. Current profile/card/detail/share
+methods consume their actual completed store rows. `[V]` instrument and its successful9428 run,
+`/tmp/tabiya-profile-source-cost-current.log` (2026-11-05).
+
+| Measured component | Result |
+|---|---:|
+| Complete production semantic projection,200sessions | 545,853.71ms |
+| Existing three-source operand probe,200sessions | 3,389.04ms |
+| Original source values probed | 26,200 |
+| All200jobs completed window (last progress record) | 552,931.04ms |
+| Current cold profile read | 854.35ms;200actual V4 reads |
+| Current warm profile read | 351.57ms;0additional V4 reads |
+| Later detail/share calls in this run | 0additional V4 reads |
+| Setup rate / screen rate | 60/200 and30/200 |
+| Kingside / queenside castled game rates | 140/200 and30/200 |
+
+Every nonroot/source-board setup/screen result is checked against the existing independent helper;
+exact first contributing node refs and card numerator/denominator/contributor parity pass. All four
+rate cards are measured at their unchanged floors; current share gate is exercised. Original source
+inputs remain genuine: setup→same original screen input and an actual live-owner first-rights
+prefix matched to the same native cut. This probe DOES NOT implement the future worker-owned
+GAME issuer, storage or consumer; it cannot authenticate that new path. No new game facts are
+persisted. The original final log's workerAndProbeMs556,840.45 label includes subsequent profile/
+detail/share measurement; use the last200-completion progress record for worker window. The
+instrument now prints those two elapsed scopes separately and suppresses duplicate final progress.
+`[V]` executable assertions/log and instrument's corrected reporting labels; no computation change.
+
+The existing source arithmetic adds little work relative to the full semantic population on this
+workload. That supports evaluating an additive source-owned game reduction in the existing worker;
+it does not prove the cost of the not-yet-implemented issuer or new complete profile read path.
+Ten repeated lines favor warm semantic reuse; no population prevalence, real HTTP/UI/worker-thread
+responsiveness, broad hardware latency or source qualification follows. No timing threshold was
+invented or added to ordinary CI. `[M]` bounded engineering inference from the measurements above.
+
+**D4149 is reproduced through the actual store and public profile methods.** After the200normal
+sessions, a201st standard-root native line scripts e2e3/e7e6/Ke2/Nf6 before the owner's first Nf3.
+The source's first represented stored-side decision is node0 with rights retained; the metric's
+first owner BEFORE node is node4 after rights loss. The actual profile counts201games but retains
+200castling-eligible games. Direct substitution of source1 would incorrectly change that denominator
+to201. Preserve the measured metric and represent this unsupported subject join explicitly; do not
+retarget source1, silently change eligibility or call unknown false. `[V]` instrument D4149 control,
+actual SQLite/default worker/profile and original factory assertions; normal9428 exits0.
+
+The new claimed-cut GAME authority must separately retain the real claim/source/generation/token
+and close with the synchronous operation. Legitimate lease renewal returns a new sealed claim;
+initial lease-expiry identity must not be frozen into per-value source checks. Existing checkpoints
+and publication own current liveness. `[V]` `longitudinal-store.ts#claimSourceImage/sourceDigest/renew/
+publish`, `longitudinal-worker-core.ts#processClaim`; independent source preflight2026-11-05.
+
+## 2026-11-05 — remaining choice/clock consumer preflight
+
+[V] The three existing choice residuals still read `decisionTraitPopulation` in
+`apps/server/src/learner-profile.ts::deriveRunFact`. `packages/runtime/src/style-atoms.ts`
+computes each trait share over the complete `exactLegalMoves` set, **including** the chosen move;
+a forced legal move is retained with a zero residual. `residualCard` divides the sum of chosen
+indicator minus that share by total retained decisions, then bootstraps by game. These are
+implementation facts, not new style validity or qualified-source claims.
+
+[V] The current worker opportunity algebra in
+`apps/server/src/longitudinal-projector.ts::decisionPopulation` is different: no alternatives
+returns `forced_move`; membership requires `0 < exhibiting < all edges`; stored share counts
+counterfactual exhibiting moves divided by alternatives only. Therefore adding the trait names
+to the current constructor list would not preserve residual mathematics. Aggregate alternative
+shares cannot be converted to all-legal shares without each original legal-set cardinality.
+D4159 owns this finite adoption prerequisite; GAME rows are not per-decision trait records.
+
+[V] `packages/runtime/src/foundation-style-sources.ts` already supplies original legal candidate
+role, exact eight extended-center destinations and queen-role candidates before rooted index16.
+`recorded-foundation-source.ts` correctly refuses claimed GAME prefixes at live decision issuance.
+A genuine claimed recorded-decision/candidate-population contract is still needed for worker
+adoption. Canonical all-legal members, promotions and castle identities, original actor/decision,
+complete/unknown/zero and selected-versus-alternative roles must remain separate. No prototype,
+cost/parity run or production migration of this next lane is claimed by this desk preflight.
+
+[V] The three clock cards in `packages/runtime/src/style-contract.ts` remain blocked under
+`clock_readings_unrecorded`; their reason currently says no run records typed readings. Imported
+clock persistence/source and historical Review delivery now exist (`docs/longitudinal-store.md`,
+`docs/learner-profile.md` and `planning/foundation-source-identity/plan.md` retained-clock receipt).
+That does not establish owner-played/native longitudinal clock authority. D4160 owns truthful
+blocked wording; recorded-clocks D4/D7 remain the actual ingest/native prerequisites. Do not
+substitute imported mover color, createdAt differences or bridged sample gaps for owner evidence.
+
+## 2026-11-05 — actual GAME worker/store/Profile workload
+
+[V] `make profile-source-cost` completes200native64-ply runs and the201st mixed-control negative
+through the actual new claimed GAME scope, exact3ref machine consumer, strict fourth-family
+publication/read model and current Profile/detail/share paths. Compact results:
+`planning/foundation-source-identity/profile-game-facts-cost-2026-11-05.json`; instrument:
+`tools/r12-player-style-harness/profile-source-cost.ts`. No raw source-value dump is retained.
+
+[V] Full projection570788.45ms versus the prior545853.71ms workload observation (about4.6% longer);
+worker plus separately timed parity probes575656.58ms. Current original-value probes take1502.99ms
+for25800values; they reuse the already acquired worker scope, whereas the old component included
+live scope acquisition. Those component times do not establish a speedup. Cold/warm Profile
+1061.71/381.78ms,200/zero new V4 reads; all later detail/share reads add zero V4 reads. Detail
+344.74–377.11ms and share352.12–365.18ms for the four migrated cards. These are same-process
+batch/profile costs over real separate SQLite connections, not production thread/network/browser
+latency or statistically paired attribution.
+
+[V] Independent legacy-helper/original-source assertions cover the three migrated operands:
+earliest setup/screen refs and numerator counts60/200and30/200, plus castling rights/eligibility
+and the original first-owner BEFORE join. All four measured cards/details/shares execute; observed
+castling numerators are140/200and30/200. The cost harness checks share game counts, not full share
+text/metadata bytes, and does not independently rebuild unchanged castling numerator/contributor
+or bootstrap/tier code. This is migrated-operand/ref parity, not independent validation of every
+pre-existing card statistic. D4149's201st genuine scripted-own-side king move
+keeps201games counted and200independently proved eligible detail refs; the affected card honestly
+abstains incomplete instead of reporting200or201as a proved total. Source first-side remains
+node0/rights true; metric first-owner BEFORE remains node4/rights false. No baseline retargeting,
+new style/human-validity/source qualification or whole1.0 clearance follows this workload.
+
+### 2026-11-09 — D4159 finite source-population experiment
+
+[V] `make profile-choice-source` runs the disposable typed instrument
+`tools/r12-player-style-harness/choice-source.ts` using original legal_moves, candidate_role and
+pawn_extended_center_destination factory invocations, not fabricated DeclaredEvidence or an
+alternate matcher. Actual23898 exits0:43position/chosen sample calls, including repeated FENs, and284candidate-member visits. For every chosen
+move, actual old `decisionTraitPopulation` legal membership, chosen flags and all three shares
+match those retained source readings. Both colors cover four promotion identities with source
+pawn role, both canonical castling wings with king-landing aliases refused by harness membership admission, all eight centre
+destinations/four outside neighbors, forced/unanimous/all-false populations and terminal refusal.
+This is finite source arithmetic, not new production ingestion or human-style validity.
+
+[V] White king h1 versus g1 with white pawn a3, black king h8 and chosen a3a4 has N=4versus6;
+the black equivalents with pawn a6 chosen a6a5 give the same result. Each complete legal set has
+one pawn move, chosen. Current profile residuals are therefore3/4and5/6. Each produces the same
+**algebraic** opportunity tuple (one opportunity, one occurrence, zero alternative-share sum)
+under the existing formula; this tuple is calculated, not an emitted/persisted trait row (the
+worker admits no such trait identity). Thus no function of that aggregate tuple alone can recover
+both correct values. Code trace: `longitudinal-projector.ts::decisionPopulation` and
+`longitudinal-contract.test.ts` criterion3; executed complete sets: disposable instrument.
+
+[V] The forced-move sample has N=1andzero residual; the queen-only legal population has N=2and
+zero residual; an all-false pawn population also has zero residual. Retaining a3a4's3/4plus the
+forced/all-false zeros gives three observations and mean1/4; retaining only the strict-interior
+nonzero observation gives3/4. This changes the feedback even without a floating-point bug.
+The mean and existing by-game bootstrap/floors must be preserved independently of storage layout.
+
+[V] A single23.76ms instrument execution is not worker/Profile integration cost or a performance
+claim. It issues no claimed worker decision, early-queen context, persisted row, HTTP delivery or
+new semantic qualification. The live early-queen source's original rooted index<16cannot be
+replaced by a caller-authored index or generic opening phase. `recorded-foundation-source.ts`
+explicitly refuses a claimed GAME prefix at issueDecision/readDecision; the worker must gain a
+finite original claimed-decision contract, preserving event/node/root-index/actor joins and
+retirement. No existing accepted contract authorizes the replacement yet. Independent static
+preflight agrees this is a real source/row/consumer gap; independent research review accepts this bounded exploration for companion drafting. It does not
+authorize production implementation. The bare-kings all-false case proves source arithmetic, not
+a replayable committed runtime decision.
+
+[M] The bounded successor should use the existing original legal/candidate/centre/early-queen
+sources and job/revision/atomic lifecycle, retain N and trait counts/chosen flags plus exact
+original decision and legal identities, and keep unavailable distinct from zero. It must migrate
+all existing profile/card/detail/contributor/share paths, retain GAME cohorts and100/200/100floors,
+and remove these raw helper reads from learner delivery after parity proof. No GAME-row overload,
+new generic platform, metric/personality, legacy compatibility obligation or raw research dump.
+Measure actual new full worker and cold/warm profile paths before claiming implementation done;
+the earlier200-session cost baseline measures the preceding implementation only.
+
+### 2026-11-09 — complete chosen-inclusive worker/Profile migration
+
+[V] The independently accepted profile-choice-facts companion now issues original claimed
+owner decisions, executes its exact four-source consumer and publishes the separate strict
+schema34/revision8 choice family. All current Profile cards/details/contributors/shares, Skills
+legal-set inputs and account export/delete/rederive read that family; HTTP no longer calls the
+old choice helper. Unknown selected source preserves the game/history and abstains the whole
+affected metric before floors. Forced/unanimous/all-false zeros remain in the formula; early
+queen selects original BEFORE index<16. Source: rfc/profile-choice-facts.md; apps/server/src/
+profile-choice-facts.ts, profile-choice-facts-contract.ts, learner-profile.ts; packages/runtime/
+src/internal/profile-choice-facts.ts and actual source/store/Profile tests.
+
+[V] Actual make profile-source-cost on2026-11-09 passes200native64ply/100eachside jobs and6400
+original-decision comparisons against the old helper's complete legal identities/chosen flags/
+shares plus original refs. All three existing cards independently match weighted statistics,
+separate BigInt/PRNG bootstrap intervals, full contributor paging and consented shared object/
+text. Floors remain100/200/100. A separate real100game/150decision Profile control distinguishes
+weighted decisions from averaging game means. Compact4956byte receipt: planning/foundation-
+source-identity/profile-choice-facts-cost-2026-11-09.json; instrument: tools/r12-player-style-
+harness/profile-source-cost.ts. These are ten repeated scripted CC0 lines, not200independent
+human games, a new human habit result or semantic qualification.
+
+[V] Production projection609174.98ms and worker+probe613892.17ms; cold/warm Profile1174.1/
+501.07ms with200/zero V4 source reads. Combined old GAME-probe/helper/comparison942.87ms does
+not isolate the new choice-source cost;25800counts only prior GAME probe factory calls. New
+choice work is included in productionProjectorMs. There is no browser/network latency or causal
+performance attribution claim. The independent201st source-first0/rights-true versus owner-
+first4/rights-false control retains the original incomplete GAME card and counted history.
+Same compact receipt and source plan.
+
+[V] Final local normal software14730/all534410.56s,7performance/four58.02s/types/build/source
+contracts and source-author11 pass. Complete real-content tier remains60fail/261pass/18setup
+43files172.73s; all62prior failure headings exactly match in order. Source/store/account/
+missing-row/cache/unequal-weight/revision controls and both independent reviews support bounded
+D4159 local closure. Exact predecessor4family output is retained despite the new fifth family.
+No source/actor/personality/official-content/native/release or whole learner-model gate closes.
+Evidence: planning/foundation-source-identity/plan.md and profile-game-facts-review.md.

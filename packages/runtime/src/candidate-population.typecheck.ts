@@ -58,9 +58,11 @@ declare const packet: CandidateEventPopulation;
 const convention: CandidateEventPopulation["moveIdentityConvention"] = packet.moveIdentityConvention;
 // @ts-expect-error a packet built under another move convention is a different type.
 const foreignConvention: CandidateEventPopulation["moveIdentityConvention"] = "standard-uci-king-destination@1";
-const version: CandidateEventPopulation["compilerVersion"] = 1;
+const version: CandidateEventPopulation["compilerVersion"] = 7;
+// @ts-expect-error source construction changed; the previous compiler literal is no longer current.
+const previousVersion: CandidateEventPopulation["compilerVersion"] = 6;
 // @ts-expect-error the compiler version is the literal CANDIDATE_PACKET_COMPILER_VERSION.
-const nextVersion: CandidateEventPopulation["compilerVersion"] = 2;
+const nextVersion: CandidateEventPopulation["compilerVersion"] = 1;
 const abstention: CandidatePacketAbstention = { projection: "rules.tactic.event.loose_piece@1", reason: "invalid_turn_clone" };
 // @ts-expect-error a reason the generated map does not pair with the projection.
 const wrongReason: CandidatePacketAbstention = { projection: "rules.tactic.event.loose_piece@1", reason: "threw" };
@@ -76,4 +78,4 @@ const drawn: NonNullable<CandidateEventPopulation["terminal"]>["reason"] = "insu
 // @ts-expect-error a packet receipt is not a rendered evidence view.
 voiceCheck(wide, "text");
 
-export const TYPECHECK_WITNESSES = [convention, foreignConvention, version, nextVersion, abstention, wrongReason, wrongProjection, mate, drawn] as const;
+export const TYPECHECK_WITNESSES = [convention, foreignConvention, version, previousVersion, nextVersion, abstention, wrongReason, wrongProjection, mate, drawn] as const;

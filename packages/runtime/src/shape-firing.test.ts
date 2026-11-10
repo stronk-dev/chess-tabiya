@@ -1,11 +1,13 @@
-import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
-
-import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
-import { consumeShapeFiring, declareShapeFiringEvidence, shapeFiringEvidence, shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
+import { describe, expect, it, vi } from "vitest";
+import { declareShapeFiringEvidence, shapeFirings, type ShapeTriggerSource } from "./shape-firing.js";
+import { consumeShapeFiring, shapeFiringEvidence } from "./shape-presentation.js";
 import { evidenceForConsumer } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { commitMove, createRun } from "./runtime.js";
+import { presentedItemOwner, presentedSentence } from "./presentation-contract.js";
+import * as presentation from "./presentation-contract.js";
+import { createRun, commitMove } from "./runtime.js";
+import { branchPath } from "./branch-path.js";
+import { mirrorSemanticFen, mirrorSemanticUci } from "./semantic-validation.js";
 
 const openA: ShapeTriggerSource = { id: "a", trigger: { kind: "feature", feature: { kind: "open_file", file: "a" } } };
 const openB: ShapeTriggerSource = { id: "b", trigger: { kind: "feature", feature: { kind: "open_file", file: "b" } } };
@@ -33,9 +35,16 @@ describe("shapeFirings", () => {
 
   it("admits detected spans at the theory consumer boundary", () => {
     const firings = shapeFirings([openA], [{ id: "n", fen: aOpen }]);
-    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 }, declareShapeFiringEvidence([openA], [{ id: "n", fen: aOpen }]));
-    expect(consumeShapeFiring(view)).toEqual(firings);
-    expect(shapeFiringEvidence([openA], [{ id: "n", fen: aOpen }])).toEqual(firings);
+    const sources = declareShapeFiringEvidence([openA], [{ id: "n", fen: aOpen }]);
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 }, sources);
+    const delivered = consumeShapeFiring(view);
+    expect(delivered.map(entry => entry.firing)).toEqual(firings);
+    expect(shapeFiringEvidence([openA], [{ id: "n", fen: aOpen }]).map(entry => entry.firing)).toEqual(firings);
+    expect(delivered[0]!.presentation.kind).toBe("ready");
+    if (delivered[0]!.presentation.kind !== "ready") throw new Error("Expected registered recognition");
+    expect(delivered[0]!.presentation.items).toHaveLength(1);
+    expect(presentedItemOwner(delivered[0]!.presentation.items[0]!)).toBe(sources[0]);
+    expect(presentedSentence(delivered[0]!.presentation.items[0]!)).toContain("A");
     // Firings are recomputed from the registered trigger and recorded path; none fires on a closed file.
     expect(shapeFiringEvidence([openA], [{ id: "n", fen: initial }])).toEqual([]);
     if (false) {
@@ -43,18 +52,56 @@ describe("shapeFirings", () => {
       consumeShapeFiring(firings);
     }
   });
+  it.each([false, true])("retains both genuine recorded spans and every original owner, black=%s", black => {
+    const at = "2026-11-03T00:00:00.000Z";
+    const fen = "7k/8/8/8/1n6/n7/1P6/7K w - - 0 1";
+    let run = createRun({ id: `shape-spans-${black}`, packId: "p", packDigest: `sha256:${"a".repeat(64)}`,
+      startFen: black ? mirrorSemanticFen(fen, "color_and_vertical") : fen, seed: 1, createdAt: at,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+    for (const move of ["b2a3", "h8g8", "a3b4"]) run = commitMove(run, black ? mirrorSemanticUci(move, "color_and_vertical") : move, { at }).run;
+    const path = branchPath(run, run.activeCursor.branchId), saved = JSON.stringify(run);
+    const a = declareShapeFiringEvidence([openA], path), b = declareShapeFiringEvidence([openA], path);
+    expect(a.map(item => item.payload)).toEqual([
+      { entryId: "a", firstNodeId: path[0]!.id, lastNodeId: path[0]!.id, openEnded: false },
+      { entryId: "a", firstNodeId: path[3]!.id, lastNodeId: path[3]!.id, openEnded: true },
+    ]);
+    expect(a[0]).not.toBe(b[0]); expect(a[0]!.payload).toEqual(b[0]!.payload);
+    const input = [a[1]!, a[0]!, b[0]!, a[0]!];
+    const delivered = consumeShapeFiring(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 }, input));
+    expect(delivered).toHaveLength(4);
+    delivered.forEach((entry, index) => {
+      expect(entry.firing).toBe(input[index]!.payload);
+      if (entry.presentation.kind !== "ready") throw new Error("Expected registered recognition");
+      expect(entry.presentation.items).toHaveLength(1);
+      expect(presentedItemOwner(entry.presentation.items[0]!)).toBe(input[index]);
+      expect(presentation.parsePresentationReceipt(presentation.serializePresentedEvidence(entry.presentation.items))).toHaveLength(1);
+    });
+    expect(JSON.stringify(run)).toBe(saved);
+  });
 
-  it("records the four-entry firing envelope over every Pack B spine node without gating it", () => {
-    const pack = JSON.parse(readFileSync(new URL(resolvePackPath("carlsbad-minority-attack"), import.meta.url), "utf8"));
-    const entries = ["carlsbad", "iqp-white", "iqp-black", "rook-4v3-same-side"].map((id) => JSON.parse(readFileSync(new URL(`../../../content/shapes/${id}.json`, import.meta.url), "utf8")) as ShapeTriggerSource);
-    const root = createRun({ id: "shape-envelope", packId: pack.id, packDigest: `sha256:${"a".repeat(64)}`, startFen: pack.start.fen, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-08-14T00:00:00.000Z" });
-    const positions: { id: string; fen: string }[] = [{ id: root.nodes[0]!.id, fen: root.nodes[0]!.fen }];
-    const walk = (nodes: readonly any[], run: typeof root): void => { for (const node of nodes) { const next = commitMove(run, node.moveUci, { at: "2026-08-14T00:00:00.000Z" }).run; const active = next.nodes.find((candidate) => candidate.id === next.activeCursor.nodeId)!; positions.push({ id: active.id, fen: active.fen }); walk(node.children ?? [], next); } };
-    walk(pack.spine, root);
-    const durations: number[] = [];
-    for (let sample = 0; sample < 20; sample += 1) { const started = performance.now(); for (const position of positions) shapeFirings(entries, [position]); durations.push(performance.now() - started); }
-    durations.sort((a, b) => a - b); const medianMs = durations[Math.floor(durations.length / 2)]!, maxMs = durations.at(-1)!;
-    console.log(`SHAPE_LATENCY ${JSON.stringify({ entries: entries.length, spineNodes: positions.length, samples: durations.length, medianMs: Number(medianMs.toFixed(3)), maxMs: Number(maxMs.toFixed(3)) })}`);
-    expect(positions.length).toBeGreaterThan(1); expect(Number.isFinite(maxMs)).toBe(true);
+  it("keeps known formatting failure local, while propagating other failures", () => {
+    const sources = declareShapeFiringEvidence([openA, openB], [{ id: "n", fen: bothOpen }]);
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "theory.shape_firing", version: 1 }, sources);
+    const spy = vi.spyOn(presentation, "presentEvidenceItems");
+    try {
+      spy.mockImplementationOnce(() => { throw new presentation.PresentationError("PRESENTATION_INVALID", "fixture recognition formatting"); });
+      const delivered = consumeShapeFiring(view);
+      expect(delivered[0]).toEqual({ firing: sources[0]!.payload, presentation: { kind: "failed" } });
+      if (delivered[1]!.presentation.kind !== "ready") throw new Error("Valid sibling must remain available");
+      expect(presentedItemOwner(delivered[1]!.presentation.items[0]!)).toBe(sources[1]);
+      for (const error of [new Error("fixture programming error"), ...(["PRESENTATION_RAW_ID", "PRESENTATION_UNSEALED", "PRESENTATION_UNREGISTERED"] as const)
+        .map(code => new presentation.PresentationError(code, "fixture contract failure"))]) {
+        spy.mockImplementationOnce(() => { throw error; });
+        expect(() => consumeShapeFiring(view)).toThrow(error);
+      }
+    } finally { spy.mockRestore(); }
+  });
+
+  it("refuses bare firing lists and sealed views for a different consumer", () => {
+    const firings = shapeFirings([openA], [{ id: "n", fen: aOpen }]);
+    // @ts-expect-error The runtime must also refuse a bare payload list.
+    expect(() => consumeShapeFiring(firings)).toThrow();
+    const wrong = evidenceForConsumer<import("./shape-firing.js").ShapeFiring>(PRIMARY_EVIDENCE_MANIFEST, { id: "guidance.deterministic", version: 1 }, []);
+    expect(() => consumeShapeFiring(wrong)).toThrow(/theory.shape_firing@1/u);
   });
 });

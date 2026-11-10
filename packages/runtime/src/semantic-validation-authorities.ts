@@ -110,7 +110,7 @@ export function resolveSemanticValidationCitedPropositionAuthority(value: Semant
   if (sources.length !== 1) return invalid(`cited source ${ref.sourceId}@${ref.sourceRevision} has no registered immutable source manifest`);
   const source = sources[0]!;
   // Offsets are half-open UTF-16 positions within the retained excerpt, not upstream line numbers.
-  // This manifest registers the whole function span; a different slice has no proposition here.
+  // This manifest registers the entire retained excerpt; another slice has no proposition here.
   if (source.licence !== ref.licence || ref.span.start !== 0 || ref.span.end !== source.text.length || sha256Text(source.text) !== ref.span.textSha256) return invalid(`cited source ${ref.sourceId} licence or retained span differs`);
   const rows = source.cases.filter((row) => row.proposition.case.id === value.id && row.proposition.case.version === value.version);
   if (rows.length !== 1) return invalid(`cited source ${ref.sourceId} does not bind case ${value.id}`);

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { factStatementOperand, presentationDigest, type PresentationReceipt } from "@chess-tabiya/runtime";
 
 import { parseCorpusPage, parseHumanSplitPage } from "./human-evidence-response.js";
 import { corpusPageFixture } from "./corpus-presentation.test-support.js";
@@ -25,9 +26,17 @@ const rawCorpus = Object.freeze({
 });
 const corpus = corpusPageFixture(rawCorpus as Parameters<typeof corpusPageFixture>[0]);
 
+function redigestReceipt(receipt: PresentationReceipt): PresentationReceipt {
+  const items = receipt.items.map(({ componentDigest: _digest, ...body }) => ({
+    ...body, componentDigest: presentationDigest("presentation.component@1", body),
+  }));
+  return { ...receipt, items, digest: presentationDigest("presentation.receipt@1", items) };
+}
+
 describe("human evidence response authority", () => {
   it("accepts and deeply freezes a bound Maia candidate page", () => {
     const page = parseHumanSplitPage(split, "node-1");
+    if ("protocol" in page) throw new Error("Explicit legacy page must retain its legacy parser");
     expect(page).toEqual(split); expect(Object.isFrozen(page)).toBe(true); expect(Object.isFrozen(page.candidates[0]?.wdl)).toBe(true);
   });
 
@@ -54,6 +63,18 @@ describe("human evidence response authority", () => {
     const stats = parseCorpusPage(corpus, "node-1");
     expect(stats).toEqual(corpus); expect(Object.isFrozen(stats.presentation)).toBe(true); expect(Object.isFrozen(stats.population.ratings)).toBe(true);
     expect(parseCorpusPage(corpusPageFixture({ nodeId: "node-1", committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population } }), "node-1").status.kind).toBe("below_floor");
+  });
+
+  it.each(["binding", "convention"] as const)("D3948 refuses re-digested Corpus %s drift with unchanged population/text", field => {
+    const items = corpus.presentation.items.map(item => {
+      if (item.component.id !== "fact_statement" || item.component.operand.rendererId !== "consumer.explorer_population@1") throw new Error("Expected genuine Corpus renderer");
+      const operand = factStatementOperand("consumer.explorer_population@1", field === "binding" ? "recorded_run" : "declared_convention",
+        field === "convention" ? "recorded-run@1" : "explorer-population@1", item.component.operand.operands);
+      expect(operand.renderedText).toBe(item.component.operand.renderedText);
+      return { ...item, component: { id: "fact_statement" as const, operand } };
+    });
+    const page = { ...corpus, presentation: redigestReceipt({ ...corpus.presentation, items }) };
+    expect(() => parseCorpusPage(page, "node-1")).toThrow(/binding|convention/u);
   });
 
   it.each([

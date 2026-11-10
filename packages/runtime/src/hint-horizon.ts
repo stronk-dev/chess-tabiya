@@ -1,8 +1,8 @@
 // rfc/hint-distance.md §1–§3 — the pure value computations behind the two Guided Hint factories.
 //
-// `evidence-factories.ts` is the only caller: the horizon factory mints `derived.hint.horizon.<family>@1`
+// `evidence-factories.ts` is the only caller: the horizon factory mints the matrix's exact current family ref
 // from exactly one sealed searched line and one sealed family source, and the disclosure factory mints
-// `derived.hint.disclosure.<family>.<rung>@1` from exactly one sealed horizon. Because the payload is
+// its exact current disclosure ref from exactly one sealed horizon. Because the payload is
 // computed here from sealed inputs — never supplied by a caller — a literal, spread, JSON or
 // double-asserted occurrence cannot become a learner packet ([[D1640]]).
 //

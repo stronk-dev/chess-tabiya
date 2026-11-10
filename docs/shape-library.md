@@ -6,7 +6,7 @@ signatures, watch points, and provenance also work in pack-free Just Play sessio
 
 ## Entry anatomy and trust
 
-`schemas/shape_entry.schema.json` is the closed v0.3 format. An entry has an id and version,
+`schemas/shape_entry.schema.json` is the closed v0.4 format. An entry has an id and version,
 one or more phases, a structural trigger, plans for both colours, watch points, typical
 mistakes, and explicit provenance. Each plan may carry a structural success signature or
 `null` when the shipped arithmetic cannot honestly express one. The entry cannot contain a
@@ -19,7 +19,7 @@ the same `all`/`any`/`not`, feature, piece-on-square, mirrored, and bounded quan
 used by pack objectives. Mirrored catalogue names are refused. Files mirroring preserves plan
 owners and can widen an entry's trigger only when every wing-pinned success signature widens with
 it. Colours or both axes change plan ownership and therefore require a separate entry with its own
-authored plan prose. There is one evaluator in `@chess-tabiya/runtime`.
+authored plan prose. Current authored evaluation uses the source-owned runtime visitor.
 
 Schema 0.3 carries the same eighteen-leaf grammar as pack 0.18, including `piece_count`,
 `king_zone`, and static `piece_distance`. The duplicated grammar is sync-tested so a leaf cannot
@@ -27,6 +27,27 @@ silently work in packs but fail in shape triggers. A non-null `plan.success.sign
 a pack-grading resolution target through `plan_consequence`; registration checks that a referenced
 present signature is exercised on an authored spine. A null signature remains an explicit,
 learner-visible refusal to grade that plan.
+
+Schema 0.4 shares pack 0.33's optional exact `conventionRef` grammar for opposition,
+backward pawns and outpost candidates, including template forms. Absence retains legacy
+meaning. Current validation captures the complete draft and exact expression pointer before
+evaluating its genuine legal-position source; registration validates before admitting a record.
+Draft source capture grants no publication right. Studio corpus previews, standalone trigger/plan
+probes and direct pack presence/consequence/reasoning probes use that same evaluator. Missing
+dependencies produce explicit unavailable diagnostics. Direct Inspector recognition now uses
+the current registry-owned firing3 scan, retaining every positive and negative path observation.
+It checks the actual access and source between finite chunks; repeated intervals never expose
+later endpoints. The ordinary guided board now reads the complete registered scan through authenticated
+`POST /runs/:runId/shape-firings/query`, with its own finalized assistance ceiling and requested
+endpoint prefix. It receives current registered recognition, not raw local trigger matching.
+Changing position, run, source or help settings retires the displayed matches and panel actions.
+General plans and inspected sources require the catalogue document digest admitted by that match;
+another document with the same id is unavailable for that occurrence. This ordinary integration
+is verified locally; its current proof and remaining scope are in `planning/foundation-source-identity/plan.md`. Recommendation and
+point-module cutovers, census and timing/transition consumers are still being migrated; no catalogue content is automatically converted.
+
+`make shape-probe SHAPE=carlsbad PROBE='<fen>'` checks a shape's trigger and every non-null plan
+signature. `make shape-probe PACK=<pack.json>` walks that pack's authored spine for its named shapes.
 
 Official entries load from `content/shapes/`. Community entries are immutable registered
 versions from Shape Studio. Channel is derived from the resolving source and is never an

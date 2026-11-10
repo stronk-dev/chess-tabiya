@@ -237,6 +237,78 @@ admits `analysis`); `pre_commit`/`post_commit` → `precommit`/`postcommit` lite
 
 ### §3 — Selection: deterministic, module-local, and R3-honest about lift
 
+**D3767/D4064 successor independently accepted for bounded implementation, 2026-11-04.**
+The independently accepted research gate supports the joint module-registration§4.5e /
+evidence-presentation§3.10c / move-quality-grades§4b amendment. Nudge2's
+production.postcommit_observed_window@2 keeps the current critical key and eight exact
+completed-window/overload key, then puts exact available grade@2 before remaining simpler
+facts, retaining current ties within each group. Its fixed budgets and original accepts order,
+source exactness, novelty/abstention and other consumers remain. Critical/window facts can still
+legitimately exclude a grade; no universal grade-first, relevance score or source-risk rewrite.
+The compact registered Nudge grade and same-item full measurement report are mandatory
+companions: standalone offline grade overflow cannot be fixed with priority alone. This
+successor is a product presentation convention, not strategic significance or grading research.
+The recorded@1 behavior below is the predecessor; the joint compiler2 review accepts the
+successor for implementation. The bounded D3767/D4064/D3766 production cutover is independently
+closed locally:13804software/497+7performance/types/build/source/governance pass. Actual native
+startup remains heldD3928,zero journeys; D3765/D879 authenticated9-cell consumer parity closes
+separately on independent acceptance/current200/seven+types, while whole-parent/qualification/
+release obligations remain. No new shared resource/schema lane, persisted preference or generic disclosure
+system is claimed; claims remain none.
+
+**D4058 independently accepted amendment, 2026-11-03 — Nudge observed-window ordering.**
+The existing compiler2 independent review receipt records bounded buildability acceptance.
+The actual18-window
+source→authenticated REST census in `design/research/module-evidence-assembly.md` records all18
+sequences reaching the reducer and zero selected captions. This is a product-selection gap,
+not broken source exactness or permission to suppress genuine simpler events. Nudge alone
+uses `production.postcommit_observed_window@1`; other modules retain
+`production.module_local@1` and byte-identical ordering. For the actual current Nudge2 consumer,
+insert one finite key immediately after the unchanged critical-event key and before exactness:
+the eight exact completed @3 windows enumerated by module-registration §4.5c precede other
+admitted noncritical facts. This is a declared presentation convention—prefer a complete
+observed sequence description to isolated changes—not tactical importance, usefulness scoring,
+causality, praise, a move grade or a detector-qualification claim.
+
+Within each side of that key, retain every existing exactness/lift/accepts-order/square/event/
+canonical tie. Never apply it by source-prefix match, to predecessor versions, trade@2, other
+window families, another module/consumer or an unregistered policy. Admission, answer image,
+novelty, all reducers and fact/word/mark/arrow budgets remain unchanged; no forced slot, backfill,
+extra component, source collection, priority score or global ranking. Critical events still
+win; a longer complete caption can still truthfully defer for words. Multiple completed
+sequences compete under the existing total order, not by guessed motif importance.
+
+**Bounded coexistence revision — independently accepted, 2026-11-03.** The existing compiler2
+review receipt records the separate decision. The actual shared
+deflection/overload example also emits critical last_of_role, which correctly takes one of the
+two fact slots. The other window is cut at the fact backstop, not falsely reported as a word
+deferral. Within the
+completed-window group only, prefer exact `derived.tactic.overload_exploitation_observed@3`
+before the other seven, then retain every existing key. This makes the recorded two-target
+capture description available rather than systematically hiding it behind the overlapping
+description. It is an explicit product convention, not a claim that overload entails deflection
+or that it is the most important motif. No pairwise/non-transitive comparator, false subsumption,
+source change, word crop or budget increase. Critical-first still wins over overload. All sources
+remain admitted. Recheck the original coexisting source occurrences for both colors, including
+the lawful nonselection of the other full caption and the critical fact's retention; add a genuine non-overload deflection example so
+both families reach actual selected delivery. Other modules/versions/consumers/policies and
+duplicate representatives remain unchanged. The earlier measured16/18 is not all-family selected
+delivery; this decision authorizes implementation, not a passing-delivery claim.
+
+The exact eight projections have no registered fact-equivalence membership. Pin that nonoverlap
+against FACT_EQUIVALENCE_CLASSES so this key cannot make a less conservative duplicate win.
+The current registered-equivalence exactness-first representative invariant must remain true;
+changing equivalence membership needs its own coherent rule, not a silent altered dedup result.
+Do not add a false subsumption: harassment does not entail an entire occupied_attack/slider_ray
+projection, whose actual target/slider populations are broader.
+
+Acceptance requires actual both-color/all8/both-attraction-horizon REST delivery controls, proving
+original sources reach selection and that complete typed captions now survive where budgets permit;
+original critical-first controls, non-Nudge old-order identity, finite version/policy negatives,
+conservative duplicate/novelty/backstop controls, no-word-backfill proof, and mounted original
+receipt/retirement/board controls. Ordinary full gates still apply. §4.5c's representation is
+separately accepted; this draft cannot retroactively claim adapter-only green is delivered UX.
+
 One production selection policy, `production.module_local@1`, is added beside the untouched
 research policy. Per module, at a decision point:
 
@@ -299,6 +371,71 @@ legal moves would not have"* — **denominator always shown, never on the pre-co
 (ruling quoted). Registry invariant: an avoidance row may only bind to a module none of whose
 timings is `pre_commit` or `at_commit`. In this RFC that is `postcommit_nudge` and
 `review_map` only.
+
+#### Structure recognition selection amendment — D4095 (accepted, 2026-11-05)
+
+**Independently accepted for bounded implementation 2026-11-05.** Separate source/ABI and
+meaning/consumer reviews accept after normal measurement97136: clean dedicated types and49/49
+source-stage controls3.02s. Production discharges below remain open. The research gate is
+`design/research/module-evidence-assembly.md` §2026-11-04 Structure recognition and the existing
+compiler2 independent review receipt. This amendment addresses the measured normal-phase
+starvation class, not natural-game prevalence or the pedagogical quality of authored material.
+
+Declare `production.structure_recognition@1`, used only by the actual current
+`structure_nudge` declaration and `module.structure_nudge@2`. The exact module id, consumer id/
+version and selection policy id/version must all match before this exception applies. Historical
+consumer1 tables do not override `MODULE_CURRENT_IMAGE`'s current consumer2. No new consumer,
+producer, projection, renderer, schema, stored preference, shared resource claim or wire field.
+
+After §3's unchanged critical-event key and before its exactness key, put recognized structures
+before generic summaries, using only this closed exact-ref mapping:
+
+| Exact admitted ref | Group |
+|---|---|
+| `rules.structural.reading.named_structure@2` | recognition |
+| `theory.endgame.setup_match@1` | recognition |
+| `theory.shapes.firing@3` | recognition |
+| `rules.structural.reading.space@1` | generic |
+| `rules.structural.reading.pawn_connectivity@1` | generic |
+| `rules.phase.reading@2` | generic, including `unclear` |
+| `rules.endgame.classification@1` | generic, both positive material type and `type:null` |
+
+A material census is not a geometric technique match. Outside the phase-band endgame the actual
+classification factory emits no value; this changes no abstention rule. A missing/unavailable
+recognition source is not a generic fact or a false match. No recognition class is inferred from
+text, names, payload fields, string prefixes or caller-edited `ModuleFact` summaries. Rank uses
+the genuine admitted evidence's exact projection ref, with its seal and original declaration/ref
+join intact. Public copied facts cannot relabel generic evidence or alter its source risk.
+The current acceptance image must match all seven declared refs; an added/replaced ref needs a
+reviewed table change, not an automatic recognition boost.
+
+Within both groups, preserve every current key: exactness, measured lift, declaration precedence,
+subject square, event id and canonical operands. Thus a convention-backed named structure/setup
+may still beat an authored match; multiple matches keep deterministic old ties. The new group is
+a presentation convention for this module's recognition intent, not a chess-quality/significance
+score, and never raises authored exactness or source permission. All other modules, old policies,
+wrong consumers/versions and research selection retain the previous order.
+
+Keep complete source acquisition and every existing gate before selection. Keep the unchanged
+ordered→dedupe→subsumption→ancestor-novelty→one-fact-backstop→atomic-presentation-fit pipeline.
+Do not add equivalence/subsumption, infer novelty, resurrect a removed fact, drop generic sources,
+add a card, increase 80words/4marks/0arrows, or backfill a generic fact after the winning complete
+recognition bundle exceeds a fit dimension. Existing truthful compact-detail and unavailable
+states, source attribution and the actual shape-entry link remain. The wire proves retained
+selected evidence, not server selection-policy authenticity; no new protocol is required.
+
+**Acceptance evidence.** Before accepting this amendment, the disposable D4095 source-stage
+instrument must retain full genuine source sets and exercise both colors through actual stored
+run/authenticated REST/strict receiving boundaries: authored, named, setup and simultaneous
+recognition; generic-only/no-match, positive and null material, `unclear` phase, unavailable shape,
+actual inherited ancestors and genuine overlong recognition deferral. Record admitted, ordered,
+novelty, backstop and fit identities, original source operands and unchanged stored runs. Prototype
+selection is explicitly disposable and must not change production policy or masquerade as native
+UX. Before closing D4095 after implementation, replace that prototype with actual production
+policy tests, prove exact policy/consumer/old-version/other-module and forged-summary negatives,
+critical-first and within-group ties, actual mounted Structure selected receipt/library href and
+current retirement/budget controls, then run ordinary full gates. No whole module/source/semantic/
+content/native/default/release completion follows from this bounded correction.
 
 ### §3a — The semantic reducers (reducer amendment, 2026-08-23)
 
@@ -1147,6 +1284,8 @@ this document's to rewrite).
   D687/D688/D689 stay open with a named successor lane.
 
 ## Changelog
+
+- 2026-11-05: D4095 Structure-only recognition selection amendment independently accepted after clean dedicated types and49source-stage controls. Exact current7-ref mapping and consumer2/policy gate, unchanged risk/within-group ties/novelty/atomic fit. Production discharges remain open.
 
 - 2026-09-24: **accepted and implemented the [[D921]] Wave-C amendment (§4.12, A19)** at the
   owner's direction (implement directly, no review round). The production registry landed in the

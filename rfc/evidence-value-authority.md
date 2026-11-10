@@ -354,6 +354,198 @@ then seals it. Callers cannot supply an output payload or choose an ancestry aft
 source/derivation items, calls the projection-specific operation, and returns the event. The current
 shape—caller seals operands first, then asks the compiler to confirm object identity—is removed.
 
+#### 2.2a D4170 — consume the factory's recorded input order (independently accepted 2026-11-09)
+
+Research gate: module-evidence-assembly.md's D4170 receipt-order observation and disposable
+`make semantic-input-order-research`. Two genuine current capture-class events (both colors)
+accept their original `[capture,exchange]` inputs; reversing the actual sealed values also passes
+and produces the same event id. Missing, duplicated-instead-of-another, and extra inputs refuse.
+The observation is not a fabricated chess result or an observed change in a user's move advice.
+
+This clause separates two existing meanings. Section2.2's declaration-level input multiset and
+current unique-ref dependency-family matching remain unchanged. A particular completed factory
+call, however, has an ordered `EvidenceValueReceipt.sourceDigests` vector. Its semantic wrapper
+must retain THAT recorded vector. The pre-repair sorted-bag receipt comparison lost its ordering.
+No new input mode, registry, receipt field/version, resource lane, cache, source hash or migration
+is introduced. Parent implementing status does not accept this amendment.
+
+**Required consuming join.** Before matching a declaration member or minting a semantic wrapper,
+`compileSemanticEvidenceEvent` must require equal receipt/supplied input lengths AND byte-equal
+payload digest at every original ordinal. Do not sort or deduplicate either vector. Use existing
+`evidenceValueReceipt` and the actual supplied sealed values. All mismatch forms refuse with the
+existing EVIDENCE_EVENT_DERIVATION_MISMATCH code. Empty vectors still match. Repeated same-ref
+inputs retain multiplicity; distinct digest occurrences cannot swap. Identical digest occurrences
+are observationally equal under this existing receipt format; this check does not authenticate
+different object instances, source ownership or an exact private original invocation.
+
+After that join, preserve the current declaration logic: repeated-ref tuples retain their exact
+ref/cardinality/order branch; unique-ref dependency-family declarations retain their present
+family-set/cardinality semantics, including genuine variable populations. This amendment does
+not reinterpret all legacy declarations as fixed tuples, accept arbitrary extra evidence, change
+anyOf membership, alter event ids/signs/anchors, add wrappers or grant consumer eligibility.
+D4167's seven current source wrappers still separately need original object membership, computed-
+source tuples and camelCase anchor/payload-sign equality. No cardinality or identity debt is
+silently discharged by an ordered digest comparison.
+
+**Actual caller closure.** Audit every real call of compileSemanticEvidenceEvent and its retained
+reader/rebuilder. Correct callers, if exposed, to pass their actual factory-recorded original
+order; never reseal a value, rewrite/erase sourceDigests, recompute equivalent sources, manufacture
+an input, sort until a check passes or weaken the join. A genuine variable source population
+retains every original occurrence. Existing factory payloads, current declarations, conventions,
+source and module bindings, permissions, defaults and stored run/content bytes remain equal.
+No changes to factory math or new interpretation of an unreferenced authored leaf.
+
+**Able-to-fail acceptance.**
+
+1. Permanent production tests use actual current source/factory events from both colors. Original
+   capture-class inputs pass; reversed genuine different-ref inputs fail. Same original evidence,
+   anchor/sign/id and correct operands pass again. Synthetic caller-written output fixtures alone
+   cannot establish this arm. The disposable baseline observation above must be retained in log.
+2. Missing, extra, duplicated, changed-payload and wrong-source evidence refuse without mutating
+   originals. Exercise genuine repeated-ref tuples and at least one genuine variable-population
+   source, preserving all occurrences and existing declaration semantics. Distinguish equal-digest
+   repetition (no object-identity claim) from swapping genuinely different digest occurrences.
+3. A small independent corpus walks REAL existing local closure and recorded sequence producers,
+   rebuilds each existing event through assertSemanticEvidenceEvent, and verifies every complete
+   ordered receipt vector against its original derivationInputs. Positive controls retain all
+   existing events/operands/ids; a result containing zero multi-input witnesses cannot pass.
+   If the actual corpus has no genuine variable-length member, report that absence and add a
+   genuinely constructed current producer case rather than a forged receipt or vacuous check.
+4. Preserve declaration, counterfactual denominator/selection, source qualification and word/mark/
+   arrow budgets. Run the affected permanent source/runtime/consumer tests, full normal software,
+   production build, governance and complete content comparison. Existing D3928 failures remain
+   failures. No default/native/release/whole-foundation acceptance follows from this repair.
+
+#### 2.2b D4167 — current foundation event construction (independently accepted 2026-11-09)
+
+Both authorized independent source/meaning reviewers accept this bounded clause, coordinated
+with shared-candidate-evidence-packet§3.1d and module-registration§4.11h. Research gate:
+`design/research/module-evidence-assembly.md`'s dated canonical/ordinary reverse audit and actual
+factory/map/declaration symbols. Decision: existing compiler2 independent-review receipt.
+Construction is implemented and locally verified after both independent source/meaning reviews:
+759 focused controls, 15,301 software tests, seven performance tests, types/build/source-author 11
+and complete governance pass. Content retains the recorded 62-heading hold. Actual canonical
+acquisition, qualification and ordinary consumer adoption remain D4167 work; see the current
+source plan and review receipt. This is not parent or release completion.
+
+##### Exact scope and source dependencies
+
+The seven existing source projections are:
+
+| Source | Literal original semantic-wrapper inputs |
+|---|---|
+| rules.structural.event.king_opposition@2 | rules.structural.reading.king_opposition@3 BEFORE, AFTER |
+| rules.structural.event.backward_pawn@2 | rules.structural.reading.backward_pawn@3 BEFORE, AFTER |
+| rules.structural.event.pawn_islands@2 | rules.structural.reading.pawn_connectivity@1 BEFORE, AFTER |
+| derived.structural.event.pawn_file_group@1 | derived.structural.reading.pawn_file_group@1 BEFORE, AFTER |
+| derived.activity.event.file_state@1 | derived.activity.reading.file_state@1 BEFORE, AFTER |
+| derived.activity.event.file_access_revealed@1 | the one original derived.activity.event.file_state@1 |
+| rules.transition.event.slider_ray@2 | no evidence input; original validated edge invocation |
+
+##### Existing declaration field; no false derived plane
+
+Keep ProjectionDeclaration.derivation absent on the three rules-plane computed sources. In the
+existing SemanticEventDeclaration, derivationInputs can also name a computed event's literal
+sealed prerequisites: that field is the wrapper's inputs, not a change of producer plane.
+Document this explicitly on the existing field; do not add computedInputs, another registry,
+manifest schema version, receipt type, store or a second source issuer.
+
+For these three declarations, explicitly retain exactly two occurrences of their exact source
+ref. Pin this finite three-ref tuple contract ONCE as a literal constant in existing evidence-
+contract.ts, reused by the catalogue builder and manifest validator. It is not an independently
+maintained register, issuer or source-identity store. Do not infer multiplicity from dependsOn.
+The validator requires the event's fixed derivationInputs to equal that literal tuple in length,
+ref order and multiplicity, each source to exist, and its UNIQUE ref set to equal the projection's
+existing dependsOn set. The named source must stay non-derived without projection.derivation.
+Reject anyOf, both member forms, empty/one/three-input tuples, crossed/missing/extra sources,
+nonexistent versions or derived-plane laundering. No other computed source acquires permission
+to declare arbitrary prerequisites through this finite rule. Every derived event keeps the
+existing exact projection.derivation↔semantic-member check; old empty-prerequisite computed
+events remain empty. This is an explicit three-source declaration amendment, not a new field or
+general prerequisite mechanism.
+
+##### Retained originals at construction and consumption
+
+Reuse FOUNDATION_VALUE_INPUTS for the six existing original tuples. Reuse LOCAL_READING_INVOCATIONS
+for slider2's original successful validated edge: edgePopulation writes this existing map for
+that exact route at the sole mint before exposing each value; a reused successful source retains
+its original entry. No new map/cache/brand/issuer and no changes to source payloads/receipts.
+
+Add one finite nonminting reader in evidence-factories, exposed only via the existing internal
+value-route owner. It accepts only these seven exact sources, asserts their genuine sole factory,
+route, existing original map membership and ordered receipt correspondence. For the six tuples,
+sole-mint map membership authenticates actual construction; return the actual frozen original
+objects in ordinal order. Do not recreate the original inputDigest authority from normalized
+payload fields: a genuine accepted castle alias can normalize e1g1→e1h1 while retaining the raw
+factory input spelling. No extra hash, input store or source-factory change is needed. For slider2,
+the mint authority IS its retained canonical edge: require that genuine original invocation and
+existing inputDigest correspondence,
+then return its original edge and empty tuple. Caller-made/copy/receiptless values fail even if
+public payloads/digests/refs match. A genuine empty population emits no wrapper and cannot supply
+a fabricated negative event; collection still validates source authority before absence.
+
+When compileSemanticEvidenceEvent receives one of these seven sources, use that reader. Require
+supplied derivationInputs to have equal length and object identity at every retained ordinal,
+then keep D4170's receipt-order comparison and declaration check. Equal-digest different genuine
+instances still pass D4170 for legacy events, but cannot replace one of these sources' ORIGINAL
+retained inputs. Check the complete camelCase beforeFen/moveUci/afterFen against the canonical
+legal anchor and require payload.sign===input.sign in addition to declared sign membership.
+This guard must run before minting. Preserve existing snake_case checks and unrelated source
+rules; conflicting aliases are refused rather than choosing one. Source signatures, conventions, operands and ids are not rewritten to fit the wrapper.
+
+##### Source construction is not ordinary admission or policy
+
+Register exactly these seven current source refs in the existing semantic-event authority and
+research consumer/eligibility DECLARATIONS. This does not claim actual research acquisition or
+selectLocalSemanticEvidence execution reach. Their required validation subjects already exist;
+no qualification is granted. Atomically transfer declaration ownership for these seven from
+SEMANTIC_EXPLICIT_EVENT_VALIDATION_ROOTS' without-wrapper declaration contribution to the actual
+semantic-wrapper declarations. Preserve exactly the same98root subjects/profiles/verdicts,
+without a duplicate/missing declaration, removed pending-source blocker or suppressed obligation.
+Use the actual semantic-validation-registry four-way equality as the ownership check.
+This bounded step supplies lawful source wrappers; it does NOT yet replace localSemanticEventClosure,
+complete candidate packets, ordinary modules, comparison, guidance/voice, authored leaves, bot
+vectors or avoidance. D4167 remains doing for every reverse-audited consumer and its coordinated
+follow-up contract. There is no second compatibility user flow or legacy requirement introduced.
+
+The three new @1 semantic sources must not enter ordinary operations by the existing version===1
+ONE_EDGE_EVENT_REFS filter. Preserve the exact existing ordinary accepted and supplied source-image
+sets with explicit exclusion/current-image checks when adding these refs. There is no module
+activation, priority/significance, novelty, budget, default or permission change. Physical slider2
+still has no tactical target: target-bearing slider1 stays a distinct private discovery dependency
+until that successor's own definition/operation is authored. No relabeling or cast-to-target.
+
+The later shared-closure/candidate cutover must build required original before/after source chains
+once and derive revelation from the SAME original file-state-change objects it publishes. A loop
+that independently reacquires all seven Inspector-demand sources is not that closure. Child
+readings must retain the actual sealed legal/snapshot instances, not equal-FEN replacements. This
+is an explicit remaining D4167 duty, not a new cache or a completed operation in this increment.
+
+##### Able-to-fail verification
+
+- Every seven-source family must have a real nonempty source and original wrapper positive;
+  genuine empty remains no wrapper. Both colors, relevant gained/lost/membership and topology/count
+  cases use real legal moves/source operations; preserve every original output operand.
+- For all six tuples, reject missing/extra/crossed inputs AND equivalent-digest distinct genuine
+  inputs. Reverse the five two-input tuples to require wrong-order rejection. The revelation
+  singleton's reversal is unchanged and MUST pass with its same original input; slider's empty
+  tuple remains correct when original edge authority is genuine. Correct original tuple passes again with identical id and operands. For slider2
+  require original invocation membership, not a caller declaration or forged receipt.
+- Retain genuine both-color castle-alias source positives (e1g1→e1h1/e8g8→e8h8) with canonical
+  payload/anchor and original tuples; differing raw inputDigest spellings are not a false refusal.
+- Reject legal but wrong/full-counter-different camelCase anchors and alternate declared signs
+  without modifying actual originals. Exercise physical castling/promotion/EP sources already
+  supplied by source controls; don't fabricate an outcome or use pseudo legality as legal play.
+- Manifest positives retain computed rules planes and literal before/after tuple. Negatives cover
+  anyOf/empty/missing/extra/cross-version refs and false derived metadata. Existing derived,
+  variable-population and D4170 equal-digest controls remain unchanged.
+- Preserve exact current ordinary source image and research-only admission; no zero-qualified
+  source becomes learner eligible through declaration registration. Required validation roots,
+  qualification labels, content hold and downstream work states stay unchanged.
+- Independent source/meaning code review plus focused/types/full software/build/content/governance
+  gates. No source profile update may erase an earlier failure or change old outcome silently.
+  Record actual failures and retained baseline; no parent, capability or release completion.
+
 #### 2.3 Source receipt
 
 Recorded, provider, model and corpus factories accept a sealed source/exchange receipt plus the
@@ -2039,6 +2231,236 @@ Caller prose, attribution, structure names, plan labels or theory applicability 
 inside the factory. Authored authority proves who asserted a claim; it never upgrades the claim to
 position-rule truth.
 
+#### 2.4a D3972 — registered shape trigger authority (independently accepted 2026-11-02)
+
+Independent review accepts this bounded amendment after the concrete bootstrap/probe-order
+repair; decision: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
+The implementing author does not self-accept it. It fills the actual
+source-owner gap measured in D3972; it does not discharge the other authored factories or
+change authored chess content. Gate basis: the actual `ShapeRegistry` owns immutable complete
+records and digests; `createTheoryShapesFiringV1Evidence` accepts caller `{entries,path}` and
+its pending metadata has no corresponding executable authority. The accepted direct Inspector
+D3833 contract expressly refuses to count loaded JSON/legacy success as registered provenance.
+Existing `shapeFirings` and the accepted position/complete-prefix algorithm remain unchanged.
+
+**One actual source owner.** Add a runtime-internal registered-shape source owner, instantiated
+by each actual server `ShapeRegistry`, following the existing domain-specific storage-reader
+ownership pattern. Its sole production composition is that registry, not a public/client barrel,
+wire constructor, generic validation callback or Boolean approval. It reads the actual complete
+active registry records in stable registry order; obsolete `byDigest` entries are not active
+authority. Before issuance, validate each complete registered document through the existing
+shape validator and independently recompute `digestShapeEntry(document)`. A supplied digest,
+summary, matching ID or mutable caller object is not admission. Refuse duplicate IDs, missing
+records, document/summary ID/version/digest disagreement, noncanonical/invalid documents and
+digest mismatch before requested-path firing. Capture immutable full documents, document
+identity/version/digest and the literal `/trigger` pointer; retain every registered input,
+including records whose triggers never fire. Empty installed registries are real sources.
+
+**Concrete bootstrap and probe order.** The server registry implements one domain-specific
+`RegisteredShapeRegistryReader`: `capture(signal)` returns a detached immutable complete row
+array, and `current()` returns the actual active complete rows in the same stable order.
+Each row has exactly `recordIdentity`, `document`, `digest`, `summary: {id,version,digest}`,
+`channel` and nullable `publisherHandle`. `recordIdentity` is the original registry record
+object, not an ID/digest replacement; full documents are detached JSON owned by the reader.
+This is a record reader, never a generic predicate or Boolean approval callback. The sole
+production adapter lives in the actual `ShapeRegistry` and reads its active records directly.
+
+Registry capture first snapshots the complete population/documents/identities before its first
+await, checks all ID/summary/JSON relationships, then recomputes and compares all complete
+document digests. Only after the whole population passes those checks does it call the existing
+server `validateShapeEntry` for each document. That validator combines schema checks with its
+own fixed INITIAL_FEN admission probes; those probes are explicitly permitted and may run for
+earlier valid records before a later document fails validation. We claim **zero requested-path
+`shapeFirings`/v2 factory work** until every document admits, not zero validator probes.
+The source owner does not import the server validator or server helpers into runtime.
+
+The runtime owner receives the complete admitted row array through that concrete reader,
+independently recomputes/binds every document digest and exact row relationships, and checks
+it against `current()` after every await before issuing the source. It privately retains the
+original record identities and detached immutable full image; subsequent synchronous assertions
+compare both current identities and complete current image. No source exists if any record
+fails admission or the population changes during hashing/validation. Pin schema/digest failures
+to their actual stage: digest-invalid populations execute zero validator probes; a later
+schema-invalid population may execute earlier admission probes but still executes zero
+requested-path firing and issues no source. Currentness checks are not another validation run.
+
+The issued nominal source is private original ownership, not a serializable `{digest}` token.
+Its issuer's currentness assertion rereads the actual active record population and original
+record identities. Replacement/addition/removal, including another genuine same-byte record,
+retires it. A foreign registry's genuine same-byte source, copied handle or caller reconstruction
+fails the current server owner's assertion before trigger work and publication/readback. Missing
+registry configuration is actual `authored_source_absent`; malformed records/lookup errors are
+failures, never empty success or a guessed `source_version_held`. Once this source exists, no
+permanent version hold is authorized. No new generic provenance service or external scraper.
+
+**Exact successor, not a broadened old arm.** Add `theory.shapes.firing@2`, sole factory
+`createTheoryShapesFiringV2Evidence`, with exactly `{source: RegisteredShapeSource, path}`.
+Its declaration remains `authored_claim/authored`, reported confidence, with pattern/theory
+answer content only; it does not acquire position-rule or plan-recommendation authority. Its
+factory dependency is this RFC (`evidence-value-authority`), with no pending-version hold once
+the source owner and factory are actually implemented. Other authored routes retain their
+separate pending obligations. The source's private reader supplies the entries; callers supply
+no entry/prose/name override.
+`path` is the existing complete ordered `{id,fen}` input, validated against the actual granted
+original run before factory execution by the source supplier. The factory validates canonical
+FENs and unique nonempty node IDs and calls the existing `shapeFirings` once. The v1 route and
+its pending limitations are not silently redefined; prelaunch callers retire under the existing
+coordinated migration, not a new permanent compatibility requirement.
+
+Each v2 payload is the unchanged firing's `entryId`, `firstNodeId`, `lastNodeId`, `openEnded`,
+plus `authority: {documentId,documentVersion,documentDigest,pointer:"/trigger",name,channel,
+publisherHandle}`. `publisherHandle` is the actual registered handle or null. All attribution
+fields project only that matched source record; a shape match never validates its plans,
+typical-mistake prose, positional significance or a recommended move. Document ID equals the
+firing's entryId. Stable record/interval order, repeated intervals and inclusive endpoints are
+unchanged. `openEnded` stops at this supplied endpoint; a singleton is not historical onset.
+The value receipt binds the complete admitted source image and ordered path; each output's
+source digest binds its matched full document plus exact `/trigger` authority. The original
+complete result-array invocation reader binds the original source and exact path, including
+successful empty results. Copies, filters, reordering and genuine foreign invocation arrays
+are not proof. No rerun of `shapeFirings` may manufacture missing proof.
+
+**Direct Inspector adoption.** Replace only its modern proposed shape topic with v2: still one
+of65 topics, still position or branch context. Runtime owns dispatch/original invocation proof;
+server owns actual registry/current grant. Validate the full original run/FEN/edges before
+narrowing. Position executes exactly the selected node. Branch executes the granted root-to-
+endpoint prefix, never a whole-tip firing cropped afterwards. Join the issued source to the
+actual registry owner before preparation, the complete returned invocation to that source/path
+before publication, and current storage/access/disclosure/config/signal around async capture
+and retained reads. Key the actual complete source/documents/path/head even when no items fire.
+An installed empty source is `no_witness`; absent configuration is `authored_source_absent`.
+No source lookup/contract failure becomes either. Complete65-topic preflight and paired
+consumer/presentation/API/client/native delivery remain D3792 obligations, not waived by this
+supplier. Other Review/current v1 uses keep their weaker authority until actually migrated.
+
+**Able-to-fail acceptance.** Actual registry/SQLite/service tests must cover both learner colors,
+point and every complete prefix of legal disappearance/return play, inherited nodes, fork-only
+prefixes, full-tip algorithm parity, a genuine empty registry and a nonmatching registered
+document. Prove equal empty output from different documents/heads/paths has different source
+keys. Prove the bootstrap/probe order above with the real validator, including a later-invalid
+record and real digest mismatch; a self-approving mock validator does not satisfy it. Invalid
+document/digest, old/noncurrent or same-byte foreign issuer, original later-graph
+corruption, mutable input arrays, copied/filtered/foreign positive and empty invocation results
+must refuse before target/publication as appropriate. Real registry replacement/addition,
+storage/import/access/disclosure and cancellation during capture/work/readback must retire the
+result. Pin sole production composition and exact v2 source/factory/adapter inputs. Ordinary
+type/software/content/governance/build gates retain their populations and deadlines; current
+semantic predecessor failures do not become waivers. Independent review of this amendment and
+then of the implementation is required before declaring this source complete. Parent RFCs,
+authored chess truth, semantic qualification, full Inspector delivery and 1.0 remain open.
+
+#### 2.4b D4082 — current owned shape scans (independently accepted, 2026-11-04)
+
+Separate source/execution and delivery reviewers accept the repaired bounded amendment;
+decisions/returns are recorded in the existing compiler2 independent review receipt. This
+accepts implementation, not completion or qualification. It replaces neither §2.4a's fixed firing2 contract nor
+foundation's 23-source/five-companion inventory. Exploration basis: the dated D4082–D4084
+follow-up in `design/research/foundation-capability-closure-2026-08-31.md`. The actual native
+visitor captures retain complete truth/trace/leaf operands with much less repeated work than
+minting aggregate2 per cell. A successful disposable scan is not a production source or API.
+
+**One source-owned complete scan.** Add a package-private registered-shape scan owner composed
+only by the actual ShapeRegistry. It first acquires §2.4a's original current RegisteredShapeSource.
+For every original active record it selects that registry's original registered authored document
+and literal `/trigger` source. Extend private authored DocumentData to retain the actual registered
+record identity; a finite internal assertion joins that identity, kind/stage/id/version/digest and
+pointer to the original registered population row. Matching JSON, a foreign registry's genuine
+same-byte record or a detached draft is not this join. The six-field §2.4a reader and firing2
+payload remain unchanged. No caller passes trigger handles, observations, booleans or an evaluator.
+
+Validate the complete ordered canonical id/FEN path before collecting. Recorded application
+owners additionally validate the original granted graph, legal edges and requested prefix before
+narrowing. Share one genuine legal-move root per node; use the existing owned predicate visitor
+with `predicate` policy for every shape×node. Retain the original condition2, root, visited leaf
+values/trace and original population token for **all** cells, including negatives. Private scan
+state binds the original registered population, exact record-to-trigger joins, ordered path and
+complete rectangular population. Empty installed registry is a successful complete scan; missing
+registry is unavailable. Any visited dependency unavailable aborts the whole scan without partial
+intervals or a false no-witness result.
+
+The visitor's shared source/grammar/eligible-leaf preflight must be separated from its current
+aggregate2-specific execution-plan check. The aggregate2 entry retains its full reduction-plan
+check. The scan entry explicitly preflights **every** one of the23 literal dependency refs:
+input2, legal_moves1 and the closed21 leaves. For each, compile/check its actual execution plan,
+route metadata and actual factory callable against the existing route registry; retain those
+original callable identities and recheck them at capture/read checkpoints. Check set equality
+with firing3's declared dependency list. A fixed firing3 execution plan alone is insufficient:
+the current compiler does not traverse dependsOn. Preserve the same whole-AST/current-ref rules;
+no caller-selected lighter mode or callback. Both entries invoke the same source-owned visitor.
+Do not secretly require an undeclared aggregate2 plan or pretend an unminted aggregate was an input.
+
+**Factory and exact ancestry.** Add `theory.shapes.firing@3`, sole factory
+`createTheoryShapesFiringV3Evidence`, accepting exactly `{scan}` where scan is the original private
+complete capture above. It is an authored-authority theory projection, **not** a theory-plane
+`derivation` (which the manifest forbids). Declare its literal dependencies as input2, legal_moves1
+and the existing closed21 predicate-leaf alternatives from foundation §4.1. No new collector
+family or general reduction protocol. Runtime checks exact visited invocation/root/condition
+membership, actual receipt multiplicity and complete scan ownership before mint/readback.
+Matrix order is sorted shape id, then original path index. The invocation inputDigest binds the
+complete source/path and every ordered cell's actual observation and input2/root/visited-leaf
+receipt images (with occurrence paths), including negatives. For each interval item, sourceDigests
+are exactly the matched full-document/attribution digest followed by, for **every** cell in that
+shape's complete row, its condition receipt digest, root receipt digest and each visited leaf
+receipt digest in original visitation order. Preserve repetitions; do not deduplicate the vector.
+Each receipt image includes its producer/projection, factory, input/payload/source digests and
+convention receipt. The item's convention refs are the exact stable deduplicated union of its
+own row's condition/root/visited-leaf refs plus firing3's direct registered conventions, composed
+through existing convention receipts. Other shapes' conventions are not this item's ancestry.
+The global complete invocation still binds every row, including unmatched shapes and empty output.
+No aggregate receipt/digest or reduction identity is invented. Copies, filters, reorderings,
+duplicated/omitted cells and foreign original
+arrays do not establish completeness. Keep one source-owned interval pass with stable entry
+ordering, repeated intervals, inclusive endpoints and endpoint-relative openEnded. The public
+item payload remains RegisteredShapeFiring; grounding/exactness remain authored_claim/authored,
+reported confidence, pattern/theory only. Matching validates neither strategic advice nor plans.
+
+Preparation is cooperative; minting consumes the completed scan synchronously. The registry's
+package-private owner starts a scan builder from its own source/record joins and requested path;
+only its original complete token can mint. Its finite advance operation processes at most32
+cells or8ms elapsed, whichever first becomes due; limits are internal, not request arguments.
+It checks cancellation/current registry before/after the chunk and reports incomplete/complete
+without publishing any partial values. The actual application owner drives these chunks: it
+rechecks its original run/branch/grant/config context before and after each chunk and event-loop
+yield. Thus the registry need not claim knowledge of a run context it does not own, and there is
+no arbitrary context/evaluator callback. This is not interruption of one synchronous leaf.
+Recheck original context/source/signal before publication and on retained reads. Never publish
+a truncated scan after a deadline.
+Use existing application operation/deadline and unavailable/failure semantics; do not raise
+budgets, add per-cell jobs, persist raw scans or introduce a new research-backed release gate.
+
+**Current consumers are real cutovers.** The paired module-registration amendment owns these
+source/version/renderer/receiver changes; acceptance of this factory alone closes none of them:
+
+| Existing path | Required current migration |
+|---|---|
+| Full2 Inspector shape topic | firing3 over the exact point or complete granted prefix; original invocation, topic/renderer/receiver/page contract change together |
+| RunService.shapeRecommendations and GET /progress/recommendations | await the same owned scan; preserve learner-owned run population, all branches, run deduplication, countable-attempt exclusion, stable ranking and pagination; no write or engine request |
+| DrillScreen recognition/timeline/panel | delivered source-backed firing3 under existing guided assistance and actual grant; remove local firing1 over ShapeEntryView JSON; downloaded catalogue remains navigation/authored-plan metadata only |
+| structure_nudge/theory_breadcrumb, current Story/guidance firing sources | original server-acquired point/prefix capture, exact module/source/consumer tuples; no raw entries/path fallback or silent old-source eligibility |
+
+Inspector's explicit confirmation is not permission for automatic guided acquisition. The ordinary
+guided read uses its existing effective ceiling/role/session and captures exact run/branch/endpoint;
+retained/delayed responses retire on cursor, run, branch, grant, source or assistance changes.
+No new settings or permission is introduced. The module amendment must specify concrete delivery
+and receiving before implementation; this paragraph alone does not authorize an unspecified API.
+Historical v1/v2 definitions stay truthful; prelaunch current callers require no legacy fallback.
+Unmigrated Story/module consumers remain visible debt and prevent D4077 closure.
+
+**Permanent falsifiers before closure.** Actual registry/SQLite/service controls include both
+colors, no-ref legacy parity and explicit-ref changed truth, positive and negative triggers,
+empty installed registry, inherited/repeated FENs with different counters, every prefix of legal
+disappearance/return play and no future-node exposure. Reject copied/foreign/stale sources,
+same-id/version same-byte replacement, wrong source pointer/root/FEN/policy, missing/duplicated/
+reordered negative cells and forged complete-empty arrays. A visited unavailable after a matching
+cell publishes nothing. Prove cancellation and actual context/grant/source retirement across
+yield/publication/retained read; no source-result cache may mask those checks. Test compiler
+dependency closure and actual per-item conventions, not anchor existence. Actual authenticated
+REST→strict receiver→mounted Inspector and guided board must show current firings and retire stale
+ones. Recommendations must preserve counts/dedup/exclusion with no writes/providers. Re-measure
+complete-prefix cooperative cost through the real operation; one local PGN benchmark is neither
+a universal latency bound nor semantic/native qualification. Full normal gates and separate
+implementation review remain required.
+
 ### 3. Grounding correction before factory assignment
 
 Unit: one of the twenty current generic `rules/position_rules/exact` projections. Total: 20,
@@ -2660,3 +3082,16 @@ None for the owner. Author review must settle exact successor symbol spelling an
 - 2026-08-30: D2146 self-review correction — 75 generic adapters, 191 routes, 187 mintable ids,
   four duplicates and six no-route declarations; replaced the impossible cross-module capability
   claim with one runtime factory module and corrected receipt verification semantics.
+
+
+## Independently accepted coordinated successor — 2026-11-09
+
+`subject-safe-semantic-selection.md` owns the D1716/D1719 and D4167 canonical/candidate/avoidance
+cutover. BOTH independent source/control and consumer/meaning reviews accept its repaired finite
+source-first contract: original root/child graph, two private total reads, current42/compiler7,
+thirteen source-owned@2 outcomes, fourteen current-event compact ordinary pairs and unchanged
+historical case custody. Acceptance is recorded in the existing compiler2 review receipt; it
+comes from that review, not this parent's implementing state. Production images, source
+correctness/qualification and implementation gates remain owed. D4175 retains all26 ordinary
+avoidance pairs/delivery/cost; D4167 keeps every reverse consumer and actual bot Stage-B/D3662.
+No full adoption, content/native or release completion follows.

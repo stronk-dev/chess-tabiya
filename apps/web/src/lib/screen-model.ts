@@ -15,7 +15,7 @@ import {
   type ObjectiveState,
 } from "@chess-tabiya/runtime/client";
 
-import { renderEvidenceRef, type EvidenceSentence } from "./evidence-sentences.js";
+import { evidenceRefPresentation, type EvidenceReferencePresentation } from "./evidence-sentences.js";
 import { branchDisplayLabel } from "./run-copy.js";
 
 export interface TimelineEntry {
@@ -53,7 +53,7 @@ export interface CheckpointNotice {
 
 export interface WhyBannerModel {
   readonly state: ObjectiveState;
-  readonly sentences: readonly EvidenceSentence[];
+  readonly sentences: readonly EvidenceReferencePresentation[];
   readonly eventSeq: number;
 }
 
@@ -251,9 +251,9 @@ export function whyBanner(
   }
   const payloads = evidencePayloads(run);
   const sentences = event.data.evidenceRefs.map((reference) =>
-    renderEvidenceRef(reference, pack, payloads),
+    evidenceRefPresentation(reference, pack, payloads),
   );
-  if (sentences.some((sentence) => sentence.text.trim() === "")) {
+  if (sentences.some((result) => result.kind === "ready" && result.sentence.text.trim() === "")) {
     throw new TypeError(`Objective state change at event ${event.seq} rendered bare`);
   }
   return Object.freeze({ state: event.data.to, sentences, eventSeq: event.seq });

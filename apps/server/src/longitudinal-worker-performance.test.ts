@@ -16,7 +16,7 @@ import { join } from "node:path";
 import { monitorEventLoopDelay, performance, PerformanceObserver, type PerformanceEntry } from "node:perf_hooks";
 import { DatabaseSync } from "node:sqlite";
 
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createApplication, type ChessTabiyaApplication } from "./application.js";
 import { projectObservations } from "./longitudinal-projector.js";
@@ -25,6 +25,7 @@ import { LONGITUDINAL_WORKER_DEFAULTS } from "./longitudinal-worker-config.js";
 import { importedRun, learner } from "./longitudinal-test-fixtures.js";
 import { parsePgnMainline } from "./pgn-import.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 
 const BUDGET = Object.freeze({ probeHz: 20, p95Ms: 50, maxDelayMs: 250, maxProbeMs: 500, minimumMs: 30_000 });
 const PGN = new URL("../../../tools/r2-selection-harness/imported-sample.pgn", import.meta.url);
@@ -51,12 +52,16 @@ afterEach(async () => {
   try {
     await closing?.close();
   } finally {
+    vi.restoreAllMocks();
     for (const directory of removing) rmSync(directory, { recursive: true, force: true });
   }
 });
 
 describe("longitudinal worker responsiveness and lease liveness", () => {
   it("keeps the HTTP event loop responsive through the real 80-ply arm and renews in-loop", async () => {
+    // This imported-game instrument never uses installed content. Preserve real application,
+    // storage, worker and HTTP composition without making corpus admission its prerequisite.
+    installEmptyApplicationCatalogues();
     const directory = mkdtempSync(join(tmpdir(), "tabiya-longitudinal-perf-"));
     directories.push(directory);
     const databasePath = join(directory, "perf.sqlite");
@@ -65,7 +70,7 @@ describe("longitudinal worker responsiveness and lease liveness", () => {
     const moves = eightyPlies();
     seed.createImportedRun(importedRun("eighty", moves), owner, "80-ply arm", {
       runId: "eighty", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"d".repeat(64)}`, headers: {}, result: "*",
-      pgn: "fixed corpus", licenceNote: "fixture", importedAt: "2026-09-24T10:00:00.000Z",
+      pgn: "fixed corpus", licenceNote: "fixture", importedAt: "2026-09-24T10:00:00.000Z", clockDocument: null,
     } as never);
     seed.close();
 
@@ -148,7 +153,7 @@ describe("longitudinal worker responsiveness and lease liveness", () => {
     const run = importedRun("main-thread", moves);
     const image = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
     const owner = learner(image, "main");
-    image.createImportedRun(run, owner, "main", { runId: "main-thread", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"d".repeat(64)}`, headers: {}, result: "*", pgn: "x", licenceNote: "fixture", importedAt: "2026-09-24T10:00:00.000Z" } as never);
+    image.createImportedRun(run, owner, "main", { runId: "main-thread", sourceKind: "pgn_paste", sourceUrl: null, movetextDigest: `sha256:${"d".repeat(64)}`, headers: {}, result: "*", pgn: "x", licenceNote: "fixture", importedAt: "2026-09-24T10:00:00.000Z", clockDocument: null } as never);
     const sealed = image.longitudinalSourceImageV4("main-thread", run.events.length);
     const before = performance.now();
     projectObservations(sealed);

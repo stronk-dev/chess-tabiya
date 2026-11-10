@@ -1,37 +1,48 @@
 // rfc/module-registration.md §4.5 and rfc/move-quality-grades.md D1: the two production module
 // consumers route derived.grade.move_quality@1 through compileModulePacket.
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { branchPath } from "./branch-path.js";
 import type { DeclaredEvidence } from "./evidence-contract.js";
 import type { MoveQualityGrade } from "./grade.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import * as valueRoutes from "./internal/evidence-value-routes.js";
 import { compileModulePacket } from "./module-packets.js";
 import { postcommitEdgeEvidence } from "./postcommit-nudge.js";
 import { commitMove, createRun } from "./runtime.js";
 import { localSemanticEventClosure } from "./semantic-evidence.js";
 import { reviewMapProjection } from "./review-map.js";
-import { reviewText } from "./review-map-templates.js";
 import { storyMomentsForRun } from "./story.js";
 import { reviewFixtureRun } from "./testing/review-map-fixture.js";
-import type { DrillRun, EvidencePayload } from "./types.js";
+import { recordedReviewGradeSources, recordedReviewFixtureSources } from "./testing/recorded-grade-fixture.js";
+import type { DrillRun } from "./types.js";
 
 const LEARNER = Object.freeze({ role: "learner" as const, session: "position" });
 
-function evalPacket(run: DrillRun, nodeId: string): EvidencePayload {
-  const event = [...run.events].reverse().find((candidate) => candidate.type === "evidence.attached" && candidate.data.nodeId === nodeId);
-  if (event?.type !== "evidence.attached") throw new Error("fixture node lacks an evaluation");
-  return event.data.payload;
-}
+it.each([
+  ["4k3/8/8/8/8/8/n7/R3K3 w - - 0 1", "a1a2"],
+  ["r3k3/N7/8/8/8/8/8/4K3 b - - 0 1", "a8a7"],
+])("Nudge retains the collected material source without collecting it twice: %s", (fen, move) => {
+  const run = createRun({ id: "material-source-once", packId: "source-control", packDigest: `sha256:${"0".repeat(64)}`,
+    startFen: fen, seed: 1, createdAt: "2026-11-02T00:00:00Z", policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } });
+  const moved = commitMove(run, move, { at: "2026-11-02T00:00:00Z" }).run;
+  const node = moved.nodes.find(item => item.id === moved.activeCursor.nodeId)!;
+  const source = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+  try {
+    const evidence = postcommitEdgeEvidence(moved, run.nodes[0]!, node);
+    const calls = source.mock.calls.map((args, index) => ({ args, result: source.mock.results[index] }))
+      .filter(({ args }) => args[0] === "derived.material.event.role_asymmetry@2");
+    expect(calls).toHaveLength(1);
+    const original = (calls[0]!.result!.value as readonly { evidence: DeclaredEvidence<unknown> }[])[0]!.evidence;
+    expect(evidence.filter(item => item.projection.id === "derived.material.event.role_asymmetry")).toEqual([original]);
+    expect(evidence.find(item => item.projection.id === "derived.material.event.role_asymmetry")).toBe(original);
+  } finally { source.mockRestore(); }
+});
 
 /** A sealed grade for the White move ending at path index `index`, minted by the production factory. */
 function gradeAt(run: DrillRun, index: number): DeclaredEvidence<MoveQualityGrade> {
   const path = branchPath(run, run.activeCursor.branchId);
-  const graded = invokeEvidenceValueRoute("derived.grade.move_quality@1", {
-    before: invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: evalPacket(run, path[index - 1]!.id) }),
-    after: invokeEvidenceValueRoute("live.stockfish.eval@1", { packet: evalPacket(run, path[index]!.id) }),
-    mover: "white", context: "drill",
-  });
+  const graded = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: recordedReviewGradeSources(run).get(path[index]!.id)! });
   if (graded.kind !== "available" || graded.value.length !== 1) throw new Error(`fixture index ${index} did not grade`);
   return graded.value[0] as DeclaredEvidence<MoveQualityGrade>;
 }
@@ -115,20 +126,15 @@ describe("Review Map — module.review_map@1 admits everything it shows", () => 
   const branchId = run.activeCursor.branchId;
   const story = storyMomentsForRun(run, branchId, { recordedResult: "1-0" });
 
-  it("renders grades for every Review Map role and withholds them where the context ceiling refuses the module", () => {
-    for (const role of ["learner", "host", "participant", "spectator"] as const) {
-      const projection = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role, session: "imported" } });
+  it.each(["learner", "host", "participant", "spectator"] as const)("renders grades for the actual %s Review workflow", role => {
+      const projection = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role, session: "imported" }, ...recordedReviewFixtureSources(run, branchId, role) });
       expect(projection.rows.some((row) => row.grade !== undefined)).toBe(true);
-    }
-    const refused = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "learner", session: "match" } });
-    expect(refused.rows.every((row) => row.grade === undefined)).toBe(true);
-    const sentence = reviewText("evidence.module.withheld", { reason: reviewText("module.refusal.session_outside_ceiling") });
-    expect(refused.rows.every((row) => row.facts.includes(sentence))).toBe(true);
+  });
+  it("refuses crossed workflow and role ceilings before rendering", () => {
+    const sources = recordedReviewFixtureSources(run, branchId);
+    expect(() => reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "learner", session: "match" }, ...sources })).toThrow(/viewer/u);
     // An operator is not a Review Map role (§1.2): the module refuses rather than rendering.
     // The eval graph draws recorded evaluations, so it is gated by the same module.
-    expect(refused.evalGraph.points.every((point) => point.kind === "missing")).toBe(true);
-    expect(refused.evalGraph.caption).toBe(reviewText("graph.module.withheld", { reason: reviewText("module.refusal.session_outside_ceiling") }));
-    const operator = reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "operator", session: "imported" } });
-    expect(operator.rows.every((row) => row.grade === undefined && row.facts.includes(reviewText("evidence.module.withheld", { reason: reviewText("module.refusal.role_outside_ceiling") })))).toBe(true);
+    expect(() => reviewMapProjection({ run, branchId, story, context: "imported_analysis", viewer: { role: "operator", session: "imported" }, ...sources })).toThrow(/viewer/u);
   });
 });

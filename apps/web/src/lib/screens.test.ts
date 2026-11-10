@@ -1,13 +1,19 @@
 // @vitest-environment happy-dom
 
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
+import { nodeTask, nodePageFixture } from "../../../../packages/runtime/src/testing/maia-occurrence-fixture.js";
+import { digestRunEventHead, resolveRunSubject } from "../../../../packages/runtime/src/run-subject.js";
 import { corpusPageFixture, modernCorpusCapture, modernCorpusPageFixture } from "./corpus-presentation.test-support.js";
 import { PROVIDER_EXCHANGE_AUTHORITY } from "../../../../packages/runtime/src/provider-exchange.js";
 import type { Api } from "@lichess-org/chessground/api";
 import type { Config } from "@lichess-org/chessground/config";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { digestShapeEntry, type ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
+import { parseGuidedShapePage } from "./guided-shape-response.js";
 import {
   appendEvents,
+  projectRun,
+  moduleDecisionStamp,
   appendOpponentPly,
   attachEvidence,
   BOT_PROFILE_CATALOG,
@@ -20,12 +26,23 @@ import {
   rewind,
   transitionObjective,
   MODULE_SOURCE_AUTHORITY,
+  CONFIGURABLE_MODULE_IDS,
+  compileAssistanceRequest,
   compileAuthoritativeAssistance,
   finalizeAssistanceEffects,
   parseModuleQueryRequest,
   queryModules,
   serverAvailabilityFromProviders,
   serializePresentedEvidence,
+  evidenceForConsumer,
+  PRIMARY_EVIDENCE_MANIFEST,
+  presentEvidenceItems,
+  presentedSentence,
+  pivotalMarkerEvidenceItems,
+  declareShapeFiringEvidence,
+  declareTransitionReadingEvidence,
+  transitionReading,
+  branchPath,
   providerSourceEvidence,
   type DrillRun,
   type FinalizedAssistanceV1,
@@ -34,11 +51,22 @@ import {
   type RunMark,
 } from "@chess-tabiya/runtime";
 import type { ComponentProps } from "svelte";
-import { mount, tick, unmount } from "svelte";
-import { createClassComponent } from "svelte/legacy";
+import { flushSync, tick } from "svelte";
+import { createComponentTestScope } from "./component-test-lifecycle.js";
 import { SvelteMap } from "svelte/reactivity";
 import { botRosterFixture } from "./bot-roster.test-support.js";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
+import { inspectorBrowserFixture, historicalInspectorFixture, disposeInspectorBrowserFixtures, terminateInspectorBrowserFixture } from "./inspector-source-browser.test-support.js";
+import * as inspectorQueryResponses from "./inspector-query-response.js";
+import * as structuralSources from "../../../../packages/runtime/src/reading-evidence.js";
+import * as presentationContract from "../../../../packages/runtime/src/presentation-contract.js";
+import * as presentedView from "./evidence/presented-view.js";
+import { mirrorSemanticFen, mirrorSemanticUci } from "../../../../packages/runtime/src/semantic-validation.js";
+import * as bindingExecution from "../../../../packages/runtime/src/evidence-binding-execution.js";
+import * as valueRoutes from "../../../../packages/runtime/src/internal/evidence-value-routes.js";
+import { RECORDED_SEQUENCE_POSITIVES } from "../../../../packages/runtime/src/testing/recorded-sequence-fixtures.js";
+import { registeredShapeFixture } from "../../../../packages/runtime/src/testing/registered-shape-fixture.js";
+import { postcommitChangeFixture } from "../../../../packages/runtime/src/testing/postcommit-change-fixture.js";
 
 import fixtureJson from "../../../../schemas/drill_pack.example.json?raw";
 import carlsbadJson from "../../../../content/shapes/carlsbad.json?raw";
@@ -75,12 +103,15 @@ import type {
   RegisterKeyboardRegion,
 } from "./keyboard.js";
 import { latestCheckpoint } from "./screen-model.js";
+import { evidenceRefPresentation } from "./evidence-sentences.js";
 import { workflowPreferenceKey } from "./assistance-preference.js";
 import type { RunStateSnapshot } from "./run-state.js";
 import * as moduleResponses from "./module-query-response.js";
 import { comparisonSourcesForRun } from "../../../../packages/runtime/src/testing/recorded-comparison-point-fixture.js";
 
 const assistanceKey = (context: string): string => `tabiya.assistance.v1.${context}`;
+const componentScope = createComponentTestScope();
+const { mount, unmount, createClassComponent } = componentScope;
 const workflowKey = (context: string): string => `tabiya.workflow.v1.${context}`;
 
 /** Test double for the server stage (rest.ts `POST /runs/:id/assistance`): same runtime functions, permissive host access. */
@@ -125,6 +156,106 @@ import { RECORDED_READING_GUARD } from "./recorded-reading-sentences.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
 const carlsbad = { ...JSON.parse(carlsbadJson), channel: "official" } as ShapeEntryView;
+
+describe("D3982/D4058 actual stored-window Nudge module seats", () => {
+  function harassmentRun(black: boolean): { root: DrillRun; run: DrillRun } {
+    const sample = RECORDED_SEQUENCE_POSITIVES.find(row => row.projection === "derived.pawn.sequence.harassment_pressure")!;
+    const root = createRun({ id: `nudge-window-seat-${black}`, session: { kind: "position", start: {
+      fen: black ? mirrorSemanticFen(sample.fen, "color_and_vertical") : sample.fen, side: black ? "white" : "black",
+    }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"b".repeat(64)}`,
+    policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: "2026-11-03T00:00:00.000Z" });
+    let run = root;
+    for (const [index, move] of [...sample.moves, "b1c3"].entries()) run = commitMove(run,
+      black ? mirrorSemanticUci(move, "color_and_vertical") : move,
+      { actor: index % 2 === 0 ? "system" : "user", at: "2026-11-03T00:00:00.000Z" }).run;
+    return { root, run: revealFeedback(run, "2026-11-03T00:00:00.000Z").run };
+  }
+  for (const black of [false, true]) for (const delayed of [false, true]) {
+    it(`renders complete original ${black ? "mirrored" : "ordinary"} captions and retires ${delayed ? "late replies" : "visible cards"} with their subject`, async () => {
+      const { root, run } = harassmentRun(black);
+      const backend = await historicalInspectorFixture({ run, preserveRun: true });
+      let deliver!: () => void;
+      const hold = new Promise<void>(resolve => { deliver = resolve; });
+      let queryFailure: string | undefined, responseReady = false;
+      const onModuleQuery = vi.fn(async (body: Parameters<typeof backend.modules>[0]) => {
+        const value = await backend.modules(body).catch(error => { queryFailure = String(error); throw error; });
+        responseReady = true;
+        if (delayed) await hold;
+        return value;
+      });
+      const onMove = vi.fn();
+      const component = createClassComponent({ component: DrillScreen, target: target(), props: {
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+        onAssistanceQuery: backend.authority, onModuleQuery,
+        assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: vi.fn() },
+        onMove, onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+        onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+      await vi.waitFor(() => expect(onModuleQuery).toHaveBeenCalled());
+      await vi.waitFor(() => expect(responseReady, queryFailure).toBe(true));
+      if (!delayed) {
+        await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"] [data-component="square_set"]'), queryFailure).not.toBeNull());
+        const seat = document.querySelector('[data-module="postcommit_nudge"]')!;
+        expect(seat.textContent).toContain("still lines up");
+        expect(seat.textContent).not.toMatch(/derived\.|@3|missing_eval/u);
+        expect(seat.querySelector('[data-component="move_path"]')).toBeNull();
+        expect(seat.querySelectorAll(".squares .chip")).toHaveLength(2);
+        expect(document.querySelector('[data-board-input-grid]')?.getAttribute("aria-readonly")).not.toBe("true");
+        chessground.configs.at(-1)!.movable!.events!.after!(black ? "f3" : "f6", black ? "e5" : "e4", { premove: false });
+        await vi.waitFor(() => expect(onMove).toHaveBeenCalledOnce());
+      }
+      await backend.publish(root);
+      component.$set({ snapshot: { run: root, access: "writer", pendingEvidence: 0, withheld: false } });
+      deliver();
+      await vi.waitFor(() => expect(onModuleQuery.mock.settledResults.every(result => result.type === "fulfilled")).toBe(true));
+      await tick();
+      await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"] [data-component="square_set"]')).toBeNull());
+      expect(document.body.textContent).not.toContain("still lines up");
+      expect(run.nodes).toHaveLength(10); // Recorded play and the opponent reply survive presentation.
+      component.$destroy();
+    });
+  }
+});
+
+describe("D3715 actual stored-service change-selected Nudge seats", () => {
+  for (const kind of ["locked", "capture"] as const) for (const black of [false, true]) {
+    it(`${kind}/${black} renders the actual filtered card, keeps input and retires with its source`, async () => {
+      const { root, run } = postcommitChangeFixture(kind, black, 2), saved = JSON.stringify(run);
+      const backend = await historicalInspectorFixture({ run, preserveRun: true }), onMove = vi.fn();
+      const received = vi.spyOn(moduleResponses, "parseModuleQueryPage");
+      const onModuleQuery = vi.fn(backend.modules);
+      const component = createClassComponent({ component: DrillScreen, target: target(), props: {
+        snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onAssistanceQuery: backend.authority, onModuleQuery,
+        assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: vi.fn() },
+        onMove, onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(),
+        onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+      } });
+      await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"] [data-presented]')).not.toBeNull());
+      const pages = received.mock.results.filter(result => result.type === "return").map(result => result.value);
+      const packet = pages.flatMap(page => page.packets).find(packet => packet.module === "postcommit_nudge")!;
+      expect(packet).toBeDefined(); expect(packet.items.length).toBeGreaterThan(0);
+      for (const item of packet.items) {
+        if (item.component.id !== "fact_statement") continue;
+        if (item.component.operand.rendererId === "inspector.pawn_islands_event@1") {
+          expect(item.component.operand.operands.before).not.toBe(item.component.operand.operands.after);
+        }
+      }
+      const seat = document.querySelector('[data-module="postcommit_nudge"]')!;
+      expect(packet.items.every(item => seat.textContent?.includes(presentedSentence(item)))).toBe(true);
+      expect(seat.textContent).not.toMatch(/rules\.|derived\.|@1|@2|missing_eval/u);
+      expect(document.querySelector('[data-board-input-grid]')?.getAttribute("aria-readonly")).not.toBe("true");
+      const next = kind === "locked" ? black ? ["f6", "d7"] as const : ["f3", "d2"] as const
+        : black ? ["a8", "b8"] as const : ["a1", "b1"] as const;
+      chessground.configs.at(-1)!.movable!.events!.after!(next[0], next[1], { premove: false });
+      await vi.waitFor(() => expect(onMove).toHaveBeenCalledOnce());
+      expect(JSON.stringify(run)).toBe(saved);
+      await backend.publish(root); component.$set({ snapshot: { run: root, access: "writer", pendingEvidence: 0, withheld: false } }); await tick();
+      await vi.waitFor(() => expect(document.querySelector('[data-module="postcommit_nudge"] [data-presented]')).toBeNull());
+      expect(onModuleQuery.mock.settledResults.every(result => result.type === "fulfilled")).toBe(true);
+      component.$destroy();
+    });
+  }
+});
 
 describe("D3693 prediction perspective and capture", () => {
   it.each([false, true])("distinguishes missing guesses from unweighted recorded candidates (%s)", async (present) => {
@@ -391,17 +522,498 @@ function key(value: string, options: KeyboardEventInit = {}): void {
   );
 }
 
-afterEach(() => {
-  document.body.replaceChildren();
-  chessground.configs.length = 0;
-  chessground.set.mockClear();
-  chessground.destroy.mockClear();
-  regionKeyboard = undefined;
-  vi.restoreAllMocks();
-  vi.unstubAllGlobals();
+async function cleanupScreens(): Promise<void> {
+  try { await componentScope.cleanup(); } finally {
+    document.body.replaceChildren();
+    chessground.configs.length = 0;
+    chessground.set.mockClear();
+    chessground.destroy.mockClear();
+    regionKeyboard = undefined;
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  }
+}
+afterEach(async () => { await cleanupScreens(); await disposeInspectorBrowserFixtures(); });
+afterAll(terminateInspectorBrowserFixture);
+
+describe("D4055 actual transition collection boundary", () => {
+  function fixture(black = false) {
+    const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const root = createRun({ id: `transition-preflight-${black}`, session: { kind: "position",
+      start: { fen: black ? mirrorSemanticFen(fen, "color_and_vertical") : fen, side: black ? "black" : "white" },
+      feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    return { root, run: commitMove(root, black ? mirrorSemanticUci("e2e4", "color_and_vertical") : "e2e4", { at }).run };
+  }
+  function props(run: DrillRun): ComponentProps<typeof DrillScreen> {
+    return { onAssistanceQuery: testAssistanceAuthority,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onMove: vi.fn(),
+      onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(),
+      onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion };
+  }
+  const transitionButton = () => document.querySelector<HTMLButtonElement>(".transition-reading > button")!;
+  it("refuses the real missing-binding image before any transition factory at the mounted door", async () => {
+    const { run } = fixture();
+    const component = mountDrill({ target: target(), props: props(run) });
+    await tick(); await assistanceSettled();
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+    expect(transitionButton().getAttribute("aria-expanded")).toBe("false");
+    const original = bindingExecution.compileEvidenceConsumerExecution;
+    const compile = vi.spyOn(bindingExecution, "compileEvidenceConsumerExecution").mockImplementation((manifest, consumer) => original(
+      consumer.id === "inspector.move_transition" ? { ...manifest, bindings: manifest.bindings.filter(binding => binding.consumer.id !== consumer.id) } : manifest,
+      consumer,
+    ));
+    const factory = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    try {
+      let caught: unknown;
+      try { flushSync(() => transitionButton().click()); } catch (error) { caught = error; }
+      expect(factory.mock.calls.filter(([route]) => route.startsWith("rules.transition.reading."))).toEqual([]);
+      expect(caught).toMatchObject({ code: "BINDING_EXECUTION_UNDECLARED" });
+      expect(caught instanceof Error ? caught.message : null).toMatch(/inspector.move_transition@1 has no admitted bindings/u);
+      expect(compile.mock.calls.filter(([, consumer]) => consumer.id === "inspector.move_transition").map(([, consumer]) => consumer))
+        .toEqual([{ id: "inspector.move_transition", version: 1 }]);
+    } finally { compile.mockRestore(); factory.mockRestore(); await unmount(component); }
+  });
+  it.each([false, true])("renders the original admitted edge components without changing their order, black=%s", async black => {
+    const { run } = fixture(black), before = JSON.stringify(run);
+    const path = branchPath(run, run.activeCursor.branchId), node = path[1]!;
+    const reading = transitionReading(path[0]!.fen, node.moveUci!, node.fen)!;
+    const expected = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "inspector.move_transition", version: 1 }, declareTransitionReadingEvidence(reading)));
+    expect(expected.length).toBeGreaterThan(0);
+    const component = mountDrill({ target: target(), props: props(run) });
+    await tick(); await assistanceSettled();
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+    transitionButton().click(); await tick();
+    expect([...document.querySelectorAll('.transition-facts [data-component="fact_statement"]')].map(element => element.textContent?.trim()))
+      .toEqual(expected.map(presentedSentence));
+    expect(JSON.stringify(run)).toBe(before);
+    expect(document.querySelector('[aria-label="Chessboard"]')).not.toBeNull();
+    await unmount(component);
+  });
+  it("keeps a genuine root inapplicable rather than invoking transition collection", async () => {
+    const { root } = fixture();
+    const component = mountDrill({ target: target(), props: props(root) });
+    await tick(); await assistanceSettled();
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+    const factory = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
+    const compile = vi.spyOn(bindingExecution, "compileEvidenceConsumerExecution");
+    try {
+      transitionButton().click(); await tick();
+      expect(document.querySelector(".transition-facts")?.textContent).toBe("No rung-0 transition observations at this move.");
+      expect(factory.mock.calls.filter(([route]) => route.startsWith("rules.transition.reading."))).toEqual([]);
+      expect(compile.mock.calls.filter(([, consumer]) => consumer.id === "inspector.move_transition")).toEqual([]);
+    } finally { factory.mockRestore(); compile.mockRestore(); await unmount(component); }
+  });
+});
+
+describe("D4082 current point-module cookie REST to mounted seats", () => {
+  async function pointFixture(module: "structure_nudge" | "theory_breadcrumb", black = false, source: "positive" | "empty" | "absent" | "long" = "positive") {
+    const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    let run = createRun({ id: `module-seat-${module}-${black}-${source}`, session: { kind: "position", start: {
+      fen: black ? mirrorSemanticFen(fen, "color_and_vertical") : fen, side: black ? "black" : "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    for (const [index, move] of ["g1f3", "a7a6", "f3g1", "b7b6", "g1f3", "c7c6", "f3g1", "d7d6", "g1f3"].entries()) {
+      run = commitMove(run, black ? mirrorSemanticUci(move, "color_and_vertical") : move, { actor: index % 2 === 0 ? "user" : "system", at }).run;
+    }
+    run = revealFeedback(run, at).run;
+    const document = { ...registeredShapeFixture(undefined, black), ...(source === "long" ? { name: Array.from({ length: 70 }, () => "pattern").join(" ") } : {}) };
+    const f = await historicalInspectorFixture({ run, authenticatedRest: true, preserveRun: true, ...(source === "absent" ? {} : { shapes: source === "empty" ? [] : [document] }) });
+    const before = JSON.stringify(await f.savedRun());
+    const onModuleQuery = vi.fn((body: Parameters<NonNullable<ComponentProps<typeof DrillScreen>["onModuleQuery"]>>[0]) => f.api!.modules(run.id, body));
+    const preference = JSON.stringify({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: {
+      include: [module], exclude: CONFIGURABLE_MODULE_IDS.filter(id => id !== module) } } });
+    const props: ComponentProps<typeof DrillScreen> = { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onAssistanceQuery: f.authority, onModuleQuery,
+      assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? preference : null, setItem: vi.fn() },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion };
+    return { ...f, before, onModuleQuery, props };
+  }
+  async function openPointSeat(module: string) {
+    await assistanceSettled();
+    const seat = document.querySelector(`[data-module="${module}"]`)!;
+    expect(seat).not.toBeNull();
+    seat.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+    const show = [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show");
+    show?.click();
+    await vi.waitFor(() => expect(seat.querySelector('[data-presented], [data-empty]')).not.toBeNull());
+    return seat;
+  }
+  for (const module of ["structure_nudge", "theory_breadcrumb"] as const) {
+    it.each([false, true])(`${module} retains its actual selected current receipt through cookie REST/API/strict seat, black=%s`, async black => {
+      const f = await pointFixture(module, black), component = mountDrill({ target: target(), props: f.props });
+      await tick(); const seat = await openPointSeat(module);
+      const [body] = f.onModuleQuery.mock.calls.at(-1)!, raw = await f.onModuleQuery.mock.results.at(-1)!.value;
+      const authority = await f.authority(JSON.parse(JSON.stringify(body.assistance)));
+      const page = moduleResponses.parseModuleQueryPage(raw, { runId: f.run.id, subjectNodeId: f.run.activeCursor.nodeId, finalDigest: authority.finalDigest });
+      const packet = page.packets.find(packet => packet.module === module)!;
+      expect(packet.items).toHaveLength(1);
+      expect(packet.items[0]!.adapter).toMatchObject({ consumer: { id: `module.${module}`, version: 2 },
+        projection: { id: "theory.shapes.firing", version: 3 } });
+      expect(seat.querySelector('[data-component="fact_statement"]')?.textContent?.trim()).toBe(presentedSentence(packet.items[0]!));
+      expect(seat.textContent).toContain("published by @mechanical-author");
+      expect(seat.querySelector("a.pattern-entry")?.getAttribute("href")).toBe(`/library/shape/${registeredShapeFixture().id}`);
+      expect((await f.httpCalls()).filter(call => call.path.endsWith("/modules/query")).every(call => call.status === 200)).toBe(true);
+      expect((await f.stats()).providerCalls).toEqual([]); expect(JSON.stringify(await f.savedRun())).toBe(f.before);
+      await unmount(component);
+    });
+  }
+  it.each(["empty", "absent", "long"] as const)("Theory renders truthful %s source/fit status without invented fact components", async source => {
+    const f = await pointFixture("theory_breadcrumb", false, source), component = mountDrill({ target: target(), props: f.props });
+    await tick(); const seat = await openPointSeat("theory_breadcrumb");
+    expect(seat.querySelector('[data-presented]')).toBeNull();
+    expect(seat.textContent).toContain(source === "empty" ? "Nothing is written about this position." : source === "long" ? "More detail is available than fits" : "Named-pattern recognition could not be checked");
+    if (source !== "empty") expect(seat.textContent).not.toContain("Nothing is written about this position.");
+    expect((await f.stats()).providerCalls).toEqual([]); expect(JSON.stringify(await f.savedRun())).toBe(f.before);
+    await unmount(component);
+  });
+  it("defers the actual selected overlong Structure card without a generic replacement", async () => {
+    const f = await pointFixture("structure_nudge", false, "long"), component = mountDrill({ target: target(), props: f.props });
+    await tick(); const seat = await openPointSeat("structure_nudge");
+    expect(seat.querySelector('[data-presented]')).toBeNull();
+    expect(seat.textContent).toContain("More detail is available than fits");
+    expect(seat.querySelector("a.pattern-entry")).toBeNull();
+    expect((await f.stats()).providerCalls).toEqual([]);
+    expect(JSON.stringify(await f.savedRun())).toBe(f.before);
+    await unmount(component);
+  });
+  it.each(["structure_nudge", "theory_breadcrumb"] as const)("retires an actual held %s response when the current help ceiling changes", async module => {
+    const f = await pointFixture(module);
+    let release!: () => void, entered!: () => void;
+    const gate = new Promise<void>(resolve => { release = resolve; }), received = new Promise<void>(resolve => { entered = resolve; });
+    const held = vi.fn(async (body: Parameters<typeof f.onModuleQuery>[0]) => {
+      const response = await f.onModuleQuery(body), authority = await f.authority(JSON.parse(JSON.stringify(body.assistance)));
+      const page = moduleResponses.parseModuleQueryPage(response, { runId: f.run.id, subjectNodeId: f.run.activeCursor.nodeId, finalDigest: authority.finalDigest });
+      expect(page.packets.find(packet => packet.module === module)!.items[0]!.adapter.projection).toEqual({ id: "theory.shapes.firing", version: 3 });
+      entered(); await gate; return response;
+    });
+    const component = createClassComponent({ component: DrillScreen, target: target(), props: { ...f.props, onModuleQuery: held } });
+    await tick(); await assistanceSettled();
+    const seat = document.querySelector(`[data-module="${module}"]`)!;
+    seat.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+    [...seat.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show")?.click();
+    await received; // A real positive strict response is held, not merely dispatched.
+    component.$set({ liveSessionKind: "match" }); await tick(); release();
+    await Promise.all(held.mock.results.map(result => result.value)); await tick();
+    expect(document.querySelector(`[data-module="${module}"] [data-presented]`)).toBeNull();
+    component.$destroy();
+  });
+});
+
+describe("D4054/D4082 ordinary registered shape recognition lifetime", () => {
+  async function fixture(black = false) {
+    const fen = "7k/8/8/8/1n6/n7/1P6/7K w - - 0 1";
+    let run = createRun({ id: `shape-occurrence-${black}`, session: { kind: "position",
+      start: { fen: black ? mirrorSemanticFen(fen, "color_and_vertical") : fen, side: black ? "black" : "white" },
+      feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"a".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    for (const move of ["b2a3", "h8g8", "a3b4"]) run = commitMove(run, black ? mirrorSemanticUci(move, "color_and_vertical") : move, { at }).run;
+    const { channel: _channel, ...base } = carlsbad;
+    const document: ShapeEntryDefinition = { ...registeredShapeFixture("open-a-file"), name: "Open a-file fixture",
+      trigger: { kind: "feature", feature: { kind: "open_file", file: "a" } } };
+    const f = await historicalInspectorFixture({ run, shapes: [document], authenticatedRest: true, preserveRun: true });
+    const entry: ShapeEntryView = { ...document, channel: "community", publisherHandle: "mechanical-author", documentDigest: await digestShapeEntry(document) };
+    const props: ComponentProps<typeof DrillScreen> = {
+      onAssistanceQuery: f.authority, onShapeFirings: f.shapeFirings,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, shapes: [entry],
+      assistanceStorage: { getItem: (key: string) => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: vi.fn() },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    };
+    return { ...f, run, entry, props };
+  }
+  function retainedShapeClick(control: HTMLButtonElement) {
+    const handlers = Object.getOwnPropertySymbols(control).flatMap(symbol => {
+      const record: unknown = symbol.description === "events" ? Reflect.get(control, symbol) : undefined;
+      return record !== null && typeof record === "object" && "click" in record && typeof record.click === "function" ? [record.click] : [];
+    });
+    expect(handlers).toHaveLength(1);
+    return () => {
+      document.body.append(control);
+      const event = new MouseEvent("click", { bubbles: true }); Object.defineProperty(event, "currentTarget", { value: control });
+      return handlers[0]!.call(control, event);
+    };
+  }
+  async function markers() {
+    await assistanceSettled();
+    await vi.waitFor(() => expect(document.querySelectorAll(".shape-marker")).toHaveLength(2));
+    return [...document.querySelectorAll<HTMLButtonElement>(".shape-marker")];
+  }
+  it.each([false, true])("opens each exact recorded current-source occurrence over actual cookie REST, black=%s", async black => {
+    const f = await fixture(black), before = JSON.stringify(await f.savedRun()), path = branchPath(f.run, f.run.activeCursor.branchId);
+    const onShapeFirings = vi.fn(f.shapeFirings!);
+    const component = mountDrill({ target: target(), props: { ...f.props, onShapeFirings } });
+    await tick(); const buttons = await markers();
+    expect(document.querySelector('[data-preset-mode]')?.textContent).toContain("Guide me");
+    expect(document.querySelector(".inspector-panel")).toBeNull();
+    const [body, expected] = onShapeFirings.mock.calls.at(-1)!;
+    const page = parseGuidedShapePage(await onShapeFirings.mock.results.at(-1)!.value, f.run.id, body, expected);
+    expect(page.firings.map(item => item.value.firstNodeId)).toEqual([path[0]!.id, path[3]!.id]);
+    for (const index of [1, 0]) {
+      buttons[index]!.focus(); buttons[index]!.click(); await tick();
+      expect(document.querySelector('.shape-panel [data-presented="fact_statement"]')?.textContent).toContain("Matched authored pattern");
+      expect(document.querySelector('.shape-panel [data-component="fact_statement"]')?.textContent?.trim()).toBe(presentedSentence(page.firings[index]!.presentation[0]!));
+      expect(document.querySelector(".shape-panel a.pattern-entry")?.getAttribute("href")).toBe(`/library/shape/${f.entry.id}`);
+      expect(document.querySelector(".shape-panel")?.textContent).not.toContain("matching catalogue version is unavailable");
+      document.querySelector<HTMLButtonElement>(".shape-panel header button")!.click(); await tick();
+      expect(document.activeElement).toBe(buttons[index]);
+    }
+    expect((await f.httpCalls()).filter(call => call.path.endsWith("shape-firings/query")).every(call => call.status === 200)).toBe(true);
+    expect((await f.stats()).providerCalls).toEqual([]); expect(JSON.stringify(await f.savedRun())).toBe(before);
+    await unmount(component);
+  });
+  it.each(["run", "branch", "source", "guidance"] as const)("retires recognition on a %s change and cannot resurrect a held old Open callback", async change => {
+    const f = await fixture(), component = createClassComponent({ component: DrillScreen, target: target(), props: f.props });
+    await tick(); const old = (await markers())[0]!; old.focus(); old.click(); await tick();
+    expect(document.activeElement?.id).toBe("shape-panel-title");
+    const snapshot = (run: DrillRun) => ({ run, access: "writer" as const, pendingEvidence: 0, withheld: false });
+    if (change === "run") {
+      const other = projectRun(f.run.events.map(event => event.type === "run.started" ? { ...event, data: { ...event.data, id: "shape-other-run" } } : event));
+      component.$set({ snapshot: snapshot(other) });
+    } else if (change === "branch") {
+      const root = f.run.nodes[0]!.id;
+      component.$set({ snapshot: snapshot(fork(rewind(f.run, root, at).run, root, { at }).run) });
+    } else if (change === "source") component.$set({ shapes: [] });
+    else component.$set({ liveSessionKind: "match" });
+    await tick();
+    expect(document.querySelector(".shape-panel")).toBeNull();
+    component.$set({ snapshot: snapshot(f.run), shapes: [f.entry], liveSessionKind: undefined });
+    await tick(); const current = (await markers())[0]!;
+    old.click(); await tick(); expect(document.querySelector(".shape-panel")).toBeNull();
+    current.focus(); current.click(); await tick(); expect(document.querySelector('.shape-panel [data-presented="fact_statement"]')).not.toBeNull();
+    component.$destroy();
+  });
+  it("D4086 returns typed HTTP400 for a correctly digested wrong-workflow request, without touching providers", async () => {
+    const f = await fixture();
+    const assistance = compileAssistanceRequest({ contextHint: "pack", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+    const reply = await f.postShapes({ assistance, query: { branchId: f.run.activeCursor.branchId, endpointId: f.run.activeCursor.nodeId, decisionDigest: moduleDecisionStamp(f.run).digest } });
+    expect(reply).toMatchObject({ status: 400, body: { error: { code: "INVALID_REQUEST" } } });
+    expect((await f.stats()).providerCalls).toEqual([]);
+  });
+  it.each([false, true])("uses actual empty/absent source outcomes without inventing matches, installed=%s", async installed => {
+    const seed = await fixture(), f = await historicalInspectorFixture({ run: seed.run, authenticatedRest: true, preserveRun: true, ...(installed ? { shapes: [] } : {}) });
+    const query = vi.fn(f.shapeFirings!);
+    const component = mountDrill({ target: target(), props: { ...seed.props, onShapeFirings: query, onAssistanceQuery: f.authority } });
+    await tick(); await assistanceSettled(); await vi.waitFor(() => expect(query).toHaveBeenCalled());
+    const page = await query.mock.results.at(-1)!.value;
+    expect(page.outcome).toEqual(installed ? { kind: "no_witness" } : { kind: "unavailable", reason: "authored_source_absent" });
+    expect(document.querySelectorAll(".shape-marker")).toHaveLength(0);
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+    const structural = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Position structure")!;
+    structural.click(); await tick();
+    await vi.waitFor(() => expect(document.querySelector(".structural-facts")?.textContent).toContain(installed ? "No named structure entry matches" : "recognition is unavailable"));
+    expect(document.querySelector(".structural-facts")?.textContent).not.toContain(installed ? "recognition is unavailable" : "No named structure entry matches");
+    await unmount(component);
+  });
+  it("D4087 refuses retained actual Open/Close/Inspect callbacks after an equal-looking source replacement", async () => {
+    const f = await fixture(), component = createClassComponent({ component: DrillScreen, target: target(), props: f.props });
+    await tick(); const first = (await markers())[0]!, oldOpen = retainedShapeClick(first);
+    first.click(); await tick();
+    const oldClose = retainedShapeClick(document.querySelector<HTMLButtonElement>(".shape-panel header button")!);
+    const oldInspect = retainedShapeClick(document.querySelector<HTMLButtonElement>(".shape-panel footer button")!);
+    component.$set({ shapes: [] }); await tick();
+    component.$set({ shapes: [f.entry] }); await tick();
+    const replacement = (await markers())[0]!; expect(replacement).not.toBe(first);
+    oldOpen(); await tick(); expect(document.querySelector(".shape-panel")).toBeNull(); first.remove();
+    replacement.focus(); replacement.click(); await tick();
+    const panel = document.querySelector(".shape-panel"), focus = document.activeElement;
+    oldClose(); oldInspect(); await tick();
+    expect(document.querySelector(".shape-panel")).toBe(panel); expect(document.activeElement).toBe(focus);
+    expect(document.querySelector('[aria-label="Named structure evidence"]')).toBeNull();
+    component.$destroy();
+  });
+  it("retires pending equal-looking responses, aborts them, and keeps the replacement's focus", async () => {
+    const f = await fixture(); let release!: (value: unknown) => void, held: Promise<unknown> | undefined;
+    let oldSignal: AbortSignal | undefined, calls = 0;
+    const query: NonNullable<ComponentProps<typeof DrillScreen>["onShapeFirings"]> = async (body, expected, signal) => {
+      const result = await f.shapeFirings!(body, expected, signal);
+      if (++calls === 1) { oldSignal = signal; held = new Promise(resolve => { release = resolve; }); return held; }
+      return result;
+    };
+    const component = createClassComponent({ component: DrillScreen, target: target(), props: { ...f.props, onShapeFirings: query } });
+    await tick(); await vi.waitFor(() => expect(held).toBeDefined());
+    expect(document.querySelectorAll(".shape-marker")).toHaveLength(0);
+    component.$set({ shapes: [] }); await tick(); component.$set({ shapes: [f.entry] }); await tick();
+    const current = (await markers())[0]!; expect(oldSignal?.aborted).toBe(true);
+    current.focus(); current.click(); await tick(); const panel = document.querySelector(".shape-panel"), focus = document.activeElement;
+    // It is a genuine response to the exact same subject/configuration. The request epoch still retires it.
+    const request = { assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }),
+      query: { branchId: f.run.activeCursor.branchId, endpointId: f.run.activeCursor.nodeId, decisionDigest: moduleDecisionStamp(f.run).digest } };
+    const authority = await f.authority(request.assistance);
+    release(await f.shapeFirings!(request, { effectiveConfigDigest: authority.finalDigest, nodeIds: branchPath(f.run, f.run.activeCursor.branchId).map(n => n.id) }, new AbortController().signal));
+    await tick(); await tick();
+    expect(document.querySelector(".shape-panel")).toBe(panel); expect(document.activeElement).toBe(focus);
+    component.$destroy();
+  });
+  it("withholds stale catalogue plans while keeping admitted recognition and the board usable", async () => {
+    const f = await fixture();
+    const component = mountDrill({ target: target(), props: { ...f.props, shapes: [{ ...f.entry, documentDigest: `sha256:${"f".repeat(64)}`,
+      plans: [{ ...carlsbad.plans[0]!, label: "STALE CATALOGUE PLAN" }] }] } });
+    await tick(); const marker = (await markers())[0]!; marker.click(); await tick();
+    expect(document.querySelector(".shape-panel")?.textContent).toContain("matching catalogue version is unavailable");
+    expect(document.querySelector(".shape-panel")?.textContent).not.toContain("STALE CATALOGUE PLAN");
+    expect(document.querySelector('.shape-panel [data-presented="fact_statement"]')).not.toBeNull();
+    document.querySelector<HTMLButtonElement>(".shape-panel footer button")!.click(); await tick();
+    const inspection = document.querySelector('[aria-label="Named structure evidence"]');
+    expect(inspection?.textContent).toContain("matching catalogue version is unavailable");
+    expect(inspection?.textContent).not.toContain("STALE CATALOGUE PLAN");
+    expect(document.querySelector('[aria-label="Chessboard"]')).not.toBeNull(); await unmount(component);
+  });
+  it("does not invent markers from raw catalogue entries when the source request fails", async () => {
+    const f = await fixture();
+    const component = mountDrill({ target: target(), props: { ...f.props, onShapeFirings: async () => { throw Error("Actual source unavailable"); } } });
+    await tick(); await assistanceSettled(); await tick();
+    expect(document.querySelectorAll(".shape-marker")).toHaveLength(0);
+    expect(document.querySelector(".shape-panel")).toBeNull();
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+    const structural = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Position structure")!;
+    structural.click(); await tick();
+    await vi.waitFor(() => expect(document.querySelector(".structural-facts")?.textContent).toContain("could not be loaded"));
+    expect(document.querySelector(".structural-facts")?.textContent).not.toContain("No named structure entry matches");
+    expect(document.querySelector('[aria-label="Chessboard"]')).not.toBeNull(); await unmount(component);
+  });
+});
+
+describe("D3309 detailed structural Inspector in both actual screens", () => {
+  const fen = "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10";
+  function start() {
+    return createRun({ id: "structure-screen", session: { kind: "position", start: { fen, side: "black" },
+      feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"a".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 3, createdAt: at });
+  }
+  const button = (text: string) => [...document.querySelectorAll<HTMLButtonElement>("button")].find(row => row.textContent?.trim() === text)!;
+  it("Drill renders typed side/role/shade facts, follows the displayed FEN and preserves collapse and play", async () => {
+    const run = start(), onMove = vi.fn();
+    const before = JSON.stringify(run);
+    const component = createClassComponent({ component: DrillScreen, target: target(), props: {
+      onAssistanceQuery: testAssistanceAuthority, snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove, onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(),
+      onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick(); await assistanceSettled();
+    expect(document.querySelector(".structural-facts")).toBeNull();
+    button("Inspector").click(); await tick();
+    expect(button("Position structure").getAttribute("aria-expanded")).toBe("false");
+    button("Position structure").click(); await tick();
+    const section = () => document.querySelector<HTMLElement>(".structural-facts")!;
+    expect(section().textContent).toContain("White has 7 pawns."); expect(section().textContent).toContain("Black has 7 pawns.");
+    expect(section().textContent).toContain("White's bishop on d3 stands on a light square.");
+    expect(section().querySelectorAll('[data-component="fact_statement"]').length).toBeGreaterThan(12);
+    expect(section().textContent).not.toMatch(/Position reading:|structural_detail|sha256/u);
+    const moved = commitMove(commitMove(run, "d7f8", { at }).run, "d3h7", { at }).run;
+    component.$set({ snapshot: { run: moved, access: "writer", pendingEvidence: 0, withheld: false } });
+    await tick(); await assistanceSettled();
+    expect(section().textContent).toContain("Black has 6 pawns.");
+    expect(section().textContent).toContain("White's bishop on h7 stands on a light square.");
+    expect(section().textContent).not.toContain("White's bishop on d3");
+    button("Position structure").click(); await tick(); expect(document.querySelector(".structural-facts")).toBeNull();
+    button("Position structure").click(); await tick(); expect(section().textContent).toContain("Black has 6 pawns.");
+    expect(onMove).not.toHaveBeenCalled(); expect(JSON.stringify(run)).toBe(before);
+    button("Return to play").click(); await tick(); expect(document.querySelector(".structural-facts")).toBeNull();
+    expect(document.querySelector('[aria-label="Chessboard"]')).not.toBeNull();
+    await unmount(component);
+  });
+  it("Compare presents each exact leaf, updates a replaced leaf, and never substitutes the root for a missing one", async () => {
+    const root = start(), main = commitMove(commitMove(root, "d7f8", { at }).run, "d3h7", { at }).run;
+    let run = fork(rewind(main, root.activeCursor.nodeId, at).run, root.activeCursor.nodeId, { label: "Another line", at }).run;
+    run = commitMove(run, "h7h6", { at }).run;
+    const comparison = compareBranches(run, run.branches.map(branch => branch.id));
+    const before = JSON.stringify(run), calls = vi.spyOn(structuralSources, "presentPositionStructureEvidence");
+    const component = createClassComponent({ component: CompareView, target: target(), props: {
+      run, comparison, startSide: "black", step: 0, onStep: vi.fn(), onClose: vi.fn(),
+    } });
+    await tick();
+    expect(document.querySelector('[data-evidence-consumer="inspector.position_structure"]')).toBeNull();
+    expect(calls).not.toHaveBeenCalled();
+    button("Evidence inspector").click(); await tick();
+    const sections = () => [...document.querySelectorAll<HTMLElement>('[data-evidence-consumer="inspector.position_structure"]')];
+    expect(sections()).toHaveLength(2);
+    expect(sections()[0]!.textContent).toContain("Black has 6 pawns.");
+    expect(sections()[0]!.textContent).toContain("White's bishop on h7");
+    expect(sections()[1]!.textContent).toContain("Black has 7 pawns.");
+    expect(sections()[1]!.textContent).toContain("White's bishop on d3 stands on a light square.");
+    expect(sections().every(section => section.querySelector("[data-presented]") !== null)).toBe(true);
+    calls.mockClear();
+    const missing = { ...comparison, columns: comparison.columns.map((column, index) => index === 0 ? { ...column, leafNodeId: "missing-leaf" } : column) };
+    component.$set({ comparison: missing }); await tick();
+    expect(sections()[0]!.querySelector('[role="status"]')?.textContent).toContain("recorded position is missing");
+    expect(sections()[0]!.querySelector("[data-presented]")).toBeNull();
+    expect(sections()[1]!.textContent).toContain("Black has 7 pawns.");
+    expect(calls).toHaveBeenCalledTimes(1);
+    expect(calls.mock.calls[0]![0].fen).toBe(run.nodes.find(node => node.id === comparison.columns[1]!.leafNodeId)!.fen);
+    expect(calls.mock.calls[0]![0].fen).not.toBe(root.start.fen);
+    expect(JSON.stringify(run)).toBe(before);
+    button("Return to comparison").click(); await tick();
+    expect(document.querySelector('[data-evidence-consumer="inspector.position_structure"]')).toBeNull();
+    expect(document.querySelector('[aria-label="Chessboard"]')).not.toBeNull();
+    await unmount(component);
+  });
 });
 
 describe("Layer 3 screens", () => {
+  it("D3941 releases a mounted board when the test body exits before its explicit unmount", async () => {
+    let destroyed = 0;
+    const original = chessground.destroy.getMockImplementation();
+    chessground.destroy.mockImplementation(() => { destroyed += 1; });
+    const component = mount(Chessboard, { target: target(), props: {
+      fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      startSide: "white", onMove: vi.fn(),
+    } });
+    try {
+      await tick();
+      await cleanupScreens();
+      expect(destroyed).toBe(1);
+    } finally {
+      if (destroyed === 0) await unmount(component);
+      chessground.destroy.mockImplementation(original ?? (() => {}));
+    }
+  });
+
+  it.each(["mount", "class adapter"] as const)("D3941 does not destroy %s roots twice after explicit disposal", async kind => {
+    const scope = createComponentTestScope();
+    let destroyed = 0;
+    const original = chessground.destroy.getMockImplementation();
+    chessground.destroy.mockImplementation(() => { destroyed += 1; });
+    try {
+      const options = { target: target(), props: {
+        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", startSide: "white" as const, onMove: vi.fn(),
+      } };
+      if (kind === "mount") {
+        const root = scope.mount(Chessboard, options);
+        await tick();
+        await scope.unmount(root);
+      } else {
+        const root = scope.createClassComponent({ component: Chessboard, ...options });
+        await tick();
+        root.$destroy();
+      }
+      expect(destroyed).toBe(1);
+      await scope.cleanup();
+      expect(destroyed).toBe(1);
+    } finally {
+      await scope.cleanup();
+      chessground.destroy.mockImplementation(original ?? (() => {}));
+    }
+  });
+
+  it("D3941 tears down every root even when an earlier destructor throws", async () => {
+    const scope = createComponentTestScope();
+    let destroyed = 0;
+    const original = chessground.destroy.getMockImplementation();
+    chessground.destroy.mockImplementation(() => { if (++destroyed === 1) throw new Error("fixture destroy refusal"); });
+    try {
+      for (let index = 0; index < 2; index += 1) scope.mount(Chessboard, { target: target(), props: {
+        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", startSide: "white", onMove: vi.fn(),
+      } });
+      await tick();
+      await expect(scope.cleanup()).rejects.toThrow("Component test teardown failed");
+      expect(destroyed).toBe(2);
+      await scope.cleanup();
+      expect(destroyed).toBe(2);
+    } finally {
+      await scope.cleanup();
+      chessground.destroy.mockImplementation(original ?? (() => {}));
+    }
+  });
+
   it("D3751 updates live opponent identity and restores recorded copy after session recovery is cleared", async () => {
     const run = createRun({ id: "session-opponent-copy", session: { kind: "position",
       start: { fen: "4k3/pp6/8/8/8/8/PP4PP/4K2R w - - 0 1", side: "white" },
@@ -578,8 +1190,9 @@ describe("Layer 3 screens", () => {
           state: "degraded",
           eventSeq: 7,
           sentences: [
-            { reference: "rules:structure-outpost", sourceLabel: "Rules", text: "Tabiya's strict outpost detector condition holds." },
-            { reference: "engine:root", sourceLabel: "Engine", text: "Centipawn evidence recorded." },
+            evidenceRefPresentation("rules:structure-outpost"),
+            evidenceRefPresentation("engine:root"),
+            evidenceRefPresentation("tablebase:crossed", undefined, new Map([["tablebase:crossed", { kind: "eval", source: "engine_validated", values: { centipawns: 10 } }]])),
           ],
         },
       },
@@ -593,6 +1206,8 @@ describe("Layer 3 screens", () => {
     expect(banner.textContent).not.toContain("detector");
     expect(banner.textContent).not.toContain("Centipawn");
     expect(banner.textContent).not.toContain("Engine ·");
+    expect(banner.textContent).toContain("This recorded evidence could not be displayed. That is not an empty chess result.");
+    expect(banner.textContent).not.toContain("Exact endgame evidence affected");
     await unmount(component);
   });
 
@@ -1470,6 +2085,35 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it.each([
+    { reference: "engine:model-tablebase", payload: { kind: "tablebase" as const, source: "human_model_predicted" as const, values: { category: "win", dtz: 3 } } },
+    { reference: "tablebase:engine", payload: { kind: "eval" as const, source: "engine_validated" as const, values: { centipawns: 10 } } },
+    { reference: "engine:invalid-line", payload: { kind: "bestline" as const, source: "engine_validated" as const, values: { movesUci: ["not-a-move"] } } },
+    { reference: "tablebase:invalid-category", payload: { kind: "tablebase" as const, source: "tablebase_exact" as const, values: { category: "not-a-category", dtz: -3 } } },
+  ])("D4021 retains the board and valid siblings when reference presentation fails ($reference)", async ({ reference, payload }) => {
+    let run = createRun({ id: "refused-reference", session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"8".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    run = attachEvidence(run, run.activeCursor.nodeId, [reference], payload, at).run;
+    run = attachEvidence(run, run.activeCursor.nodeId, ["engine:valid-sibling"], { kind: "eval", source: "engine_validated", values: { centipawns: 25 } }, at).run;
+    const before = JSON.stringify(run);
+    const onMove = vi.fn();
+    const component = mountDrill({ target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove, onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await assistanceSettled();
+    expect(document.querySelector('[aria-label="Chessboard"]')).not.toBeNull();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Inspector")!.click();
+    await tick();
+    const region = document.querySelector('[aria-label="Evidence attached to this position"]')!;
+    expect(region.textContent).toContain("This recorded evidence could not be displayed. That is not an empty chess result.");
+    expect(region.textContent).toContain("Attached engine evaluation: +0.25 pawns");
+    expect(region.textContent).not.toContain("exact tablebase");
+    expect(onMove).not.toHaveBeenCalled();
+    expect(JSON.stringify(run)).toBe(before);
+    await unmount(component);
+  });
+
   it.each([true, false])("binds previewed position attachments to the displayed subject (has history: %s)", async (withHistoricalEvidence) => {
     let run = createRun({
       id: `preview-attachments-${withHistoricalEvidence}`,
@@ -1493,7 +2137,7 @@ describe("Layer 3 screens", () => {
     const inspect = () => [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Inspector")!.click();
     const close = () => [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Return to play")!.click();
     inspect(); await tick();
-    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Recorded engine evaluation: +1.20 pawns");
+    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Attached engine evaluation: +1.20 pawns");
     close(); await tick();
     const preview = document.querySelector<HTMLButtonElement>(`[data-timeline-node="${historicalId}"]`)!;
     preview.click(); await tick();
@@ -1501,13 +2145,13 @@ describe("Layer 3 screens", () => {
     inspect(); await tick();
     const evidence = document.querySelector('[aria-label="Evidence attached to this position"]');
     if (withHistoricalEvidence) {
-      expect(evidence?.textContent).toContain("Recorded engine evaluation: +0.25 pawns");
+      expect(evidence?.textContent).toContain("Attached engine evaluation: +0.25 pawns");
       expect(evidence?.textContent).not.toContain("+1.20");
     } else expect(evidence).toBeNull();
     close(); await tick();
     preview.click(); await tick();
     inspect(); await tick();
-    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Recorded engine evaluation: +1.20 pawns");
+    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Attached engine evaluation: +1.20 pawns");
     expect(onRewind).not.toHaveBeenCalled();
     expect(JSON.stringify(run)).toBe(before);
     await unmount(component);
@@ -2730,10 +3374,13 @@ describe("Layer 3 screens", () => {
 
   describe("Support seat request lifecycle", () => {
     describe("D3712 automatic seat recovery", () => {
-      function setup(failure: "transport" | "malformed", position = { fen: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", move: "e4d5" }) {
-        const initial = createRun({ id: "automatic-seat-recovery", session: { kind: "position", start: { fen: position.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
-        const run = revealFeedback(commitMove(initial, position.move, { at }).run, at).run;
-        const realQuery = testModuleQuery(run);
+      function recoveryRun(position: { fen: string; move: string }) {
+        const initial = createRun({ id: "automatic-seat-recovery", session: { kind: "position", start: { fen: position.fen, side: position.fen.split(" ")[1] === "w" ? "white" : "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"3".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+        return revealFeedback(commitMove(initial, position.move, { at }).run, at).run;
+      }
+      function setup(failure: "transport" | "malformed", position = { fen: "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", move: "e4d5" }, backend?: Pick<Awaited<ReturnType<typeof historicalInspectorFixture>>, "run" | "authority" | "modules">) {
+        const run = backend?.run ?? recoveryRun(position);
+        const realQuery = backend?.modules ?? testModuleQuery(run);
         const onModuleQuery = vi.fn(async (body: Parameters<typeof realQuery>[0]): Promise<unknown> => {
           if (failure === "transport") throw new Error("support transport unavailable");
           return { page: { runId: run.id } };
@@ -2741,6 +3388,7 @@ describe("Layer 3 screens", () => {
         const onMove = vi.fn(), onRewind = vi.fn();
         const component = mountDrill({ target: target(), props: {
           snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, onModuleQuery,
+          onAssistanceQuery: backend?.authority ?? testAssistanceAuthority,
           assistanceStorage: { getItem: key => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: () => undefined },
           onMove, onRewind, onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
           onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
@@ -2785,6 +3433,80 @@ describe("Layer 3 screens", () => {
         });
       }
 
+      for (const [width, height] of [[1440, 1000], [768, 1024], [390, 844]] as const)
+      for (const black of width === 768 ? [false, true] : [false])
+      for (const ending of width === 768 ? ["success", "moved-focus", "more", "unmount", "branches", "leave-return"] as const : ["success", "branches"] as const)
+      it(`D3713 recovers genuine service-returned empty Nudge without overriding ${ending} (mirrored=${black}, width=${width})`, async () => {
+        vi.stubGlobal("innerWidth", width);
+        vi.stubGlobal("innerHeight", height);
+        const candidate = { fen: "7k/p7/8/8/8/2P1PN2/6P1/K7 w - - 0 1", move: "f3d4" };
+        const position = black ? { fen: mirrorSemanticFen(candidate.fen, "color_and_vertical"), move: mirrorSemanticUci(candidate.move, "color_and_vertical") } : candidate;
+        const backend = await historicalInspectorFixture({ run: recoveryRun(position), preserveRun: true });
+        const screen = setup("transport", position, backend);
+        await assistanceSettled();
+        const tab = (name: string) => [...document.querySelectorAll<HTMLButtonElement>('.compact-tabs button')].find(button => button.textContent?.trim() === name)!;
+        if (width === 390) { tab("Support").click(); await tick(); await tick(); }
+        const seat = () => document.querySelector('[data-module="postcommit_nudge"]');
+        await vi.waitFor(() => expect(seat()?.querySelector("[role='alert']") ?? null).not.toBeNull());
+        const original = JSON.stringify(await backend.savedRun()), body = screen.onModuleQuery.mock.calls[0]![0];
+        const checked = await screen.realQuery(body) as { page: import("@chess-tabiya/runtime").ModuleQueryPage };
+        const nudge = checked.page.packets.find(packet => packet.module === "postcommit_nudge")!;
+        // A real source result is a prerequisite. Never edit a receipt or suppress a populated fact.
+        expect(nudge.receipt.items).toEqual([]);
+        expect(nudge.empty).toEqual({ kind: "silent" });
+        seat()!.querySelector<HTMLButtonElement>(".seat-row")!.click(); await tick();
+        const retry = [...seat()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!;
+        let release!: (value: unknown) => void;
+        screen.onModuleQuery.mockImplementation(() => new Promise(resolve => { release = resolve; }));
+        const added = vi.spyOn(document, "addEventListener"), removed = vi.spyOn(document, "removeEventListener");
+        retry.focus(); retry.click(); await tick();
+        expect(document.activeElement).toBe(retry);
+        expect(retry.isConnected).toBe(true);
+        const retried = screen.onModuleQuery.mock.calls[1]![0];
+        const result = await screen.realQuery(retried);
+        const other = document.createElement("button"); other.textContent = "Another intentional keyboard target"; document.body.append(other);
+        if (ending === "moved-focus") other.focus();
+        if (ending === "more") {
+          document.querySelector<HTMLButtonElement>('#run-support-region .companion-tools > .seat-row')!.click(); await tick();
+        }
+        if (ending === "branches" || ending === "leave-return") {
+          tab("Branches").click(); await tick();
+          expect(document.querySelector('.branch-seat')?.classList.contains("compact-active")).toBe(true);
+          if (ending === "leave-return") { tab("Support").click(); await tick(); }
+          // No focusin: pointer/touch activation may leave keyboard focus on the pending Retry.
+          expect(document.activeElement).toBe(retry);
+        }
+        if (ending === "unmount") {
+          const listeners = added.mock.calls.filter(([type]) => type === "focusin").map(([, listener]) => listener);
+          expect(listeners).toHaveLength(1);
+          await unmount(screen.component); other.focus();
+          for (const listener of listeners) expect.soft(removed.mock.calls.some(([type, callback]) => type === "focusin" && callback === listener)).toBe(true);
+          // Assert cleanup while unresolved, then let the real request settle for fixture teardown.
+          release(result); await tick(); await tick();
+          expect(document.activeElement).toBe(other);
+          expect(JSON.stringify(await backend.savedRun())).toBe(original);
+          expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
+          expect(screen.onMove).not.toHaveBeenCalled(); expect(screen.onRewind).not.toHaveBeenCalled();
+          return;
+        }
+        const priorFocus = document.activeElement;
+        release(result);
+        await vi.waitFor(() => expect(seat()).toBeNull()); await tick();
+        expect(retry.isConnected).toBe(false);
+        if (ending === "success") {
+          expect(document.activeElement).not.toBe(document.body);
+          expect(document.querySelector('#run-support-region')!.contains(document.activeElement)).toBe(true);
+        } else expect(document.activeElement === (priorFocus?.isConnected ? priorFocus : document.body), "Retry must not move focus after a newer learner action").toBe(true);
+        if (width === 768) expect(document.querySelectorAll('#run-support-region [data-queue-head]')).toHaveLength(1);
+        expect(document.querySelector<HTMLDivElement>('#support_tools-card')!.hidden).toBe(false);
+        if (ending === "more") expect(document.querySelector('#run-support-region .companion-tools > .seat-row')?.getAttribute("aria-expanded")).toBe("true");
+        expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
+        expect(JSON.stringify(await backend.savedRun())).toBe(original);
+        expect(screen.onMove).not.toHaveBeenCalled(); expect(screen.onRewind).not.toHaveBeenCalled();
+        expect(await backend.stats()).toEqual({ acquisitions: [], providerCalls: [] });
+        await unmount(screen.component);
+      });
+
       it("keeps genuinely delivered facts and tablet focus instead of assuming a pawn-free position is silent", async () => {
         vi.stubGlobal("innerWidth", 768);
         vi.stubGlobal("innerHeight", 1024);
@@ -2796,10 +3518,12 @@ describe("Layer 3 screens", () => {
         screen.onModuleQuery.mockImplementation(screen.realQuery);
         const retry = [...seat()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!;
         retry.focus(); retry.click();
-        await vi.waitFor(() => expect(seat()?.querySelectorAll("[data-presented]")).toHaveLength(2));
+        await vi.waitFor(() => expect(seat()?.querySelectorAll("[data-presented]")).toHaveLength(1));
         const body = screen.onModuleQuery.mock.calls[1]![0];
         const page = (await screen.realQuery(body) as { page: import("@chess-tabiya/runtime").ModuleQueryPage }).page;
-        expect(page.packets.find(packet => packet.module === "postcommit_nudge")!.receipt.items).toHaveLength(2);
+        expect(page.packets.find(packet => packet.module === "postcommit_nudge")!.receipt.items.map(item => item.evidenceRef?.projection)).toEqual([
+          { id: "rules.transition.event.piece_escape", version: 1 },
+        ]);
         expect(document.querySelector<HTMLDivElement>("#postcommit_nudge-card")!.hidden).toBe(false);
         expect(document.activeElement).toBe(seat()!.querySelector(".seat-row"));
         expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
@@ -2807,7 +3531,7 @@ describe("Layer 3 screens", () => {
         await unmount(screen.component);
       });
 
-      it("D3715: locked pawns still produce unchanged island counts rather than a silent recovery", async () => {
+      it("D3715 removes unchanged counts without claiming the locked-pawn move is wholly quiet", async () => {
         vi.stubGlobal("innerWidth", 768);
         vi.stubGlobal("innerHeight", 1024);
         const screen = setup("transport", { fen: "7k/pppppppp/PPPPPPPP/8/8/8/3N4/K7 w - - 0 1", move: "d2f3" });
@@ -2819,14 +3543,14 @@ describe("Layer 3 screens", () => {
         const result = await screen.realQuery(body) as { page: import("@chess-tabiya/runtime").ModuleQueryPage };
         const nudge = result.page.packets.find(packet => packet.module === "postcommit_nudge")!;
         expect(nudge.receipt.items.map(item => item.evidenceRef?.projection)).toEqual([
-          { id: "rules.structural.event.pawn_islands", version: 1 },
-          { id: "rules.structural.event.pawn_islands", version: 1 },
+          { id: "rules.tactic.event.loose_piece", version: 1 },
         ]);
         expect(nudge.empty).toBeNull();
         screen.onModuleQuery.mockImplementation(screen.realQuery);
         const retry = [...seat()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Try again")!;
         retry.focus(); retry.click();
-        await vi.waitFor(() => expect(seat()?.querySelectorAll("[data-presented]")).toHaveLength(2));
+        await vi.waitFor(() => expect(seat()?.querySelectorAll("[data-presented]")).toHaveLength(1));
+        expect(presentationContract.parsePresentationReceipt(nudge.receipt).every(item => seat()!.textContent?.includes(presentedSentence(item)))).toBe(true);
         expect(document.activeElement).toBe(seat()!.querySelector(".seat-row"));
         expect(screen.onModuleQuery).toHaveBeenCalledTimes(2);
         expect(screen.onMove).not.toHaveBeenCalled(); expect(screen.onRewind).not.toHaveBeenCalled();
@@ -3079,201 +3803,257 @@ describe("Layer 3 screens", () => {
   });
 
   describe("full Inspector request lifecycle", () => {
-    async function setup(delayed: boolean, staleDecision = false) {
+    it("D4056 actual DrillScreen reaches old root evidence without opening retry help, then returns to working board input", async () => {
+      const f = await historicalInspectorFixture({ historical: true, side: "black" }), onInspectorAssistance = vi.fn(f.confirm), onInspectorQuery = vi.fn(f.send);
+      const writes = vi.fn(), onMove = vi.fn(), onRewind = vi.fn(), onFork = vi.fn(), onSwitchBranch = vi.fn();
+      const props: ComponentProps<typeof DrillScreen> = { snapshot: { run: f.run, access: "writer", pendingEvidence: 0, withheld: true },
+        assistanceStorage: { getItem: () => null, setItem: writes }, onAssistanceQuery: f.authority,
+        onInspectorAssistance, onInspectorQuery, onMove, onRewind, onFork, onSwitchBranch,
+        onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion };
+      const screen = createClassComponent({ component: DrillScreen, target: target(), props });
+      await assistanceSettled(); const before = JSON.stringify(f.run);
+      document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+      const seat = document.querySelector<HTMLElement>('[aria-label="Inspect a recorded line"]')!;
+      expect(seat).not.toBeNull(); expect(onInspectorAssistance).not.toHaveBeenCalled(); expect(onInspectorQuery).not.toHaveBeenCalled();
+      const line = seat.querySelector<HTMLSelectElement>("select")!; line.value = f.run.branches[0]!.id; line.dispatchEvent(new Event("change", { bubbles: true })); await tick();
+      [...seat.querySelectorAll<HTMLButtonElement>("button")].find(node => node.textContent === "Inspect recorded position")!.click();
+      await vi.waitFor(() => expect(seat.querySelectorAll("nav li")).toHaveLength(8));
+      expect(onInspectorAssistance.mock.calls[0]![0].inspector).toMatchObject({ branchId: f.run.branches[0]!.id, nodeId: f.run.nodes[0]!.id });
+      expect(onInspectorQuery.mock.calls[0]![0].query).toMatchObject({ branchId: f.run.branches[0]!.id, nodeId: f.run.nodes[0]!.id });
+      for (const callback of [onMove, onRewind, onFork, onSwitchBranch, writes]) expect(callback).not.toHaveBeenCalled();
+      expect(JSON.stringify(f.run)).toBe(before);
+      [...document.querySelectorAll<HTMLButtonElement>("button")].find(node => node.textContent === "Return to play")!.click(); await tick();
+      expect(document.querySelector('[aria-label="Inspect a recorded line"]')).toBeNull();
+      const details = document.querySelector<HTMLDetailsElement>(".move-entry .text-move")!;
+      details.open = true; details.dispatchEvent(new Event("toggle")); await tick();
+      const input = details.querySelector<HTMLInputElement>("input")!; input.value = "Nf6"; input.dispatchEvent(new Event("input", { bubbles: true })); await tick();
+      details.querySelector<HTMLFormElement>("form")!.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+      await vi.waitFor(() => expect(onMove).toHaveBeenCalledExactlyOnceWith("g8f6"));
+      screen.$destroy();
+    });
+    type InspectorQuery = ComponentProps<typeof import("./InspectorSourceBrowser.svelte").default>["onQuery"];
+    async function setup(delayed: boolean, staleDecision = false, liveHealth = false) {
       const initial = createRun({ id: "inspector-lifecycle", session: { kind: "position", start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } }, sessionDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
       const sourceRun = revealFeedback(initial, at).run;
       const run = staleDecision ? appendEvents(sourceRun, [{ type: "feedback.generated", at, data: { nodeId: sourceRun.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]) : sourceRun;
+      const source = await inspectorBrowserFixture({run,...(liveHealth?{liveHealth:true,corpusTotal:100}:{})});
+      const oldSource = staleDecision ? await inspectorBrowserFixture({run:sourceRun}) : source;
       const snapshots = new SvelteMap<string, RunStateSnapshot>([["current", { run, access: "writer", pendingEvidence: 0, withheld: false }]]);
-      const realQuery = (body: Parameters<ReturnType<typeof testModuleQuery>>[0]) => testModuleQuery(staleDecision ? sourceRun : snapshots.get("current")!.run)(body);
+      const realQuery: InspectorQuery = (body,signal) => body.query.view.kind === "source" && staleDecision
+        ? oldSource.send({...body,query:{...body.query,decisionDigest:moduleDecisionStamp(sourceRun).digest}},signal)
+        : source.send(body,signal);
       const pending = deferred<unknown>();
-      let firstBody: Parameters<typeof realQuery>[0] | undefined;
-      const inspectorCalls: Parameters<typeof realQuery>[0][] = [];
-      const onModuleQuery = vi.fn((body: Parameters<typeof realQuery>[0]) => {
-        if (!(body.query as { requested: readonly string[] }).requested.includes("full_inspector")) return realQuery(body);
+      let original:unknown, firstSignal:AbortSignal|undefined, nextReply:InspectorQuery|undefined;
+      const inspectorCalls:Parameters<InspectorQuery>[0][] = [];
+      const onInspectorQuery=vi.fn<InspectorQuery>(async(body,signal)=>{
+        if(body.query.view.kind!=="source")return realQuery(body,signal);
         inspectorCalls.push(body);
-        if (delayed && inspectorCalls.length === 1) { firstBody = body; return pending.promise; }
-        return realQuery(body);
+        if(nextReply!==undefined){const reply=nextReply;nextReply=undefined;return reply(body,signal);}
+        const value=await realQuery(body,signal);
+        if(delayed&&inspectorCalls.length===1){original=value;firstSignal=signal;return pending.promise;}
+        return value;
       });
-      const preference = (arrows: string) => JSON.stringify({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset: "quiet", overrides: { arrows }, moduleOverrides: { include: ["full_inspector"], exclude: [] } } });
-      const preferences = new Map([[workflowPreferenceKey("position"), preference("off")]]);
-      const component = mount(DrillScreen, { target: target(), props: {
-        onAssistanceQuery: testAssistanceAuthority,
-        get snapshot() { return snapshots.get("current")!; }, onModuleQuery,
-        assistanceStorage: { getItem: key => preferences.get(key) ?? null, setItem: (key, value) => { preferences.set(key, value); } },
-        onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
-      } });
+      const preference=(arrows:string)=>JSON.stringify({version:2,assistanceHead:4,intent:{kind:"explicit",preset:"quiet",overrides:{arrows},moduleOverrides:{include:["full_inspector"],exclude:[]}}});
+      const preferences=new Map([[workflowPreferenceKey("position"),preference("off")]]);
+      const assistanceQueries=vi.fn(source.authority);
+      const component=mount(DrillScreen,{target:target(),props:{
+        onAssistanceQuery:assistanceQueries,
+        get snapshot(){return snapshots.get("current")!;},onInspectorQuery,
+        assistanceStorage:{getItem:key=>preferences.get(key)??null,setItem:(key,value)=>{preferences.set(key,value);}},
+        onMove:vi.fn(),onRewind:vi.fn(),onFork:vi.fn(),onSwitchBranch:vi.fn(),onCompare:vi.fn(),onCloseCompare:vi.fn(),onContinueCheckpoint:vi.fn(),onExport:vi.fn(),onStop:vi.fn(),registerKeyboardRegion,
+      }});
       await assistanceSettled();
-      const open = async () => { document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick(); };
-      const close = async () => { [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Return to play")!.click(); await tick(); };
-      const change = async (arrows: string) => {
-        preferences.set(workflowPreferenceKey("position"), preference(arrows));
-        globalThis.dispatchEvent(new StorageEvent("storage", { key: workflowPreferenceKey("position") }));
-        await assistanceSettled(); await tick();
+      const section=()=>document.querySelector<HTMLElement>(".source-browser");
+      const action=(text:string)=>[...section()!.querySelectorAll<HTMLButtonElement>("button")].find(button=>button.textContent?.trim()===text)!;
+      const inventory=async()=>{await vi.waitFor(()=>expect(section()?.querySelectorAll("nav li")).toHaveLength(8));};
+      const read=async()=>{
+        if(!action("Read this source")){
+          while(!action("Castling rights")){action("Next sources").click();await tick();await vi.waitFor(()=>expect(section()?.querySelector('[role="status"]')).toBeNull());}
+          action("Castling rights").click();
+        }else action("Read this source").click();
+        await tick();
       };
-      const section = () => document.querySelector<HTMLElement>(".full-inspector");
-      const release = async (kind: "success" | "failure") => {
-        if (kind === "success") pending.resolve(await realQuery(firstBody!)); else pending.reject(new Error("PRIVATE_INSPECTOR_FAILURE"));
-        await pending.promise.catch(() => undefined); await tick(); await tick();
+      const open=async()=>{document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();await tick();await inventory();};
+      const close=async()=>{[...document.querySelectorAll<HTMLButtonElement>("button")].find(button=>button.textContent==="Return to play")!.click();await tick();};
+      const ready=async()=>vi.waitFor(()=>expect(section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
+      const change=async(arrows:string)=>{
+        preferences.set(workflowPreferenceKey("position"),preference(arrows));
+        globalThis.dispatchEvent(new StorageEvent("storage",{key:workflowPreferenceKey("position")}));
+        await assistanceSettled();await inventory();
       };
-      await open();
-      await vi.waitFor(() => expect(inspectorCalls).toHaveLength(1));
-      const publish = async (next: DrillRun) => { snapshots.set("current", { run: next, access: "writer", pendingEvidence: 0, withheld: false }); await tick(); await tick(); };
-      return { component, run, open, close, change, section, release, inspectorCalls, publish, onModuleQuery, realQuery };
+      const release=async(kind:"success"|"failure")=>{
+        if(kind==="success")pending.resolve(original);else pending.reject(new Error("PRIVATE_INSPECTOR_FAILURE"));
+        await pending.promise.catch(()=>undefined);await tick();await tick();
+      };
+      await open();await read();
+      await vi.waitFor(()=>expect(inspectorCalls).toHaveLength(1));
+      if(delayed)await vi.waitFor(()=>expect(firstSignal).toBeDefined());
+      const publish=async(next:DrillRun)=>{
+        await source.publish(next);snapshots.set("current",{run:next,access:"writer",pendingEvidence:0,withheld:false});await tick();await tick();
+      };
+      return {component,run,open,close,change,section,release,inspectorCalls,publish,onInspectorQuery,realQuery,read,ready,action,inventory,source,assistanceQueries,
+        override:(reply:InspectorQuery)=>{nextReply=reply;},signal:()=>firstSignal};
     }
 
-    it("D3655: retries a failed explicit read once without changing its exact request or recorded play", async () => {
-      const view = await setup(true);
-      const recorded = JSON.stringify(view.run);
-      await view.release("failure");
-      expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be loaded");
-      const retry = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Retry recorded evidence");
-      expect(retry).toBeDefined();
-      retry!.focus(); retry!.click(); retry!.click();
-      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      expect(view.inspectorCalls[1]).toEqual(view.inspectorCalls[0]);
-      expect(document.activeElement).toBe(retry);
-      expect(JSON.stringify(view.run)).toBe(recorded);
-      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
-      await unmount(view.component);
+    it("D3655: retries a failed explicit read once without changing its exact request or recorded play",async()=>{
+      const view=await setup(true),recorded=JSON.stringify(view.run);await view.release("failure");
+      expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be verified");
+      const retry=view.action("Retry this request");expect(retry).toBeDefined();retry.focus();retry.click();retry.click();
+      await vi.waitFor(()=>expect(view.inspectorCalls).toHaveLength(2));await view.ready();
+      expect(view.inspectorCalls[1]).toEqual(view.inspectorCalls[0]);expect(JSON.stringify(view.run)).toBe(recorded);
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();await unmount(view.component);
     });
 
-    it("D3655: a missing demanded packet is a failed read, not a successful empty Inspector", async () => {
-      const view = await setup(true);
-      const complete = await view.realQuery(view.inspectorCalls[0]!) as { page: ReturnType<typeof queryModules>["page"] };
-      const missing = { page: { ...complete.page, packets: [], suppressions: [] } };
-      expect(moduleResponses.parseModuleQueryPage(missing, {
-        runId: complete.page.runId, subjectNodeId: complete.page.subjectNodeId,
-        finalDigest: complete.page.effectiveConfigDigest,
-      }).packets).toEqual([]);
-      // Deliver the actual page through the normal parser, with only the requested packet absent.
-      view.onModuleQuery.mockImplementationOnce(async () => missing);
-      await view.close(); await view.open();
-      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be loaded"));
-      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
-      await view.release("success");
-      expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull();
-      await unmount(view.component);
+    it("D3655: a missing demanded source body is a failed read, not a successful empty Inspector",async()=>{
+      const view=await setup(true);
+      view.override(async(body,signal)=>{const complete=await view.realQuery(body,signal);const missing=JSON.parse(JSON.stringify(complete)) as Record<string,unknown>;delete missing.body;return missing;});
+      await view.close();await view.open();await view.read();
+      await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be verified"));
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);await view.release("success");
+      expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull();await unmount(view.component);
     });
 
-    it("D3655: failed refresh remains recoverable and never falls back to stale admitted components", async () => {
-      const view = await setup(false);
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      view.onModuleQuery.mockImplementationOnce(() => { throw new Error("PRIVATE_SYNC_FAILURE"); });
-      const refresh = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Refresh recorded evidence");
-      expect(refresh).toBeDefined(); refresh!.click();
-      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+    it("D3655: failed refresh remains recoverable and never falls back to stale admitted components",async()=>{
+      const view=await setup(false);await view.ready();
+      view.override(()=>{throw new Error("PRIVATE_SYNC_FAILURE");});await view.read();
+      await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
       expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
       expect(view.section()?.textContent).not.toContain("PRIVATE_SYNC_FAILURE");
-      refresh!.click();
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      await unmount(view.component);
+      view.action("Retry this request").click();await view.ready();await unmount(view.component);
     });
 
-    it.each(["success", "failure"] as const)("D3655: manual refresh retires late %s after the Inspector closes", async kind => {
-      const view = await setup(false);
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      const pending = deferred<unknown>();
-      view.onModuleQuery.mockImplementationOnce(() => pending.promise);
-      const refresh = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Refresh recorded evidence");
-      expect(refresh).toBeDefined(); refresh!.click(); refresh!.click();
-      await tick();
-      expect(refresh!.getAttribute("aria-disabled")).toBe("true");
-      await view.close();
-      const parser = vi.spyOn(moduleResponses, "parseModuleQueryPage");
-      if (kind === "success") pending.resolve(await view.realQuery(view.inspectorCalls[0]!)); else pending.reject(new Error("PRIVATE_LATE_FAILURE"));
-      await pending.promise.catch(() => undefined); await tick(); await tick();
-      expect(parser).not.toHaveBeenCalled(); parser.mockRestore();
-      expect(view.section()).toBeNull();
-      await view.open();
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      await unmount(view.component);
+    it.each(["success","failure"] as const)("D3655: manual refresh retires late %s after the Inspector closes",async kind=>{
+      const view=await setup(false);await view.ready();const pending=deferred<unknown>();
+      let signal:AbortSignal|undefined,actual:unknown;
+      view.override(async(body,incoming)=>{actual=await view.realQuery(body,incoming);signal=incoming;return pending.promise;});
+      await view.read();await vi.waitFor(()=>expect(signal).toBeDefined());
+      expect(view.action("Read this source").disabled).toBe(true);await view.close();expect(signal!.aborted).toBe(true);
+      const parser=vi.spyOn(inspectorQueryResponses,"parseInspectorQueryPage");
+      if(kind==="success")pending.resolve(actual);else pending.reject(new Error("PRIVATE_LATE_FAILURE"));
+      await pending.promise.catch(()=>undefined);await tick();await tick();
+      expect(parser).not.toHaveBeenCalled();parser.mockRestore();expect(view.section()).toBeNull();
+      await view.open();expect(view.inspectorCalls).toHaveLength(2);await view.read();await view.ready();await unmount(view.component);
     });
 
-    it("keeps identical snapshots but replaces evidence when the recorded decision advances", async () => {
-      const view = await setup(false);
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      const previous = view.section()?.textContent;
-      await view.publish(structuredClone(view.run));
-      expect(view.inspectorCalls).toHaveLength(1);
-      expect(view.section()?.textContent).toBe(previous);
-      const next = appendEvents(view.run, [{ type: "feedback.generated", at, data: { nodeId: view.run.activeCursor.nodeId, evidenceRefs: ["rules:material"] } }]);
-      await view.publish(next);
-      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
-      await unmount(view.component);
-    });
-
-    it("refuses a genuine same-position packet replayed from an older recorded decision", async () => {
-      const view = await setup(false, true);
-      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be loaded"));
-      expect(view.section()?.querySelectorAll("[data-presented]").length).toBe(0);
-      await unmount(view.component);
-    });
-
-    it("D3655: retry cannot admit a genuine packet from an older recorded decision", async () => {
-      const view = await setup(false, true);
-      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
-      const retry = [...view.section()!.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Retry recorded evidence")!;
-      expect(retry).toBeDefined(); retry.click();
-      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
-      await vi.waitFor(() => expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+    it("keeps identical snapshots but replaces evidence when the recorded decision advances",async()=>{
+      const view=await setup(false);await view.ready();const previous=view.section()?.textContent;
+      await view.publish(structuredClone(view.run));expect(view.inspectorCalls).toHaveLength(1);expect(view.section()?.textContent).toBe(previous);
+      const next=appendEvents(view.run,[{type:"feedback.generated",at,data:{nodeId:view.run.activeCursor.nodeId,evidenceRefs:["rules:material"]}}]);
+      await view.publish(next);await view.inventory();expect(view.inspectorCalls).toHaveLength(1);
       expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
-      await unmount(view.component);
+      await view.read();await view.ready();expect(view.inspectorCalls).toHaveLength(2);
+      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();await unmount(view.component);
     });
 
-    it("recompiles a completed genuine packet when the same-node help digest changes", async () => {
-      const view = await setup(false);
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      const first = view.inspectorCalls[0]!.assistance.requestDigest;
-      await view.change("sight");
-      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
-      expect(view.inspectorCalls[1]!.assistance.requestDigest).not.toBe(first);
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      await unmount(view.component);
+    it("refuses a genuine same-position page replayed from an older recorded decision",async()=>{
+      const view=await setup(false,true);
+      await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')?.textContent).toContain("could not be verified"));
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);await unmount(view.component);
     });
 
-    it.each(["success", "failure"] as const)("retires a pending packet's late %s after the help digest changes", async kind => {
-      const view = await setup(true);
-      expect(view.section()?.querySelector('[role="status"]')).not.toBeNull();
-      await view.change("sight");
-      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      const replacement = view.section()?.textContent;
-      await view.release(kind);
-      expect(view.section()?.textContent).toBe(replacement);
-      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
-      await unmount(view.component);
+    it("D3655: retry cannot admit a genuine page from an older recorded decision",async()=>{
+      const view=await setup(false,true);await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      view.action("Retry this request").click();await vi.waitFor(()=>expect(view.inspectorCalls).toHaveLength(2));
+      await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);await unmount(view.component);
     });
 
-    it.each(["success", "failure"] as const)("closing retires a late %s and reopening requests only current evidence", async kind => {
-      const view = await setup(true);
-      await view.close();
-      const parser = vi.spyOn(moduleResponses, "parseModuleQueryPage");
-      await view.release(kind);
-      expect(parser).not.toHaveBeenCalled();
-      parser.mockRestore();
-      expect(view.section()).toBeNull();
-      await view.open();
-      await vi.waitFor(() => expect(view.inspectorCalls).toHaveLength(2));
-      await vi.waitFor(() => expect(view.section()?.querySelectorAll("[data-presented]").length).toBeGreaterThan(0));
-      expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
-      await unmount(view.component);
+    it("recompiles a completed genuine source when the same-node help digest changes",async()=>{
+      const view=await setup(false);await view.ready();const first=view.inspectorCalls[0]!.assistance.requestDigest;
+      await view.change("sight");expect(view.inspectorCalls).toHaveLength(1);
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
+      await view.read();await view.ready();expect(view.inspectorCalls).toHaveLength(2);
+      expect(view.inspectorCalls[1]!.assistance.requestDigest).not.toBe(first);await unmount(view.component);
     });
 
-    it.each(["success", "failure"] as const)("destroying the screen retires a pending genuine packet's %s without warnings", async kind => {
-      const view = await setup(true);
-      const warning = vi.spyOn(console, "warn");
-      await unmount(view.component);
-      const parser = vi.spyOn(moduleResponses, "parseModuleQueryPage");
-      await view.release(kind);
-      expect(parser).not.toHaveBeenCalled();
-      parser.mockRestore();
-      expect(warning).not.toHaveBeenCalled();
-      expect(document.body.textContent).not.toContain("PRIVATE_INSPECTOR_FAILURE");
-      expect(view.section()).toBeNull();
-      warning.mockRestore();
+    it.each(["success","failure"] as const)("retires a pending source's late %s after the help digest changes",async kind=>{
+      const view=await setup(true);expect(view.section()?.querySelector('[role="status"]')).not.toBeNull();
+      await view.change("sight");expect(view.signal()!.aborted).toBe(true);await view.read();await view.ready();
+      const replacement=view.section()?.textContent;await view.release(kind);
+      expect(view.section()?.textContent).toBe(replacement);expect(view.section()?.querySelector('[role="alert"]')).toBeNull();await unmount(view.component);
+    });
+
+    it.each(["success","failure"] as const)("closing retires a late %s and reopening requests metadata only",async kind=>{
+      const view=await setup(true);await view.close();expect(view.signal()!.aborted).toBe(true);
+      const parser=vi.spyOn(inspectorQueryResponses,"parseInspectorQueryPage");await view.release(kind);
+      expect(parser).not.toHaveBeenCalled();parser.mockRestore();expect(view.section()).toBeNull();
+      await view.open();expect(view.inspectorCalls).toHaveLength(1);await view.read();await view.ready();
+      expect(view.inspectorCalls).toHaveLength(2);expect(view.section()?.querySelector('[role="alert"]')).toBeNull();await unmount(view.component);
+    });
+
+    it.each(["success","failure"] as const)("destroying the screen retires a pending genuine page's %s without warnings",async kind=>{
+      const view=await setup(true),warning=vi.spyOn(console,"warn");await unmount(view.component);expect(view.signal()!.aborted).toBe(true);
+      const parser=vi.spyOn(inspectorQueryResponses,"parseInspectorQueryPage");await view.release(kind);
+      expect(parser).not.toHaveBeenCalled();parser.mockRestore();expect(warning).not.toHaveBeenCalled();
+      expect(document.body.textContent).not.toContain("PRIVATE_INSPECTOR_FAILURE");expect(view.section()).toBeNull();warning.mockRestore();
+    });
+
+    it("D3998: explicitly recompiles actual changed provider health without mutating the requested preset or accepting a crossed digest",async()=>{
+      const view=await setup(false,false,true);await view.ready();
+      const original=view.inspectorCalls[0]!.assistance;
+      const before=await view.source.authority(original);
+      // A real shared Explorer descriptor sees a mechanical HTTP401, settles its genuine
+      // ProviderRegistry ticket, then derives the same live availability receipt REST uses.
+      const failure=await view.source.failExplorer(view.source.props.assistance);
+      expect(failure.availability.explorer).toEqual({state:"failed",reason:"authentication"});
+      expect(failure.actual).toMatchObject({kind:"page",body:{kind:"source",outcome:{kind:"failed"}}});
+      const current=await view.source.authority(original);
+      expect(current.requestedDigest).toBe(before.requestedDigest);expect(current.finalDigest).not.toBe(before.finalDigest);
+      await view.read();await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);
+      const calls=view.inspectorCalls.length,compiles=view.assistanceQueries.mock.calls.length;
+      await tick();await tick();expect(view.inspectorCalls).toHaveLength(calls);expect(view.assistanceQueries).toHaveBeenCalledTimes(compiles);
+      const refresh=view.action("Refresh help and source list");expect(refresh).toBeDefined();refresh.click();refresh.click();await tick();
+      await assistanceSettled();await view.inventory();expect(view.assistanceQueries).toHaveBeenCalledTimes(compiles+1);
+      expect(view.inspectorCalls).toHaveLength(calls);expect(view.section()?.querySelector('[role="alert"]')).toBeNull();
+      await view.read();await view.ready();expect(view.inspectorCalls.at(-1)!.assistance).toEqual(original);
+      expect((await view.source.stats()).providerCalls).toHaveLength(1);await unmount(view.component);
+    });
+
+    it("D3998: rejected explicit help refresh retains a reachable in-modal retry and recovers through the actual compiler",async()=>{
+      const view=await setup(false);await view.ready();view.override(()=>{throw new Error("PRIVATE_SOURCE_TRANSPORT");});await view.read();
+      await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      view.assistanceQueries.mockRejectedValueOnce(new Error("PRIVATE_HELP_TRANSPORT"));
+      const refresh=view.action("Refresh help and source list");refresh.focus();refresh.click();await tick();
+      await vi.waitFor(()=>expect(document.querySelector('[data-preset-state]')?.getAttribute("data-preset-state")).toBe("unavailable"));
+      const dialog=document.querySelector('[role="dialog"]')!,retry=dialog.querySelector<HTMLButtonElement>('[data-inspector-help-retry]');
+      expect(retry?.textContent).toBe("Retry confirming help");expect(document.activeElement).toBe(retry);
+      expect(dialog.textContent).not.toContain("PRIVATE_HELP_TRANSPORT");expect(view.section()).toBeNull();
+      const calls=view.inspectorCalls.length,compiles=view.assistanceQueries.mock.calls.length;
+      await tick();expect(view.assistanceQueries).toHaveBeenCalledTimes(compiles);
+      retry!.focus();retry!.click();await tick();await assistanceSettled();await view.inventory();
+      expect(view.assistanceQueries).toHaveBeenCalledTimes(compiles+1);expect(view.inspectorCalls).toHaveLength(calls);
+      expect(document.activeElement).toBe(view.section()?.querySelector("h3"));
+      await view.read();await view.ready();await unmount(view.component);
+    });
+
+    it("D4000: successful explicit help refresh hands removed-button focus to the remounted source-list heading",async()=>{
+      const view=await setup(false);await view.ready();view.override(()=>{throw new Error("PRIVATE_SOURCE_TRANSPORT");});await view.read();
+      await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      const refresh=view.action("Refresh help and source list");refresh.focus();refresh.click();await tick();
+      await assistanceSettled();await view.inventory();expect(document.activeElement).toBe(view.section()?.querySelector("h3"));
+      expect(view.section()?.querySelectorAll("[data-presented]")).toHaveLength(0);await unmount(view.component);
+    });
+
+    it.each(["move","close","unmount"] as const)("D4000: pending help refresh does not steal focus after intentional %s",async action=>{
+      const view=await setup(false);await view.ready();view.override(()=>{throw new Error("PRIVATE_SOURCE_TRANSPORT");});await view.read();
+      await vi.waitFor(()=>expect(view.section()?.querySelector('[role="alert"]')).not.toBeNull());
+      const actual=await view.source.authority(view.inspectorCalls[0]!.assistance),held=deferred<FinalizedAssistanceV1>();
+      view.assistanceQueries.mockImplementationOnce(()=>held.promise);
+      const refresh=view.action("Refresh help and source list");refresh.focus();refresh.click();await tick();
+      await vi.waitFor(()=>expect(document.querySelector('[data-preset-state]')?.getAttribute("data-preset-state")).toBe("pending"));
+      let intentional:HTMLButtonElement;
+      if(action==="unmount"){
+        await unmount(view.component);intentional=document.createElement("button");intentional.textContent="New page keyboard target";document.body.append(intentional);
+      }else{
+        intentional=[...document.querySelectorAll<HTMLButtonElement>("button")].find(button=>button.textContent==="Return to play")!;
+        if(action==="close"){intentional.click();await tick();intentional=document.querySelector<HTMLButtonElement>(".inspector-entry")!;}
+      }
+      intentional.focus();held.resolve(actual);await held.promise;await tick();await tick();
+      if(action!=="unmount")await assistanceSettled();
+      expect(document.activeElement).toBe(intentional);
+      if(action==="close")expect(document.querySelector('[role="dialog"]')).toBeNull();
+      if(action!=="unmount")await unmount(view.component);
     });
   });
 
@@ -3549,25 +4329,54 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".guidance-panel")?.textContent).not.toContain("The queens have left the board.");
     document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click();
     await tick();
-    expect(document.querySelector('[aria-label="Recorded moment evidence"]')?.textContent).toContain("The queens have left the board.");
+    const expected = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST,
+      { id: "board.pivotal_marker", version: 2 }, pivotalMarkerEvidenceItems(queen, queen.activeCursor.branchId)));
+    const section = document.querySelector('[aria-label="Recorded moment evidence"]')!;
+    expect(expected).toHaveLength(1);
+    expect([...section.querySelectorAll('[data-presented="fact_statement"]')].map(element => element.textContent?.trim()))
+      .toEqual(expected.map(presentedSentence));
+    expect(section.textContent).toContain("Both queens have left the board.");
     await unmount(component);
+
+    const originalPresent = presentationContract.presentEvidenceItems;
+    const failedPresentation = vi.spyOn(presentationContract, "presentEvidenceItems").mockImplementation(view => {
+      if (view.consumer.id === "board.pivotal_marker") throw new presentationContract.PresentationError("PRESENTATION_INVALID", "fixture marker formatting failure");
+      return originalPresent(view);
+    });
+    try {
+      component = mountDrill({ target: target(), props: props(queen) });
+      await tick(); await assistanceSettled();
+      document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click(); await tick();
+      document.querySelector<HTMLButtonElement>(".guidance-panel button")!.click(); await tick();
+      const failed = document.querySelector('[aria-label="Recorded moment evidence"]')!;
+      expect(failed.querySelector('[role="status"]')?.textContent).toContain("could not be displayed");
+      expect(failed.querySelector('[data-presented="fact_statement"]')).toBeNull();
+      expect(failed.textContent).not.toContain("Both queens have left the board.");
+      expect(failed.textContent).not.toContain("The queens have left the board.");
+      expect(document.querySelector('[aria-label="Chessboard"]')).not.toBeNull();
+      await unmount(component);
+    } finally { failedPresentation.mockRestore(); }
   });
 
-  it("shows a guided shape marker with markers off and opens the attributed plans panel", async () => {
+  it("shows an authoritative guided shape marker and opens the attributed plans panel", async () => {
     const run = createRun({
       id: "just-play-shape",
       session: { kind: "position", start: { fen: "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10", side: "black" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
       sessionDigest: `sha256:${"b".repeat(64)}`,
       policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at,
     });
+    const { channel: _channel, ...shapeDocument } = carlsbad;
+    const f = await historicalInspectorFixture({ run, shapes: [shapeDocument], authenticatedRest: true, preserveRun: true });
+    const entry = { ...carlsbad, channel: "community" as const, documentDigest: await digestShapeEntry(shapeDocument) };
     const component = mountDrill({ target: target(), props: {
-      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, shapes: [carlsbad],
-      assistanceStorage: { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4, markers: "off", guided: "live", humanSplit: "off", corpus: "off", voice: "authored", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, shapes: [entry], onShapeFirings: f.shapeFirings, onAssistanceQuery: f.authority,
+      assistanceStorage: { getItem: (key: string) => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: vi.fn() },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
     await tick();
     await assistanceSettled();
     expect(document.body.textContent).toContain("Nothing is authored about this position — Tabiya reads it as you play");
+    await vi.waitFor(() => expect(document.querySelector(".shape-marker")).not.toBeNull());
     const marker = document.querySelector<HTMLButtonElement>(".shape-marker")!;
     expect(marker.textContent).toContain("Carlsbad structure");
     marker.focus(); marker.click(); await tick();
@@ -3578,6 +4387,8 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Named plans for this structure — general to the kind of position, not advice for this one.");
     expect(document.querySelector(".shape-panel")?.textContent).not.toContain("shape trigger");
     expect(document.querySelector(".shape-panel")?.textContent).toContain("Minority attack");
+    expect(document.querySelector('.shape-panel [data-presented="fact_statement"]')?.textContent).toContain("Matched authored pattern");
+    expect(document.querySelector('.shape-panel [data-presented="fact_statement"]')?.textContent).toContain("does not validate the entry's plans");
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); await tick();
     expect(document.querySelector(".shape-panel")).toBeNull();
     expect(document.activeElement).toBe(marker);
@@ -3629,13 +4440,17 @@ describe("Layer 3 screens", () => {
       seed: 1,
       createdAt: at,
     });
+    const f = await historicalInspectorFixture({ run, shapes: [], authenticatedRest: true, preserveRun: true });
     const component = mountDrill({ target: target(), props: {
+      onShapeFirings: f.shapeFirings, onAssistanceQuery: f.authority,
+      assistanceStorage: { getItem: (key: string) => key === workflowPreferenceKey("position") ? explicitPreference("guided") : null, setItem: vi.fn() },
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
       onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
     } });
     await tick();
 
+    await vi.waitFor(() => expect(document.querySelector(".support-empty")).not.toBeNull());
     const empty = document.querySelector<HTMLElement>('.support-empty[aria-labelledby="support-empty-title"]')!;
     expect(empty.textContent).toContain("Nothing recognizes this structure yet");
     expect(empty.textContent).toContain("Play it and see what the consequence exposes");
@@ -3966,7 +4781,7 @@ describe("Layer 3 screens", () => {
     inspect.click();
     await tick();
     const attachedEvidence = document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent;
-    expect(attachedEvidence).toContain("Recorded engine evaluation: +0.00 pawns from White's perspective.");
+    expect(attachedEvidence).toContain("Attached engine evaluation: +0.00 pawns from White's side (engine; a bounded search reading, not a proof).");
     expect(attachedEvidence).not.toContain("details are pending");
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Return to play")!.click();
     await tick();
@@ -4751,7 +5566,7 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
-  it("renders comparison objective grounds from the run's attached payload", async () => {
+  it.each([false, true])("renders comparison objective grounds and local source failure (refused: %s)", async refused => {
     const run = branchedRun();
     const comparison = compareBranches(run, run.branches.map((branch) => branch.id));
     const [branchId, timeline] = Object.entries(comparison.objectiveTimelines)
@@ -4761,21 +5576,27 @@ describe("Layer 3 screens", () => {
       objectiveTimelines: {
         ...comparison.objectiveTimelines,
         [branchId]: timeline.map((entry, index) => index === 0
-          ? { ...entry, evidenceRefs: ["engine:fork-eval"] }
+          ? { ...entry, evidenceRefs: [refused ? "engine:refused-ground" : "engine:fork-eval"] }
           : entry),
       },
     };
+    const withEvidence = refused ? attachEvidence(run, run.activeCursor.nodeId, ["engine:refused-ground"], { kind: "tablebase", source: "human_model_predicted", values: { category: "win", dtz: 3 } }, at).run : run;
+    const before = JSON.stringify(withEvidence);
     const component = mount(CompareView, { target: target(), props: {
-      run, pack, comparison: grounded, startSide: "white", step: 0,
+      run: withEvidence, pack, comparison: grounded, startSide: "white", step: 0,
       onStep: vi.fn(), onClose: vi.fn(),
     } });
     await tick();
 
-    expect(document.body.textContent).not.toContain("Recorded engine evaluation:");
+    expect(document.body.textContent).not.toContain("Attached engine evaluation:");
     document.querySelector<HTMLButtonElement>(".header-actions button")!.click();
     await tick();
-    expect(document.body.textContent).toContain("Recorded engine evaluation: +0.12 pawns from White's perspective.");
+    if (refused) {
+      expect(document.body.textContent).toContain("This recorded evidence could not be displayed. That is not an empty chess result.");
+      expect(document.body.textContent).not.toContain("exact tablebase");
+    } else expect(document.body.textContent).toContain("Attached engine evaluation: +0.12 pawns from White's side (engine; a bounded search reading, not a proof).");
     expect(document.body.textContent).not.toContain("details are pending");
+    expect(JSON.stringify(withEvidence)).toBe(before);
     await unmount(component);
   });
 
@@ -5202,5 +6023,71 @@ describe("Layer 3 screens", () => {
     branchButton.click();
     await vi.waitFor(() => expect(onSwitchBranch).toHaveBeenCalledTimes(2));
     await unmount(component);
+  });
+});
+
+
+describe("modern model Inspector registered-component delivery", () => {
+  it.each(["white", "black", "empty"] as const)("renders %s's current receipt, not a second raw candidate prose path", async arm => {
+    const side = arm === "black" ? "black" : "white", fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const initial = createRun({ id: `modern-model-${arm}`, session: { kind: "position", start: { fen, side }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 42, createdAt: at });
+    const run = revealFeedback(initial, at).run, node = run.nodes[0]!;
+    const resolved = resolveRunSubject(run, { kind: "run_node", runId: run.id, branchId: node.branchId, nodeId: node.id,
+      eventHeadDigest: digestRunEventHead({ runId: run.id, headSeq: run.events.length, events: run.events }) });
+    const task = nodeTask({ kind: "history_conditioned", startFen: fen, historyUci: [] }, arm === "empty" ? ["bestmove e2e4"] :
+      ["info multipv 1 policy 0 score cp 739 wdl 431 362 207 pv e2e4", "info multipv 3 pv d2d4", "bestmove g1f3"]);
+    const page = nodePageFixture(task, resolved), onHumanSplit = vi.fn(async () => page);
+    const assistanceStorage = { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4,
+      markers: "off", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() };
+    mountDrill({ target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(),
+      onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onHumanSplit, registerKeyboardRegion } });
+    await tick();
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+    const request = [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent?.includes("Load model candidates"));
+    expect(request).toBeDefined(); request!.click();
+    await vi.waitFor(() => {
+      const seat = document.querySelector('[aria-label="Human-model evidence"]')!;
+      expect(seat.textContent).toContain("not your rating");
+      if (arm === "empty") expect(seat.textContent).toContain("No candidate rows were reported");
+      else { expect(seat.textContent).toContain("model share not reported"); expect(seat.textContent).toContain("0% model share"); expect(seat.textContent).toContain("reported rank 3"); }
+      expect(seat.textContent).not.toMatch(/frequency unavailable|scoreCp|sampleRequestId|g1f3|739|431|derived\.maia/u);
+    });
+    expect(onHumanSplit).toHaveBeenCalledExactlyOnceWith(node.id);
+  });
+});
+
+
+describe("model Inspector cross-run subject lifetime", () => {
+  it.each([["pending", true], ["shown", true], ["pending", false], ["shown", false]] as const)("does not carry a %s page into another valid run reusing recorded node ids (ordinary assistance: %s)", async (state, ordinary) => {
+    const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    const initial = createRun({ id: "model-original", session: { kind: "position", start: { fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 42, createdAt: at });
+    const run = revealFeedback(initial, at).run, node = run.nodes[0]!;
+    // Replay the real event stream under another run identity. Its stored node/branch ids remain
+    // valid, rather than asserting that normal createRun generates colliding prefixed ids.
+    const other = projectRun(run.events.map(event => event.type === "run.started" ? { ...event, data: { ...event.data, id: "model-other" } } : event));
+    expect(other.id).not.toBe(run.id); expect(other.activeCursor).toEqual(run.activeCursor);
+    expect(moduleDecisionStamp(other)).toEqual(moduleDecisionStamp(run));
+    const resolved = resolveRunSubject(run, { kind: "run_node", runId: run.id, branchId: node.branchId, nodeId: node.id,
+      eventHeadDigest: digestRunEventHead({ runId: run.id, headSeq: run.events.length, events: run.events }) });
+    const page = nodePageFixture(nodeTask({ kind: "history_conditioned", startFen: fen, historyUci: [] }, ["info multipv 1 pv e2e4", "bestmove e2e4"]), resolved);
+    let release!: (value: typeof page) => void;
+    const held = new Promise<typeof page>(resolve => { release = resolve; });
+    const onHumanSplit = vi.fn(() => state === "pending" ? held : Promise.resolve(page));
+    const assistanceStorage = { getItem: (key: string) => !key.startsWith("tabiya.assistance.v1.") ? null : JSON.stringify({ version: 4,
+      markers: "off", guided: "off", humanSplit: "on_request", corpus: "off", voice: "authored", spoken: "off", boardLighting: "off", arrows: "off", ambient: "off" }), setItem: vi.fn() };
+    const component = createClassComponent({ component: DrillScreen, target: target(), props: { ...(ordinary ? { onAssistanceQuery: testAssistanceAuthority } : {}), snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(),
+      onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onHumanSplit, registerKeyboardRegion } });
+    await tick(); if (ordinary) await assistanceSettled(); document.querySelector<HTMLButtonElement>(".inspector-entry")!.click(); await tick();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent?.includes("Load model candidates"))!.click();
+    await vi.waitFor(() => expect(onHumanSplit).toHaveBeenCalledOnce());
+    if (state === "shown") await vi.waitFor(() => expect(document.querySelector('[aria-label="Human-model evidence"]')!.textContent).toContain("model share not reported"));
+    component.$set({ snapshot: { run: other, access: "writer", pendingEvidence: 0, withheld: false } }); await tick(); if (ordinary) await assistanceSettled();
+    if (state === "pending") { release(page); await held; await tick(); }
+    expect(document.querySelector('[aria-label="Human-model evidence"]')?.textContent ?? "").not.toContain("model share not reported");
+    expect(onHumanSplit).toHaveBeenCalledOnce();
   });
 });

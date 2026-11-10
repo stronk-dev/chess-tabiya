@@ -4,8 +4,11 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { branchPath } from "./branch-path.js";
+import { MODULE_OPERATIONS } from "./module-registry.js";
 import { evidenceValueReceipt } from "./evidence-contract.js";
-import { GRADE_CONVENTION, assertMoveQualityGradeSentence, moveQualityGrade, winPercentFromCp } from "./grade.js";
+import { GRADE_CONVENTION, assertMoveQualityGradeSentence, winPercentFromCp } from "./grade.js";
+import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { recordedGradeFixture, recordedReviewFixtureSources } from "./testing/recorded-grade-fixture.js";
 import { recordedSemanticPath } from "./recorded-semantic-path.js";
 import { REVIEW_MOMENT_BUDGET, reviewMapProjection, selectReviewMoments, type ReviewMapProjection } from "./review-map.js";
 import { REVIEW_MAP_TEMPLATES, reviewText } from "./review-map-templates.js";
@@ -24,7 +27,7 @@ const VIEWER = Object.freeze({ role: "learner" as const, session: "imported" });
 function projectionOf(run: DrillRun, context: "review" | "imported_analysis" = "imported_analysis", withSemantic = false): ReviewMapProjection {
   const branchId = run.activeCursor.branchId;
   const story = storyMomentsForRun(run, branchId, context === "imported_analysis" ? { recordedResult: "1-0" } : {});
-  return reviewMapProjection({ run, branchId, story, context, viewer: VIEWER, ...(withSemantic ? { semanticPath: recordedSemanticPath(run, branchId) } : {}) });
+  return reviewMapProjection({ run, branchId, story, context, viewer: { role: "learner", session: run.sessionKind }, ...recordedReviewFixtureSources(run, branchId), ...(withSemantic ? { semanticPath: recordedSemanticPath(run, branchId) } : {}) });
 }
 
 /** Every string the projection would put on screen. */
@@ -55,6 +58,16 @@ describe("review map projection (rfc/review-map.md)", () => {
   const run = reviewFixtureRun();
   const path = branchPath(run, run.activeCursor.branchId);
   const projection = projectionOf(run, "imported_analysis", true);
+
+  it("D3933 declares every actual rendered Review source in its operation inventory", () => {
+    const acquired = new Set(MODULE_OPERATIONS.find(operation => operation.module === "review_map")!.projections
+      .map(ref => `${ref.id}@${ref.version}`));
+    const rendered = new Set(projection.rows.flatMap(row => parsePresentationReceipt(row.packet))
+      .filter(item => item.evidenceRef !== null)
+      .map(item => `${item.adapter.projection.id}@${item.adapter.projection.version}`));
+    expect(rendered.size).toBeGreaterThan(10);
+    expect([...rendered].filter(ref => !acquired.has(ref))).toEqual([]);
+  });
 
   it.each([
     { side: "white" as const, fullmove: 1, moves: ["e2e4", "e7e5", "g1f3", "b8c6"], numbers: [1, 1, 2, 2] },
@@ -95,8 +108,8 @@ describe("review map projection (rfc/review-map.md)", () => {
         item.evidenceRef?.evidenceDigest === `sha256:${evidenceValueReceipt(event.evidence).payloadDigest}`);
       expect(components.length, `${event.projection.id} at ${event.anchor.nodeId}`).toBeGreaterThan(0);
       for (const item of components) {
-        expect(item.adapter.projection).toEqual(event.projection);
-        expect(item.adapter.consumer).toEqual({ id: "module.review_map", version: 1 });
+        expect(item.adapter.projection).toEqual({ id: event.projection.id, version: event.projection.id === "derived.exchange.trade_completed" ? 2 : 3 });
+        expect(item.adapter.consumer).toEqual({ id: "module.review_map", version: 2 });
       }
       const packet = parsePresentationReceipt(row.packet);
       expect(row.facts.slice(-packet.length)).toEqual(packet.map(presentedSentence));
@@ -115,10 +128,10 @@ describe("review map projection (rfc/review-map.md)", () => {
     expect(items[1]!.component).toMatchObject({ operand: { plies: value.moves.map(uci => ({ uci })) } });
     expect(map.rows[0]!.packet.items.some(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure")).toBe(false);
     const packet = reviewPacketForRun(recorded, recorded.activeCursor.branchId, { importRecord: importRecord(recorded, "*"), engine: new Map() });
-    const withPacket = reviewMapProjection({ run: recorded, branchId: recorded.activeCursor.branchId, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: VIEWER, semanticPath: recordedSemanticPath(recorded, recorded.activeCursor.branchId), packet });
+    const { recordedGrades, recordedMeasurements, recordedObjectives } = recordedReviewFixtureSources(recorded);
+    const withPacket = reviewMapProjection({ run: recorded, branchId: recorded.activeCursor.branchId, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: VIEWER, semanticPath: recordedSemanticPath(recorded, recorded.activeCursor.branchId), packet, recordedGrades, recordedMeasurements, recordedObjectives });
     expect(parsePresentationReceipt(withPacket.rows.at(-1)!.packet).filter(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure")).toEqual(items);
-    const forbidden = reviewMapProjection({ run: recorded, branchId: recorded.activeCursor.branchId, story: { moments: [], rank: [] }, context: "review", viewer: { role: "author", session: "imported" }, semanticPath: recordedSemanticPath(recorded, recorded.activeCursor.branchId), packet });
-    expect(forbidden.rows.every(row => row.packet.items.length === 0)).toBe(true);
+    expect(() => reviewMapProjection({ run: recorded, branchId: recorded.activeCursor.branchId, story: { moments: [], rank: [] }, context: "imported_analysis", viewer: { role: "author", session: "imported" }, semanticPath: recordedSemanticPath(recorded, recorded.activeCursor.branchId), packet, recordedGrades, recordedMeasurements, recordedObjectives })).toThrow(/viewer/u);
   });
 
   it("[criterion 1] lists every ply of the mainline with SAN, ply and side — no cap, slice or moment filter", () => {
@@ -131,7 +144,7 @@ describe("review map projection (rfc/review-map.md)", () => {
   });
 
   it("[criterion 2] emits exactly the grades an independent Win%-drop computation says cross the report ladder; most rows carry none", () => {
-    const threshold = GRADE_CONVENTION.constants.reportInaccuracy.value;
+    const threshold = GRADE_CONVENTION.constants.inaccuracy.value;
     let expected = 0;
     for (let index = 1; index < path.length; index += 1) {
       const sign = index % 2 === 1 ? 1 : -1; // odd ply = White moved
@@ -151,17 +164,19 @@ describe("review map projection (rfc/review-map.md)", () => {
     for (const row of graded) {
       const sentence = row.grade!.sentence;
       expect(sentence).toMatch(/moved [+−]\d+\.\d{2} \(\d+\.\d%\) → [+−]\d+\.\d{2} \(\d+\.\d%\)/u);
-      expect(sentence).toMatch(/a drop of \d+\.\d win-points against a threshold of \d+(?:\.\d+)? \(grade-convention@1\/imported_analysis\)\.$/u);
-      expect(row.facts[0]).toBe(sentence);
+      expect(sentence).toMatch(/a drop of \d+\.\d win-points against a threshold of \d+(?:\.\d+)? \(.+single move-loss convention, version 2\)\.$/u);
+      expect(row.facts.filter(fact => fact === sentence)).toEqual([sentence]);
+      expect(parsePresentationReceipt(row.packet).filter(item => item.adapter.projection.id === "derived.grade.move_quality").map(presentedSentence)).toEqual([sentence]);
       const word = sentence.split(" ")[0]!;
       // F-COR-1 on this surface: printing the word alone launders a convention as a fact.
       expect(judgementWordsOutsideGrounding([sentence], word)).toEqual([word.toLowerCase()]);
       expect(judgementWordsOutsideGrounding([sentence], sentence)).toEqual([]);
     }
     expect(graded.length).toBeGreaterThan(0);
-    const evaluation = (value: number, sideToMove: "white" | "black") => ({ engineId: "sf", score: { kind: "cp" as const, value }, sideToMove, lane: "recorded" as const, perspective: "white" as const, requestedMovetimeMs: 100 });
-    const grade = moveQualityGrade(evaluation(100, "white"), evaluation(-100, "black"), "imported_analysis", "white");
-    if (grade === undefined || "abstained" in grade) throw new Error("fixture must grade");
+    const fixture = recordedGradeFixture();
+    const result = invokeEvidenceValueRoute("derived.grade.move_quality@2", { recordedGrade: fixture.source });
+    if (result.kind !== "available" || result.value[0] === undefined) throw new Error("fixture must grade");
+    const grade = result.value[0].payload;
     expect(() => assertMoveQualityGradeSentence(grade, "Mistake")).toThrow(/GRADE_RENDER_INCOMPLETE/u);
   });
 
@@ -172,7 +187,8 @@ describe("review map projection (rfc/review-map.md)", () => {
     if (white.kind !== "rendered") throw new Error("unreachable");
     expect(white.decisions).toBe(Math.ceil((path.length - 1) / 2));
     expect(white.sentence).toContain(`across all ${white.decisions} of White's evaluated decisions`);
-    expect(white.sentence).toContain("grade-convention@1");
+    expect(white.sentence).toContain("single move-loss convention, version 2");
+    expect(white.sentence).not.toMatch(/grade-convention@\d/u);
     expect(white.sentence).toContain("not comparable to another site's accuracy figure");
     // Independent recomputation of 100 − mean(max(0, drop)).
     const drops: number[] = [];
@@ -196,18 +212,17 @@ describe("review map projection (rfc/review-map.md)", () => {
   it("[criterion 7] introduces no second logistic and no second coefficient", () => {
     const needle = ["0.0036", "8208"].join("");
     const hits = ["apps/", "packages/", "tools/", "tests/"].flatMap((tree) => files(new URL(tree, ROOT)))
-      .filter((file) => readFileSync(file, "utf8").includes(needle))
+      .filter((file) => { const source = readFileSync(file, "utf8"); return source.includes(needle) && source.includes("Math.exp("); })
       .map((file) => file.slice(new URL(".", ROOT).pathname.length));
     expect(hits).toEqual(["packages/runtime/src/grade.ts"]);
-    for (const file of ["packages/runtime/src/review-map.ts", "packages/runtime/src/grade-reading.ts"]) {
+    for (const file of ["packages/runtime/src/review-map.ts"]) {
       const source = readFileSync(new URL(file, ROOT), "utf8");
       expect(source).not.toMatch(/Math\.exp|1\s*\+\s*Math/u);
     }
-    expect(readFileSync(new URL("packages/runtime/src/grade-reading.ts", ROOT), "utf8")).toContain("winPercentFromCp(");
-    expect(readFileSync(new URL("packages/runtime/src/review-map.ts", ROOT), "utf8")).toContain("moverWinPercent(");
+    expect(readFileSync(new URL("packages/runtime/src/review-map.ts", ROOT), "utf8")).toContain("recordedGradeScore(");
   });
 
-  it("keeps the shipped grader's only production caller the derived.grade.move_quality@1 producer", () => {
+  it("keeps the shipped grader's only production caller the derived.grade.move_quality@2 producer", () => {
     const callers = files(new URL("packages/", ROOT)).concat(files(new URL("apps/", ROOT)))
       .filter((file) => !/\.test\.ts$|\/testing\//u.test(file) && !file.endsWith("/grade.ts"))
       .filter((file) => /\bmoveQualityGrade\s*\(/u.test(readFileSync(file, "utf8")))
@@ -217,7 +232,7 @@ describe("review map projection (rfc/review-map.md)", () => {
 
   it("[criterion 11] renders abstention as sentences: zero moments, missing evaluations, no decisions", () => {
     const bare = reviewFixtureRun({ id: "bare", kind: "position", plies: 6, evaluated: () => false });
-    const empty = reviewMapProjection({ run: bare, branchId: bare.activeCursor.branchId, story: { moments: [], rank: [] }, context: "review", viewer: VIEWER });
+    const empty = reviewMapProjection({ run: bare, branchId: bare.activeCursor.branchId, story: { moments: [], rank: [] }, context: "review", viewer: { role: "learner", session: "position" }, ...recordedReviewFixtureSources(bare) });
     expect(empty.moments).toEqual([]);
     expect(empty.momentsSentence).toBe(reviewText("moments.none"));
     expect(empty.coverage.evaluated).toBe(0);
@@ -225,7 +240,8 @@ describe("review map projection (rfc/review-map.md)", () => {
       expect(row.facts).toContain(reviewText("evidence.eval.missing"));
       expect(row.facts).toContain(reviewText("evidence.grade.abstained", { reason: reviewText("grade.abstention.missing_eval") }));
       expect(row.facts).toContain(reviewText("evidence.packet.absent"));
-      expect(row.facts).toContain(reviewText("evidence.relation.absent"));
+      // Current Review always checks the real recorded windows, even without an external packet.
+      expect(row.facts.join(" ")).not.toMatch(/relations were not compiled|compiler refused/u);
     }
     expect(empty.accuracy.white.sentence).toContain("no accuracy figure");
     const one = reviewFixtureRun({ id: "one-ply", kind: "position", plies: 1 });
@@ -237,7 +253,11 @@ describe("review map projection (rfc/review-map.md)", () => {
     const withBest = reviewFixtureRun({ id: "leak-probe", extraValues: { bestMoveUci: "a2a4", pv: ["a2a4", "a7a5"] } });
     const leaked = projectionOf(withBest, "imported_analysis", true);
     const serialized = JSON.stringify(leaked);
-    expect(serialized).not.toMatch(/bestMove|"pv"|principal|bestline|a2a4|\bbest\b|should/iu);
+    // A four-hex-character coincidence inside an evidence digest is not a delivered UCI move.
+    const leak = /bestMove|"pv"|principal|bestline|\ba2a4\b|\bbest\b|should/iu;
+    expect("sha256:00a2a400".match(leak)).toBeNull();
+    expect('"a2a4"'.match(leak)).not.toBeNull();
+    expect(serialized.match(leak)?.[0]).toBeUndefined();
     for (const praise of ["brilliant", "excellent", "great", "good move", "best move", "perfect"]) expect(serialized.toLowerCase()).not.toContain(praise);
   });
 
@@ -291,7 +311,8 @@ describe("review map projection (rfc/review-map.md)", () => {
     const engine = new Map(reviewDurableEngineStates(evaluated, path));
     engine.set(path[2]!.id, { kind: "pending", jobCount: 1, retrying: 0 });
     const packet = reviewPacketForRun(evaluated, branchId, { importRecord: importRecord(evaluated, "1-0"), engine });
-    const map = reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0", engine }), context: "imported_analysis", viewer: VIEWER, packet });
+    const { recordedGrades, recordedMeasurements, recordedObjectives } = recordedReviewFixtureSources(evaluated, branchId);
+    const map = reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0", engine }), context: "imported_analysis", viewer: VIEWER, packet, recordedGrades, recordedMeasurements, recordedObjectives });
     const [first, second] = map.rows;
     expect(first!.facts).toContain("Recorded engine evaluation after this move: +3.00 from White's side (Stockfish 19, depth 12 search).");
     expect(first!.facts).toContain("Recorded engine evaluation changed by +2.80 pawns from White's side across this move (Stockfish 19, depth 12 search).");
@@ -301,13 +322,13 @@ describe("review map projection (rfc/review-map.md)", () => {
     expect(second!.facts).toContain("Engine evaluation: requested, waiting for the provider.");
     const parsed = parsePresentationReceipt(JSON.parse(JSON.stringify(second!.packet)));
     expect(parsed.some((item) => item.component.id === "abstention")).toBe(true);
-    expect(parsePresentationReceipt(JSON.parse(JSON.stringify(first!.packet))).map(presentedSentence)).toEqual(first!.facts.slice(-3));
+    const firstComponents = parsePresentationReceipt(JSON.parse(JSON.stringify(first!.packet)));
+    expect(firstComponents.map(presentedSentence)).toEqual(first!.facts.slice(-firstComponents.length));
     // A viewer outside the module's roles is withheld, never shown the packet.
-    const withheld = reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0", engine }), context: "imported_analysis", viewer: { role: "author", session: "imported" }, packet });
-    expect(withheld.rows[0]!.packet.items).toEqual([]);
+    expect(() => reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0", engine }), context: "imported_analysis", viewer: { role: "author", session: "imported" }, packet, recordedGrades, recordedMeasurements, recordedObjectives })).toThrow(/viewer/u);
     // A packet for another branch or run is refused.
     const other = play(importedRun("panel-other"), ["e2e4"]);
-    expect(() => reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0" }), context: "imported_analysis", viewer: VIEWER, packet: reviewPacketForRun(other, other.activeCursor.branchId, { importRecord: importRecord(other, "*") }) })).toThrow(/another run or branch/u);
+    expect(() => reviewMapProjection({ run: evaluated, branchId, story: storyMomentsForRun(evaluated, branchId, { recordedResult: "1-0" }), context: "imported_analysis", viewer: VIEWER, recordedGrades, recordedMeasurements, recordedObjectives, packet: reviewPacketForRun(other, other.activeCursor.branchId, { importRecord: importRecord(other, "*") }) })).toThrow(/another run or branch/u);
   });
 });
 

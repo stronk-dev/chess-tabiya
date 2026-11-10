@@ -56,7 +56,9 @@ describe("D3626 castling-rook mobility at production boundaries", () => {
   it.each([rescuedCastleRooks[0], rescuedCastleRooks[2]])("presents $name mobility through the serialized Inspector", fixture => {
     const input = edge(fixture.fen, fixture.move);
     const declared = invokeEvidenceValueRoute("rules.mobility.event.piece_destinations@1", input).filter(item => item.payload.piece.before.square === fixture.from);
-    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, declared));
+    // These genuine edge-source values are in the accepted current71 image. Exercise its
+    // actual adapter, not the retired generic Full1 consumer or relabelled payloads.
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, declared));
     const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
     expect(wire).toHaveLength(2); // The registered Inspector retains its square caption and recorded line.
     const squares = wire.find(item => item.component.id === "square_set")!;
@@ -183,9 +185,9 @@ describe("D3619 special-move identities at the production tactical boundary", ()
     const input = edge(fixture.fen, fixture.move);
     const doubleAttack = invokeEvidenceValueRoute("rules.tactic.event.double_attack@1", input)[0]!;
     const breadth = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", input);
-    const predicate = invokeEvidenceValueRoute("derived.tactic.fork_survives_reply@1", { doubleAttack, breadth });
+    const predicate = invokeEvidenceValueRoute("derived.tactic.nonterminal_fork_survival@1", { doubleAttack, breadth });
     const evidence: readonly DeclaredEvidence<unknown>[] = [doubleAttack, predicate];
-    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, evidence));
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 2 }, evidence));
     const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
     const captions = wire.filter(item => item.component.id === "fact_statement").map(presentedSentence);
     expect(captions).toHaveLength(2);
@@ -287,8 +289,8 @@ describe("D3622 promotion defender identity at the production boundary", () => {
   it.each(promotionDutyCases.filter(fixture => fixture.losesDuty))("presents the $name $role's lost defence in Inspector, not Nudge", fixture => {
     const input = edge(fixture.fen, `${fixture.from}${fixture.to}${fixture.promotion}`);
     const evidence = invokeEvidenceValueRoute("rules.tactic.event.defender_duty_relocated@1", input);
-    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, evidence).items).toEqual([]);
-    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 1 }, evidence));
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 2 }, evidence).items).toEqual([]);
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.full_inspector", version: 2 }, evidence));
     const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
     const statements = wire.filter(item => item.component.id === "fact_statement");
     expect(statements).toHaveLength(1);
@@ -381,7 +383,7 @@ describe("D3620 en-passant victim identity at the production tactical boundary",
     const values = result.value;
     expect(values).toHaveLength(1);
     expect(values[0]!.payload).toMatchObject({ sign: "gained", mover: { after: { square: fixture.victim, role: "pawn" } }, after: { legalCapturers: [{ captureUci: fixture.capture }] } });
-    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 1 }, values));
+    const items = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.postcommit_nudge", version: 2 }, values));
     const wire = parsePresentationReceipt(JSON.parse(JSON.stringify(serializePresentedEvidence(items))));
     expect(wire).toHaveLength(1);
     const caption = presentedSentence(wire[0]!);

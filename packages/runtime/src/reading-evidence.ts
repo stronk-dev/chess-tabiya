@@ -11,6 +11,8 @@ import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.j
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import type { StructuralObservation, StructuralReading, StructureMatch } from "./structure.js";
 import type { TransitionObservation, TransitionReading } from "./transition.js";
+import { presentEvidenceItems, type PresentedEvidenceItem } from "./presentation-contract.js";
+import { STRUCTURAL_DETAIL_KINDS } from "./structural-reading-detail.js";
 
 const ref = (id: string) => ({ id, version: 1 } as const);
 const READING_KINDS = Object.freeze(STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count" && kind !== "named_structure"));
@@ -74,8 +76,12 @@ function consumeObservations(view: ConsumerEvidenceView<unknown>, id: string): r
 
 export function consumePositionStructure(
   view: ConsumerEvidenceView<unknown>,
-): readonly StructuralObservation[] {
-  return consumeObservations(view, "inspector.position_structure");
+): readonly PresentedEvidenceItem[] {
+  assertConsumerEvidenceView(view);
+  if (view.consumer.id !== "inspector.position_structure" || view.consumer.version !== 2) {
+    throw new TypeError("Expected inspector.position_structure@2 consumer view");
+  }
+  return presentEvidenceItems(view);
 }
 
 export function consumeSelectedSquareSight(
@@ -90,12 +96,18 @@ export function consumeMoveTransition(
   return consume(view, "inspector.move_transition");
 }
 
-export function positionStructureEvidence(reading: Pick<StructuralReading, "fen">): readonly StructuralObservation[] {
-  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, ref("inspector.position_structure"));
+export function presentPositionStructureEvidence({ fen }: { readonly fen: string }): readonly PresentedEvidenceItem[] {
+  const consumer = { id: "inspector.position_structure", version: 2 } as const;
+  // Complete preflight must precede *all* seventeen source calls, even on an empty position.
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, consumer);
+  const sources = [
+    ...STRUCTURAL_DETAIL_KINDS.flatMap<DeclaredEvidence<unknown>>(kind => invokeEvidenceValueRoute(`rules.structural.reading.${kind}@2`, { fen })),
+    ...invokeEvidenceValueRoute("rules.structural.reading.named_structure@2", { fen }),
+  ];
   return consumePositionStructure(evidenceForConsumer(
     PRIMARY_EVIDENCE_MANIFEST,
-    ref("inspector.position_structure"),
-    declareStructuralReadingEvidence(reading),
+    consumer,
+    sources,
   ));
 }
 
@@ -115,4 +127,11 @@ export function moveTransitionEvidence(reading: Pick<TransitionReading, "before"
     ref("inspector.move_transition"),
     declareTransitionReadingEvidence(reading),
   ));
+}
+
+/** The actual Inspector presentation path shares the complete before-collection preflight. */
+export function presentMoveTransitionEvidence(reading: Pick<TransitionReading, "before" | "moveUci" | "after">): readonly PresentedEvidenceItem[] {
+  const consumer = ref("inspector.move_transition");
+  compileEvidenceConsumerExecution(PRIMARY_EVIDENCE_MANIFEST, consumer);
+  return presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, consumer, declareTransitionReadingEvidence(reading)));
 }

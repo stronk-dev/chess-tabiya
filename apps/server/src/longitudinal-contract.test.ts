@@ -5,10 +5,14 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 import { canonicalizeJson, type JsonValue } from "@chess-tabiya/schema/drill-pack";
-import { appendEvents, fork, rewind, type DrillRun } from "@chess-tabiya/runtime";
+import { appendEvents, fork, localSemanticEventClosure, rewind, type DrillRun } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
+import { DatabaseSync } from "node:sqlite";
+import { dirname } from "node:path";
+import { rmSync } from "node:fs";
+import { LongitudinalStore } from "./longitudinal-store.js";
+import { fileFixture, learner } from "./longitudinal-test-fixtures.js";
 import { OCCUPIED_TARGET_IDENTITY_CASES } from "../../../packages/runtime/src/testing/occupied-target-fixtures.js";
-import { canonicalFen, positionFromFen } from "../../../packages/runtime/src/chess.js";
 
 import {
   assertParsedLongitudinalReadQuery,
@@ -17,7 +21,7 @@ import {
   parseLongitudinalObservationRow,
   parseLongitudinalReadQuery,
 } from "./longitudinal-contract.js";
-import { decisionPopulation, normativeDecisions, projectObservations } from "./longitudinal-projector.js";
+import { decisionPopulation, normativeDecisions, projectObservations, RUNTIME_POPULATION_DEPENDENCIES } from "./longitudinal-projector.js";
 import {
   LONGITUDINAL_ADMITTED_IDENTITIES,
   LONGITUDINAL_INGEST_REGISTRY,
@@ -29,6 +33,11 @@ import {
 } from "./longitudinal-registry.js";
 import { LONGITUDINAL_SOURCE_DOMAIN, longitudinalSourceDigestV4, sealLongitudinalSourceImageV4, type MoveAuthorship } from "./longitudinal-source.js";
 import { AT, FIXTURE_DEPENDENCIES, START_FEN, importedRun, play, positionRun, predict } from "./longitudinal-test-fixtures.js";
+import { LONGITUDINAL_SUCCESSOR_FIXTURES, longitudinalRevisionFixtures } from "./longitudinal-revision-fixtures.js";
+
+import { CANDIDATE_COLLECTOR_PROJECTION_KEYS } from "../../../packages/runtime/src/candidate-population-projections.generated.js";
+import { NATIVE_SUBJECT_SOURCE_REFS } from "../../../packages/runtime/src/semantic-native-subject-types.js";
+import { SUBJECT_OUTCOME_FAMILIES } from "../../../packages/runtime/src/semantic-subject-types.js";
 
 const AUTHORITY = Object.freeze({ fixture: "contract" });
 
@@ -45,37 +54,83 @@ function image(run: DrillRun, options: { owner?: string; attribution?: "single_p
 }
 
 describe("criterion 2 — literal registry closure", () => {
-  it("is row-equal to both published artifacts at their pinned raw-byte digests (46/13/8)", () => {
-    const registryBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-ingest-registry-v1.json", import.meta.url));
-    const signBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-sign-subsets-v1.json", import.meta.url));
-    expect(createHash("sha256").update(registryBytes).digest("hex")).toBe("e12147750b512c83872f61dd7dc333e94e20c151876a3c2d3ef5f91c7e7fc21a");
-    expect(createHash("sha256").update(signBytes).digest("hex")).toBe("4294461656e2da32106c6ba9e0753fe58e49ea74dcb907d41f9ab1e46476b32f");
-    const signs = JSON.parse(signBytes.toString("utf8")) as Record<string, readonly string[]>;
-    const published = (JSON.parse(registryBytes.toString("utf8")) as readonly Record<string, unknown>[]).map((row) => {
-      const projection = row.projection as { readonly id: string };
-      const base = row.baseProjection as { readonly id: string } | undefined;
-      return { ...row, signs: signs[projection.id], ...(base === undefined ? {} : { baseSigns: signs[base.id] }) };
-    });
-    expect(published).toEqual(LONGITUDINAL_INGEST_REGISTRY);
-    expect(Object.keys(signs).sort()).toEqual(LONGITUDINAL_INGEST_REGISTRY.map((row) => row.projection.id).sort());
-    expect(LONGITUDINAL_INGEST_REGISTRY.filter((row) => row.kind === "edge")).toHaveLength(46);
-    expect(LONGITUDINAL_INGEST_REGISTRY.filter((row) => row.kind === "population")).toHaveLength(13);
-    expect(LONGITUDINAL_INGEST_REGISTRY.filter((row) => row.kind === "path")).toHaveLength(8);
-    const loose = LONGITUDINAL_INGEST_REGISTRY.find((row) => row.projection.id === "derived.semantic_avoidance.loose_piece");
-    expect(loose).toMatchObject({ kind: "population", baseProjection: { id: "rules.tactic.event.loose_piece", version: 1 } });
+  it("matches current v3 artifacts with separate prevalence, native, complete-condition and deferred lanes", () => {
+    const registryBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-ingest-registry-v3.json", import.meta.url));
+    const signBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-sign-subsets-v3.json", import.meta.url));
+    expect(JSON.parse(registryBytes.toString("utf8"))).toEqual(LONGITUDINAL_INGEST_REGISTRY);
+    const signs = JSON.parse(signBytes.toString("utf8"));
+    expect(signs).toEqual(Object.fromEntries(LONGITUDINAL_INGEST_REGISTRY.map(row => [`${row.projection.id}@${row.projection.version}`, row.signs])));
+    expect(LONGITUDINAL_INGEST_REGISTRY).toHaveLength(65);
+    expect(LONGITUDINAL_INGEST_REGISTRY.filter(row => row.kind === "edge")).toHaveLength(34);
+    expect(LONGITUDINAL_INGEST_REGISTRY.filter(row => row.kind === "native")).toHaveLength(7);
+    expect(LONGITUDINAL_INGEST_REGISTRY.filter(row => row.kind === "population")).toHaveLength(13);
+    expect(LONGITUDINAL_INGEST_REGISTRY.filter(row => row.kind === "path")).toHaveLength(11);
+    expect(LONGITUDINAL_INGEST_REGISTRY.find(row => row.projection.id === "derived.semantic_avoidance.loose_piece"))
+      .toMatchObject({ kind: "population", projection: { version: 2 }, family: "loose_piece", sourceScope: "complete_factory_result", relations: ["false_to_true", "true_to_false", "true_to_true", "false_to_false"] });
+    for (const identity of LONGITUDINAL_ADMITTED_IDENTITIES) {
+      const row = LONGITUDINAL_INGEST_REGISTRY.find(row => row.projection.id === identity.projectionId)!;
+      expect(row).toMatchObject({ kind: "edge", meaning: "event_prevalence", visibility: "operator_only" });
+      expect([identity.matchProjectionId, identity.matchProjectionVersion]).toEqual([row.projection.id, row.projection.version]);
+      expect(identity.semanticSign).toBe(identity.sourceSign);
+    }
+    expect(new Set(LONGITUDINAL_ADMITTED_IDENTITIES.map(row => row.projectionId)).size).toBe(34);
   });
 
-  it("refuses missing, duplicate, ghost, impossible-sign, wrong-base and wrong-base-sign mutations", () => {
+  it("is set-equal to executed candidate event sources, native subjects and complete families", () => {
+    const ref = (r: { projection: { id: string; version: number } }) => `${r.projection.id}@${r.projection.version}`;
+    const candidate = Object.entries(CANDIDATE_COLLECTOR_PROJECTION_KEYS).filter(([group]) => group.startsWith("event.")).flatMap(([, refs]) => [...refs] as string[]);
+    expect(candidate).toHaveLength(42);
+    expect(candidate.filter(r => r === "derived.exchange.trade_completed@1")).toHaveLength(1);
+    const local = LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "edge" || r.kind === "native");
+    expect(new Set(local.map(ref))).toEqual(new Set(candidate.filter(r => r !== "derived.exchange.trade_completed@1")));
+    expect(new Set(LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "native").map(ref))).toEqual(new Set(NATIVE_SUBJECT_SOURCE_REFS));
+    expect(new Set(LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "population").map(ref))).toEqual(new Set(SUBJECT_OUTCOME_FAMILIES.map(f => `derived.semantic_avoidance.${f}@2`)));
+    const paths = LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "path");
+    expect(paths.every(r => r.kind === "path" && r.owner === "longitudinal-store:A.2" && r.reason.length > 0)).toBe(true);
+    expect(paths.map(ref).sort()).toEqual([
+      "derived.exchange.trade_completed@1", "derived.pawn.sequence.contact_timing@1", "derived.pawn.sequence.harassment_pressure@1",
+      "derived.tactic.sequence.defender_consequence@1", "derived.tactic.deflection_observed@1", "derived.tactic.attraction_observed@1",
+      "derived.tactic.line_blocker_clearance_observed@1", "derived.tactic.square_clearance_observed@1", "derived.tactic.interference_observed@1",
+      "derived.tactic.check_zwischenzug_observed@1", "derived.tactic.overload_exploitation_observed@1",
+    ].sort());
+  });
+
+  it("preserves the frozen v1/v2 contracts without treating their old absence joins as current admission", () => {
+    const registryBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-ingest-registry-v2.json", import.meta.url));
+    const signBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-sign-subsets-v2.json", import.meta.url));
+    expect(createHash("sha256").update(registryBytes).digest("hex")).toBe("e77dd4a63c0da9780da32218c635dd3f93e078e5836f6ea8563eef0c6633b5f9");
+    expect(createHash("sha256").update(signBytes).digest("hex")).toBe("26e21d4b686eb88d86389cf19d44bb8b04e79c6a95e64be80d6863b656647e31");
+    const oldRegistryBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-ingest-registry-v1.json", import.meta.url));
+    const oldSignBytes = readFileSync(new URL("../../../rfc/contracts/longitudinal-sign-subsets-v1.json", import.meta.url));
+    expect(createHash("sha256").update(oldRegistryBytes).digest("hex")).toBe("e12147750b512c83872f61dd7dc333e94e20c151876a3c2d3ef5f91c7e7fc21a");
+    expect(createHash("sha256").update(oldSignBytes).digest("hex")).toBe("4294461656e2da32106c6ba9e0753fe58e49ea74dcb907d41f9ab1e46476b32f");
+    const replacements = ["derived.tactic.defender_exposure", "derived.material.event.role_asymmetry"];
+    const original = JSON.parse(oldRegistryBytes.toString("utf8")) as readonly { readonly projection: { readonly id: string; readonly version: number } }[];
+    expect(JSON.parse(registryBytes.toString("utf8"))).toEqual(original.map(row => ({ ...row, projection: { ...row.projection, version: replacements.includes(row.projection.id) ? 2 : 1 } })));
+    const oldSigns = JSON.parse(oldSignBytes.toString("utf8")) as Record<string, readonly string[]>;
+    expect(JSON.parse(signBytes.toString("utf8"))).toEqual(Object.fromEntries(original.map(row => [`${row.projection.id}@${replacements.includes(row.projection.id) ? 2 : 1}`, oldSigns[row.projection.id]])));
+    expect(LONGITUDINAL_ADMITTED_IDENTITIES.some(row => row.projectionId.startsWith("derived.semantic_avoidance."))).toBe(false);
+  });
+
+  it("refuses missing, duplicate, order, exact-version, sign, subject contract and deferred mutations", () => {
     const rows = [...LONGITUDINAL_INGEST_REGISTRY];
     const population = rows.filter((row): row is Extract<LongitudinalConstructor, { kind: "population" }> => row.kind === "population");
     const edge = rows.find((row) => row.kind === "edge")!;
+    const successor = rows.find(row => row.projection.id === "derived.material.event.role_asymmetry")!;
+    const path = rows.find((row): row is Extract<LongitudinalConstructor, { kind: "path" }> => row.kind === "path")!;
     const mutations: readonly [string, readonly LongitudinalConstructor[], RegExp][] = [
       ["missing", rows.slice(1), /SET_MISMATCH/u],
       ["duplicate", [...rows, rows[0]!], /SET_MISMATCH/u],
+      ["row order", [rows[1]!, rows[0]!, ...rows.slice(2)], /ORDER_MISMATCH/u],
       ["ghost", rows.map((row) => row === edge ? { ...edge, projection: { id: "rules.ghost.event", version: 1 as const } } : row), /SET_MISMATCH/u],
+      ["retained predecessor", rows.map(row => row === successor ? { ...row, projection: { ...row.projection, version: 1 as const } } : row), /VERSION_MISMATCH/u],
+      ["arbitrary successor", rows.map(row => row === edge ? { ...row, projection: { ...row.projection, version: 2 as const } } : row), /VERSION_MISMATCH/u],
+      ["unaccepted third version", rows.map(row => row === successor ? { ...row, projection: { ...row.projection, version: 3 } } : row) as readonly LongitudinalConstructor[], /VERSION_MISMATCH/u],
       ["impossible sign", rows.map((row) => row === edge ? { ...edge, signs: [...edge.signs, "avoided" as const] } : row), /SIGN_SUBSET_MISMATCH/u],
-      ["swapped bases", rows.map((row) => row === population[0] ? { ...row, baseProjection: population[1]!.baseProjection } : row === population[1] ? { ...row, baseProjection: population[0]!.baseProjection } : row), /POPULATION_BASE_MISMATCH/u],
-      ["wrong base signs", rows.map((row) => row === population[0] ? { ...population[0]!, baseSigns: ["gained" as const] } : row), /BASE_SIGN_SUBSET_MISMATCH/u],
+      ["swapped families", rows.map(row => row === population[0] ? { ...population[0]!, family: population[1]!.family } : row), /CONTRACT_MISMATCH/u],
+      ["wrong relation domain", rows.map(row => row === population[0] ? { ...population[0]!, relations: ["equal" as const] } : row), /CONTRACT_MISMATCH/u],
+      ["changed deferred owner", rows.map(row => row === path ? { ...path, owner: "other" } : row) as readonly LongitudinalConstructor[], /CONTRACT_MISMATCH/u],
+      ["changed deferred reason", rows.map(row => row === path ? { ...path, reason: "A new policy" } : row), /CONTRACT_MISMATCH/u],
     ];
     for (const [, mutated, error] of mutations) expect(() => validateIngestRegistry(mutated)).toThrow(error);
     expect(() => validateIngestRegistry(rows)).not.toThrow();
@@ -84,11 +139,11 @@ describe("criterion 2 — literal registry closure", () => {
   it("closes both parser boundaries over the compiled registry with no admission operand", () => {
     const base = {
       learnerId: "l", runId: "r", phase: "opening", decisionClass: "played", decisions: 1, observedAt: AT, derivedRev: 1,
-      projectionId: "rules.structural.event.open_file", projectionVersion: 1, semanticSign: "gained", sourceSign: "gained",
+      projectionId: "rules.structural.event.king_zone", projectionVersion: 1, semanticSign: "gained", sourceSign: "gained",
       sessionKind: "position", packId: null, opportunities: 1, occurred: 1, alternativeShareSum: 0.5,
       occurredRefs: [{ kind: "move", nodeId: "n1", eventSeq: 2 }], opportunityRefs: [{ kind: "move", nodeId: "n1", eventSeq: 2 }],
     };
-    expect(parseLongitudinalObservationRow(base).projectionId).toBe("rules.structural.event.open_file");
+    expect(parseLongitudinalObservationRow(base).projectionId).toBe("rules.structural.event.king_zone");
     for (const forged of [
       { ...base, projectionId: "rules.invented.event" },
       { ...base, projectionVersion: 2 },
@@ -99,30 +154,34 @@ describe("criterion 2 — literal registry closure", () => {
     const query = (projections: unknown) => ({ learnerId: "l", derivationRev: 1, through: { kind: "all_complete" }, filter: { projections } });
     expect(() => parseLongitudinalReadQuery(query([{ id: "rules.invented.event", version: 1 }]))).toThrow(/not admitted/u);
     expect(() => parseLongitudinalReadQuery(query([{ id: "derived.exchange.trade_completed", version: 1 }]))).toThrow(/not admitted/u);
-    expect(() => parseLongitudinalReadQuery(query([{ id: "rules.structural.event.open_file", version: 1, semanticSign: "avoided" }]))).toThrow(/no admitted sign pair/u);
+    expect(() => parseLongitudinalReadQuery(query([{ id: "rules.structural.event.king_zone", version: 1, semanticSign: "avoided" }]))).toThrow(/no admitted sign pair/u);
+    for (const projectionId of ["derived.material.event.role_asymmetry", "derived.tactic.defender_exposure"]) {
+      const current = { ...base, derivedRev: 6, projectionId, projectionVersion: 2, semanticSign: "state", sourceSign: "state" };
+      expect(parseLongitudinalObservationRow(current)).toMatchObject({ projectionId, projectionVersion: 2 });
+      expect(parseLongitudinalReadQuery(query([{ id: projectionId, version: 2 }])).filter.projections).toEqual([{ id: projectionId, version: 2 }]);
+      for (const projectionVersion of [1, 3]) {
+        expect(() => parseLongitudinalObservationRow({ ...current, projectionVersion })).toThrow(/OBSERVATION_ROW_INVALID/u);
+        expect(() => parseLongitudinalReadQuery(query([{ id: projectionId, version: projectionVersion }]))).toThrow(/not admitted/u);
+      }
+    }
     expect(parseLongitudinalReadQuery.length).toBe(1);
   });
 });
 
 describe("criterion 3 — declinable complete population ([[D2066]])", () => {
-  const identity = LONGITUDINAL_ADMITTED_IDENTITIES.find((row) => row.projectionId === "rules.structural.event.open_file" && row.semanticSign === "gained")!;
-  const avoidance = LONGITUDINAL_ADMITTED_IDENTITIES.find((row) => row.kind === "population" && row.matchProjectionId === "rules.structural.event.open_file" && row.matchSign === "gained")!;
-  const exhibits = (moves: readonly string[]) => ({ alternatives: FIXTURE_DEPENDENCIES.alternatives, events: (_b: string, uci: string) => moves.includes(uci) ? [{ projection: { id: "rules.structural.event.open_file", version: 1 }, sign: "gained" }, { projection: { id: "rules.structural.event.open_file", version: 1 }, sign: "gained" }] : [] });
+  const identity = LONGITUDINAL_ADMITTED_IDENTITIES.find((row) => row.projectionId === "rules.structural.event.king_zone" && row.semanticSign === "gained")!;
+  const exhibits = (moves: readonly string[]) => ({ alternatives: FIXTURE_DEPENDENCIES.alternatives, events: (_b: string, uci: string) => moves.includes(uci) ? [{ projection: { id: "rules.structural.event.king_zone", version: 1 }, sign: "gained" }, { projection: { id: "rules.structural.event.king_zone", version: 1 }, sign: "gained" }] : [] });
 
-  it("crosses played-exhibits, played-avoids, all/none-exhibit, duplicate-operand, forced and unavailable", () => {
-    const playedExhibits = decisionPopulation(START_FEN, "e2e4", [identity, avoidance], exhibits(["e2e4", "d2d4"]));
+  it("counts event prevalence for played true/false, all/none-exhibit, duplicate-operand, forced and unavailable", () => {
+    const playedExhibits = decisionPopulation(START_FEN, "e2e4", [identity], exhibits(["e2e4", "d2d4"]));
     expect(playedExhibits.kind).toBe("available");
     const edgeRow = playedExhibits.kind === "available" ? playedExhibits.memberships.get(`${identity.projectionId}\0 1\0gained\0gained`.replace(" ", "")) : undefined;
     expect(edgeRow).toEqual({ opportunity: true, occurred: true, share: 1 / 19 });
-    const avoided = playedExhibits.kind === "available" ? playedExhibits.memberships.get(`derived.semantic_avoidance.open_file\x001\0avoided\0gained`) : undefined;
-    expect(avoided).toEqual({ opportunity: true, occurred: false, share: 1 / 19 });
-    const playedAvoids = decisionPopulation(START_FEN, "g1f3", [identity, avoidance], exhibits(["e2e4", "d2d4"]));
-    // The committed edge avoids the family: the edge row does not occur, the avoidance row does.
-    expect(playedAvoids.kind === "available" ? [...playedAvoids.memberships.values()] : []).toEqual([
+    const playedDoesNotExhibit = decisionPopulation(START_FEN, "g1f3", [identity], exhibits(["e2e4", "d2d4"]));
+    expect(playedDoesNotExhibit.kind === "available" ? [...playedDoesNotExhibit.memberships.values()] : []).toEqual([
       { opportunity: true, occurred: false, share: 2 / 19 },
-      { opportunity: true, occurred: true, share: 2 / 19 },
     ]);
-    const all = decisionPopulation(START_FEN, "e2e4", [identity], { alternatives: FIXTURE_DEPENDENCIES.alternatives, events: () => [{ projection: { id: "rules.structural.event.open_file", version: 1 }, sign: "gained" }] });
+    const all = decisionPopulation(START_FEN, "e2e4", [identity], { alternatives: FIXTURE_DEPENDENCIES.alternatives, events: () => [{ projection: { id: "rules.structural.event.king_zone", version: 1 }, sign: "gained" }] });
     expect(all.kind === "available" ? all.memberships.size : -1).toBe(0);
     const none = decisionPopulation(START_FEN, "e2e4", [identity], { alternatives: FIXTURE_DEPENDENCIES.alternatives, events: () => [] });
     expect(none.kind === "available" ? none.memberships.size : -1).toBe(0);
@@ -148,7 +207,7 @@ describe("criterion 3 — declinable complete population ([[D2066]])", () => {
     const refs = [{ kind: "move", nodeId: "a", eventSeq: 2 }, { kind: "move", nodeId: "b", eventSeq: 4 }];
     const row = {
       learnerId: "l", runId: "r", phase: "opening", decisionClass: "played", decisions: 2, observedAt: AT, derivedRev: 1,
-      projectionId: "rules.structural.event.open_file", projectionVersion: 1, semanticSign: "gained", sourceSign: "gained",
+      projectionId: "rules.structural.event.king_zone", projectionVersion: 1, semanticSign: "gained", sourceSign: "gained",
       sessionKind: "position", packId: null, opportunities: 2, occurred: 1, alternativeShareSum: 0.25,
       occurredRefs: [refs[0]], opportunityRefs: refs,
     };
@@ -189,12 +248,12 @@ describe("criteria 4, 9, 18, 19 — normative projector over real runtime events
   it("reads family-independent denominators: a late first opportunity sees earlier decisions", () => {
     // g1f3 (no opportunity for the fixture family? it is a declinable non-exhibitor), then d2d4.
     const run = play(positionRun("late"), "a2a3", "h7h6", "e2e4", "g8f6", "h2h3");
-    const projected = projectObservations(image(run), { dependencies: { alternatives: FIXTURE_DEPENDENCIES.alternatives, events: (before, uci) => before === run.nodes[2]!.fen && uci === "e2e4" ? [{ projection: { id: "rules.structural.event.open_file", version: 1 }, sign: "gained" }] : [] } });
+    const projected = projectObservations(image(run), { dependencies: { alternatives: FIXTURE_DEPENDENCIES.alternatives, events: (before, uci) => before === run.nodes[2]!.fen && uci === "e2e4" ? [{ projection: { id: "rules.structural.event.king_zone", version: 1 }, sign: "gained" }] : [] } });
     const denominator = projected.denominators.find((row) => row.phase === "opening" && row.decisionClass === "played");
     expect(denominator?.decisions).toBe(5);
-    const family = projected.observations.find((row) => row.projectionId === "rules.structural.event.open_file");
+    const family = projected.observations.find((row) => row.projectionId === "rules.structural.event.king_zone");
     expect(family).toMatchObject({ decisions: 5, opportunities: 1, occurred: 1 });
-    const prefix = projectObservations(image(run, { cut: 5 }), { dependencies: { alternatives: FIXTURE_DEPENDENCIES.alternatives, events: (before, uci) => before === run.nodes[2]!.fen && uci === "e2e4" ? [{ projection: { id: "rules.structural.event.open_file", version: 1 }, sign: "gained" }] : [] } });
+    const prefix = projectObservations(image(run, { cut: 5 }), { dependencies: { alternatives: FIXTURE_DEPENDENCIES.alternatives, events: (before, uci) => before === run.nodes[2]!.fen && uci === "e2e4" ? [{ projection: { id: "rules.structural.event.king_zone", version: 1 }, sign: "gained" }] : [] } });
     expect(prefix.denominators[0]?.decisions).toBe(4);
   });
 
@@ -278,8 +337,45 @@ describe("criterion 10 — observed import boundary", () => {
 });
 
 describe("criterion 12 — revision pair", () => {
+  const successorFixtures = LONGITUDINAL_SUCCESSOR_FIXTURES;
+
+  it.each(successorFixtures)("keeps genuine complete current-source positive/negative: %s", (name, fen, move, side, projectionId, occurs) => {
+    const run = play(positionRun(`revision-${name}`, fen, side), move);
+    const events = RUNTIME_POPULATION_DEPENDENCIES.events(run.nodes[0]!.fen, move, run.nodes[1]!.fen);
+    expect(events).toBeDefined();
+    expect(events!.some(event => event.projection.id === projectionId && event.projection.version === 2)).toBe(occurs);
+    const population = decisionPopulation(run.nodes[0]!.fen, move);
+    expect(population.kind).toBe("available");
+    const projected = projectObservations(image(run));
+    expect(projected.denominators.reduce((sum, row) => sum + row.decisions, 0)).toBe(1);
+    const rows = projected.observations.filter(row => row.projectionId === projectionId);
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.every(row => row.projectionVersion === 2 && row.occurred === Number(occurs))).toBe(true);
+  });
+
   it("pairs OBSERVATION_DERIVATION_REV with the registry digest and a fixture-output digest", () => {
-    expect(OBSERVATION_DERIVATION_REV).toBe(5);
+    const f = fileFixture("tabiya-current-revision-image-"), owner = learner(f.storage, "owner");
+    const db = new DatabaseSync(f.path); db.exec("PRAGMA foreign_keys=ON");
+    const store = new LongitudinalStore(db, { now: () => f.clock.now });
+    const actual = (run: DrillRun) => {
+      f.storage.create(run, owner);
+      const claim = store.claimBatch({ workerId: "revision9-fixture", scanLimit: 1, slots: 1, leaseMs: 60_000 })[0]!;
+      if (claim.runId !== run.id) throw Error("Every preceding fixture must publish its own complete cut");
+      const source = store.claimSourceImage(claim)!, scope = store.openClaimedGameSource(claim, source);
+      try {
+        const projection = projectObservations(source, { gameSource: scope });
+        expect(store.publish(claim, projection)).toBe("published");
+        return projection;
+      } finally { store.closeGameSource(scope); }
+    };
+    try {
+    const runs = longitudinalRevisionFixtures(), byId = new Map(runs.map(run => [run.id, run]));
+    const fixed = (id: string): DrillRun => {
+      const run = byId.get(id);
+      if (run === undefined) throw new Error(`Missing original revision fixture ${id}`);
+      return run;
+    };
+    expect(OBSERVATION_DERIVATION_REV).toBe(9);
     expect(ingestRegistryDigest(LONGITUDINAL_INGEST_REGISTRY)).toBe(LONGITUDINAL_REGISTRY_DIGEST);
     // A zero-incidence registry addition moves the registry digest even though no fixture row changes.
     const addition = [...LONGITUDINAL_INGEST_REGISTRY, { projection: { id: "rules.zero.incidence", version: 1 }, signs: ["gained"], kind: "edge", adapter: "local_semantic_event" }];
@@ -288,21 +384,31 @@ describe("criterion 12 — revision pair", () => {
     expect(() => ingestRegistryDigest(addition as readonly LongitudinalConstructor[])).toThrow(/SET_MISMATCH/u);
     // Actual corrected collector outputs, including a nearby retained-defence negative, are
     // included in the revision pair. Ordinary opening moves alone miss special-move repairs.
-    const fixture = play(positionRun("revision-fixture"), "e2e4", "e7e5", "g1f3");
-    const promotion = projectObservations(image(play(positionRun("revision-promotion", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8n")));
-    const retained = projectObservations(image(play(positionRun("revision-retained", "2R4r/1P6/7k/8/8/8/8/K7 w - - 0 1"), "b7b8r")));
+    const fixture = fixed("revision-fixture");
+    const promotionRun = fixed("revision-promotion");
+    const promotion = actual(promotionRun);
+    const retainedRun = fixed("revision-retained");
+    const retained = actual(retainedRun);
     const dutyId = "rules.tactic.event.defender_duty_relocated";
-    expect(promotion.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    // The committed source still proves the special-move fact, but another legal move makes
+    // exposure unavailable. The whole decision must not publish any incomplete opportunity.
+    expect(localSemanticEventClosure(promotionRun.nodes[0]!.fen, "b7b8n", promotionRun.nodes[1]!.fen).events.some(event => event.projection.id === dutyId)).toBe(true);
+    expect(decisionPopulation(promotionRun.nodes[0]!.fen, "b7b8n")).toEqual({ kind: "unavailable", reason: "population_incomplete" });
+    expect(promotion.denominators.reduce((sum, row) => sum + row.decisions, 0)).toBe(1);
+    expect(promotion.observations).toEqual([]);
+    expect(localSemanticEventClosure(retainedRun.nodes[0]!.fen, "b7b8r", retainedRun.nodes[1]!.fen).events.filter(event => event.projection.id === dutyId)).toEqual([]);
     expect(retained.observations.filter(row => row.projectionId === dutyId && row.occurred > 0)).toEqual([]);
-    const castling = projectObservations(image(play(positionRun("revision-castling", "4k3/8/8/8/8/8/3P4/4K2R w K - 0 1"), "e1h1")));
-    expect(castling.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1 });
-    expect(castling.observations.find(row => row.projectionId === "rules.mobility.event.piece_destinations" && row.occurred > 0)).toMatchObject({ occurred: 1 });
-    const enPassant = projectObservations(image(play(positionRun("revision-en-passant", "4k3/8/8/8/4p3/8/3P4/4K3 w - - 0 1"), "d2d4")));
+    const castlingRun = fixed("revision-castling");
+    const castling = actual(castlingRun);
+    const castlingEvents = localSemanticEventClosure(castlingRun.nodes[0]!.fen, "e1h1", castlingRun.nodes[1]!.fen).events;
+    expect(castlingEvents.some(event => event.projection.id === dutyId)).toBe(true);
+    expect(castlingEvents.some(event => event.projection.id === "rules.mobility.event.piece_destinations")).toBe(true);
+    expect(decisionPopulation(castlingRun.nodes[0]!.fen, "e1h1")).toEqual({ kind: "unavailable", reason: "population_incomplete" });
+    expect(castling.denominators.reduce((sum, row) => sum + row.decisions, 0)).toBe(1);
+    expect(castling.observations).toEqual([]);
+    const enPassant = actual(fixed("revision-en-passant"));
     expect(enPassant.observations.find(row => row.projectionId === "rules.tactic.event.loose_piece" && row.semanticSign === "gained" && row.occurred > 0)).toMatchObject({ occurred: 1 });
-    const pawnRuns = [
-      play(positionRun("revision-white-pawn", "4k3/8/8/2PP4/2P5/8/8/4K3 w - - 0 1"), "d5d6"),
-      play(positionRun("revision-black-pawn", "4k3/8/8/2p5/2pp4/8/8/4K3 b - - 0 1", "black"), "d4d3"),
-    ].map(run => projectObservations(image(run)));
+    const pawnRuns = [fixed("revision-white-pawn"), fixed("revision-black-pawn")].map(run => actual(run));
     for (const pawn of pawnRuns) {
       const gains = pawn.observations.filter(row => row.projectionId === "rules.pawn.event.dynamics");
       expect(gains.length).toBeGreaterThan(0);
@@ -310,24 +416,50 @@ describe("criterion 12 — revision pair", () => {
       expect(pawn.observations).toContainEqual(expect.objectContaining({ projectionId: "derived.pawn.event.transitions", occurred: 1 }));
     }
     const occupiedTargets = OCCUPIED_TARGET_IDENTITY_CASES.map(value => {
-      const projected = projectObservations(image(play(positionRun(`revision-target-${value.name}`, canonicalFen(positionFromFen(value.fen)), value.side), value.uci)));
+      const run = fixed(`revision-target-${value.name}`);
+      const projected = actual(run);
       const defence = projected.observations.filter(row => row.projectionId === "rules.transition.event.occupied_defence");
-      if (value.sign === null) expect(defence.filter(row => row.semanticSign === "gained").every(row => row.occurred === 0)).toBe(true);
-      else expect(defence).toContainEqual(expect.objectContaining({ semanticSign: value.sign, occurred: 1 }));
+      const source = localSemanticEventClosure(run.nodes[0]!.fen, value.uci, run.nodes[1]!.fen).events.filter(event => event.projection.id === "rules.transition.event.occupied_defence");
+      if (value.sign === null) expect(source.filter(event => event.sign === "gained")).toEqual([]);
+      else expect(source.some(event => event.sign === value.sign)).toBe(true);
+      const population = decisionPopulation(run.nodes[0]!.fen, value.uci);
+      // All twelve fixed occupied-target fixtures have a genuine checking alternative. Keep
+      // their original source-sign assertions above; never count unavailable as negative.
+      expect(population).toEqual({ kind: "unavailable", reason: "population_incomplete" });
+      expect(projected.denominators.reduce((sum, row) => sum + row.decisions, 0)).toBe(1);
+      expect(defence).toEqual([]);
+      expect(projected.observations).toEqual([]);
       return projected;
     });
-    const output = [projectObservations(image(fixture)), promotion, retained, castling, enPassant, ...pawnRuns, ...occupiedTargets];
+    const successors = successorFixtures.map(([name]) => actual(fixed(`revision-${name}`)));
+    const output = [actual(fixture), promotion, retained, castling, enPassant, ...pawnRuns, ...occupiedTargets, ...successors];
+    expect(output.map(row => row.denominators[0]?.runId)).toEqual(runs.map(run => run.id));
+    for (const projected of output) for (const row of [...projected.denominators, ...projected.observations,
+      ...projected.structureStats, ...projected.gameFacts, ...projected.choiceFacts, ...projected.subjectObservations]) expect(row.derivedRev).toBe(9);
+    // A.2 changes the registry, subject grain and unavailable population policy. Retagging
+    // current rows as revision7 cannot establish predecessor equality. Historical revision8 pin:
+    // sha256:aa4d3483e07222cbbe4fc26604d8c44fb5f4d6b3b477eb5c26df3c55006ec5ff
+    // Historical four-family revision7 pin:
+    // sha256:5c04abdd3419f06f7745ac532aba51a459205f2e53c92ceb573339c5c9969f79
+    // Current fingerprint below covers genuine scope/publication and ALL SIX families.
+    expect(output.every(row => row.choiceFacts.length === 1)).toBe(true);
+    expect(output[0]!.choiceFacts[0]).toMatchObject({ derivedRev: 9, cohort: { kind: "eligible", decisions:
+      Array.from({ length: 3 }, () => ({ result: { kind: "available" } })) } });
+    expect(output.slice(1).every(row => row.choiceFacts[0]!.cohort.kind === "ineligible")).toBe(true);
     const digest = `sha256:${createHash("sha256").update(canonicalizeJson(output as unknown as JsonValue)).digest("hex")}`;
     expect(digest).toBe(LONGITUDINAL_FIXTURE_OUTPUT_DIGEST);
+    } finally { db.close(); f.storage.close(); rmSync(dirname(f.path), { recursive: true, force: true }); }
   }, 60_000);
 });
 
 /**
- * §D revision pair: opening, promotion duty, castling, en-passant, retained pawn gains and exact occupied targets.
+ * §D revision pair: every original opening/special-move/occupied-target fixture plus both-color
+ * exact material/exposure successor positives and nearby negatives. Incomplete populations keep
+ * their normative denominators and original source assertions, never manufactured opportunities.
  * Any semantic change to the projector, adapters or admitted registry moves this literal; the RFC that
  * owns that change owns the revision bump and the rebuild discharge in the same diff.
  */
-const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:2e68f632b4389202a9f7752afef507376a96b336da5f626bb3b351fa5ab25c75";
+const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:375d8dc39d44e9c00b0360c0cba31af7c4b64544ddc28f09eff3a2190ea76187";
 
 describe("criteria 13, 28 — branded query parser and sealed V4 source identity", () => {
   it("rejects empty, duplicate, unknown and contradictory filters and orders bytewise", () => {

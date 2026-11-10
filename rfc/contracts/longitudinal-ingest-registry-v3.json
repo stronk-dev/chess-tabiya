@@ -1,0 +1,952 @@
+[
+  {
+    "projection": {
+      "id": "rules.structural.event.king_zone",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.structural.event.passed_pawn",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.structural.event.piece_count",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.structural.event.direct_attack_count",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.structural.event.king_opposition",
+      "version": 2
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "membership_changed"
+    ],
+    "kind": "native",
+    "adapter": "native_subject_incidence"
+  },
+  {
+    "projection": {
+      "id": "rules.structural.event.backward_pawn",
+      "version": 2
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "membership_changed"
+    ],
+    "kind": "native",
+    "adapter": "native_subject_incidence"
+  },
+  {
+    "projection": {
+      "id": "derived.structural.event.pawn_file_group",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "membership_changed"
+    ],
+    "kind": "native",
+    "adapter": "native_subject_incidence"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.slider_ray",
+      "version": 2
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "membership_changed"
+    ],
+    "kind": "native",
+    "adapter": "native_subject_incidence"
+  },
+  {
+    "projection": {
+      "id": "derived.activity.event.file_state",
+      "version": 1
+    },
+    "signs": [
+      "membership_changed"
+    ],
+    "kind": "native",
+    "adapter": "native_subject_incidence"
+  },
+  {
+    "projection": {
+      "id": "derived.activity.event.file_access_revealed",
+      "version": 1
+    },
+    "signs": [
+      "gained"
+    ],
+    "kind": "native",
+    "adapter": "native_subject_incidence"
+  },
+  {
+    "projection": {
+      "id": "rules.structural.event.pawn_islands",
+      "version": 2
+    },
+    "signs": [
+      "count_gained",
+      "count_lost",
+      "topology_changed"
+    ],
+    "kind": "native",
+    "adapter": "native_subject_incidence"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.occupied_attack",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.occupied_defence",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.piece_escape",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.defended_duty",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.castled",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.clock_reset",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.last_of_role",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.pawn_contact",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.checkmate",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.promotion",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.capture",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.transition.event.developed",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.tactic.event.double_attack",
+      "version": 1
+    },
+    "signs": [
+      "gained"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.tactic.consequence.reply_breadth",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.tactic.event.check",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.tactic.event.loose_piece",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.castling.event.rights_lost",
+      "version": 1
+    },
+    "signs": [
+      "lost",
+      "preserved"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.exchange.capture_class",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.discovered_executed",
+      "version": 1
+    },
+    "signs": [
+      "gained"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.square.event.control",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "lost"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.mobility.event.piece_destinations",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.pawn.event.dynamics",
+      "version": 1
+    },
+    "signs": [
+      "gained",
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.pawn.event.transitions",
+      "version": 1
+    },
+    "signs": [
+      "state",
+      "gained"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.defender_exposure",
+      "version": 2
+    },
+    "signs": [
+      "gained",
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.material.event.role_asymmetry",
+      "version": 2
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.king.event.zone_state",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.king.captured_zone_defender",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.activity.event.open_file_occupancy",
+      "version": 1
+    },
+    "signs": [
+      "gained"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.tactic.event.defender_removed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "rules.tactic.event.defender_duty_relocated",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "edge",
+    "adapter": "local_semantic_event",
+    "meaning": "event_prevalence",
+    "visibility": "operator_only"
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.backward_pawn",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "backward_pawn",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.doubled_pawn",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "doubled_pawn",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.half_open_file",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "half_open_file",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.isolated_pawn",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "isolated_pawn",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.king_opposition",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "king_opposition",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.king_zone",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "king_zone",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.line_blockers",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "line_blockers",
+    "relations": [
+      "increase",
+      "decrease",
+      "equal"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.open_file",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "open_file",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.passed_pawn",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "passed_pawn",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.piece_count",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "piece_count",
+    "relations": [
+      "increase",
+      "decrease",
+      "equal"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.direct_attack_count",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "direct_attack_count",
+    "relations": [
+      "increase",
+      "decrease",
+      "equal"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.loose_piece",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "loose_piece",
+    "relations": [
+      "false_to_true",
+      "true_to_false",
+      "true_to_true",
+      "false_to_false"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.semantic_avoidance.pawn_islands",
+      "version": 2
+    },
+    "signs": [
+      "avoided"
+    ],
+    "kind": "population",
+    "adapter": "subject_relation_population",
+    "sourceScope": "complete_factory_result",
+    "family": "pawn_islands",
+    "relations": [
+      "increase",
+      "decrease",
+      "equal"
+    ]
+  },
+  {
+    "projection": {
+      "id": "derived.exchange.trade_completed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.pawn.sequence.contact_timing",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.pawn.sequence.harassment_pressure",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.sequence.defender_consequence",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.deflection_observed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.attraction_observed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.line_blocker_clearance_observed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.square_clearance_observed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.interference_observed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.check_zwischenzug_observed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  },
+  {
+    "projection": {
+      "id": "derived.tactic.overload_exploitation_observed",
+      "version": 1
+    },
+    "signs": [
+      "state"
+    ],
+    "kind": "path",
+    "adapter": "recorded_sequence",
+    "status": "deferred",
+    "owner": "longitudinal-store:A.2",
+    "reason": "No complete subject-aware recorded-path opportunity authority; deferred under longitudinal-store A.2."
+  }
+]

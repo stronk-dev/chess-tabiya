@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "paths": {
+      "@chess-tabiya/runtime": ["../../packages/runtime/src/index.ts"],
+      "chessops": ["../../packages/runtime/node_modules/chessops/dist/types/index.d.ts"],
+      "chessops/*": ["../../packages/runtime/node_modules/chessops/dist/types/*.d.ts"]
+    }
+  },
+  "include": ["*.test.ts"]
+}

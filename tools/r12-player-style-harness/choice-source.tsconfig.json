@@ -1,0 +1,4 @@
+{
+  "extends": "./profile-source-cost.tsconfig.json",
+  "include": ["choice-source.ts"]
+}

@@ -462,7 +462,8 @@ function computeLoosePieceReading(fen: string): LoosePieceReading {
   });
 }
 
-function loosePieceReadingForColor(fen: string, color: Color): LoosePieceReading | undefined {
+/** Package-internal actor read shared with the source-owned complete risk prerequisite. */
+export function loosePieceReadingForColor(fen: string, color: Color): LoosePieceReading | undefined {
   const position = positionFromFen(fen);
   if (opposite(position.turn) === color) return loosePieceReading(fen);
   const clone = Chess.fromSetup({ ...position.toSetup(), turn: opposite(color), epSquare: undefined });

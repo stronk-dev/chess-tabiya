@@ -9,16 +9,21 @@ import { readFile } from "node:fs/promises";
 import type { AddressInfo } from "node:net";
 import { resolve } from "node:path";
 
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ChessTabiyaApplication } from "./application.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 
 const policyConfig = { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } } as const;
 
 describe("famous games through the production application", { timeout: 20_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
-  afterEach(async () => { await application?.close(); application = undefined; });
+  beforeEach(() => { installEmptyApplicationCatalogues(); });
+  afterEach(async () => {
+    try { await application?.close(); }
+    finally { application = undefined; vi.restoreAllMocks(); }
+  });
 
   async function start() {
     application = await createInMemoryTestApplication({ development: true, engineMode: "mock", cookieSecure: false });

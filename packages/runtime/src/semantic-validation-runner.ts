@@ -1,3 +1,4 @@
+import { isDeepStrictEqual } from "node:util";
 /**
  * The semantic-validation runner (rfc/semantic-validation-authority.md §§4.1–4.4, R1–R3).
  *
@@ -7,7 +8,7 @@
  * the closed expectation. It never accepts a callback, prebuilt evidence or result digest from a
  * case. Not exported from the runtime barrel.
  */
-import { assertDeclaredEvidence, evidenceDigest, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
+import { assertDeclaredEvidence, evidenceDigest, evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence, type VersionedEvidenceId } from "./evidence-contract.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { assertSemanticEvidenceEvent } from "./semantic-evidence.js";
 import { evidenceValueRouteRegistry } from "./internal/evidence-value-routes.js";
@@ -16,6 +17,7 @@ import { canonicalFen, positionFromFen } from "./position-cache.js";
 import {
   SEMANTIC_VALIDATION_OPERATIONS,
   canonicalSemanticEdge,
+  assertCompleteAlternativesFixture,
   observationEvidence,
   observationSubjectKind,
   type SemanticValidationObservation,
@@ -30,6 +32,8 @@ import {
   mirrorSemanticFen,
   mirrorSemanticUci,
   semanticFactConstraintSha256,
+  semanticLegalSetDigest,
+  type SemanticCompleteAlternativesInput,
   semanticValidationSubjectKey,
   type SemanticEdgeInput,
   type SemanticValidationCase,
@@ -116,18 +120,8 @@ export function assertSemanticValidationFixture(value: SemanticValidationCase): 
     case "bounded_target_source":
       if (canonicalFen(positionFromFen(input.sourceFen)) !== input.sourceFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", `${value.id} source FEN is not canonical`);
       return;
-    case "complete_alternatives": {
-      const rootFen = canonicalFen(positionFromFen(input.rootFen));
-      if (rootFen !== input.rootFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", `${value.id} root FEN is not canonical`);
-      const legal = exactLegalMoves(rootFen).map((move) => move.uci).sort();
-      const supplied = input.alternatives.map((edge) => edge.moveUci).sort();
-      if (legal.join("|") !== supplied.join("|")) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", `${value.id} alternative set is not the exact legal set (${supplied.length}/${legal.length})`);
-      for (const edge of [input.played, ...input.alternatives]) {
-        if (edge.beforeFen !== rootFen) throw new SemanticValidationError("SEMANTIC_VALIDATION_FIXTURE_INVALID", `${value.id} alternative leaves another root`);
-        assertCanonicalEdge(edge, `${value.id} ${edge.moveUci}`);
-      }
-      return;
-    }
+    case "complete_alternatives": assertCompleteAlternativesFixture(input); return;
+    case "subject_outcomes": assertCompleteAlternativesFixture(input.population); return;
   }
 }
 
@@ -182,6 +176,10 @@ export function assertSemanticTargetValueAuthority(observation: SemanticValidati
   const factory = semanticValidationSoleFactory(projection);
   if (refKey(receipt.projection) !== refKey(projection)) throw new SemanticValidationError("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING", "value receipt names another projection");
   if (factory === undefined || receipt.factory !== factory) throw new SemanticValidationError("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING", `target was minted by ${receipt.factory}, not the sole factory ${factory ?? "(none)"}`);
+  if (observation.kind === "event") {
+    const view = evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_validation", version: 1 }, [evidence]);
+    if (view.items.length !== 1 || view.items[0] !== evidence) throw new SemanticValidationError("SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING", "event lacks its exact original full-source validation consumer binding");
+  }
   return Object.freeze({
     projection: refKey(projection),
     operandDigest: evidenceDigest(evidence.payload),
@@ -245,6 +243,19 @@ function failure(error: unknown): SemanticCaseExecutionReceipt["failure"] {
 
 /** The mirror partner's input must be the canonical transform of the source input (§4.1). */
 export function assertSemanticMirrorPartnerInput(source: SemanticValidationCase, partner: SemanticValidationCase, geometry: "vertical" | "horizontal" | "color_and_vertical"): void {
+  if (source.input.kind === "subject_outcomes" || source.input.kind === "complete_alternatives") {
+    const sourcePopulation = source.input.kind === "subject_outcomes" ? source.input.population : source.input;
+    if (partner.input.kind !== source.input.kind) throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "mirror population kinds differ");
+    if (source.input.kind === "subject_outcomes" && (partner.input.kind !== "subject_outcomes" || partner.input.family !== source.input.family)) throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "mirror subject families differ");
+    const partnerPopulation = partner.input.kind === "subject_outcomes" ? partner.input.population : partner.input as SemanticCompleteAlternativesInput;
+    const transform = (edge: SemanticEdgeInput): SemanticEdgeInput => canonicalSemanticEdge({ kind: "edge", beforeFen: mirrorSemanticFen(edge.beforeFen, geometry), moveUci: mirrorSemanticUci(edge.moveUci, geometry), afterFen: mirrorSemanticFen(edge.afterFen, geometry) });
+    const alternatives = sourcePopulation.alternatives.map(transform), played = transform(sourcePopulation.played);
+    const rootFen = mirrorSemanticFen(sourcePopulation.rootFen, geometry);
+    const sorted = (edges: readonly SemanticEdgeInput[]) => [...edges].sort((a, b) => a.moveUci.localeCompare(b.moveUci));
+    if (partnerPopulation.rootFen !== rootFen || partnerPopulation.legalSetDigest !== semanticLegalSetDigest(rootFen, alternatives.map(edge => edge.moveUci))
+      || !isDeepStrictEqual(played, partnerPopulation.played) || !isDeepStrictEqual(sorted(alternatives), sorted(partnerPopulation.alternatives))) throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "mirror population is not the complete canonical transform");
+    return;
+  }
   if (source.input.kind !== "edge" || partner.input.kind !== "edge") throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "mirror cases are one-edge inputs in v1");
   const expected = { beforeFen: mirrorSemanticFen(source.input.beforeFen, geometry), moveUci: mirrorSemanticUci(source.input.moveUci, geometry), afterFen: mirrorSemanticFen(source.input.afterFen, geometry) };
   let canonical: SemanticEdgeInput;
@@ -296,7 +307,11 @@ export async function executeSemanticValidationCase(value: SemanticValidationCas
     assertSemanticValidationFixture(value);
     const mirrorPartner = value.expectation.kind === "mirrors" ? cases.get(value.expectation.partnerCase.id) : undefined;
     if (value.expectation.kind === "mirrors") {
-      if (mirrorPartner === undefined || mirrorPartner.arm !== "orientation" || semanticValidationSubjectKey(mirrorPartner.subject) !== base.subject) throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE", `mirror partner ${value.expectation.partnerCase.id} is not a registered same-subject orientation case`);
+      if (mirrorPartner === undefined || mirrorPartner.id !== value.expectation.partnerCase.id
+        || mirrorPartner.version !== value.expectation.partnerCase.version || mirrorPartner.arm !== "orientation"
+        || semanticValidationSubjectKey(mirrorPartner.subject) !== base.subject)
+        throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE", `mirror partner ${value.expectation.partnerCase.id} is not its registered exact-version same-subject orientation case`);
+      assertSemanticValidationFixture(mirrorPartner);
       assertSemanticMirrorPartnerInput(value, mirrorPartner, value.expectation.geometry);
     }
     // Authority: proposition first (the one closed record), then the neutral oracle when rules-backed.
@@ -333,6 +348,13 @@ export async function executeSemanticValidationCase(value: SemanticValidationCas
     }
     const expectation = value.expectation;
     switch (expectation.kind) {
+      case "emits_exact": {
+        if (result.kind !== "completed") throw new SemanticValidationError("SEMANTIC_VALIDATION_EXPECTATION_UNMET", `positive abstained (${result.reason})`);
+        if (targetCount < 1) throw new SemanticValidationError("SEMANTIC_VALIDATION_POSITIVE_EMPTY", `${value.id} emitted no ${base.subject}`);
+        const actual = selected.map(observation => ({ sign: observation.kind === "event" ? observation.item.sign : "state", operands: observationEvidence(observation).payload }));
+        if (!isDeepStrictEqual(actual, expectation.events)) throw new SemanticValidationError("SEMANTIC_VALIDATION_EXPECTATION_UNMET", `${value.id} complete ordered event population differs`);
+        break;
+      }
       case "emits":
         if (result.kind !== "completed") throw new SemanticValidationError("SEMANTIC_VALIDATION_EXPECTATION_UNMET", `positive abstained (${result.reason})`);
         if (targetCount < 1) throw new SemanticValidationError("SEMANTIC_VALIDATION_POSITIVE_EMPTY", `${value.id} reached ${value.operation.id} and emitted no ${base.subject}`);
@@ -355,7 +377,8 @@ export async function executeSemanticValidationCase(value: SemanticValidationCas
         const partnerTargets = selectSemanticTargets(partnerResult, value.subject);
         partnerTargets.forEach(assertSemanticTargetValueAuthority);
         const shape = (observation: SemanticValidationObservation) => ({ projection: observationProjection(observation), sign: observation.kind === "event" ? observation.item.sign : "state", operands: observationEvidence(observation).payload });
-        compareSemanticMirror(selected.map(shape), partnerTargets.map(shape), expectation.geometry, expectation.operandRules);
+        if (value.input.kind !== "edge" || mirrorPartner.input.kind !== "edge") throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "mirror context requires two exact edges");
+        compareSemanticMirror(selected.map(shape), partnerTargets.map(shape), expectation.geometry, expectation.operandRules, { source: value.input, partner: mirrorPartner.input });
         break;
       }
     }

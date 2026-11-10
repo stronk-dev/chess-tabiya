@@ -73,7 +73,8 @@ describe("criterion 36: one exact-map call owns the packet's legal population", 
 
   it("source graph: the compiler imports the registered factory once and neither legal enumerator", () => {
     const compiler = source("./candidate-population.ts");
-    const imports = [...compiler.matchAll(/import\s+(?:type\s+)?\{([^}]*)\}\s+from\s+"([^"]+)"/gu)];
+    const cells = source("./foundation-position-cells.ts");
+    const imports = [...`${compiler}\n${cells}`.matchAll(/import\s+(?:type\s+)?\{([^}]*)\}\s+from\s+"([^"]+)"/gu)];
     const importedNames = imports.flatMap((match) => match[1]!.split(",").map((name) => name.trim().replace(/^type\s+/u, "")));
     // rfc/evidence-value-authority §2: production reaches factories only through the one dispatcher.
     expect(importedNames).toContain("invokeEvidenceValueRoute");
@@ -81,8 +82,13 @@ describe("criterion 36: one exact-map call owns the packet's legal population", 
     expect(importedNames).not.toContain("exactLegalMoveMap");
     expect(importedNames).not.toContain("exactLegalMoves");
     expect(compiler).not.toMatch(/declareExactLegalMovesEvidence/u);
+    // One root authority and one per-child authority; both pass the sole registered dispatcher.
     expect(compiler.match(/invokeEvidenceValueRoute\("rules\.mobility\.reading\.legal_moves@1"/gu)).toHaveLength(1);
-    const definitions = ["./evidence-factories.ts", "./candidate-population.ts", "./semantic-evidence.ts", "./index.ts"].map(source).join("\n").match(/createRulesMobilityReadingLegalMovesV1Evidence\s*=/gu);
+    expect(cells.match(/invokeEvidenceValueRoute\("rules\.mobility\.reading\.legal_moves@1"/gu)).toHaveLength(1);
+    expect(compiler).toContain('const position = foundation.legal()');
+    expect(compiler).toContain('foundationPositionCells(beforeFen, legal.legalMovesInput)');
+    expect(cells).toContain('originalLegal ?? invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1"');
+    const definitions = ["./evidence-factories.ts", "./candidate-population.ts", "./foundation-position-cells.ts", "./semantic-evidence.ts", "./index.ts"].map(source).join("\n").match(/createRulesMobilityReadingLegalMovesV1Evidence\s*=/gu);
     expect(definitions).toHaveLength(1);
   });
 });

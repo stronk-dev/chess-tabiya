@@ -6,6 +6,7 @@
  * it. The law never fills a cell: a `present` cell exists only where a registered case, executed
  * population receipt or migrated external receipt names the subject. Not barrel-exported.
  */
+import { SUBJECT_OUTCOME_FAMILIES } from "./semantic-subject-types.js";
 import type { VersionedEvidenceId } from "./evidence-contract.js";
 import { semanticValidationBlockedFamily, semanticValidationPopulationOperation, SEMANTIC_VALIDATION_OPERATIONS } from "./semantic-validation-operations.js";
 import {
@@ -44,17 +45,20 @@ const required = <A extends SemanticValidationArm>(owner: string, discharge: str
 /** Derives the law's profile for one live root from the registered case/receipt populations. */
 export function semanticValidationLawProfile(subject: SemanticValidationSubject, cases: readonly SemanticValidationCase[], externalIds: ReadonlyMap<string, string>): SemanticValidationProfile {
   const key = semanticValidationSubjectKey(subject);
+  const subjectOwned = subject.projection.version === 2 && SUBJECT_OUTCOME_FAMILIES.some(family => subject.projection.id === `derived.semantic_avoidance.${family}`);
   const blocked = semanticValidationBlockedFamily(subject.projection);
   const caseCell = <A extends "positive" | "semantic_negative" | "orientation" | "counterfactual">(arm: A, owner: string, discharge: string): SemanticValidationCell<A> => {
     if (blocked !== undefined) return required(blocked.owner, blocked.discharge);
     const refs = cases.filter((value) => value.arm === arm && semanticValidationSubjectKey(value.subject) === key).map((value) => Object.freeze({ kind: "case" as const, id: value.id, version: 1 as const, subject, arm }));
-    return refs.length > 0 ? Object.freeze({ disposition: "present", refs: Object.freeze(refs) }) as unknown as SemanticValidationCell<A> : required(owner, discharge);
+    return refs.length > 0 ? Object.freeze({ disposition: "present", refs: Object.freeze(refs) }) as unknown as SemanticValidationCell<A>
+      : subjectOwned ? required("D1716", `Independent complete subject-owned ${{ positive: "positive", semantic_negative: "semanticNegative", orientation: "orientation", counterfactual: "counterfactual" }[arm]} source proof for ${refKey(subject.projection)} under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification.`)
+        : required(owner, discharge);
   };
   const populationOperation = semanticValidationPopulationOperation(subject);
   const importedPopulation: SemanticValidationCell<"imported_population"> = blocked !== undefined
     ? required(blocked.owner, blocked.discharge)
     : populationOperation === undefined
-      ? subject.projection.version >= 3
+      ? subject.projection.version >= 2
         ? required("semantic-validation D4/D5", "this exact version has no registered population-validation operation or census; predecessor receipts do not qualify it")
         : required("recorded-semantic-path D1870", "v1 multi-edge window events have no production operation; only their exact-edge v2 successors are emitted and census-executed")
       : SEMANTIC_VALIDATION_OPERATIONS[populationOperation].reach.kind === "required"

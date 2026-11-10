@@ -18,8 +18,12 @@
   checksum-pinned `tools/install-stockfish-linux.sh` path.
 
 The project is licensed under GNU AGPL-3.0. JavaScript dependencies are installed into a
-pnpm workspace; pnpm's store/cache/state remain under the ignored repository `.cache/`
-directory.
+pnpm workspace. Normal Make commands configure pnpm's home and machine state under the ignored
+repository `.cache/` directory; the workspace file configures its package store and metadata cache
+there too. Machine-level home/state are configured in Make because pnpm does not read those
+settings from a project workspace file. `make setup` bootstraps the declared package-manager
+version and frozen dependencies once; normal checks need no per-command environment overrides.
+Bare `pnpm` outside Make still uses the host's pnpm configuration.
 
 ## Workspace
 
@@ -46,6 +50,13 @@ are documented in `docs/branch-runtime.md`. The normative run shape remains
 `schemas/drill_run.schema.json`; its version is declared there rather than duplicated here.
 
 ## Commands
+
+`make maia-task-native-build` prepares the source-built native Maia image and runs the opt-in
+offline task-source integration check; `make maia-task-native-check` repeats it using that image
+and its existing verified OCI layout. Both use the pinned Make runtime, require Docker and the
+existing Tabiya source builder, and publish nothing. The compact result stays in ignored
+`.cache/verification/`; no model, OCI layers or raw transcripts belong in Git. This is separate
+from ordinary daemon-free CI and does not certify calibration, native UI or deployment footprint.
 
 `make provider-source-history-check` is an opt-in maintenance check, not an ordinary CI or
 product-completion gate. It verifies the fixed original provider-source landing separately
@@ -140,6 +151,16 @@ complete software pool followed by the isolated performance pool. Its unchanged2
 the normal serial Make command in host development and CI; no extra wrapper or environment
 prefix is needed. The actual expanded Make plan and complete test population have scheduling
 regressions in `tools/software-scheduling.test.mjs`.
+For complete affected software files, use the same pinned toolchain with an explicit selection:
+`make test-software-files TEST_FILES="apps/server/src/drill-client-server.test.ts apps/server/src/pack-registry-validation.test.ts"`.
+Empty, missing or wrong-tier paths and runner flags are refused before Vitest starts. This is a
+focused development check, not full verification; `make test-software` and `make verify` always
+run the complete pools even if `TEST_FILES` is set.
+`make test-software-diagnostics` runs that same complete software configuration with an additional
+reporter that prints collection/test failures immediately and the standard summary. It is an
+optional debugging command: it changes no deadline, assertion, concurrency or test population.
+`make expression-census-check` runs the complete expression-census content file, including its real
+corpus warnings and original deadlines. Neither command replaces the normal full gates.
 `make verify-governance` runs the registers, roadmap and process invariants; and
 `make verify-content` runs tests that deliberately read committed corpus bytes. It also runs
 the installed-pack Support controls (`make local-module-content-check`). The unauthored
@@ -149,9 +170,23 @@ authentication, HTTP and module factories. Their permanent isolation control che
 returned catalogues. The two installed-pack cases retain their original five-second deadlines;
 moving a test to the content tier must not silently inherit a longer deadline.
 
+The tier checker also recognizes the canonical pack resolver, including aliased and dynamic
+imports. Mixed suites keep their source-free controls in software and their authored-data cases
+in content; controller and scheduling fixtures do not need to load an opening book. The 63 cases
+split under D3938 retain their original five-second deadlines. The content gate collects
+those actual Vitest cases and rejects missing, skipped or lengthened cases; software verification
+checks discovery without importing authored cases. Both complete tiers
+remain in normal verification; classification does not make failing installed content pass.
+
 `make storage-recovery-check` uses the same split: SQLite/replacement controls are software;
 the bundled-process journey with populated installed-content authoring, classroom, bot and
 Campaign data is content. Both tiers run in `make verify` and their existing GitHub jobs.
+
+The large Svelte integration suites own their mounted roots through
+`component-test-lifecycle.ts`. Teardown unmounts them before clearing the DOM/restoring mocks,
+including when an assertion exits early. The Review UI reuses only its complete default wire
+fixture and returns an independent copy per call; custom runs and source/coverage variants still
+execute their original builders. This does not cache production grants or source decisions.
 `make application-readiness-check` also selects each suite's declared tier explicitly, with
 the process suite's original deadlines retained.
 
@@ -295,3 +330,9 @@ Run that downloaded release file with `docker compose -f compose.yaml up -d`
 for the deterministic mock profile, or with
 `ENGINE_MODE=maia docker compose -f compose.yaml --profile engines up -d` for
 the health-gated Maia profile.
+
+Project type checks in pre-commit use one complete copy of the staged Git index, with its own
+frozen dependency installation. Unstaged and untracked source cannot change that result; only
+ignored downloaded tool/package caches are shared. The normal command is `make staged-typecheck`.
+Run working-tree verification and commits sequentially: Lefthook temporarily hides unstaged
+hunks in partially staged files while the commit hooks run.

@@ -42,6 +42,13 @@ abstention after the ranked gaps. When an explicit answer changes the repertoire
 old result is visibly stale until a completed rescan replaces it. A rescan waits for a
 new scan receipt rather than mistaking the prior ready result for the new job.
 
+Current repertoire recommendations use only a scan whose answer-map digest still matches
+the repertoire. They also check the current rank-zero answers and exclude gaps already linked
+to runs. Choosing an answer therefore removes the old scan from recommendations until an
+explicit rescan completes; it does not erase the stale scan or its answered rows from Learn.
+Reading recommendations never starts a scan, calls the corpus provider, or changes saved runs.
+Rating-band and coverage-bound edits remain the separate settings contract gap below.
+
 The biggest-gap action creates an ordinary pack-free position run after the uncovered
 opponent reply. Its run row, host grant, and repertoire link are one transaction. The
 learner plays, rewinds, branches, compares, and returns through the normal attempt

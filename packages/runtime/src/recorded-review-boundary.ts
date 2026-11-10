@@ -9,9 +9,22 @@ import { recordedEdgePayload } from "./recorded-edge.js";
 import { readBackReplay } from "./replay.js";
 import { digestRunEventHead } from "./run-subject-digest.js";
 import { canonicalProviderJson } from "./provider-digest.js";
+import { deeplyImmutableJson } from "./internal/immutable-json.js";
 import { presentationDigest } from "./presentation-contract.js";
 import type { ReviewImportRecordImage, ReviewOutcomeReceipt, ReviewStorageAuthority } from "./review-evidence.js";
 import type { DrillRun, MoveCommittedEvent, Node, RunStartedEvent } from "./types.js";
+
+// Pure serialization reuse, never a run/grant lookup cache. Every read still reloads the
+// actual storage owner. Only a fully immutable graph can retain its already checked bytes;
+// mutable inputs (including a frozen envelope with mutable descendants) are serialized again.
+const IMMUTABLE_RUN_BYTES = new WeakMap<DrillRun, string>();
+export function canonicalRunBytes(run: DrillRun): string {
+  const previous = IMMUTABLE_RUN_BYTES.get(run);
+  if (previous !== undefined) return previous;
+  const bytes = canonicalProviderJson(run);
+  if (deeplyImmutableJson(run)) IMMUTABLE_RUN_BYTES.set(run, bytes);
+  return bytes;
+}
 
 declare const recordedReviewBoundaryBrand: unique symbol;
 export interface RecordedReviewBoundary { readonly [recordedReviewBoundaryBrand]: true }
@@ -138,13 +151,15 @@ export function createRecordedReviewBoundarySourceOwner(storage: ReviewStorageAu
       // Full graph/event/legal validation above establishes this exact immutable snapshot.
       // Equal live inputs derive the same path/outcome; replaying them at every nested read
       // adds work, not authority. Strict serialization also refuses malformed array holes.
-      const runBytes = canonicalProviderJson(image.run), recordBytes = canonicalProviderJson(image.importRecord);
+      const runBytes = canonicalRunBytes(image.run), recordBytes = canonicalProviderJson(image.importRecord);
       const boundary = Object.freeze({}) as RecordedReviewBoundary;
       boundaries.set(boundary, { image, assertCurrent: () => {
         const stored = loadRun(request.runId);
         if (stored === undefined || stored.id !== request.runId) throw new TypeError("Recorded Review run is not stored under the requested identity");
-        const current = structuredClone(stored);
-        if (canonicalProviderJson(current) !== runBytes) throw new TypeError("Recorded Review boundary no longer matches its storage authority");
+        // Comparison is read-only. Resolve owns the detached immutable snapshot; a nested live
+        // currentness read needs its complete strict bytes, not another disposable full clone.
+        const current = stored;
+        if (canonicalRunBytes(current) !== runBytes) throw new TypeError("Recorded Review boundary no longer matches its storage authority");
         const record = importImage(loadImportRecord(request.runId), current);
         if (canonicalProviderJson(record) !== recordBytes) throw new TypeError("Recorded Review boundary no longer matches its storage authority");
       } });

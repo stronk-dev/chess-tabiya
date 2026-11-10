@@ -1,5 +1,3 @@
-import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
-
 import { fixtureProviderHealth } from "./provider-health.test-support.js";
 import { corpusPageFixture } from "./corpus-presentation.test-support.js";
 import { readFileSync } from "node:fs";
@@ -57,12 +55,14 @@ const pack = JSON.parse(
     "utf8",
   ),
 ) as DrillPackDefinition;
-const blackToMovePack = JSON.parse(
-  readFileSync(
-    new URL(resolvePackPath("anti-caro-advance"), import.meta.url),
-    "utf8",
-  ),
-) as DrillPackDefinition;
+// Synthetic controller input: a legal black-to-move root and an unavailable policy.
+// This tests transport/ownership behavior, not the changing authored opening corpus.
+const blackToMovePack = {
+  ...structuredClone(pack),
+  id: "black-to-move-controller-fixture",
+  start: { fen: "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3", side: "white" },
+  opponentPolicy: { mode: "theory_strict", targetElo: 1800, seedMode: "per_branch" },
+} as DrillPackDefinition;
 const digest = `sha256:${"a".repeat(64)}`;
 const at = "2026-08-11T20:00:00.000Z";
 const capabilities: Capabilities = {
@@ -479,6 +479,31 @@ function controller(api = new FakeApi(), storage = new MemoryStorage()) {
 }
 
 describe("DrillSessionController", () => {
+  it("D4062 retains immutable Hint routing across run and same-run attachment replacements", async () => {
+    const hint = vi.fn<NonNullable<DrillClientApi["hint"]>>(async (_runId, body) => ({ state: "pending", requestId: "a".repeat(32), rung: body.rung }));
+    const hintPoll = vi.fn<NonNullable<DrillClientApi["hintPoll"]>>(async (_runId, requestId) => ({ state: "pending", requestId, rung: "pattern" }));
+    const hintCancel = vi.fn<NonNullable<DrillClientApi["hintCancel"]>>(async (_runId, requestId) => ({ state: "cancelled", requestId, rung: "pattern" }));
+    const api = Object.assign(new FakeApi(), { hint, hintPoll, hintCancel });
+    let nextId = 0;
+    const client = new DrillSessionController(api, { storage: new MemoryStorage(), scheduler: new FakeScheduler(), runId: () => `hint-run-${++nextId}`, seed: () => 1 });
+    try {
+      await client.startPosition({ fen: pack.start.fen, side: "white", mode: "human_common" });
+      const old = client.hintsFor("hint-run-1");
+      expect(client.hintsFor("hint-run-1")).toBe(old);
+      await client.startPosition({ fen: pack.start.fen, side: "white", mode: "human_common" });
+      const current = client.hintsFor("hint-run-2");
+      expect(current).not.toBe(old);
+      expect(() => client.hintsFor("hint-run-1")).toThrow(/does not match/u);
+      await old.cancel("a".repeat(32)); await current.poll("b".repeat(32));
+      expect(hintCancel.mock.calls[0]).toEqual(["hint-run-1", "a".repeat(32)]);
+      expect(hintPoll.mock.calls[0]).toEqual(["hint-run-2", "b".repeat(32)]);
+      await client.resume("hint-run-2");
+      expect(client.hintsFor("hint-run-2")).not.toBe(current);
+      await current.cancel("b".repeat(32));
+      expect(hintCancel.mock.calls[1]).toEqual(["hint-run-2", "b".repeat(32)]);
+    } finally { client.stopSession(); }
+  });
+
   it("D3693 records a legal reply, retains its receipt across reload, and plays that distribution once", async () => {
     const document: DrillPackDefinition = { ...pack, checkpoints: pack.checkpoints.map((checkpoint, index) => index === 0
       ? { ...checkpoint, interaction: { type: "prediction", flipBoard: false } } : checkpoint) };

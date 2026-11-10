@@ -14,6 +14,44 @@ const excluded = new Set([...CONTENT_CONTRACT_TESTS, ...PERFORMANCE_CONTRACT_TES
 const native = new Set(SERIAL_SOFTWARE_CONTRACT_TESTS);
 const requiredGates = `software-scheduling-check typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check make-toolchain-check`.split(" ");
 
+test("D4187 the actual semantic software smoke runs from an empty directory without authored content", t => {
+  const directory = mkdtempSync(join(tmpdir(), "tabiya-semantic-source-smoke-"));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const outfile = join(directory, "smoke.mjs");
+  execFileSync(resolve(root, "node_modules/.bin/esbuild"), ["apps/server/src/semantic-evidence-check.ts", "--bundle", "--platform=node", "--format=esm", `--outfile=${outfile}`, "--log-level=warning"], { cwd: root });
+  const result = JSON.parse(execFileSync(process.execPath, [outfile], { cwd: directory, encoding: "utf8" }));
+  assert.equal(result.policy, "research.r2_candidate@2");
+  assert.equal(result.researchSelection.legalAlternatives, 19);
+  assert.equal(result.researchSelection.evaluatedAlternatives, 19);
+  assert.equal(Object.hasOwn(result, "dependency"), false);
+  assert.equal(CONTENT_CONTRACT_TESTS.includes("apps/server/src/semantic-content-dependencies.test.ts"), true);
+});
+
+test("focused software files use the normal Make toolchain without narrowing the full gate", () => {
+  const files = "apps/server/src/drill-client-server.test.ts apps/server/src/pack-registry-validation.test.ts";
+  const plan = execFileSync("make", ["--no-print-directory", "--dry-run", "test-software-files", `TEST_FILES=${files}`],
+    { cwd: root, encoding: "utf8" });
+  assert.ok(plan.includes(`tools/test-tier-check.mjs --software-files ${files}`));
+  assert.ok(plan.includes(`pnpm test:software ${files}`));
+  for (const target of ["test-software", "verify-software", "verify"]) {
+    const full = execFileSync("make", ["--no-print-directory", "--dry-run", target, `TEST_FILES=${files}`],
+      { cwd: root, encoding: "utf8" });
+    assert.deepEqual(full.split("\n").filter(line => line.startsWith("pnpm test:software")),
+      ["pnpm test:software"], `${target} remains the complete pool even with TEST_FILES set`);
+  }
+});
+
+test("invalid focused Make selections fail before invoking the runner", () => {
+  for (const files of ["", "--passWithNoTests", "apps/server/src/guidance.test.ts"]) {
+    const result = spawnSync("make", ["--no-print-directory", "test-software-files", `TEST_FILES=${files}`],
+      { cwd: root, encoding: "utf8" });
+    assert.ifError(result.error);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /test-tier-check failed/u);
+    assert.ok(!result.stdout.includes("pnpm test:software"), "runner is not launched on a refused selection");
+  }
+});
+
 function assertGateOrder(prerequisites) {
   assert.deepEqual([...prerequisites].sort(), [...requiredGates].sort(), "every existing gate exactly once");
   assert.equal(prerequisites[0], "make-toolchain-check", "toolchain refusal precedes verification work");
@@ -35,7 +73,7 @@ test("D3869 fast contracts precede expensive pools in the actual canonical Make 
   const plan = execFileSync("make", ["--no-print-directory", "--dry-run", "verify-software"], { cwd: root, encoding: "utf8" });
   const software = plan.indexOf("pnpm test:software"), performance = plan.indexOf("pnpm test:performance");
   assert.ok(software >= 0 && performance > software, "both complete pools remain, in isolated order");
-  for (const command of ["tools/make-toolchain.test.mjs", "pnpm typecheck", "pnpm schema:check",
+  for (const command of ["tools/make-toolchain.test.mjs", "pnpm typecheck", "tools/structural-convention-schemas.mjs", "pnpm schema:check",
     "tools/semantic-validation/dist/semantic-validation-build.mjs --check",
     "tools/generate-candidate-packet-projections.mjs --check", "apps/server/dist/capability-contract.js check"]) {
     const before = plan.indexOf(command);
@@ -58,7 +96,9 @@ test("D3869 an actual failing contract prevents both pools; the old ordering can
     const base = join(directory, "Makefile"), overrides = join(directory, "recipes.mk");
     // Keep the real Make dependency graph. Replace only its recipe work with visible markers
     // and one deterministic refusal; never run the expensive pools to prove they were skipped.
-    writeFileSync(overrides, prerequisites.map(target => `${target}:\n\t@echo ${target}\n\t@${target === "semantic-validation-check" ? "exit 17" : ":"}\n`).join("\n"));
+    writeFileSync(overrides, prerequisites.map(target => `${target}:\n\t@echo ${target}\n\t@${target === "semantic-validation-check" ? "exit 17" : ":"}\n`).join("\n")
+      // Keep schema-check's real dependency edge while replacing its new nested recipe too.
+      + "\nstructural-convention-schemas-check:\n\t@:\n");
     const run = text => {
       writeFileSync(base, text);
       const result = spawnSync("make", ["--no-print-directory", "-s", "-f", base, "-f", overrides, "verify-software"],
@@ -87,6 +127,14 @@ function assertScheduling(rows, expected) {
     assert.equal(row.timeout, 5000, "no global timeout inflation");
   }
 }
+
+test("content case collection belongs only to the actual content Make gate", () => {
+  const content = execFileSync("make", ["--no-print-directory", "--dry-run", "test-content"], { cwd: root, encoding: "utf8" });
+  const collector = content.indexOf("tools/content-scheduling.test.mjs");
+  assert.ok(collector >= 0 && collector < content.indexOf("pnpm test:content"));
+  const software = execFileSync("make", ["--no-print-directory", "--dry-run", "verify-software"], { cwd: root, encoding: "utf8" });
+  assert.ok(!software.includes("tools/content-scheduling.test.mjs"), "software verification does not execute authored case collection");
+});
 
 test("actual Vitest discovery preserves every software file and orders native ownership separately", async () => {
   const contexts = [];

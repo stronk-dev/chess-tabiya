@@ -690,6 +690,56 @@ JSON. The API, run state and seat each have a focused contract test; one browser
 button → pending → available for every rung plus honest-empty, source-unavailable, cancellation,
 restart/re-POST and a late stale result after commit/rewind/fork.
 
+### §7a — Per-action delivery ownership (D4062, accepted amendment 2026-11-04)
+
+Independent review accepts this clause for implementation, recorded in
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`. It supersedes §7 step2's shared
+operation identity, not the search/receipt/source/disclosure contracts. The measured falsifier is
+`apps/web/src/lib/preset-change.test.ts`: a genuine pending POST returned after Quiet destroys
+the seat leaves one server operation without a consumer. Cancelling its current deterministic ID
+can cancel a newly opened seat's operation for the same decision/rung.
+
+The closed POST body requires `clientRequestId`, exactly32 lowercase hexadecimal characters,
+generated from16 browser-crypto random bytes for each explicit Hint/A-little-more/retry action.
+The same action reuses that key on restart404 re-POST; a new action or remounted seat uses a new
+key. Missing/malformed/extra fields fail before acquiring a source. No legacy fallback, persisted
+run field, migration or resource-version reservation is introduced.
+
+Every successful POST response is the closed envelope `{ hint, clientRequestId }`, echoing the
+validated action key, including refused/stale/source-failed states. DrillApi requires the exact
+expected key before admitting `hint`; missing/extra/mismatched envelope fields are rejected. GET
+and DELETE keep their existing `{ hint }` envelope and exact expected operation-ID validation.
+The receipt stays version2: action correlation belongs to the POST envelope, not chess evidence.
+Restart recovery retains the exact source/compiler identity: if server configuration changes that
+identity during an action, the existing expected operation-ID parser refuses its replacement.
+The learner may explicitly request a fresh action; recovery does not widen accepted sources.
+
+The deterministic operation ID includes this key alongside the existing exact decision/rung/
+manifest/compiler/source inputs. Repeating an identical action remains idempotent. Different
+actions have different operation IDs even for the same question. The existing horizon key excludes
+the client key: concurrent actions and successive rungs still share the exact engine search.
+DELETE removes only the addressed operation/subscriber; it cannot remove another action. Source
+work aborts only after the final live subscriber leaves. Bounded operation eviction/shutdown and
+settled-horizon caching retain their existing rules. This is delivery ownership, never a hint
+selection, chess judgement, assistance ceiling or source-policy change.
+
+The controller returns a stable Hint client bound to one immutable originating RunState store.
+App requests it reactively with the active run ID; replacing/reopening an attachment replaces the
+client. The seat captures that client per async action. Reset/destroy captures each known pending
+ID with its originating client, never the controller's later store. A late reply is strictly parsed
+against the original run/decision/rung/manifest before cleanup. A retired action never paints,
+advances progress, polls or re-POSTs; a valid late pending response is cancelled through that
+original client. Policy refusals/malformed replies invent no cleanup identity. Late settled results
+remain subject to the normal bounded server cache rather than being called live searches.
+
+Required falsifiers before closeout: (1) real delayed pending creation→Quiet leaves no operation;
+(2) reopen the same decision/rung before old acknowledgement, then cancel old without cancelling
+new or duplicating search; (3) deliver old DELETE after newer creation with the same guarantee;
+(4) switch runs before acknowledgement and prove cleanup uses the original run; (5) malformed/
+policy-refused late replies cause no invented DELETE; (6) same-action repeat and restart404 reuse
+the key/operation, while explicit retry/remount uses a different one; (7) invalid HTTP keys acquire
+zero sources; (8) existing retained-progress/preset/ceiling/strict receipt/source tests stay green.
+
 ### §8 — Rated play is guarded at the capability boundary
 
 `DrillRunService.analysis()` already calls `#refuseRatedAssistance`; public

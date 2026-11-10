@@ -1,11 +1,19 @@
 # Semantic validation closure — the manifest validates shapes, not chess semantics
 
-**Current boundary — 2026-10-08:** the August findings below are historical, not a claim
-that the resolver still does not exist. The shipped runner now executes forty cases over
-81 subjects; zero subjects satisfy every required arm. D3563 added independently cited
-castling positives/negatives. The measured remaining orientation obstruction and a narrow
-review-only proposal are at the end of this dossier. `[V]` (`docs/semantic-evidence.md`,
-`packages/runtime/src/semantic-validation-receipt.generated.ts`, `make semantic-validation-check`)
+**Current boundary — 2026-11-09:** older checkpoints below are historical. `[V]`
+
+Current 2026-11-09: 98 required subjects retain 419 passing canonical cases. Exactly castled@1,
+rights_lost@1, capture@1 and clock_reset@1 satisfy all required arms. The seven current edge roots
+remain required and unqualified; the new snapshot/detail bindings add no event-root waiver.
+Selected Inspector delivery now includes the sixteen foundation sources described in
+`planning/foundation-source-identity/plan.md`. Source reach does not qualify a detector or activate
+ordinary guidance. That plan holds current software/build/content evidence and the remaining
+D4167/D4170 canonical/ordinary/avoidance/bot cutover. Parent and release duties remain open.
+
+Evidence: `packages/runtime/src/semantic-validation-transition-sources.ts`,
+`packages/runtime/src/semantic-validation-transition-fields.test.ts`, actual factory/runner and
+generated receipt; `planning/foundation-source-identity/plan.md`. D4167 owns real consumer mapping;
+semantic qualification is not learner eligibility. `[V]`
 
 **Question:** Do the 67 semantic-event declarations' `validation` fields bind independent,
 executable evidence that each named chess predicate can both fire and refuse?
@@ -327,3 +335,30 @@ cannot qualify a collector or make guidance available. Production grammar, canon
 cases, profiles and generated semantic verdicts are unchanged: 343 passed execution
 cases do not mean any of the 81 profiles is fully qualified. `[V]` (owned change set,
 existing authority plan and generated semantic validation receipt)
+
+## 2026-11-05 — first authority-bearing local orientation candidate
+
+[V] The current generated receipt marks `rules.transition.event.castled@1` unvalidated with
+orientation as its only open cell. Accepted semantic-validation-authority Slice B and §4.1a already
+provide the local one-edge operation, complete retained-input comparison and total operand walk.
+`semantic-validation-orientation.test.ts` executes the mechanics with an injected test resolver;
+those fixtures are not canonical authority and cannot simply be promoted.
+
+[V] Independent preflight identifies the smallest genuine case-data lane (D4163). The retained
+`semantic-validation-cited-sources.ts` python-chess `is_castling` source establishes castling
+membership, but does not define the resulting king square. Total mirrored equality alone can
+accept two symmetrically wrong destinations. A new authority must also ground absolute values.
+The existing pinned primary `Board.push` implementation chooses the king's c-file destination
+for the a-side and g-file for the h-side, with the rank determined by mover color. Verified at:
+https://github.com/niklasf/python-chess/blob/3516d7c6c0879af724c2855fac5a304a4ef40949/chess/__init__.py
+(`Board.push`, castling branch); raw primary:
+https://raw.githubusercontent.com/niklasf/python-chess/3516d7c6c0879af724c2855fac5a304a4ef40949/chess/__init__.py .
+This is a literal rules/source observation, not strategic judgement or a move grade.
+
+Planned bounded proof: preserve the four existing cited cases unchanged; register independent
+absolute king-destination expectations for both wings/colors; add source-bound color/vertical
+orientation pairs with the complete existing walk; prove that a symmetric wrong-destination pair
+can satisfy geometry but fails the absolute canonical proposition. Use actual production runner,
+original authority resolver and profile references. No injected resolver, invented owner receipt,
+new oracle/comparator/case-transform framework or wider variant/recorded/bounded claim. Actual new
+case construction/execution and any qualification change are still owed.

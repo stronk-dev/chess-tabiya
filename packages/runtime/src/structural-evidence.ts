@@ -4,9 +4,13 @@ import {
   type ConsumerEvidenceView,
   type DeclaredEvidence,
 } from "./evidence-contract.js";
+import { assertLegacyStructuralExpression } from "@chess-tabiya/schema/drill-pack";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
-import { compileEvidenceConsumerExecution } from "./evidence-binding-execution.js";
+import { compileEvidenceConsumerExecution, compileEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
+import { captureAuthoredPredicatePopulation, readAuthoredPredicatePopulation, type AuthoredPredicatePolicy } from "./authored-predicate-population.js";
+import { sourceForAuthoredExpression, type AuthoredStructuralConditionSource } from "./internal/authored-structural-source.js";
+import { readAuthoredPredicateReductionValue } from "./internal/authored-predicate-reduction-authority.js";
 import {
   matchesStructuralExpression,
   mirrorExpression,
@@ -101,6 +105,7 @@ export function evaluateStructuralPredicate(
   fen: string,
   condition: StructuralExpression,
 ): StructuralPredicateResult {
+  assertLegacyStructuralExpression(condition);
   const trace: StructuralPredicateTraceNode[] = [];
   const matched = evaluateNode(fen, condition, condition, "$", trace);
   return Object.freeze({ fen, condition, matched, trace: Object.freeze(trace) });
@@ -181,4 +186,47 @@ export function evaluateAuthoredStructuralPredicate(
   );
   structuralEvidenceForAuthoring(view);
   return evidence.result.payload.matched;
+}
+
+/** Current authored path: authentic origin → original legal source → owned visitor/reduction. */
+export function declareCurrentStructuralPredicateEvidence(fen: string, source: AuthoredStructuralConditionSource, policy: AuthoredPredicatePolicy = "predicate", purpose: "authoring" | "objective" = "authoring") {
+  const consumer = preflightCurrentAuthoredOperation(purpose);
+  const position = invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1", { fen });
+  const captured = captureAuthoredPredicatePopulation(source, position, policy);
+  if (captured.kind !== "available") return captured;
+  const result = invokeEvidenceValueRoute("derived.structural.predicate_result@2", { population: captured.value });
+  readAuthoredPredicateReductionValue(result, captured.value);
+  const inputs = readAuthoredPredicatePopulation(captured.value);
+  const view = evidenceForConsumer<unknown>(PRIMARY_EVIDENCE_MANIFEST, consumer, purpose === "authoring" ? [inputs.condition, result, ...inputs.leaves.map(row => row.value)] : [result]);
+  if (!view.items.includes(result)) throw new TypeError("Current authored operation did not admit its exact reduction result");
+  return Object.freeze({ kind: "available" as const, value: result });
+}
+
+export function preflightCurrentAuthoredOperation(purpose: "authoring" | "objective") {
+  if (purpose !== "authoring" && purpose !== "objective") throw new TypeError("Unknown authored structural operation");
+  const consumer = { id: purpose === "authoring" ? "authoring.predicate" : "runtime.objective_condition", version: 2 };
+  compileEvidenceConsumerExecutionV2(PRIMARY_EVIDENCE_MANIFEST, consumer);
+  return consumer;
+}
+
+/** Source refusal is not a false predicate or an invalid chess position. */
+export class AuthoredStructuralSourceError extends TypeError {
+  constructor(message: string, cause?: unknown) { super(message, { cause }); this.name = "AuthoredStructuralSourceError"; }
+}
+
+export function requireCurrentStructuralExpression(expression: StructuralExpression): AuthoredStructuralConditionSource {
+  try { return sourceForAuthoredExpression(expression); }
+  catch (cause) { throw new AuthoredStructuralSourceError("Current expression requires its original live authored source", cause); }
+}
+
+export function matchesCurrentStructuralExpression(fen: string, expression: StructuralExpression, purpose: "authoring" | "objective"): boolean {
+  const source = requireCurrentStructuralExpression(expression);
+  try {
+    const result = declareCurrentStructuralPredicateEvidence(fen, source, "predicate", purpose);
+    if (result.kind !== "available") throw new AuthoredStructuralSourceError(`Current structural source unavailable: ${result.reason}`);
+    return result.value.payload.observation.matched;
+  } catch (cause) {
+    if (cause instanceof AuthoredStructuralSourceError) throw cause;
+    throw new AuthoredStructuralSourceError("Current structural source evaluation failed", cause);
+  }
 }

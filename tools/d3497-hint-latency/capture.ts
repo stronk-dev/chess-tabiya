@@ -82,7 +82,7 @@ async function withApplication(position: any, variant: string, sample: number, b
       const assistance=compileAssistanceRequest({contextHint:"position",preference:{kind:"explicit",preset:"support",overrides:persona?{voice:"persona"}:{},moduleOverrides:{include:[],exclude:[]}}});
       const trace:Trace={entered:now(),deps:0,packets:[],sources:[],serverRequests:[]}; trace.deps=trace.entered; active=trace;
       try {
-        let response=await post(`/runs/${run.id}/hints`,{nodeId:run.activeCursor.nodeId,rung,decisionDigest:hintDecisionStamp(run).digest,assistance});
+        let response=await post(`/runs/${run.id}/hints`,{ clientRequestId: "0".repeat(32), nodeId:run.activeCursor.nodeId,rung,decisionDigest:hintDecisionStamp(run).digest,assistance});
         const firstText=await response.text(), postMs=now()-trace.entered;
         let text=firstText, hint=parseHintResponse(JSON.parse(text).hint), polls=0;
         while(hint.state==="pending" && now()-trace.entered<70_000) {
