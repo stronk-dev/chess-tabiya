@@ -136,6 +136,7 @@ try {
   const store = new LongitudinalStore(workerDatabase), service = new RunService(storage);
   const rows: { runId: string; setup: string | null; screen: string | null; eligible: boolean }[] = [];
   let operandMs = 0, projectorMs = 0, values = 0, completed = 0;
+  let claimed = 0, leaseRenewals = 0, claimElapsedMs = 0;
   console.log(JSON.stringify({ instrument: "disposable D4159/D4147", node: process.version, input, sourceLicence: "CC0-1.0",
     nativeSessions: runs.length, learnerSides: { white: 100, black: 100 }, uniqueLines: lines.length, plies: 64, rejectedInputs,
     derivationRevision: OBSERVATION_DERIVATION_REV,
@@ -218,17 +219,21 @@ try {
       },
     });
     assert.equal(receipt.failed, 0); assert.equal(receipt.conflicts, 0); assert.equal(receipt.abandoned, 0);
+    claimed += receipt.claimed;
     completed += receipt.completed;
+    leaseRenewals += receipt.renewals;
+    claimElapsedMs += receipt.claimElapsedMs;
     if (receipt.completed > 0 && completed % 25 === 0) console.log(JSON.stringify({ completed, elapsedMs: round(performance.now() - started) }));
     if (receipt.claimed === 0) break;
   }
-  assert.equal(completed, 200); assert.equal(rows.length, 200);
+  assert.equal(claimed, 200); assert.equal(completed, 200); assert.equal(rows.length, 200);
   const subjectRows = workerDatabase.prepare("SELECT source_kind, occurred, count(*) AS rows, count(DISTINCT run_id) AS runs FROM learner_subject_observations GROUP BY source_kind,occurred ORDER BY source_kind,occurred").all();
   for (const kind of ["native_incidence", "condition_relation"]) {
     assert.ok(subjectRows.some(row => row.source_kind === kind && Number(row.rows) > 0), `Actual ${kind} subject rows must be published`);
   }
   assert.deepEqual(workerDatabase.prepare("SELECT DISTINCT derived_rev FROM learner_subject_observations").all().map(row => row.derived_rev), [OBSERVATION_DERIVATION_REV]);
   const workerAndProbeMs = performance.now() - started;
+  // Count Profile’s explicit metadata reads. Request timing includes the store’s internal replay.
   let imageReads = 0;
   const actualImage = storage.longitudinalSourceImageV4.bind(storage);
   storage.longitudinalSourceImageV4 = (runId, seq) => { imageReads++; return actualImage(runId, seq); };
@@ -250,7 +255,7 @@ try {
   assert.equal(fullRead.coverage.sources.length, 54);
   assert.equal(fullRead.coverage.decisions.length, 6_400);
   const coverageRows = workerDatabase.prepare(`SELECT count(*) AS decisions, count(DISTINCT run_id) AS runs, derived_rev
-    FROM learner_subject_evaluations GROUP BY derived_rev`).all();
+    FROM learner_subject_evaluations GROUP BY derived_rev`).all().map(row => ({ ...row }));
   assert.deepEqual(coverageRows, [{ decisions: 6_400, runs: 200, derived_rev: OBSERVATION_DERIVATION_REV }]);
   const unavailableBySource = new Map<string, { decisions: number; members: number }>();
   for (const decision of fullRead.coverage.decisions) {
@@ -318,9 +323,9 @@ try {
     return { metricId: id, games: selected.length, decisions, contributors: refs.length, value: expectedValue, interval: expectedInterval,
       detailAllPagesMs: round(detailMs), shareMs: round(performance.now() - shareStart) };
   });
-  console.log(JSON.stringify({ completed, workerAndProbeMs: round(workerAndProbeMs), experimentBeforeMismatchMs: round(performance.now() - started), productionProjectorMs: round(projectorMs),
+  console.log(JSON.stringify({ claimed, completed, leaseRenewals, claimElapsedMs: round(claimElapsedMs), workerAndProbeMs: round(workerAndProbeMs), experimentBeforeMismatchMs: round(performance.now() - started), productionProjectorMs: round(projectorMs),
     independentGameProbeAndChoiceHelperComparisonMs: round(operandMs), priorGameProbeFactoryCalls: values, coldProfileMs: round(coldMs), warmProfileMs: round(warmMs),
-    coldSourceImageReads: coldReads, laterSourceImageReads: imageReads - coldReads, results, choiceResults,
+    coldProfileSourceImageReads: coldReads, laterProfileSourceImageReads: imageReads - coldReads, results, choiceResults,
     coverageRows, fullReadMs: round(fullReadMs), unavailableBySource: Object.fromEntries(unavailableBySource),
     choiceDecisionsCompared: choiceGames.reduce((sum, game) => sum + game.decisions.length, 0), subjectRows,
     limits: "Synthetic repeated64ply native replay,100each side; not independent human games or variable game lengths. No human/source-qualification or browser/network latency proof. New choice-source work is inside productionProjectorMs; independentGameProbeAndChoiceHelperComparisonMs times old GAME probes, old choice helper and comparison assertions, not isolated choice-factory cost; priorGameProbeFactoryCalls counts only the prior GAME probes." }));

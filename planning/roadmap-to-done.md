@@ -1,33 +1,27 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
-## Current continuation — 2026-11-10
+## Current continuation — 2026-11-11
 
-The full1.0 goal remains active. Complete normal `make verify-software` passes on committed
-`35d7cc5c`: **18,944 tests /571 files (660.52s)** and **seven unchanged performance tests /
-four files (57.75s)**, with all preflights. Fresh canonical validation passes1470/1470,
-89subjects/17qualified; prior case outcomes/order and population values are preserved.
-Types, build, governance and independent source review pass. Failed earlier runs stay in the
-append-only [exploration log](exploration/log.md); local proof is not remote CI or release proof.
+The full 1.0 goal remains active. On `c59e565b`, normal software verification passed
+**18,977 tests in 572 files** (696.41 seconds) and **seven performance tests in four files**
+(57.53 seconds). The canonical evidence preflight passed all 1,470 cases across 89 subjects,
+17 of which qualify. Governance and the production build passed separately. See the [exploration log](exploration/log.md).
 
-D4210's [one-edge correction](../rfc/archive/one-edge-collector-closure.md) is complete: actual
-local41 plus13 condition refs gives selector54. It removes an unacquired trade admission slot,
-retaining real two-capture recorded trade, Profile54, all other sources and legal denominators.
-D4211's exact reader census includes the availability reader and forbids it to create another
-population. Both close with path evidence; the source-local/history parents remain implementing.
+**D4200 durable availability** now carries per-decision source coverage through revision 10
+publication, reads, rebuild and account lifecycle. Five genuine revision 9 jobs upgrade through
+startup and the real worker. The Profile fix D4212 isolates corrupt and superseded cuts so healthy
+games remain visible. The current 200-game workload and Profile cost measurement still needs to run.
 
-The next accepted work is **D4200 durable availability**: original per-decision source coverage,
-revision10 and all seven derived families through atomic publication/read/rebuild/account
-lifecycle, actual revision9 upgrade and current workload/latency/lease/drain proof. The genuine
-schema35/revision9 fixture is committed408ffa1d. Current whole54 Profile fence stays until
-that coordinated implementation. Missing evidence must never become a statistical zero.
+D4179's Review and Inspector handoff now has legal stress and ordering controls. One exposure can
+carry 159 KB of original evidence, and Review's display order can differ from the producer's
+order. The amendment needs bounded Review summaries, exact Inspect links and focused detail.
+[Exposure research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11)
 
-Six of13 new outcome families qualify; seven remain. Existing14 compact native Nudge/Review
-pairs have separate actual REST/DOM/budget proof. D4167 reverse consumers, D4175's26 ordinary
-avoidance tuples, complete module/preset/workflow adoption, learner journeys and release proof
-remain. D3928's separate owner hold still blocks content/native/release; no official pack or
-whole capability/milestone is promoted by this checkpoint. Routine independent reviews are
-authorized; no new permission question is needed. The existing
-[foundation plan](foundation-source-identity/plan.md) carries execution detail.
+Six of the 13 new outcome families qualify. Seven still need qualification. D4167 reverse
+consumers, D4175's 26 ordinary avoidance tuples, full module and preset adoption, learner journeys
+and release proof remain. D3928 still holds content, native startup and release proof. No new
+official pack graduates. The [foundation plan](foundation-source-identity/plan.md) tracks
+implementation and verification.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

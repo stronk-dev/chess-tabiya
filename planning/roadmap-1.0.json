@@ -695,8 +695,8 @@
         "dependsOn": [],
         "nextAction": "Resolve the recorded historical D3702/D3703 diagnostic obligations without inventing causes; preserve the current complete local software/performance certificate and finish remaining release-proof obligations.",
         "latestCheckpoint": {
-          "at": "2026-11-10",
-          "summary": "Complete normal software on35d7cc5c passes18944tests/571files in660.52s, unchanged performance7/four in57.75s, all preflights and fresh1470canonical cases. Independent source review, types/build/governance also pass. D4210 exact one-edge source closure and D4211 reader census close with path evidence. Earlier failed runs remain logged. Historical D3702/D3703 diagnosis, D3885 and D3928 content/native/release holds remain; this is local software proof, not remote CI or a release.",
+          "at": "2026-11-11",
+          "summary": "Normal software at c59e565b passed 18,977 tests in 572 files (696.41s), seven performance tests in four files (57.53s) and all 1,470 canonical cases. The combined run stopped at governance on an unrouted measurement issue recorded during the run. D4213 closes that instrument defect. Governance and the production build then pass separately. Historical D3702/D3703 diagnosis, D3885 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
             "tools/d3367-provider-source-history/proof.ts",
@@ -974,10 +974,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
+        "nextAction": "Measure the current 200-game workload and Profile cost for D4200. Continue the remaining source qualifications and reverse consumer adoption under the existing contracts.",
         "latestCheckpoint": {
-          "at": "2026-11-10",
-          "summary": "D4200 revision 10 persists source-local coverage in seven atomic derived families. The genuine revision 9 fixture upgrades five saved jobs through production startup and worker publication, with reopen and rebuild parity. Focused worker, upgrade and bot suites pass 90 tests across three files. Account export, restore rederivation and deletion pass in the 31-test subject store suite. Complete software and the current 200-game cost run remain. Seven outcome qualifications, D4167, ordinary26 and D3928 remain open.",
+          "at": "2026-11-11",
+          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The 200-game cost measurement, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1865,10 +1865,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
+        "nextAction": "Measure the current 200-game workload and Profile cost for D4200. Continue the remaining source qualifications and reverse consumer adoption under the existing contracts.",
         "latestCheckpoint": {
-          "at": "2026-11-10",
-          "summary": "D4200 revision 10 persists source-local coverage in seven atomic derived families. The genuine revision 9 fixture upgrades five saved jobs through production startup and worker publication, with reopen and rebuild parity. Focused worker, upgrade and bot suites pass 90 tests across three files. Account export, restore rederivation and deletion pass in the 31-test subject store suite. Complete software and the current 200-game cost run remain. Seven outcome qualifications, D4167, ordinary26 and D3928 remain open.",
+          "at": "2026-11-11",
+          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The 200-game cost measurement, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/presentation-move-path.ts",
@@ -4734,10 +4734,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Finish the full software gate and current cost measurement for D4200, then continue source qualification and reverse consumer work.",
+        "nextAction": "Finish the current D4200 cost measurement and continue source qualification and reverse consumer work.",
         "latestCheckpoint": {
-          "at": "2026-11-10",
-          "summary": "Migration 36 and revision 10 preserve saved games while rebuilding seven derived families. Five genuine predecessor jobs pass startup invalidation, worker publication, reopen and repair. Migration rollback leaves revision 9 data intact on an index conflict. Coverage export, restore rederivation and deletion pass. The current cost run and full software gate remain. D3928 and broader learner-model work remain open.",
+          "at": "2026-11-11",
+          "summary": "Migration 36 and revision 10 preserve saved games while rebuilding seven derived families. Five genuine predecessor jobs pass startup invalidation, worker publication, reopen and repair. Migration rollback leaves revision 9 data intact on an index conflict. Coverage export, restore rederivation and deletion pass. D4212 isolates invalid Profile cuts. The 200-game cost run, D3928 and broader learner-model work remain.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/campaign-storage.test.ts",
@@ -5412,8 +5412,8 @@
         ],
         "nextAction": "Keep release blocked while completing foundation/consumer contracts, D3928 content migration and real native/appliance/release journeys. Preserve the current complete local software/performance certificate; it does not clear content, deployment, backup/restore or whole-product UX.",
         "latestCheckpoint": {
-          "at": "2026-11-10",
-          "summary": "Last complete local software certificate is35d7cc5c:18944tests/571files660.52s, unchanged performance7/four57.75s and all normal preflights. Fresh canonical1470/1470 preserves89subjects/17qualified and prior values/order. D4210/D4211 close boundedly. D4200 durable coverage/lifecycle/cost, seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content/native/release; zero new official packs graduate. No remote CI, deployment, full browser-matrix or release-candidate result is claimed.",
+          "at": "2026-11-11",
+          "summary": "Latest normal local software and performance passed on c59e565b with 18,977 tests in 572 files, seven performance tests in four files and all 1,470 canonical cases. D4200 durable storage and upgrade proof are present. The current cost run, seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content, native startup and release proof. Remote CI, deployment, browser matrix and release-candidate proof remain open.",
           "impact": "advanced",
           "evidence": [
             "Makefile",

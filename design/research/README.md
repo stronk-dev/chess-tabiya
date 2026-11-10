@@ -152,6 +152,11 @@ actual factory/collector/packet/module delivery and full joint acceptance remain
 `module-evidence-assembly.md` §Defender-exposure complete source and lost availability;
 normal prefix target; dated independent review.
 
+Review exposure delivery, 2026-11-11 (D4179). Both mirrored legal stress positions produce a
+159,151-byte source occurrence with 696 recapture nodes. The checking controls retain other
+events while exposure is unavailable. The returned amendment needs bounded summary and detail
+delivery. [V] `module-evidence-assembly.md` §Review defender-exposure payload size.
+
 Current-source joint gate cleared, 2026-10-15: independent reviewer explicitly accepts the
 complete coordinated contract after source and companion repairs. Internal landing-capture
 source now has genuine factory/route and25 permanent cases (20 initially red;99 focused pass).

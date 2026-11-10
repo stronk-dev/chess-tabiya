@@ -35022,7 +35022,7 @@
       "id": "D4179",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:65be2e6de75124386cd2e67f091c2ac47d82801ee17e5c09212785b40a612baa",
+      "sourceDigest": "sha256:1083e546960e5990eddbd281874d59387f9d37b09c7efaa261e6bf0132d9b826",
       "uxItems": [],
       "owner": "evidence-foundation"
     },
@@ -35321,6 +35321,15 @@
       "sourceDigest": "sha256:bcfabe734e4f526cf0d4e9e5d8fb0fcb5e609606d24c572919e5d502f2ec9c28",
       "uxItems": [],
       "evidence": "apps/server/src/learner-profile.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4213",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0050bf6beaaadf583030112d1b177754fda5f611c6a1a2c96389212b8954f4b4",
+      "uxItems": [],
+      "evidence": "tools/r12-player-style-harness/profile-source-cost.ts",
       "evidenceKind": "path"
     }
   ]

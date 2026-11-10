@@ -40721,3 +40721,42 @@ prove a changed source at the same sequence is excluded. SQL controls cover corr
 missing evaluations and malformed coverage in both read paths. Multiple sign/subject refinements
 still share one coverage entry per source. Coverage remains internal. Independent readback
 and 61 focused tests across three files pass. Full D4200 verification and cost remain pending.
+
+### 2026-11-11 — D4179 Review defender-exposure payload study
+
+The real factory and breadth closure were probed on 20 legal edges. The canonical cases had
+eight positives and eight quiet results. Both checking cases retained 46 other events beside
+the source-specific unavailable result. The two stress positions emitted 159,151 bytes and
+696 recapture nodes per original occurrence. The existing Inspector word/geometry budget
+would not constrain hidden JSON. The compact Review summary and explicit Inspector detail
+path need separate bounded delivery under the returned amendment. Fixed positions and the
+reproduction method are in design/research/module-evidence-assembly.md. No source code or
+test files changed during the D4200 gate.
+
+The same probe compared two-target occurrence order. White's direct factory returned a8 then
+d7, while the breadth closure returned d7 then a8. Black returned a1 then d2 in both. The
+handoff needs shared ordering plus an exact source-reference comparison. Review cannot pass a
+display index into Inspector or mint Inspector's grant-scoped occurrence key.
+
+A disposable model reused the existing exchange detail member grammar on the White stress
+position. It round-tripped all four original captures across 724 members and 91 pages, with a
+3,401-byte largest modeled page. Full traversal is suitable as a completeness test. The
+inspection contract needs direct access to the relevant capture and branch for normal use.
+These figures do not include production HTTP envelopes or source reacquisition.
+
+### 2026-11-11 — Revision 10 software verification and D4213
+
+Normal software on c59e565b passed 18,977 tests across 572 files in 696.41 seconds. All seven
+performance tests across four files passed in 57.53 seconds. The canonical preflight passed all
+1,470 cases across 89 subjects, including 17 qualified subjects. The combined command stopped at
+governance because D4213 was added during the run and remained unrouted. Governance and build
+are rerun after that work-state correction.
+
+The cost tool's exact final count check would reject the correct aggregate because Node SQLite
+uses null-prototype rows. The direct probe reproduced that failure and verified the normalized
+result accepts the expected fields while refusing a wrong count. The cost tool typecheck passed.
+Actual claim counts and lease renewals will be recorded with the 200-game run.
+
+The separate governance and production build command passed after D4213's closeout. Its work
+index has no unrouted rows, and roadmap checks R1–R10 are green. The software and performance
+results apply to the same application source and test files.

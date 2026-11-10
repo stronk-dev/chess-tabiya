@@ -4084,3 +4084,67 @@ ordinary holds resolve the returns. This authorizes implementation; it does not 
 qualify the new sources or deliver ordinary avoidance. D4175 retains26module pairs, fullD4167
 retains every reverse consumer. Source: existing compiler2 receipt, round3 decisions; accepted
 subject-safe-semantic-selection.md; current foundation plan.
+
+### Review defender-exposure payload size — D4179, 2026-11-11
+
+[V] The shipped exposure factory and its breadth closure agreed on eight positive and eight
+quiet canonical exposure edges. The two legal checking controls each produced
+`invalid_turn_clone` for exposure while the same closure retained 46 other events. A
+family-level empty check would lose this distinction. The largest canonical occurrence was
+3,274 JSON bytes. The largest canonical recapture tree had one node.
+[Canonical cases](../../packages/runtime/src/semantic-validation-cases.json),
+[checking controls](../../packages/runtime/src/defender-exposure-source.test.ts) and
+[breadth closure](../../packages/runtime/src/semantic-evidence.ts).
+
+[V] Two mirrored legal stress positions each emitted one exposure with four positive captures,
+696 recursive recapture nodes and a 159,151-byte original payload. These are fixture measurements.
+
+| Color | Before FEN | Move |
+|---|---|---|
+| White | `rN1rkN2/3q4/1n3n2/2B5/b5B1/8/8/R2RK3 w - - 0 1` | `c5b6` |
+| Black | `r2rk3/8/8/B5b1/2b5/1N3N2/3Q4/Rn1RKn2 b - - 0 1` | `c4b3` |
+
+To reproduce, play the given move legally and pass the canonical before and after FEN plus UCI
+to `invokeEvidenceValueRoute("derived.tactic.defender_exposure@2", edge)`. For each positive
+capture, count its top-level `branches` and recurse through each node's `continuation`. Measure
+`Buffer.byteLength(JSON.stringify(evidence.payload))`. The positive-capture payload includes
+the recursive branches and chosen line under the exchange convention.
+[Factory](../../packages/runtime/src/evidence-factories.ts) and
+[exchange result](../../packages/runtime/src/exchange.ts).
+
+[V] Review's memo currently retains flattened evidence from `postcommitEdgeEvidence`, which
+drops the exposure outcome. The existing dependent incoming-edge Inspector supplier already
+retains original target-factory results and distinguishes unavailable from quiet. The ordinary
+Inspector occurrence fitter budgets facts, words, marks and arrows. It does not measure JSON bytes.
+[Review relations](../../packages/runtime/src/review-map.ts),
+[post-commit edge](../../packages/runtime/src/postcommit-nudge.ts),
+[dependent Inspector](../../packages/runtime/src/inspector-dependent-source.ts) and
+[occurrence fitter](../../packages/runtime/src/module-query.ts).
+
+[V] The White two-target fixture returned a8 then d7 from the direct factory. The breadth
+closure returned d7 then a8. The Black fixture returned a1 then d2 in both. Passing a Review
+display index to Inspector's factory order would inspect the wrong target.
+[Two-target fixtures](../../packages/runtime/src/semantic-validation-cases.json) and
+[breadth event ordering](../../packages/runtime/src/semantic-evidence.ts).
+
+Independent design review proposes retaining the original factory ordinal before breadth sorts
+its event wrappers. Review would keep its display order. An inspect action would check the factory
+ordinal and evidence reference against Inspector's source response before opening its detail key.
+The existing source-page contract preserves producer order. [Module registration](../../rfc/module-registration.md)
+
+The returned D4179 amendment needs a bounded mechanical summary tied to the original evidence,
+source-specific unavailable state on the selected move and an on-demand detail path for the full
+continuation tree. The measured stress positions can verify pagination and transport bounds.
+
+[V] A disposable paging model applied the existing exchange member grammar and renderer to the
+White stress occurrence. It reconstructed all four original capture results after serializing
+and decoding every page, including exact branch order, chosen moves and stop decisions. The
+724 members took 91 pages at up to eight members and the existing 400-word limit. The largest
+modeled page was 3,401 JSON bytes and the full traversal was 300,996 bytes. The model included
+edge and controller context on every page. It did not measure HTTP envelopes, source acquisition
+time or mounted UI behavior. [Existing exchange detail members](../../packages/runtime/src/foundation-snapshot-detail.ts)
+
+The ordinary Inspect action should start with the defender change and the positive capture
+options. Focused detail should show a selected capture's exchange line or a selected branch's
+immediate continuations without making the learner page through unrelated branches. Keep a
+complete original-order traversal for auditing.

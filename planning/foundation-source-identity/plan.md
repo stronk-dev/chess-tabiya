@@ -2790,3 +2790,18 @@ prediction/import negatives pass93/three; types and independent bounded review p
 revision9 store behavior stays unchanged. Next integrate original per-source summaries/fold,
 all seven atomic families, expected cardinality and available-source crossjoins at revision10;
 semantic failure truth remains publication/rebuild duty, not this cheap context decoder.
+
+### 2026-11-11 — Current revision 10 software and benchmark preparation
+
+Normal software on c59e565b passed 18,977 tests in 572 files (696.41 seconds), seven
+performance tests in four files (57.53 seconds) and all 1,470 canonical evidence cases.
+D4212 verified healthy Profile cuts survive a corrupt or superseded cut. D4213 found that
+the cost tool's strict comparison rejected correct aggregate values from null-prototype
+SQLite rows. A direct Node SQLite control and the cost tool typecheck pass after normalization.
+The report now includes actual worker claims, renewals and claim time. The full 200-game
+measurement remains required.
+
+D4179 research measured both a large original payload and a divergent display order. The next
+amendment should keep factory ordinals through Review display sorting and provide the original
+occurrence through bounded Inspector detail. See the measured fixture and paging results in
+design/research/module-evidence-assembly.md.
