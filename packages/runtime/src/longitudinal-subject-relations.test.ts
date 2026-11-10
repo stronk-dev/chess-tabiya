@@ -79,10 +79,20 @@ describe("complete original subject-relation opportunity algebra", () => {
     expect(promotedRows.rows.filter(row => row.subject.rootSquare === "a7")).toEqual([]);
   });
 
-  it.each(SUBJECT_OUTCOME_FAMILIES)("%s preserves forced evaluated-zero and genuine unavailable instead of fabricating opportunities", family => {
+  it.each(SUBJECT_OUTCOME_FAMILIES)("%s preserves forced evaluated-zero and its own required-source availability", family => {
     const forced = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: owner("8/8/8/8/8/1r6/2k5/K7 w - - 0 1"), moveUci: "a1a2" });
     expect(subjectRelationIncidences(family, forced)).toMatchObject({ kind: "available", actor: "white", rows: [] });
     const unavailable = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: owner("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1"), moveUci: "e1e2" });
-    expect(subjectRelationIncidences(family, unavailable)).toEqual({ kind: "unavailable", family, reason: "counterfactual_population_incomplete" });
+    const result = subjectRelationIncidences(family, unavailable);
+    if (family === "loose_piece") expect(result).toEqual({ kind: "unavailable", family, reason: "counterfactual_population_incomplete" });
+    else {
+      expect(result.kind).toBe("available");
+      if (result.kind !== "available") throw Error(family);
+      expect(result.edge.moveUci).toBe("e1e2");
+      for (const row of result.rows) {
+        expect(row.legalAlternatives).toBeGreaterThan(0);
+        expect(row.comparableAlternatives).toBeLessThanOrEqual(row.legalAlternatives);
+      }
+    }
   });
 });

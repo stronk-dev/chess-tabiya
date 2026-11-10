@@ -11521,3 +11521,19 @@ The capture's Git guard checks tracked source directories only; it is not exhaus
 or untracked-source closure verification. No contamination was observed in this reviewed capture.
 The tool now states that limit and requires a separately reviewed capture checkpoint for future
 regeneration. No new source-hash mechanism or normal-CI regeneration dependency is introduced.
+
+### 2026-11-10 — D4200 bounded source-calculator implementation review
+
+The standing independent source reviewer accepts the calculator checkpoint after two readings.
+Original WIDE/played/frame membership authenticates before family evaluation; every root+child
+vector and legal/source ordering remains unchanged. Only the two exact known legacy causes are
+ignored for independent complete totals, while genuine missing mover-risk stays unavailable.
+Both-color12-move controls retain all13 complete families and a literal captured pawn count.
+Both-color2-move controls pin the original missing root risk, every available empty child risk
+and exact loose-event1 abstention. Actual pre-mint collector negatives reject missing, duplicate,
+unknown-ref and unknown-reason outcomes; no public forged receipt grants source authority.
+
+The reviewer performs no edits/tests/Git and attributes focused1096/eight and132/three to the
+root agent. Root subsequently verifies full types, disposable probe2/2, actual regenerated
+1470/1470cases/89subjects/17qualified and normal governance/build. Selector3, native incidence,
+whole54 history coverage, revision10 lifecycle and whole D4200 remain separate obligations.

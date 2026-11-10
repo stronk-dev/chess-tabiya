@@ -53,9 +53,18 @@ describe("actual complete family source operation", () => {
     expect(subjectOutcomesFromReceipt(value, owner(fen))).toEqual(result);
   });
 
-  it.each(SUBJECT_OUTCOME_FAMILIES)("%s retains evaluated-zero and typed-unavailable without shrinking legal inputs", async family => {
+  it.each(SUBJECT_OUTCOME_FAMILIES)("%s retains evaluated-zero and source-local availability without shrinking legal inputs", async family => {
     expect(await operation.invoke(input(family, "8/8/8/8/8/1r6/2k5/K7 w - - 0 1", "a1a2"))).toEqual({ kind: "completed", observations: [], abstentions: [] });
-    expect(await operation.invoke(input(family, "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1", "e1e2"))).toEqual({ kind: "unavailable", reason: "complete_alternative_population_unavailable" });
+    const result = await operation.invoke(input(family, "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1", "e1e2"));
+    if (family === "loose_piece") expect(result).toEqual({ kind: "unavailable", reason: "complete_alternative_population_unavailable" });
+    else {
+      expect(result.kind).toBe("completed");
+      if (result.kind !== "completed") throw Error(family);
+      expect(result.abstentions).toEqual([]);
+      for (const observation of result.observations) {
+        expect(observation.item.projection).toEqual({ id: `derived.semantic_avoidance.${family}`, version: 2 });
+      }
+    }
   });
 
   it("refuses unknown/extra grammar, missing/duplicate alternatives, roots, counters, children and digest changes", async () => {

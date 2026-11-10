@@ -40393,3 +40393,28 @@ Source runtime/selection and storage versions remain unchanged. D4200 stays doin
 startup/worker/reopen/rebuild/unknown-coverage and new worker cost/gates are still required.
 The independent receipt and existing plan own next work; checkpoint this verified preparation
 before changing production source or projector behavior. No content/native/release promotion.
+
+### 2026-11-10 — D4200 source-local calculator checkpoint
+
+The accepted availability contract now removes the condition calculator's blanket legacy-event
+refusal. Its exact two known ref/reason pairs remain checked; original WIDE source ownership,
+complete family vectors and all legal alternatives remain intact. Only the genuine missing
+required risk makes loose_piece unavailable. Selector2 and native/whole54 Profile fences remain
+unchanged until explicit selector3 coverage and coordinated durable revision10 implementation.
+
+New both-color12-move and2-move controls fail4/46 against the old source policy, then pass. The
+first broad run exposes36 old blanket expectations, then the next exposes13 remaining census/
+incidence expectations; these are updated to the accepted family-local contract. Final focused
+1096/eight pass30.40s. Stronger original root/child risk, both legacy causes and actual pre-mint
+missing/duplicate/unknown-ref/unknown-reason collector controls pass132/three6.04s, including
+production Profile consumption. An initial new test used an undefined helper; corrected the test
+to inspect the actual typed compile result and reran. Both disposable probe controls pass1.68s.
+
+Independent read accepts this bounded source-calculator checkpoint after the stronger controls;
+it does not accept downstream coverage or all D4200. Full types/Svelte0errors0warnings pass.
+Actual semantic-validation-update exits0:1470/1470cases,89subjects/17qualified,63population and
+8external receipts, regenerated after source changes. Normal roadmap-receipt verify-governance
+build exits0, with existing bundle-size warnings. No whole source qualification, partial-history
+publication, ordinary26 activation, content/native/release or remote-CI claim. The previous
+008115ac full software certificate predates this production change; rerun the complete normal
+software gate after this verified commit, before the next production item. D4200 remains doing.

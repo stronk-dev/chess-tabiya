@@ -149,13 +149,14 @@ describe("independent complete pawn/file outcome sources", () => {
     expect(receipt.targetCount).toBe(literalPawnOutcomeEvents(value.input.family as PawnOutcomeFamily, row, value.input.population.played.moveUci).length);
   });
 
-  it.each(PAWN_OUTCOME_FAMILIES)("%s keeps available empty/uniform distinct from unavailable inputs", family => {
+  it.each(PAWN_OUTCOME_FAMILIES)("%s keeps complete empty/uniform pawn inputs despite unrelated risk unavailability", family => {
     const quiet = PAWN_OUTCOME_POPULATIONS.find(row => row.id === "quiet.white")!;
     const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: owner(quiet.root), moveUci: quiet.plays[0]! });
     expect(result).toEqual({ kind: "available", values: [] });
     expect(readSubjectOutcomeInvocation(result).population.kind).toBe("available");
-    const missing = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: owner("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1"), moveUci: "e1e2" });
-    expect(missing).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+    const checked = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: owner("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1"), moveUci: "e1e2" });
+    expect(checked).toEqual({ kind: "available", values: [] });
+    expect(readSubjectOutcomeInvocation(checked).population.kind).toBe("available");
   });
 
   it.each(PAWN_OUTCOME_FAMILIES)("%s has nonvacuous positive/negative/mirror/counterfactual coverage", family => {

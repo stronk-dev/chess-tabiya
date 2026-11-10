@@ -32,6 +32,7 @@ import * as valueRoutes from "./internal/evidence-value-routes.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import { MOVE_IDENTITY_CONVENTION, exactLegalMoves } from "./legal-moves.js";
 import { assertSemanticEvidenceEvent, compileSemanticEvidenceEvent, legalAlternativeEdges, localSemanticEvents, selectLocalSemanticEvidence, selectSemanticEvidence } from "./semantic-evidence.js";
+import * as semanticCollectors from "./semantic-evidence.js";
 
 const ref = (id: string, version = 1) => ({ id, version } as const);
 const MIDDLEGAME = "r2q1rk1/pp2bppp/2n1bn2/2pp4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 10";
@@ -318,6 +319,26 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     const forged = { ...receipt, packet: { ...receipt.packet, candidates: receipt.packet.candidates.map((candidate) => candidate === row ? forgedRow : candidate) } };
     expect(() => assertCandidatePopulationReceipt(forged)).toThrow();
     expect(failureOf(compileCandidatePopulationForContract({ beforeFen: INITIAL_FEN, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE }, { rows: (rows) => rows.map((candidate) => candidate.moveUci === "e2e4" ? Object.freeze({ ...candidate, events: Object.freeze([rebuilt, ...candidate.events.slice(1)]) }) : candidate) }))).toEqual({ code: "invariant_failed", invariant: "receipt" });
+  });
+
+  it("refuses missing, duplicate, unknown and contradictory collector outcomes before minting a genuine receipt", () => {
+    const original = semanticCollectors.localSemanticCollectorOutcomes;
+    type Outcomes = ReturnType<typeof original>;
+    const mutations: readonly ((outcomes: Outcomes) => Outcomes)[] = [
+      () => [],
+      outcomes => [...outcomes, ...outcomes],
+      outcomes => outcomes.map(outcome => ({ ...outcome, projection: "rules.unknown.event@1" } as unknown as Outcomes[number])),
+      outcomes => outcomes.map(outcome => ({ ...outcome, result: { kind: "unavailable", reason: "unknown_reason" } } as unknown as Outcomes[number])),
+    ];
+    for (const mutate of mutations) {
+      const spy = vi.spyOn(semanticCollectors, "localSemanticCollectorOutcomes").mockImplementation(closure => mutate(original(closure)));
+      try {
+        const result = compileCandidatePopulation({ beforeFen: CHECK_EVASION, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+        expect(result.kind).toBe("failed");
+        if (result.kind !== "failed") throw Error("Invalid collector outcome minted an original receipt");
+        expect(result.error).toMatchObject({ code: "invariant_failed", invariant: "receipt" });
+      } finally { spy.mockRestore(); }
+    }
   });
 
   it("criterion 9: the closure is code-derived; a census only measures prevalence", () => {

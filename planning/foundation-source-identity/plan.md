@@ -2642,3 +2642,30 @@ Next: implement accepted source-local completeness and selector3 through existin
 owners. Then complete durable evaluations/revision10/all-seven-family/read/rebuild/account/cost
 and actual9→10 upgrade proof. Current predecessor input proof cannot discharge those steps.
 Keep current ordinary26, remaining seven qualifications and D3928 holds unchanged.
+
+### Source-local calculator checkpoint — 2026-11-10
+
+Accepted D4200 §1 now evaluates each family's actual required vector. The two exact known
+legacy ref/reason pairs no longer invalidate complete independent totals; unknown dependencies
+still refuse and missing modern root/child risk still makes only loose_piece unavailable.
+Both-color12-move discovered-check controls exercise all13 available families and literal captured
+pawn counts without dropping alternatives. Both-color2-move controls pin the actual unavailable
+root, both available empty child risks and exact loose-event abstentions. Pre-mint collector
+controls reject missing/duplicate/unknown-ref/unknown-reason outcomes through the actual owner.
+
+The four new source controls first fail against the old policy, then pass after the production
+change. Updated factory/population/validation/census/incidence expectations retain complete-zero
+versus real-unavailable semantics: focused1096/eight pass30.40s; strengthened boundary/Profile
+132/three pass6.04s. An initial additional test referenced a nonexistent helper; fixed the test
+to inspect the actual typed compile result and reran it. Independent review accepts this bounded
+checkpoint. Canonical receipt regeneration and final types/gates are recorded with their result
+in the append-only log before commit; earlier008115ac full software proof is not this new proof.
+
+Selector2's two population fences and the native/whole54 Profile gates deliberately remain in
+place. No partial history is published under revision9. Next: selector/consumer3's exact55-source
+coverage, family-local validation and then coordinated durable revision10/seven-family lifecycle.
+D4200 remains doing; no ordinary26, qualification, content/native/release or whole1.0 promotion.
+
+Final checkpoint verification: complete types/Svelte0errors0warnings, probe2/2, actual regenerated
+1470/1470cases/89subjects/17qualified/63population/eight external and normal governance/build
+pass. Commit this source slice, then rerun the full normal software gate before selector changes.

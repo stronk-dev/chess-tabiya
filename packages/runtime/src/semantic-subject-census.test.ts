@@ -25,7 +25,7 @@ describe("family-aware source census executes actual complete operations", () =>
       const run = runs.get(family)!;
       expect(run.invocations).toBe(3);
       expect(run.projection).toBe(`subject_outcomes:${family}`);
-      expect(run.unavailable).toEqual(["literal-census-2#1:complete_alternative_population_unavailable"]);
+      expect(run.unavailable).toEqual(family === "loose_piece" ? ["literal-census-2#1:complete_alternative_population_unavailable"] : []);
       const expected: string[] = [];
       for (const [index, row] of sampledEdges.entries()) {
         const compiled = compileCandidatePopulation({ beforeFen: row.edge.beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });

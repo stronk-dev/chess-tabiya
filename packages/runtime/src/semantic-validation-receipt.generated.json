@@ -9,7 +9,7 @@
     {
       "id": "runtime.semantic.bounded_target_batch",
       "version": 1,
-      "implementationDigest": "14d43a7e22dc6dc94dd9d148bb074e82d0b149cb909b0e603cf6cd7eeaeb93fd",
+      "implementationDigest": "35ac099ceff9f1965750abec040d240589cc00e6a444d9313138b9cde72080a9",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -201,7 +201,7 @@
     {
       "id": "runtime.semantic.breadth_edge",
       "version": 1,
-      "implementationDigest": "26999362ef07e1edd657e6a9e8d8516b130d9ec5176341098f4bccdd76bdb7d5",
+      "implementationDigest": "3788dfb3770754ee3822b9af623daff67399bb64aa90f6db43bae610c9e1c294",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -390,7 +390,7 @@
     {
       "id": "runtime.semantic.complete_alternatives",
       "version": 1,
-      "implementationDigest": "466ef86e230c78b7476ea9c8aef6a8102e80eb73a13c806802b80e33ed37b7b4",
+      "implementationDigest": "d80dd9f99d1ff90f0454709c77d437a8d4cf872a02b3d2d4df3fad3b21f9e5e9",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -579,7 +579,7 @@
     {
       "id": "runtime.semantic.duty_edge",
       "version": 1,
-      "implementationDigest": "042b41bda94eca706698cff93daabdc85f1bae332804f81eb88faaddd13d409d",
+      "implementationDigest": "843268969a5e50bc261801491cabbd6488606bd66937a89b4b36f63f7e776a97",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -768,7 +768,7 @@
     {
       "id": "runtime.semantic.foundation_edge",
       "version": 1,
-      "implementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "implementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -957,7 +957,7 @@
     {
       "id": "runtime.semantic.local_edge",
       "version": 1,
-      "implementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "implementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -1146,7 +1146,7 @@
     {
       "id": "runtime.semantic.recorded_path",
       "version": 1,
-      "implementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "implementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -1335,7 +1335,7 @@
     {
       "id": "runtime.semantic.recorded_sequence",
       "version": 1,
-      "implementationDigest": "f9e8ffab15ce61193b2ce6481f849ad8ae78fbc9cf6c0426c7f2dc90c23faa18",
+      "implementationDigest": "e6c33620b150905f32bc80c0596711f76fca7fdb89df6bf2e86195bb93ffa472",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -1524,7 +1524,7 @@
     {
       "id": "runtime.semantic.structural_edge",
       "version": 1,
-      "implementationDigest": "0211fcee1736dcd6f6754fa614ea7ac4ce4b10ca63c513bc7a86de69325008ff",
+      "implementationDigest": "4a96d869be43d788f14656caea2ec63ba913c3fece71cbdfc8c7a8ed47f74795",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -1713,7 +1713,7 @@
     {
       "id": "runtime.semantic.subject_outcomes",
       "version": 1,
-      "implementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "implementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -1902,7 +1902,7 @@
     {
       "id": "runtime.semantic.transition_edge",
       "version": 1,
-      "implementationDigest": "7d2b8cb28221885726e375ca6a62eea5a671ab8fa528fbea0887187aafd26fac",
+      "implementationDigest": "0798058cf7cc48ec872e0fb83ff7a2a74660c48058771b26892d143c61375e7a",
       "files": [
         "packages/runtime/src/assistance-codec.ts",
         "packages/runtime/src/assistance-exchange-digest.ts",
@@ -86622,7 +86622,7 @@
       "id": "r2-2026-07.dfcf7743b03e5938",
       "subject": "event:derived.activity.event.file_access_revealed@1",
       "operation": "runtime.semantic.foundation_edge",
-      "predicateImplementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "predicateImplementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86641,7 +86641,7 @@
       "id": "r2-2026-07.c8722a88462c005f",
       "subject": "event:derived.activity.event.file_state@1",
       "operation": "runtime.semantic.foundation_edge",
-      "predicateImplementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "predicateImplementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86660,7 +86660,7 @@
       "id": "r2-2026-07.5784f239aa95f0d5",
       "subject": "event:derived.activity.event.open_file_occupancy@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86679,7 +86679,7 @@
       "id": "r2-2026-07.58a2be554bac66f3",
       "subject": "event:derived.exchange.capture_class@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86698,7 +86698,7 @@
       "id": "r2-2026-07.27727cd17a507246",
       "subject": "event:derived.exchange.trade_completed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86717,7 +86717,7 @@
       "id": "r2-2026-07.a0ef006747b77301",
       "subject": "event:derived.king.captured_zone_defender@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86736,7 +86736,7 @@
       "id": "r2-2026-07.71de92b55c362adb",
       "subject": "event:derived.pawn.event.transitions@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86755,7 +86755,7 @@
       "id": "r2-2026-07.2022a70c8e62c21f",
       "subject": "event:derived.pawn.sequence.contact_timing@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86774,7 +86774,7 @@
       "id": "r2-2026-07.6c35e5dd94ce25ab",
       "subject": "event:derived.pawn.sequence.harassment_pressure@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86793,7 +86793,7 @@
       "id": "r2-2026-07.457d91d225f925a1",
       "subject": "event:derived.semantic_avoidance.backward_pawn@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86803,16 +86803,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "8da48d01b33b42059fd3f4aaa7a6995efff202b64beca5c6772311c286ea9c3a",
-        "positiveCount": 343,
-        "abstainedCount": 257
+        "sha256": "7f0b26fe5c1bb56b71fc233bb1fec21e7da1be8fb71bd43481c3440307d1394b",
+        "positiveCount": 596,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.9396f3d07d56ae9d",
       "subject": "event:derived.semantic_avoidance.direct_attack_count@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86822,16 +86822,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "3dd7013fc02dfadc875e3829995a4e62876c6562a74f6e67b172f9ae165832b5",
-        "positiveCount": 27538,
-        "abstainedCount": 257
+        "sha256": "e805c72ade8fa8a541a6549cba7569fe9c1318d7d52e0f36d29e6f4f85306dfe",
+        "positiveCount": 50867,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.a87e4345d2b6061c",
       "subject": "event:derived.semantic_avoidance.doubled_pawn@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86841,16 +86841,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "97247c8d50006dc72c93c2db21f56ae46f5c1263e2db153b41d0bdfa6a79360e",
-        "positiveCount": 74,
-        "abstainedCount": 257
+        "sha256": "aaafab7eefd9eb8462928ef5548a8b9eecf2ea245cdb98b5c5a616d5f6f21376",
+        "positiveCount": 124,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.5ed82429cd66b5ad",
       "subject": "event:derived.semantic_avoidance.half_open_file@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86860,16 +86860,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "17994f64615b28ddea2ecca47859f5afd647aaef9389dd1fc490105aadaf1ecc",
-        "positiveCount": 442,
-        "abstainedCount": 257
+        "sha256": "134375a05101bcb8bd590a2ec1bd604980222e9f5e21f1645d612514992e1834",
+        "positiveCount": 807,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.052bd4a016ba8708",
       "subject": "event:derived.semantic_avoidance.isolated_pawn@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86879,16 +86879,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "75c3fe29db530c7031d19c33cc2393845f8dc0339df571082ec1a1b50a963226",
-        "positiveCount": 197,
-        "abstainedCount": 257
+        "sha256": "21e4153efb958f3d2e03bc074beb1d7540a91002a22a7e7939de8cf57401f92b",
+        "positiveCount": 396,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.f5bfb2908176b379",
       "subject": "event:derived.semantic_avoidance.king_opposition@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86898,16 +86898,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "35a04f065f76a39bd697d173b6de5783fe266e1a847320522687af0d00fd43c8",
-        "positiveCount": 0,
-        "abstainedCount": 257
+        "sha256": "fee518e11d63f3da92337a389c032705dc66199c141fc3e250f6420863e6d8ed",
+        "positiveCount": 7,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.f3946738a3978fdc",
       "subject": "event:derived.semantic_avoidance.king_zone@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86917,16 +86917,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "6d19091dd76900120f09d40ca04a29dcb2231e90e4a3720a75add71cc1ba8707",
-        "positiveCount": 316,
-        "abstainedCount": 257
+        "sha256": "5df5a61cff877e73ff6335cf410b9df74b19856fab626ad41f53c7b3660d2ac1",
+        "positiveCount": 573,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.a6704697da5ab75d",
       "subject": "event:derived.semantic_avoidance.line_blockers@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86936,16 +86936,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "0dabc03e40cb3f6ca2b38a8293270d060e891f3d2ae3847a067dc73c29d41616",
-        "positiveCount": 8363,
-        "abstainedCount": 257
+        "sha256": "76291a721f1fcfa66e37c106b467fbf73dc22f68e57a05c6eef5493156a1c215",
+        "positiveCount": 14615,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.21211acb9c8bb5fc",
       "subject": "event:derived.semantic_avoidance.loose_piece@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86955,16 +86955,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "5b2d6291842ff0f21335cd77756bf017af217d7c71ba82bd1f4715926afe2994",
-        "positiveCount": 1614,
-        "abstainedCount": 257
+        "sha256": "1b9e9bddbc746537026f5b2b647227917f16a2b5ab02974524a2c42e2cd0f11e",
+        "positiveCount": 2818,
+        "abstainedCount": 17
       }
     },
     {
       "id": "r2-2026-07.b7d026944c1d43c6",
       "subject": "event:derived.semantic_avoidance.open_file@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86974,16 +86974,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "b2ff95a74c1a7ccd8544917776f84e1c2401544f1c65488eaf520b105e17ee59",
-        "positiveCount": 106,
-        "abstainedCount": 257
+        "sha256": "3ead1ee13447edc46ab0f370497880c0523c21c974e3f583ad51e29d244d7212",
+        "positiveCount": 197,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.d27b785fc0e6007a",
       "subject": "event:derived.semantic_avoidance.passed_pawn@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -86993,16 +86993,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "fd69e022292b948e6e2fd9d5644fef4ec89896b2b774e4effaf87dbe72dc6f1d",
-        "positiveCount": 54,
-        "abstainedCount": 257
+        "sha256": "49654dcb98245ed16187985729cc78fb4c4cb8673d7a64e5582251fe349fbca3",
+        "positiveCount": 133,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.52da85e04f4338c1",
       "subject": "event:derived.semantic_avoidance.pawn_islands@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87012,16 +87012,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "059e5bcb74364c7af85d3b6f55af9862269aa6315a1193c924593c3d84e063b7",
-        "positiveCount": 191,
-        "abstainedCount": 257
+        "sha256": "abeba51b7141a00f3e1d2c084492ca46a7d0042f5d04ab05c767c3ae5ca839b0",
+        "positiveCount": 343,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.fc46115f6e75054a",
       "subject": "event:derived.semantic_avoidance.piece_count@2",
       "operation": "runtime.semantic.subject_outcomes",
-      "predicateImplementationDigest": "9ddf49959e7b29f608fe034a4f86b87444181397503360e32f456e1b3e6303ec",
+      "predicateImplementationDigest": "1d8f04523f936ebf90deeb6cd2509adfc69b095104a0099a4ae617ed17597676",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87031,16 +87031,16 @@
       },
       "result": {
         "version": 1,
-        "sha256": "c3441850dda2bb52442d05589aa9eadce9491396f2447a2c030b1c9caef73248",
-        "positiveCount": 367,
-        "abstainedCount": 257
+        "sha256": "837bf3ed13d8da39a177d30ec3924c49d0c5589ba1c03c356988aa71a91b9743",
+        "positiveCount": 703,
+        "abstainedCount": 0
       }
     },
     {
       "id": "r2-2026-07.ff56d31447fdc153",
       "subject": "event:derived.structural.event.pawn_file_group@1",
       "operation": "runtime.semantic.foundation_edge",
-      "predicateImplementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "predicateImplementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87059,7 +87059,7 @@
       "id": "r2-2026-07.cdbc2a90a40374b6",
       "subject": "event:derived.tactic.attraction_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87078,7 +87078,7 @@
       "id": "r2-2026-07.a7f7f9ddcfff8923",
       "subject": "event:derived.tactic.check_zwischenzug_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87097,7 +87097,7 @@
       "id": "r2-2026-07.74e6e797d09c71f5",
       "subject": "event:derived.tactic.deflection_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87116,7 +87116,7 @@
       "id": "r2-2026-07.9da87bd56355e6a2",
       "subject": "event:derived.tactic.discovered_executed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87135,7 +87135,7 @@
       "id": "r2-2026-07.aa64d339c15f1332",
       "subject": "event:derived.tactic.interference_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87154,7 +87154,7 @@
       "id": "r2-2026-07.a8bb0a8280423d83",
       "subject": "event:derived.tactic.line_blocker_clearance_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87173,7 +87173,7 @@
       "id": "r2-2026-07.8d2d920dfe4f71d4",
       "subject": "event:derived.tactic.overload_exploitation_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87192,7 +87192,7 @@
       "id": "r2-2026-07.09594c49b39b8b61",
       "subject": "event:derived.tactic.sequence.defender_consequence@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87211,7 +87211,7 @@
       "id": "r2-2026-07.b6b2ed672c753ebb",
       "subject": "event:derived.tactic.square_clearance_observed@2",
       "operation": "runtime.semantic.recorded_path",
-      "predicateImplementationDigest": "92631ab48dcb9be8244eb9732c2039fdee81dd1864a399051850720ec8a24294",
+      "predicateImplementationDigest": "1a80fa7192a98ebf893dd3ccef41de3ac73c82be88c15f25758770beb9d9df0c",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87230,7 +87230,7 @@
       "id": "r2-2026-07.0543e291a34186ab",
       "subject": "event:rules.castling.event.rights_lost@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87249,7 +87249,7 @@
       "id": "r2-2026-07.e274b77e7afa23b7",
       "subject": "event:rules.king.event.zone_state@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87268,7 +87268,7 @@
       "id": "r2-2026-07.659965fb5f65047a",
       "subject": "event:rules.mobility.event.piece_destinations@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87287,7 +87287,7 @@
       "id": "r2-2026-07.2f9851d75b706f58",
       "subject": "event:rules.pawn.event.dynamics@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87306,7 +87306,7 @@
       "id": "r2-2026-07.b4260187a4dd4291",
       "subject": "event:rules.square.event.control@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87325,7 +87325,7 @@
       "id": "r2-2026-07.702a06ee9087dc25",
       "subject": "event:rules.structural.event.backward_pawn@2",
       "operation": "runtime.semantic.foundation_edge",
-      "predicateImplementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "predicateImplementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87344,7 +87344,7 @@
       "id": "r2-2026-07.6ab973cae6defe3b",
       "subject": "event:rules.structural.event.direct_attack_count@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87363,7 +87363,7 @@
       "id": "r2-2026-07.4d977b762b7fb004",
       "subject": "event:rules.structural.event.king_opposition@2",
       "operation": "runtime.semantic.foundation_edge",
-      "predicateImplementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "predicateImplementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87382,7 +87382,7 @@
       "id": "r2-2026-07.f3e6969bbb11723f",
       "subject": "event:rules.structural.event.king_zone@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87401,7 +87401,7 @@
       "id": "r2-2026-07.03a67da8e9180882",
       "subject": "event:rules.structural.event.passed_pawn@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87420,7 +87420,7 @@
       "id": "r2-2026-07.be264ed2b0c55a04",
       "subject": "event:rules.structural.event.pawn_islands@2",
       "operation": "runtime.semantic.foundation_edge",
-      "predicateImplementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "predicateImplementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87439,7 +87439,7 @@
       "id": "r2-2026-07.52d3ff0c83458e23",
       "subject": "event:rules.structural.event.piece_count@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87458,7 +87458,7 @@
       "id": "r2-2026-07.196874b275300e57",
       "subject": "event:rules.tactic.consequence.reply_breadth@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87477,7 +87477,7 @@
       "id": "r2-2026-07.e204e1cee4ebfde1",
       "subject": "event:rules.tactic.event.check@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87496,7 +87496,7 @@
       "id": "r2-2026-07.f0e39cf297e3a8e3",
       "subject": "event:rules.tactic.event.defender_duty_relocated@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87515,7 +87515,7 @@
       "id": "r2-2026-07.ece3eb09023f9f43",
       "subject": "event:rules.tactic.event.defender_removed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87534,7 +87534,7 @@
       "id": "r2-2026-07.fcbc89975a869759",
       "subject": "event:rules.tactic.event.double_attack@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87553,7 +87553,7 @@
       "id": "r2-2026-07.18505960aa940541",
       "subject": "event:rules.tactic.event.loose_piece@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87572,7 +87572,7 @@
       "id": "r2-2026-07.13d0d64d74548b64",
       "subject": "event:rules.transition.event.capture@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87591,7 +87591,7 @@
       "id": "r2-2026-07.5bc27d00667b386e",
       "subject": "event:rules.transition.event.castled@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87610,7 +87610,7 @@
       "id": "r2-2026-07.8e1cfbd072bfd2a0",
       "subject": "event:rules.transition.event.checkmate@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87629,7 +87629,7 @@
       "id": "r2-2026-07.96f1ad7ece12a739",
       "subject": "event:rules.transition.event.clock_reset@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87648,7 +87648,7 @@
       "id": "r2-2026-07.bb30d2307214ef97",
       "subject": "event:rules.transition.event.defended_duty@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87667,7 +87667,7 @@
       "id": "r2-2026-07.be25b2ca0f470d72",
       "subject": "event:rules.transition.event.developed@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87686,7 +87686,7 @@
       "id": "r2-2026-07.811a4e0292e9a51d",
       "subject": "event:rules.transition.event.last_of_role@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87705,7 +87705,7 @@
       "id": "r2-2026-07.c1686b9e6c58958e",
       "subject": "event:rules.transition.event.occupied_attack@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87724,7 +87724,7 @@
       "id": "r2-2026-07.d06d6e7543a3c910",
       "subject": "event:rules.transition.event.occupied_defence@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87743,7 +87743,7 @@
       "id": "r2-2026-07.55e8a71ee53306d4",
       "subject": "event:rules.transition.event.pawn_contact@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87762,7 +87762,7 @@
       "id": "r2-2026-07.b1cf552d974b5b30",
       "subject": "event:rules.transition.event.piece_escape@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87781,7 +87781,7 @@
       "id": "r2-2026-07.54fe2dfc7a7b90bc",
       "subject": "event:rules.transition.event.promotion@1",
       "operation": "runtime.semantic.local_edge",
-      "predicateImplementationDigest": "ca268dedcab479d16914de0a844e24dd36ebb326a7c651bed2e9de3ba160f26b",
+      "predicateImplementationDigest": "2fe2b45395d8452aa4d78e459672eca6c5092a9b62b5202a5bb7fb99627283dd",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,
@@ -87800,7 +87800,7 @@
       "id": "r2-2026-07.e3053d7c9cdafff6",
       "subject": "event:rules.transition.event.slider_ray@2",
       "operation": "runtime.semantic.foundation_edge",
-      "predicateImplementationDigest": "51c95130001ad0b9221cfcb10f272ed6d0b067a6265a826fa0a87d3f4457299e",
+      "predicateImplementationDigest": "e410aa81673dae425e0e86baa204c84d3cde13dd14c04476e8305e02372999a9",
       "input": {
         "id": "r2-imported-sample-2026-07",
         "version": 1,

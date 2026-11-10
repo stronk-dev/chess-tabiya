@@ -423,3 +423,16 @@ under the unchanged1fact/80word Structure or1fact/60word Theory budget and repor
 exists than fits. Neither source unavailability nor fit loss means no theory exists. Existing
 Structure ordering still prevents authored patterns from winning its one-fact selection (D4095);
 the current source migration does not claim to repair that selector or complete the module.
+
+## Source-local condition availability
+
+The thirteen subject-outcome factories evaluate their own complete root and legal-child source
+vectors. A known legacy loose-piece or defender-exposure event failure does not erase independent
+count, pawn, file, geometry or other complete totals. A missing required mover-risk reading still
+makes the loose-piece condition unavailable; it never becomes a false predicate or a zero.
+Every original legal alternative stays in the population. Unknown collector dependencies refuse.
+
+This calculator change is the first part of `rfc/source-local-evidence-availability.md`.
+The research selector2 and stored Profile composer retain their conservative population fences
+until the coordinated selector3 coverage and revision10 persistence changes land. It does not
+activate ordinary avoidance modules or expose partial history as complete statistics.

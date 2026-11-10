@@ -166,7 +166,14 @@ export function computeSubjectOutcomes<F extends SubjectOutcomeFamily>(family: F
   if (playedIndex < 0) throw new TypeError("Subject outcomes lost the original played row");
   const positions = [frame.root, ...frame.candidates.map(row => row.position)];
   const vectors = positions.map(position => familyInputs(family, position));
-  if (frame.candidates.some(row => row.row.abstentions.length !== 0) || vectors.some(vector => vector === null)) {
+  // The original receipt has already joined each published abstention to its sealed outcome.
+  // These two legacy event failures do not erase independent total-source populations. Keep
+  // this closure exact: a future collector/reason must declare its dependencies before use.
+  for (const { row } of frame.candidates) for (const failure of row.abstentions) {
+    if (failure.reason !== "invalid_turn_clone" || (failure.projection !== "rules.tactic.event.loose_piece@1"
+      && failure.projection !== "derived.tactic.defender_exposure@2")) throw new TypeError("Unknown candidate source availability dependency");
+  }
+  if (vectors.some(vector => vector === null)) {
     return Object.freeze({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
   }
   const inputs = Object.freeze([...positions.map(position => position.common[0]), ...vectors.flatMap(vector => vector!)]);

@@ -60,16 +60,17 @@ describe("source-owned subject outcome factory boundary", () => {
     expect(() => readSubjectOutcomeInvocation({ ...result })).toThrow(/original/);
   });
 
-  it.each(SUBJECT_OUTCOME_FAMILIES)("%s retains original complete available-empty and unavailable result membership", family => {
+  it.each(SUBJECT_OUTCOME_FAMILIES)("%s retains original complete-empty and source-local result membership", family => {
     const receipt = owner("8/8/8/8/8/1r6/2k5/K7 w - - 0 1");
     const empty = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt, moveUci: "a1a2" });
     expect(empty).toEqual({ kind: "available", values: [] });
     expect(readSubjectOutcomeInvocation(empty).receipt).toBe(receipt);
     expect(readSubjectOutcomeInvocation(empty).inputs[0]).toBe(receipt.legalMovesInput);
-    // The current source closure genuinely abstains on this checked root; never shrink legal set.
+    // Only loose_piece depends on the missing root risk; the other total vectors are intact.
     const checked = owner("7k/8/8/8/8/8/8/r6K w - - 0 1");
     const unavailable = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: checked, moveUci: checked.packet.candidates[0]!.moveUci });
-    expect(unavailable).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+    if (family === "loose_piece") expect(unavailable).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+    else expect(unavailable.kind).toBe("available");
     expect(readSubjectOutcomeInvocation(unavailable).receipt).toBe(checked);
     expect(() => readSubjectOutcomeInvocation({ ...unavailable })).toThrow(/original/);
   });

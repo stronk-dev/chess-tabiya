@@ -1,5 +1,5 @@
-// DISPOSABLE D4200 research: measures an accepted conservative policy; not a successor
-// implementation, source qualification, ordinary assistance binding or release/CI gate.
+// DISPOSABLE D4200 research: the original policy measurement is retained in the dossier/log;
+// this replay checks the accepted source-local repair, not source qualification or a CI gate.
 import { describe, expect, it } from "vitest";
 import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, readCandidateFoundationSources } from "../../packages/runtime/src/candidate-population.js";
 import { assertDeclaredEvidence } from "../../packages/runtime/src/evidence-contract.js";
@@ -50,14 +50,14 @@ describe("D4200 source-local availability versus global canonical abstentions", 
     const familyResults = ["doubled_pawn", "isolated_pawn", "open_file", "half_open_file", "pawn_islands", "piece_count", "loose_piece"] as const;
     const results = familyResults.map(family => ({ family,
       result: invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt, moveUci }) }));
-    // This documents the current policy. Any change needs its own reviewed source/selection
-    // contract; this exploratory expectation is never treated as proof the policy is desirable.
-    for (const { result } of results) expect(result).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+    // Source-local availability is now independently accepted in its own RFC. These complete
+    // vectors must survive the unrelated legacy event failure; the root-risk control stays red.
+    for (const { result } of results) expect(result.kind).toBe("available");
     console.log(JSON.stringify({ question: "D4200", beforeFen, moveUci, legalMembers: receipt.packet.candidates.length,
       completePositions: positions.length, completeSourcesPerPosition: { legal: 1, connectivity: 1, group: 1, fileState: 1, counts: 12 },
       canonicalAbstentions: receipt.packet.candidates.flatMap(row => row.abstentions.map(value => ({ move: row.moveUci, ...value }))),
       riskUnavailablePositions: positions.filter(position => position.risk.kind === "unavailable").length,
       outcomes: results.map(({ family, result }) => ({ family, kind: result.kind })),
-      scope: "Original legal/member/source vectors are present; current global policy suppresses every family. No source/selector policy change or invented risk value." }));
+      scope: "Accepted source-local repair preserves the original complete vectors despite the unrelated legacy event failure. No selector activation or invented risk value." }));
   });
 });

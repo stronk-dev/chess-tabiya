@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
+import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, readCandidateFoundationSources, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
 import { computeSubjectOutcomes } from "./semantic-subject-outcomes.js";
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
+import { mirrorSemanticFen, mirrorSemanticUci } from "./semantic-validation.js";
 
 const capture = "7k/8/8/3p4/2P5/8/3P4/7K w - - 0 1";
 function receipt(fen: string): CandidatePopulationReceipt<CandidateWideScope> {
@@ -18,6 +19,53 @@ const positive: { readonly [F in SubjectOutcomeFamily]: readonly [string, string
 };
 
 describe("thirteen exact root subject outcome calculations", () => {
+  it.each([false, true])("an unrelated discovered-check abstention preserves all thirteen complete families (mirrored=%s)", mirrored => {
+    const fen = "k7/8/8/8/8/1p6/PP6/R6K w - - 0 1", move = "a2b3";
+    const owner = receipt(mirrored ? mirrorSemanticFen(fen, "color_and_vertical") : fen);
+    const played = mirrored ? mirrorSemanticUci(move, "color_and_vertical") : move;
+    expect(owner.packet.candidates).toHaveLength(12);
+    expect(owner.packet.candidates.find(row => row.moveUci === played)!.abstentions).toEqual([
+      { projection: "derived.tactic.defender_exposure@2", reason: "invalid_turn_clone" },
+    ]);
+    for (const family of SUBJECT_OUTCOME_FAMILIES) {
+      const result = computeSubjectOutcomes(family, owner, played);
+      expect(result.kind, family).toBe("available");
+      if (result.kind !== "available") throw Error(family);
+      expect(result.inputs[0]).toBe(owner.legalMovesInput);
+      for (const subject of result.population.subjects) {
+        expect(subject.alternatives.map(row => row.moveUci)).toEqual(owner.packet.candidates.filter(row => row.moveUci !== played).map(row => row.moveUci));
+      }
+      if (family === "piece_count") {
+        const victim = result.population.subjects.find(row => row.subject.kind === "piece_count" && row.subject.color === (mirrored ? "white" : "black") && row.subject.role === "pawn");
+        expect(victim).toMatchObject({ root: { kind: "present", value: 1 }, played: { kind: "present", value: 0 }, playedRelation: "decrease" });
+      }
+    }
+  });
+
+  it.each([false, true])("a missing required root risk leaves only loose-piece outcomes unavailable (mirrored=%s)", mirrored => {
+    const fen = "7k/8/8/8/8/8/8/r6K w - - 0 1", move = "h1h2";
+    const owner = receipt(mirrored ? mirrorSemanticFen(fen, "color_and_vertical") : fen);
+    const played = mirrored ? mirrorSemanticUci(move, "color_and_vertical") : move;
+    expect(owner.packet.candidates).toHaveLength(2);
+    const frame = readCandidateFoundationSources(owner);
+    expect(frame.root.risk).toEqual({ kind: "unavailable", reason: "invalid_turn_clone" });
+    for (const child of frame.candidates) {
+      expect(child.row.abstentions).toEqual([{ projection: "rules.tactic.event.loose_piece@1", reason: "invalid_turn_clone" }]);
+      expect(child.position.risk.kind).toBe("available");
+      if (child.position.risk.kind !== "available") throw Error("Expected genuine empty child risk");
+      expect(child.position.risk.value.payload.pieces).toEqual([]);
+    }
+    for (const family of SUBJECT_OUTCOME_FAMILIES) {
+      const result = computeSubjectOutcomes(family, owner, played);
+      if (family === "loose_piece") expect(result).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+      else {
+        expect(result.kind, family).toBe("available");
+        if (result.kind !== "available") throw Error(family);
+        for (const subject of result.population.subjects) expect(subject.alternatives).toHaveLength(1);
+      }
+    }
+  });
+
   const literal = [
     { family: "backward_pawn", subject: { kind: "backward_pawn", color: "black", rootSquare: "e6" }, parameters: {}, root: true, played: false, alternative: "h1g1", outcome: true, relation: "true_to_true" },
     { family: "doubled_pawn", subject: { kind: "doubled_pawn", color: "white", file: "d" }, parameters: {}, root: false, played: false, alternative: "c4d5", outcome: true, relation: "false_to_true" },

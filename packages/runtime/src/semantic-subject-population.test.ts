@@ -77,9 +77,16 @@ describe("internal source-owned complete subject population", () => {
     expect(mutablePaths(table)).toEqual([]);
   });
 
-  it.each(SUBJECT_OUTCOME_FAMILIES)("%s authenticates unavailable result ownership without claiming an empty complete table", family => {
+  it.each(SUBJECT_OUTCOME_FAMILIES)("%s authenticates source-local availability without claiming unknown means empty", family => {
     const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: owner("4k3/8/8/8/8/8/4r3/4K3 w - - 0 1"), moveUci: "e1e2" });
-    expect(readSubjectOutcomePopulation(family, result)).toEqual({ kind: "unavailable", family, reason: "counterfactual_population_incomplete" });
+    const table = readSubjectOutcomePopulation(family, result);
+    if (family === "loose_piece") expect(table).toEqual({ kind: "unavailable", family, reason: "counterfactual_population_incomplete" });
+    else {
+      expect(table.kind).toBe("available");
+      if (table.kind !== "available") throw Error(family);
+      expect(table.population.family).toBe(family);
+      for (const row of table.population.subjects) expect(row.alternatives.length).toBeGreaterThan(0);
+    }
     expect(() => readSubjectOutcomePopulation(family, { ...result })).toThrow(/original/);
   });
 });

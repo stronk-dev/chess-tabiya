@@ -23,9 +23,11 @@ D4200's coordinated source/selector/history availability contract is independent
 Genuine schema35/revision9 input is captured before code changes: five actual production jobs,
 all six predecessor families, both availability controls and a standalone877KB fixture with
 passing restore/type checks and bounded independent review. This is not the revision10 upgrade.
-Next, implement the accepted contract: a known unrelated legacy event abstention must not
-suppress complete required-family sources. Unknown coverage must stay explicit through selection, stored opportunity denominators,
-proofs and rebuilds. Changing only the calculator leaves downstream whole-population refusals.
+The source calculator now preserves all13 complete families on the real unrelated-abstention
+witness and leaves only the genuinely missing risk-dependent family unavailable, in both colors.
+Focused source and production-boundary checks pass. Next implement selector3 and durable revision10
+coverage: unknowns must remain explicit through selected facts, stored opportunity denominators,
+proofs and rebuilds. The downstream whole-population fences remain in place until then.
 Then finish the seven outcome-family qualifications and D4167 reverse consumers: Sight,
 Play/Compare, both comparisons, guidance/voice/speech, typed bot/replay/policy and authored migration.
 D4175's26 ordinary avoidance tuples also need shared acquisition, strict receiving and cost proof.
