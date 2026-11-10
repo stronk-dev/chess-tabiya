@@ -89,7 +89,8 @@
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
         "phase-source-composition.md",
-        "subject-safe-semantic-selection.md"
+        "subject-safe-semantic-selection.md",
+        "source-local-evidence-availability.md"
       ],
       "completion": {
         "evidence": [
@@ -973,10 +974,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Author and independently review the coordinated D4200 source/selector/history availability amendment, including typed unknown coverage and rebuild consequences; then implement it, finish seven outcome-family qualifications and D4167 reverse consumers. Ordinary26 and D3928 content/native/release remain held.",
+        "nextAction": "Capture genuine current revision9 output, then implement the independently accepted D4200 source/selector3/durable-coverage revision10 contract through seven-family publication/read/rebuild/account proof and fresh cost/gates. Finish seven remaining outcome-family qualifications and D4167 reverse consumers; ordinary26 and content/native/release remain held.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Six of13 outcome families qualify; all880 preceding case values/order and84other profiles are preserved. All13 total-source factories and selector2 exist, while seven family qualifications and source-local availability remain. Migration35/revision9 six-family adoption and genuine revision8 upgrade proof are implemented. Current200-game cost is recorded under observed load, not an isolated predecessor speed comparison. D4202/D4205/D4206 CI repairs are committed/verified; no whole foundation, capability, milestone or release promotion.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Six of13 outcome families qualify; all880 preceding case values/order and84other profiles are preserved. All13 total-source factories and selector2 exist, while seven family qualifications and source-local availability remain. Migration35/revision9 six-family adoption and genuine revision8 upgrade proof are implemented. Current200-game cost is recorded under observed load, not an isolated predecessor speed comparison. D4202/D4205/D4206 CI repairs are committed/verified; no whole foundation, capability, milestone or release promotion. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1205,7 +1206,8 @@
             "packages/runtime/src/semantic-validation-count-population-sources.ts",
             "packages/runtime/src/semantic-validation-count-population.test.ts",
             "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
-            "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json"
+            "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
+            "rfc/source-local-evidence-availability.md"
           ],
           "anchors": [
             {
@@ -1676,7 +1678,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:9351f5e0f70449ac5a91814042c9c7dd1eda0b599342adea2094ee1a5910cb7f"
+              "digest": "sha256:375a1514014d64b534ebf3020b0f2680dd87e384527a7f1f2866d229608cd512"
             },
             {
               "kind": "work_state",
@@ -1827,6 +1829,11 @@
               "kind": "work_state",
               "id": "D4202",
               "digest": "sha256:fdff1807ed0285a7843536b5212c9d0f950b14c10f6e0cd05904ff99fb67dd1c"
+            },
+            {
+              "kind": "rfc",
+              "id": "source-local-evidence-availability.md",
+              "digest": "sha256:ee7c6313400c9f43ba3e0c04c22dc8109d49cea9d620e1b21f19c70ed2c6d1e0"
             }
           ]
         },
@@ -1847,10 +1854,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Independently review D4200 across source calculation, both selector gates, native incidence and the whole54 Profile composer. Then finish D4167 Sight/Play/Compare/guidance/voice and typed bot/replay reverse bindings; ordinary26 needs complete source qualification, strict receiving and measured cost first.",
+        "nextAction": "Implement accepted D4200 completeness through original source calculation, selector3 and durable per-decision evaluations with exact filtered reads. Then finish D4167 Sight/Play/Compare/guidance/voice and typed bot/replay reverse bindings; ordinary26 still needs complete source qualification, receiving and measured cost.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Current42/compiler7/source13/selector2 and14 compact native pairs exist. Six of13 outcome families qualify;26 ordinary avoidance pairs stay held. Review now observes request-process row writes without waiting on unrelated Profile publication; real mutation/Worker/reopen controls pass. Longitudinal revision9/all-six-family publication/read/rebuild/account/Profile adoption and genuine8 upgrade proof stand. Remaining reverse consumers, partial-coverage contract and ordinary avoidance adoption keep this milestone active.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Current42/compiler7/source13/selector2 and14 compact native pairs exist. Six of13 outcome families qualify;26 ordinary avoidance pairs stay held. Review now observes request-process row writes without waiting on unrelated Profile publication; real mutation/Worker/reopen controls pass. Longitudinal revision9/all-six-family publication/read/rebuild/account/Profile adoption and genuine8 upgrade proof stand. Remaining reverse consumers, partial-coverage contract and ordinary avoidance adoption keep this milestone active. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/presentation-move-path.ts",
@@ -2425,7 +2432,8 @@
             "packages/runtime/src/semantic-validation-count-population-sources.ts",
             "packages/runtime/src/semantic-validation-count-population.test.ts",
             "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
-            "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json"
+            "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
+            "rfc/source-local-evidence-availability.md"
           ],
           "anchors": [
             {
@@ -3306,7 +3314,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:9351f5e0f70449ac5a91814042c9c7dd1eda0b599342adea2094ee1a5910cb7f"
+              "digest": "sha256:375a1514014d64b534ebf3020b0f2680dd87e384527a7f1f2866d229608cd512"
             },
             {
               "kind": "work_state",
@@ -3417,6 +3425,11 @@
               "kind": "work_state",
               "id": "D4202",
               "digest": "sha256:fdff1807ed0285a7843536b5212c9d0f950b14c10f6e0cd05904ff99fb67dd1c"
+            },
+            {
+              "kind": "rfc",
+              "id": "source-local-evidence-availability.md",
+              "digest": "sha256:ee7c6313400c9f43ba3e0c04c22dc8109d49cea9d620e1b21f19c70ed2c6d1e0"
             }
           ]
         },

@@ -11479,3 +11479,25 @@ GREEN. Three cancellation/failed-job controls precede final normal full rerun; i
 
 D4203 distinction is explicit: counts do not prove UPDATE immutability. This acceptance covers
 settlement ownership and retained assertions, not a full-row no-write proof or any cost closure.
+
+### 2026-11-10 D4200 source-local availability contract — independent acceptance
+
+The standing foundation_style_review agent reviewed the new complete RFC without edits, Git or
+new tests. First verdict returned three finite buildability defects: ordinary-read semantic
+corruption overclaim; stripped selection coverage at complete_alternatives; underspecified
+projected coverage/filter/cut semantics. Author repaired R1–R3 in the same draft and rerouted it.
+
+Fresh independent verdict accepts bounded implementation. Publication authenticates the owned
+summary; cheap reads validate structural/domain/cut/cohort/cardinality/legal associations;
+invariant-preserving semantic unknown removal is an actual compare/rebuild obligation. The
+validation adapter conservatively returns existing typed unavailable for partial selection,
+while direct selector3 retains coverage and subject_outcomes stays family-local. Exact DTO and
+source/filter/cohort ordering, full-versus-projected parsers, internal application/Profile chains,
+withheld personal output, detached equal fold literals and strict migration conflicts are pinned.
+
+The current strict probe separately passes two original-source controls (1.66s): unrelated
+12-move legacy abstention with complete modern risk and genuine required-root-risk failure with
+two legal moves/three arithmetic cells. Reviewer did not claim to run those tests. Candidate
+ownership/source vectors, sparse coverage, private summary and seven-family revision10 lifecycle
+are buildable through existing seams. Actual implementation, genuine9→10 proof, cost and normal
+CI remain required; seven source qualifications/ordinary26 and broader1.0 are not discharged.

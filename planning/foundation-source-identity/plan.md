@@ -2590,3 +2590,40 @@ history needs durable unknown coverage with coordinated projector/proof/read/reb
 revision/storage consequences; flattening available rows is not a complete foundation. Author
 and independently accept this contract before code or claims that downstream reach improved.
 No broader schema/framework or owner-order question is implied. Ordinary26 and D3928 stay held.
+
+### D4200 authoring in progress, 2026-11-10
+
+Draft `rfc/source-local-evidence-availability.md` now owns the coordinated source/selection/
+durable unknown-coverage contract; independent review is running. Proposed selection/consumer3,
+one sparse evaluation record per normative decision, existing derivation revision10 and seven
+atomic families are unaccepted. Migration claims position next rather than reserving an integer.
+Current production semantics stay at the complete008115ac software/performance baseline.
+
+The strict existing availability probe passes both actual witnesses: unrelated legacy defender
+failure with12legal/13complete positions and no missing modern risk, versus genuine required
+root-risk failure with2legal/3arithmetic positions and healthy empty child risks. No source
+qualification or learner-mode activation follows from those measurements. The review must pin
+read/filter/source ownership, original summary/fold, unknown denominators, actual9→10 migration,
+rebuild and cost before code. A source-only change does not discharge D4200.
+
+### Accepted D4200 implementation handoff, 2026-11-10
+
+Independent buildability accepts `rfc/source-local-evidence-availability.md` after R1–R3 repair.
+No owner question is pending. Follow this order with separate verified commits:
+
+1. Capture genuine current revision9/schema35 output before changing runtime/projector code;
+   include unrelated legacy abstention and genuine required-risk cases in migration evidence.
+2. Reuse original candidate outcomes/vectors for finite availability; source @2 arithmetic stays
+   source-owned. Implement selector/consumer3 mandatory coverage and the explicit conservative
+   validation-adapter path. Preserve exact legal populations, known-zero and genuine unknown.
+3. Add sparse per-decision evaluations through the existing owned summary/fold. Land next
+   contiguous migration and revision10, all seven-family publication/read/rebuild/account fences.
+4. Implement exact projected coverage DTO/filter/cut association on the real internal/operator
+   read chain; keep current Profile subject output withheld. Cheap reads prove invariants, while
+   actual compare/rebuild proves same-domain semantic corruption and repair.
+5. Verify actual9→10 upgrade/reopen/rollback/all-seven-family omissions, source/case receipts,
+   worker cost/lease/drain, normal software/performance/governance and build. Record compact
+   cost aggregates only. Full source/selection/history handoff closes D4200; partial slices do not.
+
+Seven remaining outcome qualifications, D4167 complete reverse consumers and D4175ordinary26
+retain their own evidence and delivery obligations. D3928 content/native/release remains held.

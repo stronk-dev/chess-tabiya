@@ -392,3 +392,15 @@ For full partial-family history, pin durable coverage, opportunity denominators,
 rebuild and revision/storage consequences together. Keeping today's whole-population refusal
 is conservative but does not deliver that expanded reach. This review changes no production
 policy, source qualification, stored data or learner availability.
+
+### Required-risk counter-control, 2026-11-10
+
+`[V]` The expanded existing strict probe also measures the legal checked-king root
+`7k/8/8/8/8/8/8/r6K w - - 0 1`. Its exact legal moves are h1g2 and h1h2. All three original
+positions retain authentic arithmetic sources; the original root-risk result is genuinely
+unavailable/invalid_turn_clone, while both child-risk results are available with empty own-piece
+lists. The current loose_piece2 outcome correctly remains unavailable. Thus an empty physical
+domain or healthy children cannot be used to invent a missing required root result. Source:
+`tools/d1718-avoidance-subject-harness/availability.test.ts`; actual normal
+`make counterfactual-availability-probe` typechecks and passes both controls in1.66s. The original
+12-move unrelated-defender witness is unchanged. This is research, not a production-policy change.

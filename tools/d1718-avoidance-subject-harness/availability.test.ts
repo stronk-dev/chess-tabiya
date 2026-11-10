@@ -6,6 +6,31 @@ import { assertDeclaredEvidence } from "../../packages/runtime/src/evidence-cont
 import { invokeEvidenceValueRoute } from "../../packages/runtime/src/internal/evidence-value-routes.js";
 
 describe("D4200 source-local availability versus global canonical abstentions", () => {
+  it("retains a genuine missing required risk source separately from complete arithmetic and empty own pieces", () => {
+    const beforeFen = "7k/8/8/8/8/8/8/r6K w - - 0 1";
+    const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+    if (compiled.kind !== "ready") throw Error(JSON.stringify(compiled.error));
+    const receipt = compiled.receipt, frame = readCandidateFoundationSources(receipt);
+    expect(receipt.packet.candidates.map(row => row.moveUci).sort()).toEqual(["h1g2", "h1h2"]);
+    expect(frame.root.risk).toEqual({ kind: "unavailable", reason: "invalid_turn_clone" });
+    for (const position of [frame.root, ...frame.candidates.map(row => row.position)]) {
+      for (const source of [...position.common, ...position.totals.counts]) assertDeclaredEvidence(source);
+      expect(position.totals.counts).toHaveLength(12);
+    }
+    for (const child of frame.candidates) {
+      expect(child.position.risk.kind).toBe("available");
+      if (child.position.risk.kind !== "available") throw Error("Actual available child risk required");
+      expect(child.position.risk.value.payload.pieces).toEqual([]);
+    }
+    const result = invokeEvidenceValueRoute("derived.semantic_avoidance.loose_piece@2", {
+      receipt, moveUci: "h1h2",
+    });
+    expect(result).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+    console.log(JSON.stringify({ question: "D4200", beforeFen, legalMembers: 2, completeArithmeticPositions: 3,
+      rootRisk: frame.root.risk.kind, childRisks: frame.candidates.map(row => row.position.risk.kind),
+      scope: "Real required root-risk failure stays unknown despite an empty own-piece domain; available child empties do not repair the missing root." }));
+  });
+
   it("measures complete original arithmetic vectors on a legal discovered-check pawn capture", () => {
     const beforeFen = "k7/8/8/8/8/1p6/PP6/R6K w - - 0 1", moveUci = "a2b3";
     const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });

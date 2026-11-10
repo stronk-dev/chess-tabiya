@@ -40328,3 +40328,46 @@ selection omissions, stored denominators and proof/read/rebuild consequences. Do
 `continue` and publish apparently complete partial histories. Existing candidate owners/outcomes
 can be reused; no generic issuer/registry/hash mechanism is required. The existing D4200 row and
 dossier now own this full authoring/review scope; production semantics remain unchanged.
+
+### 2026-11-10 — draft D4200 complete source/selection/history availability successor
+
+The new source-local-evidence-availability RFC is draft and under independent buildability
+review. It reuses genuine candidate outcomes/vectors, proposes selection/consumer3, and adds one
+compact per-decision evaluation family with sparse unavailable sources. A missing evaluation
+is not an evaluated zero. The full contract includes revision10, seven-family atomic ownership,
+publication/read/rebuild/account semantics and the remaining source/consumer holds. Migration
+position next is registered; no production code, version or stored data changes yet.
+
+The existing research probe gains a real required-risk counter-control: checked-king root has
+two legal moves/three authentic arithmetic positions, unavailable root risk and two available
+empty child risks. Strict normal target passes2/2 in1.66s, preserving the original12-move
+unrelated-defender witness. This separates the two availability cases without fabricating a
+collector outcome. Independent review has been explicitly asked to challenge cheap-read
+semantic-tamper claims; no hash/issuer mechanism or HTTP collector replay is authorized.
+
+D4200 is doing under evidence-foundation and owns this draft. Parent references explicitly
+preserve current production semantics until independent acceptance. Existing normal008115ac
+software/performance proof remains the unchanged production baseline; no ordinary26/content/
+release or parent completion claim. Record review returns and commit the reviewed contract
+checkpoint before production implementation.
+
+### 2026-11-10 — D4200 R1–R3 repaired and independently accepted
+
+The first source-local availability review returned three real contract gaps: cheap-read semantic
+tamper overclaim, selection-validation adapter stripping and incomplete DTO/filter definitions.
+The author repaired them before code. Fresh independent read accepts bounded implementation;
+source ownership, sparse evaluation rows and seven-family revision10 scope stay intact. The
+existing compiler2 receipt records findings, repair and independent verdict without claiming
+reviewer-executed tests. Current production remains revision9/selector2.
+
+D4207 closes four stale landed-register statements (32–35 still uncommitted/unverified despite
+committed008115ac, current full gate, actual8 upgrade and current9 cost). Rows now describe the
+landed schema and bounded evidence; parent lifecycle obligations remain in Active. Actual
+storage.ts confirms clock_document_json belongs to imported_games. No new progress/register
+mechanism or weakened check. A first work-state invocation wrongly supplied OWNER with done;
+the validator refused it, then the normal owner-free transition passed. No invalid state is left.
+
+Next: commit accepted contract/receipts, capture genuine current9 fixture before projector
+changes, then implement source/completeness/selector and complete durable coverage in verified
+checkpoints. No source-only D4200 completion, implicit ordinary26, content/native/release or
+whole1.0 claim. Earlier successful normal008115ac gate remains the unchanged production proof.

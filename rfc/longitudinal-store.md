@@ -108,6 +108,13 @@ receipt: `planning/longitudinal-store/prefix-reuse-2026-10-06.md`.
 ```tabiya-claims
 ```
 
+## Independently accepted source-availability follow-up
+
+`source-local-evidence-availability.md` is independently accepted2026-11-10 for D4200's
+follow-up to §A.2.5a's whole54 refusal. It owns compact durable source-unknown coverage,
+revision10 and seven-family publication/read/rebuild/account adoption. Existing revision9
+production semantics stand until implementation; this does not close the parent's wider duties.
+
 ## Summary
 
 A per-learner, per-game store of **opportunity/outcome pairs over declared evidence**,

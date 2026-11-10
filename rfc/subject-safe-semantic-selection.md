@@ -1,6 +1,6 @@
 # RFC: subject-safe semantic selection
 
-- **Status:** implementing — independently accepted source/selection contract2026-11-09. Canonical42/compiler7, all13 typed factories/wrappers, selector/policy2, exact retirement/history and14 compact pairs implemented with bounded review; real delivery/qualification/full gates remain. D4180 validation and D4178 grade-plan repairs close locally. D4199§7.3 closes full-population mirrors/strict UCI leaves and the first piece_count2 qualification; other12source proofs remain. D4181 longitudinal current-source adoption is separately accepted/implementing under longitudinal-store §A.2/A.2.5a; D4179 proposed Review exposure delivery returned before implementation. Existing decision/checkpoint: planning/learner-modules/compiler2-independent-review-2026-11-02.md.
+- **Status:** implementing — independently accepted source/selection contract2026-11-09. Canonical42/compiler7, all13 typed factories/wrappers, selector/policy2, exact retirement/history and14 compact pairs implemented with bounded review; real delivery/qualification/full gates remain. D4180 validation and D4178 grade-plan repairs close locally. D4199§7.3 closes full-population mirrors/strict UCI leaves; piece_count2 and five pawn/file outcome families qualify under1470/1470cases/17total qualified subjects. Seven outcome-family proofs remain. D4181 longitudinal current-source adoption is separately accepted/implementing under longitudinal-store §A.2/A.2.5a; D4179 proposed Review exposure delivery returned before implementation. Existing decision/checkpoint: planning/learner-modules/compiler2-independent-review-2026-11-02.md.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09
 - **Parent:** `archive/semantic-evidence-selection.md` (immutable historical contract).
@@ -15,6 +15,14 @@
 ```tabiya-claims
 none
 ```
+
+## Independently accepted follow-up
+
+`source-local-evidence-availability.md` is independently accepted2026-11-10 for D4200
+source-local completeness, selection3 and durable per-decision unknown coverage. It supersedes
+the global refusal in §5.1 only through its coordinated source/selection/history implementation.
+Current production remains on the old policy until that implementation; the parent's wider
+qualification/consumer/discharge obligations are unchanged.
 
 ## Summary
 
