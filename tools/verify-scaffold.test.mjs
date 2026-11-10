@@ -6,6 +6,19 @@ import { checkoutFetchDepth, missingMakeDependencies, missingRequiredText, workf
 
 const required = ["verify-software", "verify-governance", "verify-content"];
 
+test("pnpm machine-state guard requires both Make exports, not an ignored workspace setting", () => {
+  const settings = [
+    "export PNPM_HOME := $(abspath .cache/pnpm-home)",
+    "export PNPM_CONFIG_STATE_DIR := $(abspath .cache/pnpm-state)",
+  ];
+  const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
+  assert.deepEqual(missingRequiredText(makefile, settings), []);
+  for (const setting of settings) {
+    assert.deepEqual(missingRequiredText(makefile.replace(setting, ""), settings), [setting]);
+  }
+  assert.deepEqual(missingRequiredText("stateDir: .cache/pnpm-state", settings), settings);
+});
+
 test("raw research storage guards run on commit and in CI without hydrating recordings", () => {
   const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
   const hook = readFileSync(new URL("../lefthook.yml", import.meta.url), "utf8");

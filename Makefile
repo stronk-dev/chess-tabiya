@@ -8,6 +8,11 @@ endif
 export PATH := $(abspath $(dir $(LOCAL_NODE))):$(PATH)
 CI_NODE := $(abspath $(LOCAL_NODE))
 
+# pnpm's version switch and machine state ignore workspace-file directory settings.
+# Keep normal Make commands writable without editing the user's global configuration.
+export PNPM_HOME := $(abspath .cache/pnpm-home)
+export PNPM_CONFIG_STATE_DIR := $(abspath .cache/pnpm-state)
+
 SF_CMD ?= $(if $(wildcard /opt/homebrew/bin/stockfish),/opt/homebrew/bin/stockfish,$(shell command -v stockfish 2>/dev/null))
 export SF_CMD
 

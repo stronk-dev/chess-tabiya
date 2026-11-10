@@ -18,6 +18,17 @@ test("the actual Make runtime matches .node-version and the compiler Unicode con
   assert.equal(result.stdout.trim(), `v${required}:17.0`);
 });
 
+test("normal Make children keep pnpm self-management and machine state in the ignored checkout cache", () => {
+  const prelude = makefile.slice(0, makefile.indexOf("SF_CMD ?="));
+  const result = spawnSync("make", ["--no-print-directory", "-f", "-", "probe"], {
+    input: `${prelude}\nprobe:\n\t@$(CI_NODE) -p 'JSON.stringify([process.env.PNPM_HOME, process.env.PNPM_CONFIG_STATE_DIR])'\n`,
+    env: { ...process.env, PNPM_HOME: "/not-the-checkout/global-pnpm", PNPM_CONFIG_STATE_DIR: "/not-the-checkout/global-state" },
+    encoding: "utf8",
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout), [join(process.cwd(), ".cache/pnpm-home"), join(process.cwd(), ".cache/pnpm-state")]);
+});
+
 test("all CI Node installations consume the same version file, not a floating major", () => {
   for (const name of ["verify", "browser", "release"]) {
     const workflow = readFileSync(new URL(`../.github/workflows/${name}.yml`, import.meta.url), "utf8");

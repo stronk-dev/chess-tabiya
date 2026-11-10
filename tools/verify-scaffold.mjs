@@ -274,13 +274,23 @@ const workspace = await readText("pnpm-workspace.yaml");
 const requiredWorkspaceSettings = [
   "storeDir: .cache/pnpm-store",
   "cacheDir: .cache/pnpm-cache",
-  "stateDir: .cache/pnpm-state",
   "strictPeerDependencies: true",
   "autoInstallPeers: false",
 ];
 for (const setting of requiredWorkspaceSettings) {
   if (!workspace.includes(setting)) {
     failures.push(`pnpm-workspace.yaml: missing ${setting}`);
+  }
+}
+
+// pnpm ignores project-level stateDir; normal Make children must receive the
+// machine-level settings through the environment instead (tested by execution).
+for (const setting of [
+  "export PNPM_HOME := $(abspath .cache/pnpm-home)",
+  "export PNPM_CONFIG_STATE_DIR := $(abspath .cache/pnpm-state)",
+]) {
+  if (!makefile.includes(setting)) {
+    failures.push(`Makefile: missing ${setting}`);
   }
 }
 

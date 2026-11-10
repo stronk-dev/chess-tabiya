@@ -4,7 +4,6 @@ packages:
 
 storeDir: .cache/pnpm-store
 cacheDir: .cache/pnpm-cache
-stateDir: .cache/pnpm-state
 verifyStoreIntegrity: true
 strictPeerDependencies: true
 autoInstallPeers: false
