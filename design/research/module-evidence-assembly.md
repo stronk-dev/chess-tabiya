@@ -4148,3 +4148,15 @@ The ordinary Inspect action should start with the defender change and the positi
 options. Focused detail should show a selected capture's exchange line or a selected branch's
 immediate continuations without making the learner page through unrelated branches. Keep a
 complete original-order traversal for auditing.
+
+[V] The independent caption review raised the pinned-defender case. Two additional legal
+mirrored positions each emitted one exposure with two positive captures. Before the move the
+knight is pinned on the b-file to its king. Its pseudo-control of the target is present, while
+a legal knight move off the pin is unavailable. Review should describe lost geometric coverage
+and the hypothetical material exchange. [Square control](../../packages/runtime/src/square-control.ts) ·
+[Exposure join](../../packages/runtime/src/internal/defender-exposure.ts)
+
+| Color | Before FEN | Move |
+|---|---|---|
+| White | `rk6/8/1nB5/2B5/8/8/8/RR2K3 w - - 0 1` | `c5b6` |
+| Black | `rr2k3/8/8/8/2b5/1Nb5/8/RK6 b - - 0 1` | `c4b3` |

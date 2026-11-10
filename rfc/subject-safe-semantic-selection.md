@@ -1,6 +1,6 @@
 # RFC: subject-safe semantic selection
 
-- **Status:** implementing — independently accepted source/selection contract2026-11-09. Canonical41/compiler7 under one-edge-collector-closure, all13 typed factories/wrappers, selector/policy3 under source-local-evidence-availability, exact retirement/history and14 compact pairs implemented with bounded review; real delivery/qualification/full gates remain. D4180 validation and D4178 grade-plan repairs close locally. D4199§7.3 closes full-population mirrors/strict UCI leaves; piece_count2 and five pawn/file outcome families qualify under1470/1470cases/17total qualified subjects. Seven outcome-family proofs remain. D4181 longitudinal current-source adoption is separately accepted/implementing under longitudinal-store §A.2/A.2.5a; D4179 proposed Review exposure delivery returned before implementation. Existing decision/checkpoint: planning/learner-modules/compiler2-independent-review-2026-11-02.md.
+- **Status:** implementing — independently accepted source/selection contract2026-11-09. Canonical41/compiler7 under one-edge-collector-closure, all13 typed factories/wrappers, selector/policy3 under source-local-evidence-availability, exact retirement/history and14 compact pairs implemented with bounded review; real delivery/qualification/full gates remain. D4180 validation and D4178 grade-plan repairs close locally. D4199§7.3 closes full-population mirrors/strict UCI leaves; piece_count2 and five pawn/file outcome families qualify under1470/1470cases/17total qualified subjects. Seven outcome-family proofs remain. D4181 longitudinal current-source adoption is separately accepted/implementing under longitudinal-store §A.2/A.2.5a; D4179 replacement Review and Inspector amendment was independently accepted on 2026-11-11; production delivery remains open. Existing decision/checkpoint: planning/learner-modules/compiler2-independent-review-2026-11-02.md.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09
 - **Parent:** `archive/semantic-evidence-selection.md` (immutable historical contract).
@@ -21,7 +21,8 @@ none
 `source-local-evidence-availability.md` is independently accepted2026-11-10 for D4200
 source-local completeness, selection3 and durable per-decision unknown coverage. It supersedes
 the global refusal in §5.1 only through its coordinated source/selection/history implementation.
-Source and selector3 are implemented; coordinated durable history remains open. Independently
+Source, selector3 and revision 10 history are implemented. Current 200-game cost verification
+remains in progress under the follow-up. Independently
 accepted `archive/one-edge-collector-closure.md` corrects §§2/5 to actual local41/selector54, preserving
 recorded trade and all other refs. Complete normal35d7cc5c software18944/571 and performance7/four pass; the parent's wider
 qualification/consumer/discharge obligations are unchanged.
@@ -557,33 +558,150 @@ accepted module/presentation amendment informed by actual source qualification/c
 ordinary adoption and every other reverse consumer open. No placeholder factory or fallback@1.
 Full thirteen-family source execution is required before this source RFC can be implemented.
 
-### 6.1 Review exposure delivery repair (D4179) — returned for concrete authoring
+### 6.1 Review defender exposure and exact inspection (D4179) — accepted amendment
 
-A bounded amendment was independently reviewed and returned before implementation. The proposed
-Review2/exposure2 pair has a sound source meaning and pass-qualified compact caption, but its
-acquisition/absence/detail contract is NOT accepted. Three measured gaps must be resolved:
+The first amendment was returned over duplicate acquisition, discarded source unavailability
+and the missing Inspector delivery path. This replacement specifies one Review output and
+source-scoped detail. Independent buildability and meaning reviews accepted this contract on
+2026-11-11. The source semantics and
+both-color stress and ordering witnesses are recorded in
+[the evidence assembly research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11).
 
-1. collectRelations memoizes flattened evidence, not a complete original closure. No shared
-   complete-closure cache exists at this seam. Review also concatenates relation evidence with
-   every captured source result. Adding the pair to both would duplicate facts and still lose
-   original abstentions. Author one finite owned acquisition/handoff and exactly one output lane;
-   do not replace this with generic digest dedup or a second classifier invocation.
-2. Exposure2 has no Full Inspector2 source topic/local supplier/presentation/detail path. The
-   actual scoped expansion contract must be authored explicitly; Threat Radar's relation overlay
-   is not an existing Inspector implementation.
-3. Review's current absence rendering covers engine families and suppresses semantic absence
-   when another semantic fact exists. Source-slot unavailable exposure must survive beside other
-   available semantics, through owned state, strict receiving and the selected mounted view.
+#### One acquisition and one Review output
 
-The intended source remains the COMPLETE original available exposure2, including controller
-edge, all positive legal-exchange captures and the hypothetical mover-turn/pass convention.
-It never asserts undefendedness, forced capture, safe/best move, intent, overload/deflection or
-quality. Proposed caption grammar: “Black's knight on b6 stopped defending Black's rook on a8.
-If Black passes, White has a positive exchange capture on a8.” Full hidden capture/controller
-operands must remain verifiable; this is not permission to register a display-field-only receipt.
-No production source, consumer or adapter change is authorized by this returned subsection.
-D4179 owns the next exact authoring/review/journey work; Nudge, Threat Radar, budgets, roles,
-ceilings/defaults/moment selection and D1716/D4175/D4167 completion remain unchanged.
+Keep the current edge collector's output order, fork augmentation and recorded-window exclusions.
+At the existing exposure factory call in `breadthSemanticEventClosure`, bind each available event
+wrapper to its original factory member and zero-based ordinal before sorting. Retain that exact
+result or `invalid_turn_clone` on the original breadth/local closure, using its existing private
+ownership. Do not match occurrences by value or require a second exposure call. Forward the
+original closure alongside the existing postcommit edge facts. Review's original-run/branch memo
+retains per-node exposure metadata and the existing flattened facts. The closure owner verifies
+the original control input against the recorded edge, and the original landing-capture input
+against the hypothetical pass FEN and target. Both exact inputs stay with the sealed event. Only Review's relation admission and its exact
+adapter deliver exposure. The existing 12-adapter Review/Story population and engine packet
+keep their current sources.
+
+Review2 admits exposure2 with a bounded `fact_statement` mechanical transform. Its closed operands
+are defender color/role/square, target color/role/square, positive capture count and the literal
+pass convention. The adapter renders the original admitted item and retains its existing evidence reference.
+Its wire operands contain only the bounded summary fields. The caption names the lost geometric
+coverage and the number of positive material exchanges under the hypothetical pass. For example:
+“The black rook on a8 lost geometric coverage from the black knight that was on b6. If Black
+could skip the reply, White would have two captures on a8 with a positive result under the
+local capture-and-recapture rule.” A pinned knight can contribute geometric coverage. The fact
+states no lost legal defence, legal pass, position evaluation or recommendation.
+
+The row carries a closed exposure state beside other relations. Available lists the exposure
+components in their actual presentation packet order, with each component's existing digest
+and original factory ordinal. The receiver checks a one-to-one ordered join with the exact
+source and renderer and unique original ordinals. A digest alone cannot identify an occurrence.
+Quiet requires the original `available([])`. An unavailable row has the sole
+`invalid_turn_clone` reason and no exposure component. An invalid or missing source fails closed.
+Review's existing role, session and timing admission precedes state or content. A withheld row
+exposes neither source outcome nor ordinals. The explicit Inspect action additionally requires
+current Full Inspector assistance permission.
+
+In the normal Review route, `App.svelte` calls `assertReviewMapResponse` before mounting
+the response. That receiver checks these states and their joins. Derive the selected-row
+notice from typed unavailability and the registered text “Defender exposure is unavailable
+for this move because the hypothetical reply-skip position is illegal.” The notice has one
+owner and stays outside the generic `facts` array.
+
+#### Explicit access and occurrence handoff
+
+On the selected Review exposure component, the existing recorded incoming-edge Review confirmation
+accepts `{ branchId,nodeId,entryNodeId,decisionDigest }` and checks the actual authorized edge and
+open retry. Reuse `reviewAnalyzeTarget`, `reviewAnalyzeIntent` and the source-free
+`reviewAssistance` confirmation with its strict receiver. Send only the original requested assistance to Inspector.
+Keep finalized assistance locally and use its digest as the expected finalDigest when calling
+`parseInspectorQueryPage`. The Analyze projection loop and saved preferences are outside this action. Each subsequent request uses the existing
+`inspector.query_page@1` endpoint and its recorded-context
+owner. At each await, recheck selected item, run, branch, node, decision, access, assistance
+configuration and generation. Retire on selection, retry, revocation, response replacement,
+close or unmount. Reuse Review Analyze’s abort ownership and stable invoking control. If paging
+replaces the focused detail control, restore focus to its successor in the current scoped detail.
+
+Add exposure2 as a Full Inspector2 dependent source for `incoming_edge`. Its single exact route
+returns the original availability result and keeps every available fact in producer order.
+A root or foreign edge cannot become this source. On every direct source and detail request,
+`InspectorDependentSourceOwner` checks the open-retry entry using the granted branch and actual
+parent before invoking the exposure factory. Confirmation supplies no grant. Distinguish quiet,
+unavailable and malformed
+source. The source-page adapter renders a bounded overview of each admitted original occurrence
+and exposes its existing detail door. If the occurrence is outside the first page or its
+overview was deferred, request the exact start ordinal using the returned collection key.
+The overview must fit when first. Match the disclosure source ordinal and evidence reference
+(producer, projection and payload digest) against the corresponding presented bundle under the
+confirmed target and current assistance. Account for deferred occurrences before joining. Use
+the opaque occurrence key from that matching page to request detail. A refusal, missing or
+deferred exact occurrence, mismatch or stale key leaves the inspection unavailable with a
+retry for the original target. The action never substitutes a different occurrence.
+
+#### Exact registration and detail scopes
+
+Review uses `module.review_map@2` with `derived.tactic.defender_exposure@2` and renderer
+`review.defender_exposure@1`. Full Inspector uses `module.full_inspector@2` with that same
+source and renderer `inspector.defender_exposure@1`, plus detail projection
+`derived.inspector.detail.defender_exposure@1` and renderer
+`inspector.detail.defender_exposure@1`. The exact Review census advances 61 to 62.
+Full Inspector advances from 88 topics and 14 details to 89 topics and 15 details.
+The compiled module pair count advances from 291 to 294. Preflight requires all three new
+bindings with their actual source and adapter paths.
+
+Keep original edge, defender, target, controller event and pass convention as typed detail context.
+Reuse the exact exchange member shapes for positive capture headers, recursive branch path
+and child count, chosen-line steps and stop decisions. Preserve each original value and
+ordinal. The scope may select from those members without reordering them:
+- `whole` traverses every original member in source order and supports lossless verification.
+- `exposure_captures` shows all positive capture headers, preserving capture order, as the initial
+  detail view for a Review handoff.
+- `exposure_exchange` takes a valid original capture ordinal. It shows that header, the local
+  exchange line and its stop decisions. Any selected capture has a door to its recaptures.
+- `exposure_branches` takes an original capture ordinal and parent path. An empty path means
+  the capture's first recaptures. Other paths must resolve against the exact original tree.
+  Return the direct children only, in their original order. An existing leaf has an empty list.
+  An out-of-range path refuses.
+
+Extend `InspectorDetailScope` only for exposure. The existing detail builder and strict
+receiver keep whole-stream ordinals in every filtered page. The receiver joins context to
+the selected recorded edge and pass convention. It checks exact indices and order for
+captures, chosen-line steps and stop decisions. Each branch member must have the requested
+capture and path equal to the requested parent path plus one index. That index equals
+the selected range start plus the member's page offset. An empty branch range is available
+only at start zero for an authenticated existing leaf. Enforce the existing collection and
+occurrence checks, eight-member page and 400-word Inspector limit. Exposure detail is text-only
+and keeps the recorded board at its selected position. Each detail request
+reacquires its exact source once under the current grant. No page includes a hidden recursive
+operand or treats a hypothetical exchange as the game's actual continuation. The full traversal
+remains accessible for auditing. The primary learner workflow opens the chosen capture and
+its exchange line directly instead of paging past unrelated recaptures.
+
+#### Acceptance proof
+
+- Both-color legal positive and quiet edges, one checking edge per color, and the divergent
+  White two-target source-order control run through the actual Review and Inspector routes.
+  Prove a single exposure acquisition per edge in Review and per Inspector request. Read-only
+  Review and provider-off behavior remain valid. Existing Story, Threat Radar and Nudge fixtures retain their current output.
+- Both-color pinned-knight witnesses render the loss of geometric coverage. The receiver and
+  UI exercise the exact same caption and avoid claiming a legal defence was lost.
+- Every original positive capture and promotion variant remain accessible under the
+  exact original source receipt. Extra, reordered, missing or foreign occurrences, branch
+  paths and capture ordinals refuse at the actual source/receiver boundary. Demonstrate that
+  the Review display index opens the wrong target on the White fixture and that the verified
+  ordinal/ref join prevents it. The real Review receiver rejects missing, reordered or foreign
+  state entries and rejects source details on withheld rows.
+- At the real selected Review UI, a source-specific unavailable message coexists with unrelated
+  facts. The disclosure button reaches the exact occurrence under the current assistance
+  ceiling. Grant revoke, abandoned request, selection change and old disclosure responses
+  cannot replace the active detail view. Direct Inspector requests at the same open retry
+  also refuse, including on an inherited edge in the granted branch. Cover keyboard focus,
+  phone-width rendering and recoverable source failure.
+- Reconstruct the full 696-node stress witness across actual detail pages, including all
+  positive captures, recursive ordering, chosen moves and stops. Prove direct access to the
+  chosen line and individual recapture levels through real scoped requests. Measure actual
+  serialized response size, cold/warm first disclosure and total acquisition work. No Review
+  row or Inspector page embeds the whole tree. Preserve existing Review moment and Inspector
+  word/geometry budgets. A selected Review row still admits evidence under its existing rules.
 
 ### 6.2 D4185 — bounded Nudge summary reachability
 

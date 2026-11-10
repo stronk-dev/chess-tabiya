@@ -40760,3 +40760,22 @@ Actual claim counts and lease renewals will be recorded with the 200-game run.
 The separate governance and production build command passed after D4213's closeout. Its work
 index has no unrouted rows, and roadmap checks R1–R10 are green. The software and performance
 results apply to the same application source and test files.
+
+### 2026-11-11 — D4179 replacement amendment
+
+The existing subject-safe semantic selection RFC now carries the D4179 draft. It specifies
+one Review acquisition and output path, original factory ordinals, a bounded mechanical
+summary and source-specific absence. The Inspect action reuses the existing recorded
+incoming-edge confirmation and exact source-page ownership. The detail contract provides
+direct capture and branch scopes plus lossless whole traversal. Independent acceptance
+and production delivery remain pending.
+
+The first buildability review returned the caption because a geometric controller can be pinned.
+Both mirrored pinned-knight probes emitted one exposure and two positive capture options.
+The draft now names lost geometric coverage and the hypothetical material exchange. The
+direct Inspector refusal is assigned to the selected branch's source owner before acquisition.
+
+Both independent reviewers accepted the bounded replacement after correcting the caption,
+occurrence and detail checks, and the assistance wire contract. The Inspector request carries
+requested assistance. The client retains finalized assistance to check the response. Production
+delivery and its mounted Review/Inspector journey are the next checkpoint.
