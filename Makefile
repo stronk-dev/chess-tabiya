@@ -1744,6 +1744,10 @@ semantic-validation-build:
 semantic-count-population-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-count-population.test.ts packages/runtime/src/semantic-validation-current-source.test.ts packages/runtime/src/semantic-validation-opposition.test.ts packages/runtime/src/semantic-validation-pawn-file.test.ts packages/runtime/src/semantic-validation-backward.test.ts packages/runtime/src/semantic-validation-slider.test.ts
 
+.PHONY: semantic-pawn-outcome-check
+semantic-pawn-outcome-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-pawn-outcome.test.ts
+
 semantic-validation-update: semantic-validation-build
 	$(CI_NODE) tools/semantic-validation/dist/semantic-validation-build.mjs --write
 
@@ -1953,6 +1957,12 @@ grade-selection-measurement:
 	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config tools/d1865-evidence-assembly-harness/vitest.config.ts tools/d1865-evidence-assembly-harness/grade-presentation.test.ts tools/d1865-evidence-assembly-harness/grade-source-selection.test.ts
 
 # Disposable D1716/D1718/D1719 research; default counterexamples, no bulk census or learner delivery.
+.PHONY: counterfactual-availability-probe
+# Disposable D4200 policy measurement; not a production or normal CI dependency.
+counterfactual-availability-probe:
+	$(CI_NODE) ./node_modules/typescript/bin/tsc --project tools/d1718-avoidance-subject-harness/tsconfig.availability.json
+	./node_modules/.bin/vitest run --config tools/d1718-avoidance-subject-harness/vitest.config.ts tools/d1718-avoidance-subject-harness/availability.test.ts
+
 .PHONY: avoidance-subject-measurement
 avoidance-subject-measurement:
 	$(CI_NODE) ./node_modules/typescript/bin/tsc --project tools/d1718-avoidance-subject-harness/tsconfig.json

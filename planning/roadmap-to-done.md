@@ -36,12 +36,18 @@ D4181/A.2/A.2.5a implements migration35/revision9 and one original WIDE per deci
 native7/condition13/prevalence34. All-six-family publication/read/rebuild/account paths use
 original source ownership and the same denominator/prevalence fold; Profile withholds old
 unqualified habit aggregates. Final post-Proxy performance now passes. Current200-game bulk cost
-remains owed. Genuine predecessor8 execution now produces a standalone171KB SQL fixture, with
+completes under observed workstation load:101.38minutes production projection,1265.73/350.02ms
+cold/warm Profile,6400decision parity and all6publication families. The compact current9 receipt
+is in planning/foundation-source-identity/profile-current9-cost-2026-11-10.json; no isolated
+revision8 comparison or source qualification follows. Genuine predecessor8 execution now produces a standalone171KB SQL fixture, with
 all five original families populated across both native colors and import. Permanent actual
 startup→worker→reopen→all-six-family omission/repair passes2/2; saved play/account rows remain
 identical. No current9 data is relabelled as old output and ordinary tests need no ignored bundle.
 
-Next: checkpoint the verified genuine8 proof, then measure current200-game cost. Independent13source qualification and D4167
+Genuine8 and the first piece_count2 qualification are committed. The next five-family
+literal-source/test checkpoint passes929controls/types with independent review, retaining
+880canonical cases/12qualified;590 new propositions are not promoted yet. D4200 records a
+separate source-availability limitation for review. Remaining source qualification and D4167
 reverse consumers follow. D3928's content/native/release hold remains; no official pack,
 whole capability, milestone or1.0 completion is claimed.
 

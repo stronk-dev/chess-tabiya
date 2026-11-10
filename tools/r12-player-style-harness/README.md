@@ -5,8 +5,10 @@ isolated SQLite database, replays ten existing CC0 lines into200native64-ply ses
 runs the complete current production projector, probes the three existing source operands and
 compares current profile cards/contributors/denominators. It also reproduces first-owner versus
 first-side castling mismatch. The historical revision8 run took roughly ten minutes; that is not
-a revision9 estimate. Current54-input/all-six-family cost is being measured and is substantially
-longer. The job prints completed counts and fails source/publication/parity errors, not an
+a revision9 estimate. The 2026-11-10 revision9 run completes in107.47minutes, with101.38minutes
+in the production projector under observed workstation load. Its compact result is
+`planning/foundation-source-identity/profile-current9-cost-2026-11-10.json`; it is not an isolated
+speed comparison. The job prints completed counts and fails source/publication/parity errors, not an
 invented total-time threshold.
 Only compact timings/counts print; no raw dumps are written. It is outside ordinary CI, carries
 no timing threshold and does not implement or authenticate a new worker game context/read model.

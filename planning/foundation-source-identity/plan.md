@@ -2465,3 +2465,35 @@ D4198 follow-through:77e8528f lands independently with12 controls and normal hoo
 hook validates the actual staged bot revision in21.12s; a8b5c82e lands its four code/test files,
 and cd35afa2 lands the accepted contract/docs with staged process checks. Exact-index108 tests
 and all project types pass; this does not certify the coordinated remainder. D4197 stays doing.
+
+
+### 2026-11-10 — five-family source/test checkpoint; no qualification promotion
+
+Independent literal pawn-per-file arithmetic now covers doubled/isolated/open/half-open/island
+outcomes over24 literal complete legal populations. The590 cited propositions cover both actors,
+vertical/color and horizontal partners, capture/EP/promotion, constant false/zero domains,
+simultaneous source/destination changes, both-color island changes and non-pawn capture of a
+last/doubled pawn. Actual factory invocation retains every16/8/2subject, including available[].
+Genuine pre-mint wrong math/subject/state/identity/support/denominator/drop/duplicate/order faults
+fail; symmetric mistakes mirror but fail both independent absolute partners. Normal focused
+make semantic-pawn-outcome-check passes929tests, final35.48s; full types/Svelte0errors0warnings
+pass. Independent reviewer accepts this bounded source-definition/test checkpoint only.
+Canonical remains880cases/12qualified: no new pawn refs or five-profile promotion yet.
+
+D4200's disposable strict current probe passes1/1: discovered-check a2b3 has12legal members,
+13complete count/file/source positions and zero unavailable risk positions; one unrelated
+canonical defender-exposure invalid_turn_clone suppresses all seven probed outcomes. This follows
+the accepted global policy. D4200 owns a reviewed amendment before any source-local availability
+change. The research dossier/matrix record the actual finding, not a risk-source diagnosis.
+
+The same immutable c0489cce current9 cost executable finishes200native64ply/100eachside sessions,
+6400decision comparisons, six-family publication, Profile/contributor/share and mismatch controls.
+Compact receipt: profile-current9-cost-2026-11-10.json. Production101.38minutes; cold/warm Profile
+1265.73/350.02ms. Timings are observed workstation load, not an isolated predecessor comparison.
+Source qualification/ordinary26/reverse consumers/full serial gates and D3928 remain open.
+This source/test/measurement slice is checkpointed before new implementation work.
+
+Checkpoint follow-through: make semantic-validation-check exits0 with880/880cases,89subjects,
+12qualified,63population/eightexternal receipts and both generated files unchanged/current.
+Normal make roadmap-receipt verify-governance and roadmap-check pass. No full software or
+remote CI verdict is inferred; exact-index commit hooks run after working-tree checks finish.

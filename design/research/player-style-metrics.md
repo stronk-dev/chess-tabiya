@@ -574,3 +574,26 @@ missing-row/cache/unequal-weight/revision controls and both independent reviews 
 D4159 local closure. Exact predecessor4family output is retained despite the new fifth family.
 No source/actor/personality/official-content/native/release or whole learner-model gate closes.
 Evidence: planning/foundation-source-identity/plan.md and profile-game-facts-review.md.
+
+### 2026-11-10 — current revision9 six-family workload (D4181)
+
+[V] `make profile-source-cost` completes200 native64-ply jobs,100 per side over ten repeated
+CC0 lines, using the immutable executable launched at c0489cce. All six publication families,
+6400 original-decision comparisons, existing card statistics/bootstrap intervals, contributor
+paging and share parity assertions pass. Terminal exit0; compact result:
+`planning/foundation-source-identity/profile-current9-cost-2026-11-10.json`; executable source:
+`tools/r12-player-style-harness/profile-source-cost.ts`. This is synthetic load, not200
+independent human games or qualification of the13 subject families.
+
+[V] Production projection totals6082886.98ms (101.38minutes); worker/probe6430877.21ms,
+whole experiment before mismatch6448237.92ms (107.47minutes). Cold/warm Profile reads take
+1265.73/350.02ms with200/zero source-image reads. Persisted subject rows total811700:
+678140 condition-relation and133560 native-incidence, including occurred=false rows. The
+separate201st mismatch control preserves201 counted games,200 independently proved eligible
+refs and an honestly incomplete affected card. Same compact receipt and instrument assertions.
+
+[V] Bounded source checks ran on the workstation while the immutable measurement ran. These
+times describe that observed workload; they do not isolate a regression against the earlier
+revision8 run or attribute time to one new family. The launch executable predates the new
+source-definition tests and any prospective D4200 availability amendment. Broader software,
+isolated performance, source qualification, browser and release gates remain separate.

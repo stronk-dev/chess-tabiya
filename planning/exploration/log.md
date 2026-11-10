@@ -40146,3 +40146,32 @@ before another implementation wave.
 D4199 checkpoint follow-through: normal make roadmap-receipt verify-governance exits0 after
 final state/RFC/roadmap flow-back. Explicit owned-file staging follows; no full-suite or remote
 CI readiness claim is inferred from these bounded gates.
+
+
+### 2026-11-10 — commit checkpoint for five-family sources and completed current9 measurement
+
+Owner asks why one huge diff/no commits. The oversized integration recovery and two bounded
+follow-ups are already committed; this new source/test slice is checkpointed before promotion.
+Five pawn/file literal-source definitions provide590 independent propositions over24 complete
+literal populations. Actual929focused tests pass35.48s, including genuine pre-mint faults,
+symmetric wrong math caught by both absolutes, quiet invention and missing total subjects.
+All project types/Svelte0errors0warnings pass. Independent bounded review accepts definitions/
+tests/registration only. Canonical stays880/12; five new profiles and ordinary26 remain held.
+
+D4200 research measures a real global-availability limitation: discovered-check a2b3 has12legal
+choices,13complete original source positions, zero unavailable risk positions, but one unrelated
+defender-exposure invalid_turn_clone suppresses all seven probed outcomes. Strict probe1/1 passes;
+older obsolete research ABI files are excluded explicitly by the new probe's typed project.
+No production policy changes. Dossier/matrix and durable todo record the review dependency.
+
+The immutable c0489cce current9 cost job exits0 at200jobs/6400decisions with actual six-family,
+Profile/statistics/contributor/share/mismatch assertions. Only its compact aggregate JSON is
+tracked. Production101.38minutes, cold/warm Profile1265.73/350.02ms under observed workstation
+load; no isolated revision8 comparison, new habit validity or source qualification claimed.
+D4181/D1716/D4167 remain active; remaining canonical qualification/reverse journeys and serial
+software/performance gates remain. D3928 content/native/release stays held; no push/1.0 closure.
+
+Checkpoint follow-through: make semantic-validation-check exits0 with880/880cases,89subjects,
+12qualified,63population/eightexternal receipts and both generated files unchanged/current.
+Normal make roadmap-receipt verify-governance and roadmap-check pass. No full software or
+remote CI verdict is inferred; exact-index commit hooks run after working-tree checks finish.

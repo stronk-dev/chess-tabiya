@@ -13448,7 +13448,7 @@
       "id": "D1716",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:629df6d0693600e29d42274c627bb48feff368c2b9fd8f3156b802c8ea258e84",
+      "sourceDigest": "sha256:b01e803dd8af9ed1403c4a8e1d87db0e76af0ac90034cc4e6684bca74c93e6df",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-04"
@@ -35039,7 +35039,7 @@
       "id": "D4181",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:48cc9675163e592ef62a4e63cac20d94c8d422d84aaa379651122dcaceab0d72",
+      "sourceDigest": "sha256:1d1a06be5e3f121083d2144d1c01ccf98399fb5b41e3408bbc49fa770c2ef6a7",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-09"
@@ -35205,6 +35205,14 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-count-population.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4200",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:27e2459e065d7844e42c06eb28dab43507fd2f21f7dea4dbdd4191ffe18aac99",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

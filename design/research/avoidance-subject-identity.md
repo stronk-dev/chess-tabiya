@@ -305,3 +305,26 @@ is drafted, not accepted or implemented. Final normal72719 runs strict types,20 
 with one explicit expensive-census skip1.79s,11 historical author controls and current register
 C1-C8. These are authoring/identity facts, not a new detector or semantic qualification. `[V]`
 (same instrument and primary source paths; rfc/foundation-source-identity.md §§2.1,3,4)
+
+## Complete sources suppressed by an unrelated abstention — 2026-11-10 (D4200)
+
+`[V]` Disposable `make counterfactual-availability-probe` strictly typechecks and passes its
+single measurement. The original WIDE population for `k7/8/8/8/8/1p6/PP6/R6K w - - 0 1`
+has12 legal members. `a2b3` captures the pawn and exposes the a-file rook check; its exact child
+is `k7/8/8/8/8/1P6/1P6/R6K b - - 0 1`. All13 original positions retain declared legal,
+connectivity, group, file-state and12 count inputs. Nevertheless all seven probed outcome
+families (doubled, isolated, open, half-open, islands, count and loose-piece) return unavailable.
+The only canonical abstention is `derived.tactic.defender_exposure@2: invalid_turn_clone` on
+`a2b3`. There are **zero** unavailable risk positions in this witness; a risk-source failure
+is not its cause. Evidence: `tools/d1718-avoidance-subject-harness/availability.test.ts` and
+its explicit `tsconfig.availability.json`; actual source dispatch in
+`packages/runtime/src/semantic-subject-outcomes.ts::computeSubjectOutcomes`.
+
+`[V]` This follows the accepted blanket refusal in `rfc/subject-safe-semantic-selection.md`
+§5.1 and the whole-packet refusal in `packages/runtime/src/semantic-evidence.ts`; it is a
+conservative policy limitation, not an implementation violating that contract. The probe adds
+no production policy or qualification. The older research harness has obsolete ABI types;
+the new target typechecks this current probe explicitly rather than claiming the older census
+has been revalidated. D4200 owns a separately reviewed source-local availability contract.
+Any successor must retain all legal alternatives, distinguish absent/false/unavailable states,
+and declare selection omissions. It may not invent a zero or quietly drop an inconvenient child.
