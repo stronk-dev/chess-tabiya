@@ -18,7 +18,7 @@ population. Both close with path evidence; the source-local/history parents rema
 The next accepted work is **D4200 durable availability**: original per-decision source coverage,
 revision10 and all seven derived families through atomic publication/read/rebuild/account
 lifecycle, actual revision9 upgrade and current workload/latency/lease/drain proof. The genuine
-schema35/revision9 fixture is committed408ffa1d. Current native/whole54 Profile fences stay until
+schema35/revision9 fixture is committed408ffa1d. Current whole54 Profile fence stays until
 that coordinated implementation. Missing evidence must never become a statistical zero.
 
 Six of13 new outcome families qualify; seven remain. Existing14 compact native Nudge/Review

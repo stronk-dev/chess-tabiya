@@ -40614,3 +40614,26 @@ D3928 residuals. No milestone/capability promotion or content graduation follows
 D4200's per-decision54-source coverage through original reductions, seven-family atomic storage,
 revision9→10 upgrade/read/rebuild/account lifecycle and current cost proof. The full1.0 goal stays
 active; no implementation bytes changed during the verified software run.
+
+### 2026-11-10 — D4200 native-incidence isolation, persisted revision9 still conservative
+
+The native7 calculator now authenticates the original full WIDE source frame and closed failure
+vocabulary through the existing availability reader, then retains its independent original-event
+incidences. Known legacy loose/exposure and modern risk gaps cannot erase complete native facts;
+unknown/missing/crossed original authority still refuses. The obsolete native unavailable return
+arm is removed. Profile's existing whole54 persisted fence is now explicit at its composer,
+preserving revision9 publication semantics until the coordinated coverage/revision upgrade.
+
+Actual mirrored12-member/11-alternative witnesses and genuine missing-root-risk control first
+fail3/7 against old code. After repair, normal focused48/three pass (13.17s), including actual
+SQLite store/Profile controls, plus complete types/Svelte0errors0warnings. Forced zero and copied/
+narrow-owner refusals remain. Independent bounded review accepts the original native proof,
+full denominators and unchanged revision9 publication. Recorded semantic implementation file
+closures contain neither changed private module; no current case/profiles/receipt is rewritten
+or new qualification inherited. The full35d7cc5c certificate belongs to the preceding stage;
+this native stage has bounded proof, not a new full-software or release certificate.
+
+Commit the small source checkpoint, then continue the same accepted D4200 item with exact literal
+evaluation rows, original reduction/fold, next migration36/revision10 and all seven atomic family
+paths. Full normal gates, genuine9 upgrade/account/read/rebuild and current workload proof remain
+required before the coordinated feature closes. No whole1.0 gate or consumer default changes.

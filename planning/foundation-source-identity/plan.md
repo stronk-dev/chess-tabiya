@@ -2761,3 +2761,12 @@ Next implement accepted D4200 through the original native/condition/prevalence r
 private per-decision summary; strict stored evaluations, next migration36/revision10; seven-
 family publish/read/rebuild/export/delete/restore exclusion; actual9 upgrade and current cost.
 All legal alternatives remain, and unknown sources produce no false-zero opportunities.
+
+### D4200 native calculation checkpoint — 2026-11-10
+
+Native7 now retains complete original incidences despite known unrelated legacy/risk failures.
+The existing Profile composer explicitly keeps the persisted revision9 whole54 refusal, so no
+partial data is published without durable coverage. Actual new controls first fail3/7, then
+focused48/three and complete types pass; independent bounded review accepts. Full35d7cc5c remains
+the prior-stage certificate. Continue D4200's typed evaluations/private summary/fold and coordinated
+seven-family migration/read/rebuild/account work; no qualification or product gate is promoted.

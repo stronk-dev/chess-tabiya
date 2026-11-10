@@ -8,6 +8,7 @@ import { SUBJECT_OUTCOME_FAMILIES } from "../semantic-subject-types.js";
 import { NATIVE_SUBJECT_SOURCE_REFS } from "../semantic-native-subject-types.js";
 import { invokeEvidenceValueRoute } from "./evidence-value-routes.js";
 import { nativeSubjectIncidences } from "./longitudinal-native-incidence.js";
+import { readCandidateUnavailableSources } from "../semantic-source-availability.js";
 import { subjectRelationIncidences } from "./longitudinal-subject-relations.js";
 const localRefs: ReadonlySet<string> = new Set([...NATIVE_SUBJECT_SOURCE_REFS, ...PROFILE_PREVALENCE_SOURCE_REFS]);
 const consumer = Object.freeze({ id: "profile.subject_observations", version: 1 });
@@ -46,7 +47,7 @@ function admitProfileSubjectValues(values: readonly DeclaredEvidence<unknown>[])
 export function collectProfileSubjectPopulation(beforeFen: string, moveUci: string) {
   const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
   if (compiled.kind !== "ready") throw new TypeError("Subject consumer cannot acquire its original complete legal population: " + JSON.stringify(compiled.error));
-  const receipt = compiled.receipt, native = nativeSubjectIncidences(receipt, moveUci);
+  const receipt = compiled.receipt, unavailable = readCandidateUnavailableSources(receipt), native = nativeSubjectIncidences(receipt, moveUci);
   const conditions = SUBJECT_OUTCOME_FAMILIES.map(family => {
     const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt, moveUci });
     const incidence = subjectRelationIncidences(family, result);
@@ -55,7 +56,9 @@ export function collectProfileSubjectPopulation(beforeFen: string, moveUci: stri
   });
   admitProfileSubjectValues(receipt.packet.candidates.flatMap(candidate => candidate.events
     .filter(e => localRefs.has(`${e.projection.id}@${e.projection.version}`)).map(e => e.evidence)));
-  if (native.kind === "unavailable" || conditions.some(r => r.kind === "unavailable")) return Object.freeze({ kind: "unavailable" as const, reason: "counterfactual_population_incomplete" as const });
+  // Revision9 has no durable per-source coverage. Keep its whole-population fence until the
+  // coordinated D4200 reduction/table/revision upgrade; native calculation no longer supplies it.
+  if (unavailable.length > 0 || conditions.some(r => r.kind === "unavailable")) return Object.freeze({ kind: "unavailable" as const, reason: "counterfactual_population_incomplete" as const });
   if (conditions.some(r => r.kind === "available" && (r.actor !== native.actor || r.edge.beforeFen !== native.edge.beforeFen
     || r.edge.moveUci !== native.edge.moveUci || r.edge.afterFen !== native.edge.afterFen))) throw new TypeError("Subject populations cross their original actor or edge");
   const prevalence: { projectionId: string; projectionVersion: number; sign: import("../evidence-contract.js").SemanticEventSign;

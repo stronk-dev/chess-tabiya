@@ -1,21 +1,23 @@
 // Accepted longitudinal-store §A.2: native EVENT incidence over exact original root subjects.
 // This is deliberately distinct from condition relations and full played-outcome ranking.
-import { candidatePlayedRow, readCandidateFoundationSources, type CandidatePopulationReceipt, type CandidateWideScope } from "../candidate-population.js";
+import { candidatePlayedRow, type CandidatePopulationReceipt, type CandidateWideScope } from "../candidate-population.js";
+import { readCandidateUnavailableSources } from "../semantic-source-availability.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../evidence-catalog.js";
 import type { SemanticEventSign } from "../evidence-contract.js";
 import { nativeEventSubject, NATIVE_SUBJECT_SOURCE_REFS, type NativeEventSubject, type NativeSubjectSourceRef } from "../semantic-native-subject.js";
 
 type Counts = Readonly<{ sign: SemanticEventSign; occurred: boolean; legalAlternatives: number; matchingAlternatives: number; comparableAlternatives: number }>;
 export type NativeSubjectIncidence = { [R in NativeSubjectSourceRef]: Omit<Extract<NativeEventSubject, { source: R }>, "ordinal"> & Counts }[NativeSubjectSourceRef];
-export type NativeSubjectIncidenceResult =
-  | Readonly<{ kind: "available"; actor: "white" | "black"; edge: Readonly<{ beforeFen: string; moveUci: string; afterFen: string }>; rows: readonly NativeSubjectIncidence[] }>
-  | Readonly<{ kind: "unavailable"; reason: "counterfactual_population_incomplete" }>;
+export type NativeSubjectIncidenceResult = Readonly<{ kind: "available"; actor: "white" | "black";
+  edge: Readonly<{ beforeFen: string; moveUci: string; afterFen: string }>; rows: readonly NativeSubjectIncidence[] }>;
 const SOURCES: ReadonlySet<string> = new Set(NATIVE_SUBJECT_SOURCE_REFS);
 type SubjectEntry = { descriptor: NativeEventSubject; moves: Map<SemanticEventSign, Set<string>> };
 
 export function nativeSubjectIncidences(receipt: CandidatePopulationReceipt<CandidateWideScope>, moveUci: string): NativeSubjectIncidenceResult {
-  const frame = readCandidateFoundationSources(receipt), played = candidatePlayedRow(receipt, moveUci);
-  if (frame.candidates.some(row => row.row.abstentions.length !== 0)) return Object.freeze({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+  // Authenticate the original full source frame and its closed failure vocabulary. Known
+  // legacy event/risk failures do not affect these seven independently complete native sources.
+  readCandidateUnavailableSources(receipt);
+  const played = candidatePlayedRow(receipt, moveUci);
   const subjects = new Map<NativeSubjectSourceRef, Map<number, SubjectEntry>>();
   for (const candidate of receipt.packet.candidates) for (const event of candidate.events) {
     const source = `${event.projection.id}@${event.projection.version}`;
