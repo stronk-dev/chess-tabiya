@@ -173,7 +173,7 @@ describe("actual complete family source operation", () => {
 });
 
 describe("validation consumption is distinct from selection", () => {
-  it("validates a genuine recorded event outside selector2's55 without widening selector2", () => {
+  it("validates a genuine recorded event outside selector3's55 without widening selector3", () => {
     const run = recordedSequenceWindowFixture(RECORDED_SEQUENCE_POSITIVES[1]);
     const source = recordedSemanticWindowSource({ run, branchId: run.activeCursor.branchId, throughNodeId: run.activeCursor.nodeId, projection: { id: "derived.pawn.sequence.contact_timing", version: 3 } });
     expect(source.kind).toBe("window_available"); if (source.kind !== "window_available") throw Error("Required recorded source unavailable");

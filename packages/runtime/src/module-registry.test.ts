@@ -193,7 +193,7 @@ describe("module registration — the compiled production registry", () => {
       ...INSPECTOR_SOURCE_TOPICS.map(row => row.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`),
     ]);
     expect(MODULE_OPERATIONS.find(row => row.module === "full_inspector")!.operation).toBe("compileInspectorSourcePage");
-    // Separate exact55 selector2 and all-live86 validation1 images; neither grants learner use.
+    // Separate exact55 selector3 and all-live86 validation1 images; neither grants learner use.
     expect(new Set(PRIMARY_EVIDENCE_MANIFEST.eligibility.map(row => key(row.consumer)))).toEqual(new Set(["research.semantic_selection@3", "research.semantic_validation@1"]));
     expect(PRIMARY_EVIDENCE_MANIFEST.eligibility.filter(row => key(row.consumer) === "research.semantic_selection@3")).toHaveLength(55);
     expect(PRIMARY_EVIDENCE_MANIFEST.eligibility.filter(row => key(row.consumer) === "research.semantic_validation@1")).toHaveLength(86);

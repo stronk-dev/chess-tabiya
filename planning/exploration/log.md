@@ -40489,3 +40489,24 @@ D4200 remains doing for revision10/private summary/fold/table, all seven atomic 
 filtered reads and actual9→10 startup/rollback/reopen/compare/rebuild/account/cost/lease/drain.
 Native/whole54 Profile remain conservative. No new qualification, ordinary26, content/native/release,
 remote-CI or whole1.0 claim; the goal remains active.
+
+### 2026-11-10 — D4209 actual selector manifest preflight repair
+
+The first full normal run on committed d449e3c8 terminates2 at evidence-manifest-check before
+value authority/canonical/main pools. The selector consumer lookup migrated to3 while a separate
+policy-consumer comparison remained2. The short semantic smoke exercised another executable and
+did not catch this missed operational check. No sandbox/environment failure caused this run.
+
+D4209 records the defect before repair. A new test in the existing scheduling suite bundles and
+executes the ACTUAL manifest checker; normal software-scheduling-check reproduces1/9 failure at
+the same stale comparison. The fix compares exact actual policy/consumer identities, retaining
+absent policy/consumer and full55-source equality. No fence is weakened. Current operational paths
+and comments are reconciled; historical@2 rejection controls remain. Independent bounded static
+review accepts and finds no remaining active selector2 operational check.
+
+Normal make software-scheduling-check evidence-manifest-check typecheck exits0:9scheduling
+controls,571discovered files/seven serial owners, actual compiled manifest and all project types/
+Svelte0errors0warnings. The changed operational checker is absent from every generated semantic
+implementation closure; no source-case rewrite or inherited new qualification is required. Fresh
+selector1470/1470 and2948/eighteen proof remains bounded; its whole software gate is still pending.
+Commit this verified repair, then run the complete normal gate again before durable revision10.

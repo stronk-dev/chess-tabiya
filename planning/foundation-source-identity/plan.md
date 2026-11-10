@@ -2724,3 +2724,14 @@ gaps on its initial-position fixture. Independent code review accepts; canonical
 2948/eighteen and full types/scheduling stand. Commit, then run the complete normal software gate
 on these committed bytes before the next production item. The earlier e4672b36 certificate is
 explicitly the prior source-calculator phase, not this selector phase.
+
+
+### Selector3 operational preflight repair — 2026-11-10
+
+Committed d449e3c8's complete rerun fails early at an overlooked policy-consumer2 comparison in
+the manifest checker. D4209 now pins the ACTUAL checker in the existing scheduling suite (red1/9,
+then green9/9). Actual identity equality retains the full55-source fence; normal manifest/types
+and independent bounded read pass. Source/selector runtime semantics and canonical1470cases are
+unchanged. Commit the repair and rerun the complete normal software gate; no durable code starts
+until that result is known. The last complete certificate remains e4672b36, scoped to its source
+phase. D4200 and durable revision10 remain open.

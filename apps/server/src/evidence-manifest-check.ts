@@ -41,11 +41,12 @@ const semanticResearch = EVIDENCE_MANIFEST.consumers.find(c => c.id === "researc
 const semanticValidation = EVIDENCE_MANIFEST.consumers.find(c => c.id === "research.semantic_validation" && c.version === 1);
 const semanticIds = semanticResearch?.accepts.map(exactRef).sort() ?? [];
 const declaredSemanticIds = SEMANTIC_SELECTION_PROJECTION_REFS.map(exactRef).sort();
-if (semanticResearch === undefined || semanticIds.join("|") !== declaredSemanticIds.join("|")
-  || EVIDENCE_MANIFEST.selectionPolicies[0]?.consumer.id !== semanticResearch.id || EVIDENCE_MANIFEST.selectionPolicies[0]?.consumer.version !== 2)
-  throw new TypeError(`Research selector2 is not set-equal to its exact${declaredSemanticIds.length} source image`);
+const semanticPolicy = EVIDENCE_MANIFEST.selectionPolicies[0];
+if (semanticResearch === undefined || semanticPolicy === undefined || semanticIds.join("|") !== declaredSemanticIds.join("|")
+  || exactRef(semanticPolicy.consumer) !== exactRef(semanticResearch))
+  throw new TypeError(`Research selection is not set-equal to its exact${declaredSemanticIds.length} source image and declared policy consumer`);
 if (semanticValidation === undefined || semanticValidation.accepts.map(exactRef).sort().join("|") !== SEMANTIC_EVENT_PROJECTION_REFS.map(exactRef).sort().join("|"))
-  throw new TypeError("Semantic source validation must preserve all exact live roots separately from selector2");
+  throw new TypeError("Semantic source validation must preserve all exact live roots separately from research selection");
 preflightProfileSubjectFacts(EVIDENCE_MANIFEST);
 const counts = [EVIDENCE_MANIFEST.producers.length, EVIDENCE_MANIFEST.projections.length, EVIDENCE_MANIFEST.consumers.length, EVIDENCE_MANIFEST.bindings.length, EVIDENCE_MANIFEST.semanticEvents.length, EVIDENCE_MANIFEST.eligibility.length, EVIDENCE_MANIFEST.reasons.length, EVIDENCE_MANIFEST.selectionPolicies.length];
 const declaredCounts = [EVIDENCE_PRODUCERS.length, EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs).length, EVIDENCE_CONSUMERS.length, EVIDENCE_ADAPTERS.length, SEMANTIC_EVENT_PROJECTION_REFS.length, EVIDENCE_ELIGIBILITY_DECLARATIONS.length, EVIDENCE_REASON_DECLARATIONS.length, EVIDENCE_SELECTION_POLICIES.length];

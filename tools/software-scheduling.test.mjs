@@ -14,6 +14,15 @@ const excluded = new Set([...CONTENT_CONTRACT_TESTS, ...PERFORMANCE_CONTRACT_TES
 const native = new Set(SERIAL_SOFTWARE_CONTRACT_TESTS);
 const requiredGates = `software-scheduling-check typecheck test-software test-performance schema-check release-policy-check label-sweep component-theme-sweep component-coverage evidence-manifest-check evidence-value-authority semantic-validation-check semantic-evidence-check candidate-packet-projections-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check style-registry-check capability-applicability-check capability-check capability-census capability-site-check capability-lifecycle-check migration-plan-check play-composition-matrix-contract guided-hint-latency-check make-toolchain-check`.split(" ");
 
+test("the actual manifest preflight accepts the current selector and its declared policy consumer", t => {
+  const directory = mkdtempSync(join(tmpdir(), "tabiya-manifest-preflight-"));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const outfile = join(directory, "manifest-check.mjs");
+  execFileSync(resolve(root, "node_modules/.bin/esbuild"), ["apps/server/src/evidence-manifest-check.ts", "--bundle", "--platform=node", "--format=esm", `--outfile=${outfile}`, "--log-level=warning"], { cwd: root });
+  const output = execFileSync(process.execPath, [outfile], { cwd: root, encoding: "utf8" });
+  assert.match(output, /^evidence-manifest-check: [0-9a-f]{64} · \d+\/\d+\/\d+\/\d+ core · \d+\/\d+\/\d+\/\d+ semantic\s*$/u);
+});
+
 test("D4187 the actual semantic software smoke runs from an empty directory without authored content", t => {
   const directory = mkdtempSync(join(tmpdir(), "tabiya-semantic-source-smoke-"));
   t.after(() => rmSync(directory, { recursive: true, force: true }));

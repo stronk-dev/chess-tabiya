@@ -35286,6 +35286,15 @@
       "uxItems": [],
       "evidence": "tools/r3-presentation-harness/real-packet.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4209",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:84d6edbe2a226e2ab54098f0e6165fe67694747d2624e1f3f5b9592e392986b6",
+      "uxItems": [],
+      "evidence": "tools/software-scheduling.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }
