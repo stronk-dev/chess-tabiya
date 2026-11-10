@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:0ea3408178acd76288666424a9d58211e717a6d65467418ab11b2350218c945d",
+    "roadmap": "sha256:0f049344123b2b3677fca6eea4213204bfb48e5d39f74f49c447c76c77e2c2e1",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
     "workState": "sha256:a1d091fb6416a26933c94b45908e83ccf808af9a81361f787d7689ff357bf15a",
-    "rfcRegister": "sha256:64a6a381aaf5b11d6069c994d2c922e67e183ad1fd21c58c3661562b60ac8bf1",
+    "rfcRegister": "sha256:6e9141fe916574ea6e07c484eaf8746468b32bcea039b1aff74422088232017c",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -357,7 +357,7 @@
       "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "D4200 native7/data grammar now also has original-source association: one existing replay/domain index checks evaluation actor/cohort/revision, exact legal count and canonical child order, retaining forced/no-observation refs without collectors. Actual93/three source/store/grammar tests, complete types and independent bounded review pass. Existing revision9 publication remains conservative. Native48/three and data62/three plus41/two prior proofs stand; complete35d7cc5c software18944/571 and performance7/four predates these steps. Next integrate original per-source summary/fold and seven-family revision10 storage/read/rebuild/account/upgrade/cost, with evaluation cardinality and observation availability crossjoins. No source/runtime qualification change, ordinary26 or release promotion; D4167 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage in seven atomic derived families. The genuine revision 9 fixture upgrades five saved jobs through production startup and worker publication, with reopen and rebuild parity. Focused worker, upgrade and bot suites pass 90 tests across three files. Account export, restore rederivation and deletion pass in the 31-test subject store suite. Complete software and the current 200-game cost run remain. Seven outcome qualifications, D4167, ordinary26 and D3928 remain open.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1219,7 +1219,7 @@
           {
             "kind": "rfc",
             "id": "source-local-evidence-availability.md",
-            "digest": "sha256:878eb0846285fac0a709dc0e153974d2c5c883b88a066ad252f6b2d90885ff29"
+            "digest": "sha256:f1a678bb733a1917aa441483e906e00ec3b68d77252be7d246044f625da05842"
           },
           {
             "kind": "work_state",
@@ -1248,7 +1248,7 @@
       "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "D4200 native7/data grammar now also has original-source association: one existing replay/domain index checks evaluation actor/cohort/revision, exact legal count and canonical child order, retaining forced/no-observation refs without collectors. Actual93/three source/store/grammar tests, complete types and independent bounded review pass. Existing revision9 publication remains conservative. Native48/three and data62/three plus41/two prior proofs stand; complete35d7cc5c software18944/571 and performance7/four predates these steps. Next integrate original per-source summary/fold and seven-family revision10 storage/read/rebuild/account/upgrade/cost, with evaluation cardinality and observation availability crossjoins. No source/runtime qualification change, ordinary26 or release promotion; D4167 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage in seven atomic derived families. The genuine revision 9 fixture upgrades five saved jobs through production startup and worker publication, with reopen and rebuild parity. Focused worker, upgrade and bot suites pass 90 tests across three files. Account export, restore rederivation and deletion pass in the 31-test subject store suite. Complete software and the current 200-game cost run remain. Seven outcome qualifications, D4167, ordinary26 and D3928 remain open.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/presentation-move-path.ts",
@@ -2826,7 +2826,7 @@
           {
             "kind": "rfc",
             "id": "source-local-evidence-availability.md",
-            "digest": "sha256:878eb0846285fac0a709dc0e153974d2c5c883b88a066ad252f6b2d90885ff29"
+            "digest": "sha256:f1a678bb733a1917aa441483e906e00ec3b68d77252be7d246044f625da05842"
           },
           {
             "kind": "work_state",
@@ -4114,10 +4114,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement independently accepted D4200 durable unknown coverage, preserving the now-captured genuine revision9 predecessor through actual revision10/seven-family startup/worker/read/rebuild/account proof. Current source qualification, reverse consumers and content/native/release remain separate obligations.",
+      "nextAction": "Finish the full software gate and current cost measurement for D4200, then continue source qualification and reverse consumer work.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Migration35/revision9 retains six-family publication/read/rebuild/account/Profile adoption and actual8 startup/worker/reopen/all-family omission repair. The standalone genuine9 predecessor fixture preserves five actual production jobs and all six old families. Native/whole54 Profile still refuses incomplete populations; selector3 is now source-local but adds no durable partial rows. Accepted D4200 next implements revision10/seven-family evaluations, exact typed coverage reads and filtering, actual9 upgrade/rollback/reopen/compare/rebuild/account plus new cost. Pre-availability revision9 cost remains dated:200games/6400decisions101.38minutes and cold/warm Profile1265.73/350.02ms under observed load. D3928 and broader learner-model work remain.",
+        "summary": "Migration 36 and revision 10 preserve saved games while rebuilding seven derived families. Five genuine predecessor jobs pass startup invalidation, worker publication, reopen and repair. Migration rollback leaves revision 9 data intact on an index conflict. Coverage export, restore rederivation and deletion pass. The current cost run and full software gate remain. D3928 and broader learner-model work remain open.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",

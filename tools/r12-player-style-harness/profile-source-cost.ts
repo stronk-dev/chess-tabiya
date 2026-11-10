@@ -1,4 +1,4 @@
-// DISPOSABLE D4159/D4147/D4149/D4181 source parity/cost instrument. Actual six-family worker and Profile.
+// DISPOSABLE D4159/D4147/D4149/D4181/D4200 parity and cost. Actual seven-family worker and Profile.
 // Real SQLite claims, the complete production semantic projector, existing source factories and
 // current profile are measured. Native sessions replay fixed CC0 moves; no human-style validity
 // or semantic/human qualification is inferred. Only compact aggregates reach stdout.
@@ -15,6 +15,7 @@ import { readFoundationRecordedPrefix } from "../../packages/runtime/src/recorde
 import { LearnerProfileService } from "../../apps/server/src/learner-profile.js";
 import { readProfileGameSource } from "../../apps/server/src/profile-game-source.js";
 import { OBSERVATION_DERIVATION_REV } from "../../apps/server/src/longitudinal-registry.js";
+import { parseLongitudinalReadQuery } from "../../apps/server/src/longitudinal-contract.js";
 import { normativeDecisions } from "../../apps/server/src/longitudinal-decisions.js";
 import { projectObservations } from "../../apps/server/src/longitudinal-projector.js";
 import { LongitudinalStore } from "../../apps/server/src/longitudinal-store.js";
@@ -138,7 +139,7 @@ try {
   console.log(JSON.stringify({ instrument: "disposable D4159/D4147", node: process.version, input, sourceLicence: "CC0-1.0",
     nativeSessions: runs.length, learnerSides: { white: 100, black: 100 }, uniqueLines: lines.length, plies: 64, rejectedInputs,
     derivationRevision: OBSERVATION_DERIVATION_REV,
-    scope: "Actual original claimed GAME/choice sources, current54-input same-WIDE projector, atomic six-family publication, parsed snapshot and Profile paths; independent old-helper operands and full choice statistics/interval/contributor/share parity" }));
+    scope: "Actual original claimed GAME/choice sources, current54-input same-WIDE projector, atomic seven-family publication, parsed snapshot and Profile paths; independent old-helper operands and full choice statistics/interval/contributor/share parity" }));
   const started = performance.now();
   for (;;) {
     const receipt = runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "research-profile-worker", {
@@ -237,6 +238,30 @@ try {
   assert.equal(cold.store.counted, 200); assert.equal(cold.store.pending + cold.store.failed + cold.store.unavailable, 0);
   const warmStart = performance.now(), warm = profile.profile(owner), warmMs = performance.now() - warmStart;
   assert.deepEqual(warm, cold);
+  const coverageStart = performance.now();
+  const fullRead = storage.readLongitudinalSnapshot(owner.learnerId, parseLongitudinalReadQuery({
+    learnerId: owner.learnerId, derivationRev: OBSERVATION_DERIVATION_REV, through: { kind: "all_complete" },
+    filter: {}, includeSubjectObservations: true,
+  }));
+  const fullReadMs = performance.now() - coverageStart;
+  assert.equal(fullRead.kind, "complete");
+  if (fullRead.kind !== "complete") throw new Error("Expected all 200 complete cuts");
+  assert.equal(fullRead.cuts.length, 200);
+  assert.equal(fullRead.coverage.sources.length, 54);
+  assert.equal(fullRead.coverage.decisions.length, 6_400);
+  const coverageRows = workerDatabase.prepare(`SELECT count(*) AS decisions, count(DISTINCT run_id) AS runs, derived_rev
+    FROM learner_subject_evaluations GROUP BY derived_rev`).all();
+  assert.deepEqual(coverageRows, [{ decisions: 6_400, runs: 200, derived_rev: OBSERVATION_DERIVATION_REV }]);
+  const unavailableBySource = new Map<string, { decisions: number; members: number }>();
+  for (const decision of fullRead.coverage.decisions) {
+    for (const failure of decision.unavailable) {
+      const key = `${failure.projection.id}@${failure.projection.version}:${failure.cause.kind}:${failure.reason}`;
+      const count = unavailableBySource.get(key) ?? { decisions: 0, members: 0 };
+      count.decisions++;
+      count.members += failure.members.length;
+      unavailableBySource.set(key, count);
+    }
+  }
   const results = ["fianchetto_setup_rate", "fianchetto_knight_screen_rate", "castle_kingside_rate", "castle_queenside_rate"].map(metricId => {
     const begin = performance.now(), detail = profile.styleCard(owner, metricId, 0, 1_000), detailMs = performance.now() - begin;
     assert.equal(detail.card.state, "measured"); if (detail.card.state !== "measured") throw Error("Not measured");
@@ -296,6 +321,7 @@ try {
   console.log(JSON.stringify({ completed, workerAndProbeMs: round(workerAndProbeMs), experimentBeforeMismatchMs: round(performance.now() - started), productionProjectorMs: round(projectorMs),
     independentGameProbeAndChoiceHelperComparisonMs: round(operandMs), priorGameProbeFactoryCalls: values, coldProfileMs: round(coldMs), warmProfileMs: round(warmMs),
     coldSourceImageReads: coldReads, laterSourceImageReads: imageReads - coldReads, results, choiceResults,
+    coverageRows, fullReadMs: round(fullReadMs), unavailableBySource: Object.fromEntries(unavailableBySource),
     choiceDecisionsCompared: choiceGames.reduce((sum, game) => sum + game.decisions.length, 0), subjectRows,
     limits: "Synthetic repeated64ply native replay,100each side; not independent human games or variable game lengths. No human/source-qualification or browser/network latency proof. New choice-source work is inside productionProjectorMs; independentGameProbeAndChoiceHelperComparisonMs times old GAME probes, old choice helper and comparison assertions, not isolated choice-factory cost; priorGameProbeFactoryCalls counts only the prior GAME probes." }));
 

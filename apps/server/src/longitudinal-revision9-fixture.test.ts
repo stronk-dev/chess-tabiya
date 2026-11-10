@@ -1,10 +1,18 @@
-// D4200 predecessor input proof, not successor implementation or release qualification.
+// D4200: genuine predecessor output and actual startup migration/rebuild.
 // Fixed genuine schema35/revision9 data remains readable without any ignored old executable.
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync, type SQLInputValue } from "node:sqlite";
-import { afterEach, beforeEach, expect, it } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { createApplication } from "./application.js";
+import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
+import { parseLongitudinalReadQuery } from "./longitudinal-contract.js";
+import { projectObservations } from "./longitudinal-projector.js";
+import { LongitudinalStore } from "./longitudinal-store.js";
+import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js";
+import { LongitudinalProjectionWorker } from "./longitudinal-worker.js";
+import { SQLiteRunStorage } from "./storage.js";
 
 const prior = JSON.parse(readFileSync(new URL("./fixtures/longitudinal-predecessor-rev9.json", import.meta.url), "utf8")) as {
   sourceCommit: string; schemaVersion: number; derivationRevision: number; owner: string;
@@ -67,4 +75,106 @@ it("keeps the real whole-decision suppression controls in saved source data for 
     expect(db.prepare("SELECT count(*) AS n FROM learner_observations WHERE run_id=?").get(runId!)).toEqual({ n: 0 });
     expect(db.prepare("SELECT count(*) AS n FROM imported_games WHERE run_id=?").get(runId!)).toEqual({ n: 1 });
   }
+});
+
+it("upgrades five genuine revision 9 jobs before the worker, then rebuilds all seven families", async () => {
+  installEmptyApplicationCatalogues();
+  const path = join(directory, "history.sqlite");
+  const derived = [...families, "learner_subject_evaluations"];
+  const preserved = prior.tables.filter(table => !derived.includes(table.name) && table.name !== "learner_observation_jobs");
+  const protectedRows = () => preserved.map(table => db.prepare(`SELECT * FROM ${quote(table.name)} ORDER BY rowid`).all());
+  const before = protectedRows();
+  const heads = db.prepare("SELECT run_id,requested_seq,claim_generation FROM learner_observation_jobs ORDER BY run_id").all();
+  const query = parseLongitudinalReadQuery({
+    learnerId: prior.owner,
+    derivationRev: 10,
+    through: { kind: "all_complete" },
+    filter: {},
+    includeSubjectObservations: true,
+  });
+  const realStart = LongitudinalProjectionWorker.start.bind(LongitudinalProjectionWorker);
+  let release!: () => void;
+  let entered!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  const starting = new Promise<void>(resolve => { entered = resolve; });
+  const start = vi.spyOn(LongitudinalProjectionWorker, "start").mockImplementation(async input => {
+    entered();
+    await held;
+    return realStart(input);
+  });
+  const boot = createApplication({ development: true, engineMode: "mock", cookieSecure: false,
+    databasePath: path, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
+  void boot.catch(() => {});
+  let closed = false;
+  try {
+    await Promise.race([starting, boot.then(() => { throw Error("Expected held worker startup"); })]);
+    expect(db.prepare("PRAGMA user_version").get()).toEqual({ user_version: 36 });
+    for (const table of derived) {
+      expect(db.prepare(`SELECT count(*) AS n FROM ${quote(table)}`).get(), table).toEqual({ n: 0 });
+    }
+    expect(db.prepare("SELECT DISTINCT derived_rev,state,completed_seq FROM learner_observation_jobs").all())
+      .toEqual([{ derived_rev: 10, state: "pending", completed_seq: 0 }]);
+    expect(db.prepare("SELECT run_id,requested_seq,claim_generation-1 AS claim_generation FROM learner_observation_jobs ORDER BY run_id").all())
+      .toEqual(heads);
+    expect(protectedRows()).toEqual(before);
+    release();
+    const app = await boot;
+    expect(app.startupReceipt.longitudinal).toMatchObject({ revisionReset: 5 });
+    const deadline = Date.now() + 30_000;
+    let snapshot = app.longitudinal.read(prior.owner, query);
+    while (snapshot.kind !== "complete") {
+      if (snapshot.cuts.some(cut => cut.kind === "failed") || Date.now() >= deadline) {
+        throw new Error(`Upgrade worker did not complete: ${JSON.stringify(snapshot.cuts)}`);
+      }
+      await new Promise(resolve => setTimeout(resolve, 20));
+      snapshot = app.longitudinal.read(prior.owner, query);
+    }
+    expect(snapshot.cuts).toHaveLength(5);
+    expect(snapshot.coverage.sources).toHaveLength(54);
+    for (const table of derived) {
+      expect(db.prepare(`SELECT DISTINCT derived_rev FROM ${quote(table)}`).all(), table).toEqual([{ derived_rev: 10 }]);
+    }
+    for (const [runId, legalAlternatives, projection] of [
+      ["genuine9-unrelated-abstention", 11, { id: "derived.tactic.defender_exposure", version: 2 }],
+      ["genuine9-required-risk", 1, { id: "derived.semantic_avoidance.loose_piece", version: 2 }],
+    ] as const) {
+      expect(snapshot.coverage.decisions).toContainEqual(expect.objectContaining({
+        runId, legalAlternatives, unavailable: expect.arrayContaining([expect.objectContaining({ projection })]),
+      }));
+      expect(snapshot.subjectObservations.some(row => row.runId === runId && row.projectionId !== projection.id)).toBe(true);
+      expect(snapshot.subjectObservations.some(row => row.runId === runId && row.projectionId === projection.id &&
+        row.projectionVersion === projection.version)).toBe(false);
+    }
+    await app.close();
+    closed = true;
+    const reopened = new SQLiteRunStorage(path, { onMigration: () => {} });
+    try {
+      expect(reopened.readLongitudinalSnapshot(prior.owner, query)).toEqual(snapshot);
+      const operator = new LongitudinalStore(db);
+      expect(operator.rebuild({ write: false, project: projectObservations })).toMatchObject({ checked: 5, mismatches: [] });
+      db.exec("DELETE FROM learner_subject_evaluations WHERE run_id='genuine9-unrelated-abstention'");
+      expect(operator.rebuild({ write: true, project: projectObservations }).repaired).toBe(1);
+      expect(reopened.readLongitudinalSnapshot(prior.owner, query)).toEqual(snapshot);
+      expect(protectedRows()).toEqual(before);
+      expect(db.prepare("PRAGMA foreign_key_check").all()).toEqual([]);
+    } finally { reopened.close(); }
+  } finally {
+    release();
+    start.mockRestore();
+    if (!closed) await (await boot.catch(() => undefined))?.close();
+  }
+}, 120_000);
+
+it("rolls back migration 36 when its cohort index name is already occupied", () => {
+  const path = join(directory, "history.sqlite");
+  db.exec("CREATE INDEX learner_subject_evaluations_cohort ON learners(id)");
+  const before = db.prepare("SELECT type,name,sql FROM sqlite_schema ORDER BY name").all();
+  const heads = db.prepare("SELECT * FROM learner_observation_jobs ORDER BY run_id").all();
+  expect(() => new SQLiteRunStorage(path, { onMigration: () => {} })).toThrow("Could not migrate run storage");
+  expect(db.prepare("PRAGMA user_version").get()).toEqual({ user_version: 35 });
+  expect(db.prepare("SELECT type,name,sql FROM sqlite_schema ORDER BY name").all()).toEqual(before);
+  expect(db.prepare("SELECT * FROM learner_observation_jobs ORDER BY run_id").all()).toEqual(heads);
+  db.exec("DROP INDEX learner_subject_evaluations_cohort");
+  new SQLiteRunStorage(path, { onMigration: () => {} }).close();
+  expect(db.prepare("PRAGMA user_version").get()).toEqual({ user_version: 36 });
 });

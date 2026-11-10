@@ -331,21 +331,31 @@ describe("same-cut subject storage adoption", () => {
       .run(captured.projectionId, canonicalizeJson(captured.subject));
     expect(() => g.store.readSnapshot(g.lease.learnerId!, query(g, { includeSubjectObservations: true }))).toThrow(/SOURCE_JOIN_INVALID/u);
   });
-  it("exports/deletes the actual subject class and rederives rather than restoring supplied counts", () => {
+  it("exports and deletes subject facts and coverage, and rederives both on restore", () => {
     const f = fixture(), s = acquire(f); f.store.publish(s.claim, s.projection);
     const wire = JSON.parse(new TextDecoder().decode(serializeAccountBundle(f.storage.accountBundle(f.lease.learnerId)).bytes));
     const subjects = wire.behavioralProfiles.value.filter((r: { table: string }) => r.table === "learner_subject_observations");
     expect(subjects).toHaveLength(s.projection.subjectObservations.length);
     for (const r of subjects) r.record.matching_alternatives = 999999;
+    const evaluations = wire.behavioralProfiles.value.filter((r: { table: string }) => r.table === "learner_subject_evaluations");
+    expect(evaluations).toHaveLength(s.projection.subjectEvaluations.length);
+    expect(evaluations.length).toBeGreaterThan(0);
+    for (const r of evaluations) r.record.legal_alternatives = 999999;
+    const preview = f.storage.deletionPreview(f.lease.learnerId, { kind: "run", runId: f.run.id }, AT);
+    expect(preview.hardDelete.flatMap(effect => effect.objectIds)
+      .filter(id => id.startsWith(`longitudinal-evaluation:${f.run.id}:`))).toHaveLength(evaluations.length);
     const target = fixture("subject-restore-target"), restored = learner(target.storage, "restored-subject-owner");
     target.storage.deleteLearner(target.lease.learnerId, AT);
     expect(target.storage.restoreAccountBundle(restored.learnerId, planAccountRestore(readPortableAccountBundle(wire)), { commit: true, at: AT })).toEqual([]);
     expect(n(target, "learner_subject_observations")).toBe(0);
+    expect(n(target, "learner_subject_evaluations")).toBe(0);
     const batch = runLongitudinalBatch(target.store, LONGITUDINAL_WORKER_DEFAULTS, "subject-restore-worker");
     expect(batch.completed).toBe(1); expect(batch.failed).toBe(0);
     const actual = target.store.storedProjection(f.run.id).subjectObservations;
     expect(actual).toHaveLength(s.projection.subjectObservations.length);
     expect(actual.every(r => r.learnerId === restored.learnerId && r.matchingAlternatives < 999999)).toBe(true);
+    expect(target.store.storedProjection(f.run.id).subjectEvaluations).toEqual(s.projection.subjectEvaluations
+      .map(row => ({ ...row, learnerId: restored.learnerId })));
     expect(target.storage.foreignKeyViolationCount()).toBe(0);
     f.storage.deleteLearner(f.lease.learnerId, AT);
     expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);

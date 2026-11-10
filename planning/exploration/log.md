@@ -40699,3 +40699,11 @@ The original revision 9 database fixture is unchanged.
 Focused integration tests exercise partial coverage, exact source joins, publication rollback,
 rebuild and older schema transitions. Genuine revision 9 worker upgrade, the current cost run
 and the full software gate are separate checkpoints. D4200 remains in progress.
+
+The genuine schema 35 fixture now passes production startup, all five worker jobs, all seven
+families, exact partial coverage, reopen and rebuild repair. An index conflict rolls back
+migration 36 before the version stamp. The combined upgrade, worker and bot check passed 90
+tests across three files with localhost access. The 31-test subject store suite proves exported
+coverage is discarded on restore, rederived from saved games and removed on deletion. The
+200-game cost tool now verifies 6,400 coverage rows and reports compact source counts. Its
+typecheck passed. The full software gate and cost measurement are pending.

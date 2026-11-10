@@ -146,12 +146,19 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
       return result.kind === "complete" ? result : undefined;
     });
     expect(rebuilt.cuts).toHaveLength(2);
-    // The accepted revision-six policy refuses these incomplete alternative populations.
-    // Join that actual outcome explicitly: an empty filtered .every() is not zero-count proof.
+    // The old population adapter still refuses an incomplete family. The durable read
+    // retains independent opportunities without reviving the two historical false gains.
     for (const value of OCCUPIED_TARGET_IDENTITY_CASES.slice(0, 2)) {
       expect(decisionPopulation(value.fen, value.uci)).toEqual({ kind: "unavailable", reason: "population_incomplete" });
     }
-    expect(rebuilt.observations).toEqual([]);
+    expect(rebuilt.coverage.decisions).toHaveLength(2);
+    for (const decision of rebuilt.coverage.decisions) {
+      expect(decision.unavailable.length).toBeGreaterThan(0);
+      const rows = rebuilt.observations.filter(row => row.runId === decision.runId);
+      expect(rows.length).toBeGreaterThan(0);
+      expect(rows.some(row => row.projectionId === "rules.transition.event.occupied_defence" &&
+        row.semanticSign === "gained" && row.occurred > 0)).toBe(false);
+    }
     expect(rebuilt.denominators.reduce((total, row) => total + row.decisions, 0)).toBe(2);
     const closing = application; application = undefined; await closing.close();
     const after = new DatabaseSync(databasePath);
@@ -176,8 +183,7 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     for (const value of specialMoves) {
       const run = play(positionRun(value.id, value.fen), value.uci);
       seed.create(run, owner);
-      // The original special-move fact remains real even when one counterfactual
-      // makes its whole opportunity population unavailable at the current revision.
+      // The committed special-move fact survives a gap in a different source.
       expect(localSemanticEventClosure(run.nodes[0]!.fen, value.uci, run.nodes[1]!.fen).events)
         .toContainEqual(expect.objectContaining({ projection: { id: value.projection, version: 1 } }));
     }
@@ -228,7 +234,13 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     } finally { completedJobs.close(); }
     for (const value of specialMoves) {
       expect(decisionPopulation(value.fen, value.uci)).toEqual({ kind: "unavailable", reason: "population_incomplete" });
-      expect(preexisting.observations.filter(row => row.runId === value.id)).toEqual([]);
+      const coverage = preexisting.coverage.decisions.find(row => row.runId === value.id);
+      expect(coverage?.unavailable.length).toBeGreaterThan(0);
+      const rows = preexisting.observations.filter(row => row.runId === value.id);
+      for (const failure of coverage!.unavailable) {
+        expect(rows.some(row => row.projectionId === failure.projection.id &&
+          row.projectionVersion === failure.projection.version)).toBe(false);
+      }
       expect(preexisting.denominators).toContainEqual(expect.objectContaining({ runId: value.id, decisions: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
     }
     for (const runId of ["legacy-white-pawn", "legacy-black-pawn"]) {
