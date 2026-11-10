@@ -35236,7 +35236,7 @@
       "id": "D4203",
       "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d36e9846652a37780072325a87a20b42a4de9f55e097223141d2f8ec1a9d64bb",
+      "sourceDigest": "sha256:fc4969e2a709f1542cf9a30e83ece78cec9eb7990e1f1f9670a108f37979c4ab",
       "uxItems": [],
       "owner": "release-engineering"
     },
@@ -35253,7 +35253,7 @@
       "id": "D4205",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bf406eb8c4d52f7fcf1fbb36400d74aadbd3a305b9cc891ab272bd2f9be31dc0",
+      "sourceDigest": "sha256:e38d9bdd0ad74fd2bb1fae0d253956ba3e9b4f3551fa55c79bd8868049953291",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-11-10"
@@ -35262,7 +35262,7 @@
       "id": "D4206",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0bcf6c2ef13968a3044283e0b8f3e8b1cef8e58351be8fce4c4fa0acb23d6360",
+      "sourceDigest": "sha256:b1d4273f7787493b34735d9d9ba008d110b63293e1eaa82133a7836012559f62",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-11-10"

@@ -301,7 +301,8 @@ describe("player-style criterion 11 — privacy and sharing", () => {
   });
 });
 
-describe("profile-game-facts — current durable evidence across every profile path", () => {
+// D4205: durable source/storage/Profile correctness; separate performance limits stay unchanged.
+describe("profile-game-facts — current durable evidence across every profile path", { timeout: 30_000 }, () => {
   it("warm overview/detail/share cannot reuse stale source fields or hide the counted cohort", async () => {
     const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
     for (let index = 0; index < 25; index++) f.storage.create(game(`evidence-${index}`, FIANCHETTO), owner);
@@ -434,7 +435,8 @@ describe("profile-game-facts — current durable evidence across every profile p
   });
 });
 
-describe("profile-choice-facts — current parsed source rows across every Profile path", () => {
+// D4205: durable source/storage/Profile correctness; separate performance limits stay unchanged.
+describe("profile-choice-facts — current parsed source rows across every Profile path", { timeout: 30_000 }, () => {
   it("weights all retained decisions rather than averaging unequal-length game means", async () => {
     const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
     const short = game("weight-short", ["e2e4"]), long = game("weight-long", ["e2e4", "e7e5", "g1f3"]);

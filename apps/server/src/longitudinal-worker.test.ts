@@ -347,7 +347,18 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
 
     // Restart on the same file: the abandoned lease is re-leased at once and every job completes.
     application = await createApplication({ engineMode: "mock", cookieSecure: false, databasePath, longitudinalWorkerEntry: longitudinalThreadEntryForTests() });
-    await until(() => jobs().every((job) => job.state === "complete") ? true : undefined, 110_000);
+    try {
+      await until(() => jobs().every((job) => job.state === "complete") ? true : undefined, 110_000);
+    } catch (cause) {
+      // Preserve the original job population/budget; report real state before teardown removes it.
+      const diagnostic = new DatabaseSync(databasePath, { readOnly: true });
+      try {
+        const pending = diagnostic.prepare(`SELECT run_id,state,requested_seq,completed_seq,
+          claimed_requested_seq,claim_generation,failure_code FROM learner_observation_jobs ORDER BY run_id`).all();
+        throw new Error(`Post-restart completion failed: ${JSON.stringify({ jobs: pending,
+          health: application.longitudinal.health(), progress: application.longitudinal.progress() })}`, { cause });
+      } finally { diagnostic.close(); }
+    }
     expect(jobs()).toEqual([{ run_id: "long-1", state: "complete" }, { run_id: "long-2", state: "complete" }, { run_id: "long-3", state: "complete" }]);
     const resumed = new DatabaseSync(databasePath, { readOnly: true });
     try {

@@ -40251,3 +40251,18 @@ integration budget. No global test timeout, performance budget, fixture size or 
 changes. The separate learner-profile weighting timeout remains open, as do D4202/D4203
 Review instrumentation and D4206 worker restart. Full software/performance is not green.
 The preceding evidence checkpoint is d7c5df9e; this test checkpoint is separate. No push.
+
+
+### 2026-11-10 — checkpoint reviewed native ownership and Profile integration limits
+
+Independent review accepts exactly seven primary native-worker owner files in the existing
+serial software project. Actual discovery passes8controls and preserves all569software files
+exactly once; no global timeout/pool/content/performance changes. Both durable GAME/CHOICE
+Profile correctness groups use explicit30s limits, preserving all original games/decisions,
+cohort floors, statistics, contributor/bootstrap/share and mismatch assertions.
+
+Fresh normal full Profile and worker suites pass42/two103.33s. The genuine longest-game/three-job
+restart test retains its110s completion limit and all original close/drain/source assertions.
+A failure now includes actual stored job sequences/state/failure plus worker health/progress
+before cleanup. D4205/D4206 remain doing until the complete software/performance run proves
+the combined image. Review D4202/D4203 remains separate; no release or capability promotion.

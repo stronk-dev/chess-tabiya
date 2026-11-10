@@ -118,9 +118,19 @@ test("D3869 an actual failing contract prevents both pools; the old ordering can
 });
 
 function assertScheduling(rows, expected) {
+  const expectedNative = new Set([
+    "apps/server/src/application-startup-cleanup.test.ts",
+    "apps/server/src/review-map.test.ts",
+    "apps/server/src/longitudinal-worker.test.ts",
+    "apps/server/src/longitudinal-predecessor-upgrade.test.ts",
+    "apps/server/src/longitudinal-successor-upgrade.test.ts",
+    "apps/server/src/longitudinal-worker-start.test.ts",
+    "apps/server/src/learner-profile-application.test.ts",
+  ]);
+  assert.deepEqual([...native].sort(), [...expectedNative].sort(), "only the seven primary native-worker owners run serially");
   assert.deepEqual(rows.map(row => row.path).sort(), [...expected].sort(), "complete software population, exactly once");
   for (const row of rows) {
-    const serial = native.has(row.path);
+    const serial = expectedNative.has(row.path);
     assert.equal(row.project, serial ? "native-startup" : "software");
     assert.equal(row.order, serial ? 1 : 0, "native ownership runs after the main pool");
     assert.equal(row.workers, serial ? 1 : 2);
@@ -151,15 +161,16 @@ test("actual Vitest discovery preserves every software file and orders native ow
     }));
     assertScheduling(rows, expected);
     assert.ok(SERIAL_SOFTWARE_CONTRACT_TESTS.every(path => rows.some(row => row.path === path)));
-    console.log(`software scheduling: ${rows.length} files, ${rows.filter(row => native.has(row.path)).length} serial native file; no omitted or duplicated cases`);
-    const index = rows.findIndex(row => native.has(row.path));
-    for (const mutation of ["missing", "duplicate", "overlap", "workers", "timeout"]) {
+    console.log(`software scheduling: ${rows.length} files, ${rows.filter(row => native.has(row.path)).length} serial native files; no omitted or duplicated cases`);
+    const index = rows.findIndex(row => row.path === "apps/server/src/review-map.test.ts");
+    for (const mutation of ["missing", "duplicate", "overlap", "workers", "timeout", "membership"]) {
       const changed = rows.map(row => ({ ...row }));
       if (mutation === "missing") changed.splice(index, 1);
       if (mutation === "duplicate") changed.push({ ...changed[index] });
       if (mutation === "overlap") changed[index].order = 0;
       if (mutation === "workers") changed[index].workers = 2;
       if (mutation === "timeout") changed[index].timeout = 15000;
+      if (mutation === "membership") Object.assign(changed[index], { project: "software", order: 0, workers: 2 });
       assert.throws(() => assertScheduling(changed, expected), undefined, mutation);
     }
   } finally {

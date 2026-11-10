@@ -10,8 +10,8 @@ export default defineConfig({
     coverage: {
       reportsDirectory: ".cache/coverage/software",
     },
-    // Keep native refusal→restart ownership out of the main pool's CPU/worker overlap, without
-    // raising any test or production deadline. Both projects remain in the normal software run.
+    // Keep primary native startup/lifecycle/upgrade and Review/Profile publication ownership out of the main pool's
+    // CPU/worker overlap. Both projects remain in the normal software run, with existing limits.
     projects: [
       {
         extends: true,

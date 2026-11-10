@@ -58,7 +58,13 @@ export const PERFORMANCE_CONTRACT_TESTS = Object.freeze([
   "packages/runtime/src/recorded-semantic-path.performance.test.ts",
 ]);
 
-// Still software contracts, but native restart ownership must run after the main pool settles.
+// Still software contracts; actual native-worker ownership runs after the main pool settles.
 export const SERIAL_SOFTWARE_CONTRACT_TESTS = Object.freeze([
   "apps/server/src/application-startup-cleanup.test.ts",
+  "apps/server/src/review-map.test.ts",
+  "apps/server/src/longitudinal-worker.test.ts",
+  "apps/server/src/longitudinal-predecessor-upgrade.test.ts",
+  "apps/server/src/longitudinal-successor-upgrade.test.ts",
+  "apps/server/src/longitudinal-worker-start.test.ts",
+  "apps/server/src/learner-profile-application.test.ts",
 ]);
