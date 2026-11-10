@@ -485,6 +485,19 @@ export type LongitudinalCompleteCut = {
   /** Existing completed job source identity; not a new hash or public profile operand. */
   readonly sourceDigest: `sha256:${string}`;
 };
+/** The strict snapshot refused these cuts. No partial rows accompany this error. */
+export class LongitudinalReadIntegrityError extends LongitudinalContractError {
+  constructor(
+    readonly cuts: readonly LongitudinalCompleteCut[],
+    readonly invalidRunIds: readonly string[],
+    cause: LongitudinalContractError,
+  ) {
+    super("LONGITUDINAL_READ_CUT_INVALID", cause.message);
+    this.name = "LongitudinalReadIntegrityError";
+    this.cause = cause;
+  }
+}
+
 export type LongitudinalCutOutcome =
   | LongitudinalCompleteCut
   | { readonly kind: "pending"; readonly runId: string; readonly requestedSeq: number; readonly completedSeq: number; readonly derivedRev: number; readonly retryAt?: string }

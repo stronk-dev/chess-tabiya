@@ -35313,6 +35313,15 @@
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4212",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bcfabe734e4f526cf0d4e9e5d8fb0fcb5e609606d24c572919e5d502f2ec9c28",
+      "uxItems": [],
+      "evidence": "apps/server/src/learner-profile.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

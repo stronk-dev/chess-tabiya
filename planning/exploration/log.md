@@ -40707,3 +40707,17 @@ tests across three files with localhost access. The 31-test subject store suite 
 coverage is discarded on restore, rederived from saved games and removed on deletion. The
 200-game cost tool now verifies 6,400 coverage rows and reports compact source counts. Its
 typecheck passed. The full software gate and cost measurement are pending.
+
+### 2026-11-11 — D4212 Profile recovery from invalid derived cuts
+
+Both original D3772 tests reproduced the revision 10 regression on 49b0a23c: an inflated
+denominator failed the whole Profile read. The first full software run was stopped after
+confirmation, during semantic validation. Its completed preflights are not a full result.
+
+The store now refuses the complete read with the invalid run IDs and original cuts, without
+returning partial rows. Profile marks the affected games unavailable and reads healthy cuts at
+the same sequence, revision and source identity. A real sharing grant and worker republication
+prove a changed source at the same sequence is excluded. SQL controls cover corrupt counts,
+missing evaluations and malformed coverage in both read paths. Multiple sign/subject refinements
+still share one coverage entry per source. Coverage remains internal. Independent readback
+and 61 focused tests across three files pass. Full D4200 verification and cost remain pending.

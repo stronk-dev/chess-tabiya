@@ -11,8 +11,8 @@ import { exactLegalMoves } from "../../../packages/runtime/src/legal-moves.js";
 import { normativeDecisions } from "./longitudinal-decisions.js";
 import type { LongitudinalSourceImageV4 } from "./longitudinal-source.js";
 import { parseLongitudinalSubjectEvaluationRow, type LongitudinalSubjectEvaluationRow, type LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
-import { parseDecisionRef, type DecisionRef } from "./longitudinal-contract.js";
-const fail = (): never => { throw new TypeError("LONGITUDINAL_SUBJECT_SOURCE_JOIN_INVALID"); };
+import { LongitudinalContractError, parseDecisionRef, type DecisionRef } from "./longitudinal-contract.js";
+const fail = (): never => { throw new LongitudinalContractError("LONGITUDINAL_SUBJECT_SOURCE_JOIN_INVALID"); };
 export function profileSubjectReferenceIndex(image: LongitudinalSourceImageV4, derivedRev: number) {
   const run = readBackReplay(image.runPrefix.events).run, observedAt = new Date(Date.parse(run.events[0]!.at)).toISOString();
   const originalDecisions = normativeDecisions(image, run);

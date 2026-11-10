@@ -7,7 +7,7 @@ import type { SemanticEventSign } from "@chess-tabiya/runtime";
 import type { UnavailableSemanticSource } from "../../../packages/runtime/src/semantic-source-availability-types.js";
 import type { SEMANTIC_PLAYED_RANKING_MODES } from "../../../packages/runtime/src/semantic-played-types.js";
 import { PROFILE_PREVALENCE_SOURCE_REFS, PROFILE_SUBJECT_PROJECTIONS } from "../../../packages/runtime/src/profile-subject-sources.js";
-import { canonicalInstant, LONGITUDINAL_PHASES, LONGITUDINAL_DECISION_CLASSES, LONGITUDINAL_SESSION_KINDS,
+import { canonicalInstant, LongitudinalContractError, LONGITUDINAL_PHASES, LONGITUDINAL_DECISION_CLASSES, LONGITUDINAL_SESSION_KINDS,
   parseDecisionRef, compareDecisionRefs, assertParsedLongitudinalReadQuery, type ParsedLongitudinalReadQuery, type LongitudinalCompleteCut,
   type DecisionRef, type LongitudinalPhase, type LongitudinalDecisionClass, type LongitudinalSessionKind } from "./longitudinal-contract.js";
 import { LONGITUDINAL_INGEST_REGISTRY } from "./longitudinal-registry.js";
@@ -37,7 +37,7 @@ type ProjectionForRef<R extends string> = R extends `${infer Id}@${infer Version
 export type ProfileCoverageProjection = ProjectionForRef<NativeSubjectSourceRef
   | Exclude<ProfilePrevalenceRef, "derived.exchange.trade_completed@1">
   | `derived.semantic_avoidance.${SubjectOutcomeFamily}@2`>;
-const invalid = (): never => { throw new TypeError("LONGITUDINAL_SUBJECT_ROW_INVALID"); };
+const invalid = (): never => { throw new LongitudinalContractError("LONGITUDINAL_SUBJECT_ROW_INVALID"); };
 // Snapshot data properties once. Accessors, symbols, extra keys and prototype bags refuse.
 function object(value: unknown, keys: readonly string[]): Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value) || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) return invalid();
@@ -292,14 +292,14 @@ export function profileCoverageSources(query: ParsedLongitudinalReadQuery): read
 }
 export function projectSubjectEvaluation(row: LongitudinalSubjectEvaluationRow, sources: readonly ProfileCoverageProjection[]): LongitudinalCoverageDecision {
   const { learnerId: _owner, observedAt: _time, derivedRev: _rev, unavailable, ...context } = row;
-  const selected = new Set(sources.map(p => `${p.id}@${p.version}`));
-  return Object.freeze({ ...context, unavailable: Object.freeze(unavailable.filter(u => selected.has(`${u.projection.id}@${u.projection.version}`))) });
+  return Object.freeze({ ...context, unavailable: Object.freeze(unavailable.filter(u =>
+    sources.some(source => source.id === u.projection.id && source.version === u.projection.version))) });
 }
 /** Projected output has its own grammar. It is never restored through the full storage parser. */
 export function parseLongitudinalReadCoverage(value: unknown, query: ParsedLongitudinalReadQuery, cuts: readonly LongitudinalCompleteCut[],
-  expected: readonly Omit<LongitudinalCoverageDecision, "unavailable">[]): LongitudinalReadCoverage {
+  expectedSources: readonly ProfileCoverageProjection[], expected: readonly Omit<LongitudinalCoverageDecision, "unavailable">[]): LongitudinalReadCoverage {
   const r = object(value, ["sources", "decisions"]), sources = Object.freeze(denseArray(r.sources).map(parseProfileCoverageProjection));
-  if (canonicalizeJson(sources) !== canonicalizeJson(profileCoverageSources(query))) return invalid();
+  if (canonicalizeJson(sources) !== canonicalizeJson(expectedSources)) return invalid();
   const selected = new Set(sources.map(p => `${p.id}@${p.version}`));
   const byRun = new Map(cuts.map(c => [c.runId,c]));
   if (byRun.size !== cuts.length || cuts.some(c => c.derivedRev !== query.derivationRev || c.completedSeq !== c.requestedSeq)) return invalid();

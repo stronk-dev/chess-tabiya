@@ -1,5 +1,6 @@
 // Accepted longitudinal-store A.2. Additive literal row storage; no collection/publication issuer.
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { LongitudinalContractError } from "./longitudinal-contract.js";
 import { parseLongitudinalSubjectObservationRow, parseLongitudinalSubjectEvaluationRow, type LongitudinalSubjectEvaluationRow, type LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
 export const PROFILE_SUBJECT_EVALUATIONS_SQL = `CREATE TABLE learner_subject_evaluations (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
@@ -28,9 +29,21 @@ export function subjectEvaluationSqlValues(row: LongitudinalSubjectEvaluationRow
   return [row.learnerId,row.runId,canonicalizeJson(row.decisionRef),row.actor,row.phase,row.decisionClass,row.sessionKind,row.packId,
     row.legalAlternatives,canonicalizeJson(row.unavailable),row.observedAt,row.derivedRev] as const;
 }
+function parseCanonicalSubjectJson(value: unknown): unknown {
+  try {
+    if (typeof value === "string") {
+      const parsed: unknown = JSON.parse(value);
+      if (canonicalizeJson(parsed) === value) return parsed;
+    }
+  } catch {
+    // Invalid JSON or an unrepresentable JSON number is a malformed stored operand.
+  }
+  throw new LongitudinalContractError("LONGITUDINAL_SUBJECT_SQL_INVALID");
+}
+
 export function subjectEvaluationFromSql(r: Record<string, unknown>): LongitudinalSubjectEvaluationRow {
-  const decisionRef: unknown = JSON.parse(String(r.decision_ref_json)), unavailable: unknown = JSON.parse(String(r.unavailable_json));
-  if (canonicalizeJson(decisionRef) !== r.decision_ref_json || canonicalizeJson(unavailable) !== r.unavailable_json) throw new TypeError("LONGITUDINAL_SUBJECT_SQL_INVALID");
+  const decisionRef = parseCanonicalSubjectJson(r.decision_ref_json);
+  const unavailable = parseCanonicalSubjectJson(r.unavailable_json);
   return parseLongitudinalSubjectEvaluationRow({ learnerId:r.learner_id,runId:r.run_id,decisionRef,actor:r.actor,phase:r.phase,
     decisionClass:r.decision_class,sessionKind:r.session_kind,packId:r.pack_id,legalAlternatives:r.legal_alternatives,
     unavailable,observedAt:r.observed_at,derivedRev:r.derived_rev });
@@ -79,11 +92,11 @@ export const INSERT_SUBJECT_OBSERVATION = `INSERT INTO learner_subject_observati
    actor,phase,decision_class,session_kind,pack_id,occurred,legal_alternatives,matching_alternatives,comparable_alternatives,observed_at,derived_rev)
   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 export function subjectObservationFromSql(r: Readonly<Record<string, unknown>>): LongitudinalSubjectObservationRow {
-  const decisionRef = JSON.parse(String(r.decision_ref_json)), subject = JSON.parse(String(r.subject_json)), parameters = JSON.parse(String(r.parameters_json));
-  if (r.occurred !== 0 && r.occurred !== 1 || canonicalizeJson(decisionRef) !== r.decision_ref_json
-    || canonicalizeJson(subject) !== r.subject_json || canonicalizeJson(parameters) !== r.parameters_json
-    || (r.source_kind === "condition_relation" ? r.sign !== null || r.tested_key !== `relation:${r.relation}`
-      : r.relation !== null || r.tested_key !== `sign:${r.sign}`)) throw new TypeError("LONGITUDINAL_SUBJECT_SQL_INVALID");
+  const decisionRef = parseCanonicalSubjectJson(r.decision_ref_json);
+  const subject = parseCanonicalSubjectJson(r.subject_json);
+  const parameters = parseCanonicalSubjectJson(r.parameters_json);
+  if (r.occurred !== 0 && r.occurred !== 1 || (r.source_kind === "condition_relation" ? r.sign !== null || r.tested_key !== `relation:${r.relation}`
+      : r.relation !== null || r.tested_key !== `sign:${r.sign}`)) throw new LongitudinalContractError("LONGITUDINAL_SUBJECT_SQL_INVALID");
   return parseLongitudinalSubjectObservationRow({ learnerId: r.learner_id, runId: r.run_id, decisionRef,
     sourceKind: r.source_kind, projectionId: r.projection_id, projectionVersion: r.projection_version, subject, parameters,
     ...(r.source_kind === "condition_relation" ? { relation: r.relation } : { sign: r.sign }),

@@ -69,9 +69,13 @@ describe("same-cut subject storage adoption", () => {
 
   it("projects source unions before actor/sign/subject refinements without shrinking the decision cohort", () => {
     const f = fixture(), s = acquire(f); f.store.publish(s.claim,s.projection);
-    const q = query(f,{includeSubjectObservations:true, subjectFilters:[{sourceKind:"condition_relation",
-      projection:{id:"derived.semantic_avoidance.doubled_pawn",version:2},actor:"black"}],
-      filter:{projections:[{id:"rules.structural.event.king_zone",version:1,semanticSign:"gained"}]}});
+    const condition = { sourceKind: "condition_relation", projection: { id: "derived.semantic_avoidance.doubled_pawn", version: 2 }, actor: "black" };
+    const kingZone = { id: "rules.structural.event.king_zone", version: 1 };
+    const q = query(f, {
+      includeSubjectObservations: true,
+      subjectFilters: [{ ...condition, subject: { kind: "doubled_pawn", color: "black", file: "c" } }, condition],
+      filter: { projections: [{ ...kingZone, semanticSign: "lost" }, { ...kingZone, semanticSign: "gained" }] },
+    });
     const result = f.store.readSnapshot(f.lease.learnerId!,q);
     if(result.kind!=="complete") throw Error("Expected complete source cut");
     expect(result.subjectObservations).toEqual([]);

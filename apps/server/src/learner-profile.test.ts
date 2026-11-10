@@ -122,6 +122,52 @@ describe("the profile abstains until each card's own denominator clears", () => 
     expect(profileService.historyPage({ learnerId: "owner", handle: "owner" }, 0, 25).items).toEqual(profile.history.items);
   });
 
+  it.each(["all complete", "ready subset"] as const)("D4212 isolates corrupt rows on the %s read", async (scenario) => {
+    const fixture = setup();
+    const owner = learner(fixture.storage, "owner");
+    for (const id of ["bad-denominator", "missing-coverage", "healthy"]) {
+      fixture.storage.create(game(id, FIANCHETTO), owner);
+    }
+    drain(fixture.workerStore());
+    if (scenario === "ready subset") fixture.storage.create(positionRun("pending"), owner);
+    const inspection = new DatabaseSync(fixture.path);
+    try {
+      const count = inspection.prepare("UPDATE learner_observation_denominators SET decisions=decisions+1 WHERE run_id='bad-denominator'").run();
+      const malformed = scenario === "ready subset"
+        ? "UPDATE learner_subject_evaluations SET unavailable_json='[1e999]' WHERE run_id='missing-coverage'"
+        : "DELETE FROM learner_subject_evaluations WHERE run_id='missing-coverage'";
+      const missing = inspection.prepare(malformed).run();
+      expect(count.changes).toBeGreaterThan(0);
+      expect(missing.changes).toBeGreaterThan(0);
+    } finally { inspection.close(); }
+    const profileService = await service(fixture);
+    const read = vi.spyOn(fixture.storage, "readLongitudinalSnapshot");
+    try {
+      const overview = profileService.profile({ learnerId: "owner", handle: "owner" });
+      expect(overview.store).toMatchObject({ counted: 1, unavailable: 2, pending: scenario === "ready subset" ? 1 : 0 });
+      for (const id of ["bad-denominator", "missing-coverage"]) {
+        expect(overview.history.items.find(row => row.runId === id)).toMatchObject({
+          state: "unavailable", status: "store_mismatch", playedDecisions: null,
+        });
+      }
+      expect(overview.history.items.find(row => row.runId === "healthy")).toMatchObject({ state: "counted", playedDecisions: 3 });
+      expect(overview.observations).toEqual([]);
+      expect(overview).not.toHaveProperty("coverage");
+      const rejected = read.mock.results.find(result => result.type === "throw");
+      expect(rejected?.value).toMatchObject({ invalidRunIds: ["bad-denominator", "missing-coverage"] });
+      expect(rejected?.value).not.toHaveProperty("coverage");
+      const retry = read.mock.results.at(-1);
+      expect(retry).toMatchObject({ type: "return", value: { kind: "complete" } });
+      expect(retry?.value.coverage.sources).toHaveLength(34);
+      expect(retry?.value.coverage.decisions.map((row: { runId: string }) => row.runId)).toEqual(["healthy", "healthy", "healthy"]);
+      expect(read.mock.calls.map(([, query]) => query.through.kind)).toEqual(
+        scenario === "ready subset" ? ["all_complete", "runs", "runs"] : ["all_complete", "runs"],
+      );
+      const healthyHead = fixture.storage.read("healthy")!.run.events.length;
+      expect(read.mock.calls.at(-1)?.[1].through).toEqual({ kind: "runs", cuts: [{ runId: "healthy", requestedSeq: healthyHead }] });
+    } finally { read.mockRestore(); }
+  });
+
   it("D3772 does not call an unread complete cut counted after another cut advances during the subset read", async () => {
     const fixture = setup();
     const owner = learner(fixture.storage, "owner");
@@ -149,6 +195,38 @@ describe("the profile abstains until each card's own denominator clears", () => 
       const refreshed = profileService.profile({ learnerId: "owner", handle: "owner" });
       expect(refreshed.store).toMatchObject({ runs: 3, counted: 1, pending: 2, unavailable: 0 });
       expect(refreshed.history.items.find(row => row.runId === "ready-but-unread")).toMatchObject({ state: "counted", status: "counted_game" });
+    } finally { read.mockRestore(); }
+  });
+
+  it("D4212 retires a ready cut republished at the same sequence during Profile recovery", async () => {
+    const f = setup();
+    const owner = learner(f.storage, "owner");
+    const guest = learner(f.storage, "guest");
+    for (const id of ["same-head", "healthy"]) f.storage.create(game(id, FIANCHETTO), owner);
+    const store = f.workerStore();
+    drain(store);
+    const before = store.job("same-head")!;
+    f.storage.create(positionRun("pending"), owner);
+    const original = f.storage.readLongitudinalSnapshot.bind(f.storage);
+    let reads = 0;
+    const read = vi.spyOn(f.storage, "readLongitudinalSnapshot").mockImplementation((actor, query) => {
+      if (reads++ === 1) {
+        f.storage.grantRole("same-head", guest.learnerId, "participant", owner, AT);
+        drain(store);
+        const current = store.job("same-head")!;
+        expect(current).toMatchObject({ state: "complete", completedSeq: before.completedSeq });
+        expect(current.requestedSourceDigest).not.toBe(before.requestedSourceDigest);
+      }
+      return original(actor, query);
+    });
+    try {
+      const overview = (await service(f)).profile({ learnerId: "owner", handle: "owner" });
+      expect(overview.store).toMatchObject({ counted: 1, unavailable: 1 });
+      expect(overview.history.items.find(row => row.runId === "same-head")).toMatchObject({
+        state: "unavailable", playedDecisions: null, detail: "Not counted (cut superseded).",
+      });
+      expect(overview.history.items.find(row => row.runId === "healthy")).toMatchObject({ state: "counted" });
+      expect(read).toHaveBeenCalledTimes(3);
     } finally { read.mockRestore(); }
   });
 

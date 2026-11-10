@@ -55,6 +55,7 @@ import {
 import type { Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
 import {
+  LongitudinalReadIntegrityError,
   parseLongitudinalReadQuery,
   type LongitudinalCompleteCut,
   type LongitudinalCutOutcome,
@@ -681,19 +682,49 @@ export class LearnerProfileService {
   #snapshot(principal: Principal): Snapshot {
     const learnerId = principal.learnerId;
     const storage = this.#deps.storage;
-    const first = storage.readLongitudinalSnapshot(learnerId, this.#query(learnerId, { kind: "all_complete" }));
-    let cuts: readonly LongitudinalCutOutcome[] = first.cuts;
-    let complete: LongitudinalReadResult | undefined = first.kind === "complete" ? first : undefined;
-    if (complete === undefined) {
-      const ready = first.cuts.filter((cut) => cut.kind === "complete");
-      if (ready.length > 0) {
-        const second = storage.readLongitudinalSnapshot(learnerId, this.#query(learnerId, { kind: "runs", cuts: ready.map((cut) => ({ runId: cut.runId, requestedSeq: cut.requestedSeq })) }));
-        if (second.kind === "complete") complete = second;
-        else cuts = first.cuts.map((cut) => second.cuts.find((other) => other.runId === cut.runId) ?? cut);
+    const rejected = new Map<string, ProfileRunStatus>();
+    const read = (through: ParsedLongitudinalReadQuery["through"]): LongitudinalReadResult => {
+      try {
+        return storage.readLongitudinalSnapshot(learnerId, this.#query(learnerId, through));
+      } catch (error) {
+        if (!(error instanceof LongitudinalReadIntegrityError)) throw error;
+        for (const runId of error.invalidRunIds) rejected.set(runId, "store_mismatch");
+        return { kind: "incomplete", cuts: error.cuts };
+      }
+    };
+    const first = read({ kind: "all_complete" });
+    let cuts = first.cuts;
+    let complete = first.kind === "complete" ? first : undefined;
+    if (first.kind === "incomplete") {
+      const isReady = (cut: LongitudinalCutOutcome): cut is LongitudinalCompleteCut =>
+        cut.kind === "complete" && !rejected.has(cut.runId);
+      let ready = first.cuts.filter(isReady);
+      while (ready.length > 0) {
+        const priorRejections = rejected.size;
+        const next = read({ kind: "runs", cuts: ready.map(({ runId, requestedSeq }) => ({ runId, requestedSeq })) });
+        const byRun = new Map(next.cuts.map(cut => [cut.runId, cut]));
+        const current = ready.map<LongitudinalCutOutcome>(cut => {
+          const returned = byRun.get(cut.runId);
+          if (returned !== undefined) {
+            if (returned.kind !== "complete") return returned;
+            if (returned.sourceDigest === cut.sourceDigest && returned.completedSeq === cut.completedSeq
+              && returned.requestedSeq === cut.requestedSeq && returned.derivedRev === cut.derivedRev) return cut;
+          }
+          return { kind: "unavailable", reason: "cut_superseded", runId: cut.runId, requestedSeq: cut.requestedSeq };
+        });
+        const surviving = current.filter(isReady);
+        if (next.kind === "complete" && surviving.length === ready.length) {
+          complete = next;
+          break;
+        }
+        const currentByRun = new Map(current.map(cut => [cut.runId, cut]));
+        cuts = cuts.map(cut => currentByRun.get(cut.runId) ?? cut);
+        // A failed read supplies no rows. Retry only after removing invalid or replaced cuts.
+        if (next.kind === "incomplete" && rejected.size === priorRejections) break;
+        ready = surviving;
       }
     }
     const runs: RunFact[] = [];
-    const rejected = new Map<string, ProfileRunStatus>();
     let playedDecisionsInStore = 0;
     if (complete !== undefined && complete.kind === "complete") {
       const played = new Map<string, number>();
