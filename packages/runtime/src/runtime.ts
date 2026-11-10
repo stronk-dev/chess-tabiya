@@ -145,6 +145,17 @@ function cursorHasChildren(run: DrillRun): boolean {
   return run.nodes.some((node) => node.parentId === run.activeCursor.nodeId);
 }
 
+/** The shared pure allocation rule; callers persist it only with a valid committed move. */
+export function prepareMoveBranch(run: DrillRun, options: { readonly at?: string } = {}): MutationResult {
+  if (cursorHasChildren(run) && !branchIsEmptyAtCursor(run)) {
+    return appendBranch(run, run.activeCursor.nodeId, {
+      label: nextAltLabel(run),
+      ...(options.at === undefined ? {} : { at: options.at }),
+    });
+  }
+  return { run, emitted: [] };
+}
+
 export function createRun(inputValue: CreateRunInput | LegacyCreateRunInput): DrillRun {
   const input: CreateRunInput = "session" in inputValue
     ? inputValue
@@ -298,16 +309,9 @@ export function commitMove(
   if (!move || !isNormal(move)) throw illegalMove(uci, "malformed-UCI");
 
   const at = timestamp(options.at);
-  let run = original;
-  const emitted: DrillRunEvent[] = [];
-  if (cursorHasChildren(run) && !branchIsEmptyAtCursor(run)) {
-    const forked = appendBranch(run, run.activeCursor.nodeId, {
-      label: nextAltLabel(run),
-      at,
-    });
-    run = forked.run;
-    emitted.push(...forked.emitted);
-  }
+  const prepared = prepareMoveBranch(original, { at });
+  let run = prepared.run;
+  const emitted: DrillRunEvent[] = [...prepared.emitted];
 
   if (options.actor === "opponent") {
     const selected = appendEvents(run, [

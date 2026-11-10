@@ -110,7 +110,8 @@ import {
   botWriterLeaseDigest,
   findBotSelectionEvent,
   parseStoredBotEnvelope,
-  sealBotRootAt,
+  reconstructStoredBotRoot,
+  sealPreparedBotRoot,
   type BotOpponentAcquirer,
 } from "./bot-opponent-operation.js";
 import { botMaiaSource, botSourceFailure, botStockfishSource } from "./bot-opponent-source.js";
@@ -1442,7 +1443,7 @@ export class RunService {
       throw new ServerError("INVALID_REQUEST", "The game is over at this position");
     }
     if (position.turn === run.start.side) throw new ServerError("INVALID_REQUEST", "It is not the opponent's turn");
-    const root = sealBotRootAt(run, { nodeId: request.expectedNodeId, branchId: request.expectedBranchId, preCommitEventHeadDigest: request.expectedEventHeadDigest });
+    const root = sealPreparedBotRoot(run, request.expectedEventHeadDigest, at ?? new Date().toISOString());
     if (root === undefined) return Object.freeze({ kind: "stale_root" });
     const legal = compileBotLegalMoveMap(root);
     const classifiers = compileBotClassifierView(root, legal);
@@ -1493,6 +1494,10 @@ export class RunService {
 
     // 5. One atomic append: move, decision, operation record and the persisted deliveries.
     const committedAt = at ?? new Date().toISOString();
+    const currentRoot = sealPreparedBotRoot(current.stored.run, request.expectedEventHeadDigest, committedAt);
+    if (currentRoot === undefined || botPreProviderOperandDigest({ requestId: request.requestId,
+      root: currentRoot.identity, writerLeaseDigest: currentLeaseDigest, profileDigest: entry.reference.digest,
+      seed: currentRoot.seed }) !== preProviderOperandDigest) return Object.freeze({ kind: "stale_root" });
     const base = botSelection(decision, acquisition.maia.delivery);
     const stockfishRecord = acquisition.stockfish === undefined
       ? undefined
@@ -1550,12 +1555,12 @@ export class RunService {
    */
   #replayBotSelection(run: DrillRun, event: OpponentMoveSelectedEvent, entry: BotProfileCatalogEntry, request: BotOpponentPlyRequest, writerLeaseDigest: string, kind: "replayed_idempotent" | "replayed_concurrent_winner"): BotOpponentPlyOutcome {
     const stored = event.data.selection.policy!.operation;
-    const root = sealBotRootAt(run, { nodeId: request.expectedNodeId, branchId: request.expectedBranchId, preCommitEventHeadDigest: request.expectedEventHeadDigest });
-    if (root === undefined) return Object.freeze({ kind: "request_reused_with_different_operands" });
-    const pre = botPreProviderOperandDigest({ requestId: request.requestId, root: root.identity, writerLeaseDigest, profileDigest: entry.reference.digest, seed: root.seed });
-    if (stored.preProviderOperandDigest !== pre) return Object.freeze({ kind: "request_reused_with_different_operands" });
     let envelope: BotPolicyEventEnvelope;
     try {
+      const recovered = reconstructStoredBotRoot(run, event), root = recovered.root;
+      if (!botRootIsCurrent(recovered.original, request)) return Object.freeze({ kind: "request_reused_with_different_operands" });
+      const pre = botPreProviderOperandDigest({ requestId: request.requestId, root: root.identity, writerLeaseDigest, profileDigest: entry.reference.digest, seed: root.seed });
+      if (stored.preProviderOperandDigest !== pre) return Object.freeze({ kind: "request_reused_with_different_operands" });
       envelope = parseStoredBotEnvelope(run, event);
     } catch (error) {
       throw new ServerError("STORAGE_FAILURE", "A stored bot-policy envelope failed its durable parse", { cause: error });

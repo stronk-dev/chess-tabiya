@@ -16,6 +16,7 @@ import {
   digestSessionSource,
   projectRun,
   runEventHeadDigest,
+  readBackReplay,
   type BotProfileReference,
   type DrillRun,
   type DrillRunEvent,
@@ -25,7 +26,7 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { APPLICATION_PROVIDER_BOUNDS } from "./application.js";
-import { BotOpponentProviders, parseStoredBotEnvelope, sealBotRootAt, type BotAcquisition, type BotOpponentAcquirer, type BotOpponentProvidersOptions } from "./bot-opponent-operation.js";
+import { BotOpponentProviders, parseStoredBotEnvelope, parseRunBotEnvelopes, sealBotRootAt, type BotAcquisition, type BotOpponentAcquirer, type BotOpponentProvidersOptions } from "./bot-opponent-operation.js";
 import { BotProviderAvailability, reloadBotSources } from "./bot-opponent-source.js";
 import { compileBotClassifierView, compileBotLegalMoveMap, compileBotPolicyExecution, sealBotRootAuthority } from "./bot-policy-compiler.js";
 import { EVIDENCE_MANIFEST } from "./evidence-manifest.js";
@@ -70,7 +71,8 @@ class NoEvidence implements EvidenceExecutor {
 
 const cleanups: (() => void | Promise<void>)[] = [];
 afterEach(async () => {
-  for (const cleanup of cleanups.splice(0).reverse()) await cleanup();
+  try { for (const cleanup of cleanups.splice(0).reverse()) await cleanup(); }
+  finally { vi.restoreAllMocks(); }
 });
 
 type ProviderOptions = Partial<Pick<BotOpponentProvidersOptions, "stockfishEngine" | "now" | "maiaBudgetMs">>;
@@ -283,6 +285,17 @@ function storedSelections(storage: SQLiteRunStorage, runId: string): readonly Op
   return storage.read(runId)!.run.events.filter((event): event is OpponentMoveSelectedEvent => event.type === "opponent.move_selected");
 }
 
+async function afterBotRewind(f: ReturnType<typeof setup>, seedMode: "fixed" | "per_branch" = "per_branch") {
+  const body = createBody("bot-auto-fork", { mode: "human_common", profile: profile("human-baseline.1400@1") });
+  const created = await call(f.handler, "POST", "/runs", { ...body, policyConfig: { ...body.policyConfig, seedMode } });
+  expect(created.status, await created.clone().text()).toBe(201);
+  const initial = (await created.json() as { run: DrillRun }).run;
+  const first = await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, plyBody(initial, requestId("before-rewind")));
+  expect(first.status, await first.clone().text()).toBe(200);
+  const rewind = f.service.rewind(initial.id, WRITER, { nodeId: initial.activeCursor.nodeId, branchId: initial.activeCursor.branchId });
+  return { initial, rewound: rewind.run, request: plyBody(rewind.run, requestId("after-rewind")) };
+}
+
 describe("run lane 0.18: create, resume and rematch carry the exact profile (A1)", () => {
   it("migration31 preserves a real stored bot decision, shared deliveries and evidence attachment", async () => {
     const directory = mkdtempSync(join(tmpdir(), "tabiya-bot-telemetry-migration-"));
@@ -366,6 +379,118 @@ describe("run lane 0.18: create, resume and rematch carry the exact profile (A1)
 });
 
 describe("POST /runs/:runId/opponent-ply (A2, A6, A8; D3027/D3028)", () => {
+  it.each(["fixed", "per_branch"] as const)("replays and retries a bot reply after a real rewind automatically forks (%s)", async seedMode => {
+    const f = setup(), { handler, storage, engine } = f;
+    const { initial, request } = await afterBotRewind(f, seedMode);
+    const response = await call(handler, "POST", `/runs/${initial.id}/opponent-ply`, request);
+    expect(response.status, await response.clone().text()).toBe(200);
+    const run = storage.read(initial.id)!.run, selected = storedSelections(storage, run.id).at(-1)!;
+    expect(selected.data.branchId).not.toBe(initial.activeCursor.branchId);
+    const actualBranch = run.branches.find(branch => branch.id === selected.data.branchId)!;
+    const envelope = parseStoredBotEnvelope(run, selected);
+    expect(envelope.operation.root.branchId).toBe(actualBranch.id);
+    expect(envelope.operation.seed).toBe(actualBranch.seed);
+    const bytes = JSON.stringify(run), calls = (engine as CountingEngine).exchanges.length;
+    const retry = await call(handler, "POST", `/runs/${initial.id}/opponent-ply`, request);
+    expect(retry.status, await retry.clone().text()).toBe(200);
+    expect((await retry.json() as { operation: unknown }).operation).toEqual((await response.json() as { operation: unknown }).operation);
+    expect((engine as CountingEngine).exchanges.length).toBe(calls);
+    expect(JSON.stringify(storage.read(initial.id)!.run)).toBe(bytes);
+  });
+  it("keeps an explicit empty fork and later historical numbering stable", async () => {
+    const f = setup(), { initial } = await afterBotRewind(f);
+    const explicit = f.service.fork(initial.id, WRITER, initial.activeCursor.nodeId, { label: "Explicit choice" }).run;
+    const explicitRequest = plyBody(explicit, requestId("explicit-fork"));
+    expect((await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, explicitRequest)).status).toBe(200);
+    const first = f.storage.read(initial.id)!.run;
+    expect(first.branches).toHaveLength(explicit.branches.length);
+    const earlier = storedSelections(f.storage, initial.id).at(-1)!;
+    expect(parseStoredBotEnvelope(first, earlier).operation.root.branchId).toBe(explicit.activeCursor.branchId);
+    const again = f.service.rewind(initial.id, WRITER, { nodeId: initial.activeCursor.nodeId, branchId: initial.activeCursor.branchId }).run;
+    expect((await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, plyBody(again, requestId("nonzero-index")))).status).toBe(200);
+    const next = f.storage.read(initial.id)!.run, latest = storedSelections(f.storage, initial.id).at(-1)!;
+    const latestEnvelope = parseStoredBotEnvelope(next, latest);
+    expect(next.branches).toHaveLength(3); expect(latestEnvelope.operation.seed).toBe(initial.branches[0]!.seed + 2);
+    expect(parseStoredBotEnvelope(next, earlier)).toEqual(parseStoredBotEnvelope(first, earlier));
+    const calls = (f.engine as CountingEngine).exchanges.length, bytes = JSON.stringify(next);
+    expect((await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, explicitRequest)).status).toBe(200);
+    expect((f.engine as CountingEngine).exchanges.length).toBe(calls); expect(JSON.stringify(f.storage.read(initial.id)!.run)).toBe(bytes);
+  });
+  it("refuses an execution-branch retry substituted for the original request branch", async () => {
+    const f = setup(), { initial, request } = await afterBotRewind(f);
+    expect((await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, request)).status).toBe(200);
+    const run = f.storage.read(initial.id)!.run, selected = storedSelections(f.storage, initial.id).at(-1)!;
+    const calls = (f.engine as CountingEngine).exchanges.length;
+    const retry = await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, { ...request, expectedBranchId: selected.data.branchId });
+    expect(retry.status).toBe(409); expect((f.engine as CountingEngine).exchanges.length).toBe(calls);
+    expect(f.storage.read(initial.id)!.run).toEqual(run);
+  });
+  it("keeps failed acquisition free of speculative automatic branches", async () => {
+    let fail = false;
+    const working = providersFor(new MockProviderEngineClient()), failing = providersFor(new MockProviderEngineClient({ maiaFail: () => true }));
+    const f = setup({ acquirer: { acquire: input => (fail ? failing : working).acquire(input) } });
+    const { initial, request } = await afterBotRewind(f); fail = true;
+    const before = JSON.stringify(f.storage.read(initial.id)!.run);
+    const response = await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, request);
+    expect(response.status).toBe(503);
+    expect((await response.json() as { error: { result: unknown } }).error.result).toEqual(BOT_OPPONENT_PLY_RESULTS.base_provider_unavailable);
+    expect(JSON.stringify(f.storage.read(initial.id)!.run)).toBe(before);
+  });
+  it("rechecks the original root after acquisition without saving its preview fork", async () => {
+    const actual = providersFor(new MockProviderEngineClient()); let held = false;
+    let release!: () => void, entered!: () => void;
+    const wait = new Promise<void>(resolve => { release = resolve; }), ready = new Promise<void>(resolve => { entered = resolve; });
+    const f = setup({ acquirer: { async acquire(input) { const value = await actual.acquire(input); if (held) { entered(); await wait; } return value; } } });
+    const { initial, request } = await afterBotRewind(f); held = true;
+    const pending = call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, request);
+    try {
+      await ready;
+      const manual = f.service.fork(initial.id, WRITER, initial.activeCursor.nodeId, { label: "Concurrent actual branch" }).run;
+      release(); const response = await pending;
+      expect(response.status).toBe(409); expect((await response.json() as { error: { result: unknown } }).error.result).toEqual(BOT_OPPONENT_PLY_RESULTS.stale_root);
+      expect(f.storage.read(initial.id)!.run).toEqual(manual); expect(storedSelections(f.storage, initial.id)).toHaveLength(1);
+    } finally { release(); }
+  });
+  it("identical first flights on a rewound root create only one automatic branch", async () => {
+    const f = setup(), { initial, request } = await afterBotRewind(f);
+    const responses = await Promise.all([call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, request), call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, request)]);
+    const bodies = await Promise.all(responses.map(response => response.json() as Promise<{ result: { kind: string }; operation: unknown }>));
+    expect(bodies.map(body => body.result.kind).sort()).toEqual(["committed", "replayed_concurrent_winner"]);
+    expect(bodies[0]!.operation).toEqual(bodies[1]!.operation);
+    expect(f.storage.read(initial.id)!.run.branches).toHaveLength(2); expect(storedSelections(f.storage, initial.id)).toHaveLength(2);
+  });
+  it.each(["seed", "label", "origin", "intent", "fork_node", "timestamp", "mode", "head", "nonadjacent", "missing", "extra"] as const)("refuses replayable automatic-fork %s corruption", async field => {
+    const f = setup(), { initial, request } = await afterBotRewind(f);
+    expect((await call(f.handler, "POST", `/runs/${initial.id}/opponent-ply`, request)).status).toBe(200);
+    const original = f.storage.read(initial.id)!.run, selected = storedSelections(f.storage, initial.id).at(-1)!;
+    const forkSeq = selected.seq - 1;
+    const changed = original.events.flatMap((event): DrillRunEvent[] => {
+      if (field === "missing" && event.seq === forkSeq) return [];
+      if (field === "extra" && event.seq === forkSeq && event.type === "branch.forked") return [
+        { ...event, data: { branch: { ...event.data.branch, id: `${original.id}:branch:extra`, label: "Undeclared extra fork" } } }, event,
+      ];
+      if (field === "nonadjacent" && event.seq === selected.seq && event.type === "opponent.move_selected") return [
+        { type: "feedback.revealed", seq: event.seq, at: event.at, data: { nodeId: event.data.nodeId } }, { ...event, seq: event.seq + 1 },
+      ];
+      if (field === "nonadjacent" && event.seq > selected.seq) return [{ ...event, seq: event.seq + 1 }];
+      if (event.seq === forkSeq && event.type === "branch.forked") return [{ ...event,
+        ...(field === "timestamp" ? { at: "2026-11-05T12:00:00.000Z" } : {}), data: { branch: { ...event.data.branch,
+          ...(field === "seed" ? { seed: event.data.branch.seed + 1 } : {}), ...(field === "label" ? { label: "Substituted label" } : {}),
+          ...(field === "intent" ? { intent: "Substituted intent" } : {}), ...(field === "fork_node" ? { forkNodeId: original.nodes[1]!.id } : {}),
+          ...(field === "origin" ? { origin: "simulated" as const } : {}) } } }];
+      if (field === "mode" && event.type === "run.started") return [{ ...event, data: { ...event.data,
+        policyConfig: { ...event.data.policyConfig, seedMode: "fixed" } } }];
+      if (field === "head" && event.seq === selected.seq && event.type === "opponent.move_selected") {
+        const policy = event.data.selection.policy!, root = policy.operation.root as Readonly<Record<string, unknown>>;
+        return [{ ...event, data: { ...event.data, selection: { ...event.data.selection, policy: { ...policy,
+          operation: { ...policy.operation, root: { ...root, preCommitEventHeadDigest: runEventHeadDigest(original) } } } } } }];
+      }
+      return [event];
+    }).map((event, index) => ({ ...event, seq: index + 1 }));
+    const run = readBackReplay(changed).run;
+    const actual = run.events.filter((event): event is OpponentMoveSelectedEvent => event.type === "opponent.move_selected").at(-1)!;
+    expect(() => parseStoredBotEnvelope(run, actual)).toThrow(/original request prefix.*resolve uniquely/u);
+  });
   it("refuses an acquisition's copied delivery without committing an opponent move (D3368)", async () => {
     const actual = providersFor(new MockProviderEngineClient());
     const forged: BotOpponentAcquirer = {
@@ -539,21 +664,22 @@ describe("POST /runs/:runId/opponent-ply (A2, A6, A8; D3027/D3028)", () => {
     expect(storedSelections(storage, "bot-race")).toHaveLength(1);
   });
 
-  it("two first flights with different delivered bytes: the loser gets a typed conflict and writes nothing", async () => {
+  it.each([false, true])("two differing first flights give a typed conflict without a second commit (rewound=%s)", async rewound => {
     const heavy = (move: string) => (_fen: string, legal: readonly string[]) => [[move, 0.9], ...legal.filter((candidate) => candidate !== move).slice(0, 3).map((candidate) => [candidate, 0.02] as const)] as const;
     const first = providersFor(new MockProviderEngineClient({ maiaPolicy: heavy("e2e4") }));
     const second = providersFor(new MockProviderEngineClient({ maiaPolicy: heavy("d2d4") }));
     let turn = 0;
     const alternating: BotOpponentAcquirer = { acquire: (input) => (turn++ % 2 === 0 ? first : second).acquire(input) as Promise<BotAcquisition> };
-    const { handler, storage } = setup({ acquirer: alternating });
-    const run = await createBotRun(handler, "bot-conflict");
+    const f = setup({ acquirer: alternating }), { handler, storage } = f;
+    const run = rewound ? (await afterBotRewind(f)).rewound : await createBotRun(handler, "bot-conflict");
     const body = plyBody(run, requestId("conflict"));
-    const responses = await Promise.all([call(handler, "POST", "/runs/bot-conflict/opponent-ply", body), call(handler, "POST", "/runs/bot-conflict/opponent-ply", body)]);
+    const responses = await Promise.all([call(handler, "POST", `/runs/${run.id}/opponent-ply`, body), call(handler, "POST", `/runs/${run.id}/opponent-ply`, body)]);
     const statuses = responses.map((response) => response.status).sort();
     expect(statuses).toEqual([200, 409]);
     const loser = responses.find((response) => response.status === 409)!;
     expect((await loser.json() as { error: { result: unknown } }).error.result).toEqual(BOT_OPPONENT_PLY_RESULTS.concurrent_commit_conflict);
-    expect(storedSelections(storage, "bot-conflict")).toHaveLength(1);
+    expect(storedSelections(storage, run.id)).toHaveLength(rewound ? 2 : 1);
+    expect(storage.read(run.id)!.run.branches).toHaveLength(rewound ? 2 : 1);
   });
 });
 
@@ -563,6 +689,26 @@ describe("durable replay: save → reload → retry through the shared delivery 
     cleanups.push(() => rmSync(directory, { recursive: true, force: true }));
     return join(directory, "bot.sqlite");
   }
+
+  it.each(["fixed", "per_branch"] as const)("exports and retries a real automatic fork after restart with no provider work (%s)", async seedMode => {
+    const filename = file(), first = setup({ filename });
+    const { initial, request } = await afterBotRewind(first, seedMode);
+    const response = await call(first.handler, "POST", `/runs/${initial.id}/opponent-ply`, request);
+    expect(response.status).toBe(200);
+    const original = (await response.json() as { operation: unknown }).operation;
+    const run = first.storage.read(initial.id)!.run, envelopes = parseRunBotEnvelopes(run);
+    const exported = first.storage.accountBundle("__legacy").ownedRuns.value.find(row => row.id === initial.id)!;
+    expect(exported.snapshot.kind).toBe("parsed");
+    if (exported.snapshot.kind !== "parsed") throw Error("Actual account export is not replayable");
+    expect(parseRunBotEnvelopes(exported.snapshot.value)).toEqual(envelopes);
+    await cleanups.pop()!();
+    const engine = new CountingEngine(), second = setup({ filename, engine });
+    const retry = await call(second.handler, "POST", `/runs/${initial.id}/opponent-ply`, request);
+    expect(retry.status, await retry.clone().text()).toBe(200);
+    expect((await retry.json() as { operation: unknown }).operation).toEqual(original);
+    expect(parseRunBotEnvelopes(second.storage.read(initial.id)!.run)).toEqual(envelopes);
+    expect(second.storage.read(initial.id)!.run).toEqual(run); expect(engine.exchanges).toEqual([]);
+  });
 
   it("returns the stored envelope after a restart with zero provider calls", async () => {
     const filename = file();

@@ -16,6 +16,8 @@
 import {
   BOT_LAYER_DECLARATIONS,
   branchPath,
+  readBackReplay,
+  runEventHeadDigest,
   catalogEntryFor,
   historyFrom,
   resolveBotProfileReference,
@@ -29,6 +31,8 @@ import {
   type MaiaPolicyPage,
   type TypedProviderResult,
 } from "@chess-tabiya/runtime";
+import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
+import { prepareMoveBranch } from "../../../packages/runtime/src/runtime.js";
 
 import {
   compileBotClassifierView,
@@ -232,6 +236,47 @@ export function sealBotRootAt(run: DrillRun, input: { readonly nodeId: string; r
   });
 }
 
+/** Plan the actual execution branch without saving a speculative fork (§4.1a). */
+export function sealPreparedBotRoot(run: DrillRun, originalHead: string, at: string): BotOperationRootAuthority | undefined {
+  const prepared = prepareMoveBranch(run, { at }).run;
+  return sealBotRootAt(prepared, { nodeId: prepared.activeCursor.nodeId, branchId: prepared.activeCursor.branchId,
+    preCommitEventHeadDigest: originalHead });
+}
+
+/** The two possible ORIGINAL request prefixes, never the current branch count or a caller root. */
+export function reconstructStoredBotRoot(run: DrillRun, event: OpponentMoveSelectedEvent): Readonly<{
+  original: DrillRun; root: BotOperationRootAuthority;
+}> {
+  const ordinal = run.events.findIndex(candidate => candidate.seq === event.seq);
+  const actual = run.events[ordinal], committed = run.events[ordinal + 1];
+  if (actual?.type !== "opponent.move_selected" || canonicalizeJson(actual) !== canonicalizeJson(event)
+    || committed?.type !== "move.committed" || committed.seq !== actual.seq + 1
+    || committed.data.node.actor !== "opponent" || committed.data.node.parentId !== actual.data.nodeId
+    || committed.data.node.branchId !== actual.data.branchId || committed.data.node.moveUci !== actual.data.moveUci
+    || actual.data.selection.moveUci !== actual.data.moveUci) throw new BotEnvelopeIntegrityError("selection is not its exact original committed pair");
+  const storedRoot = actual.data.selection.policy?.operation.root;
+  if (storedRoot === null || typeof storedRoot !== "object" || Array.isArray(storedRoot)) throw new BotEnvelopeIntegrityError("the operation names no original root");
+  const originalHead = (storedRoot as Readonly<Record<string, unknown>>).preCommitEventHeadDigest;
+  if (typeof originalHead !== "string") throw new BotEnvelopeIntegrityError("the operation root has no event head");
+  const lengths = [ordinal, ...(run.events[ordinal - 1]?.type === "branch.forked" ? [ordinal - 1] : [])];
+  const matches: { original: DrillRun; root: BotOperationRootAuthority }[] = [];
+  const actualPrefix = run.events.slice(0, ordinal);
+  for (const length of lengths) {
+    const events = run.events.slice(0, length);
+    if (runEventHeadDigest({ id: run.id, events }) !== originalHead) continue;
+    const original = readBackReplay(events).run;
+    if (original.activeCursor.nodeId !== actual.data.nodeId) continue;
+    const prepared = prepareMoveBranch(original, { at: actual.at }).run;
+    if (prepared.activeCursor.branchId !== actual.data.branchId
+      || canonicalizeJson(prepared.events) !== canonicalizeJson(actualPrefix)) continue;
+    const root = sealBotRootAt(prepared, { nodeId: actual.data.nodeId, branchId: actual.data.branchId,
+      preCommitEventHeadDigest: originalHead });
+    if (root !== undefined) matches.push({ original, root });
+  }
+  if (matches.length !== 1) throw new BotEnvelopeIntegrityError("the original request prefix and exact branch preparation do not resolve uniquely");
+  return Object.freeze(matches[0]!);
+}
+
 /**
  * The recorded selection a composed profile move commits (the event's ordinary half). Candidates
  * carry Maia's reconstructed human-model mass — the same kind of value an ordinary human_common
@@ -293,8 +338,7 @@ export function parseStoredBotEnvelope(run: DrillRun, event: OpponentMoveSelecte
     throw new BotEnvelopeIntegrityError("the operation root is not this event's position");
   }
   if (typeof rootIdentity.preCommitEventHeadDigest !== "string") throw new BotEnvelopeIntegrityError("the operation root has no event head");
-  const root = sealBotRootAt(run, { nodeId: event.data.nodeId, branchId: event.data.branchId, preCommitEventHeadDigest: rootIdentity.preCommitEventHeadDigest });
-  if (root === undefined) throw new BotEnvelopeIntegrityError("the event's position is not on its branch");
+  const { root } = reconstructStoredBotRoot(run, event);
   let sources: ReturnType<typeof reloadBotSources>;
   try {
     sources = reloadBotSources(stored.deliveries);
