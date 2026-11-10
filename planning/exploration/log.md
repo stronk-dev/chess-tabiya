@@ -40637,3 +40637,28 @@ Commit the small source checkpoint, then continue the same accepted D4200 item w
 evaluation rows, original reduction/fold, next migration36/revision10 and all seven atomic family
 paths. Full normal gates, genuine9 upgrade/account/read/rebuild and current workload proof remain
 required before the coordinated feature closes. No whole1.0 gate or consumer default changes.
+
+### 2026-11-10 — D4200 exact evaluation-row vocabulary and literal decoder
+
+The existing server subject contract now defines exact54-source ProfileCoverageProjection from
+the existing native/mode/condition types, plus the per-decision evaluation row and literal SQL key.
+No new source registry, issuer, schema/hash namespace or runtime collector is added. Decoder closes
+the three current failure causes, ref/cause/reason pairing, canonical source order and nonempty
+unique dense root/child members; rows reuse the exact original decision/cohort context parser.
+All normalized nested values are detached/frozen. Genuine empty/forced evaluations remain distinct
+from absent coverage, and projected DTOs cannot masquerade as full stored rows.
+
+New controls roundtrip actual original both-color legacy/risk failures with zero new population
+acquisition, reject malformed refs/causes/getters/prototype/sparse/context values and exercise
+compile-time bad-version/trade/future-source refusals. Normal focused62/three pass in7.07s;
+complete types/Svelte0errors0warnings pass after correcting TypeScript's array-descriptor view.
+Independent bounded read accepts. Actual legal member order/count, original actor/cut/time/
+revision/cardinality and publication/fold authority remain the later storage join, explicitly
+not claimed by this literal parser. Source/runtime modules and current qualification receipts
+are unchanged. No storage table, derivation revision or learner publication is activated yet.
+
+Actual existing SQLite subject-store/Profile regression then passes41/two in12.63s, in addition
+to62/three grammar controls. The shared observation context still passes its current consumer
+path. Commit the data boundary separately, then continue the same D4200 item with original-source
+reference validation and coordinated summary/fold/table/publication integration. No full-software
+certificate is extended from35d7cc5c to this newer data-contract step.

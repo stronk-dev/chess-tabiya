@@ -4,6 +4,9 @@ import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
 import type { NativeSubjectBySource, NativeSubjectSourceRef } from "../../../packages/runtime/src/semantic-native-subject-types.js";
 import type { ParametersByFamily, RelationByFamily, SubjectByFamily, SubjectOutcomeFamily } from "../../../packages/runtime/src/semantic-subject-types.js";
 import type { SemanticEventSign } from "@chess-tabiya/runtime";
+import type { UnavailableSemanticSource } from "../../../packages/runtime/src/semantic-source-availability-types.js";
+import type { SEMANTIC_PLAYED_RANKING_MODES } from "../../../packages/runtime/src/semantic-played-types.js";
+import { PROFILE_SUBJECT_PROJECTIONS } from "../../../packages/runtime/src/profile-subject-sources.js";
 import { canonicalInstant, LONGITUDINAL_PHASES, LONGITUDINAL_DECISION_CLASSES, LONGITUDINAL_SESSION_KINDS,
   parseDecisionRef, type DecisionRef, type LongitudinalPhase, type LongitudinalDecisionClass, type LongitudinalSessionKind } from "./longitudinal-contract.js";
 import { LONGITUDINAL_INGEST_REGISTRY } from "./longitudinal-registry.js";
@@ -22,6 +25,17 @@ interface SubjectRowContext {
   readonly occurred: boolean; readonly legalAlternatives: number; readonly matchingAlternatives: number; readonly comparableAlternatives: number;
 }
 export type LongitudinalSubjectObservationRow = SubjectRowContext & SubjectObservationIdentity;
+export type LongitudinalSubjectEvaluationRow = Omit<SubjectRowContext, "occurred" | "matchingAlternatives" | "comparableAlternatives"> & {
+  readonly unavailable: readonly UnavailableSemanticSource[];
+};
+type ProfilePrevalenceRef = { [K in keyof typeof SEMANTIC_PLAYED_RANKING_MODES]:
+  (typeof SEMANTIC_PLAYED_RANKING_MODES)[K] extends "projection_sign_prevalence" ? K : never
+}[keyof typeof SEMANTIC_PLAYED_RANKING_MODES];
+type ProjectionForRef<R extends string> = R extends `${infer Id}@${infer Version extends number}`
+  ? Readonly<{ id: Id; version: Version }> : never;
+export type ProfileCoverageProjection = ProjectionForRef<NativeSubjectSourceRef
+  | Exclude<ProfilePrevalenceRef, "derived.exchange.trade_completed@1">
+  | `derived.semantic_avoidance.${SubjectOutcomeFamily}@2`>;
 const invalid = (): never => { throw new TypeError("LONGITUDINAL_SUBJECT_ROW_INVALID"); };
 // Snapshot data properties once. Accessors, symbols, extra keys and prototype bags refuse.
 function object(value: unknown, keys: readonly string[]): Record<string, unknown> {
@@ -172,6 +186,16 @@ export function subjectObservationMatches(row: LongitudinalSubjectObservationRow
 }
 
 const contextKeys = ["learnerId", "runId", "decisionRef", "phase", "decisionClass", "sessionKind", "packId", "observedAt", "derivedRev", "actor", "occurred", "legalAlternatives", "matchingAlternatives", "comparableAlternatives"] as const;
+function decisionContext(r: Record<string, unknown>) {
+  const sessionKind = member(r.sessionKind, LONGITUDINAL_SESSION_KINDS), decisionRefKind = field(r.decisionRef, "kind");
+  const ref = object(r.decisionRef, decisionRefKind === "move" ? ["kind", "nodeId", "eventSeq"] : ["kind", "nodeId", "checkpointId", "eventSeq"]);
+  const decisionRef = parseDecisionRef(ref), decisionClass = member(r.decisionClass, LONGITUDINAL_DECISION_CLASSES);
+  if ((decisionClass === "predicted") !== (decisionRef.kind === "prediction") || decisionClass === "game" && sessionKind !== "imported") return invalid();
+  if (sessionKind === "pack" ? typeof r.packId !== "string" || r.packId.length === 0 : r.packId !== null) return invalid();
+  return { learnerId: string(r.learnerId), runId: string(r.runId), decisionRef,
+    phase: member(r.phase, LONGITUDINAL_PHASES), decisionClass, sessionKind, packId: r.packId as string | null,
+    observedAt: canonicalInstant(r.observedAt, "LONGITUDINAL_SUBJECT_ROW_INVALID"), derivedRev: integer(r.derivedRev, 1), actor: color(r.actor) };
+}
 export function parseLongitudinalSubjectObservationRow(value: unknown): LongitudinalSubjectObservationRow {
   const tested = field(value, "sourceKind") === "condition_relation" ? "relation" : "sign";
   const identityKeys = ["sourceKind", "projectionId", "projectionVersion", "subject", "parameters", tested];
@@ -181,17 +205,66 @@ export function parseLongitudinalSubjectObservationRow(value: unknown): Longitud
   if (typeof r.occurred !== "boolean" || matchingAlternatives > comparableAlternatives || comparableAlternatives > legalAlternatives
     || (r.occurred ? comparableAlternatives <= matchingAlternatives : matchingAlternatives === 0)
     || identity.sourceKind === "native_incidence" && comparableAlternatives !== legalAlternatives) return invalid();
-  const actor = color(r.actor);
-  if (identity.sourceKind === "condition_relation" && identity.subject.kind === "loose_piece" && identity.subject.root.color !== actor) return invalid();
-  const sessionKind = member(r.sessionKind, LONGITUDINAL_SESSION_KINDS), decisionRefKind = field(r.decisionRef, "kind");
-  const ref = object(r.decisionRef, decisionRefKind === "move" ? ["kind", "nodeId", "eventSeq"] : ["kind", "nodeId", "checkpointId", "eventSeq"]);
-  const decisionRef = parseDecisionRef(ref), decisionClass = member(r.decisionClass, LONGITUDINAL_DECISION_CLASSES);
-  if ((decisionClass === "predicted") !== (decisionRef.kind === "prediction") || decisionClass === "game" && sessionKind !== "imported") return invalid();
-  if (sessionKind === "pack" ? typeof r.packId !== "string" || r.packId.length === 0 : r.packId !== null) return invalid();
-  return Object.freeze({ ...identity, learnerId: string(r.learnerId), runId: string(r.runId), decisionRef,
-    phase: member(r.phase, LONGITUDINAL_PHASES), decisionClass, sessionKind, packId: r.packId as string | null,
-    observedAt: canonicalInstant(r.observedAt, "LONGITUDINAL_SUBJECT_ROW_INVALID"), derivedRev: integer(r.derivedRev, 1), actor,
+  const context = decisionContext(r);
+  if (identity.sourceKind === "condition_relation" && identity.subject.kind === "loose_piece" && identity.subject.root.color !== context.actor) return invalid();
+  return Object.freeze({ ...identity, ...context,
     occurred: r.occurred, legalAlternatives, matchingAlternatives, comparableAlternatives });
+}
+
+/** Literal coverage is data, never proof that its declared sources were actually evaluated. */
+export function parseProfileCoverageProjection(value: unknown): ProfileCoverageProjection {
+  const ref = object(value, ["id", "version"]);
+  const source = PROFILE_SUBJECT_PROJECTIONS.find(p => p.id === ref.id && p.version === ref.version);
+  if (source === undefined) return invalid();
+  return Object.freeze({ ...source }) as ProfileCoverageProjection;
+}
+function denseArray(value: unknown): readonly unknown[] {
+  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) return invalid();
+  const descriptors = Object.getOwnPropertyDescriptors(value as object), size: unknown = descriptors.length?.value;
+  if (!Number.isSafeInteger(size) || (size as number) < 0 || Reflect.ownKeys(descriptors).length !== (size as number) + 1) return invalid();
+  return Array.from({ length: size as number }, (_, i) => {
+    const d = descriptors[String(i)];
+    if (d === undefined || !d.enumerable || !("value" in d)) return invalid();
+    return d.value as unknown;
+  });
+}
+export function parseProfileUnavailableSources(value: unknown): readonly UnavailableSemanticSource[] {
+  let previous = "";
+  const parsed = denseArray(value).map(raw => {
+    const row = object(raw, ["projection", "cause", "reason", "members"]), projection = parseProfileCoverageProjection(row.projection);
+    const key = `${projection.id}@${projection.version}`;
+    if (key <= previous || row.reason !== "invalid_turn_clone") return invalid();
+    previous = key;
+    const cause = object(row.cause, ["kind", "projection"]), causeProjection = object(cause.projection, ["id", "version"]);
+    const collector = key === "rules.tactic.event.loose_piece@1" || key === "derived.tactic.defender_exposure@2";
+    if (collector ? cause.kind !== "candidate_collector" || causeProjection.id !== projection.id || causeProjection.version !== projection.version
+      : key !== "derived.semantic_avoidance.loose_piece@2" || cause.kind !== "required_total"
+        || causeProjection.id !== "rules.tactic.reading.mover_piece_risk" || causeProjection.version !== 1) return invalid();
+    const seen = new Set<string>();
+    const members = denseArray(row.members).map((rawMember, index) => {
+      const kind = field(rawMember, "kind");
+      const r = object(rawMember, kind === "root" ? ["kind"] : ["kind", "moveUci"]);
+      if (kind === "root") {
+        if (collector || index !== 0 || seen.has("root")) return invalid();
+        seen.add("root"); return Object.freeze({ kind: "root" as const });
+      }
+      if (kind !== "child" || typeof r.moveUci !== "string" || !/^[a-h][1-8][a-h][1-8][qrbn]?$/u.test(r.moveUci) || seen.has(r.moveUci)) return invalid();
+      seen.add(r.moveUci); return Object.freeze({ kind: "child" as const, moveUci: r.moveUci });
+    });
+    if (members.length === 0) return invalid();
+    // The closed correlated union is established by the exact source/cause checks above.
+    return Object.freeze({ projection, cause: Object.freeze({ kind: cause.kind, projection: Object.freeze({ ...causeProjection }) }),
+      reason: "invalid_turn_clone", members: Object.freeze(members) }) as UnavailableSemanticSource;
+  });
+  return Object.freeze(parsed);
+}
+const evaluationKeys = ["learnerId", "runId", "decisionRef", "actor", "phase", "decisionClass", "sessionKind", "packId", "legalAlternatives", "unavailable", "observedAt", "derivedRev"] as const;
+export function parseLongitudinalSubjectEvaluationRow(value: unknown): LongitudinalSubjectEvaluationRow {
+  const r = object(value, evaluationKeys);
+  return Object.freeze({ ...decisionContext(r), legalAlternatives: integer(r.legalAlternatives, 0), unavailable: parseProfileUnavailableSources(r.unavailable) });
+}
+export function subjectEvaluationKey(row: LongitudinalSubjectEvaluationRow): string {
+  return canonicalizeJson([row.learnerId, row.runId, row.decisionRef]);
 }
 /** Exact literal SQL key parts; no hash or cross-decision invented piece identity. */
 export function subjectObservationKey(row: LongitudinalSubjectObservationRow): string {

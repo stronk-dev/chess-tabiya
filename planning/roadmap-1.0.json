@@ -977,7 +977,7 @@
         "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "D4200 native7 now keeps complete original incidences despite unrelated legacy/risk gaps, while the Profile composer explicitly preserves the persisted revision9 whole54 fence. New controls first fail3/7; focused48/three, complete types and independent bounded review pass. The complete software18944/571 and performance7/four certificate on35d7cc5c is the preceding source/selector stage, not this new native step. Actual one-edge41/selector54,1470case values/order and89subjects/17qualified remain; recorded semantic file closures exclude these private modules. Next deliver exact per-decision evaluations, original fold and coordinated revision10/seven-family storage/read/rebuild/account/upgrade/cost. Seven qualifications, D4167, ordinary26 and D3928 remain open.",
+          "summary": "D4200 now has source-local native7 plus an exact54-source per-decision evaluation grammar, closed source/cause/member decoder and reused decision context. Grammar62/three, actual SQLite store/Profile41/two, complete types and independent bounded review pass; source runtime and qualification receipts are unchanged by the data-contract step. Revision9 whole54 publication remains conservative. Complete software18944/571 and performance7/four on35d7cc5c belongs to the preceding selector/closure stage, not these newer steps. Next join original legal members/order/count, actor/cohort/cut/cardinality and carry the original summary/fold through revision10 seven-family publication/read/rebuild/account/upgrade/cost. Seven qualifications, D4167, ordinary26 and D3928 remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1211,7 +1211,9 @@
             "apps/server/src/longitudinal-revision9-fixture.test.ts",
             "rfc/archive/one-edge-collector-closure.md",
             "packages/runtime/src/internal/longitudinal-native-incidence.ts",
-            "packages/runtime/src/internal/profile-subject-facts.ts"
+            "packages/runtime/src/internal/profile-subject-facts.ts",
+            "apps/server/src/profile-subject-facts-contract.ts",
+            "apps/server/src/profile-subject-evaluations.test.ts"
           ],
           "anchors": [
             {
@@ -1866,7 +1868,7 @@
         "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "D4200 native7 now keeps complete original incidences despite unrelated legacy/risk gaps, while the Profile composer explicitly preserves the persisted revision9 whole54 fence. New controls first fail3/7; focused48/three, complete types and independent bounded review pass. The complete software18944/571 and performance7/four certificate on35d7cc5c is the preceding source/selector stage, not this new native step. Actual one-edge41/selector54,1470case values/order and89subjects/17qualified remain; recorded semantic file closures exclude these private modules. Next deliver exact per-decision evaluations, original fold and coordinated revision10/seven-family storage/read/rebuild/account/upgrade/cost. Seven qualifications, D4167, ordinary26 and D3928 remain open.",
+          "summary": "D4200 now has source-local native7 plus an exact54-source per-decision evaluation grammar, closed source/cause/member decoder and reused decision context. Grammar62/three, actual SQLite store/Profile41/two, complete types and independent bounded review pass; source runtime and qualification receipts are unchanged by the data-contract step. Revision9 whole54 publication remains conservative. Complete software18944/571 and performance7/four on35d7cc5c belongs to the preceding selector/closure stage, not these newer steps. Next join original legal members/order/count, actor/cohort/cut/cardinality and carry the original summary/fold through revision10 seven-family publication/read/rebuild/account/upgrade/cost. Seven qualifications, D4167, ordinary26 and D3928 remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/presentation-move-path.ts",
@@ -2446,7 +2448,9 @@
             "apps/server/src/longitudinal-revision9-fixture.test.ts",
             "rfc/archive/one-edge-collector-closure.md",
             "packages/runtime/src/internal/longitudinal-native-incidence.ts",
-            "packages/runtime/src/internal/profile-subject-facts.ts"
+            "packages/runtime/src/internal/profile-subject-facts.ts",
+            "apps/server/src/profile-subject-facts-contract.ts",
+            "apps/server/src/profile-subject-evaluations.test.ts"
           ],
           "anchors": [
             {

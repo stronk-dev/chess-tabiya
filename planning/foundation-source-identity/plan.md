@@ -2770,3 +2770,12 @@ partial data is published without durable coverage. Actual new controls first fa
 focused48/three and complete types pass; independent bounded review accepts. Full35d7cc5c remains
 the prior-stage certificate. Continue D4200's typed evaluations/private summary/fold and coordinated
 seven-family migration/read/rebuild/account work; no qualification or product gate is promoted.
+
+### D4200 evaluation contract checkpoint — 2026-11-10
+
+The existing server data contract now has the exact54-source union, closed failure/member
+decoder, per-decision evaluation row and literal key. New actual-source roundtrip/negative/type
+controls plus prior subject/longitudinal grammar pass62/three; complete types and independent
+bounded review pass. This is data grammar, not source/publication authority. Join original legal
+members/order/count, actor/cohort/cut and normative cardinality in the forthcoming stored reads;
+activate only with original summary/fold, all seven atomic families and revision10 migration.
