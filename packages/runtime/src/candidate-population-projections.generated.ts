@@ -46,7 +46,6 @@ export const CANDIDATE_COLLECTOR_PROJECTION_KEYS = Object.freeze({
   ] as const),
   "event.exchange": Object.freeze([
     "derived.exchange.capture_class@1",
-    "derived.exchange.trade_completed@1",
   ] as const),
   "event.discovered": Object.freeze([
     "derived.tactic.discovered_executed@1",

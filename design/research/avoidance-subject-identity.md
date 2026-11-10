@@ -433,3 +433,15 @@ whole-population observations above describe the predecessor; current selector c
 in d449e3c8, but durable Profile availability remains open under D4200. The current complete
 software run has separately reported a repository-reader census failure and is not a green
 certificate for that selector change.
+
+`[V]` After independent follow-up acceptance, the generator's exchange group and played-mode
+map remove only trade1. Actual generated local41 and selector54 match the unchanged immutable
+ingest registry/Profile sets; global recorded support remains. Focused177/five, module/store44/two,
+historical-boundary10/two, strict probe4, scheduling9 and types pass. Fresh canonical generation
+passes1470/1470 with89 subjects/17qualified,63 population receipts/eight external receipts. Parsed
+before/after comparison preserves every case outcome/order, target operands/payload/source
+digests, all verdicts, population values and external receipts. Changed metadata is1056 target
+input digests across584cases plus population predicate implementation digests. Source cases,
+profiles and immutable v3 registry bytes remain unchanged. Sources: actual canonical writer and
+its generated receipt; `one-edge-collector-closure.md`; the cited runtime tests. The fresh whole
+software gate remains required; these checks do not discharge D4200 history or widen qualification.

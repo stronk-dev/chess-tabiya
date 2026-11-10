@@ -1,4 +1,4 @@
-// Accepted subject-safe-semantic-selection §5: exact42 played-ranking dispositions. A new
+// Accepted one-edge-collector-closure: exact41 acquired played-ranking dispositions. A new
 // registered projection never inherits a mode by version, prefix, newest ref or catchall.
 export const SEMANTIC_PLAYED_RANKING_MODES = Object.freeze({
   "rules.structural.event.king_zone@1": "projection_sign_prevalence",
@@ -30,7 +30,6 @@ export const SEMANTIC_PLAYED_RANKING_MODES = Object.freeze({
   "rules.tactic.event.loose_piece@1": "projection_sign_prevalence",
   "rules.castling.event.rights_lost@1": "projection_sign_prevalence",
   "derived.exchange.capture_class@1": "projection_sign_prevalence",
-  "derived.exchange.trade_completed@1": "projection_sign_prevalence",
   "derived.tactic.discovered_executed@1": "projection_sign_prevalence",
   "rules.square.event.control@1": "projection_sign_prevalence",
   "rules.mobility.event.piece_destinations@1": "projection_sign_prevalence",

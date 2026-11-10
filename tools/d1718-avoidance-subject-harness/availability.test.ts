@@ -12,7 +12,7 @@ import { prepareRecordedSemanticWindowPopulation, collectRecordedSequenceWindow,
 import { recordedSequenceWindowFixture } from "../../packages/runtime/src/testing/recorded-sequence-window-fixture.js";
 
 describe("D4200 source-local availability versus global canonical abstentions", () => {
-  it.each([false, true])("D4210 measures unacquired trade coverage separately from a genuine recorded trade (mirrored=%s)", mirrored => {
+  it.each([false, true])("D4210 excludes unacquired trade coverage and preserves genuine recorded trade (mirrored=%s)", mirrored => {
     const fen = "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", moves = ["e4d5", "e6d5"] as const;
     const beforeFen = mirrored ? mirrorSemanticFen(fen, "color_and_vertical") : fen;
     const moveUci = mirrored ? mirrorSemanticUci(moves[0], "color_and_vertical") : moves[0];
@@ -23,7 +23,7 @@ describe("D4200 source-local availability versus global canonical abstentions", 
       if (compiled.kind !== "ready") throw Error("Actual original candidate fixture required");
       legalMembers = compiled.receipt.packet.candidates.length;
       const selected = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 3 }, { receipt: compiled.receipt, moveUci });
-      expect(selected.coverage.sources).toContainEqual({ id: "derived.exchange.trade_completed", version: 1 });
+      expect(selected.coverage.sources).not.toContainEqual({ id: "derived.exchange.trade_completed", version: 1 });
       expect(selected.coverage.unavailable).toEqual([]);
       expect(calls.mock.calls.filter(([route]) => route.startsWith("derived.exchange.trade_completed@"))).toHaveLength(0);
       expect(calls.mock.calls.some(([route]) => route === "derived.exchange.capture_class@1")).toBe(true);
@@ -38,7 +38,7 @@ describe("D4200 source-local availability versus global canonical abstentions", 
     });
     expect(values.length).toBeGreaterThan(0);
     for (const value of values) assertDeclaredEvidence(value);
-    console.log(JSON.stringify({ question: "D4210", mirrored, legalMembers, declaredTradeCoverage: "available",
+    console.log(JSON.stringify({ question: "D4210", mirrored, legalMembers, declaredTradeCoverage: "excluded_recorded_relation",
       actualOneEdgeTradeAcquisitions: 0, genuineRecordedTradeEdges: 2, genuineRecordedTrades: values.length,
       scope: "Executed completeness-image counterexample; not a production correction or current qualification." }));
   });

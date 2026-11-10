@@ -12,7 +12,7 @@ describe("historical R3 packet bridge", () => {
     const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
     if (compiled.kind !== "ready") throw Error("Actual research boundary fixture required");
     const selected = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, POLICY, { receipt: compiled.receipt, moveUci });
-    expect(selected.coverage.sources).toHaveLength(55);
+    expect(selected.coverage.sources).toHaveLength(54);
     expect(selected.coverage.unavailable).toHaveLength(unknown);
     expect(() => adaptSelectedEvidence("current", selected)).toThrow(/R3_HISTORICAL_ADAPTER_RETIRED/);
   });

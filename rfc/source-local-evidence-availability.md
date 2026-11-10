@@ -19,6 +19,12 @@
 migration | position next | learner_subject_evaluations: one compact complete decision-coverage record; coordinated derivation-revision rebuild and seven-family publication/read/account lifecycle
 ```
 
+## Accepted scope correction
+
+`one-edge-collector-closure.md` independently supersedes §§2/3's selection55 with actual
+local41 + condition13 = selector54. Trade requires recorded captures and is excluded only from
+one-edge admission; recorded factories, Profile54 and revision10 duties remain unchanged.
+
 ## Summary
 
 Keep complete evidence usable when an unrelated collector cannot evaluate, while carrying

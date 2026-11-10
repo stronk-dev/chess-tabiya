@@ -432,11 +432,16 @@ count, pawn, file, geometry or other complete totals. A missing required mover-r
 makes the loose-piece condition unavailable; it never becomes a false predicate or a zero.
 Every original legal alternative stays in the population. Unknown collector dependencies refuse.
 
-Research selector3 carries the exact55-source image and its source-local unavailable causes on
+Research selector3 carries the exact54-source image and its source-local unavailable causes on
 every result. A complete fact can coexist with a gap in another source. Every share still counts
 all original alternatives; the result has no global evaluated-alternatives count. Empty partial
 results report incomplete coverage, while a zero fact budget retains its own reason and coverage.
 Incomplete sources cannot win a critical override. Selector/consumer2 calls are retired.
+
+The one-edge image is41 actually acquired event sources plus13 condition sources. Capture-class
+belongs to that collector; trade-completed requires two recorded captures and move anchors, so
+it belongs to recorded-window analysis. The separate recorded trade producer remains supported.
+Neither global registration nor absent events establishes that a candidate source was acquired.
 
 Selection captures plain own-data arguments once and compiles complete consumer execution before
 reading sources; local selection performs that preflight before acquiring its legal population.

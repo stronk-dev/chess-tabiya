@@ -1,6 +1,6 @@
 # RFC: one-edge collector closure
 
-- **Status:** accepted — independent buildability review2026-11-10; cache wording and native-plus-edge set returns repaired before implementation.
+- **Status:** implementing — independent contract and bounded source review2026-11-10; focused177/five, strict probe and type/scheduling checks pass. Fresh canonical1470/1470 preserves89 subjects/17qualified; complete software gate remains.
 - **Author:** codex
 - **Created:** 2026-11-10
 - **Parent / amends:** subject-safe-semantic-selection.md §§2,5; source-local-evidence-availability.md §§2,3. Both parents remain active implementation records.

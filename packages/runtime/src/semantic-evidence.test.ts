@@ -4,7 +4,7 @@ import { inspectorFixtureEdges } from "./testing/inspector-presentation-fixture.
 import { RECORDED_SEQUENCE_POSITIVES } from "./testing/recorded-sequence-fixtures.js";
 import { recordedSequenceWindowFixture } from "./testing/recorded-sequence-window-fixture.js";
 import { recordedSemanticWindowSource } from "./recorded-semantic-window.js";
-import { RECORDED_SEQUENCE_HORIZONS, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
+import { RECORDED_SEQUENCE_HORIZONS, collectRecordedSequenceWindow, prepareRecordedSemanticWindowPopulation, readRecordedSequenceWindow, type RecordedSequenceRoute } from "./recorded-sequence-window.js";
 import { normalizeMove } from "chessops/chess";
 import { INITIAL_FEN } from "chessops/fen";
 import { parseUci } from "chessops/util";
@@ -14,7 +14,7 @@ import * as valueRouteCalls from "./internal/evidence-value-routes.js";
 
 import { canonicalFen, positionFromFen } from "./chess.js";
 import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_EVENT_DECLARATIONS, SEMANTIC_SELECTION_PROJECTION_REFS } from "./evidence-catalog.js";
-import { compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceValueReceipt, type DeclaredEvidence, type EvidenceSelectionPolicyDeclaration } from "./evidence-contract.js";
+import { assertDeclaredEvidence, compileEvidenceManifest, declareEvidence as declareWithAuthority, evidenceValueReceipt, type DeclaredEvidence, type EvidenceSelectionPolicyDeclaration } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import {
   CANDIDATE_EVENTS_SCOPE,
@@ -639,6 +639,31 @@ describe("D4170 actual factory input receipt order", () => {
 });
 
 describe("selector3 source-local coverage", () => {
+  it.each([false, true])("D4210 excludes unacquired trade but preserves real recorded capture/recapture (mirrored=%s)", mirrored => {
+    const fen = "4k3/8/4p3/3p4/4P3/8/8/4K3 w - - 0 1", moves = ["e4d5", "e6d5"] as const;
+    const beforeFen = mirrored ? mirrorSemanticFen(fen, "color_and_vertical") : fen;
+    const moveUci = mirrored ? mirrorSemanticUci(moves[0], "color_and_vertical") : moves[0];
+    const calls = vi.spyOn(valueRouteCalls, "invokeEvidenceValueRoute");
+    try {
+      const receipt = eventsReceipt(beforeFen);
+      const selected = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 3), { receipt, moveUci });
+      expect(receipt.packet.candidates).toHaveLength(7);
+      expect(selected.coverage.sources).not.toContainEqual(ref("derived.exchange.trade_completed"));
+      expect(selected.coverage.unavailable).toEqual([]);
+      expect(calls.mock.calls.some(([route]) => route === "derived.exchange.capture_class@1")).toBe(true);
+      expect(calls.mock.calls.some(([route]) => route.startsWith("derived.exchange.trade_completed@"))).toBe(false);
+    } finally { calls.mockRestore(); }
+    const run = recordedSequenceWindowFixture({ fen, moves }, mirrored, `recorded-trade-${mirrored}`);
+    const prepared = prepareRecordedSemanticWindowPopulation({ run, branchId: run.activeCursor.branchId,
+      throughNodeId: run.activeCursor.nodeId, routes: ["derived.exchange.trade_completed@2"] }).get("derived.exchange.trade_completed@2")!;
+    const events = prepared.windows.flatMap(window => {
+      expect(readRecordedSequenceWindow(window).edges).toHaveLength(2);
+      return collectRecordedSequenceWindow(window);
+    });
+    expect(events).toHaveLength(1);
+    expect(events[0]!.projection).toEqual(ref("derived.exchange.trade_completed", 2));
+    expect(() => assertDeclaredEvidence(events[0]!)).not.toThrow();
+  });
   it("rejects changing receipt/move accessors before reading either genuine source", () => {
     const fen = "k7/8/8/8/8/1p6/PP6/R6K w - - 0 1", move = "a2b3";
     const a = eventsReceipt(fen), b = eventsReceipt(mirrorSemanticFen(fen, "horizontal"));
@@ -694,7 +719,7 @@ describe("selector3 source-local coverage", () => {
     const result = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 3), { receipt, moveUci });
     expect(result.population).toEqual({ legalAlternatives: 11 });
     expect(result.coverage.sources).toEqual(SEMANTIC_SELECTION_PROJECTION_REFS);
-    expect(result.coverage.sources).toHaveLength(55);
+    expect(result.coverage.sources).toHaveLength(54);
     expect(result.coverage.unavailable).toEqual([{
       projection: ref("derived.tactic.defender_exposure", 2),
       cause: { kind: "candidate_collector", projection: ref("derived.tactic.defender_exposure", 2) },
@@ -733,7 +758,7 @@ describe("selector3 source-local coverage", () => {
     const result = selectSemanticEvidence(manifest, declaration, { receipt, moveUci: "a2b3" });
     expect(result.selected).toEqual([]);
     expect(result.emptyReason).toEqual(ref("budget_zero"));
-    expect(result.coverage.sources).toHaveLength(55);
+    expect(result.coverage.sources).toHaveLength(54);
     expect(result.coverage.unavailable).toHaveLength(1);
   });
 

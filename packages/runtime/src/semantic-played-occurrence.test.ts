@@ -1,10 +1,12 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { localSemanticEvents, selectSemanticEvidence, type SemanticEvidenceEvent } from "./semantic-evidence.js";
 import { semanticPlayedOccurrenceKey, semanticPlayedSubjectOrdinal } from "./semantic-played-occurrence.js";
 import { SEMANTIC_PLAYED_RANKING_MODES } from "./semantic-played-types.js";
 import { canonicalSemanticEdge } from "./semantic-validation-operations.js";
 import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS } from "./candidate-population.js";
-import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
+import { EVIDENCE_CONTRACT_DECLARATIONS, PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_SELECTION_PROJECTION_REFS } from "./evidence-catalog.js";
+import { PROFILE_SUBJECT_PROJECTIONS } from "./profile-subject-sources.js";
 import { compileEvidenceManifest, type EvidenceSelectionPolicyDeclaration } from "./evidence-contract.js";
 import type { BackwardPawnChange } from "./foundation-position-sources.js";
 
@@ -24,10 +26,28 @@ const fixtures = [
 const key = (event: SemanticEvidenceEvent) => `${event.projection.id}@${event.projection.version}`;
 
 describe("exact played-ranking modes and source-owned native identity", () => {
-  it("declares exactly the42 current event refs, seven native modes and35 prevalence modes", () => {
+  it("declares exactly the41 acquired event refs, seven native modes and34 prevalence modes", () => {
     expect(Object.keys(SEMANTIC_PLAYED_RANKING_MODES).sort()).toEqual([...LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS].sort());
     expect(Object.entries(SEMANTIC_PLAYED_RANKING_MODES).filter(([, mode]) => mode === "native_outcome").map(([ref]) => ref).sort()).toEqual(fixtures.map(row => row[0]).sort());
-    expect(Object.values(SEMANTIC_PLAYED_RANKING_MODES).filter(mode => mode === "projection_sign_prevalence")).toHaveLength(35);
+    expect(Object.values(SEMANTIC_PLAYED_RANKING_MODES).filter(mode => mode === "projection_sign_prevalence")).toHaveLength(34);
+  });
+  it("D4210 matches the existing registry/Profile identities and excludes recorded trade from every selector boundary", () => {
+    const registry = JSON.parse(readFileSync(new URL("../../../rfc/contracts/longitudinal-ingest-registry-v3.json", import.meta.url), "utf8")) as { kind: string; projection: { id: string; version: number } }[];
+    const ref = (p: { id: string; version: number }) => `${p.id}@${p.version}`;
+    const local = registry.filter(row => row.kind === "native" || row.kind === "edge").map(row => ref(row.projection));
+    expect(local).toHaveLength(41);
+    expect([...LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS].sort()).toEqual([...local].sort());
+    const sources = SEMANTIC_SELECTION_PROJECTION_REFS.map(ref);
+    expect(sources).toHaveLength(54);
+    expect([...sources].sort()).toEqual(PROFILE_SUBJECT_PROJECTIONS.map(ref).sort());
+    const consumer = PRIMARY_EVIDENCE_MANIFEST.consumers.find(row => row.id === "research.semantic_selection" && row.version === 3)!;
+    expect(consumer.accepts.map(ref)).toEqual(sources);
+    const bindings = PRIMARY_EVIDENCE_MANIFEST.bindings.filter(row => row.consumer.id === consumer.id && row.consumer.version === consumer.version);
+    expect(bindings.map(row => ref(row.projection)).sort()).toEqual([...sources].sort());
+    const eligible = PRIMARY_EVIDENCE_MANIFEST.eligibility.filter(row => row.consumer.id === consumer.id && row.consumer.version === consumer.version);
+    expect(eligible.map(row => ref(row.event)).sort()).toEqual([...sources].sort());
+    expect(sources).not.toContain("derived.exchange.trade_completed@1");
+    expect(registry.filter(row => row.projection.id === "derived.exchange.trade_completed")).toMatchObject([{ kind: "path" }]);
   });
   it.each(fixtures)("%s compares complete native operands without enclosing FEN/counters", (ref, fen, move) => {
     const original = events(fen, move).filter(event => key(event) === ref);

@@ -40554,3 +40554,32 @@ The exact allowlist now includes it, and the same test explicitly forbids it fro
 compileCandidatePopulation. Existing application/REST/voice/browser exclusions remain. Normal
 focused software target passes all six census tests in2.23s. Commit this two-line guard repair
 separately; D4211 remains doing until the fresh complete gate after the accepted scope correction.
+
+### 2026-11-10 — D4210 exact collector-scope implementation checkpoint
+
+Actual source diff deletes only trade1 from the candidate exchange group and ranking-mode slot;
+all other generated refs/order remain. Five new/corrected assertions fail against original55
+(5failed/106passed), then focused177/five pass with corrected41/54. New both-color production
+controls prove capture-class acquisition/zero trade calls and one genuine recorded trade@2 from
+two authenticated edges. Immutable v3 native7+edge34 and existing Profile54 provide exact source
+identity checks across accepts/bindings/eligibility; no new source register is added. The compiled
+bindings have their own sorted order, so the test compares identity sets rather than incorrectly
+requiring declaration order. Existing packet identity/refusal controls remain.
+
+Independent bounded source review accepts, conditional on actual fresh generation/normal gates.
+Typecheck/Svelte0errors0warnings, scheduling9 and strict probe4 pass. An expanded module/store
+check exposes the old42-minus-trade census exception; correcting it yields direct41 identity
+equality with recorded-path retention,44/two pass. Historical adapter boundary10/two passes.
+One initially guessed nonexistent registry test path was refused before running; the actual
+longitudinal-contract suite was used. No ordinary26/new qualification/storage/release promotion.
+Canonical writer remains live; commit only after its result and synchronize current metadata,
+then freeze the implementation for the complete normal software run. D4210/D4211 remain doing.
+
+The canonical handle then exits0:1470/1470,89subjects/17qualified,63population/eight external.
+An initial equality comparison included input-provenance metadata and correctly reports changes;
+field-level comparison proves1470case outcomes/order and all target operands/payload/source
+digests unchanged. Only1056target input digests across584cases and population predicate
+implementation digests differ. All89verdicts,63population values,eight externals and source/
+profile/immutable-registry bytes are unchanged. Rebuild after the final generated receipts;
+commit this bounded implementation with full gate pending, then run the normal complete target
+on those committed bytes. The source diff remains exactly deletion of the unreachable trade slot.

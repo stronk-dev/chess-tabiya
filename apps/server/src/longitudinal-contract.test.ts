@@ -79,10 +79,10 @@ describe("criterion 2 — literal registry closure", () => {
   it("is set-equal to executed candidate event sources, native subjects and complete families", () => {
     const ref = (r: { projection: { id: string; version: number } }) => `${r.projection.id}@${r.projection.version}`;
     const candidate = Object.entries(CANDIDATE_COLLECTOR_PROJECTION_KEYS).filter(([group]) => group.startsWith("event.")).flatMap(([, refs]) => [...refs] as string[]);
-    expect(candidate).toHaveLength(42);
-    expect(candidate.filter(r => r === "derived.exchange.trade_completed@1")).toHaveLength(1);
+    expect(candidate).toHaveLength(41);
+    expect(candidate).not.toContain("derived.exchange.trade_completed@1");
     const local = LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "edge" || r.kind === "native");
-    expect(new Set(local.map(ref))).toEqual(new Set(candidate.filter(r => r !== "derived.exchange.trade_completed@1")));
+    expect(new Set(local.map(ref))).toEqual(new Set(candidate));
     expect(new Set(LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "native").map(ref))).toEqual(new Set(NATIVE_SUBJECT_SOURCE_REFS));
     expect(new Set(LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "population").map(ref))).toEqual(new Set(SUBJECT_OUTCOME_FAMILIES.map(f => `derived.semantic_avoidance.${f}@2`)));
     const paths = LONGITUDINAL_INGEST_REGISTRY.filter(r => r.kind === "path");

@@ -5,7 +5,6 @@
 import {
   BREADTH_EVENT_PROJECTION_IDS,
   CASTLING_EVENT_PROJECTION_IDS,
-  DERIVED_EXCHANGE_EVENT_PROJECTION_IDS,
   DERIVED_TACTIC_EVENT_PROJECTION_IDS,
   PRIMARY_EVIDENCE_MANIFEST,
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
@@ -67,7 +66,8 @@ export function deriveCandidatePacketProjectionGroups(manifest: CompiledEvidence
     "event.tactical": events(TACTICAL_EVENT_PROJECTION_IDS.filter((id) => id !== "rules.tactic.event.loose_piece")),
     "event.loose_piece": events(["rules.tactic.event.loose_piece"]),
     "event.castling": events(CASTLING_EVENT_PROJECTION_IDS),
-    "event.exchange": events(DERIVED_EXCHANGE_EVENT_PROJECTION_IDS),
+    // Actual one-edge composition; trade_completed requires two recorded capture anchors.
+    "event.exchange": events(["derived.exchange.capture_class"]),
     "event.discovered": events(DERIVED_TACTIC_EVENT_PROJECTION_IDS),
     "event.breadth": events(BREADTH_EVENT_PROJECTION_IDS),
     "event.duty": events(SEMANTIC_WAVE_EVENT_PROJECTION_IDS),

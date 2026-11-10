@@ -978,7 +978,7 @@
         "nextAction": "Finish selector3 complete verification, then implement accepted D4200 durable revision10/seven-family evaluation publication, typed reads, actual9→10 startup/worker/rebuild/account and expanded-work cost. Keep native/history conservative until coverage is durable; remaining qualifications, reverse consumers and content/native/release stay separate.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "All13 original total-source/outcome factories exist. Fresh canonical1470/1470 over89subjects yields17qualified: six of13 outcome families qualify and seven remain. Source-local availability and selector/consumer3 now retain exact55-source coverage, full legal denominators and genuine unknowns. Independent code review,2948/eighteen focused tests, complete types/scheduling and actual partial/complete validation controls pass. Last completed normal software certificate is e4672b36:18926/571 and7performance/four; the new selector complete rerun is pending. Migration35/revision9 six-family adoption and genuine8 upgrade proof remain; durable revision10/seven-family coverage, actual9 upgrade and expanded cost are next. D4167, ordinary26 and D3928 remain open.",
+          "summary": "All13 original total-source/outcome factories exist. Fresh canonical1470/1470 over89subjects yields17qualified: six of13 outcome families qualify and seven remain. Source-local availability and selector/consumer3 now retain exact54-source coverage under one-edge-collector-closure, full legal denominators and genuine unknowns. Independent code review,2948/eighteen focused tests, complete types/scheduling and actual partial/complete validation controls pass. Last completed normal software certificate is e4672b36:18926/571 and7performance/four; the new selector complete rerun is pending. Migration35/revision9 six-family adoption and genuine8 upgrade proof remain; durable revision10/seven-family coverage, actual9 upgrade and expanded cost are next. D4167, ordinary26 and D3928 remain open.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1209,7 +1209,8 @@
             "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
             "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
             "rfc/source-local-evidence-availability.md",
-            "apps/server/src/longitudinal-revision9-fixture.test.ts"
+            "apps/server/src/longitudinal-revision9-fixture.test.ts",
+            "rfc/one-edge-collector-closure.md"
           ],
           "anchors": [
             {
@@ -1680,7 +1681,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:e12017eac1c5b461f3b88a02d13f60ac2cb317a745a60983637280c10dcb6fa4"
+              "digest": "sha256:32d024101fbafd13401d4d6b5b7b255573c23d16cf9df28e7edc7c2649a951ed"
             },
             {
               "kind": "work_state",
@@ -1835,7 +1836,12 @@
             {
               "kind": "rfc",
               "id": "source-local-evidence-availability.md",
-              "digest": "sha256:7631d24efbbe108a873a60613203994eb692b07e66f22f5d4ab606a01273bd13"
+              "digest": "sha256:7e5d536d11d443fe75cacaa710bb2d3fed34a489a51d509b88e65ff838beb5d6"
+            },
+            {
+              "kind": "rfc",
+              "id": "one-edge-collector-closure.md",
+              "digest": "sha256:1efe7bd0c637408adc9cba3f210500801dc4f1a9ec347ce70c93684c71ecb4e2"
             }
           ]
         },
@@ -1859,7 +1865,7 @@
         "nextAction": "Finish selector3 complete verification, then implement accepted D4200 durable revision10/seven-family evaluation publication, typed reads, actual9→10 startup/worker/rebuild/account and expanded-work cost. Keep native/history conservative until coverage is durable; remaining qualifications, reverse consumers and content/native/release stay separate.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Canonical42/compiler7 and all13 source-owned condition factories now feed selector/consumer3 with mandatory55-source coverage. Known source gaps no longer erase unrelated complete facts; unknown exact refs cannot supply rarity or critical facts. Strict once-only input capture and actual complete binding execution admission pass their adversarial controls; the validation adapter explicitly abstains on partial coverage. Broad2948/eighteen, types/scheduling and fresh1470canonical cases pass; complete selector rerun is pending. Existing14 compact native Nudge/Review pairs retain verified REST/DOM/budget controls; ordinary26, seven family qualifications and D4167 reverse consumers remain. Durable revision10 coverage is still required before history widens.",
+          "summary": "Canonical41/compiler7 and all13 source-owned condition factories now feed selector/consumer3 with mandatory54-source coverage under the accepted one-edge correction. Known source gaps no longer erase unrelated complete facts; unknown exact refs cannot supply rarity or critical facts. Strict once-only input capture and actual complete binding execution admission pass their adversarial controls; the validation adapter explicitly abstains on partial coverage. Broad2948/eighteen, types/scheduling and fresh1470canonical cases pass; complete selector rerun is pending. Existing14 compact native Nudge/Review pairs retain verified REST/DOM/budget controls; ordinary26, seven family qualifications and D4167 reverse consumers remain. Durable revision10 coverage is still required before history widens.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/presentation-move-path.ts",
@@ -2436,7 +2442,8 @@
             "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
             "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
             "rfc/source-local-evidence-availability.md",
-            "apps/server/src/longitudinal-revision9-fixture.test.ts"
+            "apps/server/src/longitudinal-revision9-fixture.test.ts",
+            "rfc/one-edge-collector-closure.md"
           ],
           "anchors": [
             {
@@ -3317,7 +3324,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:e12017eac1c5b461f3b88a02d13f60ac2cb317a745a60983637280c10dcb6fa4"
+              "digest": "sha256:32d024101fbafd13401d4d6b5b7b255573c23d16cf9df28e7edc7c2649a951ed"
             },
             {
               "kind": "work_state",
@@ -3432,7 +3439,12 @@
             {
               "kind": "rfc",
               "id": "source-local-evidence-availability.md",
-              "digest": "sha256:7631d24efbbe108a873a60613203994eb692b07e66f22f5d4ab606a01273bd13"
+              "digest": "sha256:7e5d536d11d443fe75cacaa710bb2d3fed34a489a51d509b88e65ff838beb5d6"
+            },
+            {
+              "kind": "rfc",
+              "id": "one-edge-collector-closure.md",
+              "digest": "sha256:1efe7bd0c637408adc9cba3f210500801dc4f1a9ec347ce70c93684c71ecb4e2"
             }
           ]
         },
