@@ -791,6 +791,91 @@ durations and delivered coverage under expected release concurrency before guard
 register. Deadline records `guard_deadline`; it
 never turns into an unguarded trait or hides baseline Play.
 
+### §4.1a — Automatic branch preparation (D4148, independently accepted 2026-11-05)
+
+**Exploration gate.** The dated bot-policy research audit and permanent actual REST controls show
+2/48 failures: fixed and per_branch rewind→automatic-fork commits cannot pass the correct durable
+root/selected-branch check.46existing cases pass. This repairs the accepted atomic bot operation,
+not bot personality/calibration or new product scope. No request/outcome/envelope key, projection,
+profile identity, schema or storage migration is added.
+
+**One deterministic rule.** Factor the existing commitMove cursorHasChildren/empty-at-cursor/
+nextBranch allocation into one pure runtime `prepareMoveBranch(original,{at?})` reducer returning
+its ordinary MutationResult. It emits no event unless current commitMove would auto-fork; on a
+required fork it uses the same next id, label, origin and fixed/per_branch seed. commitMove keeps
+its existing legality and terminal checks BEFORE invoking this reducer. No duplicated allocation
+formula, special bot-only counter, manual-fork requirement or new persisted planning object.
+
+**Two roots.** The four request fields still describe the original stored cursor/node/branch/head.
+Verify that actual root, writer, opponent side and terminal state before provider work. Apply the
+shared reducer only IN MEMORY, seal the execution root from its resulting active branch and seed,
+and keep execution.root.preCommitEventHeadDigest equal to the ORIGINAL request head. All existing
+legal/classifier/profile/acquisition/seeded-draw/operand-digest work uses that execution root.
+The request branch and execution branch may differ. This is not a fictitious post-preparation
+CAS/head and does not grant a caller control over the prepared branch.
+
+No speculative fork is saved. After awaits, use the original request root/head and writer lease
+for the existing CAS, after checking a same-request concurrent winner. Regenerate the same pure
+preparation from the still-current original state and verify its execution identity/seed before
+append. A valid admitted decision, auto-fork if needed, selection, exact move and deliveries then
+commit in the existing one atomic operation. Provider failure/cancelled acquisition that cannot
+produce an admitted decision, terminal refusal or stale original CAS produces no speculative
+branch. Same-request winner/conflict still compares both complete operand digests before replay.
+
+Allocation has no wall-clock input: branch identity/label/seed do not depend on preview timestamp.
+Final commit keeps its actual one timestamp for fork/selection/move; never compare a request-time
+preview event timestamp to the committed event bytes. The original pre-provider request digest
+continues to include the execution root, original head, writer, profile and execution seed.
+
+**Durable original-prefix reconstruction.** The existing stored parser and retry operation share
+one finite reconstruction of the actual original selection event in the run. Locate it by exact
+original ordinal/sequence and bytes, not a caller's replacement event. Admit only these candidates:
+
+1. original event prefix immediately BEFORE that selection;
+2. ONLY if the immediately preceding original event is branch.forked, the prefix BEFORE that fork.
+
+Do not search any earlier head, infer from the latest branch count, trust a supplied existing
+root/envelope or borrow a nonadjacent fork. Replay each candidate through the existing full event
+reader; require the stored original preCommitEventHeadDigest to equal that candidate's existing
+runEventHeadDigest. It must have the exact selected BEFORE cursor node. Reapply the SAME runtime
+preparation with the COMMITTED selection timestamp. Its complete prepared pre-selection event
+prefix must equal the actual original prefix before selection, including any complete fork payload,
+seq/at, id/label/origin/seed and cursor. Its active execution branch must equal the actual selection
+and next committed child's branch; original selection/move parent/UCI/opponent joins remain.
+Require exactly ONE valid candidate, never first-match fallback. Seal execution root and seed from
+that reconstructed prepared run and keep its original prehead; existing full profile/legal/
+classifier/provider durable admission and decision/envelope comparison remain unchanged.
+
+An explicit already-empty fork is in the ORIGINAL request prefix and causes no second fork.
+An automatic fork is reproduced from the prefix before its exact adjacent fork. Later appended
+branches cannot change an old operation's historical numbering/seed. A malformed, missing, extra,
+wrong-time/seed/origin branch preparation or mismatched original head refuses; it is not an
+unsupported/legacy success or a reason to weaken source checks.
+
+**Retry.** Before providers, recover that same original prefix/execution root from the actual stored
+event. Compare expectedNodeId/expectedBranchId/expectedEventHeadDigest to its ORIGINAL request
+cursor/head, then compare original writer, exact profile, execution seed and full pre-provider
+operand digest. Substituting the execution branch for the requested branch refuses. Valid reload/
+retry/concurrent-winner returns the stored parsed envelope byte-for-byte without provider calls or
+writes. No new database identity or weaker private replay source is needed.
+
+**Required controls.** Keep the two real failing seed-mode controls and repair them. Cover a nonzero
+next-branch index, explicit empty-fork/no-double-fork, inherited BEFORE node, later appended forks,
+provider failure and real stale original head with no saved speculative branch; same-request
+winner/conflict; original versus substituted execution request branch/head; wrong/missing/
+nonadjacent/extra fork, complete payload/seed/mode/timestamp corruption; exact selection/move pair;
+restart/retry/export and genuine recorded style occurrence reading. Genuine provider receipts and
+original full source replay remain in every positive. Do not replace tests by a source text match.
+Independent contract AND implementation review plus focused/type/full normal gates are required.
+Current recorded style proof may inherit this EXACT original-prefix validation through the existing
+bot parser; no arbitrary external execution authenticity or human-role/predicted scope is claimed.
+
+Separate read-only source/ABI and meaning/consumer reviewers accept this bounded repair contract.
+Bounded implementation is committed in a8b5c82e. Its exact staged revision installs frozen
+dependencies and passes all project types plus108 source/compiler/REST tests, including actual
+rewind, concurrency, branch corruption, restart/export and zero-provider retries. This is not
+whole bot-policy completion; current coordinated software/performance/release gates remain open.
+
 ### §5 — Candidate featuring: Stage A without [[D813]], Stage B with it
 
 **[[D813]] — the candidate-evidence adapter — is named as the dependency it is.** The accepted

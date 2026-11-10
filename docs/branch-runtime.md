@@ -85,7 +85,9 @@ legality. Opponent moves use the selection-aware helper described below.
 - At a leaf cursor, the move extends the active branch.
 - After rewind, committing at a node that already has children creates an implicit
   branch labeled with the next available `alt-N`, then commits the move there. The
-  emitted order is always `branch.forked` followed by `move.committed`.
+  user/system event order is `branch.forked` then `move.committed`; opponent commits put
+  their `opponent.move_selected` between those events. One internal pure `prepareMoveBranch`
+  rule supplies allocation to both commit and server bot planning. Planning alone writes nothing.
 - `fork(nodeId, label?, intent?)` creates an empty explicit branch and moves the
   cursor to it. Its first move does not create another branch.
 

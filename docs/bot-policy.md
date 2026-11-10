@@ -125,7 +125,8 @@ expectedNodeId, expectedBranchId, expectedEventHeadDigest }`. The server then:
    profile digest, branch seed, all recomputed from the run) returns the stored reply after the
    durable parse; a different digest returns `request_reused_with_different_operands`;
 2. refuses a moved root (`stale_root`) — cursor node and branch plus the event-head token;
-3. seals the root, legal map and `pawn_move@1` view from the run's own path, and asks the ONE
+3. prepares any automatic fork in memory with the same runtime rule used by move commit, seals
+   the resulting execution branch/seed, legal map and `pawn_move@1` view, and asks the ONE
    shared `ProviderExchangeScheduler` for `maia.policy_page@1` and, for guarded families,
    `stockfish.legal_root_table@1` under the guard's 500 ms opportunity deadline — with no
    transaction open and no bot-private fetch, queue or cache;
@@ -134,7 +135,21 @@ expectedNodeId, expectedBranchId, expectedEventHeadDigest }`. The server then:
 5. re-reads the run: an existing winner for the request id with equal pre-provider and commit
    operand digests is `replayed_concurrent_winner`, different delivered bytes are
    `concurrent_commit_conflict`; only then the root CAS (`stale_root`);
-6. appends move + decision + operation + deliveries in one `opponent.move_selected`.
+6. atomically appends any required fork, the selection carrying decision/operation/deliveries,
+   and its exact committed move. Failed or stale acquisition saves no speculative branch.
+
+After rewind, the request still names the original cursor branch and event head. The execution
+may need a new branch, whose deterministic seed is used before the bot draws its move. One shared
+pure runtime rule prepares that branch; no database write occurs until the admitted move commits.
+The original request head and lease remain the compare-and-swap authority after provider work.
+An explicit already-empty fork needs no second fork.
+
+Historical retry and durable parsing reconstruct only the actual prefix before selection and,
+when immediately adjacent, the prefix before its fork event. Exactly one must match the original
+head and reproduce the complete prepared prefix at the committed timestamp, including branch
+identity/label/origin/seed. Later branches cannot renumber an old decision. Retry checks the
+original request branch/head, not a substituted execution branch, and reuses retained deliveries
+without provider calls or writes. This adds no envelope fields, migration or bot calibration claim.
 
 The guard's 500 ms opportunity includes engine identity discovery, not just scheduler work.
 Discovery that fails promptly retains `not_delivered`; expiry records `guard_deadline` and the
