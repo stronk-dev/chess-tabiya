@@ -16,6 +16,8 @@ import { serializeAccountBundle } from "./account-data.js";
 import { readPortableAccountBundle, planAccountRestore } from "./account-import.js";
 import { runLongitudinalBatch } from "./longitudinal-worker-core.js";
 import { LONGITUDINAL_WORKER_DEFAULTS } from "./longitudinal-worker-config.js";
+import { PROFILE_SUBJECT_PROJECTIONS } from "../../../packages/runtime/src/profile-subject-sources.js";
+import { parseLongitudinalSubjectEvaluationRow } from "./profile-subject-facts-contract.js";
 const capture = "7k/8/8/3p4/2P5/8/3P4/7K w - - 0 1";
 const fixtures: FileFixture[] = [], dbs: DatabaseSync[] = [], reopened: SQLiteRunStorage[] = [];
 afterEach(() => { vi.restoreAllMocks(); for (const d of dbs.splice(0)) d.close(); for (const d of reopened.splice(0)) d.close(); for (const f of fixtures.splice(0)) { f.storage.close(); rmSync(dirname(f.path), { recursive: true, force: true }); } });
@@ -38,17 +40,103 @@ function query(f: ReturnType<typeof fixture>, extra: Record<string, unknown> = {
     through: { kind: "runs", cuts: [{ runId: f.run.id, requestedSeq: f.run.events.length }] }, filter: {}, ...extra });
 }
 const n = (f: ReturnType<typeof fixture>, table: string) => Number(f.db.prepare(`SELECT count(*) AS n FROM ${table}`).get()!.n);
-const families = ["learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations"] as const;
+const families = ["learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_subject_evaluations"] as const;
 
 describe("same-cut subject storage adoption", () => {
-  it("uses exactly one complete population and publishes/reads all six families at revision9", () => {
+  it("retains exact per-source gaps through actual publication and projected ordinary/subject reads", () => {
+    const f = fixture("coverage-partial", "k7/8/8/8/8/1p6/PP6/R6K w - - 0 1", "a2b3"), s = acquire(f);
+    expect(s.projection.subjectEvaluations).toHaveLength(1);
+    expect(s.projection.subjectObservations.length).toBeGreaterThan(0);
+    expect(s.projection.subjectEvaluations[0]).toMatchObject({ actor:"white",legalAlternatives:11,
+      unavailable:[{projection:{id:"derived.tactic.defender_exposure",version:2}}] });
+    expect(s.projection.observations.every(row => row.projectionId !== "derived.tactic.defender_exposure")).toBe(true);
+    expect(() => f.store.publish(s.claim,{...s.projection,subjectEvaluations:Object.freeze([])})).toThrow(/REDUCTION_MISMATCH/);
+    expect(() => f.store.publish(s.claim,{...s.projection,subjectEvaluations:Object.freeze(s.projection.subjectEvaluations.map(row =>
+      parseLongitudinalSubjectEvaluationRow({...row,unavailable:[]})))})).toThrow(/REDUCTION_MISMATCH/);
+    const detached = Object.freeze(s.projection.subjectEvaluations.map(row => parseLongitudinalSubjectEvaluationRow(structuredClone(row))));
+    expect(f.store.publish(s.claim,{...s.projection,subjectEvaluations:detached})).toBe("published");
+    const prepare = vi.spyOn(f.db,"prepare"), ordinary = f.store.readSnapshot(f.lease.learnerId!,query(f));
+    expect(ordinary.kind).toBe("complete"); if(ordinary.kind!=="complete") throw Error("Complete original cut required");
+    expect(ordinary.coverage.sources).toHaveLength(34);
+    expect(ordinary.coverage.decisions[0]).toMatchObject({runId:f.run.id,actor:"white",legalAlternatives:11,unavailable:s.projection.subjectEvaluations[0]!.unavailable});
+    expect(prepare.mock.calls.some(([sql]) => String(sql).includes("FROM learner_subject_observations"))).toBe(false);
+    const full = f.store.readSnapshot(f.lease.learnerId!,query(f,{includeSubjectObservations:true}));
+    if(full.kind!=="complete") throw Error("Complete original cut required");
+    expect(full.coverage.sources).toEqual(PROFILE_SUBJECT_PROJECTIONS);
+    expect(full.subjectObservations).toEqual(s.projection.subjectObservations);
+    expect(() => parseLongitudinalSubjectEvaluationRow(full.coverage.decisions[0])).toThrow();
+  });
+
+  it("projects source unions before actor/sign/subject refinements without shrinking the decision cohort", () => {
+    const f = fixture(), s = acquire(f); f.store.publish(s.claim,s.projection);
+    const q = query(f,{includeSubjectObservations:true, subjectFilters:[{sourceKind:"condition_relation",
+      projection:{id:"derived.semantic_avoidance.doubled_pawn",version:2},actor:"black"}],
+      filter:{projections:[{id:"rules.structural.event.king_zone",version:1,semanticSign:"gained"}]}});
+    const result = f.store.readSnapshot(f.lease.learnerId!,q);
+    if(result.kind!=="complete") throw Error("Expected complete source cut");
+    expect(result.subjectObservations).toEqual([]);
+    expect(result.coverage.sources).toEqual([{id:"rules.structural.event.king_zone",version:1},{id:"derived.semantic_avoidance.doubled_pawn",version:2}]);
+    expect(result.coverage.decisions).toHaveLength(1);
+    expect(result.coverage.decisions[0]).toMatchObject({actor:"white",unavailable:[]});
+    const filtered = f.store.readSnapshot(f.lease.learnerId!,query(f,{filter:{decisionClasses:["predicted"]}}));
+    expect(filtered.kind==="complete" ? filtered.coverage.decisions : undefined).toEqual([]);
+    expect(() => query(f,{filter:{projections:[]}})).toThrow();
+  });
+
+  it("rejects evaluation getters and rolls back all seven families on last-family insertion failure", () => {
+    const f=fixture(),s=acquire(f); let gets=0;
+    const getter={...s.projection}; Object.defineProperty(getter,"subjectEvaluations",{enumerable:true,get:()=>{gets++;return s.projection.subjectEvaluations;}});
+    expect(()=>f.store.publish(s.claim,getter)).toThrow(/PROJECTION_IMAGE_INVALID/);expect(gets).toBe(0);
+    expect(families).toHaveLength(7);
+    f.db.exec("CREATE TRIGGER refuse_evaluation BEFORE INSERT ON learner_subject_evaluations BEGIN SELECT RAISE(ABORT,'controlled evaluation insertion'); END;");
+    expect(()=>f.store.publish(s.claim,s.projection)).toThrow("controlled evaluation insertion");
+    expect(families.map(t=>n(f,t))).toEqual([0,0,0,0,0,0,0]);expect(f.store.job(f.run.id)?.state).toBe("running");
+    f.db.exec("DROP TRIGGER refuse_evaluation");expect(f.store.publish(s.claim,s.projection)).toBe("published");
+    expect(families.every(t=>n(f,t)>0)).toBe(true);
+  });
+
+  it("requires expected evaluation cardinality and repairs lost semantic unknowns by actual rebuild", () => {
+    const f=fixture("coverage-repair","k7/8/8/8/8/1p6/PP6/R6K w - - 0 1","a2b3"),s=acquire(f);f.store.publish(s.claim,s.projection);
+    f.db.exec("DELETE FROM learner_subject_evaluations");
+    expect(()=>f.store.readSnapshot(f.lease.learnerId!,query(f))).toThrow(/EVALUATION_CARDINALITY/);
+    expect(f.store.rebuild({write:true,project:projectObservations}).repaired).toBe(1);
+    f.db.exec("UPDATE learner_subject_evaluations SET unavailable_json='[]'");
+    // A cheap reader cannot detect a structurally consistent removal of a true source failure.
+    expect(f.store.readSnapshot(f.lease.learnerId!,query(f)).kind).toBe("complete");
+    const report=f.store.rebuild({write:false,project:projectObservations});
+    expect(report.mismatches.some(m=>m.table==="learner_subject_evaluations" && m.kind==="changed")).toBe(true);
+    expect(f.store.rebuild({write:true,project:projectObservations}).repaired).toBe(1);
+    expect(f.store.storedProjection(f.run.id).subjectEvaluations).toEqual(s.projection.subjectEvaluations);
+  });
+
+  it("parses full stored unknowns before projection and refuses observations from an unavailable source", () => {
+    const f=fixture(),s=acquire(f);f.store.publish(s.claim,s.projection);
+    expect(s.projection.subjectObservations.some(r=>r.projectionId==="derived.semantic_avoidance.loose_piece")).toBe(true);
+    const unknown=[{projection:{id:"derived.semantic_avoidance.loose_piece",version:2},cause:{kind:"required_total",projection:{id:"rules.tactic.reading.mover_piece_risk",version:1}},reason:"invalid_turn_clone",members:[{kind:"root"}]}];
+    f.db.prepare("UPDATE learner_subject_evaluations SET unavailable_json=?").run(canonicalizeJson(unknown));
+    expect(()=>f.store.readSnapshot(f.lease.learnerId!,query(f,{includeSubjectObservations:true}))).toThrow(/OBSERVATION_COVERAGE_INVALID/);
+    f.db.prepare("UPDATE learner_subject_evaluations SET unavailable_json=?").run(JSON.stringify([{...unknown[0],reason:"invented"}]));
+    expect(()=>f.store.readSnapshot(f.lease.learnerId!,query(f,{filter:{projections:[{id:"rules.structural.event.king_zone",version:1}]}}))).toThrow();
+    f.db.exec("UPDATE learner_subject_evaluations SET unavailable_json='[]',legal_alternatives=legal_alternatives+1");
+    expect(()=>f.store.readSnapshot(f.lease.learnerId!,query(f))).toThrow(/SOURCE_JOIN_INVALID/);
+  });
+
+  it.each(families)("actual rebuild detects independent omission of %s", table => {
+    const f=fixture(`coverage-omit-${table}`),s=acquire(f);expect(f.store.publish(s.claim,s.projection)).toBe("published");
+    expect(n(f,table)).toBeGreaterThan(0);
+    f.db.exec(`DELETE FROM ${table}`);
+    expect(f.store.rebuild({write:false,project:projectObservations}).mismatches.some(m=>m.table===table)).toBe(true);
+    expect(f.store.rebuild({write:true,project:projectObservations}).repaired).toBe(1);
+    expect(f.store.storedProjection(f.run.id)).toEqual(s.projection);
+  });
+  it("uses exactly one complete population and publishes/reads all seven families at revision10", () => {
     const f = fixture(), compile = vi.spyOn(candidate, "compileCandidatePopulation"), s = acquire(f);
-    expect(STORAGE_VERSION).toBe(35); expect(OBSERVATION_DERIVATION_REV).toBe(9);
+    expect(STORAGE_VERSION).toBe(36); expect(OBSERVATION_DERIVATION_REV).toBe(10);
     expect(compile).toHaveBeenCalledTimes(1);
-    expect(s.projection.denominators).toMatchObject([{ decisions: 1, derivedRev: 9 }]);
+    expect(s.projection.denominators).toMatchObject([{ decisions: 1, derivedRev: 10 }]);
     expect(s.projection.subjectObservations.length).toBeGreaterThan(0);
     expect(f.store.publish(s.claim, s.projection)).toBe("published");
-    expect(f.store.job(f.run.id)).toMatchObject({ state: "complete", derivedRev: 9, completedSeq: f.run.events.length });
+    expect(f.store.job(f.run.id)).toMatchObject({ state: "complete", derivedRev: 10, completedSeq: f.run.events.length });
     const stored = f.store.storedProjection(f.run.id);
     expect(stored).toEqual(s.projection);
     const ordinary = f.store.readSnapshot(f.lease.learnerId!, query(f));
@@ -92,13 +180,13 @@ describe("same-cut subject storage adoption", () => {
     expect(() => f.store.publish(s.claim, { ...s.projection, denominators: Object.freeze(s.projection.denominators.map(r => Object.freeze({ ...r, decisions: r.decisions + 1 }))) })).toThrow(/REDUCTION_MISMATCH/u);
     expect(s.projection.observations.length).toBeGreaterThan(0);
     expect(() => f.store.publish(s.claim, { ...s.projection, observations: Object.freeze(s.projection.observations.slice(1)) })).toThrow(/REDUCTION_MISMATCH/u);
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]);
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);
     expect(f.store.job(f.run.id)?.state).toBe("running");
     expect(f.store.publish(s.claim, s.projection)).toBe("published");
   });
   it.each([
     ["forced", "7k/8/8/8/8/8/6q1/7K w - - 0 1", "h1g2"],
-    ["unavailable", "r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", "e1f1"],
+    ["known-zero", "8/8/8/8/8/1r6/2k5/K7 w - - 0 1", "a1a2"],
   ])("authentic empty %s subjects do not authorize changed or absent denominators", (name, fen, uci) => {
     const f = fixture(`subject-${name}`, fen, uci), s = acquire(f);
     expect(s.projection.subjectObservations).toEqual([]); expect(s.projection.observations).toEqual([]);
@@ -114,7 +202,7 @@ describe("same-cut subject storage adoption", () => {
     Object.defineProperty(forged, "denominators", { enumerable: true, get: () => ++reads <= 2 ? s.projection.denominators : wrong });
     expect(() => f.store.publish(s.claim, forged)).toThrow(/PROJECTION_IMAGE_INVALID/u);
     expect(reads).toBe(0);
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]);
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);
   });
   it("D4182 refuses a frozen-array proxy that changes its inherited iterator after checking", () => {
     const f = fixture(), s = acquire(f);
@@ -130,7 +218,7 @@ describe("same-cut subject storage adoption", () => {
     expect(Object.isFrozen(denominators)).toBe(true);
     expect(() => f.store.publish(s.claim, { ...s.projection, denominators })).toThrow(/PROJECTION_IMAGE_INVALID/u);
     expect(iterations).toBe(0);
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]);
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);
   });
   it("D4182 rejects nested row proxies and rebuild envelopes without executing their traps", () => {
     const f = fixture(), s = acquire(f); let gets = 0;
@@ -146,11 +234,11 @@ describe("same-cut subject storage adoption", () => {
     expect(gets).toBe(0);
     expect(f.store.storedProjection(f.run.id)).toEqual(s.projection);
   });
-  it("rolls back all six families when subject insertion fails late", () => {
+  it("rolls back all seven families when subject insertion fails late", () => {
     const f = fixture(), s = acquire(f);
     f.db.exec("CREATE TRIGGER refuse_subject BEFORE INSERT ON learner_subject_observations BEGIN SELECT RAISE(ABORT,'controlled subject insertion'); END;");
     expect(() => f.store.publish(s.claim, s.projection)).toThrow("controlled subject insertion");
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]); expect(f.store.job(f.run.id)?.state).toBe("running");
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]); expect(f.store.job(f.run.id)?.state).toBe("running");
     f.db.exec("DROP TRIGGER refuse_subject"); expect(f.store.publish(s.claim, s.projection)).toBe("published");
   });
   it("joins decoded rows to their original decision actor, without treating SQL bytes as original proof", () => {
@@ -163,6 +251,12 @@ describe("same-cut subject storage adoption", () => {
     const repaired = f.store.readSnapshot(f.lease.learnerId!, query(f, { includeSubjectObservations: true }));
     expect(repaired.kind === "complete" ? repaired.subjectObservations : []).toEqual(s.projection.subjectObservations);
   });
+  it("refuses a stored denominator count contradicted by exact original decision coverage", () => {
+    const f = fixture(), s = acquire(f);
+    f.store.publish(s.claim, s.projection);
+    f.db.prepare("UPDATE learner_observation_denominators SET decisions=decisions+1 WHERE run_id=?").run(f.run.id);
+    expect(() => f.store.readSnapshot(f.lease.learnerId!, query(f))).toThrow(/DENOMINATOR_COVERAGE_INVALID/u);
+  });
   it("rebuild rejects copied subject arrays and repairs missing rows under a fresh original scope", () => {
     const f = fixture(), s = acquire(f); f.store.publish(s.claim, s.projection);
     expect(() => f.store.rebuild({ write: true, project: (image, { gameSource }) => {
@@ -173,11 +267,11 @@ describe("same-cut subject storage adoption", () => {
     expect(f.store.rebuild({ write: true, project: (image, { gameSource }) => projectObservations(image, { gameSource }) }).repaired).toBe(1);
     expect(f.store.storedProjection(f.run.id).subjectObservations.map(subjectObservationKey)).toContain(key);
   });
-  it("source advancement clears all six families and old claims cannot republish", () => {
+  it("source advancement clears all seven families and old claims cannot republish", () => {
     const f = fixture(), s = acquire(f); f.store.publish(s.claim, s.projection);
     const advanced = play(f.run, "h8g8"); f.storage.save(advanced, f.lease);
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]);
-    expect(f.store.job(f.run.id)).toMatchObject({ state: "pending", derivedRev: 9, completedSeq: 0 });
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);
+    expect(f.store.job(f.run.id)).toMatchObject({ state: "pending", derivedRev: 10, completedSeq: 0 });
     expect(f.store.publish(s.claim, s.projection)).toBe("publication_conflict");
     expect(JSON.parse(String(f.db.prepare("SELECT snapshot_json FROM drill_runs WHERE id=?").get(f.run.id)!.snapshot_json)).events).toEqual(advanced.events);
   });
@@ -187,9 +281,9 @@ describe("same-cut subject storage adoption", () => {
     f.db.exec("UPDATE learner_observation_jobs SET derived_rev=8");
     const opened = f.reopen(); reopened.push(opened);
     expect(opened.reconcileLongitudinalJobs().revisionReset).toBe(1);
-    expect(opened.longitudinalJob(f.run.id)).toMatchObject({ state: "pending", derivedRev: 9, completedSeq: 0 });
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]);
-    const next = acquire(f); expect(next.claim.derivedRev).toBe(9);
+    expect(opened.longitudinalJob(f.run.id)).toMatchObject({ state: "pending", derivedRev: 10, completedSeq: 0 });
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);
+    const next = acquire(f); expect(next.claim.derivedRev).toBe(10);
     expect(f.store.publish(next.claim, next.projection)).toBe("published");
     expect(canonicalizeJson(f.store.storedProjection(f.run.id))).toBe(canonicalizeJson(s.projection));
   });
@@ -198,14 +292,14 @@ describe("same-cut subject storage adoption", () => {
     // preservation, not parity with genuinely executed revision8 output.
     const f = fixture(), s = acquire(f); f.store.publish(s.claim, s.projection);
     const before = f.db.prepare("SELECT snapshot_json,summary_json FROM drill_runs WHERE id=?").get(f.run.id);
-    f.db.exec("DROP TABLE learner_subject_observations");
-    for (const table of families.filter(t => t !== "learner_subject_observations")) f.db.exec(`UPDATE ${table} SET derived_rev=8`);
+    f.db.exec("DROP TABLE learner_subject_evaluations; DROP TABLE learner_subject_observations");
+    for (const table of families.filter(t => t !== "learner_subject_observations" && t !== "learner_subject_evaluations")) f.db.exec(`UPDATE ${table} SET derived_rev=8`);
     f.db.exec("UPDATE learner_observation_jobs SET derived_rev=8; PRAGMA user_version=34");
     const migrations: number[] = [], upgraded = new SQLiteRunStorage(f.path, { onMigration: m => migrations.push(m.version), longitudinalNow: () => f.clock.now }); reopened.push(upgraded);
-    expect(migrations).toEqual([35]);
+    expect(migrations).toEqual([35,36]);
     expect(f.db.prepare("SELECT snapshot_json,summary_json FROM drill_runs WHERE id=?").get(f.run.id)).toEqual(before);
     expect(upgraded.reconcileLongitudinalJobs().revisionReset).toBe(1);
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]);
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);
     const next = acquire(f); expect(f.store.publish(next.claim, next.projection)).toBe("published");
     expect(next.projection.subjectObservations).toEqual(s.projection.subjectObservations);
     expect(f.db.prepare("SELECT snapshot_json,summary_json FROM drill_runs WHERE id=?").get(f.run.id)).toEqual(before);
@@ -254,7 +348,7 @@ describe("same-cut subject storage adoption", () => {
     expect(actual.every(r => r.learnerId === restored.learnerId && r.matchingAlternatives < 999999)).toBe(true);
     expect(target.storage.foreignKeyViolationCount()).toBe(0);
     f.storage.deleteLearner(f.lease.learnerId, AT);
-    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0]);
+    expect(families.map(t => n(f, t))).toEqual([0, 0, 0, 0, 0, 0, 0]);
   });
 
 });

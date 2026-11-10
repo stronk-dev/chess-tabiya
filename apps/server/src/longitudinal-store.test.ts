@@ -118,8 +118,8 @@ describe("criterion 1 — additive migration with a prior-release upgrade", () =
 
     const log: { version: number; name: string }[] = [];
     const upgraded = new SQLiteRunStorage(path, { onMigration: (entry) => log.push(entry) });
-    expect(STORAGE_VERSION).toBe(35);
-    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }]);
+    expect(STORAGE_VERSION).toBe(36);
+    expect(log).toEqual([{ version: 26, name: "longitudinal observation ledger, structure stats, and projection jobs" }, { version: 27, name: "durable evidence job batches, jobs, result sequences and application transitions" }, { version: 28, name: "registered global concept identities and the legacy concept quarantine" }, { version: 29, name: "bot profile run schema" }, { version: 30, name: "campaign runs, creations, events, charged commands and durable awards" }, { version: 31, name: "preserve explicitly empty recorded human-selection telemetry" }, { version: 32, name: "typed retained original imported clock document" }, { version: 33, name: "profile GAME facts from original foundation sources" }, { version: 34, name: "profile complete legal choice facts" }, { version: 35, name: "subject-grain longitudinal observations" }, { version: 36, name: "source-local longitudinal decision evaluations" }]);
     upgraded.close();
 
     const after = raw(path);
@@ -242,7 +242,7 @@ describe("criteria 6, 31 — the eleven source mutations commit watermark and so
     expect(claim?.claimedRequestedSeq).toBe(3);
     storage.save(run, owner);
     expect(jobRow(path, "native")).toMatchObject({ requested_seq: 2, state: "pending", completed_seq: 0 });
-    expect(store.publish(claim!, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [] })).toBe("publication_conflict");
+    expect(store.publish(claim!, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [], subjectEvaluations: [] })).toBe("publication_conflict");
   });
 
   it("taints same-head collaboration monotonically and invalidates a complete job in the same transaction", () => {
@@ -328,7 +328,7 @@ describe("criteria 5, 23 — owner attribution and run-owner provenance", () => 
     const preview = storage.deletionPreview("a", { kind: "run", runId: "run-a" }, AT);
     storage.deleteOwnedRun("a", "run-a", AT, preview.digest);
     expect(store.renew(claim, 60_000)).toBeUndefined();
-    expect(store.publish(claim, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [] })).toBe("publication_conflict");
+    expect(store.publish(claim, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [], subjectEvaluations: [] })).toBe("publication_conflict");
     expect(count(path, "learner_observation_jobs", "run_id = 'run-a'")).toBe(0);
   });
 });
@@ -353,7 +353,7 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     expect(second?.generation).toBe(first!.generation + 1);
     expect(store.renew(first!, 60_000)).toBeUndefined();
     expect(store.fail(first!, "derivation_failed")).toBe(false);
-    expect(store.publish(first!, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [] })).toBe("publication_conflict");
+    expect(store.publish(first!, { denominators: [], observations: [], structureStats: [], gameFacts: [], choiceFacts: [], subjectObservations: [], subjectEvaluations: [] })).toBe("publication_conflict");
     expect(() => rival.renew(first!, 60_000)).toThrow(/WRONG_STORE/u);
     expect(() => store.claimBatch({ workerId: "", scanLimit: 1, slots: 1, leaseMs: 60_000 })).toThrow(/WORKER_ID_INVALID/u);
   });
@@ -612,17 +612,18 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     const run = play(positionRun("mobility-history", fixtureRow.fen, fixtureRow.side), fixtureRow.move);
     value.storage.create(run, owner);
     const source = value.storage.longitudinalSourceImageV4(run.id, run.events.length);
-    const expected = projectObservations(source);
+
     const events = assertFullPopulation(run, fixtureRow.complete);
     const rank = fixtureRow.side === "white" ? "1" : "8";
     expect(events.filter(event => event.projection.id === "rules.mobility.event.piece_destinations").map(event => event.operands)).toContainEqual(expect.objectContaining({
       color: fixtureRow.side, moved: true, piece: { before: { square: `h${rank}`, role: "rook" }, after: { square: `f${rank}`, role: "rook" } },
     }));
-    expect(expected.denominators).toContainEqual(expect.objectContaining({ decisions: 1 }));
-    if (fixtureRow.complete) expect(expected.observations.find(row => row.projectionId === "rules.mobility.event.piece_destinations" && row.occurred > 0)).toMatchObject({ occurred: 1 });
-    else expect(expected.observations).toEqual([]);
     const store = value.workerStore();
     expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "before-upgrade").completed).toBe(1);
+    const expected = store.storedProjection(run.id);
+    expect(expected.denominators).toContainEqual(expect.objectContaining({ decisions: 1 }));
+    expect(expected.observations.find(row => row.projectionId === "rules.mobility.event.piece_destinations" && row.occurred > 0)).toMatchObject({ occurred: 1 });
+    if (!fixtureRow.complete) expect(expected.subjectEvaluations[0]!.unavailable.length).toBeGreaterThan(0);
     const database = raw(value.path);
     database.exec("UPDATE learner_observation_denominators SET derived_rev=2; UPDATE learner_observations SET derived_rev=2; UPDATE learner_structure_stats SET derived_rev=2; UPDATE learner_observation_jobs SET derived_rev=2");
     database.prepare("DELETE FROM learner_observations WHERE run_id=? AND projection_id=?").run(run.id, "rules.mobility.event.piece_destinations");
@@ -648,7 +649,7 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
     value.storage.create(run, owner);
     const store = value.workerStore();
     const source = value.storage.longitudinalSourceImageV4(run.id, run.events.length);
-    const expected = projectObservations(source);
+
     const dutyId = "rules.tactic.event.defender_duty_relocated";
     const events = assertFullPopulation(run, fixtureRow.complete);
     expect(events.filter(event => event.projection.id === dutyId).map(event => event.operands)).toContainEqual(expect.objectContaining({
@@ -656,10 +657,11 @@ describe("criteria 7, 20, 24, 25 — exclusive, recoverable, bounded claims", ()
       defenderAfter: { square: "b8", piece: expect.objectContaining({ role: "knight", color: "white" }) },
       target: { square: "c8", piece: expect.objectContaining({ role: "rook", color: "white" }) },
     }));
-    expect(expected.denominators).toContainEqual(expect.objectContaining({ decisions: 1 }));
-    if (fixtureRow.complete) expect(expected.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1, decisionClass: "played" });
-    else expect(expected.observations).toEqual([]);
     expect(runLongitudinalBatch(store, LONGITUDINAL_WORKER_DEFAULTS, "before-upgrade").completed).toBe(1);
+    const expected = store.storedProjection(run.id);
+    expect(expected.denominators).toContainEqual(expect.objectContaining({ decisions: 1 }));
+    expect(expected.observations.find(row => row.projectionId === dutyId && row.occurred > 0)).toMatchObject({ occurred: 1, decisionClass: "played" });
+    if (!fixtureRow.complete) expect(expected.subjectEvaluations[0]!.unavailable.length).toBeGreaterThan(0);
 
     // Exact prior representation: the same completed cut, but no promoted defender-duty row.
     // Only this test-owned database is edited; source history and source identity stay unchanged.

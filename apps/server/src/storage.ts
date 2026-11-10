@@ -1,4 +1,4 @@
-import { PROFILE_SUBJECT_OBSERVATIONS_SQL } from "./profile-subject-facts-storage.js";
+import { PROFILE_SUBJECT_OBSERVATIONS_SQL, PROFILE_SUBJECT_EVALUATIONS_SQL } from "./profile-subject-facts-storage.js";
 import { PROFILE_GAME_FACTS_SQL, PROFILE_CHOICE_FACTS_SQL } from "./longitudinal-store.js";
 import { randomUUID } from "node:crypto";
 import { DatabaseSync, type SQLInputValue } from "node:sqlite";
@@ -812,7 +812,7 @@ export type DeletionEffectGroup =
   | "retained_identity_scrub"
   | "learner_state";
 
-export const STORAGE_VERSION = 35;
+export const STORAGE_VERSION = 36;
 const LEGACY_ID = "__legacy";
 const LEGACY_HASH = "!";
 
@@ -1722,6 +1722,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         ...tagged("learner_structure_stats", rows("SELECT * FROM learner_structure_stats WHERE learner_id=? ORDER BY run_id,root_key", learnerId)),
         ...tagged("learner_game_facts", rows("SELECT * FROM learner_game_facts WHERE learner_id=? ORDER BY run_id", learnerId)),
         ...tagged("learner_choice_facts", rows("SELECT * FROM learner_choice_facts WHERE learner_id=? ORDER BY run_id", learnerId)),
+        ...tagged("learner_subject_evaluations", rows("SELECT * FROM learner_subject_evaluations WHERE learner_id=? ORDER BY run_id,decision_ref_json", learnerId)),
         ...tagged("learner_subject_observations", rows("SELECT * FROM learner_subject_observations WHERE learner_id=? ORDER BY run_id,decision_ref_json,source_kind,projection_id,projection_version,subject_json,parameters_json,tested_key", learnerId)),
         ...tagged("learner_observation_jobs", rows("SELECT run_id,requested_seq,completed_seq,derived_rev,state,retry_count,failure_code,next_attempt_at,updated_at FROM learner_observation_jobs WHERE learner_id=? ORDER BY run_id", learnerId)),
       ];
@@ -1897,6 +1898,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       ...ids(`SELECT 'longitudinal-structure:'||run_id||':'||root_key AS id FROM learner_structure_stats WHERE ${where} ORDER BY run_id,root_key`, ...parameters),
       ...ids(`SELECT 'longitudinal-game:'||run_id AS id FROM learner_game_facts WHERE ${where} ORDER BY run_id`, ...parameters),
       ...ids(`SELECT 'longitudinal-choice:'||run_id AS id FROM learner_choice_facts WHERE ${where} ORDER BY run_id`, ...parameters),
+      ...ids(`SELECT 'longitudinal-evaluation:'||run_id||':'||decision_ref_json AS id FROM learner_subject_evaluations WHERE ${where} ORDER BY run_id,decision_ref_json`, ...parameters),
       ...ids(`SELECT 'longitudinal-subject:'||run_id||':'||decision_ref_json||':'||source_kind||':'||projection_id||':'||projection_version||':'||subject_json||':'||parameters_json||':'||tested_key AS id FROM learner_subject_observations WHERE ${where} ORDER BY run_id,decision_ref_json,source_kind,projection_id,projection_version,subject_json,parameters_json,tested_key`, ...parameters),
       ...ids(`SELECT 'longitudinal-job:'||run_id AS id FROM learner_observation_jobs WHERE ${where} ORDER BY run_id`, ...parameters),
     ];
@@ -4766,6 +4768,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       { version: 33, name: "profile GAME facts from original foundation sources", apply: () => this.#database.exec(PROFILE_GAME_FACTS_SQL) },
       { version: 34, name: "profile complete legal choice facts", apply: () => this.#database.exec(PROFILE_CHOICE_FACTS_SQL) },
       { version: 35, name: "subject-grain longitudinal observations", apply: () => this.#database.exec(PROFILE_SUBJECT_OBSERVATIONS_SQL) },
+      { version: 36, name: "source-local longitudinal decision evaluations", apply: () => this.#database.exec(PROFILE_SUBJECT_EVALUATIONS_SQL) },
     ] as const;
     assertContiguousMigrationVersions(migrations.map((migration) => migration.version));
     for (const migration of migrations) {

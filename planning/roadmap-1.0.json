@@ -1839,7 +1839,7 @@
             {
               "kind": "rfc",
               "id": "source-local-evidence-availability.md",
-              "digest": "sha256:ce3b7ecd982245959cd49843eee43b48172689f5b0e180ce6a4a3266b2c54285"
+              "digest": "sha256:878eb0846285fac0a709dc0e153974d2c5c883b88a066ad252f6b2d90885ff29"
             },
             {
               "kind": "work_state",
@@ -3446,7 +3446,7 @@
             {
               "kind": "rfc",
               "id": "source-local-evidence-availability.md",
-              "digest": "sha256:ce3b7ecd982245959cd49843eee43b48172689f5b0e180ce6a4a3266b2c54285"
+              "digest": "sha256:878eb0846285fac0a709dc0e153974d2c5c883b88a066ad252f6b2d90885ff29"
             },
             {
               "kind": "work_state",

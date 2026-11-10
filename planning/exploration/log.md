@@ -40686,3 +40686,16 @@ publication summary and actual compare/rebuild can detect removal of a genuine f
 evaluation cardinality and observation-to-coverage availability joins remain the next coordinated
 storage duty. No table/revision/publication is activated, and no complete-software certificate
 for these newer steps is inferred from35d7cc5c. Continue the same D4200 seven-family upgrade.
+
+### 2026-11-10 — D4200 durable per-decision coverage integration
+
+Migration 36 adds decision coverage and revision 10 rebuilds derived history from saved games.
+Available facts survive unrelated source failures. One atomic projection carries denominators,
+prevalence, structure, game facts, choice facts, subject observations and decision coverage.
+Reads validate the complete decision set and cross-check stored denominators before filtering.
+Independent review found the count-only corruption case, now covered through the real SQL read.
+The original revision 9 database fixture is unchanged.
+
+Focused integration tests exercise partial coverage, exact source joins, publication rollback,
+rebuild and older schema transitions. Genuine revision 9 worker upgrade, the current cost run
+and the full software gate are separate checkpoints. D4200 remains in progress.

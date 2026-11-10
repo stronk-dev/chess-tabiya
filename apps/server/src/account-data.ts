@@ -88,6 +88,7 @@ export const ACCOUNT_DATA_INVENTORY = Object.freeze([
   table("learner_structure_stats", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_game_facts", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_choice_facts", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
+  table("learner_subject_evaluations", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_subject_observations", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   table("learner_observation_jobs", "behavioral_profiles", "project", "hard_delete", { learner_id: "delete_row" }),
   // rfc/evidence-job-durability.md: run-owned operational evidence state. It carries no learner
@@ -183,6 +184,7 @@ export const ACCOUNT_TAGGED_RECORD_FIELDS = {
   learner_observations: [["run_id", "projection_id", "projection_version", "semantic_sign", "source_sign", "phase", "decision_class", "session_kind", "pack_id", "opportunities", "occurred", "alternative_share_sum", "occurredRefs", "opportunityRefs", "observed_at", "derived_rev"]],
   learner_game_facts: [["run_id", "completed_seq", "derived_rev", "observed_at", "primary_branch_id", "learner_side", "game_json"]],
   learner_choice_facts: [["run_id", "completed_seq", "derived_rev", "observed_at", "primary_branch_id", "cohort_json"]],
+  learner_subject_evaluations: [["run_id", "decision_ref_json", "actor", "phase", "decision_class", "session_kind", "pack_id", "legal_alternatives", "unavailable_json", "observed_at", "derived_rev"]],
   learner_subject_observations: [["run_id", "decision_ref_json", "source_kind", "projection_id", "projection_version", "subject_json", "parameters_json", "tested_key", "relation", "sign", "actor", "phase", "decision_class", "session_kind", "pack_id", "occurred", "legal_alternatives", "matching_alternatives", "comparable_alternatives", "observed_at", "derived_rev"]],
   learner_structure_stats: [["run_id", "root_key", "root_node_id", "session_kind", "pack_id", "branch_count", "rewound_count", "forked_count", "group_count", "outcome_count", "observed_at", "derived_rev"]],
   learner_observation_jobs: [["run_id", "requested_seq", "completed_seq", "derived_rev", "state", "retry_count", "failure_code", "next_attempt_at", "updated_at"]],
@@ -310,7 +312,7 @@ export function buildAccountBundle(input: AccountBundleInput): AccountBundleV1 {
     drafts: projected(["pack_drafts", "shape_drafts", "playtest_documents"], Object.freeze([...input.drafts])),
     publications: projected(["registered_packs", "registered_shapes"], Object.freeze([...input.publications])),
     liveAndSocial: projected(["live_sessions", "session_journal", "session_proposals", "session_vote_windows", "session_votes", "session_invitations", "arena_legs", "match_states", "public_tokens", "classrooms", "classroom_members", "assignments", "assignment_submissions"], Object.freeze([...input.liveAndSocial])),
-    behavioralProfiles: projected(["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks", "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_observation_jobs"], Object.freeze([...input.behavioralProfiles])),
+    behavioralProfiles: projected(["learner_ratings", "rated_games", "rating_periods", "cohort_standings", "standing_members", "learner_marks", "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_subject_evaluations", "learner_observation_jobs"], Object.freeze([...input.behavioralProfiles])),
     exclusions: projected(["learners", "learner_sessions", "public_tokens", "browser_local"], Object.freeze([
       Object.freeze({ kind: "password_hash", reason: "Password hashes, login failures, and lock state are authentication material and are never exported." }),
       Object.freeze({ kind: "sessions", reason: "Authenticated sessions, bearer tokens, and token hashes are credentials and are never exported." }),

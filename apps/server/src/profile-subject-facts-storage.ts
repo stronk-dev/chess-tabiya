@@ -1,6 +1,40 @@
 // Accepted longitudinal-store A.2. Additive literal row storage; no collection/publication issuer.
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
-import { parseLongitudinalSubjectObservationRow, type LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
+import { parseLongitudinalSubjectObservationRow, parseLongitudinalSubjectEvaluationRow, type LongitudinalSubjectEvaluationRow, type LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
+export const PROFILE_SUBJECT_EVALUATIONS_SQL = `CREATE TABLE learner_subject_evaluations (
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  run_id TEXT NOT NULL,
+  decision_ref_json TEXT NOT NULL CHECK(json_valid(decision_ref_json) AND json_type(decision_ref_json)='object'),
+  actor TEXT NOT NULL CHECK(actor IN ('white','black')),
+  phase TEXT NOT NULL CHECK(phase IN ('opening','middlegame','endgame','unclear')),
+  decision_class TEXT NOT NULL CHECK(decision_class IN ('played','game','predicted')),
+  session_kind TEXT NOT NULL CHECK(session_kind IN ('pack','position','imported')),
+  pack_id TEXT,
+  legal_alternatives INTEGER NOT NULL CHECK(legal_alternatives>=0),
+  unavailable_json TEXT NOT NULL CHECK(json_valid(unavailable_json) AND json_type(unavailable_json)='array'),
+  observed_at TEXT NOT NULL CHECK(strftime('%Y-%m-%dT%H:%M:%fZ',observed_at) IS observed_at),
+  derived_rev INTEGER NOT NULL CHECK(derived_rev>0),
+  CHECK((session_kind='pack' AND pack_id IS NOT NULL AND length(pack_id)>0) OR (session_kind<>'pack' AND pack_id IS NULL)),
+  PRIMARY KEY(learner_id,run_id,decision_ref_json),
+  FOREIGN KEY(run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON DELETE CASCADE,
+  FOREIGN KEY(learner_id,run_id,phase,decision_class)
+    REFERENCES learner_observation_denominators(learner_id,run_id,phase,decision_class) ON DELETE CASCADE
+) STRICT;
+CREATE INDEX learner_subject_evaluations_cohort ON learner_subject_evaluations(learner_id,run_id,phase,decision_class);`;
+export const INSERT_SUBJECT_EVALUATION = `INSERT INTO learner_subject_evaluations
+  (learner_id,run_id,decision_ref_json,actor,phase,decision_class,session_kind,pack_id,legal_alternatives,unavailable_json,observed_at,derived_rev)
+  VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
+export function subjectEvaluationSqlValues(row: LongitudinalSubjectEvaluationRow) {
+  return [row.learnerId,row.runId,canonicalizeJson(row.decisionRef),row.actor,row.phase,row.decisionClass,row.sessionKind,row.packId,
+    row.legalAlternatives,canonicalizeJson(row.unavailable),row.observedAt,row.derivedRev] as const;
+}
+export function subjectEvaluationFromSql(r: Record<string, unknown>): LongitudinalSubjectEvaluationRow {
+  const decisionRef: unknown = JSON.parse(String(r.decision_ref_json)), unavailable: unknown = JSON.parse(String(r.unavailable_json));
+  if (canonicalizeJson(decisionRef) !== r.decision_ref_json || canonicalizeJson(unavailable) !== r.unavailable_json) throw new TypeError("LONGITUDINAL_SUBJECT_SQL_INVALID");
+  return parseLongitudinalSubjectEvaluationRow({ learnerId:r.learner_id,runId:r.run_id,decisionRef,actor:r.actor,phase:r.phase,
+    decisionClass:r.decision_class,sessionKind:r.session_kind,packId:r.pack_id,legalAlternatives:r.legal_alternatives,
+    unavailable,observedAt:r.observed_at,derivedRev:r.derived_rev });
+}
 export const PROFILE_SUBJECT_OBSERVATIONS_SQL = `CREATE TABLE learner_subject_observations (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   run_id TEXT NOT NULL,

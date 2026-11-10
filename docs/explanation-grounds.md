@@ -434,8 +434,9 @@ Every original legal alternative stays in the population. Unknown collector depe
 
 Native subject incidence likewise keeps its seven complete source families when a legacy
 event or mover-risk source fails. It authenticates the original full population and failure
-vocabulary first; copied/narrow inputs and integrity failures still refuse. Stored revision9
-retains the whole54-source fence until per-decision durable coverage is implemented.
+vocabulary first; copied/narrow inputs and integrity failures still refuse. Stored revision 10
+records each decision's legal alternative count and unavailable sources alongside its available
+observations. Reads check the recorded decisions and denominators against the saved game.
 
 Research selector3 carries the exact54-source image and its source-local unavailable causes on
 every result. A complete fact can coexist with a gap in another source. Every share still counts

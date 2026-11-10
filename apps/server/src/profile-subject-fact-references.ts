@@ -128,7 +128,7 @@ export function profileSubjectReferenceIndex(image: LongitudinalSourceImageV4, d
       default: return fail();
     }
   }
-  return Object.freeze({ observation, evaluation, evaluationContext,
+  return Object.freeze({ observation, evaluation, evaluationContext, sessionKind: run.sessionKind, packId: run.sessionKind === "pack" ? run.packId : null,
     // Includes quiet/forced decisions; later query cohort filtering must not depend on SQL rows.
     decisions: Object.freeze([...decisions.values()].map(d => Object.freeze({ decisionRef: d.ref, phase: d.phase, decisionClass: d.decisionClass }))),
   });

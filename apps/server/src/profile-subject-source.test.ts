@@ -4,7 +4,7 @@ import { LongitudinalStore } from "./longitudinal-store.js";
 import { rmSync } from "node:fs";
 import { dirname } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { consumeProfileSubjectFacts, assertProfileSubjectFactOwner } from "./profile-subject-facts.js";
+import { consumeProfileSubjectFacts, assertProfileSubjectFactOwner, readProfileSubjectReduction } from "./profile-subject-facts.js";
 import { selectProfileSubjectDecision } from "./profile-game-source.js";
 import { normativeDecisions } from "./longitudinal-decisions.js";
 import { fileFixture, learner, play, positionRun, predict, importedRun, type FileFixture } from "./longitudinal-test-fixtures.js";
@@ -116,9 +116,13 @@ describe("original complete subject machine consumption", () => {
     s.store.closeGameSource(s.scope);
     expect(() => assertProfileSubjectFactOwner(rows, s.image, s.scope, s.claim.derivedRev)).toThrow();
   });
-  it("keeps a whole genuinely incomplete decision unavailable instead of publishing other family rows", () => {
+  it("keeps complete family rows with exact per-source unknowns on a partially evaluated decision", () => {
     const s = acquire(play(positionRun("subject-incomplete", "r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1"), "e1f1"));
-    expect(consumeProfileSubjectFacts(s.image, s.options)).toEqual([]);
+    const rows = consumeProfileSubjectFacts(s.image, s.options);
+    expect(rows.length).toBeGreaterThan(0);
+    const summary = readProfileSubjectReduction(rows,s.image,s.scope,s.claim.derivedRev);
+    expect(summary).toHaveLength(1); expect(summary[0]!.unavailable.length).toBeGreaterThan(0);
+    expect(rows.every(row => !summary[0]!.unavailable.some(u => u.projection.id === row.projectionId && u.projection.version === row.projectionVersion))).toBe(true);
   });
   it("refuses source/image/revision/decision copies and cross cuts before acquiring a packet", () => {
     const s = acquire(play(positionRun("subject-owner", capture), "h1g1"));

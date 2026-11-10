@@ -10,7 +10,7 @@ import { SUBJECT_OUTCOME_FAMILIES, BOOLEAN_SUBJECT_RELATIONS, INTEGER_SUBJECT_RE
 
 // Revision9 installs the subject table and six-family publication together.
 // Current migration/rebuild/cost acceptance remains in flight; this is not a release certificate.
-export const OBSERVATION_DERIVATION_REV = 9 as const;
+export const OBSERVATION_DERIVATION_REV = 10 as const;
 export const LONGITUDINAL_SEMANTIC_SIGNS = SEMANTIC_EVENT_SIGNS;
 export interface RegistryProjection { readonly id: string; readonly version: 1 | 2 }
 export type LongitudinalConstructor =

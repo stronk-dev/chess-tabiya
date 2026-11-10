@@ -282,10 +282,12 @@ export function projectObservations(image: LongitudinalSourceImageV4, supplied: 
   const subjectObservations = options.gameSource === undefined ? Object.freeze([]) : consumeProfileSubjectFacts(image, {
     gameSource: options.gameSource, derivedRev, ...(options.checkpoint === undefined ? {} : { checkpoint: options.checkpoint }),
   });
+  let subjectEvaluations: ReturnType<typeof foldProfileSubjectReduction>["evaluations"] = Object.freeze([]);
   if (options.gameSource !== undefined) {
     const summary = readProfileSubjectReduction(subjectObservations, image, options.gameSource, derivedRev);
     const folded = foldProfileSubjectReduction(summary, { learnerId, runId, observedAt, derivedRev, sessionKind, packId });
     denominators = [...folded.denominators]; observations = [...folded.observations];
+    subjectEvaluations = folded.evaluations;
   }
   const structureStats = structureStatistics(image, run).map((row) => parseLongitudinalStructureStatRow({ ...row, learnerId, runId, observedAt, derivedRev }));
   const gameFacts = Object.freeze([consumeProfileGameFacts(image, { derivedRev,
@@ -294,5 +296,5 @@ export function projectObservations(image: LongitudinalSourceImageV4, supplied: 
   const choiceFacts = Object.freeze([consumeProfileChoiceFacts(image, { derivedRev,
     ...(options.gameSource === undefined ? {} : { gameSource: options.gameSource }),
     ...(options.checkpoint === undefined ? {} : { checkpoint: () => options.checkpoint!(decisions.length, decisions.length) }) })]);
-  return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts, choiceFacts, subjectObservations });
+  return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts, choiceFacts, subjectObservations, subjectEvaluations });
 }

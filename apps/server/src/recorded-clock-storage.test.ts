@@ -45,12 +45,12 @@ describe("retained original clock document: actual SQL/account image", () => {
     expect(old.prepare("PRAGMA table_info(imported_games)").all().map(row => row.name)).not.toContain("clock_document_json");
     old.close();
     const migrations: number[] = [], upgraded = new SQLiteRunStorage(file, { onMigration: entry => migrations.push(entry.version) }); stores.push(upgraded);
-    expect(migrations).toEqual([32, 33, 34, 35]);
+    expect(migrations).toEqual([32, 33, 34, 35, 36]);
     expect(upgraded.importedGame("clock-run")!.clockDocument).toBeNull();
     const inspect = new DatabaseSync(file); databases.push(inspect);
     expect(inspect.prepare("SELECT snapshot_json FROM drill_runs WHERE id='clock-run'").get()!.snapshot_json).toBe(before);
     const repeated = new SQLiteRunStorage(file, { onMigration: entry => migrations.push(entry.version) }); stores.push(repeated);
-    expect(migrations).toEqual([32, 33, 34, 35]);
+    expect(migrations).toEqual([32, 33, 34, 35, 36]);
   });
 
   it.each(["paste", "fetch"] as const)("persists %s extraction atomically with every original node and no annotation prose", async kind => {

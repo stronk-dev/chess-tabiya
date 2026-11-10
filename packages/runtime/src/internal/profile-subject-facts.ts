@@ -52,19 +52,19 @@ export function collectProfileSubjectPopulation(beforeFen: string, moveUci: stri
     const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt, moveUci });
     const incidence = subjectRelationIncidences(family, result);
     if (result.kind === "available") admitProfileSubjectValues(result.values);
+    const unknown = unavailable.some(value => value.projection.id === `derived.semantic_avoidance.${family}` && value.projection.version === 2);
+    if ((incidence.kind === "unavailable") !== unknown) throw new TypeError("Condition availability contradicts its original required sources");
     return incidence;
   });
   admitProfileSubjectValues(receipt.packet.candidates.flatMap(candidate => candidate.events
     .filter(e => localRefs.has(`${e.projection.id}@${e.projection.version}`)).map(e => e.evidence)));
-  // Revision9 has no durable per-source coverage. Keep its whole-population fence until the
-  // coordinated D4200 reduction/table/revision upgrade; native calculation no longer supplies it.
-  if (unavailable.length > 0 || conditions.some(r => r.kind === "unavailable")) return Object.freeze({ kind: "unavailable" as const, reason: "counterfactual_population_incomplete" as const });
   if (conditions.some(r => r.kind === "available" && (r.actor !== native.actor || r.edge.beforeFen !== native.edge.beforeFen
     || r.edge.moveUci !== native.edge.moveUci || r.edge.afterFen !== native.edge.afterFen))) throw new TypeError("Subject populations cross their original actor or edge");
   const prevalence: { projectionId: string; projectionVersion: number; sign: import("../evidence-contract.js").SemanticEventSign;
     occurred: boolean; legalAlternatives: number; matchingAlternatives: number }[] = [];
   const played = receipt.packet.candidates.find(c => c.moveUci === native.edge.moveUci)!;
   for (const ref of PROFILE_PREVALENCE_SOURCE_REFS) {
+    if (unavailable.some(value => `${value.projection.id}@${value.projection.version}` === ref)) continue;
     const at = ref.lastIndexOf("@"), projectionId = ref.slice(0, at), projectionVersion = Number(ref.slice(at + 1));
     const declaration = PRIMARY_EVIDENCE_MANIFEST.semanticEvents.find(e => `${e.projection.id}@${e.projection.version}` === ref);
     if (declaration === undefined) throw new TypeError("Prevalence source lacks exact sign declaration");
@@ -77,6 +77,6 @@ export function collectProfileSubjectPopulation(beforeFen: string, moveUci: stri
         legalAlternatives: receipt.packet.candidates.length - 1, matchingAlternatives: matching - Number(occurred) }));
     }
   }
-  return Object.freeze({ kind: "available" as const, actor: native.actor, edge: native.edge,
+  return Object.freeze({ actor: native.actor, edge: native.edge, legalAlternatives: receipt.packet.candidates.length - 1, unavailable,
     native: native.rows, conditions: Object.freeze(conditions.flatMap(r => r.kind === "available" ? [...r.rows] : [])), prevalence: Object.freeze(prevalence) });
 }

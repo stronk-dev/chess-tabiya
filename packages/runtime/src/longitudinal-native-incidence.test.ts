@@ -68,14 +68,18 @@ describe("original root native-event incidence", () => {
     expect(result.actor).toBe(mirrored ? "black" : "white");
     expect(result.rows.length).toBeGreaterThan(0);
     expect(result.rows.every(row => row.legalAlternatives === 11 && row.comparableAlternatives === 11)).toBe(true);
-    // Stored revision9 remains conservative until the coordinated durable coverage upgrade.
-    expect(collectProfileSubjectPopulation(beforeFen, moveUci)).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+    const population = collectProfileSubjectPopulation(beforeFen, moveUci);
+    expect(population.unavailable).toEqual(readCandidateUnavailableSources(receipt));
+    expect(population.native).toEqual(result.rows);
+    expect(population.legalAlternatives).toBe(11);
   });
 
   it("does not turn a genuine risk failure into a failure of the independent native families", () => {
     const fen = "7k/8/8/8/8/8/8/r6K w - - 0 1", receipt = owner(fen);
     expect(readCandidateUnavailableSources(receipt).some(value => value.projection.id === "derived.semantic_avoidance.loose_piece")).toBe(true);
     expect(nativeSubjectIncidences(receipt, "h1h2")).toMatchObject({ kind: "available", actor: "white" });
-    expect(collectProfileSubjectPopulation(fen, "h1h2")).toEqual({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
+    const population = collectProfileSubjectPopulation(fen, "h1h2");
+    expect(population.unavailable.some(value => value.projection.id === "derived.semantic_avoidance.loose_piece")).toBe(true);
+    expect(population.conditions.every(value => value.family !== "loose_piece")).toBe(true);
   });
 });

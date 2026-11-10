@@ -36,12 +36,9 @@ export function consumeProfileSubjectFacts(image: LongitudinalSourceImageV4, opt
     rows.push(...reduceDecision());
     function reduceDecision(): readonly LongitudinalSubjectObservationRow[] {
       const population = collectProfileSubjectPopulation(decision.beforeFen, decision.moveUci);
-      if (population.kind === "unavailable") {
-        summary.push(Object.freeze({ ref: decision.ref, phase: decision.phase, decisionClass: decision.decisionClass, kind: "unavailable", reason: population.reason }));
-        return [];
-      }
-      summary.push(Object.freeze({ ref: decision.ref, phase: decision.phase, decisionClass: decision.decisionClass, kind: "complete", prevalence: population.prevalence }));
       if (population.actor !== actor) throw new TypeError("Subject population crosses its original decision actor");
+      summary.push(Object.freeze({ ref: decision.ref, phase: decision.phase, decisionClass: decision.decisionClass,
+        actor, legalAlternatives: population.legalAlternatives, unavailable: population.unavailable, prevalence: population.prevalence }));
       const context = { learnerId: image.ownerLearnerId, runId: run.id, decisionRef: decision.ref, actor,
         phase: decision.phase, decisionClass: decision.decisionClass, sessionKind: run.sessionKind,
         packId: run.sessionKind === "pack" ? run.packId : null, observedAt, derivedRev: derivedRev };

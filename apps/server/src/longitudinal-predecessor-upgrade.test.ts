@@ -26,7 +26,7 @@ interface HistoricalFixture {
 const prior = JSON.parse(readFileSync(new URL("./fixtures/longitudinal-predecessor-rev8.json", import.meta.url), "utf8")) as HistoricalFixture;
 const owner = "research-profile-owner";
 const families = LONGITUDINAL_TABLES.filter(table => table !== "learner_observation_jobs");
-const priorFamilies = families.filter(table => table !== "learner_subject_observations");
+const priorFamilies = families.filter(table => table !== "learner_subject_observations" && table !== "learner_subject_evaluations");
 const directories: string[] = [], databases: DatabaseSync[] = [], stores: SQLiteRunStorage[] = [];
 let application: ChessTabiyaApplication | undefined;
 const quoted = (name: string) => `"${name.replaceAll('"', '""')}"`;
@@ -105,7 +105,7 @@ describe("D4181 actual revision-eight saved-history upgrade", { timeout: 120_000
       .toEqual([{ state: "complete", derived_rev: 8 }]);
   });
 
-  it("invalidates before real worker startup, publishes all six families, and survives reopen and complete rebuild", async () => {
+  it("invalidates before real worker startup, publishes all seven families, and survives reopen and complete rebuild", async () => {
     const { path, db } = restore(), before = protectedRows(db);
     const heads = db.prepare("SELECT run_id,requested_seq,claim_generation FROM learner_observation_jobs ORDER BY run_id").all();
     const realStart = LongitudinalProjectionWorker.start.bind(LongitudinalProjectionWorker);
@@ -123,7 +123,7 @@ describe("D4181 actual revision-eight saved-history upgrade", { timeout: 120_000
       expect(db.prepare("PRAGMA user_version").get()).toEqual({ user_version: STORAGE_VERSION });
       for (const table of families) expect(count(db, table), table).toBe(0);
       expect(db.prepare("SELECT DISTINCT derived_rev,state,completed_seq FROM learner_observation_jobs").all())
-        .toEqual([{ derived_rev: 9, state: "pending", completed_seq: 0 }]);
+        .toEqual([{ derived_rev: 10, state: "pending", completed_seq: 0 }]);
       expect(db.prepare("SELECT run_id,requested_seq,claim_generation-1 AS claim_generation FROM learner_observation_jobs ORDER BY run_id").all()).toEqual(heads);
       expect(new LongitudinalStore(db).readSnapshot(owner, query()).kind).toBe("incomplete");
       expect(protectedRows(db)).toEqual(before);
@@ -133,7 +133,7 @@ describe("D4181 actual revision-eight saved-history upgrade", { timeout: 120_000
     expect(snapshot.cuts).toHaveLength(3);
     for (const table of families) {
       expect(count(db, table), table).toBeGreaterThan(0);
-      expect(db.prepare(`SELECT DISTINCT derived_rev FROM ${quoted(table)}`).all()).toEqual([{ derived_rev: 9 }]);
+      expect(db.prepare(`SELECT DISTINCT derived_rev FROM ${quoted(table)}`).all()).toEqual([{ derived_rev: 10 }]);
     }
     const originalFamilies = allFamilies(db);
     const closing = application; application = undefined; await closing.close();

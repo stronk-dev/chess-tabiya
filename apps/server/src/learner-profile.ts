@@ -642,6 +642,7 @@ function evidenceGroundingOf(id: string, version: number): EvidenceGrounding | u
 // ---------------------------------------------------------------------------------------------
 
 interface Snapshot {
+  readonly coverage: import("./profile-subject-facts-contract.js").LongitudinalReadCoverage | null;
   readonly cuts: readonly LongitudinalCutOutcome[];
   readonly runs: readonly RunFact[];
   readonly rejected: ReadonlyMap<string, ProfileRunStatus>;
@@ -717,7 +718,7 @@ export class LearnerProfileService {
       const result = rated.get(run.runId) ?? run.game?.outcome ?? null;
       if (result !== null) results.set(run.runId, result);
     }
-    return { cuts, runs, rejected, playedDecisionsInStore, results };
+    return { cuts, runs, rejected, playedDecisionsInStore, results, coverage: complete?.kind === "complete" ? complete.coverage : null };
   }
 
   #games(snapshot: Snapshot): Games {

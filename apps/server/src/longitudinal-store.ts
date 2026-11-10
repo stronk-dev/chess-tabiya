@@ -22,8 +22,8 @@ import { assertProfileChoiceFactReferences } from "./profile-choice-fact-referen
 import { isImmutableOwnData } from "../../../packages/runtime/src/internal/immutable-data.js";
 import { assertProfileSubjectFactOwner, readProfileSubjectReduction } from "./profile-subject-facts-authority.js";
 import { foldProfileSubjectReduction, assertProfileSubjectFold } from "./profile-subject-reduction.js";
-import { parseLongitudinalSubjectObservationRow, subjectObservationKey, subjectObservationMatches, type LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
-import { subjectObservationFromSql, subjectObservationSqlValues, INSERT_SUBJECT_OBSERVATION } from "./profile-subject-facts-storage.js";
+import { parseLongitudinalSubjectObservationRow, subjectObservationKey, subjectObservationMatches, type LongitudinalSubjectObservationRow, parseLongitudinalSubjectEvaluationRow, subjectEvaluationKey, profileCoverageSources, projectSubjectEvaluation, parseLongitudinalReadCoverage, type LongitudinalSubjectEvaluationRow, type LongitudinalReadCoverage, type LongitudinalCoverageDecision } from "./profile-subject-facts-contract.js";
+import { subjectObservationFromSql, subjectObservationSqlValues, INSERT_SUBJECT_OBSERVATION, subjectEvaluationFromSql, subjectEvaluationSqlValues, INSERT_SUBJECT_EVALUATION } from "./profile-subject-facts-storage.js";
 import { profileSubjectReferenceIndex } from "./profile-subject-fact-references.js";
 
 import {
@@ -33,6 +33,7 @@ import {
   LongitudinalContractError,
   assertParsedLongitudinalReadQuery,
   compareText,
+  compareDecisionRefs,
   instantFromMillis,
   observationSortKey,
   longitudinalRetryDelayMs,
@@ -60,6 +61,7 @@ export interface LongitudinalProjection {
   readonly gameFacts: readonly LongitudinalGameFactRow[];
   readonly choiceFacts: readonly LongitudinalChoiceFactRow[];
   readonly subjectObservations: readonly LongitudinalSubjectObservationRow[];
+  readonly subjectEvaluations: readonly LongitudinalSubjectEvaluationRow[];
 }
 import { OBSERVATION_DERIVATION_REV } from "./longitudinal-registry.js";
 import {
@@ -72,7 +74,7 @@ import {
   type MoveAuthorship,
 } from "./longitudinal-source.js";
 
-const PROJECTION_FIELDS = ["denominators", "observations", "structureStats", "gameFacts", "choiceFacts", "subjectObservations"] as const;
+const PROJECTION_FIELDS = ["denominators", "observations", "structureStats", "gameFacts", "choiceFacts", "subjectObservations", "subjectEvaluations"] as const;
 function dataWithoutProxies(value: unknown, seen = new WeakSet<object>()): boolean {
   if (value === null || typeof value !== "object") return typeof value !== "function";
   if (nodeTypes.isProxy(value)) return false;
@@ -275,11 +277,11 @@ CREATE INDEX IF NOT EXISTS learner_observation_jobs_work
 `;
 
 export const LONGITUDINAL_TABLES = Object.freeze([
-  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_observation_jobs",
+  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_subject_evaluations", "learner_observation_jobs",
 ] as const);
 export const LONGITUDINAL_INDEXES = Object.freeze([
   "drill_runs_longitudinal_owner", "learner_observation_denominators_by_learner", "learner_observations_by_family",
-  "learner_observations_by_run", "learner_structure_stats_by_learner", "learner_observation_jobs_work", "learner_subject_observations_source",
+  "learner_observations_by_run", "learner_structure_stats_by_learner", "learner_observation_jobs_work", "learner_subject_observations_source", "learner_subject_evaluations_cohort",
 ] as const);
 
 /**
@@ -340,7 +342,7 @@ export type WatermarkOutcome = "created" | "advanced" | "revision_reset" | "unch
 
 export interface RebuildMismatch {
   readonly runId: string;
-  readonly table: "learner_observation_denominators" | "learner_observations" | "learner_structure_stats" | "learner_game_facts" | "learner_choice_facts" | "learner_subject_observations" | "learner_observation_jobs";
+  readonly table: "learner_observation_denominators" | "learner_observations" | "learner_structure_stats" | "learner_game_facts" | "learner_choice_facts" | "learner_subject_observations" | "learner_subject_evaluations" | "learner_observation_jobs";
   readonly key: string;
   readonly kind: "missing" | "surplus" | "changed";
 }
@@ -492,6 +494,10 @@ export class LongitudinalStore {
   }
 
   #deleteDerivedRows(runId: string): void {
+    const beforeEvaluationMigration = Number((this.#db.prepare("PRAGMA user_version").get() as Row).user_version) < 36;
+    if (!beforeEvaluationMigration || this.#db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='learner_subject_evaluations'").get() !== undefined) {
+      this.#db.prepare("DELETE FROM learner_subject_evaluations WHERE run_id=?").run(runId);
+    }
     const beforeSubjectMigration = Number((this.#db.prepare("PRAGMA user_version").get() as Row).user_version) < 35;
     if (!beforeSubjectMigration || this.#db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='learner_subject_observations'").get() !== undefined) {
       this.#db.prepare("DELETE FROM learner_subject_observations WHERE run_id=?").run(runId);
@@ -854,12 +860,14 @@ export class LongitudinalStore {
     }
     const subject = this.#db.prepare(INSERT_SUBJECT_OBSERVATION);
     for (const raw of projection.subjectObservations) subject.run(...subjectObservationSqlValues(parseLongitudinalSubjectObservationRow(raw)));
+    const evaluation = this.#db.prepare(INSERT_SUBJECT_EVALUATION);
+    for (const raw of projection.subjectEvaluations) evaluation.run(...subjectEvaluationSqlValues(parseLongitudinalSubjectEvaluationRow(raw)));
   }
 
   static #assertProjectionSubject(projection: LongitudinalProjection, runId: string, learnerId: string, derivedRev: number): void {
     if (projection.gameFacts.length !== 1) throw new LongitudinalContractError("LONGITUDINAL_GAME_ROW_CARDINALITY");
     if (projection.choiceFacts.length !== 1) throw new LongitudinalContractError("LONGITUDINAL_CHOICE_ROW_CARDINALITY");
-    for (const row of [...projection.denominators, ...projection.observations, ...projection.structureStats, ...projection.gameFacts, ...projection.choiceFacts, ...projection.subjectObservations]) {
+    for (const row of [...projection.denominators, ...projection.observations, ...projection.structureStats, ...projection.gameFacts, ...projection.choiceFacts, ...projection.subjectObservations, ...projection.subjectEvaluations]) {
       if (row.runId !== runId || row.learnerId !== learnerId || row.derivedRev !== derivedRev) {
         throw new LongitudinalContractError("LONGITUDINAL_PROJECTION_SUBJECT_MISMATCH", runId);
       }
@@ -876,6 +884,8 @@ export class LongitudinalStore {
     assertProfileSubjectFold(projection, expected);
     const check = profileSubjectReferenceIndex(image, derivedRev);
     for (const row of projection.subjectObservations) check.observation(parseLongitudinalSubjectObservationRow(row));
+    for (const row of projection.subjectEvaluations) check.evaluation(row);
+    assertAvailableObservations(projection.observations, projection.subjectObservations, projection.subjectEvaluations);
   }
 
   /**
@@ -980,47 +990,76 @@ export class LongitudinalStore {
       if (frozenOutcomes.some((outcome) => outcome.kind !== "complete")) return Object.freeze({ kind: "incomplete", cuts: frozenOutcomes });
       const cuts = frozenOutcomes as readonly LongitudinalCompleteCut[];
       const runIds = cuts.map((cut) => cut.runId);
-      return Object.freeze({ kind: "complete", cuts, ...this.#rows(query, runIds) });
+      return Object.freeze({ kind: "complete", cuts, ...this.#rows(query, runIds, cuts) });
     });
   }
 
-  #rows(query: ParsedLongitudinalReadQuery, runIds: readonly string[]): {
+  #rows(query: ParsedLongitudinalReadQuery, runIds: readonly string[], cuts: readonly LongitudinalCompleteCut[]): {
     readonly denominators: readonly LongitudinalDenominatorRow[];
     readonly observations: readonly LongitudinalObservationRow[];
     readonly structureStats: readonly LongitudinalStructureStatRow[];
     readonly gameFacts: readonly GameFactReadOutcome[];
     readonly choiceFacts: readonly ChoiceFactReadOutcome[];
     readonly subjectObservations: readonly LongitudinalSubjectObservationRow[];
+    readonly coverage: LongitudinalReadCoverage;
   } {
     const filter = query.filter;
-    const runSelected = (runId: string): boolean => {
+    const runSelected = (runId: string, original?: { readonly sessionKind: string; readonly packId: string | null }): boolean => {
       if (filter.sessionKinds === undefined && filter.packIds === undefined) return true;
-      const summary = this.#db.prepare("SELECT json_extract(summary_json, '$.sessionKind') AS kind, json_extract(summary_json, '$.packId') AS pack FROM drill_runs WHERE id = ?").get(runId) as Row | undefined;
+      const summary = original === undefined ? this.#db.prepare("SELECT json_extract(summary_json, '$.sessionKind') AS kind, json_extract(summary_json, '$.packId') AS pack FROM drill_runs WHERE id = ?").get(runId) as Row | undefined : { kind: original.sessionKind, pack: original.packId };
       const kind = String(summary?.kind);
       if (filter.sessionKinds !== undefined && !(filter.sessionKinds as readonly string[]).includes(kind)) return false;
       if (filter.packIds !== undefined && (kind !== "pack" || !filter.packIds.includes(String(summary?.pack)))) return false;
       return true;
     };
-    const selectedRuns = runIds.filter(runSelected);
     const denominators: LongitudinalDenominatorRow[] = [];
     const observations: LongitudinalObservationRow[] = [];
     const structureStats: LongitudinalStructureStatRow[] = [];
     const gameFacts: GameFactReadOutcome[] = [];
     const choiceFacts: ChoiceFactReadOutcome[] = [];
     const subjectObservations: LongitudinalSubjectObservationRow[] = [];
+    const sources = profileCoverageSources(query);
+    const coverageDecisions: LongitudinalCoverageDecision[] = [];
+    const coverageExpected: Omit<LongitudinalCoverageDecision, "unavailable">[] = [];
+    const allEvaluations: LongitudinalSubjectEvaluationRow[] = [];
     const phaseOk = (phase: string): boolean => filter.phases === undefined || (filter.phases as readonly string[]).includes(phase);
     const classOk = (value: string): boolean => filter.decisionClasses === undefined || (filter.decisionClasses as readonly string[]).includes(value);
     const projectionOk = (row: LongitudinalObservationRow): boolean => filter.projections === undefined || filter.projections.some((projection) =>
       projection.id === row.projectionId && projection.version === row.projectionVersion
       && (projection.semanticSign === undefined || projection.semanticSign === row.semanticSign)
       && (projection.sourceSign === undefined || projection.sourceSign === row.sourceSign));
-    for (const runId of selectedRuns) {
-      if (query.includeSubjectObservations === true) {
+    for (const runId of runIds) {
+      let check: ReturnType<typeof profileSubjectReferenceIndex> | undefined;
+      if (sources.length > 0 || query.includeSubjectObservations === true) {
         const cut = this.#job(runId)!, image = this.#sourceImageInTransaction(runId, cut.completedSeq);
         if (cut.derivedRev !== OBSERVATION_DERIVATION_REV || this.sourceDigest(image) !== cut.requestedSourceDigest) throw new LongitudinalContractError("LONGITUDINAL_SUBJECT_SOURCE_JOIN_INVALID");
-        const check = profileSubjectReferenceIndex(image, query.derivationRev);
+        check = profileSubjectReferenceIndex(image, query.derivationRev);
+      }
+      if (!runSelected(runId,check)) continue;
+      const expectedBands = new Map<string, { decisions: number; observedAt: string }>();
+      if (sources.length > 0) {
+        const raw = this.#db.prepare("SELECT * FROM learner_subject_evaluations WHERE run_id=?").all(runId) as readonly Row[];
+        const rows = raw.map(r => check!.evaluation(subjectEvaluationFromSql(r)));
+        const byRef = new Map(rows.map(r => [canonicalizeJson(r.decisionRef),r]));
+        if (byRef.size !== rows.length || rows.length !== check!.decisions.length) throw new LongitudinalContractError("LONGITUDINAL_EVALUATION_CARDINALITY");
+        for (const decision of check!.decisions) {
+          const row = byRef.get(canonicalizeJson(decision.decisionRef));
+          if (row === undefined) throw new LongitudinalContractError("LONGITUDINAL_EVALUATION_CARDINALITY");
+          allEvaluations.push(row);
+          const band = `${row.phase}\0${row.decisionClass}`;
+          const count = expectedBands.get(band)?.decisions ?? 0;
+          expectedBands.set(band, { decisions: count + 1, observedAt: row.observedAt });
+          if (phaseOk(row.phase) && classOk(row.decisionClass)) {
+            const projected = projectSubjectEvaluation(row,sources);
+            coverageDecisions.push(projected);
+            const { unavailable: _unknown, ...context } = projected;
+            coverageExpected.push(Object.freeze(context));
+          }
+        }
+      }
+      if (query.includeSubjectObservations === true) {
         for (const raw of this.#db.prepare("SELECT * FROM learner_subject_observations WHERE run_id=? AND learner_id=? AND derived_rev=?").all(runId, query.learnerId, query.derivationRev) as readonly Row[]) {
-          const row = subjectObservationFromSql(raw); check.observation(row);
+          const row = subjectObservationFromSql(raw); check!.observation(row);
           if (phaseOk(row.phase) && classOk(row.decisionClass) && (query.subjectFilters === undefined || query.subjectFilters.some(f => subjectObservationMatches(row, f)))) subjectObservations.push(row);
         }
       }
@@ -1051,8 +1090,17 @@ export class LongitudinalStore {
       for (const raw of this.#db.prepare(`SELECT learner_id, run_id, phase, decision_class, decisions, observed_at, derived_rev
           FROM learner_observation_denominators WHERE run_id = ? AND learner_id = ? AND derived_rev = ?`).all(runId, query.learnerId, query.derivationRev) as readonly Row[]) {
         const row = denominatorFromSql(raw);
+        if (sources.length > 0) {
+          const band = `${row.phase}\0${row.decisionClass}`;
+          const expected = expectedBands.get(band);
+          if (expected?.decisions !== row.decisions || expected.observedAt !== row.observedAt) {
+            throw new LongitudinalContractError("LONGITUDINAL_DENOMINATOR_COVERAGE_INVALID");
+          }
+          expectedBands.delete(band);
+        }
         if (phaseOk(row.phase) && classOk(row.decisionClass)) denominators.push(row);
       }
+      if (expectedBands.size !== 0) throw new LongitudinalContractError("LONGITUDINAL_DENOMINATOR_COVERAGE_INVALID");
       for (const raw of this.#db.prepare(`SELECT o.*, d.decisions FROM learner_observations o
           JOIN learner_observation_denominators d ON d.learner_id = o.learner_id AND d.run_id = o.run_id
             AND d.phase = o.phase AND d.decision_class = o.decision_class
@@ -1067,7 +1115,11 @@ export class LongitudinalStore {
     observations.sort((left, right) => compareText(observationSortKey(left), observationSortKey(right)));
     structureStats.sort((left, right) => compareText(`${left.runId}\0${left.rootKey}`, `${right.runId}\0${right.rootKey}`));
     subjectObservations.sort((a, b) => compareText(a.runId, b.runId) || a.decisionRef.eventSeq - b.decisionRef.eventSeq || compareText(subjectObservationKey(a), subjectObservationKey(b)));
-    return { denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts: Object.freeze(gameFacts), choiceFacts: Object.freeze(choiceFacts), subjectObservations: Object.freeze(subjectObservations) };
+    assertAvailableObservations(observations,subjectObservations,allEvaluations);
+    const decisionOrder = (a: {runId:string;decisionRef:import("./longitudinal-contract.js").DecisionRef},b: {runId:string;decisionRef:import("./longitudinal-contract.js").DecisionRef}) => compareText(a.runId,b.runId) || compareDecisionRefs(a.decisionRef,b.decisionRef);
+    coverageDecisions.sort(decisionOrder); coverageExpected.sort(decisionOrder);
+    const coverage = parseLongitudinalReadCoverage({sources,decisions:coverageDecisions},query,cuts,coverageExpected);
+    return { denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts: Object.freeze(gameFacts), choiceFacts: Object.freeze(choiceFacts), subjectObservations: Object.freeze(subjectObservations), coverage };
   }
 
   // ------------------------------------------------------------------------------------------
@@ -1088,7 +1140,10 @@ export class LongitudinalStore {
     const subjectObservations = (this.#db.prepare("SELECT * FROM learner_subject_observations WHERE run_id=?").all(runId) as readonly Row[]).flatMap(row => {
       try { return [subjectObservationFromSql(row)]; } catch (error) { if (!forRebuild) throw error; return []; }
     }).sort((a, b) => a.decisionRef.eventSeq - b.decisionRef.eventSeq || compareText(subjectObservationKey(a), subjectObservationKey(b)));
-    return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts: Object.freeze(gameFacts), choiceFacts: Object.freeze(choiceFacts), subjectObservations: Object.freeze(subjectObservations) });
+    const subjectEvaluations = (this.#db.prepare("SELECT * FROM learner_subject_evaluations WHERE run_id=?").all(runId) as readonly Row[]).flatMap(row => {
+      try { return [subjectEvaluationFromSql(row)]; } catch(error) { if(!forRebuild) throw error; return []; }
+    }).sort((a,b) => compareDecisionRefs(a.decisionRef,b.decisionRef));
+    return Object.freeze({ denominators: Object.freeze(denominators), observations: Object.freeze(observations), structureStats: Object.freeze(structureStats), gameFacts: Object.freeze(gameFacts), choiceFacts: Object.freeze(choiceFacts), subjectObservations: Object.freeze(subjectObservations), subjectEvaluations: Object.freeze(subjectEvaluations) });
   }
 
   /**
@@ -1152,6 +1207,8 @@ export class LongitudinalStore {
         const runMismatches = compareProjections(runId, expected, actual);
         const rawSubjectCount = Number((this.#db.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id=?").get(runId) as Row).n);
         if (rawSubjectCount !== actual.subjectObservations.length) runMismatches.push({ runId, table: "learner_subject_observations", key: `${runId}:invalid`, kind: "changed" });
+        const rawEvaluationCount = Number((this.#db.prepare("SELECT count(*) AS n FROM learner_subject_evaluations WHERE run_id=?").get(runId) as Row).n);
+        if (rawEvaluationCount !== actual.subjectEvaluations.length) runMismatches.push({ runId, table:"learner_subject_evaluations",key:`${runId}:invalid`,kind:"changed" });
         mismatches.push(...runMismatches);
         if (options.write && runMismatches.length > 0) {
           this.#inTransaction("BEGIN IMMEDIATE", () => {
@@ -1199,7 +1256,23 @@ function compareProjections(runId: string, expected: LongitudinalProjection, act
   compare("learner_game_facts", jsonRows(expected.gameFacts), jsonRows(actual.gameFacts), (row: LongitudinalGameFactRow) => row.runId);
   compare("learner_choice_facts", jsonRows(expected.choiceFacts), jsonRows(actual.choiceFacts), (row: LongitudinalChoiceFactRow) => row.runId);
   compare("learner_subject_observations", jsonRows(expected.subjectObservations), jsonRows(actual.subjectObservations), (row: LongitudinalSubjectObservationRow) => subjectObservationKey(row));
+  compare("learner_subject_evaluations", jsonRows(expected.subjectEvaluations), jsonRows(actual.subjectEvaluations), (row: LongitudinalSubjectEvaluationRow) => subjectEvaluationKey(row));
   return mismatches;
+}
+
+function assertAvailableObservations(observations: readonly LongitudinalObservationRow[], subjects: readonly LongitudinalSubjectObservationRow[], evaluations: readonly LongitudinalSubjectEvaluationRow[]): void {
+  const key = (runId:string,ref:import("./longitudinal-contract.js").DecisionRef) => canonicalizeJson([runId,ref]);
+  const byRef = new Map(evaluations.map(row => [key(row.runId,row.decisionRef),row]));
+  if (byRef.size !== evaluations.length) throw new LongitudinalContractError("LONGITUDINAL_EVALUATION_CARDINALITY");
+  function available(row: {runId:string;projectionId:string;projectionVersion:number;phase:string;decisionClass:string;sessionKind:string;packId:string|null},ref:import("./longitudinal-contract.js").DecisionRef) {
+    const e = byRef.get(key(row.runId,ref));
+    if (e === undefined || e.legalAlternatives <= 0 || e.phase !== row.phase || e.decisionClass !== row.decisionClass
+      || e.sessionKind !== row.sessionKind || e.packId !== row.packId
+      || e.unavailable.some(u => u.projection.id === row.projectionId && u.projection.version === row.projectionVersion)) throw new LongitudinalContractError("LONGITUDINAL_OBSERVATION_COVERAGE_INVALID");
+    return e;
+  }
+  for (const row of subjects) if (row.legalAlternatives !== available(row,row.decisionRef).legalAlternatives) throw new LongitudinalContractError("LONGITUDINAL_OBSERVATION_COVERAGE_INVALID");
+  for (const row of observations) for (const ref of row.opportunityRefs) available(row,ref);
 }
 
 function denominatorFromSql(row: Row): LongitudinalDenominatorRow {

@@ -496,6 +496,7 @@ export type LongitudinalReadResult =
     readonly denominators: readonly LongitudinalDenominatorRow[];
     readonly observations: readonly LongitudinalObservationRow[];
     readonly subjectObservations: readonly import("./profile-subject-facts-contract.js").LongitudinalSubjectObservationRow[];
+    readonly coverage: import("./profile-subject-facts-contract.js").LongitudinalReadCoverage;
     readonly structureStats: readonly LongitudinalStructureStatRow[];
     readonly gameFacts: readonly import("./profile-game-facts-contract.js").GameFactReadOutcome[];
     readonly choiceFacts: readonly import("./profile-choice-facts-contract.js").ChoiceFactReadOutcome[];

@@ -115,7 +115,7 @@ export const ACCOUNT_NOT_RESTORED_REASONS: Readonly<Record<AccountNotRestoredKin
 /** Classes rebuilt from the restored runs rather than copied from the file. */
 export const ACCOUNT_REDERIVED_TABLES = Object.freeze([
   "learner_position_stats",
-  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_observation_jobs",
+  "learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_subject_evaluations", "learner_observation_jobs",
 ] as const);
 
 export interface RestoredRun {

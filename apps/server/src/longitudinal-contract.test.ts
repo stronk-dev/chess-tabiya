@@ -359,7 +359,7 @@ describe("criterion 12 — revision pair", () => {
     const store = new LongitudinalStore(db, { now: () => f.clock.now });
     const actual = (run: DrillRun) => {
       f.storage.create(run, owner);
-      const claim = store.claimBatch({ workerId: "revision9-fixture", scanLimit: 1, slots: 1, leaseMs: 60_000 })[0]!;
+      const claim = store.claimBatch({ workerId: "revision10-fixture", scanLimit: 1, slots: 1, leaseMs: 60_000 })[0]!;
       if (claim.runId !== run.id) throw Error("Every preceding fixture must publish its own complete cut");
       const source = store.claimSourceImage(claim)!, scope = store.openClaimedGameSource(claim, source);
       try {
@@ -375,7 +375,7 @@ describe("criterion 12 — revision pair", () => {
       if (run === undefined) throw new Error(`Missing original revision fixture ${id}`);
       return run;
     };
-    expect(OBSERVATION_DERIVATION_REV).toBe(9);
+    expect(OBSERVATION_DERIVATION_REV).toBe(10);
     expect(ingestRegistryDigest(LONGITUDINAL_INGEST_REGISTRY)).toBe(LONGITUDINAL_REGISTRY_DIGEST);
     // A zero-incidence registry addition moves the registry digest even though no fixture row changes.
     const addition = [...LONGITUDINAL_INGEST_REGISTRY, { projection: { id: "rules.zero.incidence", version: 1 }, signs: ["gained"], kind: "edge", adapter: "local_semantic_event" }];
@@ -390,12 +390,23 @@ describe("criterion 12 — revision pair", () => {
     const retainedRun = fixed("revision-retained");
     const retained = actual(retainedRun);
     const dutyId = "rules.tactic.event.defender_duty_relocated";
-    // The committed source still proves the special-move fact, but another legal move makes
-    // exposure unavailable. The whole decision must not publish any incomplete opportunity.
+    // A checking alternative makes exposure unavailable while independent sources survive.
     expect(localSemanticEventClosure(promotionRun.nodes[0]!.fen, "b7b8n", promotionRun.nodes[1]!.fen).events.some(event => event.projection.id === dutyId)).toBe(true);
     expect(decisionPopulation(promotionRun.nodes[0]!.fen, "b7b8n")).toEqual({ kind: "unavailable", reason: "population_incomplete" });
     expect(promotion.denominators.reduce((sum, row) => sum + row.decisions, 0)).toBe(1);
-    expect(promotion.observations).toEqual([]);
+    const expectPartial = (projection: typeof promotion) => {
+      expect(projection.subjectEvaluations).toHaveLength(1);
+      const evaluation = projection.subjectEvaluations[0]!;
+      expect(evaluation.unavailable).toContainEqual(expect.objectContaining({
+        projection: { id: "derived.tactic.defender_exposure", version: 2 },
+      }));
+      expect(projection.subjectObservations.length).toBeGreaterThan(0);
+      for (const failure of evaluation.unavailable) {
+        expect(projection.observations.some(row => row.projectionId === failure.projection.id &&
+          row.projectionVersion === failure.projection.version)).toBe(false);
+      }
+    };
+    expectPartial(promotion);
     expect(localSemanticEventClosure(retainedRun.nodes[0]!.fen, "b7b8r", retainedRun.nodes[1]!.fen).events.filter(event => event.projection.id === dutyId)).toEqual([]);
     expect(retained.observations.filter(row => row.projectionId === dutyId && row.occurred > 0)).toEqual([]);
     const castlingRun = fixed("revision-castling");
@@ -405,7 +416,7 @@ describe("criterion 12 — revision pair", () => {
     expect(castlingEvents.some(event => event.projection.id === "rules.mobility.event.piece_destinations")).toBe(true);
     expect(decisionPopulation(castlingRun.nodes[0]!.fen, "e1h1")).toEqual({ kind: "unavailable", reason: "population_incomplete" });
     expect(castling.denominators.reduce((sum, row) => sum + row.decisions, 0)).toBe(1);
-    expect(castling.observations).toEqual([]);
+    expectPartial(castling);
     const enPassant = actual(fixed("revision-en-passant"));
     expect(enPassant.observations.find(row => row.projectionId === "rules.tactic.event.loose_piece" && row.semanticSign === "gained" && row.occurred > 0)).toMatchObject({ occurred: 1 });
     const pawnRuns = [fixed("revision-white-pawn"), fixed("revision-black-pawn")].map(run => actual(run));
@@ -427,23 +438,23 @@ describe("criterion 12 — revision pair", () => {
       // their original source-sign assertions above; never count unavailable as negative.
       expect(population).toEqual({ kind: "unavailable", reason: "population_incomplete" });
       expect(projected.denominators.reduce((sum, row) => sum + row.decisions, 0)).toBe(1);
-      expect(defence).toEqual([]);
-      expect(projected.observations).toEqual([]);
+      expectPartial(projected);
+      if (value.sign === null) expect(defence.some(row => row.semanticSign === "gained" && row.occurred > 0)).toBe(false);
       return projected;
     });
     const successors = successorFixtures.map(([name]) => actual(fixed(`revision-${name}`)));
     const output = [actual(fixture), promotion, retained, castling, enPassant, ...pawnRuns, ...occupiedTargets, ...successors];
     expect(output.map(row => row.denominators[0]?.runId)).toEqual(runs.map(run => run.id));
     for (const projected of output) for (const row of [...projected.denominators, ...projected.observations,
-      ...projected.structureStats, ...projected.gameFacts, ...projected.choiceFacts, ...projected.subjectObservations]) expect(row.derivedRev).toBe(9);
+      ...projected.structureStats, ...projected.gameFacts, ...projected.choiceFacts, ...projected.subjectObservations, ...projected.subjectEvaluations]) expect(row.derivedRev).toBe(10);
     // A.2 changes the registry, subject grain and unavailable population policy. Retagging
     // current rows as revision7 cannot establish predecessor equality. Historical revision8 pin:
     // sha256:aa4d3483e07222cbbe4fc26604d8c44fb5f4d6b3b477eb5c26df3c55006ec5ff
     // Historical four-family revision7 pin:
     // sha256:5c04abdd3419f06f7745ac532aba51a459205f2e53c92ceb573339c5c9969f79
-    // Current fingerprint below covers genuine scope/publication and ALL SIX families.
+    // Current fingerprint below covers genuine scope/publication and all seven families.
     expect(output.every(row => row.choiceFacts.length === 1)).toBe(true);
-    expect(output[0]!.choiceFacts[0]).toMatchObject({ derivedRev: 9, cohort: { kind: "eligible", decisions:
+    expect(output[0]!.choiceFacts[0]).toMatchObject({ derivedRev: 10, cohort: { kind: "eligible", decisions:
       Array.from({ length: 3 }, () => ({ result: { kind: "available" } })) } });
     expect(output.slice(1).every(row => row.choiceFacts[0]!.cohort.kind === "ineligible")).toBe(true);
     const digest = `sha256:${createHash("sha256").update(canonicalizeJson(output as unknown as JsonValue)).digest("hex")}`;
@@ -459,7 +470,7 @@ describe("criterion 12 — revision pair", () => {
  * Any semantic change to the projector, adapters or admitted registry moves this literal; the RFC that
  * owns that change owns the revision bump and the rebuild discharge in the same diff.
  */
-const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:375d8dc39d44e9c00b0360c0cba31af7c4b64544ddc28f09eff3a2190ea76187";
+const LONGITUDINAL_FIXTURE_OUTPUT_DIGEST = "sha256:8dd08a6b87dd34f6a4be364ef12f235639d6991c2c17b4bbc02620e8823699f5";
 
 describe("criteria 13, 28 — branded query parser and sealed V4 source identity", () => {
   it("rejects empty, duplicate, unknown and contradictory filters and orders bytewise", () => {

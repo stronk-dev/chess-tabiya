@@ -125,10 +125,10 @@ describe("actual complete-cut choice family", { timeout: 30_000 }, () => {
   it("upgrades a real schema33/revision7-shaped predecessor and rederives without rewriting play", () => {
     const f = fixture(); batch(f);
     const before = f.db.prepare("SELECT snapshot_json,summary_json FROM drill_runs WHERE id=?").get(f.run.id);
-    f.db.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; UPDATE learner_observation_denominators SET derived_rev=7; UPDATE learner_observations SET derived_rev=7; UPDATE learner_structure_stats SET derived_rev=7; UPDATE learner_game_facts SET derived_rev=7; UPDATE learner_observation_jobs SET derived_rev=7; PRAGMA user_version=33");
+    f.db.exec("DROP TABLE learner_subject_evaluations; DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; UPDATE learner_observation_denominators SET derived_rev=7; UPDATE learner_observations SET derived_rev=7; UPDATE learner_structure_stats SET derived_rev=7; UPDATE learner_game_facts SET derived_rev=7; UPDATE learner_observation_jobs SET derived_rev=7; PRAGMA user_version=33");
     const migrations: number[] = [], upgraded = new SQLiteRunStorage(f.path, { onMigration: entry => migrations.push(entry.version) });
     try {
-      expect(migrations).toEqual([34, 35]);
+      expect(migrations).toEqual([34, 35, 36]);
       expect(f.db.prepare("SELECT snapshot_json,summary_json FROM drill_runs WHERE id=?").get(f.run.id)).toEqual(before);
       expect(upgraded.reconcileLongitudinalJobs().revisionReset).toBe(1);
       expect(batch(f).completed).toBe(1);

@@ -117,7 +117,7 @@ describe("D4018 exact successor history", () => {
       expect(db.prepare("SELECT run_id,requested_seq,claim_generation-1 AS claim_generation FROM learner_observation_jobs WHERE run_id <> ? ORDER BY run_id").all(imported.run.id)).toEqual(heads);
       // Keep the version pin after the actual reconciliation assertions: omitting the bump
       // must fail at unchanged-head SQL state, not merely at a constant's spelling.
-      expect(OBSERVATION_DERIVATION_REV).toBe(9);
+      expect(OBSERVATION_DERIVATION_REV).toBe(10);
       expect(protectedRows(db)).toEqual(before);
       const pendingStore = new LongitudinalStore(db);
       expect(pendingStore.readSnapshot(ownerId, query()).kind).toBe("incomplete");
@@ -138,7 +138,13 @@ describe("D4018 exact successor history", () => {
         expect(localSemanticEventClosure(checking.beforeFen, checking.moveUci, checking.afterFen).abstentions).toContainEqual({ projection: "derived.tactic.defender_exposure@2", reason: "invalid_turn_clone" });
         expect(decisionPopulation(before.fen, after.moveUci)).toEqual({ kind: "unavailable", reason: "population_incomplete" });
         expect(complete.denominators).toContainEqual(expect.objectContaining({ runId: value.run.id, decisions: 1, derivedRev: OBSERVATION_DERIVATION_REV }));
-        expect(complete.observations.filter(row => row.runId === value.run.id)).toEqual([]);
+        expect(complete.coverage.decisions).toContainEqual(expect.objectContaining({
+          runId: value.run.id,
+          unavailable: expect.arrayContaining([expect.objectContaining({ projection: { id: "derived.tactic.defender_exposure", version: 2 } })]),
+        }));
+        const observations = complete.observations.filter(row => row.runId === value.run.id);
+        expect(observations.length).toBeGreaterThan(0);
+        expect(observations.some(row => row.projectionId === "derived.tactic.defender_exposure" && row.projectionVersion === 2)).toBe(false);
         continue;
       }
       const id = value.name.startsWith("material") ? changed[0]! : changed[1]!;

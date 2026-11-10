@@ -6,9 +6,10 @@ import type { ParametersByFamily, RelationByFamily, SubjectByFamily, SubjectOutc
 import type { SemanticEventSign } from "@chess-tabiya/runtime";
 import type { UnavailableSemanticSource } from "../../../packages/runtime/src/semantic-source-availability-types.js";
 import type { SEMANTIC_PLAYED_RANKING_MODES } from "../../../packages/runtime/src/semantic-played-types.js";
-import { PROFILE_SUBJECT_PROJECTIONS } from "../../../packages/runtime/src/profile-subject-sources.js";
+import { PROFILE_PREVALENCE_SOURCE_REFS, PROFILE_SUBJECT_PROJECTIONS } from "../../../packages/runtime/src/profile-subject-sources.js";
 import { canonicalInstant, LONGITUDINAL_PHASES, LONGITUDINAL_DECISION_CLASSES, LONGITUDINAL_SESSION_KINDS,
-  parseDecisionRef, type DecisionRef, type LongitudinalPhase, type LongitudinalDecisionClass, type LongitudinalSessionKind } from "./longitudinal-contract.js";
+  parseDecisionRef, compareDecisionRefs, assertParsedLongitudinalReadQuery, type ParsedLongitudinalReadQuery, type LongitudinalCompleteCut,
+  type DecisionRef, type LongitudinalPhase, type LongitudinalDecisionClass, type LongitudinalSessionKind } from "./longitudinal-contract.js";
 import { LONGITUDINAL_INGEST_REGISTRY } from "./longitudinal-registry.js";
 
 export type SubjectObservationIdentity =
@@ -186,15 +187,19 @@ export function subjectObservationMatches(row: LongitudinalSubjectObservationRow
 }
 
 const contextKeys = ["learnerId", "runId", "decisionRef", "phase", "decisionClass", "sessionKind", "packId", "observedAt", "derivedRev", "actor", "occurred", "legalAlternatives", "matchingAlternatives", "comparableAlternatives"] as const;
-function decisionContext(r: Record<string, unknown>) {
+function decisionIdentity(r: Record<string, unknown>) {
   const sessionKind = member(r.sessionKind, LONGITUDINAL_SESSION_KINDS), decisionRefKind = field(r.decisionRef, "kind");
   const ref = object(r.decisionRef, decisionRefKind === "move" ? ["kind", "nodeId", "eventSeq"] : ["kind", "nodeId", "checkpointId", "eventSeq"]);
   const decisionRef = parseDecisionRef(ref), decisionClass = member(r.decisionClass, LONGITUDINAL_DECISION_CLASSES);
   if ((decisionClass === "predicted") !== (decisionRef.kind === "prediction") || decisionClass === "game" && sessionKind !== "imported") return invalid();
   if (sessionKind === "pack" ? typeof r.packId !== "string" || r.packId.length === 0 : r.packId !== null) return invalid();
-  return { learnerId: string(r.learnerId), runId: string(r.runId), decisionRef,
+  return { decisionRef,
     phase: member(r.phase, LONGITUDINAL_PHASES), decisionClass, sessionKind, packId: r.packId as string | null,
-    observedAt: canonicalInstant(r.observedAt, "LONGITUDINAL_SUBJECT_ROW_INVALID"), derivedRev: integer(r.derivedRev, 1), actor: color(r.actor) };
+    actor: color(r.actor) };
+}
+function decisionContext(r: Record<string, unknown>) {
+  return { learnerId: string(r.learnerId), runId: string(r.runId), ...decisionIdentity(r),
+    observedAt: canonicalInstant(r.observedAt, "LONGITUDINAL_SUBJECT_ROW_INVALID"), derivedRev: integer(r.derivedRev, 1) };
 }
 export function parseLongitudinalSubjectObservationRow(value: unknown): LongitudinalSubjectObservationRow {
   const tested = field(value, "sourceKind") === "condition_relation" ? "relation" : "sign";
@@ -265,6 +270,54 @@ export function parseLongitudinalSubjectEvaluationRow(value: unknown): Longitudi
 }
 export function subjectEvaluationKey(row: LongitudinalSubjectEvaluationRow): string {
   return canonicalizeJson([row.learnerId, row.runId, row.decisionRef]);
+}
+export type LongitudinalCoverageDecision = Omit<LongitudinalSubjectEvaluationRow, "learnerId" | "observedAt" | "derivedRev">;
+export interface LongitudinalReadCoverage {
+  readonly sources: readonly ProfileCoverageProjection[];
+  readonly decisions: readonly LongitudinalCoverageDecision[];
+}
+export function profileCoverageSources(query: ParsedLongitudinalReadQuery): readonly ProfileCoverageProjection[] {
+  assertParsedLongitudinalReadQuery(query);
+  const selected = new Set<string>();
+  for (const ref of PROFILE_PREVALENCE_SOURCE_REFS) {
+    const at = ref.lastIndexOf("@"), id = ref.slice(0,at), version = Number(ref.slice(at+1));
+    if (query.filter.projections === undefined || query.filter.projections.some(p => p.id === id && p.version === version)) selected.add(ref);
+  }
+  if (query.includeSubjectObservations === true) {
+    if (query.subjectFilters === undefined) {
+      for (const p of PROFILE_SUBJECT_PROJECTIONS) if (!PROFILE_PREVALENCE_SOURCE_REFS.includes(`${p.id}@${p.version}`)) selected.add(`${p.id}@${p.version}`);
+    } else for (const f of query.subjectFilters) selected.add(`${f.projection.id}@${f.projection.version}`);
+  }
+  return Object.freeze(PROFILE_SUBJECT_PROJECTIONS.filter(p => selected.has(`${p.id}@${p.version}`)).map(p => parseProfileCoverageProjection(p)));
+}
+export function projectSubjectEvaluation(row: LongitudinalSubjectEvaluationRow, sources: readonly ProfileCoverageProjection[]): LongitudinalCoverageDecision {
+  const { learnerId: _owner, observedAt: _time, derivedRev: _rev, unavailable, ...context } = row;
+  const selected = new Set(sources.map(p => `${p.id}@${p.version}`));
+  return Object.freeze({ ...context, unavailable: Object.freeze(unavailable.filter(u => selected.has(`${u.projection.id}@${u.projection.version}`))) });
+}
+/** Projected output has its own grammar. It is never restored through the full storage parser. */
+export function parseLongitudinalReadCoverage(value: unknown, query: ParsedLongitudinalReadQuery, cuts: readonly LongitudinalCompleteCut[],
+  expected: readonly Omit<LongitudinalCoverageDecision, "unavailable">[]): LongitudinalReadCoverage {
+  const r = object(value, ["sources", "decisions"]), sources = Object.freeze(denseArray(r.sources).map(parseProfileCoverageProjection));
+  if (canonicalizeJson(sources) !== canonicalizeJson(profileCoverageSources(query))) return invalid();
+  const selected = new Set(sources.map(p => `${p.id}@${p.version}`));
+  const byRun = new Map(cuts.map(c => [c.runId,c]));
+  if (byRun.size !== cuts.length || cuts.some(c => c.derivedRev !== query.derivationRev || c.completedSeq !== c.requestedSeq)) return invalid();
+  const decisions = denseArray(r.decisions).map(raw => {
+    const d = object(raw, ["runId","decisionRef","actor","phase","decisionClass","sessionKind","packId","legalAlternatives","unavailable"]);
+    const row = Object.freeze({ runId: string(d.runId), ...decisionIdentity(d), legalAlternatives: integer(d.legalAlternatives,0), unavailable: parseProfileUnavailableSources(d.unavailable) });
+    const cut = byRun.get(row.runId);
+    if (cut === undefined || row.decisionRef.eventSeq > cut.completedSeq || row.unavailable.some(u => !selected.has(`${u.projection.id}@${u.projection.version}`))) return invalid();
+    return row;
+  });
+  if (sources.length === 0 && (decisions.length !== 0 || expected.length !== 0) || decisions.length !== expected.length) return invalid();
+  for (const [i,row] of decisions.entries()) {
+    const previous = decisions[i-1];
+    if (previous !== undefined && (previous.runId > row.runId || previous.runId === row.runId && compareDecisionRefs(previous.decisionRef,row.decisionRef) >= 0)) return invalid();
+    const { unavailable: _unknown, ...context } = row;
+    if (canonicalizeJson(context) !== canonicalizeJson(expected[i]!)) return invalid();
+  }
+  return Object.freeze({ sources, decisions: Object.freeze(decisions) });
 }
 /** Exact literal SQL key parts; no hash or cross-decision invented piece identity. */
 export function subjectObservationKey(row: LongitudinalSubjectObservationRow): string {

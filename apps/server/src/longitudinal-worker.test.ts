@@ -340,7 +340,7 @@ describe("criteria 16, 29 — the production-composed file-backed worker", { tim
     expect(jobs().find((job) => job.run_id === inFlight)?.state).toBe("running");
     const abandoned = new DatabaseSync(databasePath, { readOnly: true });
     try {
-      for (const table of ["learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations"]) {
+      for (const table of ["learner_observation_denominators", "learner_observations", "learner_structure_stats", "learner_game_facts", "learner_choice_facts", "learner_subject_observations", "learner_subject_evaluations"]) {
         expect(abandoned.prepare(`SELECT count(*) AS n FROM ${table} WHERE run_id=?`).get(inFlight), table).toEqual({ n: 0 });
       }
     } finally { abandoned.close(); }
@@ -410,6 +410,8 @@ describe("operator doors and packaging", { timeout: 120_000 }, () => {
     expect(database.prepare("SELECT run_id, state FROM learner_observation_jobs ORDER BY run_id").all()).toEqual([{ run_id: "one", state: "complete" }, { run_id: "two", state: "pending" }]);
     for (const sourceKind of ["native_incidence", "condition_relation"]) expect(Number(database.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id='one' AND source_kind=?").get(sourceKind)!.n), sourceKind).toBeGreaterThan(0);
     expect(database.prepare("SELECT count(*) AS n FROM learner_subject_observations WHERE run_id='two'").get()).toEqual({ n: 0 });
+    expect(database.prepare("SELECT count(*) AS n FROM learner_subject_evaluations WHERE run_id='one'").get()).toEqual({ n: 1 });
+    expect(database.prepare("SELECT count(*) AS n FROM learner_subject_evaluations WHERE run_id='two'").get()).toEqual({ n: 0 });
     database.close();
     const rebuild = bundle("longitudinal-rebuild.ts");
     const clean = spawnSync(process.execPath, [rebuild, "--database", databasePath], { encoding: "utf8", cwd: ROOT });

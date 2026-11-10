@@ -43,7 +43,7 @@ async function predecessor(filename: string) {
     source: { kind: "pgn", pgn: "[Result \"*\"]\n\n1. e4 e5 *" }, createdAt: at }, { writerId: "import-writer", learnerId: "migration-owner" });
   storage.close();
   const database = new DatabaseSync(filename);
-  database.exec("UPDATE drill_runs SET schema_version='0.18', snapshot_json=json_set(snapshot_json,'$.schemaVersion','0.18'); ALTER TABLE imported_games DROP COLUMN clock_document_json; DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version=30");
+  database.exec("UPDATE drill_runs SET schema_version='0.18', snapshot_json=json_set(snapshot_json,'$.schemaVersion','0.18'); ALTER TABLE imported_games DROP COLUMN clock_document_json; DROP TABLE learner_subject_evaluations; DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; PRAGMA user_version=30");
   return database;
 }
 const snapshots = (database: DatabaseSync) => database.prepare("SELECT * FROM drill_runs ORDER BY id").all();
@@ -56,7 +56,7 @@ describe("recorded empty telemetry migration31", () => {
     fixture.close();
     const migrations: number[] = [];
     const storage = new SQLiteRunStorage(filename, { onMigration: entry => migrations.push(entry.version) });
-    expect(migrations).toEqual([31, 32, 33, 34, 35]);
+    expect(migrations).toEqual([31, 32, 33, 34, 35, 36]);
     expect(storage.list("migration-owner", 10, 0)).toHaveLength(4);
     expect(storage.runCount("migration-owner")).toBe(4);
     for (const row of before) expect(storage.read(String(row.id))!.run.schemaVersion).toBe("0.19");
@@ -68,7 +68,7 @@ describe("recorded empty telemetry migration31", () => {
     expect(raw.prepare("SELECT * FROM run_grants ORDER BY run_id,learner_id").all()).toEqual(grants);
     raw.close();
     const reopened = new SQLiteRunStorage(filename, { onMigration: entry => migrations.push(entry.version) });
-    expect(migrations).toEqual([31, 32, 33, 34, 35]);
+    expect(migrations).toEqual([31, 32, 33, 34, 35, 36]);
     expect(reopened.read("a-absent")!.run.events).toEqual(JSON.parse(String(before[0]!.snapshot_json)).events);
     const prior = reopened.read("b-present")!.run;
     reopened.save(commitMove(prior, "e7e5", { at }).run, { writerId: "writer-b-present", learnerId: "migration-owner" });

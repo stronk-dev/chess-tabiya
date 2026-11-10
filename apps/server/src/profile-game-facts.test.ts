@@ -228,10 +228,10 @@ describe("atomic fourth derived family and strict read lane", { timeout: 30_000 
     const f = fixture(); batch(f);
     const snapshot = f.db.prepare("SELECT snapshot_json,summary_json FROM drill_runs WHERE id=?").get(f.run.id);
     const sourceBefore = f.storage.longitudinalSourceImageV4(f.run.id, f.run.events.length);
-    f.db.exec("DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; UPDATE learner_observation_denominators SET derived_rev=6; UPDATE learner_observations SET derived_rev=6; UPDATE learner_structure_stats SET derived_rev=6; UPDATE learner_observation_jobs SET derived_rev=6; PRAGMA user_version=32");
+    f.db.exec("DROP TABLE learner_subject_evaluations; DROP TABLE learner_subject_observations; DROP TABLE learner_choice_facts; DROP TABLE learner_game_facts; UPDATE learner_observation_denominators SET derived_rev=6; UPDATE learner_observations SET derived_rev=6; UPDATE learner_structure_stats SET derived_rev=6; UPDATE learner_observation_jobs SET derived_rev=6; PRAGMA user_version=32");
     const migrations: number[] = [], upgraded = new SQLiteRunStorage(f.path, { onMigration: entry => migrations.push(entry.version) });
     try {
-      expect(migrations).toEqual([33, 34, 35]);
+      expect(migrations).toEqual([33, 34, 35, 36]);
       expect(upgraded.reconcileLongitudinalJobs().revisionReset).toBe(1);
       expect(f.store.jobs()[0]).toMatchObject({ state: "pending", completedSeq: 0, derivedRev: OBSERVATION_DERIVATION_REV });
       expect(batch(f).completed).toBe(1);

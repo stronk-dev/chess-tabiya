@@ -1,8 +1,8 @@
 // rfc/player-style.md criteria 7, 11, 14, 15 and rfc/skills.md criteria 9, 12, 13 through the real
 // longitudinal store: file-backed SQLite, real decision attribution/default batch, GAME/choice
-// factories and card arithmetic. Unadopted subject collection is explicitly controlled unavailable
-// in THIS math cohort. Unmocked subject storage/application/worker/performance cohorts own the
-// real54-source pipeline, lifecycle and throughput proof.
+// factories, source coverage and card arithmetic. This card-math cohort memoizes genuine flat
+// source results for repeated exact positions; unmocked worker/storage/upgrade/cost cohorts own
+// acquisition count, source lifecycle and production throughput proof.
 import { rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -21,11 +21,18 @@ import { LONGITUDINAL_WORKER_DEFAULTS } from "./longitudinal-worker-config.js";
 import { AT, FIXTURE_DEPENDENCIES, fileFixture, importedRun, learner, positionRun, type FileFixture } from "./longitudinal-test-fixtures.js";
 import { loadOpeningCatalogue } from "./opening-catalogue.js";
 import { LONGITUDINAL_TABLES, type LongitudinalStore } from "./longitudinal-store.js";
-
 import * as subjectBridge from "../../../packages/runtime/src/internal/profile-subject-facts.js";
+const realSubjectPopulation = subjectBridge.collectProfileSubjectPopulation;
+const subjectPopulations = new Map<string, ReturnType<typeof realSubjectPopulation>>();
 beforeEach(() => {
-  vi.spyOn(subjectBridge, "collectProfileSubjectPopulation").mockReturnValue(Object.freeze({ kind: "unavailable", reason: "counterfactual_population_incomplete" }));
+  vi.spyOn(subjectBridge, "collectProfileSubjectPopulation").mockImplementation((fen,move) => {
+    const key = JSON.stringify([fen,move]);
+    let result = subjectPopulations.get(key);
+    if (result === undefined) { result = realSubjectPopulation(fen,move); subjectPopulations.set(key,result); }
+    return result;
+  });
 });
+
 
 const fixtures: FileFixture[] = [];
 afterEach(() => {
