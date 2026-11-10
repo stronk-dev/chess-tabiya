@@ -2569,3 +2569,24 @@ mutation and equal-counter reopen controls make the new check falsifiable. It do
 all SQLite headers/schemas or establish universal immutability. The service integration cases
 use their reviewed correctness limits; explicit graph/performance limits are retained.
 D4202/D4205/D4206 still require complete software/performance proof before closure.
+
+### Complete verification and next coordinated source contract, 2026-11-10
+
+`make verify-software` exits0 at008115ac:18,919software tests/570files728.43s; unchanged
+seven performance tests/fourfiles65.29s; all source/type/schema/application preflights pass.
+D4202/D4205/D4206 close boundedly. Governance and normal commit hooks are checked separately.
+The original failures remain in the append-only log; no remote/content/native/release claim.
+
+Next is D4200's coordinated availability amendment, followed by the remaining seven outcome
+qualifications and complete D4167 reverse adoption. Independent read-only review confirms that
+fixing only computeSubjectOutcomes leaves both selector gates and the Profile whole54 composer
+suppressing complete sources. Existing sealed candidate outcomes and finite source vectors are
+sufficient authority. Known legacy loose-piece1/defender-exposure2 abstentions must not be
+confused with the separate modern mover-risk source; the measured witness has no missing risk.
+Unknown additions still fail closed, and every original legal alternative/denominator stays.
+
+The selector needs explicit per-source/family completeness and omission semantics. Partial
+history needs durable unknown coverage with coordinated projector/proof/read/rebuild and
+revision/storage consequences; flattening available rows is not a complete foundation. Author
+and independently accept this contract before code or claims that downstream reach improved.
+No broader schema/framework or owner-order question is implied. Ordinary26 and D3928 stay held.

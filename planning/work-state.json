@@ -13448,7 +13448,7 @@
       "id": "D1716",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b558e669340393e5661bd047dc0656e0beb5651f47b6b36b2382a1879e324763",
+      "sourceDigest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-04"
@@ -35210,7 +35210,7 @@
       "id": "D4200",
       "state": "todo",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:27e2459e065d7844e42c06eb28dab43507fd2f21f7dea4dbdd4191ffe18aac99",
+      "sourceDigest": "sha256:38f8bc51c0fb75f483a7821c09c8de76109f91498adacc26cff8b03d94188224",
       "uxItems": [],
       "owner": "evidence-foundation"
     },
@@ -35225,18 +35225,18 @@
     },
     {
       "id": "D4202",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b555e140207075fe286bc7bcb10404fd78ffc688c8dfad42c7ad5d8535d446db",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fdff1807ed0285a7843536b5212c9d0f950b14c10f6e0cd05904ff99fb67dd1c",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-11-10"
+      "evidence": "008115ac",
+      "evidenceKind": "commit"
     },
     {
       "id": "D4203",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:41aace958553558d5ce05ff620bad928dc85d608ffa36377850ef9796c6cd7a1",
+      "sourceDigest": "sha256:28d0f0574dbcca7dcd9723ff1923ae610f6a35999dc748c530ddeea6a679af0f",
       "uxItems": [],
       "evidence": "apps/server/src/testing/sqlite-read-guard.test.ts",
       "evidenceKind": "path"
@@ -35245,28 +35245,28 @@
       "id": "D4204",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:7db8c0f15f08eba90df7aaa07e4a77ec6f749d6c32ad850e5da20bba908bf3db",
+      "sourceDigest": "sha256:a7fc2873ac9c87a2fb6a8156acf05755d0689649b4d345fe9aa6c08554af09ce",
       "uxItems": [],
       "evidence": "apps/web/src/lib/app-shell.test.ts",
       "evidenceKind": "path"
     },
     {
       "id": "D4205",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5b08533ad94eadaf5a5c554624bfa5459c939b6e3c3e6392b76a7dc1b0aaa4d3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9f21e055de1be9ea2e6078bfcfd149bb1fed8159eaa7d3a68bb27e83c2470b66",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-11-10"
+      "evidence": "008115ac",
+      "evidenceKind": "commit"
     },
     {
       "id": "D4206",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b1d4273f7787493b34735d9d9ba008d110b63293e1eaa82133a7836012559f62",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7fbc6aaacd3ed5ef9937dae52ecc34462b59a52fb650b694ea67993c4022c15e",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-11-10"
+      "evidence": "008115ac",
+      "evidenceKind": "commit"
     }
   ]
 }

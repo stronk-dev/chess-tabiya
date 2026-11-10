@@ -352,3 +352,43 @@ writer `tools/semantic-validation-build.ts`; storage guard `tools/git-size-check
 historical source suites; independent compiler2 review receipt. Full integration gates are
 separate from this measured qualification. Seven other outcome families, D4200 and ordinary26
 remain open.
+
+## Coordinated availability boundary — 2026-11-10 D4200 read-only review
+
+`[V]` Source-local availability alone does not finish the handoff. The current calculator
+checks every row's canonical abstentions before reading its finite `familyInputs` vectors.
+The selector refuses once for any row abstention and again for any unavailable one of the
+13 outcome families. Native incidence has its own blanket refusal. Finally the Profile
+composer returns whole-population unavailable if native or any condition family is unavailable,
+also discarding its later prevalence population. Sources:
+`packages/runtime/src/semantic-subject-outcomes.ts::computeSubjectOutcomes`;
+`packages/runtime/src/semantic-evidence.ts::selectSemanticEvidence`;
+`packages/runtime/src/internal/longitudinal-native-incidence.ts::nativeSubjectIncidences`;
+`packages/runtime/src/internal/profile-subject-facts.ts::collectProfileSubjectPopulation`.
+Independent reviewer inspected these paths without editing or running new experiments.
+
+`[V]` The original candidate owner already retains sealed collector outcomes joined to exact
+row/ref/reason identities. The closed current abstention vocabulary is legacy
+`rules.tactic.event.loose_piece@1` and `derived.tactic.defender_exposure@2`, both for
+`invalid_turn_clone`. Neither name establishes failure of the newer mover-risk source: the
+actual12-move witness above has zero unavailable risk positions. Existing exact root/every-child
+source vectors and owner-issued outcomes should be reused; no second source registry or issuer
+is needed. Sources: `packages/runtime/src/candidate-population.ts` and the strict availability
+probe cited above. Any future unknown abstention must remain fail-closed unless independently
+specified, and genuine required-source unavailability must never become false/zero.
+
+`[V]` Current `EvidenceSelectionResult` has only one evaluated-alternative count and optional
+empty reason. Current stored subject decision availability is complete/unavailable under the
+whole54 contract. Prevalence includes both named legacy tactical projections, so it cannot
+silently treat missing events as nonoccurrence. Sources:
+`packages/runtime/src/semantic-evidence.ts::EvidenceSelectionResult`;
+`packages/runtime/src/profile-subject-sources.ts`;
+`packages/runtime/src/semantic-played-types.ts`;
+`rfc/longitudinal-store.md` §A.2.5a.
+
+D4200 authoring must therefore specify complete-versus-unknown coverage through selection and
+history, preserving all legal alternatives and distinguishing known empty from unavailable.
+For full partial-family history, pin durable coverage, opportunity denominators, parsing/proof,
+rebuild and revision/storage consequences together. Keeping today's whole-population refusal
+is conservative but does not deliver that expanded reach. This review changes no production
+policy, source qualification, stored data or learner availability.

@@ -692,10 +692,10 @@
           "operations"
         ],
         "dependsOn": [],
-        "nextAction": "Diagnose the current D3702 castling setup failure and D3703 Review failure without erasing the failed/interrupted runs or raising deadlines. D3692's original remote checkpoint race and D3693/D3696's actual prediction/private-pack boundaries are repaired locally. D3694 now admits the writer/role, legal guess, reached occurrence and exact selector operands before provider work and re-admits after awaiting selection; D3698 recovers lost-response event gaps without rewriting history, and D3699 preserves declared score/WDL disclosure. D3700's withheld-reasoning public-view/canonical-replay conflict is the next core-loop contract boundary; D3695 retains the authored example's wrong-turn sequence. Require paired green GitHub verify/browser on the exact pushed revision before restoring release-truth. Diagnose D3600's published 62c81eb1 warm native-arrival failure (1092.9 ms p95; three of five samples meet 250 ms), retaining its earlier failures. D3771's locally measured assertion interference and ordering correction do not establish the remote cause; preserve tracing, every sample and the 250 ms budget. Locate D3591's longitudinal-worker stall without changing its budget or closing it on green replays. D3592/D3593's native-arrival gate and duplicate-hydration repair are verified locally; keep their access/source and readiness controls. Diagnose D3558's Review/Studio failures and historical intermittent causes. Keep every live row assigned. Publication remains separately authorized; operator/release journeys belong to release-candidate-proof.",
+        "nextAction": "Resolve the recorded historical D3702/D3703 diagnostic obligations without inventing causes; preserve the current complete local software/performance certificate and finish remaining release-proof obligations.",
         "latestCheckpoint": {
           "at": "2026-10-16",
-          "summary": "D3884 repairs an observed Review whole-database snapshot race: engine settlement preceded import's independent atomic learner-history publication. Initial snapshots now observe the exact completed job before the measured request; every real HTTP/worker/table/event assertion and existing deadline remains. Independent review and157 focused Review cases pass. Normal software6751/416 (418.50s), unchanged performance7/4 (59.62s), and corrected remaining governance/content257/26 (58.16s)/corpus/build tiers pass. Governance's two initially unrouted new rows are routed in the existing queue; failed/interrupted combined commands stay logged. D3885 count-only/full-row coverage debt remains owned, not a claimed observed product mutation. Prior D3869 scheduling/source-history/remote evidence stands. No worker disable, table exclusion, sleep, retry, product behavior change, remote-green revision or whole release-truth promotion.",
+          "summary": "D3884 repairs an observed Review whole-database snapshot race: engine settlement preceded import's independent atomic learner-history publication. Initial snapshots now observe the exact completed job before the measured request; every real HTTP/worker/table/event assertion and existing deadline remains. Independent review and157 focused Review cases pass. Normal software6751/416 (418.50s), unchanged performance7/4 (59.62s), and corrected remaining governance/content257/26 (58.16s)/corpus/build tiers pass. Governance's two initially unrouted new rows are routed in the existing queue; failed/interrupted combined commands stay logged. D3885 count-only/full-row coverage debt remains owned, not a claimed observed product mutation. Prior D3869 scheduling/source-history/remote evidence stands. No worker disable, table exclusion, sleep, retry, product behavior change, remote-green revision or whole release-truth promotion. Current2026-11-10 complete normal software/performance at008115ac passes18,919/570 plus7/four and all preflights. This does not diagnose the interrupted historical D3702/D3703 causes or clear D3928 content/native/release; those rows remain open.",
           "impact": "advanced",
           "evidence": [
             "tools/d3367-provider-source-history/proof.ts",
@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Run the complete normal software/performance gate for the independently reviewed Review observer/native scheduling/Profile test repairs. Then complete the remaining seven outcome-family qualifications and D4167 reverse consumers; independently review D4200 before changing availability. Ordinary26 and held content remain blocked.",
+        "nextAction": "Author and independently review the coordinated D4200 source/selector/history availability amendment, including typed unknown coverage and rebuild consequences; then implement it, finish seven outcome-family qualifications and D4167 reverse consumers. Ordinary26 and D3928 content/native/release remain held.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game revision9 cost completes under observed workstation load: production101.38minutes, cold/warm Profile1265.73/350.02ms,6400decision and full card/contributor/share parity; no isolated predecessor speed claim.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion. Subsequent D4199 fixes complete-population mirror context and adds one strict UCI leaf under independent acceptance. Actual old guardRED21/194 restoresGREEN215/two. The first piece_count2 family adds56 independently accepted cases preserving all824 predecessors. Generator880/880 over89subjects yields12qualified; bounded2790tests/20files,tier9/types/build pass. Frozen875 history stays fixed; only this new family qualifies. Full software/serial-performance release proof remains separate. Other12source qualifications and ordinary26 remain held. Following5bc8cc95, all590 pawn/file propositions join canonical validation:1470/1470cases,89subjects/17qualified. Five outcome families gain exact four-arm refs; all880predecessor values/order and84other profiles remain identical. Actual10RED+929pass becomes939GREEN; ordinary2views stayempty. Same-schema one-case-per-line JSON and the generated receipt fit the unchanged5MiB guard (D4201). Full normal integration gate remains live; seven outcome qualifications, D4200 and ordinary26 remain open. Full gate finds old qualification count and real10s Review worker-settlement assumption (D4202), reproduced in isolation. Exact40ply probe completes healthy all83seq; independently reviewed remaining-existing-journey-budget/AbortSignal repair passes148focused/types, with three cancellation/failure controls. Full normal rerun is live; D4203 complete-row proof stays open. Latest complete software run:18911pass/3fail,569files971.38s; Review30s journey, Profile weighting5s and worker restart110s remain open. Performance did not execute. No green full-gate or release claim. Canonical qualification is committed asd7c5df9e; App/store repairs9aedcf83 and native-owner/Profile classification8b254921 are committed. Fresh request-process observer/fullReview90/two117.94s and types pass after independent review, including genuine UPDATE/Worker/reopen falsifiers. D4203 closes this bounded instrument defect; full software/performance still required under D4202/D4205/D4206.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Six of13 outcome families qualify; all880 preceding case values/order and84other profiles are preserved. All13 total-source factories and selector2 exist, while seven family qualifications and source-local availability remain. Migration35/revision9 six-family adoption and genuine revision8 upgrade proof are implemented. Current200-game cost is recorded under observed load, not an isolated predecessor speed comparison. D4202/D4205/D4206 CI repairs are committed/verified; no whole foundation, capability, milestone or release promotion.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1681,7 +1681,7 @@
             {
               "kind": "work_state",
               "id": "D1716",
-              "digest": "sha256:b558e669340393e5661bd047dc0656e0beb5651f47b6b36b2382a1879e324763"
+              "digest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5"
             },
             {
               "kind": "work_state",
@@ -1826,7 +1826,7 @@
             {
               "kind": "work_state",
               "id": "D4202",
-              "digest": "sha256:b555e140207075fe286bc7bcb10404fd78ffc688c8dfad42c7ad5d8535d446db"
+              "digest": "sha256:fdff1807ed0285a7843536b5212c9d0f950b14c10f6e0cd05904ff99fb67dd1c"
             }
           ]
         },
@@ -1847,10 +1847,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Finish the current full gate, then D4167 Sight/Play/Compare/guidance/voice reverse bindings and the remaining seven outcome-family qualifications. D4200 availability needs reviewed amendment; D4175 ordinary26 remains held.",
+        "nextAction": "Independently review D4200 across source calculation, both selector gates, native incidence and the whole54 Profile composer. Then finish D4167 Sight/Play/Compare/guidance/voice and typed bot/replay reverse bindings; ordinary26 needs complete source qualification, strict receiving and measured cost first.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game revision9 cost completes under observed workstation load: production101.38minutes, cold/warm Profile1265.73/350.02ms,6400decision and full card/contributor/share parity; no isolated predecessor speed claim.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion. Subsequent D4199 fixes complete-population mirror context and adds one strict UCI leaf under independent acceptance. Actual old guardRED21/194 restoresGREEN215/two. The first piece_count2 family adds56 independently accepted cases preserving all824 predecessors. Generator880/880 over89subjects yields12qualified; bounded2790tests/20files,tier9/types/build pass. Frozen875 history stays fixed; only this new family qualifies. Full software/serial-performance release proof remains separate. Other12source qualifications and ordinary26 remain held. Following5bc8cc95, all590 pawn/file propositions join canonical validation:1470/1470cases,89subjects/17qualified. Five outcome families gain exact four-arm refs; all880predecessor values/order and84other profiles remain identical. Actual10RED+929pass becomes939GREEN; ordinary2views stayempty. Same-schema one-case-per-line JSON and the generated receipt fit the unchanged5MiB guard (D4201). Full normal integration gate remains live; seven outcome qualifications, D4200 and ordinary26 remain open. Full gate finds old qualification count and real10s Review worker-settlement assumption (D4202), reproduced in isolation. Exact40ply probe completes healthy all83seq; independently reviewed remaining-existing-journey-budget/AbortSignal repair passes148focused/types, with three cancellation/failure controls. Full normal rerun is live; D4203 complete-row proof stays open.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Current42/compiler7/source13/selector2 and14 compact native pairs exist. Six of13 outcome families qualify;26 ordinary avoidance pairs stay held. Review now observes request-process row writes without waiting on unrelated Profile publication; real mutation/Worker/reopen controls pass. Longitudinal revision9/all-six-family publication/read/rebuild/account/Profile adoption and genuine8 upgrade proof stand. Remaining reverse consumers, partial-coverage contract and ordinary avoidance adoption keep this milestone active.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/presentation-move-path.ts",
@@ -2891,7 +2891,7 @@
             {
               "kind": "work_state",
               "id": "D1716",
-              "digest": "sha256:b558e669340393e5661bd047dc0656e0beb5651f47b6b36b2382a1879e324763"
+              "digest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5"
             },
             {
               "kind": "work_state",
@@ -3416,7 +3416,7 @@
             {
               "kind": "work_state",
               "id": "D4202",
-              "digest": "sha256:b555e140207075fe286bc7bcb10404fd78ffc688c8dfad42c7ad5d8535d446db"
+              "digest": "sha256:fdff1807ed0285a7843536b5212c9d0f950b14c10f6e0cd05904ff99fb67dd1c"
             }
           ]
         },
@@ -3434,10 +3434,10 @@
         "dependsOn": [
           "evidence-to-consumer-spine"
         ],
-        "nextAction": "Verify complete current software and real-browser geometry/owner-use after the actual14 native pair/default-budget/selected inspection lifetimes. Keep broader presets, all workflows and accessibility release proof open.",
+        "nextAction": "Complete real-browser geometry and owner-use proof for current board/module defaults, preserve assistance/role ceilings, then finish ordinary26 only after complete source qualification and the accepted availability/adoption contracts.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game revision9 cost completes under observed workstation load: production101.38minutes, cold/warm Profile1265.73/350.02ms,6400decision and full card/contributor/share parity; no isolated predecessor speed claim.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Previously verified14 native compact pairs retain strict REST/DOM selection, budget, role and source-identity controls. New13-family avoidance adoption remains held at26 ordinary tuples, with six families qualified and seven still owed. Current9 store/Profile adoption and genuine8 upgrade proof are implemented; neither software success nor source qualification proves complete learner UX, presets or owner-device use. D3928 content/native/release remains held.",
           "impact": "advanced",
           "evidence": [
             "apps/web/src/lib/evidence/move-path-callers.test.ts",
@@ -4253,7 +4253,7 @@
             {
               "kind": "work_state",
               "id": "D1716",
-              "digest": "sha256:b558e669340393e5661bd047dc0656e0beb5651f47b6b36b2382a1879e324763"
+              "digest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5"
             },
             {
               "kind": "work_state",
@@ -4699,10 +4699,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Current200-game revision9 cost is measured and genuine8 startup/worker/reopen/all-six-family repair is proved. Continue source qualification and actual learner-model consumer journeys; migration35/revision9 remains a bounded foundation checkpoint, not whole learner-model completion.",
+        "nextAction": "Author/review D4200 durable per-source unknown coverage together with source/selection semantics before partial-family history publication. Preserve current revision9/genuine8 proof, then complete remaining source qualification, reverse consumers and account/rebuild obligations.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game revision9 cost completes under observed workstation load: production101.38minutes, cold/warm Profile1265.73/350.02ms,6400decision and full card/contributor/share parity; no isolated predecessor speed claim.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Migration35/revision9 six-family publication, read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen repair are implemented. Current200-game cost is recorded: production101.38minutes, cold/warm Profile1265.73/350.02ms under observed load; no isolated predecessor comparison. Current whole54 availability is conservative; partial-family persisted coverage is not yet specified. D3928 content/native/release and remaining consumers stay held.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/campaign-storage.test.ts",
@@ -5374,10 +5374,10 @@
         "dependsOn": [
           "official-content"
         ],
-        "nextAction": "Keep release blocked: no current complete software/performance certificate yet. Current consumer/storage/declaration repairs and native inspection are bounded local progress; content/native/release D3928 hold and full release journeys remain.",
+        "nextAction": "Keep release blocked while completing foundation/consumer contracts, D3928 content migration and real native/appliance/release journeys. Preserve the current complete local software/performance certificate; it does not clear content, deployment, backup/restore or whole-product UX.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game revision9 cost completes under observed workstation load: production101.38minutes, cold/warm Profile1265.73/350.02ms,6400decision and full card/contributor/share parity; no isolated predecessor speed claim.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. The local software/performance certificate now exists. Seven outcome-family qualifications, D4200 typed availability, D4167 reverse consumers and ordinary26 remain. D3928 still blocks content/native/release; no official pack or release candidate is graduated by this test-only wave. Current store upgrade/cost evidence stands. No remote-CI, deployment, content, capability or milestone promotion.",
           "impact": "advanced",
           "evidence": [
             "Makefile",

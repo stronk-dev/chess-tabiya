@@ -1,71 +1,40 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
-## Current continuation — 2026-11-10, verified foundation checkpoint
+## Current continuation — 2026-11-10
 
-Normal serial `make verify-software` passes all17,205 software tests/566files and the unchanged
-seven performance tests/fourfiles; `make verify-governance build` then passes. These are actual
-working-tree results, not a remote CI or release verdict. The earlier concurrent run is explicitly
-interrupted130 and remains unusable. Five scoped commits preserve the independent pnpm/routing/hook fixes and D4148 bot rewind
-repair/accepted contract. Coordinated source/schema/API/consumer checkpoint648dbad2 and tracker
-closeoutce60e6ae are committed without claiming parent completion.
+The full 1.0 goal remains active. Foundation implementation has advanced, while complete
+consumer adoption, learner workflows, content and release proof remain open.
 
-The subsequent D4199 qualification cut passes its bounded verification: independently accepted§7.3
-fixes complete-population result context and adds one strict canonical-UCI leaf. Actual old guard
-fails21controls after real source dispatch; the restored fix passes215/two. Canonical generation
-passes880/880 cases over89subjects, with12qualified: the previous11 plus piece_count2 only.
-All824 prior cases remain unchanged; the other12 new families and ordinary26 remain held.
-Source/history/admission/regression2790/20, nine tier controls and build pass before its own commit;
-the full software/performance release gate is not implied by this source cut.
+| Checkpoint | Current evidence |
+|---|---|
+| Normal software gate | `make verify-software` exits0 on `008115ac`: 18,919 tests / 570 files in728.43s, seven unchanged performance tests / four files in65.29s, and all preflights |
+| Source qualification | 1,470 / 1,470 executed cases; 89 subjects / 17 qualified. Six of13 new outcome families qualify; seven remain |
+| Persistent evidence | Migration35/revision9, six-family publication/read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen/repair proof implemented |
+| Learner delivery | 14 compact native Nudge/Review pairs have actual strict REST/DOM and budget controls. The26 ordinary avoidance tuples remain held |
+| Content and release | D3928's separate pack migration decision still holds content/native/release. This software certificate graduates no official pack or release candidate |
 
-Canonical42/compiler7, all13 source-owned outcome factories and selector/policy2 share original
-root/child sources, complete quiet/lifecycle states and legal populations. Nine old public event
-meanings retain unchanged custody of51cases/9profiles/8receipts. Normal semantic generation and
-checking pass824cases/89subjects/11qualified/63population receipts; the new13 meanings do not
-inherit qualification. Separate validation consumes actual recorded sources outside selector2's
-exact55. D4175's26 ordinary avoidance pairs remain held, and D4179 remains returned.
+The verified qualification is committed in `d7c5df9e`; App/store test repairs in `9aedcf83`,
+native-worker ownership/Profile integration classification in `8b254921`, and the Review
+request-write observer in `008115ac`. D4202/D4205/D4206 close boundedly after the complete gate.
+Governance and normal commit hooks pass. Earlier failed/interrupted runs remain in the
+append-only [exploration log](exploration/log.md); local success is not a remote-CI verdict.
 
-D4185 policy3 and D4188 same-selected-fact inspection close their bounded delivery repairs:
-actual14 compact Nudge/Review pairs×bothcolors pass through cookie REST, strict receivers and
-selected DOM under ordinary budgets. Source-authenticated causal slots make access/topology
-reachable inside cap2. Explicit detail reuses the complete original human renderer with no new
-acquisition or Full2 mint. Genuine spectator, read-refusal/recovery, selected membership and
-retained Open/Close/Escape/focus controls pass. Real-browser geometry and full consumer breadth
-remain separate obligations.
+Next, author and independently review D4200's coordinated source/selector/history availability
+amendment. A known unrelated legacy event abstention must not suppress complete required-family
+sources. Unknown coverage must stay explicit through selection, stored opportunity denominators,
+proofs and rebuilds. Changing only the calculator leaves downstream whole-population refusals.
+Then finish the seven outcome-family qualifications and D4167 reverse consumers: Sight,
+Play/Compare, both comparisons, guidance/voice/speech, typed bot/replay/policy and authored migration.
+D4175's26 ordinary avoidance tuples also need shared acquisition, strict receiving and cost proof.
 
-D4181/A.2/A.2.5a implements migration35/revision9 and one original WIDE per decision for
-native7/condition13/prevalence34. All-six-family publication/read/rebuild/account paths use
-original source ownership and the same denominator/prevalence fold; Profile withholds old
-unqualified habit aggregates. Final post-Proxy performance now passes. Current200-game bulk cost
-completes under observed workstation load:101.38minutes production projection,1265.73/350.02ms
-cold/warm Profile,6400decision parity and all6publication families. The compact current9 receipt
-is in planning/foundation-source-identity/profile-current9-cost-2026-11-10.json; no isolated
-revision8 comparison or source qualification follows. Genuine predecessor8 execution now produces a standalone171KB SQL fixture, with
-all five original families populated across both native colors and import. Permanent actual
-startup→worker→reopen→all-six-family omission/repair passes2/2; saved play/account rows remain
-identical. No current9 data is relabelled as old output and ordinary tests need no ignored bundle.
+The existing [foundation plan](foundation-source-identity/plan.md) carries implementation detail
+and the current handoff. It records1470-case preservation, exact source identities,14-pair
+journeys, the genuine8 fixture and the compact200-game current9 cost receipt. Those observations
+do not establish an isolated predecessor speed comparison or new habit validity.
 
-Genuine8 and the first piece_count2 qualification are committed. The following pawn/file
-source/test checkpoint is5bc8cc95. Its independently reviewed canonical integration now executes
-all590 further propositions:1470/1470 cases,89subjects/17qualified. All880 prior values/order
-and84other profiles remain unchanged; only five profiles gain four case arms. Frozen875 history
-is unchanged. Both JSON source/receipt blobs fit the unchanged5MiB guard; the case document uses
-one complete case per line within the same schema. Qualification/types/build checks pass; the
-latest full software run terminates18911pass/3fail (Review, Profile weighting, worker restart).
-Performance did not execute after that failure. CI repair remains open under D4202/D4205/D4206.
-Seven outcome-family qualifications, D4200 source-local availability and D4167 reverse consumers
-remain; ordinary26 is held. D3928's content/native/release hold remains; no official pack,
-whole capability, milestone or1.0 completion is claimed.
-
-D1716/D1719/D4167 retain implementation and all reverse consumers: both Sight paths, Play/Compare
-panels, both comparisons, guidance/voice/speech, authored migration and actual typed bot/D3662
-replay/policy. D1719 waits on D1716's implementation, not another RFC decision. D4175 retains all
-26 ordinary avoidance pairs, acquisition, strict UI and cost work. D1718's closed historical
-research is not successor implementation. The ordinary image and Inspector remain to be reconciled
-with in-flight42/compiler7; budgets/defaults and strict capability/milestone states are unchanged.
-
-Routine independent reviews are owner-authorized; no permission question is pending for them.
-The separate D3928 pack decision remains pending. Full 1.0 stays active; no Git/archive or
-whole-parent/capability/milestone/release promotion is made by this source checkpoint.
+Routine independent reviews are authorized without another permission question. D1716/D1719/
+D4167/D4181/D4175 and the whole-product gates remain open; this checkpoint promotes no whole
+capability or milestone. D3928's separate owner request remains pending.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

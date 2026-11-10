@@ -40303,3 +40303,28 @@ independently accepted; dedicated product performance gates remain unchanged.
 
 D4202/D4205/D4206 remain doing until the complete normal software/performance image passes.
 Commit this dependency slice before that run; do not infer parent, content or release closure.
+
+### 2026-11-10 — complete normal software/performance gate passes on008115ac
+
+The single committed-image `make verify-software` invocation exits0. Full software:
+18,919 tests across570files,728.43s. Unchanged performance: seven tests/fourfiles,65.29s.
+All preceding toolchain/type/schema/packaging/manifest/source/capability/migration/application/
+account/label/presentation/hint-latency preflights pass. Canonical replay is1470/1470 cases,
+89subjects/17qualified,63population/eight external receipts. No source/test edits occurred
+throughout the run, no narrowed rerun was substituted and no push/remote-green is claimed.
+
+D4202/D4205/D4206 now close their bounded CI repairs against008115ac. Earlier failure and
+interrupted-run entries remain intact. The updated strategic checkpoints distinguish this
+certificate from unfinished source qualification, consumer adoption, real UX and release.
+D1716/D4167/D4181/D4175 remain open; ordinary26 and D3928 content/native/release remain held.
+Historical D3702/D3703 causes are not invented or closed merely because this run is green.
+
+During that run, a read-only independent D4200 audit found four coordinated boundaries: source
+outcome calculation; both selector refusals; native incidence; and the whole54 Profile composer.
+The original witness's legacy tactical abstention is not a modern mover-risk failure. Current
+selector has no per-family completeness image; persisted decision coverage is whole-population.
+A coherent successor therefore needs exact source-local validity plus typed unknown coverage,
+selection omissions, stored denominators and proof/read/rebuild consequences. Do not implement
+`continue` and publish apparently complete partial histories. Existing candidate owners/outcomes
+can be reused; no generic issuer/registry/hash mechanism is required. The existing D4200 row and
+dossier now own this full authoring/review scope; production semantics remain unchanged.
