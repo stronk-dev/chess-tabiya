@@ -342,12 +342,14 @@ describe("application shell", () => {
       const f = await historicalInspectorFixture({ authenticatedRest: true, sharedViewer: true, clockPgn: '[TimeControl "300+2"]\n\n1. e4 {[%clk 0:04:59.123]} e5 {[%clk 0:04:57]} *', side: "black" });
       if (f.api === undefined) throw new Error("Actual shared-viewer cookie fixture required");
       const held = deferred<Awaited<ReturnType<DrillApi["recordedClock"]>>>();
-      let captured: Awaited<ReturnType<DrillApi["recordedClock"]>> | undefined;
+      const firstClock = deferred<{ page: Awaited<ReturnType<DrillApi["recordedClock"]>>; signal: AbortSignal }>();
       let clockCalls = 0;
       const recordedClock = vi.fn(async (runId: string, branch: string, node: string, signal: AbortSignal) => {
-        const page = await f.api!.recordedClock(runId, branch, node, signal);
-        if (++clockCalls === 1) { captured = page; return held.promise; }
-        return page;
+        try {
+          const page = await f.api!.recordedClock(runId, branch, node, signal);
+          if (++clockCalls === 1) { firstClock.resolve({ page, signal }); return held.promise; }
+          return page;
+        } catch (error) { firstClock.reject(error); throw error; }
       });
       const first = f.run.nodes[1]!, branchId = f.run.branches[0]!.id;
       history.replaceState(null, "", `/review/game/${encodeURIComponent(f.run.id)}?branch=${encodeURIComponent(branchId)}&node=${encodeURIComponent(first.id)}`);
@@ -356,13 +358,15 @@ describe("application shell", () => {
         router: new HistoryRouter(window), storage: new MemoryStorage(),
       } });
       try {
-        await vi.waitFor(() => expect(captured).toBeDefined());
-        const signal = recordedClock.mock.calls[0]![3]; expect(signal.aborted).toBe(false);
+        // D4204: observe the actual HTTP completion under this test's unchanged overall budget,
+        // rather than impose vi.waitFor's unrelated 1s default on cold fixture delivery.
+        const { page: captured, signal } = await firstClock.promise;
+        expect(signal).toBe(recordedClock.mock.calls[0]![3]); expect(signal.aborted).toBe(false);
         await f.viewerAccess(false);
         root.querySelector<HTMLButtonElement>("[data-review-refresh]")!.click();
         await vi.waitFor(async () => expect((await f.httpCalls()).some(row => row.path.includes("/review?") && row.status === 404)).toBe(true));
         await vi.waitFor(() => expect(signal.aborted).toBe(true));
-        if (late === "success") held.resolve(captured!); else held.reject(new Error("old clock error"));
+        if (late === "success") held.resolve(captured); else held.reject(new Error("old clock error"));
         await tick(); await tick();
         expect(root.textContent).not.toContain("0:04:59.123"); expect(recordedClock).toHaveBeenCalledTimes(1);
         await f.viewerAccess(true);

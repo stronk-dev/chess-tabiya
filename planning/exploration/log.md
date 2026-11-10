@@ -40237,3 +40237,17 @@ journey in the full pool. Its trace spends approximately16s waiting for unrelate
 publication solely to obtain a table-count baseline. D4203 still owns the missing UPDATE
 negative control; no whole-database immutability claim is made. App's actual first-response
 deferred and scoped store integration budgets remain a separate test-repair checkpoint.
+
+
+### 2026-11-10 — checkpoint App completion and full-source correctness tests
+
+Fresh normal make test-software-files over App, choice-store and GAME source-store tests
+passes187/three in40.87s on the exact test image now checkpointed. D4204 closes boundedly:
+actual first HTTP completion replaces the accidental1s polling default; overall budget,
+real revoke/regrant, abort, late success/error and rendered/call-count assertions stay.
+
+D4205's two full-source correctness groups use the independently reviewed explicit30s
+integration budget. No global test timeout, performance budget, fixture size or assertion
+changes. The separate learner-profile weighting timeout remains open, as do D4202/D4203
+Review instrumentation and D4206 worker restart. Full software/performance is not green.
+The preceding evidence checkpoint is d7c5df9e; this test checkpoint is separate. No push.

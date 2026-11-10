@@ -137,7 +137,9 @@ describe("actual three-source GAME consumer", () => {
     expect(f.store.jobs()[0]).toMatchObject({ state: "retry_wait", failureCode: "derivation_failed" });
   });
 });
-describe("atomic fourth derived family and strict read lane", () => {
+// D4205: the complete source/storage lifecycle owns a 30s correctness integration budget.
+// The preceding source-consumer unit group and dedicated performance gates keep their limits.
+describe("atomic fourth derived family and strict read lane", { timeout: 30_000 }, () => {
   for (const changed of ["rights", "first snapshot"] as const) it(`refuses a copied original row with changed ${changed}`, () => {
     const f = fixture(), s = source(f), original = projectObservations(s.image, { gameSource: s.gameSource, dependencies: FIXTURE_DEPENDENCIES });
     const row = original.gameFacts[0]!;

@@ -35242,18 +35242,18 @@
     },
     {
       "id": "D4204",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:65c7a31f251690258975778706ca0cdf9d5a51e19e315071cf0559bc714f1484",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7db8c0f15f08eba90df7aaa07e4a77ec6f749d6c32ad850e5da20bba908bf3db",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-11-10"
+      "evidence": "apps/web/src/lib/app-shell.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D4205",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:19c8af771cd9db4d31155130261259c39177a1457cfe5a6e353d8e95f04018a6",
+      "sourceDigest": "sha256:bf406eb8c4d52f7fcf1fbb36400d74aadbd3a305b9cc891ab272bd2f9be31dc0",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-11-10"

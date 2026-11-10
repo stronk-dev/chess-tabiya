@@ -44,7 +44,9 @@ function read(f: ReturnType<typeof fixture>, include = true, filter = {}) {
   if (result.kind !== "complete") throw Error("Expected complete snapshot"); return result;
 }
 
-describe("actual complete-cut choice family", () => {
+// D4205: real source/store/rebuild/migration/account integration keeps its complete workload.
+// Its correctness budget is 30s; dedicated latency/performance gates remain separate and unchanged.
+describe("actual complete-cut choice family", { timeout: 30_000 }, () => {
   it("opt-in reads the whole document; decision filters do not truncate it; omitted lane never reads its table", () => {
     const f = fixture(); expect(batch(f).completed).toBe(1);
     const all = read(f);
