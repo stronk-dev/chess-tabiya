@@ -35227,18 +35227,19 @@
       "id": "D4202",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ce5d1635b7ee557d92725189c3430c3636f06ffb9dd4ac1b50ca100ccf821290",
+      "sourceDigest": "sha256:b555e140207075fe286bc7bcb10404fd78ffc688c8dfad42c7ad5d8535d446db",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-11-10"
     },
     {
       "id": "D4203",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fc4969e2a709f1542cf9a30e83ece78cec9eb7990e1f1f9670a108f37979c4ab",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:41aace958553558d5ce05ff620bad928dc85d608ffa36377850ef9796c6cd7a1",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "apps/server/src/testing/sqlite-read-guard.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D4204",
@@ -35253,7 +35254,7 @@
       "id": "D4205",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e38d9bdd0ad74fd2bb1fae0d253956ba3e9b4f3551fa55c79bd8868049953291",
+      "sourceDigest": "sha256:5b08533ad94eadaf5a5c554624bfa5459c939b6e3c3e6392b76a7dc1b0aaa4d3",
       "uxItems": [],
       "owner": "release-engineering",
       "since": "2026-11-10"

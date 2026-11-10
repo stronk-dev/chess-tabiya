@@ -40266,3 +40266,40 @@ restart test retains its110s completion limit and all original close/drain/sourc
 A failure now includes actual stored job sequences/state/failure plus worker health/progress
 before cleanup. D4205/D4206 remain doing until the complete software/performance run proves
 the combined image. Review D4202/D4203 remains separate; no release or capability promotion.
+
+### 2026-11-10 — Review observer review finds a genuine lifecycle falsifier
+
+The first concrete request-process SQLite observer and complete Review suites passed 89 tests
+across two files in 105.92 seconds. Independent review then found an unhandled connection
+lifecycle: reopening the same object resets total_changes. The new file-backed control proves
+an UPDATE can produce the same counter value as the previous connection while changing data.
+A successful observed-object reopen now permanently invalidates this observer's proof; actual
+SQLite open behavior is preserved. No connection-epoch framework or production API is added.
+
+Final types pass with zero Svelte errors/warnings. The next focused image executes all eight
+observer controls and all genuine HTTP journeys successfully, but terminates 89 passed / one
+failed in 226.74 seconds: the existing full-40-ply service/storage/provider spectator test exceeds
+its default five-second limit at 6082ms. This is not an observer or semantic assertion failure.
+Independent review accepts a 30-second budget on that three-test integration group only, while
+retaining the graph case's explicit 20-second override, all fixtures/access/coverage assertions,
+source-unit defaults and dedicated performance limits. This explicitly relaxes the other two
+service cases' default limits; it is not a product-performance clearance. Fresh combined proof
+is still required. D4202/D4203/D4205/D4206 remain open at this point.
+
+
+### 2026-11-10 — checkpoint the independently reviewed Review read observer
+
+Fresh normal observer/full-Review suites pass 90 tests across two files in 117.94 seconds.
+All project types pass with zero Svelte errors/warnings. Independent review accepts the
+bounded implementation after its reopening false-pass was reproduced and fenced. D4203
+closes this exact instrument defect; no universal database-immutability claim is made.
+
+Main-process DML plus observed main-schema changes replace table-count equality and unrelated
+Profile settlement waits. Every full fixture/native worker/engine settlement/run-event/source/
+presentation/Analyze/share/retry assertion remains. Eight real observer controls include the
+same-cardinality HTTP mutation and equal-counter reopen, without fabricated Review responses.
+The service integration group's explicit30s budget and graph's stronger20s override are
+independently accepted; dedicated product performance gates remain unchanged.
+
+D4202/D4205/D4206 remain doing until the complete normal software/performance image passes.
+Commit this dependency slice before that run; do not infer parent, content or release closure.

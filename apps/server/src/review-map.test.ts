@@ -27,6 +27,7 @@ import { longitudinalThreadEntryForTests } from "./longitudinal-test-support.js"
 import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
+import { observeMainSqliteWrites } from "./testing/sqlite-read-guard.js";
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
@@ -37,13 +38,7 @@ import { moduleDecisionStamp, parseFinalizedAssistanceV1 } from "@chess-tabiya/r
 
 // A pasted broadcast-style PGN: third-party SAN glyphs outside comments, a NAG, and a third-party
 // eval comment. None of it may reach the review surface (§8).
-const GLYPHED_PGN = `[Event "Broadcast"]
-[Site "?"]
-[White "Alice"]
-[Black "Bob"]
-[Result "1-0"]
-
-1. e4 e5 2. Nf3?! Nc6 3. Bb5 a6?? 4. Ba4 Nf6! 5. O-O Be7 $2 6. Re1 b5 {[%eval 5.2] Stockfish says this loses} 7. Bb3 d6? 8. c3 O-O 9. h3 Nb8!? 10. d4 Nbd7 11. Nbd2 Bb7 12. Bc2 Re8 13. Nf1 Bf8 14. Ng3 g6 15. a4 c5 16. d5 c4 17. Bg5 h6 18. Be3 Nc5 19. Qd2 h5 20. Bg5 Be7 1-0`;
+import { REVIEW_GLYPHED_PGN as GLYPHED_PGN } from "./testing/review-import-fixture.js";
 const PLIES = 40;
 const policyConfig = { seedMode: "fixed" as const, locus: { executedAt: "server" as const, engineIds: [], modelIds: [] } };
 
@@ -113,15 +108,6 @@ function storedRun(path: string, runId: string): DrillRun {
   } finally { database.close(); }
 }
 
-function observationJobSettled(path: string, runId: string): boolean {
-  const database = new DatabaseSync(path, { readOnly: true });
-  try {
-    const row = database.prepare("SELECT state, requested_seq, completed_seq FROM learner_observation_jobs WHERE run_id=?").get(runId) as
-      { state: string; requested_seq: number; completed_seq: number } | undefined;
-    return row?.state === "complete" && row.completed_seq === row.requested_seq;
-  } finally { database.close(); }
-}
-
 interface ReviewPayload {
   readonly branchId: string;
   readonly ready: boolean;
@@ -131,24 +117,6 @@ interface ReviewPayload {
   readonly moments: readonly { readonly nodeId: string; readonly entryNodeId: string }[];
   readonly accuracy: { readonly white: { readonly kind: string; readonly sentence: string; readonly value?: number }; readonly black: { readonly kind: string } };
   readonly footer: { readonly sentence: string };
-}
-
-function tableSnapshot(path: string): Readonly<Record<string, number>> {
-  const database = new DatabaseSync(path, { readOnly: true });
-  try {
-    const tables = (database.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all() as { name: string }[]).map((row) => row.name);
-    return Object.fromEntries(tables.map((name) => [name, (database.prepare(`SELECT count(*) AS count FROM "${name.replaceAll("\"", "\"\"")}"`).get() as { count: number }).count]));
-  } finally {
-    database.close();
-  }
-}
-
-/** Import's engine pass and learner-history worker settle independently. A no-write test must
- * observe both before its initial snapshot, not count unrelated import work as a Review write.
- * Keep the real worker, every table/event assertion and the existing observation deadline. */
-async function settledTableSnapshot(path: string, runId: string): Promise<Readonly<Record<string, number>>> {
-  await expect.poll(() => observationJobSettled(path, runId), { timeout: 10_000 }).toBe(true);
-  return tableSnapshot(path);
 }
 
 function eventKinds(path: string, runId: string): readonly string[] {
@@ -165,10 +133,14 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
   let application: ChessTabiyaApplication | undefined;
   let directory: string | undefined;
   let phase: (label: string) => void = () => {};
+  let reads: ReturnType<typeof observeMainSqliteWrites>;
   // These PGN-only software journeys own no authored pack/training/campaign catalogue. Keep
   // the real application, validation, workers, SQLite, identity and HTTP; D3928's installed
   // content/default-app proof remains separately held, including across the restart below.
-  beforeEach(() => { installEmptyApplicationCatalogues(); });
+  beforeEach(() => {
+    reads = observeMainSqliteWrites();
+    installEmptyApplicationCatalogues();
+  });
   // Detach this test's application and directory before awaiting close(): a teardown that outlives
   // its hook must never close or delete the next test's live database (D3300). close() is bounded by
   // the longitudinal drain grace, so the default hook budget holds.
@@ -180,6 +152,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     try {
       await closing?.close();
     } finally {
+      reads.restore();
       vi.restoreAllMocks();
       if (removing !== undefined) rmSync(removing, { recursive: true, force: true });
     }
@@ -295,16 +268,14 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "sequence_owner");
     const runId = await importReviewedGame(origin, cookie, "writer-sequence", sequencePgn(value.fen, value.moves));
-    // Engine settlement is not worker settlement. Observe the real job before taking a
-    // whole-database no-write snapshot; otherwise import's concurrent derivation looks like
-    // a Review mutation. No job is fabricated, bypassed or driven by this read-only poll.
-    await expect.poll(() => observationJobSettled(databasePath, runId), { timeout: 10_000 }).toBe(true);
+    // Engine evidence is settled by importReviewedGame; native Profile publication may continue.
+    // Observe request-process DML directly rather than waiting for unrelated worker writes.
     const saved = storedRun(databasePath, runId);
     const path = recordedSemanticPath(saved, saved.activeCursor.branchId);
     expect(path.kind).toBe("available");
     if (path.kind !== "available") throw new Error("actual imported sequence refused");
     expect(path.events.some(event => event.projection.id === value.projection && event.projection.version === 2)).toBe(value.emits);
-    const before = await settledTableSnapshot(databasePath, runId);
+    const before = reads.snapshot();
     const compile = vi.spyOn(phaseSources, "compilePhaseArc");
     const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
     expect(response.status, await response.clone().text()).toBe(200);
@@ -327,7 +298,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
         `sha256:${evidenceValueReceipt(event.evidence).payloadDigest}` === item.evidenceRef?.evidenceDigest)).toBe(true);
     }
     expect(observed.some(({ item }) => item.adapter.projection.id === value.projection)).toBe(value.emits && admittedSequence.has(value.projection));
-    expect(tableSnapshot(databasePath)).toEqual(before);
+    reads.assertUnchanged(before);
     expect(storedRun(databasePath, runId)).toEqual(saved);
     expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
     const stranger = await register(origin, "sequence_stranger");
@@ -449,7 +420,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const cookie = await register(origin, "review_relation_owner");
     const pgn = `[Event "Recorded pressure"]\n[Result "*"]\n[SetUp "1"]\n[FEN "${value.fen}"]\n\n${value.line}`;
     const runId = await importReviewedGame(origin, cookie, "writer-relation", pgn);
-    const before = await settledTableSnapshot(databasePath, runId);
+    const before = reads.snapshot();
     const response = await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } });
     expect(response.status, await response.clone().text()).toBe(200);
     const review = await response.json() as ReviewMap;
@@ -462,7 +433,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(items[0]!.component).toMatchObject({ operand: { squares: value.squares } });
     expect(items[1]!.component).toMatchObject({ operand: { plies: [{}, {}] } });
     expect(review.rows[0]!.packet.items.some(item => item.adapter.projection.id === "derived.pawn.sequence.harassment_pressure")).toBe(false);
-    expect(tableSnapshot(databasePath)).toEqual(before);
+    reads.assertUnchanged(before);
     expect((await fetch(`${origin}/runs/${runId}/review`)).status).toBe(401);
     const stranger = await register(origin, "review_relation_stranger");
     expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
@@ -599,6 +570,32 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(calls.length).toBe(settledCalls);
   });
 
+  it("D4203 catches a same-cardinality write injected into the real Review HTTP storage read", async () => {
+    const { origin, databasePath } = await start();
+    const cookie = await register(origin, "review_write_control");
+    const runId = await importReviewedGame(origin, cookie, "writer-write-control");
+    const database = new DatabaseSync(databasePath);
+    try {
+      database.exec("CREATE TABLE review_write_witness(value TEXT); INSERT INTO review_write_witness VALUES('original')");
+      const mutation = database.prepare("UPDATE review_write_witness SET value='changed'");
+      const before = reads.snapshot();
+      const count = database.prepare("SELECT count(*) AS n FROM review_write_witness").get();
+      const original = SQLiteRunStorage.prototype.read;
+      let injected = false;
+      const storageRead = vi.spyOn(SQLiteRunStorage.prototype, "read").mockImplementation(function(this: SQLiteRunStorage, id) {
+        const value = original.call(this, id);
+        if (id === runId && !injected) { mutation.run(); injected = true; }
+        return value;
+      });
+      const review = await currentReview(origin, cookie, runId);
+      expect(review.rows).toHaveLength(PLIES);
+      expect(storageRead).toHaveBeenCalled(); expect(injected).toBe(true);
+      expect(database.prepare("SELECT count(*) AS n FROM review_write_witness").get()).toEqual(count);
+      expect(database.prepare("SELECT value FROM review_write_witness").get()).toEqual({ value: "changed" });
+      expect(() => reads.assertUnchanged(before)).toThrow(/Read sequence changed/);
+    } finally { database.close(); }
+  });
+
   it("serves every ply, glyph-free, with coverage-gated accuracy; writes nothing; one projection feeds share; retry forks before opening", async () => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "review_owner");
@@ -609,12 +606,13 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
       return await response.json() as ReviewPayload;
     };
 
-    // [criterion 14] nothing persisted: every table and the run's event log are unchanged by review reads.
-    const before = await settledTableSnapshot(databasePath, runId);
+    // [criterion 14] Review performs no main-process row writes/main-schema changes; run events stay identical.
+    // The separate native worker remains live and may publish its own rows throughout.
+    const before = reads.snapshot();
     const eventsBefore = eventKinds(databasePath, runId);
     const review = await read();
     await read();
-    expect(tableSnapshot(databasePath)).toEqual(before);
+    reads.assertUnchanged(before);
     expect(eventKinds(databasePath, runId)).toEqual(eventsBefore);
 
     // [criterion 1] every ply; [§8] third-party glyphs, NAGs and eval comments never reach the payload.
@@ -712,7 +710,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const runId = await importReviewedGame(origin, cookie, "writer-nudge");
     const review = await (await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie } })).json() as ReviewPayload;
     const nudge = (nodeId: string) => queryNudge(origin, cookie, runId, nodeId);
-    const before = await settledTableSnapshot(databasePath, runId);
+    const before = reads.snapshot();
     const white = review.rows[4]!;
     const response = await nudge(white.nodeId);
     expect(response.status, await response.clone().text()).toBe(200);
@@ -731,7 +729,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect((await nudge(storedRun(databasePath, runId).nodes.find(node => node.parentId === null)!.id)).status).toBe(400);
     expect((await nudge("missing-node")).status).toBe(400);
     expect((await fetch(`${origin}/runs/${runId}/nudge?nodeId=${encodeURIComponent(white.nodeId)}`, { headers: { cookie } })).status).toBe(404);
-    expect(tableSnapshot(databasePath)).toEqual(before);
+    reads.assertUnchanged(before);
   });
 
   it.each(["white", "black"] as const)("D3765 actual Review grade and Nudge source admission are populated, read-only and rating-inert (%s)", async side => {
@@ -753,7 +751,6 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
       ? "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
       : "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 37";
     const runId = await importReviewedGame(origin, cookie, "writer-grade", sequencePgn(fen, [side === "white" ? "e2e4" : "e7e5"]), side);
-    await expect.poll(() => observationJobSettled(databasePath, runId), { timeout: 10_000 }).toBe(true);
     const saved = storedRun(databasePath, runId);
     const nodeId = saved.activeCursor.nodeId;
     const read = async (path: string): Promise<string> => {
@@ -819,16 +816,16 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
         (learner_id,calibration_id,rating,rd,volatility,seed_band,rated_games,voided_games,abandoned_games,period_no,period_started_at,updated_at)
         VALUES (?,?,?,40,0.06,NULL,40,0,0,0,?,?)`).run(learner.id, RATED_OPPONENT_CALIBRATION.id, 1300, at, at);
       const lowRating = await read("/rating");
-      const lowTables = tableSnapshot(databasePath);
+      const lowTables = reads.snapshot();
       expect(await read(reviewPath)).toBe(reviewBytes);
       expect(await nudgeRead()).toBe(nudgeBytes);
-      expect(tableSnapshot(databasePath)).toEqual(lowTables);
+      reads.assertUnchanged(lowTables);
       database.prepare("UPDATE learner_ratings SET rating=1900 WHERE learner_id=?").run(learner.id);
       expect(await read("/rating")).not.toBe(lowRating);
-      const highTables = tableSnapshot(databasePath);
+      const highTables = reads.snapshot();
       expect(await read(reviewPath)).toBe(reviewBytes);
       expect(await nudgeRead()).toBe(nudgeBytes);
-      expect(tableSnapshot(databasePath)).toEqual(highTables);
+      reads.assertUnchanged(highTables);
       expect(storedRun(databasePath, runId)).toEqual(saved);
       expect(JSON.stringify(saved)).not.toMatch(/grade-convention|derived\.grade|"klass"/u);
       // Unauthorized readers cannot use the grade endpoints as a game-existence oracle.
@@ -858,7 +855,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect(JSON.stringify(review)).not.toMatch(/bestMove|movesUci|principal|providerLineDelivery/u);
 
     // §7 / O7.3: the explicit reveal, attributed to engine and search bound, and it writes nothing.
-    const tables = await settledTableSnapshot(databasePath, runId);
+    const tables = reads.snapshot();
     const events = eventKinds(databasePath, runId);
     const target = review.rows[10]!;
     phase("explicit Analyze request");
@@ -875,7 +872,7 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     const san = line.operands.line.map((move, index) => move.side === "white" || index === 0 ? `${move.fullmove}${move.side === "white" ? "." : "…"} ${move.san}` : move.san).join(" ");
     expect(line.sentence).toContain(`Mock Stockfish mock-1 (100 ms search) reported this principal variation from the position before ${target.label}: ${san}.`);
     expect(line.sentence).toContain("It is not advice");
-    expect(tableSnapshot(databasePath)).toEqual(tables);
+    reads.assertUnchanged(tables);
     expect(eventKinds(databasePath, runId)).toEqual(events);
     expect((await confirmRecordedTarget(origin, cookie, review, review.rows[0]!.entryNodeId, review.rows[0]!.entryNodeId)).status).toBe(400);
     expect((await fetch(`${origin}/runs/${runId}/review-analysis`, { headers: { cookie } })).status).toBe(404);
@@ -918,7 +915,8 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
   });
 });
 
-describe("review map service boundary", () => {
+// D4205: full imported-game storage/provider integrations; the graph keeps its explicit20s bound.
+describe("review map service boundary", { timeout: 30_000 }, () => {
   const stores: SQLiteRunStorage[] = [];
   afterEach(() => { for (const store of stores.splice(0)) store.close(); });
 

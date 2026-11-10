@@ -177,3 +177,42 @@ families, whole-game count/default, engine role and disclosure sequence.
 
 R7's **mechanical research is complete**. Owner use and O7's product ruling remain; neither is
 manufactured by the harness.
+
+
+## 2026-11-10: Review read testing and independent worker publication (D4202/D4203)
+
+The old read-only test snapshots table counts after waiting for the native learner-history
+worker. Counts cannot detect an UPDATE that preserves cardinality. In the full software run,
+the Analyze/Compare journey also spent about 16 seconds waiting for unrelated Profile
+publication solely to acquire this baseline, then exceeded its unchanged 30-second budget.
+The original 40-ply HTTP fixture, actual worker and engine-evidence settlement remain. [V]
+Source: `apps/server/src/review-map.test.ts`; recorded terminal failures and lifecycle trace
+in `planning/exploration/log.md` (2026-11-10); D4202/D4203.
+
+SQLite's `total_changes()` reports completed row mutations per connection and ignores other
+connections. Its main schema version is a shared database-header value, so it can observe a
+schema change but cannot attribute that change to the request process. [V]
+[SQLite row-change documentation](https://www.sqlite.org/c3ref/total_changes.html),
+[SQLite schema-version documentation](https://www.sqlite.org/pragma.html#pragma_schema_version).
+
+The test-only observer installs before application startup, records main-realm connections
+before prepare/exec, and samples actual counters around the HTTP read sequence. Final samples
+survive close/dispose; missed samples fail. A successful reopen of a known object invalidates
+the proof because a new connection resets its counter. The independent reviewer identified
+that equal-counter loophole; the added file-backed control exercises the same object and a
+changed persisted row. No generic connection-epoch subsystem is introduced. [V]
+Sources: `apps/server/src/testing/sqlite-read-guard.ts`,
+`apps/server/src/testing/sqlite-read-guard.test.ts`.
+
+This establishes a bounded observation of main-process DML activity and observed main-schema
+changes. It does not establish universal database immutability or audit header PRAGMAs, TEMP
+or attached schemas. Native Profile publication uses another worker realm/connection and
+continues independently; the real Worker control verifies both parent-visible changed data
+and unchanged parent-origin row counters. The real HTTP negative control injects a cached
+UPDATE within the genuine Review storage read, retaining a successful complete response and
+unchanged witness cardinality while requiring the observer to fail. [V]
+Sources: the two tests above and `apps/server/src/review-map.test.ts`.
+
+The first concrete image passed 89 controls across the observer and full Review suite; final
+reopen-control and complete-gate results are recorded in the append-only exploration log.
+This test repair changes neither Review policy nor the separate content/release hold. [V]
