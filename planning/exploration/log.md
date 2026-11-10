@@ -40546,3 +40546,11 @@ The original a7b29564 software handle then exits2:18940passed/onefailed across57
 (694.30s), with the sole failure exactly the missing semantic-source-availability.ts reader
 in the census. Performance is not reached; do not count it as passing. Its explicit no-new-
 population guard will accompany the allowlist repair. Contract/tracker governance passes.
+
+### 2026-11-10 — D4211 exact reader census repaired
+
+The terminal full run proves the only omitted reader is semantic-source-availability.ts.
+The exact allowlist now includes it, and the same test explicitly forbids it from calling
+compileCandidatePopulation. Existing application/REST/voice/browser exclusions remain. Normal
+focused software target passes all six census tests in2.23s. Commit this two-line guard repair
+separately; D4211 remains doing until the fresh complete gate after the accepted scope correction.

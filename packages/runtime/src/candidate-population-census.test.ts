@@ -50,13 +50,14 @@ describe("candidate packet repository census", () => {
       "packages/runtime/src/internal/longitudinal-native-incidence.ts",
       "packages/runtime/src/internal/profile-subject-facts.ts",
       "packages/runtime/src/semantic-evidence.ts",
+      "packages/runtime/src/semantic-source-availability.ts",
       "packages/runtime/src/semantic-subject-outcomes.ts",
       // rfc/semantic-validation-authority.md §4.3: the (required-reach) complete-alternatives
       // validation operation over the research selection; a validation harness, not a product consumer.
       "packages/runtime/src/semantic-validation-operations.ts",
       "packages/runtime/src/testing/hint-fixture.ts",
     ]);
-    for (const rel of ["packages/runtime/src/evidence-factories.ts", "packages/runtime/src/internal/longitudinal-native-incidence.ts", "packages/runtime/src/semantic-subject-outcomes.ts"]) {
+    for (const rel of ["packages/runtime/src/evidence-factories.ts", "packages/runtime/src/internal/longitudinal-native-incidence.ts", "packages/runtime/src/semantic-source-availability.ts", "packages/runtime/src/semantic-subject-outcomes.ts"]) {
       expect(read(rel)).not.toMatch(/\bcompileCandidatePopulation\s*\(/u);
     }
     const worker = read("packages/runtime/src/internal/profile-subject-facts.ts");
