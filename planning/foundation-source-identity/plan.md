@@ -2627,3 +2627,18 @@ No owner question is pending. Follow this order with separate verified commits:
 
 Seven remaining outcome qualifications, D4167 complete reverse consumers and D4175ordinary26
 retain their own evidence and delivery obligations. D3928 content/native/release remains held.
+
+### Genuine current9 predecessor is preserved — 2026-11-10
+
+Accepted contract is committedce675044. Step1 of the D4200 handoff is now complete: actual
+current35/revision9 capture produces five complete production jobs, six positive derived families
+and the two required availability source controls. Standalone predecessor JSON is877366bytes,
+contains1024 authentic subject rows and needs no ignored producer in normal CI. Permanent SQL
+restore controls pass2/2 in189ms; strict capture and full types/Svelte pass; independent reviewer
+accepts the bounded proof and independently verifies exact captured-file equality. Future
+regeneration must respect the tool's narrow source-guard limitation and use a reviewed checkpoint.
+
+Next: implement accepted source-local completeness and selector3 through existing original
+owners. Then complete durable evaluations/revision10/all-seven-family/read/rebuild/account/cost
+and actual9→10 upgrade proof. Current predecessor input proof cannot discharge those steps.
+Keep current ordinary26, remaining seven qualifications and D3928 holds unchanged.

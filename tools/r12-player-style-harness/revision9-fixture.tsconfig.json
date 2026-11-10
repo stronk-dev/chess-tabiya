@@ -1,0 +1,4 @@
+{
+  "extends": "./profile-source-cost.tsconfig.json",
+  "include": ["revision9-fixture.ts"]
+}

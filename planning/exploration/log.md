@@ -40371,3 +40371,25 @@ Next: commit accepted contract/receipts, capture genuine current9 fixture before
 changes, then implement source/completeness/selector and complete durable coverage in verified
 checkpoints. No source-only D4200 completion, implicit ordinary26, content/native/release or
 whole1.0 claim. Earlier successful normal008115ac gate remains the unchanged production proof.
+
+### 2026-11-10 — preserve genuine revision9 input before source/projector changes
+
+Accepted contract ce675044 is committed. The optional normal longitudinal-revision9-fixture
+Make target strictly compiles and runs current schema35/revision9 production APIs and worker
+batch without a population/project override. Five actual jobs cover both native colors,
+ordinary import, unrelated legacy abstention and genuine required-risk input. All six old
+families populate5/45/5/5/5/1024 rows; actual publication leaves saved source snapshots/summaries
+unchanged. The877366-byte standalone fixture is copied unchanged into apps/server/src/fixtures.
+It needs no ignored old executable, raw dump or regeneration during ordinary verification.
+
+First capture terminated on an author assertion comparing SQLite null-prototype rows with plain
+objects after all five jobs completed. Corrected only that assertion's row representation; fresh
+normal capture exits0. New permanent raw-SQL restore contracts pass2/2 in189ms; all project types
+pass with zero Svelte errors/warnings. Independent read accepts capture/data/control boundaries,
+including byte equality to actual output. Its narrow tracked-source guard is documented as such,
+not exhaustive dependency/untracked closure proof. No source-hash framework is added.
+
+Source runtime/selection and storage versions remain unchanged. D4200 stays doing: actual9→10
+startup/worker/reopen/rebuild/unknown-coverage and new worker cost/gates are still required.
+The independent receipt and existing plan own next work; checkpoint this verified preparation
+before changing production source or projector behavior. No content/native/release promotion.

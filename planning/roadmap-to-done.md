@@ -19,9 +19,12 @@ request-write observer in `008115ac`. D4202/D4205/D4206 close boundedly after th
 Governance and normal commit hooks pass. Earlier failed/interrupted runs remain in the
 append-only [exploration log](exploration/log.md); local success is not a remote-CI verdict.
 
-Next, author and independently review D4200's coordinated source/selector/history availability
-amendment. A known unrelated legacy event abstention must not suppress complete required-family
-sources. Unknown coverage must stay explicit through selection, stored opportunity denominators,
+D4200's coordinated source/selector/history availability contract is independently accepted.
+Genuine schema35/revision9 input is captured before code changes: five actual production jobs,
+all six predecessor families, both availability controls and a standalone877KB fixture with
+passing restore/type checks and bounded independent review. This is not the revision10 upgrade.
+Next, implement the accepted contract: a known unrelated legacy event abstention must not
+suppress complete required-family sources. Unknown coverage must stay explicit through selection, stored opportunity denominators,
 proofs and rebuilds. Changing only the calculator leaves downstream whole-population refusals.
 Then finish the seven outcome-family qualifications and D4167 reverse consumers: Sight,
 Play/Compare, both comparisons, guidance/voice/speech, typed bot/replay/policy and authored migration.

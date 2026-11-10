@@ -1,6 +1,6 @@
 # RFC: source-local evidence availability
 
-- **Status:** accepted — independently accepted for bounded D4200 implementation2026-11-10 after R1–R3 author repair. No production implementation, migration, qualification or wider foundation completion is claimed.
+- **Status:** implementing — independently accepted2026-11-10 after R1–R3 repair; genuine schema35/revision9 predecessor capture and restore controls verified. Source/selector3/revision10 coverage, actual upgrade/lifecycle/cost and complete gates remain; no wider foundation completion.
 - **Author:** codex, under the owner's full-foundation and pre-launch zero-legacy rulings.
 - **Created:** 2026-11-10
 - **Parent / amends:** subject-safe-semantic-selection.md §§5.1–5.3; longitudinal-store.md
@@ -465,3 +465,7 @@ Wider D1716/D4167/D4175 work is not discharged by this RFC alone.
 
 - 2026-11-10: fresh independent buildability read accepts the repaired complete contract. Actual
   source/migration/read/rebuild/lifecycle/cost and normal-gate obligations remain unexecuted.
+
+- 2026-11-10: bounded predecessor preparation independently reviewed: actual five-job schema35/
+  revision9 capture, six populated families and standalone877366-byte fixture; normal restore
+  controls2/2 and types pass. This is not revision10 startup/rebuild or expanded source reach.

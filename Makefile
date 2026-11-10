@@ -2474,6 +2474,14 @@ longitudinal-successor-fixture:
 	$(CI_NODE) tools/d4018-longitudinal-successor-fixture.mjs
 
 .PHONY: longitudinal-predecessor-fixture longitudinal-predecessor-upgrade-check
+# Optional D4200 capture while actual committed production is schema35/revision9.
+# This is never a normal verification dependency and cannot retag successor output.
+.PHONY: longitudinal-revision9-fixture
+longitudinal-revision9-fixture:
+	$(CI_NODE) ./node_modules/typescript/bin/tsc -p tools/r12-player-style-harness/revision9-fixture.tsconfig.json
+	./node_modules/.bin/esbuild tools/r12-player-style-harness/revision9-fixture.ts --bundle --platform=node --format=esm --external:typescript --outfile=apps/server/dist/revision9-fixture.mjs --log-level=warning
+	$(CI_NODE) apps/server/dist/revision9-fixture.mjs
+
 # Optional D4181 old-executable capture; permanent upgrade tests use the committed small fixture.
 longitudinal-predecessor-fixture:
 	$(CI_NODE) tools/d4181-longitudinal-predecessor-fixture.mjs

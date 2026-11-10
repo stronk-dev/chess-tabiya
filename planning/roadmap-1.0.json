@@ -974,10 +974,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Capture genuine current revision9 output, then implement the independently accepted D4200 source/selector3/durable-coverage revision10 contract through seven-family publication/read/rebuild/account proof and fresh cost/gates. Finish seven remaining outcome-family qualifications and D4167 reverse consumers; ordinary26 and content/native/release remain held.",
+        "nextAction": "Genuine current revision9 output is preserved. Implement the independently accepted D4200 source/selector3/durable-coverage revision10 contract through seven-family publication/read/rebuild/account proof and fresh cost/gates. Finish seven remaining outcome-family qualifications and D4167 reverse consumers; ordinary26 and content/native/release remain held.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Six of13 outcome families qualify; all880 preceding case values/order and84other profiles are preserved. All13 total-source factories and selector2 exist, while seven family qualifications and source-local availability remain. Migration35/revision9 six-family adoption and genuine revision8 upgrade proof are implemented. Current200-game cost is recorded under observed load, not an isolated predecessor speed comparison. D4202/D4205/D4206 CI repairs are committed/verified; no whole foundation, capability, milestone or release promotion. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Six of13 outcome families qualify; all880 preceding case values/order and84other profiles are preserved. All13 total-source factories and selector2 exist, while seven family qualifications and source-local availability remain. Migration35/revision9 six-family adoption and genuine revision8 upgrade proof are implemented. Current200-game cost is recorded under observed load, not an isolated predecessor speed comparison. D4202/D4205/D4206 CI repairs are committed/verified; no whole foundation, capability, milestone or release promotion. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed. D4200 predecessor preparation now preserves genuine committed ce675044 schema35/revision9 output: five actual jobs, six populated families and both source-availability controls;877366-byte standalone fixture, SQL restore2/2/types and independent bounded review pass. Actual source/selector3/revision10 coverage/upgrade/cost remains unimplemented.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1207,7 +1207,8 @@
             "packages/runtime/src/semantic-validation-count-population.test.ts",
             "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
             "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
-            "rfc/source-local-evidence-availability.md"
+            "rfc/source-local-evidence-availability.md",
+            "apps/server/src/longitudinal-revision9-fixture.test.ts"
           ],
           "anchors": [
             {
@@ -1833,7 +1834,7 @@
             {
               "kind": "rfc",
               "id": "source-local-evidence-availability.md",
-              "digest": "sha256:ee7c6313400c9f43ba3e0c04c22dc8109d49cea9d620e1b21f19c70ed2c6d1e0"
+              "digest": "sha256:cccff30bd10cd0535f5a0f6b810a506d6662c5cad1727ab9b388ce03e4f4dac2"
             }
           ]
         },
@@ -1857,7 +1858,7 @@
         "nextAction": "Implement accepted D4200 completeness through original source calculation, selector3 and durable per-decision evaluations with exact filtered reads. Then finish D4167 Sight/Play/Compare/guidance/voice and typed bot/replay reverse bindings; ordinary26 still needs complete source qualification, receiving and measured cost.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Current42/compiler7/source13/selector2 and14 compact native pairs exist. Six of13 outcome families qualify;26 ordinary avoidance pairs stay held. Review now observes request-process row writes without waiting on unrelated Profile publication; real mutation/Worker/reopen controls pass. Longitudinal revision9/all-six-family publication/read/rebuild/account/Profile adoption and genuine8 upgrade proof stand. Remaining reverse consumers, partial-coverage contract and ordinary avoidance adoption keep this milestone active. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Current42/compiler7/source13/selector2 and14 compact native pairs exist. Six of13 outcome families qualify;26 ordinary avoidance pairs stay held. Review now observes request-process row writes without waiting on unrelated Profile publication; real mutation/Worker/reopen controls pass. Longitudinal revision9/all-six-family publication/read/rebuild/account/Profile adoption and genuine8 upgrade proof stand. Remaining reverse consumers, partial-coverage contract and ordinary avoidance adoption keep this milestone active. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed. D4200 predecessor preparation now preserves genuine committed ce675044 schema35/revision9 output: five actual jobs, six populated families and both source-availability controls;877366-byte standalone fixture, SQL restore2/2/types and independent bounded review pass. Actual source/selector3/revision10 coverage/upgrade/cost remains unimplemented.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/presentation-move-path.ts",
@@ -2433,7 +2434,8 @@
             "packages/runtime/src/semantic-validation-count-population.test.ts",
             "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
             "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
-            "rfc/source-local-evidence-availability.md"
+            "rfc/source-local-evidence-availability.md",
+            "apps/server/src/longitudinal-revision9-fixture.test.ts"
           ],
           "anchors": [
             {
@@ -3429,7 +3431,7 @@
             {
               "kind": "rfc",
               "id": "source-local-evidence-availability.md",
-              "digest": "sha256:ee7c6313400c9f43ba3e0c04c22dc8109d49cea9d620e1b21f19c70ed2c6d1e0"
+              "digest": "sha256:cccff30bd10cd0535f5a0f6b810a506d6662c5cad1727ab9b388ce03e4f4dac2"
             }
           ]
         },
@@ -4712,10 +4714,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Author/review D4200 durable per-source unknown coverage together with source/selection semantics before partial-family history publication. Preserve current revision9/genuine8 proof, then complete remaining source qualification, reverse consumers and account/rebuild obligations.",
+        "nextAction": "Implement independently accepted D4200 durable unknown coverage, preserving the now-captured genuine revision9 predecessor through actual revision10/seven-family startup/worker/read/rebuild/account proof. Current source qualification, reverse consumers and content/native/release remain separate obligations.",
         "latestCheckpoint": {
           "at": "2026-11-10",
-          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Migration35/revision9 six-family publication, read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen repair are implemented. Current200-game cost is recorded: production101.38minutes, cold/warm Profile1265.73/350.02ms under observed load; no isolated predecessor comparison. Current whole54 availability is conservative; partial-family persisted coverage is not yet specified. D3928 content/native/release and remaining consumers stay held.",
+          "summary": "Complete normal make verify-software at008115ac passes18,919software tests/570files728.43s and unchanged7performance tests/four65.29s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Migration35/revision9 six-family publication, read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen repair are implemented. Current200-game cost is recorded: production101.38minutes, cold/warm Profile1265.73/350.02ms under observed load; no isolated predecessor comparison. Current whole54 availability is conservative; partial-family persisted coverage is not yet specified. D3928 content/native/release and remaining consumers stay held. D4200 predecessor preparation now preserves genuine committed ce675044 schema35/revision9 output: five actual jobs, six populated families and both source-availability controls;877366-byte standalone fixture, SQL restore2/2/types and independent bounded review pass. Actual source/selector3/revision10 coverage/upgrade/cost remains unimplemented.",
           "impact": "advanced",
           "evidence": [
             "apps/server/src/campaign-storage.test.ts",
@@ -4782,7 +4784,8 @@
             "apps/server/src/bot-opponent-ply.test.ts",
             "rfc/bot-policy.md",
             "apps/server/src/longitudinal-predecessor-upgrade.test.ts",
-            "tools/d4181-longitudinal-predecessor-fixture.mjs"
+            "tools/d4181-longitudinal-predecessor-fixture.mjs",
+            "apps/server/src/longitudinal-revision9-fixture.test.ts"
           ],
           "anchors": [
             {

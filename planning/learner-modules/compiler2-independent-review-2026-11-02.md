@@ -11501,3 +11501,23 @@ two legal moves/three arithmetic cells. Reviewer did not claim to run those test
 ownership/source vectors, sparse coverage, private summary and seven-family revision10 lifecycle
 are buildable through existing seams. Actual implementation, genuine9→10 proof, cost and normal
 CI remain required; seven source qualifications/ordinary26 and broader1.0 are not discharged.
+
+### 2026-11-10 D4200 genuine revision9 predecessor preparation
+
+Independent foundation_style_review accepts the bounded capture/fixture proof. It inspected
+actual runtime creation/opponent ownership, actual imports and production runLongitudinalBatch
+without injected projection/population. The current production-source snapshot is ce675044;
+actual captured schema35/revision9 has five completed jobs, correct heads and six populated
+families5/45/5/5/5/1024. Both original suppression controls retain one normative GAME decision
+and zero subject/prevalence rows. The new evaluation table is absent. Saved source snapshots
+and summaries survive actual claim/project/publication unchanged.
+
+Reviewer independently compared the tracked877366-byte JSON with capture output: identical.
+Standalone SQL restore preserves old schema/all rows and validates foreign keys/integrity, exact
+old jobs/revision, native/condition rows and both original FEN controls. Normal2/2 and strict
+capture/types pass. This is old-input proof, not successor startup/worker/rebuild evidence.
+
+The capture's Git guard checks tracked source directories only; it is not exhaustive dependency
+or untracked-source closure verification. No contamination was observed in this reviewed capture.
+The tool now states that limit and requires a separately reviewed capture checkpoint for future
+regeneration. No new source-hash mechanism or normal-CI regeneration dependency is introduced.
