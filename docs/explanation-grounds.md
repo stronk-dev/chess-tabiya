@@ -432,7 +432,17 @@ count, pawn, file, geometry or other complete totals. A missing required mover-r
 makes the loose-piece condition unavailable; it never becomes a false predicate or a zero.
 Every original legal alternative stays in the population. Unknown collector dependencies refuse.
 
-This calculator change is the first part of `rfc/source-local-evidence-availability.md`.
-The research selector2 and stored Profile composer retain their conservative population fences
-until the coordinated selector3 coverage and revision10 persistence changes land. It does not
-activate ordinary avoidance modules or expose partial history as complete statistics.
+Research selector3 carries the exact55-source image and its source-local unavailable causes on
+every result. A complete fact can coexist with a gap in another source. Every share still counts
+all original alternatives; the result has no global evaluated-alternatives count. Empty partial
+results report incomplete coverage, while a zero fact budget retains its own reason and coverage.
+Incomplete sources cannot win a critical override. Selector/consumer2 calls are retired.
+
+Selection captures plain own-data arguments once and compiles complete consumer execution before
+reading sources; local selection performs that preflight before acquiring its legal population.
+The complete-alternatives validation adapter returns typed unavailable for any partial coverage,
+while the separate family operation still evaluates its own complete sources independently.
+
+The stored Profile composer retains its conservative whole-population fence until coordinated
+revision10 coverage is implemented. Ordinary avoidance modules remain held. The old R3 static
+prototype replays historical data; its retired writer refuses current selections before rendering.

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e3040fcb36c8a748e039dc54600e424d3d8302672b19cc0e1811454c8db4d12d",
+    "roadmap": "sha256:a8ab8211719d0b92c0b083e51cdcdddd1e99e61492b3f888144af4d74a7cac0f",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:380aab2e2e19eedf434219f824fc193752340b09203cdd52c21c4450fed62fa9",
-    "rfcRegister": "sha256:169dff84429ac605338cf1ca8f1502fe79df427a31fe39ef2ddb6c8cc203c0ce",
+    "workState": "sha256:6bd2b32270776168155ec4c910e49629b3cac720d6e29534c31eb7b72e5963df",
+    "rfcRegister": "sha256:06f98576c2607e3e140ff359a45eba7add967d0c4373510b50cc3626a2a04538",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -33,7 +33,7 @@
       "todo": 632,
       "doing": 173,
       "blocked": 1063,
-      "done": 1925,
+      "done": 1926,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Genuine current revision9 output is preserved. Implement the independently accepted D4200 source/selector3/durable-coverage revision10 contract through seven-family publication/read/rebuild/account proof and fresh cost/gates. Finish seven remaining outcome-family qualifications and D4167 reverse consumers; ordinary26 and content/native/release remain held.",
+      "nextAction": "Finish selector3 complete verification, then implement accepted D4200 durable revision10/seven-family evaluation publication, typed reads, actual9→10 startup/worker/rebuild/account and expanded-work cost. Keep native/history conservative until coverage is durable; remaining qualifications, reverse consumers and content/native/release stay separate.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Complete normal make verify-software ate4672b36 passes18,926software tests/571files867.27s and unchanged7performance tests/four69.32s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Six of13 outcome families qualify; all880 preceding case values/order and84other profiles are preserved. All13 total-source factories and selector2 exist, while seven family qualifications and source-local availability remain. Migration35/revision9 six-family adoption and genuine revision8 upgrade proof are implemented. Current200-game cost is recorded under observed load, not an isolated predecessor speed comparison. D4202/D4205/D4206 CI repairs are committed/verified; no whole foundation, capability, milestone or release promotion. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed. D4200 predecessor preparation now preserves genuine committed ce675044 schema35/revision9 output: five actual jobs, six populated families and both source-availability controls;877366-byte standalone fixture, SQL restore2/2/types and independent bounded review pass. Source-local calculator is implemented: both-color12-move controls retain all13 complete families; real missing root risk blocks only loose_piece. Focused1096/eight and boundary132/three pass; the full normal software gate now passes on the committed source fix. Selector3 and revision10 coverage/upgrade/cost remain unimplemented; downstream population fences stay conservative.",
+        "summary": "All13 original total-source/outcome factories exist. Fresh canonical1470/1470 over89subjects yields17qualified: six of13 outcome families qualify and seven remain. Source-local availability and selector/consumer3 now retain exact55-source coverage, full legal denominators and genuine unknowns. Independent code review,2948/eighteen focused tests, complete types/scheduling and actual partial/complete validation controls pass. Last completed normal software certificate is e4672b36:18926/571 and7performance/four; the new selector complete rerun is pending. Migration35/revision9 six-family adoption and genuine8 upgrade proof remain; durable revision10/seven-family coverage, actual9 upgrade and expanded cost are next. D4167, ordinary26 and D3928 remain open.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1059,7 +1059,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:375a1514014d64b534ebf3020b0f2680dd87e384527a7f1f2866d229608cd512"
+            "digest": "sha256:e12017eac1c5b461f3b88a02d13f60ac2cb317a745a60983637280c10dcb6fa4"
           },
           {
             "kind": "work_state",
@@ -1214,7 +1214,7 @@
           {
             "kind": "rfc",
             "id": "source-local-evidence-availability.md",
-            "digest": "sha256:cccff30bd10cd0535f5a0f6b810a506d6662c5cad1727ab9b388ce03e4f4dac2"
+            "digest": "sha256:7631d24efbbe108a873a60613203994eb692b07e66f22f5d4ab606a01273bd13"
           }
         ]
       },
@@ -1235,10 +1235,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement accepted D4200 completeness through original source calculation, selector3 and durable per-decision evaluations with exact filtered reads. Then finish D4167 Sight/Play/Compare/guidance/voice and typed bot/replay reverse bindings; ordinary26 still needs complete source qualification, receiving and measured cost.",
+      "nextAction": "Finish selector3 complete verification, then implement accepted D4200 durable revision10/seven-family evaluation publication, typed reads, actual9→10 startup/worker/rebuild/account and expanded-work cost. Keep native/history conservative until coverage is durable; remaining qualifications, reverse consumers and content/native/release stay separate.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Complete normal make verify-software ate4672b36 passes18,926software tests/571files867.27s and unchanged7performance tests/four69.32s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Current42/compiler7/source13/selector2 and14 compact native pairs exist. Six of13 outcome families qualify;26 ordinary avoidance pairs stay held. Review now observes request-process row writes without waiting on unrelated Profile publication; real mutation/Worker/reopen controls pass. Longitudinal revision9/all-six-family publication/read/rebuild/account/Profile adoption and genuine8 upgrade proof stand. Remaining reverse consumers, partial-coverage contract and ordinary avoidance adoption keep this milestone active. D4200 full source/selection/durable-coverage successor is independently accepted after R1–R3 repair, with migration position next recorded. Strict probe passes both unrelated legacy abstention and genuine required-root-risk controls; production implementation is still owed. D4200 predecessor preparation now preserves genuine committed ce675044 schema35/revision9 output: five actual jobs, six populated families and both source-availability controls;877366-byte standalone fixture, SQL restore2/2/types and independent bounded review pass. Source-local calculator is implemented: both-color12-move controls retain all13 complete families; real missing root risk blocks only loose_piece. Focused1096/eight and boundary132/three pass; the full normal software gate now passes on the committed source fix. Selector3 and revision10 coverage/upgrade/cost remain unimplemented; downstream population fences stay conservative.",
+        "summary": "Canonical42/compiler7 and all13 source-owned condition factories now feed selector/consumer3 with mandatory55-source coverage. Known source gaps no longer erase unrelated complete facts; unknown exact refs cannot supply rarity or critical facts. Strict once-only input capture and actual complete binding execution admission pass their adversarial controls; the validation adapter explicitly abstains on partial coverage. Broad2948/eighteen, types/scheduling and fresh1470canonical cases pass; complete selector rerun is pending. Existing14 compact native Nudge/Review pairs retain verified REST/DOM/budget controls; ordinary26, seven family qualifications and D4167 reverse consumers remain. Durable revision10 coverage is still required before history widens.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/presentation-move-path.ts",
@@ -2696,7 +2696,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:375a1514014d64b534ebf3020b0f2680dd87e384527a7f1f2866d229608cd512"
+            "digest": "sha256:e12017eac1c5b461f3b88a02d13f60ac2cb317a745a60983637280c10dcb6fa4"
           },
           {
             "kind": "work_state",
@@ -2811,7 +2811,7 @@
           {
             "kind": "rfc",
             "id": "source-local-evidence-availability.md",
-            "digest": "sha256:cccff30bd10cd0535f5a0f6b810a506d6662c5cad1727ab9b388ce03e4f4dac2"
+            "digest": "sha256:7631d24efbbe108a873a60613203994eb692b07e66f22f5d4ab606a01273bd13"
           }
         ]
       },
@@ -2832,7 +2832,7 @@
       "nextAction": "Complete real-browser geometry and owner-use proof for current board/module defaults, preserve assistance/role ceilings, then finish ordinary26 only after complete source qualification and the accepted availability/adoption contracts.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Complete normal make verify-software ate4672b36 passes18,926software tests/571files867.27s and unchanged7performance tests/four69.32s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Previously verified14 native compact pairs retain strict REST/DOM selection, budget, role and source-identity controls. New13-family avoidance adoption remains held at26 ordinary tuples, with six families qualified and seven still owed. Current9 store/Profile adoption and genuine8 upgrade proof are implemented; neither software success nor source qualification proves complete learner UX, presets or owner-device use. D3928 content/native/release remains held.",
+        "summary": "Previously verified14 compact native Nudge/Review pairs retain strict actual receiving, whole-payload fit and same-selected-fact inspection. The new selector3 foundation carries explicit source gaps without activating ordinary26. Its2948/eighteen focused tests, full types/scheduling and fresh1470canonical cases pass; complete selector rerun remains. Remaining learner module hooks, preset/workflow adoption and owner use still require their own delivery proof. D3928 content/native/release holds remain.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/evidence/move-path-callers.test.ts",
@@ -4097,7 +4097,7 @@
       "nextAction": "Implement independently accepted D4200 durable unknown coverage, preserving the now-captured genuine revision9 predecessor through actual revision10/seven-family startup/worker/read/rebuild/account proof. Current source qualification, reverse consumers and content/native/release remain separate obligations.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Complete normal make verify-software ate4672b36 passes18,926software tests/571files867.27s and unchanged7performance tests/four69.32s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. Migration35/revision9 six-family publication, read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen repair are implemented. Pre-availability revision9 200-game cost is recorded: production101.38minutes, cold/warm Profile1265.73/350.02ms under observed load; no isolated predecessor comparison. Current whole54 availability remains conservative; accepted D4200 specifies the pending persisted partial coverage. D3928 content/native/release and remaining consumers stay held. D4200 predecessor preparation now preserves genuine committed ce675044 schema35/revision9 output: five actual jobs, six populated families and both source-availability controls;877366-byte standalone fixture, SQL restore2/2/types and independent bounded review pass. Source-local calculator is implemented: both-color12-move controls retain all13 complete families; real missing root risk blocks only loose_piece. Focused1096/eight and boundary132/three pass; the full normal software gate now passes on the committed source fix. Selector3 and revision10 coverage/upgrade/cost remain unimplemented; downstream population fences stay conservative.",
+        "summary": "Migration35/revision9 retains six-family publication/read/rebuild/account/Profile adoption and actual8 startup/worker/reopen/all-family omission repair. The standalone genuine9 predecessor fixture preserves five actual production jobs and all six old families. Native/whole54 Profile still refuses incomplete populations; selector3 is now source-local but adds no durable partial rows. Accepted D4200 next implements revision10/seven-family evaluations, exact typed coverage reads and filtering, actual9 upgrade/rollback/reopen/compare/rebuild/account plus new cost. Pre-availability revision9 cost remains dated:200games/6400decisions101.38minutes and cold/warm Profile1265.73/350.02ms under observed load. D3928 and broader learner-model work remain.",
         "impact": "advanced",
         "evidence": [
           "apps/server/src/campaign-storage.test.ts",
@@ -4773,7 +4773,7 @@
       "nextAction": "Keep release blocked while completing foundation/consumer contracts, D3928 content migration and real native/appliance/release journeys. Preserve the current complete local software/performance certificate; it does not clear content, deployment, backup/restore or whole-product UX.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Complete normal make verify-software ate4672b36 passes18,926software tests/571files867.27s and unchanged7performance tests/four69.32s, plus all type/schema/source/application preflights. Canonical source validation1470/1470 over89subjects yields17qualified. The local software/performance certificate now exists. Seven outcome-family qualifications, D4200 typed availability, D4167 reverse consumers and ordinary26 remain. D3928 still blocks content/native/release; no official pack or release candidate is graduated by this test-only wave. Current store upgrade/cost evidence stands. No remote-CI, deployment, content, capability or milestone promotion.",
+        "summary": "The last complete local normal software/performance certificate is committed e4672b36:18926tests/571files867.27s, unchanged7performance/four69.32s and all preflights. Selector3 now has independent code acceptance,2948/eighteen focused checks, full types/scheduling and fresh1470canonical cases; its complete rerun is pending. Seven outcome qualifications, durable D4200 coverage/lifecycle/cost, D4167 and ordinary26 remain. D3928 continues to hold content/native/release; this checkpoint graduates no official pack or release candidate and supplies no remote-CI or deployment result.",
         "impact": "advanced",
         "evidence": [
           "Makefile",

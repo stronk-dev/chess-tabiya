@@ -19,12 +19,16 @@ position.play(move);
 const packet = compileCandidatePopulation({ beforeFen: INITIAL_FEN, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
 if (packet.kind !== "ready") throw new TypeError(`Candidate packet did not compile: ${packet.error.code}`);
 if (packet.receipt.packet.candidates.find(row => row.moveUci === "e2e4")?.afterFen !== canonicalFen(position)) throw new TypeError("Candidate packet does not retain the actual played edge");
-const selected = selectSemanticEvidence(EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 2 }, { receipt: packet.receipt, moveUci: "e2e4" });
+const selected = selectSemanticEvidence(EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 3 }, { receipt: packet.receipt, moveUci: "e2e4" });
 const alternatives = new Set(candidateAlternatives(packet.receipt, "e2e4").map((row) => row.moveUci));
 const legal = new Set(packet.receipt.packet.legalMoves.map((move) => move.uci).filter((uci) => uci !== "e2e4"));
 if (alternatives.size !== legal.size || [...legal].some((uci) => !alternatives.has(uci))) throw new TypeError("Candidate packet alternatives are not set-equal to the exact legal authority");
-if (selected.population.legalAlternatives !== alternatives.size || selected.population.evaluatedAlternatives !== alternatives.size || selected.selected.length > 2) throw new TypeError("Research selector did not evaluate the complete compiled candidate population");
+const consumer = EVIDENCE_MANIFEST.consumers.find(value => value.id === selected.consumer.id && value.version === selected.consumer.version);
+const sourceKeys = new Set(selected.coverage.sources.map(value => `${value.id}@${value.version}`));
+if (consumer === undefined || sourceKeys.size !== consumer.accepts.length || consumer.accepts.some(value => !sourceKeys.has(`${value.id}@${value.version}`))
+  || selected.coverage.unavailable.length !== 0 || selected.population.legalAlternatives !== alternatives.size || selected.selected.length > 2
+  || Object.hasOwn(selected.population, "evaluatedAlternatives")) throw new TypeError("Research selector did not retain exact complete-source coverage and the full legal population");
 
 // Authored dependency inventory is checked by semantic-content-dependencies.test.ts in the
 // content tier. This smoke uses source-free legal fixtures and the exact current owner only.
-console.log(JSON.stringify({ digest: EVIDENCE_MANIFEST.digest, counts: tuple, policy: "research.r2_candidate@2", researchSelection: selected.population }));
+console.log(JSON.stringify({ digest: EVIDENCE_MANIFEST.digest, counts: tuple, policy: "research.r2_candidate@3", researchSelection: selected.population, coverage: selected.coverage }));

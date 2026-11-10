@@ -20,9 +20,11 @@ test("D4187 the actual semantic software smoke runs from an empty directory with
   const outfile = join(directory, "smoke.mjs");
   execFileSync(resolve(root, "node_modules/.bin/esbuild"), ["apps/server/src/semantic-evidence-check.ts", "--bundle", "--platform=node", "--format=esm", `--outfile=${outfile}`, "--log-level=warning"], { cwd: root });
   const result = JSON.parse(execFileSync(process.execPath, [outfile], { cwd: directory, encoding: "utf8" }));
-  assert.equal(result.policy, "research.r2_candidate@2");
+  assert.equal(result.policy, "research.r2_candidate@3");
   assert.equal(result.researchSelection.legalAlternatives, 19);
-  assert.equal(result.researchSelection.evaluatedAlternatives, 19);
+  assert.equal(Object.hasOwn(result.researchSelection, "evaluatedAlternatives"), false);
+  assert.equal(result.coverage.sources.length, 55);
+  assert.deepEqual(result.coverage.unavailable, []);
   assert.equal(Object.hasOwn(result, "dependency"), false);
   assert.equal(CONTENT_CONTRACT_TESTS.includes("apps/server/src/semantic-content-dependencies.test.ts"), true);
 });

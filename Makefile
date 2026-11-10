@@ -1958,6 +1958,11 @@ grade-selection-measurement:
 
 # Disposable D1716/D1718/D1719 research; default counterexamples, no bulk census or learner delivery.
 .PHONY: counterfactual-availability-probe
+.PHONY: research-presentation-boundary-check
+# Current-source refusal + historical replay controls; the old source census is a frozen study.
+research-presentation-boundary-check:
+	$(CI_NODE) ./node_modules/vitest/vitest.mjs run --config tools/r3-presentation-harness/vitest.config.ts tools/r3-presentation-harness/real-packet.test.ts tools/r3-presentation-harness/prototype.test.ts
+
 # Disposable D4200 policy measurement; not a production or normal CI dependency.
 counterfactual-availability-probe:
 	$(CI_NODE) ./node_modules/typescript/bin/tsc --project tools/d1718-avoidance-subject-harness/tsconfig.availability.json

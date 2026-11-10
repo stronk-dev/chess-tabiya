@@ -53,7 +53,7 @@ describe("exact played-ranking modes and source-owned native identity", () => {
     const native = compiled.receipt.packet.candidates.find(row => row.moveUci === "d4d5")!.events.filter(event => key(event) === "rules.structural.event.backward_pawn@2");
     expect(native.map(event => (event.operands as BackwardPawnChange).subject.beforePawn)).toEqual(["c7", "d4", "c6"]);
     expect(new Set(native.map(semanticPlayedOccurrenceKey)).size).toBe(3);
-    const policy: EvidenceSelectionPolicyDeclaration = { id: "test.root_subject_order", version: 1, consumer: { id: "research.semantic_selection", version: 2 }, disposition: "experimental", minimumAlternatives: 0, maximumSameFamilyShare: 1, minimumAlternativeOnlyShare: null, maxFacts: 1,
+    const policy: EvidenceSelectionPolicyDeclaration = { id: "test.root_subject_order", version: 1, consumer: { id: "research.semantic_selection", version: 3 }, disposition: "experimental", minimumAlternatives: 0, maximumSameFamilyShare: 1, minimumAlternativeOnlyShare: null, maxFacts: 1,
       criticalEvents: [{ id: "rules.structural.event.backward_pawn", version: 2 }] };
     const manifest = compileEvidenceManifest({ ...EVIDENCE_CONTRACT_DECLARATIONS, selectionPolicies: [...EVIDENCE_CONTRACT_DECLARATIONS.selectionPolicies!, policy] });
     const result = selectSemanticEvidence(manifest, policy, { receipt: compiled.receipt, moveUci: "d4d5" });

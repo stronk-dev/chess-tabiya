@@ -3,11 +3,12 @@ import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, type CandidatePopulat
 import { PRIMARY_EVIDENCE_MANIFEST, SEMANTIC_SELECTION_PROJECTION_REFS } from "./evidence-catalog.js";
 import { evidenceForConsumer } from "./evidence-contract.js";
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
-import { subjectOutcomeSemanticEvents, selectSemanticEvidence } from "./semantic-evidence.js";
+import { subjectOutcomeSemanticEvents, selectSemanticEvidence, assertSemanticEvidenceEvent } from "./semantic-evidence.js";
 import { SEMANTIC_VALIDATION_OPERATIONS, subjectOutcomesFromReceipt } from "./semantic-validation-operations.js";
-import { assertSemanticMirrorPartnerInput, assertSemanticTargetValueAuthority } from "./semantic-validation-runner.js";
+import { assertSemanticMirrorPartnerInput, assertSemanticTargetValueAuthority, executeSemanticValidationCase } from "./semantic-validation-runner.js";
+import { SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
 import { semanticLegalSetDigest, parseSemanticValidationCase, parseSemanticValidationOperationInput, mirrorSemanticFen, mirrorSemanticUci,
-  type SemanticCompleteAlternativesInput, type SemanticSubjectOutcomesInput, type SemanticValidationCaseFor, type SemanticValidationCase } from "./semantic-validation.js";
+  semanticFactConstraintSha256, type SemanticCompleteAlternativesInput, type SemanticSubjectOutcomesInput, type SemanticValidationCaseFor, type SemanticValidationCase } from "./semantic-validation.js";
 import cases from "./semantic-validation-cases.json" with { type: "json" };
 import { recordedSemanticWindowSource } from "./recorded-semantic-window.js";
 import { RECORDED_SEQUENCE_POSITIVES } from "./testing/recorded-sequence-fixtures.js";
@@ -37,6 +38,56 @@ function input(family: SubjectOutcomeFamily, fen: string, move: string): Semanti
 const operation = SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.subject_outcomes"];
 
 describe("actual complete family source operation", () => {
+  it("retains the complete selector's exact condition event identities through the actual adapter", async () => {
+    const fen = "4k3/8/4K3/8/8/8/PPP5/8 w - - 0 1", moveUci = "a2a3";
+    const direct = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 3 }, { receipt: owner(fen), moveUci });
+    expect(direct.coverage.unavailable).toEqual([]);
+    const expected = direct.selected.filter(fact => fact.kind === "counterfactual_absence").map(fact => fact.event);
+    expect(expected.length).toBeGreaterThan(0);
+    const result = await SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.complete_alternatives"].invoke(input("piece_count", fen, moveUci).population);
+    expect(result.kind).toBe("completed");
+    if (result.kind !== "completed") throw Error(result.reason);
+    expect(result.abstentions).toEqual([]);
+    const events = result.observations.map(value => {
+      if (value.kind !== "event") throw Error("Complete condition adapter must retain events");
+      return value.item;
+    });
+    expect(events.map(value => value.id)).toEqual(expected.map(value => value.id));
+    for (const observation of result.observations) {
+      expect(observation.kind).toBe("event");
+      assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, observation.item);
+    }
+  });
+
+  it("keeps a partial selector result but makes the actual validation adapter abstain instead of claiming omission", async () => {
+    const fen = "k7/8/8/8/8/1p6/PP6/R6K w - - 0 1", moveUci = "a2b3";
+    const population = input("piece_count", fen, moveUci).population;
+    const direct = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 3 }, { receipt: owner(fen), moveUci });
+    expect(direct.selected.length).toBeGreaterThan(0);
+    expect(direct.coverage.unavailable).toHaveLength(1);
+    const adapter = SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.complete_alternatives"];
+    expect(await adapter.invoke(population)).toEqual({ kind: "unavailable", reason: "complete_alternative_population_unavailable" });
+    const base = cases.cases.find(row => row.authority.kind === "cited_proposition")!;
+    const omitted = parseSemanticValidationCase({ ...base, id: "availability.partial.omits", arm: "semantic_negative", operation: adapter.ref,
+      subject: { kind: "event", projection: { id: "derived.semantic_avoidance.piece_count", version: 2 } }, input: population, expectation: { kind: "omits" } });
+    const abstained = parseSemanticValidationCase({ ...omitted, id: "availability.partial.abstains",
+      expectation: { kind: "abstains", reason: "complete_alternative_population_unavailable" } });
+    // This runner-boundary control supplies an exact test proposition, not a qualification source.
+    const resolvers = { ...SEMANTIC_VALIDATION_RESOLVERS, resolveProposition: (value: SemanticValidationCase) => ({
+      subject: value.subject, case: { id: value.id, version: 1 as const }, factConstraint: [],
+      factConstraintSha256: semanticFactConstraintSha256([]), expectation: value.expectation,
+    }) };
+    const registry = new Map([omitted, abstained].map(value => [value.id, value]));
+    const negative = await executeSemanticValidationCase(omitted, resolvers, registry);
+    expect(negative.invocations).toBe(1);
+    expect(negative.status).toBe("failed");
+    expect(negative.failure?.code).toBe("SEMANTIC_VALIDATION_EXPECTATION_UNMET");
+    const positive = await executeSemanticValidationCase(abstained, resolvers, registry);
+    expect(positive.invocations).toBe(1);
+    expect(positive.status, positive.failure?.message).toBe("passed");
+    expect((await operation.invoke({ kind: "subject_outcomes", family: "piece_count", population })).kind).toBe("completed");
+  });
+
   it.each(SUBJECT_OUTCOME_FAMILIES)("%s executes the full original population, not selected top-two hints", async family => {
     const [fen, move] = fixtures[family], value = input(family, fen, move), result = await operation.invoke(value);
     expect(result.kind).toBe("completed"); if (result.kind !== "completed") throw Error(result.reason);
@@ -130,7 +181,7 @@ describe("validation consumption is distinct from selection", () => {
     expect(SEMANTIC_SELECTION_PROJECTION_REFS).not.toContainEqual(event.projection);
     expect(() => assertSemanticTargetValueAuthority({ kind: "event", item: event })).not.toThrow();
     expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_validation", version: 1 }, [event.evidence]).items[0]).toBe(event.evidence);
-    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_selection", version: 2 }, [event.evidence]).items).toEqual([]);
+    expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_selection", version: 3 }, [event.evidence]).items).toEqual([]);
     expect(() => assertSemanticTargetValueAuthority({ kind: "event", item: { ...event } })).toThrow();
     expect(() => assertSemanticTargetValueAuthority({ kind: "event", item: { ...event, evidence: { ...event.evidence } } })).toThrow();
   });

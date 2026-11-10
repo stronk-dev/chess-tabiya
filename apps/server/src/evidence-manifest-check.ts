@@ -37,7 +37,7 @@ if (EVIDENCE_MANIFEST.producers.map((producer) => producer.id).sort().join("|") 
 const arrows = EVIDENCE_MANIFEST.consumers.find((consumer) => consumer.id === "assistance.arrows");
 if (arrows?.disposition?.kind !== "experimental" || arrows.accepts.length !== 0) throw new TypeError("assistance.arrows lost its explicit producerless experimental disposition");
 const exactRef = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
-const semanticResearch = EVIDENCE_MANIFEST.consumers.find(c => c.id === "research.semantic_selection" && c.version === 2);
+const semanticResearch = EVIDENCE_MANIFEST.consumers.find(c => c.id === "research.semantic_selection" && c.version === 3);
 const semanticValidation = EVIDENCE_MANIFEST.consumers.find(c => c.id === "research.semantic_validation" && c.version === 1);
 const semanticIds = semanticResearch?.accepts.map(exactRef).sort() ?? [];
 const declaredSemanticIds = SEMANTIC_SELECTION_PROJECTION_REFS.map(exactRef).sort();

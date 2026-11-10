@@ -47,6 +47,7 @@ import { MODULE_IDS, type ModuleId } from "./module-contract.js";
 import { moduleConsumerCeilings } from "./module-policy.js";
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
 import { SEMANTIC_PLAYED_RANKING_MODES } from "./semantic-played-types.js";
+import type { SemanticSelectionProjection } from "./semantic-source-availability-types.js";
 import type { InspectorDetailKind } from "./inspector-source-topics.js";
 
 const ref =(id: string): VersionedEvidenceId => Object.freeze({ id, version: 1 });
@@ -306,10 +307,10 @@ export const SEMANTIC_EVENT_PROJECTION_REFS: readonly VersionedEvidenceId[] = Ob
 ]);
 
 /** The exact source image of the current research selector; validation has its own consumer. */
-export const SEMANTIC_SELECTION_PROJECTION_REFS: readonly VersionedEvidenceId[] = Object.freeze([
+export const SEMANTIC_SELECTION_PROJECTION_REFS = Object.freeze([
   ...Object.keys(SEMANTIC_PLAYED_RANKING_MODES).map(route => { const [id, version] = route.split("@"); return Object.freeze({ id: id!, version: Number(version) }); }),
   ...SUBJECT_OUTCOME_FAMILIES.map(family => ref2(`derived.semantic_avoidance.${family}`)),
-]);
+]) as readonly SemanticSelectionProjection[];
 
 /**
  * Explicitly lossy logical-family view (unique base ids). Analysis/display only: coexisting versions
@@ -1992,7 +1993,7 @@ const CONSUMER_SPECS: readonly ConsumerSpec[] = [
   { id: "guidance.voice_compare", implementation: "comparisonNarrative", projections: ["run.record.fork", "run.record.move", "run.record.checkpoint_hit", "run.record.objective_transition", "run.record.consequence", ...PIVOTAL_MARKER_IDS, "derived.compare.structure_delta", "derived.compare.eval_delta"], timing: ["review"], forms: ["sentence"], answerContent: ["fact", "evaluation", "move"], providerOff: "available" },
   { id: "guidance.voice_story", implementation: "storyDeclaredEvidence", projections: [...POSITION_GUIDANCE_IDS, "theory.shapes.firing", "run.record.consequence", "run.record.imported_result", ref2("derived.review.eval_delta"), ref2("derived.review.mate_transition"), "derived.story.last_level", ref2("derived.story.title")], timing: ["review"], forms: ["sentence", "audio"], answerContent: ["fact", "pattern", "theory", "principle", "plan", "evaluation"], providerOff: "available" },
   { id: "assistance.arrows", implementation: "experimentalProducerlessArrows", disposition: { kind: "experimental", reason: "D546: migrated preference has no producer and no renderer; F5 or an owner ruling decides activation or retirement." } },
-  { id: "research.semantic_selection", version: 2, implementation: "selectLocalSemanticEvidence", projections: SEMANTIC_SELECTION_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
+  { id: "research.semantic_selection", version: 3, implementation: "selectLocalSemanticEvidence", projections: SEMANTIC_SELECTION_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: 4_000 }, budget: { maxFacts: 2, maxForms: 1 } },
   { id: "research.semantic_validation", implementation: "assertSemanticTargetValueAuthority", projections: SEMANTIC_EVENT_PROJECTION_REFS, timing: ["analysis"], roles: ["operator"], forms: ["machine_condition"], answerContent: ["fact", "threat"], latency: { mode: "sync", maxMs: null }, budget: { maxFacts: null, maxForms: null } },
   ...EVIDENCE_MODULE_IDS.map(moduleConsumerSpec),
 ];
@@ -2103,7 +2104,7 @@ export const EVIDENCE_REASON_DECLARATIONS: readonly EvidenceReasonDeclaration[] 
 
 const selectionSourceKeys = new Set(SEMANTIC_SELECTION_PROJECTION_REFS.map(refKey));
 export const EVIDENCE_ELIGIBILITY_DECLARATIONS: readonly EvidenceEligibilityDeclaration[] = Object.freeze(SEMANTIC_EVENT_DECLARATIONS.flatMap(event => [
-  ref("research.semantic_validation"), ...(selectionSourceKeys.has(refKey(event.projection)) ? [ref2("research.semantic_selection")] : []),
+  ref("research.semantic_validation"), ...(selectionSourceKeys.has(refKey(event.projection)) ? [{ id: "research.semantic_selection", version: 3 }] : []),
 ].map(consumer => Object.freeze({
   event: event.projection, consumer, disposition: "eligible" as const, reason: ref("eligible_validated_literal"),
   allowedSigns: event.allowedSigns, requiredOperands: event.requiredOperands, valenceAuthority: Object.freeze([]),
@@ -2112,7 +2113,7 @@ export const EVIDENCE_ELIGIBILITY_DECLARATIONS: readonly EvidenceEligibilityDecl
 
 export const EVIDENCE_SELECTION_POLICIES: readonly EvidenceSelectionPolicyDeclaration[] = Object.freeze([
   Object.freeze({
-    id: "research.r2_candidate", version: 2, consumer: ref2("research.semantic_selection"), disposition: "experimental",
+    id: "research.r2_candidate", version: 3, consumer: Object.freeze({ id: "research.semantic_selection", version: 3 }), disposition: "experimental",
     minimumAlternatives: 8, maximumSameFamilyShare: 0.20, minimumAlternativeOnlyShare: 0.30, maxFacts: 2,
     criticalEvents: Object.freeze(["checkmate", "promotion", "castled", "last_of_role"].map((family) => ref(`rules.transition.event.${family}`))),
   }),

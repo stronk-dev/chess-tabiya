@@ -2683,3 +2683,44 @@ Source availability expands without losing the genuine required-risk failures. R
 stays17 of89, with1470/1470cases. Pre-availability revision9 cost is not a new expanded-work budget.
 Next: implement accepted selector/consumer3 coverage and conservative validation adaptation before
 coordinated revision10 persistence. D4200 and every wider consumer/content/release hold remain open.
+
+
+### Selector3 source-local coverage checkpoint — 2026-11-10
+
+D4200's selector/consumer3 implementation now retains exact55-source coverage for complete,
+partial, below-threshold and zero-budget results. Every legal alternative remains inN; only
+complete exact refs supply rarity/critical facts. All13 condition factories run before exits and
+their kinds must match original source availability. The new closed data-only types and owner
+reader reuse original sealed collector outcomes and root/child risk, reject unknown/contradictory/
+unaccounted causes and retain canonical member ordering. No new registry or source issuer exists.
+
+Six new behavior controls first fail against selector2. Independent review returns two concrete
+holes: a changing getter can mix two genuine receipts, and key-set admission is not execution
+preflight. Actual regression run fails3/97. Strict own-data capture, the existing complete V2
+consumer compiler and local preflight before WIDE repair both; final158/three pass8.62s, including
+invalid/missing/duplicate binding zero-work, stale2 zero-acquisition, genuine critical-source
+exclusion and original extra-outcome refusal. Actual complete/partial adapter tests retain
+nonempty original event IDs and distinguish an unavailable operation from an omission in the real
+runner. Independent bounded code acceptance follows; the remaining README wording return is fixed.
+
+Broad2948/eighteen pass38.78s; full types/Svelte0errors0warnings and scheduling8controls/571files/
+seven serial owners pass. Fresh canonical regeneration passes1470/1470,89subjects/17qualified,
+63population/eight external. No qualification is inherited or promoted. D4208 retires the obsolete
+R3 live writer, labels its unchanged August replay/census historical and pins current-input refusal;
+its explicitly scoped boundary10/two pass without rewriting saved data. Earlier optional v1
+research remains historical and cannot consume current selections through a compatibility alias.
+
+Governance/build/current source checks and the complete new software run remain before the next
+production item. Commit this verified selector slice, then finish that normal complete run. Next
+implement durable revision10: private summaries/fold/evaluations, seven-family atomic publication,
+exact projected reads and filters, actual9 startup/worker/reopen/rollback/compare/rebuild/account,
+and new expanded-work cost/lease/drain. Native/history remain conservative until coverage is durable.
+D4200 remains doing; seven qualifications, ordinary26, reverse consumers and D3928 remain separate.
+
+
+Final selector checkpoint: normal roadmap-receipt verify-governance build semantic-evidence-check
+exits0; actual compiled smoke reports policy3, exact55 coverage and full19 alternatives with no
+gaps on its initial-position fixture. Independent code review accepts; canonical1470/1470,
+2948/eighteen and full types/scheduling stand. Commit, then run the complete normal software gate
+on these committed bytes before the next production item. The earlier e4672b36 certificate is
+explicitly the prior source-calculator phase, not this selector phase.

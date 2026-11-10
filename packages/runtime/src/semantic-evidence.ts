@@ -8,7 +8,10 @@ import { canonicalFen, positionFromFen } from "./position-cache.js";
 import { exactLegalMoves, exactMoveDestination, exactMoveIdentity } from "./legal-moves.js";
 import { castlingRightsLost, type CastlingRightLostEvent } from "./castling.js";
 import { captureClassEvent, legalCaptureMovesTo, legalExchangeForMove, type CaptureClassEvent, type LegalExchangeResult } from "./exchange.js";
-import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES } from "./evidence-catalog.js";
+import { PRIMARY_EVIDENCE_MANIFEST, STRUCTURAL_EVENT_FAMILIES, SEMANTIC_SELECTION_PROJECTION_REFS } from "./evidence-catalog.js";
+import { readCandidateUnavailableSources } from "./semantic-source-availability.js";
+import type { SemanticSelectionProjection, UnavailableSemanticSource } from "./semantic-source-availability-types.js";
+import { compileEvidenceConsumerExecutionV2 } from "./evidence-binding-execution.js";
 import {
   EvidenceManifestError,
   assertDeclaredEvidence,
@@ -47,7 +50,6 @@ import {
   candidateAlternatives,
   candidatePlayedRow,
   compileCandidatePopulation,
-  readCandidateFoundationSources,
   type CandidatePopulationReceipt,
   type CandidateWideScope,
 } from "./candidate-population.js";
@@ -97,7 +99,11 @@ export interface EvidenceSelectionResult {
   readonly [SELECTED_EVIDENCE]: true;
   readonly policy: VersionedEvidenceId;
   readonly consumer: VersionedEvidenceId;
-  readonly population: { readonly legalAlternatives: number; readonly evaluatedAlternatives: number };
+  readonly population: { readonly legalAlternatives: number };
+  readonly coverage: {
+    readonly sources: readonly SemanticSelectionProjection[];
+    readonly unavailable: readonly UnavailableSemanticSource[];
+  };
   readonly selected: readonly SelectedEvidenceFact[];
   readonly rejected: readonly {
     readonly candidate: { readonly kind: "played_event" | "counterfactual_absence"; readonly id: string };
@@ -1459,23 +1465,55 @@ function policyFor(manifest: CompiledEvidenceManifest, policy: VersionedEvidence
   return value;
 }
 
-export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, policyRef: VersionedEvidenceId, input: SemanticSelectionInput): EvidenceSelectionResult {
+/** Capture only plain own-data fields. In particular, coverage and facts cannot read different
+ * genuine receipts from an accessor or pick different played moves during the same call. */
+function selectionArguments<K extends string>(value: unknown, keys: readonly K[]): Readonly<Record<K, unknown>> {
+  if (typeof value !== "object" || value === null || Object.getPrototypeOf(value) !== Object.prototype
+    || Object.getOwnPropertySymbols(value).length !== 0) throw new TypeError("Selection requires a plain own-data input");
+  const fields = Object.getOwnPropertyDescriptors(value);
+  if (Object.keys(fields).length !== keys.length || keys.some(key => fields[key] === undefined || !("value" in fields[key]!) || !fields[key]!.enumerable)) throw new TypeError("Selection requires exact own-data input fields");
+  return Object.freeze(Object.fromEntries(keys.map(key => [key, fields[key]!.value]))) as Readonly<Record<K, unknown>>;
+}
+
+function selectionPolicy(manifest: CompiledEvidenceManifest, policyRef: VersionedEvidenceId): EvidenceSelectionPolicyDeclaration {
   const policy = policyFor(manifest, policyRef), consumer = policy.consumer;
-  if (consumer.id !== "research.semantic_selection" || consumer.version !== 2) throw new TypeError("Semantic selection requires its exact current subject-owned consumer");
+  if (consumer.id !== "research.semantic_selection" || consumer.version !== 3) throw new TypeError("Semantic selection requires its exact current subject-owned consumer");
+  const sourceKeys = new Set(SEMANTIC_SELECTION_PROJECTION_REFS.map(refKey));
+  const declaration = manifest.consumers.find(value => refKey(value) === refKey(consumer));
+  if (declaration === undefined || declaration.accepts.length !== sourceKeys.size || new Set(declaration.accepts.map(refKey)).size !== sourceKeys.size
+    || declaration.accepts.some(value => !sourceKeys.has(refKey(value)))) genericBypass("selection requires its exact complete consumer/source image");
+  compileEvidenceConsumerExecutionV2(manifest, consumer);
+  return policy;
+}
+
+export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, policyRef: VersionedEvidenceId, input: SemanticSelectionInput): EvidenceSelectionResult {
+  const captured = selectionArguments(input, ["receipt", "moveUci"]);
+  if (typeof captured.moveUci !== "string") throw new TypeError("Selection requires an exact played move");
+  const receipt = captured.receipt as CandidatePopulationReceipt<CandidateWideScope>, moveUci = captured.moveUci;
+  const policy = selectionPolicy(manifest, policyRef), consumer = policy.consumer;
   // This authenticates WIDE scope before any family evaluation. Narrow/copy receipts cannot
   // claim missing quiet state, and no alternate legal enumerator can shrink the population.
-  readCandidateFoundationSources(input.receipt);
-  const packet = input.receipt.packet, playedRow = candidatePlayedRow(input.receipt, input.moveUci);
-  const alternativeRows = candidateAlternatives(input.receipt, input.moveUci);
+  const coverage: EvidenceSelectionResult["coverage"] = {
+    sources: SEMANTIC_SELECTION_PROJECTION_REFS, unavailable: readCandidateUnavailableSources(receipt),
+  };
+  const unavailable = new Set(coverage.unavailable.map(value => refKey(value.projection)));
+  const packet = receipt.packet, playedRow = candidatePlayedRow(receipt, moveUci);
+  const alternativeRows = candidateAlternatives(receipt, moveUci);
   for (const row of [playedRow, ...alternativeRows]) for (const event of row.events) {
     if (event.anchor.beforeFen !== packet.beforeFen || event.anchor.moveUci !== row.moveUci || event.anchor.afterFen !== row.afterFen) genericBypass("candidate event differs from its original row edge");
   }
   const alternatives = alternativeRows.length;
-  const evaluated = alternativeRows.filter(row => row.abstentions.length === 0);
-  if (playedRow.abstentions.length > 0 || evaluated.length !== alternatives) return selectedResult(manifest, policy, alternatives, evaluated.length, [], [], ref("counterfactual_population_incomplete"));
-  const played = playedRow.events.filter(event => eligible(manifest, event, consumer));
+  // Evaluate all thirteen families even below the rarity threshold or with a zero fact budget.
+  // Complete-source coverage is a property of this original decision, not of selected facts.
+  const conditions = SUBJECT_OUTCOME_FAMILIES.map(family => {
+    const result = subjectOutcomeSemanticEvents(manifest, family, receipt, playedRow.moveUci);
+    if ((result.kind === "unavailable") !== unavailable.has(`derived.semantic_avoidance.${family}@2`)) throw new TypeError("Condition factory contradicts its original source availability");
+    return result;
+  });
+  const completeEvent = (event: SemanticEvidenceEvent) => !unavailable.has(refKey(event.projection)) && eligible(manifest, event, consumer);
+  const played = playedRow.events.filter(completeEvent);
   const occurrenceMoves = new Map<string, Set<string>>();
-  for (const row of evaluated) for (const event of row.events.filter(value => eligible(manifest, value, consumer))) {
+  for (const row of alternativeRows) for (const event of row.events.filter(completeEvent)) {
     const occurrence = semanticPlayedOccurrenceKey(event), moves = occurrenceMoves.get(occurrence) ?? new Set<string>();
     moves.add(row.moveUci); occurrenceMoves.set(occurrence, moves);
   }
@@ -1490,9 +1528,8 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
     else candidates.push({ fact: { kind: "played_event", event, sameFamilyShare: share }, support: 1 - share, critical: isCritical, operandDigest: evidenceDigest(event.operands),
       subjectOrdinal: semanticPlayedSubjectOrdinal(event) });
   }
-  if (policy.minimumAlternativeOnlyShare !== null && alternatives >= policy.minimumAlternatives) for (const family of SUBJECT_OUTCOME_FAMILIES) {
-    const result = subjectOutcomeSemanticEvents(manifest, family, input.receipt, playedRow.moveUci);
-    if (result.kind === "unavailable") return selectedResult(manifest, policy, alternatives, evaluated.length, [], [], ref("counterfactual_population_incomplete"));
+  if (policy.minimumAlternativeOnlyShare !== null && alternatives >= policy.minimumAlternatives) for (const result of conditions) {
+    if (result.kind === "unavailable") continue;
     for (const [ordinal, event] of result.events.entries()) {
       const share = event.operands.alternativesWithOutcome / alternatives;
       if (share >= policy.minimumAlternativeOnlyShare && eligible(manifest, event, consumer)) candidates.push({
@@ -1508,11 +1545,11 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
     || (refKey(left.fact.event.projection) === refKey(right.fact.event.projection) && left.subjectOrdinal !== null && right.subjectOrdinal !== null ? left.subjectOrdinal - right.subjectOrdinal : 0)
     || refKey(left.fact.event.projection).localeCompare(refKey(right.fact.event.projection))
     || left.operandDigest.localeCompare(right.operandDigest) || left.fact.event.id.localeCompare(right.fact.event.id));
-  if (policy.maxFacts === 0) return selectedResult(manifest, policy, alternatives, evaluated.length, [], rejected, ref("budget_zero"));
+  if (policy.maxFacts === 0) return selectedResult(manifest, policy, alternatives, coverage, [], rejected, ref("budget_zero"));
   const selected = candidates.slice(0, policy.maxFacts).map(candidate => candidate.fact);
   for (const candidate of candidates.slice(policy.maxFacts)) rejected.push({ candidate: { kind: candidate.fact.kind, id: candidate.fact.event.id }, reason: ref(candidate.critical ? "critical_budget_exhausted" : "nothing_distinctive") });
-  const emptyReason = selected.length > 0 ? undefined : played.length === 0 && candidates.length === 0 ? ref("no_eligible_events") : alternatives < policy.minimumAlternatives ? ref("insufficient_alternatives") : ref("nothing_distinctive");
-  return selectedResult(manifest, policy, alternatives, evaluated.length, selected, rejected, emptyReason);
+  const emptyReason = selected.length > 0 ? undefined : coverage.unavailable.length > 0 ? ref("counterfactual_population_incomplete") : played.length === 0 && candidates.length === 0 ? ref("no_eligible_events") : alternatives < policy.minimumAlternatives ? ref("insufficient_alternatives") : ref("nothing_distinctive");
+  return selectedResult(manifest, policy, alternatives, coverage, selected, rejected, emptyReason);
 }
 
 /**
@@ -1521,16 +1558,20 @@ export function selectSemanticEvidence(manifest: CompiledEvidenceManifest, polic
  * readers below never normalise.
  */
 export function selectLocalSemanticEvidence(policyRef: VersionedEvidenceId, input: { readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }): EvidenceSelectionResult {
-  const compiled = compileCandidatePopulation({ beforeFen: input.beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+  const captured = selectionArguments(input, ["beforeFen", "moveUci", "afterFen"]);
+  if (typeof captured.beforeFen !== "string" || typeof captured.moveUci !== "string" || typeof captured.afterFen !== "string") throw new TypeError("Local selection requires exact edge strings");
+  const { beforeFen, moveUci: requestedMove, afterFen } = captured;
+  const policy = selectionPolicy(PRIMARY_EVIDENCE_MANIFEST, policyRef);
+  const compiled = compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
   if (compiled.kind !== "ready") throw new TypeError(`Candidate population did not compile: ${compiled.error.code}`);
-  const moveUci = canonicalMoveUci(compiled.receipt.packet.beforeFen, input.moveUci);
+  const moveUci = canonicalMoveUci(compiled.receipt.packet.beforeFen, requestedMove);
   const row = candidatePlayedRow(compiled.receipt, moveUci);
-  if (row.afterFen !== canonicalFen(positionFromFen(input.afterFen))) throw new TypeError(`Semantic selection after FEN does not match ${moveUci}`);
-  return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, policyRef, { receipt: compiled.receipt, moveUci });
+  if (row.afterFen !== canonicalFen(positionFromFen(afterFen))) throw new TypeError(`Semantic selection after FEN does not match ${moveUci}`);
+  return selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: policy.id, version: policy.version }, { receipt: compiled.receipt, moveUci });
 }
 
-function selectedResult(manifest: CompiledEvidenceManifest, policy: EvidenceSelectionPolicyDeclaration, legalAlternatives: number, evaluatedAlternatives: number, selected: readonly SelectedEvidenceFact[], rejected: readonly EvidenceSelectionResult["rejected"][number][], emptyReason?: VersionedEvidenceId): EvidenceSelectionResult {
-  const result = immutable({ [SELECTED_EVIDENCE]: true as const, policy: { id: policy.id, version: policy.version }, consumer: { ...policy.consumer }, population: { legalAlternatives, evaluatedAlternatives }, selected: [...selected], rejected: [...rejected], ...(emptyReason === undefined ? {} : { emptyReason }) });
+function selectedResult(manifest: CompiledEvidenceManifest, policy: EvidenceSelectionPolicyDeclaration, legalAlternatives: number, coverage: EvidenceSelectionResult["coverage"], selected: readonly SelectedEvidenceFact[], rejected: readonly EvidenceSelectionResult["rejected"][number][], emptyReason?: VersionedEvidenceId): EvidenceSelectionResult {
+  const result = immutable({ [SELECTED_EVIDENCE]: true as const, policy: { id: policy.id, version: policy.version }, consumer: { ...policy.consumer }, population: { legalAlternatives }, coverage, selected: [...selected], rejected: [...rejected], ...(emptyReason === undefined ? {} : { emptyReason }) });
   SELECTED_EVIDENCE_VALUES.add(result);
   assertEvidenceSelectionResult(manifest, result);
   return result;
@@ -1541,5 +1582,6 @@ export function assertEvidenceSelectionResult(manifest: CompiledEvidenceManifest
   const result = value as EvidenceSelectionResult;
   const policy = policyFor(manifest, result.policy);
   if (refKey(policy.consumer) !== refKey(result.consumer)) genericBypass("selection result consumer differs from its policy");
-  for (const fact of result.selected) if (!eligible(manifest, fact.event, result.consumer)) genericBypass("selection result contains an ineligible or unsealed event");
+  const unavailable = new Set(result.coverage.unavailable.map(value => refKey(value.projection)));
+  for (const fact of result.selected) if (unavailable.has(refKey(fact.event.projection)) || !eligible(manifest, fact.event, result.consumer)) genericBypass("selection result contains an unavailable, ineligible or unsealed event");
 }

@@ -724,6 +724,7 @@ export {
   type OpenFileOccupancyOperands,
   type TradeCompletedEventOperands,
 } from "./semantic-evidence.js";
+export type { SemanticSelectionProjection, UnavailableSemanticSource, SourceAvailabilityMember } from "./semantic-source-availability-types.js";
 export {
   RecordedEdgeError,
   assertRecordedEdgeEvidence,

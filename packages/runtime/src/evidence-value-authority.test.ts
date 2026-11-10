@@ -711,7 +711,7 @@ describe("value authority: negative authority cases", () => {
       expect(() => invoke(route, { fen: mutated })).toThrow(/refused its authority inputs/u);
       expect(() => invoke(route, mutated)).toThrow(/refused its authority inputs/u);
       const forged = identitySealedEvidenceWithoutValueReceipt(genuine.producer, genuine.projection, mutated);
-      expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_selection", version: 2 }, [forged])).toThrow(/value-authority receipt/u);
+      expect(() => evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "research.semantic_selection", version: 3 }, [forged])).toThrow(/value-authority receipt/u);
     }
     const contacts = invoke("rules.pawn.reading.contacts@1", { fen: "8/1p6/8/8/8/8/P7/4K2k w - - 0 1" }) as DeclaredEvidence<Record<string, unknown>>;
     const inverted = { ...contacts.payload, passed: [] };

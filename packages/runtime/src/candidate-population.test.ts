@@ -341,6 +341,25 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     }
   });
 
+  it("refuses an extra sealed but unaccounted outcome at both original source and selector boundaries", () => {
+    const original = semanticCollectors.localSemanticCollectorOutcomes;
+    const spy = vi.spyOn(semanticCollectors, "localSemanticCollectorOutcomes").mockImplementation(closure => {
+      const outcomes = original(closure);
+      return outcomes.length === 0 ? outcomes : [...outcomes, { ...outcomes[0]!, projection: "rules.unknown.event@1" } as unknown as typeof outcomes[number]];
+    });
+    let receipt: CandidatePopulationReceipt<CandidateWideScope>;
+    try {
+      const result = compileCandidatePopulation({ beforeFen: CHECK_EVASION, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
+      if (result.kind !== "ready") throw Error("Genuine faulty-collector fixture required");
+      receipt = result.receipt;
+    }
+    finally { spy.mockRestore(); }
+    // The packet's historical mint checks published failures; the new availability reader must
+    // additionally refuse any extra outcome before minting a condition or covered selection.
+    expect(() => invokeEvidenceValueRoute("derived.semantic_avoidance.piece_count@2", { receipt, moveUci: "e1e2" })).toThrow(/Unaccounted/);
+    expect(() => selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 3), { receipt, moveUci: "e1e2" })).toThrow(/Unaccounted/);
+  });
+
   it("criterion 9: the closure is code-derived; a census only measures prevalence", () => {
     const { groups, abstentions } = deriveCandidatePacketProjectionGroups();
     expect(checkCandidatePacketProjectionGroups(groups, CANDIDATE_COLLECTOR_PROJECTION_KEYS)).toEqual([]);
@@ -454,23 +473,26 @@ describe("shared candidate evidence packet (rfc/shared-candidate-evidence-packet
     expect(() => deriveCandidatePacketProjectionGroups({ ...manifest, projections: manifest.projections.map(value => value === current ? { ...value, role: "event" as const } : value) })).toThrow(/exactly one compiled local reading/u);
   });
 
-  it("criterion 10: the two enumerators are one, and an unevaluated population reports zero evaluated alternatives", () => {
+  it("criterion 10: the single legal enumerator stays complete alongside source-local availability", () => {
     const afterFen = "r2q1rk1/pp2bppp/2n1bn2/2Pp4/8/2N1PN2/PP2BPPP/R1BQ1RK1 b - - 0 10";
-    const shipped = selectLocalSemanticEvidence(ref("research.r2_candidate", 2), { beforeFen: MIDDLEGAME, moveUci: "d4c5", afterFen });
+    const shipped = selectLocalSemanticEvidence(ref("research.r2_candidate", 3), { beforeFen: MIDDLEGAME, moveUci: "d4c5", afterFen });
     const wide = compiled(MIDDLEGAME, CANDIDATE_WIDE_SCOPE);
     const projected = projectCandidatePopulationReceipt(wide, CANDIDATE_WIDE_SCOPE);
     if (projected.kind !== "ready") throw new Error("projection failed");
-    const full = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 2), { receipt: projected.receipt, moveUci: "d4c5" });
+    const full = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 3), { receipt: projected.receipt, moveUci: "d4c5" });
     const families = (result: typeof shipped) => result.selected.map((item) => `${item.event.projection.id}:${item.event.sign}`);
     expect(families(shipped)).toEqual(families(full));
     expect(families(shipped)).not.toContain("rules.structural.event.backward_pawn:gained");
     // The narrow eight-family closure selected these before the repair (RFC §1.5, measured at HEAD).
     expect(families(shipped)).not.toEqual(["rules.structural.event.backward_pawn:gained", "rules.structural.event.half_open_file:lost"]);
-    expect(shipped.population).toEqual({ legalAlternatives: 33, evaluatedAlternatives: 33 });
+    expect(shipped.population).toEqual({ legalAlternatives: 33 });
+    expect(shipped.coverage.unavailable).toEqual([]);
     const check = compiled(CHECK_EVASION, CANDIDATE_WIDE_SCOPE);
-    const unevaluated = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 2), { receipt: check, moveUci: "e1e2" });
-    expect(unevaluated.population).toEqual({ legalAlternatives: check.packet.candidates.length - 1, evaluatedAlternatives: 0 });
-    expect(unevaluated.emptyReason?.id).toBe("counterfactual_population_incomplete");
+    const unevaluated = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 3), { receipt: check, moveUci: "e1e2" });
+    expect(unevaluated.population).toEqual({ legalAlternatives: check.packet.candidates.length - 1 });
+    expect(unevaluated.coverage.unavailable.map(value => value.projection.id)).toEqual(["derived.semantic_avoidance.loose_piece", "rules.tactic.event.loose_piece"]);
+    expect(unevaluated.emptyReason).toBeUndefined();
+    expect(unevaluated.selected.some(fact => fact.event.projection.id === "rules.transition.event.last_of_role")).toBe(true);
   });
 
   it("criteria 11/21b: the packet key is facts only, and every fact term moves it", () => {

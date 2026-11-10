@@ -9,6 +9,7 @@ import type { DeclaredEvidence } from "./evidence-contract.js";
 import { originalPiecePositions } from "./foundation-piece-lineage.js";
 import { physicalRayDirectionAllowed } from "./foundation-slider-sources.js";
 import { positionFromFen } from "./position-cache.js";
+import { readCandidateUnavailableSources } from "./semantic-source-availability.js";
 import { BOOLEAN_SUBJECT_RELATIONS, INTEGER_SUBJECT_RELATIONS, SUBJECT_OUTCOME_FAMILIES, type ParametersByFamily,
   type RelationByFamily, type StateByFamily, type SubjectByFamily, type SubjectOutcomeFamily,
   type SubjectOutcomePayload, type SubjectOutcomePopulation } from "./semantic-subject-types.js";
@@ -166,13 +167,9 @@ export function computeSubjectOutcomes<F extends SubjectOutcomeFamily>(family: F
   if (playedIndex < 0) throw new TypeError("Subject outcomes lost the original played row");
   const positions = [frame.root, ...frame.candidates.map(row => row.position)];
   const vectors = positions.map(position => familyInputs(family, position));
-  // The original receipt has already joined each published abstention to its sealed outcome.
-  // These two legacy event failures do not erase independent total-source populations. Keep
-  // this closure exact: a future collector/reason must declare its dependencies before use.
-  for (const { row } of frame.candidates) for (const failure of row.abstentions) {
-    if (failure.reason !== "invalid_turn_clone" || (failure.projection !== "rules.tactic.event.loose_piece@1"
-      && failure.projection !== "derived.tactic.defender_exposure@2")) throw new TypeError("Unknown candidate source availability dependency");
-  }
+  // Authenticate the exact failure image as well as the required total vectors. Known legacy
+  // event failures do not erase independent totals; unaccounted or unknown outcomes refuse.
+  readCandidateUnavailableSources(receipt);
   if (vectors.some(vector => vector === null)) {
     return Object.freeze({ kind: "unavailable", reason: "counterfactual_population_incomplete" });
   }

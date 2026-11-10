@@ -11537,3 +11537,24 @@ The reviewer performs no edits/tests/Git and attributes focused1096/eight and132
 root agent. Root subsequently verifies full types, disposable probe2/2, actual regenerated
 1470/1470cases/89subjects/17qualified and normal governance/build. Selector3, native incidence,
 whole54 history coverage, revision10 lifecycle and whole D4200 remain separate obligations.
+
+
+### 2026-11-10 — D4200 selector3 implementation return and bounded acceptance
+
+Independent source review returns a concrete context bug and a preflight gap. Repeated receipt
+reads can combine coverage from original discovered-check populationA with facts from original
+mirrored populationB; exact source-key equality cannot detect wrong legal members. The key-set
+check also admits unusable binding execution metadata and local stale2 still acquires WIDE.
+Root reproduces3/97 failures, then captures exact own-data arguments once, uses the existing
+complete V2 consumer compiler and preflights before local acquisition. All later work uses the
+captured receipt/move and actual resolved policy. Zero-getter/zero-source controls pass.
+
+The reviewer accepts bounded source/consumer/context, completeness/threshold/budget and validation
+behavior after readback. Actual positive+unknown results, critical unknown-ref suppression,
+extra sealed unaccounted failures, complete adapter IDs and partial actual-runner omissionFAIL/
+abstentionPASS remain explicit. The R3 writer correctly refuses genuine complete/partial current
+selections; its frozen replay is historical. A final README opening falsely said current/shipped;
+that wording is corrected. The reviewer performs no edits/tests/Git and attributes all executed
+counts to root. Current code checks pass2948/eighteen, types/scheduling and fresh1470canonical
+cases/89subjects/17qualified. Complete new gate and all durable revision10 work remain; this is
+not whole D4200, a new qualification or whole-foundation acceptance.

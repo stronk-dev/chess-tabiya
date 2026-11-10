@@ -7,7 +7,7 @@ consumer adoption, learner workflows, content and release proof remain open.
 
 | Checkpoint | Current evidence |
 |---|---|
-| Normal software gate | `make verify-software` exits0 on `e4672b36`: 18,926 tests / 571 files in867.27s, seven unchanged performance tests / four files in69.32s, and all preflights |
+| Normal software gate | `make verify-software` exits0 on `e4672b36`: 18,926 tests / 571 files in867.27s, seven unchanged performance tests / four files in69.32s, and all preflights; selector3 has focused/type/canonical proof, with its complete rerun pending |
 | Source qualification | 1,470 / 1,470 executed cases; 89 subjects / 17 qualified. Six of13 new outcome families qualify; seven remain |
 | Persistent evidence | Migration35/revision9, six-family publication/read/rebuild/account/Profile adoption and genuine revision8 startup/worker/reopen/repair proof implemented |
 | Learner delivery | 14 compact native Nudge/Review pairs have actual strict REST/DOM and budget controls. The26 ordinary avoidance tuples remain held |
@@ -26,9 +26,12 @@ all six predecessor families, both availability controls and a standalone877KB f
 passing restore/type checks and bounded independent review. This is not the revision10 upgrade.
 The source calculator now preserves all13 complete families on the real unrelated-abstention
 witness and leaves only the genuinely missing risk-dependent family unavailable, in both colors.
-Focused source and production-boundary checks pass. Next implement selector3 and durable revision10
-coverage: unknowns must remain explicit through selected facts, stored opportunity denominators,
-proofs and rebuilds. The downstream whole-population fences remain in place until then.
+Selector/consumer3 is now locally implemented and independently reviewed: every result carries
+exact55-source coverage; partial results preserve valid facts and full legal denominators. Strict
+own-data input capture and actual execution preflight close the review returns. Broad2948/eighteen,
+types/scheduling, current research-boundary10/two and fresh1470/1470canonical cases pass. The full
+selector software rerun remains pending. Next implement durable revision10 coverage through stored
+opportunity denominators, proofs and rebuilds; native/whole54 Profile fences remain until then.
 Then finish the seven outcome-family qualifications and D4167 reverse consumers: Sight,
 Play/Compare, both comparisons, guidance/voice/speech, typed bot/replay/policy and authored migration.
 D4175's26 ordinary avoidance tuples also need shared acquisition, strict receiving and cost proof.

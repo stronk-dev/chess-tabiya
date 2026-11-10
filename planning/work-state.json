@@ -35210,7 +35210,7 @@
       "id": "D4200",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:07637766201a5b2c3b126b3802fc6990a1f722470fde8ed9bf89a38eb37f6729",
+      "sourceDigest": "sha256:709612ce4eaa0ec6c5ce394ec2585a8d23543656ac42c87d4c9e1ba8db60dc9f",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-10"
@@ -35276,6 +35276,15 @@
       "sourceDigest": "sha256:a6f4791769e409d1b578c79f3a6baedfb211599afd236e8148771ec56803d73b",
       "uxItems": [],
       "evidence": "rfc/README.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4208",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c9a29aee04b76f862b774e710055e898fe1b103aebab5f8e9c8b255a64cb5f6f",
+      "uxItems": [],
+      "evidence": "tools/r3-presentation-harness/real-packet.test.ts",
       "evidenceKind": "path"
     }
   ]

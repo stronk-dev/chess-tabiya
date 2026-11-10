@@ -216,7 +216,8 @@ function completeAlternativesOperation(raw: SemanticCompleteAlternativesInput): 
   const input = assertCompleteAlternativesFixture(raw);
   const compiled = compileCandidatePopulation({ beforeFen: input.rootFen, ruleset: "standard", scope: CANDIDATE_WIDE_SCOPE });
   if (compiled.kind !== "ready") return unavailable("complete_alternative_population_unavailable");
-  const selection = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 2), { receipt: compiled.receipt, moveUci: input.played.moveUci });
+  const selection = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, ref("research.r2_candidate", 3), { receipt: compiled.receipt, moveUci: input.played.moveUci });
+  if (selection.coverage.unavailable.length > 0) return unavailable("complete_alternative_population_unavailable");
   return completed(selection.selected.filter((fact) => fact.kind === "counterfactual_absence").map((fact) => fact.event));
 }
 

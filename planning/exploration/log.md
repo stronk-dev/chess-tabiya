@@ -40440,3 +40440,52 @@ Tracker and milestone checkpoint prose now cite the actual committed software re
 doing for exact55 selector/consumer3 coverage and validation, then revision10/seven-family durable
 coverage, actual9→10 upgrade/read/rebuild/account/cost/gates. D3928's separate content/native/release
 hold and all whole-product completion gates remain. Next production item: accepted selector3.
+
+### 2026-11-10 — D4200 selector3 source-local coverage implementation
+
+The accepted successor now implements mandatory exact55-source coverage on every branded result,
+using original sealed collector failures and separately original root/child risk. Unknown or
+unaccounted causes refuse; exact partial refs cannot contribute rarity/critical facts. All13 family
+factories execute before threshold/budget exits and must agree with source availability. FullN,
+existing policy numbers/order/caps and source@2 arithmetic remain. Callable selector/consumer2 is
+retired; current runtime/server/smoke checks and bindings use3, with no compatibility alias.
+
+Six new controls fail against the predecessor. Independent review then returns two actual holes:
+repeated getter reads can mix genuine receiptA coverage with genuine receiptB facts, and a key-set
+census does not compile binding execution or prevent stale-policy local acquisition. Their actual
+regression run fails3/97. Exact own-data capture (zero getter calls), the existing complete V2
+execution compiler and local preflight before WIDE repair them; only resolved policy identity is
+forwarded. Missing/duplicate/invalid binding zero-work and retired2 zero-acquisition remain tested.
+
+Actual partial selection retains positive facts+coverage; its validation adapter returns existing
+typed unavailable. In the actual runner an omission expectation fails and an exact abstention
+passes. A complete-source adapter control retains nonempty selected condition event IDs and genuine
+event authority. Another genuine fixture proves an emitted but incompletely evaluated exposure ref
+cannot win critical override. An extra original sealed-but-unaccounted collector outcome refuses
+at both source and selection. Initial controls exposed two nonwitness fixtures and a poisoned test
+memo; corrected fixture selection and kept adversarial compilation outside the shared memo. A test
+union needed an explicit event-kind guard for strict types; production semantics were unchanged.
+
+Final158/three pass8.62s; broad2948/eighteen pass38.78s. Complete types/Svelte0errors0warnings and
+scheduling8controls/all571files/seven serial owners pass. Fresh actual canonical regeneration passes
+1470/1470cases,89subjects/17qualified,63population/eight external. Independent bounded implementation
+review accepts after P1/P2 repair; its final historical/current README wording return is corrected.
+Normal roadmap-receipt verify-governance build semantic-evidence-check exits0. Existing bundle-size
+warnings remain; compiled smoke reports current policy3/full55 coverage/no unknowns on its legal
+fixture. Current source and test bytes remain stable during these checks.
+
+D4208 closes only obsolete-writer retirement: genuine current complete/partial selections explicitly
+refuse at the old R3 adapter; unchanged August JSON/replay and source census are historical. An
+optional all-harness run fails its old54-switch expectation at current2; the explicit boundary Make
+target correctly tests current refusal+historical replay (10/two), not that retired census or current
+learner-workflow readiness. Old saved inputs/output remain unchanged. Its done evidence is the
+actual boundary test path, with closeout-prose count unchanged. A first tracker command supplied
+an owner on a done item and correctly refused; retry uses the existing done-state contract.
+
+Current roadmap checkpoint summaries are rewritten to the final state instead of appending
+contradictory selector2/3 claims. Both live RFC registers are reconciled; statuses stay implementing.
+Commit this verified selector slice, then rerun normal make verify-software before durable work.
+D4200 remains doing for revision10/private summary/fold/table, all seven atomic families, typed
+filtered reads and actual9→10 startup/rollback/reopen/compare/rebuild/account/cost/lease/drain.
+Native/whole54 Profile remain conservative. No new qualification, ordinary26, content/native/release,
+remote-CI or whole1.0 claim; the goal remains active.

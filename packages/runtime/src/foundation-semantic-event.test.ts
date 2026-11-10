@@ -265,8 +265,8 @@ describe("literal computed prerequisites and declaration ownership", () => {
         result: { version: 1, abstainedCount: 0 } });
       expect(semanticValidationVerdict(profile.subject)?.verdict === "passed").toBe(qualifiedSource);
       expect(SEMANTIC_EVENT_DECLARATIONS.filter(row => key(row.projection) === route)).toHaveLength(1);
-      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(row => key(row.projection) === route).map(row => key(row.consumer)).sort()).toEqual(["module.full_inspector@2", "module.postcommit_nudge@2", "module.review_map@2", "profile.subject_observations@1", "research.semantic_selection@2", "research.semantic_validation@1"]);
-      expect(PRIMARY_EVIDENCE_MANIFEST.eligibility.filter(row => key(row.event) === route).map(row => [key(row.consumer), row.semanticValidation]).sort()).toEqual([["research.semantic_selection@2", "research_only"], ["research.semantic_validation@1", "research_only"]]);
+      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(row => key(row.projection) === route).map(row => key(row.consumer)).sort()).toEqual(["module.full_inspector@2", "module.postcommit_nudge@2", "module.review_map@2", "profile.subject_observations@1", "research.semantic_selection@3", "research.semantic_validation@1"]);
+      expect(PRIMARY_EVIDENCE_MANIFEST.eligibility.filter(row => key(row.event) === route).map(row => [key(row.consumer), row.semanticValidation]).sort()).toEqual([["research.semantic_selection@3", "research_only"], ["research.semantic_validation@1", "research_only"]]);
       expect(LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS).toContain(route);
     }
   });

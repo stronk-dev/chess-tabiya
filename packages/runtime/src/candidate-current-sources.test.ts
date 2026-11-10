@@ -70,7 +70,7 @@ describe("current candidate source adoption", () => {
   it.each([
     ["white", "r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6"],
     ["black", "3k3r/8/8/8/5b2/6N1/6b1/4K2R b - - 0 1", "f4g3"],
-  ])("keeps %s's unavailable exposure separate from no witness, through narrowing and whole-selection refusal", (_side, fen, move) => {
+  ])("keeps %s's unavailable exposure separate from no witness, through narrowing and partial selection", (_side, fen, move) => {
     const source = vi.spyOn(valueRoutes, "invokeEvidenceValueRoute");
     try {
       const receipt = compile(fen), row = candidatePlayedRow(receipt, move);
@@ -91,9 +91,15 @@ describe("current candidate source adoption", () => {
       const readings = projectCandidatePopulationReceipt(receipt, CANDIDATE_READINGS_SCOPE);
       if (readings.kind !== "ready") throw new Error("Expected lawful reading projection");
       expect(candidatePlayedRow(readings.receipt, move).abstentions).toEqual([]);
-      const selected = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 2 }, { receipt, moveUci: move });
-      expect(selected.emptyReason).toEqual({ id: "counterfactual_population_incomplete", version: 1 });
-      expect(selected.population.evaluatedAlternatives).toBe(receipt.packet.candidates.filter(candidate => candidate.moveUci !== move && candidate.abstentions.length === 0).length);
+      const selected = selectSemanticEvidence(PRIMARY_EVIDENCE_MANIFEST, { id: "research.r2_candidate", version: 3 }, { receipt, moveUci: move });
+      expect(selected.emptyReason).toBeUndefined();
+      expect(selected.selected.length).toBeGreaterThan(0);
+      expect(selected.selected.every(fact => fact.event.projection.id !== "derived.tactic.defender_exposure")).toBe(true);
+      expect(selected.population).toEqual({ legalAlternatives: receipt.packet.candidates.length - 1 });
+      expect(selected.coverage.unavailable).toContainEqual({ projection: { id: "derived.tactic.defender_exposure", version: 2 },
+        cause: { kind: "candidate_collector", projection: { id: "derived.tactic.defender_exposure", version: 2 } }, reason: "invalid_turn_clone",
+        members: receipt.packet.candidates.filter(candidate => candidate.abstentions.some(value => value.projection === "derived.tactic.defender_exposure@2"))
+          .map(candidate => ({ kind: "child", moveUci: candidate.moveUci })) });
       // Projection and selection reuse collection; neither reruns a source to recover its outcome.
       expect(source.mock.calls.filter(args => args[0] === "derived.tactic.defender_exposure@2")).toHaveLength(exposureCalls.length);
     } finally { source.mockRestore(); }

@@ -119,7 +119,7 @@ describe("current source completion and bounded rendering", () => {
       expect(semanticValidationPopulationOperation(subject)).toBe("runtime.semantic.foundation_edge");
       expect(SEMANTIC_EVENT_PROJECTION_REFS.some(row => row.id === id && row.version === Number(version))).toBe(true);
       expect(LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS).toContain(ref);
-      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(row => row.projection.id === id && row.projection.version === Number(version)).map(row => `${row.consumer.id}@${row.consumer.version}`).sort()).toEqual(["module.full_inspector@2", "module.postcommit_nudge@2", "module.review_map@2", "profile.subject_observations@1", "research.semantic_selection@2", "research.semantic_validation@1"]);
+      expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(row => row.projection.id === id && row.projection.version === Number(version)).map(row => `${row.consumer.id}@${row.consumer.version}`).sort()).toEqual(["module.full_inspector@2", "module.postcommit_nudge@2", "module.review_map@2", "profile.subject_observations@1", "research.semantic_selection@3", "research.semantic_validation@1"]);
     }
   });
 

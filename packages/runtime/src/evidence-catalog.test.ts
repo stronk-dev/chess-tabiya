@@ -137,7 +137,7 @@ describe("primary evidence catalogue", () => {
     const exact = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
     expect(manifest.semanticEvents.map((item) => exact(item.projection)).sort()).toEqual(SEMANTIC_EVENT_PROJECTION_REFS.map(exact).sort());
     // Source validation preserves all live roots; selector2 owns only the exact current55.
-    expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@2", "research.semantic_validation@1"]));
+    expect(new Set(manifest.eligibility.map((item) => `${item.consumer.id}@${item.consumer.version}`))).toEqual(new Set(["research.semantic_selection@3", "research.semantic_validation@1"]));
     const semanticKeys = new Set(SEMANTIC_EVENT_PROJECTION_REFS.map(exact));
     expect(manifest.bindings.filter((binding) => semanticKeys.has(exact(binding.projection))).every((binding) => ["research.semantic_selection", "research.semantic_validation", "profile.subject_observations"].includes(binding.consumer.id) || binding.consumer.id.startsWith("module."))).toBe(true);
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));

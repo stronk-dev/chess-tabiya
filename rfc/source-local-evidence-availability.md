@@ -1,6 +1,6 @@
 # RFC: source-local evidence availability
 
-- **Status:** implementing — independently accepted2026-11-10 after R1–R3 repair; genuine schema35/revision9 predecessor capture and restore controls verified. Source/selector3/revision10 coverage, actual upgrade/lifecycle/cost and complete gates remain; no wider foundation completion.
+- **Status:** implementing — independently accepted2026-11-10 after R1–R3 repair; genuine schema35/revision9 predecessor and source-local calculator verified. Selector/consumer3 implementation has bounded independent code acceptance and focused/type/scheduling controls; canonical1470/1470 over89subjects/17qualified passes; current complete gates and durable revision10 coverage/upgrade/lifecycle/cost remain. No wider foundation completion.
 - **Author:** codex, under the owner's full-foundation and pre-launch zero-legacy rulings.
 - **Created:** 2026-11-10
 - **Parent / amends:** subject-safe-semantic-selection.md §§5.1–5.3; longitudinal-store.md

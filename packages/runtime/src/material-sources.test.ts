@@ -182,7 +182,7 @@ describe("material sources derive from actual count and capture/promotion inputs
       expect(declaration).toMatchObject({ grounding: "position_rules", exactness: "exact", confidence: "not_applicable", answerContent: ["fact"] });
       expect(PRIMARY_EVIDENCE_MANIFEST.bindings.filter(value => `${value.projection.id}@${value.projection.version}` === key)
         .map(value => `${value.consumer.id}@${value.consumer.version}`).sort()).toEqual(key === EVENT
-          ? ["module.full_inspector@2", "module.review_map@2", "profile.subject_observations@1", "research.semantic_selection@2", "research.semantic_validation@1"]
+          ? ["module.full_inspector@2", "module.review_map@2", "profile.subject_observations@1", "research.semantic_selection@3", "research.semantic_validation@1"]
           : ["module.full_inspector@2"]);
       expect(declaration.disposition).toBeUndefined();
       expect(PRIMARY_EVIDENCE_MANIFEST.semanticEvents.some(value => `${value.projection.id}@${value.projection.version}` === key)).toBe(key === EVENT);
