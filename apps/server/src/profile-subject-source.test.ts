@@ -13,6 +13,9 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "../../../packages/runtime/src/evidenc
 import { preflightProfileSubjectFacts } from "../../../packages/runtime/src/internal/profile-subject-facts.js";
 import * as candidateSource from "../../../packages/runtime/src/candidate-population.js";
 import * as bindingExecution from "../../../packages/runtime/src/evidence-binding-execution.js";
+import { readCandidateUnavailableSources } from "../../../packages/runtime/src/semantic-source-availability.js";
+import { mirrorSemanticFen, mirrorSemanticUci } from "../../../packages/runtime/src/semantic-validation.js";
+import { profileSubjectReferenceIndex } from "./profile-subject-fact-references.js";
 const fixtures: FileFixture[] = [], databases: DatabaseSync[] = [];
 afterEach(() => { vi.restoreAllMocks(); for (const db of databases.splice(0)) db.close(); for (const f of fixtures.splice(0)) { f.storage.close(); rmSync(dirname(f.path), { recursive: true, force: true }); } });
 function acquire(run: DrillRun) {
@@ -26,6 +29,66 @@ function acquire(run: DrillRun) {
 }
 const capture = "7k/8/8/3p4/2P5/8/3P4/7K w - - 0 1";
 describe("original complete subject machine consumption", () => {
+  it.each([false, true])("joins actual coverage to the original actor/cut/full legal population without collectors (mirrored=%s)", mirrored => {
+    const fen = "7k/8/8/8/8/8/8/r6K w - - 0 1", move = "h1h2";
+    const beforeFen = mirrored ? mirrorSemanticFen(fen, "color_and_vertical") : fen;
+    const moveUci = mirrored ? mirrorSemanticUci(move, "color_and_vertical") : move;
+    const s = acquire(play(positionRun(`coverage-source-${mirrored}`, beforeFen, mirrored ? "black" : "white"), moveUci));
+    const original = candidateSource.compileCandidatePopulation({ beforeFen, ruleset: "standard", scope: candidateSource.CANDIDATE_WIDE_SCOPE });
+    if (original.kind !== "ready") throw Error("Original full population required");
+    const unavailable = readCandidateUnavailableSources(original.receipt), compile = vi.spyOn(candidateSource, "compileCandidatePopulation");
+    const index = profileSubjectReferenceIndex(s.image, s.claim.derivedRev);
+    expect(index.decisions).toHaveLength(1);
+    const context = index.evaluationContext(index.decisions[0]!.decisionRef);
+    expect(context.actor).toBe(mirrored ? "black" : "white");
+    expect(context.legalAlternatives).toBe(original.receipt.packet.candidates.length - 1);
+    expect(Object.isFrozen(context.decisionRef)).toBe(true);
+    const row = index.evaluation({ ...context, unavailable });
+    expect(row).toEqual({ ...context, unavailable });
+    // A cheap SQL/source join cannot re-prove failure truth. Publication's original summary
+    // and actual compare/rebuild must detect deleting a genuine unknown from stored data.
+    expect(index.evaluation({ ...context, unavailable: [] }).unavailable).toEqual([]);
+    for (const change of [
+      { learnerId: "other" }, { runId: "other" }, { actor: mirrored ? "white" : "black" },
+      { derivedRev: s.claim.derivedRev + 1 }, { observedAt: "2026-11-10T00:00:00.000Z" },
+      { phase: context.phase === "opening" ? "endgame" : "opening" }, { legalAlternatives: context.legalAlternatives + 1 },
+      { decisionRef: { ...context.decisionRef, nodeId: "other" } },
+    ]) expect(() => index.evaluation({ ...row, ...change })).toThrow();
+    const multiple = unavailable.find(value => value.members.filter(member => member.kind === "child").length > 1)!;
+    expect(multiple).toBeDefined();
+    expect(() => index.evaluation({ ...context, unavailable: [{ ...multiple, members: [...multiple.members].reverse() }] })).toThrow();
+    expect(() => index.evaluation({ ...context, unavailable: [{ ...multiple, members: [{ kind: "child", moveUci: "a1a1" }] }] })).toThrow();
+    expect(compile).not.toHaveBeenCalled();
+  });
+
+  it("keeps quiet/forced decisions in coverage independently of observation rows", () => {
+    const fen = "8/8/8/8/8/1r6/2k5/K7 w - - 0 1";
+    const s = acquire(play(positionRun("coverage-forced", fen), "a1a2"));
+    expect(consumeProfileSubjectFacts(s.image, s.options)).toEqual([]);
+    const original = candidateSource.compileCandidatePopulation({ beforeFen: fen, ruleset: "standard", scope: candidateSource.CANDIDATE_WIDE_SCOPE });
+    if (original.kind !== "ready") throw Error("Original known-zero population required");
+    expect(readCandidateUnavailableSources(original.receipt)).toEqual([]);
+    const compile = vi.spyOn(candidateSource, "compileCandidatePopulation"), index = profileSubjectReferenceIndex(s.image, s.claim.derivedRev);
+    expect(index.decisions).toHaveLength(1);
+    const context = index.evaluationContext(index.decisions[0]!.decisionRef);
+    expect(index.evaluation({ ...context, unavailable: [] })).toMatchObject({ legalAlternatives: 0, actor: "white", unavailable: [] });
+    expect(compile).not.toHaveBeenCalled();
+    expect(() => { (context.decisionRef as { nodeId: string }).nodeId = "other"; }).toThrow();
+  });
+
+  it("checks genuine castling members in the original king-takes-rook convention", () => {
+    const fen = "5k2/8/8/8/8/8/8/4K2R w K - 0 1";
+    const s = acquire(play(positionRun("coverage-castle", fen), "e1h1"));
+    const original = candidateSource.compileCandidatePopulation({ beforeFen: fen, ruleset: "standard", scope: candidateSource.CANDIDATE_WIDE_SCOPE });
+    if (original.kind !== "ready") throw Error("Actual castling population required");
+    const unavailable = readCandidateUnavailableSources(original.receipt);
+    expect(unavailable.some(value => value.members.some(member => member.kind === "child" && member.moveUci === "e1h1"))).toBe(true);
+    const index = profileSubjectReferenceIndex(s.image, s.claim.derivedRev), context = index.evaluationContext(index.decisions[0]!.decisionRef);
+    expect(index.evaluation({ ...context, unavailable }).unavailable).toEqual(unavailable);
+    const wrongDialect = unavailable.map(value => ({ ...value, members: value.members.map(member => member.kind === "child" && member.moveUci === "e1h1"
+      ? { ...member, moveUci: "e1g1" } : member) }));
+    expect(() => index.evaluation({ ...context, unavailable: wrongDialect })).toThrow();
+  });
   it("retains true/false per-subject relations under the original owner decision and source cut", () => {
     const run = play(positionRun("subject-capture", capture), "c4d5"), s = acquire(run), checkpoint = vi.fn();
     const collect = vi.spyOn(candidateSource, "compileCandidatePopulation");
@@ -75,10 +138,18 @@ describe("original complete subject machine consumption", () => {
     const rows = consumeProfileSubjectFacts(s.image, s.options);
     expect(rows.length).toBeGreaterThan(0);
     expect(rows.every(r => r.actor === "white" && r.decisionClass === "predicted" && r.decisionRef.kind === "prediction")).toBe(true);
-    const imported = acquire(importedRun("subject-import", ["e2e4", "e7e5"], "black"));
+    const predictedIndex = profileSubjectReferenceIndex(s.image, s.claim.derivedRev);
+    const predictionContext = predictedIndex.evaluationContext(predictedIndex.decisions[0]!.decisionRef);
+    expect(predictionContext).toMatchObject({ actor: "white", decisionClass: "predicted", decisionRef: { kind: "prediction" } });
+    const originalImportedRun = importedRun("subject-import", ["e2e4", "e7e5"], "black");
+    const imported = acquire(originalImportedRun);
     const gameRows = consumeProfileSubjectFacts(imported.image, imported.options);
     expect(gameRows.length).toBeGreaterThan(0);
     expect(gameRows.every(r => r.actor === "black" && r.decisionClass === "game")).toBe(true);
+    const importedIndex = profileSubjectReferenceIndex(imported.image, imported.claim.derivedRev);
+    expect(importedIndex.decisions).toHaveLength(normativeDecisions(imported.image, originalImportedRun).length);
+    for (const decision of importedIndex.decisions) expect(importedIndex.evaluationContext(decision.decisionRef))
+      .toMatchObject({ actor: "black", decisionClass: "game", sessionKind: "imported" });
   });
   it("snapshots the original claim before a callback can switch two genuine same-reference sources", () => {
     const aRun = play(positionRun("same-subject-run", capture), "c4d5");

@@ -40662,3 +40662,27 @@ to62/three grammar controls. The shared observation context still passes its cur
 path. Commit the data boundary separately, then continue the same D4200 item with original-source
 reference validation and coordinated summary/fold/table/publication integration. No full-software
 certificate is extended from35d7cc5c to this newer data-contract step.
+
+### 2026-11-10 — D4200 original-source association for evaluation rows
+
+The existing per-request subject reference index now shares one original replay/domain cache
+between unchanged observation checks and new parsed evaluation checks. Both real store callers
+use its observation method. Evaluation compares exact original owner/run/DecisionRef/actor/cohort/
+time/revision and legal-alternative count, then requires each child in original canonical legal
+order. Only one actual recorded move is replayed; no counterfactual/engine/provider collector runs.
+Normative refs and returned context are detached/frozen; duplicate expected refs refuse. Quiet/
+forced decisions remain in its expected cohort even when observations are empty.
+
+Actual both-color risk fixtures, metadata/count/ref/order/illegal-member negatives, a real
+castling-check failure with e1h1→e1g1 alias refusal, prediction/import actor joins and known-
+complete forced-zero source pass93/three in4.98s. Existing SQLite publication/read/source tests
+remain in that suite. Complete types/Svelte0errors0warnings and independent bounded review pass.
+The initial implementation used the wrong argument type for exactLegalMoves; corrected to the
+actual original before-FEN before new evaluation tests/typecheck. The first coverage grammar
+commit is c8a64004; no source/runtime or qualification output changes in this reference step.
+
+This check intentionally accepts a structurally consistent empty unknown list: only original
+publication summary and actual compare/rebuild can detect removal of a genuine failure. Expected
+evaluation cardinality and observation-to-coverage availability joins remain the next coordinated
+storage duty. No table/revision/publication is activated, and no complete-software certificate
+for these newer steps is inferred from35d7cc5c. Continue the same D4200 seven-family upgrade.

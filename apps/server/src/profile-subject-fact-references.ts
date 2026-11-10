@@ -7,14 +7,22 @@ import { readBackReplay } from "../../../packages/runtime/src/replay.js";
 import { positionFromFen } from "../../../packages/runtime/src/position-cache.js";
 import { originalPiecePositions } from "../../../packages/runtime/src/foundation-piece-lineage.js";
 import { physicalRayDirectionAllowed } from "../../../packages/runtime/src/foundation-slider-sources.js";
+import { exactLegalMoves } from "../../../packages/runtime/src/legal-moves.js";
 import { normativeDecisions } from "./longitudinal-decisions.js";
 import type { LongitudinalSourceImageV4 } from "./longitudinal-source.js";
-import type { LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
+import { parseLongitudinalSubjectEvaluationRow, type LongitudinalSubjectEvaluationRow, type LongitudinalSubjectObservationRow } from "./profile-subject-facts-contract.js";
+import { parseDecisionRef, type DecisionRef } from "./longitudinal-contract.js";
 const fail = (): never => { throw new TypeError("LONGITUDINAL_SUBJECT_SOURCE_JOIN_INVALID"); };
 export function profileSubjectReferenceIndex(image: LongitudinalSourceImageV4, derivedRev: number) {
   const run = readBackReplay(image.runPrefix.events).run, observedAt = new Date(Date.parse(run.events[0]!.at)).toISOString();
-  const decisions = new Map(normativeDecisions(image, run).map(d => [canonicalizeJson(d.ref), d]));
+  const originalDecisions = normativeDecisions(image, run);
+  const decisions = new Map(originalDecisions.map(d => {
+    const ref = parseDecisionRef(d.ref);
+    return [canonicalizeJson(ref), Object.freeze({ ...d, ref })] as const;
+  }));
+  if (decisions.size !== originalDecisions.length) return fail();
   const domain = new Map<string, ReturnType<typeof playedDomain>>();
+  const legal = new Map<string, readonly string[]>();
   function playedDomain(beforeFen: string, moveUci: string) {
     const root = positionFromFen(beforeFen), raw = parseUci(moveUci);
     if (raw === undefined) return fail();
@@ -23,13 +31,44 @@ export function profileSubjectReferenceIndex(image: LongitudinalSourceImageV4, d
     const after = root.clone(); after.play(move);
     return { root, after, pieces: originalPiecePositions(root, after, move) };
   }
-  return (row: LongitudinalSubjectObservationRow): void => {
+  function decisionDomain(ref: DecisionRef) {
+    const key = canonicalizeJson(ref), decision = decisions.get(key);
+    if (decision === undefined) return fail();
+    let board = domain.get(key);
+    if (board === undefined) { board = playedDomain(decision.beforeFen, decision.moveUci); domain.set(key, board); }
+    return { key, decision, board };
+  }
+  function evaluationContext(ref: DecisionRef): Omit<LongitudinalSubjectEvaluationRow, "unavailable"> {
+    const { key, decision, board } = decisionDomain(ref);
+    let moves = legal.get(key);
+    if (moves === undefined) { moves = Object.freeze(exactLegalMoves(decision.beforeFen).map(move => move.uci)); legal.set(key, moves); }
+    return Object.freeze({ learnerId: image.ownerLearnerId, runId: run.id, decisionRef: decision.ref,
+      actor: board.root.turn, phase: decision.phase, decisionClass: decision.decisionClass,
+      sessionKind: run.sessionKind, packId: run.sessionKind === "pack" ? run.packId : null,
+      legalAlternatives: moves.length - 1, observedAt, derivedRev });
+  }
+  function evaluation(value: unknown): LongitudinalSubjectEvaluationRow {
+    const row = parseLongitudinalSubjectEvaluationRow(value), expected = evaluationContext(row.decisionRef);
+    const { unavailable, ...context } = row;
+    if (canonicalizeJson(context) !== canonicalizeJson(expected)) return fail();
+    const moves = legal.get(canonicalizeJson(row.decisionRef))!;
+    for (const source of unavailable) {
+      let previous = -1;
+      for (const member of source.members) {
+        if (member.kind === "root") continue; // Literal parser admits this only first/required_total.
+        const index = moves.indexOf(member.moveUci);
+        if (index < 0 || index <= previous) return fail();
+        previous = index;
+      }
+    }
+    return row;
+  }
+  function observation(row: LongitudinalSubjectObservationRow): void {
     const key = canonicalizeJson(row.decisionRef), decision = decisions.get(key);
     if (decision === undefined || row.learnerId !== image.ownerLearnerId || row.runId !== run.id || row.derivedRev !== derivedRev
       || row.observedAt !== observedAt || row.phase !== decision.phase || row.decisionClass !== decision.decisionClass
       || row.sessionKind !== run.sessionKind || row.packId !== (run.sessionKind === "pack" ? run.packId : null)) return fail();
-    let board = domain.get(key);
-    if (board === undefined) { board = playedDomain(decision.beforeFen, decision.moveUci); domain.set(key, board); }
+    const { board } = decisionDomain(row.decisionRef);
     if (row.actor !== board.root.turn) return fail();
     const original = (piece: { square: SquareName; color: string; role: Role }) => {
       const found = board!.pieces.find(p => p.root.square === piece.square && p.root.color === piece.color && p.root.role === piece.role);
@@ -88,5 +127,9 @@ export function profileSubjectReferenceIndex(image: LongitudinalSourceImageV4, d
       case "pawn_file_group": case "file_state": case "pawn_islands": case "piece_count": case "direct_attack_count": break;
       default: return fail();
     }
-  };
+  }
+  return Object.freeze({ observation, evaluation, evaluationContext,
+    // Includes quiet/forced decisions; later query cohort filtering must not depend on SQL rows.
+    decisions: Object.freeze([...decisions.values()].map(d => Object.freeze({ decisionRef: d.ref, phase: d.phase, decisionClass: d.decisionClass }))),
+  });
 }

@@ -875,7 +875,7 @@ export class LongitudinalStore {
     });
     assertProfileSubjectFold(projection, expected);
     const check = profileSubjectReferenceIndex(image, derivedRev);
-    for (const row of projection.subjectObservations) check(parseLongitudinalSubjectObservationRow(row));
+    for (const row of projection.subjectObservations) check.observation(parseLongitudinalSubjectObservationRow(row));
   }
 
   /**
@@ -1020,7 +1020,7 @@ export class LongitudinalStore {
         if (cut.derivedRev !== OBSERVATION_DERIVATION_REV || this.sourceDigest(image) !== cut.requestedSourceDigest) throw new LongitudinalContractError("LONGITUDINAL_SUBJECT_SOURCE_JOIN_INVALID");
         const check = profileSubjectReferenceIndex(image, query.derivationRev);
         for (const raw of this.#db.prepare("SELECT * FROM learner_subject_observations WHERE run_id=? AND learner_id=? AND derived_rev=?").all(runId, query.learnerId, query.derivationRev) as readonly Row[]) {
-          const row = subjectObservationFromSql(raw); check(row);
+          const row = subjectObservationFromSql(raw); check.observation(row);
           if (phaseOk(row.phase) && classOk(row.decisionClass) && (query.subjectFilters === undefined || query.subjectFilters.some(f => subjectObservationMatches(row, f)))) subjectObservations.push(row);
         }
       }

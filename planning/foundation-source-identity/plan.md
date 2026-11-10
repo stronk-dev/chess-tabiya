@@ -2779,3 +2779,14 @@ controls plus prior subject/longitudinal grammar pass62/three; complete types an
 bounded review pass. This is data grammar, not source/publication authority. Join original legal
 members/order/count, actor/cohort/cut and normative cardinality in the forthcoming stored reads;
 activate only with original summary/fold, all seven atomic families and revision10 migration.
+
+### D4200 source-reference checkpoint — 2026-11-10
+
+One existing source index now validates observations and per-decision evaluation contexts against
+the original replay, exact actor/cohort/revision and full canonical legal member count/order.
+It exposes frozen normative decision refs, including known-complete forced-zero decisions with
+no observations, and acquires no counterfactual graph. Actual castling-member alias and both-color/
+prediction/import negatives pass93/three; types and independent bounded review pass. Current
+revision9 store behavior stays unchanged. Next integrate original per-source summaries/fold,
+all seven atomic families, expected cardinality and available-source crossjoins at revision10;
+semantic failure truth remains publication/rebuild duty, not this cheap context decoder.

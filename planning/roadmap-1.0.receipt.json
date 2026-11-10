@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4315288480e169b6f1762c8c0cb0f51857f8db6322b39b8d8f8da55a46fd912a",
+    "roadmap": "sha256:5b57fb4e96402b8640f9f2a9bc8be4969fb2d5a06e1d747f580ff17563faf404",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
     "workState": "sha256:a1d091fb6416a26933c94b45908e83ccf808af9a81361f787d7689ff357bf15a",
     "rfcRegister": "sha256:8b28e7b4ddf7cdf3de2cd845ac60583baf35823f29a4a7636ccb9f26744b2d64",
@@ -357,7 +357,7 @@
       "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "D4200 now has source-local native7 plus an exact54-source per-decision evaluation grammar, closed source/cause/member decoder and reused decision context. Grammar62/three, actual SQLite store/Profile41/two, complete types and independent bounded review pass; source runtime and qualification receipts are unchanged by the data-contract step. Revision9 whole54 publication remains conservative. Complete software18944/571 and performance7/four on35d7cc5c belongs to the preceding selector/closure stage, not these newer steps. Next join original legal members/order/count, actor/cohort/cut/cardinality and carry the original summary/fold through revision10 seven-family publication/read/rebuild/account/upgrade/cost. Seven qualifications, D4167, ordinary26 and D3928 remain open.",
+        "summary": "D4200 native7/data grammar now also has original-source association: one existing replay/domain index checks evaluation actor/cohort/revision, exact legal count and canonical child order, retaining forced/no-observation refs without collectors. Actual93/three source/store/grammar tests, complete types and independent bounded review pass. Existing revision9 publication remains conservative. Native48/three and data62/three plus41/two prior proofs stand; complete35d7cc5c software18944/571 and performance7/four predates these steps. Next integrate original per-source summary/fold and seven-family revision10 storage/read/rebuild/account/upgrade/cost, with evaluation cardinality and observation availability crossjoins. No source/runtime qualification change, ordinary26 or release promotion; D4167 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1248,7 +1248,7 @@
       "nextAction": "Implement accepted D4200 per-decision source availability through original reductions, revision10 seven-family storage/read/rebuild/account lifecycle and actual upgrade/cost proof; retain the existing qualification, consumer and release holds.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "D4200 now has source-local native7 plus an exact54-source per-decision evaluation grammar, closed source/cause/member decoder and reused decision context. Grammar62/three, actual SQLite store/Profile41/two, complete types and independent bounded review pass; source runtime and qualification receipts are unchanged by the data-contract step. Revision9 whole54 publication remains conservative. Complete software18944/571 and performance7/four on35d7cc5c belongs to the preceding selector/closure stage, not these newer steps. Next join original legal members/order/count, actor/cohort/cut/cardinality and carry the original summary/fold through revision10 seven-family publication/read/rebuild/account/upgrade/cost. Seven qualifications, D4167, ordinary26 and D3928 remain open.",
+        "summary": "D4200 native7/data grammar now also has original-source association: one existing replay/domain index checks evaluation actor/cohort/revision, exact legal count and canonical child order, retaining forced/no-observation refs without collectors. Actual93/three source/store/grammar tests, complete types and independent bounded review pass. Existing revision9 publication remains conservative. Native48/three and data62/three plus41/two prior proofs stand; complete35d7cc5c software18944/571 and performance7/four predates these steps. Next integrate original per-source summary/fold and seven-family revision10 storage/read/rebuild/account/upgrade/cost, with evaluation cardinality and observation availability crossjoins. No source/runtime qualification change, ordinary26 or release promotion; D4167 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/presentation-move-path.ts",
