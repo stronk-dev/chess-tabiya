@@ -476,7 +476,7 @@ export type SemanticValidationUnavailableReason = "source_predicate_unavailable"
 const UNAVAILABLE_REASONS: readonly SemanticValidationUnavailableReason[] = ["source_predicate_unavailable", "recorded_path_incomplete", "complete_alternative_population_unavailable"];
 
 export type SemanticMirrorGeometry = "vertical" | "horizontal" | "color_and_vertical";
-export type SemanticMirrorValueRule = "identity" | "square" | "color" | "signed_file_delta" | "signed_rank_delta" | "file" | "file_state";
+export type SemanticMirrorValueRule = "identity" | "square" | "uci" | "color" | "signed_file_delta" | "signed_rank_delta" | "file" | "file_state";
 export type SemanticOperandPathSegment = string | "*";
 
 interface SemanticMirrorGeometricOperandRule {
@@ -522,7 +522,7 @@ function parseMirrorOperandRules(value: unknown): readonly SemanticMirrorOperand
       // The closed mapping and exact checks above establish this discriminated tuple type.
       return Object.freeze({ sourcePath, partnerPath, value, collection: "scalar" }) as SemanticMirrorInputOperandRule;
     }
-    if (!["identity", "square", "color", "signed_file_delta", "signed_rank_delta", "file", "file_state"].includes(entry.value as string)) return fail(code, `operand rule transform ${String(entry.value)} is not closed`);
+    if (!["identity", "square", "uci", "color", "signed_file_delta", "signed_rank_delta", "file", "file_state"].includes(entry.value as string)) return fail(code, `operand rule transform ${String(entry.value)} is not closed`);
     if (!["scalar", "ordered", "canonical_set"].includes(entry.collection as string)) return fail(code, `operand rule collection ${String(entry.collection)} is not closed`);
     return Object.freeze({ sourcePath, partnerPath, value: entry.value as SemanticMirrorValueRule, collection: entry.collection as SemanticMirrorGeometricOperandRule["collection"] });
   });
@@ -1086,6 +1086,13 @@ function matchPattern(pattern: readonly SemanticOperandPathSegment[], concrete: 
   return parts.length === pattern.length;
 }
 
+function canonicalMirrorUci(value: unknown): string {
+  if (typeof value !== "string" || !/^[a-h][1-8][a-h][1-8][qrbn]?$/u.test(value) || value.slice(0, 2) === value.slice(2, 4)) {
+    return fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "uci must be two different canonical squares with an optional q/r/b/n suffix");
+  }
+  return value;
+}
+
 function transformLeaf(value: unknown, rule: SemanticMirrorValueRule, geometry: SemanticMirrorGeometry): unknown {
   switch (rule) {
     case "file": {
@@ -1098,6 +1105,7 @@ function transformLeaf(value: unknown, rule: SemanticMirrorValueRule, geometry: 
     }
     case "identity": return value;
     case "square": return typeof value === "string" ? mirrorSquare(value, geometry) : fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", `square rule over ${JSON.stringify(value)}`);
+    case "uci": return mirrorSemanticUci(canonicalMirrorUci(value), geometry);
     case "color": return geometry === "color_and_vertical" ? swapColor(String(value)) : value;
     case "signed_file_delta": return typeof value === "number" ? (geometry === "horizontal" ? -value : value) : fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "file delta must be numeric");
     case "signed_rank_delta": return typeof value === "number" ? (geometry === "horizontal" ? value : -value) : fail("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "rank delta must be numeric");
@@ -1153,7 +1161,8 @@ export function compareSemanticMirror(source: readonly SemanticMirrorObservation
           return `input.${field}`;
         });
       }
-      return ruleValues(leaves, rule[side], rule, side === "sourcePath" ? value => transformLeaf(value, rule.value, geometry) : value => value);
+      return ruleValues(leaves, rule[side], rule, side === "sourcePath" ? value => transformLeaf(value, rule.value, geometry)
+        : value => rule.value === "uci" ? canonicalMirrorUci(value) : value);
     });
     return evidenceDigest({ projection: observation.projection, sign: observation.sign, values });
   };

@@ -1717,7 +1717,7 @@
       },
       "importedPopulation": {
         "disposition": "required",
-        "owner": "bounded-policy-targets \u00a74.2",
+        "owner": "bounded-policy-targets §4.2",
         "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
       },
       "externalLabel": {
@@ -3874,24 +3874,752 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned positive source proof for derived.semantic_avoidance.piece_count@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.white.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.white.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.black.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.black.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.white.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.white.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.black.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.black.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.2.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.3.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.4.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.2.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.3.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.4.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned semanticNegative source proof for derived.semantic_avoidance.piece_count@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.quiet.white.0.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.quiet.black.0.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned orientation source proof for derived.semantic_avoidance.piece_count@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.white.0.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.white.1.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.black.0.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.black.1.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.white.0.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.white.1.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.black.0.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.black.1.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.0.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.1.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.2.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.3.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.4.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.0.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.1.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.2.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.3.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.4.mirror",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          }
+        ]
       },
       "counterfactual": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned counterfactual source proof for derived.semantic_avoidance.piece_count@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.white.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.white.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.black.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.pawn.black.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.white.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.white.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.black.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.ep.black.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.2.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.3.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.white.4.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.2.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.3.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.count-population.promotion.black.4.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.piece_count",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          }
+        ]
       },
       "importedPopulation": {
         "disposition": "present",
@@ -14835,7 +15563,7 @@
       },
       "importedPopulation": {
         "disposition": "required",
-        "owner": "bounded-policy-targets \u00a74.2",
+        "owner": "bounded-policy-targets §4.2",
         "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
       },
       "externalLabel": {
@@ -15028,7 +15756,7 @@
       },
       "importedPopulation": {
         "disposition": "required",
-        "owner": "bounded-policy-targets \u00a74.2",
+        "owner": "bounded-policy-targets §4.2",
         "discharge": "the population census cannot pass while the operation's application reach is required; the D1023 batch census (make bounded-target-census) is the measured execution"
       },
       "externalLabel": {

@@ -46,6 +46,30 @@ are authorized without another permission question. D3928 remains a separate pen
   invocation while the position comparison canonicalizes it. Full counters/board identity remain
   exact. A second actual candidate guard refuses a genuine byte-equal snapshot with wrong ancestry.
 
+### 2026-11-10 [[D4199]] — source mirror repair and first count-population cases
+
+Independent review accepts source-safe§7.3 before implementation, then the concrete literal
+piece_count2 source/control integration. The accepted complete-population preflight was followed
+by an edge-only result comparison; it now takes only the original nested played edge as context,
+without narrowing either invocation. One strict both-side UCI leaf retains every literal suffix.
+Actual committed old guardRED21/194, restored fixGREEN215/two. Genuine pre-mint wrong outputs
+retain source/factory authority and fail independent exact positives; symmetric errors can pass
+mirrors but not absolutes. Available quiet and complete promotion5-event populations are explicit.
+
+The independently reviewed56 new cases preserve all824 prior canonical case values and change
+only piece_count2's four profile arms. Canonical compilation passes880/880 over89subjects,12
+qualified (old11 plus this exact family only). Final2790tests/20files, nine tier controls, full
+types/Svelte0errors0warnings and build pass; no other family inherits a verdict. Frozen history
+stays875, not931: its existing custody helper excludes all new subject_outcomes. Generic
+canonical execution now tests nonempty expectations, including actual counterfactual emits,
+without misclassifying them as negative. The old388-case historical cut and all epoch counts
+stay fixed. D4199 closes locally; ordinary26 remain held. Current200-game source
+cost is the same still-live job, not restarted; bounded validation/type work continues against
+its immutable launch bundle, so its timings are observational workstation-load timings rather
+than an isolated predecessor speed comparison. Full performance gates remain serial. Next:
+commit this verified qualification cut, finish actual200-game cost, then remaining12
+source proofs and D4167 consumers. D3928 content/native/release remains held.
+
 ### 2026-11-10 genuine predecessor migration proof
 
 D4197 checkpoint recovery is committed648dbad2/ce60e6ae. D4181's actual schema34/revision8

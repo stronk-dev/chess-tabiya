@@ -8,6 +8,7 @@ import { BACKWARD_LITERAL_SOURCE } from "./semantic-validation-backward-sources.
 import { PAWN_FILE_LITERAL_SOURCES } from "./semantic-validation-pawn-file-sources.js";
 import { OPPOSITION_LITERAL_SOURCE } from "./semantic-validation-opposition-sources.js";
 import { SEMANTIC_VALIDATION_TRANSITION_SOURCES } from "./semantic-validation-transition-sources.js";
+import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
 
 // Retained verbatim from python-chess 1.11.2, chess/__init__.py lines 3341–3346.
 // Copyright Niklas Fiekas; GPL-3.0-or-later. Licence and full corresponding source:
@@ -98,4 +99,4 @@ export const SEMANTIC_VALIDATION_CITED_SOURCES = Object.freeze([{
       },
     },
   ] satisfies readonly CitedCase[],
-}, ...SEMANTIC_VALIDATION_LITERAL_SOURCES, ...SEMANTIC_VALIDATION_CASTLING_SOURCES, ...SEMANTIC_VALIDATION_RIGHTS_SOURCES, ...SEMANTIC_VALIDATION_TRANSITION_SOURCES, OPPOSITION_LITERAL_SOURCE, ...PAWN_FILE_LITERAL_SOURCES, BACKWARD_LITERAL_SOURCE, SLIDER_LITERAL_SOURCE] as const);
+}, ...SEMANTIC_VALIDATION_LITERAL_SOURCES, ...SEMANTIC_VALIDATION_CASTLING_SOURCES, ...SEMANTIC_VALIDATION_RIGHTS_SOURCES, ...SEMANTIC_VALIDATION_TRANSITION_SOURCES, OPPOSITION_LITERAL_SOURCE, ...PAWN_FILE_LITERAL_SOURCES, BACKWARD_LITERAL_SOURCE, SLIDER_LITERAL_SOURCE, COUNT_POPULATION_LITERAL_SOURCE] as const);

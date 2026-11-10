@@ -40093,3 +40093,56 @@ raw bulk tracking, protected-intent edit, push or deployment. Checkpoint precede
 
 D4181 predecessor-proof follow-through: normal make roadmap-receipt verify-governance exits0;
 all tracking, type/tier and independent-review evidence is present before explicit-file staging.
+
+### 2026-11-10 — D4199 complete-population mirror repair in verification
+
+Accepted source-safe§7.1's full-population admission reached an edge-only comparison guard;
+the closed walk also lacked UCI leaves for alternative/support arrays. D4199 is recorded doing.
+Independent reviewer accepts concrete§7.3 before implementation: full original invocation and
+preflight remain, nested original played edges supply only comparison context, one strict UCI
+leaf validates both sides and retains promotion suffixes. No input-relative wildcard/callback.
+
+Actual old committed guard RED21/194 after genuine2dispatch/target1; restoring the reviewed fix
+yields215/two GREEN. Genuine pre-mint count/role/state/relation/support/denominator/array faults
+retain original receipts and are caught by independent absolute values. Symmetric wrong outputs
+can mirror but both absolute partners fail. False quiet events and crossed source/input/authority
+fail. Original aliases fail at the authentic original-edge wrapper, not an invented array error.
+
+Independent review accepts the first piece_count2 source/canonical integration conditionally.
+Fifty-six new cases cover literal both-color capture/EP/all4promotion/uniform quiet populations;
+all824 prior cases remain equal in order. Exactly one of89 profiles changes its four case cells;
+other12 families and ordinary26 stay held. New canonical/verdict/admission controls deliberately
+fail2/215 against the old compiled receipt, proving refs alone cannot admit a source. Canonical
+make semantic-validation-update is live with final gates still owed; no successful receipt or
+commit is invented. Four historical source tests retain51retired/two reanchored records and all
+original epoch cuts, treating only the new56IDs as later additions. No frozen history changed.
+
+The existing200-game current9 cost job remains live, not restarted. Bounded source/type work is
+against its immutable c0489cce launch bundle; its timings are observational workstation-load
+measurements, not an isolated predecessor comparison. Full performance gates remain serial.
+Current progress is saved in the existing source plan/review/register; D4181/D1716/D4167 and
+D3928 content/native/release remain open. No whole capability or1.0 completion, push or pause.
+
+### 2026-11-10 — D4199 first source qualification passes bounded gates
+
+Canonical generator terminates0:880/880 cases over89subjects,12qualified (old11 plus exact
+piece_count2),63population/eightexternal receipts. Final source/history/admission/cited suites
+pass2790tests/20files; tier9 and normal build pass. Full project types/Svelte0errors0warnings
+pass before the final assertion-only generic test correction; exact-index hooks recheck latest
+types. Meaningful local failures were repaired: frozen history remains875 because its existing
+helper excludes subject_outcomes; current live880 and all original epoch cuts remain exact.
+Generic execution asserts positive target count by declared emits/emits_exact/mirrors semantics,
+including actual nonempty counterfactuals; old negative/abstention expectations still require0.
+No deadline, frozen assertion/helper, source case or independent grounding was weakened.
+
+Independent review accepts contract, literal source/control integration and canonical/history
+readback conditionally on these terminal gates. D4199 closes its bounded defect/first-family
+proof. ParentD1716/D4167, other12 source qualifications, ordinary26 and D4181 current200-game cost
+stay open; cost job is the same verified-live process. No full software/serial-performance/
+capability/1.0/release claim, push, protected-intent edit or pause. Build's existing D3722 client
+chunk warning remains (1963.84KB,442.50KB gzip); no threshold changed. Explicit checkpoint follows
+before another implementation wave.
+
+D4199 checkpoint follow-through: normal make roadmap-receipt verify-governance exits0 after
+final state/RFC/roadmap flow-back. Explicit owned-file staging follows; no full-suite or remote
+CI readiness claim is inferred from these bounded gates.

@@ -1,3 +1,4 @@
+import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
 // rfc/semantic-validation-authority.md — acceptance criteria and §10 able-to-fail fixtures.
 import { SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
 import { BACKWARD_LITERAL_SOURCE } from "./semantic-validation-backward-sources.js";
@@ -263,12 +264,12 @@ describe("semantic-validation roots, profiles and verdicts", () => {
   it("[25] reports passed/open subjects by arm rather than one blended percentage", () => {
     const summary = semanticValidationSummary();
     expect(summary.subjects).toBe(SEMANTIC_VALIDATION_ROOTS.length);
-    // Four basic transitions plus all seven independently grounded current foundation profiles.
-    expect(summary.passed).toBe(11);
+    // Four basic transitions, seven current foundation profiles and the independently grounded complete piece-count population.
+    expect(summary.passed).toBe(12);
     expect(SEMANTIC_VALIDATION_RECEIPT.verdicts.filter(row => row.verdict === "passed").map(row => row.subject))
-      .toEqual([event("derived.activity.event.file_access_revealed"), event("derived.activity.event.file_state"), event("derived.structural.event.pawn_file_group"), event("rules.castling.event.rights_lost"), { kind: "event", projection: { id: "rules.structural.event.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.king_opposition", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.pawn_islands", version: 2 } }, event("rules.transition.event.capture"),
+      .toEqual([event("derived.activity.event.file_access_revealed"), event("derived.activity.event.file_state"), { kind: "event", projection: { id: "derived.semantic_avoidance.piece_count", version: 2 } }, event("derived.structural.event.pawn_file_group"), event("rules.castling.event.rights_lost"), { kind: "event", projection: { id: "rules.structural.event.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.king_opposition", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.pawn_islands", version: 2 } }, event("rules.transition.event.capture"),
         event("rules.transition.event.castled"), event("rules.transition.event.clock_reset"), { kind: "event", projection: { id: "rules.transition.event.slider_ray", version: 2 } }]);
-    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length - 11);
+    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length - 12);
     const verdict = compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => ({ arm, status: "passed" as const, refs: ["a"] })));
     expect(verdict.verdict).toBe("passed");
     expect(compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => arm === "orientation" ? { arm, status: "required" as const, owner: "o", discharge: "d" } : { arm, status: "passed" as const, refs: ["a"] })).open).toEqual(["orientation"]);
@@ -346,7 +347,7 @@ describe("semantic-validation cases and execution", () => {
     expect(receipt.arm).toBe(value.arm);
     expect(receipt.status, receipt.failure?.message).toBe("passed");
     expect(receipt.invocations).toBe(value.arm === "orientation" ? 2 : 1);
-    if (receipt.arm === "positive" || receipt.arm === "orientation") expect(receipt.targetCount).toBeGreaterThan(0);
+    if (value.expectation.kind === "emits" || value.expectation.kind === "emits_exact" || value.expectation.kind === "mirrors") expect(receipt.targetCount).toBeGreaterThan(0);
     else expect(receipt.targetCount).toBe(0);
     for (const target of receipt.targets) expect(target.factory).toMatch(/^create[A-Z]/u);
   });
@@ -432,8 +433,11 @@ describe("semantic-validation cases and execution", () => {
     expect(addedBackwardIds.size).toBe(74);
     const addedSliderIds = new Set(SLIDER_LITERAL_SOURCE.cases.map(row => row.proposition.case.id));
     expect(addedSliderIds.size).toBe(116);
-    expect(CASES.filter(row => !addedOppositionIds.has(row.id) && !addedPawnFileIds.has(row.id) && !addedBackwardIds.has(row.id) && !addedSliderIds.has(row.id))).toHaveLength(419 - SUBJECT_SAFE_RETIRED_CASES.length);
-    expect(CASES).toHaveLength(375 + addedCastleIds.size + addedRightsIds.size + addedTransitionIds.size + addedOppositionIds.size + addedPawnFileIds.size + addedBackwardIds.size + addedSliderIds.size - SUBJECT_SAFE_RETIRED_CASES.length);
+    const addedCountIds = new Set(COUNT_POPULATION_LITERAL_SOURCE.cases.map(row => row.proposition.case.id));
+    expect(addedCountIds.size).toBe(56);
+    expect(CASES.filter(row => addedCountIds.has(row.id)).map(row => row.id).sort()).toEqual([...addedCountIds].sort());
+    expect(CASES.filter(row => !addedOppositionIds.has(row.id) && !addedPawnFileIds.has(row.id) && !addedBackwardIds.has(row.id) && !addedSliderIds.has(row.id) && !addedCountIds.has(row.id))).toHaveLength(419 - SUBJECT_SAFE_RETIRED_CASES.length);
+    expect(CASES).toHaveLength(375 + addedCastleIds.size + addedRightsIds.size + addedTransitionIds.size + addedOppositionIds.size + addedPawnFileIds.size + addedBackwardIds.size + addedSliderIds.size + addedCountIds.size - SUBJECT_SAFE_RETIRED_CASES.length);
     expect(HISTORICAL_CASES.filter((item) => item.arm === "positive")).toHaveLength(230);
     expect(HISTORICAL_CASES.filter((item) => item.arm === "semantic_negative")).toHaveLength(158);
   });

@@ -1740,6 +1740,10 @@ evidence-foundation-check: mobility-check king-state-check
 semantic-validation-build:
 	./node_modules/.bin/esbuild tools/semantic-validation-build.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/semantic-validation/dist/semantic-validation-build.mjs --log-level=warning
 
+.PHONY: semantic-count-population-check
+semantic-count-population-check:
+	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-count-population.test.ts packages/runtime/src/semantic-validation-current-source.test.ts packages/runtime/src/semantic-validation-opposition.test.ts packages/runtime/src/semantic-validation-pawn-file.test.ts packages/runtime/src/semantic-validation-backward.test.ts packages/runtime/src/semantic-validation-slider.test.ts
+
 semantic-validation-update: semantic-validation-build
 	$(CI_NODE) tools/semantic-validation/dist/semantic-validation-build.mjs --write
 

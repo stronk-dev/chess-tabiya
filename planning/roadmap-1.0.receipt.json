@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ccbbf6c70e18ba575f9a5bcb4bd20de1e2e4b432a776e0e293938a7477d6a5d5",
+    "roadmap": "sha256:c27bd636adb886b5100f1f5520ef1b7a84e2874ee2a2c9464560652f03a47e59",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:6dd3d7743e3ff9a0cacd17f62c08bafbb30ed838d454f370caa85529f6c85467",
-    "rfcRegister": "sha256:c843c75a7380211f611387b7027ae976d928ba1b1f01381ae4a941150c351f3d",
+    "workState": "sha256:a0ead2b6470c4b75f7d6bb440b28c0e9f9713977c782f3229aef1193772b1edb",
+    "rfcRegister": "sha256:ce0a22800ee208866f6fb60691496cd0d527177ffdad074874d0e172604e5c94",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -33,7 +33,7 @@
       "todo": 632,
       "doing": 172,
       "blocked": 1063,
-      "done": 1917,
+      "done": 1918,
       "refused": 163
     },
     "workItems": {
@@ -357,7 +357,7 @@
       "nextAction": "Measure current200-game Profile cost after the committed genuine predecessor8 proof; then complete independent13 source qualifications and D4167 reverse consumers. Do not promote whole foundation or held content.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion. Subsequent D4199 fixes complete-population mirror context and adds one strict UCI leaf under independent acceptance. Actual old guardRED21/194 restoresGREEN215/two. The first piece_count2 family adds56 independently accepted cases preserving all824 predecessors. Generator880/880 over89subjects yields12qualified; bounded2790tests/20files,tier9/types/build pass. Frozen875 history stays fixed; only this new family qualifies. Full software/serial-performance release proof remains separate. Other12source qualifications and ordinary26 remain held.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -582,7 +582,9 @@
           "rfc/live-following.md",
           "rfc/measurement-records.md",
           "apps/server/src/longitudinal-predecessor-upgrade.test.ts",
-          "tools/d4181-longitudinal-predecessor-fixture.mjs"
+          "tools/d4181-longitudinal-predecessor-fixture.mjs",
+          "packages/runtime/src/semantic-validation-count-population-sources.ts",
+          "packages/runtime/src/semantic-validation-count-population.test.ts"
         ],
         "anchors": [
           {
@@ -1053,7 +1055,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:f261cc360b433685b9342a96998ab26a55fbe2e1db22b1fda27adf0f5a753d55"
+            "digest": "sha256:7e4adea116d1c78f760b1e0cd7ca4e623d8cb39202662a99a15d149937ea6413"
           },
           {
             "kind": "work_state",
@@ -1088,7 +1090,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
+            "digest": "sha256:c3bf337d10064e6626975bf85289aff79b998195a529f24246cf033f0d0277fe"
           },
           {
             "kind": "work_state",
@@ -1189,6 +1191,11 @@
             "kind": "rfc",
             "id": "measurement-records.md",
             "digest": "sha256:3d0740faa0d97234fed16bcf9c4b288508888c3cbf15868363d4822d241f5c7e"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4199",
+            "digest": "sha256:3fc2da94dc2636182cc1787e46d3da77196453f6ac3ce4a715cf632f4532ac53"
           }
         ]
       },
@@ -1212,7 +1219,7 @@
       "nextAction": "Complete current full gate after independently reviewed current-consumer repairs and accepted native same-fact inspection. Then finish D4167 Sight/Play/Compare/guidance/voice reverse bindings and independent13 source qualifications; D4175 ordinary26 remain held.",
       "latestCheckpoint": {
         "at": "2026-11-10",
-        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion.",
+        "summary": "Fresh serial normal software gate passes17205tests/all566files555.42s, unchanged performance7/four59.38s; governance/build pass. Five scoped commits preserve independent fixes; coordinated kernel648dbad2 and trackerce60e6ae are committed. D4185/D4188 bounded native Nudge/Review selection and explicit same-fact inspection pass actual14pairs/bothcolors cookie REST/strict selectedDOM and spectator/read/refusal/lifetime controls. Migration35/revision9/all-six-family source ownership is implemented. Genuine8 output now supplies a171KB standalone SQL fixture: actual startup/current worker/reopen/all-six-family omission/repair passes2/2; saved/account records unchanged. All project types and nine tier controls pass. Current200-game bulk cost remains owed.13source qualification, D4167 reverse consumers and ordinary26 remain; D3928 content/native/release hold stands. Earlier concurrent run130 is invalid; no whole parent/capability/milestone/release promotion. Subsequent D4199 fixes complete-population mirror context and adds one strict UCI leaf under independent acceptance. Actual old guardRED21/194 restoresGREEN215/two. The first piece_count2 family adds56 independently accepted cases preserving all824 predecessors. Generator880/880 over89subjects yields12qualified; bounded2790tests/20files,tier9/types/build pass. Frozen875 history stays fixed; only this new family qualifies. Full software/serial-performance release proof remains separate. Other12source qualifications and ordinary26 remain held.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/presentation-move-path.ts",
@@ -1783,7 +1790,9 @@
           "tools/staged-typecheck.mjs",
           "tools/staged-typecheck.test.mjs",
           "apps/server/src/bot-opponent-operation.ts",
-          "apps/server/src/bot-opponent-ply.test.ts"
+          "apps/server/src/bot-opponent-ply.test.ts",
+          "packages/runtime/src/semantic-validation-count-population-sources.ts",
+          "packages/runtime/src/semantic-validation-count-population.test.ts"
         ],
         "anchors": [
           {
@@ -2064,7 +2073,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
+            "digest": "sha256:c3bf337d10064e6626975bf85289aff79b998195a529f24246cf033f0d0277fe"
           },
           {
             "kind": "work_state",
@@ -2664,7 +2673,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:f261cc360b433685b9342a96998ab26a55fbe2e1db22b1fda27adf0f5a753d55"
+            "digest": "sha256:7e4adea116d1c78f760b1e0cd7ca4e623d8cb39202662a99a15d149937ea6413"
           },
           {
             "kind": "work_state",
@@ -2760,6 +2769,11 @@
             "kind": "work_state",
             "id": "D4198",
             "digest": "sha256:c5fb6b4ba01f25ce951f9a59c176a456ddb6ae50479697573c7e0563c262bbee"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4199",
+            "digest": "sha256:3fc2da94dc2636182cc1787e46d3da77196453f6ac3ce4a715cf632f4532ac53"
           }
         ]
       },
@@ -3936,7 +3950,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
+            "digest": "sha256:c3bf337d10064e6626975bf85289aff79b998195a529f24246cf033f0d0277fe"
           },
           {
             "kind": "work_state",
@@ -4153,7 +4167,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
+            "digest": "sha256:c3bf337d10064e6626975bf85289aff79b998195a529f24246cf033f0d0277fe"
           },
           {
             "kind": "work_state",
@@ -5012,7 +5026,7 @@
           {
             "kind": "rfc",
             "id": "longitudinal-store.md",
-            "digest": "sha256:2a480f6c4dfa3857116535294997a7412e8baf1886f5bd31b13a6643a99cc9a7"
+            "digest": "sha256:c3bf337d10064e6626975bf85289aff79b998195a529f24246cf033f0d0277fe"
           },
           {
             "kind": "work_state",

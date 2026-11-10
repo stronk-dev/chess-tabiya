@@ -1,3 +1,4 @@
+import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
 import { restoreSubjectSafeHistoricalCases, SUBJECT_SAFE_RETIRED_CASES, SUBJECT_SAFE_REANCHORED_CASES } from "./testing/subject-safe-retired-semantic-cases.js";
 // Independent literal source controls; canonical/profile integration follows source review.
 import { SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
@@ -215,16 +216,18 @@ describe("real fixed authority binding before qualification", () => {
 
 it("joins exactly220 reviewed cases, preserves the prior465 and qualifies only the four current subjects", () => {
   const canonical = (JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
-  expect(canonical).toHaveLength(824);
+  expect(canonical).toHaveLength(824 + COUNT_POPULATION_LITERAL_SOURCE.cases.length);
   expect(SUBJECT_SAFE_RETIRED_CASES).toHaveLength(51);
   const historical = restoreSubjectSafeHistoricalCases(canonical as unknown as Record<string, unknown>[]);
+  // This frozen image deliberately excludes every new subject_outcomes case.
   expect(historical).toHaveLength(875);
+  expect(historical.some(row => (row.operation as { id?: string }).id === "runtime.semantic.subject_outcomes")).toBe(false);
   const liveIds = new Set(canonical.map(row => row.id));
   expect(SUBJECT_SAFE_RETIRED_CASES.every(row => !liveIds.has(row.id as string))).toBe(true);
   expect(historical.filter(row => SUBJECT_SAFE_RETIRED_CASES.some(retired => retired.id === row.id))).toEqual(SUBJECT_SAFE_RETIRED_CASES);
   for (const original of SUBJECT_SAFE_REANCHORED_CASES) expect(historical.find(row => row.id === original.id)).toEqual(original);
   expect(canonical.filter(row => actualCaseMap.has(row.id))).toEqual(actualCases);
-  const laterIds = new Set([BACKWARD_LITERAL_SOURCE, SLIDER_LITERAL_SOURCE].flatMap(source => source.cases.map(row => row.proposition.case.id)));
+  const laterIds = new Set([BACKWARD_LITERAL_SOURCE, SLIDER_LITERAL_SOURCE, COUNT_POPULATION_LITERAL_SOURCE].flatMap(source => source.cases.map(row => row.proposition.case.id)));
   expect(canonical.filter(row => !actualCaseMap.has(row.id) && !laterIds.has(row.id))).toHaveLength(465 - SUBJECT_SAFE_RETIRED_CASES.length);
   for (const family of PAWN_FILE_FAMILIES) {
     const subject = PAWN_FILE_SUBJECTS[family];

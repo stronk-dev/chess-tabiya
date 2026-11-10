@@ -11378,3 +11378,50 @@ Root execution2026-11-10: fresh serial normal verify-software passes17,205/all56
 7/four; subsequent verify-governance/build passes. D4185/D4188 bounded delivery closes; actual
 source13qualification, reverse consumers, genuine8 startup and current bulk cost remain separate.
 No independent review verdict, source admission or release status is inferred from this log.
+
+### 2026-11-10 — D4199 complete-population mirrors and first subject qualification
+
+Independent source/control reviewer foundation_style_review confirms two concrete blockers at
+the symbol: source-safe§7.1 already admits/validates complete population mirror inputs, but the
+runner rejects them after dispatch at its edge-only comparison context; the closed geometric
+walk also cannot transform alternative/support UCI leaves. The reviewer accepts the concrete
+§7.3 amendment before implementation: original complete inputs/invocations/preflight/receipts
+stay intact, only validated played edges provide the existing comparison context; one strict
+uci leaf checks both sides, preserves literal promotion suffixes and allows no callback/alias
+normalization/input-relative wildcard.
+
+The same reviewer independently accepts the literal piece_count2 source for canonical/profile
+integration, conditional on canonical readback and normal gates. All eight root boards, both
+colors, regular pawn capture, EP, all four promotions and genuinely nonforced available quiet
+populations are literal. Expected values use independent placement character counts and the
+disclosed integer relation convention, never production output. Counterfactual cases check one
+whole alternative/state/support/denominator payload; paired emits_exact positives cover every
+subject/event. Explicit partner indices keep moves attached to their states.
+
+Genuine computeSubjectOutcomes pre-mint faults retain original receipt/inputs/population; the
+normal sole factory mints the results. Wrong counts/color/role/state/relation, crossed move/state,
+wrong support membership at unchanged cardinality, numerators/denominators and five-event
+drop/duplicate/reverse fail the full independent positives. Symmetric wrong counts/roles still
+mirror but both independent absolute partners fail. A genuinely minted false quiet event fails.
+Before/move/after alias faults fail earlier at the original-edge wrapper after one dispatch,
+not at an invented array check. Crossed identity/authority/input/partner cases refuse with zero
+source calls. Actual old committed runner RED21/194 includes real orientation target1 after two
+dispatches; restoring the fix yields GREEN215/two.
+
+Existing824 cases are checked unchanged as the canonical prefix; only one of89 profiles changes
+its four required case arms to the new56 exact references. The other12 subject families remain
+required, imported receipt meaning stays separate, and ordinary26 bindings stay held. Canonical
+compilation/final types/gates remain pending at this review checkpoint. No parent, D1716/D4167,
+capability or release acceptance follows.
+
+D4199 terminal follow-through: canonical generation exits0 with880/880 cases,89subjects and
+exact12qualified (only piece_count2 added),63populations/eightexternals. Final bounded source/
+history/admission/cited regressions pass2790/20; tier9 and build pass. Full project types and
+Svelte0errors0warnings pass before the final generic-test assertion-only correction; the normal
+exact-index hook checks current types again. Local gates caught my incorrect875+56 frozen-view
+expectation: the existing custody helper deliberately excludes new subject_outcomes, so all
+four tests retain875 with explicit exclusion. Reviewer re-reads/accepts this fixed boundary.
+The generic runner test now derives nonemptiness from the actual expectation, allowing real
+counterfactual emits; explicit new56ID census leaves all old historical cuts unchanged. No
+frozen helper/body was weakened. Other12source/ordinary26/full software/performance/release
+remain separate; no broader acceptance is inferred.

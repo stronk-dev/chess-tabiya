@@ -1,6 +1,6 @@
 # RFC: subject-safe semantic selection
 
-- **Status:** implementing — independently accepted source/selection contract2026-11-09. Canonical42/compiler7, all13 typed factories/wrappers, selector/policy2, exact retirement/history and14 compact pairs implemented with bounded review; real delivery/qualification/full gates remain. D4180 validation and D4178 grade-plan repairs close locally. D4181 longitudinal current-source adoption is separately accepted/implementing under longitudinal-store §A.2/A.2.5a; D4179 proposed Review exposure delivery returned before implementation. Existing decision/checkpoint: planning/learner-modules/compiler2-independent-review-2026-11-02.md.
+- **Status:** implementing — independently accepted source/selection contract2026-11-09. Canonical42/compiler7, all13 typed factories/wrappers, selector/policy2, exact retirement/history and14 compact pairs implemented with bounded review; real delivery/qualification/full gates remain. D4180 validation and D4178 grade-plan repairs close locally. D4199§7.3 closes full-population mirrors/strict UCI leaves and the first piece_count2 qualification; other12source proofs remain. D4181 longitudinal current-source adoption is separately accepted/implementing under longitudinal-store §A.2/A.2.5a; D4179 proposed Review exposure delivery returned before implementation. Existing decision/checkpoint: planning/learner-modules/compiler2-independent-review-2026-11-02.md.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09
 - **Parent:** `archive/semantic-evidence-selection.md` (immutable historical contract).
@@ -898,6 +898,52 @@ Controls must demonstrate a genuine recorded event outside selector2 still valid
 new full-source consumer, selector2 refuses/excludes it, all original factory/event/source checks
 still reject copied/crossed observations, the retired selector1 and policy1 refuse, and remaining
 roots/profiles/cases remain set-equal. Verify real consumption, not merely an implementation anchor.
+
+### 7.3 D4199 — full-population result mirrors and canonical UCI leaves
+
+**Independently accepted2026-11-10 by the source/control reviewer; bounded implementation and first piece_count2 qualification verified. Other12 source-family proofs remain owed.**
+This bounded amendment coordinates semantic-validation-authority §4.1a's closed operand walk
+with the complete source operations already required by §7.1. No new source/chess meaning,
+authority issuer, consumer, qualification waiver or selected-output substitution is introduced.
+
+The actual runner already validates transformed subject_outcomes/complete_alternatives root,
+played and every legal edge/digest before invocation. Its final edge-only context check then
+rejects those cases. After that existing full-population preflight, supply the two original
+nested population.played edges as the existing SemanticMirrorInputContext. Ordinary edge cases
+keep their original edges; unsupported input kinds still fail. Do not narrow the operation input:
+both invocations, case/authority/input receipts, exact family and full-population checks remain
+over the original complete inputs. Same-side beforeFen/moveUci/afterFen operands must still equal
+the exact corresponding played input, including all counters. A same-side consistent corruption
+of both output/input aliases cannot be excused by a geometric comparison.
+
+Add exactly one geometric leaf value, `uci`, to SemanticMirrorValueRule and its strict parser.
+It accepts only a lowercase canonical token of two different a1–h8 squares, optionally followed
+by exactly one q/r/b/n promotion character. Reject null/empty/non-string/uppercase/malformed,
+same-square, null-move/drop notation and every other suffix. Check BOTH source and partner token
+domains. Reuse the existing mirrorSemanticUci square geometry and retain the literal promotion
+suffix; do not normalize king-destination/rook-destination castling aliases, discard promotion
+or call a case-supplied transform. Actual position legality and canonical dialect stay owned by
+the earlier complete legal-population fixture check, not this token transform.
+
+The new rule follows the existing scalar/ordered/canonical_set mechanics and total leaf coverage.
+It does not widen `input_move_uci` paths, accept wildcards in input-relative identity rules or
+permit FEN/UCI operands to be ignored. Alternative/support arrays use their complete literal UCI
+membership and corresponding state/relation paths. Where canonical move ordering changes under
+geometry, independently declared index remapping must keep each move attached to its own state;
+never compare flattened independent sets of moves and values to hide a crossed pairing. Source
+and partner population admission still checks every legal edge, played membership, uniqueness,
+root counters, child FENs and recomputed legalSetDigest before either source dispatches.
+
+Required falsifiers: a genuine nonempty subject_outcomes orientation fails at the old final
+edge-only check, then passes through the real fixed authority/operation with complete literal
+absolute partners. Exercise all geometries at the token layer, all four promotion suffixes,
+malformed values on BOTH sides, source/partner same-side counter/UCI corruption and extra/missing/
+duplicate/changed legal edges. Wrong family/root/played/child/digest and input-transform faults
+must retain zero-dispatch refusal. Complete event positives must reject wrong subject/color/
+role/value/relation, extra/omitted/duplicate/reordered events, wrong supporting UCIs or denominator,
+crossed alternative UCI/state and symmetric wrong outputs despite a passing geometric mirror.
+No current profile becomes present until its own real positive/negative/orientation/counterfactual
+references execute; all other required arms and the held ordinary26 remain unchanged.
 
 ## 8. Remaining full-consumer obligations
 

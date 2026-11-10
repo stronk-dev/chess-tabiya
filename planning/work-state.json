@@ -35196,6 +35196,15 @@
       "uxItems": [],
       "evidence": "77e8528f",
       "evidenceKind": "commit"
+    },
+    {
+      "id": "D4199",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3fc2da94dc2636182cc1787e46d3da77196453f6ac3ce4a715cf632f4532ac53",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-count-population.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

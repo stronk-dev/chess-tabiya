@@ -377,8 +377,17 @@ export async function executeSemanticValidationCase(value: SemanticValidationCas
         const partnerTargets = selectSemanticTargets(partnerResult, value.subject);
         partnerTargets.forEach(assertSemanticTargetValueAuthority);
         const shape = (observation: SemanticValidationObservation) => ({ projection: observationProjection(observation), sign: observation.kind === "event" ? observation.item.sign : "state", operands: observationEvidence(observation).payload });
-        if (value.input.kind !== "edge" || mirrorPartner.input.kind !== "edge") throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "mirror context requires two exact edges");
-        compareSemanticMirror(selected.map(shape), partnerTargets.map(shape), expectation.geometry, expectation.operandRules, { source: value.input, partner: mirrorPartner.input });
+        // Full-population fixture/partner/authority admission above remains over the original
+        // inputs, and both invocations still consume those complete populations. Only the
+        // existing input-relative operand context projects their already validated played edge.
+        const playedEdge = (input: SemanticValidationCase["input"]): SemanticEdgeInput => {
+          if (input.kind === "edge") return input;
+          if (input.kind === "subject_outcomes") return input.population.played;
+          if (input.kind === "complete_alternatives") return input.played;
+          throw new SemanticValidationError("SEMANTIC_VALIDATION_ORIENTATION_SCHEMA", "mirror context requires original exact played edges");
+        };
+        compareSemanticMirror(selected.map(shape), partnerTargets.map(shape), expectation.geometry, expectation.operandRules,
+          { source: playedEdge(value.input), partner: playedEdge(mirrorPartner.input) });
         break;
       }
     }

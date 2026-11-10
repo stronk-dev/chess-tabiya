@@ -4,7 +4,10 @@
 isolated SQLite database, replays ten existing CC0 lines into200native64-ply sessions (100per side),
 runs the complete current production projector, probes the three existing source operands and
 compares current profile cards/contributors/denominators. It also reproduces first-owner versus
-first-side castling mismatch. Expect roughly ten minutes on the measured development host.
+first-side castling mismatch. The historical revision8 run took roughly ten minutes; that is not
+a revision9 estimate. Current54-input/all-six-family cost is being measured and is substantially
+longer. The job prints completed counts and fails source/publication/parity errors, not an
+invented total-time threshold.
 Only compact timings/counts print; no raw dumps are written. It is outside ordinary CI, carries
 no timing threshold and does not implement or authenticate a new worker game context/read model.
 The measured checkpoint is in `design/research/player-style-metrics.md` (2026-11-05).

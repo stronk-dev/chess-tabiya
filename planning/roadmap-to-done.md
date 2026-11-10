@@ -9,6 +9,14 @@ interrupted130 and remains unusable. Five scoped commits preserve the independen
 repair/accepted contract. Coordinated source/schema/API/consumer checkpoint648dbad2 and tracker
 closeoutce60e6ae are committed without claiming parent completion.
 
+The subsequent D4199 qualification cut passes its bounded verification: independently accepted§7.3
+fixes complete-population result context and adds one strict canonical-UCI leaf. Actual old guard
+fails21controls after real source dispatch; the restored fix passes215/two. Canonical generation
+passes880/880 cases over89subjects, with12qualified: the previous11 plus piece_count2 only.
+All824 prior cases remain unchanged; the other12 new families and ordinary26 remain held.
+Source/history/admission/regression2790/20, nine tier controls and build pass before its own commit;
+the full software/performance release gate is not implied by this source cut.
+
 Canonical42/compiler7, all13 source-owned outcome factories and selector/policy2 share original
 root/child sources, complete quiet/lifecycle states and legal populations. Nine old public event
 meanings retain unchanged custody of51cases/9profiles/8receipts. Normal semantic generation and
