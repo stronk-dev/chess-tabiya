@@ -9,21 +9,13 @@ pre-commit:
     - name: staged-file-sizes
       run: node tools/git-size-check.mjs --staged
 
-    - name: runtime-typecheck
-      glob: "packages/runtime/**/*.{ts,js}"
-      run: pnpm --filter @chess-tabiya/runtime typecheck
-
-    - name: schema-typecheck
-      glob: "packages/schema/**/*.{ts,js}"
-      run: pnpm --filter @chess-tabiya/schema typecheck
-
-    - name: server-typecheck
-      glob: "apps/server/**/*.{ts,js}"
-      run: pnpm --filter @chess-tabiya/server typecheck
-
-    - name: web-typecheck
-      glob: "apps/web/**/*.{ts,js,svelte}"
-      run: pnpm --filter @chess-tabiya/web typecheck
+    # One project graph from the index; live partial-file hiding is not a project snapshot.
+    # Run commit hooks and working-tree verification sequentially.
+    - name: staged-typecheck
+      glob:
+        - "packages/**/*.{ts,js}"
+        - "apps/**/*.{ts,js,svelte}"
+      run: make staged-typecheck
 
     - name: process-contracts
       glob:

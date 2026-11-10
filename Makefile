@@ -115,6 +115,10 @@ check: verify
 typecheck:
 	pnpm typecheck
 
+.PHONY: staged-typecheck
+staged-typecheck:
+	$(CI_NODE) tools/staged-typecheck.mjs
+
 test:
 	pnpm test
 
@@ -158,7 +162,7 @@ docs-check:
 	$(CI_NODE) tools/docs-index.mjs
 
 staged-process-contracts-test:
-	$(CI_NODE) --test tools/staged-process-contracts.test.mjs
+	$(CI_NODE) --test tools/staged-process-contracts.test.mjs tools/staged-typecheck.test.mjs
 
 staged-process-contracts:
 	$(CI_NODE) tools/staged-process-contracts.mjs
