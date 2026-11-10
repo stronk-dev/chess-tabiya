@@ -9,7 +9,7 @@ import * as exchange from "./exchange.js";
 import { evidenceValueRouteRegistry, invokeEvidenceValueRoute, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
 import * as control from "./square-control.js";
 import { defenderExposureValue } from "./internal/defender-exposure.js";
-import { defenderExposureOperands } from "./semantic-evidence.js";
+import { defenderExposureOperands, localDefenderExposure, localSemanticCollectorOutcomes, localSemanticEventClosure } from "./semantic-evidence.js";
 
 const ROUTE = "derived.tactic.defender_exposure@2";
 const key = (value: { readonly id: string; readonly version: number }) => `${value.id}@${value.version}`;
@@ -33,6 +33,40 @@ const fixtures = [
 ] as const;
 
 describe("source-owned defender exposure (accepted F2 §2.3m)", () => {
+  it("keeps the original wrapper and inputs at each factory ordinal after breadth sorting", () => {
+    const { beforeFen, moveUci, afterFen } = edge("r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1", "c5b6");
+    const closure = localSemanticEventClosure(beforeFen, moveUci, afterFen);
+    const exposure = localDefenderExposure(closure);
+    if (exposure.result.kind !== "available") throw new Error("expected two available exposures");
+    expect(exposure.result.value).toHaveLength(2);
+    expect(exposure.events).toHaveLength(2);
+    const displayed = closure.events.filter(value => key(value.projection) === ROUTE);
+    expect(displayed).toHaveLength(2);
+    expect(exposure.result.value.map(item => item.evidence.payload.target.square)).toEqual(["a8", "d7"]);
+    expect(displayed[0]).toBe(exposure.events[1]);
+    expect(displayed[1]).toBe(exposure.events[0]);
+    for (const [ordinal, item] of exposure.result.value.entries()) {
+      const wrapper = exposure.events[ordinal]!;
+      expect(wrapper.evidence).toBe(item.evidence);
+      expect(wrapper.derivationInputs).toHaveLength(item.inputs.length);
+      item.inputs.forEach((input, index) => expect(wrapper.derivationInputs[index]).toBe(input));
+    }
+    expect(() => localDefenderExposure({ ...closure })).toThrow(/original collected closure/u);
+  });
+
+  it("preserves the original unavailable result distinctly from a quiet edge", () => {
+    const quiet = edge(fixtures[4][1], fixtures[4][2]);
+    const quietClosure = localSemanticEventClosure(quiet.beforeFen, quiet.moveUci, quiet.afterFen);
+    expect(localDefenderExposure(quietClosure)).toEqual({ result: { kind: "available", value: [] }, events: [] });
+
+    const checking = edge("r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6");
+    const checkingClosure = localSemanticEventClosure(checking.beforeFen, checking.moveUci, checking.afterFen);
+    const exposure = localDefenderExposure(checkingClosure);
+    expect(exposure).toEqual({ result: { kind: "unavailable", reason: "invalid_turn_clone" }, events: [] });
+    expect(localSemanticCollectorOutcomes(checkingClosure).find(value => value.projection === ROUTE)?.result).toBe(exposure.result);
+    expect(checkingClosure.events.length).toBeGreaterThan(0);
+  });
+
   it.each(fixtures)("retains full positive payloads with exactly two genuine inputs: %s", (_name, fen, move, count) => {
     const anchor = edge(fen, move), result = invokeEvidenceValueRoute(ROUTE, anchor);
     expect(result.kind).toBe("available");

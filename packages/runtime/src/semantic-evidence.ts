@@ -26,7 +26,7 @@ import {
 } from "./evidence-contract.js";
 import { evidenceValueReceipt } from "./evidence-contract.js";
 import { SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS } from "./semantic-validation.js";
-import { invokeEvidenceValueRoute, readFoundationEventInvocation, readSubjectOutcomeInvocation, type EvidenceValueRoute } from "./internal/evidence-value-routes.js";
+import { invokeEvidenceValueRoute, readFoundationEventInvocation, readSubjectOutcomeInvocation, type EvidenceValueRoute, type EvidenceValueRouteResults } from "./internal/evidence-value-routes.js";
 import { SUBJECT_OUTCOME_FAMILIES, type AnySubjectOutcomePayload, type SubjectOutcomeFamily } from "./semantic-subject-types.js";
 import { semanticPlayedOccurrenceKey, semanticPlayedSubjectOrdinal } from "./semantic-played-occurrence.js";
 import { SEMANTIC_PLAYED_RANKING_MODES } from "./semantic-played-types.js";
@@ -906,13 +906,16 @@ export function breadthSemanticEventClosure(beforeFen: string, moveUci: string, 
   }
   const exposure = invokeEvidenceValueRoute(CANDIDATE_CURRENT_SOURCE_ROUTES.defenderExposure, edge);
   if (exposure.kind === "unavailable" && exposure.reason !== "invalid_turn_clone") throw new TypeError("Defender exposure returned an undeclared abstention");
-  if (exposure.kind === "available") for (const item of exposure.value) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: item.evidence, derivationInputs: item.inputs, anchor, sign: "gained" }));
+  const exposureEvents = exposure.kind === "available" ? exposure.value.map(item =>
+    compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: item.evidence, derivationInputs: item.inputs, anchor, sign: "gained" })) : [];
+  result.push(...exposureEvents);
   for (const item of invokeEvidenceValueRoute(CANDIDATE_CURRENT_SOURCE_ROUTES.materialEvent, edge)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: item.evidence, derivationInputs: item.inputs, anchor, sign: "state" }));
   for (const evidence of invokeEvidenceValueRoute("rules.king.event.zone_state@1", edge)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence, anchor, sign: "state" }));
   for (const item of invokeEvidenceValueRoute("derived.king.captured_zone_defender@1", edge)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: item.evidence, derivationInputs: item.inputs, anchor, sign: "state" }));
   for (const item of invokeEvidenceValueRoute("derived.activity.event.open_file_occupancy@1", edge)) result.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: item.evidence, derivationInputs: item.inputs, anchor, sign: "gained" }));
   return collectedSemanticEvents(Object.freeze(result.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection)) || left.id.localeCompare(right.id))),
-    exposure.kind === "unavailable" ? [Object.freeze({ projection: CANDIDATE_CURRENT_SOURCE_ROUTES.defenderExposure, result: exposure as LocalSemanticCollectorOutcome["result"] })] : []);
+    exposure.kind === "unavailable" ? [Object.freeze({ projection: CANDIDATE_CURRENT_SOURCE_ROUTES.defenderExposure, result: exposure as LocalSemanticCollectorOutcome["result"] })] : [],
+    Object.freeze({ result: exposure, events: Object.freeze(exposureEvents) }));
 }
 
 /** Event-only view of the same current collection, not a second detector/compatibility path.
@@ -1256,21 +1259,37 @@ interface LocalSemanticCollectorOutcome {
   readonly result: { readonly kind: "unavailable"; readonly reason: "invalid_turn_clone" };
 }
 
-// Keep source outcomes private, without adding transport fields or reconstructing them from
-// public abstention labels. The candidate compiler receives the actual source result objects.
-const LOCAL_COLLECTOR_OUTCOMES = new WeakMap<LocalSemanticEventClosure, readonly LocalSemanticCollectorOutcome[]>();
-function collectedSemanticEvents(events: readonly SemanticEvidenceEvent[], outcomes: readonly LocalSemanticCollectorOutcome[]): LocalSemanticEventClosure {
+interface CollectedDefenderExposure {
+  readonly result: EvidenceValueRouteResults[typeof CANDIDATE_CURRENT_SOURCE_ROUTES.defenderExposure];
+  /** Original compiled wrappers indexed by factory ordinal, independent of display order. */
+  readonly events: readonly SemanticEvidenceEvent[];
+}
+
+// Retain original source results and wrappers without adding public closure fields.
+const LOCAL_COLLECTIONS = new WeakMap<LocalSemanticEventClosure, {
+  readonly outcomes: readonly LocalSemanticCollectorOutcome[];
+  readonly exposure: CollectedDefenderExposure;
+}>();
+function collectedSemanticEvents(events: readonly SemanticEvidenceEvent[], outcomes: readonly LocalSemanticCollectorOutcome[],
+  exposure: CollectedDefenderExposure): LocalSemanticEventClosure {
   const retained = Object.freeze([...outcomes]);
   const closure = Object.freeze({ events, abstentions: Object.freeze(retained.map(({ projection, result }) => Object.freeze({ projection, reason: result.reason }))) });
-  LOCAL_COLLECTOR_OUTCOMES.set(closure, retained);
+  LOCAL_COLLECTIONS.set(closure, { outcomes: retained, exposure });
   return closure;
 }
 
 /** Internal compiler hand-off; copied public closures cannot manufacture a source outcome. */
 export function localSemanticCollectorOutcomes(closure: LocalSemanticEventClosure): readonly LocalSemanticCollectorOutcome[] {
-  const outcomes = LOCAL_COLLECTOR_OUTCOMES.get(closure);
+  const outcomes = LOCAL_COLLECTIONS.get(closure)?.outcomes;
   if (outcomes === undefined) throw new TypeError("Local collector outcomes require the original collected closure");
   return outcomes;
+}
+
+/** The exact exposure invocation and its wrappers, accessible only from a collected closure. */
+export function localDefenderExposure(closure: LocalSemanticEventClosure): CollectedDefenderExposure {
+  const exposure = LOCAL_COLLECTIONS.get(closure)?.exposure;
+  if (exposure === undefined) throw new TypeError("Defender exposure requires the original collected closure");
+  return exposure;
 }
 
 /**
@@ -1302,7 +1321,7 @@ export function localSemanticEventClosure(beforeFen: string, moveUci: string, af
     ...(loose === undefined ? [Object.freeze({ projection: "rules.tactic.event.loose_piece@1" as const, result: Object.freeze({ kind: "unavailable" as const, reason: "invalid_turn_clone" as const }) })] : []),
     ...localSemanticCollectorOutcomes(breadth),
   ];
-  return collectedSemanticEvents(events, outcomes);
+  return collectedSemanticEvents(events, outcomes, localDefenderExposure(breadth));
 }
 
 export function localSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent[] {

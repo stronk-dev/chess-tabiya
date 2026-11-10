@@ -40779,3 +40779,9 @@ Both independent reviewers accepted the bounded replacement after correcting the
 occurrence and detail checks, and the assistance wire contract. The Inspector request carries
 requested assistance. The client retains finalized assistance to check the response. Production
 delivery and its mounted Review/Inspector journey are the next checkpoint.
+
+The first production slice retains the original defender-exposure result and its compiled
+wrappers in factory order on the shared edge closure. The focused source and Nudge tests
+passed 42 cases across three files. The White two-target control proves that factory and
+display order differ. The quiet and checking controls preserve distinct original outcomes.
+Review admission and Inspector delivery remain open.
