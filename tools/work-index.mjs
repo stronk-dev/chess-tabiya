@@ -121,10 +121,6 @@ function durableRouteText(relative, markdown) {
   return withoutProposedLedgerSections(markdown);
 }
 
-function durableMention(relative, text, id) {
-  return mention(durableRouteText(relative, text), id);
-}
-
 function routePriority(relative) {
   if (relative.startsWith("rfc/")) return 0;
   if (/(?:queue|work-order|triage)\.md$/u.test(relative)) return 1;
@@ -137,8 +133,11 @@ export function buildWorkIndex({ ledger, documents }) {
   const rows = parseLedgerRows(ledger);
   const duplicateIds = [...new Set(rows.map((row) => row.id).filter((id, index, all) => all.indexOf(id) !== index))].sort();
   const openRows = rows.filter((row) => row.open);
+  // One audit owns one immutable document snapshot. Strip non-owning sections once, not for
+  // every ledger row; exact-id matching and route ordering below remain unchanged.
+  const prepared = openRows.length === 0 ? [] : Object.entries(documents).map(([relative, text]) => [relative, durableRouteText(relative, text)]);
   const routes = openRows.map((row) => {
-    const mentions = Object.entries(documents).filter(([relative, text]) => durableMention(relative, text, row.id)).map(([relative]) => relative);
+    const mentions = prepared.filter(([, text]) => mention(text, row.id)).map(([relative]) => relative);
     const archivedDestinations = mentions.filter((relative) => relative.startsWith("rfc/archive/")).sort();
     const destinations = mentions.filter((relative) => !relative.startsWith("rfc/archive/"))
       .sort((left, right) => routePriority(left) - routePriority(right) || left.localeCompare(right));

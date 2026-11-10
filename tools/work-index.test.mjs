@@ -6,6 +6,22 @@ import test from "node:test";
 
 import { buildWorkIndex, parseLedgerRows, parseLedgerSourceRows, routeDocumentPaths } from "./work-index.mjs";
 
+test("D3946 prepares each route document once, not once for every live row", () => {
+  let preparations = 0;
+  const markdown = "D100 D101 D102 D103 are queued.\n## Proposed ledger rows\nD104 is not assigned.\n";
+  // A string-shaped instrument counts preprocessing without a host-speed assertion or global
+  // prototype mutation. The production reader still supplies ordinary immutable strings.
+  const counted = { split(separator) { preparations++; return markdown.split(separator); } };
+  const result = buildWorkIndex({ ledger: Array.from({ length: 5 }, (_, index) => `| D${100 + index} 🐞 | tracked | open |`).join("\n"),
+    documents: { "planning/queue.md": counted } });
+  assert.equal(preparations, 1);
+  assert.deepEqual(result.unrouted, ["D104"]);
+  assert.deepEqual(result.routes.slice(0, 4).map(row => row.primary), Array(4).fill("planning/queue.md"));
+  preparations = 0;
+  assert.equal(buildWorkIndex({ ledger: "| D104 ✅ | closed | done |", documents: { "planning/queue.md": counted } }).routes.length, 0);
+  assert.equal(preparations, 0); // no live rows still means no document preparation
+});
+
 test("parses open and terminal ledger glyphs without treating measured rows as closed", () => {
   assert.deepEqual(parseLedgerRows([
     "| D1 🐞 | open | queue |",
