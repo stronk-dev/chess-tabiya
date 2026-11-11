@@ -40871,3 +40871,12 @@ The 62.2-minute aggregate above is combined claim time in the in-process
 production batch runner with comparison checks. The 51.0-second reading is the
 unfiltered 54-source snapshot. Filtered reads have separate correctness tests.
 The seven pending qualifications, reverse consumer adoption and D3928 remain.
+
+### 2026-11-11 — D4179 mounted Inspector coverage corrected
+
+The full software run failed when the generic mounted detail test selected
+defender exposure on its default run. The focused run reproduced the missing
+detail button, with 136 tests passing and one failing. The corrected case uses
+the recorded `c5b6` exposure position, authenticates the Inspector requests and
+requires the original landing capture on a8 to render. The mounted file passed
+all 137 tests. The new full software result and D3928's native journey remain open.

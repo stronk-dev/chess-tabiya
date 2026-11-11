@@ -314,7 +314,7 @@ describe("independent genuine Inspector source browser", () => {
     expect(await f.httpStatuses()).toEqual([401]);
     expect(await f.stats()).toEqual({ acquisitions: [], providerCalls: [] });
   });
-  it("opens only eight metadata topics and navigates all88 human labels without acquiring evidence", async () => {
+  it("opens only eight metadata topics and navigates every human label without acquiring evidence", async () => {
     const f = await fixture(), onQuery = vi.fn(f.send), { target } = await mountBrowser({ ...f.props, onQuery });
     expect(onQuery).toHaveBeenCalledTimes(1); expect(onQuery.mock.calls[0]![0].query.view).toEqual({ kind: "inventory", start: 0 });
     const seen: string[] = [];
@@ -339,14 +339,22 @@ describe("independent genuine Inspector source browser", () => {
 
   it.each(Object.values(INSPECTOR_DETAIL_SOURCES))("%s retains its genuine bounded-member door without source cropping", async projection => {
     const advanceCase = FOUNDATION_INSPECTOR_CASES.find(row => row[0] === "derived.pawn.consequence.backward_pawn_legal_advance@1")!;
-    const f = await fixture(projection === advanceCase[0] ? { run: recordedSequenceWindowFixture({ fen: advanceCase[1], moves: [advanceCase[2]] }) } : {});
+    const isExposure = projection === INSPECTOR_DETAIL_SOURCES.defender_exposure;
+    const setup = isExposure
+      ? { fen: "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1", moves: ["c5b6"] }
+      : projection === advanceCase[0] ? { fen: advanceCase[1], moves: [advanceCase[2]] } : undefined;
+    const f = await fixture(setup === undefined ? {} : { run: recordedSequenceWindowFixture(setup), authenticatedRest: isExposure });
     const onQuery = vi.fn(f.send), { target } = await mountBrowser({ ...f.props, onQuery });
     await choose(target, projection); await settled(target);
-    const door = [...target.querySelectorAll<HTMLButtonElement>("button")].find(node => node.textContent?.startsWith("Read complete members of observation"));
-    expect(door).toBeDefined(); door!.click(); await tick(); await settled(target);
+    await click(target, "Read complete members of observation 1"); await settled(target);
     expect(onQuery.mock.calls.at(-1)![0].query.view).toMatchObject({ kind: "detail", projection, scope: { kind: "whole" }, start: 0 });
     expect(target.querySelector('[role="alert"]')).toBeNull();
-    expect(target.textContent).toMatch(/Members|No members|complete member exceeds/u);
+    if (isExposure) {
+      expect(target.textContent).toMatch(/Landing capture 1:.*landing a8/u);
+      expect(await f.httpStatuses()).toEqual(Array(onQuery.mock.calls.length).fill(200));
+    } else {
+      expect(target.textContent).toMatch(/Members|No members|complete member exceeds/u);
+    }
     await click(target, "Back to source"); await settled(target);
     expect(onQuery.mock.calls.at(-1)![0].query.view).toMatchObject({ kind: "source", projection, start: 0 });
   });
