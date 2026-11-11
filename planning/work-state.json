@@ -35385,6 +35385,15 @@
       "uxItems": [],
       "evidence": "packages/runtime/src/semantic-validation-king-outcome.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4220",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2ba808bee267426fde066611a2743e2a62366cdb46e86eaffbf65de1f85eea6e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
     }
   ]
 }

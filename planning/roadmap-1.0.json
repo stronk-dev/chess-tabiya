@@ -89,7 +89,8 @@
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
         "phase-source-composition.md",
-        "subject-safe-semantic-selection.md"
+        "subject-safe-semantic-selection.md",
+        "semantic-validation-receipt-storage.md"
       ],
       "completion": {
         "evidence": [

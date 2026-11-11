@@ -41130,3 +41130,15 @@ accepts source/mirror/fault validity. A draft illegal selected king move was cau
 execution and corrected, with no production change. All404 remaining source cases are now
 prepared; no canonical/profile/receipt or ordinary binding has changed. Next is the coordinated
 five-family case/profile/writer run, preserving all earlier semantic results and full verification.
+
+
+### 2026-11-11 — D1716 canonical proofs pass; D4220 generated size dependency
+
+The real writer passes1928/1928 cases,24/89 subjects, all13 outcome families; the ten actual
+canonical/admission controls go red10/10 before certificate generation then green10/10.
+All1524 predecessor case receipts, operations/population/external records and84 unowned
+verdicts compare exactly unchanged. The generated JSON is12,750,264 bytes, above the
+unchanged5MiB source guard. D4220 records this dependency before implementation. A lossless
+measurement finds461 unique ordered input vectors; storing each once measures4.30MB.
+A scoped receipt-storage RFC is drafted for independent review; full verification/commit
+of the coordinated outcome image waits for the storage repair. No guard or evidence drops.

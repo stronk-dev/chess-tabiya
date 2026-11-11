@@ -3121,3 +3121,15 @@ King88+control74+line148+risk94 =404 new source cases are now prepared, not yet 
 Next: append bounded case parts, bind the five profiles' four exact arms, preserve every old
 case/population/external receipt, run the canonical writer and full normal verification.
 No ordinary26, content, UI, learning-effect or release completion is inferred.
+
+
+### 2026-11-11 — Canonical outcome execution succeeds; D4220 size repair required
+
+All404 new cases pass in the real1928-case writer; exactlyfive new subjects pass (24/89,
+all13 outcome families). All1524 old case receipts and operation/population/external records,
+plus84 other verdicts, remain exact. New canonical/admission tests are genuinely red10/10
+before writing and green10/10 afterward. The full JSON is12,750,264 bytes, over the unchanged
+5MiB cap. D4220's new receipt-storage RFC proposes one exact ordered-vector dictionary:
+461 unique vectors measure4.30MB, preserving the decoded complete schema1 document.
+Independent acceptance precedes implementation; full normal gates/qualified checkpoint
+commit still remain. No ordinary26, capability, content or release claim is promoted.
