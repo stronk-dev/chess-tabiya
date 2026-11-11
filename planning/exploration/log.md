@@ -41039,3 +41039,26 @@ pre-mint authority controls and the independent legal-exchange own-piece risk re
 The independent reviewer accepts the bounded reference checkpoint after inspecting expected-
 value independence, all physical identities, ray membership/order and complete comparisons.
 No concrete flaw found. This does not accept canonical qualification or consumer readiness.
+
+
+### 2026-11-11 — D1716 independent legal-exchange risk reference
+
+Added disposable unregistered full own-piece risk reference using whole-board balance minimax
+over complete legal same-square recaptures, separate from production exchange/tactics helpers.
+Normal `make semantic-piece-risk-source-research` typechecks and passes77 checks/9.78s,
+40 roots/70 selected moves, including all legal alternatives and original physical subjects.
+Pinned captures/EP, original EP victims, all capture-promotions, defended profitable targets,
+uniform/empty versus unavailable and castling identities are explicit. The instrument's initial
+six invalid-clone input assertions were corrected to the genuine no-acquired-input refusal;
+production behavior was unchanged. Independent bounded review requested. Next: fixed-authority
+pre-mint controls and coordinated source/profile/case integration for all five remaining families.
+
+
+### 2026-11-11 — D1716 risk review and deeper stopping controls
+
+Independent static review accepts bounded reference equivalence and flags the absence of
+explicit deeper optional-stop anchors before qualification. Added both candidate chains only
+after checking each move's actual legality and fixing material expectations independently:
+White can decline a−4 recapture, retaining Black1 instead of5; Black can decline a−2
+continuation, retaining−8 instead of−10. Normal research now typechecks and passes79 checks
+in4.98s. No source/profile/consumer admission or production behavior changes.

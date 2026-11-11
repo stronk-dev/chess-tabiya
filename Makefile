@@ -4711,6 +4711,12 @@ semantic-retained-piece-source-research:
 	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
 	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/retained-piece-reference.test.ts
 
+# Disposable D1716 independently computed legal-exchange risk; no canonical admission.
+.PHONY: semantic-piece-risk-source-research
+semantic-piece-risk-source-research:
+	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
+	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/piece-risk-reference.test.ts
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

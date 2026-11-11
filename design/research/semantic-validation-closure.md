@@ -427,3 +427,40 @@ case/profile arm or consumer and adds no canonical qualification. Legal-input ge
 ray occupancy and a public differing-relation event remain separate meanings. Source citation,
 pre-mint fault controls, absolute/mirror/canonical execution and consumer adoption still remain.
 `[V]` (unchanged cited-source/profile registries; reference import boundary)
+
+
+## Complete original-own-piece risk reference — D1716, 2026-11-11
+
+Normal `make semantic-piece-risk-source-research` typechecks and passes79 checks/4.98s.
+The independent reference enumerates legal captures and same-landing-square recaptures,
+recomputing whole-board material balances at each node with optional stop. Its declared
+pawn/knight/bishop/rook/queen/king units are1/3/3/5/9/100, matching `legal-exchange@1`;
+these are product-convention units, not engine scores or a strategic judgement. Production
+exchange, tactics and lineage helpers do not supply expected results. External Chessops
+supplies legal positions/moves only. `[V]`
+(`tools/d1713-semantic-validation-matrix/piece-risk-reference.ts`,
+`tools/d1713-semantic-validation-matrix/piece-risk-reference.test.ts`;
+`packages/runtime/src/exchange.ts` declared convention)
+
+The full original-own-piece table and emitted arrays match across40 input populations and70
+selected moves, each with every legal alternative. The30 non-castle roots are15 independently
+scored input pairs; ten additional roots cover both colors of standard, stationary and crossing
+castling. Nine focused controls anchor positive8/zero0/negative−8 exchange units, pinned versus
+unpinned captures, defended-but-profitable capture, numeric original-square order, genuine EP
+victim/landing identities, illegal pinned EP and all four capture-promotion values7/7/13/9.
+Two deeper legal exchange chains pin both players' optional-stop decisions: forcing recaptures
+would change1→5 and−8→−10, while correct optional stopping retains1 and−8. Each move is
+independently checked legal. Root pawn subjects retain their identities through all four
+promotions while current roles change.
+Uniform true/false and available-empty cases stay distinct from invalid turn clones, which remain
+unavailable even with no own non-king pieces. `[V]` (same reference and79 checks)
+
+The first run exposed an instrument error: it expected an acquired legal-map input on an
+unavailable invocation. All six invalid-clone controls correctly have no acquired inputs;
+the assertion now checks that explicit refusal separately and retains original-first-input
+identity on all available cases. No production change was made to satisfy the instrument.
+`[V]` (test unavailable branch; `computeSubjectOutcomes` unavailable return)
+
+This remains unregistered source preparation. Cited grounding, real-runner pre-mint faults,
+canonical arms/admission, consumer adoption, learning effect and release proof remain separate.
+`[V]` (unchanged canonical cited-source/profile/consumer registries)

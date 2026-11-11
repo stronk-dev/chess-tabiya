@@ -3041,3 +3041,20 @@ Independent static review accepts this bounded checkpoint without a concrete fla
 this is unregistered D1716 research, not source qualification.
 Five outcome families, ordinary26 and broader consumers remain. The D1716 ledger now cites
 the actual complete0dda10a3 software certificate rather than its superseded c484bfc7 run.
+
+
+### 2026-11-11 — Independent complete own-piece risk reference
+
+Normal `make semantic-piece-risk-source-research` typechecks and passes79 checks/4.98s,
+40 roots/70 chosen moves with every legal alternative. Separate whole-board material minimax
+matches all original-own-nonking subject tables and emitted arrays. Literal material anchors,
+pin/EP legality, victim/landing identity, turnclone refusal evenempty, all capture/promotions,
+castling rook identities and genuine uniform/empty populations remain explicit. An initial
+instrument expectation about acquired inputs on unavailable results was corrected after
+reading the actual refusal path; no collector was changed. Independent review requested.
+This is D1716 unregistered reference preparation, not qualification or ordinary admission.
+
+The independent reviewer accepts the bounded reference and requests explicit deeper optional-
+stop anchors before qualification. Both legal chains are now checked with fixed material sums:
+White declines−4 rather than turning Black1 into5; Black declines−2 rather than worsening
+−8 into−10. The expanded79-test normal target passes4.98s. Source qualification remains held.

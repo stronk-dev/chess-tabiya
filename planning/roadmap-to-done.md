@@ -45,7 +45,9 @@ D4217 separately owns two obsolete inventory assertions in an older disposable r
 model. The unconnected control reference now passes34 research checks across16 boards/30moves
 with128 subjects each. Independent original-piece ray preparation passes67 research checks
 over62 literal examples and all legal alternatives; citation/fault/mirror/admission work
-remains for both references. This is not qualification.
+remains. A separate original-own-piece legal-exchange reference passes79 checks over40
+roots/70 moves, including pins, EP, promotions and castling. None of these references
+is canonical qualification.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 
