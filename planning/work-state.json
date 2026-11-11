@@ -35434,19 +35434,19 @@
       "id": "D4225",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:848352e0394b931602cb4211950861d8ae304831ba70c7910eb663b690a8f57b",
+      "sourceDigest": "sha256:a9de6220db839acd5be35e85d2812f556d918cbf6d6045560e2c1b5f9b3da628",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
     },
     {
       "id": "D4226",
-      "state": "doing",
-      "sourceGlyph": "📝",
-      "sourceDigest": "sha256:4e56929b5c17b025ac4196b6a5fe96605710c3c25501a5e48b87fa6b9dcd5e6c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:328fe7ba0b9b16cd57844e79eaa4ea179b83867c05d66c6362cbb7f509ae2f15",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-11"
+      "evidence": "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md",
+      "evidenceKind": "path"
     }
   ]
 }

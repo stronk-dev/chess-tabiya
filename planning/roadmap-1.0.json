@@ -89,8 +89,7 @@
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
         "phase-source-composition.md",
-        "subject-safe-semantic-selection.md",
-        "bounded-evidence-verification.md"
+        "subject-safe-semantic-selection.md"
       ],
       "completion": {
         "evidence": [
@@ -974,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
+        "nextAction": "D4226 is complete. Measure D4224 actual acquisition stages/call counts before selecting a repair, and resolve remaining D4225 retention before D4175 ordinary bindings. Preserve all source/authority semantics; D4167 and D3928 remain.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion. Both independent reviews now accept the finite bounded-verifier contract; implementation/measurement still required.",
+          "summary": "D4226 bounded verification memo is implemented/independently accepted for archival: two weak262144-add generations preserve old authority and full32-source graphs/receipts, with239\u2013240MiB lower held/released heap in every4ordinary paired trial.3faster/1slower,3.72%lower summed local source time is no portable claim. Full frozen-production20500software/581+7performance/four/types/build/governance pass; final stronger cycle/sparse assertions pass42focused afterward. Canonical1928/1928/24of89,461vectors/8externals unchanged except11 exact helper/hash and63 joined predicate hashes;4341526B<5MiB. D4225 remaining~884MiB held/~318MiB released and D4224~18s acquisition stay open, as do D4175ordinary26/D4167/D3928. No capability/release completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1239,8 +1238,11 @@
             "tools/d4175-outcome-delivery/build-memo-probe.mjs",
             "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
             "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json",
-            "rfc/bounded-evidence-verification.md",
-            "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md"
+            "rfc/archive/bounded-evidence-verification.md",
+            "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md",
+            "packages/runtime/src/frozen-data-memo.ts",
+            "packages/runtime/src/frozen-data-memo.test.ts",
+            "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json"
           ],
           "anchors": [
             {
@@ -1891,17 +1893,12 @@
             {
               "kind": "work_state",
               "id": "D4225",
-              "digest": "sha256:848352e0394b931602cb4211950861d8ae304831ba70c7910eb663b690a8f57b"
+              "digest": "sha256:a9de6220db839acd5be35e85d2812f556d918cbf6d6045560e2c1b5f9b3da628"
             },
             {
               "kind": "work_state",
               "id": "D4226",
-              "digest": "sha256:4e56929b5c17b025ac4196b6a5fe96605710c3c25501a5e48b87fa6b9dcd5e6c"
-            },
-            {
-              "kind": "rfc",
-              "id": "bounded-evidence-verification.md",
-              "digest": "sha256:98559bb7595241e3e73782117c6d2cdefd98938b2c2f0bf68a1e9cc2ef18de25"
+              "digest": "sha256:328fe7ba0b9b16cd57844e79eaa4ea179b83867c05d66c6362cbb7f509ae2f15"
             }
           ]
         },
@@ -1922,10 +1919,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
+        "nextAction": "D4226 is complete. Measure D4224 actual acquisition stages/call counts before selecting a repair, and resolve remaining D4225 retention before D4175 ordinary bindings. Preserve all source/authority semantics; D4167 and D3928 remain.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion. Both independent reviews now accept the finite bounded-verifier contract; implementation/measurement still required.",
+          "summary": "D4226 bounded verification memo is implemented/independently accepted for archival: two weak262144-add generations preserve old authority and full32-source graphs/receipts, with239\u2013240MiB lower held/released heap in every4ordinary paired trial.3faster/1slower,3.72%lower summed local source time is no portable claim. Full frozen-production20500software/581+7performance/four/types/build/governance pass; final stronger cycle/sparse assertions pass42focused afterward. Canonical1928/1928/24of89,461vectors/8externals unchanged except11 exact helper/hash and63 joined predicate hashes;4341526B<5MiB. D4225 remaining~884MiB held/~318MiB released and D4224~18s acquisition stay open, as do D4175ordinary26/D4167/D3928. No capability/release completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2524,8 +2521,11 @@
             "tools/d4175-outcome-delivery/build-memo-probe.mjs",
             "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
             "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json",
-            "rfc/bounded-evidence-verification.md",
-            "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md"
+            "rfc/archive/bounded-evidence-verification.md",
+            "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md",
+            "packages/runtime/src/frozen-data-memo.ts",
+            "packages/runtime/src/frozen-data-memo.test.ts",
+            "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json"
           ],
           "anchors": [
             {
@@ -3541,17 +3541,12 @@
             {
               "kind": "work_state",
               "id": "D4225",
-              "digest": "sha256:848352e0394b931602cb4211950861d8ae304831ba70c7910eb663b690a8f57b"
+              "digest": "sha256:a9de6220db839acd5be35e85d2812f556d918cbf6d6045560e2c1b5f9b3da628"
             },
             {
               "kind": "work_state",
               "id": "D4226",
-              "digest": "sha256:4e56929b5c17b025ac4196b6a5fe96605710c3c25501a5e48b87fa6b9dcd5e6c"
-            },
-            {
-              "kind": "rfc",
-              "id": "bounded-evidence-verification.md",
-              "digest": "sha256:98559bb7595241e3e73782117c6d2cdefd98938b2c2f0bf68a1e9cc2ef18de25"
+              "digest": "sha256:328fe7ba0b9b16cd57844e79eaa4ea179b83867c05d66c6362cbb7f509ae2f15"
             }
           ]
         },

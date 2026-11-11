@@ -9,7 +9,7 @@ import { build } from "esbuild";
 export const PROBE_KEY = "__TABIYA_RESEARCH_MEMO_PROBES__";
 export const PULSE_KEY = "__TABIYA_RESEARCH_IMMUTABLE_PULSE__";
 export const RESET_KEY = "__TABIYA_RESEARCH_IMMUTABLE_RESET__";
-export const PULSE_SITE = { path: "packages/runtime/src/evidence-contract.ts", anchor: "const IMMUTABLE_DATA = new WeakSet<object>();" };
+export const PULSE_SITE = { path: "packages/runtime/src/evidence-contract.ts", anchor: "const IMMUTABLE_DATA = new FrozenDataMemo(262_144);" };
 export const SITES = Object.freeze([
   { path: "packages/runtime/src/fen-memo.ts", name: "readings", anchor: "const CACHES = new Map<string, Map<string, unknown>>();",
     counts: "[...CACHES].map(([name, entries]) => ({ name, entries: entries.size })).sort((a,b) => a.name.localeCompare(b.name))", clear: "CACHES.clear()" },
@@ -51,7 +51,7 @@ export function permitImmutableReset(source) {
   const replaced = source.replace(PULSE_SITE.anchor, PULSE_SITE.anchor.replace("const ", "let "));
   return replaced + `\n// D4225 post-work verification-memo replacement; never an authority reset.\n{
     if (Object.hasOwn(globalThis, ${JSON.stringify(RESET_KEY)})) throw Error('Duplicate immutable-data reset');
-    globalThis[${JSON.stringify(RESET_KEY)}] = () => { IMMUTABLE_DATA = new WeakSet(); };
+    globalThis[${JSON.stringify(RESET_KEY)}] = () => { IMMUTABLE_DATA = new FrozenDataMemo(262_144); };
   }\n`;
 }
 

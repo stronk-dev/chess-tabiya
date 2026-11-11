@@ -1,4 +1,5 @@
 import type { ConventionReceipt } from "./evidence-conventions.js";
+import { FrozenDataMemo } from "./frozen-data-memo.js";
 import { assertEvidenceReductionDeclaration } from "./evidence-reduction-contract.js";
 import { assertEvidenceReductionValue, assertEvidenceReductionConsumerManifest, evidenceReductionMintReceipt, joinEvidenceReductionValue, type EvidenceReductionAuthority, type EvidenceReductionReceipt } from "./internal/evidence-reduction-seal.js";
 
@@ -553,7 +554,8 @@ function sha256(input: string): string {
 
 // Object.freeze only freezes one object. Cache a digest only after this module has frozen
 // the complete ordinary-data tree; a caller's shallow freeze is not that guarantee.
-const IMMUTABLE_DATA = new WeakSet<object>();
+// Verification shortcuts may expire; identity/value/source receipts never expire with them.
+const IMMUTABLE_DATA = new FrozenDataMemo(262_144);
 
 function freezeData(value: unknown, visiting: WeakSet<object>): boolean {
   if (value === null || typeof value !== "object") return true;

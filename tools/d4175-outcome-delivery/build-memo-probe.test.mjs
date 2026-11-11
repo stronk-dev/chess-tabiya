@@ -27,7 +27,7 @@ test("the separate reset changes exactly the verifier's declaration and adds no 
   const expected = source.replace(PULSE_SITE.anchor, PULSE_SITE.anchor.replace("const ", "let "));
   assert(result.startsWith(expected)); assert.equal(expected.length, source.length - 2);
   const added = result.slice(expected.length);
-  assert(added.includes(RESET_KEY)); assert(added.includes("IMMUTABLE_DATA = new WeakSet()"));
+  assert(added.includes(RESET_KEY)); assert(added.includes("IMMUTABLE_DATA = new FrozenDataMemo(262_144)"));
   assert(!/VALUE_RECEIPTS|DECLARED_VALUES|declareEvidence|\.clear\(/u.test(added));
   assert.throws(() => permitImmutableReset(source.replace(PULSE_SITE.anchor, "")));
   assert.throws(() => permitImmutableReset(source + PULSE_SITE.anchor));

@@ -2,7 +2,14 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. The coordinated source/storage cutover in `03b584b4` passes
+The full 1.0 goal remains active. D4226 now closes the independently reviewed bounded verifier
+repair: two weak generations preserve complete evidence while reducing post-GC heap by roughly
+239–240MiB in every matched32-decision pair. Full frozen-production verification passes20,500
+software tests/581files and seven performance tests/fourfiles; final stronger cycle/sparse
+assertions pass42focused tests afterward. Types, build and governance pass. The finite RFC is
+[archived](../rfc/archive/bounded-evidence-verification.md). D4224/D4225/consumer/release work stays open.
+
+The coordinated source/storage cutover in `03b584b4` previously passed
 **20,488 software tests in 580 files** (742.34 seconds) and **seven performance tests in
 four files** (57.73 seconds), with the complete normal gate exiting zero. All 1,928
 canonical cases pass over 89 subjects; 24 qualify, including all 13 original-subject
@@ -63,8 +70,10 @@ overlapping marginal effects explain part of the retention. Controlled allocatio
 observes303.95MiB of live samples, mostly native add/set, after325.66MiB post-clear heap.
 A separate guarded verifier reset now reduces post-work heap334.63→78.63MiB while extra GC
 and one insertion do not. Real14-position controls preserve all13 source/receipt/admission
-semantics. D4226 owns a bounded verification-memo repair; D4225 remains open for production
-memory proof. This diagnostic drop is not production memory or a complete root census. [Method and limits](../design/research/module-evidence-assembly.md#qualified-outcome-memory-attribution--d4225-2026-11-11).
+semantics. D4226 now closes the bounded verification-memo repair with four ordinary paired source
+measurements: held1123.4–1123.7→883.5–884.9MiB and released557.1–557.5→317.2–318.6MiB.
+Three timings improve and one worsens,3.72%lower summed locally, with all32 complete graphs/
+receipts unchanged. D4225 remains open for remaining live-owner/global-cache/appliance costs. This diagnostic drop is not production memory or a complete root census. [Method and limits](../design/research/module-evidence-assembly.md#qualified-outcome-memory-attribution--d4225-2026-11-11).
 
 D4167 reverse consumers, D4175's26 ordinary avoidance bindings, full module/preset adoption,
 learner journeys and release proof remain. D3928 still holds content/native startup/release;

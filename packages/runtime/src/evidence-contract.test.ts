@@ -151,6 +151,38 @@ describe("evidence manifest compiler", () => {
     expect(evidenceDigest(declared.payload)).toBe(receipt.payloadDigest);
   });
 
+  it("D4226 preserves old authority and unsafe-data refusals across actual verification-memo rotations", () => {
+    const hidden = { count: 2 }, symbolic = { square: "e4" }, symbol = Symbol("rotation");
+    const child = { count: 1, [symbol]: symbolic };
+    Object.defineProperty(child, "hidden", { value: hidden });
+    const original = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { left: child, right: [child] });
+    const receipt = evidenceValueReceipt(original), expected = evidenceDigest({ left: { count: 1 }, right: [{ count: 1 }] });
+    let changing = "before";
+    const unsafe = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { get value() { return changing; } });
+    const prototype = Object.assign(Object.create(Array.prototype), { 0: "before" }), sparse = new Array(1);
+    Object.setPrototypeOf(sparse, prototype);
+    const inherited = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, sparse);
+    const cycle: { self?: unknown } = {}; cycle.self = cycle;
+    const declareCycle = () => declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, cycle);
+    expect(declareCycle).toThrow(RangeError);
+    // More than two complete generations, with every key strongly live throughout the test.
+    const churn = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, Array.from({ length: 524_289 }, () => ({})));
+    expect(churn.payload).toHaveLength(524_289);
+    expect(() => assertDeclaredEvidence(original)).not.toThrow();
+    expect(evidenceValueReceipt(original)).toBe(receipt);
+    expect(receipt.payloadDigest).toBe(expected);
+    expect(original.payload.right[0]).toBe(child);
+    expect(Object.isFrozen(hidden)).toBe(true); expect(Object.isFrozen(symbolic)).toBe(true);
+    const fresh = declareEvidence({ id: "p", version: 1 }, { id: "p.output", version: 1 }, { left: { count: 1 }, right: [{ count: 1 }] });
+    expect(evidenceValueReceipt(fresh).payloadDigest).toBe(expected);
+    changing = "after";
+    expect(() => assertDeclaredEvidence(unsafe)).toThrow(/receipt disagrees/u);
+    prototype[0] = "after";
+    expect(() => assertDeclaredEvidence(inherited)).toThrow(/receipt disagrees/u);
+    expect(declareCycle).toThrow(RangeError);
+    expect(() => assertDeclaredEvidence({ ...original })).toThrow(/unsealed/u);
+  });
+
   it("keeps the executable error-code set equal to the RFC table", () => {
     expect(EVIDENCE_MANIFEST_ERROR_CODES).toEqual(ERROR_TABLE);
   });

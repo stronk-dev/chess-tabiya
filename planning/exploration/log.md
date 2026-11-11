@@ -41420,3 +41420,85 @@ case/population, external and verdict semantics remain fixed. The actual rotatio
 ordinary-source counterbalanced equality/memory/cost and complete normal gates are still
 implementation work; no parent, default or release completion is accepted in advance.
 Review record: foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md.
+
+
+### 2026-11-11 — D4226 bounded verifier candidate starts
+
+Accepted contract130f4973 is committed before production work. The candidate replaces only
+the frozen-data shortcut with two weak generations of65536 writes. Forty-two focused cases
+pass, including tiny live-key rotations and actual131073-object churn preserving original
+receipt/admission and getter/copy refusals. Independent static correctness review accepts the
+finite candidate. Ordinary baseline/candidate equality/counterbalanced memory and source cost,
+exact canonical metadata refresh and complete normal gates still precede retention/closeout.
+Historical diagnostic hooks now target the bounded verifier when built at this image; their
+old reset-memory figures remain evidence of the earlier committed weak-set image, not new
+production measurements. No ordinary binding, parent or release promotion.
+
+
+### 2026-11-11 — D4226 measurement control repairs
+
+The initial comparison smoke caught CLI side effects from bundling the original driver;
+unchanged workloads/collector helpers are extracted into CLI-free workload.ts. Repaired
+smoke passes actual payload/receipt equality and two fresh pairs. Independent method review
+then returns PGN/workload parsing inside the timing clock. Preparation now precedes initial
+GC/clock and full workers assert exactly32 positions. The earlier in-flight interval is not
+source-only proof and will not support retention. No product budget or source is weakened.
+
+
+### 2026-11-11 — D4226 rejects the first bound and measures a larger proposal
+
+The65536-add candidate saves about254MiB owner-released heap but every exploratory interval
+is substantially slower; reject it. Its compact report explicitly retains the PGN-including
+interval limit and every measured pair, not source-only proof. A disposable262144 constant
+proposal preserves all32 complete graphs/receipts and records17.16s/16.81s in one ordered pair,
+with released heap559.54→317.45MiB. This only supports proposing the new bound for independent
+review. The repaired four-pair ordinary-build comparison and all gates are still required;
+no faster-product, memory-completion or parent claim is made.
+
+
+### 2026-11-11 — D4226 measured bound amendment accepted
+
+Both independent reviewers accept only the finite262144 per-generation change for final
+implementation/measurement. The actual mint/admission churn now uses524289 live children,
+more than two production generations, with old receipt and unsafe-data controls retained.
+The disposable capacity override is removed; final comparison builds actual ordinary source.
+All four counterbalanced pairs, exact metadata preservation and complete normal gates remain.
+The single ordered probe is not a speed or completion result.
+
+
+### 2026-11-11 — D4226 ordinary-source proof and exact metadata pass
+
+The actual262144 candidate passes32 complete graph/receipt comparisons and all4 repaired
+ordinary counterbalanced pairs. Held/released heaps are239–240MiB lower every pair;3timings
+are lower/1higher, summed source time3.72%lower locally, not a portable speed promise. Both
+independent reviews accept finite source/measurement retention subject to remaining gates.
+The canonical writer passes1928/1928 cases,24/89 subjects,63populations/8externals. Independent
+metadata audit accepts only11 exact helper-file/hash additions and63 joined population hashes;
+all cases/461vectors/population operands/results/externals/verdicts remain identical. Artifact
+4341526B remains under5MiB. Normal full verify-software session3950 is running; no closeout yet.
+
+D4224's independent static source review finds32 cold misses in the prior cohort (79% in
+acquisition), existing foundation-cell/loose-piece sharing, and repeated original-piece mapping
+in pawnLineage construction/validation and line_blockers outcomes. None is a measured current
+hotspot. Next profile actual acquisition stages/call counts against the complete uninstrumented
+source stream, rejecting reuse if negligible; do not add a guessed cache or omit sources.
+
+
+### 2026-11-11 — D4226 finite bounded-verifier implementation closes
+
+Both independent reviewers accept finite archival and ledger closeout. The unchanged production
+candidate passes normal make verify-software:20500/581 software761.40s and7/four performance60.82s,
+types/build/governance. Final test-only before/after cycle and inherited-sparse assertions pass
+42 focused tests524ms afterward; do not attribute them to the earlier full run. Nine instrument,
+four builder and14 actual-source/662-value controls pass. Current1928 cases/461vectors/89verdicts,
+population operands/results and8externals remain exact; only11 helper-path/hash and63 matching
+population hashes change. The receipt4341526B remains below5MiB, with unchanged writer/guards.
+
+D4226 is done; rfc/archive/bounded-evidence-verification.md records the finite implementation.
+Ordinary32-source pairs show239–240MiB lower held/released heap every pair,3faster/1slower
+source intervals and3.72%lower local summed source time, not a portable speed promise. D4225
+still owns substantial~884MiB held/~318MiB released memory; D4224 still owns acquisition/budget,
+D4175 ordinary26 and D4167 reverse consumers stay held/open, and D3928 content/native/release
+is untouched. Next take D4224's actual stage/call census, retaining complete sources and exact
+receipt identity; no guessed cache or source omission. Final staging/hooks/commit/first-parent
+checks follow this closeout and are recorded by the landing result.

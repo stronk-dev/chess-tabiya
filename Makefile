@@ -4807,6 +4807,18 @@ outcome-delivery-metadata-reset-smoke: outcome-delivery-metadata-reset-build
 outcome-delivery-metadata-reset-update: outcome-delivery-metadata-reset-build
 	$(CI_NODE) .cache/outcome-delivery-cost/metadata-reset.mjs --memo-probe --sample-live --metadata-pulse --metadata-reset --write
 
+.PHONY: bounded-verifier-build bounded-verifier-smoke bounded-verifier-measure
+bounded-verifier-build:
+	./node_modules/.bin/tsc --project tools/d4175-outcome-delivery/tsconfig.json
+	$(CI_NODE) tools/d4175-outcome-delivery/build-verifier-comparison.mjs
+
+bounded-verifier-smoke: bounded-verifier-build
+	$(CI_NODE) .cache/outcome-delivery-cost/verifier-candidate.mjs --smoke
+
+bounded-verifier-measure: bounded-verifier-build
+	$(CI_NODE) .cache/outcome-delivery-cost/verifier-candidate.mjs --write
+
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

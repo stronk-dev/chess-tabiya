@@ -4375,3 +4375,49 @@ D4225 remains doing. D4226 owns specification/review and measurement of a bounde
 verification memo. It must preserve deep-own-data immutability, source/receipt bytes and
 all authority checks; source omission and larger deadlines are not repairs. Other retained
 metadata/service caches and D4224 acquisition remain independent work. `[V]` (D4225/D4226)
+
+
+## Bounded frozen-data verifier candidate — D4226, 2026-11-11
+
+The first65,536-add candidate is rejected: its four exploratory intervals are substantially
+slower despite lower retained heap. Those intervals include PGN setup and are explicitly
+not source-only proof. A single ordered262,144 proposal pair justified only amending the
+finite bound; it establishes no speed or retention result. Both independent reviewers accept
+the amended two-generation262,144-add policy and require genuine524,289-live-child rotation
+controls. Production changes only the pure verification memo; all authority maps and existing
+freeze/digest behavior remain. `[V]`
+([accepted RFC](../../rfc/archive/bounded-evidence-verification.md),
+[rejected candidate](../../planning/foundation-source-identity/bounded-verifier-cap65536-rejected-2026-11-11.json),
+[proposal](../../planning/foundation-source-identity/bounded-verifier-capacity-probe-2026-11-11.json),
+[rotation controls](../../packages/runtime/src/evidence-contract.test.ts))
+
+The final ordinary builds compare the exact committed original verifier with the current
+candidate, using the same remaining source graph. Separate workers compare all32 complete
+packet/foundation/outcome/availability graphs and traversed value receipts. Repeated calls
+retain exact original prerequisite identities within each side. Four fresh sequential pairs
+alternate order; PGN setup precedes the initial GC/clock. There are no profiler, WeakRef,
+map-clear or reset hooks. Forty-two focused controls/types and complete equality pass. `[V]`
+([driver](../../tools/d4175-outcome-delivery/compare-verifier.ts),
+[controlled ordinary builds](../../tools/d4175-outcome-delivery/build-verifier-comparison.mjs),
+[15,731-byte report](../../planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json))
+
+| Pair/order | Baseline source ms | Candidate source ms | Baseline released heap MiB | Candidate released heap MiB |
+|---|---:|---:|---:|---:|
+|1/baseline→candidate|18525.4|17707.3|557.45|317.16|
+|2/candidate→baseline|18707.5|19103.7|557.45|317.47|
+|3/baseline→candidate|18508.1|17430.8|557.45|318.58|
+|4/candidate→baseline|19303.2|18010.8|557.14|317.19|
+
+Candidate source time is lower in three pairs and higher in one. Sums are75044.2→72252.6ms
+(3.72% lower locally); this is not a portable speed claim. Held heaps are roughly
+1123.4–1123.7→883.5–884.9MiB; released heaps are557.1–557.5→317.2–318.6MiB. The roughly239–240MiB
+reduction appears in every pair. These are forced-GC observations, not natural peaks, immediate
+RSS return, exhaustive ownership or a complete appliance footprint. Source/admission timings
+are not API/DOM latency or a solved Review budget. `[V]` (same report)
+
+The canonical writer passes all1928 cases/89subjects with24 qualified. Independent comparison
+normalizes exactly11 helper-file additions/operation hashes and63 joined population hashes;
+whole stored JSON is otherwise identical, including all461 vectors/cases/externals/verdicts.
+The4,341,526B artifact remains under5MiB and compact runtime metadata changes only its matching
+receipt SHA. Full frozen-production gates pass20500software/581 and7performance/four, types/build/governance; final stronger cycle/sparse assertions pass42 focused afterward. Both independent reviewers accept finite D4226 archival/closeout. D4224/D4225/D1716 remain open. `[V]`
+(same source writer/current generated receipt and independent metadata review)

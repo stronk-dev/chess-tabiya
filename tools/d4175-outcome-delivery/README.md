@@ -135,3 +135,29 @@ not a complete root census or proof that weak keys remain strongly held. Metadat
 heaps include diagnostics after sampling stops; do not subtract them from pre-stop heaps to
 claim source growth. A production policy requires its own contract and unmodified-source
 memory/cost proof. No raw profile/heap dump is saved.
+
+
+## D4226 — ordinary bounded-verifier comparison
+
+```sh
+make bounded-verifier-smoke
+make bounded-verifier-measure
+```
+
+Build two ordinary source graphs: the baseline substitutes only the committed130f4973
+`evidence-contract.ts`; the candidate uses the actual working tree. There are no profiler,
+WeakRef, reset or map-clear hooks. Workload/data/collection helpers are in CLI-free
+`workload.ts`, shared with the prior driver without bundling its CLI side effects.
+
+Two separate equality workers compare the complete packet/foundation/outcome/availability
+graph and all traversed value receipts, plus exact repeated prerequisite identities within
+each side. Four fresh sequential baseline/candidate pairs alternate order. PGN selection is
+outside the timed stream and before memory checkpoints. Real owner stats after held GC keep
+the service live; then the worker releases it and collects. All numeric results are kept.
+These are controlled source/admission timings and post-GC observations, not API/DOM latency,
+natural peak memory, allocator return or completion of the remaining source-cost work.
+
+The historical immutable-reset report was measured before the bounded repair. Diagnostic
+builds at a later source image target its actual current verification memo; they cannot
+reproduce the old weak-set footprint merely by rerunning the old command. Do not use that
+reset report in place of the ordinary-source comparison.

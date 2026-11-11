@@ -1,6 +1,6 @@
 # RFC: Bounded frozen-data verification metadata
 
-- **Status:** accepted — 2026-11-11 after independent buildability and meaning reviews; finite implementation and measurement remain.
+- **Status:** implemented — 2026-11-11 after independent finite completion acceptance, measured ordinary-source proof and complete local gates.
 - **Author:** codex, under the full-foundation 1.0 ruling.
 - **Created:** 2026-11-11
 - **Parent / amends:** evidence-value-authority.md, recursive freezing and payload digest memoization.
@@ -19,6 +19,27 @@ Bound the pure recursively frozen-data verification shortcut with two weak gener
 Eviction causes ordinary rechecking; all evidence authority and bytes remain unchanged.
 Keep the candidate only after actual source-equality, memory/cost and complete gate proof.
 
+## Implementation checkpoint — 2026-11-11
+
+The fixed262144 two-generation memo is installed without changing the freezing/digest/authority
+paths. Live-key rotations and actual524289-child old-admission/receipt controls pass. Complete
+32-source graph/receipt equality and four ordinary counterbalanced pairs establish a consistent
+239–240MiB post-GC heap reduction on this workload. Timings are3faster/1slower,3.72% lower summed
+local time; there is no portable speed claim. The65536 candidate is rejected and retained as
+explicitly exploratory/PGN-including data; the single larger-bound probe grants no speed result.
+
+Canonical1928/1928,24/89,63populations/8externals remain exact except11 permitted helper-path/
+operation hashes and63 joined population hashes. All461 input vectors/cases/results/externals/
+verdicts are unchanged. The4341526B receipt stays under5MiB. Full frozen-production verification
+passes20500software/581files761.40s and7performance/four60.82s, types/build/governance;9instrument/
+4builder/14source662value controls pass. Final test-only cycle/sparse additions pass the current
+42-test focused suite afterward; they are not attributed to the earlier full run.
+
+Both independent reviewers accept this finite closeout. Canonical behavior is documented in
+`docs/evidence-contract.md`; the detailed completion record is
+`planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md`.
+D4224/D4225/D1716, ordinary bindings and content/native/release obligations remain open.
+
 ## Problem and evidence
 
 The actual 32-decision/all-thirteen-family source workload leaves substantial metadata after
@@ -29,9 +50,9 @@ verification WeakSet lowers it to 78.63 MiB. Fourteen genuine both-color control
 original evidence admission and receipt identity, then fresh payloads, prerequisite identities,
 availability and receipts across all thirteen families. This is a marginal diagnostic effect,
 not a root census, strong-key leak or production memory measurement. `[V]`
-([research](../design/research/module-evidence-assembly.md#frozen-data-verification-metadata--d4225-2026-11-11),
-[58,251-byte report](../planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json),
-[actual control](../tools/d4175-outcome-delivery/measure.ts))
+([research](../../design/research/module-evidence-assembly.md#frozen-data-verification-metadata--d4225-2026-11-11),
+[58,251-byte report](../../planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json),
+[actual control](../../tools/d4175-outcome-delivery/measure.ts))
 
 `IMMUTABLE_DATA` is a performance shortcut for already verified recursively frozen own data.
 It supplies neither identity membership nor value/source receipts. Forgetting an entry must
@@ -41,11 +62,25 @@ acquisition cost remains D4224. This RFC does not close either parent.
 
 ## Specification
 
+### Independently accepted measured bound repair — 2026-11-11
+
+The 65,536-add candidate saves roughly254MiB after owner release but all four exploratory
+intervals are substantially slower; it is rejected. Those intervals include PGN setup and
+are explicitly not the final source-only proof. A disposable constant-only262,144-add
+proposal preserves all32 complete evidence graphs/receipts and records17.16s baseline versus
+16.81s candidate, with released heap559.54→317.45MiB. This is one ordered exploratory pair,
+not counterbalanced evidence or a speed claim. Both independent reviewers accept replacing only the finite per-generation
+bound with262,144 for implementation and the full ordinary
+four-pair repaired comparison before retaining it. The two-generation mechanism and every
+authority, semantic, metadata and complete-gate requirement stay fixed.
+([rejected candidate](../../planning/foundation-source-identity/bounded-verifier-cap65536-rejected-2026-11-11.json),
+[disposable proposal](../../planning/foundation-source-identity/bounded-verifier-capacity-probe-2026-11-11.json))
+
 ### A bounded, weak verification memo
 
 Replace only the global frozen-data verification set with a private two-generation memo.
 Each generation is a WeakSet; the memo keeps no array, queue or strong set of its keys.
-There are at most 65,536 add operations per generation. Before an add that would exceed
+There are at most 262,144 add operations per generation. Before an add that would exceed
 that bound, discard the older generation, retain the current generation as previous, and
 start an empty current generation. Membership checks consult current and previous.
 Duplicate adds may count against the bound; that can forget a shortcut sooner and never
@@ -54,8 +89,10 @@ or automatic capacity growth is introduced.
 
 Use one small package-internal helper in `packages/runtime/src/frozen-data-memo.ts` so tests
 can exercise real rotation with a small constructor capacity. The production instance in
-`evidence-contract.ts` uses the fixed 65,536 bound. The helper accepts object keys only and
-exposes membership/add operations, not authority issuance, cache contents or a public reset.
+`evidence-contract.ts` uses the fixed 262,144 bound. The helper's TypeScript API takes object
+keys; the existing verifier calls it only after its non-null-object guard. This private
+shortcut is not a new runtime validator for arbitrary unknown keys. It exposes membership/add
+operations, not authority issuance, cache contents or a public reset.
 It is absent from the package barrel and application configuration.
 
 The insertion bound limits verification metadata growth; it is not a portable byte limit on
@@ -144,11 +181,17 @@ none
 
 ## Open questions
 
-None for review. The fixed candidate still has to earn retention on real measured benefit;
-the RFC is not a performance result or permission to raise another budget.
+None. The finite repair earns retention on the executed fixed workload above; other source
+budgets, memory ownership, ordinary adoption and release remain separate obligations.
 
 ## Changelog
 
 - 2026-11-11: drafted from the independently reviewed actual-source metadata intervention.
 - 2026-11-11: independent review requires the helper's exact import-closure addition to be
   explicit, alongside recomputed existing hashes and unchanged remaining semantic records.
+
+- 2026-11-11: both independent reviewers accept the finite262144 bound after rejecting the
+  first measured candidate; actual churn must exceed524288 live adds and final proof remains.
+
+- 2026-11-11: independently accepted finite completion after ordinary paired memory/cost,
+  exact canonical preservation, full frozen-production gates and final stronger focused controls.

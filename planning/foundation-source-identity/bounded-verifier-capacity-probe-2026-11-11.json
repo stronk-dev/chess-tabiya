@@ -1,0 +1,291 @@
+{
+  "question": "D4226 ordinary-source bounded-verifier comparison",
+  "baselineCommit": "130f4973",
+  "candidate": "DISPOSABLE constant-only262144-add proposal; no production retention",
+  "node": "v24.22.1",
+  "v8": "13.6.233.17-node.58",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "scope": "same actual32-decision source workload/capacity64; PGN/workload prepared before checkpoints/clock; separate complete-equality workers; one exploratory ordered baseline/candidate pair; no WeakRefs/profiler/reset/clear hooks; GC only in explicit before/held/released checkpoints",
+  "exclusions": [
+    "natural peak/RSS return",
+    "production API/DOM latency",
+    "complete cache/ownership census",
+    "whole D4224/D4225 or ordinary adoption"
+  ],
+  "equality": [
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#9",
+      "digest": "e63a369aafefe26552a2d70fba8365d6e9f6776fdcaa2a148c2cc47136c7f58c",
+      "receipts": 5095,
+      "outcomes": 123
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#10",
+      "digest": "49117542e7a2e3040d99f352526cb207b5957a86072af6c6f0b84599819a7541",
+      "receipts": 4531,
+      "outcomes": 114
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#11",
+      "digest": "222c843ea6a53df6fe410521a7f207c47600b2f5acacab6393dfc82124f862db",
+      "receipts": 5766,
+      "outcomes": 136
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#12",
+      "digest": "76a863d5fcd482f43c7da6608977591cd8ae6370b167c184539815711db1ab43",
+      "receipts": 4707,
+      "outcomes": 116
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#13",
+      "digest": "922257db8d4d5c83219dfaa2408afc517737f4551207f5ad47fda65b0a90d8d9",
+      "receipts": 5937,
+      "outcomes": 138
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#14",
+      "digest": "1e57c3c58da178ffebc8295df9a9be1f0f019592d2e6c3c9012a4947ad5ed001",
+      "receipts": 4635,
+      "outcomes": 121
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#15",
+      "digest": "c716a2bcd55c3f1fd02635b46dab8cbd2bdcf54646073319aafd8b299c6e3a51",
+      "receipts": 6974,
+      "outcomes": 146
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#16",
+      "digest": "31167a3ecf95850cec78c370e1cf8ebf8af72dcc301ecc9d1cf7eeb33431b219",
+      "receipts": 4959,
+      "outcomes": 132
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#17",
+      "digest": "b04629575e72d27387487bf10fc018976cc2092a5319ddc81d20edfc49cdaf43",
+      "receipts": 7203,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#18",
+      "digest": "a78b2869849a013b6580afc1f12cbcb3c0451b59ccafee2eb06866a6e0fe00c2",
+      "receipts": 4483,
+      "outcomes": 136
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#19",
+      "digest": "4e29a2b0d747a7afa8f520f70eee2882bc9ddd0fe8684517c049968f925b8ce3",
+      "receipts": 7036,
+      "outcomes": 149
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#20",
+      "digest": "c201185c1c287aa10c9c9377709460ff8be7a72d3d22c5af0778a9e84e0ca694",
+      "receipts": 4891,
+      "outcomes": 140
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#21",
+      "digest": "8d1f5fb24700e1edd42a760987fd6ac27cd67514afb82bd14fc10e404ec4c59a",
+      "receipts": 6352,
+      "outcomes": 151
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#22",
+      "digest": "ba43fa4b407ebdf2237b621c04a629285d0c013ecf58a89d6427bfd5be9c46eb",
+      "receipts": 5468,
+      "outcomes": 147
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#23",
+      "digest": "5241d0911b4fd39e1360cdd43bb821791bc416eda1fc3d456ed37006ef254410",
+      "receipts": 6983,
+      "outcomes": 167
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#24",
+      "digest": "2919b7fdf212f3b02f6d76cbef6ef33f713526efe76aab7c526fe139cf236143",
+      "receipts": 5308,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#25",
+      "digest": "2c8cb8e78c066a8e7d926fab9cfcc1dd1f99e2f96a19a605135b31521b727289",
+      "receipts": 6967,
+      "outcomes": 160
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#26",
+      "digest": "1a7f64be2ab97c16bb1e37e4fc7fec9eda44110fad7d71cd7c8b2b2ec734a028",
+      "receipts": 5102,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#27",
+      "digest": "acfb43d700e2339a9e7f101a4944124d4290cf9ef3cc1a6caa6fc0ced800df65",
+      "receipts": 5989,
+      "outcomes": 141
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#28",
+      "digest": "c8fe53360b3876f3126324f8a38af44c391d5a49bcc49b5e76844d327ce031b1",
+      "receipts": 5956,
+      "outcomes": 136
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#29",
+      "digest": "f00adc97e170ee4ec8ca07e574ed25985b2e8fff330cb83ac0eaf6c7d35c3cc5",
+      "receipts": 5661,
+      "outcomes": 142
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#30",
+      "digest": "aaa34f612d883478a196322ab9e13db8c128629b10bf99c48564bd6f525a404b",
+      "receipts": 5456,
+      "outcomes": 135
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#31",
+      "digest": "8be4798119189ad5ba8079029d2298aa8b23add793264b517c0ce08492879552",
+      "receipts": 4783,
+      "outcomes": 129
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#32",
+      "digest": "f50dd51df438da084661637830c86aa4ad8524d887e9e9937df157fd29e8d630",
+      "receipts": 6541,
+      "outcomes": 135
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#33",
+      "digest": "02ac75a82285448074e9f8540d8d39ca263fc794eda02d6cb464303b9e1e7b2a",
+      "receipts": 5438,
+      "outcomes": 142
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#34",
+      "digest": "c71b54d4b6ee11288b888d4df8af1a71cf174039cfd9c6eadd245796bfcc3ed3",
+      "receipts": 6155,
+      "outcomes": 137
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#35",
+      "digest": "0a35094aa3165f84d62d1d50a7acf8c7607226f25cf641bfec47bb1924463b7b",
+      "receipts": 6265,
+      "outcomes": 152
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#36",
+      "digest": "3d624154885839fbdf090c5a7b64abb88269791dae6af1fcf994352e884e93f3",
+      "receipts": 5836,
+      "outcomes": 140
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#37",
+      "digest": "7a5cc4101d38f7fb7c10c914480a06dc7662e3db871abe66f18ab76b828bdd99",
+      "receipts": 6338,
+      "outcomes": 152
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#38",
+      "digest": "d826afff7486da217c07594a4aa39da0abfbfc0b7f01cfb6ab86f3d42b59665e",
+      "receipts": 6477,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#39",
+      "digest": "b42cea849f0683169a58a5ef2a74b86ed9b2a84a6e789e55a806471d0ce96ef9",
+      "receipts": 7393,
+      "outcomes": 156
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#40",
+      "digest": "734dd2a0614f5cdada896cbb7b1d79a7c3557a621eace6fcd4c27b2a3c27ed00",
+      "receipts": 7478,
+      "outcomes": 158
+    }
+  ],
+  "pairs": [
+    {
+      "pair": 0,
+      "order": [
+        "baseline",
+        "candidate"
+      ],
+      "baseline": {
+        "sourceMs": 17162.150959,
+        "stats": {
+          "hits": 0,
+          "misses": 32,
+          "retained": 32,
+          "capacity": 64
+        },
+        "sourceSummary": "678714ed790cb08717698227b1fc2feb6bdf3b2b1c6256433844b2297cab3d1a",
+        "positions": 32,
+        "candidates": 1286,
+        "outcomes": 4523,
+        "memory": {
+          "before": {
+            "rss": 204963840,
+            "heapTotal": 92962816,
+            "heapUsed": 23382168,
+            "external": 11913118,
+            "arrayBuffers": 144655
+          },
+          "held": {
+            "rss": 1646149632,
+            "heapTotal": 1365590016,
+            "heapUsed": 1180495120,
+            "external": 11913158,
+            "arrayBuffers": 144655
+          },
+          "released": {
+            "rss": 1689141248,
+            "heapTotal": 1289830400,
+            "heapUsed": 586715848,
+            "external": 11913158,
+            "arrayBuffers": 144655
+          }
+        }
+      },
+      "candidate": {
+        "sourceMs": 16806.532625,
+        "stats": {
+          "hits": 0,
+          "misses": 32,
+          "retained": 32,
+          "capacity": 64
+        },
+        "sourceSummary": "678714ed790cb08717698227b1fc2feb6bdf3b2b1c6256433844b2297cab3d1a",
+        "positions": 32,
+        "candidates": 1286,
+        "outcomes": 4523,
+        "memory": {
+          "before": {
+            "rss": 210173952,
+            "heapTotal": 92962816,
+            "heapUsed": 23395808,
+            "external": 11914542,
+            "arrayBuffers": 144655
+          },
+          "held": {
+            "rss": 1315504128,
+            "heapTotal": 1092714496,
+            "heapUsed": 926660144,
+            "external": 11911823,
+            "arrayBuffers": 144655
+          },
+          "released": {
+            "rss": 1336115200,
+            "heapTotal": 1023770624,
+            "heapUsed": 332874224,
+            "external": 11911823,
+            "arrayBuffers": 144655
+          }
+        }
+      }
+    }
+  ]
+}

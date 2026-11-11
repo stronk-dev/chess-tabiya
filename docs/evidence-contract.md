@@ -610,6 +610,11 @@ therefore no generic mint API and no caller-payload adapter:
   a full runtime audit. Matching refs alone do not establish operand identity or same-subject joins.
   The seven hint-horizon input-order conflicts are corrected separately in D3848. Do not interpret
   sealing or a successful execution compile as proof that every derived tuple already conforms.
+- Verified frozen-data shortcuts use two weak generations, each limited to262,144 add
+  attempts. Losing a shortcut causes rechecking or the existing uncached digest path; it does
+  not expire evidence identity, value receipts or source authority. No strong key list, timer,
+  public reset or user-facing cache setting is added. This bounds remembered verification
+  metadata, not live evidence payload bytes or total process memory.
 - Sealing recursively freezes nested own data, even when a factory has already frozen the outer
   object or array. Payload digests are cached only for complete plain-data trees verified by the
   sealing function. Accessors, custom prototypes and array holes cannot borrow that cache: their
