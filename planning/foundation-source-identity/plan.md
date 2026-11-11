@@ -3858,3 +3858,20 @@ selection uses the existing default if omitted, then continuations retain the re
 Literal interim metadata and independent job identity/lifetime still need the bounded amendment.
 Candidate originals/seals stay server-side; opaque references cannot become caller evidence.
 No new default capacity, evidence serializer, budget, global ranking or product policy is inferred.
+
+
+### 2026-11-11 — D4242 current construction8 baseline measured
+
+The unchanged normal outcome-delivery-memory target exits0 at3da82490. Existing32 distinct
+positions/all13 actual factories/admission paths preserve availability/event counts across
+fresh capacity1/4/64 workers. Held/released post-GC heaps:337.87/317.42,391.06/317.42 and
+888.36/317.45MiB; original receipt liveness1/4/32→0. The64-capacity case holds32 receipts,
+with570.9MiB marginal held→released change and29.11s observer-influenced source/factory/admission
+work (not actual Review5s or Hint latency). Both WeakRef controls pass and GC crosses real jobs.
+Compact report outcome-memory-construction8-2026-11-11.json preserves all old observations.
+
+This measures current cache retention, not an exclusive owner/peak/leak/native/appliance budget.
+D4242 remains doing: next genuine Hint.close while the same cache and detached deliveries remain
+live, followed by cache release. No guessed capacity/compaction, dropped collector or default
+change; old compiler7 heaps are not current Hint proof. Research dossier/matrix/log updated. Independent measurement/source-lifetime review accepts
+the exact compact report, original worker data and bounded interpretation.

@@ -75,6 +75,13 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D4242, 2026-11-11: fresh construction8 baseline uses32 existing positions/all13 genuine outcome
+families, separate workers and unchanged source counts at capacities1/4/64. Post-GC held/released
+heaps are337.87/317.42,391.06/317.42 and888.36/317.45MiB; receipt liveness1/4/32→0. Forced-GC
+research intervals do not establish Hint, natural peak or appliance memory. Actual Hint ownership
+is next; no default/source reduction. `[V]` `module-evidence-assembly.md` §D4242 current
+construction8 retention baseline and its compact numeric report.
+
 D4063/D3979, 2026-11-04: actual historical target/branch/run, provider401 and real shared-viewer
 grant revoke/restore reveal and fix a run-switch branch-query crash.587/nine plus independent
 review and full13591 software/7 isolated performance/types/build/source/governance pass; actual

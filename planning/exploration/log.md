@@ -41901,3 +41901,19 @@ the existing clause. No source values/authority travel in interim references. Ne
 current construction8 retention with the existing32-root/all13 workload, then isolate actual
 Hint.close ownership while keeping its candidate cache and detached deliveries live. No guessed
 cache/default change, raw heap dump, p95/native/qualification or whole1.0 clearance.
+
+
+## 2026-11-11 — D4242 construction8 source retention baseline
+
+Fresh normal make outcome-delivery-memory exits0 at3da82490:32 existing distinct positions,
+all13 genuine factory/admission families, equal availability/event counts across fresh research
+capacities1/4/64. Service-held/released post-GC heaps are337.87/317.42,391.06/317.42 and
+888.36/317.45MiB; receipt objects1/4/32→0, with real-job WeakRef/GC and held/released observer
+controls. The64 case retains32 complete receipts and its marginal interval is570.9MiB; the
+29.11s source/factory/admission stream is research, not an implemented Review job or5s pass.
+
+Current compact report is outcome-memory-construction8-2026-11-11.json (<48KiB), not a heap,
+event or packet dump. Existing historical reports remain unchanged. Dossier/matrix updated.
+No source, capacity/default, qualification or product gate changes. D4242 stays doing for
+genuine Hint owner/cache/detached-delivery isolation; no exclusive attribution, leak, native
+peak/appliance or full1.0 claim. The current producer-to-consumer foundation continues next.

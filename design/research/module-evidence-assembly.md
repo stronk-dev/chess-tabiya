@@ -4544,3 +4544,35 @@ experiment is an implemented Review job. D4228 records the remaining runtime/ser
 job implementation, coordinated with D4224 and existing selection/assistance rules. `[V]`
 ([request](../../packages/runtime/src/module-query.ts),
 [service](../../apps/server/src/service.ts), `rfc/module-registration.md` §2.5.2)
+
+
+## D4242 — current construction8 retention baseline (2026-11-11)
+
+Fresh standard `make outcome-delivery-memory` at3da82490 completes over the existing32 distinct
+recorded positions and all13 original outcome families. Each capacity runs in a fresh worker;
+source availability/event counts match across capacities1/4/64. Every source is a genuine
+events-and-readings receipt and every family uses the actual current factory/admission path.
+The worker keeps the service live through the retained checkpoint, then releases it; WeakRef
+creation/read and forced GC cross real jobs, with an independently held/released observer control.
+`[V]` [method](../../tools/d4175-outcome-delivery/measure.ts),
+[numeric report](../../planning/foundation-source-identity/outcome-memory-construction8-2026-11-11.json).
+
+| Research cache capacity | Retained receipts | Post-GC heap, service held (MiB) | Post-GC heap, service released (MiB) | Receipt objects after release |
+|---|---:|---:|---:|---:|
+| 1 | 1 | 337.87 | 317.42 | 0 |
+| 4 | 4 | 391.06 | 317.42 | 0 |
+| 64 (application value) | 32 | 888.36 | 317.45 | 0 |
+
+The64-capacity worker’s held→released interval is about570.9MiB. Its source/factory/admission
+work interval is29.11s; the other capacities take30.82–31.71s. This synchronous research stream
+is a proposed32-position/all13 workload, not the shipped paged Review job or its5s proof.
+Post-work heap before GC is observer-influenced; neither that number nor these forced-GC
+checkpoints are natural peaks, RSS, native/appliance footprint, exclusive owner attribution or
+a leak certificate. The317MiB residual includes other live process state and caches. `[V]`
+(same report and method; actual Review implementation remains D4228).
+
+The old compiler7 observations remain historical and are not overwritten. No cache capacity,
+production collector, qualification or default changes from this measurement. Next isolate
+the actual Hint owner: keep its candidate cache and detached deliveries live across genuine
+Hint.close, then release the cache, with source-object liveness checks across jobs. That
+experiment remains open; this baseline cannot stand in for Hint or appliance memory.
