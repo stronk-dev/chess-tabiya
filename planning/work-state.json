@@ -35353,12 +35353,12 @@
     },
     {
       "id": "D4216",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec51afc09db9377bdb120627fba3f4498cdaf6abb14939aa5500435ac16480b6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e4efef7fb9284d60634a0a5a95cb609a51d6fbc89f3f2e43126b900b63b37df1",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-11"
+      "evidence": "apps/server/src/learner-profile.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

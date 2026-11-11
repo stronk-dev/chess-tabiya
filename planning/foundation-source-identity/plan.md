@@ -2924,3 +2924,7 @@ groups' existing 30-second budget; all 26 focused tests pass in 88.57 seconds ov
 The repair remains a separate commit checkpoint. Product performance budgets stay unchanged.
 The interrupted full run also reports recorded-Review and choice-source failures; neither
 is discharged by this Profile-only repair, and a complete software pass remains required.
+
+D4216 closes at the scoped test-repair checkpoint: 26/26 focused Profile tests pass.
+The complete software/performance certificate remains outstanding; the Review and
+choice-source failures reported in the interrupted run remain open work.

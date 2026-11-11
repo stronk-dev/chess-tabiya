@@ -40944,3 +40944,12 @@ test. The Profile repair separately passes 26/26. The full run was stopped with 
 before commit hooks; it is incomplete and provides no full-pass certificate. The recorded-
 Review failure remains within D3935/D3944, and the choice-source failure needs diagnosis
 under the source-foundation work. Their deadlines have not been changed.
+
+### 2026-11-11 — D4216 scoped Profile integration test repair
+
+The floor, opening and privacy cohorts now use the same 30-second integration budget as
+the existing GAME and choice Profile groups. All 26 focused tests pass (88.57 seconds
+overall). Fixtures, cohort sizes, behavioral assertions, unit defaults and separate
+performance checks remain unchanged. D4216 closes for this scoped test correction.
+The interrupted full suite is not green: recorded-Review and choice-source failures still
+need diagnosis and a complete rerun. This commit does not discharge them.

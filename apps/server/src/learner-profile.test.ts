@@ -24,6 +24,9 @@ import { LONGITUDINAL_TABLES, type LongitudinalStore } from "./longitudinal-stor
 import * as subjectBridge from "../../../packages/runtime/src/internal/profile-subject-facts.js";
 const realSubjectPopulation = subjectBridge.collectProfileSubjectPopulation;
 const subjectPopulations = new Map<string, ReturnType<typeof realSubjectPopulation>>();
+// These cohorts publish and read durable evidence before asserting Profile behavior.
+// Use the same integration budget as the GAME and choice source cohorts.
+const PROFILE_INTEGRATION_TIMEOUT_MS = 30_000;
 beforeEach(() => {
   vi.spyOn(subjectBridge, "collectProfileSubjectPopulation").mockImplementation((fen,move) => {
     const key = JSON.stringify([fen,move]);
@@ -257,7 +260,7 @@ describe("the profile abstains until each card's own denominator clears", () => 
   });
 });
 
-describe("a card measures exactly at its floor", () => {
+describe("a card measures exactly at its floor", { timeout: PROFILE_INTEGRATION_TIMEOUT_MS }, () => {
   it("measures fianchetto at 25 games with numerator, denominator, interval, window, scope and drill-down; abstains at 24", async () => {
     const fixture = setup();
     const owner = learner(fixture.storage, "owner");
@@ -292,7 +295,7 @@ describe("a card measures exactly at its floor", () => {
   });
 });
 
-describe("opening performance uses the runtime opening identity", () => {
+describe("opening performance uses the runtime opening identity", { timeout: PROFILE_INTEGRATION_TIMEOUT_MS }, () => {
   it("groups games by deepest named endpoint with recorded results, drill-down and registered related packs", async () => {
     const fixture = setup();
     const owner = learner(fixture.storage, "owner");
@@ -366,7 +369,7 @@ describe("history, pending work and attribution", () => {
   });
 });
 
-describe("player-style criterion 11 — privacy and sharing", () => {
+describe("player-style criterion 11 — privacy and sharing", { timeout: PROFILE_INTEGRATION_TIMEOUT_MS }, () => {
   it("is private by default, refuses a share without consent or for an abstaining card, and shares measured rows only", async () => {
     const fixture = setup();
     const owner = learner(fixture.storage, "owner");
@@ -387,7 +390,7 @@ describe("player-style criterion 11 — privacy and sharing", () => {
 });
 
 // D4205: durable source/storage/Profile correctness; separate performance limits stay unchanged.
-describe("profile-game-facts — current durable evidence across every profile path", { timeout: 30_000 }, () => {
+describe("profile-game-facts — current durable evidence across every profile path", { timeout: PROFILE_INTEGRATION_TIMEOUT_MS }, () => {
   it("warm overview/detail/share cannot reuse stale source fields or hide the counted cohort", async () => {
     const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
     for (let index = 0; index < 25; index++) f.storage.create(game(`evidence-${index}`, FIANCHETTO), owner);
@@ -521,7 +524,7 @@ describe("profile-game-facts — current durable evidence across every profile p
 });
 
 // D4205: durable source/storage/Profile correctness; separate performance limits stay unchanged.
-describe("profile-choice-facts — current parsed source rows across every Profile path", { timeout: 30_000 }, () => {
+describe("profile-choice-facts — current parsed source rows across every Profile path", { timeout: PROFILE_INTEGRATION_TIMEOUT_MS }, () => {
   it("weights all retained decisions rather than averaging unequal-length game means", async () => {
     const f = setup(), owner = learner(f.storage, "owner"), principal = { learnerId: "owner", handle: "owner" };
     const short = game("weight-short", ["e2e4"]), long = game("weight-long", ["e2e4", "e7e5", "g1f3"]);
