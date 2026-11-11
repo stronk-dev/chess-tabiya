@@ -4341,3 +4341,37 @@ no raw sampling profile or heap snapshot is saved. Module comments are approxima
 hints. Previous WeakRef/forced-GC limits stand; sampler timings are not production throughput.
 No production source, cache/default, deadline, admission or learner binding changes. `[V]`
 (same method; D4225)
+
+
+## Frozen-data verification metadata — D4225, 2026-11-11
+
+Bounded caller context now associates the largest sampled native `add` allocation (256MiB)
+with `freezeData` in `evidence-contract.ts`. This is allocation-origin context, not a retaining
+root census. A separate disposable build changes exactly that module's known verifier
+`const` to `let` and appends one reset closure; production remains unchanged. Neither identity
+brands, value receipts nor source/invocation membership are replaced. `[V]`
+([guarded builder](../../tools/d4175-outcome-delivery/build-memo-probe.mjs),
+[transformation guards](../../tools/d4175-outcome-delivery/build-memo-probe.test.mjs),
+[58,251-byte report](../../planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json))
+
+The actual32-decision workload runs all13 qualified families before releasing the service,
+clearing the three actual map groups and collecting. Post-sampling heap is334.63MiB;
+another no-op collection and one real non-chess verifier insertion leave it unchanged.
+Replacing only the verification WeakSet and collecting reduces it to78.63MiB. The
+256.00MiB marginal effect identifies a concrete repair target. It does not prove
+exclusive ownership, a strong-key leak, production memory/throughput or complete attribution.
+The metadata-phase figures include diagnostic allocations after sampling and must not be
+compared directly with the pre-stop325.66MiB figure. `[V]` (same report, `immutablePulse`)
+
+Nine instrument/four builder guards, dedicated types, actual smoke and full worker pass.
+Fourteen genuine both-color/special/empty/unavailable source controls preserve original
+admission and receipt identity after reset, then re-execute all13 factories with equal full
+payloads, exact prerequisite identities, family availability and fresh receipts. Independent
+read-only review accepts the bounded diagnostic. The initial full pulse worker timed out;
+only the terminal-success retry/reset report supports these results. `[V]`
+([actual-source control](../../tools/d4175-outcome-delivery/measure.ts), same report)
+
+D4225 remains doing. D4226 owns specification/review and measurement of a bounded pure
+verification memo. It must preserve deep-own-data immutability, source/receipt bytes and
+all authority checks; source omission and larger deadlines are not repairs. Other retained
+metadata/service caches and D4224 acquisition remain independent work. `[V]` (D4225/D4226)

@@ -109,3 +109,29 @@ Only aggregate self-size totals and the top 30 allocation sites are saved, under
 census, retaining paths or exclusive owners. Native `add`/`set` frames do not identify their
 containers. Module names are approximate esbuild comment hints. No raw profile or heap
 snapshot is persisted; no production limits, source semantics or admission changes result.
+
+
+## D4225 — frozen verification metadata
+
+```sh
+make outcome-delivery-metadata-smoke
+make outcome-delivery-metadata-reset-smoke
+make outcome-delivery-metadata-reset-update
+```
+
+The sampler also saves the top12 allocation call paths with the nearest four callers.
+The standard diagnostic appends a non-chess immutable-data insertion, retaining no object
+and issuing no evidence. The separate reset build guards one `const`→`let` replacement for
+`IMMUTABLE_DATA` and appends a post-work replacement with a fresh WeakSet. This mode does
+not preserve that module's complete byte prefix. It never edits production files or changes
+identity seals, value receipts, source/invocation membership, source algorithms or budgets.
+
+After source/service/map release, the experiment compares another no-op collection, a real
+verifier insertion/collection and finally verifier replacement/collection. Source-map counts
+must remain unchanged. Fourteen both-color real-source controls preserve old evidence
+admission/receipt identity and fresh all13-family payloads, prerequisite identities,
+availability and receipts. Native origins and reset drops are marginal intervention evidence,
+not a complete root census or proof that weak keys remain strongly held. Metadata-phase
+heaps include diagnostics after sampling stops; do not subtract them from pre-stop heaps to
+claim source growth. A production policy requires its own contract and unmodified-source
+memory/cost proof. No raw profile/heap dump is saved.

@@ -41360,3 +41360,43 @@ D4225 stays doing; next isolate those allocation call chains before selecting a 
 repair. The51,014B report saves only aggregates/top30 sites, no raw profile or heap dump.
 Bundle reads happen after stop, and scoped cleanup is independently reviewed. No production
 source/default/deadline/ordinary binding or capability/release promotion.
+
+
+### 2026-11-11 — D4225 frozen-data metadata pulse starts
+
+c22df3e2 commits the bounded sampler. Next preserve sampled caller context for native
+allocation sites and use one append-only diagnostic closure over the real immutable-data
+verifier. After source owner release, actual map clears and collection, compare another
+no-op collection with one harmless non-chess immutable-object insertion and collection.
+The pulse never mints evidence or replaces/clears a WeakSet. Keep compact heap/count/caller
+aggregates only. Native origins and a pulse effect are not an exhaustive retaining-root
+proof; do not choose a production cache policy from static suspicion alone.
+
+
+### 2026-11-11 — D4225 isolated verifier-reset intervention
+
+The first full metadata worker terminated on its timeout; its output is inadmissible. After
+confirming no surviving chess worker, the bounded retry passes. One genuine insertion has
+no heap effect. Caller paths place the largest native add allocation at freezeData, but do
+not identify an exclusive owner. Next use a SEPARATE disposable build: guard the exact
+const-to-let change for IMMUTABLE_DATA and reset that pure verification shortcut only after
+all source work/owner/map release. This diagnostic does not preserve that module's complete
+byte prefix. Production files, authority memberships/receipts and all collector algorithms
+remain unchanged. Fourteen both-color actual-source controls must preserve all13 availability,
+complete payloads, exact input identities and old/new receipt/admission before the experiment.
+
+
+### 2026-11-11 — D4225 verifier metadata isolated
+
+Actual32-decision reset diagnostic passes after nine instrument/four builder controls,
+dedicated types,14 both-color actual source controls and smoke. Caller context places256MiB
+of sampled allocations at freezeData. Post-work no-op GC and one harmless real insertion
+leave heap334.63MiB; replacing only the verification memo then collecting gives78.63MiB.
+The256.00MiB difference is this intervention's marginal effect, not a root census,
+strong-key leak or production footprint. Full payloads/prerequisite identities, old admission/
+receipt objects and fresh event receipts survive reset in all13 families. Metadata-phase
+heaps include post-sampling diagnostic allocations and are not comparable with pre-stop
+heap without that limit. Independent review accepts the guarded const-to-let diagnostic;
+on-disk production and authority maps remain unchanged. Compact58251B report, no raw dump.
+D4225 stays doing; D4226 owns a bounded pure verification-memo repair before ordinary adoption.
+D4224's acquisition budget and the existing consumer/content/native holds remain.

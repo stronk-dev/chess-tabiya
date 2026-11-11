@@ -22,8 +22,9 @@ export function summarizeSampling(profile: Profile, bundleUrl: string, bundle: s
     modules.push(module);
   }
   const sites = new Map<string, { readonly function: string; readonly url: string; readonly line: number; readonly moduleHint: string; bytes: number }>();
+  const callers = new Map<string, { readonly site: string; readonly callers: readonly string[]; bytes: number }>();
   let nodes = 0;
-  const visit = (node: ProfileNode): void => {
+  const visit = (node: ProfileNode, parents: readonly string[] = []): void => {
     nodes++; assert(Number.isFinite(node.selfSize) && node.selfSize >= 0);
     const frame = node.callFrame, key = JSON.stringify([frame.functionName, frame.url, frame.lineNumber, frame.columnNumber]);
     let site = sites.get(key);
@@ -32,12 +33,20 @@ export function summarizeSampling(profile: Profile, bundleUrl: string, bundle: s
         line: frame.lineNumber + 1, moduleHint: frame.url === bundleUrl ? modules[frame.lineNumber] ?? "(unknown bundle location)" : "(native/other script)", bytes: 0 };
       sites.set(key, site);
     }
-    site.bytes += node.selfSize; node.children.forEach(visit);
+    site.bytes += node.selfSize;
+    const location = `${site.function} (${site.moduleHint}:${site.line})`;
+    if (node.selfSize > 0) {
+      const nearest = parents.slice(-4).reverse(), key = JSON.stringify([location, nearest]);
+      const entry = callers.get(key) ?? { site: location, callers: nearest, bytes: 0 };
+      entry.bytes += node.selfSize; callers.set(key, entry);
+    }
+    node.children.forEach(child => visit(child, [...parents.slice(-3), location]));
   };
   visit(profile.head);
   const ranked = [...sites.values()].filter(site => site.bytes > 0).sort((a, b) => b.bytes - a.bytes || a.function.localeCompare(b.function));
   return { samplingInterval: 65_536, nodes, allocationSites: ranked.length,
     sampledLiveBytes: ranked.reduce((n, site) => n + site.bytes, 0), topSites: ranked.slice(0, 30),
+    topCallers: [...callers.values()].sort((a, b) => b.bytes - a.bytes).slice(0, 12),
     attribution: "allocation call sites; module hints use nearest preceding esbuild module comments, not retaining-root ownership" };
 }
 

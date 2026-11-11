@@ -13,6 +13,8 @@ describe("retained-allocation summary", () => {
     expect(value.sampledLiveBytes).toBe(60); expect(value.topSites[0]!.bytes).toBe(30);
     expect(value.topSites.every(site => site.moduleHint === "packages/runtime/src/example.ts")).toBe(true);
     expect(sampledFunctionBytes(head, "control")).toBe(50); expect(sampledFunctionBytes(head, "missing")).toBe(0);
+    expect(value.topCallers[0]!.bytes).toBe(30);
+    expect(value.topCallers[0]!.callers.map(frame => frame.split(" ")[0])).toEqual(["control", "root"]);
   });
   it("refuses nonsensical sizes rather than publishing fake retained bytes", () => {
     for (const size of [NaN, Infinity, -1]) expect(() => summarizeSampling({ head: leaf("bad", size) }, "", "")).toThrow();

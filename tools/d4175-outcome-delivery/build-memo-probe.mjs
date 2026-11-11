@@ -7,6 +7,9 @@ import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 export const PROBE_KEY = "__TABIYA_RESEARCH_MEMO_PROBES__";
+export const PULSE_KEY = "__TABIYA_RESEARCH_IMMUTABLE_PULSE__";
+export const RESET_KEY = "__TABIYA_RESEARCH_IMMUTABLE_RESET__";
+export const PULSE_SITE = { path: "packages/runtime/src/evidence-contract.ts", anchor: "const IMMUTABLE_DATA = new WeakSet<object>();" };
 export const SITES = Object.freeze([
   { path: "packages/runtime/src/fen-memo.ts", name: "readings", anchor: "const CACHES = new Map<string, Map<string, unknown>>();",
     counts: "[...CACHES].map(([name, entries]) => ({ name, entries: entries.size })).sort((a,b) => a.name.localeCompare(b.name))", clear: "CACHES.clear()" },
@@ -28,12 +31,41 @@ export function appendProbe(path, source) {
   }\n`;
 }
 
+export function appendImmutablePulse(source) {
+  assert.equal(source.split(PULSE_SITE.anchor).length, 2, "Expected one actual immutable-data verifier");
+  assert(!source.includes(PULSE_KEY), "Immutable-data pulse already present");
+  return source + `\n// D4225 non-chess insertion into the ACTUAL frozen-data memo; no evidence mint.\n{
+    if (Object.hasOwn(globalThis, ${JSON.stringify(PULSE_KEY)})) throw Error('Duplicate immutable-data pulse');
+    globalThis[${JSON.stringify(PULSE_KEY)}] = () => {
+      const value = immutable({ d4225: 'non-chess metadata insertion' });
+      return Object.isFrozen(value) && IMMUTABLE_DATA.has(value);
+    };
+  }\n`;
+}
+
+// A separate causal build: one guarded const→let change, then one post-work memo reset.
+// This build does NOT claim to preserve evidence-contract's complete byte prefix.
+export function permitImmutableReset(source) {
+  assert.equal(source.split(PULSE_SITE.anchor).length, 2, "Expected one actual immutable-data verifier");
+  assert(!source.includes(RESET_KEY), "Immutable-data reset already present");
+  const replaced = source.replace(PULSE_SITE.anchor, PULSE_SITE.anchor.replace("const ", "let "));
+  return replaced + `\n// D4225 post-work verification-memo replacement; never an authority reset.\n{
+    if (Object.hasOwn(globalThis, ${JSON.stringify(RESET_KEY)})) throw Error('Duplicate immutable-data reset');
+    globalThis[${JSON.stringify(RESET_KEY)}] = () => { IMMUTABLE_DATA = new WeakSet(); };
+  }\n`;
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const resetMode = process.argv.includes("--reset-immutable-memo");
   await build({ entryPoints: ["tools/d4175-outcome-delivery/measure.ts"], bundle: true,
     platform: "node", format: "esm", external: ["typescript"],
-    outfile: ".cache/outcome-delivery-cost/memo-probe.mjs", logLevel: "warning",
+    outfile: `.cache/outcome-delivery-cost/${resetMode ? "metadata-reset" : "memo-probe"}.mjs`, logLevel: "warning",
     plugins: [{ name: "D4225-private-cache-observer", setup(build) {
-      build.onLoad({ filter: /(?:fen-memo|evidence-factories|position-cache)\.ts$/ }, args => {
+      build.onLoad({ filter: /(?:fen-memo|evidence-factories|position-cache|evidence-contract)\.ts$/ }, args => {
+        if (resolve(PULSE_SITE.path) === args.path) {
+          const original = readFileSync(args.path, "utf8"), contents = appendImmutablePulse(original);
+          return { contents: resetMode ? permitImmutableReset(contents) : contents, loader: "ts" };
+        }
         const site = SITES.find(site => resolve(site.path) === args.path);
         assert(site, `Unexpected diagnostic module ${args.path}`);
         return { contents: appendProbe(site.path, readFileSync(args.path, "utf8")), loader: "ts" };

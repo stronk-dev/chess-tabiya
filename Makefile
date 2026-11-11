@@ -4789,6 +4789,24 @@ outcome-delivery-allocation-smoke: outcome-delivery-memo-build
 outcome-delivery-allocation-update: outcome-delivery-memo-build
 	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --sample-live --write
 
+.PHONY: outcome-delivery-metadata-smoke outcome-delivery-metadata-update
+outcome-delivery-metadata-smoke: outcome-delivery-memo-build
+	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --sample-live --metadata-pulse --smoke
+
+outcome-delivery-metadata-update: outcome-delivery-memo-build
+	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --sample-live --metadata-pulse --write
+
+.PHONY: outcome-delivery-metadata-reset-build outcome-delivery-metadata-reset-smoke outcome-delivery-metadata-reset-update
+outcome-delivery-metadata-reset-build: outcome-delivery-memo-build
+	$(CI_NODE) tools/d4175-outcome-delivery/build-memo-probe.mjs --reset-immutable-memo
+
+outcome-delivery-metadata-reset-smoke: outcome-delivery-metadata-reset-build
+	$(CI_NODE) .cache/outcome-delivery-cost/metadata-reset.mjs --immutable-reset-control
+	$(CI_NODE) .cache/outcome-delivery-cost/metadata-reset.mjs --memo-probe --sample-live --metadata-pulse --metadata-reset --smoke
+
+outcome-delivery-metadata-reset-update: outcome-delivery-metadata-reset-build
+	$(CI_NODE) .cache/outcome-delivery-cost/metadata-reset.mjs --memo-probe --sample-live --metadata-pulse --metadata-reset --write
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

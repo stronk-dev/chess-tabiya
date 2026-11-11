@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { CandidatePopulationService } from "../../apps/server/src/candidate-population-service.js";
 import { GUIDED_HINT_PROFILE } from "../../apps/server/src/application.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
+import { evidenceValueReceipt } from "../../packages/runtime/src/evidence-contract.js";
 import { assertCandidatePopulationReceipt, type CandidatePopulationReceipt, type CandidateWideScope } from "../../packages/runtime/src/candidate-population.js";
 import { selectSemanticEvidence, subjectOutcomeSemanticEvents, type SemanticEvidenceEvent } from "../../packages/runtime/src/semantic-evidence.js";
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "../../packages/runtime/src/semantic-subject-types.js";
@@ -186,6 +187,7 @@ interface MemoryCase {
   readonly rows: readonly { readonly id: string; readonly legalMoves: number; readonly families: readonly Pick<Family, "family" | "kind" | "events">[] }[];
   readonly memoClears?: readonly MemoClear[];
   readonly allocationSampling?: { readonly control: { readonly heldBytes: number; readonly releasedBytes: number }; readonly result: Awaited<ReturnType<RetainedSampler["stop"]>> };
+  readonly immutablePulse?: { readonly before: NodeJS.MemoryUsage; readonly afterNoop: NodeJS.MemoryUsage; readonly afterPulse: NodeJS.MemoryUsage; readonly afterReset?: NodeJS.MemoryUsage; readonly counts: CacheCounts };
 }
 export const MEMO_NAMES = ["readings", "factories", "positions"] as const;
 type MemoName = (typeof MEMO_NAMES)[number];
@@ -223,8 +225,11 @@ async function collectedMemory(): Promise<NodeJS.MemoryUsage> {
   for (let i = 0; i < 3; i++) { await new Promise<void>(resolve => setImmediate(resolve)); global.gc(); }
   return process.memoryUsage();
 }
-async function measureMemoryCase(workload: readonly Position[], capacity: number, clearOrder?: readonly MemoName[], sampleLive = false): Promise<MemoryCase> {
+async function measureMemoryCase(workload: readonly Position[], capacity: number, clearOrder?: readonly MemoName[], sampleLive = false, metadataPulse = false, metadataReset = false): Promise<MemoryCase> {
   const probes = clearOrder === undefined ? undefined : memoProbes(); // Refuse absent hooks BEFORE any source work.
+  const pulse = metadataPulse ? Reflect.get(globalThis, "__TABIYA_RESEARCH_IMMUTABLE_PULSE__") as (() => boolean) | undefined : undefined;
+  if (metadataPulse) assert(probes && typeof pulse === "function", "Actual immutable-data pulse hook must exist before source work");
+  const reset = metadataReset ? immutableReset() : undefined;
   if (clearOrder !== undefined) assert.deepEqual([...clearOrder].sort(), [...MEMO_NAMES].sort());
   assert.equal(new Set(workload.map(row => row.fen)).size, workload.length);
   let control: object | undefined = Object.freeze({ observerControl: true });
@@ -251,12 +256,54 @@ async function measureMemoryCase(workload: readonly Position[], capacity: number
     }
     const allocationSampling = sampler === undefined ? undefined : { control: sampler.control,
       result: await sampler.stop(import.meta.url, () => readFileSync(fileURLToPath(import.meta.url), "utf8")) };
+    let immutablePulse: MemoryCase["immutablePulse"];
+    if (pulse !== undefined && probes !== undefined) {
+      const before = await collectedMemory(), counts = cacheCounts(probes);
+      const afterNoop = await collectedMemory();
+      assert.equal(pulse(), true, "Real immutable-data verifier refused the non-chess insertion");
+      const afterPulse = await collectedMemory();
+      reset?.();
+      const afterReset = reset === undefined ? undefined : await collectedMemory();
+      assert.deepEqual(cacheCounts(probes), counts, "Metadata insertion changed source-map entries");
+      immutablePulse = { before, afterNoop, afterPulse, ...(afterReset === undefined ? {} : { afterReset }), counts };
+    }
     const result = { capacity, workMs, observer: { held: true as const, released: true as const }, stats, aliveRetained, aliveReleased,
       memory: { before, afterWork, retainedGc, releasedGc }, rows, ...(probes === undefined ? {} : { memoClears }),
-      ...(allocationSampling === undefined ? {} : { allocationSampling }) };
+      ...(allocationSampling === undefined ? {} : { allocationSampling }), ...(immutablePulse === undefined ? {} : { immutablePulse }) };
     assertMemoryCase(result, workload.length); return result;
   };
   return sampleLive ? withRetainedSampling(collectedMemory, work) : work();
+}
+function immutableReset(): () => void {
+  const reset = Reflect.get(globalThis, "__TABIYA_RESEARCH_IMMUTABLE_RESET__") as (() => void) | undefined;
+  assert(typeof reset === "function", "Actual immutable-data reset hook must exist before source work");
+  return reset;
+}
+
+function verifyImmutableReset(): void {
+  const reset = immutableReset(); let cases = 0, emitted = 0;
+  for (const position of LITERAL_POSITIONS.filter(row => row.move !== null)) {
+    const lookup = new CandidatePopulationService({ capacity: 1 }).wide(position.fen);
+    assert.equal(lookup.kind, "ready"); if (lookup.kind !== "ready") throw Error("Control needs real source");
+    assertWide(lookup.receipt);
+    const before = collect(lookup.receipt, position.move!);
+    const receipts = before.events.map(event => evidenceValueReceipt(event.evidence));
+    reset();
+    // A verifier-cache miss must not revoke an original evidence value or change its receipt.
+    before.events.forEach((event, index) => {
+      assert.equal(admitValidatedSemanticInstance("event", event.evidence).kind, "admitted");
+      assert.strictEqual(evidenceValueReceipt(event.evidence), receipts[index]);
+    });
+    const after = collect(lookup.receipt, position.move!);
+    assertRepeatedSources(before.events, after.events);
+    assert.deepEqual(after.events.map(event => evidenceValueReceipt(event.evidence)), receipts);
+    const summary = (families: readonly Family[]) => families.map(({ family, kind, events }) => ({ family, kind, events }));
+    assert.deepEqual(summary(after.families), summary(before.families));
+    if (before.events.length > 0) assert.notStrictEqual(after.events[0]!.evidence, before.events[0]!.evidence);
+    cases++; emitted += before.events.length;
+  }
+  assert.equal(cases, 14); assert(emitted > 0);
+  process.stdout.write(`Actual verifier reset preserves all13 families across${cases} both-color controls/${emitted} emitted values.\n`);
 }
 export function assertMemoryCase(value: MemoryCase, subjects: number): void {
   assert(Number.isSafeInteger(value.capacity) && value.capacity > 0);
@@ -307,7 +354,9 @@ export function assertMemoCase(value: Pick<MemoryCase, "memoClears" | "rows">, o
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes("--sampler-failure-control")) {
+  if (process.argv.includes("--immutable-reset-control")) {
+    verifyImmutableReset();
+  } else if (process.argv.includes("--sampler-failure-control")) {
     const session = new Session();
     await assert.rejects(withRetainedSampling(collectedMemory, async () => {
       throw new Error("controlled source-work failure after sampler startup");
@@ -315,11 +364,14 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     await assert.rejects(session.post("HeapProfiler.getSamplingProfile"), { code: "ERR_INSPECTOR_NOT_CONNECTED" });
     process.stdout.write("Actual sampler disconnects after controlled work failure.\n");
   } else if (process.argv.includes("--memory-worker")) {
-    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly workload: readonly Position[]; readonly capacity: number; readonly clearOrder?: readonly MemoName[]; readonly sampleLive?: boolean };
-    process.stdout.write(JSON.stringify(await measureMemoryCase(input.workload, input.capacity, input.clearOrder, input.sampleLive)));
+    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly workload: readonly Position[]; readonly capacity: number; readonly clearOrder?: readonly MemoName[]; readonly sampleLive?: boolean; readonly metadataPulse?: boolean; readonly metadataReset?: boolean };
+    process.stdout.write(JSON.stringify(await measureMemoryCase(input.workload, input.capacity, input.clearOrder, input.sampleLive, input.metadataPulse, input.metadataReset)));
   } else if (process.argv.includes("--memory") || process.argv.includes("--memo-probe")) {
     const probeMode = process.argv.includes("--memo-probe");
     const sampleLive = process.argv.includes("--sample-live"); assert(!sampleLive || probeMode);
+    const metadataPulse = process.argv.includes("--metadata-pulse"); assert(!metadataPulse || sampleLive);
+    const metadataReset = process.argv.includes("--metadata-reset"); assert(!metadataReset || metadataPulse);
+    if (metadataReset) immutableReset();
     if (probeMode) memoProbes();
     const workload = process.argv.includes("--smoke") ? LITERAL_POSITIONS.slice(0, 2) : reviewPositions();
     const runs: readonly { readonly capacity: number; readonly clearOrder?: readonly MemoName[] }[] = probeMode
@@ -328,7 +380,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const cases = runs.map(run => {
       const { capacity } = run;
       const result = JSON.parse(execFileSync(process.execPath, ["--expose-gc", fileURLToPath(import.meta.url), "--memory-worker"], {
-        input: JSON.stringify({ workload, ...run, sampleLive }), encoding: "utf8", timeout: 60_000, maxBuffer: 256 * 1024,
+        input: JSON.stringify({ workload, ...run, sampleLive, metadataPulse, metadataReset }), encoding: "utf8", timeout: 60_000, maxBuffer: 256 * 1024,
       })) as MemoryCase;
       assertMemoryCase(result, workload.length);
       if (run.clearOrder !== undefined) assertMemoCase(result, run.clearOrder);
@@ -336,11 +388,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         assert(result.allocationSampling); assert(result.allocationSampling.control.heldBytes > 0);
         assert.equal(result.allocationSampling.control.releasedBytes, 0); assert(result.allocationSampling.result.sampledLiveBytes > 0);
       }
+      if (metadataPulse) assert(result.immutablePulse, "Actual metadata insertion/collection observations are absent");
+      if (metadataReset) assert(result.immutablePulse?.afterReset, "Actual verifier reset/collection observations are absent");
       process.stderr.write(`capacity${capacity}: retained heap ${(result.memory.retainedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB, released ${(result.memory.releasedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB; live receipts ${result.aliveRetained}→${result.aliveReleased}\n`);
       return result;
     });
     for (const result of cases) assert.deepEqual(result.rows, cases[0]!.rows, "All13 family availability/event counts must survive every capacity");
-    const report = { question: sampleLive ? "D4225 retained allocation origins" : probeMode ? "D4225 actual global-memo intervention" : "D4225", node: process.version, v8: process.versions.v8, platform: process.platform, architecture: process.arch,
+    const report = { question: metadataReset ? "D4225 actual frozen-data verification-memo reset" : metadataPulse ? "D4225 real immutable-data metadata insertion" : sampleLive ? "D4225 retained allocation origins" : probeMode ? "D4225 actual global-memo intervention" : "D4225", node: process.version, v8: process.versions.v8, platform: process.platform, architecture: process.arch,
       scope: "fresh processes; identical source stream; forced GC only before/after work; service kept live then released; WeakRef observers cross jobs before GC; workMs/afterWork are observer-influenced",
       exclusions: ["production GC behavior", "peak/appliance footprint", "natural transient timing/memory (WeakRef creation keeps targets alive for the current job)", "exhaustive reachability/leak proof from surviving WeakRefs", "full semantic equality from counts alone", "production cache/default change"],
       workload, familyOrder: SUBJECT_OUTCOME_FAMILIES,
@@ -348,7 +402,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       cases: cases.map(({ rows: _rows, ...result }) => result) };
     const text = JSON.stringify(report, null, 2) + "\n";
     assert(Buffer.byteLength(text) < (probeMode ? 64 : 48) * 1024, "Memory report exceeds its compact bound; never retain heap or event dumps");
-    if (process.argv.includes("--write")) writeFileSync(`planning/foundation-source-identity/outcome-${sampleLive ? "live-allocations" : probeMode ? "global-memos" : "memory"}-2026-11-11.json`, text);
+    if (process.argv.includes("--write")) writeFileSync(`planning/foundation-source-identity/outcome-${metadataReset ? "immutable-reset" : metadataPulse ? "immutable-pulse" : sampleLive ? "live-allocations" : probeMode ? "global-memos" : "memory"}-2026-11-11.json`, text);
     else process.stdout.write(text);
   } else if (process.argv.includes("--worker")) {
     const input: unknown = JSON.parse(readFileSync(0, "utf8"));

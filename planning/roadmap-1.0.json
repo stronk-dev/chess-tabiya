@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Resolve D4224 acquisition/budget and D4225 memory costs before D4175 ordinary bindings; continue D4167 reverse consumers under accepted source contracts. Native/content proof remains behind D3928.",
+        "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 actual-map clears leave325\u2013327MiB; the controlled allocation sampler now measures325.66MiB post-clear heap and303.95MiB sampled retained allocations, mostly native add/set. Flattened origins cannot identify owning roots; D4225 stays doing. Nine instrument/two builder controls, real failure cleanup, types and actual smoke/full pass; compact51014B report. Production unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
+          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1236,7 +1236,8 @@
             "planning/foundation-source-identity/outcome-memory-2026-11-11.json",
             "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
             "tools/d4175-outcome-delivery/build-memo-probe.mjs",
-            "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json"
+            "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
+            "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json"
           ],
           "anchors": [
             {
@@ -1887,7 +1888,12 @@
             {
               "kind": "work_state",
               "id": "D4225",
-              "digest": "sha256:28f38377de0f15efce0c3990c9c3dfe7c6df4375129b3325ed4217aefdc18179"
+              "digest": "sha256:848352e0394b931602cb4211950861d8ae304831ba70c7910eb663b690a8f57b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4226",
+              "digest": "sha256:e6668cb17c3eceacab42c854ed5242cb6d688df6f785864ac51a72f695d0a6a6"
             }
           ]
         },
@@ -1908,10 +1914,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Resolve D4224 acquisition/budget and D4225 memory costs before D4175 ordinary bindings; continue D4167 reverse consumers under accepted source contracts. Native/content proof remains behind D3928.",
+        "nextAction": "Implement and measure D4226 bounded verification memo after independent contract acceptance; resolve remaining D4225 memory and D4224 acquisition before D4175 ordinary bindings. D4167 reverse consumers and D3928 content/native remain.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 actual-map clears leave325\u2013327MiB; the controlled allocation sampler now measures325.66MiB post-clear heap and303.95MiB sampled retained allocations, mostly native add/set. Flattened origins cannot identify owning roots; D4225 stays doing. Nine instrument/two builder controls, real failure cleanup, types and actual smoke/full pass; compact51014B report. Production unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
+          "summary": "Source03b584b4 retains all13 outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. D4225 caller/reset research isolates frozen-data verifier metadata: actual post-work heap334.63\u219278.63MiB after verifier-only replacement; extra-GC/insertion controls unchanged. Real14-position all13-family payload/input/receipt/admission controls,9 instrument/4 builder guards/types/smoke/full pass. Compact58251B report; marginal diagnostic effect only. D4226 owns a bounded pure-verifier repair; D4225 production memory and D4224 acquisition remain open, as do D4175 ordinary26, D4167 reverse consumers and D3928 content/native. No production/capability/release promotion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2508,7 +2514,8 @@
             "planning/foundation-source-identity/outcome-memory-2026-11-11.json",
             "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
             "tools/d4175-outcome-delivery/build-memo-probe.mjs",
-            "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json"
+            "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json",
+            "planning/foundation-source-identity/outcome-immutable-reset-2026-11-11.json"
           ],
           "anchors": [
             {
@@ -3524,7 +3531,12 @@
             {
               "kind": "work_state",
               "id": "D4225",
-              "digest": "sha256:28f38377de0f15efce0c3990c9c3dfe7c6df4375129b3325ed4217aefdc18179"
+              "digest": "sha256:848352e0394b931602cb4211950861d8ae304831ba70c7910eb663b690a8f57b"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4226",
+              "digest": "sha256:e6668cb17c3eceacab42c854ed5242cb6d688df6f785864ac51a72f695d0a6a6"
             }
           ]
         },
