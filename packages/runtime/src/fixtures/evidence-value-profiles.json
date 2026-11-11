@@ -625,6 +625,13 @@
       "86be936381cd15077648bdee60e67db6051c4d5b70b8ea542901e4e198160469"
     ]
   },
+  "derived.inspector.detail.defender_exposure@1": {
+    "availability": "available",
+    "cardinality": 1,
+    "payloadDigests": [
+      "02a2613547a12a207b7c0217e47f80c16407e86222d80d98f6b64922566bf409"
+    ]
+  },
   "derived.inspector.detail.destination_changes@1": {
     "availability": "available",
     "cardinality": 1,

@@ -1710,13 +1710,13 @@ projection("derived.opening", "derived.opening.deepest_reached", "derived", { pa
       limitations: ["No absolute distance, substituted category, assumed optimality, modern provider identity or tablebase exactness is inferred."],
     })),
     ...(Object.keys(INSPECTOR_DETAIL_SOURCES) as InspectorDetailKind[]).map(kind => {
-      const source = [...tacticalOutputs, ...squareOutputs, ...mobilityOutputs, ...kingOutputs, ...foundationSourceOutputs, ...foundationPawnGroupOutputs, ...foundationFileActivityOutputs, ...foundationPawnConsequenceOutputs, ...foundationSquareSourceOutputs].find(row => refKey(row) === INSPECTOR_DETAIL_SOURCES[kind]);
+      const source = [...tacticalOutputs, ...derivedTacticOutputs, ...squareOutputs, ...mobilityOutputs, ...kingOutputs, ...foundationSourceOutputs, ...foundationPawnGroupOutputs, ...foundationFileActivityOutputs, ...foundationPawnConsequenceOutputs, ...foundationSquareSourceOutputs].find(row => refKey(row) === INSPECTOR_DETAIL_SOURCES[kind]);
       if (source === undefined) throw new TypeError(`Missing exact Inspector detail source ${kind}`);
       return projection("derived.inspector", `derived.inspector.detail.${kind}`, "derived", {
         payloadType: `InspectorDetailPayload<${kind}>`, semantics: "Bounded complete source-order members of one admitted source. Original context, member identities, availability and source ordinals are retained without a quality or significance judgement.",
         operands: ["sourceProjection", "context", "scope", "range", "fullSourceTotal", "members"],
         grounding: source.grounding, exactness: source.exactness, confidence: source.confidence,
-        answerContent: source.answerContent, forms: isFoundationDetailKind(kind) ? ["list", "panel"] : ["list", "panel", "lit_squares"],
+        answerContent: source.answerContent, forms: kind === "defender_exposure" || isFoundationDetailKind(kind) ? ["list", "panel"] : ["list", "panel", "lit_squares"],
         abstention: source.abstention.possible ? { possible: true, reasons: ["input_abstained", ...source.abstention.reasons] } : source.abstention,
         dependsOn: [{ id: source.id, version: source.version }], derivation: { inputs: [{ id: source.id, version: source.version }] },
         limitations: [...source.limitations, "Source validation and current Inspector access remain required; this view grants neither. Internal until the complete current Inspector source/page/consumer cutover."],

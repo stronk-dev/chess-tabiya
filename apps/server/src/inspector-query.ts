@@ -6,7 +6,7 @@ import { compileEvidenceConsumerExecutionV2 } from "../../../packages/runtime/sr
 import { evidenceForConsumer, evidenceValueReceipt, type DeclaredEvidence } from "../../../packages/runtime/src/evidence-contract.js";
 import { INSPECTOR_SOURCE_TOPICS, InspectorQueryError, type InspectorQueryRequest, type InspectorQueryPage,
   type InspectorPageBody, type InspectorDisclosureReceipt, type InspectorDetailRef, type InspectorSourceOutcome } from "../../../packages/runtime/src/inspector-query-contract.js";
-import { INSPECTOR_DETAIL_SOURCES, InspectorDetailLimitError } from "../../../packages/runtime/src/inspector-detail.js";
+import { INSPECTOR_DETAIL_SOURCES, InspectorDetailLimitError, InspectorDetailSelectionError } from "../../../packages/runtime/src/inspector-detail.js";
 import { collectInspectorDetailSource } from "../../../packages/runtime/src/inspector-detail-source.js";
 import { fitInspectorSourceOccurrences } from "../../../packages/runtime/src/module-query.js";
 import { presentationAdapter, presentEvidenceItems, serializePresentedEvidence, presentationDigest,
@@ -92,6 +92,7 @@ export async function compileInspectorSourcePage(service: RunService, context: I
         body = { kind: "detail", projection: view.projection, context: view.context, sourceKey: view.sourceKey, scope: view.scope,
           range, fullSourceTotal: payload.fullSourceTotal, sourceOrdinals, presentation: serializePresentedEvidence(items) };
       } catch (error) {
+        if (error instanceof InspectorDetailSelectionError) throw new InspectorQueryError(error.message);
         if (!(error instanceof InspectorDetailLimitError)) throw error;
         sourceOrdinals = [error.sourceOrdinal];
         body = { kind: "detail_limited", projection: view.projection, context: view.context, sourceKey: view.sourceKey, scope: view.scope,

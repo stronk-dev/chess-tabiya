@@ -137,8 +137,9 @@ function assertInspectorWireComponent(ref: string, component: ComponentValue, ow
         && statement.rendererId === "play.legal_moves@1") assertSquareSetGeometry(component, owner, statement.operands.squares, "blue");
     } else if (ref.startsWith("derived.inspector.detail.")) {
       const kind = ref.slice("derived.inspector.detail.".length, -2);
-      if (statement.rendererId !== `inspector.detail.${kind}@1` || statement.binding !== "declared_convention" || statement.convention !== (isFoundationDetailKind(kind) ? FOUNDATION_DETAIL_CAPTIONS[kind] : "piece-geometry@1")) return fail();
-      if (isFoundationDetailKind(kind)) assertFoundationSnapshotPayloadRef(statement.operands, owner);
+      const convention = kind === "defender_exposure" ? "legal-exchange@1" : isFoundationDetailKind(kind) ? FOUNDATION_DETAIL_CAPTIONS[kind] : "piece-geometry@1";
+      if (statement.rendererId !== `inspector.detail.${kind}@1` || statement.binding !== "declared_convention" || statement.convention !== convention) return fail();
+      if (kind === "defender_exposure" || isFoundationDetailKind(kind)) assertFoundationSnapshotPayloadRef(statement.operands, owner);
     } else {
       const allowed = INSPECTOR_SOURCE_STATEMENTS[ref];
       if (allowed === undefined || !allowed.some(([renderer, convention, binding]) => statement.rendererId === renderer && statement.convention === convention && statement.binding === (binding ?? "declared_convention"))) return fail();
@@ -348,6 +349,7 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
   "inspector.detail.outpost_candidates@1": detailRenderer("outpost_candidates"),
   "inspector.detail.occupied_outposts@1": detailRenderer("occupied_outposts"),
   "inspector.detail.backward_pawn_advance@1": detailRenderer("backward_pawn_advance"),
+  "inspector.detail.defender_exposure@1": detailRenderer("defender_exposure"),
 
   // --- one-edge events (Post-commit Nudge, Review Map and Full Inspector)
   "inspector.structural_event@1": factRenderer(s.obj({ san: s.san, change: s.lit("appeared", "disappeared", "held"), observation: structuralObservation }), (value) =>
@@ -1464,12 +1466,12 @@ function buildInspectorAdapterSpecs(kit: PresentationKit): { readonly current: r
   }
 
   for (const kind of Object.keys(INSPECTOR_DETAIL_SOURCES) as InspectorDetailKind[]) {
-    if (isFoundationDetailKind(kind)) {
+    if (kind === "defender_exposure" || isFoundationDetailKind(kind)) {
       addSource(V(`derived.inspector.detail.${kind}`), LP, single("fact_statement",
         ["sourceProjection", "context", "scope", "range", "fullSourceTotal", "members"], ["copied_byte_equal", "mechanical_transform", "retained_convention"], evidence => {
           const parsed = parseInspectorDetailPayload(kind, evidence.payload);
           assertFoundationSnapshotPayloadRef(parsed, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
-          return statement(`inspector.detail.${kind}@1`, FOUNDATION_DETAIL_CAPTIONS[kind], parsed);
+          return statement(`inspector.detail.${kind}@1`, kind === "defender_exposure" ? "legal-exchange@1" : FOUNDATION_DETAIL_CAPTIONS[kind], parsed);
         }));
       continue;
     }

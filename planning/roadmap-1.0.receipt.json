@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ca0b1f6c20166489a025257e4975858f74ac034453b4deeb3e2c32fc2981d8db",
+    "roadmap": "sha256:b4adc744c081533de2cdc841f03c1718fe6c423de78b0a756c4fa6546e5a9c26",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:b43f4019e6ea1115c6a321a9e76d0108823074dc57f99ac6d6cb87ae558ea24d",
+    "workState": "sha256:65c3e00a16acfaf107efd9c6cf461c419132e42707f51865baadb9cb6ae1efcb",
     "rfcRegister": "sha256:b4778c5052edb6eff8598a4e1d6e316359d7d2297b28e699859aaca08834e013",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -1245,10 +1245,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish the active D4200 workload measurement. Implement D4179 scoped Inspector detail and the exact Review handoff. Continue the remaining source qualifications and consumer adoption.",
+      "nextAction": "Finish the active D4200 workload measurement. Connect the selected Review fact to its exact D4179 Inspector occurrence and scoped exchange pages. Continue the remaining source qualifications and consumer adoption.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source pages retain the original ordered occurrences. Scoped detail and the Inspect action remain. The 200-game cost measurement, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review Inspect action and combined journey remain. The 200-game cost measurement, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "packages/runtime/src/presentation-move-path.ts",

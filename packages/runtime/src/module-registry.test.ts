@@ -175,19 +175,19 @@ describe("module registration — the compiled production registry", () => {
     expect(awaiting.every((projection) => !PRIMARY_EVIDENCE_MANIFEST.projections.some((value) => key(value) === projection))).toBe(true);
     const bound = PRIMARY_EVIDENCE_MANIFEST.bindings.filter((binding) => binding.consumer.id.startsWith("module.")).map((binding) => `${binding.consumer.id.slice("module.".length)}\u0000${key(binding.projection)}`).sort();
     expect([...pairs].sort()).toEqual(bound);
-    // Current source-safe cut:89 Full2 topics/fourteen details; ordinary avoidance26 is held,
+    // Current source-safe cut:89 Full2 topics/fifteen details; ordinary avoidance26 is held,
     // not silently installed as a binding that the operation cannot supply.
-    expect(pairs).toHaveLength(293);
-    expect(pairs.length + awaiting.length).toBe(294);
+    expect(pairs).toHaveLength(294);
+    expect(pairs.length + awaiting.length).toBe(295);
     // Nine retired public events and ten old ordinary avoidance refs leave the old214 union;
     // the current seven native sources were already present in Full2.
-    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(195);
+    expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(196);
     expect(pairs.filter(pair => pair.includes("\u0000run.record.objective_transition@"))).toEqual([
       "compare_coach\u0000run.record.objective_transition@1", "review_map\u0000run.record.objective_transition@2",
     ]);
     expect(Object.fromEntries(MODULE_REGISTRY.modules.map((module) => [module.id, accepted(module).length]))).toEqual({
       rules_floor: 0, sight_on_request: 23, blunder_prevention: 3, threat_radar: 7, postcommit_nudge: 41, structure_nudge: 7,
-      theory_breadcrumb: 4, guided_hint: 35, compare_coach: 8, review_map: 62, full_inspector: 103,
+      theory_breadcrumb: 4, guided_hint: 35, compare_coach: 8, review_map: 62, full_inspector: 104,
     });
     expect(accepted(MODULE_REGISTRY.byId.get("full_inspector")!)).toEqual([
       ...INSPECTOR_SOURCE_TOPICS.map(row => row.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`),

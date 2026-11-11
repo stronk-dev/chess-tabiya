@@ -231,6 +231,9 @@ export function parseInspectorQueryPage(value: unknown, expected: {
         const payload = parseInspectorDetailPayload(detailKind, statement.operand.operands), squares = inspectorDetailSquares(payload);
         need(payload.sourceProjection === body.projection && equal(payload.scope, body.scope) && equal(payload.range, body.range)
           && payload.fullSourceTotal === full && equal(list(payload.members).map(member => record(member).sourceOrdinal), ordinals), "detail typed operands");
+        if (payload.sourceProjection === "derived.tactic.defender_exposure@2") {
+          need("afterFen" in payload.context && payload.context.afterFen === expected.fen, "exposure detail recorded position");
+        }
         need(items.length === (squares.length === 0 ? 1 : 2), "complete detail geometry");
         const board = items[1]?.component;
         if (squares.length !== 0) need(board?.id === "square_set" && board.operand.brush === "blue" && board.operand.ordered === false

@@ -368,7 +368,7 @@ describe("value authority: registry equality", () => {
     // Foundation source identity adds two complete position snapshots without learner bindings.
     // F2 §2.4b adds the current owned shape-scan successor; historical2 stays truthful.
     // Subject-safe selection adds two private total-state prerequisites, without bindings.
-    expect(ACTIVE).toHaveLength(370);
+    expect(ACTIVE).toHaveLength(371);
     expect(RETIRED).toEqual([
       "derived.grade.move_quality@1",
       "derived.material.event.role_asymmetry@1",
@@ -1129,7 +1129,12 @@ function buildProfiles(): ReadonlyMap<string, Profile> {
   // Accepted D3792/D3802 additions, not a rewrite of the frozen migration receipt.
   // Each exercises its own genuine complete source and a copied-source falsifier.
   for (const [kind, sourceRoute] of Object.entries(INSPECTOR_DETAIL_SOURCES)) {
-    const source = isFoundationDetailKind(kind) ? (() => {
+    const source = kind === "defender_exposure" ? (() => {
+      const result = invokeEvidenceValueRoute("derived.tactic.defender_exposure@2", firstNonEmpty(sourceRoute, edgesFor(sourceRoute)) as {
+        beforeFen: string; moveUci: string; afterFen: string;
+      });
+      return result.kind === "available" ? result.value[0]?.evidence : undefined;
+    })() : isFoundationDetailKind(kind) ? (() => {
       const profile = profiles.get(sourceRoute);
       if (profile?.valid === undefined) throw new Error(`Missing original foundation source profile: ${sourceRoute}`);
       const result = invoke(sourceRoute, profile.valid) as { kind: "available"; value: DeclaredEvidence<unknown> | readonly DeclaredEvidence<unknown>[] };

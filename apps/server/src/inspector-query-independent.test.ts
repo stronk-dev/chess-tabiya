@@ -127,8 +127,8 @@ describe("independent current-image Inspector query boundary", () => {
     expect(result.disclosure.sourceKeys).toEqual([]); expect(result.disclosure.componentDigests).toEqual([]);
     expect(collect).toHaveBeenCalledTimes(1);
   });
-  it("retains the complete89-topic/fourteen-detail root image without duplicate or historical aliases", () => {
-    expect(expectedRoots).toHaveLength(103); expect(new Set(expectedRoots).size).toBe(103);
+  it("retains the complete89-topic/fifteen-detail root image without duplicate or historical aliases", () => {
+    expect(expectedRoots).toHaveLength(104); expect(new Set(expectedRoots).size).toBe(104);
   });
 
   it.each(expectedRoots)("compiles the actual complete source graph for %s without fake consumer bindings", projection => {
@@ -139,7 +139,7 @@ describe("independent current-image Inspector query boundary", () => {
     expect(executionPlanDigest(plan)).toMatch(/^(?:sha256:)?[a-f0-9]{64}$/u);
   });
 
-  it("preflights the real complete current103 image and exact operation", () => {
+  it("preflights the real complete current104 image and exact operation", () => {
     const current = MODULE_CURRENT_IMAGE.find(row => row.moduleId === "full_inspector")!;
     expect(current.consumer).toEqual({ id: "module.full_inspector", version: 2 });
     expect(current.implementation).toBe("compileInspectorSourcePage");

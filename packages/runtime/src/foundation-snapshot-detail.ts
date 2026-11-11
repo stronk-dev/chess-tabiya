@@ -1,6 +1,6 @@
 // Accepted evidence-presentation §3.10e: literal, lossless source-member expansion. No collector.
 import { evidenceDigest } from "./evidence-contract.js";
-import type { LegalExchangeBranch } from "./exchange.js";
+import type { LegalExchangeBranch, LegalExchangeResult } from "./exchange.js";
 import { FOUNDATION_VALUE_SCHEMAS as shape } from "./foundation-edge-presentation.js";
 import { FOUNDATION_SNAPSHOT_SCHEMAS as snapshot, assertFoundationAdvanceEdge } from "./foundation-snapshot-presentation.js";
 import { pieceOn, s, side } from "./presentation-schema.js";
@@ -43,11 +43,29 @@ export const FOUNDATION_DETAIL_MEMBER_PARSERS = {
   foundation_pawn_reply: member("foundation_pawn_reply", s.obj({ replyIndex: s.nat, captureIndex: s.nat })),
 } as const;
 export type FoundationDetailMember = ReturnType<(typeof FOUNDATION_DETAIL_MEMBER_PARSERS)[keyof typeof FOUNDATION_DETAIL_MEMBER_PARSERS]>;
+export const EXCHANGE_DETAIL_KINDS = ["foundation_capture_header", "foundation_exchange_branch", "foundation_exchange_chosen", "foundation_exchange_stop"] as const;
+export type ExchangeDetailMember = Extract<FoundationDetailMember, { kind: typeof EXCHANGE_DETAIL_KINDS[number] }>;
+
+export function exchangeDetailMembers(capture: LegalExchangeResult, captureIndex: number): readonly ExchangeDetailMember[] {
+  const { branches, chosenLine, stopDecisions, ...head } = capture;
+  const members: ExchangeDetailMember[] = [{ kind: "foundation_capture_header", value: {
+    captureIndex, ...head, branchCount: branches.length, chosenLineCount: chosenLine.length, stopDecisionCount: stopDecisions.length,
+  } }];
+  const walk = (rows: readonly LegalExchangeBranch[], parent: readonly number[]) => rows.forEach((row, index) => {
+    const path = [...parent, index];
+    members.push({ kind: "foundation_exchange_branch", value: { captureIndex, path, step: step(row.step, "original branch step"), resultUnits: row.resultUnits, chosen: row.chosen, continuationCount: row.continuation.length } });
+    walk(row.continuation, path);
+  });
+  walk(branches, []);
+  chosenLine.forEach((value, lineIndex) => members.push({ kind: "foundation_exchange_chosen", value: { captureIndex, lineIndex, step: step(value, "original chosen step") } }));
+  stopDecisions.forEach((decision, index) => members.push({ kind: "foundation_exchange_stop", value: { captureIndex, index, ...decision } }));
+  return members;
+}
 export const FOUNDATION_DETAIL_KINDS = {
   backward_pawns: ["foundation_pawn_domain", "foundation_backward_pawn"], pawn_file_groups: ["foundation_pawn_file_group"], file_states: ["foundation_file_state"],
   future_file_challenges: ["foundation_pawn_domain", "foundation_future_challenge"], capture_migration_reaches: ["foundation_pawn_domain", "foundation_migration_reach"],
   outpost_candidates: ["foundation_outpost_candidate"], occupied_outposts: ["foundation_occupied_outpost"],
-  backward_pawn_advance: ["foundation_capture_header", "foundation_exchange_branch", "foundation_exchange_chosen", "foundation_exchange_stop", "foundation_pawn_reply"],
+  backward_pawn_advance: [...EXCHANGE_DETAIL_KINDS, "foundation_pawn_reply"],
 } as const;
 export const FOUNDATION_DETAIL_CAPTIONS = { backward_pawns: "backward-pawn@1", pawn_file_groups: "pawn-file-membership@1", file_states: "piece-geometry@1",
   future_file_challenges: "future-file-challenge@1", capture_migration_reaches: "capture-migration-reach@1", outpost_candidates: "outpost-candidate@1", occupied_outposts: "outpost-candidate@1", backward_pawn_advance: "legal-exchange@1" } as const;
@@ -73,18 +91,7 @@ export function foundationDetailMembers(kind: FoundationDetailKind, source: Foun
       const v = snapshot.backward_pawn_advance(source, "complete source");
       context = { beforeFen: v.beforeFen, moveUci: v.moveUci, afterFen: v.afterFen, pawn: v.pawn, advancedPawn: v.advancedPawn,
         landingFen: v.landing.fen, landingSquare: v.landing.landingSquare, captureCount: v.landing.captures.length, replyCount: v.replies.length };
-      v.landing.captures.forEach((capture, captureIndex) => {
-        const { branches, chosenLine, stopDecisions, ...head } = capture;
-        members.push({ kind: "foundation_capture_header", value: { captureIndex, ...head, branchCount: branches.length, chosenLineCount: chosenLine.length, stopDecisionCount: stopDecisions.length } });
-        const walk = (rows: readonly LegalExchangeBranch[], parent: readonly number[]) => rows.forEach((row, index) => {
-          const path = [...parent, index];
-          members.push({ kind: "foundation_exchange_branch", value: { captureIndex, path, step: step(row.step, "original branch step"), resultUnits: row.resultUnits, chosen: row.chosen, continuationCount: row.continuation.length } });
-          walk(row.continuation, path);
-        });
-        walk(branches, []);
-        chosenLine.forEach((value, lineIndex) => members.push({ kind: "foundation_exchange_chosen", value: { captureIndex, lineIndex, step: step(value, "original chosen step") } }));
-        stopDecisions.forEach((decision, index) => members.push({ kind: "foundation_exchange_stop", value: { captureIndex, index, ...decision } }));
-      });
+      v.landing.captures.forEach((capture, captureIndex) => members.push(...exchangeDetailMembers(capture, captureIndex)));
       const digests = v.landing.captures.map(capture => evidenceDigest(capture));
       v.replies.forEach((reply, replyIndex) => {
         const digest = evidenceDigest(reply), captureIndex = digests.indexOf(digest);

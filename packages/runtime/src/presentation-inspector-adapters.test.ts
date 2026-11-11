@@ -175,12 +175,12 @@ describe("inspector / post-commit nudge / review map adapters: exact pair popula
   });
 
   it("covers the expected pair counts and registers inspector renderers under their own prefix", () => {
-    expect(bindingsOf("module.full_inspector")).toHaveLength(103);
+    expect(bindingsOf("module.full_inspector")).toHaveLength(104);
     expect(PRIMARY_EVIDENCE_MANIFEST.consumers.filter(row => row.id === "module.full_inspector").map(row => row.version)).toEqual([2]);
     expect(bindingsOf("module.postcommit_nudge")).toHaveLength(41);
     const own = (consumer: string) => [...OWN].filter((entry) => entry.startsWith(`${consumer}@${bindingsOf(consumer)[0]!.consumer.version}\u0000`)).length;
-    expect([own("module.full_inspector"), own("module.postcommit_nudge"), own("module.review_map")]).toEqual([103, 41, bindingsOf("module.review_map").length - 5]); // Four typed engine projections and grade are owned by the common presentation layer; current trade joins this group.
-    const detailRenderers = ["inspector.detail.rays@1", "inspector.detail.square_control@1", "inspector.detail.piece_destinations@1", "inspector.detail.destination_changes@1", "inspector.detail.king_zone@1", "inspector.detail.defender_duties@1", "inspector.detail.backward_pawns@1", "inspector.detail.pawn_file_groups@1", "inspector.detail.file_states@1", "inspector.detail.future_file_challenges@1", "inspector.detail.capture_migration_reaches@1", "inspector.detail.outpost_candidates@1", "inspector.detail.occupied_outposts@1", "inspector.detail.backward_pawn_advance@1"];
+    expect([own("module.full_inspector"), own("module.postcommit_nudge"), own("module.review_map")]).toEqual([104, 41, bindingsOf("module.review_map").length - 5]); // Four typed engine projections and grade are owned by the common presentation layer; current trade joins this group.
+    const detailRenderers = ["inspector.detail.rays@1", "inspector.detail.square_control@1", "inspector.detail.piece_destinations@1", "inspector.detail.destination_changes@1", "inspector.detail.king_zone@1", "inspector.detail.defender_duties@1", "inspector.detail.backward_pawns@1", "inspector.detail.pawn_file_groups@1", "inspector.detail.file_states@1", "inspector.detail.future_file_challenges@1", "inspector.detail.capture_migration_reaches@1", "inspector.detail.outpost_candidates@1", "inspector.detail.occupied_outposts@1", "inspector.detail.backward_pawn_advance@1", "inspector.detail.defender_exposure@1"];
     expect(Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => id.startsWith("inspector.detail.")).sort()).toEqual([...detailRenderers].sort());
     const snapshotRenderers = ["king_opposition", "backward_pawns", "pawn_file_groups", "file_states", "future_file_challenges", "capture_migration_reaches", "outpost_candidates", "occupied_outposts", "backward_pawn_advance"].map(kind => `inspector.snapshot.${kind}@1`);
     expect(Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => id.startsWith("inspector.snapshot.")).sort()).toEqual([...snapshotRenderers].sort());
@@ -922,7 +922,7 @@ describe("inspector / post-commit nudge / review map adapters: real evidence thr
         }
       }
     }
-    if (consumer === "module.full_inspector") expect(presentedPairs).toBe(103);
+    if (consumer === "module.full_inspector") expect(presentedPairs).toBe(104);
     else expect(presentedPairs).toBeGreaterThan(40);
   });
 });

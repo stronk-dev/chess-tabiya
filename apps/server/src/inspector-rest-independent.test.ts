@@ -8,8 +8,11 @@ import { recordedInspectorRun } from "../../../packages/runtime/src/testing/reco
 import { recordedSequenceWindowFixture } from "../../../packages/runtime/src/testing/recorded-sequence-window-fixture.js";
 import * as evidenceRoutes from "../../../packages/runtime/src/internal/evidence-value-routes.js";
 import { evidenceValueReceipt } from "../../../packages/runtime/src/evidence-contract.js";
+import { parseInspectorDetailPayload, type InspectorDetailScope } from "../../../packages/runtime/src/inspector-detail.js";
+import type { LegalExchangeBranch } from "../../../packages/runtime/src/exchange.js";
 import type { InspectorQueryPage, InspectorQueryRequest, InspectorQueryView } from "../../../packages/runtime/src/inspector-query-contract.js";
 import { DrillApi } from "../../web/src/lib/api.js";
+import { parseInspectorQueryPage } from "../../web/src/lib/inspector-query-response.js";
 import { IdentityService } from "./identity.js";
 import { createHttpServer, createRestHandler } from "./rest.js";
 import { RunService } from "./service.js";
@@ -98,12 +101,98 @@ describe("independent authenticated Inspector REST and client transport", () => 
     const refused = await f.call({ ...request, query: { ...request.query, branchId: reviewed, nodeId: child.id } });
     expect(refused.status).toBe(403);
     expect(await refused.json()).toEqual({ protocol: "inspector.query_page@1", kind: "refused", code: "withheld" });
+    const detailRequest = f.request({ kind: "detail", projection, context: { kind: "incoming_edge" },
+      sourceKey: `sha256:${"0".repeat(64)}`, scope: { kind: "exposure_captures" }, start: 0 });
+    const refusedDetail = await f.call({ ...detailRequest, query: { ...detailRequest.query, branchId: reviewed, nodeId: child.id } });
+    expect(refusedDetail.status).toBe(403);
+    expect(await refusedDetail.json()).toEqual({ protocol: "inspector.query_page@1", kind: "refused", code: "withheld" });
     expect(dispatch.mock.calls.filter(([route]) => route === projection)).toHaveLength(0);
     const root = await f.call(request);
     expect(root.status).toBe(200);
     expect(await root.json()).toMatchObject({ kind: "page", body: { outcome: { kind: "missing_context", reason: "no_incoming_edge" } } });
     expect(dispatch.mock.calls.filter(([route]) => route === projection)).toHaveLength(0);
   });
+
+  it.each([
+    ["White", "rN1rkN2/3q4/1n3n2/2B5/b5B1/8/8/R2RK3 w - - 0 1", "c5b6"],
+    ["Black", "r2rk3/8/8/B5b1/2b5/1N3N2/3Q4/Rn1RKn2 b - - 0 1", "c4b3"],
+  ] as const)("D4179 reconstructs every original %s exchange member from bounded Inspector REST pages", async (_side, fen, move) => {
+    const f = await fixture(true, recordedSequenceWindowFixture({ fen, moves: [move] }));
+    const projection = "derived.tactic.defender_exposure@2", context = { kind: "incoming_edge" } as const;
+    const edge = { beforeFen: f.run.nodes[0]!.fen, moveUci: move, afterFen: f.run.nodes[1]!.fen };
+    const original = evidenceRoutes.invokeEvidenceValueRoute(projection, edge);
+    if (original.kind !== "available" || original.value.length !== 1) throw new Error("Expected the original stress occurrence");
+    const dispatch = vi.spyOn(evidenceRoutes, "invokeEvidenceValueRoute");
+    const first = await f.call(f.request({ kind: "source", projection, context, start: 0, collectionKey: null }));
+    const source = await first.json() as InspectorQueryPage;
+    if (source.kind !== "page" || source.body.kind !== "source" || source.body.outcome.kind !== "available") throw new Error("Expected actual exposure overview");
+    const sourceKey = source.body.outcome.facts[0]!.sourceKey;
+    expect(source.body.outcome.facts[0]!.detail).toBe("derived.inspector.detail.defender_exposure@1");
+    let bytes = 0, largestPage = 0, detailCalls = 0;
+    const detail = async (scope: InspectorDetailScope, start = 0) => {
+      const request = f.request({ kind: "detail", projection, context, sourceKey, scope, start });
+      const response = await f.call(request), wire = await response.text();
+      expect(response.status, wire).toBe(200);
+      bytes += Buffer.byteLength(wire); largestPage = Math.max(largestPage, Buffer.byteLength(wire)); detailCalls++;
+      const parsed = parseInspectorQueryPage(JSON.parse(wire), { runId: f.run.id, request, fen: edge.afterFen,
+        requestedDigest: source.requestedConfigDigest, finalDigest: source.effectiveConfigDigest });
+      if (parsed.kind !== "page" || parsed.body.kind !== "detail" || parsed.items[0]?.component.id !== "fact_statement") throw new Error("Expected bounded detail statement");
+      expect(parsed.items).toHaveLength(1);
+      expect(parsed.body.range.count).toBeLessThanOrEqual(8);
+      return parseInspectorDetailPayload("defender_exposure", parsed.items[0].component.operand.operands);
+    };
+    const { captures, controllerEvent } = original.value[0]!.evidence.payload;
+    const headers = await detail({ kind: "exposure_captures" });
+    expect(headers.context).toMatchObject({ ...edge, controllerEvent, captureCount: 4 });
+    expect(headers.members.map(member => member.kind)).toEqual(Array(4).fill("foundation_capture_header"));
+    const firstExchange = await detail({ kind: "exposure_exchange", captureIndex: 0 });
+    expect(firstExchange.members.map(member => member.kind)).not.toContain("foundation_exchange_branch");
+    const firstBranches = await detail({ kind: "exposure_branches", captureIndex: 0, parentPath: [] });
+    expect(firstBranches.members.map(member => member.kind)).toEqual(Array(captures[0]!.branches.length).fill("foundation_exchange_branch"));
+    const branch = firstBranches.members[0]!;
+    if (branch.kind !== "foundation_exchange_branch") throw new Error("Expected a root recapture");
+    const changed = { ...branch, value: { ...branch.value, path: [1] } };
+    expect(() => parseInspectorDetailPayload("defender_exposure", { ...firstBranches, members: [changed, ...firstBranches.members.slice(1)] })).toThrow(/original edge, capture or scope/u);
+    for (const scope of [{ kind: "exposure_exchange", captureIndex: 4 }, { kind: "exposure_branches", captureIndex: 0, parentPath: [999] }] as const) {
+      const invalid = await f.call(f.request({ kind: "detail", projection, context, sourceKey, scope, start: 0 }));
+      expect(invalid.status).toBe(422);
+      expect(await invalid.json()).toMatchObject({ kind: "refused", code: "invalid_request" });
+    }
+    let current = await detail({ kind: "whole" });
+    const members = [...current.members];
+    while (current.range.next !== null) {
+      current = await detail({ kind: "whole" }, current.range.next);
+      members.push(...current.members);
+    }
+    expect(members.map(member => member.sourceOrdinal)).toEqual(members.map((_, index) => index));
+    expect(members.filter(member => member.kind === "foundation_exchange_branch")).toHaveLength(696);
+    for (const [captureIndex, capture] of captures.entries()) {
+      const group = members.filter(member => member.value.captureIndex === captureIndex);
+      const header = group.find(member => member.kind === "foundation_capture_header");
+      if (header?.kind !== "foundation_capture_header") throw new Error("Original capture header missing");
+      const { branchCount, chosenLineCount, stopDecisionCount, captureIndex: _ordinal, ...fields } = header.value;
+      const branches = new Map(group.flatMap(member => member.kind === "foundation_exchange_branch" ? [[member.value.path.join("."), member.value] as const] : []));
+      const branchAt = (path: readonly number[]): LegalExchangeBranch => {
+        const { step, resultUnits, chosen, continuationCount } = branches.get(path.join("."))!;
+        return { step, resultUnits, chosen, continuation: Array.from({ length: continuationCount }, (_, index) => branchAt([...path, index])) };
+      };
+      const chosenLine = group.flatMap(member => member.kind === "foundation_exchange_chosen" ? [member.value.step] : []);
+      const stopDecisions = group.flatMap(member => member.kind === "foundation_exchange_stop"
+        ? [{ ply: member.value.ply, color: member.value.color, stopped: member.value.stopped }] : []);
+      expect(chosenLine).toHaveLength(chosenLineCount);
+      expect(stopDecisions).toHaveLength(stopDecisionCount);
+      expect({ ...fields, chosenLine, stopDecisions, branches: Array.from({ length: branchCount }, (_, index) => branchAt([index])) }).toEqual(capture);
+    }
+    const leaf = members.find(member => member.kind === "foundation_exchange_branch" && member.value.continuationCount === 0);
+    if (leaf?.kind !== "foundation_exchange_branch") throw new Error("Expected a genuine leaf");
+    const leafScope = { kind: "exposure_branches", captureIndex: leaf.value.captureIndex, parentPath: leaf.value.path } as const;
+    expect((await detail(leafScope)).range).toEqual({ start: 0, count: 0, total: 0, next: null });
+    const invalidLeafStart = await f.call(f.request({ kind: "detail", projection, context, sourceKey, scope: leafScope, start: 1 }));
+    expect(invalidLeafStart.status).toBe(422);
+    expect(dispatch.mock.calls.filter(([route]) => route === projection)).toHaveLength(detailCalls + 4);
+    expect(largestPage).toBeLessThan(Buffer.byteLength(JSON.stringify(original.value[0]!.evidence.payload)));
+    expect(bytes).toBeGreaterThan(largestPage);
+  }, 30_000);
 
   it("uses real auth and returns a lazy inventory without changing persisted run bytes", async () => {
     const f = await fixture(), before = JSON.stringify(f.storage.read(f.run.id)), acquire = vi.spyOn(f.service, "acquireInspectorQuerySource");

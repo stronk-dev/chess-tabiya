@@ -2798,6 +2798,7 @@ export const createDerivedInspectorDetailPieceDestinationsV1Evidence = inspector
 export const createDerivedInspectorDetailDestinationChangesV1Evidence = inspectorDetailFactory("destination_changes");
 export const createDerivedInspectorDetailKingZoneV1Evidence = inspectorDetailFactory("king_zone");
 export const createDerivedInspectorDetailDefenderDutiesV1Evidence = inspectorDetailFactory("defender_duties");
+export const createDerivedInspectorDetailDefenderExposureV1Evidence = inspectorDetailFactory("defender_exposure");
 
 /** §7: the one adapter for the scheduler-sealed whole Syzygy outside-domain envelope. */
 export const createRulesEndgameTablebaseDomainV1Evidence = (() => {

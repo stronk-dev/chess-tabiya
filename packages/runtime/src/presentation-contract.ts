@@ -1507,8 +1507,8 @@ function assertConditionalComposition(entry: CompositionEntry): void {
     return;
   }
   const detailKind = full2 ? inspectorDetailKind(entry.projection) : undefined;
-  if (detailKind !== undefined && isFoundationDetailKind(detailKind)) {
-    if (entry.component !== "fact_statement" || entry.composition !== undefined || entry.forms.join("|") !== "list|panel") throw new PresentationError("PRESENTATION_UNREGISTERED", "foundation detail requires its sole text statement");
+  if (detailKind === "defender_exposure" || detailKind !== undefined && isFoundationDetailKind(detailKind)) {
+    if (entry.component !== "fact_statement" || entry.composition !== undefined || entry.forms.join("|") !== "list|panel") throw new PresentationError("PRESENTATION_UNREGISTERED", "text-only Inspector detail requires its sole statement");
     return;
   }
   const currentDetail = full2 && inspectorDetailKind(entry.projection) !== undefined;
@@ -1608,8 +1608,9 @@ export function assertPresentationSourceRetention(evidence: DeclaredEvidence<unk
   if (kind !== undefined) {
     assertDeclaredEvidence(evidence);
     const payload = parseInspectorDetailPayload(kind, evidence.payload), squares = inspectorDetailSquares(payload);
-    const caption = factStatement(`inspector.detail.${kind}@1`, "declared_convention", isFoundationDetailKind(kind) ? FOUNDATION_DETAIL_CAPTIONS[kind] : "piece-geometry@1", payload);
-    if (isFoundationDetailKind(kind)) assertFoundationSnapshotPayloadRef(payload, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
+    const convention = kind === "defender_exposure" ? "legal-exchange@1" : isFoundationDetailKind(kind) ? FOUNDATION_DETAIL_CAPTIONS[kind] : "piece-geometry@1";
+    const caption = factStatement(`inspector.detail.${kind}@1`, "declared_convention", convention, payload);
+    if (kind === "defender_exposure" || isFoundationDetailKind(kind)) assertFoundationSnapshotPayloadRef(payload, `sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
     const statement = components[0], board = components[1];
     if (components.length !== (squares.length === 0 ? 1 : 2) || statement?.id !== "fact_statement"
       || canonicalizeJson(statement.operand) !== canonicalizeJson(caption)

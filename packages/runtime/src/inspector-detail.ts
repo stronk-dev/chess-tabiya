@@ -1,4 +1,6 @@
-import { FOUNDATION_DETAIL_CONTEXTS, FOUNDATION_DETAIL_KINDS, FOUNDATION_DETAIL_MEMBER_PARSERS, foundationDetailMembers, isFoundationDetailKind, isFoundationDetailMember, renderFoundationDetailMember, renderFoundationDetailContext, type FoundationDetailSources, type FoundationDetailKind } from "./foundation-snapshot-detail.js";
+import { EXCHANGE_DETAIL_KINDS, FOUNDATION_DETAIL_CONTEXTS, FOUNDATION_DETAIL_KINDS, FOUNDATION_DETAIL_MEMBER_PARSERS, exchangeDetailMembers, foundationDetailMembers, isFoundationDetailKind, isFoundationDetailMember, renderFoundationDetailMember, renderFoundationDetailContext, type ExchangeDetailMember, type FoundationDetailSources, type FoundationDetailKind } from "./foundation-snapshot-detail.js";
+import { EXPOSURE_DETAIL_SCOPE, assertExposureDetailPage, hasExposureScope, exposureMemberMatches, parseExposureDetailContext, renderExposureDetailContext, type ExposureDetailScope } from "./defender-exposure-detail.js";
+import type { AvailableDefenderExposureOperands } from "./internal/defender-exposure.js";
 // Accepted module-registration §4.11a / evidence-presentation D3802. Pure bounded views over
 // complete sources; no collector, chess judgement, generic JSON path, mint or process-local seal.
 import type { Color, Piece, SquareName } from "chessops/types";
@@ -18,6 +20,7 @@ export interface InspectorDetailSources extends FoundationDetailSources {
   destination_changes: PieceDestinationsEvent;
   king_zone: KingZoneReading;
   defender_duties: DefenderDutyReading;
+  defender_exposure: AvailableDefenderExposureOperands;
 }
 const piece = s.obj({ color: s.color, role: s.role }, { promoted: s.bool });
 const placed = s.obj({ square: s.square, piece });
@@ -69,9 +72,11 @@ type MembersByDetail = {
   piece_destinations: "destinations_unavailable" | "destinations_empty_color" | "destinations_empty_piece" | "destination_membership";
   destination_changes: "destination_event_context" | "destination_event_membership";
   king_zone: "king_zone_member" | "king_zone_relation" | "king_empty_group" | "king_shelter" | "king_escape" | "king_escapes_empty" | "king_escapes_unavailable";
+  defender_exposure: typeof EXCHANGE_DETAIL_KINDS[number];
 } & { [K in FoundationDetailKind]: (typeof FOUNDATION_DETAIL_KINDS)[K][number] };
 const MEMBER_KINDS = Object.freeze({
   ...FOUNDATION_DETAIL_KINDS,
+  defender_exposure: EXCHANGE_DETAIL_KINDS,
   rays: ["ray"], defender_duties: ["defender_duty"], square_control: ["control_relation", "control_empty_target", "control_unavailable"],
   piece_destinations: ["destinations_unavailable", "destinations_empty_color", "destinations_empty_piece", "destination_membership"],
   destination_changes: ["destination_event_context", "destination_event_membership"],
@@ -82,9 +87,10 @@ const CONTROL_SCOPE = s.union("kind", {
   whole: WHOLE,
   control_target: s.obj({ kind: s.lit("control_target"), color: s.color, mode: s.lit("geometric", "legal"), target: s.square }),
 });
-export type InspectorDetailScope = ReturnType<typeof CONTROL_SCOPE>;
+export type InspectorDetailScope = ReturnType<typeof CONTROL_SCOPE> | ExposureDetailScope;
 const CONTEXTS = {
   ...FOUNDATION_DETAIL_CONTEXTS,
+  defender_exposure: parseExposureDetailContext,
   rays: s.obj({ fen: s.str }), defender_duties: s.obj({ fen: s.str }), square_control: s.obj({ fen: s.str }),
   piece_destinations: s.obj({ fen: s.str, conventionId: s.lit("local-non-losing@1") }),
   destination_changes: s.obj({ beforeFen: s.str, moveUci: s.uci, afterFen: s.str, color: s.color, piece: beforeAfter, moved: s.bool, zeroSafe: s.bool }),
@@ -104,7 +110,8 @@ export type InspectorDetailPayload<K extends InspectorDetailKind = InspectorDeta
   [P in K]: Readonly<{
     sourceProjection: (typeof INSPECTOR_DETAIL_SOURCES)[P];
     context: ReturnType<(typeof CONTEXTS)[P]>;
-    scope: P extends "square_control" ? InspectorDetailScope : ReturnType<typeof WHOLE>;
+    scope: P extends "square_control" ? ReturnType<typeof CONTROL_SCOPE>
+      : P extends "defender_exposure" ? ExposureDetailScope : ReturnType<typeof WHOLE>;
     range: ReturnType<typeof range>;
     fullSourceTotal: number;
     members: readonly (Extract<InspectorDetailMember, { kind: MembersByDetail[P] }> & { readonly ordinal: number; readonly sourceOrdinal: number })[];
@@ -113,6 +120,7 @@ export type InspectorDetailPayload<K extends InspectorDetailKind = InspectorDeta
 const fail = (message: string): never => { throw new TypeError(`Inspector detail: ${message}`); };
 
 export function parseInspectorDetailScope(kind: InspectorDetailKind, value: unknown): InspectorDetailScope {
+  if (kind === "defender_exposure") return EXPOSURE_DETAIL_SCOPE(value, "detail scope");
   return kind === "square_control" ? CONTROL_SCOPE(value, "detail scope") : WHOLE(value, "detail scope");
 }
 const parseMember = s.union("kind", MEMBER_PARSERS);
@@ -168,6 +176,8 @@ export function parseInspectorDetailPayload<K extends InspectorDetailKind>(kind:
     })) fail("destination context differs");
     return Object.freeze({ ...member, ordinal: raw.ordinal, sourceOrdinal: raw.sourceOrdinal });
   });
+  if (kind === "defender_exposure") assertExposureDetailPage(parsed.context as ReturnType<typeof parseExposureDetailContext>,
+    parsed.scope as ExposureDetailScope, r, members as readonly (ExchangeDetailMember & { readonly ordinal: number })[]);
   return Object.freeze({ ...parsed, members: Object.freeze(members) }) as InspectorDetailPayload<K>;
 }
 
@@ -184,6 +194,12 @@ export function inspectorDetailMembers<K extends InspectorDetailKind>(kind: K, s
   const add = (candidate: InspectorDetailMember) => { members.push(checkedMember(kind, candidate)); };
   let context: unknown;
   switch (kind) {
+    case "defender_exposure": {
+      const { kind: _kind, captures, ...originalContext } = source as AvailableDefenderExposureOperands;
+      context = { ...originalContext, captureCount: captures.length };
+      captures.forEach((capture, index) => members.push(...exchangeDetailMembers(capture, index)));
+      break;
+    }
     case "rays": { const value = source as RayClassificationReading; context = { fen: value.fen }; for (const ray of value.rays) add({ kind: "ray", value: ray }); break; }
     case "defender_duties": { const value = source as DefenderDutyReading; context = { fen: value.fen }; for (const duty of value.duties) add({ kind: "defender_duty", value: duty }); break; }
     case "square_control": {
@@ -251,7 +267,7 @@ const RAY_LABELS = { absolute_pin: "absolute pin", relative_pin: "relative pin",
 
 /** One deterministic sentence shared by the factory's page fitting and registered rendering. */
 export function renderInspectorDetail(payload: InspectorDetailEnvelope): string {
-  const scope = payload.scope.kind === "whole" ? "" : ` for ${side(payload.scope.color)}'s ${payload.scope.mode === "legal" ? "legal turn-clone" : "geometric"} control at ${payload.scope.target}`;
+  const scope = payload.scope.kind !== "control_target" ? "" : ` for ${side(payload.scope.color)}'s ${payload.scope.mode === "legal" ? "legal turn-clone" : "geometric"} control at ${payload.scope.target}`;
   const r = payload.range;
   const originalHeading = r.count === 0 ? `No members in this complete source view${scope} (full source: ${payload.fullSourceTotal}).`
     : `Details ${r.start + 1}–${r.start + r.count} of ${r.total}${scope} (full source: ${payload.fullSourceTotal}).`;
@@ -283,7 +299,8 @@ export function renderInspectorDetail(payload: InspectorDetailEnvelope): string 
     }
   });
   const sourceKind = (Object.keys(INSPECTOR_DETAIL_SOURCES) as InspectorDetailKind[]).find(kind => INSPECTOR_DETAIL_SOURCES[kind] === payload.sourceProjection);
-  const sourceContext = sourceKind !== undefined && isFoundationDetailKind(sourceKind) ? renderFoundationDetailContext(sourceKind, payload.context) : "";
+  const sourceContext = sourceKind === "defender_exposure" ? renderExposureDetailContext(payload.context as ReturnType<typeof parseExposureDetailContext>)
+    : sourceKind !== undefined && isFoundationDetailKind(sourceKind) ? renderFoundationDetailContext(sourceKind, payload.context) : "";
   const heading = sourceKind !== undefined && isFoundationDetailKind(sourceKind)
     ? r.count === 0 ? "No expanded members in this complete source view."
       : `Expanded members ${r.start + 1}–${r.start + r.count} of ${r.total}; complete expanded source member total ${payload.fullSourceTotal}.`
@@ -317,15 +334,22 @@ export class InspectorDetailLimitError extends TypeError {
     super("Inspector detail member exceeds the unchanged module budget");
   }
 }
+export class InspectorDetailSelectionError extends TypeError {}
 
 /** Source and factory own all members; caller selects only a closed scope and start. */
 export function buildInspectorDetailPayload<K extends InspectorDetailKind>(kind: K, source: InspectorDetailSources[K], scopeValue: unknown, startValue: unknown): InspectorDetailPayload<K> {
   const scope = parseInspectorDetailScope(kind, scopeValue), start = s.nat(startValue, "detail start");
+  if (kind === "defender_exposure" && !hasExposureScope(source as AvailableDefenderExposureOperands, scope as ExposureDetailScope)) {
+    throw new InspectorDetailSelectionError("Inspector detail scope is outside the original exchange");
+  }
   const complete = inspectorDetailMembers(kind, source), fullSourceTotal = complete.members.length;
-  const selected = complete.members.map((member, sourceOrdinal) => ({ ...member, sourceOrdinal })).filter(member => scope.kind === "whole"
-    || (member.kind === "control_relation" || member.kind === "control_empty_target" || member.kind === "control_unavailable")
-      && member.value.color === scope.color && member.value.mode === scope.mode && (!("target" in member.value) || member.value.target === scope.target));
-  if (start >= selected.length && (start !== 0 || selected.length !== 0)) return fail("start is outside the selected source");
+  const selected = complete.members.map((member, sourceOrdinal) => ({ ...member, sourceOrdinal })).filter(member => {
+    if (scope.kind === "whole") return true;
+    if (scope.kind !== "control_target") return isFoundationDetailMember(member) && exposureMemberMatches(member, scope);
+    return (member.kind === "control_relation" || member.kind === "control_empty_target" || member.kind === "control_unavailable")
+      && member.value.color === scope.color && member.value.mode === scope.mode && (!("target" in member.value) || member.value.target === scope.target);
+  });
+  if (start >= selected.length && (start !== 0 || selected.length !== 0)) throw new InspectorDetailSelectionError("Inspector detail start is outside the selected source");
   const envelope = (count: number) => parseInspectorDetailPayload(kind, { sourceProjection: INSPECTOR_DETAIL_SOURCES[kind], context: complete.context,
     scope, fullSourceTotal, range: { start, count, total: selected.length, next: start + count === selected.length ? null : start + count },
     members: selected.slice(start, start + count).map((member, index) => ({ ...member, ordinal: start + index })) });

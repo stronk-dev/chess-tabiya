@@ -44,7 +44,7 @@ function canonical(value: unknown): string {
 }
 
 describe("primary evidence catalogue", () => {
-  it("keeps the fourteen bounded details source-limited and bound only to the current Full2 consumer", () => {
+  it("keeps the fifteen bounded details source-limited and bound only to the current Full2 consumer", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const sources = {
       rays: "rules.tactic.reading.ray_classification@1", square_control: "rules.square.reading.control@1",
@@ -54,6 +54,7 @@ describe("primary evidence catalogue", () => {
       file_states: "derived.activity.reading.file_state@1", future_file_challenges: "derived.square.reading.future_file_challenge@1",
       capture_migration_reaches: "derived.square.reading.capture_migration_reach@1", outpost_candidates: "derived.structural.reading.outpost_candidate@1",
       occupied_outposts: "derived.structural.reading.occupied_outpost@1", backward_pawn_advance: "derived.pawn.consequence.backward_pawn_legal_advance@1",
+      defender_exposure: "derived.tactic.defender_exposure@2",
     };
     const rows = manifest.projections.filter(row => row.id.startsWith("derived.inspector.detail."));
     expect(rows.map(row => row.id).sort()).toEqual(Object.keys(sources).map(kind => `derived.inspector.detail.${kind}`).sort());
@@ -85,11 +86,11 @@ describe("primary evidence catalogue", () => {
     expect(EVIDENCE_CONSUMER_IDS).toEqual([...CURRENT_CONSUMER_OPERATION_IDS, ...MODULE_CONSUMER_IDS, "assistance.arrows", "research.semantic_selection", "research.semantic_validation"]);
     expect(manifest.consumers.find((item) => item.id === "assistance.arrows")?.disposition).toEqual(expect.objectContaining({ kind: "experimental" }));
     // Current Full2 retains88 source topics and14 details; retired duplicate topics are absent.
-    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(293);
+    expect(manifest.bindings.filter((binding) => binding.consumer.id.startsWith("module."))).toHaveLength(294);
     // rfc/hint-distance.md: +1 producer (derived.hint), +42 projections (7 operator-only horizons, 35 disclosures), +1 consumer, +35 bindings;
     // Bounded target composition adds two producers and five inspector-only projections, no bindings.
     // D4053 replaces the four-binding board1 image with the ruled two-binding board2 image.
-    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([50, 404, 52, 699]); // Exact current source/selector/validation image; no ordinary avoidance2 bindings.
+    expect([manifest.producers.length, manifest.projections.length, manifest.consumers.length, manifest.bindings.length]).toEqual([50, 405, 52, 700]); // Exact current source/selector/validation image; no ordinary avoidance2 bindings.
     for (const id of ["rules.mobility.reading.early_queen_move"]) {
       expect(manifest.projections.filter(row => row.id === id)).toHaveLength(1);
       expect(manifest.projections.find(row => row.id === id)?.disposition).toBeUndefined();

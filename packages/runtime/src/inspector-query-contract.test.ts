@@ -25,7 +25,7 @@ const mate = (version: 1 | 2, maxAttackerMoves = 1) => ({ ...source(`rules.tacti
   parameters: { kind: "forced_mate", maxAttackerMoves } });
 
 describe("accepted Inspector requested-intent boundary (not source/access/Full2 delivery)", () => {
-  it("keeps89 literal topics in the exact source order and excludes fourteen views", () => {
+  it("keeps89 literal topics in the exact source order and excludes fifteen views", () => {
     expect(INSPECTOR_SOURCE_TOPICS).toHaveLength(89);
     expect(new Set(INSPECTOR_SOURCE_TOPICS.map(row => row.projection)).size).toBe(89);
     const specs = inspectorSourceAdapterSpecs(inspectorSourcePresentationKit).filter(row => !row.projection.id.startsWith("derived.inspector.detail."));
@@ -88,9 +88,9 @@ describe("accepted Inspector requested-intent boundary (not source/access/Full2 
     expect(() => parseInspectorQueryRequest(request(source(projection, { kind: "incoming_edge" })))).toThrow(InspectorQueryError);
   });
 
-  it("accepts precisely fourteen source-bound detail doors and only control's target filter", () => {
+  it("accepts fifteen source-bound detail doors with source-specific filters", () => {
     for (const projection of Object.values(INSPECTOR_DETAIL_SOURCES)) {
-      const view = { kind: "detail", projection, context: (projection === "rules.mobility.event.piece_destinations@1" || projection === "derived.pawn.consequence.backward_pawn_legal_advance@1") ? { kind: "incoming_edge" } : { kind: "position" }, sourceKey: "actual-source", scope: { kind: "whole" }, start: 0 };
+      const view = { kind: "detail", projection, context: (projection === "rules.mobility.event.piece_destinations@1" || projection === "derived.pawn.consequence.backward_pawn_legal_advance@1" || projection === "derived.tactic.defender_exposure@2") ? { kind: "incoming_edge" } : { kind: "position" }, sourceKey: "actual-source", scope: { kind: "whole" }, start: 0 };
       expect(parseInspectorQueryRequest(request(view)).query.view).toEqual(view);
       const filtered = () => parseInspectorQueryRequest(request({ ...view, scope: { kind: "control_target", color: "white", mode: "legal", target: "a1" } }));
       if (projection === "rules.square.reading.control@1") expect(filtered).not.toThrow();
@@ -100,6 +100,12 @@ describe("accepted Inspector requested-intent boundary (not source/access/Full2 
     expect(parseInspectorQueryRequest(request(control)).query.view).toEqual(control);
     for (const scope of [{ ...control.scope, target: "i9" }, { ...control.scope, mode: "safe" }, { ...control.scope, color: "player" }, { ...control.scope, ordering: "usefulness" }]) expect(() => parseInspectorQueryRequest(request({ ...control, scope }))).toThrow();
     for (const view of [{ ...control, sourceKey: "" }, { ...control, projection: "rules.phase.reading@2" }, { ...control, projection: "derived.inspector.detail.square_control@1" }, { ...control, parameters: { kind: "forced_mate", maxAttackerMoves: 1 } }]) expect(() => parseInspectorQueryRequest(request(view))).toThrow();
+    const exposure = { ...control, projection: "derived.tactic.defender_exposure@2", context: { kind: "incoming_edge" } };
+    for (const scope of [{ kind: "exposure_captures" }, { kind: "exposure_exchange", captureIndex: 0 }, { kind: "exposure_branches", captureIndex: 2, parentPath: [1, 3] }]) {
+      const view = { ...exposure, scope };
+      expect(parseInspectorQueryRequest(request(view)).query.view).toEqual(view);
+      expect(() => parseInspectorQueryRequest(request({ ...control, scope }))).toThrow();
+    }
   });
 
   it("refuses crossed comparison branches and every nested caller authority/operand bag", () => {

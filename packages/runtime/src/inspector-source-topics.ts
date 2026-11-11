@@ -118,5 +118,6 @@ export const INSPECTOR_DETAIL_SOURCES = Object.freeze({
   outpost_candidates: "derived.structural.reading.outpost_candidate@1",
   occupied_outposts: "derived.structural.reading.occupied_outpost@1",
   backward_pawn_advance: "derived.pawn.consequence.backward_pawn_legal_advance@1",
+  defender_exposure: "derived.tactic.defender_exposure@2",
 } as const);
 export type InspectorDetailKind = keyof typeof INSPECTOR_DETAIL_SOURCES;

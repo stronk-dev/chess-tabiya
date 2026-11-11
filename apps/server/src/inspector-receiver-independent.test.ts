@@ -130,7 +130,7 @@ describe("independent actual Full2 browser receiver", () => {
   it("requires semantic wire validation on every one of the actual102 Full2 adapter pairs", () => {
     const adapters = PRESENTATION_ADAPTERS.filter(adapter => adapter.consumer.id === "module.full_inspector" && adapter.consumer.version === 2);
     const roots = [...INSPECTOR_SOURCE_TOPICS.map(topic => topic.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`)];
-    expect(adapters).toHaveLength(103);
+    expect(adapters).toHaveLength(104);
     expect(adapters.map(adapter => `${adapter.projection.id}@${adapter.projection.version}`).sort()).toEqual(roots.sort());
     expect(adapters.every(adapter => typeof adapter.validateWireComponent === "function")).toBe(true);
   });
@@ -155,9 +155,10 @@ describe("independent actual Full2 browser receiver", () => {
   });
 
   it.each(Object.entries(INSPECTOR_DETAIL_SOURCES))("parses genuine %s whole/focused details with original source ordinals", async (kind, projection) => {
-    const initial = kind === "backward_pawn_advance" ? recordedSequenceWindowFixture({ fen: "1r5k/8/8/p1p5/8/1P6/8/1R5K w - - 0 1", moves: ["b3b4"] })
+    const initial = kind === "defender_exposure" ? recordedSequenceWindowFixture({ fen: "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1", moves: ["c5b6"] })
+      : kind === "backward_pawn_advance" ? recordedSequenceWindowFixture({ fen: "1r5k/8/8/p1p5/8/1P6/8/1R5K w - - 0 1", moves: ["b3b4"] })
       : kind === "destination_changes" ? commitMove(recordedInspectorRun(), "b1a3", { at }).run : recordedInspectorRun();
-    const f = fixture(initial), context = { kind: kind === "destination_changes" || kind === "backward_pawn_advance" ? "incoming_edge" : "position" } as const;
+    const f = fixture(initial), context = { kind: kind === "destination_changes" || kind === "backward_pawn_advance" || kind === "defender_exposure" ? "incoming_edge" : "position" } as const;
     const full = await issued(f, source(projection, context)), fact = available(full.page).facts[0]!;
     const r = await issued(f, { kind: "detail", projection, context, sourceKey: fact.sourceKey, scope: { kind: "whole" }, start: 0 });
     expect(r.decode()).toMatchObject({ kind: "page", body: { kind: "detail", sourceKey: fact.sourceKey } });

@@ -40813,3 +40813,19 @@ server suite passed 526 tests. The runtime and mounted Inspector suite passed 1,
 updating its exact renderer list for the Review renderer added in the previous checkpoint.
 Workspace types and the evidence manifest, semantic evidence, candidate projection and capability
 checks passed. Scoped exchange pages and the Review action remain open.
+
+### 2026-11-11 — D4179 scoped Inspector exchange detail
+
+The recorded incoming-edge source now has a text-only Inspector detail door. Its original
+exchange members support capture headers, one capture's chosen exchange and stop decisions,
+direct recaptures beneath a valid parent, and complete ordered traversal. Focused pages retain
+whole-source ordinals. The receiver checks the selected position, pass convention, member order
+and branch suffix. The REST test first found an untyped 500 for an invalid capture ordinal.
+Invalid capture, parent path and page starts now return the existing closed 422 refusal.
+
+The authenticated REST stress tests reconstructed all four original captures and all 696
+recapture nodes independently for each color. They compared the full trees, promotions,
+chosen lines and stop decisions, checked one exposure acquisition per request, exercised an
+empty genuine leaf and refused a crossed branch suffix. The REST, runtime, presentation and
+receiver checks passed 3,764 tests. Workspace types and manifest and capability checks passed.
+The Review Inspect action and the combined selected-move journey remain open.

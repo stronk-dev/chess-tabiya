@@ -23,7 +23,7 @@ const key = (ref: { readonly id: string; readonly version: number }) => `${ref.i
 const inspectorForms = PRIMARY_EVIDENCE_MANIFEST.consumers.find(row => row.id === "module.full_inspector")!.forms;
 
 describe("actual current Full Inspector2 source adapter image", () => {
-  it("covers every actual supplier exactly once plus fourteen detail views, without Full1 rebasing", () => {
+  it("covers every actual supplier exactly once plus fifteen detail views, without Full1 rebasing", () => {
     const topics = [...INSPECTOR_LOCAL_PROJECTIONS, ...INSPECTOR_DEPENDENT_PROJECTIONS,
       ...Object.keys(RECORDED_SEQUENCE_HORIZONS), ...INSPECTOR_PACKET_PROJECTIONS,
       ...INSPECTOR_PIVOTAL_PROJECTIONS, ...INSPECTOR_OPENING_PROJECTIONS,
@@ -34,7 +34,7 @@ describe("actual current Full Inspector2 source adapter image", () => {
     expect(topics).toHaveLength(89);
     expect(new Set(topics).size).toBe(89);
     expect([...topics].sort()).toEqual(INSPECTOR_SOURCE_TOPICS.map(row => row.projection).sort());
-    expect(specs).toHaveLength(103);
+    expect(specs).toHaveLength(104);
     const expected = [...topics, ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`)];
     expect(specs.map(spec => key(spec.projection)).sort()).toEqual(expected.sort());
     expect(specs.every(spec => key(spec.consumer) === "module.full_inspector@2")).toBe(true);
@@ -70,9 +70,9 @@ for (const route of INSPECTOR_LOCAL_PROJECTIONS) factoryValues.set(route, inspec
 const currentValues = await inspectorCurrentPresentationFixtures(factoryValues);
 
 describe("every actual Full2 source/detail pair through the sole compiled presentation path", () => {
-  it("has genuine fixture populations for exactly all89 source topics and fourteen details", () => {
+  it("has genuine fixture populations for exactly all89 source topics and fifteen details", () => {
     const expected = [...INSPECTOR_SOURCE_TOPICS.map(row => row.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`)];
-    expect(currentValues.size).toBe(103);
+    expect(currentValues.size).toBe(104);
     expect([...currentValues.keys()].sort()).toEqual(expected.sort());
   });
   it.each([...currentValues.keys()])("%s admits genuine source, seals complete components and round-trips", route => {
