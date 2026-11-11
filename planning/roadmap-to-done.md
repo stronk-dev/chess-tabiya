@@ -26,11 +26,16 @@ and refuse before acquiring evidence during retry, for both colors. D3928
 blocks the desktop and phone-width browser journey at server startup.
 [Exposure research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11)
 
-Six of the 13 new outcome families qualify. Seven still need qualification. D4167 reverse
+Eight of the 13 new outcome families qualify. The new backward- and passed-pawn cases
+pass all 1,524 canonical cases and 4,161 focused tests. The earlier 1,470 case receipts and
+all population and external receipts are preserved. Five families still need qualification. D4167 reverse
 consumers, D4175's 26 ordinary avoidance tuples, full module and preset adoption, learner journeys
 and release proof remain. D3928 still holds content, native startup and release proof. No new
 official pack graduates. The [foundation plan](foundation-source-identity/plan.md) tracks
 implementation and verification.
+
+The pawn qualification wave still needs its complete software rerun. The generated receipt
+retains every record with one case per line and remains below the unchanged 5 MiB guard.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

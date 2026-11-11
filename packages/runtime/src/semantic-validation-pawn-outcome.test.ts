@@ -6,6 +6,8 @@ import { evidenceDigest, evidenceForConsumer } from "./evidence-contract.js";
 import { invokeEvidenceValueRoute, readSubjectOutcomeInvocation } from "./internal/evidence-value-routes.js";
 import { PAWN_OUTCOME_FAMILIES, PAWN_OUTCOME_LITERAL_SOURCES, PAWN_OUTCOME_POPULATIONS, pawnOutcomeInput,
   literalPawnOutcomeEvents, literalPawnOutcomePopulation, type PawnOutcomeFamily } from "./semantic-validation-pawn-outcome-sources.js";
+import { PAWN_LINEAGE_FAMILIES, PAWN_LINEAGE_LITERAL_SOURCES, PAWN_LINEAGE_POPULATIONS,
+  literalPawnLineagePopulation, pawnLineageInput, type PawnLineageFamily } from "./semantic-validation-pawn-lineage-sources.js";
 import { canonicalSemanticEdge, SEMANTIC_VALIDATION_OPERATIONS } from "./semantic-validation-operations.js";
 import { admitValidatedSemanticInstance, SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { SEMANTIC_VALIDATION_RESOLVERS, sha256Text } from "./semantic-validation-authorities.js";
@@ -15,10 +17,32 @@ import type { SubjectOutcomePayload } from "./semantic-subject-types.js";
 
 type Mutable<T> = T extends readonly (infer U)[] ? Mutable<U>[] : T extends object ? { -readonly [K in keyof T]: Mutable<T[K]> } : T;
 const faults = vi.hoisted(() => ({ family: "isolated_pawn" as PawnOutcomeFamily, kind: "none", calls: 0 }));
+const lineageFaults = vi.hoisted(() => ({ family: "passed_pawn" as PawnLineageFamily, kind: "none", calls: 0 }));
 vi.mock("./semantic-subject-outcomes.js", async importOriginal => {
   const original = await importOriginal<typeof import("./semantic-subject-outcomes.js")>();
   return { ...original, computeSubjectOutcomes: ((...args: Parameters<typeof original.computeSubjectOutcomes>) => {
     const result = original.computeSubjectOutcomes(...args);
+    if (args[0] === lineageFaults.family && lineageFaults.kind !== "none" && result.kind === "available") {
+      lineageFaults.calls++;
+      const payloads = structuredClone(result.payloads) as Mutable<SubjectOutcomePayload<PawnLineageFamily>>[];
+      for (const payload of payloads) {
+        const subjectSquare = lineageFaults.family === "backward_pawn" ? "d4" : "d5";
+        if (lineageFaults.kind === "subject" && payload.subject.rootSquare === subjectSquare) {
+          payload.subject.rootSquare = lineageFaults.family === "backward_pawn" ? "d2" : "d7";
+        }
+        const removed = payload.alternatives.find(edge => edge.state.kind === "removed");
+        if (removed === undefined) continue;
+        if (lineageFaults.kind === "capture-as-zero") {
+          removed.state = { kind: "present", value: false };
+          removed.relation = "false_to_false";
+        }
+        if (lineageFaults.kind === "crossed-state") {
+          const present = payload.alternatives.find(edge => edge.state.kind === "present")!;
+          [removed.state, present.state] = [present.state, removed.state];
+        }
+      }
+      return { ...result, payloads } as typeof result;
+    }
     if (args[0] !== faults.family || faults.kind === "none" || result.kind !== "available") return result;
     faults.calls++;
     const payloads = structuredClone(result.payloads) as Mutable<SubjectOutcomePayload<PawnOutcomeFamily>>[];
@@ -71,15 +95,19 @@ vi.mock("./semantic-subject-outcomes.js", async importOriginal => {
     return { ...result, payloads } as typeof result;
   }) as typeof original.computeSubjectOutcomes };
 });
-afterEach(() => { faults.kind = "none"; faults.calls = 0; vi.restoreAllMocks(); });
-const sources = PAWN_OUTCOME_LITERAL_SOURCES;
-const cases = sources.flatMap(source => source.cases.map(row => parseSemanticValidationCase({
+afterEach(() => {
+  faults.kind = "none"; faults.calls = 0;
+  lineageFaults.kind = "none"; lineageFaults.calls = 0;
+  vi.restoreAllMocks();
+});
+const readCitedCases = (sources: typeof PAWN_OUTCOME_LITERAL_SOURCES) => sources.flatMap(source => source.cases.map(row => parseSemanticValidationCase({
   id: row.proposition.case.id, version: 1, subject: row.proposition.subject, arm: row.arm, operation: source.operation,
   input: row.input, expectation: row.proposition.expectation,
   authority: { kind: "cited_proposition", sourceId: source.sourceId, sourceRevision: source.sourceRevision, licence: source.licence,
     span: { start: 0, end: source.text.length, textSha256: sha256Text(source.text) },
     propositionSha256: evidenceDigest({ ...row.proposition, factConstraintSha256: semanticFactConstraintSha256(row.proposition.factConstraint) }) },
 }))) as readonly SemanticValidationCaseFor<"runtime.semantic.subject_outcomes">[];
+const cases = readCitedCases(PAWN_OUTCOME_LITERAL_SOURCES);
 const registry = new Map(cases.map(value => [value.id, value]));
 const owners = new Map<string, CandidatePopulationReceipt<CandidateWideScope>>();
 function owner(fen: string, fresh = false): CandidatePopulationReceipt<CandidateWideScope> {
@@ -222,4 +250,91 @@ describe("independent complete pawn/file outcome sources", () => {
       expect(faults.calls).toBe(1);
     });
   }
+});
+
+const lineageCases = readCitedCases(PAWN_LINEAGE_LITERAL_SOURCES);
+const lineageRegistry = new Map(lineageCases.map(value => [value.id, value]));
+const lineageMatrix = PAWN_LINEAGE_FAMILIES.flatMap(family =>
+  PAWN_LINEAGE_POPULATIONS.flatMap(row => row.plays.map(move => ({ family, row, move }))));
+
+describe("independent exact pawn lineage", () => {
+  it.each(lineageMatrix)("$family $row.id $move preserves each original pawn and complete legal alternatives", ({ family, row, move }) => {
+    const originalOwner = owner(row.root);
+    const input = pawnLineageInput(family, row, move);
+    expect(input.population.alternatives.map(edge => edge.moveUci))
+      .toEqual(originalOwner.packet.candidates.map(candidate => candidate.moveUci));
+    for (const edge of input.population.alternatives) expect(canonicalSemanticEdge(edge)).toEqual(edge);
+    const result = invokeEvidenceValueRoute(`derived.semantic_avoidance.${family}@2`, { receipt: originalOwner, moveUci: move });
+    const original = readSubjectOutcomeInvocation(result);
+    expect(original.receipt).toBe(originalOwner);
+    expect(original.inputs[0]).toBe(originalOwner.legalMovesInput);
+    if (original.population.kind !== "available") throw Error("Expected the complete original subject population");
+    expect(original.population.population).toEqual(literalPawnLineagePopulation(family, row, move));
+  });
+
+  it.each(PAWN_LINEAGE_FAMILIES)("%s joins only its own canonical cases and all four required arms", async family => {
+    const casesDocument = JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] };
+    const expected = lineageCases.filter(value => value.input.family === family);
+    const ids = new Set(expected.map(value => value.id));
+    expect(casesDocument.cases.map(parseSemanticValidationCase).filter(value => ids.has(value.id))).toEqual(expected);
+    const profile = SEMANTIC_VALIDATION_PROFILES.find(value => value.subject.projection.id === `derived.semantic_avoidance.${family}` && value.subject.projection.version === 2);
+    if (profile === undefined) throw Error("Missing exact pawn lineage profile");
+    for (const [key, arm] of [["positive", "positive"], ["semanticNegative", "semantic_negative"],
+      ["orientation", "orientation"], ["counterfactual", "counterfactual"]] as const) {
+      const cell = profile[key];
+      expect(cell.disposition).toBe("present");
+      if (cell.disposition !== "present") throw Error("Expected the executed profile arm");
+      expect(cell.refs.map(ref => ref.id)).toEqual(expected.filter(value => value.arm === arm).map(value => value.id));
+    }
+    expect(semanticValidationVerdict(profile.subject)?.verdict).toBe("passed");
+    const positive = expected.find(value => value.arm === "positive")!;
+    const result = await SEMANTIC_VALIDATION_OPERATIONS["runtime.semantic.subject_outcomes"].invoke(positive.input);
+    if (result.kind !== "completed") throw Error("Expected complete registered source");
+    const evidenceValues = result.observations.map(observation => {
+      if (observation.kind !== "event") throw Error("Expected a pawn outcome event");
+      return observation.item.evidence;
+    });
+    expect(evidenceValues.length).toBeGreaterThan(0);
+    for (const evidence of evidenceValues) {
+      expect(admitValidatedSemanticInstance("event", evidence).kind).toBe("admitted");
+      for (const consumer of ["module.postcommit_nudge", "module.review_map"]) {
+        expect(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: consumer, version: 2 }, [evidence]).items).toEqual([]);
+      }
+    }
+  });
+
+  it.each(lineageCases)("$id executes the original source with its own fixed authority", async value => {
+    const result = await executeSemanticValidationCase(value, SEMANTIC_VALIDATION_RESOLVERS, lineageRegistry);
+    expect(result.status, result.failure?.message).toBe("passed");
+    expect(result.invocations).toBe(value.arm === "orientation" ? 2 : 1);
+  });
+
+  it("distinguishes a stationary pawn's gained passage from removal in the same population", () => {
+    const row = PAWN_LINEAGE_POPULATIONS.find(candidate => candidate.id === "pass-or-remove.white")!;
+    const result = invokeEvidenceValueRoute("derived.semantic_avoidance.passed_pawn@2", { receipt: owner(row.root), moveUci: "h1g1" });
+    if (result.kind !== "available") throw Error("Expected complete pawn outcome");
+    const original = result.values.find(value => value.payload.subject.rootSquare === "d5");
+    expect(original?.payload.supportingMoves).toEqual(["c4c5"]);
+    expect(original?.payload.alternatives.find(edge => edge.moveUci === "c4d5")).toEqual({
+      moveUci: "c4d5", state: { kind: "removed", at: "d5" }, relation: "not_comparable",
+    });
+  });
+
+  it.each(PAWN_LINEAGE_FAMILIES)("%s rejects a same-file replacement of its original pawn", async family => {
+    lineageFaults.family = family; lineageFaults.kind = "subject";
+    const value = lineageCases.find(row => row.input.family === family && row.arm === "positive"
+      && row.id.includes(family === "backward_pawn" ? ".support-loss.white.0." : ".pass-or-remove.white.0."))!;
+    const result = await executeSemanticValidationCase(value, SEMANTIC_VALIDATION_RESOLVERS, lineageRegistry);
+    expect(lineageFaults.calls).toBe(1);
+    expect(result).toMatchObject({ status: "failed", failure: { code: "SEMANTIC_VALIDATION_EXPECTATION_UNMET" } });
+  });
+
+  it.each(["capture-as-zero", "crossed-state"])("rejects the pawn-lineage error %s before qualification", async kind => {
+    lineageFaults.family = "passed_pawn"; lineageFaults.kind = kind;
+    const value = lineageCases.find(row => row.input.family === "passed_pawn" && row.arm === "positive"
+      && row.id.includes(".pass-or-remove.white.0."))!;
+    const result = await executeSemanticValidationCase(value, SEMANTIC_VALIDATION_RESOLVERS, lineageRegistry);
+    expect(lineageFaults.calls).toBe(1);
+    expect(result).toMatchObject({ status: "failed", failure: { code: "SEMANTIC_VALIDATION_EXPECTATION_UNMET" } });
+  });
 });

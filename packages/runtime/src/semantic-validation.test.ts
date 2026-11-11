@@ -1,4 +1,5 @@
 import { PAWN_OUTCOME_LITERAL_SOURCES } from "./semantic-validation-pawn-outcome-sources.js";
+import { PAWN_LINEAGE_LITERAL_SOURCES } from "./semantic-validation-pawn-lineage-sources.js";
 import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
 // rfc/semantic-validation-authority.md — acceptance criteria and §10 able-to-fail fixtures.
 import { SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
@@ -240,7 +241,7 @@ describe("semantic-validation roots, profiles and verdicts", () => {
   });
 
   it("[27] keeps new source qualification separate from its actual complete population coverage", () => {
-    const debt = SEMANTIC_VALIDATION_PROFILES.find((profile) => profile.subject.projection.id === "derived.semantic_avoidance.backward_pawn")!;
+    const debt = SEMANTIC_VALIDATION_PROFILES.find((profile) => profile.subject.projection.id === "derived.semantic_avoidance.king_zone")!;
     expect(SEMANTIC_VALIDATION_ARMS.filter((arm) => arm !== "external_label" && arm !== "imported_population").every((arm) => {
       const key = ({ positive: "positive", semantic_negative: "semanticNegative", orientation: "orientation", counterfactual: "counterfactual", imported_population: "importedPopulation" } as const)[arm as Exclude<typeof arm, "external_label">];
       const cell = debt[key];
@@ -265,12 +266,12 @@ describe("semantic-validation roots, profiles and verdicts", () => {
   it("[25] reports passed/open subjects by arm rather than one blended percentage", () => {
     const summary = semanticValidationSummary();
     expect(summary.subjects).toBe(SEMANTIC_VALIDATION_ROOTS.length);
-    // Four basic transitions, seven current foundation profiles and six independently grounded outcome families.
-    expect(summary.passed).toBe(17);
+    // Four basic transitions, seven current foundation profiles and eight independently grounded outcome families.
+    expect(summary.passed).toBe(19);
     expect(SEMANTIC_VALIDATION_RECEIPT.verdicts.filter(row => row.verdict === "passed").map(row => row.subject))
-      .toEqual([event("derived.activity.event.file_access_revealed"), event("derived.activity.event.file_state"), { kind: "event", projection: { id: "derived.semantic_avoidance.doubled_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.half_open_file", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.isolated_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.open_file", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.pawn_islands", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.piece_count", version: 2 } }, event("derived.structural.event.pawn_file_group"), event("rules.castling.event.rights_lost"), { kind: "event", projection: { id: "rules.structural.event.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.king_opposition", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.pawn_islands", version: 2 } }, event("rules.transition.event.capture"),
+      .toEqual([event("derived.activity.event.file_access_revealed"), event("derived.activity.event.file_state"), { kind: "event", projection: { id: "derived.semantic_avoidance.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.doubled_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.half_open_file", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.isolated_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.open_file", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.passed_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.pawn_islands", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.piece_count", version: 2 } }, event("derived.structural.event.pawn_file_group"), event("rules.castling.event.rights_lost"), { kind: "event", projection: { id: "rules.structural.event.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.king_opposition", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.pawn_islands", version: 2 } }, event("rules.transition.event.capture"),
         event("rules.transition.event.castled"), event("rules.transition.event.clock_reset"), { kind: "event", projection: { id: "rules.transition.event.slider_ray", version: 2 } }]);
-    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length - 17);
+    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length - 19);
     const verdict = compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => ({ arm, status: "passed" as const, refs: ["a"] })));
     expect(verdict.verdict).toBe("passed");
     expect(compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => arm === "orientation" ? { arm, status: "required" as const, owner: "o", discharge: "d" } : { arm, status: "passed" as const, refs: ["a"] })).open).toEqual(["orientation"]);
@@ -438,10 +439,13 @@ describe("semantic-validation cases and execution", () => {
     expect(addedCountIds.size).toBe(56);
     const addedPawnOutcomeIds = new Set(PAWN_OUTCOME_LITERAL_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
     expect(addedPawnOutcomeIds.size).toBe(590);
+    const addedPawnLineageIds = new Set(PAWN_LINEAGE_LITERAL_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    expect(addedPawnLineageIds.size).toBe(54);
+    expect(CASES.filter(row => addedPawnLineageIds.has(row.id)).map(row => row.id).sort()).toEqual([...addedPawnLineageIds].sort());
     expect(CASES.filter(row => addedPawnOutcomeIds.has(row.id)).map(row => row.id).sort()).toEqual([...addedPawnOutcomeIds].sort());
     expect(CASES.filter(row => addedCountIds.has(row.id)).map(row => row.id).sort()).toEqual([...addedCountIds].sort());
-    expect(CASES.filter(row => !addedOppositionIds.has(row.id) && !addedPawnFileIds.has(row.id) && !addedBackwardIds.has(row.id) && !addedSliderIds.has(row.id) && !addedCountIds.has(row.id) && !addedPawnOutcomeIds.has(row.id))).toHaveLength(419 - SUBJECT_SAFE_RETIRED_CASES.length);
-    expect(CASES).toHaveLength(375 + addedCastleIds.size + addedRightsIds.size + addedTransitionIds.size + addedOppositionIds.size + addedPawnFileIds.size + addedBackwardIds.size + addedSliderIds.size + addedCountIds.size + addedPawnOutcomeIds.size - SUBJECT_SAFE_RETIRED_CASES.length);
+    expect(CASES.filter(row => !addedOppositionIds.has(row.id) && !addedPawnFileIds.has(row.id) && !addedBackwardIds.has(row.id) && !addedSliderIds.has(row.id) && !addedCountIds.has(row.id) && !addedPawnOutcomeIds.has(row.id) && !addedPawnLineageIds.has(row.id))).toHaveLength(419 - SUBJECT_SAFE_RETIRED_CASES.length);
+    expect(CASES).toHaveLength(375 + addedCastleIds.size + addedRightsIds.size + addedTransitionIds.size + addedOppositionIds.size + addedPawnFileIds.size + addedBackwardIds.size + addedSliderIds.size + addedCountIds.size + addedPawnOutcomeIds.size + addedPawnLineageIds.size - SUBJECT_SAFE_RETIRED_CASES.length);
     expect(HISTORICAL_CASES.filter((item) => item.arm === "positive")).toHaveLength(230);
     expect(HISTORICAL_CASES.filter((item) => item.arm === "semantic_negative")).toHaveLength(158);
   });

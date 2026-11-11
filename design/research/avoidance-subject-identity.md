@@ -454,3 +454,22 @@ and `derivedExchangeSemanticEvents`; trade factory ownership is in `evidence-fac
 The follow-up is frozen in `rfc/archive/one-edge-collector-closure.md`, canonical behavior in
 `docs/explanation-grounds.md`. D4200 durable availability, seven family qualifications and wider
 consumer adoption remain; this local certificate is not content, remote-CI or release proof.
+
+## 2026-11-11 — Exact original-pawn outcome qualification
+
+`[V]` The independent literal reference in
+`packages/runtime/src/semantic-validation-pawn-lineage-sources.ts` decodes board placement and
+uses the disclosed backward-pawn and passed-pawn conventions. It imports no production
+classifier, lineage tracker or source output for its expected values. Sixty move choices across
+twelve literal positions match the actual complete original subject populations. The cases cover
+both colors, support loss affecting one of two same-file pawns, passage gained by a stationary
+pawn, capture, en passant, all four promotions and quiet uniform populations. The existing
+`semantic-validation-pawn-outcome.test.ts` exercises these comparisons and rejects wrong
+same-file identities, capture-as-false and crossed alternative states.
+
+`[V]` Fifty-four new fixed-authority cases pass through the canonical runner. All 1,524 cases
+pass across 89 subjects, with 19 qualified. The 1,470 earlier case receipts and all population
+and external receipts compare equal. Only backward-pawn and passed-pawn verdicts change.
+The focused pawn, historical-source and authority tests pass 4,161 tests. Sources are the normal
+canonical writer, its generated receipt and the tests named above. Eight of thirteen outcome
+families qualify. Ordinary avoidance bindings and whole-product completion remain separate.

@@ -3250,24 +3250,258 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned positive source proof for derived.semantic_avoidance.backward_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.white.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.white.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.black.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.black.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned semanticNegative source proof for derived.semantic_avoidance.backward_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.ep.white.1.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.ep.black.1.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.promotion.white.3.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.promotion.black.3.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.quiet.white.0.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.quiet.black.0.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned orientation source proof for derived.semantic_avoidance.backward_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.white.0.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.white.1.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.black.0.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.black.1.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          }
+        ]
       },
       "counterfactual": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned counterfactual source proof for derived.semantic_avoidance.backward_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.white.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.white.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.black.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.backward_pawn.support-loss.black.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.backward_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          }
+        ]
       },
       "importedPopulation": {
         "disposition": "present",
@@ -9698,24 +9932,492 @@
         }
       },
       "positive": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned positive source proof for derived.semantic_avoidance.passed_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.white.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.white.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.black.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.black.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.2.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.0.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.1.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.2.absolute",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "positive"
+          }
+        ]
       },
       "semanticNegative": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned semanticNegative source proof for derived.semantic_avoidance.passed_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.ep.white.1.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.ep.black.1.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.promotion.white.3.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.promotion.black.3.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.quiet.white.0.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.quiet.black.0.uniform",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "semantic_negative"
+          }
+        ]
       },
       "orientation": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned orientation source proof for derived.semantic_avoidance.passed_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.white.0.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.white.1.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.black.0.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.black.1.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.0.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.1.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.2.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.0.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.1.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.2.color_and_vertical",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "orientation"
+          }
+        ]
       },
       "counterfactual": {
-        "disposition": "required",
-        "owner": "D1716",
-        "discharge": "Independent complete subject-owned counterfactual source proof for derived.semantic_avoidance.passed_pawn@2 under subject-safe-semantic-selection; no predecessor arm or selected-top-two output is qualification."
+        "disposition": "present",
+        "refs": [
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.white.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.white.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.black.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pawn.black.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.white.2.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.0.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.1.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          },
+          {
+            "kind": "case",
+            "id": "cited.literal-board.pawn-lineage.passed_pawn.pass-or-remove.black.2.counterfactual",
+            "version": 1,
+            "subject": {
+              "kind": "event",
+              "projection": {
+                "id": "derived.semantic_avoidance.passed_pawn",
+                "version": 2
+              }
+            },
+            "arm": "counterfactual"
+          }
+        ]
       },
       "importedPopulation": {
         "disposition": "present",

@@ -246,9 +246,9 @@ describe("literal computed prerequisites and declaration ownership", () => {
     expect(SEMANTIC_VALIDATION_ROOTS).toHaveLength(89);
     expect(SEMANTIC_VALIDATION_PROFILES).toHaveLength(89);
     const qualified = SEMANTIC_VALIDATION_ROOTS.filter(subject => semanticValidationVerdict(subject)?.verdict === "passed");
-    expect(qualified).toHaveLength(17);
+    expect(qualified).toHaveLength(19);
     expect(qualified.filter(subject => subject.projection.id.startsWith("derived.semantic_avoidance.")).map(subject => key(subject.projection)).sort())
-      .toEqual(["doubled_pawn", "half_open_file", "isolated_pawn", "open_file", "pawn_islands", "piece_count"].map(family => `derived.semantic_avoidance.${family}@2`));
+      .toEqual(["backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "open_file", "passed_pawn", "pawn_islands", "piece_count"].map(family => `derived.semantic_avoidance.${family}@2`));
     const document = JSON.parse(readFileSync(new URL("./semantic-validation-receipt.generated.json", import.meta.url), "utf8")) as SemanticValidationReceiptDocument;
     for (const root of SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS) {
       const route = key(root), profile = SEMANTIC_VALIDATION_PROFILES.find(row => row.subject.kind === "event" && key(row.subject.projection) === route)!;

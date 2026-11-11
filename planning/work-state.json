@@ -13448,7 +13448,7 @@
       "id": "D1716",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5",
+      "sourceDigest": "sha256:0d6a0688fa37b780221c7d86937b0460a734093935be83e0926775bb444ffa17",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-04"
@@ -35335,12 +35335,12 @@
     },
     {
       "id": "D4214",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:aac0f0cb7a5a7587fdd9fbef0a2e67e76dbd5e62080f4128599d12ca54255f14",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1f87b6c85ca94d73378b78e610773b4c5415f8a10b6dcf6fd7eea1c2401112d4",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-11"
+      "evidence": "tools/semantic-validation-build.ts",
+      "evidenceKind": "path"
     }
   ]
 }

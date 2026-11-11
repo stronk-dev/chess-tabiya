@@ -2874,3 +2874,24 @@ colors. D3928 still holds the native app journeys.
 D4214 records the next qualification wave's generated receipt size. The combined preview uses
 5,429,723 bytes with nested indentation and 4,496,716 bytes when each case stays on one line.
 The decoded records agree. Regenerate through the canonical writer before qualification.
+
+### 2026-11-11 — Backward- and passed-pawn qualification
+
+The independent literal source follows each original pawn through all sixty selected moves
+across twelve complete legal populations. The full population checks retain quiet, false,
+removed and promoted states. Source cases include both-color support loss affecting one of two
+same-file pawns and a stationary pawn whose passage changes when an adjacent blocker moves or
+is captured. Permanent pre-mint fault controls reject a substituted same-file subject,
+capture-as-false and crossed alternative states.
+
+`make semantic-validation-update` passes all 1,524 cases with 89 subjects, 19 qualified,
+63 population receipts and eight external receipts. All 1,470 predecessor case receipts and
+every population and external receipt remain equal after parsing. Only the two intended
+verdicts change. The focused pawn and historical-source targets pass 2,490 tests across seven
+files. Foundation and authority tests pass another 1,671 tests in two files. Workspace types
+and Svelte checks pass. Normal governance and the production build pass. The complete software
+rerun remains required for this wave.
+
+D4214's canonical writer now keeps each complete case receipt on one line. The generated
+receipt is 4,499,592 bytes, within the unchanged 5 MiB guard. The input case file remains
+4,913,962 bytes. Five outcome families, D4167 reverse consumers and D4175's ordinary pairs remain.

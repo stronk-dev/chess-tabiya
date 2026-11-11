@@ -309,7 +309,15 @@ export async function buildSemanticValidationReceipt(): Promise<{ readonly docum
     externals: externals.map((row) => row.receipt).sort((left, right) => String(left.id).localeCompare(String(right.id))),
     verdicts: [...verdicts].sort((left, right) => semanticValidationSubjectKey(left.subject).localeCompare(semanticValidationSubjectKey(right.subject))),
   };
-  const json = `${JSON.stringify(document, null, 2)}\n`;
+  // Keep one complete case receipt per line so the checked artifact stays within the
+  // source blob limit. The other sections retain the existing readable formatting.
+  const fields = Object.entries(document).map(([key, value]) => {
+    const serialized = key === "cases"
+      ? `[\n${document.cases.map(row => `    ${JSON.stringify(row)}`).join(",\n")}\n  ]`
+      : JSON.stringify(value, null, 2).replaceAll("\n", "\n  ");
+    return `  ${JSON.stringify(key)}: ${serialized}`;
+  });
+  const json = `{\n${fields.join(",\n")}\n}\n`;
   const table = {
     schemaVersion: 1,
     receiptSha256: sha(json),

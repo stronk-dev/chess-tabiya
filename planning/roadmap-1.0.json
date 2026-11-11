@@ -976,9 +976,10 @@
         "nextAction": "Qualify the seven remaining outcome families and continue reverse consumer adoption under the existing contracts.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. D4200 is closed. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. D4200 is closed. Backward- and passed-pawn qualification adds 54 cases; all 1,524 canonical cases and 4,161 focused tests pass, with 19 qualified subjects. The wave's full software rerun remains. Five outcome qualifications, D4167, ordinary26 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
+            "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
             "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
             "packages/runtime/src/semantic-validation-orientation.test.ts",
             "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
@@ -1684,12 +1685,12 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:aa73bf04b374b15973756f73737dac9d79c2e1d35176d2b15db795c1ec3e18dc"
+              "digest": "sha256:20da2740dbf6ed26246c7590f68c4d18b2a2362f26cfb9ee01f6b66285c6db68"
             },
             {
               "kind": "work_state",
               "id": "D1716",
-              "digest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5"
+              "digest": "sha256:0d6a0688fa37b780221c7d86937b0460a734093935be83e0926775bb444ffa17"
             },
             {
               "kind": "work_state",
@@ -1868,9 +1869,10 @@
         "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. The Inspector fixture exercises the actual recorded capture and the Review panel uses declared theme tokens. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. The Inspector fixture exercises the actual recorded capture and the Review panel uses declared theme tokens. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Exact original-pawn references now qualify backward and passed outcomes with 1,524 passing canonical cases. The new full software rerun remains. Five outcome qualifications, D4167, ordinary26 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
+            "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
             "apps/web/src/lib/ReviewExposurePanel.svelte",
             "apps/web/src/lib/theme/theme.test.ts",
             "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
@@ -2919,7 +2921,7 @@
             {
               "kind": "work_state",
               "id": "D1716",
-              "digest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5"
+              "digest": "sha256:0d6a0688fa37b780221c7d86937b0460a734093935be83e0926775bb444ffa17"
             },
             {
               "kind": "work_state",
@@ -3334,7 +3336,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:aa73bf04b374b15973756f73737dac9d79c2e1d35176d2b15db795c1ec3e18dc"
+              "digest": "sha256:20da2740dbf6ed26246c7590f68c4d18b2a2362f26cfb9ee01f6b66285c6db68"
             },
             {
               "kind": "work_state",
@@ -4291,7 +4293,7 @@
             {
               "kind": "work_state",
               "id": "D1716",
-              "digest": "sha256:bf4ad7576cbf5bb74dbfea848d14fa132037539b0501faad1c9c571f63dceee5"
+              "digest": "sha256:0d6a0688fa37b780221c7d86937b0460a734093935be83e0926775bb444ffa17"
             },
             {
               "kind": "work_state",
@@ -5417,7 +5419,7 @@
         "nextAction": "Keep release blocked while completing foundation/consumer contracts, D3928 content migration and real native/appliance/release journeys. Preserve the current complete local software/performance certificate; it does not clear content, deployment, backup/restore or whole-product UX.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Latest normal local software and performance passed on c484bfc7 with 19,027 tests in 572 files, seven performance tests in four files and all 1,470 canonical cases. D4200 durable storage, upgrade and workload proof are present. Seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content, native startup and release proof. Remote CI, deployment, browser matrix and release-candidate proof remain open.",
+          "summary": "Latest normal local software and performance passed on c484bfc7 with 19,027 tests in 572 files, seven performance tests in four files and all 1,470 canonical cases. D4200 durable storage, upgrade and workload proof are present. Five outcome qualifications, D4167 and ordinary26 remain. D3928 holds content, native startup and release proof. Remote CI, deployment, browser matrix and release-candidate proof remain open.",
           "impact": "advanced",
           "evidence": [
             "Makefile",

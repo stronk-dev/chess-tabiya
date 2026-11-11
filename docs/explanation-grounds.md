@@ -438,6 +438,12 @@ vocabulary first; copied/narrow inputs and integrity failures still refuse. Stor
 records each decision's legal alternative count and unavailable sources alongside its available
 observations. Reads check the recorded decisions and denominators against the saved game.
 
+Independent literal references qualify the backward- and passed-pawn subject outcomes alongside
+the six previously qualified outcome families. A subject follows its original pawn square.
+A capture yields a removed state and a promotion yields the new piece identity. Neither state
+is a false pawn predicate. The complete legal alternatives and supporting move identities stay
+attached to that subject. Ordinary avoidance modules still require their separate adoption.
+
 Research selector3 carries the exact54-source image and its source-local unavailable causes on
 every result. A complete fact can coexist with a gap in another source. Every share still counts
 all original alternatives; the result has no global evaluated-alternatives count. Empty partial

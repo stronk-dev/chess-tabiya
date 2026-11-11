@@ -40905,3 +40905,15 @@ performance tests. The follow-up authenticated Inspector suite passed all 20 tes
 including both colors of inherited-edge source and detail refusal before collection
 during retry. D4214 records a reproducible receipt-size overflow in the proposed
 pawn-lineage wave. Canonical qualification has its own verification.
+
+### 2026-11-11 — Two original-pawn outcome families qualify
+
+Backward-pawn and passed-pawn outcome references now execute fifty-four new canonical
+cases. The writer passes all 1,524 cases. All 1,470 predecessor case receipts, every
+population receipt and every external receipt are preserved. Only the two intended
+verdicts change. Eight of thirteen outcome families qualify.
+
+The focused suite passes 4,161 tests and workspace types pass. D4214 closes with complete
+case receipts on single lines, keeping the generated file at 4,499,592 bytes under the
+unchanged source guard. Five outcome families, ordinary avoidance delivery, the new full
+software rerun and broader 1.0 work remain.
