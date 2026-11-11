@@ -41088,3 +41088,22 @@ source/proof checkpoint is verified. No canonical/profile/ordinary qualification
 Independent direct-control readback confirms the sole-move available[] semantic-negative
 boundary is lawful, but cannot establish correct total counts; the next wave keeps independent
 128-cell table/identity/value/omission faults and a genuine pre-mint erroneously emitted target.
+
+
+### 2026-11-11 — D1716 fixed whole-square control authority
+
+Moved reviewed geometry arithmetic to one build/test source with research re-export; added
+26 complete input roots/40 plays and74 fixed cited propositions, including all10 castles.
+Normal software137/14.86s, types and original research34/2.31s pass. Actual pre-mint faults
+exercise exact output, support/order and mirror-safe offsets; forced[] negative controls
+separately reject an unsupported minted event and bad complete128-cell tables. No fake UCI,
+canonical/profile/receipt change or learner admission. Independent bounded review requested;
+next is blocker/risk fixed-source proof before coordinated qualification.
+
+
+### 2026-11-11 — Control proof independently accepted
+
+Independent read-only review accepts the bounded fixed-source checkpoint after checking
+input/expected-value separation, every mirror leaf, genuine pre-mint controls and forced
+negative/full-table distinctions. No concrete blocker found. Normal governance also passes.
+Canonical/profile qualification and remaining two fixed-source families still remain.

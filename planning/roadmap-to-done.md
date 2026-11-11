@@ -50,7 +50,9 @@ roots/70 moves, including pins, EP, promotions and castling. None of these refer
 is canonical qualification. King preparation now registers88 fixed cited-source cases
 and tests genuine pre-mint corruption with both absolute partners. The four-file authority/
 pawn regression passes2966 checks; its canonical/profile admission remains pending with
-the other three families.
+the other three families. Square-control preparation now binds74 fixed source records;
+137 focused software checks, workspace types and the original34 research checks pass.
+Canonical/profile admission remains pending.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

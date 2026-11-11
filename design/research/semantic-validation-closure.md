@@ -505,3 +505,28 @@ workspace types and canonical non-change verification pass. All1,524 case result
 population receipts,eight external receipts and19/89 qualification verdicts remain current.
 This is source proof, not canonical qualification, learner adoption or release proof. `[V]`
 (same tests; normal `make test-software-files`)
+
+
+## Fixed-source whole-square control proofs — D1716, 2026-11-11
+
+The reviewed geometric reference now has one build/test implementation in
+`packages/runtime/src/semantic-validation-control-outcome-sources.ts`; the disposable
+research path re-exports it. New fixed propositions use the pinned attackers-mask excerpt
+for geometric control, not legal capture or safety. Twenty-six roots/40 selected moves
+cover both colors, literal capture/EP/promotion populations, starting play, pinned pieces,
+opened bishop lines and all standard/stationary/crossing castles. Seventy-four source cases
+execute the real fixed authority; canonical/profile arms remain untouched. `[V]`
+(new source; `semantic-validation-reference-inputs.ts`; fixed cited-source registry)
+
+Normal focused software passes137 tests/14.86s, workspace types pass, and the original34
+research checks still pass/2.31s. Genuine pre-mint faults cover identities, counts, crossed
+move-state associations, support, duplicate/drop/reverse output and a consistent+1 offset
+which passes mirrors but fails both absolute partners. Forced legal inputs are explicitly
+available with128 complete cells and no alternatives. Incorrectly emitting an unsupported
+zero-alt event fails the actual negative runner; independent table checks reject missing,
+wrong-value and wrong-identity cells even while public output stays empty. Copied evidence
+and held ordinary module bindings remain refused. `[V]`
+(`semantic-validation-control-outcome.test.ts`; normal Make checks above)
+
+This qualifies neither a canonical profile nor a learner feature. Blocker/risk fixed-source
+proofs and the coordinated five-family canonical run remain. `[V]` (unchanged case/profile files)

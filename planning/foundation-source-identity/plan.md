@@ -3080,3 +3080,16 @@ conditions are satisfied. Canonical/profile admission is still pending, not impl
 registration. For the next direct-control proof, independent review confirms forced-only
 available[] is a lawful semantic-negative boundary, but full128-cell count/identity/missing
 faults must separately detect bad totals; an invented-event fault must not fabricate an UCI.
+
+
+### 2026-11-11 — Fixed-source full-control proof checkpoint
+
+One build/test reference now owns the independently reviewed control arithmetic; the old
+research entry re-exports it. Its26 roots/40 plays include all10 castling cases. Seventy-four
+new fixed cited-source records execute real operations, with137 focused checks/14.86s;
+workspace types and original34 research checks/2.31s pass. Pre-mint errors and mirror-safe
+consistent offsets fail exact absolute sources. Genuine forced[] negatives do not stand in
+for correct totals: independent128-cell omission/value/identity controls fail despite public[].
+The injected unsupported event uses no fake alternative and fails the real negative runner.
+Canonical/profile/receipt/ordinary bindings remain unchanged. Independent read-only review
+accepts this bounded checkpoint: no source/mirror/fault blocker found. Governance passes.
