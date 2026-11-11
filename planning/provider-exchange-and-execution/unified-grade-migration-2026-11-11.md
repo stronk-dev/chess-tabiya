@@ -74,3 +74,14 @@ The separately rerun tail gates, unreached by the failed combined target, also e
 clearance-audit errors and confirms104 exact requirement declarations. The audit still records
 354 blocking entries,34 resolved and48 accepted; audit integrity is not pack graduation.
 D3791’s old item:D3928 blocker is removed and its native Inspector journey is todo, not done.
+
+
+## Follow-on D4247 caller repair
+
+Nine installed-corpus test loads now explicitly supply the actual shape/principle registries,
+matching production composition and preserving caller-provided lookups. The unchanged required-
+source refusal and authored data remain. Independent source/code review accepts. Complete normal
+make verify-content passes340/all44, zero skips260.57s,92-document clearance audit with zero errors
+and104 exact declarations. Existing copied/missing/replaced-source regressions pass33/two2.77s;
+full types/Svelte reports zero errors/warnings. This supersedes the intermediate nine failures
+above and completes D4247 without claiming pack graduation or whole1.0 readiness.

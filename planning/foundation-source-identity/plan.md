@@ -3816,3 +3816,25 @@ controls reject vacuous reply-surviving fork captions on mate/stalemate. The ord
 still repeated the old terminal bug and compiler2 label. Its bounded description and D3768's
 completed Hint portion are reconciled; broader qualification/API/native/consumer duties stay.
 This is documentation flow-back, not a new tactical collector or whole D3768 completion.
+
+### 2026-11-11 — D4247 installed-corpus source composition verified
+
+After91c90d7c's exact grade metadata migration, all nine remaining content failures share the
+same unresolved base-strike plan: installed-corpus test callers omitted the actual shape lookup.
+Independent source review confirms accepted foundation §4.2.2 requires original captured records;
+both production composition roots already inject their actual ShapeRegistry/PrincipleRegistry.
+The correct repair preserves that strict source contract and supplies dependencies in callers.
+
+A small test-only loadInstalledPackRegistry helper loads the actual registries and passes those
+same instances/options unchanged. Explicit caller-provided lookups remain authoritative. Nine
+installed-corpus calls across six test files adopt it; existing assertions, custom-directory
+loads, fromDocuments paths and intentional missing-source controls remain unchanged. Production
+loader, validation, authored data and source authority are untouched. Independent code review
+accepts the finite repair subject to complete content/source-regression verification.
+
+The complete normal make verify-content exits0:340/all44 files, zero skips260.57s,92-document
+clearance audit with zero errors and104 canonical capability declarations. Original/copied/
+missing/replaced-source regressions pass33/two2.77s; complete types/Svelte0errors0warnings.
+The audit retains354 blocking entries,34 resolved and48 accepted, so integrity is not graduation.
+D4247 closes this finite caller repair. D4246 import attribution, original D4224/D4225/D4228/
+ordinary/qualification and all whole-product obligations remain open.

@@ -1,3 +1,4 @@
+import { loadInstalledPackRegistry } from "./installed-pack.test-support.js";
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
 import { readFileSync } from "node:fs";
@@ -64,7 +65,7 @@ afterEach(async () => {
 
 describe("pack authoring validation", () => {
   it("loads all six verified endgame drafts through the development registry admission path", async () => {
-    const registry = await PackRegistry.loadDefault({ development: true });
+    const registry = await loadInstalledPackRegistry({ development: true });
     for (const id of [
       "lucena-bridge-convert",
       "philidor-third-rank-hold",

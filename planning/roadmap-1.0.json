@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Repair D4247 installed-corpus callers to inject the actual ShapeRegistry/PrincipleRegistry used by production, preserving captured-source authority and strict missing-source refusal. Re-run complete content and continue accepted bounded Review jobs/current retention measurements/remaining consumer adoption; D3791 native Inspector journey is executable. No full1.0 milestone is complete.",
+        "nextAction": "Verify committed software/governance jobs, then continue D4241 bounded Review contract/jobs, D4242 current-source retention measurements and remaining consumer adoption. D3791 actual native Inspector journey is executable. D4246 import attribution remains todo; no full1.0 milestone is complete.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D3928 exact unified-grade requirements migration verified:104 gradei1→i2 stamps/68 digest-only ledgers, all authored bytes unchanged and independent365-image/68-digest audit. Normal migration/readiness zero rows,104 exact requirements and schemas pass. Complete content331pass/9fail/no skips44files301.84s versus262/60/18skipped; all9 failures are distinct D4247 actual plan-source wiring in direct default registry callers. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off; source identity/deadline/acquisition checkpoint remains verified. D3791 unblocked, not discharged. D4246 long import attribution remains todo. No p95/browser/memory/content-green/parent or release closure.",
+          "summary": "D3928/D4247 restore complete normal content:340/all44 tests/no skips260.57s,92-document clearance audit zero errors and104 exact canonical requirements.104 exact grade stamps/68 digest-only updates preserve all authored content; independently reviewed nine-caller actual-registry test composition preserves strict source authority, production loader and every assertion.33 original/copy/missing/replaced-source regressions and full types/Svelte0errors0warnings pass. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off. D3791 unblocked, not discharged. Current full software confirmation is next; p95/browser/memory/qualification/parent/release duties remain open.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1265,7 +1265,9 @@
             "packages/runtime/src/review-map.test.ts",
             "planning/provider-exchange-and-execution/unified-grade-migration-2026-11-11.md",
             "apps/server/src/capability/pack-capability-corpus.test.ts",
-            "tools/content-scheduling.test.mjs"
+            "tools/content-scheduling.test.mjs",
+            "apps/server/src/installed-pack.test-support.ts",
+            "apps/server/src/evidence-at-runtime.test.ts"
           ],
           "anchors": [
             {
@@ -2026,7 +2028,7 @@
             {
               "kind": "work_state",
               "id": "D4247",
-              "digest": "sha256:62fba002119fe211d477cc7d5114fbac1374cad9386a70ba2f8c249eb8dcf087"
+              "digest": "sha256:c53097bef62007788d08b0a083530efeeeddb20e53ae585eb7056b5eb956a741"
             }
           ]
         },
@@ -2047,10 +2049,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Repair D4247 installed-corpus callers to inject the actual ShapeRegistry/PrincipleRegistry used by production, preserving captured-source authority and strict missing-source refusal. Re-run complete content and continue accepted bounded Review jobs/current retention measurements/remaining consumer adoption; D3791 native Inspector journey is executable. No full1.0 milestone is complete.",
+        "nextAction": "Verify committed software/governance jobs, then continue D4241 bounded Review contract/jobs, D4242 current-source retention measurements and remaining consumer adoption. D3791 actual native Inspector journey is executable. D4246 import attribution remains todo; no full1.0 milestone is complete.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D3928 exact unified-grade requirements migration verified:104 gradei1→i2 stamps/68 digest-only ledgers, all authored bytes unchanged and independent365-image/68-digest audit. Normal migration/readiness zero rows,104 exact requirements and schemas pass. Complete content331pass/9fail/no skips44files301.84s versus262/60/18skipped; all9 failures are distinct D4247 actual plan-source wiring in direct default registry callers. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off; source identity/deadline/acquisition checkpoint remains verified. D3791 unblocked, not discharged. D4246 long import attribution remains todo. No p95/browser/memory/content-green/parent or release closure.",
+          "summary": "D3928/D4247 restore complete normal content:340/all44 tests/no skips260.57s,92-document clearance audit zero errors and104 exact canonical requirements.104 exact grade stamps/68 digest-only updates preserve all authored content; independently reviewed nine-caller actual-registry test composition preserves strict source authority, production loader and every assertion.33 original/copy/missing/replaced-source regressions and full types/Svelte0errors0warnings pass. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off. D3791 unblocked, not discharged. Current full software confirmation is next; p95/browser/memory/qualification/parent/release duties remain open.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2673,7 +2675,9 @@
             "packages/runtime/src/review-map.test.ts",
             "planning/provider-exchange-and-execution/unified-grade-migration-2026-11-11.md",
             "apps/server/src/capability/pack-capability-corpus.test.ts",
-            "tools/content-scheduling.test.mjs"
+            "tools/content-scheduling.test.mjs",
+            "apps/server/src/installed-pack.test-support.ts",
+            "apps/server/src/evidence-at-runtime.test.ts"
           ],
           "anchors": [
             {
@@ -2974,7 +2978,7 @@
             {
               "kind": "rfc",
               "id": "move-quality-grades.md",
-              "digest": "sha256:08a5e29585121df4ecc241dcdbb2ff23de36767f06152ea24579823608c5241a"
+              "digest": "sha256:f0992f780a00844c4981121341a40dfb81434d05e6d3ab7799d83b21ff73c044"
             },
             {
               "kind": "rfc",
@@ -3789,7 +3793,7 @@
             {
               "kind": "work_state",
               "id": "D4247",
-              "digest": "sha256:62fba002119fe211d477cc7d5114fbac1374cad9386a70ba2f8c249eb8dcf087"
+              "digest": "sha256:c53097bef62007788d08b0a083530efeeeddb20e53ae585eb7056b5eb956a741"
             }
           ]
         },

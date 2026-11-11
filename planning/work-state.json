@@ -35628,11 +35628,12 @@
     },
     {
       "id": "D4247",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:62fba002119fe211d477cc7d5114fbac1374cad9386a70ba2f8c249eb8dcf087",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c53097bef62007788d08b0a083530efeeeddb20e53ae585eb7056b5eb956a741",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/evidence-at-runtime.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

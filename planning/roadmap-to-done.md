@@ -2,19 +2,20 @@
 
 ## Current continuation — 2026-11-11
 
-D3928’s exact unified-grade requirement migration is verified:104 requirement stamps and68
-linked digest fields, with all authored content unchanged. Migration/readiness report zero rows;
-schema/corpus checks pass. Complete content improves262pass/60fail/18skipped to331pass/9fail/no
-skips/all44 files. D4247 owns all9 remaining failures: installed-corpus callers omit the actual
-authored plan registry source. Production already injects those registries; preserve that source
-authority and the strict missing-source refusal while repairing the callers.
-Production build and the real-Stockfish Hint smoke now pass44 cells (one sample/cell), including
-11 available and the deliberate empty/refused/source-off cases. This clears the old startup
-requirement blocker, without p95/browser/memory/full-Hint/release clearance. D3791’s native
-Inspector journey is executable again, not completed. D4246 records import-cost attribution.
-[Migration scope and evidence](provider-exchange-and-execution/unified-grade-migration-2026-11-11.md).
-Next: repair D4247 source wiring, then continue bounded Review jobs, measured retention
-and the remaining foundation-to-consumer adoption work.
+The complete normal real-content gate is green after D3928/D4247:340/all44 tests, zero skips,
+92-document clearance audit with zero errors and104 exact capability declarations. D3928 applied
+the already-chosen unified grader with104 requirement stamps/68 digest-only updates and unchanged
+authored content. D4247 repaired nine installed-corpus test callers to inject the actual source
+registries already used by production. Independent reviews,33 original/copy/missing/replaced-source
+regressions and full types/Svelte0errors0warnings pass. Source refusal and every assertion remain.
+
+Production build and the real-Stockfish Hint smoke pass44 cells (one sample/cell), including11
+available plus deliberate empty/refused/source-off cases. D3791’s native Inspector journey is
+executable, not completed. No p95/browser/memory/full-Hint or release clearance is inferred.
+[Migration and content evidence](provider-exchange-and-execution/unified-grade-migration-2026-11-11.md).
+Next: verify the committed software/governance jobs, then continue D4241’s bounded Review contract/
+jobs, D4242 retention measurements and remaining consumer adoption. D4246 import attribution
+remains todo. These verified slices do not complete a whole-product milestone.
 
 D4233–35's finite Hint caller handoff is verified: original live action authority at every
 actual source stage, distinct real registry/engine generations, cold handshake identity,

@@ -1,3 +1,4 @@
+import { loadInstalledPackRegistry } from "./installed-pack.test-support.js";
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -63,7 +64,7 @@ describe("feedback delivery corpus", () => {
     const documents = corpusDocuments();
     const census = evidenceCensus(documents);
     const principles = await PrincipleRegistry.loadDefault();
-    const registry = await PackRegistry.loadDefault({ development: true, principles });
+    const registry = await loadInstalledPackRegistry({ development: true, principles });
     const implementation = new Set<string>();
     for (const summary of registry.list()) {
       const record = registry.required(summary.id);

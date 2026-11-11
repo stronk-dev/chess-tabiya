@@ -1,3 +1,4 @@
+import { loadInstalledPackRegistry } from "./installed-pack.test-support.js";
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
 import { readFile } from "node:fs/promises";
@@ -6,7 +7,6 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { validatePackDocument } from "./pack-validation.js";
-import { PackRegistry } from "./pack-registry.js";
 import { PrincipleRegistry } from "./principle-registry.js";
 import { validatePrincipleEntry } from "./principle-validation.js";
 import { validateClaimBindings } from "./sourcing/claim-binding.js";
@@ -38,7 +38,7 @@ describe("principle registry",()=>{
     const ledger=JSON.parse(await readFile(resolve("content/drafts/philidor-third-rank-hold.evidence.json"),"utf8"));
     const issues:any[]=[]; const bindings=validateClaimBindings(document,ledger,issues);
     expect(issues,JSON.stringify(issues)).toEqual([]); expect(bindings).toHaveLength(1);
-    const registry=await PackRegistry.loadDefault({development:true,principles});
+    const registry=await loadInstalledPackRegistry({development:true,principles});
     const pack=registry.required("philidor-third-rank-hold");
     expect(pack.boundClaimIds.has("philidor-is-drawn")).toBe(true);
     expect(pack.claimBackings.get("philidor-is-drawn")).toMatchObject({binding:"author_attributed",instrumentKinds:["tablebase_result","tablebase_result","tablebase_result","tablebase_result"],rendered:expect.arrayContaining([expect.stringContaining("Syzygy")]),principles:[expect.objectContaining({id:"authored-teaching-is-declared"})]});

@@ -41863,3 +41863,21 @@ one sample/cell:11 available,24 honest-empty,8 policy-refused,1 source-off; thre
 baselines retained. Actual original compiler8 packets/advances are observed. Raw output remains
 ignored cache, not a progress dependency. No p95/browser/memory/Hint-D7/release clearance.
 D3928 closes finite requirements scope; D4247 and the parent1.0 obligations remain active.
+
+
+## 2026-11-11 — D4247 actual source composition restores the complete content gate
+
+All9 failures exposed by91c90d7c’s grade migration had one cause: direct installed-corpus test
+loads omitted actual shape source authority. Independent contract review confirms the existing
+accepted foundation requires that authority and both production roots already inject it. Nine
+loads across six test files now use a small explicit actual-registry composition helper. Supplied
+lookups remain authoritative; all existing assertions, custom-directory/fromDocuments/intentional
+missing-source cases and production loader/validators/content/deadlines remain unchanged.
+
+Independent code review accepts. Complete ordinary make verify-content exits0:340/all44 tests,
+zero skips260.57s,92-document clearance audit zero errors and104 canonical declarations. The audit
+retains354 blocking/34 resolved/48 accepted entries; it does not graduate packs. Existing original/
+copy/missing/replaced-source regressions pass33/two2.77s. Complete types/Svelte0errors0warnings.
+D4247 closes finite caller repair; D4246 import cost and D4224/D4225/D4228/ordinary/qualification/
+native/full1.0 duties remain. Continue accepted Review contract precision/bounded jobs and current
+retention measurement after the verified checkpoint. No full software rerun is claimed here.

@@ -1,3 +1,4 @@
+import { loadInstalledPackRegistry } from "./installed-pack.test-support.js";
 import { readdirSync, readFileSync } from "node:fs";
 
 import { attachEvidence, createRun, renderRecordedReading, transposeKey, type RecordedReading } from "@chess-tabiya/runtime";
@@ -14,7 +15,7 @@ const antiCaroManifest = JSON.parse(readFileSync(new URL("../../../content/draft
 
 describe("recorded evidence at runtime", () => {
   it("projects the current committed corpus without freezing a stale pack denominator", async () => {
-    const registry = await PackRegistry.loadDefault({ development: true });
+    const registry = await loadInstalledPackRegistry({ development: true });
     const records = registry.list().map((summary) => registry.required(summary.id));
     const indexed = records.filter((record) => record.positionEvidence.size > 0);
     const readings = indexed.reduce((sum, record) => sum + [...record.positionEvidence.values()].reduce((inner, rows) => inner + rows.length, 0), 0);
@@ -81,7 +82,7 @@ describe("recorded evidence at runtime", () => {
   });
 
   it("keeps duplicate position keys, enforces tablebase clocks, and lets live evidence win", async () => {
-    const registry = await PackRegistry.loadDefault({ development: true });
+    const registry = await loadInstalledPackRegistry({ development: true });
     const record = registry.required("lucena-bridge-convert");
     const duplicate = [...record.positionEvidence.values()].find((readings) => readings.length === 2)!;
     expect(duplicate).toHaveLength(2);
@@ -104,7 +105,7 @@ describe("recorded evidence at runtime", () => {
   // Real installed-catalogue behavior belongs beside the other corpus integrations;
   // preserve the original drill-client-server test's population and own deadlock limit.
   it("serves committed drafts and never serves the schema fixture", async () => {
-    const registry = await PackRegistry.loadDefault();
+    const registry = await loadInstalledPackRegistry();
     expect(registry.list()).not.toContainEqual(expect.objectContaining({ reviewStatus: "schema_example" }));
     expect(registry.list()).toContainEqual(expect.objectContaining({ reviewStatus: "draft", channel: "community" }));
     expect(registry.list().map((entry) => entry.id)).not.toEqual(
@@ -120,7 +121,7 @@ describe("recorded evidence at runtime", () => {
   }, 15_000);
 
   it("keeps the new PackRecord field out of pack wire projections", async () => {
-    const registry = await PackRegistry.loadDefault({ development: true });
+    const registry = await loadInstalledPackRegistry({ development: true });
     const record = registry.required("anti-caro-advance-c5-race");
     expect(record.positionEvidence.size).toBeGreaterThan(0);
     expect(JSON.stringify(projectPackDocument(record.document, record.assessmentGrounding, record.channel))).not.toContain("positionEvidence");

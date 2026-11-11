@@ -1,3 +1,4 @@
+import { loadInstalledPackRegistry } from "./installed-pack.test-support.js";
 import { randomUUID } from "node:crypto";
 import type { AddressInfo } from "node:net";
 import { fileURLToPath } from "node:url";
@@ -115,7 +116,7 @@ describe("campaign core through the application (rfc/campaign-core.md)", () => {
     const started = performance.now();
     const phases = ["0ms installed packs start"];
     onTestFailed(() => console.error(`Installed Campaign lifecycle: ${phases.join(" → ")}`));
-    const installed = await PackRegistry.loadDefault();
+    const installed = await loadInstalledPackRegistry();
     phases.push(`${Math.round(performance.now() - started)}ms installed packs ready; campaigns start`);
     const registry = await CampaignRegistry.loadDefault(Object.freeze({ get: (id: string) => installed.get(id)?.document }));
     phases.push(`${Math.round(performance.now() - started)}ms campaigns ready`);

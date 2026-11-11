@@ -1,3 +1,4 @@
+import { loadInstalledPackRegistry } from "./installed-pack.test-support.js";
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
 import { readFileSync } from "node:fs";
@@ -11,7 +12,6 @@ import { commitMove, createRun, lineMembership } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
 import { objectiveRules } from "./pack-orchestrator.js";
-import { PackRegistry } from "./pack-registry.js";
 import { objectiveIssues, validatePackDocument } from "./pack-validation.js";
 
 const example = JSON.parse(
@@ -259,7 +259,7 @@ describe("validator integrity", () => {
   });
 
   it("loads the grounded B+N trajectory through the registry", async () => {
-    const registry = await PackRegistry.loadDefault({ development: true });
+    const registry = await loadInstalledPackRegistry({ development: true });
     expect(registry.required("trajectory-mate-bishop-knight").assessmentGrounding).toBe("ledger_verified");
   });
 });
