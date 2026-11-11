@@ -2,10 +2,11 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. On `c484bfc7`, normal software verification passed
-**19,027 tests in 572 files** (716.63 seconds) and **seven performance tests in four files**
-(58.13 seconds). That run verified the two Review fixes and all 1,470 canonical cases across
-89 subjects, 17 of which qualify. See the [exploration log](exploration/log.md).
+The full 1.0 goal remains active. On `847d9ab0`, normal software verification passed
+**19,272 tests in 573 files** (742.66 seconds) and **seven performance tests in four files**
+(64.17 seconds). All 1,524 canonical cases pass across 89 subjects, 19 of which qualify.
+The earlier Review and choice-source failures did not recur in this isolated run.
+See the [exploration log](exploration/log.md).
 
 **D4200 durable availability** now carries per-decision source coverage through revision 10
 publication, reads, rebuild and account lifecycle. Five genuine revision 9 jobs upgrade through
@@ -34,8 +35,11 @@ and release proof remain. D3928 still holds content, native startup and release 
 official pack graduates. The [foundation plan](foundation-source-identity/plan.md) tracks
 implementation and verification.
 
-The pawn qualification wave still needs its complete software rerun. The generated receipt
-retains every record with one case per line and remains below the unchanged 5 MiB guard.
+The pawn qualification wave now has its complete software verification. The generated
+receipt retains every record with one case per line under the unchanged 5 MiB guard.
+D4215's shared case loader has independent bounded review and 34 separate focused tests.
+It remains unconnected; canonical storage, all current readers and the Git temporal guard
+still need coordinated migration under the accepted RFC.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

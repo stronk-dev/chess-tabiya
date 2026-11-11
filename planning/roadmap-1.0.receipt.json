@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:44cb081e0855a7a9db847c1a95b39bee7eb291e34841dda31385bb02acc4b396",
+    "roadmap": "sha256:e1572b68a6b2d2d93c824bf7982cb20b9a94346235781aa48003c6074ff0a18f",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:4d995fd5f7c12d2a01c761f5b6677d0d99f39803cd1cad8c0885655fe31b328c",
-    "rfcRegister": "sha256:0dd3eae8420c1ed526562dc091e9f90ca06b252ef914e34fab7f06a972d337b3",
+    "workState": "sha256:ee16596bce3e1402f75c344b35b8ee3dfdeea6f25d027001560ae2af6c64c573",
+    "rfcRegister": "sha256:6efe7197b9bfb2c041a6d3c428d4b359a6672704f4ce98b59946749ca60db857",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -21,8 +21,8 @@
     "assignedRfcs": 80,
     "activeRfcLifecycle": {
       "draft": 20,
-      "accepted": 1,
-      "implementing": 50,
+      "accepted": 0,
+      "implementing": 51,
       "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
@@ -357,10 +357,12 @@
       "nextAction": "Implement the independently accepted case-storage dependency, complete the five remaining outcome qualifications and continue reverse consumer adoption.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. D4200 is closed. Backward- and passed-pawn qualification adds 54 cases; all 1,524 canonical cases and 4,161 focused tests pass, with 19 qualified subjects. The wave's full software rerun remains. Five outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "D4200 revision 10 persists exact per-decision coverage across seven derived families; the measured workload rebuilt 200 runs and 6,400 decisions. Backward- and passed-pawn qualification yields 1,524 canonical cases over 89 subjects, 19 qualified; eight of thirteen new outcome families qualify. Complete software verification on 847d9ab0 passes 19,272 tests/573 files (742.66s) and seven performance tests/four files (64.17s). D4215 has an independently reviewed shared-loader kernel with 34 separate focused tests; compiler, current readers and Git temporal adoption remain. Five qualifications, D4167, ordinary26 and held D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "rfc/semantic-validation-case-storage.md",
+          "packages/runtime/src/semantic-validation-case-storage.test.ts",
+          "packages/runtime/src/semantic-validation-case-storage.ts",
           "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
           "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -602,7 +604,7 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-case-storage.md",
-            "digest": "sha256:8bb00b79315e2599d53e6f3d83d0d7b4e23b5cb4545e694462cee665b140beb7"
+            "digest": "sha256:46ccda28e093a85418806b67de8f44e91d6680df963972dfa676185142f86783"
           },
           {
             "kind": "work_state",
@@ -1072,7 +1074,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:20da2740dbf6ed26246c7590f68c4d18b2a2362f26cfb9ee01f6b66285c6db68"
+            "digest": "sha256:540f6187f6d506f287a32f745029b69ac9a34d27b3f2e8b4a177f34e418e433e"
           },
           {
             "kind": "work_state",
@@ -2723,7 +2725,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:20da2740dbf6ed26246c7590f68c4d18b2a2362f26cfb9ee01f6b66285c6db68"
+            "digest": "sha256:540f6187f6d506f287a32f745029b69ac9a34d27b3f2e8b4a177f34e418e433e"
           },
           {
             "kind": "work_state",

@@ -2933,3 +2933,19 @@ The prepared king references are saved in semantic-validation-king-outcome-sourc
 with semantic-validation-king-outcome.test.ts: 68 focused tests pass, covering all 48
 selected complete populations and 20 mirror controls. This is a research fixture checkpoint,
 not canonical source admission; the qualified-subject count remains 19.
+
+### 2026-11-11 — Complete checkpoint verified; bounded case loader tested
+
+The isolated normal `make verify-software` run on847d9ab0 exits0: all19,272 software
+tests/573files pass in742.66s, followed by unchanged seven performance tests/four files
+in64.17s. All1,524 canonical cases pass over89subjects/19qualified. The two Review/choice
+files also passed61 focused tests unchanged before the complete run. The earlier failures
+did not recur; their root cause is not proved by that observation.
+
+D4215's new semantic-validation-case-storage.ts and its focused test have independent
+bounded source acceptance and34/34 passing checks (193ms overall). One tree supplies the
+index and every part, all part refs validate before part reads, duplicate identities fail,
+and original case objects/order survive repartition. This kernel is not yet imported by
+any existing reader; the complete run above does not certify its later integration.
+Current storage, compiler digest, all32 readers, base-only historical decoding, actual
+Git staged/first-parent refusal controls and runtime graph proofs remain. D1 stays open.

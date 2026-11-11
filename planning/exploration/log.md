@@ -40962,3 +40962,16 @@ all literal successor states and 20 exact mirror pairs through the real producti
 All 68 pass in 3.01 seconds overall. The reference sources remain unregistered: canonical
 qualification is still 19 subjects over 1,524 cases. The accepted storage migration and
 separate authority integration remain required before these sources can change that count.
+
+### 2026-11-11 — Full software checkpoint green; D4215 loader kernel
+
+Normal isolated verification on847d9ab0 exits0 with19,272 software tests/573files
+(742.66s), then seven performance tests/four files(64.17s). Canonical1524/1524 over
+89subjects/19qualified passes. The earlier Review and choice-source failures do not recur;
+this observation does not prove their root cause.
+
+The separately reviewed, unconnected D4215 loader passes34 focused tests(193ms). Its
+first run caught an invalid minimum2 test fixture; the test now changes a valid operand
+expectation instead. Existing parsers remain strict. Current callers/storage are untouched,
+and full compiler/history/all-reader migration and D1 remain open. The roadmap now records
+the complete pawn-wave pass without promoting any whole capability or release milestone.

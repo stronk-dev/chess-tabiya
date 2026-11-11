@@ -1,6 +1,6 @@
 # RFC: Semantic validation case storage
 
-- **Status:** accepted — 2026-11-11 after independent review of the reader census, build/test boundary and exact tree isolation.
+- **Status:** implementing — 2026-11-11; independently reviewed loader kernel tested, current readers and temporal guard not yet migrated.
 - **Author:** codex, under the full-foundation and pre-launch zero-legacy rulings.
 - **Created:** 2026-11-11
 - **Parent / amends:** semantic-validation-authority.md §§4,6 and its owner-authority temporal guard.
@@ -28,6 +28,16 @@ The existing source guard and complete expectations remain requirements.
 There are 32 direct current references to the exact case filename or its path constant, plus
 the temporal guard CLI as an indirect consumer. The similarly named retired-fixture reader is
 independent. Every current reader must use the same case set.
+
+## Implementation checkpoint — 2026-11-11
+
+The shared loader and filesystem wrapper have independent bounded source acceptance and
+34 passing focused tests. They are deliberately unconnected: current case storage, compiler,
+Git temporal guard and existing readers still use the old path. D1 remains open.
+
+The complete pre-migration software gate on `847d9ab0` passes 19,272 tests in 573 files
+(742.66 seconds), then seven performance tests in four files (64.17 seconds). The new loader
+has separate focused verification; it was not part of that complete run.
 
 ## Contract
 
@@ -126,8 +136,8 @@ case-file assumption at its explicit registry and Git-history boundaries.
 
 ## Open questions
 
-None for the owner. Independent review must verify the shared reader and historical guard
-before implementation.
+None for the owner. Independent contract and bounded loader reviews are accepted.
+Historical-guard implementation, all-reader adoption and the remaining proofs are still open.
 
 ## Discharges
 
@@ -141,3 +151,4 @@ before implementation.
 - 2026-11-11 — first independent return corrected the exact reader census, placed the
   tree-reading guard in build/test tooling and required complete reads to refuse missing data.
 - 2026-11-11 — independent reviewer accepts the repaired bounded contract. Implementation and all listed proofs remain.
+- 2026-11-11 — independently reviewed unconnected loader kernel passes 34 focused tests; full migration and D1 remain open.
