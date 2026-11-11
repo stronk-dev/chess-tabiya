@@ -75,8 +75,8 @@ function band(rating: number): "1000-1399" | "1400-1799" | "1800-2199" | undefin
   return undefined;
 }
 
-export function importedPopulation(): ResearchPopulation {
-  const blocks = readFileSync(IMPORTED, "utf8").split(/\n(?=\[Event )/u);
+export function importedPopulation(sourcePath = IMPORTED): ResearchPopulation {
+  const blocks = readFileSync(sourcePath, "utf8").split(/\n(?=\[Event )/u);
   const accepted = new Map<string, number>();
   const rows: ResearchRow[] = [];
   const paths: ResearchRow[][] = [];

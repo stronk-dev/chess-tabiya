@@ -4160,3 +4160,74 @@ and the hypothetical material exchange. [Square control](../../packages/runtime/
 |---|---|---|
 | White | `rk6/8/1nB5/2B5/8/8/8/RR2K3 w - - 0 1` | `c5b6` |
 | Black | `rr2k3/8/8/8/2b5/1Nb5/8/RK6 b - - 0 1` | `c4b3` |
+
+
+## Qualified outcome delivery cost — D4223 / D4175, 2026-11-11
+
+All thirteen original-subject outcome families are now qualified. This pass measures the
+**existing** application candidate service and real factories before ordinary Support/Review
+adoption. The final workload uses the application's actual capacity64 constant, not a copied
+configuration. Thirty-four fresh-process positions include sixteen literal boundaries and
+18 positions from nine existing imported games;32 are nonterminal and expose773 legal
+candidates in total. Each nonterminal position executes all13 factories/admissions once with
+a cold service, then three times with the same original receipt. Initialization/PGN replay are
+outside timing. These are fixed workload measurements, not a random sample. `[V]`
+([instrument](../../tools/d4175-outcome-delivery/measure.ts),
+[method and commands](../../tools/d4175-outcome-delivery/README.md),
+[88,874-byte report](../../planning/foundation-source-identity/outcome-delivery-cost-2026-11-11.json))
+
+| Operation / population | Median | Maximum |
+|---|---:|---:|
+| Cold acquisition + all13 sources/admission,32 nonterminal positions |395.21ms |650.08ms |
+| Same operation,18 imported positions |521.53ms |650.08ms |
+| Wide lookup alone,18 imported positions |431.60ms |518.45ms |
+| Repeated acquisition + all13 sources/admission,54 imported repeats |84.83ms |133.13ms |
+| Existing research selector after three repeats,18 imported positions |183.99ms |273.30ms |
+
+The main operation includes original-receipt/member assertions and instrument overhead.
+Post-pass equality checks and payload-size diagnostics are excluded. Selector timing is a
+separate warm diagnostic; the selector invokes the families itself, so adding both operation
+columns would double-count source work rather than describe an implemented workflow. All
+emitted qualified outcome instances pass actual validation admission. `[V]` (same instrument/report)
+
+The separate fresh-process stream runs **one game's32 consecutive decisions**, plies9–40,
+with one capacity64 service and naturally warm runtime memos. Source acquisition/admission takes
+**17,029.66ms**, including13,463.44ms of wide lookup; the slowest row takes842.59ms. It retains32
+receipts with32 misses/zero hits. Sampled RSS rises from193.70MiB before the stream to1545.45MiB
+after it. This is source-only execution, not a measured Review request or a cache-owned/leak
+estimate. The existing Review contract has a5,000ms total collection budget and500ms optional
+source bound. A simple eager insertion of this workload cannot be justified by the warm-cache
+numbers; actual collection/budget behavior must be resolved before adoption. `[V]`
+(report `reviewBatch`; [Review pagination contract](../../rfc/module-registration.md), “One Review job” paragraph)
+
+The first passes produce2,922 qualified outcome events;2,656 (90.9%) are direct-control/ray
+outcomes. One decision's complete outcome payloads occupy1,031,784 JSON bytes, with a largest
+single payload of20,244 bytes and a maximum168 events in one decision. These populations remain
+inside the measurement worker; only counts are saved. Volume alone does not establish teaching
+usefulness. A learner module must retain exact subject/root/played/alternative grounding behind
+its bounded view, rather than display this full population. `[V]` (same report/instrument)
+
+Availability controls retain `loose_piece` unavailable in both literal clone-invalid positions
+and one imported position; twelve other complete families remain available at the literal
+witness. The actual existing **research** selector picks eight unqualified non-outcome facts
+across seven positions (promotion, last-of-role, check and captured-zone-defender). Research
+eligibility therefore cannot replace exact ordinary-source admission or consumer selection.
+This is not a defect in a research-only consumer. All four distinct refused projection IDs
+currently have `unvalidated` generated verdicts; the admission helper refuses them before
+instance checks. `[V]` (same report; `semantic-validation-receipt.generated.json`; actual
+`admitValidatedSemanticInstance` in `semantic-validation-registry.ts`)
+
+Independent readback returned two instrument gaps: a shortened warm prerequisite vector could
+escape comparison, and the advertised unavailable witness lacked an explicit assertion. The
+repaired instrument checks equal vector lengths before ordinal identities, uses explicit
+initialization even for empty populations, pins genuine risk unavailability, and refuses a NaN
+selector clock. Final dedicated types and five source/instrument controls pass. The final check also
+proves explicit/default imported-fixture equality; the optional
+fixture path preserves the research helper's original default. `[V]`
+([instrument tests](../../tools/d4175-outcome-delivery/measure.test.ts), current measurement log)
+
+**Next:** D4224 owns actual acquisition/dependency/budget work; D4225 owns reachable-memory and
+capacity attribution. Both precede D4175's independently accepted ordinary module/presentation
+handoff. All26 family/consumer pairs, original source sharing, literal bounded captions, strict
+receiving, assistance/role preflight and real selected API/DOM/voice delivery remain required.
+No source, deadline, semantic profile, content/native gate or whole1.0 requirement is waived.

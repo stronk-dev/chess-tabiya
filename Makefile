@@ -4734,6 +4734,25 @@ semantic-piece-risk-source-research:
 	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
 	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/piece-risk-reference.test.ts
 
+.PHONY: outcome-delivery-cost-build outcome-delivery-cost-check outcome-delivery-cost-smoke outcome-delivery-cost outcome-delivery-cost-update
+# Disposable D4223/D4175 measurement, outside software/release gates. Numeric summaries only.
+outcome-delivery-cost-build:
+	./node_modules/.bin/tsc --project tools/d4175-outcome-delivery/tsconfig.json
+	./node_modules/.bin/esbuild tools/d4175-outcome-delivery/measure.ts --bundle --platform=node --format=esm --external:typescript --outfile=.cache/outcome-delivery-cost/measure.mjs --log-level=warning
+
+outcome-delivery-cost-check:
+	./node_modules/.bin/tsc --project tools/d4175-outcome-delivery/tsconfig.json
+	./node_modules/.bin/vitest run --config tools/d4175-outcome-delivery/vitest.config.ts
+
+outcome-delivery-cost-smoke: outcome-delivery-cost-build
+	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --smoke
+
+outcome-delivery-cost: outcome-delivery-cost-build
+	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs
+
+outcome-delivery-cost-update: outcome-delivery-cost-build
+	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --write
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

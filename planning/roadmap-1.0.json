@@ -976,7 +976,7 @@
         "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance, actual staged/first-parent controls and all hooks pass in03b584b4; independently accepted receipt storage is archived. D4220/D4221/D4222 are closed. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
+          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects, with full20488 software+7 performance and finite storage closure. D4223 now measures actual-capacity64 source acquisition/admission: a same-game32-decision stream takes17.03s, sampled RSS193.70\u21921545.45MiB, raw outcome payloads up to1.03MB/168events. Independent bounded review, five instrument controls and dedicated types pass; compact report88874B. This is source-only research, not Review latency, cache ownership or ordinary delivery. D4224 acquisition/budget and D4225 reachable-memory work precede D4175 ordinary26; D4167 reverse consumers, native/content D3928 and full1.0 remain open.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1228,7 +1228,11 @@
             "packages/runtime/src/semantic-validation-cases/original-pawns.json",
             "tools/semantic-validation-owner-transition.ts",
             "tools/d1713-semantic-validation-matrix/direct-control-reference.ts",
-            "tools/d1713-semantic-validation-matrix/direct-control-reference.test.ts"
+            "tools/d1713-semantic-validation-matrix/direct-control-reference.test.ts",
+            "planning/foundation-source-identity/outcome-delivery-cost-2026-11-11.json",
+            "tools/d4175-outcome-delivery/measure.ts",
+            "tools/d4175-outcome-delivery/measure.test.ts",
+            "design/research/module-evidence-assembly.md"
           ],
           "anchors": [
             {
@@ -1865,6 +1869,21 @@
               "kind": "work_state",
               "id": "D4210",
               "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4223",
+              "digest": "sha256:e9ad6c287d761b43893f6796f6a87cc9215df54f21c3d4b87aa057f6ffd0b64d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4224",
+              "digest": "sha256:29090ef1966c518331f1800b6df832eeeb098ad3b64c8bd4d305d24477ada7c8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4225",
+              "digest": "sha256:53d8ea9536726330a24b46dfc6cea0629f21f0ccd145ef15502cbac67d560633"
             }
           ]
         },
@@ -1888,7 +1907,7 @@
         "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance, actual staged/first-parent controls and all hooks pass in03b584b4; independently accepted receipt storage is archived. D4220/D4221/D4222 are closed. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
+          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects, with full20488 software+7 performance and finite storage closure. D4223 now measures actual-capacity64 source acquisition/admission: a same-game32-decision stream takes17.03s, sampled RSS193.70\u21921545.45MiB, raw outcome payloads up to1.03MB/168events. Independent bounded review, five instrument controls and dedicated types pass; compact report88874B. This is source-only research, not Review latency, cache ownership or ordinary delivery. D4224 acquisition/budget and D4225 reachable-memory work precede D4175 ordinary26; D4167 reverse consumers, native/content D3928 and full1.0 remain open.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2478,7 +2497,10 @@
             "packages/runtime/src/internal/longitudinal-native-incidence.ts",
             "packages/runtime/src/internal/profile-subject-facts.ts",
             "apps/server/src/profile-subject-facts-contract.ts",
-            "apps/server/src/profile-subject-evaluations.test.ts"
+            "apps/server/src/profile-subject-evaluations.test.ts",
+            "planning/foundation-source-identity/outcome-delivery-cost-2026-11-11.json",
+            "tools/d4175-outcome-delivery/measure.ts",
+            "tools/d4175-outcome-delivery/measure.test.ts"
           ],
           "anchors": [
             {
@@ -3480,6 +3502,21 @@
               "kind": "work_state",
               "id": "D4210",
               "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4223",
+              "digest": "sha256:e9ad6c287d761b43893f6796f6a87cc9215df54f21c3d4b87aa057f6ffd0b64d"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4224",
+              "digest": "sha256:29090ef1966c518331f1800b6df832eeeb098ad3b64c8bd4d305d24477ada7c8"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4225",
+              "digest": "sha256:53d8ea9536726330a24b46dfc6cea0629f21f0ccd145ef15502cbac67d560633"
             }
           ]
         },

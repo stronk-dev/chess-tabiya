@@ -1,0 +1,4299 @@
+{
+  "question": "D4223 / D4175",
+  "node": "v24.22.1",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "scope": "fresh process after module initialization; acquisition, wide/member checks, all13 outcome factories/admission and instrument overhead; three shared-receipt repeats; selector is separate warm diagnostic",
+  "exclusions": [
+    "module preflight/API/DOM/voice",
+    "ordinary consumer activation",
+    "usefulness or population-wide latency guarantee"
+  ],
+  "familyOrder": [
+    "backward_pawn",
+    "doubled_pawn",
+    "half_open_file",
+    "isolated_pawn",
+    "king_opposition",
+    "king_zone",
+    "line_blockers",
+    "open_file",
+    "passed_pawn",
+    "piece_count",
+    "direct_attack_count",
+    "loose_piece",
+    "pawn_islands"
+  ],
+  "familyColumns": [
+    "availability",
+    "eventCount",
+    "sourceMs",
+    "admissionMs"
+  ],
+  "reviewBatch": {
+    "scope": "one imported game, plies9–40, current application cache capacity, all13 sources/admission per decision; sampled RSS after each row; no selection/API/DOM",
+    "totalMs": 17029.660875,
+    "rssBeforeBytes": 203112448,
+    "stats": {
+      "hits": 0,
+      "misses": 32,
+      "retained": 32,
+      "capacity": 64
+    },
+    "rows": [
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#9",
+        "lookupMs": 416.35508300000004,
+        "totalMs": 511.647916,
+        "rssAfterBytes": 309460992,
+        "legalMoves": 36,
+        "events": 123,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#10",
+        "lookupMs": 324.44949999999994,
+        "totalMs": 406.286333,
+        "rssAfterBytes": 356548608,
+        "legalMoves": 32,
+        "events": 114,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#11",
+        "lookupMs": 420.7072079999998,
+        "totalMs": 524.0799579999998,
+        "rssAfterBytes": 395034624,
+        "legalMoves": 40,
+        "events": 136,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#12",
+        "lookupMs": 373.5928329999999,
+        "totalMs": 458.05174999999986,
+        "rssAfterBytes": 408059904,
+        "legalMoves": 33,
+        "events": 116,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#13",
+        "lookupMs": 429.3372079999999,
+        "totalMs": 538.1927079999996,
+        "rssAfterBytes": 447643648,
+        "legalMoves": 41,
+        "events": 138,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#14",
+        "lookupMs": 335.01837499999965,
+        "totalMs": 432.44779199999994,
+        "rssAfterBytes": 476577792,
+        "legalMoves": 32,
+        "events": 121,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#15",
+        "lookupMs": 545.5543749999997,
+        "totalMs": 676.06475,
+        "rssAfterBytes": 585990144,
+        "legalMoves": 48,
+        "events": 146,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#16",
+        "lookupMs": 333.2975000000006,
+        "totalMs": 425.36275000000023,
+        "rssAfterBytes": 620265472,
+        "legalMoves": 34,
+        "events": 132,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#17",
+        "lookupMs": 509.33916599999975,
+        "totalMs": 653.1488330000002,
+        "rssAfterBytes": 670007296,
+        "legalMoves": 50,
+        "events": 148,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#18",
+        "lookupMs": 334.72791700000016,
+        "totalMs": 423.6556250000003,
+        "rssAfterBytes": 695042048,
+        "legalMoves": 31,
+        "events": 136,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#19",
+        "lookupMs": 486.975958,
+        "totalMs": 620.2822079999996,
+        "rssAfterBytes": 734363648,
+        "legalMoves": 49,
+        "events": 149,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#20",
+        "lookupMs": 325.38095799999974,
+        "totalMs": 547.6217499999993,
+        "rssAfterBytes": 883081216,
+        "legalMoves": 34,
+        "events": 140,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#21",
+        "lookupMs": 568.8852079999997,
+        "totalMs": 691.684166,
+        "rssAfterBytes": 801095680,
+        "legalMoves": 43,
+        "events": 151,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#22",
+        "lookupMs": 366.16233400000056,
+        "totalMs": 469.9002499999997,
+        "rssAfterBytes": 804470784,
+        "legalMoves": 37,
+        "events": 147,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#23",
+        "lookupMs": 454.16020800000024,
+        "totalMs": 588.8970419999996,
+        "rssAfterBytes": 848314368,
+        "legalMoves": 45,
+        "events": 167,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#24",
+        "lookupMs": 372.03441700000076,
+        "totalMs": 472.91095900000073,
+        "rssAfterBytes": 898973696,
+        "legalMoves": 36,
+        "events": 148,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#25",
+        "lookupMs": 449.6594160000004,
+        "totalMs": 582.6159160000007,
+        "rssAfterBytes": 940703744,
+        "legalMoves": 46,
+        "events": 160,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#26",
+        "lookupMs": 335.4905830000007,
+        "totalMs": 432.5236669999995,
+        "rssAfterBytes": 972390400,
+        "legalMoves": 35,
+        "events": 148,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#27",
+        "lookupMs": 399.14195800000016,
+        "totalMs": 507.21137499999895,
+        "rssAfterBytes": 1008451584,
+        "legalMoves": 42,
+        "events": 141,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#28",
+        "lookupMs": 402.3093750000007,
+        "totalMs": 506.2502920000006,
+        "rssAfterBytes": 1018019840,
+        "legalMoves": 41,
+        "events": 136,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#29",
+        "lookupMs": 420.5656249999993,
+        "totalMs": 523.0272919999989,
+        "rssAfterBytes": 1054523392,
+        "legalMoves": 39,
+        "events": 142,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#30",
+        "lookupMs": 456.00841599999876,
+        "totalMs": 550.9838749999999,
+        "rssAfterBytes": 1079328768,
+        "legalMoves": 38,
+        "events": 135,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#31",
+        "lookupMs": 309.2182499999999,
+        "totalMs": 390.0597089999992,
+        "rssAfterBytes": 1107099648,
+        "legalMoves": 34,
+        "events": 129,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#32",
+        "lookupMs": 402.74620799999866,
+        "totalMs": 511.1805409999997,
+        "rssAfterBytes": 1143291904,
+        "legalMoves": 45,
+        "events": 135,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#33",
+        "lookupMs": 724.6853750000009,
+        "totalMs": 842.5930000000008,
+        "rssAfterBytes": 1358200832,
+        "legalMoves": 38,
+        "events": 142,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#34",
+        "lookupMs": 416.8565830000007,
+        "totalMs": 519.3173330000009,
+        "rssAfterBytes": 1391984640,
+        "legalMoves": 42,
+        "events": 137,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#35",
+        "lookupMs": 429.33679200000006,
+        "totalMs": 544.9256249999999,
+        "rssAfterBytes": 1409351680,
+        "legalMoves": 43,
+        "events": 152,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#36",
+        "lookupMs": 404.33366699999897,
+        "totalMs": 508.9419999999991,
+        "rssAfterBytes": 1443610624,
+        "legalMoves": 40,
+        "events": 140,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#37",
+        "lookupMs": 436.4566250000007,
+        "totalMs": 544.352667000001,
+        "rssAfterBytes": 1482440704,
+        "legalMoves": 43,
+        "events": 152,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#38",
+        "lookupMs": 400.12024999999994,
+        "totalMs": 504.64379199999894,
+        "rssAfterBytes": 1522237440,
+        "legalMoves": 43,
+        "events": 148,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#39",
+        "lookupMs": 440.526167,
+        "totalMs": 553.9262080000008,
+        "rssAfterBytes": 1580335104,
+        "legalMoves": 47,
+        "events": 156,
+        "unavailable": []
+      },
+      {
+        "id": "review-page.https://lichess.org/ZoaIX0pA#40",
+        "lookupMs": 440.0017919999991,
+        "totalMs": 566.3123749999977,
+        "rssAfterBytes": 1620525056,
+        "legalMoves": 49,
+        "events": 158,
+        "unavailable": []
+      }
+    ]
+  },
+  "samples": [
+    {
+      "position": {
+        "id": "start.white",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "move": "e2e4",
+        "source": "semantic-validation-control-outcome-sources.ts"
+      },
+      "legalMoves": 20,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 226.88929099999996,
+        "totalMs": 272.66966599999995,
+        "families": [
+          [
+            "available",
+            0,
+            1.174,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.652,
+            0.003
+          ],
+          [
+            "available",
+            0,
+            0.536,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.523,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.304,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.263,
+            0.001
+          ],
+          [
+            "available",
+            20,
+            30.603,
+            0.264
+          ],
+          [
+            "available",
+            0,
+            0.303,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.37,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.372,
+            0
+          ],
+          [
+            "available",
+            43,
+            9.506,
+            0.137
+          ],
+          [
+            "available",
+            0,
+            0.389,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.142,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004541000000017448,
+          "totalMs": 40.35829100000001
+        },
+        {
+          "lookupMs": 0.0031669999999621723,
+          "totalMs": 40.28916700000002
+        },
+        {
+          "lookupMs": 0.00333299999999781,
+          "totalMs": 40.027417000000014
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 214886,
+      "largestOutcomePayloadBytes": 10749,
+      "selector": {
+        "ms": 100.48833300000001,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "start.black",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+        "move": "e7e5",
+        "source": "semantic-validation-control-outcome-sources.ts"
+      },
+      "legalMoves": 20,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 226.85566700000004,
+        "totalMs": 271.70220800000004,
+        "families": [
+          [
+            "available",
+            0,
+            1.133,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.62,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.543,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.492,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.264,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.242,
+            0.001
+          ],
+          [
+            "available",
+            20,
+            28.052,
+            0.229
+          ],
+          [
+            "available",
+            0,
+            0.268,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.369,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.363,
+            0
+          ],
+          [
+            "available",
+            43,
+            11.224,
+            0.141
+          ],
+          [
+            "available",
+            0,
+            0.45,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.179,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004458999999997104,
+          "totalMs": 42.646458999999936
+        },
+        {
+          "lookupMs": 0.004457999999999629,
+          "totalMs": 39.46408299999996
+        },
+        {
+          "lookupMs": 0.003167000000075859,
+          "totalMs": 39.856042
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 214894,
+      "largestOutcomePayloadBytes": 10749,
+      "selector": {
+        "ms": 108.383375,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "bishop-knight.white",
+        "fen": "7k/8/8/3q4/8/5N2/6B1/7K w - - 0 1",
+        "move": "f3h4",
+        "source": "semantic-validation-control-outcome-sources.ts"
+      },
+      "legalMoves": 12,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 85.160708,
+        "totalMs": 98.69570800000002,
+        "families": [
+          [
+            "available",
+            0,
+            0.516,
+            0.008
+          ],
+          [
+            "available",
+            0,
+            0.554,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.351,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.302,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.455,
+            0.058
+          ],
+          [
+            "available",
+            1,
+            0.536,
+            0.008
+          ],
+          [
+            "available",
+            4,
+            1.986,
+            0.029
+          ],
+          [
+            "available",
+            0,
+            0.214,
+            0.003
+          ],
+          [
+            "available",
+            0,
+            0.097,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.298,
+            0
+          ],
+          [
+            "available",
+            45,
+            7.325,
+            0.174
+          ],
+          [
+            "available",
+            1,
+            0.311,
+            0.004
+          ],
+          [
+            "available",
+            0,
+            0.105,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0038329999999859865,
+          "totalMs": 10.90079099999997
+        },
+        {
+          "lookupMs": 0.002957999999978256,
+          "totalMs": 10.766165999999998
+        },
+        {
+          "lookupMs": 0.0033749999999486135,
+          "totalMs": 11.083291999999972
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 77183,
+      "largestOutcomePayloadBytes": 3793,
+      "selector": {
+        "ms": 66.20529099999999,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "bishop-knight.black",
+        "fen": "7k/6b1/5n2/8/3Q4/8/8/7K b - - 0 1",
+        "move": "f6h5",
+        "source": "semantic-validation-control-outcome-sources.ts"
+      },
+      "legalMoves": 12,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 85.22375,
+        "totalMs": 99.20933300000002,
+        "families": [
+          [
+            "available",
+            0,
+            0.525,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.563,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.349,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.302,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.476,
+            0.064
+          ],
+          [
+            "available",
+            1,
+            0.545,
+            0.008
+          ],
+          [
+            "available",
+            4,
+            1.962,
+            0.029
+          ],
+          [
+            "available",
+            0,
+            0.224,
+            0.003
+          ],
+          [
+            "available",
+            0,
+            0.099,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.304,
+            0
+          ],
+          [
+            "available",
+            45,
+            7.672,
+            0.182
+          ],
+          [
+            "available",
+            1,
+            0.345,
+            0.004
+          ],
+          [
+            "available",
+            0,
+            0.112,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004000000000019099,
+          "totalMs": 11.059124999999995
+        },
+        {
+          "lookupMs": 0.003666000000009717,
+          "totalMs": 10.168583000000012
+        },
+        {
+          "lookupMs": 0.002124999999978172,
+          "totalMs": 14.809416999999996
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 77182,
+      "largestOutcomePayloadBytes": 3794,
+      "selector": {
+        "ms": 67.73762499999998,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "ep.white",
+        "fen": "7k/8/8/3pP3/8/8/8/7K w - d6 0 1",
+        "move": "e5d6",
+        "source": "semantic-validation-count-population-sources.ts"
+      },
+      "legalMoves": 5,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 39.662082999999996,
+        "totalMs": 46.969291,
+        "families": [
+          [
+            "available",
+            0,
+            0.603,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.294,
+            0.002
+          ],
+          [
+            "available",
+            3,
+            0.661,
+            0.081
+          ],
+          [
+            "available",
+            3,
+            0.491,
+            0.025
+          ],
+          [
+            "available",
+            1,
+            0.269,
+            0.008
+          ],
+          [
+            "available",
+            2,
+            0.468,
+            0.017
+          ],
+          [
+            "available",
+            0,
+            0.51,
+            0.003
+          ],
+          [
+            "available",
+            1,
+            0.236,
+            0.011
+          ],
+          [
+            "available",
+            0,
+            0.101,
+            0
+          ],
+          [
+            "available",
+            1,
+            0.55,
+            0.006
+          ],
+          [
+            "available",
+            17,
+            2.434,
+            0.056
+          ],
+          [
+            "available",
+            0,
+            0.087,
+            0
+          ],
+          [
+            "available",
+            1,
+            0.2,
+            0.004
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.003458000000023276,
+          "totalMs": 5.652833000000044
+        },
+        {
+          "lookupMs": 0.0035829999999918982,
+          "totalMs": 4.155957999999998
+        },
+        {
+          "lookupMs": 0.0027079999999841675,
+          "totalMs": 4.082625000000007
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 22385,
+      "largestOutcomePayloadBytes": 851,
+      "selector": {
+        "ms": 47.575917000000004,
+        "selected": 1,
+        "refused": [
+          "rules.transition.event.last_of_role@1"
+        ]
+      }
+    },
+    {
+      "position": {
+        "id": "ep.black",
+        "fen": "7k/8/8/8/3Pp3/8/8/7K b - d3 0 1",
+        "move": "e4d3",
+        "source": "semantic-validation-count-population-sources.ts"
+      },
+      "legalMoves": 5,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 39.04958399999998,
+        "totalMs": 46.14458400000001,
+        "families": [
+          [
+            "available",
+            0,
+            0.607,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.288,
+            0.002
+          ],
+          [
+            "available",
+            3,
+            0.619,
+            0.079
+          ],
+          [
+            "available",
+            3,
+            0.469,
+            0.019
+          ],
+          [
+            "available",
+            1,
+            0.259,
+            0.009
+          ],
+          [
+            "available",
+            2,
+            0.445,
+            0.017
+          ],
+          [
+            "available",
+            0,
+            0.518,
+            0.003
+          ],
+          [
+            "available",
+            1,
+            0.237,
+            0.011
+          ],
+          [
+            "available",
+            0,
+            0.101,
+            0
+          ],
+          [
+            "available",
+            1,
+            0.546,
+            0.006
+          ],
+          [
+            "available",
+            17,
+            2.312,
+            0.055
+          ],
+          [
+            "available",
+            0,
+            0.09,
+            0
+          ],
+          [
+            "available",
+            1,
+            0.2,
+            0.004
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.002999999999985903,
+          "totalMs": 5.609167000000014
+        },
+        {
+          "lookupMs": 0.0037090000000148393,
+          "totalMs": 4.158584000000019
+        },
+        {
+          "lookupMs": 0.0021250000000350155,
+          "totalMs": 4.050207999999998
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 22385,
+      "largestOutcomePayloadBytes": 851,
+      "selector": {
+        "ms": 47.735208,
+        "selected": 1,
+        "refused": [
+          "rules.transition.event.last_of_role@1"
+        ]
+      }
+    },
+    {
+      "position": {
+        "id": "promotion.white",
+        "fen": "8/P7/7k/8/8/8/8/7K w - - 0 1",
+        "move": "a7a8q",
+        "source": "semantic-validation-count-population-sources.ts"
+      },
+      "legalMoves": 7,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 48.499082999999985,
+        "totalMs": 58.72791699999999,
+        "families": [
+          [
+            "available",
+            0,
+            0.57,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.381,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            0.509,
+            0.057
+          ],
+          [
+            "available",
+            1,
+            0.336,
+            0.008
+          ],
+          [
+            "available",
+            1,
+            0.333,
+            0.008
+          ],
+          [
+            "available",
+            2,
+            0.553,
+            0.012
+          ],
+          [
+            "available",
+            0,
+            0.53,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.288,
+            0.013
+          ],
+          [
+            "available",
+            0,
+            0.101,
+            0.001
+          ],
+          [
+            "available",
+            5,
+            2.168,
+            0.039
+          ],
+          [
+            "available",
+            30,
+            3.733,
+            0.094
+          ],
+          [
+            "available",
+            0,
+            0.1,
+            0
+          ],
+          [
+            "available",
+            1,
+            0.201,
+            0.004
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0034169999999562606,
+          "totalMs": 7.923749999999984
+        },
+        {
+          "lookupMs": 0.0027910000000019863,
+          "totalMs": 7.908582999999965
+        },
+        {
+          "lookupMs": 0.002166999999985819,
+          "totalMs": 6.856750000000034
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 38668,
+      "largestOutcomePayloadBytes": 1028,
+      "selector": {
+        "ms": 53.011833000000024,
+        "selected": 1,
+        "refused": [
+          "rules.transition.event.promotion@1"
+        ]
+      }
+    },
+    {
+      "position": {
+        "id": "promotion.black",
+        "fen": "7k/8/8/8/8/7K/p7/8 b - - 0 1",
+        "move": "a2a1q",
+        "source": "semantic-validation-count-population-sources.ts"
+      },
+      "legalMoves": 7,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 48.14066699999995,
+        "totalMs": 58.355624999999975,
+        "families": [
+          [
+            "available",
+            0,
+            0.563,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.381,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            0.53,
+            0.055
+          ],
+          [
+            "available",
+            1,
+            0.323,
+            0.008
+          ],
+          [
+            "available",
+            1,
+            0.322,
+            0.007
+          ],
+          [
+            "available",
+            2,
+            0.531,
+            0.012
+          ],
+          [
+            "available",
+            0,
+            0.527,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.294,
+            0.013
+          ],
+          [
+            "available",
+            0,
+            0.1,
+            0.001
+          ],
+          [
+            "available",
+            5,
+            2.174,
+            0.038
+          ],
+          [
+            "available",
+            30,
+            3.748,
+            0.1
+          ],
+          [
+            "available",
+            0,
+            0.098,
+            0
+          ],
+          [
+            "available",
+            1,
+            0.195,
+            0.004
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004209000000003016,
+          "totalMs": 7.168875000000014
+        },
+        {
+          "lookupMs": 0.002583000000015545,
+          "totalMs": 9.156708000000037
+        },
+        {
+          "lookupMs": 0.0061249999999972715,
+          "totalMs": 7.146042000000023
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 38668,
+      "largestOutcomePayloadBytes": 1028,
+      "selector": {
+        "ms": 57.46991600000001,
+        "selected": 1,
+        "refused": [
+          "rules.transition.event.promotion@1"
+        ]
+      }
+    },
+    {
+      "position": {
+        "id": "forced.white",
+        "fen": "8/8/8/8/8/1r6/2k5/K7 w - - 0 1",
+        "move": "a1a2",
+        "source": "semantic-subject-population.test.ts"
+      },
+      "legalMoves": 1,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 18.20274999999998,
+        "totalMs": 20.448833999999977,
+        "families": [
+          [
+            "available",
+            0,
+            0.439,
+            0.004
+          ],
+          [
+            "available",
+            0,
+            0.215,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.176,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.125,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.097,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.09,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.268,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.095,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.049,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.128,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.292,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.036,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.05,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0022910000000138098,
+          "totalMs": 0.8576659999999947
+        },
+        {
+          "lookupMs": 0.0019169999999917309,
+          "totalMs": 0.9066250000000196
+        },
+        {
+          "lookupMs": 0.0015000000000213731,
+          "totalMs": 0.8529169999999908
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 2,
+      "largestOutcomePayloadBytes": 0,
+      "selector": {
+        "ms": 40.91316599999999,
+        "selected": 0,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "forced.black",
+        "fen": "k7/2K5/1R6/8/8/8/8/8 b - - 0 1",
+        "move": "a8a7",
+        "source": "vertical/color mirror of forced.white"
+      },
+      "legalMoves": 1,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 20.136875000000032,
+        "totalMs": 22.561333000000047,
+        "families": [
+          [
+            "available",
+            0,
+            0.461,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.238,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.178,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.131,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.115,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.098,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.288,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.097,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.054,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.133,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.332,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.042,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.061,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0030409999999960746,
+          "totalMs": 0.9123749999999973
+        },
+        {
+          "lookupMs": 0.0019170000000485743,
+          "totalMs": 0.8932500000000232
+        },
+        {
+          "lookupMs": 0.0014170000000035543,
+          "totalMs": 0.896000000000015
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 2,
+      "largestOutcomePayloadBytes": 0,
+      "selector": {
+        "ms": 43.99874999999997,
+        "selected": 0,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "unavailable-risk.white",
+        "fen": "4k3/8/8/8/8/8/4r3/4K3 w - - 0 1",
+        "move": "e1e2",
+        "source": "semantic-subject-population.test.ts"
+      },
+      "legalMoves": 3,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 36.35620899999998,
+        "totalMs": 42.491416999999956,
+        "families": [
+          [
+            "available",
+            0,
+            0.565,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.327,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.234,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.193,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.337,
+            0.084
+          ],
+          [
+            "available",
+            1,
+            0.349,
+            0.01
+          ],
+          [
+            "available",
+            0,
+            0.378,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.124,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.065,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            0.444,
+            0.011
+          ],
+          [
+            "available",
+            26,
+            2.526,
+            0.106
+          ],
+          [
+            "unavailable",
+            0,
+            0.058,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.096,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.003666000000009717,
+          "totalMs": 3.7762500000000045
+        },
+        {
+          "lookupMs": 0.002874999999960437,
+          "totalMs": 3.4926249999999754
+        },
+        {
+          "lookupMs": 0.0026659999999765205,
+          "totalMs": 3.276791000000003
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 17429,
+      "largestOutcomePayloadBytes": 684,
+      "selector": {
+        "ms": 49.30099999999999,
+        "selected": 1,
+        "refused": [
+          "rules.transition.event.last_of_role@1"
+        ]
+      }
+    },
+    {
+      "position": {
+        "id": "unavailable-risk.black",
+        "fen": "4k3/4R3/8/8/8/8/8/4K3 b - - 0 1",
+        "move": "e8e7",
+        "source": "vertical/color mirror of unavailable-risk.white"
+      },
+      "legalMoves": 3,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 31.679332999999986,
+        "totalMs": 37.611500000000035,
+        "families": [
+          [
+            "available",
+            0,
+            0.536,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.33,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.24,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.207,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.296,
+            0.084
+          ],
+          [
+            "available",
+            1,
+            0.324,
+            0.01
+          ],
+          [
+            "available",
+            0,
+            0.376,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.117,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.065,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            0.423,
+            0.011
+          ],
+          [
+            "available",
+            26,
+            2.443,
+            0.116
+          ],
+          [
+            "unavailable",
+            0,
+            0.054,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.087,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0027919999999994616,
+          "totalMs": 3.5742500000000064
+        },
+        {
+          "lookupMs": 0.0021660000000451873,
+          "totalMs": 3.297791000000018
+        },
+        {
+          "lookupMs": 0.0019169999999917309,
+          "totalMs": 3.102916999999991
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 17429,
+      "largestOutcomePayloadBytes": 684,
+      "selector": {
+        "ms": 46.513082999999995,
+        "selected": 1,
+        "refused": [
+          "rules.transition.event.last_of_role@1"
+        ]
+      }
+    },
+    {
+      "position": {
+        "id": "castle.white",
+        "fen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+        "move": "e1h1",
+        "source": "standard board, original rook-square move convention"
+      },
+      "legalMoves": 26,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 178.78470800000002,
+        "totalMs": 221.33833300000003,
+        "families": [
+          [
+            "available",
+            0,
+            0.664,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.78,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.666,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.498,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.796,
+            0.064
+          ],
+          [
+            "available",
+            1,
+            0.971,
+            0.01
+          ],
+          [
+            "available",
+            6,
+            5.227,
+            0.072
+          ],
+          [
+            "available",
+            0,
+            0.35,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.127,
+            0
+          ],
+          [
+            "available",
+            1,
+            4.08,
+            0.02
+          ],
+          [
+            "available",
+            105,
+            26.601,
+            0.341
+          ],
+          [
+            "available",
+            2,
+            0.832,
+            0.009
+          ],
+          [
+            "available",
+            0,
+            0.188,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004791000000011536,
+          "totalMs": 37.935708000000034
+        },
+        {
+          "lookupMs": 0.004083000000036918,
+          "totalMs": 37.506708
+        },
+        {
+          "lookupMs": 0.005374999999958163,
+          "totalMs": 37.80449999999996
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 307789,
+      "largestOutcomePayloadBytes": 7240,
+      "selector": {
+        "ms": 119.516708,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "castle.black",
+        "fen": "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+        "move": "e8h8",
+        "source": "standard board, original rook-square move convention"
+      },
+      "legalMoves": 26,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 175.22887499999996,
+        "totalMs": 220.16141699999997,
+        "families": [
+          [
+            "available",
+            0,
+            0.665,
+            0.008
+          ],
+          [
+            "available",
+            0,
+            0.782,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            1.62,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.53,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            0.896,
+            0.071
+          ],
+          [
+            "available",
+            1,
+            0.91,
+            0.009
+          ],
+          [
+            "available",
+            6,
+            4.599,
+            0.085
+          ],
+          [
+            "available",
+            0,
+            0.362,
+            0.003
+          ],
+          [
+            "available",
+            0,
+            0.125,
+            0
+          ],
+          [
+            "available",
+            1,
+            2.053,
+            0.015
+          ],
+          [
+            "available",
+            105,
+            30.465,
+            0.346
+          ],
+          [
+            "available",
+            2,
+            0.902,
+            0.009
+          ],
+          [
+            "available",
+            0,
+            0.196,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004791000000011536,
+          "totalMs": 38.43933300000003
+        },
+        {
+          "lookupMs": 0.004124999999930878,
+          "totalMs": 37.3667089999999
+        },
+        {
+          "lookupMs": 0.0038749999999936335,
+          "totalMs": 36.77237500000001
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 307787,
+      "largestOutcomePayloadBytes": 7240,
+      "selector": {
+        "ms": 120.33391700000004,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "terminal.checkmate",
+        "fen": "7k/6Q1/6K1/8/8/8/8/8 b - - 0 1",
+        "move": null,
+        "source": "literal legal-move boundary"
+      },
+      "legalMoves": 0,
+      "terminal": "checkmate",
+      "cold": {
+        "lookupMs": 5.577832999999998,
+        "totalMs": 5.699791000000005,
+        "families": []
+      },
+      "warm": [
+        {
+          "lookupMs": 0.003084000000001197,
+          "totalMs": 0.0160420000000272
+        },
+        {
+          "lookupMs": 0.001125000000001819,
+          "totalMs": 0.00791700000002038
+        },
+        {
+          "lookupMs": 0.0009170000000153777,
+          "totalMs": 0.005999999999971806
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 2,
+      "largestOutcomePayloadBytes": 0,
+      "selector": null
+    },
+    {
+      "position": {
+        "id": "terminal.stalemate",
+        "fen": "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1",
+        "move": null,
+        "source": "literal legal-move boundary"
+      },
+      "legalMoves": 0,
+      "terminal": "stalemate",
+      "cold": {
+        "lookupMs": 5.701666999999986,
+        "totalMs": 5.820833999999991,
+        "families": []
+      },
+      "warm": [
+        {
+          "lookupMs": 0.003084000000001197,
+          "totalMs": 0.015292000000044936
+        },
+        {
+          "lookupMs": 0.001167000000009466,
+          "totalMs": 0.007375000000024556
+        },
+        {
+          "lookupMs": 0.0008330000000000837,
+          "totalMs": 0.005541999999991276
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 2,
+      "largestOutcomePayloadBytes": 0,
+      "selector": null
+    },
+    {
+      "position": {
+        "id": "imported.0.https://lichess.org/ZoaIX0pA#12",
+        "fen": "rnbqk2r/ppp1bpp1/3p1n1p/4p3/2B1P3/2NP1N1P/PPP2PP1/R1BQK2R b KQkq - 0 6",
+        "move": "a7a6",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#12"
+      },
+      "legalMoves": 33,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 421.0405410000001,
+        "totalMs": 506.34895800000004,
+        "families": [
+          [
+            "available",
+            1,
+            1.973,
+            0.068
+          ],
+          [
+            "available",
+            0,
+            0.822,
+            0.002
+          ],
+          [
+            "available",
+            2,
+            1.523,
+            0.018
+          ],
+          [
+            "available",
+            0,
+            0.764,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.334,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.175,
+            0.012
+          ],
+          [
+            "available",
+            28,
+            46.626,
+            0.283
+          ],
+          [
+            "available",
+            0,
+            0.458,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.577,
+            0
+          ],
+          [
+            "available",
+            1,
+            2.381,
+            0.006
+          ],
+          [
+            "available",
+            76,
+            24.762,
+            0.22
+          ],
+          [
+            "available",
+            6,
+            2.482,
+            0.025
+          ],
+          [
+            "available",
+            1,
+            0.531,
+            0.004
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004457999999999629,
+          "totalMs": 80.07125000000008
+        },
+        {
+          "lookupMs": 0.004332999999974163,
+          "totalMs": 78.16166599999997
+        },
+        {
+          "lookupMs": 0.004916999999977634,
+          "totalMs": 78.05320900000004
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 557077,
+      "largestOutcomePayloadBytes": 14049,
+      "selector": {
+        "ms": 164.89300000000003,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.0.https://lichess.org/ZoaIX0pA#13",
+        "fen": "rnbqk2r/1pp1bpp1/p2p1n1p/4p3/2B1P3/2NP1N1P/PPP2PP1/R1BQK2R w KQkq - 0 7",
+        "move": "c1e3",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#13"
+      },
+      "legalMoves": 41,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 488.08129199999996,
+        "totalMs": 602.99,
+        "families": [
+          [
+            "available",
+            0,
+            1.741,
+            0.006
+          ],
+          [
+            "available",
+            0,
+            1.077,
+            0.006
+          ],
+          [
+            "available",
+            4,
+            3.089,
+            0.104
+          ],
+          [
+            "available",
+            0,
+            0.817,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.403,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.358,
+            0.01
+          ],
+          [
+            "available",
+            30,
+            58.638,
+            0.309
+          ],
+          [
+            "available",
+            0,
+            0.518,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.695,
+            0
+          ],
+          [
+            "available",
+            1,
+            3.015,
+            0.006
+          ],
+          [
+            "available",
+            97,
+            38.412,
+            1.229
+          ],
+          [
+            "available",
+            4,
+            2.469,
+            0.019
+          ],
+          [
+            "available",
+            1,
+            0.671,
+            0.005
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.009000000000014552,
+          "totalMs": 104.66099999999994
+        },
+        {
+          "lookupMs": 0.007542000000057669,
+          "totalMs": 103.51799999999992
+        },
+        {
+          "lookupMs": 0.005875000000060027,
+          "totalMs": 103.62620800000013
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 755176,
+      "largestOutcomePayloadBytes": 15429,
+      "selector": {
+        "ms": 216.22350000000006,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.1.https://lichess.org/a0Xo4b5J#24",
+        "fen": "r4r1k/pppq1p1p/2p1bp2/4p2Q/4P2N/P1P5/1PP2PPP/R3K2R b KQ - 3 12",
+        "move": "f8g8",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/a0Xo4b5J#24"
+      },
+      "legalMoves": 35,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 438.78833399999996,
+        "totalMs": 520.1115,
+        "families": [
+          [
+            "available",
+            1,
+            2.344,
+            0.08
+          ],
+          [
+            "available",
+            0,
+            3.027,
+            0.007
+          ],
+          [
+            "available",
+            0,
+            0.907,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.846,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.413,
+            0.001
+          ],
+          [
+            "available",
+            2,
+            2.117,
+            0.025
+          ],
+          [
+            "available",
+            29,
+            37.969,
+            0.274
+          ],
+          [
+            "available",
+            0,
+            0.427,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.678,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.569,
+            0
+          ],
+          [
+            "available",
+            83,
+            28.767,
+            0.242
+          ],
+          [
+            "available",
+            4,
+            2.059,
+            0.018
+          ],
+          [
+            "available",
+            0,
+            0.236,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.005415999999968335,
+          "totalMs": 73.717625
+        },
+        {
+          "lookupMs": 0.00437499999998181,
+          "totalMs": 72.57041600000002
+        },
+        {
+          "lookupMs": 0.005917000000067674,
+          "totalMs": 82.73237500000005
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 570638,
+      "largestOutcomePayloadBytes": 14954,
+      "selector": {
+        "ms": 202.33562499999994,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.1.https://lichess.org/a0Xo4b5J#25",
+        "fen": "r5rk/pppq1p1p/2p1bp2/4p2Q/4P2N/P1P5/1PP2PPP/R3K2R w KQ - 4 13",
+        "move": "e1h1",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/a0Xo4b5J#25"
+      },
+      "legalMoves": 32,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 365.34237499999995,
+        "totalMs": 445.71845799999994,
+        "families": [
+          [
+            "available",
+            0,
+            1.416,
+            0.005
+          ],
+          [
+            "available",
+            1,
+            1.297,
+            0.062
+          ],
+          [
+            "available",
+            2,
+            1.5,
+            0.018
+          ],
+          [
+            "available",
+            2,
+            1.429,
+            0.015
+          ],
+          [
+            "available",
+            0,
+            0.363,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.071,
+            0.016
+          ],
+          [
+            "available",
+            20,
+            33.554,
+            0.222
+          ],
+          [
+            "available",
+            0,
+            0.509,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            3.072,
+            0.006
+          ],
+          [
+            "available",
+            1,
+            2.475,
+            0.005
+          ],
+          [
+            "available",
+            86,
+            29.561,
+            0.249
+          ],
+          [
+            "available",
+            6,
+            2.638,
+            0.026
+          ],
+          [
+            "available",
+            1,
+            0.585,
+            0.004
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.005291999999940344,
+          "totalMs": 73.102125
+        },
+        {
+          "lookupMs": 0.0039999999999054126,
+          "totalMs": 69.88675
+        },
+        {
+          "lookupMs": 0.005541999999991276,
+          "totalMs": 68.321458
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 491238,
+      "largestOutcomePayloadBytes": 12988,
+      "selector": {
+        "ms": 157.2996250000001,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.2.https://lichess.org/pQZ75avT#40",
+        "fen": "4r1k1/ppp2p1p/2n3p1/8/3b1P2/7P/PP4P1/1RB1R2K b - - 0 20",
+        "move": "e8e1",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/pQZ75avT#40"
+      },
+      "legalMoves": 41,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 378.36437500000005,
+        "totalMs": 458.98829200000006,
+        "families": [
+          [
+            "available",
+            0,
+            1.398,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            1.039,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            1.518,
+            0.071
+          ],
+          [
+            "available",
+            1,
+            1.372,
+            0.011
+          ],
+          [
+            "available",
+            0,
+            0.417,
+            0.002
+          ],
+          [
+            "available",
+            2,
+            2.1,
+            0.018
+          ],
+          [
+            "available",
+            9,
+            22.459,
+            0.107
+          ],
+          [
+            "available",
+            0,
+            0.439,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            2.64,
+            0.007
+          ],
+          [
+            "available",
+            2,
+            5.299,
+            0.012
+          ],
+          [
+            "available",
+            103,
+            38.712,
+            0.354
+          ],
+          [
+            "available",
+            4,
+            2.083,
+            0.02
+          ],
+          [
+            "available",
+            0,
+            0.282,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.007958000000030552,
+          "totalMs": 73.59524999999996
+        },
+        {
+          "lookupMs": 0.004708000000050561,
+          "totalMs": 73.25229200000001
+        },
+        {
+          "lookupMs": 0.005332999999950516,
+          "totalMs": 72.276792
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 517243,
+      "largestOutcomePayloadBytes": 13427,
+      "selector": {
+        "ms": 171.99149999999997,
+        "selected": 2,
+        "refused": [
+          "derived.king.captured_zone_defender@1",
+          "rules.tactic.event.check@1"
+        ]
+      }
+    },
+    {
+      "position": {
+        "id": "imported.2.https://lichess.org/pQZ75avT#41",
+        "fen": "6k1/ppp2p1p/2n3p1/8/3b1P2/7P/PP4P1/1RB1r2K w - - 0 21",
+        "move": "h1h2",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/pQZ75avT#41"
+      },
+      "legalMoves": 1,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 27.070790999999986,
+        "totalMs": 30.2235,
+        "families": [
+          [
+            "available",
+            0,
+            0.573,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.159,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.134,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.146,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.116,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.096,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            1.031,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.099,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.097,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.12,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.313,
+            0.001
+          ],
+          [
+            "unavailable",
+            0,
+            0.03,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.057,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0024579999999900792,
+          "totalMs": 1.72283299999998
+        },
+        {
+          "lookupMs": 0.002082999999970525,
+          "totalMs": 1.6068750000000023
+        },
+        {
+          "lookupMs": 0.0013329999999882602,
+          "totalMs": 1.456165999999996
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 2,
+      "largestOutcomePayloadBytes": 0,
+      "selector": {
+        "ms": 41.369708,
+        "selected": 0,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.3.https://lichess.org/SbXfrIkH#12",
+        "fen": "rnbqk1nr/pp2pp2/2pp2pB/7p/3PP3/2N2N1P/PPP2PP1/R2QKB1R b KQkq - 0 6",
+        "move": "g8h6",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/SbXfrIkH#12"
+      },
+      "legalMoves": 28,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 361.73375,
+        "totalMs": 439.454208,
+        "families": [
+          [
+            "available",
+            0,
+            1.327,
+            0.006
+          ],
+          [
+            "available",
+            0,
+            0.791,
+            0.004
+          ],
+          [
+            "available",
+            1,
+            1.276,
+            0.065
+          ],
+          [
+            "available",
+            0,
+            0.684,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.391,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.22,
+            0.011
+          ],
+          [
+            "available",
+            20,
+            40.57,
+            0.212
+          ],
+          [
+            "available",
+            0,
+            0.441,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.544,
+            0
+          ],
+          [
+            "available",
+            2,
+            3.325,
+            0.01
+          ],
+          [
+            "available",
+            78,
+            23.004,
+            0.225
+          ],
+          [
+            "available",
+            4,
+            3.061,
+            0.02
+          ],
+          [
+            "available",
+            0,
+            0.276,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.006958000000054199,
+          "totalMs": 69.48683300000005
+        },
+        {
+          "lookupMs": 0.005625000000009095,
+          "totalMs": 67.34179199999994
+        },
+        {
+          "lookupMs": 0.005458999999973457,
+          "totalMs": 68.81545900000003
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 409340,
+      "largestOutcomePayloadBytes": 13002,
+      "selector": {
+        "ms": 144.31379200000003,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.3.https://lichess.org/SbXfrIkH#13",
+        "fen": "rnbqk2r/pp2pp2/2pp2pn/7p/3PP3/2N2N1P/PPP2PP1/R2QKB1R w KQkq - 0 7",
+        "move": "f1d3",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/SbXfrIkH#13"
+      },
+      "legalMoves": 36,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 400.29875000000004,
+        "totalMs": 486.88704199999995,
+        "families": [
+          [
+            "available",
+            0,
+            1.523,
+            0.01
+          ],
+          [
+            "available",
+            0,
+            0.896,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.824,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.834,
+            0.003
+          ],
+          [
+            "available",
+            0,
+            0.428,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.444,
+            0.077
+          ],
+          [
+            "available",
+            23,
+            45.655,
+            0.248
+          ],
+          [
+            "available",
+            0,
+            0.489,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.649,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.567,
+            0
+          ],
+          [
+            "available",
+            84,
+            30.141,
+            0.237
+          ],
+          [
+            "available",
+            4,
+            2.058,
+            0.018
+          ],
+          [
+            "available",
+            0,
+            0.203,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004583000000025095,
+          "totalMs": 80.74129199999993
+        },
+        {
+          "lookupMs": 0.00508399999989706,
+          "totalMs": 79.89083399999993
+        },
+        {
+          "lookupMs": 0.00587499999994634,
+          "totalMs": 78.60799999999995
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 550941,
+      "largestOutcomePayloadBytes": 13740,
+      "selector": {
+        "ms": 167.95179199999995,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.4.https://lichess.org/c0E9K95v#24",
+        "fen": "r1bqr1k1/1pp1bpp1/p1n2n1p/3pN3/P2P1P2/1PNB4/2PB2PP/R2QK2R b KQ - 4 12",
+        "move": "c6e5",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/c0E9K95v#24"
+      },
+      "legalMoves": 34,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 425.49529200000006,
+        "totalMs": 522.9389170000001,
+        "families": [
+          [
+            "available",
+            0,
+            1.37,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            0.903,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            1.313,
+            0.075
+          ],
+          [
+            "available",
+            0,
+            0.755,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.353,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.25,
+            0.011
+          ],
+          [
+            "available",
+            33,
+            45.701,
+            0.309
+          ],
+          [
+            "available",
+            0,
+            0.413,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.572,
+            0
+          ],
+          [
+            "available",
+            2,
+            5.603,
+            0.012
+          ],
+          [
+            "available",
+            103,
+            34.29,
+            0.299
+          ],
+          [
+            "available",
+            9,
+            3.663,
+            0.04
+          ],
+          [
+            "available",
+            0,
+            0.232,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.007458000000042375,
+          "totalMs": 88.85704199999998
+        },
+        {
+          "lookupMs": 0.005708000000026914,
+          "totalMs": 90.63183300000003
+        },
+        {
+          "lookupMs": 0.006333000000040556,
+          "totalMs": 87.26733300000012
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 708462,
+      "largestOutcomePayloadBytes": 14867,
+      "selector": {
+        "ms": 181.16704200000004,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.4.https://lichess.org/c0E9K95v#25",
+        "fen": "r1bqr1k1/1pp1bpp1/p4n1p/3pn3/P2P1P2/1PNB4/2PB2PP/R2QK2R w KQ - 0 13",
+        "move": "d4e5",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/c0E9K95v#25"
+      },
+      "legalMoves": 42,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 469.27270799999997,
+        "totalMs": 576.720458,
+        "families": [
+          [
+            "available",
+            0,
+            1.572,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            1.042,
+            0.002
+          ],
+          [
+            "available",
+            5,
+            3.282,
+            0.103
+          ],
+          [
+            "available",
+            0,
+            0.828,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.412,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.323,
+            0.012
+          ],
+          [
+            "available",
+            24,
+            49.896,
+            0.249
+          ],
+          [
+            "available",
+            1,
+            0.896,
+            0.008
+          ],
+          [
+            "available",
+            0,
+            0.651,
+            0
+          ],
+          [
+            "available",
+            2,
+            4.622,
+            0.01
+          ],
+          [
+            "available",
+            97,
+            38.291,
+            0.321
+          ],
+          [
+            "available",
+            6,
+            3.316,
+            0.029
+          ],
+          [
+            "available",
+            0,
+            0.312,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.005167000000028565,
+          "totalMs": 101.49229200000002
+        },
+        {
+          "lookupMs": 0.003917000000001281,
+          "totalMs": 100.61241699999994
+        },
+        {
+          "lookupMs": 0.00637500000016189,
+          "totalMs": 100.20091700000012
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 719769,
+      "largestOutcomePayloadBytes": 17483,
+      "selector": {
+        "ms": 222.16800000000012,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.5.https://lichess.org/kL85VmlC#40",
+        "fen": "5r1k/p3bppp/bpB1pn2/2q1B3/3N4/2P3Q1/PP4PP/4RRK1 b - - 2 20",
+        "move": "a6f1",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/kL85VmlC#40"
+      },
+      "legalMoves": 39,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 450.686542,
+        "totalMs": 554.5500830000001,
+        "families": [
+          [
+            "available",
+            0,
+            1.381,
+            0.005
+          ],
+          [
+            "available",
+            0,
+            1.037,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            1.485,
+            0.067
+          ],
+          [
+            "available",
+            0,
+            0.854,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.383,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.403,
+            0.012
+          ],
+          [
+            "available",
+            32,
+            39.078,
+            0.293
+          ],
+          [
+            "available",
+            1,
+            0.864,
+            0.008
+          ],
+          [
+            "available",
+            0,
+            0.507,
+            0
+          ],
+          [
+            "available",
+            4,
+            8.042,
+            0.018
+          ],
+          [
+            "available",
+            122,
+            44.491,
+            0.382
+          ],
+          [
+            "available",
+            6,
+            2.972,
+            0.029
+          ],
+          [
+            "available",
+            0,
+            0.278,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.005084000000010747,
+          "totalMs": 97.43125000000009
+        },
+        {
+          "lookupMs": 0.005499999999983629,
+          "totalMs": 95.32487500000002
+        },
+        {
+          "lookupMs": 0.0050420000000030996,
+          "totalMs": 95.32220900000004
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 805257,
+      "largestOutcomePayloadBytes": 14726,
+      "selector": {
+        "ms": 228.43254100000013,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.5.https://lichess.org/kL85VmlC#41",
+        "fen": "5r1k/p3bppp/1pB1pn2/2q1B3/3N4/2P3Q1/PP4PP/4RbK1 w - - 0 21",
+        "move": "e1f1",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/kL85VmlC#41"
+      },
+      "legalMoves": 43,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 472.27762499999994,
+        "totalMs": 646.5275409999999,
+        "families": [
+          [
+            "available",
+            0,
+            1.897,
+            0.007
+          ],
+          [
+            "available",
+            0,
+            1.298,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            4.272,
+            0.104
+          ],
+          [
+            "available",
+            1,
+            1.764,
+            0.016
+          ],
+          [
+            "available",
+            0,
+            0.505,
+            0.002
+          ],
+          [
+            "available",
+            2,
+            2.995,
+            0.098
+          ],
+          [
+            "available",
+            33,
+            69.714,
+            0.441
+          ],
+          [
+            "available",
+            0,
+            1.64,
+            0.006
+          ],
+          [
+            "available",
+            0,
+            2.521,
+            0.001
+          ],
+          [
+            "available",
+            3,
+            14.332,
+            0.02
+          ],
+          [
+            "available",
+            122,
+            67.775,
+            0.452
+          ],
+          [
+            "available",
+            5,
+            3.296,
+            0.032
+          ],
+          [
+            "available",
+            1,
+            0.738,
+            0.005
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0072079999999914435,
+          "totalMs": 113.44804199999999
+        },
+        {
+          "lookupMs": 0.011584000000084416,
+          "totalMs": 103.85075000000006
+        },
+        {
+          "lookupMs": 0.005125000000134605,
+          "totalMs": 116.75866700000006
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 893123,
+      "largestOutcomePayloadBytes": 15966,
+      "selector": {
+        "ms": 273.30100000000016,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.6.https://lichess.org/hknq4D3z#12",
+        "fen": "rnbqkb1r/ppp1pppp/4n3/3pP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 6",
+        "move": "f7f6",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/hknq4D3z#12"
+      },
+      "legalMoves": 24,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 284.4867919999999,
+        "totalMs": 350.9583329999999,
+        "families": [
+          [
+            "available",
+            0,
+            1.241,
+            0.006
+          ],
+          [
+            "available",
+            0,
+            0.669,
+            0.004
+          ],
+          [
+            "available",
+            1,
+            0.999,
+            0.069
+          ],
+          [
+            "available",
+            0,
+            0.567,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.316,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.205,
+            0.014
+          ],
+          [
+            "available",
+            20,
+            35.174,
+            0.223
+          ],
+          [
+            "available",
+            0,
+            0.423,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.465,
+            0
+          ],
+          [
+            "available",
+            1,
+            1.913,
+            0.009
+          ],
+          [
+            "available",
+            73,
+            20.683,
+            0.191
+          ],
+          [
+            "available",
+            4,
+            1.6,
+            0.015
+          ],
+          [
+            "available",
+            1,
+            0.432,
+            0.004
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.009999999999990905,
+          "totalMs": 64.05387499999995
+        },
+        {
+          "lookupMs": 0.0049999999999954525,
+          "totalMs": 56.17487500000004
+        },
+        {
+          "lookupMs": 0.006541999999967629,
+          "totalMs": 55.742624999999975
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 345898,
+      "largestOutcomePayloadBytes": 11508,
+      "selector": {
+        "ms": 127.36004200000002,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.6.https://lichess.org/hknq4D3z#13",
+        "fen": "rnbqkb1r/ppp1p1pp/4np2/3pP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 7",
+        "move": "e5f6",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/hknq4D3z#13"
+      },
+      "legalMoves": 35,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 402.896792,
+        "totalMs": 494.97908400000006,
+        "families": [
+          [
+            "available",
+            1,
+            2.062,
+            0.068
+          ],
+          [
+            "available",
+            1,
+            1.315,
+            0.011
+          ],
+          [
+            "available",
+            2,
+            1.612,
+            0.022
+          ],
+          [
+            "available",
+            0,
+            0.711,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.38,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.168,
+            0.014
+          ],
+          [
+            "available",
+            26,
+            48.912,
+            0.27
+          ],
+          [
+            "available",
+            0,
+            0.468,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.577,
+            0
+          ],
+          [
+            "available",
+            1,
+            2.493,
+            0.006
+          ],
+          [
+            "available",
+            83,
+            28.411,
+            0.248
+          ],
+          [
+            "available",
+            4,
+            2.17,
+            0.019
+          ],
+          [
+            "available",
+            2,
+            0.864,
+            0.008
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004874999999969987,
+          "totalMs": 89.828667
+        },
+        {
+          "lookupMs": 0.010665999999901032,
+          "totalMs": 94.31791599999997
+        },
+        {
+          "lookupMs": 0.006624999999985448,
+          "totalMs": 86.22479099999998
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 595633,
+      "largestOutcomePayloadBytes": 16055,
+      "selector": {
+        "ms": 175.83629100000007,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.7.https://lichess.org/UNkqj1pt#24",
+        "fen": "r1b2bkr/ppp1q1p1/1nn4p/3pP3/3p1B2/1Q3N2/PPP2PPP/RN3RK1 b - - 3 12",
+        "move": "c8e6",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/UNkqj1pt#24"
+      },
+      "legalMoves": 36,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 473.387875,
+        "totalMs": 573.739917,
+        "families": [
+          [
+            "available",
+            0,
+            1.428,
+            0.008
+          ],
+          [
+            "available",
+            0,
+            0.949,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            3.031,
+            0.078
+          ],
+          [
+            "available",
+            0,
+            0.837,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.37,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.342,
+            0.013
+          ],
+          [
+            "available",
+            30,
+            47.167,
+            0.307
+          ],
+          [
+            "available",
+            1,
+            0.849,
+            0.008
+          ],
+          [
+            "available",
+            0,
+            0.616,
+            0
+          ],
+          [
+            "available",
+            1,
+            2.667,
+            0.007
+          ],
+          [
+            "available",
+            97,
+            36.482,
+            0.356
+          ],
+          [
+            "available",
+            6,
+            3.279,
+            0.028
+          ],
+          [
+            "available",
+            0,
+            0.252,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.011874999999918145,
+          "totalMs": 89.62116700000001
+        },
+        {
+          "lookupMs": 0.005541999999991276,
+          "totalMs": 84.61470900000006
+        },
+        {
+          "lookupMs": 0.005333000000064203,
+          "totalMs": 84.31445800000006
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 671722,
+      "largestOutcomePayloadBytes": 13869,
+      "selector": {
+        "ms": 187.6959589999999,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.7.https://lichess.org/UNkqj1pt#25",
+        "fen": "r4bkr/ppp1q1p1/1nn1b2p/3pP3/3p1B2/1Q3N2/PPP2PPP/RN3RK1 w - - 4 13",
+        "move": "c2c3",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/UNkqj1pt#25"
+      },
+      "legalMoves": 36,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 489.009208,
+        "totalMs": 585.882875,
+        "families": [
+          [
+            "available",
+            0,
+            1.407,
+            0.008
+          ],
+          [
+            "available",
+            1,
+            1.515,
+            0.073
+          ],
+          [
+            "available",
+            1,
+            1.255,
+            0.011
+          ],
+          [
+            "available",
+            1,
+            1.072,
+            0.01
+          ],
+          [
+            "available",
+            0,
+            0.354,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.21,
+            0.01
+          ],
+          [
+            "available",
+            31,
+            45.659,
+            0.314
+          ],
+          [
+            "available",
+            0,
+            0.485,
+            0.002
+          ],
+          [
+            "available",
+            1,
+            2.893,
+            0.006
+          ],
+          [
+            "available",
+            2,
+            3.838,
+            0.009
+          ],
+          [
+            "available",
+            97,
+            33.085,
+            0.286
+          ],
+          [
+            "available",
+            6,
+            2.806,
+            0.027
+          ],
+          [
+            "available",
+            0,
+            0.242,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.0049999999999954525,
+          "totalMs": 90.37291600000003
+        },
+        {
+          "lookupMs": 0.004542000000014923,
+          "totalMs": 88.79375000000005
+        },
+        {
+          "lookupMs": 0.004582999999911408,
+          "totalMs": 88.34300000000007
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 682499,
+      "largestOutcomePayloadBytes": 13519,
+      "selector": {
+        "ms": 186.81150000000002,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.8.https://lichess.org/t8kAN9m2#40",
+        "fen": "4rbk1/p2n1p2/b1p1p1p1/q2pP3/5B1Q/P3R3/1rP1NPPP/R5K1 b - - 3 20",
+        "move": "f8g7",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/t8kAN9m2#40"
+      },
+      "legalMoves": 49,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 518.4516249999999,
+        "totalMs": 650.084416,
+        "families": [
+          [
+            "available",
+            2,
+            2.864,
+            0.079
+          ],
+          [
+            "available",
+            0,
+            1.139,
+            0.002
+          ],
+          [
+            "available",
+            3,
+            2.499,
+            0.025
+          ],
+          [
+            "available",
+            2,
+            1.852,
+            0.017
+          ],
+          [
+            "available",
+            0,
+            0.457,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.485,
+            0.011
+          ],
+          [
+            "available",
+            31,
+            51.442,
+            0.32
+          ],
+          [
+            "available",
+            0,
+            0.583,
+            0.002
+          ],
+          [
+            "available",
+            3,
+            7.4,
+            0.019
+          ],
+          [
+            "available",
+            2,
+            5.228,
+            0.01
+          ],
+          [
+            "available",
+            113,
+            50.309,
+            0.396
+          ],
+          [
+            "available",
+            8,
+            4.462,
+            0.041
+          ],
+          [
+            "available",
+            1,
+            0.696,
+            0.005
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.005083000000013271,
+          "totalMs": 126.42833299999995
+        },
+        {
+          "lookupMs": 0.007250000000112777,
+          "totalMs": 133.12595800000008
+        },
+        {
+          "lookupMs": 0.006666999999879408,
+          "totalMs": 122.04195800000002
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 1031784,
+      "largestOutcomePayloadBytes": 20244,
+      "selector": {
+        "ms": 240.7093749999999,
+        "selected": 2,
+        "refused": []
+      }
+    },
+    {
+      "position": {
+        "id": "imported.8.https://lichess.org/t8kAN9m2#41",
+        "fen": "4r1k1/p2n1pb1/b1p1p1p1/q2pP3/5B1Q/P3R3/1rP1NPPP/R5K1 w - - 4 21",
+        "move": "e3h3",
+        "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/t8kAN9m2#41"
+      },
+      "legalMoves": 40,
+      "terminal": null,
+      "cold": {
+        "lookupMs": 437.706084,
+        "totalMs": 530.110042,
+        "families": [
+          [
+            "available",
+            1,
+            2.059,
+            0.064
+          ],
+          [
+            "available",
+            0,
+            0.981,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.861,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.848,
+            0.001
+          ],
+          [
+            "available",
+            0,
+            0.393,
+            0.001
+          ],
+          [
+            "available",
+            1,
+            1.339,
+            0.011
+          ],
+          [
+            "available",
+            29,
+            40.407,
+            0.287
+          ],
+          [
+            "available",
+            0,
+            0.478,
+            0.002
+          ],
+          [
+            "available",
+            0,
+            0.552,
+            0
+          ],
+          [
+            "available",
+            0,
+            0.638,
+            0
+          ],
+          [
+            "available",
+            102,
+            38.385,
+            0.33
+          ],
+          [
+            "available",
+            6,
+            4.091,
+            0.029
+          ],
+          [
+            "available",
+            0,
+            0.375,
+            0
+          ]
+        ]
+      },
+      "warm": [
+        {
+          "lookupMs": 0.004416999999989457,
+          "totalMs": 85.77837499999998
+        },
+        {
+          "lookupMs": 0.003916000000003805,
+          "totalMs": 85.0378750000001
+        },
+        {
+          "lookupMs": 0.004125000000044565,
+          "totalMs": 84.62879100000009
+        }
+      ],
+      "stats": {
+        "hits": 3,
+        "misses": 1,
+        "retained": 1,
+        "capacity": 64
+      },
+      "rawOutcomePayloadBytes": 731365,
+      "largestOutcomePayloadBytes": 16683,
+      "selector": {
+        "ms": 189.84866699999998,
+        "selected": 2,
+        "refused": []
+      }
+    }
+  ]
+}

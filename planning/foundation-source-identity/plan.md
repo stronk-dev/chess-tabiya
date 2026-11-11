@@ -3182,3 +3182,40 @@ HEAD preservation, then stops on D3928's unchanged first-pack grade.move_quality
 requirement (the sole actual/expected requirement difference). Its overall target remains
 held, with no authored-content rewrite or waiver. Full software20488/580 and performance7/4
 are green; ordinary26/D1716/D4167, content/native and whole1.0 delivery remain open.
+
+
+### 2026-11-11 — D4223 actual outcome-delivery measurement starts
+
+All13 source families are qualified, but D4175 still holds ordinary adoption pending its
+module/presentation contract and actual cost. D4223 owns a disposable measurement of the
+existing CandidatePopulationService, all13 factories/admission and current research selector,
+with fresh processes and repeated access to the same original receipt. Both-color literal
+boundaries and the existing imported-game fixture cover full boards, legal alternatives,
+promotion/EP/castling, unavailable risk, empty and terminal cases. No learner activation,
+source semantics, product threshold, raw recording or release-gate change is authorized here.
+
+
+### 2026-11-11 — D4223 changes the ordinary-adoption order
+
+Independent review returns and then accepts the repaired instrument: full warm prerequisite
+length/identity, explicit empty initialization, genuine risk-unavailable witness and all clocks.
+Four instrument checks/types and the actual application-capacity64 run pass.34 positions/773
+legal candidates retain all13 source paths and exact warm receipt reuse. The same-game32-decision
+stream takes17,029.66ms source-only (13,463.44ms wide lookup), before selection/API/DOM; sampled
+RSS193.70→1545.45MiB is not a leak/cache-owned estimate. Complete outcome payloads reach1.03MB/
+168 events per decision; the existing research selector can select unqualified other families.
+The bounded report is88,874 bytes, with no raw populations or recordings. D4224/D4225 now own
+acquisition/budget and reachable-memory attribution before D4175 ordinary activation. The source
+qualification stays intact; no shortened evidence, larger deadline, content waiver or release
+claim. Next checkpoint commits this evidence before the causal optimization experiments.
+
+
+### 2026-11-11 — D4223 research checkpoint verification
+
+Final dedicated types and five instrument controls pass/2.59s, including exact unchanged
+default imported-population behavior. All four research-selector refusal families have
+unvalidated generated verdicts; this is not an instance-forgery or ordinary-consumer finding.
+D4223's bounded measurement question closes on its compact report; D4224 acquisition/budget
+and D4225 memory attribution are durable todo items owned by evidence-foundation. The source
+qualification/production bytes remain those of03b584b4. Governance and normal hooks follow
+before this research checkpoint is committed; whole ordinary adoption remains D4175.

@@ -44,6 +44,14 @@ checks pass; D4221 removes growing-corpus coupling from the owner-policy unit wi
 its assertions or the actual full-repository/large-Git checks. D4222 replaces copied later-source
 lists with exact fixed-source IDs, preserving all historical joins. The repaired full local gate passes.
 
+D4223 now measures the qualified sources through the actual application service/configuration.
+A 32-decision same-game stream takes **17.03 seconds for acquisition/admission alone**,
+with sampled process RSS rising from 193.70 to 1,545.45 MiB. This is not an implemented Review
+latency or cache-owned-memory measurement. Raw outcome payloads reach 1.03 MB/168 events per
+decision. D4224 acquisition/budget work and D4225 reachable-memory attribution now precede
+ordinary activation. The independently reviewed compact report is 88,874 bytes; five instrument
+controls and dedicated types pass. [Research and limits](../design/research/module-evidence-assembly.md#qualified-outcome-delivery-cost--d4223--d4175-2026-11-11).
+
 D4167 reverse consumers, D4175's26 ordinary avoidance bindings, full module/preset adoption,
 learner journeys and release proof remain. D3928 still holds content/native startup/release;
 no new official pack graduates. The [foundation plan](foundation-source-identity/plan.md)

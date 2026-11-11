@@ -35412,6 +35412,31 @@
       "uxItems": [],
       "evidence": "03b584b4",
       "evidenceKind": "commit"
+    },
+    {
+      "id": "D4223",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e9ad6c287d761b43893f6796f6a87cc9215df54f21c3d4b87aa057f6ffd0b64d",
+      "uxItems": [],
+      "evidence": "planning/foundation-source-identity/outcome-delivery-cost-2026-11-11.json",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4224",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:29090ef1966c518331f1800b6df832eeeb098ad3b64c8bd4d305d24477ada7c8",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D4225",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:53d8ea9536726330a24b46dfc6cea0629f21f0ccd145ef15502cbac67d560633",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }
