@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Verify committed software/governance jobs, then continue D4241 bounded Review contract/jobs, D4242 current-source retention measurements and remaining consumer adoption. D3791 actual native Inspector journey is executable. D4246 import attribution remains todo; no full1.0 milestone is complete.",
+        "nextAction": "Measure D4242 current construction8 retention with the existing32-root/all13 instrument, then isolate genuine Hint.close with the same candidate cache/detached deliveries live. Finish D4241 literal branch/job/interim-page transport before Review cutover. D3791 native Inspector and D4246 import attribution remain executable; no guessed defaults, omitted sources or full1.0 closure.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D3928/D4247 restore complete normal content:340/all44 tests/no skips260.57s,92-document clearance audit zero errors and104 exact canonical requirements.104 exact grade stamps/68 digest-only updates preserve all authored content; independently reviewed nine-caller actual-registry test composition preserves strict source authority, production loader and every assertion.33 original/copy/missing/replaced-source regressions and full types/Svelte0errors0warnings pass. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off. D3791 unblocked, not discharged. Current full software confirmation is next; p95/browser/memory/qualification/parent/release duties remain open.",
+          "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1743,7 +1743,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:c89a78b0ab9b1b1fe344c1451ef070ad0f75418693743601d8d19e7125838fe8"
+              "digest": "sha256:0d12f86dc022552e71d1798ecbb91d5ffc3fe5927461ac288bda1086eacaa2e3"
             },
             {
               "kind": "work_state",
@@ -2029,6 +2029,11 @@
               "kind": "work_state",
               "id": "D4247",
               "digest": "sha256:c53097bef62007788d08b0a083530efeeeddb20e53ae585eb7056b5eb956a741"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4248",
+              "digest": "sha256:8689f2af1f21c2fc065c68aa7d183693d29e5552ca560ba8dd0e8315565b5e4a"
             }
           ]
         },
@@ -2049,10 +2054,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Verify committed software/governance jobs, then continue D4241 bounded Review contract/jobs, D4242 current-source retention measurements and remaining consumer adoption. D3791 actual native Inspector journey is executable. D4246 import attribution remains todo; no full1.0 milestone is complete.",
+        "nextAction": "Measure D4242 current construction8 retention with the existing32-root/all13 instrument, then isolate genuine Hint.close with the same candidate cache/detached deliveries live. Finish D4241 literal branch/job/interim-page transport before Review cutover. D3791 native Inspector and D4246 import attribution remain executable; no guessed defaults, omitted sources or full1.0 closure.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D3928/D4247 restore complete normal content:340/all44 tests/no skips260.57s,92-document clearance audit zero errors and104 exact canonical requirements.104 exact grade stamps/68 digest-only updates preserve all authored content; independently reviewed nine-caller actual-registry test composition preserves strict source authority, production loader and every assertion.33 original/copy/missing/replaced-source regressions and full types/Svelte0errors0warnings pass. Production build/real-Stockfish Hint smoke passes44cells/one sample with11available/24honest-empty/8policy-refused/1source-off. D3791 unblocked, not discharged. Current full software confirmation is next; p95/browser/memory/qualification/parent/release duties remain open.",
+          "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -3558,7 +3563,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:c89a78b0ab9b1b1fe344c1451ef070ad0f75418693743601d8d19e7125838fe8"
+              "digest": "sha256:0d12f86dc022552e71d1798ecbb91d5ffc3fe5927461ac288bda1086eacaa2e3"
             },
             {
               "kind": "work_state",
@@ -3794,6 +3799,11 @@
               "kind": "work_state",
               "id": "D4247",
               "digest": "sha256:c53097bef62007788d08b0a083530efeeeddb20e53ae585eb7056b5eb956a741"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4248",
+              "digest": "sha256:8689f2af1f21c2fc065c68aa7d183693d29e5552ca560ba8dd0e8315565b5e4a"
             }
           ]
         },

@@ -13,9 +13,14 @@ Production build and the real-Stockfish Hint smoke pass44 cells (one sample/cell
 available plus deliberate empty/refused/source-off cases. D3791’s native Inspector journey is
 executable, not completed. No p95/browser/memory/full-Hint or release clearance is inferred.
 [Migration and content evidence](provider-exchange-and-execution/unified-grade-migration-2026-11-11.md).
-Next: verify the committed software/governance jobs, then continue D4241’s bounded Review contract/
-jobs, D4242 retention measurements and remaining consumer adoption. D4246 import attribution
-remains todo. These verified slices do not complete a whole-product milestone.
+Committed10632884 now passes the complete software/performance/build/governance run:
+20588/all585 software tests852.82s and7performance/four65.36s, with clean types/Svelte and
+canonical1928/1928 unchanged. All three actual normal CI commands are green locally; nothing
+has been pushed. D4248 reconciles the scoped-source header with the shipped Hint implementation.
+Next: measure D4242 current retention using the existing32-root/all13 instrument, then actual
+Hint ownership; in parallel, finish D4241’s literal branch/job/interim-page contract before
+production cutover. D4246 import attribution and remaining consumer adoption stay open.
+These verified slices do not complete a whole-product milestone.
 
 D4233–35's finite Hint caller handoff is verified: original live action authority at every
 actual source stage, distinct real registry/engine generations, cold handshake identity,

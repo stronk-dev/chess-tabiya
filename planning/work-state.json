@@ -35586,7 +35586,7 @@
       "id": "D4242",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:b0dea23ba9561b05974bf48c028762847255a0bd3769867fc83c3cb6c6a8f965",
+      "sourceDigest": "sha256:f9ce785f485db4621badfbe63fae7419f8941dc82046666db903074e33eed00f",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35633,6 +35633,15 @@
       "sourceDigest": "sha256:c53097bef62007788d08b0a083530efeeeddb20e53ae585eb7056b5eb956a741",
       "uxItems": [],
       "evidence": "apps/server/src/evidence-at-runtime.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4248",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8689f2af1f21c2fc065c68aa7d183693d29e5552ca560ba8dd0e8315565b5e4a",
+      "uxItems": [],
+      "evidence": "rfc/subject-safe-semantic-selection.md",
       "evidenceKind": "path"
     }
   ]

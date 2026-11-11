@@ -1,7 +1,7 @@
 # RFC: subject-safe semantic selection
 
 - **Status:** implementing — construction8 source/service checkpoint committed8dc421fc: genuine complete foundation receipts, shared original full/core inputs, fixed stages, bounded partial/completed owners and actual operation/census migration. Fresh1928/1928 retains24/89 qualified and all13 outcomes; source/lifetime reviews accept this finite slice. Fresh committed software20550/583 passes843.04s after the confirmed sleep-interrupted attempt; normal types/performance/build/governance pass. Actual cooperative caller/budget/consumer/native/content/release work stays open.
-- **Scoped acquisition amendment:** §6.4 D4224 independently accepted2026-11-11; construction8 source/API/qualification implemented at8dc421fc. The actual Hint caller mapping in hint-distance.md §7b is independently accepted2026-11-11; its production implementation and boundary proofs remain owed.
+- **Scoped acquisition amendment:** §6.4 D4224 independently accepted2026-11-11; construction8 source/API/qualification implemented at8dc421fc. The actual Hint caller mapping in hint-distance.md §7b is independently accepted2026-11-11 and implemented at a52e255a: live per-stage authority, actual provider generations, fixed source deadline and cooperative full acquisition. Current10632884 passes20588software/all585,7performance/four, types/build/governance; complete content340/all44 and44-cell real-engine smoke also pass. Remaining Review adoption, p95/browser/owner-use, memory and total budget proof stay open.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09
 - **Parent:** `archive/semantic-evidence-selection.md` (immutable historical contract).
