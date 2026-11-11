@@ -175,8 +175,106 @@ function measureReviewBatch(workload: readonly Position[]) {
   return { scope: "one imported game, plies9–40, current application cache capacity, all13 sources/admission per decision; sampled RSS after each row; no selection/API/DOM", totalMs, rssBeforeBytes, stats: service.stats(), rows };
 }
 
+interface MemoryCase {
+  readonly capacity: number; readonly workMs: number;
+  readonly observer: { readonly held: true; readonly released: true };
+  readonly stats: ReturnType<CandidatePopulationService["stats"]>;
+  readonly aliveRetained: number; readonly aliveReleased: number;
+  readonly memory: Readonly<Record<"before" | "afterWork" | "retainedGc" | "releasedGc", NodeJS.MemoryUsage>>;
+  readonly rows: readonly { readonly id: string; readonly legalMoves: number; readonly families: readonly Pick<Family, "family" | "kind" | "events">[] }[];
+}
+function memoryStream(service: CandidatePopulationService, workload: readonly Position[]) {
+  const references: WeakRef<Receipt>[] = [];
+  const rows = workload.map(position => {
+    assert(position.move !== null);
+    const lookup = service.wide(position.fen); if (lookup.kind !== "ready") throw Error(JSON.stringify(lookup.error));
+    assertWide(lookup.receipt); references.push(new WeakRef(lookup.receipt));
+    const result = collect(lookup.receipt, position.move);
+    return { id: position.id, legalMoves: lookup.receipt.packet.candidates.length,
+      families: result.families.map(({ family, kind, events }) => ({ family, kind, events })) };
+  });
+  // Rows retain no receipt/event/closure. WeakRef CREATION temporarily keeps targets alive
+  // until this synchronous job ends, so workMs/afterWork are observer-influenced diagnostics.
+  return { rows, references };
+}
+async function collectedMemory(): Promise<NodeJS.MemoryUsage> {
+  assert(typeof global.gc === "function", "Memory worker requires --expose-gc");
+  // WeakRef creation AND dereference keep a target alive until the job ends. End the job
+  // BEFORE each GC; do not confuse this research observer with a retaining source cache.
+  for (let i = 0; i < 3; i++) { await new Promise<void>(resolve => setImmediate(resolve)); global.gc(); }
+  return process.memoryUsage();
+}
+async function measureMemoryCase(workload: readonly Position[], capacity: number): Promise<MemoryCase> {
+  assert.equal(new Set(workload.map(row => row.fen)).size, workload.length);
+  let control: object | undefined = Object.freeze({ observerControl: true });
+  const weakControl = new WeakRef(control);
+  await collectedMemory(); assert.strictEqual(weakControl.deref(), control, "Observer must see a genuinely held target");
+  control = undefined;
+  await collectedMemory(); assert.equal(weakControl.deref(), undefined, "Observer must not retain its own released target");
+  let service: CandidatePopulationService | undefined = new CandidatePopulationService({ capacity });
+  const before = await collectedMemory(), start = performance.now();
+  const { rows, references } = memoryStream(service, workload), workMs = performance.now() - start;
+  const afterWork = process.memoryUsage(), retainedGc = await collectedMemory();
+  const stats = service.stats(); // Keep the actual service reachable THROUGH the retained GC.
+  const aliveRetained = references.filter(ref => ref.deref() !== undefined).length;
+  service = undefined;
+  const releasedGc = await collectedMemory(), aliveReleased = references.filter(ref => ref.deref() !== undefined).length;
+  const result = { capacity, workMs, observer: { held: true as const, released: true as const }, stats, aliveRetained, aliveReleased,
+    memory: { before, afterWork, retainedGc, releasedGc }, rows };
+  assertMemoryCase(result, workload.length); return result;
+}
+export function assertMemoryCase(value: MemoryCase, subjects: number): void {
+  assert(Number.isSafeInteger(value.capacity) && value.capacity > 0);
+  assert.equal(value.stats.capacity, value.capacity); assert.equal(value.stats.misses, subjects); assert.equal(value.stats.hits, 0);
+  assert.equal(value.stats.retained, Math.min(subjects, value.capacity));
+  assert(Number.isFinite(value.workMs) && value.workMs >= 0);
+  assert.equal(value.observer.held, true); assert.equal(value.observer.released, true);
+  assert.equal(value.rows.length, subjects); assert.equal(new Set(value.rows.map(row => row.id)).size, subjects);
+  assert(value.aliveRetained >= value.stats.retained && value.aliveRetained <= subjects);
+  assert(value.aliveReleased >= 0 && value.aliveReleased <= value.aliveRetained);
+  assert(Number.isSafeInteger(value.aliveRetained) && Number.isSafeInteger(value.aliveReleased));
+  for (const phase of ["before", "afterWork", "retainedGc", "releasedGc"] as const) {
+    const memory = value.memory[phase]; assert(memory);
+    for (const field of ["rss", "heapUsed", "heapTotal", "external", "arrayBuffers"] as const) {
+      assert(Number.isFinite(memory[field]) && memory[field] >= 0);
+    }
+  }
+  for (const row of value.rows) {
+    assert(Number.isSafeInteger(row.legalMoves) && row.legalMoves > 0);
+    assert.deepEqual(row.families.map(family => family.family), [...SUBJECT_OUTCOME_FAMILIES]);
+    for (const family of row.families) {
+      assert(["available", "unavailable"].includes(family.kind)); assert(Number.isSafeInteger(family.events) && family.events >= 0);
+      if (family.kind === "unavailable") assert.equal(family.events, 0);
+    }
+  }
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes("--worker")) {
+  if (process.argv.includes("--memory-worker")) {
+    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly workload: readonly Position[]; readonly capacity: number };
+    process.stdout.write(JSON.stringify(await measureMemoryCase(input.workload, input.capacity)));
+  } else if (process.argv.includes("--memory")) {
+    const workload = process.argv.includes("--smoke") ? LITERAL_POSITIONS.slice(0, 2) : reviewPositions();
+    const cases = [...new Set([1, 4, GUIDED_HINT_PROFILE.packetCapacity])].map(capacity => {
+      const result = JSON.parse(execFileSync(process.execPath, ["--expose-gc", fileURLToPath(import.meta.url), "--memory-worker"], {
+        input: JSON.stringify({ workload, capacity }), encoding: "utf8", timeout: 60_000, maxBuffer: 256 * 1024,
+      })) as MemoryCase;
+      assertMemoryCase(result, workload.length);
+      process.stderr.write(`capacity${capacity}: retained heap ${(result.memory.retainedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB, released ${(result.memory.releasedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB; live receipts ${result.aliveRetained}→${result.aliveReleased}\n`);
+      return result;
+    });
+    for (const result of cases) assert.deepEqual(result.rows, cases[0]!.rows, "All13 family availability/event counts must survive every capacity");
+    const report = { question: "D4225", node: process.version, platform: process.platform, architecture: process.arch,
+      scope: "fresh processes; identical source stream; forced GC only before/after work; service kept live then released; WeakRef observers cross jobs before GC; workMs/afterWork are observer-influenced",
+      exclusions: ["production GC behavior", "peak/appliance footprint", "natural transient timing/memory (WeakRef creation keeps targets alive for the current job)", "exhaustive reachability/leak proof from surviving WeakRefs", "full semantic equality from counts alone", "production cache/default change"],
+      workload, familyOrder: SUBJECT_OUTCOME_FAMILIES,
+      familyResults: cases[0]!.rows.map(row => ({ id: row.id, legalMoves: row.legalMoves, families: row.families.map(family => [family.kind, family.events]) })),
+      cases: cases.map(({ rows: _rows, ...result }) => result) };
+    const text = JSON.stringify(report, null, 2) + "\n";
+    assert(Buffer.byteLength(text) < 48 * 1024, "Memory report exceeds48KiB; never retain heap or event dumps");
+    if (process.argv.includes("--write")) writeFileSync("planning/foundation-source-identity/outcome-memory-2026-11-11.json", text);
+    else process.stdout.write(text);
+  } else if (process.argv.includes("--worker")) {
     const input: unknown = JSON.parse(readFileSync(0, "utf8"));
     process.stdout.write(JSON.stringify(process.argv.includes("--batch") ? measureReviewBatch(input as readonly Position[]) : measurePosition(input as Position)));
   } else {

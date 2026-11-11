@@ -6,7 +6,7 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-c
 import { subjectOutcomeSemanticEvents } from "../../packages/runtime/src/semantic-evidence.js";
 import { importedPopulation } from "../research-chess/populations.js";
 import { resolve } from "node:path";
-import { assertSample, assertWarmReuse, assertWide, assertRepeatedSources, LITERAL_POSITIONS, measurePosition } from "./measure.js";
+import { assertSample, assertWarmReuse, assertWide, assertRepeatedSources, assertMemoryCase, LITERAL_POSITIONS, measurePosition } from "./measure.js";
 
 describe("D4223 actual-source cost instrument", () => {
   it("explicit bundled fixture location preserves the original imported population exactly", () => {
@@ -56,5 +56,23 @@ describe("D4223 actual-source cost instrument", () => {
     const narrow = compileCandidatePopulation({ beforeFen: real.position.fen, ruleset: "standard", scope: CANDIDATE_EVENTS_SCOPE });
     if (narrow.kind !== "ready") throw Error("Original events-only control required");
     expect(() => assertWide(narrow.receipt)).toThrow();
+  });
+  it("refuses impossible memory counters, missing families and an observer that retains its own target", () => {
+    const source = measurePosition(LITERAL_POSITIONS.find(row => row.id === "forced.white")!);
+    const memory = { rss: 100, heapUsed: 50, heapTotal: 80, external: 10, arrayBuffers: 5 };
+    const good = { capacity: 1, workMs: 1, observer: { held: true as const, released: true as const },
+      stats: { capacity: 1, retained: 1, hits: 0, misses: 1 }, aliveRetained: 1, aliveReleased: 0,
+      memory: { before: { ...memory }, afterWork: { ...memory }, retainedGc: { ...memory }, releasedGc: { ...memory } },
+      rows: [{ id: source.position.id, legalMoves: source.legalMoves,
+        families: source.cold.families.map(({ family, kind, events }) => ({ family, kind, events })) }] };
+    expect(() => assertMemoryCase(good, 1)).not.toThrow();
+    for (const mutate of [
+      (v: typeof good) => { v.stats.retained = 2; },
+      (v: typeof good) => { v.aliveRetained = 0; },
+      (v: typeof good) => { v.aliveReleased = 2; },
+      (v: typeof good) => { v.memory.retainedGc.heapUsed = NaN; },
+      (v: typeof good) => { v.rows[0]!.families.pop(); },
+      (v: typeof good) => { Object.assign(v.observer, { released: false }); },
+    ]) { const bad = structuredClone(good); mutate(bad); expect(() => assertMemoryCase(bad, 1)).toThrow(); }
   });
 });

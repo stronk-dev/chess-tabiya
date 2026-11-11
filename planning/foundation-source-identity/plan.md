@@ -3219,3 +3219,28 @@ D4223's bounded measurement question closes on its compact report; D4224 acquisi
 and D4225 memory attribution are durable todo items owned by evidence-foundation. The source
 qualification/production bytes remain those of03b584b4. Governance and normal hooks follow
 before this research checkpoint is committed; whole ordinary adoption remains D4175.
+
+
+### 2026-11-11 — D4225 reachable-memory attribution starts
+
+The cost evidence is committedc50dcefa. Its sampled RSS cannot identify live cache ownership.
+A disposable follow-up runs the same original32-decision source/admission workload in fresh
+processes at capacities1/4/current64, with forced GC only before/after work. Record live heap,
+RSS and original-receipt WeakRef liveness while the real service remains reachable, then
+after releasing it. Compare all13 availability/event counts across capacities; no source
+omission, allocator/leak assumption, production default change or heap dump.
+
+
+### 2026-11-11 — D4225 separates owner-held and remaining heap
+
+Six focused instrument controls/types and actual memory smoke/full workers pass. Same32
+original decisions execute all13 source/admission paths; legal/family availability/event
+counts agree at1/4/64. Post-GC held heaps576.97/629.97/1123.44MiB fall to556.86/557.12/557.12MiB
+on releasing the service, and all observed original receipts clear. The remaining heap
+needs global-memo attribution, so D4225 stays doing. Independent review caught that WeakRef
+CREATION pins targets until the job ends: workMs/afterWork are observer-influenced and not
+natural capacity comparisons. Explicit limits/forced-GC labels are corrected with every
+measured value unchanged. The numeric report is40,454B, no heap dump. Next inspect actual
+private reading/factory memos before changing any production bound. No source/deadline/
+ordinary activation, allocator return or leak claim. Commit this verified partial experiment
+before extending the next causal control.

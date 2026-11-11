@@ -35432,11 +35432,12 @@
     },
     {
       "id": "D4225",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:53d8ea9536726330a24b46dfc6cea0629f21f0ccd145ef15502cbac67d560633",
+      "sourceDigest": "sha256:75f4e470dee8d1f0c9c483a72b7cc2c8670661c6e5e850adc334d87fe8edbeb0",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
     }
   ]
 }

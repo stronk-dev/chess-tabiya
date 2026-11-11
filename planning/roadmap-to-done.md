@@ -52,6 +52,13 @@ decision. D4224 acquisition/budget work and D4225 reachable-memory attribution n
 ordinary activation. The independently reviewed compact report is 88,874 bytes; five instrument
 controls and dedicated types pass. [Research and limits](../design/research/module-evidence-assembly.md#qualified-outcome-delivery-cost--d4223--d4175-2026-11-11).
 
+D4225's first controlled memory experiment now separates live-owner retention from other
+remaining heap. At capacities 1/4/64, post-GC heaps are 576.97/629.97/1,123.44 MiB; after
+releasing the service they are about 557 MiB, with all observed original packets collected.
+Transient timing/RSS in this WeakRef experiment is observer-influenced and is excluded from
+natural-capacity comparisons. **D4225 remains doing**: global memo attribution precedes a
+production cache decision. [Method and limits](../design/research/module-evidence-assembly.md#qualified-outcome-memory-attribution--d4225-2026-11-11).
+
 D4167 reverse consumers, D4175's26 ordinary avoidance bindings, full module/preset adoption,
 learner journeys and release proof remain. D3928 still holds content/native startup/release;
 no new official pack graduates. The [foundation plan](foundation-source-identity/plan.md)

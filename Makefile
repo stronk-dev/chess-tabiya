@@ -4753,6 +4753,17 @@ outcome-delivery-cost: outcome-delivery-cost-build
 outcome-delivery-cost-update: outcome-delivery-cost-build
 	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --write
 
+.PHONY: outcome-delivery-memory-smoke outcome-delivery-memory outcome-delivery-memory-update
+# D4225 research workers use controlled GC; production configuration is unchanged.
+outcome-delivery-memory-smoke: outcome-delivery-cost-build
+	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --memory --smoke
+
+outcome-delivery-memory: outcome-delivery-cost-build
+	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --memory
+
+outcome-delivery-memory-update: outcome-delivery-cost-build
+	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --memory --write
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

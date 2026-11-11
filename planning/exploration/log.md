@@ -41266,3 +41266,38 @@ and owned D4224/D4225 work rather than advertising consumer completion. Runtime 
 qualification and generated receipt bytes remain unchanged from03b584b4; the shared research
 helper's explicit fixture option preserves default results and is outside that receipt's
 implementation inputs. Commit this finite evidence checkpoint before causal profiling.
+
+
+### 2026-11-11 — D4225 reachable-memory attribution starts
+
+The cost evidence is committedc50dcefa. Its sampled RSS cannot identify live cache ownership.
+A disposable follow-up runs the same original32-decision source/admission workload in fresh
+processes at capacities1/4/current64, with forced GC only before/after work. Record live heap,
+RSS and original-receipt WeakRef liveness while the real service remains reachable, then
+after releasing it. Compare all13 availability/event counts across capacities; no source
+omission, allocator/leak assumption, production default change or heap dump.
+
+
+### 2026-11-11 — D4225 separates owner-held and remaining heap
+
+Six focused instrument controls/types and actual memory smoke/full workers pass. Same32
+original decisions execute all13 source/admission paths; legal/family availability/event
+counts agree at1/4/64. Post-GC held heaps576.97/629.97/1123.44MiB fall to556.86/557.12/557.12MiB
+on releasing the service, and all observed original receipts clear. The remaining heap
+needs global-memo attribution, so D4225 stays doing. Independent review caught that WeakRef
+CREATION pins targets until the job ends: workMs/afterWork are observer-influenced and not
+natural capacity comparisons. Explicit limits/forced-GC labels are corrected with every
+measured value unchanged. The numeric report is40,454B, no heap dump. Next inspect actual
+private reading/factory memos before changing any production bound. No source/deadline/
+ordinary activation, allocator return or leak claim. Commit this verified partial experiment
+before extending the next causal control.
+
+
+### 2026-11-11 — D4225 partial memory evidence accepted and checked
+
+Independent final interpretation review accepts the bounded post-GC observations and
+explicit WeakRef-construction limits. Six focused instrument controls/dedicated types and
+normal governance pass. The current roadmap binds the actual doing-state D4225 row and
+compact report while retaining the global-retention question and all consumer/release
+requirements. Production source and qualification bytes remain unchanged. Commit before
+intervening in the actual global memo candidates; do not infer a production limit yet.

@@ -862,3 +862,6 @@ semantics and historical compatibility need independent acceptance. See
 
 
 | Qualified original-subject outcome delivery cost | D4223, D4175, D4224–D4225 | **Measured `[V]`2026-11-11**:34 positions/773 candidates, all13 actual source/admission paths and shared-receipt repeats; at actual capacity64, one32-decision stream takes17.03s source-only and sampled RSS193.70→1545.45MiB. Raw outcomes reach168 events/1.03MB per decision. Ordinary adoption needs acquisition/budget and memory work first; no API/DOM or population-wide claim | `module-evidence-assembly.md` §Qualified outcome delivery cost; `tools/d4175-outcome-delivery/README.md`; `planning/foundation-source-identity/outcome-delivery-cost-2026-11-11.json` |
+
+
+| Qualified source retained-memory attribution | D4225, D4175 | **Partial measured `[V]`2026-11-11**: identical32-decision/all13 source counts at capacities1/4/64; post-GC owner-held heaps576.97/629.97/1123.44MiB, owner-released about557MiB with zero surviving original receipt observers. WeakRef construction affects transient timing/memory, which are excluded. Global retention attribution remains doing; no production change or leak claim | `module-evidence-assembly.md` §Qualified outcome memory attribution; `tools/d4175-outcome-delivery/README.md`; `planning/foundation-source-identity/outcome-memory-2026-11-11.json` |

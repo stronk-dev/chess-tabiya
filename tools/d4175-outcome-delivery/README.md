@@ -41,3 +41,26 @@ together as an implemented workflow: the selector itself invokes the outcome fam
 This does not prove module preflight, API/DOM/voice delivery, teaching usefulness, ordinary
 activation, Review response time, appliance memory or population-wide latency. The findings
 and next work are in `design/research/module-evidence-assembly.md` §Qualified outcome delivery cost.
+
+## D4225 — retained-memory attribution
+
+```sh
+make outcome-delivery-memory-smoke
+make outcome-delivery-memory
+make outcome-delivery-memory-update
+```
+
+Fresh research workers use controlled GC internally. They run the same source stream at
+capacities 1, 4 and the actual application capacity, retaining the service through the first
+post-work collection and then releasing it. All thirteen family availability/event counts
+must remain equal across capacities. A genuinely held/released WeakRef control must pass.
+Only memory counters, weak-receipt observer counts and the shared numeric source results
+are saved, capped at 48 KiB; there is no heap dump.
+
+**Observer limit:** creating a WeakRef keeps its target alive through the current job, so
+the synchronous stream temporarily pins every observed receipt even with a tiny cache.
+`workMs` and `memory.afterWork` are observer-influenced and cannot compare natural transient
+costs. The useful comparisons occur after job boundaries/forced collections, with the real
+service still reachable and then released. Surviving references do not prove a leak or an
+exhaustive reachable-object census. RSS need not follow live-heap changes.
+[ECMAScript WeakRef constructor, step 4](https://tc39.es/ecma262/multipage/managing-memory.html#sec-weak-ref-target).

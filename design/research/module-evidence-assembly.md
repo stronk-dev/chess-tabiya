@@ -4231,3 +4231,47 @@ capacity attribution. Both precede D4175's independently accepted ordinary modul
 handoff. All26 family/consumer pairs, original source sharing, literal bounded captions, strict
 receiving, assistance/role preflight and real selected API/DOM/voice delivery remain required.
 No source, deadline, semantic profile, content/native gate or whole1.0 requirement is waived.
+
+
+## Qualified outcome memory attribution — D4225, 2026-11-11
+
+The same original32-decision stream now runs in three fresh workers with actual candidate
+service capacities1/4/64. Each dispatches all13 real outcome factories and admits emitted
+instances. All per-decision family availability/event counts and legal-move counts agree
+across capacities. These counts do not prove full semantic payload equality. Forced GC occurs
+before/after source work; automatic collections can still occur during work. A held/released
+object control checks the observer, then original receipt WeakRefs are sampled after job
+boundaries. The real service is read after its retained-GC phase, then released. `[V]`
+([method](../../tools/d4175-outcome-delivery/README.md#d4225--retained-memory-attribution),
+[instrument](../../tools/d4175-outcome-delivery/measure.ts),
+[40,454-byte report](../../planning/foundation-source-identity/outcome-memory-2026-11-11.json))
+
+| Capacity | Live receipt observers after retained GC | Heap with service retained | Heap after service release/GC | Live receipt observers after release |
+|---:|---:|---:|---:|---:|
+|1 |1 |576.97MiB |556.86MiB |0 |
+|4 |4 |629.97MiB |557.12MiB |0 |
+|64 |32 |1123.44MiB |557.12MiB |0 |
+
+The table is a post-collection observation of these processes. Live-heap differences support
+separating service retention from other remaining allocations, but are not an exhaustive
+object-ownership census. After release, RSS still sits around1.36–1.41GiB while the observed
+heap is roughly557MiB. Reducing the service cache alone therefore does not explain all
+remaining live heap or guarantee an immediate RSS reduction. `[V]` (same report, `cases`)
+
+Independent review caught a crucial observer effect: **constructing** a WeakRef, as well as
+dereferencing one, keeps its target alive through the current job. This synchronous instrument
+therefore temporarily pins all32 receipts even at capacity1. Its `afterWork` memory and
+`workMs` are observer-influenced and cannot compare natural transient peaks, eviction timing
+or throughput. Post-job retained/released observations remain useful within their stated
+limits. Surviving observers after forced GC would not prove a leak. The report labels were
+corrected without changing any measured values. `[V]`
+([ECMAScript WeakRef constructor step4](https://tc39.es/ecma262/multipage/managing-memory.html#sec-weak-ref-target),
+current instrument and report)
+
+D4225 remains **doing**. The next causal experiment must inspect the actual retained global
+memos after service release. Source inspection identifies bounded pure-reading caches in
+`fen-memo.ts` and the factory memo in `evidence-factories.ts` as candidates, not proven causes
+of the remaining557MiB. No production cache limit, source semantics, profile, deadline or
+consumer activation changes in this research checkpoint. `[V]`
+([reading cache](../../packages/runtime/src/fen-memo.ts),
+[factory memo](../../packages/runtime/src/evidence-factories.ts); D4225)
