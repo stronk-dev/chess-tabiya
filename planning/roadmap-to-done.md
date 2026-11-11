@@ -9,10 +9,11 @@ qualification now uses the genuine foundation path:1928/1928 canonical cases ret
 including all13 migrated outcomes. D4230–32 repair context replacement, cross-scope failure retries
 and retired-token retention; both independent reviewers accept this finite implementation.
 [Review and verification](foundation-source-identity/scoped-acquisition-review-2026-11-11.md).
-Types, seven performance checks, build/governance and all43 affected repair tests pass. The
-broad software run had20545 passes/four repaired test-side failures; clean full-suite confirmation
-on the committed checkpoint is next. This is not cooperative delivery completion: actual run-facing live-permission/coalesced-cancel
-integration and measured cost/budget proof are next. D4224/D4225/D4228 and the ordinary consumer,
+Fresh committed software passes all20550 tests/583 files in843.04s, completing confirmation
+after a measured sleep interruption. Normal types, seven performance checks, build and governance
+also pass. The next actual caller contract, Hint §7b (D4233–35), is independently accepted: owner
+isolation, fresh live authority, genuine provider generations, finite source/voice phases and
+cooperative full acquisition. Its implementation and cost/budget proof are next. D4224/D4225/D4228 and the ordinary consumer,
 content/native and release holds remain open.
 
 The preceding D4224 private compiler-state dependency is verified: the existing

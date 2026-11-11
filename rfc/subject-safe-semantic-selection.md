@@ -1,7 +1,7 @@
 # RFC: subject-safe semantic selection
 
-- **Status:** implementing — current2026-11-11 private compiler-state dependency is verified and independently accepted: current construction7/all13 outcome sources retain exact full graphs/receipts;1928/1928 cases and24/89 qualified subjects unchanged. Full20502software/581+7performance/four/types/build/governance pass. §6.4 construction8/foundation receipt/service/actual source-operation adoption and fresh qualification remain owed. D4175ordinary26, broader D4167, native/content and release stay open.
-- **Scoped acquisition amendment:** §6.4 D4224 independently accepted2026-11-11 after source/buildability and meaning/lifetime review; construction8 implementation and fresh qualification remain owed.
+- **Status:** implementing — construction8 source/service checkpoint committed8dc421fc: genuine complete foundation receipts, shared original full/core inputs, fixed stages, bounded partial/completed owners and actual operation/census migration. Fresh1928/1928 retains24/89 qualified and all13 outcomes; source/lifetime reviews accept this finite slice. Fresh committed software20550/583 passes843.04s after the confirmed sleep-interrupted attempt; normal types/performance/build/governance pass. Actual cooperative caller/budget/consumer/native/content/release work stays open.
+- **Scoped acquisition amendment:** §6.4 D4224 independently accepted2026-11-11; construction8 source/API/qualification implemented at8dc421fc. The actual Hint caller mapping in hint-distance.md §7b is independently accepted2026-11-11; its production implementation and boundary proofs remain owed.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09
 - **Parent:** `archive/semantic-evidence-selection.md` (immutable historical contract).
@@ -10,7 +10,7 @@
   semantic-validation-authority only at the boundaries specified below.
 - **Work:** [[D1716]], [[D1718]], [[D1719]], and the canonical/candidate/avoidance portion of [[D4167]].
 - **Resource claims:** none on persisted schemas, migrations or product-convention versions.
-  The shared-packet owner moves its construction literal6→7 once for this coordinated image.
+  The initial shared-packet migration moved construction6→7; accepted §6.4 now owns construction8.
   No other RFC independently owns that literal.
 
 ```tabiya-claims

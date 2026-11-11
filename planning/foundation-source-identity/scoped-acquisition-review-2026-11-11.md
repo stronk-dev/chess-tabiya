@@ -1,5 +1,9 @@
 # Scoped acquisition implementation review — 2026-11-11
 
+**Final source checkpoint:** committed8dc421fc passes all20550 software tests/583 files
+in843.04s; normal types,7performance/four, build and governance pass. Actual Hint caller
+implementation, total budget and parent/consumer/release holds remain open.
+
 Contract: independently accepted `rfc/subject-safe-semantic-selection.md` §6.4.
 This checkpoint implements construction8 source ownership, qualification and the bounded service
 API. It does not complete D4224 or the run-facing cooperative adopter.
@@ -54,5 +58,11 @@ content/native/release remain open. No whole-product milestone or official pack 
 
 Normal `make typecheck test-performance build verify-governance` exits0 after the repairs:
 Svelte0 errors/warnings, seven performance tests/four files (90.62s), build, R1–R10 and C1–C8.
-A clean full software confirmation against the committed checkpoint remains the next check;
-no source changes followed its canonical/complete-suite execution.
+The clean committed software confirmation below completes this check; no source changes
+followed its canonical/complete-suite execution.
+
+Post-commit confirmation session53973 was interrupted by confirmed macOS sleep, including a
+928s interval matching two unrelated long test failures. It was deliberately cancelled130;
+its timings are not a software pass or an established code-regression cause. The unchanged
+normal suite subsequently exits0 as session34377:20550/583843.04s. No test limits or production
+sources were changed.

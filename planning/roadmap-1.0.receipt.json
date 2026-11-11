@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:beb0eba71648949c0383fba61465ae20e7ee6c8ee0e62d803295da737a1b6ea6",
+    "roadmap": "sha256:af8e2879c03045519106f03595adfb7c3cb7bec8704b26081e8259c5f4f8ef7f",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:80a18012d7b432d681d7631d34004dd9ac26d6eaeb161f04fe0e1f48f465d29a",
-    "rfcRegister": "sha256:fdcf85be04c51a844591c68b26099dec7fcb50241d0db5c706fe461b7ae2a303",
+    "workState": "sha256:be4ab76bb4f730880acf39cd98c7037fd901257269f298cc81488d1884dc57a5",
+    "rfcRegister": "sha256:e419289a1e1644148f0c428751301c4ebc5e8523e800b5da1c63f97311fb0822",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 632,
-      "doing": 175,
+      "doing": 178,
       "blocked": 1064,
       "done": 1947,
       "refused": 163
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Confirm the complete software suite on committed construction8 bytes, then implement actual run-facing cooperative acquisition with live authorization/currentness, coalesced cancellation and deadlines, and measure actual cost/budgets. Existing full selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no ordinary activation or release closure.",
+      "nextAction": "Implement accepted Hint §7b in verified dependency slices: owner-scoped actions/current policy, genuine source generation and absolute bounded startup/source deadline, then cooperative full acquisition with subscriber isolation. Run actual HTTP/lifetime/source proofs and cost/budget measurements. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 and full product holds remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4224 construction8 source/service checkpoint implements genuine complete foundation receipts, original core/full source reuse, retained readings-first tactical inputs, fixed acquisition steps and one bounded pending/completed owner LRU. Actual subject_outcomes operation/census use foundation; fresh canonical1928/1928 retains24/89 qualified and all13 outcomes. Payloads, operands, source vectors, case/population results and verdicts are unchanged; authority changes independently recomputed. Source/lifetime reviews accept finite implementation and D4230-32 repairs. Fresh normal types,7performance/four90.62s,build/governance pass. Complete software20545pass/four test-side failures were repaired without production changes;43 affected checks pass afterward. Clean committed full-suite confirmation is next; no whole-software green command claimed. Run-facing live-permission/coalesced-cancel integration and measured cost/budget proof remain D4224; memory/ordinary/Review/native/content/release remain open.",
+        "summary": "Committed8dc421fc construction8 source/service checkpoint fully confirmed:20550 software/all583 files843.04s after measured sleep interruption; normal types/Svelte,7performance/four90.62s,build/governance pass. Genuine foundation/full ownership and actual operation/census retain1928/1928,24/89 qualified and all13 outcome families. D4230-32 repairs verified. Next actual Hint caller handoff §7b independently accepted after retained-source-ID repair; D4233-35 owner/current-policy/generation/deadline/cooperative implementation and proofs remain owed. No parent, ordinary consumer or whole-product milestone completes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -633,7 +633,10 @@
           "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
           "packages/runtime/src/candidate-construction.test.ts",
           "apps/server/src/candidate-population-service.test.ts",
-          "apps/server/src/testing/candidate-retirement.test-support.ts"
+          "apps/server/src/testing/candidate-retirement.test-support.ts",
+          "rfc/hint-distance.md",
+          "apps/server/src/hint-service.ts",
+          "apps/server/src/rest.ts"
         ],
         "anchors": [
           {
@@ -1109,7 +1112,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:e62eab20e0d5f1a76f06e6dae34ca4507d3caab224848529186b4b18b26f751f"
+            "digest": "sha256:c89a78b0ab9b1b1fe344c1451ef070ad0f75418693743601d8d19e7125838fe8"
           },
           {
             "kind": "work_state",
@@ -1279,7 +1282,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:d7b76338b8fdff319c704d5a39b5d482a0cccda6541813ad27e2bd013a9213fa"
+            "digest": "sha256:d4712058ceccf67b04b74d802fa2d835ddb2f3a312cd37dc0c767e3c1140590a"
           },
           {
             "kind": "work_state",
@@ -1320,6 +1323,26 @@
             "kind": "work_state",
             "id": "D4232",
             "digest": "sha256:fa5a3050bdfcb8337866e410443d14f2e257e0738b149a68f859356cd5fdb46f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4233",
+            "digest": "sha256:ae666fac63241018f617a6803b331b06f347263603ed054426a3bf9325497f7f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4234",
+            "digest": "sha256:d351e77ede9ce08b2416e6dbb74bb20364307a0d67a851b2b4bf3b48278ce417"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4235",
+            "digest": "sha256:f94fda17d4df49a0aabee9e47d77f1e7db977b56a1456e3c2b239a416fcad9c3"
+          },
+          {
+            "kind": "rfc",
+            "id": "hint-distance.md",
+            "digest": "sha256:d0616423fb50df21d29d966b116e2a015069508ddead5a04ad115d9c281bb1c5"
           }
         ]
       },
@@ -1340,10 +1363,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Confirm the complete software suite on committed construction8 bytes, then implement actual run-facing cooperative acquisition with live authorization/currentness, coalesced cancellation and deadlines, and measure actual cost/budgets. Existing full selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no ordinary activation or release closure.",
+      "nextAction": "Implement accepted Hint §7b in verified dependency slices: owner-scoped actions/current policy, genuine source generation and absolute bounded startup/source deadline, then cooperative full acquisition with subscriber isolation. Run actual HTTP/lifetime/source proofs and cost/budget measurements. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 and full product holds remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4224 construction8 source/service checkpoint implements genuine complete foundation receipts, original core/full source reuse, retained readings-first tactical inputs, fixed acquisition steps and one bounded pending/completed owner LRU. Actual subject_outcomes operation/census use foundation; fresh canonical1928/1928 retains24/89 qualified and all13 outcomes. Payloads, operands, source vectors, case/population results and verdicts are unchanged; authority changes independently recomputed. Source/lifetime reviews accept finite implementation and D4230-32 repairs. Fresh normal types,7performance/four90.62s,build/governance pass. Complete software20545pass/four test-side failures were repaired without production changes;43 affected checks pass afterward. Clean committed full-suite confirmation is next; no whole-software green command claimed. Run-facing live-permission/coalesced-cancel integration and measured cost/budget proof remain D4224; memory/ordinary/Review/native/content/release remain open.",
+        "summary": "Committed8dc421fc construction8 source/service checkpoint fully confirmed:20550 software/all583 files843.04s after measured sleep interruption; normal types/Svelte,7performance/four90.62s,build/governance pass. Genuine foundation/full ownership and actual operation/census retain1928/1928,24/89 qualified and all13 outcome families. D4230-32 repairs verified. Next actual Hint caller handoff §7b independently accepted after retained-source-ID repair; D4233-35 owner/current-policy/generation/deadline/cooperative implementation and proofs remain owed. No parent, ordinary consumer or whole-product milestone completes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1956,7 +1979,8 @@
           "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
           "packages/runtime/src/candidate-construction.test.ts",
           "apps/server/src/candidate-population-service.test.ts",
-          "apps/server/src/testing/candidate-retirement.test-support.ts"
+          "apps/server/src/testing/candidate-retirement.test-support.ts",
+          "apps/server/src/rest.ts"
         ],
         "anchors": [
           {
@@ -2207,7 +2231,7 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:c86443f0e87cc1f5e0ee50258974278710ae48db811d70ad0905dab5d067f68c"
+            "digest": "sha256:d0616423fb50df21d29d966b116e2a015069508ddead5a04ad115d9c281bb1c5"
           },
           {
             "kind": "rfc",
@@ -2837,7 +2861,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:e62eab20e0d5f1a76f06e6dae34ca4507d3caab224848529186b4b18b26f751f"
+            "digest": "sha256:c89a78b0ab9b1b1fe344c1451ef070ad0f75418693743601d8d19e7125838fe8"
           },
           {
             "kind": "work_state",
@@ -2967,7 +2991,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:d7b76338b8fdff319c704d5a39b5d482a0cccda6541813ad27e2bd013a9213fa"
+            "digest": "sha256:d4712058ceccf67b04b74d802fa2d835ddb2f3a312cd37dc0c767e3c1140590a"
           },
           {
             "kind": "work_state",
@@ -3008,6 +3032,21 @@
             "kind": "work_state",
             "id": "D4232",
             "digest": "sha256:fa5a3050bdfcb8337866e410443d14f2e257e0738b149a68f859356cd5fdb46f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4233",
+            "digest": "sha256:ae666fac63241018f617a6803b331b06f347263603ed054426a3bf9325497f7f"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4234",
+            "digest": "sha256:d351e77ede9ce08b2416e6dbb74bb20364307a0d67a851b2b4bf3b48278ce417"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4235",
+            "digest": "sha256:f94fda17d4df49a0aabee9e47d77f1e7db977b56a1456e3c2b239a416fcad9c3"
           }
         ]
       },
@@ -3464,7 +3503,7 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:c86443f0e87cc1f5e0ee50258974278710ae48db811d70ad0905dab5d067f68c"
+            "digest": "sha256:d0616423fb50df21d29d966b116e2a015069508ddead5a04ad115d9c281bb1c5"
           },
           {
             "kind": "rfc",

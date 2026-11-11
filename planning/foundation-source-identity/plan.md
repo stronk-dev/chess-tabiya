@@ -3619,3 +3619,53 @@ D4230–32 close, D4224 remains doing. Actual live run-facing authorization/curr
 cancellation and cost/budget proof, D4225 memory, D4228 paged Review, D4175 ordinary26/D4167 and
 D3928 content/native/release remain open. No parent RFC or whole-product milestone closes.
 Details: planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md.
+
+
+### 2026-11-11 — construction8 confirmation interruption and next caller preflight
+
+8dc421fc is committed; production remains unchanged. Confirmation session53973 is not a green
+certificate: macOS `pmset -g log` records clamshell sleep17:29:37 local, maintenance sleeps including
+17:39:39→17:55:07 (928s), and full wake17:58:41. Its unrelated test failures include928487ms and
+926378ms cases during that interval. The interruption invalidates an uninterrupted timing claim;
+it does not establish a code-regression cause. The owned runner was deliberately interrupted130
+and verified gone, then normal `make test-software` restarted as session34377 with unchanged
+limits/commands/source. Its result remains pending; do not count either attempt as a pass yet.
+
+Independent source/lifetime preflight of accepted subject-safe§6.4 and Hint§7a finds three
+concrete caller seams, now owned as D4233–D4235: actions lack authenticated owner binding and
+fresh full-policy rechecks; reuse identities omit the actual provider generation; provider10s
+and scheduler+1s bounds do not define a total local-source-work deadline. These are static
+source observations, not completed HTTP exploit/cancellation/budget proofs. The caller must
+attach subscribers before work, revalidate each independently and retain only pure shared data.
+Foreign polls/cancels must not affect another action. First source identity must account for
+real cold-start generation changes; no readiness flag or invented generation counter suffices.
+
+Next implementation is the bounded real caller handoff, after full committed-source confirmation.
+Pin owner/fresh-policy/generation/deadline semantics and independent review before implementing
+any addition beyond accepted clauses. Keep full Hint packets/ordering and independent optional
+voice fallback. No pending/delivery/Review5s latency gate, consumer capability or parent closes.
+
+
+### 2026-11-11 — committed construction8 fully confirmed; Hint caller handoff accepted
+
+Awake session34377 exits0 on committed8dc421fc:20550 software tests/all583 files pass843.04s.
+No production bytes changed between commit and confirmation. This completes the normal source
+checkpoint alongside existing types/Svelte0errors0warnings,7performance/four90.62s, build and
+complete governance. The sleep-interrupted/cancelled130 attempt remains recorded above; its
+failures were not relabelled as a pass or hidden by timeout changes. All code stays committed.
+
+Independent source/buildability and meaning/lifetime reviews accept new Hint§7b after one
+source-identity return: a retained sealed action keeps its ID/source and refuses replacement
+under that ID with zero discovery/search; only genuine absence may resolve a replacement that
+the strict recovery parser refuses. The accepted handoff pins authenticated action/original
+writer ownership and fresh authoritative policy, bounded pre-ack slots, attach-before-work
+subscribers, both actual generation domains, terminal-only attempt IDs, a fixed11s source-work
+cap at production settings, unchanged10s provider timeout and independent2s voice fallback.
+Mock registry supervisorStart0 is distinct from engine generation1; no Stockfish ticket is
+invented. This is contract acceptance, not implementation or pending/delivery latency clearance.
+
+RFC/register leading status is corrected from stale construction7/"construction8 owed" to the
+actual committed source/service checkpoint. D4233–35 remain doing and own the next concrete
+caller implementation/tests; D4224/D4225/D4228/ordinary26/D4167/D3928 and full product holds stay.
+Next: implement accepted §7b in verified dependency slices, preserving the full Hint sources,
+permissions, client-action/receipt behavior and normal gates. No parent RFC or 1.0 milestone closes.

@@ -1,5 +1,10 @@
 # RFC: Guided-hint disclosure distance
 
+**Independent acceptance 2026-11-11 — D4233–D4235, §7b:** source/buildability and
+meaning/lifetime reviews accept the bounded caller handoff, including the retained-action
+source-replacement repair. Decision and limits: `planning/foundation-source-identity/plan.md`.
+This accepts the contract for implementation, not its implementation, latency or parent closure.
+
 **2026-10-15 joint amendment acceptance:** independent review accepts §3a's exact current
 source/disclosure/compiler/wire contract with the coordinated module image. Earlier unaccepted
 labels for that clause are history; actual source/API/native migration and unrelated parent
@@ -739,6 +744,114 @@ new or duplicating search; (3) deliver old DELETE after newer creation with the 
 policy-refused late replies cause no invented DELETE; (6) same-action repeat and restart404 reuse
 the key/operation, while explicit retry/remount uses a different one; (7) invalid HTTP keys acquire
 zero sources; (8) existing retained-progress/preset/ceiling/strict receipt/source tests stay green.
+
+### §7b — Authenticated cooperative caller handoff (independently accepted, D4233–D4235)
+
+This clause maps accepted subject-safe-semantic-selection §6.4 to the actual Hint service.
+It owns [[D4233]] action/live authority, [[D4234]] source-generation identity and [[D4235]] the
+explicit source-work deadline; each remains open until its actual implementation proof passes.
+The source gate is the independent production-source/lifetime preflight recorded in
+`planning/foundation-source-identity/plan.md`, not a new chess-selection rule. Existing full
+packet populations, `hintPacketRoots()` order, disclosure templates, ceilings, receiptv2 and
+closed POST/GET/DELETE envelopes stay unchanged. No persisted schema, new evidence issuer,
+source cache or configurable collector scheduler is introduced.
+
+**Actions and live authority.** Bind each operation internally to authenticated learnerId,
+originating writerId, exact run/decision/FEN, rung, clientRequestId and immutable parsed
+assistance intent. A repeated action cannot replace that intent or adopt another owner.
+Use an owner-scoped internal action key; do not silently add a principal field to the public
+`hintRequestId` algorithm. GET/DELETE pass the authenticated owner internally. A readable run
+does not entitle a caller to another action: an owner mismatch returns the existing unknown404
+without inspecting, cancelling or rebinding the victim. Existing authentication/run-read
+refusals still apply before that lookup.
+
+The production revalidator calls actual identity/RunService authorities, including the original
+writer lease, grants, rated/disclosure state, decision/FEN, role/workflow and genuine campaign
+origin. Recompile the captured assistance intent against current server authority; never treat
+a captured finalized-assistance value as continuing permission. Recheck after REST's awaited
+capability work, before acquisition, after discovery, at every advance/yield boundary, before
+voice, after voice and before publication; GET rechecks too. A changed original decision,
+role/workflow, writer or required permission makes the action stale/refused rather than
+recompiling a higher-permission packet for it. Client-local preference changes use §7a's actual
+DELETE/retired-action protocol; the server does not invent knowledge of unreceived browser state.
+Optional voice availability may fall back independently; it is not a lower chess-hint ceiling.
+
+**Bounded startup and true source identity.** Reserve an action slot before awaiting discovery;
+pre-acknowledgement actions count in the same existing maxOperations bound. Concurrent identical
+actions coalesce, including startup. No separate unbounded startup/promise map is allowed.
+Timeout/eviction/cancellation must settle/detach the slot and prevent late discovery from creating
+work. The original POST transport signal is not the lifetime of an acknowledged protocol action.
+
+Successful identity uses two existing, distinct generation domains: the provider registry's
+string generation and `engines.establishedGeneration("stockfish-analysis")`'s positive numeric
+generation. Capture both from actual application authorities; compare each to its own current
+authority before reuse, work and publication. Compare delivery.acquisition.generation to the
+numeric engine generation only. Current Stockfish traversal supplies no ProviderRegistry ticket;
+do not fabricate one. Mock registry supervisorStart0 and actual mock engine generation1 are valid
+different domains. Neither readiness nor a new counter substitutes for either authority.
+
+An already-established pair can seal the source identity immediately. Otherwise perform bounded
+engine discovery, revalidate live authority, then capture the actual post-handshake pair before
+sealing the successful operation/horizon identity. The first pending acknowledgement therefore
+uses an actual established source, not a pre-start generation that every cold spawn replaces.
+Keep the existing request-ID function and its exact source parameter: encode the two generations
+with the existing operation/depth/plies profile. Actual source replacement invalidates retained
+reuse; same-action restart recovery remains strict and a fresh explicit action uses a new client
+key. Measure the unchanged1500ms pending requirement; asynchronous discovery does not waive it.
+
+A retained action with a sealed requestId keeps that exact ID and source image. A generation
+replacement makes repeat POST/GET return source_unavailable/identity_mismatch under the original
+ID, with zero replacement discovery or search; never rebind the retained slot or create a second
+operation for it. An existing terminal-only attempt likewise stays terminal. Only a genuinely
+absent action after eviction/restart may resolve a new source and produce a replacement ID;
+§7a's expected-ID parser then rejects that changed ID during same-action recovery. A new explicit
+action uses a new client key. Pure owner-scoped lookup may recover an existing ID for refusal,
+but grants neither source reuse nor relief from complete preflight.
+
+Early policy/contract/stale/start-failure paths never start a provider merely to calculate an ID.
+Where the existing terminal response requires requestId, derive a terminal-only attempt image
+from actual currently observed registry/established-engine values (including null), explicitly
+distinguished from an established-source image. It grants no horizon or source authority and
+cannot be promoted into a successful receipt. No fictional successful generation or wire fallback.
+
+**Shared work and finite deadlines.** A pending HorizonJob owns a Set of attached operations.
+Attach the operation and its job reference before starting/deferring work. Revalidate subscribers
+individually: detach only an invalid/expired/cancelled action while a valid peer can continue on
+the same pure owner. With no active subscribers, abort/remove unfinished work and perform no
+further provider, collector, voice or publication work. Settled cached horizons retain pure
+source data and no permission-bearing subscriber/first-request closure.
+
+timeoutMs remains the unchanged normalized provider timeout (production10000ms). Define the
+new total *source-work* cap as timeoutMs+1000ms (production11000ms), beginning before discovery.
+It covers startup, provider waiting/execution, full local acquisition and horizon selection.
+Only remaining positive scheduler waiter budget reaches the scheduler; the provider's normalized
+timeout value stays unchanged. A pending shared horizon inherits its creator's absolute cap;
+joining, changing packet or removing that creator never resets/extends it. Each action also
+honors its own earlier cap. Expiry of the shared job budget ends that source job for all waiters;
+it is distinct from cancelling one subscriber. Exhaustion returns the existing typed deadline
+failure, never honest-empty, fabricated absence or partial successful coverage.
+
+Acquire full packets through begin → one actual advance → real macrotask → fresh checks, with
+seal-only read on completion. Recheck signal, monotonic source deadline, current source identity
+and live subscribers before every advance, after each yield and before source selection publishes
+its complete horizon. A retired candidate token is unavailable/failure; never reacquire into its
+old receipts. No mid-function preemption is claimed. Optional voice begins only after successful
+source publication and keeps its independent existing2000ms bound; voice failure/timeout retains
+the deterministic hint. Revalidate authority/source/cancellation after voice before delivery.
+This phase separation does not claim a new whole-response latency certificate or reset the source
+cap. Existing1500ms pending/150ms resolved, optional-voice and Review5s obligations remain.
+
+**Required falsifiers.** Actual authenticated application controls must prove foreign readable
+participants cannot inspect/cancel/rebind an action, including equal client keys and writer
+handoff. Real source/service controls cover cold and warm generations (both domains), concurrent
+startup coalescing/capacity/late completion, source replacement, malformed preflight before work,
+and sealed-action repeat after source replacement (same ID, refusal, zero new discovery/search),
+direct and foundation-first full acquisition, actual yields/heartbeat, retirement, deadline and
+mid-step run/disclosure/grant/role/help changes. Revoke/cancel/expire the first of two shared
+waiters and its peer in the opposite order; genuine source inputs are acquired once while the
+survivor completes. Include ignored-abort provider/voice results, cache-hit authorization and
+fresh GET refusal. Existing §7a identity/client cleanup, pressure, recovery, rung, receipt and
+optional-voice tests stay. Close only measured boundaries; parent/ordinary/budget holds remain.
 
 ### §8 — Rated play is guarded at the capability boundary
 

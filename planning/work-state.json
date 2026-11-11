@@ -35426,7 +35426,7 @@
       "id": "D4224",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:d7b76338b8fdff319c704d5a39b5d482a0cccda6541813ad27e2bd013a9213fa",
+      "sourceDigest": "sha256:d4712058ceccf67b04b74d802fa2d835ddb2f3a312cd37dc0c767e3c1140590a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35502,6 +35502,33 @@
       "uxItems": [],
       "evidence": "planning/foundation-source-identity/scoped-acquisition-review-2026-11-11.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4233",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ae666fac63241018f617a6803b331b06f347263603ed054426a3bf9325497f7f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
+    },
+    {
+      "id": "D4234",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d351e77ede9ce08b2416e6dbb74bb20364307a0d67a851b2b4bf3b48278ce417",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
+    },
+    {
+      "id": "D4235",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f94fda17d4df49a0aabee9e47d77f1e7db977b56a1456e3c2b239a416fcad9c3",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
     }
   ]
 }
