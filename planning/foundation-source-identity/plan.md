@@ -2928,3 +2928,8 @@ is discharged by this Profile-only repair, and a complete software pass remains 
 D4216 closes at the scoped test-repair checkpoint: 26/26 focused Profile tests pass.
 The complete software/performance certificate remains outstanding; the Review and
 choice-source failures reported in the interrupted run remain open work.
+
+The prepared king references are saved in semantic-validation-king-outcome-sources.ts
+with semantic-validation-king-outcome.test.ts: 68 focused tests pass, covering all 48
+selected complete populations and 20 mirror controls. This is a research fixture checkpoint,
+not canonical source admission; the qualified-subject count remains 19.

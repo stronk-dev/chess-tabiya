@@ -40953,3 +40953,12 @@ overall). Fixtures, cohort sizes, behavioral assertions, unit defaults and separ
 performance checks remain unchanged. D4216 closes for this scoped test correction.
 The interrupted full suite is not green: recorded-Review and choice-source failures still
 need diagnosis and a complete rerun. This commit does not discharge them.
+
+### 2026-11-11 — Prepared king references saved as a tested checkpoint
+
+The D4215 preparation now has durable independent king-zone and opposition reference
+fixtures and 68 focused tests. The tests check 48 complete original-subject populations,
+all literal successor states and 20 exact mirror pairs through the real production routes.
+All 68 pass in 3.01 seconds overall. The reference sources remain unregistered: canonical
+qualification is still 19 subjects over 1,524 cases. The accepted storage migration and
+separate authority integration remain required before these sources can change that count.
