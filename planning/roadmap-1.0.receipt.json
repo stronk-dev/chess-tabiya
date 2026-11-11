@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ea4c655b1513c94186b057b47dfccf3e350cd4901e3f9ef7cfb18b8b8f3f7e7c",
+    "roadmap": "sha256:87c55fac045012f9ba045c695e0293f16a66a0882f2c0cfcd7167108847cb856",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:596c21cfc51f48f4db2c3b7bdd1b4eb5d13729170d9898b3fd7bab394cb13826",
-    "rfcRegister": "sha256:7a6b0a5508cc718b7b340da9d6203d2868bdc0d7bf6aaa1201b81844266d76ad",
+    "workState": "sha256:29615fb9cda71107b73f51181acc3d3d8f07ba19656b35c199c4e2ce9097b24b",
+    "rfcRegister": "sha256:a1cd27a2a560a00e73d27e32003ce1367fc0f2f8af73478f7791444ba2603565",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -18,11 +18,11 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 80,
+    "assignedRfcs": 79,
     "activeRfcLifecycle": {
       "draft": 20,
       "accepted": 0,
-      "implementing": 51,
+      "implementing": 50,
       "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 632,
-      "doing": 174,
+      "doing": 173,
       "blocked": 1063,
-      "done": 1935,
+      "done": 1936,
       "refused": 163
     },
     "workItems": {
@@ -354,13 +354,13 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Complete the case-storage cutover software/performance proof, then qualify the five remaining outcome families and continue reverse consumer adoption.",
+      "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 retains source-local coverage across seven derived families; measured200 runs/6400 decisions. Canonical1524/1524 over89subjects/19qualified remains unchanged. D4215 now migrates30 consumers, compiler and extracted Git guard to index2/two bounded parts, preserving exact cases and all receipt fields except declared recomputed hashes. Reader4754/28, actual storage/Git48/two, real staged guard, types and build pass; D4218 fixes the reproduced >1MiB Git transport failure. Complete cutover software/performance verification remains. The pre-migration847d9ab0 full gate passed19272/573 and seven performance tests. Five outcome qualifications, D4167/ordinary26 and held D3928 remain; D4217 records two superseded research-model inventory assertions.",
+        "summary": "D4215/D1 is independently complete and archived. Index2/two bounded parts,30 consumers/compiler/Git guard preserve all1524 ordered cases and semantic receipt fields. Committed0dda10a3 full verification passes19320 software tests/575files(768.81s), seven performance tests/four(61.45s), canonical1524/1524,89subjects/19qualified and all preflights. Real staged/first-parent guards, large-blob regression, types/build/governance and normal hooks pass. D4218 transport bug is closed. D4200 durable coverage remains complete. Five outcome qualifications, D4167/ordinary26, D4217 research-model debt and held D3928 remain; no whole capability or release gate is promoted.",
         "impact": "advanced",
         "evidence": [
-          "rfc/semantic-validation-case-storage.md",
+          "rfc/archive/semantic-validation-case-storage.md",
           "packages/runtime/src/semantic-validation-case-storage.test.ts",
           "packages/runtime/src/semantic-validation-case-storage.ts",
           "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
@@ -607,9 +607,9 @@
         ],
         "anchors": [
           {
-            "kind": "rfc",
-            "id": "semantic-validation-case-storage.md",
-            "digest": "sha256:6acd2c91f901202bb36f211ff8022c862629d465ae62f4778e03d5a90ec9ee46"
+            "kind": "work_state",
+            "id": "D4215",
+            "digest": "sha256:6208239246427d2dcef62d91fb67d93d9e39f60a6c257f5ff5b53d10fc4c8929"
           },
           {
             "kind": "work_state",
@@ -5292,7 +5292,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 29,
+      "rfcCount": 28,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

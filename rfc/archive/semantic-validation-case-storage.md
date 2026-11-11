@@ -1,6 +1,6 @@
 # RFC: Semantic validation case storage
 
-- **Status:** implementing — 2026-11-11; canonical parts, compiler, current readers and Git guard migrated; complete software/performance verification remains.
+- **Status:** implemented — 2026-11-11 after independent D1 completion review, complete committed-byte software/performance verification and exact case/receipt preservation.
 - **Author:** codex, under the full-foundation and pre-launch zero-legacy rulings.
 - **Created:** 2026-11-11
 - **Parent / amends:** semantic-validation-authority.md §§4,6 and its owner-authority temporal guard.
@@ -49,8 +49,11 @@ D4217 separately records two obsolete inventory assertions in the disposable D41
 proposal model; no frozen fixture or original assertion was rewritten.
 
 The complete pre-migration software gate on `847d9ab0` passes 19,272 tests in 573 files
-and seven performance tests in four files. The cutover still needs its own complete
-software/performance verification and D1 remains open.
+and seven performance tests in four files. The committed cutover `0dda10a3` passes its complete normal software gate: 19,320 tests
+in 575 files (768.81s), then seven performance tests in four files (61.45s). Actual
+repository staged and committed first-parent guards, governance, types, build and normal
+commit hooks pass. Independent review accepts all seven verification items and D1.
+The wider source qualifications, consumer adoption and D4217 remain separately open.
 
 ## Contract
 
@@ -159,13 +162,14 @@ case-file assumption at its explicit registry and Git-history boundaries.
 ## Open questions
 
 None for the owner. Independent contract and bounded loader reviews are accepted.
-The source/temporal adoption is implemented. Complete cutover verification and D1 remain open.
+The source/temporal adoption and all required cutover verification are complete.
+Independent completion review identified no remaining D1 proof.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 | --- | --- | --- | --- | --- |
-| D1 | Complete storage migration, all reader adoption and temporal guard proof | semantic-validation-case-storage.md | Existing foundation plan and exploration log | |
+| D1 | Complete storage migration, all reader adoption and temporal guard proof | semantic-validation-case-storage.md | Foundation plan and exploration log,2026-11-11; independently accepted complete0dda10a3 proof | 2026-11-11 |
 
 ## Changelog
 
@@ -177,3 +181,4 @@ The source/temporal adoption is implemented. Complete cutover verification and D
 - 2026-11-11 — independent review accepts the required guard extraction and the exact three-field hash clarification; all semantic outputs and other receipt fields remain pinned.
 - 2026-11-11 — canonical index/parts, compiler,30 consumers and Git guard adopted with exact receipt preservation,4754 reader tests and actual temporal controls. Full cutover gates/D1 remain.
 - 2026-11-11 — D4218 transport repair independently accepted after a real staged-gate ENOBUFS failure; large-blob regression red→green and actual HEAD→index pass.
+- 2026-11-11 — independent completion review accepts D1 after full19320/575 software, unchanged7/four performance, actual staged/committed guards and exact preservation; archived as a completed finite storage change.

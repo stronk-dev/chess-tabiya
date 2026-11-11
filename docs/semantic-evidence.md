@@ -1,11 +1,9 @@
 # Semantic evidence
 
 Current qualification is reported by `make semantic-validation-check` and the generated
-semantic-validation receipt. The four transition sources castled1/rights_lost1/capture1/
-clock_reset1 and seven current foundation event sources have complete required validation
-arms: opposition2, backward2, pawn-file-group1, physical-slider2, file-state1, stationary
-file-access1 and pawn-islands2. Other subjects retain their own outstanding profile arms.
-Qualification is separate from consumer admission, application reach and release proof.
+semantic-validation receipt. Each subject must pass its own required profile arms; a
+validated prerequisite does not automatically qualify a new derived outcome. Qualification
+is separate from consumer admission, application reach and release proof.
 
 `planning/foundation-source-identity/plan.md` records the current implementation/checkpoint and
 remaining D4167 canonical/candidate/ordinary/avoidance/bot adoption. The accepted source-first
@@ -437,7 +435,8 @@ with four independent authorities:
 2. **Validated** — the subject's literal profile in `semantic-validation-profiles.json` carries all
    six arms (positive, semantic negative, orientation, counterfactual, imported population,
    external label) and every non-`not_applicable` arm passed. Positives and negatives are data
-   cases in `semantic-validation-cases.json` executed by `semantic-validation-runner.ts` through
+   cases reached through the index in `semantic-validation-cases.json` and executed by
+   `semantic-validation-runner.ts` through
    the registered production operation (`semantic-validation-operations.ts`); each case resolves
    an independent authority (a moved D1713 assertion whose test body and expectation bytes are
    digest-frozen, a rules oracle plus proposition, an immutable cited source, or an owner row in
@@ -459,6 +458,19 @@ with four independent authorities:
 4. **Learner-eligible** — `admitValidatedSemanticInstance` admits one exact instance only when its
    subject verdict is `passed` *and* the instance carries the sole-factory value receipt with a
    reproduced payload digest. A missing, alternate or swapped receipt is `event_value_unverified`.
+
+Case storage is build/test-only. The schema-2 index names schema-1 case parts; one shared
+loader supplies compiler, tests and Git history with the same complete ordered case
+document. Missing parts, unsafe paths, duplicate identities and malformed envelopes
+refuse the entire read. The pure runtime, HTTP application and client graphs do not load
+the storage or Git-tree helpers.
+
+The compiler hashes the complete normalized document, so repartitioning preserves the
+case digest. The temporal guard reads each tree independently, permits the old single-file
+shape only for historical base reads, and checks exact profile subject/arm and owner-row
+identity. Git blob reads distinguish actual missing objects from transport errors and
+support the existing source-size limit. See the implemented
+[case-storage RFC](../rfc/archive/semantic-validation-case-storage.md).
 
 The live register and generated receipt are the current inventory. Historical wave counts and
 failed attempts are retained in `planning/exploration/log.md` and the source implementation plan.

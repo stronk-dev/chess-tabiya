@@ -35344,18 +35344,18 @@
     },
     {
       "id": "D4215",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:44b2142d275db8683da0cf67c7179e007aad4ac823d9c6ca22b001c81f059668",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6208239246427d2dcef62d91fb67d93d9e39f60a6c257f5ff5b53d10fc4c8929",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-11"
+      "evidence": "rfc/archive/semantic-validation-case-storage.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D4216",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:e4efef7fb9284d60634a0a5a95cb609a51d6fbc89f3f2e43126b900b63b37df1",
+      "sourceDigest": "sha256:05f684a82efa400d4032eb9a3a9602b37472a16583121bd9017926740d60e33c",
       "uxItems": [],
       "evidence": "apps/server/src/learner-profile.test.ts",
       "evidenceKind": "path"

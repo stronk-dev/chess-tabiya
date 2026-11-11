@@ -2,8 +2,9 @@
 
 **Case storage follow-up, 2026-11-11.** D4215's executed complete attack-count proof exceeds
 the available singleton registry space after the prepared king cases.
-`semantic-validation-case-storage.md` specifies bounded case parts and the coordinated
-compiler/test/history reader migration. The repaired contract is independently accepted for bounded implementation.
+`archive/semantic-validation-case-storage.md` records the completed bounded case parts and
+coordinated compiler/test/history reader migration. It supersedes the singleton-storage
+assumption below; case/authority semantics are unchanged and D1 is independently discharged.
 
 **Current bounded Slice B checkpoint — 2026-11-09, uncommitted.**
 

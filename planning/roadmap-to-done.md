@@ -2,10 +2,12 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. On `847d9ab0`, normal software verification passed
-**19,272 tests in 573 files** (742.66 seconds) and **seven performance tests in four files**
-(64.17 seconds). All 1,524 canonical cases pass across 89 subjects, 19 of which qualify.
-The earlier Review and choice-source failures did not recur in this isolated run.
+The full 1.0 goal remains active. On `0dda10a3`, complete normal software verification
+passes **19,320 tests in 575 files** (768.81 seconds), then **seven performance tests in
+four files** (61.45 seconds). All1,524 canonical cases pass over89subjects,19qualified.
+The real staged and committed first-parent guards, types/build/governance and normal
+commit hooks pass. The finite case-storage RFC/D1 has independent completion acceptance
+and is archived; D4215 and its transport repair D4218 are closed.
 See the [exploration log](exploration/log.md).
 
 **D4200 durable availability** now carries per-decision source coverage through revision 10
@@ -35,14 +37,12 @@ and release proof remain. D3928 still holds content, native startup and release 
 official pack graduates. The [foundation plan](foundation-source-identity/plan.md) tracks
 implementation and verification.
 
-The pawn qualification wave now has its complete software verification. The generated
-receipt retains every record with one case per line under the unchanged 5 MiB guard.
-D4215 now migrates thirty consumers, the compiler and extracted Git guard to index2 and
-two bounded case files. All cases and receipt results are preserved; only the independently
-reviewed hash metadata changes. Reader tests4754/28, actual storage/Git checks48/two,
-the real staged guard, types and production build pass. D4218 closes the reproduced
-Git output-buffer bug. The cutover still needs its complete software/performance verification.
-D4217 separately owns two obsolete inventory assertions in an older disposable research model.
+The canonical case registry now uses an index and two bounded parts, read through one
+shared compiler/test/Git loader. Exact ordered cases and receipt results are preserved;
+only the independently reviewed hash metadata changes. The
+[implemented case-storage RFC](../rfc/archive/semantic-validation-case-storage.md) is closed.
+D4217 separately owns two obsolete inventory assertions in an older disposable research
+model. New control-reference preparation remains unconnected and is not qualification.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

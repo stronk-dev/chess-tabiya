@@ -41000,3 +41000,13 @@ Independently reviewed bounded NUL-delimited blob reads now propagate transport 
 and distinguish genuine missing objects. Storage/temporal48/two and the actual repository
 HEAD→index guard pass; D4218 closes. Types and production build pass. Full cutover gates
 and D1 remain open; frozen assertions, source limits and chess qualifications are unchanged.
+
+### 2026-11-11 — Archived completed case-storage RFC
+
+Independent completion review accepts D4215/D1 after normal committed0dda10a3 passes
+19320software/575files(768.81s), then7performance/four(61.45s), canonical1524/1524 and
+all preflights. Complete case/receipt preservation, actual staged/first-parent and large-
+blob guards, all-reader adoption, types/build/governance and normal hooks are verified.
+The finite RFC moves to rfc/archive/semantic-validation-case-storage.md; D4215 closes
+in the same change. D4218 is closed and D4217 remains separate. Canonical qualification
+stays19/89; no broader source/consumer/content/capability or1.0 completion is claimed.

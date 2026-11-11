@@ -89,8 +89,7 @@
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
         "phase-source-composition.md",
-        "subject-safe-semantic-selection.md",
-        "semantic-validation-case-storage.md"
+        "subject-safe-semantic-selection.md"
       ],
       "completion": {
         "evidence": [
@@ -974,13 +973,13 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Complete the case-storage cutover software/performance proof, then qualify the five remaining outcome families and continue reverse consumer adoption.",
+        "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4200 revision 10 retains source-local coverage across seven derived families; measured200 runs/6400 decisions. Canonical1524/1524 over89subjects/19qualified remains unchanged. D4215 now migrates30 consumers, compiler and extracted Git guard to index2/two bounded parts, preserving exact cases and all receipt fields except declared recomputed hashes. Reader4754/28, actual storage/Git48/two, real staged guard, types and build pass; D4218 fixes the reproduced >1MiB Git transport failure. Complete cutover software/performance verification remains. The pre-migration847d9ab0 full gate passed19272/573 and seven performance tests. Five outcome qualifications, D4167/ordinary26 and held D3928 remain; D4217 records two superseded research-model inventory assertions.",
+          "summary": "D4215/D1 is independently complete and archived. Index2/two bounded parts,30 consumers/compiler/Git guard preserve all1524 ordered cases and semantic receipt fields. Committed0dda10a3 full verification passes19320 software tests/575files(768.81s), seven performance tests/four(61.45s), canonical1524/1524,89subjects/19qualified and all preflights. Real staged/first-parent guards, large-blob regression, types/build/governance and normal hooks pass. D4218 transport bug is closed. D4200 durable coverage remains complete. Five outcome qualifications, D4167/ordinary26, D4217 research-model debt and held D3928 remain; no whole capability or release gate is promoted.",
           "impact": "advanced",
           "evidence": [
-            "rfc/semantic-validation-case-storage.md",
+            "rfc/archive/semantic-validation-case-storage.md",
             "packages/runtime/src/semantic-validation-case-storage.test.ts",
             "packages/runtime/src/semantic-validation-case-storage.ts",
             "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
@@ -1227,9 +1226,9 @@
           ],
           "anchors": [
             {
-              "kind": "rfc",
-              "id": "semantic-validation-case-storage.md",
-              "digest": "sha256:6acd2c91f901202bb36f211ff8022c862629d465ae62f4778e03d5a90ec9ee46"
+              "kind": "work_state",
+              "id": "D4215",
+              "digest": "sha256:6208239246427d2dcef62d91fb67d93d9e39f60a6c257f5ff5b53d10fc4c8929"
             },
             {
               "kind": "work_state",

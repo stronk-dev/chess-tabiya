@@ -2997,3 +2997,18 @@ reviewed cat-file NUL protocol reads distinguish explicit missing objects from c
 transport errors, preserve exact blob byte lengths and retain the existing source-size
 bound plus framing. The real repository HEAD→index transition now passes. Production
 build and types also pass. Complete cutover software/performance proof still remains.
+
+### 2026-11-11 — D4215/D1 independently complete
+
+Normal committed0dda10a3 verification exits0:19320 software tests/575files in768.81s,
+then unchanged7performance/four in61.45s. Canonical1524/1524,89subjects/19qualified and
+all preflights pass. Actual repository HEAD→index and HEAD^1→HEAD guards, types/build/
+governance and normal commit hooks pass. Independent completion review accepts all
+seven criteria and D1, including exact ordered cases/full receipt preservation, actual
+Git and large-blob controls, all-reader adoption and runtime-graph separation.
+
+D4215 closes and its RFC is archived at rfc/archive/semantic-validation-case-storage.md.
+D4218 is already closed; D4217 remains owned separate research-model debt. No source
+qualification, ordinary consumer, content, capability or release gate is promoted. Five
+outcome qualifications and broader D4167/D4175 work remain. The new unconnected control
+reference preparation is not part of this full software run or a qualified source.
