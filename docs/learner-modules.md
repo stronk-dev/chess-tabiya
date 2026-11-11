@@ -20,8 +20,11 @@ stop decision and calculated pawn reply. Overviews do not claim every member has
 Ordinary Sight/Nudge/Review, avoidance and bot adoption remain separate D4167 work.
 
 The current checkpoint and measured gates are in `planning/foundation-source-identity/plan.md`.
-Software and builds pass locally; content/default native/release remain held at D3928. This is
-neither full foundation qualification nor parent/capability completion.
+The D3928 startup/content hold is now resolved: the grade-contract migration and original
+registry composition pass the complete content gate, and the real native Hint smoke starts
+successfully. Complete software/performance/build/governance gates also pass locally on10632884.
+Native Inspector journeys, broader qualification and release remain separate open obligations;
+this is neither parent/capability completion nor remote-CI clearance.
 
 Post-move grades now use a concise Nudge summary over the complete source operands. The exact
 Nudge policy keeps critical and completed-window facts first, then the current grade before routine
@@ -30,7 +33,15 @@ a local, explicit disclosure of its original full report, capped at400 words wit
 if too long. Review keeps the full report. The disclosure retires with its packet, region or
 preset, and old Open/Close controls cannot affect a later opening. Independent bounded closeout accepts
 these defects with13804 software checks passing; source qualification, native/default startup and
-whole-parent/release duties remain separate. The latter startup is held by D3928 content migration.
+whole-parent/release duties remain separate. The historical D3928 startup hold is resolved as above.
+
+The private `module-review-prefix.ts` helper now plans a complete genuine stored Review branch
+without running collectors. It retains root/incoming-edge units, original creation event sequence
+numbers and inherited node identities; limits1..32 cover each selected subject once. It refuses
+a narrowed boundary and validates the original storage boundary when planning. Its frozen metadata
+and pure cursor slicing are not evidence or authorization: the paged job still owes ownership,
+expected-cursor/currentness checks, total deadline, cancellation, final merge and public UI delivery
+under D4228. The existing per-node query is not reported as whole-game paging.
 
 The eleven learner modules (`rfc/learner-modules.md`, registered by `rfc/module-registration.md`)
 are compiled at runtime import. A module is a declaration, not a detector: it names which sealed

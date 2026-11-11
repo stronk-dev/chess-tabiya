@@ -1372,6 +1372,173 @@ The fixture oracle runs the single frozen prefix in one in-memory pass and must 
 bytes; a long run, mutation between pages, duplicated/omitted boundary node and provider
 cancellation are permanent negatives.
 
+###### D4241 — frozen-prefix Review job clarification (independently accepted, 2026-11-12)
+
+**Independently accepted on buildability, 2026-11-12.** Decision and four repaired returns:
+`planning/learner-modules/compiler2-independent-review-2026-11-02.md`. This bounded amendment
+makes the existing unimplemented paging arm literal. It preserves the five-second total job,
+32-subject page maximum, selected whole branch, source authority and final selection policy.
+D4224 cost/default proof remains required before ordinary activation; it does not prohibit
+implementing and testing this bounded job. No other query timing changes.
+
+**Request and branch.** This accepted clarification supersedes the earlier Review request,
+interim-page and response sketches in this subsection. The actual authenticated endpoint retains its closed `{assistance, query}`
+envelope. Assistance is untrusted requested intent and is compiled afresh by the server. Keep
+`requested: ModuleId[]` on Review: it names opened doors, never effective permissions. Replace
+only the Review query arm above with:
+
+```ts
+{
+  timing: "review";
+  requested: readonly ModuleId[];
+  branchId?: string;
+  nodeId?: string;
+  page: { limit: number; jobId?: string; prefixDigest?: string; cursor?: ReviewCursor };
+}
+```
+
+First requests omit all three job/digest/cursor fields. `limit` is a safe integer1..32.
+The server resolves an omitted branch by the existing Review selection order (imported mainline,
+latest outcome branch, then active branch); it always returns the resolved `branchId`. Optional
+`nodeId` selects a focus on that branch, not a shorter collection prefix. Continuations provide
+all three fields plus the resolved branch and the same focus/opened doors/configuration. A job
+id is an opaque server-issued handle, separate from the canonical prefix digest. Two first
+requests may create distinct jobs for an identical prefix without cancelling each other;
+capacity refusal never replaces a different job. Preserve `module.query_page@1`: this fulfils
+its specified but unimplemented Review arm; other timing requests/replies remain byte-compatible.
+
+**Metadata-only plan.** Resolve the full selected branch through the existing storage-owned
+`RecordedReviewBoundary` before any collector. Enumerate its original path once, root through
+tip. One subject is one original path entry: the root position; otherwise the position and its
+exact original incoming edge together. Registered windows are anchored to these entries and
+are not extra pagination subjects. A subject id canonically encodes selected branch, original
+node id and its actual creation event's `seq`. Equal FENs do not merge recorded subjects; inherited
+nodes keep their original node/edge metadata. Neither `creationEventOrdinal`, ply nor array index
+substitutes for event sequence. The prefix digest remains exactly the canonical digest of
+`{runId,eventHeadSeq,orderedSubjectIds}`; a nonce belongs only to job identity. The page cursor is
+`{afterEventSeq,afterBranchId,afterNodeId}` for the preceding page's last entry; `afterBranchId`
+is the selected branch context, including for inherited nodes. Pages cover at most `limit`
+whole entries in the original root-to-tip order. A final partial page is valid.
+
+**Authority and lifetime.** Jobs belong to authenticated principal, authorization/session,
+run, selected branch, focus, original decision stamp, requested/effective configuration and
+opened doors. Revalidate these against live authoritative state before each page, after every
+await/yield, and before final publication; a handle is never a grant. Run mutation, branch
+change, source availability/generation change, narrowed help or revoked access retires the
+job without publishing retained candidates. Unknown/foreign/retired handles refuse with no
+source metadata. Wrong digest, omitted/duplicated/replayed cursor or changed branch/focus/doors
+refuses before source work; a rejected foreign or malformed request cannot retire another
+owner's job. Never copy a retained partial pool into a new job or reset its deadline.
+
+The job owner has a positive safe-integer `maxJobs` bound, separate from provider queue and
+candidate-cache capacity. Initial application composition supplies1 explicitly as a bounded
+engineering starting point, not a measured memory-safe/default-throughput claim. Inject1 and2
+in capacity controls; measure actual jobs before ordinary activation under D4224/D4225. Capacity
+returns a typed refusal without acquisition or eviction. Retirement drops the job's source and
+candidate references on cancellation, stale authority, finite failure, expiry, successful final
+serialization and service shutdown. An idle expiry timer releases references without a later
+client request. It never extends the monotonic deadline. Pure source caches retain only their
+existing independent authority/lifetime. No new durable run schema or historical compatibility
+pipeline is introduced.
+
+**Clock and cooperation.** Start one absolute monotonic deadline no later than first collection;
+5,000ms includes inter-page HTTP/idle time. Each optional source receives the lesser of500ms
+and remaining job time, with real AbortSignal/currentness checks. Check before and after each
+indivisible synchronous unit, yield between units, and never pretend a synchronous collector
+can be preempted halfway through. Deadline overrun is typed `budget_exhausted`, not complete
+partial coverage. An HTTP abort cancels only that owned job. Continuations never renew the cap.
+
+Explicit cancellation after an interim response uses authenticated
+`DELETE /runs/:runId/modules/review-jobs/:jobId`, with no request body. Require the same current
+principal/session and run-read authority; a foreign, unknown or already retired handle returns
+the same source-free404. A matching job is atomically retired and aborts in-flight work before
+returning exactly `{jobId, state:"cancelled"}`. Cancel never needs a fake cursor or limit0, runs
+no collector and cannot affect another job. Finalization racing cancellation must recheck live
+job ownership before serialization. Revoked authority still retires on its live check/expiry;
+cancel is not an access bypass. Pre-response HTTP abort remains the separate cancellation path.
+
+**Literal interim wire, without transported authority.** Full original F1 values, brands and
+per-subject candidate pools stay server-side until whole-prefix completion. Interim replies
+carry no presentation packets and no raw candidate payloads or seal-shaped JSON. Their closed
+candidate references are `{subjectId, module, ordinal}`: an ordinal addresses one retained
+original candidate in that job/subject/module pool; clients cannot submit these as evidence.
+They are progress metadata only, not renderable components or a second evidence issuer.
+Interim source receipts are closed metadata records:
+
+```ts
+type ReviewJobSourceReceipt = {
+  subjectId: string;
+  invocationId: string; // actual declared source-plan invocation
+  sourceId: string;     // exact owned job invocation-plan row described below
+  projection: VersionedEvidenceId;
+  state: ReviewAdapterState
+    | { kind: "cancelled" }
+    | { kind: "stale" }
+    | { kind: "failed_typed"; reason: "budget_exhausted" | "source_failed" };
+};
+```
+
+`sourceId` names one literal row of the server-owned invocation plan, not a claimed generic
+Story adapter. Every row binds `{sourceId, owner, callable, projection, subjectId, invocationId}`
+to an existing actual owner and its exact output. Derive the demanded image from the effective
+module's registered source acceptances and actual source routes, then join these owners:
+
+| source population | existing owner/callable and exact projection authority |
+|---|---|
+| Current recorded Review packet slots | `review-evidence.ts` current packet/recorded source adapter registry and its actual slot formula; reuse its adapter id only for that registry's own projections |
+| Recorded grade | RunService's existing grade source owner `reviewSources`; exact `derived.grade.move_quality@2` source factory/route |
+| Original structural/window population | Same owner's `reviewPopulation` and the existing recorded semantic window owner; exact literal per-family projections from their original retained results |
+| Recorded measurements | Same owner's `reviewMeasurements`; each original measurement's own exact projection, never a grade or invented Story adapter |
+| Single-line recorded objectives | Same owner's `reviewObjectives`; `run.record.objective_transition@2`, not a fabricated two-branch comparison |
+| Other effective ordinary modules | `moduleQuerySourceRoutes` and their existing actual source context (installed opening, authored ledger, shapes, recorded comparison or explorer); the row joins that actual route's exact output projection |
+
+The literal plan must be total/set-equal over the demanded current callable image before
+collection; a missing owner or mismatched output refuses instead of fabricating registry
+membership. Source plan rows describe dispatch/metadata only and cannot mint evidence. Do not
+activate accepted-but-unsupplied routes, broaden module acceptances or hide a missing source
+behind the twelve Story adapters. Reuse the real finite `ReviewAdapterState` vocabulary, including
+`pending` and `not_yet_scheduled`; neither becomes `honest_empty`/`no_witness`. Validate source,
+invocation, projection and subject against that original owned job plan. No nonexistent generic
+`ModuleSourceReceipt` or unrestricted reason string is a wire contract. Failed/cancelled pages
+report only actually observed slots; unreached subjects never acquire fabricated receipts.
+
+The actual outer Review reply is exactly the existing nine-field `ModuleQueryPage`
+`{protocol, runId, timing, subjectNodeId, decision, requestedConfigDigest,
+effectiveConfigDigest, packets, suppressions}` plus required `review`. `subjectNodeId` is the
+validated focus when supplied, otherwise the selected branch tip; it never limits enumeration.
+Keep existing per-packet disclosure receipts; there is no new top-level disclosure or
+sourceReceipts field. All source metadata lives inside `review`.
+
+The Review metadata arm is exactly `{jobId, branchId, prefixDigest, pageSubjectIds,
+nextCursor, complete, state, elapsedMs, remainingBudgetMs, candidates, sourceReceipts, failure}`.
+`state` is `collecting | complete | cancelled | stale | failed`. `failure` is null except failed,
+where it is `budget_exhausted | source_failed`. Collecting requires non-null nextCursor,
+`complete:false` and `packets:[]`; complete requires null cursor, `complete:true` and final
+normal packets; every terminal noncomplete state requires null cursor and `packets:[]`.
+Elapsed/remaining values use the same absolute clock and remaining is clamped at zero.
+`candidates` is empty on final/terminal pages; source receipts retain honest upstream states.
+Collection-complete means all planned slots have been observed, not all upstream analysis ready:
+existing pending/not-ready Review controls and their disabled primary action remain truthful.
+Unauthorized/unknown-handle errors expose none of this metadata.
+
+**Finalization and proof.** After all original subjects, merge retained original evidence in
+canonical subject order, deduplicate shared evidence identity and run ordinary reducers once.
+Apply Story's existing top-eight convention once over the complete pool. Review Map's distinct
+zero-to-three-moment rule stays distinct. Assert F1/presentation brands before normal presentation
+serialization, then retire the job; the strict client accepts only the normal registered
+components. Never rank/truncate per page, render progress references, broaden a module's source
+acceptances or claim adoption merely because a plan names a source. Unavailable/pending sources
+retain their existing presentation state. The one-pass frozen-prefix oracle must equal final
+paged packet, disclosure and presentation bytes for limits1,2,32, inherited branches, repeated
+FENs and over32-entry paths. Compare the same run/decision/configuration/subject and suppressions;
+exclude only job identity and per-page progress metadata (`jobId`, `pageSubjectIds`, `nextCursor`,
+`elapsedMs`, `remainingBudgetMs`, interim candidate/source receipt slices). Neither evidence nor
+its source identity, complete final source coverage, ordering or content is excluded. Permanent
+negatives cover wrong owner/session/config/branch/focus, mutation/rewind/revoke after yields,
+foreign and duplicate cursors, absolute idle expiry, real cancellation, synchronous overrun,
+capacity, cleanup and release of retained pools. Actual authenticated route, strict receiver and
+selected Review progress/cancel/retry/final journeys remain required for D4228 completion.
+
 Before an assembler or provider runs, the boundary parser applies four closed validations
 ([[D1869]]): `selectedSquare` passes chessops `parseSquare` and is scoped to the authoritative node;
 `candidateUci` passes `parseUci`, canonical round-trip and membership in that node's exact legal
@@ -5275,6 +5442,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
 
 ## Changelog
+
+- 2026-11-12: Independently accepted D4241 makes the existing Review paging arm literal: original selected-branch
+  units, independent owned job ids, absolute five-second clock, bounded retention, metadata-only
+  interim transport and one final whole-prefix reduction. Four independent returns repair cancel
+  transport, actual outer shape, original source-plan dispatch and executable oracle equality.
+  Metadata-only core passes independent readback; public job/activation/whole-product proof remains owed.
 
 - 2026-11-04: draft D4060§4.11e from the source-backed twelve-family census. Exact incoming-edge
   suppliers and complete Inspector-only before/after presentation replace a tempting enum-only

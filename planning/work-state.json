@@ -35458,12 +35458,12 @@
     },
     {
       "id": "D4228",
-      "state": "blocked",
+      "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fc52ef8689f28f218ec64d9cf586cd646f813d56f3c107f45bc99c797b1e062c",
+      "sourceDigest": "sha256:105234531a981ee56c1f56e646809874f347ec8f2ee7c9562a57fe3e1ecbcf58",
       "uxItems": [],
       "owner": "review-and-return",
-      "blocker": "item:D4224"
+      "since": "2026-11-12"
     },
     {
       "id": "D4229",
@@ -35575,12 +35575,12 @@
     },
     {
       "id": "D4241",
-      "state": "doing",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:5d177a669002c079f61dc0703be8fd4f7a687e767280055fa68f78bbd27aefa5",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ae248049cd92494548f3474de5d5f38b451744eef9f9f3457e6ee1ae2cca9f35",
       "uxItems": [],
-      "owner": "review-and-return",
-      "since": "2026-11-11"
+      "evidence": "rfc/module-registration.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D4242",
@@ -35642,6 +35642,15 @@
       "sourceDigest": "sha256:8689f2af1f21c2fc065c68aa7d183693d29e5552ca560ba8dd0e8315565b5e4a",
       "uxItems": [],
       "evidence": "rfc/subject-safe-semantic-selection.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4249",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:00aad4d1ed9ecce0f809f98b04c522ecf784b91c58e341af65cf82a840faf7c8",
+      "uxItems": [],
+      "evidence": "docs/learner-modules.md",
       "evidenceKind": "path"
     }
   ]

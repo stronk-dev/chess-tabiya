@@ -3907,3 +3907,30 @@ remain compact (<48KiB baseline,<16KiB Hint). Complete normal production CI rema
 D4241’s literal Review branch/job/interim metadata clause, review it independently, then implement
 the full frozen-prefix collection/merge/strict-receiver/UI contract. D4225 broad memory/defaults,
 D4246 import attribution and every remaining1.0 capability remain open.
+
+
+### 2026-11-12 — D4241 contract accepted; first whole-prefix Review runtime slice
+
+The existing module-registration§2.5.2 now specifies the actual closed assistance/query envelope,
+selected whole-branch units and focus, separate owned job identity, exact cursor, one absolute5s
+cap, explicit idle cancellation, bounded retention and metadata-only interim progress. Independent
+source review returns four buildability seams (cancel, outer shape, source-owner namespace,
+oracle comparison); all four are repaired and read back as accepted in the existing compiler2
+review receipt. No new source issuer, default policy, budget or schema lane is created.
+
+The private metadata-only module-review-prefix helper is implemented under the existing accepted
+contract and independently read back. Genuine storage boundary/full original tip is mandatory.
+Original creation event.seq and inherited branch/node identities survive; root and incoming-edge
+units page1/2/32 without duplication over a genuine37-node path. An initial repeated-knight test
+hits the real threefold terminal and is corrected to one repetition plus a legal Ruy Lopez line;
+no runtime terminal is bypassed. Equal full FENs on distinct retry nodes remain distinct.
+Narrow/forged/stale boundaries and wrong cursors refuse; plan has no semantic/provider work.
+Normal focused regressions164/four pass7.55s; complete workspace types/Svelte0errors0warnings pass.
+The pure slicing helper is not job authorization/replay/currentness. No public Review cutover
+or whole-parent completion is claimed. D4249 repairs two stale current D3928 hold sentences in
+learner-module docs using the actual migration/content/Hint evidence.
+
+D4241 closes its finite contract question; D4228 is doing for bounded job implementation, with
+D4224/D4225 certification still required before ordinary activation. Next retain actual original
+candidates in the bounded owned job, enforce deadline/expected cursor/cancel/cleanup, then wire
+actual service/API/strict receiver/selected Review and whole-prefix oracle. No milestone advances.

@@ -11558,3 +11558,29 @@ that wording is corrected. The reviewer performs no edits/tests/Git and attribut
 counts to root. Current code checks pass2948/eighteen, types/scheduling and fresh1470canonical
 cases/89subjects/17qualified. Complete new gate and all durable revision10 work remain; this is
 not whole D4200, a new qualification or whole-foundation acceptance.
+
+
+## 2026-11-12 — D4241 whole-prefix Review clarification and metadata core
+
+Separate read-only objective/source reviewer accepts the bounded module-registration§2.5.2
+D4241 amendment on buildability after four concrete returns and readback of their repairs:
+
+- Explicit authenticated DELETE cancellation closes idle-between-pages cancellation.
+- Actual nine-field outer ModuleQueryPage plus review, focus/default tip and per-packet
+  disclosures replace the contradictory historical response sketches.
+- Owned invocation-plan rows join the actual grade/objective/window/ledger/ordinary module
+  callables; the twelve Story adapters are not falsely declared to cover every source.
+- Oracle equality covers whole final packets/disclosures/presentations and source coverage;
+  only literal job/page/clock metadata is excluded. Grade@2 and objective-transition@2 are exact.
+
+No new product decision is needed. Full selected branch, original node-plus-incoming-edge
+units, one absolute five-second clock, distinct owned job handles, metadata-only interim pools
+and explicit bounded capacity are buildable. D4224/D4225 activation/cost/default proof remains.
+
+The reviewer separately clears metadata-only planning under the already accepted contract,
+then reads module-review-prefix.ts and its genuine-boundary tests without finding a blocker.
+It preserves actual creationEvent.seq, inherited node/source branch identities, full-tip scope,
+canonical tuple/prefix digest and cursor slicing. Pure slicing is NOT access or replay authority;
+the actual job owner must retain and revalidate the original boundary and expected cursor.
+No reviewer commands/edits ran; primary verification is recorded in the source plan/log.
+This accepts neither a public job implementation nor integration/latency/default activation.

@@ -23,8 +23,10 @@ keep the CLOSED instance/cache/detached911-byte response/providers live: the evi
 collects after close at1, while at64 it stays until cache release. Independent exact-data/method
 review, tool/runtime checks and real-job GC controls pass. Broader D4225 memory/peak/appliance,
 multi-Hint and default questions remain; no production capacity or source changed.
-Next: finish and independently review D4241’s literal branch/job/interim-page transport, then
-implement the complete frozen-prefix Review collection, final merge, strict receiver and UI.
+D4241 is now independently accepted after four repaired buildability returns. Its private
+whole-prefix metadata plan passes164/four focused checks and clean workspace types. Next implement
+the bounded owned Review job, then whole-prefix collection/final merge/strict receiver/UI; the
+helper alone is not a paged public Review. D4224/D4225 certification still gates activation.
 D4246 import attribution and remaining consumer adoption stay open.
 These verified slices do not complete a whole-product milestone.
 
@@ -40,7 +42,8 @@ Canonical1928/1928 and24/89 qualification remain current without regenerated met
 The first full run’s two verification failures and the fixes remain recorded in the source plan.
 That checkpoint’s real-engine smoke stopped at D3928 before Hint; the migration and successful
 current smoke above supersede that startup hold. Fresh p95/browser/memory clearance is still owed.
-D4241 Review job contract precision and D4242 current retention measurements remain active.
+D4241 contract precision and D4242 finite retention measurements now close; actual D4228 job
+implementation and broader D4225 memory/default proof remain active.
 No whole caller RFC, capability or1.0 milestone completes from this checkpoint.
 
 The full 1.0 goal remains active. D4224's construction8 source/service checkpoint implements the
