@@ -555,3 +555,30 @@ These are measured test failures, not newly found production defects. `[V]` (sam
 Fixed cited registration does not add canonical/profile arms or ordinary consumer eligibility.
 Risk-source fixed authority and coordinated five-family qualification remain. `[V]`
 (unchanged canonical case/profile/receipt files)
+
+
+## Fixed own-piece risk authority — D1716, 2026-11-11
+
+One build/test source now owns the reviewed independent material minimax; the disposable
+research entry re-exports it. Forty-six complete input populations/82 selected moves retain
+all earlier inputs and add both-color deeper optional-stop controls. Ninety-four fixed
+cited propositions execute actual operations. Invalid turn clones remain focused unavailable
+controls and deliberately produce no semantic-negative proposition. Available empty/uniform
+reads remain genuine negative cases. `[V]` (`semantic-validation-risk-outcome-sources.ts`,
+`semantic-validation-risk-outcome.test.ts`)
+
+The deeper profit control legally captures9, recaptures1, then could exchange1 for9: forcing
+the whole line yields0, but optional stopping retains8. The fixed reference and actual risk
+factory both keep the original queen's root risk true. Every prescribed move is checked legal.
+This is `legal-exchange@1` arithmetic, not an engine score, recommendation or forced gain.
+The first draft's selected Kh1–g1 was rejected as illegal before test execution; Kh1–h2 is
+used with the same legal exchange proof and no collector change. `[V]` (same test)
+
+Normal focused software passes200/11.43s, workspace types and original research79/4.41s pass;
+the five outcome-proof files together pass1850/39.93s. Genuine pre-mint faults cover original/
+current identity, color/role, all state/alternative/support/count/order fields, EP victim versus
+landing and promoted current roles. Consistent inversion passes mirrors but fails both absolute
+partners. Invented quiet events and corrupted quiet private totals fail their independent controls.
+Copy/held-consumer refusal remains. Independent read-only review accepts the bounded source
+proof. Canonical/profile/receipt integration and qualification remain the next coordinated step.
+`[V]` (same tests and fixed cited-source registry; unchanged canonical/profile/receipt files)

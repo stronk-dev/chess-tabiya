@@ -3106,3 +3106,18 @@ pre-mint field/order faults are checked. Internally regrouped first-blocker trun
 mirrors but fails both absolutes; removed/role/promotion private totals cannot become zero.
 Independent review accepts this bounded checkpoint. No canonical/profile/ordinary change.
 Risk fixed-source proof and coordinated five-family qualification remain next.
+
+
+### 2026-11-11 — Five outcome-family fixed-source proofs prepared
+
+Risk now shares its reviewed minimax from one build/test source, with46 inputs/82 selected
+plays and94 real fixed cited-source cases. Deep stopping controls include a verified legal
+line where optional stopping retains8 while forced recaptures yield0; actual root risk is true.
+Invalid root clones never become quiet negative propositions. Pre-mint identity/role/EP/
+promotion/state/support/count/order, mirror-safe inversion and quiet/private-total controls pass.
+Focused200/11.43s, workspace types and original research79/4.41s pass. All five outcome-proof
+files together pass1850/39.93s. Independent read-only review accepts the bounded checkpoint.
+King88+control74+line148+risk94 =404 new source cases are now prepared, not yet canonical.
+Next: append bounded case parts, bind the five profiles' four exact arms, preserve every old
+case/population/external receipt, run the canonical writer and full normal verification.
+No ordinary26, content, UI, learning-effect or release completion is inferred.

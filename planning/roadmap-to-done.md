@@ -54,7 +54,9 @@ the other three families. Square-control preparation now binds74 fixed source re
 137 focused software checks, workspace types and the original34 research checks pass.
 Canonical/profile admission remains pending. Blocker preparation adds148 fixed source cases
 with965 checks across the line/control/king/slider regression; types and the original67
-research checks pass. Piece-risk fixed authority is the remaining source-proof step.
+research checks pass. Risk preparation adds94 fixed source cases and deep optional-stop controls, with200 focused
+checks, types and original79 research checks passing. All five outcome-proof files pass1850
+checks. The404 prepared source cases still need coordinated canonical/profile qualification.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

@@ -41118,3 +41118,15 @@ read-only review accepts optional leaf/UCI mirror coverage and actual pre-mint f
 including internally regrouped first-blocker truncation rejected by both absolute references.
 Private quiet tables separately test removal/inapplicable/promotion distinctions. Canonical
 cases/profiles/receipt and ordinary consumers remain unchanged. Next: risk fixed authority.
+
+
+### 2026-11-11 — D1716 fixed risk proof and coordinated qualification readiness
+
+Added94 fixed cited risk cases over46 input populations/82 plays, sharing the reviewed
+independent whole-board minimax. The deep8-vs-forced0 case reaches actual risk output;
+invalid clones stay unavailable and never discharge semantic negatives. Focused200/11.43s,
+workspace types, original research79/4.41s and five-file1850/39.93s pass. Independent review
+accepts source/mirror/fault validity. A draft illegal selected king move was caught before
+execution and corrected, with no production change. All404 remaining source cases are now
+prepared; no canonical/profile/receipt or ordinary binding has changed. Next is the coordinated
+five-family case/profile/writer run, preserving all earlier semantic results and full verification.
