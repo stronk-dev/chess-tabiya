@@ -8,7 +8,7 @@ import { FIVE_SECOND_CONTENT_TESTS } from "./test-tiers.mjs";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 
 function assertMovedContentCases(rows) {
-  assert.equal(rows.length, 63, "all original authored cases remain collected");
+  assert.equal(rows.length, 64, "all authored cases remain collected");
   assert.deepEqual([...new Set(rows.map(row => row.path))].sort(), [...FIVE_SECOND_CONTENT_TESTS].sort());
   for (const row of rows) {
     assert.equal(row.timeout, 5000, `${row.path}: ${row.name} retains its original deadline`);

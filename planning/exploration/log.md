@@ -41826,3 +41826,15 @@ D4233–35/D4238–40/D4243/D4244 close finite duties with path evidence. Native
 existing D3928 before any Hint timing: no p95, memory or native clearance. Next checkpoint is
 the narrow already-chosen unified-grade requirements migration after exact scope verification,
 then real content/startup/measurement. Parent Hint, D4224/D4225/D4228 and full1.0 remain open.
+
+
+## 2026-11-11 — D4245 content collection baseline repaired
+
+Fresh normal make test-content exited2 before the content pool: the actual Vitest collection
+contains64 cases while the moved-case guard expected63. Both current cases and guard originated
+in648dbad2; no case was removed by this repair. The one-number correction preserves exact15-file
+membership/module checks, all5000ms deadlines, run mode, unhandled-error checks and deliberate
+omission/skip/extended-timeout negatives. Actual guard now passes64/15 in7.77s and the same normal
+command proceeds to real content failures. Independent bounded review accepts the guard only.
+D4245 closes with test evidence; no production, content, schema or timeout change. The subsequent
+real-content baseline and exact unified-grade migration remain D3928, not content-green claims.
