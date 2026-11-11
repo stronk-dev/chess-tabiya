@@ -2,10 +2,10 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. On `c59e565b`, normal software verification passed
-**18,977 tests in 572 files** (696.41 seconds) and **seven performance tests in four files**
-(57.53 seconds). The canonical evidence preflight passed all 1,470 cases across 89 subjects,
-17 of which qualify. Governance and the production build passed separately. See the [exploration log](exploration/log.md).
+The full 1.0 goal remains active. On `c484bfc7`, normal software verification passed
+**19,027 tests in 572 files** (716.63 seconds) and **seven performance tests in four files**
+(58.13 seconds). That run verified the two Review fixes and all 1,470 canonical cases across
+89 subjects, 17 of which qualify. See the [exploration log](exploration/log.md).
 
 **D4200 durable availability** now carries per-decision source coverage through revision 10
 publication, reads, rebuild and account lifecycle. Five genuine revision 9 jobs upgrade through
@@ -21,7 +21,8 @@ D4179 now shows bounded defender-exposure summaries and typed source availabilit
 It carries original factory ordinals alongside the displayed facts, including where those orders
 differ. Inspector serves the original source and bounded capture and recapture pages. Both
 mirrored REST stress tests reconstruct each original exchange tree. Review now opens the
-exact fact and scoped exchanges, with mounted and authenticated refusal coverage. D3928
+exact fact and scoped exchanges. Authenticated requests for inherited edges open before retry
+and refuse before acquiring evidence during retry, for both colors. D3928
 blocks the desktop and phone-width browser journey at server startup.
 [Exposure research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11)
 

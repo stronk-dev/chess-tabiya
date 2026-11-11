@@ -2861,3 +2861,16 @@ source acquisitions, one per Inspector request. Assistance confirmation does no 
 acquisition. The instrument includes serialized response reading and client decoding, using an
 in-process HTTP handler, in-memory SQLite and concurrent local verification. Network latency,
 browser rendering and the native desktop and phone journeys remain unmeasured.
+
+### 2026-11-11 — Review software verification and inherited-edge refusal
+
+`make verify-software` passed on `c484bfc7`: 19,027 tests in 572 files (716.63 seconds),
+seven performance tests in four files (58.13 seconds) and all 1,470 canonical cases.
+Both mounted Inspector and Review theme fixes are covered. The subsequent 20-test authenticated
+Inspector suite confirms that inherited incoming edges serve both source and detail before an
+open retry. During retry both routes refuse before dispatching the exposure collector, for both
+colors. D3928 still holds the native app journeys.
+
+D4214 records the next qualification wave's generated receipt size. The combined preview uses
+5,429,723 bytes with nested indentation and 4,496,716 bytes when each case stays on one line.
+The decoded records agree. Regenerate through the canonical writer before qualification.

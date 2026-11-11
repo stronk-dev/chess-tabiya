@@ -113,6 +113,39 @@ describe("independent authenticated Inspector REST and client transport", () => 
     expect(dispatch.mock.calls.filter(([route]) => route === projection)).toHaveLength(0);
   });
 
+  it.each([false, true])("D4179 an inherited incoming edge loses its direct detail door during retry, black=%s", async black => {
+    const original = recordedSequenceWindowFixture({ fen: "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1", moves: ["c5b6"] }, black);
+    const [parent, child] = original.nodes;
+    const inherited = fork(original, child!.id, { label: "inherited line", at }).run;
+    const inheritedBranch = inherited.activeCursor.branchId;
+    expect(inheritedBranch).not.toBe(child!.branchId);
+    const available = await fixture(true, inherited);
+    const projection = "derived.tactic.defender_exposure@2", context = { kind: "incoming_edge" } as const;
+    const sourceView = { kind: "source", projection, context, start: 0, collectionKey: null } as const;
+    const source = await available.call(available.request(sourceView));
+    expect(source.status).toBe(200);
+    const page = await source.json() as InspectorQueryPage;
+    if (page.kind !== "page" || page.body.kind !== "source" || page.body.outcome.kind !== "available") {
+      throw new Error("Expected the original exposure on the inherited branch");
+    }
+    const detailView = { kind: "detail", projection, context, scope: { kind: "exposure_captures" },
+      sourceKey: page.body.outcome.facts[0]!.sourceKey, start: 0 } as const;
+    const detail = await available.call(available.request(detailView));
+    expect(detail.status).toBe(200);
+    expect(await detail.json()).toMatchObject({ kind: "page", body: { kind: "detail" } });
+
+    const retry = fork(rewind(inherited, parent!.id, at).run, parent!.id, { label: "open retry", at }).run;
+    const held = await fixture(true, retry);
+    const dispatch = vi.spyOn(evidenceRoutes, "invokeEvidenceValueRoute");
+    for (const view of [sourceView, detailView]) {
+      const request = held.request(view);
+      const response = await held.call({ ...request, query: { ...request.query, branchId: inheritedBranch, nodeId: child!.id } });
+      expect(response.status).toBe(403);
+      expect(await response.json()).toEqual({ protocol: "inspector.query_page@1", kind: "refused", code: "withheld" });
+    }
+    expect(dispatch.mock.calls.filter(([route]) => route === projection)).toHaveLength(0);
+  });
+
   it.each([
     ["White", "rN1rkN2/3q4/1n3n2/2B5/b5B1/8/8/R2RK3 w - - 0 1", "c5b6"],
     ["Black", "r2rk3/8/8/B5b1/2b5/1N3N2/3Q4/Rn1RKn2 b - - 0 1", "c4b3"],

@@ -695,7 +695,7 @@
         "nextAction": "Resolve the recorded historical D3702/D3703 diagnostic obligations without inventing causes; preserve the current complete local software/performance certificate and finish remaining release-proof obligations.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Normal software at c59e565b passed 18,977 tests in 572 files (696.41s), seven performance tests in four files (57.53s) and all 1,470 canonical cases. The combined run stopped at governance on an unrouted measurement issue recorded during the run. D4213 closes that instrument defect. Governance and the production build then pass separately. Historical D3702/D3703 diagnosis, D3885 and D3928 remain.",
+          "summary": "Normal software at c484bfc7 passed 19,027 tests in 572 files (716.63s), seven performance tests in four files (58.13s) and all 1,470 canonical cases. This includes the mounted Inspector and Review theme repairs. The subsequent 20-test authenticated Inspector suite passes both-color inherited-edge refusal during retry. Historical D3702/D3703 diagnosis, D3885 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
             "tools/d3367-provider-source-history/proof.ts",
@@ -5417,7 +5417,7 @@
         "nextAction": "Keep release blocked while completing foundation/consumer contracts, D3928 content migration and real native/appliance/release journeys. Preserve the current complete local software/performance certificate; it does not clear content, deployment, backup/restore or whole-product UX.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Latest normal local software and performance passed on c59e565b with 18,977 tests in 572 files, seven performance tests in four files and all 1,470 canonical cases. D4200 durable storage, upgrade and workload proof are present. Seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content, native startup and release proof. Remote CI, deployment, browser matrix and release-candidate proof remain open.",
+          "summary": "Latest normal local software and performance passed on c484bfc7 with 19,027 tests in 572 files, seven performance tests in four files and all 1,470 canonical cases. D4200 durable storage, upgrade and workload proof are present. Seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content, native startup and release proof. Remote CI, deployment, browser matrix and release-candidate proof remain open.",
           "impact": "advanced",
           "evidence": [
             "Makefile",

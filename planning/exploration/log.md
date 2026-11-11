@@ -40897,3 +40897,11 @@ positions through the strict web receiver. Initial disclosure totaled at most
 completed the five-request journey with four Inspector acquisitions and at most
 24,358 bytes. The largest Inspector page was 6,430 bytes. The foundation plan
 records first and repeated in-process timings. Native browser proof remains held by D3928.
+
+### 2026-11-11 — Review software gate and inherited-edge refusal
+
+The complete local software gate on `c484bfc7` passed 19,027 software tests and seven
+performance tests. The follow-up authenticated Inspector suite passed all 20 tests,
+including both colors of inherited-edge source and detail refusal before collection
+during retry. D4214 records a reproducible receipt-size overflow in the proposed
+pawn-lineage wave. Canonical qualification has its own verification.

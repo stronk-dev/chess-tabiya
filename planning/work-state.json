@@ -35022,7 +35022,7 @@
       "id": "D4179",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d5c2b97d8164f39ddcc3e0cfb5bb2c5d193dabb219243510e9da9c3afc0ced68",
+      "sourceDigest": "sha256:3234be7e9b545a8146dd46e9394722581f49ae2873ee82097ce99e311f9cc4c8",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35332,6 +35332,15 @@
       "uxItems": [],
       "evidence": "tools/r12-player-style-harness/profile-source-cost.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4214",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:aac0f0cb7a5a7587fdd9fbef0a2e67e76dbd5e62080f4128599d12ca54255f14",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
     }
   ]
 }
