@@ -3093,3 +3093,16 @@ for correct totals: independent128-cell omission/value/identity controls fail de
 The injected unsupported event uses no fake alternative and fails the real negative runner.
 Canonical/profile/receipt/ordinary bindings remain unchanged. Independent read-only review
 accepts this bounded checkpoint: no source/mirror/fault blocker found. Governance passes.
+
+
+### 2026-11-11 — Fixed original-piece ray proof checkpoint
+
+Reviewed reference arithmetic is shared from one build/test source; its research entry
+re-exports it.64 population records/148 fixed source cases retain all62 literal examples
+plus two comparable-play/captured-alternative controls; root placements can repeat.
+Normal965/four line/control/king/slider regression passes21.31s, workspace types pass,
+original research67 passes4.58s. All optional mirror leaves/UCI associations and genuine
+pre-mint field/order faults are checked. Internally regrouped first-blocker truncation passes
+mirrors but fails both absolutes; removed/role/promotion private totals cannot become zero.
+Independent review accepts this bounded checkpoint. No canonical/profile/ordinary change.
+Risk fixed-source proof and coordinated five-family qualification remain next.

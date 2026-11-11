@@ -52,7 +52,9 @@ and tests genuine pre-mint corruption with both absolute partners. The four-file
 pawn regression passes2966 checks; its canonical/profile admission remains pending with
 the other three families. Square-control preparation now binds74 fixed source records;
 137 focused software checks, workspace types and the original34 research checks pass.
-Canonical/profile admission remains pending.
+Canonical/profile admission remains pending. Blocker preparation adds148 fixed source cases
+with965 checks across the line/control/king/slider regression; types and the original67
+research checks pass. Piece-risk fixed authority is the remaining source-proof step.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

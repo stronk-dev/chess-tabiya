@@ -530,3 +530,28 @@ and held ordinary module bindings remain refused. `[V]`
 
 This qualifies neither a canonical profile nor a learner feature. Blocker/risk fixed-source
 proofs and the coordinated five-family canonical run remain. `[V]` (unchanged case/profile files)
+
+
+## Fixed original-piece ray authority — D1716, 2026-11-11
+
+One build/test reference now owns the reviewed placement/lineage/full-ray arithmetic; its
+research path re-exports it. Sixty-four population records retain62 literal examples and
+add two quiet capture-replacement controls; repeated root FENs are intentional distinct
+plays, not extra distinct boards. The148 fixed cited source cases include whole-array
+absolutes, every optional mirror state leaf and original alternative UCI associations.
+Normal four-file line/control/king/slider regression passes965 checks/21.31s; workspace
+types and original67 research checks/4.58s pass. Independent read-only review accepts the
+bounded checkpoint. `[V]` (`semantic-validation-line-outcome-sources.ts`,
+`semantic-validation-line-outcome.test.ts`; normal Make checks)
+
+Pre-mint faults reject physical identity/direction/value/member-order/support/count and
+output mistakes. A mirror-safe simulated bug truncates every ray's blocker membership
+to its first blocker, then recomputes counts, relations, groups and support consistently;
+both absolute partners reject it although the mirror passes. Capture alternatives cannot
+replace a removed original by zero; private total-table controls catch missing domains,
+role-as-zero and promoted-pawn current-role loss even when public output stays quiet.
+These are measured test failures, not newly found production defects. `[V]` (same test)
+
+Fixed cited registration does not add canonical/profile arms or ordinary consumer eligibility.
+Risk-source fixed authority and coordinated five-family qualification remain. `[V]`
+(unchanged canonical case/profile/receipt files)

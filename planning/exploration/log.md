@@ -41107,3 +41107,14 @@ Independent read-only review accepts the bounded fixed-source checkpoint after c
 input/expected-value separation, every mirror leaf, genuine pre-mint controls and forced
 negative/full-table distinctions. No concrete blocker found. Normal governance also passes.
 Canonical/profile qualification and remaining two fixed-source families still remain.
+
+
+### 2026-11-11 — D1716 fixed original-piece ray proofs
+
+Added148 fixed source cases over64 population records (root placements may repeat) and
+one shared reviewed reference; two quiet replacement plays exercise original enemy capture
+in an alternative. Normal four-file965/21.31s, types and research67/4.58s pass. Independent
+read-only review accepts optional leaf/UCI mirror coverage and actual pre-mint faults,
+including internally regrouped first-blocker truncation rejected by both absolute references.
+Private quiet tables separately test removal/inapplicable/promotion distinctions. Canonical
+cases/profiles/receipt and ordinary consumers remain unchanged. Next: risk fixed authority.
