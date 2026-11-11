@@ -2805,3 +2805,40 @@ D4179 research measured both a large original payload and a divergent display or
 amendment should keep factory ordinals through Review display sorting and provide the original
 occurrence through bounded Inspector detail. See the measured fixture and paging results in
 design/research/module-evidence-assembly.md.
+
+### 2026-11-11 — Measured revision 10 Profile rebuild and reads
+
+The [aggregate report](profile-current10-cost-2026-11-11.json) records
+`make profile-source-cost` on `284d978a`. The real worker claimed and completed
+all 200 runs in 62.2 minutes, with 251 lease renewals. The projector accounted for
+58.2 minutes. The stored coverage contains 6,400 decisions across all 200 runs
+at revision 10. All 6,400 choice decisions matched the independent complete-legal
+calculation, including the original game counts, card values, intervals, contributors
+and share outputs.
+
+Cold Profile took 2.21 seconds and read 200 source images. A warm read took 1.29
+seconds without rereading any source images. The complete filtered and unfiltered
+54-source coverage read took 51.0 seconds across the cohort. Reading every page
+of pawn-choice detail took 42.2 seconds across the cohort. D3300 retains the open
+projector cost work. These are local timings for repeated 64-ply games, with
+100 replays per color and concurrent verification. The prior revision 9 run observed
+faster Profile reads and a slower worker under different load. These runs cannot
+isolate a regression or a speedup.
+
+Three source-specific failures survived publication as unavailable records. Other
+source rows remained readable. The D4149 mismatch control counted 201 games,
+retained 200 independently verified eligible games, and withheld the affected
+card while preserving the original baseline. No new source qualification or
+production latency claim follows.
+
+The §7 completion check uses the following executed boundaries.
+
+| Criteria | Evidence |
+| --- | --- |
+| 1–2 | `semantic-subject-outcomes.test.ts` runs both colors of the actual 12-move check and the independent root-risk failure. `longitudinal-native-incidence.test.ts` refuses copied and narrowed owners and retains forced zero. `profile-subject-evaluations.test.ts` pins the source, reason and member grammar. |
+| 3 | `semantic-evidence.test.ts` checks the exact selector3 source set, critical exclusion, preserved denominators, partial and complete empty outcomes, thresholds and caps. |
+| 4–5 | `profile-subject-source.test.ts` and `profile-subject-store.test.ts` use original populations for quiet, forced and partial coverage, then refuse foreign or forged operands. `longitudinal-worker.test.ts` checks that the HTTP graph excludes the worker executor. |
+| 6–7 | `longitudinal-revision9-fixture.test.ts` upgrades actual predecessor output, tests migration rollback, runs the worker, reopens and repairs. `profile-subject-store.test.ts` checks all seven families, account rederivation and reads including the case that only replay detects a structurally valid missing failure. `learner-profile.test.ts` checks that bad cuts do not hide healthy games. |
+| 8 | Canonical validation passed 1,470 cases across 89 subjects, with 17 qualified. No new source acquired qualification from availability alone. |
+| 9 | The current worker, read and lease measurements above. `longitudinal-worker-performance.test.ts` exercises worker responsiveness and lease renewal. `longitudinal-worker.test.ts` exercises bounded drain and restart. |
+| 10 | The `c59e565b` full software and performance run, governance and build reported above. `learner-profile-application.test.ts` exercises the actual authenticated Profile HTTP routes. The combined rerun with later Review delivery is in progress. |

@@ -454,6 +454,8 @@ reading sources; local selection performs that preflight before acquiring its le
 The complete-alternatives validation adapter returns typed unavailable for any partial coverage,
 while the separate family operation still evaluates its own complete sources independently.
 
-The stored Profile composer retains its conservative whole-population fence until coordinated
-revision10 coverage is implemented. Ordinary avoidance modules remain held. The old R3 static
-prototype replays historical data; its retired writer refuses current selections before rendering.
+Revision 10 publishes available observations and their per-decision coverage together. A failed
+source cannot contribute a zero or an opportunity for that decision. Profile still withholds
+personal structure metrics pending adoption. Ordinary avoidance modules remain held. The old R3
+static prototype replays historical data; its retired writer refuses current selections before
+rendering.

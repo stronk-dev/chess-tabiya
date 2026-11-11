@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9a7ef43d41c4d6e3a7aeb2e4cbddfe1818324a84fc732776b35d6d6150855882",
+    "roadmap": "sha256:a2d3b32150129fce9dd4275243c3083f7a85983e7948f9deefef330ddbf68fb5",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
     "workState": "sha256:6da5c62ec1ed09fdcb7a2870b8da5a7a86727b4a4414254df895e2914d421fdd",
     "rfcRegister": "sha256:b4778c5052edb6eff8598a4e1d6e316359d7d2297b28e699859aaca08834e013",
@@ -354,12 +354,13 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Measure the current 200-game workload and Profile cost for D4200. Continue the remaining source qualifications and reverse consumer adoption under the existing contracts.",
+      "nextAction": "Close D4200 against its implementation checks. Continue the remaining source qualifications and reverse consumer adoption under the existing contracts.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The 200-game cost measurement, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. RFC closeout, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
+          "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
           "packages/runtime/src/semantic-validation-orientation.test.ts",
           "tools/d1713-semantic-validation-matrix/mirror-boundary.test.ts",
           "design/research/semantic-validation-closure.md",
@@ -1245,12 +1246,13 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Record the completed D4200 workload and close its RFC against the implementation checks. D4179 retains native browser proof behind D3928. Continue the remaining source qualifications and consumer adoption.",
+      "nextAction": "Close D4200 against the implementation checks and recorded workload. D4179 retains native browser proof behind D3928. Continue the remaining source qualifications and consumer adoption.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. Native desktop and phone proof remain behind D3928. The D4200 cost closeout, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. Native desktop and phone proof remain behind D3928. D4200's 200-run cost measurement is recorded. Its RFC closeout, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
+          "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
           "packages/runtime/src/presentation-move-path.ts",
           "packages/runtime/src/presentation-move-path.test.ts",
           "apps/web/src/lib/evidence/move-path.test.ts",
@@ -4114,12 +4116,13 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish the current D4200 cost measurement and continue source qualification and reverse consumer work.",
+      "nextAction": "Close the verified D4200 contract and continue source qualification and reverse consumer work.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Migration 36 and revision 10 preserve saved games while rebuilding seven derived families. Five genuine predecessor jobs pass startup invalidation, worker publication, reopen and repair. Migration rollback leaves revision 9 data intact on an index conflict. Coverage export, restore rederivation and deletion pass. D4212 isolates invalid Profile cuts. The 200-game cost run, D3928 and broader learner-model work remain.",
+        "summary": "Migration 36 and revision 10 preserve saved games while rebuilding seven derived families. Five genuine predecessor jobs pass startup invalidation, worker publication, reopen and repair. Migration rollback leaves revision 9 data intact on an index conflict. Coverage export, restore rederivation and deletion pass. D4212 isolates invalid Profile cuts. The measured revision 10 worker completed all 200 runs. D3928 and broader learner-model work remain.",
         "impact": "advanced",
         "evidence": [
+          "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
           "apps/server/src/campaign-storage.test.ts",
           "planning/campaign/implementation-receipt-2026-09-24.md",
           "apps/server/src/account-import.ts",
@@ -4793,7 +4796,7 @@
       "nextAction": "Keep release blocked while completing foundation/consumer contracts, D3928 content migration and real native/appliance/release journeys. Preserve the current complete local software/performance certificate; it does not clear content, deployment, backup/restore or whole-product UX.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Latest normal local software and performance passed on c59e565b with 18,977 tests in 572 files, seven performance tests in four files and all 1,470 canonical cases. D4200 durable storage and upgrade proof are present. The current cost run, seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content, native startup and release proof. Remote CI, deployment, browser matrix and release-candidate proof remain open.",
+        "summary": "Latest normal local software and performance passed on c59e565b with 18,977 tests in 572 files, seven performance tests in four files and all 1,470 canonical cases. D4200 durable storage, upgrade and workload proof are present. Seven outcome qualifications, D4167 and ordinary26 remain. D3928 holds content, native startup and release proof. Remote CI, deployment, browser matrix and release-candidate proof remain open.",
         "impact": "advanced",
         "evidence": [
           "Makefile",

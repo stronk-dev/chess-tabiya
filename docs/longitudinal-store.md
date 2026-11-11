@@ -1,10 +1,5 @@
 # Longitudinal store
 
-Current prelaunch migration checkpoint (2026-11-10): source/reducer adoption under
-longitudinal-store A.2/A.2.5a installs local migration35/revision9 and the subject table.
-The same-WIDE54 six-family integration passes the normal software/performance gate. Genuine
-revision8/schema34 saved-history migration now passes actual startup/worker/reopen/all-six-family
-repair. Current200-game cost and release proof remain in flight. These private observations do not activate learner metrics.
 Profile no longer exposes the old pooled event-prevalence observations as habits. Its overview
 returns observationStatus unavailable/subject_metrics_not_adopted and observations:[]; old
 observation detail returns authenticated409 PROFILE_OBSERVATIONS_NOT_ADOPTED. The UI states
@@ -20,31 +15,20 @@ re-derivable byte-for-byte and never a second source of truth. Contract: `rfc/lo
 Its first consumer is the private [learner profile](learner-profile.md) (`/learner-profile`, client
 route `/profile`); the store itself still has no route of its own.
 
-Current local derivation revision is **9**, with storage migration **35** (D4181, 2026-11-10).
-The current65-entry registry separates seven native subject sources,34 prevalence sources,
-13 condition-relation sources and11 explicitly deferred paths. One complete legal population
-per decision supplies the54 admitted machine inputs; complete native/condition subjects have
-their own private table and opt-in query. Subject observations remain separate from aggregate
-prevalence and do not activate personal habits. On upgrade, normal application startup atomically
-removes all six derived families and requeues earlier revisions. The existing background worker rebuilds
-them; Profile reports incomplete/rebuilding until the current cut completes. No manual rebuild
-is required, and saved moves are unchanged. Permanent file-backed and real-worker startup tests
-cover corrected promotion duty, castling-rook mobility, both-color retained pawn gains and
-populated false Chess960 occupied-target counts. The saved-history fixture retains actual
-revision-5 outputs from the predecessor implementation and tests unchanged-head invalidation,
-real worker publication, exact current-revision reads, reopening, corruption repair and preserved
-saved/account data. The separate schema34/revision8-shaped fixture retains its narrower migration/reset purpose.
-The genuine revision8 fixture in `fixtures/longitudinal-predecessor-rev8.json` is actual output
-from the preserved previous executable: three synthetic sessions (native both colors and one
-import), all five old derived families populated. Permanent `make longitudinal-predecessor-upgrade-check`
-restores its original SQL/data, proves invalidation before real worker startup, rebuilds all six
-current families, reopens them and detects/repairs a missing row in each. Saved play, imported
-source and account records stay identical. Optional `make longitudinal-predecessor-fixture`
-regenerates it only when the ignored old executable is available; ordinary tests never need that
-bundle or raw research. These bounded proofs do not clear default installed-content/native startup
-or the full release gate.
+Current derivation revision is **10**, with storage migration **36** (D4200).
+The 65-entry registry separates seven native subject sources, 34 prevalence sources, 13 condition
+sources and 11 deferred paths. One complete legal population per decision supplies the 54
+admitted sources. Available observations and per-source gaps publish with the same completion
+watermark. Normal startup invalidates earlier derived revisions and requeues their jobs.
+The worker rebuilds all seven families from saved play. Profile reports incomplete coverage
+while a cut rebuilds.
 
-## Storage (migrations 26, 33 and 34)
+The revision 9 predecessor test restores five actual schema 35 jobs, starts the current
+application and worker, and checks revision 10 publication, reopening and repair. The upgrade
+retains saved play, imports and account data. The predecessor fixture is committed and the
+normal test suite needs no archived executable or raw research dumps.
+
+## Storage
 
 | Object | Meaning |
 |---|---|
@@ -54,6 +38,8 @@ or the full release gate.
 | `learner_observations` | one row per admitted `(projection, version, semantic sign, source sign, phase, class)` with `opportunities`, `occurred`, `alternative_share_sum` and canonical typed decision refs |
 | `learner_game_facts` | migration33: exactly one typed per-cut GAME row, including ineligible games and explicit field unavailability; original first-owner BEFORE and earliest configuration snapshot references |
 | `learner_choice_facts` | migration34: exactly one typed per-cut complete choice document, including ineligible runs and unavailable decisions; original move refs, chosen flags, legal identities and integer trait counts |
+| `learner_subject_observations` | migration35: exact native and condition subjects from available sources |
+| `learner_subject_evaluations` | migration36: one record per original decision, including actor, phase, decision class, legal-alternative count and exact unavailable sources |
 | `learner_structure_stats` | per-root branch/rewind/fork/group/outcome counts, single-player runs only |
 | `learner_observation_jobs` | the durable five-state projection job (`pending`, `running`, `complete`, `retry_wait`, `quarantined`) |
 
@@ -63,11 +49,8 @@ while private rows exist. `observed_at` is the immutable `run.started.at`, never
 
 ## What is observed
 
-`apps/server/src/longitudinal-registry.ts` rebuilds the literal 67-row ingest registry
-(`rfc/contracts/longitudinal-ingest-registry-v2.json` and the version-keyed
-`longitudinal-sign-subsets-v2.json`, 46 edge / 13 avoidance-population / 8 deferred path families)
-against the compiled evidence catalogue and refuses any exact version, order, sign, base or
-deferred-status drift. The V1 artifacts remain historical, not a second live registry.
+`apps/server/src/longitudinal-registry.ts` defines the exact 65-entry ingest registry against
+the compiled evidence catalogue.
 For every owner-authored decision the projector enumerates the complete legal population once;
 a family is an opportunity only when at least one legal move exhibits it and at least one does not.
 Imported source-game moves are `game`, the learner's own moves `played`, first predictions per
@@ -78,13 +61,9 @@ Predictions are admitted only on `single_player` runs. That decision algebra (`n
 lives in `longitudinal-decisions.ts` so the HTTP-side profile can share it without importing the
 projector's population enumeration, which stays off the HTTP module graph.
 
-Exposure's original `invalid_turn_clone` outcome now reaches the projector instead of becoming
-an empty event list. If any legal edge in a non-forced population has that outcome, the existing
-whole-population rule establishes no family opportunities for that decision; its independent
-normative decision denominator still counts it. This is not a claim that the player never
-exposes defenders. An absent row is distinct from a present row with opportunities and zero
-occurrences. The current read format supplies no per-family unavailable count or completeness
-badge. No family-local missing-data policy is invented.
+An original `invalid_turn_clone` outcome marks the affected source unavailable for that
+decision. It leaves independent complete sources and the normative decision count intact.
+The coverage read includes quiet and forced decisions even when neither has observation rows.
 
 `make longitudinal-incidence` is an opt-in diagnostic, not a CI/progress prerequisite. In the
 three fixed PGNs measured for D4018, 60 of 109 decisions have complete populations and 49 are
@@ -115,7 +94,7 @@ original setup/screen snapshots and the first-side castling source; it joins eac
 value to its original FEN/setup/prefix. Original computed rows belong to that operation scope;
 copies, foreign scopes and context-free test outputs cannot publish or repair.
 
-All five families replace atomically with the completion watermark. Rebuild compares and repairs
+All seven families replace atomically with the completion watermark. Rebuild compares and repairs
 GAME and choice rows as well, tolerating corrupt persisted JSON without losing the other families.
 `includeGameFacts: true` is a separate read-query option: run/session/pack selection applies,
 while decision phase/class/projection filters do not shrink the GAME population. Each selected
@@ -269,12 +248,19 @@ no data. Consumer RFCs build on this handle. The learner profile reads `played` 
 some cuts are still pending, re-reads exactly the complete cuts so it can count them while naming
 the rest.
 
+Every complete snapshot includes typed source coverage. The ordinary view covers 34 prevalence
+sources. `includeSubjectObservations: true` also admits the seven native and 13 condition
+sources. Exact source filters project that union. Sign, actor and subject refinements filter
+observations while preserving the decision cohort. Reads check source context and row cardinality
+against the saved replay. A compare/rebuild re-executes the collectors to detect and repair
+semantically incorrect stored availability.
+
 ## Operations
 
 - `make longitudinal-worker-once` drains one bounded batch of queued work against `DATABASE_PATH`.
 - `make longitudinal-rebuild [WRITE=1]` re-derives every complete projection, names each missing,
   surplus or changed row by run and key, and repairs with `WRITE=1`. It is never an upgrade step.
-- Account export includes all five derived families and their projection jobs under `behavioralProfiles`; account and per-run deletion
+- Account export includes all seven derived families and their projection jobs under `behavioralProfiles`; account and per-run deletion
   previews list them, and deletion removes them (see `account-data-lifecycle.md`).
 
 The real 80-ply fixed-corpus arm projects in the worker while `/healthz` answers at 20 Hz with

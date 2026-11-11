@@ -1,9 +1,8 @@
 # Learner profile
 
-Current prelaunch migration checkpoint (2026-11-10): source/reducer adoption under
-longitudinal-store A.2/A.2.5a installs local migration35/revision9 and the subject table.
-The same-WIDE54 six-family integration is locally tested; final full-suite/cost/release proof
-remains in flight. These private observations do not activate learner metrics.
+Storage migration 36 and derivation revision 10 add per-decision source coverage to completed
+cuts. Profile isolates a corrupt or superseded cut and keeps independently verified games visible.
+These private observations do not activate learner metrics.
 Profile no longer exposes the old pooled event-prevalence observations as habits. Its overview
 returns observationStatus unavailable/subject_metrics_not_adopted and observations:[]; old
 observation detail returns authenticated409 PROFILE_OBSERVATIONS_NOT_ADOPTED. The UI states
@@ -30,9 +29,9 @@ subset: taxonomy, valence register, concept-mark derivation). Cards are read-tim
 | Valence register (content, empty) | `content/valence/register.json` |
 | Client surface | `apps/web/src/lib/ProfileScreen.svelte`, route `/profile`, linked from Rating and Learn |
 
-`createApplication` composes `LearnerProfileService` over the file-backed storage; it refuses to
-compose without the observation tables, migration33 GAME table and migration34 choice table (`assertLongitudinalStorePresent`) and fails startup on an
-invalid valence register.
+`createApplication` composes `LearnerProfileService` over file-backed storage. The service
+requires all longitudinal tables, including GAME facts, choice facts, subject observations and
+subject evaluations. An invalid valence register fails startup.
 
 ## HTTP
 

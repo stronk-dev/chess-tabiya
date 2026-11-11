@@ -1,0 +1,186 @@
+{
+  "recordedAt": "2026-11-11",
+  "command": "make profile-source-cost",
+  "launchCommit": "284d978a",
+  "measurementScope": "Local workstation with concurrent focused checks, semantic validation and compilation. Timings are observations of this workload. Cross-revision comparisons were uncontrolled.",
+  "cohort": {
+    "instrument": "disposable D4159/D4147",
+    "node": "v24.22.1",
+    "input": "tools/r2-selection-harness/imported-sample.pgn",
+    "sourceLicence": "CC0-1.0",
+    "nativeSessions": 200,
+    "learnerSides": {
+      "white": 100,
+      "black": 100
+    },
+    "uniqueLines": 10,
+    "plies": 64,
+    "rejectedInputs": 0,
+    "derivationRevision": 10,
+    "scope": "Actual original claimed GAME/choice sources, current54-input same-WIDE projector, atomic seven-family publication, parsed snapshot and Profile paths; independent old-helper operands and full choice statistics/interval/contributor/share parity"
+  },
+  "result": {
+    "claimed": 200,
+    "completed": 200,
+    "leaseRenewals": 251,
+    "claimElapsedMs": 3729878.87,
+    "workerAndProbeMs": 3731643.89,
+    "experimentBeforeMismatchMs": 3866112.64,
+    "productionProjectorMs": 3492606.64,
+    "independentGameProbeAndChoiceHelperComparisonMs": 2850.07,
+    "priorGameProbeFactoryCalls": 25800,
+    "coldProfileMs": 2210.65,
+    "warmProfileMs": 1292.41,
+    "coldProfileSourceImageReads": 200,
+    "laterProfileSourceImageReads": 0,
+    "results": [
+      {
+        "metricId": "fianchetto_setup_rate",
+        "games": 200,
+        "numerator": 60,
+        "eligibleGames": 200,
+        "detailMs": 1618.68,
+        "shareMs": 1577.1
+      },
+      {
+        "metricId": "fianchetto_knight_screen_rate",
+        "games": 200,
+        "numerator": 30,
+        "eligibleGames": 200,
+        "detailMs": 2136.78,
+        "shareMs": 1626.48
+      },
+      {
+        "metricId": "castle_kingside_rate",
+        "games": 200,
+        "numerator": 140,
+        "eligibleGames": 200,
+        "detailMs": 1498.51,
+        "shareMs": 2068.65
+      },
+      {
+        "metricId": "castle_queenside_rate",
+        "games": 200,
+        "numerator": 30,
+        "eligibleGames": 200,
+        "detailMs": 1627.3,
+        "shareMs": 1476.61
+      }
+    ],
+    "choiceResults": [
+      {
+        "metricId": "pawn_choice_residual",
+        "games": 200,
+        "decisions": 6400,
+        "contributors": 1890,
+        "value": 0.028983852297941967,
+        "interval": {
+          "level": 0.95,
+          "method": "game_bootstrap",
+          "resamples": 1000,
+          "seed": "pawn_choice_residual@1",
+          "lower": 0.015101270403296882,
+          "upper": 0.04159393155067261
+        },
+        "detailAllPagesMs": 42154.57,
+        "shareMs": 1582.69
+      },
+      {
+        "metricId": "center_pawn_choice_residual",
+        "games": 200,
+        "decisions": 6400,
+        "contributors": 740,
+        "value": 0.05929157409012227,
+        "interval": {
+          "level": 0.95,
+          "method": "game_bootstrap",
+          "resamples": 1000,
+          "seed": "center_pawn_choice_residual@1",
+          "lower": 0.05160689314161775,
+          "upper": 0.06666328178843257
+        },
+        "detailAllPagesMs": 16886.71,
+        "shareMs": 1699.33
+      },
+      {
+        "metricId": "early_queen_choice_residual",
+        "games": 200,
+        "decisions": 1600,
+        "contributors": 60,
+        "value": -0.07856897951594208,
+        "interval": {
+          "level": 0.95,
+          "method": "game_bootstrap",
+          "resamples": 1000,
+          "seed": "early_queen_choice_residual@1",
+          "lower": -0.08838998395657105,
+          "upper": -0.06870240794870704
+        },
+        "detailAllPagesMs": 1751.6,
+        "shareMs": 2115.54
+      }
+    ],
+    "coverageRows": [
+      {
+        "decisions": 6400,
+        "runs": 200,
+        "derived_rev": 10
+      }
+    ],
+    "fullReadMs": 50969.83,
+    "unavailableBySource": {
+      "derived.tactic.defender_exposure@2:candidate_collector:invalid_turn_clone": {
+        "decisions": 2890,
+        "members": 5170
+      },
+      "derived.semantic_avoidance.loose_piece@2:required_total:invalid_turn_clone": {
+        "decisions": 210,
+        "members": 210
+      },
+      "rules.tactic.event.loose_piece@1:candidate_collector:invalid_turn_clone": {
+        "decisions": 210,
+        "members": 840
+      }
+    },
+    "choiceDecisionsCompared": 6400,
+    "subjectRows": [
+      {
+        "source_kind": "condition_relation",
+        "occurred": 0,
+        "rows": 786080,
+        "runs": 200
+      },
+      {
+        "source_kind": "condition_relation",
+        "occurred": 1,
+        "rows": 603600,
+        "runs": 200
+      },
+      {
+        "source_kind": "native_incidence",
+        "occurred": 0,
+        "rows": 237830,
+        "runs": 200
+      },
+      {
+        "source_kind": "native_incidence",
+        "occurred": 1,
+        "rows": 33880,
+        "runs": 200
+      }
+    ],
+    "limits": "Synthetic repeated64ply native replay,100each side; not independent human games or variable game lengths. No human/source-qualification or browser/network latency proof. New choice-source work is inside productionProjectorMs; independentGameProbeAndChoiceHelperComparisonMs times old GAME probes, old choice helper and comparison assertions, not isolated choice-factory cost; priorGameProbeFactoryCalls counts only the prior GAME probes."
+  },
+  "mismatchControl": {
+    "control": "D4149 first-owner versus first-side",
+    "countedGames": 201,
+    "independentlyProvedEligibleGames": 200,
+    "cardState": "abstained",
+    "abstention": "incomplete_card",
+    "sourceFirstNode": "research-profile-baseline-mismatch:node:0",
+    "metricFirstNode": "research-profile-baseline-mismatch:node:4",
+    "sourceRetainedRights": true,
+    "metricRetainedRights": false,
+    "consequence": "Count201 overall, retain200 independently proved eligible refs, abstain the whole affected card; never retarget the baseline or hide the game"
+  }
+}

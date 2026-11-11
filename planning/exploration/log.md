@@ -40844,3 +40844,15 @@ late replies. Native desktop and phone cases are registered in the Review browse
 The normal pinned-runtime browser command stopped before either test because D3928's
 anti-Caro pack still requires grade version 1 while the installed contract derives version 2.
 Browser geometry and final journey timing remain open.
+
+### 2026-11-11 — D4200 revision 10 cost measurement
+
+The actual Profile cost command completed on `284d978a`. The worker finished all
+200 claims in 62.2 minutes with 251 lease renewals. It published 6,400 exact
+revision 10 decision evaluations. Cold and warm Profile took 2.21 and 1.29
+seconds. The full filtered and unfiltered coverage read took 51.0 seconds across
+the cohort. Independent complete-legal choice values and the genuine baseline
+mismatch control passed. The compact results are in
+`planning/foundation-source-identity/profile-current10-cost-2026-11-11.json`.
+The synthetic local workload does not establish a cross-revision speed change.
+D3300 remains open.
