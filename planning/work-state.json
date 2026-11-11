@@ -35376,6 +35376,15 @@
       "uxItems": [],
       "evidence": "tools/semantic-validation-owner-transition.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4219",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:23f75f6b134a0d830457ef9868fd635262741fcb85b132c9b610d71ad1686fee",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/semantic-validation-king-outcome.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

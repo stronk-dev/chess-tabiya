@@ -464,3 +464,44 @@ identity on all available cases. No production change was made to satisfy the in
 This remains unregistered source preparation. Cited grounding, real-runner pre-mint faults,
 canonical arms/admission, consumer adoption, learning effect and release proof remain separate.
 `[V]` (unchanged canonical cited-source/profile/consumer registries)
+
+
+## Fixed-authority king proofs and multi-output witnesses — D1716/D4219, 2026-11-11
+
+The king sources now have fixed cited-proposition lookup entries. Their independent placement,
+coordinate, interior occupancy and turn arithmetic comes from the reviewed literal references;
+the retained Python excerpt grounds placement/turn facts, while zone/opposition rules remain
+disclosed product conventions. Neither source claims move quality or strategic advantage.
+No canonical case part, profile arm, generated receipt or ordinary binding changes. `[V]`
+(`packages/runtime/src/semantic-validation-cited-sources.ts`,
+`packages/runtime/src/semantic-validation-king-outcome-sources.ts`)
+
+A new nonvacuity guard exposed a real test gap: no existing king-zone canonical first play
+produced multiple outputs, so reversing the output array could not test order. It failed1/69
+before repair. Explicit both-color split-zone roots distinguish corner/edge/interior outcomes;
+split-opposition roots reach different distant-three/five alternatives from the same original
+king pair. The18 roots/32 plays produce88 source cases (46 zone,42 opposition), with64 full
+population comparisons,26 mirrors and the all-form/holder/nonvacuity guard passing91 checks.
+All opposition forms already reached true/false values through the prior complete alternatives;
+an initial missing-form hypothesis was refuted rather than turned into a new requirement.
+`[V]` (`semantic-validation-king-outcome-sources.ts`, `semantic-validation-king-outcome.test.ts`)
+
+Every source case executes the real registered operation with the fixed resolver and real
+runner. Pre-mint faults modify `computeSubjectOutcomes` output before its genuine factory,
+covering original identities/colors/parameters, root/played/alternative values, crossed
+move-state associations, support membership and both counts, duplicate/drop/reverse outputs.
+Each requires real fault invocation and exact expectation-failure code; multi-output and
+nonsupporting/different-state guards prevent vacuous mutation tests. Symmetric corruption
+inverts the full table and payloads consistently: the real mirror still passes, while BOTH
+absolute source partners fail. Invented quiet events and omitted total cells are distinct
+controls—the latter shows explicitly that public empty output cannot prove a complete table.
+`[V]` (`semantic-validation-king-outcome.test.ts` fixed-authority proof group)
+
+The same checks retain genuine invocation/first-input identity, reject result/value copies and
+refuse the currently held ordinary module bindings. Corrupted cited input/arm/span is rejected
+by the fixed authority. Four normal software files pass2,966 tests/39.51s, including existing
+pawn/cited/authority regressions. Independent readback finds no bounded source/proof blocker;
+workspace types and canonical non-change verification pass. All1,524 case results,63
+population receipts,eight external receipts and19/89 qualification verdicts remain current.
+This is source proof, not canonical qualification, learner adoption or release proof. `[V]`
+(same tests; normal `make test-software-files`)

@@ -3058,3 +3058,25 @@ The independent reviewer accepts the bounded reference and requests explicit dee
 stop anchors before qualification. Both legal chains are now checked with fixed material sums:
 White declines−4 rather than turning Black1 into5; Black declines−2 rather than worsening
 −8 into−10. The expanded79-test normal target passes4.98s. Source qualification remains held.
+
+
+### 2026-11-11 — King fixed-source runner and real pre-mint faults
+
+D4219's new nonvacuity guard fails1/69 before repair; both-color split-zone/split-form
+literal roots make output ordering genuinely testable. Independently reviewed18 roots/32plays
+supply88 source cases, not yet canonical/profile refs. Two source manifests now bind fixed cited
+lookup. Actual runner proofs and pre-mint identity/parameter/state/association/support/count/
+duplicate/drop/reverse faults pass; internally consistent inversion passes mirrors but fails
+both absolute partners. Genuine quiet invention and missing-full-table controls remain distinct.
+Exact source tamper, genuine inputs, copied-value refusal and held modules are checked.
+Normal four-file regression passes2966/4 in39.51s; final workspace types/canonical check is live.
+Independent source/proof review finds no concrete blocker conditional on those terminal checks.
+D4219 closes only the witness gap. All five canonical qualifications/ordinary26 remain.
+
+Final normal workspace types pass with zero Svelte errors/warnings. The canonical check
+exits0:1524/1524 cases,63 population/eight external receipts and19/89 verdicts; both generated
+files are byte-current, with no regeneration. Governance also exits0. Independent checkpoint
+conditions are satisfied. Canonical/profile admission is still pending, not implied by source
+registration. For the next direct-control proof, independent review confirms forced-only
+available[] is a lawful semantic-negative boundary, but full128-cell count/identity/missing
+faults must separately detect bad totals; an invented-event fault must not fabricate an UCI.

@@ -47,7 +47,10 @@ with128 subjects each. Independent original-piece ray preparation passes67 resea
 over62 literal examples and all legal alternatives; citation/fault/mirror/admission work
 remains. A separate original-own-piece legal-exchange reference passes79 checks over40
 roots/70 moves, including pins, EP, promotions and castling. None of these references
-is canonical qualification.
+is canonical qualification. King preparation now registers88 fixed cited-source cases
+and tests genuine pre-mint corruption with both absolute partners. The four-file authority/
+pawn regression passes2966 checks; its canonical/profile admission remains pending with
+the other three families.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

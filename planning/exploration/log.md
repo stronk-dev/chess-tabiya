@@ -41062,3 +41062,29 @@ after checking each move's actual legality and fixing material expectations inde
 White can decline a−4 recapture, retaining Black1 instead of5; Black can decline a−2
 continuation, retaining−8 instead of−10. Normal research now typechecks and passes79 checks
 in4.98s. No source/profile/consumer admission or production behavior changes.
+
+
+### 2026-11-11 — D1716 fixed cited king source proofs; D4219 witness repair
+
+An executable nonvacuity guard fails1/69 on old single-output king-zone first plays.
+Independently reviewed both-color split-zone/split-form roots add genuine two-output controls;
+91 expanded reference checks pass. The old corner alternatives already cover distant-five;
+the initial missing-form hypothesis is refuted, not retained as a defect. Two reviewed king
+source manifests are registered in the fixed cited authority only, with88 real-runner source
+cases and genuine pre-mint corruption controls. Four normal software files pass2966/4,
+including both absolute partners failing a symmetric fault that still passes the real mirror.
+Independent review finds no bounded source/proof blocker, subject to final types/canonical
+non-change checks still running. No canonical cases/profiles/receipt or learner bindings change.
+D4219 closes the multi-output witness gap; D1716 and all five qualifications remain open.
+
+
+### 2026-11-11 — King source checkpoint final verification
+
+Normal workspace types exit0, Svelte reports zero errors/warnings; normal canonical check
+exits0 with1524/1524 cases,63 populations,eight external receipts,19/89 verdicts. Both
+canonical generated files are current without rewriting. Governance exits0. Together with
+the2966/four-file authority/pawn regression and independent acceptance, the bounded king
+source/proof checkpoint is verified. No canonical/profile/ordinary qualification is claimed.
+Independent direct-control readback confirms the sole-move available[] semantic-negative
+boundary is lawful, but cannot establish correct total counts; the next wave keeps independent
+128-cell table/identity/value/omission faults and a genuine pre-mint erroneously emitted target.
