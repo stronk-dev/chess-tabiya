@@ -1,19 +1,20 @@
-# Semantic validation closure — the manifest validates shapes, not chess semantics
+# Semantic validation closure — from shape checks to executable authority
 
-**Current boundary — 2026-11-09:** older checkpoints below are historical. `[V]`
+**Current boundary — 2026-11-11:** the older checkpoints below are historical. `[V]`
 
-Current 2026-11-09: 98 required subjects retain 419 passing canonical cases. Exactly castled@1,
-rights_lost@1, capture@1 and clock_reset@1 satisfy all required arms. The seven current edge roots
-remain required and unqualified; the new snapshot/detail bindings add no event-root waiver.
-Selected Inspector delivery now includes the sixteen foundation sources described in
-`planning/foundation-source-identity/plan.md`. Source reach does not qualify a detector or activate
-ordinary guidance. That plan holds current software/build/content evidence and the remaining
-D4167/D4170 canonical/ordinary/avoidance/bot cutover. Parent and release duties remain open.
+The current writer passes1,524/1,524 canonical cases over89 subjects;19 satisfy their own
+required arms. Eight of thirteen original-subject outcome families qualify. Five remain:
+king zone, king opposition, direct attack count, line blockers and loose-piece risk.
+Consumer admission, application reach and ordinary guidance remain separate. `[V]`
+(`packages/runtime/src/semantic-validation-receipt.generated.json`,
+`packages/runtime/src/semantic-validation-profiles.json`;
+`planning/foundation-source-identity/plan.md`)
 
-Evidence: `packages/runtime/src/semantic-validation-transition-sources.ts`,
-`packages/runtime/src/semantic-validation-transition-fields.test.ts`, actual factory/runner and
-generated receipt; `planning/foundation-source-identity/plan.md`. D4167 owns real consumer mapping;
-semantic qualification is not learner eligibility. `[V]`
+The shared case-storage migration is independently complete and archived. Its committed
+normal software run passes19,320 tests/575files and seven performance tests/four files;
+all original cases and semantic receipt fields are preserved. This storage change adds
+no qualification. `[V]` (`rfc/archive/semantic-validation-case-storage.md`;
+`planning/foundation-source-identity/plan.md` §2026-11-11 D4215/D1)
 
 **Question:** Do the 67 semantic-event declarations' `validation` fields bind independent,
 executable evidence that each named chess predicate can both fire and refuse?
@@ -362,3 +363,40 @@ can satisfy geometry but fails the absolute canonical proposition. Use actual pr
 original authority resolver and profile references. No injected resolver, invented owner receipt,
 new oracle/comparator/case-transform framework or wider variant/recorded/bounded claim. Actual new
 case construction/execution and any qualification change are still owed.
+
+## Complete all-square control reference — 2026-11-11
+
+The `direct_attack_count` original-subject family measures128 fixed color/square subjects,
+including empty, pawn, king and friendly-occupied targets and explicit zero values. It uses
+current-occupancy geometric controllers, including pinned pieces, and stops slider attacks
+after the first occupied square. It is different from legal destinations and from the old
+structural event's nonpawn-target subset. `[V]` (`packages/runtime/src/square-control.ts`
+`pseudoFor`/`grouped`; `packages/runtime/src/semantic-subject-outcomes.ts`
+`direct_attack_count`; the retained Python attacker rules in
+`packages/runtime/src/semantic-validation-literal-sources.ts` `ATTACK_CITED_SOURCES`)
+
+`make semantic-control-source-research` typechecks the disposable research and passes34
+checks in2.58s overall. An independent FEN placement decoder and piece-offset/ray arithmetic
+compare every root, chosen successor and legal alternative across16 boards/30 selected
+moves. Each complete table has128 subjects. Existing successor-board literals are retained;
+the external rules library generates only the additional legal inputs, not expected counts.
+All complete input UCI/FEN lists are checked before table/event comparisons. `[V]`
+(`tools/d1713-semantic-validation-matrix/direct-control-reference.ts`,
+`tools/d1713-semantic-validation-matrix/direct-control-reference.test.ts`;
+Make target `semantic-control-source-research`)
+
+Boundary controls include a full two-king table with explicit zeros, first friendly blockers,
+pawn diagonal attacks versus pushes, starting-position counts, a geometrically attacking
+pinned knight whose legal destination is absent, EP, captures and each promotion role.
+In the literal bishop/knight board, f3h4 opens the g2 bishop's attack on the queen at d5:
+White's control count there changes0→1. This states an attack, not move quality or a forced
+material gain. Two forced single-capture cases retain complete128-subject availability
+while producing no differing-alternative events. `[V]` (the same research tests and explicit
+`PIN`, `BISHOP_KNIGHT`, `only-capture` inputs)
+
+Independent static review found no concrete reference or fixture flaw; execution confirms
+finite agreement, not general qualification. The prototype is unregistered. It has no new
+cited proposition, profile arm or learner binding. Promotion still needs reviewed source
+grounding, genuine wrong-output controls, exact mirrors and all required canonical/profile
+proofs. Line-blocker and legal profitable-capture risk references remain separate work. `[V]`
+(the research import boundary; current cited-source/profile/consumer registries)

@@ -976,7 +976,7 @@
         "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4215/D1 is independently complete and archived. Index2/two bounded parts,30 consumers/compiler/Git guard preserve all1524 ordered cases and semantic receipt fields. Committed0dda10a3 full verification passes19320 software tests/575files(768.81s), seven performance tests/four(61.45s), canonical1524/1524,89subjects/19qualified and all preflights. Real staged/first-parent guards, large-blob regression, types/build/governance and normal hooks pass. D4218 transport bug is closed. D4200 durable coverage remains complete. Five outcome qualifications, D4167/ordinary26, D4217 research-model debt and held D3928 remain; no whole capability or release gate is promoted.",
+          "summary": "D4215/D1 is independently complete and archived. Index2/two bounded parts,30 consumers/compiler/Git guard preserve all1524 ordered cases and semantic receipt fields. Committed0dda10a3 full verification passes19320 software tests/575files(768.81s), seven performance tests/four(61.45s), canonical1524/1524,89subjects/19qualified and all preflights. Real staged/first-parent guards, large-blob regression, types/build/governance and normal hooks pass. D4218 transport bug is closed. D4200 durable coverage remains complete. Unregistered complete-control research passes34 checks over16boards/30moves with128 subjects each; citation/fault/mirror/admission proofs remain. Five outcome qualifications, D4167/ordinary26, D4217 research-model debt and held D3928 remain; no whole capability or release gate is promoted.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-case-storage.md",
@@ -1222,7 +1222,9 @@
             "packages/runtime/src/semantic-validation-owner-transition.test.ts",
             "packages/runtime/src/semantic-validation-cases/foundation.json",
             "packages/runtime/src/semantic-validation-cases/original-pawns.json",
-            "tools/semantic-validation-owner-transition.ts"
+            "tools/semantic-validation-owner-transition.ts",
+            "tools/d1713-semantic-validation-matrix/direct-control-reference.ts",
+            "tools/d1713-semantic-validation-matrix/direct-control-reference.test.ts"
           ],
           "anchors": [
             {

@@ -41010,3 +41010,13 @@ blob guards, all-reader adoption, types/build/governance and normal hooks are ve
 The finite RFC moves to rfc/archive/semantic-validation-case-storage.md; D4215 closes
 in the same change. D4218 is closed and D4217 remains separate. Canonical qualification
 stays19/89; no broader source/consumer/content/capability or1.0 completion is claimed.
+
+### 2026-11-11 — Unregistered complete-control reference passes
+
+Disposable D1716 preparation runs through `make semantic-control-source-research`: types
+and34 checks pass(2.58s). Independent board arithmetic compares full128-subject tables
+for16boards/30moves, including pinned geometric attacks, friendly blockers, promotion/EP,
+a bishop line opened by a knight, and forced single-capture available/no-event cases.
+Independent source readback reports no concrete flaw. The existing dossier and coverage
+row record the result. No production collector, cited source, profile, learner binding or
+qualification changes; source grounding/fault/mirror/admission work remains.

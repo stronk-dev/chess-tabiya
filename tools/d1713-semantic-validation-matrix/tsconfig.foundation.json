@@ -7,5 +7,5 @@
       "chessops/*": ["../../packages/runtime/node_modules/chessops/dist/types/*.d.ts"]
     }
   },
-  "include": ["candidate-foundation-frame.test.ts", "foundation-operation.test.ts", "total-foundation-states.test.ts"]
+  "include": ["candidate-foundation-frame.test.ts", "foundation-operation.test.ts", "total-foundation-states.test.ts", "direct-control-reference.test.ts"]
 }

@@ -3012,3 +3012,19 @@ D4218 is already closed; D4217 remains owned separate research-model debt. No so
 qualification, ordinary consumer, content, capability or release gate is promoted. Five
 outcome qualifications and broader D4167/D4175 work remain. The new unconnected control
 reference preparation is not part of this full software run or a qualified source.
+
+### 2026-11-11 — Complete geometric-control reference preparation
+
+After the cutover full gate finishes, normal `make semantic-control-source-research`
+typechecks and passes34 checks(2.58s). The unregistered reference uses independent
+placement/offset/first-blocker arithmetic and compares all128 root/played/alternative
+subjects plus complete event arrays over16 boards/30 moves. Literal counts and legal
+controls distinguish pinned geometry, friendly blockers, pawn pushes, promotion/EP,
+bishop/knight line opening and complete availability with no differing alternative.
+
+Independent static review finds no concrete arithmetic/fixture flaw. The new Make target
+is explicit research, outside ordinary software CI. Existing source/profile/consumer
+registries remain unchanged. No citation, wrong-output fault control, mirror or qualification
+is claimed; those remain required before admission. The existing semantic-validation
+dossier and coverage row now hold the bounded result and current19/89 qualification
+checkpoint, replacing the stale November9 header without changing historical findings.

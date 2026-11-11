@@ -42,7 +42,8 @@ shared compiler/test/Git loader. Exact ordered cases and receipt results are pre
 only the independently reviewed hash metadata changes. The
 [implemented case-storage RFC](../rfc/archive/semantic-validation-case-storage.md) is closed.
 D4217 separately owns two obsolete inventory assertions in an older disposable research
-model. New control-reference preparation remains unconnected and is not qualification.
+model. The unconnected control reference now passes34 research checks across16 boards/30moves
+with128 subjects each; citation/fault/mirror/admission work remains. This is not qualification.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

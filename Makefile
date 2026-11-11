@@ -4699,6 +4699,12 @@ foundation-shared-operation-research:
 	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
 	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/foundation-operation.test.ts tools/d1713-semantic-validation-matrix/candidate-foundation-frame.test.ts tools/d1713-semantic-validation-matrix/total-foundation-states.test.ts
 
+# Disposable D1716 complete-control reference; no canonical admission or product qualification.
+.PHONY: semantic-control-source-research
+semantic-control-source-research:
+	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
+	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/direct-control-reference.test.ts
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:
