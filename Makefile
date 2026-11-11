@@ -4818,6 +4818,22 @@ bounded-verifier-smoke: bounded-verifier-build
 bounded-verifier-measure: bounded-verifier-build
 	$(CI_NODE) .cache/outcome-delivery-cost/verifier-candidate.mjs --write
 
+.PHONY: acquisition-profile-check acquisition-profile-build acquisition-profile-smoke acquisition-profile-measure
+acquisition-profile-check:
+	./node_modules/.bin/tsc --project tools/d4224-acquisition-profile/tsconfig.json
+	./node_modules/.bin/vitest run --config tools/d4224-acquisition-profile/vitest.config.ts
+	$(CI_NODE) --test tools/d4224-acquisition-profile/build.test.mjs
+
+acquisition-profile-build: acquisition-profile-check
+	$(CI_NODE) tools/d4224-acquisition-profile/build.mjs
+
+acquisition-profile-smoke: acquisition-profile-build
+	$(CI_NODE) .cache/d4224-acquisition-profile/profiled.mjs --profiled --failure-control
+	$(CI_NODE) .cache/d4224-acquisition-profile/ordinary.mjs --smoke
+
+acquisition-profile-measure: acquisition-profile-build
+	$(CI_NODE) .cache/d4224-acquisition-profile/ordinary.mjs --write
+
 
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update

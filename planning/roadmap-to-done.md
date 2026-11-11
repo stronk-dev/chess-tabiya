@@ -9,6 +9,15 @@ software tests/581files and seven performance tests/fourfiles; final stronger cy
 assertions pass42focused tests afterward. Types, build and governance pass. The finite RFC is
 [archived](../rfc/archive/bounded-evidence-verification.md). D4224/D4225/consumer/release work stays open.
 
+D4224's acquisition attribution is now measured: the current32-decision source
+interval is18.88s, with1286 legal alternatives and211230 evidence mints. Active-counter builds
+preserve every complete source graph/receipt. Repeated physical mapping and packet validation
+are not the primary costs in this diagnostic. D4227 next tests whether required foundation
+inputs can be acquired without eagerly building unrelated candidate facts. It is a disposable,
+non-authoritative feasibility experiment; full collection, source/failure checks and all13
+families must be preserved before any production contract changes. No timing span is treated
+as a promised saving. [Method and limits](../design/research/module-evidence-assembly.md#current-acquisition-attribution--d4224-2026-11-11).
+
 The coordinated source/storage cutover in `03b584b4` previously passed
 **20,488 software tests in 580 files** (742.34 seconds) and **seven performance tests in
 four files** (57.73 seconds), with the complete normal gate exiting zero. All 1,928

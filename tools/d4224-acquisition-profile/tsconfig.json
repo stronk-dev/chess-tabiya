@@ -1,0 +1,4 @@
+{
+  "extends": "../d4175-outcome-delivery/tsconfig.json",
+  "include": ["run.ts", "trace.ts", "cpu.ts", "profile.test.ts"]
+}

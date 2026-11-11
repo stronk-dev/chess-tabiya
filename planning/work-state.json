@@ -35424,11 +35424,12 @@
     },
     {
       "id": "D4224",
-      "state": "todo",
+      "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:29090ef1966c518331f1800b6df832eeeb098ad3b64c8bd4d305d24477ada7c8",
+      "sourceDigest": "sha256:f63183bb948bd2801f635fdb3441c8b8f421a3b113b07f4c6a7fae403ebbbc4b",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
     },
     {
       "id": "D4225",
@@ -35447,6 +35448,14 @@
       "uxItems": [],
       "evidence": "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4227",
+      "state": "todo",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:6d839545123347cc45f7867deca0192cc07c75518408cddec74a49b401e4eaea",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

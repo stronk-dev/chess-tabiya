@@ -4421,3 +4421,60 @@ whole stored JSON is otherwise identical, including all461 vectors/cases/externa
 The4,341,526B artifact remains under5MiB and compact runtime metadata changes only its matching
 receipt SHA. Full frozen-production gates pass20500software/581 and7performance/four, types/build/governance; final stronger cycle/sparse assertions pass42 focused afterward. Both independent reviewers accept finite D4226 archival/closeout. D4224/D4225/D1716 remain open. `[V]`
 (same source writer/current generated receipt and independent metadata review)
+
+
+## Current acquisition attribution — D4224, 2026-11-11
+
+The ordinary source image remains18f199ed. Disposable TS-body instrumentation preserves every
+original statement between guarded observers; erasing only observer syntax restores exact
+source. Two builds and separate fresh workers retain the normal capacity64 service and all13
+families. Active-counter equality compares all32 complete graphs/receipts and original repeated
+prerequisite identities. Compiler calls32, legal alternatives1286 and outcome-family calls416
+must match actual source counts; real reading compute misses must be nonzero. Four instrument
+and two original-source guards/types, actual profiler-failure cleanup, smoke and full run pass.
+No production file or source issuer changes. `[V]`
+([instrument](../../tools/d4224-acquisition-profile/build.mjs),
+[driver](../../tools/d4224-acquisition-profile/run.ts),
+[method controls](../../tools/d4224-acquisition-profile/profile.test.ts),
+[56,762-byte report](../../planning/foundation-source-identity/acquisition-profile-2026-11-11.json))
+
+Prepared-workload intervals are ordinary18881.2ms, ordinary-source CPU
+sample19756.7ms and instrumented/sample21333.0ms.
+This is one ordered diagnostic, not a speed comparison. Spans include observer overhead;
+CPU leaf samples are approximate attribution, not exact elapsed costs. The ordinary-source
+sample separates real function distribution from hot span-wrapper overhead. Raw profiles are
+discarded; module comments/callers are hints. `[V]` (same report and driver)
+
+| Diagnostic body | Actual calls | Inclusive ms | Interpretation |
+|---|---:|---:|---|
+| Cold compiler |32|17010.2| All complete wide acquisitions |
+| Local event closure |1286|5762.2| One per legal alternative |
+| Child readings |1286|6727.0| One per legal alternative |
+| Sole mint |211230|10166.3| Nested in collectors; cannot add to their time |
+| Evidence declaration |211230|8817.7| Nested in mint; includes sealing |
+| Original piece mapping |3954|44.0| Repetition is real but not a material target here |
+
+Inclusive parents overlap; do not sum this table. The event/child-reading calls are the two
+sequential per-row calls in `compileRow`; their disjoint spans total roughly12.5s in THIS
+diagnostic. That is not predicted removable time: they may warm required downstream work.
+The repeated-lineage cache hypothesis is deprioritized by3954 calls/44.0ms,
+not accepted from repetition alone. Packet validation is also called21452 times but totals
+only289.5ms diagnostically; call volume is not a hotspot verdict. `[V]` (same report;
+[cold row](../../packages/runtime/src/candidate-population.ts))
+
+Ordinary-source sample leaders includefreezeData(15.2%),
+canonicalPart(14.2%), weak-memo add(6.8%) and
+native digest(5.7%). Sample fractions are aggregated across recursive
+contexts using exclusive leaves, never inclusive stacks. High-frequency instrumented digest
+self-time is not substituted for this ordinary distribution. `[V]` (same report, `cpuOnly`;
+[CPU aggregation](../../tools/d4224-acquisition-profile/cpu.ts))
+
+D4224 remains doing. D4227 asks whether a scoped foundation acquisition can preserve every
+required common/total/ray/risk input and thirteen-family result without eagerly materializing
+unrequested candidate facts. Current algebra also authenticates collector unavailability;
+that must be addressed honestly in any future contract. The first experiment must return only
+unadmitted raw data, not forge a wide receipt or skip a claimed source/failure check. Future
+full collection must remain available and share original sources through one compiler.
+No production optimization, source omission, budget increase or consumer completion follows
+from this profile. `[V]` (D4224/D4227;
+[actual outcome input/guard](../../packages/runtime/src/semantic-subject-outcomes.ts))

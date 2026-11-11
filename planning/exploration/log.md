@@ -41502,3 +41502,33 @@ D4175 ordinary26 and D4167 reverse consumers stay held/open, and D3928 content/n
 is untouched. Next take D4224's actual stage/call census, retaining complete sources and exact
 receipt identity; no guessed cache or source omission. Final staging/hooks/commit/first-parent
 checks follow this closeout and are recorded by the landing result.
+
+
+### 2026-11-11 — D4224 current acquisition profile starts
+
+18f199ed commits D4226; all commit hooks and the actual first-parent authority check pass,
+and the tracked diff is clear. Next use disposable current-source stage counters and Node's
+CPU sampler on the exact32-decision/all13-family workload. Separate ordinary/profiled workers
+must preserve complete graphs/receipts, original prerequisite identities, order and source
+counts. Count actual reading compute misses and original-piece mapping, not wrapper calls
+alone. Keep inclusive versus exclusive spans distinct and retain only compact summaries;
+no raw profile, guessed cache, missing source, raised deadline or new learner feature.
+
+
+### 2026-11-11 — D4224 acquisition attribution measured
+
+Current ordinary32-source interval18881.2ms; separate ordinary CPU sample19756.7ms and
+instrumented/sample21333.0ms are diagnostic observations, not a speed comparison. All32
+active-counter complete graphs/receipts and original input identities match;1286alternatives,
+416family calls and211230mints are actual. Four instrument/two source guards/types, real native
+profiler failure cleanup, smoke and full run pass. Both independent reviews accept the bounded
+method; result interpretation preserves observer/nesting/sample limits. The56762B report
+stores only compact counts/aggregates, no raw profile/payload recording.
+
+Repeated physical mapping3954calls44ms and packet validation21452calls289.5ms are not primary
+targets in this diagnostic. Event closure5762.2ms/child reading6727.0ms are sequential row
+spans, not additive with their nested declaration/mint costs. Ordinary CPU samples point at
+freezing/serialization; do not infer exact source time from4.2m hot wrapper spans. D4227 now
+owns a non-authoritative scoped-core/raw-algebra feasibility experiment: preserve every
+required input/result and explicit failure semantics, with no fake wide receipt or lost full
+feature path. D4224 remains doing. Commit this verified instrument before that next wave.

@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:edf8d7515be3b96f92d6dfb5684ee683c0ea3837f7429274e80b1686beb00b30",
+    "roadmap": "sha256:582973bcdbcff78e69444f2a38e67789caffd2fcd1e084aab77854d80c6bea82",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:d1f5a6a6920975527cd5e461f5370f4d39d89ff5031e4aafa19d19c0c2901fc8",
+    "workState": "sha256:bfe7bda9207ee03ccbbe68beaa51b4046b2b2878fe453b0d4910ad83c87e1b35",
     "rfcRegister": "sha256:31ea9a6874d0963fc58e610a308df568a8b20a8a380014d7a3d25d677fbcccc5",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 633,
-      "doing": 174,
+      "doing": 175,
       "blocked": 1063,
       "done": 1942,
       "refused": 163
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "D4226 is complete. Measure D4224 actual acquisition stages/call counts before selecting a repair, and resolve remaining D4225 retention before D4175 ordinary bindings. Preserve all source/authority semantics; D4167 and D3928 remain.",
+      "nextAction": "D4224 actual acquisition attribution is measured. Run D4227 non-authoritative scoped-core feasibility against every required thirteen-family input/result/population before any reviewed source-group contract or production change. Preserve complete full-collection features and failure semantics; continue D4225 remaining memory work before D4175 ordinary bindings. D4167 and D3928 remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4226 bounded verification memo is implemented/independently accepted for archival: two weak262144-add generations preserve old authority and full32-source graphs/receipts, with239–240MiB lower held/released heap in every4ordinary paired trial.3faster/1slower,3.72%lower summed local source time is no portable claim. Full frozen-production20500software/581+7performance/four/types/build/governance pass; final stronger cycle/sparse assertions pass42focused afterward. Canonical1928/1928/24of89,461vectors/8externals unchanged except11 exact helper/hash and63 joined predicate hashes;4341526B<5MiB. D4225 remaining~884MiB held/~318MiB released and D4224~18s acquisition stay open, as do D4175ordinary26/D4167/D3928. No capability/release completion.",
+        "summary": "D4226 production verification remains committed in18f199ed. D4224 diagnostic preserves all32 complete source graphs/receipts and original inputs:1286 legal alternatives,416 family calls,211230 evidence mints. Ordinary18881.2ms, separate ordinary CPU/sample19756.7ms and instrumented21333.0ms are one ordered attribution, not a speed comparison. Original mapping44ms and packet validation289.5ms are not primary targets here; event/child-reading sequential spans total~12.5s diagnostically, not predicted removable cost. Four instrument/two source guards/types, native-profiler failure cleanup/smoke/full run pass;56762B compact report, no production mutation. D4227 scopes required-source acquisition feasibility; D4224/D4225/D4175ordinary26/D4167/D3928 and release remain open.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -623,7 +623,9 @@
           "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md",
           "packages/runtime/src/frozen-data-memo.ts",
           "packages/runtime/src/frozen-data-memo.test.ts",
-          "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json"
+          "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json",
+          "tools/d4224-acquisition-profile/README.md",
+          "planning/foundation-source-identity/acquisition-profile-2026-11-11.json"
         ],
         "anchors": [
           {
@@ -1269,7 +1271,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:29090ef1966c518331f1800b6df832eeeb098ad3b64c8bd4d305d24477ada7c8"
+            "digest": "sha256:f63183bb948bd2801f635fdb3441c8b8f421a3b113b07f4c6a7fae403ebbbc4b"
           },
           {
             "kind": "work_state",
@@ -1280,6 +1282,11 @@
             "kind": "work_state",
             "id": "D4226",
             "digest": "sha256:328fe7ba0b9b16cd57844e79eaa4ea179b83867c05d66c6362cbb7f509ae2f15"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4227",
+            "digest": "sha256:6d839545123347cc45f7867deca0192cc07c75518408cddec74a49b401e4eaea"
           }
         ]
       },
@@ -1300,10 +1307,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D4226 is complete. Measure D4224 actual acquisition stages/call counts before selecting a repair, and resolve remaining D4225 retention before D4175 ordinary bindings. Preserve all source/authority semantics; D4167 and D3928 remain.",
+      "nextAction": "D4224 actual acquisition attribution is measured. Run D4227 non-authoritative scoped-core feasibility against every required thirteen-family input/result/population before any reviewed source-group contract or production change. Preserve complete full-collection features and failure semantics; continue D4225 remaining memory work before D4175 ordinary bindings. D4167 and D3928 remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4226 bounded verification memo is implemented/independently accepted for archival: two weak262144-add generations preserve old authority and full32-source graphs/receipts, with239–240MiB lower held/released heap in every4ordinary paired trial.3faster/1slower,3.72%lower summed local source time is no portable claim. Full frozen-production20500software/581+7performance/four/types/build/governance pass; final stronger cycle/sparse assertions pass42focused afterward. Canonical1928/1928/24of89,461vectors/8externals unchanged except11 exact helper/hash and63 joined predicate hashes;4341526B<5MiB. D4225 remaining~884MiB held/~318MiB released and D4224~18s acquisition stay open, as do D4175ordinary26/D4167/D3928. No capability/release completion.",
+        "summary": "D4226 production verification remains committed in18f199ed. D4224 diagnostic preserves all32 complete source graphs/receipts and original inputs:1286 legal alternatives,416 family calls,211230 evidence mints. Ordinary18881.2ms, separate ordinary CPU/sample19756.7ms and instrumented21333.0ms are one ordered attribution, not a speed comparison. Original mapping44ms and packet validation289.5ms are not primary targets here; event/child-reading sequential spans total~12.5s diagnostically, not predicted removable cost. Four instrument/two source guards/types, native-profiler failure cleanup/smoke/full run pass;56762B compact report, no production mutation. D4227 scopes required-source acquisition feasibility; D4224/D4225/D4175ordinary26/D4167/D3928 and release remain open.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1906,7 +1913,9 @@
           "planning/foundation-source-identity/bounded-verifier-independent-review-2026-11-11.md",
           "packages/runtime/src/frozen-data-memo.ts",
           "packages/runtime/src/frozen-data-memo.test.ts",
-          "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json"
+          "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json",
+          "tools/d4224-acquisition-profile/README.md",
+          "planning/foundation-source-identity/acquisition-profile-2026-11-11.json"
         ],
         "anchors": [
           {
@@ -2917,7 +2926,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:29090ef1966c518331f1800b6df832eeeb098ad3b64c8bd4d305d24477ada7c8"
+            "digest": "sha256:f63183bb948bd2801f635fdb3441c8b8f421a3b113b07f4c6a7fae403ebbbc4b"
           },
           {
             "kind": "work_state",
@@ -2928,6 +2937,11 @@
             "kind": "work_state",
             "id": "D4226",
             "digest": "sha256:328fe7ba0b9b16cd57844e79eaa4ea179b83867c05d66c6362cbb7f509ae2f15"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4227",
+            "digest": "sha256:6d839545123347cc45f7867deca0192cc07c75518408cddec74a49b401e4eaea"
           }
         ]
       },
