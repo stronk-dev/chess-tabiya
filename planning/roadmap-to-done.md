@@ -2,12 +2,13 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. The current coordinated source/storage cutover passes
+The full 1.0 goal remains active. The coordinated source/storage cutover in `03b584b4` passes
 **20,488 software tests in 580 files** (742.34 seconds) and **seven performance tests in
 four files** (57.73 seconds), with the complete normal gate exiting zero. All 1,928
 canonical cases pass over 89 subjects; 24 qualify, including all 13 original-subject
-outcome families. Staged/committed-tree controls and the finite storage closeout follow
-before the next implementation wave. Earlier D4215/D4218 case-storage completion stands.
+outcome families. Actual staged/committed-tree controls and all hooks pass. The independently completed
+receipt-storage RFC is archived; D4220/D4221/D4222 close on that commit. Earlier
+D4215/D4218 case-storage completion stands.
 See the [exploration log](exploration/log.md).
 
 **D4200 durable availability** now carries per-decision source coverage through revision 10
@@ -37,7 +38,7 @@ source checkpoint, not completed consumer delivery.
 
 D4220 replaces repeated input lists with461 unique ordered vectors. Its complete generated
 receipt shrinks from12,750,264 to4,340,954 bytes, under the unchanged5MiB guard. Independent
-expansion reproduces the full1928-case document exactly. Current readers use storage2;
+expansion reproduces the full1928-case document exactly. The independently completed storage RFC is archived. Current readers use storage2;
 Git-history reads retain an explicit pre-cutover1/post-cutover2 boundary. Focused codec/Git
 checks pass; D4221 removes growing-corpus coupling from the owner-policy unit without changing
 its assertions or the actual full-repository/large-Git checks. D4222 replaces copied later-source

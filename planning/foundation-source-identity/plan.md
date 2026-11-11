@@ -3169,3 +3169,16 @@ exact. The461-vector receipt is4,340,954 bytes under the unchanged5MiB guard. D4
 repairs have independent bounded acceptance;32 codec/Git and3312 affected tests pass.
 Staged/first-parent checks and finite storage completion follow. No ordinary26, whole
 foundation/capability, content, native journey or release completion is inferred.
+
+
+### 2026-11-11 — Committed qualification/storage and finite closeout
+
+03b584b4 commits all13 qualified outcome families/1928 passing cases/24 subjects and the
+lossless receipt cutover. Every normal hook passes, including staged-image types, exact
+source sizes and process/history controls. Actual HEAD→index and HEAD^1→HEAD guards pass.
+Independent finite completion accepts D4220; its RFC is archived and D4220/D4221/D4222
+close on real code paths. The actual current source-history tool passes strict storage2/
+HEAD preservation, then stops on D3928's unchanged first-pack grade.move_quality1→2
+requirement (the sole actual/expected requirement difference). Its overall target remains
+held, with no authored-content rewrite or waiver. Full software20488/580 and performance7/4
+are green; ordinary26/D1716/D4167, content/native and whole1.0 delivery remain open.

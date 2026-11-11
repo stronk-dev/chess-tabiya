@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5b8221fac820c9fe16e491dd9ac78ac85d085e29a2c2a27d48fb89b67d38a49a",
+    "roadmap": "sha256:6b43ba05214af8b0ac167cbb855717cc02d5f9aa2559ac082380cdd26223f0f6",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:50d7008759edf61b4914a899bed5ab9ee182f8e60f62ee87a01f39359da28d54",
-    "rfcRegister": "sha256:a36a73c2fd76905467dec9f625be0022f3a3cb3468ca9ff08f2760efebbe90c2",
+    "workState": "sha256:2b05d2f2cc0177fa1227d9e2808f165ff8af86da40361848a77874e9c2236adb",
+    "rfcRegister": "sha256:b4da266d47add25ffd2ddac7aa483252c9d2726d9ef1817910680605c1b022b2",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -18,11 +18,11 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 80,
+    "assignedRfcs": 79,
     "activeRfcLifecycle": {
       "draft": 20,
       "accepted": 0,
-      "implementing": 51,
+      "implementing": 50,
       "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 632,
-      "doing": 176,
+      "doing": 173,
       "blocked": 1063,
-      "done": 1937,
+      "done": 1940,
       "refused": 163
     },
     "workItems": {
@@ -357,10 +357,10 @@
       "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance/staged controls remain for the checkpoint. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
+        "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance, actual staged/first-parent controls and all hooks pass in03b584b4; independently accepted receipt storage is archived. D4220/D4221/D4222 are closed. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
         "impact": "advanced",
         "evidence": [
-          "rfc/semantic-validation-receipt-storage.md",
+          "rfc/archive/semantic-validation-receipt-storage.md",
           "packages/runtime/src/semantic-validation-receipt-storage.ts",
           "packages/runtime/src/semantic-validation-receipt-storage.test.ts",
           "packages/runtime/src/semantic-validation-final-outcome.test.ts",
@@ -1246,11 +1246,6 @@
             "kind": "work_state",
             "id": "D4210",
             "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
-          },
-          {
-            "kind": "rfc",
-            "id": "semantic-validation-receipt-storage.md",
-            "digest": "sha256:89801a442a3cd13c409434bf5235ee7e2d24d686a1a3a67210a03c058cbaa765"
           }
         ]
       },
@@ -1274,10 +1269,10 @@
       "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance/staged controls remain for the checkpoint. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
+        "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance, actual staged/first-parent controls and all hooks pass in03b584b4; independently accepted receipt storage is archived. D4220/D4221/D4222 are closed. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
         "impact": "advanced",
         "evidence": [
-          "rfc/semantic-validation-receipt-storage.md",
+          "rfc/archive/semantic-validation-receipt-storage.md",
           "packages/runtime/src/semantic-validation-receipt-storage.ts",
           "packages/runtime/src/semantic-validation-receipt-storage.test.ts",
           "packages/runtime/src/semantic-validation-final-outcome.test.ts",
@@ -2866,11 +2861,6 @@
             "kind": "work_state",
             "id": "D4210",
             "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
-          },
-          {
-            "kind": "rfc",
-            "id": "semantic-validation-receipt-storage.md",
-            "digest": "sha256:89801a442a3cd13c409434bf5235ee7e2d24d686a1a3a67210a03c058cbaa765"
           }
         ]
       },
@@ -5312,7 +5302,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 29,
+      "rfcCount": 28,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

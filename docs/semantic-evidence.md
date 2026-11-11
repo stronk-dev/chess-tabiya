@@ -21,7 +21,7 @@ restore the complete schema1 execution document. Vector order and duplicate occu
 intact; decoded shared vectors are immutable. The runtime imports the compact verdict module.
 The canonical writer hashes the exact stored bytes and `--check` remains read-only. Current
 schema1 storage refuses; the preservation tool handles pre-cutover Git blobs explicitly.
-See `rfc/semantic-validation-receipt-storage.md`.
+See `rfc/archive/semantic-validation-receipt-storage.md`.
 
 ## Factory input order
 

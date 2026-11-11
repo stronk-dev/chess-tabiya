@@ -1,6 +1,6 @@
 # RFC: Semantic validation receipt storage
 
-- **Status:** implementing — independently accepted on bounded buildability 2026-11-11 after the explicit Git-history reader repair; complete local verification passes, with committed-tree controls and independent completion still pending.
+- **Status:** implemented — 2026-11-11 after independent finite completion acceptance, full local verification and actual staged/first-parent controls.
 - **Author:** codex, under the full-foundation/pre-launch zero-legacy rulings.
 - **Created:** 2026-11-11
 - **Parent / amends:** semantic-validation-authority.md §6; follows archive/semantic-validation-case-storage.md without changing its format.
@@ -18,6 +18,24 @@ none
 Store each repeated ordered input-digest vector once in the generated validation JSON.
 One build/test codec restores the unchanged complete schema1 execution document. The compact
 runtime verdict module and all source/case/profile/qualification semantics stay intact.
+
+## Implementation checkpoint — 2026-11-11
+
+Committed in `03b584b4`. The complete 1,928-case receipt occupies 4,340,954 bytes with
+461 exact ordered input vectors. Independent expansion reproduces the full pre-codec
+document; all 1,524 earlier case receipts, operations/populations/externals and 84 other
+verdicts remain exact. Five newly qualified outcomes belong to the parent source work.
+
+Normal verification passes 20,488 software tests/580 files (742.34s), seven performance
+tests/four files (57.73s), governance, types and build. Thirty-two codec/Git controls and
+3,312 affected regressions pass. The actual repository staged and first-parent guards
+pass; commit hooks typecheck the complete staged image. Independent completion review
+accepts this finite storage implementation.
+
+The actual current source-history tool decodes and preserves the committed storage2
+receipt, then stops at the existing D3928 pack requirement: grade.move_quality1 versus2.
+That whole target remains held; it is not reported green or waived. No content, ordinary
+consumer, broader D1716 or release completion follows from this storage closeout.
 
 ## Motivation
 
