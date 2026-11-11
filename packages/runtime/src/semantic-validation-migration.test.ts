@@ -1,7 +1,7 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3628: elevate existing nearby negatives, not new chess judgements.
 // Fixtures are retained from breadth-semantic, semantic-tactics, semantic-tactic-sequences
 // and D1714's harassment/defender-consequence assertions. Their original tests remain intact.
-import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { normalizeMove } from "chessops/chess";
 import { parseUci } from "chessops/util";
@@ -30,7 +30,7 @@ function sequence(family: SemanticSequenceFamily, fen: string, moves: readonly s
     path: { kind: "recorded_path", pathReceipt: { id: "run.record.edge", version: 1 }, edges: pathEdges, pathDigest: semanticRecordedPathDigest(pathEdges) } };
 }
 
-const cases = () => (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+const cases = () => (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
 
 async function checked(id: string | null, projection: string, version: number, operation: SemanticValidationOperationId,
   input: SemanticEdgeInput | SemanticRecordedSequenceInput, emits: boolean): Promise<void> {

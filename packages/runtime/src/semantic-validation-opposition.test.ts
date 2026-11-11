@@ -1,3 +1,4 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 import { PAWN_OUTCOME_LITERAL_SOURCES } from "./semantic-validation-pawn-outcome-sources.js";
 import { PAWN_LINEAGE_LITERAL_SOURCES } from "./semantic-validation-pawn-lineage-sources.js";
 import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
@@ -6,7 +7,6 @@ import { restoreSubjectSafeHistoricalCases, SUBJECT_SAFE_RETIRED_CASES, SUBJECT_
 import { SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
 import { BACKWARD_LITERAL_SOURCE } from "./semantic-validation-backward-sources.js";
 import { PAWN_FILE_LITERAL_SOURCES } from "./semantic-validation-pawn-file-sources.js";
-import { readFileSync } from "node:fs";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { evidenceDigest } from "./evidence-contract.js";
@@ -175,7 +175,7 @@ describe("real fixed authority and operation falsifiers before qualification", (
 
 
 it("joins all46 concrete cases to the canonical register and only qualifies the current exact source", () => {
-  const canonical = (JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+  const canonical = (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
   expect(canonical).toHaveLength(824 + COUNT_POPULATION_LITERAL_SOURCE.cases.length + [...PAWN_OUTCOME_LITERAL_SOURCES, ...PAWN_LINEAGE_LITERAL_SOURCES].reduce((n, source) => n + source.cases.length, 0));
   expect(SUBJECT_SAFE_RETIRED_CASES).toHaveLength(51);
   const historical = restoreSubjectSafeHistoricalCases(canonical as unknown as Record<string, unknown>[]);

@@ -1,3 +1,4 @@
+import { loadSemanticValidationCases } from "../packages/runtime/src/semantic-validation-case-storage.js";
 // `make semantic-validation-update` / `make semantic-validation-check` (rfc/semantic-validation-authority.md §6).
 //
 // Runs every registered case, every population census and the migrated external receipts, compiles
@@ -18,7 +19,6 @@ import { SEMANTIC_VALIDATION_OPERATIONS, subjectOutcomesFromReceipt, observation
 import { executeSemanticValidationCase, semanticValidationSoleFactory, type SemanticCaseExecutionReceipt } from "../packages/runtime/src/semantic-validation-runner.js";
 import {
   SEMANTIC_VALIDATION_ARMS,
-  SEMANTIC_VALIDATION_CASES_PATH,
   SEMANTIC_VALIDATION_PROFILE_CELLS,
   SEMANTIC_VALIDATION_PROFILES_PATH,
   SEMANTIC_READING_VALIDATION_DECLARATIONS,
@@ -191,9 +191,10 @@ function externalRows(): readonly ExternalRow[] {
 
 function loadDocuments(): { readonly profiles: readonly SemanticValidationProfile[]; readonly cases: ReturnType<typeof parseSemanticValidationCase>[]; readonly profileText: string; readonly caseText: string } {
   const profileText = readFileSync(resolve(ROOT, SEMANTIC_VALIDATION_PROFILES_PATH), "utf8");
-  const caseText = readFileSync(resolve(ROOT, SEMANTIC_VALIDATION_CASES_PATH), "utf8");
+  const caseDocument = loadSemanticValidationCases(ROOT);
+  const caseText = JSON.stringify(caseDocument);
   const profiles = (JSON.parse(profileText) as { readonly profiles: readonly unknown[] }).profiles.map(parseSemanticValidationProfile);
-  const cases = (JSON.parse(caseText) as { readonly cases: readonly unknown[] }).cases.map(parseSemanticValidationCase);
+  const cases = caseDocument.cases.map(parseSemanticValidationCase);
   return { profiles, cases, profileText, caseText };
 }
 

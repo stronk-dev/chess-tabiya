@@ -1,7 +1,7 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 import { invokeEvidenceValueRoute } from "./internal/evidence-value-routes.js";
 // D3691: independent finite pawn operands through the registered production edge.
 // No pawn collector/helper is used to construct this test's expected geometry.
-import { readFileSync } from "node:fs";
 import { retainHistoricalSemanticCaseFixtures, SUBJECT_SAFE_RETIRED_CASES } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import type { Color, Square } from "chessops/types";
@@ -16,7 +16,7 @@ import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./seman
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
+const raw = retainHistoricalSemanticCaseFixtures((loadSemanticValidationCases()).cases);
 const byId = new Map(raw.map(value => { const parsed = parseSemanticValidationCase(value); return [parsed.id, parsed] as const; }));
 const rows = PAWN_DYNAMICS_CITED_SOURCE.cases;
 const subject = rows[0]!.proposition.subject;

@@ -2949,3 +2949,51 @@ and original case objects/order survive repartition. This kernel is not yet impo
 any existing reader; the complete run above does not certify its later integration.
 Current storage, compiler digest, all32 readers, base-only historical decoding, actual
 Git staged/first-parent refusal controls and runtime graph proofs remain. D1 stays open.
+
+D4217 records the older D4167 proposal audit's live/historical mismatch found during the
+reader census: its original875-case and withdrawn-ref expectations already contradict the
+unchanged1524-case live registry. Keep frozen data and original assertions intact pending
+explicit historical-model repair; execute the existing research target to bound the debt.
+
+### 2026-11-11 — D4215 complete reader and temporal cutover
+
+The canonical index2 names foundation.json(880 cases;2,006,442bytes) and
+original-pawns.json(644 cases;2,907,562bytes). Their exact ordered concatenation equals
+the former singleton. All thirty consumer files, compiler and extracted Git guard use
+the shared loader. The pure runtime, actual HTTP and client import graphs exclude both
+storage and tree guard. Retired fixtures and archived files remain byte-identical.
+
+The actual writer passes1524/1524 cases over89subjects/19qualified,63 populations and
+eight externals. Complete predecessor/current receipt comparison is equal after removing
+ONLY caseDigest, operations[*].implementationDigest and populations[*].predicateImplementationDigest.
+The independently accepted clarification is necessary because extraction changes source
+bytes within existing operation closures. The unchanged hash algorithm recomputes11
+operation and63 corresponding population hashes; all operation file lists and every
+case/target, population input/result, external, root/profile and verdict field stay equal.
+The normalized case digest changes47fbae80c91dfc9714e33d55efb66ed54173b188b1ebe47648054e06f62d8fec
+to18e0a87931d352888a5cb79274a8e2bf6cb0361f8a01ed5c6f4f2ea8f7af35ea.
+
+All4754 reader tests/28files pass(52.63s); workspace types pass. Forty-seven storage/
+temporal tests include real bundled CLI commands in temporary Git repositories: staged
+case/ruling bytes beat differing working copies; missing staged and base parts refuse;
+actual first-parent schema1→index2 works; no-parent, crossed subject/arm, nested owner and
+repartitioned same-change admission refuse. No filesystem or other-tree fallback exists.
+
+D4217's old disposable proposal target compiles,39pass/2fail, at its unchanged44-event
+and withdrawn-ref assertions before case access. Both current manifest inputs are unchanged
+by this storage migration. Its historical assertions remain intact and the debt is owned.
+The cutover still needs normal build/governance and complete software/performance proof.
+D1 remains open; no new source qualifies and no content, capability or release gate closes.
+
+D4218 records the actual staged-gate transport failure: default execFileSync output limits
+truncate the4.9MB historical case blob and1.56MB work-state blob, while the old CLI catch
+reports them absent. The new strict guard exposed it. Repair the Git reader and add actual
+large-blob temporal fixtures before treating cutover governance as passed.
+
+D4218 closes after the real guard exposes the old transport bug: both historical cases
+and work-state produce ENOBUFS under the default child output buffer. The actual >1MiB
+Git fixture fails1/14 before repair, then storage/temporal48/two pass(2.03s). Independently
+reviewed cat-file NUL protocol reads distinguish explicit missing objects from child/
+transport errors, preserve exact blob byte lengths and retain the existing source-size
+bound plus framing. The real repository HEAD→index transition now passes. Production
+build and types also pass. Complete cutover software/performance proof still remains.

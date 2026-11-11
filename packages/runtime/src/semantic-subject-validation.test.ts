@@ -9,7 +9,8 @@ import { assertSemanticMirrorPartnerInput, assertSemanticTargetValueAuthority, e
 import { SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
 import { semanticLegalSetDigest, parseSemanticValidationCase, parseSemanticValidationOperationInput, mirrorSemanticFen, mirrorSemanticUci,
   semanticFactConstraintSha256, type SemanticCompleteAlternativesInput, type SemanticSubjectOutcomesInput, type SemanticValidationCaseFor, type SemanticValidationCase } from "./semantic-validation.js";
-import cases from "./semantic-validation-cases.json" with { type: "json" };
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
+const cases = { cases: loadSemanticValidationCases().cases.map(parseSemanticValidationCase) };
 import { recordedSemanticWindowSource } from "./recorded-semantic-window.js";
 import { RECORDED_SEQUENCE_POSITIVES } from "./testing/recorded-sequence-fixtures.js";
 import { recordedSequenceWindowFixture } from "./testing/recorded-sequence-window-fixture.js";

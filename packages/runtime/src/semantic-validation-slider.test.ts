@@ -1,9 +1,9 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 import { PAWN_OUTCOME_LITERAL_SOURCES } from "./semantic-validation-pawn-outcome-sources.js";
 import { PAWN_LINEAGE_LITERAL_SOURCES } from "./semantic-validation-pawn-lineage-sources.js";
 import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
 import { restoreSubjectSafeHistoricalCases, SUBJECT_SAFE_RETIRED_CASES, SUBJECT_SAFE_REANCHORED_CASES } from "./testing/subject-safe-retired-semantic-cases.js";
 // Independent literal data controls. Authority/canonical integration follows source review.
-import { readFileSync } from "node:fs";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SLIDER_LITERAL_EXAMPLES, SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
@@ -276,7 +276,7 @@ it("retains a genuine latest edge value until a different real input replaces it
 
 
 it("joins all116 literal slider cases while preserving759 predecessors and the distinct legacy meaning", () => {
-  const canonical = (JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+  const canonical = (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
   expect(canonical).toHaveLength(824 + COUNT_POPULATION_LITERAL_SOURCE.cases.length + [...PAWN_OUTCOME_LITERAL_SOURCES, ...PAWN_LINEAGE_LITERAL_SOURCES].reduce((n, source) => n + source.cases.length, 0));
   expect(SUBJECT_SAFE_RETIRED_CASES).toHaveLength(51);
   const historical = restoreSubjectSafeHistoricalCases(canonical as unknown as Record<string, unknown>[]);

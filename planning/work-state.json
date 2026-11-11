@@ -35346,7 +35346,7 @@
       "id": "D4215",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f7c7f211f945df805ca4b3902ff5756c4538c50caa92d45a7e542e8fa67cbbb0",
+      "sourceDigest": "sha256:44b2142d275db8683da0cf67c7179e007aad4ac823d9c6ca22b001c81f059668",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35358,6 +35358,23 @@
       "sourceDigest": "sha256:e4efef7fb9284d60634a0a5a95cb609a51d6fbc89f3f2e43126b900b63b37df1",
       "uxItems": [],
       "evidence": "apps/server/src/learner-profile.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4217",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7be758c5f37866821b09fde0112a2840d8ad88d40e277357f24d1298fa562a31",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D4218",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:75cb3c356d2a4188b10d90300e37e21b84ad2411b2d72c2763e61e4b1ebfe5a9",
+      "uxItems": [],
+      "evidence": "tools/semantic-validation-owner-transition.ts",
       "evidenceKind": "path"
     }
   ]

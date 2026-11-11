@@ -1,6 +1,6 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3717: independent legal replay, integer diagonal occupancy and literal role scope.
 // Never use pressureLines, harassmentPressureSequence or collector output as the oracle.
-import { readFileSync } from "node:fs";
 import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { Chess } from "chessops/chess";
@@ -15,7 +15,7 @@ import { SEMANTIC_VALIDATION_OPERATIONS, observationEvidence } from "./semantic-
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const liveDocument = JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] };
+const liveDocument = loadSemanticValidationCases();
 const raw = { cases: retainHistoricalSemanticCaseFixtures(liveDocument.cases) };
 const byId = new Map(raw.cases.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
 const source = RECORDED_CITED_SOURCES.find(source => source.sourceId === "python-chess.recorded.pressure")!;

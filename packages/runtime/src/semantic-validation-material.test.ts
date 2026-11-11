@@ -1,6 +1,6 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3949: exact current-subject authority through the production operation. Pinned source
 // membership plus neutral count arithmetic, not material advantage or move quality.
-import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Chess, normalizeMove } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
@@ -15,7 +15,7 @@ import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 import { RETIRED_SEMANTIC_VALIDATION_CASES } from "./testing/subject-safe-retired-semantic-cases.js";
 
-const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: unknown[] }).cases;
+const raw = (loadSemanticValidationCases()).cases;
 const cases = raw.map(parseSemanticValidationCase), byId = new Map(cases.map(value => [value.id, value]));
 const source = MATERIAL_V2_CITED_SOURCE, roles = ["pawn", "knight", "bishop", "rook", "queen"] as const;
 const position = (fen: string) => Chess.fromSetup(parseFen(fen).unwrap()).unwrap();

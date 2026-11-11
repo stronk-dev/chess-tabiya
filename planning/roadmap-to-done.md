@@ -37,9 +37,12 @@ implementation and verification.
 
 The pawn qualification wave now has its complete software verification. The generated
 receipt retains every record with one case per line under the unchanged 5 MiB guard.
-D4215's shared case loader has independent bounded review and 34 separate focused tests.
-It remains unconnected; canonical storage, all current readers and the Git temporal guard
-still need coordinated migration under the accepted RFC.
+D4215 now migrates thirty consumers, the compiler and extracted Git guard to index2 and
+two bounded case files. All cases and receipt results are preserved; only the independently
+reviewed hash metadata changes. Reader tests4754/28, actual storage/Git checks48/two,
+the real staged guard, types and production build pass. D4218 closes the reproduced
+Git output-buffer bug. The cutover still needs its complete software/performance verification.
+D4217 separately owns two obsolete inventory assertions in an older disposable research model.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

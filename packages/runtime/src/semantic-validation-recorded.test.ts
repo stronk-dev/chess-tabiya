@@ -1,5 +1,5 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3705: exact recorded facts, not “trade is good”, contact intent or forced continuation.
-import { readFileSync } from "node:fs";
 import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { makeFen } from "chessops/fen";
@@ -14,7 +14,7 @@ import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./seman
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase, type SemanticRecordedPathInput } from "./semantic-validation.js";
 
-const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
+const raw = retainHistoricalSemanticCaseFixtures((loadSemanticValidationCases()).cases);
 const byId = new Map(raw.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
 const pressureSource = RECORDED_CITED_SOURCES.find(source => source.sourceId === "python-chess.recorded.pressure")!;
 const rows = RECORDED_CITED_SOURCES.filter(source => source !== pressureSource).flatMap(source => source.cases);

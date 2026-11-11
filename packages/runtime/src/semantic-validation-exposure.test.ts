@@ -1,7 +1,7 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3950: independent finite board facts through the current production operation. No calls to
 // exchange/control/semantic helpers to produce expected facts. Pass and exchange are conventions,
 // not a claim of forced gain or move quality. Deeper capture trees must fail this fixture oracle.
-import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { attacks } from "chessops/attacks";
 import { Chess, normalizeMove } from "chessops/chess";
@@ -18,7 +18,7 @@ import { executeSemanticValidationCase, selectSemanticTargets, subjectSemanticRe
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
 const source = EXPOSURE_V2_CITED_SOURCE, subject = source.cases[0]!.proposition.subject;
-const raw = (JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: unknown[] }).cases;
+const raw = (loadSemanticValidationCases()).cases;
 const byId = new Map(raw.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
 const position = (fen: string) => Chess.fromSetup(parseFen(fen).unwrap()).unwrap();
 const promotions = ["bishop", "knight", "queen", "rook"] as const;

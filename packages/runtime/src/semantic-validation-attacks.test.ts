@@ -1,5 +1,5 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3701: neutral finite geometry and legal capture sets, not detector output as an oracle.
-import { readFileSync } from "node:fs";
 import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { Chess } from "chessops/chess";
@@ -15,7 +15,7 @@ import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./seman
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
+const raw = retainHistoricalSemanticCaseFixtures((loadSemanticValidationCases()).cases);
 const byId = new Map(raw.map(row => { const value = parseSemanticValidationCase(row); return [value.id, value] as const; }));
 const rows = ATTACK_CITED_SOURCES.flatMap(source => source.cases);
 

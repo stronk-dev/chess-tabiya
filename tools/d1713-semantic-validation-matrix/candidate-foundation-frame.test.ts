@@ -1,8 +1,8 @@
+import { loadSemanticValidationCases } from "../../packages/runtime/src/semantic-validation-case-storage.js";
 // DISPOSABLE D4167 research: one root owner shares six existing foundation prerequisites across
 // real legal children, current seven event factories and retained reading views. This is NOT a
 // production packet/issuer/ABI, semantic oracle, ordinary activation or timing budget.
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { readFileSync } from "node:fs";
 import { normalizeMove } from "chessops/chess";
 import { parseUci } from "chessops/util";
 import * as routes from "../../packages/runtime/src/internal/evidence-value-routes.js";
@@ -11,7 +11,7 @@ import { collectFoundationEdgeEvents, type FoundationEdgeSourceRef } from "../..
 import { compileSemanticEvidenceEvent, type SemanticEvidenceEvent } from "../../packages/runtime/src/semantic-evidence.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 import { assertDeclaredEvidence, type DeclaredEvidence, type SemanticEventSign } from "../../packages/runtime/src/evidence-contract.js";
-import { SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS } from "../../packages/runtime/src/semantic-validation.js";
+import { SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS, parseSemanticValidationCase } from "../../packages/runtime/src/semantic-validation.js";
 import type { ExactLegalMove } from "../../packages/runtime/src/legal-moves.js";
 import { deriveCandidatePacketProjectionGroups } from "../candidate-packet-projections/derive.js";
 import { ONE_EDGE_EVENT_REFS } from "../../packages/runtime/src/module-registry.js";
@@ -206,9 +206,7 @@ describe("D4167 disposable original candidate-frame composition", () => {
     expect(proposed).toContain("derived.tactic.discovered_executed@1");
     const readings = Object.entries(groups).filter(([group]) => group.startsWith("reading.")).flatMap(([, values]) => values);
     expect(readings).toHaveLength(35); expect(new Set(readings).size).toBe(35);
-    const document = JSON.parse(readFileSync(new URL("../../packages/runtime/src/semantic-validation-cases.json", import.meta.url), "utf8")) as {
-      readonly cases: readonly { readonly subject: { readonly projection: { readonly id: string; readonly version: number } } }[];
-    };
+    const document = { cases: loadSemanticValidationCases().cases.map(parseSemanticValidationCase) };
     const historical = document.cases.filter(row => withdrawn.includes(`${row.subject.projection.id}@${row.subject.projection.version}`));
     expect(document.cases).toHaveLength(875); expect(historical).toHaveLength(51);
     expect(historical.some(row => row.subject.projection.id === "rules.structural.event.king_opposition")).toBe(false);

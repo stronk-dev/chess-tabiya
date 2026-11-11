@@ -1,6 +1,6 @@
 # RFC: Semantic validation case storage
 
-- **Status:** implementing — 2026-11-11; independently reviewed loader kernel tested, current readers and temporal guard not yet migrated.
+- **Status:** implementing — 2026-11-11; canonical parts, compiler, current readers and Git guard migrated; complete software/performance verification remains.
 - **Author:** codex, under the full-foundation and pre-launch zero-legacy rulings.
 - **Created:** 2026-11-11
 - **Parent / amends:** semantic-validation-authority.md §§4,6 and its owner-authority temporal guard.
@@ -15,7 +15,7 @@ none
 
 ## Summary
 
-The current canonical case file is 4,913,962 bytes. The prepared 68 king cases take it to
+At drafting, the single canonical case file was 4,913,962 bytes. The prepared 68 king cases would take it to
 5,146,462 bytes, leaving 96,418 bytes under the existing 5 MiB guard. Each starting-position
 attack-count proof has 20 legal moves, 128 subjects and 43 exact outcome events. The complete
 expected events alone require 85,438 bytes per color. Both populations were executed and
@@ -25,19 +25,32 @@ The next two absolute cases already exceed the available space before their inpu
 rules are included. This is a storage dependency of the remaining three source families.
 The existing source guard and complete expectations remain requirements.
 
-There are 32 direct current references to the exact case filename or its path constant, plus
+The initial reader census found 32 direct reader files using the exact case filename or its path constant, plus
 the temporal guard CLI as an indirect consumer. The similarly named retired-fixture reader is
 independent. Every current reader must use the same case set.
 
 ## Implementation checkpoint — 2026-11-11
 
-The shared loader and filesystem wrapper have independent bounded source acceptance and
-34 passing focused tests. They are deliberately unconnected: current case storage, compiler,
-Git temporal guard and existing readers still use the old path. D1 remains open.
+The index now names two schema-1 parts containing exactly the original 1,524 cases in
+order. Thirty consumer files, the compiler and the extracted build/test Git guard use the
+shared loader. The pure runtime module has no filesystem or tree-reading dependency.
+
+All 1,524 canonical cases pass over 89 subjects, 19 qualified. The complete receipt comparison
+preserves all case outcomes/targets, 63 population inputs/results, eight external receipts,
+89 verdicts and every other field except the three independently clarified hash fields.
+The unchanged hashing algorithm recomputes one case digest, 11 operation implementation
+hashes and 63 population implementation hashes; operation file lists remain identical.
+
+The migrated reader suite passes 4,754 tests in 28 files. Forty-eight storage/temporal
+checks include actual staged and first-parent Git CLI controls. Workspace types and production build pass. D4218 fixes the original Git-reader 1 MiB
+buffer failure with explicit NUL-delimited blob reads; a reproduced large-blob regression
+and the actual repository staged transition pass.
+D4217 separately records two obsolete inventory assertions in the disposable D4167
+proposal model; no frozen fixture or original assertion was rewritten.
 
 The complete pre-migration software gate on `847d9ab0` passes 19,272 tests in 573 files
-(742.66 seconds), then seven performance tests in four files (64.17 seconds). The new loader
-has separate focused verification; it was not part of that complete run.
+and seven performance tests in four files. The cutover still needs its own complete
+software/performance verification and D1 remains open.
 
 ## Contract
 
@@ -113,7 +126,16 @@ There is no caller-supplied list of admitted cases or authority refs.
 
 1. Flatten the current cases before and after the split and require exact ordered equality.
    Execute the full canonical writer. Existing case outcomes, target values, population/external
-   receipts and verdicts remain equal. Record the expected storage-digest change.
+   receipts and verdicts remain equal apart from the three recomputed hash fields below.
+   Record the expected storage-digest change.
+
+   Independent clarification, 2026-11-11: extracting the Git guard changes bytes in the
+   existing operation import closures. Compare the complete receipts allowing changes only
+   to `caseDigest`, `operations[*].implementationDigest` and
+   `populations[*].predicateImplementationDigest`. Recompute all three using the existing
+   hash rules, require each population hash to match its exact operation, and preserve
+   every other field, including operation file lists and all population inputs/results.
+   Keeping stale implementation hashes would violate the existing source check.
 2. Exercise index and part shape/version failures, missing files, duplicate parts and case
    identities, path escapes and partial reads. Each failure rejects the complete document.
 3. Run the actual owner-authority guard across the schema-1 base and version-2 candidate.
@@ -137,7 +159,7 @@ case-file assumption at its explicit registry and Git-history boundaries.
 ## Open questions
 
 None for the owner. Independent contract and bounded loader reviews are accepted.
-Historical-guard implementation, all-reader adoption and the remaining proofs are still open.
+The source/temporal adoption is implemented. Complete cutover verification and D1 remain open.
 
 ## Discharges
 
@@ -152,3 +174,6 @@ Historical-guard implementation, all-reader adoption and the remaining proofs ar
   tree-reading guard in build/test tooling and required complete reads to refuse missing data.
 - 2026-11-11 — independent reviewer accepts the repaired bounded contract. Implementation and all listed proofs remain.
 - 2026-11-11 — independently reviewed unconnected loader kernel passes 34 focused tests; full migration and D1 remain open.
+- 2026-11-11 — independent review accepts the required guard extraction and the exact three-field hash clarification; all semantic outputs and other receipt fields remain pinned.
+- 2026-11-11 — canonical index/parts, compiler,30 consumers and Git guard adopted with exact receipt preservation,4754 reader tests and actual temporal controls. Full cutover gates/D1 remain.
+- 2026-11-11 — D4218 transport repair independently accepted after a real staged-gate ENOBUFS failure; large-blob regression red→green and actual HEAD→index pass.

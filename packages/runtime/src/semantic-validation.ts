@@ -1300,63 +1300,6 @@ export function parseSemanticValidationOwnerAuthorityStore(value: unknown): Sema
   return Object.freeze({ schemaVersion: 1, authorities: Object.freeze(rows) });
 }
 
-/** A read-only view of one repository tree (base or candidate): path → bytes, or undefined if absent. */
-export type SemanticValidationTreeReader = (path: string) => string | undefined;
-
-/** Owner-ledger rulings present in a work-state document (`planning/work-state.json`). */
-export type SemanticValidationRulingReader = (tree: SemanticValidationTreeReader) => ReadonlySet<string>;
-
-function ownerKeysReachableFromPresent(tree: SemanticValidationTreeReader): ReadonlySet<string> {
-  const profilesText = tree(SEMANTIC_VALIDATION_PROFILES_PATH);
-  const casesText = tree(SEMANTIC_VALIDATION_CASES_PATH);
-  if (profilesText === undefined || casesText === undefined) return new Set();
-  const profiles = (JSON.parse(profilesText) as { readonly profiles: readonly unknown[] }).profiles.map(parseSemanticValidationProfile);
-  const cases = (JSON.parse(casesText) as { readonly cases: readonly unknown[] }).cases.map(parseSemanticValidationCase);
-  const present = new Set<string>();
-  for (const profile of profiles) for (const [key] of SEMANTIC_VALIDATION_PROFILE_CELLS) {
-    const cell = profile[key] as SemanticValidationCell<SemanticValidationArm>;
-    if (cell.disposition === "present") for (const ref of cell.refs) if (ref.kind === "case") present.add(ref.id);
-  }
-  const owners = new Set<string>();
-  for (const value of cases) {
-    if (!present.has(value.id)) continue;
-    const authority = value.authority;
-    const owner = authority.kind === "owner_authored" ? authority : authority.kind === "rules_and_proposition" && authority.proposition.kind === "owner_authored" ? authority.proposition : undefined;
-    if (owner !== undefined) owners.add(`${owner.id}@${owner.version}`);
-  }
-  return owners;
-}
-
-/**
- * The staged owner-authority transition guard (§R4, [[D2447]]). It reads base and candidate trees
- * itself — never an admitted-ref list, row list or ruling list from its caller — and rejects owner
- * row mutation/removal, uncited rows, same-change row+case admission and any newly present case
- * whose owner row did not already exist in the base tree.
- */
-export function assertSemanticValidationOwnerTransition(base: SemanticValidationTreeReader, candidate: SemanticValidationTreeReader, rulings: SemanticValidationRulingReader): void {
-  const storeOf = (tree: SemanticValidationTreeReader): SemanticValidationOwnerAuthorityStore | undefined => {
-    const text = tree(SEMANTIC_VALIDATION_OWNER_STORE_PATH);
-    return text === undefined ? undefined : parseSemanticValidationOwnerAuthorityStore(JSON.parse(text));
-  };
-  const baseStore = storeOf(base);
-  const candidateStore = storeOf(candidate);
-  const baseRows = new Map((baseStore?.authorities ?? []).map((row) => [`${row.id}@${row.version}`, evidenceDigest(row)]));
-  const candidateRows = new Map((candidateStore?.authorities ?? []).map((row) => [`${row.id}@${row.version}`, { digest: evidenceDigest(row), row }]));
-  for (const [key, digest] of baseRows) {
-    const next = candidateRows.get(key);
-    if (next === undefined) fail("SEMANTIC_VALIDATION_OWNER_TRANSITION", `owner authority ${key} was removed`);
-    if (next!.digest !== digest) fail("SEMANTIC_VALIDATION_OWNER_TRANSITION", `owner authority ${key} was mutated`);
-  }
-  const candidateRulings = rulings(candidate);
-  for (const [key, { row }] of candidateRows) if (!candidateRulings.has(row.ruling.slice("ledger:".length))) fail("SEMANTIC_VALIDATION_OWNER_TRANSITION", `owner authority ${key} cites ${row.ruling}, which is not an owner-ledger ruling`);
-  const introduced = new Set([...candidateRows.keys()].filter((key) => !baseRows.has(key)));
-  const reachable = ownerKeysReachableFromPresent(candidate);
-  for (const key of reachable) {
-    if (introduced.has(key)) fail("SEMANTIC_VALIDATION_OWNER_TRANSITION", `owner authority ${key} and the case admitting it arrive in the same change`);
-    if (!baseRows.has(key)) fail("SEMANTIC_VALIDATION_OWNER_TRANSITION", `a present case names owner authority ${key}, absent from the base tree`);
-  }
-}
-
 /** A sealed-digest helper shared by build and tests for receipt/profile/case digests. */
 export function semanticValidationDigest(domain: string, value: unknown): string {
   return evidenceDigest({ domain: `tabiya:semantic-validation-${domain}@1`, value });

@@ -1,7 +1,7 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3639: legal rule facts, not new strategic judgements. The independent GPL source
 // excerpts are pinned in semantic-validation-cited-sources; every case executes the
 // registered production operation, including nearby negatives that emit other events.
-import { readFileSync } from "node:fs";
 import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { SEMANTIC_VALIDATION_RIGHTS_SOURCES } from "./semantic-validation-rights-sources.js";
 import { SEMANTIC_VALIDATION_TRANSITION_SOURCES } from "./semantic-validation-transition-sources.js";
@@ -18,7 +18,7 @@ import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITED_SOURCE, KING_ZONE_CITED_SOURCE, DISCOVERED_CITED_SOURCE, ATTACK_CITED_SOURCES, CAPTURE_DEPENDENT_NEGATIVE_FAMILIES, PAWN_DYNAMICS_CITED_SOURCE, RECORDED_CITED_SOURCES, RULE_STATE_CITED_SOURCES } from "./semantic-validation-literal-sources.js";
 
-const liveDocument = JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] };
+const liveDocument = loadSemanticValidationCases();
 const liveIds = new Set(liveDocument.cases.map(row => row.id));
 // Earlier frozen population assertions retain all rows. Only live rows execute current
 // production operations; retired authorities are covered in subject-safe-retirement.test.ts.

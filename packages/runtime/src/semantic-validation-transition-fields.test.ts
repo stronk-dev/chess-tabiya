@@ -1,5 +1,5 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D4166: complete source-bound capture/halfmove-reset facts, not elapsed player clocks.
-import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { SEMANTIC_VALIDATION_TRANSITION_SOURCES } from "./semantic-validation-transition-sources.js";
 import { SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
@@ -8,7 +8,7 @@ import { semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { executeSemanticValidationCase, selectSemanticTargets, semanticOperandsMatch } from "./semantic-validation-runner.js";
 import { compareSemanticMirror, parseSemanticValidationCase, type SemanticMirrorObservation, type SemanticValidationCase } from "./semantic-validation.js";
 
-const cases = JSON.parse(readFileSync("packages/runtime/src/semantic-validation-cases.json", "utf8")).cases.map(parseSemanticValidationCase) as SemanticValidationCase[];
+const cases = loadSemanticValidationCases().cases.map(parseSemanticValidationCase) as SemanticValidationCase[];
 const byId = new Map(cases.map(row => [row.id, row]));
 const sourceRows = SEMANTIC_VALIDATION_TRANSITION_SOURCES.flatMap(source => source.cases);
 const registered = sourceRows.map(row => byId.get(row.proposition.case.id)!);

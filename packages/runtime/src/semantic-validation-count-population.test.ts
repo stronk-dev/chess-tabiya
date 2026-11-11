@@ -1,6 +1,6 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // Independent source qualification, never selected top-two hints or recorded emitter output.
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { readFileSync } from "node:fs";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { evidenceDigest, evidenceForConsumer } from "./evidence-contract.js";
 import * as semantic from "./semantic-evidence.js";
@@ -71,7 +71,7 @@ afterEach(() => { faults.kind = "none"; faults.calls = 0; vi.restoreAllMocks(); 
 
 describe("independent literal full-population piece counts", () => {
   it("binds each exact literal case to the canonical registry and the four current profile arms", () => {
-    const canonical = JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")).cases.map(parseSemanticValidationCase);
+    const canonical = loadSemanticValidationCases().cases.map(parseSemanticValidationCase);
     for (const value of cases) expect(canonical.filter((row: { id: string }) => row.id === value.id)).toEqual([value]);
     const profile = SEMANTIC_VALIDATION_PROFILES.find(row => row.subject.projection.id === "derived.semantic_avoidance.piece_count" && row.subject.projection.version === 2)!;
     for (const [cell, arm] of [[profile.positive, "positive"], [profile.semanticNegative, "semantic_negative"],

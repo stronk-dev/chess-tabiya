@@ -1,6 +1,6 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3688: finite rule facts through the actual sole-factory production operation.
 // Count asymmetry is not advantage, and localNonLosing is not general safety.
-import { readFileSync } from "node:fs";
 import { retainHistoricalSemanticCaseFixtures } from "./testing/subject-safe-retired-semantic-cases.js";
 import { resolve } from "node:path";
 import { Chess, normalizeMove } from "chessops/chess";
@@ -17,7 +17,7 @@ import { EXPOSURE_V2_CITED_SOURCE, MATERIAL_V2_CITED_SOURCE, BOUNDED_TARGET_CITE
 import { executeSemanticValidationCase, selectSemanticTargets } from "./semantic-validation-runner.js";
 import { parseSemanticValidationCase } from "./semantic-validation.js";
 
-const raw = retainHistoricalSemanticCaseFixtures((JSON.parse(readFileSync(resolve(SEMANTIC_VALIDATION_REPOSITORY_ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: Record<string, unknown>[] }).cases);
+const raw = retainHistoricalSemanticCaseFixtures((loadSemanticValidationCases()).cases);
 const cases = raw.map(parseSemanticValidationCase), byId = new Map(cases.map(value => [value.id, value]));
 const historicalRows = RULE_STATE_CITED_SOURCES.flatMap(source => source.cases);
 // Original inputs remain grounded independently; exercise their separately authored

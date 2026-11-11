@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { loadSemanticValidationCases } from "../../packages/runtime/src/semantic-validation-case-storage.js";
 import * as semantic from "../../packages/runtime/src/semantic-evidence.js";
 import { executeSemanticValidationCase } from "../../packages/runtime/src/semantic-validation-runner.js";
 import { SEMANTIC_VALIDATION_RESOLVERS } from "../../packages/runtime/src/semantic-validation-authorities.js";
@@ -111,7 +111,7 @@ it("D4171 measures representability of the actual nested source edge paths", () 
 
 
 it("D4172 retains the intentional minimum-witness semantics under a duplicated genuine observation", async () => {
-  const document = JSON.parse(readFileSync(new URL("../../packages/runtime/src/semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] };
+  const document = loadSemanticValidationCases();
   const cases = document.cases.map(parseSemanticValidationCase), map = new Map(cases.map(value => [value.id, value]));
   const value = cases.find(row => row.arm === "positive" && row.operation.id === "runtime.semantic.local_edge"
     && row.subject.projection.id === "derived.material.event.role_asymmetry" && row.subject.projection.version === 2)!;

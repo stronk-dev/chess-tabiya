@@ -1,5 +1,5 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { readFileSync } from "node:fs";
 import { PRIMARY_EVIDENCE_MANIFEST } from "./evidence-catalog.js";
 import { CANDIDATE_WIDE_SCOPE, compileCandidatePopulation, type CandidatePopulationReceipt, type CandidateWideScope } from "./candidate-population.js";
 import { evidenceDigest, evidenceForConsumer } from "./evidence-contract.js";
@@ -120,7 +120,7 @@ const matrix = PAWN_OUTCOME_FAMILIES.flatMap(family => PAWN_OUTCOME_POPULATIONS.
 
 describe("independent complete pawn/file outcome sources", () => {
   it.each(PAWN_OUTCOME_FAMILIES)("%s joins every reviewed proposition to the exact four canonical profile arms", family => {
-    const canonical = (JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+    const canonical = (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
     const expected = cases.filter(value => value.input.family === family);
     const ids = new Set(expected.map(value => value.id));
     expect(canonical.filter(value => ids.has(value.id))).toEqual(expected);
@@ -273,7 +273,7 @@ describe("independent exact pawn lineage", () => {
   });
 
   it.each(PAWN_LINEAGE_FAMILIES)("%s joins only its own canonical cases and all four required arms", async family => {
-    const casesDocument = JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] };
+    const casesDocument = loadSemanticValidationCases();
     const expected = lineageCases.filter(value => value.input.family === family);
     const ids = new Set(expected.map(value => value.id));
     expect(casesDocument.cases.map(parseSemanticValidationCase).filter(value => ids.has(value.id))).toEqual(expected);

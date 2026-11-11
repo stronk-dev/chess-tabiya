@@ -1,5 +1,5 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // Comparator/parser mechanics only. These controls never enter canonical cases or qualify sources.
-import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as semantic from "./semantic-evidence.js";
 import { SEMANTIC_VALIDATION_RESOLVERS } from "./semantic-validation-authorities.js";
@@ -135,12 +135,12 @@ describe("nonempty complete positive event expectations", () => {
 
   it("refuses non-event exact expectations and positive-to-other-arm laundering", () => {
     expect(() => parseSemanticValidationExpectation({ kind: "emits_exact", events: [event] }, { ...subject, kind: "reading" })).toThrow();
-    const row = JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")).cases[0];
+    const row = loadSemanticValidationCases().cases[0];
     for (const arm of ["semantic_negative", "counterfactual", "external_label"]) expect(() => parseSemanticValidationCase({ ...row, arm, expectation: { kind: "emits_exact", events: [event] } })).toThrow();
   });
 
   it("rejects extra/missing/duplicate/reordered/changed real targets without changing old witness behavior", async () => {
-    const cases = (JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+    const cases = (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
     const old = cases.find(value => value.arm === "positive" && value.subject.projection.id === "derived.material.event.role_asymmetry" && value.subject.projection.version === 2)!;
     const original = semantic.localSemanticEventClosure;
     if (old.input.kind !== "edge") throw Error("An edge is required");

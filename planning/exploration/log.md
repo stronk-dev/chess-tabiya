@@ -40975,3 +40975,28 @@ first run caught an invalid minimum2 test fixture; the test now changes a valid 
 expectation instead. Existing parsers remain strict. Current callers/storage are untouched,
 and full compiler/history/all-reader migration and D1 remain open. The roadmap now records
 the complete pawn-wave pass without promoting any whole capability or release milestone.
+
+### 2026-11-11 — D4215 reader/temporal cutover, full gate still pending
+
+All1524 existing cases move unchanged into two bounded parts behind index2. Thirty
+consumer files, compiler and extracted Git guard use one complete per-tree loader. Actual
+canonical writer passes1524/1524,89subjects/19qualified,63population/eight external receipts.
+Full receipt comparison preserves every field except the independently accepted case/
+operation/population implementation hash fields;11operation and63population hashes
+recompute under unchanged hashing rules, with unchanged operation file lists.
+
+Reader4754/28 passes; storage/temporal47/two includes actual staged/first-parent Git
+commands and runtime graph exclusion. Types pass. D4217 owns the old disposable D4167
+proposal target's39pass/2fail at unchanged route-inventory assertions before case access.
+Frozen fixtures and original assertions are preserved. Full cutover gates/D1 remain open;
+this does not qualify the prepared king sources or promote any whole product milestone.
+
+### 2026-11-11 — D4218 real Git transport failure repaired
+
+The first real staged cutover gate caught an old CLI bug: git-show of the4.9MB base cases
+and1.56MB work-state throws ENOBUFS; the old broad catch mislabeled both as absent. The
+new strict guard refuses that loss. A >1MiB actual Git fixture fails before repair.
+Independently reviewed bounded NUL-delimited blob reads now propagate transport failures
+and distinguish genuine missing objects. Storage/temporal48/two and the actual repository
+HEAD→index guard pass; D4218 closes. Types and production build pass. Full cutover gates
+and D1 remain open; frozen assertions, source limits and chess qualifications are unchanged.

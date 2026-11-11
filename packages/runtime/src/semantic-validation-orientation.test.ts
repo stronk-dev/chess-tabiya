@@ -1,6 +1,6 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 // D3564/D3781 accepted §4.1a. These unregistered mechanics tests do not populate the canonical
 // case/profile registry or manufacture orientation authority. Real factories and runner execute.
-import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import * as semantic from "./semantic-evidence.js";
 import { evidenceDigest } from "./evidence-contract.js";
@@ -85,8 +85,8 @@ describe("D3564 production retained-input orientation grammar", () => {
   });
 
   it.each(["direct", "discovered"])("actual both-colour %s Check retains triggeringMove and promoted metadata", async kind => {
-    const raw = JSON.parse(readFileSync("packages/runtime/src/semantic-validation-cases.json", "utf8")).cases;
-    const value = parseSemanticValidationCase(raw.find((row: { id: string }) => row.id === `cited.python-chess.check.${kind}.white`));
+    const raw = loadSemanticValidationCases().cases;
+    const value = parseSemanticValidationCase(raw.find(row => row.id === `cited.python-chess.check.${kind}.white`));
     if (value.input.kind !== "edge") throw new Error("Expected complete Check edge");
     const input = value.input, partner = partnerOf(input);
     const bodyRules = [

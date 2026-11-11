@@ -1,3 +1,5 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
+import { assertSemanticValidationOwnerTransition } from "./semantic-validation-owner-transition.js";
 import { PAWN_OUTCOME_LITERAL_SOURCES } from "./semantic-validation-pawn-outcome-sources.js";
 import { PAWN_LINEAGE_LITERAL_SOURCES } from "./semantic-validation-pawn-lineage-sources.js";
 import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
@@ -40,7 +42,6 @@ import {
   SEMANTIC_VALIDATION_ARMS,
   SemanticValidationError,
   assertSemanticValidationFourWayEquality,
-  assertSemanticValidationOwnerTransition,
   assertSemanticValidationRegistryJoins,
   compareSemanticMirror,
   compileSemanticValidationVerdict,
@@ -65,7 +66,7 @@ import {
 } from "./semantic-validation.js";
 
 const ROOT = SEMANTIC_VALIDATION_REPOSITORY_ROOT;
-const casesJson = (): { readonly cases: readonly Record<string, unknown>[] } => JSON.parse(readFileSync(resolve(ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8"));
+const casesJson = (): { readonly cases: readonly Record<string, unknown>[] } => loadSemanticValidationCases();
 const CASES = casesJson().cases.map(parseSemanticValidationCase);
 const addedCastleIds = new Set(SEMANTIC_VALIDATION_CASTLING_SOURCES.flatMap(source => source.cases.map(row => row.proposition.case.id)));
 const HISTORICAL_CASES = retainHistoricalSemanticCaseFixtures(casesJson().cases).map(parseSemanticValidationCase);
@@ -688,18 +689,21 @@ describe("semantic-validation owner authority store", () => {
   it("[32] derives owner admissions from base/candidate trees and rejects mutation, removal and same-change admission", () => {
     const store = (rows: readonly unknown[]) => JSON.stringify({ schemaVersion: 1, authorities: rows });
     const profiles = readFileSync(resolve(ROOT, "packages/runtime/src/semantic-validation-profiles.json"), "utf8");
-    const cases = readFileSync(resolve(ROOT, "packages/runtime/src/semantic-validation-cases.json"), "utf8");
+    const cases = JSON.stringify(loadSemanticValidationCases());
     const ownerCases = JSON.parse(cases) as { cases: Record<string, unknown>[] };
     const castled = ownerCases.cases.find((value) => value.id === "transition.short-castle.castled")!;
     castled.authority = { kind: "owner_authored", id: "castled-short", version: 1 };
-    const tree = (files: Readonly<Record<string, string>>) => (path: string) => files[path];
+    const tree = (files: Readonly<Record<string, string>>) => {
+      const complete = { "packages/runtime/src/semantic-validation-profiles.json": profiles, "packages/runtime/src/semantic-validation-cases.json": JSON.stringify({ schemaVersion: 2, parts: ["semantic-validation-cases/fixture.json"] }), "packages/runtime/src/semantic-validation-cases/fixture.json": cases, ...files };
+      return (path: string) => (complete as Readonly<Record<string, string>>)[path];
+    };
     const rulings = () => new Set(["D9001"]);
-    const base = tree({ "packages/runtime/src/semantic-validation-profiles.json": profiles, "packages/runtime/src/semantic-validation-cases.json": cases });
+    const base = tree({ "packages/runtime/src/semantic-validation-cases.json": cases });
     // Same-change owner row plus present case admission fails.
-    const sameChange = tree({ "design/research/semantic-validation-owner-authorities.json": store([row()]), "packages/runtime/src/semantic-validation-profiles.json": profiles, "packages/runtime/src/semantic-validation-cases.json": JSON.stringify(ownerCases) });
+    const sameChange = tree({ "design/research/semantic-validation-owner-authorities.json": store([row()]), "packages/runtime/src/semantic-validation-profiles.json": profiles, "packages/runtime/src/semantic-validation-cases/fixture.json": JSON.stringify(ownerCases) });
     expect(code(() => assertSemanticValidationOwnerTransition(base, sameChange, rulings))).toBe("SEMANTIC_VALIDATION_OWNER_TRANSITION");
     // Appending only the row (no admission) passes; admitting in the next change passes.
-    const rowOnly = tree({ "design/research/semantic-validation-owner-authorities.json": store([row()]), "packages/runtime/src/semantic-validation-profiles.json": profiles, "packages/runtime/src/semantic-validation-cases.json": cases });
+    const rowOnly = tree({ "design/research/semantic-validation-owner-authorities.json": store([row()]) });
     expect(() => assertSemanticValidationOwnerTransition(base, rowOnly, rulings)).not.toThrow();
     expect(() => assertSemanticValidationOwnerTransition(rowOnly, sameChange, rulings)).not.toThrow();
     // Mutation, removal and an uncited ruling fail.

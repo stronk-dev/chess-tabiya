@@ -1,7 +1,7 @@
+import { loadSemanticValidationCases } from "../../packages/runtime/src/semantic-validation-case-storage.js";
 // Disposable D3629 author model for semantic-validation-authority §4.3a.
 // It invokes current production emitters but cannot change the runner, canonical cases,
 // source/proposition authority or learner eligibility. Delete/replace after accepted migration.
-import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { branchPath } from "../../packages/runtime/src/branch-path.js";
@@ -74,7 +74,7 @@ function assertWindowReach(input: SemanticRecordedSequenceInput, subject: Versio
   if (!same(multiset(child.observations), multiset(selected))) fail();
 }
 
-const canonical = (JSON.parse(readFileSync(resolve("packages/runtime/src/semantic-validation-cases.json"), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+const canonical = (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
 const sequenceIds = ["harassment", "defender-consequence", "deflection", "attraction", "ray-clearance", "square-clearance", "interference", "overload", "zwischenzug"];
 function canonicalFixture(name: string, arm: "positive" | "negative") {
   const value = canonical.find(value => value.id === `migration.${name}.${arm}`)!;

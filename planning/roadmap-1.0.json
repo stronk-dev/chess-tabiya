@@ -974,10 +974,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Implement the independently accepted case-storage dependency, complete the five remaining outcome qualifications and continue reverse consumer adoption.",
+        "nextAction": "Complete the case-storage cutover software/performance proof, then qualify the five remaining outcome families and continue reverse consumer adoption.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4200 revision 10 persists exact per-decision coverage across seven derived families; the measured workload rebuilt 200 runs and 6,400 decisions. Backward- and passed-pawn qualification yields 1,524 canonical cases over 89 subjects, 19 qualified; eight of thirteen new outcome families qualify. Complete software verification on 847d9ab0 passes 19,272 tests/573 files (742.66s) and seven performance tests/four files (64.17s). D4215 has an independently reviewed shared-loader kernel with 34 separate focused tests; compiler, current readers and Git temporal adoption remain. Five qualifications, D4167, ordinary26 and held D3928 remain.",
+          "summary": "D4200 revision 10 retains source-local coverage across seven derived families; measured200 runs/6400 decisions. Canonical1524/1524 over89subjects/19qualified remains unchanged. D4215 now migrates30 consumers, compiler and extracted Git guard to index2/two bounded parts, preserving exact cases and all receipt fields except declared recomputed hashes. Reader4754/28, actual storage/Git48/two, real staged guard, types and build pass; D4218 fixes the reproduced >1MiB Git transport failure. Complete cutover software/performance verification remains. The pre-migration847d9ab0 full gate passed19272/573 and seven performance tests. Five outcome qualifications, D4167/ordinary26 and held D3928 remain; D4217 records two superseded research-model inventory assertions.",
           "impact": "advanced",
           "evidence": [
             "rfc/semantic-validation-case-storage.md",
@@ -1218,13 +1218,18 @@
             "packages/runtime/src/internal/longitudinal-native-incidence.ts",
             "packages/runtime/src/internal/profile-subject-facts.ts",
             "apps/server/src/profile-subject-facts-contract.ts",
-            "apps/server/src/profile-subject-evaluations.test.ts"
+            "apps/server/src/profile-subject-evaluations.test.ts",
+            "packages/runtime/src/semantic-validation-owner-transition.ts",
+            "packages/runtime/src/semantic-validation-owner-transition.test.ts",
+            "packages/runtime/src/semantic-validation-cases/foundation.json",
+            "packages/runtime/src/semantic-validation-cases/original-pawns.json",
+            "tools/semantic-validation-owner-transition.ts"
           ],
           "anchors": [
             {
               "kind": "rfc",
               "id": "semantic-validation-case-storage.md",
-              "digest": "sha256:46ccda28e093a85418806b67de8f44e91d6680df963972dfa676185142f86783"
+              "digest": "sha256:6acd2c91f901202bb36f211ff8022c862629d465ae62f4778e03d5a90ec9ee46"
             },
             {
               "kind": "work_state",

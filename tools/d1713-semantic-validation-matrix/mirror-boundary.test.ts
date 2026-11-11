@@ -1,6 +1,7 @@
+import { loadSemanticValidationCases } from "../../packages/runtime/src/semantic-validation-case-storage.js";
 // DISPOSABLE D3564 research: real mirror input/payload boundaries, not validation authority.
 // No case is registered, no chess expectation is admitted, no production behavior is changed.
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parseFen } from "chessops/fen";
 
@@ -150,8 +151,8 @@ function proposedCompare(source: Awaited<ReturnType<typeof observation>>, partne
 
 describe("D3781 retained-input coverage — research only", () => {
   it.each(["direct", "discovered"])("the real %s Check pair retains its triggering move and every geometric leaf", async kind => {
-    const value = parseSemanticValidationCase(JSON.parse(readFileSync("packages/runtime/src/semantic-validation-cases.json", "utf8")).cases
-      .find((row: { id: string }) => row.id === `cited.python-chess.check.${kind}.white`));
+    const value = parseSemanticValidationCase(loadSemanticValidationCases().cases
+      .find(row => row.id === `cited.python-chess.check.${kind}.white`));
     if (value.input.kind !== "edge") throw new Error("Check input must be an edge");
     const input = value.input, partnerInput = pair(input);
     const acquire = async (request: SemanticEdgeInput) => {
@@ -218,14 +219,14 @@ describe("D3781 retained-input coverage — research only", () => {
     expect(leaves.map(leaf => leaf.path)).toEqual([["before_fen"], ["triggeringMove"], ["nested", "*", "beforeFen"]]);
     expect(leaves.map(leaf => retainedInputScope(leaf, input).scope)).toEqual(["initial_draft_root_binding", "root_alias", "nested_same_edge"]);
     expect(retainedInputScope({ path: ["move_uci"], format: "uci", value: "a2a3" }, input).scope).toBe("other_frame");
-    const nonEdge = parseSemanticValidationCase(JSON.parse(readFileSync("packages/runtime/src/semantic-validation-cases.json", "utf8")).cases.find((row: { input: { kind: string } }) => row.input.kind !== "edge")).input;
+    const nonEdge = parseSemanticValidationCase(loadSemanticValidationCases().cases.map(parseSemanticValidationCase).find(row => row.input.kind !== "edge")).input;
     expect(retainedInputScope(leaves[0]!, nonEdge).scope).toBe("non_edge_input");
     expect(Object.keys(payload)).toEqual(["before_fen", "triggeringMove", "nested", "role", "san", "caption"]);
     expect(() => parseProposedInputRules([{ ...proposedInputRules[1]!, sourcePath: ["triggeringMove"], partnerPath: ["triggeringMove"] }])).not.toThrow();
   });
 
   it("inventories every registered case's actual target payload and keeps absent targets explicit", async () => {
-    const values = (JSON.parse(readFileSync("packages/runtime/src/semantic-validation-cases.json", "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+    const values = (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
     const counts = { cases: values.length, edge: 0, recorded_path: 0, bounded_target_source: 0,
       completed: 0, unavailable: 0, absentTargets: 0, targets: 0, retainedLeaves: 0 };
     const subjects = new Set<string>(), emittingSubjects = new Set<string>();
@@ -300,7 +301,7 @@ describe("D3564 actual orientation boundary — research only", () => {
   });
 
   it("measures the retained-input obstruction on migrated positive edge fixtures without registering new authority", async () => {
-    const document = JSON.parse(readFileSync("packages/runtime/src/semantic-validation-cases.json", "utf8")) as { cases: unknown[] };
+    const document = loadSemanticValidationCases();
     const positives = document.cases.map(parseSemanticValidationCase).filter(value => value.arm === "positive" && value.input.kind === "edge");
     const projections = new Set<string>();
     for (const value of positives) {

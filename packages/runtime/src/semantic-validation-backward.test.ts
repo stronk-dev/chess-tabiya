@@ -1,10 +1,10 @@
+import { loadSemanticValidationCases } from "./semantic-validation-case-storage.js";
 import { PAWN_OUTCOME_LITERAL_SOURCES } from "./semantic-validation-pawn-outcome-sources.js";
 import { PAWN_LINEAGE_LITERAL_SOURCES } from "./semantic-validation-pawn-lineage-sources.js";
 import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
 import { restoreSubjectSafeHistoricalCases, SUBJECT_SAFE_RETIRED_CASES, SUBJECT_SAFE_REANCHORED_CASES } from "./testing/subject-safe-retired-semantic-cases.js";
 // Literal source controls first; fixed-authority/canonical integration follows independent review.
 import { SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
-import { readFileSync } from "node:fs";
 import { SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BACKWARD_LITERAL_EXAMPLES, BACKWARD_LITERAL_SOURCE } from "./semantic-validation-backward-sources.js";
@@ -247,7 +247,7 @@ it.each(["quiet.white", "quiet.black"])("real whole-family negative refuses an u
 
 
 it("joins exactly74 reviewed backward cases and retains its685 predecessors after later source additions", () => {
-  const canonical = (JSON.parse(readFileSync(new URL("./semantic-validation-cases.json", import.meta.url), "utf8")) as { cases: unknown[] }).cases.map(parseSemanticValidationCase);
+  const canonical = (loadSemanticValidationCases()).cases.map(parseSemanticValidationCase);
   expect(canonical).toHaveLength(824 + COUNT_POPULATION_LITERAL_SOURCE.cases.length + [...PAWN_OUTCOME_LITERAL_SOURCES, ...PAWN_LINEAGE_LITERAL_SOURCES].reduce((n, source) => n + source.cases.length, 0));
   expect(SUBJECT_SAFE_RETIRED_CASES).toHaveLength(51);
   const historical = restoreSubjectSafeHistoricalCases(canonical as unknown as Record<string, unknown>[]);
