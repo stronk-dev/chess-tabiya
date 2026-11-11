@@ -3269,3 +3269,27 @@ with shared-graph overlap, not exclusive ownership. Independent static review ac
 method subject to this interpretation. The49,535B report contains no raw payload/heap dump.
 D4225 stays doing for remaining325–327MiB allocation origins; next use bounded allocation
 sampling before choosing a production policy. No source/default/deadline/ordinary change.
+
+
+### 2026-11-11 — D4225 retained-allocation sampling starts
+
+0a45e5d2 commits the actual-map intervention. The residual needs allocation origins rather
+than more guessed ownership. Use Node's built-in sampling heap profiler in an isolated
+actual-source worker, with an actual held/released allocation control establishing that
+collected samples disappear. Sample before the32-decision stream and stop after owner and
+map release/forced collections. Keep only aggregate self-size/function/module hints; no raw
+profile or heap snapshot is saved. Allocation origin is not a retaining-root proof or a
+throughput/production-memory guarantee.
+
+
+### 2026-11-11 — D4225 bounded retained-allocation origins
+
+D4225's isolated allocation sampler now passes actual held/released and failure-cleanup
+controls. Nine instrument tests, two builder guards, dedicated types, actual smoke and the
+full32-decision worker pass. After owner release and three actual cache clears, heap is
+325.66MiB; sampled live allocations total303.95MiB, including native add273.00MiB
+and set27.73MiB. Native sites do not identify owning containers or retaining roots.
+D4225 stays doing; next isolate those allocation call chains before selecting a production
+repair. The51,014B report saves only aggregates/top30 sites, no raw profile or heap dump.
+Bundle reads happen after stop, and scoped cleanup is independently reviewed. No production
+source/default/deadline/ordinary binding or capability/release promotion.

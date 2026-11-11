@@ -4780,6 +4780,15 @@ outcome-delivery-memo: outcome-delivery-memo-build
 outcome-delivery-memo-update: outcome-delivery-memo-build
 	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --write
 
+.PHONY: outcome-delivery-allocation-smoke outcome-delivery-allocation-update
+# D4225 native sampling profiler, with actual held/released controls; no heap snapshot/raw profile.
+outcome-delivery-allocation-smoke: outcome-delivery-memo-build
+	$(CI_NODE) --expose-gc .cache/outcome-delivery-cost/memo-probe.mjs --sampler-failure-control
+	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --sample-live --smoke
+
+outcome-delivery-allocation-update: outcome-delivery-memo-build
+	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --sample-live --write
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

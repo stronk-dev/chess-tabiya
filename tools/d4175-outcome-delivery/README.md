@@ -87,3 +87,25 @@ Heap drops are marginal effects given earlier clears, not exclusive cache owners
 graphs make order matter; unchanged entry counts do not prove unchanged reachable bytes.
 Transient observer limits still apply. The numeric report is capped at 64 KiB and never
 contains payloads or a heap dump. Production cache policy and ordinary activation remain open.
+
+
+## D4225 — retained-allocation sampling
+
+```sh
+make outcome-delivery-cost-check
+make outcome-delivery-allocation-smoke
+make outcome-delivery-allocation-update
+```
+
+The isolated actual-source worker uses Node's in-process allocation sampler at a 64 KiB
+interval. A genuinely held 8 MB array must appear, and its samples must disappear after
+release/collection, before source measurement begins. Sampling ends after owner release,
+actual map interventions and forced collections. Bundle text is read only after sampling
+stops. The sampler closes in a scoped finalizer, including source/assertion failure; the
+smoke target proves actual disconnection after a deliberate post-startup exception.
+
+Only aggregate self-size totals and the top 30 allocation sites are saved, under the same
+64 KiB report cap. These are sampled allocation origins, not an exhaustive live-object
+census, retaining paths or exclusive owners. Native `add`/`set` frames do not identify their
+containers. Module names are approximate esbuild comment hints. No raw profile or heap
+snapshot is persisted; no production limits, source semantics or admission changes result.

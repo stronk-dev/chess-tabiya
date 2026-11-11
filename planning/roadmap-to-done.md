@@ -59,8 +59,9 @@ Transient timing/RSS in this WeakRef experiment is observer-influenced and is ex
 natural-capacity comparisons. **D4225 remains doing**: global memo attribution precedes a
 production cache decision. Actual-map probes now reduce the owner-released heap to
 325.30/327.42 MiB after clearing reading/factory/position caches in both orders. Their
-overlapping marginal effects explain part of the retention; the residual needs allocation
-sampling. [Method and limits](../design/research/module-evidence-assembly.md#qualified-outcome-memory-attribution--d4225-2026-11-11).
+overlapping marginal effects explain part of the retention. Controlled allocation sampling now
+observes303.95MiB of live samples, mostly native add/set, after325.66MiB post-clear heap.
+Those native origins do not identify owning roots; D4225 still needs causal attribution. [Method and limits](../design/research/module-evidence-assembly.md#qualified-outcome-memory-attribution--d4225-2026-11-11).
 
 D4167 reverse consumers, D4175's26 ordinary avoidance bindings, full module/preset adoption,
 learner journeys and release proof remain. D3928 still holds content/native startup/release;

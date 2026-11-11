@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:93fc8c643d7d3125ac85347831b53b9ccf5f8557f4d20dc255e2fde33adf1fbb",
+    "roadmap": "sha256:f842bce2883b6de31cc3dcf503f850b7f04a5646572c76f0e0ff9af1b344ca4e",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:aba5e03775944be7042b0edb0dcbcbbd73258568ee4f8317718335bd702562e7",
+    "workState": "sha256:8e1a20b341df16f0d74f286983ed3613d0e45643d17cc0695bc012ffd28e2212",
     "rfcRegister": "sha256:b4da266d47add25ffd2ddac7aa483252c9d2726d9ef1817910680605c1b022b2",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
+      "nextAction": "Resolve D4224 acquisition/budget and D4225 memory costs before D4175 ordinary bindings; continue D4167 reverse consumers under accepted source contracts. Native/content proof remains behind D3928.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 now intervenes in the actual private reading/factory/position maps after owner release: opposite clear orders reduce post-GC heap557.17→325.30MiB and559.27→327.42MiB, with all13 source counts preserved. Effects overlap; remaining325–327MiB allocation origins stay doing. Seven instrument/two builder controls, types and actual-map smoke/full pass; compact49535B report. Production source/cache/defaults unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
+        "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 actual-map clears leave325–327MiB; the controlled allocation sampler now measures325.66MiB post-clear heap and303.95MiB sampled retained allocations, mostly native add/set. Flattened origins cannot identify owning roots; D4225 stays doing. Nine instrument/two builder controls, real failure cleanup, types and actual smoke/full pass; compact51014B report. Production unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -616,7 +616,8 @@
           "design/research/module-evidence-assembly.md",
           "planning/foundation-source-identity/outcome-memory-2026-11-11.json",
           "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
-          "tools/d4175-outcome-delivery/build-memo-probe.mjs"
+          "tools/d4175-outcome-delivery/build-memo-probe.mjs",
+          "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json"
         ],
         "anchors": [
           {
@@ -1267,7 +1268,7 @@
           {
             "kind": "work_state",
             "id": "D4225",
-            "digest": "sha256:5bcb211933533434ade7eee5d2829e44aca5b274c64ee5eff21d65bd007e6301"
+            "digest": "sha256:28f38377de0f15efce0c3990c9c3dfe7c6df4375129b3325ed4217aefdc18179"
           }
         ]
       },
@@ -1288,10 +1289,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
+      "nextAction": "Resolve D4224 acquisition/budget and D4225 memory costs before D4175 ordinary bindings; continue D4167 reverse consumers under accepted source contracts. Native/content proof remains behind D3928.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 now intervenes in the actual private reading/factory/position maps after owner release: opposite clear orders reduce post-GC heap557.17→325.30MiB and559.27→327.42MiB, with all13 source counts preserved. Effects overlap; remaining325–327MiB allocation origins stay doing. Seven instrument/two builder controls, types and actual-map smoke/full pass; compact49535B report. Production source/cache/defaults unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
+        "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 actual-map clears leave325–327MiB; the controlled allocation sampler now measures325.66MiB post-clear heap and303.95MiB sampled retained allocations, mostly native add/set. Flattened origins cannot identify owning roots; D4225 stays doing. Nine instrument/two builder controls, real failure cleanup, types and actual smoke/full pass; compact51014B report. Production unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1887,7 +1888,8 @@
           "tools/d4175-outcome-delivery/measure.test.ts",
           "planning/foundation-source-identity/outcome-memory-2026-11-11.json",
           "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
-          "tools/d4175-outcome-delivery/build-memo-probe.mjs"
+          "tools/d4175-outcome-delivery/build-memo-probe.mjs",
+          "planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json"
         ],
         "anchors": [
           {
@@ -2903,7 +2905,7 @@
           {
             "kind": "work_state",
             "id": "D4225",
-            "digest": "sha256:5bcb211933533434ade7eee5d2829e44aca5b274c64ee5eff21d65bd007e6301"
+            "digest": "sha256:28f38377de0f15efce0c3990c9c3dfe7c6df4375129b3325ed4217aefdc18179"
           }
         ]
       },

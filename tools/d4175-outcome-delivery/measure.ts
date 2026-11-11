@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { performance } from "node:perf_hooks";
+import { Session } from "node:inspector/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CandidatePopulationService } from "../../apps/server/src/candidate-population-service.js";
@@ -14,6 +15,7 @@ import { selectSemanticEvidence, subjectOutcomeSemanticEvents, type SemanticEvid
 import { SUBJECT_OUTCOME_FAMILIES, type SubjectOutcomeFamily } from "../../packages/runtime/src/semantic-subject-types.js";
 import { admitValidatedSemanticInstance } from "../../packages/runtime/src/semantic-validation-registry.js";
 import { importedPopulation } from "../research-chess/populations.js";
+import { withRetainedSampling, type RetainedSampler } from "./sampling.js";
 
 interface Position { readonly id: string; readonly fen: string; readonly move: string | null; readonly source: string }
 const start = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
@@ -183,6 +185,7 @@ interface MemoryCase {
   readonly memory: Readonly<Record<"before" | "afterWork" | "retainedGc" | "releasedGc", NodeJS.MemoryUsage>>;
   readonly rows: readonly { readonly id: string; readonly legalMoves: number; readonly families: readonly Pick<Family, "family" | "kind" | "events">[] }[];
   readonly memoClears?: readonly MemoClear[];
+  readonly allocationSampling?: { readonly control: { readonly heldBytes: number; readonly releasedBytes: number }; readonly result: Awaited<ReturnType<RetainedSampler["stop"]>> };
 }
 export const MEMO_NAMES = ["readings", "factories", "positions"] as const;
 type MemoName = (typeof MEMO_NAMES)[number];
@@ -220,7 +223,7 @@ async function collectedMemory(): Promise<NodeJS.MemoryUsage> {
   for (let i = 0; i < 3; i++) { await new Promise<void>(resolve => setImmediate(resolve)); global.gc(); }
   return process.memoryUsage();
 }
-async function measureMemoryCase(workload: readonly Position[], capacity: number, clearOrder?: readonly MemoName[]): Promise<MemoryCase> {
+async function measureMemoryCase(workload: readonly Position[], capacity: number, clearOrder?: readonly MemoName[], sampleLive = false): Promise<MemoryCase> {
   const probes = clearOrder === undefined ? undefined : memoProbes(); // Refuse absent hooks BEFORE any source work.
   if (clearOrder !== undefined) assert.deepEqual([...clearOrder].sort(), [...MEMO_NAMES].sort());
   assert.equal(new Set(workload.map(row => row.fen)).size, workload.length);
@@ -229,25 +232,31 @@ async function measureMemoryCase(workload: readonly Position[], capacity: number
   await collectedMemory(); assert.strictEqual(weakControl.deref(), control, "Observer must see a genuinely held target");
   control = undefined;
   await collectedMemory(); assert.equal(weakControl.deref(), undefined, "Observer must not retain its own released target");
-  let service: CandidatePopulationService | undefined = new CandidatePopulationService({ capacity });
-  const before = await collectedMemory(), start = performance.now();
-  const { rows, references } = memoryStream(service, workload), workMs = performance.now() - start;
-  const afterWork = process.memoryUsage(), retainedGc = await collectedMemory();
-  const stats = service.stats(); // Keep the actual service reachable THROUGH the retained GC.
-  const aliveRetained = references.filter(ref => ref.deref() !== undefined).length;
-  service = undefined;
-  const releasedGc = await collectedMemory(), aliveReleased = references.filter(ref => ref.deref() !== undefined).length;
-  const memoClears: MemoClear[] = [];
-  if (probes !== undefined && clearOrder !== undefined) for (const cleared of clearOrder) {
-    const before = cacheCounts(probes); probes[cleared].clear();
-    const memory = await collectedMemory(), after = cacheCounts(probes);
-    assert.equal(after[cleared].reduce((n, group) => n + group.entries, 0), 0, "Actual target cache was not cleared");
-    for (const other of MEMO_NAMES) if (other !== cleared) assert.deepEqual(after[other], before[other], "Intervention changed another cache");
-    memoClears.push({ cleared, before, after, memory, aliveReceipts: references.filter(ref => ref.deref() !== undefined).length });
-  }
-  const result = { capacity, workMs, observer: { held: true as const, released: true as const }, stats, aliveRetained, aliveReleased,
-    memory: { before, afterWork, retainedGc, releasedGc }, rows, ...(probes === undefined ? {} : { memoClears }) };
-  assertMemoryCase(result, workload.length); return result;
+  const work = async (sampler?: RetainedSampler): Promise<MemoryCase> => {
+    let service: CandidatePopulationService | undefined = new CandidatePopulationService({ capacity });
+    const before = await collectedMemory(), start = performance.now();
+    const { rows, references } = memoryStream(service, workload), workMs = performance.now() - start;
+    const afterWork = process.memoryUsage(), retainedGc = await collectedMemory();
+    const stats = service.stats(); // Keep the actual service reachable THROUGH the retained GC.
+    const aliveRetained = references.filter(ref => ref.deref() !== undefined).length;
+    service = undefined;
+    const releasedGc = await collectedMemory(), aliveReleased = references.filter(ref => ref.deref() !== undefined).length;
+    const memoClears: MemoClear[] = [];
+    if (probes !== undefined && clearOrder !== undefined) for (const cleared of clearOrder) {
+      const before = cacheCounts(probes); probes[cleared].clear();
+      const memory = await collectedMemory(), after = cacheCounts(probes);
+      assert.equal(after[cleared].reduce((n, group) => n + group.entries, 0), 0, "Actual target cache was not cleared");
+      for (const other of MEMO_NAMES) if (other !== cleared) assert.deepEqual(after[other], before[other], "Intervention changed another cache");
+      memoClears.push({ cleared, before, after, memory, aliveReceipts: references.filter(ref => ref.deref() !== undefined).length });
+    }
+    const allocationSampling = sampler === undefined ? undefined : { control: sampler.control,
+      result: await sampler.stop(import.meta.url, () => readFileSync(fileURLToPath(import.meta.url), "utf8")) };
+    const result = { capacity, workMs, observer: { held: true as const, released: true as const }, stats, aliveRetained, aliveReleased,
+      memory: { before, afterWork, retainedGc, releasedGc }, rows, ...(probes === undefined ? {} : { memoClears }),
+      ...(allocationSampling === undefined ? {} : { allocationSampling }) };
+    assertMemoryCase(result, workload.length); return result;
+  };
+  return sampleLive ? withRetainedSampling(collectedMemory, work) : work();
 }
 export function assertMemoryCase(value: MemoryCase, subjects: number): void {
   assert(Number.isSafeInteger(value.capacity) && value.capacity > 0);
@@ -298,28 +307,40 @@ export function assertMemoCase(value: Pick<MemoryCase, "memoClears" | "rows">, o
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes("--memory-worker")) {
-    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly workload: readonly Position[]; readonly capacity: number; readonly clearOrder?: readonly MemoName[] };
-    process.stdout.write(JSON.stringify(await measureMemoryCase(input.workload, input.capacity, input.clearOrder)));
+  if (process.argv.includes("--sampler-failure-control")) {
+    const session = new Session();
+    await assert.rejects(withRetainedSampling(collectedMemory, async () => {
+      throw new Error("controlled source-work failure after sampler startup");
+    }, session), /controlled source-work failure/);
+    await assert.rejects(session.post("HeapProfiler.getSamplingProfile"), { code: "ERR_INSPECTOR_NOT_CONNECTED" });
+    process.stdout.write("Actual sampler disconnects after controlled work failure.\n");
+  } else if (process.argv.includes("--memory-worker")) {
+    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly workload: readonly Position[]; readonly capacity: number; readonly clearOrder?: readonly MemoName[]; readonly sampleLive?: boolean };
+    process.stdout.write(JSON.stringify(await measureMemoryCase(input.workload, input.capacity, input.clearOrder, input.sampleLive)));
   } else if (process.argv.includes("--memory") || process.argv.includes("--memo-probe")) {
     const probeMode = process.argv.includes("--memo-probe");
+    const sampleLive = process.argv.includes("--sample-live"); assert(!sampleLive || probeMode);
     if (probeMode) memoProbes();
     const workload = process.argv.includes("--smoke") ? LITERAL_POSITIONS.slice(0, 2) : reviewPositions();
     const runs: readonly { readonly capacity: number; readonly clearOrder?: readonly MemoName[] }[] = probeMode
-      ? [{ capacity: GUIDED_HINT_PROFILE.packetCapacity, clearOrder: MEMO_NAMES }, { capacity: GUIDED_HINT_PROFILE.packetCapacity, clearOrder: ["factories", "readings", "positions"] }]
+      ? [{ capacity: GUIDED_HINT_PROFILE.packetCapacity, clearOrder: MEMO_NAMES }, ...(sampleLive ? [] : [{ capacity: GUIDED_HINT_PROFILE.packetCapacity, clearOrder: ["factories", "readings", "positions"] as const }])]
       : [...new Set([1, 4, GUIDED_HINT_PROFILE.packetCapacity])].map(capacity => ({ capacity }));
     const cases = runs.map(run => {
       const { capacity } = run;
       const result = JSON.parse(execFileSync(process.execPath, ["--expose-gc", fileURLToPath(import.meta.url), "--memory-worker"], {
-        input: JSON.stringify({ workload, ...run }), encoding: "utf8", timeout: 60_000, maxBuffer: 256 * 1024,
+        input: JSON.stringify({ workload, ...run, sampleLive }), encoding: "utf8", timeout: 60_000, maxBuffer: 256 * 1024,
       })) as MemoryCase;
       assertMemoryCase(result, workload.length);
       if (run.clearOrder !== undefined) assertMemoCase(result, run.clearOrder);
+      if (sampleLive) {
+        assert(result.allocationSampling); assert(result.allocationSampling.control.heldBytes > 0);
+        assert.equal(result.allocationSampling.control.releasedBytes, 0); assert(result.allocationSampling.result.sampledLiveBytes > 0);
+      }
       process.stderr.write(`capacity${capacity}: retained heap ${(result.memory.retainedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB, released ${(result.memory.releasedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB; live receipts ${result.aliveRetained}→${result.aliveReleased}\n`);
       return result;
     });
     for (const result of cases) assert.deepEqual(result.rows, cases[0]!.rows, "All13 family availability/event counts must survive every capacity");
-    const report = { question: probeMode ? "D4225 actual global-memo intervention" : "D4225", node: process.version, platform: process.platform, architecture: process.arch,
+    const report = { question: sampleLive ? "D4225 retained allocation origins" : probeMode ? "D4225 actual global-memo intervention" : "D4225", node: process.version, v8: process.versions.v8, platform: process.platform, architecture: process.arch,
       scope: "fresh processes; identical source stream; forced GC only before/after work; service kept live then released; WeakRef observers cross jobs before GC; workMs/afterWork are observer-influenced",
       exclusions: ["production GC behavior", "peak/appliance footprint", "natural transient timing/memory (WeakRef creation keeps targets alive for the current job)", "exhaustive reachability/leak proof from surviving WeakRefs", "full semantic equality from counts alone", "production cache/default change"],
       workload, familyOrder: SUBJECT_OUTCOME_FAMILIES,
@@ -327,7 +348,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       cases: cases.map(({ rows: _rows, ...result }) => result) };
     const text = JSON.stringify(report, null, 2) + "\n";
     assert(Buffer.byteLength(text) < (probeMode ? 64 : 48) * 1024, "Memory report exceeds its compact bound; never retain heap or event dumps");
-    if (process.argv.includes("--write")) writeFileSync(`planning/foundation-source-identity/outcome-${probeMode ? "global-memos" : "memory"}-2026-11-11.json`, text);
+    if (process.argv.includes("--write")) writeFileSync(`planning/foundation-source-identity/outcome-${sampleLive ? "live-allocations" : probeMode ? "global-memos" : "memory"}-2026-11-11.json`, text);
     else process.stdout.write(text);
   } else if (process.argv.includes("--worker")) {
     const input: unknown = JSON.parse(readFileSync(0, "utf8"));

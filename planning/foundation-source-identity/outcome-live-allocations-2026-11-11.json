@@ -1,0 +1,2518 @@
+{
+  "question": "D4225 retained allocation origins",
+  "node": "v24.22.1",
+  "v8": "13.6.233.17-node.58",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "scope": "fresh processes; identical source stream; forced GC only before/after work; service kept live then released; WeakRef observers cross jobs before GC; workMs/afterWork are observer-influenced",
+  "exclusions": [
+    "production GC behavior",
+    "peak/appliance footprint",
+    "natural transient timing/memory (WeakRef creation keeps targets alive for the current job)",
+    "exhaustive reachability/leak proof from surviving WeakRefs",
+    "full semantic equality from counts alone",
+    "production cache/default change"
+  ],
+  "workload": [
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#9",
+      "fen": "rnbqkb1r/ppp2pp1/3p1n1p/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5",
+      "move": "d2d3",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#9"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#10",
+      "fen": "rnbqkb1r/ppp2pp1/3p1n1p/4p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 5",
+      "move": "f8e7",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#10"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#11",
+      "fen": "rnbqk2r/ppp1bpp1/3p1n1p/4p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 1 6",
+      "move": "h2h3",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#11"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#12",
+      "fen": "rnbqk2r/ppp1bpp1/3p1n1p/4p3/2B1P3/2NP1N1P/PPP2PP1/R1BQK2R b KQkq - 0 6",
+      "move": "a7a6",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#12"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#13",
+      "fen": "rnbqk2r/1pp1bpp1/p2p1n1p/4p3/2B1P3/2NP1N1P/PPP2PP1/R1BQK2R w KQkq - 0 7",
+      "move": "c1e3",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#13"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#14",
+      "fen": "rnbqk2r/1pp1bpp1/p2p1n1p/4p3/2B1P3/2NPBN1P/PPP2PP1/R2QK2R b KQkq - 1 7",
+      "move": "b8c6",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#14"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#15",
+      "fen": "r1bqk2r/1pp1bpp1/p1np1n1p/4p3/2B1P3/2NPBN1P/PPP2PP1/R2QK2R w KQkq - 2 8",
+      "move": "a2a3",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#15"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#16",
+      "fen": "r1bqk2r/1pp1bpp1/p1np1n1p/4p3/2B1P3/P1NPBN1P/1PP2PP1/R2QK2R b KQkq - 0 8",
+      "move": "e8h8",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#16"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#17",
+      "fen": "r1bq1rk1/1pp1bpp1/p1np1n1p/4p3/2B1P3/P1NPBN1P/1PP2PP1/R2QK2R w KQ - 1 9",
+      "move": "d1d2",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#17"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#18",
+      "fen": "r1bq1rk1/1pp1bpp1/p1np1n1p/4p3/2B1P3/P1NPBN1P/1PPQ1PP1/R3K2R b KQ - 2 9",
+      "move": "g8h7",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#18"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#19",
+      "fen": "r1bq1r2/1pp1bppk/p1np1n1p/4p3/2B1P3/P1NPBN1P/1PPQ1PP1/R3K2R w KQ - 3 10",
+      "move": "e1a1",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#19"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#20",
+      "fen": "r1bq1r2/1pp1bppk/p1np1n1p/4p3/2B1P3/P1NPBN1P/1PPQ1PP1/2KR3R b - - 4 10",
+      "move": "c8e6",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#20"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#21",
+      "fen": "r2q1r2/1pp1bppk/p1npbn1p/4p3/2B1P3/P1NPBN1P/1PPQ1PP1/2KR3R w - - 5 11",
+      "move": "c3d5",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#21"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#22",
+      "fen": "r2q1r2/1pp1bppk/p1npbn1p/3Np3/2B1P3/P2PBN1P/1PPQ1PP1/2KR3R b - - 6 11",
+      "move": "b7b5",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#22"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#23",
+      "fen": "r2q1r2/2p1bppk/p1npbn1p/1p1Np3/2B1P3/P2PBN1P/1PPQ1PP1/2KR3R w - - 0 12",
+      "move": "c4a2",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#23"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#24",
+      "fen": "r2q1r2/2p1bppk/p1npbn1p/1p1Np3/4P3/P2PBN1P/BPPQ1PP1/2KR3R b - - 1 12",
+      "move": "e6d7",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#24"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#25",
+      "fen": "r2q1r2/2pbbppk/p1np1n1p/1p1Np3/4P3/P2PBN1P/BPPQ1PP1/2KR3R w - - 2 13",
+      "move": "d5e7",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#25"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#26",
+      "fen": "r2q1r2/2pbNppk/p1np1n1p/1p2p3/4P3/P2PBN1P/BPPQ1PP1/2KR3R b - - 0 13",
+      "move": "d8e7",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#26"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#27",
+      "fen": "r4r2/2pbqppk/p1np1n1p/1p2p3/4P3/P2PBN1P/BPPQ1PP1/2KR3R w - - 0 14",
+      "move": "d1g1",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#27"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#28",
+      "fen": "r4r2/2pbqppk/p1np1n1p/1p2p3/4P3/P2PBN1P/BPPQ1PP1/2K3RR b - - 1 14",
+      "move": "d7e6",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#28"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#29",
+      "fen": "r4r2/2p1qppk/p1npbn1p/1p2p3/4P3/P2PBN1P/BPPQ1PP1/2K3RR w - - 2 15",
+      "move": "a2e6",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#29"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#30",
+      "fen": "r4r2/2p1qppk/p1npBn1p/1p2p3/4P3/P2PBN1P/1PPQ1PP1/2K3RR b - - 0 15",
+      "move": "e7e6",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#30"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#31",
+      "fen": "r4r2/2p2ppk/p1npqn1p/1p2p3/4P3/P2PBN1P/1PPQ1PP1/2K3RR w - - 0 16",
+      "move": "c1b1",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#31"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#32",
+      "fen": "r4r2/2p2ppk/p1npqn1p/1p2p3/4P3/P2PBN1P/1PPQ1PP1/1K4RR b - - 1 16",
+      "move": "d6d5",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#32"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#33",
+      "fen": "r4r2/2p2ppk/p1n1qn1p/1p1pp3/4P3/P2PBN1P/1PPQ1PP1/1K4RR w - - 0 17",
+      "move": "e3c5",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#33"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#34",
+      "fen": "r4r2/2p2ppk/p1n1qn1p/1pBpp3/4P3/P2P1N1P/1PPQ1PP1/1K4RR b - - 1 17",
+      "move": "f8g8",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#34"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#35",
+      "fen": "r5r1/2p2ppk/p1n1qn1p/1pBpp3/4P3/P2P1N1P/1PPQ1PP1/1K4RR w - - 2 18",
+      "move": "g2g4",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#35"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#36",
+      "fen": "r5r1/2p2ppk/p1n1qn1p/1pBpp3/4P1P1/P2P1N1P/1PPQ1P2/1K4RR b - - 0 18",
+      "move": "d5e4",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#36"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#37",
+      "fen": "r5r1/2p2ppk/p1n1qn1p/1pB1p3/4p1P1/P2P1N1P/1PPQ1P2/1K4RR w - - 0 19",
+      "move": "d3e4",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#37"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#38",
+      "fen": "r5r1/2p2ppk/p1n1qn1p/1pB1p3/4P1P1/P4N1P/1PPQ1P2/1K4RR b - - 0 19",
+      "move": "f6e4",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#38"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#39",
+      "fen": "r5r1/2p2ppk/p1n1q2p/1pB1p3/4n1P1/P4N1P/1PPQ1P2/1K4RR w - - 0 20",
+      "move": "d2e3",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#39"
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#40",
+      "fen": "r5r1/2p2ppk/p1n1q2p/1pB1p3/4n1P1/P3QN1P/1PP2P2/1K4RR b - - 1 20",
+      "move": "e4c5",
+      "source": "tools/r2-selection-harness/imported-sample.pgn:https://lichess.org/ZoaIX0pA#40"
+    }
+  ],
+  "familyOrder": [
+    "backward_pawn",
+    "doubled_pawn",
+    "half_open_file",
+    "isolated_pawn",
+    "king_opposition",
+    "king_zone",
+    "line_blockers",
+    "open_file",
+    "passed_pawn",
+    "piece_count",
+    "direct_attack_count",
+    "loose_piece",
+    "pawn_islands"
+  ],
+  "familyResults": [
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#9",
+      "legalMoves": 36,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          27
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          87
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#10",
+      "legalMoves": 32,
+      "families": [
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          27
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          76
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#11",
+      "legalMoves": 40,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          30
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          96
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#12",
+      "legalMoves": 33,
+      "families": [
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          28
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          76
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#13",
+      "legalMoves": 41,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          30
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          97
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#14",
+      "legalMoves": 32,
+      "families": [
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          28
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          81
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#15",
+      "legalMoves": 48,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          32
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          102
+        ],
+        [
+          "available",
+          5
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#16",
+      "legalMoves": 34,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          29
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          92
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#17",
+      "legalMoves": 50,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          33
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          104
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#18",
+      "legalMoves": 31,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          32
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          93
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#19",
+      "legalMoves": 49,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          36
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          102
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#20",
+      "legalMoves": 34,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          33
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          94
+        ],
+        [
+          "available",
+          7
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#21",
+      "legalMoves": 43,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          38
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          103
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#22",
+      "legalMoves": 37,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          35
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          99
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#23",
+      "legalMoves": 45,
+      "families": [
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          35
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          113
+        ],
+        [
+          "available",
+          7
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#24",
+      "legalMoves": 36,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          35
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          99
+        ],
+        [
+          "available",
+          7
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#25",
+      "legalMoves": 46,
+      "families": [
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          33
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          109
+        ],
+        [
+          "available",
+          7
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#26",
+      "legalMoves": 35,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          33
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          99
+        ],
+        [
+          "available",
+          10
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#27",
+      "legalMoves": 42,
+      "families": [
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          33
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          94
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#28",
+      "legalMoves": 41,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          31
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          91
+        ],
+        [
+          "available",
+          8
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#29",
+      "legalMoves": 39,
+      "families": [
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          29
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          99
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#30",
+      "legalMoves": 38,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          24
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          94
+        ],
+        [
+          "available",
+          8
+        ],
+        [
+          "available",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#31",
+      "legalMoves": 34,
+      "families": [
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          26
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          90
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#32",
+      "legalMoves": 45,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          25
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          98
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#33",
+      "legalMoves": 38,
+      "families": [
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          28
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          95
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#34",
+      "legalMoves": 42,
+      "families": [
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          29
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          93
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#35",
+      "legalMoves": 43,
+      "families": [
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          31
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          102
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#36",
+      "legalMoves": 40,
+      "families": [
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          27
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          94
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#37",
+      "legalMoves": 43,
+      "families": [
+        [
+          "available",
+          4
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          3
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          30
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          104
+        ],
+        [
+          "available",
+          7
+        ],
+        [
+          "available",
+          0
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#38",
+      "legalMoves": 43,
+      "families": [
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          28
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          105
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#39",
+      "legalMoves": 47,
+      "families": [
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          32
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          111
+        ],
+        [
+          "available",
+          6
+        ],
+        [
+          "available",
+          0
+        ]
+      ]
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#40",
+      "legalMoves": 49,
+      "families": [
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          27
+        ],
+        [
+          "available",
+          0
+        ],
+        [
+          "available",
+          1
+        ],
+        [
+          "available",
+          2
+        ],
+        [
+          "available",
+          112
+        ],
+        [
+          "available",
+          7
+        ],
+        [
+          "available",
+          1
+        ]
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "capacity": 64,
+      "workMs": 20463.100916,
+      "observer": {
+        "held": true,
+        "released": true
+      },
+      "stats": {
+        "hits": 0,
+        "misses": 32,
+        "retained": 32,
+        "capacity": 64
+      },
+      "aliveRetained": 32,
+      "aliveReleased": 0,
+      "memory": {
+        "before": {
+          "rss": 201998336,
+          "heapTotal": 93044736,
+          "heapUsed": 23516200,
+          "external": 12086200,
+          "arrayBuffers": 144659
+        },
+        "afterWork": {
+          "rss": 1569341440,
+          "heapTotal": 1672413184,
+          "heapUsed": 1565253000,
+          "external": 12082436,
+          "arrayBuffers": 144659
+        },
+        "retainedGc": {
+          "rss": 1525465088,
+          "heapTotal": 1364623360,
+          "heapUsed": 1178464616,
+          "external": 12082436,
+          "arrayBuffers": 144659
+        },
+        "releasedGc": {
+          "rss": 1572896768,
+          "heapTotal": 1288077312,
+          "heapUsed": 584604336,
+          "external": 12082436,
+          "arrayBuffers": 144659
+        }
+      },
+      "memoClears": [
+        {
+          "cleared": "readings",
+          "before": {
+            "readings": [
+              {
+                "name": "defenderDutyReading",
+                "entries": 1287
+              },
+              {
+                "name": "discoveredLatencyReading",
+                "entries": 1287
+              },
+              {
+                "name": "kingZoneReading",
+                "entries": 1287
+              },
+              {
+                "name": "loosePieceReading",
+                "entries": 1318
+              },
+              {
+                "name": "pawnConnectivityReading",
+                "entries": 1287
+              },
+              {
+                "name": "pawnContactsReading",
+                "entries": 1287
+              },
+              {
+                "name": "pieceDestinationsReading",
+                "entries": 1287
+              },
+              {
+                "name": "squareControlReading",
+                "entries": 1287
+              },
+              {
+                "name": "structuralReading",
+                "entries": 1287
+              }
+            ],
+            "factories": [
+              {
+                "name": "factoryMemo",
+                "entries": 2048
+              }
+            ],
+            "positions": [
+              {
+                "name": "positionTemplates",
+                "entries": 2545
+              }
+            ]
+          },
+          "after": {
+            "readings": [],
+            "factories": [
+              {
+                "name": "factoryMemo",
+                "entries": 2048
+              }
+            ],
+            "positions": [
+              {
+                "name": "positionTemplates",
+                "entries": 2545
+              }
+            ]
+          },
+          "memory": {
+            "rss": 1512030208,
+            "heapTotal": 785547264,
+            "heapUsed": 377434496,
+            "external": 12082436,
+            "arrayBuffers": 144659
+          },
+          "aliveReceipts": 0
+        },
+        {
+          "cleared": "factories",
+          "before": {
+            "readings": [],
+            "factories": [
+              {
+                "name": "factoryMemo",
+                "entries": 2048
+              }
+            ],
+            "positions": [
+              {
+                "name": "positionTemplates",
+                "entries": 2545
+              }
+            ]
+          },
+          "after": {
+            "readings": [],
+            "factories": [
+              {
+                "name": "factoryMemo",
+                "entries": 0
+              }
+            ],
+            "positions": [
+              {
+                "name": "positionTemplates",
+                "entries": 2545
+              }
+            ]
+          },
+          "memory": {
+            "rss": 1515421696,
+            "heapTotal": 484081664,
+            "heapUsed": 345750320,
+            "external": 12082436,
+            "arrayBuffers": 144659
+          },
+          "aliveReceipts": 0
+        },
+        {
+          "cleared": "positions",
+          "before": {
+            "readings": [],
+            "factories": [
+              {
+                "name": "factoryMemo",
+                "entries": 0
+              }
+            ],
+            "positions": [
+              {
+                "name": "positionTemplates",
+                "entries": 2545
+              }
+            ]
+          },
+          "after": {
+            "readings": [],
+            "factories": [
+              {
+                "name": "factoryMemo",
+                "entries": 0
+              }
+            ],
+            "positions": [
+              {
+                "name": "positionTemplates",
+                "entries": 0
+              }
+            ]
+          },
+          "memory": {
+            "rss": 1513259008,
+            "heapTotal": 479887360,
+            "heapUsed": 341484352,
+            "external": 12082436,
+            "arrayBuffers": 144659
+          },
+          "aliveReceipts": 0
+        }
+      ],
+      "allocationSampling": {
+        "control": {
+          "heldBytes": 8000016,
+          "releasedBytes": 0
+        },
+        "result": {
+          "samplingInterval": 65536,
+          "nodes": 238,
+          "allocationSites": 35,
+          "sampledLiveBytes": 318715584,
+          "topSites": [
+            {
+              "function": "add",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 286261448
+            },
+            {
+              "function": "set",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 29082040
+            },
+            {
+              "function": "join",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 721336
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 38995,
+              "moduleHint": "packages/runtime/src/evidence-factories.ts",
+              "bytes": 196824
+            },
+            {
+              "function": "hash",
+              "url": "node:internal/crypto/hash",
+              "line": 339,
+              "moduleHint": "(native/other script)",
+              "bytes": 136280
+            },
+            {
+              "function": "includes",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 135712
+            },
+            {
+              "function": "immutable2",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 32569,
+              "moduleHint": "packages/runtime/src/semantic-evidence.ts",
+              "bytes": 133184
+            },
+            {
+              "function": "canonicalAnchor2",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 32584,
+              "moduleHint": "packages/runtime/src/semantic-evidence.ts",
+              "bytes": 131336
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 39151,
+              "moduleHint": "packages/runtime/src/evidence-factories.ts",
+              "bytes": 131208
+            },
+            {
+              "function": "refKey6",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 32567,
+              "moduleHint": "packages/runtime/src/semantic-evidence.ts",
+              "bytes": 131104
+            },
+            {
+              "function": "Map",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 69984
+            },
+            {
+              "function": "has",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 69120
+            },
+            {
+              "function": "getOwnPropertyDescriptor",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 67896
+            },
+            {
+              "function": "declareEvidence",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 10422,
+              "moduleHint": "packages/runtime/src/evidence-contract.ts",
+              "bytes": 67440
+            },
+            {
+              "function": "compileInternal",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 32226,
+              "moduleHint": "packages/runtime/src/candidate-population.ts",
+              "bytes": 66664
+            },
+            {
+              "function": "computeDiscoveredLatencyReading",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 30972,
+              "moduleHint": "packages/runtime/src/tactics.ts",
+              "bytes": 66272
+            },
+            {
+              "function": "attacksTo",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 8900,
+              "moduleHint": "node_modules/.pnpm/chessops@0.15.1/node_modules/chessops/dist/esm/chess.js",
+              "bytes": 66096
+            },
+            {
+              "function": "next",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 66096
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 39304,
+              "moduleHint": "packages/runtime/src/evidence-factories.ts",
+              "bytes": 65736
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 34801,
+              "moduleHint": "packages/runtime/src/semantic-subject-outcomes.ts",
+              "bytes": 65728
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 39030,
+              "moduleHint": "packages/runtime/src/evidence-factories.ts",
+              "bytes": 65664
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 39061,
+              "moduleHint": "packages/runtime/src/evidence-factories.ts",
+              "bytes": 65664
+            },
+            {
+              "function": "canonicalPart",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 10195,
+              "moduleHint": "packages/runtime/src/evidence-contract.ts",
+              "bytes": 65664
+            },
+            {
+              "function": "filter",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 65664
+            },
+            {
+              "function": "find",
+              "url": "",
+              "line": 0,
+              "moduleHint": "(native/other script)",
+              "bytes": 65664
+            },
+            {
+              "function": "has",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 8527,
+              "moduleHint": "node_modules/.pnpm/chessops@0.15.1/node_modules/chessops/dist/esm/squareSet.js",
+              "bytes": 65664
+            },
+            {
+              "function": "computeSubjectOutcomes",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 34795,
+              "moduleHint": "packages/runtime/src/semantic-subject-outcomes.ts",
+              "bytes": 65592
+            },
+            {
+              "function": "assertSemanticEvidenceEvent",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 33301,
+              "moduleHint": "packages/runtime/src/semantic-evidence.ts",
+              "bytes": 65576
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 38309,
+              "moduleHint": "packages/runtime/src/evidence-factories.ts",
+              "bytes": 65568
+            },
+            {
+              "function": "(anonymous)",
+              "url": "file:///Users/stronk/repos/chess-drills/.cache/outcome-delivery-cost/memo-probe.mjs",
+              "line": 30899,
+              "moduleHint": "packages/runtime/src/tactics.ts",
+              "bytes": 65568
+            }
+          ],
+          "attribution": "allocation call sites; module hints use nearest preceding esbuild module comments, not retaining-root ownership"
+        }
+      }
+    }
+  ]
+}

@@ -4314,3 +4314,30 @@ roughly325–327MiB residual is still unassigned. Next sample retained allocatio
 without storing a heap dump, before choosing a production cache policy. No deadline, source
 semantics, ordinary binding, production cache/default or release state changes. `[V]`
 (same report; unchanged production source files)
+
+
+## Retained-allocation sampling — D4225, 2026-11-11
+
+The isolated actual-source worker starts Node's in-process sampler at64KiB intervals after
+an actual held/released array control:8,000,016 sampled bytes while held, zero after release
+and collection. It executes the same32 decisions/all13 families, releases the service, clears
+the actual three memo groups and collects before stopping. A deliberate post-startup failure
+must disconnect the real inspector session. Scoped cleanup, count/self-size tests and actual
+smoke/full runs pass; the bounded method was independently reviewed. `[V]`
+([sampler](../../tools/d4175-outcome-delivery/sampling.ts),
+[actual worker/control](../../tools/d4175-outcome-delivery/measure.ts),
+[51,014-byte report](../../planning/foundation-source-identity/outcome-live-allocations-2026-11-11.json))
+
+The final post-GC heap is325.66MiB. Sampled retained allocations total303.95MiB, of
+which native `add` accounts for273.00MiB and native `set` for27.73MiB.
+These are sampled allocation origins, not complete live-heap accounting or retaining roots.
+The flattened native frames cannot establish which containers or authority metadata own the
+remaining allocations. Bundle/module text is read only after sampling stops; an earlier
+instrument image counted its own read and was discarded. `[V]` (same report and worker)
+
+D4225 remains **doing**. Next isolate the native allocation call chains before choosing a
+production repair. The report retains only aggregate self sizes/top30 allocation sites;
+no raw sampling profile or heap snapshot is saved. Module comments are approximate source
+hints. Previous WeakRef/forced-GC limits stand; sampler timings are not production throughput.
+No production source, cache/default, deadline, admission or learner binding changes. `[V]`
+(same method; D4225)
