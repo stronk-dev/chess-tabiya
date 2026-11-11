@@ -1,6 +1,6 @@
 # RFC: subject-safe semantic selection
 
-- **Status:** implementing — current2026-11-11 source checkpoint: all13 outcome families qualify with1928/1928 cases and24/89 validated subjects; all1524 predecessor case receipts and other84 verdicts are preserved. D4220 lossless storage2 passes focused/Git proofs and complete normal verification:20488 software tests/580files and7 performance tests/fourfiles. D4175 ordinary26, broader D4167 consumers, native journeys and release remain separate.
+- **Status:** implementing — current2026-11-11 private compiler-state dependency is verified and independently accepted: current construction7/all13 outcome sources retain exact full graphs/receipts;1928/1928 cases and24/89 qualified subjects unchanged. Full20502software/581+7performance/four/types/build/governance pass. §6.4 construction8/foundation receipt/service/actual source-operation adoption and fresh qualification remain owed. D4175ordinary26, broader D4167, native/content and release stay open.
 - **Scoped acquisition amendment:** §6.4 D4224 independently accepted2026-11-11 after source/buildability and meaning/lifetime review; construction8 implementation and fresh qualification remain owed.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09

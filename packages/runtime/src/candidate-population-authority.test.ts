@@ -22,8 +22,10 @@ const source = (path: string) => readFileSync(new URL(path, import.meta.url), "u
 describe("criterion 36: one exact-map call owns the packet's legal population", () => {
   beforeEach(() => { spy.mockClear(); });
 
-  it("calls the factory's authority exactly once for the root and retains that exact returned object", () => {
-    const result = compileCandidatePopulation({ beforeFen: INITIAL_FEN, ruleset: "standard", scope: CANDIDATE_READINGS_SCOPE });
+  it.each([
+    ["events", CANDIDATE_EVENTS_SCOPE], ["readings", CANDIDATE_READINGS_SCOPE], ["wide", CANDIDATE_WIDE_SCOPE],
+  ] as const)("%s calls the root authority once and retains its exact returned object", (_name, scope) => {
+    const result = compileCandidatePopulation({ beforeFen: INITIAL_FEN, ruleset: "standard", scope });
     if (result.kind !== "ready") throw new Error("expected packet");
     expect(rootCalls(INITIAL_FEN)).toBe(1);
     const index = spy.mock.calls.findIndex(([argument]) => argument === INITIAL_FEN);
@@ -86,7 +88,6 @@ describe("criterion 36: one exact-map call owns the packet's legal population", 
     expect(compiler.match(/invokeEvidenceValueRoute\("rules\.mobility\.reading\.legal_moves@1"/gu)).toHaveLength(1);
     expect(cells.match(/invokeEvidenceValueRoute\("rules\.mobility\.reading\.legal_moves@1"/gu)).toHaveLength(1);
     expect(compiler).toContain('const position = foundation.legal()');
-    expect(compiler).toContain('foundationPositionCells(beforeFen, legal.legalMovesInput)');
     expect(cells).toContain('originalLegal ?? invokeEvidenceValueRoute("rules.mobility.reading.legal_moves@1"');
     const definitions = ["./evidence-factories.ts", "./candidate-population.ts", "./foundation-position-cells.ts", "./semantic-evidence.ts", "./index.ts"].map(source).join("\n").match(/createRulesMobilityReadingLegalMovesV1Evidence\s*=/gu);
     expect(definitions).toHaveLength(1);

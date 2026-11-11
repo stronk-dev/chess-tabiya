@@ -1,0 +1,538 @@
+{
+  "question": "D4224 private compiler-owner refactor equality",
+  "baselineSource": "0e5057d0:candidate-population.ts",
+  "scope": "Current dependency image; one controlled compiler-file substitution; ordinary fresh workers; all three scopes/16literal roots and32complete same-game source graphs with all13 factories/admission and original repeat inputs",
+  "limits": "Equality only, no scoped receipt, construction8, cancellation, capacity, latency or memory claim",
+  "literal": [
+    {
+      "id": "start.white",
+      "member": "events",
+      "candidates": 20,
+      "digest": "644a9eeec4ec174ee9ac813715d399e05631522eb9778560e6dfc9515cd99c61",
+      "receipts": 1136
+    },
+    {
+      "id": "start.white",
+      "member": "readings",
+      "candidates": 20,
+      "digest": "d45b1b9722d5ea30223c0991a2aa0c4f44ee9134d4ff29523ecf469432eda00e",
+      "receipts": 705
+    },
+    {
+      "id": "start.white",
+      "member": "events_and_readings",
+      "candidates": 20,
+      "digest": "e6c40abaabd9d10a659ca9d910939b9b68f2dfb3b14ea39955764647c57d5665",
+      "receipts": 2435
+    },
+    {
+      "id": "start.black",
+      "member": "events",
+      "candidates": 20,
+      "digest": "cc21d81fa94bf351229871b8dac26cd9914a38b025e5508198b771ae570b1458",
+      "receipts": 1136
+    },
+    {
+      "id": "start.black",
+      "member": "readings",
+      "candidates": 20,
+      "digest": "307a61d7c8c886eb1a569cef0402f900c35e3ccf89ad915ba6c2ab37e809721b",
+      "receipts": 705
+    },
+    {
+      "id": "start.black",
+      "member": "events_and_readings",
+      "candidates": 20,
+      "digest": "a2a1c844910a00f90b2351410e058ba5fed3f50fd91bd5d6fa3966fee296d965",
+      "receipts": 2435
+    },
+    {
+      "id": "bishop-knight.white",
+      "member": "events",
+      "candidates": 12,
+      "digest": "0de53eb20ea9b7d07ee5b37dfc756c18d747b9227a5e2da1d11504345162d255",
+      "receipts": 923
+    },
+    {
+      "id": "bishop-knight.white",
+      "member": "readings",
+      "candidates": 12,
+      "digest": "8f8d0c050071aa54d09d5141f131f69593fc919ac26e3ccd074f83fe15ddd3e8",
+      "receipts": 373
+    },
+    {
+      "id": "bishop-knight.white",
+      "member": "events_and_readings",
+      "candidates": 12,
+      "digest": "fe8b4c81abd82549cc618e6d50fb272410c256228c6c8e0592fc9dfea2b3b013",
+      "receipts": 1458
+    },
+    {
+      "id": "bishop-knight.black",
+      "member": "events",
+      "candidates": 12,
+      "digest": "71ede738b28788906efa5454effd9b508a20b0bef28f6b3f7af56d0a25202c58",
+      "receipts": 923
+    },
+    {
+      "id": "bishop-knight.black",
+      "member": "readings",
+      "candidates": 12,
+      "digest": "0f0913af773cad564425ba62b3c3a3b64eb5452fdd09fdd2b0c66b2a86a09d7c",
+      "receipts": 373
+    },
+    {
+      "id": "bishop-knight.black",
+      "member": "events_and_readings",
+      "candidates": 12,
+      "digest": "6fe85be78321535e826ddf2f8b417d92d1d534e4c347f4cd996089d0e3d1fcd2",
+      "receipts": 1458
+    },
+    {
+      "id": "ep.white",
+      "member": "events",
+      "candidates": 5,
+      "digest": "6554fcc8eebcc8a93a73b20c9734779f160acbe22430c8d392cd4af203e31777",
+      "receipts": 229
+    },
+    {
+      "id": "ep.white",
+      "member": "readings",
+      "candidates": 5,
+      "digest": "79e53ac8d60b6473655475220af3e8b0edd96aa17a9790b995d724c0e8f00336",
+      "receipts": 157
+    },
+    {
+      "id": "ep.white",
+      "member": "events_and_readings",
+      "candidates": 5,
+      "digest": "ccce92e6e906d7746595f49fa904e6835391bbe0dc64d4fee568a89067abca6c",
+      "receipts": 475
+    },
+    {
+      "id": "ep.black",
+      "member": "events",
+      "candidates": 5,
+      "digest": "2b6911814d811446bbab7fe11384dfbde9eeeb7cbabc45b4f52ed9ac7f496b9b",
+      "receipts": 229
+    },
+    {
+      "id": "ep.black",
+      "member": "readings",
+      "candidates": 5,
+      "digest": "a6702e44754d05401ea23ff5ef989cc9b8e3579d79d3174cfae1a87791382596",
+      "receipts": 157
+    },
+    {
+      "id": "ep.black",
+      "member": "events_and_readings",
+      "candidates": 5,
+      "digest": "626f40d8e8c5051fdb1efb1eaea18f51304e09902a511088be8fb65f5524b69d",
+      "receipts": 475
+    },
+    {
+      "id": "promotion.white",
+      "member": "events",
+      "candidates": 7,
+      "digest": "d6c997acc74078547c86533874a483e5017b4b9b452a2fe65a05e5d7a91d9023",
+      "receipts": 368
+    },
+    {
+      "id": "promotion.white",
+      "member": "readings",
+      "candidates": 7,
+      "digest": "c93c4018724df5169b58603efc319b4a8f4c5171e484ee71830c3add05984d71",
+      "receipts": 218
+    },
+    {
+      "id": "promotion.white",
+      "member": "events_and_readings",
+      "candidates": 7,
+      "digest": "1931d00535895b280f556ca5f3ca3de0dcf5f7c333ffb8f8f9a0d3475c7bad4d",
+      "receipts": 692
+    },
+    {
+      "id": "promotion.black",
+      "member": "events",
+      "candidates": 7,
+      "digest": "f183ccf6aaa943c148f1d034c3e76d558087ce9318866ecb760ab33eda29af26",
+      "receipts": 368
+    },
+    {
+      "id": "promotion.black",
+      "member": "readings",
+      "candidates": 7,
+      "digest": "e3b6fd059a9ffa3d338662833ec45ba35270c2e8b3a469dd98297e75d8c1f9db",
+      "receipts": 218
+    },
+    {
+      "id": "promotion.black",
+      "member": "events_and_readings",
+      "candidates": 7,
+      "digest": "30743ec807724e403afa79a6a101bde612b4c3d0bc469dcf46e0c5274f0f0eab",
+      "receipts": 692
+    },
+    {
+      "id": "forced.white",
+      "member": "events",
+      "candidates": 1,
+      "digest": "c22c9957aa392579ecca6cb785ea30311e700dd9dd73e3d20f7357998b11a367",
+      "receipts": 45
+    },
+    {
+      "id": "forced.white",
+      "member": "readings",
+      "candidates": 1,
+      "digest": "885533eef88570d4d9ff5ae1b0554fbea395d17271215bd8c8398b34b524ea61",
+      "receipts": 32
+    },
+    {
+      "id": "forced.white",
+      "member": "events_and_readings",
+      "candidates": 1,
+      "digest": "bbd67367d7c1934c409646cb58bacde540fd91f84564eebb34102a482d3c3c49",
+      "receipts": 107
+    },
+    {
+      "id": "forced.black",
+      "member": "events",
+      "candidates": 1,
+      "digest": "e38af6bf44dc15355dfd3314ace5b81b0c1cd975a23bc040bece1ab2165a15f1",
+      "receipts": 45
+    },
+    {
+      "id": "forced.black",
+      "member": "readings",
+      "candidates": 1,
+      "digest": "f427b3d80aa62b4733d3d47904fa9384afda80ad5d9e85677c88b4d604002a16",
+      "receipts": 32
+    },
+    {
+      "id": "forced.black",
+      "member": "events_and_readings",
+      "candidates": 1,
+      "digest": "67c39b8e84686c744e75c674dc149fffd6f782109c8e38ffb60cb4d7e20ea15f",
+      "receipts": 107
+    },
+    {
+      "id": "unavailable-risk.white",
+      "member": "events",
+      "candidates": 3,
+      "digest": "1a79cd1203b2e396d488d3d19c18094bd91dcad55735a9b83a16063a7a4cdbf1",
+      "receipts": 172
+    },
+    {
+      "id": "unavailable-risk.white",
+      "member": "readings",
+      "candidates": 3,
+      "digest": "16e7017d0c844226e3a6de13c0ef58670f872f2331ef868b67e9d808e76d2f2f",
+      "receipts": 95
+    },
+    {
+      "id": "unavailable-risk.white",
+      "member": "events_and_readings",
+      "candidates": 3,
+      "digest": "aedc53457a542017fca94060d4a9304029a45762455061a91c1901a0ecbcec6f",
+      "receipts": 320
+    },
+    {
+      "id": "unavailable-risk.black",
+      "member": "events",
+      "candidates": 3,
+      "digest": "e4b4c48dbd50234bf3d1176e8a31e851022c762a0ffe11398ff7f9c110878d3d",
+      "receipts": 172
+    },
+    {
+      "id": "unavailable-risk.black",
+      "member": "readings",
+      "candidates": 3,
+      "digest": "bd34038862668187416e18d9c6f3d65f87a77f6051b68561c43c30c8ffc8e42d",
+      "receipts": 95
+    },
+    {
+      "id": "unavailable-risk.black",
+      "member": "events_and_readings",
+      "candidates": 3,
+      "digest": "e1f42180eedc70c81d302d12f9dfae676acafa18e93c881868ad07b9c725a3bb",
+      "receipts": 320
+    },
+    {
+      "id": "castle.white",
+      "member": "events",
+      "candidates": 26,
+      "digest": "834edf4c0e8522cc82a068c75e7447be2a8871a64b8ecb8befd31f772901cd62",
+      "receipts": 2398
+    },
+    {
+      "id": "castle.white",
+      "member": "readings",
+      "candidates": 26,
+      "digest": "fd4ab82706df2116c1748f47cfe1af1f5518da1977f9bfadee943c1d40f7b9bd",
+      "receipts": 878
+    },
+    {
+      "id": "castle.white",
+      "member": "events_and_readings",
+      "candidates": 26,
+      "digest": "b4166f9f44e75f7301b4e3c250d1d0a542b3760be04cb7b862a1f4f39657956a",
+      "receipts": 3606
+    },
+    {
+      "id": "castle.black",
+      "member": "events",
+      "candidates": 26,
+      "digest": "0bbf1bcebf5896d52adf67481eaaaf91a4f17d127e6e135a9a535e432824d010",
+      "receipts": 2398
+    },
+    {
+      "id": "castle.black",
+      "member": "readings",
+      "candidates": 26,
+      "digest": "47fa2ca7af622148699b5ef7afb8597504f66569440099aa7f3c98e103355c55",
+      "receipts": 878
+    },
+    {
+      "id": "castle.black",
+      "member": "events_and_readings",
+      "candidates": 26,
+      "digest": "ea2b507eedd6e0cb42d48c8343fedc1743fbd92f85dc17401ee295b7e70f9060",
+      "receipts": 3606
+    },
+    {
+      "id": "terminal.checkmate",
+      "member": "events",
+      "candidates": 0,
+      "digest": "9f80f98106a2f68d53a5f3e7a6e2cb81cbd6fe37b9d1b51c881ae812bc8bf3f4",
+      "receipts": 6
+    },
+    {
+      "id": "terminal.checkmate",
+      "member": "readings",
+      "candidates": 0,
+      "digest": "056309c86f754a11ea381113d10958738c7a68dee9c12f7257c3e3748505decd",
+      "receipts": 1
+    },
+    {
+      "id": "terminal.checkmate",
+      "member": "events_and_readings",
+      "candidates": 0,
+      "digest": "cc1775436cfbb0e2d93dec04207381ab04c39a1c952e67f14981c068d22f33a8",
+      "receipts": 24
+    },
+    {
+      "id": "terminal.stalemate",
+      "member": "events",
+      "candidates": 0,
+      "digest": "3a641eaee7f6c8b3ce1afec88f5713c5e64c5d0ded7f632cb6a9623c95e91721",
+      "receipts": 6
+    },
+    {
+      "id": "terminal.stalemate",
+      "member": "readings",
+      "candidates": 0,
+      "digest": "0310bbed15b38924d3c81e6c449a54396c48b2d7e9eed331250941f4dd3c5e07",
+      "receipts": 1
+    },
+    {
+      "id": "terminal.stalemate",
+      "member": "events_and_readings",
+      "candidates": 0,
+      "digest": "db3245d438945058fe024010a18b9edc8cde0dd43cc5cc209b6a7401c28fcf8a",
+      "receipts": 25
+    }
+  ],
+  "completeReview": [
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#9",
+      "digest": "e63a369aafefe26552a2d70fba8365d6e9f6776fdcaa2a148c2cc47136c7f58c",
+      "receipts": 5095,
+      "outcomes": 123
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#10",
+      "digest": "49117542e7a2e3040d99f352526cb207b5957a86072af6c6f0b84599819a7541",
+      "receipts": 4531,
+      "outcomes": 114
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#11",
+      "digest": "222c843ea6a53df6fe410521a7f207c47600b2f5acacab6393dfc82124f862db",
+      "receipts": 5766,
+      "outcomes": 136
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#12",
+      "digest": "76a863d5fcd482f43c7da6608977591cd8ae6370b167c184539815711db1ab43",
+      "receipts": 4707,
+      "outcomes": 116
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#13",
+      "digest": "922257db8d4d5c83219dfaa2408afc517737f4551207f5ad47fda65b0a90d8d9",
+      "receipts": 5937,
+      "outcomes": 138
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#14",
+      "digest": "1e57c3c58da178ffebc8295df9a9be1f0f019592d2e6c3c9012a4947ad5ed001",
+      "receipts": 4635,
+      "outcomes": 121
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#15",
+      "digest": "c716a2bcd55c3f1fd02635b46dab8cbd2bdcf54646073319aafd8b299c6e3a51",
+      "receipts": 6974,
+      "outcomes": 146
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#16",
+      "digest": "31167a3ecf95850cec78c370e1cf8ebf8af72dcc301ecc9d1cf7eeb33431b219",
+      "receipts": 4959,
+      "outcomes": 132
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#17",
+      "digest": "b04629575e72d27387487bf10fc018976cc2092a5319ddc81d20edfc49cdaf43",
+      "receipts": 7203,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#18",
+      "digest": "a78b2869849a013b6580afc1f12cbcb3c0451b59ccafee2eb06866a6e0fe00c2",
+      "receipts": 4483,
+      "outcomes": 136
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#19",
+      "digest": "4e29a2b0d747a7afa8f520f70eee2882bc9ddd0fe8684517c049968f925b8ce3",
+      "receipts": 7036,
+      "outcomes": 149
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#20",
+      "digest": "c201185c1c287aa10c9c9377709460ff8be7a72d3d22c5af0778a9e84e0ca694",
+      "receipts": 4891,
+      "outcomes": 140
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#21",
+      "digest": "8d1f5fb24700e1edd42a760987fd6ac27cd67514afb82bd14fc10e404ec4c59a",
+      "receipts": 6352,
+      "outcomes": 151
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#22",
+      "digest": "ba43fa4b407ebdf2237b621c04a629285d0c013ecf58a89d6427bfd5be9c46eb",
+      "receipts": 5468,
+      "outcomes": 147
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#23",
+      "digest": "5241d0911b4fd39e1360cdd43bb821791bc416eda1fc3d456ed37006ef254410",
+      "receipts": 6983,
+      "outcomes": 167
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#24",
+      "digest": "2919b7fdf212f3b02f6d76cbef6ef33f713526efe76aab7c526fe139cf236143",
+      "receipts": 5308,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#25",
+      "digest": "2c8cb8e78c066a8e7d926fab9cfcc1dd1f99e2f96a19a605135b31521b727289",
+      "receipts": 6967,
+      "outcomes": 160
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#26",
+      "digest": "1a7f64be2ab97c16bb1e37e4fc7fec9eda44110fad7d71cd7c8b2b2ec734a028",
+      "receipts": 5102,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#27",
+      "digest": "acfb43d700e2339a9e7f101a4944124d4290cf9ef3cc1a6caa6fc0ced800df65",
+      "receipts": 5989,
+      "outcomes": 141
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#28",
+      "digest": "c8fe53360b3876f3126324f8a38af44c391d5a49bcc49b5e76844d327ce031b1",
+      "receipts": 5956,
+      "outcomes": 136
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#29",
+      "digest": "f00adc97e170ee4ec8ca07e574ed25985b2e8fff330cb83ac0eaf6c7d35c3cc5",
+      "receipts": 5661,
+      "outcomes": 142
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#30",
+      "digest": "aaa34f612d883478a196322ab9e13db8c128629b10bf99c48564bd6f525a404b",
+      "receipts": 5456,
+      "outcomes": 135
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#31",
+      "digest": "8be4798119189ad5ba8079029d2298aa8b23add793264b517c0ce08492879552",
+      "receipts": 4783,
+      "outcomes": 129
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#32",
+      "digest": "f50dd51df438da084661637830c86aa4ad8524d887e9e9937df157fd29e8d630",
+      "receipts": 6541,
+      "outcomes": 135
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#33",
+      "digest": "02ac75a82285448074e9f8540d8d39ca263fc794eda02d6cb464303b9e1e7b2a",
+      "receipts": 5438,
+      "outcomes": 142
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#34",
+      "digest": "c71b54d4b6ee11288b888d4df8af1a71cf174039cfd9c6eadd245796bfcc3ed3",
+      "receipts": 6155,
+      "outcomes": 137
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#35",
+      "digest": "0a35094aa3165f84d62d1d50a7acf8c7607226f25cf641bfec47bb1924463b7b",
+      "receipts": 6265,
+      "outcomes": 152
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#36",
+      "digest": "3d624154885839fbdf090c5a7b64abb88269791dae6af1fcf994352e884e93f3",
+      "receipts": 5836,
+      "outcomes": 140
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#37",
+      "digest": "7a5cc4101d38f7fb7c10c914480a06dc7662e3db871abe66f18ab76b828bdd99",
+      "receipts": 6338,
+      "outcomes": 152
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#38",
+      "digest": "d826afff7486da217c07594a4aa39da0abfbfc0b7f01cfb6ab86f3d42b59665e",
+      "receipts": 6477,
+      "outcomes": 148
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#39",
+      "digest": "b42cea849f0683169a58a5ef2a74b86ed9b2a84a6e789e55a806471d0ce96ef9",
+      "receipts": 7393,
+      "outcomes": 156
+    },
+    {
+      "id": "review-page.https://lichess.org/ZoaIX0pA#40",
+      "digest": "734dd2a0614f5cdada896cbb7b1d79a7c3557a621eace6fcd4c27b2a3c27ed00",
+      "receipts": 7478,
+      "outcomes": 158
+    }
+  ]
+}

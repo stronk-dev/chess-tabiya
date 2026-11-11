@@ -4818,6 +4818,12 @@ bounded-verifier-smoke: bounded-verifier-build
 bounded-verifier-measure: bounded-verifier-build
 	$(CI_NODE) .cache/outcome-delivery-cost/verifier-candidate.mjs --write
 
+.PHONY: candidate-owner-equality
+candidate-owner-equality:
+	./node_modules/.bin/tsc --project tools/d4175-outcome-delivery/tsconfig.json
+	$(CI_NODE) tools/d4175-outcome-delivery/build-owner-comparison.mjs
+	$(CI_NODE) .cache/outcome-delivery-cost/owner-candidate.mjs
+
 .PHONY: acquisition-profile-check acquisition-profile-build acquisition-profile-smoke acquisition-profile-measure
 acquisition-profile-check:
 	./node_modules/.bin/tsc --project tools/d4224-acquisition-profile/tsconfig.json

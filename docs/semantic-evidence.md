@@ -535,11 +535,23 @@ In-flight compiler7 canonical events now consume those same original common sour
 receipts retain quiet prerequisites privately without acquiring wide-only total readings.
 Thirteen registered subject-outcome@2 factories consume complete original wide states, keeping
 all legal alternatives and exact ordered source vectors. Copied values/results cannot supply
-original invocation membership. Selector/constructor adoption, contract retirement, semantic
-qualification and ordinary presentation remain unfinished under
-`rfc/subject-safe-semantic-selection.md`. These routes add neither public child-reading slots nor
+original invocation membership. These thirteen source families qualify through their actual
+wide-source operations; broader consumer qualification, ordinary adoption and the accepted
+construction8 scoped-source path remain under `rfc/subject-safe-semantic-selection.md`. These routes add neither public child-reading slots nor
 direct learner bindings. Complete local exchange-model facts do not grade a move or assert a
 forced win.
+
+### Candidate compilation state
+
+The synchronous compiler uses one private `CandidateCompilation` for its original root legal
+source and per-move `CandidateRowCompilation` cells. Each row retains its own common snapshots,
+event closure, reading bundle and wide-only totals during construction. Scope selection and
+collector order remain unchanged; readers and receipt minting still validate the original full
+packet. These classes introduce no new public input or evidence authority.
+
+The accepted scoped-acquisition follow-up is `subject-safe-semantic-selection.md` §6.4. Its
+construction8 foundation receipt, service advancement, readings-first tactical reuse and fresh
+source qualification remain separate implementation duties.
 
 ## Adding a product module
 

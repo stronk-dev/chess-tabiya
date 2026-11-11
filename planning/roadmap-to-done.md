@@ -2,7 +2,16 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. D4226 now closes the independently reviewed bounded verifier
+The full 1.0 goal remains active. D4224's first production dependency is verified: the existing
+synchronous compiler uses one private root/child compilation graph. All48 literal scope graphs
+and32 complete same-game graphs/all13 families retain exact values, receipts and original
+inputs. Full normal gates pass20,502 software tests/581files, seven performance tests/fourfiles,
+types/build/governance; canonical1928/1928 and24/89 qualification remain unchanged except the
+expected11 operation/63 joined predicate hashes. [Equality result](foundation-source-identity/owner-refactor-equality-2026-11-11.json).
+Construction7 stays current; scoped receipt, cooperative service and construction8/fresh source
+qualification are next. D4224 and the broader consumer/memory/release obligations remain open.
+
+Earlier D4226 closed the independently reviewed bounded verifier
 repair: two weak generations preserve complete evidence while reducing post-GC heap by roughly
 239–240MiB in every matched32-decision pair. Full frozen-production verification passes20,500
 software tests/581files and seven performance tests/fourfiles; final stronger cycle/sparse
@@ -15,9 +24,9 @@ match, including quiet/unavailable/terminal cases. Four alternating local raw-so
 15.54–16.92s through the full packet versus5.62–6.26s through the required core. Forced-GC held
 heaps are881–882 versus395MiB; these are intentionally different collection scopes, not a
 transparent full-packet optimization or appliance footprint. Raw frames have no source authority;
-unrequested collector failures remain unclaimed. D4224 must now own a reviewed shared-source/
+unrequested collector failures remain unclaimed. D4224 now implements its accepted shared-source/
 full-on-demand/failure contract **and bounded execution**: rawcore32 still exceeds Review's5s
-budget before outcome mint/admission. Full production and D4225/D4175/D4167/D3928 holds remain.
+budget before outcome mint/admission. Existing full behavior and D4225/D4175/D4167/D3928 holds remain.
 [Method and limits](../design/research/module-evidence-assembly.md#scoped-required-core-feasibility--d4227-2026-11-11).
 
 The scoped-acquisition amendment, [subject-safe §6.4](../rfc/subject-safe-semantic-selection.md),

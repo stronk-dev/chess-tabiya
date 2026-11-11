@@ -3546,3 +3546,48 @@ and fresh qualification. No copied @2 certificate, dormant test-only supplier, f
 missing full collector feature or increased deadline. Run relevant actual boundary/source/cancel/
 eviction tests and full normal gates before closing a production slice. D4224/D4225/D4228,
 D4175ordinary26/D4167 and D3928 content/native/release remain live; parent status stays implementing.
+
+
+### 2026-11-11 — D4224 private compiler-state dependency implementation starts
+
+0e5057d0 records independent acceptance of §6.4. The first production dependency encapsulates
+existing root/child cells in private CandidateCompilation/CandidateRowCompilation, used by the
+actual synchronous compiler. It exposes no new scope, receipt, owner token or service API and
+retains construction7 only while proving identical current behavior. Both independent reviewers
+clear that boundary, with the explicit limit that future readings-first→events tactical sharing,
+scoped receipts and cooperative service execution remain construction8 duties.
+
+The first focused run found one source-spelling assertion tied to the old local variable name;
+the actual root authority/object-identity checks are now expanded across all three real scopes,
+and the spelling assertion is removed.141 focused tests/six files pass. Ordinary controlled-file
+comparison passes all48 literal scope graphs and32 complete imported-game graphs/all13 admitted
+families with every traversed value receipt and original repeated inputs unchanged. The compact
+16765B result is owner-refactor-equality-2026-11-11.json. Canonical refresh and full normal gates
+are running next; no production completion or performance/cancellation claim is made yet.
+
+
+### 2026-11-11 — D4224 private compiler-state dependency verified for commit
+
+The actual synchronous compiler now uses private CandidateCompilation/CandidateRowCompilation
+root/child cells; public scopes, payloads, receipt guards and construction7 are unchanged.
+141 focused tests/six files pass. Fresh ordinary controlled compiler-file comparisons before
+AND after canonical refresh pass48 literal scope graphs and32 full imported-game graphs with
+all13 factories/admission, every traversed value receipt and exact original repeated inputs.
+The16765B equality report is compact; no raw payload/profile dump or latency/memory claim.
+
+Canonical writer/check passes1928/1928,89subjects/24qualified,461vectors/8externals. Independent
+whole-JSON audit against gitHEAD permits exactly11 implementation hashes and63 correctlyjoined
+predicate hashes; file lists, all case/input/vector/population result/external/verdict data are
+otherwise exact. The4341526B artifact stays under5MiB; compact TS changes only matching receiptSHA.
+
+Frozen-production `make verify-software build verify-governance` exits0:20502 software/581 files
+815.14s and7 serial performance/four files61.11s, types/build/governance including R1–R10. Both
+independent reviewers accept the private dependency; source reviewer also independently verifies
+final artifact scope and actual full/equality logs. Normal staging/hooks and committed-tree
+checks follow. No source changed after that gate.
+
+D4224 remains doing. Construction8 still owes the distinct genuine foundation receipt, retained
+readings-first tactical inputs, all staged full collection, actual operation/census adoption,
+partial-owner64LRU and cooperative service/currentness/cancel proof with fresh qualification.
+D4225 remaining memory, D4228 actual paged Review, D4175ordinary26/D4167 and D3928 content/native/
+release remain live. No parent, learner capability or full1.0 milestone is marked complete.

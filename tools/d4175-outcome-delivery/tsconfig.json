@@ -10,5 +10,5 @@
       "chessops/*": ["../../packages/runtime/node_modules/chessops/dist/types/*.d.ts"]
     }
   },
-  "include": ["measure.ts", "measure.test.ts", "sampling.test.ts", "compare-verifier.ts"]
+  "include": ["measure.ts", "measure.test.ts", "sampling.test.ts", "compare-verifier.ts", "compare-owner.ts"]
 }

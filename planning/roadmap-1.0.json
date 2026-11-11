@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Implement independently accepted subject-safe-semantic-selection \u00a76.4 D4224: one original owner, distinct foundation receipt, full-scope staged collection and seal-only final reads, actual subject_outcomes operation/census adoption, bounded partial-owner LRU and live permission/deadline/cancellation. Coordinate construction8 with fresh qualification; retain full-only selector/Profile/native paths. D4228 actual paged Review and D4175ordinary26 remain held until full delivery/budget proof; D4225/D4167/D3928 stay open.",
+        "nextAction": "Private compiler-state dependency is verified. Continue accepted \u00a76.4 construction8: distinct genuine foundation receipt, retained tactical/full stages, actual subject_outcomes operation/census adoption and fresh qualification, then bounded partial-owner LRU/service advancement and live caller permission/deadline/cancellation. Existing full-only selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no budget or ordinary activation claim.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54\u201316.92s versus rawcore5.62\u20136.26s; forcedGC held881\u2013882 versus395MiB, released317\u2013318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain. Independently repaired/accepted \u00a76.4 acquisition contract is now ready for implementation; D4229 closes only that draft defect, not source delivery.",
+          "summary": "D4224 first private compiler-state dependency is verified/independently accepted: actual synchronous compiler uses private root/child cells with construction7/publicscopes unchanged.141 focused/six and48scope+32complete all13 graph/value-receipt/original-input comparisons pass before/after canonical refresh. Full frozen-production20502software/581815.14s+7performance/four61.11s/types/build/governanceR1-R10 pass. Canonical1928/1928/24of89/461vectors/8externals unchanged except11 operation/63 joined predicate hashes;4341526B. Compact16765B proof. Construction8/scopedreceipt/actualmachineoperation/service/freshqualification, memory/budget/ordinary/native/content/release remain owed. No capability or parent completes.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1246,7 +1246,9 @@
             "tools/d4224-acquisition-profile/README.md",
             "planning/foundation-source-identity/acquisition-profile-2026-11-11.json",
             "tools/d4227-core-acquisition/README.md",
-            "planning/foundation-source-identity/core-acquisition-2026-11-11.json"
+            "planning/foundation-source-identity/core-acquisition-2026-11-11.json",
+            "tools/d4175-outcome-delivery/compare-owner.ts",
+            "planning/foundation-source-identity/owner-refactor-equality-2026-11-11.json"
           ],
           "anchors": [
             {
@@ -1722,7 +1724,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:02a9d639a061649db1c14abee3f7678095eff9ea227fddfb89eb62b68548c5d7"
+              "digest": "sha256:e62eab20e0d5f1a76f06e6dae34ca4507d3caab224848529186b4b18b26f751f"
             },
             {
               "kind": "work_state",
@@ -1892,7 +1894,7 @@
             {
               "kind": "work_state",
               "id": "D4224",
-              "digest": "sha256:f000ccd46326e9589b1e2b21c8e4f87dab08b4ee38b53d4ddce50dcc52922108"
+              "digest": "sha256:2dad4bd0331ec9c2b896cc0e20e387ce2b0a05133d6920c6f5871ae223ad69cc"
             },
             {
               "kind": "work_state",
@@ -1938,10 +1940,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement independently accepted subject-safe-semantic-selection \u00a76.4 D4224: one original owner, distinct foundation receipt, full-scope staged collection and seal-only final reads, actual subject_outcomes operation/census adoption, bounded partial-owner LRU and live permission/deadline/cancellation. Coordinate construction8 with fresh qualification; retain full-only selector/Profile/native paths. D4228 actual paged Review and D4175ordinary26 remain held until full delivery/budget proof; D4225/D4167/D3928 stay open.",
+        "nextAction": "Private compiler-state dependency is verified. Continue accepted \u00a76.4 construction8: distinct genuine foundation receipt, retained tactical/full stages, actual subject_outcomes operation/census adoption and fresh qualification, then bounded partial-owner LRU/service advancement and live caller permission/deadline/cancellation. Existing full-only selector/Profile/native paths and D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open; no budget or ordinary activation claim.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54\u201316.92s versus rawcore5.62\u20136.26s; forcedGC held881\u2013882 versus395MiB, released317\u2013318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain. Independently repaired/accepted \u00a76.4 acquisition contract is now ready for implementation; D4229 closes only that draft defect, not source delivery.",
+          "summary": "D4224 first private compiler-state dependency is verified/independently accepted: actual synchronous compiler uses private root/child cells with construction7/publicscopes unchanged.141 focused/six and48scope+32complete all13 graph/value-receipt/original-input comparisons pass before/after canonical refresh. Full frozen-production20502software/581815.14s+7performance/four61.11s/types/build/governanceR1-R10 pass. Canonical1928/1928/24of89/461vectors/8externals unchanged except11 operation/63 joined predicate hashes;4341526B. Compact16765B proof. Construction8/scopedreceipt/actualmachineoperation/service/freshqualification, memory/budget/ordinary/native/content/release remain owed. No capability or parent completes.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2548,7 +2550,9 @@
             "tools/d4224-acquisition-profile/README.md",
             "planning/foundation-source-identity/acquisition-profile-2026-11-11.json",
             "tools/d4227-core-acquisition/README.md",
-            "planning/foundation-source-identity/core-acquisition-2026-11-11.json"
+            "planning/foundation-source-identity/core-acquisition-2026-11-11.json",
+            "tools/d4175-outcome-delivery/compare-owner.ts",
+            "planning/foundation-source-identity/owner-refactor-equality-2026-11-11.json"
           ],
           "anchors": [
             {
@@ -3429,7 +3433,7 @@
             {
               "kind": "rfc",
               "id": "subject-safe-semantic-selection.md",
-              "digest": "sha256:02a9d639a061649db1c14abee3f7678095eff9ea227fddfb89eb62b68548c5d7"
+              "digest": "sha256:e62eab20e0d5f1a76f06e6dae34ca4507d3caab224848529186b4b18b26f751f"
             },
             {
               "kind": "work_state",
@@ -3559,7 +3563,7 @@
             {
               "kind": "work_state",
               "id": "D4224",
-              "digest": "sha256:f000ccd46326e9589b1e2b21c8e4f87dab08b4ee38b53d4ddce50dcc52922108"
+              "digest": "sha256:2dad4bd0331ec9c2b896cc0e20e387ce2b0a05133d6920c6f5871ae223ad69cc"
             },
             {
               "kind": "work_state",

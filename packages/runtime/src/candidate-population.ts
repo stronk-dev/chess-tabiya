@@ -424,44 +424,83 @@ function forkSurvival(tactical: readonly SemanticEvidenceEvent[]): readonly Decl
   return [invokeEvidenceValueRoute(CANDIDATE_CURRENT_SOURCE_ROUTES.forkSurvival, { doubleAttack: doubleAttack.evidence as DeclaredEvidence<DoubleAttackEvent>, breadth: breadth.evidence as DeclaredEvidence<ReplyBreadth> })];
 }
 
-function compileRow(legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>, move: ExactLegalMove, member: CandidatePacketScopeMember,
-  originalRoot: FoundationPositionTuple | undefined): CompiledRowValues {
-  const beforeFen = legalMovesInput.payload.fen;
-  const afterFen = childFen(beforeFen, move);
-  const wantsEvents = member !== "readings";
-  const wantsReadings = member !== "events";
-  // Scope selects retained families; it never removes a dependency a retained output needs. Fork
-  // survival reads the tactical events privately when events are not retained (§3.4).
-  const child = foundationPositionCells(afterFen);
-  const closure = wantsEvents ? localSemanticEventClosure(beforeFen, move.uci, afterFen,
-    [originalRoot!, child.values()]) : undefined;
-  const events = closure?.events ?? EMPTY;
-  let readings: readonly DeclaredEvidence<unknown>[] = EMPTY;
-  let foundation: CandidateFoundationPosition | undefined;
-  if (wantsReadings) {
-    const candidateRole = invokeEvidenceValueRoute(CANDIDATE_CURRENT_SOURCE_ROUTES.candidateRole, { position: legalMovesInput, moveUci: move.uci });
+/** One private invocation graph. Retained cells never recollect equal-byte prerequisites.
+ * Existing public compilation still drains it synchronously; scoped receipts/advancement are
+ * the coordinated construction8 follow-up in subject-safe-semantic-selection §6.4. */
+class CandidateCompilation {
+  readonly beforeFen: string;
+  readonly #rows = new Map<string, CandidateRowCompilation>();
+  #rootCells: ReturnType<typeof foundationPositionCells> | undefined;
+  #foundation: CandidateFoundationPosition | undefined;
+
+  constructor(readonly legal: ReturnType<typeof compileLegalPopulation>) {
+    this.beforeFen = legal.legalMovesInput.payload.fen;
+  }
+  common(): FoundationPositionTuple {
+    this.#rootCells ??= foundationPositionCells(this.beforeFen, this.legal.legalMovesInput);
+    return this.#rootCells.values();
+  }
+  foundation(): CandidateFoundationPosition {
+    this.common();
+    return this.#foundation ??= candidateFoundationPosition(this.#rootCells!, this.legal.legalMovesInput, null);
+  }
+  row(move: ExactLegalMove): CandidateRowCompilation {
+    let row = this.#rows.get(move.uci);
+    if (row === undefined) { row = new CandidateRowCompilation(this, move); this.#rows.set(move.uci, row); }
+    return row;
+  }
+}
+
+/** Fixed root/child source cells, not a caller-configurable collector graph or evidence issuer. */
+class CandidateRowCompilation {
+  readonly afterFen: string;
+  readonly #child: ReturnType<typeof foundationPositionCells>;
+  #closure: ReturnType<typeof localSemanticEventClosure> | undefined;
+  #readings: readonly DeclaredEvidence<unknown>[] | undefined;
+  #foundation: CandidateFoundationPosition | undefined;
+
+  constructor(readonly owner: CandidateCompilation, readonly move: ExactLegalMove) {
+    this.afterFen = childFen(owner.beforeFen, move);
+    this.#child = foundationPositionCells(this.afterFen);
+  }
+  common(): FoundationPositionTuple { return this.#child.values(); }
+  events(): ReturnType<typeof localSemanticEventClosure> {
+    return this.#closure ??= localSemanticEventClosure(this.owner.beforeFen, this.move.uci, this.afterFen,
+      [this.owner.common(), this.common()]);
+  }
+  readings(): readonly DeclaredEvidence<unknown>[] {
+    if (this.#readings !== undefined) return this.#readings;
+    const legalMovesInput = this.owner.legal.legalMovesInput, moveUci = this.move.uci;
+    const candidateRole = invokeEvidenceValueRoute(CANDIDATE_CURRENT_SOURCE_ROUTES.candidateRole, { position: legalMovesInput, moveUci });
     if (candidateRole.kind !== "available") throw new CandidateInvariantFailure("receipt", "Exact candidate role unavailable");
     const centre = invokeEvidenceValueRoute(CANDIDATE_CURRENT_SOURCE_ROUTES.extendedCenterDestination, { source: candidateRole.value });
     if (centre.kind !== "available") throw new CandidateInvariantFailure("receipt", "Exact candidate centre fact unavailable");
-    const exchange = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: beforeFen, captureUci: move.uci });
-    const tactical = closure === undefined ? tacticalSemanticEvents(beforeFen, move.uci, afterFen) : closure.events;
-    readings = Object.freeze([
-      ...childReadingsFromFoundation(child),
-      candidateRole.value,
-      ...centre.value,
-      ...exchange,
-      ...forkSurvival(tactical),
+    const exchange = invokeEvidenceValueRoute("rules.exchange.predicate.legal_exchange@1", { fen: this.owner.beforeFen, captureUci: moveUci });
+    const tactical = this.#closure === undefined ? tacticalSemanticEvents(this.owner.beforeFen, moveUci, this.afterFen) : this.#closure.events;
+    return this.#readings = Object.freeze([
+      ...childReadingsFromFoundation(this.#child), candidateRole.value, ...centre.value, ...exchange, ...forkSurvival(tactical),
     ]);
-    if (wantsEvents) foundation = candidateFoundationPosition(child, legalMovesInput, move.uci);
   }
+  foundation(): CandidateFoundationPosition {
+    return this.#foundation ??= candidateFoundationPosition(this.#child, this.owner.legal.legalMovesInput, this.move.uci);
+  }
+}
+
+function compileRow(row: CandidateRowCompilation, member: CandidatePacketScopeMember): CompiledRowValues {
+  const wantsEvents = member !== "readings", wantsReadings = member !== "events";
+  // Scope controls retained output; readings still acquire their private tactical dependency.
+  const closure = wantsEvents ? row.events() : undefined;
+  const events = closure?.events ?? EMPTY;
+  const readings = wantsReadings ? row.readings() : EMPTY;
+  const foundation = wantsEvents && wantsReadings ? row.foundation() : undefined;
   const abstentions: readonly CandidatePacketAbstention[] = closure === undefined || closure.abstentions.length === 0 ? EMPTY : closure.abstentions;
   const outcomes = Object.freeze((closure === undefined ? [] : localSemanticCollectorOutcomes(closure)).map((source) => {
-    const outcome: SealedCandidateCollectorOutcome = Object.freeze({ moveUci: move.uci, projection: source.projection, result: source.result });
+    const outcome: SealedCandidateCollectorOutcome = Object.freeze({ moveUci: row.move.uci, projection: source.projection, result: source.result });
     OUTCOMES.add(outcome);
     return outcome;
   }));
-  return Object.freeze({ afterFen, events, readings, abstentions, outcomes,
-    ...(wantsEvents ? { common: child.values() } : {}), ...(foundation === undefined ? {} : { foundation }) });
+  return Object.freeze({ afterFen: row.afterFen, events, readings, abstentions, outcomes,
+    ...(wantsEvents ? { common: row.common() } : {}), ...(foundation === undefined ? {} : { foundation }) });
 }
 
 interface MintInput {
@@ -608,16 +647,14 @@ function compileInternal(request: unknown, tamper?: CandidatePopulationContractT
   try { legal = compileLegalPopulation(parsed.beforeFen); } catch (error) {
     return Object.freeze({ kind: "failed", error: Object.freeze({ code: "invalid_fen", message: error instanceof Error ? error.message : String(error) }) });
   }
-  const beforeFen = legal.legalMovesInput.payload.fen;
-  const rootCells = parsed.member === "readings" ? undefined : foundationPositionCells(beforeFen, legal.legalMovesInput);
-  const originalRoot = rootCells?.values();
-  const foundationRoot = parsed.member === "events_and_readings"
-    ? candidateFoundationPosition(rootCells!, legal.legalMovesInput, null) : undefined;
+  const owner = new CandidateCompilation(legal), beforeFen = owner.beforeFen;
+  const originalRoot = parsed.member === "readings" ? undefined : owner.common();
+  const foundationRoot = parsed.member === "events_and_readings" ? owner.foundation() : undefined;
   const position = positionFromFen(beforeFen);
   const terminal = position.isCheckmate() ? Object.freeze({ reason: "checkmate" as const }) : position.isStalemate() ? Object.freeze({ reason: "stalemate" as const }) : undefined;
   const legalMoves = tamper?.legalMoves === undefined ? legal.legalMoves : tamper.legalMoves(legal.legalMoves);
   const compiled = new Map<string, CompiledRowValues>();
-  for (const move of legalMoves) if (!compiled.has(move.uci)) compiled.set(move.uci, compileRow(legal.legalMovesInput, move, parsed.member, originalRoot));
+  for (const move of legalMoves) if (!compiled.has(move.uci)) compiled.set(move.uci, compileRow(owner.row(move), parsed.member));
   const built: readonly CandidateEventRow[] = legalMoves.map((move) => {
     const values = compiled.get(move.uci)!;
     return Object.freeze({ moveUci: move.uci, afterFen: values.afterFen, events: values.events, readings: values.readings, abstentions: values.abstentions });
