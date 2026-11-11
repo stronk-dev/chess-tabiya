@@ -2,10 +2,11 @@
 
 **Current boundary — 2026-11-11:** the older checkpoints below are historical. `[V]`
 
-The current writer passes1,524/1,524 canonical cases over89 subjects;19 satisfy their own
-required arms. Eight of thirteen original-subject outcome families qualify. Five remain:
-king zone, king opposition, direct attack count, line blockers and loose-piece risk.
-Consumer admission, application reach and ordinary guidance remain separate. `[V]`
+The current writer passes1,928/1,928 canonical cases over89 subjects;24 satisfy their own
+required arms. All thirteen original-subject outcome families qualify. The404 added cases
+retain all1,524 earlier case receipts and84 other verdicts exactly. Consumer admission,
+application reach and ordinary guidance remain separate. Full normal verification of this
+coordinated cutover passes20,488 software tests/580files and7 performance tests/fourfiles. `[V]`
 (`packages/runtime/src/semantic-validation-receipt.generated.json`,
 `packages/runtime/src/semantic-validation-profiles.json`;
 `planning/foundation-source-identity/plan.md`)

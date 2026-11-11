@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "types": ["node"],
+    "paths": {
+      "@chess-tabiya/runtime": ["../../packages/runtime/src/index.ts"],
+      "@chess-tabiya/schema": ["../../packages/schema/src/index.ts"],
+      "@chess-tabiya/schema/drill-pack": ["../../packages/schema/src/drill-pack/index.ts"],
+      "chessops": ["../../packages/runtime/node_modules/chessops/dist/types/index.d.ts"],
+      "chessops/*": ["../../packages/runtime/node_modules/chessops/dist/types/*.d.ts"]
+    }
+  },
+  "include": ["proof.ts", "validation-receipt.ts"]
+}

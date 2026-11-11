@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1f20130affb033b59b8f48bd2c06701dea0f2ed5c6a6b741e531006066e85749",
+    "roadmap": "sha256:5b8221fac820c9fe16e491dd9ac78ac85d085e29a2c2a27d48fb89b67d38a49a",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:f37b4411e3c16febc886333174d2cdff6f19a121024040eee61c073666120b4e",
-    "rfcRegister": "sha256:b860d7b524b5129144dbb85922f905e147fef19e44bc2795385508a303ce3526",
+    "workState": "sha256:50d7008759edf61b4914a899bed5ab9ee182f8e60f62ee87a01f39359da28d54",
+    "rfcRegister": "sha256:a36a73c2fd76905467dec9f625be0022f3a3cb3468ca9ff08f2760efebbe90c2",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -20,9 +20,9 @@
     },
     "assignedRfcs": 80,
     "activeRfcLifecycle": {
-      "draft": 21,
+      "draft": 20,
       "accepted": 0,
-      "implementing": 50,
+      "implementing": 51,
       "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 632,
-      "doing": 174,
+      "doing": 176,
       "blocked": 1063,
       "done": 1937,
       "refused": 163
@@ -357,9 +357,13 @@
       "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4215/D1 is independently complete and archived. Index2/two bounded parts,30 consumers/compiler/Git guard preserve all1524 ordered cases and semantic receipt fields. Committed0dda10a3 full verification passes19320 software tests/575files(768.81s), seven performance tests/four(61.45s), canonical1524/1524,89subjects/19qualified and all preflights. Real staged/first-parent guards, large-blob regression, types/build/governance and normal hooks pass. D4218 transport bug is closed. D4200 durable coverage remains complete. Unregistered complete-control research passes34 checks over16boards/30moves with128 subjects each; citation/fault/mirror/admission proofs remain. Five outcome qualifications, D4167/ordinary26, D4217 research-model debt and held D3928 remain; no whole capability or release gate is promoted.",
+        "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance/staged controls remain for the checkpoint. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
         "impact": "advanced",
         "evidence": [
+          "rfc/semantic-validation-receipt-storage.md",
+          "packages/runtime/src/semantic-validation-receipt-storage.ts",
+          "packages/runtime/src/semantic-validation-receipt-storage.test.ts",
+          "packages/runtime/src/semantic-validation-final-outcome.test.ts",
           "rfc/archive/semantic-validation-case-storage.md",
           "packages/runtime/src/semantic-validation-case-storage.test.ts",
           "packages/runtime/src/semantic-validation-case-storage.ts",
@@ -661,7 +665,7 @@
           {
             "kind": "rfc",
             "id": "semantic-validation-authority.md",
-            "digest": "sha256:d188283c3a784ce77fb4fba518e037816d7258dc6b0795be16578ef08acca7d7"
+            "digest": "sha256:3f2b2d8d046b66306ed4281ddcb10a88fbd58893fda7c6775bb3245aba353142"
           },
           {
             "kind": "work_state",
@@ -1081,12 +1085,12 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:540f6187f6d506f287a32f745029b69ac9a34d27b3f2e8b4a177f34e418e433e"
+            "digest": "sha256:6be3814ca086cdd0ab05b146853b6b75db1fe0946452b8c62a116a1982063194"
           },
           {
             "kind": "work_state",
             "id": "D1716",
-            "digest": "sha256:b5b19b1c838b8f94b97f6bc8defd5939094c479202af43439fa389111909b125"
+            "digest": "sha256:1d2ad9757a307e1ae9be5edca6ff0506bb85ac0ab5373bb7fbf02dd6e61623d8"
           },
           {
             "kind": "work_state",
@@ -1242,6 +1246,11 @@
             "kind": "work_state",
             "id": "D4210",
             "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-validation-receipt-storage.md",
+            "digest": "sha256:89801a442a3cd13c409434bf5235ee7e2d24d686a1a3a67210a03c058cbaa765"
           }
         ]
       },
@@ -1265,9 +1274,13 @@
       "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. The Inspector fixture exercises the actual recorded capture and the Review panel uses declared theme tokens. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Exact original-pawn references now qualify backward and passed outcomes with 1,524 passing canonical cases. The new full software rerun remains. Five outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "All13 original-subject outcome families qualify in actual1928/1928 cases and24/89 subjects. The404 new cases preserve all1524 predecessor case receipts, operation/population/external records and84 other verdicts. Genuine source admission tests go red10 to green10; ordinary26 remain held. D4220 lossless storage preserves the complete1928-case document while shrinking12,750,264 to4,340,954 bytes. Codec/Git and integrated source tests pass; complete normal verification passes20488 software tests/580files and7 performance tests/fourfiles. Governance/staged controls remain for the checkpoint. Independently reviewed D4221 isolates owner-policy fixtures and D4222 derives later cases from fixed source IDs; all historical and scale assertions remain. D4200/D4215 earlier completion stands. D4167 reverse consumers, D4175 ordinary26, native journeys, D4217 research debt and held D3928 remain; no whole capability or release promotion.",
         "impact": "advanced",
         "evidence": [
+          "rfc/semantic-validation-receipt-storage.md",
+          "packages/runtime/src/semantic-validation-receipt-storage.ts",
+          "packages/runtime/src/semantic-validation-receipt-storage.test.ts",
+          "packages/runtime/src/semantic-validation-final-outcome.test.ts",
           "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
           "apps/web/src/lib/ReviewExposurePanel.svelte",
           "apps/web/src/lib/theme/theme.test.ts",
@@ -2317,7 +2330,7 @@
           {
             "kind": "work_state",
             "id": "D1716",
-            "digest": "sha256:b5b19b1c838b8f94b97f6bc8defd5939094c479202af43439fa389111909b125"
+            "digest": "sha256:1d2ad9757a307e1ae9be5edca6ff0506bb85ac0ab5373bb7fbf02dd6e61623d8"
           },
           {
             "kind": "work_state",
@@ -2732,7 +2745,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:540f6187f6d506f287a32f745029b69ac9a34d27b3f2e8b4a177f34e418e433e"
+            "digest": "sha256:6be3814ca086cdd0ab05b146853b6b75db1fe0946452b8c62a116a1982063194"
           },
           {
             "kind": "work_state",
@@ -2853,6 +2866,11 @@
             "kind": "work_state",
             "id": "D4210",
             "digest": "sha256:fa298a958cafb061aa5dd9fccaef1d65a64bc30b012c81f73962a6a387e42231"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-validation-receipt-storage.md",
+            "digest": "sha256:89801a442a3cd13c409434bf5235ee7e2d24d686a1a3a67210a03c058cbaa765"
           }
         ]
       },
@@ -3689,7 +3707,7 @@
           {
             "kind": "work_state",
             "id": "D1716",
-            "digest": "sha256:b5b19b1c838b8f94b97f6bc8defd5939094c479202af43439fa389111909b125"
+            "digest": "sha256:1d2ad9757a307e1ae9be5edca6ff0506bb85ac0ab5373bb7fbf02dd6e61623d8"
           },
           {
             "kind": "work_state",

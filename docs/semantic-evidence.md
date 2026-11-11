@@ -13,6 +13,16 @@ below. It does not automatically activate consumer bindings.
 Semantic evidence is the typed bridge between Tabiya's raw detectors and later learner-facing
 modules. It does not itself choose a hint, name a tactic, grade a move, or turn on assistance.
 
+## Validation receipt storage
+
+The full generated JSON uses storage2: repeated ordered input-digest lists are stored once,
+with exact per-target indices. Build/test readers use `decodeSemanticValidationReceipt` to
+restore the complete schema1 execution document. Vector order and duplicate occurrences stay
+intact; decoded shared vectors are immutable. The runtime imports the compact verdict module.
+The canonical writer hashes the exact stored bytes and `--check` remains read-only. Current
+schema1 storage refuses; the preservation tool handles pre-cutover Git blobs explicitly.
+See `rfc/semantic-validation-receipt-storage.md`.
+
 ## Factory input order
 
 A semantic event retains the factory receipt's complete ordered input digest vector. Compilation

@@ -14,6 +14,8 @@ import { ShapeRegistry } from "../../apps/server/src/shape-registry.js";
 import { PrincipleRegistry } from "../../apps/server/src/principle-registry.js";
 import { assertAuthoredContentUnchanged, assertLedgerMetadataUnchanged } from "../explorer-summary-migration-proof/proof.js";
 import { checkSourceHistory } from "./history.mjs";
+import { decodeGitValidationReceipt } from "./validation-receipt.js";
+import { decodeSemanticValidationReceipt } from "../../packages/runtime/src/semantic-validation-receipt-storage.js";
 
 // Reuse the same preservation checks for D3369; each mode names its committed predecessor.
 const BINDING_ABSENCE = process.argv.includes("--binding-absence");
@@ -89,9 +91,9 @@ async function proof(editsOnly: boolean) {
   }
   const newProfiles = [...successors.values(), ...(REPERTOIRE_FRONTIER ? ["derived.explorer.repertoire_frontier@1"] : []), ...(RETURN_FREQUENCY ? ["derived.explorer.position_frequency@1"] : []), ...(INSPECTOR_POPULATION ? ["derived.explorer.inspector_population@1"] : [])].sort();
   assert.deepEqual(Object.keys(profiles).filter(key => !Object.hasOwn(oldProfiles, key)).sort(), newProfiles);
-  const previousReceipt = JSON.parse(old("packages/runtime/src/semantic-validation-receipt.generated.json"));
-  const currentReceipt = JSON.parse(read("packages/runtime/src/semantic-validation-receipt.generated.json"));
-  for (const key of Object.keys(previousReceipt).filter(key => key !== "operations" && key !== "populations")) assert.equal(canonicalJson(currentReceipt[key]), canonicalJson(previousReceipt[key]), `Semantic validation outcome changed: ${key}`);
+  const previousReceipt = decodeGitValidationReceipt(old("packages/runtime/src/semantic-validation-receipt.generated.json"));
+  const currentReceipt = decodeSemanticValidationReceipt(read("packages/runtime/src/semantic-validation-receipt.generated.json"));
+  for (const key of (Object.keys(previousReceipt) as (keyof typeof previousReceipt)[]).filter(key => key !== "operations" && key !== "populations")) assert.equal(canonicalJson(currentReceipt[key]), canonicalJson(previousReceipt[key]), `Semantic validation outcome changed: ${key}`);
   const withoutDigest = (rows: readonly Record<string, unknown>[], field: string) => rows.map(({ [field]: _digest, ...retained }) => retained);
   const currentOperations = withoutDigest(currentReceipt.operations, "implementationDigest");
   if (REPERTOIRE_FRONTIER || ASSISTANCE_CODEC) {
@@ -164,7 +166,7 @@ async function proof(editsOnly: boolean) {
       const start = before.lastIndexOf(',\n  "requires": [\n');
       assert.ok(start >= 0 && before.endsWith("\n  ]\n}\n"), `Unexpected stamp layout: ${path}`);
       const compact = before.slice(start).includes('    { "id":');
-      const rendered = compact ? stamped.requires.map(row => `    ${JSON.stringify(row).replaceAll(":", ": ").replaceAll(",", ", ").replaceAll("{", "{ ").replaceAll("}", " }")}`).join(",\n")
+      const rendered = compact ? stamped.requires.map((row: unknown) => `    ${JSON.stringify(row).replaceAll(":", ": ").replaceAll(",", ", ").replaceAll("{", "{ ").replaceAll("}", " }")}`).join(",\n")
         : JSON.stringify(stamped.requires, null, 2).split("\n").slice(1, -1).map(line => `  ${line}`).join("\n");
       const after = `${before.slice(0, start)},\n  "requires": [\n${rendered}\n  ]\n}\n`;
       assert.equal(canonicalJson(JSON.parse(after)), canonicalJson(stamped));

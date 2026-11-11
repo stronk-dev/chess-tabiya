@@ -56,7 +56,8 @@ no skips/setup-blocked. Types/research/build pass separately; later aggregate po
 trailing build are unreached. This local checkpoint is not a parent completion or qualification.
 Scope/review: `planning/learner-modules/compiler2-independent-review-2026-11-02.md`.
 
-- **Status:** implementing — **Slice A
+- **Status:** implementing — current2026-11-11:1928/1928 canonical cases,24/89 qualified subjects and all13 outcome families; D4220 lossless receipt storage and complete local verification pass20488 software tests/580files and7 performance tests/fourfiles. D4167 consumer/application duties remain.
+  **Historical Slice A:**
   implemented 2026-09-24 at the owner's direction, no review round.** The authority mechanism,
   81-root profile register (78 original subjects plus three bounded-target subjects),
   38 migrated D1713 emitter cases (29 positive / 9 negative, all passing

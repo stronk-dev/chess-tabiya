@@ -1,6 +1,6 @@
 # RFC: Semantic validation receipt storage
 
-- **Status:** draft — D4220 measured lossless input-vector deduplication.
+- **Status:** implementing — independently accepted on bounded buildability 2026-11-11 after the explicit Git-history reader repair; complete local verification passes, with committed-tree controls and independent completion still pending.
 - **Author:** codex, under the full-foundation/pre-launch zero-legacy rulings.
 - **Created:** 2026-11-11
 - **Parent / amends:** semantic-validation-authority.md §6; follows archive/semantic-validation-case-storage.md without changing its format.
@@ -60,16 +60,20 @@ of the exact stored JSON bytes: the hash algorithm is unchanged. `buildSemanticV
 still returns the complete schema1 in-memory document. `--check` recomputes and compares bytes
 without writes. Only the ordinary writer rewrites generated files.
 
-Reader census unit: **current direct JSON-reader files**, total **two**:
+Reader census unit: **current direct JSON-reader files**, total **three**:
 
 | File | Required reading |
 |---|---|
 | packages/runtime/src/foundation-semantic-event.test.ts | Decode current receipt before using full records. Its new24/13 qualification expectation belongs to the outcome wave, not this storage change. |
-| tools/d3367-provider-source-history/proof.ts | Decode its current receipt; retain the existing explicit historical schema1 read for its immutable prior revision. |
+| packages/runtime/src/semantic-validation-receipt-storage.test.ts | Decode and round-trip the actual stored artifact, check its size and runtime hash. |
+| tools/d3367-provider-source-history/proof.ts | Strictly decode the working receipt as storage2. Its previous Git receipt selects HEAD in CURRENT_HISTORY mode and a fixed BASELINE otherwise: use the sole decoder for a schema2 Git blob, and a confined historical schema1 read for a pre-cutover Git blob. |
 
 `tools/d3367-provider-source-history/history.mjs` compares two fixed historical commits,
-not the current artifact; keep that reader unchanged. Audit all literal/dynamic current
-receipt readers before claiming the census complete. Do not modify historical bytes.
+not the current artifact; keep that reader unchanged. A small tool-local history decoder
+may handle the explicit Git-blob split; the runtime-storage codec itself never falls back.
+Check fixed schema1 BASELINE, pre-cutover schema1 HEAD and post-cutover schema2 HEAD through
+actual Git blobs. Unknown or mixed historical representations refuse. Audit all literal/
+dynamic current receipt readers before claiming the census complete. Do not modify historical bytes.
 
 ### Bounds and scope
 
@@ -89,8 +93,10 @@ None. This changes generated representation only.
    every target/input vector, counts, failures, operations, populations, externals and verdicts.
 2. Focused tests cover shared/empty vectors, vector order/multiplicity, immutable shared reads,
    no encoder input mutation, and each malformed/ambiguous/out-of-range form above.
-3. Both current direct readers use the sole decoder; the historical-only reader is unchanged.
-   No storage parser or generated JSON enters the runtime/application graph.
+3. All three current direct readers use the sole decoder; the historical-only reader is unchanged.
+   Actual Git controls cover fixed schema1 BASELINE, pre-cutover schema1 HEAD and post-cutover
+   schema2 HEAD. Current schema1 still refuses; history support is confined to the tool's
+   explicit previous-Git read. No storage parser or generated JSON enters the runtime/application graph.
 4. Actual stored output is below5MiB; the existing source guard and its negative tests pass.
 5. The canonical check passes read-only with1928/1928 cases and24/89 subjects. This criterion
    validates storage of the outcome wave; storage itself grants no additional qualification.
@@ -111,3 +117,6 @@ None. Scope preserves complete execution evidence and the existing guard.
 ## Changelog
 
 - 2026-11-11: drafted from the executed12.75MB receipt and measured461-vector deduplication.
+- 2026-11-11: independent review returned the prior-reader assumption: CURRENT_HISTORY reads
+  HEAD, which becomes storage2 after cutover. Added an explicit previous-Git split and actual
+  pre/post-cutover HEAD controls without a current-format fallback.

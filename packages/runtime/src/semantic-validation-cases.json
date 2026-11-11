@@ -2,6 +2,10 @@
   "schemaVersion": 2,
   "parts": [
     "semantic-validation-cases/foundation.json",
-    "semantic-validation-cases/original-pawns.json"
+    "semantic-validation-cases/original-pawns.json",
+    "semantic-validation-cases/king-outcomes.json",
+    "semantic-validation-cases/control-outcomes.json",
+    "semantic-validation-cases/line-outcomes.json",
+    "semantic-validation-cases/risk-outcomes.json"
   ]
 }

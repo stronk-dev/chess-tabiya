@@ -3,6 +3,11 @@ import { assertSemanticValidationOwnerTransition } from "./semantic-validation-o
 import { PAWN_OUTCOME_LITERAL_SOURCES } from "./semantic-validation-pawn-outcome-sources.js";
 import { PAWN_LINEAGE_LITERAL_SOURCES } from "./semantic-validation-pawn-lineage-sources.js";
 import { COUNT_POPULATION_LITERAL_SOURCE } from "./semantic-validation-count-population-sources.js";
+import { KING_OUTCOME_LITERAL_SOURCES } from "./semantic-validation-king-outcome-sources.js";
+import { CONTROL_OUTCOME_LITERAL_SOURCE } from "./semantic-validation-control-outcome-sources.js";
+import { LINE_OUTCOME_LITERAL_SOURCE } from "./semantic-validation-line-outcome-sources.js";
+import { RISK_OUTCOME_LITERAL_SOURCE } from "./semantic-validation-risk-outcome-sources.js";
+import { SUBJECT_OUTCOME_FAMILIES } from "./semantic-subject-types.js";
 // rfc/semantic-validation-authority.md — acceptance criteria and §10 able-to-fail fixtures.
 import { SLIDER_LITERAL_SOURCE } from "./semantic-validation-slider-sources.js";
 import { BACKWARD_LITERAL_SOURCE } from "./semantic-validation-backward-sources.js";
@@ -40,6 +45,7 @@ import { assertSemanticReachRetained, assertSemanticTargetValueAuthority, execut
 import {
   SEMANTIC_READING_VALIDATION_DECLARATIONS,
   SEMANTIC_VALIDATION_ARMS,
+  SEMANTIC_VALIDATION_PROFILE_CELLS,
   SemanticValidationError,
   assertSemanticValidationFourWayEquality,
   assertSemanticValidationRegistryJoins,
@@ -242,16 +248,29 @@ describe("semantic-validation roots, profiles and verdicts", () => {
   });
 
   it("[27] keeps new source qualification separate from its actual complete population coverage", () => {
-    const debt = SEMANTIC_VALIDATION_PROFILES.find((profile) => profile.subject.projection.id === "derived.semantic_avoidance.king_zone")!;
+    const qualified = SEMANTIC_VALIDATION_PROFILES.find((profile) => profile.subject.projection.id === "derived.semantic_avoidance.king_zone")!;
     expect(SEMANTIC_VALIDATION_ARMS.filter((arm) => arm !== "external_label" && arm !== "imported_population").every((arm) => {
       const key = ({ positive: "positive", semantic_negative: "semanticNegative", orientation: "orientation", counterfactual: "counterfactual", imported_population: "importedPopulation" } as const)[arm as Exclude<typeof arm, "external_label">];
-      const cell = debt[key];
-      return cell.disposition === "required" && cell.owner === "D1716";
+      const cell = qualified[key];
+      return cell.disposition === "present" && cell.refs.length > 0;
     })).toBe(true);
-    expect(debt.subject.projection.version).toBe(2);
-    expect(debt.importedPopulation.disposition).toBe("present");
-    expect(CASES.some((value) => value.subject.projection.id === debt.subject.projection.id)).toBe(false);
-    expect(semanticValidationVerdict(debt.subject)?.verdict).toBe("unvalidated");
+    expect(qualified.subject.projection.version).toBe(2);
+    expect(qualified.importedPopulation.disposition).toBe("present");
+    expect(CASES.some((value) => value.subject.projection.id === qualified.subject.projection.id)).toBe(true);
+    const actual = semanticValidationVerdict(qualified.subject)!;
+    expect(actual.verdict).toBe("passed");
+    // Real population coverage alone still cannot replace any of the four source proofs.
+    const populationOnly = compileSemanticValidationVerdict(qualified.subject, SEMANTIC_VALIDATION_PROFILE_CELLS.map(([key, arm]) => {
+      if (["positive", "semantic_negative", "orientation", "counterfactual"].includes(arm)) {
+        return { arm, status: "required" as const, owner: "D1716", discharge: "Independent source cases still required" };
+      }
+      const cell = qualified[key];
+      if (cell.disposition === "not_applicable") return { arm, status: "not_applicable" as const, reason: cell.reason };
+      if (cell.disposition !== "present") throw Error("Actual qualified population required");
+      return { arm, status: "passed" as const, refs: cell.refs.map(ref => ref.id) };
+    }));
+    expect(populationOnly.verdict).toBe("unvalidated");
+    expect(populationOnly.open).toEqual(["positive", "semantic_negative", "orientation", "counterfactual"]);
     expect(SEMANTIC_VALIDATION_PROFILES.find(profile => profile.subject.projection.id === "rules.structural.event.king_opposition" && profile.subject.projection.version === 1)).toBeUndefined();
     const opposition = SEMANTIC_VALIDATION_PROFILES.find(profile => profile.subject.projection.id === "rules.structural.event.king_opposition" && profile.subject.projection.version === 2)!;
     expect(opposition.positive.disposition).toBe("present"); // Independently grounded current cases, not the retired slot.
@@ -267,12 +286,17 @@ describe("semantic-validation roots, profiles and verdicts", () => {
   it("[25] reports passed/open subjects by arm rather than one blended percentage", () => {
     const summary = semanticValidationSummary();
     expect(summary.subjects).toBe(SEMANTIC_VALIDATION_ROOTS.length);
-    // Four basic transitions, seven current foundation profiles and eight independently grounded outcome families.
-    expect(summary.passed).toBe(19);
+    // Four basic transitions, seven current foundation profiles and all thirteen outcome families.
+    expect(summary.passed).toBe(24);
     expect(SEMANTIC_VALIDATION_RECEIPT.verdicts.filter(row => row.verdict === "passed").map(row => row.subject))
-      .toEqual([event("derived.activity.event.file_access_revealed"), event("derived.activity.event.file_state"), { kind: "event", projection: { id: "derived.semantic_avoidance.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.doubled_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.half_open_file", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.isolated_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.open_file", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.passed_pawn", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.pawn_islands", version: 2 } }, { kind: "event", projection: { id: "derived.semantic_avoidance.piece_count", version: 2 } }, event("derived.structural.event.pawn_file_group"), event("rules.castling.event.rights_lost"), { kind: "event", projection: { id: "rules.structural.event.backward_pawn", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.king_opposition", version: 2 } }, { kind: "event", projection: { id: "rules.structural.event.pawn_islands", version: 2 } }, event("rules.transition.event.capture"),
-        event("rules.transition.event.castled"), event("rules.transition.event.clock_reset"), { kind: "event", projection: { id: "rules.transition.event.slider_ray", version: 2 } }]);
-    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length - 19);
+      .toEqual([event("derived.activity.event.file_access_revealed"), event("derived.activity.event.file_state"),
+        ...SUBJECT_OUTCOME_FAMILIES.map(family => ({ kind: "event" as const, projection: { id: `derived.semantic_avoidance.${family}`, version: 2 } })),
+        event("derived.structural.event.pawn_file_group"), event("rules.castling.event.rights_lost"),
+        ...["rules.structural.event.backward_pawn", "rules.structural.event.king_opposition", "rules.structural.event.pawn_islands", "rules.transition.event.slider_ray"]
+          .map(id => ({ kind: "event" as const, projection: { id, version: 2 } })),
+        event("rules.transition.event.capture"), event("rules.transition.event.castled"), event("rules.transition.event.clock_reset")]
+        .sort((a, b) => semanticValidationSubjectKey(a).localeCompare(semanticValidationSubjectKey(b))));
+    expect(summary.openByArm.orientation).toBe(SEMANTIC_VALIDATION_ROOTS.length - 24);
     const verdict = compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => ({ arm, status: "passed" as const, refs: ["a"] })));
     expect(verdict.verdict).toBe("passed");
     expect(compileSemanticValidationVerdict(event("x"), SEMANTIC_VALIDATION_ARMS.map((arm) => arm === "orientation" ? { arm, status: "required" as const, owner: "o", discharge: "d" } : { arm, status: "passed" as const, refs: ["a"] })).open).toEqual(["orientation"]);
@@ -445,8 +469,12 @@ describe("semantic-validation cases and execution", () => {
     expect(CASES.filter(row => addedPawnLineageIds.has(row.id)).map(row => row.id).sort()).toEqual([...addedPawnLineageIds].sort());
     expect(CASES.filter(row => addedPawnOutcomeIds.has(row.id)).map(row => row.id).sort()).toEqual([...addedPawnOutcomeIds].sort());
     expect(CASES.filter(row => addedCountIds.has(row.id)).map(row => row.id).sort()).toEqual([...addedCountIds].sort());
-    expect(CASES.filter(row => !addedOppositionIds.has(row.id) && !addedPawnFileIds.has(row.id) && !addedBackwardIds.has(row.id) && !addedSliderIds.has(row.id) && !addedCountIds.has(row.id) && !addedPawnOutcomeIds.has(row.id) && !addedPawnLineageIds.has(row.id))).toHaveLength(419 - SUBJECT_SAFE_RETIRED_CASES.length);
-    expect(CASES).toHaveLength(375 + addedCastleIds.size + addedRightsIds.size + addedTransitionIds.size + addedOppositionIds.size + addedPawnFileIds.size + addedBackwardIds.size + addedSliderIds.size + addedCountIds.size + addedPawnOutcomeIds.size + addedPawnLineageIds.size - SUBJECT_SAFE_RETIRED_CASES.length);
+    const finalOutcomeIds = new Set([...KING_OUTCOME_LITERAL_SOURCES, CONTROL_OUTCOME_LITERAL_SOURCE, LINE_OUTCOME_LITERAL_SOURCE, RISK_OUTCOME_LITERAL_SOURCE]
+      .flatMap(source => source.cases.map(row => row.proposition.case.id)));
+    expect(finalOutcomeIds.size).toBe(404);
+    expect(CASES.filter(row => finalOutcomeIds.has(row.id)).map(row => row.id).sort()).toEqual([...finalOutcomeIds].sort());
+    expect(CASES.filter(row => !addedOppositionIds.has(row.id) && !addedPawnFileIds.has(row.id) && !addedBackwardIds.has(row.id) && !addedSliderIds.has(row.id) && !addedCountIds.has(row.id) && !addedPawnOutcomeIds.has(row.id) && !addedPawnLineageIds.has(row.id) && !finalOutcomeIds.has(row.id))).toHaveLength(419 - SUBJECT_SAFE_RETIRED_CASES.length);
+    expect(CASES).toHaveLength(375 + addedCastleIds.size + addedRightsIds.size + addedTransitionIds.size + addedOppositionIds.size + addedPawnFileIds.size + addedBackwardIds.size + addedSliderIds.size + addedCountIds.size + addedPawnOutcomeIds.size + addedPawnLineageIds.size + finalOutcomeIds.size - SUBJECT_SAFE_RETIRED_CASES.length);
     expect(HISTORICAL_CASES.filter((item) => item.arm === "positive")).toHaveLength(230);
     expect(HISTORICAL_CASES.filter((item) => item.arm === "semantic_negative")).toHaveLength(158);
   });
@@ -688,8 +716,16 @@ describe("semantic-validation owner authority store", () => {
 
   it("[32] derives owner admissions from base/candidate trees and rejects mutation, removal and same-change admission", () => {
     const store = (rows: readonly unknown[]) => JSON.stringify({ schemaVersion: 1, authorities: rows });
-    const profiles = readFileSync(resolve(ROOT, "packages/runtime/src/semantic-validation-profiles.json"), "utf8");
-    const cases = JSON.stringify(loadSemanticValidationCases());
+    // Policy branches need one complete tree, not a replay of every growing corpus case.
+    // Actual Git/large-blob tests and the real staged guard cover the full-tree scale.
+    const member = structuredClone(CASE_MAP.get("transition.short-castle.castled")!);
+    const prior = SEMANTIC_VALIDATION_PROFILES.find(profile => semanticValidationSubjectKey(profile.subject) === semanticValidationSubjectKey(member.subject))!;
+    const needed = { disposition: "required", owner: "policy fixture", discharge: "Outside this owner-policy unit" };
+    const profile = { ...prior, positive: { disposition: "present", refs: [{ kind: "case", id: member.id, version: member.version, subject: member.subject, arm: "positive" }] },
+      semanticNegative: needed, orientation: needed };
+    parseSemanticValidationProfile(profile);
+    const profiles = JSON.stringify({ schemaVersion: 1, profiles: [profile] });
+    const cases = JSON.stringify({ schemaVersion: 1, cases: [member] });
     const ownerCases = JSON.parse(cases) as { cases: Record<string, unknown>[] };
     const castled = ownerCases.cases.find((value) => value.id === "transition.short-castle.castled")!;
     castled.authority = { kind: "owner_authored", id: "castled-short", version: 1 };
@@ -777,7 +813,7 @@ describe("semantic-validation consumer eligibility", () => {
 
   it("[23] keeps fixture registries, runner, operations, oracles and authority stores out of the production import graph", () => {
     const closure = semanticValidationImportClosure(["packages/runtime/src/index.ts"]);
-    for (const forbidden of ["semantic-validation-cases.json", "semantic-validation-runner.ts", "semantic-validation-operations.ts", "semantic-validation-oracles.ts", "semantic-validation-authorities.ts", "semantic-validation-cited-sources.ts", "semantic-validation-receipt.generated.json", "semantic-validation-external.json"]) {
+    for (const forbidden of ["semantic-validation-cases.json", "semantic-validation-runner.ts", "semantic-validation-operations.ts", "semantic-validation-oracles.ts", "semantic-validation-authorities.ts", "semantic-validation-cited-sources.ts", "semantic-validation-receipt-storage.ts", "semantic-validation-receipt.generated.json", "semantic-validation-external.json"]) {
       expect(closure.some((file) => file.endsWith(forbidden)), forbidden).toBe(false);
     }
     expect(closure).toContain("packages/runtime/src/semantic-validation-registry.ts");

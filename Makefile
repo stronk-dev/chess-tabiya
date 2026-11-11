@@ -1751,6 +1751,23 @@ semantic-pawn-outcome-check:
 semantic-validation-update: semantic-validation-build
 	$(CI_NODE) tools/semantic-validation/dist/semantic-validation-build.mjs --write
 
+# Author the reviewed five outcome-family fixtures. Qualification remains the canonical writer's job.
+.PHONY: semantic-outcome-cases semantic-outcome-cases-update
+semantic-outcome-cases:
+	./node_modules/.bin/tsc --project tools/semantic-validation/tsconfig.outcome-cases.json
+	./node_modules/.bin/esbuild tools/semantic-outcome-cases.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/semantic-validation/dist/semantic-outcome-cases.mjs --log-level=warning
+	$(CI_NODE) tools/semantic-validation/dist/semantic-outcome-cases.mjs
+
+semantic-outcome-cases-update:
+	./node_modules/.bin/tsc --project tools/semantic-validation/tsconfig.outcome-cases.json
+	./node_modules/.bin/esbuild tools/semantic-outcome-cases.ts --bundle --platform=node --format=esm --external:typescript --outfile=tools/semantic-validation/dist/semantic-outcome-cases.mjs --log-level=warning
+	$(CI_NODE) tools/semantic-validation/dist/semantic-outcome-cases.mjs --write
+
+.PHONY: semantic-receipt-storage-check
+semantic-receipt-storage-check:
+	./node_modules/.bin/tsc --project tools/d3367-provider-source-history/tsconfig.json
+	$(MAKE) test-software-files TEST_FILES=packages/runtime/src/semantic-validation-receipt-storage.test.ts
+
 .PHONY: semantic-validation-bounded-check
 semantic-validation-bounded-check:
 	./node_modules/.bin/vitest run --config vitest.software.config.ts packages/runtime/src/semantic-validation-bounded.test.ts packages/runtime/src/bounded-target-oracle.test.ts

@@ -11,7 +11,9 @@ import { compileSemanticEvidenceEvent, assertSemanticEvidenceEvent } from "./sem
 import { ONE_EDGE_EVENT_REFS } from "./module-registry.js";
 import type { FoundationEdgeSourceRef } from "./foundation-edge-source.js";
 import { exactLegalMoves } from "./legal-moves.js";
-import { mirrorSemanticFen, mirrorSemanticUci, SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS, type SemanticValidationReceiptDocument } from "./semantic-validation.js";
+import { mirrorSemanticFen, mirrorSemanticUci, SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS } from "./semantic-validation.js";
+import { decodeSemanticValidationReceipt } from "./semantic-validation-receipt-storage.js";
+import { SUBJECT_OUTCOME_FAMILIES } from "./semantic-subject-types.js";
 import { SEMANTIC_VALIDATION_ROOTS, SEMANTIC_VALIDATION_PROFILES, semanticValidationVerdict } from "./semantic-validation-registry.js";
 import { LOCAL_CANDIDATE_EVENT_PROJECTION_KEYS } from "./candidate-population.js";
 
@@ -246,10 +248,10 @@ describe("literal computed prerequisites and declaration ownership", () => {
     expect(SEMANTIC_VALIDATION_ROOTS).toHaveLength(89);
     expect(SEMANTIC_VALIDATION_PROFILES).toHaveLength(89);
     const qualified = SEMANTIC_VALIDATION_ROOTS.filter(subject => semanticValidationVerdict(subject)?.verdict === "passed");
-    expect(qualified).toHaveLength(19);
+    expect(qualified).toHaveLength(24);
     expect(qualified.filter(subject => subject.projection.id.startsWith("derived.semantic_avoidance.")).map(subject => key(subject.projection)).sort())
-      .toEqual(["backward_pawn", "doubled_pawn", "half_open_file", "isolated_pawn", "open_file", "passed_pawn", "pawn_islands", "piece_count"].map(family => `derived.semantic_avoidance.${family}@2`));
-    const document = JSON.parse(readFileSync(new URL("./semantic-validation-receipt.generated.json", import.meta.url), "utf8")) as SemanticValidationReceiptDocument;
+      .toEqual(SUBJECT_OUTCOME_FAMILIES.map(family => `derived.semantic_avoidance.${family}@2`).sort());
+    const document = decodeSemanticValidationReceipt(readFileSync(new URL("./semantic-validation-receipt.generated.json", import.meta.url), "utf8"));
     for (const root of SEMANTIC_INSPECTOR_EVENT_VALIDATION_ROOTS) {
       const route = key(root), profile = SEMANTIC_VALIDATION_PROFILES.find(row => row.subject.kind === "event" && key(row.subject.projection) === route)!;
       const qualifiedSource = ["rules.structural.event.king_opposition@2", "rules.structural.event.backward_pawn@2", "derived.structural.event.pawn_file_group@1", "derived.activity.event.file_state@1", "derived.activity.event.file_access_revealed@1", "rules.structural.event.pawn_islands@2", "rules.transition.event.slider_ray@2"].includes(route);

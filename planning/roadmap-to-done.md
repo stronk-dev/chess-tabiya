@@ -2,12 +2,12 @@
 
 ## Current continuation — 2026-11-11
 
-The full 1.0 goal remains active. On `0dda10a3`, complete normal software verification
-passes **19,320 tests in 575 files** (768.81 seconds), then **seven performance tests in
-four files** (61.45 seconds). All1,524 canonical cases pass over89subjects,19qualified.
-The real staged and committed first-parent guards, types/build/governance and normal
-commit hooks pass. The finite case-storage RFC/D1 has independent completion acceptance
-and is archived; D4215 and its transport repair D4218 are closed.
+The full 1.0 goal remains active. The current coordinated source/storage cutover passes
+**20,488 software tests in 580 files** (742.34 seconds) and **seven performance tests in
+four files** (57.73 seconds), with the complete normal gate exiting zero. All 1,928
+canonical cases pass over 89 subjects; 24 qualify, including all 13 original-subject
+outcome families. Staged/committed-tree controls and the finite storage closeout follow
+before the next implementation wave. Earlier D4215/D4218 case-storage completion stands.
 See the [exploration log](exploration/log.md).
 
 **D4200 durable availability** now carries per-decision source coverage through revision 10
@@ -29,34 +29,25 @@ and refuse before acquiring evidence during retry, for both colors. D3928
 blocks the desktop and phone-width browser journey at server startup.
 [Exposure research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11)
 
-Eight of the 13 new outcome families qualify. The new backward- and passed-pawn cases
-pass all 1,524 canonical cases and 4,161 focused tests. The earlier 1,470 case receipts and
-all population and external receipts are preserved. Five families still need qualification. D4167 reverse
-consumers, D4175's 26 ordinary avoidance tuples, full module and preset adoption, learner journeys
-and release proof remain. D3928 still holds content, native startup and release proof. No new
-official pack graduates. The [foundation plan](foundation-source-identity/plan.md) tracks
-implementation and verification.
+All13 original-subject outcome families now pass their own source proofs. The actual writer
+passes1928/1928 cases and24/89 subjects;404 new cases preserve all1524 earlier case receipts,
+operations, population/external records and84 other verdicts. Real source admission controls
+fail10/10 before the certificate is written, then pass10/10. Full normal verification passes 20,488 software and seven performance tests; this is a
+source checkpoint, not completed consumer delivery.
 
-The canonical case registry now uses an index and two bounded parts, read through one
-shared compiler/test/Git loader. Exact ordered cases and receipt results are preserved;
-only the independently reviewed hash metadata changes. The
-[implemented case-storage RFC](../rfc/archive/semantic-validation-case-storage.md) is closed.
-D4217 separately owns two obsolete inventory assertions in an older disposable research
-model. The unconnected control reference now passes34 research checks across16 boards/30moves
-with128 subjects each. Independent original-piece ray preparation passes67 research checks
-over62 literal examples and all legal alternatives; citation/fault/mirror/admission work
-remains. A separate original-own-piece legal-exchange reference passes79 checks over40
-roots/70 moves, including pins, EP, promotions and castling. None of these references
-is canonical qualification. King preparation now registers88 fixed cited-source cases
-and tests genuine pre-mint corruption with both absolute partners. The four-file authority/
-pawn regression passes2966 checks; its canonical/profile admission remains pending with
-the other three families. Square-control preparation now binds74 fixed source records;
-137 focused software checks, workspace types and the original34 research checks pass.
-Canonical/profile admission remains pending. Blocker preparation adds148 fixed source cases
-with965 checks across the line/control/king/slider regression; types and the original67
-research checks pass. Risk preparation adds94 fixed source cases and deep optional-stop controls, with200 focused
-checks, types and original79 research checks passing. All five outcome-proof files pass1850
-checks. The404 prepared source cases still need coordinated canonical/profile qualification.
+D4220 replaces repeated input lists with461 unique ordered vectors. Its complete generated
+receipt shrinks from12,750,264 to4,340,954 bytes, under the unchanged5MiB guard. Independent
+expansion reproduces the full1928-case document exactly. Current readers use storage2;
+Git-history reads retain an explicit pre-cutover1/post-cutover2 boundary. Focused codec/Git
+checks pass; D4221 removes growing-corpus coupling from the owner-policy unit without changing
+its assertions or the actual full-repository/large-Git checks. D4222 replaces copied later-source
+lists with exact fixed-source IDs, preserving all historical joins. The repaired full local gate passes.
+
+D4167 reverse consumers, D4175's26 ordinary avoidance bindings, full module/preset adoption,
+learner journeys and release proof remain. D3928 still holds content/native startup/release;
+no new official pack graduates. The [foundation plan](foundation-source-identity/plan.md)
+records source preparation, actual execution and outstanding verification. D4217 separately
+owns obsolete inventory assertions in an older disposable research model.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 
