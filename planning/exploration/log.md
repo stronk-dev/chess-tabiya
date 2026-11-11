@@ -41765,3 +41765,33 @@ D4233 stays doing: actual original-writer/live intent-policy authority and fresh
 checks remain next. D4234 actual generation/startup identity, D4235 fixed source deadline and
 D4224 cooperative full-step execution/cost, D4225/D4228/ordinary26/D4167/D3928 all remain open.
 This checkpoint closes neither the full caller contract nor a whole-product 1.0 milestone.
+
+## 2026-11-11 — D4233 live Hint action authority; D4236/D4237 repaired
+
+Implemented the accepted Hint §7b live-authority slice after9206e87e's owner isolation. REST
+authenticates again after awaited capabilities and captures immutable parsed intent/original
+writer. Actual identity/RunService checks cover session, lease, grants, rated/disclosure state,
+decision/FEN, role/workflow and issued Campaign authority. Source waits/packet yields, private
+render/voice/publication and GET recheck; repeats cannot replace the original authority.
+Pending shared jobs attach a Set of independently checked actions before deferred work and
+completed horizons clear permission-bearing subscribers. Revoking one session leaves its
+authorized peer's genuine shared search running.
+
+Independent source/lifetime reviewers returned D4236 (stale GET forgetting original action
+binding) and D4237 (raw pack context passed instead of issued Campaign context). Both repairs
+are independently accepted and path-backed done: same-key new-writer/changed-intent repeats
+stay stale in the existing bounded map; actual earned/missing Campaign kits deliver/refuse
+through the application, not a copied receipt. D4233 remains doing for fine-advance integration.
+
+Verification: three intended actual HTTP predecessor failures (22 other tests pass), then182
+expanded tests/nine files in31.16s. The initial default-sandbox loopback EPERM run was discarded;
+it is not predecessor evidence. Frozen-source normal `make verify-software build verify-governance`
+exits0:20564 software tests/584 files938.73s,7 isolated performance tests/four files66.09s, complete
+types/Svelte0errors0warnings, build, R1–R10/C1–C8/P1–P7. Canonical evidence remains current without
+regeneration. No production code changed after this run.
+
+Next: D4234 actual registry/engine generation identity and bounded startup, D4235 absolute
+source-work cap, then D4224 fixed begin/advance/yield integration and actual cost/budget proof.
+The registry instance is stockfish-analysis (string generation); evidence.stockfish_analysis is
+its family, not the generation lookup argument. Engine acquisition generation is a separate
+numeric domain. D4224/D4225/D4228/ordinary26/D4167/D3928 and full1.0 release obligations remain.

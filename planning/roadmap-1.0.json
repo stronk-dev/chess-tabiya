@@ -973,10 +973,10 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Implement accepted Hint§7b fresh original-writer/intent-policy authority and GET/publication rechecks, genuine provider-generation/bounded startup identity, absolute source deadline and cooperative full stages. Preserve sources and shared-authorized-peer cancellation; prove actual HTTP/lifetime/cost boundaries. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
+        "nextAction": "Implement accepted Hint§7b actual registry string and established-engine numeric generations with bounded startup/original action identities, absolute source-work deadline and fixed full begin/advance/yield checks. Preserve original permissions, complete populations and valid shared peers; measure real cost/budget boundaries. D4233 fine-step integration,D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4233 first actual Hint caller cut verified: authenticated owner scopes action idempotence/health/poll/cancel/drop without public-ID/wire or shared-search changes. Four genuine predecessor failures become30/two and172/eight controls; frozen normal20554software/all5831041.64s+7performance/four70.30s/types/build/governanceR1-R10/C1-C8 pass. Construction8 source qualification remains1928/1928,24/89 includingall13 outcomes, with no regenerated metadata. Fresh original-writer/help-policy authority, generation/deadline/cooperative work and D4224/D4225/D4228/ordinary26/D4167/D3928 remain open; no parent or capability completes.",
+          "summary": "D4233 live Hint authority checkpoint verified: immutable original writer/intent, actual session/lease/grant/rated/disclosure/decision/FEN/role/workflow/issued-Campaign checks after capabilities and around source/voice/publication/GET; pending shared operations validate independently and pure completed horizons release subscriber authority. Three actual predecessor HTTP failures,182/nine expanded passes; frozen normal20564software/all584938.73s+7performance/four66.09s/types/build/governance pass. Independently reviewed D4236 bounded stale binding and D4237 genuine Campaign context close with actual code/test proof. Canonical evidence unchanged. D4233 fine-step integration,D4234/D4235/D4224/D4225/D4228/ordinary26/D4167/D3928 remain; no parent/capability completes.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1258,7 +1258,8 @@
             "apps/server/src/rest.ts",
             "docs/guided-hint.md",
             "apps/server/src/hint-service.test.ts",
-            "apps/server/src/hint-lifetime.test.ts"
+            "apps/server/src/hint-lifetime.test.ts",
+            "apps/server/src/hint-campaign.test.ts"
           ],
           "anchors": [
             {
@@ -1949,7 +1950,7 @@
             {
               "kind": "work_state",
               "id": "D4233",
-              "digest": "sha256:fd1cb749e5d2500964872a15bcd39330660f51bef17b7b0ef2084429c6b59220"
+              "digest": "sha256:c7ee202eca79b17bbc69cde6d4a5e785c6a1fdcd7c37b16c4ab1290486e0f4c3"
             },
             {
               "kind": "work_state",
@@ -1964,7 +1965,17 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:e70c9fd6c6caca4346f8ff90614cf7881896d637b7ee215d9cb0516e9debfe4c"
+              "digest": "sha256:58d982560527260cdbe258fd2fa820ca871c8ed37dabec0d3ccacfdaedd66faf"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4236",
+              "digest": "sha256:e4c0b80e417f04a002243e0e4039ab76e9a7054be196febbddec079a167f6a69"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4237",
+              "digest": "sha256:4518d9125ca00d6cf8cd1cafb882b40dc54ef65d253235a7ad98061251c6b342"
             }
           ]
         },
@@ -1985,10 +1996,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Implement accepted Hint§7b fresh original-writer/intent-policy authority and GET/publication rechecks, genuine provider-generation/bounded startup identity, absolute source deadline and cooperative full stages. Preserve sources and shared-authorized-peer cancellation; prove actual HTTP/lifetime/cost boundaries. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
+        "nextAction": "Implement accepted Hint§7b actual registry string and established-engine numeric generations with bounded startup/original action identities, absolute source-work deadline and fixed full begin/advance/yield checks. Preserve original permissions, complete populations and valid shared peers; measure real cost/budget boundaries. D4233 fine-step integration,D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4233 first actual Hint caller cut verified: authenticated owner scopes action idempotence/health/poll/cancel/drop without public-ID/wire or shared-search changes. Four genuine predecessor failures become30/two and172/eight controls; frozen normal20554software/all5831041.64s+7performance/four70.30s/types/build/governanceR1-R10/C1-C8 pass. Construction8 source qualification remains1928/1928,24/89 includingall13 outcomes, with no regenerated metadata. Fresh original-writer/help-policy authority, generation/deadline/cooperative work and D4224/D4225/D4228/ordinary26/D4167/D3928 remain open; no parent or capability completes.",
+          "summary": "D4233 live Hint authority checkpoint verified: immutable original writer/intent, actual session/lease/grant/rated/disclosure/decision/FEN/role/workflow/issued-Campaign checks after capabilities and around source/voice/publication/GET; pending shared operations validate independently and pure completed horizons release subscriber authority. Three actual predecessor HTTP failures,182/nine expanded passes; frozen normal20564software/all584938.73s+7performance/four66.09s/types/build/governance pass. Independently reviewed D4236 bounded stale binding and D4237 genuine Campaign context close with actual code/test proof. Canonical evidence unchanged. D4233 fine-step integration,D4234/D4235/D4224/D4225/D4228/ordinary26/D4167/D3928 remain; no parent/capability completes.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2604,7 +2615,8 @@
             "apps/server/src/testing/candidate-retirement.test-support.ts",
             "apps/server/src/rest.ts",
             "docs/guided-hint.md",
-            "apps/server/src/hint-service.test.ts"
+            "apps/server/src/hint-service.test.ts",
+            "apps/server/src/hint-campaign.test.ts"
           ],
           "anchors": [
             {
@@ -2855,7 +2867,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:e70c9fd6c6caca4346f8ff90614cf7881896d637b7ee215d9cb0516e9debfe4c"
+              "digest": "sha256:58d982560527260cdbe258fd2fa820ca871c8ed37dabec0d3ccacfdaedd66faf"
             },
             {
               "kind": "rfc",
@@ -3660,7 +3672,7 @@
             {
               "kind": "work_state",
               "id": "D4233",
-              "digest": "sha256:fd1cb749e5d2500964872a15bcd39330660f51bef17b7b0ef2084429c6b59220"
+              "digest": "sha256:c7ee202eca79b17bbc69cde6d4a5e785c6a1fdcd7c37b16c4ab1290486e0f4c3"
             },
             {
               "kind": "work_state",
@@ -3671,6 +3683,16 @@
               "kind": "work_state",
               "id": "D4235",
               "digest": "sha256:f94fda17d4df49a0aabee9e47d77f1e7db977b56a1456e3c2b239a416fcad9c3"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4236",
+              "digest": "sha256:e4c0b80e417f04a002243e0e4039ab76e9a7054be196febbddec079a167f6a69"
+            },
+            {
+              "kind": "work_state",
+              "id": "D4237",
+              "digest": "sha256:4518d9125ca00d6cf8cd1cafb882b40dc54ef65d253235a7ad98061251c6b342"
             }
           ]
         },
@@ -4127,7 +4149,7 @@
             {
               "kind": "rfc",
               "id": "hint-distance.md",
-              "digest": "sha256:e70c9fd6c6caca4346f8ff90614cf7881896d637b7ee215d9cb0516e9debfe4c"
+              "digest": "sha256:58d982560527260cdbe258fd2fa820ca871c8ed37dabec0d3ccacfdaedd66faf"
             },
             {
               "kind": "rfc",

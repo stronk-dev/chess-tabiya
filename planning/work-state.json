@@ -35507,7 +35507,7 @@
       "id": "D4233",
       "state": "doing",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fd1cb749e5d2500964872a15bcd39330660f51bef17b7b0ef2084429c6b59220",
+      "sourceDigest": "sha256:c7ee202eca79b17bbc69cde6d4a5e785c6a1fdcd7c37b16c4ab1290486e0f4c3",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35529,6 +35529,24 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
+    },
+    {
+      "id": "D4236",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e4c0b80e417f04a002243e0e4039ab76e9a7054be196febbddec079a167f6a69",
+      "uxItems": [],
+      "evidence": "apps/server/src/hint-lifetime.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D4237",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4518d9125ca00d6cf8cd1cafb882b40dc54ef65d253235a7ad98061251c6b342",
+      "uxItems": [],
+      "evidence": "apps/server/src/hint-campaign.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

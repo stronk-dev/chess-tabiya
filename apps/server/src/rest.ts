@@ -1879,8 +1879,20 @@ export function createRestHandler(
         const nodeId = requiredString(body.nodeId, "nodeId");
         const decisionDigest = requiredString(body.decisionDigest, "decisionDigest");
         if (hints === undefined) throw new ServerError("ENGINE_UNAVAILABLE", "Guided hints are not configured", { details: { engineId: "stockfish-analysis", retryAfterMs: 0 } });
-        const access = service.hintAccess(route.runId, principal, writerId(request));
-        const { authoritative } = await authoritativeAssistance(route.runId, principal, body.assistance);
+        const originalWriter = writerId(request);
+        service.hintAccess(route.runId, principal, originalWriter);
+        let intent;
+        try { intent = parseRequestedAssistanceV1(body.assistance); }
+        catch (error) { if (error instanceof AssistanceExchangeError) throw invalid(error.message); throw error; }
+        const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
+        // Capabilities may await an engine handshake. No pre-await identity, lease or policy
+        // snapshot is permission to admit work after that wait.
+        const currentPrincipal = authenticate();
+        const access = service.hintAccess(route.runId, currentPrincipal, originalWriter);
+        const authority = service.assistanceAuthority(route.runId, currentPrincipal);
+        let authoritative;
+        try { authoritative = compileAuthoritativeAssistance(intent, { ...authority, availability }); }
+        catch (error) { if (error instanceof AssistanceExchangeError) throw invalid(error.message); throw error; }
         const policy = hintPolicyDecision({
           rung,
           ceiling: authoritative.hintCeiling.rung,
@@ -1893,7 +1905,30 @@ export function createRestHandler(
         if (nodeId !== access.decision.cursor.nodeId || decisionDigest !== access.decision.digest) {
           return json(200, { clientRequestId, hint: { state: "stale", requestId: hints.requestIdFor(decisionDigest, rung, clientRequestId), rung } });
         }
-        return json(200, { clientRequestId, hint: hints.request({ learnerId: principal.learnerId, run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: access.session, voiceRequested: authoritative.config.voice === "persona" }, rung, clientRequestId) });
+        const origin = JSON.stringify(authority.origin);
+        const revalidate = (): boolean => {
+          try {
+            const actor = authenticate();
+            if (actor.learnerId !== currentPrincipal.learnerId) return false;
+            const live = service.hintAccess(route.runId, actor, originalWriter);
+            const liveAuthority = service.assistanceAuthority(route.runId, actor);
+            // Only output-channel availability is captured. Rule 3 never changes Hint modules
+            // or ceilings; provider failure is handled independently by search/voice. Permission
+            // always comes from the current run and the original immutable requested intent.
+            const permitted = compileAuthoritativeAssistance(intent, { ...liveAuthority, availability });
+            return live.decision.digest === access.decision.digest && live.node.fen === access.node.fen
+              && live.role === access.role && live.session === access.session
+              && permitted.context === authoritative.context
+              && JSON.stringify(liveAuthority.origin) === origin
+              && permitted.config.voice === authoritative.config.voice
+              && hintPolicyDecision({ rung, ceiling: permitted.hintCeiling.rung, moduleActive: permitted.modules.includes("guided_hint"), deliveryOpen: live.deliveryOpen, learnerToMove: live.learnerToMove, ratedGameOpen: false }).kind === "allowed";
+          } catch (error) {
+            if (error instanceof AssistanceExchangeError || (error instanceof RuntimeError && error.code === "NOT_ACTIVE_WRITER")
+              || (error instanceof ServerError && ["UNAUTHENTICATED", "FORBIDDEN", "RUN_NOT_FOUND", "ASSISTANCE_WITHHELD", "FEEDBACK_WITHHELD"].includes(error.code))) return false;
+            throw error;
+          }
+        };
+        return json(200, { clientRequestId, hint: hints.request({ learnerId: currentPrincipal.learnerId, writerId: originalWriter, assistance: intent, revalidate, run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: authoritative.context, voiceRequested: authoritative.config.voice === "persona" }, rung, clientRequestId) });
       }
       if (route.action === "shape-firings/query") {
         requireJson(request);

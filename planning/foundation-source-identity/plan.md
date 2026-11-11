@@ -3698,3 +3698,37 @@ D4233 stays doing: actual original-writer/live intent-policy authority and fresh
 checks remain next. D4234 actual generation/startup identity, D4235 fixed source deadline and
 D4224 cooperative full-step execution/cost, D4225/D4228/ordinary26/D4167/D3928 all remain open.
 This checkpoint closes neither the full caller contract nor a whole-product 1.0 milestone.
+
+### 2026-11-11 — D4233 live Hint authority and independent shared subscribers
+
+The actual REST handoff captures parsed immutable assistance intent and the original writer.
+It authenticates again after awaited capabilities, then uses fresh RunService writer/grant,
+rated/disclosure, decision/FEN, role/workflow and actual Campaign origin authorities. Each
+operation retains its original revalidator; repeat POST cannot replace writer, intent or callback.
+Pending shared source jobs attach a Set of operations before deferred work, revalidate each
+independently around waits and packet yields, stop when none remain, and clear all subscriber
+references before retaining a completed pure horizon. Private rendering/voice/publication and
+GET, including previously delivered actions, recheck actual current authority.
+
+Three genuine prior-code HTTP controls fail before the implementation: pending/delivered
+writer replacement stays valid, and capabilities-wait lease replacement still admits a POST.
+The first default-sandbox attempt was discarded for loopback EPERM; the authoritative repeated
+localhost run fails the three intended assertions (22 other tests pass). Current expanded
+verification passes182 tests/nine files in31.16s, including actual HTTP session revocation in
+both creator/peer orders while one genuine provider search survives for the valid peer, late
+voice success after logout, current role demotion, writer replacement and captured-intent refusal.
+
+Independent source and lifetime reviews returned two concrete gaps and accept their repairs:
+D4236 keeps authority-invalidated original bindings in the same bounded map, preventing stale
+GET followed by same-key/new-writer/changed-intent POST from rebinding. D4237 binds packet context
+to authoritative.context, not raw pack context, and compares the current issued context too.
+A genuine CampaignService/SQLite/application/HTTP control proves earned-kit success/search1
+and missing-kit refusal before HintService/search; no copied or manually issued receipt.
+
+Frozen-source normal `make verify-software build verify-governance` exits0:20564 software/all584
+files in938.73s, seven isolated performance tests/four files in66.09s, complete types/Svelte
+0errors0warnings, build and governance R1–R10/C1–C8/P1–P7. Canonical validation is current
+without regenerated metadata. No production source changed after the run. D4236/D4237 close
+with actual test/code evidence. D4233 remains doing for integration with forthcoming fine
+advance boundaries. D4234 real generations, D4235 total source deadline, D4224 cooperative full
+acquisition/cost, D4225/D4228/ordinary26/D4167/D3928 remain open. No parent/capability completes.

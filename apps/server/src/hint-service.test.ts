@@ -190,7 +190,7 @@ describe("Guided Hint through createApplication", { timeout: 60_000 }, () => {
 });
 
 describe("HintService source and voice arms", () => {
-  const access = (run: DrillRun, fen: string): HintAccess => ({ learnerId: "owner", run, decision: hintDecisionStamp(run), fen, role: "learner", session: "position", voiceRequested: true });
+  const access = (run: DrillRun, fen: string): HintAccess => ({ learnerId: "owner", writerId: "unit-writer", assistance: compileAssistanceRequest({ contextHint: "position", preference: preference("support") }), revalidate: () => true, run, decision: hintDecisionStamp(run), fen, role: "learner", session: "position", voiceRequested: true });
   const run = { id: "unit", feedbackPolicy: "attempt_end", events: [{ seq: 1, type: "feedback.revealed", at: "2026-09-24T12:00:00.000Z", data: { nodeId: "n0" } }], nodes: [], branches: [], activeCursor: { branchId: "main", nodeId: "n0" } } as unknown as DrillRun;
   const engine = async () => ({ id: "stockfish-analysis", version: "mock-1" });
   const settle = async (service: HintService, first: HintResponse): Promise<HintResponse> => {

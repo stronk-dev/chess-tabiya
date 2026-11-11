@@ -6,6 +6,7 @@ import {
 } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CandidatePopulationService } from "./candidate-population-service.js";
+import { EngineCapabilities } from "./capabilities.js";
 import { ExternalHttpVoiceProvider } from "./external-voice.js";
 import { HintService, type HintAccess, type HintProviderGateway } from "./hint-service.js";
 import { createInMemoryTestApplication } from "./in-memory-test-application.js";
@@ -16,7 +17,7 @@ import { composeProviderTraversalApplication } from "./provider-traversal.js";
 const FEN = "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1";
 afterEach(() => { vi.restoreAllMocks(); });
 const run = { id: "lifetime", feedbackPolicy: "attempt_end", events: [{ seq: 1, type: "feedback.revealed", at: "2026-10-05T12:00:00.000Z", data: { nodeId: "n0" } }], nodes: [], branches: [], activeCursor: { branchId: "main", nodeId: "n0" } } as unknown as DrillRun;
-const access = (voiceRequested = true): HintAccess => ({ learnerId: "owner", run, decision: hintDecisionStamp(run), fen: FEN, role: "learner", session: "position", voiceRequested });
+const access = (voiceRequested = true): HintAccess => ({ learnerId: "owner", writerId: "unit-writer", assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }), revalidate: () => true, run, decision: hintDecisionStamp(run), fen: FEN, role: "learner", session: "position", voiceRequested });
 function deferred<T>() {
   let resolve!: (value: T) => void;
   let reject!: (error: unknown) => void;
@@ -40,6 +41,33 @@ function id(response: HintResponse): string {
 }
 
 describe("Guided Hint operation lifetimes", () => {
+  it("repeat POST cannot replace the original writer, assistance intent or authority callback", async () => {
+    const engine = deferred<{ id: string; version: string }>();
+    let permitted = true;
+    const originalAuthority = vi.fn(() => permitted);
+    const replacementAuthority = vi.fn(() => true);
+    const get = vi.fn<HintProviderGateway["get"]>();
+    const hints = service({ scheduler: { get }, requestedEngine: () => engine.promise });
+    const original = { ...access(false), revalidate: originalAuthority };
+    const requestId = id(hints.request(original, "pattern", "0".repeat(32)));
+    try {
+      const changedIntent = compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+      for (const replacement of [{ writerId: "replacement" }, { assistance: changedIntent }]) {
+        expect(hints.request({ ...original, ...replacement, revalidate: replacementAuthority }, "pattern", "0".repeat(32))).toMatchObject({ state: "failed", reason: "contract_violation", requestId });
+      }
+      expect(hints.operationCount).toBe(1);
+      await new Promise<void>(resolve => setImmediate(resolve));
+      permitted = false;
+      engine.resolve({ id: "stockfish-analysis", version: "mock-1" });
+      await bounded(hints.whenIdle());
+      expect(hints.poll(run.id, requestId, original.decision, "owner")).toMatchObject({ state: "stale", requestId });
+      expect(hints.operationCount).toBe(1); // Same bounded terminal record; no rebinding map.
+      expect(get).not.toHaveBeenCalled();
+      expect(replacementAuthority).not.toHaveBeenCalled();
+      expect(originalAuthority).toHaveBeenCalled();
+    } finally { engine.resolve({ id: "stockfish-analysis", version: "mock-1" }); await hints.close(); }
+  });
+
   it("equal public action IDs belong to independent owners while their search remains shared", async () => {
     const result = deferred<TypedProviderResult<"stockfish.principal_variation@1">>();
     void result.promise.catch(() => undefined); // Cleanup may run before the scheduler subscribes.
@@ -300,20 +328,158 @@ async function applicationControl() {
     const graph = await (await fetch(`${origin}/runs/hint-lifetime/graph`, { headers })).json() as { graph: Pick<DrillRun, "nodes" | "branches" | "activeCursor"> };
     const events = await (await fetch(`${origin}/runs/hint-lifetime/events?sinceSeq=0`, { headers })).json() as { events: DrillRun["events"] };
     const decision = hintDecisionStamp({ id: "hint-lifetime", feedbackPolicy: "attempt_end", ...graph.graph, events: events.events } as DrillRun);
+    const hintBody = (rung: HintRung) => ({ clientRequestId: "0".repeat(32), nodeId: graph.graph.activeCursor.nodeId, rung, decisionDigest: decision.digest,
+      assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: { voice: "persona" }, moduleOverrides: { include: [], exclude: [] } } }) });
     const ask = async (rung: HintRung = "pattern") => {
-      const response = await post("/runs/hint-lifetime/hints", { clientRequestId: "0".repeat(32), nodeId: graph.graph.activeCursor.nodeId, rung, decisionDigest: decision.digest,
-        assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: { voice: "persona" }, moduleOverrides: { include: [], exclude: [] } } }) });
+      const response = await post("/runs/hint-lifetime/hints", hintBody(rung));
       expect(response.status, await response.clone().text()).toBe(200);
       return parseHintResponse((await response.json() as { hint: unknown }).hint);
     };
     const poll = async (requestId: string) => fetch(`${origin}/runs/hint-lifetime/hints/${requestId}`, { headers });
     const cancel = async (requestId: string) => fetch(`${origin}/runs/hint-lifetime/hints/${requestId}`, { method: "DELETE", headers });
     const state = () => application.providerHealth.snapshot().providers.find(row => row.instanceId === "external-voice")!;
-    return { application, exchanges, post, ask, poll, cancel, state };
+    return { application, exchanges, origin, headers, decision, hintBody, post, ask, poll, cancel, state };
   } catch (error) { for (const exchange of exchanges) exchange.reply.reject(error); await application.close(); throw error; }
 }
 
 describe("authenticated Hint → application → health → external HTTP voice cancellation", () => {
+  it("a still-readable co-host demoted to spectator loses the pending action's original authority", { timeout: 30_000 }, async () => {
+    const app = await applicationControl();
+    try {
+      const registered = await app.post("/auth/register", { handle: "hint_participant", password: "hint-participant-password" });
+      expect(registered.status).toBe(201);
+      const headers = { ...app.headers, cookie: registered.headers.get("set-cookie")!.split(";", 1)[0]!, "x-writer-id": "participant-writer" };
+      const participantPost = (path: string, body: unknown) => fetch(`${app.origin}${path}`, { method: "POST", headers, body: JSON.stringify(body) });
+      expect((await app.post("/runs/hint-lifetime/grants", { op: "grant", handle: "hint_participant", role: "host" })).status).toBe(200);
+      const session = await (await fetch(`${app.origin}/auth/session`, { headers: app.headers })).json() as { learner: { id: string } };
+      const claimed = await participantPost("/runs/hint-lifetime/lease", { expectedHolderLearnerId: session.learner.id });
+      expect(claimed.status, await claimed.clone().text()).toBe(200);
+      const asked = await participantPost("/runs/hint-lifetime/hints", app.hintBody("pattern"));
+      expect(asked.status, await asked.clone().text()).toBe(200);
+      const requestId = id(parseHintResponse((await asked.json() as { hint: unknown }).hint));
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(1));
+      expect((await app.post("/runs/hint-lifetime/grants", { op: "grant", handle: "hint_participant", role: "spectator" })).status).toBe(200);
+      expect((await fetch(`${app.origin}/runs/hint-lifetime/graph`, { headers })).status).toBe(200);
+      const polled = await fetch(`${app.origin}/runs/hint-lifetime/hints/${requestId}`, { headers });
+      expect(polled.status).toBe(200);
+      expect(parseHintResponse((await polled.json() as { hint: unknown }).hint)).toMatchObject({ state: "stale", requestId });
+      expect(app.exchanges[0]!.signal.aborted).toBe(true);
+    } finally { for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
+  it.each(["creator", "peer"] as const)("logging out the %s during discovery retires only that action; another authenticated session finishes the one search", { timeout: 30_000 }, async invalid => {
+    const app = await applicationControl();
+    const gate = deferred<void>();
+    const reached = deferred<void>();
+    const original = MockProviderEngineClient.prototype.start;
+    const discovery = vi.spyOn(MockProviderEngineClient.prototype, "start").mockImplementationOnce(async function (this: MockProviderEngineClient, ...args) {
+      const engine = await original.apply(this, args);
+      reached.resolve();
+      await gate.promise;
+      return engine;
+    });
+    const search = vi.spyOn(app.application.providers.scheduler, "get");
+    try {
+      const first = id(await app.ask("pattern"));
+      await bounded(reached.promise);
+      const logged = await app.post("/auth/login", { handle: "hint_lifetime", password: "hint-test-password" });
+      expect(logged.status).toBe(200);
+      const headers = { ...app.headers, cookie: logged.headers.get("set-cookie")!.split(";", 1)[0]! };
+      const response = await fetch(`${app.origin}/runs/hint-lifetime/hints`, { method: "POST", headers, body: JSON.stringify(app.hintBody("square")) });
+      expect(response.status).toBe(200);
+      const second = id(parseHintResponse((await response.json() as { hint: unknown }).hint));
+      const revoked = invalid === "creator" ? first : second;
+      const retained = invalid === "creator" ? second : first;
+      const logout = await fetch(`${app.origin}/auth/logout`, { method: "POST", headers: invalid === "creator" ? app.headers : headers, body: "{}" });
+      expect(logout.status).toBeLessThan(300);
+      gate.resolve();
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(1));
+      expect(search).toHaveBeenCalledTimes(1);
+      expect(app.exchanges[0]!.signal.aborted).toBe(false);
+      app.exchanges[0]!.reply.resolve(Response.json({ text: app.exchanges[0]!.sentence }));
+      const survivingHeaders = invalid === "creator" ? headers : app.headers;
+      await vi.waitFor(async () => {
+        const delivered = await fetch(`${app.origin}/runs/hint-lifetime/hints/${retained}`, { headers: survivingHeaders });
+        expect(parseHintResponse((await delivered.json() as { hint: unknown }).hint).state).toBe("available");
+      });
+      const retired = await fetch(`${app.origin}/runs/hint-lifetime/hints/${revoked}`, { headers: survivingHeaders });
+      expect(parseHintResponse((await retired.json() as { hint: unknown }).hint).state).toBe("stale");
+      const again = await fetch(`${app.origin}/runs/hint-lifetime/hints/${revoked}`, { headers: survivingHeaders });
+      expect(parseHintResponse((await again.json() as { hint: unknown }).hint).state).toBe("stale");
+      expect(app.exchanges).toHaveLength(1);
+    } finally { gate.resolve(); discovery.mockRestore(); search.mockRestore(); for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
+  it("a logged-out session cannot publish a late successful voice response or reuse its action under a new session", { timeout: 30_000 }, async () => {
+    const app = await applicationControl();
+    try {
+      const requestId = id(await app.ask());
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(1));
+      expect((await app.post("/auth/logout", {})).status).toBeLessThan(300);
+      expect((await app.poll(requestId)).status).toBe(401);
+      app.exchanges[0]!.reply.resolve(Response.json({ text: app.exchanges[0]!.sentence }));
+      const logged = await app.post("/auth/login", { handle: "hint_lifetime", password: "hint-test-password" });
+      expect(logged.status).toBe(200);
+      const headers = { ...app.headers, cookie: logged.headers.get("set-cookie")!.split(";", 1)[0]! };
+      const repeated = await fetch(`${app.origin}/runs/hint-lifetime/hints`, { method: "POST", headers, body: JSON.stringify(app.hintBody("pattern")) });
+      expect(repeated.status).toBe(200);
+      expect(parseHintResponse((await repeated.json() as { hint: unknown }).hint)).toMatchObject({ state: "stale", requestId });
+      const response = await fetch(`${app.origin}/runs/hint-lifetime/hints/${requestId}`, { headers });
+      expect(parseHintResponse((await response.json() as { hint: unknown }).hint).state).toBe("stale");
+      expect(app.exchanges).toHaveLength(1);
+    } finally { for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
+  it.each(["pending", "available"] as const)("a replaced original writer invalidates a %s action without moving its decision", { timeout: 30_000 }, async phase => {
+    const app = await applicationControl();
+    try {
+      const requestId = id(await app.ask());
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(1));
+      if (phase === "available") {
+        app.exchanges[0]!.reply.resolve(Response.json({ text: app.exchanges[0]!.sentence }));
+        await vi.waitFor(async () => expect(parseHintResponse((await (await app.poll(requestId)).json() as { hint: unknown }).hint).state).toBe("available"));
+      }
+      const changed = await fetch(`${app.origin}/runs/hint-lifetime/lease`, { method: "POST", headers: { ...app.headers, "x-writer-id": "replacement-writer" }, body: "{}" });
+      expect(changed.status, await changed.clone().text()).toBe(200);
+      const response = await app.poll(requestId);
+      expect(response.status).toBe(200);
+      expect(parseHintResponse((await response.json() as { hint: unknown }).hint).state).toBe("stale");
+      if (phase === "pending") expect(app.exchanges[0]!.signal.aborted).toBe(true);
+      const again = await app.poll(requestId);
+      expect(parseHintResponse((await again.json() as { hint: unknown }).hint).state).toBe("stale");
+      const repeated = await fetch(`${app.origin}/runs/hint-lifetime/hints`, { method: "POST", headers: { ...app.headers, "x-writer-id": "replacement-writer" }, body: JSON.stringify({ ...app.hintBody("pattern"), assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) }) });
+      expect(repeated.status).toBe(200);
+      expect(parseHintResponse((await repeated.json() as { hint: unknown }).hint)).toMatchObject({ state: "stale", requestId });
+      expect(app.exchanges).toHaveLength(1);
+    } finally { for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
+  it("rechecks the original session and writer after awaiting capabilities, before admitting work", { timeout: 30_000 }, async () => {
+    const app = await applicationControl();
+    const gate = deferred<void>();
+    const reached = deferred<void>();
+    const original = EngineCapabilities.prototype.get;
+    const capability = vi.spyOn(EngineCapabilities.prototype, "get").mockImplementationOnce(async function (this: EngineCapabilities, ...args) {
+      const snapshot = await original.apply(this, args);
+      reached.resolve();
+      await gate.promise;
+      return snapshot;
+    });
+    const search = vi.spyOn(app.application.providers.scheduler, "get");
+    let response: Promise<Response> | undefined;
+    try {
+      response = app.post("/runs/hint-lifetime/hints", { clientRequestId: "0".repeat(32), nodeId: app.decision.cursor.nodeId, decisionDigest: app.decision.digest, rung: "pattern", assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) });
+      await bounded(reached.promise);
+      expect((await fetch(`${app.origin}/runs/hint-lifetime/lease`, { method: "POST", headers: { ...app.headers, "x-writer-id": "replacement-writer" }, body: "{}" })).status).toBe(200);
+      gate.resolve();
+      const result = await response;
+      expect(result.status, await result.clone().text()).toBe(409);
+      expect(await result.json()).toMatchObject({ error: { code: "NOT_ACTIVE_WRITER" } });
+      expect(search).not.toHaveBeenCalled();
+      expect(app.exchanges).toHaveLength(0);
+    } finally { gate.resolve(); await response; capability.mockRestore(); search.mockRestore(); for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
   it("DELETE detaches queued voice admission while the first rung keeps its upstream slot", { timeout: 30_000 }, async () => {
     const app = await applicationControl();
     const coordinator = app.application.providerHealth.coordinator("external-voice-api")!;

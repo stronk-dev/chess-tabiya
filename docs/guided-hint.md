@@ -139,8 +139,20 @@ read the run; another learner's action answers the same404 as an unknown action.
 correlation values, and equal IDs can identify separate owners' private operations. Their source
 search can still be shared without sharing delivery or cancellation authority.
 
-This ownership boundary does not yet implement §7b's fresh original-writer/help-policy checks,
-provider-generation binding or cooperative source deadlines. Those remain D4233–D4235.
+Each action also retains its original writer, parsed assistance intent and live authority check.
+The server authenticates the original session again and checks the current writer lease, grants,
+decision/FEN, role, disclosure, rated state and workflow. It recompiles that intent against current
+authority, including the actual issued Campaign kit. Campaign rendering uses the issued workflow,
+not the underlying pack's raw context. Checks run after the awaited capabilities read, around
+source waits and packet yields, before/after voice and on GET, including already delivered hints.
+An authority-invalid action stays terminal in the same bounded store: a new writer or session
+cannot adopt its ID or intent through repeat POST. Explicit DELETE and ordinary eviction remove it.
+
+Pending shared searches retain a set of independently checked actions. Revoking one action leaves
+an authorized peer running; with none left, source work aborts. Completed cached horizons retain
+source data without subscriber permissions. Provider-generation binding, the total source-work
+deadline and fine-grained cooperative acquisition remain D4234/D4235/D4224; packet-boundary checks
+alone do not complete that handoff.
 
 The shared horizon is keyed by the complete decision digest, including its branch and event
 head, not merely by a node/FEN. A different decision cannot reuse a sealed occurrence from

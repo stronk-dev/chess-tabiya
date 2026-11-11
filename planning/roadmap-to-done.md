@@ -2,13 +2,18 @@
 
 ## Current continuation — 2026-11-11
 
-D4233's first actual Hint caller cut is verified: authenticated action ownership now protects
-POST/idempotence/health, GET and DELETE, including readable foreign hosts/participants/spectators.
-Equal public IDs remain private per learner while their source search stays shared. Four genuine
-predecessor failures become30 local and172 expanded passes. Frozen production passes the complete
-normal gate:20554 software/all583 files1041.64s,7performance/four70.30s,types/build/governance.
-The row remains doing for fresh original-writer/help-policy authority; generation/deadline and
-cooperative execution remain D4234/D4235/D4224. These are the next accepted §7b implementation cuts.
+D4233's live-authority checkpoint is verified. Hint retains the original writer and parsed
+assistance intent, then uses actual current identity/RunService authorities after capabilities,
+around source waits/packet yields, before/after voice/publication and on GET. Shared pending
+actions revalidate independently; completed horizons clear permission-bearing subscribers.
+Independent review caught and cleared D4236 (stale GET forgetting the original binding) and
+D4237 (raw pack rather than issued Campaign context). Both have actual production-boundary
+controls and path-backed closeout. Three genuine predecessor HTTP failures become182 expanded
+passes/nine files. Frozen normal gates pass20564 software/all584 files938.73s and7 isolated
+performance/four66.09s, types/build/governance. Canonical evidence remains current without
+regeneration. D4233 stays doing for fine-advance integration; next are D4234 real generation/
+startup identity, D4235 source-work deadline and D4224 cooperative acquisition/cost proof.
+No whole caller, capability or1.0 milestone completes from this checkpoint.
 
 The full 1.0 goal remains active. D4224's construction8 source/service checkpoint implements the
 accepted distinct foundation receipt, shared original foundation/full inputs, retained tactical
