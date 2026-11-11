@@ -8,6 +8,11 @@ import { Session } from "node:inspector/promises";
 import { fileURLToPath } from "node:url";
 import { CandidatePopulationService } from "../../apps/server/src/candidate-population-service.js";
 import { GUIDED_HINT_PROFILE } from "../../apps/server/src/application.js";
+import { HintService } from "../../apps/server/src/hint-service.js";
+import { MockProviderEngineClient } from "../../apps/server/src/mock-provider-engine.js";
+import { ProviderRegistry } from "../../apps/server/src/provider-health.js";
+import { composeProviderTraversalApplication } from "../../apps/server/src/provider-traversal.js";
+import { compileAssistanceRequest, createRun, hintDecisionStamp, revealFeedback, type HintResponse } from "../../packages/runtime/src/index.js";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 import { evidenceValueReceipt } from "../../packages/runtime/src/evidence-contract.js";
 import { selectSemanticEvidence, type SemanticEvidenceEvent } from "../../packages/runtime/src/semantic-evidence.js";
@@ -152,6 +157,99 @@ async function collectedMemory(): Promise<NodeJS.MemoryUsage> {
   for (let i = 0; i < 3; i++) { await new Promise<void>(resolve => setImmediate(resolve)); global.gc(); }
   return process.memoryUsage();
 }
+
+/** D4242: genuine Hint ownership; fixed mock acquisition, not authentication/engine-quality proof. */
+async function measureHintMemoryCase(capacity: number) {
+  const engine = new MockProviderEngineClient();
+  const registry = new ProviderRegistry({ configured: [{ instanceId: "stockfish-analysis", implementation: "local_fixture", endpoint: "hint-memory-control", identity: "actual mock analysis" }] });
+  registry.recordHandshake("stockfish-analysis");
+  const providers = composeProviderTraversalApplication({ engines: engine, tablebaseFetch: null, explorerFetch: null, explorerToken: null });
+  let populations: CandidatePopulationService | undefined = new CandidatePopulationService({ capacity });
+  let hints: HintService | undefined = new HintService({
+    scheduler: providers.scheduler,
+    requestedEngine: async () => { const identity = await engine.start("stockfish-analysis"); return { id: identity.id, version: identity.version }; },
+    sourceGenerations: () => ({ registry: registry.generation("stockfish-analysis"), engine: engine.establishedGeneration("stockfish-analysis") }),
+    populations, depth: GUIDED_HINT_PROFILE.depth, timeoutMs: GUIDED_HINT_PROFILE.timeoutMs, maxOperations: GUIDED_HINT_PROFILE.maxOperations,
+  });
+  const fen = "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1";
+  const run = revealFeedback(createRun({ id: "hint-memory", session: { kind: "position", start: { fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "strong_engine" } },
+    sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 3, createdAt: "2026-11-11T12:00:00.000Z" }), "2026-11-11T12:00:01.000Z").run;
+  const references: { readonly receipt: WeakRef<Receipt>; readonly packet: WeakRef<Receipt["packet"]> }[] = [];
+  const sources: { readonly packetId: string; readonly compiler: number; readonly fen: string; readonly legalMoves: number; readonly candidates: number }[] = [];
+  const seen = new WeakSet<object>();
+  const originalRead = CandidatePopulationService.prototype.read;
+  let control: object | undefined = Object.freeze({ hintMemoryObserver: true });
+  const weakControl = new WeakRef(control);
+  await collectedMemory(); assert.strictEqual(weakControl.deref(), control);
+  control = undefined;
+  await collectedMemory(); assert.equal(weakControl.deref(), undefined);
+  const before = await collectedMemory();
+  CandidatePopulationService.prototype.read = function(this: CandidatePopulationService, ...args: Parameters<typeof originalRead>) {
+    const result = originalRead.apply(this, args);
+    if (this === populations && args[1] === "events_and_readings" && result.kind === "ready" && "packet" in result.receipt && !seen.has(result.receipt)) {
+      const receipt = result.receipt;
+      assertWide(receipt); seen.add(receipt);
+      references.push({ receipt: new WeakRef(receipt), packet: new WeakRef(receipt.packet) });
+      sources.push({ packetId: receipt.packet.id, compiler: receipt.packet.compilerVersion, fen: receipt.packet.beforeFen,
+        legalMoves: receipt.packet.legalMoves.length, candidates: receipt.packet.candidates.length });
+    }
+    return result;
+  } as typeof originalRead;
+  // The helper returns detached bytes only, never an operation, horizon, receipt or source closure.
+  const deliver = async (service: HintService): Promise<HintResponse> => {
+    const initial = await service.request({ learnerId: "memory-owner", writerId: "memory-writer", run, decision: hintDecisionStamp(run), fen, role: "learner", session: "position", voiceRequested: false,
+      assistance: compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }), revalidate: () => true }, "pattern", "0".repeat(32));
+    const requestId = initial.state === "available" ? initial.delivery.requestId : "requestId" in initial ? initial.requestId : undefined;
+    assert(requestId, "The actual Hint request must establish an action");
+    await service.whenIdle();
+    const final = service.poll(run.id, requestId, hintDecisionStamp(run), "memory-owner");
+    assert.equal(final.state, "available", "The lifetime control needs a real selected horizon");
+    return JSON.parse(JSON.stringify(final)) as HintResponse;
+  };
+  let detached: HintResponse;
+  try { detached = await deliver(hints); }
+  finally { CandidatePopulationService.prototype.read = originalRead; }
+  assert.equal(references.length, 1, "This controlled selected horizon acquires exactly one original full packet");
+  assert.equal(sources[0]!.fen, fen);
+  const wireBefore = JSON.stringify(detached);
+  const liveness = () => references.map(ref => {
+    const receipt = ref.receipt.deref(), packet = ref.packet.deref();
+    if (receipt !== undefined) { assertWide(receipt); assert.strictEqual(receipt.packet, packet); }
+    return { receipt: receipt !== undefined, packet: packet !== undefined };
+  });
+  // Populate the same cache with another genuine full source. No receipt escapes this helper.
+  const evict = (service: CandidatePopulationService): string => {
+    const otherFen = "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1";
+    const result = service.wide(otherFen);
+    assert.equal(result.kind, "ready"); if (result.kind !== "ready") throw Error("Eviction source failed");
+    assertWide(result.receipt); assert.equal(result.receipt.packet.beforeFen, otherFen);
+    assert.notEqual(result.receipt.packet.id, sources[0]!.packetId);
+    return result.receipt.packet.id;
+  };
+  const otherPacketId = evict(populations);
+  const held = await collectedMemory(), heldStats = populations.stats(), aliveHeld = liveness();
+  assert.deepEqual(aliveHeld, [{ receipt: true, packet: true }], "Hint retains its original selected source after capacity1 eviction");
+  assert.equal(heldStats.retained, Math.min(capacity, 2));
+  await hints.close();
+  const hintClosed = await collectedMemory(), cacheAfterClose = populations.stats(), aliveHintClosed = liveness();
+  const closedOperationCount = hints.operationCount; // Keep the CLOSED instance alive through this GC too.
+  assert.equal(closedOperationCount, 0, "Actual Hint.close must retire its operations");
+  assert.deepEqual(cacheAfterClose, heldStats, "Closing Hint must preserve the same candidate cache");
+  if (capacity >= 2) assert.deepEqual(aliveHintClosed, [{ receipt: true, packet: true }], "The cache independently retains its original source");
+  assert.equal(JSON.stringify(detached), wireBefore, "Detached delivery stays live and unchanged through Hint.close");
+  // Release both only now: even a correctly closed Hint instance still owns its cache option.
+  hints = undefined; populations = undefined;
+  const cacheReleased = await collectedMemory(), aliveCacheReleased = liveness();
+  assert.equal(JSON.stringify(detached), wireBefore, "The same detached delivery survives cache release");
+  assert.equal(registry.generation("stockfish-analysis") === null, false);
+  assert.equal(engine.establishedGeneration("stockfish-analysis") === null, false);
+  const providerStats = providers.scheduler.stats(); // Keep the same small provider owners live too.
+  return { capacity, fixture: "genuine selected Hint through typed mock provider", source: sources[0], otherPacketId,
+    observer: { held: true, released: true }, closedOperationCount, cache: { held: heldStats, afterHintClose: cacheAfterClose },
+    memory: { before, held, hintClosed, cacheReleased },
+    liveness: { hintAndCacheHeld: aliveHeld, hintClosedCacheHeld: aliveHintClosed, hintAndCacheReleased: aliveCacheReleased },
+    detachedDelivery: { state: detached.state, bytes: Buffer.byteLength(wireBefore), unchanged: true }, providerStats };
+}
 async function measureMemoryCase(workload: readonly Position[], capacity: number, clearOrder?: readonly MemoName[], sampleLive = false, metadataPulse = false, metadataReset = false): Promise<MemoryCase> {
   const probes = clearOrder === undefined ? undefined : memoProbes(); // Refuse absent hooks BEFORE any source work.
   const pulse = metadataPulse ? Reflect.get(globalThis, "__TABIYA_RESEARCH_IMMUTABLE_PULSE__") as (() => boolean) | undefined : undefined;
@@ -281,7 +379,22 @@ export function assertMemoCase(value: Pick<MemoryCase, "memoClears" | "rows">, o
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes("--immutable-reset-control")) {
+  if (process.argv.includes("--hint-memory-worker")) {
+    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly capacity: number };
+    process.stdout.write(JSON.stringify(await measureHintMemoryCase(input.capacity)));
+  } else if (process.argv.includes("--hint-memory")) {
+    const cases = [1, GUIDED_HINT_PROFILE.packetCapacity].map(capacity => JSON.parse(execFileSync(process.execPath,
+      ["--expose-gc", fileURLToPath(import.meta.url), "--hint-memory-worker"], {
+        input: JSON.stringify({ capacity }), encoding: "utf8", timeout: 60_000, maxBuffer: 64 * 1024,
+      })) as Awaited<ReturnType<typeof measureHintMemoryCase>>);
+    assert.equal(cases[0]!.source!.packetId, cases[1]!.source!.packetId, "Both capacities must observe the same genuine source identity");
+    const report = { question: "D4242 genuine Hint source ownership", node: process.version, v8: process.versions.v8, platform: process.platform, architecture: process.arch,
+      scope: "fresh workers; one genuinely selected full-source Hint; CLOSED Hint instance and original cache stay live at middle checkpoint; both are released only at final checkpoint; unchanged detached JSON/providers survive all checkpoints; real-job WeakRef/GC",
+      exclusions: ["HTTP/session permission proof", "real engine quality or timing", "exclusive owner bytes", "natural peaks or appliance footprint", "leak proof from weak liveness", "production capacity/default changes"], cases };
+    const text = JSON.stringify(report, null, 2) + "\n";
+    assert(Buffer.byteLength(text) < 16 * 1024, "Hint ownership report must remain compact");
+    process.stdout.write(text);
+  } else if (process.argv.includes("--immutable-reset-control")) {
     verifyImmutableReset();
   } else if (process.argv.includes("--sampler-failure-control")) {
     const session = new Session();

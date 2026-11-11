@@ -4576,3 +4576,41 @@ production collector, qualification or default changes from this measurement. Ne
 the actual Hint owner: keep its candidate cache and detached deliveries live across genuine
 Hint.close, then release the cache, with source-object liveness checks across jobs. That
 experiment remains open; this baseline cannot stand in for Hint or appliance memory.
+
+
+## D4242 — genuine Hint owner isolation (2026-11-11)
+
+The existing instrument’s new normal `make outcome-hint-memory` mode completes over two fresh
+workers. It runs the real HintService with the actual typed mock-provider scheduler, genuine
+generation callbacks and one selected complete nine-candidate source. An observing read wrapper
+returns the original receipt, stores WeakRefs/primitive metadata only, then restores the method.
+Another genuine full terminal source supplies the cache eviction control. Original receipt and
+packet identities, actual close/operation count, unchanged cache stats, provider owners and the
+same detached911-byte available response are checked across real-job GC boundaries. `[V]`
+[method](../../tools/d4175-outcome-delivery/measure.ts),
+[compact observations](../../planning/foundation-source-identity/hint-source-retention-2026-11-11.json).
+
+| Research capacity | Hint/cache held after eviction control | CLOSED Hint and SAME cache still held | Closed Hint and cache released; detached response/providers still held |
+|---|---|---|---|
+| 1 | Original receipt + packet alive | Both collected | Both collected |
+| 64 | Original receipt + packet alive | Both alive in cache | Both collected |
+
+At the middle checkpoint the closed instance is deliberately kept alive via its operation-count
+read after GC; dropping it before that checkpoint would mask a broken close. It and the cache
+are released together only at the last checkpoint because Hint’s options retain the cache.
+Held/released observer controls pass. The duplicate-free original source and distinct eviction
+source are genuine; source identity agreement across capacities is not an independent complete
+payload-byte comparison. `[V]` (same method/report).
+
+Post-GC heaps for held→Hint-closed→both-released are29.123→28.050→27.993MiB at capacity1 and
+29.139→29.119→27.975MiB at64. These are order-dependent marginal intervals for one small fixed
+positive case, not exclusive owner bytes. Both original receipt/packet objects becoming
+collectible while detached JSON remains live confirms that wire data does not keep those
+original objects in this control. The64 case separately demonstrates the cache’s independent
+retention after close. `[V]` (same report; direct liveness, not a general heap ownership proof).
+
+This answers D4242’s selected-source lifetime question without declaring a leak, natural peak,
+HTTP/authentication result, live-engine quality, multi-Hint workload, default capacity,5s Review
+or appliance footprint. The dense32-position/all13 baseline above remains a different workload.
+D4225 broader memory and D4224/D4228 actual consumer/budget work remain open; no source/default
+optimization follows automatically. Both old observations and original payloads remain intact.

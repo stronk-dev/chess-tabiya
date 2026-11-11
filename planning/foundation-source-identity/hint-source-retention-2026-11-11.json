@@ -1,0 +1,207 @@
+{
+  "workItem": "D4242",
+  "productionCommit": "f8298673ab0d5d02f93ce7470c8ec5d0db2118db",
+  "instrumentState": "disposable observer extension committed with this report",
+  "question": "D4242 genuine Hint source ownership",
+  "node": "v24.22.1",
+  "v8": "13.6.233.17-node.58",
+  "platform": "darwin",
+  "architecture": "arm64",
+  "scope": "fresh workers; one genuinely selected full-source Hint; CLOSED Hint instance and original cache stay live at middle checkpoint; both are released only at final checkpoint; unchanged detached JSON/providers survive all checkpoints; real-job WeakRef/GC",
+  "exclusions": [
+    "HTTP/session permission proof",
+    "real engine quality or timing",
+    "exclusive owner bytes",
+    "natural peaks or appliance footprint",
+    "leak proof from weak liveness",
+    "production capacity/default changes"
+  ],
+  "cases": [
+    {
+      "capacity": 1,
+      "fixture": "genuine selected Hint through typed mock provider",
+      "source": {
+        "packetId": "52d6856d2e58a02cec470aa32ffb05d279cf83c47e03e449aef31ae7bcc297ea",
+        "compiler": 8,
+        "fen": "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1",
+        "legalMoves": 9,
+        "candidates": 9
+      },
+      "otherPacketId": "a6df2ec5b5c2bda0da8c472cb4c5782fa9dcefa79e6304f645c91da1b8b2d1b9",
+      "observer": {
+        "held": true,
+        "released": true
+      },
+      "closedOperationCount": 0,
+      "cache": {
+        "held": {
+          "hits": 0,
+          "misses": 2,
+          "retained": 1,
+          "capacity": 1
+        },
+        "afterHintClose": {
+          "hits": 0,
+          "misses": 2,
+          "retained": 1,
+          "capacity": 1
+        }
+      },
+      "memory": {
+        "before": {
+          "rss": 202670080,
+          "heapTotal": 92078080,
+          "heapUsed": 23142744,
+          "external": 12310464,
+          "arrayBuffers": 144659
+        },
+        "held": {
+          "rss": 206487552,
+          "heapTotal": 99172352,
+          "heapUsed": 30537456,
+          "external": 12310464,
+          "arrayBuffers": 144659
+        },
+        "hintClosed": {
+          "rss": 206635008,
+          "heapTotal": 98648064,
+          "heapUsed": 29412424,
+          "external": 12341936,
+          "arrayBuffers": 144659
+        },
+        "cacheReleased": {
+          "rss": 206635008,
+          "heapTotal": 98648064,
+          "heapUsed": 29352760,
+          "external": 12341936,
+          "arrayBuffers": 144659
+        }
+      },
+      "liveness": {
+        "hintAndCacheHeld": [
+          {
+            "receipt": true,
+            "packet": true
+          }
+        ],
+        "hintClosedCacheHeld": [
+          {
+            "receipt": false,
+            "packet": false
+          }
+        ],
+        "hintAndCacheReleased": [
+          {
+            "receipt": false,
+            "packet": false
+          }
+        ]
+      },
+      "detachedDelivery": {
+        "state": "available",
+        "bytes": 911,
+        "unchanged": true
+      },
+      "providerStats": {
+        "active": 0,
+        "queued": 0,
+        "pending": 0,
+        "retained": 1,
+        "retainedWeight": 2
+      }
+    },
+    {
+      "capacity": 64,
+      "fixture": "genuine selected Hint through typed mock provider",
+      "source": {
+        "packetId": "52d6856d2e58a02cec470aa32ffb05d279cf83c47e03e449aef31ae7bcc297ea",
+        "compiler": 8,
+        "fen": "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1",
+        "legalMoves": 9,
+        "candidates": 9
+      },
+      "otherPacketId": "a6df2ec5b5c2bda0da8c472cb4c5782fa9dcefa79e6304f645c91da1b8b2d1b9",
+      "observer": {
+        "held": true,
+        "released": true
+      },
+      "closedOperationCount": 0,
+      "cache": {
+        "held": {
+          "hits": 0,
+          "misses": 2,
+          "retained": 2,
+          "capacity": 64
+        },
+        "afterHintClose": {
+          "hits": 0,
+          "misses": 2,
+          "retained": 2,
+          "capacity": 64
+        }
+      },
+      "memory": {
+        "before": {
+          "rss": 202588160,
+          "heapTotal": 92864512,
+          "heapUsed": 23393288,
+          "external": 12310464,
+          "arrayBuffers": 144659
+        },
+        "held": {
+          "rss": 205996032,
+          "heapTotal": 99434496,
+          "heapUsed": 30554648,
+          "external": 12310464,
+          "arrayBuffers": 144659
+        },
+        "hintClosed": {
+          "rss": 206045184,
+          "heapTotal": 99434496,
+          "heapUsed": 30533392,
+          "external": 12341936,
+          "arrayBuffers": 144659
+        },
+        "cacheReleased": {
+          "rss": 206077952,
+          "heapTotal": 99434496,
+          "heapUsed": 29333488,
+          "external": 12341936,
+          "arrayBuffers": 144659
+        }
+      },
+      "liveness": {
+        "hintAndCacheHeld": [
+          {
+            "receipt": true,
+            "packet": true
+          }
+        ],
+        "hintClosedCacheHeld": [
+          {
+            "receipt": true,
+            "packet": true
+          }
+        ],
+        "hintAndCacheReleased": [
+          {
+            "receipt": false,
+            "packet": false
+          }
+        ]
+      },
+      "detachedDelivery": {
+        "state": "available",
+        "bytes": 911,
+        "unchanged": true
+      },
+      "providerStats": {
+        "active": 0,
+        "queued": 0,
+        "pending": 0,
+        "retained": 1,
+        "retainedWeight": 2
+      }
+    }
+  ]
+}

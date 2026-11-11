@@ -4764,6 +4764,10 @@ outcome-delivery-memory: outcome-delivery-cost-build
 outcome-delivery-memory-update: outcome-delivery-cost-build
 	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --memory --write
 
+.PHONY: outcome-hint-memory
+outcome-hint-memory: outcome-delivery-cost-build
+	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --hint-memory
+
 .PHONY: outcome-delivery-memo-build outcome-delivery-memo-smoke outcome-delivery-memo outcome-delivery-memo-update
 # D4225 append-only observers in a DISPOSABLE bundle; production sources are never edited.
 outcome-delivery-memo-build:

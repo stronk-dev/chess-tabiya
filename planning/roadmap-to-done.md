@@ -17,12 +17,15 @@ Committed10632884 now passes the complete software/performance/build/governance 
 20588/all585 software tests852.82s and7performance/four65.36s, with clean types/Svelte and
 canonical1928/1928 unchanged. All three actual normal CI commands are green locally; nothing
 has been pushed. D4248 reconciles the scoped-source header with the shipped Hint implementation.
-D4242’s fresh construction8 baseline now measures32 original positions/all13 families at
-research capacities1/4/64. At64, post-GC heap is888.36MiB held and317.45MiB released, with all32
-original receipt objects collected after cache release. Independent review accepts the bounded
-measurement; it establishes neither Hint ownership nor appliance/peak memory.
-Next: isolate actual Hint ownership with the same candidate cache and detached deliveries live;
-in parallel, finish D4241’s literal branch/job/interim-page contract before production cutover. D4246 import attribution and remaining consumer adoption stay open.
+D4242’s finite baseline/selected-Hint ownership study is complete. The32-position/all13 baseline
+retains888.36MiB at64 and releases all32 receipt objects after cache release. Actual Hint controls
+keep the CLOSED instance/cache/detached911-byte response/providers live: the evicted source
+collects after close at1, while at64 it stays until cache release. Independent exact-data/method
+review, tool/runtime checks and real-job GC controls pass. Broader D4225 memory/peak/appliance,
+multi-Hint and default questions remain; no production capacity or source changed.
+Next: finish and independently review D4241’s literal branch/job/interim-page transport, then
+implement the complete frozen-prefix Review collection, final merge, strict receiver and UI.
+D4246 import attribution and remaining consumer adoption stay open.
 These verified slices do not complete a whole-product milestone.
 
 D4233–35's finite Hint caller handoff is verified: original live action authority at every

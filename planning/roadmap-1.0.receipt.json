@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:31a12616c2bce8986ee89245e81b00b3bad60337d3247ba5fc063fd358b263ea",
+    "roadmap": "sha256:d67f1d795505181e50c907536d9bb5ac7f0933e93dca015b223800c28192be0f",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:3f2f12053dde7cb2ba4e5fc727d3fa5212a5f3242a82f43b6048d4a958ec12bb",
+    "workState": "sha256:9ae67d4af0d5a1bc8aaa8ff0e3c421c7e5747c7cd48caf102f236aaad3ed2cb0",
     "rfcRegister": "sha256:49e46c03e8cf65e0983bcbd7a00a465007dbd3b6aeaa05915b5988fcd462b071",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 634,
-      "doing": 177,
+      "doing": 176,
       "blocked": 1062,
-      "done": 1961,
+      "done": 1962,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Isolate D4242 actual Hint.close ownership while retaining the same candidate cache and detached deliveries, then release the cache; fresh construction8 32-root/all13 baseline is measured. Finish D4241 literal branch/job/interim-page contract before Review cutover. Preserve all populations/defaults and D3791/D4246/qualification/release obligations.",
+      "nextAction": "Finish and independently review D4241 literal selected-branch/job/interim metadata transport, then implement complete frozen-prefix Review collection/final merge/strict receiver/UI. D4242 finite ownership study is measured/closed; D4225 broader memory/defaults, D4224/D4228 budgets/adoption, D3791 native Inspector and D4246 import attribution remain open.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure. Fresh D4242 construction8 memory baseline at3da82490 preserves32roots/all13 family counts at capacities1/4/64; capacity64 retains32 receipt objects at888.36MiB post-GC and releases all32 at317.45MiB. Independent review accepts exact compact data/observer controls, without Hint, exclusive-attribution, peak/appliance or budget proof. Actual Hint ownership remains next.",
+        "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure. Fresh D4242 construction8 memory baseline at3da82490 preserves32roots/all13 family counts at capacities1/4/64; capacity64 retains32 receipt objects at888.36MiB post-GC and releases all32 at317.45MiB. Independent review accepts exact compact data/observer controls, without Hint, exclusive-attribution, peak/appliance or budget proof. Actual Hint ownership remains next. D4242 selected-Hint ownership study now closes with genuine typed-mock/full9-candidate source: while CLOSED Hint/cache/detached911Bresponse/providers stay live, source receipt/packet collect after close at1 and stay cached at64 until joint closed-instance/cache release. Exact-data/method review, tooltypes/9instrument and9Make-runtime checks pass. No source/default change, multi-Hint/exclusive/peak/appliance/leak proof or whole-product transition.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -649,7 +649,9 @@
           "tools/content-scheduling.test.mjs",
           "apps/server/src/installed-pack.test-support.ts",
           "apps/server/src/evidence-at-runtime.test.ts",
-          "planning/foundation-source-identity/outcome-memory-construction8-2026-11-11.json"
+          "planning/foundation-source-identity/outcome-memory-construction8-2026-11-11.json",
+          "planning/foundation-source-identity/hint-source-retention-2026-11-11.json",
+          "tools/d4175-outcome-delivery/README.md"
         ],
         "anchors": [
           {
@@ -1420,7 +1422,7 @@
           {
             "kind": "work_state",
             "id": "D4242",
-            "digest": "sha256:087300c4f611a2cb25b33de78b4f1a5cf799ff6c2d93e65b3b029a3a2a6e7dd0"
+            "digest": "sha256:d43572035acaca91f162a8d17edca1ca330d5b7c455a42f59fd0a96c2ad56a95"
           }
         ]
       },
@@ -1441,10 +1443,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Isolate D4242 actual Hint.close ownership while retaining the same candidate cache and detached deliveries, then release the cache; fresh construction8 32-root/all13 baseline is measured. Finish D4241 literal branch/job/interim-page contract before Review cutover. Preserve all populations/defaults and D3791/D4246/qualification/release obligations.",
+      "nextAction": "Finish and independently review D4241 literal selected-branch/job/interim metadata transport, then implement complete frozen-prefix Review collection/final merge/strict receiver/UI. D4242 finite ownership study is measured/closed; D4225 broader memory/defaults, D4224/D4228 budgets/adoption, D3791 native Inspector and D4246 import attribution remain open.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure. Fresh D4242 construction8 memory baseline at3da82490 preserves32roots/all13 family counts at capacities1/4/64; capacity64 retains32 receipt objects at888.36MiB post-GC and releases all32 at317.45MiB. Independent review accepts exact compact data/observer controls, without Hint, exclusive-attribution, peak/appliance or budget proof. Actual Hint ownership remains next.",
+        "summary": "Committed10632884 passes all actual normal local CI commands:20588software/all585852.82s+7performance/four65.36s/types/Svelte0errors0warnings/build/governance; complete content340/all44/no skips260.57s,92-document clearance audit zero errors and104 exact requirements. Canonical1928/1928 and24/89 qualified remain current without regeneration. D3928 exact grade metadata and D4247 real source-composition repairs remain verified; real-Stockfish44-cell smoke passes without D7/p95/browser/memory clearance. D4248 reconciles the stale Hint header. No push, remote-green, graduation, parent or release closure. Fresh D4242 construction8 memory baseline at3da82490 preserves32roots/all13 family counts at capacities1/4/64; capacity64 retains32 receipt objects at888.36MiB post-GC and releases all32 at317.45MiB. Independent review accepts exact compact data/observer controls, without Hint, exclusive-attribution, peak/appliance or budget proof. Actual Hint ownership remains next. D4242 selected-Hint ownership study now closes with genuine typed-mock/full9-candidate source: while CLOSED Hint/cache/detached911Bresponse/providers stay live, source receipt/packet collect after close at1 and stay cached at64 until joint closed-instance/cache release. Exact-data/method review, tooltypes/9instrument and9Make-runtime checks pass. No source/default change, multi-Hint/exclusive/peak/appliance/leak proof or whole-product transition.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2070,7 +2072,9 @@
           "tools/content-scheduling.test.mjs",
           "apps/server/src/installed-pack.test-support.ts",
           "apps/server/src/evidence-at-runtime.test.ts",
-          "planning/foundation-source-identity/outcome-memory-construction8-2026-11-11.json"
+          "planning/foundation-source-identity/outcome-memory-construction8-2026-11-11.json",
+          "planning/foundation-source-identity/hint-source-retention-2026-11-11.json",
+          "tools/d4175-outcome-delivery/README.md"
         ],
         "anchors": [
           {
@@ -3196,7 +3200,7 @@
           {
             "kind": "work_state",
             "id": "D4242",
-            "digest": "sha256:087300c4f611a2cb25b33de78b4f1a5cf799ff6c2d93e65b3b029a3a2a6e7dd0"
+            "digest": "sha256:d43572035acaca91f162a8d17edca1ca330d5b7c455a42f59fd0a96c2ad56a95"
           }
         ]
       },

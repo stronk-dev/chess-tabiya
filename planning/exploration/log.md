@@ -41917,3 +41917,27 @@ event or packet dump. Existing historical reports remain unchanged. Dossier/matr
 No source, capacity/default, qualification or product gate changes. D4242 stays doing for
 genuine Hint owner/cache/detached-delivery isolation; no exclusive attribution, leak, native
 peak/appliance or full1.0 claim. The current producer-to-consumer foundation continues next.
+
+
+## 2026-11-11 — D4242 genuine Hint ownership question discharged
+
+A disposable extension of the existing memory instrument adds the normal outcome-hint-memory
+target. Genuine HintService and typed mock gateway produce one complete9-candidate source and
+a911-byte detached available response. A different genuine full terminal source controls cache
+eviction; the observer returns original values and stores only weak refs/primitive metadata.
+The CLOSED instance and same cache/providers/response remain live through middle GC; only final
+GC drops closed Hint/cache together because options otherwise retain the cache.
+
+Two fresh workers yield receipt AND packet liveness true→false→false at1 and true→true→false
+at64. Held→closed→released heaps are29.123→28.050→27.993MiB and29.139→29.119→27.975MiB.
+Cache stats remain unchanged by close, operations0; actual source identity, distinct evictor,
+unchanged detached response and held/released observer controls pass across real jobs. Final
+probe exits0, tool types/9existing instrument cases and9normal Make-runtime cases pass.
+Independent method and exact-data reviews accept the5416-byte artifact as identical to final
+raw observations except three explicit attribution fields. No heap/packet/event dump committed.
+
+D4242’s finite current baseline/selected-Hint question closes, with dense32/all13 data kept
+separate from the one-fixture Hint case. No full payload-byte equality, exclusive owner bytes,
+leak, multi-Hint, natural/native/appliance,5s Review/default or1.0 clearance follows. D4225 broad
+memory and D4224/D4228 consumers/budgets remain. No production source or capacity changed.
+Next D4241 literal transport/lifecycle clarification and actual paged Review implementation.

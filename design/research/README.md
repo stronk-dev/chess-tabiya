@@ -75,11 +75,17 @@ claim as `[P]` unless a new dossier upgrades it. The package's own caveats:
 
 ## Coverage matrix
 
+D4242 follow-through, 2026-11-11: actual Hint owner isolation preserves a genuine selected
+nine-candidate source, typed mock acquisition, same cache, closed Hint instance and detached
+911-byte response. At capacity1 the original receipt/packet survive eviction then collect after
+actual close; at64 they survive close until cache release. Observer and source identity controls
+pass; no leak/exclusive/natural/multi-Hint/appliance/default claim. `[V]` `module-evidence-assembly.md`
+§D4242 genuine Hint owner isolation, its compact report and actual disposable method.
+
 D4242, 2026-11-11: fresh construction8 baseline uses32 existing positions/all13 genuine outcome
 families, separate workers and unchanged source counts at capacities1/4/64. Post-GC held/released
 heaps are337.87/317.42,391.06/317.42 and888.36/317.45MiB; receipt liveness1/4/32→0. Forced-GC
-research intervals do not establish Hint, natural peak or appliance memory. Actual Hint ownership
-is next; no default/source reduction. `[V]` `module-evidence-assembly.md` §D4242 current
+research intervals do not establish Hint, natural peak or appliance memory. The subsequent Hint isolation is recorded above; no default/source reduction. `[V]` `module-evidence-assembly.md` §D4242 current
 construction8 retention baseline and its compact numeric report.
 
 D4063/D3979, 2026-11-04: actual historical target/branch/run, provider401 and real shared-viewer

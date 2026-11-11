@@ -161,3 +161,22 @@ The historical immutable-reset report was measured before the bounded repair. Di
 builds at a later source image target its actual current verification memo; they cannot
 reproduce the old weak-set footprint merely by rerunning the old command. Do not use that
 reset report in place of the ordinary-source comparison.
+
+## D4242 — actual Hint ownership
+
+`make outcome-hint-memory` extends this disposable instrument with two fresh workers at research
+capacities1/64. The real HintService, actual typed mock-provider scheduler and genuine complete
+source produce an available Hint. The observer records weak receipt/packet references and small
+identity/count metadata only, then restores the real read method before collection checkpoints.
+A different genuine full source evicts the selected one at capacity1; capacity64 retains both.
+
+The middle checkpoint keeps the **closed Hint instance**, same candidate cache, detached delivery
+JSON and provider owners live across actual Hint.close. Dropping the closed instance earlier would
+mask a broken close. The final checkpoint releases the closed instance and cache together (its
+options otherwise retain that cache), while the identical detached response/providers remain
+live. Every GC crosses real jobs; an independent held/released WeakRef control must pass.
+
+This is one fixed positive nine-candidate source, not a multi-Hint workload, HTTP authentication,
+live-engine quality, exclusive byte attribution, natural peak, leak or appliance-memory proof.
+Reports contain only compact counts/identities/memory; no source/heap/event dumps. Original source
+selection, production capacities and all old32-position/all13 measurement modes remain unchanged.

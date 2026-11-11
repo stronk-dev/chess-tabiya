@@ -35584,12 +35584,12 @@
     },
     {
       "id": "D4242",
-      "state": "doing",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:087300c4f611a2cb25b33de78b4f1a5cf799ff6c2d93e65b3b029a3a2a6e7dd0",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d43572035acaca91f162a8d17edca1ca330d5b7c455a42f59fd0a96c2ad56a95",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-11"
+      "evidence": "planning/foundation-source-identity/hint-source-retention-2026-11-11.json",
+      "evidenceKind": "path"
     },
     {
       "id": "D4243",

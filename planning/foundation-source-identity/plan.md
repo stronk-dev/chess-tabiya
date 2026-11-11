@@ -3875,3 +3875,35 @@ D4242 remains doing: next genuine Hint.close while the same cache and detached d
 live, followed by cache release. No guessed capacity/compaction, dropped collector or default
 change; old compiler7 heaps are not current Hint proof. Research dossier/matrix/log updated. Independent measurement/source-lifetime review accepts
 the exact compact report, original worker data and bounded interpretation.
+
+
+### 2026-11-11 — D4242 actual Hint source ownership measured
+
+A disposable extension of the existing instrument and normal outcome-hint-memory target
+run genuine HintService/typed mock acquisition through one complete selected nine-candidate
+source. The wrapper returns original values, stores weak receipt/packet refs + primitive metadata
+and restores itself before GC. A different genuine full terminal source controls eviction.
+Fresh capacity1/64 workers keep the CLOSED Hint instance and same cache/provider owners/detached
+911-byte response alive at the middle checkpoint; only the final checkpoint drops closed Hint
+and cache together. This avoids masking a broken close by prematurely collecting the instance.
+
+Original source liveness is true→false→false at1, true→true→false at64 for both receipt/packet.
+Cache stats are unchanged by close and operationCount is0. Held→closed→released heaps are
+29.123→28.050→27.993MiB and29.139→29.119→27.975MiB. These are marginal one-fixture intervals,
+not exclusive/global/peak/appliance or multi-Hint memory. Source identity, distinct evictor and
+held/released observer controls pass. Final typechecked probe exits0; existing9/two instrument
+tests pass. Independent method AND exact final compact-data reviews accept. The artifact matches the
+terminal raw observation except its three explicit attribution fields; only the assertion
+diagnostic wording was narrowed from source bytes to source identity.
+No production source, cache capacity, default, factory or evidence payload changes. The current
+32-root/all13 baseline stays separate; D4225/D4224/D4228 and full1.0 remain open.
+
+
+D4242 finite study closes after exact-data/method review: instrument types and9/two existing
+checks plus9 normal Make-runtime checks pass. The new normal target uses selected Node and
+isolated real-GC workers; no altered environment or manual test flags are needed. Both reports
+remain compact (<48KiB baseline,<16KiB Hint). Complete normal production CI remains the verified
+10632884 image; this checkpoint changes only disposable tooling/research/tracking. Next finish
+D4241’s literal Review branch/job/interim metadata clause, review it independently, then implement
+the full frozen-prefix collection/merge/strict-receiver/UI contract. D4225 broad memory/defaults,
+D4246 import attribution and every remaining1.0 capability remain open.
