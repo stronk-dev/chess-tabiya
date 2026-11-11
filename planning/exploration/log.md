@@ -41532,3 +41532,41 @@ freezing/serialization; do not infer exact source time from4.2m hot wrapper span
 owns a non-authoritative scoped-core/raw-algebra feasibility experiment: preserve every
 required input/result and explicit failure semantics, with no fake wide receipt or lost full
 feature path. D4224 remains doing. Commit this verified instrument before that next wave.
+
+
+### 2026-11-11 — D4227 scoped-core feasibility instrument starts
+
+The D4224 research checkpoint is committed as c6fa6266 with all hooks passing and a clean
+tracked diff. D4227 now tests append-only access to the actual legal/root/child foundation
+acquisition and original input validators, without collecting unrelated candidate event and
+reading populations. A guarded clone of the actual raw outcome algebra deliberately does not
+claim candidate ownership or authentication of unacquired legacy collector failures. The
+original production function remains unchanged. Before cost measurement, compare all required
+core values/receipts, every thirteen-family raw payload/input/population and actual original
+factory outputs, including quiet, unavailable, castling/promotion/en-passant and terminal cases.
+Actual source/factory readers must refuse the raw frame. Fresh paired workers compare raw
+acquisition/calculation only; no inferred admitted-event or UI timing, no new production API,
+missing required source, raised budget, stored raw recording or ordinary activation.
+
+
+### 2026-11-11 — D4227 required-core feasibility measured
+
+Full48-position comparison passes every required root/child graph and input receipt, all13 raw
+payload/input/population images and genuine existing factory outputs.286quiet/310positive/
+2unavailable results plus26terminal-family refusals prevent positive-only or no-op evidence.
+Both colors, promotion, en passant, castling and original repeated prerequisite identity pass.
+Actual source/factory/invocation readers refuse raw frames/results. Two source-restoration/anchor
+guards, dedicated types and literal smoke/full runs pass; report is42214B with no raw recording.
+
+Four alternating fresh-worker32-position raw-source intervals are16923.3/6088.7,
+16317.4/6262.7,15901.8/6002.5,15540.4/5621.0ms full/core. Forced-GC held heaps are~881–882/395MiB,
+released~317–318/188MiB; actual owner reads after held GC establish liveness. Both arms stop before
+outcome mint/admission and differ deliberately in collected scope. Legacy failure images remain
+unclaimed (23groups observed in full); this is not a same-full-feature optimizer or API/appliance
+certificate. Independent review accepts the bounded research checkpoint. D4227's finite feasibility
+question closes; D4224 remains doing for an independently reviewed original-owner/scoped-source/
+full-on-demand/failure contract AND bounded execution: core32 alone still exceeds Review's5s
+job limit. D4225, ordinary26, D4167, content/native D3928 and full release remain open.
+
+No production source, issuer, schema, module, consumer default or budget changes. Commit this
+verified research/dependency slice before starting the next contract/implementation wave.

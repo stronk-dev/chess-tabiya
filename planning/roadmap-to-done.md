@@ -9,14 +9,16 @@ software tests/581files and seven performance tests/fourfiles; final stronger cy
 assertions pass42focused tests afterward. Types, build and governance pass. The finite RFC is
 [archived](../rfc/archive/bounded-evidence-verification.md). D4224/D4225/consumer/release work stays open.
 
-D4224's acquisition attribution is now measured: the current32-decision source
-interval is18.88s, with1286 legal alternatives and211230 evidence mints. Active-counter builds
-preserve every complete source graph/receipt. Repeated physical mapping and packet validation
-are not the primary costs in this diagnostic. D4227 next tests whether required foundation
-inputs can be acquired without eagerly building unrelated candidate facts. It is a disposable,
-non-authoritative feasibility experiment; full collection, source/failure checks and all13
-families must be preserved before any production contract changes. No timing span is treated
-as a promised saving. [Method and limits](../design/research/module-evidence-assembly.md#current-acquisition-attribution--d4224-2026-11-11).
+D4224's measured attribution led to D4227's completed required-core feasibility experiment.
+All48 required graphs/input receipts and all13 raw/actual-factory results and full populations
+match, including quiet/unavailable/terminal cases. Four alternating local raw-source pairs take
+15.54–16.92s through the full packet versus5.62–6.26s through the required core. Forced-GC held
+heaps are881–882 versus395MiB; these are intentionally different collection scopes, not a
+transparent full-packet optimization or appliance footprint. Raw frames have no source authority;
+unrequested collector failures remain unclaimed. D4224 must now own a reviewed shared-source/
+full-on-demand/failure contract **and bounded execution**: rawcore32 still exceeds Review's5s
+budget before outcome mint/admission. Full production and D4225/D4175/D4167/D3928 holds remain.
+[Method and limits](../design/research/module-evidence-assembly.md#scoped-required-core-feasibility--d4227-2026-11-11).
 
 The coordinated source/storage cutover in `03b584b4` previously passed
 **20,488 software tests in 580 files** (742.34 seconds) and **seven performance tests in

@@ -4834,6 +4834,20 @@ acquisition-profile-smoke: acquisition-profile-build
 acquisition-profile-measure: acquisition-profile-build
 	$(CI_NODE) .cache/d4224-acquisition-profile/ordinary.mjs --write
 
+.PHONY: core-acquisition-check core-acquisition-build core-acquisition-smoke core-acquisition-measure
+core-acquisition-check:
+	./node_modules/.bin/tsc --project tools/d4227-core-acquisition/tsconfig.json
+	$(CI_NODE) --test tools/d4227-core-acquisition/build.test.mjs
+
+core-acquisition-build: core-acquisition-check
+	$(CI_NODE) tools/d4227-core-acquisition/build.mjs
+
+core-acquisition-smoke: core-acquisition-build
+	$(CI_NODE) .cache/d4227-core-acquisition/probe.mjs --smoke
+
+core-acquisition-measure: core-acquisition-build
+	$(CI_NODE) .cache/d4227-core-acquisition/probe.mjs --write
+
 
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update

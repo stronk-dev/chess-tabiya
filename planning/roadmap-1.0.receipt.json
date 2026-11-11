@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:582973bcdbcff78e69444f2a38e67789caffd2fcd1e084aab77854d80c6bea82",
+    "roadmap": "sha256:0823212a4e1f32ef1d3081daeddfd828bdd2bba45fe91f6b685cb643bba21962",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:bfe7bda9207ee03ccbbe68beaa51b4046b2b2878fe453b0d4910ad83c87e1b35",
+    "workState": "sha256:fb3c0df423c0fcd4483d43f6c66a9994df92f28b77b4ed1fcb2b2e002ec429bc",
     "rfcRegister": "sha256:31ea9a6874d0963fc58e610a308df568a8b20a8a380014d7a3d25d677fbcccc5",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 633,
+      "todo": 632,
       "doing": 175,
       "blocked": 1063,
-      "done": 1942,
+      "done": 1943,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "D4224 actual acquisition attribution is measured. Run D4227 non-authoritative scoped-core feasibility against every required thirteen-family input/result/population before any reviewed source-group contract or production change. Preserve complete full-collection features and failure semantics; continue D4225 remaining memory work before D4175 ordinary bindings. D4167 and D3928 remain.",
+      "nextAction": "D4227 raw-core feasibility is complete. D4224 must specify independently reviewed scoped source acquisition with one original owner, full on-demand collection and exact requested/failure coverage, plus bounded execution/cancellation under the unchanged Review5s job limit. Rawcore32 still exceeds5s before outcome mint/admission. No fake wide receipt or dropped feature. Continue D4225 remaining full-owner/global-cache costs before D4175ordinary26; D4167 and D3928 remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4226 production verification remains committed in18f199ed. D4224 diagnostic preserves all32 complete source graphs/receipts and original inputs:1286 legal alternatives,416 family calls,211230 evidence mints. Ordinary18881.2ms, separate ordinary CPU/sample19756.7ms and instrumented21333.0ms are one ordered attribution, not a speed comparison. Original mapping44ms and packet validation289.5ms are not primary targets here; event/child-reading sequential spans total~12.5s diagnostically, not predicted removable cost. Four instrument/two source guards/types, native-profiler failure cleanup/smoke/full run pass;56762B compact report, no production mutation. D4227 scopes required-source acquisition feasibility; D4224/D4225/D4175ordinary26/D4167/D3928 and release remain open.",
+        "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54–16.92s versus rawcore5.62–6.26s; forcedGC held881–882 versus395MiB, released317–318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -625,7 +625,9 @@
           "packages/runtime/src/frozen-data-memo.test.ts",
           "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json",
           "tools/d4224-acquisition-profile/README.md",
-          "planning/foundation-source-identity/acquisition-profile-2026-11-11.json"
+          "planning/foundation-source-identity/acquisition-profile-2026-11-11.json",
+          "tools/d4227-core-acquisition/README.md",
+          "planning/foundation-source-identity/core-acquisition-2026-11-11.json"
         ],
         "anchors": [
           {
@@ -1271,7 +1273,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:f63183bb948bd2801f635fdb3441c8b8f421a3b113b07f4c6a7fae403ebbbc4b"
+            "digest": "sha256:304c1ce11d8c87d9796b4f432fd1712b8e4497d0b95883b763fd7db682181dfe"
           },
           {
             "kind": "work_state",
@@ -1286,7 +1288,7 @@
           {
             "kind": "work_state",
             "id": "D4227",
-            "digest": "sha256:6d839545123347cc45f7867deca0192cc07c75518408cddec74a49b401e4eaea"
+            "digest": "sha256:536525b63d34c704078ee141a80840295df99c3b8296dc77bf96570b92a1aa83"
           }
         ]
       },
@@ -1307,10 +1309,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "D4224 actual acquisition attribution is measured. Run D4227 non-authoritative scoped-core feasibility against every required thirteen-family input/result/population before any reviewed source-group contract or production change. Preserve complete full-collection features and failure semantics; continue D4225 remaining memory work before D4175 ordinary bindings. D4167 and D3928 remain.",
+      "nextAction": "D4227 raw-core feasibility is complete. D4224 must specify independently reviewed scoped source acquisition with one original owner, full on-demand collection and exact requested/failure coverage, plus bounded execution/cancellation under the unchanged Review5s job limit. Rawcore32 still exceeds5s before outcome mint/admission. No fake wide receipt or dropped feature. Continue D4225 remaining full-owner/global-cache costs before D4175ordinary26; D4167 and D3928 remain.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4226 production verification remains committed in18f199ed. D4224 diagnostic preserves all32 complete source graphs/receipts and original inputs:1286 legal alternatives,416 family calls,211230 evidence mints. Ordinary18881.2ms, separate ordinary CPU/sample19756.7ms and instrumented21333.0ms are one ordered attribution, not a speed comparison. Original mapping44ms and packet validation289.5ms are not primary targets here; event/child-reading sequential spans total~12.5s diagnostically, not predicted removable cost. Four instrument/two source guards/types, native-profiler failure cleanup/smoke/full run pass;56762B compact report, no production mutation. D4227 scopes required-source acquisition feasibility; D4224/D4225/D4175ordinary26/D4167/D3928 and release remain open.",
+        "summary": "D4227 finite research closes:48 complete required-core graphs/value receipts and all13 raw/actual-factory payload/input/population comparisons,286quiet310positive2unavailable results and26terminal-family refusals. Four alternating local32-source pairs fullraw15.54–16.92s versus rawcore5.62–6.26s; forcedGC held881–882 versus395MiB, released317–318 versus188MiB. Both stopbeforeoutcomemint/admission. Append-only/source-restoration guards and dedicated types pass;42214B compact report. Raw frames/results have no original candidate/factory authority;23legacy collector-failure groups are unclaimed. No production mutation or scope/budget/ordinary/release completion. D4224/D4225/D4175/D4167/D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1915,7 +1917,9 @@
           "packages/runtime/src/frozen-data-memo.test.ts",
           "planning/foundation-source-identity/bounded-verifier-cost-2026-11-11.json",
           "tools/d4224-acquisition-profile/README.md",
-          "planning/foundation-source-identity/acquisition-profile-2026-11-11.json"
+          "planning/foundation-source-identity/acquisition-profile-2026-11-11.json",
+          "tools/d4227-core-acquisition/README.md",
+          "planning/foundation-source-identity/core-acquisition-2026-11-11.json"
         ],
         "anchors": [
           {
@@ -2926,7 +2930,7 @@
           {
             "kind": "work_state",
             "id": "D4224",
-            "digest": "sha256:f63183bb948bd2801f635fdb3441c8b8f421a3b113b07f4c6a7fae403ebbbc4b"
+            "digest": "sha256:304c1ce11d8c87d9796b4f432fd1712b8e4497d0b95883b763fd7db682181dfe"
           },
           {
             "kind": "work_state",
@@ -2941,7 +2945,7 @@
           {
             "kind": "work_state",
             "id": "D4227",
-            "digest": "sha256:6d839545123347cc45f7867deca0192cc07c75518408cddec74a49b401e4eaea"
+            "digest": "sha256:536525b63d34c704078ee141a80840295df99c3b8296dc77bf96570b92a1aa83"
           }
         ]
       },

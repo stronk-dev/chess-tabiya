@@ -4478,3 +4478,56 @@ full collection must remain available and share original sources through one com
 No production optimization, source omission, budget increase or consumer completion follows
 from this profile. `[V]` (D4224/D4227;
 [actual outcome input/guard](../../packages/runtime/src/semantic-subject-outcomes.ts))
+
+
+## Scoped required-core feasibility — D4227, 2026-11-11
+
+The disposable instrument appends private-core access to the existing compiler module and a
+guarded clone of the actual raw outcome algebra. Original production bodies remain unchanged.
+Acquisition calls the real legal enumeration, child application, foundation sources and original
+input validators. The raw calculation deliberately does **not** claim a candidate receipt or
+unacquired legacy collector-failure image. Actual candidate/factory/invocation readers refuse
+its frame/results. Two exact-source restoration/anchor guards and dedicated types pass. `[V]`
+([instrument](../../tools/d4227-core-acquisition/build.mjs),
+[guards](../../tools/d4227-core-acquisition/build.test.mjs),
+[driver](../../tools/d4227-core-acquisition/run.ts))
+
+All48 positions compare complete required root/child graphs and every traversed input receipt,
+all13 raw payload/input/population images, and genuine existing factory payloads/populations.
+Repeated calculations retain original inputs within each core. This includes16 literal positions
+covering both colors, castling, en passant, promotion, forced moves, unavailable risk and two
+terminals, plus32 imported-game decisions. There are286 quiet,310 positive and2 unavailable
+family results, with26 terminal-family refusals. The full source records23 legacy collector-failure
+groups, explicitly outside this raw core's coverage. Matching these required inputs/results is
+**not** matching the whole wide packet or granting source/admission authority. `[V]`
+([42,214-byte report](../../planning/foundation-source-identity/core-acquisition-2026-11-11.json),
+[fixed workload](../../tools/d4175-outcome-delivery/workload.ts))
+
+Both timed arms acquire and calculate all13 raw families, stopping BEFORE outcome mint/admission.
+Full uses the normal64-entry application service; core retains32 research frames without
+implementing a service/cache. Four fresh-worker pairs alternate order. PGN preparation precedes
+the initial GC/clock, and the actual owner is read after held GC before release. `[V]` (same driver/report)
+
+| Pair/order | Full raw source ms | Required core raw source ms | Full held/released heap MiB | Core held/released heap MiB |
+|---|---:|---:|---:|---:|
+|1/full→core|16923.3|6088.7|881.14/316.90|395.29/187.55|
+|2/core→full|16317.4|6262.7|881.10/316.90|395.29/187.55|
+|3/full→core|15901.8|6002.5|882.15/317.99|395.31/187.55|
+|4/core→full|15540.4|5621.0|882.19/317.99|395.31/187.56|
+
+Required-core acquisition is lower in every local pair; sums are64682.9→23975.0ms. These are
+feasibility results for intentionally different collection scopes, **not** a transparent optimizer
+of the full packet, portable speed, the prior admitted-event workload, API/DOM responsiveness or
+an appliance memory certificate. Forced-GC heaps are not natural peaks/RSS or a root census.
+The current full-production path is unchanged. `[V]` (same report)
+
+The experiment supports a scoped-acquisition contract, with two obligations still explicit:
+(1) one genuine owner must preserve original shared sources and full event/readings collection
+when requested, with declared not-requested/available/unavailable/failure semantics; and
+(2) even the raw core's32-decision intervals exceed Review's existing5,000-ms job budget BEFORE
+outcome mint/admission. D4224 therefore still needs bounded execution/cancellation and real
+application/module performance proof; a slimmer source alone cannot close it. D4225 remaining
+full-owner/global-cache costs, D4175 ordinary adoption and D3928 content/native/release remain.
+No production implementation, source qualification, lost feature or increased deadline follows
+from this experiment. `[V]` (same report; `rfc/module-registration.md` §Review pagination;
+`rfc/subject-safe-semantic-selection.md` §§1/6)

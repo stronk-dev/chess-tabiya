@@ -35426,7 +35426,7 @@
       "id": "D4224",
       "state": "doing",
       "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:f63183bb948bd2801f635fdb3441c8b8f421a3b113b07f4c6a7fae403ebbbc4b",
+      "sourceDigest": "sha256:304c1ce11d8c87d9796b4f432fd1712b8e4497d0b95883b763fd7db682181dfe",
       "uxItems": [],
       "owner": "evidence-foundation",
       "since": "2026-11-11"
@@ -35451,11 +35451,12 @@
     },
     {
       "id": "D4227",
-      "state": "todo",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:6d839545123347cc45f7867deca0192cc07c75518408cddec74a49b401e4eaea",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:536525b63d34c704078ee141a80840295df99c3b8296dc77bf96570b92a1aa83",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/foundation-source-identity/core-acquisition-2026-11-11.json",
+      "evidenceKind": "path"
     }
   ]
 }
