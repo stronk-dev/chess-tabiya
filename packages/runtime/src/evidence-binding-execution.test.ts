@@ -153,7 +153,7 @@ describe("binding execution and source absence", () => {
     expect(() => compile(incomplete, theory)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
   });
 
-  it("cannot weaken the exact current102 Inspector image by removing twelve actual source bindings", () => {
+  it("refuses an Inspector execution plan missing declared source bindings", () => {
     const inspector = { id: "module.full_inspector", version: 2 };
     const retired = ["live.stockfish.eval@1", "live.stockfish.wdl@1", "live.stockfish.pv@1",
       "human.maia.policy@1", "human.maia.candidate_wdl@1", "human.explorer.population@1",
@@ -163,7 +163,7 @@ describe("binding execution and source absence", () => {
       "rules.structural.event.doubled_pawn@1", "rules.structural.event.isolated_pawn@1", "rules.structural.event.open_file@1", "rules.structural.event.half_open_file@1", "rules.structural.event.line_blockers@1"];
     const current = MANIFEST.consumers.find(row => row.id === inspector.id)!;
     expect(current.version).toBe(2);
-    expect(current.accepts).toHaveLength(102);
+    expect(current.accepts).toHaveLength(104);
     for (const old of retired) expect(current.accepts.map(row => `${row.id}@${row.version}`)).not.toContain(old);
     const failed = new Set(["recorded.inspector.eval_packet@1", "recorded.inspector.wdl_packet@1", "recorded.inspector.pv_packet@1",
       "derived.maia.node_distribution@1", "derived.maia.node_candidate_wdl@1", "derived.explorer.inspector_population@1",
@@ -172,7 +172,15 @@ describe("binding execution and source absence", () => {
     const bindings = MANIFEST.bindings.filter(row => row.consumer.id !== inspector.id || !failed.has(`${row.projection.id}@${row.projection.version}`));
     expect(bindings.filter(row => row.consumer.id === inspector.id)).toHaveLength(current.accepts.length - failed.size);
     expect(() => compileEvidenceConsumerExecutionV2({ ...MANIFEST, bindings }, inspector)).toThrow(/BINDING_EXECUTION_UNDECLARED/u);
-    expect(compileEvidenceConsumerExecutionV2(MANIFEST, inspector).bindings).toHaveLength(102);
+    const compiled = compileEvidenceConsumerExecutionV2(MANIFEST, inspector);
+    expect(compiled.bindings).toHaveLength(104);
+    for (const exposure of ["derived.tactic.defender_exposure@2", "derived.inspector.detail.defender_exposure@1"]) {
+      const withoutExposure = MANIFEST.bindings.filter(row =>
+        row.consumer.id !== inspector.id || `${row.projection.id}@${row.projection.version}` !== exposure);
+      expect(withoutExposure).toHaveLength(MANIFEST.bindings.length - 1);
+      expect(() => compileEvidenceConsumerExecutionV2({ ...MANIFEST, bindings: withoutExposure }, inspector))
+        .toThrow(/BINDING_EXECUTION_UNDECLARED/u);
+    }
     expect(() => compile(MANIFEST, inspector)).toThrow(/V2/u);
     expect(() => compileEvidenceConsumerExecutionV2(MANIFEST, ref("module.full_inspector"))).toThrow();
   });
