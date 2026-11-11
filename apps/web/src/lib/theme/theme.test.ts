@@ -294,7 +294,6 @@ describe("theme foundation", () => {
     const source = files.map((file) => readFileSync(file, "utf8")).join("\n");
     const declared = new Set<string>([...THEME_TOKENS, ...DERIVED_TOKENS]);
     for (const match of source.matchAll(/--([a-z][a-z0-9-]+)\s*:/gu)) declared.add(match[1]!);
-    for (const match of source.matchAll(/var\(--([a-z][a-z0-9-]+)/gu)) expect(declared.has(match[1]!)).toBe(true);
     expect(source).not.toMatch(/--(?:paper|panel)-soft\b/u);
 
     const literalAuthorities = new Set([
@@ -311,8 +310,12 @@ describe("theme foundation", () => {
     expect(files.some((path) => path.endsWith(".css") && !literalAuthorities.has(path))).toBe(true);
     for (const file of files) {
       const contents = readFileSync(file, "utf8");
-      if (!literalAuthorities.has(file)) expect(contents, relative(sourceDirectory, file)).not.toMatch(COLOR_LITERAL);
-      if (!systemColorAuthorities.has(file)) expect(contents, relative(sourceDirectory, file)).not.toMatch(NAMED_COLOR_DECLARATION);
+      const relativeFile = relative(sourceDirectory, file);
+      for (const [, token] of contents.matchAll(/var\(--([a-z][a-z0-9-]+)/gu)) {
+        expect(declared.has(token!), `${relativeFile} uses undeclared theme token --${token}`).toBe(true);
+      }
+      if (!literalAuthorities.has(file)) expect(contents, relativeFile).not.toMatch(COLOR_LITERAL);
+      if (!systemColorAuthorities.has(file)) expect(contents, relativeFile).not.toMatch(NAMED_COLOR_DECLARATION);
     }
     for (const file of filesBelow(join(themeDirectory, "board-skins"))) {
       expect(readFileSync(file, "utf8")).not.toMatch(/last-move|selected|move-dest|check|premove/u);

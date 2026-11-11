@@ -119,10 +119,11 @@
 </section>
 
 <style>
-  .exposure-detail { min-width: 0; overflow-wrap: anywhere; margin-block: .75rem; padding: .75rem; border: 1px solid var(--border); border-radius: .5rem; }
+  .exposure-detail { min-width: 0; overflow-wrap: anywhere; margin-block: .75rem; padding: .75rem; border: 1px solid var(--line); border-radius: .5rem; }
   header, nav { display: flex; flex-wrap: wrap; gap: .5rem; align-items: baseline; }
   header { justify-content: space-between; }
   h3, li p { margin: 0; }
+  .muted { color: var(--muted); }
   ul { padding-inline-start: 1.25rem; }
   li { margin-block: .5rem; }
   li button { margin-block-start: .25rem; }

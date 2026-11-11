@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:322cf0171be0428e69cc271112bdf21f8503180b2197a63cb1a5bcc421a9d2fd",
+    "roadmap": "sha256:6be3edeb554a99e55480d72fee091a38e3b4bfaabc9cf1489f92637517cce23d",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:46d88a602a2bfb2662bb09a7b142831e6d7762b3b1c6717a356d9d60e432b93c",
+    "workState": "sha256:125b4e0945ba7381fdf8b90eadd18667b66359a7b01d07eee21cb13920eb067d",
     "rfcRegister": "sha256:263b03be13e59d59560f2ec6b1c440d7584a4bd1cb330633f14e56d3aa11429e",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
@@ -1249,9 +1249,11 @@
       "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. The Inspector fixture exercises the actual recorded capture and the Review panel uses declared theme tokens. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
+          "apps/web/src/lib/ReviewExposurePanel.svelte",
+          "apps/web/src/lib/theme/theme.test.ts",
           "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
           "packages/runtime/src/presentation-move-path.ts",
           "packages/runtime/src/presentation-move-path.test.ts",

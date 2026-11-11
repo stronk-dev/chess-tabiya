@@ -1868,9 +1868,11 @@
         "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. The Inspector fixture exercises the actual recorded capture and the Review panel uses declared theme tokens. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
+            "apps/web/src/lib/ReviewExposurePanel.svelte",
+            "apps/web/src/lib/theme/theme.test.ts",
             "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
             "packages/runtime/src/presentation-move-path.ts",
             "packages/runtime/src/presentation-move-path.test.ts",

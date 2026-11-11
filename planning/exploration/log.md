@@ -40880,3 +40880,11 @@ detail button, with 136 tests passing and one failing. The corrected case uses
 the recorded `c5b6` exposure position, authenticates the Inspector requests and
 requires the original landing capture on a8 to render. The mounted file passed
 all 137 tests. The new full software result and D3928's native journey remain open.
+
+### 2026-11-11 — D4179 Review panel theme repair
+
+The full software run also caught an undeclared border token in the Review
+exposure panel. The focused theme suite reproduced it. The panel uses the shared
+line token and applies the muted text token to its explanation. The theme check
+now identifies the file and token when a component references an undeclared
+variable. All 40 focused theme and mounted Review tests passed.
