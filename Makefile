@@ -4534,7 +4534,7 @@ guided-hint-execution-check:
 
 .PHONY: guided-hint-lifetime-check
 guided-hint-lifetime-check:
-	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/hint-lifetime.test.ts apps/server/src/hint-service.test.ts apps/server/src/provider-health.test.ts apps/web/src/lib/guided-hint.test.ts
+	./node_modules/.bin/vitest run --config vitest.software.config.ts apps/server/src/hint-lifetime.test.ts apps/server/src/hint-acquisition.test.ts apps/server/src/hint-campaign.test.ts apps/server/src/hint-execution-preflight.test.ts apps/server/src/hint-service.test.ts apps/server/src/provider-health.test.ts apps/web/src/lib/guided-hint.test.ts
 	$(MAKE) typecheck
 
 .PHONY: guided-hint-client-check

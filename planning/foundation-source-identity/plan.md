@@ -3732,3 +3732,87 @@ without regenerated metadata. No production source changed after the run. D4236/
 with actual test/code evidence. D4233 remains doing for integration with forthcoming fine
 advance boundaries. D4234 real generations, D4235 total source deadline, D4224 cooperative full
 acquisition/cost, D4225/D4228/ordinary26/D4167/D3928 remain open. No parent/capability completes.
+
+### 2026-11-11 — actual Hint generation/deadline/cooperative handoff verified
+
+After02597642, the accepted §7b caller now uses actual provider-registry string and established
+engine numeric generations, including the acquired delivery's numeric generation. An async
+request reserves the existing bounded logical action slot before cold discovery, coalesces
+startup, then seals the actual post-handshake pair. Terminal-only attempts are distinct from
+established-source IDs; retained actions never adopt a new source. Both generation domains
+independently refuse pending/delivered old actions under their original IDs without replacement
+discovery/search. An explicitly removed action may acquire the new actual source and ID.
+
+The source-work cap is timeoutMs+1000 from before discovery. Pending jobs keep the creator's
+absolute cap; individual earlier expiry removes only that waiter. Only the remaining positive
+integer waiter budget reaches the scheduler; normalized timeout is unchanged. Timely source
+completion clears both source timers before the existing independent voice phase. Full packets
+use original begin/one advance/real macrotask/current checks/sealed read, never synchronous wide;
+retirement refuses without reacquisition. The population, factory authority and receipt ABI stay.
+
+Three actual prior-code HTTP generation controls fail before the fix. Current64/four source
+controls pass23.62s, including actual cold HTTP handshake/identity, real eleven-second hanging
+startup/late-work0, bounded pre-ack pressure and coalescing, direct/foundation-first complete
+receipts/heartbeats, actual RunService writer transfer between stages (advance1/read0/voice0),
+retirement, source/individual/shared expiry and separate voice completion. The earlier expanded
+202 tests/ten files passes38.77s before the final four additional source controls; the full
+normal run below owns final counts. Initial async-call parentheses and two nonexistent receipt
+field assertions were test migration mistakes, corrected without changing production semantics
+or counting them as source defects.
+
+Independent reviews returned D4238: a surviving later-deadline peer's synchronous permission
+check can cross the detached creator's cap. The actual counter reports two advances instead of
+one; the post-subscriber deadline/source checks repair it. D4239's genuine other-root PV returns
+failed/internal_error before repair; both outer and acquired normalized-request identities now
+join the exact complete requested PV before begin, returning identity_mismatch with zero begins.
+Both source/lifetime reviewers accept the finite code/control boundary subject to normal gates.
+
+D4240 repairs the existing HTTP/browser latency instruments to observe actual begin/advance/
+sealed read, with stage count/active/longest/elapsed time and complete original packet metadata.
+Interrupted rows stay pending/failed/retired. Both captures share the serial-plan observer, HTTP
+awaits the actual acknowledgement, and normal checks typecheck both entry files (HTTP was not
+included). Genuine cold/warm observer controls pass; historical880 rows/60 baselines and all20
+negative module controls remain unchanged. This is not a concurrent-subscriber profiler.
+
+`make guided-hint-latency-smoke` builds current production but exits2 before Hint acquisition:
+D3928's existing anti-caro-advance-early-c5 grade@i1/@i2 contract refusal. No source, latency,
+longest-step or memory measurement occurred. Do not count that startup refusal as a Hint timing
+reading. Next, reconcile the narrow migration against existing owner approvals before applying it. §10's1500ms target is a p95 interaction measure, not an independently
+specified startup cutoff; the11s hanging-start test proves only the source safety cap.
+
+The first full normal run exits2:20586 passes/585 files and exactly two verification failures
+in948.31s. D4240 also repairs the existing preflight test's obsolete wide spy: actual begin/
+advance/read all remain zero for malformed or cached-invalid contracts; the positive still
+checks all four rung compiles, one search and now begin1/read1/advance>1. D4243's independent
+Review singleton-grader scan timed out at5536ms against its unchanged5s limit. The diagnostic
+enumerates3201 eligible files/52638382B; Dirents avoid per-entry stat calls (symlink fallback
+preserved), and identical ASCII predicates search bytes without decoding all JSON. Trees,
+extensions, exclusions, singleton/caller assertions and5s deadline remain unchanged.
+
+The two repaired files pass29 focused tests10.75s. The updated ordinary Hint lifetime target
+includes acquisition/Campaign/preflight controls and passes176/seven24.45s plus clean complete
+types/Svelte. Both source reviewers accept the unchanged source/control slice and independent
+readback clears these verification repairs. No production source changed after the first run.
+Full normal confirmation exits0:20588 software/all585 files873.97s,7 isolated performance/
+four69.23s, complete types/Svelte0errors0warnings, build and governance R1–R10/C1–C8/P1–P7.
+Canonical1928/1928 and24/89 qualification remain current without regenerated metadata. No
+production source changed after that run. D4233–35/D4238–40/D4243/D4244 close their finite
+mechanism, fault, instrument and documentation duties; neither parent RFC nor1.0 completes.
+D4224 actual cost/budget proof, D4225 memory, D4228 Review jobs, ordinary26/D4167, D3928
+content/native and all full1.0 gates remain open.
+
+Next-work read-only audits are durable questions, not implementation or changed scope. D4241
+confirms selected-branch Review can reuse the metadata-only RecordedReviewBoundary and current
+accepted source plan; the5s budget is total across the prefix/pages, with max32 subjects/page
+and final-only reduction. Public idle-clock/interim-carrier precision still needs a bounded
+existing-clause repair; no automatic sibling inclusion or replacement of the0..3 moment rule.
+D4242 traces candidate builders and chosen-horizon full packets as independent strong roots,
+while detached deliveries are JSON only. Historical compiler7 absolute heaps do not describe
+construction8 Hint. Remeasure the existing workload, then real Hint.close with the same candidate
+service/deliveries retained; no guessed compaction, cache/default change or source reduction.
+
+D4244 corrects an already-shipped fact: current both-color source/packet/disclosure/module/JSON
+controls reject vacuous reply-surviving fork captions on mate/stalemate. The ordinary Hint doc
+still repeated the old terminal bug and compiler2 label. Its bounded description and D3768's
+completed Hint portion are reconciled; broader qualification/API/native/consumer duties stay.
+This is documentation flow-back, not a new tactical collector or whole D3768 completion.

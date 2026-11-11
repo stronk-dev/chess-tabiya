@@ -43,11 +43,11 @@ function surfaceText(projection: ReviewMapProjection): readonly string[] {
 function files(directory: URL): string[] {
   const out: string[] = [];
   const walk = (path: string): void => {
-    for (const entry of readdirSync(path)) {
-      if (entry === "node_modules" || entry === "dist" || entry.startsWith(".")) continue;
-      const full = join(path, entry);
-      if (statSync(full).isDirectory()) walk(full);
-      else if (/\.(?:ts|svelte|mjs|js|json)$/u.test(entry)) out.push(full);
+    for (const entry of readdirSync(path, { withFileTypes: true })) {
+      if (entry.name === "node_modules" || entry.name === "dist" || entry.name.startsWith(".")) continue;
+      const full = join(path, entry.name);
+      if (entry.isDirectory() || (entry.isSymbolicLink() && statSync(full).isDirectory())) walk(full);
+      else if (/\.(?:ts|svelte|mjs|js|json)$/u.test(entry.name)) out.push(full);
     }
   };
   walk(directory.pathname);
@@ -212,7 +212,9 @@ describe("review map projection (rfc/review-map.md)", () => {
   it("[criterion 7] introduces no second logistic and no second coefficient", () => {
     const needle = ["0.0036", "8208"].join("");
     const hits = ["apps/", "packages/", "tools/", "tests/"].flatMap((tree) => files(new URL(tree, ROOT)))
-      .filter((file) => { const source = readFileSync(file, "utf8"); return source.includes(needle) && source.includes("Math.exp("); })
+      // Both needles are ASCII. Scan the same complete file population as bytes instead of
+      // allocating/decoding every large JSON document solely to look for these literals.
+      .filter((file) => { const source = readFileSync(file); return source.includes(needle) && source.includes("Math.exp("); })
       .map((file) => file.slice(new URL(".", ROOT).pathname.length));
     expect(hits).toEqual(["packages/runtime/src/grade.ts"]);
     for (const file of ["packages/runtime/src/review-map.ts"]) {

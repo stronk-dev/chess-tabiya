@@ -201,19 +201,19 @@ describe("HintService source and voice arms", () => {
 
   it("[D1638] search absence is source_unavailable; voice absence, timeout, refusal and invalid output keep the hint available", async () => {
     const populations = new CandidatePopulationService({ capacity: 8 });
-    const off = new HintService({ scheduler: null, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
-    expect(off.request(access(run, FORK_FEN), "pattern", "0".repeat(32))).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
+    const off = new HintService({ sourceGenerations: () => ({ registry: "unit-registry", engine: 1 }), scheduler: null, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
+    expect((await (off.request(access(run, FORK_FEN), "pattern", "0".repeat(32))))).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
     // Provider health says the search source is down: honest source_unavailable before any search.
     let searched = 0;
-    const unhealthy = new HintService({ scheduler: { get: async () => { searched += 1; throw new Error("must not search"); } }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8, availability: () => ({ state: "unavailable", instanceIds: [], reason: "not_configured" }) });
-    expect(unhealthy.request(access(run, FORK_FEN), "pattern", "0".repeat(32))).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
+    const unhealthy = new HintService({ sourceGenerations: () => ({ registry: "unit-registry", engine: 1 }), scheduler: { get: async () => { searched += 1; throw new Error("must not search"); } }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8, availability: () => ({ state: "unavailable", instanceIds: [], reason: "not_configured" }) });
+    expect((await (unhealthy.request(access(run, FORK_FEN), "pattern", "0".repeat(32))))).toMatchObject({ state: "source_unavailable", reason: "provider_unavailable" });
     expect(searched).toBe(0);
-    const failing = new HintService({ scheduler: { get: async (request) => ({ kind: "source_failure", operation: request.operation, normalizedRequestDigest: "sha256:0", failedAt: "2026-09-24T12:00:00.000Z", reason: "deadline_exceeded" }) as unknown as TypedProviderResult<"stockfish.principal_variation@1"> }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
-    expect(await settle(failing, failing.request(access(run, FORK_FEN), "pattern", "0".repeat(32)))).toMatchObject({ state: "source_unavailable", reason: "deadline_exceeded" });
+    const failing = new HintService({ sourceGenerations: () => ({ registry: "unit-registry", engine: 1 }), scheduler: { get: async (request) => ({ kind: "source_failure", operation: request.operation, normalizedRequestDigest: "sha256:0", failedAt: "2026-09-24T12:00:00.000Z", reason: "deadline_exceeded" }) as unknown as TypedProviderResult<"stockfish.principal_variation@1"> }, requestedEngine: engine, populations, depth: 12, timeoutMs: 1_000, maxOperations: 8 });
+    expect(await settle(failing, (await (failing.request(access(run, FORK_FEN), "pattern", "0".repeat(32)))))).toMatchObject({ state: "source_unavailable", reason: "deadline_exceeded" });
 
     const voiced = async (voice: (sentence: string) => Promise<string>) => {
-      const service = new HintService({ scheduler: real(), requestedEngine: engine, populations, depth: 12, timeoutMs: 5_000, maxOperations: 8, voiceTimeoutMs: 200, voice: (_view, sentence) => voice(sentence) });
-      const result = await settle(service, service.request(access(run, FORK_FEN), "square", "0".repeat(32)));
+      const service = new HintService({ sourceGenerations: () => ({ registry: "unit-registry", engine: 1 }), scheduler: real(), requestedEngine: engine, populations, depth: 12, timeoutMs: 5_000, maxOperations: 8, voiceTimeoutMs: 200, voice: (_view, sentence) => voice(sentence) });
+      const result = await settle(service, (await (service.request(access(run, FORK_FEN), "square", "0".repeat(32)))));
       if (result.state !== "available") throw new Error(`expected available, got ${JSON.stringify(result)}`);
       return result.delivery.rendered;
     };
@@ -229,14 +229,14 @@ describe("HintService source and voice arms", () => {
     const populations = new CandidatePopulationService({ capacity: 8 });
     let searches = 0;
     const scheduler = real();
-    const service = new HintService({ scheduler: { get: (request, scope, signal) => { searches += 1; return scheduler.get(request, scope, signal); } }, requestedEngine: engine, populations, depth: 12, timeoutMs: 5_000, maxOperations: 8 });
-    for (const rung of ["pattern", "square", "piece", "distance"] as const) expect((await settle(service, service.request({ ...access(run, FORK_FEN), voiceRequested: false }, rung, "0".repeat(32)))).state).toBe("available");
+    const service = new HintService({ sourceGenerations: () => ({ registry: "unit-registry", engine: 1 }), scheduler: { get: (request, scope, signal) => { searches += 1; return scheduler.get(request, scope, signal); } }, requestedEngine: engine, populations, depth: 12, timeoutMs: 5_000, maxOperations: 8 });
+    for (const rung of ["pattern", "square", "piece", "distance"] as const) expect((await settle(service, (await (service.request({ ...access(run, FORK_FEN), voiceRequested: false }, rung, "0".repeat(32)))))).state).toBe("available");
     expect(searches).toBe(1);
     expect(populations.stats()).toMatchObject({ misses: 1, retained: 1 });
     // A second consumer of the same position hits the same process-local packet.
     expect(populations.wide(FORK_FEN).kind).toBe("ready");
     expect(populations.stats().hits).toBeGreaterThanOrEqual(1);
     // The service cannot be built without the injected packet service; it never constructs its own.
-    expect(() => new HintService({ scheduler: null, requestedEngine: engine, populations: undefined as never, depth: 12, timeoutMs: 1, maxOperations: 1 })).toThrow(/injected/u);
+    expect(() => new HintService({ sourceGenerations: () => ({ registry: "unit-registry", engine: 1 }), scheduler: null, requestedEngine: engine, populations: undefined as never, depth: 12, timeoutMs: 1, maxOperations: 1 })).toThrow(/injected/u);
   });
 });

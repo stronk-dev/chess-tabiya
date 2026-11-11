@@ -6,5 +6,5 @@
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "paths": { "@chess-tabiya/runtime": ["../../packages/runtime/src/index.ts"] }
   },
-  "include": ["browser-capture.ts"]
+  "include": ["capture.ts", "browser-capture.ts", "acquisition-observer.ts"]
 }

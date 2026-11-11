@@ -53,7 +53,9 @@ async function control(initialFault?: Fault) {
     });
     const start = vi.spyOn(MockProviderEngineClient.prototype, "start");
     const exchange = vi.spyOn(MockProviderEngineClient.prototype, "exchange");
-    const packets = vi.spyOn(CandidatePopulationService.prototype, "wide");
+    const packets = vi.spyOn(CandidatePopulationService.prototype, "begin");
+    const advances = vi.spyOn(CandidatePopulationService.prototype, "advance");
+    const reads = vi.spyOn(CandidatePopulationService.prototype, "read");
     const ask = async (rung: runtime.HintRung) => {
       const response = await post("/runs/hint-preflight/hints", { clientRequestId: "0".repeat(32), nodeId: graph.graph.activeCursor.nodeId, rung, decisionDigest: decision.digest,
         assistance: runtime.compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "support", overrides: {}, moduleOverrides: { include: [], exclude: [] } } }) });
@@ -70,7 +72,7 @@ async function control(initialFault?: Fault) {
       }
       return result;
     };
-    return { application, compile, trace, start, exchange, packets, ask, settle, fault(value: Fault) { fault = value; } };
+    return { application, compile, trace, start, exchange, packets, advances, reads, ask, settle, fault(value: Fault) { fault = value; } };
   } catch (error) { try { await application.close(); } finally { vi.restoreAllMocks(); } throw error; }
 }
 
@@ -83,6 +85,7 @@ describe("authenticated complete Guided Hint preflight", () => {
       expect(app.start).not.toHaveBeenCalled();
       expect(app.exchange).not.toHaveBeenCalled();
       expect(app.packets).not.toHaveBeenCalled();
+      expect(app.advances).not.toHaveBeenCalled(); expect(app.reads).not.toHaveBeenCalled();
     } finally { try { await app.application.close(); } finally { vi.restoreAllMocks(); } }
   });
 
@@ -91,11 +94,12 @@ describe("authenticated complete Guided Hint preflight", () => {
     try {
       const first = await app.settle(await app.ask("pattern"));
       expect(first.state).toBe("available");
-      app.start.mockClear(); app.exchange.mockClear(); app.packets.mockClear(); app.trace.length = 0;
+      app.start.mockClear(); app.exchange.mockClear(); app.packets.mockClear(); app.advances.mockClear(); app.reads.mockClear(); app.trace.length = 0;
       app.fault(fault);
       expect(await app.ask("distance")).toEqual({ state: "failed", requestId: expect.stringMatching(/^[a-f0-9]{32}$/u), rung: "distance", reason: "contract_violation" });
       expect(app.trace).toEqual(["compile"]);
       expect(app.start).not.toHaveBeenCalled(); expect(app.exchange).not.toHaveBeenCalled(); expect(app.packets).not.toHaveBeenCalled();
+      expect(app.advances).not.toHaveBeenCalled(); expect(app.reads).not.toHaveBeenCalled();
     } finally { try { await app.application.close(); } finally { vi.restoreAllMocks(); } }
   });
 
@@ -111,6 +115,7 @@ describe("authenticated complete Guided Hint preflight", () => {
       expect(app.compile.mock.calls.filter(([, consumer]) => consumer.id === "module.guided_hint").every(([, consumer]) => consumer.version === 2)).toBe(true);
       expect(app.exchange).toHaveBeenCalledTimes(1);
       expect(app.packets).toHaveBeenCalledTimes(1);
+      expect(app.advances.mock.calls.length).toBeGreaterThan(1); expect(app.reads).toHaveBeenCalledTimes(1);
     } finally { try { await app.application.close(); } finally { vi.restoreAllMocks(); } }
   });
 });

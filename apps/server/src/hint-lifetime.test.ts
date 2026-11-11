@@ -13,6 +13,7 @@ import { createInMemoryTestApplication } from "./in-memory-test-application.js";
 import { installEmptyApplicationCatalogues } from "./empty-application-catalogues.test-support.js";
 import { MockProviderEngineClient } from "./mock-provider-engine.js";
 import { composeProviderTraversalApplication } from "./provider-traversal.js";
+import { RunService } from "./service.js";
 
 const FEN = "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1";
 afterEach(() => { vi.restoreAllMocks(); });
@@ -32,7 +33,7 @@ async function bounded<T>(work: Promise<T>): Promise<T> {
 }
 const realScheduler = () => composeProviderTraversalApplication({ engines: new MockProviderEngineClient(), tablebaseFetch: null, explorerFetch: null, explorerToken: null }).scheduler;
 function service(extra: Partial<ConstructorParameters<typeof HintService>[0]> = {}) {
-  return new HintService({ scheduler: realScheduler(), requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), populations: new CandidatePopulationService({ capacity: 8 }), depth: 12, timeoutMs: 5_000, maxOperations: 8, ...extra });
+  return new HintService({ sourceGenerations: () => ({ registry: "unit-registry", engine: 1 }), scheduler: realScheduler(), requestedEngine: async () => ({ id: "stockfish-analysis", version: "mock-1" }), populations: new CandidatePopulationService({ capacity: 8 }), depth: 12, timeoutMs: 5_000, maxOperations: 8, ...extra });
 }
 function id(response: HintResponse): string {
   if (response.state === "available") return response.delivery.requestId;
@@ -49,11 +50,11 @@ describe("Guided Hint operation lifetimes", () => {
     const get = vi.fn<HintProviderGateway["get"]>();
     const hints = service({ scheduler: { get }, requestedEngine: () => engine.promise });
     const original = { ...access(false), revalidate: originalAuthority };
-    const requestId = id(hints.request(original, "pattern", "0".repeat(32)));
+    const requestId = id((await (hints.request(original, "pattern", "0".repeat(32)))));
     try {
       const changedIntent = compileAssistanceRequest({ contextHint: "position", preference: { kind: "explicit", preset: "guided", overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
       for (const replacement of [{ writerId: "replacement" }, { assistance: changedIntent }]) {
-        expect(hints.request({ ...original, ...replacement, revalidate: replacementAuthority }, "pattern", "0".repeat(32))).toMatchObject({ state: "failed", reason: "contract_violation", requestId });
+        expect((await (hints.request({ ...original, ...replacement, revalidate: replacementAuthority }, "pattern", "0".repeat(32))))).toMatchObject({ state: "failed", reason: "contract_violation", requestId });
       }
       expect(hints.operationCount).toBe(1);
       await new Promise<void>(resolve => setImmediate(resolve));
@@ -80,8 +81,8 @@ describe("Guided Hint operation lifetimes", () => {
       return result.promise;
     });
     const hints = service({ scheduler: { get } });
-    const first = id(hints.request({ ...access(false), learnerId: "owner" }, "pattern", "0".repeat(32)));
-    const peer = id(hints.request({ ...access(false), learnerId: "peer" }, "pattern", "0".repeat(32)));
+    const first = id((await (hints.request({ ...access(false), learnerId: "owner" }, "pattern", "0".repeat(32)))));
+    const peer = id((await (hints.request({ ...access(false), learnerId: "peer" }, "pattern", "0".repeat(32)))));
     try {
       expect(peer).toBe(first); // Ownership is internal, not a new public digest field.
       expect(hints.operationCount).toBe(2);
@@ -117,12 +118,12 @@ describe("Guided Hint operation lifetimes", () => {
       return { ...access(false), run: current, decision: hintDecisionStamp(current) };
     };
     const firstAccess = decision(1), secondAccess = decision(2), thirdAccess = decision(3);
-    const first = id(hints.request(firstAccess, "pattern", "0".repeat(32)));
+    const first = id((await (hints.request(firstAccess, "pattern", "0".repeat(32)))));
     try {
       await vi.waitFor(() => expect(firstSignal).toBeDefined());
-      const second = id(hints.request(secondAccess, "pattern", "0".repeat(32)));
+      const second = id((await (hints.request(secondAccess, "pattern", "0".repeat(32)))));
       await vi.waitFor(() => expect(hints.poll(run.id, second, secondAccess.decision, "owner").state).toBe("available"));
-      const third = id(hints.request(thirdAccess, "pattern", "0".repeat(32)));
+      const third = id((await (hints.request(thirdAccess, "pattern", "0".repeat(32)))));
       await vi.waitFor(() => expect(hints.poll(run.id, third, thirdAccess.decision, "owner").state).toBe("available"));
       expect(hints.operationCount).toBe(2);
       expect(() => hints.poll(run.id, second, secondAccess.decision, "owner")).toThrow(/not known/u);
@@ -138,19 +139,19 @@ describe("Guided Hint operation lifetimes", () => {
     let signal: AbortSignal | undefined;
     const hints = service({ maxOperations: action === "evict" ? 1 : 8, voiceTimeoutMs: 60_000,
       voice: async (_view, _sentence, current) => { signal = current; return reply.promise; } });
-    const requestId = id(hints.request(access(), "pattern", "0".repeat(32)));
+    const requestId = id((await (hints.request(access(), "pattern", "0".repeat(32)))));
     try {
       await vi.waitFor(() => expect(signal).toBeDefined());
       if (action === "cancel") expect(hints.cancel(run.id, requestId, "owner").state).toBe("cancelled");
       else if (action === "stale") expect(hints.poll(run.id, requestId, { ...access().decision, digest: "sha256:changed" }, "owner").state).toBe("stale");
-      else if (action === "evict") hints.request(access(false), "square", "0".repeat(32));
+      else if (action === "evict") (await (hints.request(access(false), "square", "0".repeat(32))));
       else await bounded(hints.close());
       expect(signal!.aborted).toBe(true);
       await bounded(hints.whenIdle());
       reply.resolve("The best move is Nb2.");
       await new Promise<void>(resolve => setImmediate(resolve));
       expect(() => hints.poll(run.id, requestId, access().decision, "owner")).toThrow(/not known/u);
-      if (action === "close") expect(hints.request(access(), "pattern", "0".repeat(32))).toMatchObject({ state: "source_unavailable", reason: "cancelled" });
+      if (action === "close") expect((await (hints.request(access(), "pattern", "0".repeat(32))))).toMatchObject({ state: "source_unavailable", reason: "cancelled" });
     } finally { reply.resolve(""); await hints.close(); }
   });
 
@@ -162,8 +163,8 @@ describe("Guided Hint operation lifetimes", () => {
     const search = vi.fn<HintProviderGateway["get"]>((...args) => scheduler.get(...args));
     const hints = service({ scheduler: { get: search }, voiceTimeoutMs: 60_000,
       voice: async (_view, sentence, signal) => { const index = signals.length; signals.push(signal); sentences.push(sentence); return replies[index]!.promise; } });
-    const first = id(hints.request(access(), "pattern", "0".repeat(32)));
-    const second = id(hints.request(access(), "square", "0".repeat(32)));
+    const first = id((await (hints.request(access(), "pattern", "0".repeat(32)))));
+    const second = id((await (hints.request(access(), "square", "0".repeat(32)))));
     try {
       await vi.waitFor(() => expect(signals).toHaveLength(2));
       hints.cancel(run.id, first, "owner");
@@ -183,8 +184,8 @@ describe("Guided Hint operation lifetimes", () => {
     let signal: AbortSignal | undefined;
     const get = vi.fn<HintProviderGateway["get"]>(async (_request, _scope, current) => { signal = current; return result.promise; });
     const hints = service({ scheduler: { get } });
-    const first = id(hints.request(access(false), "pattern", "0".repeat(32)));
-    const second = id(hints.request(access(false), "square", "0".repeat(32)));
+    const first = id((await (hints.request(access(false), "pattern", "0".repeat(32)))));
+    const second = id((await (hints.request(access(false), "square", "0".repeat(32)))));
     try {
       await vi.waitFor(() => expect(signal).toBeDefined());
       hints.cancel(run.id, first, "owner");
@@ -200,7 +201,7 @@ describe("Guided Hint operation lifetimes", () => {
     const engine = deferred<{ id: string; version: string }>();
     const get = vi.fn<HintProviderGateway["get"]>();
     const hints = service({ requestedEngine: () => engine.promise, scheduler: { get } });
-    const requestId = id(hints.request(access(false), "pattern", "0".repeat(32)));
+    const requestId = id((await (hints.request(access(false), "pattern", "0".repeat(32)))));
     hints.cancel(run.id, requestId, "owner");
     await bounded(hints.whenIdle());
     engine.resolve({ id: "stockfish-analysis", version: "mock-1" });
@@ -222,17 +223,17 @@ describe("Guided Hint operation lifetimes", () => {
       return current.promise;
     });
     const hints = service({ scheduler: { get } });
-    const first = id(hints.request(access(false), "pattern", "0".repeat(32)));
+    const first = id((await (hints.request(access(false), "pattern", "0".repeat(32)))));
     try {
       await vi.waitFor(() => expect(signals).toHaveLength(1));
       hints.cancel(run.id, first, "owner");
       await bounded(hints.whenIdle());
-      const replacement = id(hints.request(access(false), "pattern", "0".repeat(32)));
+      const replacement = id((await (hints.request(access(false), "pattern", "0".repeat(32)))));
       expect(replacement).toBe(first);
       await vi.waitFor(() => expect(signals).toHaveLength(2));
       old.reject(new Error("abandoned search"));
       await new Promise<void>(resolve => setImmediate(resolve));
-      const peer = id(hints.request(access(false), "square", "0".repeat(32)));
+      const peer = id((await (hints.request(access(false), "square", "0".repeat(32)))));
       expect(get).toHaveBeenCalledTimes(2);
       expect(signals[1]!.aborted).toBe(false);
       await fulfill();
@@ -251,16 +252,16 @@ describe("Guided Hint operation lifetimes", () => {
       return failure === "null" ? Promise.resolve(null) : Promise.reject(new Error("startup failed"));
     } });
     try {
-      const first = id(hints.request(access(false), "pattern", "0".repeat(32)));
-      const peer = id(hints.request(access(false), "square", "0".repeat(32)));
+      const first = id((await (hints.request(access(false), "pattern", "0".repeat(32)))));
+      const peer = id((await (hints.request(access(false), "square", "0".repeat(32)))));
       await hints.whenIdle();
       expect(starts).toBe(1);
       expect(hints.poll(run.id, first, access().decision, "owner")).toMatchObject({ state: "source_unavailable" });
       expect(hints.poll(run.id, peer, access().decision, "owner")).toMatchObject({ state: "source_unavailable" });
       // Ordinary idempotent POST/poll preserves that settled result; explicit retry removes it.
-      expect(hints.request(access(false), "pattern", "0".repeat(32)).state).toBe("source_unavailable");
+      expect((await (hints.request(access(false), "pattern", "0".repeat(32)))).state).toBe("source_unavailable");
       hints.cancel(run.id, first, "owner");
-      expect(id(hints.request(access(false), "pattern", "0".repeat(32)))).toBe(first);
+      expect(id((await (hints.request(access(false), "pattern", "0".repeat(32)))))).toBe(first);
       await hints.whenIdle();
       expect(starts).toBe(2);
       expect(hints.poll(run.id, first, access().decision, "owner").state).toBe("available");
@@ -276,7 +277,7 @@ describe("Guided Hint operation lifetimes", () => {
     const get = vi.fn<HintProviderGateway["get"]>((...args) => scheduler.get(...args));
     const hints = service({ scheduler: { get } });
     try {
-      const first = id(hints.request(access(false), "pattern", "0".repeat(32)));
+      const first = id((await (hints.request(access(false), "pattern", "0".repeat(32)))));
       await hints.whenIdle();
       expect(hints.poll(run.id, first, access().decision, "owner").state).toBe("available");
       const changed = {
@@ -287,13 +288,13 @@ describe("Guided Hint operation lifetimes", () => {
       } as DrillRun;
       const next = { ...access(false), run: changed, decision: hintDecisionStamp(changed) };
       expect(next.decision.digest).not.toBe(access().decision.digest);
-      const second = id(hints.request(next, "square", "0".repeat(32)));
+      const second = id((await (hints.request(next, "square", "0".repeat(32)))));
       await hints.whenIdle();
       const result = hints.poll(run.id, second, next.decision, "owner");
       expect(result).toMatchObject({ state: "available", delivery: { decision: next.decision } });
       expect(get).toHaveBeenCalledTimes(2);
       // Only the decision's local occurrence must be rebuilt. Scheduler/source dedupe is unchanged.
-      const peer = id(hints.request(next, "piece", "0".repeat(32)));
+      const peer = id((await (hints.request(next, "piece", "0".repeat(32)))));
       await hints.whenIdle();
       expect(hints.poll(run.id, peer, next.decision, "owner").state).toBe("available");
       expect(get).toHaveBeenCalledTimes(2);
@@ -343,6 +344,125 @@ async function applicationControl() {
 }
 
 describe("authenticated Hint → application → health → external HTTP voice cancellation", () => {
+  it("a real original-writer handoff between actual source stages stops the next stage and all voice/publication", { timeout: 30_000 }, async () => {
+    const app = await applicationControl();
+    let transfer: (() => void) | undefined, advances = 0;
+    const originalAccess = RunService.prototype.hintAccess;
+    const authority = vi.spyOn(RunService.prototype, "hintAccess").mockImplementation(function (this: RunService, ...args) {
+      const access = originalAccess.apply(this, args);
+      if (args[2] !== undefined) transfer = () => this.claimLease(args[0], args[1], "changed-between-stages");
+      return access;
+    });
+    const originalAdvance = CandidatePopulationService.prototype.advance;
+    const advancing = vi.spyOn(CandidatePopulationService.prototype, "advance").mockImplementation(function (this: CandidatePopulationService, ...args) {
+      const step = originalAdvance.apply(this, args); advances++;
+      if (advances === 1) setImmediate(() => { expect(transfer).toBeTypeOf("function"); transfer!(); });
+      return step;
+    } as typeof originalAdvance);
+    const reading = vi.spyOn(CandidatePopulationService.prototype, "read");
+    try {
+      const requestId = id(await app.ask());
+      await vi.waitFor(async () => expect(parseHintResponse((await (await app.poll(requestId)).json() as { hint: unknown }).hint)).toMatchObject({ state: "stale", requestId }));
+      expect(advances).toBe(1); expect(reading).not.toHaveBeenCalled(); expect(app.exchanges).toHaveLength(0);
+    } finally { authority.mockRestore(); advancing.mockRestore(); reading.mockRestore(); await app.application.close(); }
+  });
+
+  it("cold HTTP acknowledgements wait for the actual post-handshake pair and equal the same-source warm identity", { timeout: 30_000 }, async () => {
+    const app = await applicationControl(); const gate = deferred<void>(); const reached = deferred<void>();
+    let ready = false, acknowledged = false;
+    const actualGeneration = MockProviderEngineClient.prototype.establishedGeneration;
+    const generation = vi.spyOn(MockProviderEngineClient.prototype, "establishedGeneration").mockImplementation(function (this: MockProviderEngineClient, engineId) { return ready ? actualGeneration.call(this, engineId) : null; });
+    const actualStart = MockProviderEngineClient.prototype.start;
+    const sink = app.application.providerHealth.engineLifecycleSink({ "stockfish-analysis": "stockfish-analysis" });
+    const discovery = vi.spyOn(MockProviderEngineClient.prototype, "start").mockImplementationOnce(async function (this: MockProviderEngineClient, engineId) {
+      sink({ engineId, kind: "starting" }); reached.resolve(); await gate.promise;
+      const identity = await actualStart.call(this, engineId); ready = true; sink({ engineId, kind: "ready" }); return identity;
+    });
+    const search = vi.spyOn(app.application.providers.scheduler, "get");
+    const first = app.ask().then(response => { acknowledged = true; return response; });
+    try {
+      await bounded(reached.promise);
+      expect(acknowledged).toBe(false); expect(search).not.toHaveBeenCalled();
+      const repeat = app.ask(); gate.resolve();
+      const [one, same] = await Promise.all([first, repeat]); expect(id(same)).toBe(id(one));
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(1));
+      app.exchanges[0]!.reply.resolve(Response.json({ text: app.exchanges[0]!.sentence }));
+      await vi.waitFor(async () => expect(parseHintResponse((await (await app.poll(id(one))).json() as { hint: unknown }).hint).state).toBe("available"));
+      expect((await app.cancel(id(one))).status).toBe(200);
+      const warm = await app.ask(); expect(id(warm)).toBe(id(one));
+      expect(discovery).toHaveBeenCalledTimes(1); expect(search).toHaveBeenCalledTimes(1);
+    } finally { gate.resolve(); await first; generation.mockRestore(); discovery.mockRestore(); search.mockRestore(); for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
+  it("the production eleven-second cap bounds cold HTTP startup and prevents late provider/collector work", { timeout: 30_000 }, async () => {
+    const app = await applicationControl(); const gate = deferred<void>(); const reached = deferred<void>();
+    const generation = vi.spyOn(MockProviderEngineClient.prototype, "establishedGeneration").mockReturnValue(null);
+    const actual = MockProviderEngineClient.prototype.start;
+    const discovery = vi.spyOn(MockProviderEngineClient.prototype, "start").mockImplementationOnce(async function (this: MockProviderEngineClient, ...args) { reached.resolve(); await gate.promise; return actual.apply(this, args); });
+    const search = vi.spyOn(app.application.providers.scheduler, "get");
+    const collection = vi.spyOn(CandidatePopulationService.prototype, "begin");
+    let acknowledged = false;
+    const started = performance.now();
+    const pending = app.ask().then(response => { acknowledged = true; return response; });
+    try {
+      await bounded(reached.promise);
+      await new Promise<void>(resolve => setTimeout(resolve, 50));
+      expect(acknowledged).toBe(false);
+      const response = await pending;
+      expect(response).toMatchObject({ state: "source_unavailable", reason: "deadline_exceeded" });
+      expect(performance.now() - started).toBeGreaterThanOrEqual(10_900);
+      gate.resolve(); await new Promise<void>(resolve => setImmediate(resolve));
+      expect(search).not.toHaveBeenCalled(); expect(collection).not.toHaveBeenCalled(); expect(app.exchanges).toHaveLength(0);
+      expect(await app.ask()).toEqual(response);
+    } finally { gate.resolve(); await pending; generation.mockRestore(); discovery.mockRestore(); search.mockRestore(); collection.mockRestore(); await app.application.close(); }
+  });
+
+  it.each((["pending", "available"] as const).flatMap(phase => (["registry", "engine"] as const).map(domain => ({ phase, domain }))))("a $domain generation change invalidates a retained $phase action without replacement discovery or search", { timeout: 30_000 }, async ({ phase, domain }) => {
+    const app = await applicationControl();
+    const search = vi.spyOn(app.application.providers.scheduler, "get");
+    const discovery = vi.spyOn(MockProviderEngineClient.prototype, "start");
+    try {
+      const requestId = id(await app.ask());
+      await vi.waitFor(() => expect(app.exchanges).toHaveLength(1));
+      if (phase === "available") {
+        app.exchanges[0]!.reply.resolve(Response.json({ text: app.exchanges[0]!.sentence }));
+        await vi.waitFor(async () => expect(parseHintResponse((await (await app.poll(requestId)).json() as { hint: unknown }).hint).state).toBe("available"));
+      }
+      if (domain === "registry") {
+        const old = app.application.providerHealth.generation("stockfish-analysis");
+        const lifecycle = app.application.providerHealth.engineLifecycleSink({ "stockfish-analysis": "stockfish-analysis" });
+        lifecycle({ engineId: "stockfish-analysis", kind: "starting" });
+        lifecycle({ engineId: "stockfish-analysis", kind: "ready" });
+        expect(app.application.providerHealth.generation("stockfish-analysis")).not.toBe(old);
+      } else vi.spyOn(MockProviderEngineClient.prototype, "establishedGeneration").mockReturnValue(2);
+      expect(await app.ask()).toMatchObject({ state: "source_unavailable", reason: "identity_mismatch", requestId });
+      expect(parseHintResponse((await (await app.poll(requestId)).json() as { hint: unknown }).hint)).toMatchObject({ state: "source_unavailable", reason: "identity_mismatch", requestId });
+      expect(search).toHaveBeenCalledTimes(1); expect(discovery).toHaveBeenCalledTimes(1);
+      if (phase === "pending") expect(app.exchanges[0]!.signal.aborted).toBe(true);
+      expect(app.exchanges).toHaveLength(1);
+      if (domain === "registry") {
+        expect((await app.cancel(requestId)).status).toBe(200);
+        const fresh = await app.ask();
+        expect(id(fresh)).not.toBe(requestId); // Same action bytes after explicit deletion, new actual registry source.
+        await vi.waitFor(() => expect(app.exchanges).toHaveLength(2));
+        app.exchanges[1]!.reply.resolve(Response.json({ text: app.exchanges[1]!.sentence }));
+        await vi.waitFor(async () => expect(parseHintResponse((await (await app.poll(id(fresh))).json() as { hint: unknown }).hint).state).toBe("available"));
+        expect(search).toHaveBeenCalledTimes(2);
+      }
+    } finally { search.mockRestore(); discovery.mockRestore(); for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
+  it("the actual acquired numeric engine generation must match the sealed engine domain before collectors or voice", { timeout: 30_000 }, async () => {
+    const app = await applicationControl();
+    const generation = vi.spyOn(MockProviderEngineClient.prototype, "establishedGeneration").mockReturnValue(2);
+    const collection = vi.spyOn(CandidatePopulationService.prototype, "begin");
+    try {
+      const requestId = id(await app.ask()); // The real mock acquisition remains generation1.
+      await vi.waitFor(async () => expect(parseHintResponse((await (await app.poll(requestId)).json() as { hint: unknown }).hint)).toMatchObject({ state: "source_unavailable", reason: "identity_mismatch", requestId }));
+      expect(collection).not.toHaveBeenCalled(); expect(app.exchanges).toHaveLength(0);
+    } finally { generation.mockRestore(); collection.mockRestore(); for (const exchange of app.exchanges) exchange.reply.reject(new Error("closed")); await app.application.close(); }
+  });
+
   it("a still-readable co-host demoted to spectator loses the pending action's original authority", { timeout: 30_000 }, async () => {
     const app = await applicationControl();
     try {

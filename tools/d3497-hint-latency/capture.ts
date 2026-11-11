@@ -11,7 +11,7 @@ import { pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import { compileAssistanceRequest, hintDecisionStamp, parseHintResponse, HINT_COMPILER_VERSION, CANDIDATE_PACKET_COMPILER_VERSION, PRIMARY_EVIDENCE_MANIFEST, type DrillRun, type HintRung } from "@chess-tabiya/runtime";
 import { createApplication, GUIDED_HINT_PROFILE, APPLICATION_PROVIDER_BOUNDS } from "../../apps/server/src/application.js";
-import { CandidatePopulationService } from "../../apps/server/src/candidate-population-service.js";
+import { observeHintAcquisition } from "./acquisition-observer.js";
 import { ProviderExchangeScheduler } from "../../apps/server/src/provider-exchange.js";
 import { HintService } from "../../apps/server/src/hint-service.js";
 import type { VoiceProvider } from "../../apps/server/src/guidance.js";
@@ -29,29 +29,23 @@ assert(existsSync(binary), "make must supply the pinned actual Stockfish executa
 const digest = (bytes: Buffer | string) => createHash("sha256").update(bytes).digest("hex");
 const binaryBytes = readFileSync(binary);
 const providerBinaryDigest = `sha256:${createHash("sha256").update("tabiya/engine.binary.v1\0").update(binaryBytes).digest("hex")}`;
-const sourcePaths=[planPath,"tools/d3497-hint-latency/capture.ts","tools/d3497-hint-latency/receipt.mjs","apps/server/src/application.ts","apps/server/src/hint-service.ts","apps/server/src/candidate-population-service.ts","apps/server/src/provider-exchange.ts","apps/web/src/lib/GuidedHintSeat.svelte","packages/runtime/src/hint-distance.ts","packages/runtime/src/candidate-population.ts"];
+const sourcePaths=[planPath,"tools/d3497-hint-latency/acquisition-observer.ts","tools/d3497-hint-latency/capture.ts","tools/d3497-hint-latency/receipt.mjs","apps/server/src/application.ts","apps/server/src/hint-service.ts","apps/server/src/candidate-population-service.ts","apps/server/src/provider-exchange.ts","apps/web/src/lib/GuidedHintSeat.svelte","packages/runtime/src/hint-distance.ts","packages/runtime/src/candidate-population.ts"];
 const sourceDigests=Object.fromEntries(sourcePaths.map(path=>[path,digest(readFileSync(path))]));
 const now = () => performance.now();
 type Trace = { entered: number; deps: number; packets: any[]; sources: any[]; serverRequests: any[] };
 let active: Trace | undefined;
 const rows: any[] = [], baselines: any[] = [], startups: any[] = [];
-const wide = CandidatePopulationService.prototype.wide;
-CandidatePopulationService.prototype.wide = function(fen) {
-  const trace = active, start = now(), before = this.stats();
-  const result = wide.call(this, fen), end = now(), after = this.stats();
-  if (trace) { trace.deps = end; trace.packets.push({ fen, ms: end-start, hitsDelta: after.hits-before.hits, missesDelta: after.misses-before.misses, kind: result.kind, ...(result.kind === "ready" ? { id:result.receipt.packet.id, manifestDigest:result.receipt.packet.manifestDigest, compilerVersion:result.receipt.packet.compilerVersion, legalMoves:result.receipt.packet.legalMoves.length, candidates:result.receipt.packet.candidates.length } : {}) }); }
-  return result;
-};
+const restoreAcquisition = observeHintAcquisition(() => active);
 const get = ProviderExchangeScheduler.prototype.get;
-ProviderExchangeScheduler.prototype.get = async function(...args: Parameters<typeof get>) {
+ProviderExchangeScheduler.prototype.get = async function(this: ProviderExchangeScheduler, ...args: Parameters<typeof get>) {
   const trace = active, start = now(), result = await get.apply(this, args), end = now();
   if (trace) { trace.deps = end; trace.sources.push({ operation:args[0].operation, ms:end-start, kind:result.kind === "success" ? result.delivery.kind : result.kind, result }); }
   return result;
 } as typeof get;
 const request = HintService.prototype.request;
-HintService.prototype.request = function(...args: Parameters<typeof request>) {
-  const start = now(), result = request.apply(this, args);
-  active?.serverRequests.push({ runId:args[0].run.id, rung:args[1], ms:now()-start, initialState:result.state });
+HintService.prototype.request = async function(...args: Parameters<typeof request>) {
+  const trace = active, start = now(), result = await request.apply(this, args);
+  trace?.serverRequests.push({ runId:args[0].run.id, rung:args[1], ms:now()-start, initialState:result.state });
   return result;
 };
 
@@ -135,4 +129,4 @@ try {
   // Keep the raw population even when its independent checker refuses acceptance.
   const checked=checkReceipt(result,plan);
   console.log(JSON.stringify({output,checked}));
-} finally { CandidatePopulationService.prototype.wide=wide; ProviderExchangeScheduler.prototype.get=get; HintService.prototype.request=request; }
+} finally { restoreAcquisition(); ProviderExchangeScheduler.prototype.get=get; HintService.prototype.request=request; }

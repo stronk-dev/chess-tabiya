@@ -76,7 +76,7 @@ async function create(options) {
   const service=new RunService(storage,{...(repertoireSelector===undefined?{}:{opponentSelector:repertoireSelector}),...(options.recommendations?{progressStorage:storage}:{}),...(shapeRegistry===undefined?{}:{shapeRegistry}),...(packRegistry===undefined?{}:{packRegistry}),...(options.corpusTotal===undefined?{}:{corpusSource:new ExchangeCorpusSource({scheduler:providers.scheduler,monotonicNowMs:clock.now})})});
   const repertoires=options.repertoires?new RepertoireService(storage,service,new ExchangeCorpusSource({scheduler:providers.scheduler,monotonicNowMs:clock.now})):undefined;
   const hintGate={blocked:options.holdHintSource===true,waiters:new Set()},hintCounts={searches:0};
-  const hints=options.hints?new HintService({scheduler:{get:async(request,scope,signal)=>{
+  const hints=options.hints?new HintService({sourceGenerations:()=>({registry:"browser-fixture",engine:1}),scheduler:{get:async(request,scope,signal)=>{
     hintCounts.searches++;
     const result=await providers.scheduler.get(request,scope,signal);
     if(hintGate.blocked)await new Promise((resolve,reject)=>{

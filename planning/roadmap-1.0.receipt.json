@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f8ddbc7fb05a9a2ff0bda2b194b01565ca801df87188d2b401781508d230d447",
+    "roadmap": "sha256:7fc68d55ec7024eebec12781292d8e5b219df6c4866d993b443ebb0b04110bf5",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:3b799953a62da9fb306416a61b2eccc7d99a71a27844a74b35b81b9ca67b1b10",
-    "rfcRegister": "sha256:e1ad5cd480c0d7eae4e1e533e67539c22e9635408dd8d08c3062971acc00576d",
+    "workState": "sha256:0842492fd2fb1903c3c001f8fa81d65e4188c4424577f07b424350ee478c4364",
+    "rfcRegister": "sha256:068ab93e9fc303e63e98f2654b32ebb5bcc64173433df9919bbbc5f6eb973e2c",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
-    "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
-    "rest": "sha256:51e99e1da5f0d91ce642457de8e3e4410ff19ee49c4d0088518c83f6a46bb533"
+    "application": "sha256:7600ab54572b8e91519cee41aa264479e952993ea1f0b5a4438e5ebff9b36993",
+    "rest": "sha256:c09af34df2ab4ba1ec5640d9d327e00cea6dab95e292323adc148da5863a92b0"
   },
   "summary": {
     "capabilities": 14,
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 632,
-      "doing": 178,
+      "doing": 177,
       "blocked": 1064,
-      "done": 1949,
+      "done": 1957,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Implement accepted Hint§7b actual registry string and established-engine numeric generations with bounded startup/original action identities, absolute source-work deadline and fixed full begin/advance/yield checks. Preserve original permissions, complete populations and valid shared peers; measure real cost/budget boundaries. D4233 fine-step integration,D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
+      "nextAction": "Verify and apply only the already-chosen unified-grade requirements/digest migration for the exact92-pack population, then rerun real-content/startup and actual Hint measurements. D4241 Review clock/interim transport precision and D4242 current-source retention remain active; D4224 cost,D4225 memory,D4228 Review,ordinary26/D4167 and full1.0 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4233 live Hint authority checkpoint verified: immutable original writer/intent, actual session/lease/grant/rated/disclosure/decision/FEN/role/workflow/issued-Campaign checks after capabilities and around source/voice/publication/GET; pending shared operations validate independently and pure completed horizons release subscriber authority. Three actual predecessor HTTP failures,182/nine expanded passes; frozen normal20564software/all584938.73s+7performance/four66.09s/types/build/governance pass. Independently reviewed D4236 bounded stale binding and D4237 genuine Campaign context close with actual code/test proof. Canonical evidence unchanged. D4233 fine-step integration,D4234/D4235/D4224/D4225/D4228/ordinary26/D4167/D3928 remain; no parent/capability completes.",
+        "summary": "D4233–35 finite Hint source handoff verified: current original action authority at each stage, distinct actual provider generations/cold identity, bounded async actions, original absolute source cap and cooperative complete packet acquisition. Independently reviewed D4238/D4239 fault fixes and D4240 observers/preflight; D4243 unchanged-population scan repair and D4244 doc reconciliation. Final20588software/all585873.97s+7performance/four69.23s/types/Svelte/build/governance pass. Canonical1928/1928 and24/89 qualification unchanged. Native smoke stops at D3928 before Hint: no p95/memory/native clearance. Parent RFCs/capabilities/milestones remain open.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -640,7 +640,10 @@
           "docs/guided-hint.md",
           "apps/server/src/hint-service.test.ts",
           "apps/server/src/hint-lifetime.test.ts",
-          "apps/server/src/hint-campaign.test.ts"
+          "apps/server/src/hint-campaign.test.ts",
+          "apps/server/src/hint-acquisition.test.ts",
+          "tools/d3497-hint-latency/acquisition-observer.ts",
+          "packages/runtime/src/review-map.test.ts"
         ],
         "anchors": [
           {
@@ -656,7 +659,7 @@
           {
             "kind": "work_state",
             "id": "D3768",
-            "digest": "sha256:90d946dd22858bba5504f73d020bb9979c366a3997b80a6f7ff8ba6776f41b98"
+            "digest": "sha256:6b16a8571328177e143dc400bb15082f3b144506479401bf967e6e24737c515a"
           },
           {
             "kind": "work_state",
@@ -1331,22 +1334,22 @@
           {
             "kind": "work_state",
             "id": "D4233",
-            "digest": "sha256:c7ee202eca79b17bbc69cde6d4a5e785c6a1fdcd7c37b16c4ab1290486e0f4c3"
+            "digest": "sha256:f786cb0b2588d37573e17c43d1f452f5a710d87b988e5d66fe7d51e35a3a1375"
           },
           {
             "kind": "work_state",
             "id": "D4234",
-            "digest": "sha256:d351e77ede9ce08b2416e6dbb74bb20364307a0d67a851b2b4bf3b48278ce417"
+            "digest": "sha256:f0968eef56f783c20d92325cf0953ab90045304cbf6a46f8414941f33a35e319"
           },
           {
             "kind": "work_state",
             "id": "D4235",
-            "digest": "sha256:f94fda17d4df49a0aabee9e47d77f1e7db977b56a1456e3c2b239a416fcad9c3"
+            "digest": "sha256:cabe1a9558626748c208ed51fd2997319d2172f3d50dcad00149831bf1a94476"
           },
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:58d982560527260cdbe258fd2fa820ca871c8ed37dabec0d3ccacfdaedd66faf"
+            "digest": "sha256:44dc5664af00f0c41cca43cb104d37e23e4541e59aeddb608ffea8af3ee1b314"
           },
           {
             "kind": "work_state",
@@ -1357,6 +1360,31 @@
             "kind": "work_state",
             "id": "D4237",
             "digest": "sha256:4518d9125ca00d6cf8cd1cafb882b40dc54ef65d253235a7ad98061251c6b342"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4238",
+            "digest": "sha256:3f073971aed14a44c6eb67399f33ec0f50849afab6909d93dea1bb7428af31e4"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4239",
+            "digest": "sha256:f64e55a122aaf2ce1353185102638869ec9b787269ca8c1860fe3d22bffe4793"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4240",
+            "digest": "sha256:06a7dd89622060e8cb325e4c99e16a065c6e815ca1ee8bfc09918f0d4f0e3214"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4243",
+            "digest": "sha256:5103b7a509305a4dbc75224a108ceb5fbe4279f792d6cf1b2e4d8aae35b8d00d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4244",
+            "digest": "sha256:62b436675009a088add227a094b23d5aa6092d7e81a1533ce86d7db154374afb"
           }
         ]
       },
@@ -1377,10 +1405,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement accepted Hint§7b actual registry string and established-engine numeric generations with bounded startup/original action identities, absolute source-work deadline and fixed full begin/advance/yield checks. Preserve original permissions, complete populations and valid shared peers; measure real cost/budget boundaries. D4233 fine-step integration,D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
+      "nextAction": "Verify and apply only the already-chosen unified-grade requirements/digest migration for the exact92-pack population, then rerun real-content/startup and actual Hint measurements. D4241 Review clock/interim transport precision and D4242 current-source retention remain active; D4224 cost,D4225 memory,D4228 Review,ordinary26/D4167 and full1.0 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4233 live Hint authority checkpoint verified: immutable original writer/intent, actual session/lease/grant/rated/disclosure/decision/FEN/role/workflow/issued-Campaign checks after capabilities and around source/voice/publication/GET; pending shared operations validate independently and pure completed horizons release subscriber authority. Three actual predecessor HTTP failures,182/nine expanded passes; frozen normal20564software/all584938.73s+7performance/four66.09s/types/build/governance pass. Independently reviewed D4236 bounded stale binding and D4237 genuine Campaign context close with actual code/test proof. Canonical evidence unchanged. D4233 fine-step integration,D4234/D4235/D4224/D4225/D4228/ordinary26/D4167/D3928 remain; no parent/capability completes.",
+        "summary": "D4233–35 finite Hint source handoff verified: current original action authority at each stage, distinct actual provider generations/cold identity, bounded async actions, original absolute source cap and cooperative complete packet acquisition. Independently reviewed D4238/D4239 fault fixes and D4240 observers/preflight; D4243 unchanged-population scan repair and D4244 doc reconciliation. Final20588software/all585873.97s+7performance/four69.23s/types/Svelte/build/governance pass. Canonical1928/1928 and24/89 qualification unchanged. Native smoke stops at D3928 before Hint: no p95/memory/native clearance. Parent RFCs/capabilities/milestones remain open.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1997,7 +2025,10 @@
           "apps/server/src/rest.ts",
           "docs/guided-hint.md",
           "apps/server/src/hint-service.test.ts",
-          "apps/server/src/hint-campaign.test.ts"
+          "apps/server/src/hint-campaign.test.ts",
+          "apps/server/src/hint-acquisition.test.ts",
+          "tools/d3497-hint-latency/acquisition-observer.ts",
+          "packages/runtime/src/review-map.test.ts"
         ],
         "anchors": [
           {
@@ -2248,7 +2279,7 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:58d982560527260cdbe258fd2fa820ca871c8ed37dabec0d3ccacfdaedd66faf"
+            "digest": "sha256:44dc5664af00f0c41cca43cb104d37e23e4541e59aeddb608ffea8af3ee1b314"
           },
           {
             "kind": "rfc",
@@ -3053,17 +3084,17 @@
           {
             "kind": "work_state",
             "id": "D4233",
-            "digest": "sha256:c7ee202eca79b17bbc69cde6d4a5e785c6a1fdcd7c37b16c4ab1290486e0f4c3"
+            "digest": "sha256:f786cb0b2588d37573e17c43d1f452f5a710d87b988e5d66fe7d51e35a3a1375"
           },
           {
             "kind": "work_state",
             "id": "D4234",
-            "digest": "sha256:d351e77ede9ce08b2416e6dbb74bb20364307a0d67a851b2b4bf3b48278ce417"
+            "digest": "sha256:f0968eef56f783c20d92325cf0953ab90045304cbf6a46f8414941f33a35e319"
           },
           {
             "kind": "work_state",
             "id": "D4235",
-            "digest": "sha256:f94fda17d4df49a0aabee9e47d77f1e7db977b56a1456e3c2b239a416fcad9c3"
+            "digest": "sha256:cabe1a9558626748c208ed51fd2997319d2172f3d50dcad00149831bf1a94476"
           },
           {
             "kind": "work_state",
@@ -3074,6 +3105,31 @@
             "kind": "work_state",
             "id": "D4237",
             "digest": "sha256:4518d9125ca00d6cf8cd1cafb882b40dc54ef65d253235a7ad98061251c6b342"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4238",
+            "digest": "sha256:3f073971aed14a44c6eb67399f33ec0f50849afab6909d93dea1bb7428af31e4"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4239",
+            "digest": "sha256:f64e55a122aaf2ce1353185102638869ec9b787269ca8c1860fe3d22bffe4793"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4240",
+            "digest": "sha256:06a7dd89622060e8cb325e4c99e16a065c6e815ca1ee8bfc09918f0d4f0e3214"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4243",
+            "digest": "sha256:5103b7a509305a4dbc75224a108ceb5fbe4279f792d6cf1b2e4d8aae35b8d00d"
+          },
+          {
+            "kind": "work_state",
+            "id": "D4244",
+            "digest": "sha256:62b436675009a088add227a094b23d5aa6092d7e81a1533ce86d7db154374afb"
           }
         ]
       },
@@ -3530,7 +3586,7 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:58d982560527260cdbe258fd2fa820ca871c8ed37dabec0d3ccacfdaedd66faf"
+            "digest": "sha256:44dc5664af00f0c41cca43cb104d37e23e4541e59aeddb608ffea8af3ee1b314"
           },
           {
             "kind": "rfc",

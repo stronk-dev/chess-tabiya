@@ -1885,7 +1885,7 @@ export function createRestHandler(
         try { intent = parseRequestedAssistanceV1(body.assistance); }
         catch (error) { if (error instanceof AssistanceExchangeError) throw invalid(error.message); throw error; }
         const availability = serverAvailabilityFromProviderHealth(capabilities === undefined ? undefined : (await capabilities.get()).providerHealth);
-        // Capabilities may await an engine handshake. No pre-await identity, lease or policy
+        // Capabilities are an asynchronous snapshot read. No pre-await identity, lease or policy
         // snapshot is permission to admit work after that wait.
         const currentPrincipal = authenticate();
         const access = service.hintAccess(route.runId, currentPrincipal, originalWriter);
@@ -1928,7 +1928,7 @@ export function createRestHandler(
             throw error;
           }
         };
-        return json(200, { clientRequestId, hint: hints.request({ learnerId: currentPrincipal.learnerId, writerId: originalWriter, assistance: intent, revalidate, run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: authoritative.context, voiceRequested: authoritative.config.voice === "persona" }, rung, clientRequestId) });
+        return json(200, { clientRequestId, hint: await hints.request({ learnerId: currentPrincipal.learnerId, writerId: originalWriter, assistance: intent, revalidate, run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: authoritative.context, voiceRequested: authoritative.config.voice === "persona" }, rung, clientRequestId) });
       }
       if (route.action === "shape-firings/query") {
         requireJson(request);

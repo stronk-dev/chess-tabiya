@@ -74,10 +74,11 @@ Until it lands, the stored-preference term of the minimum is simply absent.
 
 ## How a hint is built
 
-Known terminal gap (D3768): controlled provider fixtures through the actual candidate compiler
-and selector produce a reply-surviving fork hint for a stalemating double attack, although there
-are no replies. Checkmate selects mate instead. This is a source semantic boundary awaiting
-independent contract repair, not a real-engine recommendation or completed coaching behavior.
+Terminal fork safety uses the actual nonterminal source: zero-reply mate and stalemate cannot
+produce a reply-surviving fork caption. Both-color controls through source, packet, selection,
+disclosure and module rendering preserve the geometric double-attack family on stalemate and
+select mate on checkmate. `hint-current-sources.test.ts` verifies this already-shipped boundary;
+D3768 still owns broader qualification, API/native and consumer duties.
 
 1. **Registry** (`packages/runtime/src/hint-registry.ts`). There are seven families, set-equal to
    D1397's frozen list: mate in one, forced mate, double attack, fork survives reply, discovered
@@ -93,7 +94,7 @@ independent contract repair, not a real-engine recommendation or completed coach
    this corrects receipt order without changing hint selection, payloads, rungs or permissions.
    The current matrix uses horizon/disclosure@2 for fork survival and promotion pressure;
    the other five families retain@1. Their actual sources are nonterminal fork survival and
-   direct-FEN promotion pressure from candidate compiler2, not relabelled predecessor values.
+   direct-FEN promotion pressure from candidate compiler8, not relabelled predecessor values.
 3. **Horizon** (`selectHintHorizon`, `hint-distance.ts`). One bounded Stockfish principal variation
    is scanned to four plies. Only the root side's own ply 1 (`root_direct`) and ply 3
    (`root_followup_in_line`) are read, joined to the original sealed events and readings of the
@@ -150,9 +151,23 @@ cannot adopt its ID or intent through repeat POST. Explicit DELETE and ordinary 
 
 Pending shared searches retain a set of independently checked actions. Revoking one action leaves
 an authorized peer running; with none left, source work aborts. Completed cached horizons retain
-source data without subscriber permissions. Provider-generation binding, the total source-work
-deadline and fine-grained cooperative acquisition remain D4234/D4235/D4224; packet-boundary checks
-alone do not complete that handoff.
+source data without subscriber permissions. Each acquisition stage, its real macrotask yield and
+sealed read recheck live authority, source identity and deadline. Full packets use the shared
+service’s begin/advance/read path; retired work is refused rather than reacquired.
+
+The application supplies two distinct actual source generations: registry string generation and
+established-engine numeric generation. Async POST reserves a bounded logical action before cold
+discovery and seals its public identity only after the real handshake. Retained actions never
+adopt a replacement source: a change to either domain returns identity_mismatch under the old ID
+without another discovery/search. Explicit removal permits a new action/source identity.
+Both acquired generation and complete normalized request identities are checked before collectors.
+
+Source work has one timeoutMs+1000 absolute cap, starting before discovery. Shared work retains
+the creator’s cap; joining cannot extend it, while earlier individual expiry removes only that
+waiter. The scheduler receives the remaining positive integer budget without changing normalized
+provider timeout. Timely source completion clears its timers before optional voice’s independent
+two-second bound. These safety bounds do not establish real-engine p95 or native usability;
+D4224 cost, D4225 memory and the complete Hint RFC remain open.
 
 The shared horizon is keyed by the complete decision digest, including its branch and event
 head, not merely by a node/FEN. A different decision cannot reuse a sealed occurrence from

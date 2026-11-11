@@ -890,6 +890,7 @@ async function composeServices(
   // one-item rendered view; its absence or failure never suppresses the deterministic hint.
   const hints = new HintService({
     scheduler: providers.scheduler,
+    sourceGenerations: () => ({ registry: providerHealth.generation("stockfish-analysis"), engine: providerEngines.establishedGeneration("stockfish-analysis") }),
     requestedEngine: async () => {
       const engine = await providerEngines.start("stockfish-analysis");
       return Object.freeze({ id: engine.id, version: engine.version });

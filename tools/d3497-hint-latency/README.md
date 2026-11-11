@@ -22,6 +22,14 @@ directories. No user database, session, source fixture or production setting is
 changed. The instrument observes the existing service/scheduler/population paths;
 it does not replace chess results or acquire a hidden alternative source.
 
+The current observer follows `begin → advance → read`, including actual stage count,
+active collector time, longest step and elapsed time through the macrotask yields. A packet
+is complete only after the real sealed read; interrupted acquisition remains visible as
+pending/failed/retired and cannot become an accepted complete measurement. Both HTTP and
+browser instruments use this observer, and the normal checker typechecks both capture entries.
+HTTP request timing awaits the actual generation-sealed acknowledgement. Historical receipts
+remain historical; the new path requires a new measurement and does not inherit latency clearance.
+
 `plan.json` freezes four positions, six arms, all five requested rungs and twenty
 samples per cell. Coldness means fresh application Hint and packet caches, not
 cold OS executable pages. Warmness means a new run on the same FEN/source in the

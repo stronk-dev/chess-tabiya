@@ -12,7 +12,7 @@ import { pathToFileURL } from "node:url";
 import { chromium, expect, type Page } from "@playwright/test";
 import { compileAssistanceRequest, hintDecisionStamp, parseHintResponse, PRIMARY_EVIDENCE_MANIFEST, HINT_COMPILER_VERSION, CANDIDATE_PACKET_COMPILER_VERSION, type DrillRun } from "@chess-tabiya/runtime";
 import { createApplication, GUIDED_HINT_PROFILE } from "../../apps/server/src/application.js";
-import { CandidatePopulationService } from "../../apps/server/src/candidate-population-service.js";
+import { observeHintAcquisition } from "./acquisition-observer.js";
 import { ProviderExchangeScheduler } from "../../apps/server/src/provider-exchange.js";
 import { HintService } from "../../apps/server/src/hint-service.js";
 import type { VoiceProvider } from "../../apps/server/src/guidance.js";
@@ -31,7 +31,7 @@ const digest = (bytes: Buffer | string) => createHash("sha256").update(bytes).di
 const providerBinaryDigest = `sha256:${createHash("sha256").update("tabiya/engine.binary.v1\0").update(readFileSync(binary)).digest("hex")}`;
 const tracked = execFileSync("git", ["ls-files"], { encoding: "utf8" }).trim().split("\n");
 const sources = [...tracked.filter(path => /^(apps\/(server|web)\/src|packages\/(runtime|schema)\/src)\//u.test(path) && !/\.(test|spec)\./u.test(path)),
-  "tools/d3497-hint-latency/browser-capture.ts", "tools/d3497-hint-latency/browser-receipt.mjs", "tools/d3497-hint-latency/browser-plan.json", plan.basePlan];
+  "tools/d3497-hint-latency/acquisition-observer.ts", "tools/d3497-hint-latency/browser-capture.ts", "tools/d3497-hint-latency/browser-receipt.mjs", "tools/d3497-hint-latency/browser-plan.json", plan.basePlan];
 const sourceDigests = Object.fromEntries(sources.map(path => [path, digest(readFileSync(path))]));
 function built(directory: string): string[] { return readdirSync(directory, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? built(join(directory, entry.name)) : [join(directory, entry.name)]); }
 const buildDigests = Object.fromEntries([...built("apps/web/dist"), ...built("apps/server/dist")].sort().map(path => [path, digest(readFileSync(path))]));
@@ -39,16 +39,7 @@ type Trace = { entered: number; deps: number; packets: any[]; sources: any[] };
 let active: Trace | undefined;
 const context = new AsyncLocalStorage<Trace>();
 const now = () => nodePerformance.now();
-const wide = CandidatePopulationService.prototype.wide;
-CandidatePopulationService.prototype.wide = function(fen) {
-  const trace = context.getStore(), before = this.stats(), result = wide.call(this, fen), after = this.stats();
-  if (trace) {
-    trace.deps = now();
-    trace.packets.push({ fen, completedAt: trace.deps, kind: result.kind, hitsDelta: after.hits - before.hits, missesDelta: after.misses - before.misses,
-      ...(result.kind === "ready" ? { id: result.receipt.packet.id, manifestDigest: result.receipt.packet.manifestDigest, legalMoves: result.receipt.packet.legalMoves.length, candidates: result.receipt.packet.candidates.length } : {}) });
-  }
-  return result;
-};
+const restoreAcquisition = observeHintAcquisition(() => context.getStore());
 const get = ProviderExchangeScheduler.prototype.get;
 ProviderExchangeScheduler.prototype.get = async function(this: ProviderExchangeScheduler, ...args: Parameters<typeof get>) {
   const trace = context.getStore(), result = await get.apply(this, args);
@@ -240,4 +231,4 @@ try {
     writeFileSync(output, JSON.stringify({ version: 1, workItem: plan.workItem, status: "incomplete_rejected", error: String(error), samples, sourceDigests, buildDigests, startups, rows, baselines }, null, 2) + "\n", { flag: "wx" });
   }
   throw error;
-} finally { await browser.close(); CandidatePopulationService.prototype.wide = wide; ProviderExchangeScheduler.prototype.get = get; HintService.prototype.request = request; }
+} finally { await browser.close(); restoreAcquisition(); ProviderExchangeScheduler.prototype.get = get; HintService.prototype.request = request; }

@@ -2,18 +2,21 @@
 
 ## Current continuation — 2026-11-11
 
-D4233's live-authority checkpoint is verified. Hint retains the original writer and parsed
-assistance intent, then uses actual current identity/RunService authorities after capabilities,
-around source waits/packet yields, before/after voice/publication and on GET. Shared pending
-actions revalidate independently; completed horizons clear permission-bearing subscribers.
-Independent review caught and cleared D4236 (stale GET forgetting the original binding) and
-D4237 (raw pack rather than issued Campaign context). Both have actual production-boundary
-controls and path-backed closeout. Three genuine predecessor HTTP failures become182 expanded
-passes/nine files. Frozen normal gates pass20564 software/all584 files938.73s and7 isolated
-performance/four66.09s, types/build/governance. Canonical evidence remains current without
-regeneration. D4233 stays doing for fine-advance integration; next are D4234 real generation/
-startup identity, D4235 source-work deadline and D4224 cooperative acquisition/cost proof.
-No whole caller, capability or1.0 milestone completes from this checkpoint.
+D4233–35's finite Hint caller handoff is verified: original live action authority at every
+actual source stage, distinct real registry/engine generations, cold handshake identity,
+one absolute source-work cap, independent shared subscribers and cooperative full-packet
+begin/advance/macrotask/read. D4238/D4239 repair deadline crossing and genuine foreign PV
+admission before collectors. D4240 instruments now observe that actual path; D4243 preserves
+the complete singleton scan within its unchanged5s limit; D4244 reconciles current docs.
+Independent reviews accept the bounded changes. Final normal gates pass20588 software/all585
+files873.97s,7 isolated performance/four69.23s, types/Svelte0errors0warnings, build and governance.
+Canonical1928/1928 and24/89 qualification remain current without regenerated metadata.
+The first full run’s two verification failures and the fixes remain recorded in the source plan.
+Real-engine smoke still stops at the existing D3928 grade requirement refusal before Hint:
+there is no fresh native/p95/memory clearance. Next: apply the narrowly authorized unified-grade
+requirements migration after exact scope verification, then rerun content/startup and measurement.
+D4241 Review job contract precision and D4242 current retention measurements remain active.
+No whole caller RFC, capability or1.0 milestone completes from this checkpoint.
 
 The full 1.0 goal remains active. D4224's construction8 source/service checkpoint implements the
 accepted distinct foundation receipt, shared original foundation/full inputs, retained tactical
@@ -26,8 +29,8 @@ Fresh committed software passes all20550 tests/583 files in843.04s, completing c
 after a measured sleep interruption. Normal types, seven performance checks, build and governance
 also pass. The next actual caller contract, Hint §7b (D4233–35), is independently accepted: owner
 isolation, fresh live authority, genuine provider generations, finite source/voice phases and
-cooperative full acquisition. Implementation continues below that contract; complete currentness, cooperative execution and
-cost/budget proof remain owed. D4224/D4225/D4228 and the ordinary consumer,
+cooperative full acquisition. The finite currentness/cooperative caller implementation is verified above;
+cost/budget proof and the remaining consumer adoptions remain owed. D4224/D4225/D4228 and the ordinary consumer,
 content/native and release holds remain open.
 
 The preceding D4224 private compiler-state dependency is verified: the existing

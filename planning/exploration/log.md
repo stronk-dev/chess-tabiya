@@ -41795,3 +41795,34 @@ source-work cap, then D4224 fixed begin/advance/yield integration and actual cos
 The registry instance is stockfish-analysis (string generation); evidence.stockfish_analysis is
 its family, not the generation lookup argument. Engine acquisition generation is a separate
 numeric domain. D4224/D4225/D4228/ordinary26/D4167/D3928 and full1.0 release obligations remain.
+
+
+## 2026-11-11 — Hint source handoff, actual acquisition observers and verified checkpoint
+
+Implemented accepted Hint §7b against actual application provider generations. Bounded async
+cold actions seal only after real discovery, retain original identity across either generation
+change, and share source work without sharing permission. Discovery/search/full cooperative
+acquisition/selection obey the original timeoutMs+1000 cap; per-stage live authority and sealed
+read remain mandatory, with independent voice after timely source completion. Source and
+receipt populations, disclosure, schemas and normalized engine timeout are unchanged.
+
+Independent review returned two genuine faults: D4238 advanced twice after a surviving peer’s
+authority callback crossed the creator cap; D4239’s genuine foreign PV returned internal_error.
+Both now fail before further source work, with identity_mismatch and zero begins for the latter.
+D4240 moves disposable HTTP/browser observation and production preflight controls to actual
+begin/advance/read, typechecking both captures without changing historical measurements.
+D4244 reconciles already-shipped terminal safety in docs. D4241 Review recipe and D4242 current
+Hint retention audits remain active, without guessed optimization or narrowed source populations.
+
+The first normal run records20586 passes and two verification failures in948.31s: obsolete wide
+spy and the unchanged5s singleton census timing out. Repairs preserve all preflight guarantees,
+scan trees/extensions/symlink handling/singleton assertions and deadline. Focused29/two pass.
+Final ordinary lifetime target176/seven24.45s plus types passes; final full normal
+make verify-software build verify-governance exits0:20588/all585873.97s,7performance/four69.23s,
+types/Svelte0errors0warnings, build and R1–R10/C1–C8/P1–P7. Canonical1928/1928 and24/89
+qualification stay current without regenerated metadata. No production changes follow that run.
+
+D4233–35/D4238–40/D4243/D4244 close finite duties with path evidence. Native smoke exits2 at
+existing D3928 before any Hint timing: no p95, memory or native clearance. Next checkpoint is
+the narrow already-chosen unified-grade requirements migration after exact scope verification,
+then real content/startup/measurement. Parent Hint, D4224/D4225/D4228 and full1.0 remain open.
