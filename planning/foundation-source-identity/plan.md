@@ -2809,15 +2809,15 @@ design/research/module-evidence-assembly.md.
 ### 2026-11-11 — Measured revision 10 Profile rebuild and reads
 
 The [aggregate report](profile-current10-cost-2026-11-11.json) records
-`make profile-source-cost` on `284d978a`. The real worker claimed and completed
-all 200 runs in 62.2 minutes, with 251 lease renewals. The projector accounted for
+`make profile-source-cost` on `284d978a`. The production batch runner claimed and completed
+all 200 runs, with 62.2 minutes of combined claim time and 251 lease renewals. The projector accounted for
 58.2 minutes. The stored coverage contains 6,400 decisions across all 200 runs
 at revision 10. All 6,400 choice decisions matched the independent complete-legal
 calculation, including the original game counts, card values, intervals, contributors
 and share outputs.
 
-Cold Profile took 2.21 seconds and read 200 source images. A warm read took 1.29
-seconds without rereading any source images. The complete filtered and unfiltered
+Cold Profile took 2.21 seconds and made 200 explicit source-image metadata reads.
+A warm read took 1.29 seconds and made no further metadata reads. The unfiltered
 54-source coverage read took 51.0 seconds across the cohort. Reading every page
 of pawn-choice detail took 42.2 seconds across the cohort. D3300 retains the open
 projector cost work. These are local timings for repeated 64-ply games, with

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a2d3b32150129fce9dd4275243c3083f7a85983e7948f9deefef330ddbf68fb5",
+    "roadmap": "sha256:322cf0171be0428e69cc271112bdf21f8503180b2197a63cb1a5bcc421a9d2fd",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:6da5c62ec1ed09fdcb7a2870b8da5a7a86727b4a4414254df895e2914d421fdd",
-    "rfcRegister": "sha256:b4778c5052edb6eff8598a4e1d6e316359d7d2297b28e699859aaca08834e013",
+    "workState": "sha256:db93f64297cb222ee72d45288e0b61068c8c9fe0b97c6c329d02ab21930e1daf",
+    "rfcRegister": "sha256:263b03be13e59d59560f2ec6b1c440d7584a4bd1cb330633f14e56d3aa11429e",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -18,11 +18,11 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 80,
+    "assignedRfcs": 79,
     "activeRfcLifecycle": {
       "draft": 20,
       "accepted": 0,
-      "implementing": 51,
+      "implementing": 50,
       "awaiting": 9,
       "implemented": 0,
       "superseded": 0,
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 631,
-      "doing": 174,
+      "doing": 173,
       "blocked": 1063,
-      "done": 1931,
+      "done": 1932,
       "refused": 163
     },
     "workItems": {
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Close D4200 against its implementation checks. Continue the remaining source qualifications and reverse consumer adoption under the existing contracts.",
+      "nextAction": "Qualify the seven remaining outcome families and continue reverse consumer adoption under the existing contracts.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. RFC closeout, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. D4200 is closed. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
@@ -588,7 +588,7 @@
           "packages/runtime/src/semantic-validation-count-population.test.ts",
           "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
           "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
-          "rfc/source-local-evidence-availability.md",
+          "rfc/archive/source-local-evidence-availability.md",
           "apps/server/src/longitudinal-revision9-fixture.test.ts",
           "rfc/archive/one-edge-collector-closure.md",
           "packages/runtime/src/internal/longitudinal-native-incidence.ts",
@@ -1065,7 +1065,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:4ee5a6f3c41bc36f8138bc437999ec2a9e016d34e19db03235d1a6933a606e7e"
+            "digest": "sha256:aa73bf04b374b15973756f73737dac9d79c2e1d35176d2b15db795c1ec3e18dc"
           },
           {
             "kind": "work_state",
@@ -1218,9 +1218,9 @@
             "digest": "sha256:fdff1807ed0285a7843536b5212c9d0f950b14c10f6e0cd05904ff99fb67dd1c"
           },
           {
-            "kind": "rfc",
-            "id": "source-local-evidence-availability.md",
-            "digest": "sha256:f1a678bb733a1917aa441483e906e00ec3b68d77252be7d246044f625da05842"
+            "kind": "work_state",
+            "id": "D4200",
+            "digest": "sha256:6173ed42788220afd6d473feca877a86266fcf954d66f068d50b9fe57139f788"
           },
           {
             "kind": "work_state",
@@ -1246,10 +1246,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Close D4200 against the implementation checks and recorded workload. D4179 retains native browser proof behind D3928. Continue the remaining source qualifications and consumer adoption.",
+      "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. Native desktop and phone proof remain behind D3928. D4200's 200-run cost measurement is recorded. Its RFC closeout, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+        "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source and detail pages retain original ordered occurrences and reconstruct both stress trees. The selected Review action passes mounted and authenticated refusal controls. Native desktop and phone proof remain behind D3928. D4200 is closed with the measured 200-run revision 10 workload. Seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
           "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
@@ -1826,7 +1826,7 @@
           "packages/runtime/src/semantic-validation-count-population.test.ts",
           "packages/runtime/src/semantic-validation-pawn-outcome.test.ts",
           "planning/foundation-source-identity/profile-current9-cost-2026-11-10.json",
-          "rfc/source-local-evidence-availability.md",
+          "rfc/archive/source-local-evidence-availability.md",
           "apps/server/src/longitudinal-revision9-fixture.test.ts",
           "rfc/archive/one-edge-collector-closure.md",
           "packages/runtime/src/internal/longitudinal-native-incidence.ts",
@@ -2713,7 +2713,7 @@
           {
             "kind": "rfc",
             "id": "subject-safe-semantic-selection.md",
-            "digest": "sha256:4ee5a6f3c41bc36f8138bc437999ec2a9e016d34e19db03235d1a6933a606e7e"
+            "digest": "sha256:aa73bf04b374b15973756f73737dac9d79c2e1d35176d2b15db795c1ec3e18dc"
           },
           {
             "kind": "work_state",
@@ -2826,9 +2826,9 @@
             "digest": "sha256:fdff1807ed0285a7843536b5212c9d0f950b14c10f6e0cd05904ff99fb67dd1c"
           },
           {
-            "kind": "rfc",
-            "id": "source-local-evidence-availability.md",
-            "digest": "sha256:f1a678bb733a1917aa441483e906e00ec3b68d77252be7d246044f625da05842"
+            "kind": "work_state",
+            "id": "D4200",
+            "digest": "sha256:6173ed42788220afd6d473feca877a86266fcf954d66f068d50b9fe57139f788"
           },
           {
             "kind": "work_state",
@@ -4116,7 +4116,7 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Close the verified D4200 contract and continue source qualification and reverse consumer work.",
+      "nextAction": "Continue source qualification and reverse consumer work toward the learner model.",
       "latestCheckpoint": {
         "at": "2026-11-11",
         "summary": "Migration 36 and revision 10 preserve saved games while rebuilding seven derived families. Five genuine predecessor jobs pass startup invalidation, worker publication, reopen and repair. Migration rollback leaves revision 9 data intact on an index conflict. Coverage export, restore rederivation and deletion pass. D4212 isolates invalid Profile cuts. The measured revision 10 worker completed all 200 runs. D3928 and broader learner-model work remain.",
@@ -5275,7 +5275,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 29,
+      "rfcCount": 28,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

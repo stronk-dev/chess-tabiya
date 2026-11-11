@@ -110,10 +110,9 @@ receipt: `planning/longitudinal-store/prefix-reuse-2026-10-06.md`.
 
 ## Independently accepted source-availability follow-up
 
-`source-local-evidence-availability.md` is independently accepted2026-11-10 for D4200's
-follow-up to §A.2.5a's whole54 refusal. It owns compact durable source-unknown coverage,
-revision10 and seven-family publication/read/rebuild/account adoption. Existing revision9
-production semantics stand until implementation; this does not close the parent's wider duties.
+`archive/source-local-evidence-availability.md` implements D4200. It replaces §A.2.5a's
+whole-population refusal with durable per-source availability, revision 10 and seven-family
+publication, reads, rebuild and account adoption. This RFC retains its wider duties.
 
 ## Summary
 

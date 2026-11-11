@@ -35209,12 +35209,12 @@
     },
     {
       "id": "D4200",
-      "state": "doing",
-      "sourceGlyph": "🔬",
-      "sourceDigest": "sha256:709612ce4eaa0ec6c5ce394ec2585a8d23543656ac42c87d4c9e1ba8db60dc9f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6173ed42788220afd6d473feca877a86266fcf954d66f068d50b9fe57139f788",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-11-10"
+      "evidence": "rfc/archive/source-local-evidence-availability.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D4201",

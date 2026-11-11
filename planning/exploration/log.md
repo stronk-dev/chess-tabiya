@@ -40856,3 +40856,18 @@ mismatch control passed. The compact results are in
 `planning/foundation-source-identity/profile-current10-cost-2026-11-11.json`.
 The synthetic local workload does not establish a cross-revision speed change.
 D3300 remains open.
+
+### 2026-11-11 — D4200 source-local availability closed
+
+The ten criteria are traced in the foundation plan. Original source failures,
+selector3, seven-family revision 10 publication and typed reads pass together.
+The genuine predecessor fixture verifies migration 36, startup requeue, worker
+publication, reopen and repair. Account export, deletion and restore preserve
+the agreed source behavior. Full local software on `c59e565b` passed 18,977
+tests and seven performance tests. Governance and build passed separately.
+The RFC is archived and the tracker records D4200 as done.
+
+The 62.2-minute aggregate above is combined claim time in the in-process
+production batch runner with comparison checks. The 51.0-second reading is the
+unfiltered 54-source snapshot. Filtered reads have separate correctness tests.
+The seven pending qualifications, reverse consumer adoption and D3928 remain.

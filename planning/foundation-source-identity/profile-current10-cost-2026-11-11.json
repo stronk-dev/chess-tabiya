@@ -2,7 +2,7 @@
   "recordedAt": "2026-11-11",
   "command": "make profile-source-cost",
   "launchCommit": "284d978a",
-  "measurementScope": "Local workstation with concurrent focused checks, semantic validation and compilation. Timings are observations of this workload. Cross-revision comparisons were uncontrolled.",
+  "measurementScope": "The production batch runner executed in process with independent operand checks on a local workstation under concurrent verification. Profile timings include internal snapshot replay. Source-image counters measure explicit Profile metadata reads. Cross-revision comparisons were uncontrolled.",
   "cohort": {
     "instrument": "disposable D4159/D4147",
     "node": "v24.22.1",

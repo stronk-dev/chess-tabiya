@@ -1,6 +1,6 @@
 # RFC: source-local evidence availability
 
-- **Status:** implementing — independently accepted2026-11-10 after R1–R3 repair; genuine schema35/revision9 predecessor and source-local calculator verified. Selector/consumer3 implementation has bounded independent code acceptance and focused/type/scheduling controls; canonical1470/1470 over89subjects/17qualified passes; complete normal35d7cc5c software18944/571 and performance7/four pass; durable revision10 publication, read, rebuild and account paths are integrated. The genuine revision 9 worker upgrade and migration rollback pass. Full software and current cost proof remain. No wider foundation completion.
+- **Status:** implemented — 2026-11-11. Source-local calculation, selector3 and durable revision 10 verified through actual migration, reads, rebuild, account lifecycle and measured worker cost.
 - **Author:** codex, under the owner's full-foundation and pre-launch zero-legacy rulings.
 - **Created:** 2026-11-10
 - **Parent / amends:** subject-safe-semantic-selection.md §§5.1–5.3; longitudinal-store.md
@@ -456,7 +456,7 @@ draft rather than implemented by inference.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Complete D4200 source/selection/durable-coverage handoff and all ten verification criteria | `source-local-evidence-availability.md` | Implementation commits and complete normal gates in the existing foundation plan and exploration log | |
+| D1 | Complete D4200 source/selection/durable-coverage handoff and all ten verification criteria | `source-local-evidence-availability.md` | Foundation plan §2026-11-11 and exploration log | 2026-11-11 |
 
 Wider D1716/D4167/D4175 work is not discharged by this RFC alone.
 
@@ -475,3 +475,13 @@ Wider D1716/D4167/D4175 work is not discharged by this RFC alone.
 - 2026-11-10: bounded predecessor preparation independently reviewed: actual five-job schema35/
   revision9 capture, six populated families and standalone877366-byte fixture; normal restore
   controls2/2 and types pass. This is not revision10 startup/rebuild or expanded source reach.
+
+- 2026-11-11: implemented and verified all three parts together. Actual one-edge acquisition
+  bounds selector3 at 54 sources. Migration 36 upgrades five genuine predecessor jobs and
+  publishes all seven revision 10 families. Source coverage survives original-cut reads,
+  rebuild, export, deletion and restore rederivation. Full local software on `c59e565b` passed
+  18,977 tests in 572 files and seven performance tests. Governance and build passed separately.
+  The 200-run production batch path on `284d978a` published 6,400 decision evaluations with
+  251 lease renewals. The [measurement](../../planning/foundation-source-identity/profile-current10-cost-2026-11-11.json)
+  and [criteria evidence](../../planning/foundation-source-identity/plan.md#2026-11-11--measured-revision-10-profile-rebuild-and-reads)
+  document the workload and its limits.

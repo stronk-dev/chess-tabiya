@@ -11,9 +11,11 @@ The full 1.0 goal remains active. On `c59e565b`, normal software verification pa
 publication, reads, rebuild and account lifecycle. Five genuine revision 9 jobs upgrade through
 startup and the real worker. The Profile fix D4212 isolates corrupt and superseded cuts so healthy
 games remain visible. The current workload rebuilt all 200 runs and retained exact coverage
-for 6,400 decisions. The worker took 62.2 minutes with 251 lease renewals. Cold and warm
+for 6,400 decisions. The production batch recorded 62.2 minutes of claim time and 251
+lease renewals. Cold and warm
 Profile reads took 2.21 and 1.29 seconds on this local workload. See the
 [revision 10 measurement](foundation-source-identity/profile-current10-cost-2026-11-11.json).
+D4200 is closed. [Implemented RFC](../rfc/archive/source-local-evidence-availability.md)
 
 D4179 now shows bounded defender-exposure summaries and typed source availability in Review.
 It carries original factory ordinals alongside the displayed facts, including where those orders
