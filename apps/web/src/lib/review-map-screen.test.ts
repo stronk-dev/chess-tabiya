@@ -594,6 +594,7 @@ describe("Review Map screen (rfc/review-map.md)", () => {
     const sources = {
       screen: readFileSync(resolve(ROOT, "apps/web/src/lib/ReviewMapScreen.svelte"), "utf8"),
       graph: readFileSync(resolve(ROOT, "apps/web/src/lib/ReviewEvalGraph.svelte"), "utf8"),
+      exposure: readFileSync(resolve(ROOT, "apps/web/src/lib/ReviewExposurePanel.svelte"), "utf8"),
       projection: readFileSync(resolve(ROOT, "packages/runtime/src/review-map.ts"), "utf8"),
       recordedAnalysis: readFileSync(resolve(ROOT, "packages/runtime/src/recorded-analyze-presentation.ts"), "utf8"),
       recordedClock: readFileSync(resolve(ROOT, "apps/web/src/lib/ClockReadout.svelte"), "utf8"),

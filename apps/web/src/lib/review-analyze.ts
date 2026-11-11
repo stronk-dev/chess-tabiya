@@ -74,12 +74,17 @@ export function assertReviewAnalyzeResult(result: ReviewAnalyzeResult, target: R
   if (!equal(result.target, target)) return fail("analysis identity changed");
   if (result.page.kind === "page" && (result.page.runId !== target.runId || result.page.branchId !== target.branchId || result.page.nodeId !== target.nodeId || result.page.decision.digest !== target.decision.digest)) return fail("analysis page identity changed");
 }
+export async function confirmReviewAssistance(api: ReviewAnalyzeApi, target: ReviewAnalyzeTarget, signal: AbortSignal, check: () => void) {
+  check();
+  const assistance = reviewAnalyzeIntent(target);
+  const confirmation: ReviewAssistanceRequest = { assistance, review: { branchId: target.branchId, nodeId: target.nodeId, entryNodeId: target.entryNodeId, decisionDigest: target.decision.digest } };
+  const raw = await api.reviewAssistance(target.runId, confirmation, signal);
+  check();
+  return { assistance, finalized: parseReviewAssistanceResponse(raw, target, assistance) };
+}
 export async function requestReviewAnalyze(api: ReviewAnalyzeApi, target: ReviewAnalyzeTarget, signal: AbortSignal, current: () => boolean = () => true): Promise<ReviewAnalyzeResult> {
   const active = () => { signal.throwIfAborted(); if (!current()) throw new DOMException("Review Analyze target retired", "AbortError"); };
-  active();
-  const assistance = reviewAnalyzeIntent(target), confirmation: ReviewAssistanceRequest = { assistance, review: { branchId: target.branchId, nodeId: target.nodeId, entryNodeId: target.entryNodeId, decisionDigest: target.decision.digest } };
-  const rawHelp = await api.reviewAssistance(target.runId, confirmation, signal); active();
-  const finalized = parseReviewAssistanceResponse(rawHelp, target, assistance);
+  const { assistance, finalized } = await confirmReviewAssistance(api, target, signal, active);
   let finalPage: ParsedInspectorPage | undefined;
   for (const projection of ["derived.review.analysis_typed_pv@1", "derived.review.analysis_recorded_pv@1", "derived.review.analysis_recorded_first@1"] as const) {
     active();

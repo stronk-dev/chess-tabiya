@@ -6,14 +6,16 @@ import { attachEvidence, branchPath, commitMove, fork, moduleDecisionStamp, pars
 import { mount, tick, unmount } from "svelte";
 import { createComponentTestScope } from "./component-test-lifecycle.js";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
-import { inspectorBrowserFixture, disposeInspectorBrowserFixtures, terminateInspectorBrowserFixture } from "./inspector-source-browser.test-support.js";
+import { historicalInspectorFixture, inspectorBrowserFixture, disposeInspectorBrowserFixtures, terminateInspectorBrowserFixture } from "./inspector-source-browser.test-support.js";
 
 import { REVIEW_FIXTURE_AT, reviewFixtureRun } from "../../../../packages/runtime/src/testing/review-map-fixture.js";
 import { recordedReviewFixtureSources } from "../../../../packages/runtime/src/testing/recorded-grade-fixture.js";
+import { recordedSequenceWindowFixture } from "../../../../packages/runtime/src/testing/recorded-sequence-window-fixture.js";
 import type { ReviewMap } from "./api.js";
 import ReviewMapScreen from "./ReviewMapScreen.svelte";
 import { assertReviewMapResponse } from "./review-response.js";
 import { assertReviewAnalyzeResult, requestReviewAnalyze, reviewAnalyzeTarget, type ReviewAnalyzeResult } from "./review-analyze.js";
+import { openReviewExposure, type ReviewExposureOccurrence, type ReviewExposureSession } from "./review-exposure.js";
 
 afterEach(async () => { document.body.replaceChildren(); await disposeInspectorBrowserFixtures(); });
 afterAll(async () => { await terminateInspectorBrowserFixture(); });
@@ -51,6 +53,121 @@ function render(review: ReviewMap, props: Props = {}) {
 const points = (): HTMLElement[] => [...document.querySelectorAll<HTMLElement>(".eval-graph .point")];
 const selectedRow = (): string | null => document.querySelector(".move-row.selected")!.getAttribute("data-node-id");
 const key = (element: Element, value: string): void => { element.dispatchEvent(new KeyboardEvent("keydown", { key: value, bubbles: true })); };
+
+describe("D4179 exact Review inspection", () => {
+  const exposureRun = () => revealFeedback(recordedSequenceWindowFixture({
+    fen: "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1", moves: ["c5b6", "e8f7"],
+  }), REVIEW_FIXTURE_AT).run;
+  async function fixture() {
+    const run = exposureRun();
+    const f = await inspectorBrowserFixture({ run, preserveRun: true });
+    const review = await f.review();
+    assertReviewMapResponse(review, { runId: run.id });
+    const api = { reviewAssistance: (_id: string, body: unknown, signal?: AbortSignal) => f.reviewConfirm(body, signal),
+      inspector: (_id: string, body: Parameters<typeof f.send>[0], signal?: AbortSignal) => f.send(body, signal ?? new AbortController().signal) };
+    const load = (owner: ReviewMap, nodeId: string, occurrence: ReviewExposureOccurrence, signal: AbortSignal, current: () => boolean) =>
+      openReviewExposure(api, owner, nodeId, occurrence, signal, current);
+    return { f, review, api, load };
+  }
+  const button = (label: string) => [...document.querySelectorAll("button")].find(node => node.textContent?.trim() === label)!;
+
+  it("joins both original occurrences and refuses an ordinal that points at the other fact", async () => {
+    const { review, api, f } = await fixture();
+    const row = review.rows[0]!;
+    if (row.defenderExposure.kind !== "available") throw new Error("Expected two actual source occurrences");
+    const [queen, rook] = row.defenderExposure.occurrences;
+    expect([queen!.factoryOrdinal, rook!.factoryOrdinal]).toEqual([1, 0]);
+    const signal = new AbortController().signal;
+    const first = await openReviewExposure(api, review, row.nodeId, queen!, signal, () => true);
+    expect(first.initialPage.context.target.square).toBe("d7");
+    expect((await openReviewExposure(api, review, row.nodeId, rook!, signal, () => true)).initialPage.context.target.square).toBe("a8");
+    const reversed = [{ ...queen!, factoryOrdinal: 0 }, { ...rook!, factoryOrdinal: 1 }];
+    const crossed = { ...review, rows: [{ ...row, defenderExposure: { kind: "available" as const, occurrences: reversed } }, ...review.rows.slice(1)] };
+    const inspector = vi.fn(api.inspector);
+    await expect(openReviewExposure({ ...api, inspector }, crossed, row.nodeId, reversed[0]!, signal, () => true)).rejects.toThrow(/exact defender exposure/u);
+    expect(inspector.mock.calls.map(([, input]) => input.query.view.kind)).toEqual(["source"]);
+    expect((await f.stats()).providerCalls).toEqual([]);
+  });
+
+  it("mounts the exact capture, recovers its scoped request and returns focus to the opener", async () => {
+    const { review, load, f } = await fixture();
+    const before = await f.savedRun();
+    let rejected = false;
+    const open = vi.fn(async (...args: Parameters<typeof load>) => {
+      const session = await load(...args);
+      return { ...session, read: async (...request: Parameters<ReviewExposureSession["read"]>) => {
+        if (!rejected) { rejected = true; throw new Error("internal source failure"); }
+        return session.read(...request);
+      } };
+    });
+    replacementScope.createClassComponent({ component: ReviewMapScreen, target: document.body, props: {
+      review, initialNodeId: review.rows[0]!.nodeId, onRetry: vi.fn(), onExport: vi.fn(), onInspectExposure: open,
+    } });
+    await tick();
+    const opener = button(reviewText("exposure.inspect", { square: "d7" }));
+    opener.focus(); opener.click();
+    const exchange = reviewText("exposure.exchange", { number: 1 });
+    await vi.waitFor(() => expect(button(exchange)).toBeDefined());
+    expect(document.querySelector(".exposure-detail")?.textContent).toContain("captures Black's queen on d7");
+    expect(document.querySelector(".exposure-detail")?.textContent).not.toContain("captures Black's rook on a8");
+    button(exchange).click();
+    await vi.waitFor(() => expect(button(reviewText("exposure.retry"))).toBeDefined());
+    expect(document.body.textContent).not.toContain("internal source failure");
+    button(reviewText("exposure.retry")).click();
+    await vi.waitFor(() => expect(button(reviewText("exposure.recapture_choices"))).toBeDefined());
+    expect(open).toHaveBeenCalledTimes(2);
+    button(reviewText("exposure.recapture_choices")).click();
+    await vi.waitFor(() => expect(document.querySelector(".exposure-detail")?.textContent).toContain("branch 1:"));
+    button(reviewText("exposure.close")).click();
+    await tick();
+    expect(document.querySelector(".exposure-detail")).toBeNull();
+    expect(document.activeElement).toBe(opener);
+    expect(await f.savedRun()).toEqual(before);
+  });
+
+  it("refuses a later detail read after the actual server grant is revoked", async () => {
+    const f = await historicalInspectorFixture({ run: exposureRun(), preserveRun: true, sharedViewer: true });
+    const api = f.api!, review = await api.review(f.run.id, f.run.activeCursor.branchId);
+    assertReviewMapResponse(review, { runId: f.run.id });
+    const row = review.rows[0]!;
+    if (row.defenderExposure.kind !== "available") throw new Error("Expected the recorded exposure");
+    const signal = new AbortController().signal;
+    const inspection = await openReviewExposure(api, review, row.nodeId, row.defenderExposure.occurrences[0]!, signal, () => true);
+    expect(inspection.initialPage.context.target.square).toBe("d7");
+    expect(await f.viewerAccess(false)).toMatchObject({ kind: "refused" });
+    await expect(inspection.read({ kind: "exposure_exchange", captureIndex: 0 }, 0, signal, () => true)).rejects.toThrow(/exact defender exposure/u);
+    expect((await f.httpCalls()).at(-1)).toMatchObject({ status: 404, path: `/runs/${f.run.id}/inspector/query` });
+  });
+
+  it.each(["selection", "replacement", "access", "retry", "close", "unmount"] as const)("retires a pending inspection on %s", async reason => {
+    const { review, load } = await fixture();
+    const row = review.rows[0]!;
+    let resolve!: (value: ReviewExposureSession) => void;
+    const pending = new Promise<ReviewExposureSession>(accept => { resolve = accept; });
+    const open = vi.fn((_owner: ReviewMap, _node: string, _occurrence: ReviewExposureOccurrence, _signal: AbortSignal, _current: () => boolean) => pending);
+    const component = replacementScope.createClassComponent({ component: ReviewMapScreen, target: document.body,
+      props: { review, initialNodeId: row.nodeId, readActive: true, onRetry: vi.fn(), onExport: vi.fn(), onInspectExposure: open } });
+    await tick();
+    const opener = button(reviewText("exposure.inspect", { square: "d7" }));
+    opener.focus(); opener.click();
+    await vi.waitFor(() => expect(open).toHaveBeenCalledOnce());
+    const [owner, node, occurrence, signal, current] = open.mock.calls[0]!;
+    const actual = await load(owner, node, occurrence, new AbortController().signal, () => true);
+    if (reason === "selection") document.querySelectorAll<HTMLButtonElement>(".move-select")[1]!.click();
+    if (reason === "replacement") component.$set({ review: structuredClone(review) });
+    if (reason === "access") component.$set({ readActive: false });
+    if (reason === "retry") document.querySelector<HTMLButtonElement>(".move-row.selected .retry")!.click();
+    if (reason === "close") button(reviewText("exposure.close")).click();
+    if (reason === "unmount") component.$destroy();
+    await tick();
+    expect(signal.aborted).toBe(true);
+    expect(current()).toBe(false);
+    if (reason === "close") expect(document.activeElement).toBe(opener);
+    resolve(actual);
+    await tick();
+    expect(document.querySelector(".exposure-detail")).toBeNull();
+  });
+});
 
 describe("eval graph on the Review Map (§6)", () => {
   it("draws one keyboard stop per ply, one tab stop at a time, and arrow keys select the ply in the move list", async () => {

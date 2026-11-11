@@ -95,6 +95,7 @@
   import { assertCreatedStoryShare, assertRevokedStoryShare, assertStoryShares } from "./lib/story-response.js";
   import { assertReviewMapResponse } from "./lib/review-response.js";
   import { requestReviewAnalyze, reviewAnalyzeTarget } from "./lib/review-analyze.js";
+  import { openReviewExposure, type ReviewExposureOccurrence } from "./lib/review-exposure.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
@@ -1611,6 +1612,15 @@
     return page;
   }
 
+  async function inspectExposureFromReview(owner: ReviewMap, nodeId: string, occurrence: ReviewExposureOccurrence, signal: AbortSignal, current: () => boolean) {
+    const generation = loadGeneration, account = learner?.id, access = storyClockAccess.epoch;
+    const confirm = api.reviewAssistance, inspector = api.inspector;
+    const valid = () => current() && !signal.aborted && appMounted && !storyClockAccess.refused && access === storyClockAccess.epoch
+      && generation === loadGeneration && learner?.id === account && route.name === "story" && route.runId === owner.runId && story === owner;
+    if (confirm === undefined || inspector === undefined || !valid()) throw new Error("This reviewed position is no longer open");
+    return openReviewExposure({ reviewAssistance: confirm.bind(api), inspector: inspector.bind(api) }, owner, nodeId, occurrence, signal, valid);
+  }
+
   async function exportStory(runId: string): Promise<void> {
     const generation = loadGeneration;
     const download = await api.pgn(runId);
@@ -3124,7 +3134,7 @@
       <DeferredScreen label="Game review" load={() => import("./lib/ReviewMapScreen.svelte")} onReady={focusDeliveredRoute}>
         {#snippet children({ default: ReviewMapScreen })}
           {#if story}
-          <ReviewMapScreen review={story} readActive={!storyClockAccess.refused && !storyRefreshBusy} onRecordedClock={api.recordedClock === undefined || storyClockAccess.refused ? undefined : recordedClockFromReview} clockAccessIdentity={storyClockIdentity} initialNodeId={route.name === 'story' ? route.nodeId : undefined} refreshBusy={storyRefreshBusy && storyRefreshExplicit} refreshFailed={storyRefreshFailed} onRefresh={() => refreshStory(storyRunId,true)} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAssistance === undefined || api.inspector === undefined ? undefined : (nodeId, signal, current) => analyzeFromReview(storyRunId, story!.branchId, nodeId, signal, current)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
+          <ReviewMapScreen review={story} onInspectExposure={api.reviewAssistance === undefined || api.inspector === undefined ? undefined : inspectExposureFromReview} readActive={!storyClockAccess.refused && !storyRefreshBusy} onRecordedClock={api.recordedClock === undefined || storyClockAccess.refused ? undefined : recordedClockFromReview} clockAccessIdentity={storyClockIdentity} initialNodeId={route.name === 'story' ? route.nodeId : undefined} refreshBusy={storyRefreshBusy && storyRefreshExplicit} refreshFailed={storyRefreshFailed} onRefresh={() => refreshStory(storyRunId,true)} shares={storyShares} onRetry={(nodeId) => enterStoryMoment(storyRunId, nodeId)} onExport={() => exportStory(storyRunId)} onShare={api.shareStory === undefined ? undefined : () => createStoryShare(storyRunId, story!.branchId)} onRevoke={api.revokeStoryShare === undefined ? undefined : (tokenId) => revokeStoryShare(storyRunId, tokenId)} onCompare={(branchIds) => compareFromReview(storyRunId, branchIds)} onAnalyze={api.reviewAssistance === undefined || api.inspector === undefined ? undefined : (nodeId, signal, current) => analyzeFromReview(storyRunId, story!.branchId, nodeId, signal, current)} onVoice={operationConfigured(capabilities, "render.voice_story") && requestedAssistanceConfig("imported", loadWorkflowPreference("imported", applicationStorage())).voice === "persona" ? async (nodeId) => (await api.voice(storyRunId, nodeId, "story")).text : undefined} />
           {/if}
         {/snippet}
       </DeferredScreen>

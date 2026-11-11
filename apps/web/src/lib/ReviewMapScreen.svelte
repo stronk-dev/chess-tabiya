@@ -13,6 +13,8 @@
   import ClockReadout from "./ClockReadout.svelte";
   import type { RecordedClockView } from "../../../../packages/runtime/src/recorded-clock-view.js";
   import { assertReviewAnalyzeResult, reviewAnalyzeTarget, type ReviewAnalyzeResult } from "./review-analyze.js";
+  import { reviewExposureFacts, type ReviewExposureOccurrence, type ReviewExposureSession } from "./review-exposure.js";
+  import ReviewExposurePanel from "./ReviewExposurePanel.svelte";
 
   interface Props {
     review: ReviewMap;
@@ -31,12 +33,13 @@
     onCompare?: ((branchIds: readonly string[]) => void | Promise<void>) | undefined;
     /** §7 / O7.3: the explicit, secondary Analyze reveal for one reviewed move. */
     onAnalyze?: ((nodeId: string, signal: AbortSignal, current: () => boolean) => Promise<ReviewAnalyzeResult>) | undefined;
+    onInspectExposure?: ((review: ReviewMap, nodeId: string, occurrence: ReviewExposureOccurrence, signal: AbortSignal, current: () => boolean) => Promise<ReviewExposureSession>) | undefined;
     onRecordedClock?: ((review: ReviewMap, nodeId: string, signal: AbortSignal, current: () => boolean) => Promise<RecordedClockView>) | undefined;
     clockAccessIdentity?: string;
     /** Actual authenticated read access; independent of retry/write permission. */
     readActive?: boolean;
   }
-  let { review, initialNodeId, refreshBusy = false, refreshFailed = false, onRefresh, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze, onRecordedClock, clockAccessIdentity = "", readActive = true }: Props = $props();
+  let { review, initialNodeId, refreshBusy = false, refreshFailed = false, onRefresh, onRetry, onExport, onVoice, shares = [], onShare, onRevoke, onCompare, onAnalyze, onInspectExposure, onRecordedClock, clockAccessIdentity = "", readActive = true }: Props = $props();
 
   type RetryFailure = "retry.failed.board_held" | "retry.failed.forbidden" | "retry.failed.other";
   let selectedId = $state<string | undefined>();
@@ -86,6 +89,29 @@
   const doors = $derived(new Map(review.compareDoors.map((door) => [door.entryNodeId, door])));
   /** rfc/review-evidence-compiler.md: the typed packet components, re-sealed client-side by the exact parser. */
   const packetItems = $derived(selected === undefined ? [] : parsePresentationReceipt(selected.packet));
+  type ExposureSelection = { owner: ReviewMap; row: ReviewMap["rows"][number]; occurrence: ReviewExposureOccurrence; opener: HTMLButtonElement; access: string };
+  let inspection = $state.raw<ExposureSelection>();
+  const exposureFacts = $derived(selected === undefined ? [] : reviewExposureFacts(selected, packetItems));
+  const inspectAllowed = $derived(onInspectExposure !== undefined && readActive && !refreshBusy && retrying === undefined
+    && selected !== undefined && selected.entryNodeId !== review.openRetryEntryNodeId);
+  function currentInspection(item: ExposureSelection): boolean {
+    return mounted && inspectAllowed && item === inspection && item.owner === review && item.row === selected && item.access === clockAccessIdentity;
+  }
+  const shownInspection = $derived(inspection !== undefined && currentInspection(inspection) ? inspection : undefined);
+  $effect(() => { if (inspection !== undefined && shownInspection === undefined) inspection = undefined; });
+  function inspect(occurrence: ReviewExposureOccurrence, opener: HTMLButtonElement): void {
+    if (!inspectAllowed || selected === undefined) return;
+    if (shownInspection?.occurrence.factoryOrdinal === occurrence.factoryOrdinal) {
+      closeInspection(shownInspection);
+      return;
+    }
+    inspection = { owner: review, row: selected, occurrence, opener, access: clockAccessIdentity };
+  }
+  function closeInspection(item: ExposureSelection): void {
+    if (!currentInspection(item)) return;
+    inspection = undefined;
+    item.opener.focus({ preventScroll: true });
+  }
   const factDetailsScope = $derived({ review, selected, packet: selected?.packet, access: clockAccessIdentity,
     refreshing: refreshBusy, retrying, readActive });
   /** The facts that are not packet components (the packet's equivalent sentences are their tail). */
@@ -127,6 +153,7 @@
   function select(nodeId: string): void {
     if (nodeId !== selected?.nodeId) {
       hideAnalysis();
+      inspection = undefined;
       focusedFact = undefined;
     }
     selectedId = nodeId;
@@ -229,6 +256,7 @@
   async function retry(key: string, entryNodeId: string): Promise<void> {
     if (!retryAvailable || retrying !== undefined) return;
     hideAnalysis();
+    inspection = undefined;
     retrying = key;
     retryError = undefined;
     try {
@@ -419,6 +447,21 @@
           {#each plainFacts as fact}<p>{fact}</p>{/each}
           {#if selected.defenderExposure.kind === "unavailable"}<p class="muted">{reviewText("evidence.defender_exposure.unavailable")}</p>{/if}
           <PresentedEvidence items={packetItems} onFocusSquares={focusFactSquares} detailsScope={factDetailsScope} detailsActive={readActive && !refreshBusy && retrying === undefined} />
+          {#if inspectAllowed && exposureFacts.length > 0}
+            <div class="exposure-actions">
+              {#each exposureFacts as fact (fact.occurrence.factoryOrdinal)}
+                <button type="button" aria-expanded={shownInspection?.occurrence.factoryOrdinal === fact.occurrence.factoryOrdinal}
+                  onclick={(event) => inspect(fact.occurrence, event.currentTarget)}>{reviewText("exposure.inspect", { square: fact.summary.target.square })}</button>
+              {/each}
+            </div>
+          {/if}
+          {#if shownInspection}
+            {@const item = shownInspection}
+            {#key item}
+              <ReviewExposurePanel current={() => currentInspection(item)} onClose={() => closeInspection(item)}
+                load={(signal, current) => onInspectExposure!(item.owner, item.row.nodeId, item.occurrence, signal, current)} />
+            {/key}
+          {/if}
         </article>
         {#if onAnalyze && retrying === undefined}
           <section class="analysis" aria-labelledby="review-analysis-title" aria-busy={analysisBusy === selected.nodeId} data-analysis={selected.entryNodeId === review.openRetryEntryNodeId ? "withheld" : shownAnalysis?.page.kind ?? "closed"}>
@@ -498,6 +541,7 @@
 </main>
 
 <style>
+  .exposure-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-block: .5rem; }
   .review-map{min-height:100%;display:grid;gap:.9rem;padding:1rem;align-content:start}
   .review-map h1,.review-map h2,.review-map h3,.review-map p{margin:.15rem 0}
   .review-map h2{font-size:1rem}

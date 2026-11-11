@@ -4,15 +4,15 @@ import type { DrillRun } from "@chess-tabiya/runtime";
 import type { ReviewMap, RunGraph } from "../../apps/web/src/lib/api.js";
 import { assertOnlyEvidenceAppended, assertRecordedNodesPreserved } from "../../packages/runtime/src/testing/recorded-play.js";
 
-async function reviewedGame(page: Page): Promise<string> {
+async function reviewedGame(page: Page, pgn?: string, plies = 4): Promise<string> {
   expect((await page.request.post("/auth/register", { data: {
     handle: `refresh_${randomUUID().slice(0, 8)}`, password: "review-refresh-test-password",
   } })).status()).toBe(201);
   await page.goto("/review");
-  await page.getByLabel("PGN", { exact: true }).fill('[White "Refresh White"]\n[Black "Refresh Black"]\n[Result "*"]\n\n1. e4 e5 2. Nf3 Nc6 *');
+  await page.getByLabel("PGN", { exact: true }).fill(pgn ?? '[White "Refresh White"]\n[Black "Refresh Black"]\n[Result "*"]\n\n1. e4 e5 2. Nf3 Nc6 *');
   await page.getByRole("button", { name: "Build game story", exact: true }).click();
   await expect(page).toHaveURL(/\/review\/game\/import-/);
-  await expect(page.locator(".move-select")).toHaveCount(4);
+  await expect(page.locator(".move-select")).toHaveCount(plies);
   await expect(page.getByText(/Evaluation pending for/)).toHaveCount(0);
   return new URL(page.url()).pathname.split("/").at(-1)!;
 }
@@ -39,6 +39,41 @@ async function geometry(page: Page) {
 }
 
 for (const mobile of [false, true]) {
+  test(`D4179 opens the exact recorded capture and recapture options${mobile ? " @mobile" : ""}`, async ({ page }) => {
+    const id = await reviewedGame(page, '[Result "*"]\n[SetUp "1"]\n[FEN "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1"]\n\n1. Bxb6 Kf7 *', 2);
+    await page.locator(".move-select").first().click();
+    const board = await geometry(page), before = await recorded(page, id);
+    const opener = page.getByRole("button", { name: "Inspect captures on d7", exact: true });
+    const panel = page.getByRole("region", { name: "Capture and recapture options" });
+    await expect(opener).toBeVisible();
+    const query = `**/runs/${id}/inspector/query`;
+    await page.route(query, route => route.fulfill({ status: 503, json: { error: { code: "EVIDENCE_UNAVAILABLE" } } }), { times: 1 });
+    await opener.focus();
+    await page.keyboard.press("Enter");
+    await expect(panel).toContainText("This exchange evidence could not be opened.");
+    await panel.getByRole("button", { name: "Try inspection again" }).click();
+    const exchange = panel.getByRole("button", { name: "Show exchange for capture 1" });
+    await expect(exchange).toBeEnabled();
+    await expect(panel).toContainText("captures Black's queen on d7");
+    await expect(panel).not.toContainText("captures Black's rook on a8");
+    await exchange.focus();
+    await page.keyboard.press("Enter");
+    const recaptures = panel.getByRole("button", { name: "Show recapture choices" });
+    await expect(recaptures).toBeEnabled();
+    if (!mobile) await expect(panel.getByRole("heading")).toBeFocused();
+    await recaptures.click();
+    await expect(panel).toContainText("branch 1:");
+    await expect(panel).toContainText("These exchanges assume the opponent skips the reply.");
+    const currentBoard = await geometry(page);
+    expect({ width: currentBoard.width, height: currentBoard.height }).toEqual({ width: board.width, height: board.height });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(await page.evaluate(() => document.documentElement.clientWidth));
+    await panel.getByRole("button", { name: "Close inspection" }).click();
+    await expect(panel).toHaveCount(0);
+    await expect(opener).toBeFocused();
+    const after = await recorded(page, id);
+    expect(after.events).toEqual(before.events);
+  });
+
   test(`Review refresh recovers the exact selected line without playing moves${mobile ? " @mobile" : ""}`, async ({ page }) => {
     const id = await reviewedGame(page);
     const moves = page.locator(".move-select");

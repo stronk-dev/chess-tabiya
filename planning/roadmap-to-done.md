@@ -10,13 +10,14 @@ The full 1.0 goal remains active. On `c59e565b`, normal software verification pa
 **D4200 durable availability** now carries per-decision source coverage through revision 10
 publication, reads, rebuild and account lifecycle. Five genuine revision 9 jobs upgrade through
 startup and the real worker. The Profile fix D4212 isolates corrupt and superseded cuts so healthy
-games remain visible. The current 200-game workload and Profile cost measurement is running.
+games remain visible. The current 200-game workload completed. Its compact report and RFC closeout are next.
 
 D4179 now shows bounded defender-exposure summaries and typed source availability in Review.
 It carries original factory ordinals alongside the displayed facts, including where those orders
 differ. Inspector serves the original source and bounded capture and recapture pages. Both
-mirrored REST stress tests reconstruct each original exchange tree. The selected-move Inspect
-action and its end-to-end verification remain.
+mirrored REST stress tests reconstruct each original exchange tree. Review now opens the
+exact fact and scoped exchanges, with mounted and authenticated refusal coverage. D3928
+blocks the desktop and phone-width browser journey at server startup.
 [Exposure research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11)
 
 Six of the 13 new outcome families qualify. Seven still need qualification. D4167 reverse

@@ -40829,3 +40829,18 @@ chosen lines and stop decisions, checked one exposure acquisition per request, e
 empty genuine leaf and refused a crossed branch suffix. The REST, runtime, presentation and
 receiver checks passed 3,764 tests. Workspace types and manifest and capability checks passed.
 The Review Inspect action and the combined selected-move journey remain open.
+
+### 2026-11-11 — D4179 selected Review inspection
+
+The selected Review fact opens its exact original Inspector occurrence. The action confirms
+the recorded parent and current assistance, joins the original ordinal and source reference,
+and pages the selected capture and its recaptures. Failed detail requests re-confirm the
+original fact before retrying the requested scope. Closing restores focus to the invoking
+control. Selection, retry, Review replacement, access changes and unmount retire pending work.
+
+The mounted checks and authenticated service/REST controls passed. They exercised the White
+display/factory order reversal, a crossed ordinal, scoped recovery, a revoked grant, and
+late replies. Native desktop and phone cases are registered in the Review browser suite.
+The normal pinned-runtime browser command stopped before either test because D3928's
+anti-Caro pack still requires grade version 1 while the installed contract derives version 2.
+Browser geometry and final journey timing remain open.
