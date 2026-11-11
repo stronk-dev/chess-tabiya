@@ -40888,3 +40888,12 @@ exposure panel. The focused theme suite reproduced it. The panel uses the shared
 line token and applies the muted text token to its explanation. The theme check
 now identifies the file and token when a component references an undeclared
 variable. All 40 focused theme and mounted Review tests passed.
+
+### 2026-11-11 — D4179 measured scoped disclosure
+
+The real authenticated Review and Inspector handlers served both mirrored stress
+positions through the strict web receiver. Initial disclosure totaled at most
+12,570 bytes across three responses. The first capture and its direct recaptures
+completed the five-request journey with four Inspector acquisitions and at most
+24,358 bytes. The largest Inspector page was 6,430 bytes. The foundation plan
+records first and repeated in-process timings. Native browser proof remains held by D3928.

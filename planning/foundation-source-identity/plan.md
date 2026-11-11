@@ -2842,3 +2842,22 @@ The §7 completion check uses the following executed boundaries.
 | 8 | Canonical validation passed 1,470 cases across 89 subjects, with 17 qualified. No new source acquired qualification from availability alone. |
 | 9 | The current worker, read and lease measurements above. `longitudinal-worker-performance.test.ts` exercises worker responsiveness and lease renewal. `longitudinal-worker.test.ts` exercises bounded drain and restart. |
 | 10 | The `c59e565b` full software and performance run, governance and build reported above. `learner-profile-application.test.ts` exercises the actual authenticated Profile HTTP routes. The combined rerun with later Review delivery is in progress. |
+
+### 2026-11-11 — D4179 Review disclosure size and local latency
+
+The two mirrored 696-recapture stress positions ran through the actual authenticated Review
+endpoint, strict web receiver, `openReviewExposure` and scoped Inspector requests on `c484bfc7`.
+Each color opened once after Review loaded and twice more from the same reviewed row.
+
+| Side | Review bytes | First disclosure | Repeated disclosure | First capture and recapture level |
+| --- | ---: | ---: | ---: | ---: |
+| White | 34,020 | 94.16 ms | 41.22 / 35.37 ms | 128.15 / 77.38 / 69.00 ms |
+| Black | 34,013 | 32.08 ms | 34.62 / 36.51 ms | 60.97 / 64.97 / 67.37 ms |
+
+The three initial responses total 12,570 bytes for White and 12,548 for Black. The largest
+Inspector response is 6,430 bytes. Opening the first capture and its direct recaptures brings
+the total to 24,358 or 24,320 bytes across five requests. Every sample makes four Inspector
+source acquisitions, one per Inspector request. Assistance confirmation does no Inspector
+acquisition. The instrument includes serialized response reading and client decoding, using an
+in-process HTTP handler, in-memory SQLite and concurrent local verification. Network latency,
+browser rendering and the native desktop and phone journeys remain unmeasured.
