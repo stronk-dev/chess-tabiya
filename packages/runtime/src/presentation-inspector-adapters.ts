@@ -72,6 +72,7 @@ const INSPECTOR_SOURCE_STATEMENTS: Readonly<Record<string, readonly StatementCon
   "derived.tactic.sequence.defender_consequence@3": [["inspector.defender_consequence@1", "recorded-run@1", "recorded_run"]],
   "derived.material.reading.role_signature@2": [["inspector.role_signature@1", "board-rules@1"]],
   "derived.material.event.role_asymmetry@2": [["inspector.role_asymmetry@1", "board-rules@1"]],
+  "derived.tactic.defender_exposure@2": [["inspector.defender_exposure@1", "piece-geometry@1"]],
   "rules.king.reading.zone_state@1": [["inspector.king_zone@1", "piece-geometry@1"]],
   "recorded.inspector.eval_packet@1": [["inspector.recorded_eval@1", "recorded-run@1", "recorded_run"]],
   "recorded.inspector.wdl_packet@1": [["inspector.recorded_wdl@1", "recorded-run@1", "recorded_run"]],
@@ -289,6 +290,23 @@ const exposureSummary = s.obj({
   captureCount: s.nat,
   passConvention: s.lit("mover-turn-ep-cleared@1"),
 });
+const defenderExposureRenderer = factRenderer((raw, label) => {
+  const value = exposureSummary(raw, label);
+  if (value.captureCount === 0 || value.defender.color !== value.target.color || value.defender.square === value.target.square) {
+    throw new PresentationSchemaError("defender exposure requires distinct allied pieces and positive captures");
+  }
+  return value;
+}, ({ defender, target, captureCount }) =>
+  `The ${target.color} ${ROLE_NAMES[target.role]} on ${target.square} lost geometric coverage from the ${defender.color} ${ROLE_NAMES[defender.role]} that was on ${defender.square}. If ${side(target.color)} could skip the reply, ${otherSide(target.color)} would have ${plural(captureCount, "capture")} on ${target.square} with a positive result under the local capture-and-recapture rule.`);
+
+function defenderExposureSummary(evidence: DeclaredEvidence<unknown>): ReturnType<typeof exposureSummary> {
+  const { defender, target, captures, passConvention } = evidence.payload as AvailableDefenderExposureOperands;
+  return {
+    defender: { color: defender.piece.color, role: defender.piece.role, square: defender.square },
+    target: { color: target.piece.color, role: target.piece.role, square: target.square },
+    captureCount: captures.length, passConvention,
+  };
+}
 
 export const INSPECTOR_FACT_RENDERERS = Object.freeze({
   ...INSPECTOR_WHOLE_FACT_RENDERERS,
@@ -299,14 +317,8 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
   "review.analysis_typed_pv@1": analyzeRenderer("typed_pv"),
   "review.analysis_recorded_pv@1": analyzeRenderer("recorded_bestline"),
   "review.analysis_recorded_first@1": analyzeRenderer("recorded_search_first"),
-  "review.defender_exposure@1": factRenderer((raw, label) => {
-    const value = exposureSummary(raw, label);
-    if (value.captureCount === 0 || value.defender.color !== value.target.color || value.defender.square === value.target.square) {
-      throw new PresentationSchemaError("defender exposure requires distinct allied pieces and positive captures");
-    }
-    return value;
-  }, ({ defender, target, captureCount }) =>
-    `The ${target.color} ${ROLE_NAMES[target.role]} on ${target.square} lost geometric coverage from the ${defender.color} ${ROLE_NAMES[defender.role]} that was on ${defender.square}. If ${side(target.color)} could skip the reply, ${otherSide(target.color)} would have ${plural(captureCount, "capture")} on ${target.square} with a positive result under the local capture-and-recapture rule.`),
+  "review.defender_exposure@1": defenderExposureRenderer,
+  "inspector.defender_exposure@1": defenderExposureRenderer,
   "inspector.registered_shape_firing@2": factRenderer(parseRegisteredShapeFiringOperands, renderRegisteredShapeFiring),
   "inspector.recorded_eval@1": factRenderer(recordedEvalOperands, value =>
     `Stored report ${value.reportSeq}: centipawn number ${reportField(value.centipawns, String)}; mate-distance number ${reportField(value.mateIn, String)}; reported perspective ${reportField(value.perspective, side => side === "white" ? "White" : "side to move")}. Historical report only, not independently verified engine analysis or a move grade.`),
@@ -1257,15 +1269,9 @@ function buildInspectorAdapterSpecs(kit: PresentationKit): { readonly current: r
   }
 
   // Review Map only (beyond Checkpoint A's list).
+  const exposureOperands = ["defender", "target", "captures", "passConvention"] as const;
   add(MAP, V("derived.tactic.defender_exposure", 2), LP, singleFact("review.defender_exposure@1", "piece-geometry@1",
-    ["defender", "target", "captures", "passConvention"], ["mechanical_transform"], evidence => {
-      const { defender, target, captures, passConvention } = evidence.payload as AvailableDefenderExposureOperands;
-      return {
-        defender: { color: defender.piece.color, role: defender.piece.role, square: defender.square },
-        target: { color: target.piece.color, role: target.piece.role, square: target.square },
-        captureCount: captures.length, passConvention,
-      };
-    }));
+    exposureOperands, ["mechanical_transform"], defenderExposureSummary));
   add(MAP, V("derived.material.event.role_asymmetry"), BOARD5, roleAsymmetry);
   add(MAP, V("derived.opening.deepest_reached"), LPS, openingReached);
   add(MAP, V("derived.pawn.sequence.contact_timing"), BOARD5, contactTiming);
@@ -1347,6 +1353,8 @@ function buildInspectorAdapterSpecs(kit: PresentationKit): { readonly current: r
   addSource(V("derived.pawn.sequence.harassment_pressure", 3), BOARD5, harassment);
   addSource(V("derived.tactic.sequence.defender_consequence", 3), BOARD4, defenderConsequence);
   addSource(V("derived.material.event.role_asymmetry", 2), BOARD5, roleAsymmetry);
+  addSource(V("derived.tactic.defender_exposure", 2), LP, singleFact("inspector.defender_exposure@1", "piece-geometry@1",
+    exposureOperands, ["mechanical_transform"], defenderExposureSummary));
   addSource(V("derived.material.reading.role_signature", 2), LP, roleSignature);
   addSource(V("rules.king.reading.zone_state"), BOARD5, kingZone);
 

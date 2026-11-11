@@ -25,9 +25,9 @@ const mate = (version: 1 | 2, maxAttackerMoves = 1) => ({ ...source(`rules.tacti
   parameters: { kind: "forced_mate", maxAttackerMoves } });
 
 describe("accepted Inspector requested-intent boundary (not source/access/Full2 delivery)", () => {
-  it("keeps88 literal topics in the exact source order and excludes fourteen views", () => {
-    expect(INSPECTOR_SOURCE_TOPICS).toHaveLength(88);
-    expect(new Set(INSPECTOR_SOURCE_TOPICS.map(row => row.projection)).size).toBe(88);
+  it("keeps89 literal topics in the exact source order and excludes fourteen views", () => {
+    expect(INSPECTOR_SOURCE_TOPICS).toHaveLength(89);
+    expect(new Set(INSPECTOR_SOURCE_TOPICS.map(row => row.projection)).size).toBe(89);
     const specs = inspectorSourceAdapterSpecs(inspectorSourcePresentationKit).filter(row => !row.projection.id.startsWith("derived.inspector.detail."));
     expect(INSPECTOR_SOURCE_TOPICS.map(row => row.projection)).toEqual(specs.map(row => `${row.projection.id}@${row.projection.version}`));
     expect(Object.isFrozen(INSPECTOR_SOURCE_TOPICS)).toBe(true);
@@ -49,7 +49,7 @@ describe("accepted Inspector requested-intent boundary (not source/access/Full2 
     expected.set("derived.compare.structure_delta@2", ["comparison"]);
     expected.set("derived.compare.eval_delta@2", ["comparison"]);
     for (const ref of ["derived.review.analysis_typed_pv@1", "derived.review.analysis_recorded_pv@1", "derived.review.analysis_recorded_first@1"]) expected.set(ref, ["incoming_edge"]);
-    expect(expected.size).toBe(88);
+    expect(expected.size).toBe(89);
     for (const topic of INSPECTOR_SOURCE_TOPICS) expect(topic.contexts, topic.projection).toEqual(expected.get(topic.projection));
     expect(INSPECTOR_SOURCE_TOPICS.filter(row => row.family === "maia").map(row => row.projection)).toEqual(["derived.maia.node_distribution@1", "derived.maia.node_candidate_wdl@1"]);
     expect(INSPECTOR_SOURCE_TOPICS.filter(row => row.family === "explorer").map(row => row.projection)).toEqual(["derived.explorer.inspector_population@1"]);

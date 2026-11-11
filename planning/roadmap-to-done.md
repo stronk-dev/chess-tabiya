@@ -14,7 +14,8 @@ games remain visible. The current 200-game workload and Profile cost measurement
 
 D4179 now shows bounded defender-exposure summaries and typed source availability in Review.
 It carries original factory ordinals alongside the displayed facts, including where those orders
-differ. Exact Inspector source and detail paging and the selected-move Inspect action remain.
+differ. Inspector serves the bounded source overview in factory order. Scoped capture and
+recapture detail and the selected-move Inspect action remain.
 [Exposure research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11)
 
 Six of the 13 new outcome families qualify. Seven still need qualification. D4167 reverse

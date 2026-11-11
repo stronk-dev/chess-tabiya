@@ -1865,10 +1865,10 @@
         "dependsOn": [
           "foundation-contracts"
         ],
-        "nextAction": "Finish the active D4200 workload measurement. Implement the accepted D4179 Inspector source, scoped detail and Review handoff. Continue the remaining source qualifications and consumer adoption.",
+        "nextAction": "Finish the active D4200 workload measurement. Implement D4179 scoped Inspector detail and the exact Review handoff. Continue the remaining source qualifications and consumer adoption.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector paging and the Inspect action remain. The 200-game cost measurement, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
+          "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. D4179 now delivers bounded defender-exposure facts and typed source availability in Review. Inspector source pages retain the original ordered occurrences. Scoped detail and the Inspect action remain. The 200-game cost measurement, seven outcome qualifications, D4167, ordinary26 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
             "packages/runtime/src/presentation-move-path.ts",

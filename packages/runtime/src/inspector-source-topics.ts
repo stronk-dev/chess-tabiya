@@ -100,6 +100,7 @@ export const INSPECTOR_SOURCE_TOPICS = Object.freeze([
   topic("derived.structural.reading.outpost_candidate@1", "derived", "position"),
   topic("derived.structural.reading.occupied_outpost@1", "derived", "position"),
   topic("derived.pawn.consequence.backward_pawn_legal_advance@1", "derived", "incoming_edge"),
+  topic("derived.tactic.defender_exposure@2", "derived", "incoming_edge"),
 ]);
 export type InspectorSourceRef = (typeof INSPECTOR_SOURCE_TOPICS)[number]["projection"];
 export const INSPECTOR_DETAIL_SOURCES = Object.freeze({

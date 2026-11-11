@@ -2,6 +2,7 @@
 import { collectInspectorDependentEdge, parseInspectorDependentRequest, type InspectorDependentRequest, type InspectorDependentCollection } from "../../../packages/runtime/src/inspector-dependent-source.js";
 import { evidenceValueReceipt } from "../../../packages/runtime/src/evidence-contract.js";
 import { presentationDigest } from "../../../packages/runtime/src/presentation-contract.js";
+import { openRetryEntry } from "../../../packages/runtime/src/review-branch-state.js";
 import { InspectorContextError, InspectorRecordedContextOwner, type InspectorRecordedContext } from "./inspector-recorded-context.js";
 
 declare const dependentSourceBrand: unique symbol;
@@ -23,6 +24,8 @@ export class InspectorDependentSourceOwner {
     const request = parseInspectorDependentRequest(input), current = this.contexts.read(context);
     if (current.selection.context.kind !== "incoming_edge") throw new InspectorContextError("source_contract_invalid");
     const nodes = current.paths[0]!.nodes;
+    if (request.projection === "derived.tactic.defender_exposure@2" && nodes.length >= 2
+      && openRetryEntry(current.run, current.selection.branchId) === nodes[0]!.id) throw new InspectorContextError("withheld");
     const collection = nodes.length < 2 ? null : collectInspectorDependentEdge(current.run, nodes[0]!, current.selected, request);
     const sourceKey = collection === null ? null : presentationDigest("inspector.source@1", {
       runId: current.run.id, decision: current.decision, selection: current.selection,

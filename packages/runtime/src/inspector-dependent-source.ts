@@ -10,6 +10,7 @@ export const INSPECTOR_DEPENDENT_PROJECTIONS = Object.freeze([
   "rules.tactic.predicate.overload_conflict@1", "rules.tactic.consequence.forced_mate_after_move@1",
   "rules.tactic.consequence.forced_mate_after_move@2",
   "derived.material.event.role_asymmetry@2",
+  "derived.tactic.defender_exposure@2",
 ] as const);
 export type InspectorDependentProjection = typeof INSPECTOR_DEPENDENT_PROJECTIONS[number];
 type MateProjection = Extract<InspectorDependentProjection, `rules.tactic.consequence.forced_mate_after_move@${number}`>;
@@ -59,6 +60,18 @@ export function collectInspectorDependentEdge(run: DrillRun, parent: Node, child
   let dependencies: Values = [], values: Values = [], unavailable: string | undefined;
   let result: InspectorDependentCollection["result"] = null;
   switch (request.projection) {
+    case "derived.tactic.defender_exposure@2": {
+      const computed = invokeEvidenceValueRoute(request.projection, anchor);
+      result = computed;
+      if (computed.kind === "unavailable") {
+        if (computed.reason !== "invalid_turn_clone") throw new TypeError("Inspector defender exposure returned an undeclared reason");
+        unavailable = computed.reason;
+      } else {
+        values = computed.value.map(item => item.evidence);
+        dependencies = computed.value.flatMap(item => item.inputs);
+      }
+      break;
+    }
     case "derived.material.event.role_asymmetry@2": {
       const computed = invokeEvidenceValueRoute(request.projection, anchor);
       result = computed; values = computed.map(item => item.evidence);

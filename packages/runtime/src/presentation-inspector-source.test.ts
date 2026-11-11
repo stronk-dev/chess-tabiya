@@ -31,10 +31,10 @@ describe("actual current Full Inspector2 source adapter image", () => {
       "derived.maia.node_candidate_wdl@1", "derived.explorer.inspector_population@1",
       "derived.compare.structure_delta@2", "derived.compare.eval_delta@2", "derived.story.rank@3", "theory.shapes.firing@3",
       "derived.review.analysis_typed_pv@1", "derived.review.analysis_recorded_pv@1", "derived.review.analysis_recorded_first@1"];
-    expect(topics).toHaveLength(88);
-    expect(new Set(topics).size).toBe(88);
+    expect(topics).toHaveLength(89);
+    expect(new Set(topics).size).toBe(89);
     expect([...topics].sort()).toEqual(INSPECTOR_SOURCE_TOPICS.map(row => row.projection).sort());
-    expect(specs).toHaveLength(102);
+    expect(specs).toHaveLength(103);
     const expected = [...topics, ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`)];
     expect(specs.map(spec => key(spec.projection)).sort()).toEqual(expected.sort());
     expect(specs.every(spec => key(spec.consumer) === "module.full_inspector@2")).toBe(true);
@@ -48,7 +48,9 @@ describe("actual current Full Inspector2 source adapter image", () => {
     if (projection === undefined) throw new Error("Undeclared source");
     expect(spec.sourceOperands.filter(operand => !projection.operands.includes(operand))).toEqual([]);
     expect(new Set(spec.sourceOperands).size).toBe(spec.sourceOperands.length);
-    expect([...spec.forms].sort()).toEqual(projection.forms.filter(form => inspectorForms.includes(form)).sort());
+    const expectedForms = key(spec.projection) === "derived.tactic.defender_exposure@2"
+      ? ["list", "panel"] : projection.forms.filter(form => inspectorForms.includes(form));
+    expect([...spec.forms].sort()).toEqual(expectedForms.sort());
     const members = spec.composition?.members ?? [{ component: spec.component, forms: spec.forms }];
     expect([...new Set(members.flatMap(member => member.forms))].sort()).toEqual([...spec.forms].sort());
     for (const member of members) {
@@ -68,9 +70,9 @@ for (const route of INSPECTOR_LOCAL_PROJECTIONS) factoryValues.set(route, inspec
 const currentValues = await inspectorCurrentPresentationFixtures(factoryValues);
 
 describe("every actual Full2 source/detail pair through the sole compiled presentation path", () => {
-  it("has genuine fixture populations for exactly all88 source topics and fourteen details", () => {
+  it("has genuine fixture populations for exactly all89 source topics and fourteen details", () => {
     const expected = [...INSPECTOR_SOURCE_TOPICS.map(row => row.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`)];
-    expect(currentValues.size).toBe(102);
+    expect(currentValues.size).toBe(103);
     expect([...currentValues.keys()].sort()).toEqual(expected.sort());
   });
   it.each([...currentValues.keys()])("%s admits genuine source, seals complete components and round-trips", route => {

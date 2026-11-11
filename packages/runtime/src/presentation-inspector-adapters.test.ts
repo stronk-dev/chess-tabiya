@@ -175,20 +175,20 @@ describe("inspector / post-commit nudge / review map adapters: exact pair popula
   });
 
   it("covers the expected pair counts and registers inspector renderers under their own prefix", () => {
-    expect(bindingsOf("module.full_inspector")).toHaveLength(102);
+    expect(bindingsOf("module.full_inspector")).toHaveLength(103);
     expect(PRIMARY_EVIDENCE_MANIFEST.consumers.filter(row => row.id === "module.full_inspector").map(row => row.version)).toEqual([2]);
     expect(bindingsOf("module.postcommit_nudge")).toHaveLength(41);
     const own = (consumer: string) => [...OWN].filter((entry) => entry.startsWith(`${consumer}@${bindingsOf(consumer)[0]!.consumer.version}\u0000`)).length;
-    expect([own("module.full_inspector"), own("module.postcommit_nudge"), own("module.review_map")]).toEqual([102, 41, bindingsOf("module.review_map").length - 5]); // Four typed engine projections and grade are owned by the common presentation layer; current trade joins this group.
+    expect([own("module.full_inspector"), own("module.postcommit_nudge"), own("module.review_map")]).toEqual([103, 41, bindingsOf("module.review_map").length - 5]); // Four typed engine projections and grade are owned by the common presentation layer; current trade joins this group.
     const detailRenderers = ["inspector.detail.rays@1", "inspector.detail.square_control@1", "inspector.detail.piece_destinations@1", "inspector.detail.destination_changes@1", "inspector.detail.king_zone@1", "inspector.detail.defender_duties@1", "inspector.detail.backward_pawns@1", "inspector.detail.pawn_file_groups@1", "inspector.detail.file_states@1", "inspector.detail.future_file_challenges@1", "inspector.detail.capture_migration_reaches@1", "inspector.detail.outpost_candidates@1", "inspector.detail.occupied_outposts@1", "inspector.detail.backward_pawn_advance@1"];
     expect(Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => id.startsWith("inspector.detail.")).sort()).toEqual([...detailRenderers].sort());
     const snapshotRenderers = ["king_opposition", "backward_pawns", "pawn_file_groups", "file_states", "future_file_challenges", "capture_migration_reaches", "outpost_candidates", "occupied_outposts", "backward_pawn_advance"].map(kind => `inspector.snapshot.${kind}@1`);
     expect(Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => id.startsWith("inspector.snapshot.")).sort()).toEqual([...snapshotRenderers].sort());
-    const analyzeRenderers = ["review.analysis_typed_pv@1", "review.analysis_recorded_pv@1", "review.analysis_recorded_first@1"];
-    expect(Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => id.startsWith("review.analysis_")).sort()).toEqual([...analyzeRenderers].sort());
+    const reviewRenderers = ["review.analysis_typed_pv@1", "review.analysis_recorded_pv@1", "review.analysis_recorded_first@1", "review.defender_exposure@1"];
+    expect(Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => id.startsWith("review.")).sort()).toEqual([...reviewRenderers].sort());
     const nudgeRenderers = ["play.move_quality_summary@1", ...Object.values(FOUNDATION_COMPACT_STATEMENTS).map(([renderer]) => renderer)].sort();
     expect(Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => id.startsWith("play.")).sort()).toEqual(nudgeRenderers);
-    for (const id of Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => !detailRenderers.includes(id) && !snapshotRenderers.includes(id) && !analyzeRenderers.includes(id) && !nudgeRenderers.includes(id))) expect(id).toMatch(/^(?:inspector\.[a-z_]+@1|inspector\.registered_shape_firing@2|grade\.move_quality@2)$/u);
+    for (const id of Object.keys(INSPECTOR_FACT_RENDERERS).filter(id => !detailRenderers.includes(id) && !snapshotRenderers.includes(id) && !reviewRenderers.includes(id) && !nudgeRenderers.includes(id))) expect(id).toMatch(/^(?:inspector\.[a-z_]+@1|inspector\.registered_shape_firing@2|grade\.move_quality@2)$/u);
   });
 });
 
@@ -290,16 +290,16 @@ function currentPairReceipt(spec: typeof remainingCurrentPairs[number]): Present
 }
 
 describe("D3948 remaining current board/Map pairs", () => {
-  it("partitions the actual97 current pairs as37 static +4 retained conditional +14 compact +42 remaining", () => {
+  it("partitions the actual98 current pairs as37 static +4 retained conditional +14 compact +43 remaining", () => {
     expect(compactStatementPairs).toHaveLength(14);
-    expect(remainingCurrentPairs).toHaveLength(42);
+    expect(remainingCurrentPairs).toHaveLength(43);
     expect(remainingCurrentPairs.filter(spec => spec.composition !== undefined)).toHaveLength(21);
     expect(remainingCurrentPairs.filter(spec => spec.component === "square_set" && spec.composition === undefined)).toHaveLength(8);
-    expect(remainingCurrentPairs.filter(spec => spec.component === "fact_statement")).toHaveLength(12);
+    expect(remainingCurrentPairs.filter(spec => spec.component === "fact_statement")).toHaveLength(13);
     expect(remainingCurrentPairs.filter(spec => spec.component === "magnitude")).toHaveLength(1);
     const all = [...staticStatementPairs, ...conditionalStatementPairs, ...compactStatementPairs, ...remainingCurrentPairs];
-    expect(all).toHaveLength(97);
-    expect(new Set(all.map(spec => key(spec.consumer, spec.projection))).size).toBe(97);
+    expect(all).toHaveLength(98);
+    expect(new Set(all.map(spec => key(spec.consumer, spec.projection))).size).toBe(98);
     for (const spec of remainingCurrentPairs) expect(spec.validateWireComponent, key(spec.consumer, spec.projection)).toBeTypeOf("function");
   });
   it.each(remainingCurrentPairs)("round-trips genuine $consumer.id × $projection.id@$projection.version", spec => {
@@ -922,7 +922,7 @@ describe("inspector / post-commit nudge / review map adapters: real evidence thr
         }
       }
     }
-    if (consumer === "module.full_inspector") expect(presentedPairs).toBe(102);
+    if (consumer === "module.full_inspector") expect(presentedPairs).toBe(103);
     else expect(presentedPairs).toBeGreaterThan(40);
   });
 });

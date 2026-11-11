@@ -40799,3 +40799,17 @@ mounted tests covered the same fact rendering and checked rejection of crossed o
 occurrences. The 103 HTTP/manifest tests, 113 runtime and mounted tests, workspace types and
 the evidence manifest, semantic evidence, candidate projection and capability checks passed.
 Exact Inspector source acquisition, scoped paging and the Inspect action are still open.
+
+### 2026-11-11 — D4179 Inspector source overview
+
+The granted incoming-edge source calls the original defender-exposure factory once per request.
+Its overview keeps the source reference and original order. An exact-start request returns the
+same occurrence key and evidence reference. The granted branch and actual parent determine the
+open-retry refusal before collection. Root requests have no incoming source.
+
+The authenticated REST checks cover both colors for two targets, quiet and checking edges,
+provider-off execution, exact-start paging and open-retry refusal before the factory. The focused
+server suite passed 526 tests. The runtime and mounted Inspector suite passed 1,823 tests after
+updating its exact renderer list for the Review renderer added in the previous checkpoint.
+Workspace types and the evidence manifest, semantic evidence, candidate projection and capability
+checks passed. Scoped exchange pages and the Review action remain open.

@@ -130,7 +130,7 @@ describe("independent actual Full2 browser receiver", () => {
   it("requires semantic wire validation on every one of the actual102 Full2 adapter pairs", () => {
     const adapters = PRESENTATION_ADAPTERS.filter(adapter => adapter.consumer.id === "module.full_inspector" && adapter.consumer.version === 2);
     const roots = [...INSPECTOR_SOURCE_TOPICS.map(topic => topic.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`)];
-    expect(adapters).toHaveLength(102);
+    expect(adapters).toHaveLength(103);
     expect(adapters.map(adapter => `${adapter.projection.id}@${adapter.projection.version}`).sort()).toEqual(roots.sort());
     expect(adapters.every(adapter => typeof adapter.validateWireComponent === "function")).toBe(true);
   });

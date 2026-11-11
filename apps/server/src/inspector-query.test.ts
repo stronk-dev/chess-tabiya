@@ -68,10 +68,10 @@ describe("actual current Inspector source-page operation", () => {
   });
   it("requires complete preflight even for inventory, before any source owner", async () => {
     const f = fixture(), acquire = vi.spyOn(f.service, "acquireInspectorQuerySource");
-    expect(await f.send()).toMatchObject({ protocol: "inspector.query_page@1", kind: "page", body: { kind: "inventory", range: { start: 0, count: 8, total: 88, next: 8 } } });
+    expect(await f.send()).toMatchObject({ protocol: "inspector.query_page@1", kind: "page", body: { kind: "inventory", range: { start: 0, count: 8, total: 89, next: 8 } } });
     expect(acquire).not.toHaveBeenCalled();
   });
-  it("acquires only the actual requested source for each of the88 topics", async () => {
+  it("acquires only the actual requested source for each of the89 topics", async () => {
     const f = fixture(), acquire = vi.spyOn(f.service, "acquireInspectorQuerySource"), original = JSON.stringify(f.storage.read(f.run.id));
     for (const topic of INSPECTOR_SOURCE_TOPICS) {
       const kind = topic.contexts[0]!, nodeId = f.mainPath.at(-1)!.id;
@@ -83,7 +83,7 @@ describe("actual current Inspector source-page operation", () => {
         : { kind: "source", projection, context, start: 0, collectionKey: null };
       expect(await f.send(f.request(view))).toMatchObject({ protocol: "inspector.query_page@1", kind: "page", body: { kind: "source", projection } });
     }
-    expect(acquire).toHaveBeenCalledTimes(88); expect(JSON.stringify(f.storage.read(f.run.id))).toBe(original);
+    expect(acquire).toHaveBeenCalledTimes(89); expect(JSON.stringify(f.storage.read(f.run.id))).toBe(original);
   });
   it("keeps current access, disclosure and decision refusals ahead of source work", async () => {
     const f = fixture(), acquire = vi.spyOn(f.service, "acquireInspectorQuerySource");

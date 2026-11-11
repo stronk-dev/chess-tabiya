@@ -324,7 +324,7 @@ describe("independent genuine Inspector source browser", () => {
       await click(target, "Next sources"); await settled(target);
     }
     expect(seen).toEqual(INSPECTOR_SOURCE_TOPICS.map(row => INSPECTOR_SOURCE_LABELS[row.projection]));
-    expect(new Set(seen).size).toBe(88); expect(seen.every(text => !/@\d|sha256|_/u.test(text))).toBe(true);
+    expect(new Set(seen).size).toBe(89); expect(seen.every(text => !/@\d|sha256|_/u.test(text))).toBe(true);
     expect(await f.stats()).toEqual({ acquisitions: [], providerCalls: [] });
   });
 

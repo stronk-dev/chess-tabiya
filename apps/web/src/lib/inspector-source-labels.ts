@@ -31,6 +31,7 @@ export const INSPECTOR_SOURCE_LABELS: Readonly<Record<InspectorSourceRef, string
   "derived.tactic.sequence.defender_consequence@3": "Recorded defender and capture sequence",
   "derived.material.reading.role_signature@2": "Material by piece type",
   "derived.material.event.role_asymmetry@2": "Material changes after the move",
+  "derived.tactic.defender_exposure@2": "Lost coverage and capture options",
   "rules.king.reading.zone_state@1": "King zone, shelter and escapes",
   "recorded.inspector.eval_packet@1": "Saved engine evaluations",
   "recorded.inspector.wdl_packet@1": "Saved win, draw and loss reports",

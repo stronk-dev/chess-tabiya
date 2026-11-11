@@ -127,8 +127,8 @@ describe("independent current-image Inspector query boundary", () => {
     expect(result.disclosure.sourceKeys).toEqual([]); expect(result.disclosure.componentDigests).toEqual([]);
     expect(collect).toHaveBeenCalledTimes(1);
   });
-  it("retains the complete88-topic/fourteen-detail root image without duplicate or historical aliases", () => {
-    expect(expectedRoots).toHaveLength(102); expect(new Set(expectedRoots).size).toBe(102);
+  it("retains the complete89-topic/fourteen-detail root image without duplicate or historical aliases", () => {
+    expect(expectedRoots).toHaveLength(103); expect(new Set(expectedRoots).size).toBe(103);
   });
 
   it.each(expectedRoots)("compiles the actual complete source graph for %s without fake consumer bindings", projection => {
@@ -139,7 +139,7 @@ describe("independent current-image Inspector query boundary", () => {
     expect(executionPlanDigest(plan)).toMatch(/^(?:sha256:)?[a-f0-9]{64}$/u);
   });
 
-  it("preflights the real complete current102 image and exact operation", () => {
+  it("preflights the real complete current103 image and exact operation", () => {
     const current = MODULE_CURRENT_IMAGE.find(row => row.moduleId === "full_inspector")!;
     expect(current.consumer).toEqual({ id: "module.full_inspector", version: 2 });
     expect(current.implementation).toBe("compileInspectorSourcePage");
@@ -173,13 +173,13 @@ describe("independent current-image Inspector query boundary", () => {
     if (projection !== "recorded.engine.eval@1" && projection !== "recorded.tablebase.result@1") expect(f.acquisitions[4]).not.toHaveBeenCalled();
   });
 
-  it("enumerates all88 original topics in bounded inventory pages without acquiring anything", async () => {
+  it("enumerates all89 original topics in bounded inventory pages without acquiring anything", async () => {
     const f = fixture(), before = JSON.stringify(f.storage.read(f.run.id)), seen: string[] = [];
     for (let start = 0; start < INSPECTOR_SOURCE_TOPICS.length; start += 8) {
       const result = page(await f.service.queryInspectorSources(f.run.id, owner, f.request({ kind: "inventory", start }), availability, f.controller.signal));
       if (result.body.kind !== "inventory") throw new Error("Expected actual inventory");
       const { range, topics } = result.body;
-      expect(range).toEqual({ start, count: Math.min(8, 88 - start), total: 88, next: start + 8 < 88 ? start + 8 : null });
+      expect(range).toEqual({ start, count: Math.min(8, 89 - start), total: 89, next: start + 8 < 89 ? start + 8 : null });
       expect(topics.every(topic => topic.state === "not_requested")).toBe(true);
       seen.push(...topics.map(topic => topic.projection));
       expect(result.disclosure).toMatchObject({ range, sourceKeys: [], sourceOrdinals: [], componentDigests: [], sourceOutcome: null, recordedCoverage: null });
