@@ -43,7 +43,9 @@ only the independently reviewed hash metadata changes. The
 [implemented case-storage RFC](../rfc/archive/semantic-validation-case-storage.md) is closed.
 D4217 separately owns two obsolete inventory assertions in an older disposable research
 model. The unconnected control reference now passes34 research checks across16 boards/30moves
-with128 subjects each; citation/fault/mirror/admission work remains. This is not qualification.
+with128 subjects each. Independent original-piece ray preparation passes67 research checks
+over62 literal examples and all legal alternatives; citation/fault/mirror/admission work
+remains for both references. This is not qualification.
 
 ## Verified historical clock delivery — 2026-11-05, uncommitted
 

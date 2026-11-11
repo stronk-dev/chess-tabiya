@@ -3028,3 +3028,16 @@ registries remain unchanged. No citation, wrong-output fault control, mirror or 
 is claimed; those remain required before admission. The existing semantic-validation
 dossier and coverage row now hold the bounded result and current19/89 qualification
 checkpoint, replacing the stale November9 header without changing historical findings.
+
+
+### 2026-11-11 — Complete original-piece ray reference preparation
+
+Normal `make semantic-retained-piece-source-research` typechecks and passes67 checks/4.68s.
+Independent placement/relocation/full-ray arithmetic covers62 existing literal examples,
+all original pieces ×8 directions and every legal alternative. Full populations, complete
+event arrays and original invocation inputs match. Capture replacement, EP, four promotions,
+standard/stationary/crossing castles and role/border/zero distinctions are explicit.
+Independent static review accepts this bounded checkpoint without a concrete flaw;
+this is unregistered D1716 research, not source qualification.
+Five outcome families, ordinary26 and broader consumers remain. The D1716 ledger now cites
+the actual complete0dda10a3 software certificate rather than its superseded c484bfc7 run.

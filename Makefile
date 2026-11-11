@@ -4705,6 +4705,12 @@ semantic-control-source-research:
 	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
 	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/direct-control-reference.test.ts
 
+# Disposable D1716 original-piece ray reference; outside software CI and canonical admission.
+.PHONY: semantic-retained-piece-source-research
+semantic-retained-piece-source-research:
+	./node_modules/.bin/tsc --project tools/d1713-semantic-validation-matrix/tsconfig.foundation.json
+	./node_modules/.bin/vitest run --config tools/d1713-semantic-validation-matrix/vitest.config.ts tools/d1713-semantic-validation-matrix/retained-piece-reference.test.ts
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

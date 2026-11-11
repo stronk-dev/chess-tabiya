@@ -400,3 +400,30 @@ cited proposition, profile arm or learner binding. Promotion still needs reviewe
 grounding, genuine wrong-output controls, exact mirrors and all required canonical/profile
 proofs. Line-blocker and legal profitable-capture risk references remain separate work. `[V]`
 (the research import boundary; current cited-source/profile/consumer registries)
+
+
+## Complete original-piece ray reference — D1716, 2026-11-11
+
+Normal `make semantic-retained-piece-source-research` typechecks and passes67 checks
+in4.68s. Its independent placement decoder, physical relocation map and board-edge ray
+arithmetic compare all original pieces × eight signed directions, including inapplicable,
+removed and zero states, over62 hand-authored examples and their complete legal alternatives.
+The external rules library supplies legal inputs only. Full emitted arrays and invocation
+receipt/first-input identity are compared; existing hand-authored sparse rays independently
+anchor matching complete-table cells. `[V]`
+(`tools/d1713-semantic-validation-matrix/retained-piece-reference.ts`,
+`tools/d1713-semantic-validation-matrix/retained-piece-reference.test.ts`)
+
+The boundary checks cover numeric original-square order, both colors/all roles, occupied
+interior squares beyond the first blocker, endpoint exclusion, adjacent endpoints, role-before-
+border refusal, equal counts with changed membership, moved originals, identical-role capture
+replacement, en passant, all four promotions, normal and stationary/crossing castling. A
+promotion retains the original pawn subject and becomes a current-role ray where applicable;
+its non-comparable original state cannot be treated as a zero baseline. Bare kings retain
+16 explicit inapplicable subjects with no differing events. `[V]` (same reference and tests)
+
+This is disposable, unregistered reference preparation. It does not register a cited source,
+case/profile arm or consumer and adds no canonical qualification. Legal-input generation,
+ray occupancy and a public differing-relation event remain separate meanings. Source citation,
+pre-mint fault controls, absolute/mirror/canonical execution and consumer adoption still remain.
+`[V]` (unchanged cited-source/profile registries; reference import boundary)

@@ -41020,3 +41020,22 @@ a bishop line opened by a knight, and forced single-capture available/no-event c
 Independent source readback reports no concrete flaw. The existing dossier and coverage
 row record the result. No production collector, cited source, profile, learner binding or
 qualification changes; source grounding/fault/mirror/admission work remains.
+
+
+### 2026-11-11 — D1716 complete original-piece ray reference
+
+Added disposable unregistered placement/physical-identity/full-ray reference, separate from
+production lineage and ray helpers. Normal `make semantic-retained-piece-source-research`
+typechecks and passes67 checks/4.68s across62 literal examples and complete alternatives,
+including capture replacement, EP, promotions and stationary/crossing castles. Every
+original piece/direction, inapplicable/removed/zero cell and full emitted array is compared.
+Independent bounded review requested. No source/profile/consumer is registered or qualified.
+D1716 remains doing; its full-run certificate was corrected to verified0dda10a3. Next:
+pre-mint authority controls and the independent legal-exchange own-piece risk reference.
+
+
+### 2026-11-11 — D1716 ray reference independently reviewed
+
+The independent reviewer accepts the bounded reference checkpoint after inspecting expected-
+value independence, all physical identities, ray membership/order and complete comparisons.
+No concrete flaw found. This does not accept canonical qualification or consumer readiness.
