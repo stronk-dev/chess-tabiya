@@ -35457,6 +35457,15 @@
       "uxItems": [],
       "evidence": "planning/foundation-source-identity/core-acquisition-2026-11-11.json",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4228",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fc52ef8689f28f218ec64d9cf586cd646f813d56f3c107f45bc99c797b1e062c",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "item:D4224"
     }
   ]
 }

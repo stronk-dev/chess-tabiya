@@ -4531,3 +4531,16 @@ full-owner/global-cache costs, D4175 ordinary adoption and D3928 content/native/
 No production implementation, source qualification, lost feature or increased deadline follows
 from this experiment. `[V]` (same report; `rfc/module-registration.md` §Review pagination;
 `rfc/subject-safe-semantic-selection.md` §§1/6)
+
+
+### Actual Review execution boundary — D4228
+
+The accepted `rfc/module-registration.md` §2.5.2 defines multi-subject frozen-prefix/cursor
+jobs with a5s total collection contract. The current `ModuleQueryRequest.review` instead carries
+one nodeId/requested set; RunService.queryModules handles that selected timing subject.
+RunService.review separately composes the selected whole branch without that prefix/page job
+protocol. These are actual source boundaries, not evidence that the prospective32-source
+experiment is an implemented Review job. D4228 records the remaining runtime/service/API/client
+job implementation, coordinated with D4224 and existing selection/assistance rules. `[V]`
+([request](../../packages/runtime/src/module-query.ts),
+[service](../../apps/server/src/service.ts), `rfc/module-registration.md` §2.5.2)

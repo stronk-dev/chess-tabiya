@@ -1,6 +1,7 @@
 # RFC: subject-safe semantic selection
 
 - **Status:** implementing — current2026-11-11 source checkpoint: all13 outcome families qualify with1928/1928 cases and24/89 validated subjects; all1524 predecessor case receipts and other84 verdicts are preserved. D4220 lossless storage2 passes focused/Git proofs and complete normal verification:20488 software tests/580files and7 performance tests/fourfiles. D4175 ordinary26, broader D4167 consumers, native journeys and release remain separate.
+- **Draft amendment:** §6.4 D4224 scoped acquisition, authored2026-11-11; independent review pending, not implementation authority.
 - **Author:** codex, on the owner's full-foundation/zero-legacy ruling.
 - **Created:** 2026-11-09
 - **Parent:** `archive/semantic-evidence-selection.md` (immutable historical contract).
@@ -898,6 +899,155 @@ Required proof before closure:
 | item | foundation | owner | due |
 |---|---|---|---|
 | [[D4175]] | [[D1716]] | `evidence-foundation` | 2026-11-10 |
+
+### 6.4 D4224 — owned scoped foundation acquisition (DRAFT, not accepted)
+
+**2026-11-11 author proposal.** Parent implementing status does not authorize this amendment.
+D4224/D4227 measured the need and feasibility; no production source changes are included in the
+research commits. This section changes only acquisition/authority plumbing for the existing
+thirteen exact outcome families. D4175 ordinary bindings remain held; D4228 owns the accepted
+whole-prefix Review job rather than pretending that job already ships.
+
+#### Research and intended behavior
+
+The42,214B D4227 report compares48 required source graphs/value receipts and all13 raw and genuine
+factory payloads/inputs/complete populations. Four32-decision raw-stage pairs are15.54–16.92s
+full versus5.62–6.26s core. The raw probe has no source authority and deliberately omits unrelated
+collector failure images. It establishes feasibility, not a ready API or an existing budget pass.
+See `design/research/module-evidence-assembly.md` §Scoped required-core feasibility.
+
+A consumer requiring complete counterfactual foundation states must acquire those states
+without first requesting every unrelated event/reading. A consumer requesting the full packet
+must still receive every current event/reading and its actual failures, using the SAME original
+legal/root/child sources already acquired for that owner. No provider, grade, source ranking,
+new chess algorithm, pack change or learner setting is added.
+
+#### One owner and two honest receipt types
+
+Refactor the EXISTING candidate compiler's invocation-local graph into one fixed owner per
+service entry. The root legal source remains the sole enumerator. Its original ExactLegalMove
+objects and canonical child FENs determine the finite candidate slots. Each slot lazily retains
+its existing foundationPositionCells, total/ray/risk values and full collector results. No
+same-FEN replacement invocation may stand in for a retained original source.
+
+Keep CandidatePopulationReceipt and all existing events/readings/wide scopes as full packet
+contracts. Add a distinct internal CandidateFoundationReceipt with exactly the public factual
+fields `{kind:"foundation", beforeFen, compilerVersion:8, id, legalMovesInput}` and private
+root/child references under the same owner. It has NO packet, event/readings arrays, abstention
+array or selectedMember pretending full collection happened. It cannot pass the existing full
+receipt reader or any full-only operation. Receipt copies, equal-byte inputs from another owner,
+missing/extra/reordered legal members, mismatched moves/children and unfinished owners refuse.
+
+The foundation identity hashes the same factual identity terms as packet identity, with
+scope:"foundation" and construction version8. Wide packet identities retain their own scope.
+A full owner can expose its original foundation receipt; a foundation receipt cannot be widened
+by projection. Requesting full collection advances the SAME owner and only then constructs the
+normal full receipt. Existing wide→narrow projection retains its semantics and original values.
+
+Move the construction literal7→8 once for this coordinated change. No persisted schema or
+convention version is claimed. This supersedes §1's wide-only requirement ONLY for these thirteen
+outcome factories and their exact private population/availability readers. Events-only and
+readings-only receipts remain insufficient. The current full compiler/factory paths stay live
+until the coordinated successor passes; there is no public legacy adapter or raw payload bridge.
+
+#### Original graph and unchanged outcome meaning
+
+A fixed nonminting reader accepts either the original foundation receipt or an original wide
+receipt from this owner and returns the same original core graph. Existing full readers keep
+returning their full row references; do not replace a full CandidateEventRow with a thin row.
+Join every full row to its original source slot explicitly. Core legal/root/child/ray/risk/total
+values must be object-identical before and after full acquisition in BOTH request orders.
+
+All thirteen existing @2 outcome projections keep their payload/state/relation/denominator
+meaning and exact ordered input vectors. Their sole factories accept the exact original full
+or foundation receipt through the existing `receipt` field; no caller supplies a vector or
+resolver. Their factual authority digest uses exactly `{foundationId, compilerVersion:8, moveUci, family}`,
+where foundationId is the owner's original foundation receipt id, independent of whether unrelated
+full facts were requested. The original
+invocation record retains the actual supplied receipt and original core inputs. Result/value
+copies and another family's result still refuse. Repeated factory calls need not return the
+same output wrapper; they MUST retain every original prerequisite reference.
+
+Retaining @2 is a proposal based on unchanged mathematical meaning, NOT grandfathered
+qualification. Re-execute every affected real operation/case/counterfactual/orientation and the
+canonical writer under construction8; keep source admission held if any required proof is
+absent. Preserve all historical cases and unaffected payloads/verdicts, with an explicit review
+of every changed receipt/hash. No copied certificate, newest-version resolver or automatic
+qualification follows from raw equality.
+
+#### Coverage and failure cannot be invented
+
+Foundation requests collect ALL six common cells, complete ray/risk/total inputs for the root
+and EVERY legal child, including zero, false, removed, promoted and known unavailable states.
+Only after full source validation may the owner seal a foundation receipt. Unknown/missing/
+contradictory required sources fail; they are never quiet or a smaller denominator.
+
+A foundation receipt makes no claim about unrelated event/reading collectors. Its source state
+is `not_requested` for that group, distinguishable from collected available-empty and unavailable.
+It does not manufacture a full candidate abstention/failure image. Its outcome availability
+comes from the complete actual required vectors, including invalid_turn_clone risk, exactly as
+the current thirteen-family algebra. Do not run an omitted collector just to reconstruct its
+failure, and do not return success as if its full check happened.
+
+When full collection is requested, preserve the existing exact collector outcomes, known legacy
+failures and contradictory/unknown-outcome refusal. A full-group failure cannot rewrite a
+previously valid foundation source or erase a genuine required risk failure. A caller explicitly
+requesting full must receive full success or the actual full failure; no fallback thin receipt.
+Existing readCandidateUnavailableSources remains a full-receipt operation. Add the finite
+foundation-required availability reader rather than weakening the full reader.
+
+#### Bounded service advancement and live permission checks
+
+The application-lifetime CandidatePopulationService owns this graph at its current64-entry
+capacity. Repeated core/full requests share its entry and original sources, not one service per
+HTTP request, a bot-only graph or a second global FEN cache. Existing stats keep counting service
+hits/misses/retained roots, not a fictitious hit for uncomputed full collection. Test eviction,
+reacquisition and externally retained old valid receipts explicitly.
+
+Expose a fixed internal begin/advance/final-read path: one step acquires the root foundation or
+one original legal child's foundation, and final read seals only the complete validated set.
+The synchronous existing compiler drains this SAME construction path. The service-driven path
+can yield between steps without changing the graph, output order or identity. No configurable
+collector scheduler, generic callback DAG or second legal enumerator is introduced.
+
+A run-facing caller completes whole-consumer/role/help/rated preflight BEFORE begin and checks
+signal, monotonic deadline and actual run/grant/assistance/source currentness before each
+advance, after each real event-loop yield and before publication. Aborted, expired or stale
+callers perform no subsequent advance or publication. Pure retained source data never caches
+permission. Interleaved authorized core/full callers cannot duplicate a slot or expose unfinished
+state; cancelling one caller does not grant authority to another. A full operation must not
+silently monopolize the event loop via a new synchronous32-position loop.
+
+This does not promise mid-function preemption or that32 subjects fit5s. Real scheduling and
+longest-step measurements must prove the service boundary; deadline exhaustion is an explicit
+failed/cancelled operation, not quiet evidence or completed coverage. D4228 implements actual
+frozen-prefix Review jobs/pages within the unchanged5s total/500ms optional-source contracts.
+The full-prefix result must remain identical to the one-pass oracle. D4175 stays held until its
+real selected source→service→REST→UI/voice and budget/cancellation proof passes.
+
+#### Acceptance — exact production paths, not the raw research hook
+
+1. Direct, foundation-first/full-later, full-first/foundation-later and interleaved paths retain
+   all original legal objects and every shared source input; all full event/reading/result bytes
+   and original within-owner joins match the current full meaning. Instrument actual factories,
+   not helper aliases, to catch duplicate acquisition. Cover quiet/unavailable and both colors.
+2. Real nominal guards refuse research thin frames, object copies, genuine foreign/equal-byte
+   substitutions, wrong scope/version/family/played/member, partial builders and forged ids.
+   Foundation→wide projection refuses before collector work. Full callers never get thin success.
+3. All13 factory outputs/input vectors/full subject populations match current independent literal
+   oracles, including all promotions, castling, EP, captures, forced/terminal states, zero, false,
+   removed/promoted and all known unavailable cases. Prove actual required failure versus
+   unrelated not-requested and full-group failure without suppressing any full feature.
+4. Actual service steps/yields prove cancellation, deadline, run mutation, disclosure/role/grant
+   revocation and source changes before acquisition and mid-work. Permanent controls fail on
+   a no-yield loop, stale publication, post-cancel advance and per-request source recollection.
+5. Re-run canonical affected source proofs and complete normal software/performance/types/build/
+   governance gates with frozen production bytes. Compact actual application cost/retention
+   measurements use current capacity and all required sources; do not infer them from raw data.
+   Preserve/report content/native holds. No @2 admission survives merely from an old certificate.
+6. Close only the verified source/acquisition slice. D4224's total budget, D4225 remaining memory,
+   D4228 Review jobs, D4175 ordinary26 and D4167 full consumer/release duties remain independently
+   live until their actual delivery proof passes. No schema/pack/default or protected intent edit.
 
 ## 7. Live validation versus unchanged history
 

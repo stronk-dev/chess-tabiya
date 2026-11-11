@@ -3503,3 +3503,22 @@ job limit. D4225, ordinary26, D4167, content/native D3928 and full release remai
 
 No production source, issuer, schema, module, consumer default or budget changes. Commit this
 verified research/dependency slice before starting the next contract/implementation wave.
+
+
+### 2026-11-11 — D4224 scoped-source contract drafted; D4228 actual Review job routed
+
+8b686200 commits the finite D4227 result with all hooks passing and a clean tracked tree.
+The existing subject-safe RFC now has a clearly UNACCEPTED §6.4 proposal: one owner retains
+original core/full inputs, a distinct foundation receipt cannot impersonate a full packet,
+construction8 coordinates actual source requalification, and explicit required/not-requested/
+full-failure states replace no checks by silence. Stepwise construction enables real caller
+cancellation/deadline/currentness checks; no existing5s budget is raised. Both authorized
+independent reviewers are reviewing the concrete draft; parent implementing status grants no
+new implementation authority. Current production remains unchanged.
+
+D4228 records an additional actual boundary: module-query Review is currently single-node and
+RunService.review composes the whole branch, while accepted §2.5.2's frozen-prefix paged job is
+not that implementation. The prospective32-source workload must not be cited as a shipped
+paged-job regression or a completed job. D4228 is owned review-and-return, blocked on D4224,
+with full runtime/service/REST/receiver/selected Review, mutation/cancellation/merge proof owed.
+No accepted feature, subject, default or content/release obligation is dropped.
