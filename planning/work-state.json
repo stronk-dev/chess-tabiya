@@ -35341,6 +35341,24 @@
       "uxItems": [],
       "evidence": "tools/semantic-validation-build.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D4215",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7b9fdde89f4aacb6454715836bf6a1cf940cab77ce0242c7b3f80a96fb950ac1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
+    },
+    {
+      "id": "D4216",
+      "state": "doing",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ec51afc09db9377bdb120627fba3f4498cdaf6abb14939aa5500435ac16480b6",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "since": "2026-11-11"
     }
   ]
 }

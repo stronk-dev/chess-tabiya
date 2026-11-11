@@ -2895,3 +2895,32 @@ rerun remains required for this wave.
 D4214's canonical writer now keeps each complete case receipt on one line. The generated
 receipt is 4,499,592 bytes, within the unchanged 5 MiB guard. The input case file remains
 4,913,962 bytes. Five outcome families, D4167 reverse consumers and D4175's ordinary pairs remain.
+
+### 2026-11-11 — Case registry capacity before the remaining sources
+
+The prepared king-zone and opposition source references compare all forty-eight selected
+populations against independent king coordinates, occupancy and turn arithmetic. Their
+sixty-eight proposed cases execute successfully through isolated registration with the real
+canonical runner. They remain outside the canonical registry during the pawn wave's full run.
+
+The proposed case document is 5,146,462 bytes, leaving 96,418 below the source guard. The
+starting-position direct-attack control has twenty legal moves and 128 square/color subjects
+per color. Independent piece-step and sliding-ray counts match every original subject state.
+Each color produces 43 exact events occupying 85,438 bytes before case inputs and authority
+metadata. Those two absolute expectations alone exceed the remaining space.
+
+D4215 and `rfc/semantic-validation-case-storage.md` own the resulting storage dependency.
+The independent reviewer returned the first draft for an incorrect reader count and the
+placement of Git-tree helpers in the pure runtime module. The repaired contract is accepted:
+32 direct readers plus the indirect CLI, one complete tree reader, exact case ordering and
+complete historical authority checks. Storage implementation has not started.
+
+### 2026-11-11 — D4216 Profile integration deadline
+
+The full software run reports Profile floor and privacy timeouts. A focused reproduction
+adds the opening cohort: all three failures are the default five-second test deadline,
+with no failed behavioral assertion. The scoped repair uses the adjacent integration
+groups' existing 30-second budget; all 26 focused tests pass in 88.57 seconds overall.
+The repair remains a separate commit checkpoint. Product performance budgets stay unchanged.
+The interrupted full run also reports recorded-Review and choice-source failures; neither
+is discharged by this Profile-only repair, and a complete software pass remains required.

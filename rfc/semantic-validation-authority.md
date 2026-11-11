@@ -1,5 +1,10 @@
 # RFC: Executable semantic-validation authority
 
+**Case storage follow-up, 2026-11-11.** D4215's executed complete attack-count proof exceeds
+the available singleton registry space after the prepared king cases.
+`semantic-validation-case-storage.md` specifies bounded case parts and the coordinated
+compiler/test/history reader migration. The repaired contract is independently accepted for bounded implementation.
+
 **Current bounded Slice B checkpoint — 2026-11-09, uncommitted.**
 
 Current 2026-11-09: 98 required subjects retain 419 passing canonical cases. Exactly castled@1,

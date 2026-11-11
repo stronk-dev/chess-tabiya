@@ -40917,3 +40917,30 @@ The focused suite passes 4,161 tests and workspace types pass. D4214 closes with
 case receipts on single lines, keeping the generated file at 4,499,592 bytes under the
 unchanged source guard. Five outcome families, ordinary avoidance delivery, the new full
 software rerun and broader 1.0 work remain.
+
+### 2026-11-11 — Measured case storage dependency
+
+The prepared king proofs pass sixty-eight cases through isolated source registration.
+The proposed case document leaves 96,418 bytes under the source guard. Executed complete
+starting-position attack counts match independent geometry for both colors, with twenty
+legal moves and 128 subjects each. Their two absolute event populations alone require
+170,876 bytes. D4215 now owns the draft case-storage follow-up, sent to independent review.
+The pawn wave's complete software run continues on its committed case set.
+
+### 2026-11-11 — Case-storage contract accepted after independent repair
+
+The independent review returned the initial D4215 draft for its reader census and runtime
+boundary. The repaired contract is accepted: 32 direct readers plus the indirect CLI,
+complete tree-isolated reads, and a build/test-only temporal guard. The RFC and roadmap
+record acceptance separately from implementation. D4216 records the Profile integration
+timeouts; its focused repair passes all 26 tests. The full software run is still pending
+and has reported an additional recorded-Review failure. No complete pass is claimed.
+
+### 2026-11-11 — Interrupted failing software run before commit checks
+
+The d89535d2 full run reported four failures before interruption: two Profile tests,
+one complete70-decision recorded-Review test and one choice-source completion/rebuild
+test. The Profile repair separately passes 26/26. The full run was stopped with exit130
+before commit hooks; it is incomplete and provides no full-pass certificate. The recorded-
+Review failure remains within D3935/D3944, and the choice-source failure needs diagnosis
+under the source-foundation work. Their deadlines have not been changed.

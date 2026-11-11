@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b59d55eec9a80ffa13cfe4ac506abace097a1ccf0a6a938152c9c4aabf58395e",
+    "roadmap": "sha256:44cb081e0855a7a9db847c1a95b39bee7eb291e34841dda31385bb02acc4b396",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:772c3a06bd84ea8f93f65847204380d870515db2aeff695a5aa7f092ed1ab421",
-    "rfcRegister": "sha256:4ed70464cb878a3ef59117798a12d29e543e0f708642c2935f672a1d13515b0a",
+    "workState": "sha256:5d32d69348782428742b103fd8dfae7ee363491cf0abab3ab394e67693ee05b2",
+    "rfcRegister": "sha256:0dd3eae8420c1ed526562dc091e9f90ca06b252ef914e34fab7f06a972d337b3",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
@@ -18,10 +18,10 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 79,
+    "assignedRfcs": 80,
     "activeRfcLifecycle": {
       "draft": 20,
-      "accepted": 0,
+      "accepted": 1,
       "implementing": 50,
       "awaiting": 9,
       "implemented": 0,
@@ -31,7 +31,7 @@
     "workState": {
       "untriaged": 0,
       "todo": 631,
-      "doing": 173,
+      "doing": 175,
       "blocked": 1063,
       "done": 1933,
       "refused": 163
@@ -354,12 +354,13 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Qualify the seven remaining outcome families and continue reverse consumer adoption under the existing contracts.",
+      "nextAction": "Implement the independently accepted case-storage dependency, complete the five remaining outcome qualifications and continue reverse consumer adoption.",
       "latestCheckpoint": {
         "at": "2026-11-11",
         "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. D4200 is closed. Backward- and passed-pawn qualification adds 54 cases; all 1,524 canonical cases and 4,161 focused tests pass, with 19 qualified subjects. The wave's full software rerun remains. Five outcome qualifications, D4167, ordinary26 and D3928 remain.",
         "impact": "advanced",
         "evidence": [
+          "rfc/semantic-validation-case-storage.md",
           "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
           "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
           "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -598,6 +599,11 @@
           "apps/server/src/profile-subject-evaluations.test.ts"
         ],
         "anchors": [
+          {
+            "kind": "rfc",
+            "id": "semantic-validation-case-storage.md",
+            "digest": "sha256:8bb00b79315e2599d53e6f3d83d0d7b4e23b5cb4545e694462cee665b140beb7"
+          },
           {
             "kind": "work_state",
             "id": "D3781",
@@ -5279,7 +5285,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 28,
+      "rfcCount": 29,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

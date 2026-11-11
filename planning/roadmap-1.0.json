@@ -89,7 +89,8 @@
         "recorded-semantic-path.md",
         "evidence-value-authority.md",
         "phase-source-composition.md",
-        "subject-safe-semantic-selection.md"
+        "subject-safe-semantic-selection.md",
+        "semantic-validation-case-storage.md"
       ],
       "completion": {
         "evidence": [
@@ -973,12 +974,13 @@
         "dependsOn": [
           "release-truth"
         ],
-        "nextAction": "Qualify the seven remaining outcome families and continue reverse consumer adoption under the existing contracts.",
+        "nextAction": "Implement the independently accepted case-storage dependency, complete the five remaining outcome qualifications and continue reverse consumer adoption.",
         "latestCheckpoint": {
           "at": "2026-11-11",
           "summary": "D4200 revision 10 persists source-local coverage across seven derived families. Five genuine revision 9 jobs upgrade through production startup, worker publication, reopen and rebuild. Account export, restore rederivation and deletion pass. D4212 preserves healthy Profile cuts when others fail. The full local software and performance gates pass on c59e565b. The revision 10 measurement completed 200 runs and published coverage for 6,400 decisions. D4200 is closed. Backward- and passed-pawn qualification adds 54 cases; all 1,524 canonical cases and 4,161 focused tests pass, with 19 qualified subjects. The wave's full software rerun remains. Five outcome qualifications, D4167, ordinary26 and D3928 remain.",
           "impact": "advanced",
           "evidence": [
+            "rfc/semantic-validation-case-storage.md",
             "packages/runtime/src/semantic-validation-pawn-lineage-sources.ts",
             "planning/foundation-source-identity/profile-current10-cost-2026-11-11.json",
             "packages/runtime/src/semantic-validation-orientation.test.ts",
@@ -1217,6 +1219,11 @@
             "apps/server/src/profile-subject-evaluations.test.ts"
           ],
           "anchors": [
+            {
+              "kind": "rfc",
+              "id": "semantic-validation-case-storage.md",
+              "digest": "sha256:8bb00b79315e2599d53e6f3d83d0d7b4e23b5cb4545e694462cee665b140beb7"
+            },
             {
               "kind": "work_state",
               "id": "D3781",
