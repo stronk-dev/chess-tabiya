@@ -3244,3 +3244,28 @@ measured value unchanged. The numeric report is40,454B, no heap dump. Next inspe
 private reading/factory memos before changing any production bound. No source/deadline/
 ordinary activation, allocator return or leak claim. Commit this verified partial experiment
 before extending the next causal control.
+
+
+### 2026-11-11 — D4225 actual global-cache intervention starts
+
+43a0405d commits the partial observation. Next use a disposable esbuild-only probe appended
+to the actual private reading/factory/position cache modules. Production files and all
+source algorithms remain unchanged. Only after releasing the service and collecting its
+original packets may the worker count/clear these real maps and collect again. Run both
+reading→factory and factory→reading orders, with positions last, to expose overlap rather
+than sum exclusive ownership. Missing/changed injection anchors or absent probes must fail
+before source work; keep only compact counts/heap observations, not payloads or heap dumps.
+
+
+### 2026-11-11 — D4225 actual maps explain part of remaining heap
+
+Append-only esbuild probes preserve actual module prefixes and source work, then clear the
+real reading/factory/position maps only after owner release. Seven instrument/two builder
+controls, dedicated types and smoke/full workers pass. Both32-decision workers preserve
+all13 source counts. Reading→factory→positions reduces post-GC heap557.17→359.59→329.37→325.30MiB;
+reverse first2 reduces559.27→543.15→331.49→327.42MiB. Initial counts11614/2048/2545 are nonempty;
+each target clears to0, others stay unchanged, snapshots join. These are marginal effects
+with shared-graph overlap, not exclusive ownership. Independent static review accepts the
+method subject to this interpretation. The49,535B report contains no raw payload/heap dump.
+D4225 stays doing for remaining325–327MiB allocation origins; next use bounded allocation
+sampling before choosing a production policy. No source/default/deadline/ordinary change.

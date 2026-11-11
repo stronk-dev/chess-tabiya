@@ -4764,6 +4764,22 @@ outcome-delivery-memory: outcome-delivery-cost-build
 outcome-delivery-memory-update: outcome-delivery-cost-build
 	$(CI_NODE) .cache/outcome-delivery-cost/measure.mjs --memory --write
 
+.PHONY: outcome-delivery-memo-build outcome-delivery-memo-smoke outcome-delivery-memo outcome-delivery-memo-update
+# D4225 append-only observers in a DISPOSABLE bundle; production sources are never edited.
+outcome-delivery-memo-build:
+	./node_modules/.bin/tsc --project tools/d4175-outcome-delivery/tsconfig.json
+	$(CI_NODE) --test tools/d4175-outcome-delivery/build-memo-probe.test.mjs
+	$(CI_NODE) tools/d4175-outcome-delivery/build-memo-probe.mjs
+
+outcome-delivery-memo-smoke: outcome-delivery-memo-build
+	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --smoke
+
+outcome-delivery-memo: outcome-delivery-memo-build
+	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe
+
+outcome-delivery-memo-update: outcome-delivery-memo-build
+	$(CI_NODE) .cache/outcome-delivery-cost/memo-probe.mjs --memo-probe --write
+
 # Accepted longitudinal-store A.2 current source contract; frozen v1/v2 artifacts never rewritten.
 .PHONY: longitudinal-registry-build longitudinal-registry-check longitudinal-registry-update
 longitudinal-registry-build:

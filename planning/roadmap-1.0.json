@@ -976,7 +976,7 @@
         "nextAction": "Qualify the five remaining outcome families, then continue ordinary and downstream consumer adoption under the accepted source contracts.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects with full20488 software+7 performance. Committedc50dcefa/D4223 measures source-only32-decision acquisition/admission17.03s before ordinary adoption. D4225 partial memory evidence now separates owner-retained post-GC heaps576.97/629.97/1123.44MiB at1/4/64 from about557MiB after owner release, with all observed original receipts collected. Observer-influenced transient costs are excluded. Six focused instrument checks/types pass;40454B report, no heap dump/default change. D4225 stays doing for global memo attribution; D4224 acquisition/budget, D4175 ordinary26, D4167 reverse consumers, D3928 content/native and full1.0 remain open.",
+          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 now intervenes in the actual private reading/factory/position maps after owner release: opposite clear orders reduce post-GC heap557.17\u2192325.30MiB and559.27\u2192327.42MiB, with all13 source counts preserved. Effects overlap; remaining325\u2013327MiB allocation origins stay doing. Seven instrument/two builder controls, types and actual-map smoke/full pass; compact49535B report. Production source/cache/defaults unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1233,7 +1233,9 @@
             "tools/d4175-outcome-delivery/measure.ts",
             "tools/d4175-outcome-delivery/measure.test.ts",
             "design/research/module-evidence-assembly.md",
-            "planning/foundation-source-identity/outcome-memory-2026-11-11.json"
+            "planning/foundation-source-identity/outcome-memory-2026-11-11.json",
+            "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
+            "tools/d4175-outcome-delivery/build-memo-probe.mjs"
           ],
           "anchors": [
             {
@@ -1884,7 +1886,7 @@
             {
               "kind": "work_state",
               "id": "D4225",
-              "digest": "sha256:75f4e470dee8d1f0c9c483a72b7cc2c8670661c6e5e850adc334d87fe8edbeb0"
+              "digest": "sha256:5bcb211933533434ade7eee5d2829e44aca5b274c64ee5eff21d65bd007e6301"
             }
           ]
         },
@@ -1908,7 +1910,7 @@
         "nextAction": "Continue the remaining outcome qualifications and reverse consumer adoption. D4179 native browser proof remains behind D3928.",
         "latestCheckpoint": {
           "at": "2026-11-11",
-          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects with full20488 software+7 performance. Committedc50dcefa/D4223 measures source-only32-decision acquisition/admission17.03s before ordinary adoption. D4225 partial memory evidence now separates owner-retained post-GC heaps576.97/629.97/1123.44MiB at1/4/64 from about557MiB after owner release, with all observed original receipts collected. Observer-influenced transient costs are excluded. Six focused instrument checks/types pass;40454B report, no heap dump/default change. D4225 stays doing for global memo attribution; D4224 acquisition/budget, D4175 ordinary26, D4167 reverse consumers, D3928 content/native and full1.0 remain open.",
+          "summary": "Source checkpoint03b584b4 retains all13 qualified outcome families/1928 passing cases/24 of89 subjects and full20488 software+7 performance. Source-only32-decision cost17.03s remains D4224. D4225 now intervenes in the actual private reading/factory/position maps after owner release: opposite clear orders reduce post-GC heap557.17\u2192325.30MiB and559.27\u2192327.42MiB, with all13 source counts preserved. Effects overlap; remaining325\u2013327MiB allocation origins stay doing. Seven instrument/two builder controls, types and actual-map smoke/full pass; compact49535B report. Production source/cache/defaults unchanged. D4175 ordinary26, D4167 reverse consumers and D3928 content/native remain open; no capability or1.0 completion.",
           "impact": "advanced",
           "evidence": [
             "rfc/archive/semantic-validation-receipt-storage.md",
@@ -2502,7 +2504,9 @@
             "planning/foundation-source-identity/outcome-delivery-cost-2026-11-11.json",
             "tools/d4175-outcome-delivery/measure.ts",
             "tools/d4175-outcome-delivery/measure.test.ts",
-            "planning/foundation-source-identity/outcome-memory-2026-11-11.json"
+            "planning/foundation-source-identity/outcome-memory-2026-11-11.json",
+            "planning/foundation-source-identity/outcome-global-memos-2026-11-11.json",
+            "tools/d4175-outcome-delivery/build-memo-probe.mjs"
           ],
           "anchors": [
             {
@@ -3518,7 +3522,7 @@
             {
               "kind": "work_state",
               "id": "D4225",
-              "digest": "sha256:75f4e470dee8d1f0c9c483a72b7cc2c8670661c6e5e850adc334d87fe8edbeb0"
+              "digest": "sha256:5bcb211933533434ade7eee5d2829e44aca5b274c64ee5eff21d65bd007e6301"
             }
           ]
         },

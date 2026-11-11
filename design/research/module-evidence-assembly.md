@@ -4275,3 +4275,42 @@ of the remaining557MiB. No production cache limit, source semantics, profile, de
 consumer activation changes in this research checkpoint. `[V]`
 ([reading cache](../../packages/runtime/src/fen-memo.ts),
 [factory memo](../../packages/runtime/src/evidence-factories.ts); D4225)
+
+
+## Actual global memo interventions — D4225, 2026-11-11
+
+A disposable esbuild plugin appends count/clear closures to the **actual lexical** reading,
+factory and parsed-position maps. It preserves every original module prefix byte-for-byte;
+production files and source algorithms are unchanged. Memo-probe mode in an uninstrumented bundle refuses missing
+hooks before source work. Two fresh workers execute the same32 decisions/all13 source and
+admission paths at actual capacity64. Only after service release/collection do they clear
+maps in opposite reading/factory orders, then parsed positions. `[V]`
+([probe builder](../../tools/d4175-outcome-delivery/build-memo-probe.mjs),
+[controls](../../tools/d4175-outcome-delivery/build-memo-probe.test.mjs),
+[49,535-byte report](../../planning/foundation-source-identity/outcome-global-memos-2026-11-11.json))
+
+| Intervention order | Owner released | After first clear | After second clear | After parsed-position clear |
+|---|---:|---:|---:|---:|
+| Readings → factory → parsed positions |557.17MiB |359.59MiB |329.37MiB |325.30MiB |
+| Factory → readings → parsed positions |559.27MiB |543.15MiB |331.49MiB |327.42MiB |
+
+All cells are post-job, post-forced-GC **heap-used** observations. The maps initially contain
+11,614 pure reading entries across nine families,2,048 factory memo entries and2,545 parsed
+positions. Every target must be nonempty before clearing and empty afterward; other map counts
+must stay equal, and each next snapshot must join the preceding one. Both workers preserve the
+same legal/family availability/event counts. Seven instrument checks, two actual-source builder
+guards, dedicated types and both actual-map smoke/full runs pass. `[V]` (same report and
+`measure.test.ts`; `make outcome-delivery-cost-check outcome-delivery-memo-smoke`,
+`make outcome-delivery-memo-update`)
+
+These are **order-dependent marginal effects**. Shared objects may remain reachable through
+both caches, so a drop cannot be labelled exclusive bytes owned by one cache or added across
+orders. Unchanged entry counts also do not imply unchanged transitive reachable bytes. The
+previous WeakRef-construction/GC limits still apply; transient timing/afterWork data are not
+natural-capacity comparisons. `[V]` (same original-map controls and retained/released method)
+
+D4225 remains **doing**. These actual caches explain part of the retained heap, but the
+roughly325–327MiB residual is still unassigned. Next sample retained allocation origins,
+without storing a heap dump, before choosing a production cache policy. No deadline, source
+semantics, ordinary binding, production cache/default or release state changes. `[V]`
+(same report; unchanged production source files)

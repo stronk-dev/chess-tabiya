@@ -182,6 +182,22 @@ interface MemoryCase {
   readonly aliveRetained: number; readonly aliveReleased: number;
   readonly memory: Readonly<Record<"before" | "afterWork" | "retainedGc" | "releasedGc", NodeJS.MemoryUsage>>;
   readonly rows: readonly { readonly id: string; readonly legalMoves: number; readonly families: readonly Pick<Family, "family" | "kind" | "events">[] }[];
+  readonly memoClears?: readonly MemoClear[];
+}
+export const MEMO_NAMES = ["readings", "factories", "positions"] as const;
+type MemoName = (typeof MEMO_NAMES)[number];
+type CacheCounts = Readonly<Record<MemoName, readonly { readonly name: string; readonly entries: number }[]>>;
+interface MemoProbe { readonly counts: () => CacheCounts[MemoName]; readonly clear: () => void }
+interface MemoClear { readonly cleared: MemoName; readonly before: CacheCounts; readonly after: CacheCounts; readonly memory: NodeJS.MemoryUsage; readonly aliveReceipts: number }
+export function memoProbes(): Readonly<Record<MemoName, MemoProbe>> {
+  const raw = Reflect.get(globalThis, "__TABIYA_RESEARCH_MEMO_PROBES__") as Partial<Record<MemoName, MemoProbe>> | undefined;
+  assert(raw, "D4225 actual private-cache probes are absent; use the diagnostic build");
+  assert.deepEqual(Object.keys(raw).sort(), [...MEMO_NAMES].sort());
+  for (const name of MEMO_NAMES) assert(typeof raw[name]?.counts === "function" && typeof raw[name]?.clear === "function");
+  return raw as Readonly<Record<MemoName, MemoProbe>>;
+}
+function cacheCounts(probes: Readonly<Record<MemoName, MemoProbe>>): CacheCounts {
+  return { readings: probes.readings.counts(), factories: probes.factories.counts(), positions: probes.positions.counts() };
 }
 function memoryStream(service: CandidatePopulationService, workload: readonly Position[]) {
   const references: WeakRef<Receipt>[] = [];
@@ -204,7 +220,9 @@ async function collectedMemory(): Promise<NodeJS.MemoryUsage> {
   for (let i = 0; i < 3; i++) { await new Promise<void>(resolve => setImmediate(resolve)); global.gc(); }
   return process.memoryUsage();
 }
-async function measureMemoryCase(workload: readonly Position[], capacity: number): Promise<MemoryCase> {
+async function measureMemoryCase(workload: readonly Position[], capacity: number, clearOrder?: readonly MemoName[]): Promise<MemoryCase> {
+  const probes = clearOrder === undefined ? undefined : memoProbes(); // Refuse absent hooks BEFORE any source work.
+  if (clearOrder !== undefined) assert.deepEqual([...clearOrder].sort(), [...MEMO_NAMES].sort());
   assert.equal(new Set(workload.map(row => row.fen)).size, workload.length);
   let control: object | undefined = Object.freeze({ observerControl: true });
   const weakControl = new WeakRef(control);
@@ -219,8 +237,16 @@ async function measureMemoryCase(workload: readonly Position[], capacity: number
   const aliveRetained = references.filter(ref => ref.deref() !== undefined).length;
   service = undefined;
   const releasedGc = await collectedMemory(), aliveReleased = references.filter(ref => ref.deref() !== undefined).length;
+  const memoClears: MemoClear[] = [];
+  if (probes !== undefined && clearOrder !== undefined) for (const cleared of clearOrder) {
+    const before = cacheCounts(probes); probes[cleared].clear();
+    const memory = await collectedMemory(), after = cacheCounts(probes);
+    assert.equal(after[cleared].reduce((n, group) => n + group.entries, 0), 0, "Actual target cache was not cleared");
+    for (const other of MEMO_NAMES) if (other !== cleared) assert.deepEqual(after[other], before[other], "Intervention changed another cache");
+    memoClears.push({ cleared, before, after, memory, aliveReceipts: references.filter(ref => ref.deref() !== undefined).length });
+  }
   const result = { capacity, workMs, observer: { held: true as const, released: true as const }, stats, aliveRetained, aliveReleased,
-    memory: { before, afterWork, retainedGc, releasedGc }, rows };
+    memory: { before, afterWork, retainedGc, releasedGc }, rows, ...(probes === undefined ? {} : { memoClears }) };
   assertMemoryCase(result, workload.length); return result;
 }
 export function assertMemoryCase(value: MemoryCase, subjects: number): void {
@@ -248,31 +274,60 @@ export function assertMemoryCase(value: MemoryCase, subjects: number): void {
     }
   }
 }
+export function assertMemoCase(value: Pick<MemoryCase, "memoClears" | "rows">, order: readonly MemoName[]): void {
+  assert.deepEqual([...order].sort(), [...MEMO_NAMES].sort());
+  assert.deepEqual(value.memoClears?.map(row => row.cleared), order, "Every requested actual-map intervention must execute");
+  let previous: CacheCounts | undefined;
+  for (const row of value.memoClears!) {
+    for (const counts of [row.before, row.after]) {
+      assert.deepEqual(Object.keys(counts).sort(), [...MEMO_NAMES].sort());
+      for (const name of MEMO_NAMES) {
+        assert(Array.isArray(counts[name]));
+        assert.equal(new Set(counts[name].map(group => group.name)).size, counts[name].length);
+        for (const group of counts[name]) assert(typeof group.name === "string" && group.name.length > 0 && Number.isSafeInteger(group.entries) && group.entries >= 0);
+      }
+    }
+    if (previous !== undefined) assert.deepEqual(row.before, previous, "Cache observations must join consecutively");
+    assert(row.before[row.cleared].reduce((n, group) => n + group.entries, 0) > 0, "An empty target cannot establish memory attribution");
+    assert.equal(row.after[row.cleared].reduce((n, group) => n + group.entries, 0), 0);
+    for (const other of MEMO_NAMES) if (other !== row.cleared) assert.deepEqual(row.after[other], row.before[other]);
+    for (const field of ["rss", "heapUsed", "heapTotal", "external", "arrayBuffers"] as const) assert(Number.isFinite(row.memory[field]) && row.memory[field] >= 0);
+    assert(Number.isSafeInteger(row.aliveReceipts) && row.aliveReceipts >= 0 && row.aliveReceipts <= value.rows.length);
+    previous = row.after;
+  }
+}
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (process.argv.includes("--memory-worker")) {
-    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly workload: readonly Position[]; readonly capacity: number };
-    process.stdout.write(JSON.stringify(await measureMemoryCase(input.workload, input.capacity)));
-  } else if (process.argv.includes("--memory")) {
+    const input = JSON.parse(readFileSync(0, "utf8")) as { readonly workload: readonly Position[]; readonly capacity: number; readonly clearOrder?: readonly MemoName[] };
+    process.stdout.write(JSON.stringify(await measureMemoryCase(input.workload, input.capacity, input.clearOrder)));
+  } else if (process.argv.includes("--memory") || process.argv.includes("--memo-probe")) {
+    const probeMode = process.argv.includes("--memo-probe");
+    if (probeMode) memoProbes();
     const workload = process.argv.includes("--smoke") ? LITERAL_POSITIONS.slice(0, 2) : reviewPositions();
-    const cases = [...new Set([1, 4, GUIDED_HINT_PROFILE.packetCapacity])].map(capacity => {
+    const runs: readonly { readonly capacity: number; readonly clearOrder?: readonly MemoName[] }[] = probeMode
+      ? [{ capacity: GUIDED_HINT_PROFILE.packetCapacity, clearOrder: MEMO_NAMES }, { capacity: GUIDED_HINT_PROFILE.packetCapacity, clearOrder: ["factories", "readings", "positions"] }]
+      : [...new Set([1, 4, GUIDED_HINT_PROFILE.packetCapacity])].map(capacity => ({ capacity }));
+    const cases = runs.map(run => {
+      const { capacity } = run;
       const result = JSON.parse(execFileSync(process.execPath, ["--expose-gc", fileURLToPath(import.meta.url), "--memory-worker"], {
-        input: JSON.stringify({ workload, capacity }), encoding: "utf8", timeout: 60_000, maxBuffer: 256 * 1024,
+        input: JSON.stringify({ workload, ...run }), encoding: "utf8", timeout: 60_000, maxBuffer: 256 * 1024,
       })) as MemoryCase;
       assertMemoryCase(result, workload.length);
+      if (run.clearOrder !== undefined) assertMemoCase(result, run.clearOrder);
       process.stderr.write(`capacity${capacity}: retained heap ${(result.memory.retainedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB, released ${(result.memory.releasedGc.heapUsed / 1024 ** 2).toFixed(1)}MiB; live receipts ${result.aliveRetained}→${result.aliveReleased}\n`);
       return result;
     });
     for (const result of cases) assert.deepEqual(result.rows, cases[0]!.rows, "All13 family availability/event counts must survive every capacity");
-    const report = { question: "D4225", node: process.version, platform: process.platform, architecture: process.arch,
+    const report = { question: probeMode ? "D4225 actual global-memo intervention" : "D4225", node: process.version, platform: process.platform, architecture: process.arch,
       scope: "fresh processes; identical source stream; forced GC only before/after work; service kept live then released; WeakRef observers cross jobs before GC; workMs/afterWork are observer-influenced",
       exclusions: ["production GC behavior", "peak/appliance footprint", "natural transient timing/memory (WeakRef creation keeps targets alive for the current job)", "exhaustive reachability/leak proof from surviving WeakRefs", "full semantic equality from counts alone", "production cache/default change"],
       workload, familyOrder: SUBJECT_OUTCOME_FAMILIES,
       familyResults: cases[0]!.rows.map(row => ({ id: row.id, legalMoves: row.legalMoves, families: row.families.map(family => [family.kind, family.events]) })),
       cases: cases.map(({ rows: _rows, ...result }) => result) };
     const text = JSON.stringify(report, null, 2) + "\n";
-    assert(Buffer.byteLength(text) < 48 * 1024, "Memory report exceeds48KiB; never retain heap or event dumps");
-    if (process.argv.includes("--write")) writeFileSync("planning/foundation-source-identity/outcome-memory-2026-11-11.json", text);
+    assert(Buffer.byteLength(text) < (probeMode ? 64 : 48) * 1024, "Memory report exceeds its compact bound; never retain heap or event dumps");
+    if (process.argv.includes("--write")) writeFileSync(`planning/foundation-source-identity/outcome-${probeMode ? "global-memos" : "memory"}-2026-11-11.json`, text);
     else process.stdout.write(text);
   } else if (process.argv.includes("--worker")) {
     const input: unknown = JSON.parse(readFileSync(0, "utf8"));

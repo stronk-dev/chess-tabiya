@@ -64,3 +64,26 @@ costs. The useful comparisons occur after job boundaries/forced collections, wit
 service still reachable and then released. Surviving references do not prove a leak or an
 exhaustive reachable-object census. RSS need not follow live-heap changes.
 [ECMAScript WeakRef constructor, step 4](https://tc39.es/ecma262/multipage/managing-memory.html#sec-weak-ref-target).
+
+## D4225 — actual global memo intervention
+
+```sh
+make outcome-delivery-memo-smoke
+make outcome-delivery-memo
+make outcome-delivery-memo-update
+```
+
+The diagnostic build appends count/clear closures to the actual private lexical maps in
+`fen-memo.ts`, `evidence-factories.ts` and `position-cache.ts`. It does not replace their
+implementations or edit production files. Source prefixes/declarations and missing-hook
+controls must pass before measurement. The ordinary build contains no diagnostic hooks.
+
+Workers run the original source workload first, release the service and collect. Only then
+do they clear the actual reading/factory maps in opposite orders, with parsed positions last.
+Each target must initially be nonempty and end empty; other counts and consecutive snapshots
+must agree. Both workers must retain equal legal/family availability/event counts.
+
+Heap drops are marginal effects given earlier clears, not exclusive cache ownership. Shared
+graphs make order matter; unchanged entry counts do not prove unchanged reachable bytes.
+Transient observer limits still apply. The numeric report is capped at 64 KiB and never
+contains payloads or a heap dump. Production cache policy and ordinary activation remain open.

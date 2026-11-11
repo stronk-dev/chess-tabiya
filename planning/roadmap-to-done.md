@@ -57,7 +57,10 @@ remaining heap. At capacities 1/4/64, post-GC heaps are 576.97/629.97/1,123.44 M
 releasing the service they are about 557 MiB, with all observed original packets collected.
 Transient timing/RSS in this WeakRef experiment is observer-influenced and is excluded from
 natural-capacity comparisons. **D4225 remains doing**: global memo attribution precedes a
-production cache decision. [Method and limits](../design/research/module-evidence-assembly.md#qualified-outcome-memory-attribution--d4225-2026-11-11).
+production cache decision. Actual-map probes now reduce the owner-released heap to
+325.30/327.42 MiB after clearing reading/factory/position caches in both orders. Their
+overlapping marginal effects explain part of the retention; the residual needs allocation
+sampling. [Method and limits](../design/research/module-evidence-assembly.md#qualified-outcome-memory-attribution--d4225-2026-11-11).
 
 D4167 reverse consumers, D4175's26 ordinary avoidance bindings, full module/preset adoption,
 learner journeys and release proof remain. D3928 still holds content/native startup/release;

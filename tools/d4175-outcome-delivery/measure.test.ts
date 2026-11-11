@@ -6,9 +6,12 @@ import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-c
 import { subjectOutcomeSemanticEvents } from "../../packages/runtime/src/semantic-evidence.js";
 import { importedPopulation } from "../research-chess/populations.js";
 import { resolve } from "node:path";
-import { assertSample, assertWarmReuse, assertWide, assertRepeatedSources, assertMemoryCase, LITERAL_POSITIONS, measurePosition } from "./measure.js";
+import { assertSample, assertWarmReuse, assertWide, assertRepeatedSources, assertMemoryCase, assertMemoCase, MEMO_NAMES, memoProbes, LITERAL_POSITIONS, measurePosition } from "./measure.js";
 
 describe("D4223 actual-source cost instrument", () => {
+  it("uninstrumented runtime cannot claim private cache observations", () => {
+    expect(() => memoProbes()).toThrow(/probes are absent/);
+  });
   it("explicit bundled fixture location preserves the original imported population exactly", () => {
     expect(importedPopulation(resolve("tools/r2-selection-harness/imported-sample.pgn"))).toEqual(importedPopulation());
   });
@@ -74,5 +77,18 @@ describe("D4223 actual-source cost instrument", () => {
       (v: typeof good) => { v.rows[0]!.families.pop(); },
       (v: typeof good) => { Object.assign(v.observer, { released: false }); },
     ]) { const bad = structuredClone(good); mutate(bad); expect(() => assertMemoryCase(bad, 1)).toThrow(); }
+    const counts = { readings: [{ name: "r", entries: 1 }], factories: [{ name: "f", entries: 1 }], positions: [{ name: "p", entries: 1 }] };
+    const memoClears = MEMO_NAMES.map(cleared => {
+      const before = structuredClone(counts); counts[cleared] = [];
+      return { cleared, before, after: structuredClone(counts), memory: { ...memory }, aliveReceipts: 0 };
+    });
+    const memo = { ...good, memoClears }; expect(() => assertMemoCase(memo, MEMO_NAMES)).not.toThrow();
+    for (const mutate of [
+      (v: typeof memo) => { v.memoClears.pop(); },
+      (v: typeof memo) => { v.memoClears[0]!.before.readings = []; },
+      (v: typeof memo) => { v.memoClears[0]!.after.factories = []; },
+      (v: typeof memo) => { v.memoClears[1]!.before.readings = [{ name: "r", entries: 1 }]; },
+      (v: typeof memo) => { v.memoClears[2]!.memory.heapUsed = NaN; },
+    ]) { const bad = structuredClone(memo); mutate(bad); expect(() => assertMemoCase(bad, MEMO_NAMES)).toThrow(); }
   });
 });
