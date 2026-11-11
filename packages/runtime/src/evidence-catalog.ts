@@ -1870,6 +1870,7 @@ const MODULE_ACCEPTANCE_IMAGE = Object.freeze({
     "derived.material.event.role_asymmetry", "derived.opening.deepest_reached",
     // rfc/review-evidence-compiler.md: the typed Review packet projections the panel admits.
     "derived.review.eval_point", ref2("derived.review.eval_delta"), ref2("derived.review.mate_transition"), "derived.review.wdl_point",
+    ref2("derived.tactic.defender_exposure"),
   ])),
   // The sole accepted Full2 image:65 source topics and their six explicit bounded views.
   full_inspector: Object.freeze([
@@ -2042,6 +2043,7 @@ export const EVIDENCE_ADAPTERS: readonly AdapterDeclaration[] = Object.freeze(CO
     ? ["machine_condition" as const]
     : (spec.forms ?? DEFAULT_FORMS).filter((form) => projectionValue.forms.includes(form)
       && !(form === "machine_condition" && SELECTION_ONLY_CONSUMERS.has(spec.id))
+      && !(spec.id === "module.review_map" && refKey(projectionRef) === "derived.tactic.defender_exposure@2" && form !== "list" && form !== "panel")
       && !(form === "arrows" && isNudgeRecordedCaptionBinding({ id: spec.id, version: spec.version ?? 1 }, projectionRef)));
   const answers = spec.id === "profile.subject_observations"
     ? [projectionRef.id === "rules.tactic.event.double_attack" ? "threat" as const : "fact" as const]

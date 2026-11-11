@@ -10,11 +10,11 @@ The full 1.0 goal remains active. On `c59e565b`, normal software verification pa
 **D4200 durable availability** now carries per-decision source coverage through revision 10
 publication, reads, rebuild and account lifecycle. Five genuine revision 9 jobs upgrade through
 startup and the real worker. The Profile fix D4212 isolates corrupt and superseded cuts so healthy
-games remain visible. The current 200-game workload and Profile cost measurement still needs to run.
+games remain visible. The current 200-game workload and Profile cost measurement is running.
 
-D4179's Review and Inspector handoff now has legal stress and ordering controls. One exposure can
-carry 159 KB of original evidence, and Review's display order can differ from the producer's
-order. The amendment needs bounded Review summaries, exact Inspect links and focused detail.
+D4179 now shows bounded defender-exposure summaries and typed source availability in Review.
+It carries original factory ordinals alongside the displayed facts, including where those orders
+differ. Exact Inspector source and detail paging and the selected-move Inspect action remain.
 [Exposure research](../design/research/module-evidence-assembly.md#review-defender-exposure-payload-size--d4179-2026-11-11)
 
 Six of the 13 new outcome families qualify. Seven still need qualification. D4167 reverse

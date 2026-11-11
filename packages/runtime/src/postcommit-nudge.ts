@@ -100,9 +100,10 @@ export function hasPostcommitChangeWitness(evidence: DeclaredEvidence<unknown>):
 }
 
 /** The evidence a production operation can seal for one committed edge today. */
-export function postcommitEdgeEvidence(run: DrillRun, parent: Node, node: Node): readonly DeclaredEvidence<unknown>[] {
+export function collectPostcommitEdge(parent: Node, node: Node) {
   const sequenceIds = new Set(["derived.exchange.trade_completed", ...Object.keys(RECORDED_SEQUENCE_HORIZONS).map(key => key.split("@")[0]!)]);
-  const events = localSemanticEventClosure(parent.fen, node.moveUci!, node.fen).events.map(event => event.evidence)
+  const closure = localSemanticEventClosure(parent.fen, node.moveUci!, node.fen);
+  const events = closure.events.map(event => event.evidence)
     .filter(value => hasKingZoneWitness(value) && !sequenceIds.has(value.projection.id)
       && value.projection.id !== "derived.tactic.fork_survives_reply");
   const forks = events.filter((value): value is DeclaredEvidence<import("./tactics.js").DoubleAttackEvent> => value.projection.id === "rules.tactic.event.double_attack");
@@ -110,5 +111,9 @@ export function postcommitEdgeEvidence(run: DrillRun, parent: Node, node: Node):
     const breadth = invokeEvidenceValueRoute("rules.tactic.consequence.reply_breadth@1", { beforeFen: parent.fen, moveUci: node.moveUci!, afterFen: node.fen });
     for (const doubleAttack of forks) events.push(invokeEvidenceValueRoute("derived.tactic.nonterminal_fork_survival@1", { doubleAttack, breadth }));
   }
-  return Object.freeze(events);
+  return Object.freeze({ closure, evidence: Object.freeze(events) });
+}
+
+export function postcommitEdgeEvidence(_run: DrillRun, parent: Node, node: Node): readonly DeclaredEvidence<unknown>[] {
+  return collectPostcommitEdge(parent, node).evidence;
 }

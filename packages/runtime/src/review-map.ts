@@ -23,7 +23,8 @@ import type { RecordedReviewObjectives } from "./evidence-factories.js";
 import type { DetectedPhase } from "./phase.js";
 import type { RecordedSemanticPathResult } from "./recorded-semantic-path.js";
 import { collectRecordedSequenceWindow, prepareRecordedSemanticBranchWindows, RECORDED_SEQUENCE_HORIZONS, type RecordedWindowRoute } from "./recorded-sequence-window.js";
-import { postcommitEdgeEvidence } from "./postcommit-nudge.js";
+import { collectPostcommitEdge } from "./postcommit-nudge.js";
+import { localDefenderExposure } from "./semantic-evidence.js";
 import { ENDGAME_SETUP_CONVENTIONS } from "./endgame-setup.js";
 import { collectRecordedOpeningHistory } from "./recorded-opening-history.js";
 import type { OpeningCatalogueAvailability } from "./opening-catalogue.js";
@@ -45,6 +46,17 @@ export interface ReviewMapGrade {
   readonly sentence: string;
 }
 
+interface ReviewExposureOccurrence {
+  readonly componentDigest: string;
+  readonly factoryOrdinal: number;
+}
+
+type ReviewExposureState =
+  | { readonly kind: "available"; readonly occurrences: readonly ReviewExposureOccurrence[] }
+  | { readonly kind: "quiet" }
+  | { readonly kind: "unavailable"; readonly reason: "invalid_turn_clone" }
+  | { readonly kind: "withheld" };
+
 export interface ReviewMapRow {
   readonly nodeId: string;
   /** The position before this move: where `Retry from here` forks a `story-reentry` branch. */
@@ -60,6 +72,7 @@ export interface ReviewMapRow {
   readonly grade?: ReviewMapGrade;
   /** Evidence-panel sentences for this move, each from a registered template or an admitted renderer. */
   readonly facts: readonly string[];
+  readonly defenderExposure: ReviewExposureState;
   /**
    * The typed Review packet components for this move admitted by `module.review_map@1`, plus the
    * packet-issued abstentions of its engine families (rfc/review-evidence-compiler.md). The closed
@@ -369,9 +382,13 @@ function accuracyFor(side: GradeSide, decisions: readonly Decision[]): ReviewAcc
 /** The packet projections the Review Map panel admits through `module.review_map@1`. */
 const REVIEW_PANEL_PROJECTIONS: ReadonlySet<string> = new Set(["derived.review.eval_point@1", "derived.review.eval_delta@2", "derived.review.mate_transition@2", "derived.review.wdl_point@1"]);
 type RecordedRelation = Readonly<{ evidence: DeclaredEvidence<unknown>; nodeId: string }>;
-const recordedRelations = new WeakMap<DrillRun, Map<string, readonly RecordedRelation[]>>();
+interface RecordedRelations {
+  readonly events: readonly RecordedRelation[];
+  readonly exposures: ReadonlyMap<string, ReturnType<typeof localDefenderExposure>>;
+}
+const recordedRelations = new WeakMap<DrillRun, Map<string, RecordedRelations>>();
 
-function collectRelations(run: DrillRun, branchId: string, routes: readonly RecordedWindowRoute[]): readonly RecordedRelation[] {
+function collectRelations(run: DrillRun, branchId: string, routes: readonly RecordedWindowRoute[]): RecordedRelations {
   // Only the immutable original run from a validated GradeSource enters this memo. No permission,
   // admission, rendered card or mutable storage object is retained; current checks still precede it.
   const key = JSON.stringify([branchId, routes]), previous = recordedRelations.get(run)?.get(key);
@@ -379,8 +396,11 @@ function collectRelations(run: DrillRun, branchId: string, routes: readonly Reco
   const path = branchPath(run, branchId);
   const sequences = prepareRecordedSemanticBranchWindows({ run, branchId,
     throughNodeIds: path.slice(1).map(node => node.id), routes });
+  const exposures = new Map<string, ReturnType<typeof localDefenderExposure>>();
   const events = Object.freeze(path.slice(1).flatMap((node, index) => {
-    const edge = postcommitEdgeEvidence(run, path[index]!, node).map(evidence => Object.freeze({ evidence, nodeId: node.id }));
+    const collected = collectPostcommitEdge(path[index]!, node);
+    exposures.set(node.id, localDefenderExposure(collected.closure));
+    const edge = collected.evidence.map(evidence => Object.freeze({ evidence, nodeId: node.id }));
     const phase = invokeEvidenceValueRoute("rules.phase.reading@2", { fen: node.fen });
     const setups = ENDGAME_SETUP_CONVENTIONS.flatMap(convention => {
       const result = invokeEvidenceValueRoute("theory.endgame.setup_match@1", { fen: node.fen, convention: { id: convention.id, version: convention.version } });
@@ -390,8 +410,9 @@ function collectRelations(run: DrillRun, branchId: string, routes: readonly Reco
     return [...edge, { evidence: phase, nodeId: node.id }, ...setups, ...routes.flatMap(route => sequences.get(node.id)!.get(route)!.windows.flatMap(window =>
       collectRecordedSequenceWindow(window).map(evidence => Object.freeze({ evidence, nodeId: node.id }))))];
   }));
-  const byBranch = recordedRelations.get(run) ?? new Map<string, readonly RecordedRelation[]>();
-  byBranch.set(key, events); recordedRelations.set(run, byBranch); return events;
+  const result = Object.freeze({ events, exposures });
+  const byBranch = recordedRelations.get(run) ?? new Map<string, RecordedRelations>();
+  byBranch.set(key, result); recordedRelations.set(run, byBranch); return result;
 }
 
 /**
@@ -459,7 +480,8 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
   if (sequenceRoutes.length !== 11) throw new TypeError("Review lost its complete eleven-family recorded sequence image");
   // Current recorded sources, not predecessor @2 events filtered against a successor accept list.
   // Validate the full original graph first; every observed window ends at its own actual node.
-  const events = [...(path.length === 1 ? [] : collectRelations(originalRun, input.branchId, sequenceRoutes)),
+  const recorded = path.length === 1 ? undefined : collectRelations(originalRun, input.branchId, sequenceRoutes);
+  const events = [...(recorded?.events ?? []),
     ...objectives.items.map(item => ({ evidence: item.evidence, nodeId: item.nodeId })),
     ...(sources?.results.flatMap(result => result.items.map(evidence => ({ evidence, nodeId: result.slot.nodeId }))) ?? []),
     ...measurements.rows.slice(1).flatMap(row => row.slots.flatMap(slot => (slot.data?.readings ?? []).map(evidence => ({ evidence, nodeId: row.position.payload.nodeId }))))];
@@ -476,6 +498,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
     events.push(...invokeEvidenceValueRoute("derived.opening.deepest_reached@2", { history }).map(item => ({ evidence: item.evidence, nodeId: item.nodeId })));
   }
   const relationsByNode = new Map<string, readonly PresentedEvidenceItem[]>();
+  const exposureOccurrences = new Map<string, ReviewExposureOccurrence[]>();
   const relationLabels = new Set<string>();
   const relationAdmission = admitForReview(input.viewer, events.map(event => event.evidence));
   if ("admitted" in relationAdmission) {
@@ -486,6 +509,13 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
       // One event may own several components. Keep the whole composition with its end node;
       // indexing a flattened component array by event index crosses those ownership boundaries.
       const presented = presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 }, [event.evidence]));
+      if (event.evidence.projection.id === "derived.tactic.defender_exposure" && event.evidence.projection.version === 2) {
+        const factoryOrdinal = recorded?.exposures.get(event.nodeId)?.events.findIndex(wrapper => wrapper.evidence === event.evidence) ?? -1;
+        if (factoryOrdinal < 0 || presented.length !== 1) throw new TypeError("Review defender exposure lacks its original occurrence");
+        const occurrences = exposureOccurrences.get(event.nodeId) ?? [];
+        occurrences.push(Object.freeze({ componentDigest: presented[0]!.componentDigest, factoryOrdinal }));
+        exposureOccurrences.set(event.nodeId, occurrences);
+      }
       const declaration = PRIMARY_EVIDENCE_MANIFEST.projections.find(projection => projection.id === event.evidence.projection.id && projection.version === event.evidence.projection.version)!;
       relationLabels.add(evidenceGroundingLabel(declaration.grounding));
       relationsByNode.set(event.nodeId, Object.freeze([...(relationsByNode.get(event.nodeId) ?? []), ...presented]));
@@ -528,6 +558,21 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
       : "refused" in packetItems ? [withheld(packetItems.refused)] : [];
     const gradePresented = decision.evidence === undefined ? [] : presentEvidenceItems(evidenceForConsumer(PRIMARY_EVIDENCE_MANIFEST, { id: "module.review_map", version: 2 }, [decision.evidence]));
     const presented = Object.freeze([...gradePresented, ...(relationsByNode.get(node.id) ?? []), ...packetPresented]);
+    const defenderExposure: ReviewExposureState = (() => {
+      if ("refused" in relationAdmission) return Object.freeze({ kind: "withheld" });
+      const exposure = recorded?.exposures.get(node.id)?.result;
+      if (exposure === undefined) throw new TypeError("Review defender exposure lacks its original source result");
+      if (exposure.kind === "unavailable") {
+        if (exposure.reason !== "invalid_turn_clone") throw new TypeError("Review defender exposure has an unknown source refusal");
+        return Object.freeze({ kind: "unavailable", reason: exposure.reason });
+      }
+      const occurrences = exposureOccurrences.get(node.id) ?? [];
+      if (occurrences.length !== exposure.value.length || new Set(occurrences.map(item => item.factoryOrdinal)).size !== occurrences.length) {
+        throw new TypeError("Review defender exposure failed to present its complete occurrence population");
+      }
+      return occurrences.length === 0 ? Object.freeze({ kind: "quiet" })
+        : Object.freeze({ kind: "available", occurrences: Object.freeze(occurrences) });
+    })();
     const facts = Object.freeze([
       ...(grade === undefined ? [gradeFact] : []),
       evaluationSentence(readings.get(node.id)),
@@ -543,6 +588,7 @@ export function reviewMapProjection(input: ReviewMapInput): ReviewMapProjection 
       fen: node.fen, moveUci: node.moveUci, moment: selected.has(node.id),
       ...(grade === undefined ? {} : { grade }),
       facts,
+      defenderExposure,
       packet: serializePresentedEvidence(presented),
     });
   });

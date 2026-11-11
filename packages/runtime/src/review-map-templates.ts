@@ -93,6 +93,7 @@ export const REVIEW_MAP_TEMPLATES = Object.freeze({
   "grade.abstention.unequal_instrument": "These readings used different engine settings or search budgets.",
   "grade.abstention.mate_score_inconsistent": "These mate readings do not form a consistent comparison.",
   "evidence.relation.none": "The recorded-path compiler detected no relation starting on this move.",
+  "evidence.defender_exposure.unavailable": "Defender exposure is unavailable for this move because the hypothetical reply-skip position is illegal.",
   "evidence.module.withheld": "Review Map evidence is withheld for this view: {reason}.",
   "module.refusal.role_outside_ceiling": "this viewer's role is outside the Review Map module's declared roles",
   "module.refusal.session_outside_ceiling": "this workflow context does not admit the Review Map module",

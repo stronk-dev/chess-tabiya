@@ -305,6 +305,51 @@ describe("review map through createApplication", { timeout: 30_000 }, () => {
     expect((await fetch(`${origin}/runs/${runId}/review`, { headers: { cookie: stranger } })).status).toBe(404);
   });
 
+  it.each([
+    ["white two targets", "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1", "c5b6", "white", "available", [1, 0]],
+    ["black two targets", "r2rk3/8/8/8/2b5/1N6/3Q4/R3K3 b - - 0 1", "c4b3", "black", "available", [0, 1]],
+    ["white pinned defender", "rk6/8/1nB5/2B5/8/8/8/RR2K3 w - - 0 1", "c5b6", "white", "available", [0]],
+    ["black pinned defender", "rr2k3/8/8/8/2b5/1Nb5/8/RK6 b - - 0 1", "c4b3", "black", "available", [0]],
+    ["white quiet", "r3k3/8/1n6/2B5/8/8/8/4K3 w - - 0 1", "c5b6", "white", "quiet", []],
+    ["black quiet", "3k4/8/8/8/5b2/6N1/8/3K3R b - - 0 1", "f4g3", "black", "quiet", []],
+    ["white checking", "r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1", "c5b6", "white", "unavailable", []],
+    ["black checking", "3k3r/8/8/8/5b2/6N1/6b1/4K2R b - - 0 1", "f4g3", "black", "unavailable", []],
+  ] as const)("D4179 delivers bounded defender exposure through Review HTTP for %s", async (_name, fen, moveUci, side, kind, ordinals) => {
+    const { origin } = await start();
+    const cookie = await register(origin, "exposure_owner");
+    const runId = await importReviewedGame(origin, cookie, "writer-exposure", sequencePgn(fen, [moveUci]), side);
+    const review = await currentReview(origin, cookie, runId);
+    expect(review.rows).toHaveLength(1);
+    const row = review.rows[0]!;
+    const items = parsePresentationReceipt(row.packet).filter(item => item.adapter.projection.id === "derived.tactic.defender_exposure");
+    expect(row.defenderExposure.kind).toBe(kind);
+    expect(items).toHaveLength(ordinals.length);
+    if (row.defenderExposure.kind !== "available") {
+      expect(row.defenderExposure).toEqual(kind === "unavailable" ? { kind, reason: "invalid_turn_clone" } : { kind });
+      expect(row.facts.join(" ")).not.toContain("hypothetical reply-skip position");
+      return;
+    }
+    const source = invokeEvidenceValueRoute("derived.tactic.defender_exposure@2", { beforeFen: fen, moveUci, afterFen: row.fen });
+    if (source.kind !== "available") throw new Error("expected original factory result");
+    expect(row.defenderExposure.occurrences).toEqual(ordinals.map((factoryOrdinal, index) => ({
+      factoryOrdinal, componentDigest: items[index]!.componentDigest,
+    })));
+    for (const [index, item] of items.entries()) {
+      const { evidence } = source.value[ordinals[index]!]!;
+      expect(item.evidenceRef?.evidenceDigest).toBe(`sha256:${evidenceValueReceipt(evidence).payloadDigest}`);
+      if (item.component.id !== "fact_statement") throw new Error("expected the Review fact statement");
+      const { defender, target, captures, passConvention } = evidence.payload;
+      expect(item.component.operand.rendererId).toBe("review.defender_exposure@1");
+      expect(item.component.operand.operands).toEqual({
+        defender: { color: defender.piece.color, role: defender.piece.role, square: defender.square },
+        target: { color: target.piece.color, role: target.piece.role, square: target.square },
+        captureCount: captures.length, passConvention,
+      });
+      expect(presentedSentence(item)).toContain("lost geometric coverage");
+      expect(presentedSentence(item)).toContain(`If ${side === "white" ? "Black" : "White"} could skip the reply`);
+    }
+  });
+
   it.each(RECORDED_CASTLING_DEFENDER)("D3739 actual Review retains the castling defender's lost duty ($name)", async value => {
     const { origin, databasePath } = await start();
     const cookie = await register(origin, "castling_defender_owner");

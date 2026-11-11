@@ -417,6 +417,7 @@
         <article class="evidence" aria-labelledby="review-evidence-title">
           <h2 id="review-evidence-title">{reviewText("evidence.title")}</h2>
           {#each plainFacts as fact}<p>{fact}</p>{/each}
+          {#if selected.defenderExposure.kind === "unavailable"}<p class="muted">{reviewText("evidence.defender_exposure.unavailable")}</p>{/if}
           <PresentedEvidence items={packetItems} onFocusSquares={focusFactSquares} detailsScope={factDetailsScope} detailsActive={readActive && !refreshBusy && retrying === undefined} />
         </article>
         {#if onAnalyze && retrying === undefined}

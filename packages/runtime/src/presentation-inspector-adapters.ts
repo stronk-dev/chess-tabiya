@@ -26,7 +26,8 @@ import { parseUci } from "chessops/util";
 import { assertDeclaredEvidence, evidenceValueReceipt, type DeclaredEvidence, type EvidenceForm, type VersionedEvidenceId } from "./evidence-contract.js";
 import type { AdapterSpec, ComponentValue, ConventionReceipt, FactOperandsByRenderer, PresentationKit, RelationOverlayOperand } from "./presentation-contract.js";
 import { assertSquareSetGeometry, bindFactStatement } from "./presentation-fact-contract.js";
-import { factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, PresentationSchemaError, s, side, type SchemaPiece } from "./presentation-schema.js";
+import { factRenderer, listPhrase, otherSide, pieceOn, pieceSchema, plural, PresentationSchemaError, ROLE_NAMES, s, side, type SchemaPiece } from "./presentation-schema.js";
+import type { AvailableDefenderExposureOperands } from "./internal/defender-exposure.js";
 import type { SquareControlReading } from "./square-control.js";
 import { pawnContactCaptionOperands, squareControlCaptionOperands } from "./presentation-play-adapters.js";
 import { renderMoveQualityGrade, renderMoveQualityGradeSummary } from "./grade.js";
@@ -282,6 +283,13 @@ const analyzeRenderer = (arm: RecordedAnalyzeArm) => factRenderer((value, label)
   return parsed;
 }, renderRecordedAnalyzeLine);
 
+const exposureSummary = s.obj({
+  defender: s.obj({ color: s.color, role: s.role, square: s.square }),
+  target: s.obj({ color: s.color, role: s.role, square: s.square }),
+  captureCount: s.nat,
+  passConvention: s.lit("mover-turn-ep-cleared@1"),
+});
+
 export const INSPECTOR_FACT_RENDERERS = Object.freeze({
   ...INSPECTOR_WHOLE_FACT_RENDERERS,
   ...FOUNDATION_EDGE_FACT_RENDERERS,
@@ -291,6 +299,14 @@ export const INSPECTOR_FACT_RENDERERS = Object.freeze({
   "review.analysis_typed_pv@1": analyzeRenderer("typed_pv"),
   "review.analysis_recorded_pv@1": analyzeRenderer("recorded_bestline"),
   "review.analysis_recorded_first@1": analyzeRenderer("recorded_search_first"),
+  "review.defender_exposure@1": factRenderer((raw, label) => {
+    const value = exposureSummary(raw, label);
+    if (value.captureCount === 0 || value.defender.color !== value.target.color || value.defender.square === value.target.square) {
+      throw new PresentationSchemaError("defender exposure requires distinct allied pieces and positive captures");
+    }
+    return value;
+  }, ({ defender, target, captureCount }) =>
+    `The ${target.color} ${ROLE_NAMES[target.role]} on ${target.square} lost geometric coverage from the ${defender.color} ${ROLE_NAMES[defender.role]} that was on ${defender.square}. If ${side(target.color)} could skip the reply, ${otherSide(target.color)} would have ${plural(captureCount, "capture")} on ${target.square} with a positive result under the local capture-and-recapture rule.`),
   "inspector.registered_shape_firing@2": factRenderer(parseRegisteredShapeFiringOperands, renderRegisteredShapeFiring),
   "inspector.recorded_eval@1": factRenderer(recordedEvalOperands, value =>
     `Stored report ${value.reportSeq}: centipawn number ${reportField(value.centipawns, String)}; mate-distance number ${reportField(value.mateIn, String)}; reported perspective ${reportField(value.perspective, side => side === "white" ? "White" : "side to move")}. Historical report only, not independently verified engine analysis or a move grade.`),
@@ -1241,6 +1257,15 @@ function buildInspectorAdapterSpecs(kit: PresentationKit): { readonly current: r
   }
 
   // Review Map only (beyond Checkpoint A's list).
+  add(MAP, V("derived.tactic.defender_exposure", 2), LP, singleFact("review.defender_exposure@1", "piece-geometry@1",
+    ["defender", "target", "captures", "passConvention"], ["mechanical_transform"], evidence => {
+      const { defender, target, captures, passConvention } = evidence.payload as AvailableDefenderExposureOperands;
+      return {
+        defender: { color: defender.piece.color, role: defender.piece.role, square: defender.square },
+        target: { color: target.piece.color, role: target.piece.role, square: target.square },
+        captureCount: captures.length, passConvention,
+      };
+    }));
   add(MAP, V("derived.material.event.role_asymmetry"), BOARD5, roleAsymmetry);
   add(MAP, V("derived.opening.deepest_reached"), LPS, openingReached);
   add(MAP, V("derived.pawn.sequence.contact_timing"), BOARD5, contactTiming);

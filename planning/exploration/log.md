@@ -40785,3 +40785,17 @@ wrappers in factory order on the shared edge closure. The focused source and Nud
 passed 42 cases across three files. The White two-target control proves that factory and
 display order differ. The quiet and checking controls preserve distinct original outcomes.
 Review admission and Inspector delivery remain open.
+
+### 2026-11-11 — D4179 bounded Review delivery
+
+The production Review response now admits the original defender-exposure evidence and emits a
+bounded geometric summary. The selected move shows typed unavailability once and keeps it
+outside the facts. The strict receiver checks packet order, component digests and unique
+source ordinals before rendering.
+
+Authenticated HTTP covered both colors for two targets, pinned defenders, quiet edges and
+checking edges. The White fixture retained factory ordinals 1 and 0 in display order. The
+mounted tests covered the same fact rendering and checked rejection of crossed or missing
+occurrences. The 103 HTTP/manifest tests, 113 runtime and mounted tests, workspace types and
+the evidence manifest, semantic evidence, candidate projection and capability checks passed.
+Exact Inspector source acquisition, scoped paging and the Inspect action are still open.

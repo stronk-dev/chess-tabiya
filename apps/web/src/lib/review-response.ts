@@ -14,6 +14,8 @@ function record(value: unknown): Record<string, unknown> | undefined {
 const text = (value: unknown): value is string => typeof value === "string" && value.trim() !== "";
 const natural = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
 const texts = (value: unknown): value is readonly string[] => Array.isArray(value) && value.every(text);
+const exactFields = (value: Record<string, unknown>, fields: readonly string[]): boolean =>
+  Object.keys(value).length === fields.length && fields.every(field => Object.hasOwn(value, field));
 
 /** A grade chip is admitted only as its complete grounding sentence (rfc/review-map.md §3 rule 2). */
 export function isGroundedGradeSentence(klass: string, sentence: string): boolean {
@@ -26,6 +28,42 @@ export function isGroundedGradeSentence(klass: string, sentence: string): boolea
 }
 function fail(message: string): never {
   throw new TypeError(`Invalid review map response: ${message}`);
+}
+
+function assertDefenderExposure(value: unknown, packet: ReturnType<typeof parsePresentationReceipt>, index: number): void {
+  const state = record(value) ?? fail(`row ${index} defender exposure state`);
+  const items = packet.filter(item => {
+    const source = item.adapter.projection.id === "derived.tactic.defender_exposure";
+    const renderer = item.component.id === "fact_statement" && item.component.operand.rendererId === "review.defender_exposure@1";
+    if ((source || renderer) && (!source || item.adapter.projection.version !== 2 || !renderer || item.evidenceRef === null)) {
+      fail(`row ${index} defender exposure has a different renderer or source`);
+    }
+    return source;
+  });
+  if (state.kind === "available") {
+    const occurrences: unknown = state.occurrences;
+    if (!exactFields(state, ["kind", "occurrences"]) || !Array.isArray(occurrences) || items.length === 0 || items.length !== occurrences.length) {
+      fail(`row ${index} defender exposure occurrence count`);
+    }
+    const ordinals = new Set<number>();
+    occurrences.forEach((raw: unknown, position: number) => {
+      const occurrence = record(raw);
+      if (occurrence === undefined || !exactFields(occurrence, ["componentDigest", "factoryOrdinal"])
+        || occurrence.componentDigest !== items[position]!.componentDigest
+        || !natural(occurrence.factoryOrdinal) || occurrence.factoryOrdinal >= items.length || ordinals.has(occurrence.factoryOrdinal)) {
+        fail(`row ${index} defender exposure occurrence identity`);
+      }
+      ordinals.add(occurrence.factoryOrdinal);
+    });
+    return;
+  }
+  if (items.length !== 0) fail(`row ${index} defender exposure components without an available source`);
+  if (state.kind === "quiet" || state.kind === "withheld") {
+    if (exactFields(state, ["kind"])) return;
+  } else if (state.kind === "unavailable" && state.reason === "invalid_turn_clone" && exactFields(state, ["kind", "reason"])) {
+    return;
+  }
+  fail(`row ${index} defender exposure state`);
 }
 
 /** Closed shape check for the Review Map payload before any of it renders. */
@@ -64,6 +102,7 @@ export function assertReviewMapResponse(value: unknown, subject: { readonly runI
       const objectiveRenderer = item.component.id === "fact_statement" && item.component.operand.rendererId === "review.objective_transition@1";
       if ((objectiveSource || objectiveRenderer) && (!objectiveSource || item.adapter.projection.version !== 2 || !objectiveRenderer)) fail(`row ${index} objective has a different renderer or source`);
     }
+    assertDefenderExposure(row.defenderExposure, packet, index);
     const facts = row.facts as readonly string[];
     const tail = facts.slice(facts.length - packet.length);
     if (packet.length > facts.length || packet.some((item, position) => presentedSentence(item) !== tail[position])) fail(`row ${index} packet sentences are not its facts`);

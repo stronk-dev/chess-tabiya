@@ -177,8 +177,8 @@ describe("module registration — the compiled production registry", () => {
     expect([...pairs].sort()).toEqual(bound);
     // Current source-safe cut:88 Full2 topics/fourteen details; ordinary avoidance26 is held,
     // not silently installed as a binding that the operation cannot supply.
-    expect(pairs).toHaveLength(291);
-    expect(pairs.length + awaiting.length).toBe(292);
+    expect(pairs).toHaveLength(292);
+    expect(pairs.length + awaiting.length).toBe(293);
     // Nine retired public events and ten old ordinary avoidance refs leave the old214 union;
     // the current seven native sources were already present in Full2.
     expect(new Set(pairs.map((pair) => pair.split("\u0000")[1])).size).toBe(195);
@@ -187,7 +187,7 @@ describe("module registration — the compiled production registry", () => {
     ]);
     expect(Object.fromEntries(MODULE_REGISTRY.modules.map((module) => [module.id, accepted(module).length]))).toEqual({
       rules_floor: 0, sight_on_request: 23, blunder_prevention: 3, threat_radar: 7, postcommit_nudge: 41, structure_nudge: 7,
-      theory_breadcrumb: 4, guided_hint: 35, compare_coach: 8, review_map: 61, full_inspector: 102,
+      theory_breadcrumb: 4, guided_hint: 35, compare_coach: 8, review_map: 62, full_inspector: 102,
     });
     expect(accepted(MODULE_REGISTRY.byId.get("full_inspector")!)).toEqual([
       ...INSPECTOR_SOURCE_TOPICS.map(row => row.projection), ...Object.keys(INSPECTOR_DETAIL_SOURCES).map(kind => `derived.inspector.detail.${kind}@1`),
@@ -389,11 +389,11 @@ describe("module registration — the compiled production registry", () => {
   it("keeps Review's exact current supplied image separate from the26 held ordinary pairs", () => {
     const required = MODULE_CONSUMER_ACCEPTS.review_map;
     const expectedBlocked = required.filter(ref => ref.id.startsWith("derived.semantic_avoidance."));
-    expect(required).toHaveLength(61);
+    expect(required).toHaveLength(62);
     expect(expectedBlocked).toEqual([]);
     const blocked = MODULE_PAIR_EXECUTION.filter(pair => pair.module === "review_map" && pair.status === "blocked_dependencies");
     expect(blocked.map(pair => key(pair.projection))).toEqual(expectedBlocked.map(key));
-    expect(MODULE_OPERATIONS.find(operation => operation.module === "review_map")!.projections).toHaveLength(61);
+    expect(MODULE_OPERATIONS.find(operation => operation.module === "review_map")!.projections).toHaveLength(62);
     expect(MODULE_PAIR_EXECUTION.find(pair => pair.module === "review_map" && key(pair.projection) === "run.record.objective_transition@2")).toMatchObject({ status: "executable" });
   });
 

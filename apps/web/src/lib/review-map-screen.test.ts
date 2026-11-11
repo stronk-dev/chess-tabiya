@@ -155,6 +155,40 @@ function files(directory: string): string[] {
 }
 
 describe("Review Map screen (rfc/review-map.md)", () => {
+  it("D4179 renders a bounded geometric summary and refuses crossed exposure occurrences", async () => {
+    const run = play(importedRun("web-exposure", "white", "r3k3/3q4/1n6/2B5/8/8/8/R2RK3 w - - 0 1"), ["c5b6"]);
+    const review = payload({ run }), row = review.rows[0]!;
+    if (row.defenderExposure.kind !== "available") throw new Error("expected available defender exposure");
+    const occurrences = row.defenderExposure.occurrences;
+    expect(occurrences.map(item => item.factoryOrdinal)).toEqual([1, 0]);
+    for (const defenderExposure of [
+      { kind: "available", occurrences: [...occurrences].reverse() },
+      { kind: "available", occurrences: [{ ...occurrences[0], factoryOrdinal: 0 }, occurrences[1]] },
+      { kind: "quiet" },
+      { kind: "withheld", occurrences },
+      { kind: "unavailable", reason: "invalid_turn_clone", occurrences },
+    ]) {
+      expect(() => assertReviewMapResponse({ ...review, rows: [{ ...row, defenderExposure }] }, { runId: run.id })).toThrow(/defender exposure/u);
+    }
+    const component = render(review, undefined, row.nodeId); await tick();
+    const facts = document.querySelector(".evidence")?.textContent ?? "";
+    expect(facts).toContain("The black queen on d7 lost geometric coverage from the black knight that was on b6.");
+    expect(facts).toContain("The black rook on a8 lost geometric coverage from the black knight that was on b6.");
+    expect(facts).not.toMatch(/defender_exposure|mover-turn-ep-cleared|reply-skip position/u);
+    await unmount(component);
+  });
+
+  it("D4179 shows source unavailability once outside the ordinary facts", async () => {
+    const run = play(importedRun("web-exposure-check", "white", "r2k4/1B6/1n6/2B5/8/8/8/R3K3 w - - 0 1"), ["c5b6"]);
+    const review = payload({ run }), row = review.rows[0]!;
+    const notice = reviewText("evidence.defender_exposure.unavailable");
+    expect(row.defenderExposure).toEqual({ kind: "unavailable", reason: "invalid_turn_clone" });
+    expect(row.facts).not.toContain(notice);
+    const component = render(review, undefined, row.nodeId); await tick();
+    expect([...document.querySelectorAll(".evidence > p")].filter(element => element.textContent === notice)).toHaveLength(1);
+    await unmount(component);
+  });
+
   it.each(["white", "black"] as const)("D3927 renders %s's three repeated current objective facts, not its root event", async side => {
     const run = objectiveRun(side), review = payload({ run }), row = review.rows.at(-1)!;
     const objective = parsePresentationReceipt(row.packet).filter(item => item.adapter.projection.id === "run.record.objective_transition");

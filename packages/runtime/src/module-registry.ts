@@ -276,6 +276,7 @@ const POSTCOMMIT_SOURCE_KEYS = new Set([
 const REVIEW_SOURCE_KEYS = new Set([
   ...POSTCOMMIT_SOURCE_KEYS,
   "derived.material.event.role_asymmetry@2",
+  "derived.tactic.defender_exposure@2",
   "derived.review.eval_point@1", "derived.review.eval_delta@2", "derived.review.mate_transition@2", "derived.review.wdl_point@1",
   "derived.pivotal.irreversibility@1", "derived.pivotal.phase_change@2", "derived.pivotal.human_divergence@2", "derived.pivotal.option_collapse@2",
   "rules.phase.reading@2", "rules.endgame.classification@1", "theory.endgame.setup_match@1",
