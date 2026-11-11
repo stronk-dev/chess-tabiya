@@ -2,6 +2,14 @@
 
 ## Current continuation — 2026-11-11
 
+D4233's first actual Hint caller cut is verified: authenticated action ownership now protects
+POST/idempotence/health, GET and DELETE, including readable foreign hosts/participants/spectators.
+Equal public IDs remain private per learner while their source search stays shared. Four genuine
+predecessor failures become30 local and172 expanded passes. Frozen production passes the complete
+normal gate:20554 software/all583 files1041.64s,7performance/four70.30s,types/build/governance.
+The row remains doing for fresh original-writer/help-policy authority; generation/deadline and
+cooperative execution remain D4234/D4235/D4224. These are the next accepted §7b implementation cuts.
+
 The full 1.0 goal remains active. D4224's construction8 source/service checkpoint implements the
 accepted distinct foundation receipt, shared original foundation/full inputs, retained tactical
 evidence, fixed acquisition steps and bounded partial/completed owners. Actual subject-outcomes
@@ -13,7 +21,8 @@ Fresh committed software passes all20550 tests/583 files in843.04s, completing c
 after a measured sleep interruption. Normal types, seven performance checks, build and governance
 also pass. The next actual caller contract, Hint §7b (D4233–35), is independently accepted: owner
 isolation, fresh live authority, genuine provider generations, finite source/voice phases and
-cooperative full acquisition. Its implementation and cost/budget proof are next. D4224/D4225/D4228 and the ordinary consumer,
+cooperative full acquisition. Implementation continues below that contract; complete currentness, cooperative execution and
+cost/budget proof remain owed. D4224/D4225/D4228 and the ordinary consumer,
 content/native and release holds remain open.
 
 The preceding D4224 private compiler-state dependency is verified: the existing

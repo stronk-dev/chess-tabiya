@@ -168,15 +168,34 @@ describe("Guided Hint through createApplication", { timeout: 60_000 }, () => {
     // The exact response image excludes every move, prose, PV or delivery field.
     expect(result).toEqual({ state: "honest_empty", requestId: expect.stringMatching(/^[a-f0-9]{32}$/u), rung: "pattern", reason: "no_admitted_occurrence" });
   });
+
+  it.each(["spectator", "participant", "host"] as const)("a readable %s cannot inspect or cancel another learner's hint action", async role => {
+    const origin = await start();
+    const { post, ask, settle, poll } = await session(origin, FORK_FEN);
+    expect((await post("/runs/hint-run/reveal", {})).status).toBe(200);
+    const hint = await settle(await ask("pattern"));
+    if (hint.state !== "available") throw new Error(`Expected an actual owned hint: ${JSON.stringify(hint)}`);
+    const registered = await fetch(`${origin}/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ handle: "hint_guest", password: "hint-guest-password" }) });
+    expect(registered.status).toBe(201);
+    const cookie = registered.headers.get("set-cookie")!.split(";", 1)[0]!;
+    expect((await post("/runs/hint-run/grants", { op: "grant", handle: "hint_guest", role })).status).toBe(200);
+    expect((await fetch(`${origin}/runs/hint-run/graph`, { headers: { cookie } })).status).toBe(200);
+    const action = `${origin}/runs/hint-run/hints/${hint.delivery.requestId}`;
+    const foreignRead = await fetch(action, { headers: { cookie } });
+    const foreignCancel = await fetch(action, { method: "DELETE", headers: { cookie } });
+    const owner = await poll(hint.delivery.requestId);
+    expect([foreignRead.status, foreignCancel.status, owner.status]).toEqual([404, 404, 200]);
+    expect(parseHintResponse((await owner.json() as { hint: unknown }).hint)).toEqual(hint);
+  });
 });
 
 describe("HintService source and voice arms", () => {
-  const access = (run: DrillRun, fen: string): HintAccess => ({ run, decision: hintDecisionStamp(run), fen, role: "learner", session: "position", voiceRequested: true });
+  const access = (run: DrillRun, fen: string): HintAccess => ({ learnerId: "owner", run, decision: hintDecisionStamp(run), fen, role: "learner", session: "position", voiceRequested: true });
   const run = { id: "unit", feedbackPolicy: "attempt_end", events: [{ seq: 1, type: "feedback.revealed", at: "2026-09-24T12:00:00.000Z", data: { nodeId: "n0" } }], nodes: [], branches: [], activeCursor: { branchId: "main", nodeId: "n0" } } as unknown as DrillRun;
   const engine = async () => ({ id: "stockfish-analysis", version: "mock-1" });
   const settle = async (service: HintService, first: HintResponse): Promise<HintResponse> => {
     await service.whenIdle();
-    return first.state === "pending" ? service.poll("unit", first.requestId, hintDecisionStamp(run)) : first;
+    return first.state === "pending" ? service.poll("unit", first.requestId, hintDecisionStamp(run), "owner") : first;
   };
   const real = () => composeProviderTraversalApplication({ engines: new MockProviderEngineClient(), tablebaseFetch: null, explorerFetch: null, explorerToken: null }).scheduler;
 

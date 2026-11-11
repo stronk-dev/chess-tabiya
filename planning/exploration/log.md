@@ -41736,3 +41736,32 @@ actual committed source/service checkpoint. D4233–35 remain doing and own the 
 caller implementation/tests; D4224/D4225/D4228/ordinary26/D4167/D3928 and full product holds stay.
 Next: implement accepted §7b in verified dependency slices, preserving the full Hint sources,
 permissions, client-action/receipt behavior and normal gates. No parent RFC or 1.0 milestone closes.
+
+
+### 2026-11-11 — D4233 first owner-isolation API cut verified
+
+Implements the authenticated action-ownership boundary of independently accepted Hint§7b.
+REST alone supplies principal.learnerId; private operation keys include run/learner/publicID.
+Request idempotence/health, poll, cancel and removal all use the same owned identity. Wrong-owner
+GET/DELETE returns unknown404 before touching the victim; drop removes only the original record.
+Public request IDs, closed wire bodies/envelopes, source horizon keys, presets and full packet
+population remain unchanged. No owner-less legacy fallback or persisted schema is introduced.
+
+Four actual predecessor controls fail with26 existing passes and no unhandled harness errors:
+readable spectator/participant/host get GET200/DELETE200 and destroy the owner's operation404;
+two authenticated-owner contexts with the same public ID collapse into one record. The fix
+passes all30 cases/two files6.87s. Real HTTP owner delivery remains byte-identical, while the
+real typed mock-provider shared-search control retains two private actions, search1 and a live
+survivor after peer cancellation. Expanded172/eight17.62s includes mounted cleanup/recovery,
+authentication, rated refusal and the unchanged source-consumer census. Independent source and
+lifetime reviewers accept this finite cut only.
+
+Frozen-source normal `make verify-software build verify-governance` exits0:20554 software/all583
+files1041.64s,7 isolated performance/four70.30s, complete types/Svelte0errors0warnings, build and
+R1–R10/C1–C8. Canonical check passes without regenerated metadata; this changes server authority,
+not chess values or factory qualification. No production source changed after that run.
+
+D4233 stays doing: actual original-writer/live intent-policy authority and fresh GET/publication
+checks remain next. D4234 actual generation/startup identity, D4235 fixed source deadline and
+D4224 cooperative full-step execution/cost, D4225/D4228/ordinary26/D4167/D3928 all remain open.
+This checkpoint closes neither the full caller contract nor a whole-product 1.0 milestone.

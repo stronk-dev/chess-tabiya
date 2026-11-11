@@ -16,7 +16,7 @@ import { composeProviderTraversalApplication } from "./provider-traversal.js";
 const FEN = "k7/7K/8/8/N7/3r4/8/3r4 w - - 0 1";
 afterEach(() => { vi.restoreAllMocks(); });
 const run = { id: "lifetime", feedbackPolicy: "attempt_end", events: [{ seq: 1, type: "feedback.revealed", at: "2026-10-05T12:00:00.000Z", data: { nodeId: "n0" } }], nodes: [], branches: [], activeCursor: { branchId: "main", nodeId: "n0" } } as unknown as DrillRun;
-const access = (voiceRequested = true): HintAccess => ({ run, decision: hintDecisionStamp(run), fen: FEN, role: "learner", session: "position", voiceRequested });
+const access = (voiceRequested = true): HintAccess => ({ learnerId: "owner", run, decision: hintDecisionStamp(run), fen: FEN, role: "learner", session: "position", voiceRequested });
 function deferred<T>() {
   let resolve!: (value: T) => void;
   let reject!: (error: unknown) => void;
@@ -40,6 +40,37 @@ function id(response: HintResponse): string {
 }
 
 describe("Guided Hint operation lifetimes", () => {
+  it("equal public action IDs belong to independent owners while their search remains shared", async () => {
+    const result = deferred<TypedProviderResult<"stockfish.principal_variation@1">>();
+    void result.promise.catch(() => undefined); // Cleanup may run before the scheduler subscribes.
+    const scheduler = realScheduler();
+    let signal: AbortSignal | undefined;
+    let fulfill!: () => Promise<void>;
+    const get = vi.fn<HintProviderGateway["get"]>(async (request, scope, current) => {
+      signal = current;
+      fulfill = async () => result.resolve(await scheduler.get(request, scope, current));
+      return result.promise;
+    });
+    const hints = service({ scheduler: { get } });
+    const first = id(hints.request({ ...access(false), learnerId: "owner" }, "pattern", "0".repeat(32)));
+    const peer = id(hints.request({ ...access(false), learnerId: "peer" }, "pattern", "0".repeat(32)));
+    try {
+      expect(peer).toBe(first); // Ownership is internal, not a new public digest field.
+      expect(hints.operationCount).toBe(2);
+      await vi.waitFor(() => expect(signal).toBeDefined());
+      expect(() => hints.poll(run.id, first, access().decision, "stranger")).toThrow(/not known/u);
+      expect(() => hints.cancel(run.id, first, "stranger")).toThrow(/not known/u);
+      expect(hints.operationCount).toBe(2);
+      expect(hints.cancel(run.id, peer, "peer").state).toBe("cancelled");
+      expect(signal!.aborted).toBe(false);
+      await fulfill();
+      await bounded(hints.whenIdle());
+      expect(get).toHaveBeenCalledTimes(1);
+      expect(hints.poll(run.id, first, access().decision, "owner").state).toBe("available");
+      expect(() => hints.poll(run.id, peer, access().decision, "peer")).toThrow(/not known/u);
+    } finally { result.reject(new Error("closed")); await hints.close(); }
+  });
+
   it("two-slot horizon pressure evicts an unused result, not an older surviving search", async () => {
     const result = deferred<TypedProviderResult<"stockfish.principal_variation@1">>();
     const scheduler = realScheduler();
@@ -62,15 +93,15 @@ describe("Guided Hint operation lifetimes", () => {
     try {
       await vi.waitFor(() => expect(firstSignal).toBeDefined());
       const second = id(hints.request(secondAccess, "pattern", "0".repeat(32)));
-      await vi.waitFor(() => expect(hints.poll(run.id, second, secondAccess.decision).state).toBe("available"));
+      await vi.waitFor(() => expect(hints.poll(run.id, second, secondAccess.decision, "owner").state).toBe("available"));
       const third = id(hints.request(thirdAccess, "pattern", "0".repeat(32)));
-      await vi.waitFor(() => expect(hints.poll(run.id, third, thirdAccess.decision).state).toBe("available"));
+      await vi.waitFor(() => expect(hints.poll(run.id, third, thirdAccess.decision, "owner").state).toBe("available"));
       expect(hints.operationCount).toBe(2);
-      expect(() => hints.poll(run.id, second, secondAccess.decision)).toThrow(/not known/u);
+      expect(() => hints.poll(run.id, second, secondAccess.decision, "owner")).toThrow(/not known/u);
       expect(firstSignal.aborted).toBe(false);
       await fulfill();
       await bounded(hints.whenIdle());
-      expect(hints.poll(run.id, first, firstAccess.decision).state).toBe("available");
+      expect(hints.poll(run.id, first, firstAccess.decision, "owner").state).toBe("available");
     } finally { result.reject(new Error("closed")); await hints.close(); }
   });
 
@@ -82,15 +113,15 @@ describe("Guided Hint operation lifetimes", () => {
     const requestId = id(hints.request(access(), "pattern", "0".repeat(32)));
     try {
       await vi.waitFor(() => expect(signal).toBeDefined());
-      if (action === "cancel") expect(hints.cancel(run.id, requestId).state).toBe("cancelled");
-      else if (action === "stale") expect(hints.poll(run.id, requestId, { ...access().decision, digest: "sha256:changed" }).state).toBe("stale");
+      if (action === "cancel") expect(hints.cancel(run.id, requestId, "owner").state).toBe("cancelled");
+      else if (action === "stale") expect(hints.poll(run.id, requestId, { ...access().decision, digest: "sha256:changed" }, "owner").state).toBe("stale");
       else if (action === "evict") hints.request(access(false), "square", "0".repeat(32));
       else await bounded(hints.close());
       expect(signal!.aborted).toBe(true);
       await bounded(hints.whenIdle());
       reply.resolve("The best move is Nb2.");
       await new Promise<void>(resolve => setImmediate(resolve));
-      expect(() => hints.poll(run.id, requestId, access().decision)).toThrow(/not known/u);
+      expect(() => hints.poll(run.id, requestId, access().decision, "owner")).toThrow(/not known/u);
       if (action === "close") expect(hints.request(access(), "pattern", "0".repeat(32))).toMatchObject({ state: "source_unavailable", reason: "cancelled" });
     } finally { reply.resolve(""); await hints.close(); }
   });
@@ -107,15 +138,15 @@ describe("Guided Hint operation lifetimes", () => {
     const second = id(hints.request(access(), "square", "0".repeat(32)));
     try {
       await vi.waitFor(() => expect(signals).toHaveLength(2));
-      hints.cancel(run.id, first);
+      hints.cancel(run.id, first, "owner");
       expect(signals.map(signal => signal.aborted)).toEqual([true, false]);
       replies[1]!.resolve(sentences[1]!);
       await bounded(hints.whenIdle());
       expect(search).toHaveBeenCalledTimes(1);
-      expect(hints.poll(run.id, second, access().decision)).toMatchObject({ state: "available", delivery: { rung: "square", rendered: { voice: { state: "rendered", sentence: sentences[1] } } } });
+      expect(hints.poll(run.id, second, access().decision, "owner")).toMatchObject({ state: "available", delivery: { rung: "square", rendered: { voice: { state: "rendered", sentence: sentences[1] } } } });
       replies[0]!.reject(new Error("late discarded provider rejection"));
       await new Promise<void>(resolve => setImmediate(resolve));
-      expect(() => hints.poll(run.id, first, access().decision)).toThrow(/not known/u);
+      expect(() => hints.poll(run.id, first, access().decision, "owner")).toThrow(/not known/u);
     } finally { for (const reply of replies) reply.resolve(""); await hints.close(); }
   });
 
@@ -128,9 +159,9 @@ describe("Guided Hint operation lifetimes", () => {
     const second = id(hints.request(access(false), "square", "0".repeat(32)));
     try {
       await vi.waitFor(() => expect(signal).toBeDefined());
-      hints.cancel(run.id, first);
+      hints.cancel(run.id, first, "owner");
       expect(signal!.aborted).toBe(false);
-      hints.cancel(run.id, second);
+      hints.cancel(run.id, second, "owner");
       expect(signal!.aborted).toBe(true);
       await bounded(hints.whenIdle());
       expect(get).toHaveBeenCalledTimes(1);
@@ -142,7 +173,7 @@ describe("Guided Hint operation lifetimes", () => {
     const get = vi.fn<HintProviderGateway["get"]>();
     const hints = service({ requestedEngine: () => engine.promise, scheduler: { get } });
     const requestId = id(hints.request(access(false), "pattern", "0".repeat(32)));
-    hints.cancel(run.id, requestId);
+    hints.cancel(run.id, requestId, "owner");
     await bounded(hints.whenIdle());
     engine.resolve({ id: "stockfish-analysis", version: "mock-1" });
     await new Promise<void>(resolve => setImmediate(resolve));
@@ -166,7 +197,7 @@ describe("Guided Hint operation lifetimes", () => {
     const first = id(hints.request(access(false), "pattern", "0".repeat(32)));
     try {
       await vi.waitFor(() => expect(signals).toHaveLength(1));
-      hints.cancel(run.id, first);
+      hints.cancel(run.id, first, "owner");
       await bounded(hints.whenIdle());
       const replacement = id(hints.request(access(false), "pattern", "0".repeat(32)));
       expect(replacement).toBe(first);
@@ -178,8 +209,8 @@ describe("Guided Hint operation lifetimes", () => {
       expect(signals[1]!.aborted).toBe(false);
       await fulfill();
       await bounded(hints.whenIdle());
-      expect(hints.poll(run.id, replacement, access().decision).state).toBe("available");
-      expect(hints.poll(run.id, peer, access().decision).state).toBe("available");
+      expect(hints.poll(run.id, replacement, access().decision, "owner").state).toBe("available");
+      expect(hints.poll(run.id, peer, access().decision, "owner").state).toBe("available");
     } finally { old.reject(new Error("closed")); current.reject(new Error("closed")); await hints.close(); }
   });
 
@@ -196,15 +227,15 @@ describe("Guided Hint operation lifetimes", () => {
       const peer = id(hints.request(access(false), "square", "0".repeat(32)));
       await hints.whenIdle();
       expect(starts).toBe(1);
-      expect(hints.poll(run.id, first, access().decision)).toMatchObject({ state: "source_unavailable" });
-      expect(hints.poll(run.id, peer, access().decision)).toMatchObject({ state: "source_unavailable" });
+      expect(hints.poll(run.id, first, access().decision, "owner")).toMatchObject({ state: "source_unavailable" });
+      expect(hints.poll(run.id, peer, access().decision, "owner")).toMatchObject({ state: "source_unavailable" });
       // Ordinary idempotent POST/poll preserves that settled result; explicit retry removes it.
       expect(hints.request(access(false), "pattern", "0".repeat(32)).state).toBe("source_unavailable");
-      hints.cancel(run.id, first);
+      hints.cancel(run.id, first, "owner");
       expect(id(hints.request(access(false), "pattern", "0".repeat(32)))).toBe(first);
       await hints.whenIdle();
       expect(starts).toBe(2);
-      expect(hints.poll(run.id, first, access().decision).state).toBe("available");
+      expect(hints.poll(run.id, first, access().decision, "owner").state).toBe("available");
     } finally { await hints.close(); }
   });
 
@@ -219,7 +250,7 @@ describe("Guided Hint operation lifetimes", () => {
     try {
       const first = id(hints.request(access(false), "pattern", "0".repeat(32)));
       await hints.whenIdle();
-      expect(hints.poll(run.id, first, access().decision).state).toBe("available");
+      expect(hints.poll(run.id, first, access().decision, "owner").state).toBe("available");
       const changed = {
         ...run,
         ...(change === "head"
@@ -230,13 +261,13 @@ describe("Guided Hint operation lifetimes", () => {
       expect(next.decision.digest).not.toBe(access().decision.digest);
       const second = id(hints.request(next, "square", "0".repeat(32)));
       await hints.whenIdle();
-      const result = hints.poll(run.id, second, next.decision);
+      const result = hints.poll(run.id, second, next.decision, "owner");
       expect(result).toMatchObject({ state: "available", delivery: { decision: next.decision } });
       expect(get).toHaveBeenCalledTimes(2);
       // Only the decision's local occurrence must be rebuilt. Scheduler/source dedupe is unchanged.
       const peer = id(hints.request(next, "piece", "0".repeat(32)));
       await hints.whenIdle();
-      expect(hints.poll(run.id, peer, next.decision).state).toBe("available");
+      expect(hints.poll(run.id, peer, next.decision, "owner").state).toBe("available");
       expect(get).toHaveBeenCalledTimes(2);
     } finally { await hints.close(); }
   });

@@ -133,6 +133,15 @@ waiters; late cancellation cannot remove a reopened Hint's waiter. `HintService`
 process-local and bounded. All rungs of one decision share one search, and every packet comes
 from the injected application-lifetime `CandidatePopulationService`.
 
+Each operation belongs to the authenticated learner who creates it. The POST body cannot select
+an owner. GET and DELETE require that same learner, even when another host or participant can
+read the run; another learner's action answers the same404 as an unknown action. Public IDs remain
+correlation values, and equal IDs can identify separate owners' private operations. Their source
+search can still be shared without sharing delivery or cancellation authority.
+
+This ownership boundary does not yet implement §7b's fresh original-writer/help-policy checks,
+provider-generation binding or cooperative source deadlines. Those remain D4233–D4235.
+
 The shared horizon is keyed by the complete decision digest, including its branch and event
 head, not merely by a node/FEN. A different decision cannot reuse a sealed occurrence from
 the previous one. Pending engine discovery coalesces; failed discovery and unavailable horizons

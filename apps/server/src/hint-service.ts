@@ -69,6 +69,8 @@ export interface HintServiceOptions {
 
 /** Everything the service needs about one request, re-derived by RunService from the stored run. */
 export interface HintAccess {
+  /** Authenticated action owner, derived by REST; public action IDs are not credentials. */
+  readonly learnerId: string;
   readonly run: DrillRun;
   readonly decision: HintDecisionStamp;
   readonly fen: string;
@@ -90,6 +92,8 @@ interface HorizonJob {
 }
 
 interface Operation {
+  readonly key: string;
+  readonly learnerId: string;
   readonly requestId: string;
   readonly runId: string;
   readonly rung: HintRung;
@@ -162,9 +166,16 @@ export class HintService {
     return hintRequestId({ clientRequestId, decisionDigest, rung, manifestDigest: PRIMARY_EVIDENCE_MANIFEST.digest, compiler: HINT_COMPILER_VERSION, source: this.#source() });
   }
 
+  #operationKey(runId: string, learnerId: string, requestId: string): string {
+    return JSON.stringify([runId, learnerId, requestId]);
+  }
+
   /** §7 step 1–2: join or create the exact operation; returns its current state. */
   request(access: HintAccess, rung: HintRung, clientRequestId: string): HintResponse {
+    const learnerId = access.learnerId;
+    if (typeof learnerId !== "string" || learnerId.length === 0) throw new TypeError("Hint requests require an authenticated action owner");
     const requestId = this.requestIdFor(access.decision.digest, rung, clientRequestId);
+    const key = this.#operationKey(access.run.id, learnerId, requestId);
     if (this.#closed) return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "cancelled" });
     // Compile the complete family/rung contract before identity, search, packet or
     // voice acquisition, including requests that would reuse a retained horizon.
@@ -176,13 +187,13 @@ export class HintService {
     }
     if (this.#options.scheduler === null) return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "provider_unavailable" });
     const health = this.#options.availability?.();
-    if (health !== undefined && (health.state === "unavailable" || health.state === "temporarily_blocked") && !this.#operations.has(requestId)) {
+    if (health !== undefined && (health.state === "unavailable" || health.state === "temporarily_blocked") && !this.#operations.has(key)) {
       return Object.freeze({ state: "source_unavailable", requestId, rung, reason: "provider_unavailable" });
     }
-    let operation = this.#operations.get(requestId);
+    let operation = this.#operations.get(key);
     if (operation === undefined) {
-      operation = { requestId, runId: access.run.id, rung, decisionDigest: access.decision.digest, horizonKey: `${HINT_COMPILER_VERSION}\u0000${PRIMARY_EVIDENCE_MANIFEST.digest}\u0000${this.#source()}\u0000${access.run.id}\u0000${access.decision.digest}\u0000${access.fen}`, controller: new AbortController(), state: Object.freeze({ state: "pending", requestId, rung }), settled: false, lastUsed: ++this.#clock };
-      this.#operations.set(requestId, operation);
+      operation = { key, learnerId, requestId, runId: access.run.id, rung, decisionDigest: access.decision.digest, horizonKey: `${HINT_COMPILER_VERSION}\u0000${PRIMARY_EVIDENCE_MANIFEST.digest}\u0000${this.#source()}\u0000${access.run.id}\u0000${access.decision.digest}\u0000${access.fen}`, controller: new AbortController(), state: Object.freeze({ state: "pending", requestId, rung }), settled: false, lastUsed: ++this.#clock };
+      this.#operations.set(key, operation);
       this.#evict();
       const work = this.#run(operation, access).catch(() => this.#settle(operation!, Object.freeze({ state: "failed", requestId, rung, reason: "internal_error" })));
       this.#inflight.add(work);
@@ -193,9 +204,9 @@ export class HintService {
   }
 
   /** §7 step 3: poll one exact operation; a moved decision is `stale` and cancels the work. */
-  poll(runId: string, requestId: string, currentDecision: HintDecisionStamp): HintResponse {
-    const operation = this.#operations.get(requestId);
-    if (operation === undefined || operation.runId !== runId) throw new ServerError("HINT_REQUEST_NOT_FOUND", "This hint request is not known here; request the hint again");
+  poll(runId: string, requestId: string, currentDecision: HintDecisionStamp, learnerId: string): HintResponse {
+    const operation = this.#operations.get(this.#operationKey(runId, learnerId, requestId));
+    if (operation === undefined || operation.runId !== runId || operation.learnerId !== learnerId) throw new ServerError("HINT_REQUEST_NOT_FOUND", "This hint request is not known here; request the hint again");
     operation.lastUsed = ++this.#clock;
     if (operation.decisionDigest !== currentDecision.digest) {
       this.#drop(operation);
@@ -205,15 +216,15 @@ export class HintService {
   }
 
   /** §7 step 4: remove this waiter; the shared search is aborted when its final subscriber leaves. */
-  cancel(runId: string, requestId: string): HintResponse {
-    const operation = this.#operations.get(requestId);
-    if (operation === undefined || operation.runId !== runId) throw new ServerError("HINT_REQUEST_NOT_FOUND", "This hint request is not known here; nothing to cancel");
+  cancel(runId: string, requestId: string, learnerId: string): HintResponse {
+    const operation = this.#operations.get(this.#operationKey(runId, learnerId, requestId));
+    if (operation === undefined || operation.runId !== runId || operation.learnerId !== learnerId) throw new ServerError("HINT_REQUEST_NOT_FOUND", "This hint request is not known here; nothing to cancel");
     this.#drop(operation);
     return Object.freeze({ state: "cancelled", requestId, rung: operation.rung });
   }
 
   #drop(operation: Operation): void {
-    this.#operations.delete(operation.requestId);
+    if (this.#operations.get(operation.key) === operation) this.#operations.delete(operation.key);
     operation.controller.abort();
     if (!operation.settled) {
       operation.settled = true;

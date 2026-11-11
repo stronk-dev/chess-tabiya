@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:af8e2879c03045519106f03595adfb7c3cb7bec8704b26081e8259c5f4f8ef7f",
+    "roadmap": "sha256:b0efdb5fa8bcc89f94b3e99d92a81fc2dc3e7b6fbaa93be807429602228d700d",
     "workItems": "sha256:513647e305e5433ab5feaade3888e517477c2b3990604062c8410c8e71604db7",
-    "workState": "sha256:be4ab76bb4f730880acf39cd98c7037fd901257269f298cc81488d1884dc57a5",
-    "rfcRegister": "sha256:e419289a1e1644148f0c428751301c4ebc5e8523e800b5da1c63f97311fb0822",
+    "workState": "sha256:47529e1b39a96d0075f656633e0c833cbd90446e72d5846a3e174a922cd630cd",
+    "rfcRegister": "sha256:b25387fb5072e00166a1905f56724eaae2f6abae8f1661564899b58468de7a2f",
     "uxIndex": "sha256:b7ddaa0778cefec6cf06db07d4abcff922b40ac89bff6cb372415e195f23a313",
     "router": "sha256:313ec6ffa216d8ed27021907fda464a950c1a5cf34bdb08dbb22509c3c03887d",
     "application": "sha256:007f0b61b9fa874ea968fbbf915e26d05899b42b7143b6f22fed85464e018345",
-    "rest": "sha256:109e4a47ea219749546ffd71bb2eff296fb7ea9c559e571e27fbd180641e13bc"
+    "rest": "sha256:83c3453e87294596fc4addfeec5b781fbf58a3ad93b6ff32b04c40be4d0ba9d9"
   },
   "summary": {
     "capabilities": 14,
@@ -354,10 +354,10 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Implement accepted Hint §7b in verified dependency slices: owner-scoped actions/current policy, genuine source generation and absolute bounded startup/source deadline, then cooperative full acquisition with subscriber isolation. Run actual HTTP/lifetime/source proofs and cost/budget measurements. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 and full product holds remain.",
+      "nextAction": "Implement accepted Hint§7b fresh original-writer/intent-policy authority and GET/publication rechecks, genuine provider-generation/bounded startup identity, absolute source deadline and cooperative full stages. Preserve sources and shared-authorized-peer cancellation; prove actual HTTP/lifetime/cost boundaries. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Committed8dc421fc construction8 source/service checkpoint fully confirmed:20550 software/all583 files843.04s after measured sleep interruption; normal types/Svelte,7performance/four90.62s,build/governance pass. Genuine foundation/full ownership and actual operation/census retain1928/1928,24/89 qualified and all13 outcome families. D4230-32 repairs verified. Next actual Hint caller handoff §7b independently accepted after retained-source-ID repair; D4233-35 owner/current-policy/generation/deadline/cooperative implementation and proofs remain owed. No parent, ordinary consumer or whole-product milestone completes.",
+        "summary": "D4233 first actual Hint caller cut verified: authenticated owner scopes action idempotence/health/poll/cancel/drop without public-ID/wire or shared-search changes. Four genuine predecessor failures become30/two and172/eight controls; frozen normal20554software/all5831041.64s+7performance/four70.30s/types/build/governanceR1-R10/C1-C8 pass. Construction8 source qualification remains1928/1928,24/89 includingall13 outcomes, with no regenerated metadata. Fresh original-writer/help-policy authority, generation/deadline/cooperative work and D4224/D4225/D4228/ordinary26/D4167/D3928 remain open; no parent or capability completes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -636,7 +636,10 @@
           "apps/server/src/testing/candidate-retirement.test-support.ts",
           "rfc/hint-distance.md",
           "apps/server/src/hint-service.ts",
-          "apps/server/src/rest.ts"
+          "apps/server/src/rest.ts",
+          "docs/guided-hint.md",
+          "apps/server/src/hint-service.test.ts",
+          "apps/server/src/hint-lifetime.test.ts"
         ],
         "anchors": [
           {
@@ -1327,7 +1330,7 @@
           {
             "kind": "work_state",
             "id": "D4233",
-            "digest": "sha256:ae666fac63241018f617a6803b331b06f347263603ed054426a3bf9325497f7f"
+            "digest": "sha256:fd1cb749e5d2500964872a15bcd39330660f51bef17b7b0ef2084429c6b59220"
           },
           {
             "kind": "work_state",
@@ -1342,7 +1345,7 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:d0616423fb50df21d29d966b116e2a015069508ddead5a04ad115d9c281bb1c5"
+            "digest": "sha256:e70c9fd6c6caca4346f8ff90614cf7881896d637b7ee215d9cb0516e9debfe4c"
           }
         ]
       },
@@ -1363,10 +1366,10 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Implement accepted Hint §7b in verified dependency slices: owner-scoped actions/current policy, genuine source generation and absolute bounded startup/source deadline, then cooperative full acquisition with subscriber isolation. Run actual HTTP/lifetime/source proofs and cost/budget measurements. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 and full product holds remain.",
+      "nextAction": "Implement accepted Hint§7b fresh original-writer/intent-policy authority and GET/publication rechecks, genuine provider-generation/bounded startup identity, absolute source deadline and cooperative full stages. Preserve sources and shared-authorized-peer cancellation; prove actual HTTP/lifetime/cost boundaries. D4224/D4225/D4228/D4175ordinary26/D4167/D3928 remain open.",
       "latestCheckpoint": {
         "at": "2026-11-11",
-        "summary": "Committed8dc421fc construction8 source/service checkpoint fully confirmed:20550 software/all583 files843.04s after measured sleep interruption; normal types/Svelte,7performance/four90.62s,build/governance pass. Genuine foundation/full ownership and actual operation/census retain1928/1928,24/89 qualified and all13 outcome families. D4230-32 repairs verified. Next actual Hint caller handoff §7b independently accepted after retained-source-ID repair; D4233-35 owner/current-policy/generation/deadline/cooperative implementation and proofs remain owed. No parent, ordinary consumer or whole-product milestone completes.",
+        "summary": "D4233 first actual Hint caller cut verified: authenticated owner scopes action idempotence/health/poll/cancel/drop without public-ID/wire or shared-search changes. Four genuine predecessor failures become30/two and172/eight controls; frozen normal20554software/all5831041.64s+7performance/four70.30s/types/build/governanceR1-R10/C1-C8 pass. Construction8 source qualification remains1928/1928,24/89 includingall13 outcomes, with no regenerated metadata. Fresh original-writer/help-policy authority, generation/deadline/cooperative work and D4224/D4225/D4228/ordinary26/D4167/D3928 remain open; no parent or capability completes.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/semantic-validation-receipt-storage.md",
@@ -1980,7 +1983,9 @@
           "packages/runtime/src/candidate-construction.test.ts",
           "apps/server/src/candidate-population-service.test.ts",
           "apps/server/src/testing/candidate-retirement.test-support.ts",
-          "apps/server/src/rest.ts"
+          "apps/server/src/rest.ts",
+          "docs/guided-hint.md",
+          "apps/server/src/hint-service.test.ts"
         ],
         "anchors": [
           {
@@ -2231,7 +2236,7 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:d0616423fb50df21d29d966b116e2a015069508ddead5a04ad115d9c281bb1c5"
+            "digest": "sha256:e70c9fd6c6caca4346f8ff90614cf7881896d637b7ee215d9cb0516e9debfe4c"
           },
           {
             "kind": "rfc",
@@ -3036,7 +3041,7 @@
           {
             "kind": "work_state",
             "id": "D4233",
-            "digest": "sha256:ae666fac63241018f617a6803b331b06f347263603ed054426a3bf9325497f7f"
+            "digest": "sha256:fd1cb749e5d2500964872a15bcd39330660f51bef17b7b0ef2084429c6b59220"
           },
           {
             "kind": "work_state",
@@ -3503,7 +3508,7 @@
           {
             "kind": "rfc",
             "id": "hint-distance.md",
-            "digest": "sha256:d0616423fb50df21d29d966b116e2a015069508ddead5a04ad115d9c281bb1c5"
+            "digest": "sha256:e70c9fd6c6caca4346f8ff90614cf7881896d637b7ee215d9cb0516e9debfe4c"
           },
           {
             "kind": "rfc",

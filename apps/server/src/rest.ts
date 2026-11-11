@@ -1675,7 +1675,7 @@ export function createRestHandler(
         if (hints === undefined) throw new ServerError("ENGINE_UNAVAILABLE", "Guided hints are not configured", { details: { engineId: "stockfish-analysis", retryAfterMs: 0 } });
         const runId = decodeURIComponent(hintItem[1]!);
         const access = service.hintAccess(runId, principal);
-        return json(200, { hint: request.method === "GET" ? hints.poll(runId, hintItem[2]!, access.decision) : hints.cancel(runId, hintItem[2]!) });
+        return json(200, { hint: request.method === "GET" ? hints.poll(runId, hintItem[2]!, access.decision, principal.learnerId) : hints.cancel(runId, hintItem[2]!, principal.learnerId) });
       }
       const shareDelete = /^\/runs\/([^/]+)\/share\/([^/]+)$/.exec(url.pathname);
       if (request.method === "DELETE" && shareDelete !== null) {
@@ -1893,7 +1893,7 @@ export function createRestHandler(
         if (nodeId !== access.decision.cursor.nodeId || decisionDigest !== access.decision.digest) {
           return json(200, { clientRequestId, hint: { state: "stale", requestId: hints.requestIdFor(decisionDigest, rung, clientRequestId), rung } });
         }
-        return json(200, { clientRequestId, hint: hints.request({ run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: access.session, voiceRequested: authoritative.config.voice === "persona" }, rung, clientRequestId) });
+        return json(200, { clientRequestId, hint: hints.request({ learnerId: principal.learnerId, run: access.run, decision: access.decision, fen: access.node.fen, role: access.role, session: access.session, voiceRequested: authoritative.config.voice === "persona" }, rung, clientRequestId) });
       }
       if (route.action === "shape-firings/query") {
         requireJson(request);
